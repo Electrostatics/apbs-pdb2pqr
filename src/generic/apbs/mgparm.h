@@ -122,8 +122,9 @@ typedef struct MGparm {
     int pdime[3];                        /* Grid of processors to be used in
                                           * calculation */
     int setpdime;
-    int rank;                            /* Rank of this processor */
-    int setrank;
+    Vcom *com;                           /* Communications object for this 
+                                          * processor */
+    int setcom;
     double ofrac;                        /* Overlap fraction between procs */
     int setofrac; 
 

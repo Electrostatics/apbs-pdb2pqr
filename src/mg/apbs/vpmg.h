@@ -134,7 +134,7 @@ VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, char *title, double *data,
+  const char *thost, const char *fname, char *title, double *data, int *pvec,
   double hx, double hy, double hzed, int nx, int ny, int nz,
   double xmin, double ymin, double zmin);
 VEXTERNC void Vpmg_readDX(const char *iodev, const char *iofmt,

@@ -120,7 +120,7 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
 
     /* *** TYPE 2 PARAMETERS *** */
     thee->setpdime = 0;
-    thee->setrank = 0;
+    thee->setcom = 0;
     thee->setofrac = 0;
     for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 1;
 
@@ -218,8 +218,8 @@ VPUBLIC int MGparm_check(MGparm *thee) {
             Vnm_print(2, "MGparm_check:  PDIME not set!\n");
             rc = 0;
         }
-        if (!thee->setrank) {
-            Vnm_print(2, "MGparm_check:  RANK not set!\n");
+        if (!thee->setcom) {
+            Vnm_print(2, "MGparm_check:  COM not set!\n");
             rc = 0;
         }
         if (!thee->setofrac) {
@@ -336,8 +336,8 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
       thee->partOlapLength[i] = parm->partOlapLength[i];
     for (i=0; i<3; i++) thee->pdime[i] = parm->pdime[i];
     thee->setpdime = parm->setpdime;
-    thee->rank = parm->rank;
-    thee->setrank = parm->setrank;
+    thee->com = parm->com;
+    thee->setcom = parm->setcom;
     thee->ofrac = parm->ofrac;
     thee->setofrac = parm->setofrac;
 

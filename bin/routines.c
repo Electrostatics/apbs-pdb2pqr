@@ -186,7 +186,13 @@ to be written to %s.%s in UHBD format\n", pbeparm->writepotstem, "grd");
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]) {
-    
+
+    if (mgparm->type == 2) {
+        Vcom_print(com, 1, "main:    Partition overlap fraction = %g\n", 
+          mgparm->ofrac);
+        Vcom_print(com, 1, "main:    Processor array = %d x %d x %d\n", 
+          mgparm->pdime[0], mgparm->pdime[1], mgparm->pdime[2]);
+    }
     Vcom_print(com, 1, "main:    Grid dimensions: %d x %d x %d\n",
       mgparm->dime[0], mgparm->dime[1], mgparm->dime[2]);
     Vcom_print(com, 1, "main:    Grid spacings: %4.3f x %4.3f x %4.3f\n",
@@ -560,12 +566,20 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
 VPUBLIC int writepotMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg) {
 
     char outpath[VMAX_ARGLEN];
+    char writepotstem[VMAX_ARGLEN];
+
+#ifdef HAVE_MPI_H
+    snprintf(writepotstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writepotstem,
+      Vcom_rank(com));
+#else
+    snprintf(writepotstem, VMAX_ARGLEN, "%s", pbeparm->writepotstem);
+#endif
+
 
     if (pbeparm->writepot == 1) {
         /* In DX format */
         if (pbeparm->writepotfmt == 0) {
-            snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writepotstem, 
-              "dx");
+            snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "dx");
             Vcom_print(com, 1, "main:    Writing potential in DX format \
 to %s...\n", outpath);
             Vpmg_writeDX(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
@@ -573,15 +587,13 @@ to %s...\n", outpath);
 
          /* In AVS format */
          } else if (pbeparm->writepotfmt == 1) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writepotstem, 
-               "ucd");
+             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "ucd");
              Vcom_print(com, 2, "main:    Sorry, AVS format isn't supported \
 for multigrid calculations yet!\n");
              return 0;
          /* In UHBD format */
          } else if (pbeparm->writepotfmt == 2) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writepotstem, 
-               "grd");
+             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "grd");
              Vcom_print(com, 1, "main:    Writing potential in UHBD format \
 to %s...\n", outpath);
              Vpmg_writeUHBD(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
@@ -609,13 +621,20 @@ to %s...\n", outpath);
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int writeaccMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg) {
 
+    char writeaccstem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
 
+#ifdef HAVE_MPI_H
+    snprintf(writeaccstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writeaccstem,
+      Vcom_rank(com));
+#else
+    snprintf(writeaccstem, VMAX_ARGLEN, "%s", pbeparm->writeaccstem);
+#endif
+    
     if (pbeparm->writeacc == 1) {
         /* In DX format */
         if (pbeparm->writeaccfmt == 0) {
-            snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writeaccstem, 
-              "dx");
+            snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "dx");
             Vcom_print(com, 1, "main:    Writing accessibility in DX format \
 to %s...\n", outpath);
             Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
@@ -624,15 +643,13 @@ to %s...\n", outpath);
 
          /* In AVS format */
          } else if (pbeparm->writeaccfmt == 1) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writeaccstem, 
-               "ucd");
+             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "ucd");
              Vcom_print(com, 2, "main:    Sorry, AVS format isn't supported\
 for multigrid calculations yet!\n");
              return 0;
          /* In UHBD format */
          } else if (pbeparm->writeaccfmt == 2) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", pbeparm->writeaccstem, 
-               "grd");
+             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "grd");
              Vcom_print(com, 1, "main:    Writing accessibility in UHBD \
 format to %s...\n", outpath);
              Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
@@ -704,7 +721,7 @@ Calculation #%d\n", calcid+1);
     }
 
     Vcom_print(com, 1, "main:    Local answer (PE %d) = %1.12E kJ/mol\n", 
-      com->mpi_rank, ltenergy);
+      Vcom_rank(com), ltenergy);
     Vcom_print(com, 0, "printEnergy:  Performing global reduction (sum)\n");
     Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
     Vcom_print(com, 1, "main:    Global answer = %1.12E kJ/mol\n", gtenergy);

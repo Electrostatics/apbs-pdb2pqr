@@ -174,7 +174,7 @@ int main(int argc, char **argv) {
 
 
     /* *************** PARSE INPUT FILE ******************* */
-    nosh = NOsh_ctor(rank);
+    nosh = NOsh_ctor(com);
     sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
     Vcom_print(com, 1, "main:  Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
