@@ -91,6 +91,7 @@ VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
 VEXTERNC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
 VEXTERNC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+VEXTERNC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i);
 VEXTERNC void startVio();

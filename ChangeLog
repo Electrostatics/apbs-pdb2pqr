@@ -11,7 +11,7 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
     - The read keywords has been generalized and new I/O features have been
       added which support the use of pre-calculated coefficient grids, etc..
       The correct syntax for reading in a molecule is now 
-      "read mol mol.pqr end"; please see the User's Manual for more
+      "read mol pqr mol.pqr end"; please see the User's Manual for more
       information.
     - The "mg" keyword is no longer supported; all input files should use
       "mg-manual" or one of the other alternatives instead.

@@ -905,7 +905,7 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
 VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writematstem[VMAX_ARGLEN];
-    char outpath[VMAX_ARGLEN];
+    char outpath[72];
     char mxtype[3];
 
     if (nosh->bogus) return 1;
@@ -918,11 +918,17 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 #endif
     
     if (pbeparm->writemat == 1) {
-        /* Poisson operator only */
-        sprintf(outpath, "%s.%s", writematstem, "mat");
+        if (snprintf(outpath, 72, "%s.%s", writematstem, "mat") == -1) {
+            Vnm_print(2, "main:    Matrix output path truncated to: %s\n", 
+              outpath);
+            Vnm_print(2, "main:    72-character limit exceeded!\n");
+            Vnm_print(2, "main:    Skipping matrix I/O!\n");
+            return 1;
+        }
         mxtype[0] = 'R';
         mxtype[1] = 'S';
         mxtype[2] = 'A';
+        /* Poisson operator only */
         if (pbeparm->writematflag == 0) {
             Vnm_tprint( 1, "main:    Writing Poisson operator matrix \
 to %s...\n", outpath);
