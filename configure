@@ -2008,6 +2008,8 @@ trap 'rm -fr `echo "
 
     work/Makefile
     work/bin/Makefile
+    work/bin/regularized/Makefile
+    work/bin/traditional/Makefile
  inc/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -2123,6 +2125,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
 
     work/Makefile
     work/bin/Makefile
+    work/bin/regularized/Makefile
+    work/bin/traditional/Makefile
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
