@@ -612,30 +612,70 @@
  * <dd> Read in molecular data from the file <i>path</i>.  The acceptable
  * <i>format</i> flags are:
  *  <ul>
- *  <li><code>pqr</code>.  The molecule file is in PQR format, which has the
- *  form
+ *  <li><code>pqr</code>.  The molecule file is in PQR format (attributed to 
+ *  Don Bashford's MEAD package), which has the form
  *       <pre>
- *                       ATOM%7d  %4s%4s%5d    %lf%lf%lf%lf%lf
+ *          ATOM anum aname resname resnum x y z q r
  *       </pre>
- *       (note: there are <b>no</b> chain IDs) the columns are
+ *       where the fields can be delimited by spaces, tabs or newlines and
+ *       denote:
  *       <ol>
- *       <li> "ATOM"  NOTE: no substitutes here (i.e., no "HETATM" lines)
- *       <li> Atom number (ignored and replaced with an internal integer id
- *       based on the order in which the atoms were read)
- *       <li> Atom name (ignored)
- *       <li> Residue name (ignored)
- *       <li> Residue number (ignored)
- *       <li> X coordinate (in \f$\AA\f$)
- *       <li> Y coordinate (in \f$\AA\f$)
- *       <li> Z coordinate (in \f$\AA\f$)
- *       <li> Charge (in e)
- *       <li> Radius (in \f$\AA\f$)
+ *       <li> ATOM <br>
+ *            The "ATOM" or "HETATM" string
+ *       <li> anum <br>
+ *            The integer atom number; ignored
+ *       <li> aname <br>
+ *            The atom name string; ignored
+ *       <li> rname <br>
+ *            The residue name string; ignored
+ *       <li> rnum <br>
+ *            The residue number string; iggored
+ *       <li> x <br>
+ *            A floating-point number denoting the x-coordinate (in &Aring;)
+ *       <li> y <br>
+ *            A floating-point number denoting the y-coordinate (in &Aring;)
+ *       <li> z <br>
+ *            A floating-point number denoting the z-coordinate (in &Aring;)
+ *       <li> q <br>
+ *            A floating-point number denoting the charge (in e)
+ *       <li> r <br>
+ *            A floating-point number denoting the radius (in &Aring;)
  *       </ol>
  *       See the <a href="http://nbcr.sdsc.edu/pdb2pqr/index.html">PDB2PQR</a>
  *       web service, the <code>apbs/tools/conversion</code> directory, and the
  *       @ref tools section above for scripts to convert PDB files into PQR
  *       format.
- *    </ul>
+ *  <li><code>pdb</code>.  The molecule file is in PDB format as described at
+ *  <a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards</a>.  
+ *  <b>IMPORTANT NOTEs:</b> 
+ *  <ol>
+ *  <li> PDB input files must be accompanied by a <a href="#read-parm">"READ 
+ *  PARM"</a> statement to obtain charge and radius parameters.
+ *  <li>We make one significant exception to the PDB format; we require
+ *  whitespace-, tab-, or newline-delimited fields.  This exception enables the
+ *  study of molecules with coordinates substantially outside the &#241;999.0
+ *  range.  
+ *  </ul>
+ * <dt> <a name="read-parm"><code>parm</code></a> <i>format</i> <i>path</i>
+ * <dd> Read in a database from <i>path</i> with charges and radii for use with
+ * PDB-format molecule files.  The <i>format</i> can be one of the following:
+ *   <ul>
+ *   <li> <code>flat</code> <br>
+ *        A flat-file database with "#" and "%" comment characters (i.e., text
+ *        between these characters and the end of a line is ignored) and
+ *        ASCII-based data in the following form:
+ *        <pre>
+ *           rname  aname  q  r  eps
+ *        </pre>
+ *        where <code>rname</code> is a string denoting the residue name, 
+ *        <code>aname</code> is a string denoting the atom name, <code>q</code>
+ *        is the atomic charge (in e), <code>r</code> is the atomic radius (in
+ *        &Aring;), and <code>eps</code> is the van der Waals well-depth in
+ *        <i>kcal/mol</i> (NOTE:  this a different set of energy units than
+ *        used in the rest of APBS but agrees with the format of CHARMM and
+ *        AMBER parameter files).  Sample flat-file databases are provided in
+ *        <code>apbs/tools/conversion/param/vparam/</code>.
+ *   </ul>
  * <dt> <a name="read-diel"><code>diel</code></a> <i>format</i> <i>path-x
  * path-y path-z</i>
  * <dd> Read in the dielectric function \f$\epsilon(x)\f$ mapped to a

@@ -226,22 +226,23 @@ VPUBLIC Vparam_ResData* Vparam_getResData(Vparam *thee,
         return res;
     }
 
-
     /* Look for the matching residue */
     for (i=0; i<thee->nResData; i++) {
         res = &(thee->resData[i]);
         if (Vstring_strcasecmp(resName, res->name) == 0) return res;
+
     }
 
     /* Didn't find a matching residue */
     res = VNULL;
+    Vnm_print(2, "Vparam_getResData:  unable to find res=%s\n", resName);
     return res;
 }
 
 VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee, 
   char resName[VMAX_ARGLEN], char atomName[VMAX_ARGLEN]) {
 
-    int i, j;
+    int i;
     Vparam_ResData *res = VNULL;
     Vparam_AtomData *atom = VNULL;
 
@@ -253,28 +254,29 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
     }
 
     /* Look for the matching residue */
-    for (i=0; i<thee->nResData; i++) {
-        res = &(thee->resData[i]);
-        if (Vstring_strcasecmp(resName, res->name) == 0) {
-            /* Look for the matching atom */
-            for (j=0; j<res->nAtomData; j++) {
-                atom = &(res->atomData[i]);
-                if (Vstring_strcasecmp(atomName, atom->atomName) == 0) {
-                    return atom;
-                }
-            }
+    res = Vparam_getResData(thee, resName);
+    if (res == VNULL) {
+        atom = VNULL;
+        return atom;
+    }
+    for (i=0; i<res->nAtomData; i++) {
+        atom = &(res->atomData[i]);
+        if (Vstring_strcasecmp(atomName, atom->atomName) == 0) {
+            return atom;
         }
     }
 
     /* Didn't find a matching atom/residue */
     atom = VNULL;
+    Vnm_print(2, "Vparam_getAtomData:  unable to find atom=%s, res=%s\n",
+      atomName, resName);
     return atom;
 }
 
 VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
   const char *iofmt, const char *thost, const char *fname) {
 
-    int i, iatom, ires, natoms, nalloc;
+    int i, iatom, jatom, ires, natoms, nalloc;
     Vparam_AtomData *atoms = VNULL;
     Vparam_AtomData *tatoms = VNULL;
     Vparam_AtomData *atom = VNULL;
@@ -335,12 +337,11 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     if (natoms == 0) return 0;
 
     /* Count the number of residues */
-    thee->nResData = 0;
+    thee->nResData = 1;
     strcpy(currResName, atoms[0].resName);
-    (thee->nResData)++;
-    for (i=0; i<natoms; i++) {
+    for (i=1; i<natoms; i++) {
         if (Vstring_strcasecmp(atoms[i].resName, currResName) != 0) {
-            strcpy(currResName, atoms[0].resName);
+            strcpy(currResName, atoms[i].resName);
             (thee->nResData)++;
         }
     }
@@ -359,12 +360,12 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     res = &(thee->resData[ires]);
     res->nAtomData = 1;
     strcpy(res->name, atoms[0].resName);
-    for (i=0; i<natoms; i++) {
+    for (i=1; i<natoms; i++) {
         if (Vstring_strcasecmp(atoms[i].resName, res->name) != 0) {
             (ires)++;
             res = &(thee->resData[ires]);
             res->nAtomData = 1;
-            strcpy(res->name, atoms[0].resName);
+            strcpy(res->name, atoms[i].resName);
         } else (res->nAtomData)++;
     }
 
@@ -376,24 +377,19 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     }
 
     /* Copy atoms into residues */
-    ires = 0;
     iatom = 0;
-    res = &(thee->resData[ires]);
     Vparam_AtomData_copyTo(&(atoms[0]), &(res->atomData[iatom]));
-    for (i=0; i<natoms; i++) {
-        iatom++;
-        if (Vstring_strcasecmp(atoms[i].resName, res->name) != 0) {
-            (ires)++;
-            iatom = 0;
-            res = &(thee->resData[ires]);
+    for (ires=0; ires<thee->nResData; ires++) {
+        res = &(thee->resData[ires]);
+        for (jatom=0; jatom<res->nAtomData; jatom++) {
+            Vparam_AtomData_copyTo(&(atoms[iatom]), &(res->atomData[jatom]));
+            iatom++;
         }
-        Vparam_AtomData_copyTo(&(atoms[i]), &(res->atomData[iatom]));
     }
 
     /* Shut down communication */
     Vio_acceptFree(sock);
     Vio_dtor(&sock);
-
 
     /* Destroy temporary atom space */
     Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), (void **)&(atoms));

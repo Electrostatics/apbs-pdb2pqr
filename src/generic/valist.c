@@ -264,22 +264,24 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
             for (i=0; i<ntok; i++) {
                 if (strlen(tokArray[i]) < VMAX_ARGLEN) {
                     strcpy(resName, tokArray[i]);
-                    break;
-                } else {
-                    Vnm_print(2, "Valist_readPDB:  Residue name (%s) too long!\n", tokArray[i]);
-                    return 0;
-                }
-                atomData = Vparam_getAtomData(param, resName, atomName);
-                if (atomData != VNULL) {
-                    gotit = 1;
-                    charge = atomData->charge;
-                    radius = atomData->radius;
-                    break;
+                    atomData = Vparam_getAtomData(param, resName, atomName);
+                    if (atomData != VNULL) {
+                        gotit = 1;
+                        charge = atomData->charge;
+                        radius = atomData->radius;
+                        break;
+                    }
                 }
             }
             if (!gotit) {
-                Vnm_print(2, "Couldn't find parmeters for atom %s %s!\n", 
-                  atomName, resName);
+                Vnm_print(2, "Valist_readPDB:  Couldn't find parameters for \
+atom=%s using following residue names as guesses: ");
+                for (i=0; i<ntok; i++) {
+                    if (strlen(tokArray[i]) < VMAX_ARGLEN) {
+                        Vnm_print(2, " %s,", tokArray[i]);
+                    }
+                }
+                Vnm_print(2, "\n");
                 return 0;
             }
 
@@ -305,14 +307,12 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
     } /* while we haven't run out of tokens */
 
 
-#if defined(VDEBUG)
-    Vnm_print(1, "Valist_readPDB: Counted %d atoms\n",thee->number);
+    printf("Valist_readPDB: Counted %d atoms\n", thee->number);
     fflush(stdout);
-#endif
 
 
     /* Allocate the necessary space for the actual atom array */
-    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
+    thee->atoms = Vmem_malloc(thee->vmem, thee->number, (sizeof(Vatom)));
     VASSERT(thee->atoms != VNULL);
     for (i=0; i<thee->number; i++) {
         Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
