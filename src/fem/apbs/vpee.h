@@ -27,13 +27,17 @@
  *
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
- * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
- * Dept. of Chemistry and Biochemistry
- * University of California, San Diego
+ * Nathan A. Baker (baker@biochem.wustl.edu)
+ * Dept. of Biochemistry and Molecular Biophysics
+ * Washington University in St. Louis
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 1999-2002.  The Regents of the University of California.
+ * Copyright (c) 2002.  Washington University in St. Louis.
+ * All Rights Reserved.
+ *
+ * Portions Copyright (c) 1999-2002.  The Regents of the University of
+ * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
  * Permission to use, copy, modify, and distribute this software and its
@@ -53,7 +57,7 @@
  * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
  * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
  * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
+
  * @endverbatim
  */
 

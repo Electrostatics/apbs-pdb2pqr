@@ -6,7 +6,20 @@
 ///  Dept. of Mathematics, Scientific Computing Group
 ///  University of California, San Diego 
 ///
- * Copyright (c) 1999-2002.  The Regents of the University of California.
+
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (baker@biochem.wustl.edu)
+ * Dept. of Biochemistry and Molecular Biophysics
+ * Washington University in St. Louis
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 2002.  Washington University in St. Louis.
+ * All Rights Reserved.
+ *
+ * Portions Copyright (c) 1999-2002.  The Regents of the University of
+ * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
  * Permission to use, copy, modify, and distribute this software and its
@@ -26,14 +39,7 @@
  * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
  * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
  * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-////////////////////////////////////////////////////////////////////////////
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// File:     vstring.c 
-//
-// Author:   Various authors for each function
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"

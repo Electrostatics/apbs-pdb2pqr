@@ -9,33 +9,38 @@ c*  @verbatim
 c*
 c* APBS -- Adaptive Poisson-Boltzmann Solver
 c*
-c* Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-c* Dept. of Chemistry and Biochemistry
-c* University of California, San Diego
+c* Nathan A. Baker (baker@biochem.wustl.edu)
+c* Dept. of Biochemistry and Molecular Biophysics
+c* Washington University in St. Louis
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 1999-2002. The Regents of the University of California
-c*                          (Regents).  All Rights Reserved.
+c* Copyright (c) 2002.  Washington University in St. Louis.
+c* All Rights Reserved.
 c*
-c* Permission to use, copy, modify, and distribute this software and its
-c* documentation for educational, research, and not-for-profit purposes,
-c* without fee and without a signed licensing agreement, is hereby granted,
-c* provided that the above copyright notice, this paragraph and the
-c* following two paragraphs appear in all copies, modifications, and
-c* distributions.
+c* Portions Copyright (c) 1999-2002.  The Regents of the University of
+c* California.  
+c* Portions Copyright (c) 1995.  Michael Holst.
 c*
-c* IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-c* SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-c* ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-c* REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+c* Permission to use, copy, modify, and distribute this software and 
+c* its documentation for educational, research, and not-for-profit 
+c* purposes, without fee and without a signed licensing agreement, is 
+c* hereby granted, provided that the above copyright notice, this 
+c* paragraph and the following two paragraphs appear in all copies, 
+c* modifications, and distributions.
 c*
-c* REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-c* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-c* PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-c* ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-c* TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-c* MODIFICATIONS.
+c* IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, 
+c* INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING 
+c* LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS 
+c* DOCUMENTATION, EVEN IF THE * AUTHORS HAVE BEEN ADVISED OF THE 
+c* POSSIBILITY OF SUCH DAMAGE.
+c*
+c* THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT 
+c* NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND 
+c* FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING 
+c* DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  
+c* THE AUTHORS HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
+c* UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 c*
 c* @endverbatim
 c**************************************************************************

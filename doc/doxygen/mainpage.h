@@ -9,7 +9,11 @@
  * @section license License
  *
  * <blockquote>
- * Copyright (c) 1999-2002.  The Regents of the University of California.
+ * Copyright (c) 2002.  Washington University in St. Louis.
+ * All Rights Reserved.
+ *
+ * Portions Copyright (c) 1999-2002.  The Regents of the University of
+ * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
  * Permission to use, copy, modify, and distribute this software and its
@@ -17,18 +21,18 @@
  * without fee and without a signed licensing agreement, is hereby granted,
  * provided that the above copyright notice, this paragraph and the
  * following two paragraphs appear in all copies, modifications, and
- * distributions.<br>
+ * distributions.
  *
  * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
  * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
  * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
- * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br>
+ * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
  * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
  * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.<br>
+ * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  * </blockquote>
  * 
  *  <hr width="100%">
@@ -67,7 +71,8 @@
  *  <hr width="100%">
  *  @section intro Introduction
  * 
- *  <p> APBS was primarily written by <a href="http://wasabi.ucsd.edu/">Nathan
+ *  <p> APBS was primarily written by <a
+ *  href="http://www.biochem.wustl.edu/~baker">Nathan
  * Baker</a> during his graduate work with <a
  * href="http://mccammon.ucsd.edu/">J.  Andrew McCammon</a> and <a
  * href="http://www.scicomp.ucsd.edu/~mholst/">Michael Holst</a>.  APBS relies
@@ -1097,7 +1102,7 @@
  * </pre>
  * However, while the code is in beta, you should also e-mail
  * the problem to <a
- * href="mailto:nbaker@wasabi.ucsd.edu">nbaker@wasabi.ucsd.edu</a>.
+ * href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>.
  * 
  * <hr width="100%">
  * @section reading Further reading
@@ -1181,7 +1186,7 @@
  * can be found in the <a href="user.html">User's Guide</a>.
  * 
  * <p>
- * APBS was primarily written by <a href="http://wasabi.ucsd.edu/">Nathan
+ * APBS was primarily written by <a href="http://www.biochem.wustl.edu/~baker/">Nathan
  * Baker</a> during his graduate work with <a
  * href="http://mccammon.ucsd.edu/">J.  Andrew McCammon</a> and <a
  * href="http://www.scicomp.ucsd.edu/~mholst/">Michael Holst</a>.  APBS relies
