@@ -119,8 +119,7 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) {
 VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
-    int iatom, jatom, isimp, jsimp;
-    int gotSimp;
+    int iatom, jatom, isimp, jsimp, gotSimp;
     /* Atomic information */
     Vatom *atom;
     double *position;
