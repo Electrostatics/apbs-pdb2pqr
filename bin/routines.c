@@ -38,7 +38,6 @@
  * @endverbatim
  */
 
-
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
@@ -46,6 +45,7 @@
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
+#include "maloc/maloc.h"  
 
 #include "routines.h"
 
@@ -85,7 +85,7 @@ VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
               Valist_getNumberAtoms(alist[i]));
             Vnm_tprint( 1, "main:    Centered at (%4.3e, %4.3e, %4.3e)\n",
               alist[i]->center[0], alist[i]->center[1], alist[i]->center[2]);
-            Vnm_tprint( 1, "main:    Net charge %4.3e\n",
+            Vnm_tprint( 1, "main:    Net charge %3.2e e\n",
               alist[i]->charge);        
         }
     }
@@ -103,25 +103,116 @@ VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh, 
+  Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
+  Vgrid *dielZMap[NOSH_MAXMOL]) {
 
-    int i;
+    int i, ii, nx, ny, nz;
+    double sum, hx, hy, hzed, xmin, ymin, zmin;
 
     if (nosh->ndiel > 0) 
-      Vnm_tprint( 1, "main:  Got paths for %d dielectric maps\n", nosh->ndiel);
+      Vnm_tprint( 1, "main:  Got paths for %d dielectric map sets\n", 
+        nosh->ndiel);
     else return 1;
 
     for (i=0; i<nosh->ndiel; i++) {
-        Vnm_tprint( 1, "main:  Reading dielectric map data from %s:\n",
-          nosh->dielpath[i]);
-        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        Vnm_tprint( 1, "main:  Reading x-shifted dielectric map data from \
+%s:\n", nosh->dielXpath[i]);
+        dielXMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->dielfmt[i] == 0) {
-            if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->dielpath[i]) 
-              != 1) {
+            if (Vgrid_readDX(dielXMap[i], "FILE", "ASC", VNULL, 
+              nosh->dielXpath[i]) != 1) {
                 Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
-                  nosh->dielpath[i]);
+                  nosh->dielXpath[i]);
                 return 0;
             }
+            nx = dielXMap[i]->nx;
+            ny = dielXMap[i]->ny;
+            nz = dielXMap[i]->nz;
+            hx = dielXMap[i]->hx;
+            hy = dielXMap[i]->hy;
+            hzed = dielXMap[i]->hzed;
+            xmin = dielXMap[i]->xmin;
+            ymin = dielXMap[i]->ymin;
+            zmin = dielXMap[i]->zmin;
+            Vnm_tprint(1, "main:    %d x %d x %d grid\n", nx, ny, nz);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", hx, hy, hzed);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+              xmin, ymin, zmin);
+            sum = 0;
+            for (ii=0; ii<(nx*ny*nz); ii++)
+              sum += (dielXMap[i]->data[ii]);
+            sum = sum*hx*hy*hzed;
+            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n", 
+              sum);
+        } else {
+            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            return 0;
+        }
+        Vnm_tprint( 1, "main:  Reading y-shifted dielectric map data from \
+%s:\n", nosh->dielYpath[i]);
+        dielYMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        if (nosh->dielfmt[i] == 0) {
+            if (Vgrid_readDX(dielYMap[i], "FILE", "ASC", VNULL, nosh->dielYpath[i])
+              != 1) {
+                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                  nosh->dielYpath[i]);
+                return 0;
+            }
+            nx = dielYMap[i]->nx;
+            ny = dielYMap[i]->ny;
+            nz = dielYMap[i]->nz;
+            hx = dielYMap[i]->hx;
+            hy = dielYMap[i]->hy;
+            hzed = dielYMap[i]->hzed;
+            xmin = dielYMap[i]->xmin;
+            ymin = dielYMap[i]->ymin;
+            zmin = dielYMap[i]->zmin;
+            Vnm_tprint(1, "main:    %d x %d x %d grid\n", nx, ny, nz);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", hx, hy, hzed);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n",
+              xmin, ymin, zmin);
+            sum = 0;
+            for (ii=0; ii<(nx*ny*nz); ii++)
+              sum += (dielYMap[i]->data[ii]);
+            sum = sum*hx*hy*hzed;
+            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n",
+              sum);
+        } else {
+            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            return 0;
+        }
+        Vnm_tprint( 1, "main:  Reading z-shifted dielectric map data from \
+%s:\n", nosh->dielZpath[i]);
+        dielZMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        if (nosh->dielfmt[i] == 0) {
+            if (Vgrid_readDX(dielZMap[i], "FILE", "ASC", VNULL, nosh->dielZpath[i])
+              != 1) {
+                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                  nosh->dielZpath[i]);
+                return 0;
+            }
+            nx = dielZMap[i]->nx;
+            ny = dielZMap[i]->ny;
+            nz = dielZMap[i]->nz;
+            hx = dielZMap[i]->hx;
+            hy = dielZMap[i]->hy;
+            hzed = dielZMap[i]->hzed;
+            xmin = dielZMap[i]->xmin;
+            ymin = dielZMap[i]->ymin;
+            zmin = dielZMap[i]->zmin;
+            Vnm_tprint(1, "main:    %d x %d x %d grid\n",
+              nx, ny, nz);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n",
+              hx, hy, hzed);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n",
+              xmin, ymin, zmin);
+            sum = 0;
+            for (ii=0; ii<(nx*ny*nz); ii++)
+              sum += (dielZMap[i]->data[ii]);
+            sum = sum*hx*hy*hzed;
+            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n",
+              sum);
         } else {
             Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
             return 0;
@@ -143,7 +234,8 @@ VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
-    int i;
+    int i, ii;
+    double sum;
 
     if (nosh->nkappa > 0) 
       Vnm_tprint( 1, "main:  Got paths for %d kappa maps\n", nosh->nkappa);
@@ -160,6 +252,18 @@ VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
                   nosh->kappapath[i]);
                 return 0;
             }
+            Vnm_tprint(1, "main:    %d x %d x %d grid\n", 
+              map[i]->nx, map[i]->ny, map[i]->nz);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", 
+              map[i]->hx, map[i]->hy, map[i]->hzed);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+              map[i]->xmin, map[i]->ymin, map[i]->zmin);
+            sum = 0;
+            for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
+              sum += (map[i]->data[ii]);
+            sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n", sum);
+
         } else {
             Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
             return 0;
@@ -181,14 +285,15 @@ VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
-    int i;
+    int i, ii;
+    double sum;
 
     if (nosh->ncharge > 0)
       Vnm_tprint( 1, "main:  Got paths for %d charge maps\n", nosh->ncharge);
     else return 1;
 
     for (i=0; i<nosh->ncharge; i++) {
-        Vnm_tprint( 1, "main:  Reading kappa map data from %s:\n",
+        Vnm_tprint( 1, "main:  Reading charge map data from %s:\n",
           nosh->chargepath[i]);
         map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->chargefmt[i] == 0) {
@@ -198,6 +303,17 @@ VPUBLIC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
                   nosh->chargepath[i]);
                 return 0;
             }
+            Vnm_tprint(1, "main:    %d x %d x %d grid\n", 
+              map[i]->nx, map[i]->ny, map[i]->nz);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", 
+              map[i]->hx, map[i]->hy, map[i]->hzed);
+            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+              map[i]->xmin, map[i]->ymin, map[i]->zmin);
+            sum = 0;
+            for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
+              sum += (map[i]->data[ii]);
+            sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+            Vnm_print(2, "main:    Charge map integral = %3.2e e\n", sum);
         } else {
             Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
             return 0;
@@ -306,6 +422,21 @@ to be written to ");
             case VDT_QDENS:
                 Vnm_print(1, "main:    Ion charge density to be written to ");
                 break;
+            case VDT_DIELX:
+                Vnm_print(1, "main:    X-shifted dielectric map to be written \
+to ");
+                break;
+            case VDT_DIELY:
+                Vnm_print(1, "main:    Y-shifted dielectric map to be written \
+to ");
+                break;
+            case VDT_DIELZ:
+                Vnm_print(1, "main:    Z-shifted dielectric map to be written \
+to ");
+                break;
+            case VDT_KAPPA:
+                Vnm_print(1, "main:    Kappa map to be written to ");
+                break;
             default: 
                 Vnm_print(2, "main:    Invalid data type for writing!\n");
                 break;
@@ -380,13 +511,14 @@ VPUBLIC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm, 
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
-  Valist *alist[NOSH_MAXMOL], Vgrid *dielMap[NOSH_MAXMOL],
+  Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
+  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
     
     int j, bytesTotal, highWater;
     double sparm, iparm;
-    Vgrid *theDielMap, *theKappaMap, *theChargeMap;
+    Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
 
     Vnm_tstart(27, "Setup timer");
 
@@ -437,15 +569,21 @@ VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
         Vpmgp_dtor(&(pmgp[i-1]));
         Vpbe_dtor(&(pbe[i-1]));
     }
-    if (pbeparm->useDielMap) theDielMap = dielMap[pbeparm->dielMapID-1];
-    else theDielMap = VNULL;
+    if (pbeparm->useDielMap) theDielXMap = dielXMap[pbeparm->dielMapID-1];
+    else theDielXMap = VNULL;
+    if (pbeparm->useDielMap) theDielYMap = dielYMap[pbeparm->dielMapID-1];
+    else theDielYMap = VNULL;
+    if (pbeparm->useDielMap) theDielZMap = dielZMap[pbeparm->dielMapID-1];
+    else theDielZMap = VNULL;
     if (pbeparm->useKappaMap) theKappaMap = kappaMap[pbeparm->kappaMapID-1];
     else theKappaMap = VNULL;
     if (pbeparm->useChargeMap) theChargeMap = chargeMap[pbeparm->chargeMapID-1];
     else theChargeMap = VNULL;
     Vpmg_fillco(pmg[i], 
       pbeparm->srfm, pbeparm->swin,
-      pbeparm->useDielMap, theDielMap,
+      pbeparm->useDielMap, theDielXMap,
+      pbeparm->useDielMap, theDielYMap,
+      pbeparm->useDielMap, theDielZMap,
       pbeparm->useKappaMap, theKappaMap,
       pbeparm->useChargeMap, theChargeMap);
 
@@ -821,40 +959,53 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     if (nosh->bogus) return 1;
 
-    nx = pmg->pmgp->nx;
-    ny = pmg->pmgp->ny;
-    nz = pmg->pmgp->nz;
-    hx = pmg->pmgp->hx;
-    hy = pmg->pmgp->hy;
-    hzed = pmg->pmgp->hzed;
-    xcent = pmg->pmgp->xcent;
-    ycent = pmg->pmgp->ycent;
-    zcent = pmg->pmgp->zcent;
-    xmin = pmg->pmgp->xcent - 0.5*(nx-1)*hx;
-    ymin = pmg->pmgp->ycent - 0.5*(ny-1)*hy;
-    zmin = pmg->pmgp->zcent - 0.5*(nz-1)*hzed;
   
     for (i=0; i<pbeparm->numwrite; i++) { 
+
+        nx = pmg->pmgp->nx;
+        ny = pmg->pmgp->ny;
+        nz = pmg->pmgp->nz;
+        hx = pmg->pmgp->hx;
+        hy = pmg->pmgp->hy;
+        hzed = pmg->pmgp->hzed;
 
         switch (pbeparm->writetype[i]) {
 
             case VDT_CHARGE:
  
-                Vnm_print(1, "main:  Writing charge distribution to ");
+                Vnm_print(1, "main:    Writing charge distribution to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0);
                 sprintf(title, "CHARGE DISTRIBUTION (e)");
                 break;
 
             case VDT_POT:
  
-                Vnm_print(1, "main:  Writing potential to ");
+                Vnm_print(1, "main:    Writing potential to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
                 sprintf(title, "POTENTIAL (kT/e)");
                 break;
 
             case VDT_SMOL:
 
-                Vnm_print(1, "main:  Writing molecular accessibility to ");
+                Vnm_print(1, "main:    Writing molecular accessibility to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, pbeparm->srad);
                 sprintf(title, 
                   "SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
@@ -863,7 +1014,13 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_SSPL:
 
-                Vnm_print(1, "main:  Writing spline-based accessibility to ");
+                Vnm_print(1, "main:    Writing spline-based accessibility to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL, pbeparm->swin);
                 sprintf(title, 
                   "SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
@@ -872,14 +1029,26 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_VDW:
 
-                Vnm_print(1, "main:  Writing van der Waals accessibility to ");
+                Vnm_print(1, "main:    Writing van der Waals accessibility to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0);
                 sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
                 break;
 
             case VDT_IVDW:
 
-                Vnm_print(1, "main:  Writing ion accessibility to ");
+                Vnm_print(1, "main:    Writing ion accessibility to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
                   pmg->pbe->maxIonRadius);
                 sprintf(title, 
@@ -889,7 +1058,13 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_LAP:
 
-                Vnm_print(1, "main:  Writing potential Laplacian to ");
+                Vnm_print(1, "main:    Writing potential Laplacian to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0);
                 sprintf(title, 
                   "POTENTIAL LAPLACIAN (kT/e/A^2)");
@@ -897,7 +1072,13 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_EDENS:
 
-                Vnm_print(1, "main:  Writing energy density to ");
+                Vnm_print(1, "main:    Writing energy density to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0);
                 sprintf(title, 
                   "ENERGY DENSITY (kT/e/A)^2");
@@ -905,7 +1086,13 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_NDENS:
 
-                Vnm_print(1, "main:  Writing number density to ");
+                Vnm_print(1, "main:    Writing number density to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0);
                 sprintf(title, 
                   "ION NUMBER DENSITY (M)");
@@ -913,15 +1100,78 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_QDENS:
 
-                Vnm_print(1, "main:  Writing charge density to ");
+                Vnm_print(1, "main:    Writing charge density to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0);
                 sprintf(title, 
                   "ION CHARGE DENSITY (e_c * M)");
                 break;
 
+            case VDT_DIELX:
+
+                Vnm_print(1, "main:    Writing x-shifted dielectric map to ");
+                xcent = pmg->pmgp->xcent + 0.5*hx;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0);
+                sprintf(title,
+                  "X-SHIFTED DIELECTRIC MAP");
+                break;
+
+            case VDT_DIELY:
+
+                Vnm_print(1, "main:    Writing y-shifted dielectric map to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent + 0.5*hy;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0);
+                sprintf(title,
+                  "Y-SHIFTED DIELECTRIC MAP");
+                break;
+
+            case VDT_DIELZ:
+
+                Vnm_print(1, "main:    Writing z-shifted dielectric map to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent + 0.5*hzed;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0);
+                sprintf(title,
+                  "Z-SHIFTED DIELECTRIC MAP");
+                break;
+
+            case VDT_KAPPA:
+
+                Vnm_print(1, "main:    Writing kappa map to ");
+                xcent = pmg->pmgp->xcent;
+                ycent = pmg->pmgp->ycent;
+                zcent = pmg->pmgp->zcent;
+                xmin = xcent - 0.5*(nx-1)*hx;
+                ymin = ycent - 0.5*(ny-1)*hy;
+                zmin = zcent - 0.5*(nz-1)*hzed;
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0);
+                sprintf(title,
+                  "KAPPA MAP");
+                break;
+
             default:
 
                 Vnm_print(2, "Invalid data type for writing!\n");
+                return 0;
                 break;
         }
 

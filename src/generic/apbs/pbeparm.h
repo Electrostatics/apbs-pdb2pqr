@@ -67,7 +67,7 @@ struct PBEparm {
     int molid;                 /**< Molecule ID to perform calculation on */
     int setmolid;              /**< Flag, @see molid */
     int useDielMap;            /**< Indicates whether we use an external
-                                * dielectric map */
+                                * dielectric maps (note plural) */
     int dielMapID;             /**< Dielectric map ID (if used) */
     int useKappaMap;           /**< Indicates whether we use an external
                                 * kappa map */

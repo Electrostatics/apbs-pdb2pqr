@@ -1,5 +1,5 @@
 /** @defgroup Vgrid Vgrid class
- *  @brief  Potential oracle for Cartesian mesh data
+ *  @brief    Oracle for Cartesian mesh data
  */
 
 /**
@@ -66,6 +66,9 @@ struct Vgrid {
     double xmin;  /**< x coordinate of lower grid corner */
     double ymin;  /**< y coordinate of lower grid corner */
     double zmin;  /**< z coordinate of lower grid corner */
+    double xmax;  /**< x coordinate of upper grid corner */
+    double ymax;  /**< y coordinate of upper grid corner */
+    double zmax;  /**< z coordinate of upper grid corner */
     double *data; /**< nx*ny*nz array of data */
     int readdata; /**< flag indicating whether data was read from file */
     int ctordata; /**< flag indicating whether data was included at

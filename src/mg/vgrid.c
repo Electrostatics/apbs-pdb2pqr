@@ -82,8 +82,11 @@ VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
     thee->hy = hy;
     thee->hzed = hzed;
     thee->xmin = xmin;
+    thee->xmax = xmin + (nx-1)*hx;
     thee->ymin = ymin;
+    thee->ymax = ymin + (ny-1)*hy;
     thee->zmin = zmin;
+    thee->zmax = zmin + (nz-1)*hzed;
     if (data == VNULL) {
         thee->ctordata = 0;
         thee->readdata = 0;
@@ -134,6 +137,7 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 
     int nx, ny, nz, ihi, jhi, khi, ilo, jlo, klo;
     double hx, hy, hzed, xmin, ymin, zmin, ifloat, jfloat, kfloat;
+    double xmax, ymax, zmax;
     double u, dx, dy, dz;
 
     VASSERT(thee != VNULL);
@@ -148,6 +152,9 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     xmin = thee->xmin;
     ymin = thee->ymin;
     zmin = thee->zmin;
+    xmax = thee->xmax;
+    ymax = thee->ymax;
+    zmax = thee->zmax;
 
     u = 0;
 
@@ -176,6 +183,78 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
           + (1.0-dx)*(1.0-dy)*dz      *(thee->data[IJK(ilo,jlo,khi)])
           + (1.0-dx)*dy      *(1.0-dz)*(thee->data[IJK(ilo,jhi,klo)])
           + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->data[IJK(ilo,jlo,klo)]);
+
+        *value = u;
+        return 1;
+
+    } else if (VABS(pt[0] - xmin) < VSMALL) {
+
+        dy = jfloat - (double)(jlo);
+        dz = kfloat - (double)(klo);
+        u = dy      *dz      *(thee->data[IJK(0, jhi,khi)])
+          + (1.0-dy)*dz      *(thee->data[IJK(0, jlo,khi)])
+          + dy      *(1.0-dz)*(thee->data[IJK(0, jhi,klo)])
+          + (1.0-dy)*(1.0-dz)*(thee->data[IJK(0, jlo,klo)]);
+
+        *value = u;
+        return 1;
+    
+    } else if (VABS(pt[0] - xmax) < VSMALL) {
+
+        dy = jfloat - (double)(jlo);
+        dz = kfloat - (double)(klo);
+        u = dy      *dz      *(thee->data[IJK((nx-1),jhi,khi)])
+          + (1.0-dy)*dz      *(thee->data[IJK((nx-1),jlo,khi)])
+          + dy      *(1.0-dz)*(thee->data[IJK((nx-1),jhi,klo)])
+          + (1.0-dy)*(1.0-dz)*(thee->data[IJK((nx-1),jlo,klo)]);
+
+        *value = u;
+        return 1;
+
+    } else if (VABS(pt[1] - ymin) < VSMALL) {
+
+        dx = ifloat - (double)(ilo);
+        dz = kfloat - (double)(klo);
+        u = dx      *dz      *(thee->data[IJK(ihi,0,khi)])
+          + dx      *(1.0-dz)*(thee->data[IJK(ihi,0,klo)])
+          + (1.0-dx)*dz      *(thee->data[IJK(ilo,0,khi)])
+          + (1.0-dx)*(1.0-dz)*(thee->data[IJK(ilo,0,klo)]);
+
+        *value = u;
+        return 1;
+
+    } else if (VABS(pt[1] - ymax) < VSMALL) {
+
+        dx = ifloat - (double)(ilo);
+        dz = kfloat - (double)(klo);
+        u = dx      *dz      *(thee->data[IJK(ihi,(ny-1),khi)])
+          + dx      *(1.0-dz)*(thee->data[IJK(ihi,(ny-1),klo)])
+          + (1.0-dx)*dz      *(thee->data[IJK(ilo,(ny-1),khi)])
+          + (1.0-dx)*(1.0-dz)*(thee->data[IJK(ilo,(ny-1),klo)]);
+
+        *value = u;
+        return 1;
+
+    } else if (VABS(pt[2] - zmin) < VSMALL) {
+
+        dx = ifloat - (double)(ilo);
+        dy = jfloat - (double)(jlo);
+        u = dx      *dy      *(thee->data[IJK(ihi,jhi,0)])
+          + dx      *(1.0-dy)*(thee->data[IJK(ihi,jlo,0)])
+          + (1.0-dx)*dy      *(thee->data[IJK(ilo,jhi,0)])
+          + (1.0-dx)*(1.0-dy)*(thee->data[IJK(ilo,jlo,0)]);
+
+        *value = u;
+        return 1;
+
+    } else if (VABS(pt[2] - zmax) < VSMALL) {
+
+        dx = ifloat - (double)(ilo);
+        dy = jfloat - (double)(jlo);
+        u = dx      *dy      *(thee->data[IJK(ihi,jhi,(nz-1))])
+          + dx      *(1.0-dy)*(thee->data[IJK(ihi,jlo,(nz-1))])
+          + (1.0-dx)*dy      *(thee->data[IJK(ilo,jhi,(nz-1))])
+          + (1.0-dx)*(1.0-dy)*(thee->data[IJK(ilo,jlo,(nz-1))]);
 
         *value = u;
         return 1;
@@ -415,13 +494,13 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     VJMPERR1(!strcmp(tok, "origin"));
     /* Get zmin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->zmin)));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->xmin)));
     /* Get ymin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &(thee->ymin)));
     /* Get xmin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->xmin)));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->zmin)));
     Vnm_print(0, "Vgrid_readDX:  Grid origin = (%g, %g, %g)\n",
       thee->xmin, thee->ymin, thee->zmin);
     /* Get "delta" */
