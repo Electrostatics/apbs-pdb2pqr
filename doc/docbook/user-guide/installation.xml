@@ -388,18 +388,20 @@
       </sect3>
 
       <sect3> <title>AMD Opteron</title>
-        <para> Since the BLAS libraries that MALOC uses are not 64-bit clean, you must
-               download a third-party BLAS for installation to succeed as well as make
-               a few additional changes.  To compile APBS on the Opteron with MPI,
-               you will most likely need to ensure that MPI was compiled with the 
-               <literal>-fPIC</literal> flag.
+        <para> Since the MALOC BLAS is not 64 bit clean, you must used a third
+               party BLAS for installation on the Opteron.  We have had good 
+               success using the Portland group compilers and the associated 
+               PGI BLAS libraries, although a different third party BLAS 
+               (like ATLAS) should work as well.  For the Portland compilers:  
            <orderedlist>
              <listitem>
-                <para> Make sure the <literal>-fPIC</literal> flag is set in both 
-                       <literal>CFLAGS</literal> and <literal>FFLAGS</literal>:
+                <para> Set the following flags for use with the Portland 
+                       compilers:
                    <screen>
-                     <prompt>$</prompt> <userinput>export CFLAGS='-fPIC'</userinput>
-                     <prompt>$</prompt> <userinput>export FFLAGS='-fPIC'</userinput>
+                     <prompt>$</prompt> <userinput>export CC=pgcc</userinput>
+                     <prompt>$</prompt> <userinput>export CFLAGS='-O2 -fPIC -fastsse -Bstatic'</userinput>
+                     <prompt>$</prompt> <userinput>export F77=pgf77</userinput>
+                     <prompt>$</prompt> <userinput>export FFLAGS='-O2 -fPIC -fastsse -Bstatic'</userinput>
                    </screen>
                 </para>
              </listitem>
@@ -412,34 +414,15 @@
                 </para>
              </listitem>
              <listitem>
-                <para> Download the single-threaded BLAS for 64-bit Opteron from
-                       Kazushige Goto's <ulink url="http://www.cs.utexas.edu/users/kgoto/">
-                       site</ulink>.  Make sure you also download <literal>xerbla.f</literal>
-                       as noted in Note 1.  Place both of these files in the
-                       directory containing the libraries for APBS and MALOC - 
-                       this will be the <parameter>$FETK_LIBRARY/[triplet]</parameter> directory, 
-                       where <parameter>[triplet]</parameter> is a machine specific directory 
-                       (i.e. <literal>
-                       x86_64-unknown-linux</literal>).  You should see <literal>libmaloc.a
-                       </literal> in this directory.  Set the <parameter> LD_LIBRARY_PATH
-                       </parameter> variable to this directory, unzip the BLAS library, compile 
-                       <literal>xerbla.f</literal> and create a new archive which will be 
-                       <literal>libblas.a</literal> (replace <literal>libgoto_px_xxx.so
-                       </literal> with the correctly named file):
+                <para> Locate the BLAS library in your PGI installation and
+                       configure APBS to use that library, and then finish
+                       the installation:
                    <screen>
-                     <prompt>$</prompt> <userinput> export LD_LIBRARY_PATH='${FETK_LIBRARY}/[triplet]:${LD_LIBRARY_PATH}'</userinput>
-                     <prompt>$</prompt> <userinput> gunzip libgoto_px_xxx.so.gz</userinput>
-                     <prompt>$</prompt> <userinput> gcc -c -O2 -fPIC xerbla.f</userinput>
-                     <prompt>$</prompt> <userinput> ar cru libblas.a libgoto_px_xxx.so xerbla.o</userinput>
-                     <prompt>$</prompt> <userinput> ranlib libblas.a</userinput>
+                     <prompt>$</prompt> <userinput> export BLAS_DIR='/path/to/blas'</userinput>
+                     <prompt>$</prompt> <userinput> ./configure --with-blas="-L${BLAS_DIR} -lblas" </userinput>
+                     <prompt>$</prompt> <userinput> make; make install </userinput>
                    </screen>
                 </para>
-             </listitem>
-             <listitem>
-                <para> Now proceed with standard APBS installation.  You do not need to use
-                       the <literal>--with-blas</literal> flag, as the BLAS library has been
-                       created in the standard directory.
-                </para> 
              </listitem>
           </orderedlist>
         </para>

@@ -160,13 +160,13 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 # For Itanium ia64 using intel-mkl BLAS
 # NOTE: you must set the INTEL_BLAS environment variable to the BLAS lib dir!
 # From intel-mkl notes: Use the following linking flag order:
-#       -lmkl_lapack -lmkl_ipf
+#       -lmkl_lapack -lmkl_ipf -ldl
 
 %ifarch ia64
    export CC=icc
-   export CFLAGS='-fPIC' 
+   export CFLAGS='-fPIC  -O3 -tpp2' 
    export F77=ifort
-   export FFLAGS='-fPIC'
+   export FFLAGS='-fPIC -O3 -tpp2'
    export LDFLAGS='-static -static-libcxa'
    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"
    make
@@ -186,13 +186,16 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 #        2.  Copy the xlc stanza in vac.cfg and make a new stanza, using the
 #            same name you used in the xlf config file.
 #        3.  Set var in FFLAGS -F:var below to this name.
- 
+#        4.  Set the BLAS environment variable and BLAS library flags to
+#            point to the appropriate libraries (ATLAS or ESSL) - if using
+#            ATLAS, make sure to use xlf when compiling the Fortran wrappers.
+
 %ifarch ppc64 ppc64pseries ppc64iseries
      export CC=xlc
-     export CFLAGS='-q64 -qarch=ppc64'
+     export CFLAGS='-O2 -q64 -qarch=pwr4 -qtune=pwr4'
      export F77=xlf
-     export FFLAGS='-q64 -qarch=ppc64 -Wl,-static -F:xtest'
-     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+     export FFLAGS='-q64 -qarch=pwr4 -qtune=pwr4 -Wl,-static -F:xtest'
+     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${BLAS} -lxlfblas -latlas" --with-blas-name="xlfblas"
      make
 %endif
 
