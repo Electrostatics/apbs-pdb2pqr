@@ -704,11 +704,14 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    natoms = Valist_getNumberAtoms(thee->alist);
    for (iatom=0; iatom<natoms; iatom++) {
        /* Get atom information */
-       icolor = Vcsm_getAtomColor(thee->csm, iatom);
+       icolor = Vpbe_getAtomColor(thee, iatom);
        charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
        position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
        /* Check if this atom belongs to the specified partition */
-       if (color>=0) VASSERT(icolor>=0);
+       if ((color>=0) && (icolor<0)) {
+           Vnm_print(2, "Vpbe_getLinearEnergy1: Atom colors not set!\n");
+           VASSERT(0);
+       }
        if (icolor == color) { 
            /* Loop over the simps associated with this atom */
            nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
@@ -739,6 +742,54 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
 
    /* Return the energy */
    return 0.5*energy;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getLinearEnergy2
+//
+// Purpose:  Using the solution at the finest mesh level, get the 
+//           electrostatic energy using the free energy functional for the 
+//           linearized Poisson-Boltzmann equation without removing any 
+//           self-interaction terms (i.e., removing the reference state of
+//           isolated charges present in an infinite dielectric continuum with 
+//           the same relative permittivity as the interior of the protein).
+//           In other words, we calculate
+//             \[ G = (1/2) (A u, u) \]
+//           where $A$ is the stiffness matrix, and return the result in 
+//           units of $k_B T$.  The argument color
+//           allows the user to control the partition on which this energy
+//           is calculated; if (color == -1) no restrictions are used.
+//           The solution is obtained from the finest level of the passed AM
+//           object, but atomic data from the Vpbe object is used to
+//           calculate the energy
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) { 
+
+    double energy = 0.0;
+    int isimp, nsimps;
+    int level;
+
+    SS *simp;
+    Alg *alg;
+    Emat emat;
+
+    level = AM_maxLevel(am);
+    alg = AM_alg(am, level);
+    nsimps = Vpbe_numSS(thee->gm); 
+
+    for (isimp=0; isimp<nsimps; isimp++) {
+        simp = Vgm_SS(gm, isimp);
+        /* Only work on the simps that belong to the selected partition, unless
+         * no partition was selected */
+        if ((SS_chart(simp) == color) || (color < 0)) {
+            /* Build the stiffness matrix and load vector for this element */
+            Alg_assemEmat(alg, simp, 0, u, ud, &emat);
+            /* Now what do we do? */
+            VASSERT(0);
+        }
+    }
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -794,6 +845,57 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 
     return energy;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_setAtomColors
+//
+// Purpose:  Transfer color information from partitioned mesh to the atoms.
+//           In the case that a charge is shared between two partitions, the
+//           partition color of the first simplex is selected.  Due to the
+//           arbitrary nature of this selection, THIS METHOD SHOULD ONLY BE
+//           USED IMMEDIATELY AFTER PARTITIONING!!!
+//
+// Note:     This is a friend function of Vcsm
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
+
+    SS *simp;
+    int iatom, natoms;
+
+    VASSERT(thee != VNULL);
+
+    natoms = Valist_getNumberAtoms(thee->alist);
+
+    for (iatom=0; iatom<natoms; iatom++) {
+        simp = Vcsm_getSimplex(thee->csm, 0, iatom);
+        thee->csm->colors[iatom] = SS_chart(simp);
+    }
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getAtomColor
+//
+// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
+//           hasn't been initialized yet.
+//
+// Note:     This is a friend function of Vcsm
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
+
+    int natoms;
+
+    VASSERT(thee != VNULL);
+
+    natoms = Valist_getNumberAtoms(thee->alist);
+    VASSERT(iatom < natoms);
+
+    return thee->csm->colors[iatom];
+}
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_memChk
