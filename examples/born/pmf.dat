@@ -1,14 +1,13 @@
-# One ion (+1), zero ionic strength, 15 levels of uniform refinement,
-# 298.15 K, 78.5 dielectric -- energies calculated with respect to vacuum
-# and in units of kJ/mol, times in seconds.  Tra = traditional PBE... Reg =
-# regularized
+# One ion (+1), zero ionic strength, 298.15 K, 78.5 dielectric -- 
+# energies calculated with respect to vacuum and in units of kJ/mol, 
+# times in seconds (for 1 * 500 MHz PIII with 384 MB RAM).  
 #
 #
-# Rad (A)	Tra E	Reg E	True E
-1.00		-715	-707	-686
-2.00		-358	-354	-343
-3.00		-239	-236	-228
-4.00		-179	-178	-172
-5.00		-143	-142	-137
-6.00		-120	-118	-114
-7.00		-103	-101	-98.0
+# Rad (A)	True E	APBS E	# Unknowns	Time (s)	Max Mem (MB)
+1.00		-686	-686	51839		338		75.56
+2.00		-343	-344	51707		323		75.26
+3.00		-228	-229	51159		303		73.79
+4.00		-172	-172	45379		239		60.53
+5.00		-137	-138	45379		234		60.53
+6.00		-114	-115	39425		225		54.00
+7.00		-98.0	-98.6	32525		152		47.09
