@@ -147,12 +147,13 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 
 %ifarch x86_64
    export CC=pgcc
-   export CFLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export CFLAGS='-O2 -fastsse -fPIC'
    export F77=pgf77
-   export FFLAGS='-O2 -fastsse -fPIC -Bstatic'
-   export F77FLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export FFLAGS='-O2 -fastsse -fPIC'
+   export F77FLAGS='-O2 -fastsse -fPIC'
    export CXX=pgf77
-   export CXXFLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export CXXFLAGS='-O2 -fastsse -fPIC'
+   export LDFLAGS='-Bstatic'	   
    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${PGI_BLAS} -lblas"
    make
 %endif
