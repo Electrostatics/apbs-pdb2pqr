@@ -103,14 +103,13 @@ liberty_lib = @liberty_lib@
 math_lib = @math_lib@
 mcdir = @mcdir@
 mpi_lib = @mpi_lib@
-sav = @sav@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
 always_built_SUBDIRS = vatom vhash vcsm vpbe
 
-SUBDIRS = $(always_built_SUBDIRS) @sav@
+SUBDIRS = $(always_built_SUBDIRS)
 INCLUDES = @mcdir@/inc
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../inc/config.h
