@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     char *input_path = VNULL;
     char outpath[VMAX_ARGLEN];
     double iparm, sparm;
-    int i, j, rank;
+    int i, j, rank, size;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -150,8 +150,10 @@ int main(int argc, char **argv) {
     Vcom_init(&argc, &argv);
     com = Vcom_ctor(1);
     rank = Vcom_rank(com);
+    size = Vcom_size(com);
     Vio_start();
-    Vcom_print(com, 0, "main:  Hello world from PE %d\n", rank);
+    Vnm_setIoTag(rank, size);
+    Vnm_tprint( 0, "main:  Hello world from PE %d\n", rank);
 
     /* A bit of array/pointer initialization */
     mem = Vmem_ctor("MAIN");
@@ -163,11 +165,11 @@ int main(int argc, char **argv) {
 
     /* *************** CHECK INVOCATION ******************* */
     Vnm_tstart(26, "APBS WALL CLOCK");
-    Vcom_print(com, 1, "%s", header);
-    Vcom_print(com, 1, "This executable compiled on %s at %s\n\n", __DATE__, 
+    Vnm_tprint( 1, "%s", header);
+    Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
       __TIME__);
     if (argc != 2) {
-        Vcom_print(com, 2,"%s\n", usage);
+        Vnm_tprint( 2,"%s\n", usage);
         return APBSRC;
     } 
     input_path = argv[1];
@@ -176,36 +178,36 @@ int main(int argc, char **argv) {
     /* *************** PARSE INPUT FILE ******************* */
     nosh = NOsh_ctor(com);
     sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
-    Vcom_print(com, 1, "main:  Parsing input file %s...\n", input_path);
+    Vnm_tprint( 1, "main:  Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
-        Vcom_print(com, 2, "main:  Error while parsing input file.\n");
+        Vnm_tprint( 2, "main:  Error while parsing input file.\n");
         return APBSRC;
-    } else Vcom_print(com, 1, "main:  Parsed input file.\n");
+    } else Vnm_tprint( 1, "main:  Parsed input file.\n");
     Vio_dtor(&sock);
 
     /* *************** LOAD MOLECULES ******************* */
     loadMolecules(com, nosh, alist);
 
     /* *************** DO THE CALCULATIONS ******************* */
-    Vcom_print(com, 1, "main:  Preparing to run %d PBE calculations.\n",
+    Vnm_tprint( 1, "main:  Preparing to run %d PBE calculations.\n",
       nosh->ncalc);
     for (i=0; i<nosh->ncalc; i++) {
-        Vcom_print(com, 1, "main:  ----------------------------------------\n");
+        Vnm_tprint( 1, "main:  ----------------------------------------\n");
 
         /* ***** Do MG calculation ***** */
         if (nosh->calc[i].calctype == 0) {
 
-            Vcom_print(com, 1, "main:  CALCULATION #%d: MULTIGRID\n", i+1);
+            Vnm_tprint( 1, "main:  CALCULATION #%d: MULTIGRID\n", i+1);
 
             /* Useful local variables */
             mgparm = nosh->calc[i].mgparm;
             pbeparm = nosh->calc[i].pbeparm;
 
             /* Set up problem */
-            Vcom_print(com, 1, "main:    Setting up problem...\n");
+            Vnm_tprint( 1, "main:    Setting up problem...\n");
             if (!initMG(com, i, nosh, mgparm, pbeparm, realCenter, pbe, 
               alist, pmgp, pmg)) {
-                Vcom_print(com, 2, "main:  Error setting up MG calculation!\n");
+                Vnm_tprint( 2, "main:  Error setting up MG calculation!\n");
                 return APBSRC;
             }
 
@@ -239,7 +241,7 @@ int main(int argc, char **argv) {
 
         /* ***** Do FEM calculation ***** */
         } else {
-            Vcom_print(com, 2, "main: FEM shell support not implemented yet\n");
+            Vnm_tprint( 2, "main: FEM shell support not implemented yet\n");
             return APBSRC;
         }
     } 
@@ -247,23 +249,23 @@ int main(int argc, char **argv) {
     
     /* *************** HANDLE PRINT STATEMENTS ******************* */
     if (nosh->nprint > 0) {
-        Vcom_print(com, 1, "main:  ----------------------------------------\n");
-        Vcom_print(com, 1, "main:  PRINT STATEMENTS\n");
+        Vnm_tprint( 1, "main:  ----------------------------------------\n");
+        Vnm_tprint( 1, "main:  PRINT STATEMENTS\n");
     }
     for (i=0; i<nosh->nprint; i++) {
         /* Print energy */
         if (nosh->printwhat[i] == 0) {
             printEnergy(com, nosh, totEnergy, i);
         } else {
-            Vcom_print(com, 2, "main:  Undefined PRINT keyword!\n");
+            Vnm_tprint( 2, "main:  Undefined PRINT keyword!\n");
             break;
         }
     }
  
 
     /* *************** GARBAGE COLLECTION ******************* */
-    Vcom_print(com, 1, "main:  ----------------------------------------\n");
-    Vcom_print(com, 1, "main:  CLEANING UP AND SHUTTING DOWN...\n");
+    Vnm_tprint( 1, "main:  ----------------------------------------\n");
+    Vnm_tprint( 1, "main:  CLEANING UP AND SHUTTING DOWN...\n");
     for (i=0; i<nosh->ncalc; i++) {
         if (nforce[i] > 0) 
           Vmem_free(mem, nforce[i], sizeof(AtomForce), 
@@ -277,7 +279,7 @@ int main(int argc, char **argv) {
     Vnm_tstop(26, "APBS WALL CLOCK");
 
     Vnm_print(1, "\n\n");
-    Vcom_print(com, 1, "Thanks for using APBS!\n\n");
+    Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
     Vcom_finalize();
     Vcom_dtor(&com);
