@@ -126,9 +126,10 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Simplex/Vertex information */
     SS *simplex;
 
-    VASSERT(thee != NULL);
+    VASSERT(thee != VNULL);
     thee->natom = Valist_getNumberAtoms(thee->alist);
-    thee->nsimp = thee->gm->numSS;
+    VASSERT(thee->gm != VNULL);
+    thee->nsimp = Vgm_numSS(thee->gm);
     VASSERT(thee->nsimp > 0);
 
     /* Set up the array of colors and initialize all to -1 */
