@@ -104,7 +104,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     hzOLD = pmgOLD->pmgp->hz;
     nxOLD = pmgOLD->pmgp->nx;
     nyOLD = pmgOLD->pmgp->ny;
-    nzOLD = pmgOLD->pmgp->ny;
+    nzOLD = pmgOLD->pmgp->nz;
     xminOLD = pmgOLD->pmgp->xcent - ((double)(nxOLD-1)*hxOLD)/2.0;
     xmaxOLD = pmgOLD->pmgp->xcent + ((double)(nxOLD-1)*hxOLD)/2.0;
     yminOLD = pmgOLD->pmgp->ycent - ((double)(nyOLD-1)*hyOLD)/2.0;
