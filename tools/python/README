@@ -2,7 +2,7 @@ README for tools/Python directory
 ---------------------------------
 
 Author: Todd Dolinsky (todd@ccb.wustl.edu)
-Date: 1/14/2004
+Date: 10/19/2004
 
 This directory contains Python wrappers for APBS.
 
@@ -13,6 +13,9 @@ Files:
                   for the APBS functions defined in routines.c
     apbslibc.so - Generated shared object file
     main.py     - Driver file for APBS code; mimics main.c
+    noinput.py  - Example driver file for APBS code that does not need
+                  PQR/.in input files - all input is handled at the Python
+                  level
     apbs.in     - Example APBS input file for Born Ion example
 
 To run the Python-wrapper version of APBS, make sure you have a working
