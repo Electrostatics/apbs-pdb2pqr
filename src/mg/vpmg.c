@@ -167,7 +167,35 @@ VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_solve(Vpmg *thee) {
 
+    int i;
+    double zkappa2;
+
     thee->filled = 0;
+
+    /* This is a really disgusting hack, however, it preserves the relative
+	 * clarity of the code elsewhere.  There are two paths the code can follow
+	 * based on whether we're solving the NPBE or LPBE.  
+	 * - For the NPBE, we need to keep track of (possibly asymmetric)
+	 *   contributions from different ion species.  In this case, ccf should
+	 *   only contain a characteristic function which describes ion
+	 *   accessibility.  The appropriate scaling coefficients are included in
+	 *   mypde.f (as set by F77MYPDEFINIT).
+     * - For the LPBE, we don't need to keep track of individual ion
+	 *   contributions.  In this case, ccf should contain a characteristic
+	 *   function _ALREADY SCALED BY THE APPROPRIATE COEFFICIENTS_.
+     * In all cases, the fillco functions in vpmg-setup.c only fill ccf with
+	 * the values of the characteristic function.  This would be fine if all
+	 * paths of execution used the functions in mypde.f.  Unforunately, the
+	 * functions in mypde.f are not called by PMG in the case of the LPBE.
+	 * Rather than modifying PMG (we want to maintain as much compatibility as
+	 * possible), we will scale ccf here and then immediately unscale it at the
+	 * end of this function. */
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    if (zkappa2 > VPMGSMALL) {
+        for (i=0; i<(thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz); i++) {
+            thee->ccf[i] = zkappa2*thee->ccf[i];
+        }
+    }
 
     switch(thee->pmgp->meth) {
         /* CGMG (linear) */
@@ -239,6 +267,13 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
             Vnm_print(2, "Vpgm_solve: invalid solver method key (%d)\n",
               thee->pmgp->key);
             break;
+    }
+
+    /* Un-scale ccf (see long comment above) */
+    if (zkappa2 > VPMGSMALL) {
+        for (i=0; i<(thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz); i++) {
+            thee->ccf[i] = thee->ccf[i]/zkappa2;
+        }
     }
 
 }
