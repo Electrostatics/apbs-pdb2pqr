@@ -465,8 +465,23 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
       ionstr += 0.5*(VSQR(pbeparm->ionq[i])*pbeparm->ionc[i]);
 
     Vnm_tprint( 1, "  Molecule ID: %d\n", pbeparm->molid);
-    if (pbeparm->nonlin) Vnm_tprint( 1, "  Nonlinear PBE\n");
-    else Vnm_tprint( 1, "  Linearized PBE\n");
+    switch (pbeparm->pbetype) {
+        case PBE_NPBE:
+            Vnm_tprint( 1, "  Nonlinear traditional PBE\n");
+            break;
+        case PBE_LPBE:
+            Vnm_tprint( 1, "  Linearized traditional PBE\n");
+            break;
+        case PBE_NRPBE:
+            Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
+            break;
+        case PBE_LRPBE:
+            Vnm_tprint( 1, "  Linearized regularized PBE\n");
+            break;
+        default:
+            Vnm_tprint(2, "  Unknown PBE type (%d)!\n", pbeparm->pbetype);
+            break;
+    }
     if (pbeparm->bcfl == BCFL_ZERO) {
         Vnm_tprint( 1, "  Zero boundary conditions\n");
     } else if (pbeparm->bcfl == BCFL_SDH) {
@@ -634,6 +649,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
     if (mgparm->cmeth == MCM_MOL) {
+        Vnm_tprint(0, "Fixing grid center based on molecule...\n");
         for (j=0; j<3; j++) {
             imol = mgparm->centmol-1;
             if (imol < nosh->nmol) {
@@ -648,6 +664,7 @@ fgcent/cgcent!\n",  (imol+1));
 
     /* If we're a parallel calculation, update the grid center based on
      * the appropriate shifts */
+    Vnm_tprint(0, "Fixing grid center...\n");
     if (mgparm->type == 2) {
         for (j=0; j<3; j++) realCenter[j] = mgparm->center[j]
           + mgparm->partOlapCenterShift[j];
@@ -656,7 +673,8 @@ fgcent/cgcent!\n",  (imol+1));
     }
 
     /* Set up PBE object */
-    if (pbeparm->srfm == 2) sparm = pbeparm->swin;
+    Vnm_tprint(0, "Setting up PBE object...\n");
+    if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
     else sparm = pbeparm->srad;
     if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
     else iparm = 0.0;
@@ -665,9 +683,31 @@ fgcent/cgcent!\n",  (imol+1));
       pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
 
     /* Set up PDE object */
-    pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-      mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
-      mgparm->grid[2], pbeparm->nonlin);
+    Vnm_tprint(0, "Setting up PDE object...\n");
+    switch (pbeparm->pbetype) {
+        case PBE_NPBE:
+            pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+              mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
+              mgparm->grid[2], 1);
+            break;
+        case PBE_LPBE:
+            pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+              mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
+              mgparm->grid[2], 0);
+            break;
+        case PBE_LRPBE:
+            Vnm_tprint(2, "Sorry, LRPBE isn't supported with the MG solver!\n");
+            return 0;
+            break;
+        case PBE_NRPBE:
+            Vnm_tprint(2, "Sorry, NRPBE isn't supported with the MG solver!\n");
+            return 0;
+            break;
+        default:
+            Vnm_tprint(2, "Error!  Unknown PBE type (%d)!\n", pbeparm->pbetype);
+            return 0;
+    }
+    Vnm_tprint(0, "Setting PDE center to local center...\n");
     pmgp[i]->bcfl = pbeparm->bcfl;
     pmgp[i]->xcent = realCenter[0];
     pmgp[i]->ycent = realCenter[1];
@@ -1655,15 +1695,14 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 
     /* Set up FEtk objects */
     Vnm_tprint(0, "Setting up FEtk object...\n");
-    if (pbeparm->nonlin)  fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_NRPBE);
-    else fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_LRPBE);
+    fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_NRPBE);
     Vfetk_setParameters(fetk[icalc], pbeparm, feparm);
 
     /* Build mesh */
     Vnm_tprint(0, "Setting up mesh...\n");
     Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->domainLength);
     /* Uniformly refine the mesh a bit */
-    for (j=0; j<3; j++) {
+    for (j=0; j<5; j++) {
         AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
         AM_refine(fetk[icalc]->am, 0, USEHB);
     }
@@ -1836,22 +1875,16 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 
     int lkeyHB = 3;  /**<  AM_hPcg */
 
-    if (pbeparm->nonlin) {
+    if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)) {
         AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
           fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
           fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
           fetk[icalc]->pjac);
-    } else {
+    } else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
         if (USEHB) {
-            printf("lkey = %d, lmax = %d, ltol = %g, gues = %d, pjac = %d\n",
-              lkeyHB, fetk[icalc]->lmax, fetk[icalc]->ltol, fetk[icalc]->gues,
-              fetk[icalc]->pjac);
             AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
               fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
         } else {
-            printf("lkey = %d, lmax = %d, ltol = %g, lprec = %d, gues = %d, pjac = %d\n",
-              fetk[icalc]->lkey, fetk[icalc]->lmax, fetk[icalc]->ltol, 
-              fetk[icalc]->lprec, fetk[icalc]->gues, fetk[icalc]->pjac);
             AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
               fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
               fetk[icalc]->pjac);
@@ -1876,7 +1909,12 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 
     /* Some processors don't count */
     if (nosh->bogus == 0) {
-        *totEnergy = Vfetk_energy(fetk[icalc], -1, pbeparm->nonlin);
+        if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype==PBE_NRPBE)) {
+            *totEnergy = Vfetk_energy(fetk[icalc], -1, 1);
+        } else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
+            *totEnergy = Vfetk_energy(fetk[icalc], -1, 0);
+        } else VASSERT(0);
+
 #ifndef VAPBSQUIET
         Vnm_tprint(1, "    Total electrostatic energy = %1.12E kJ/mol\n", 
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));

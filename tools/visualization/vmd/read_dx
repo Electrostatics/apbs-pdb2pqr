@@ -24,18 +24,18 @@ proc read_dx {fileName molNum} {
     set InputLine [gets $in]
     set InputLine [gets $in]
     set InputLine [gets $in]
-    scan $InputLine "object 1 class gridpositions counts %i %i %i" zgrid ygrid xgrid
+    scan $InputLine "object 1 class gridpositions counts %i %i %i" xgrid ygrid zgrid
     puts "Grid Points per Dimension = x:$xgrid y:$ygrid z:$zgrid"
     set InputLine [gets $in]
     scan $InputLine "origin %e %e %e" xOrigin yOrigin zOrigin
     set origin [list $xOrigin $yOrigin $zOrigin ]
     puts "Origin at: $xOrigin $yOrigin $zOrigin" 
     set InputLine [gets $in]
-    scan $InputLine "delta %e %e %e" zdel dum2 dum1
+    scan $InputLine "delta %e %e %e" xdel dum2 dum1
     set InputLine [gets $in]
     scan $InputLine "delta %e %e %e" dum1 ydel dum2
     set InputLine [gets $in]
-    scan $InputLine "delta %e %e %e" dum2 dum1 xdel
+    scan $InputLine "delta %e %e %e" dum2 dum1 zdel
     set xVec [list [expr $xdel * $xgrid] 0 0 ]
     set yVec [list 0 [expr $ydel * $ygrid] 0 ]
     set zVec [list 0 0 [expr $zdel * $zgrid] ]

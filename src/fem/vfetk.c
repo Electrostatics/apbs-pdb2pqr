@@ -377,7 +377,7 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
 }
 #endif /* if !defined(VINLINE_VFETK) */
 
-VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type) {
+VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vhal_PBEType type) {
 
     /* Set up the structure */
     Vfetk *thee = VNULL;
@@ -388,7 +388,7 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type) {
     return thee;
 }
 
-VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type) {
+VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
 
     int i;
     double center[3];
@@ -817,6 +817,11 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
+
+    /* Destroy socket */
+    Vio_connectFree(sock);
+    Vio_bufGive(sock);
+    Vio_dtor(&sock);
 
     return 1;
 }
@@ -1633,11 +1638,7 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U,
 
 }
 
-VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
-
-    printf("DEBUG: initAssemble\n"); 
-
-}
+VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { ; }
 
 VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
   double tvx[][3], void *data) {
@@ -1687,7 +1688,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
     int i, j, ichop;
     double u2, coef2, eps_p;
-    Vfetk_PBEType pdekey;
+    Vhal_PBEType pdekey;
     Vpbe *pbe = VNULL;
 
     eps_p = Vpbe_getSoluteDiel(var.fetk->pbe);
@@ -1790,7 +1791,7 @@ VPUBLIC void Vfetk_PDE_Fu(PDE *thee, int key, double F[]) {
 
 VPUBLIC double Vfetk_PDE_Fu_v(PDE *thee, int key, double V[], double dV[][3]) {
 
-    Vfetk_PBEType type;
+    Vhal_PBEType type;
     int i;
     double value = 0.;
 
@@ -1835,7 +1836,7 @@ to PBE!\n");
 VPUBLIC double Vfetk_PDE_DFu_wv(PDE *thee, int key, double W[], double dW[][3],
   double V[], double dV[][3]) {
 
-    Vfetk_PBEType type;
+    Vhal_PBEType type;
     int i;
     double value = 0.;
 
@@ -1884,7 +1885,7 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
     int gotAtom, numSring, isimp, ivert, sid;
     double *position, charge, phi[4], phix[4][3], value;
     Vatom *atom;
-    Vfetk_PBEType pdekey;
+    Vhal_PBEType pdekey;
     SS *sring[VRINGMAX];
     VV *vertex = (VV *)user;
 
@@ -2008,7 +2009,7 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     double targetRes, edgeLength, srad, swin, myAcc, refAcc;
     int i, natoms;
     Vsurf_Meth srfm;
-    Vfetk_PBEType type;
+    Vhal_PBEType type;
     FEMparm *feparm = VNULL;
     PBEparm *pbeparm = VNULL;
     Vpbe *pbe = VNULL;
@@ -2083,7 +2084,7 @@ VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
     int i, ichop;
     double dielE, qmE, coef2, u2;
     double value = 0.;
-    Vfetk_PBEType type;
+    Vhal_PBEType type;
 
     type = var.fetk->type;
 

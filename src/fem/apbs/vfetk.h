@@ -63,23 +63,6 @@
 #include "apbs/femparm.h"
 
 /**
- * @brief  Version of PB equation to solve
- * @ingroup  Vfetk
- */
-enum eVfetk_PBEType {
-    PBE_LPBE,  /**< Linearized Poisson-Boltzmann equation */
-    PBE_NPBE,  /**< Nonlinear (full) Poisson-Boltzmann equation */
-    PBE_LRPBE,  /**< Linearzed regularized Poisson-Boltzmann equation */
-    PBE_NRPBE  /**< Nonlinear regularized Poisson-Boltzmann equation */
-};
-
-/**
- * @brief  Declare FEMparm_PBEType type
- * @ingroup  Vfetk
- */
-typedef enum eVfetk_PBEType Vfetk_PBEType;
-
-/**
  * @brief  Linear solver type 
  * @ingroup Vfetk
  * @note  Do not change these values; they correspond to settings in FEtk
@@ -180,7 +163,7 @@ struct sVfetk {
               * please) */
   PBEparm *pbeparm;  /**<  Generic PB parameters */
   FEMparm *feparm;  /**<  FEM-specific parameters */
-  Vfetk_PBEType type;  /**< Version of PBE to solve */
+  Vhal_PBEType type;  /**< Version of PBE to solve */
   int level;  /**< Refinement level (starts at 0) */
 
 };
@@ -305,7 +288,7 @@ typedef struct sVfetk_LocalVar Vfetk_LocalVar;
  * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
  *         Vfetk_genCube */
-VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type);
+VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Vhal_PBEType type);
 
 /** 
  * @brief  FORTRAN stub constructor for Vfetk object
@@ -318,7 +301,7 @@ VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type);
  * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
  *         Vfetk_genCube */
-VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type);
+VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type);
 
 /** @brief   Object destructor
  *  @ingroup Vfetk

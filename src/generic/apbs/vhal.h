@@ -82,6 +82,24 @@ enum eVsurf_Meth {
 typedef enum eVsurf_Meth Vsurf_Meth;
 
 /**
+ * @brief  Version of PBE to solve
+ * @ingroup  Vhal
+ */
+enum eVhal_PBEType {
+    PBE_LPBE,  /**<  Traditional Poisson-Boltzmann equation, linearized */
+    PBE_NPBE,  /**<  Traditional Poisson-Boltzmann equation, full */
+    PBE_LRPBE,  /**<  Regularized Poisson-Boltzmann equation, linearized */
+    PBE_NRPBE  /** <  Regularized Poisson-Boltzmann equation, full */
+};
+
+/** 
+ *  @brief   Declaration of the Vhal_PBEType type as the Vhal_PBEType enum
+ *  @ingroup Vhal
+ */
+typedef enum eVhal_PBEType Vhal_PBEType;
+
+
+/**
  * @ingroup  Vhal
  * @author  Nathan Baker
  * @brief  Types of boundary conditions 
