@@ -79,7 +79,7 @@ export FETK_LIBRARY=$FETK_PREFIX/lib
 
 # We're assuming Intel compilers for Intel platforms.  These are the specific
 # Intel platforms we'll support:
-%ifarch i787
+%ifarch i787 {
   export CC="icc" 
   export CFLAGS="-O3 -tpp7 -static-libcxa" 
   export F77="ifc" 
@@ -119,12 +119,14 @@ export FETK_LIBRARY=$FETK_PREFIX/lib
   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
   make
 %else
-  export CC='ccc'
-  export CFLAGS='-O2'
-  export F77='fort'
-  export FFLAGS='-O2'
-  ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
-  make
+  %ifarch alpha
+    export CC='ccc'
+    export CFLAGS='-O2'
+    export F77='fort'
+    export FFLAGS='-O2'
+    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
+    make
+  %endif
 %endif
 
 
