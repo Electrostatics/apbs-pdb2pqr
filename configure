@@ -9669,6 +9669,10 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 
 
 
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${maloc_lib_path};
+CPPFLAGS=${maloc_inc_path};
 mpi_lib="";
 echo "$as_me:$LINENO: checking for maloc_needs_mpi in -lmaloc" >&5
 echo $ECHO_N "checking for maloc_needs_mpi in -lmaloc... $ECHO_C" >&6
@@ -9730,6 +9734,8 @@ else
   mpi_use=""
 fi
 
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 mpi_inc="";
 if test -z "${mpi_use}"; then
     echo "$as_me:$LINENO: result: MALOC not compiled with MPI:  MPI disabled" >&5
@@ -10071,6 +10077,10 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 
 
 
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${maloc_lib_path};
+CPPFLAGS=${maloc_inc_path};
 rl_lib="";
 echo "$as_me:$LINENO: checking for maloc_needs_rl in -lmaloc" >&5
 echo $ECHO_N "checking for maloc_needs_rl in -lmaloc... $ECHO_C" >&6
@@ -10343,6 +10353,8 @@ echo "$as_me: error: READLINE cannot be found!" >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 
 echo "$as_me:$LINENO: result: ---------- end configuring for MALOC linkage --------------" >&5
 echo "${ECHO_T}---------- end configuring for MALOC linkage --------------" >&6

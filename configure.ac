@@ -261,11 +261,17 @@ AC_SUBST(maloc_inc)
 dnl # ----------------------
 dnl # HANDLE THE MPI LIBRARY
 dnl # ----------------------
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${maloc_lib_path};
+CPPFLAGS=${maloc_inc_path};
 mpi_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_mpi,
     [mpi_use="yes"],
     [mpi_use=""],
     [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 mpi_inc="";
 if test -z "${mpi_use}"; then
     AC_MSG_RESULT([MALOC not compiled with MPI:  MPI disabled])
@@ -350,6 +356,10 @@ dnl # ---------------------------
 dnl # HANDLE THE READLINE LIBRARY
 dnl # ---------------------------
 
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${maloc_lib_path};
+CPPFLAGS=${maloc_inc_path};
 rl_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_rl,
     [rl_use="yes"],
@@ -395,6 +405,8 @@ if test -n "${rl_use}"; then
         AC_MSG_ERROR([READLINE cannot be found!])
     fi
 fi
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(rl_lib)
 AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
 
