@@ -47,6 +47,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vpmg vgreen vfetk
+always_built_SUBDIRS = vatom vacc vpbe vgreen @fetk_do_src@ @pmg_do_src@ 
 
 SUBDIRS = $(always_built_SUBDIRS)

@@ -46,7 +46,7 @@
 #ifndef _VPMGP_H_
 #define _VPMGP_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vhal.h"
 #include "apbs/valist.h"
 #include "apbs/vunit.h"

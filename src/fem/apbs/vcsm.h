@@ -47,6 +47,7 @@
 #ifndef _VCSM_H_
 #define _VCSM_H_
 
+#include "maloc/maloc.h"
 #include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"

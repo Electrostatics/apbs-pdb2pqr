@@ -59,6 +59,7 @@
 #ifndef _VPEE_H
 #define _VPEE_H
 
+#include "maloc/maloc.h"
 #include "mc/mc.h"
 #include "apbs/vhal.h"
 

@@ -44,6 +44,10 @@
 #include "apbscfg.h"
 #include "apbs/vacc.h"
 
+#if defined(HAVE_FETK_H)
+#include "mc/mc.h"
+#endif
+
 VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -68,7 +72,7 @@ VPUBLIC int Vacc_memChk(Vacc *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vacc: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int ivdwAccExclus(Vacc *thee, Vec3 center, double radius, int atomID);
+VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius, int atomID);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_ctor
@@ -320,7 +324,7 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vacc_splineAcc(Vacc *thee, Vec3 center, double radius, 
+VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double radius, 
   double alpha) {
 
 
@@ -388,14 +392,14 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, Vec3 center, double radius,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
+VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
     double dist;
     Vatom *atom;
-    Vec3 vec;
+    double vec[3];
 
     /* Convert to grid based coordinates */
     centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
@@ -417,7 +421,7 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
         vec[0] = (Vatom_getPosition(atom))[0];
         vec[1] = (Vatom_getPosition(atom))[1];
         vec[2] = (Vatom_getPosition(atom))[2];
-        dist = Vec3_dif2(center,vec);
+        dist = VSQRT(VSQR(center[0]-vec[0])+VSQR(center[1]-vec[1])+VSQR(center[2]-vec[2]));
         if (dist < Vatom_getRadius(atom)) return 0;
     }
 
@@ -435,7 +439,7 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
+VPUBLIC int Vacc_ivdwAcc(Vacc *thee, double center[3], double radius) {
 
     return ivdwAccExclus(thee, center, radius, -1);
 
@@ -457,7 +461,7 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int ivdwAccExclus(Vacc *thee, Vec3 center, double radius, 
+VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius, 
   int atomID) {
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
@@ -514,10 +518,10 @@ VPRIVATE int ivdwAccExclus(Vacc *thee, Vec3 center, double radius,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
+VPUBLIC int Vacc_molAcc(Vacc *thee, double center[3], double radius) {
 
     int ipt;
-    Vec3 vec;
+    double vec[3];
 
     /* ******* CHECK IF OUTSIDE ATOM+PROBE RADIUS SURFACE ***** */
     if (Vacc_ivdwAcc(thee, center, radius)) return 1;
@@ -541,6 +545,7 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
     return 0;
 }
 
+#if defined(HAVE_FETK_H)
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_writeGMV
 //
@@ -590,6 +595,7 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
     Vmem_free(thee->vmem, Gem_numVV(gm), sizeof(double), 
       (void **)&(accVals[1]));
 }
+#endif /* defined(HAVE_FETK_H) */
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_sphere

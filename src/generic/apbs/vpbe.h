@@ -46,7 +46,7 @@
 #ifndef _VPBE_H_
 #define _VPBE_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
@@ -54,11 +54,6 @@
 #include "apbs/vacc.h"
 #include "apbs/vunit.h"
 #include "apbs/vgreen.h"
-
-#if defined(HAVE_PMGC_H)
-#   include "pmgc/mgmlsys.h"
-#   include "pmgc/mgarray.h"
-#endif
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Parameters and datatypes

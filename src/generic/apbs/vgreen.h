@@ -49,7 +49,7 @@
 #ifndef _VGREEN_H_
 #define _VGREEN_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
 #include "apbs/vunit.h"

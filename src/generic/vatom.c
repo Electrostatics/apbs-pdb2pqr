@@ -53,7 +53,7 @@ VEMBED(rcsid="$Id$")
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vatom_getPosition
 //
-// Purpose:  Return atom position (as Vec3 vector)
+// Purpose:  Return atom position (as 3-array)
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -194,11 +194,11 @@ VPUBLIC void Vatom_dtor2(Vatom *thee) { ; }
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vatom_setPosition
 //
-// Purpose:  Set atom position (as Vec3 vector)
+// Purpose:  Set atom position (as 3-array)
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vatom_setPosition(Vatom *thee, Vec3 position) { 
+VPUBLIC void Vatom_setPosition(Vatom *thee, double position[3]) { 
 
    VASSERT(thee != VNULL);
    (thee->position)[0] = position[0]; 
