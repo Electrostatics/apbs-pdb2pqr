@@ -108,12 +108,15 @@
  * href="http://scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC</a>
  * (hardware abstraction library for code portability).
  * 
- * <p><i>Please acknowledge your use of APBS</i> by citing: <br>
+ * <p>
+ * <font color="red">
+ * <i>Please acknowledge your use of APBS</i> by citing: <br>
  *   N. A. Baker, D.  Sept, S.  Joseph, M. J. Holst, J. A. McCammon.
  *   Electrostatics of nanosystems: application to microtubules and the
  *   ribosome.  <i>Proc. Natl.  Acad. Sci.  USA</i> <b>98</b>, 10037-10041,
  *   2001.  <a href="http://www.pnas.org/cgi/reprint/181342398v1">(Link to
  *   paper)</a>
+ * </font>
  * 
  * <p> 
  * For more information on Poisson-Boltzmann methods and theory, please visit
@@ -121,6 +124,11 @@
  * href="http://www.biophysics.org/btol/compute.html#3C">Introduction to
  * Continnuum Electrostatics</a> chapter (by Mike Gilson) of the <a
  * href="http://www.biophysics.org/btol/">Biophysics Textbook On-line</a>.
+ * APBS contains a number of <a href="#test">examples</a> which are described
+ * in detail <a href="#test">in this document</a>.  I've also prepared a brief
+ * but more generic set of notes on PB energy calculations with APBS (avilable
+ * in <a href="pb_data.pdf">PDF</a> or <a
+ * href="pb_data.ps">Postscript</a>).  
  * <p>
  * This version of the APBS code contains sequential and parallel fast
  * multigrid Poisson-Boltzmann solver.  Subsequent releases will include

@@ -9,6 +9,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
     reported inside iVdW surface.
   * Added documetnation for fe-manual
   * Fixed bug in VMD read_dx utility
+  * Modified mechanism for cubic-spline output, fixing a bug associated with
+    zero-radius atoms
   * Added following aliases for some of the more obscure parameters in the
     input files:
       chgm 0 ==> chgm spl0
