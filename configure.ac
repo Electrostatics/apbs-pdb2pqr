@@ -180,6 +180,8 @@ esac
 case $host_cpu in
    x86_64*)
       PY_CFLAGS="";;
+   powerpc64*)
+      PY_CFLAGS="";;
 esac
 
 AC_SUBST(PY_SHARED,[$PY_SHARED])
