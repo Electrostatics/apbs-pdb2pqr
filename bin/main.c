@@ -242,23 +242,24 @@ int main(int argc, char **argv) {
                 Vnm_print(1, "main:    Zero boundary conditions\n"); 
             } else if (mgparm->bcfl == 1) {
                 Vnm_print(1, "main:    Single Debye-Huckel sphere boundary \
-                   conditions\n"); 
+conditions\n"); 
             } else if (mgparm->bcfl == 2) {
                 Vnm_print(1, "main:    Multiple Debye-Huckel sphere boundary \
-                  conditions\n"); 
+conditions\n"); 
             } else if (mgparm->bcfl == 4) {
                 Vnm_print(1, "main:    Boundary conditions from focusing\n"); 
             }
             Vnm_print(1, "main:    %d ion species (%4.3f M ionic strength):\n",
               mgparm->nion, ionstr);
             for (j=0; j<mgparm->nion; j++) {
-                Vnm_print(1, "main:      %4.3f A-radius, %4.3f e-charge, %4.3f M concentration\n",
-                  mgparm->ionr[j], mgparm->ionq[j], mgparm->ionc[j]);
+                Vnm_print(1, "main:      %4.3f A-radius, %4.3f e-charge, \
+%4.3f M concentration\n", mgparm->ionr[j], mgparm->ionq[j], mgparm->ionc[j]);
             }
             Vnm_print(1, "main:    Solute dielectric: %4.3f\n", mgparm->pdie);
             Vnm_print(1, "main:    Solvent dielectric: %4.3f\n", mgparm->sdie);
             if (mgparm->srfm == 0) {
-                Vnm_print(1, "main:    Using \"molecular\" surface definition; no smoothing\n");
+                Vnm_print(1, "main:    Using \"molecular\" surface \
+definition; no smoothing\n");
                 Vnm_print(1, "main:    Solvent probe radius: %4.3f A\n", 
                   mgparm->srad);
             } else if (mgparm->srfm == 1) {
@@ -315,6 +316,9 @@ int main(int argc, char **argv) {
               mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
               mgparm->grid[2], mgparm->nonlin);
             pmgp[i]->bcfl = mgparm->bcfl;
+            pmgp[i]->xcent = mgparm->center[0];
+            pmgp[i]->ycent = mgparm->center[1];
+            pmgp[i]->zcent = mgparm->center[2];
             /* See if we're supposed to be focusing this calculation */
             if (mgparm->bcfl == 4) {
                 if (i == 0) {
