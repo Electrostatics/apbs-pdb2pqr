@@ -5,7 +5,7 @@
 /**
  *  @file    vopot.h
  *  @ingroup Vopot
- *  @author  Nathan Baker and Steve Bond
+ *  @author  Nathan Baker
  *  @brief   Potential oracle for Cartesian mesh data
  *  @version $Id$
  *  @attention
@@ -47,6 +47,7 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vunit.h"
+#include "apbs/vgrid.h"
 #include "apbs/vpbe.h"
 
 VEMBED(rcsid="$Id$")
@@ -59,16 +60,7 @@ VEMBED(rcsid="$Id$")
  */
 struct Vopot {
 
-    int nx;       /**< Number grid points in x direction */
-    int ny;       /**< Number grid points in y direction */
-    int nz;       /**< Number grid points in z direction */
-    double hx;    /**< Grid spacing in x direction */
-    double hy;    /**< Grid spacing in y direction */
-    double hzed;  /**< Grid spacing in z direction */
-    double xmin;  /**< x coordinate of lower grid corner */
-    double ymin;  /**< y coordinate of lower grid corner */
-    double zmin;  /**< z coordinate of lower grid corner */
-    double *data; /**< nx*ny*nz array of potential data (in units kT/e) */
+    Vgrid *grid;  /**< Grid object containing potential data (in units kT/e) */
     Vpbe   *pbe;  /**< Pointer to PBE object */
 };
 
@@ -90,55 +82,32 @@ typedef struct Vopot Vopot;
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
- *  @param   nx    Number grid points in x direction
- *  @param   ny    Number grid points in y direction
- *  @param   nz    Number grid points in z direction
- *  @param   hx    Grid spacing in x direction
- *  @param   hy    Grid spacing in y direction
- *  @param   hzed  Grid spacing in z direction
- *  @param   xmin  x coordinate of lower grid corner
- *  @param   ymin  y coordinate of lower grid corner
- *  @param   zmin  z coordinate of lower grid corner
- *  @param   data  nx*ny*nz array of potential data (in units kT/e)
+ *  @param   Vgrid Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @returns Newly allocated and initialized Vopot object
  */
-VEXTERNC Vopot*  Vopot_ctor(int nx, int ny, int nz, 
-                  double hx, double hy, double hzed,
-                  double xmin, double ymin, double zmin,
-                  double *data, Vpbe *pbe);
+VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe);
 
 /** @brief   Initialize Vopot object with values obtained from Vpmg_readDX (for
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Pointer to newly allocated Vopot object
- *  @param   nx    Number grid points in x direction
- *  @param   ny    Number grid points in y direction
- *  @param   nz    Number grid points in z direction
- *  @param   hx    Grid spacing in x direction
- *  @param   hy    Grid spacing in y direction
- *  @param   hzed  Grid spacing in z direction
- *  @param   xmin  x coordinate of lower grid corner
- *  @param   ymin  y coordinate of lower grid corner
- *  @param   zmin  z coordinate of lower grid corner
- *  @param   data  nx*ny*nz array of potential data (in units kT/e)
+ *  @param   Vgrid Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @returns Newly allocated and initialized Vopot object
  */
-VEXTERNC int Vopot_ctor2(Vopot *thee, int nx, int ny, int nz, 
-                  double hx, double hy, double hzed,
-                  double xmin, double ymin, double zmin,
-                  double *data, Vpbe *pbe);
+VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe);
 
 /** @brief   Get potential value (from mesh or approximation) at a point
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Vopot obejct
  *  @param   x     Point at which to evaluate potential
- *  @returns pot   Dimensionless potential (units kT/e) at point x
+ *  @param   pot   Set to dimensionless potential (units kT/e) at point x
+ *  @returns        1 if successful, 0 otherwise
  */
-VEXTERNC double Vopot_pot(Vopot *thee, double x[3]);
+VEXTERNC int Vopot_pot(Vopot *thee, double x[3], double *pot);
 
 /** @brief   Object destructor
  *  @ingroup Vopot
@@ -156,7 +125,7 @@ VEXTERNC void Vopot_dtor2(Vopot *thee);
 
 /** @brief   Get second derivative values at a point
  *  @ingroup Vopot
- *  @author  Steve Bond and Nathan Baker
+ *  @author  Nathan Baker
  *  @param   thee   Pointer to Vopot object
  *  @param   pt     Location to evaluate second derivative
  *  @param   cflag  
@@ -164,18 +133,21 @@ VEXTERNC void Vopot_dtor2(Vopot *thee);
  *             \li  1:  Mean Curvature (Laplace)
  *             \li  2:  Gauss Curvature
  *             \li  3:  True Maximal Curvature
- *  @return  Specified curvature value
+ *  @param   curv   Set to specified curvature value
+ *  @returns        1 if successful, 0 otherwise
  */
-VEXTERNC double Vopot_curvature(Vopot *thee, double pt[3], int cflag );
+VEXTERNC int Vopot_curvature(Vopot *thee, double pt[3], int cflag, double
+  *curv);
 
 /** @brief   Get first derivative values at a point
  *  @ingroup Vopot
- *  @author  Nathan Baker and Steve Bond
+ *  @author  Nathan Baker
  *  @param   thee   Pointer to Vopot object
  *  @param   pt     Location to evaluate gradient
  *  @param   grad   Gradient
+ *  @returns        1 if successful, 0 otherwise
  */
-VEXTERNC void Vopot_gradient(Vopot *thee, double pt[3], double grad[3] );
+VEXTERNC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3] );
 
 
 #endif

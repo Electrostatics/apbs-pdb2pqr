@@ -131,6 +131,22 @@ struct NOsh {
 					  * calc array. */
     int nmol;                            /**< Number of molecules */
     char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
+    char molfmt[NOSH_MAXMOL];            /**< Mol files formats (0=>PQR) */
+    int ndiel;                           /**< Number of dielectric maps */
+    char dielpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to dielectric map
+                                          * files */
+    char dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
+                                          * formats (0=>OpenDX) */
+    int nkappa;                          /**< Number of kappa maps */
+    char kappapath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to kappa map
+                                          * files */
+    char kappafmt[NOSH_MAXMOL];          /**< Kappa maps file 
+                                          * formats (0=>OpenDX) */
+    int ncharge;                         /**< Number of charge maps */
+    char chargepath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to charge map
+                                          * files */
+    char chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
+                                          * formats (0=>OpenDX) */
     int nprint;                          /**< How many print sections? */
     int printwhat[NOSH_MAXPRINT];        /**< What do we print (0=>energy) */
     int printnarg[NOSH_MAXPRINT];        /**< How many arguments in energy 

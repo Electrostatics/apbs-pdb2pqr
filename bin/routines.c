@@ -42,6 +42,7 @@
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
+#include "apbs/vgrid.h"  
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
@@ -563,6 +564,9 @@ VPUBLIC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char outpath[VMAX_ARGLEN];
     char writepotstem[VMAX_ARGLEN];
+    int nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent;
+    Vgrid *grid; 
 
     if (nosh->bogus) return 1;
 
@@ -575,13 +579,26 @@ VPUBLIC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
 
     if (pbeparm->writepot == 1) {
+        nx = pmg->pmgp->nx;
+        ny = pmg->pmgp->ny;
+        nz = pmg->pmgp->nz;
+        hx = pmg->pmgp->hx;
+        hy = pmg->pmgp->hy;
+        hzed = pmg->pmgp->hzed;
+        xcent = pmg->pmgp->xcent;
+        ycent = pmg->pmgp->ycent;
+        zcent = pmg->pmgp->zcent;
+        grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed,
+          xcent-0.5*(nx-1)*hx, ycent-0.5*(ny-1)*hy, zcent-0.5*(nz-1)*hzed,
+          pmg->u);
+
         /* In DX format */
         if (pbeparm->writepotfmt == 0) {
             sprintf(outpath, "%s.%s", writepotstem, "dx");
             Vnm_tprint( 1, "main:    Writing potential in DX format \
 to %s...\n", outpath);
-            Vpmg_writeDX(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
-              pmg->u);
+            Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
+              pmg->pvec);
 
          /* In AVS format */
          } else if (pbeparm->writepotfmt == 1) {
@@ -594,8 +611,8 @@ for multigrid calculations yet!\n");
              sprintf(outpath, "%s.%s", writepotstem, "grd");
              Vnm_tprint( 1, "main:    Writing potential in UHBD format \
 to %s...\n", outpath);
-             Vpmg_writeUHBD(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
-               pmg->u);
+             Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
+               pmg->pvec);
          } else {
              Vnm_tprint( 2, "main:    Bogus potential file format (%d)!\n",
                pbeparm->writepotfmt);
@@ -676,6 +693,9 @@ VPUBLIC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writeaccstem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
+    int nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent;
+    Vgrid *grid; 
 
     if (nosh->bogus) return 1;
 
@@ -687,14 +707,28 @@ VPUBLIC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 #endif
     
     if (pbeparm->writeacc == 1) {
+
+        nx = pmg->pmgp->nx;
+        ny = pmg->pmgp->ny;
+        nz = pmg->pmgp->nz;
+        hx = pmg->pmgp->hx;
+        hy = pmg->pmgp->hy;
+        hzed = pmg->pmgp->hzed;
+        xcent = pmg->pmgp->xcent;
+        ycent = pmg->pmgp->ycent;
+        zcent = pmg->pmgp->zcent;
+        Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
+        grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed,
+          xcent-0.5*(nx-1)*hx, ycent-0.5*(ny-1)*hy, zcent-0.5*(nz-1)*hzed,
+          pmg->rwork);
+
         /* In DX format */
         if (pbeparm->writeaccfmt == 0) {
             sprintf(outpath, "%s.%s", writeaccstem, "dx");
             Vnm_tprint( 1, "main:    Writing accessibility in DX format \
 to %s...\n", outpath);
-            Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
-            Vpmg_writeDX(pmg, "FILE", "ASC", VNULL, outpath, "ACCESSIBILITY", 
-              pmg->rwork);
+            Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, "ACCESSIBILITY", 
+              pmg->pvec);
 
          /* In AVS format */
          } else if (pbeparm->writeaccfmt == 1) {
@@ -702,14 +736,14 @@ to %s...\n", outpath);
              Vnm_tprint( 2, "main:    Sorry, AVS format isn't supported\
 for multigrid calculations yet!\n");
              return 0;
+
          /* In UHBD format */
          } else if (pbeparm->writeaccfmt == 2) {
              sprintf(outpath, "%s.%s", writeaccstem, "grd");
              Vnm_tprint( 1, "main:    Writing accessibility in UHBD \
 format to %s...\n", outpath);
-             Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
-             Vpmg_writeUHBD(pmg, "FILE", "ASC", VNULL, outpath, 
-               "ACCESSIBILITY", pmg->rwork);
+             Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, 
+               "ACCESSIBILITY", pmg->pvec);
          } else {
              Vnm_tprint( 2, "main:    Bogus accessibility file format\
 (%d)!\n", pbeparm->writeaccfmt);

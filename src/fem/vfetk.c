@@ -407,7 +407,9 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     fflush(stdout);
     if (Bmat_sluFactor(A) == 0) {
         Vnm_print(2, "Vfetk_lnDet:  Error factoring matrix!\n");
-        Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", A->AG->state);
+        if (A->AG == VNULL) Vnm_print(2, 
+          "Vfetk_lnDet:  NULL A->AG: Mike -- what the hell are you doing???\n");
+        Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", Mat_state(A->AG));
         return 0.0;
     }
     slu = A->AG->slu;
