@@ -730,7 +730,7 @@ fgcent/cgcent!\n",  (imol+1));
             return 0;
         }
         pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1],
-          pbeparm->calcenergy);
+                       mgparm, pbeparm->calcenergy);       
     } else {
         if (i>0) Vpmg_dtor(&(pmg[i-1]));
         pmg[i] = Vpmg_ctor(pmgp[i], pbe[i]);
@@ -900,15 +900,12 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     double tenergy;
     MGparm *mgparm;
     PBEparm *pbeparm;
-    int extEnergy;              /* When focusing, do we include energy 
-                                 * contributions from outside the local 
-                                 * partition? */
+    int extEnergy;              
 
     mgparm = nosh->calc[icalc].mgparm;
     pbeparm = nosh->calc[icalc].pbeparm;
 
-    if (mgparm->type == 2) extEnergy = 0;
-    else extEnergy = 1;
+    extEnergy = 1;
 
     if (pbeparm->calcenergy == 1) {
         *nenergy = 1;

@@ -62,6 +62,7 @@
 #include "apbs/vcap.h"
 #include "apbs/vpbe.h"
 #include "apbs/vgrid.h"
+#include "apbs/mgparm.h"
 
 /** @def VPMGMAXPART The maximum number of partitions the
  *                   mesh can be divided into 
@@ -196,6 +197,7 @@ VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
  *  @param   parms  PMG parameter object for new mesh
  *  @param   pbe    PBE parameter object
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
+ *  @param   mgparm MGparm parameter object (used for boundary conditions)
  *  @param   energyFlag  
  *             \li 0:  Don't calculate any energy contribution from
  *                   outside focusing area 
@@ -204,8 +206,8 @@ VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
  *             \li 2:  Calculate energy component contributions
  *  @returns Pointer to the newly allocated Vpmg object
  */
-VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
-  int energyFlag);
+VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD, 
+  MGparm *mgparm, int energyFlag);
 
 /** @brief   FORTRAN stub bonstructor for the Vpmg class (with focusing)
  *  @note    Construct the PMG object by focusing.  In other words, use the
@@ -220,6 +222,7 @@ VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
  *  @param   parms  PMG parameter object for new mesh
  *  @param   pbe    PBE parameter object 
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
+ *  @param   mgparm MGparm parameter object (used for boundary conditions)
  *  @param   energyFlag  
  *             \li 0:  Don't calculate any energy contribution from
  *                   outside focusing area 
@@ -229,7 +232,7 @@ VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
  *  @returns 1 if successful, 0 otherwise
  */
 VEXTERNC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
-  int energyFlag);
+  MGparm *mgparm, int energyFlag);
 
 /** @brief   Object destructor
  *  @ingroup Vpmg
