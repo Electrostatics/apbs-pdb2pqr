@@ -143,7 +143,7 @@ int main(int argc, char **argv) {
 
 
     /* ************** CHECK PARALLEL STATUS *************** */
-    Vcom_init(&argc, &argv);
+    VASSERT(Vcom_init(&argc, &argv));
     com = Vcom_ctor(1);
     rank = Vcom_rank(com);
     size = Vcom_size(com);
