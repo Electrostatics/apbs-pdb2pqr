@@ -192,6 +192,7 @@ c* ***   print*,'% C_SCAL: trapped hyperbolic sine overflow...'
 c* ***endif
 c*
 c*    *** end it ***
+      c_scal = 0
       return
       end
       function dc_scal(coef,u,ipkey)
@@ -280,6 +281,7 @@ c* ***   print*,'% DC_SCAL: trapped hyperbolic cosine overflow...'
 c* ***endif
 c*
 c*    *** end it ***
+      dc_scal = 0
       return
       end
       subroutine c_vec(coef,uin,uout,nx,ny,nz,ipkey)
