@@ -2,6 +2,9 @@
 BETA PUBLIC RELEASE VERSION 0.2.3       ??-??-02
 #############################################################################
 
+  * Fixed very, very, very nasty bug which set Debye-Huckel coefficient to 1
+    (roughly 150 mM for 1:1) salt for all LPBE calculations -- doesn't affect
+    NPBE calculations.  Huge thanks to Michael Grabe!!
   * Added more verbosity to error with NPBE forces
   * Added working Python wrappers -- Todd Dolinksy
   * Modified VMD scripts read_dx and loadstuff.vmd
