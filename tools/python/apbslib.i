@@ -91,7 +91,7 @@ extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
 
 extern char* NOsh_elecname(NOsh *thee, int ielec);
 extern int NOsh_elec2calc(NOsh *thee, int icalc);
-extern int NOsh_printWhat(NOsh *thee, int iprint); 
+extern NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint); 
 extern int NOsh_ctor2(NOsh *thee, int rank, int size);
 extern void NOsh_dtor(NOsh **thee); 
 extern int NOsh_parseFile(NOsh *thee, char *filename); 
