@@ -62,7 +62,11 @@
 
 VEMBED(rcsid="$Id$")
 
-int main(int argc, char **argv) {
+int main(
+        int argc, 
+        char **argv
+        ) 
+{
 
     NOsh *nosh = VNULL;
     MGparm *mgparm = VNULL;
@@ -231,148 +235,156 @@ int main(int argc, char **argv) {
     for (i=0; i<nosh->ncalc; i++) {
         Vnm_tprint( 1, "----------------------------------------\n");
 
-        /* ***** Do MG calculation ***** */
-        if (nosh->calc[i].calctype == 0) {
-            for (k=0; k<nosh->nelec; k++){
-              if (nosh->elec2calc[k] >= i){
-                break;
-              }
-            }
-            if (Vstring_strcasecmp(nosh->elecname[k+1], "") == 0){
-              Vnm_tprint( 1, "CALCULATION #%d: MULTIGRID\n", i+1);
-            } else {
-              Vnm_tprint( 1, "CALCULATION #%d (%s): MULTIGRID\n", i+1, nosh->elecname[k+1]);
-            }
-            /* Useful local variables */
-            mgparm = nosh->calc[i].mgparm;
-            pbeparm = nosh->calc[i].pbeparm;
+        switch (nosh->calc[i].calctype) {  
+            case NCT_MG:
+                /* What is this?  This seems like a very awkward way to find
+                 * the right ELEC statement... */
+                for (k=0; k<nosh->nelec; k++) {
+                    if (nosh->elec2calc[k] >= i) {
+                        break;
+                    }
+                }
+                if (Vstring_strcasecmp(nosh->elecname[k+1], "") == 0) {
+                    Vnm_tprint( 1, "CALCULATION #%d: MULTIGRID\n", i+1);
+                } else {
+                    Vnm_tprint( 1, "CALCULATION #%d (%s): MULTIGRID\n", 
+                            i+1, nosh->elecname[k+1]);
+                }
+                /* Useful local variables */
+                mgparm = nosh->calc[i].mgparm;
+                pbeparm = nosh->calc[i].pbeparm;
 
-            /* Set up problem */
-            Vnm_tprint( 1, "  Setting up problem...\n");
-            if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
-              alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
-              pmgp, pmg)) {
-                Vnm_tprint( 2, "Error setting up MG calculation!\n");
-                return APBSRC;
-            }
+                /* Set up problem */
+                Vnm_tprint( 1, "  Setting up problem...\n");
+                if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
+                  alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
+                  pmgp, pmg)) {
+                    Vnm_tprint( 2, "Error setting up MG calculation!\n");
+                    return APBSRC;
+                }
 
-            /* Print problem parameters */
-            printMGPARM(mgparm, realCenter);
-            printPBEPARM(pbeparm);
+                /* Print problem parameters */
+                printMGPARM(mgparm, realCenter);
+                printPBEPARM(pbeparm);
 
-            /* Solve PDE */
-            if (solveMG(nosh, pmg[i], mgparm->type) != 1) {
-                Vnm_tprint(2, "Error solving PDE!\n");
-                return APBSRC;
-            }
+                /* Solve PDE */
+                if (solveMG(nosh, pmg[i], mgparm->type) != 1) {
+                    Vnm_tprint(2, "Error solving PDE!\n");
+                    return APBSRC;
+                }
 
-            /* Set partition information for observables and I/O */
-            if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
-                Vnm_tprint(2, "Error setting partition info!\n");
-                return APBSRC;
-            }
+                /* Set partition information for observables and I/O */
+                if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
+                    Vnm_tprint(2, "Error setting partition info!\n");
+                    return APBSRC;
+                }
 
-            /* Write out energies */
-            energyMG(nosh, i, pmg[i], &(nenergy[i]), 
-              &(totEnergy[i]), &(qfEnergy[i]), &(qmEnergy[i]), 
-              &(dielEnergy[i]));
+                /* Write out energies */
+                energyMG(nosh, i, pmg[i], 
+                        &(nenergy[i]), &(totEnergy[i]), &(qfEnergy[i]), 
+                        &(qmEnergy[i]), &(dielEnergy[i]));
 
-            /* get apolar energy */
-            npenergyMG(nosh, i, pmg[i], &(nenergy[i]),
-                       &(npEnergy[i]));
-	        npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(npEnergy[i]);
-	        Vnm_tprint(0, "Apolar energy: %f kJ/mol\n", npEnergy[i]);
+                /* Get apolar energy */
+                npenergyMG(nosh, i, pmg[i], &(nenergy[i]), 
+                        &(npEnergy[i]));
+                npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(npEnergy[i]);
+                Vnm_tprint(0, "Apolar energy: %f kJ/mol\n", npEnergy[i]);
 
 
-            /* Write out forces */
-            forceMG(mem, nosh, pbeparm, mgparm, pmg[i], &(nforce[i]), 
-              &(atomForce[i]), alist);
+                /* Write out forces */
+                forceMG(mem, nosh, pbeparm, mgparm, pmg[i], &(nforce[i]), 
+                        &(atomForce[i]), alist);
 
-            /* Write out data folks might want */
-            writedataMG(rank, nosh, pbeparm, pmg[i]);
+                /* Write out data folks might want */
+                writedataMG(rank, nosh, pbeparm, pmg[i]);
             
-            /* Write matrix */
-            writematMG(rank, nosh, pbeparm, pmg[i]);
+                /* Write matrix */
+                writematMG(rank, nosh, pbeparm, pmg[i]);
 
-            fflush(stdout);
-            fflush(stderr);
+                fflush(stdout);
+                fflush(stderr);
 
-        /* ***** Do FEM calculation ***** */
-        } else {
-
-#ifdef HAVE_MC_H
-            for (k=0; k<nosh->nelec; k++){
-              if (nosh->elec2calc[k] >= i){
                 break;
-              }
-            }
-            if (Vstring_strcasecmp(nosh->elecname[i+1], "") == 0){
-              Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
-            } else {
-              Vnm_tprint( 1, "CALCULATION #%d (%s): FINITE ELEMENT\n", i+1, nosh->elecname[k+1]);
-            }
+
+            /* ***** Do FEM calculation ***** */
+            case NCT_FEM:
+#ifdef HAVE_MC_H
+                for (k=0; k<nosh->nelec; k++) {
+                    if (nosh->elec2calc[k] >= i) break;
+                }
+                if (Vstring_strcasecmp(nosh->elecname[i+1], "") == 0) {
+                    Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
+                } else {
+                  Vnm_tprint( 1, "CALCULATION #%d (%s): FINITE ELEMENT\n", i+1, nosh->elecname[k+1]);
+                }
           
-            /* Useful local variables */
-            feparm = nosh->calc[i].femparm;
-            pbeparm = nosh->calc[i].pbeparm;
+                /* Useful local variables */
+                feparm = nosh->calc[i].femparm;
+                pbeparm = nosh->calc[i].pbeparm;
 
-            /* Warn the user about some things */
-            Vnm_tprint(2, "#################### WARNING ###################\n");
-            Vnm_tprint(2, "## FE support is currently very experimental! ##\n");
-            Vnm_tprint(2, "#################### WARNING ###################\n");
+                /* Warn the user about some things */
+                Vnm_tprint(2, "#################### WARNING ###################\n");
+                Vnm_tprint(2, "## FE support is currently very experimental! ##\n");
+                Vnm_tprint(2, "#################### WARNING ###################\n");
 
-            /* Set up problem */
-            Vnm_tprint( 1, "  Setting up problem...\n");
-            if (!initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk)) {
-                Vnm_tprint( 2, "Error setting up FE calculation!\n");
-                return APBSRC;
-            }
-
-            /* Print problem parameters */
-            printFEPARM(i, nosh, feparm, fetk);
-            printPBEPARM(pbeparm);
-
-            /* Refine mesh */
-            if (!preRefineFE(i, nosh, feparm, fetk)) {
-                Vnm_tprint( 2, "Error pre-refining mesh!\n");
-                return APBSRC;
-            }
-
-            /* Solve-estimate-refine */
-Vnm_tprint(2, "\n\nWARNING!  DO NOT EXPECT PERFORMANCE OUT OF THE APBS/FEtk\n");
-Vnm_tprint(2, "INTERFACE AT THIS TIME.  THE FINITE ELEMENT SOLVER IS\n");
-Vnm_tprint(2, "CURRENTLY NOT OPTIMIZED FOR THE PB EQUATION.  IF YOU WANT\n");
-Vnm_tprint(2, "PERFORMANCE, PLEASE USE THE MULTIGRID-BASED METHODS, E.G.\n");
-Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
-            Vnm_tprint(1, "  Beginning solve-estimate-refine cycle:\n");
-            for (isolve=0; isolve<feparm->maxsolve; isolve++) {
-                Vnm_tprint(1, "    Solve #%d...\n", isolve);
-                if (!solveFE(i, nosh, pbeparm, feparm, fetk)) {
-                    Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+                /* Set up problem */
+                Vnm_tprint( 1, "  Setting up problem...\n");
+                if (!initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk)) {
+                    Vnm_tprint( 2, "Error setting up FE calculation!\n");
                     return APBSRC;
                 }
-                if (!energyFE(nosh, i, fetk, &(nenergy[i]), &(totEnergy[i]), 
-                  &(qfEnergy[i]), &(qmEnergy[i]), &(dielEnergy[i]))) {
-                    Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+
+                /* Print problem parameters */
+                printFEPARM(i, nosh, feparm, fetk);
+                printPBEPARM(pbeparm);
+    
+                /* Refine mesh */
+                if (!preRefineFE(i, nosh, feparm, fetk)) {
+                    Vnm_tprint( 2, "Error pre-refining mesh!\n");
                     return APBSRC;
                 }
-                if (!postRefineFE(i, nosh, feparm, fetk)) break;
-                bytesTotal = Vmem_bytesTotal();
-                highWater = Vmem_highWaterTotal();
-                Vnm_tprint(1, "      Currently memory use:  %g MB\n", 
-                  ((double)bytesTotal/(1024.)/(1024.)));
-                Vnm_tprint(1, "      High-water memory use:  %g MB\n", 
-                  ((double)highWater/(1024.)/(1024.)));
-            }
+    
+                /* Solve-estimate-refine */
+                Vnm_tprint(2, "\n\nWARNING!  DO NOT EXPECT PERFORMANCE OUT OF THE APBS/FEtk\n");
+                Vnm_tprint(2, "INTERFACE AT THIS TIME.  THE FINITE ELEMENT SOLVER IS\n");
+                Vnm_tprint(2, "CURRENTLY NOT OPTIMIZED FOR THE PB EQUATION.  IF YOU WANT\n");
+                Vnm_tprint(2, "PERFORMANCE, PLEASE USE THE MULTIGRID-BASED METHODS, E.G.\n");
+                Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
+                Vnm_tprint(1, "  Beginning solve-estimate-refine cycle:\n");
+                for (isolve=0; isolve<feparm->maxsolve; isolve++) {
+                    Vnm_tprint(1, "    Solve #%d...\n", isolve);
+                    if (!solveFE(i, nosh, pbeparm, feparm, fetk)) {
+                        Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+                        return APBSRC;
+                    }
+                    if (!energyFE(nosh, i, fetk, &(nenergy[i]), 
+                                &(totEnergy[i]), &(qfEnergy[i]), 
+                                &(qmEnergy[i]), &(dielEnergy[i]))) {
+                        Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+                        return APBSRC;
+                    }
+                    if (!postRefineFE(i, nosh, feparm, fetk)) break;
+                    bytesTotal = Vmem_bytesTotal();
+                    highWater = Vmem_highWaterTotal();
+                    Vnm_tprint(1, "      Currently memory use:  %g MB\n", 
+                            ((double)bytesTotal/(1024.)/(1024.)));
+                    Vnm_tprint(1, "      High-water memory use:  %g MB\n", 
+                            ((double)highWater/(1024.)/(1024.)));
+                }
 
-            Vnm_tprint(1, "  Writing FEM data to files.\n");
-            if (!writedataFE(rank, nosh, pbeparm, fetk[i])) {
-                Vnm_tprint(2, "  Error while writing FEM data!\n");
-            }
+                Vnm_tprint(1, "  Writing FEM data to files.\n");
+                if (!writedataFE(rank, nosh, pbeparm, fetk[i])) {
+                    Vnm_tprint(2, "  Error while writing FEM data!\n");
+                }
 #else /* ifdef HAVE_MC_H */
-            Vnm_print(2, "Error!  APBS not compiled with FEtk!\n");
-            exit(2);
+                Vnm_print(2, "Error!  APBS not compiled with FEtk!\n");
+                exit(2);
 #endif /* ifdef HAVE_MC_H */
+                break;
+            default:
+                Vnm_tprint(2, "  Unknown calculation type (%d)!\n", 
+                        nosh->calc[i].calctype);
+                exit(2);
         }
     }
     

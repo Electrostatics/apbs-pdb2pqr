@@ -90,6 +90,21 @@ enum eNOsh_MolFormat {
 typedef enum eNOsh_MolFormat NOsh_MolFormat;
 
 /**
+ * @brief  NOsh calculation types
+ * @ingroup NOsh
+ */
+enum eNOsh_CalcType {
+    NCT_MG=0,  /**< Multigrid */
+    NCT_FEM=1  /**< Finite element */
+};
+
+/**
+ * @brief  Declare NOsh_CalcType type
+ * @ingroup  NOsh
+ */
+typedef enum eNOsh_CalcType NOsh_CalcType;
+
+/**
  * @brief  Parameter file format types
  * @ingroup NOsh
  */
@@ -113,7 +128,7 @@ struct sNOsh_calc {
     MGparm *mgparm;         /**< Multigrid parameters */
     FEMparm *femparm;       /**< Finite element parameters */
     PBEparm *pbeparm;       /**< Generic PBE parameters */
-    int calctype;           /**< 0: multigrid, 1: FEM */
+    NOsh_CalcType calctype; /**< Calculation type */
 
 };
 
