@@ -53,8 +53,6 @@ VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
 
-
-
 VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -63,22 +61,6 @@ VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_ctor
-//
-// Purpose:  Construct the parallel error estimator
-//     
-// Args:     GM              a pointer to an initialized and partitioned mesh
-//           localPartID     the local partition ID
-//           killFlag        a flag to indicate how error esimates are to be 
-//                           attenuated outside the local partition.
-//                           0 => no attenuation
-//                           1 => all error outside the local partition set to
-//                                zero
-//                           2 => all error is set to zero outside a sphere of 
-//                                radius (killParam*partRadius), where
-//                                partRadius is the radius of the sphere
-//                                circumscribing the local partition
-//                           3 => all error is set to zero except for the local
-//                                partition and its immediate neighbors
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -97,8 +79,6 @@ VPUBLIC Vpee* Vpee_ctor(Gem *gm, int localPartID, int killFlag, double
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_ctor2
-//
-// Purpose:  Construct the parallel error estimator
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -203,8 +183,6 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_dtor
 //
-// Purpose:  Clean up
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpee_dtor(Vpee **thee) {
@@ -220,46 +198,12 @@ VPUBLIC void Vpee_dtor(Vpee **thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_dtor2
 //
-// Purpose:  Clean up
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_markRefine
-//
-// Purpose:  A wrapper/reimplementation of AM_markRefine that allows for more
-//           flexible attenuation of error-based markings outside the local
-//           partition.  The error in each simplex is modified by the method
-//           (see killFlag) specified in the Vpee constructor.  This allows the
-//           user to confine refinement to an arbitrary area around
-//           the local partition.
-//
-// Args:     am            A pointer to the AM object from which the
-//                         solution/error should be obtained
-//           level         The solution level in the AM object to be used
-//           akey          The marking method:
-//                          -1 => Reset markings  --> killFlag has no effect
-//                           0 => Uniform        
-//                           1 => User defined (geometry-based)
-//                          >1 => A numerical estimate for the error has 
-//                                already been set in am and should be
-//                                attenuated according to killFlag and used,
-//                                in conjunction with etol, to mark simplices
-//                                for refinement
-//           rcol          The ID of the main partition on which to mark (or 
-//                         -1 if all partitions should be marked).  Note that
-//                         we should have (rcol == thee->localPartID) for 
-//                         (thee->killFlag == 2 or 3)
-//           etol          The error tolerance criterion for marking
-//           bkey          How the error tolerance is interpreted:
-//                          0 => Simplex marked if error>etol
-//                          1 => Simplex marked if error>(etol^2/numS)^{1/2}
-//
-// Returns:  The number of simplices marked for refinement.
-//
-// Notes:    This is pretty much a rip-off of AM_markRefine.
 //
 // Author:   Nathan Baker (and Michael Holst: the author of AM_markRefine, on
 //           which this is based)
@@ -482,8 +426,6 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_numSS
-//
-// Purpose:  Return the number of simplices with chart == thee->localPartID
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */

@@ -59,8 +59,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getValist
 //
-// Purpose:  Get a pointer to the Valist (atom list) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) { 
@@ -72,8 +70,6 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getVgreen
-//
-// Purpose:  Get a pointer to the Vgreen (grid manager) object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -103,8 +99,6 @@ VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getBulkIonicStrength
 //
-// Purpose:  Get the bulk ionic strength in M
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) { 
@@ -117,8 +111,6 @@ VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getTemperature
-//
-// Purpose:  Get the temperature in K
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -133,8 +125,6 @@ VPUBLIC double Vpbe_getTemperature(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteDiel
 //
-// Purpose:  Get the solute dielectric
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) { 
@@ -148,8 +138,6 @@ VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteCenter
 //
-// Purpose:  Get the center of the solute molecule
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
@@ -160,8 +148,6 @@ VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSolventDiel
-//
-// Purpose:  Get the solvent dielectric
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -175,8 +161,6 @@ VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSolventRadius
 //
-// Purpose:  Get the solvent radius in angstroms
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) { 
@@ -188,8 +172,6 @@ VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getMaxIonRadius
-//
-// Purpose:  Get the maximum ion probe radius in angstroms 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -203,8 +185,6 @@ VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getXkappa
 //
-// Purpose:  Get the bulk Debye-Huckel parameter in reciprocal angstroms
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getXkappa(Vpbe *thee) { 
@@ -216,8 +196,6 @@ VPUBLIC double Vpbe_getXkappa(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getDeblen
-//
-// Purpose:  Get the bulk Debye length in angstroms
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -231,8 +209,6 @@ VPUBLIC double Vpbe_getDeblen(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getZkappa2
 //
-// Purpose:  Get the bulk squared modified Debye-Huckel parameter
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) { 
@@ -244,8 +220,6 @@ VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getZmagic
-//
-// Purpose:  Get the delta function scaling factor
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -259,8 +233,6 @@ VPUBLIC double Vpbe_getZmagic(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteRadius
 //
-// Purpose:  Get the radius of the solute molecule
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) { 
@@ -271,8 +243,6 @@ VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteXlen
-//
-// Purpose:  Solute length in x-direction
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -285,8 +255,6 @@ VPUBLIC double Vpbe_getSoluteXlen(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteYlen
 //
-// Purpose:  Solute length in Y-direction
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) { 
@@ -298,8 +266,6 @@ VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteZlen
 //
-// Purpose:  Solute length in Z-direction
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) { 
@@ -310,8 +276,6 @@ VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteCharge
-//
-// Purpose:  Get the charge of the solute molecule
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -328,43 +292,6 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_ctor
-//
-// Purpose:  Set up parameters, Vacc objects, and charge-simplex map
-//
-// Arguments: alist         = list of solute atoms
-//            ionNum        = total number of counterion species
-//            ionConc       = array of counterion concentrations (M)
-//            ionRadii      = array of counterion radii (A)
-//            ionQ          = array of counterion charges (e)
-//            T             = temperature in K
-//            soluteDiel    = solute dielectric (unitless)
-//            solventDiel   = solvent dielectric (unitless)
-//            solventRadius = solvent radius in Angstroms
-//
-// Notes:  Here's the original function coments from Mike
-//
-//    kappa is defined as follows:
-//
-//       kappa^2 = (8 pi N_A e_c^2) I_s / (1000 eps_w k_B T)
-//
-//    note that the units here are:  esu^2 / erg-mole.
-//    to obtain angstroms^{-2}, we multiply by 10^{-16}.
-//
-//    thus, in angstroms^{-2}, where k_B and e_c are in gaussian
-//    rather than mks units, the proper value for kappa is:
-//
-//       kappa^2 = 8 pi N_A e_c^2 I_s / (1000 eps_w k_b T)  * 1.0e-16
-//
-//    where:
-//
-//       e_c = 4.803242384e-10 esu  (rather than 1.6021892e-19 coulombs)
-//       k_B = 1.380662000e-16 ers  (rather than 1.380662000e-23 joules)
-//
-//    and the factor of 1.0e-16 results from converting cm^2 to anstroms^2,
-//    noting that the 1000 in the denominator has converted m^3 to cm^3,
-//    since the ionic strength I_s is assumed to have been provided in
-//    moles
-//    per liter, which is moles per 1000 cm^3.
 //
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -385,12 +312,6 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_ctor2
-//
-// Purpose:  Construct the Vpbe object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker and Mike Holst
 /////////////////////////////////////////////////////////////////////////// */
@@ -555,11 +476,6 @@ function\n", thee->maxIonRadius);
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_dtor
 //
-// Purpose:  Destroy the charge-simplex map.
-// 
-// Notes:    Since the grid manager and atom list were allocated outside of
-//           the Vpbe routines, they are not destroyed.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
@@ -573,8 +489,6 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_dtor2
 //
-// Purpose:  Destroy the atom object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
@@ -586,13 +500,6 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getCoulombEnergy1
-//
-// Purpose:  Perform an inefficient double sum to calculate the Coulombic
-//           energy of a set of charges in a homogeneous dielectric (with
-//           permittivity equal to the protein interior) and zero ionic
-//           strength.  Result is returned in units of k_B T.  The sum can be
-//           restriction to charges present in simplices of specified color
-//           (pcolor); if (color == -1) no restrictions are used.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -641,8 +548,6 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_memChk
 //
-// Purpose:  Returns the bytes used by the specified object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpbe_memChk(Vpbe *thee) {
@@ -660,15 +565,6 @@ VPUBLIC int Vpbe_memChk(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getIons
 //
-// Purpose:  Loads up some arrays with counterion data
-//
-// Arguments:  nion => replaced with number of counterion species
-//             ionConc => counterion concentrations (M)
-//             ionRadii => counterion radii (A)
-//             ionQ => counterion charges (e)
-//
-// Returns: number of counterions
-//      
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],

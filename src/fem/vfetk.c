@@ -47,9 +47,6 @@
 
 #include "apbs/vfetk.h"
 
-#include "supermatrix.h"
-#include "Cnames.h"
-
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Private method declaration
@@ -63,8 +60,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getGem
 //
-// Purpose:  Get a pointer to the Gem (grid manager) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Gem* Vfetk_getGem(Vfetk *thee) { 
@@ -77,8 +72,6 @@ VPUBLIC Gem* Vfetk_getGem(Vfetk *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getAM
 //
-// Purpose:  Get a pointer to the AM (algebra manager) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC AM* Vfetk_getAM(Vfetk *thee) { 
@@ -89,8 +82,6 @@ VPUBLIC AM* Vfetk_getAM(Vfetk *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getVpbe
-//
-// Purpose:  Get a pointer to the Vpbe Poisson-Boltzmann object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -104,8 +95,6 @@ VPUBLIC Vpbe* Vfetk_getVpbe(Vfetk *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getVcsm
 //
-// Purpose:  Get a pointer to the Vcsm (charge-simplex map) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) { 
@@ -117,11 +106,6 @@ VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getAtomColor
-//
-// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
-//           hasn't been initialized yet.
-//
-// Note:     This is a friend function of Vcsm
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -145,16 +129,6 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_ctor
 //
-// Purpose:  Construct the charge-vertex map, assign atoms to vertices,
-//           and assign vertices to atoms
-//
-// Args:     pbe    -- PBE data (molecules and stuff)
-//           gm     -- the grid manager 
-//           am     -- the algebra manager 
-//
-// Notes:    The initial mesh must be sufficiently coarse for the
-//           assignment procedures to be efficient.  
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am) {
@@ -170,12 +144,6 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_ctor2
-//
-// Purpose:  Construct the Vfetk object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -205,11 +173,6 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_dtor
 //
-// Purpose:  Destroy the charge-simplex map.
-// 
-// Notes:    Since the grid manager and atom list were allocated outside of
-//           the Vfetk routines, they are not destroyed.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vfetk_dtor(Vfetk **thee) {
@@ -223,8 +186,6 @@ VPUBLIC void Vfetk_dtor(Vfetk **thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_dtor2
 //
-// Purpose:  Destroy the atom object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vfetk_dtor2(Vfetk *thee) { 
@@ -234,14 +195,6 @@ VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getSolution
-//
-// Purpose:  Get the electrostatic potential (in units of kT/e) at the
-//           finest level of the passed AM object as a (newly allocated) array
-//           of doubles and store the length in *length.  You'd better destroy
-//           the returned array later!
-//
-// Notes:    Only meaningful for MC invocations of Vfetk (returns VNULL
-//           otherwise)
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
@@ -282,22 +235,6 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_energy
 //
-// Purpose:  Using the solution at the finest mesh level, get the
-//           electrostatic energy using the free energy functional for the
-//           Poisson-Boltzmann equation without removing any
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with
-//           the same relative permittivity as the interior of the protein)
-//           and return the result in units of $k_B T$.  The argument color
-//           allows the user to control the partition on which this energy
-//           is calculated; if (color == -1) no restrictions are used.
-//           The solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vfetk object is used to
-//           calculate the energy
-//
-// Args:     color        Partition ID
-//           nonlin       NPBE (1) or LPBE (0) energy
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
@@ -334,23 +271,6 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_qfEnergy
-//
-// Purpose:  Using the solution at the finest mesh level, get the 
-//           electrostatic energy using the free energy functional for the 
-//           linearized Poisson-Boltzmann equation without removing any 
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with 
-//           the same relative permittivity as the interior of the protein).
-//           In other words, we calculate
-//             \[ G = \sum_i q_i u(r_i) \]
-//           and return the result in units of $k_B T$.  The argument color
-//           allows the user to control the partition on which this energy
-//           is calculated; if (color == -1) no restrictions are used.
-//           The solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vfetk object is used to
-//           calculate the energy
-//
-// Args:     color    Partition ID
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -433,16 +353,6 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_dqmEnergy
 //
-// Purpose:  Calculate dielectric and mobile ion energy in kT.
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           internal AM object, but atomic data from the Vpbe object is used
-//           to calculate the energy
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) { 
@@ -453,15 +363,6 @@ VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_lnDet
-//
-// Purpose:  Calculate the log of the determinant of the specified operator:
-//             flag = 0         Helmholtz operator (PBE tangent operator
-//                              evaluated at u = 0)
-//             flag = 1         Tangent operator at current solution (response 
-//                              function)
-//           in the current finite element basis.
-//           
-// Notes:    Uses SLU factorization and will be very slow for large matrices.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -521,14 +422,6 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_setAtomColors
-//
-// Purpose:  Transfer color information from partitioned mesh to the atoms.
-//           In the case that a charge is shared between two partitions, the
-//           partition color of the first simplex is selected.  Due to the
-//           arbitrary nature of this selection, THIS METHOD SHOULD ONLY BE
-//           USED IMMEDIATELY AFTER PARTITIONING!!!
-//
-// Note:     This is a friend function of Vcsm
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -609,12 +502,16 @@ VPUBLIC int Vfetk_genIcosGem(Gem *gm, double radius, double center[3]) {
     int vnum, vtp, vtpI; 
     int fnum[3], ftp[3], ftpB[3];
 
+    /* THIS ROUTINE IS BROKEN!!! */
+    VASSERT(0);
+
     /* Make sure this is an empty Gem object */
     if (Gem_numVV(gm) != 0) {
         Vnm_print(2, "Vbnd_genIcosGem:  Error! Gem object has non-zero \
 number of vertices!\n");
         return -1;
     }
+
 
     /* Set up parameters for 3D domain */
     theDim = 3;

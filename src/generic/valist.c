@@ -55,8 +55,6 @@ VEMBED(rcsid="$Id$")
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_getAtomList
 //
-// Purpose:  Get atom list
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
@@ -68,8 +66,6 @@ VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_getNumberAtoms
-//
-// Purpose:  Get number of atoms in atom list
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -83,8 +79,6 @@ VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_getAtom
 //
-// Purpose:  Get pointer to atom i
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
@@ -97,8 +91,6 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_memChk
-//
-// Purpose:  Get total memory (in bytes) allocated for this object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -118,10 +110,6 @@ VPUBLIC int Valist_memChk(Valist *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_ctor
 //
-// Purpose:  Construct the atom list object
-//
-// Notes:    This routine sets up data members via file I/O.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Valist_ctor() {
@@ -137,12 +125,6 @@ VPUBLIC Valist* Valist_ctor() {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_ctor2
-//
-// Purpose:  Construct the atom list object
-//
-// Notes:    This routine sets up data members of the class.
-//           Broken into two parts for FORTRAN users.
-//
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -161,8 +143,6 @@ VPUBLIC int Valist_ctor2(Valist *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_dtor
 //
-// Purpose:  Destroy the atom list object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor(Valist **thee)
@@ -177,8 +157,6 @@ VPUBLIC void Valist_dtor(Valist **thee)
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_dtor2
 //
-// Purpose:  Destroy the atom list object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor2(Valist *thee) {
@@ -192,14 +170,6 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_readPQR
-//
-// Purpose:  Fill atom list with information from a PQR file
-//           A PQR file has PDB structure with charge and radius in the
-//           last two columns (instead of weight and occupancy)
-//
-// Returns:  1 if successful
-//
-// Notes:    The PDB reader routine was borrowed from Phil Hunenberger
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -345,27 +315,6 @@ error reading: \n    %s\n", line);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_buildMesh
-//
-// Purpose:   Build a cuboid 3D mesh to surround the molecule contained in this
-//            Valist.  The mesh will have rectagular sides and consist of 6
-//            simplices/8 vertices with all boundaries Dirichlet.  The mesh
-//            will be written, in MCSF format, to the output "path" specified
-//            by the arguments below.
-//
-// Arguments: size  The factor by which the mesh is larger than the
-//                  biomolecule.  In other words, if the smallest box
-//                  containing the protein is dx x dy x dz, then the mesh will
-//                  be (size*dx) x (size*dy) x (size*dz).  Clearly, size > 1.
-//            iodev Where we write the data: 
-//                    FILE -- to some file
-//                    INET -- to an INET socket
-//                    BUFF -- to a buffer in memory
-//                    UNIX -- to a UNIX domain socket
-//            iofmt Data format that we write:
-//                    ASC -- ASCII
-//                    XDR -- Network byte order format
-//            thost The hostname to which we may connect the socket
-//            fname The file name
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */

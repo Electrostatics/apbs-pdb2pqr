@@ -61,8 +61,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_getValist
 //
-// Purpose:  Get a pointer to the Valist (atom list) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) { 
@@ -74,8 +72,6 @@ VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_memChk
-//
-// Purpose:  Return number of bytes used by this object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -93,11 +89,6 @@ VPUBLIC int Vgreen_memChk(Vgreen *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_ctor
 //
-// Purpose:  Construct the Green's function oracle
-//
-// Notes:    This doesn't have any multipole method implementation yet, so it's
-//           most likeley slow
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
@@ -113,12 +104,6 @@ VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_ctor2
-//
-// Purpose:  Construct the Vgreen object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -205,23 +190,6 @@ VPUBLIC void Vgreen_dtor2(Vgreen *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_helmholtz
 //
-// Purpose:  Return the Green's function for Helmholtz's equation
-//           integrated over the atomic point charges
-//
-//           G(r) = \sum_i \frac{q_i e^{-\kappa r_i}}{r_i}
-//
-//           where \kappa is the inverse screening length (in Angstroms),
-//           q_i is the atomic charge (in e), and r_i is the distance from atom
-//           i to the observation point.  The potential returned is in units of
-//           J/C.
-//
-// Note:     This quantity needs to be multiplied by (1/\epsilon)
-//           give the actual potential.
-//
-// Args:     position = vector containing the position of the observation pt
-//           dim      = number of elements in position
-//           kappa    = Helmholtz coefficient (units of inverse length)
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim, 
@@ -234,25 +202,6 @@ VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_helmholtzD
 //
-// Purpose:  Return the gradient of the Green's function for Helmholtz's
-//           equation integrated over the atomic point charges
-//
-//           G(r) = \nabla (\sum_i \frac{q_i e^{-\kappa r_i}}{r_i})
-//
-//           where \kappa is the inverse screening length (in Angstroms),
-//           q_i is the atomic charge (in e), and r_i is the distance from atom
-//           i to the observation point.  The field is returned in units of
-//           J/C/A.
-//
-// Note:     This quantity needs to be multiplied by (1/\epsilon) to give the
-//           actual field.
-//
-// Args:     position = vector containing the position of the observation pt
-//           dim      = number of elements in position
-//           kappa    = Helmholtz coefficient (units of inverse length)
-//           grad     = storage for the gradient of the Green's function (dim
-//                      elements)
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position, 
@@ -262,21 +211,6 @@ VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_coulomb
-//
-// Purpose:  Return the Coulomb's Law Green's function for Poisson's equation
-//           integrated over the atomic point charges
-//
-//           G(r) = \sum_i \frac{q_i}{r_i}
-//
-//           where q_i is the atomic charge (in e), and r_i is the distance
-//           from atom i to the observation point.  The potential is returned
-//           in units of J/C.
-//
-// Note:     This quantity needs to be multiplied by (1/\epsilon) to give the
-//           potential.
-//
-// Args:     position = vector containing the position of the observation pt
-//           dim      = number of elements in position
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -312,22 +246,6 @@ position[1], position[2]);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_coulombD
-//
-// Purpose:  Return the gradient for the Coulomb's Law Green's function for
-//           Poisson's equation integrated over the atomic point charges
-//
-//           G(r) = \sum_i \frac{q_i}{r_i}
-//
-//           where q_i is the atomic charge (in e), and r_i is the distance
-//           from atom i to the observation point.  The field is returned in
-//           units of J/C/A.
-//
-// Note:     This quantity needs to be scaled by (1/\epsilon) to give the
-//           actual field.
-//
-// Args:     position = vector containing the position of the observation pt
-//           dim      = number of elements in position
-//           grad     = storage for the gradient (at least dim elems)
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
