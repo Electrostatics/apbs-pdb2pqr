@@ -778,7 +778,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
 #if defined(HAVE_PMGC_H)
    MGmlsys *mlsys;
    int I0, I1, J0, J1, K0, K1, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
-   double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hz, ifloat, jfloat;
+   double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
    double kfloat, dx, dy, dz;
 #endif
 
@@ -877,7 +877,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
             nz = MGlsys_nzg(mlsys->s[0]);
             hx = VABS(mlsys->s[0]->xc[1] - mlsys->s[0]->xc[0]);
             hy = VABS(mlsys->s[0]->yc[1] - mlsys->s[0]->yc[0]);
-            hz = VABS(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
+            hzed = VABS(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
             xmax = mlsys->s[0]->xc[nx-1];
             xmin = mlsys->s[0]->xc[0];
             ymax = mlsys->s[0]->yc[ny-1];
@@ -895,7 +895,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
                 /* Figure out which vertices we're next to */
                 ifloat = (position[0] - xmin)/hx;
                 jfloat = (position[1] - xmin)/hy;
-                kfloat = (position[2] - xmin)/hz;
+                kfloat = (position[2] - xmin)/hzed;
 
                 ihi = (int)ceil(ifloat);
                 ilo = (int)floor(ifloat);
