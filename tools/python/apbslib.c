@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.9  2005/01/25 21:18:48  apbs
- * TJD:  Added ability to get/print both energy and force vectors in Python via noinput.py
+ * Revision 1.10  2005/03/03 17:17:49  apbs
+ * TJD:  Added wrappers for some Vacc functions
  *
  ************************************************************************/
 
@@ -1108,6 +1108,10 @@ Vpbe **new_pbelist(int maxargs) {
    return (Vpbe **) malloc(maxargs*sizeof(Vpbe *));
 }
 
+Vpbe *get_Vpbe(Vpbe **args, int n) { 
+    return (Vpbe *)args[n];
+}
+
 AtomForce **new_atomforcelist(int maxargs) {
    return (AtomForce **) malloc(maxargs*sizeof(AtomForce *));
 }
@@ -1335,6 +1339,8 @@ extern int writematMG(int ,NOsh *,PBEparm *,Vpmg *);
 extern int printEnergy(Vcom *,NOsh *,double [NOSH_MAXCALC],int );
 extern int printForce(Vcom *,NOsh *,int [NOSH_MAXCALC],AtomForce *[NOSH_MAXCALC],int );
 extern void startVio();
+extern double Vacc_molAcc(Vacc *,double [3],double );
+extern double Vacc_vdwAcc(Vacc *,double [3]);
 static PyObject *_wrap_Vcom_ctor(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     Vcom * _result;
@@ -1830,6 +1836,29 @@ static PyObject *_wrap_new_pbelist(PyObject *self, PyObject *args) {
         return NULL;
     _result = (Vpbe **)new_pbelist(_arg0);
     SWIG_MakePtr(_ptemp, (char *) _result,"_Vpbe_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_get_Vpbe(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpbe * _result;
+    Vpbe ** _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:get_Vpbe",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpbe_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_Vpbe. Expected _Vpbe_pp.");
+        return NULL;
+        }
+    }
+    _result = (Vpbe *)get_Vpbe(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vpbe_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3194,6 +3223,63 @@ static PyObject *_wrap_startVio(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static PyObject *_wrap_Vacc_molAcc(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double  _result;
+    Vacc * _arg0;
+    double * _arg1;
+    double  _arg2;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ssd:Vacc_molAcc",&_argc0,&_argc1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vacc_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vacc_molAcc. Expected _Vacc_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vacc_molAcc. Expected _double_p.");
+        return NULL;
+        }
+    }
+    _result = (double )Vacc_molAcc(_arg0,_arg1,_arg2);
+    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vacc_vdwAcc(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double  _result;
+    Vacc * _arg0;
+    double * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:Vacc_vdwAcc",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vacc_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vacc_vdwAcc. Expected _Vacc_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vacc_vdwAcc. Expected _double_p.");
+        return NULL;
+        }
+    }
+    _result = (double )Vacc_vdwAcc(_arg0,_arg1);
+    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
 #define new_MGparm() ((MGparm *) calloc(1,sizeof(MGparm)))
 static PyObject *_wrap_new_MGparm(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3468,6 +3554,96 @@ static PyObject *_wrap_delete_Vpmg(PyObject *self, PyObject *args) {
     delete_Vpmg(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define new_Vpbe() ((Vpbe *) calloc(1,sizeof(Vpbe)))
+static PyObject *_wrap_new_Vpbe(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpbe * _result;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,":new_Vpbe")) 
+        return NULL;
+    _result = (Vpbe *)new_Vpbe();
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vpbe_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define delete_Vpbe(_swigobj) (free ((char *) _swigobj))
+static PyObject *_wrap_delete_Vpbe(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpbe * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_Vpbe",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpbe_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_Vpbe. Expected _Vpbe_p.");
+        return NULL;
+        }
+    }
+    delete_Vpbe(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define Vpbe_acc_set(_swigobj,_swigval) (_swigobj->acc = _swigval,_swigval)
+static PyObject *_wrap_Vpbe_acc_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vacc * _result;
+    Vpbe * _arg0;
+    Vacc * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:Vpbe_acc_set",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpbe_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vpbe_acc_set. Expected _Vpbe_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Vacc_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vpbe_acc_set. Expected _Vacc_p.");
+        return NULL;
+        }
+    }
+    _result = (Vacc *)Vpbe_acc_set(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vacc_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define Vpbe_acc_get(_swigobj) ((Vacc *) _swigobj->acc)
+static PyObject *_wrap_Vpbe_acc_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vacc * _result;
+    Vpbe * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:Vpbe_acc_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpbe_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vpbe_acc_get. Expected _Vpbe_p.");
+        return NULL;
+        }
+    }
+    _result = (Vacc *)Vpbe_acc_get(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vacc_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -3920,6 +4096,10 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "NOsh_calc_femparm_set", _wrap_NOsh_calc_femparm_set, 1 },
 	 { "NOsh_calc_mgparm_get", _wrap_NOsh_calc_mgparm_get, 1 },
 	 { "NOsh_calc_mgparm_set", _wrap_NOsh_calc_mgparm_set, 1 },
+	 { "Vpbe_acc_get", _wrap_Vpbe_acc_get, 1 },
+	 { "Vpbe_acc_set", _wrap_Vpbe_acc_set, 1 },
+	 { "delete_Vpbe", _wrap_delete_Vpbe, 1 },
+	 { "new_Vpbe", _wrap_new_Vpbe, 1 },
 	 { "delete_Vpmg", _wrap_delete_Vpmg, 1 },
 	 { "new_Vpmg", _wrap_new_Vpmg, 1 },
 	 { "delete_Vmem", _wrap_delete_Vmem, 1 },
@@ -3934,6 +4114,8 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "MGparm_type_set", _wrap_MGparm_type_set, 1 },
 	 { "delete_MGparm", _wrap_delete_MGparm, 1 },
 	 { "new_MGparm", _wrap_new_MGparm, 1 },
+	 { "Vacc_vdwAcc", _wrap_Vacc_vdwAcc, 1 },
+	 { "Vacc_molAcc", _wrap_Vacc_molAcc, 1 },
 	 { "startVio", _wrap_startVio, 1 },
 	 { "printForce", _wrap_printForce, 1 },
 	 { "printEnergy", _wrap_printEnergy, 1 },
@@ -3973,6 +4155,7 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "int_array", _wrap_int_array, 1 },
 	 { "double_array", _wrap_double_array, 1 },
 	 { "new_atomforcelist", _wrap_new_atomforcelist, 1 },
+	 { "get_Vpbe", _wrap_get_Vpbe, 1 },
 	 { "new_pbelist", _wrap_new_pbelist, 1 },
 	 { "new_pmgplist", _wrap_new_pmgplist, 1 },
 	 { "get_Vpmg", _wrap_get_Vpmg, 1 },

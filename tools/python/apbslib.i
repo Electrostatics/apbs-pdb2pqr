@@ -66,6 +66,13 @@ typedef struct {
 	~Vpmg();
 } Vpmg;
 
+// Functions and Constructor from vpbe.h:
+typedef struct {
+	Vpbe();
+	~Vpbe();
+    Vacc *acc;
+} Vpbe;
+
 // Functions and Constructors from nosh.h:
 
 typedef struct { 
@@ -142,6 +149,14 @@ Vpbe **new_pbelist(int maxargs) {
    return (Vpbe **) malloc(maxargs*sizeof(Vpbe *));
 }
 %}
+
+%inline %{
+Vpbe *get_Vpbe(Vpbe **args, int n) { 
+    return (Vpbe *)args[n];
+}
+%}
+
+
 
 %inline %{
 AtomForce **new_atomforcelist(int maxargs) {
@@ -451,3 +466,5 @@ extern int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 extern int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC], int i);
 extern void startVio();
+extern double Vacc_molAcc(Vacc *thee, double center[3], double radius);
+extern double Vacc_vdwAcc(Vacc *thee, double center[3]);

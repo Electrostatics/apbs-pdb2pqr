@@ -89,7 +89,21 @@ Vpmg()
 del this
         [ Destructor: returns void  ]
 
-6.  class NOsh_calc
+6.  class Vpbe
+==============
+[ created from struct Vpbe ]
+
+
+Vpbe()
+        [ Constructor: returns Vpbe * ]
+
+del this
+        [ Destructor: returns void  ]
+
+self.acc
+        [ Member data: returns Vacc * ]
+
+7.  class NOsh_calc
 ===================
 [ created from struct NOsh_calc ]
 
@@ -106,7 +120,7 @@ self.pbeparm
 self.calctype
         [ Member data: returns int  ]
 
-7.  class NOsh
+8.  class NOsh
 ==============
 [ created from struct NOsh ]
 
@@ -158,7 +172,7 @@ NOsh_dtor(thee)
 NOsh_parseFile(thee,filename)
         [ returns int  ]
 
-8.  Pointer Handling Library
+9.  Pointer Handling Library
 ============================
 
 %include pointer.i
@@ -321,6 +335,8 @@ new_pmgplist(maxargs)
 
 new_pbelist(maxargs)
 
+get_Vpbe(args,n)
+
 new_atomforcelist(maxargs)
 
 double_array(size)
@@ -351,7 +367,7 @@ NOsh_parse(thee,sock)
 
 Vio_setup(key,iodev,iofmt,iohost,iofile,string)
 
-8.1.  class AtomForce
+9.1.  class AtomForce
 ---------------------
 
 AtomForce()
@@ -407,4 +423,8 @@ printEnergy(com,nosh,totEnergy,i)
 printForce(com,nosh,nforce,atomForce,i)
 
 startVio()
+
+Vacc_molAcc(thee,center,radius)
+
+Vacc_vdwAcc(thee,center)
 
