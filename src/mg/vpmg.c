@@ -333,7 +333,7 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
     Vmem_free(thee->vmem, 10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double),
       (void **)&(thee->gzcf));
     Vmem_free(thee->vmem, (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), 
-      sizeof(int), (void **)&(thee->pvec));
+      sizeof(double), (void **)&(thee->pvec));
 
     Vmem_dtor(&(thee->vmem));
 }
@@ -348,8 +348,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
 
     Valist *alist;
     Vatom *atom;
-    int i, j, k, nx, ny, nz, xok, yok, zok;
-    double xmin, ymin, zmin, x, y, z, hx, hy, hzed;
+    int i, j, k, nx, ny, nz;
+    double xmin, ymin, zmin, x, y, z, hx, hy, hzed, xok, yok, zok;
+    double x0,x1,y0,y1,z0,z1;
 
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
@@ -386,86 +387,131 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     Vnm_print(0, "Vpmg_setPart:  bflag[DOWN] = %d\n", 
       bflags[VAPBS_DOWN]);
 
-    /* Identify atoms as inside or outside */
+    /* Identify atoms as inside, outside, or on the border
+       If on the border, use the bflags to determine if there
+       is an adjacent processor - if so, this atom should be equally
+       shared. */
+
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
         if ((atom->position[0] < upperCorner[0]) &&
             (atom->position[0] > lowerCorner[0])) xok = 1;
         else {
-            if ((atom->position[0] == lowerCorner[0]) &&
-                (bflags[VAPBS_LEFT] == 1)) xok = 1;
-            else if ((atom->position[0] == upperCorner[0]) &&
-                     (bflags[VAPBS_RIGHT] == 1)) xok = 1;
-            else xok = 0; 
+            if ((VABS(atom->position[0] - lowerCorner[0]) < VPMGSMALL) && 
+                (bflags[VAPBS_LEFT] == 0)) xok = 1;
+            else if ((VABS(atom->position[0] - lowerCorner[0]) < VPMGSMALL) && 
+                (bflags[VAPBS_LEFT] == 1)) xok = 0.5;
+            else if ((VABS(atom->position[0] - upperCorner[0]) < VPMGSMALL) &&
+                (bflags[VAPBS_RIGHT] == 0)) xok = 1;
+            else if ((VABS(atom->position[0] - upperCorner[0]) < VPMGSMALL) &&
+                (bflags[VAPBS_RIGHT] == 1)) xok = 0.5;
+            else xok = 0;
         }
         if ((atom->position[1] < upperCorner[1]) &&
             (atom->position[1] > lowerCorner[1])) yok = 1;
         else {
-            if ((atom->position[1] == lowerCorner[1]) &&
-                (bflags[VAPBS_BACK] == 1)) yok = 1;
-            else if ((atom->position[1] == upperCorner[1]) &&
-                     (bflags[VAPBS_FRONT] == 1)) yok = 1;
+            if ((VABS(atom->position[1] - lowerCorner[1]) < VPMGSMALL) && 
+                (bflags[VAPBS_BACK] == 0)) yok = 1;
+            else if ((VABS(atom->position[1] - lowerCorner[1]) < VPMGSMALL) && 
+                (bflags[VAPBS_BACK] == 1)) yok = 0.5;
+            else if ((VABS(atom->position[1] - upperCorner[1]) < VPMGSMALL) &&
+                (bflags[VAPBS_FRONT] == 0)) yok = 1;
+            else if ((VABS(atom->position[1] - upperCorner[1]) < VPMGSMALL) &&
+                (bflags[VAPBS_FRONT] == 1)) yok = 0.5;
             else yok = 0;
         }
         if ((atom->position[2] < upperCorner[2]) &&
             (atom->position[2] > lowerCorner[2])) zok = 1;
         else {
-            if ((atom->position[2] == lowerCorner[2]) &&
-                (bflags[VAPBS_DOWN] == 1)) zok = 1;
-            else if ((atom->position[2] == upperCorner[2]) &&
-                     (bflags[VAPBS_UP] == 1)) zok = 1;
-            else zok = 0; 
+            if ((VABS(atom->position[2] - lowerCorner[2]) < VPMGSMALL) && 
+                (bflags[VAPBS_DOWN] == 0)) zok = 1;
+            else if ((VABS(atom->position[2] - lowerCorner[2]) < VPMGSMALL) && 
+                (bflags[VAPBS_DOWN] == 1)) zok = 0.5;
+            else if ((VABS(atom->position[2] - upperCorner[2]) < VPMGSMALL) &&
+                (bflags[VAPBS_UP] == 0)) zok = 1;
+            else if ((VABS(atom->position[2] - upperCorner[2]) < VPMGSMALL) &&
+                (bflags[VAPBS_UP] == 1)) zok = 0.5;
+            else zok = 0;
         }
-
-        if ((xok && yok) && zok) atom->partID = 1;
-        else atom->partID = 0;
+        atom->partID = xok*yok*zok;     
     }
 
+    /* Load up pvec -
+       For all points within h{axis}/2 of a border - use a gradient
+       to determine the pvec weight.
+       Points on the boundary depend on the presence of an adjacent
+       processor. */
 
-    /* Load up pvec */
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0;
     for (i=0; i<nx; i++) {
         xok = 0;
         x = i*hx + xmin;
-        if ((x < upperCorner[0]) && (x > lowerCorner[0])) xok = 1;
-        else { 
-            if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
-                (bflags[VAPBS_LEFT] == 1)) xok = 1;
-            else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
-                (bflags[VAPBS_RIGHT] == 1)) xok = 1;
-            else xok = 0;
+        if ((x < (upperCorner[0]-hx/2)) && (x > (lowerCorner[0]+hx/2))) xok = 1;
+        else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
+                 (bflags[VAPBS_LEFT] == 0)) xok = 1;
+        else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
+                 (bflags[VAPBS_LEFT] == 1)) xok = 0.5;
+        else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
+                 (bflags[VAPBS_RIGHT] == 0)) xok = 1;
+        else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
+                 (bflags[VAPBS_RIGHT] == 1)) xok = 0.5;
+        else if ((x > (upperCorner[0] + hx/2)) || (x < (lowerCorner[0] - hx/2))) xok = 0;
+        else if ((x < (upperCorner[0] + hx/2)) || (x > (lowerCorner[0] - hx/2))){
+            x0 = VMAX2(x - hx/2, lowerCorner[0]);
+            x1 = VMIN2(x + hx/2, upperCorner[0]);
+            xok = VABS(x1-x0)/hx;
+            VASSERT(xok >= 0.0);
+            VASSERT(xok <= 1.0);
         }
-        if (xok) {
-            for (j=0; j<ny; j++) {
-                yok = 0;
-                y = j*hy + ymin;
-                if ((y < upperCorner[1]) && 
-                    (y > lowerCorner[1])) yok = 1;
-                else {
-                    if ((VABS(y - lowerCorner[1]) < VPMGSMALL) &&
-                        (bflags[VAPBS_BACK] == 1)) yok = 1;
-                    else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
-                        (bflags[VAPBS_FRONT] == 1)) yok = 1;
-                    else yok = 0;
-                }
-                if (yok) {
-                    for (k=0; k<nz; k++) {
-                        zok = 0; 
-                        z = k*hzed + zmin;
-                        if ((z < upperCorner[2]) && 
-                            (z > lowerCorner[2])) zok = 1;
-                        else {
-                            if ((VABS(z - lowerCorner[2]) < VPMGSMALL) &&
-                                (bflags[VAPBS_DOWN] == 1)) zok = 1;
-                            else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
-                                (bflags[VAPBS_UP] == 1)) zok = 1;
-                            else zok = 0;
+        else xok=0;
+     
+        for (j=0; j<ny; j++) {
+            yok = 0;
+            y = j*hy + ymin;
+            if ((y < (upperCorner[1]-hy/2)) && (y > (lowerCorner[1]+hy/2))) yok = 1;
+            else if ((VABS(y - lowerCorner[1]) < VPMGSMALL) && 
+                     (bflags[VAPBS_BACK] == 0)) yok = 1;
+            else if ((VABS(y - lowerCorner[1]) < VPMGSMALL) && 
+                     (bflags[VAPBS_BACK] == 1)) yok = 0.5;
+            else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
+                     (bflags[VAPBS_FRONT] == 0)) yok = 1;
+            else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
+                     (bflags[VAPBS_FRONT] == 1)) yok = 0.5;
+            else if ((y > (upperCorner[1] + hy/2)) || (y < (lowerCorner[1] - hy/2))) yok=0;
+            else if ((y < (upperCorner[1] + hy/2)) || (y > (lowerCorner[1] - hy/2))){
+                y0 = VMAX2(y - hy/2, lowerCorner[1]);
+                y1 = VMIN2(y + hy/2, upperCorner[1]);
+                yok = VABS(y1-y0)/hy;
+                VASSERT(yok >= 0.0);
+                VASSERT(yok <= 1.0);
+            }
+            else yok=0;
 
-                        }
-                        if (zok) thee->pvec[IJK(i,j,k)] = 1;
-                        else thee->pvec[IJK(i,j,k)] = 0;
-                    }
+
+            for (k=0; k<nz; k++) {
+                zok = 0; 
+                z = k*hzed + zmin;
+                if ((z < (upperCorner[2]-hzed/2)) && (z > (lowerCorner[2]+hzed/2))) zok = 1;
+                else if ((VABS(z - lowerCorner[2]) < VPMGSMALL) && 
+                         (bflags[VAPBS_DOWN] == 0)) zok = 1;
+                else if ((VABS(z - lowerCorner[2]) < VPMGSMALL) && 
+                         (bflags[VAPBS_DOWN] == 1)) zok = 0.5;
+                else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
+                         (bflags[VAPBS_UP] == 0)) zok = 1;
+                else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
+                         (bflags[VAPBS_UP] == 1)) zok = 0.5;
+                else if ((z > (upperCorner[2] + hzed/2)) || (z < (lowerCorner[2] - hzed/2))) zok=0;
+                else if ((z < (upperCorner[2] + hzed/2)) || (z > (lowerCorner[2] - hzed/2))){
+                    z0 = VMAX2(z - hzed/2, lowerCorner[2]);
+                    z1 = VMIN2(z + hzed/2, upperCorner[2]);
+                    zok = VABS(z1-z0)/hzed;
+                    VASSERT(zok >= 0.0);
+                    VASSERT(zok <= 1.0);
                 }
+                else zok = 0;
+
+                thee->pvec[IJK(i,j,k)] = xok*yok*zok;
+               
             }
         }
     }

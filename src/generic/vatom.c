@@ -55,7 +55,7 @@ VPUBLIC double *Vatom_getPosition(Vatom *thee) {
 
 }
 
-VPUBLIC int Vatom_getPartID(Vatom *thee) {
+VPUBLIC double Vatom_getPartID(Vatom *thee) {
 
    VASSERT(thee != VNULL);
    return thee->partID;
@@ -65,7 +65,7 @@ VPUBLIC int Vatom_getPartID(Vatom *thee) {
 VPUBLIC void Vatom_setPartID(Vatom *thee, int partID) {
 
    VASSERT(thee != VNULL);
-   thee->partID = partID;
+   thee->partID = (double)partID;
 
 }
 

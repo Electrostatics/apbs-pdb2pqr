@@ -101,7 +101,7 @@ struct sVpmg {
   double *gxcf;                  /**< Boundary conditions for x faces */
   double *gycf;                  /**< Boundary conditions for y faces */
   double *gzcf;                  /**< Boundary conditions for z faces */
-  int *pvec;                     /**< Partition mask array */
+  double *pvec;                  /**< Partition mask array */
   double extDiEnergy;            /**< Stores contributions to the dielectric 
                                   *   energy from regions outside the problem
                                   *   domain */
@@ -560,9 +560,9 @@ VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
  *  @param   thee          Vpmg object
  *  @param   lowerCorner   Partition lower corner
  *  @param   upperCorner   Partition upper corner
- *  @param   bflags        Whether or not a particular processor owns a face of
- *                         it's partition.  This keeps things disjoint.  0 if
- *                         the face is not owned by this partition and 1
+ *  @param   bflags        Whether or not a particular processor is on the 
+ *                         boundary with another partition.  0 if the face is
+ *                         not bounded (next to) another partition, and 1 
  *                         otherwise.
  */
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],

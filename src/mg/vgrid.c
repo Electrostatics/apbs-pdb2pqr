@@ -642,7 +642,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, char *title, int *pvec) {
+  const char *thost, const char *fname, char *title, double *pvec) {
 
     double xmin, ymin, zmin, hx, hy, hzed;
     int nx, ny, nz;
@@ -758,7 +758,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         }
 
         if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
-            Vnm_print(0, "Vgrid_writeUHBD:  printing only subset of domain\n");
+            Vnm_print(0, "Vgrid_writeDX:  printing only subset of domain\n");
         }
 
 
@@ -881,7 +881,7 @@ class field\n");
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, char *title, int *pvec) {
+  const char *thost, const char *fname, char *title, double *pvec) {
 
     int icol, i, j, k, u, nx, ny, nz, gotit;
     double xmin, ymin, zmin, hzed, hy, hx;
