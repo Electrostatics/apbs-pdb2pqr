@@ -43,7 +43,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _VFETK_H_
+#if !defined(_VFETK_H_)
 #define _VFETK_H_
 
 #include "maloc/maloc.h"
@@ -55,6 +55,7 @@
 #include "apbs/vpbe.h"
 #include "apbs/vunit.h"
 #include "apbs/vgreen.h"
+#include "apbs/vcap.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Parameters and datatypes
@@ -103,11 +104,14 @@ VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am);
 VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *apbe, Gem *gm, AM *am);
 VEXTERNC void    Vfetk_dtor(Vfetk **thee);
 VEXTERNC void    Vfetk_dtor2(Vfetk *thee);
-
 VEXTERNC double* Vfetk_getSolution(Vfetk *thee, int *length);
-VEXTERNC double  Vfetk_getLinearEnergy1(Vfetk *thee, int color);
-VEXTERNC double  Vfetk_getLinearEnergy2(Vfetk *thee, int color);
-VEXTERNC double  Vfetk_getEnergyNorm2(Vfetk *thee, int color);
+VEXTERNC double  Vfetk_energy(Vfetk *thee, int color, int nonlin);
+VEXTERNC double  Vfetk_qmEnergy(Vfetk *thee, int color, int nonlin);
+VEXTERNC double  Vfetk_qfEnergy(Vfetk *thee, int color);
+VEXTERNC double  Vfetk_dielEnergy(Vfetk *thee, int color);
+VEXTERNC double  Vfetk_qmEnergySimplex(Vfetk *thee, SS *sm, int nonlin);
+VEXTERNC double  Vfetk_energyNorm(Vfetk *thee, int flag);
+
 VEXTERNC int     Vfetk_memChk(Vfetk *thee);
 VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);
 

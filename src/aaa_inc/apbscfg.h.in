@@ -50,8 +50,8 @@
 // Author:   Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef _APBSCONFIG_H_
+#define _APBSCONFIG_H_
 
 /* Does the EMBED macro for embedding rcsid symbols into binaries work? */
 #undef HAVE_EMBED
