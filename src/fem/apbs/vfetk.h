@@ -91,7 +91,7 @@ typedef struct Vfetk {
 #   define Vfetk_getAM(thee) ((thee)->am)
 #   define Vfetk_getVpbe(thee) ((thee)->pbe)
 #   define Vfetk_getVcsm(thee) ((thee)->csm)
-#   define Vfetk_getAtomColor(thee, iatom) (Vatom_getPartID(Valist_getAtom(Vpbe_getValist(thee->pbe), iatom))
+#   define Vfetk_getAtomColor(thee, iatom) (Vatom_getPartID(Valist_getAtom(Vpbe_getValist(thee->pbe), iatom)))
 #endif /* if !defined(VINLINE_VFETK) */
 
 /* ///////////////////////////////////////////////////////////////////////////

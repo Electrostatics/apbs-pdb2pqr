@@ -42,15 +42,14 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
-#include "cxxfmm.h"
 #include "apbs/vgreen.h"
+#include "cxxfmm.h"
 
-#define dtorCXXFMM      Vgreen_dtorCXXFMM__FP6Vgreen
-#define fieldCXXFMM     Vgreen_fieldCXXFMM__FP6VgreenPdT1
-#define initCXXFMM      Vgreen_initCXXFMM__FP6Vgreendiiiddd
-#define potentialCXXFMM Vgreen_potentialCXXFMM__FP6VgreenPd
-#define updateCXXFMM    Vgreen_updateCXXFMM__FP6Vgreen
-
+#define DTORCXXFMM      Vgreen_dtorCXXFMM__FP6Vgreen
+#define FIELDCXXFMM     Vgreen_fieldCXXFMM__FP6VgreenPdT1
+#define INITCXXFMM      Vgreen_initCXXFMM__FP6Vgreendiiiddd
+#define POTCXXFMM       Vgreen_potentialCXXFMM__FP6VgreenPd
+#define UPDATECXXFMM    Vgreen_updateCXXFMM__FP6Vgreen
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vgreen: Inlineable methods
@@ -129,7 +128,7 @@ VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) {
     thee->vmem = Vmem_ctor("APBS:VGREEN");
 
     /* Set up the atom list and grid manager */
-    if(alist == VNULL) {
+    if (alist == VNULL) {
         Vnm_print(2,"Vgreen_ctor2: got null pointer to Valist object!\n");
     }
 
@@ -156,7 +155,7 @@ VPUBLIC void Vgreen_initFMM(Vgreen *thee, double spacing, int nx, int ny,
     VASSERT( thee != VNULL );
 
 #if defined(USE_CXX_FMM)
-    initCXXFMM(thee, spacing, nx, ny, nz, xlow, ylow, zlow);
+    INITCXXFMM(thee, spacing, nx, ny, nz, xlow, ylow, zlow);
     thee->initFlagCXXFMM = 1;
 #else
     Vnm_print(2, "Vgreen_initFMM: Not compiled with FMM support!\n");
@@ -196,7 +195,7 @@ VPUBLIC void Vgreen_dtor2(Vgreen *thee) {
     Vmem_dtor(&(thee->vmem));
 
 #if defined(USE_CXX_FMM)
-    if (thee->initFlagCXXFMM) dtorCXXFMM(thee);
+    if (thee->initFlagCXXFMM) DTORCXXFMM(thee);
 #endif
 
 }
@@ -290,7 +289,9 @@ VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
   
 #if defined(USE_CXX_FMM)
     VASSERT(thee->initFlagCXXFMM);
-    pot = potentialCXXFMM(thee, position);
+    Vnm_print(2, "Vgreen_coulomb: pos = (%g, %g, %g)\n", position[0],
+position[1], position[2]);
+    pot = POTCXXFMM(thee, position);
 #else
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
@@ -341,7 +342,7 @@ VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
   
 #if defined(USE_CXX_FMM)
     VASSERT(thee->initFlagCXXFMM);
-    fieldCXXFMM(thee, position, grad);
+    FIELDCXXFMM(thee, position, grad);
 #else
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
