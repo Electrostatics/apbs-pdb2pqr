@@ -48,7 +48,6 @@
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
 #include "apbs/vacc.h"
-#include "mc/vec3.h"
 
 int main(int argc, char **argv) {
 
@@ -78,7 +77,7 @@ int main(int argc, char **argv) {
     double x_cen, y_cen, z_cen;
     double x, y, z;
     double w = 1.0;
-    Vec3 vec;
+    double vec[3];
 
     /* TIMING VARIABLES */
     double t;

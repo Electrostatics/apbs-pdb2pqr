@@ -50,12 +50,10 @@
 #include "apbs/valist.h"
 #include "apbs/vhal.h"
 #include "apbs/vpbe.h"
-#include "apbs/vpee.h"
 #include "apbs/vunit.h"
 #include "apbs/vgreen.h"
 #include "apbs/vpmg.h"
 #include "apbs/vpmgp.h"
-#include "apbs/vfetk.h"
 #include "apbs/mgsh.h"
 
 #endif /* _APBS_H_ */
