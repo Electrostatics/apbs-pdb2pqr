@@ -56,7 +56,7 @@
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
 #include "apbs/vcsm.h"
-#include "apbs/vhash.h"
+#include "apbs/vacc.h"
 #include "apbs/vunit.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -75,8 +75,8 @@ typedef struct Vpbe {
                        * operator for updating after refinement ) */
 
 
-  Vhash *solvHash;    /* Atomic hash table for solvent accessibility */
-  Vhash *ionHash;     /* Atomic hash table for ionic accessibility */
+  Vacc *solvAcc;      /* Accessibility object for solvent accessibility */
+  Vacc *ionAcc;       /* Accessibility object for ionic accessibility */
   Vcsm *csm;          /* Charge-simplex map */
 
   double ionConc;     /* Ionic strength (M) */
@@ -131,8 +131,8 @@ VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
 VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
 VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
 VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
-VEXTERNC Vhash*  Vpbe_getSolventHash(Vpbe *thee);
-VEXTERNC Vhash*  Vpbe_getIonHash(Vpbe *thee);
+VEXTERNC Vacc*  Vpbe_getSolventAcc(Vpbe *thee);
+VEXTERNC Vacc*  Vpbe_getIonAccash(Vpbe *thee);
 VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
 
 VEXTERNC double Vpbe_getIonConc(Vpbe *thee);
