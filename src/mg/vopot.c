@@ -175,7 +175,7 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
         position = Vpbe_getSoluteCenter(thee->pbe);
         charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
         dist = 0;
-        for (i=0; i<d; i++) 
+        for (i=0; i<d; i++)
           dist += ((position[i] - pt[i])*(position[i] - pt[i]));
         dist = (1.0e-10)*VSQRT(dist);
         val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
@@ -183,7 +183,7 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
         val = val*Vunit_ec/(Vunit_kb*T);
 
         u = val;
-        
+
 
 #elseif (VOPOT_BCFL == 2)
 
@@ -215,14 +215,17 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vopot_curvature
 //
-//   Notes:  cflag=0 ==> Laplace
-//           cflag=1 ==> Maximum
+//   Notes:  cflag=0 ==> Reduced Maximal Curvature
+//           cflag=1 ==> Mean Curvature (Laplace)
+//           cflag=2 ==> Gauss Curvature
+//           cflag=3 ==> True Maximal Curvature
 //
 // Authors:  Stephen Bond and Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag )
+VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag)
 {
-    double hx, hy, hzed, val, curv;
+    double hx, hy, hzed, curv;
+    double dxx, dyy, dzz;
     double uleft, umid, uright, testpt[3];
 
     hx = thee->hx;
@@ -243,16 +246,7 @@ VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag )
     uright = Vopot_pot( thee, testpt );
     testpt[0] = pt[0];
 
-    val = (uright - 2*umid + uleft)/(hx*hx);
-
-    if ( cflag == 0 ) {
-        curv += val;
-    } else if ( cflag == 1 ) {
-        val = fabs( val );
-        curv = ( val > curv ) ? val : curv;
-    } else {
-        VASSERT( 0 );
-    }
+    dxx = (uright - 2*umid + uleft)/(hx*hx);
 
     /* Compute 2nd derivative in the y-direction */
     umid = Vopot_pot( thee, testpt );
@@ -262,36 +256,29 @@ VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag )
     uright = Vopot_pot( thee, testpt );
     testpt[1] = pt[1];
 
-    val = (uright - 2*umid + uleft)/(hy*hy); 
-
-    if ( cflag == 0 ) {
-        curv += val;
-    } else if ( cflag == 1 ) {
-        val = fabs( val );
-        curv = ( val > curv ) ? val : curv;
-    } else {
-        VASSERT( 0 );
-    }
+    dyy = (uright - 2*umid + uleft)/(hy*hy);
 
     /* Compute 2nd derivative in the z-direction */
     umid = Vopot_pot( thee, testpt );
     testpt[2] = pt[2] - hzed;
     uleft = Vopot_pot( thee, testpt );
-    testpt[2] = pt[2] + hzed; 
+    testpt[2] = pt[2] + hzed;
     uright = Vopot_pot( thee, testpt );
-    
-    val = (uright - 2*umid + uleft)/(hzed*hzed);
-    
-    if ( cflag == 0 ) { 
-        curv += val;
-    } else if ( cflag == 1 ) {
-        val = fabs( val ); 
-        curv = ( val > curv ) ? val : curv;
-    } else {
-        VASSERT( 0 );
-    } 
 
-    return curv; 
-    
+    dzz = (uright - 2*umid + uleft)/(hzed*hzed);
+
+
+    if ( cflag == 0 ) {
+        curv = fabs(dxx);
+        curv = ( curv > fabs(dyy) ) ? curv : fabs(dyy);
+        curv = ( curv > fabs(dzz) ) ? curv : fabs(dzz);
+    } else if ( cflag == 1 ) {
+        curv = (dxx + dyy + dzz)/3.0;
+    } else {
+        VASSERT( 0 ); /* Feature Not Coded Yet! */
+    }
+
+    return curv;
+
 }
 
