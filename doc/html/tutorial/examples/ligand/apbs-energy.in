@@ -1,0 +1,81 @@
+read 
+    mol pqr bx6_7_lig_apbs.pqr  # Balanol
+    mol pqr bx6_7_apo_apbs.pqr  # Protein kinase A
+    mol pqr bx6_7_bin_apbs.pqr  # Complex
+end
+
+elec name bal                # BALANOL ENERGY CALCULATION
+    mg-auto   
+    dime 65 65 65            # Grid dimensions
+    cglen 70 70 70           # Coarse grid lengths
+    cgcent mol 3             # Coarse grid centered on the complex
+    fglen 16 16 16           # Fine grid lengths
+    fgcent mol 1             # Fine grid centered on the complex
+    mol 1                    
+    lpbe                     # Linearized PB
+    bcfl sdh                 # Monopole boundary condition
+    ion 1 0.000 2.0          # Zero ionic strength
+    ion -1 0.000 2.0         
+    pdie 2.0                 # Solute dielectric
+    sdie 78.00               # Solvent dielectric
+    chgm spl0                # Linear charge discretization
+    srfm smol                # Smoothed molecular surface
+    srad 0.0                 # Solvent probe radius
+    swin 0.3                 # Surface spline window (not used)
+    temp 298.15              # Temperature
+    gamma 0.105              # Surface tension (not used)
+    calcenergy total
+    calcforce no
+end
+
+elec name pka                # PROTEIN KINASE A CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3       
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+elec name complex            # COMPLEX CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3       
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+print energy complex - pka - bal end
+
+quit

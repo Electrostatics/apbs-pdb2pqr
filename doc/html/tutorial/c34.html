@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Getting started</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="HOME"
+TITLE="APBS Tutorial"
+HREF="book1.html"><LINK
+REL="PREVIOUS"
+TITLE="APBS Tutorial"
+HREF="book1.html"><LINK
+REL="NEXT"
+TITLE="The Born ion"
+HREF="c61.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>APBS Tutorial: (Actively under development)</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="book1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c61.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="introduction-sect"
+></A
+>Getting started</H1
+><DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="./stylesheet-images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>This is my first attempt at a tutorial and it is actively under
+        development.  Please let me know if you encounter any problems;
+        suggestions about modifications/additions are always welcome.
+      </P
+></TD
+></TR
+></TABLE
+></DIV
+><P
+>&#13;      This tutorial is designed to help users get acquainted with
+      computational electrostatics calculations using APBS.  In order to
+      perform the provided examples, you will need:
+      <P
+></P
+><UL
+><LI
+><P
+>&#13;            The latest version of APBS 
+            (<A
+HREF="http://agave.wustl.edu"
+TARGET="_top"
+>http://agave.wustl.edu</A
+>)
+            to perform the electrostatics calculations.
+          </P
+></LI
+><LI
+><P
+>&#13;            VMD 
+            (<A
+HREF="http://www.ks.uiuc.edu/Research/vmd/"
+TARGET="_top"
+>http://www.ks.uiuc.edu/Research/vmd/</A
+>)
+            to visualize the molecular structures and electrostatic
+            potentials.
+          </P
+></LI
+><LI
+><P
+>&#13;            Gnuplot
+            (<A
+HREF="http://www.gnuplot.info/"
+TARGET="_top"
+>http://www.gnuplot.info/</A
+>)
+            to plot energies, etc.
+          </P
+></LI
+><LI
+><P
+>&#13;            Bash (<A
+HREF="http://www.gnu.org/software/bash/bash.html"
+TARGET="_top"
+>http://www.gnu.org/software/bash/bash.html</A
+>; standard on most
+            Linux, MacOS X)
+          </P
+></LI
+><LI
+><P
+>&#13;            Python (<A
+HREF="http://www.python.org/"
+TARGET="_top"
+>http://www.python.org/</A
+>; standard on most
+            Linux, MacOS X)
+          </P
+></LI
+></UL
+>
+      Furthermore, these examples all assume that the above programs are in
+      your system path (i.e., can be run simply by typing the program name).
+    </P
+><P
+>&#13;      The following examples demonstrate some of the basic electrostatics
+      which require modest computational resources; i.e., can be performed
+      using in 0-5 min on a modern PC.  
+      <DIV
+CLASS="important"
+><P
+></P
+><TABLE
+CLASS="important"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="./stylesheet-images/important.gif"
+HSPACE="5"
+ALT="Important"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+> These examples build on one another and are designed to be
+          carried out in order.  Please read through each section completely
+          before trying the example.  
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+      <DIV
+CLASS="warning"
+><P
+></P
+><TABLE
+CLASS="warning"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="./stylesheet-images/warning.gif"
+HSPACE="5"
+ALT="Warning"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+> This tutorial require several files (linked to from the
+          individual examples) be downloaded.  It is recommended that you
+          create a separate subdirectory (e.g., 
+          <TT
+CLASS="userinput"
+><B
+>mkdir foo; cd foo</B
+></TT
+>) for each example.  Also
+          many browsers will display, rather than save the example files.
+          Right-clicking on the link (or the displayed file) should present
+          you with the option to save the file.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="book1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c61.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>APBS Tutorial</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>The Born ion</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
