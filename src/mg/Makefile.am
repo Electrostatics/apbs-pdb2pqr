@@ -22,7 +22,6 @@ libapbsmg_la_SOURCES  = vpmg.c vpmg-setup.c vpmg-force.c vpmg-energy.c \
   smoothd.f sord.f wjd.f mypde.f vpmgf.f vmgrid.c vgrid.c vopot.c
 INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
-AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 
 
 all-local:

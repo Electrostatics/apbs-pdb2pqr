@@ -16,5 +16,4 @@ noinst_LTLIBRARIES = libapbsblas.la
 libapbsblas_la_SOURCES  = mblasd.f
 INCLUDES           = @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
-AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 
