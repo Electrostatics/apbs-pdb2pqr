@@ -16,7 +16,7 @@ noinst_LTLIBRARIES = libapbsgen.la
 libapbsgen_la_SOURCES  = nosh.c mgparm.c mgparse.c femparm.c pbeparm.c \
                          vacc.c valist.c vatom.c vgreen.c vpbe.c vcap.c \
                          vstring.c
-INCLUDES           = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg @inc_list@ 
+INCLUDES           = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg -I${top_srcdir}/src/aaa_inc @inc_list@ 
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
 AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 

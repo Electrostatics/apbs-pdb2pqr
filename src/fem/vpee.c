@@ -56,8 +56,6 @@ VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
 
-VEMBED(rcsid="$Id$")
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpee: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
