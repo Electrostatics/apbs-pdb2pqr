@@ -306,14 +306,14 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../src/mg/apbs ../../src/generic/apbs \
                          ../../src/fem/apbs ../../src/aaa_inc/apbs/apbs.h \
-                         ./mainpage.h ../../doc/LICENSE.h
+                         ./mainpage.h ../../doc/LICENSE.h 
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
 # and *.h) to filter out the source-files in the directories. If left 
 # blank all files are included.
 
-FILE_PATTERNS          = *.h
+FILE_PATTERNS          = *.h 
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories 
 # should be searched for input files as well. Possible values are YES and NO. 

@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/sh -x
 
 ##############################################################################
 # APBS -- Adaptive Poisson-Boltzmann Solver
@@ -10,8 +10,8 @@
 #
 #  Additional contributing authors listed in the code documentation.
 #
-# Copyright © 1999. The Regents of the University of California (Regents).
-# All Rights Reserved. 
+# Copyright (c) 1999-2002. The Regents of the University of California
+#                          (Regents).  All Rights Reserved. 
 # 
 # Permission to use, copy, modify, and distribute this software and its
 # documentation for educational, research, and not-for-profit purposes,
@@ -36,23 +36,12 @@
 ##############################################################################
 # Purpose: Auto-generate the GNU configure script.
 #
-# Author:  Michael Holst
+# Author:  Nathan Baker and Michael Holst
 ##############################################################################
 
-echo "setup:  rm -f config.cache"
 rm -f config.cache
-
-echo "setup:  aclocal"
 aclocal
-
-echo "setup:  autoconf"
 autoconf
-
-echo "setup:  autoheader"
 autoheader
-
-echo "setup:  automake"
 automake
-
-echo "setup:  libtoolize"
 libtoolize -f
