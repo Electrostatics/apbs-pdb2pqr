@@ -76,13 +76,13 @@ to simply type:
 
 If you need MPI support, replace the above with 
 
-    ./configure --enable-vhack --enable-mpi --with-mpilib=PATH1  \
-          --with-mpiinc=PATH2
+    ./configure --enable-vhack --enable-mpi --with-mpilib=MC_MPI_LIBRARY  \
+          --with-mpiinc=MC_MPI_INCLUDE
     make
     make install
 
-where PATH1 is the path to the directory in which libmpi.a resides and 
-PATH2 is the path to the directory in which mpi.h resides.
+where MC_MPI_LIBRARY is the path to the directory in which libmpi.a resides 
+and MC_MPI_INCLUDE is the path to the directory in which mpi.h resides.
 
 If you ever need to rebuild the configure script or Makefile.in files that 
 configure uses, the procedure is rougly as follows.  You first run aclocal to 
@@ -159,3 +159,11 @@ Finally, a single electrostatics calculation via APBS requires so little
 communication, that it makes since to use the IP-based MPI implementation
 and thereby allow 8 tasks (processes) per node.  Check the NPACI
 documentation for more information on this.
+
+--------------------
+SDSC Sun E10K System
+--------------------
+CC=/usr/ucb/cc
+MC_MPI_LIBRARY=/usr/local/apps/mpi-1.0.13/lib/solaris/ch_p4
+MC_MPI_INCLUDE=/usr/local/apps/mpi-1.0.13/include
+
