@@ -49,6 +49,7 @@
 
 #include "mc/vhal.h"
 #include "mc/vec3.h"
+#include "mc/vset.h"
 #include "mc/vmem.h"
 
 #include "apbs/valist.h"
@@ -64,25 +65,21 @@
 
 typedef struct Vacc {
 
-  /* Memory management object for this class */
-  Vmem *vmem;
-
-  /* An array of arrays of pointers to atoms */
-  Vatom ***atoms;
-  /* An array telling how many pointers are stored in atoms[i] */
-  int *natoms;
-  /* An array of points on the surface of a sphere */
-  double **sphere;
+  Vmem *vmem;                    /* Memory management object for this class */
+  Vatom ***atoms;                /* An array of arrays of pointers to atoms */
+  int *natoms;                   /* An array telling how many pointers are 
+                                  * stored in atoms[i] */
+  double **sphere;               /* An array of points on the surface of a 
+                                  * sphere */
   int nsphere;
-
-  /* Grid corner */
-  Vec3 grid_lower_corner;
-  /* Grid spacings */
-  double hx, hy, hzed;
-  /* Grid dimensions, n = nx*nz*ny */
-  int nx, ny, nz, n;
-  /* Maximum probe radius */
-  double max_radius;
+  Vset acc;                      /* An integer array (to be treated as 
+                                  * bitfields) of Vset type with length equal 
+                                  * to the number of vertices in the mesh */
+  Vec3 grid_lower_corner;        /* Hash table grid corner */
+  double hx, hy, hzed;           /* Hash table grid spacings */
+  int nx, ny, nz, n;             /* Hash table grid dimensions, 
+                                  * n = nx*nz*ny */
+  double max_radius;             /* Maximum probe radius */
 
 } Vacc;
 
@@ -105,11 +102,11 @@ VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
-VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
+VEXTERNC int Vacc_memChk(Vacc *thee);
 
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
-VEXTERNC int Vacc_memChk(Vacc *thee);
+
 
 #endif    /* ifndef _VACC_H_ */

@@ -97,7 +97,6 @@ VPUBLIC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, double
 VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
   double killParam) {
 
-    int *usedVert;
     int ivert, isimp, nLocalVerts;
     SS *simp;
     VV *vert;
@@ -130,27 +129,27 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
     thee->killParam = killParam;
     thee->mem = Vmem_ctor("APBS::VPEE");
 
-    /* Now, figure out the center of geometry for the local partition.  We 
-     * need to keep track of vertices so we don't double count them. */
-    usedVert = (int *)Vmem_malloc(thee->mem, Vgm_numVV(thee->gm), sizeof(int));
-    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) usedVert[ivert] = 0;
+    /* Now, figure out the center of geometry for the local partition.  The 
+     * general plan is to loop through the vertices, loop through the 
+     * vertices' simplex lists and find the vertices with simplices containing
+     * chart values we're interested in. */
     thee->localPartCenter[0] = 0.0;
     thee->localPartCenter[1] = 0.0;
     thee->localPartCenter[2] = 0.0;
     nLocalVerts = 0;
-    for (isimp=0; isimp<Vgm_numSS(thee->gm); isimp++) {
-        simp = Vgm_SS(thee->gm, isimp);
-        if (SS_chart(simp) == thee->localPartID) {
-            for (ivert=0; ivert<Vgm_dimVV(thee->gm); ivert++) {
-                vert = SS_vertex(simp, ivert);
-                if (usedVert[VV_id(vert)] == 0) {
-                    usedVert[VV_id(vert)] = 1;
-                    thee->localPartCenter[0] += VV_coord(vert, 0);
-                    thee->localPartCenter[1] += VV_coord(vert, 1);
-                    thee->localPartCenter[2] += VV_coord(vert, 2);
-                    nLocalVerts++;
-                }
+    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) {
+        vert = Vgm_VV(thee->gm, ivert);
+        simp = VV_firstSS(vert);
+        VASSERT(simp != VNULL);
+        while (simp != VNULL) {
+            if (SS_chart(simp) == thee->localPartID) {
+                thee->localPartCenter[0] += VV_coord(vert, 0);
+                thee->localPartCenter[1] += VV_coord(vert, 1);
+                thee->localPartCenter[2] += VV_coord(vert, 2);
+                nLocalVerts++;
+                break;
             }
+            simp = SS_link(simp, vert);
         }
     }
     VASSERT(nLocalVerts > 0);
@@ -168,30 +167,27 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
     /* Now, figure out the radius of the sphere circumscribing the local
      * partition.  We need to keep track of vertices so we don't double count 
      * them. */
-    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) usedVert[ivert] = 0;
     thee->localPartRadius = 0.0;
-    for (isimp=0; isimp<Vgm_numSS(thee->gm); isimp++) {
-        simp = Vgm_SS(thee->gm, isimp);
-        if (SS_chart(simp) == thee->localPartID) {
-            for (ivert=0; ivert<Vgm_dimVV(thee->gm); ivert++) {
-                vert = SS_vertex(simp, ivert);
-                if (usedVert[VV_id(vert)] == 0) {
-                    usedVert[VV_id(vert)] = 1;
-                    dx = thee->localPartCenter[0] - VV_coord(vert, 0);
-                    dy = thee->localPartCenter[1] - VV_coord(vert, 1);
-                    dz = thee->localPartCenter[2] - VV_coord(vert, 2);
-                    radius = dx*dx + dy*dy + dz*dz;
-                    if (radius > thee->localPartRadius) thee->localPartRadius =
-                      radius;
-                }
+    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) {
+        vert = Vgm_VV(thee->gm, ivert);
+        simp = VV_firstSS(vert);
+        VASSERT(simp != VNULL);
+        while (simp != VNULL) {
+            if (SS_chart(simp) == thee->localPartID) {
+                dx = thee->localPartCenter[0] - VV_coord(vert, 0);
+                dy = thee->localPartCenter[1] - VV_coord(vert, 1);
+                dz = thee->localPartCenter[2] - VV_coord(vert, 2);
+                radius = dx*dx + dy*dy + dz*dz;
+                if (radius > thee->localPartRadius) thee->localPartRadius =
+                  radius;
+                break;
             }
+            simp = SS_link(simp, vert);
         }
     }
     thee->localPartRadius = VSQRT(thee->localPartRadius);
     Vnm_print(2, "Vpee_ctor2: Part %d has circumscribing sphere of radius %4.3f\n", 
       thee->localPartID, thee->localPartRadius);
-    Vmem_free(thee->mem, Vgm_numVV(thee->gm), sizeof(int), 
-      (void **)&usedVert);
 
     return 1;
 }
