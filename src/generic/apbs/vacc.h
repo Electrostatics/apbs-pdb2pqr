@@ -295,6 +295,23 @@ VEXTERNC double Vacc_splineAcc(
         double infrad  /** Inflation radius (&Aring;) for ion access. */
         );
 
+/** @brief   Report gradient of spline-based accessibility for a given atom 
+ *           multiplied by the spline-based accessibility of all other atoms.
+ *
+ *  @ingroup Vacc
+ *  @author  Nathan Baker
+ *  @returns Characteristic function value between 1.0 (accessible) and 0.0
+ *          (inaccessible)
+ */
+VEXTERNC void Vacc_splineAccGrad(
+        Vacc *thee, /** Accessibility object */
+        double center[3], /** Probe center coordinates */
+        double win, /** Spline window (&Aring;) */ 
+        double infrad,  /** Inflation radius (&Aring;) for ion access. */
+        int atomID, /** Index of atom in Valist object */ 
+        double *grad /** 3-vector set to gradient of accessibility */
+        );
+
 /** @brief   Report spline-based accessibility for a given atom
  *
  *  Determine accessibility at a given point for a given atomic

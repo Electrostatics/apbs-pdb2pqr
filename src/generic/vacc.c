@@ -801,10 +801,13 @@ VPUBLIC void Vacc_splineAccGradAtom(Vacc *thee, double center[3], double win,
           + VSQR(apos[2]-center[2]));
         /* If we're inside an atom, the entire characteristic function
          * will be zero and the grad will be zero, so we can stop */
-        if (dist <= (arad - win)) return;
+        if (dist < (arad - win)) return;
         /* Likewise, if we're outside the smoothing window, the characteristic
          * function is unity and the grad will be zero, so we can stop */
-        else if (dist >= (arad + win)) return;
+        else if (dist > (arad + win)) return;
+        /* Account for floating point error at the border */
+        else if ((VABS(dist - (arad - win)) < VSMALL) || 
+                 (VABS(dist - (arad + win)) < VSMALL)) return;
         /* If we're inside the smoothing window */
         else {
             sm = dist - arad + win;
@@ -817,10 +820,7 @@ VPUBLIC void Vacc_splineAccGradAtom(Vacc *thee, double center[3], double win,
         grad[0] = -(mygrad/mychi)*((center[0] - apos[0])/dist);
         grad[1] = -(mygrad/mychi)*((center[1] - apos[1])/dist);
         grad[2] = -(mygrad/mychi)*((center[2] - apos[2])/dist);
-    } 
-
-
-    
+    }    
 }
 
 
@@ -846,7 +846,7 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
     atom = Valist_getAtom(thee->alist, atomID);
     apos = Vatom_getPosition(atom);
     /* Zero-radius atoms don't contribute */
-    if (Vatom_getRadius(atom) > 1.0) {
+    if (Vatom_getRadius(atom) > 0.0) {
         arad = Vatom_getRadius(atom) + infrad;
         stot = arad + win;
         sctot = VMAX2(0, (arad - win));
@@ -854,11 +854,10 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
           + VSQR(apos[2]-center[2]));
         /* If we're inside an atom, the entire characteristic function
          * will be zero */
-        if (dist <= sctot) {
+        if ((dist < sctot) || (VABS(dist - sctot) < VSMALL)){
             value = 0.0;
-            return value;
         /* We're outside the smoothing window */
-        } else if (dist >= stot) {
+        } else if ((dist > stot) || (VABS(dist - stot) < VSMALL)) {
             value = 1.0;
         /* We're inside the smoothing window */
         } else {
@@ -883,10 +882,10 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE double splineAcc(Vacc *thee, int ui, double win, double infrad) {
+VPRIVATE double splineAcc(Vacc *thee, double center[3], double win, double infrad, int ui) {
 
-    int centeri, centerj, centerk, ui, iatom, atomID;      
-    double value = 1.0;            
+    int atomID, iatom;      
+    double value = 1.0;          
 
 
     VASSERT(thee != NULL);
@@ -954,7 +953,7 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) 
       thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
 
-    return splineAcc(thee, ui, win, infrad);
+    return splineAcc(thee, center, win, infrad, ui);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -965,7 +964,7 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
 VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win, 
   double infrad, int atomID, double *grad) {
 
-    int centeri, centerj, centerk, ui, iatom, atomID;      
+    int centeri, centerj, centerk, ui, iatom, i;      
     double value = 1.0;            
 
 
@@ -989,7 +988,7 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
     if ((centeri < 0) || (centeri >= thee->nx) || \
         (centerj < 0) || (centerj >= thee->ny) || \
         (centerk < 0) || (centerk >= thee->nz)) {
-        return 1;
+        return;
     }
 
     /* If we're still here, then we need to check each atom until we find an
@@ -1007,13 +1006,13 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
         }
     }
 
-    value = splineAcc(thee, ui, win, infrad);
+    value = splineAcc(thee, center, win, infrad, ui);
 
     /* This is inefficient because we have to compute ui again in this
      * function: */
     Vacc_splineAccGradAtom(thee, center, win, infrad, atomID, grad);
 
-    for (i=0; i<DIMENSION_THAT_IS_THREE; i++) {
+    for (i=0; i<VAPBS_DIM; i++) {
         if (value < VSMALL) {
             grad[i] = 0.0;
         } else{
