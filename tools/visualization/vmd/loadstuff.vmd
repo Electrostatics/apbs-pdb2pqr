@@ -1,0 +1,18 @@
+  source read_dx 
+  mol load pdb barstar.pdb
+  read_dx barstar.pot 
+
+  mol color Name
+  mol representation Lines 1.000000
+  mol selection all
+  mol material Opaque
+  mol addrep 0
+  mol modstyle 1 0 Isosurface 0.500000 0.000000 1.000000 1.000000
+  mol color Name
+  mol representation Isosurface 0.500000 0.000000 1.000000 1.000000
+  mol selection all
+  mol material Opaque
+  mol addrep 0
+  mol modstyle 2 0 Isosurface 0.500000 0.000000 0.000000 0.000000
+
+
