@@ -492,13 +492,13 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     /* Get "origin" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "origin"));
-    /* Get zmin */
+    /* Get xmin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &(thee->xmin)));
     /* Get ymin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &(thee->ymin)));
-    /* Get xmin */
+    /* Get zmin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &(thee->zmin)));
     Vnm_print(0, "Vgrid_readDX:  Grid origin = (%g, %g, %g)\n",
@@ -768,7 +768,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
 
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
-          nzPART, nyPART, nxPART);
+          nxPART, nyPART, nzPART);
         Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xminPART, yminPART,
           zminPART);
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
@@ -776,7 +776,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
-          nzPART, nyPART, nxPART);
+          nxPART, nyPART, nzPART);
 
         /* Write off the DX data */
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
@@ -818,7 +818,7 @@ class field\n");
 
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
-          nz, ny, nx);
+          nx, ny, nz);
         Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
@@ -826,7 +826,7 @@ class field\n");
     
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
-          nz, ny, nx);
+          nx, ny, nz);
 
         /* Write off the DX data */
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
