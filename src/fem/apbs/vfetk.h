@@ -46,6 +46,7 @@
 #ifndef _VFETK_H_
 #define _VFETK_H_
 
+#include "maloc/maloc.h"
 #include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"

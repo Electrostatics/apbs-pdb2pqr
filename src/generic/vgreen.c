@@ -329,6 +329,9 @@ position[1], position[2]);
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
+#ifndef MAXV
+#define MAXV 5
+#endif
 VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
   double *grad) {
 

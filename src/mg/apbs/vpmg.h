@@ -48,7 +48,7 @@
 #ifndef _VPMG_H_
 #define _VPMG_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vhal.h"
 #include "apbs/vpmgp.h"
 #include "apbs/vunit.h"

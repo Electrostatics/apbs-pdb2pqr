@@ -106,7 +106,7 @@ esac
 
 ])
 
-
+rm -f mangle-func.f mangle-func.o
 
 
 

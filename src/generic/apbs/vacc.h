@@ -47,7 +47,7 @@
 #ifndef _VACC_H_
 #define _VACC_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vhal.h"
 #include "apbs/valist.h"
 #include "apbs/vunit.h"
@@ -74,7 +74,7 @@ typedef struct Vacc {
   Vset acc;                      /* An integer array (to be treated as 
                                   * bitfields) of Vset type with length equal 
                                   * to the number of vertices in the mesh */
-  Vec3 grid_lower_corner;        /* Hash table grid corner */
+  double grid_lower_corner[3];   /* Hash table grid corner */
   double hx, hy, hzed;           /* Hash table grid spacings */
   int nx, ny, nz, n;             /* Hash table grid dimensions, 
                                   * n = nx*nz*ny */
@@ -107,14 +107,12 @@ VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
 
-VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
-VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);
-VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
-VEXTERNC double Vacc_splineAcc(Vacc *thee, Vec3 center, double radius, 
+VEXTERNC int Vacc_vdwAcc(Vacc *thee, double center[3]);
+VEXTERNC int Vacc_ivdwAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC int Vacc_molAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double radius, 
   double alpha);
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
-VEXTERNC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
-  char *iodev, char *iofmt, char *iohost, char *iofile);
 VEXTERNC double Vacc_totalSASA(Vacc *thee, double radius);
 VEXTERNC double Vacc_atomSASA(Vacc *thee, double radius, int iatom);
 

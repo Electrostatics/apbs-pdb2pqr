@@ -50,7 +50,7 @@
 #ifndef _VATOM_H_
 #define _VATOM_H_
 
-#include "mc/mc.h"
+#include "maloc/maloc.h"
 #include "apbs/vhal.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@
 
 typedef struct Vatom {
 
-    Vec3 position;     /* Atomic position */
+    double position[3];     /* Atomic position */
     double radius;     /* Atomic radius   */
     double charge;     /* Atomic charge   */
     int partID;        /* Partition ID    */
@@ -103,6 +103,6 @@ VEXTERNC int     Vatom_ctor2(Vatom *thee);
 VEXTERNC void    Vatom_dtor(Vatom **thee);
 VEXTERNC void    Vatom_dtor2(Vatom *thee);
 
-VEXTERNC void   Vatom_setPosition(Vatom *thee, Vec3 position);
+VEXTERNC void   Vatom_setPosition(Vatom *thee, double position[3]);
 
 #endif /* ifndef _VATOM_H_ */

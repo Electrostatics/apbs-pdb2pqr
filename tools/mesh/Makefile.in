@@ -113,6 +113,9 @@ VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
+fetk_do_bin = @fetk_do_bin@
+fetk_do_src = @fetk_do_src@
+fetk_do_tst = @fetk_do_tst@
 inc_list = @inc_list@
 lib_list = @lib_list@
 liberty_lib = @liberty_lib@
@@ -128,7 +131,9 @@ mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 nsl_lib = @nsl_lib@
 pedantic_ansi = @pedantic_ansi@
-rl_inc = @rl_inc@
+pmg_do_bin = @pmg_do_bin@
+pmg_do_src = @pmg_do_src@
+pmg_do_tst = @pmg_do_tst@
 rl_lib = @rl_lib@
 socket_lib = @socket_lib@
 stdcxx_lib = @stdcxx_lib@
@@ -145,7 +150,7 @@ LINK = $(F77) $(LDFLAGS) -o $@
 noinst_PROGRAMS = mgmesh accmap
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ${math_lib}
-accmap_SOURCES = accmap.c
+accmap_SOURCES = accmap.c mypde.f
 accmap_LDADD = -lapbs @lib_list@
 INCLUDES = @inc_list@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -161,9 +166,13 @@ LIBS = @LIBS@
 mgmesh_OBJECTS =  mgmesh.o
 mgmesh_DEPENDENCIES = 
 mgmesh_LDFLAGS = 
-accmap_OBJECTS =  accmap.o
+accmap_OBJECTS =  accmap.o mypde.o
 accmap_DEPENDENCIES = 
 accmap_LDFLAGS = 
+FFLAGS = @FFLAGS@
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -222,7 +231,9 @@ mgmesh: $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES)
 
 accmap: $(accmap_OBJECTS) $(accmap_DEPENDENCIES)
 	@rm -f accmap
-	$(LINK) $(accmap_LDFLAGS) $(accmap_OBJECTS) $(accmap_LDADD) $(LIBS)
+	$(F77LINK) $(accmap_LDFLAGS) $(accmap_OBJECTS) $(accmap_LDADD) $(LIBS)
+.f.o:
+	$(F77COMPILE) -c $<
 
 tags: TAGS
 
