@@ -1140,7 +1140,10 @@
  * <p> Problems can be reported to the APBS User mailing list at <a
  * href="mailto:apbs-users@cholla.wustl..edu">apbs-users@cholla.wustl.edu</a>.
  * To subscribe, simply visit 
- * <a href="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</a>.
+ * <a
+ * href="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</a>.
+ * Archives for the list are available at <a
+ * href="http://cholla.wustl.edu/pipermail/apbs-users/">http://cholla.wustl.edu/pipermail/apbs-users/</a>.
  * 
  * <hr width="100%">
  * @section reading Further reading
