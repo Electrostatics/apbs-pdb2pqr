@@ -387,6 +387,64 @@
         </para>
       </sect3>
 
+      <sect3> <title>AMD Opteron</title>
+        <para> Since the BLAS libraries that MALOC uses are not 64-bit clean, you must
+               download a third-party BLAS for installation to succeed as well as make
+               a few additional changes.  To compile APBS on the Opteron with MPI,
+               you will most likely need to ensure that MPI was compiled with the 
+               <literal>-fPIC</literal> flag.
+           <orderedlist>
+             <listitem>
+                <para> Make sure the <literal>-fPIC</literal> flag is set in both 
+                       <literal>CFLAGS</literal> and <literal>FFLAGS</literal>:
+                   <screen>
+                     <prompt>$</prompt> <userinput>export CFLAGS='-fPIC'</userinput>
+                     <prompt>$</prompt> <userinput>export FFLAGS='-fPIC'</userinput>
+                   </screen>
+                </para>
+             </listitem>
+             <listitem>
+                <para> When compiling MALOC, disable the building of the BLAS library:
+                   <screen>
+                      <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --disable-blas</userinput>
+                      <prompt>$</prompt> <userinput> make; make install </userinput>
+                   </screen>
+                </para>
+             </listitem>
+             <listitem>
+                <para> Download the single-threaded BLAS for 64-bit Opteron from
+                       Kazushige Goto's <ulink url="http://www.cs.utexas.edu/users/kgoto/">
+                       site</ulink>.  Make sure you also download <literal>xerbla.f</literal>
+                       as noted in Note 1.  Place both of these files in the
+                       directory containing the libraries for APBS and MALOC - 
+                       this will be the <parameter>$FETK_LIBRARY/[triplet]</parameter> directory, 
+                       where <parameter>[triplet]</parameter> is a machine specific directory 
+                       (i.e. <literal>
+                       x86_64-unknown-linux</literal>).  You should see <literal>libmaloc.a
+                       </literal> in this directory.  Set the <parameter> LD_LIBRARY_PATH
+                       </parameter> variable to this directory, unzip the BLAS library, compile 
+                       <literal>xerbla.f</literal> and create a new archive which will be 
+                       <literal>libblas.a</literal> (replace <literal>libgoto_px_xxx.so
+                       </literal> with the correctly named file):
+                   <screen>
+                     <prompt>$</prompt> <userinput> export LD_LIBRARY_PATH='${FETK_LIBRARY}/[triplet]:${LD_LIBRARY_PATH}'</userinput>
+                     <prompt>$</prompt> <userinput> gunzip libgoto_px_xxx.so.gz</userinput>
+                     <prompt>$</prompt> <userinput> gcc -c -O2 -fPIC xerbla.f</userinput>
+                     <prompt>$</prompt> <userinput> ar cru libblas.a libgoto_px_xxx.so xerbla.o</userinput>
+                     <prompt>$</prompt> <userinput> ranlib libblas.a</userinput>
+                   </screen>
+                </para>
+             </listitem>
+             <listitem>
+                <para> Now proceed with standard APBS installation.  You do not need to use
+                       the <literal>--with-blas</literal> flag, as the BLAS library has been
+                       created in the standard directory.
+                </para> 
+             </listitem>
+          </orderedlist>
+        </para>
+      </sect3>
+
 
     </sect2>
   </sect1>
