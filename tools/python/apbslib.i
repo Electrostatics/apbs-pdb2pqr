@@ -80,6 +80,7 @@ typedef struct {
 	~NOsh();
 	int ncalc;
 	int nprint;             
+    int nelec;
 } NOsh;
 
 #if !defined(VINLINE_NOSH)
@@ -88,6 +89,8 @@ extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
 #define NOsh_getCalc(thee, icalc) ((thee)->calc[(icalc)])
 #endif
 
+extern char* NOsh_elecname(NOsh *thee, int ielec);
+extern int NOsh_elec2calc(NOsh *thee, int icalc);
 extern int NOsh_printWhat(NOsh *thee, int iprint); 
 extern int NOsh_ctor2(NOsh *thee, int rank, int size);
 extern void NOsh_dtor(NOsh **thee); 

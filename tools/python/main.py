@@ -188,7 +188,16 @@ def main():
         if calc.calctype != 0:
             stderr.write("main:  Only multigrid calculations supported!\n")
             raise APBSError, "Only multigrid calculations supported!"
-        stdout.write("CALCULATION #%d:  MULTIGRID\n" % (icalc+1))
+
+        for k in range(0, nosh.nelec):
+            if NOsh_elec2calc(nosh,k) >= icalc:
+                break
+
+        name = NOsh_elecname(nosh, k+1)
+        if name == "":
+            stdout.write("CALCULATION #%d:  MULTIGRID\n" % (icalc+1))
+        else:
+            stdout.write("CALCULATION #%d (%s): MULTIGRID\n" % ((icalc+1),name))
         stdout.write("Setting up problem...\n")
 	
         # Routine initMG
