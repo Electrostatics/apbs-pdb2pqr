@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.1  2004/04/09 17:00:32  apbs
- * TJD: Minor bugfix from last update on parallel grid spacing; Added new tools/python/vgrid/mergedx.py script to merge dx files generated from parallel APBS runs back into a single dx file.
+ * Revision 1.2  2004/12/14 19:28:50  apbs
+ * TJD:  Added python/vgrid to autoconf script.  Should compile when the rest of the Python wrapper compilation is enabled.
  *
  ************************************************************************/
 
@@ -1084,6 +1084,15 @@ double get_entry(double *array, int i){
 void set_entry(double *array, int i, double val){
 	array[i] = val;
   }
+
+void delVgrid(Vgrid *thee){
+    if (thee != VNULL) {
+        Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+          (void **)&(thee->data));
+        Vmem_free(VNULL, 1, sizeof(Vgrid), (void **)&thee);
+        thee = VNULL;
+    }
+}
 extern Vgrid *Vgrid_ctor(int ,int ,int ,double ,double ,double ,double ,double ,double ,double *);
 extern int Vgrid_ctor2(Vgrid *,int ,int ,int ,double ,double ,double ,double ,double ,double ,double *);
 extern int Vgrid_value(Vgrid *,double [3],double *);
@@ -1304,6 +1313,26 @@ static PyObject *_wrap_set_entry(PyObject *self, PyObject *args) {
         }
     }
     set_entry(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delVgrid(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vgrid * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delVgrid",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delVgrid. Expected _Vgrid_p.");
+        return NULL;
+        }
+    }
+    delVgrid(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2139,6 +2168,7 @@ static PyMethodDef vgridcMethods[] = {
 	 { "Vgrid_value", _wrap_Vgrid_value, 1 },
 	 { "Vgrid_ctor2", _wrap_Vgrid_ctor2, 1 },
 	 { "Vgrid_ctor", _wrap_Vgrid_ctor, 1 },
+	 { "delVgrid", _wrap_delVgrid, 1 },
 	 { "set_entry", _wrap_set_entry, 1 },
 	 { "get_entry", _wrap_get_entry, 1 },
 	 { "double_array", _wrap_double_array, 1 },
