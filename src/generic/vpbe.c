@@ -147,7 +147,7 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee)->paramFlag) Vhash_dtor(&((*thee)->hash));
     if ((*thee) != VNULL) {
         Vpbe_dtor2(*thee);
-        Vram_dtor(thee, 1, sizeof(Vpbe) );
+        Vram_dtor((Vram *)thee, 1, sizeof(Vpbe) );
         (*thee) = VNULL;
     }
 }

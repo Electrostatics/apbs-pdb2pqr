@@ -70,6 +70,20 @@ You would then configure and build as before:
 Notes for installation on various platforms
 ======================================================================
 ----------------------------------
+Intel ix86 processor family with GCC 2.95.1 compiler
+----------------------------------
+Set the CC variable before ./configure depending on what you want to do:
+
+  Figure out why the code isn't working:
+  % setenv CC "gcc -Wall -g -O"
+
+  Do production runs
+  % setenv CC "gcc -O3 -ffast-math -m486 -funroll-loops"
+
+Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
+compiling.
+
+----------------------------------
 The Power3 IBM Blue Horizon system
 ----------------------------------
 Set the CC variable before ./configure:
@@ -78,5 +92,7 @@ Set the CC variable before ./configure:
                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
 
+Note that the actual command line declaration should contain no line breaks
+and continuations; these seem to screw up sed (used by configure) under AIX.
 Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
 compiling.
