@@ -51,6 +51,18 @@
 VEMBED(rcsid="$Id$")
 
 /**
+ * @brief  Whitespace characters for socket reads 
+ * @ingroup  Vparam
+ */
+VPRIVATE char *MCwhiteChars = " =,;\t\n\r";
+
+/**
+ * @brief  Comment characters for socket reads 
+ * @ingroup  Vparam
+ */
+VPRIVATE char *MCcommChars  = "#%";
+
+/**
  * @brief  Read a single line of the flat file database
  * @author  Nathan Baker
  * @ingroup  Vparam
@@ -162,7 +174,7 @@ VPUBLIC int Vparam_ctor2(Vparam *thee) {
 
     thee->vmem = VNULL;
     thee->vmem = Vmem_ctor("APBS:VPARAM");
-    if (thee->vmem) {
+    if (thee->vmem == VNULL) {
         Vnm_print(2, "Vparam_ctor2:  failed to init Vmem!\n");
         return 0;
     }
@@ -259,16 +271,33 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
     return atom;
 }
 
-VPUBLIC int Vparam_readFlatFile(Vparam *thee, Vio *sock) {
+VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
+  const char *iofmt, const char *thost, const char *fname) {
 
     int i, iatom, ires, natoms, nalloc;
     Vparam_AtomData *atoms = VNULL;
     Vparam_AtomData *tatoms = VNULL;
     Vparam_AtomData *atom = VNULL;
     Vparam_ResData *res = VNULL;
+    Vio *sock = VNULL;
     char currResName[VMAX_ARGLEN];
 
     VASSERT(thee != VNULL);
+
+    /* Setup communication */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vparam_readFlatFile: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Vparam_readFlatFile: Problem accepting virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
 
     /* Clear existing parameters */
     if (thee->nResData > 0) {
@@ -361,6 +390,11 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, Vio *sock) {
         Vparam_AtomData_copyTo(&(atoms[i]), &(res->atomData[iatom]));
     }
 
+    /* Shut down communication */
+    Vio_acceptFree(sock);
+    Vio_dtor(&sock);
+
+
     /* Destroy temporary atom space */
     Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), (void **)&(atoms));
 
@@ -399,19 +433,38 @@ VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom) {
         return 0;
     }
     strcpy(atom->resName, tok);
-    if (Vio_scanf(sock, "%s", tok) != 1) return 0;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (strlen(tok) > VMAX_ARGLEN) {
         Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n", 
           tok, strlen(tok));
         return 0;
     }
     strcpy(atom->atomName, tok);
-    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &dtmp) != 1) {
+        Vnm_print(2, "Vparam_readFlatFile:  Unexpected token (%s) while \
+parsing charge!\n", tok);
+        return 0;
+    }
     atom->charge = dtmp;
-    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &dtmp) != 1) {
+        Vnm_print(2, "Vparam_readFlatFile:  Unexpected token (%s) while \
+parsing radius!\n", tok);
+        return 0;
+    }
     atom->radius = dtmp;
-    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &dtmp) != 1) {
+        Vnm_print(2, "Vparam_readFlatFile:  Unexpected token (%s) while \
+parsing radius!\n", tok);
+        return 0;
+    }
     atom->epsilon = dtmp;
 
     return 1;
+
+VERROR1:
+    Vnm_print(2, "Vparam_readFlatFile: Got unexpected EOF reading parameter file!\n");
+    return 0;
 }

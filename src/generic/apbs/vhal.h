@@ -147,9 +147,9 @@ typedef enum Vdata_Type Vdata_Type;
  *  @brief   Format of data that can be written out of APBS
  */
 enum Vdata_Format {
-    VDF_DX,   /**< OpenDX (Data Explorer) format */
-    VDF_UHBD, /**< UHBD format */
-    VDF_AVS   /**< AVS UCD format */
+    VDF_DX=0,  /**< OpenDX (Data Explorer) format */
+    VDF_UHBD=1, /**< UHBD format */
+    VDF_AVS=2  /**< AVS UCD format */
 };
 
 /** @typedef Vdata_Format

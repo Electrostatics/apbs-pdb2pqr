@@ -281,7 +281,10 @@ VEXTERNC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
  * @ingroup Vparam
  * @author  Nathan Baker
  * @param  thee Vparam object
- * @param  sock  Vio object ready for reading flat-file-format parameter data
+ * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
+ * @param   iofmt  Input device format (ASCII/XDR)
+ * @param   thost  Input hostname (for sockets)
+ * @param   fname  Input FILE/BUFF/UNIX/INET name
  * (see note below for format)
  * @returns 1 if successful, 0 otherwise
  * @note  The database file should have the following format:
@@ -302,6 +305,7 @@ VEXTERNC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
  *   <dd> CHARMM par_all27_prot_na parameters
  * </dl>
  * */
-VEXTERNC int Vparam_readFlatFile(Vparam *thee, Vio *sock);
+VEXTERNC int Vparam_readFlatFile(Vparam *thee, const char *iodev, 
+  const char *iofmt, const char *thost, const char *fname);
 
 #endif    /* ifndef _VPARAM_H_ */

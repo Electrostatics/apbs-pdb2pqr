@@ -180,17 +180,17 @@ struct NOsh {
                                                * dielectric map files */
     char dielZpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to z-shifted 
                                                * dielectric map files */
-    int dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
+    Vdata_Format dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
                                           * formats (0=>OpenDX) */
     int nkappa;                          /**< Number of kappa maps */
     char kappapath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to kappa map
                                           * files */
-    int kappafmt[NOSH_MAXMOL];          /**< Kappa maps file 
+    Vdata_Format kappafmt[NOSH_MAXMOL];          /**< Kappa maps file 
                                           * formats (0=>OpenDX) */
     int ncharge;                         /**< Number of charge maps */
     char chargepath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to charge map
                                           * files */
-    int chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
+    Vdata_Format chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
                                           * formats (0=>OpenDX) */
     int nprint;                          /**< How many print sections? */
     int printwhat[NOSH_MAXPRINT];        /**< What do we print:
