@@ -2567,43 +2567,34 @@ CPPFLAGS_SAVE=${CPPFLAGS};
 LDFLAGS=${mcx_lib_path} ${nsl_lib} ${socket_lib};
 CPPFLAGS=${mcx_inc_path};
 mcx_found="";
-ac_safe=`echo "mcx/mcx.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for mcx/mcx.h""... $ac_c" 1>&6
-echo "configure:2573: checking for mcx/mcx.h" >&5
-if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
+if test -n "${with_mcxinc}"; then
+    echo $ac_n "checking for MCX header in ${with_mcxinc}""... $ac_c" 1>&6
+echo "configure:2573: checking for MCX header in ${with_mcxinc}" >&5
+    if test -f "${with_mcxinc}/mcx/mcx.h"; then
+        mcx_found="yes";
+        mcx_inc="${mcx_inc_path}"
+        echo "$ac_t""yes" 1>&6
+    else
+        mcx_found="";
+        mcx_inc=""
+        echo "$ac_t""no" 1>&6
+    fi
 else
-  cat > conftest.$ac_ext <<EOF
-#line 2578 "configure"
-#include "confdefs.h"
-#include <mcx/mcx.h>
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2583: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=yes"
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=no"
+    echo $ac_n "checking for MCX header in ${MC_INCLUDE}""... $ac_c" 1>&6
+echo "configure:2585: checking for MCX header in ${MC_INCLUDE}" >&5
+    if test -f "${MC_INCLUDE}/mcx/mcx.h"; then
+        mcx_found="yes";
+        mcx_inc="${mcx_inc_path}"
+        echo "$ac_t""yes" 1>&6
+    else
+        mcx_found="";
+        mcx_inc=""
+        echo "$ac_t""no" 1>&6
+    fi
 fi
-rm -f conftest*
-fi
-if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  mcx_found="yes";mcx_inc="${mcx_inc_path}"
-else
-  echo "$ac_t""no" 1>&6
-mcx_found="";mcx_inc=""
-fi
-
 if test -n "${mcx_found}"; then
     echo $ac_n "checking for MCX_link in -lmcx""... $ac_c" 1>&6
-echo "configure:2607: checking for MCX_link in -lmcx" >&5
+echo "configure:2598: checking for MCX_link in -lmcx" >&5
 ac_lib_var=`echo mcx'_'MCX_link | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2611,7 +2602,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lmcx ${mcx_lib_path}-lmcx ${mpi_lib_path} ${mc_lib_path}-lmc ${math_lib} $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2615 "configure"
+#line 2606 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -2622,7 +2613,7 @@ int main() {
 MCX_link()
 ; return 0; }
 EOF
-if { (eval echo configure:2626: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2617: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
