@@ -54,25 +54,8 @@
 
 VEMBED(rcsid="$Id$")
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  startVio
-//
-// Purpose:  Wrapper for Vio_start
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void startVio() { Vio_start(); }
 
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  loadMolecules
-//
-// Purpose:  Load molecules from files
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i, j, rc;
@@ -164,13 +147,6 @@ specifying PARM file!\n");
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killMolecules
-//
-// Purpose:  Kill the molecule structures
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i;
@@ -183,15 +159,6 @@ VPUBLIC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  loadDielMaps
-// 
-// Purpose:  Load the dielectric maps from files
-// 
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadDielMaps(NOsh *nosh, 
   Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
   Vgrid *dielZMap[NOSH_MAXMOL]) {
@@ -335,13 +302,6 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killDielMaps
-// 
-// Purpose:  Kill the dielectric map structures
-// 
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killDielMaps(NOsh *nosh, 
   Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
   Vgrid *dielZMap[NOSH_MAXMOL]) {
@@ -363,15 +323,6 @@ VPUBLIC void killDielMaps(NOsh *nosh,
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  loadKappaMaps
-//
-// Purpose:  Load kappa maps from files
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i, ii;
@@ -422,13 +373,6 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killKappaMaps
-//
-// Purpose:  Kill kappa map structures
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i;
@@ -443,15 +387,6 @@ VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  loadChargeMaps
-// 
-// Purpose:  Load charge maps from files
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i, ii;
@@ -502,13 +437,6 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killChargeMaps
-// 
-// Purpose:  Kill charge map structures
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i;
@@ -525,15 +453,6 @@ VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  printPBEPARM
-//
-// Purpose:  Print useful stuff from the PBE parameter file
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
     
     int i;
@@ -581,16 +500,6 @@ definition; no smoothing\n");
         case 2:
             Vnm_tprint( 1, "  Using spline-based surface definition;\
  window = %4.3f\n", pbeparm->swin);
-            break;
-        default:
-            break;
-    }
-    switch (pbeparm->chgm) {
-        case 0:
-            Vnm_tprint(1, "  Using linear spline charge discretization.\n");
-            break;
-        case 1:
-            Vnm_tprint(1, "  Using cubic spline charge discretization.\n");
             break;
         default:
             break;
@@ -677,17 +586,18 @@ to ");
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  printMGPARM
-//
-// Purpose:  Print useful stuff from the MG parameter file
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 
+    switch (mgparm->chgm) {
+        case 0:
+            Vnm_tprint(1, "  Using linear spline charge discretization.\n");
+            break;
+        case 1:
+            Vnm_tprint(1, "  Using cubic spline charge discretization.\n");
+            break;
+        default:
+            break;
+    }
     if (mgparm->type == 2) {
         Vnm_tprint( 1, "  Partition overlap fraction = %g\n", 
           mgparm->ofrac);
@@ -706,26 +616,6 @@ VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  initMG
-//
-// Purpose:  Setup a MG calculation
-//
-// Args:     realCenter    The actual center of the fine mesh (this could be
-//                         somewhat different than a molecule center in the
-//                         case of parallel focusing)
-//           nosh          Holds input file
-//           pbeparm       PBE parameters for this calc
-//           mgparm        Multigrid parameters for this calc
-//           pbe           PBE object (accessibility, etc. inside)
-//           pmgp          Array of PMG parameter objects
-//           pmg           Array of PMG objects
-//           i             Index of this calculation in pmgp/pmg arrays
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm, 
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
@@ -805,7 +695,7 @@ fgcent/cgcent!\n",  (imol+1));
     if (pbeparm->useChargeMap) theChargeMap = chargeMap[pbeparm->chargeMapID-1];
     else theChargeMap = VNULL;
     Vpmg_fillco(pmg[i], 
-      pbeparm->srfm, pbeparm->swin, pbeparm->chgm,
+      pbeparm->srfm, pbeparm->swin, mgparm->chgm,
       pbeparm->useDielMap, theDielXMap,
       pbeparm->useDielMap, theDielYMap,
       pbeparm->useDielMap, theDielZMap,
@@ -833,13 +723,6 @@ fgcent/cgcent!\n",  (imol+1));
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killMG
-//
-// Purpose:  Kill MG structures
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC], 
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
     
@@ -853,18 +736,7 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  solveMG
-//
-// Purpose:  Solve a PDE wth MG 
-//
-// Args:     type   MGparm::type
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, int type) {
+VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {
 
     int nx, ny, nz, i;
 
@@ -876,7 +748,7 @@ VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, int type) {
     Vnm_tstart(28, "Solver timer");
 
 
-    if (type != 3) {
+    if (type != MCT_DUM) {
 #ifndef VAPBSQUIET
         Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
 #endif
@@ -895,15 +767,6 @@ solution array\n");
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  setPartMG
-//
-// Purpose:  Set partition information for observables and I/I
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 
     int j;
@@ -935,23 +798,6 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  energyMG
-//
-// Purpose:  Calculate and write out energies for MG calculation
-//
-// Args:     nosh       Holds input file information
-//           pmg        Holds solution
-//           icalc      Calculation index in nosh
-//           totEnergy  set to total energy
-//           qfEnergy   set to charge-phi energy
-//           qmEnergy   set to mobile ion energy
-//           dielEnergy set to dielectric energy
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg, 
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy) {
@@ -1009,28 +855,7 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  forceMG
-//
-// Purpose:  Calculate and write out forces for MG calculation
-//
-// Args:     mem         Memory management
-//           nosh        stores input file information
-//           pbeparm     PBE parameters
-//           pmg         Vpmg object for calculation
-//           nforce      0 => no forces, 1 => net forces, >1 => number of
-//                       forces (1 per atom)
-//           atomForce   pointer to array of force objects
-//           alist       molecules
-//
-// Returns:  1 if sucessful, 0 otherwise
-// 
-// Notes:    Sometimes (if nosh->bogus == 1) we just go through the motions,
-//           but don't assign any forces
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
+VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
    Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]) {
 
     int j, k;
@@ -1048,7 +873,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm,
         }
         for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) { 
             if (nosh->bogus == 0) {
-                Vpmg_qfForce(pmg, qfForce, j, pbeparm->chgm);
+                Vpmg_qfForce(pmg, qfForce, j, mgparm->chgm);
                 Vpmg_ibForce(pmg, ibForce, j, pbeparm->srfm);
                 Vpmg_dbnpForce(pmg, dbForce, npForce, j, pbeparm->srfm);
             } else {
@@ -1096,7 +921,7 @@ molecule %d\n", pbeparm->molid);
           sizeof(AtomForce));
         for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
             if (nosh->bogus == 0) {
-                Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, pbeparm->chgm);
+                Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, mgparm->chgm);
                 Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j, pbeparm->srfm);
                 Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
                   (*atomForce)[j].npForce, j, pbeparm->srfm);
@@ -1145,13 +970,6 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killEnergy
-//
-// Purpose:  Clear out energy structures 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killEnergy() { 
 
 #ifndef VAPBSQUIET
@@ -1160,13 +978,6 @@ VPUBLIC void killEnergy() {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  killForce
-//
-// Purpose:  Clear out force structures 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC], 
   AtomForce *atomForce[NOSH_MAXCALC]) {
 
@@ -1184,17 +995,6 @@ VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  writematMG
-//
-// Purpose:  Write out matrix for MG calculation
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Notes:    currently ignores partition information when writing out acc
-// 
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writematstem[VMAX_ARGLEN];
@@ -1261,15 +1061,6 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  writedataMG
-//
-// Purpose:  Write out data from  MG calculation
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writestem[VMAX_ARGLEN];
@@ -1542,17 +1333,6 @@ uniform meshes yet!\n");
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  printEnergy
-//
-// Purpose:  Execute a PRINT ENERGY statement
-//
-// Args:     i     Index of energy statement to print
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], 
   int i) {
 
@@ -1601,17 +1381,6 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  printForce
-//
-// Purpose:  Execute a PRINT ENERGY statement
-//
-// Args:     i     Index of energy statement to print
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
   AtomForce *atomForce[NOSH_MAXCALC], int i) {
 
@@ -1819,19 +1588,6 @@ gforce[ifr].qfForce[2]));
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  npenergyMG
-//
-// Purpose:  Calculate and write out energies for MG calculation
-//
-// Args:     nosh       Holds input file information
-//           pmg        Holds solution
-//           icalc      Calculation index in nosh
-//           npEnergy   set to apolar energy
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Robert Konecny (based on energyMG)
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *npEnergy) {
 

@@ -230,11 +230,21 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     SS *simplex;
     /* Basis function values */
 
-    VASSERT(thee != VNULL);
-    thee->natom = Valist_getNumberAtoms(thee->alist);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vcsm_init:  Error!  Got NULL thee!\n");
+        VASSERT(0);
+    }
+    if (thee->gm == VNULL) {
     VASSERT(thee->gm != VNULL);
+        Vnm_print(2, "Vcsm_init:  Error!  Got NULL thee->gm!\n");
+        VASSERT(0);
+    }
     thee->nsimp = Gem_numSS(thee->gm);
-    VASSERT(thee->nsimp > 0);
+    if (thee->nsimp <= 0) {
+        Vnm_print(2, "Vcsm_init:  Error!  Got %d simplices!\n", thee->nsimp);
+        VASSERT(0);
+    }
+    thee->natom = Valist_getNumberAtoms(thee->alist);
 
     /* Allocate and initialize space for the first dimensions of the 
      * simplex-charge map, the simplex array, and the counters */

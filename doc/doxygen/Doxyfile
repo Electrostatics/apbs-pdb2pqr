@@ -306,7 +306,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../src/mg/apbs ../../src/generic/apbs \
                          ../../src/fem/apbs ../../src/aaa_inc/apbs/apbs.h \
-                         ./mainpage.h ../../doc/LICENSE.h 
+                         ../../bin/ ./mainpage.h ../../doc/LICENSE.h 
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 

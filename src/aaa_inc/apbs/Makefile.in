@@ -113,7 +113,6 @@ build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
-cxxfmmsrc = @cxxfmmsrc@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
@@ -136,11 +135,10 @@ maloc_inc = @maloc_inc@
 maloc_lib = @maloc_lib@
 mandir = @mandir@
 math_lib = @math_lib@
-mc_do_lib = @mc_do_lib@
-mc_do_src = @mc_do_src@
-mc_do_test = @mc_do_test@
 mc_inc = @mc_inc@
 mc_lib = @mc_lib@
+mcx_inc = @mcx_inc@
+mcx_lib = @mcx_lib@
 mpi_bin = @mpi_bin@
 mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
@@ -153,7 +151,6 @@ rl_lib = @rl_lib@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 socket_lib = @socket_lib@
-stdcxx_lib = @stdcxx_lib@
 sysconfdir = @sysconfdir@
 target = @target@
 target_alias = @target_alias@
@@ -171,7 +168,8 @@ always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 
 BOTH_HEADS = femparm.h mgparm.h nosh.h pbeparm.h vacc.h valist.h \
-              vatom.h vcap.h vgreen.h vhal.h vpbe.h vunit.h vstring.h
+              vatom.h vcap.h vgreen.h vhal.h vpbe.h vunit.h vstring.h \
+              vparam.h
 
 PMG_HEADS = vpmg.h vpmgp.h vgrid.h vmgrid.h vopot.h
 FETK_HEADS = vfetk.h vcsm.h vpee.h

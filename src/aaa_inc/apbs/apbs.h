@@ -61,6 +61,7 @@
 #include "apbs/vpbe.h"
 #include "apbs/vstring.h"
 #include "apbs/vunit.h"
+#include "apbs/vparam.h"
 
 /* MG headers */
 #include "apbs/vgrid.h"

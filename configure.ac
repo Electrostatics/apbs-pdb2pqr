@@ -479,36 +479,33 @@ if test -z "${with_fetk}"; then
         [mcx_found="";mcx_lib=""],
         [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     
-    if test -n "${mcx_found}"; then
-        mc_inc="${mc_inc} ${mcx_inc}"
-        mc_lib="${mc_lib} ${mcx_lib}"
-        AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
-    else
-        mc_found=""
-    fi
-        
 
     dnl # Return LDFLAGS and CPPFLAGS to normal
     LDFLAGS=${LDFLAGS_SAVE};
     CPPFLAGS=${CPPFLAGS_SAVE};
 
     if test -n "${mc_found}"; then
-        AC_MSG_RESULT([FEtk components found:  enabled.])
+        AC_MSG_RESULT([FEtk component MC found:  enabled.])
         AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
-        mc_do_src="vcsm.c vfetk.c vpee.c"
-        mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
     else
-        AC_MSG_RESULT([FEtk component not found:  disabled.])
+        AC_MSG_RESULT([FEtk component MC not found:  disabled.])
     fi
+    if test -n "${mcx_found}"; then
+        AC_MSG_RESULT([FEtk component MCX found:  enabled.])
+        AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
+    else
+        AC_MSG_RESULT([FEtk component MCX not found:  disabled.])
+    fi
+        
+
 else
     AC_MSG_RESULT([yes])
     AC_MSG_RESULT([FEtk disabled at user request.])
 fi
+AC_SUBST(mcx_lib)
+AC_SUBST(mcx_inc)
 AC_SUBST(mc_lib)
 AC_SUBST(mc_inc)
-AC_SUBST(mc_do_src)
-AC_SUBST(mc_do_test)
-AC_SUBST(mc_do_lib)
 AC_MSG_RESULT([---------- end configuring for FEtk linkage --------------])
 
 AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
@@ -621,34 +618,6 @@ AC_SUBST(blas_lib)
 AC_SUBST(blas_do_src)
 
 dnl # -----------------------
-dnl # CHECK WHETHER OR NOT TO COMPILE C++ FMM CODE
-dnl # -----------------------
-AC_MSG_CHECKING([for --enable-cxxfmm])
-AC_ARG_ENABLE(cxxfmm,
-    [AC_HELP_STRING([--enable-cxxfmm], [enable the C++ FMM CODE (BROKEN!!!)])],
-    [ cxxfmm_use="yes"],
-    [ cxxfmm_use="" ]
-)
-if test -n "${cxxfmm_use}"; then
-    AC_MSG_RESULT([yes])
-    AC_DEFINE([USE_CXX_FMM], [], [use fancy FMM])
-    cxxfmmsrc="cxxfmm.cc"
-    AC_SUBST(cxxfmmsrc)
-    dnl # Check for libstdc++ 
-    stdcxx_lib="";
-    AC_LANG_CPLUSPLUS
-    AC_CHECK_LIB(stdc++,main,
-      [stdcxx_lib="-lstdc++"],
-      [stdcxx_lib=""],[])
-    AC_LANG_C
-else
-    AC_MSG_RESULT([no])
-    stdcxx_lib=""
-fi
-AC_SUBST(stdcxx_lib)
-
-
-dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --with-arpack])
@@ -695,8 +664,8 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
-inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
+lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 

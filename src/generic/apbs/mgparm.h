@@ -102,6 +102,8 @@ struct MGparm {
     /* *** GENERIC PARAMETERS *** */
     int dime[3];  /**< Grid dimensions */
     int setdime;  /**< Flag, @see dime */
+    Vchrg_Meth chgm;  /**< Charge discretization method */
+    int setchgm;  /**< Flag, @see chgm */
 
     /* *** TYPE 0 PARAMETERS (SEQUENTIAL MANUAL) *** */
     int nlev;  /**< Levels in multigrid hierarchy 

@@ -469,7 +469,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mc_lib mc_inc mc_do_src mc_do_test mc_do_lib wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib blas_do_src cxxfmmsrc stdcxx_lib arpack_lib arpack_do_tools lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib blas_do_src arpack_lib arpack_do_tools lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1038,7 +1038,6 @@ Optional Features:
   --enable-pansi          enable pedantic ANSI compilation
   --disable-tools         disable tool compilation
   --disable-blas          disable local BLAS compilation
-  --enable-cxxfmm         enable the C++ FMM CODE (BROKEN!!!)
   --disable-inline        disable inline functions (macros)
 
 Optional Packages:
@@ -3595,7 +3594,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3598:" \
+echo "$as_me:3597:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -5707,7 +5706,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5710 "configure"' > conftest.$ac_ext
+  echo '#line 5709 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -6236,7 +6235,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:6239: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:6238: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -8056,7 +8055,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8059 "configure"
+#line 8058 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -8154,7 +8153,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8157 "configure"
+#line 8156 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10805,43 +10804,42 @@ else
 fi
 
 
+
+        LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+
+    if test -n "${mc_found}"; then
+        echo "$as_me:$LINENO: result: FEtk component MC found:  enabled." >&5
+echo "${ECHO_T}FEtk component MC found:  enabled." >&6
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MC_H
+_ACEOF
+
+    else
+        echo "$as_me:$LINENO: result: FEtk component MC not found:  disabled." >&5
+echo "${ECHO_T}FEtk component MC not found:  disabled." >&6
+    fi
     if test -n "${mcx_found}"; then
-        mc_inc="${mc_inc} ${mcx_inc}"
-        mc_lib="${mc_lib} ${mcx_lib}"
+        echo "$as_me:$LINENO: result: FEtk component MCX found:  enabled." >&5
+echo "${ECHO_T}FEtk component MCX found:  enabled." >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MCX_H
 _ACEOF
 
     else
-        mc_found=""
+        echo "$as_me:$LINENO: result: FEtk component MCX not found:  disabled." >&5
+echo "${ECHO_T}FEtk component MCX not found:  disabled." >&6
     fi
 
 
-        LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-
-    if test -n "${mc_found}"; then
-        echo "$as_me:$LINENO: result: FEtk components found:  enabled." >&5
-echo "${ECHO_T}FEtk components found:  enabled." >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_MC_H
-_ACEOF
-
-        mc_do_src="vcsm.c vfetk.c vpee.c"
-        mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
-    else
-        echo "$as_me:$LINENO: result: FEtk component not found:  disabled." >&5
-echo "${ECHO_T}FEtk component not found:  disabled." >&6
-    fi
 else
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     echo "$as_me:$LINENO: result: FEtk disabled at user request." >&5
 echo "${ECHO_T}FEtk disabled at user request." >&6
 fi
-
 
 
 
@@ -11082,102 +11080,6 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking for --enable-cxxfmm" >&5
-echo $ECHO_N "checking for --enable-cxxfmm... $ECHO_C" >&6
-# Check whether --enable-cxxfmm or --disable-cxxfmm was given.
-if test "${enable_cxxfmm+set}" = set; then
-  enableval="$enable_cxxfmm"
-   cxxfmm_use="yes"
-else
-   cxxfmm_use=""
-
-fi;
-if test -n "${cxxfmm_use}"; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-
-cat >>confdefs.h <<\_ACEOF
-#define USE_CXX_FMM
-_ACEOF
-
-    cxxfmmsrc="cxxfmm.cc"
-
-        stdcxx_lib="";
-    ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-echo "$as_me:$LINENO: checking for main in -lstdc++" >&5
-echo $ECHO_N "checking for main in -lstdc++... $ECHO_C" >&6
-if test "${ac_cv_lib_stdcpp_main+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lstdc++  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-int
-main ()
-{
-main ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_stdcpp_main=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_stdcpp_main=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_stdcpp_main" >&5
-echo "${ECHO_T}$ac_cv_lib_stdcpp_main" >&6
-if test $ac_cv_lib_stdcpp_main = yes; then
-  stdcxx_lib="-lstdc++"
-else
-  stdcxx_lib=""
-fi
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    stdcxx_lib=""
-fi
-
-
-
 echo "$as_me:$LINENO: checking for --with-arpack" >&5
 echo $ECHO_N "checking for --with-arpack... $ECHO_C" >&6
 
@@ -11233,8 +11135,8 @@ echo "$as_me:$LINENO: result: ------------- end processing APBS configure option
 echo "${ECHO_T}------------- end processing APBS configure options -----------" >&6
 
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
-inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
+lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 
 
 
@@ -11973,11 +11875,10 @@ s,@mpi_lib@,$mpi_lib,;t t
 s,@mpi_inc@,$mpi_inc,;t t
 s,@mpi_bin@,$mpi_bin,;t t
 s,@rl_lib@,$rl_lib,;t t
+s,@mcx_lib@,$mcx_lib,;t t
+s,@mcx_inc@,$mcx_inc,;t t
 s,@mc_lib@,$mc_lib,;t t
 s,@mc_inc@,$mc_inc,;t t
-s,@mc_do_src@,$mc_do_src,;t t
-s,@mc_do_test@,$mc_do_test,;t t
-s,@mc_do_lib@,$mc_do_lib,;t t
 s,@wall@,$wall,;t t
 s,@wall_pedantic@,$wall_pedantic,;t t
 s,@wall_pedantic_ansi@,$wall_pedantic_ansi,;t t
@@ -11985,8 +11886,6 @@ s,@pedantic_ansi@,$pedantic_ansi,;t t
 s,@apbs_do_tools@,$apbs_do_tools,;t t
 s,@blas_lib@,$blas_lib,;t t
 s,@blas_do_src@,$blas_do_src,;t t
-s,@cxxfmmsrc@,$cxxfmmsrc,;t t
-s,@stdcxx_lib@,$stdcxx_lib,;t t
 s,@arpack_lib@,$arpack_lib,;t t
 s,@arpack_do_tools@,$arpack_do_tools,;t t
 s,@lib_list@,$lib_list,;t t

@@ -96,8 +96,6 @@ struct PBEparm {
     int setpdie;  /**< Flag, @see pdie */
     double sdie;  /**< Solvent dielectric */
     int setsdie;  /**< Flag, @see sdie */
-    Vchrg_Meth chgm;  /**< Charge discretization method */
-    int setchgm;  /**< Flag, @see chgm */
     Vsurf_Meth srfm;  /**< Surface calculation method */
     int setsrfm;  /**< Flag, @see srfm */
     double srad;  /**< Solvent radius */
