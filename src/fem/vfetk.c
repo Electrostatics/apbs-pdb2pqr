@@ -205,29 +205,26 @@ VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 
-   int level, i;
+   int i;
    double *solution;
    double *theAnswer;
-   Alg *alg;
+   AM *am;
 
    VASSERT(thee != VNULL);
 
-   /* Get the max level from AM */
-   level = AM_maxLevel(thee->am);
-   /* Get the alg object at that level */
-   alg = AM_alg(thee->am, level);
-
+   /* Get the AM object */
+   am = thee->am;
    /* Copy the solution into the w0 vector */
-   Bvec_copy(alg->W[W_w0], alg->W[W_u]);
+   Bvec_copy(am->w0, am->u);
    /* Add the Dirichlet conditions */
-   Bvec_axpy(alg->W[W_w0], alg->W[W_ud], 1.);
+   Bvec_axpy(am->w0, am->ud, 1.);
    /* Get the data from the Bvec */
-   solution = Bvec_addr(alg->W[W_w0], 0);
+   solution = Bvec_addr(am->w0, 0);
    /* Get the length of the data from the Bvec */
-   *length = Bvec_numRT(alg->W[W_w0]);
+   *length = Bvec_numRT(am->w0);
    /* Make sure that we got scalar data (only one block) for the solution
     * to the FETK */
-   VASSERT(1 == Bvec_numB(alg->W[W_w0]));
+   VASSERT(1 == Bvec_numB(am->w0));
    /* Allocate space for the returned vector and copy the solution into it */
    theAnswer = VNULL;
    theAnswer = Vmem_malloc(VNULL, *length, sizeof(double));
@@ -362,7 +359,7 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 
-    return AM_evalJ(thee->am, AM_maxLevel(thee->am));
+    return AM_evalJ(thee->am);
 
 }
 
@@ -376,9 +373,8 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int oflag, int mflag) {
     Bmat *A;
     Zslu *slu;
 
-    Alg *alg;
     AM *am;
-    int level, ip[10];
+    int ip[10];
     int evalKey, tangKey, energyKey, residKey, massKey;
     double lndet = 0, rp[10];
 
@@ -397,19 +393,15 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int oflag, int mflag) {
     if (oflag == 0) tangKey = 0;
     else if (oflag == 1) tangKey = 1;
 
-    /* Get the max level from AM */
-    level = AM_maxLevel(thee->am);
-
     /* Assemble the requested operator */
     Vnm_print(1, "Vfetk_lnDet: assembling operator...\n");
-    AM_zeroA(thee->am, level);
-    AM_init(am, level, W_f, 0.);
-    AM_assem(am, level, evalKey, energyKey, residKey, tangKey, massKey,
-      W_u, W_ud, W_f, ip, rp);
+    Bmat_zero(am->A);
+    Bvec_init(am->f, 0.);
+    AM_assem(am, evalKey, energyKey, residKey, tangKey, massKey,
+        am->u, am->ud, am->f, ip, rp);
 
     /* Au = A u */
-    alg = AM_alg(thee->am, level);
-    A = alg->A;
+    A = am->A;
     Vnm_print(1, "Vfetk_lnDet: factoring matrix...\n");
     fflush(stdout);
     switch(mflag) {
@@ -651,13 +643,13 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
 //
 // Author:   Stephen Bond and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void mContribRecycle(Vset *mtpool, 
+VPRIVATE void mContribRecycle(Vset *mtpool,
     LinkA **rclnk, int key, int *count, int i, int j, double val)
 {
     int done;
     LinkA *curr, *mnew;
 
-    mnew=VNULL;    
+    mnew=VNULL;
     curr=(LinkA*)Vset_access(mtpool,i);
     VASSERT( curr != VNULL );
 
@@ -725,7 +717,7 @@ VPRIVATE void mContribRecycle(Vset *mtpool,
 // Routine:  Bmat_choleskyCreate
 //
 // Purpose:  Create the global matrix from the blocks in CLN storage format.
-//           This is required for preparing a single global matrix for input 
+//           This is required for preparing a single global matrix for input
 //           to the Cholesky Factor routine.
 //
 //    Note:  It is assumed implicitly that the Bmat is symmetric, and hence
@@ -742,7 +734,7 @@ VPRIVATE void Bmat_choleskyCreate(Bmat *thee)
     MATmirror mirror;
     MATformat format;
     /* Bound on the size of L */
-    int maxnZ = Bmat_numRT(thee)*1000; 
+    int maxnZ = Bmat_numRT(thee)*1000;
     double *diag, *offU, *offL;
 
     /* initialize the global matrix datastructure */
@@ -873,7 +865,7 @@ VPRIVATE int Mat_choleskyFactor(Mat *thee, int flag)
                 for ( mti=mt->next; mti!=VNULL; mti=mti->next ) {
                     mti->val /= Akk; /* A(i,k)/A(k,k) */
                 }
-                
+
                 for ( mtj=mt->next; mtj!=VNULL; mtj=mtj->next ) {
                     for ( mti=mtj; mti!=VNULL; mti=mti->next ) {
                         mContrib( lnk, 1, &count, mtj->idx, mti->idx,
@@ -897,7 +889,7 @@ VPRIVATE int Mat_choleskyFactor(Mat *thee, int flag)
                 for ( mti=mt->next; mti!=VNULL; mti=mti->next ) {
                     mti->val /= Akk; /* A(i,k)/A(k,k) */
                 }
-                
+
                 for ( mtj=mt->next; mtj!=VNULL; mtj=mtj->next ) {
                     for ( mti=mtj; mti!=VNULL; mti=mti->next ) {
                         while( (mt_recyc == VNULL) && (recyc_idx < k) ) {
@@ -906,7 +898,7 @@ VPRIVATE int Mat_choleskyFactor(Mat *thee, int flag)
                             mt_tmp = VNULL;
                             recyc_idx++;
                         }
-                        mContribRecycle( lnk, &(mt_recyc), 1, &count, 
+                        mContribRecycle( lnk, &(mt_recyc), 1, &count,
                             mtj->idx, mti->idx, -1*mti->val*mtj->val );
                         /* A(i,j) -= A(i,k)*A(j,k) */
                     }
@@ -951,7 +943,7 @@ VPUBLIC int Bmat_choleskyFactor(Bmat *thee, int flag)
 // Routine:  Mat_lnDetDiag
 //
 // Purpose:  Calculate the log(det(A)), where A is diagonal or triangular.
-//           
+//
 // Notes:    Use another algorithm first to reduce to the triangular.
 //
 // Author:   Stephen Bond
@@ -1129,13 +1121,13 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
                 j++;
             }
         }
-            
+
         if ( ( j % nvalline ) != 0 ) {
             fprintf( fp, "\n" );
         }
-        
+
     } else { /* ISNOT_SYM */
-        
+
         VASSERT( 0 ); /* NOT CODED YET */
     }
 
