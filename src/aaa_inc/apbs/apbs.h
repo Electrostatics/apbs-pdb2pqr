@@ -73,8 +73,6 @@
 /* FEM headers */
 #if defined(HAVE_MC_H)
 #   include "apbs/vfetk.h"
-#endif
-#if defined(HAVE_MCX_H)
 #   include "apbs/vpee.h"
 #endif
 
