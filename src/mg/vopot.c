@@ -153,7 +153,6 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
         dx = ifloat - (double)(ilo);
         dy = jfloat - (double)(jlo);
         dz = kfloat - (double)(klo);
-        Vnm_print(1, "dx = %g, dy = %g, dz = %g\n", dx, dy, dz);
         u = dx      *dy      *dz      *(thee->data[IJK(ihi,jhi,khi)])
           + dx      *(1.0-dy)*dz      *(thee->data[IJK(ihi,jlo,khi)])
           + dx      *dy      *(1.0-dz)*(thee->data[IJK(ihi,jhi,klo)])

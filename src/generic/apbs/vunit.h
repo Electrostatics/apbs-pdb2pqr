@@ -84,7 +84,7 @@
 
 /** @brief   Pi
  *  @ingroup Vunit */
-#define Vunit_pi		3.1415927e+00
+#define Vunit_pi		VPI
 
 /** @brief   Vacuum permittivity
  *  @ingroup Vunit */
