@@ -493,10 +493,12 @@ case $host_cpu in
 	          PY_CFLAGS=""	
 	      fi
 	      if test -n "${IS_STATIC}"; then
-	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+	          PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
           fi
       else
-          PY_CFLAGS=""
+          if test "$CC" != "gcc"; then
+              PY_CFLAGS=""
+          fi
       fi;; 
    ia64*)
       if test -n "${mpi_use}"; then

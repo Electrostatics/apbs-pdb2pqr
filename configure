@@ -10793,7 +10793,11 @@ PY_LINKFLAGS=${CFLAGS}
 PY_CC=${CC}
 case $host_cpu in
    x86_64*)
-      PY_CC=${F77}
+      if test "${F&&}" = "pgf77"; then
+	  PY_CC=${F77}
+      else
+	  PY_CFLAGS=""
+      fi
       if test -n "${IS_STATIC}"; then
 	  PY_CFLAGS=""
       fi;;
@@ -10867,10 +10871,12 @@ fi
 	          PY_CFLAGS=""
 	      fi
 	      if test -n "${IS_STATIC}"; then
-	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+	          PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
           fi
       else
-          PY_CFLAGS=""
+          if test "$CC" != "gcc"; then
+              PY_CFLAGS=""
+          fi
       fi;;
    ia64*)
       if test -n "${mpi_use}"; then
