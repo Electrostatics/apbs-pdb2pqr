@@ -437,27 +437,10 @@
  *   NBCR-supported web portal with a <a
  *   href="http://www.cmbi.kun.nl/whatif/">WHATIF</a> backend.  Provided by
  *   Jens Nielsen and Jerry Greenberg; supported by NBCR.
- *   <li> apbs/tools/conversion/pdb2pqr.awk<br> 
- *   Convert a PDB file to PQR format (as read by APBS) with the help of one of
- *   the following UHBD-format parameter files:
- *     <ul>
- *     <li> apbs/tools/conversion/param/pdb2pqr/amber-param.dat  <br>  
- *     All-atom charges and radii from AMBER94 parameter set; polar hydrogens
- *     given 1 &Aring; radius.  Contributed by Adrian Elcock; modified by Nathan
- *     Baker.
- *     <li> apbs/tools/conversion/param/pdb2pqr/c-alpha.dat  <br>  
- *     C-alpha charges for reduced representations of protein structures.
- *     Contributed by Dave Sept and Adrian Elcock.
- *     <li> apbs/tools/conversion/param/pdb2pqr/charmm-param.dat  <br>
- *     All-atom charges and radii from CHARMM23 force field.  Contributed by
- *     Adrian Elcock; modified by Robert Konecny.
- *     <li> apbs/tools/conversion/param/pdb2pqr/jim-opls.dat  <br>
- *     OPLS force field charges and radii; contributed by Jim Briggs.
- *     <li> apbs/tools/conversion/param/pdb2pqr/weiner86-param.dat  <br>
- *     Weiner '86 force field charges and radii.  Contributed by Chiansan Ma
- *     and Nathan Baker.
- *     </ul>
- *   This script was contributed by Dave Sept.
+ *   <li>apbs/tools/conversion/pdb2pqr/pdb2pqr.py<br>
+ *   A command line Python script to convert a PDB file to PQR format by 
+ *   using a supported forcefield - AMBER02, CHARMM23, or PARSE.
+ *   Contributed by Todd Dolinsky, Jens Nielsen, and Nathan Baker.
  *   <li>apbs/tools/conversion/qcd2pqr.awk  <br> 
  *   Convert a QCD file (i.e., UHBD format for a molecule) to PQR format.
  *   Written by Nathan Baker.
@@ -570,12 +553,23 @@
  *   </ul>
  * <li> Python tools and wrappers
  *   <ul>
- *   <li> apbs/tools/python/Makefile <br> 
- *   Run to generate Python-wrapped APBS code.  Written by Todd Dolinksy with
- *   help from Alex Gillet and Michel Sanner.
- *   <li> python/main.py <br> 
- *   Example Python driver code for used with the APBS Python library.  Written
- *   by Todd Dolinsky and Nathan Baker.
+ *   <li> apbs/tools/python/main.py <br> 
+ *   Run APBS in Python using SWIG generated wrappers.  Contains example Python 
+ *   driver code for use with the APBS Python library.  Written
+ *   by Todd Dolinsky and Nathan Baker with help from Alex Gillet and 
+ *   Michel Sanner.
+ *   <li> apbs/tools/conversion/pdb2pqr/pdb2pqr.py<br>
+ *   A command line Python script to convert a PDB file to PQR format by 
+ *   using a supported forcefield - AMBER02, CHARMM23, or PARSE.
+ *   Contributed by Todd Dolinsky, Jens Nielsen, and Nathan Baker.
+ *   <li> apbs/tools/manip/inputgen.py <br> 
+ *   Generate an APBS input file from PQR data using specified parameters.
+ *   Contributed by Todd Dolinsky and Nathan Baker.
+ *   <li> apbs/tools/manip/psize.py <br> 
+ *   Get the dimensions and center of a molecule in PQR format.  Very useful
+ *   for setting up input files (i.e., grid dimensions, lengths, spacings,
+ *   etc.) for APBS calculations.  Contributed by Todd Dolinsky and
+ *   Nathan Baker. 
  *   </ul>
  * </ul>
  * 
