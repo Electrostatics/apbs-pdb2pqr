@@ -18,7 +18,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = fem
 
 noinst_LTLIBRARIES = libapbsfem.la
-libapbsfem_la_SOURCES  = @fetk_do_src@ vcsm.c vfetk.c vpee.c
+libapbsfem_la_SOURCES  = @fetk_do_src@
 INCLUDES           = -I../generic -I../mg @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@
 CFLAGS             = @CFLAGS@

@@ -11,6 +11,8 @@ This version contains a few bug fixes, including
   * Fixed error message bug in VPMG class
   * Fixed grid length bug (popped up during sanity checks) in VPMG class
   * Switched to libtool for linking
+Note that Compaq Tru64 Alpha users may still experience problems while
+compiling due to some strangess with linking C and FORTRAN objects.
 
 #############################################################################
 VERSION 0.1.1       08-29-01
