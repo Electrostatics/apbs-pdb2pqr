@@ -844,6 +844,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
     int acclo, accmid, acchi;
 
+    if (epsmeth == 2) Vnm_print(2, "Vpmg_fillco:  WARNING!!! epsmeth = 2 is horribly broken!!!\n");
+
     /* Get PBE info */
     pbe = thee->pbe;
     acc = pbe->acc;
