@@ -1393,7 +1393,6 @@ Vpmg_fillco:  a substantial decrease in setup time.\n");
                  * these entries is evaluated ad the grid edges midpoints */
                 if ((!thee->useDielXMap) || (!thee->useDielYMap) || 
                     (!thee->useDielZMap)) {
-                    Vnm_print(0, "Vpmg_fillco:  Not using grid-based maps\n");
                     switch (surfMeth) {
 
                       /* No dielectric smoothing */
