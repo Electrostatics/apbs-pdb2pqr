@@ -50,6 +50,15 @@
 #ifndef _NOSH_H_
 #define _NOSH_H_
 
+/* Generic headers */
+#include "maloc/maloc.h"
+#include "apbs/vhal.h"
+
+/* Headers specific to this file */
+#include "apbs/pbeparm.h"
+#include "apbs/mgparm.h"
+#include "apbs/femparm.h"
+
 /** @brief Maximum number of molecules in a run 
  *  @ingroup NOsh */
 #define NOSH_MAXMOL 20
@@ -65,12 +74,6 @@
 /** @brief Maximum number of operations in a PRINT statement
  *  @ingroup NOsh */
 #define NOSH_MAXPOP 20
-
-#include "apbs/apbs.h"
-#include "maloc/maloc.h"
-#include "apbs/femparm.h"
-#include "apbs/mgparm.h"
-#include "apbs/pbeparm.h"
 
 /**
  *  @struct  NOsh_calc

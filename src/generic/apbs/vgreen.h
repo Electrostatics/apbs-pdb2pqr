@@ -53,10 +53,15 @@
 #ifndef _VGREEN_H_
 #define _VGREEN_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
+
+/* Specific headers */
+#include "apbs/vunit.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
-#include "apbs/vunit.h"
+
 
 /**
  *  @struct  Vgreen

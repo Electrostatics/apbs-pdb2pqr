@@ -53,14 +53,15 @@
 #ifndef _VPMG_H_
 #define _VPMG_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+
+/* Headers specific to this file */
 #include "apbs/vpmgp.h"
-#include "apbs/vunit.h"
-#include "apbs/vpbe.h"
-#include "apbs/valist.h"
 #include "apbs/vacc.h"
 #include "apbs/vcap.h"
+#include "apbs/vpbe.h"
 #include "apbs/vgrid.h"
 
 /** @def VPMGMAXPART The maximum number of partitions the

@@ -54,12 +54,14 @@
 #ifndef _VPBE_H_
 #define _VPBE_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
-#include "apbs/vatom.h"
-#include "apbs/valist.h"
-#include "apbs/vacc.h"
+
+/* Specific headers */
 #include "apbs/vunit.h"
+#include "apbs/vatom.h"
+#include "apbs/vacc.h"
 #include "apbs/vgreen.h"
 
 /**

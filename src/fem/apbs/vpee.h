@@ -64,9 +64,9 @@
 #ifndef _VPEE_H
 #define _VPEE_H
 
+/* Generic headers */
 #include "maloc/maloc.h"
 #include "mc/mc.h"
-#include "apbs/vhal.h"
 
 /**
  *  @struct  Vpee

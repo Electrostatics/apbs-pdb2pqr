@@ -50,8 +50,11 @@
 #ifndef _VALIST_H_
 #define _VALIST_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+
+/* Headers specific to this file */
 #include "apbs/vatom.h"
 
 /** 

@@ -50,8 +50,11 @@
 #ifndef _PBEPARM_H_
 #define _PBEPARM_H_
 
-#include "apbs/apbs.h"
+/* Generic headers */
 #include "maloc/maloc.h"
+
+/* Headers specific to this file */
+#include "apbs/vhal.h"
 
 /** @brief   Number of things that can be written out in a single calculation
  *  @ingroup PBEparm

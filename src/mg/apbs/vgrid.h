@@ -52,6 +52,7 @@
 #define _VGRID_H_
 
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
 
 /**
  *  @struct  Vgrid
