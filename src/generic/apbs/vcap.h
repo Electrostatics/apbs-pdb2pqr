@@ -34,27 +34,24 @@
 //////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// File: apbs.h
+// File:     vcap.h    < vcap.c >
 //
-// Purpose:  Top-level APBS header
+// Purpose: Class Vcap:
+//      Provides routines which cap certain exponential and hyperbolic
+//      functions.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-
-#ifndef _APBS_H_
-#define _APBS_H_
+#ifndef _VCAP_H_
+#define _VCAP_H_
 
 #include "maloc/maloc.h"
-#include "apbs/vacc.h"
-#include "apbs/vatom.h"
-#include "apbs/valist.h"
-#include "apbs/vhal.h"
-#include "apbs/vpbe.h"
-#include "apbs/vunit.h"
-#include "apbs/vgreen.h"
-#include "apbs/vpmg.h"
-#include "apbs/vpmgp.h"
-#include "apbs/mgsh.h"
-#include "apbs/vcap.h"
 
-#endif /* _APBS_H_ */
+/* ///////////////////////////////////////////////////////////////////////////
+// Class Vcap: Non-Inlineable methods (vcap.c)
+/////////////////////////////////////////////////////////////////////////// */
+VEXTERNC double Vcap_exp(double x, int *ichop);
+VEXTERNC double Vcap_sinh(double x, int *ichop);
+VEXTERNC double Vcap_cosh(double x, int *ichop);
+
+#endif    /* ifndef _VACC_H_ */

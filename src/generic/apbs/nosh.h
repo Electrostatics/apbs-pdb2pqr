@@ -46,7 +46,6 @@
 
 #define NOSH_MAXMOL 20
 #define NOSH_MAXPATH 256
-#define NOSH_MAXION 8
 #define NOSH_MAXMGPARM 20
 #define NOSH_MAXFEMPARM 20
 #define NOSH_MAXCALC 20
@@ -94,10 +93,10 @@ typedef struct NOsh_mgparm {
     int setbcfl;
     int nion;                  /* Number of counterion species */
     int setnion;
-    double ionq[NOSH_MAXION];  /* Counterion charges (in e) */
-    double ionc[NOSH_MAXION];  /* Counterion concentrations (in M) */
-    double ionr[NOSH_MAXION];  /* Counterion radii (in A) */
-    int setion[NOSH_MAXION];
+    double ionq[MAXION];  /* Counterion charges (in e) */
+    double ionc[MAXION];  /* Counterion concentrations (in M) */
+    double ionr[MAXION];  /* Counterion radii (in A) */
+    int setion[MAXION];
     double pdie;               /* Solute dielectric */
     int setpdie;
     double sdie;               /* Solvent dielectric */

@@ -104,11 +104,17 @@ c*    *** find the coarser grid size ***
       nnew = (nold - 1) / 2 + 1
 c*
 c*    *** check a few things ***
-      if (((nnew-1)*2).ne.(nold-1)) 
-     2   call vnmprt(2, 'CORSR:  may not corsen grid this far... ', 40)
-      if (nnew .lt. 1)
-     2   call vnmprt(2, 'CORSR:  have corsenned grid below zero... ', 
-     3      42)
+      if (((nnew-1)*2).ne.(nold-1)) then
+        call vnmprt(2, 'CORSR:  ERROR!  The grid dimensions are not',
+     2     43)
+        call vnmprt(2, 'CORSR:  consistent with nlev!', 29)
+      endif
+      if (nnew .lt. 1) then
+        call vnmprt(2, 'CORSR:  ERROR!  The grid dimensions are not',
+     2     43)
+        call vnmprt(2, 'CORSR:  consistent with nlev!', 29)
+        call vnmprt(2, 'CORSR:  Grid coarsened below zero.', 34)
+      endif
 c*
 c*    *** return and end ***
       return

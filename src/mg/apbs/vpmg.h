@@ -55,6 +55,7 @@
 #include "apbs/vpbe.h"
 #include "apbs/valist.h"
 #include "apbs/vacc.h"
+#include "apbs/vcap.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Parameters and datatypes

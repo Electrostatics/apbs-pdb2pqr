@@ -116,7 +116,7 @@ VPUBLIC int NOsh_ctor2(NOsh *thee) {
         thee->mgparm[j].setnonlin = 0;
         thee->mgparm[j].setbcfl = 0;
         thee->mgparm[j].setnion = 0;
-        for (i=0; i<NOSH_MAXION; i++) thee->mgparm[j].setion[i] = 0;
+        for (i=0; i<MAXION; i++) thee->mgparm[j].setion[i] = 0;
         thee->mgparm[j].setpdie = 0;
         thee->mgparm[j].setsdie = 0;
         thee->mgparm[j].setsrfm = 0;
@@ -486,6 +486,14 @@ in this run!\n");
 
     /* The next token HAS to be the method */
     if (Vio_scanf(sock, "%s", tok) == 1) {
+        /* THERE ARE TWO CHOICES HERE: MG-MANUAL OR MG-AUTOMATIC
+         * IN THE CASE OF THE LATTER, SEVERAL FOCUSSING CALCULATIONS ARE
+         * PERFORMED TO ACHEIVE THE TARGET RESOLUTION.  THIS MEANS THAT THINGS
+         * LIKE (thee->nmgcalc) AND ARRAYS WHICH ARE REFERENCED BY THIS
+         * VARIABLE CAN NO LONGER BE UPDATED OUTSIDE OF THE PARSING ROUTINE.
+         * IT ALSO MEANS THAT PARSING OF THE PRINT STATEMENTS WILL HAVE TO BE
+         * HANDLED CAREFULLY TO USE ONLY THE SOLUTION FROM THE FINEST LEVEL OF
+         * THE AUTOMATIC FOCUSSING HIERARCHY */
         if (strcasecmp(tok, "mg") == 0) {
 	    /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number
@@ -657,7 +665,7 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
                     Vnm_print(2, "NOsh:  Only 1:1 ionic solutions presently allowed!\n");           
                     return 0;
                 }
-                Vnm_print(2, "NOsh:  Warning -- only the first ionic radius is used!\n");
+                Vnm_print(2, "NOsh:  Warning -- only the largest ionic radius is used!\n");
             }
             for (i=0; i<parm->nion; i++) {
                 if (!parm->setion[i]) {

@@ -43,6 +43,7 @@
 
 #include "apbscfg.h"
 #include "supermatrix.h"
+#include "Cnames.h"
 
 #if defined(HAVE_FETK_H)
 #include "apbs/vfetk.h"
@@ -436,12 +437,15 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
     Zslu *slu;
     Bvec *diag;
     /* Begin SuperLU-specific objects */
-    SuperMatrix *L, *U;
+    SuperMatrix *L;
     SCformat *Astore;
+    int i, j, k, c, d, n, nsup;
+    double Lii, *dp;
+    int *col_to_sup, *sup_to_col, *rowind, *rowind_colptr;
     /* End SuperLU-specific objects */
     Alg *alg; 
     int level;
-    double det;
+    double lndet, det;
 
     VASSERT(thee != VNULL);
 
@@ -465,18 +469,51 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
         return 0.0;
     }
 
-    /* Print out the diagonal of the upper triangle of the newly factored
-     * matrix */
+    /* According to Sherry Li, author of SuperLU:
+     * The diagonal blocks of both L and U are stored in the L matrix,
+     * which is returned from dgstrf().  The L matrix is a supernodal matrix,
+     * its structure is called SCformat in supermatrix.h.  This is also
+     * illustrated by a small 5x5 example in Section 2.3 of the Users' Guide,
+     * see Figures 2.1 and 2.3.   This example is in the code
+     * EXAMPLE/superlu.c.  Since L is unit-diagonal, so the ones are not
+     * stored. Instead, the diagonal stored in L is really the diagonal for U.
+     * Therefore, you only need to extract those diagonal elements.  One
+     * routine that you can hack to get the diagonal is
+     * dPrint_SuperNode_Matrix() in dutil.c.  Another tricky part is the sign
+     * of the determinant. Since I am doing the following factorization Pr*A*Pc
+     * = LU, i.e., both row and column permutations may be applied, they are
+     * called perm_r and perm_c in the code. Their determinants will be 1 or
+     * -1, but you need to find out the sign by going through these
+     * permutations. */
+
     slu = A->slu;
     L = (SuperMatrix *)(slu->L);
-    U = (SuperMatrix *)(slu->U);
-    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d COLUMNS\n", U->ncol);
-    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d ROWS\n", U->nrow);
-    Astore = (SCformat *)(U->Store);
-    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d NON-ZEROS\n", Astore->nnz);
-    Vnm_print(1, "PRINTING FACTORS:\n");
-    dPrint_CompCol_Matrix("U", U); 
-    dPrint_SuperNode_Matrix("L", L);
+    /* Stolen from dPrint_SuperNode_Matrix (SuperLU 2.0) */
+    Vnm_print(1, "CALCULATING DETERMINANT (ASSUMING POSITIVE):\n");
+    n = L->ncol;
+    Astore = (SCformat *)(L->Store);
+    dp = (double *) Astore->nzval;
+    col_to_sup = Astore->col_to_sup;
+    sup_to_col = Astore->sup_to_col;
+    rowind_colptr = Astore->rowind_colptr;
+    rowind = Astore->rowind;
+    lndet = 0;
+    det = 1;
+    for (k = 0; k <= Astore->nsuper+1; ++k) {
+        c = sup_to_col[k];
+        nsup = sup_to_col[k+1] - c;
+        for (j = c; j < c + nsup; ++j) {
+            d = Astore->nzval_colptr[j];
+            for (i = rowind_colptr[c]; i < rowind_colptr[c+1]; ++i) {
+                if (rowind[i] == j) {
+                    Lii = dp[d++];
+                    /* Vnm_print(1, "L(%d, %d) = %g\n", j, j, Lii); */
+                    lndet += log(VABS(Lii));
+                } else d++;
+            }
+        }
+    }
+    Vnm_print(1, "LOG DETERMINANT = %g\n", lndet);
 
     return 0.0;
 }

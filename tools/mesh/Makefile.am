@@ -16,8 +16,9 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES           = @inc_list@
 LDFLAGS            = @LDFLAGS@ @FLIBS@
+CCLD = $(F77)
 
 noinst_PROGRAMS    = mgmesh 
-mgmesh_SOURCES     = mgmesh.c mypde.f
+mgmesh_SOURCES     = mgmesh.c 
 mgmesh_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
 

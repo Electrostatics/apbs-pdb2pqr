@@ -70,7 +70,6 @@ typedef struct Vpbe {
   Vacc *acc;          /* Accessibility object */
   Vgreen *green;      /* Green's function oracle */
 
-  double ionConc;     /* Ionic strength (M) */
   double T;           /* Temperature (K) */
   double soluteDiel;  /* Solute dielectric constant (unitless) */
   double solventDiel; /* Solvent dielectric constant (unitless) */
@@ -78,13 +77,18 @@ typedef struct Vpbe {
                       /* Solvent probe radius (angstroms) for accessibility;
                        * determining defining volumes for the dielectric
                        * coefficient */
-  double ionRadius;   /* Ion probe radius (angstroms) for accessibility;
-                       * determining defining volumes for the ionic strength
-                       * coefficient */
+  double bulkIonicStrength; /* Bulk ionic strength (M) */
+  double maxIonRadius;      /* Max ion radius (A; used for calculating
+                             * accessiblity and defining volumes for ionic
+                             * strength coeffcients) */
+  int    numIon;            /* Total number of ion species */
+  double ionConc[MAXION];   /* Concentration (M) of each species */
+  double ionRadii[MAXION];  /* Ionic radius (A) of each species */
+  double ionQ[MAXION];      /* Charge (e) of each species */
 
-  double xkappa;      /* Debye-Huckel parameter */
-  double deblen;      /* Debye length */
-  double zkappa2;     /* Square of modified Debye-Huckel parameter */
+  double xkappa;      /* Debye-Huckel parameter (bulk) */
+  double deblen;      /* Debye length (bulk) */
+  double zkappa2;     /* Square of modified Debye-Huckel parameter (bulk) */
   double zmagic;      /* Delta function scaling parameter */
 
   double soluteCenter[3];
@@ -108,7 +112,8 @@ typedef struct Vpbe {
     VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
     VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
     VEXTERNC Vgreen* Vpbe_getVgreen(Vpbe *thee);
-    VEXTERNC double  Vpbe_getIonConc(Vpbe *thee);
+    VEXTERNC double  Vpbe_getBulkIonicStrength(Vpbe *thee);
+    VEXTERNC double  Vpbe_getMaxIonRadius(Vpbe *thee);
     VEXTERNC double  Vpbe_getTemperature(Vpbe *thee);           
     VEXTERNC double  Vpbe_getSoluteDiel(Vpbe *thee); 
     VEXTERNC double  Vpbe_getSoluteRadius(Vpbe *thee);
@@ -119,7 +124,6 @@ typedef struct Vpbe {
     VEXTERNC double  Vpbe_getSoluteCharge(Vpbe *thee);
     VEXTERNC double  Vpbe_getSolventDiel(Vpbe *thee);
     VEXTERNC double  Vpbe_getSolventRadius(Vpbe *thee);
-    VEXTERNC double  Vpbe_getIonRadius(Vpbe *thee);
     VEXTERNC double  Vpbe_getSplineWin(Vpbe *thee);
     VEXTERNC double  Vpbe_getXkappa(Vpbe *thee);
     VEXTERNC double  Vpbe_getDeblen(Vpbe *thee);
@@ -129,7 +133,7 @@ typedef struct Vpbe {
 #   define Vpbe_getValist(thee) ((thee)->alist)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
 #   define Vpbe_getVgreen(thee) ((thee)->green)
-#   define Vpbe_getIonConc(thee) ((thee)->ionConc)
+#   define Vpbe_getBulkIonicStrength(thee) ((thee)->bulkIonicStrength)
 #   define Vpbe_getTemperature(thee) ((thee)->T)           
 #   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 
 #   define Vpbe_getSoluteCenter(thee) ((thee)->soluteCenter)
@@ -140,7 +144,7 @@ typedef struct Vpbe {
 #   define Vpbe_getSoluteCharge(thee) ((thee)->soluteCharge)
 #   define Vpbe_getSolventDiel(thee) ((thee)->solventDiel)
 #   define Vpbe_getSolventRadius(thee) ((thee)->solventRadius)
-#   define Vpbe_getIonRadius(thee) ((thee)->ionRadius)
+#   define Vpbe_getMaxIonRadius(thee) ((thee)->maxIonRadius)
 #   define Vpbe_getXkappa(thee) ((thee)->xkappa)
 #   define Vpbe_getDeblen(thee) ((thee)->deblen)
 #   define Vpbe_getZkappa2(thee) ((thee)->zkappa2)
@@ -151,12 +155,16 @@ typedef struct Vpbe {
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, double ionConc, double ionRadius,
-                    double T, double soluteDiel, double solventDiel,
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
+		    double *ionRadii, double *ionQ, double T,
+                    double soluteDiel, double solventDiel,  
                     double solventRadius);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc, 
-		    double ionRadius, double T, double soluteDiel, double
-                    solventDiel, double solventRadius);
+VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
+		    double *ionConc, double *ionRadii, double *ionQ, 
+                    double T, double soluteDiel, 
+                    double solventDiel, double solventRadius);
+VEXTERNC int     Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],
+                    double ionRadii[MAXION], double ionQ[MAXION]);
 
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
