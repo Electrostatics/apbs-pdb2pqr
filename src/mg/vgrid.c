@@ -47,7 +47,9 @@
 VEMBED(rcsid="$Id$")
 
 #if !defined(VINLINE_VGRID)
-    VPUBLIC int Vgrid_memChk(Vgrid *thee) { return Vmem_bytes(thee->mem); }
+    VPUBLIC unsigned long int Vgrid_memChk(Vgrid *thee) { 
+        return Vmem_bytes(thee->mem); 
+    }
 #endif
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 

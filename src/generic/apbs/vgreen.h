@@ -110,7 +110,7 @@ typedef struct sVgreen Vgreen;
      *  @param   thee  Vgreen object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC int     Vgreen_memChk(Vgreen *thee);
+    VEXTERNC unsigned long int Vgreen_memChk(Vgreen *thee);
 
 #else /* if defined(VINLINE_VGREEN) */
 #   define Vgreen_getValist(thee) ((thee)->alist)

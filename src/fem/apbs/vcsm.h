@@ -186,7 +186,7 @@ typedef struct sVcsm Vcsm;
      *  @param   thee  Vcsm object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC int     Vcsm_memChk(Vcsm *thee);
+    VEXTERNC unsigned long int Vcsm_memChk(Vcsm *thee);
 
 #else /* if defined(VINLINE_VCSM) */
 #   define Vcsm_getValist(thee) ((thee)->alist)

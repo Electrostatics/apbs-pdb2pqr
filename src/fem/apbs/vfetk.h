@@ -443,7 +443,7 @@ VEXTERNC double Vfetk_lnDet(Vfetk *thee, int color, int oflag, int mflag);
  *  @param   thee  Vfetk object
  *  @return  The memory used by this structure and its contents in bytes
  */
-VEXTERNC int     Vfetk_memChk(Vfetk *thee);
+VEXTERNC unsigned long int Vfetk_memChk(Vfetk *thee);
 
 /** @brief   Transfer color (partition ID) information frmo a partitioned mesh
  *           to the atoms.

@@ -97,7 +97,7 @@ VPUBLIC double Vatom_getCharge(Vatom *thee) {
 
 }
 
-VPUBLIC int Vatom_memChk(Vatom *thee) { return sizeof(Vatom); }
+VPUBLIC unsigned long int Vatom_memChk(Vatom *thee) { return sizeof(Vatom); }
 
 #endif /* if !defined(VINLINE_VATOM) */
 

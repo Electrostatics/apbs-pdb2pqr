@@ -58,7 +58,7 @@ VEMBED(rcsid="$Id$")
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmg_memChk(Vpmg *thee) {
+VPUBLIC unsigned long int Vpmg_memChk(Vpmg *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
 }

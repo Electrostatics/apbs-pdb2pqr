@@ -114,7 +114,7 @@ typedef struct sVacc Vacc;
      *  @param   thee  Vacc object
      *  @returns Number of bytes allocated for object
      */
-    VEXTERNC int Vacc_memChk(Vacc *thee);
+    VEXTERNC unsigned long int Vacc_memChk(Vacc *thee);
 
 #else /* if defined(VINLINE_VACC) */
 

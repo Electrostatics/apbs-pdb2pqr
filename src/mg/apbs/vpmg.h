@@ -154,7 +154,7 @@ typedef struct sVpmg Vpmg;
      *  @param   thee  Vpmg object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC int Vpmg_memChk(Vpmg *thee);
+    VEXTERNC unsigned long int Vpmg_memChk(Vpmg *thee);
 
 #else /* if defined(VINLINE_VPMG) */
 
