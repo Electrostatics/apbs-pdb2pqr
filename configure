@@ -10354,19 +10354,19 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking whether you want the included BLAS routines" >&5
+echo $ECHO_N "checking whether you want the included BLAS routines... $ECHO_C" >&6
 # Check whether --enable-blas or --disable-blas was given.
 if test "${enable_blas+set}" = set; then
   enableval="$enable_blas"
-   local_blas=""
+   disable_blas="yes"
 else
-   local_blas="yes"
+   disable_blas=""
 
 fi;
 # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 blas_do_src=""
 blas_lib=""
-echo "$as_me:$LINENO: checking whether you want to use your own BLAS" >&5
-echo $ECHO_N "checking whether you want to use your own BLAS... $ECHO_C" >&6
 
 # Check whether --with-blas or --without-blas was given.
 if test "${with_blas+set}" = set; then
@@ -10376,27 +10376,24 @@ else
    blas_lib=""
 
 fi;
+# INTERPRET THIS MESS
 if test -n "${blas_lib}"; then
-    local_blas=""
+    echo "$as_me:$LINENO: result: no; you have your own" >&5
+echo "${ECHO_T}no; you have your own" >&6
 else
-    local_blas="yes"
-fi
-if test -n "${local_blas}"; then
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    blas_do_src="blas"
-    cat >>confdefs.h <<\_ACEOF
+    if test -n "${disable_blas}"; then
+       echo "$as_me:$LINENO: result: no; you must be linking against it elsewhere" >&5
+echo "${ECHO_T}no; you must be linking against it elsewhere" >&6
+    else
+       echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+       blas_do_src="blas"
+       cat >>confdefs.h <<\_ACEOF
 #define USE_PMG_BLAS 1
 _ACEOF
 
-    blas_lib="../blas/libapbsblas.la"
-    echo "$as_me:$LINENO: result: Compiling local version of BLAS." >&5
-echo "${ECHO_T}Compiling local version of BLAS." >&6
-else
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    echo "$as_me:$LINENO: result: Local BLAS routine compilation disabled at user request" >&5
-echo "${ECHO_T}Local BLAS routine compilation disabled at user request" >&6
+       blas_lib="../blas/libapbsblas.la"
+    fi
 fi
 
 
