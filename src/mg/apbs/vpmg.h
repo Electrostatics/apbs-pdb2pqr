@@ -127,6 +127,6 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
   int *nz, double **data);
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
-VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec);
+VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
 
 #endif    /* ifndef _VPMG_H_ */

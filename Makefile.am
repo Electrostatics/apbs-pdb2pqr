@@ -47,7 +47,7 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = tools src tst inc lib work
+SUBDIRS = src tst inc lib work tools
 
 distclean-local: clean-local
 
