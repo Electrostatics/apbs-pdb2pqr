@@ -96,6 +96,7 @@ int main(int argc, char **argv) {
     /* OBJECTS */
     Valist *alist;
     Vatom *atom1, *atom2;
+    Vio *sock = VNULL;
     double charge1, charge2, dist, dist2, *pos1, *pos2, energy, myenergy;
     double zmagic, rad1, rad2, eps, disp[3], force[5], myforce[5], dG_drij;
     double dG_dRi, dG_dRj;
@@ -146,7 +147,18 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
 
     printf("Setting up atom list from %s\n", path);
     alist = Valist_ctor();
-    Valist_readPQR(alist, "FILE", "ASC", VNULL, path);
+    sock = Vio_ctor("FILE", "ASC", VNULL, path, "r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Problem opening virtual socket %s!\n", 
+                  path);
+        return 0;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Problem accepting virtual socket %s!\n",
+                  path);
+        return 0;
+    }
+    Valist_readPQR(alist,sock);
     printf("Read %d atoms\n", Valist_getNumberAtoms(alist));
 
     /* Energy scaling factor */
