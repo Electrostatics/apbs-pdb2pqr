@@ -1,6 +1,14 @@
 #!/bin/bash
 
-bindir='../../../dist/bin/i686-pc-linux-gnu'
+# Put the APBS executeable dir in bindir, i.e:
+#bindir="../../../dist/bin/i686-pc-linux/"
+bindir=''
+
+if [ "$bindir" = '' ]; then
+    echo "Please edit runme.sh to add your APBS executeable directory to the path."
+    exit
+fi
+
 
 coord='-2.000 -1.00 0.000 1.000 2.000'
 
