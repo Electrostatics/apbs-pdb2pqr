@@ -68,12 +68,11 @@
 #include "mc/mc.h"
 
 /**
- *  @struct  Vpee
  *  @ingroup Vpee
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vpee class/module
  */
-struct Vpee {
+struct sVpee {
 
   Gem *gm;                     /**< Grid manager */
   int localPartID;             /**< The local partition ID: i.e. the partition 
@@ -92,11 +91,11 @@ struct Vpee {
 
 };
 
-/** @typedef Vpee
+/** 
  *  @ingroup Vpee
  *  @brief   Declaration of the Vpee class as the Vpee structure
  */
-typedef struct Vpee Vpee;
+typedef struct sVpee Vpee;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpee Inlineable methods 

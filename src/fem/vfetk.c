@@ -323,7 +323,7 @@ VPRIVATE int lgr_3DP1z[4][VMAXP] = {
  * @ingroup  Vfetk
  * @author  Mike Holst
  * @notes  Mike says: 1 = linear, 2 = quadratic */
-const int P_DEG=1;
+VPRIVATE const int P_DEG=1;
     
 /**
  * @brief  Another Holst variable
@@ -391,32 +391,43 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type) {
 VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type) {
 
     int i;
+    double center[3];
 
     /* Make sure things have been properly initialized & store them */
     VASSERT(pbe != VNULL);
+    thee->pbe = pbe;
     VASSERT(pbe->alist != VNULL);
     VASSERT(pbe->acc != VNULL);
 
-    /* Store PBE type -- right now we only handle linearized RPBE */
-    if (type != PBE_LRPBE) {
-        Vnm_print(2, "Vfetk_ctor2:  Sorry, we only handle PBE_LRPBE right \
-now!\n");
-        return 0;
-    }
+    /* Store PBE type */
     thee->type = type;
 
     /* Set up memory management object */
     thee->vmem = Vmem_ctor("APBS::VFETK");
 
     /* Set up FEtk objects */
+    Vnm_print(0, "Vfetk_ctor2:  Constructing PDE...\n");
     thee->pde = Vfetk_PDE_ctor(thee);
+    Vnm_print(0, "Vfetk_ctor2:  Constructing Gem...\n");
     thee->gm = Gem_ctor(thee->vmem, thee->pde);
+    Vnm_print(0, "Vfetk_ctor2:  Constructing Aprx...\n");
     thee->aprx = Aprx_ctor(thee->vmem, thee->gm, thee->pde);
+    Vnm_print(0, "Vfetk_ctor2:  Constructing Aprx...\n");
     thee->am = AM_ctor(thee->vmem, thee->aprx);
 
-    /* Set up charge-simplex map */
-    thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
-    VASSERT(thee->csm != VNULL);
+    /* Reset refinement level */
+    thee->level = 0;
+
+    /* Set solver variables */
+    thee->lkey = VLT_MG;
+    thee->lmax = 1000000;
+    thee->ltol = 1e-5;
+    thee->lprec = VPT_MG;
+    thee->nkey = VNT_NEW;
+    thee->nmax = 1000000;
+    thee->ntol = 1e-5;
+    thee->gues = VGT_ZERO;
+    thee->pjac = -1;
 
     /* Store local copy of myself */
     var.fetk = thee;
@@ -425,7 +436,6 @@ now!\n");
     Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);
 
     /* Set up ion-related variables */
-    /* Set up ionic strength stuff */
     var.zkappa2 = Vpbe_getZkappa2(var.fetk->pbe);
     var.ionstr = Vpbe_getBulkIonicStrength(var.fetk->pbe);
     if (var.ionstr > 0.0) var.zks2 = 0.5*var.zkappa2/var.ionstr;
@@ -436,9 +446,10 @@ now!\n");
         var.ionConc[i] = var.zks2 * var.ionConc[i] * var.ionQ[i];
     }
 
-    /* Set parameter objects to NULL */
+    /* Set uninitialized objects to NULL */
     thee->pbeparm = VNULL;
     thee->feparm = VNULL;
+    thee->csm = VNULL;
 
 
     return 1;
@@ -798,7 +809,29 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
         }
     }
 
+    /* Setup charge-simplex map */
+    Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
+    thee->csm = VNULL;
+    thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
+    VASSERT(thee->csm != VNULL);
+    Vcsm_init(thee->csm);
+
+
     return 1;
+}
+
+VPUBLIC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock) {
+
+    VASSERT(thee != VNULL);
+    AM_read(thee->am, skey, sock);
+
+    /* Setup charge-simplex map */
+    Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
+    thee->csm = VNULL;
+    thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
+    VASSERT(thee->csm != VNULL);
+    Vcsm_init(thee->csm);
+
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1366,6 +1399,7 @@ VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
         Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee);
         (*thee) = VNULL;
     }
+
 }
 
 VPUBLIC void Vfetk_PDE_dtor2(PDE *thee) { 
@@ -1398,7 +1432,7 @@ VPRIVATE double smooth(int nverts, double dist[4], double coeff[4], int meth) {
 VPRIVATE double diel() {
 
     int i, j;
-    double epsp, epsw, dist[5], coeff[5], srad, swin, *vx;
+    double eps, epsp, epsw, dist[5], coeff[5], srad, swin, *vx;
     Vsurf_Meth srfm;
     Vacc *acc;
     PBEparm *pbeparm;
@@ -1412,10 +1446,12 @@ VPRIVATE double diel() {
     swin = pbeparm->swin;
     acc = var.fetk->pbe->acc;
 
+    eps = 0;
+
     if (VABS(epsp - epsw) < VSMALL) return epsp;
     switch (srfm) {
         case VSM_MOL:
-            return ((epsw-epsp)*Vacc_molAcc(acc, var.xq, srad) + epsp);
+            eps = ((epsw-epsp)*Vacc_molAcc(acc, var.xq, srad) + epsp);
             break;
         case VSM_MOLSMOOTH:
             for (i=0; i<var.nverts; i++) {
@@ -1427,15 +1463,17 @@ VPRIVATE double diel() {
                 dist[i] = VSQRT(dist[i]);
                 coeff[i] = (epsw-epsp)*Vacc_molAcc(acc, var.xq, srad) + epsp;
             }
-            return smooth(var.nverts, dist, coeff, 1);
+            eps = smooth(var.nverts, dist, coeff, 1);
             break;
         case VSM_SPLINE:
-            return ((epsw-epsp)*Vacc_splineAcc(acc, var.xq, swin, 0.0) + epsp);
+            eps = ((epsw-epsp)*Vacc_splineAcc(acc, var.xq, swin, 0.0) + epsp);
             break;
         default:
             Vnm_print(2, "Undefined surface method (%d)!\n", srfm);
             VASSERT(0);
     }
+
+    return eps;
 }
 
 VPRIVATE double kappa2() {
@@ -1511,6 +1549,7 @@ VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]) {
         pot = pot + val;
     }
 
+
     return pot;
 }
 
@@ -1544,6 +1583,7 @@ VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
         } else val = val*(1/(eps_w) - 1/(eps_p));
         pot = pot + val;
     }
+
     return pot;
 }
 
@@ -1587,20 +1627,19 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U,
     *U   = (*U)  *VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
     *d2U = (*d2U)*VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
     for (i=0; i<d; i++) {
-        dU[i] = dU[i] *VSQR(Vunit_ec)*(1.0e10) / \
-          (4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+        dU[i] = dU[i] *VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
     }
 
 }
 
-VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { ; }
+VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
+    printf("initAssemble\n"); 
+}
 
 VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
   double tvx[][3], void *data) {
 
-    int currentMol = 0;
     int i, j;
-    int bit = (int)VPOW(2, 2*currentMol);
     double epsp, epsw;
 
     /* We assume that the simplex has been passed in as the void *data * *
@@ -1625,17 +1664,7 @@ VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
     /* Set the dielectric constant for this element for use in the jump term *
      * of the residual-based error estimator.  The value is set to the average
      * * value of the vertices */
-    epsp = Vpbe_getSoluteDiel(var.fetk->pbe);
-    epsw = Vpbe_getSolventDiel(var.fetk->pbe);
-    if (VABS(epsw-epsp) > VSMALL) {
-        var.jumpDiel = 0;
-        for (i=0; i<thee->dim+1; i++) {
-            if ((VV_chart(var.verts[i]) & bit) != 0) {
-                var.jumpDiel += epsw;
-            } else var.jumpDiel += epsp;
-        }
-        var.jumpDiel = var.jumpDiel/((double)(var.nverts));
-    }
+    var.jumpDiel = 0;  /* NOT IMPLEMENTED YET! */
 }
 
 VPUBLIC void Vfetk_PDE_initFace(PDE *thee, int faceType, int chart, 
@@ -1754,7 +1783,7 @@ VPUBLIC double Vfetk_PDE_Fu_v(PDE *thee, int key, double V[], double dV[][3]) {
 
     Vfetk_PBEType type;
     int i;
-    double value = 0;
+    double value = 0.;
 
     type = var.fetk->type;
 
@@ -1798,7 +1827,7 @@ VPUBLIC double Vfetk_PDE_DFu_wv(PDE *thee, int key, double W[], double dW[][3],
 
     Vfetk_PBEType type;
     int i;
-    double value = 0;
+    double value = 0.;
 
     type = var.fetk->type;
 
@@ -1847,6 +1876,7 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
     Vfetk_PBEType pdekey;
     SS *sring[VRINGMAX];
     VV *vertex = (VV *)user;
+
 
     if ((pdekey == PBE_LPBE) || (pdekey == PBE_NPBE)) {
         VASSERT( vertex != VNULL);
@@ -1915,6 +1945,7 @@ phi = {");
     } else if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE)) {
         F[0] = 0.0;
     } else { VASSERT(0); }
+
 }
 
 VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
@@ -1925,26 +1956,37 @@ VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
     } else if ((var.fetk->type == PBE_LRPBE) || (var.fetk->type == PBE_NRPBE)) {
         F[0] = debye_Udiff(var.fetk->pbe, thee->dim, txq);
     } else VASSERT(0);
+
 }
 
 VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
-  double F[]) { F[0] = 0.; }
+  double F[]) { 
+
+    F[0] = 0.0;
+
+}
+
 
 VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType, 
   int chart[], double vx[][3]) {
+
     int i;
+
     for (i=0; i<dimII; i++) vx[2][i] = .5 * (vx[0][i] + vx[1][i]);
+
 }
 
 VPUBLIC void Vfetk_PDE_mapBoundary(int dim, int dimII, int vertexType,
-  int chart, double vx[3]) { ; }
+  int chart, double vx[3]) { 
+    
+}
 
 VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
   int faceType[4], int vertexType[4], int chart[], double vx[][3],
   void *simplex) {
 
-    double targetRes, maxRad, edgeLength, srad, swin;
-    int i, refAccLo, refAccHi, myAccLo, myAccHi, myAcc, natoms;
+    double targetRes, edgeLength, srad, swin, myAcc, refAcc;
+    int i, natoms;
     Vsurf_Meth srfm;
     Vfetk_PBEType type;
     FEMparm *feparm = VNULL;
@@ -1963,6 +2005,7 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     acc = pbe->acc;
     targetRes = feparm->targetRes;
     srfm = pbeparm->srfm;
+    srad = pbeparm->srad;
     swin = pbeparm->swin;
     simp = (SS *)simplex;
     type = var.fetk->type;
@@ -1982,35 +2025,38 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
      * changes */
     switch(srfm) {
         case VSM_MOL:
-            maxRad=VMAX2(Vpbe_getMaxIonRadius(pbe),Vpbe_getSolventRadius(pbe));
+            refAcc = Vacc_molAcc(acc, vx[0], srad);
+            for (i=1; i<(dim+1); i++) {
+                myAcc = Vacc_molAcc(acc, vx[i], srad);
+                if (myAcc != refAcc) return 1;
+            }
             break;
         case VSM_MOLSMOOTH:
-            maxRad=VMAX2(Vpbe_getMaxIonRadius(pbe),Vpbe_getSolventRadius(pbe));
+            refAcc = Vacc_molAcc(acc, vx[0], srad);
+            for (i=1; i<(dim+1); i++) {
+                myAcc = Vacc_molAcc(acc, vx[i], srad);
+                if (myAcc != refAcc) return 1;
+            }
             break;
         case VSM_SPLINE:
-            maxRad = Vpbe_getMaxIonRadius(pbe);
-            maxRad += swin;
+            refAcc = Vacc_splineAcc(acc, vx[0], swin, 0.0);
+            for (i=1; i<(dim+1); i++) {
+                myAcc = Vacc_splineAcc(acc, vx[i], swin, 0.0);
+                if (myAcc != refAcc) return 1;
+            }
             break;
         default:
             VASSERT(0);
             break;
-    }
-    refAccLo = VRINT(Vacc_vdwAcc(acc, vx[0]));
-    if (refAccLo) refAccHi = VRINT(Vacc_ivdwAcc(acc, vx[0], maxRad));
-    else refAccHi = 0;
-    for (i=1; i<(dim+1); i++) {
-        myAccLo = VRINT(Vacc_vdwAcc(acc, vx[i]));
-        if (myAccLo != refAccLo) return 1;
-        if (myAccLo) myAccHi = VRINT(Vacc_ivdwAcc(acc, vx[i], maxRad));
-        else myAccHi = 0;
-        if (myAccHi != refAccHi) return 1;
     }
 
     return 0;
 }
 
 VPUBLIC void Vfetk_PDE_oneChart(int dim, int dimII, int objType, int chart[],
-  double vx[][3], int dimV) { ; }
+  double vx[][3], int dimV) { 
+    
+}
 
 VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) { 
 
@@ -2079,9 +2125,16 @@ VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
 
 VPUBLIC void Vfetk_externalUpdateFunction(SS **simps, int num) {
 
+    Vcsm *csm = VNULL;
     int rc;
 
-    rc = Vcsm_update(Vfetk_getVcsm(var.fetk), simps, num);
+    VASSERT(var.fetk != VNULL);
+    csm = Vfetk_getVcsm(var.fetk);
+    VASSERT(csm != VNULL);
+
+    printf("externalUpdateFunction\n"); 
+
+    rc = Vcsm_update(csm, simps, num);
 
     if (!rc) { 
         Vnm_print(2, "Error while updating charge-simplex map!\n");

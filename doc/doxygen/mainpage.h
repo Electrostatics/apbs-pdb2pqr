@@ -107,14 +107,12 @@
  * href="http://scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC</a>
  * (hardware abstraction library for code portability).
  * 
- * <p><i>Please acknowledge your use of APBS</i> by citing: 
- *   <blockquote>
+ * <p><i>Please acknowledge your use of APBS</i> by citing: <br>
  *   N. A. Baker, D.  Sept, S.  Joseph, M. J. Holst, J. A. McCammon.
  *   Electrostatics of nanosystems: application to microtubules and the
  *   ribosome.  <i>Proc. Natl.  Acad. Sci.  USA</i> <b>98</b>, 10037-10041,
  *   2001.  <a href="http://www.pnas.org/cgi/reprint/181342398v1">(Link to
  *   paper)</a>
- *  </blockquote>
  * 
  * <p> 
  * For more information on Poisson-Boltzmann methods and theory, please visit
@@ -607,9 +605,9 @@
  * APBS calculation.   Molecule and "map" IDs are assigned implicitly assigned
  * for each molecule/map read, based on order and starting at 1.  The sections
  * have the following keywords:
- * <dl>
- * <dt> <code>mol</code> <i>format</i> <i>path</i>
- * <dd> Read in molecular data from the file <i>path</i>.  The acceptable
+ * <ul>
+ * <li> <code>mol</code> <i>format</i> <i>path</i> <br>
+ * Read in molecular data from the file <i>path</i>.  The acceptable
  * <i>format</i> flags are:
  *  <ul>
  *  <li><code>pqr</code>.  The molecule file is in PQR format (attributed to 
@@ -658,8 +656,8 @@
  *  </ol>
  *  </b>
  *  </ul>
- * <dt> <a name="read-parm"><code>parm</code></a> <i>format</i> <i>path</i>
- * <dd> Read in a database from <i>path</i> with charges and radii for use with
+ * <li> <a name="read-parm"><code>parm</code></a> <i>format</i> <i>path</i><br>
+ *  Read in a database from <i>path</i> with charges and radii for use with
  * PDB-format molecule files.  The <i>format</i> can be one of the following:
  *   <ul>
  *   <li> <code>flat</code> <br>
@@ -678,9 +676,9 @@
  *        AMBER parameter files).  Sample flat-file databases are provided in
  *        <code>apbs/tools/conversion/param/vparam/</code>.
  *   </ul>
- * <dt> <a name="read-diel"><code>diel</code></a> <i>format</i> <i>path-x
+ * <li> <a name="read-diel"><code>diel</code></a> <i>format</i> <i>path-x
  * path-y path-z</i>
- * <dd> Read in the dielectric function \f$\epsilon(x)\f$ mapped to a
+ * <br> Read in the dielectric function \f$\epsilon(x)\f$ mapped to a
  * Cartesian mesh.  The result is a map of values between the solvent and
  * biomolecular dielectric constants.  The values in this file have no units.
  * Acceptable <i>format</i> keywords include:
@@ -693,8 +691,8 @@
  * strength (see <a href="#ion"><code>ion</code></a> statement), then you
  * <i>must</i> also include a <a href="#read-kappa"><code>kappa</code></a>
  * READ statement.</b>
- * <dt> <a name="read-kappa"><code>kappa</code></a> <i>format</i> <i>path</i>
- * <dd> Read in the \f$\overline{\kappa}^2(x)\f$ map from the file <i>path</i>.
+ * <li> <a name="read-kappa"><code>kappa</code></a> <i>format</i> <i>path</i>
+ * <br> Read in the \f$\overline{\kappa}^2(x)\f$ map from the file <i>path</i>.
  * The values in this file have units of \f$\AA^{-2}\f$.  Acceptable
  * <i>format</i> keywords include:
  * <ul>
@@ -702,14 +700,14 @@
  * </ul>
  * <b>Note:  if you choose this option, then you <i>must</i> also include a <a
  * href="#read-diel"><code>diel</code></a> READ statement.</b>
- * <dt> <code>charge</code> <i>format</i> <i>path</i>
- * <dd> Read in the molecular charge distribution from the file <i>path</i>.
+ * <li> <code>charge</code> <i>format</i> <i>path</i>
+ * <br> Read in the molecular charge distribution from the file <i>path</i>.
  * The values in this file have units of <code>e_c</code>, the electron charge
  * (i.e., they are unitless).  Acceptable <i>format</i> keywords include:
  * <ul>
  * <li> <code>dx</code> for OpenDX format
  * </ul>
- * </dl>
+ * </ul>
  * 
  * @subsection elec ELEC statements
  * 
@@ -749,8 +747,8 @@
  * focusing is not automated as it is in <a
  * href="#mg-auto"><code>mg-auto</code></a> calculations and parallel focusing
  * (i.e., <a href="#mg-para"><code>mg-para</code></a>) is very difficult with
- * this keyword.  <i><blink>This is intended for more experienced
- * users.</blink></i>
+ * this keyword.  <i><b>This is intended for more experienced
+ * users.</b></i>
  * 
  * <li> <a href="#mg-manual"><code>mg-dummy</code></a> has <i>exactly</i> the
  * same syntax as <a href="#mg-manual"><code>mg-manual</code></a>, but simply
@@ -892,9 +890,9 @@
  * 
  * <br><br><a name="keywords"><b>Keyword definitions</b></a>
  * <br><br>
- * <dl>
- * <dt> <a name="dime">dime <i>nx</i> <i>ny</i> <i>nz</i></a> 
- * <dd> Number of grid points in the x, y, and z directions.  The <i>nx</i>,
+ * <ul>
+ * <li> <a name="dime">dime <i>nx</i> <i>ny</i> <i>nz</i></a> 
+ * <br> Number of grid points in the x, y, and z directions.  The <i>nx</i>,
  * <i>ny</i>, and <i>nz</i> are related to the value <i>l</i> specified in the
  * <a href="#nlev"><code>nlev</code></a> keyword by the formula 
  * <pre>
@@ -909,100 +907,100 @@
  * <i>This means that "bad" values will typically result in
  * lower resolution/accuracy calculations!</i>
  *  
- * <dt> <a name="nlev">nlev <i>l</i></a>
- * <dd> The number of levels in the multilevel hierarchy.  Dependent on the
+ * <li> <a name="nlev">nlev <i>l</i></a>
+ * <br> The number of levels in the multilevel hierarchy.  Dependent on the
  * values set by the <a href="#dime"><code>dime</code></a> keyword; see
  * discussion.
  * 
- * <dt> <a name="grid">grid <i>hx hy hz</i></a>
- * <dd> The mesh grid spacing (in &Aring;); may be different in each direction.
+ * <li> <a name="grid">grid <i>hx hy hz</i></a>
+ * <br> The mesh grid spacing (in &Aring;); may be different in each direction.
  * Either this keyword or <href="#name">glen</a> must be specified.
  *
- * <dt> <a name="grid">glen> <i>xlen ylen zlen</i></a>
- * <dd> The mesh lengths (in &Aring;); may be different in each direction.
+ * <li> <a name="grid">glen> <i>xlen ylen zlen</i></a>
+ * <br> The mesh lengths (in &Aring;); may be different in each direction.
  * Either this keyword or <a href="#grid">grid</a> must be specified.
  * 
- * <dt> <a name="gcent">gcent</a> {<code>mol</code> <i>id</i> | <i> xcent ycent
+ * <li> <a name="gcent">gcent</a> {<code>mol</code> <i>id</i> | <i> xcent ycent
  * zcent</i>}
- * <dd> The grid center.  If the <code>grid mol</code> is used, * <i>id</i>
+ * <br> The grid center.  If the <code>grid mol</code> is used, * <i>id</i>
  * must be the ID of a molecule read in a previous <a href="#read">READ</a>
  * section.  Molecule IDs are assigned in the order they're read, starting at
  * 1.  If just <code>grid</code> is used, the next three numbers should be the
  * x, y, and z coordinates for the center of the grid.  
  * 
- * <dt> <a name="mol">mol</a> <i>id</i>
- * <dd> The ID of a molecule read in a previous <a herf="#read">READ</a>
+ * <li> <a name="mol">mol</a> <i>id</i>
+ * <br> The ID of a molecule read in a previous <a herf="#read">READ</a>
  * section; this is the molecule for which the PBE is solved.
  *
- * <dt> <a name="lpbe">lpbe</a> 
- * <dd> Specifies that the linearized PBE should be solved.  (See also <a
+ * <li> <a name="lpbe">lpbe</a> 
+ * <br> Specifies that the linearized PBE should be solved.  (See also <a
  * href="#npbe">npbe</a>).
  * 
- * <dt> <a name="npbe">npbe</a>
- * <dd> Specifies that the nonlinear (full) PBE should be solved.  (See also <a
+ * <li> <a name="npbe">npbe</a>
+ * <br> Specifies that the nonlinear (full) PBE should be solved.  (See also <a
  * href="#lpbe">lpbe</a>).
  *
- * <dt> <a name="bcfl">bcfl</a> <i>flag</i>
- * <dd> Boundary condition flag; where <i>flag</i> is one of the following:
- *    <dl>
- *    <dt> <code>zero</code> or <code>0</code>
- *    <dd> Zero boundary conditions.
- *    <dt> <code>sdh</code> or <code>1</code>
- *    <dd> Boundary conditions assigned using the analytical
+ * <li> <a name="bcfl">bcfl</a> <i>flag</i>
+ * <br> Boundary condition flag; where <i>flag</i> is one of the following:
+ *    <ul>
+ *    <li> <code>zero</code> or <code>0</code>
+ *    <br> Zero boundary conditions.
+ *    <li> <code>sdh</code> or <code>1</code>
+ *    <br> Boundary conditions assigned using the analytical
  *    (Debye-H&uuml;ckel) expression for a single spherical ion with the
  *    molecule's radius and net charge.
- *     <dt> <code>mdh</code> or <code>2</code>
- *     <dd> The analytical (Debye-H&uuml;ckel) expression for a single
+ *    <li> <code>mdh</code> or <code>2</code>
+ *    <br> The analytical (Debye-H&uuml;ckel) expression for a single
  *     spherical ion is used for each ion (i.e., superposition) to assign
  *     boundary conditions.  Tends to capture more moments of the molecular
  *     multipole, but is (much) slower to evaluate.
- *     <dt> <code>focus</code> or <code>4</code>
- *     <dd> The solution from the previous calculation is used to assign
+ *    <li> <code>focus</code> or <code>4</code>
+ *     <br> The solution from the previous calculation is used to assign
  *     boundary conditions for the current calculation.  Clearly, the domain
  *     for the current calculation must be a subset of the previous domain.
- *     </dl>
+ *     </ul>
  * 
- * <dt> <a name="ion">ion</a> <i>charge conc radius</i>
- * <dd> These specify the different counterion species present in solution with
+ * <li> <a name="ion">ion</a> <i>charge conc radius</i>
+ * <br> These specify the different counterion species present in solution with
  * the given charge (in e), concentration (in M), and radius (in \f$\AA\f$).
  * Several of these keywords can be present to describe a variety of ionic
  * species in solution.  Varying ion valencies and concetrations are taken into
  * account in the mobile ion PBE term, however, only the largest ionic radius
  * is used to determine the ion accessibility function.
  * 
- * <dt> <a name="pdie">pdie</a> <i>dielectric</i>
- * <dd> Solute dielectric constant (unitless).  Typically 2 to 20.
+ * <li> <a name="pdie">pdie</a> <i>dielectric</i>
+ * <br> Solute dielectric constant (unitless).  Typically 2 to 20.
  * 
- * <dt> <a name="sdie">sdie</a> <i>dielectric</i>
- * <dd> Solvent dielectric constant (unitless).  Typically 78.54 (water).
+ * <li> <a name="sdie">sdie</a> <i>dielectric</i>
+ * <br> Solvent dielectric constant (unitless).  Typically 78.54 (water).
  * 
- * <dt> <a name="chgm">chgm</a> <i>flag</i>
- * <dd> Method used to define the various charge discretization methods:
+ * <li> <a name="chgm">chgm</a> <i>flag</i>
+ * <br> Method used to define the various charge discretization methods:
  * <i>flag</i> is one of the following:
- *     <dl>
- *     <dt> <code>spl0</code> or <code>0</code>
- *     <dd> Traditional trilinear hat-function discretization (linear splines);
+ *     <ul>
+ *     <li> <code>spl0</code> or <code>0</code>
+ *     <br> Traditional trilinear hat-function discretization (linear splines);
  *          charge is mapped onto nearest-neighbor grid points
- *     <dt> <code>spl2</code> or <code>1</code>
- *     <dd> Cubic B-spline discretization; charge is mapped onto nearest- and
+ *     <li> <code>spl2</code> or <code>1</code>
+ *     <br> Cubic B-spline discretization; charge is mapped onto nearest- and
  *     next-nearest-neighbor grid points
- *     </dl>
- * <dt> <a name="srfm">srfm</a> <i>flag</i>
- * <dd> Method used to define the various surface-based coefficients;
+ *     </ul>
+ * <li> <a name="srfm">srfm</a> <i>flag</i>
+ * <br> Method used to define the various surface-based coefficients;
  * <i>flag</i> is one of the following:
- *     <dl>
- *     <dt> <code>mol</code> or <code>0</code>
- *     <dd> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
+ *     <ul>
+ *     <li> <code>mol</code> or <code>0</code>
+ *     <br> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
  *     inflated van der Waals radii, the dielectric coefficient
  *     (\f$\epsilon(x)\f$) is defined using the molecular (Conolly) surface
  *     definition without smoothing.
- *     <dt> <code>smol</code> or <code>1</code>
- *     <dd> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
+ *     <li> <code>smol</code> or <code>1</code>
+ *     <br> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
  *     inflated van der Waals radii, the dielectric coefficient
  *     (\f$\epsilon(x)\f$) is defined using the molecular (Conolly) surface
  *     definition with a simple harmonic average smoothing.
- *     <dt> <code>spl2</code> or <code>2</code>
- *     <dd> Spline-based surface definitions.  This is primarily for use with
+ *     <li> <code>spl2</code> or <code>2</code>
+ *     <br> Spline-based surface definitions.  This is primarily for use with
  *     force calculations, since it requires substantial reparameterization of
  *     radii.  This is based on the work of Im et al, <i>Comp. Phys. Comm.</i>
  *     <b>111</b>, (1998) and uses a cubic spline to define a smoothly varying
@@ -1011,53 +1009,53 @@
  *     van der Waals radii with the spline function and the dielectric
  *     coefficient (\f$\epsilon(x)\f$) is defined using the standard van der
  *     Waals radii with the spline function.
- *     </dl>
+ *     </ul>
  * 
- * <dt> <a name="usemap">usemap</a> <i>type ID</i>
- * <dd> Use a pre-calculated map(s) (as provided by a <a
+ * <li> <a name="usemap">usemap</a> <i>type ID</i>
+ * <br> Use a pre-calculated map(s) (as provided by a <a
  * href="#write">write</a> statement in an earlier calculation and read in with
  * a <a href="#read">READ</a> statement) to set up a calculation.  The
- * <i>type</i> flag refers to the coefficient to be assigned from the map: <dl>
- *  <dt> <code>diel</code>
- *  <dd> Dielectric function (\f$\epsilon(x)\f$) -- this causes the
+ * <i>type</i> flag refers to the coefficient to be assigned from the map: <ul>
+ *  <li> <code>diel</code>
+ *  <br> Dielectric function (\f$\epsilon(x)\f$) -- this causes the
  *  <code>srad</code> parameter and the radii/location of atoms in the PQR file
  *  to be ignored
- *  <dt> <code>kappa</code>
- *  <dd> Ion accessibility  (\f$\overline{\kappa}^2(x)\f$) -- this causes the
+ *  <li> <code>kappa</code>
+ *  <br> Ion accessibility  (\f$\overline{\kappa}^2(x)\f$) -- this causes the
  *  <code>ion</code> radius parameter to be ignored
- *  <dt> <code>charge</code>
- *  <dd> Biomolecule charge distribution -- this causes the charges/locations in
+ *  <li> <code>charge</code>
+ *  <br> Biomolecule charge distribution -- this causes the charges/locations in
  *       the PQR file to be ignored
- *  </dl>
+ *  </ul>
  *
- * <dt> <a name="srad">srad</a> <i>radius</i>
- * <dd> Solvent molecular radius (in \f$\AA\f$) used to define molecular
+ * <li> <a name="srad">srad</a> <i>radius</i>
+ * <br> Solvent molecular radius (in \f$\AA\f$) used to define molecular
  * surfaces.  Typically 1.4 \f$\AA\f$ (water).
  * 
- * <dt> <a name="swin">swin</a> <i>window</i>
- * <dd> Spline window (in \f$\AA\f$) used to define surface-based properties.
+ * <li> <a name="swin">swin</a> <i>window</i>
+ * <br> Spline window (in \f$\AA\f$) used to define surface-based properties.
  * Typically 0.3 \f$\AA\f$.
  * 
- * <dt> <a name="temp">temp</a> <i>temperature</i>
- * <dd> System tempertature (in K).
+ * <li> <a name="temp">temp</a> <i>temperature</i>
+ * <br> System tempertature (in K).
  * 
- * <dt> <a name="gamma">gamma</a> <i>parameter</i>
- * <dd> Surface tension parameter for apolar forces (in kJ/mol/&Aring;).  Often
+ * <li> <a name="gamma">gamma</a> <i>parameter</i>
+ * <br> Surface tension parameter for apolar forces (in kJ/mol/&Aring;).  Often
  * 0.105 kJ/mol/\f$\AA\f$. <i>This parameter is only used if forces are
  * calculated but still must be present for other calculations.</i>
  * 
- * <dt> <a name="calcenergy">calcenergy</a> <i>flag</i>
- * <dd> OPTIONAL KEYWORD.  Controls electrostatic energy output.  Values for
+ * <li> <a name="calcenergy">calcenergy</a> <i>flag</i>
+ * <br> OPTIONAL KEYWORD.  Controls electrostatic energy output.  Values for
  *      <i>flag</i> are:
- *      <dl>
- *      <dt> <code>no</code> or <code>0</code>
- *      <dd> No energies are written.
- *      <dt> <code>total</code> or <code>1</code>
- *      <dd> Total electrostatic energies are written to stdout.
- *      <dt> <code>comps</code> or <code>2</code>
- *      <dd> Total electrostatic energies and individual per-atom components
+ *      <ul>
+ *      <li> <code>no</code> or <code>0</code>
+ *      <br> No energies are written.
+ *      <li> <code>total</code> or <code>1</code>
+ *      <br> Total electrostatic energies are written to stdout.
+ *      <li> <code>comps</code> or <code>2</code>
+ *      <br> Total electrostatic energies and individual per-atom components
  *      are written to stdout.
- *     </dl>
+ *     </ul>
  *      Note that this option must be used consistently for all calculations
  *      that will appear in subsequent <a href="#print">PRINT</a> statements.
  *      For example, if the statement <code>print energy 1 - 2 end</code>
@@ -1065,17 +1063,17 @@
  *      <code>calcenergy</code> keywords present with the same values for
  *      <i>flag</i>.
  *
- * <dt> <a name="calcforce">calcforce</a> <i>flag</i>
- * <dd> OPTIONAL KEYWORD.  Controls electrostatic force output.  Values for
+ * <li> <a name="calcforce">calcforce</a> <i>flag</i>
+ * <br> OPTIONAL KEYWORD.  Controls electrostatic force output.  Values for
  *      <i>flag</i> are:
- *      <dl>
- *      <dt> <code>no</code> or <code>0</code>
- *      <dd> No forces are written.
- *      <dt> <code>total</code> or <code>1</code>
- *      <dd> Net forces on molecule are written to stdout.
- *      <dt> <code>comps</code> or <code>2</code>
- *      <dd> Forces on each atom are written to stdout.
- *      </dl>
+ *      <ul>
+ *      <li> <code>no</code> or <code>0</code>
+ *      <br> No forces are written.
+ *      <li> <code>total</code> or <code>1</code>
+ *      <br> Net forces on molecule are written to stdout.
+ *      <li> <code>comps</code> or <code>2</code>
+ *      <br> Forces on each atom are written to stdout.
+ *      </ul>
  *      Note that this option must be used consistently for all calculations
  *      that will appear in subsequent <a href="#print">PRINT</a> statements.
  *      For example, if the statement <code>print force 1 - 2 end</code>
@@ -1083,13 +1081,13 @@
  *      <code>calcforce</code> keywords present with the same values for
  *      <i>flag</i>.
 
- * <dt> <a name="write">write</a> <i>type format stem</i>
- * <dd> Controls output of data; all arguments must be present.
+ * <li> <a name="write">write</a> <i>type format stem</i>
+ * <br> Controls output of data; all arguments must be present.
  * This keyword can be repeated several times to provide various types of
  * output.
- *      <dl>
- *      <dt> <i>type</i>
- *      <dd> <ul>
+ *      <ul>
+ *      <li> <i>type</i>
+ *      <br> <ul>
  *           <li> <code>charge</code>  Write out the biomolecular charge
  *           distribution in units of e
  *           <li> <code>pot</code>  Write out potential in units of kT/e
@@ -1129,20 +1127,20 @@
  *           (see <a href="#read-kappa"><code>read kappa</code></a> (units of
  *           \f$\AA^{-2}\f$)
  *           </ul>
- *      <dt> <i>format</i>
- *      <dd> <code>dx</code> for OpenDX format, <code>avs</code> for AVS UCD
+ *      <li> <i>format</i>
+ *      <br> <code>dx</code> for OpenDX format, <code>avs</code> for AVS UCD
  *      format, <code>uhbd</code> for UHBD format.
- *      <dt> <i>stem</i>
- *      <dd> The filename will be <i>stem</i>.XXX, where XXX is determined from
+ *      <li> <i>stem</i>
+ *      <br> The filename will be <i>stem</i>.XXX, where XXX is determined from
  *      the file format.
- *      </dl>
+ *      </ul>
  * 
- * <dt> <a name="writemat">writemat</a> <i>type stem</i>
- * <dd> Controls output of operator matrix in Harwell-Boeing column-compressed
+ * <li> <a name="writemat">writemat</a> <i>type stem</i>
+ * <br> Controls output of operator matrix in Harwell-Boeing column-compressed
  *      format.  This keyword is optional.
- *      <dl>
- *      <dt> <i>type</i>
- *      <dd> <ul>
+ *      <ul>
+ *      <li> <i>type</i>
+ *      <br> <ul>
  *           <li> <code>poisson</code> Write out the operator 
  *             \f[A v = -\nabla \cdot \epsilon v \nabla\f]
  *           corresponding to Poisson's equation.
@@ -1152,75 +1150,73 @@
  *            \sum_i c_i q_i^2 e^{-q_i u^*} v \f]
  *           around the current solution \f$u^*\f$.
  *           </ul>
- *      <dt> <i>stem</i>
- *      <dd> The filename will be <i>stem</i>.mat.
- *      </dl>
+ *      <li> <i>stem</i>
+ *      <br> The filename will be <i>stem</i>.mat.
+ *      </ul>
  * 
- * <dt> <a name="cglen">cglen</a> <i>xlen ylen zlen</i>
- * <dd> The coarsest mesh lengths (in \f$\AA\f$); may be different in each
+ * <li> <a name="cglen">cglen</a> <i>xlen ylen zlen</i>
+ * <br> The coarsest mesh lengths (in \f$\AA\f$); may be different in each
  * direction.  
  * 
- * <dt> <a name="fglen">fglen</a> <i>xlen ylen zlen</i>
- * <dd> The finest mesh lengths (in \f$\AA\f$); may be different in each
+ * <li> <a name="fglen">fglen</a> <i>xlen ylen zlen</i>
+ * <br> The finest mesh lengths (in \f$\AA\f$); may be different in each
  * direction.  
  * 
- * <dt> <a name="cgcent">cgcent</a> {<code>mol</code> <i>id</i> | <i> xcent
+ * <li> <a name="cgcent">cgcent</a> {<code>mol</code> <i>id</i> | <i> xcent
  * ycent zcent</i>}
- * <dd> The center of the coarsest mesh.  If the <code>grid mol</code> is used,
+ * <br> The center of the coarsest mesh.  If the <code>grid mol</code> is used,
  * <i>id</i> must be the ID of a molecule read in a previous <code>READ</code>
  * section.  Molecule IDs are assigned in the order they're read, starting at
  * 1.  If just <code>grid</code> is used, the next three numbers should be the
  * x, y, and z coordinates for the center of the grid.
  * 
- * <dt> <a name="fgcent">fgcent</a> {<code>mol</code> <i>id</i> | <i> xcent
+ * <li> <a name="fgcent">fgcent</a> {<code>mol</code> <i>id</i> | <i> xcent
  * ycent zcent</i>} 
- * <dd> The center of the finest mesh.  If the <code>grid mol</code> is used,
+ * <br> The center of the finest mesh.  If the <code>grid mol</code> is used,
  * <i>id</i> must be the ID of a molecule read in a previous <code>READ</code>
  * section.  Molecule IDs are assigned in the order they're read, starting at
  * 1.  If just <code>grid</code> is used, the next three numbers should be the
  * x, y, and z coordinates for the center of the grid.
  *
- * <dt> <a name="pdime"><code>pdime</code></a> <i>npx</i> <i>npy</i> <i>npz</i>
- * <dd> Array of processors for the calculation; processors are laid out on
+ * <li> <a name="pdime"><code>pdime</code></a> <i>npx</i> <i>npy</i> <i>npz</i>
+ * <br> Array of processors for the calculation; processors are laid out on
  * Cartesian grid over the actual mesh -- this specifies the number of
  * processors in each direction.
  * 
- * <dt> <a name="ofrac"><code>ofrac</code></a> <i>fraction</i>
- * <dd> The amount of overlap to include between processors' meshes.  This
+ * <li> <a name="ofrac"><code>ofrac</code></a> <i>fraction</i>
+ * <br> The amount of overlap to include between processors' meshes.  This
  * should be between 0 and 1; empirical evidence suggests that 0.1 is a good
  * choice.
  * 
  * 
- * </dl>
+ * </ul>
  *  
  * @subsection print PRINT statement
  * 
  * This is a very simple section that allows linear combinations of calculated
- * properties to be written to standard output.  It has the format
- * <blockquote>
+ * properties to be written to standard output.  It has the format<br><br>
  *    <code>print</code> <i>keyword</i> <i>id</i> <i>op</i> <i>id</i>
- * <i>op</i> <i>id</i> ... <code>end</code>
- * </blockquote>
+ * <i>op</i> <i>id</i> ... <code>end</code><br><br>
  * where spaces are important and the components are
- * <dl>
- * <dt> <i>keyword</i> 
- * <dd> Specifies the observable to operate on and is one of the following:
- *   <dl>
- *   <dt> <code>energy</code> <dd>  Perform the calculations on the total
+ * <ul>
+ * <li> <i>keyword</i> 
+ * <br> Specifies the observable to operate on and is one of the following:
+ *   <ul>
+ *   <li> <code>energy</code> <br>  Perform the calculations on the total
  *   energy 
- *   <dt> <code>force</code> <dd>  Perform the calculations on the force
+ *   <li> <code>force</code> <br>  Perform the calculations on the force
  *   components
- *   </dl>
- *   <dt> <i>id</i> 
- *   <dd> ELEC statement ID (they are assigned in increasing order of
+ *   </ul>
+ *   <li> <i>id</i> 
+ *   <br> ELEC statement ID (they are assigned in increasing order of
  *        declaration in the input file, starting at 1)  
- *   <dt> <i>op</i>
- *   <dd> Is the operation to perform and is one of the following:
- *     <dl>
- *     <dt> + <dd> Addition
- *     <dt> - <dd> Subtraction
- *     </dl>
- * </dl>
+ *   <li> <i>op</i>
+ *   <br> Is the operation to perform and is one of the following:
+ *     <ul>
+ *     <li> + <br> Addition
+ *     <li> - <br> Subtraction
+ *     </ul>
+ * </ul>
  * So a typical declaration might look like
  * <pre>
  * print energy 3 - 2 - 1 end

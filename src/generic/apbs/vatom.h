@@ -53,12 +53,11 @@
 #include "apbs/vhal.h"
 
 /** 
- *  @struct  Vatom
  *  @ingroup Vatom
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vatom class/module
  */
-struct Vatom {
+struct sVatom {
 
     double position[3];     /**< Atomic position */
     double radius;          /**< Atomic radius   */
@@ -68,11 +67,11 @@ struct Vatom {
 
 };
 
-/** @typedef Vatom
+/** 
  *  @ingroup Vatom
  *  @brief   Declaration of the Vatom class as the Vatom structure
  */
-typedef struct Vatom Vatom;
+typedef struct sVatom Vatom;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vatom: Inlineable methods (vatom.c)

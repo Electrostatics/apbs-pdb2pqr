@@ -61,7 +61,6 @@
 #define PBEPARM_MAXWRITE 10
 
 /**
- *  @struct  PBEparm
  *  @ingroup PBEparm
  *  @author  Nathan Baker
  *  @brief   Parameter structure for PBE variables from input files
@@ -69,7 +68,7 @@
  *           functions -- especially PBEparm_copy -- must be modified
  *           accordingly
  */
-struct PBEparm {
+struct sPBEparm {
 
     int molid;  /**< Molecule ID to perform calculation on */
     int setmolid;  /**< Flag, @see molid */
@@ -138,11 +137,11 @@ struct PBEparm {
                   * than the default values? */
 };
 
-/** @typedef PBEparm
+/** 
  *  @ingroup PBEparm
  *  @brief   Declaration of the PBEparm class as the PBEparm structure
  */
-typedef struct PBEparm PBEparm;
+typedef struct sPBEparm PBEparm;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)

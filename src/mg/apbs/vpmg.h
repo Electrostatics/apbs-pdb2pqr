@@ -70,7 +70,6 @@
 #define VPMGMAXPART 2000  
 
 /** 
- *  @struct  Vpmg
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vpmg class/module
@@ -79,7 +78,7 @@
  *  (written by Mike Holst) provided with the PMG code.
  *     
  */
-struct Vpmg {
+struct sVpmg {
 
   Vmem *vmem;                    /**< Memory management object for this class */
   Vpmgp *pmgp;                   /**< Parameters */
@@ -137,11 +136,11 @@ struct Vpmg {
   Vgrid *chargeMap;              /**< External charge distribution map */
 };
 
-/** @typedef Vpmg
+/** 
  *  @ingroup Vpmg
  *  @brief   Declaration of the Vpmg class as the Vpmg structure
  */
-typedef struct Vpmg Vpmg;
+typedef struct sVpmg Vpmg;
 
 /* /////////////////////////////////////////////////////////////////////////
 /// Inlineable methods

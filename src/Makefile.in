@@ -106,7 +106,6 @@ apbs_do_tools = @apbs_do_tools@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
 bindir = @bindir@
-blas_do_src = @blas_do_src@
 blas_lib = @blas_lib@
 build = @build@
 build_alias = @build_alias@
@@ -164,7 +163,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = generic mg fem @blas_do_src@
+always_built_SUBDIRS = generic mg fem 
 
 SUBDIRS = $(always_built_SUBDIRS) aaa_inc aaa_lib .
 subdir = src

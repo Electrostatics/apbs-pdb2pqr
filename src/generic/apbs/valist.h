@@ -58,12 +58,11 @@
 #include "apbs/vparam.h"
 
 /** 
- *  @struct  Valist
  *  @ingroup Valist
  *  @author  Nathan Baker
  *  @brief   Container class for list of atom objects
  */
-struct Valist { 
+struct sValist { 
 
   int number;         /**< Number of atoms in list */
   double center[3];   /**< Molecule center (xmin - xmax)/2, etc.*/
@@ -76,11 +75,11 @@ struct Valist {
 
 };
 
-/** @typedef Valist
+/**
  *  @ingroup Valist
  *  @brief Declaration of the Valist class as the Valist structure
  */
-typedef struct Valist Valist;
+typedef struct sValist Valist;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Valist: Inlineable methods (valist.c)

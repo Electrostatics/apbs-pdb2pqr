@@ -63,12 +63,11 @@
 
 
 /**
- *  @struct  Vmgrid
  *  @ingroup Vmgrid
  *  @author  Nathan Baker
  *  @brief   Multiresoltion oracle for Cartesian mesh data
  */
-struct Vmgrid {
+struct sVmgrid {
 
     int ngrids;                /**< Number of grids in hiearchy */
     Vgrid *grids[VMGRIDMAX];   /**< Grids in hiearchy.  Our convention will be
@@ -78,11 +77,11 @@ struct Vmgrid {
                                 *   parallel datasets, etc. */
 };
 
-/** @typedef Vmgrid
+/** 
  *  @ingroup Vmgrid
  *  @brief   Declaration of the Vmgrid class as the Vgmrid structure
  */
-typedef struct Vmgrid Vmgrid;
+typedef struct sVmgrid Vmgrid;
 
 /** @brief   Construct Vmgrid object 
  *  @ingroup Vmgrid

@@ -58,8 +58,9 @@
 /**
  * @brief  Adaptive refinment error estimate tolerance key
  * @ingroup FEMparm
+ * @author  Nathan Baker
  */
-enum FEMparm_EtolType {
+enum eFEMparm_EtolType {
     FET_SIMP=0,  /**< per-simplex error tolerance */
     FET_GLOB=1,  /**< global error tolerance */
     FET_FRAC=2   /**< fraction of simplices we want to have refined */
@@ -68,15 +69,17 @@ enum FEMparm_EtolType {
 /**
  * @brief  Declare FEparm_EtolType type
  * @ingroup  FEMparm
+ * @author  Nathan Baker
  */
-typedef enum FEMparm_EtolType FEMparm_EtolType;
+typedef enum eFEMparm_EtolType FEMparm_EtolType;
 
 /**
  * @brief  Adaptive refinment error estimator method
  * @ingroup FEMparm
- * @notes  Do not change these values; they correspond to settings in FEtk
+ * @note  Do not change these values; they correspond to settings in FEtk
+ * @author  Nathan Baker
  */
-enum FEMparm_EstType {
+enum eFEMparm_EstType {
     FRT_UNIF=0,  /**< Uniform refinement */
     FRT_GEOM=1,  /**< Geometry-based (i.e. surfaces and charges) refinement */
     FRT_RESI=2,  /**< Nonlinear residual estimate-based refinement */
@@ -89,13 +92,13 @@ enum FEMparm_EstType {
  * @brief  Declare FEMparm_EstType type
  * @ingroup  FEMparm
  */
-typedef enum FEMparm_EstType FEMparm_EstType;
+typedef enum eFEMparm_EstType FEMparm_EstType;
 
 /**
  * @brief  Calculation type 
  * @ingroup FEMparm
  */
-enum FEMparm_CalcType {
+enum eFEMparm_CalcType {
     FCT_MAN=0  /**< fe-manual */
 };
 
@@ -103,15 +106,14 @@ enum FEMparm_CalcType {
  * @brief  Declare FEMparm_CalcType type
  * @ingroup  FEMparm
  */
-typedef enum FEMparm_CalcType FEMparm_CalcType;
+typedef enum eFEMparm_CalcType FEMparm_CalcType;
 
 /**
- *  @struct  FEMparm
  *  @ingroup FEMparm
  *  @author  Nathan Baker
  *  @brief   Parameter structure for FEM-specific variables from input files
  */
-struct FEMparm {
+struct sFEMparm {
    
     int parsed;  /**< Flag:  Has this structure been filled with
                   * anything other than * the default values? (0 = no,
@@ -135,7 +137,7 @@ struct FEMparm {
     int setakeySOLVE;  /**< Boolean */
     int targetNum;    /**< Initial mesh will continue to be marked and refined
                         * with the method specified by akeyPRE until the mesh
-                        * contains this many simplies or until targetRes is
+                        * contains this many vertices or until targetRes is
                         * reached. */
     int settargetNum;  /**< Boolean */
     double targetRes; /**< Initial mesh will continue to be marked and refined
@@ -155,7 +157,7 @@ struct FEMparm {
  *  @ingroup FEMparm
  *  @brief   Declaration of the FEMparm class as the FEMparm structure
  */
-typedef struct FEMparm FEMparm;
+typedef struct sFEMparm FEMparm;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (nosh.c)

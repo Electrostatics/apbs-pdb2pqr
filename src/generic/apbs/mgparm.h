@@ -58,7 +58,7 @@
  * @brief  Calculation type 
  * @ingroup MGparm
  */
-enum MGparm_CalcType {
+enum eMGparm_CalcType {
     MCT_MAN=0,  /**< mg-manual */
     MCT_AUT=1,  /**< mg-auto */
     MCT_PAR=2,  /**< mg-para */
@@ -69,13 +69,13 @@ enum MGparm_CalcType {
  * @brief  Declare MGparm_CalcType type
  * @ingroup  MGparm
  */
-typedef enum MGparm_CalcType MGparm_CalcType;
+typedef enum eMGparm_CalcType MGparm_CalcType;
 
 /**
  * @brief  Centering method
  * @ingroup MGparm
  */
-enum MGparm_CentMeth {
+enum eMGparm_CentMeth {
     MCM_PNT=0,  /**< Center on a molecule */
     MCM_MOL=1  /**< Center on a point */
 };
@@ -84,9 +84,8 @@ enum MGparm_CentMeth {
  * @brief  Declare MGparm_CentMeth type
  * @ingroup  MGparm
  */
-typedef enum MGparm_CentMeth MGparm_CentMeth;
+typedef enum eMGparm_CentMeth MGparm_CentMeth;
 /**
- *  @struct  MGparm
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @brief   Parameter structure for MG-specific variables from input files
@@ -94,7 +93,7 @@ typedef enum MGparm_CentMeth MGparm_CentMeth;
  *           functions -- especially MGparm_copy -- must be modified
  *           accordingly
  */
-struct MGparm {
+struct sMGparm {
 
     MGparm_CalcType type;  /**< What type of MG calculation? */
     int parsed;  /**< Has this structure been filled? (0 = no, 1 = yes) */
@@ -172,7 +171,7 @@ struct MGparm {
  *  @ingroup MGparm
  *  @brief   Declaration of the MGparm class as the MGparm structure
  */
-typedef struct MGparm MGparm;
+typedef struct sMGparm MGparm;
 
 /** @brief   Get number of grid points in x direction
  *  @ingroup MGparm

@@ -60,6 +60,11 @@
  * @ingroup  Frontend */
 #define APBSRC 13
 
+/** 
+ * @brief  Set this macro to 1 for hierarchical basis, 0 for normal solver
+ * @ingroup  Frontend */
+#define USEHB 0
+
 /**
  * @brief  Structure to hold atomic forces
  * @ingroup  Frontend
@@ -158,6 +163,13 @@ VEXTERNC void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 VEXTERNC void printPBEPARM(PBEparm *pbeparm);
 
 /**
+ * @brief  Print out FE-specific params loaded from input
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  feparm  FEMparm object */
+VEXTERNC void printFEPARM(FEMparm *feparm);
+
+/**
  * @brief  Print out MG-specific params loaded from input
  * @ingroup  Frontend
  * @author  Nathan Baker
@@ -236,6 +248,24 @@ VEXTERNC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
  * @param dielEnergy  Set to polarization energy (in kT)
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
+  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
+  double *dielEnergy);
+
+/**
+ * @brief  Calculate electrostatic energies from FE solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param icalc  Index of calculation 
+ * @param fetk  FE object  array
+ * @param nenergy  Set to number of entries in energy arrays
+ * @param totEnergy  Set to total energy (in kT)
+ * @param qfEnergy  Set to charge-potential energy (in kT)
+ * @param qmEnergy  Set to mobile ion energy (in kT)
+ * @param dielEnergy  Set to polarization energy (in kT)
+ * @bug  "calcenergy 2" does not work
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int energyFE(NOsh* nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
 
@@ -337,5 +367,58 @@ VEXTERNC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
  * @ingroup  Frontend
  * @author  Nathan Baker and Robert Konecny */
 VEXTERNC void startVio();
+
+/**
+ * @brief  Initialize FE solver objects
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  icalc  Index in pbe, fetk to initialize -- calculation index
+ * @param nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param pbeparm  Generic PBE parameters
+ * @param pbe  Array of PBE objects 
+ * @param alist Array of atom lists 
+ * @param fetk  Array of FE solver objects 
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
+  Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
+  Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Pre-refine mesh before solve
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  i  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param fetk  Array of FE solver objects 
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int preRefineFE(int i, NOsh *nosh, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Partition mesh (if applicable)
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  i  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param fetk  Array of FE solver objects 
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int partFE(int i, NOsh *nosh, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Solve-estimate-refine
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  i  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param pbeparm  Generic PBE parameters
+ * @param fetk  Array of FE solver objects 
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int solveFE(int i, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
 
 #endif
