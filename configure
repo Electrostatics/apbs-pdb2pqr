@@ -2826,12 +2826,14 @@ trap 'rm -fr `echo "
     src/vpee/Makefile
     src/vgreen/Makefile
     src/vgrid/Makefile
+    src/vpmg/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
     tst/vacc/Makefile
     tst/vpee/Makefile
     tst/vmetis/Makefile
+    tst/vpmg/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
@@ -2979,12 +2981,14 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/vpee/Makefile
     src/vgreen/Makefile
     src/vgrid/Makefile
+    src/vpmg/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
     tst/vacc/Makefile
     tst/vpee/Makefile
     tst/vmetis/Makefile
+    tst/vpmg/Makefile
 
     inc/Makefile
     inc/apbs/Makefile

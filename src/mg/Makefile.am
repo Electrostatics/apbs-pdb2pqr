@@ -49,7 +49,12 @@ SUFFIXES = .H .h .C .cc .c .f .o
 
 libdir           = ${top_srcdir}/lib
 noinst_LIBRARIES    = libvpmg.a
-libvacc_a_SOURCES = buildAd.f
+libvpmg_a_SOURCES = buildAd.f buildBd.f buildGd.f buildPd.f cgd.f cgmgd.f \
+	cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f mblasd.f mgcsd.f \
+	mgdrvd.f mgfasd.f mgsubd.f  mikpckd.f mlinpckd.f ncgd.f ncgdrvd.f \
+	newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f nrchdrvd.f \
+	nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f pded.f powerd.f \
+	rand.c rchd.f secd.c smoothd.f sord.f wjd.f vpmgp.c vpmg.c
 INCLUDES         = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ @pmgc_inc@
 CFLAGS            = @CFLAGS@
 
