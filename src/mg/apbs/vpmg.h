@@ -100,6 +100,8 @@ typedef struct Vpmg {
 
 VEXTERNC Vpmg* Vpmg_ctor(Vpmgp *parms, Vpbe *pbe);
 VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
+VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD);
+VEXTERNC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD);
 VEXTERNC void Vpmg_dtor(Vpmg **thee);
 VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 
