@@ -344,6 +344,15 @@ VEXTERNC int NOsh_printWhat(NOsh *thee, int iprint);
  *  @returns An integer mapping of an ELEC statement to a calculation ID
  *           (@see elec2calc)
  */
+VEXTERNC char* NOsh_elecname(NOsh *thee, int ielec);
+
+/** @brief   Return the name of an elec statement        
+ *  @ingroup NOsh
+ *  @author  Todd Dolinsky
+ *  @param   thee NOsh object to use
+ *  @param   ielec ID of ELEC statement
+ *  @returns The name (if present) of an ELEC statement
+ */
 VEXTERNC int NOsh_elec2calc(NOsh *thee, int icalc);
 
 /** @brief   Return number of arguments to PRINT statement (@see printnarg)

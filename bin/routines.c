@@ -1430,8 +1430,12 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 
     int j, calcid;
     double ltenergy, gtenergy, scalar;
-
-    Vnm_tprint( 1, "print energy %d ", nosh->printcalc[i][0]);
+    
+    if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[i][0]], "") == 0){
+      Vnm_tprint( 1, "print energy %d ", nosh->printcalc[i][0]);
+    } else {
+      Vnm_tprint( 1, "print energy %d (%s) ", nosh->printcalc[i][0], nosh->elecname[nosh->printcalc[i][0]]);
+    }
     for (j=1; j<nosh->printnarg[i]; j++) {
         if (nosh->printop[i][j-1] == 0)
           Vnm_tprint(1, "+ ");
@@ -1441,7 +1445,11 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
             Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
-        Vnm_tprint(1, "%d ", nosh->printcalc[i][j]);
+        if (Vstring_strcasecmp(nosh->elecname[j+1], "") == 0){
+          Vnm_tprint( 1, "%d ", nosh->printcalc[i][j]);
+        } else {
+          Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[i][j], nosh->elecname[nosh->printcalc[i][j]]);
+        }
     }
     Vnm_tprint(1, "end\n");
     calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];

@@ -125,6 +125,12 @@ VPUBLIC int NOsh_elec2calc(NOsh *thee, int icalc) {
     return thee->elec2calc[icalc];
 }
 
+VPUBLIC char* NOsh_elecname(NOsh *thee, int ielec) {
+    VASSERT(thee != VNULL);
+    VASSERT(ielec < thee->nelec + 1);
+    return thee->elecname[ielec];
+} 
+
 VPUBLIC int NOsh_printOp(NOsh *thee, int iprint, int iarg) {
     VASSERT(thee != VNULL);
     VASSERT(iprint < thee->nprint);
