@@ -104,8 +104,10 @@ typedef struct Vpbe {
 
   double soluteCenter[3];
                       /* Center of solute molecule (A) */
-  double soluteRadius;
-                      /* Radius of solute molecule (A) */
+  double soluteRadius;/* Radius of solute molecule (A) */
+  double soluteMaxX;  /* Max dist from solute center in x-direction */
+  double soluteMaxY;  /* Max dist from solute center in y-direction */
+  double soluteMaxZ;  /* Max dist from solute center in z-direction */
   double soluteCharge;
                       /* Charge of solute molecule (e) */
 
@@ -126,6 +128,9 @@ typedef struct Vpbe {
     VEXTERNC double  Vpbe_getTemperature(Vpbe *thee);           
     VEXTERNC double  Vpbe_getSoluteDiel(Vpbe *thee); 
     VEXTERNC double  Vpbe_getSoluteRadius(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteMaxX(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteMaxY(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteMaxZ(Vpbe *thee);
     VEXTERNC double* Vpbe_getSoluteCenter(Vpbe *thee);
     VEXTERNC double  Vpbe_getSoluteCharge(Vpbe *thee);
     VEXTERNC double  Vpbe_getSolventDiel(Vpbe *thee);
@@ -146,6 +151,9 @@ typedef struct Vpbe {
 #   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 
 #   define Vpbe_getSoluteCenter(thee) ((thee)->soluteCenter)
 #   define Vpbe_getSoluteRadius(thee) ((thee)->soluteRadius)
+#   define Vpbe_getSoluteMaxX(thee) ((thee)->soluteMaxX)
+#   define Vpbe_getSoluteMaxY(thee) ((thee)->soluteMaxY)
+#   define Vpbe_getSoluteMaxZ(thee) ((thee)->soluteMaxZ)
 #   define Vpbe_getSoluteCharge(thee) ((thee)->soluteCharge)
 #   define Vpbe_getSolventDiel(thee) ((thee)->solventDiel)
 #   define Vpbe_getSolventRadius(thee) ((thee)->solventRadius)
