@@ -92,6 +92,8 @@ am__include = @am__include@
 am__quote = @am__quote@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
+blas_do_src = @blas_do_src@
+blas_lib = @blas_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
 inc_list = @inc_list@
@@ -133,7 +135,7 @@ THISLIB = mg
 noinst_LTLIBRARIES = libapbsmg.la
 libapbsmg_la_SOURCES = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f \
   buildPd.f cgd.f cgmgd.f cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f \
-  mblasd.f mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
+  mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
   nrchdrvd.f nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rchd.f \
   smoothd.f sord.f wjd.f mypde.f vpmgf.f vgrid.c vopot.c
@@ -152,12 +154,12 @@ libapbsmg_la_LDFLAGS =
 libapbsmg_la_LIBADD =
 am_libapbsmg_la_OBJECTS = vpmg.lo vpmgp.lo buildAd.lo buildBd.lo \
 	buildGd.lo buildPd.lo cgd.lo cgmgd.lo cgmgdrvd.lo dlphsubd.lo \
-	gsd.lo mainsubd.lo matvecd.lo mblasd.lo mgcsd.lo mgdrvd.lo \
-	mgfasd.lo mgsubd.lo mikpckd.lo mlinpckd.lo ncgd.lo ncgdrvd.lo \
-	newdrvd.lo newtond.lo ngsd.lo ngsdrvd.lo ninterpd.lo nrchd.lo \
-	nrchdrvd.lo nsmoothd.lo nsord.lo nsordrvd.lo nwjd.lo nwjdrvd.lo \
-	powerd.lo rchd.lo smoothd.lo sord.lo wjd.lo mypde.lo vpmgf.lo \
-	vgrid.lo vopot.lo
+	gsd.lo mainsubd.lo matvecd.lo mgcsd.lo mgdrvd.lo mgfasd.lo \
+	mgsubd.lo mikpckd.lo mlinpckd.lo ncgd.lo ncgdrvd.lo newdrvd.lo \
+	newtond.lo ngsd.lo ngsdrvd.lo ninterpd.lo nrchd.lo nrchdrvd.lo \
+	nsmoothd.lo nsord.lo nsordrvd.lo nwjd.lo nwjdrvd.lo powerd.lo \
+	rchd.lo smoothd.lo sord.lo wjd.lo mypde.lo vpmgf.lo vgrid.lo \
+	vopot.lo
 libapbsmg_la_OBJECTS = $(am_libapbsmg_la_OBJECTS)
 
 DEFS = @DEFS@

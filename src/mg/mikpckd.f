@@ -553,7 +553,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine fbound(ibound,nx,ny,nz,x,gxc,gyc,gzc)
+      subroutine fboundPMG(ibound,nx,ny,nz,x,gxc,gyc,gzc)
 c* *********************************************************************
 c* purpose:
 c*
@@ -571,7 +571,7 @@ cmdir 0 0
 c*
 c*    *** zero dirichlet? ***
       if (ibound .eq. 0) then 
-         call fbound00(nx,ny,nz,x)
+         call fboundPMG00(nx,ny,nz,x)
 c*
 c*    *** nonzero dirichlet ***
       else
@@ -609,7 +609,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine fbound00(nx,ny,nz,x)
+      subroutine fboundPMG00(nx,ny,nz,x)
 c* *********************************************************************
 c* purpose:
 c*

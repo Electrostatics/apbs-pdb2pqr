@@ -30,6 +30,7 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
   * The API has changed significantly; please see the Programmer's Manual.
   * Working (but still experimental) Python wrappers for major APBS functions.
   * More flexible installation capabilities (pointed out by Steve Bond)
+  * Added ability to use vendor-supplied BLAS
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02

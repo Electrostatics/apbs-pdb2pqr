@@ -36,7 +36,7 @@ oldincludedir = /usr/include
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ..
+top_builddir = ../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -127,16 +127,41 @@ wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
 
 AUTOMAKE_OPTIONS = no-dependencies
-SUFFIXES = .H .h .C .cc .c .f .o
+SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
+always_built_SUBDIRS = 
+SUBDIRS = $(always_built_SUBDIRS) .
+THISLIB = apbsblas
 
-SUBDIRS = mesh manip opendx @arpack_do_tools@
-subdir = tools
+noinst_LTLIBRARIES = libapbsblas.la
+libapbsblas_la_SOURCES = mblasd.f
+INCLUDES = @inc_list@
+AM_CFLAGS = @wall_pedantic_ansi@
+CFLAGS = @CFLAGS@
+LDFLAGS = @LDFLAGS@ @FLIBS@
+subdir = src/blas
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+
+libapbsblas_la_LDFLAGS =
+libapbsblas_la_LIBADD =
+am_libapbsblas_la_OBJECTS = mblasd.lo
+libapbsblas_la_OBJECTS = $(am_libapbsblas_la_OBJECTS)
+
+DEFS = @DEFS@
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
+CPPFLAGS = @CPPFLAGS@
+LIBS = @LIBS@
 depcomp =
 am__depfiles_maybe =
-DIST_SOURCES =
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+FFLAGS = @FFLAGS@
+DIST_SOURCES = $(libapbsblas_la_SOURCES)
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
@@ -144,10 +169,12 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
 DIST_COMMON = README Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
+SOURCES = $(libapbsblas_la_SOURCES)
+
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .H .h .C .cc .c .f .o
+.SUFFIXES: .y .l .H .h .m .C .cc .c .f .java .o .lo .obj
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -159,9 +186,29 @@ distclean-libtool:
 	-rm -f libtool
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  tools/Makefile
+	  $(AUTOMAKE) --gnu  src/blas/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+libapbsblas.la: $(libapbsblas_la_OBJECTS) $(libapbsblas_la_DEPENDENCIES) 
+	$(F77LINK)  $(libapbsblas_la_LDFLAGS) $(libapbsblas_la_OBJECTS) $(libapbsblas_la_LIBADD) $(LIBS)
+
+mostlyclean-compile:
+	-rm -f *.$(OBJEXT) core *.core
+
+distclean-compile:
+	-rm -f *.tab.c
+
+.f.o:
+	$(F77COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.f.obj:
+	$(F77COMPILE) -c -o $@ `cygpath -w $<`
+
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 uninstall-info-am:
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -261,7 +308,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-top_distdir = ..
+top_distdir = ../..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
@@ -298,7 +345,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile
+all-am: Makefile $(LTLIBRARIES)
 installdirs: installdirs-recursive
 installdirs-am:
 
@@ -328,12 +375,13 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
 distclean: distclean-recursive
 
-distclean-am: clean-am distclean-generic distclean-libtool \
-	distclean-tags
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-libtool distclean-tags
 
 dvi: dvi-recursive
 
@@ -359,23 +407,25 @@ maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
-mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool
 
 uninstall-am: uninstall-info-am
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) GTAGS all all-am check check-am clean \
-	clean-generic clean-libtool clean-recursive distclean \
-	distclean-generic distclean-libtool distclean-recursive \
-	distclean-tags distdir dvi dvi-am dvi-recursive info info-am \
-	info-recursive install install-am install-data install-data-am \
-	install-data-recursive install-exec install-exec-am \
-	install-exec-recursive install-info install-info-am \
-	install-info-recursive install-man install-recursive \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am installdirs-recursive maintainer-clean \
-	maintainer-clean-generic maintainer-clean-recursive mostlyclean \
+	clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	clean-recursive distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-recursive distclean-tags distdir \
+	dvi dvi-am dvi-recursive info info-am info-recursive install \
+	install-am install-data install-data-am install-data-recursive \
+	install-exec install-exec-am install-exec-recursive \
+	install-info install-info-am install-info-recursive install-man \
+	install-recursive install-strip installcheck installcheck-am \
+	installdirs installdirs-am installdirs-recursive \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-recursive mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
 	tags tags-recursive uninstall uninstall-am uninstall-info-am \
 	uninstall-info-recursive uninstall-recursive

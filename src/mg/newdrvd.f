@@ -245,7 +245,7 @@ c*    *** determine machine epsilon ***
       epsiln = epsmac(0)
 c*
 c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
-      call fbound00(nx,ny,nz,u)
+      call fboundPMG00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
 c*    print*,' new = [ '
@@ -283,7 +283,7 @@ c* 100  format(' ];',4(' ',a7,'=',1pe9.3,';'))
 c*
 c*    *** restore boundary conditions ***
       ibound = 1
-      call fbound(ibound,nx,ny,nz,u,gxcf,gycf,gzcf)
+      call fboundPMG(ibound,nx,ny,nz,u,gxcf,gycf,gzcf)
 c*
 c*    *** return and end ***
       return

@@ -76,6 +76,9 @@
 /* Do I use the C++ fast multipole code? */
 #undef USE_CXX_FMM
 
+/* Do I use my own BLAS? */
+#undef USE_PMG_BLAS
+
 /* Do I use inline functions? */
 #undef APBS_NOINLINE
 

@@ -8,6 +8,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
+CCLD = $(F77)
 
 noinst_PROGRAMS  = acc coulomb
 acc_SOURCES      = acc.c 

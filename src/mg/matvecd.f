@@ -789,7 +789,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine interp(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,pc)
+      subroutine interpPMG(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,pc)
 c* *********************************************************************
 c* purpose:
 c*
@@ -802,8 +802,8 @@ c* *********************************************************************
       double precision xin(*),xout(*),pc(nxc*nyc*nzc,*)
 c*
 c*    *** doit ***
-CZZZZ call interpZ(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout)
-      call interp2(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+CZZZZ call interpPMGZ(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout)
+      call interpPMG2(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2   pc(1,1),pc(1,2),pc(1,3),pc(1,4),pc(1,5),pc(1,6),pc(1,7),
      3   pc(1,8),pc(1,9),pc(1,10),pc(1,11),pc(1,12),pc(1,13),pc(1,14),
      4   pc(1,15),pc(1,16),pc(1,17),pc(1,18),pc(1,19),pc(1,20),pc(1,21),
@@ -812,7 +812,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine interp2(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+      subroutine interpPMG2(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2   oPC,oPN,oPS,oPE,oPW,oPNE,oPNW,oPSE,oPSW,
      3   uPC,uPN,uPS,uPE,uPW,uPNE,uPNW,uPSE,uPSW,
      4   dPC,dPN,dPS,dPE,dPW,dPNE,dPNW,dPSE,dPSW)
@@ -848,7 +848,7 @@ c*
 cmdir 0 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxc,nyc,nzc,xin)
+      call fboundPMG00(nxc,nyc,nzc,xin)
 c*
 c*    *** doit ***
 cmdir 3 1
@@ -931,7 +931,7 @@ c*             *** completely interior points ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxf,nyf,nzf,xout)
+      call fboundPMG00(nxf,nyf,nzf,xout)
 c*
 c*    *** return and end ***
       return
@@ -1004,7 +1004,7 @@ c*
 cmdir 0 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxf,nyf,nzf,xin)
+      call fboundPMG00(nxf,nyf,nzf,xin)
 c*
 c*    *** determine dimension factor ***
       dimfac  = 2.**idimenshun
@@ -1057,7 +1057,7 @@ c*             *** compute the restriction ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxc,nyc,nzc,xout)
+      call fboundPMG00(nxc,nyc,nzc,xout)
 c*
 c*    *** return and end ***
       return
@@ -1077,7 +1077,7 @@ c*
 cmdir 0 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxf,nyf,nzf,xin)
+      call fboundPMG00(nxf,nyf,nzf,xin)
 c*
 c*    *** doit ***
 cmdir 3 1
@@ -1097,12 +1097,12 @@ c*             *** compute the restriction ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxc,nyc,nzc,xout)
+      call fboundPMG00(nxc,nyc,nzc,xout)
 c*
 c*    *** return and end ***
       return
       end
-      subroutine interpZ(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout)
+      subroutine interpPMGZ(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout)
 c* *********************************************************************
 c* purpose:
 c*
@@ -1122,7 +1122,7 @@ c*
 cmdir 0 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxc,nyc,nzc,xin)
+      call fboundPMG00(nxc,nyc,nzc,xin)
 c*
 c*    *** set interpolation weights ***
       c0 = 1.0d0
@@ -1198,7 +1198,7 @@ c*             *** completely interior points ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxf,nyf,nzf,xout)
+      call fboundPMG00(nxf,nyf,nzf,xout)
 c*
 c*    *** return and end ***
       return
@@ -1232,7 +1232,7 @@ c*
 cmdir 0 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxf,nyf,nzf,xin)
+      call fboundPMG00(nxf,nyf,nzf,xin)
 c*
 c*    *** determine dimension factor ***
       dimfac  = 2.**idimenshun
@@ -1274,7 +1274,7 @@ c*             *** compute the restriction ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxc,nyc,nzc,xout)
+      call fboundPMG00(nxc,nyc,nzc,xout)
 c*
 c*    *** return and end ***
       return
