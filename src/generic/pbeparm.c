@@ -106,6 +106,7 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setcalcforce = 0;       
     thee->setwritepot = 0; 
     thee->setwriteacc = 0; 
+    thee->setwritemat = 0; 
     thee->nion = 0;
     thee->swin = 0;
     thee->srad = 1.4;
@@ -208,6 +209,7 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if (!thee->setcalcforce) thee->calcforce = 0;
     if (!thee->setwritepot) thee->writepot = 0;
     if (!thee->setwriteacc) thee->writeacc = 0;
+    if (!thee->setwritemat) thee->writemat = 0;
 
     return 1;
 }
@@ -515,7 +517,7 @@ WRITEMAT keyword!\n", tok);
         }
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         strncpy(thee->writematstem, tok, VMAX_ARGLEN);
-        thee->setwriteacc = 1;
+        thee->setwritemat = 1;
         return 1;
 
     }
