@@ -3,31 +3,6 @@
  *  @author  Nathan Baker
  *  @brief   Sample program that illustrates OpenDX data I/O
  *  @version $Id$
- *  @attention
- *  @verbatim
- *
- * Copyright (c) 1999-2002.  The Regents of the University of California.
- * Portions Copyright (c) 1995.  Michael Holst.
- *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for educational, research, and not-for-profit purposes,
- * without fee and without a signed licensing agreement, is hereby granted,
- * provided that the above copyright notice, this paragraph and the
- * following two paragraphs appear in all copies, modifications, and
- * distributions.
- *
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
- * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
- * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
- * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- *
- * @endverbatim
  */
 
 #include "apbscfg.h"
@@ -68,34 +43,6 @@ int main(int argc, char **argv) {
 
     char *header = "\n\n\
     ----------------------------------------------------------------------\n\
-    Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.2.1 (April 23, 2002)\n\
-    \n\
-    Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
-    Dept. of Chemistry and Biochemistry\n\
-    Dept. of Mathematics, Scientific Computing Group\n\
-    University of California, San Diego \n\n\
-    Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 1999-2002.\n\
-    Nathan A. Baker\n\
-    All Rights Reserved.\n\n\
-    Permission to use, copy, modify, and distribute this software and its\n\
-    documentation for educational, research, and not-for-profit purposes,\n\
-    without fee and without a signed licensing agreement, is hereby granted,\n\
-    provided that the above copyright notice, this paragraph and the\n\
-    following two paragraphs appear in all copies, modifications, and\n\
-    distributions.\n\n\
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,\n\
-    INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST\n\
-    PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,\n\
-    EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH\n\
-    DAMAGE.\n\n\
-    THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT\n\
-    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\n\
-    PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF\n\
-    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\
-    OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
-    MODIFICATIONS.\n\
     ----------------------------------------------------------------------\n\
     \n\n";
 
