@@ -15,6 +15,7 @@ CLEANFILES       = apbslibc.so
 if PY_PRESENT
    noinst_PROGRAMS       = apbslibc.so
    apbslibc_so_SOURCES   = apbslib.c
-   apbslibc_so_LDADD     = ${top_builddir}/bin/libapbsmainroutines.la ${top_builddir}/src/aaa_lib/libapbs.la @lib_list@ $(PY_LDEXTRA)
-   apbslibc_so_LDFLAGS   = $(PY_SHARED) 
+   apbslibc_so_LINK      = $(CC) $(PY_LINKFLAGS)
+   apbslibc_so_LDFLAGS   = -o $@ $(PY_SHARED)
+   apbslibc_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
 endif

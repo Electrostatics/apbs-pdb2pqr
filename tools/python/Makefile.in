@@ -86,7 +86,8 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PY_CFLAGS = @PY_CFLAGS@
-PY_LDEXTRA = @PY_LDEXTRA@
+PY_LDFLAGS = @PY_LDFLAGS@
+PY_LINKFLAGS = @PY_LINKFLAGS@
 PY_PRESENT_FALSE = @PY_PRESENT_FALSE@
 PY_PRESENT_TRUE = @PY_PRESENT_TRUE@
 PY_SHARED = @PY_SHARED@
@@ -176,8 +177,9 @@ CLEANFILES = apbslibc.so
 
 @PY_PRESENT_TRUE@noinst_PROGRAMS = apbslibc.so
 @PY_PRESENT_TRUE@apbslibc_so_SOURCES = apbslib.c
-@PY_PRESENT_TRUE@apbslibc_so_LDADD = ${top_builddir}/bin/libapbsmainroutines.la ${top_builddir}/src/aaa_lib/libapbs.la @lib_list@ $(PY_LDEXTRA)
-@PY_PRESENT_TRUE@apbslibc_so_LDFLAGS = $(PY_SHARED) 
+@PY_PRESENT_TRUE@apbslibc_so_LINK = $(CC) $(PY_LINKFLAGS)
+@PY_PRESENT_TRUE@apbslibc_so_LDFLAGS = -o $@ $(PY_SHARED)
+@PY_PRESENT_TRUE@apbslibc_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
 subdir = tools/python
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
@@ -189,8 +191,8 @@ PROGRAMS = $(noinst_PROGRAMS)
 @PY_PRESENT_TRUE@am_apbslibc_so_OBJECTS = apbslib.$(OBJEXT)
 apbslibc_so_OBJECTS = $(am_apbslibc_so_OBJECTS)
 @PY_PRESENT_TRUE@apbslibc_so_DEPENDENCIES = \
-@PY_PRESENT_TRUE@	${top_builddir}/bin/libapbsmainroutines.la \
-@PY_PRESENT_TRUE@	${top_builddir}/src/aaa_lib/libapbs.la
+@PY_PRESENT_TRUE@	${top_builddir}/bin/.libs/libapbsmainroutines.a \
+@PY_PRESENT_TRUE@	${top_builddir}/src/aaa_lib/.libs/libapbs.a
 @PY_PRESENT_FALSE@apbslibc_so_DEPENDENCIES =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
@@ -224,7 +226,7 @@ clean-noinstPROGRAMS:
 	done
 apbslibc.so$(EXEEXT): $(apbslibc_so_OBJECTS) $(apbslibc_so_DEPENDENCIES) 
 	@rm -f apbslibc.so$(EXEEXT)
-	$(LINK) $(apbslibc_so_LDFLAGS) $(apbslibc_so_OBJECTS) $(apbslibc_so_LDADD) $(LIBS)
+	$(apbslibc_so_LINK) $(apbslibc_so_LDFLAGS) $(apbslibc_so_OBJECTS) $(apbslibc_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
