@@ -48,14 +48,20 @@ Authors                            Contributions
 Nathan Baker                       Primary author
 <nbaker@wasabi.ucsd.edu>
 
-Michael Holst                      Primary author of MC.  Provided
-<mholst@math.ucsd.edu>              templates for:
-                                      Source code directory structure and
+Michael Holst                      Primary author of FETK & PMG.  Provided
+<mholst@math.ucsd.edu>             templates for:
+                                      - Source code directory structure and
                                         autoconf files
-                                      Driver PDE program files in the work
+                                      - Driver PDE program files in the work
                                         directory
-                                   Some of the mesh and protein coordinate
-                                      files under work/
+				      - Some of the mesh and protein coordinate
+				        files under work/
+                                      - PMG driver code examples
 
 Philippe Hunenberger               Provided example code for parsing of
-<phil@igc.phys.chem.ethz.ch>         PDB files in valist/valist.c
+<phil@igc.phys.chem.ethz.ch>       PDB files in valist/valist.c
+
+Dave Sept                          Provided algorithms for diffusion-based
+<dsept@mccammon.ucsd.edu>          error estimate smoothing and several of the
+                                   biomolecular solvation/binding energy test
+                                   cases

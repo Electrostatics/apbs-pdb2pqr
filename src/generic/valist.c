@@ -304,3 +304,107 @@ VPUBLIC int Valist_readPDB(Valist *thee, char *path, char *parameter_path) {
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_buildMesh
+//
+// Purpose:   Build a cuboid 3D mesh to surround the molecule contained in this
+//            Valist.  The mesh will have rectagular sides and consist of 6
+//            simplices/8 vertices with all boundaries Dirichlet.  The mesh
+//            will be written, in MCSF format, to the output "path" specified
+//            by the arguments below.
+//
+// Arguments: size  The factor by which the mesh is larger than the
+//                  biomolecule.  In other words, if the smallest box
+//                  containing the protein is dx x dy x dz, then the mesh will
+//                  be (size*dx) x (size*dy) x (size*dz).  Clearly, size > 1.
+//            iodev Where we write the data: 
+//                    FILE -- to some file
+//                    INET -- to an INET socket
+//                    BUFF -- to a buffer in memory
+//                    UNIX -- to a UNIX domain socket
+//            iofmt Data format that we write:
+//                    ASC -- ASCII
+//                    XDR -- Network byte order format
+//            thost The hostname to which we may connect the socket
+//            fname The file name
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Valist_buildMesh(Valist *thee, double size, const char *iodev,
+  const char *iofmt, const char *thost, const char *fname) {
+
+    Vatom *atom;
+    Vio *sock;
+    double centC[3], minC[3], maxC[3], pos, rad;
+    double x0, x1, y0, y1, z0, z1;
+    int i, j;
+
+    VASSERT(thee != VNULL);
+
+    /* Get the protein center and dimensions */
+    atom = &((thee->atoms)[0]);
+    for (j=0; j<3; j++) {
+       rad = Vatom_getRadius(atom);
+       pos = (Vatom_getPosition(atom))[j];
+       minC[j] = pos - rad;
+       maxC[j] = pos + rad;
+       centC[j] = pos;
+    }
+    for (i=1; i<thee->number; i++) {
+        for (j=0; j<3; j++) {
+            pos = (Vatom_getPosition(atom))[j];
+            centC[j] += pos;
+            if ((pos+rad) > maxC[j]) maxC[j] = (pos + rad);
+            if ((pos-rad) < minC[j]) minC[j] = (pos - rad);
+        }
+    }
+    for (j=0; j<3; j++) centC[j] = centC[j]/((double)(thee->number));
+
+    /* Determine the box corner positions */
+    x0 = centC[0] - size*(maxC[0]-minC[0])/2;
+    x1 = centC[0] + size*(maxC[0]-minC[0])/2;
+    y0 = centC[1] - size*(maxC[1]-minC[1])/2;
+    y1 = centC[1] + size*(maxC[1]-minC[1])/2;
+    z0 = centC[2] - size*(maxC[2]-minC[2])/2;
+    z1 = centC[2] + size*(maxC[2]-minC[2])/2;
+   
+    /* Open up a socket for writing out the mesh */ 
+    sock = Vio_ctor(iodev, iofmt, thost, fname, "w");
+    VASSERT(sock != VNULL);
+
+    /* Write out the MCSF header */
+    Vio_printf(sock, "mcsf_begin=1;\n");
+    Vio_printf(sock, "dim=3;\n");
+    Vio_printf(sock, "dimii=3;\n");
+    Vio_printf(sock, "vertices=8;\n");
+    Vio_printf(sock, "simplices=6;\n");
+
+    /* Write out the vertices */
+    Vio_printf(sock, "vert=[\n");
+    Vio_printf(sock, "0 0  %11.10e %11.10e %11.10e\n", x0, y0, z0);
+    Vio_printf(sock, "1 0  %11.10e %11.10e %11.10e\n", x1, y0, z0);
+    Vio_printf(sock, "2 0  %11.10e %11.10e %11.10e\n", x0, y1, z0);
+    Vio_printf(sock, "3 0  %11.10e %11.10e %11.10e\n", x1, y1, z0);
+    Vio_printf(sock, "4 0  %11.10e %11.10e %11.10e\n", x0, y0, z1);
+    Vio_printf(sock, "5 0  %11.10e %11.10e %11.10e\n", x1, y0, z1);
+    Vio_printf(sock, "6 0  %11.10e %11.10e %11.10e\n", x0, y1, z1);
+    Vio_printf(sock, "7 0  %11.10e %11.10e %11.10e\n", x1, y1, z1);
+    Vio_printf(sock, "];\n");
+
+    /* Write out the simplices */
+    Vio_printf(sock, "simp=[\n");
+    Vio_printf(sock, "0 0 0    0 1 0 1   0 5 1 2\n");
+    Vio_printf(sock, "1 0 0    0 1 1 0   0 5 2 4\n");
+    Vio_printf(sock, "2 0 0    0 1 0 1   1 5 3 2\n");
+    Vio_printf(sock, "3 0 0    0 1 0 1   3 5 7 2\n");
+    Vio_printf(sock, "4 0 0    1 1 0 0   2 5 7 6\n");
+    Vio_printf(sock, "5 0 0    1 1 0 0   2 5 6 4\n");
+    Vio_printf(sock, "];\n");
+
+    /* Write out the MCSF footer */
+    Vio_printf(sock, "mcsf_end=1;\n");
+
+    /* Close the socket */
+    Vio_dtor(&sock);
+}
+
