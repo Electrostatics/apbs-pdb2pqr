@@ -117,7 +117,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
         thee->mgsolv = 0;
     } else {                 
         Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgcoar = 2, mgsolv = 0\n");
-#if 1                               /* Fastest convergence */
+#if 0                               /* Fastest convergence, but lots of mem */
         thee->meth = 0;
         thee->mgcoar = 2;
         thee->mgsolv = 0;
