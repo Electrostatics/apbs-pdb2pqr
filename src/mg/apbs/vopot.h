@@ -86,7 +86,8 @@ typedef struct Vopot Vopot;
  */
 #define VOPOT_BCFL 1
 
-/** @brief   Construct Vopot object
+/** @brief   Construct Vopot object with values obtained from Vpmg_readDX (for
+ *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   nx    Number grid points in x direction
@@ -107,7 +108,8 @@ VEXTERNC Vopot*  Vopot_ctor(int nx, int ny, int nz,
                   double xmin, double ymin, double zmin,
                   double *data, Vpbe *pbe);
 
-/** @brief   Initialize Vopot object
+/** @brief   Initialize Vopot object with values obtained from Vpmg_readDX (for
+ *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Pointer to newly allocated Vopot object
