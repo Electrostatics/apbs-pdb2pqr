@@ -307,9 +307,8 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 
     double totEnergy = 0.0;
-    double dielEnergy = 0.0;
     double qfEnergy = 0.0;
-    double qmEnergy = 0.0;
+    double dqmEnergy = 0.0;
 
     VASSERT(thee != VNULL);
 
@@ -317,16 +316,16 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
         Vnm_print(0, "Vfetk_energy:  calculating full PBE energy\n");
         Vnm_print(0, "Vfetk_energy:  bulk ionic strength = %g M\n",
           Vpbe_getBulkIonicStrength(thee->pbe));
-        qmEnergy = Vfetk_qmEnergy(thee, color, nonlin);
-        Vnm_print(0, "Vfetk_energy:  qmEnergy = %g kT\n", qmEnergy);
+        dqmEnergy = Vfetk_dqmEnergy(thee, color);
+        Vnm_print(0, "Vfetk_energy:  dqmEnergy = %g kT\n", dqmEnergy);
         qfEnergy = Vfetk_qfEnergy(thee, color);
         Vnm_print(0, "Vfetk_energy:  qfEnergy = %g kT\n", qfEnergy);
-        dielEnergy = Vfetk_dielEnergy(thee, color);
-        Vnm_print(0, "Vfetk_energy:  dielEnergy = %g kT\n", dielEnergy);
 
-        totEnergy = qfEnergy - dielEnergy - qmEnergy;
+        totEnergy = qfEnergy - dqmEnergy;
     } else {
         Vnm_print(0, "Vfetk_energy:  calculating only q-phi energy\n");
+        dqmEnergy = Vfetk_dqmEnergy(thee, color);
+        Vnm_print(0, "Vfetk_energy:  dqmEnergy = %g kT (NOT USED)\n", dqmEnergy);
         qfEnergy = Vfetk_qfEnergy(thee, color);
         Vnm_print(0, "Vfetk_energy:  qfEnergy = %g kT\n", qfEnergy);
         totEnergy = 0.5*qfEnergy;
@@ -440,7 +439,7 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 //
 // Purpose:  Calculate (u, A u), where 
 //              flag = 0     A is the tangent operator evaluated at u = 0
-//                           (Poisson equation energy norm)
+//                           (Helmholtz equation energy norm)
 //              flag = 1     A is the dual tangent operator operator evaluated
 //                           at current solution
 //              flag = 2     A is the tangent operator evaluated at the current
@@ -506,7 +505,8 @@ VPUBLIC double Vfetk_dielEnergy(Vfetk *thee, int color) {
     int smid;
     double totVal, simVal;
 
-    Vnm_print(2, "Vfetk_dielEnergy:  partition information ignored!\n");
+    if (color>=0) 
+      Vnm_print(2, "Vfetk_dielEnergy:  partition information ignored!\n");
 
     totVal = 0.25*Vfetk_energyNorm(thee, 0)/Vpbe_getZmagic(thee->pbe);
 
@@ -576,6 +576,27 @@ VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
 
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_dqmEnergy
+//
+// Purpose:  Calculate dielectric and mobile ion energy in kT.
+//           The argument color allows the user to control the partition on
+//           which this energy is calculated; if (color == -1) no restrictions
+//           are used.  The solution is obtained from the finest level of the
+//           internal AM object, but atomic data from the Vpbe object is used
+//           to calculate the energy
+//
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           assem.c routines in MC.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) { 
+
+    return AM_evalJ(thee->am, AM_maxLevel(thee->am));
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_qmEnergy
 //
 // Purpose:  Calculate mobile ion energy in kT.
@@ -587,6 +608,8 @@ VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
 //
 // Notes:    Large portions of this routine are borrowed from Mike Holst's
 //           assem.c routines in MC.
+//
+//           IT IS POSSIBLE THAT THIS ROUTINE IS BROKEN
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -706,21 +729,26 @@ times!\n", nchop);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_getPoissonDet
+// Routine:  Vfetk_getDeterminant
 //
-// Purpose:  Calculate the determinant of the differential operator
-//                 A u = -\nabla cdot \epsilon \nabla u
+// Purpose:  Calculate the log of the determinant of the specified operator:
+//             flag = 0         Helmholtz operator (PBE tangent operator
+//                              evaluated at u = 0)
+//             flag = 1         Dual tangent operator
+//             flag = 2         Tangent operator (response function)
 //           in the current finite element basis.
 //           
 // Notes:    Uses SLU factorization and will be very slow for large matrices.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
+VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
 
     Bmat *A;
     Zslu *slu;
     Bvec *diag;
+    Bvec *u, *ud;
+    int pnumR[MAXV];
     /* Begin SuperLU-specific objects */
     SuperMatrix *L;
     SCformat *Astore;
@@ -729,28 +757,33 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
     int *col_to_sup, *sup_to_col, *rowind, *rowind_colptr;
     /* End SuperLU-specific objects */
     Alg *alg; 
-    int level;
-    double lndet, det;
+    AM *am;
+    int level, ip[10];
+    double lndet, det, rp[10];
 
     VASSERT(thee != VNULL);
+    am = thee->am;
+    VASSERT(am != VNULL);
+
+    if (color>=0) Vnm_print(2,"Vfetk_lnDet: color argument ignored!\n");
 
     /* Get the max level from AM */
     level = AM_maxLevel(thee->am);
-    /* Get the alg object at that level */
-    alg = AM_alg(thee->am, level);
 
-    if (color>=0) Vnm_print(2,"Vfetk_getPoissonDet: color argument ignored!\n");
-    Vnm_print(2,"Vfetk_getPoissonDet: this routine will destroy stiffness matrix!!\n");
-
-    /* Get stiffness matrix */
-    A = alg->A;
+    /* Assemble the requested operator */
+    Vnm_print(1, "Vfetk_lnDet: assembling operator...\n");
+    AM_zeroMatrix(thee->am, level);
+    AM_init(am, level, W_f, 0.);
+    AM_assem(am, level, flag, W_u, W_ud, W_f, ip, rp);
 
     /* Au = A u */
-    Vnm_print(1, "Vfetk_getPoissonDet: factoring stiffness matrix...\n");
+    alg = AM_alg(thee->am, level);
+    A = alg->A;
+    Vnm_print(1, "Vfetk_lnDet: factoring matrix...\n");
     fflush(stdout);
     if (Bmat_sluFactor(A) == 0) {
-        Vnm_print(2, "Vfetk_getPoissonDet:  Error factoring matrix!\n");
-        Vnm_print(2, "Vfetk_getPoissonDet:  Last state = %d\n", A->state);
+        Vnm_print(2, "Vfetk_lnDet:  Error factoring matrix!\n");
+        Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", A->state);
         return 0.0;
     }
 
@@ -774,7 +807,8 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
     slu = A->slu;
     L = (SuperMatrix *)(slu->L);
     /* Stolen from dPrint_SuperNode_Matrix (SuperLU 2.0) */
-    Vnm_print(1, "CALCULATING DETERMINANT (ASSUMING POSITIVE):\n");
+    Vnm_print(1, "Vfetk_lnDet:  Calculating log determinant \
+(assuming SPD!)...\n");
     n = L->ncol;
     Astore = (SCformat *)(L->Store);
     dp = (double *) Astore->nzval;
@@ -792,15 +826,14 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
             for (i = rowind_colptr[c]; i < rowind_colptr[c+1]; ++i) {
                 if (rowind[i] == j) {
                     Lii = dp[d++];
-                    /* Vnm_print(1, "L(%d, %d) = %g\n", j, j, Lii); */
                     lndet += log(VABS(Lii));
                 } else d++;
             }
         }
     }
-    Vnm_print(1, "LOG DETERMINANT = %g\n", lndet);
+    Vnm_print(0, "Vfetk_lnDet:  ln(det(A)) = %g\n", lndet);
 
-    return 0.0;
+    return lndet;
 }
     
     
@@ -976,9 +1009,9 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
             ftpB[2] = VBOUNDARY( SS_faceType(sm,fnum[2]) );
             /* if any of the faces are Boundary, then mark vertex Boundary */
             if ( ftpB[0] || ftpB[1] || ftpB[2] ) {
+
                 /* deal with existing vertex type */
                 if (vtpI) (gm->numBV)++;
-
 
                 /* okay, determine max boundary flag (including vtp) */
                 if (ftpB[0]) vtp = VMAX2(vtp,ftp[0]);
