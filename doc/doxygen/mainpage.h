@@ -2,6 +2,9 @@
  *  
  *  <center>APBS was written by Nathan A. Baker.<br>
  *          Additional contributing authors listed in the code documentation.
+ * </center>
+ * 
+ * <hr width="100%">
  *
  * <blockquote>
  * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.<br>
@@ -25,6 +28,7 @@
  * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.<br>
  * </blockquote>
  * 
+ * <hr width="100%">
  *
  *  @section toc   Table of Contents
  *  <ul>
