@@ -815,17 +815,32 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
 
+#define VMAXLOCALCOLORSDONTREUSETHISVARIABLE 1024
     SS *simp;
-    int iatom, natoms;
+    int i, natoms;
+    int ncolors, nac[VMAXLOCALCOLORSDONTREUSETHISVARIABLE];
 
     VASSERT(thee != VNULL);
 
     natoms = Valist_getNumberAtoms(thee->alist);
 
-    for (iatom=0; iatom<natoms; iatom++) {
-        simp = Vcsm_getSimplex(thee->csm, 0, iatom);
-        thee->csm->colors[iatom] = SS_chart(simp);
+    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
+    for (i=0; i<natoms; i++) {
+        simp = Vcsm_getSimplex(thee->csm, 0, i);
+        thee->csm->colors[i] = SS_chart(simp);
+        nac[SS_chart(simp)] = 1;
     }
+
+    /* Bookkeeping */
+    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) 
+      if (nac[i] == 0) break;
+    ncolors = i;
+    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
+    for (i=0; i<natoms; i++) {
+        simp = Vcsm_getSimplex(thee->csm, 0, i);
+        (nac[SS_chart(simp)])++;
+    }
+    for (i=0; i<ncolors; i++) Vnm_print(2, "Vpbe_setAtomColors: Part %d has %d atoms\n", i, nac[i]);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

@@ -105,6 +105,25 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
 
     VASSERT(thee != VNULL);
 
+    /* Sanity check on input values */
+    if (killFlag == 0) {
+        Vnm_print(2, "Vpee_ctor2: No error attenuation outside partition.\n");
+    } else if (killFlag == 1) {
+        Vnm_print(2, "Vpee_ctor2: Error outside local partition ignored.\n");
+    } else if (killFlag == 2) {
+        Vnm_print(2, "Vpee_ctor2: Error ignored outside sphere with radius %4.3f times the radius of the circumscribing sphere\n", killParam);
+        if (killParam < 1.0) {
+          Vnm_print(2, "Vpee_ctor2: Warning! Parameter killParam = %4.3 < 1.0!\n", 
+            killParam);
+          Vnm_print(2, "Vpee_ctor2: This may result in non-optimal marking and refinement!\n");
+        }
+    } else if (killFlag == 3) {
+        Vnm_print(2, "Vpee_ctor2: Error outside local partition and immediate neighbors ignored [NOT IMPLEMENTED].\n");
+    } else {
+        Vnm_print(2, "Vpee_ctor2: UNRECOGNIZED killFlag PARAMETER! BAILING!.\n");
+        VASSERT(0);
+    }
+        
     thee->gm = gm;
     thee->localPartID = localPartID;
     thee->killFlag = killFlag;
