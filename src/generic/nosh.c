@@ -178,7 +178,6 @@ VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
     for (i=0; i<NOSH_MAXCALC; i++) {
         thee->calc[i].mgparm = VNULL;
         thee->calc[i].femparm = VNULL;
-        thee->calc[i].calctype = -1;
     }
 
     return 1; 
