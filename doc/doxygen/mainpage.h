@@ -383,83 +383,91 @@
  * The <code>apbs/tools</code> directory contains several (hopefully) useful
  * accessories for working with APBS:
  * <dl>
- * <dt>conversion/pdb2qr  <dd> Convert a PDB file to PQR format (as read by
- * APBS) with the help of a parameter file (see conversion/param).  Contributed
- * by Dave Sept.
  * <dt><a href="http://nbcr.sdsc.edu/pdb2pqr/index.html">PDB2PQR web service</a>
  * <dd>Fix, protonate, and convert a PDB file to PQR format using an
  * NBCR-supported web portal with a <a
  * href="http://www.cmbi.kun.nl/whatif/">WHATIF</a> backend.  Provided by Jens
  * Nielsen and Jerry Greenberg; supported by NBCR.
+ * <dt>arpack/driver  <dd>If APBS linked with ARPACK, perform eigenvalue
+ * analyses of matrices produced by APBS.  Written by Nathan Baker.
+ * <dt>conversion/pdb2qr  <dd> Convert a PDB file to PQR format (as read by
+ * APBS) with the help of a parameter file (see conversion/param).  Contributed
+ * by Dave Sept.
  * <dt>conversion/pdb2qcd  <dd> Convert a QCD file (i.e., UHBD format for a
- * molecule) to PQR format.
+ * molecule) to PQR format.  Written by Nathan Baker.
  * <dt>conversion/amber2charmm <dd> A script which converts a PDB file with
  * AMBER atom names to a PDB file with CHARMm atom names.  Useful for
- * preprocessing files before converting with pdb2pqr
- * 
+ * preprocessing files before converting with pdb2pqr.  Written by Nathan
+ * Baker.
  * <dt> conversion/WHATIF2AMBER.sed <dd> A sed script for converting a PDB file
  * with WHATIF atom names to a PDB file with CHARMm atom names.  Useful for
  * preprocessing files before converting with pdb2pqr.  Contributed by Chiansan
  * Ma.
- * 
  * <dt> conversion/param <dd> A collection of parameter files in UHBD format
  * (contributed by Dave Sept and Adrian Elcock) suitable for use with pdb2pqr.
- * 
+ *
  * <dt> manip/acc <dd> A program for calculating molecular volumes, surface
- * areas, etc. from molecules in PQR format.
- * 
+ * areas, etc. from molecules in PQR format.  Written by Nathan Baker.
+ * <dt> manip/born <dd> A crude program for calculating Generalized Born
+ * energies.  Written by Nathan Baker (and not really debugged).
  * <dt> manip/collisions <dd> Useful for looking for collisions between two
  * molecules when trying to set up a binding energy calculation.  Contributed by
  * Dave Sept.
- * 
+ * <dt> manip/coulomb <dd> A simple program for printing out forces and
+ * energies as calculated (analytically) from Coulomb's law.  Written by Nathan
+ * Baker.
+ * <dt> manip/psize.py <dd> Get the dimensions and center of a molecule in PQR
+ * format.  Very useful for setting up input files (i.e., grid dimensions,
+ * lengths, spacings, etc.) for APBS calculations.   Contributed by Todd
+ * Dolinsky and Nathan Baker.
  * <dt> manip/psize <dd> Get the dimensions and center of a molecule in PQR
  * format.  Very useful for setting up input files (i.e., grid dimensions,
- * lengths, spacings, etc.) for APBS calculations.  Contributed by Dave Sept.
- * 
+ * lengths, spacings, etc.) for APBS calculations.  NOTE:  THIS SCRIPT HAS BEEN
+ * SUPERCEDED BY manip/psize.py.  Contributed by Dave Sept; modified by Nathan
+ * Baker and Todd Dolinsky.
  * <dt> manip/shift <dd> Move the center of a molecule in PQR format around.
  * Contributed by Dave Sept.
- * 
+ *
  * <dt> mesh/mgmesh <dd> List acceptable grid dimensions/multigrid levels
  * combinations.  Saves considerable headaches with math. :)
- * 
  * <dt> mesh/dxmath <dd> Perform arithmetic operations on OpenDX-format grids
  * and scalar quantities.  Similar to UHBD's <code>gridcalc</code> utility; run
  * code with no arguments for instructions.
- * 
  * <dt> mesh/uhbd_asc2bin <dd> Converts UHBD-format grid files from ASCII to
  * binary.  Contributed by Dave Sept.
  * 
  * <dt> opendx/average <dd> Basically example code for OpenDX manipulation in
- * APBS.  Averages potential along an axis.
- * 
- * <dt> opendx/read  <dd> Basically example code for OpenDX manipulation in
- * APBS.  Reads in DX file and spits out some information.
- * 
+ * APBS.  Averages potential along an axis.  Written by Nathan Baker
+ * <dt> opendx/benchmark <dd> Calculates time to read/write OpenDX data.
+ * Written by Nathan Baker.
+ * <dt> opendx/read  <dd> Basic example code for OpenDX manipulation in
+ * APBS.  Reads in DX file and spits out some information.  Written by Nathan
+ * Baker.
  * <dt> opendx/dx2mol <dd> For converting the OpenDX format of the
  * electrostatic potential to the MOLMOL format. MOLMOL is a popular free
  * molecular display program (<a
  * href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>).
  * Contributed by Jung-Hsin Lin.
- * 
- * 
  * <dt> opendx/potacc.* <dd> OpenDX visual program (*.net) and accessory files
- * for looking at potentials and molecular surfaces.
- * 
+ * for looking at potentials and molecular surfaces.  Written by Nathan Baker.
  * <dt> opendx/pot.* <dd> OpenDX visual program (*.net) and accessory files for
- * looking at potentials only.
- * 
+ * looking at potentials only.  Written by Nathan Baker.
  * <dt> opendx/multipot.* <dd> Sample OpenDX visual program (*.net) and
  * accessory files for looking at potentials as output by a parallel focusing
- * calculation.
+ * calculation.  Written by Nathan Baker.
  * 
+ * <dt> python/Makefile <dd> Run to generate Python-wrapped APBS code.
+ * Written by Todd Dolinksy with help from Alex Gillet and Michel Sanner.
+ * <dt> python/main.py <dd> Example Python driver code for used with the 
+ * APBS Python library.  Written by Todd Dolinsky and Nathan Baker.
+ *
  * <dt> vmd/read_dx </dt> <dd> Tcl commands for visualizing electrostatic
  * potentials in <a href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.
- * Contributed by Dave Sept.
- * 
+ * Contributed by Dave Sept; modified by Nathan Baker.
  * <dt> vmd/loadstuff.vmd </dt>  <dd> Sample command script for visualizing
  * electrostatic potentials in <a
  * href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.  Contributed by Dave
- * Sept.
+ * Sept; modified by Nathan Baker
  * 
  * </dl>
  * 

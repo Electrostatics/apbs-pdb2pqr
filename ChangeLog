@@ -3,10 +3,12 @@ BETA PUBLIC RELEASE VERSION 0.2.5       ??-??-02
 #############################################################################
 
   * Improved consistency between energies evaluated with "chgm 0" and "chgm 1"
-  * Added RPM capabilities courtesy of Steve Bond.
   * Made charge-field energy evaluation consistent for user-supplied charge
     maps
-  * Removed annoying excess verbosity from Vgrid
+  * Added new psize.py script courtesy of Todd Dolinsky.
+  * Updated list of APBS-related tools in User Guide.
+  * Added RPM capabilities courtesy of Steve Bond.
+  * Removed annoying excess verbosity from Vgrid.
   * Updated Blue Horizon compilation instructions (thanks to Robert Konecny and
     Giri Chukkapalli)
 
