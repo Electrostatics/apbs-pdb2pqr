@@ -47,7 +47,7 @@ c*
 c*    *** do in one step ***
       numdia = ipc(11)
       if (numdia .eq. 7) then
-         print*,'% BUILDBAND: building 7-pt banded coarse operator...'
+c*       print*,'% BUILDBAND: building 7-pt banded coarse operator...'
          n   = (nx-2)*(ny-2)*(nz-2)
          m   = (nx-2)*(ny-2)
          lda = m+1
@@ -55,7 +55,7 @@ c*    *** do in one step ***
      2      ac(1,2),ac(1,3),ac(1,4),
      3      ipcB,rpcB,acB,n,m,lda)
       elseif (numdia .eq. 27) then
-         print*,'% BUILDBAND: building 27-pt banded coarse operator...'
+c*       print*,'% BUILDBAND: building 27-pt banded coarse operator...'
          n   = (nx-2)*(ny-2)*(nz-2)
          m   = (nx-2)*(ny-2) + (nx-2) + 1
          lda = m+1
@@ -75,7 +75,7 @@ c*
 c*    *** factor the system ***
       key  = 0
       info = 0
-      print*,'% BUILDBAND: dpbfa factoring banded coarse system...'
+c*    print*,'% BUILDBAND: dpbfa factoring banded coarse system...'
       call dpbfa(acB,lda,n,m,info)
 CZZZZ call dpbco(acB,lda,n,m,rcond,w1,info)
       ipcB(4) = 1
@@ -85,7 +85,7 @@ CZZZZ    print*,'% BUILDBAND: dpbco rcond:   ',rcond
          print*,'% BUILDBAND: leading principle minor not PD...'
          key = 1
       endif
-      print*,'% BUILDBAND: dpbfa banded factorization complete.'
+c*    print*,'% BUILDBAND: dpbfa banded factorization complete.'
 c*
 c*    *** return and end ***
       return

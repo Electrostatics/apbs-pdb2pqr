@@ -65,8 +65,8 @@ c*    *** recover gridsizes ***
 c*
 c*    *** move up grids: interpolate solution to finer, do v cycle ***
       if (iinfo.ne.0) then
-         write(6,100)'% FMVCS: starting:  ',nxf,nyf,nzf,nxc,nyc,nzc
- 100     format(a,2(2x,' [',i3,',',i3,',',i3,'] '))
+c*       write(6,100)'% FMVCS: starting:  ',nxf,nyf,nzf,nxc,nyc,nzc
+c* 100     format(a,2(2x,' [',i3,',',i3,',',i3,'] '))
       endif
       do 10 level = nlev_real, ilev+1, -1
 c*
@@ -176,8 +176,8 @@ c*    *** recover gridsizes ***
 c*
 c*    *** do some i/o if requested ***
       if (iinfo.ne.0) then
-         write(6,100)'% MVCS: starting:   ',nxf,nyf,nzf,nxc,nyc,nzc
- 100     format(a,2(2x,' [',i3,',',i3,',',i3,'] '))
+c*         write(6,100)'% MVCS: starting:   ',nxf,nyf,nzf,nxc,nyc,nzc
+c* 100     format(a,2(2x,' [',i3,',',i3,',',i3,'] '))
       endif
 c*
 c*    *** initial wall clock ***

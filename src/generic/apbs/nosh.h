@@ -50,6 +50,8 @@
 #define NOSH_MAXMGPARM 20
 #define NOSH_MAXFEMPARM 20
 #define NOSH_MAXCALC 20
+#define NOSH_MAXPRINT 20
+#define NOSH_MAXPOP 20
 
 #include "apbs/apbs.h"
 #include "maloc/maloc.h"
@@ -116,17 +118,17 @@ typedef struct NOsh_mgparm {
     double gamma;              /* Surface tension for apolar energies/forces
                                 * (in kJ/mol/A^2) */
     int setgamma;
-    int writeenergy;           /* Energy I/O (to stdout)
-				* 0 => don't write out energy
-                                * 1 => write out total energy 
-                                * 2 => write out total energy and all energy
+    int calcenergy;            /* Energy calculation
+				* 0 => don't calculate out energy
+                                * 1 => calculate total energy 
+                                * 2 => calculate total energy and all energy
                                 *      components*/
-    int setwriteenergy;      
-    int writeforce;            /* Atomic forces I/O (to stdout)
-                                * 0 => don't write out forces
-                                * 1 => write out net forces on molecule
-                                * 2 => write out atom-level forces */
-    int setwriteforce;       
+    int setcalcenergy;      
+    int calcforce;             /* Atomic forces I/O 
+                                * 0 => don't calculate forces
+                                * 1 => calculate net forces on molecule
+                                * 2 => calculate atom-level forces */
+    int setcalcforce;       
     int writepot;              /* 0 => no, 1 => yes */
     int setwritepot; 
     char writepotstem[NOSH_MAXPATH];    /* File stem to write pot */
@@ -145,20 +147,28 @@ typedef struct NOsh_mgparm {
 
 typedef struct NOsh {
 
-  NOsh_mgparm mgparm[NOSH_MAXMGPARM];       /* Parameter objects for MG types
-                                             * of calculations */
-  NOsh_femparm femparm[NOSH_MAXFEMPARM];    /* Parameter objects for FEM types
-                                             * of calculations */
-  int ncalc;                                /* The number of calculations to be
-                                             * done */
-  int imgcalc, ifemcalc, nmgcalc, nfemcalc; /* Counters for the various MG and
-                                             * FEM calculations */
-  int calctype[NOSH_MAXCALC];               /* The list of calculations: 0 =>
-                                             * multigrid and 1 => FEM */
-  int nmol;                                 /* Number of molecules */
-  char molpath[NOSH_MAXMOL][NOSH_MAXPATH];  /* Paths to mol files */
-  int parsed;                               /* Have we parsed an input file
-                                             * yet? */
+    NOsh_mgparm mgparm[NOSH_MAXMGPARM];       /* Parameter objects for MG 
+                                               * types of calculations */
+    NOsh_femparm femparm[NOSH_MAXFEMPARM];    /* Parameter objects for FEM 
+                                               * types of calculations */
+    int ncalc;                                /* The number of calculations to 
+                                               * be done */
+    int imgcalc, ifemcalc, nmgcalc, nfemcalc; /* Counters for the various MG 
+                                               * and FEM calculations */
+    int calctype[NOSH_MAXCALC];               /* The list of calculations: 0 =>
+                                               * multigrid and 1 => FEM */
+    int nmol;                                 /* Number of molecules */
+    char molpath[NOSH_MAXMOL][NOSH_MAXPATH];  /* Paths to mol files */
+    int nprint;                               /* How many print sections? */
+    int printwhat[NOSH_MAXPRINT];
+                                              /* What do we print (0=>energy) */
+    int printnarg[NOSH_MAXPRINT];             /* How many arguments in energy 
+                                               * list */
+    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP];/* Calculation id */
+    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  /* Operation id (0 = add, 1 = 
+                                               * subtract) */
+  int parsed;                                 /* Have we parsed an input file
+                                               * yet? */
 
 } NOsh;
 
