@@ -201,46 +201,46 @@ c* *********************************************************************
       character*20     str0c,str1c,str2c,str3c
 c*
 c*    *** do some i/o ***
-      str0a = 'iteration  '
-      str0b = 'count      '
-      str0c = '---------  '
-      if (istop .eq. 0) then
-         str1a = 'absol resid'
-         str1b = 'discr(1-nm)'
-         str1c = '-----------'
-      elseif (istop .eq. 1) then
-         str1a = 'relat resid'
-         str1b = 'discr(1-nm)'
-         str1c = '-----------'
-      elseif (istop .eq. 2) then
-         str1a = 'rms change '
-         str1b = 'discr(1-nm)'
-         str1c = '---------- '
-      elseif (istop .eq. 3) then
-         str1a = 'relat error'
-         str1b = 'conti(2-nm)'
-         str1c = '-----------'
-      elseif (istop .eq. 4) then
-         str1a = 'relat error'
-         str1b = 'discr(2-nm)'
-         str1c = '-----------'
-      elseif (istop .eq. 5) then
-         str1a = 'relat error'
-         str1b = 'discr(A-nm)'
-         str1c = '-----------'
-      else
-         print*,'% PRTINI: bad istop value... '
-      endif
-      str2a = 'contraction'
-      str2b = 'number     '
-      str2c = '-----------'
-      str3a = 'wall '
-      str3b = 'clock'
-      str3c = '-----'
-      write(6,100) str0c,str1c,str2c,str3c
-      write(6,100) str0a,str1a,str2a,str3a
-      write(6,100) str0b,str1b,str2b,str3b
-      write(6,100) str0c,str1c,str2c,str3c
+c*    str0a = 'iteration  '
+c*    str0b = 'count      '
+c*    str0c = '---------  '
+c*    if (istop .eq. 0) then
+c*       str1a = 'absol resid'
+c*       str1b = 'discr(1-nm)'
+c*       str1c = '-----------'
+c*    elseif (istop .eq. 1) then
+c*       str1a = 'relat resid'
+c*       str1b = 'discr(1-nm)'
+c*       str1c = '-----------'
+c*    elseif (istop .eq. 2) then
+c*       str1a = 'rms change '
+c*       str1b = 'discr(1-nm)'
+c*       str1c = '---------- '
+c*    elseif (istop .eq. 3) then
+c*       str1a = 'relat error'
+c*       str1b = 'conti(2-nm)'
+c*       str1c = '-----------'
+c*    elseif (istop .eq. 4) then
+c*       str1a = 'relat error'
+c*       str1b = 'discr(2-nm)'
+c*       str1c = '-----------'
+c*    elseif (istop .eq. 5) then
+c*       str1a = 'relat error'
+c*       str1b = 'discr(A-nm)'
+c*       str1c = '-----------'
+c*    else
+c*       print*,'% PRTINI: bad istop value... '
+c*    endif
+c*    str2a = 'contraction'
+c*    str2b = 'number     '
+c*    str2c = '-----------'
+c*    str3a = 'wall '
+c*    str3b = 'clock'
+c*    str3c = '-----'
+c*    write(6,100) str0c,str1c,str2c,str3c
+c*    write(6,100) str0a,str1a,str2a,str3a
+c*    write(6,100) str0b,str1b,str2b,str3b
+c*    write(6,100) str0c,str1c,str2c,str3c
 c*
 c*    *** format statements ***
  100  format('% ',a12,1x,a12,3x,a12,3x,a12)
@@ -265,7 +265,7 @@ c* *********************************************************************
 c*
 c*    *** initializing timer ***
       if (iters .eq. -99) then
-         call vtstrt(40, 'MG iteration', 12)
+c*       call vtstrt(40, 'MG iteration', 12)
          cputme = 0.0d0
          goto 99
 c*
@@ -273,9 +273,11 @@ c*    *** setup for the iteration ***
       elseif (iters .eq. -1) then
          call vtstop(40, 'MG iteration', 12)
          if (iok .eq. 1) then
-            write(6,100) -1,0.0d0,0.0d0,cputme
+            call vnmprt(0, '-1, 0, 0', 7)
+c*          write(6,100) -1,0.0d0,0.0d0,cputme
          elseif (iok .eq. 2) then
-            write(6,110) -1,0.0d0,0.0d0,cputme
+            call vnmprt(0, '-1, 0, 0', 7)
+c*          write(6,110) -1,0.0d0,0.0d0,cputme
          endif
          goto 99
 c*
@@ -283,7 +285,7 @@ c*    *** during the iteration ***
       else
 c*
 c*       *** stop the timer ***
-         call vtstop(40, 'MG iteration', 12)
+c*       call vtstop(40, 'MG iteration', 12)
 c*
 c*       *** relative residual ***
          if (rsden .eq. 0.0d0) then
@@ -303,9 +305,15 @@ c*       *** contraction number ***
 c*
 c*       *** the i/o ***
          if (iok .eq. 1) then
-            write(6,100) iters,relres,contrac,cputme
+            call vnmpri(0, 'PMG: iteration = ', 17, iters)
+            call vnmprd(0, 'PMG: relative residual = , ', 26, relres)
+            call vnmprd(0, 'PMG: contraction number = , ', 27, contrac)
+c*          write(6,100) iters,relres,contrac,cputme
          elseif (iok .eq. 2) then
-            write(6,110) iters,relres,contrac,cputme
+            call vnmpri(0, 'PMG: iteration = ', 17, iters)
+            call vnmprd(0, 'PMG: relative residual = , ', 26, relres)
+            call vnmprd(0, 'PMG: contraction number = , ', 27, contrac)
+c*          write(6,110) iters,relres,contrac,cputme
          endif
       endif
 c*
@@ -450,7 +458,9 @@ c*    *** build the operator a on the finest level ***
 c*
 c*       *** some i/o ***
          if (iinfo .ne. 0) then
-            write(6,100)'% BUILDOPS: (FINE) :',nxx,nyy,nzz
+c*           call vnmpri(0, '% BUILDOPS: (FINE) :', 21, nxx)
+c*           call vnmpri(0, ', ', 2, nyy)
+c*           call vnmpri(0, ', ', 2, nzz)
  100        format(a,(2x,' [',i3,',',i3,',',i3,'] '))
          endif
 c*
@@ -464,8 +474,8 @@ c*       *** finest level discretization ***
      7      ccf(iz(1,lev)),fcf(iz(1,lev)))
 c*
 c*       *** now initialize the differential operator offset ***
-         print*,'% BUILDOPS: operator stencil (lev,numdia) = ',
-     2      lev,numdia
+c*       print*,'% BUILDOPS: operator stencil (lev,numdia) = ',
+c*   2      lev,numdia
          iz(7,lev+1)  = iz(7,lev) + numdia * nxx * nyy * nzz
 c*
 c*       *** debug ***
@@ -491,7 +501,7 @@ c*
 c*             *** differential operator this level with standard disc. ***
                if (mgcoar .eq. 0) then
                   if (iinfo .ne. 0) then
-                     write(6,100)'% BUILDOPS: (STAND) ',nxx,nyy,nzz
+c*                   write(6,100)'% BUILDOPS: (STAND) ',nxx,nyy,nzz
                   endif
                   call buildcopy0 (nxx,nyy,nzz,nxold,nyold,nzold,
      2               xf(iz(8,lev)),yf(iz(9,lev)),zf(iz(10,lev)),
@@ -516,7 +526,7 @@ c*
 c*             *** differential operator this level with harmonic disc. ***
                elseif (mgcoar .eq. 1) then
                   if (iinfo .ne. 0) then
-                     write(6,100)'% BUILDOPS: (HARMO) ',nxx,nyy,nzz
+c*                   write(6,100)'% BUILDOPS: (HARMO) ',nxx,nyy,nzz
                   endif
                   call buildharm0 (nxx,nyy,nzz,nxold,nyold,nzold,
      2               xf(iz(8,lev)),yf(iz(9,lev)),zf(iz(10,lev)),
@@ -541,7 +551,7 @@ c*
 c*             *** differential operator with galerkin formulation ***
                elseif (mgcoar .eq. 2) then
                   if (iinfo .ne. 0) then
-                     write(6,100)'% BUILDOPS: (GALER) ',nxx,nyy,nzz
+c*                   write(6,100)'% BUILDOPS: (GALER) ',nxx,nyy,nzz
                   endif
                   call buildgaler0 (nxold,nyold,nzold,nxx,nyy,nzz,
      2               ipkey,numdia,pc(iz(11,lev-1)),
@@ -556,8 +566,8 @@ c*             *** differential operator with galerkin formulation ***
                endif
 c*
 c*             *** now initialize the differential operator offset ***
-               print*,'% BUILDOPS: operator stencil (lev,numdia) = ',
-     2            lev,numdia
+c*             print*,'% BUILDOPS: operator stencil (lev,numdia) = ',
+c*   2            lev,numdia
                iz(7,lev+1)  = iz(7,lev) + numdia * nxx * nyy * nzz
 c*
 c*             *** debug ***

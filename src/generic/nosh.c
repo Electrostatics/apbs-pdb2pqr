@@ -48,6 +48,7 @@
 // Class NOsh: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock);
+VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, NOsh_femparm *parm);
 VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm);
@@ -103,6 +104,7 @@ VPUBLIC int NOsh_ctor2(NOsh *thee) {
     thee->nmgcalc = 0;
     thee->nfemcalc = 0;
     thee->nmol = 0;
+    thee->nprint = 0;
 
     for (j=0; j<NOSH_MAXMGPARM; j++) {
         thee->mgparm[j].setdime = 0;
@@ -122,8 +124,8 @@ VPUBLIC int NOsh_ctor2(NOsh *thee) {
         thee->mgparm[j].setswin = 0; 
         thee->mgparm[j].settemp = 0;
         thee->mgparm[j].setgamma = 0;
-        thee->mgparm[j].setwriteenergy = 0;      
-        thee->mgparm[j].setwriteforce = 0;       
+        thee->mgparm[j].setcalcenergy = 0;      
+        thee->mgparm[j].setcalcforce = 0;       
         thee->mgparm[j].setwritepot = 0; 
         thee->mgparm[j].setwriteacc = 0; 
         thee->mgparm[j].nion = 0;
@@ -219,6 +221,10 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
             Vnm_print(0, "NOsh: Parsing READ section\n");
             if (!NOsh_parseREAD(thee, sock)) return 0;
             Vnm_print(0, "NOsh: Done parsing READ section\n");
+        } else if (strcasecmp(tok, "print") == 0) {
+            Vnm_print(0, "NOsh: Parsing PRINT section\n");
+            if (!NOsh_parsePRINT(thee, sock)) return 0;
+            Vnm_print(0, "NOsh: Done parsing PRINT section\n");
         } else if (strcasecmp(tok, "elec") == 0) {
             Vnm_print(0, "NOsh: Parsing ELEC section\n");
             if (!NOsh_parseELEC(thee, sock)) return 0;
@@ -290,6 +296,132 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
     /* We ran out of tokens! */
     Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ section!\n");
     return 0;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  NOsh_parsePRINT
+//
+// Purpose:  Parse an input file PRINT section
+//
+// Returns:  1 if successful, 0 otherwise
+//
+// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
+//           Should only be called from NOsh_parse()
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti, idx, expect;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh_parse:  Got NULL thee!\n");
+        return 0;
+    }
+
+    if (sock == VNULL) {
+        Vnm_print(2, "NOsh_parse:  Got pointer to NULL socket!\n");
+        return 0;
+    } 
+
+    if (thee->parsed) {
+        Vnm_print(2, "NOsh_parse:  Already parsed an input file!\n");
+        return 0;
+    }
+
+    idx = thee->nprint;
+    if (thee->nprint >= NOSH_MAXPRINT) {
+        Vnm_print(2, "NOsh_parse:  Exceeded max number (%d) of PRINT sections\n", 
+          NOSH_MAXPRINT);
+        return 0;
+    }
+
+   
+    /* The first thing we read is the thing we want to print */ 
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (strcasecmp(tok, "energy") == 0) {
+        thee->printwhat[idx] = 0;
+        thee->printnarg[idx] = 0;
+    } else {
+        Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing PRINT section!\n",
+          tok);
+        return 0;
+    }
+
+    expect = 0;   /* We first expect a calculation ID (0) then an op (1) */
+
+    /* Read until we run out of tokens (bad) or hit the "END" keyword (good) */
+    while (Vio_scanf(sock, "%s", tok) == 1) {
+
+        /* The next thing we read is either END or an ARG OP ARG statement */
+        if (strcasecmp(tok, "end") == 0) {
+            if (expect != 0) {
+                (thee->nprint)++;
+                (thee->printnarg[idx])++;
+                Vnm_print(0, "NOsh: Done parsing PRINT section\n");
+                return 1;
+            } else {
+                Vnm_print(2, "NOsh_parsePRINT:  Got premature END to PRINT!\n");
+                return 0;
+            }
+        } else {
+            /* Grab a calculation ID */
+            if (sscanf(tok, "%d", &ti) == 1) {
+                if (expect == 0) {
+                    thee->printcalc[idx][thee->printnarg[idx]] = ti;
+                    expect = 1;
+                } else {
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    return 0;
+                }
+            /* Grab addition operation */
+            } else if (strcasecmp(tok, "+") == 0) {
+                if (expect == 1) {
+                    thee->printop[idx][thee->printnarg[idx]] = 0;
+                    (thee->printnarg[idx])++;
+                    expect = 0;
+                    if (thee->printnarg[idx] >= NOSH_MAXPOP) {
+                        Vnm_print(2, "NOsh_parsePRINT:  Exceeded max number (%d) of arguments for PRINT section!\n", 
+                          NOSH_MAXPOP);
+                        return 0;
+                    }
+                } else {
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    return 0;
+                }
+            /* Grab subtraction operation */
+            } else if (strcasecmp(tok, "-") == 0) {
+                if (expect == 1) {
+                    thee->printop[idx][thee->printnarg[idx]] = 1;
+                    (thee->printnarg[idx])++;
+                    expect = 0;
+                    if (thee->printnarg[idx] >= NOSH_MAXPOP) {
+                        Vnm_print(2, "NOsh_parseREAD:  Exceeded max number (%d) of arguments for PRINT section!\n", 
+                          NOSH_MAXPOP);
+                        return 0;
+                    }
+                } else {
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    return 0;
+                }
+            /* Got bad operation */
+            } else {
+                Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing PRINT section!\n",
+                  tok);
+                return 0;
+            } 
+        } /* end parse token */
+
+    } /* end while */
+
+    VJMPERR1(0);
+
+    /* We ran out of tokens! */
+    VERROR1:
+       Vnm_print(2, "NOsh_parsePRINT:  Ran out of tokens while parsing PRINT section!\n");
+       return 0;
 
 }
 
@@ -552,8 +684,8 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
                 Vnm_print(2, "NOsh: GAMMA not set!\n");
                 return 0;
             }
-            if (!parm->setwriteenergy) parm->writeenergy = 0;
-            if (!parm->setwriteforce) parm->writeforce = 0;
+            if (!parm->setcalcenergy) parm->calcenergy = 0;
+            if (!parm->setcalcforce) parm->calcforce = 0;
             if (!parm->setwritepot) parm->writepot = 0;
             if (!parm->setwriteacc) parm->writeacc = 0;
             Vnm_print(0, "NOsh: Done parsing ELEC section\n");
@@ -793,25 +925,25 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
             parm->gamma = tf;
             parm->setgamma = 1;
         /* Energy writing */
-        } else if (strcasecmp(tok, "writeenergy") == 0) {
+        } else if (strcasecmp(tok, "calcenergy") == 0) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (sscanf(tok, "%d", &ti) == 0) {
                 Vnm_print(2, "NOsh:  Read non-float (%s) while parsing WRITEENERGY keyword!\n",
                   tok);
                 return 0;
             }
-            parm->writeenergy = ti;
-            parm->setwriteenergy = 1;
+            parm->calcenergy = ti;
+            parm->setcalcenergy = 1;
         /* Force writing */
-        } else if (strcasecmp(tok, "writeforce") == 0) {
+        } else if (strcasecmp(tok, "calcforce") == 0) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (sscanf(tok, "%d", &ti) == 0) {
                 Vnm_print(2, "NOsh:  Read non-float (%s) while parsing WRITEFORCE keyword!\n",
                   tok);
                 return 0;
             }
-            parm->writeforce = ti;
-            parm->setwriteforce = 1;
+            parm->calcforce = ti;
+            parm->setcalcforce = 1;
         /* Potential writing */
         } else if (strcasecmp(tok, "writepot") == 0) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);

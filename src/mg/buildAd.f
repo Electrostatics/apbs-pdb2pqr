@@ -50,13 +50,13 @@ cmdir 0 0
 c*
 c*    *** call the build routine ***
       if (mgdisc .eq. 0) then
-         print*,'% BUILDA:   (BOX) performing discretization...'
+c*       print*,'% BUILDA:   (BOX) performing discretization...'
          call buildA_fv (nx,ny,nz,ipkey,numdia,
      2      ipc,rpc,ac(1,1),cc,fc,
      3      ac(1,2),ac(1,3),ac(1,4),
      4      xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf)
       elseif (mgdisc .eq. 1) then
-         print*,'% BUILDA:   (FEM) performing discretization...'
+c*       print*,'% BUILDA:   (FEM) performing discretization...'
          call buildA_fe (nx,ny,nz,ipkey,numdia,
      2      ipc,rpc,ac(1,1),cc,fc,
      3      ac(1,2),ac(1,3),ac(1,4),ac(1,5),ac(1,6),ac(1,7),ac(1,8),

@@ -264,9 +264,9 @@ c*          *** new grid size ***
             nyf = nyc
             nzf = nzc
          endif
-         print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-     2         ,'%%%%%%%%%%'
-         write(6,200)'% MGDRIV2: ANALYSIS==>',nxf,nyf,nzf
+c*       print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
+c*   2         ,'%%%%%%%%%%'
+c*       write(6,200)'% MGDRIV2: ANALYSIS==>',nxf,nyf,nzf
  200     format(a,' [',i3,',',i3,',',i3,'] ')
 c*
 c*       *** largest eigenvalue of the system matrix A ***
@@ -328,7 +328,7 @@ c*       *** reinitialize the solution function ***
 c*
 c*    *** next grid ***
  40   continue
-      print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
+c*    print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
 c*
 c*    *** reinitialize the solution function ***
       call azeros(nx,ny,nz,u)
@@ -347,14 +347,14 @@ c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fbound00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
-      print*,' mg = [ '
+c*    print*,' mg = [ '
 c*
 c*    *** start timer ***
       call vtstrt(30, 'MGDRIV2: solve', 14)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
-         print*,'% MGDRIV2: linear mode...'
+c*       print*,'% MGDRIV2: linear mode...'
          nlev_real = nlev
          iok  = 1
          ilev = 1
@@ -373,7 +373,7 @@ c*    *** call specified multigrid method ***
          endif
       endif
       if ((mode .eq. 1) .or. (mode .eq. 2)) then
-         print*,'% MGDRIV2: nonlinear mode...'
+c*       print*,'% MGDRIV2: nonlinear mode...'
          nlev_real = nlev
          iok  = 1
          ilev = 1
@@ -396,8 +396,8 @@ c*    *** stop timer ***
       call vtstop(30, 'MGDRIV2: solve', 14)
 c*
 c*    *** MATLAB ***
-      write(*,100) 'mg_sf',tsetupf,'mg_sc',tsetupc,
-     2   'mg_st',(tsetupf+tsetupc),'mg_so',tsolve
+c*    write(*,100) 'mg_sf',tsetupf,'mg_sc',tsetupc,
+c*   2   'mg_st',(tsetupf+tsetupc),'mg_so',tsolve
  100  format(' ];',4(' ',a7,'=',1pe9.3,';'))
 c*
 c*    *** restore boundary conditions ***
@@ -605,12 +605,12 @@ c*    *** basic grid sizes, etc. ***
      2   nf,nc,narr,narrc,n_rpc,n_iz,n_ipc,iretot,iintot)
 c*
 c*    *** resulting total required for real/integer storage ***
-      print*,'% MGSIZE: number of unknowns on finest level:    ',nf
-      print*,'% MGSIZE: number of unknowns on coarsest level:  ',nc
-      print*,'% MGSIZE: storage for a vector on all levels:    ',narr
-      print*,'% MGSIZE: storage for a vector on coarse levels: ',narrc
-      print*,'% MGSIZE: REQUIRED floating point array size:    ',iretot
-      print*,'% MGSIZE: REQUIRED integer array size:           ',iintot
+c*    print*,'% MGSIZE: number of unknowns on finest level:    ',nf
+c*    print*,'% MGSIZE: number of unknowns on coarsest level:  ',nc
+c*    print*,'% MGSIZE: storage for a vector on all levels:    ',narr
+c*    print*,'% MGSIZE: storage for a vector on coarse levels: ',narrc
+c*    print*,'% MGSIZE: REQUIRED floating point array size:    ',iretot
+c*    print*,'% MGSIZE: REQUIRED integer array size:           ',iintot
 c*
 c*    *** return and end ***
       return

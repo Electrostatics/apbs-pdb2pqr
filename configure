@@ -3381,7 +3381,7 @@ EOF
 
         fetk_do_src="vfetk vcsm vpee"
         fetk_do_bin="fem reg-fem"
-        fetk_do_tst="vmetis vcsm"
+        fetk_do_tst="vmetis"
     else
         if test -z "${mc_found}"; then
             echo "$ac_t""*** Component MC not found:  FEtk disabled. ***" 1>&6
@@ -3406,7 +3406,7 @@ EOF
 
 pmg_do_src="vpmg mgsh"
 pmg_do_bin="mg mgsh"
-pmg_do_tst="vpmg"
+pmg_do_tst=""
 
 
 
@@ -3625,6 +3625,8 @@ trap 'rm -fr `echo "
 
     tools/Makefile
     tools/mesh/Makefile
+    tools/manip/Makefile
+    tools/opendx/Makefile
 
     src/Makefile
     src/vatom/Makefile
@@ -3640,16 +3642,14 @@ trap 'rm -fr `echo "
     src/nosh/Makefile
 
     tst/Makefile
-    tst/vcsm/Makefile
-    tst/vacc/Makefile
     tst/vmetis/Makefile
-    tst/vpmg/Makefile
-    tst/opendx/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
 
     lib/Makefile
+
+    bin/Makefile
 
     work/Makefile
     work/bin/Makefile
@@ -3799,6 +3799,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
 
     tools/Makefile
     tools/mesh/Makefile
+    tools/manip/Makefile
+    tools/opendx/Makefile
 
     src/Makefile
     src/vatom/Makefile
@@ -3814,16 +3816,14 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/nosh/Makefile
 
     tst/Makefile
-    tst/vcsm/Makefile
-    tst/vacc/Makefile
     tst/vmetis/Makefile
-    tst/vpmg/Makefile
-    tst/opendx/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
 
     lib/Makefile
+
+    bin/Makefile
 
     work/Makefile
     work/bin/Makefile

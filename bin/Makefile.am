@@ -1,4 +1,4 @@
-## ###########################################################################
+### ##########################################################################
 # APBS -- Adaptive Poisson-Boltzmann Solver
 #
 #  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
@@ -29,7 +29,7 @@
 # ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
 # TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
 # MODIFICATIONS. 
-## ###########################################################################
+### ##########################################################################
 
 ## ###########################################################################
 ## File:    Makefile.am
@@ -41,12 +41,14 @@
 ##     COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 ##     LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 ##
-## Author:  Nathan Baker and Michael Holst
+## Author:  Michael Holst
 ## ###########################################################################
 
 AUTOMAKE_OPTIONS = no-dependencies
-SUFFIXES = .H .h .C .c .f .o
+SUFFIXES = .H .h .C .cc .c .f .o
 
-always_built_SUBDIRS = vatom vacc vpbe vgreen @fetk_do_src@ @pmg_do_src@ nosh
-
-SUBDIRS = $(always_built_SUBDIRS)
+bin_PROGRAMS     = apbs
+apbs_SOURCES     = main.c mypde.f
+apbs_LDADD       = -lapbs @lib_list@
+INCLUDES         = @inc_list@
+LDFLAGS          = @LDFLAGS@ @FLIBS@

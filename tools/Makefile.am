@@ -47,4 +47,4 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = mesh
+SUBDIRS = mesh manip opendx

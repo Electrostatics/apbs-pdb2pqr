@@ -54,16 +54,16 @@ cmdir 0 0
 c*
 c*    *** call the build routine ***
       if (mgprol .eq. 0) then
-         print*,'% BUILDP:   (TRILINEAR) building prolongation...'
+c*       print*,'% BUILDP:   (TRILINEAR) building prolongation...'
          call buildP_trilin (nxf,nyf,nzf,nxc,nyc,nzc,pc(1,1),xf,yf,zf)
       elseif (mgprol .eq. 1) then
          numdia = ipc(11)
          if (numdia .eq. 7) then
-            print*,'% BUILDP:   (OPERATOR-7) building prolongation...'
+c*          print*,'% BUILDP:   (OPERATOR-7) building prolongation...'
             call buildP_op7 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          elseif (numdia .eq. 27) then
-            print*,'% BUILDP:   (OPERATOR-27) building prolongation...'
+c*          print*,'% BUILDP:   (OPERATOR-27) building prolongation...'
             call buildP_op27 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          else
@@ -72,11 +72,11 @@ c*    *** call the build routine ***
       elseif (mgprol .eq. 2) then
          numdia = ipc(11)
          if (numdia .eq. 7) then
-            print*,'% BUILDP: (MODIFY-OP-7) building prolongation...'
+c*          print*,'% BUILDP: (MODIFY-OP-7) building prolongation...'
             call buildP_modop7 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          elseif (numdia .eq. 27) then
-            print*,'% BUILDP: (MODIFY-OP-27) building prolongation...'
+c*          print*,'% BUILDP: (MODIFY-OP-27) building prolongation...'
             call buildP_modop27 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          else
