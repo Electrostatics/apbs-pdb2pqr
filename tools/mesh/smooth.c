@@ -40,7 +40,6 @@
  *
  * @endverbatim
  */
- */
 
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
