@@ -66,14 +66,16 @@ c*    *** decode some parameters ***
 c*
 c*    *** some checks on input ***
       if ((nlev.le.0).or.(nx.le.0).or.(ny.le.0).or.(nz.le.0)) then
-         print*,'% MGDRIV:  nx,ny,nz, and nlev must be positive...'
+         call vnmprt(2,'% MGDRIV:  nx ny nz and nlev ', 29)
+         call vnmprt(2,'% MGDRIV:  must be positive...', 30)
          ierror = -1
          iparm(51) = ierror 
          return
       endif
       mxlv = maxlev(nx,ny,nz)
       if (nlev.gt.mxlv) then
-         print*,'% MGDRIV:  max levels for your grid size is: ',mxlv
+         call vnmprt(2,'% MGDRIV:  max levels for your ', 31)
+         call vnmpri(2,'% MGDRIV:  grid size is: ',25 ,mxlv)
          ierror = -2
          iparm(51) = ierror 
          return
@@ -88,8 +90,10 @@ c*    *** basic grid sizes, etc. ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% MGDRIV: real    work space must be: ',iretot
-         print*,'% MGDRIV: integer work space must be: ',iintot
+         call vnmpri(2,'% MGDRIV: real    work space must be: ',
+     2      38, iretot)
+         call vnmpri(2,'% MGDRIV: integer work space must be: ',
+     2      38, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -271,7 +275,7 @@ c*       write(6,200)'% MGDRIV2: ANALYSIS==>',nxf,nyf,nzf
 c*
 c*       *** largest eigenvalue of the system matrix A ***
          if ((iperf .eq. 1) .or. (iperf .eq. 3)) then
-            print*,'% MGDRIV2: power calculating rho(A)...'
+            call vnmprt(2,'% MGDRIV2: power calculating rho(A)...',38)
             iters_p   = 0
             iinfo_p   = iinfo
             errtol_p  = 1.0e-4
@@ -279,12 +283,13 @@ c*       *** largest eigenvalue of the system matrix A ***
      2         ipc,rpc,ac,cc,
      3         a1cf,a2cf,a3cf,ccf,
      4         rho_max,rho_max_mod,errtol_p,itmax_p,iters_p,iinfo_p)
-            print*,'% MGDRIV2: power iters   = ',iters_p
-            print*,'% MGDRIV2: power eigmax  = ',rho_max
-            print*,'% MGDRIV2: power (MODEL) = ',rho_max_mod
+            call vnmpri(2,'% MGDRIV2: power iters   = ',27,iters_p)
+            call vnmprd(2,'% MGDRIV2: power eigmax  = ',27,rho_max)
+            call vnmprd(2,'% MGDRIV2: power (MODEL) = ',27,rho_max_mod)
 c*
 c*          *** smallest eigenvalue of the system matrix A ***
-            print*,'% MGDRIV2: ipower calculating lambda_min(A)...'
+            call vnmprt(2,'% MGDRIV2: ipower calculating ', 30)
+            call vnmprt(2,'% MGDRIV2: lambda_min(A)...', 27)
             iters_p   = 0
             iinfo_p   = iinfo
             errtol_p  = 1.0e-4
@@ -295,20 +300,21 @@ c*          *** smallest eigenvalue of the system matrix A ***
      4         nlevd,level,nlev_real,mgsolv,
      5         iok_p,iinfo_p,epsiln,errtol,omegal,nu1,nu2,mgsmoo,
      6         ipc,rpc,pc,ac,cc,tcf)
-            print*,'% MGDRIV2: ipower iters   = ',iters_p
-            print*,'% MGDRIV2: ipower eigmin  = ',rho_min
-            print*,'% MGDRIV2: ipower (MODEL) = ',rho_min_mod
+            call vnmpri(2,'% MGDRIV2: ipower iters   = ',28,iters_p)
+            call vnmprd(2,'% MGDRIV2: ipower eigmin  = ',28,rho_min)
+            call vnmprd(2,'% MGDRIV2: ipower (MODEL) = ',28,rho_min_mod)
 c*
 c*          *** condition number estimate ***
-            print*,'% MGDRIV2: condition number  = ',rho_max/rho_min
-            print*,'% MGDRIV2: condition (MODEL) = ',
-     2         rho_max_mod/rho_min_mod
+            call vnmprd(2,'% MGDRIV2: condition number  = ',
+     2         31, rho_max/rho_min)
+            call vnmprd(2,'% MGDRIV2: condition (MODEL) = ',
+     2         31, rho_max_mod/rho_min_mod)
          endif
 c*
 c*       *** spectral radius of the multigrid operator M ***
 c*       *** NOTE: due to lack of vectors, we destroy "fc" in mpower... ***
          if ((iperf .eq. 2) .or. (iperf .eq. 3)) then
-            print*,'% MGDRIV2: mpower calculating rho(M)...'
+            call vnmprt(2,'% MGDRIV2: mpower calculating rho(M)...',39)
             iters_p   = 0
             iinfo_p   = iinfo
             errtol_p  = epsiln
@@ -319,8 +325,8 @@ c*       *** NOTE: due to lack of vectors, we destroy "fc" in mpower... ***
      4         nlevd,level,nlev_real,mgsolv,
      5         iok_p,iinfo_p,epsiln,errtol,omegal,nu1,nu2,mgsmoo,
      6         ipc,rpc,pc,ac,cc,fc,tcf)
-            print*,'% MGDRIV2: mpower iters  = ',iters_p
-            print*,'% MGDRIV2: mpower rho(M) = ',rho_p
+            call vnmpri(2,'% MGDRIV2: mpower iters  = ',27,iters_p)
+            call vnmprd(2,'% MGDRIV2: mpower rho(M) = ',27,rho_p)
          endif
 c*
 c*       *** reinitialize the solution function ***
@@ -337,7 +343,8 @@ c* ******************************************************************
 c* *** this overwrites the rhs array provided by pde specification
 c* ****** compute an algebraically produced rhs for the given tcf ***
       if ((istop .eq. 4) .or. (istop .eq. 5) .or. (iperf .ne. 0)) then
-         print*,'% MGDRIV2: generating algebraic RHS from your soln...'
+         call vnmprt(2,'% MGDRIV2: generating algebraic ', 32)
+         call vnmprt(2,'% MGDRIV2: RHS from your soln...', 32)
          call buildALG (nx,ny,nz,mode,nlev,iz,
      2      ipc,rpc,ac,cc,ccf,tcf,fc,fcf)
       endif
@@ -369,7 +376,7 @@ c*       print*,'% MGDRIV2: linear mode...'
      3         iok,iinfo,epsiln,errtol,omegal,nu1,nu2,mgsmoo,
      4         ipc,rpc,pc,ac,cc,fc,tcf)
          else
-            print*,'% MGDRIV2: bad mgkey given... '
+            call vnmprt(2,'% MGDRIV2: bad mgkey given... ',30)
          endif
       endif
       if ((mode .eq. 1) .or. (mode .eq. 2)) then
@@ -388,7 +395,7 @@ c*       print*,'% MGDRIV2: nonlinear mode...'
      3         iok,iinfo,epsiln,errtol,omegan,nu1,nu2,mgsmoo,
      4         ipc,rpc,pc,ac,cc,fc,tcf)
          else
-            print*,'% MGDRIV2: bad mgkey given... '
+            call vnmprt(2,'% MGDRIV2: bad mgkey given... ',30)
          endif
       endif
 c*
@@ -529,7 +536,8 @@ c*    *** box or fem on fine grid? ***
       elseif (mgdisc .eq. 1) then
          num_nf_oper = 14
       else
-         print*,'% MGSZ: invalid mgdisc parameter... ', mgdisc
+         call vnmpri(2,'% MGSZ: invalid mgdisc parameter... ',
+     2      36, mgdisc)
       endif
 c*
 c*    *** galerkin or standard coarsening? ***
@@ -539,7 +547,7 @@ c*    *** galerkin or standard coarsening? ***
       elseif (mgcoar .eq. 2) then
          num_narrc_oper = 14
       else
-         print*,'% MGSZ: invalid mgcoar parameter...'
+         call vnmprt(2,'% MGSZ: invalid mgcoar parameter...',35)
       endif
 c*
 c*    *** symmetric banded linpack storage on coarse grid ***
@@ -555,7 +563,7 @@ c*    *** symmetric banded linpack storage on coarse grid ***
          nc_band = (nxc-2)*(nyc-2)*(nzc-2)
          n_band  = nc_band * num_band
       else
-         print*,'% MGSZ: invalid mgsolv parameter...'
+         call vnmprt(2,'% MGSZ: invalid mgsolv parameter...',35)
       endif
 c*
 c*    *** info work array required storage ***

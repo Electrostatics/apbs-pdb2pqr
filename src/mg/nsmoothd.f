@@ -61,7 +61,8 @@ c*    *** do in one step ***
          call nrich(nx,ny,nz,ipc,rpc,ac,cc,fc,x,w1,w2,r,
      2      itmax,iters,errtol,omega,iresid,iadjoint)
       else
-         print*,'% NSMOOTH: bad smoothing routine specified...'
+         call vnmprt(2,'% NSMOOTH: bad smoothing routine specified...',
+     2      45)
       endif
 c*
 c*    *** return and end ***

@@ -67,7 +67,7 @@ c*          print*,'% BUILDP:   (OPERATOR-27) building prolongation...'
             call buildP_op27 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          else
-            print*,'% BUILDP: invalid stencil type give...'
+            call vnmprt(2,'% BUILDP: invalid stencil type give...',38)
          endif
       elseif (mgprol .eq. 2) then
          numdia = ipc(11)
@@ -80,10 +80,10 @@ c*          print*,'% BUILDP: (MODIFY-OP-27) building prolongation...'
             call buildP_modop27 (nxf,nyf,nzf,nxc,nyc,nzc,
      2         ipc,rpc,ac(1,1),pc(1,1))
          else
-            print*,'% BUILDP: invalid stencil type give...'
+            call vnmprt(2,'% BUILDP: invalid stencil type give...',38)
          endif
       else
-         print*,'% BUILDP: invalid prolongation requested...'
+         call vnmprt(2,'% BUILDP: invalid prolongation requested...',43)
       endif
 c*
 c*    *** return and end ***

@@ -173,11 +173,11 @@ c*    *** compute denominator for stopping criterion ***
      4      tru(iz(1,lev)),w1)
          rsden = dsqrt(xdot(nx,ny,nz,tru(iz(1,lev)),w1))
       else
-         print*,'% CGMG: bad istop value... '
+         call vnmprt(2,'% CGMG: bad istop value... ',27)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% CGMG: rhs is zero...'
+         call vnmprt(2,'% CGMG: rhs is zero...',22)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -303,7 +303,7 @@ c*       *** compute/check the current stopping test ***
      4         w1,w2)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% MVCS: bad istop value... '
+            call vnmprt(2,'% MVCS: bad istop value... ',27)
          endif
          if (iok.ne.0) then
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)

@@ -229,11 +229,11 @@ c*          *** simply take norm of rhs for a zero initial guess ***
      4         tru(iz(1,lev)),w1,w2)
             rsden = dsqrt(xdot(nxf,nyf,nzf,tru(iz(1,lev)),w1))
          else
-            print*,'% MVFAS: bad istop value... '
+            call vnmprt(2,'% MVFAS: bad istop value... ',28)
          endif
          if (rsden.eq.0.0d0) then
             rsden = 1.0d0
-            print*,'% MVFAS:  rhs is zero on finest level '
+            call vnmprt(2,'% MVFAS:  rhs is zero on finest level ',38)
          endif
          rsnrm = rsden
          orsnrm = rsnrm
@@ -305,7 +305,7 @@ c*       *** compute the stopping test ***
      4            w1,w2,w3)
                rsnrm = dsqrt(xdot(nxf,nyf,nzf,w1,w2))
             else
-               print*,'% MVCS: bad istop value... '
+               call vnmprt(2,'% MVCS: bad istop value... ',27)
             endif
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          endif
@@ -523,7 +523,7 @@ c*       *** compute/check the current stopping test ***
      4            w1,w2,w3)
                rsnrm = dsqrt(xdot(nxf,nyf,nzf,w1,w2))
             else
-               print*,'% MVFAS: bad istop value... '
+               call vnmprt(2,'% MVFAS: bad istop value... ',28)
             endif
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)
             if ((rsnrm/rsden) .le. errtol) goto 99

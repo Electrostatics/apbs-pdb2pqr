@@ -103,7 +103,7 @@ c*    *** call the build routine ***
      3      ac(1,12),ac(1,13),ac(1,14))
 
       else
-         print*,'% BUILDG: invalid stencil type give...'
+         call vnmprt(2,'% BUILDG: invalid stencil type give...',38)
       endif
 c*
 c*    *** return and end ***

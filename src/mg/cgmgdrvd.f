@@ -66,14 +66,16 @@ c*    *** decode some parameters ***
 c*
 c*    *** some checks on input ***
       if ((nlev.le.0).or.(nx.le.0).or.(ny.le.0).or.(nz.le.0)) then
-         print*,'% CGMGDRIV:  nx,ny,nz, and nlev must be positive...'
+         call vnmprt(2,'% CGMGDRIV:  nx ny nz and nlev must ', 36)
+         call vnmprt(2,'% CGMGDRIV:  be positive...', 27)
          ierror = -1
          iparm(51) = ierror 
          return
       endif
       mxlv = maxlev(nx,ny,nz)
       if (nlev.gt.mxlv) then
-         print*,'% CGMGDRIV:  max levels for your grid size is: ',mxlv
+         call vnmprt(2,'% CGMGDRIV:  max levels for your ',33)
+         call vnmpri(2,'% CGMCDRIV:  grid size is: ', 27,mxlv)
          ierror = -2
          iparm(51) = ierror 
          return
@@ -91,8 +93,10 @@ c*    *** allocate space for two additional work vectors ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% CGMGDRIV: real    work space must be: ',iretot
-         print*,'% CGMGDRIV: integer work space must be: ',iintot
+         call vnmpri(2,'% CGMGDRIV: real    work space must be: ',
+     2      40, iretot)
+         call vnmpri(2,'% CGMGDRIV: integer work space must be: ',
+     2      40, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -243,7 +247,7 @@ c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fboundPMG00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
-      print*,' cgmg = [ '
+      call vnmprt(2,' cgmg = [ ',10)
 c*
 c*    *** start timer ***
       call vtstrt(30, 'CGMGDRIV2: solve', 16)
@@ -265,7 +269,7 @@ c*    *** call specified multigrid method ***
      4      a1cf,a2cf,a3cf,
      5      ipc,rpc,pc,ac,cc,fc,tcf)
       else
-         print*,'% CGMGDRIV2: bad mgkey given '
+         call vnmprt(2,'% CGMGDRIV2: bad mgkey given ',29)
       endif
 c*
 c*    *** stop timer ***

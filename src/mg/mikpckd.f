@@ -671,7 +671,7 @@ c* *********************************************************************
       character*10     title
 c*
 c*    *** doit ***
-      print*, title
+      call vnmprt(2,title,3)
       do 10 k = 2, nz-1
          do 11 j = 2, ny-1
               write(6,100) (x(i,j,k),i=2,nx-1)
@@ -710,7 +710,7 @@ c*    *** do the printing ***
      3      ac(1,5),ac(1,6),ac(1,7),ac(1,8),ac(1,9),
      4      ac(1,10),ac(1,11),ac(1,12),ac(1,13),ac(1,14))
       else
-         print*,'% PRTMATD: invalid stencil type given...'
+         call vnmprt(2,'% PRTMATD: invalid stencil type given...',40)
       endif
 c*
 c*    *** go home ***
@@ -736,9 +736,9 @@ c* *********************************************************************
 c*
 c*    *** recover matrix dimension ***
       n = (nx-2) * (ny-2) * (nz-2)
-      print*,'% '
-      print*,'% dimension of matrix = ',n
-      print*,'% *begin diagonal matrix* '
+      call vnmprt(2,'% ',2)
+      call vnmpri(2,'% dimension of matrix = ',24,n)
+      call vnmprt(2,'% *begin diagonal matrix* ',26)
 c*
 c*    *** handle first block ***
       do 10 k = 2, nz-1
@@ -750,7 +750,7 @@ c*    *** handle first block ***
  10   continue
 c*
 c*    *** finish up ***
-      print*,'% *end diagonal matrix* '
+      call vnmprt(2,'% *end diagonal matrix* ',24)
 c*
 c*    *** format statements ***
  104  format (4(1pe8.1,1x))
@@ -783,9 +783,9 @@ c* *********************************************************************
 c*
 c*    *** recover matrix dimension ***
       n = (nx-2) * (ny-2) * (nz-2)
-      print*,'% '
-      print*,'% dimension of matrix = ',n
-      print*,'% *begin diagonal matrix* '
+      call vnmprt(2,'% ',2)
+      call vnmpri(2,'% dimension of matrix = ',24,n)
+      call vnmprt(2,'% *begin diagonal matrix* ',26)
 c*
 c*    *** handle first block ***
       do 10 k = 2, nz-1
@@ -801,7 +801,7 @@ c*    *** handle first block ***
  10   continue
 c*
 c*    *** finish up ***
-      print*,'% *end diagonal matrix* '
+      call vnmprt(2,'% *end diagonal matrix* ',24)
 c*
 c*    *** format statements ***
  114  format (14(1pe8.1,1x))
@@ -826,9 +826,9 @@ c***********************************************************************
       double precision a(lda,*)
 c
 c     *** recover matrix dimension ***
-      print*,' '
-      print*,' dimension of matrix = ',n
-      print*,' *begin banded matrix* '
+      call vnmprt(2,' ',1)
+      call vnmpri(2,' dimension of matrix = ',23,n)
+      call vnmprt(2,' *begin banded matrix* ',23)
 c
 c     *** do the printing ***
       do 10 j = 1, n
@@ -836,7 +836,7 @@ c     *** do the printing ***
  10   continue
 c
 c     *** finish up ***
-      print*,' *end banded matrix* '
+      call vnmprt(2,' *end banded matrix* ',21)
 c
 c     *** format statements ***
  100  format (30(1x,1pe8.1))
@@ -972,7 +972,8 @@ c*    *** newton's method complete -- update solution value ***
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
-         print*,'% LINESEARCH: exceeded 1d newton itmax: = ',nitmax
+         call vnmpri(2,'% LINESEARCH: exceeded 1d newton itmax: = ',
+     2      42, nitmax)
       endif
 c*
 c*    *** return and end ***

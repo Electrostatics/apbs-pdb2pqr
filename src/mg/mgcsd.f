@@ -215,11 +215,11 @@ c*    *** compute denominator for stopping criterion ***
      4         tru(iz(1,lev)),w1)
             rsden = dsqrt(xdot(nxf,nyf,nzf,tru(iz(1,lev)),w1))
          else
-            print*,'% MVCS: bad istop value... '
+            call vnmprt(2,'% MVCS: bad istop value... ',27)
          endif
          if (rsden.eq.0.0d0) then
             rsden = 1.0d0
-            print*,'% MVCS: rhs is zero on finest level '
+            call vnmprt(2,'% MVCS: rhs is zero on finest level ',36)
          endif
          rsnrm = rsden
          orsnrm = rsnrm
@@ -253,7 +253,8 @@ c*          *** solve on coarsest grid with cghs, mgsmoo_s=4 (no residual) ***
 c*    
 c*          *** check for trouble on the coarse grid ***
             if (iters_s .ge. itmax_s) then
-               print*,'% MVCS: > max iters on coarse grid: ',iters_s
+               call vnmpri(2,'% MVCS: > max iters on coarse grid: ',
+           2      36, iters_s)
             endif
 c*
 c*       *** use direct method? ***
@@ -273,7 +274,8 @@ c*          *** call dpbsl to solve ***
             call xcopy_large(nxf,nyf,nzf,w1,x(iz(1,lev)))
             call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
-            print*,'% MVCS: invalid coarse solver requested...'
+            call vnmprt(2,'% MVCS: invalid coarse solver requested...',
+        2      42)
          endif
 c*      
 c*       *** compute the stopping test ***
@@ -314,7 +316,7 @@ c*       *** compute the stopping test ***
      4            w1,w2)
                rsnrm = dsqrt(xdot(nxf,nyf,nzf,w1,w2))
             else
-               print*,'% MVCS: bad istop value... '
+               call vnmprt(2,'% MVCS: bad istop value... ',27)
             endif
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          endif
@@ -419,7 +421,8 @@ c*          *** solve on coarsest grid with cghs, mgsmoo_s=4 (no residual) ***
 c*    
 c*          *** check for trouble on the coarse grid ***
             if (iters_s .ge. itmax_s) then
-               print*,'% MVCS: iters on coarse grid: ',iters_s
+               call vnmpri(2,'% MVCS: iters on coarse grid: ',
+           2      30, iters_s)
             endif
 c*
 c*       *** use direct method? ***
@@ -439,7 +442,8 @@ c*          *** call dpbsl to solve ***
             call xcopy_large(nxf,nyf,nzf,w1,x(iz(1,lev)))
             call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
-            print*,'% MVCS: invalid coarse solver requested...'
+            call vnmprt(2,'% MVCS: invalid coarse solver requested...',
+        2      42)
          endif
 c*      
 c* *********************************************************************
@@ -543,7 +547,7 @@ c*       *** compute/check the current stopping test ***
      4            w1,w2)
                rsnrm = dsqrt(xdot(nxf,nyf,nzf,w1,w2))
             else
-               print*,'% MVCS: bad istop value... '
+               call vnmprt(2,'% MVCS: bad istop value... ',27)
             endif
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)
             if ((rsnrm/rsden) .le. errtol) goto 99

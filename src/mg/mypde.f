@@ -382,7 +382,8 @@ c*            *** count chopped values ***
 c*
 c*         *** info ***
            if (ichopped .gt. 0) then
-           print*,'% C_VEC: trapped exp overflows:          ',ichopped
+           call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
+       2      41, ichopped)
            endif
 c*
 c*      *** else if polynomial requested ***
@@ -533,7 +534,8 @@ c*            *** count chopped values ***
 c*
 c*         *** info ***
            if (ichopped .gt. 0) then
-           print*,'% DC_VEC: trapped exp overflows:         ',ichopped
+           call vnmpri(2,'% DC_VEC: trapped exp overflows:         ',
+       2      41, ichopped)
            endif
 c*
 c*      *** else if polynomial requested ***
