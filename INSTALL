@@ -163,7 +163,8 @@ documentation for more information on this.
 --------------------
 SDSC Sun E10K System
 --------------------
-CC=/usr/ucb/cc
+The Sun compiler is very strange.  I used gcc instead.
+CC=gcc
 MC_MPI_LIBRARY=/usr/local/apps/mpi-1.0.13/lib/solaris/ch_p4
 MC_MPI_INCLUDE=/usr/local/apps/mpi-1.0.13/include
 
