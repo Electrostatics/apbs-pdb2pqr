@@ -47,7 +47,8 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
-
+#define MAX_SPLINE_WINDOW 1.0
+#define MAX_HASH_DIM 75
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods
@@ -501,12 +502,19 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
     }
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
 
-    /* Compute accessibility objects */
-    if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
-    else radius = thee->solventRadius;
+    /* Compute accessibility objects:
+     *   - Allow for extra room in the case of spline windowing 
+     *   - Place some limits on the size of the hash table in the case of very
+     *     large molecules
+     */
+    if (thee->ionRadius > thee->solventRadius) 
+      radius = thee->ionRadius + MAX_SPLINE_WINDOW;
+    else radius = thee->solventRadius + MAX_SPLINE_WINDOW;
     nhash = VPOW(8.0*(double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
     if (((int)nhash) < 3) nhash = 3;
-    Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object...\n"); 
+    if (((int)nhash) > MAX_HASH_DIM) nhash = MAX_HASH_DIM;
+    Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object with %d^3 hash table\n",
+      (int)nhash); 
     thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
       (int)(nhash), 200);
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 

@@ -149,11 +149,14 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     Vnm_print(0, "Vacc_ctor2:  Constructing sphere...\n");
     thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
     VASSERT(thee->sphere != VNULL);
-
+ 
     /* Allocate space */
     thee->natoms = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
     VASSERT(thee->natoms != VNULL);
     for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
+    thee->atomFlags = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
+    VASSERT(thee->atomFlags != VNULL);
+    for (i=0; i<thee->n; i++) (thee->atomFlags)[i] = 0;
     thee->atomIDs = Vmem_malloc(thee->vmem, thee->n, sizeof(int *));
     VASSERT(thee->atomIDs != VNULL);
     for (i=0; i<thee->n; i++) (thee->atomIDs)[i] = VNULL;
@@ -329,6 +332,7 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     }
     Vmem_free(thee->vmem, thee->n, sizeof(int *), (void **)&(thee->atomIDs));
     Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->natoms));
+    Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->atomFlags));
     for (i=0; i<thee->nsphere; i++) 
       Vmem_free(thee->vmem, 3, sizeof(double), (void **)&(thee->sphere[i]));
     Vmem_free(thee->vmem, thee->nsphere, sizeof(double *), 
@@ -344,11 +348,12 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
 //
 // Purpose:  Determines if a point is within the union of the atomic spheres
 //           (with radii equal to their van der Waals radii).
-//           Returns 1 if accessible (outside the molecular volume).
+//           Returns the characteristic function value: 1.0 => accessible; 
+//           0.0 => inaccessible
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
+VPUBLIC double Vacc_vdwAcc(Vacc *thee, double center[3]) {
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
@@ -366,7 +371,7 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
      * accessible */ 
     if ((centeri < 0) || (centeri >= thee->nx) || 
         (centerj < 0) || (centerj >= thee->ny) || 
-        (centerk < 0) || (centerk >= thee->nz)) return 1;
+        (centerk < 0) || (centerk >= thee->nz)) return 1.0;
    
     /* If we're still here, then we need to check each atom until we find an
      * overlap at which point we can determine that the point is not 
@@ -377,11 +382,11 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
         apos = Vatom_getPosition(atom);
         dist = VSQR(center[0]-apos[0]) + VSQR(center[1]-apos[1])
                + VSQR(center[2]-apos[2]);
-        if (dist < VSQR(Vatom_getRadius(atom))) return 0;
+        if (dist < VSQR(Vatom_getRadius(atom))) return 0.0;
     }
 
     /* If we're still here, then the point is accessible */
-    return 1;
+    return 1.0;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -390,13 +395,13 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
 // Purpose:  Determines if a point is within the union of the spheres centered
 //           at the atomic centers with radii equal to the sum of their van 
 //           der Waals radii and the probe radius.
-//           Returns 1 if accessible (outside the molecular volume).
+//           Returns value between 1.0 (if accessible) and 0.0
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_ivdwAcc(Vacc *thee, double center[3], double radius) {
+VPUBLIC double Vacc_ivdwAcc(Vacc *thee, double center[3], double radius) {
 
-    return ivdwAccExclus(thee, center, radius, -1);
+    return (double)ivdwAccExclus(thee, center, radius, -1);
 
 }
 
@@ -454,7 +459,11 @@ VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius,
             apos = Vatom_getPosition(atom);
             dist = VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
                    + VSQR(apos[2]-center[2]);
-            if (dist < VSQR(Vatom_getRadius(atom)+radius)) return 0;
+            /* Only atoms with non-zero radii can contribute to solvent 
+             * inaccessibility */
+            if (Vatom_getRadius(atom) > 0.0) {
+                if (dist < VSQR(Vatom_getRadius(atom)+radius)) return 0;
+            }
         }
     }
 
@@ -463,24 +472,251 @@ VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vacc_molAcc
+// Routine:  Vacc_splineAccGrad
 //
-// Purpose:  Determine accessibility of a probe (of radius radius)
-//           at a given point, given a collection of atomic spheres.
-//           Returns 1 if accessible.
+// Purpose:  Determine derivative (with respect to displacement of a single
+//           atom) of the accessibility at a given point, given a collection of
+//           atomic spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111,
+//           59--75, 1998) definition suitable for force evalation; basically a
+//           cubic spline.  
+//
+// Args:     Instead of a probe radius, we use a smoothing window parameter.
+//           However, a ``inflation" term can be included to account for
+//           probe-centered surfaces as in ion-accesibility, etc.  The variable
+//           ``grad" should be a 3-vector.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_molAcc(Vacc *thee, double center[3], double radius) {
+VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
+  double infrad, int atomID, double *grad) {
+
+    int centeri, centerj, centerk;  /* Grid-based coordinates */
+    int ui;                         /* Natural array coordinates */
+    int iatom;                      /* Counters */
+    double dist, adist, *apos, arad, sm, sm2, w2i, mygrad;
+    Vatom *atom;
+    double value = 1.0;             /* Characteristic function value */
+    double tvalue = 1.0;            
+    double myvalue = 1.0;           /* Char. func. value for given atom */
+
+
+    VASSERT(thee != NULL);
+
+    /* Inverse squared window parameter */
+    w2i = 1.0/VSQR(win);
+
+    /* The grad is zero by default */
+    grad[0] = 0.0;
+    grad[1] = 0.0;
+    grad[2] = 0.0;
+
+    if (thee->max_radius < (win + infrad)) {
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Vacc constructed with max_radius=%g;\n",
+          thee->max_radius);
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Insufficient for window=%g, inflation radius=%g\n",
+          win, infrad);
+        VASSERT(0);
+    }
+
+    /* Convert to grid based coordinates */
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+
+    /* Check to make sure we're on the grid; if not, then our characteristic
+     * function is definitely unity and the grad is definitely zero */
+    if ((centeri < 0) || (centeri >= thee->nx) || \
+        (centerj < 0) || (centerj >= thee->ny) || \
+        (centerk < 0) || (centerk >= thee->nz))  return;
+
+    /* If we're still here, then we need to check each atom until we find an
+     * overlap at which point we can determine that the point is not
+     * accessible */
+    ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+
+    /* *** CALCULATE THE CHARACTERISTIC FUNCTION VALUE FOR THIS ATOM AND THE
+     * *** MAGNITUDE OF THE FORCE *** */
+    atom = Valist_getAtom(thee->alist, atomID);
+    apos = Vatom_getPosition(atom);
+    /* Zero-radius atoms don't contribute */
+    if (Vatom_getRadius(atom) > 0.0) {
+        arad = Vatom_getRadius(atom) + infrad;
+        adist = VSQRT(VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+          + VSQR(apos[2]-center[2]));
+        /* If we're inside an atom, the entire characteristic function
+         * will be zero and the grad will be zero, so we can stop */
+        if (adist <= (arad - win)) return;
+        /* Likewise, if we're outside the smoothing window, the characteristic
+         * function is unity and the grad will be zero, so we can stop */
+        else if (adist >= (arad + win)) return;
+        /* If we're inside the smoothing window */
+        else {
+            sm = adist - arad + win;
+            sm2 = VSQR(sm);
+            myvalue = 0.75*sm2*w2i -0.25*sm*sm2*w2i/win;
+            mygrad = 1.5*sm*w2i - 0.75*sm2*w2i/win;
+        }
+    } else return;
+
+    /* *** CALCULATE THE CHARACTERISTIC FUNCTION VALUE FOR ALL ATOMS *** */
+    /* First, reset the list of atom flags */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++)
+      thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
+    /* Now loop through the atoms assembling the characteristic function */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
+        /* Check to see if we've counted this atom already */
+        if (!(thee->atomFlags[thee->atomIDs[ui][iatom]])) {
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
+            atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+            apos = Vatom_getPosition(atom);
+            /* Zero-radius atoms don't contribute */
+            if (Vatom_getRadius(atom) > 0.0) {
+                arad = Vatom_getRadius(atom) + infrad;
+                dist = VSQRT(VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+                    + VSQR(apos[2]-center[2]));
+                /* If we're inside an atom, the entire characteristic function
+                 * will be zero */
+                if (dist <= (arad - win)) {
+                    value = 0.0;
+                    break;
+                /* We're outside the smoothing window */
+                } else if (dist >= (arad + win)) {
+                    tvalue = 1.0;
+                /* We're inside the smoothing window */
+                } else {
+                    sm = dist - arad + win;
+                    sm2 = VSQR(sm);
+                    tvalue = 0.75*sm2/VSQR(win) -0.25*sm*sm2/VSQR(win)/win;
+                }
+                value *= tvalue;
+            }
+        }
+    }
+
+    /* Now assemble the grad vector */
+    VASSERT(myvalue > 0.0);
+    atom = Valist_getAtom(thee->alist, atomID);
+    apos = Vatom_getPosition(atom);
+    grad[0] = -(value/myvalue)*((center[0] - apos[0])/adist);
+    grad[1] = -(value/myvalue)*((center[1] - apos[1])/adist);
+    grad[2] = -(value/myvalue)*((center[2] - apos[2])/adist);
+    
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_splineAcc
+//
+// Purpose:  Determine accessibility at a given point, given a collection of
+//           atomic spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111,
+//           59--75, 1998) definition suitable for force evalation; basically a
+//           cubic spline.  Returns value between 1.0 (if accessible) and 0.0
+//           (inaccessible).
+//
+// Args:     Instead of a probe radius, we use a smoothing window parameter.
+//           However, a ``inflation" term can be included to account for
+//           probe-centered surfaces as in ion-accesibility, etc.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win, 
+  double infrad) {
+
+    int centeri, centerj, centerk;  /* Grid-based coordinates */
+    int ui;                         /* Natural array coordinates */
+    int iatom;                      /* Counters */
+    double dist, *apos, arad, sm, sm2, w2i;
+    Vatom *atom;
+    double value = 1.0;             /* Characteristic function value */
+    double tvalue = 1.0;           /* Char. func. value for given atom */
+
+
+    VASSERT(thee != NULL);
+
+    /* Inverse squared window parameter */
+    w2i = 1.0/VSQR(win);
+
+    if (thee->max_radius < (win + infrad)) {
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Vacc constructed with max_radius=%g;\n",
+          thee->max_radius);
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Insufficient for window=%g, inflation radius=%g\n", 
+          win, infrad);
+        VASSERT(0);
+    }
+
+    /* Convert to grid based coordinates */
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+
+    /* Check to make sure we're on the grid; if not, then our characteristic
+     * function is definitely unity */
+    if ((centeri < 0) || (centeri >= thee->nx) || \
+        (centerj < 0) || (centerj >= thee->ny) || \
+        (centerk < 0) || (centerk >= thee->nz)) return 1;
+
+    /* If we're still here, then we need to check each atom until we find an
+     * overlap at which point we can determine that the point is not
+     * accessible */
+    ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+    /* First, reset the list of atom flags */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) 
+      thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
+    /* Now loop through the atoms assembling the characteristic function */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
+        /* Check to see if we've counted this atom already */
+        if (!(thee->atomFlags[thee->atomIDs[ui][iatom]])) {
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
+            atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+            apos = Vatom_getPosition(atom);
+            /* Zero-radius atoms don't contribute */
+            if (Vatom_getRadius(atom) > 0.0) {
+                arad = Vatom_getRadius(atom) + infrad;
+                dist = VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+                    + VSQR(apos[2]-center[2]);
+                /* If we're inside an atom, the entire characteristic function
+                 * will be zero */
+                if (dist <= (arad - win)) {
+                    tvalue = 0.0;
+                    value = 0.0;
+                    return value;
+                /* We're outside the smoothing window */
+                } else if (dist >= (arad + win)) {
+                    tvalue = 1.0;
+                /* We're inside the smoothing window */
+                } else {
+                    sm = dist - arad + win;
+                    sm2 = VSQR(sm);
+                    tvalue = 0.75*sm2*w2i -0.25*sm*sm2*w2i/win;
+                }
+                value *= tvalue;
+            } 
+        }
+    }
+ 
+    return value;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_molAcc
+//
+// Purpose:  Determine accessibility of a probe (of radius radius)
+//           at a given point, given a collection of atomic spheres.  Uses
+//           molecular (Connolly) surface definition.
+//           Returns value between 1.0 (if accessible) and 0.0 (inaccessible).
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
 
     int ipt;
     double vec[3];
 
     /* ******* CHECK IF OUTSIDE ATOM+PROBE RADIUS SURFACE ***** */
-    if (Vacc_ivdwAcc(thee, center, radius)) return 1;
+    if (Vacc_ivdwAcc(thee, center, radius) == 1.0) return 1;
 
     /* ******* CHECK IF INSIDE ATOM RADIUS SURFACE ***** */
-    if (!Vacc_vdwAcc(thee, center)) return 0;
+    if (Vacc_vdwAcc(thee, center) == 0.0) return 0;
 
     /* ******* CHECK IF OUTSIDE MOLECULAR SURFACE ***** */
     /* Let S be the sphere of radius radius centered at the point we are
@@ -491,11 +727,11 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, double center[3], double radius) {
         vec[0] = radius*thee->sphere[ipt][0] + center[0];
         vec[1] = radius*thee->sphere[ipt][1] + center[1];
         vec[2] = radius*thee->sphere[ipt][2] + center[2];
-        if (Vacc_ivdwAcc(thee, vec, radius)) return 1;
+        if (Vacc_ivdwAcc(thee, vec, radius)) return 1.0;
     }
 
     /* If all else failed, we are not inside the molecular surface */
-    return 0;
+    return 0.0;
 }
 
 #if defined(HAVE_FETK_H)
@@ -533,14 +769,14 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
         for (icoord=0;icoord<3;icoord++) 
           coord[icoord] = VV_coord(Gem_VV(gm, ivert), icoord);
         if (meth == 0) {
-            accVals[0][ivert] = (double)Vacc_molAcc(thee, coord, radius);
-            accVals[1][ivert] = (double)Vacc_molAcc(thee, coord, radius);
+            accVals[0][ivert] = Vacc_molAcc(thee, coord, radius);
+            accVals[1][ivert] = Vacc_molAcc(thee, coord, radius);
         } else if (meth == 1) {
-            accVals[0][ivert] = (double)Vacc_ivdwAcc(thee, coord, radius);
-            accVals[1][ivert] = (double)Vacc_ivdwAcc(thee, coord, radius);
+            accVals[0][ivert] = Vacc_ivdwAcc(thee, coord, radius);
+            accVals[1][ivert] = Vacc_ivdwAcc(thee, coord, radius);
         } else if (meth == 2) {
-            accVals[0][ivert] = (double)Vacc_vdwAcc(thee, coord);
-            accVals[1][ivert] = (double)Vacc_vdwAcc(thee, coord);
+            accVals[0][ivert] = Vacc_vdwAcc(thee, coord);
+            accVals[1][ivert] = Vacc_vdwAcc(thee, coord);
         } else VASSERT(0);
     }
     sock = Vio_ctor(iodev, iofmt, iohost, iofile, "w");

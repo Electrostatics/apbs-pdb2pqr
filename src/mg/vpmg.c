@@ -931,6 +931,8 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 //                            smoothing
 //                       1 => smoothing based on a harmonic average of the
 //                            value at three points
+//                       2 => spline-based accessibility with epsparm =
+//                            windowing parameter (<1.0, please)
 //           epsparm  Parameter for dielectric discretizing functions
 //
 // Author:   Nathan Baker
@@ -941,7 +943,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     Valist *alist;
     Vpbe *pbe;
     Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xmin, xmax, ymin, ymax, zmin, zmax, chi;
     double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
     double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
     double hx, hy, hzed, *apos, arad;
@@ -1236,6 +1238,37 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
                           epsw*epsp/((1-accf)*epsw + accf*epsp);
                     }
                     break;
+
+                  /* Spline-based accessibility function for force
+                   * calculations.  See Im et al, Comp Phys Comm 111, (1998)
+                   * 59--75. */
+                  case 2:
+                    /* x-direction */
+                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i] + 0.5*hx;
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k];
+                        chi = Vacc_splineAcc(acc, position, epsparm, 0.0);
+                        thee->a1cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                    }
+                    /* y-direction */
+                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j] + 0.5*hy;
+                        position[2] = thee->zf[k];
+                        chi = Vacc_splineAcc(acc, position, epsparm, 0.0);
+                        thee->a2cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                    }
+                    /* z-direction */
+                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k] + 0.5*hzed;
+                        chi = Vacc_splineAcc(acc, position, epsparm, 0.0);
+                        thee->a3cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                    }
+                    break;
+
 
                   /* Oops, invalid epsmeth */
                   default:

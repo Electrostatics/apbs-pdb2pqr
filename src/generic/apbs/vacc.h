@@ -42,7 +42,6 @@
 //      Uses list of atoms.
 //
 // Author:   Nathan Baker
-//           Force evlaution routines by Larry Canino
 /////////////////////////////////////////////////////////////////////////// */
 
 #ifndef _VACC_H_
@@ -69,6 +68,7 @@ typedef struct Vacc {
   int **atomIDs;                 /* An array of arrays of atom IDs in alist */
   int *natoms;                   /* An array telling how many pointers are 
                                   * stored in atoms[i] */
+  int *atomFlags;                /* Flags for keeping track of atoms */
   double **sphere;               /* An array of points on the surface of a 
                                   * sphere */
   int nsphere;                   /* The number of points in thee->sphere */
@@ -83,14 +83,6 @@ typedef struct Vacc {
   double *area;                  /* The contribution to the solvent-accessible
                                   * surface area from each atom.  This array is
                                   * filled by Vacc_totalSASA */
-  /* ** FORCE EVALUATION STUFF ** */
-  double **qrule;                /* Rule to be used for computing quadratures 
-                                  * over unit sphere */
-  int nrule;                     /* Number of points in quadrature rule */
-  int nsrf;                      /* Total number of surface points */
-  double **srf;                  /* Surface point coordinates */
-  int *iatsrf;                   /* Mapping from global surface point index to
-                                  * atom index */
 
 
 } Vacc;
@@ -116,9 +108,13 @@ VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
-VEXTERNC int Vacc_vdwAcc(Vacc *thee, double center[3]);
-VEXTERNC int Vacc_ivdwAcc(Vacc *thee, double center[3], double radius);
-VEXTERNC int Vacc_molAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC double Vacc_vdwAcc(Vacc *thee, double center[3]);
+VEXTERNC double Vacc_ivdwAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC double Vacc_molAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
+  double infrad);
+VEXTERNC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
+  double infrad, int atomID, double *force);
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
 VEXTERNC double Vacc_totalSASA(Vacc *thee, double radius);
 VEXTERNC double Vacc_atomSASA(Vacc *thee, double radius, int iatom);
