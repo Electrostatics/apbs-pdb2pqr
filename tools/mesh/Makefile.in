@@ -106,6 +106,7 @@ CPP = @CPP@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
 F77 = @F77@
+FLIBS = @FLIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
@@ -148,8 +149,6 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-LINK = $(F77) $(LDFLAGS) -o $@
-
 noinst_PROGRAMS = mgmesh accmap
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ${math_lib}
@@ -181,6 +180,7 @@ CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
