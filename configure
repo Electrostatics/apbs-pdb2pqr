@@ -3382,7 +3382,7 @@ fi
 #define HAVE_FETK_H 1
 EOF
 
-        fetk_do_src="fem"
+        fetk_do_src="vcsm.c vfetk.c vpee.c"
         fetk_do_lib="../fem/libapbsfem.la"
         fetk_do_test="vmetis fem reg-fem"
     else

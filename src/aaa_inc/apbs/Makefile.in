@@ -140,7 +140,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 BOTH_HEADS = nosh.h vacc.h valist.h vatom.h vgreen.h vhal.h vpbe.h   vunit.h apbssh.h
 
 PMG_HEADS = vpmg.h vpmgp.h mgsh.h
-FETK_HEADS = ../../fem/apbs/vfetk.h ../../fem/apbs/vcsm.h ../../fem/apbs/vpee.h
+FETK_HEADS = vfetk.h vcsm.h vpee.h
 
 APBS_HEADS = apbs.h
 OTHER_HEADS = ${BOTH_HEADS} ${PMG_HEADS} ${FETK_HEADS}
