@@ -68,7 +68,7 @@ typedef struct Vacc {
   /* An array telling how many pointers are stored in atoms[i] */
   int *natoms;
   /* An array of points on the surface of a sphere */
-  Vec3 *sphere;
+  double **sphere;
   int nsphere;
 
   /* Grid corner */
@@ -101,7 +101,7 @@ VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
 VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
-VEXTERNC Vec3* Vacc_sphere(Vacc *thee, int *npts, double radius);
+VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts, double radius);
 
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center);
