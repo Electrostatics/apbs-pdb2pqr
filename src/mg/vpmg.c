@@ -2795,7 +2795,7 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
     ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
     zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
 
-    Vpmg_writeDX2(iodev, iofmt, thost, fname, title, data,
+    Vpmg_writeDX2(iodev, iofmt, thost, fname, title, data, pvec,
       hx, hy, hzed, nx, ny, nz, xmin, ymin, zmin);
 }
 
@@ -2805,17 +2805,28 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
 //
 // Purpose:  Write out a PMG array in OpenDX grid format (ASCII)
 //
-// Notes:    See Vpmg_writeDX
+// Args:     iodev        ==> output device type (file/buff/unix/inet)
+//           iofmt        ==> output device format (ascii/xdr)
+//           thost        ==> output hostname (for sockets)
+//           fname        ==> output file/buff/unix/inet name
+//           title        ==> title to be inserted in grid
+//           data         ==> nx*ny*nz length array of data
+//           pvec         ==> nx*ny*nz length array of partition masks (1 if in
+//                            partition, 0 otherwise).  This array can be VNULL
+//                            if no masking is desired.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, char *title, double *data,
+  const char *thost, const char *fname, char *title, double *data, int *pvec,
   double hx, double hy, double hzed, int nx, int ny, int nz, 
   double xmin, double ymin, double zmin) {
 
-    int icol, i, j, k, u;
+    int icol, i, j, k, u, usepart;
     Vio *sock;
+
+    if (pvec == VNULL) usepart = 0;
+    else usepart = 1;
 
     /* Set up the virtual socket */
     sock = Vio_ctor(iodev,iofmt,thost,fname,"w");
@@ -2830,50 +2841,204 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
         return;
     }
 
-    /* Write off the title */
-    Vio_printf(sock, "# Electrostatic potential data from APBS/PMG\n");
-    Vio_printf(sock, "# \n");
-    Vio_printf(sock, "# %s\n", title);
-    Vio_printf(sock, "# \n");
-
-    /* Write off the DX regular positions */
-    Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
-      nz, ny, nx);
-    Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
-
-    /* Write off the DX regular connections */
-    Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
-      nz, ny, nx);
-
-    /* Write off the DX data */
-    Vio_printf(sock, "object 3 class array type double rank 0 items %d data follows\n",
-      (nx*ny*nz));
-    icol = 0;
-    for (k=0; k<nz; k++) {
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
-                u = k*(nx)*(ny)+j*(nx)+i;
-                Vio_printf(sock, "%12.6E ", data[u]);
-                icol++;
-                if (icol == 3) {
-                    icol = 0;
-                    Vio_printf(sock, "\n");
+    if (usepart) {
+        /* Get the lower corner and number of grid points for the local
+         * partition */
+        xminPART = xmin + (hx)*(nx-1);
+        yminPART = ymin + (hy)*(ny-1);
+        zminPART = zmin + (hzed)*(nz-1);
+        nxPART = 0;
+        nyPART = 0;
+        nzPART = 0;
+        for (k=0; k<nz; k++) {
+            u = k*(nx)*(ny);
+            if (pvec[u] == 1) {
+                nz++;
+                z = k*hzed + xmin;
+                if (z < zminPART) zminPART = z;
+            }
+            for (j=0; j<thee->pmgp->ny; j++) {
+                u = k*(nx)*(ny)+j*(nx);
+                if (pvec[u] == 1) {
+                    ny++;
+                    y = j*hy + ymin;
+                    if (y < yminPART) yminPART = y;
+                }
+                for (i=0; i<nx; i++) {
+                    u = k*(nx)*(ny)+j*(nx)+i;
+                    if (pvec[u] != 0) {
+                        nx++;
+                        x = i*hx + xmin;
+                        if (x < xminPART) xminPART = x;
+                    }
                 }
             }
         }
-    }
-    if (icol != 0) Vio_printf(sock, "\n");
-                
-    /* Create the field */
-    Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
-    Vio_printf(sock, "object \"regular positions regular connections\" class field\n");
-    Vio_printf(sock, "component \"positions\" value 1\n");
-    Vio_printf(sock, "component \"connections\" value 2\n");
-    Vio_printf(sock, "component \"data\" value 3\n");
 
+        /* Write off the title */
+        Vio_printf(sock, "# Electrostatic potential data from APBS/PMG\n");
+        Vio_printf(sock, "# \n");
+        Vio_printf(sock, "# %s\n", title);
+        Vio_printf(sock, "# \n");
+    
+        /* Write off the DX regular positions */
+        Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
+          nzPART, nyPART, nxPART);
+        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xminPART, yminPART,
+          zminPART);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
+    
+        /* Write off the DX regular connections */
+        Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
+          nzPART, nyPART, nxPART);
+    
+        /* Write off the DX data */
+        Vio_printf(sock, "object 3 class array type double rank 0 items %d data follows\n",
+          (nxPART*nyPART*nzPART));
+        icol = 0;
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    u = k*(nx)*(ny)+j*(nx)+i;
+                    if (pvec[u] != 0) {
+                        Vio_printf(sock, "%12.6E ", data[u]);
+                        icol++;
+                        if (icol == 3) {
+                            icol = 0;
+                            Vio_printf(sock, "\n");
+                        }
+                    }
+                }
+            }
+        }
+        if (icol != 0) Vio_printf(sock, "\n");
+                    
+        /* Create the field */
+        Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
+        Vio_printf(sock, "object \"regular positions regular connections\" class field\n");
+        Vio_printf(sock, "component \"positions\" value 1\n");
+        Vio_printf(sock, "component \"connections\" value 2\n");
+        Vio_printf(sock, "component \"data\" value 3\n");
+    }
+    
+    /* Close off the socket */
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_setPart
+//
+// Purpose:  Set partition information which restricts the calculation of
+//           observables to a (rectangular) subset of the problem domain
+// 
+// Args:     lowerCorner   Partition lower corner
+//           upperCorner   Partition upper corner
+//           bflags        Whether or not a particular processor owns a face of
+//                         it's partition.  This keeps things disjoint.
+//
+// Notes:    Each partition 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
+  double upperCorner[3], int bflags[6]) {
+
+    Valist *alist;
+    Vatom *atom;
+    int i, j, k, nx, ny, nz, xok, yok, zok;
+
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+
+    /* We need have called Vpmg_fillco first */
+    VASSERT(thee->filled == 1);
+
+    alist = thee->pbe->alist;
+
+    Vnm_print(0, "Vpmg_setPart:  lower corner = (%g, %g, %g)\n",
+      lowerCorner[0], lowerCorner[1], lowerCorner[2]);
+    Vnm_print(0, "Vpmg_setPart:  upper corner = (%g, %g, %g)\n",
+      upperCorner[0], upperCorner[1], upperCorner[2]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[FRONT] = %d\n", 
+      bflags[VAPBS_FRONT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[BACK] = %d\n", 
+      bflags[VAPBS_BACK]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[LEFT] = %d\n", 
+      bflags[VAPBS_LEFT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[RIGHT] = %d\n", 
+      bflags[VAPBS_RIGHT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[UP] = %d\n", 
+      bflags[VAPBS_UP]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[DOWN] = %d\n", 
+      bflags[VAPBS_DOWN]);
+
+    /* Identify atoms as inside or outside */
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        if ((atom->position[0] < upperCorner[0]) &&
+            (atom->position[0] > lowerCorner[0])) xok = 1;
+        else {
+            if (atom->position[0] == lowerCorner[0]) {
+                if (bflags[VAPBS_LEFT] == 1) xok = 1;
+                else xok = 0;
+                Vnm_print(0, "ATOM %d on LEFT face (x = %g; bflag = %d)\n", i,
+                  lowerCorner[0], bflags[VAPBS_LEFT]);
+            } 
+            if (atom->position[0] == upperCorner[0]) {
+                if (bflags[VAPBS_RIGHT] == 1) xok = 1;
+   
+    } else { 
+    
+        /* Write off the title */
+        Vio_printf(sock, "# Electrostatic potential data from APBS/PMG\n");
+        Vio_printf(sock, "# \n");
+        Vio_printf(sock, "# %s\n", title);
+        Vio_printf(sock, "# \n");
+    
+        /* Write off the DX regular positions */
+        Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
+          nz, ny, nx);
+        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
+    
+        /* Write off the DX regular connections */
+        Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
+          nz, ny, nx);
+    
+        /* Write off the DX data */
+        Vio_printf(sock, "object 3 class array type double rank 0 items %d data follows\n",
+          (nx*ny*nz));
+        icol = 0;
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    u = k*(nx)*(ny)+j*(nx)+i;
+                    Vio_printf(sock, "%12.6E ", data[u]);
+                    icol++;
+                    if (icol == 3) {
+                        icol = 0;
+                        Vio_printf(sock, "\n");
+                    }
+                }
+            }
+        }
+        if (icol != 0) Vio_printf(sock, "\n");
+                    
+        /* Create the field */
+        Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
+        Vio_printf(sock, "object \"regular positions regular connections\" class field\n");
+        Vio_printf(sock, "component \"positions\" value 1\n");
+        Vio_printf(sock, "component \"connections\" value 2\n");
+        Vio_printf(sock, "component \"data\" value 3\n");
+    }
+    
     /* Close off the socket */
     Vio_connectFree(sock);
     Vio_dtor(&sock);
