@@ -49,9 +49,7 @@ SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES           = @inc_list@
 LDFLAGS            = @LDFLAGS@ @FLIBS@
 
-noinst_PROGRAMS    = mgmesh accmap
+noinst_PROGRAMS    = mgmesh 
 mgmesh_SOURCES     = mgmesh.c mypde.f
 mgmesh_LDADD       = -lapbs @lib_list@
-accmap_SOURCES     = accmap.c mypde.f
-accmap_LDADD       = -lapbs @lib_list@
 

@@ -151,11 +151,9 @@ SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES = @inc_list@
 LDFLAGS = @LDFLAGS@ @FLIBS@
 
-noinst_PROGRAMS = mgmesh accmap
+noinst_PROGRAMS = mgmesh 
 mgmesh_SOURCES = mgmesh.c mypde.f
 mgmesh_LDADD = -lapbs @lib_list@
-accmap_SOURCES = accmap.c mypde.f
-accmap_LDADD = -lapbs @lib_list@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../../apbscfg.h
 CONFIG_CLEAN_FILES = 
@@ -168,9 +166,6 @@ LIBS = @LIBS@
 mgmesh_OBJECTS =  mgmesh.o mypde.o
 mgmesh_DEPENDENCIES = 
 mgmesh_LDFLAGS = 
-accmap_OBJECTS =  accmap.o mypde.o
-accmap_DEPENDENCIES = 
-accmap_LDFLAGS = 
 FFLAGS = @FFLAGS@
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 LTF77COMPILE = $(LIBTOOL) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
@@ -188,8 +183,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(mgmesh_SOURCES) $(accmap_SOURCES)
-OBJECTS = $(mgmesh_OBJECTS) $(accmap_OBJECTS)
+SOURCES = $(mgmesh_SOURCES)
+OBJECTS = $(mgmesh_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -252,10 +247,6 @@ maintainer-clean-libtool:
 mgmesh: $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES)
 	@rm -f mgmesh
 	$(F77LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
-
-accmap: $(accmap_OBJECTS) $(accmap_DEPENDENCIES)
-	@rm -f accmap
-	$(F77LINK) $(accmap_LDFLAGS) $(accmap_OBJECTS) $(accmap_LDADD) $(LIBS)
 .f.o:
 	$(F77COMPILE) -c $<
 .f.lo:
