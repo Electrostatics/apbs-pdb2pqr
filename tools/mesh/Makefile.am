@@ -46,11 +46,12 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
+INCLUDES           = @inc_list@
+LDFLAGS            = @LDFLAGS@ @FLIBS@
 
 noinst_PROGRAMS    = mgmesh accmap
-mgmesh_SOURCES     = mgmesh.c 
+mgmesh_SOURCES     = mgmesh.c mypde.f
 mgmesh_LDADD       = ${math_lib}
 accmap_SOURCES     = accmap.c mypde.f
 accmap_LDADD       = -lapbs @lib_list@
-INCLUDES           = @inc_list@
 

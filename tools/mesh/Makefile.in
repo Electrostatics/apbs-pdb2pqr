@@ -148,13 +148,14 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
+INCLUDES = @inc_list@
+LDFLAGS = @LDFLAGS@ @FLIBS@
 
 noinst_PROGRAMS = mgmesh accmap
-mgmesh_SOURCES = mgmesh.c 
+mgmesh_SOURCES = mgmesh.c mypde.f
 mgmesh_LDADD = ${math_lib}
 accmap_SOURCES = accmap.c mypde.f
 accmap_LDADD = -lapbs @lib_list@
-INCLUDES = @inc_list@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../../apbscfg.h
 CONFIG_CLEAN_FILES = 
@@ -163,9 +164,8 @@ PROGRAMS =  $(noinst_PROGRAMS)
 
 DEFS = @DEFS@ -I. -I$(srcdir) -I../..
 CPPFLAGS = @CPPFLAGS@
-LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-mgmesh_OBJECTS =  mgmesh.o
+mgmesh_OBJECTS =  mgmesh.o mypde.o
 mgmesh_DEPENDENCIES = 
 mgmesh_LDFLAGS = 
 accmap_OBJECTS =  accmap.o mypde.o
@@ -251,7 +251,7 @@ maintainer-clean-libtool:
 
 mgmesh: $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES)
 	@rm -f mgmesh
-	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
+	$(F77LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
 
 accmap: $(accmap_OBJECTS) $(accmap_DEPENDENCIES)
 	@rm -f accmap
