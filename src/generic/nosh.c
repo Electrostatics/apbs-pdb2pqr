@@ -458,6 +458,8 @@ VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
         return 0;
     }
 
+    for (i=0; i<NOSH_MAXCALC; i++) tmgparms[i] = VNULL;
+
     /* Update the ELEC statement number */
     if (thee->ncalc >= NOSH_MAXCALC) {
         Vnm_print(2, "NOsh:  Too many electrostatics calculations in this \
@@ -472,9 +474,9 @@ run!\n");
         if ((strcasecmp(tok, "mg") == 0) || 
             (strcasecmp(tok, "mg-manual") == 0)) {
             if (strcasecmp(tok, "mg") == 0) { 
-                Vnm_print(2, "NOsh:  The MG keyword is deprecated.  Please use\n");
-                Vnm_print(2, "NOsh:  either MG-MANUAL or MG-AUTO.  I'm assuming\n");
-                Vnm_print(2, "NOsh:  you meant MG-MANUAL here.\n");
+                Vnm_print(2, "NOsh:  The MG keyword is deprecated.  Please \
+use either MG-MANUAL or MG-AUTO.\nNOsh:  I'm assuming you meant MG-MANUAL \
+here.\n");
             }
 	    /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number
@@ -496,8 +498,11 @@ calculation\n",
             return NOsh_parseMGMANUAL(thee, sock, 
               thee->calc[thee->ncalc-1].mgparm);
         } else if (strcasecmp(tok, "mg-auto") == 0) {
-            Vnm_print(0, "NOsh: Parsing parameters for MG-AUTO calculation.\n");
-            if (!NOsh_parseMGAUTO(thee, sock, &nparm, tmgparms)) return 0;
+            Vnm_print(0, "NOsh:  Parsing parameters for MG-AUTO calculation.\n");
+            if (!NOsh_parseMGAUTO(thee, sock, &nparm, tmgparms)) {
+                Vnm_print(2, "NOsh:  Error in parsing routine!\n");
+                return 0;
+            }
             if ((thee->ncalc + nparm) >= NOSH_MAXCALC) {
                 Vnm_print(2, "NOsh:  Foucsing requires too many multigrid \
 electrostatics calculations in this run!\n");
@@ -511,8 +516,9 @@ calculation\n",
                 thee->calc[thee->ncalc+i].calctype = 0;
             }
             /* Setup the map from ELEC statement to actual calculation */
-            thee->elec2calc[thee->nelec] = thee->ncalc + nparm - 1;
+            thee->elec2calc[thee->nelec-1] = thee->ncalc + nparm - 1;
             thee->ncalc += nparm;
+            return 1;
         } else if (strcasecmp(tok, "fem") == 0) {
             /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number
@@ -633,7 +639,7 @@ VPRIVATE int NOsh_parseMGMANUAL(NOsh *thee, Vio *sock, MGparm *parm) {
                 Vnm_print(2, "NOsh:  MG parameters not set correctly!\n");
                 VJMPERR2(0);
             }
-            Vnm_print(0, "NOsh:  Done parsing ELEC section\n");
+            Vnm_print(0, "NOsh:  Done parsing MG-MANUAL section\n");
             return 1;
         /* Read grid dimensions */
         } else if (strcasecmp(tok, "dime") == 0) {
@@ -990,11 +996,6 @@ VPRIVATE int NOsh_parseMGAUTO(NOsh *thee, Vio *sock, int *nparm,
         return 0;
     }
 
-    if (parms != VNULL) {
-        Vnm_print(2, "NOsh:  Destroying existing parms!\n");
-        return 0;
-    }
-
     if (sock == VNULL) {
         Vnm_print(2, "NOsh:  Got pointer to NULL socket!\n");
         return 0;
@@ -1012,23 +1013,27 @@ VPRIVATE int NOsh_parseMGAUTO(NOsh *thee, Vio *sock, int *nparm,
     /* Here we go... */
     while (Vio_scanf(sock, "%s", tok) == 1) {
         if (strcasecmp(tok, "end") == 0) {
-            /* Check to see that everything was set */
+            /* Check to see that everything was set (fake some settings that
+             * aren't relevant in the current context) */
+            cparm->setnlev = 1;
+            fparm->setnlev = 1;
             cparm->parsed = 1;
             fparm->parsed = 1;
             if (!MGparm_check(cparm) || !MGparm_check(fparm)) { 
-                Vnm_print(2, "NOsh: MG parameters not set correctly!\n");
+                Vnm_print(2, "NOsh:  MG parameters not set correctly!\n");
                 VJMPERR2(0);
             }
             /* Build the real parameter objects */
             mgauto = MGAUTOparm_ctor(cparm, fparm);
             MGAUTOparm_build(mgauto, nparm, parms);
             Vnm_print(0, "NOsh:  Built %d parameter objects for focusing\n",
-              nparm);
+              *nparm);
             MGAUTOparm_dtor(&mgauto);
             /* Destroy the coarse/fine parameter objects */
             MGparm_dtor(&cparm);
             MGparm_dtor(&fparm);
-            Vnm_print(0, "NOsh: Done parsing ELEC section\n");
+            Vnm_print(0, "NOsh:  Done parsing MG-AUTO section\n");
+            return 1;
         /* Read grid dimensions */
         } else if (strcasecmp(tok, "dime") == 0) {
             /* Read the number of grid points */
@@ -1434,6 +1439,7 @@ WRITEPOT keyword!\n",
     VJMPERR2(0);
 
     VERROR1:
+       Vnm_print(0, "NOsh_parseMGAUTO:  VERROR1.\n");
        Vnm_print(2, "NOsh:  Ran out of tokens while parsing ELEC section!\n");
        VJMPERR2(0);
 
