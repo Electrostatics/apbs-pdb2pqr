@@ -528,7 +528,7 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
     atom = Valist_getAtom(thee->alist, atomID);
     apos = Vatom_getPosition(atom);
     /* Zero-radius atoms don't contribute */
-    if (Vatom_getRadius(atom) > 0.0) {
+    if (Vatom_getRadius(atom) > 1.0) {
         arad = Vatom_getRadius(atom) + infrad;
         stot = arad + win;
         sctot = VMAX2(0, (arad - win));
@@ -548,7 +548,7 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
             sm2 = VSQR(sm);
             value = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
         }
-    } 
+    } else value = 1.0;
  
     return value;
 }
