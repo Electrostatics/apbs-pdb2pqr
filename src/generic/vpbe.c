@@ -1136,10 +1136,10 @@ VPUBLIC int Vpbe_memChk(Vpbe *thee) {
    
     int memUse = 0;
 
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) return 0;
 
     memUse = memUse + sizeof(Vpbe);
-    memUse = memUse + Vcsm_memChk(thee->csm);
+    if (thee->methFlag == 0) memUse = memUse + Vcsm_memChk(thee->csm);
     memUse = memUse + Vacc_memChk(thee->acc);
 
     return memUse;
