@@ -94,7 +94,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 
     /* Grid variables */
     int i;
-    double x, y, z;
+    double x, y, z, *coord;
     double x_max, y_max, z_max;
     double x_min, y_min, z_min;
     int ii, jj, kk;
@@ -175,9 +175,10 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
         atom = Valist_getAtom(alist, i);
         /* Get the position in the grid's frame of reference */
-        x = (Vatom_getPosition(atom))[0] - (thee->grid_lower_corner)[0];
-        y = (Vatom_getPosition(atom))[1] - (thee->grid_lower_corner)[1];
-        z = (Vatom_getPosition(atom))[2] - (thee->grid_lower_corner)[2];
+        coord = Vatom_getPosition(atom);
+        x = coord[0] - (thee->grid_lower_corner)[0];
+        y = coord[1] - (thee->grid_lower_corner)[1];
+        z = coord[2] - (thee->grid_lower_corner)[2];
 
         /* Get the range the atom radius + probe radius spans */
         rtot = Vatom_getRadius(atom) + thee->max_radius;
@@ -421,6 +422,56 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
 
     /* If all else failed, we are not inside the molecular surface */
     return 0;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_writeGMV
+//
+// Purpose:  Write out the chosen accessibility data at each vertex.  The the
+//           appropriate isosurface routine, this would generate a
+//           representation of the molecular surface as ``seen" by the PBE
+//           solver.
+//
+// Arguments: radius   Radius of sphere to test
+//            meth     Plot accessibility for molecular surface (meth=0),
+//                     inflated van der Waals (meth=1), or van der Waals
+//                     (meth=2)
+//            gm       Vgm object with mesh data
+//            iodev    Device (usually "FILE")
+//            iofmt    Format (usually "ASC")
+//            iohost   Host   (usually "localhost")
+//            iofile   Filename
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Vgm *gm, 
+  char *iodev, char *iofmt, char *iohost, char *iofile) {
+
+    double *accVals[MAXV], coord[3];
+    int ivert, icoord;
+
+    for (ivert=0; ivert<MAXV; ivert++) accVals[ivert] = VNULL;
+    accVals[0] = (void *)Vmem_malloc(thee->vmem, Vgm_numVV(gm), sizeof(double));
+    accVals[1] = (void *)Vmem_malloc(thee->vmem, Vgm_numVV(gm), sizeof(double));
+    for (ivert=0; ivert<Vgm_numVV(gm); ivert++) {
+        for (icoord=0;icoord<3;icoord++) 
+          coord[icoord] = VV_coord(Vgm_VV(gm, ivert), icoord);
+        if (meth == 0) {
+            accVals[0][ivert] = (double)Vacc_molAcc(thee, coord, radius);
+            accVals[1][ivert] = (double)Vacc_molAcc(thee, coord, radius);
+        } else if (meth == 1) {
+            accVals[0][ivert] = (double)Vacc_ivdwAcc(thee, coord, radius);
+            accVals[1][ivert] = (double)Vacc_ivdwAcc(thee, coord, radius);
+        } else if (meth == 2) {
+            accVals[0][ivert] = (double)Vacc_vdwAcc(thee, coord);
+            accVals[1][ivert] = (double)Vacc_vdwAcc(thee, coord);
+        } else VASSERT(0);
+    }
+    Vgm_writeGMV(gm, iodev, iofmt, iohost, iofile, 1, accVals);
+    Vmem_free(thee->vmem, Vgm_numVV(gm), sizeof(double), 
+      (void **)&(accVals[0]));
+    Vmem_free(thee->vmem, Vgm_numVV(gm), sizeof(double), 
+      (void **)&(accVals[1]));
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

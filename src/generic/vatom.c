@@ -131,7 +131,7 @@ VPUBLIC void Vatom_setPosition(Vatom *thee, Vec3 position) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double * Vatom_getPosition(Vatom *thee) { 
+VPUBLIC double *Vatom_getPosition(Vatom *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->position; 
