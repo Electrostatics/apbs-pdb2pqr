@@ -1017,6 +1017,7 @@ Optional Features:
   --enable-pansi          enable pedantic ANSI compilation
   --disable-fetk          disable FEtk features
   --enable-cxxfmm         enable the C++ FMM CODE (BROKEN!!!)
+  --disable-inline        disable inline functions (macros)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3366,7 +3367,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:3369:" \
+echo "$as_me:3370:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -5289,7 +5290,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 5292 "configure"' > conftest.$ac_ext
+  echo '#line 5293 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5825,7 +5826,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:5828: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:5829: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -7618,7 +7619,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7621 "configure"
+#line 7622 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7716,7 +7717,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 7719 "configure"
+#line 7720 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9034,9 +9035,9 @@ echo $ECHO_N "checking whether you want pedantic ANSI compilation... $ECHO_C" >&
 # Check whether --enable-pansi or --disable-pansi was given.
 if test "${enable_pansi+set}" = set; then
   enableval="$enable_pansi"
-   pansi_use="yes"
+  pansi_use="yes"
 else
-   pansi_use=""
+  pansi_use=""
 
 fi;
 if test -z "${pansi_use}"; then
@@ -10467,6 +10468,32 @@ echo "${ECHO_T}no" >&6
 fi
 
 
+echo "$as_me:$LINENO: checking whether you want inlined functions" >&5
+echo $ECHO_N "checking whether you want inlined functions... $ECHO_C" >&6
+# Check whether --enable-inline or --disable-inline was given.
+if test "${enable_inline+set}" = set; then
+  enableval="$enable_inline"
+   use_inline="${enableval}"
+else
+   use_inline=""
+
+fi;
+if test -n "${use_inline}"; then
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+    if test "${use_inline}" != no; then
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        cat >>confdefs.h <<\_ACEOF
+#define APBS_NOINLINE 1
+_ACEOF
+
+    else
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    fi
+fi
 
 top_srcdir="`pwd`"
 lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"

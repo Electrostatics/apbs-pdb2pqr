@@ -1,0 +1,677 @@
+dnl ##########################################################################
+dnl APBS -- Adaptive Poisson-Boltzmann Solver
+dnl 
+dnl   Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+dnl   Dept. of Chemistry and Biochemistry
+dnl   Dept. of Mathematics, Scientific Computing Group
+dnl   University of California, San Diego 
+dnl 
+dnl   Additional contributing authors listed in the code documentation.
+dnl 
+dnl   Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.
+dnl  
+dnl   Permission to use, copy, modify, and distribute this software and its
+dnl   documentation for educational, research, and not-for-profit purposes,
+dnl   without fee and without a signed licensing agreement, is hereby granted,
+dnl   provided that the above copyright notice, this paragraph and the
+dnl   following two paragraphs appear in all copies, modifications, and
+dnl   distributions.
+dnl  
+dnl   IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,
+dnl   INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
+dnl   PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+dnl   EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+dnl  
+dnl   THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT
+dnl   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+dnl   PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
+dnl   PROVIDED HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION
+dnl   TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl File: configure.in
+dnl Purpose: configure.in script for APBS
+dnl Author:  Michael Holst and Nathan Baker
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 0. autoconf initialization
+dnl ##########################################################################
+AC_INIT(src/aaa_inc/apbs/apbs.h)
+AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
+AC_CONFIG_AUX_DIR(config)
+AC_PREFIX_DEFAULT(${HOME})
+AC_CANONICAL_SYSTEM
+fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
+AC_SUBST(fetk_cpu_vendor_os)
+
+dnl ##########################################################################
+dnl 1. automake initialization (uncomment only if rebuilding Makefile.in's)
+dnl ##########################################################################
+dnl # THIS IS THE VERSION INFORMATION FOR THE APBS LIBRARY.  ACCORDING TO 
+dnl # THE LIBTOOL MANUAL:
+dnl #   This flag accepts an argument of the form `current[:revision[:age]]'.
+dnl #   So, passing `-version-info 3:12:1' sets current to 3, revision to 12,
+dnl #   and age to 1.  If either revision or age are omitted, they default to 
+dnl #   0. Also note that age must be less than or equal to the current 
+dnl #   interface number.  Here are a set of rules to help you update your
+dnl #   library version information:
+dnl #      1. Start with version information of `0:0:0' for each libtool 
+dnl #         library.
+dnl #      2. Update the version information only immediately before a public
+dnl #         release of your software. More frequent updates are unnecessary,
+dnl #         and only guarantee that the current interface number gets larger
+dnl #         faster.  
+dnl #      3. If the library source code has changed at all since the last
+dnl #         update, then increment revision (`c:r:a' becomes `c:r+1:a').
+dnl #      4. If any interfaces have been added, removed, or changed since the
+dnl #         last update, increment current, and set revision to 0.
+dnl #      5. If any interfaces have been added since the last public release,
+dnl #         then increment age.
+dnl #      6. If any interfaces have been removed since the last public
+dnl #         release, then set age to 0.
+dnl #
+dnl #   Never try to set the interface numbers so that they correspond to the
+dnl #   release number of your package. This is an abuse that only fosters
+dnl #   misunderstanding of the purpose of library versions.
+AM_INIT_AUTOMAKE(apbs, 0.2.0)
+APBS_VERSION="1:0:0"
+AC_SUBST(APBS_VERSION)
+ACLOCAL=":";
+AUTOCONF=":";
+AUTOMAKE=":";
+AUTOHEADER=":";
+AC_SUBST(ACLOCAL)
+AC_SUBST(AUTOCONF)
+AC_SUBST(AUTOMAKE)
+AC_SUBST(AUTOHEADER)
+
+dnl ##########################################################################
+dnl 2. checks for programs
+dnl ##########################################################################
+AC_LANG_C
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_PROG_CXX
+AC_PROG_F77
+AC_LANG_FORTRAN77
+dnl AC_F77_LIBRARY_LDFLAGS 
+dnl # -----------------------
+dnl # HANDLE OSF WEIRDNESS:
+dnl #   This includes the inability to link FORTRAN and C code compiled with
+dnl #   debugger flags and a g77 that breaks on some FORTRAN code with the
+dnl #   -O2 flag set.
+dnl # -----------------------
+short_os=`echo ${host_os} | sed 's/osf.*/osf/g'`;
+if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
+  AC_MSG_RESULT([Disabling debugger compiler flags to avert OSF weirdness])
+  if test -z ${FFLAGS-''}; then
+      FFLAGS="";
+  else
+     FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
+     if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
+         FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
+     fi
+  fi
+  if test -z ${CFLAGS-''}; then
+      CFLAGS="";
+  else
+     CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
+  fi
+  if test -z ${CPPFLAGS-''}; then
+      CPPFLAGS="";
+  else
+     CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
+  fi
+  if test -z ${CXXFLAGS-''}; then
+      CXXFLAGS="";
+  else
+     CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
+  fi
+fi
+AC_F77_NOFORMAIN
+AC_F77_FCN_MANGLE()
+AC_LANG_C
+AC_PROG_CPP
+AC_DISABLE_SHARED
+AM_PROG_LIBTOOL
+
+dnl ##########################################################################
+dnl 3. checks for libraries
+dnl ##########################################################################
+dnl # Check for the math library.
+AC_CHECK_LIB(m,pow,[math_lib="-lm"],[math_lib=""])
+AC_SUBST(math_lib)
+dnl # Check for the liberty library
+AC_CHECK_LIB(iberty,strerrno,[liberty_lib="-liberty"],[liberty_lib=""])
+AC_SUBST(liberty_lib)
+dnl # Check for "gethostbyname" and nsl library
+nsl_lib="";
+AC_CHECK_FUNC(gethostbyname,[try_nsl=""],[try_nsl="yes"])
+if test -n "${try_nsl}"; then
+    AC_CHECK_LIB(nsl,gethostbyname,[nsl_lib="-lnsl"],[nsl_lib=""])
+fi
+AC_SUBST(nsl_lib)
+dnl # Check for "connect" and socket library
+socket_lib="";
+AC_CHECK_FUNC(connect,[try_socket=""],[try_socket="yes"])
+if test -n "${try_socket}"; then
+    AC_CHECK_LIB(socket,connect,[socket_lib="-lsocket"],[socket_lib=""])
+fi
+AC_SUBST(socket_lib)
+dnl # Check for "thr_create()" and thread library
+thread_lib="";
+AC_CHECK_FUNC(thr_create,[try_thread=""],[try_thread="yes"])
+if test -n "${try_thread}"; then
+    AC_CHECK_LIB(thread,thr_create,[thread_lib="-lthread"],[thread_lib=""])
+fi
+AC_SUBST(thread_lib)
+
+dnl ##########################################################################
+dnl 4. checks for header files
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 5. checks for typedefs
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 6. checks for structures
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 7. checks for compiler characteristics
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 8. checks for library functions
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 9. checks for system services
+dnl ##########################################################################
+
+dnl ##########################################################################
+dnl 10. checks for anything else
+dnl ##########################################################################
+
+dnl # -----------------------
+dnl # HANDLE SYMBOL EMBEDDING
+dnl # -----------------------
+AC_MSG_CHECKING([whether EMBED macro can be used without compilation errors])
+AC_TRY_COMPILE(,
+    [#define EMBED(rctag) \
+     static const char* rctag; \
+     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+     EMBED(rcsid)],
+    [embed_ok=yes;AC_DEFINE(HAVE_EMBED)],[embed_ok=no])
+AC_MSG_RESULT(${embed_ok})
+
+AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
+
+dnl # --------------------------------
+dnl # HANDLE ANSI/PEDANTIC COMPILATION
+dnl # --------------------------------
+AC_MSG_CHECKING([whether you want pedantic ANSI compilation])
+AC_ARG_ENABLE(pansi,
+    [AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
+    [pansi_use="yes"],
+    [pansi_use=""   ]
+)
+if test -z "${pansi_use}"; then
+    AC_MSG_RESULT([no])
+    wall=""
+    wall_pedantic=""
+    wall_pedantic_ansi=""
+    pedantic_ansi=""
+    dnl # --------------------------
+    dnl # We only look for the non-ANSI strcasecmp if configure wasn't invoked
+    dnl # with --enable-pansi
+    dnl # --------------------------
+    try_strcasecmp="";
+    AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
+    if test -n "${try_strcasecmp}"; then
+        AC_DEFINE(HAVE_STRCASECMP)
+    fi
+else
+    AC_MSG_RESULT([yes])
+    wall="-Wall"
+    wall_pedantic="-Wall -pedantic"
+    wall_pedantic_ansi="-Wall -pedantic -ansi"
+    pedantic_ansi="-pedantic -ansi"
+fi
+AC_SUBST(wall)
+AC_SUBST(wall_pedantic)
+AC_SUBST(wall_pedantic_ansi)
+AC_SUBST(pedantic_ansi)
+
+AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
+
+dnl # ----------------------
+dnl # HANDLE THE MALOC LIBRARY
+dnl # ----------------------
+AC_MSG_CHECKING([whether your environment defines FETK_INCLUDE])
+if test -n "${FETK_INCLUDE}"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no; you had better specify MALOC/FEtk/PMG paths!])
+fi
+
+dnl # MALOC library location ENV specification
+AC_MSG_CHECKING([whether your environment defines FETK_LIBRARY])
+if test -n "${FETK_LIBRARY}"; then
+    AC_MSG_RESULT([yes])
+    maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+else
+    AC_MSG_RESULT([no; you had better specify MALOC/FEtk/PMG paths!])
+    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+fi
+
+dnl # Setup temp LDFLAGS and look for MALOC library/header
+if test -n "${FETK_INCLUDE}"; then
+    maloc_inc_path="-I${FETK_INCLUDE} ";
+else
+    maloc_inc_path="-I${HOME}/include ";
+fi
+if test -n "${FETK_LIBRARY}"; then
+    maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+else
+    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+fi
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${maloc_lib_path};
+CPPFLAGS=${maloc_inc_path};
+maloc_found="";
+AC_CHECK_HEADER(maloc/maloc.h,
+    [maloc_found="yes";maloc_inc="${maloc_inc_path}"],
+    [maloc_found="";maloc_inc=""])
+if test -n "${maloc_found}"; then
+    AC_CHECK_LIB(maloc,maloc_link,
+        [maloc_found="yes";maloc_lib="${maloc_lib_path}-lmaloc"],
+        [maloc_found="";maloc_lib=""],
+        [${maloc_lib_path}-lmaloc ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+fi
+if test -z "${maloc_found}"; then
+    AC_MSG_ERROR([** MALOC libraries or headers missing:  exiting on error! ***])
+fi
+dnl # Return LDFLAGS and CPPFLAGS to normal
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
+AC_SUBST(maloc_lib)
+AC_SUBST(maloc_inc)
+
+
+dnl # ----------------------
+dnl # HANDLE THE MPI LIBRARY
+dnl # ----------------------
+mpi_lib="";
+AC_CHECK_LIB(maloc,maloc_needs_mpi,
+    [mpi_use="yes"],
+    [mpi_use=""],
+    [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+mpi_inc="";
+if test -z "${mpi_use}"; then
+    AC_MSG_RESULT([*** MALOC not compiled with MPI:  MPI disabled  ***])
+else
+
+    dnl # MPI header location ENV specification
+    if test -n "${FETK_MPI_INCLUDE}"; then
+        mpi_inc_path_env="-I${FETK_MPI_INCLUDE} ";
+    else
+        mpi_inc_path_env="";
+    fi
+
+    dnl # MPI library location ENV specification
+    if test -n "${FETK_MPI_LIBRARY}"; then
+        mpi_lib_path_env="-L${FETK_MPI_LIBRARY} ";
+    else
+        mpi_lib_path_env="";
+    fi
+
+    dnl # MPI header location ARG specification (override environment)
+    AC_MSG_CHECKING([whether you specified location of <mpi.h>])
+    AC_ARG_WITH(mpiinc,
+        [AC_HELP_STRING([--with-mpiinc=PATH], [directory containing <mpi.h>])],
+        [mpi_inc_path="-I${with_mpiinc} "; AC_MSG_RESULT([yes])],
+        [mpi_inc_path="${mpi_inc_path_env}"; AC_MSG_RESULT([no])]
+    )
+
+    dnl # MPI library location ARG specification (override environment)
+    AC_MSG_CHECKING([whether you specified location of <libmpi.a>])
+    AC_ARG_WITH(mpilib,
+        [AC_HELP_STRING([--with-mpilib=PATH], 
+                        [directory containing <libmpi.a>])],
+        [mpi_lib_path="-L${with_mpilib} "; AC_MSG_RESULT([yes])],
+        [mpi_lib_path="${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
+    )
+    dnl # Setup temp LDFLAGS and look for MPI library/header
+    LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${mpi_lib_path} ${nsl_lib} ${socket_lib};
+    CPPFLAGS=${mpi_inc_path};
+    mpi_use="";
+    AC_CHECK_HEADER(mpi.h,
+        [mpi_use="yes";mpi_inc="${mpi_inc_path}"],
+        [mpi_use="";mpi_inc=""])
+    if test -n "${mpi_use}"; then
+        AC_CHECK_LIB(mpi,main,
+            [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
+            [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+        if test -z "${mpi_use}"; then
+            AC_CHECK_LIB(mpich,main,
+                [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
+                [mpi_use="";mpi_lib=""],${mpi_lib_path})
+        fi
+    fi
+    if test -z "${mpi_use}"; then
+        AC_MSG_RESULT([*** MPI library or header is missing:  MPI disabled ***])
+        AC_MSG_RESULT([*** Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY ***])
+    else
+        AC_MSG_RESULT([*** MPI library and header were found:  MPI enabled ***])
+        AC_DEFINE(HAVE_MPI_H)
+    fi
+
+    dnl # Return LDFLAGS and CPPFLAGS to normal
+    LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+fi
+AC_SUBST(mpi_lib)
+AC_SUBST(mpi_inc)
+AC_SUBST(mpi_bin)
+
+dnl # ---------------------------
+dnl # HANDLE THE READLINE LIBRARY
+dnl # ---------------------------
+
+rl_lib="";
+AC_CHECK_LIB(maloc,maloc_needs_rl,
+    [rl_use="yes"],
+    [rl_use=""],
+    [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+if test -n "${rl_use}"; then
+
+    dnl # READLINE library location ENV specification
+    AC_MSG_CHECKING([whether your environment defines FETK_RL_LIBRARY])
+    if test -n "${FETK_RL_LIBRARY}"; then
+        AC_MSG_RESULT([yes])
+        rl_lib_path="-L${FETK_RL_LIBRARY} ";
+    else
+        AC_MSG_RESULT([no])
+        rl_lib_path="";
+    fi
+
+    dnl # Setup temp LDFLAGS and look for READLINE library
+    LDFLAGS_SAVE=${LDFLAGS};
+    LDFLAGS=${rl_lib_path};
+    AC_CHECK_LIB(ncurses,tgetnum,
+        [ncurses_lib="-lncurses"],
+        [ncurses_lib=""],
+        [${math_lib}])
+    AC_CHECK_LIB(readline,readline,
+        [rl_use="yes";rl_lib="${rl_lib_path}-lreadline ${ncurses_lib}"],
+        [rl_use="";rl_lib=""],
+        [${rl_lib_path} ${ncurses_lib} ${math_lib}])
+    if test -n "${rl_use}"; then
+        AC_CHECK_LIB(readline,add_history,
+            [rl_use="yes";rl_lib="${rl_lib_path}-lreadline ${ncurses_lib}"],
+            [rl_use="";rl_lib=""],
+            [${rl_lib_path} ${ncurses_lib} ${math_lib}])
+    fi
+
+    dnl # Return LDFLAGS to normal
+    LDFLAGS=${LDFLAGS_SAVE};
+
+    dnl # Final decision
+    if test -z "${rl_use}"; then
+        AC_MSG_RESULT([MALOC was compiled with READLINE enabled])
+        AC_MSG_RESULT([MALOC needs to link against the READLINE library])
+        AC_MSG_ERROR([READLINE cannot be found now...EXITING ON ERROR])
+    else
+        AC_MSG_RESULT([READLINE library found ...rocking on...])
+    fi
+fi
+AC_SUBST(rl_lib)
+AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
+
+
+dnl # -----------------------
+dnl # HANDLE THE FEtk LIBRARIES
+dnl #
+dnl # We require both MC and MCX to be present.  If either of these libraries
+dnl # is not found, then we simply disable compilation of the portions of APBS
+dnl # which depend on FEtk.  Compilation can also be disabled by the
+dnl # '--disable-fetk' flag.
+dnl # -----------------------
+dnl # MC header location ENV specification
+AC_ARG_ENABLE(fetk,
+    [AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
+    [ with_fetk="no" ],
+    [ with_fetk=""    ]
+)
+# BEGIN FETK LIBRARY/HEADER TEST BLOCK
+use_fetk=""
+mc_lib=""
+mc_inc=""
+mc_do_src=""
+mc_do_lib=""
+mc_do_test=""
+mcx_lib=""
+mcx_inc=""
+mcx_do_src=""
+mcx_do_lib=""
+mcx_do_test=""
+if test -z "${with_fetk}"; then
+    AC_CHECKING([for FEtk libraries and headers...])
+    if test -n "${FETK_INCLUDE}"; then
+        mc_inc_path="-I${FETK_INCLUDE} ";
+    else
+        mc_inc_path="-I${HOME}/include ";
+    fi
+    if test -n "${FETK_LIBRARY}"; then
+        mc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+    else
+        mc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    fi
+    dnl # Setup temp LDFLAGS and look for MC library/header
+    LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${mc_lib_path};
+    CPPFLAGS=${mc_inc_path};
+    mc_found="";
+    AC_CHECK_HEADER(mc/mc.h,
+        [mc_found="yes";mc_inc="${mc_inc_path}"],
+        [mc_found="";mc_inc=""])
+    if test -n "${mc_found}"; then
+        AC_CHECK_LIB(mc,mc_link,
+            [mc_found="yes";mc_lib="${mc_lib_path}-lmc"],
+            [mc_found="";mc_lib=""],
+            [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    fi
+
+    dnl # Return LDFLAGS and CPPFLAGS to normal
+    LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+
+    dnl # MCX header location ENV specification
+    if test -n "${FETK_INCLUDE}"; then
+        mcx_inc_path="-I${FETK_INCLUDE} ";
+    else
+        mcx_inc_path="-I${HOME}/include ";
+    fi
+    dnl # MCX library location ENV specification
+    if test -n "${FETK_LIBRARY}"; then
+        mcx_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+    else
+        mcx_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    fi
+
+    dnl # Setup temp LDFLAGS and look for MCX library/header
+    LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${mcx_lib_path} 
+    CPPFLAGS=${mcx_inc_path};
+    mcx_found="";
+    AC_MSG_CHECKING([for mcx/mcx.h])
+    if test -f "${FETK_INCLUDE}/mcx/mcx.h"; then
+        mcx_found="yes";
+        mcx_inc="${mcx_inc_path}"
+        AC_MSG_RESULT([yes])
+    else
+        mcx_found="";
+        mcx_inc=""
+        AC_MSG_RESULT([no])
+    fi
+    if test -n "${mcx_found}"; then
+        AC_CHECK_LIB(mcx,mcx_link,
+            [mcx_found="yes";mcx_lib="${mcx_lib_path}-lmcx"],
+            [mcx_found="";mcx_lib=""],
+            [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${thread_lib} ${math_lib}])
+    fi
+
+    dnl # Return LDFLAGS and CPPFLAGS to normal
+    LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+
+    if test -n "${mc_found}"; then
+        AC_MSG_RESULT([*** FEtk component MC found:  enabled. ***])
+        AC_DEFINE(HAVE_MC_H)
+        mc_do_src="vcsm.c vfetk.c vpee.c"
+        mc_do_lib="../fem/libapbsfem.la"
+        mc_do_test="fem reg-fem lndet"
+        if test -n "${mcx_found}"; then
+            AC_MSG_RESULT([*** FEtk components MCX found:  enabled. ***])
+            AC_DEFINE(HAVE_MCX_H)
+            mcx_do_src="vpee.c"
+            mcx_do_lib="../fem/libapbsfem.la"
+            mcx_do_test="vmetis"
+        else
+            AC_MSG_RESULT([*** FEtk omponent MCX not found:  disabled. ***])
+        fi 
+    else
+        AC_MSG_RESULT([*** FEtk component MC not found:  disabled. ***])
+    fi
+else
+    AC_MSG_RESULT([*** FEtk disabled at user request. ***])
+fi
+AC_SUBST(mc_lib)
+AC_SUBST(mc_inc)
+AC_SUBST(mc_do_src)
+AC_SUBST(mc_do_test)
+AC_SUBST(mc_do_lib)
+AC_SUBST(mcx_lib)
+AC_SUBST(mcx_inc)
+AC_SUBST(mcx_do_src)
+AC_SUBST(mcx_do_test)
+AC_SUBST(mcx_do_lib)
+
+dnl # -----------------------
+dnl # CHECK WHETHER OR NOT TO COMPILE C++ FMM CODE
+dnl # -----------------------
+AC_MSG_CHECKING([whether you want fancy C++ FMM functions])
+AC_ARG_ENABLE(cxxfmm,
+    [AC_HELP_STRING([--enable-cxxfmm], [enable the C++ FMM CODE (BROKEN!!!)])],
+    [ cxxfmm_use="yes"],
+    [ cxxfmm_use="" ]
+)
+if test -n "${cxxfmm_use}"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE(USE_CXX_FMM)
+    cxxfmmsrc="cxxfmm.cc"
+    AC_SUBST(cxxfmmsrc)
+    dnl # Check for libstdc++ 
+    stdcxx_lib="";
+    AC_LANG_CPLUSPLUS
+    AC_CHECK_LIB(stdc++,main,
+      [stdcxx_lib="-lstdc++"],
+      [stdcxx_lib=""],[])
+    AC_LANG_C
+else
+    AC_MSG_RESULT([no])
+    stdcxx_lib=""
+fi
+AC_SUBST(stdcxx_lib)
+
+
+dnl # -----------------------
+dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
+dnl # -----------------------
+AC_MSG_CHECKING([whether you want ARPACK functions])
+AC_ARG_WITH(arpack,
+    [AC_HELP_STRING([--with-arpack=PATH],
+                    [enable ARPACK functions (specify path to lib)])],
+    [ arpack_lib="-larpack ${withval}"],
+    [ arpack_lib="" ]
+)
+if test -n "${arpack_lib}"; then
+    AC_MSG_RESULT([yes])
+    
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(arpack_lib)
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT INLINE FUNCTIONS
+dnl # -----------------------
+AC_MSG_CHECKING([whether you want inlined functions])
+AC_ARG_ENABLE(inline,
+    [AC_HELP_STRING([--disable-inline],[disable inline functions (macros)])],
+    [ use_inline="${enableval}"],
+    [ use_inline="" ]
+)
+if test -n "${use_inline}"; then
+    AC_MSG_RESULT([yes])
+else
+    if test "${use_inline}" != no; then
+        AC_MSG_RESULT([no])
+        AC_DEFINE(APBS_NOINLINE, 1)
+    else
+        AC_MSG_RESULT([yes])
+    fi
+fi
+
+dnl # -----------------------
+dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
+dnl # COMPILATIONS
+dnl # -----------------------
+top_srcdir="`pwd`"
+lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
+inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
+AC_SUBST(lib_list)
+AC_SUBST(inc_list)
+
+AC_MSG_RESULT([------------- end processing APBS configure options -----------])
+
+dnl ##########################################################################
+dnl 11. generate the makefiles
+dnl ##########################################################################
+
+AC_OUTPUT([
+    Makefile
+
+    tools/Makefile
+    tools/mesh/Makefile
+    tools/manip/Makefile
+    tools/opendx/Makefile
+
+    src/Makefile
+    src/generic/Makefile
+    src/mg/Makefile
+    src/fem/Makefile
+    src/aaa_inc/Makefile
+    src/aaa_inc/apbs/Makefile
+    src/aaa_lib/Makefile
+
+    bin/Makefile
+
+    test/Makefile
+    test/vmetis/Makefile
+    test/vgreen/Makefile
+    test/fem/Makefile
+    test/reg-fem/Makefile
+    test/lndet/Makefile
+    test/mg/Makefile
+])
+

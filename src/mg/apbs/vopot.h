@@ -50,8 +50,6 @@
 #include "apbs/vgrid.h"
 #include "apbs/vpbe.h"
 
-VEMBED(rcsid="$Id$")
-
 /**
  *  @struct  Vopot
  *  @ingroup Vopot

@@ -26,7 +26,6 @@ datadir = @datadir@
 sysconfdir = @sysconfdir@
 sharedstatedir = @sharedstatedir@
 localstatedir = @localstatedir@
-libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
@@ -68,6 +67,8 @@ OBJEXT = @OBJEXT@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 
 bindir = ${prefix}/bin/${fetk_cpu_vendor_os}
+
+libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
 AMTAR = @AMTAR@
 APBS_VERSION = @APBS_VERSION@
 AS = @AS@
@@ -129,12 +130,21 @@ CCLD = $(F77)
 bin_PROGRAMS = apbs
 apbs_SOURCES = main.c routines.c
 apbs_LDADD = ../src/aaa_lib/libapbs.la @lib_list@
+lib_LTLIBRARIES = libapbsmainroutines.la
+libapbsmainroutines_la_SOURCES = routines.c
+libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
+
 INCLUDES = @inc_list@
 LDFLAGS = @LDFLAGS@ @FLIBS@
 subdir = bin
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(lib_LTLIBRARIES)
+
+libapbsmainroutines_la_LIBADD =
+am_libapbsmainroutines_la_OBJECTS = routines.lo
+libapbsmainroutines_la_OBJECTS = $(am_libapbsmainroutines_la_OBJECTS)
 bin_PROGRAMS = apbs$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
 
@@ -156,9 +166,9 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
-DIST_SOURCES = $(apbs_SOURCES)
+DIST_SOURCES = $(libapbsmainroutines_la_SOURCES) $(apbs_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(apbs_SOURCES)
+SOURCES = $(libapbsmainroutines_la_SOURCES) $(apbs_SOURCES)
 
 all: all-am
 
@@ -173,11 +183,35 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  bin/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+libLTLIBRARIES_INSTALL = $(INSTALL)
+install-libLTLIBRARIES: $(lib_LTLIBRARIES)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    f="`echo $$p | sed -e 's|^.*/||'`"; \
+	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$f"; \
+	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$f; \
+	  else :; fi; \
+	done
+
+uninstall-libLTLIBRARIES:
+	@$(NORMAL_UNINSTALL)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	    p="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
+	  $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	done
+
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+libapbsmainroutines.la: $(libapbsmainroutines_la_OBJECTS) $(libapbsmainroutines_la_DEPENDENCIES) 
+	$(LINK) -rpath $(libdir) $(libapbsmainroutines_la_LDFLAGS) $(libapbsmainroutines_la_OBJECTS) $(libapbsmainroutines_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -286,10 +320,12 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES) $(PROGRAMS)
+install-binPROGRAMS: install-libLTLIBRARIES
+
 
 installdirs:
-	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(bindir)
 
 install: install-am
 install-exec: install-exec-am
@@ -317,7 +353,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
+	clean-libtool mostlyclean-am
 
 distclean: distclean-am
 
@@ -334,7 +371,7 @@ info-am:
 
 install-data-am:
 
-install-exec-am: install-binPROGRAMS
+install-exec-am: install-binPROGRAMS install-libLTLIBRARIES
 
 install-info: install-info-am
 
@@ -351,18 +388,21 @@ mostlyclean: mostlyclean-am
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-binPROGRAMS uninstall-info-am
+uninstall-am: uninstall-binPROGRAMS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 .PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	clean-generic clean-libLTLIBRARIES clean-libtool distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-binPROGRAMS install-data install-data-am \
+	install-exec install-exec-am install-info install-info-am \
+	install-libLTLIBRARIES install-man install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-info-am
+	uninstall-am uninstall-binPROGRAMS uninstall-info-am \
+	uninstall-libLTLIBRARIES
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -47,8 +47,6 @@
 
 #include "maloc/maloc.h"
 
-VEMBED(rcsid="$Id$")
-
 /**
  *  @struct  Vgrid
  *  @ingroup Vgrid
