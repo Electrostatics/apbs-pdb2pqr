@@ -83,9 +83,9 @@ c*       *** find new grid size ***
          call mkfine(1,nxc,nyc,nzc,nxf,nyf,nzf)
 c*
 c*       *** interpolate to next finer grid (use correct bc's) ***
-         call interp(nxc,nyc,nzc,nxf,nyf,nzf,
+         call interpPMG(nxc,nyc,nzc,nxf,nyf,nzf,
      2      x(iz(1,level)),x(iz(1,level-1)),pc(iz(11,level-1)))
-CZZZ     call ninterp(nxc,nyc,nzc,nxf,nyf,nzf,
+CZZZ     call ninterpPMG(nxc,nyc,nzc,nxf,nyf,nzf,
 CZZZ 2      x(iz(1,level)),x(iz(1,level-1)),pc(iz(11,level-1)),
 CZZZ 3      ipc(iz(5,level-1)),rpc(iz(6,level-1)),
 CZZZ 4      ac(iz(7,level-1)),cc(iz(1,level-1)),fc(iz(1,level-1)))

@@ -29,7 +29,7 @@ c* IMPORTANT: If you intend to use or modify this code, make sure you
 c* understand your responsibilities under the GNU license.
 c* ///////////////////////////////////////////////////////////////////////////
 
-      subroutine ninterp(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,pc,
+      subroutine ninterpPMG(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,pc,
      2   ipc,rpc,ac,cc,fc)
 c* *********************************************************************
 c* purpose:
@@ -46,7 +46,7 @@ c*
 c*    *** doit ***
       numdia = ipc(11)
       if (numdia .eq. 7) then
-         call ninterp7(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+         call ninterpPMG7(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2      pc(1,1),pc(1,2),pc(1,3),pc(1,4),pc(1,5),pc(1,6),
      3      pc(1,7),pc(1,8),pc(1,9),pc(1,10),pc(1,11),pc(1,12),
      4      pc(1,13),pc(1,14),pc(1,15),pc(1,16),pc(1,17),pc(1,18),
@@ -54,7 +54,7 @@ c*    *** doit ***
      6      pc(1,25),pc(1,26),pc(1,27),
      7      ipc,rpc,ac(1,1),ac(1,2),ac(1,3),ac(1,4),cc,fc)
       elseif (numdia .eq. 27) then
-         call ninterp27(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+         call ninterpPMG27(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2      pc(1,1),pc(1,2),pc(1,3),pc(1,4),pc(1,5),pc(1,6),
      3      pc(1,7),pc(1,8),pc(1,9),pc(1,10),pc(1,11),pc(1,12),
      4      pc(1,13),pc(1,14),pc(1,15),pc(1,16),pc(1,17),pc(1,18),
@@ -70,7 +70,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine ninterp7(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+      subroutine ninterpPMG7(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2   oPC,oPN,oPS,oPE,oPW,oPNE,oPNW,oPSE,oPSW,
      3   uPC,uPN,uPS,uPE,uPW,uPNE,uPNW,uPSE,uPSW,
      4   dPC,dPN,dPS,dPE,dPW,dPNE,dPNW,dPSE,dPSW,
@@ -123,7 +123,7 @@ c*    *** nonlinear iteration tolerance and itmax ***
       key       = 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxc,nyc,nzc,xin)
+      call fboundPMG00(nxc,nyc,nzc,xin)
 c*
 c*    *** doit ***
 cmdir 3 1
@@ -666,7 +666,7 @@ c*             *** main loop ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxf,nyf,nzf,xout)
+      call fboundPMG00(nxf,nyf,nzf,xout)
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
@@ -676,7 +676,7 @@ c*
 c*    *** return and end ***
       return
       end
-      subroutine ninterp27(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
+      subroutine ninterpPMG27(nxc,nyc,nzc,nxf,nyf,nzf,xin,xout,
      2   oPC,oPN,oPS,oPE,oPW,oPNE,oPNW,oPSE,oPSW,
      3   uPC,uPN,uPS,uPE,uPW,uPNE,uPNW,uPSE,uPSW,
      4   dPC,dPN,dPS,dPE,dPW,dPNE,dPNW,dPSE,dPSW,
@@ -736,7 +736,7 @@ c*    *** nonlinear iteration tolerance and itmax ***
       key       = 0
 c*
 c*    *** verify correctness of the input boundary points ***
-      call fbound00(nxc,nyc,nzc,xin)
+      call fboundPMG00(nxc,nyc,nzc,xin)
 c*
 c*    *** doit ***
 cmdir 3 1
@@ -1292,7 +1292,7 @@ c*             *** main loop ***
  10   continue
 c*
 c*    *** verify correctness of the output boundary points ***
-      call fbound00(nxf,nyf,nzf,xout)
+      call fboundPMG00(nxf,nyf,nzf,xout)
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then

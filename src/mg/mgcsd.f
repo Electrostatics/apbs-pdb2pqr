@@ -87,7 +87,7 @@ c*       *** find new grid size ***
          call mkfine(1,nxc,nyc,nzc,nxf,nyf,nzf)
 c*
 c*       *** interpolate to next finer grid ***
-         call interp(nxc,nyc,nzc,nxf,nyf,nzf,
+         call interpPMG(nxc,nyc,nzc,nxf,nyf,nzf,
      2      x(iz(1,level)),x(iz(1,level-1)),pc(iz(11,level-1)))
 c*
 c*       *** new grid size ***
@@ -271,7 +271,7 @@ c*          *** call dpbsl to solve ***
             call xcopy_small(nxf,nyf,nzf,fc(iz(1,lev)),w1)
             call dpbsl(ac(iz(7,lpv)),lda,n,m,w1)
             call xcopy_large(nxf,nyf,nzf,w1,x(iz(1,lev)))
-            call fbound00(nxf,nyf,nzf,x(iz(1,lev)))
+            call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
             print*,'% MVCS: invalid coarse solver requested...'
          endif
@@ -437,7 +437,7 @@ c*          *** call dpbsl to solve ***
             call xcopy_small(nxf,nyf,nzf,w0(iz(1,lev)),w1)
             call dpbsl(ac(iz(7,lpv)),lda,n,m,w1)
             call xcopy_large(nxf,nyf,nzf,w1,x(iz(1,lev)))
-            call fbound00(nxf,nyf,nzf,x(iz(1,lev)))
+            call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
             print*,'% MVCS: invalid coarse solver requested...'
          endif
@@ -454,7 +454,7 @@ c*          *** find new grid size ***
             call mkfine(1,nxf,nyf,nzf,nxc,nyc,nzc)
 c*
 c*          *** interpolate to next finer grid ***
-            call interp(nxf,nyf,nzf,nxc,nyc,nzc,
+            call interpPMG(nxf,nyf,nzf,nxc,nyc,nzc,
      2         x(iz(1,lev+1)),w1,pc(iz(11,lev)))
 c*
 c*          *** compute the hackbusch/reusken damping parameter ***

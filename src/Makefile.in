@@ -92,6 +92,8 @@ am__include = @am__include@
 am__quote = @am__quote@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
+blas_do_src = @blas_do_src@
+blas_lib = @blas_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
 inc_list = @inc_list@
@@ -127,7 +129,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = generic mg fem
+always_built_SUBDIRS = generic mg fem @blas_do_src@
 
 SUBDIRS = $(always_built_SUBDIRS) aaa_inc aaa_lib .
 subdir = src

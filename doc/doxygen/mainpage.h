@@ -206,6 +206,10 @@
  * # make
  * # make install
  * </pre>
+ * <font color="red">If you have vendor-supplied BLAS libraries for your
+ * platform, set the environmental variable <pre>BLASPATH</pre> to their
+ * location and use them with APBS by inkoving the 
+ * <pre>--with-blas=${BLASPATH}</pre> flag during configurationa.</font>
  * <li> You should now find the APBS executable in the
  * <code>${TOP}/dist/bin/${triplet}</code> directory,
  * </ol>
