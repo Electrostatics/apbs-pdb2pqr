@@ -6,6 +6,9 @@ BETA PUBLIC RELEASE VERSION 0.3.2       ??-??-04
     * Updated apbs.spec file for generating RPMs on more platforms.
     * Added new Python wrapper to tools/python directory showing how to run 
       APBS without PQR and .in inputs.
+    * Updated tools/conversion/pdb2pqr to a new version (0.1.0) of PDB2PQR,
+      which now can handle nucleic acids, rebuild missing heavy atoms, add
+      hydrogens, and perform some optimization.
   - BUG FIXES
     * The dimensions of the fine grids in the pka-lig example calculations
       were increased to give more reliable results (albeit ones which don't
