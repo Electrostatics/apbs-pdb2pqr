@@ -234,5 +234,77 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     if (!thee->setwritepot) thee->writepot = 0;
     if (!thee->setwriteacc) thee->writeacc = 0;
 
-    return 0;
+    return 1;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  MGparm_copy
+//  
+// Purpose:  Copy parm into thee
+//
+// Args:     parm    object to copy into thee
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
+
+    int i;
+
+    VASSERT(thee != VNULL);
+    VASSERT(parm != VNULL);
+
+    for (i=0; i<3; i++) thee->dime[i] = parm->dime[i];
+    thee->setdime = parm->setdime;
+    thee->nlev = parm->nlev;
+    thee->setnlev = parm->setnlev;
+    for (i=0; i<3; i++) thee->grid[i] = parm->grid[i];
+    thee->setgrid = parm->setgrid;
+    for (i=0; i<3; i++) thee->glen[i] = parm->glen[i];
+    thee->setglen = parm->setglen;
+    thee->cmeth = parm->cmeth;
+    for (i=0; i<3; i++) thee->center[i] = parm->center[i];
+    thee->setgcent = parm->setgcent;
+    thee->centmol = parm->centmol;
+    thee->molid = parm->molid;
+    thee->setmolid = parm->setmolid;
+    thee->nonlin = parm->nonlin; 
+    thee->setnonlin = parm->setnonlin;
+    thee->bcfl = parm->bcfl;
+    thee->setbcfl = parm->setbcfl;
+    thee->nion = parm->nion;
+    thee->setnion = parm->setnion;
+    for (i=0; i<MAXION; i++) {
+        thee->ionq[i] = parm->ionq[i];
+        thee->ionc[i] = parm->ionc[i];
+        thee->ionr[i] = parm->ionr[i];
+        thee->setion[i] = parm->setion[i];
+    };
+    thee->pdie = parm->pdie;
+    thee->setpdie = parm->setpdie;
+    thee->sdie = parm->sdie;
+    thee->setsdie = parm->setsdie;
+    thee->srfm = parm->srfm;
+    thee->setsrfm = parm->setsrfm;
+    thee->srad = parm->srad;
+    thee->setsrad = parm->setsrad;
+    thee->swin = parm->swin;
+    thee->setswin = parm->setswin;
+    thee->temp = parm->temp;
+    thee->settemp = parm->settemp;
+    thee->gamma = parm->gamma;
+    thee->setgamma = parm->setgamma;
+    thee->calcenergy = parm->calcenergy;
+    thee->setcalcenergy = parm->setcalcenergy;
+    thee->calcforce = parm->calcforce;
+    thee->setcalcforce = parm->setcalcforce;
+    thee->writepot = parm->writepot;
+    thee->setwritepot = parm->setwritepot;
+    for (i=0; i<VMAX_ARGLEN; i++) thee->writepotstem[i] = parm->writepotstem[i];
+    thee->writepotfmt = parm->writepotfmt;
+    thee->writeacc = parm->writeacc;
+    thee->setwriteacc = parm->setwriteacc;
+    for (i=0; i<VMAX_ARGLEN; i++) thee->writeaccstem[i] = parm->writeaccstem[i];
+    thee->writeaccfmt = parm->writeaccfmt;
+    thee->parsed = parm->parsed;
+
 }

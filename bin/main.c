@@ -202,8 +202,8 @@ int main(int argc, char **argv) {
     for (i=0; i<nosh->ncalc; i++) {
         Vnm_print(1, "main:  ----------------------------------------\n");
         /* Do MG calculation */
-        if (nosh->calctype[i] == 0) {
-            mgparm = nosh->mgparm[imgcalc];
+        if (nosh->calc[i].calctype == 0) {
+            mgparm = nosh->calc[imgcalc].mgparm;
             imgcalc++;
             /* Set up missing MG parameters */
             if (mgparm->setgrid == 0) {
@@ -587,28 +587,28 @@ for multigrid calculations yet!\n");
                 Vnm_print(1, "%d ", nosh->printcalc[i][j]);
             }
             Vnm_print(1, "end\n");
-            calcid = nosh->printcalc[i][0];
-            if (nosh->mgparm[calcid-1]->calcenergy != 0) {
+            calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
+            if (nosh->calc[calcid].mgparm->calcenergy != 0) {
                 tenergy = Vunit_kb * (1e-3) * Vunit_Na * 
-                  nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
+                  nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
             } else {
                 Vnm_print(2, "main:    Didn't calculate energy in Calculation \
 #%d\n", 
-                  calcid);
+                  calcid+1);
                 break;
             }
             for (j=1; j<nosh->printnarg[i]; j++) {
-                calcid = nosh->printcalc[i][j];
-                if (nosh->mgparm[calcid-1]->calcenergy != 0) {
+                calcid = nosh->elec2calc[nosh->printcalc[i][j]-1];
+                if (nosh->calc[calcid].mgparm->calcenergy != 0) {
                     if (nosh->printop[i][j-1] == 0)
                       tenergy = tenergy + Vunit_kb * (1e-3) * Vunit_Na *
-                        nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
+                        nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
                     else if (nosh->printop[i][j-1] == 1)
                       tenergy = tenergy - Vunit_kb * (1e-3) * Vunit_Na * 
-                        nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
+                        nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
                 } else {  
                     Vnm_print(2, "main:    Didn't calculate energy in Calculation #%d\n", 
-                      calcid);
+                      calcid+1);
                     break;
                 }
             }
