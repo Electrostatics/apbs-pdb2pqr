@@ -660,20 +660,10 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
             if (!parm->setnion) {
                 parm->setnion = 1;
                 parm->nion = 0;
-            } else {
-                if (parm->nion > 2) {
-                    Vnm_print(2, "NOsh:  Only 1:1 ionic solutions presently allowed!\n");           
-                    return 0;
-                }
-                Vnm_print(2, "NOsh:  Warning -- only the largest ionic radius is used!\n");
-            }
+            } 
             for (i=0; i<parm->nion; i++) {
                 if (!parm->setion[i]) {
                     Vnm_print(2, "NOsh: ION #%d not set!\n",i);
-                    return 0;
-                }
-                if (VABS(parm->ionq[i]) != 1.00) {
-                    Vnm_print(2, "NOsh: Only monovalent ions presently allowed!\n");
                     return 0;
                 }
             }
