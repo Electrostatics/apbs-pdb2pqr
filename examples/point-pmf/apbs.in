@@ -140,5 +140,6 @@ elec
 end
 
 print energy 3 - 2 - 1 end
+print force 3 - 2 - 1 end
 
 quit
