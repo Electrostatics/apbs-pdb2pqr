@@ -4,11 +4,12 @@ read
     mol pqr bx6_7_bin_apbs.pqr  # Read complex (mol 3)
 end
 elec name bal
-    mg-manual                          # Use the multigrid method
+    mg-auto                          # Use the multigrid method
     dime 97 97 97                      # Grid dimensions
-    nlev 4                             # Multigrid levels
-    glen 70 70 70                      # Grid length
-    gcent mol 3                        # Center on complex
+    fglen 70 70 70                      # Grid length
+    fgcent mol 3                        # Center on complex
+    cglen 80 80 80                      # Grid length
+    cgcent mol 3                        # Center on complex
     mol 1                              
     lpbe                               
     bcfl sdh                           # Monopole boundary conditions
@@ -27,11 +28,12 @@ elec name bal
     write pot dx ligand                # Write potential to ligand.dx
 end
 elec name pka
-    mg-manual                          
+    mg-auto                          
     dime 97 97 97                      
-    nlev 4                             
-    glen 70 70 70
-    gcent mol 3
+    fglen 70 70 70
+    fgcent mol 3 
+    cglen 80 80 80
+    cgcent mol 3 
     mol 2
     lpbe
     bcfl sdh
@@ -50,11 +52,12 @@ elec name pka
    write pot dx apo
 end
 elec name complex
-    mg-manual
+    mg-auto
     dime 97 97 97
-    nlev 4
-    glen 70 70 70
-    gcent mol 3
+    fglen 70 70 70
+    fgcent mol 3 
+    cglen 80 80 80
+    cgcent mol 3 
     mol 3
     lpbe
     bcfl sdh

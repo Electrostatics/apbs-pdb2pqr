@@ -31,11 +31,12 @@ read
     mol pqr dna.pqr         # Read in DNA
 end
 elec
-    mg-manual
+    mg-auto
     dime 97 97 161          # Rectangular grid dimensions
-    nlev 4                  # Multigrid levels
-    glen 130 130 200        # Rectangular box
-    gcent mol 1             # Center on the molecule
+    cglen 160 160 230       # Rectangular box
+    fglen 130 130 200       # Rectangular box
+    cgcent mol 1            # Center on the molecule
+    fgcent mol 1            # Center on the molecule
     mol 1                   
     npbe                    # Nonlinear DNA
     bcfl mdh                # Full multipole approximation
