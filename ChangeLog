@@ -6,6 +6,8 @@ BETA PUBLIC RELEASE VERSION 0.2.5       ??-??-02
   * Made charge-field energy evaluation consistent for user-supplied charge
     maps
   * Removed annoying excess verbosity from Vgrid
+  * Updated Blue Horizon compilation instructions (thanks to Robert Konecny and
+    Giri Chukkapalli)
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.4       10-21-02
