@@ -43,7 +43,6 @@
 //      provided with the PMG code.
 //     
 // Author:   Nathan Baker
-//           Force evaluation routines by Larry Canino
 /////////////////////////////////////////////////////////////////////////// */
 
 #ifndef _VPMG_H_
@@ -91,11 +90,6 @@ typedef struct Vpmg {
   int filled;                    /* Indicates whether Vpmg_fillco has been
                                   * called */
 
-  /* ** FORCE EVALUATION STUFF ** */
-  double **occa;                 /* Occlusion map for "above" grid point */
-  double **occb;                 /* Occlusion map for "below" grid point */
-
-
 } Vpmg;
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -141,5 +135,18 @@ VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
 VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
+/* ********************* Force stuff ************************ */
+VEXTERNC void Vpmg_map_vdwDiel(Vpmg *thee);
+VEXTERNC void Vpmg_map_sasDiel(Vpmg *thee);
+VEXTERNC void Vpmg_setDiel(Vpmg *thee, int id, double *center,
+  double radius, double eps1, double eps2, int fuzz);
+VEXTERNC void Vpmg_getCFForce(Vpmg *thee, double **force);  // Coulombic
+VEXTERNC void Vpmg_getRFForce(Vpmg *thee, double **force);  // Reaction
+VEXTERNC void Vpmg_getVBForce(Vpmg *thee, double **force);  // VDW
+VEXTERNC void Vpmg_getSBForce(Vpmg *thee, double **force);  // SAS
+VEXTERNC void Vpmg_getDBForce(Vpmg *thee, double **force);  // dielectric
+VEXTERNC void Vpmg_interpolate(Vpmg *thee, Vec3 point, int option,
+  double *u, Vec3 *grad_u);
+
 
 #endif    /* ifndef _VPMG_H_ */
