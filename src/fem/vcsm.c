@@ -540,7 +540,58 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
         VASSERT(0);
     }
 
-    /* Replace the existing entries in the table */
+    /* Update the QSM map using the old and new SQM lists */
+    /* The affected atoms are those contained in the parent simplex; i.e.
+     * thee->sqm[SS_id(simps[0])] */
+    affAtoms = thee->sqm[SS_id(simps[0])];
+    nAffAtoms = thee->nsqm[SS_id(simps[0])];
+    /* Each of these atoms will go somewhere else; i.e., the entries in
+     * thee->qsm are never destroyed and thee->nqsm never decreases.
+     * However, it is possible that a subdivision could cause an atom to be
+     * shared by two child simplices.  Here we record the change, if any,
+     * in the number of simplices associated with each atom. */
+    dnqsm = Vram_ctor(nAffAtoms, sizeof(int));
+    VASSERT(dnqsm != VNULL);
+    nqsmNew = Vram_ctor(nAffAtoms, sizeof(int));
+    VASSERT(nqsm != VNULL);
+    qsmNew = Vram_ctor(nAffAtoms, sizeof(int*));
+    VASSERT(nqsm != VNULL);
+    for (iatom=0; iatom<nAffAtoms; iatom++) {
+        dnqsm[iatom] = -1;
+        atomID = affAtoms[iatom];
+        for (isimp=0; isimp<num; isimp++) {
+            for (jatom=0; jatom<nsqmNew[isimp]; jatom++) {
+                if (sqmNew[isimp][jatom] == atomID) dnqsm[iatom]++;
+            }
+        }
+        VASSERT(dnqsm[iatom] > -1);
+    }
+    /* Setup the new entries in the array */
+    for (iatom=0;iatom<nAffAtoms; iatom++) {
+        atomID = affAtoms[iatom];
+        qsmNew[iatom] = Vram_ctor(dqsm[iatom] + thee->nqsm[atomID], 
+                                  sizeof(int));
+        nqsmNew[iatom] = 0;
+        VASSERT(qsmNew[iatom] != VNULL);
+    }
+    /* Fill the new entries in the array */
+    /* First, do the modified entries */
+    for (isimp=0; isimp<num; isimp++) {
+        atomID
+STOPPED!
+    }
+    /* Now do the unmodified entries */
+    for (iatom=0; iatom<nAffAtoms; iatom++) {
+        atomID = affAtoms[iatom];
+        for (isimp=0; isimp<thee->nqsm[atomID]; isimp++) {
+            if (thee->qsm[atomID][isimp] != SS_id(simps[0])) {
+                qsmNew[iatom][nqsmNew[iatom]] = thee->qsm[atomID][isimp];
+            }
+            nqsmNew[iatom]++;
+        }
+    }
+
+    /* Replace the existing SQM entries in the table */
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
         if (thee->nsqm[simpID] > 0) Vram_dtor((Vram **)&(thee->sqm[simpID]),
