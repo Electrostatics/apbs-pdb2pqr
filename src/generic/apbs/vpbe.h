@@ -50,7 +50,6 @@
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
-#include "apbs/vcsm.h"
 #include "apbs/vacc.h"
 #include "apbs/vunit.h"
 #include "apbs/vgreen.h"
