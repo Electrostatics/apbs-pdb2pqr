@@ -232,7 +232,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
                 for ( kk = k_min; kk <= k_max; kk++) {
                     ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
                     (thee->natoms[ui])++;
-                    totatoms += thee->natoms[i];
+                    totatoms += thee->natoms[ui];
                 } 
             } 
         } 
