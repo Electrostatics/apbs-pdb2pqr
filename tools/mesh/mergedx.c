@@ -69,10 +69,15 @@ int main(int argc, char **argv) {
     char **fnams = VNULL;
     SHORTINT *carray = VNULL;
     char *usage0 = "[FLAGS] nx ny nz file1.dx [file2.dx ...]\n";
-    char *help0 = "-v               Default (off)";
-    char *help1 = "-quiet           Default (off)";
-    char *help2 = "-pad integer     Default (1)";
-    char *help3 = "-o filename.dx   Default (gridmerged.dx)";
+    char *req0  = "nx ny nz        Grid points on the merged grid";
+    char *req1  = "file1.dx        Names of unmerged grid files";
+    char *flag0 = "-v               Verbose                  (default: off)";
+    char *flag1 = "-quiet           Silent                   (default: off)";
+    char *flag2 = "-pad integer     Num. of pad grid points  (default: 1  )";
+    char *flag3 = "-o filename.dx   Output file    (default: gridmerged.dx)";
+    char *note0 = "Each subgrid is extended by the number of pad points,";
+    char *note1 = "which is often necessary to fill gaps between the grids.";
+    char *note2 = "Any overlap between subgrids is resolved by averaging.";
     char *snam = "# main:  ";
     char outname[80];
     Vgrid *grid, *mgrid;
@@ -87,8 +92,11 @@ int main(int argc, char **argv) {
                         &fnams, &numfnams, outname, &vflag) != 0 ) {
         Vnm_print(2,"\nImproper or Unrecognized Switches?\nUsage: ");
         Vnm_print(2,"%s %s\n",argv[0],usage0);
-        Vnm_print(2,"Flags:\t\t%s\n\t\t%s\n\t\t%s\n\t\t%s\n",
-                  help0, help1, help2, help3);
+        Vnm_print(2,"Input:\t\t%s\n\t\t%s\n\n", req0, req1);
+        Vnm_print(2,"Flags:\t\t%s\n\t\t%s\n\t\t%s\n\t\t%s\n\n",
+                  flag0, flag1, flag2, flag3);
+        Vnm_print(2,"Notes:\t\t%s\n\t\t%s\n\t\t%s\n",
+                  note0, note1, note2);
         return -1;
     }
 
