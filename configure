@@ -1997,6 +1997,7 @@ trap 'rm -fr `echo "
 
     src/Makefile
     src/vatom/Makefile
+    src/vacc/Makefile
     src/vhash/Makefile
     src/vcsm/Makefile
     src/vpbe/Makefile
@@ -2005,6 +2006,7 @@ trap 'rm -fr `echo "
     tst/vhash/Makefile
     tst/vcsm/Makefile
     tst/vpbe/Makefile
+    tst/vacc/Makefile
 
     work/Makefile
     work/bin/Makefile
@@ -2114,6 +2116,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
 
     src/Makefile
     src/vatom/Makefile
+    src/vacc/Makefile
     src/vhash/Makefile
     src/vcsm/Makefile
     src/vpbe/Makefile
@@ -2122,6 +2125,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     tst/vhash/Makefile
     tst/vcsm/Makefile
     tst/vpbe/Makefile
+    tst/vacc/Makefile
 
     work/Makefile
     work/bin/Makefile
