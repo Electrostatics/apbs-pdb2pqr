@@ -157,18 +157,43 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
    make
 %endif
 
-# For Itanium IA64 using intel-mkl BLAS
+# For Itanium ia64 using intel-mkl BLAS
 # NOTE: you must set the INTEL_BLAS environment variable to the BLAS lib dir!
 # From intel-mkl notes: Use the following linking flag order:
-#       -lmkl_lapack -lmkl_ipf -lguide 
+#       -lmkl_lapack -lmkl_ipf
 
 %ifarch ia64
    export CC=icc
-   export CFLAGS='-fPIC -static' 
+   export CFLAGS='-fPIC' 
    export F77=ifort
-   export FFLAGS='-fPIC -static'
-   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -lguide -ldl" --with-blas-name="mkl_lapack"
+   export FFLAGS='-fPIC'
+   export LDFLAGS='-static -static-libcxa'
+   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"
    make
+%endif
+
+# For power 64
+# NOTE:  There are a couple of changes you must make to compile with xlc
+#        and xlf:
+#        1.  In order to use static libraries you must edit the configuration
+#            files for xlc (vac.cfg) and xlf (xlf.cfg).  For xlf, model the
+#            stanza after xlf, but change the following libs in the
+#            libraries_64 variable to the COMPLETE path to the static library:
+#                 a) -lxlf90  to /path/to/libxlf90.a
+#                 b) -lxlomp_ser to /path/to/libxlomp_ser.a
+#                 c) -lxlfmath to /path/to/libxlfmath.a
+#            and give the stanza a new name.
+#        2.  Copy the xlc stanza in vac.cfg and make a new stanza, using the
+#            same name you used in the xlf config file.
+#        3.  Set var in FFLAGS -F:var below to this name.
+ 
+%ifarch ppc64 ppc64pseries ppc64iseries
+     export CC=xlc
+     export CFLAGS='-q64 -qarch=ppc64'
+     export F77=xlf
+     export FFLAGS='-q64 -qarch=ppc64 -Wl,-static -F:xtest'
+     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+     make
 %endif
 
 %install
