@@ -94,7 +94,8 @@ int main(int argc, char **argv) {
     double realCenter[3];
 
     /* Instructions: */
-    char *header = "\n\n\
+    char header[] = 
+{"\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
     Version 0.2.1 (April 23, 2002)\n\
@@ -124,15 +125,16 @@ int main(int argc, char **argv) {
     OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
     MODIFICATIONS.\n\
     ----------------------------------------------------------------------\n\
-    \n\n";
-    char *usage = "\n\n\
+    \n\n"};
+    char *usage = 
+{"\n\n\
     ----------------------------------------------------------------------\n\
     This driver program calculates electrostatic potentials, energies,\n\
     and forces using both multigrid and finite element methods.\n\
     It is invoked as:\n\n\
       apbs apbs.in\n\n\
     where apbs.in is a formatted input file.\n\
-    ----------------------------------------------------------------------\n\n";
+    ----------------------------------------------------------------------\n\n"};
 
 
     /* ************** CHECK PARALLEL STATUS *************** */
