@@ -2060,8 +2060,11 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
         Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");
         qmEnergy = Vpmg_qmEnergy(thee, extFlag);
+        Vnm_print(0, "Vpmg_energy:  qmEnergy = %g kT\n", qmEnergy);
         qfEnergy = Vpmg_qfEnergy(thee, extFlag);
+        Vnm_print(0, "Vpmg_energy:  qfEnergy = %g kT\n", qfEnergy);
         dielEnergy = Vpmg_dielEnergy(thee, extFlag);
+        Vnm_print(0, "Vpmg_energy:  dielEnergy = %g kT\n", dielEnergy);
         totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
         Vnm_print(2, "Vpmg_energy:  calculating only q-phi energy\n");
