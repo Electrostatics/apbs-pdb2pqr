@@ -494,6 +494,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
     
     pbe = thee->pbe;
     flag = thee->pmgp->bcfl;
+    alist = thee->pbe->alist;
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
