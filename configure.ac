@@ -42,7 +42,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [0.3.1], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [0.3.2], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -80,7 +80,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 0.3.1)
+AM_INIT_AUTOMAKE(apbs, 0.3.2)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";
@@ -183,22 +183,38 @@ case $host_cpu in
       PY_CFLAGS="";;
    powerpc64*)
       PY_CFLAGS="";;
+   i*86)
+      PY_LINKFLAGS=${CFLAGS}
+      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+      if test "${CC}" = "icc"; then
+          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
+	      else
+	          PY_CFLAGS=""	
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+          fi
+      else
+          PY_CFLAGS=""
+      fi;; 
    ia64*)
       PY_LINKFLAGS=${CFLAGS}
       IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
       if test "${CC}" = "icc"; then
           AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-	  if test -n "${ifcore_lib}"; then
-	      PY_LDFLAGS=${ifcore_lib}
-	  else
-	      PY_CFLAGS=""	
-	  fi
-	  if test -n "${IS_STATIC}"; then
-	      if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	          PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
 	      else
+	          PY_CFLAGS=""	
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	          if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+	              PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	          else
                   PY_CFLAGS=""
-	      fi 
+	          fi 
           fi
       else
           PY_CFLAGS=""
