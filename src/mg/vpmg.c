@@ -570,7 +570,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
             atom = Valist_getAtom(alist, iatom);
             position = Vatom_getPosition(atom);
-            charge = Vatom_getCharge(atom);
+            charge = Vunit_ec*Vatom_getCharge(atom);
             size = Vatom_getRadius(atom);
             bcfl1(size, position, charge, xkappa, pre1,
               thee->gxcf, thee->gycf, thee->gzcf, 
