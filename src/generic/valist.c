@@ -307,7 +307,7 @@ atom=%s using following residue names as guesses: ");
     } /* while we haven't run out of tokens */
 
 
-    printf("Valist_readPDB: Counted %d atoms\n", thee->number);
+    Vnm_print(0, "Valist_readPDB: Counted %d atoms\n", thee->number);
     fflush(stdout);
 
 
@@ -509,7 +509,7 @@ VPRIVATE int getStatistics(Valist *thee) {
         thee->maxcrd[i] = thee->mincrd[i] = atom->position[i];
     }
     thee->maxrad = atom->radius;
-    thee->charge = atom->charge;
+    thee->charge = 0.0;
 
     for (i=0; i<thee->number; i++) {
 
@@ -522,7 +522,6 @@ VPRIVATE int getStatistics(Valist *thee) {
         }
         if (atom->radius > thee->maxrad) thee->maxrad = atom->radius;
         thee->charge = thee->charge + atom->charge;
-
     } 
 
     thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);

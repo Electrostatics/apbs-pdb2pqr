@@ -81,10 +81,6 @@ struct sValist {
  */
 typedef struct sValist Valist;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Valist: Inlineable methods (valist.c)
-/////////////////////////////////////////////////////////////////////////// */
-
 #if !defined(VINLINE_VATOM)
 
     /** @brief   Get actual array of atom objects from the list
