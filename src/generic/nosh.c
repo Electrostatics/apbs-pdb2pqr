@@ -483,8 +483,9 @@ PRINT section!\n",
                 return 0;
             }
         } else {
+     
             /* Grab a calculation ID */
-            if (sscanf(tok, "%d", &ti) == 1) {
+            if (sscanf(tok, "%d", &ti) == 1 && Vstring_isdigit(tok) == 1) {
                 if (expect == 0) {
                     thee->printcalc[idx][thee->printnarg[idx]] = ti;
                     expect = 1;
@@ -532,7 +533,7 @@ section while reading %s!\n", tok);
 			    if (expect == 0) {
 				    for (i=1;i<thee->nelec+1;i++){
 					    if (Vstring_strcasecmp(thee->elecname[i], name) == 0){
-						    thee->printcalc[idx][thee->printnarg[idx]] = i;
+                            thee->printcalc[idx][thee->printnarg[idx]] = i;
 							expect = 1;
 							break;
 					    }
