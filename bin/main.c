@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
     char *header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.1.7 (December 13, 2001)\n\
+    Version 0.1.8 (January 29, 2002)\n\
     \n\
     Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
     Dept. of Chemistry and Biochemistry\n\
