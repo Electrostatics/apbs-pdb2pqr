@@ -508,16 +508,14 @@ run!\n");
 
     /* The next token HAS to be the method */
     if (Vio_scanf(sock, "%s", tok) == 1) {
-        if ((Vstring_strcasecmp(tok, "mg") == 0) || 
-            (Vstring_strcasecmp(tok, "mg-manual") == 0)) {
-            if (Vstring_strcasecmp(tok, "mg") == 0) Vnm_print(2, "NOsh:  The MG \
-keyword is deprecated.  Please use either MG-MANUAL or MG-AUTO.\nNOsh:  \
-I'm assuming you meant MG-MANUAL here.\n");
+        if (Vstring_strcasecmp(tok, "mg-manual") == 0) {
             return NOsh_parseMG(thee, sock, 0);
         } else if (Vstring_strcasecmp(tok, "mg-auto") == 0) {
             return NOsh_parseMG(thee, sock, 1);
         } else if (Vstring_strcasecmp(tok, "mg-para") == 0) {
             return NOsh_parseMG(thee, sock, 2);
+        } else if (Vstring_strcasecmp(tok, "mg-dummy") == 0) {
+            return NOsh_parseMG(thee, sock, 3);
         } else if (Vstring_strcasecmp(tok, "fem") == 0) {
             /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number

@@ -64,7 +64,9 @@ struct MGparm {
     int type;                   /**< What type of MG calculation?
                                  *   \li 0: sequential manual
                                  *   \li 1: sequential auto-focus
-                                 *   \li 2: parallel auto-focus */
+                                 *   \li 2: parallel auto-focus 
+                                 *   \li 3: dummy calculation for coefficient
+                                 *          I/O */
     int parsed;                 /**< Has this structure been filled? (0 = no,
                                  * 1 = yes) */
 

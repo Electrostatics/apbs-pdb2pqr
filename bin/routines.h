@@ -81,15 +81,14 @@ VEXTERNC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
   Valist *alist[NOSH_MAXMOL], Vgrid *dielMap[NOSH_MAXMOL], 
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-VEXTERNC int solveMG(Vcom *com, Vpmg *pmg);
+VEXTERNC int solveMG(Vcom *com, Vpmg *pmg, int type);
 VEXTERNC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg);
 VEXTERNC int energyMG(Vcom *com, NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
 VEXTERNC int forceMG(Vcom *com, Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
-VEXTERNC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
-VEXTERNC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+VEXTERNC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i);
 

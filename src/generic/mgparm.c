@@ -162,8 +162,8 @@ VPUBLIC int MGparm_check(MGparm *thee) {
         rc = 0;
     }
 
-    /* Check sequential manual settings */
-    if (thee->type == 0) {
+    /* Check sequential manual & dummy settings */
+    if ((thee->type == 0) || (thee->type == 3)) {
         if ((!thee->setgrid) && (!thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
             rc = 0;

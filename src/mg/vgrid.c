@@ -89,6 +89,7 @@ VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
         thee->readdata = 0;
     } else {
         thee->ctordata = 1;
+        thee->readdata = 0;
         thee->data = data;
     }
 
@@ -282,6 +283,7 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 
     double hx, hy, hzed;
     double uleft, umid, uright, testpt[3];
+    int haveleft, haveright;
 
     VASSERT(thee != VNULL);
     VASSERT(thee->ctordata || thee->readdata);
@@ -290,38 +292,53 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
     hy = thee->hy;
     hzed = thee->hzed;
 
+    /* Compute derivative in the x-direction */
     testpt[0] = pt[0];
     testpt[1] = pt[1];
     testpt[2] = pt[2];
-
-    /* Compute derivative in the x-direction */
     VJMPERR1( Vgrid_value( thee, testpt, &umid));
     testpt[0] = pt[0] - hx;
-    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
+    if (Vgrid_value( thee, testpt, &uleft)) haveleft = 1;
+    else haveleft = 0;
     testpt[0] = pt[0] + hx;
-    VJMPERR1( Vgrid_value( thee, testpt, &uright));
-    testpt[0] = pt[0];
-
-    grad[0] = (uright - uleft)/(2*hx);
+    if (Vgrid_value( thee, testpt, &uright)) haveright = 1;
+    else haveright = 0;
+    if (haveright && haveleft) grad[0] = (uright - uleft)/(2*hx);
+    else if (haveright) grad[0] = (uright - umid)/hx;
+    else if (haveleft) grad[0] = (umid - uleft)/hx;
+    else VJMPERR1(0);
 
     /* Compute derivative in the y-direction */
-    VJMPERR1( Vgrid_value( thee, testpt, &umid));
-    testpt[1] = pt[1] - hy;
-    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
-    testpt[1] = pt[1] + hy;
-    VJMPERR1( Vgrid_value( thee, testpt, &uright));
+    testpt[0] = pt[0];
     testpt[1] = pt[1];
-
-    grad[1] = (uright - uleft)/(2*hy);
+    testpt[2] = pt[2];
+    VJMPERR1(Vgrid_value(thee, testpt, &umid));
+    testpt[0] = pt[0] - hy;
+    if (Vgrid_value( thee, testpt, &uleft)) haveleft = 1;
+    else haveleft = 0;
+    testpt[0] = pt[0] + hy;
+    if (Vgrid_value( thee, testpt, &uright)) haveright = 1;
+    else haveright = 0;
+    if (haveright && haveleft) grad[0] = (uright - uleft)/(2*hy);
+    else if (haveright) grad[0] = (uright - umid)/hy;
+    else if (haveleft) grad[0] = (umid - uleft)/hy;
+    else VJMPERR1(0);
 
     /* Compute derivative in the z-direction */
-    VJMPERR1( Vgrid_value( thee, testpt, &umid));
-    testpt[2] = pt[2] - hzed;
-    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
-    testpt[2] = pt[2] + hzed;
-    VJMPERR1( Vgrid_value( thee, testpt, &uright));
-
-    grad[2] = (uright - uleft)/(2*hzed);
+    testpt[0] = pt[0];
+    testpt[1] = pt[1];
+    testpt[2] = pt[2];
+    VJMPERR1(Vgrid_value(thee, testpt, &umid));
+    testpt[0] = pt[0] - hzed;
+    if (Vgrid_value( thee, testpt, &uleft)) haveleft = 1;
+    else haveleft = 0;
+    testpt[0] = pt[0] + hzed;
+    if (Vgrid_value( thee, testpt, &uright)) haveright = 1;
+    else haveright = 0;
+    if (haveright && haveleft) grad[0] = (uright - uleft)/(2*hzed);
+    else if (haveright) grad[0] = (uright - umid)/hzed;
+    else if (haveleft) grad[0] = (umid - uleft)/hzed;
+    else VJMPERR1(0);
 
     return 1;
 

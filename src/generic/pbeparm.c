@@ -102,8 +102,7 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setgamma = 0;
     thee->setcalcenergy = 0;      
     thee->setcalcforce = 0;       
-    thee->setwritepot = 0; 
-    thee->setwriteacc = 0; 
+    thee->numwrite = 0; 
     thee->setwritemat = 0; 
     thee->nion = 0;
     thee->swin = 0;
@@ -208,8 +207,6 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     }
     if (!thee->setcalcenergy) thee->calcenergy = 0;
     if (!thee->setcalcforce) thee->calcforce = 0;
-    if (!thee->setwritepot) thee->writepot = 0;
-    if (!thee->setwriteacc) thee->writeacc = 0;
     if (!thee->setwritemat) thee->writemat = 0;
 
     return 1;
@@ -226,7 +223,7 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 
-    int i;
+    int i, j;
 
     VASSERT(thee != VNULL);
     VASSERT(parm != VNULL);
@@ -269,14 +266,13 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setcalcenergy = parm->setcalcenergy;
     thee->calcforce = parm->calcforce;
     thee->setcalcforce = parm->setcalcforce;
-    thee->writepot = parm->writepot;
-    thee->setwritepot = parm->setwritepot;
-    for (i=0; i<VMAX_ARGLEN; i++) thee->writepotstem[i] = parm->writepotstem[i];
-    thee->writepotfmt = parm->writepotfmt;
-    thee->writeacc = parm->writeacc;
-    thee->setwriteacc = parm->setwriteacc;
-    for (i=0; i<VMAX_ARGLEN; i++) thee->writeaccstem[i] = parm->writeaccstem[i];
-    thee->writeaccfmt = parm->writeaccfmt;
+    thee->numwrite = parm->numwrite;
+    for (i=0; i<PBEPARM_MAXWRITE; i++) {
+        thee->writetype[i] = parm->writetype[i];
+        thee->writefmt[i] = parm->writefmt[i];
+        for (j=0; j<VMAX_ARGLEN; j++) 
+          thee->writestem[i][j] = parm->writestem[i][j];
+    }
     thee->writemat = parm->writemat;
     thee->setwritemat = parm->setwritemat;
     for (i=0; i<VMAX_ARGLEN; i++) thee->writematstem[i] = parm->writematstem[i];
@@ -302,6 +298,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
 
     int ti;
     double tf;
+    Vdata_Type writetype;
+    Vdata_Format writefmt;
 
     if (thee == VNULL) {
         Vnm_print(2, "parsePBE:  got NULL thee!\n");
@@ -456,54 +454,52 @@ WRITEFORCE keyword!\n", tok);
         thee->calcforce = ti;
         thee->setcalcforce = 1;
         return 1;
-    } else if (Vstring_strcasecmp(tok, "writepot") == 0) {
+    } else if (Vstring_strcasecmp(tok, "write") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEPOT \
-keyword!\n", tok);
+        if (Vstring_strcasecmp(tok, "pot") == 0) {
+            writetype = VDT_POT;
+        } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+            writetype = VDT_CHARGE;
+        } else if (Vstring_strcasecmp(tok, "smol") == 0) {
+            writetype = VDT_SMOL;
+        } else if (Vstring_strcasecmp(tok, "sspl") == 0) {
+            writetype = VDT_SSPL;
+        } else if (Vstring_strcasecmp(tok, "vdw") == 0) {
+            writetype = VDT_VDW;
+        } else if (Vstring_strcasecmp(tok, "ivdw") == 0) {
+            writetype = VDT_IVDW;
+        } else if (Vstring_strcasecmp(tok, "lap") == 0) {
+            writetype = VDT_LAP;
+        } else if (Vstring_strcasecmp(tok, "edens") == 0) {
+            writetype = VDT_EDENS;
+        } else if (Vstring_strcasecmp(tok, "ndens") == 0) {
+            writetype = VDT_NDENS;
+        } else if (Vstring_strcasecmp(tok, "qdens") == 0) {
+            writetype = VDT_QDENS;
+        } else {
+            Vnm_print(2, "PBEparm_parse:  Invalid data type (%s) to write!\n",
+               tok);
             return -1;
         }
-        thee->writepot = ti;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (Vstring_strcasecmp(tok, "dx") == 0) {
-            thee->writepotfmt = 0;
-        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
-            thee->writepotfmt = 1;
+            writefmt = VDF_DX;
         } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
-            thee->writepotfmt = 2;
+            writefmt = VDF_UHBD;
+        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
+            writefmt = VDF_AVS;
         } else {
-            Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
-WRITEPOT keyword!\n", tok);
+            Vnm_print(2, "PBEparm_parse:  Invalid data format (%s) to write!\n",
+               tok);
             return -1;
         }
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        strncpy(thee->writepotstem, tok, VMAX_ARGLEN);
-        thee->setwritepot = 1;
+        strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
+        thee->writetype[thee->numwrite] = writetype;
+        thee->writefmt[thee->numwrite] = writefmt;
+        (thee->numwrite)++;
         return 1;
-    } else if (Vstring_strcasecmp(tok, "writeacc") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEACC \
-keyword!\n", tok);
-            return -1;
-        } 
-        thee->writeacc = ti;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (Vstring_strcasecmp(tok, "dx") == 0) {
-            thee->writeaccfmt = 0;
-        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
-            thee->writeaccfmt = 1;
-        } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
-            thee->writeaccfmt = 2;
-        } else {
-            Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
-WRITEACC keyword!\n", tok);
-            return -1;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        strncpy(thee->writeaccstem, tok, VMAX_ARGLEN);
-        thee->setwriteacc = 1;
-        return 1;
+
     } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {

@@ -2764,16 +2764,19 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_fillAcc
+// Routine:  Vpmg_fillArray
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
+VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
+  double parm) {
 
     Vacc *acc = VNULL;
     Vpbe *pbe = VNULL;
+    Vgrid *grid = VNULL;
     double position[3], hx, hy, hzed, xmin, ymin, zmin;
-    int i, j, k, nx, ny, nz;
+    double grad[3],  eps, epsp, epss;
+    int i, j, k, l, nx, ny, nz, ichop;
 
     pbe = thee->pbe;
     acc = Vpbe_getVacc(pbe);
@@ -2786,45 +2789,197 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
     xmin = thee->pmgp->xmin;
     ymin = thee->pmgp->ymin;
     zmin = thee->pmgp->zmin;
+    epsp = Vpbe_getSoluteDiel(pbe);
+    epss = Vpbe_getSolventDiel(pbe);
 
-    if (meth == 0) {
-        Vnm_print(0, "Vpmg_fillAcc: using molecular surface with %g A probe\n",
-          parm);
-    } else if (meth == 1) {
-        Vnm_print(0, "Vpmg_fillAcc: using van der Waals surface\n");
-    } else if (meth == 2) {
-        Vnm_print(0, "Vpmg_fillAcc: using inflated van der Waals surface with %g A probe\n",
-          parm);
-    } else if (meth == 3) {
-        Vnm_print(0, "Vpmg_fillAcc: using spline surface with %g window\n",
-          parm);
-    } else {
-        Vnm_print(2, "Vpmg_fillAcc: invalid surface method (%d)!\n", meth);
-        VASSERT(0);
-    }
+    switch (type) {
 
+        case VDT_CHARGE:
 
-    for (k=0; k<nz; k++) {
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
+            /* Fill the mesh point coordinate arrays */
+            for (i=0; i<nx; i++) thee->xf[i] = xmin + i*hx;
+            for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
+            for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hzed;
+            /* Reset the fcf array */
+            for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
+            /* Call the charge discretization routine */
+            fillcoCharge(thee);
+            /* Copy the charge array into the argument vector */
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->fcf[i];
+            break;
 
-                position[0] = i*hx + xmin;
-                position[1] = j*hy + ymin;
-                position[2] = k*hzed + zmin;
+        case VDT_POT:
 
-                /* the scalar (0th derivative) entry */
-                if (meth == 0) {
-                    vec[IJK(i,j,k)] = (Vacc_molAcc(acc,position,parm));
-                } else if (meth == 1) {
-                    vec[IJK(i,j,k)] = (Vacc_vdwAcc(acc,position));
-                } else if (meth == 2) {
-                    vec[IJK(i,j,k)] = (Vacc_ivdwAcc(acc,position,parm));
-                } else if (meth == 3) {
-                    vec[IJK(i,j,k)] = (Vacc_splineAcc(acc,position,parm,0.0));
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->u[i];
+            break;
+
+        case VDT_SMOL:
+ 
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+
+                        vec[IJK(i,j,k)] = (Vacc_molAcc(acc,position,parm));
+                    }
                 }
             }
-        }
+            break;
+
+        case VDT_SSPL:
+
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+
+                        vec[IJK(i,j,k)] = Vacc_splineAcc(acc,position,parm,0);
+                    }
+                }   
+            }
+            break;
+
+        case VDT_VDW:
+
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+
+                        vec[IJK(i,j,k)] = Vacc_vdwAcc(acc,position);
+                    }
+                }
+            }
+            break;
+
+        case VDT_IVDW:
+
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+
+                        vec[IJK(i,j,k)] = Vacc_ivdwAcc(acc,position,parm);
+                    }
+                }
+            }
+            break;
+
+        case VDT_LAP:
+
+            grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+              thee->u);
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        if ((k==0) || (k==nz) ||
+                            (j==0) || (j==ny) ||
+                            (i==0) || (j==nz)) {
+
+                            vec[IJK(i,j,k)] = 0;
+
+                        } else { 
+
+                                position[0] = i*hx + xmin;
+                                position[1] = j*hy + ymin;
+                                position[2] = k*hzed + zmin;
+                                VASSERT(Vgrid_curvature(grid,position, 1,
+                                  &(vec[IJK(i,j,k)])));
+                        }
+                    }
+                }
+            }
+            Vgrid_dtor(&grid);
+            break;
+
+        case VDT_EDENS:
+
+            grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+              thee->u);
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+                        VASSERT(Vgrid_gradient(grid, position, grad));
+                        eps = epsp + (epss-epsp)*Vacc_molAcc(acc, position, 
+                          pbe->solventRadius);
+                        vec[IJK(i,j,k)] = 0.0;
+                        for (l=0; l<3; l++) 
+                          vec[IJK(i,j,k)] += eps*VSQR(grad[l]);
+                    }
+                }
+            }
+            Vgrid_dtor(&grid);
+            break;
+
+        case VDT_NDENS:
+
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+                        vec[IJK(i,j,k)] = 0.0;
+                        if (Vacc_molAcc(acc, position, pbe->maxIonRadius)) {
+                            for (l=0; l<pbe->numIon; l++) {
+                              vec[IJK(i,j,k)] += (pbe->ionConc[l]
+                                * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)], 
+                                &ichop));
+                            }
+                        } 
+                    }
+                }
+            }
+            break;
+
+        case VDT_QDENS:
+
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    for (i=0; i<nx; i++) {
+
+                        position[0] = i*hx + xmin;
+                        position[1] = j*hy + ymin;
+                        position[2] = k*hzed + zmin;
+                        vec[IJK(i,j,k)] = 0.0;
+                        if (Vacc_molAcc(acc, position, pbe->maxIonRadius)) {
+                            for (l=0; l<pbe->numIon; l++) {
+                              vec[IJK(i,j,k)] += (pbe->ionConc[l] 
+                                * pbe->ionQ[l]
+                                * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
+                                &ichop));
+                            }
+                        }
+                    }
+                }
+            }
+            break;
+
+        default:
+
+            Vnm_print(2, "main:  Bogus data type (%d)!\n", type);
+            break;
+
     }
+
 }
 
 #undef VPMGSMALL

@@ -2,7 +2,7 @@ read
     mol pqr fas2.pqr                   # Read molecule 1
 end
 elec
-    mg                                 # Use the multigrid method
+    mg-dummy                           # Use the multigrid method
     dime 97 97 97                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
     nlev 4                             # Number of levels in multilevel
@@ -15,7 +15,7 @@ elec
                                        #   coordinates
     mol 1                              # Which molecule (1, 2, ...)
     lpbe                               # lpbe/npbe = linear/nonlinear PBE
-    bcfl 2                             # Boundary condition flag
+    bcfl 1                             # Boundary condition flag
                                        #  0 => Zero
                                        #  1 => Single DH sphere
                                        #  2 => Multiple DH spheres
@@ -35,27 +35,21 @@ elec
     swin 0.3                           # Surface cubic spline window
     temp 298.15                        # Temperature
     gamma 0.105                        # Surface tension (in kJ/mol/A^2)
-    calcenergy 1                      # Energy I/O (to stdout)
+    calcenergy 1                       # Energy I/O (to stdout)
                                        #  0 => don't write out energy
                                        #  1 => write out total energy
                                        #  2 => write out total energy and all
                                        #       components
-    calcforce 0                       # Atomic forces I/O (to stdout)
+    calcforce 0                        # Atomic forces I/O (to stdout)
                                        #  0 => don't write out forces
                                        #  1 => write out net forces on molecule
                                        #  2 => write out atom-level forces
-    writepot 1 dx potential            # Potential I/O:
-                                       #  writepot <flag> <format> <stem>
-				       #  Writes potential to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
-    writeacc 1 dx accessibility        # Solvent accessibility I/O:
-                                       #  writeacc <flag> <format> <stem>
-				       #  Writes access. to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
+    write pot dx potential             # Potential I/O
+    write sspl dx accessibility        # Solvent accessibility I/O
+    write ndens dx ion-density         # Ion number density
+    write qdens dx charge-density      # Ion charge density
+    write edens dx energy-density      # Energy density
+    write charge dx charge             # Biomolecule charge distribution
 end
 
 quit

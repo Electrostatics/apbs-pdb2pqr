@@ -4,13 +4,21 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
   * Inclusion of SWIG wrappers for use with Python (contributed by Alexandre
     Gillet)
   * Improvement of VMD visualization scripts (contributed by Dave Sept)
+  * The API has changed significantly; please see the Programmer's Manual.
   * Syntax changes
-    - The writepot and writeacc keywords have been generalized.  The syntax is
+    - The writepot and writeacc keywords have been generalized and new I/O
+      features have been added.  The syntax is
       now:  write pot dx potential
-            write acc dx potential
+            write smol dx potential
             etc.
-    - The read keywords has been generalized.  The correct syntax for reading
-      in a molecule is now:  read mol mol.pqr end
+      Please see the User's Manual for more information
+    - The read keywords has been generalized and new I/O features have been
+      added which support the use of pre-calculated coefficient grids, etc..
+      The correct syntax for reading in a molecule is now 
+      "read mol mol.pqr end"; please see the User's Manual for more
+      information.
+    - The "mg" keyword is no longer supported; all input files should use
+      "mg-manual" or one of the other alternatives instead.
  
 
 #############################################################################

@@ -58,8 +58,6 @@
 #include "apbs/vcap.h"
 #include "apbs/vgrid.h"
 
- 
-
 /** @def VPMGMAXPART The maximum number of partitions the
  *                   mesh can be divided into 
  *  @ingroup Vpmg
@@ -482,14 +480,11 @@ VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
  *  @param   thee   Vpmg object
  *  @param   vec    An array nx*ny*nz in length to contain the accessibility
  *                  values (where nx, ny, nz are the numbers of grid points)
- *  @param   meth   Accessibility definition to use:
- *                  \li 0:  Mol surf (uses parm as probe radius)
- *                  \li 1:  VdW surf (ignores parm)
- *                  \li 2:  Inflated VdW surf (uses parm as probe radius)
- *                  \li 3:  Spline surface (uses parm as spline window)
- *  @param   parm  Parameter for surface definition
+ *  @param   type   Which data to write
+ *  @param   parm   Parameter for data definition (if needed)
  */
-VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
+VEXTERNC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
+  double parm);
 
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  

@@ -48,6 +48,11 @@
 #include "apbs/apbs.h"
 #include "maloc/maloc.h"
 
+/** @brief   Number of things that can be written out in a single calculation
+ *  @ingroup PBEparm
+ */
+#define PBEPARM_MAXWRITE 10
+
 /**
  *  @struct  PBEparm
  *  @ingroup PBEparm
@@ -113,16 +118,12 @@ struct PBEparm {
                                 * \li 1: calculate net forces on molecule
                                 * \li 2: calculate atom-level forces */
     int setcalcforce;          /**< Flag, @see calcforce */
-    int writepot;              /**< 0 => no, 1 => yes */
-    int setwritepot;           /**< Flag, @see writepot */
-    char writepotstem[VMAX_ARGLEN]; /**< File stem to write pot */
-    int writepotfmt;           /**< Potential file formats: 0 => dx, 1 => avs, 
-                                * 2 => UHBD */
-    int writeacc;              /**< 0 => no, 1 => yes */
-    int setwriteacc;           /**< Flag, @see writeacc */
-    char writeaccstem[VMAX_ARGLEN];    /**< File stem to write pot */
-    int writeaccfmt;           /**< Potential file formats: 0 => dx, 1 => avs, 
-                                * 2 => UHBD */
+    int numwrite;              /**< Number of write statements encountered */
+    char writestem[PBEPARM_MAXWRITE][VMAX_ARGLEN]; /**< File stem to write 
+                                * data to */
+    Vdata_Type writetype[PBEPARM_MAXWRITE]; /**< What data to write */
+    Vdata_Format writefmt[PBEPARM_MAXWRITE]; /**< File format to write data 
+                                * in */
     int writemat;              /**< Write out the operator matrix? 
                                     \li 0 => no 
                                     \li 1 => yes */

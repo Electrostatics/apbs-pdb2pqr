@@ -45,18 +45,6 @@ elec
                                        #  0 => don't write out forces
                                        #  1 => write out net forces on molecule
                                        #  2 => write out atom-level forces
-    writepot 0 dx potential            # Potential I/O:
-                                       #  writepot <flag> <format> <stem>
-				       #  Writes potential to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
-    writeacc 0 dx accessibility        # Solvent accessibility I/O:
-                                       #  writeacc <flag> <format> <stem>
-				       #  Writes access. to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
 end
 elec
     mg-manual                          # Use the multigrid method
@@ -102,18 +90,6 @@ elec
                                        #  0 => don't write out forces
                                        #  1 => write out net forces on molecule
                                        #  2 => write out atom-level forces
-    writepot 0 dx potential            # Potential I/O:
-                                       #  writepot <flag> <format> <stem>
-				       #  Writes potential to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
-    writeacc 0 dx accessibility        # Solvent accessibility I/O:
-                                       #  writeacc <flag> <format> <stem>
-				       #  Writes access. to stem-n.xxx, where
-				       #  n is the molecule number and xxx is
-				       #  the appropriate extension.  0 => no,
-				       #  1 => yes Formats: uhbd, dx, avs
 end
 
 print energy 1 - 2 end
