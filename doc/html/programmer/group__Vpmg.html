@@ -67,7 +67,7 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Set partition information which restricts the calculation of observables to a (rectangular) subset of the problem domain.</em> <a href="#a21"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a22">Vpmg_unsetPart</a> (Vpmg *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Remove partition restrictions.</em> <a href="#a22"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a23">Vpmg_fillArray</a> (Vpmg *thee, double *vec, <a class="el" href="group__Vhal.html#a25">Vdata_Type</a> type, double parm)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a23">Vpmg_fillArray</a> (Vpmg *thee, double *vec, <a class="el" href="group__Vhal.html#a25">Vdata_Type</a> type, double parm, <a class="el" href="group__Vhal.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill the specified array with accessibility values.</em> <a href="#a23"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a24">Vpmg_printColComp</a> (Vpmg *thee, char path[72], char title[72], char mxtype[3], int flag)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Print out a column-compressed sparse matrix in Harwell-Boeing format.</em> <a href="#a24"></a><em></em></font><br><br></td></tr>
@@ -694,7 +694,13 @@ Get the total electrostatic energy.
           <td></td>
           <td></td>
           <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>parm</em></td>
+          <td class="mdname" nowrap>&nbsp; <em>parm</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="group__Vhal.html#a0">Vhal_PBEType</a>&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>pbetype</em></td>
         </tr>
         <tr>
           <td></td>
@@ -723,6 +729,7 @@ Fill the specified array with accessibility values.
     <tr><td valign=top><em>vec</em>&nbsp;</td><td>An array nx*ny*nz in length to contain the accessibility values (where nx, ny, nz are the numbers of grid points) </td></tr>
     <tr><td valign=top><em>type</em>&nbsp;</td><td>Which data to write </td></tr>
     <tr><td valign=top><em>parm</em>&nbsp;</td><td>Parameter for data definition (if needed) </td></tr>
+    <tr><td valign=top><em>pbetype</em>&nbsp;</td><td>Parameter for PBE type (if needed) </td></tr>
   </table>
 </dl>
     </td>
@@ -1536,7 +1543,7 @@ Remove partition restrictions.
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Apr 30 14:09:23 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Wed Nov 10 10:18:57 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
