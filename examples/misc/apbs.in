@@ -11,7 +11,7 @@ read
     mol pqr mache.pqr
 end
 
-elec
+elec name viz
     mg-manual
     dime 129 129 129
     nlev 4

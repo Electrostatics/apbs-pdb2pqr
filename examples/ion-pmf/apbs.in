@@ -12,7 +12,7 @@ read
 end
 
 # SOLVATED STATE FORCE CALCULATION
-elec
+elec name solv
     mg-manual
     dime 65 65 65
     nlev 4
@@ -34,7 +34,7 @@ elec
 end
 
 # REFERENCE STATE FORCE CALCULATION
-elec
+elec name ref
     mg-manual
     dime 65 65 65
     nlev 4
@@ -56,13 +56,13 @@ elec
 end
 
 # THIS GIVES THE SOLVATION ENERGY OF THE COMPLEX
-print energy 1 - 2 end
+print energy solv - ref end
 
 # THIS GIVES THE SOLVATION FORCES ON THE COMPLEX
 #   Global fixed charge force = total reaction field force
 #   Global dielectric boundary force = total dielectric boundary force
 #   Global ionic boundary force = total ionic boundary force
 #   Global apolar boundary force = total apolar boundary force
-print force 1 - 2 end
+print force solv - ref end
 
 quit
