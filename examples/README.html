@@ -311,6 +311,7 @@ I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
   </ul>
 </td>
 </tr>
+<tr>
 <td>0.2.1</td>
 <td> <ul>
      <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   91.194 kJ/mol
@@ -380,6 +381,75 @@ I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
   <li> Methanol:  -36.222 kJ/mol
   <li> Methoxide: -391.800 kJ/mol
   <li> Difference:  -355.577 kJ/mol
+  </ul>
+</td>
+</tr>
+<tr>
+<td>0.2.2</td>
+<td> <ul>
+     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   ???
+     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.829 kJ/mol
+     </ul>
+</td>
+<td> <ul>
+     <li> -229.725 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
+     <li> -227.186 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
+     <li> ???<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A, srfm 1)
+     </ul>
+</td>
+<td>2-level focusing to 0.225 A, VdW surface:
+  <ul>
+  <li>1D7H-DMSO:
+    <ul>
+    <li> DGbind(solv.):  14.5886 kJ/mol
+    <li> DGbind(Coul.): -15.0930 kJ/mol
+    <li> DGbind: -0.5043 kJ/mol
+    </ul>
+  <li>1D7I-DSS:
+    <ul>
+    <li> DGbind(solv.): 14.3865 kJ/mol
+    <li> DGbind(Coul.): -11.9670 kJ/mol
+    <li> DGbind:      2.4195 kJ/mol
+    </ul>
+  </ul>
+</td>
+<td> 
+2-level focus to 0.225, srfm 1, VdW surf:
+    <ul>
+    <li> Directly-calculated binding energy: -57.1123 kJ/mol
+    </ul>
+<br>
+</td>
+<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
+  <ul>
+  <li> Acetic acid solv. G: -22.6268 kJ/mol
+  <li> Acetate solv. G:  -195.3051 kJ/mol
+  <li> Proton solv. G:  -290.8591 kJ/mol
+  <li> IONIZATION ENERGY: -463.5373 kJ/mol
+</td>
+<td> 0.53 A resolution, NPBE:
+  <ul>
+  <li> 18.8953 kJ/mol (prot. diel. of 12)
+  <li> 21.4530 kJ/mol (prot. diel. of 2)
+  </ul>
+<td> 2-level focusing to 0.250 A spacing:
+  <ul>
+  <li> 6.6465 kJ/mol (vdw-based dielectric)
+  <li> 97.0147 (mol surf-based dielectric)
+  </ul>
+</td>
+<td><ul>
+    <li> 18.3082 kJ/mol (1 A dist)
+    <li> 8.9067 kJ/mol (2 A dist)
+    <li> 5.9096 kJ/mol (3 A dist)
+    <li> 4.4301 kJ/mol (4 A dist)
+    </ul>
+</td>
+<td> 0.250 A spacing, zero probe radius, srfm 1
+  <ul>
+  <li> Methanol:  -36.2223 kJ/mol
+  <li> Methoxide: -391.7995 kJ/mol
+  <li> Difference:  -355.5772 kJ/mol
   </ul>
 </td>
 </tr>
