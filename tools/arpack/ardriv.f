@@ -14,7 +14,8 @@ c* University of California, San Diego
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 1999-2002.  Nathan A. Baker
+c* Copyright (c) 1999-2002.  The Regents of the University of California.
+c* Portions Copyright (c) 1995.  Michael Holst.
 c*
 c* Permission to use, copy, modify, and distribute this software and its
 c* documentation for educational, research, and not-for-profit purposes,

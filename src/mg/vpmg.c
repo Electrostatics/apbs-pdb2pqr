@@ -15,7 +15,8 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.
+ * Copyright (c) 1999-2002.  The Regents of the University of California.
+ * Portions Copyright (c) 1995.  Michael Holst.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for educational, research, and not-for-profit purposes,
@@ -1898,6 +1899,9 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     force[1] = 0.0;
     force[2] = 0.0;
 
+    /* If we aren't in the current position, then we're done */
+    if (!(atom->partID)) return;
+
     /* Get PBE info */
     pbe = thee->pbe;
     acc = pbe->acc;
@@ -2035,6 +2039,9 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     npForce[0] = 0.0;
     npForce[1] = 0.0;
     npForce[2] = 0.0;
+
+    /* If we aren't in the current position, then we're done */
+    if (!(atom->partID)) return;
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -2230,6 +2237,9 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
     force[0] = 0.0;
     force[1] = 0.0;
     force[2] = 0.0;
+
+    /* If we aren't in the current position, then we're done */
+    if (!(atom->partID)) return;
 
     /* Mesh info */
     nx = thee->pmgp->nx;
@@ -2582,7 +2592,7 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_dtor
+// Routine:  Vpmg_qfAtomEnergy
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom) {

@@ -16,8 +16,9 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.
- *
+ * Copyright (c) 1999-2002.  The Regents of the University of California.
+ * Portions Copyright (c) 1995.  Michael Holst.
+ * 
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for educational, research, and not-for-profit purposes,
  * without fee and without a signed licensing agreement, is hereby granted,

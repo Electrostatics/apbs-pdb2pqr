@@ -9,7 +9,8 @@
  * @section license License
  *
  * <blockquote>
- * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.<br>
+ * Copyright (c) 1999-2002.  The Regents of the University of California.
+ * Portions Copyright (c) 1995.  Michael Holst.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for educational, research, and not-for-profit purposes,
@@ -829,7 +830,8 @@
  * calculations.</font>
  * 
  * <dt> <a name="calcenergy">calcenergy</a> <i>flag</i>
- * <dd> Controls electrostatic energy output.
+ * <dd> OPTIONAL KEYWORD.  Controls electrostatic energy output.  Values for
+ *      <i>flag</i> are:
  *      <dl>
  *      <dt> 0
  *      <dd> No energies are written.
@@ -839,9 +841,16 @@
  *      <dd> Total electrostatic energies and individual per-atom components
  *      are written to stdout.
  *     </dl>
+ *      Note that this option must be used consistently for all calculations
+ *      that will appear in subsequent <a href="#print">PRINT</a> statements.
+ *      For example, if the statement <code>print energy 1 - 2 end</code>
+ *      appears in the input file, then both calculations 1 and 2 must have
+ *      <code>calcenergy</code> keywords present with the same values for
+ *      <i>flag</i>.
  *
  * <dt> <a name="calcforce">calcforce</a> <i>flag</i>
- * <dd> OPTIONAL KEYWORD.  Controls electrostatic force output.
+ * <dd> OPTIONAL KEYWORD.  Controls electrostatic force output.  Values for
+ *      <i>flag</i> are:
  *      <dl>
  *      <dt> 0
  *      <dd> No forces are written.
@@ -850,6 +859,13 @@
  *      <dt> 2
  *      <dd> Forces on each atom are written to stdout.
  *      </dl>
+ *      Note that this option must be used consistently for all calculations
+ *      that will appear in subsequent <a href="#print">PRINT</a> statements.
+ *      For example, if the statement <code>print force 1 - 2 end</code>
+ *      appears in the input file, then both calculations 1 and 2 must have
+ *      <code>calcforce</code> keywords present with the same values for
+ *      <i>flag</i>.
+
  * <dt> <a name="write">write</a> <i>type format stem</i>
  * <dd> Controls output of data; all arguments must be present.
  * This keyword can be repeated several times to provide various types of
@@ -994,6 +1010,10 @@
  * </pre>
  * and be interpreted as "subtract the energy from ELEC statements #1 and #2
  * from the energy in ELEC statement #3" (i.e., a binding energy calculation).
+ * Alternatively, single energies can also be printed; for example:
+ * <pre>
+ * print energy 1 end
+ * </pre>
  * <br>
  * 
  * <b>NOTE:</b> It is important to realize that, in the case of automatic

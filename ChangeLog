@@ -2,8 +2,9 @@
 BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
 #############################################################################
 
-  * Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
+  * Made focused evaluation of forces more sensible.
   * Added 'print force ...' support for input files
+  * Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.1       04-23-02
