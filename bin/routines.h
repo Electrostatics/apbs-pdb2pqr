@@ -63,7 +63,7 @@
 /** 
  * @brief  Set this macro to 1 for hierarchical basis, 0 for normal solver
  * @ingroup  Frontend */
-#define USEHB 1
+#define USEHB 0
 
 /**
  * @brief  Structure to hold atomic forces
@@ -163,17 +163,6 @@ VEXTERNC void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 VEXTERNC void printPBEPARM(PBEparm *pbeparm);
 
 /**
- * @brief  Print out FE-specific params loaded from input
- * @ingroup  Frontend
- * @author  Nathan Baker
- * @param  icalc  Calculation index
- * @param  nosh  Master parameter object
- * @param feparm  FE-specific parameters 
- * @param fetk  Array of FE solver objects  */
-VEXTERNC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
-  Vfetk *fetk[NOSH_MAXCALC]);
-
-/**
  * @brief  Print out MG-specific params loaded from input
  * @ingroup  Frontend
  * @author  Nathan Baker
@@ -252,24 +241,6 @@ VEXTERNC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
  * @param dielEnergy  Set to polarization energy (in kT)
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
-  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
-  double *dielEnergy);
-
-/**
- * @brief  Calculate electrostatic energies from FE solution
- * @ingroup  Frontend
- * @author  Nathan Baker
- * @param nosh  Object with parsed input file parameters
- * @param icalc  Index of calculation 
- * @param fetk  FE object  array
- * @param nenergy  Set to number of entries in energy arrays
- * @param totEnergy  Set to total energy (in kT)
- * @param qfEnergy  Set to charge-potential energy (in kT)
- * @param qmEnergy  Set to mobile ion energy (in kT)
- * @param dielEnergy  Set to polarization energy (in kT)
- * @bug  "calcenergy 2" does not work
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int energyFE(NOsh* nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
 
@@ -372,6 +343,36 @@ VEXTERNC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
  * @author  Nathan Baker and Robert Konecny */
 VEXTERNC void startVio();
 
+#ifdef HAVE_MC_H
+/**
+ * @brief  Print out FE-specific params loaded from input
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  icalc  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param fetk  Array of FE solver objects  */
+VEXTERNC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Calculate electrostatic energies from FE solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param icalc  Index of calculation 
+ * @param fetk  FE object  array
+ * @param nenergy  Set to number of entries in energy arrays
+ * @param totEnergy  Set to total energy (in kT)
+ * @param qfEnergy  Set to charge-potential energy (in kT)
+ * @param qmEnergy  Set to mobile ion energy (in kT)
+ * @param dielEnergy  Set to polarization energy (in kT)
+ * @bug  "calcenergy 2" does not work
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int energyFE(NOsh* nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
+  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
+  double *dielEnergy);
+
 /**
  * @brief  Initialize FE solver objects
  * @ingroup  Frontend
@@ -452,5 +453,6 @@ VEXTERNC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
  * @param  fetk  FEtk object (with solution)
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk);
+#endif
 
 #endif

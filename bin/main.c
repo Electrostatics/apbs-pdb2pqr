@@ -71,7 +71,11 @@ int main(int argc, char **argv) {
     Vmem *mem = VNULL;
     Vcom *com = VNULL;
     Vio *sock = VNULL;
+#ifdef HAVE_MC_H
     Vfetk *fetk[NOSH_MAXCALC];
+#else
+    void *fetk[NOSH_MAXCALC];
+#endif
     Vpmg *pmg[NOSH_MAXCALC];
     Vpmgp *pmgp[NOSH_MAXCALC];
     Vpbe *pbe[NOSH_MAXCALC];
@@ -288,6 +292,8 @@ int main(int argc, char **argv) {
 
         /* ***** Do FEM calculation ***** */
         } else {
+
+#ifdef HAVE_MC_H
             Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
 
             /* Useful local variables */
@@ -347,10 +353,12 @@ Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
             if (!writedataFE(rank, nosh, pbeparm, fetk[i])) {
                 Vnm_tprint(2, "  Error while writing FEM data!\n");
             }
-
+#else /* ifdef HAVE_MC_H */
+            Vnm_print(2, "Error!  APBS not compiled with FEtk!\n");
+            exit(2);
+#endif /* ifdef HAVE_MC_H */
         }
-    } 
-
+    }
     
     /* *************** HANDLE PRINT STATEMENTS ******************* */
     if (nosh->nprint > 0) {
@@ -368,9 +376,7 @@ Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
             Vnm_tprint( 2, "Undefined PRINT keyword!\n");
             break;
         }
-    }
- 
-
+    } 
     /* *************** GARBAGE COLLECTION ******************* */
     Vnm_tprint( 1, "----------------------------------------\n");
     Vnm_tprint( 1, "CLEANING UP AND SHUTTING DOWN...\n");
@@ -404,5 +410,4 @@ Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
     Vcom_finalize();
 
     return 0;
-
 }

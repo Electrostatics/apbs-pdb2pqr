@@ -632,40 +632,26 @@ AC_MSG_CHECKING([for --with-blas])
 if test -n "${blas_lib}"; then
     AC_MSG_RESULT([yes])
 
-    AC_MSG_RESULT([Looking for BLAS with ${CC} ${blas_lib}])
-    AC_LANG_C
+    AC_MSG_RESULT([Looking for BLAS with ${F77} ${blas_lib}])
+    AC_LANG_FORTRAN77
     LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${blas_lib};
+    LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
     AC_CHECK_LIB(blas,dscal,
         [blas_found="yes"],
         [blas_found=""],
-        [${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     LDFLAGS=${LDFLAGS_SAVE};
     CPPFLAGS=${CPPFLAGS_SAVE};
     if test -z "${blas_found}"; then
         AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
     fi
+    AC_LANG_C
 
 else
     AC_MSG_RESULT([no])
     blas_lib_path="${maloc_lib_path}"
-    blas_lib="${blas_lib_path} -lvf2c ${blas_lib_path} -lblas"
-
-    AC_LANG_C
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${blas_lib_path};
-    AC_CHECK_LIB(blas,dscal,
-        [blas_found="yes"],
-        [blas_found=""],
-        [${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-    if test -z "${blas_found}"; then
-        AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
-    fi
-
+    blas_lib="${blas_lib_path} -lblas ${blas_lib_path} -lvf2c"
 fi
 AC_SUBST(blas_lib)
 
@@ -698,8 +684,8 @@ AC_CHECK_LIB(tree,treepeforce,
         [tree_found="yes"],
         [tree_found=""],
         [${mcx_lib_path} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-if test -n "${vmetis_found}"; then
-    tree_lib="${mcx_lib_path} -ltree"
+if test -n "${tree_found}"; then
+    tree_lib="${mc_lib_path} -ltree"
     AC_DEFINE([HAVE_TREE], [], [have the FMM library])
 else
     tree_lib=""

@@ -37,7 +37,7 @@ elec
     #write ndens dx ion-density
     #write qdens dx charge-density
     #write edens dx energy-density
-    #write charge dx charge
+    write charge dx charge
 end
 
 quit
