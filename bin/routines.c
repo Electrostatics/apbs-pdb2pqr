@@ -65,6 +65,12 @@ VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     int i;
 
     Vnm_tprint( 1, "main:  Got PQR paths for %d molecules\n", nosh->nmol);
+    if (nosh->nmol <= 0) {
+       Vnm_tprint(2, "main:  You didn't specify any molecules (correctly)!\n");
+       Vnm_tprint(2, "main:  Bailing out!\n");
+       return 0;
+    }
+
     for (i=0; i<nosh->nmol; i++) {
         Vnm_tprint( 1, "main:  Reading atom data from %s:\n",
           nosh->molpath[i]);
