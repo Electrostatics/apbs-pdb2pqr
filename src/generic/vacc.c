@@ -371,7 +371,11 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
 
     /* We can only test probes with radii less than the max specified */
     VASSERT(thee != VNULL);
-    VASSERT(radius <= thee->max_radius);
+    if (radius > thee->max_radius) {
+        Vnm_print(2, "Vacc_ivdwAcc: got radius (%g) bigger than max radius (%g)\n", 
+          radius, thee->max_radius);
+         VASSERT(0);
+    }
 
     /* Convert to grid based coordinates */
     centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);

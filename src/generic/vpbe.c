@@ -83,6 +83,21 @@ VPUBLIC Gem* Vpbe_getGem(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getVgreen
+//
+// Purpose:  Get a pointer to the Vgreen (grid manager) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Gem* Vpbe_getVgreen(Vpbe *thee) {
+
+   VASSERT(thee != VNULL);
+   return thee->green;
+
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getVacc
 //
 // Purpose:  Get a pointer to the Vacc accessibility object 
@@ -430,6 +445,9 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Gem *gm, int methFlag) {
     /* Set pointers */
     thee->alist = alist;
     thee->paramFlag = 0;
+
+    /* Set up Green's function oracle */
+    thee->green = Vgreen_ctor(alist);
 
     /* Determine solute center */
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {

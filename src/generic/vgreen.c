@@ -169,13 +169,11 @@ VPUBLIC void Vgreen_dtor2(Vgreen *thee) {
 //
 //           where \kappa is the inverse screening length (in Angstroms),
 //           q_i is the atomic charge (in e), and r_i is the distance from atom
-//           i to the observation point.  
+//           i to the observation point.  The potential returned is in units of
+//           J/C.
 //
-// Note:     This quantity needs to be scaled by 
-//                    \frac{10^{-10} e_c}{4 \pi \eps_0 \eps}
-//           to give the potential in units of J/C and scaled by 
-//                    \frac{10^{-10} e_c^2}{4 \pi \eps_0 \eps k T}
-//           to give a dimensionless potential.
+// Note:     This quantity needs to be multiplied by (1/\epsilon)
+//           give the actual potential.
 //
 // Args:     position = vector containing the position of the observation pt
 //           dim      = number of elements in position
@@ -204,7 +202,59 @@ VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
         pot = pot + charge*exp(-kappa*dist)/dist;
     }
 
-    return pot;
+    return pot*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgreen_helmholtzD
+//
+// Purpose:  Return the gradient of the Green's function for Helmholtz's
+//           equation integrated over the atomic point charges
+//
+//           G(r) = \nabla (\sum_i \frac{q_i e^{-\kappa r_i}}{r_i})
+//
+//           where \kappa is the inverse screening length (in Angstroms),
+//           q_i is the atomic charge (in e), and r_i is the distance from atom
+//           i to the observation point.  The field is returned in units of
+//           J/C/A.
+//
+// Note:     This quantity needs to be multiplied by (1/\epsilon) to give the
+//           actual field.
+//
+// Args:     position = vector containing the position of the observation pt
+//           dim      = number of elements in position
+//           kappa    = Helmholtz coefficient (units of inverse length)
+//           grad     = storage for the gradient of the Green's function (dim
+//                      elements)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position, 
+  double dim, double kappa, double *grad) {
+
+    Vatom *atom;
+    double *x, tpot[MAXV], charge, dist;
+    int iatom, j;
+
+    VASSERT(dim < 4);
+    for (j=0; j<dim; j++) grad[j] = 0;
+
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        atom = Valist_getAtom(thee->alist, iatom);
+        x = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
+        dist = 0;
+        for (j=0; j<dim; j++)
+          dist = dist + (x[j] - position[j])*(x[j] - position[j]);
+        for (j=0; j<dim; j++) {
+            tpot[j] = 1/VSQRT(dist) + kappa;
+            tpot[j] = -charge*(position[j] - x[j])*tpot[j]/dist;
+            tpot[j] = exp(-kappa*VSQRT(dist))*tpot[j];
+            grad[j] = grad[j] + tpot[j];
+        }
+    }
+    for (j=0; j<dim; j++) 
+        grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -216,13 +266,11 @@ VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
 //           G(r) = \sum_i \frac{q_i}{r_i}
 //
 //           where q_i is the atomic charge (in e), and r_i is the distance
-//           from atom i to the observation point.  
+//           from atom i to the observation point.  The potential is returned
+//           in units of J/C.
 //
-// Note:     This quantity needs to be scaled by 
-//                    \frac{10^{-10} e_c}{4 \pi \eps_0 \eps}
-//           to give the potential in units of J/C and scaled by 
-//                    \frac{10^{-10} e_c^2}{4 \pi \eps_0 \eps k T}
-//           to give a dimensionless potential.
+// Note:     This quantity needs to be multiplied by (1/\epsilon) to give the
+//           potential.
 //
 // Args:     position = vector containing the position of the observation pt
 //           dim      = number of elements in position
@@ -244,11 +292,57 @@ VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
         charge = Vatom_getCharge(atom);
         dist = 0;
         for (j=0; j<dim; j++) 
-          dist = dist + (x[j] - position[j])*(x[j] - position[j]);
-        dist = VSQRT(dist);
-        pot = pot + charge/dist;
+          dist += ((x[j] - position[j])*(x[j] - position[j]));
+        dist = 10e-10*VSQRT(dist);
+        pot += (charge/dist);
     }
 
-    return pot;
+    return pot*Vunit_ec/(4*Vunit_pi*Vunit_eps0);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgreen_coulombD
+//
+// Purpose:  Return the gradient for the Coulomb's Law Green's function for
+//           Poisson's equation integrated over the atomic point charges
+//
+//           G(r) = \sum_i \frac{q_i}{r_i}
+//
+//           where q_i is the atomic charge (in e), and r_i is the distance
+//           from atom i to the observation point.  The field is returned in
+//           units of J/C/A.
+//
+// Note:     This quantity needs to be scaled by (1/\epsilon) to give the
+//           actual field.
+//
+// Args:     position = vector containing the position of the observation pt
+//           dim      = number of elements in position
+//           grad     = storage for the gradient (at least dim elems)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
+  double *grad) {
+
+    Vatom *atom;
+    double *x, tpot[MAXV], charge, dist;
+    int iatom, j;
+
+    VASSERT(dim < 4);
+    
+    for (j=0; j<dim; j++) grad[j] = 0;
+   
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        atom = Valist_getAtom(thee->alist, iatom);
+        x = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
+        dist = 0;
+        for (j=0; j<dim; j++) 
+          dist += ((x[j] - position[j])*(x[j] - position[j]));
+        for (j=0; j<dim; j++) 
+          grad[j] += (-charge*(position[j] - x[j])/dist/VSQRT(dist));
+    }
+    for (j=0; j<dim; j++) 
+      grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
 }
 
