@@ -408,7 +408,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
 
     VASSERT(thee != VNULL);
     if (alist == VNULL) {
-        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Valist object!\n");
+        Vnm_print(2, "Vpbe_ctor2: Got null pointer to Valist object!\n");
         return 0;
     }
 

@@ -75,8 +75,11 @@ typedef struct Vpmgp {
     int niwk;                    /* Integer work storage */
     int narr;                    /* Array work storage */
     int ipkey;                   /* Toggles nonlinearity (set by nonlin)
-                                  *   0 => Linearized PBE
-                                  *   1 => Nonlinear PBE */
+                                  *  -1 => Linearized PBE
+                                  *   0 => Nonlinear PBE with capped sinh 
+                                  *        term [default]
+                                  *  >1 => Polynomial approximation to sinh, 
+                                  *        note that ipkey must be odd       */
 
     /* ********** PARAMETERS WITH DEFAULT VALUES ********** */
     double xcent, ycent, zcent;  /* Grid center [0, 0, 0]  */

@@ -98,8 +98,8 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->hz = hz;
     thee->nlev = nlev; 
     thee->nonlin = nonlin;
-    if (nonlin == 0) thee->ipkey = 0;
-    else thee->ipkey = 1;
+    if (nonlin == 0) thee->ipkey = -1;
+    else thee->ipkey = 0;
 
     /* Default parameters */
     thee->errtol = 1.0e-9;
