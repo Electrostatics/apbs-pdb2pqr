@@ -1,4 +1,19 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.2.3       ??-??-02
+#############################################################################
+
+  * A parameter (chgm) has been added which controls the charge discretization
+    method used.  Therefore, this version contains substantial changes in both
+	the API and input file syntax.  Specifically:
+    - PBEparm has two new members (chgm, setchgm)
+    - Vpmg_fillco requires another argument
+    - Vpmg_*Force functions require additional arguments
+    - Input files must now contain the keyword "chgm #" where # is an integer
+    Please see the documentation for more information.
+  * Created enumerations for common surface and charge discretization methods
+
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.2       08-14-02
 #############################################################################
 

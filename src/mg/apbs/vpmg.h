@@ -115,20 +115,9 @@ struct Vpmg {
   double extNpEnergy;            /**< Stores contributions to the apolar
                                   *   energy from regions outside the problem
                                   *   domain */
-  int surfMeth;                  /**< Surface definition method:
-                                  *   \li 0:  Mol surface for epsilon; inflated
-                                  *   VdW for kappa; no smoothing
-                                  *   \li 1:  As 0 with harmoic average
-                                  *   smoothing
-                                  *   \li 2:  Cubic spline 
-                                  */
+  Vsurf_Meth surfMeth;           /**< Surface definition method */
   double splineWin;              /**< Spline window parm for surf defs */
-  int chargeMeth;                /**< Charge discretization method:
-                                  *   \li 0:  Linear B-spline (first-order,
-                                  *   AKA hats) -- the traditional choice
-                                  *   \li 1:  Cubic B-spline (second-order,
-                                  *   AKA anti-aliased)
-                                  */
+  Vchrg_Meth chargeMeth;         /**< Charge discretization method */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
                                   * called */
   int useDielXMap;               /**< Indicates whether Vpmg_fillco was called
@@ -261,17 +250,9 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee  Vpmg object
- *  @param   surfMeth  Surface discretization
- *            \li 0:  straight discretization (collocation-like), no
- *                  smoothing
- *            \li 1:  smoothing based on a harmonic average of the
- *                  value at three points
- *            \li 2:  spline-based accessibility with epsparm =
- *                  windowing parameter (<1.0, please)
- *  @param   splineWin    Spline window (for use with surfMeth = 2)
- *  @param   chargeMeth   Charge discretization
- *            \li 0:  Traditional hats (first order B-spline)
- *            \li 1:  Cubic spline (second order B-spline, anti-aliased)
+ *  @param   surfMeth  Surface discretization method
+ *  @param   splineWin    Spline window (for surfMeth = VSM_SPLINE)
+ *  @param   chargeMeth   Charge discretization method
  *  @param   useDielXMap  Specifies whether to use (1) or ignore (0) the 
  *                        dielXMap arguement
  *  @param   dielXMap     Pointer to a Vgrid object containing an external
@@ -298,7 +279,7 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *                        useChargeMap is 0.
  */
 VEXTERNC void Vpmg_fillco(Vpmg *thee, 
-  int surfMeth,      double splineWin,  int chargeMeth,
+  Vsurf_Meth surfMeth,      double splineWin,  Vchrg_Meth chargeMeth,
   int useDielXMap,   Vgrid *dielXMap, 
   int useDielYMap,   Vgrid *dielYMap, 
   int useDielZMap,   Vgrid *dielZMap, 
@@ -503,8 +484,11 @@ VEXTERNC double Vpmg_dielGradNorm(Vpmg *thee);
  *  @param   thee  Vpmg object
  *  @param   force 3*double space to hold the force in units of \f$k_B T/\AA\f$
  *  @param   atomID  Valist ID of desired atom
+ *  @param   srfm    Surface definition method
+ *  @param   chgm    Charge discretization method
  */
-VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID);
+VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID, 
+  Vsurf_Meth srfm, Vchrg_Meth chgm);
 
 /** @brief    Calculate the "charge-field" force on the specified atom in units
  *           of \f$k_B T/\AA\f$
@@ -521,8 +505,10 @@ VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID);
  * @param    thee  Vpmg object
  * @param    force 3*double space to hold the force in units of \f$k_B T/\AA\f$
  * @param    atomID  Valist ID of desired atom
+ * @param    chgm    Charge discretization method
  */
-VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID);
+VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID, 
+  Vchrg_Meth chgm);
 
 /** @brief   Calculate the dielectric boundary and apolar forces on the
  *           specified atom in units of \f$k_B T/\AA\f$
@@ -542,9 +528,10 @@ VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID);
  *  @param   npForce 3*double space to hold the apolar boudnary force in
  *           units of \f$k_B T/\AA\f$ 
  *  @param   atomID  Valist ID of desired atom
+ *  @param   srfm    Surface definition method
  */
 VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
-  int atomID);
+  int atomID, Vsurf_Meth srfm);
 
 /** @brief   Calculate the osmotic pressure on the specified atom in units of
  *           \f$k_B T/\AA\f$
@@ -562,8 +549,10 @@ VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
  *  @param   force   3*double space to hold the force in units of \f$k_B
  *                   T/\AA\f$ 
  *  @param   atomID  Valist ID of desired atom
+ *  @param   srfm    Surface definition method
  */
-VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID);
+VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID, 
+  Vsurf_Meth srfm);
 
 /** @brief   Set partition information which restricts the calculation of
  *           observables to a (rectangular) subset of the problem domain

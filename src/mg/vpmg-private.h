@@ -49,23 +49,8 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Private routines
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE double bspline2(double x);
-VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD);
-VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag);
-VPRIVATE void bcfl1(double size, double *apos, double charge,
-  double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf,
-  double *xf, double *yf, double *zf, int nx, int ny, int nz);
-VPRIVATE double bcfl1sp(double size, double *apos, double charge,
-  double xkappa, double pre1, double *pos);
-VPRIVATE void bcCalc(Vpmg *thee);
-VPRIVATE void fillcoCoef(Vpmg *thee);
-VPRIVATE void fillcoCoefMap(Vpmg *thee);
-VPRIVATE void fillcoCoefMol(Vpmg *thee);
-VPRIVATE void fillcoCoefSpline(Vpmg *thee);
-VPRIVATE void fillcoCharge(Vpmg *thee);
-VPRIVATE void fillcoChargeMap(Vpmg *thee);
-VPRIVATE void fillcoChargeSpline1(Vpmg *thee);
-VPRIVATE void fillcoChargeSpline2(Vpmg *thee);
+VPUBLIC double bspline2(double x);
+VPUBLIC double dbspline2(double x);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
@@ -161,5 +146,6 @@ VEXTERNC void F77MYPDEFCLEAR();
 #define IJKx(j,k,i) (((i)*(ny)*(nz))+((k)*(ny))+(j))
 #define IJKy(i,k,j) (((j)*(nx)*(nz))+((k)*(nx))+(i))
 #define IJKz(i,j,k) (((k)*(nx)*(ny))+((j)*(nx))+(i))
+#define VFCHI(iint,iflt) (1.5+((double)(iint)-(iflt)))
 
 #endif

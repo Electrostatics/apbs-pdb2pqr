@@ -851,8 +851,8 @@
  * <i>flag</i> is one of the following:
  *     <dl>
  *     <dt> 0
- *     <dd> Traditional hat-function discretization (linear splines); charge is
- *     mapped onto nearest-neighbor grid points
+ *     <dd> Traditional trilinear hat-function discretization (linear splines);
+ *          charge is mapped onto nearest-neighbor grid points
  *     <dt> 1
  *     <dd> Cubic B-spline discretization; charge is mapped onto nearest- and
  *     next-nearest-neighbor grid points
