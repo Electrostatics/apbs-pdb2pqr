@@ -311,6 +311,7 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     const double pi  = 4. * VATAN(1.);
 
     double radius;
+    double nhash;
  
     /* Set parameters */
     thee->ionConc = ionConc;
@@ -347,7 +348,11 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     /* Compute accessibility objects */
     if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
     else radius = thee->solventRadius;
-    thee->acc = Vacc_ctor(thee->alist, radius, 110, 110, 110, 100);
+    nhash = VPOW((double)(Valist_getNumberAtoms(thee->alist)), 1.0/3.0);
+    Vnm_print(2, "Vcsm_ctor2: Using %d x %d x %d hash table\n", ceil(nhash),
+      ceil(nhash), ceil(nhash));
+    thee->acc = Vacc_ctor(thee->alist, radius, ceil(nhash), ceil(nhash),
+      ceil(nhash), 100);
     VASSERT(thee->acc != VNULL);
 
     /* Compute charge-simplex map */
