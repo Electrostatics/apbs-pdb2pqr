@@ -172,14 +172,14 @@ environmental variables CC and F77.
 For fast(er) production runs, try setting the CC variable before issuing the 
 configure commands:
 
-    setenv CC "gcc -O3 -ffast-math -m486 -funroll-loops"
+    CC="gcc -O3 -ffast-math -m486 -funroll-loops"
 
 ========================================================================
 3.2 NPACI IBM RS/6000 Power3 Blue Horizon supercomputer
 ========================================================================
 In all cases, set the CC variable before ./configure:
 
-    setenv CC "mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
+    CC="mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
 
@@ -211,4 +211,16 @@ documentation for more information on this.
 Sun compilers are very strange; I have not been able to use them to compile
 FEtk/APBS.  Use gcc instead:
     
-    setenv CC gcc
+    CC='gcc'; export CC
+
+========================================================================
+3.3 Alpha compilers
+========================================================================
+If you're compiling this on an Alpha platform (Linux or OSF), you definitely
+need to use the Alpha compilers:
+
+    CC='ccc'; export CC   
+    CXX='cxx'; export CXX   
+    F77='fort'; export F77   
+
+It's also worthwhile to add the '-arch' flag
