@@ -7,6 +7,8 @@ bug-fixes:
   * Added several test cases and validated the current version of the code for
     all but one (see examples/README.html)
   * Fixed atom partitioning bug and external energy evaluation during focusing
+  * Added new program for converting OpenDX format files to MOLMOL (by
+    Jung-Hsin Lin)
 You should definitely upgrade, the previous versions may produce unreliable
 results.
 
