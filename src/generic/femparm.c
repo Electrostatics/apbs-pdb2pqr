@@ -210,33 +210,13 @@ ETOL keyword!\n", tok);
             thee->akeyPRE = FRT_GEOM;
             thee->setakeyPRE = 1;
             return 1;
-        } else if (Vstring_strcasecmp(tok, "resi") == 0) {
-            thee->akeyPRE = FRT_RESI;
-            thee->setakeyPRE = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "dual") == 0) {
-            thee->akeyPRE = FRT_DUAL;
-            thee->setakeyPRE = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "loca") == 0) {
-            thee->akeyPRE = FRT_LOCA;
-            thee->setakeyPRE = 1;
-            return 1;
         } else {
             Vnm_print(2, "parseFE:  undefined value (%s) for akeyPRE!\n", tok);
             return -1;
         }
     } else if (Vstring_strcasecmp(tok, "akeySOLVE") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (Vstring_strcasecmp(tok, "unif") == 0) {
-            thee->akeySOLVE = FRT_UNIF;
-            thee->setakeySOLVE = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "geom") == 0) {
-            thee->akeySOLVE = FRT_GEOM;
-            thee->setakeySOLVE = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "resi") == 0) {
+        if (Vstring_strcasecmp(tok, "resi") == 0) {
             thee->akeySOLVE = FRT_RESI;
             thee->setakeySOLVE = 1;
             return 1;
