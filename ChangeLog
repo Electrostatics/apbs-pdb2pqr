@@ -1,6 +1,7 @@
 #############################################################################
-BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
+BETA PUBLIC RELEASE VERSION 0.2.1       04-23-02
 #############################################################################
+This version requires the latest version of MALOC to work properly!
   * Syntax changes
     - The writepot and writeacc keywords have been generalized and new I/O
       features have been added.  The syntax is
@@ -31,6 +32,7 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
   * Working (but still experimental) Python wrappers for major APBS functions.
   * More flexible installation capabilities (pointed out by Steve Bond)
   * Added ability to use vendor-supplied BLAS
+  * Brought up-to-date with new MALOC
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02

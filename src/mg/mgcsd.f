@@ -253,7 +253,7 @@ c*          *** solve on coarsest grid with cghs, mgsmoo_s=4 (no residual) ***
 c*    
 c*          *** check for trouble on the coarse grid ***
             if (iters_s .ge. itmax_s) then
-               print*,'% MVCS: iters on coarse grid: ',iters_s
+               print*,'% MVCS: > max iters on coarse grid: ',iters_s
             endif
 c*
 c*       *** use direct method? ***
