@@ -12054,7 +12054,7 @@ inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 
 
 
-                                                                                                                                                      ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile"
+                                                                                                                                                                ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -12630,6 +12630,7 @@ do
   "tools/manip/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/manip/Makefile" ;;
   "tools/python/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/python/Makefile" ;;
   "tools/arpack/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/arpack/Makefile" ;;
+  "tools/python/vgrid/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/python/vgrid/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "src/generic/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/generic/Makefile" ;;
   "src/mg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/mg/Makefile" ;;

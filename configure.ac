@@ -865,6 +865,7 @@ AC_OUTPUT([
     tools/manip/Makefile
     tools/python/Makefile
     tools/arpack/Makefile
+    tools/python/vgrid/Makefile
 
     src/Makefile
     src/generic/Makefile

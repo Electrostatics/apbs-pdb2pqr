@@ -1,39 +1,7 @@
 This directory contains a Python interface for modifying dx files
 generated from APBS. 
 
-README updated 8/12/2004 by Todd Dolinsky (todd@ccb.wustl.edu)
-
-
-Before compiling the wrappers, you will want to change a few variables
-in the Makefile:
-
-    CC          - The C compiler
-    LDSHARED    - The linker (with any flags)
-    PYTHONPATH  - The path to Python's include files 
-                  (i.e. /usr/include/python2.2)
-    CFLAGS      - Any desired C flags
-    LIBPATH     - The path to the directory where APBS libraries have been
-                  installed - this directory should contain libapbs.a and
-                  libapbsmainroutines.a
-
-Next simply type 
-
-    make
-
-    This will convert the SWIG-wrapped vgrid.c (vgridlib.c) to the 
-    shared object file vgridc.so, which is accessed by vgrid.py.
-    
-    You may also need to edit the Makefile to include machine specific
-    compilers and libraries - one known problem is if you would like 
-    to use Intel's Fortran compiler (ifc), you might need to link to two 
-    additional libraries, libg2c and lstdc++ .
-
-	These may be found (on this machine, at least) at
-		/usr/lib/gcc-lib/i386-redhat-linux/3.2.3/
-
-    If installation was successful, you should see the vgridc.so shared
-    object file.
-
+README updated 12/14/2004 by Todd Dolinsky (todd@ccb.wustl.edu)
 
 Scripts in this directory:
 

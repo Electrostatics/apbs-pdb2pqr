@@ -97,6 +97,10 @@ get_entry = vgridc.get_entry
 
 set_entry = vgridc.set_entry
 
+def delVgrid(arg0):
+    val = vgridc.delVgrid(arg0.this)
+    return val
+
 def Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9):
     val = vgridc.Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
     val = VgridPtr(val)
