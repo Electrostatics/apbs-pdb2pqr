@@ -694,11 +694,15 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
        /* Loop over the simps associated with this atom */
        nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
        /* Don't overcount q*phi contributions if found in more than one
-        * simplex */
-       efac = 1.0/((double)(nsimps));
-       /* Loop over the simps associated with this atom */
+        * simplex.  Since the solution is piecewise linear (i.e.,
+        * continuous), FOR THE ENERGY ONLY, we should be able to integrate
+        * the delta function in only one of the simplices.  Note that this
+        * is a completely different story for the forces...
+        */
        for (isimp=0; isimp<nsimps; isimp++) {
            simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
+           /* Loop through the list of simplices to see if any belong to
+            * our partition */
            if ((SS_chart(simp)==color)||(color<0)) {
                /* Get the value of each basis function evaluated at this
                 * point */
@@ -707,6 +711,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
                    uval = sol[VV_id(SS_vertex(simp,ivert))];
                    energy += (efac*charge*phi[ivert]*uval);
                } /* end for ivert */
+               break;
            } /* endif (color) */
        } /* end for isimp */
    } /* end for iatom */
