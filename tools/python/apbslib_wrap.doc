@@ -1,4 +1,4 @@
-apbslib.python.c
+apbslib.c
 
 [ Python Module : apbslib ]
 
@@ -138,7 +138,7 @@ NOsh_elec2calc(thee,icalc)
         [ returns int  ]
 
 NOsh_printWhat(thee,iprint)
-        [ returns int  ]
+        [ returns NOsh_PrintType  ]
 
 NOsh_ctor2(thee,rank,size)
         [ returns int  ]

@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  2004/02/11 18:49:53  apbs
- * Allows Python wrapped APBS to use ELEC names
+ * Revision 1.3  2004/04/23 20:26:32  apbs
+ * TJD: Changed wrapped version of NOsh_printWhat to match new version.
  *
  ************************************************************************/
 
@@ -569,7 +569,7 @@ extern void Vmem_dtor(Vmem **);
 extern NOsh_calc *NOsh_getCalc(NOsh *,int );
 extern char *NOsh_elecname(NOsh *,int );
 extern int NOsh_elec2calc(NOsh *,int );
-extern int NOsh_printWhat(NOsh *,int );
+extern NOsh_PrintType NOsh_printWhat(NOsh *,int );
 extern int NOsh_ctor2(NOsh *,int ,int );
 extern void NOsh_dtor(NOsh **);
 extern int NOsh_parseFile(NOsh *,char *);
@@ -1320,10 +1320,11 @@ static PyObject *_wrap_NOsh_elec2calc(PyObject *self, PyObject *args) {
 
 static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    int  _result;
+    NOsh_PrintType * _result;
     NOsh * _arg0;
     int  _arg1;
     char * _argc0 = 0;
+    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTuple(args,"si:NOsh_printWhat",&_argc0,&_arg1)) 
@@ -1334,8 +1335,10 @@ static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (int )NOsh_printWhat(_arg0,_arg1);
-    _resultobj = Py_BuildValue("i",_result);
+    _result = (NOsh_PrintType *) malloc(sizeof(NOsh_PrintType ));
+    *(_result) = NOsh_printWhat(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (void *) _result,"_NOsh_PrintType_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
