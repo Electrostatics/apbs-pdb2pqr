@@ -278,6 +278,12 @@ typedef enum Vdata_Format Vdata_Format;
  */
 #   define VINLINE_VPMG 
 
+
+
+
+#endif
+
+/* Fortran name mangling */
 #if defined(VF77_UPPERCASE)
 #   if defined(VF77_NOUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) NAME
@@ -294,9 +300,15 @@ typedef enum Vdata_Format Vdata_Format;
 #   endif
 #endif
 
-
-
+/* String embedding for ident */
+#if defined(HAVE_EMBED)
+#    define VEMBED(rctag) \
+         VPRIVATE const char* rctag; \
+         static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+#else
+#    define VEMBED(rctag)
 #endif
+
 
 
 #endif
