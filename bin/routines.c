@@ -401,7 +401,7 @@ VPUBLIC int energyMG(Vcom *com, NOsh *nosh, int icalc, Vpmg *pmg,
         *qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
         *qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
         *dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
-        Vnm_tprint( 1, "main:    Total electrostatic energy = %1.12E\
+        Vnm_tprint( 1, "main:    Total electrostatic energy = %1.12E \
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         Vnm_tprint( 1, "main:    Fixed charge energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
