@@ -47,8 +47,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-LINK    = $(F77) $(LDFLAGS) -o $@
-
 noinst_PROGRAMS    = mgmesh accmap
 mgmesh_SOURCES     = mgmesh.c 
 mgmesh_LDADD       = ${math_lib}
