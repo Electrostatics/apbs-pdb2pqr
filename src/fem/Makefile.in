@@ -119,7 +119,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = fem
 
 noinst_LTLIBRARIES = libapbsfem.la
-libapbsfem_la_SOURCES = @fetk_do_src@ vcsm.c vfetk.c vpee.c
+libapbsfem_la_SOURCES = @fetk_do_src@
 INCLUDES = -I../generic -I../mg @inc_list@
 AM_CFLAGS = @wall_pedantic_ansi@
 CFLAGS = @CFLAGS@
@@ -135,11 +135,7 @@ CPPFLAGS = @CPPFLAGS@
 LIBS = @LIBS@
 libapbsfem_la_LDFLAGS = 
 libapbsfem_la_LIBADD = 
-libapbsfem_la_OBJECTS =  vcsm.lo vfetk.lo vpee.lo
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+libapbsfem_la_OBJECTS = 
 DIST_COMMON =  Makefile.am Makefile.in
 
 
