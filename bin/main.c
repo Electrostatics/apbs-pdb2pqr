@@ -59,6 +59,8 @@
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
+#include "apbs/mgparm.h"  
+#include "apbs/femparm.h"  
 
 #define APBSRC 13
 
@@ -74,8 +76,8 @@ typedef struct AtomForce {
 int main(int argc, char **argv) {
 
     NOsh *nosh = VNULL;
-    NOsh_mgparm *mgparm = VNULL;
-    NOsh_femparm *femparm = VNULL;
+    MGparm *mgparm = VNULL;
+    FEMparm *femparm = VNULL;
     Vmem *mem = VNULL;
     Vio *sock = VNULL;
     Vpmg *pmg[NOSH_MAXCALC];
@@ -83,7 +85,7 @@ int main(int argc, char **argv) {
     Vpbe *pbe[NOSH_MAXCALC];
     Valist *alist[NOSH_MAXMOL];
     char *input_path = VNULL;
-    char outpath[NOSH_MAXPATH];
+    char outpath[VMAX_ARGLEN];
     double ionstr, iparm, sparm;
     int i, j, imgcalc, ifemcalc;
     /* These variables require some explaining... The energy double arrays
@@ -201,7 +203,7 @@ int main(int argc, char **argv) {
         Vnm_print(1, "main:  ----------------------------------------\n");
         /* Do MG calculation */
         if (nosh->calctype[i] == 0) {
-            mgparm = &(nosh->mgparm[imgcalc]);
+            mgparm = nosh->mgparm[imgcalc];
             imgcalc++;
             /* Set up missing MG parameters */
             if (mgparm->setgrid == 0) {
@@ -586,20 +588,24 @@ for multigrid calculations yet!\n");
             }
             Vnm_print(1, "end\n");
             calcid = nosh->printcalc[i][0];
-            if (nosh->mgparm[calcid-1].calcenergy != 0) {
-                tenergy = Vunit_kb*(1e-3)*Vunit_Na*nosh->mgparm[calcid-1].temp*totEnergy[calcid-1];
+            if (nosh->mgparm[calcid-1]->calcenergy != 0) {
+                tenergy = Vunit_kb * (1e-3) * Vunit_Na * 
+                  nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
             } else {
-                Vnm_print(2, "main:    Didn't calculate energy in Calculation #%d\n", 
+                Vnm_print(2, "main:    Didn't calculate energy in Calculation \
+#%d\n", 
                   calcid);
                 break;
             }
             for (j=1; j<nosh->printnarg[i]; j++) {
                 calcid = nosh->printcalc[i][j];
-                if (nosh->mgparm[calcid-1].calcenergy != 0) {
+                if (nosh->mgparm[calcid-1]->calcenergy != 0) {
                     if (nosh->printop[i][j-1] == 0)
-                      tenergy = tenergy + Vunit_kb*(1e-3)*Vunit_Na*nosh->mgparm[calcid-1].temp*totEnergy[calcid-1];
+                      tenergy = tenergy + Vunit_kb * (1e-3) * Vunit_Na *
+                        nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
                     else if (nosh->printop[i][j-1] == 1)
-                      tenergy = tenergy - Vunit_kb*(1e-3)*Vunit_Na*nosh->mgparm[calcid-1].temp*totEnergy[calcid-1];
+                      tenergy = tenergy - Vunit_kb * (1e-3) * Vunit_Na * 
+                        nosh->mgparm[calcid-1]->temp * totEnergy[calcid-1];
                 } else {  
                     Vnm_print(2, "main:    Didn't calculate energy in Calculation #%d\n", 
                       calcid);

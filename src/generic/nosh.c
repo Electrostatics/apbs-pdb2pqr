@@ -50,8 +50,8 @@
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock);
-VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, NOsh_femparm *parm);
-VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm);
+VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm);
+VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, MGparm *parm);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Inlineable methods
@@ -106,41 +106,12 @@ VPUBLIC int NOsh_ctor2(NOsh *thee) {
     thee->nmol = 0;
     thee->nprint = 0;
 
-    for (j=0; j<NOSH_MAXMGPARM; j++) {
-        thee->mgparm[j].setdime = 0;
-        thee->mgparm[j].setnlev = 0;
-        thee->mgparm[j].setgrid = 0;
-        thee->mgparm[j].setglen = 0;
-        thee->mgparm[j].setgcent = 0;  
-        thee->mgparm[j].setmolid = 0;
-        thee->mgparm[j].setnonlin = 0;
-        thee->mgparm[j].setbcfl = 0;
-        thee->mgparm[j].setnion = 0;
-        for (i=0; i<MAXION; i++) thee->mgparm[j].setion[i] = 0;
-        thee->mgparm[j].setpdie = 0;
-        thee->mgparm[j].setsdie = 0;
-        thee->mgparm[j].setsrfm = 0;
-        thee->mgparm[j].setsrad = 0;
-        thee->mgparm[j].setswin = 0; 
-        thee->mgparm[j].settemp = 0;
-        thee->mgparm[j].setgamma = 0;
-        thee->mgparm[j].setcalcenergy = 0;      
-        thee->mgparm[j].setcalcforce = 0;       
-        thee->mgparm[j].setwritepot = 0; 
-        thee->mgparm[j].setwriteacc = 0; 
-        thee->mgparm[j].nion = 0;
-        thee->mgparm[j].swin = 0;
-        thee->mgparm[j].srad = 1.4;
-    }
-
     return 1; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  NOsh_dtor
 //
-// Purpose:  Destroy the charge-simplex map.
-// 
 // Notes:    Since the grid manager and atom list were allocated outside of
 //           the NOsh routines, they are not destroyed.
 //
@@ -157,11 +128,18 @@ VPUBLIC void NOsh_dtor(NOsh **thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  NOsh_dtor2
 //
-// Purpose:  Destroy the atom object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void NOsh_dtor2(NOsh *thee) { ; }
+VPUBLIC void NOsh_dtor2(NOsh *thee) { 
+   
+    int i;
+
+    if (thee != VNULL) {
+        for (i=0; i<thee->nmgcalc; i++) MGparm_dtor(&(thee->mgparm[i]));
+        for (i=0; i<thee->nfemcalc; i++) FEMparm_dtor(&(thee->femparm[i]));
+    }
+
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  NOsh_parse
@@ -220,7 +198,8 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
         if (strcasecmp(tok, "read") == 0) {
             Vnm_print(0, "NOsh: Parsing READ section\n");
             if (!NOsh_parseREAD(thee, sock)) return 0;
-            Vnm_print(0, "NOsh: Done parsing READ section\n");
+            Vnm_print(0, "NOsh: Done parsing READ section (nmol = %d)\n",
+              thee->nmol);
         } else if (strcasecmp(tok, "print") == 0) {
             Vnm_print(0, "NOsh: Parsing PRINT section\n");
             if (!NOsh_parsePRINT(thee, sock)) return 0;
@@ -228,7 +207,8 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
         } else if (strcasecmp(tok, "elec") == 0) {
             Vnm_print(0, "NOsh: Parsing ELEC section\n");
             if (!NOsh_parseELEC(thee, sock)) return 0;
-            Vnm_print(0, "NOsh: Done parsing ELEC section\n");
+            Vnm_print(0, "NOsh: Done parsing ELEC section (ncalc = %d)\n",
+              thee->ncalc);
         } else if (strcasecmp(tok, "quit") == 0) {
             Vnm_print(0, "NOsh: Done parsing file (got QUIT)\n");
             break;
@@ -283,7 +263,7 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
             if (Vio_scanf(sock, "%s", tok) == 1) {
                 Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
                   thee->nmol, tok);
-                strncpy(thee->molpath[thee->nmol], tok, NOSH_MAXPATH);
+                strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
                 (thee->nmol)++;
             } else break;
         } else {
@@ -473,8 +453,7 @@ run!\n");
         Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n", 
           NOSH_MAXCALC);
         return 1;
-    }
-    (thee->ncalc)++;
+    } else (thee->ncalc)++;
 
     if (thee->nmgcalc >= NOSH_MAXMGPARM) {
         Vnm_print(2, "NOsh:  Too many multigrid electrostatics calculations \
@@ -507,11 +486,12 @@ calculation\n",
                   NOSH_MAXMGPARM);
                 return 1;
             }
-            thee->calctype[thee->ncalc - 1] = 0;
             (thee->nmgcalc)++;
+            thee->calctype[thee->ncalc - 1] = 0;
             Vnm_print(0, "NOsh: Parsing parameters for MG calculation #%d\n",
               thee->nmgcalc);
-            return NOsh_parseMG(thee, sock, &(thee->mgparm[thee->nmgcalc-1]));
+            thee->mgparm[thee->nmgcalc-1] = MGparm_ctor();
+            return NOsh_parseMG(thee, sock, thee->mgparm[thee->nmgcalc-1]);
         } else if (strcasecmp(tok, "fem") == 0) {
             /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number
@@ -523,11 +503,12 @@ calculation\n",
                   NOSH_MAXFEMPARM);
                 return 1;
             }
-            thee->calctype[thee->ncalc - 1] = 1;
             (thee->nfemcalc)++;
+            thee->calctype[thee->ncalc - 1] = 1;
             Vnm_print(0, "NOsh: Parsing parameters for FEM calculation #%d\n",
               thee->nfemcalc);
-            return NOsh_parseFEM(thee,sock,&(thee->femparm[thee->nfemcalc-1]));
+            thee->femparm[thee->nfemcalc-1] = FEMparm_ctor();
+            return NOsh_parseFEM(thee,sock,thee->femparm[thee->nfemcalc-1]);
         } else {
             Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") must be the first keyword in the ELEC section\n");
             return 0;
@@ -555,7 +536,7 @@ calculation\n",
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, NOsh_femparm *parm) {
+VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm) {
 
     char tok[VMAX_BUFSIZE];
 
@@ -595,7 +576,7 @@ VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, NOsh_femparm *parm) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
+VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, MGparm *parm) {
 
     char tok[VMAX_BUFSIZE];
     double tf;
@@ -977,7 +958,7 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
                 return 0;
             }
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            strncpy(parm->writepotstem, tok, NOSH_MAXPATH); 
+            strncpy(parm->writepotstem, tok, VMAX_ARGLEN); 
             parm->setwritepot = 1;
          /* Accessibility writing */
         } else if (strcasecmp(tok, "writeacc") == 0) {
@@ -1002,7 +983,7 @@ WRITEPOT keyword!\n",
                 return 0;
             }
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            strncpy(parm->writeaccstem, tok, NOSH_MAXPATH);
+            strncpy(parm->writeaccstem, tok, VMAX_ARGLEN);
             parm->setwriteacc = 1;
         } else {
             Vnm_print(2, "NOsh:  Ignoring unknown keyword (%s) while parsing ELEC section!\n",
