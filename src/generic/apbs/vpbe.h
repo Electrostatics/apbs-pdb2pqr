@@ -148,7 +148,6 @@ VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
 VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
 VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
-VEXTERNC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color);
 VEXTERNC double Vpbe_getCoulombEnergy1(Vpbe *thee);
 VEXTERNC int    Vpbe_memChk(Vpbe *thee);
 VEXTERNC void   Vpbe_setAtomColors(Vpbe *thee);
