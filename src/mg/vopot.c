@@ -46,13 +46,13 @@ VEMBED(rcsid="$Id$")
 // Routine:  Vopot_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe) {
+VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl) {
 
     Vopot *thee = VNULL;
 
     thee = Vmem_malloc(VNULL, 1, sizeof(Vopot));
     VASSERT(thee != VNULL);
-    VASSERT(Vopot_ctor2(thee, grid, pbe));
+    VASSERT(Vopot_ctor2(thee, grid, pbe, bcfl));
 
     return thee;
 }
@@ -61,9 +61,14 @@ VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe) {
 // Routine:  Vopot_ctor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe) {
+VPUBLIC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, int bcfl) {
 
     if (thee == VNULL) return 0;
+    if ((bcfl < 0) || (bcfl > 2)) {
+        Vnm_print(2, "Vopot_ctor:  Bogus bcfl flag (%d)!\n", bcfl);
+        return 0;
+    }
+    thee->bcfl = bcfl;
     thee->grid = grid;
     thee->pbe = pbe;
 
@@ -96,7 +101,9 @@ VPUBLIC void Vopot_dtor2(Vopot *thee) { return; }
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
 
-    double u, T, charge, eps_w, xkappa, dist;
+    Vatom *atom;
+    int i, iatom;
+    double u, T, charge, eps_w, xkappa, dist, size, val, *position;
     Valist *alist;
 
     VASSERT(thee != VNULL);
@@ -115,46 +122,52 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
 
     } else {
 
-#if defined(VOPOT_BCFL_0) 
+        switch (thee->bcfl) {
 
-        u = 0;
+            case 0:
+                u = 0;
+                break;
 
-#elseif defined(VOPOT_BCFL_1)
+            case 1:
+                size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
+                position = Vpbe_getSoluteCenter(thee->pbe);
+                charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
+                dist = 0;
+                for (i=0; i<3; i++)
+                  dist += VSQR(position[i] - pt[i]);
+                dist = (1.0e-10)*VSQRT(dist);
+                val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
+                if (xkappa != 0.0) 
+                  val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                val = val*Vunit_ec/(Vunit_kb*T);
+                u = val;
+                break;
 
-        size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
-        position = Vpbe_getSoluteCenter(thee->pbe);
-        charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
-        dist = 0;
-        for (i=0; i<d; i++)
-          dist += ((position[i] - pt[i])*(position[i] - pt[i]));
-        dist = (1.0e-10)*VSQRT(dist);
-        val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
-        if (xkappa != 0.0) val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-        val = val*Vunit_ec/(Vunit_kb*T);
+            case 2:
+                u = 0;
+                for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                    atom = Valist_getAtom(alist, iatom);
+                    position = Vatom_getPosition(atom);
+                    charge = Vunit_ec*Vatom_getCharge(atom);
+                    size = (1e-10)*Vatom_getRadius(atom);
+                    dist = 0;
+                    for (i=0; i<3; i++)
+                      dist += VSQR(position[i] - pt[i]);
+                    dist = (1.0e-10)*VSQRT(dist);
+                    val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
+                    if (xkappa != 0.0)
+                      val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                    val = val*Vunit_ec/(Vunit_kb*T);
+                    u = u + val;
+                }
+                break;
 
-        u = val;
-
-
-#elseif defined(VOPOT_BCFL_2)
-
-        u = 0;
-        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-            atom = Valist_getAtom(alist, iatom);
-            position = Vatom_getPosition(atom);
-            charge = Vunit_ec*Vatom_getCharge(atom);
-            size = (1e-10)*Vatom_getRadius(atom);
-            dist = 0;
-            for (i=0; i<d; i++)
-              dist += ((position[i] - pt[i])*(position[i] - pt[i]));
-            dist = (1.0e-10)*VSQRT(dist);
-            val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
-            if (xkappa != 0.0)
-              val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-            val = val*Vunit_ec/(Vunit_kb*T);
-            u = u + val;
+            default:
+                Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
+                  thee->bcfl);
+                return 0;        
+                break;
         }
-
-#endif
 
         *value = u;
 

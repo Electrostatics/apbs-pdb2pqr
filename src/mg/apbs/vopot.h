@@ -62,6 +62,10 @@ struct Vopot {
 
     Vgrid *grid;  /**< Grid object containing potential data (in units kT/e) */
     Vpbe   *pbe;  /**< Pointer to PBE object */
+    int bcfl;     /**< Boundary condition flag for returning potential values
+                   * at points off the grid.  0 is zero potential, 1 is single
+                   * sphere Debye-Huckel approximation, and 2 is multiple
+                   * sphere Debye-Huckel approximation */
 };
 
 /** @typedef Vopot
@@ -70,37 +74,19 @@ struct Vopot {
  */
 typedef struct Vopot Vopot;
 
-/** @def     VOPOT_BCFL_0  Controls behavior of potential outside mesh, sets
- *                            potential to zero
- *                       zero potential, 1 => single Debye-Huckel sphere
- *                       approximation, 2 => multiple Debye-Huckel sphere
- *                       approximation (slow)
- *  @ingroup Vopot
- */
-/* #define VOPOT_BCFL_0 */
-
-/** @def     VOPOT_BCFL_1  Controls behavior of potential outside mesh, sets
- * *                            potential to single Debye-Huckel sphere approx
- *  @ingroup Vopot
- */
-#define VOPOT_BCFL_1
-
-/** @def     VOPOT_BCFL_2  Controls behavior of potential outside mesh, sets
- * *                            potential to multi Debye-Huckel sphere approx
- *  @ingroup Vopot
- */
-#define VOPOT_BCFL_2
-
-
 /** @brief   Construct Vopot object with values obtained from Vpmg_readDX (for
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   Vgrid Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
+ *  @param   bcfl  Boundary condition to use for potential values off the grid
+ *                 \li 0:  Zero potential
+ *                 \li 1:  Single sphere Debye-Huckel approximation
+ *                 \li 2:  Multiple sphere Debye-Huckel approximation
  *  @returns Newly allocated and initialized Vopot object
  */
-VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe);
+VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl);
 
 /** @brief   Initialize Vopot object with values obtained from Vpmg_readDX (for
  *           example)
@@ -109,9 +95,13 @@ VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe);
  *  @param   thee  Pointer to newly allocated Vopot object
  *  @param   Vgrid Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
- *  @returns Newly allocated and initialized Vopot object
+ *  @param   bcfl  Boundary condition to use for potential values off the grid
+ *                 \li 0:  Zero potential
+ *                 \li 1:  Single sphere Debye-Huckel approximation
+ *                 \li 2:  Multiple sphere Debye-Huckel approximation
+ *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe);
+VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, int bcfl);
 
 /** @brief   Get potential value (from mesh or approximation) at a point
  *  @ingroup Vopot
