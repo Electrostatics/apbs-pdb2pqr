@@ -259,20 +259,20 @@ AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
 dnl # ----------------------
 dnl # HANDLE THE MALOC LIBRARY
 dnl # ----------------------
-AC_MSG_CHECKING([whether your environment defines FETK_INCLUDE])
+AC_MSG_CHECKING([for FETK_INCLUDE])
 if test -n "${FETK_INCLUDE}"; then
     AC_MSG_RESULT([yes])
 else
-    AC_MSG_RESULT([no; you had better specify MALOC/FEtk/PMG paths!])
+    AC_MSG_RESULT([no; will use ${HOME}/include])
 fi
 
 dnl # MALOC library location ENV specification
-AC_MSG_CHECKING([whether your environment defines FETK_LIBRARY])
+AC_MSG_CHECKING([for FETK_LIBRARY])
 if test -n "${FETK_LIBRARY}"; then
     AC_MSG_RESULT([yes])
     maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
 else
-    AC_MSG_RESULT([no; you had better specify MALOC/FEtk/PMG paths!])
+    AC_MSG_RESULT([no; will use ${HOME}/lib])
     maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
 fi
 
@@ -485,7 +485,7 @@ mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
 if test -z "${with_fetk}"; then
-    AC_CHECKING([for FETK_INCLUDE])
+    AC_MSG_CHECKING([for FETK_INCLUDE])
     if test -n "${FETK_INCLUDE}"; then
         mc_inc_path="-I${FETK_INCLUDE} ";
         AC_MSG_RESULT([yes])
@@ -493,7 +493,7 @@ if test -z "${with_fetk}"; then
         AC_MSG_RESULT([no])
         mc_inc_path="-I${HOME}/include ";
     fi
-    AC_CHECKING([for FETK_LIBRARY])
+    AC_MSG_CHECKING([for FETK_LIBRARY])
     if test -n "${FETK_LIBRARY}"; then
         AC_MSG_RESULT([yes])
         mc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
@@ -507,53 +507,31 @@ if test -z "${with_fetk}"; then
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mc_found="";
-    AC_CHECKING([for mc/mc.h])
     AC_CHECK_HEADER(mc/mc.h,
         [mc_found="yes";mc_inc="${mc_inc_path}"],
         [mc_found="";mc_inc=""])
-    if test -n "${mc_found}"; then
-        AC_MSG_RESULT([yes])
-        AC_CHECKING([for -lmc])
-        AC_CHECK_LIB(mc,mc_link,
-            [mc_found="yes";mc_lib="${mc_lib_path}-lmc"],
-            [mc_found="";mc_lib=""],
-            [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-        if test -n "${mc_found}"; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
+    AC_CHECK_LIB(mc,mc_link,
+        [mc_found="yes";mc_lib="${mc_lib_path}-lmc"],
+        [mc_found="";mc_lib=""],
+        [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     dnl # Setup temp LDFLAGS and look for MCX library/header
     LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mcx_found="";
-    AC_CHECKING([for mcx/mcx.h])
     AC_CHECK_HEADER(mcx/mcx.h,
         [mcx_found="yes";mcx_inc="${mc_inc_path}"],
         [mcx_found="";mc_inc=""])
-    if test -n "${mcx_found}"; then
-        AC_MSG_RESULT([yes])
-        AC_CHECKING([for -lmcx])
-        AC_CHECK_LIB(mcx,mcx_link,
-            [mcx_found="yes";mcx_lib="${mc_lib_path}-lmcx"],
-            [mcx_found="";mcx_lib=""],
-            [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-        if test -n "${mcx_found}"; then
-            AC_MSG_RESULT([yes])
-        else
-            AC_MSG_RESULT([no])
-        fi
-    else
-        AC_MSG_RESULT([no])
-    fi
+    AC_CHECK_LIB(mcx,mcx_link,
+        [mcx_found="yes";mcx_lib="${mc_lib_path}-lmcx"],
+        [mcx_found="";mcx_lib=""],
+        [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    
     if test -n "${mcx_found}"; then
         mc_inc="${mc_inc} ${mcx_inc}"
         mc_lib="${mc_lib} ${mcx_lib}"
+        AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
     else
         mc_found=""
     fi

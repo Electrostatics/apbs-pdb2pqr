@@ -9584,25 +9584,25 @@ fi
 echo "$as_me:$LINENO: result: ---------- begin configuring for MALOC linkage ------------" >&5
 echo "${ECHO_T}---------- begin configuring for MALOC linkage ------------" >&6
 
-echo "$as_me:$LINENO: checking whether your environment defines FETK_INCLUDE" >&5
-echo $ECHO_N "checking whether your environment defines FETK_INCLUDE... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for FETK_INCLUDE" >&5
+echo $ECHO_N "checking for FETK_INCLUDE... $ECHO_C" >&6
 if test -n "${FETK_INCLUDE}"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-    echo "$as_me:$LINENO: result: no; you had better specify MALOC/FEtk/PMG paths!" >&5
-echo "${ECHO_T}no; you had better specify MALOC/FEtk/PMG paths!" >&6
+    echo "$as_me:$LINENO: result: no; will use ${HOME}/include" >&5
+echo "${ECHO_T}no; will use ${HOME}/include" >&6
 fi
 
-echo "$as_me:$LINENO: checking whether your environment defines FETK_LIBRARY" >&5
-echo $ECHO_N "checking whether your environment defines FETK_LIBRARY... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for FETK_LIBRARY" >&5
+echo $ECHO_N "checking for FETK_LIBRARY... $ECHO_C" >&6
 if test -n "${FETK_LIBRARY}"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
 else
-    echo "$as_me:$LINENO: result: no; you had better specify MALOC/FEtk/PMG paths!" >&5
-echo "${ECHO_T}no; you had better specify MALOC/FEtk/PMG paths!" >&6
+    echo "$as_me:$LINENO: result: no; will use ${HOME}/lib" >&5
+echo "${ECHO_T}no; will use ${HOME}/lib" >&6
     maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
 fi
 
@@ -10524,8 +10524,8 @@ mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
 if test -z "${with_fetk}"; then
-    { echo "$as_me:$LINENO: checking for FETK_INCLUDE..." >&5
-echo "$as_me: checking for FETK_INCLUDE..." >&6;}
+    echo "$as_me:$LINENO: checking for FETK_INCLUDE" >&5
+echo $ECHO_N "checking for FETK_INCLUDE... $ECHO_C" >&6
     if test -n "${FETK_INCLUDE}"; then
         mc_inc_path="-I${FETK_INCLUDE} ";
         echo "$as_me:$LINENO: result: yes" >&5
@@ -10535,8 +10535,8 @@ echo "${ECHO_T}yes" >&6
 echo "${ECHO_T}no" >&6
         mc_inc_path="-I${HOME}/include ";
     fi
-    { echo "$as_me:$LINENO: checking for FETK_LIBRARY..." >&5
-echo "$as_me: checking for FETK_LIBRARY..." >&6;}
+    echo "$as_me:$LINENO: checking for FETK_LIBRARY" >&5
+echo $ECHO_N "checking for FETK_LIBRARY... $ECHO_C" >&6
     if test -n "${FETK_LIBRARY}"; then
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -10551,8 +10551,6 @@ echo "${ECHO_T}no" >&6
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mc_found="";
-    { echo "$as_me:$LINENO: checking for mc/mc.h..." >&5
-echo "$as_me: checking for mc/mc.h..." >&6;}
     if test "${ac_cv_header_mc_mc_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mc/mc.h" >&5
 echo $ECHO_N "checking for mc/mc.h... $ECHO_C" >&6
@@ -10689,12 +10687,7 @@ else
 fi
 
 
-    if test -n "${mc_found}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-        { echo "$as_me:$LINENO: checking for -lmc..." >&5
-echo "$as_me: checking for -lmc..." >&6;}
-        echo "$as_me:$LINENO: checking for mc_link in -lmc" >&5
+    echo "$as_me:$LINENO: checking for mc_link in -lmc" >&5
 echo $ECHO_N "checking for mc_link in -lmc... $ECHO_C" >&6
 if test "${ac_cv_lib_mc_mc_link+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10754,24 +10747,11 @@ else
   mc_found="";mc_lib=""
 fi
 
-        if test -n "${mc_found}"; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-        else
-            echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-        fi
-    else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    fi
         LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mcx_found="";
-    { echo "$as_me:$LINENO: checking for mcx/mcx.h..." >&5
-echo "$as_me: checking for mcx/mcx.h..." >&6;}
     if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mcx/mcx.h" >&5
 echo $ECHO_N "checking for mcx/mcx.h... $ECHO_C" >&6
@@ -10908,12 +10888,7 @@ else
 fi
 
 
-    if test -n "${mcx_found}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-        { echo "$as_me:$LINENO: checking for -lmcx..." >&5
-echo "$as_me: checking for -lmcx..." >&6;}
-        echo "$as_me:$LINENO: checking for mcx_link in -lmcx" >&5
+    echo "$as_me:$LINENO: checking for mcx_link in -lmcx" >&5
 echo $ECHO_N "checking for mcx_link in -lmcx... $ECHO_C" >&6
 if test "${ac_cv_lib_mcx_mcx_link+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10973,20 +10948,15 @@ else
   mcx_found="";mcx_lib=""
 fi
 
-        if test -n "${mcx_found}"; then
-            echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-        else
-            echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-        fi
-    else
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    fi
+
     if test -n "${mcx_found}"; then
         mc_inc="${mc_inc} ${mcx_inc}"
         mc_lib="${mc_lib} ${mcx_lib}"
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MCX_H
+_ACEOF
+
     else
         mc_found=""
     fi
