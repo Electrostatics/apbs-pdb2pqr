@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.6  2004/09/27 19:24:52  apbs
- * TJD:  Created Vio_setup wrapper function to allow APBS to read data files directly from a socket (string)
+ * Revision 1.7  2004/10/07 15:11:39  apbs
+ * TJD: Fixed wrapper for Vpmg_fillArray fix
  *
  ************************************************************************/
 
@@ -1206,7 +1206,7 @@ double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
     ymin = ycent - 0.5*(ny-1)*hy;
     zmin = zcent - 0.5*(nz-1)*hzed;
    
-    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype);
     grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
                   pmg->rwork);
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
