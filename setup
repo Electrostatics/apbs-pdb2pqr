@@ -7,7 +7,7 @@
 ##############################################################################
 
 rm -f config.cache
-libtoolize --automake --force --copy
+#libtoolize --automake --force --copy
 aclocal
 autoconf
 autoheader
@@ -16,7 +16,7 @@ automake
 
 cd test
 rm -f config.cache
-libtoolize --automake --force --copy
+#libtoolize --automake --force --copy
 aclocal
 autoconf
 autoheader
