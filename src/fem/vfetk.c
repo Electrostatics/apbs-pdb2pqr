@@ -418,7 +418,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type) {
     /* Reset refinement level */
     thee->level = 0;
 
-    /* Set solver variables */
+    /* Set default solver variables */
     thee->lkey = VLT_MG;
     thee->lmax = 1000000;
     thee->ltol = 1e-5;
@@ -450,7 +450,6 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type) {
     thee->pbeparm = VNULL;
     thee->feparm = VNULL;
     thee->csm = VNULL;
-
 
     return 1;
 }
@@ -760,14 +759,6 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     AM *am = VNULL;
     Gem *gm = VNULL;
 
-    VASSERT(thee != VNULL);
-    am = thee->am;
-    VASSERT(am != VNULL);
-    gm = thee->gm;
-    VASSERT(gm != VNULL);
-
-    /** @note This code is based on Gem_makeCube by Mike Holst */
-
     int skey = 0;  /**< Simplex format */
     char *key = "r";  /**< Read */
     char *iodev = "BUFF";  /**< Buffer */
@@ -781,6 +772,13 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     int i, j;
     double x;
 
+    VASSERT(thee != VNULL);
+    am = thee->am;
+    VASSERT(am != VNULL);
+    gm = thee->gm;
+    VASSERT(gm != VNULL);
+
+    /** @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
     bufsize = strlen(cubeString);
     VASSERT( bufsize <= VMAX_BUFSIZE );
@@ -788,6 +786,10 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
     Vio_bufTake(sock, buf, bufsize);
     AM_read(am, skey, sock);
+#if 0
+    Vio_socketClose(&sock);
+    Vio_dtor(&sock);
+#endif
 
     /* Scale (unit) cube */
     for (i=0; i<Gem_numVV(gm); i++) {
@@ -815,7 +817,6 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
-
 
     return 1;
 }
@@ -1633,7 +1634,9 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U,
 }
 
 VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
-    printf("initAssemble\n"); 
+
+    printf("DEBUG: initAssemble\n"); 
+
 }
 
 VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
@@ -1693,10 +1696,11 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
     /* the point, the solution value and gradient, and the Coulomb value and *
      * gradient at the point */
+    if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE)) {
+        coulomb(pbe, thee->dim, txq, eps_p, &(var.W), var.dW, &(var.d2W));
+    }
     for (i=0; i<thee->vec; i++) {
         var.U[i] = tU[i];
-        if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE))
-          coulomb(pbe, thee->dim, txq, eps_p, &(var.W), var.dW, &(var.d2W));
         for (j=0; j<thee->dim; j++) {
             var.xq[j] = txq[j];
             var.dU[i][j] = tdU[i][j];
@@ -1766,8 +1770,13 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 break;
         }
 
+
     /* boundary form case */
     } else VASSERT(0);
+
+#if 0 /* THIS IS VERY NOISY! */
+    Vfetk_dumpLocalVar();
+#endif
 
 }
 
@@ -1819,6 +1828,7 @@ to PBE!\n");
         VASSERT(0);
     }
 
+    var.Fu_v = value;
     return value;
 }
 
@@ -1853,10 +1863,11 @@ applicable to PBE!\n");
             VASSERT(0);
         }
     } else {
-        Vnm_print(2, "Vfetk_PDE_DFu_v:  Invalid PBE type (%d)!\n", type);
+        Vnm_print(2, "Vfetk_PDE_DFu_wv:  Invalid PBE type (%d)!\n", type);
         VASSERT(0);
     }
 
+    var.DFu_wv = value;
     return value;
 }
 
@@ -1877,6 +1888,9 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
     SS *sring[VRINGMAX];
     VV *vertex = (VV *)user;
 
+    pdekey = var.fetk->type;
+
+    F[0] = 0.0;
 
     if ((pdekey == PBE_LPBE) || (pdekey == PBE_NPBE)) {
         VASSERT( vertex != VNULL);
@@ -1946,6 +1960,8 @@ phi = {");
         F[0] = 0.0;
     } else { VASSERT(0); }
 
+    var.delta = F[0];
+
 }
 
 VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
@@ -1957,12 +1973,15 @@ VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
         F[0] = debye_Udiff(var.fetk->pbe, thee->dim, txq);
     } else VASSERT(0);
 
+    var.u_D = F[0];
+
 }
 
 VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
   double F[]) { 
 
     F[0] = 0.0;
+    var.u_T = F[0];
 
 }
 
@@ -1973,6 +1992,7 @@ VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType,
     int i;
 
     for (i=0; i<dimII; i++) vx[2][i] = .5 * (vx[0][i] + vx[1][i]);
+    chart[2] = chart[0];
 
 }
 
@@ -2131,8 +2151,6 @@ VPUBLIC void Vfetk_externalUpdateFunction(SS **simps, int num) {
     VASSERT(var.fetk != VNULL);
     csm = Vfetk_getVcsm(var.fetk);
     VASSERT(csm != VNULL);
-
-    printf("externalUpdateFunction\n"); 
 
     rc = Vcsm_update(csm, simps, num);
 
@@ -2301,6 +2319,51 @@ VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
     /* coefficients of the polynomials */
     setCoef( *ndof, c, cx, cy, cz, lgr_3DP1, lgr_3DP1x, lgr_3DP1y, lgr_3DP1z );
 }
+
+VPUBLIC void Vfetk_dumpLocalVar() {
+
+    int i;
+
+    Vnm_print(1, "DEBUG: nvec = (%g, %g, %g)\n", var.nvec[0], var.nvec[1],
+      var.nvec[2]);
+    Vnm_print(1, "DEBUG: nverts = %d\n", var.nverts);
+    for (i=0; i<var.nverts; i++) {
+        Vnm_print(1, "DEBUG: verts[%d] ID = %d\n", i, VV_id(var.verts[i]));
+        Vnm_print(1, "DEBUG: vx[%d] = (%g, %g, %g)\n", i, var.vx[i][0], 
+          var.vx[i][1], var.vx[i][2]);
+    }
+    Vnm_print(1, "DEBUG: simp ID = %d\n", SS_id(var.simp));
+    Vnm_print(1, "DEBUG: sType = %d\n", var.sType);
+    Vnm_print(1, "DEBUG: fType = %d\n", var.fType);
+    Vnm_print(1, "DEBUG: xq = (%g, %g, %g)\n", var.xq[0], var.xq[1], var.xq[2]);
+    Vnm_print(1, "DEBUG: U[0] = %g\n", var.U[0]);
+    Vnm_print(1, "DEBUG: dU[0] = (%g, %g, %g)\n", var.dU[0][0], var.dU[0][1], 
+      var.dU[0][2]);
+    Vnm_print(1, "DEBUG: W = %g\n", var.W);
+    Vnm_print(1, "DEBUG: d2W = %g\n", var.d2W);
+    Vnm_print(1, "DEBUG: dW = (%g, %g, %g)\n", var.dW[0], var.dW[1], var.dW[2]);
+    Vnm_print(1, "DEBUG: diel = %g\n", var.diel);
+    Vnm_print(1, "DEBUG: kappa2 = %g\n", var.kappa2);
+    Vnm_print(1, "DEBUG: A = %g\n", var.A);
+    Vnm_print(1, "DEBUG: F = %g\n", var.F);
+    Vnm_print(1, "DEBUG: B = %g\n", var.B);
+    Vnm_print(1, "DEBUG: DB = %g\n", var.DB);
+    Vnm_print(1, "DEBUG: nion = %d\n", var.nion);
+    for (i=0; i<var.nion; i++) {
+        Vnm_print(1, "DEBUG: ionConc[%d] = %g\n", i, var.ionConc[i]);
+        Vnm_print(1, "DEBUG: ionQ[%d] = %g\n", i, var.ionQ[i]);
+        Vnm_print(1, "DEBUG: ionRadii[%d] = %g\n", i, var.ionRadii[i]);
+    }
+    Vnm_print(1, "DEBUG: zkappa2 = %g\n", var.zkappa2);
+    Vnm_print(1, "DEBUG: zks2 = %g\n", var.zks2);
+    Vnm_print(1, "DEBUG: Fu_v = %g\n", var.Fu_v);
+    Vnm_print(1, "DEBUG: DFu_wv = %g\n", var.DFu_wv);
+    Vnm_print(1, "DEBUG: delta = %g\n", var.delta);
+    Vnm_print(1, "DEBUG: u_D = %g\n", var.u_D);
+    Vnm_print(1, "DEBUG: u_T = %g\n", var.u_T);
+
+};
+
 
 
 #endif

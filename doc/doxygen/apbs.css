@@ -1,0 +1,51 @@
+<html>
+
+@MEDIA SCREEN { TABLE.APBS A:HOVER {background-color: #ff7777}}
+
+/* Defaults */
+BODY {	
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    bgcolor: #ffffff;
+}
+
+/* Headers */
+H1, H2, H3, H4	{
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    font-weight: normal;
+    background: transparent;
+    margin-bottom: 4pt; 
+    margin-top: 4pt;
+}
+
+/* Definition lists */
+DT {
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    font-weight: bold;
+    background: transparent;
+    color: #000000;
+}
+
+/* normal paragraph -- no noticeable effect */
+P {	
+    text-indent: 0pc; text-align: left;
+}
+
+
+/* preformatted text */
+PRE { 
+    font-family: Courier, monospace; 
+}
+
+/* 
+A:link  	{   color: #8b1c62; text-decoration: none; fontweight: bold }
+A:active    {   color: #8b1c62; text-decoration: none; fontweight: bold }
+A:visited   {   color: #8b475d; text-decoration: none; fontweight: bold }
+A:hover     {   color: #8b475d; text-decoration: none; fontweight: bold }
+*/
+A:link  	{   color: #5588bb; text-decoration: none; fontweight: bold }
+A:active    {   color: #5588bb; text-decoration: none; fontweight: bold }
+A:visited   {   color: #5588bb; text-decoration: none; fontweight: bold }
+A:hover     {   color: #881c22; text-decoration: none; fontweight: bold }
+
+</html>
+
