@@ -37,7 +37,6 @@
 #include "mc/vhal.h"
 #include "mc/vgm.h"
 #include "mc/vram.h"
-#include "mc/vset.h"
 #include "mc/ves.h"
 
 #include "mc/vatom.h"
@@ -59,13 +58,21 @@ typedef struct Vcsm {
   Vgm *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
-  Vset *sqm;          /* The map which gives the list charges associated with
+  int **sqm;          /* The map which gives the list charges associated with
                        * each simplex in gm->simplices.  The indices of
                        * the first dimension are associated with the
                        * simplex ID's in Vgm.  Each charge list (second 
                        * dimension) contains entries corresponding to
                        * indicies in thee->alist with lengths given in 
                        * thee->nsqm */
+  int *nsqm;          /* The length of the charge lists in thee->sqm */
+  int nsimp;          /* The _currently used) length of sqm, nsqm -- may not 
+                       * always be up-to-date with Vgm */
+  int msimp;          /* The maximum number of entries that can be 
+                       * accomodated by sqm or nsqm  -- saves on realloc's */
+  int **qsm;          /* The inverse of sqm; the list of simplices
+                       * associated with a given charge */
+  int *nqsm;          /* The length of the simplex lists in thee->qsm */
   int initFlag;       /* Indicates whether the maps have been initialized
                        * yet */
 
