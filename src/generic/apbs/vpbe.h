@@ -51,6 +51,7 @@
 #include "mc/vram.h"
 #include "mc/ves.h"
 #include "mc/am.h"
+#include "mc/bvec.h"
 
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
@@ -142,5 +143,6 @@ VEXTERNC double Vpbe_getXkappa(Vpbe *thee);
 VEXTERNC double Vpbe_getDeblen(Vpbe *thee);
 VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
 VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
+VEXTERNC double* Vpbe_getSolution(Vpbe *thee, int *length);
 
 #endif /* ifndef _VALIST_H_ */
