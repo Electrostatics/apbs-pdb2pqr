@@ -40,10 +40,10 @@
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#include <math.h>
-#include <stdio.h>
+#include "apbscfg.h"
+#include "fortlink.h"
 
-int main(int argc, char **argv) {
+int themain(int argc, char **argv) {
 
     int i, lev;
     int maxvert = 700;
