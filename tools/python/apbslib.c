@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.1  2003/09/22 21:12:54  apbs
- * Additions to tools/python . Users no longer need to use SWIG - generated .c and .py files are included.
+ * Revision 1.2  2004/02/11 18:49:53  apbs
+ * Allows Python wrapped APBS to use ELEC names
  *
  ************************************************************************/
 
@@ -567,6 +567,8 @@ extern int Vcom_rank(Vcom *);
 extern Vmem *Vmem_ctor(char *);
 extern void Vmem_dtor(Vmem **);
 extern NOsh_calc *NOsh_getCalc(NOsh *,int );
+extern char *NOsh_elecname(NOsh *,int );
+extern int NOsh_elec2calc(NOsh *,int );
 extern int NOsh_printWhat(NOsh *,int );
 extern int NOsh_ctor2(NOsh *,int ,int );
 extern void NOsh_dtor(NOsh **);
@@ -1271,6 +1273,48 @@ static PyObject *_wrap_NOsh_getCalc(PyObject *self, PyObject *args) {
     _result = (NOsh_calc *)NOsh_getCalc(_arg0,_arg1);
     SWIG_MakePtr(_ptemp, (char *) _result,"_NOsh_calc_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_NOsh_elecname(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    char * _result;
+    NOsh * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:NOsh_elecname",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_elecname. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    _result = (char *)NOsh_elecname(_arg0,_arg1);
+    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_NOsh_elec2calc(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    NOsh * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:NOsh_elec2calc",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_elec2calc. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    _result = (int )NOsh_elec2calc(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3198,6 +3242,49 @@ static PyObject *_wrap_NOsh_nprint_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define NOsh_nelec_set(_swigobj,_swigval) (_swigobj->nelec = _swigval,_swigval)
+static PyObject *_wrap_NOsh_nelec_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    NOsh * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:NOsh_nelec_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_nelec_set. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    _result = (int )NOsh_nelec_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define NOsh_nelec_get(_swigobj) ((int ) _swigobj->nelec)
+static PyObject *_wrap_NOsh_nelec_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    NOsh * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:NOsh_nelec_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_nelec_get. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    _result = (int )NOsh_nelec_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define new_AtomForce() ((AtomForce *) calloc(1,sizeof(AtomForce)))
 static PyObject *_wrap_new_AtomForce(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3237,6 +3324,8 @@ static PyObject *_wrap_delete_AtomForce(PyObject *self, PyObject *args) {
 static PyMethodDef apbslibcMethods[] = {
 	 { "delete_AtomForce", _wrap_delete_AtomForce, 1 },
 	 { "new_AtomForce", _wrap_new_AtomForce, 1 },
+	 { "NOsh_nelec_get", _wrap_NOsh_nelec_get, 1 },
+	 { "NOsh_nelec_set", _wrap_NOsh_nelec_set, 1 },
 	 { "NOsh_nprint_get", _wrap_NOsh_nprint_get, 1 },
 	 { "NOsh_nprint_set", _wrap_NOsh_nprint_set, 1 },
 	 { "NOsh_ncalc_get", _wrap_NOsh_ncalc_get, 1 },
@@ -3309,6 +3398,8 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "NOsh_dtor", _wrap_NOsh_dtor, 1 },
 	 { "NOsh_ctor2", _wrap_NOsh_ctor2, 1 },
 	 { "NOsh_printWhat", _wrap_NOsh_printWhat, 1 },
+	 { "NOsh_elec2calc", _wrap_NOsh_elec2calc, 1 },
+	 { "NOsh_elecname", _wrap_NOsh_elecname, 1 },
 	 { "NOsh_getCalc", _wrap_NOsh_getCalc, 1 },
 	 { "Vmem_dtor", _wrap_Vmem_dtor, 1 },
 	 { "Vmem_ctor", _wrap_Vmem_ctor, 1 },
