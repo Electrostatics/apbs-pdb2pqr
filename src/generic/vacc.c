@@ -353,8 +353,7 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
-    double dist;
-    Vec3 vec;
+    double dist, *apos, arad;
 
     /* We can only test probes with radii less than the max specified */
     VASSERT(thee != VNULL);
@@ -376,12 +375,12 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
      * accessible */
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
-        vec[0] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[0];
-        vec[1] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[1];
-        vec[2] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[2];
-        dist = Vec3_dif2(center,vec);
-        if (dist < (Vatom_getRadius((thee->atoms)[ui][iatom])+radius) )
-          return 0;
+        apos = Vatom_getPosition((thee->atoms)[ui][iatom]);
+        arad = Vatom_getRadius((thee->atoms)[ui][iatom]);
+        dist = (apos[0]-center[0])*(apos[0]-center[0]) +
+               + (apos[1]-center[1])*(apos[1]-center[1])
+               + (apos[2]-center[2])*(apos[2]-center[2]);
+        if (dist < ((arad+radius)*(arad+radius))) return 0;
     }
 
     /* If we're still here, then the point is accessible */
