@@ -64,13 +64,13 @@
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, AM *am) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vram_ctor( 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, gm, am));
+    VASSERT( Vpbe_ctor2(thee, alist, gm));
 
     return thee;
 }
@@ -86,7 +86,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, AM *am) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am) { 
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) { 
 
     int iatom;
     double atomRadius;
@@ -104,15 +104,9 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am) {
         return 0;
     }
 
-    if (am == VNULL) {
-        Vnm_print(1,"Vpbe_ctor2: Got null pointer to AM object!\n");
-        return 0;
-    }
-
     /* Set pointers */
     thee->alist = alist;
     thee->gm = gm;
-    thee->am = am;
     thee->paramFlag = 0;
 
     /* Set up charge-simplex map */
@@ -389,20 +383,6 @@ VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getAM
-//
-// Purpose:  Get a pointer to the AM (linear algebra manager) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC AM* Vpbe_getAM(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->am; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSolventHash
 //
 // Purpose:  Get a pointer to the Vhash (atomic hash table) object for solvent
@@ -634,38 +614,38 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 // Routine:  Vpbe_getSolution
 //
 // Purpose:  Get the electrostatic potential (in units of kT/e) at the
-//           finest level as a (newly allocated) array of doubles and store
-//           the length in *length.
-//           You'd better destroy the returned array later!
+//           finest level of the passed AM object as a (newly allocated) array
+//           of doubles and store the length in *length.  You'd better destroy
+//           the returned array later!
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double* Vpbe_getSolution(Vpbe *thee, int *length) { 
+VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) { 
 
    int level, i;
    double *solution;
    double *theAnswer;
 
    VASSERT(thee != VNULL);
-   VASSERT(thee->am != VNULL);
+   VASSERT(am != VNULL);
    VASSERT(thee->gm != VNULL);
 
    /* Get the max level from AM */
-   level = AM_maxLevel(thee->am);
+   level = AM_maxLevel(am);
 
    /* Copy the solution into the w0 vector */
-   Bvec_copy(AM_alg(thee->am, level)->W[W_w0], 
-     AM_alg(thee->am, level)->W[W_u]);
+   Bvec_copy(AM_alg(am, level)->W[W_w0], 
+     AM_alg(am, level)->W[W_u]);
    /* Add the Dirichlet conditions */
-   Bvec_axpy(AM_alg(thee->am, level)->W[W_w0], 
-     AM_alg(thee->am, level)->W[W_ud], 1.);
+   Bvec_axpy(AM_alg(am, level)->W[W_w0], 
+     AM_alg(am, level)->W[W_ud], 1.);
    /* Get the data from the Bvec */
-   solution = Bvec_data(AM_alg(thee->am, level)->W[W_w0], 0);
+   solution = Bvec_data(AM_alg(am, level)->W[W_w0], 0);
    /* Get the length of the data from the Bvec */
-   *length = Bvec_numRT(AM_alg(thee->am, level)->W[W_w0]);
+   *length = Bvec_numRT(AM_alg(am, level)->W[W_w0]);
    /* Make sure that we got scalar data (only one block) for the solution
     * to the PBE */
-   VASSERT(1 == Bvec_numB(AM_alg(thee->am, level)->W[W_w0]));
+   VASSERT(1 == Bvec_numB(AM_alg(am, level)->W[W_w0]));
    /* Allocate space for the returned vector and copy the solution into it */
    theAnswer = VNULL;
    theAnswer = Vram_ctor(*length, sizeof(double));
@@ -690,10 +670,13 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, int *length) {
 //           and return the result in units of $k_B T$.  The argument color
 //           allows the user to control the partition on which this energy
 //           is calculated; if (color == -1) no restrictions are used.
+//           The solution is obtained from the finest level of the passed AM
+//           object, but atomic data from the Vpbe object is used to
+//           calculate the energy
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) { 
+VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) { 
 
    double *sol; int nsol;
    double charge;
@@ -706,14 +689,14 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
    double uval;
 
    VASSERT(thee != VNULL);
-   VASSERT(thee->am != VNULL);
+   VASSERT(am != VNULL);
    VASSERT(thee->gm != VNULL);
    VASSERT(thee->alist != VNULL);
    VASSERT(thee->csm != VNULL);
 
    /* Get the finest level solution */
    sol= VNULL;
-   sol = Vpbe_getSolution(thee, &nsol);
+   sol = Vpbe_getSolution(thee, am, &nsol);
    VASSERT(sol != VNULL);
 
    /* Make sure the number of entries in the solution array matches the
