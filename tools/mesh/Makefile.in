@@ -209,10 +209,10 @@ subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
-	smooth$(EXEEXT) value$(EXEEXT) dx2mol$(EXEEXT) \
-	benchmark$(EXEEXT) similarity$(EXEEXT) analysis$(EXEEXT) \
-	mergedx$(EXEEXT)
+noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) mergedx$(EXEEXT) \
+	uhbd_asc2bin$(EXEEXT) smooth$(EXEEXT) value$(EXEEXT) \
+	dx2mol$(EXEEXT) benchmark$(EXEEXT) similarity$(EXEEXT) \
+	analysis$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_analysis_OBJECTS = analysis.$(OBJEXT)
@@ -230,12 +230,12 @@ dx2mol_LDFLAGS =
 am_dxmath_OBJECTS = dxmath.$(OBJEXT)
 dxmath_OBJECTS = $(am_dxmath_OBJECTS)
 dxmath_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
-am_mgmesh_OBJECTS = mgmesh.$(OBJEXT)
-mgmesh_OBJECTS = $(am_mgmesh_OBJECTS)
-mgmesh_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_mergedx_OBJECTS = mergedx.$(OBJEXT)
 mergedx_OBJECTS = $(am_mergedx_OBJECTS)
 mergedx_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+am_mgmesh_OBJECTS = mgmesh.$(OBJEXT)
+mgmesh_OBJECTS = $(am_mgmesh_OBJECTS)
+mgmesh_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_similarity_OBJECTS = similarity.$(OBJEXT)
 similarity_OBJECTS = $(am_similarity_OBJECTS)
 similarity_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
@@ -266,11 +266,11 @@ F77LD = $(F77)
 F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) \
-	$(dx2mol_SOURCES) $(dxmath_SOURCES) $(mgmesh_SOURCES) \
-	$(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) \
-	$(value_SOURCES) $(mergedx_SOURCES)
+	$(dx2mol_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) \
+	$(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) \
+	$(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dxmath_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES) $(mergedx_SOURCES)
+SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 
 all: all-am
 
@@ -300,12 +300,12 @@ dx2mol$(EXEEXT): $(dx2mol_OBJECTS) $(dx2mol_DEPENDENCIES)
 dxmath$(EXEEXT): $(dxmath_OBJECTS) $(dxmath_DEPENDENCIES) 
 	@rm -f dxmath$(EXEEXT)
 	$(LINK) $(dxmath_LDFLAGS) $(dxmath_OBJECTS) $(dxmath_LDADD) $(LIBS)
+mergedx$(EXEEXT): $(mergedx_OBJECTS) $(mergedx_DEPENDENCIES) 
+	@rm -f mergedx$(EXEEXT)
+	$(LINK) $(mergedx_LDFLAGS) $(mergedx_OBJECTS) $(mergedx_LDADD) $(LIBS)
 mgmesh$(EXEEXT): $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES) 
 	@rm -f mgmesh$(EXEEXT)
 	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
-mergedx$(EXEEXT): $(mergedx_OBJECTS) $(mergedx_DEPENDENCIES)
-	@rm -f mergedx$(EXEEXT)
-	$(LINK) $(mergedx_LDFLAGS) $(mergedx_OBJECTS) $(mergedx_LDADD) $(LIBS)
 similarity$(EXEEXT): $(similarity_OBJECTS) $(similarity_DEPENDENCIES) 
 	@rm -f similarity$(EXEEXT)
 	$(LINK) $(similarity_LDFLAGS) $(similarity_OBJECTS) $(similarity_LDADD) $(LIBS)

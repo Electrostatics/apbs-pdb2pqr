@@ -29,9 +29,9 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Constructor for the Vpmg class (no focusing).</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a3">Vpmg_ctor2</a> (Vpmg *thee, <a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub constructor for the Vpmg class (no focusing).</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>Vpmg *&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a4">Vpmg_ctorFocus</a> (<a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>, Vpmg *pmgOLD, int energyFlag)</td></tr>
+<tr><td nowrap align=right valign=top>Vpmg *&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a4">Vpmg_ctorFocus</a> (<a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>, Vpmg *pmgOLD, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, int energyFlag)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Constructor for the Vpmg class (with focusing).</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_ctor2Focus</a> (Vpmg *thee, <a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>, Vpmg *pmgOLD, int energyFlag)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_ctor2Focus</a> (Vpmg *thee, <a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>, Vpmg *pmgOLD, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, int energyFlag)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub bonstructor for the Vpmg class (with focusing).</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_dtor</a> (Vpmg **thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Object destructor.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
@@ -260,6 +260,12 @@ FORTRAN stub constructor for the Vpmg class (no focusing).
         <tr>
           <td></td>
           <td></td>
+          <td class="md" nowrap><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>mgparm</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
           <td class="md" nowrap>int&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>energyFlag</em></td>
         </tr>
@@ -291,6 +297,7 @@ FORTRAN stub bonstructor for the Vpmg class (with focusing).
     <tr><td valign=top><em>parms</em>&nbsp;</td><td>PMG parameter object for new mesh </td></tr>
     <tr><td valign=top><em>pbe</em>&nbsp;</td><td>PBE parameter object </td></tr>
     <tr><td valign=top><em>pmgOLD</em>&nbsp;</td><td>Old Vpmg object to use for setting boundary conditions </td></tr>
+    <tr><td valign=top><em>mgparm</em>&nbsp;</td><td>MGparm parameter object (used for boundary conditions) </td></tr>
     <tr><td valign=top><em>energyFlag</em>&nbsp;</td><td><ul>
 <li>0: Don't calculate any energy contribution from outside focusing area </li>
 <li>1: Calculate total energy contribution from outside focusing area </li>
@@ -329,6 +336,12 @@ FORTRAN stub bonstructor for the Vpmg class (with focusing).
         <tr>
           <td></td>
           <td></td>
+          <td class="md" nowrap><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>mgparm</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
           <td class="md" nowrap>int&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>energyFlag</em></td>
         </tr>
@@ -359,6 +372,7 @@ Constructor for the Vpmg class (with focusing).
     <tr><td valign=top><em>parms</em>&nbsp;</td><td>PMG parameter object for new mesh </td></tr>
     <tr><td valign=top><em>pbe</em>&nbsp;</td><td>PBE parameter object </td></tr>
     <tr><td valign=top><em>pmgOLD</em>&nbsp;</td><td>Old Vpmg object to use for setting boundary conditions </td></tr>
+    <tr><td valign=top><em>mgparm</em>&nbsp;</td><td>MGparm parameter object (used for boundary conditions) </td></tr>
     <tr><td valign=top><em>energyFlag</em>&nbsp;</td><td><ul>
 <li>0: Don't calculate any energy contribution from outside focusing area </li>
 <li>1: Calculate total energy contribution from outside focusing area </li>
@@ -1532,7 +1546,7 @@ Remove partition restrictions.
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Tue Mar 30 14:24:01 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Tue Apr 13 08:51:58 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
