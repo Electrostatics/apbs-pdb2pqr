@@ -53,6 +53,7 @@
 #include "maloc/maloc.h"
 #include "apbs/femparm.h"
 #include "apbs/mgparm.h"
+#include "apbs/pbeparm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh_calc: A small class which allows NOsh to keep track of various
@@ -62,6 +63,7 @@ typedef struct NOsh_calc {
 
     MGparm *mgparm;                      /* Multigrid parameters */
     FEMparm *femparm;                    /* Finite element parameters */
+    PBEparm *pbeparm;                    /* Generic PBE parameters */
     int calctype;                        /* 0 => multigrid, 1 => FEM */
 
 } NOsh_calc;
@@ -78,6 +80,17 @@ typedef struct NOsh {
     int ncalc;                           /* The number of calculations in the
                                           * calc array */
     int nelec;
+    int ispara;                          /* (1 => is a parallel calculation, 
+                                          *  0 => is not) */
+    int rank;                            /* Processor rank for parallel
+                                          * focusing calculations */
+    int bogus;                           /* A flag which tells routines using
+                                          * NOsh that this particular NOsh is
+                                          * broken -- useful for parallel
+                                          * focusing calculations where the
+                                          * user gave us too many processors 
+                                          * (1 => ignore this NOsh; 
+                                          *  0 => this NOsh is OK) */
     int elec2calc[NOSH_MAXCALC];         /* A mapping between ELEC statements
 					  * which appear in the input file and
 					  * calc objects stored above.  Since
@@ -114,8 +127,8 @@ typedef struct NOsh {
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC NOsh* NOsh_ctor();
-VEXTERNC int   NOsh_ctor2(NOsh *thee);
+VEXTERNC NOsh* NOsh_ctor(int rank);
+VEXTERNC int   NOsh_ctor2(NOsh *thee, int rank);
 VEXTERNC void  NOsh_dtor(NOsh **thee);
 VEXTERNC void  NOsh_dtor2(NOsh *thee);
 VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
