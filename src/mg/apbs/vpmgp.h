@@ -43,6 +43,21 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+/** @defgroup Vpmgp Vpmgp
+ *  @brief  Parameter structure for Mike Holst's PMGP code
+ *  @note   Variables and many default values taken directly from PMG
+ */
+
+/**
+ *  @file     vpmgp.h
+ *  @ingroup  Vpmgp
+ *  @brief    Contains declarations for class Vpmgp
+ *  @version  $Id$
+ *  @author   Nathan A. Baker
+ *  @note     Variables and many default values taken directly from PMG
+ */
+
+
 #ifndef _VPMGP_H_
 #define _VPMGP_H_
 
@@ -51,118 +66,133 @@
 #include "apbs/valist.h"
 #include "apbs/vunit.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmgp: Parameters and datatypes
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmgp: Definition
-/////////////////////////////////////////////////////////////////////////// */
-
-typedef struct Vpmgp {
+/**
+ *  @struct  Vpmgp
+ *  @ingroup Vpmgp
+ *  @author  Nathan Baker
+ *  @brief   Contains public data members for Vpmgp class/module
+ */
+struct Vpmgp {
 
     /* ********** USER-SPECIFIED PARAMETERS ********** */
-    int nx, ny, nz;              /* Grid dimensions [no default]  */
-    int nlev;                    /* Number of mesh levels [no default] */
-    double hx, hy, hzed;         /* Grid spacings [no default]  */
-    int nonlin;                  /* Problem type [no default]
-                                  *   0 => linear
-                                  *   1 => nonlinear
-                                  *   2 => linear then nonlinear */
+    int nx;              /**< Grid x dimensions [no default]  */
+    int ny;              /**< Grid y dimensions [no default]  */
+    int nz;              /**< Grid z dimensions [no default]  */
+    int nlev;            /**< Number of mesh levels [no default] */
+    double hx;           /**< Grid x spacings [no default]  */
+    double hy;           /**< Grid y spacings [no default]  */
+    double hzed;         /**< Grid z spacings [no default]  */
+    int nonlin;          /**< Problem type [no default]
+                              - 0: linear
+                              - 1: nonlinear
+                              - 2: linear then nonlinear */
 
     /* ********** DERIVED PARAMETERS ********** */
-    int nrwk;                    /* Real work storage */
-    int niwk;                    /* Integer work storage */
-    int narr;                    /* Array work storage */
-    int ipkey;                   /* Toggles nonlinearity (set by nonlin)
-                                  *  -1 => Linearized PBE
-                                  *   0 => Nonlinear PBE with capped sinh 
-                                  *        term [default]
-                                  *  >1 => Polynomial approximation to sinh, 
-                                  *        note that ipkey must be odd       */
+    int nrwk;            /**< Real work storage */
+    int niwk;            /**< Integer work storage */
+    int narr;            /**< Array work storage */
+    int ipkey;           /**< Toggles nonlinearity (set by nonlin)
+                              -  -1: Linearized PBE
+                              -   0: Nonlinear PBE with capped sinh 
+                                     term [default]
+                              -  >1: Polynomial approximation to sinh, 
+                                     note that ipkey must be odd  */
 
     /* ********** PARAMETERS WITH DEFAULT VALUES ********** */
-    double xcent, ycent, zcent;  /* Grid center [0, 0, 0]  */
-    double errtol;               /* Desired error tolerance [default = 1e-9] */
-    int itmax;                   /* Maximum number of iters [default = 100] */
-    int istop;                   /* Stopping criterion [default = 1]
-                                  *   0 => residual
-                                  *   1 => relative residual
-                                  *   2 => diff
-                                  *   3 => errc
-                                  *   4 => errd
-                                  *   5 => aerrd */
-    int iinfo;                   /* Runtime status messages [default = 1]
-                                  *   0 => none
-                                  *   1 => some
-                                  *   2 => lots
-                                  *   3 => more */
-    int bcfl;                    /* Boundary condition method [default = 1]
-                                  *   0 => zero boundary conditions
-                                  *   1 => boundary condition approximated by
-                                  *        single Debye-Huckel sphere for
-                                  *        entire molecule
-                                  *   2 => boundary condition approximated by 
-                                  *        Debye-Huckel spheres for each atom 
-                                  *   4 => boundary condition determined from 
-                                  *        previously calculated solution 
-                                  *        (i.e., for focusing calculations)
-                                  */
-    int key;                     /* Print solution to file [default = 0] 
-                                  *   0 => no
-                                  *   1 => yes */
-    int iperf;                   /* Analysis of the operator [default = 0]
-                                  *   0 => no
-                                  *   1 => condition number
-                                  *   2 => spectral radius
-                                  *   3 => cond. number & spectral radius */
-    int meth;                    /* Solution method [default = 2]
-                                  *   0 => conjugate gradient multigrid
-                                  *   1 => newton
-                                  *   2 => multigrid
-                                  *   3 => conjugate gradient
-                                  *   4 => sucessive overrelaxation
-                                  *   5 => red-black gauss-seidel
-                                  *   6 => weighted jacobi
-                                  *   7 => richardson */
-    int mgkey;                   /* Multigrid method [default = 0]
-                                  *   0 => variable v-cycle
-                                  *   1 => nested iteration */
-    int nu1;                     /* Number of pre-smoothings [default = 2] */
-    int nu2;                     /* Number of post-smoothings [default = 2] */
-    int mgsmoo;                  /* Smoothing method [default = 1]
-                                  *   0 => weighted jacobi
-                                  *   1 => gauss-seidel
-                                  *   2 => SOR
-                                  *   3 => richardson
-                                  *   4 => cghs */
-    int mgprol;                  /* Prolongation method [default = 0]
-                                  *   0 => trilinear
-                                  *   1 => operator-based
-                                  *   2 => mod. operator-based */
-    int mgcoar;                  /* Coarsening method [default = 2]
-                                  *   0 => standard
-                                  *   1 => harmonic
-                                  *   2 => galerkin */
-    int mgsolv;                  /* Coarse equation solve method [default = 1]
-                                  *   0 => cghs
-                                  *   1 => banded linpack */
-    int mgdisc;                  /* Discretization method [default = 0]
-                                  *   0 => finite volume
-                                  *   1 => finite element */
-    double omegal;               /* Linear relax parameter [default = 8e-1] */
-    double omegan;               /* Nonlin relax parameter [default = 9e-1] */
-    int irite;                   /* FORTRAN output unit [default = 8] */
-    int ipcon;                   /* Preconditioning method [default = 3]
-                                  *   0 => diagonal
-                                  *   1 => ICCG 
-                                  *   2 => ICCGDW
-                                  *   3 => MICCGDW
-                                  *   4 => none */
-    double xlen, ylen, zlen;     /* Domain dimensions */
-    double xmin, ymin, zmin;     /* Domain dimensions */
-    double xmax, ymax, zmax;     /* Domain dimensions */
-} Vpmgp;
+    double xcent;        /**< Grid x center [0]  */
+    double ycent;        /**< Grid y center [0]  */
+    double zcent;        /**< Grid z center [0]  */
+    double errtol;       /**< Desired error tolerance [default = 1e-9] */
+    int itmax;           /**< Maximum number of iters [default = 100] */
+    int istop;           /**< Stopping criterion [default = 1]
+                              - 0: residual
+                              - 1: relative residual
+                              - 2: diff
+                              - 3: errc
+                              - 4: errd
+                              - 5: aerrd */
+    int iinfo;           /**< Runtime status messages [default = 1]
+                              - 0: none
+                              - 1: some
+                              - 2: lots
+                              - 3: more */
+    int bcfl;            /**< Boundary condition method [default = 1]
+                              -   0: zero boundary conditions
+                              -   1: boundary condition approximated by
+                                      single Debye-Huckel sphere for
+                                      entire molecule
+                              -   2: boundary condition approximated by 
+                                      Debye-Huckel spheres for each atom 
+                              -   4: boundary condition determined from 
+                                      previously calculated solution 
+                                      (i.e., for focusing calculations) */
+    int key;             /**< Print solution to file [default = 0] 
+                              -   0: no
+                              -   1: yes */
+    int iperf;           /**< Analysis of the operator [default = 0]
+                              -   0: no
+                              -   1: condition number
+                              -   2: spectral radius
+                              -   3: cond. number & spectral radius */
+    int meth;            /**< Solution method [default = 2]
+                              -   0: conjugate gradient multigrid
+                              -   1: newton
+                              -   2: multigrid
+                              -   3: conjugate gradient
+                              -   4: sucessive overrelaxation
+                              -   5: red-black gauss-seidel
+                              -   6: weighted jacobi
+                              -   7: richardson */
+    int mgkey;           /**< Multigrid method [default = 0]
+                              -   0: variable v-cycle
+                              -   1: nested iteration */
+    int nu1;             /**< Number of pre-smoothings [default = 2] */
+    int nu2;             /**< Number of post-smoothings [default = 2] */
+    int mgsmoo;          /**< Smoothing method [default = 1]
+                              -   0: weighted jacobi
+                              -   1: gauss-seidel
+                              -   2: SOR
+                              -   3: richardson
+                              -   4: cghs */
+    int mgprol;          /**< Prolongation method [default = 0]
+                              -   0: trilinear
+                              -   1: operator-based
+                              -   2: mod. operator-based */
+    int mgcoar;          /**< Coarsening method [default = 2]
+                              -   0: standard
+                              -   1: harmonic
+                              -   2: galerkin */
+    int mgsolv;          /**< Coarse equation solve method [default = 1]
+                              -   0: cghs
+                              -   1: banded linpack */
+    int mgdisc;          /**< Discretization method [default = 0]
+                              -   0: finite volume
+                              -   1: finite element */
+    double omegal;       /**< Linear relax parameter [default = 8e-1] */
+    double omegan;       /**< Nonlin relax parameter [default = 9e-1] */
+    int irite;           /**< FORTRAN output unit [default = 8] */
+    int ipcon;           /**< Preconditioning method [default = 3]
+                              -   0: diagonal
+                              -   1: ICCG 
+                              -   2: ICCGDW
+                              -   3: MICCGDW
+                              -   4: none */
+    double xlen;        /**< Domain x length */
+    double ylen;        /**< Domain y length */
+    double zlen;        /**< Domain z length */
+    double xmin;        /**< Domain lower x corner */
+    double ymin;        /**< Domain lower y corner */
+    double zmin;        /**< Domain lower z corner */
+    double xmax;        /**< Domain upper x corner */
+    double ymax;        /**< Domain upper y corner */
+    double zmax;        /**< Domain upper z corner */
+};
+
+/** @typedef Vpmgp
+ *  @ingroup Vpmgp
+ *  @brief   Declaration of the Vpmgp class as the Vpmgp structure
+ */
+typedef struct Vpmgp Vpmgp;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmgp: Inlineable methods (vpmgp.c)
@@ -176,11 +206,56 @@ typedef struct Vpmgp {
 // Class Vpmgp: Non-Inlineable methods (vpmgp.c)
 /////////////////////////////////////////////////////////////////////////// */
 
+/** @brief   Construct PMG parameter object and initialize to default values
+ *  @ingroup Vpmgp
+ *  @author  Nathan Baker
+ *  @param   nx    Number of x grid points
+ *  @param   ny    Number of y grid points
+ *  @param   nz    Number of z grid points
+ *  @param   nlev  Number of levels in multigrid hierarchy
+ *  @param   hx    Grid spacing in x direction
+ *  @param   hy    Grid spacing in y direction
+ *  @param   hzed  Grid spacing in z direction
+ *  @param   nonlin  Nonlinearity flag
+ *                   - 0: Linearized PBE
+ *                   - 1: Nonlinear PBE
+ *  @returns Newly allocated and initialized Vpmgp object
+ */
 VEXTERNC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, 
   double hx, double hy, double hzed, int nonlin);
+
+/** @brief   FORTRAN stub to construct PMG parameter object and initialize to
+ *           default values 
+ *  @ingroup Vpmgp
+ *  @author  Nathan Baker
+ *  @param   thee  Newly allocated PMG object
+ *  @param   nx    Number of x grid points
+ *  @param   ny    Number of y grid points
+ *  @param   nz    Number of z grid points
+ *  @param   nlev  Number of levels in multigrid hierarchy
+ *  @param   hx    Grid spacing in x direction
+ *  @param   hy    Grid spacing in y direction
+ *  @param   hzed  Grid spacing in z direction
+ *  @param   nonlin  Nonlinearity flag
+ *                   - 0: Linearized PBE
+ *                   - 1: Nonlinear PBE
+ *  @returns Initialized Vpmgp object
+ */
 VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev, 
   double hx, double hy, double hzed, int nonlin);
+
+/** @brief   Object destructor
+ *  @ingroup Vpmgp
+ *  @author  Nathan Baker
+ *  @param   thee  Pointer to memory location for Vpmgp object
+ */
 VEXTERNC void Vpmgp_dtor(Vpmgp **thee);
+
+/** @brief   FORTRAN stub for object destructor
+ *  @ingroup Vpmgp
+ *  @author  Nathan Baker
+ *  @param   thee  Pointer to Vpmgp object
+ */
 VEXTERNC void Vpmgp_dtor2(Vpmgp *thee);
 
 #endif    /* ifndef _VPMGP_H_ */
