@@ -117,7 +117,7 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) {
 VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
-    int iatom, isimp, jsimp;
+    int iatom, jatom, isimp, jsimp;
     int gotSimp;
     /* Atomic information */
     Vatom *atom;
@@ -136,11 +136,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     VASSERT( (thee->nsqm = Vram_ctor(thee->nsimp, sizeof(int))) != VNULL);
     for (isimp=0; isimp<thee->nsimp; isimp++) (thee->nsqm)[isimp] = 0;
 
-    /* Count the number of charges per simplex.
-     * IF AN ATOM IS IN MORE THAN ONE SIMPLEX, COUNT THE TOTAL NUMBER OF
-     * SIMPLICES IT RESIDES IN AND DIVIDE THE ATOMIC CHARGE BY THAT NUMBER.
-     * WE ASSUME THAT SIMPLICES ARE NEVER UNREFINED, SO ONCE AN ATOM'S
-     * CHARGE IS DIVIDED IT WILL NEVER BE REINTEGRATED */
+    /* Count the number of charges per simplex. */
     for (iatom=0; iatom<thee->natom; iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
         position = Vatom_getPosition(atom);
@@ -151,18 +147,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
                 (thee->nsqm)[isimp]++;
                 gotSimp = 1;
              }
-        }
-        if (!gotSimp) {
-            Vnm_print(2, "Vcsm_init: Atom #%d (%4.3f, %4.3f, %4.3f) was not located in a simplex!\n", 
-                iatom, position[0], position[1], position[2]);
-            Vnm_print(2, "Vcsm_init: Confirming...\n");
-            for (isimp=0; isimp<thee->nsimp; isimp++) {
-                simplex = Vgm_SS(thee->gm, isimp);
-                if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                    Vnm_print(2, "Vcsm_init:     Atom %d IN simplex %d!!!\n", iatom, isimp);
-                 } else Vnm_print(2, "Vcsm_init:     Atom %d not in simplex %d\n", iatom, isimp);
-            }
-            VASSERT(0);
         }
     }
 
@@ -191,6 +175,43 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     }
 
     thee->msimp = thee->nsimp;
+
+    /* Allocate space for the charge-simplex map */
+    VASSERT( (thee->qsm = Vram_ctor(thee->natom, sizeof(int *))) != VNULL);
+    VASSERT( (thee->nqsm = Vram_ctor(thee->natom, sizeof(int))) != VNULL);
+    for (iatom=0; iatom<thee->natom; iatom++) (thee->nqsm)[iatom] = 0;
+    /* Loop through the list of simplices and count the number of times
+     * each atom appears */
+    for (isimp=0; isimp<thee->nsimp; isimp++) {
+        for (iatom=0; iatom<thee->nsqm[isimp]; iatom++) {
+            jatom = thee->sqm[isimp][iatom];
+            thee->nqsm[jatom]++;
+        }
+    }
+    /* Do a TIME-CONSUMING SANITY CHECK to make sure that each atom was
+     * placed in at simplex */
+    for (iatom=0; iatom<thee->natom; iatom++) {
+        if (thee->nqsm[iatom] == 0) {
+            Vnm_print(2,"Vcsm_init: atom %d not placed in simplex!\n");
+            VASSERT(0);
+        }
+    }
+    /* Allocate the appropriate amount of space for each entry in the
+     * charge-simplex map and clear the counter for re-use in assignment */
+    for (iatom=0; iatom<thee->natom; iatom++) {
+        VASSERT(((thee->qsm)[iatom] = Vram_ctor((thee->nqsm)[iatom],
+                                            sizeof(int)) ) != VNULL);
+        thee->nqsm[iatom] = 0;
+    }
+    /* Assign the simplices to atoms */
+    for (isimp=0; isimp<thee->nsimp; isimp++) {
+        for (iatom=0; iatom<thee->nsqm[isimp]; iatom++) {
+            jatom = thee->sqm[isimp][iatom];
+            thee->qsm[jatom][thee->nqsm[jatom]] = isimp;
+            thee->nqsm[jatom]++;
+        }
+    }
+
     thee->initFlag = 1;
 }
 
@@ -327,6 +348,57 @@ VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getNumberSimplices
+//
+// Purpose:  Get the number of simplices associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return (thee->nqsm)[iatom];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getSimplex
+//
+// Purpose:  Get simplex isimp associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return Vgm_SS(thee->gm, (thee->qsm)[iatom][isimp]);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getSimplexIndex
+//
+// Purpose:  Get simplex isimp associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return (thee->qsm)[iatom][isimp];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_update
 //
 // Purpose:  Update the charge-vertex and vertex-charge maps after
@@ -364,21 +436,12 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     while (!gotMem) {
         if (isimp > thee->msimp) {
             isimp = 2 * isimp;
-       
-#if 0
-            printf("WARNING: USING SYSTEM REALLOC\n");
-            VASSERT( (thee->nsqm =
-               realloc(thee->nsqm, isimp * sizeof(int))) != VNULL);
-            VASSERT( (thee->sqm =
-               realloc(thee->sqm, isimp * sizeof(int *))) != VNULL);
-#else
             VASSERT( (thee->nsqm = 
               Vram_realloc((Vram **)&(thee->nsqm), thee->msimp, sizeof(int), 
               isimp)) != VNULL); 
             VASSERT( (thee->sqm = 
               Vram_realloc((Vram **)&(thee->sqm), thee->msimp, sizeof(int *), 
               isimp)) != VNULL); 
-#endif
             thee->msimp = isimp;
         } else gotMem = 1;
     }

@@ -111,6 +111,9 @@ VEXTERNC Vgm*    Vcsm_getVgm(Vcsm *thee);
 VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
 VEXTERNC Vatom*  Vcsm_getAtom(Vcsm *thee, int iatom, int isimp);
 VEXTERNC int     Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
+VEXTERNC int     Vcsm_getNumberSimplices(Vcsm *thee, int iatom);
+VEXTERNC SS*     Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom);
+VEXTERNC int     Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom);
 
 VEXTERNC void    Vcsm_init(Vcsm *thee);
 VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);
