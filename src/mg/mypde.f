@@ -103,7 +103,7 @@ c* *********************************************************************
       return
       end
 
-
+ 
       function c_scal(coef,u,ipkey)
 c* *********************************************************************
 c* purpose:
@@ -131,6 +131,10 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ charge
       common /MYPDEF/ kappa
       common /MYPDEF/ nion
+
+      call vnmprt(2, 'MYPDEF: C_SCAL NOT SUPPORTED! USE NEWTON SOLVER',
+     2     47)
+      stop
 
 c*    print *, 'HELLO FROM C_SCAL'
       c_scal2 = 0.0
@@ -218,6 +222,10 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ kappa
       common /MYPDEF/ nion
 
+      call vnmprt(2, 'MYPDEF: DC_SCAL NOT SUPPORTED! USE NEWTON SOLVER',
+     2    48)
+      stop
+
       dc_scal2 = 0.0
 c*    print *, 'HELLO FROM DC_SCAL'
 
@@ -303,7 +311,7 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ charge
       common /MYPDEF/ kappa
       common /MYPDEF/ nion
-
+ 
 c*    print *, 'HELLO FROM C_VEC'
 
 c*
