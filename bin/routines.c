@@ -1098,7 +1098,7 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
-    strlenmax = VMAX_ARGLEN-14;
+    strlenmax = int(VMAX_ARGLEN)-14;
     if (strlen(pbeparm->writematstem) > strlenmax) {
         Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
           pbeparm->writematstem, strlenmax);
@@ -1107,7 +1107,7 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     }
     sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
 #else
-    strlenmax = VMAX_ARGLEN-1;
+    strlenmax = int(VMAX_ARGLEN)-1;
     if (strlen(pbeparm->writematstem) > strlenmax) {
         Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
           pbeparm->writematstem, strlenmax);
