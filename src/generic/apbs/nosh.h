@@ -75,6 +75,35 @@
 #define NOSH_MAXPOP 20
 
 /**
+ * @brief  Molecule file format types
+ * @ingroup NOsh
+ */
+enum NOsh_MolFormat {
+    NMF_PQR=0,  /**< PQR format */
+    NMF_PDB=1  /**< PDB format */
+};
+
+/**
+ * @brief  Declare NOsh_MolFormat type
+ * @ingroup  NOsh
+ */
+typedef enum NOsh_MolFormat NOsh_MolFormat;
+
+/**
+ * @brief  Parameter file format types
+ * @ingroup NOsh
+ */
+enum NOsh_ParmFormat {
+    NPF_FLAT=0  /**< Flat-file format */
+};
+
+/**
+ * @brief  Declare NOsh_ParmFormat type
+ * @ingroup  NOsh
+ */
+typedef enum NOsh_ParmFormat NOsh_ParmFormat;
+
+/**
  *  @struct  NOsh_calc
  *  @ingroup NOsh
  *  @author  Nathan Baker
@@ -138,9 +167,12 @@ struct NOsh {
 					  * calculation-specific operation.  It
 					  * points to a specific entry in the
 					  * calc array. */
-    int nmol;                            /**< Number of molecules */
+    int nmol;  /**< Number of molecules */
     char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
-    int molfmt[NOSH_MAXMOL];            /**< Mol files formats (0=>PQR) */
+    NOsh_MolFormat molfmt[NOSH_MAXMOL];  /**< Mol files formats */
+    int gotparm;  /**< Either have (1) or don't have (0) parm */
+    char parmpath[VMAX_ARGLEN];   /**< Paths to parm file */
+    NOsh_ParmFormat parmfmt;  /**< Parm file format */
     int ndiel;                           /**< Number of dielectric maps */
     char dielXpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to x-shifted 
                                                * dielectric map files */
