@@ -1,4 +1,16 @@
 #############################################################################
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.8       01-29-01
+#############################################################################
+This version is a public (beta) release candidate and includes the following
+bug-fixes:
+  * Added warning to parallel focusing 
+  * Added several test cases and validated the current version of the code for
+    all but one (see examples/README.html)
+  * Fixed atom partitioning bug and external energy evaluation during focusing
+You should definitely upgrade, the previous versions may produce unreliable
+results.
+
+#############################################################################
 PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.7       12-13-01
 #############################################################################
 This version is a public (beta) release candidate and includes the following

@@ -28,6 +28,12 @@ $Id$
   <li>Description:  Calculate solvation energies for ions of various sizes and
       compare to the analytical results.
   </ul>
+<li>FKBP
+  <ul>
+  <li>Source: Jung-Hsin Lin
+  <li>Description:  Binding of various (small) ligands to FKBP.  Analogous to
+      HCA binding case (except it works).
+  </ul>
 <li>hca-bind
   <ul>
   <li>Source:  UHBD 
@@ -47,6 +53,11 @@ $Id$
   <li>Description:  Calculate forces and energies for two charged ions and
       various separations.
   </ul>
+<li>ion-protein
+  <ul>
+  <li>Source:  Dave Sept
+  <li>Description:  Calculate energy of placing an ion near a macromolecule
+  </ul>
 <li>pka-lig
   <ul>
   <li>Source:  Chung Wong
@@ -56,12 +67,6 @@ $Id$
   <ul>
   <li>Source:  Nathan Baker
   <li>Description:  See how well we do reproducing Coulomb's law.
-  </ul>
-<li>rxnfld
-  <ul>
-  <li>Source:  UHBD
-  <li>Description:  Determine the interaction energy between a point charge and
-      a big dielectric sphere.
   </ul>
 <li>solv
   <ul>
@@ -76,17 +81,34 @@ $Id$
 <th>APBS Version</th>
 <th>actin-dimer</th>
 <th>born</th>
+<th>FKBP</th>
 <th>hca-bind</th>
 <th>ionize</th>
+<th>ion-protein</th>
 <th>pka-lig</th>
 <th>point-pmf</th>
-<th>rxnfld</th>
 <th>solv</th>
 </tr>
 <tr>
 <td>UHBD/<font color="blue">Analytical</font></td>
 <td>+106.7 kJ/mol<br>(1.00 A res., NPBE)</td>
 <td><font color="blue">-228.57 kJ/mol<br>(3 A sphere)</font></td>
+<td>2-level focusing to 0.225 A, VdW surface:
+  <ul>
+  <li>1D7H-DMSO:
+    <ul>
+    <li> DGbind(solv.):  -19.097 kJ/mol
+    <li> DGbind(Coul.):   15.103 kJ/mol
+    <li> DGbind:           3.994 kJ/mol
+    </ul>
+  <li>1D7I-DSS:
+    <ul>
+    <li> DGbind(solv.):   16.231 kJ/mol
+    <li> DGbind(Coul.):  -11.975 kJ/mol
+    <li> DGbind:           4.256 kJ/mol
+    </ul>
+  </ul>
+</td>
 <td>
   2-level focusing to 0.225 A:
   <ul>
@@ -105,6 +127,11 @@ $Id$
   <li>IONIZATION ENERGY:  -471.61 kJ/mol
   </ul>
 </td>
+<td>0.5 A resolution, NPBE, mol-based surface:
+  <ul>
+  <li> 18.39 kJ/mol (prot. diel. of 12)
+  <li> <font color="red">???</font> (prot. diel. of 2)
+  </ul>
 <td>0.300 A resolution
   <ul>
   <li> 8.876 kJ/mol (vdw-based dielectric)
@@ -120,7 +147,6 @@ $Id$
     </ul>
     </font>
 </td>
-<td></td>
 <td>0.250 A grid spacing
   <ul>
   <li> Methanol:  -35.595 kJ/mol
@@ -131,8 +157,8 @@ $Id$
 <tr>
 <td>CURRENT</td>
 <td> <ul>
-     <li> Parallel (8 proc, ):
-     <li> Sequential:
+     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):  91.67 kJ/mol
+     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.84 kJ/mol
      </ul>
 </td>
 <td> <ul>
@@ -142,14 +168,35 @@ $Id$
           srfm 1)
      </ul>
 </td>
-<td> 2-level focus to 0.225, srfm 1, VdW surf:
+<td>2-level focusing to 0.225 A, VdW surface:
+  <ul>
+  <li>1D7H-DMSO:
     <ul>
-    <li> Complex solv. G:       
-    <li> HCA solv. G:           
-    <li> Acetazolamide solv. G: 
-    <li> Coulomb G (analytic):   -535.27 kJ/mol
-    <li> BINDING ENERGY: 
+    <li> DGbind(solv.):  -18.591 kJ/mol
+    <li> DGbind(Coul.):   15.103 kJ/mol
+    <li> DGbind:           3.488 kJ/mol
     </ul>
+  <li>1D7I-DSS:
+    <ul>
+    <li> DGbind(solv.):   15.210 kJ/mol
+    <li> DGbind(Coul.):  -11.975 kJ/mol
+    <li> DGbind:           3.235 kJ/mol
+    </ul>
+  </ul>
+</td>
+<td> 
+<font color="red">
+2-level focus to 0.225, srfm 1, VdW surf:
+    <ul>
+    <li> Complex solv. G:       -8940.26 kJ/mol
+    <li> HCA solv. G:           -9243.06 kJ/mol
+    <li> Acetazolamide solv. G: -173.96 kJ/mol
+    <li> Coulomb G (analytic):   -535.27 kJ/mol
+    <li> BINDING ENERGY:          -58.51 kJ/mol
+    </ul>
+<br>
+I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
+</font>
 </td>
 <td>3-level focus to 0.094 A spacing (srfm 0): 
   <ul>
@@ -158,6 +205,11 @@ $Id$
   <li> Proton solv. G:  -290.86 kJ/mol
   <li> IONIZATION ENERGY:  -463.54 kJ/mol
 </td>
+<td> 0.53 A resolution, NPBE:
+  <ul>
+  <li> 18.90 kJ/mol (prot. diel. of 12)
+  <li> 21.45 kJ/mol (prot. diel. of 2)
+  </ul>
 <td> 2-level focusing to 0.250 A spacing:
   <ul>
   <li>  6.65 kJ/mol (vdw-based dielectric)
@@ -171,7 +223,6 @@ $Id$
     <li> 4.430  kJ/mol (4 A dist)
     </ul>
 </td>
-<td></td>
 <td> 0.250 A spacing, zero probe radius, srfm 1
   <ul>
   <li> Methanol:  -36.222 kJ/mol
