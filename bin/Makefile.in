@@ -51,8 +51,6 @@ top_srcdir = @top_srcdir@
 VPATH = @srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
-
-bindir = @bindir@
 sbindir = @sbindir@
 libexecdir = @libexecdir@
 datadir = @datadir@
@@ -149,6 +147,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
+bindir = ${prefix}/bin/${fetk_cpu_vendor_os}
 bin_PROGRAMS = apbs
 apbs_SOURCES = main.c mypde.f
 apbs_LDADD = -lapbs @lib_list@
