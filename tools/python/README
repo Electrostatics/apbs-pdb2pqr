@@ -1,0 +1,49 @@
+This directory contains SWIG interfaces for wrapping APBS routines into Python. README created 9/26/2002 by Todd Dolinsky (todd@ccb.wustl.edu)
+
+1. Check your PYTHONPATH environment variable. Make sure it looks like
+     /usr/lib/pythonX.Y:/usr/lib/pythonX.Y/lib-tk:\
+     /usr/lib/pythonX.Y/lib-dynload:/usr/lib/pythonX.Y/site-packages:\
+     /usr/lib/pythonX.Y/site-packages/Numeric
+
+     where X.Y is the version of Python you wish to run, i.e. 1.5 or 2.2.
+
+2. Make sure you have a working SWIG compiled correctly.  The Makefile
+      currently works with SWIG 1.1; Version 1.3 is untested.
+
+3. Make sure you configured APBS with the --disable-inline and --disable-fetk
+    options and did a (successful) 'make all install'
+
+4. The Makefile assumes you have installed Python in a standard location,
+    namely usr/include/pythonX.Y   .  If not, edit the CINCLUDES flag in
+    the Makefile to the path where the Python header files are located.
+
+5. Run the Makefile:
+
+	A. The current default Python version is Python1.5.  You can change
+	  this by changing the PYTHONRELEASE variable in the Makefile.
+	
+	B. To compile, simply type "make"
+
+	C. If you have multiple versions of Python installed, you can 
+	  change the PYTHONRELEASE variable on the command line instead
+	  of editing the Makefile each time.  Make sure the PYTHONPATH
+          (as in 1.) is correctly set, and then run
+
+		make PYTHONRELEASE=X.Y
+
+	  where X.Y is the version of Python you wish to compile for
+
+	Note: You may need to hand-edit the FORTRAN compiler option in the
+		LDSHARED variable in the Makefile
+
+	D. If all goes well, a SWIG-generated C file is created in the
+           directory.
+
+6.  To run the Python wrappers, type
+
+	pythonX main.py apbs.in
+
+	where X is version 1 or 2, whatever version you intend to run.
+
+
+
