@@ -2408,6 +2408,7 @@ trap 'rm -fr `echo "
     tst/vacc/Makefile
     tst/vpbm/Makefile
     tst/vpee/Makefile
+    tst/vmetis/Makefile
 
     work/Makefile
     work/bin/Makefile
@@ -2529,6 +2530,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     tst/vacc/Makefile
     tst/vpbm/Makefile
     tst/vpee/Makefile
+    tst/vmetis/Makefile
 
     work/Makefile
     work/bin/Makefile
