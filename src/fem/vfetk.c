@@ -409,10 +409,10 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     fflush(stdout);
     if (Bmat_sluFactor(A) == 0) {
         Vnm_print(2, "Vfetk_lnDet:  Error factoring matrix!\n");
-        Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", A->state);
+        Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", A->AG->state);
         return 0.0;
     }
-    slu = A->slu;
+    slu = A->AG->slu;
 
     lndet = Zslu_lnDet(slu);
 

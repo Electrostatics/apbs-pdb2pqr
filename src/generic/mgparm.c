@@ -242,7 +242,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
 	       /* We'd like to have at least VMGNLEV levels in the multigrid
 		* hierarchy.  This means that the dimension needs to be
 		* c*2^VMGNLEV + 1, where c is an integer. */
-                if (tnlev[i] < VMGNLEV) {
+                if ((tdime[i] > 17) && (tnlev[i] < VMGNLEV)) {
                     Vnm_print(2, "NOsh:  Bad dime[%d]  = %d (%d nlev)!\n",
                       i, tdime[i], tnlev[i]);
                     ti = (int)(tdime[i]/VPOW(2.,(VMGNLEV+1)));
