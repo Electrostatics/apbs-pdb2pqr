@@ -10,5 +10,4 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
 always_built_SUBDIRS = apbs
 SUBDIRS = $(always_built_SUBDIRS) .
-AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 

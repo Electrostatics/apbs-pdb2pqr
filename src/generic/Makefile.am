@@ -18,7 +18,6 @@ libapbsgen_la_SOURCES  = nosh.c mgparm.c mgparse.c femparm.c pbeparm.c \
                          vstring.c vparam.c femparse.c
 INCLUDES           = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg -I${top_srcdir}/src/aaa_inc @inc_list@ 
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
-AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 
 
 all-local:

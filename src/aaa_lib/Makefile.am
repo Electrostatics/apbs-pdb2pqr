@@ -25,5 +25,4 @@ libapbs_la_LDFLAGS = -version-info ${APBS_VERSION}
 
 INCLUDES         = -I${top_srcdir}/src/generic -I${top_srcdir}/src/mg -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS        = @wall_pedantic@
-AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 

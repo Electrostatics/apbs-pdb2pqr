@@ -114,17 +114,16 @@ dnl Test for the use of the -nofor_main option used by Alpha FORTRAN
 dnl
 dnl   by Nathan Baker 
 dnl
-AC_DEFUN(AC_F77_NOFORMAIN,
-[
+AC_DEFUN(AC_F77_NOFORMAIN, [
 AC_REQUIRE([AC_PROG_CC])
 AC_REQUIRE([AC_PROG_F77])
 dnl AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
 AC_REQUIRE([AC_CANONICAL_HOST])
-AC_MSG_CHECKING([if Fortran 77 compiler accepts -nofor_main])
+dnl First, compile the C code with the main routine
 cat > noformain.c <<EOF
-      int main(int argc, char **argv) {
-          return 0;
-      }
+    int main(int argc, char **argv) {
+        return 0;
+    }
 EOF
 AC_LANG_SAVE
 AC_LANG_C
@@ -137,19 +136,30 @@ else
   rm -f noformain*
   AC_MSG_ERROR(failed to compile test C program)
 fi
+AC_MSG_CHECKING([if Fortran 77 compiler accepts -nofor_main])
 AC_LANG_FORTRAN77
-ac_use_nfm=""
 myflibs="$FLIBS"
 ac_try='$F77 -nofor_main $FFLAGS $FLIBS noformain.o -o noformain 1>&AC_FD_CC'
 if AC_TRY_EVAL(ac_try); then
   ac_try=""
   AC_MSG_RESULT([yes])
-  FLIBS="$FLIBS -nofor_main"
-  AC_SUBST(FLIBS)
+  AC_MSG_CHECKING([if Fortran 77 compilers requires -nofor_main])
+  AC_LANG_FORTRAN77
+  myflibs="$FLIBS"
+  ac_try='$F77 $FFLAGS $FLIBS noformain.o -o noformain
+  1>&AC_FD_CC'
+  if AC_TRY_EVAL(ac_try); then
+    ac_try=""     
+    AC_MSG_RESULT([no])
+  else
+    AC_MSG_RESULT([yes])
+    FFLAGS="$FFLAGS -nofor_main"
+    AC_SUBST(FFLAGS)
+  fi
 else
-  rm -f noformain*
   AC_MSG_RESULT([no])
 fi
+rm -f noformain*
 AC_LANG_RESTORE
 
 ])
@@ -4680,4 +4690,5 @@ else
 fi
 AC_MSG_RESULT([$SED])
 ])
+
 
