@@ -706,11 +706,9 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 
     Vnm_tprint(1, "Destroying multigrid structures.\n");
 
-    for (i=0; i<nosh->ncalc; i++) {
-        Vpbe_dtor(&(pbe[i]));
-        Vpmg_dtor(&(pmg[i]));
-        Vpmgp_dtor(&(pmgp[i]));
-    }
+    Vpbe_dtor(&(pbe[nosh->ncalc-1]));
+    Vpmg_dtor(&(pmg[nosh->ncalc-1]));
+    Vpmgp_dtor(&(pmgp[nosh->ncalc-1]));
 
 }
 
