@@ -46,7 +46,6 @@
 
 #include "apbscfg.h"
 #include "apbs/vmgrid.h"
-#include "apbs/vstring.h"
 
 VEMBED(rcsid="$Id$")
 
