@@ -760,9 +760,10 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 //
 // Purpose:  Calculate and write out forces for MG calculation
 //
-// Args:     com         communications object
+// Args:     mem         Memory management
 //           nosh        stores input file information
 //           pbeparm     PBE parameters
+//           pmg         Vpmg object for calculation
 //           nforce      0 => no forces, 1 => net forces, >1 => number of
 //                       forces (1 per atom)
 //           atomForce   pointer to array of force objects
