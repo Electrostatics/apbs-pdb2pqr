@@ -530,6 +530,11 @@ else
 fi
 
 
+
+
+
+
+
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
   if test -f $ac_dir/install-sh; then
@@ -577,7 +582,7 @@ else { echo "configure: error: can not run $ac_config_sub" 1>&2; exit 1; }
 fi
 
 echo $ac_n "checking host system type""... $ac_c" 1>&6
-echo "configure:581: checking host system type" >&5
+echo "configure:586: checking host system type" >&5
 
 host_alias=$host
 case "$host_alias" in
@@ -598,7 +603,7 @@ host_os=`echo $host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$host" 1>&6
 
 echo $ac_n "checking target system type""... $ac_c" 1>&6
-echo "configure:602: checking target system type" >&5
+echo "configure:607: checking target system type" >&5
 
 target_alias=$target
 case "$target_alias" in
@@ -616,7 +621,7 @@ target_os=`echo $target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 echo "$ac_t""$target" 1>&6
 
 echo $ac_n "checking build system type""... $ac_c" 1>&6
-echo "configure:620: checking build system type" >&5
+echo "configure:625: checking build system type" >&5
 
 build_alias=$build
 case "$build_alias" in
@@ -638,15 +643,6 @@ test "$host_alias" != "$target_alias" &&
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
 
-echo $ac_n "checking host CPU""... $ac_c" 1>&6
-echo "configure:643: checking host CPU" >&5
-echo "$ac_t""${host_cpu}" 1>&6
-echo $ac_n "checking host operating system""... $ac_c" 1>&6
-echo "configure:646: checking host operating system" >&5
-echo "$ac_t""${host_os}" 1>&6
-echo $ac_n "checking host vendor""... $ac_c" 1>&6
-echo "configure:649: checking host vendor" >&5
-echo "$ac_t""${host_vendor}" 1>&6
 fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
 
 
@@ -662,7 +658,7 @@ fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:666: checking for a BSD compatible install" >&5
+echo "configure:662: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -715,7 +711,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 echo $ac_n "checking whether build environment is sane""... $ac_c" 1>&6
-echo "configure:719: checking whether build environment is sane" >&5
+echo "configure:715: checking whether build environment is sane" >&5
 # Just in case
 sleep 1
 echo timestamp > conftestfile
@@ -772,7 +768,7 @@ test "$program_suffix" != NONE &&
 test "$program_transform_name" = "" && program_transform_name="s,x,x,"
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:776: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:772: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -818,7 +814,7 @@ EOF
 
 missing_dir=`cd $ac_aux_dir && pwd`
 echo $ac_n "checking for working aclocal""... $ac_c" 1>&6
-echo "configure:822: checking for working aclocal" >&5
+echo "configure:818: checking for working aclocal" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -831,7 +827,7 @@ else
 fi
 
 echo $ac_n "checking for working autoconf""... $ac_c" 1>&6
-echo "configure:835: checking for working autoconf" >&5
+echo "configure:831: checking for working autoconf" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -844,7 +840,7 @@ else
 fi
 
 echo $ac_n "checking for working automake""... $ac_c" 1>&6
-echo "configure:848: checking for working automake" >&5
+echo "configure:844: checking for working automake" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -857,7 +853,7 @@ else
 fi
 
 echo $ac_n "checking for working autoheader""... $ac_c" 1>&6
-echo "configure:861: checking for working autoheader" >&5
+echo "configure:857: checking for working autoheader" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -870,7 +866,7 @@ else
 fi
 
 echo $ac_n "checking for working makeinfo""... $ac_c" 1>&6
-echo "configure:874: checking for working makeinfo" >&5
+echo "configure:870: checking for working makeinfo" >&5
 # Run test in a subshell; some versions of sh will print an error if
 # an executable is not found, even if stderr is redirected.
 # Redirect stdin to placate older versions of autoconf.  Sigh.
@@ -883,6 +879,10 @@ else
 fi
 
 
+ACLOCAL=":";
+AUTOCONF=":";
+AUTOMAKE=":";
+AUTOHEADER=":";
 
 
 
@@ -2825,37 +2825,37 @@ echo $ac_n "checking whether your environment defines FETK_INCLUDE""... $ac_c" 1
 echo "configure:2826: checking whether your environment defines FETK_INCLUDE" >&5
 if test -n "${FETK_INCLUDE}"; then
     echo "$ac_t""yes" 1>&6
-    hal_inc_path="-I${FETK_INCLUDE} ";
+    pal_inc_path="-I${FETK_INCLUDE} ";
 else
     echo "$ac_t""no" 1>&6
-    hal_inc_path="-I${HOME}/include ";
+    pal_inc_path="-I${HOME}/include ";
 fi
 
 echo $ac_n "checking whether your environment defines FETK_LIBRARY""... $ac_c" 1>&6
 echo "configure:2836: checking whether your environment defines FETK_LIBRARY" >&5
 if test -n "${FETK_LIBRARY}"; then
     echo "$ac_t""yes" 1>&6
-    hal_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+    pal_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
 else
     echo "$ac_t""no" 1>&6
-    hal_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    pal_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
 fi
 
 LDFLAGS_SAVE=${LDFLAGS};
 CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${hal_lib_path};
-CPPFLAGS=${hal_inc_path};
-hal_found="";
-ac_safe=`echo "hal/hal.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for hal/hal.h""... $ac_c" 1>&6
-echo "configure:2852: checking for hal/hal.h" >&5
+LDFLAGS=${pal_lib_path};
+CPPFLAGS=${pal_inc_path};
+pal_found="";
+ac_safe=`echo "pal/pal.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for pal/pal.h""... $ac_c" 1>&6
+echo "configure:2852: checking for pal/pal.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
 #line 2857 "configure"
 #include "confdefs.h"
-#include <hal/hal.h>
+#include <pal/pal.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
 { (eval echo configure:2862: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
@@ -2874,21 +2874,21 @@ rm -f conftest*
 fi
 if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  hal_found="yes";hal_inc="${hal_inc_path}"
+  pal_found="yes";pal_inc="${pal_inc_path}"
 else
   echo "$ac_t""no" 1>&6
-hal_found="";hal_inc=""
+pal_found="";pal_inc=""
 fi
 
-if test -n "${hal_found}"; then
-    echo $ac_n "checking for hal_link in -lhal""... $ac_c" 1>&6
-echo "configure:2886: checking for hal_link in -lhal" >&5
-ac_lib_var=`echo hal'_'hal_link | sed 'y%./+-%__p_%'`
+if test -n "${pal_found}"; then
+    echo $ac_n "checking for pal_link in -lpal""... $ac_c" 1>&6
+echo "configure:2886: checking for pal_link in -lpal" >&5
+ac_lib_var=`echo pal'_'pal_link | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lhal ${hal_lib_path}-lhal ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib}
+LIBS="-lpal ${pal_lib_path}-lpal ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib}
 ${nsl_lib} ${math_lib} $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 2895 "configure"
@@ -2896,10 +2896,10 @@ cat > conftest.$ac_ext <<EOF
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
     builtin and then its argument prototype would still apply.  */
-char hal_link();
+char pal_link();
 
 int main() {
-hal_link()
+pal_link()
 ; return 0; }
 EOF
 if { (eval echo configure:2906: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
@@ -2917,17 +2917,17 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  hal_found="yes";hal_lib="${hal_lib_path}-lhal"
+  pal_found="yes";pal_lib="${pal_lib_path}-lpal"
 else
   echo "$ac_t""no" 1>&6
-hal_found="";hal_lib=""
+pal_found="";pal_lib=""
 fi
 
 fi
-if test -z "${hal_found}"; then
-    { echo "configure: error: HAL libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
+if test -z "${pal_found}"; then
+    { echo "configure: error: PAL libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
 else
-    echo "$ac_t""HAL libraries AND headers were found ...rocking on..." 1>&6
+    echo "$ac_t""PAL libraries AND headers were found ...rocking on..." 1>&6
 fi
 
 LDFLAGS=${LDFLAGS_SAVE};
@@ -3002,7 +3002,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lmc ${mc_lib_path}-lmc ${hal_lib} ${mpi_lib} ${rl_lib} ${liberty_lib}
+LIBS="-lmc ${mc_lib_path}-lmc ${pal_lib} ${mpi_lib} ${rl_lib} ${liberty_lib}
 ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 3009 "configure"
@@ -3092,7 +3092,7 @@ if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   ac_save_LIBS="$LIBS"
-LIBS="-lmcx ${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${hal_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${thread_lib} ${math_lib} $LIBS"
+LIBS="-lmcx ${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${pal_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${thread_lib} ${math_lib} $LIBS"
 cat > conftest.$ac_ext <<EOF
 #line 3098 "configure"
 #include "confdefs.h"
@@ -3354,8 +3354,8 @@ s%@pedantic_ansi@%$pedantic_ansi%g
 s%@mpi_lib@%$mpi_lib%g
 s%@mpi_inc@%$mpi_inc%g
 s%@mpi_bin@%$mpi_bin%g
-s%@hal_lib@%$hal_lib%g
-s%@hal_inc@%$hal_inc%g
+s%@pal_lib@%$pal_lib%g
+s%@pal_inc@%$pal_inc%g
 s%@mc_lib@%$mc_lib%g
 s%@mc_inc@%$mc_inc%g
 s%@mcx_lib@%$mcx_lib%g
