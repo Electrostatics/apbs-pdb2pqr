@@ -3637,6 +3637,7 @@ trap 'rm -fr `echo "
     src/vpmg/Makefile
     src/vfetk/Makefile
     src/mgsh/Makefile
+    src/nosh/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
@@ -3810,6 +3811,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/vpmg/Makefile
     src/vfetk/Makefile
     src/mgsh/Makefile
+    src/nosh/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile

@@ -237,6 +237,18 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
         return 0;
     }
 
+    thee->center[0] = 0.;
+    thee->center[1] = 0.;
+    thee->center[2] = 0.;
+    thee->maxcrd[0] = -VLARGE;
+    thee->maxcrd[1] = -VLARGE;
+    thee->maxcrd[2] = -VLARGE;
+    thee->mincrd[0] = VLARGE;
+    thee->mincrd[1] = VLARGE;
+    thee->mincrd[2] = VLARGE;
+    thee->maxrad = 0.;
+    thee->charge = 0.;
+
     /* Now we read some lines and count the atoms. */
     while (1) {
 
@@ -280,13 +292,20 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
                     return 0;
                 }
             }
-            
 
+            if (x < thee->mincrd[0]) thee->mincrd[0] = x;
+            if (y < thee->mincrd[1]) thee->mincrd[1] = y;
+            if (z < thee->mincrd[2]) thee->mincrd[2] = z;
+            if (x > thee->maxcrd[0]) thee->maxcrd[0] = x;
+            if (y > thee->maxcrd[1]) thee->maxcrd[1] = y;
+            if (z > thee->maxcrd[2]) thee->maxcrd[2] = z;
+            if (radius > thee->maxrad) thee->maxrad = radius;
+            thee->charge = thee->charge + charge;
+
+            /* Put it in the atom list */
             pos[0] = x;
             pos[1] = y;
             pos[2] = z;
-
-            /* Put it in the atom list */
             Vatom_setPosition(&(thee->atoms)[i],pos);
             Vatom_setCharge(&(thee->atoms)[i],charge);
             Vatom_setRadius(&(thee->atoms)[i],radius);
@@ -299,6 +318,10 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
 
         }  /* !strncmp(line,"ATOM",4) */
     } /* while(1) */
+
+    thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
+    thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
+    thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
 
     return 1;
 }

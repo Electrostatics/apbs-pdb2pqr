@@ -422,14 +422,9 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
     thee->green = Vgreen_ctor(alist);
 
     /* Determine solute center */
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        center[0] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[0];
-        center[1] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[1];
-        center[2] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[2];
-    }
-    center[0] = center[0]/((double)(Valist_getNumberAtoms(thee->alist)));
-    center[1] = center[1]/((double)(Valist_getNumberAtoms(thee->alist)));
-    center[2] = center[2]/((double)(Valist_getNumberAtoms(thee->alist)));
+    center[0] = thee->alist->center[0];
+    center[1] = thee->alist->center[1];
+    center[2] = thee->alist->center[2];
     thee->soluteCenter[0] = center[0];
     thee->soluteCenter[1] = center[1];
     thee->soluteCenter[2] = center[2];
