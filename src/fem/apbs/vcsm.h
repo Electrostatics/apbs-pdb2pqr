@@ -129,10 +129,11 @@ typedef struct Vcsm Vcsm;
      */
     VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
 
-    /** @brief   Get list of atoms associated with a simplex
+    /** @brief   Get particular atom associated with a simplex
      *  @ingroup Vcsm
      *  @author  Nathan Baker
      *  @param   thee  Vcsm object
+     *  @param   iatom Index of atom in Vcsm list for this simplex
      *  @param   isimp Simplex ID
      *  @return  Array of atoms associated with a simplex
      */
@@ -143,10 +144,10 @@ typedef struct Vcsm Vcsm;
      *  @author  Nathan Baker
      *  @param   thee  Vcsm object
      *  @param   isimp Simplex ID
-     *  @oaram   iatom Index of atom in Vcsm list
+     *  @param   iatom Index of atom in Vcsm list for this simplex
      *  @return  Index of atom in Valist object
      */
-    VEXTERNC int     Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
+    VEXTERNC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
 
     /** @brief   Get number of simplices associated with an atom
      *  @ingroup Vcsm
@@ -259,6 +260,7 @@ VEXTERNC void    Vcsm_init(Vcsm *thee);
  *           parent simplex and therefore have the same ID.  The remaining
  *           simplices are the children and should represent new entries in the
  *           charge-simplex map.
+ *  @param   num   Number of simplices in simps list
  *  @return  1 if successful, 0 otherwise 
  */
 VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);

@@ -646,12 +646,6 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
           mgparm->center[j] = (alist[mgparm->centmol-1])->center[j];
     }
 
-    /* If we're doing a force calculation, add a small offset to the
-     * coordinates to reduce the chance that an atom will inadvertantly lie on
-     * a grid line */
-    if (pbeparm->calcforce > 0) 
-      for (j=0; j<3; j++) mgparm->center[j] += (200*VPMGSMALL);
-
     /* If we're a parallel calculation, update the grid center based on
      * the appropriate shifts */
     if (mgparm->type == 2) {
@@ -660,6 +654,11 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     } else {
         for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
     }
+
+    Vnm_print(2, "CENTER = %1.12E, %1.12E %1.12E\n", mgparm->center[0],
+      mgparm->center[1], mgparm->center[2]);
+    Vnm_print(2, "REALCENTER = %1.12E, %1.12E %1.12E\n", realCenter[0],
+      realCenter[1], realCenter[2]);
 
     /* Set up PBE object */
     if (pbeparm->srfm == 2) sparm = pbeparm->swin;
@@ -1686,6 +1685,14 @@ gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
         Vnm_tprint( 1, "  Global apolar boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].npForce[0],
 gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
+        Vnm_tprint( 1, "  Global total force (atom %d) = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, 
+(gforce[ifr].npForce[0] + gforce[ifr].dbForce[0] + gforce[ifr].ibForce[0] +
+gforce[ifr].qfForce[0]),
+(gforce[ifr].npForce[1] + gforce[ifr].dbForce[1] + gforce[ifr].ibForce[1] +
+gforce[ifr].qfForce[1]),
+(gforce[ifr].npForce[2] + gforce[ifr].dbForce[2] + gforce[ifr].ibForce[2] +
+gforce[ifr].qfForce[2]));
         }
     }
 
@@ -1696,3 +1703,42 @@ gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  npenergyMG
+//
+// Purpose:  Calculate and write out energies for MG calculation
+//
+// Args:     nosh       Holds input file information
+//           pmg        Holds solution
+//           icalc      Calculation index in nosh
+//           npEnergy   set to apolar energy
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Robert Konecny (based on energyMG)
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
+  int *nenergy, double *npEnergy) {
+
+    MGparm *mgparm;
+    PBEparm *pbeparm;
+    int extEnergy;              /* When focusing, do we include energy
+                                 * contributions from outside the local
+                                 * partition? */
+
+    mgparm = nosh->calc[icalc].mgparm;
+    pbeparm = nosh->calc[icalc].pbeparm;
+
+    if (mgparm->type == 2) extEnergy = 0;
+    else extEnergy = 1;
+
+    if (pbeparm->calcenergy > 0) {
+        *nenergy = 1;
+        /* Some processors don't count */
+        if (nosh->bogus == 0) {
+        *npEnergy = Vpmg_npEnergy(pmg, extEnergy);
+        } else *npEnergy = 0;
+
+    } else *nenergy = 0;
+
+    return 1;
+}

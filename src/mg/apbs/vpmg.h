@@ -177,6 +177,7 @@ VEXTERNC Vpmg* Vpmg_ctor(Vpmgp *parms, Vpbe *pbe);
 /** @brief   FORTRAN stub constructor for the Vpmg class (no focusing)
  *  @author  Nathan Baker
  *  @ingroup Vpmg
+ *  @param   thee   Pointer to newly-allocated Vpmg object
  *  @param   parms  PMG parameter object
  *  @param   pbe    Object containing PBE-specific variables
  *  @returns 1 if successful, 0 otherwise
@@ -192,7 +193,7 @@ VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
  *           used.
  *  @author  Nathan Baker
  *  @ingroup Vpmg
- *  @param   pmgp   PMG parameter object for new mesh
+ *  @param   parms  PMG parameter object for new mesh
  *  @param   pbe    PBE parameter object
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
  *  @param   energyFlag  
@@ -216,7 +217,7 @@ VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee   Pointer to newly allocated Vpmg object
- *  @param   pmgp   PMG parameter object for new mesh
+ *  @param   parms  PMG parameter object for new mesh
  *  @param   pbe    PBE parameter object 
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
  *  @param   energyFlag  
