@@ -51,10 +51,7 @@
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Non-inlineable methods
-//
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void Vcsm_freeArrays(Vcsm *thee);
-VPRIVATE Vram* Vram_realloc(Vram **thee, int num, int size, int newNum);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_ctor
@@ -155,8 +152,8 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Allocate the space for the simplex-charge map */
     for (isimp=0; isimp<thee->nsimp; isimp++) {
         if ((thee->nsqm)[isimp] > 0) {
-            VASSERT(((thee->sqm)[isimp] = Vram_ctor((thee->nsqm)[isimp],
-                                            sizeof(int)) ) != VNULL);
+            thee->sqm[isimp] = Vram_ctor((thee->nsqm)[isimp], sizeof(int));
+            VASSERT(thee->sqm[isimp] != VNULL);
         }
     }
 
@@ -243,23 +240,10 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_dtor2(Vcsm *thee) { 
-    Vnm_print(2, "Vcsm_dtor2: freeing arrays");
-    Vcsm_freeArrays(thee);
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_freeArrays
-//
-// Purpose:  Frees the memory allocated to the map arrays
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void Vcsm_freeArrays(Vcsm *thee) {
     int i;
 
     if ((thee != VNULL) && thee->initFlag) {
 
-        Vnm_print(0,"Vcsm_freeArrays: freeing sqm entries.\n"); 
         for (i=0; i<thee->msimp; i++) {
             if (thee->nsqm[i] > 0) Vram_dtor((Vram **)&(thee->sqm[i]),
                thee->nsqm[i], sizeof(int));
@@ -663,22 +647,3 @@ VPUBLIC int Vcsm_memChk(Vcsm *thee)
 
     return memUse;
 }
-
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vram_realloc
-//
-// Purpose:  A logged version of realloc (using this is usually a bad idea)
-//
-// Author:   Michael Holst
-/////////////////////////////////////////////////////////////////////////// */
-VPRIVATE Vram *Vram_realloc(Vram **thee, int num, int size, int newNum)
-{
-    Vram *tee = Vram_ctor(newNum, size);
-    memcpy(tee, (*thee), size*VMIN2(num,newNum));
-    Vram_dtor((Vram **)thee, num, size);                  
-    return tee;                
-}
-
-

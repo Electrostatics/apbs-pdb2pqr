@@ -74,7 +74,7 @@ typedef struct Vacc {
   /* Grid corner */
   Vec3 grid_lower_corner;
   /* Grid spacings */
-  double hx, hy, hz;
+  double hx, hy, hzed;
   /* Grid dimensions, n = nx*nz*ny */
   int nx, ny, nz, n;
   /* Probe radius */
