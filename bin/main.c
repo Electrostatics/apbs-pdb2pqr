@@ -25,8 +25,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 1999-2002. The Regents of the University of California
- *                          (Regents).  All Rights Reserved.
+ * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for educational, research, and not-for-profit purposes,
@@ -35,17 +34,16 @@
  * following two paragraphs appear in all copies, modifications, and
  * distributions.
  *
- * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
  * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
- * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
+ * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
- * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
- * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
- * MODIFICATIONS.
+ * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
+ * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
+ * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *
  * @endverbatim
  */
@@ -96,7 +94,7 @@ int main(int argc, char **argv) {
     char *header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.1.8 (January 29, 2002)\n\
+    Version 0.2.0 (March 20, 2002)\n\
     \n\
     Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
     Dept. of Chemistry and Biochemistry\n\
@@ -104,7 +102,7 @@ int main(int argc, char **argv) {
     University of California, San Diego \n\n\
     Additional contributing authors listed in the code documentation.\n\n\
     Copyright (c) 1999-2002.\n\
-    The Regents of the University of California (Regents).\n\
+    Nathan A. Baker\n\
     All Rights Reserved.\n\n\
     Permission to use, copy, modify, and distribute this software and its\n\
     documentation for educational, research, and not-for-profit purposes,\n\
@@ -112,16 +110,16 @@ int main(int argc, char **argv) {
     provided that the above copyright notice, this paragraph and the\n\
     following two paragraphs appear in all copies, modifications, and\n\
     distributions.\n\n\
-    IN NO EVENT SHALL REGENTS OR THE AUTHORS BE LIABLE TO ANY PARTY FOR\n\
-    DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,\n\
-    INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS\n\
-    DOCUMENTATION, EVEN IF REGENTS OR THE AUTHORS HAVE BEEN ADVISED OF THE\n\
-    POSSIBILITY OF SUCH DAMAGE.\n\n\
-    REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT\n\
+    IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,\n\
+    INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST\n\
+    PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,\n\
+    EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH\n\
+    DAMAGE.\n\n\
+    THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT\n\
     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\n\
     PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF\n\
-    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  REGENTS HAS NO OBLIGATION\n\
-    TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
+    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\ 
+    OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
     MODIFICATIONS.\n\
     ----------------------------------------------------------------------\n\
     \n\n";

@@ -19,8 +19,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 1999-2002. The Regents of the University of California 
- *                          (Regents).  All Rights Reserved.
+ * Copyright (c) 1999-2002.  Nathan A. Baker.  All Rights Reserved.
  *
  * Permission to use, copy, modify, and distribute this software and its
  * documentation for educational, research, and not-for-profit purposes,
@@ -29,17 +28,16 @@
  * following two paragraphs appear in all copies, modifications, and
  * distributions.
  *
- * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
  * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
- * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
+ * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
- * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
- * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
- * MODIFICATIONS.
+ * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
+ * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
+ * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  *
  * @endverbatim
  */
@@ -194,6 +192,54 @@ VEXTERNC void  NOsh_dtor2(NOsh *thee);
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
+
+/** @brief   Setup NOsh, MGparm, and PBEparm objects for a MG-MANUAL ELEC
+ *           calculation
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee    Pointer to NOsh object
+ *  @param   mgparm  Pointer to MGparm object containing basic parameters for
+ *                   run; these will be supplemented and modified (for
+ *                   consistency, etc.) by this function
+ *  @param   pbeparm Pointer to PBEparm object containing basic parameters for
+ *                   run; these will be supplemented and modified (for
+ *                   consistency, etc.) by this function
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int NOsh_setupMGMANUAL(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);
+
+/** @brief   Setup NOsh, MGparm, and PBEparm objects for a MG-AUTO ELEC
+ *           calculation
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee    Pointer to NOsh object
+ *  @param   mgparm  Pointer to base MGparm object containing parameters for
+ *                   the run; these will be used to construct the MGparm
+ *                   objects inside the NOsh object (for actual use by the code
+ *                   during calculations)
+ *  @param   pbeparm Pointer to PBEparm object containing basic parameters for
+ *                   run; these will be supplemented and modified (for
+ *                   consistency, etc.) by this function
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int NOsh_setupMGAUTO(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);
+
+/** @brief   Setup NOsh, MGparm, and PBEparm objects for a MG-PARA ELEC
+ *           calculation
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee    Pointer to NOsh object
+ *  @param   mgparm  Pointer to base MGparm object containing parameters for
+ *                   the run; these will be used to construct the MGparm
+ *                   objects inside the NOsh object (for actual use by the code
+ *                   during calculations)
+ *  @param   pbeparm Pointer to PBEparm object containing basic parameters for
+ *                   run; these will be supplemented and modified (for
+ *                   consistency, etc.) by this function
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int NOsh_setupMGPARA(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);
+
 
 #endif 
 
