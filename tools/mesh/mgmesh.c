@@ -41,6 +41,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "maloc/maloc.h"
+
 
 int main(int argc, char **argv) {
 
@@ -49,11 +51,10 @@ int main(int argc, char **argv) {
     int minlev = 3;
     double newval, oldval;
 
-    printf("\n\nThis program determines the acceptable meshpoint number/level\n");
-    printf("combinations for the PMG multigrid libraries and %d or more.\n",
-      minlev);
-    printf("levels in the mesh (because you typically use one less than the\n");
-    printf("max number of levels\n\n\n");
+    Vnm_print(1, "\n\nThis program determines the acceptable meshpoint number\n"
+                 "and level combinations for the PMG multigrid libraries and\n"
+                 "%d or more levels in the mesh (because you typically use\n"
+                 "one less than the max number of levels)\n\n\n", minlev);
 
     for (i=2; i<maxvert; i++) { 
         /* the number of times it's divisible. */
@@ -67,10 +68,10 @@ int main(int argc, char **argv) {
            lev++;
         } 
         if (lev >= minlev) {
-            printf("%4d verts/direction => %d levels\n", i, lev);
-            printf("                        %d verts on coarsest level\n",
+            Vnm_print(1, "%4d verts/direction => %d levels\n", i, lev);
+            Vnm_print(1, "                        %d verts on coarsest level\n",
               (int)oldval); 
-            printf("                        ~%g MB memory (for %d^3 mesh)\n",
+            Vnm_print(1, "                        ~%g MB memory (for %d^3 mesh)\n",
               (double)(i*i*i)*160.0/1024.0/1024.0, i);
         }
     }
