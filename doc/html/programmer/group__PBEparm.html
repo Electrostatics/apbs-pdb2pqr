@@ -244,13 +244,13 @@ Calculate per-atom force components </td></tr>
 Consistency check for parameter values stored in object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if OK, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Object to be checked </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a11" doxytag="pbeparm.h::PBEparm_copy"></a><p>
@@ -291,13 +291,12 @@ Consistency check for parameter values stored in object.
 Copy PBEparm object into thee.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object (target for copy) </td></tr>
-    <tr><td valign=top><em>parm</em>&nbsp;</td><td>PBEparm object (source for copy) </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>parm</em>&nbsp;</td><td>
+Target for copy Source for copy </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a6" doxytag="pbeparm.h::PBEparm_ctor"></a><p>
@@ -361,13 +360,13 @@ Construct PBEparm object.
 FORTRAN stub to construct PBEparm object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Space for PBEparm object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if succesful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Memory location for object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a8" doxytag="pbeparm.h::PBEparm_dtor"></a><p>
@@ -399,12 +398,12 @@ FORTRAN stub to construct PBEparm object.
 Object destructor.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to memory location of PBEparm object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to memory location of object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a9" doxytag="pbeparm.h::PBEparm_dtor2"></a><p>
@@ -436,12 +435,12 @@ Object destructor.
 FORTRAN stub for object destructor.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to PBEparm object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to object to be destroyed </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a3" doxytag="pbeparm.h::PBEparm_getIonCharge"></a><p>
@@ -482,14 +481,13 @@ FORTRAN stub for object destructor.
 Get charge (e) of specified ion species.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object </td></tr>
-    <tr><td valign=top><em>iion</em>&nbsp;</td><td>Ion species ID </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Charge of ion species (e) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iion</em>&nbsp;</td><td>
+PBEparm object Ion species ID/index </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="pbeparm.h::PBEparm_getIonConc"></a><p>
@@ -530,14 +528,13 @@ Get charge (e) of specified ion species.
 Get concentration (M) of specified ion species.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object </td></tr>
-    <tr><td valign=top><em>iion</em>&nbsp;</td><td>Ion species ID </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Concentration of ion species (M) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iion</em>&nbsp;</td><td>
+PBEparm object Ion species ID/index </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a5" doxytag="pbeparm.h::PBEparm_getIonRadius"></a><p>
@@ -578,14 +575,13 @@ Get concentration (M) of specified ion species.
 Get radius (A) of specified ion species.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object </td></tr>
-    <tr><td valign=top><em>iion</em>&nbsp;</td><td>Ion species ID </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Radius of ion species (A) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iion</em>&nbsp;</td><td>
+PBEparm object Ion species ID/index </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a12" doxytag="pbeparm.h::PBEparm_parseToken"></a><p>
@@ -632,18 +628,18 @@ Get radius (A) of specified ion species.
 Parse a keyword from an input file.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>PBEparm object </td></tr>
-    <tr><td valign=top><em>tok</em>&nbsp;</td><td>Token to parse </td></tr>
-    <tr><td valign=top><em>sock</em>&nbsp;</td><td>Stream for more tokens </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if matched and assigned; -1 if matched, but there's some sort of error (i.e., too few args); 0 if not matched </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>tok</em>&nbsp;</td><td>
+Parsing object </td></tr>
+<tr><td valign=top><em>sock</em>&nbsp;</td><td>
+Token to parse Socket for additional tokens </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Apr 30 08:22:49 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 10:46:13 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

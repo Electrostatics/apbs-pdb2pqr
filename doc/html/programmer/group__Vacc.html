@@ -32,9 +32,9 @@
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a3">Vacc_ctor2</a> (Vacc *thee, <a class="el" href="structsValist.html">Valist</a> *<a class="el" href="structsVacc.html#m1">alist</a>, double <a class="el" href="structsVacc.html#m16">max_radius</a>, int <a class="el" href="structsVacc.html#m12">nx</a>, int <a class="el" href="structsVacc.html#m13">ny</a>, int <a class="el" href="structsVacc.html#m14">nz</a>, int <a class="el" href="structsVacc.html#m6">nsphere</a>)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct the accessibility object.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>Vacc *&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a4">Vacc_ctorFocus</a> (<a class="el" href="structsValist.html">Valist</a> *<a class="el" href="structsVacc.html#m1">alist</a>, double <a class="el" href="structsVacc.html#m16">max_radius</a>, int <a class="el" href="structsVacc.html#m12">nx</a>, int <a class="el" href="structsVacc.html#m13">ny</a>, int <a class="el" href="structsVacc.html#m14">nz</a>, int <a class="el" href="structsVacc.html#m6">nsphere</a>, double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct the accessibility object for a subdomain.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Constructor for an accessibility object for a subdomain of a molecule.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a5">Vacc_ctor2Focus</a> (Vacc *thee, <a class="el" href="structsValist.html">Valist</a> *<a class="el" href="structsVacc.html#m1">alist</a>, double <a class="el" href="structsVacc.html#m16">max_radius</a>, int <a class="el" href="structsVacc.html#m12">nx</a>, int <a class="el" href="structsVacc.html#m13">ny</a>, int <a class="el" href="structsVacc.html#m14">nz</a>, int <a class="el" href="structsVacc.html#m6">nsphere</a>, double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct the accessibility object for a subdomain.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub for constructor for an accessibility object for a subdomain of a molecule.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a6">Vacc_dtor</a> (Vacc **thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Destroy object.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a7">Vacc_dtor2</a> (Vacc *thee)</td></tr>
@@ -134,15 +134,15 @@ Calculates the solvent-accessible area due to the specified atom.
 <p>
 <dl compact><dt><b>Note:</b></dt><dd>Shamelessly ripped off from UHBD FORTRAN routine by Brock Luty </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker (original FORTRAN routine by Brock Luty) </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>radius</em>&nbsp;</td><td>Radius of probe molecule used to calculate solvent accessible area </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Atom ID in Valist list </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Solvent accessible area </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Acessibility object </td></tr>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+Probe radius (&Aring;) Atom index in Valist object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a2" doxytag="vacc.h::Vacc_ctor"></a><p>
@@ -207,18 +207,21 @@ Calculates the solvent-accessible area due to the specified atom.
 Construct the accessibility object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atom objects </td></tr>
-    <tr><td valign=top><em>max_radius</em>&nbsp;</td><td>Maximum probe radius to be queried </td></tr>
-    <tr><td valign=top><em>nx</em>&nbsp;</td><td>Number of grid points in hash table (x) </td></tr>
-    <tr><td valign=top><em>ny</em>&nbsp;</td><td>Number of grid points in hash table (y) </td></tr>
-    <tr><td valign=top><em>nz</em>&nbsp;</td><td>Number of grid points in hash table (z) </td></tr>
-    <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>Number of points on surface of reference sphere </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Newly allocated Vacc object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>max_radius</em>&nbsp;</td><td>
+Molecule for accessibility queries </td></tr>
+<tr><td valign=top><em>nx</em>&nbsp;</td><td>
+Max probe radius (&Aring;) to be queried </td></tr>
+<tr><td valign=top><em>ny</em>&nbsp;</td><td>
+Number of x-points in hash table </td></tr>
+<tr><td valign=top><em>nz</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
+Number of y-points in hash table Number of points on surface of reference sphere </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a3" doxytag="vacc.h::Vacc_ctor2"></a><p>
@@ -289,19 +292,23 @@ Construct the accessibility object.
 FORTRAN stub to construct the accessibility object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Allocated Vacc memory </td></tr>
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atom objects </td></tr>
-    <tr><td valign=top><em>max_radius</em>&nbsp;</td><td>Maximum probe radius to be queried </td></tr>
-    <tr><td valign=top><em>nx</em>&nbsp;</td><td>Number of grid points in hash table (x) </td></tr>
-    <tr><td valign=top><em>ny</em>&nbsp;</td><td>Number of grid points in hash table (y) </td></tr>
-    <tr><td valign=top><em>nz</em>&nbsp;</td><td>Number of grid points in hash table (z) </td></tr>
-    <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>Number of points on surface of reference sphere </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>alist</em>&nbsp;</td><td>
+Memory for Vacc objet </td></tr>
+<tr><td valign=top><em>max_radius</em>&nbsp;</td><td>
+Molecule for accessibility queries </td></tr>
+<tr><td valign=top><em>nx</em>&nbsp;</td><td>
+Max probe radius (&Aring;) to be queried </td></tr>
+<tr><td valign=top><em>ny</em>&nbsp;</td><td>
+Number of x-points in hash table </td></tr>
+<tr><td valign=top><em>nz</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
+Number of y-points in hash table Number of points on surface of reference sphere </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a5" doxytag="vacc.h::Vacc_ctor2Focus"></a><p>
@@ -405,28 +412,38 @@ FORTRAN stub to construct the accessibility object.
     <td>
 
 <p>
-FORTRAN stub to construct the accessibility object for a subdomain.
+FORTRAN stub for constructor for an accessibility object for a subdomain of a molecule.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker, Todd Dolinsky </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Allocated Vacc memory </td></tr>
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atom objects </td></tr>
-    <tr><td valign=top><em>max_radius</em>&nbsp;</td><td>Maximum probe radius to be queried </td></tr>
-    <tr><td valign=top><em>nx</em>&nbsp;</td><td>Number of grid points in hash table (x) </td></tr>
-    <tr><td valign=top><em>ny</em>&nbsp;</td><td>Number of grid points in hash table (y) </td></tr>
-    <tr><td valign=top><em>nz</em>&nbsp;</td><td>Number of grid points in hash table (z) </td></tr>
-    <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>Number of points on surface of reference sphere </td></tr>
-    <tr><td valign=top><em>x_min</em>&nbsp;</td><td>Minimum location in X direction </td></tr>
-    <tr><td valign=top><em>y_min</em>&nbsp;</td><td>Minimum location in Y direction </td></tr>
-    <tr><td valign=top><em>z_min</em>&nbsp;</td><td>Minimum location in Z direction </td></tr>
-    <tr><td valign=top><em>x_max</em>&nbsp;</td><td>Maximum location in X direction </td></tr>
-    <tr><td valign=top><em>y_max</em>&nbsp;</td><td>Maximum location in Y direction </td></tr>
-    <tr><td valign=top><em>z_max</em>&nbsp;</td><td>Maximum location in Z direction </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>alist</em>&nbsp;</td><td>
+Previously-allocated Vacc memory </td></tr>
+<tr><td valign=top><em>max_radius</em>&nbsp;</td><td>
+Molecule for accessibility queries </td></tr>
+<tr><td valign=top><em>nx</em>&nbsp;</td><td>
+Max probe radius (&Aring;) to be queried </td></tr>
+<tr><td valign=top><em>ny</em>&nbsp;</td><td>
+Number of x-points in hash table </td></tr>
+<tr><td valign=top><em>nz</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>x_min</em>&nbsp;</td><td>
+Number of points on surface of reference sphere </td></tr>
+<tr><td valign=top><em>y_min</em>&nbsp;</td><td>
+Min x-coord of subdomain </td></tr>
+<tr><td valign=top><em>z_min</em>&nbsp;</td><td>
+Min y-coord of subdomain </td></tr>
+<tr><td valign=top><em>x_max</em>&nbsp;</td><td>
+Min z-coord of subdomain </td></tr>
+<tr><td valign=top><em>y_max</em>&nbsp;</td><td>
+Max x-coord of subdomain </td></tr>
+<tr><td valign=top><em>z_max</em>&nbsp;</td><td>
+Max y-coord of subdomain Max z-coord of subdomain </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="vacc.h::Vacc_ctorFocus"></a><p>
@@ -524,27 +541,36 @@ FORTRAN stub to construct the accessibility object for a subdomain.
     <td>
 
 <p>
-FORTRAN stub to construct the accessibility object for a subdomain.
+Constructor for an accessibility object for a subdomain of a molecule.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker, Todd Dolinsky </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atom objects </td></tr>
-    <tr><td valign=top><em>max_radius</em>&nbsp;</td><td>Maximum probe radius to be queried </td></tr>
-    <tr><td valign=top><em>nx</em>&nbsp;</td><td>Number of grid points in hash table (x) </td></tr>
-    <tr><td valign=top><em>ny</em>&nbsp;</td><td>Number of grid points in hash table (y) </td></tr>
-    <tr><td valign=top><em>nz</em>&nbsp;</td><td>Number of grid points in hash table (z) </td></tr>
-    <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>Number of points on surface of reference sphere </td></tr>
-    <tr><td valign=top><em>x_min</em>&nbsp;</td><td>Minimum location in X direction </td></tr>
-    <tr><td valign=top><em>y_min</em>&nbsp;</td><td>Minimum location in Y direction </td></tr>
-    <tr><td valign=top><em>z_min</em>&nbsp;</td><td>Minimum location in Z direction </td></tr>
-    <tr><td valign=top><em>x_max</em>&nbsp;</td><td>Maximum location in X direction </td></tr>
-    <tr><td valign=top><em>y_max</em>&nbsp;</td><td>Maximum location in Y direction </td></tr>
-    <tr><td valign=top><em>z_max</em>&nbsp;</td><td>Maximum location in Z direction </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Newly allocated Vacc object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>max_radius</em>&nbsp;</td><td>
+Molecule for accessibility queries </td></tr>
+<tr><td valign=top><em>nx</em>&nbsp;</td><td>
+Max probe radius (&Aring;) to be queried </td></tr>
+<tr><td valign=top><em>ny</em>&nbsp;</td><td>
+Number of x-points in hash table </td></tr>
+<tr><td valign=top><em>nz</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
+Number of y-points in hash table </td></tr>
+<tr><td valign=top><em>x_min</em>&nbsp;</td><td>
+Number of points on surface of reference sphere </td></tr>
+<tr><td valign=top><em>y_min</em>&nbsp;</td><td>
+Min x-coord of subdomain </td></tr>
+<tr><td valign=top><em>z_min</em>&nbsp;</td><td>
+Min y-coord of subdomain </td></tr>
+<tr><td valign=top><em>x_max</em>&nbsp;</td><td>
+Min z-coord of subdomain </td></tr>
+<tr><td valign=top><em>y_max</em>&nbsp;</td><td>
+Max x-coord of subdomain </td></tr>
+<tr><td valign=top><em>z_max</em>&nbsp;</td><td>
+Max y-coord of subdomain Max z-coord of subdomain </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a6" doxytag="vacc.h::Vacc_dtor"></a><p>
@@ -576,12 +602,12 @@ FORTRAN stub to construct the accessibility object for a subdomain.
 Destroy object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to memory location of object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to memory location of object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a7" doxytag="vacc.h::Vacc_dtor2"></a><p>
@@ -613,12 +639,12 @@ Destroy object.
 FORTRAN stub to destroy object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a11" doxytag="vacc.h::Vacc_fastMolAcc"></a><p>
@@ -667,15 +693,15 @@ Report molecular accessibility quickly.
 Given a point which is INSIDE the collection of inflated van der Waals spheres, but OUTSIDE the collection of non-inflated van der Waals spheres, determine accessibility of a probe (of radius radius) at a given point, given a collection of atomic spheres. Uses molecular (Connolly) surface definition.<p>
 <dl compact><dt><b>Note:</b></dt><dd>THIS ASSUMES YOU HAVE TESTED THAT THIS POINT IS DEFINITELY INSIDE THE INFLATED AND NON-INFLATED VAN DER WAALS SURFACES! </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>radius</em>&nbsp;</td><td>Probe radius </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Probe center coordinates Probe radius (in &Aring;) </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a9" doxytag="vacc.h::Vacc_ivdwAcc"></a><p>
@@ -723,15 +749,15 @@ Report inflated van der Waals accessibility.
 <p>
 Determines if a point is within the union of the spheres centered at the atomic centers with radii equal to the sum of the atomic van der Waals radius and the probe radius.<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>radius</em>&nbsp;</td><td>Probe radius </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Probe center coordinates Probe radius (&Aring;) </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a1" doxytag="vacc.h::Vacc_memChk"></a><p>
@@ -763,13 +789,13 @@ Determines if a point is within the union of the spheres centered at the atomic 
 Get number of bytes in this object and its members.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Number of bytes allocated for object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Object for memory check </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a10" doxytag="vacc.h::Vacc_molAcc"></a><p>
@@ -817,15 +843,15 @@ Report molecular accessibility.
 <p>
 Determine accessibility of a probe (of radius radius) at a given point, given a collection of atomic spheres. Uses molecular (Connolly) surface definition.<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>radius</em>&nbsp;</td><td>Probe radius </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Probe center coordinates Probe radius (in &Aring;) </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a15" doxytag="vacc.h::Vacc_sphere"></a><p>
@@ -868,14 +894,13 @@ Set up an array of points for the reference sphere.
 Generates approximately npts # of points (actual number stored in npts) somewhat uniformly distributed across a sphere of unit radius centered at the origin. Returns an (npts x 3) double array, which the user is responsible for destroying.<p>
 <dl compact><dt><b>Note:</b></dt><dd>This routine was shamelessly ripped off from sphere.f from UHBD as developed by Michael K. Gilson.</dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker (original FORTRAN code by Mike Gilson) </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>npts</em>&nbsp;</td><td>Requested number of points on sphere, later set to actual number of points placed on sphere </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to array of reference sphere points' coordinates </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>npts</em>&nbsp;</td><td>
+Accessibility object Input: requested number of points on sphere; Output: set to actual number of points placed on sphere </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a12" doxytag="vacc.h::Vacc_splineAcc"></a><p>
@@ -929,16 +954,17 @@ Report spline-based accessibility.
 <p>
 Determine accessibility at a given point, given a collection of atomic spheres. Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998) definition suitable for force evalation; basically a cubic spline.<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>win</em>&nbsp;</td><td>Spline window </td></tr>
-    <tr><td valign=top><em>infrad</em>&nbsp;</td><td>Inflation radius (for ion-accessibility) </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>win</em>&nbsp;</td><td>
+Probe center coordinates </td></tr>
+<tr><td valign=top><em>infrad</em>&nbsp;</td><td>
+Spline window (&Aring;) Inflation radius (&Aring;) for ion access. </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a13" doxytag="vacc.h::Vacc_splineAccAtom"></a><p>
@@ -998,17 +1024,19 @@ Report spline-based accessibility for a given atom.
 <p>
 Determine accessibility at a given point for a given atomic spheres. Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998) definition suitable for force evalation; basically a cubic spline.<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>win</em>&nbsp;</td><td>Spline window </td></tr>
-    <tr><td valign=top><em>infrad</em>&nbsp;</td><td>Inflation radius (for ion-accessibility) </td></tr>
-    <tr><td valign=top><em>atomID</em>&nbsp;</td><td>ID of atom for which this characteric function value should be calculated </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>win</em>&nbsp;</td><td>
+Probe center coordinates </td></tr>
+<tr><td valign=top><em>infrad</em>&nbsp;</td><td>
+Spline window (&Aring;) </td></tr>
+<tr><td valign=top><em>atomID</em>&nbsp;</td><td>
+Inflation radius (&Aring;) for ion access. Index of atom in Valist object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a14" doxytag="vacc.h::Vacc_splineAccGradAtom"></a><p>
@@ -1074,17 +1102,20 @@ Report gradient of spline-based accessibility with respect to a particular atom 
 <p>
 Determine accessibility at a given point, given a collection of atomic spheres. Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998) definition suitable for force evalation; basically a cubic spline.<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-    <tr><td valign=top><em>win</em>&nbsp;</td><td>Spline window </td></tr>
-    <tr><td valign=top><em>infrad</em>&nbsp;</td><td>Inflation radius (for ion-accessibility) </td></tr>
-    <tr><td valign=top><em>atomID</em>&nbsp;</td><td>Valist ID of atom used in calculation </td></tr>
-    <tr><td valign=top><em>force</em>&nbsp;</td><td>Stores gradient of accesibility (3-vector) </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>win</em>&nbsp;</td><td>
+Probe center coordinates </td></tr>
+<tr><td valign=top><em>infrad</em>&nbsp;</td><td>
+Spline window (&Aring;) </td></tr>
+<tr><td valign=top><em>atomID</em>&nbsp;</td><td>
+Inflation radius (&Aring;) for ion access. </td></tr>
+<tr><td valign=top><em>force</em>&nbsp;</td><td>
+Index of atom in Valist object 3-vector set to gradient of accessibility </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a16" doxytag="vacc.h::Vacc_totalSASA"></a><p>
@@ -1126,14 +1157,13 @@ Calculates the solvent-accessible area of the entire molecules.
 <p>
 <dl compact><dt><b>Note:</b></dt><dd>Shamelessly ripped off from UHBD FORTRAN routine by Brock Luty </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker (original FORTRAN routine by Brock Luty) </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>radius</em>&nbsp;</td><td>Radius of probe molecule used to calculate solvent accessible area </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Solvent accessible area </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Accessibility object Probe molecule radius (&Aring;) </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a8" doxytag="vacc.h::Vacc_vdwAcc"></a><p>
@@ -1175,17 +1205,16 @@ Report van der Waals accessibility.
 <p>
 Determines if a point is within the union of the atomic spheres (with radii equal to their van der Waals radii).<p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vacc object </td></tr>
-    <tr><td valign=top><em>center</em>&nbsp;</td><td>Probe center coordinates (point to test) </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object Probe center coordinates </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Apr 30 08:22:49 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 10:46:13 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
