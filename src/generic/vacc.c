@@ -494,7 +494,6 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
-    int iatom;                      /* Counters */
     double dist, *apos, arad, sm, sm2, w2i, mygrad;
     Vatom *atom;
     double totchi = 1.0;             /* Characteristic function value */

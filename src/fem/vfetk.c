@@ -54,10 +54,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
-    TT *t, int qp, int face, int u, int ud, int ut,
-    double xq[], double phi[4], double phix[4][3],
-    double U[], double dU[][3], double Ut[], double dUt[][3]);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Inlineable methods
@@ -435,68 +431,6 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_buildFunc
-//
-// Purpose:  Build finite element functions.
-//
-// Author:   Michael Holst
-/////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
-    TT *t, int qp, int face, int u, int ud, int ut,
-    double xq[], double phi[4], double phix[4][3], 
-    double U[], double dU[][3], double Ut[], double dUt[][3])
-{
-    int i, j, k;
-    double u_u[4][MAXV], u_ud[4][MAXV], u_t[4][MAXV];
-
-    /* Get quad pt by mapping master el quad pt to this el */
-    for (i=0; i<Gem_dimII(thee->gm); i++) {
-        xq[i] = t->bb[i];
-        for (j=0;j<Gem_dimII(thee->gm);j++)
-            xq[i] += ( t->ff[i][j] * Re_x_hi(re,qp,j,face) );
-    }
-
-    /* Get basis functions; transform grads to arbitrary elm */
-    for (i=0; i<Gem_dimVV(thee->gm); i++) {
-        phi[i] = Re_phi_hi(re,qp,i,face);
-        for (j=0; j<Gem_dim(thee->gm); j++) {
-            phix[i][j] = 0.;
-            for (k=0; k<Gem_dim(thee->gm); k++)
-                phix[i][j] += ( t->gg[k][j] * Re_phix2_hi(re,qp,i,k,face) );
-        }
-    }
-
-    /* Setup for initialize of [U+UD] and [dU+dUD] and [Ut] and [dUt] */
-    for (j=0; j<Gem_dimVV(thee->gm); j++) {
-        for (i=0; i<Alg_vec(thee); i++) {
-            u_u[j][i]  = Bvec_val( thee->W[u],  i, t->vid[j] );
-            u_ud[j][i] = Bvec_val( thee->W[ud], i, t->vid[j] );
-            u_t[j][i]  = Bvec_val( thee->W[ut], i, t->vid[j] );
-        }
-    }
-
-    /* Initialize [U+UD] and [dU+dUD] and [Ut] and [dUt] */
-    for (i=0; i<Alg_vec(thee); i++) {
-        U[i]  = 0.;
-        Ut[i] = 0.;
-        for (k=0; k<Gem_dim(thee->gm); k++) {
-            dU[i][k]  = 0.;
-            dUt[i][k] = 0.;
-            for (j=0; j<Gem_dimVV(thee->gm); j++) {
-                if (k==0) {
-                    U[i]  += phi[j] * ( u_u[j][i] + u_ud[j][i] );
-                    Ut[i] += phi[j] * u_t[j][i];
-                }
-                dU[i][k]  += phix[j][k] * ( u_u[j][i] + u_ud[j][i] );
-                dUt[i][k] += phix[j][k] * u_t[j][i];
-            }
-        }
-    }
-}
-
-
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_dqmEnergy
 //
 // Purpose:  Calculate dielectric and mobile ion energy in kT.
@@ -535,15 +469,12 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
 
     Bmat *A;
     Zslu *slu;
-    Bvec *diag;
-    Bvec *u, *ud;
-    int pnumR[MAXV];
 
     Alg *alg; 
     AM *am;
     int level, ip[10];
     int evalKey, tangKey, energyKey, residKey, massKey;
-    double lndet, det, rp[10];
+    double lndet, rp[10];
 
     VASSERT(thee != VNULL);
     am = thee->am;
