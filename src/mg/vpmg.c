@@ -63,15 +63,15 @@ VEMBED(rcsid="$Id$")
 VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72], 
   char mxtype[3], int flag) {
 
-    int i, nn, nx, ny, nz, ncol, nrow, nonz; 
+    int i, nn, nxm2, nym2, nzm2, ncol, nrow, nonz; 
     double *nzval;
     int *colptr, *rowind;
 
     /* Calculate the total number of unknowns */
-    nx = thee->pmgp->nx;
-    ny = thee->pmgp->ny;
-    nz = thee->pmgp->nz;
-    nn = nx*ny*nz;
+    nxm2 = thee->pmgp->nx - 2;
+    nym2 = thee->pmgp->ny - 2;
+    nzm2 = thee->pmgp->nz - 2;
+    nn = nxm2*nym2*nzm2;
     ncol = nn;
     nrow = nn;
 
@@ -83,10 +83,13 @@ VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72],
      *
      *    7*nn-2*nx*ny-2*nx-2 TOTAL non-zeros
      */
-    nonz = 7*nn - 2*nx*ny - 2*nx - 2;
+    nonz = 7*nn - 2*nxm2*nym2 - 2*nxm2 - 2;
     nzval  = Vmem_malloc(thee->vmem, nonz, sizeof(double));
     rowind = Vmem_malloc(thee->vmem, nonz, sizeof(int));
     colptr = Vmem_malloc(thee->vmem, (ncol+1), sizeof(int));
+
+    Vnm_print(1, "Vpmg_printColComp:  Allocated space for %d nonzeros\n",
+      nonz);
 
     F77BCOLCOMP(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
       nzval, rowind, colptr, &flag);
