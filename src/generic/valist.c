@@ -197,6 +197,8 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
 //           A PQR file has PDB structure with charge and radius in the
 //           last two columns (instead of weight and occupancy)
 //
+// Returns:  1 if successful
+//
 // Notes:    The PDB reader routine was borrowed from Phil Hunenberger
 //
 // Author:   Nathan Baker
@@ -271,9 +273,12 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
         /* Check to see if we got an ATOM line */
         if ( !strncmp(line,"ATOM",4)) {
             if ( (sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf", 
-                        &x,&y,&z,&charge,&radius) == 5) != 1) {
-                fprintf(stderr,"Valist_readPQR: sscanf (formatting) error.\n");
-                return 0;
+                   &x,&y,&z,&charge,&radius) == 5) != 1) {
+                if ( (sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
+                   &x,&y,&z,&charge,&radius) == 5) != 1) {
+                    fprintf(stderr,"Valist_readPQR:  FATAL sscanf (formatting) error reading: \n    %s\n", line);
+                    return 0;
+                }
             }
             
 
