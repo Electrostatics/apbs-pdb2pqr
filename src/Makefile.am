@@ -47,7 +47,7 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = vatom vhash vcsm vpbe
+always_built_SUBDIRS = vatom vacc vhash vcsm vpbe
 
 SUBDIRS = $(always_built_SUBDIRS)
 INCLUDES = @mcdir@/inc
