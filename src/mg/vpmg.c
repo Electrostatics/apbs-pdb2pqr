@@ -533,6 +533,7 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
     thee->extQmEnergy = 0;
     thee->extQfEnergy = 0;
     thee->extDiEnergy = 0;
+    thee->extNpEnergy = 0;
 
     /* New problem dimensions */
     hxNEW = thee->pmgp->hx;
@@ -569,6 +570,8 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
     Vnm_print(0, "VPMG::extEnergy: extQmEnergy = %g kT\n", thee->extQmEnergy);
     thee->extQfEnergy = Vpmg_qfEnergy(pmgOLD, 1);
     Vnm_print(0, "VPMG::extEnergy: extQfEnergy = %g kT\n", thee->extQfEnergy);
+    thee->extNpEnergy = Vpmg_npEnergy(pmgOLD, 1);
+    Vnm_print(0, "VPMG::extEnergy: extNpEnergy = %g kT\n", thee->extNpEnergy);
     thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
     Vnm_print(0, "VPMG::extEnergy: extDiEnergy = %g kT\n", thee->extDiEnergy);
     Vpmg_unsetPart(pmgOLD);
@@ -933,6 +936,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     thee->extQmEnergy = 0;
     thee->extDiEnergy = 0;
     thee->extQfEnergy = 0;
+    thee->extNpEnergy = 0;
 
     thee->filled = 0;
 
@@ -1091,6 +1095,8 @@ Vpmg_ctor2Focus:  maps during focusing!\n");
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_solve(Vpmg *thee) {
+
+    thee->filled = 0;
 
     switch(thee->pmgp->meth) {
         /* CGMG (linear) */
@@ -1848,8 +1854,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
 // Routine:  Vpmg_force
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma, 
-  int atomID) {
+VPUBLIC void Vpmg_force(Vpmg *thee, double *force, int atomID) {
 
     double qfF[3];                  /* Charge-field force */  
     double dbF[3];                  /* Dielectric boundary force */
@@ -1857,9 +1862,8 @@ VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma,
     double npF[3];                  /* Non-polar boundary force */
 
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
  
-    Vpmg_dbnpForce(thee, qfF, npF, gamma, atomID);
+    Vpmg_dbnpForce(thee, qfF, npF, atomID);
     Vpmg_ibForce(thee, dbF, atomID); 
     Vpmg_qfForce(thee, ibF, atomID); 
 
@@ -1938,13 +1942,13 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != 4) {
-            Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+            Vnm_print(2, "Vpmg_ibForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
                   atomID, position[0], position[1], position[2]);
-            Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n",
+            Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n",
               xmin, xmax);
-            Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n",
+            Vnm_print(2, "Vpmg_ibForce:    ymin = %g, ymax = %g\n",
               ymin, ymax);
-            Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n",
+            Vnm_print(2, "Vpmg_ibForce:    zmin = %g, zmax = %g\n",
               zmin, zmax);
         }
         fflush(stderr);
@@ -2010,7 +2014,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce, 
-  double gamma, int atomID) {
+  int atomID) {
 
     Vacc *acc;
     Vpbe *pbe;
@@ -2018,7 +2022,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 
     double *apos, position[3], arad, hx, hy, hzed, izmagic;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
-    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, gamma;
     double npFmag, *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
     double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
     double dHzijkm1[3];
@@ -2048,6 +2052,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     acc = pbe->acc;
     epsp = Vpbe_getSoluteDiel(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
+    gamma = Vpbe_getGamma(pbe);
     izmagic = 1.0/Vpbe_getZmagic(pbe);
 
     /* Mesh info */
@@ -2079,13 +2084,13 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != 4) {
-            Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+            Vnm_print(2, "Vpmg_dbnpForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
                   atomID, position[0], position[1], position[2]);
-            Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n",
+            Vnm_print(2, "Vpmg_dbnpForce:    xmin = %g, xmax = %g\n",
               xmin, xmax);
-            Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n",
+            Vnm_print(2, "Vpmg_dbnpForce:    ymin = %g, ymax = %g\n",
               ymin, ymax);
-            Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n",
+            Vnm_print(2, "Vpmg_dbnpForce:    zmin = %g, zmax = %g\n",
               zmin, zmax);
         }
         fflush(stderr);
@@ -2263,10 +2268,10 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
     if ((apos[0]<=xmin) || (apos[0]>=xmax) || (apos[1]<=ymin) || \
         (apos[1]>=ymax) || (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != 4) {
-            Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, position[0], position[1], position[2]);
-            Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", xmin, xmax);
-            Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", ymin, ymax);
-            Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", zmin, zmax);
+            Vnm_print(2, "Vpmg_qfForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, position[0], position[1], position[2]);
+            Vnm_print(2, "Vpmg_qfForce:    xmin = %g, xmax = %g\n", xmin, xmax);
+            Vnm_print(2, "Vpmg_qfForce:    ymin = %g, ymax = %g\n", ymin, ymax);
+            Vnm_print(2, "Vpmg_qfForce:    zmin = %g, zmax = %g\n", zmin, zmax);
         }
         fflush(stderr);
     } else {
@@ -2371,8 +2376,6 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 
 }
 
-
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_dielEnergy
 // Author:   Nathan Baker
@@ -2383,7 +2386,6 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
     int i, j, k, nx, ny, nz;
  
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
 
     /* Get the mesh information */
     nx = thee->pmgp->nx;
@@ -2396,7 +2398,7 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
     energy = 0.0;
 
     /* Refill the dieletric coefficient arrays */
-    Vpmg_fillco(thee, 
+    if (!thee->filled) Vpmg_fillco(thee, 
       thee->surfMeth, thee->splineWin,
       thee->useDielXMap, thee->dielXMap,
       thee->useDielYMap, thee->dielYMap,
@@ -2430,6 +2432,88 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_dielGradNorm
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
+
+    double hx, hy, hzed, energy, nrgx, nrgy, nrgz, pvecx, pvecy, pvecz;
+    int i, j, k, nx, ny, nz;
+ 
+    VASSERT(thee != VNULL);
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    energy = 0.0;
+
+    /* Refill the dieletric coefficient arrays */
+    if (!thee->filled) Vpmg_fillco(thee, 
+      thee->surfMeth, thee->splineWin,
+      thee->useDielXMap, thee->dielXMap,
+      thee->useDielYMap, thee->dielYMap,
+      thee->useDielZMap, thee->dielZMap,
+      thee->useKappaMap, thee->kappaMap,
+      thee->useChargeMap, thee->chargeMap);
+
+    for (k=0; k<(nz-1); k++) {
+        for (j=0; j<(ny-1); j++) {
+            for (i=0; i<(nx-1); i++) {
+                pvecx = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i+1,j,k)]);
+                pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j+1,k)]);
+                pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k+1)]);
+                nrgx = pvecx
+                 * VSQR((thee->a1cf[IJK(i,j,k)]-thee->a1cf[IJK(i+1,j,k)])/hx);
+                nrgy = pvecy
+                 * VSQR((thee->a2cf[IJK(i,j,k)]-thee->a2cf[IJK(i,j+1,k)])/hy);
+                nrgz = pvecz
+                 * VSQR((thee->a3cf[IJK(i,j,k)]-thee->a3cf[IJK(i,j,k+1)])/hzed);
+                energy += VSQRT(nrgx + nrgy + nrgz);
+            }
+        }
+    }
+
+    energy = energy*hx*hy*hzed;
+
+    return energy;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_npEnergy
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_npEnergy(Vpmg *thee, int extFlag) {
+
+    double area, energy, epsp, epss, gamma, temp;
+
+    epsp = Vpbe_getSoluteDiel(thee->pbe);
+    epss = Vpbe_getSolventDiel(thee->pbe);
+    gamma = Vpbe_getGamma(thee->pbe);
+    temp = Vpbe_getTemperature(thee->pbe);
+    gamma = gamma/(Vunit_kb*temp);
+
+    if (VABS(epsp-epss) < VSMALL) {
+        Vnm_print(2, "Vpmg_npEnergy:  No apolar energy for equal \
+protein/solvent dielectric values!");
+        return 0.0;
+    } 
+
+    area = Vpmg_dielGradNorm(thee);
+    energy = gamma*area/(epss-epsp);
+   
+    if (extFlag == 1) energy += (thee->extNpEnergy); 
+
+    return energy;
+
+}
+    
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_qmEnergy
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -2440,7 +2524,6 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     int i, j, nx, ny, nz, nion, ichop, nchop;
  
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
 
     /* Get the mesh information */
     nx = thee->pmgp->nx;
@@ -2460,7 +2543,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     zks2 = 0.5*zkappa2/ionstr;
 
     /* Because PMG seems to overwrite some of the coefficient arrays... */
-    Vpmg_fillco(thee, 
+    if (!thee->filled) Vpmg_fillco(thee, 
       thee->surfMeth, thee->splineWin,
       thee->useDielXMap, thee->dielXMap,
       thee->useDielYMap, thee->dielYMap,
@@ -2754,7 +2837,6 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     zok = 0;
 
     /* We need have called Vpmg_fillco first */
-    /* VASSERT(thee->filled == 1); */
 
     alist = thee->pbe->alist;
 

@@ -73,6 +73,7 @@ struct Vpbe {
   Vgreen *green;      /**< Green's function oracle */
 
   double T;           /**< Temperature (K) */
+  double gamma;       /**< Apolar coefficient (kJ/mol/A/A) */
   double soluteDiel;  /**< Solute dielectric constant (unitless) */
   double solventDiel; /**< Solvent dielectric constant (unitless) */
   double solventRadius;
@@ -171,6 +172,14 @@ typedef struct Vpbe Vpbe;
      *  @return  Solute dielectric constant
      */
     VEXTERNC double  Vpbe_getSoluteDiel(Vpbe *thee); 
+
+    /** @brief   Get apolar coefficient
+     *  @ingroup Vpbe
+     *  @author  Nathan Baker
+     *  @param   thee Vpbe object
+     *  @return  Apolar coefficent (kJ/mol/A^2)
+     */
+    VEXTERNC double  Vpbe_getGamma(Vpbe *thee);
 
     /** @brief   Get sphere radius which bounds biomolecule
      *  @ingroup Vpbe
@@ -275,6 +284,7 @@ typedef struct Vpbe Vpbe;
 #   define Vpbe_getBulkIonicStrength(thee) ((thee)->bulkIonicStrength)
 #   define Vpbe_getTemperature(thee) ((thee)->T)           
 #   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 
+#   define Vpbe_getGamma(thee) ((thee)->gamma) 
 #   define Vpbe_getSoluteCenter(thee) ((thee)->soluteCenter)
 #   define Vpbe_getSoluteRadius(thee) ((thee)->soluteRadius)
 #   define Vpbe_getSoluteXlen(thee) ((thee)->soluteXlen)
@@ -318,13 +328,14 @@ typedef struct Vpbe Vpbe;
  *  @param   ionRadii Array containing counterion species' radii (A)
  *  @param   ionQ Array containing counterion species' charges (e)
  *  @param   T temperature (K)
+ *  @param   gamma Apolar coefficient (kJ/mol/A^2)
  *  @param   soluteDiel Solute dielectric constant
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
  *  @return  Pointer to newly allocated Vpbe object
  */
 VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
-		    double *ionRadii, double *ionQ, double T,
+		    double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,  
                     double solventRadius);
 
@@ -352,6 +363,7 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  *  @param   ionRadii Array containing counterion species' radii (A)
  *  @param   ionQ Array containing counterion species' charges (e)
  *  @param   T temperature (K)
+ *  @param   gamma Apolar coefficient (kJ/mol/A^2)
  *  @param   soluteDiel Solute dielectric constant
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
@@ -359,7 +371,7 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  */
 VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
 		    double *ionConc, double *ionRadii, double *ionQ, 
-                    double T, double soluteDiel, 
+                    double T, double gamma, double soluteDiel, 
                     double solventDiel, double solventRadius);
 
 /** @brief   Get information about the counterion species present
