@@ -126,7 +126,16 @@ self.nprint
 self.nelec
         [ Member data: returns int  ]
 
+self.printwhat
+        [ Member data: returns NOsh_PrintType * ]
+
 ----------
+
+NPT_ENERGY = NPT_ENERGY
+        [ Constant: int  ]
+
+NPT_FORCE = NPT_FORCE
+        [ Constant: int  ]
 
 NOsh_getCalc(thee,icalc)
         [ returns NOsh_calc * ]

@@ -81,7 +81,13 @@ typedef struct {
 	int ncalc;
 	int nprint;             
     int nelec;
+    NOsh_PrintType printwhat[NOSH_MAXPRINT];
 } NOsh;
+
+enum NOsh_PrintType {
+    NPT_ENERGY=0, NPT_FORCE=1
+};
+
 
 #if !defined(VINLINE_NOSH)
 extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);

@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.3  2004/04/23 20:26:32  apbs
- * TJD: Changed wrapped version of NOsh_printWhat to match new version.
+ * Revision 1.4  2004/04/26 20:56:13  apbs
+ * TJD: Another Python wrapper NOsh_printWhat fix.
  *
  ************************************************************************/
 
@@ -1320,11 +1320,10 @@ static PyObject *_wrap_NOsh_elec2calc(PyObject *self, PyObject *args) {
 
 static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    NOsh_PrintType * _result;
+    NOsh_PrintType  _result;
     NOsh * _arg0;
     int  _arg1;
     char * _argc0 = 0;
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTuple(args,"si:NOsh_printWhat",&_argc0,&_arg1)) 
@@ -1335,10 +1334,8 @@ static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (NOsh_PrintType *) malloc(sizeof(NOsh_PrintType ));
-    *(_result) = NOsh_printWhat(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (void *) _result,"_NOsh_PrintType_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+    _result = (NOsh_PrintType )NOsh_printWhat(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -3288,6 +3285,29 @@ static PyObject *_wrap_NOsh_nelec_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define NOsh_printwhat_get(_swigobj) ((NOsh_PrintType *) _swigobj->printwhat)
+static PyObject *_wrap_NOsh_printwhat_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    NOsh_PrintType * _result;
+    NOsh * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:NOsh_printwhat_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_printwhat_get. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    _result = (NOsh_PrintType *)NOsh_printwhat_get(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_NOsh_PrintType_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define new_AtomForce() ((AtomForce *) calloc(1,sizeof(AtomForce)))
 static PyObject *_wrap_new_AtomForce(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -3327,6 +3347,7 @@ static PyObject *_wrap_delete_AtomForce(PyObject *self, PyObject *args) {
 static PyMethodDef apbslibcMethods[] = {
 	 { "delete_AtomForce", _wrap_delete_AtomForce, 1 },
 	 { "new_AtomForce", _wrap_new_AtomForce, 1 },
+	 { "NOsh_printwhat_get", _wrap_NOsh_printwhat_get, 1 },
 	 { "NOsh_nelec_get", _wrap_NOsh_nelec_get, 1 },
 	 { "NOsh_nelec_set", _wrap_NOsh_nelec_set, 1 },
 	 { "NOsh_nprint_get", _wrap_NOsh_nprint_get, 1 },
@@ -3422,6 +3443,8 @@ SWIGEXPORT(void,initapbslibc)() {
 	 m = Py_InitModule("apbslibc", apbslibcMethods);
 	 d = PyModule_GetDict(m);
 	 PyDict_SetItemString(d,"APBS_SWIG", PyInt_FromLong((long) 1));
+	 PyDict_SetItemString(d,"NPT_ENERGY", PyInt_FromLong((long) NPT_ENERGY));
+	 PyDict_SetItemString(d,"NPT_FORCE", PyInt_FromLong((long) NPT_FORCE));
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
