@@ -144,5 +144,6 @@ VEXTERNC double Vpbe_getDeblen(Vpbe *thee);
 VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
 VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, int *length);
+VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, int color);
 
 #endif /* ifndef _VALIST_H_ */

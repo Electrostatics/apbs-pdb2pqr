@@ -638,4 +638,86 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, int *length) {
 }
 
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getLinearEnergy1
+//
+// Purpose:  using the solution at the finest mesh level, get the 
+//           electrostatic energy using the free energy functional for the 
+//           linearized Poisson-Boltzmann equation without removing any 
+//           self-interaction terms (i.e., removing the reference state of
+//           isolated charges present in an infinite dielectric continuum with 
+//           the same relative permittivity as the interior of the protein).
+//           In other words, we calculate
+//             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
+//           and return the result in units of $k_B T$.  The argument color
+//           allows the user to control the partition on which this energy
+//           is calculated; if (color == -1) no restrictions are used.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) { 
+
+   double *sol; int nsol;
+   double charge;
+   double phi[4], phix[4][3], *position;
+   int iatom, natoms;
+   int isimp, nsimps;
+   int ivert;
+   SS *simp;
+   double energy = 0.0;
+   double efac, uval;
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->am != VNULL);
+   VASSERT(thee->gm != VNULL);
+   VASSERT(thee->alist != VNULL);
+   VASSERT(thee->csm != VNULL);
+
+   /* Get the finest level solution */
+   sol= VNULL;
+   sol = Vpbe_getSolution(thee, &nsol);
+   VASSERT(sol != VNULL);
+
+   /* Make sure the number of entries in the solution array matches the
+    * number of vertices currently in the mesh */
+   if (nsol != Vgm_numVV(thee->gm)) {
+      Vnm_print(2, "Vpbe_getLinearEnergy1: Number of unknowns in solution does not match\n");
+      Vnm_print(2, "Vpbe_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
+      VASSERT(0);
+   }
+
+   /* Now we do the sum over atoms... */
+   natoms = Valist_getNumberAtoms(thee->alist);
+   for (iatom=0; iatom<natoms; iatom++) {
+       charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
+       position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
+       /* Loop over the simps associated with this atom */
+       nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
+       /* Don't overcount q*phi contributions if found in more than one
+        * simplex */
+       efac = 1.0/((double)(nsimps));
+       /* Loop over the simps associated with this atom */
+       for (isimp=0; isimp<nsimps; isimp++) {
+           simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
+           if ((SS_chart(simp)==color)||(color<0)) {
+               /* Get the value of each basis function evaluated at this
+                * point */
+               Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
+               for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
+                   uval = sol[VV_id(SS_vertex(simp,ivert))];
+                   energy += (efac*charge*phi[ivert]*uval);
+               } /* end for ivert */
+           } /* endif (color) */
+       } /* end for isimp */
+   } /* end for iatom */
+
+   /* Destroy the finest level solution */
+   Vram_dtor((Vram **)&sol, nsol, sizeof(double));
+
+   /* Return the energy */
+   return 0.5*energy;
+}
+
+
+
 
