@@ -571,17 +571,17 @@ VPUBLIC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
-    snprintf(writepotstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writepotstem,
+    sprintf(writepotstem, "%s-PE%d", pbeparm->writepotstem,
       Vcom_rank(com));
 #else
-    snprintf(writepotstem, VMAX_ARGLEN, "%s", pbeparm->writepotstem);
+    sprintf(writepotstem, "%s", pbeparm->writepotstem);
 #endif
 
 
     if (pbeparm->writepot == 1) {
         /* In DX format */
         if (pbeparm->writepotfmt == 0) {
-            snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "dx");
+            sprintf(outpath, "%s.%s", writepotstem, "dx");
             Vnm_tprint( 1, "main:    Writing potential in DX format \
 to %s...\n", outpath);
             Vpmg_writeDX(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
@@ -589,13 +589,13 @@ to %s...\n", outpath);
 
          /* In AVS format */
          } else if (pbeparm->writepotfmt == 1) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "ucd");
+             sprintf(outpath, "%s.%s", writepotstem, "ucd");
              Vnm_tprint( 2, "main:    Sorry, AVS format isn't supported \
 for multigrid calculations yet!\n");
              return 0;
          /* In UHBD format */
          } else if (pbeparm->writepotfmt == 2) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writepotstem, "grd");
+             sprintf(outpath, "%s.%s", writepotstem, "grd");
              Vnm_tprint( 1, "main:    Writing potential in UHBD format \
 to %s...\n", outpath);
              Vpmg_writeUHBD(pmg, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
@@ -629,16 +629,16 @@ VPUBLIC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
-    snprintf(writeaccstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writeaccstem,
+    sprintf(writeaccstem, "%s-PE%d", pbeparm->writeaccstem,
       Vcom_rank(com));
 #else
-    snprintf(writeaccstem, VMAX_ARGLEN, "%s", pbeparm->writeaccstem);
+    sprintf(writeaccstem, "%s", pbeparm->writeaccstem);
 #endif
     
     if (pbeparm->writeacc == 1) {
         /* In DX format */
         if (pbeparm->writeaccfmt == 0) {
-            snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "dx");
+            sprintf(outpath, "%s.%s", writeaccstem, "dx");
             Vnm_tprint( 1, "main:    Writing accessibility in DX format \
 to %s...\n", outpath);
             Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
@@ -647,13 +647,13 @@ to %s...\n", outpath);
 
          /* In AVS format */
          } else if (pbeparm->writeaccfmt == 1) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "ucd");
+             sprintf(outpath, "%s.%s", writeaccstem, "ucd");
              Vnm_tprint( 2, "main:    Sorry, AVS format isn't supported\
 for multigrid calculations yet!\n");
              return 0;
          /* In UHBD format */
          } else if (pbeparm->writeaccfmt == 2) {
-             snprintf(outpath, VMAX_ARGLEN, "%s.%s", writeaccstem, "grd");
+             sprintf(outpath, "%s.%s", writeaccstem, "grd");
              Vnm_tprint( 1, "main:    Writing accessibility in UHBD \
 format to %s...\n", outpath);
              Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
