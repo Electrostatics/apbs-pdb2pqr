@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
     hx = grid->hx;
     hy = grid->hy;
     hzed = grid->hzed;
-    xmin = grid->xmin,
-    ymin = grid->ymin,
+    xmin = grid->xmin;
+    ymin = grid->ymin;
     zmin = grid->zmin;
 
     /* Intialize socket for writing */
