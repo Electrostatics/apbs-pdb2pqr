@@ -14,6 +14,9 @@ c* University of California, San Diego
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
+c* Copyright (c) 1999-2002.  Washington University in St. Louis.
+c* All Rights Reserved.
+c*
 c* Copyright (c) 1999-2002.  The Regents of the University of California.
 c* Portions Copyright (c) 1995.  Michael Holst.
 c*
