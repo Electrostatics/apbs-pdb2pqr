@@ -168,7 +168,7 @@ SUFFIXES = .H .h .C .cc .c .f .o
 CCLD = $(F77)
 bin_PROGRAMS = apbs
 apbs_SOURCES = main.c routines.c
-apbs_LDADD = ${top_srcdir}/src/aaa_lib/libapbs.la @lib_list@
+apbs_LDADD = ${top_builddir}/src/aaa_lib/libapbs.la @lib_list@
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c
 libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
@@ -190,7 +190,7 @@ PROGRAMS = $(bin_PROGRAMS)
 
 am_apbs_OBJECTS = main.$(OBJEXT) routines.$(OBJEXT)
 apbs_OBJECTS = $(am_apbs_OBJECTS)
-apbs_DEPENDENCIES = ${top_srcdir}/src/aaa_lib/libapbs.la
+apbs_DEPENDENCIES = ${top_builddir}/src/aaa_lib/libapbs.la
 apbs_LDFLAGS =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
