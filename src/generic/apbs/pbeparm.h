@@ -150,6 +150,34 @@ typedef struct PBEparm PBEparm;
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
+/** @brief   Get charge (e) of specified ion species
+ *  @ingroup PBEparm
+ *  @author  Nathan Baker
+ *  @param   thee PBEparm object
+ *  @param   iion Ion species ID
+ *  @returns Charge of ion species (e)
+ */
+VEXTERNC double PBEparm_getIonCharge(PBEparm *thee, int iion);
+
+/** @brief   Get concentration (M) of specified ion species
+ *  @ingroup PBEparm
+ *  @author  Nathan Baker
+ *  @param   thee PBEparm object
+ *  @param   iion Ion species ID
+ *  @returns Concentration of ion species (M)
+ */
+VEXTERNC double PBEparm_getIonConc(PBEparm *thee, int iion);
+
+/** @brief   Get radius (A) of specified ion species
+ *  @ingroup PBEparm
+ *  @author  Nathan Baker
+ *  @param   thee PBEparm object
+ *  @param   iion Ion species ID
+ *  @returns Radius of ion species (A)
+ */
+VEXTERNC double PBEparm_getIonRadius(PBEparm *thee, int iion);
+
+
 /** @brief   Construct PBEparm object
  *  @ingroup PBEparm
  *  @author  Nathan Baker

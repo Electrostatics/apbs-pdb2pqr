@@ -49,6 +49,32 @@ VEMBED(rcsid="$Id$")
 #if !defined(VINLINE_VATOM)
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_getCenterCoord
+// 
+// Author:   Nathan Baker 
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Valist_getCenterX(Valist *thee) {
+ 
+  VASSERT(thee != NULL);
+  return thee->center[0];
+
+}
+VPUBLIC double Valist_getCenterY(Valist *thee) {
+
+  VASSERT(thee != NULL);
+  return thee->center[1];
+
+}
+VPUBLIC double Valist_getCenterZ(Valist *thee) {
+
+  VASSERT(thee != NULL);
+  return thee->center[2];
+
+}
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Valist_getAtomList
 //
 // Author:   Nathan Baker

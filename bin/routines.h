@@ -70,28 +70,29 @@ typedef struct AtomForce {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VEXTERNC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
-VEXTERNC int loadDielMaps(Vcom *com, NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
+VEXTERNC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+VEXTERNC int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
-VEXTERNC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
-VEXTERNC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
-VEXTERNC void printPBEPARM(Vcom *com, PBEparm *pbeparm);
-VEXTERNC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]);
-VEXTERNC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
+VEXTERNC int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+VEXTERNC int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+VEXTERNC void printPBEPARM(PBEparm *pbeparm);
+VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
+VEXTERNC int initMG(int i, NOsh *nosh, MGparm *mgparm,
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-VEXTERNC int solveMG(Vcom *com, Vpmg *pmg, int type);
-VEXTERNC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg);
-VEXTERNC int energyMG(Vcom *com, NOsh* nosh, int icalc, Vpmg *pmg,
+VEXTERNC int solveMG(Vpmg *pmg, int type);
+VEXTERNC int setPartMG(MGparm *mgparm, Vpmg *pmg);
+VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
-VEXTERNC int forceMG(Vcom *com, Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
+VEXTERNC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
-VEXTERNC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+VEXTERNC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i);
+VEXTERNC void startVio();
 
 #endif

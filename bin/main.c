@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     com = Vcom_ctor(1);
     rank = Vcom_rank(com);
     size = Vcom_size(com);
-    Vio_start();
+    startVio(); 
     Vnm_setIoTag(rank, size);
     Vnm_tprint( 0, "main:  Hello world from PE %d\n", rank);
 
@@ -167,7 +167,7 @@ int main(int argc, char **argv) {
 
 
     /* *************** PARSE INPUT FILE ******************* */
-    nosh = NOsh_ctor(com);
+    nosh = NOsh_ctor(rank, size);
     sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
     Vnm_tprint( 1, "main:  Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
@@ -177,21 +177,21 @@ int main(int argc, char **argv) {
     Vio_dtor(&sock);
 
     /* *************** LOAD MOLECULES ******************* */
-    if (loadMolecules(com, nosh, alist) != 1) {
+    if (loadMolecules(nosh, alist) != 1) {
         Vnm_tprint(2, "main:  Error reading molecules!\n");
         return APBSRC;
     }
 
     /* *************** LOAD MAPS ******************* */
-    if (loadDielMaps(com, nosh, dielXMap, dielYMap, dielZMap) != 1) {
+    if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
         Vnm_tprint(2, "main:  Error reading dielectric maps!\n");
         return APBSRC;
     }
-    if (loadKappaMaps(com, nosh, kappaMap) != 1) {
+    if (loadKappaMaps(nosh, kappaMap) != 1) {
         Vnm_tprint(2, "main:  Error reading kappa maps!\n");
         return APBSRC;
     }
-    if (loadChargeMaps(com, nosh, chargeMap) != 1) {
+    if (loadChargeMaps(nosh, chargeMap) != 1) {
         Vnm_tprint(2, "main:  Error reading charge maps!\n");
         return APBSRC;
     }
@@ -213,7 +213,7 @@ int main(int argc, char **argv) {
 
             /* Set up problem */
             Vnm_tprint( 1, "main:    Setting up problem...\n");
-            if (!initMG(com, i, nosh, mgparm, pbeparm, realCenter, pbe, 
+            if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
               alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
               pmgp, pmg)) {
                 Vnm_tprint( 2, "main:  Error setting up MG calculation!\n");
@@ -221,35 +221,35 @@ int main(int argc, char **argv) {
             }
 
             /* Print problem parameters */
-            printMGPARM(com, mgparm, realCenter);
-            printPBEPARM(com, pbeparm);
+            printMGPARM(mgparm, realCenter);
+            printPBEPARM(pbeparm);
 
             /* Solve PDE */
-            if (solveMG(com, pmg[i], mgparm->type) != 1) {
+            if (solveMG(pmg[i], mgparm->type) != 1) {
                 Vnm_tprint(2, "main:  Error solving PDE!\n");
                 return APBSRC;
             }
 
             /* Set partition information for observables and I/O */
-            if (setPartMG(com, mgparm, pmg[i]) != 1) {
+            if (setPartMG(mgparm, pmg[i]) != 1) {
                 Vnm_tprint(2, "main:  Error setting partition info!\n");
                 return APBSRC;
             }
 
             /* Write out energies */
-            energyMG(com, nosh, i, pmg[i], &(nenergy[i]), 
+            energyMG(nosh, i, pmg[i], &(nenergy[i]), 
               &(totEnergy[i]), &(qfEnergy[i]), &(qmEnergy[i]), 
               &(dielEnergy[i]));
 
             /* Write out forces */
-            forceMG(com, mem, nosh, pbeparm, pmg[i], &(nforce[i]), 
+            forceMG(mem, nosh, pbeparm, pmg[i], &(nforce[i]), 
               &(atomForce[i]), alist);
 
             /* Write out data folks might want */
-            writedataMG(com, nosh, pbeparm, pmg[i]);
+            writedataMG(rank, nosh, pbeparm, pmg[i]);
             
             /* Write matrix */
-            writematMG(com, nosh, pbeparm, pmg[i]);
+            writematMG(rank, nosh, pbeparm, pmg[i]);
 
             fflush(stdout);
             fflush(stderr);

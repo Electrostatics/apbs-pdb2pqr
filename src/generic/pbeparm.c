@@ -53,6 +53,23 @@
 // Class PBEparm: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 
+VPUBLIC double PBEparm_getIonCharge(PBEparm *thee, int i) {
+    VASSERT(thee != VNULL);
+	VASSERT(i < thee->nion);
+    return thee->ionq[i];
+}
+VPUBLIC double PBEparm_getIonConc(PBEparm *thee, int i) {
+    VASSERT(thee != VNULL);
+    VASSERT(i < thee->nion);
+    return thee->ionc[i];
+}
+VPUBLIC double PBEparm_getIonRadius(PBEparm *thee, int i) {
+    VASSERT(thee != VNULL);
+    VASSERT(i < thee->nion);
+    return thee->ionr[i];
+}
+
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  PBEparm_ctor
 //

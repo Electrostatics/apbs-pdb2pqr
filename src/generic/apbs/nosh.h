@@ -105,8 +105,10 @@ struct NOsh {
                                           * the input file */
     int ispara;                          /**< 1 => is a parallel calculation, 
                                           *  0 => is not */
-    Vcom *com;                           /**< Communications object for parallel
-                                          * focusing calculations */
+    int proc_rank;                       /**< Processor rank in parallel
+                                          * calculation */
+    int proc_size;                       /**< Number of processors in parallel
+                                          * calculation */
     int bogus;                           /**< A flag which tells routines using
                                           * NOsh that this particular NOsh is
                                           * broken -- useful for parallel
@@ -131,7 +133,7 @@ struct NOsh {
 					  * calc array. */
     int nmol;                            /**< Number of molecules */
     char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
-    char molfmt[NOSH_MAXMOL];            /**< Mol files formats (0=>PQR) */
+    int molfmt[NOSH_MAXMOL];            /**< Mol files formats (0=>PQR) */
     int ndiel;                           /**< Number of dielectric maps */
     char dielXpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to x-shifted 
                                                * dielectric map files */
@@ -139,17 +141,17 @@ struct NOsh {
                                                * dielectric map files */
     char dielZpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to z-shifted 
                                                * dielectric map files */
-    char dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
+    int dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
                                           * formats (0=>OpenDX) */
     int nkappa;                          /**< Number of kappa maps */
     char kappapath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to kappa map
                                           * files */
-    char kappafmt[NOSH_MAXMOL];          /**< Kappa maps file 
+    int kappafmt[NOSH_MAXMOL];          /**< Kappa maps file 
                                           * formats (0=>OpenDX) */
     int ncharge;                         /**< Number of charge maps */
     char chargepath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to charge map
                                           * files */
-    char chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
+    int chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
                                           * formats (0=>OpenDX) */
     int nprint;                          /**< How many print sections? */
     int printwhat[NOSH_MAXPRINT];        /**< What do we print (0=>energy) */
@@ -170,25 +172,192 @@ struct NOsh {
 typedef struct NOsh NOsh;
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Class NOsh: Inlineable methods (mcsh.c)
+/////////////////////////////////////////////////////////////////////////// */
+#if !defined(VINLINE_NOSH)
+    /** @brief    Returns path to specified molecule
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imol Molecule ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getMolpath(NOsh *thee, int imol);
+
+    /** @brief    Returns path to specified x-shifted dielectric map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Map ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getDielXpath(NOsh *thee, int imap);
+
+    /** @brief    Returns path to specified y-shifted dielectric map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Map ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getDielYpath(NOsh *thee, int imap);
+
+    /** @brief    Returns path to specified z-shifted dielectric map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Map ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getDielZpath(NOsh *thee, int imap);
+
+    /** @brief    Returns path to specified kappa map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Map ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getKappapath(NOsh *thee, int imap);
+
+    /** @brief    Returns path to specified charge distribution map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Map ID of interest
+     *  @returns  Path string
+     */
+    VEXTERNC char* NOsh_getChargepath(NOsh *thee, int imap);
+
+    /** @brief    Returns specified calculation object
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    icalc Calculation ID of interest
+     *  @returns  Pointer to specified calculation object
+     */
+    VEXTERNC NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
+
+    /** @brief    Returns format of specified dielectric map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Calculation ID of interest
+     *  @returns  Format of dielectric map
+     */
+    VEXTERNC int NOsh_getDielfmt(NOsh *thee, int imap);
+
+    /** @brief    Returns format of specified kappa map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Calculation ID of interest
+     *  @returns  Format of kappa map
+     */
+    VEXTERNC int NOsh_getKappafmt(NOsh *thee, int imap);
+
+    /** @brief    Returns format of specified charge map
+     *  @ingroup  NOsh
+     *  @author   Nathan Baker
+     *  @param    thee Pointer to NOsh object
+     *  @param    imap Calculation ID of interest
+     *  @returns  Format of charge map
+     */
+    VEXTERNC int NOsh_getChargefmt(NOsh *thee, int imap);
+
+#else
+
+#   define NOsh_getMolpath(thee, imol) ((thee)->molpath[(imol)])
+#   define NOsh_getDielXpath(thee, imol) ((thee)->dielXpath[(imol)])
+#   define NOsh_getDielYpath(thee, imol) ((thee)->dielYpath[(imol)])
+#   define NOsh_getDielZpath(thee, imol) ((thee)->dielZpath[(imol)])
+#   define NOsh_getKappapath(thee, imol) ((thee)->kappapath[(imol)])
+#   define NOsh_getChargepath(thee, imol) ((thee)->chargepath[(imol)])
+#   define NOsh_getCalc(thee, icalc) ((thee)->calc[(icalc)])
+#   define NOsh_getDielfmt(thee, imap) ((thee)->dielfmt[(imap)])
+#   define NOsh_getKappafmt(thee, imap) ((thee)->kappafmt[(imap)])
+#   define NOsh_getChargefmt(thee, imap) ((thee)->chargefmt[(imap)])
+
+#endif
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
+
+/** @brief   Return an integer ID of the observable to print (@see printwhat)
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee NOsh object to use
+ *  @param   iprint ID of PRINT statement
+ *  @returns An integer ID of the observable to print (@see printwhat)
+ */
+VEXTERNC int NOsh_printWhat(NOsh *thee, int iprint);
+
+/** @brief   Return an integer mapping of an ELEC statement to a calculation ID
+ *           (@see elec2calc)
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee NOsh object to use
+ *  @param   icalc ID of CALC statement
+ *  @returns An integer mapping of an ELEC statement to a calculation ID
+ *           (@see elec2calc)
+ */
+VEXTERNC int NOsh_elec2calc(NOsh *thee, int iprint);
+
+/** @brief   Return number of arguments to PRINT statement (@see printnarg)
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee NOsh object to use
+ *  @param   iprint ID of PRINT statement
+ *  @returns Number of arguments to PRINT statement (@see printnarg)
+ */
+VEXTERNC int NOsh_printNarg(NOsh *thee, int iprint);
+
+/** @brief   Return integer ID for specified operation (@see printop)
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee NOsh object to use
+ *  @param   iprint ID of PRINT statement
+ *  @param   iarg ID of operation in PRINT statement
+ *  @returns Integer ID for specified operation (@see printop)
+ */ 
+VEXTERNC int NOsh_printOp(NOsh *thee, int iprint, int iarg);
+
+/** @brief   Return calculation ID for specified PRINT statement 
+ *           (@see printcalc)
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee NOsh object to use
+ *  @param   iprint ID of PRINT statement
+ *  @param   iarg ID of operation in PRINT statement
+ *  @returns Calculation ID for specified PRINT statement 
+ *           (@see printcalc)
+ */
+VEXTERNC int NOsh_printCalc(NOsh *thee, int iprint, int iarg);
 
 /** @brief   Construct NOsh
  *  @ingroup NOsh
  *  @author  Nathan Baker
- *  @param   com   Communications object
+ *  @param   rank   Rank of current processor in parallel calculation (0 if not
+ *                  parallel)
+ *  @param   size   Number of processors in parallel calculation (1 if not
+ *                  parallel)
  *  @returns Newly allocated and initialized NOsh object
  */
-VEXTERNC NOsh* NOsh_ctor(Vcom *com);
+VEXTERNC NOsh* NOsh_ctor(int rank, int size);
 
 /** @brief   FORTRAN stub to construct NOsh
  *  @ingroup NOsh
  *  @author  Nathan Baker
  *  @param   thee  Space for NOsh objet
- *  @param   com   Communications object
+ *  @param   rank   Rank of current processor in parallel calculation (0 if not
+ *                  parallel)
+ *  @param   size   Number of processors in parallel calculation (1 if not
+ *                  parallel)
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int   NOsh_ctor2(NOsh *thee, Vcom *com);
+VEXTERNC int   NOsh_ctor2(NOsh *thee, int rank, int size);
 
 /** @brief   Object destructor
  *  @ingroup NOsh

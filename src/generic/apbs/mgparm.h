@@ -133,9 +133,10 @@ struct MGparm {
     int pdime[3];                        /**< Grid of processors to be used in
                                           * calculation */
     int setpdime;                        /**< Flag, @see pdime */
-    Vcom *com;                           /**< Communications object for this 
-                                          * processor */
-    int setcom;                          /**< Flag, @see com */
+    int proc_rank;                       /**< Rank of this processor */
+    int setrank;                         /**< Flag, @see proc_rank */
+    int proc_size;                       /**< Total number of processors */
+    int setsize;                         /**< Flag, @see proc_size */
     double ofrac;                        /**< Overlap fraction between procs */
     int setofrac;                        /**< Flag, @see ofrac */
 
@@ -147,9 +148,125 @@ struct MGparm {
  */
 typedef struct MGparm MGparm;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Non-inlineable methods (mcsh.c)
-/////////////////////////////////////////////////////////////////////////// */
+/** @brief   Get number of grid points in x direction
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Number of grid points in the x direction
+ */
+VEXTERNC int MGparm_getNx(MGparm *thee);
+
+/** @brief   Get number of grid points in y direction
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Number of grid points in the y direction
+ */
+VEXTERNC int MGparm_getNy(MGparm *thee);
+
+/** @brief   Get number of grid points in z direction
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Number of grid points in the z direction
+ */
+VEXTERNC int MGparm_getNz(MGparm *thee);
+
+/** @brief   Get grid spacing in x direction (\f$\AA\f$)
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Grid spacing in the x direction
+ */
+VEXTERNC double MGparm_getHx(MGparm *thee);
+
+/** @brief   Get grid spacing in y direction (\f$\AA\f$)
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Grid spacing in the y direction
+ */
+VEXTERNC double MGparm_getHy(MGparm *thee);
+
+/** @brief   Get grid spacing in z direction (\f$\AA\f$)
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns Grid spacing in the z direction
+ */
+VEXTERNC double MGparm_getHz(MGparm *thee);
+
+/** @brief   Set center x-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @param   thee  x-coordinate
+ */
+VEXTERNC void MGparm_setCenterX(MGparm *thee, double x);
+
+/** @brief   Set center y-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @param   thee  y-coordinate
+ */  
+VEXTERNC void MGparm_setCenterY(MGparm *thee, double y);
+
+/** @brief   Set center z-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @param   thee  z-coordinate
+ */
+VEXTERNC void MGparm_setCenterZ(MGparm *thee, double z);
+
+/** @brief   Get center x-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  x-coordinate
+ */
+VEXTERNC double MGparm_getCenterX(MGparm *thee);
+
+/** @brief   Get center y-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  y-coordinate
+ */
+VEXTERNC double MGparm_getCenterY(MGparm *thee);
+
+/** @brief   Get center z-coordinate
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  z-coordinate
+ */
+VEXTERNC double MGparm_getCenterZ(MGparm *thee);
+
+/** @brief   Get x-coordinate shift of partition center in parallel calculation
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  x-coordinate shift of partition center in parallel calculation
+ */
+VEXTERNC double MGparm_getPartOlapCenterShiftX(MGparm *thee);
+
+/** @brief   Get y-coordinate shift of partition center in parallel calculation
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  y-coordinate
+ */
+VEXTERNC double MGparm_getPartOlapCenterShiftY(MGparm *thee);
+
+/** @brief   Get z-coordinate shift of partition center in parallel calculation
+ *  @ingroup MGparm
+ *  @author  Nathan Baker
+ *  @param   thee  MGparm object
+ *  @returns  z-coordinate shift of partition center in parallel calculation
+ */
+VEXTERNC double MGparm_getPartOlapCenterShiftZ(MGparm *thee);
 
 /** @brief   Construct MGparm object
  *  @ingroup MGparm

@@ -88,6 +88,31 @@ typedef struct Valist Valist;
      */
     VEXTERNC Vatom* Valist_getAtomList(Valist *thee);
 
+    /** @brief   Get x-coordinate of molecule center
+     *  @ingroup Valist
+     *  @author  Nathan Baker
+     *  @param   thee Valist object
+     *  @return  X-coordinate of molecule center
+     */
+    VEXTERNC double Valist_getCenterX(Valist *thee);
+
+    /** @brief   Get y-coordinate of molecule center
+     *  @ingroup Valist
+     *  @author  Nathan Baker
+     *  @param   thee Valist object
+     *  @return  Y-coordinate of molecule center
+     */ 
+    VEXTERNC double Valist_getCenterY(Valist *thee);
+
+    /** @brief   Get z-coordinate of molecule center
+     *  @ingroup Valist
+     *  @author  Nathan Baker
+     *  @param   thee Valist object
+     *  @return  Z-coordinate of molecule center
+     */ 
+    VEXTERNC double Valist_getCenterZ(Valist *thee);
+
+
     /** @brief   Get number of atoms in the list
      *  @ingroup Valist
      *  @author  Nathan Baker
@@ -118,6 +143,9 @@ typedef struct Valist Valist;
 #   define Valist_getNumberAtoms(thee) ((thee)->number)
 #   define Valist_getAtom(thee, i) (&((thee)->atoms[i]))
 #   define Valist_memChk(thee) (Vmem_bytes((thee)->vmem))
+#   define Valist_getCenterX(thee) ((thee)->center[0])
+#   define Valist_getCenterY(thee) ((thee)->center[1])
+#   define Valist_getCenterZ(thee) ((thee)->center[2])
 #endif /* if !defined(VINLINE_VATOM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
