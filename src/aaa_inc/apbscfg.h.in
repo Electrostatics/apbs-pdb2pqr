@@ -12,9 +12,6 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* have FEtk component MCX */
-#undef HAVE_MCX_H
-
 /* have FEtk component MC */
 #undef HAVE_MC_H
 

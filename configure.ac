@@ -466,8 +466,8 @@ dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
 dnl # HANDLE THE FEtk LIBRARIES
 dnl #
-dnl # We require both MC and MCX to be present.  If either of these libraries
-dnl # is not found, then we simply disable compilation of the portions of APBS
+dnl # We require MC to be present.  If this library is not found, then 
+dnl # we simply disable compilation of the portions of APBS
 dnl # which depend on FEtk.  Compilation can also be disabled by the
 dnl # '--disable-fetk' flag.
 dnl # -----------------------
@@ -484,11 +484,6 @@ mc_inc=""
 mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
-mcx_lib=""
-mcx_inc=""
-mcx_do_src=""
-mcx_do_lib=""
-mcx_do_test=""
 if test -z "${with_fetk}"; then
     AC_CHECKING([for FEtk libraries and headers...])
     if test -n "${FETK_INCLUDE}"; then
@@ -521,61 +516,11 @@ if test -z "${with_fetk}"; then
     LDFLAGS=${LDFLAGS_SAVE};
     CPPFLAGS=${CPPFLAGS_SAVE};
 
-    dnl # MCX header location ENV specification
-    if test -n "${FETK_INCLUDE}"; then
-        mcx_inc_path="-I${FETK_INCLUDE} ";
-    else
-        mcx_inc_path="-I${HOME}/include ";
-    fi
-    dnl # MCX library location ENV specification
-    if test -n "${FETK_LIBRARY}"; then
-        mcx_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
-    else
-        mcx_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
-    fi
-
-    dnl # Setup temp LDFLAGS and look for MCX library/header
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mcx_lib_path} 
-    CPPFLAGS=${mcx_inc_path};
-    mcx_found="";
-    AC_MSG_CHECKING([for mcx/mcx.h])
-    if test -f "${FETK_INCLUDE}/mcx/mcx.h"; then
-        mcx_found="yes";
-        mcx_inc="${mcx_inc_path}"
-        AC_MSG_RESULT([yes])
-    else
-        mcx_found="";
-        mcx_inc=""
-        AC_MSG_RESULT([no])
-    fi
-    if test -n "${mcx_found}"; then
-        AC_CHECK_LIB(mcx,mcx_link,
-            [mcx_found="yes";mcx_lib="${mcx_lib_path}-lmcx"],
-            [mcx_found="";mcx_lib=""],
-            [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${thread_lib} ${math_lib}])
-    fi
-
-    dnl # Return LDFLAGS and CPPFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-
     if test -n "${mc_found}"; then
         AC_MSG_RESULT([*** FEtk component MC found:  enabled. ***])
         AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
         mc_do_src="vcsm.c vfetk.c vpee.c"
         mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
-        mc_do_test="fem reg-fem lndet"
-        if test -n "${mcx_found}"; then
-            AC_MSG_RESULT([*** FEtk components MCX found:  enabled. ***])
-            AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
-            mcx_do_src="vpee.c"
-            mcx_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
-            mcx_do_test="vmetis"
-        else
-            AC_MSG_RESULT([*** FEtk omponent MCX not found:  disabled. ***])
-        fi 
     else
         AC_MSG_RESULT([*** FEtk component MC not found:  disabled. ***])
     fi
@@ -587,12 +532,6 @@ AC_SUBST(mc_inc)
 AC_SUBST(mc_do_src)
 AC_SUBST(mc_do_test)
 AC_SUBST(mc_do_lib)
-AC_SUBST(mcx_lib)
-AC_SUBST(mcx_inc)
-AC_SUBST(mcx_do_src)
-AC_SUBST(mcx_do_test)
-AC_SUBST(mcx_do_lib)
-
 
 dnl # -----------------------
 dnl # HANDLE THE BLAS LIBRARIES
@@ -701,8 +640,8 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
-inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
+lib_list="-L${top_srcdir}/lib ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
+inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
@@ -731,12 +670,5 @@ AC_OUTPUT([
     src/aaa_lib/Makefile
 
     bin/Makefile
-
-    test/Makefile
-    test/vmetis/Makefile
-    test/vgreen/Makefile
-    test/fem/Makefile
-    test/reg-fem/Makefile
-    test/lndet/Makefile
 ])
 

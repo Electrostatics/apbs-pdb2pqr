@@ -46,7 +46,6 @@
 
 #include "apbscfg.h"
 
-#if defined(HAVE_MCX_H)
 #include "mc/mc.h"
 #include "apbs/vpee.h"
 
@@ -514,4 +513,3 @@ VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol) {
 
 }
 
-#endif

@@ -42,9 +42,6 @@
 #if defined(HAVE_MC_H)
     void apbs_needs_mc(void) { }
 #endif
-#if defined(HAVE_MCX_H)
-    void apbs_needs_mcx(void) { }
-#endif
 #if !defined(USE_PMG_BLAS)
     void apbs_needs_blas(void) { }
 #endif
