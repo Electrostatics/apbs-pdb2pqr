@@ -64,7 +64,7 @@ typedef struct Vpmgp {
     /* ********** USER-SPECIFIED PARAMETERS ********** */
     int nx, ny, nz;              /* Grid dimensions [no default]  */
     int nlev;                    /* Number of mesh levels [no default] */
-    double hx, hy, hz;           /* Grid spacings [no default]  */
+    double hx, hy, hzed;         /* Grid spacings [no default]  */
     int nonlin;                  /* Problem type [no default]
                                   *   0 => linear
                                   *   1 => nonlinear
