@@ -19,6 +19,7 @@ libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c
 libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
+libapbsmainroutines_la_CFLAGS = AM_CFLAGS
 
 
 INCLUDES         = @inc_list@
