@@ -469,7 +469,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_PRESENT_TRUE PY_PRESENT_FALSE math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_PRESENT_TRUE PY_PRESENT_FALSE mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -8928,255 +8928,6 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-# Extract the first word of "python", so it can be a program name with args.
-set dummy python; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_py_path+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $py_path in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_py_path="$py_path" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_py_path="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-py_path=$ac_cv_path_py_path
-
-if test -n "$py_path"; then
-  echo "$as_me:$LINENO: result: $py_path" >&5
-echo "${ECHO_T}$py_path" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-if test -n "${py_path}"; then
-      PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
-      PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
-   PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
-   if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
-   else
-	  PY_CFLAGS=""
-   fi
-else
-   PY_CFLAGS=""
-fi
-
-PY_LDFLAGS=""
-PY_SHARED=""
-PY_LINKFLAGS=""
-case $host_os in
-   linux*)
-      PY_SHARED="-shared";;
-   irix*)
-      PY_SHARED="-shared"
-      PY_LDFLAGS="-lftn -lm";;
-   sun|solaris**)
-      PY_SHARED="-G"
-      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
-   cygwin|mingw32|windows**)
-      PY_CFLAGS="";;
-   *)
-      PY_CFLAGS="";;
-esac
-case $host_cpu in
-   x86_64*)
-      PY_CFLAGS="";;
-   powerpc64*)
-      PY_CFLAGS="";;
-   i*86)
-      PY_LINKFLAGS=${CFLAGS}
-      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
-      if test "${CC}" = "icc"; then
-          echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
-echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
-if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lifcore_pic  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char d_int_val ();
-int
-main ()
-{
-d_int_val ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_ifcore_pic_d_int_val=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_ifcore_pic_d_int_val=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_ifcore_pic_d_int_val" >&5
-echo "${ECHO_T}$ac_cv_lib_ifcore_pic_d_int_val" >&6
-if test $ac_cv_lib_ifcore_pic_d_int_val = yes; then
-  ifcore_lib="-lifcore_pic"
-else
-  ifcore_lib=""
-fi
-
-	      if test -n "${ifcore_lib}"; then
-	          PY_LDFLAGS=${ifcore_lib}
-	      else
-	          PY_CFLAGS=""
-	      fi
-	      if test -n "${IS_STATIC}"; then
-	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
-          fi
-      else
-          PY_CFLAGS=""
-      fi;;
-   ia64*)
-      PY_LINKFLAGS=${CFLAGS}
-      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
-      if test "${CC}" = "icc"; then
-          echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
-echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
-if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lifcore_pic  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char d_int_val ();
-int
-main ()
-{
-d_int_val ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_ifcore_pic_d_int_val=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_ifcore_pic_d_int_val=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_ifcore_pic_d_int_val" >&5
-echo "${ECHO_T}$ac_cv_lib_ifcore_pic_d_int_val" >&6
-if test $ac_cv_lib_ifcore_pic_d_int_val = yes; then
-  ifcore_lib="-lifcore_pic"
-else
-  ifcore_lib=""
-fi
-
-	      if test -n "${ifcore_lib}"; then
-	          PY_LDFLAGS=${ifcore_lib}
-	      else
-	          PY_CFLAGS=""
-	      fi
-	      if test -n "${IS_STATIC}"; then
-	          if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	              PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
-	          else
-                  PY_CFLAGS=""
-	          fi
-          fi
-      else
-          PY_CFLAGS=""
-      fi
-esac
-
-PY_SHARED=$PY_SHARED
-
-PY_LDFLAGS=$PY_LDFLAGS
-
-PY_CFLAGS=$PY_CFLAGS
-
-PY_LINKFLAGS=$PY_LINKFLAGS
-
-
-
-if test -n "${PY_CFLAGS}"; then
-  PY_PRESENT_TRUE=
-  PY_PRESENT_FALSE='#'
-else
-  PY_PRESENT_TRUE='#'
-  PY_PRESENT_FALSE=
-fi
-
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -10962,6 +10713,272 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 
 echo "$as_me:$LINENO: result: ---------- end configuring for MALOC linkage --------------" >&5
 echo "${ECHO_T}---------- end configuring for MALOC linkage --------------" >&6
+
+echo "$as_me:$LINENO: result: ---------- begin configuring for Python wrappers --------------" >&5
+echo "${ECHO_T}---------- begin configuring for Python wrappers --------------" >&6
+
+# Extract the first word of "python", so it can be a program name with args.
+set dummy python; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_py_path+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $py_path in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_py_path="$py_path" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_py_path="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+py_path=$ac_cv_path_py_path
+
+if test -n "$py_path"; then
+  echo "$as_me:$LINENO: result: $py_path" >&5
+echo "${ECHO_T}$py_path" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+if test -n "${py_path}"; then
+      PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
+      PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+   PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
+   if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
+   else
+	  PY_CFLAGS=""
+   fi
+else
+   PY_CFLAGS=""
+fi
+
+PY_LDFLAGS=""
+PY_SHARED=""
+PY_LINKFLAGS=""
+case $host_os in
+   linux*)
+      PY_SHARED="-shared";;
+   irix*)
+      PY_SHARED="-shared"
+      PY_LDFLAGS="-lftn -lm";;
+   sun|solaris**)
+      PY_SHARED="-G"
+      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
+   cygwin|mingw32|windows**)
+      PY_CFLAGS="";;
+   *)
+      PY_CFLAGS="";;
+esac
+
+
+IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+PY_LINKFLAGS=${CFLAGS}
+case $host_cpu in
+   x86_64*)
+      PY_CFLAGS="";;
+   powerpc64*)
+      PY_CFLAGS="";;
+   i*86)
+      if test "${CC}" = "icc"; then
+          echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
+echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
+if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lifcore_pic  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char d_int_val ();
+int
+main ()
+{
+d_int_val ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_ifcore_pic_d_int_val=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_ifcore_pic_d_int_val=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_ifcore_pic_d_int_val" >&5
+echo "${ECHO_T}$ac_cv_lib_ifcore_pic_d_int_val" >&6
+if test $ac_cv_lib_ifcore_pic_d_int_val = yes; then
+  ifcore_lib="-lifcore_pic"
+else
+  ifcore_lib=""
+fi
+
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
+	      else
+	          PY_CFLAGS=""
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+          fi
+      else
+          PY_CFLAGS=""
+      fi;;
+   ia64*)
+      if test -n "${mpi_use}"; then
+          PY_CFLAGS=""
+      fi
+      if test "${CC}" = "icc"; then
+          echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
+echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
+if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lifcore_pic  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char d_int_val ();
+int
+main ()
+{
+d_int_val ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_ifcore_pic_d_int_val=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_ifcore_pic_d_int_val=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_ifcore_pic_d_int_val" >&5
+echo "${ECHO_T}$ac_cv_lib_ifcore_pic_d_int_val" >&6
+if test $ac_cv_lib_ifcore_pic_d_int_val = yes; then
+  ifcore_lib="-lifcore_pic"
+else
+  ifcore_lib=""
+fi
+
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
+	      else
+	          PY_CFLAGS=""
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	          if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+	              PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	          else
+                      PY_CFLAGS=""
+	          fi
+          fi
+      else
+          PY_CFLAGS=""
+      fi
+esac
+
+if test -n "${PY_CFLAGS}"; then
+   echo "$as_me:$LINENO: result: Python wrappers enabled" >&5
+echo "${ECHO_T}Python wrappers enabled" >&6
+else
+   echo "$as_me:$LINENO: result: Python wrappers disabled" >&5
+echo "${ECHO_T}Python wrappers disabled" >&6
+fi
+
+PY_SHARED=$PY_SHARED
+
+PY_LDFLAGS=$PY_LDFLAGS
+
+PY_CFLAGS=$PY_CFLAGS
+
+PY_LINKFLAGS=$PY_LINKFLAGS
+
+
+
+if test -n "${PY_CFLAGS}"; then
+  PY_PRESENT_TRUE=
+  PY_PRESENT_FALSE='#'
+else
+  PY_PRESENT_TRUE='#'
+  PY_PRESENT_FALSE=
+fi
+
+echo "$as_me:$LINENO: result: ---------- end configuring for Python wrappers --------------" >&5
+echo "${ECHO_T}---------- end configuring for Python wrappers --------------" >&6
+
 
 echo "$as_me:$LINENO: result: ---------- begin configuring for FEtk linkage --------------" >&5
 echo "${ECHO_T}---------- begin configuring for FEtk linkage --------------" >&6
@@ -12761,13 +12778,6 @@ s,@RANLIB@,$RANLIB,;t t
 s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
-s,@py_path@,$py_path,;t t
-s,@PY_SHARED@,$PY_SHARED,;t t
-s,@PY_LDFLAGS@,$PY_LDFLAGS,;t t
-s,@PY_CFLAGS@,$PY_CFLAGS,;t t
-s,@PY_LINKFLAGS@,$PY_LINKFLAGS,;t t
-s,@PY_PRESENT_TRUE@,$PY_PRESENT_TRUE,;t t
-s,@PY_PRESENT_FALSE@,$PY_PRESENT_FALSE,;t t
 s,@math_lib@,$math_lib,;t t
 s,@liberty_lib@,$liberty_lib,;t t
 s,@nsl_lib@,$nsl_lib,;t t
@@ -12779,6 +12789,13 @@ s,@mpi_lib@,$mpi_lib,;t t
 s,@mpi_inc@,$mpi_inc,;t t
 s,@mpi_bin@,$mpi_bin,;t t
 s,@rl_lib@,$rl_lib,;t t
+s,@py_path@,$py_path,;t t
+s,@PY_SHARED@,$PY_SHARED,;t t
+s,@PY_LDFLAGS@,$PY_LDFLAGS,;t t
+s,@PY_CFLAGS@,$PY_CFLAGS,;t t
+s,@PY_LINKFLAGS@,$PY_LINKFLAGS,;t t
+s,@PY_PRESENT_TRUE@,$PY_PRESENT_TRUE,;t t
+s,@PY_PRESENT_FALSE@,$PY_PRESENT_FALSE,;t t
 s,@mcx_lib@,$mcx_lib,;t t
 s,@mcx_inc@,$mcx_inc,;t t
 s,@mc_lib@,$mc_lib,;t t

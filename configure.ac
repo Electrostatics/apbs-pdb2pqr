@@ -143,90 +143,6 @@ AC_PROG_CPP
 AC_DISABLE_SHARED
 AM_PROG_LIBTOOL
 
-dnl # Check for Python (for wrappers)
-AC_PATH_PROG(py_path, python)
-if test -n "${py_path}"; then
-   changequote(<<, >>)dnl
-   PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
-   changequote([, ])dnl
-   PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
-   PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
-   if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
-   else
-	  PY_CFLAGS=""
-   fi
-else
-   PY_CFLAGS=""
-fi
-
-dnl # Platform specific linking flags
-PY_LDFLAGS=""
-PY_SHARED=""
-PY_LINKFLAGS=""
-case $host_os in
-   linux*) 
-      PY_SHARED="-shared";;
-   irix*) 
-      PY_SHARED="-shared"
-      PY_LDFLAGS="-lftn -lm";;
-   sun|solaris**) 
-      PY_SHARED="-G"
-      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
-   cygwin|mingw32|windows**)
-      PY_CFLAGS="";;
-   *) 
-      PY_CFLAGS="";;
-esac
-case $host_cpu in
-   x86_64*)
-      PY_CFLAGS="";;
-   powerpc64*)
-      PY_CFLAGS="";;
-   i*86)
-      PY_LINKFLAGS=${CFLAGS}
-      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
-      if test "${CC}" = "icc"; then
-          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-	      if test -n "${ifcore_lib}"; then
-	          PY_LDFLAGS=${ifcore_lib}
-	      else
-	          PY_CFLAGS=""	
-	      fi
-	      if test -n "${IS_STATIC}"; then
-	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
-          fi
-      else
-          PY_CFLAGS=""
-      fi;; 
-   ia64*)
-      PY_LINKFLAGS=${CFLAGS}
-      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
-      if test "${CC}" = "icc"; then
-          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-	      if test -n "${ifcore_lib}"; then
-	          PY_LDFLAGS=${ifcore_lib}
-	      else
-	          PY_CFLAGS=""	
-	      fi
-	      if test -n "${IS_STATIC}"; then
-	          if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	              PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
-	          else
-                  PY_CFLAGS=""
-	          fi 
-          fi
-      else
-          PY_CFLAGS=""
-      fi 
-esac
-
-AC_SUBST(PY_SHARED,[$PY_SHARED])
-AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
-AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
-AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
-AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
-
 dnl ##########################################################################
 dnl 3. checks for libraries
 dnl ##########################################################################
@@ -511,6 +427,105 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(rl_lib)
 
 AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
+
+AC_MSG_RESULT([---------- begin configuring for Python wrappers --------------])
+
+dnl # Check for Python (for wrappers)
+AC_PATH_PROG(py_path, python)
+if test -n "${py_path}"; then
+   changequote(<<, >>)dnl
+   PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
+   changequote([, ])dnl
+   PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+   PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
+   if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
+   else
+	  PY_CFLAGS=""
+   fi
+else
+   PY_CFLAGS=""
+fi
+
+dnl # Platform specific linking flags
+PY_LDFLAGS=""
+PY_SHARED=""
+PY_LINKFLAGS=""
+case $host_os in
+   linux*) 
+      PY_SHARED="-shared";;
+   irix*) 
+      PY_SHARED="-shared"
+      PY_LDFLAGS="-lftn -lm";;
+   sun|solaris**) 
+      PY_SHARED="-G"
+      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
+   cygwin|mingw32|windows**)
+      PY_CFLAGS="";;
+   *) 
+      PY_CFLAGS="";;
+esac
+
+dnl # The Python wrappers use different flags
+dnl # On different architectures
+
+IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+PY_LINKFLAGS=${CFLAGS}
+case $host_cpu in
+   x86_64*)
+      PY_CFLAGS="";;
+   powerpc64*)
+      PY_CFLAGS="";;
+   i*86)
+      if test "${CC}" = "icc"; then
+          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
+	      else
+	          PY_CFLAGS=""	
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	         PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+          fi
+      else
+          PY_CFLAGS=""
+      fi;; 
+   ia64*)
+      if test -n "${mpi_use}"; then
+          PY_CFLAGS=""
+      fi
+      if test "${CC}" = "icc"; then
+          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+	      if test -n "${ifcore_lib}"; then
+	          PY_LDFLAGS=${ifcore_lib}
+	      else
+	          PY_CFLAGS=""	
+	      fi
+	      if test -n "${IS_STATIC}"; then
+	          if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+	              PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	          else
+                      PY_CFLAGS=""
+	          fi 
+          fi
+      else
+          PY_CFLAGS=""
+      fi 
+esac
+
+if test -n "${PY_CFLAGS}"; then
+   AC_MSG_RESULT(Python wrappers enabled)
+else
+   AC_MSG_RESULT(Python wrappers disabled)
+fi
+
+AC_SUBST(PY_SHARED,[$PY_SHARED])
+AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
+AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
+AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
+AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
+AC_MSG_RESULT([---------- end configuring for Python wrappers --------------])
+
 
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
