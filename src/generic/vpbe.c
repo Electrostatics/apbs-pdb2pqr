@@ -41,6 +41,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "apbscfg.h"
 #include "apbs/vpbe.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -70,7 +71,7 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getVgm
 //
-// Purpose:  Get a pointer to the Vgm (grid manager) object
+// Purpose:  Get a pointer to the Gem (grid manager) object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -379,7 +380,7 @@ VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, int methFlag) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Gem *gm, int methFlag) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
@@ -401,7 +402,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, int methFlag) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) { 
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Gem *gm, int methFlag) { 
 
     int iatom;
     double atomRadius;
@@ -421,7 +422,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) {
         return 0;
     }
     if ((gm == VNULL) && (thee->methFlag == 0)) {
-        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Vgm object!\n");
+        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Gem object!\n");
         return 0;
     }
 
@@ -800,7 +801,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
     
        /* Make sure the number of entries in the solution array matches the
         * number of vertices currently in the mesh */
-       if (nsol != Vgm_numVV(thee->gm)) {
+       if (nsol != Gem_numVV(thee->gm)) {
           Vnm_print(2, "Vpbe_getLinearEnergy1: Number of unknowns in solution does not match\n");
           Vnm_print(2, "Vpbe_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
           VASSERT(0);
@@ -831,7 +832,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
                    if ((SS_chart(simp)==color)||(color<0)) {
                        /* Get the value of each basis function evaluated at this
                         * point */
-                       Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
+                       Gem_pointInSimplexVal(thee->gm, simp, position, phi, phix);
                        for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
                            uval = sol[VV_id(SS_vertex(simp,ivert))];
                            energy += (charge*phi[ivert]*uval);

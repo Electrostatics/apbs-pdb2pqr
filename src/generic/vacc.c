@@ -41,6 +41,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "apbscfg.h"
 #include "apbs/vacc.h"
 
 VEMBED(rcsid="$Id$")
@@ -448,7 +449,7 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
 //            meth     Plot accessibility for molecular surface (meth=0),
 //                     inflated van der Waals (meth=1), or van der Waals
 //                     (meth=2)
-//            gm       Vgm object with mesh data
+//            gm       Gem object with mesh data
 //            iodev    Device (usually "FILE")
 //            iofmt    Format (usually "ASC")
 //            iohost   Host   (usually "localhost")
@@ -456,18 +457,18 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Vgm *gm, 
+VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm, 
   char *iodev, char *iofmt, char *iohost, char *iofile) {
 
     double *accVals[MAXV], coord[3];
     int ivert, icoord;
 
     for (ivert=0; ivert<MAXV; ivert++) accVals[ivert] = VNULL;
-    accVals[0] = (void *)Vmem_malloc(thee->vmem, Vgm_numVV(gm), sizeof(double));
-    accVals[1] = (void *)Vmem_malloc(thee->vmem, Vgm_numVV(gm), sizeof(double));
-    for (ivert=0; ivert<Vgm_numVV(gm); ivert++) {
+    accVals[0] = (void *)Vmem_malloc(thee->vmem, Gem_numVV(gm), sizeof(double));
+    accVals[1] = (void *)Vmem_malloc(thee->vmem, Gem_numVV(gm), sizeof(double));
+    for (ivert=0; ivert<Gem_numVV(gm); ivert++) {
         for (icoord=0;icoord<3;icoord++) 
-          coord[icoord] = VV_coord(Vgm_VV(gm, ivert), icoord);
+          coord[icoord] = VV_coord(Gem_VV(gm, ivert), icoord);
         if (meth == 0) {
             accVals[0][ivert] = (double)Vacc_molAcc(thee, coord, radius);
             accVals[1][ivert] = (double)Vacc_molAcc(thee, coord, radius);
@@ -479,10 +480,10 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Vgm *gm,
             accVals[1][ivert] = (double)Vacc_vdwAcc(thee, coord);
         } else VASSERT(0);
     }
-    Vgm_writeGMV(gm, iodev, iofmt, iohost, iofile, 1, accVals);
-    Vmem_free(thee->vmem, Vgm_numVV(gm), sizeof(double), 
+    Gem_writeGMV(gm, iodev, iofmt, iohost, iofile, 1, accVals);
+    Vmem_free(thee->vmem, Gem_numVV(gm), sizeof(double), 
       (void **)&(accVals[0]));
-    Vmem_free(thee->vmem, Vgm_numVV(gm), sizeof(double), 
+    Vmem_free(thee->vmem, Gem_numVV(gm), sizeof(double), 
       (void **)&(accVals[1]));
 }
 

@@ -47,11 +47,7 @@
 #ifndef _VCSM_H_
 #define _VCSM_H_
 
-#include "mc/vhal.h"
-#include "mc/vgm.h"
-#include "mc/vmem.h"
-#include "mc/ves.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
@@ -60,7 +56,7 @@
 // Class Vcsm: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC void Vgm_setExternalUpdateFunction(Vgm *thee,
+VEXTERNC void Gem_setExternalUpdateFunction(Gem *thee,
     void (*externalUpdate)(SS **simps, int num));
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -72,7 +68,7 @@ typedef struct Vcsm {
   Valist *alist;      /* Atom (charge) list */
   int natom;          /* Size of thee->alist; redundant, but useful for
                        * convenience */
-  Vgm *gm;            /* Grid manager (container class for master vertex
+  Gem *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
   int **sqm;          /* The map which gives the list charges associated with
@@ -84,7 +80,7 @@ typedef struct Vcsm {
                        * thee->nsqm */
   int *nsqm;          /* The length of the charge lists in thee->sqm */
   int nsimp;          /* The _currently used) length of sqm, nsqm -- may not 
-                       * always be up-to-date with Vgm */
+                       * always be up-to-date with Gem */
   int msimp;          /* The maximum number of entries that can be 
                        * accomodated by sqm or nsqm  -- saves on realloc's */
   int **qsm;          /* The inverse of sqm; the list of simplices
@@ -119,7 +115,7 @@ typedef struct Vcsm {
 #   define Vcsm_getAtom(thee, iatom, isimp) (Valist_getAtom((thee)->alist, ((thee)->sqm)[isimp][iatom]))
 #   define Vcsm_getAtomIndex(thee, iatom, isimp) (((thee)->sqm)[isimp][iatom])
 #   define Vcsm_getNumberSimplices(thee, iatom) (((thee)->nqsm)[iatom])
-#   define Vcsm_getSimplex(thee, isimp, iatom) (Vgm_SS((thee)->gm, ((thee)->qsm)[iatom][isimp]))
+#   define Vcsm_getSimplex(thee, isimp, iatom) (Gem_SS((thee)->gm, ((thee)->qsm)[iatom][isimp]))
 #   define Vcsm_getSimplexIndex(thee, isimp, iatom) (((thee)->qsm)[iatom][isimp])
 #   define Vcsm_memChk(thee) (Vmem_bytes((thee)->vmem))
 #endif /* if !defined(VINLINE_VCSM) */
@@ -128,8 +124,8 @@ typedef struct Vcsm {
 // Class Vcsm: Non-Inlineable methods (vcsm.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vcsm*   Vcsm_ctor(Valist *alist, Vgm *gm);
-VEXTERNC int     Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm);
+VEXTERNC Vcsm*   Vcsm_ctor(Valist *alist, Gem *gm);
+VEXTERNC int     Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm);
 VEXTERNC void    Vcsm_dtor(Vcsm **thee);
 VEXTERNC void    Vcsm_dtor2(Vcsm *thee);
 

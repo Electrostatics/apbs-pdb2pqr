@@ -46,14 +46,7 @@
 #ifndef _VPBE_H_
 #define _VPBE_H_
 
-#include "mc/vhal.h"
-#include "mc/vgm.h"
-#include "mc/vram.h"
-#include "mc/ves.h"
-#include "mc/am.h"
-#include "mc/alg.h"
-#include "mc/bvec.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
@@ -77,7 +70,7 @@
 typedef struct Vpbe { 
 
   Valist *alist;      /* Atom (charge) list */
-  Vgm *gm;            /* Grid manager (container class for master vertex
+  Gem *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
 
@@ -174,8 +167,8 @@ typedef struct Vpbe {
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm, int methFlag);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag);
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Gem *gm, int methFlag);
+VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Gem *gm, int methFlag);
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 

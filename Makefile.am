@@ -47,5 +47,10 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = src tst work
-INCLUDES = @mcdir@/inc
+SUBDIRS = src tst inc lib work
+
+distclean-local: clean-local
+
+clean-local:
+	-rm -f ./lib/*.a
+

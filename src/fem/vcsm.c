@@ -41,6 +41,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "apbscfg.h"
 #include "apbs/vcsm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -65,7 +66,7 @@ VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getVgm
 //
-// Purpose:  Get a pointer to the Vgm (grid manager) object
+// Purpose:  Get a pointer to the Gem (grid manager) object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -157,7 +158,7 @@ VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
    VASSERT(thee != VNULL);
    VASSERT(thee->initFlag);
 
-   return Vgm_SS(thee->gm, (thee->qsm)[iatom][isimp]);
+   return Gem_SS(thee->gm, (thee->qsm)[iatom][isimp]);
 
 }
 
@@ -207,7 +208,7 @@ VPUBLIC int Vcsm_memChk(Vcsm *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
+VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
 
     /* Set up the structure */
     Vcsm *thee = VNULL;
@@ -229,7 +230,7 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) { 
+VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) { 
  
     VASSERT( thee != VNULL );
 
@@ -243,7 +244,7 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) {
     }
     thee->alist = alist;
     if( gm == VNULL) {
-        Vnm_print(2,"Vcsm_ctor2: got a null pointer to the Vgm object!\n");
+        Vnm_print(2,"Vcsm_ctor2: got a null pointer to the Gem object!\n");
         return 0;
     }
     thee->gm = gm;
@@ -272,7 +273,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     VASSERT(thee != VNULL);
     thee->natom = Valist_getNumberAtoms(thee->alist);
     VASSERT(thee->gm != VNULL);
-    thee->nsimp = Vgm_numSS(thee->gm);
+    thee->nsimp = Gem_numSS(thee->gm);
     VASSERT(thee->nsimp > 0);
 
     /* Set up the array of colors and initialize all to -1 */
@@ -294,8 +295,8 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
         position = Vatom_getPosition(atom);
         gotSimp = 0;
         for (isimp=0; isimp<thee->nsimp; isimp++) {
-            simplex = Vgm_SS(thee->gm, isimp);
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
+            simplex = Gem_SS(thee->gm, isimp);
+            if (Gem_pointInSimplex(thee->gm, simplex, position)) {
                 (thee->nsqm)[isimp]++;
                 gotSimp = 1;
              }
@@ -314,12 +315,12 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Finally, set up the map */
     for (isimp=0; isimp<thee->nsimp; isimp++) {
         jsimp = 0;
-        simplex = Vgm_SS(thee->gm, isimp);
+        simplex = Gem_SS(thee->gm, isimp);
         for (iatom=0; iatom<thee->natom; iatom++) {
             atom = Valist_getAtom(thee->alist, iatom);
             position = Vatom_getPosition(atom);
             /* Check to see if the atom's in this simplex */
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
+            if (Gem_pointInSimplex(thee->gm, simplex, position)) {
                 /* Assign the entries in the next vacant spot */
                 (thee->sqm)[isimp][jsimp] = iatom;
                 jsimp++;
@@ -516,7 +517,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
         for (isimp=0; isimp<num; isimp++) {
             simplex = simps[isimp];
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
+            if (Gem_pointInSimplex(thee->gm, simplex, position)) {
                 nsqmNew[isimp]++;
                 jsimp = 1;
             }
@@ -555,7 +556,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
             atomID = qParent[iatom];
             atom = Valist_getAtom(thee->alist, atomID);
             position = Vatom_getPosition(atom);
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
+            if (Gem_pointInSimplex(thee->gm, simplex, position)) {
                 sqmNew[isimp][jsimp] = atomID;
                 jsimp++;
             }

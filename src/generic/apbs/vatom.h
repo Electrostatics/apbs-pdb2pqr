@@ -50,10 +50,7 @@
 #ifndef _VATOM_H_
 #define _VATOM_H_
 
-#include "mc/vhal.h"
-#include "mc/vmem.h"
-#include "mc/vec3.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
