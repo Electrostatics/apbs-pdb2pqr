@@ -103,6 +103,7 @@ math_lib = @math_lib@
 mcdir = @mcdir@
 mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
+pmgcdir = @pmgcdir@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o

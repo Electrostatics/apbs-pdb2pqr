@@ -325,18 +325,25 @@ VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
 // Purpose:  Construct the charge-vertex map, assign atoms to vertices,
 //           and assign vertices to atoms
 //
+// Args:     alist    -- molecule for this Vpbe object
+//           gm       -- the grid manager (when using MC, may be VNULL 
+//                       otherwise)
+//           methFlag -- method of solution associated with this Vpbe object
+//                       = 0  --> use MC (adaptive multilevel FEM)
+//                       = 1  --> use PMGC (multigrid)
+//
 // Notes:    The initial mesh must be sufficiently coarse for the
 //           assignment procedures to be efficient.  
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, int methFlag) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, gm));
+    VASSERT( Vpbe_ctor2(thee, alist, gm, methFlag));
 
     return thee;
 }
@@ -352,7 +359,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) { 
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) { 
 
     int iatom;
     double atomRadius;
@@ -363,23 +370,23 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
     /* Set up memory management object */
     thee->vmem = Vmem_ctor("APBS::VPBE");
 
+    /* Set methFlag */
+    thee->methFlag = methFlag;
+
     VASSERT(thee != VNULL);
     if (alist == VNULL) {
         Vnm_print(1,"Vpbe_ctor2: Got null pointer to Valist object!\n");
         return 0;
     }
-    if (gm == VNULL) {
+    if ((gm == VNULL) && (thee->methFlag == 0)) {
         Vnm_print(1,"Vpbe_ctor2: Got null pointer to Vgm object!\n");
         return 0;
     }
 
+    /* **** STUFF THAT GETS DONE FOR EVERYONE **** */
     /* Set pointers */
     thee->alist = alist;
-    thee->gm = gm;
     thee->paramFlag = 0;
-
-    /* Set up charge-simplex map */
-    VASSERT((thee->csm = Vcsm_ctor(thee->alist, thee->gm)) != VNULL);
 
     /* Determine solute center */
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
@@ -411,6 +418,24 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
     thee->soluteRadius = radius;
     thee->soluteCharge = charge;
 
+    /* **** METHOD-SPECIFIC STUFF **** */
+    if (thee->methFlag == 0) {
+        thee->gm = gm;
+        /* Set up charge-simplex map */
+        VASSERT((thee->csm = Vcsm_ctor(thee->alist, thee->gm)) != VNULL);
+    } else if (thee->methFlag == 1) {
+
+#if !defined(HAVE_PMGC_H) 
+            Vnm_print(2, "Vpbe_ctor2: Not compiled with PMGC support!\n");
+            return 0;
+#endif
+
+        thee->gm = VNULL;
+    } else {
+        Vnm_print(2, "Vpbe_ctor2: Invalid methFlag (=%d)!\n", methFlag);
+        return 0;
+    }
+
     return 1; 
 }
 
@@ -440,9 +465,9 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
-    Vcsm_dtor(&(thee->csm));
     Vacc_dtor(&(thee->acc));
     Vmem_dtor(&(thee->vmem));
+    if (thee->methFlag == 0) Vcsm_dtor(&(thee->csm));
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -596,8 +621,11 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
       (int)(nhash), 200);
     VASSERT(thee->acc != VNULL);
 
-    /* Compute charge-simplex map */
-    Vcsm_init(thee->csm);
+    /* MC-specific stuff */
+    if (thee->methFlag == 0) {
+        /* Compute charge-simplex map */
+        Vcsm_init(thee->csm);
+    }
 
     thee->paramFlag = 1;
 }
@@ -610,6 +638,9 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
 //           of doubles and store the length in *length.  You'd better destroy
 //           the returned array later!
 //
+// Notes:    Only meaningful for MC invocations of Vpbe (returns VNULL
+//           otherwise)
+//
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) { 
@@ -619,8 +650,11 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) {
    double *theAnswer;
 
    VASSERT(thee != VNULL);
+   if (thee->methFlag != 0) return VNULL;
+
    VASSERT(am != VNULL);
    VASSERT(thee->gm != VNULL);
+
 
    /* Get the max level from AM */
    level = AM_maxLevel(am);
@@ -666,6 +700,9 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) {
 //           object, but atomic data from the Vpbe object is used to
 //           calculate the energy
 //
+// Notes:    Currently only meaningful for MC invocations of Vpbe (returns
+//           0.0 otherwise)
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) { 
@@ -682,6 +719,13 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    double uval;
 
    VASSERT(thee != VNULL);
+
+   if (thee->methFlag != 0) {
+       Vnm_print(2, "Vpbe_getLinearEnergy1: Not implemented for methFlag %d\n",
+         thee->methFlag);
+       return 0.0;
+   }
+
    VASSERT(am != VNULL);
    VASSERT(thee->gm != VNULL);
    VASSERT(thee->alist != VNULL);
@@ -757,7 +801,11 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
 //           calculate the energy
 //           
 // Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.
+//           assem.c routines in MC.  THIS FUNCTION DOES NOT WORK FOR ANY
+//           METHOD RIGHT NOW.
+//
+// Notes:    Currently only meaningful for MC invocations of Vpbe (returns
+//           0.0 otherwise)
 //           
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -766,6 +814,12 @@ VPUBLIC double Vpbe_getEnergyNorm2(Vpbe *thee, Alg *alg, int color) {
     Bmat *A;
     Bvec *u, *Au;
     double norm2;
+
+    if (thee->methFlag != 0) {
+       Vnm_print(2, "Vpbe_getEnergyNorm2: Not implemented for methFlag %d\n",
+         thee->methFlag);
+       return 0.0;
+    }
 
     /* Solution + Dirichlet conditions */
     Bvec_copy(alg->W[W_w0], alg->W[W_u]);
@@ -813,6 +867,12 @@ VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) {
 
     double energy = 0.0;
     Alg *alg;    
+
+    if (thee->methFlag != 0) {
+       Vnm_print(2, "Vpbe_getLinearEnergy2: Not implemented for methFlag %d\n",
+         thee->methFlag);
+       return 0.0;
+    }
 
     Vnm_print(2, "Vpbe_getLinearEnergy2: WARNING! This routine may be broken!\n");
     /* Get the algebra object for the finest level */
@@ -892,6 +952,7 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 //           USED IMMEDIATELY AFTER PARTITIONING!!!
 //
 // Note:     This is a friend function of Vcsm
+// Note:     This has no meaning for thee->methFlag != 0
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -902,6 +963,12 @@ VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
     int i, natoms;
 
     VASSERT(thee != VNULL);
+
+    if (thee->methFlag != 0) {
+        Vnm_print(2, "Vpbe_setAtomColors: ignoring call for methFlag = %d\n",
+          thee->methFlag);
+        return;
+    }
 
     natoms = Valist_getNumberAtoms(thee->alist);
     for (i=0; i<natoms; i++) {
