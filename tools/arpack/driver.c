@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     int key, nev, ncv, ncol, nrow, nnzero;
     int *colptr, *rowind, *select;
     double *values, *v, *workl, *workd, *d, *resid, *ax;
-    char *keystr, *numstr, path[72], title[72], mxtype[3], hbkey[8];
+    char *keystr, *numstr, path[256], title[72], mxtype[3], hbkey[8];
 
     char *usage = "\n\n"
                   "This is a program which uses ARPACK to compute\n"
@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Computing %d eigenvalue(s).\n", nev);
 
     /* Read in matrix */
-    strncpy(path, argv[3], 71);
+    strncpy(path, argv[3], 255);
     Vnm_print(1, "Reading header from matrix file at %s...\n", path);
     F77READHBHEAD(&nrow, &ncol, &nnzero, path);
     Vnm_print(1, "Matrix %s contains %d rows, %d columns, and %d nonzeros.\n",

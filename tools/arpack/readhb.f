@@ -49,7 +49,7 @@ c* Author:   Nathan Baker (mostly ripped off from Harwell-Boeing format
 c*           documentation)
 c**************************************************************************
       implicit none
-      character title*72 , path*72  , key*8    , mxtype*3 ,
+      character title*72 , path*256 , key*8    , mxtype*3 ,
      1          ptrfmt*16, indfmt*16, valfmt*20, rhsfmt*20
       integer   totcrd   , ptrcrd   , indcrd   , valcrd   ,
      1          nrow     , ncol     , nnzero  , neltvl,
@@ -86,7 +86,7 @@ c* Author:   Nathan Baker (mostly ripped off from Harwell-Boeing format
 c*           documentation)
 c**************************************************************************
       implicit none
-      character        title*72 , path*72  , key*8    , mxtype*3 ,
+      character        title*72 , path*256 , key*8    , mxtype*3 ,
      1                 ptrfmt*16, indfmt*16, valfmt*20, rhsfmt*20
       integer          totcrd   , ptrcrd   , indcrd  , valcrd,
      1                 nrow     , ncol     , nnzero  , neltvl,
