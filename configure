@@ -10453,19 +10453,21 @@ echo $ECHO_N "checking whether you want ARPACK functions... $ECHO_C" >&6
 # Check whether --with-arpack or --without-arpack was given.
 if test "${with_arpack+set}" = set; then
   withval="$with_arpack"
-   arpack_lib="-larpack ${withval}"
+   arpack_lib="-larpack -L${withval}"
 else
    arpack_lib=""
 
 fi;
 if test -n "${arpack_lib}"; then
+    arpack_do_tools="arpack"
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
 else
+    arpack_do_tools=""
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
+
 
 
 echo "$as_me:$LINENO: checking whether you want inlined functions" >&5
@@ -10505,7 +10507,7 @@ echo "$as_me:$LINENO: result: ------------- end processing APBS configure option
 echo "${ECHO_T}------------- end processing APBS configure options -----------" >&6
 
 
-ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/opendx/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile test/Makefile test/vmetis/Makefile test/vgreen/Makefile test/fem/Makefile test/reg-fem/Makefile test/lndet/Makefile test/mg/Makefile"
+ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/opendx/Makefile tools/arpack/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile test/Makefile test/vmetis/Makefile test/vgreen/Makefile test/fem/Makefile test/reg-fem/Makefile test/lndet/Makefile test/mg/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -10999,6 +11001,7 @@ do
   "tools/mesh/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/mesh/Makefile" ;;
   "tools/manip/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/manip/Makefile" ;;
   "tools/opendx/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/opendx/Makefile" ;;
+  "tools/arpack/Makefile" ) CONFIG_FILES="$CONFIG_FILES tools/arpack/Makefile" ;;
   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
   "src/generic/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/generic/Makefile" ;;
   "src/mg/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/mg/Makefile" ;;
@@ -11185,6 +11188,7 @@ s,@mcx_do_lib@,$mcx_do_lib,;t t
 s,@cxxfmmsrc@,$cxxfmmsrc,;t t
 s,@stdcxx_lib@,$stdcxx_lib,;t t
 s,@arpack_lib@,$arpack_lib,;t t
+s,@arpack_do_tools@,$arpack_do_tools,;t t
 s,@lib_list@,$lib_list,;t t
 s,@inc_list@,$inc_list,;t t
 CEOF

@@ -589,6 +589,7 @@
  * <li> <a href="#calcforce">calcforce</a> 
  * <li> <a href="#calcforce">calcforce</a> 
  * <li> <a href="#write">write</a> (optional)
+ * <li> <a href="#writemat">writemat</a> (optional)
  * </ul>
  * 
  * <br><br><a name="mg-auto"><b>Automatic multigrid focusing calculation
@@ -629,6 +630,7 @@
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#write">write</a> (optional)
+ * <li> <a href="#writemat">writemat</a> (optional)
  * </ul>
  * 
  * <br><br><a name="mg-para"><b>Automatic multigrid parallel focusing
@@ -676,6 +678,7 @@
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#write">write</a> (optional)
+ * <li> <a href="#writemat">writemat</a> (optional)
  * </ul>
  * 
  * <br><br><a name="keywords"><b>Keyword definitions</b></a>
@@ -894,6 +897,25 @@
  *      <dt> <i>stem</i>
  *      <dd> The filename will be <i>stem</i>.XXX, where XXX is determined from
  *      the file format.
+ *      </dl>
+ * 
+ * <dt> <a name="writemat">writemat</a> <i>type stem</i>
+ * <dd> Controls output of operator matrix in Harwell-Boeing column-compressed
+ *      format.  This keyword is optional.
+ *      <dl>
+ *      <dt> <i>type</i>
+ *      <dd> <ul>
+ *           <li> <code>poisson</code> Write out the operator 
+ *             \f[A v = -\nabla \cdot \epsilon v \nabla\f]
+ *           corresponding to Poisson's equation.
+ *           <li> <code>full</code>  Write out the linearization (functional
+ *           derivative) of the full non-linear Poisson-Boltzmann operator
+ *            \f[ A v = -\nabla \cdot \epsilon \nabla v + \overline{\kappa}^2
+ *            \sum_i c_i q_i^2 e^{-q_i u^*} v \f]
+ *           around the current solution \f$u^*\f$.
+ *           </ul>
+ *      <dt> <i>stem</i>
+ *      <dd> The filename will be <i>stem</i>.mat.
  *      </dl>
  * 
  * <dt> <a name="cglen">cglen</a> <i>xlen ylen zlen</i>

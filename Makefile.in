@@ -90,6 +90,7 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@

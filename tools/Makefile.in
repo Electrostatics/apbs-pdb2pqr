@@ -90,6 +90,7 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 am__include = @am__include@
 am__quote = @am__quote@
+arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
@@ -126,7 +127,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = mesh manip opendx
+SUBDIRS = mesh manip opendx @arpack_do_tools@
 subdir = tools
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h

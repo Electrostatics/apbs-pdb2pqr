@@ -565,13 +565,6 @@ WRITEFORCE keyword!\n", tok);
 
     } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEMAT \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->writemat = ti;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (Vstring_strcasecmp(tok, "poisson") == 0) {
             thee->writematflag = 0;
         } else if (Vstring_strcasecmp(tok, "full") == 0) {
@@ -584,6 +577,7 @@ WRITEMAT keyword!\n", tok);
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         strncpy(thee->writematstem, tok, VMAX_ARGLEN);
         thee->setwritemat = 1;
+        thee->writemat = 1;
         return 1;
 
     }
