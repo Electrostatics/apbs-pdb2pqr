@@ -69,20 +69,6 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getGem
-//
-// Purpose:  Get a pointer to the Gem (grid manager) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Gem* Vpbe_getGem(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->gm; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getVgreen
 //
 // Purpose:  Get a pointer to the Vgreen (grid manager) object
@@ -109,20 +95,6 @@ VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) {
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
    return thee->acc; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVcsm
-//
-// Purpose:  Get a pointer to the Vcsm (charge-simplex map) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vcsm* Vpbe_getVcsm(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->csm; 
 
 }
 
@@ -296,45 +268,42 @@ VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteMaxX
+// Routine:  Vpbe_getSoluteXlen
 //
-// Purpose:  Get the max distance of solute molecule's atoms from center of
-//           solute mol in x-direction
+// Purpose:  Solute length in x-direction
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteMaxX(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteXlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
-   return thee->soluteMaxX; 
+   return thee->soluteXlen; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteMaxY
+// Routine:  Vpbe_getSoluteYlen
 //
-// Purpose:  Get the max distance of solute molecule's atoms from center of
-//           solute mol in Y-direction
+// Purpose:  Solute length in Y-direction
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteMaxY(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
-   return thee->soluteMaxY; 
+   return thee->soluteYlen; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteMaxZ
+// Routine:  Vpbe_getSoluteZlen
 //
-// Purpose:  Get the max distance of solute molecule's atoms from center of
-//           solute mol in Z-direction
+// Purpose:  Solute length in Z-direction
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteMaxZ(Vpbe *thee) { 
+VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
-   return thee->soluteMaxZ; 
+   return thee->soluteZlen; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -349,28 +318,6 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
    VASSERT(thee != VNULL);
    return thee->soluteCharge; 
 }
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getAtomColor
-//
-// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
-//           hasn't been initialized yet.
-//
-// Note:     This is a friend function of Vcsm
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
-
-    int natoms;
-
-    VASSERT(thee != VNULL);
-
-    natoms = Valist_getNumberAtoms(thee->alist);
-    VASSERT(iatom < natoms);
-
-    return thee->csm->colors[iatom];
-}
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -379,173 +326,6 @@ VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_ctor
-//
-// Purpose:  Construct the charge-vertex map, assign atoms to vertices,
-//           and assign vertices to atoms
-//
-// Args:     alist    -- molecule for this Vpbe object
-//           gm       -- the grid manager (when using MC, may be VNULL 
-//                       otherwise)
-//           methFlag -- method of solution associated with this Vpbe object
-//                       = 0  --> use MC (adaptive multilevel FEM)
-//                       = 1  --> use PMGC (multigrid)
-//
-// Notes:    The initial mesh must be sufficiently coarse for the
-//           assignment procedures to be efficient.  
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Gem *gm, int methFlag) {
-
-    /* Set up the structure */
-    Vpbe *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
-    VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, gm, methFlag));
-
-    return thee;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_ctor2
-//
-// Purpose:  Construct the Vpbe object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Gem *gm, int methFlag) { 
-
-    int iatom;
-    double atomRadius;
-    Vatom *atom;
-    double center[3] = {0.0, 0.0, 0.0};
-    double disp[3], dist, radius, charge, maxX, maxY, maxZ;
-
-    /* Set up memory management object */
-    thee->vmem = Vmem_ctor("APBS::VPBE");
-
-    /* Set methFlag */
-    thee->methFlag = methFlag;
-
-    VASSERT(thee != VNULL);
-    if (alist == VNULL) {
-        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Valist object!\n");
-        return 0;
-    }
-    if ((gm == VNULL) && (thee->methFlag == 0)) {
-        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Gem object!\n");
-        return 0;
-    }
-
-    /* **** STUFF THAT GETS DONE FOR EVERYONE **** */
-    /* Set pointers */
-    thee->alist = alist;
-    thee->paramFlag = 0;
-
-    /* Set up Green's function oracle */
-    thee->green = Vgreen_ctor(alist);
-
-    /* Determine solute center */
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        center[0] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[0];
-        center[1] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[1];
-        center[2] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[2];
-    }
-    center[0] = center[0]/((double)(Valist_getNumberAtoms(thee->alist)));
-    center[1] = center[1]/((double)(Valist_getNumberAtoms(thee->alist)));
-    center[2] = center[2]/((double)(Valist_getNumberAtoms(thee->alist)));
-    thee->soluteCenter[0] = center[0];
-    thee->soluteCenter[1] = center[1];
-    thee->soluteCenter[2] = center[2];
-
-    /* Determine solute radius and charge*/
-    radius = 0;
-    maxX = 0;
-    maxY = 0;
-    maxZ = 0;
-    charge = 0;
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        atom = Valist_getAtom(thee->alist, iatom);
-        disp[0] = (Vatom_getPosition(atom)[0] - center[0]);
-        disp[1] = (Vatom_getPosition(atom)[1] - center[1]);
-        disp[2] = (Vatom_getPosition(atom)[2] - center[2]);
-        atomRadius = Vatom_getRadius(atom);
-        dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]); 
-        dist = VSQRT(dist) + atomRadius;
-        if (dist > radius) radius = dist;
-        if ((VABS(disp[0]) + atomRadius) > maxX) 
-          maxX = (VABS(disp[0]) + atomRadius);
-        if ((VABS(disp[1]) + atomRadius) > maxY) 
-          maxY = (VABS(disp[1]) + atomRadius);
-        if ((VABS(disp[2]) + atomRadius) > maxZ) 
-          maxZ = (VABS(disp[2]) + atomRadius);
-        charge += Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
-    }
-    thee->soluteRadius = radius;
-    thee->soluteMaxX = maxX;
-    thee->soluteMaxY = maxY;
-    thee->soluteMaxZ = maxZ;
-    thee->soluteCharge = charge;
-
-    /* **** METHOD-SPECIFIC STUFF **** */
-    if (thee->methFlag == 0) {
-        thee->gm = gm;
-        /* Set up charge-simplex map */
-        VASSERT((thee->csm = Vcsm_ctor(thee->alist, thee->gm)) != VNULL);
-    } else if (thee->methFlag == 1) {
-
-#if !defined(HAVE_PMGC_H) 
-            Vnm_print(2, "Vpbe_ctor2: Not compiled with PMGC support!\n");
-            return 0;
-#endif
-
-        thee->gm = VNULL;
-    } else {
-        Vnm_print(2, "Vpbe_ctor2: Invalid methFlag (=%d)!\n", methFlag);
-        return 0;
-    }
-
-    return 1; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_dtor
-//
-// Purpose:  Destroy the charge-simplex map.
-// 
-// Notes:    Since the grid manager and atom list were allocated outside of
-//           the Vpbe routines, they are not destroyed.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_dtor(Vpbe **thee) {
-    if ((*thee) != VNULL) {
-        Vpbe_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vpbe), (void **)thee);
-        (*thee) = VNULL;
-    }
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_dtor2
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
-    Vacc_dtor(&(thee->acc));
-    Vgreen_dtor(&(thee->green));
-    Vmem_dtor(&(thee->vmem));
-    if (thee->methFlag == 0) Vcsm_dtor(&(thee->csm));
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_initialize
 //
 // Purpose:  Set up parameters, Vacc objects, and charge-simplex map
 //
@@ -557,8 +337,6 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) {
 //            solventRadius = solvent radius in Angstroms
 //
 // Notes:  Here's the original function coments from Mike
-// notes:
-// ------
 //
 //    kappa is defined as follows:
 //
@@ -583,78 +361,114 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) {
 //    moles
 //    per liter, which is moles per 1000 cm^3.
 //
-//    some reference numbers in delphi:
-//
-//       salt = 1.0, deblen * I_s^{1/2} = 3.047000 angstroms
-//       salt = 0.1, deblen * I_s^{1/2} = 9.635460 angstroms
-//
-//    delphi:  (kappa=0.328191663 * I_s^{1/2}, must have computed with
-//    T!=298)
-//    -------
-//
-//       deblen        = 1 / kappa
-//                     = 1 / (0.328191663 * I_s^{1/2})
-//                     = 3.047 / I_s^{1/2}    angstroms
-//
-//       kappa         = 1 / deblen
-//                     = 0.328191663 * I_s^{1/2}    angstroms^{-1}
-//
-//       \bar{kappa}^2 = eps_w * kappa^2    angstroms^{-2}
-//
-//       debfact       = \bar{kappa}^2 * h^2
-//                     = eps_w / (deblen * scale)**2
-//
-//    mike:  (kappa=0.325567 * I_s^{1/2}, with T=298)
-//    -----
-//
-//       deblen        = 1 / kappa
-//                     = 1 / (0.325567 * I_s^{1/2})
-//                     = 3.071564378 * I_s^{1/2}   angstroms
-//
-//       kappa         = 1 / deblen
-//                     = 0.325567 * I_s^{1/2}   angstroms^{-1}
-//
-//       \bar{kappa}^2 = eps_w * kappa^2   angstroms^{-2}
-//
-//       zkappa2       = \bar{kappa}^2  angstroms^{-2}
-//
-//    notes on scaling for the charges:
-//    ---------------------------------
-//
-//       delphi:  (the 7049.484 seems to correspond to T=297.875)
-//       -------
-//
-//          zmagic  = (4 * pi * e_c^2) * scale / (k_B T)
-//                     / 6  (for diag scale of laplacean)
-//                  = (4 * pi * e_c^2) / (6 h k_B T)
-//                  = 7049.484 / (6 h)
-//                  = 1174.914 / h
-//
-//       mike:    (the 7046.528838 corresponds to T=298)
-//       -----
-//
-//          zmagic  = (4 * pi * e_c^2) / (k_B T)   (we scale the diagonal
-//          later)
-//                  = 7046.528838
-//
-//       since the units are esu^2 / erg, when converting to
-//       angstroms^{-2},
-//       we multiply by 1.0e8, yielding the 7046.528838 above.
-//
-// Author:   Nathan Baker and Michael Holst
+// Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
-                    double T, double soluteDiel, double solventDiel, 
-                    double solventRadius) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, double ionConc, double ionRadius,
+  double T, double soluteDiel, double solventDiel, double solventRadius) {
 
+    /* Set up the structure */
+    Vpbe *thee = VNULL;
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
+    VASSERT( thee != VNULL);
+    VASSERT( Vpbe_ctor2(thee, alist, ionConc, ionRadius, T, soluteDiel, 
+      solventDiel, solventRadius) );
+
+    return thee;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_ctor2
+//
+// Purpose:  Construct the Vpbe object
+//
+// Notes:    Constructor broken into two parts for FORTRAN users.
+//
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Nathan Baker and Mike Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc, 
+  double ionRadius, double T, double soluteDiel, double solventDiel, 
+  double solventRadius) {
+
+    int iatom;
+    double atomRadius;
+    Vatom *atom;
+    double center[3] = {0.0, 0.0, 0.0};
+    double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
+    double x, y, z;
+    double nhash;
     const double N_A = 6.022045000e+23;
     const double e_c = 4.803242384e-10;
     const double k_B = 1.380662000e-16;
     const double pi  = 4. * VATAN(1.);
 
-    double radius;
-    double nhash;
- 
+    /* Set up memory management object */
+    thee->vmem = Vmem_ctor("APBS::VPBE");
+
+    VASSERT(thee != VNULL);
+    if (alist == VNULL) {
+        Vnm_print(1,"Vpbe_ctor2: Got null pointer to Valist object!\n");
+        return 0;
+    }
+
+    /* **** STUFF THAT GETS DONE FOR EVERYONE **** */
+    /* Set pointers */
+    thee->alist = alist;
+    thee->paramFlag = 0;
+
+    /* Set up Green's function oracle */
+    thee->green = Vgreen_ctor(alist);
+
+    /* Determine solute center */
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        center[0] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[0];
+        center[1] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[1];
+        center[2] += Vatom_getPosition(Valist_getAtom(thee->alist, iatom))[2];
+    }
+    center[0] = center[0]/((double)(Valist_getNumberAtoms(thee->alist)));
+    center[1] = center[1]/((double)(Valist_getNumberAtoms(thee->alist)));
+    center[2] = center[2]/((double)(Valist_getNumberAtoms(thee->alist)));
+    thee->soluteCenter[0] = center[0];
+    thee->soluteCenter[1] = center[1];
+    thee->soluteCenter[2] = center[2];
+
+    /* Determine solute length and charge*/
+    radius = 0;
+    atom = Valist_getAtom(thee->alist, 0);
+    xmin = Vatom_getPosition(atom)[0];
+    xmax = Vatom_getPosition(atom)[0];
+    ymin = Vatom_getPosition(atom)[1];
+    ymax = Vatom_getPosition(atom)[1];
+    zmin = Vatom_getPosition(atom)[2];
+    zmax = Vatom_getPosition(atom)[2];
+    charge = 0;
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        atom = Valist_getAtom(thee->alist, iatom);
+        x = Vatom_getPosition(atom)[0];
+        y = Vatom_getPosition(atom)[1];
+        z = Vatom_getPosition(atom)[2];
+        if (x > xmax) xmax = x;
+        if (x < xmin) xmin = x;
+        if (y > ymax) ymax = y;
+        if (y < ymin) ymin = y;
+        if (z > zmax) zmax = z;
+        if (z < zmin) zmin = z;
+        disp[0] = (x - center[0]);
+        disp[1] = (y - center[1]);
+        disp[2] = (z - center[2]);
+        atomRadius = Vatom_getRadius(atom);
+        dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]); 
+        dist = VSQRT(dist) + atomRadius;
+        if (dist > radius) radius = dist;
+        charge += Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
+    }
+    thee->soluteRadius = radius;
+    thee->soluteXlen = xmax - xmin;
+    thee->soluteYlen = ymax - ymin;
+    thee->soluteZlen = zmax - zmin;
+    thee->soluteCharge = charge;
+
     /* Set parameters */
     thee->ionConc = ionConc;
     thee->ionRadius = ionRadius;
@@ -695,363 +509,40 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
       (int)(nhash), 200);
     VASSERT(thee->acc != VNULL);
 
-    /* MC-specific stuff */
-    if (thee->methFlag == 0) {
-        /* Compute charge-simplex map */
-        Vcsm_init(thee->csm);
-    }
-
-    thee->paramFlag = 1;
+    return 1; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolution
+// Routine:  Vpbe_dtor
 //
-// Purpose:  Get the electrostatic potential (in units of kT/e) at the
-//           finest level of the passed AM object as a (newly allocated) array
-//           of doubles and store the length in *length.  You'd better destroy
-//           the returned array later!
-//
-// Notes:    Only meaningful for MC invocations of Vpbe (returns VNULL
-//           otherwise)
-//
-// Author:   Nathan Baker and Michael Holst
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) { 
-
-   int level, i;
-   double *solution;
-   double *theAnswer;
-
-   VASSERT(thee != VNULL);
-   if (thee->methFlag != 0) return VNULL;
-
-   VASSERT(am != VNULL);
-   VASSERT(thee->gm != VNULL);
-
-
-   /* Get the max level from AM */
-   level = AM_maxLevel(am);
-
-   /* Copy the solution into the w0 vector */
-   Bvec_copy(AM_alg(am, level)->W[W_w0], 
-     AM_alg(am, level)->W[W_u]);
-   /* Add the Dirichlet conditions */
-   Bvec_axpy(AM_alg(am, level)->W[W_w0], 
-     AM_alg(am, level)->W[W_ud], 1.);
-   /* Get the data from the Bvec */
-   solution = Bvec_data(AM_alg(am, level)->W[W_w0], 0);
-   /* Get the length of the data from the Bvec */
-   *length = Bvec_numRT(AM_alg(am, level)->W[W_w0]);
-   /* Make sure that we got scalar data (only one block) for the solution
-    * to the PBE */
-   VASSERT(1 == Bvec_numB(AM_alg(am, level)->W[W_w0]));
-   /* Allocate space for the returned vector and copy the solution into it */
-   theAnswer = VNULL;
-   theAnswer = Vmem_malloc(VNULL, *length, sizeof(double));
-   VASSERT(theAnswer != VNULL);
-   for (i=0; i<*length; i++) theAnswer[i] = solution[i];
-   
-   return theAnswer;
-}
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getLinearEnergy1
-//
-// Purpose:  using the solution at the finest mesh level, get the 
-//           electrostatic energy using the free energy functional for the 
-//           linearized Poisson-Boltzmann equation without removing any 
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with 
-//           the same relative permittivity as the interior of the protein).
-//           In other words, we calculate
-//             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
-//           and return the result in units of $k_B T$.  The argument color
-//           allows the user to control the partition on which this energy
-//           is calculated; if (color == -1) no restrictions are used.
-//           The solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vpbe object is used to
-//           calculate the energy
-//
-// Notes:    For MC implementations, the variable "system" should be a pointer 
-//           to the AM object for the system.  
-//           For PMGC implementations, the variable "system" should be a pointer
-//           to the MGmlsys object for the system.
+// Purpose:  Destroy the charge-simplex map.
+// 
+// Notes:    Since the grid manager and atom list were allocated outside of
+//           the Vpbe routines, they are not destroyed.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) { 
-
-   double *sol; int nsol;
-   double charge;
-   double phi[4], phix[4][3], *position;
-   int iatom, natoms;
-   int isimp, nsimps;
-   int icolor;
-   int ivert;
-   SS *simp;
-   double energy = 0.0;
-   double uval;
-
-   AM *am;
-#if defined(HAVE_PMGC_H)
-   MGmlsys *mlsys;
-   int I0, I1, J0, J1, K0, K1, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
-   double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
-   double kfloat, dx, dy, dz;
-#endif
-
-   VASSERT(thee != VNULL);
-
-   if (thee->methFlag == 0) {
-
-       am = (AM *)system;
-       VASSERT(am != VNULL);
-       VASSERT(thee->gm != VNULL);
-       VASSERT(thee->alist != VNULL);
-       VASSERT(thee->csm != VNULL);
-    
-       /* Get the finest level solution */
-       sol= VNULL;
-       sol = Vpbe_getSolution(thee, am, &nsol);
-       VASSERT(sol != VNULL);
-    
-    
-       /* Make sure the number of entries in the solution array matches the
-        * number of vertices currently in the mesh */
-       if (nsol != Gem_numVV(thee->gm)) {
-          Vnm_print(2, "Vpbe_getLinearEnergy1: Number of unknowns in solution does not match\n");
-          Vnm_print(2, "Vpbe_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
-          VASSERT(0);
-       }
-    
-       /* Now we do the sum over atoms... */
-       natoms = Valist_getNumberAtoms(thee->alist);
-       for (iatom=0; iatom<natoms; iatom++) {
-           /* Get atom information */
-           icolor = Vpbe_getAtomColor(thee, iatom);
-           charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
-           position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
-           /* Check if this atom belongs to the specified partition */
-           if ((color>=0) && (icolor<0)) {
-               Vnm_print(2, "Vpbe_getLinearEnergy1: Atom colors not set!\n");
-               VASSERT(0);
-           }
-           if ((icolor==color) || (color<0)) { 
-               /* Loop over the simps associated with this atom */
-               nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
-               /* Get the first simp of the correct color; we can use just one
-                * simplex for energy evaluations, but not for force 
-                * evaluations */
-               for (isimp=0; isimp<nsimps; isimp++) {
-                   simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
-                   /* If we've asked for a particular partition AND if the atom 
-                    * is our partition, then compute the energy */
-                   if ((SS_chart(simp)==color)||(color<0)) {
-                       /* Get the value of each basis function evaluated at this
-                        * point */
-                       Gem_pointInSimplexVal(thee->gm, simp, position, phi, phix);
-                       for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
-                           uval = sol[VV_id(SS_vertex(simp,ivert))];
-                           energy += (charge*phi[ivert]*uval);
-                       } /* end for ivert */
-                       /* We only use one simplex of the appropriate color for
-                        * energy calculations, so break here */
-                       break;
-                   } /* endif (color) */
-               } /* end for isimp */
-           } 
-       } /* end for iatom */
-    
-       /* Destroy the finest level solution */
-       Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
-    
-       /* Return the energy */
-       return 0.5*energy;
-
-    } else if (thee->methFlag == 1) {
-#if defined(HAVE_PMGC_H)
-        mlsys = (MGmlsys *)system;
-        VASSERT(mlsys != VNULL);
-
-        /* Get the fine level solution */
-        sol = MGarray_d(mlsys->s[0]->u);
-
-        energy = 0.0;
-        natoms = Valist_getNumberAtoms(thee->alist);
-        for (iatom=0; iatom<natoms; iatom++) {
-            /* Get atom information */
-            charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
-            position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
-
-            /* Get mesh information */
-            I0 = MGlsys_I0g(mlsys->s[0]);
-            I1 = MGlsys_I1g(mlsys->s[0]);
-            J0 = MGlsys_J0g(mlsys->s[0]);
-            J1 = MGlsys_J1g(mlsys->s[0]);
-            K0 = MGlsys_K0g(mlsys->s[0]);
-            K1 = MGlsys_K1g(mlsys->s[0]);
-            nx = MGlsys_nxg(mlsys->s[0]);
-            ny = MGlsys_nyg(mlsys->s[0]);
-            nz = MGlsys_nzg(mlsys->s[0]);
-            hx = VABS(mlsys->s[0]->xc[1] - mlsys->s[0]->xc[0]);
-            hy = VABS(mlsys->s[0]->yc[1] - mlsys->s[0]->yc[0]);
-            hzed = VABS(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
-            xmax = mlsys->s[0]->xc[nx-1];
-            xmin = mlsys->s[0]->xc[0];
-            ymax = mlsys->s[0]->yc[ny-1];
-            ymin = mlsys->s[0]->yc[0];
-            zmax = mlsys->s[0]->zc[nz-1];
-            zmin = mlsys->s[0]->zc[0];
-
-            /* Make sure we're on the grid */
-            if ((position[0]<=xmin) || (position[0]>=xmax)  || \
-              (position[1]<=ymin) || (position[1]>=ymax)  || \
-              (position[2]<=zmin) || (position[2]>=zmax)) {
-                Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
-                iatom, position[0], position[1], position[2]);
-            } else {
-                /* Figure out which vertices we're next to */
-                ifloat = (position[0] - xmin)/hx;
-                jfloat = (position[1] - xmin)/hy;
-                kfloat = (position[2] - xmin)/hzed;
-
-                ihi = (int)ceil(ifloat);
-                ilo = (int)floor(ifloat);
-                jhi = (int)ceil(jfloat);
-                jlo = (int)floor(jfloat);
-                khi = (int)ceil(kfloat);
-                klo = (int)floor(kfloat);
-
-                /* Now get trilinear interpolation constants */
-                dx = ifloat - (double)(ilo);
-                dy = jfloat - (double)(jlo);
-                dz = kfloat - (double)(klo);
-                uval =  dx*dy*dz*sol[II(ihi,jhi,khi)]
-                      + dx*(1.0-dy)*dz*sol[II(ihi,jlo,khi)]
-                      + dx*dy*(1.0-dz)*sol[II(ihi,jhi,klo)]
-                      + dx*(1.0-dy)*(1.0-dz)*sol[II(ihi,jlo,klo)]
-                      + (1.0-dx)*dy*dz*sol[II(ilo,jhi,khi)]
-                      + (1.0-dx)*(1.0-dy)*dz*sol[II(ilo,jlo,khi)]
-                      + (1.0-dx)*dy*(1.0-dz)*sol[II(ilo,jhi,klo)]
-                      + (1.0-dx)*(1.0-dy)*(1.0-dz)*sol[II(ilo,jlo,klo)];
-                energy += (uval*charge);
-            }
-        }
-
-        energy = 0.5*energy;
-
-        return energy;
-#else /* if defined(HAVE_PMGC_H) */
-        Vnm_print(2, "Vpbe_getLinearEnergy1: Not compiled with PMGC!\n");
-        return 0.0;
-#endif
-    } else {
-        Vnm_print(2, "Vpbe_getLinearEnergy1: invalid solution method (methFlag = %d)\n", 
-          thee->methFlag);
-        return 0.0;
+VPUBLIC void Vpbe_dtor(Vpbe **thee) {
+    if ((*thee) != VNULL) {
+        Vpbe_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(Vpbe), (void **)thee);
+        (*thee) = VNULL;
     }
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getEnergyNorm2
+// Routine:  Vpbe_dtor2
 //
-// Purpose:  Calculate the square of the energy norm, i.e.
-//                 u^T A u
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           passed AM object, but atomic data from the Vpbe object is used to
-//           calculate the energy
-//           
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.  THIS FUNCTION DOES NOT WORK FOR ANY
-//           METHOD RIGHT NOW.
-//
-// Notes:    Currently only meaningful for MC invocations of Vpbe (returns
-//           0.0 otherwise)
-//           
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getEnergyNorm2(Vpbe *thee, Alg *alg, int color) {
-
-    Bmat *A;
-    Bvec *u, *Au;
-    double norm2;
-
-    if (thee->methFlag != 0) {
-       Vnm_print(2, "Vpbe_getEnergyNorm2: Not implemented for methFlag %d\n",
-         thee->methFlag);
-       return 0.0;
-    }
-
-    /* Solution + Dirichlet conditions */
-    Bvec_copy(alg->W[W_w0], alg->W[W_u]);
-    u = alg->W[W_w0];
-    Bvec_axpy(u, alg->W[W_ud], 1.);
-    /* Stiffness matrix */
-    A = alg->A;
-    /* Work space */
-    Au = alg->W[W_w1];
-
-    if (color>=0) Vnm_print(2,"Vpbe_getEnergyNorm: color argument ignored!\n");
-
-    /* Au = A u */
-    Bvec_matvec(Au, u, A, 0);
-    /* Calculate (u,Au) */
-    norm2 = Bvec_dot(u,Au);
-
-    return norm2;
-}
-    
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getLinearEnergy2
-//
-// Purpose:  Calculate the energy from the energy norm, i.e. 
-//                 G = (u, A u)/(8 pi)
-//           for the linearized Poisson-Boltzmann equation without removing any
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with
-//           the same relative permittivity as the interior of the protein).
-//           Return the result in units of $k_B T$.  The argument color allows
-//           the user to control the partition on which this energy is
-//           calculated; if (color == -1) no restrictions are used.  The
-//           solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vpbe object is used to calculate
-//           the energy.
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.
+// Purpose:  Destroy the atom object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) {
-
-    double energy = 0.0;
-    Alg *alg;    
-
-    if (thee->methFlag != 0) {
-       Vnm_print(2, "Vpbe_getLinearEnergy2: Not implemented for methFlag %d\n",
-         thee->methFlag);
-       return 0.0;
-    }
-
-    Vnm_print(2, "Vpbe_getLinearEnergy2: WARNING! This routine may be broken!\n");
-    /* Get the algebra object for the finest level */
-    alg = AM_alg(am, AM_maxLevel(am));
-
-    /* Calculate the energy norm */
-    energy = Vpbe_getEnergyNorm2(thee, alg, color);
-
-    energy = energy/Vunit_pi/Vunit_pi/16.0;
-    energy = energy*Vunit_eps0*10e-10;
-    energy = energy/Vunit_ec/Vunit_ec*(Vunit_kb*thee->T);
-
-    return energy;
+VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
+    Vacc_dtor(&(thee->acc));
+    Vgreen_dtor(&(thee->green));
+    Vmem_dtor(&(thee->vmem));
 }
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getCoulombEnergy1
@@ -1108,44 +599,6 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_setAtomColors
-//
-// Purpose:  Transfer color information from partitioned mesh to the atoms.
-//           In the case that a charge is shared between two partitions, the
-//           partition color of the first simplex is selected.  Due to the
-//           arbitrary nature of this selection, THIS METHOD SHOULD ONLY BE
-//           USED IMMEDIATELY AFTER PARTITIONING!!!
-//
-// Note:     This is a friend function of Vcsm
-// Note:     This has no meaning for thee->methFlag != 0
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
-
-#define VMAXLOCALCOLORSDONTREUSETHISVARIABLE 1024
-    SS *simp;
-    int i, natoms;
-
-    VASSERT(thee != VNULL);
-
-    if (thee->methFlag != 0) {
-        Vnm_print(2, "Vpbe_setAtomColors: ignoring call for methFlag = %d\n",
-          thee->methFlag);
-        return;
-    }
-
-    natoms = Valist_getNumberAtoms(thee->alist);
-    for (i=0; i<natoms; i++) {
-        simp = Vcsm_getSimplex(thee->csm, 0, i);
-        thee->csm->colors[i] = SS_chart(simp);
-    }
-
-}
-
-
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_memChk
 //
 // Purpose:  Returns the bytes used by the specified object
@@ -1159,7 +612,6 @@ VPUBLIC int Vpbe_memChk(Vpbe *thee) {
     if (thee == VNULL) return 0;
 
     memUse = memUse + sizeof(Vpbe);
-    if (thee->methFlag == 0) memUse = memUse + Vcsm_memChk(thee->csm);
     memUse = memUse + Vacc_memChk(thee->acc);
 
     return memUse;

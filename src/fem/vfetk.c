@@ -190,6 +190,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) {
     /* Set up charge-simplex map */
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
+    Vcsm_init(thee->csm);
 
     return 1; 
 }

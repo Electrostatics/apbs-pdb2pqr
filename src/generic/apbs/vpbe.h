@@ -70,20 +70,11 @@
 
 typedef struct Vpbe { 
 
-  Valist *alist;      /* Atom (charge) list */
-  Gem *gm;            /* Grid manager (container class for master vertex
-                       * and simplex lists as well as prolongation
-                       * operator for updating after refinement ) */
-
-
-  Vacc *acc;          /* Accessibility object */
-  Vcsm *csm;          /* Charge-simplex map */
-  Vgreen *green;      /* Green's function oracle */
   Vmem *vmem;         /* Memory management object */
 
-  int methFlag;       /* Method of solution
-                       *  0 ==> MC (adaptive multilevel FEM) 
-                       *  1 ==> PMGC (multigrid) */
+  Valist *alist;      /* Atom (charge) list */
+  Vacc *acc;          /* Accessibility object */
+  Vgreen *green;      /* Green's function oracle */
 
   double ionConc;     /* Ionic strength (M) */
   double T;           /* Temperature (K) */
@@ -105,9 +96,9 @@ typedef struct Vpbe {
   double soluteCenter[3];
                       /* Center of solute molecule (A) */
   double soluteRadius;/* Radius of solute molecule (A) */
-  double soluteMaxX;  /* Max dist from solute center in x-direction */
-  double soluteMaxY;  /* Max dist from solute center in y-direction */
-  double soluteMaxZ;  /* Max dist from solute center in z-direction */
+  double soluteXlen;  /* Solute length in x-direction */
+  double soluteYlen;  /* Solute length in y-direction */
+  double soluteZlen;  /* Solute length in z-direction */
   double soluteCharge;
                       /* Charge of solute molecule (e) */
 
@@ -121,17 +112,15 @@ typedef struct Vpbe {
 
 #if !defined(VINLINE_VPBE)
     VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
-    VEXTERNC Gem*    Vpbe_getGem(Vpbe *thee);
     VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
     VEXTERNC Vgreen* Vpbe_getVgreen(Vpbe *thee);
-    VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
     VEXTERNC double  Vpbe_getIonConc(Vpbe *thee);
     VEXTERNC double  Vpbe_getTemperature(Vpbe *thee);           
     VEXTERNC double  Vpbe_getSoluteDiel(Vpbe *thee); 
     VEXTERNC double  Vpbe_getSoluteRadius(Vpbe *thee);
-    VEXTERNC double  Vpbe_getSoluteMaxX(Vpbe *thee);
-    VEXTERNC double  Vpbe_getSoluteMaxY(Vpbe *thee);
-    VEXTERNC double  Vpbe_getSoluteMaxZ(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteXlen(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteYlen(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteZlen(Vpbe *thee);
     VEXTERNC double* Vpbe_getSoluteCenter(Vpbe *thee);
     VEXTERNC double  Vpbe_getSoluteCharge(Vpbe *thee);
     VEXTERNC double  Vpbe_getSolventDiel(Vpbe *thee);
@@ -141,21 +130,18 @@ typedef struct Vpbe {
     VEXTERNC double  Vpbe_getDeblen(Vpbe *thee);
     VEXTERNC double  Vpbe_getZkappa2(Vpbe *thee);
     VEXTERNC double  Vpbe_getZmagic(Vpbe *thee);
-    VEXTERNC int     Vpbe_getAtomColor(Vpbe *thee, int iatom);
 #else /* if defined(VINLINE_VPBE) */
 #   define Vpbe_getValist(thee) ((thee)->alist)
-#   define Vpbe_getGem(thee) ((thee)->gm)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
 #   define Vpbe_getVgreen(thee) ((thee)->green)
-#   define Vpbe_getVcsm(thee) ((thee)->csm)
 #   define Vpbe_getIonConc(thee) ((thee)->ionConc)
 #   define Vpbe_getTemperature(thee) ((thee)->T)           
 #   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 
 #   define Vpbe_getSoluteCenter(thee) ((thee)->soluteCenter)
 #   define Vpbe_getSoluteRadius(thee) ((thee)->soluteRadius)
-#   define Vpbe_getSoluteMaxX(thee) ((thee)->soluteMaxX)
-#   define Vpbe_getSoluteMaxY(thee) ((thee)->soluteMaxY)
-#   define Vpbe_getSoluteMaxZ(thee) ((thee)->soluteMaxZ)
+#   define Vpbe_getSoluteXlen(thee) ((thee)->soluteXlen)
+#   define Vpbe_getSoluteYlen(thee) ((thee)->soluteYlen)
+#   define Vpbe_getSoluteZlen(thee) ((thee)->soluteZlen)
 #   define Vpbe_getSoluteCharge(thee) ((thee)->soluteCharge)
 #   define Vpbe_getSolventDiel(thee) ((thee)->solventDiel)
 #   define Vpbe_getSolventRadius(thee) ((thee)->solventRadius)
@@ -164,28 +150,24 @@ typedef struct Vpbe {
 #   define Vpbe_getDeblen(thee) ((thee)->deblen)
 #   define Vpbe_getZkappa2(thee) ((thee)->zkappa2)
 #   define Vpbe_getZmagic(thee) ((thee)->zmagic)
-#   define Vpbe_getAtomColor(thee, iatom) ((thee)->csm->colors[iatom])
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Gem *gm, int methFlag);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Gem *gm, int methFlag);
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, double ionConc, double ionRadius,
+                    double T, double soluteDiel, double solventDiel,
+                    double solventRadius);
+VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc, 
+		    double ionRadius, double T, double soluteDiel, double
+                    solventDiel, double solventRadius);
+
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 
-VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius, 
-                    double T, double soluteDiel, double solventDiel, 
-                    double solventRadius); 
-VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
-VEXTERNC double  Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color);
-VEXTERNC double  Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color);
-VEXTERNC double  Vpbe_getEnergyNorm2(Vpbe *thee, Alg *am, int color);
 VEXTERNC double  Vpbe_getCoulombEnergy1(Vpbe *thee);
 VEXTERNC int     Vpbe_memChk(Vpbe *thee);
-VEXTERNC void    Vpbe_setAtomColors(Vpbe *thee);
 
 
 #endif /* ifndef _VALIST_H_ */
