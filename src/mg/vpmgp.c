@@ -97,6 +97,9 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->hx = hx;
     thee->hy = hy;
     thee->hzed = hzed;
+    thee->xlen = ((double)(nx-1))*hx;
+    thee->ylen = ((double)(ny-1))*hy;
+    thee->zlen = ((double)(nz-1))*hzed;
     thee->nlev = nlev; 
     thee->nonlin = nonlin;
     if (nonlin == 0) thee->ipkey = -1;
