@@ -107,7 +107,7 @@ VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
 
 #endif /* if !defined(VINLINE_NOSH) */
 
-VPUBLIC int NOsh_printWhat(NOsh *thee, int iprint) {
+VPUBLIC NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint) {
     VASSERT(thee != VNULL);
     VASSERT(iprint < thee->nprint);
     return thee->printwhat[iprint];
@@ -287,12 +287,159 @@ nkappa=%d, ncharge=%d)\n", thee->nmol, thee->ndiel, thee->nkappa, thee->ncharge)
 
 }
 
+VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    NOsh_MolFormat molfmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "pqr") == 0) {
+        molfmt = NMF_PQR;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
+          thee->nmol, tok);
+        thee->molfmt[thee->nmol] = molfmt;
+        strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
+        (thee->nmol)++;
+    } else if (Vstring_strcasecmp(tok, "pdb") == 0) {
+        molfmt = NMF_PDB;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
+          thee->nmol, tok);
+        thee->molfmt[thee->nmol] = molfmt;
+        strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
+        (thee->nmol)++;
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined mol format \
+%s!\n", tok);
+    } 
+
+
+    VERROR1:
+        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+section!\n");
+        return 0;
+
+}
+
+VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    NOsh_ParmFormat parmfmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "flat") == 0) {
+        parmfmt = NPF_FLAT;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (thee->gotparm) {
+            Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
+            Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
+        } else {
+            thee->parmfmt = parmfmt;
+            thee->gotparm = 1;
+            strncpy(thee->parmpath, tok, VMAX_ARGLEN);
+        }
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined parm format \
+%s!\n", tok);
+    } 
+
+    VERROR1:
+        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+section!\n");
+        return 0;
+
+}
+
+VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int dielfmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "dx") == 0) {
+        dielfmt = 0;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+        strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing y-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+        strncpy(thee->dielYpath[thee->ndiel], tok, VMAX_ARGLEN);
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing z-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+        strncpy(thee->dielZpath[thee->ndiel], tok, VMAX_ARGLEN);
+        thee->dielfmt[thee->ndiel] = dielfmt;
+        (thee->ndiel)++;
+    } else { 
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
+%s!\n", tok);
+    } 
+
+    VERROR1:
+        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+section!\n");
+        return 0;
+
+}
+
+VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int kappafmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "dx") == 0) {
+        kappafmt = 0;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
+          thee->nkappa, tok);
+        thee->kappafmt[thee->nkappa] = kappafmt;
+        strncpy(thee->kappapath[thee->nkappa], tok, VMAX_ARGLEN);
+        (thee->nkappa)++;
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
+%s!\n", tok);
+    }
+
+    VERROR1:
+        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+section!\n");
+        return 0;
+
+}
+
+VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int chargefmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "dx") == 0) {
+        chargefmt = 0;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
+          thee->ncharge, tok);
+        thee->chargefmt[thee->ncharge] = chargefmt;
+        strncpy(thee->chargepath[thee->ncharge], tok, VMAX_ARGLEN);
+        (thee->ncharge)++;
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
+%s!\n", tok);
+    }
+
+    VERROR1:
+        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+section!\n");
+        return 0;
+
+}
+
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int dielfmt, chargefmt, kappafmt;
-    NOsh_MolFormat molfmt;
-    NOsh_ParmFormat parmfmt;
 
     if (thee == VNULL) {
         Vnm_print(2, "NOsh_parse:  Got NULL thee!\n");
@@ -316,107 +463,26 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
             Vnm_print(0, "NOsh: Done parsing READ section\n");
             return 1;
         } else if (Vstring_strcasecmp(tok, "mol") == 0) {
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (Vstring_strcasecmp(tok, "pqr") == 0) {
-                molfmt = NMF_PQR;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
-                  thee->nmol, tok);
-                thee->molfmt[thee->nmol] = molfmt;
-                strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
-                (thee->nmol)++;
-            } else if (Vstring_strcasecmp(tok, "pdb") == 0) {
-                molfmt = NMF_PDB;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
-                  thee->nmol, tok);
-                thee->molfmt[thee->nmol] = molfmt;
-                strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
-                (thee->nmol)++;
-            } else {
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined mol format \
-%s!\n", tok);
-            } 
+            NOsh_parseREAD_MOL(thee, sock);
         } else if (Vstring_strcasecmp(tok, "parm") == 0) {
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (Vstring_strcasecmp(tok, "flat") == 0) {
-                parmfmt = NPF_FLAT;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                if (thee->gotparm) {
-                    Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
-                    Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
-                } else {
-                    thee->parmfmt = parmfmt;
-                    thee->gotparm = 1;
-                    strncpy(thee->parmpath, tok, VMAX_ARGLEN);
-                }
-            } else {
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined parm format \
-%s!\n", tok);
-            } 
+            NOsh_parseREAD_PARM(thee,sock);
         } else if (Vstring_strcasecmp(tok, "diel") == 0) {
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (Vstring_strcasecmp(tok, "dx") == 0) {
-                dielfmt = 0;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-                strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing y-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-                strncpy(thee->dielYpath[thee->ndiel], tok, VMAX_ARGLEN);
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing z-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-                strncpy(thee->dielZpath[thee->ndiel], tok, VMAX_ARGLEN);
-                thee->dielfmt[thee->ndiel] = dielfmt;
-                (thee->ndiel)++;
-            } else { 
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-            } 
+            NOsh_parseREAD_DIEL(thee,sock);
         } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (Vstring_strcasecmp(tok, "dx") == 0) {
-                kappafmt = 0;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
-                  thee->nkappa, tok);
-                thee->kappafmt[thee->nkappa] = kappafmt;
-                strncpy(thee->kappapath[thee->nkappa], tok, VMAX_ARGLEN);
-                (thee->nkappa)++;
-            } else {
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-            }
+            NOsh_parseREAD_KAPPA(thee,sock);
         } else if (Vstring_strcasecmp(tok, "charge") == 0) {
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (Vstring_strcasecmp(tok, "dx") == 0) {
-                chargefmt = 0;
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
-                  thee->ncharge, tok);
-                thee->chargefmt[thee->ncharge] = chargefmt;
-                strncpy(thee->chargepath[thee->ncharge], tok, VMAX_ARGLEN);
-                (thee->ncharge)++;
-            } else {
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-            }
+            NOsh_parseREAD_CHARGE(thee,sock);
         } else {
             Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined keyword %s!\n", 
               tok);
         }
     }
 
-    /* We ran out of tokens! */
-    VJMPERR1(0);
 
-    VERROR1:
-        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+    /* We ran out of tokens! */
+    Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
 section!\n");
-        return 0;
+    return 0;
 
 }
 
@@ -453,10 +519,10 @@ sections\n",
     /* The first thing we read is the thing we want to print */ 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "energy") == 0) {
-        thee->printwhat[idx] = 0;
+        thee->printwhat[idx] = NPT_ENERGY;
         thee->printnarg[idx] = 0;
     } else if (Vstring_strcasecmp(tok, "force") == 0) {
-        thee->printwhat[idx] = 1;
+        thee->printwhat[idx] = NPT_FORCE;
         thee->printnarg[idx] = 0;
     } else {
         Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing \

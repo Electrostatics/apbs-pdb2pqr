@@ -395,10 +395,10 @@ int main(
     }
     for (i=0; i<nosh->nprint; i++) {
         /* Print energy */
-        if (nosh->printwhat[i] == 0) {
+        if (nosh->printwhat[i] == NPT_ENERGY) {
             printEnergy(com, nosh, totEnergy, i);
         /* Print force */
-        } else if (nosh->printwhat[i] == 1) {
+        } else if (nosh->printwhat[i] == NPT_FORCE) {
             printForce(com, nosh, nforce, atomForce, i);
         } else {
             Vnm_tprint( 2, "Undefined PRINT keyword!\n");
