@@ -173,10 +173,8 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
     Vnm_print(2,"Vpbe_dtor2: Destroying VCSM\n");
     Vcsm_dtor(&(thee->csm));
-    Vnm_print(2,"Vpbe_dtor2: Destroying solvent VACC\n");
-    Vacc_dtor(&(thee->solvAcc));
-    Vnm_print(2,"Vpbe_dtor2: Destroying ion VACC\n");
-    Vacc_dtor(&(thee->ionAcc));
+    Vnm_print(2,"Vpbe_dtor2: Destroying VACC\n");
+    Vacc_dtor(&(thee->acc));
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -311,6 +309,8 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     const double e_c = 4.803242384e-10;
     const double k_B = 1.380662000e-16;
     const double pi  = 4. * VATAN(1.);
+
+    double radius;
  
     /* Set parameters */
     thee->ionConc = ionConc;
@@ -345,10 +345,10 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
 
     /* Compute accessibility objects */
-    VASSERT( (thee->solvAcc = Vacc_ctor(thee->alist, thee->solventRadius, 
-                                      110, 110, 110, 100)) != VNULL);
-    VASSERT( (thee->ionAcc = Vacc_ctor(thee->alist, thee->ionRadius, 
-                                      110, 110, 110, 100)) != VNULL);
+    if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
+    else radius = thee->solventRadius;
+    thee->acc = Vacc_ctor(thee->alist, radius, 110, 110, 110, 100);
+    VASSERT(thee->acc != VNULL);
 
     /* Compute charge-simplex map */
     Vcsm_init(thee->csm);
@@ -385,34 +385,17 @@ VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventAcc
+// Routine:  Vpbe_getVacc
 //
-// Purpose:  Get a pointer to the Vacc accessibility object for solvent
-//           accessiblity
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vacc* Vpbe_getSolventAcc(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->solvAcc; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonAcc
-//
-// Purpose:  Get a pointer to the Vacc accessiblity object for ionic
-//           accessibility
+// Purpose:  Get a pointer to the Vacc accessibility object 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vacc* Vpbe_getIonAcc(Vpbe *thee) { 
+VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->ionAcc; 
+   return thee->acc; 
 
 }
 
@@ -815,8 +798,7 @@ VPUBLIC int Vpbe_memChk(Vpbe *thee) {
 
     memUse = memUse + sizeof(Vpbe);
     memUse = memUse + Vcsm_memChk(thee->csm);
-    memUse = memUse + Vacc_memChk(thee->solvAcc);
-    memUse = memUse + Vacc_memChk(thee->ionAcc);
+    memUse = memUse + Vacc_memChk(thee->acc);
 
     return memUse;
 }
