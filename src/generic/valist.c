@@ -162,7 +162,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
     Vparam_AtomData *atomData = VNULL;
     char tok[VMAX_BUFSIZE], tokArray[4][VMAX_BUFSIZE];
     char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
-    int nalloc, itmp, i, gotit;
+    int nalloc, itmp, i, gotit, ntok;
     double dtmp, x, y, z, charge, radius;
     double pos[3];
  
@@ -177,7 +177,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
         return 0;
     }
     if (Vio_accept(sock, 0) < 0) {
-        Vnm_print(2, "Vgrid_readPDB: Problem accepting virtual socket %s\n",
+        Vnm_print(2, "Valist_readPDB: Problem accepting virtual socket %s\n",
           fname);
         return 0;
     }
@@ -215,8 +215,10 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
             /* We don't care about any of the next 1-3 fields; the next thing
              * we're looking for is resSeq (integer) */
             gotit = 0;
+            ntok = 0;
             for (i=0; i<4; i++) {
                 VJMPERR1(Vio_scanf(sock, "%s", tokArray[i]) == 1);
+                ntok++;
                 if (sscanf(tokArray[i], "%d", &itmp) == 1) {
                     gotit = 1;
                     break;
@@ -259,9 +261,10 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
              * entries in tokArray because we can't be sure which is the
              * actual resName */
             gotit = 0;
-            for (i=0; i<4; i++) {
+            for (i=0; i<ntok; i++) {
                 if (strlen(tokArray[i]) < VMAX_ARGLEN) {
                     strcpy(resName, tokArray[i]);
+                    break;
                 } else {
                     Vnm_print(2, "Valist_readPDB:  Residue name (%s) too long!\n", tokArray[i]);
                     return 0;
@@ -275,7 +278,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
                 }
             }
             if (!gotit) {
-                Vnm_print(2, "Couldn't find parmeters for atom %d %d!\n", 
+                Vnm_print(2, "Couldn't find parmeters for atom %s %s!\n", 
                   atomName, resName);
                 return 0;
             }
@@ -318,7 +321,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
     Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
 
     /* Close socket */
-    Vio_connectFree(sock);
+    Vio_acceptFree(sock);
     Vio_dtor(&sock);
       
     return getStatistics(thee);
@@ -474,7 +477,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
 
     /* Close socket */
-    Vio_connectFree(sock);
+    Vio_acceptFree(sock);
     Vio_dtor(&sock);
       
     return getStatistics(thee);
