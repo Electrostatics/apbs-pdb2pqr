@@ -44,8 +44,6 @@
 #include "apbscfg.h"
 #include "apbs/vgreen.h"
 
-#undef HAVE_TREE
-
 /* Define wrappers for F77 treecode routines */
 #ifdef HAVE_TREE
 #  define F77TREEPEFORCE VF77_MANGLE(treepeforce, TREEPEFORCE)
@@ -189,7 +187,7 @@ VPUBLIC void Vgreen_dtor(Vgreen **thee) {
 
 VPUBLIC void Vgreen_dtor2(Vgreen *thee) { 
 
-#if HAVE_TREE
+#ifdef HAVE_TREE
     treecleanup(thee);
 #endif
     Vmem_dtor(&(thee->vmem));
@@ -211,6 +209,40 @@ VPUBLIC int Vgreen_helmholtzD(Vgreen *thee, int npos, double *x, double *y,
 
 }
 
+VPUBLIC int Vgreen_coulomb_direct(Vgreen *thee, int npos, double *x, 
+        double *y, double *z, double *val) {
+
+    Vatom *atom;
+    double *apos, charge, dist, dx, dy, dz, scale;
+    double *q, qtemp, fx, fy, fz;
+    int iatom, ipos;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgreen_coulomb:  Got NULL thee!\n");
+        return 0;
+    }
+
+    for (ipos=0; ipos<npos; ipos++) val[ipos] = 0.0;
+
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        atom = Valist_getAtom(thee->alist, iatom);
+        apos = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
+        for (ipos=0; ipos<npos; ipos++) {
+            dx = apos[0] - x[ipos];
+            dy = apos[1] - y[ipos];
+            dz = apos[2] - z[ipos];
+            dist = VSQRT(VSQR(dx) + VSQR(dy) + VSQR(dz));
+            if (dist > VSMALL) val[ipos] += (charge/dist);
+        }
+    }
+
+    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*1.0e-10);
+    for (ipos=0; ipos<npos; ipos++) val[ipos] = val[ipos]*scale;
+
+    return 1;
+}
+
 VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
   double *z, double *val) {
 
@@ -229,28 +261,61 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
 #ifdef HAVE_TREE  
 
     /* Allocate charge array (if necessary) */
-    if (npos > 1) {
-        q = VNULL;
-        q = Vmem_malloc(thee->vmem, npos, sizeof(double));
-        if (q == VNULL) {
-            Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
-            return 0;
+    if (Valist_getNumberAtoms(thee->alist) > 1) {
+        if (npos > 1) {
+            q = VNULL;
+            q = Vmem_malloc(thee->vmem, npos, sizeof(double));
+            if (q == VNULL) {
+                Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
+                return 0;
+            }
+        } else {
+            q = &(qtemp);
         }
-    } else {
-        q = &(qtemp);
-    }
-    for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
-
-    /* Calculate */
-    treecalc(thee, x, y, z, q, npos, val, thee->xp, thee->yp, thee->zp,
-      thee->qp, thee->np, &fx, &fy, &fz, 1, 1, thee->np);
+        for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
+    
+        /* Calculate */
+        treecalc(thee, x, y, z, q, npos, val, thee->xp, thee->yp, thee->zp,
+          thee->qp, thee->np, &fx, &fy, &fz, 1, 1, thee->np);
+    } else return Vgreen_coulomb_direct(thee, npos, x, y, z, val);
 
     /* De-allocate charge array (if necessary) */
     if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
     
+    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*1.0e-10);
+    for (ipos=0; ipos<npos; ipos++) val[ipos] = val[ipos]*scale;
+
     return 1;
 
 #else /* ifdef HAVE_TREE */
+
+    return Vgreen_coulomb_direct(thee, npos, x, y, z, val);
+
+#endif
+
+}
+
+VPUBLIC int Vgreen_coulombD_direct(Vgreen *thee, int npos, 
+        double *x, double *y, double *z, double *pot, double *gradx, 
+        double *grady, double *gradz) {
+
+    Vatom *atom;
+    double *apos, charge, dist, dist2, idist3, dy, dz, dx, scale;
+    double *q, qtemp;
+    int iatom, ipos;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgreen_coulombD:  Got VNULL thee!\n");
+        return 0;
+    }
+
+    for (ipos=0; ipos<npos; ipos++) {
+        pot[ipos] = 0.0;
+        gradx[ipos] = 0.0;
+        grady[ipos] = 0.0;
+        gradz[ipos] = 0.0;
+    }
+
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
         apos = Vatom_getPosition(atom);
@@ -259,14 +324,27 @@ VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
             dx = apos[0] - x[ipos];
             dy = apos[1] - y[ipos];
             dz = apos[2] - z[ipos];
-            dist = VSQRT(VSQR(dx) + VSQR(dy) + VSQR(dz));
-            if (dist > VSMALL) val[ipos] += (charge/dist);
+            dist2 = VSQR(dx) + VSQR(dy) + VSQR(dz);
+            dist = VSQRT(dist2);
+            if (dist > VSMALL) {
+                idist3 = 1.0/(dist*dist2);
+                gradx[ipos] -= (charge*dx*idist3);
+                grady[ipos] -= (charge*dy*idist3);
+                gradz[ipos] -= (charge*dz*idist3);
+                pot[ipos] += (charge/dist);
+            } 
         }
     }
-#endif
 
-    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*1.0e-10);
-    for (ipos=0; ipos<npos; ipos++) val[ipos] = val[ipos]*scale;
+    scale = Vunit_ec/(4*VPI*Vunit_eps0*(1.0e-10));
+    for (ipos=0; ipos<npos; ipos++) {
+        gradx[ipos] = gradx[ipos]*scale;
+        grady[ipos] = grady[ipos]*scale;
+        gradz[ipos] = gradz[ipos]*scale;
+        pot[ipos] = pot[ipos]*scale;
+        printf("gradx = %g, grady = %g, gradz = %g, pot = %g\n", gradx[ipos], grady[ipos], gradz[ipos], pot[ipos]);
+
+    }
 
     return 1;
 }
@@ -293,48 +371,27 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
 
 #ifdef HAVE_TREE
 
-    if (npos > 1) {
-        q = VNULL;
-        q = Vmem_malloc(thee->vmem, npos, sizeof(double));
-        if (q == VNULL) {
-            Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
-            return 0;
+    if (Valist_getNumberAtoms(thee->alist) > 1) {
+        if (npos > 1) {
+            q = VNULL;
+            q = Vmem_malloc(thee->vmem, npos, sizeof(double));
+            if (q == VNULL) {
+                Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
+                return 0;
+            }
+        } else {
+            q = &(qtemp);
         }
-    } else {
-        q = &(qtemp);
-    }
-    for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
-
-    /* Calculate */
-    treecalc(thee, x, y, z, q, npos, pot, thee->xp, thee->yp, thee->zp,
-            thee->qp, thee->np, gradx, grady, gradz, 2, npos, thee->np);
-
-    /* De-allocate charge array (if necessary) */
-    if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
-
-#else /* ifdef HAVE_TREE */
-  
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        atom = Valist_getAtom(thee->alist, iatom);
-        apos = Vatom_getPosition(atom);
-        charge = Vatom_getCharge(atom);
-        for (ipos=0; ipos<npos; ipos++) {
-            dx = apos[0] - x[ipos];
-            dy = apos[1] - y[ipos];
-            dz = apos[2] - z[ipos];
-            dist2 = VSQR(dx) + VSQR(dy) + VSQR(dz);
-            dist = VSQRT(dist2);
-            if (dist > VSMALL) {
-                idist3 = 1.0/(dist*dist2);
-                gradx[ipos] -= (charge*dx*idist3);
-                grady[ipos] -= (charge*dy*idist3);
-                gradz[ipos] -= (charge*dz*idist3);
-                pot[ipos] += (charge/dist);
-            } 
-        }
-    }
-
-#endif
+        for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
+    
+        /* Calculate */
+        treecalc(thee, x, y, z, q, npos, pot, thee->xp, thee->yp, thee->zp,
+                thee->qp, thee->np, gradx, grady, gradz, 2, npos, thee->np);
+    
+        /* De-allocate charge array (if necessary) */
+        if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
+    } else return Vgreen_coulombD_direct(thee, npos, x, y, z, pot, 
+            gradx, grady, gradz);
 
     scale = Vunit_ec/(4*VPI*Vunit_eps0*(1.0e-10));
     for (ipos=0; ipos<npos; ipos++) {
@@ -342,9 +399,18 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
         grady[ipos] = grady[ipos]*scale;
         gradz[ipos] = gradz[ipos]*scale;
         pot[ipos] = pot[ipos]*scale;
+        printf("gradx = %g, grady = %g, gradz = %g, pot = %g\n", gradx[ipos], grady[ipos], gradz[ipos], pot[ipos]);
     }
 
     return 1;
+
+#else /* ifdef HAVE_TREE */
+
+    return Vgreen_coulombD_direct(thee, npos, x, y, z, pot, 
+            gradx, grady, gradz);
+
+#endif
+  
 }
 
 VPRIVATE int treesetup(Vgreen *thee) {
