@@ -117,8 +117,10 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 VEXTERNC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
 VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag);
-VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, 
-           double *data);
+VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, double *data);
+VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
 

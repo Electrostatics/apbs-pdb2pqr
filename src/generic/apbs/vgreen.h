@@ -98,5 +98,7 @@ VEXTERNC void    Vgreen_helmholtzD(Vgreen *thee, double *position,
 VEXTERNC double  Vgreen_coulomb(Vgreen *thee, double *position, double dim);
 VEXTERNC void    Vgreen_coulombD(Vgreen *thee, double *position, double dim,
                    double *grad);
+VEXTERNC void    Vgreen_initFMM(Vgreen *thee, double spacing, int nx, int ny,
+                   int nz, double xlow, double ylow, double zlow);
 
 #endif /* ifndef _VGREEN_H_ */

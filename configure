@@ -21,7 +21,7 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-mpilib=PATH      directory containing <libmpi.a> "
 ac_help="$ac_help
-  --enable-cxxfmm         enable the C++ FMM CODE (breaks some compilers)"
+  --enable-cxxfmm         enable the C++ FMM CODE (BROKEN!!!)"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -3340,6 +3340,7 @@ trap 'rm -fr `echo "
     tst/vacc/Makefile
     tst/vmetis/Makefile
     tst/vpmg/Makefile
+    tst/vgreen/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
@@ -3499,6 +3500,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     tst/vacc/Makefile
     tst/vmetis/Makefile
     tst/vpmg/Makefile
+    tst/vgreen/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
