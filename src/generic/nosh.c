@@ -215,10 +215,9 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 
     if (thee != VNULL) {
         for (i=0; i<NOSH_MAXCALC; i++) {
-            if (thee->calc[i].mgparm != VNULL) 
-              MGparm_dtor(&(thee->calc[i].mgparm));
-            if (thee->calc[i].femparm != VNULL) 
-              FEMparm_dtor(&(thee->calc[i].femparm));
+            PBEparm_dtor(&(thee->calc[i].pbeparm));
+            MGparm_dtor(&(thee->calc[i].mgparm));
+            FEMparm_dtor(&(thee->calc[i].femparm));
         }
     }
 

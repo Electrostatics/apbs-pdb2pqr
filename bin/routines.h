@@ -72,10 +72,15 @@ typedef struct AtomForce {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VEXTERNC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+VEXTERNC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 VEXTERNC int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+VEXTERNC void killDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
+Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
 VEXTERNC int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+VEXTERNC void killKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
 VEXTERNC int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+VEXTERNC void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 VEXTERNC void printPBEPARM(PBEparm *pbeparm);
 VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
 VEXTERNC int initMG(int i, NOsh *nosh, MGparm *mgparm,
@@ -84,13 +89,18 @@ VEXTERNC int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+VEXTERNC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 VEXTERNC int solveMG(Vpmg *pmg, int type);
 VEXTERNC int setPartMG(MGparm *mgparm, Vpmg *pmg);
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
+VEXTERNC void killEnergy();
 VEXTERNC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
+VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
+  AtomForce *atomForce[NOSH_MAXCALC]);
 VEXTERNC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],

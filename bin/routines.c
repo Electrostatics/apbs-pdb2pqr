@@ -75,28 +75,28 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i;
 
-    Vnm_tprint( 1, "main:  Got PQR paths for %d molecules\n", nosh->nmol);
+    Vnm_tprint( 1, "Got PQR paths for %d molecules\n", nosh->nmol);
     if (nosh->nmol <= 0) {
-       Vnm_tprint(2, "main:  You didn't specify any molecules (correctly)!\n");
-       Vnm_tprint(2, "main:  Bailing out!\n");
+       Vnm_tprint(2, "You didn't specify any molecules (correctly)!\n");
+       Vnm_tprint(2, "Bailing out!\n");
        return 0;
     }
 
     for (i=0; i<nosh->nmol; i++) {
-        Vnm_tprint( 1, "main:  Reading atom data from %s:\n",
+        Vnm_tprint( 1, "Reading atom data from %s:\n",
           nosh->molpath[i]);
         alist[i] = Valist_ctor();
         if (Valist_readPQR(alist[i], "FILE", "ASC", VNULL,
           nosh->molpath[i]) != 1) {
-            Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+            Vnm_tprint( 2, "Fatal error while reading from %s\n",
               nosh->molpath[i]);
             return 0;
         } else {
-            Vnm_tprint( 1, "main:    %d atoms\n",
+            Vnm_tprint( 1, "  %d atoms\n",
               Valist_getNumberAtoms(alist[i]));
-            Vnm_tprint( 1, "main:    Centered at (%4.3e, %4.3e, %4.3e)\n",
+            Vnm_tprint( 1, "  Centered at (%4.3e, %4.3e, %4.3e)\n",
               alist[i]->center[0], alist[i]->center[1], alist[i]->center[2]);
-            Vnm_tprint( 1, "main:    Net charge %3.2e e\n",
+            Vnm_tprint( 1, "  Net charge %3.2e e\n",
               alist[i]->charge);        
         }
     }
@@ -106,9 +106,25 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killMolecules
+//
+// Purpose:  Kill the molecule structures
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
+    
+    int i;
+
+    Vnm_tprint( 1, "Destroying %d molecules\n", nosh->nmol);
+    for (i=0; i<nosh->nmol; i++) Valist_dtor(&(alist[i]));
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  loadDielMaps
 // 
-// Purpose:  Load dielectric maps from files
+// Purpose:  Load the dielectric maps from files
 // 
 // Returns:  1 if sucessful, 0 otherwise
 //
@@ -122,18 +138,18 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
     double sum, hx, hy, hzed, xmin, ymin, zmin;
 
     if (nosh->ndiel > 0) 
-      Vnm_tprint( 1, "main:  Got paths for %d dielectric map sets\n", 
+      Vnm_tprint( 1, "Got paths for %d dielectric map sets\n", 
         nosh->ndiel);
     else return 1;
 
     for (i=0; i<nosh->ndiel; i++) {
-        Vnm_tprint( 1, "main:  Reading x-shifted dielectric map data from \
+        Vnm_tprint( 1, "Reading x-shifted dielectric map data from \
 %s:\n", nosh->dielXpath[i]);
         dielXMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->dielfmt[i] == 0) {
             if (Vgrid_readDX(dielXMap[i], "FILE", "ASC", VNULL, 
               nosh->dielXpath[i]) != 1) {
-                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                Vnm_tprint( 2, "Fatal error while reading from %s\n",
                   nosh->dielXpath[i]);
                 return 0;
             }
@@ -146,27 +162,27 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             xmin = dielXMap[i]->xmin;
             ymin = dielXMap[i]->ymin;
             zmin = dielXMap[i]->zmin;
-            Vnm_tprint(1, "main:    %d x %d x %d grid\n", nx, ny, nz);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", hx, hy, hzed);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+            Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+            Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+            Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
               xmin, ymin, zmin);
             sum = 0;
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielXMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n", 
+            Vnm_print(2, "  Volume integral = %3.2e A^3\n", 
               sum);
         } else {
-            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
         }
-        Vnm_tprint( 1, "main:  Reading y-shifted dielectric map data from \
+        Vnm_tprint( 1, "Reading y-shifted dielectric map data from \
 %s:\n", nosh->dielYpath[i]);
         dielYMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->dielfmt[i] == 0) {
             if (Vgrid_readDX(dielYMap[i], "FILE", "ASC", VNULL, nosh->dielYpath[i])
               != 1) {
-                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                Vnm_tprint( 2, "Fatal error while reading from %s\n",
                   nosh->dielYpath[i]);
                 return 0;
             }
@@ -179,27 +195,27 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             xmin = dielYMap[i]->xmin;
             ymin = dielYMap[i]->ymin;
             zmin = dielYMap[i]->zmin;
-            Vnm_tprint(1, "main:    %d x %d x %d grid\n", nx, ny, nz);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", hx, hy, hzed);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n",
+            Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+            Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+            Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
               xmin, ymin, zmin);
             sum = 0;
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielYMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n",
+            Vnm_print(2, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
-            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
         }
-        Vnm_tprint( 1, "main:  Reading z-shifted dielectric map data from \
+        Vnm_tprint( 1, "Reading z-shifted dielectric map data from \
 %s:\n", nosh->dielZpath[i]);
         dielZMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->dielfmt[i] == 0) {
             if (Vgrid_readDX(dielZMap[i], "FILE", "ASC", VNULL, nosh->dielZpath[i])
               != 1) {
-                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                Vnm_tprint( 2, "Fatal error while reading from %s\n",
                   nosh->dielZpath[i]);
                 return 0;
             }
@@ -212,25 +228,50 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             xmin = dielZMap[i]->xmin;
             ymin = dielZMap[i]->ymin;
             zmin = dielZMap[i]->zmin;
-            Vnm_tprint(1, "main:    %d x %d x %d grid\n",
+            Vnm_tprint(1, "  %d x %d x %d grid\n",
               nx, ny, nz);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n",
+            Vnm_tprint(1, "  (%g, %g, %g) A spacings\n",
               hx, hy, hzed);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n",
+            Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
               xmin, ymin, zmin);
             sum = 0;
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielZMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n",
+            Vnm_print(2, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
-            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
         }
     }
 
     return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killDielMaps
+// 
+// Purpose:  Kill the dielectric map structures
+// 
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killDielMaps(NOsh *nosh, 
+  Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
+  Vgrid *dielZMap[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->ndiel > 0) Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
+        nosh->ndiel);
+    else return;
+
+    for (i=0; i<nosh->ndiel; i++) {
+        Vgrid_dtor(&(dielXMap[i]));
+        Vgrid_dtor(&(dielYMap[i]));
+        Vgrid_dtor(&(dielZMap[i]));
+    }
 
 }
 
@@ -249,39 +290,58 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
     double sum;
 
     if (nosh->nkappa > 0) 
-      Vnm_tprint( 1, "main:  Got paths for %d kappa maps\n", nosh->nkappa);
+      Vnm_tprint( 1, "Got paths for %d kappa maps\n", nosh->nkappa);
     else return 1;
 
     for (i=0; i<nosh->nkappa; i++) {
-        Vnm_tprint( 1, "main:  Reading kappa map data from %s:\n",
+        Vnm_tprint( 1, "Reading kappa map data from %s:\n",
           nosh->kappapath[i]);
         map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->kappafmt[i] == 0) {
             if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->kappapath[i]) 
               != 1) {
-                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                Vnm_tprint( 2, "Fatal error while reading from %s\n",
                   nosh->kappapath[i]);
                 return 0;
             }
-            Vnm_tprint(1, "main:    %d x %d x %d grid\n", 
+            Vnm_tprint(1, "  %d x %d x %d grid\n", 
               map[i]->nx, map[i]->ny, map[i]->nz);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", 
+            Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
               map[i]->hx, map[i]->hy, map[i]->hzed);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+            Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
               map[i]->xmin, map[i]->ymin, map[i]->zmin);
             sum = 0;
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_print(2, "main:    Volume integral = %3.2e A^3\n", sum);
+            Vnm_print(2, "  Volume integral = %3.2e A^3\n", sum);
 
         } else {
-            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
         }
     }
 
     return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killKappaMaps
+//
+// Purpose:  Kill kappa map structures
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->nkappa > 0) 
+      Vnm_tprint( 1, "Destroying %d kappa maps\n", nosh->nkappa);
+    else return;
+
+    for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
 
 }
 
@@ -300,38 +360,57 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
     double sum;
 
     if (nosh->ncharge > 0)
-      Vnm_tprint( 1, "main:  Got paths for %d charge maps\n", nosh->ncharge);
+      Vnm_tprint( 1, "Got paths for %d charge maps\n", nosh->ncharge);
     else return 1;
 
     for (i=0; i<nosh->ncharge; i++) {
-        Vnm_tprint( 1, "main:  Reading charge map data from %s:\n",
+        Vnm_tprint( 1, "Reading charge map data from %s:\n",
           nosh->chargepath[i]);
         map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
         if (nosh->chargefmt[i] == 0) {
             if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->chargepath[i])
               != 1) {
-                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                Vnm_tprint( 2, "Fatal error while reading from %s\n",
                   nosh->chargepath[i]);
                 return 0;
             }
-            Vnm_tprint(1, "main:    %d x %d x %d grid\n", 
+            Vnm_tprint(1, "  %d x %d x %d grid\n", 
               map[i]->nx, map[i]->ny, map[i]->nz);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A spacings\n", 
+            Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
               map[i]->hx, map[i]->hy, map[i]->hzed);
-            Vnm_tprint(1, "main:    (%g, %g, %g) A lower corner\n", 
+            Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
               map[i]->xmin, map[i]->ymin, map[i]->zmin);
             sum = 0;
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_print(2, "main:    Charge map integral = %3.2e e\n", sum);
+            Vnm_print(2, "  Charge map integral = %3.2e e\n", sum);
         } else {
-            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
         }
     }
 
     return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killChargeMaps
+// 
+// Purpose:  Kill charge map structures
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->ncharge > 0)
+      Vnm_tprint( 1, "Destroying %d charge maps\n", nosh->ncharge);
+    else return;
+
+    for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
 
 }
 
@@ -352,104 +431,104 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
     for (i=0; i<pbeparm->nion; i++)
       ionstr += 0.5*(VSQR(pbeparm->ionq[i])*pbeparm->ionc[i]);
 
-    Vnm_tprint( 1, "main:    Molecule ID: %d\n", pbeparm->molid);
-    if (pbeparm->nonlin) Vnm_tprint( 1, "main:    Nonlinear PBE\n");
-    else Vnm_tprint( 1, "main:    Linearized PBE\n");
+    Vnm_tprint( 1, "  Molecule ID: %d\n", pbeparm->molid);
+    if (pbeparm->nonlin) Vnm_tprint( 1, "  Nonlinear PBE\n");
+    else Vnm_tprint( 1, "  Linearized PBE\n");
     if (pbeparm->bcfl == 0) {
-        Vnm_tprint( 1, "main:    Zero boundary conditions\n");
+        Vnm_tprint( 1, "  Zero boundary conditions\n");
     } else if (pbeparm->bcfl == 1) {
-        Vnm_tprint( 1, "main:    Single Debye-Huckel sphere boundary \
+        Vnm_tprint( 1, "  Single Debye-Huckel sphere boundary \
 conditions\n");
     } else if (pbeparm->bcfl == 2) {
-        Vnm_tprint( 1, "main:    Multiple Debye-Huckel sphere boundary \
+        Vnm_tprint( 1, "  Multiple Debye-Huckel sphere boundary \
 conditions\n");
     } else if (pbeparm->bcfl == 4) {
-        Vnm_tprint( 1, "main:    Boundary conditions from focusing\n");
+        Vnm_tprint( 1, "  Boundary conditions from focusing\n");
     }
-    Vnm_tprint( 1, "main:    %d ion species (%4.3f M ionic strength):\n",
+    Vnm_tprint( 1, "  %d ion species (%4.3f M ionic strength):\n",
       pbeparm->nion, ionstr);
     for (i=0; i<pbeparm->nion; i++) {
-        Vnm_tprint( 1, "main:      %4.3f A-radius, %4.3f e-charge, \
+        Vnm_tprint( 1, "    %4.3f A-radius, %4.3f e-charge, \
 %4.3f M concentration\n", 
           pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);            
     }
-    Vnm_tprint( 1, "main:    Solute dielectric: %4.3f\n", pbeparm->pdie);
-    Vnm_tprint( 1, "main:    Solvent dielectric: %4.3f\n", pbeparm->sdie);
+    Vnm_tprint( 1, "  Solute dielectric: %4.3f\n", pbeparm->pdie);
+    Vnm_tprint( 1, "  Solvent dielectric: %4.3f\n", pbeparm->sdie);
     if (pbeparm->srfm == 0) {
-        Vnm_tprint( 1, "main:    Using \"molecular\" surface \
+        Vnm_tprint( 1, "  Using \"molecular\" surface \
 definition; no smoothing\n");
-        Vnm_tprint( 1, "main:    Solvent probe radius: %4.3f A\n",
+        Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
           pbeparm->srad);
     } else if (pbeparm->srfm == 1) {
-        Vnm_tprint( 1, "main:    Using \"molecular\" surface definition;\
+        Vnm_tprint( 1, "  Using \"molecular\" surface definition;\
  harmonic average smoothing\n");
-        Vnm_tprint( 1, "main:    Solvent probe radius: %4.3f A\n",
+        Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
           pbeparm->srad);
     } else if (pbeparm->srfm == 2) {
-        Vnm_tprint( 1, "main:    Using spline-based surface definition;\
+        Vnm_tprint( 1, "  Using spline-based surface definition;\
  window = %4.3f\n", pbeparm->swin);
     }
-    Vnm_tprint( 1, "main:    Temperature:  %4.3f K\n", pbeparm->temp);
-    Vnm_tprint( 1, "main:    Surface tension:  %4.3f kJ/mol/A^2\n",
+    Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
+    Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
       pbeparm->gamma);
-    if (pbeparm->calcenergy == 1) Vnm_tprint( 1, "main:    Electrostatic \
+    if (pbeparm->calcenergy == 1) Vnm_tprint( 1, "  Electrostatic \
 energies will be calculated\n");
-    if (pbeparm->calcforce == 1) Vnm_tprint( 1, "main:    Net solvent \
+    if (pbeparm->calcforce == 1) Vnm_tprint( 1, "  Net solvent \
 forces will be calculated \n");
-    if (pbeparm->calcforce == 2) Vnm_tprint( 1, "main:    All-atom \
+    if (pbeparm->calcforce == 2) Vnm_tprint( 1, "  All-atom \
 solvent forces will be calculated\n");
     for (i=0; i<pbeparm->numwrite; i++) {
         switch (pbeparm->writetype[i]) {
             case VDT_CHARGE:
-                Vnm_print(1, "main:    Charge distribution to be written to ");
+                Vnm_print(1, "  Charge distribution to be written to ");
                 break;
             case VDT_POT:
-                Vnm_print(1, "main:    Potential to be written to ");
+                Vnm_print(1, "  Potential to be written to ");
                 break;
             case VDT_SMOL:
-                Vnm_print(1, "main:    Molecular solvent accessibility \
+                Vnm_print(1, "  Molecular solvent accessibility \
 to be written to ");
                 break;
             case VDT_SSPL:
-                Vnm_print(1, "main:    Spline-based solvent accessibility \
+                Vnm_print(1, "  Spline-based solvent accessibility \
 to be written to ");
                 break;
             case VDT_VDW:
-                Vnm_print(1, "main:    van der Waals solvent accessibility \
+                Vnm_print(1, "  van der Waals solvent accessibility \
 to be written to ");
                 break;
             case VDT_IVDW:
-                Vnm_print(1, "main:    Ion accessibility to be written to ");
+                Vnm_print(1, "  Ion accessibility to be written to ");
                 break;
             case VDT_LAP:
-                Vnm_print(1, "main:    Potential Laplacian to be written to ");
+                Vnm_print(1, "  Potential Laplacian to be written to ");
                 break;
             case VDT_EDENS:
-                Vnm_print(1, "main:    Energy density to be written to ");
+                Vnm_print(1, "  Energy density to be written to ");
                 break;
             case VDT_NDENS:
-                Vnm_print(1, "main:    Ion number density to be written to ");
+                Vnm_print(1, "  Ion number density to be written to ");
                 break;
             case VDT_QDENS:
-                Vnm_print(1, "main:    Ion charge density to be written to ");
+                Vnm_print(1, "  Ion charge density to be written to ");
                 break;
             case VDT_DIELX:
-                Vnm_print(1, "main:    X-shifted dielectric map to be written \
+                Vnm_print(1, "  X-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_DIELY:
-                Vnm_print(1, "main:    Y-shifted dielectric map to be written \
+                Vnm_print(1, "  Y-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_DIELZ:
-                Vnm_print(1, "main:    Z-shifted dielectric map to be written \
+                Vnm_print(1, "  Z-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_KAPPA:
-                Vnm_print(1, "main:    Kappa map to be written to ");
+                Vnm_print(1, "  Kappa map to be written to ");
                 break;
             default: 
-                Vnm_print(2, "main:    Invalid data type for writing!\n");
+                Vnm_print(2, "  Invalid data type for writing!\n");
                 break;
         }
         switch (pbeparm->writefmt[i]) {
@@ -463,7 +542,7 @@ to ");
                 Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
                 break;
             default: 
-                Vnm_print(2, "main:    Invalid format for writing!\n");
+                Vnm_print(2, "  Invalid format for writing!\n");
                 break;
         }
  
@@ -483,20 +562,20 @@ to ");
 VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 
     if (mgparm->type == 2) {
-        Vnm_tprint( 1, "main:    Partition overlap fraction = %g\n", 
+        Vnm_tprint( 1, "  Partition overlap fraction = %g\n", 
           mgparm->ofrac);
-        Vnm_tprint( 1, "main:    Processor array = %d x %d x %d\n", 
+        Vnm_tprint( 1, "  Processor array = %d x %d x %d\n", 
           mgparm->pdime[0], mgparm->pdime[1], mgparm->pdime[2]);
     }
-    Vnm_tprint( 1, "main:    Grid dimensions: %d x %d x %d\n",
+    Vnm_tprint( 1, "  Grid dimensions: %d x %d x %d\n",
       mgparm->dime[0], mgparm->dime[1], mgparm->dime[2]);
-    Vnm_tprint( 1, "main:    Grid spacings: %4.3f x %4.3f x %4.3f\n",
+    Vnm_tprint( 1, "  Grid spacings: %4.3f x %4.3f x %4.3f\n",
       mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
-    Vnm_tprint( 1, "main:    Grid lengths: %4.3f x %4.3f x %4.3f\n",
+    Vnm_tprint( 1, "  Grid lengths: %4.3f x %4.3f x %4.3f\n",
       mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
-    Vnm_tprint( 1, "main:    Grid center: (%4.3f, %4.3f, %4.3f)\n",
+    Vnm_tprint( 1, "  Grid center: (%4.3f, %4.3f, %4.3f)\n",
       realCenter[0], realCenter[1], realCenter[2]);
-    Vnm_tprint( 1, "main:    Multigrid levels: %d\n", mgparm->nlev);
+    Vnm_tprint( 1, "  Multigrid levels: %d\n", mgparm->nlev);
 
 }
 
@@ -567,7 +646,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     pmgp[i]->zcent = realCenter[2];
     if (pbeparm->bcfl == 4) {
         if (i == 0) {
-            Vnm_tprint( 2, "main:  Can't focus first calculation!\n");
+            Vnm_tprint( 2, "Can't focus first calculation!\n");
             return 0;
         }
         pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1],
@@ -604,12 +683,34 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     /* Memory statistics */
     bytesTotal = Vmem_bytesTotal();
     highWater = Vmem_highWaterTotal();
-    Vnm_tprint( 1, "main:    Current memory usage:  %4.3f MB total, \
+    Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
 %4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
       (double)(highWater)/(1024.*1024.));
 
 
     return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killMG
+//
+// Purpose:  Kill MG structures
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC], 
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
+    
+    int i;
+
+    Vnm_tprint(1, "Destroying multigrid structures.\n");
+
+    for (i=0; i<nosh->ncalc; i++) {
+        Vpbe_dtor(&(pbe[i]));
+        Vpmg_dtor(&(pmg[i]));
+        Vpmgp_dtor(&(pmgp[i]));
+    }
 
 }
 
@@ -630,10 +731,10 @@ VPUBLIC int solveMG(Vpmg *pmg, int type) {
 
     Vnm_tstart(28, "Solver timer");
     if (type != 3) {
-        Vnm_tprint( 1,"main:    Solving PDE (see io.mc* for details)...\n");
+        Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
         Vpmg_solve(pmg);
     } else {
-        Vnm_tprint( 1,"main:    Skipping solve for mg-dummy run; zeroing \
+        Vnm_tprint( 1,"  Skipping solve for mg-dummy run; zeroing \
 solution array\n");
         nx = pmg->pmgp->nx;
         ny = pmg->pmgp->ny;
@@ -667,9 +768,9 @@ VPUBLIC int setPartMG(MGparm *mgparm, Vpmg *pmg) {
             partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
               + 0.5*mgparm->partDisjLength[j];
         }
-        Vnm_print(0, "main:  Disj part lower corner = (%g, %g, %g)\n",
+        Vnm_print(0, "Disj part lower corner = (%g, %g, %g)\n",
           partMin[0], partMin[1], partMin[2]);
-        Vnm_print(0, "main:  Disj part upper corner = (%g, %g, %g)\n",
+        Vnm_print(0, "Disj part upper corner = (%g, %g, %g)\n",
           partMax[0], partMax[1], partMax[2]);
     } else {
         for (j=0; j<3; j++) {
@@ -726,7 +827,7 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
         /* Some processors don't count */
         if (nosh->bogus == 0) {
             *totEnergy = Vpmg_energy(pmg, extEnergy);
-            Vnm_tprint( 1, "main:    Total electrostatic energy = \
+            Vnm_tprint( 1, "  Total electrostatic energy = \
 %1.12E kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         } else *totEnergy = 0;
     } else if (pbeparm->calcenergy == 2) {
@@ -735,20 +836,20 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
         *qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
         *qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
         *dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
-        Vnm_tprint( 1, "main:    Total electrostatic energy = %1.12E \
+        Vnm_tprint( 1, "  Total electrostatic energy = %1.12E \
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
-        Vnm_tprint( 1, "main:    Fixed charge energy = %g kJ/mol\n",
+        Vnm_tprint( 1, "  Fixed charge energy = %g kJ/mol\n",
            0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
-        Vnm_tprint( 1, "main:    Mobile charge energy = %g kJ/mol\n",
+        Vnm_tprint( 1, "  Mobile charge energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qmEnergy));
-        Vnm_tprint( 1, "main:    Dielectric energy = %g kJ/mol\n",
+        Vnm_tprint( 1, "  Dielectric energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
-        Vnm_tprint( 1, "main:    Per-atom energies:\n");
+        Vnm_tprint( 1, "  Per-atom energies:\n");
         alist = pmg->pbe->alist;
         for (i=0; i<Valist_getNumberAtoms(alist); i++) {
             atom = Valist_getAtom(alist, i); 
             tenergy = Vpmg_qfAtomEnergy(pmg, atom);
-            Vnm_tprint( 1, "main:        Atom %d:  %1.12E kJ/mol\n", i,
+            Vnm_tprint( 1, "      Atom %d:  %1.12E kJ/mol\n", i,
               0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*tenergy);
         }
     } else *nenergy = 0;
@@ -813,25 +914,25 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm,
                 (*atomForce)[0].npForce[k] += npForce[k];
             }
         }
-        Vnm_tprint( 1, "main:    Net fixed charge force on molecule %d\n",
+        Vnm_tprint( 1, "  Net fixed charge force on molecule %d\n",
           pbeparm->molid);
         Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[2]);
-        Vnm_tprint( 1, "main:    Net ionic boundary force on molecule %d\n",
+        Vnm_tprint( 1, "  Net ionic boundary force on molecule %d\n",
           pbeparm->molid);
         Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[2]);
-        Vnm_tprint( 1, "main:    Net dielectric boundary force on \
+        Vnm_tprint( 1, "  Net dielectric boundary force on \
 molecule %d\n", pbeparm->molid);
         Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
-        Vnm_tprint( 1, "main:    Net apolar force on molecule %d\n",
+        Vnm_tprint( 1, "  Net apolar force on molecule %d\n",
           pbeparm->molid);
         Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
@@ -855,7 +956,7 @@ molecule %d\n", pbeparm->molid);
                     (*atomForce)[j].npForce[k] = 0;
                 }
             }
-            Vnm_tprint( 1, "main:    Total force on atom %d, molecule %d \
+            Vnm_tprint( 1, "  Total force on atom %d, molecule %d \
 = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n", j, pbeparm->molid,
               Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                 (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
@@ -866,22 +967,22 @@ molecule %d\n", pbeparm->molid);
               Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                 (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
                 (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
-            Vnm_tprint( 1, "main:    Fixed charge force on atom %d, \
+            Vnm_tprint( 1, "  Fixed charge force on atom %d, \
 molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[2]);
-            Vnm_tprint( 1, "main:    Ionic boundary force on atom %d, \
+            Vnm_tprint( 1, "  Ionic boundary force on atom %d, \
 molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[2]);
-            Vnm_tprint( 1, "main:    Dielectric boundary force on atom \
+            Vnm_tprint( 1, "  Dielectric boundary force on atom \
 %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[2]);
-            Vnm_tprint( 1, "main:    Apolar force on atom %d, molecule %d \
+            Vnm_tprint( 1, "  Apolar force on atom %d, molecule %d \
 = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[1],
@@ -892,6 +993,36 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
     return 1;
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killEnergy
+//
+// Purpose:  Clear out energy structures 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killEnergy() { Vnm_tprint(1, "No energy arrays to destroy.\n"); }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  killForce
+//
+// Purpose:  Clear out force structures 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC], 
+  AtomForce *atomForce[NOSH_MAXCALC]) {
+
+    int i;
+
+    Vnm_tprint(1, "Destroying force arrays.\n");
+
+    for (i=0; i<nosh->ncalc; i++) {
+
+        if (nforce[i] > 0) Vmem_free(mem, nforce[i], sizeof(AtomForce),
+          (void **)&(atomForce[i]));
+        
+    }
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  writematMG
@@ -921,10 +1052,10 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     
     if (pbeparm->writemat == 1) {
         if (snprintf(outpath, 72, "%s.%s", writematstem, "mat") == -1) {
-            Vnm_print(2, "main:    Matrix output path truncated to: %s\n", 
+            Vnm_print(2, "  Matrix output path truncated to: %s\n", 
               outpath);
-            Vnm_print(2, "main:    72-character limit exceeded!\n");
-            Vnm_print(2, "main:    Skipping matrix I/O!\n");
+            Vnm_print(2, "  72-character limit exceeded!\n");
+            Vnm_print(2, "  Skipping matrix I/O!\n");
             return 1;
         }
         mxtype[0] = 'R';
@@ -932,21 +1063,21 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
         mxtype[2] = 'A';
         /* Poisson operator only */
         if (pbeparm->writematflag == 0) {
-            Vnm_tprint( 1, "main:    Writing Poisson operator matrix \
+            Vnm_tprint( 1, "  Writing Poisson operator matrix \
 to %s...\n", outpath);
 
          /* Linearization of Poisson-Boltzmann operator around solution */
          } else if (pbeparm->writematflag == 1) {
-            Vnm_tprint( 1, "main:    Writing linearization of full \
+            Vnm_tprint( 1, "  Writing linearization of full \
 Poisson-Boltzmann operator matrix to %s...\n", outpath);
 
          } else {
-             Vnm_tprint( 2, "main:    Bogus matrix specification\
+             Vnm_tprint( 2, "  Bogus matrix specification\
 (%d)!\n", pbeparm->writematflag);
              return 0;
          }
 
-         Vnm_tprint(0, "main:    Printing operator...\n");
+         Vnm_tprint(0, "  Printing operator...\n");
          Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
            pbeparm->writematflag);
 
@@ -989,7 +1120,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_CHARGE:
  
-                Vnm_print(1, "main:    Writing charge distribution to ");
+                Vnm_print(1, "  Writing charge distribution to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1002,7 +1133,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_POT:
  
-                Vnm_print(1, "main:    Writing potential to ");
+                Vnm_print(1, "  Writing potential to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1015,7 +1146,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_SMOL:
 
-                Vnm_print(1, "main:    Writing molecular accessibility to ");
+                Vnm_print(1, "  Writing molecular accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1030,7 +1161,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_SSPL:
 
-                Vnm_print(1, "main:    Writing spline-based accessibility to ");
+                Vnm_print(1, "  Writing spline-based accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1045,7 +1176,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_VDW:
 
-                Vnm_print(1, "main:    Writing van der Waals accessibility to ");
+                Vnm_print(1, "  Writing van der Waals accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1058,7 +1189,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_IVDW:
 
-                Vnm_print(1, "main:    Writing ion accessibility to ");
+                Vnm_print(1, "  Writing ion accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1074,7 +1205,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_LAP:
 
-                Vnm_print(1, "main:    Writing potential Laplacian to ");
+                Vnm_print(1, "  Writing potential Laplacian to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1088,7 +1219,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_EDENS:
 
-                Vnm_print(1, "main:    Writing energy density to ");
+                Vnm_print(1, "  Writing energy density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1102,7 +1233,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_NDENS:
 
-                Vnm_print(1, "main:    Writing number density to ");
+                Vnm_print(1, "  Writing number density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1116,7 +1247,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_QDENS:
 
-                Vnm_print(1, "main:    Writing charge density to ");
+                Vnm_print(1, "  Writing charge density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1130,7 +1261,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELX:
 
-                Vnm_print(1, "main:    Writing x-shifted dielectric map to ");
+                Vnm_print(1, "  Writing x-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent + 0.5*hx;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1144,7 +1275,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELY:
 
-                Vnm_print(1, "main:    Writing y-shifted dielectric map to ");
+                Vnm_print(1, "  Writing y-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent + 0.5*hy;
                 zcent = pmg->pmgp->zcent;
@@ -1158,7 +1289,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELZ:
 
-                Vnm_print(1, "main:    Writing z-shifted dielectric map to ");
+                Vnm_print(1, "  Writing z-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent + 0.5*hzed;
@@ -1172,7 +1303,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_KAPPA:
 
-                Vnm_print(1, "main:    Writing kappa map to ");
+                Vnm_print(1, "  Writing kappa map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1213,7 +1344,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
             case VDF_AVS:
                 sprintf(outpath, "%s.%s", writestem, "ucd");
                 Vnm_print(1, "%s\n", outpath);
-                Vnm_print(2, "main:  Sorry, AVS format isn't supported for \
+                Vnm_print(2, "Sorry, AVS format isn't supported for \
 uniform meshes yet!\n");
                 break;
 
@@ -1228,7 +1359,7 @@ uniform meshes yet!\n");
                 break;
 
             default:
-                Vnm_print(2, "main:  Bogus data format (%d)!\n", 
+                Vnm_print(2, "Bogus data format (%d)!\n", 
                   pbeparm->writefmt[i]);
                 break;
         }
@@ -1255,14 +1386,14 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     int j, calcid;
     double ltenergy, gtenergy, scalar;
 
-    Vnm_tprint( 1, "main:  print energy %d ", nosh->printcalc[i][0]);
+    Vnm_tprint( 1, "print energy %d ", nosh->printcalc[i][0]);
     for (j=1; j<nosh->printnarg[i]; j++) {
         if (nosh->printop[i][j-1] == 0)
           Vnm_print(1, "+ ");
         else if (nosh->printop[i][j-1] == 1)
           Vnm_print(1, "- ");
         else {
-            Vnm_tprint( 2, "main:  Undefined PRINT operation!\n");
+            Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
         Vnm_print(1, "%d ", nosh->printcalc[i][j]);
@@ -1273,7 +1404,7 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
         ltenergy = Vunit_kb * (1e-3) * Vunit_Na *
           nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
     } else {
-        Vnm_tprint( 2, "main:    Didn't calculate energy in Calculation \
+        Vnm_tprint( 2, "  Didn't calculate energy in Calculation \
 #%d\n", calcid+1);
         return 0;
     }
@@ -1287,11 +1418,11 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
           nosh->calc[calcid].pbeparm->temp * totEnergy[calcid]);
     }
 
-    Vnm_tprint( 1, "main:    Local net energy (PE %d) = %1.12E kJ/mol\n", 
+    Vnm_tprint( 1, "  Local net energy (PE %d) = %1.12E kJ/mol\n", 
       Vcom_rank(com), ltenergy);
     Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
     Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-    Vnm_tprint( 1, "main:    Global net energy = %1.12E kJ/mol\n", gtenergy);
+    Vnm_tprint( 1, "  Global net energy = %1.12E kJ/mol\n", gtenergy);
 
     return 1;
 
@@ -1315,14 +1446,14 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
     double temp, scalar;
     AtomForce *lforce, *gforce, *aforce;
 
-    Vnm_tprint( 1, "main:  print force %d ", nosh->printcalc[i][0]);
+    Vnm_tprint( 1, "print force %d ", nosh->printcalc[i][0]);
     for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
         if (nosh->printop[i][ipr-1] == 0)
           Vnm_print(1, "+ ");
         else if (nosh->printop[i][ipr-1] == 1)
           Vnm_print(1, "- ");
         else {
-            Vnm_tprint( 2, "main:  Undefined PRINT operation!\n");
+            Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
         Vnm_print(1, "%d ", nosh->printcalc[i][ipr]);
@@ -1335,20 +1466,20 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
     refnforce = nforce[calcid];
     refcalcforce = nosh->calc[calcid].pbeparm->calcforce;
     if (refcalcforce == 0) {
-        Vnm_tprint( 2, "main:    Didn't calculate force in calculation \
+        Vnm_tprint( 2, "  Didn't calculate force in calculation \
 #%d\n", calcid+1);
         return 0;
     }
     for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
         calcid = nosh->elec2calc[nosh->printcalc[i][ipr]-1];
         if (nosh->calc[calcid].pbeparm->calcforce != refcalcforce) {
-            Vnm_tprint(2, "main:    Inconsistent calcforce declarations in \
+            Vnm_tprint(2, "  Inconsistent calcforce declarations in \
 calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
 calcid+1);
             return 0;
         }
         if (nforce[calcid] != refnforce) {
-            Vnm_tprint(2, "main:    Inconsistent number of forces evaluated in \
+            Vnm_tprint(2, "  Inconsistent number of forces evaluated in \
 calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
 calcid+1);
             return 0;
@@ -1440,30 +1571,30 @@ calcid+1);
    
 #if 1
     if (refcalcforce == 1) {
-        Vnm_tprint( 1, "main:    Local net fixed charge force = \
+        Vnm_tprint( 1, "  Local net fixed charge force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].qfForce[0],
 lforce[0].qfForce[1], lforce[0].qfForce[2]);
-        Vnm_tprint( 1, "main:    Local net ionic boundary force = \
+        Vnm_tprint( 1, "  Local net ionic boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].ibForce[0],
 lforce[0].ibForce[1], lforce[0].ibForce[2]);
-        Vnm_tprint( 1, "main:    Local net dielectric boundary force = \
+        Vnm_tprint( 1, "  Local net dielectric boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].dbForce[0],
 lforce[0].dbForce[1], lforce[0].dbForce[2]);
-        Vnm_tprint( 1, "main:    Local net apolar boundary force = \
+        Vnm_tprint( 1, "  Local net apolar boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].npForce[0],
 lforce[0].npForce[1], lforce[0].npForce[2]);
     } else if (refcalcforce == 2) {
         for (ifr=0; ifr<refnforce; ifr++) {
-            Vnm_tprint( 1, "main:    Local fixed charge force \
+            Vnm_tprint( 1, "  Local fixed charge force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].qfForce[0],
 lforce[ifr].qfForce[1], lforce[ifr].qfForce[2]);
-        Vnm_tprint( 1, "main:    Local ionic boundary force \
+        Vnm_tprint( 1, "  Local ionic boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].ibForce[0],
 lforce[ifr].ibForce[1], lforce[ifr].ibForce[2]);
-        Vnm_tprint( 1, "main:    Local dielectric boundary force \
+        Vnm_tprint( 1, "  Local dielectric boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].dbForce[0],
 lforce[ifr].dbForce[1], lforce[ifr].dbForce[2]);
-        Vnm_tprint( 1, "main:    Local apolar boundary force \
+        Vnm_tprint( 1, "  Local apolar boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].npForce[0],
 lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
         }
@@ -1471,30 +1602,30 @@ lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
 #endif
  
     if (refcalcforce == 1) {
-        Vnm_tprint( 1, "main:    Global net fixed charge force = \
+        Vnm_tprint( 1, "  Global net fixed charge force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].qfForce[0], 
 gforce[0].qfForce[1], gforce[0].qfForce[2]);
-        Vnm_tprint( 1, "main:    Global net ionic boundary force = \
+        Vnm_tprint( 1, "  Global net ionic boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].ibForce[0], 
 gforce[0].ibForce[1], gforce[0].ibForce[2]);
-        Vnm_tprint( 1, "main:    Global net dielectric boundary force = \
+        Vnm_tprint( 1, "  Global net dielectric boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].dbForce[0], 
 gforce[0].dbForce[1], gforce[0].dbForce[2]);
-        Vnm_tprint( 1, "main:    Global net apolar boundary force = \
+        Vnm_tprint( 1, "  Global net apolar boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].npForce[0], 
 gforce[0].npForce[1], gforce[0].npForce[2]);
     } else if (refcalcforce == 2) {
         for (ifr=0; ifr<refnforce; ifr++) {
-            Vnm_tprint( 1, "main:    Global fixed charge force \
+            Vnm_tprint( 1, "  Global fixed charge force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].qfForce[0], 
 gforce[ifr].qfForce[1], gforce[ifr].qfForce[2]);
-        Vnm_tprint( 1, "main:    Global ionic boundary force \
+        Vnm_tprint( 1, "  Global ionic boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].ibForce[0],
 gforce[ifr].ibForce[1], gforce[ifr].ibForce[2]);
-        Vnm_tprint( 1, "main:    Global dielectric boundary force \
+        Vnm_tprint( 1, "  Global dielectric boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].dbForce[0],
 gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
-        Vnm_tprint( 1, "main:    Global apolar boundary force \
+        Vnm_tprint( 1, "  Global apolar boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].npForce[0],
 gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
         }

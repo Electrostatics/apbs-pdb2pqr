@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
     Vgrid *kappaMap[NOSH_MAXMOL];
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
-    int i, rank, size;
+    int i, rank, size, bytesTotal, highWater;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -89,7 +89,6 @@ int main(int argc, char **argv) {
     double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
     double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
     AtomForce *atomForce[NOSH_MAXCALC];
-    double tenergy;
     int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
     /* THe real partition centers */
     double realCenter[3];
@@ -105,9 +104,8 @@ int main(int argc, char **argv) {
     Dept. of Mathematics, Scientific Computing Group\n\
     University of California, San Diego \n\n\
     Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 1999-2002.\n\
-    Nathan A. Baker\n\
-    All Rights Reserved.\n\n\
+    Copyright (c) 1999-2002.  The Regents of the University of California.\n\
+    Portions Copyright (c) 1995.  Michael Holst.\n\n\
     Permission to use, copy, modify, and distribute this software and its\n\
     documentation for educational, research, and not-for-profit purposes,\n\
     without fee and without a signed licensing agreement, is hereby granted,\n\
@@ -144,14 +142,29 @@ int main(int argc, char **argv) {
     size = Vcom_size(com);
     startVio(); 
     Vnm_setIoTag(rank, size);
-    Vnm_tprint( 0, "main:  Hello world from PE %d\n", rank);
+    Vnm_tprint( 0, "Hello world from PE %d\n", rank);
 
     /* A bit of array/pointer initialization */
     mem = Vmem_ctor("MAIN");
     for (i=0; i<NOSH_MAXCALC; i++) {
+        pmg[i] = VNULL;
+        pmgp[i] = VNULL;
+        pbe[i] = VNULL;
+        qfEnergy[i] = 0;
+        qmEnergy[i] = 0;
+        dielEnergy[i] = 0;
+        totEnergy[i] = 0;
         atomForce[i] = VNULL;
         nenergy[i] = 0;
         nforce[i] = 0;
+    }
+    for (i=0; i<NOSH_MAXMOL; i++) {
+        alist[i] = VNULL;
+        dielXMap[i] = VNULL;
+        dielYMap[i] = VNULL;
+        dielZMap[i] = VNULL;
+        kappaMap[i] = VNULL;
+        chargeMap[i] = VNULL;
     }
 
     /* *************** CHECK INVOCATION ******************* */
@@ -170,54 +183,54 @@ int main(int argc, char **argv) {
     /* *************** PARSE INPUT FILE ******************* */
     nosh = NOsh_ctor(rank, size);
     sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
-    Vnm_tprint( 1, "main:  Parsing input file %s...\n", input_path);
+    Vnm_tprint( 1, "Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
-        Vnm_tprint( 2, "main:  Error while parsing input file.\n");
+        Vnm_tprint( 2, "Error while parsing input file.\n");
         return APBSRC;
-    } else Vnm_tprint( 1, "main:  Parsed input file.\n");
+    } else Vnm_tprint( 1, "Parsed input file.\n");
     Vio_dtor(&sock);
 
     /* *************** LOAD MOLECULES ******************* */
     if (loadMolecules(nosh, alist) != 1) {
-        Vnm_tprint(2, "main:  Error reading molecules!\n");
+        Vnm_tprint(2, "Error reading molecules!\n");
         return APBSRC;
     }
 
     /* *************** LOAD MAPS ******************* */
     if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
-        Vnm_tprint(2, "main:  Error reading dielectric maps!\n");
+        Vnm_tprint(2, "Error reading dielectric maps!\n");
         return APBSRC;
     }
     if (loadKappaMaps(nosh, kappaMap) != 1) {
-        Vnm_tprint(2, "main:  Error reading kappa maps!\n");
+        Vnm_tprint(2, "Error reading kappa maps!\n");
         return APBSRC;
     }
     if (loadChargeMaps(nosh, chargeMap) != 1) {
-        Vnm_tprint(2, "main:  Error reading charge maps!\n");
+        Vnm_tprint(2, "Error reading charge maps!\n");
         return APBSRC;
     }
 
     /* *************** DO THE CALCULATIONS ******************* */
-    Vnm_tprint( 1, "main:  Preparing to run %d PBE calculations.\n",
+    Vnm_tprint( 1, "Preparing to run %d PBE calculations.\n",
       nosh->ncalc);
     for (i=0; i<nosh->ncalc; i++) {
-        Vnm_tprint( 1, "main:  ----------------------------------------\n");
+        Vnm_tprint( 1, "----------------------------------------\n");
 
         /* ***** Do MG calculation ***** */
         if (nosh->calc[i].calctype == 0) {
 
-            Vnm_tprint( 1, "main:  CALCULATION #%d: MULTIGRID\n", i+1);
+            Vnm_tprint( 1, "CALCULATION #%d: MULTIGRID\n", i+1);
 
             /* Useful local variables */
             mgparm = nosh->calc[i].mgparm;
             pbeparm = nosh->calc[i].pbeparm;
 
             /* Set up problem */
-            Vnm_tprint( 1, "main:    Setting up problem...\n");
+            Vnm_tprint( 1, "  Setting up problem...\n");
             if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
               alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
               pmgp, pmg)) {
-                Vnm_tprint( 2, "main:  Error setting up MG calculation!\n");
+                Vnm_tprint( 2, "Error setting up MG calculation!\n");
                 return APBSRC;
             }
 
@@ -227,13 +240,13 @@ int main(int argc, char **argv) {
 
             /* Solve PDE */
             if (solveMG(pmg[i], mgparm->type) != 1) {
-                Vnm_tprint(2, "main:  Error solving PDE!\n");
+                Vnm_tprint(2, "Error solving PDE!\n");
                 return APBSRC;
             }
 
             /* Set partition information for observables and I/O */
             if (setPartMG(mgparm, pmg[i]) != 1) {
-                Vnm_tprint(2, "main:  Error setting partition info!\n");
+                Vnm_tprint(2, "Error setting partition info!\n");
                 return APBSRC;
             }
 
@@ -265,8 +278,8 @@ int main(int argc, char **argv) {
     
     /* *************** HANDLE PRINT STATEMENTS ******************* */
     if (nosh->nprint > 0) {
-        Vnm_tprint( 1, "main:  ----------------------------------------\n");
-        Vnm_tprint( 1, "main:  PRINT STATEMENTS\n");
+        Vnm_tprint( 1, "----------------------------------------\n");
+        Vnm_tprint( 1, "PRINT STATEMENTS\n");
     }
     for (i=0; i<nosh->nprint; i++) {
         /* Print energy */
@@ -276,31 +289,42 @@ int main(int argc, char **argv) {
         } else if (nosh->printwhat[i] == 1) {
             printForce(com, nosh, nforce, atomForce, i);
         } else {
-            Vnm_tprint( 2, "main:  Undefined PRINT keyword!\n");
+            Vnm_tprint( 2, "Undefined PRINT keyword!\n");
             break;
         }
     }
  
 
     /* *************** GARBAGE COLLECTION ******************* */
-    Vnm_tprint( 1, "main:  ----------------------------------------\n");
-    Vnm_tprint( 1, "main:  CLEANING UP AND SHUTTING DOWN...\n");
-    for (i=0; i<nosh->ncalc; i++) {
-        if (nforce[i] > 0) 
-          Vmem_free(mem, nforce[i], sizeof(AtomForce), 
-            (void **)&(atomForce[i])); 
-    }
-    for (i=0; i<nosh->nmol; i++) Valist_dtor(&(alist[i]));
+    Vnm_tprint( 1, "----------------------------------------\n");
+    Vnm_tprint( 1, "CLEANING UP AND SHUTTING DOWN...\n");
+    /* Clean up APBS structures */
+    killForce(mem, nosh, nforce, atomForce);
+    killEnergy();
+    killMG(nosh, pbe, pmgp, pmg);
+    killChargeMaps(nosh, chargeMap);
+    killKappaMaps(nosh, kappaMap);
+    killDielMaps(nosh, dielXMap, dielYMap, dielZMap);
+    killMolecules(nosh, alist);
     NOsh_dtor(&nosh);
+
+    /* Memory statistics */
+    bytesTotal = Vmem_bytesTotal();
+    highWater = Vmem_highWaterTotal();
+    Vnm_tprint( 1, "Final memory usage:  %4.3f MB total, \
+%4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
+      (double)(highWater)/(1024.*1024.));
+
+    /* Clean up MALOC structures */
+    Vcom_dtor(&com);
     Vmem_dtor(&mem);
 
-    /* Stop wall clock timer */
-    Vnm_tstop(26, "APBS WALL CLOCK");
-
+    /* And now it's time to so "so long"... */
     Vnm_print(1, "\n\n");
     Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
-    Vcom_dtor(&com);
+    /* This should be last */
+    Vnm_tstop(26, "APBS WALL CLOCK");
     Vcom_finalize();
 
     return 0;
