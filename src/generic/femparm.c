@@ -124,8 +124,6 @@ VPUBLIC void FEMparm_dtor2(FEMparm *thee) { ; }
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int FEMparm_check(FEMparm *thee) { 
 
-    int i;
-
     /* Check to see if we were even filled... */
     if (!thee->parsed) {
         Vnm_print(2, "FEMparm_check:  not filled!\n");

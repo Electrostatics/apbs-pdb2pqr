@@ -685,5 +685,5 @@ VPUBLIC int Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],
         ionQ[i] = thee->ionQ[i];
     }
 
-    return nion;
+    return *nion;
 }

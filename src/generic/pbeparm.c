@@ -43,6 +43,7 @@
 
 #include "apbscfg.h"
 #include "apbs/pbeparm.h"
+#include "apbs/vstring.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class PBEparm: Inlineable methods
@@ -298,7 +299,7 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
-    if (strcasecmp(tok, "mol") == 0) {
+    if (Vstring_strcasecmp(tok, "mol") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing MOL \
@@ -308,15 +309,15 @@ keyword!\n", tok);
         thee->molid = ti;
         thee->setmolid = 1;
         return 1;
-    } else if (strcasecmp(tok, "lpbe") == 0) {
+    } else if (Vstring_strcasecmp(tok, "lpbe") == 0) {
         thee->nonlin = 0;
         thee->setnonlin = 1;
         return 1;
-    } else if (strcasecmp(tok, "npbe") == 0) {
+    } else if (Vstring_strcasecmp(tok, "npbe") == 0) {
         thee->nonlin = 1;
         thee->setnonlin = 1;
         return 1;
-    } else if (strcasecmp(tok, "bcfl") == 0) {
+    } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing BCFL \
@@ -326,7 +327,7 @@ keyword!\n", tok);
         thee->bcfl = ti;
         thee->setbcfl = 1;
         return 1;
-    } else if (strcasecmp(tok, "ion") == 0) {
+    } else if (Vstring_strcasecmp(tok, "ion") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
@@ -352,7 +353,7 @@ keyword!\n", tok);
         (thee->nion)++;
         thee->setnion = 1;
         return 1;
-    } else if (strcasecmp(tok, "pdie") == 0) {
+    } else if (Vstring_strcasecmp(tok, "pdie") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing PDIE \
@@ -362,7 +363,7 @@ keyword!\n", tok);
         thee->pdie = tf;
         thee->setpdie = 1;
         return 1;
-    } else if (strcasecmp(tok, "sdie") == 0) {
+    } else if (Vstring_strcasecmp(tok, "sdie") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDIE \
@@ -372,7 +373,7 @@ keyword!\n", tok);
         thee->sdie = tf;
         thee->setsdie = 1;
         return 1;
-    } else if (strcasecmp(tok, "srfm") == 0) {
+    } else if (Vstring_strcasecmp(tok, "srfm") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing SRFM \
@@ -382,7 +383,7 @@ keyword!\n", tok);
         thee->srfm = ti;
         thee->setsrfm = 1;
         return 1;
-    } else if (strcasecmp(tok, "srad") == 0) {
+    } else if (Vstring_strcasecmp(tok, "srad") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SRAD \
@@ -392,7 +393,7 @@ keyword!\n", tok);
         thee->srad = tf;
         thee->setsrad = 1;
         return 1;
-    } else if (strcasecmp(tok, "swin") == 0) {
+    } else if (Vstring_strcasecmp(tok, "swin") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SWIN \
@@ -402,7 +403,7 @@ keyword!\n", tok);
         thee->swin = tf;
         thee->setswin = 1;
         return 1;
-    } else if (strcasecmp(tok, "temp") == 0) {
+    } else if (Vstring_strcasecmp(tok, "temp") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TEMP \
@@ -412,7 +413,7 @@ keyword!\n", tok);
         thee->temp = tf;
         thee->settemp = 1; 
         return 1;
-    } else if (strcasecmp(tok, "gamma") == 0) {
+    } else if (Vstring_strcasecmp(tok, "gamma") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GAMMA \
@@ -422,7 +423,7 @@ keyword!\n", tok);
         thee->gamma = tf;
         thee->setgamma = 1;
         return 1;
-    } else if (strcasecmp(tok, "calcenergy") == 0) {
+    } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
@@ -432,7 +433,7 @@ WRITEENERGY keyword!\n", tok);
         thee->calcenergy = ti;
         thee->setcalcenergy = 1;
         return 1;
-    } else if (strcasecmp(tok, "calcforce") == 0) {
+    } else if (Vstring_strcasecmp(tok, "calcforce") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
@@ -442,7 +443,7 @@ WRITEFORCE keyword!\n", tok);
         thee->calcforce = ti;
         thee->setcalcforce = 1;
         return 1;
-    } else if (strcasecmp(tok, "writepot") == 0) {
+    } else if (Vstring_strcasecmp(tok, "writepot") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEPOT \
@@ -451,11 +452,11 @@ keyword!\n", tok);
         }
         thee->writepot = ti;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (strcasecmp(tok, "dx") == 0) {
+        if (Vstring_strcasecmp(tok, "dx") == 0) {
             thee->writepotfmt = 0;
-        } else if (strcasecmp(tok, "avs") == 0) {
+        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
             thee->writepotfmt = 1;
-        } else if (strcasecmp(tok, "uhbd") == 0) {
+        } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
             thee->writepotfmt = 2;
         } else {
             Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
@@ -466,7 +467,7 @@ WRITEPOT keyword!\n", tok);
         strncpy(thee->writepotstem, tok, VMAX_ARGLEN);
         thee->setwritepot = 1;
         return 1;
-    } else if (strcasecmp(tok, "writeacc") == 0) {
+    } else if (Vstring_strcasecmp(tok, "writeacc") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing WRITEACC \
@@ -475,11 +476,11 @@ keyword!\n", tok);
         } 
         thee->writeacc = ti;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (strcasecmp(tok, "dx") == 0) {
+        if (Vstring_strcasecmp(tok, "dx") == 0) {
             thee->writeaccfmt = 0;
-        } else if (strcasecmp(tok, "avs") == 0) {
+        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
             thee->writeaccfmt = 1;
-        } else if (strcasecmp(tok, "uhbd") == 0) {
+        } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
             thee->writeaccfmt = 2;
         } else {
             Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \

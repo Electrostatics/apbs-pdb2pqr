@@ -47,7 +47,7 @@
 //           including BSD Signals, UNIX Domain sockets, INET TCP/IP sockets,
 //           and the WINSOCK implementation of INET TCP/IP sockets.
 //
-// Author:   Michael Holst
+// Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
 
 #ifndef _APBSCONFIG_H_
@@ -61,6 +61,9 @@
 
 /* Do I have FETK? */
 #undef HAVE_FETK_H
+
+/* Do I have strcasecmp? */
+#undef HAVE_STRCASECMP
 
 /* Do I want some fancy multipole routines? */
 #undef USE_CXX_FMM

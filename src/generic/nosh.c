@@ -43,6 +43,7 @@
 
 #include "apbscfg.h"
 #include "apbs/nosh.h"
+#include "apbs/vstring.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Private method declaration
@@ -159,8 +160,6 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 //
 // Returns:  1 if successful, 0 otherwise
 //
-// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
@@ -206,21 +205,21 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
          * keyword.  Due to this simple layout, no nesting of these "function"
          * sections is allowed.
          */
-        if (strcasecmp(tok, "read") == 0) {
+        if (Vstring_strcasecmp(tok, "read") == 0) {
             Vnm_print(0, "NOsh: Parsing READ section\n");
             if (!NOsh_parseREAD(thee, sock)) return 0;
             Vnm_print(0, "NOsh: Done parsing READ section (nmol = %d)\n",
               thee->nmol);
-        } else if (strcasecmp(tok, "print") == 0) {
+        } else if (Vstring_strcasecmp(tok, "print") == 0) {
             Vnm_print(0, "NOsh: Parsing PRINT section\n");
             if (!NOsh_parsePRINT(thee, sock)) return 0;
             Vnm_print(0, "NOsh: Done parsing PRINT section\n");
-        } else if (strcasecmp(tok, "elec") == 0) {
+        } else if (Vstring_strcasecmp(tok, "elec") == 0) {
             Vnm_print(0, "NOsh: Parsing ELEC section\n");
             if (!NOsh_parseELEC(thee, sock)) return 0;
             Vnm_print(0, "NOsh: Done parsing ELEC section (ncalc = %d)\n",
               thee->ncalc);
-        } else if (strcasecmp(tok, "quit") == 0) {
+        } else if (Vstring_strcasecmp(tok, "quit") == 0) {
             Vnm_print(0, "NOsh: Done parsing file (got QUIT)\n");
             break;
         } else {
@@ -240,8 +239,7 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
 //
 // Returns:  1 if successful, 0 otherwise
 //
-// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
-//           Should only be called from NOsh_parse()
+// Notes:    Should only be called from NOsh_parse()
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -267,10 +265,10 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
     /* Read until we run out of tokens (bad) or hit the "END" keyword (good) */
     while (Vio_scanf(sock, "%s", tok) == 1) {
 
-        if (strcasecmp(tok, "end") == 0) {
+        if (Vstring_strcasecmp(tok, "end") == 0) {
             Vnm_print(0, "NOsh: Done parsing READ section\n");
             return 1;
-        } else if (strcasecmp(tok, "file") == 0) {
+        } else if (Vstring_strcasecmp(tok, "file") == 0) {
             if (Vio_scanf(sock, "%s", tok) == 1) {
                 Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
                   thee->nmol, tok);
@@ -297,8 +295,7 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 //
 // Returns:  1 if successful, 0 otherwise
 //
-// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
-//           Should only be called from NOsh_parse()
+// Notes:    Should only be called from NOsh_parse()
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -333,7 +330,7 @@ sections\n",
    
     /* The first thing we read is the thing we want to print */ 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (strcasecmp(tok, "energy") == 0) {
+    if (Vstring_strcasecmp(tok, "energy") == 0) {
         thee->printwhat[idx] = 0;
         thee->printnarg[idx] = 0;
     } else {
@@ -349,7 +346,7 @@ PRINT section!\n",
     while (Vio_scanf(sock, "%s", tok) == 1) {
 
         /* The next thing we read is either END or an ARG OP ARG statement */
-        if (strcasecmp(tok, "end") == 0) {
+        if (Vstring_strcasecmp(tok, "end") == 0) {
             if (expect != 0) {
                 (thee->nprint)++;
                 (thee->printnarg[idx])++;
@@ -371,7 +368,7 @@ section while reading %s!\n", tok);
                     return 0;
                 }
             /* Grab addition operation */
-            } else if (strcasecmp(tok, "+") == 0) {
+            } else if (Vstring_strcasecmp(tok, "+") == 0) {
                 if (expect == 1) {
                     thee->printop[idx][thee->printnarg[idx]] = 0;
                     (thee->printnarg[idx])++;
@@ -388,7 +385,7 @@ section while reading %s!\n", tok);
                     return 0;
                 }
             /* Grab subtraction operation */
-            } else if (strcasecmp(tok, "-") == 0) {
+            } else if (Vstring_strcasecmp(tok, "-") == 0) {
                 if (expect == 1) {
                     thee->printop[idx][thee->printnarg[idx]] = 1;
                     (thee->printnarg[idx])++;
@@ -433,8 +430,7 @@ section!\n");
 //
 // Returns:  1 if successful, 0 otherwise
 //
-// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
-//           Should only be called from NOsh_parse()
+// Notes:    Should only be called from NOsh_parse()
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -473,17 +469,17 @@ run!\n");
 
     /* The next token HAS to be the method */
     if (Vio_scanf(sock, "%s", tok) == 1) {
-        if ((strcasecmp(tok, "mg") == 0) || 
-            (strcasecmp(tok, "mg-manual") == 0)) {
-            if (strcasecmp(tok, "mg") == 0) Vnm_print(2, "NOsh:  The MG \
+        if ((Vstring_strcasecmp(tok, "mg") == 0) || 
+            (Vstring_strcasecmp(tok, "mg-manual") == 0)) {
+            if (Vstring_strcasecmp(tok, "mg") == 0) Vnm_print(2, "NOsh:  The MG \
 keyword is deprecated.  Please use either MG-MANUAL or MG-AUTO.\nNOsh:  \
 I'm assuming you meant MG-MANUAL here.\n");
             return NOsh_parseMG(thee, sock, 0);
-        } else if (strcasecmp(tok, "mg-auto") == 0) {
+        } else if (Vstring_strcasecmp(tok, "mg-auto") == 0) {
             return NOsh_parseMG(thee, sock, 1);
-        } else if (strcasecmp(tok, "mg-para") == 0) {
+        } else if (Vstring_strcasecmp(tok, "mg-para") == 0) {
             return NOsh_parseMG(thee, sock, 2);
-        } else if (strcasecmp(tok, "fem") == 0) {
+        } else if (Vstring_strcasecmp(tok, "fem") == 0) {
             /* Check to see if he have any room left for this type of
              * calculation, if so: set the calculation type, update the number
              * of calculations of this type, and parse the rest of the section
@@ -523,14 +519,11 @@ I'm assuming you meant MG-MANUAL here.\n");
 //
 // Returns:  1 if successful, 0 otherwise
 //
-// Notes:    Currently uses strcasecmp(), which I think is not ANSI C compliant
-//           Should only be called from NOsh_parse()
+// Notes:    Should only be called from NOsh_parse()
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm) {
-
-    char tok[VMAX_BUFSIZE];
 
     if (thee == VNULL) {
         Vnm_print(2, "NOsh_parseFEM:  Got NULL thee!\n");

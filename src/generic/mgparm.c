@@ -45,6 +45,7 @@
 #include "apbs/apbs.h"
 #include "apbs/vhal.h"
 #include "apbs/mgparm.h"
+#include "apbs/vstring.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class MGparm: Inlineable methods
@@ -369,7 +370,7 @@ VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
-    if (strcasecmp(tok, "dime") == 0) {
+    if (Vstring_strcasecmp(tok, "dime") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0){
             Vnm_print(2, "parseMG:  Read non-integer (%s) while parsing DIME \
@@ -390,7 +391,7 @@ keyword!\n", tok);
         } else thee->dime[2] = ti;
         thee->setdime = 1;
         return 1;
-    } else if (strcasecmp(tok, "nlev") == 0) {
+    } else if (Vstring_strcasecmp(tok, "nlev") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
             Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing NLEV \
@@ -399,7 +400,7 @@ keyword!\n", tok);
         } else thee->nlev = ti;
         thee->setnlev = 1;
         return 1;
-    } else if (strcasecmp(tok, "grid") == 0) {
+    } else if (Vstring_strcasecmp(tok, "grid") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
@@ -420,7 +421,7 @@ keyword!\n", tok);
         } else thee->grid[2] = tf;
         thee->setgrid = 1;
         return 1;
-    } else if (strcasecmp(tok, "glen") == 0) {
+    } else if (Vstring_strcasecmp(tok, "glen") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
@@ -441,12 +442,12 @@ keyword!\n", tok);
         } else thee->glen[2] = tf;
         thee->setglen = 1;
         return 1;
-    } else if (strcasecmp(tok, "gcent") == 0) {
+    } else if (Vstring_strcasecmp(tok, "gcent") == 0) {
         /* If the next token isn't a float, it probably means we want to
          * center on a molecule */
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
-            if (strcasecmp(tok, "mol") == 0) {
+            if (Vstring_strcasecmp(tok, "mol") == 0) {
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
                 if (sscanf(tok, "%d", &ti) == 0) {
                     Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
@@ -480,7 +481,7 @@ GCENT keyword!\n", tok);
         }
         thee->setgcent = 1;
         return 1;
-    } else if (strcasecmp(tok, "cglen") == 0) {
+    } else if (Vstring_strcasecmp(tok, "cglen") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
@@ -501,7 +502,7 @@ keyword!\n", tok);
         } else thee->cglen[2] = tf;
         thee->setcglen = 1;
         return 1;
-    } else if (strcasecmp(tok, "fglen") == 0) {
+    } else if (Vstring_strcasecmp(tok, "fglen") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
@@ -522,12 +523,12 @@ keyword!\n", tok);
         } else thee->fglen[2] = tf;
         thee->setfglen = 1;
         return 1;
-    } else if (strcasecmp(tok, "cgcent") == 0) {
+    } else if (Vstring_strcasecmp(tok, "cgcent") == 0) {
         /* If the next token isn't a float, it probably means we want to
          * center on a molecule */
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
-            if (strcasecmp(tok, "mol") == 0) {
+            if (Vstring_strcasecmp(tok, "mol") == 0) {
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
                 if (sscanf(tok, "%d", &ti) == 0) {
                     Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
@@ -561,12 +562,12 @@ CGCENT keyword!\n", tok);
         }
         thee->setcgcent = 1;
         return 1;
-    } else if (strcasecmp(tok, "fgcent") == 0) {
+    } else if (Vstring_strcasecmp(tok, "fgcent") == 0) {
         /* If the next token isn't a float, it probably means we want to
          * center on a molecule */
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
-            if (strcasecmp(tok, "mol") == 0) {
+            if (Vstring_strcasecmp(tok, "mol") == 0) {
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
                 if (sscanf(tok, "%d", &ti) == 0) {
                      Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
@@ -600,7 +601,7 @@ FGCENT keyword!\n", tok);
         }
         thee->setfgcent = 1;
         return 1;
-    } else if (strcasecmp(tok, "pdime") == 0) {
+    } else if (Vstring_strcasecmp(tok, "pdime") == 0) {
         /* Read the number of grid points */
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
@@ -628,7 +629,7 @@ keyword!\n", tok);
         }
         thee->setpdime = 1;
         return 1;
-    } else if (strcasecmp(tok, "ofrac") == 0) {
+    } else if (Vstring_strcasecmp(tok, "ofrac") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing OFRAC \

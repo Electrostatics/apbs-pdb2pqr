@@ -72,7 +72,6 @@ int main(int argc, char **argv) {
     NOsh *nosh = VNULL;
     MGparm *mgparm = VNULL;
     PBEparm *pbeparm = VNULL;
-    FEMparm *femparm = VNULL;
     Vmem *mem = VNULL;
     Vcom *com = VNULL;
     Vio *sock = VNULL;
@@ -81,9 +80,7 @@ int main(int argc, char **argv) {
     Vpbe *pbe[NOSH_MAXCALC];
     Valist *alist[NOSH_MAXMOL];
     char *input_path = VNULL;
-    char outpath[VMAX_ARGLEN];
-    double iparm, sparm;
-    int i, j, rank, size;
+    int i, rank, size;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -95,11 +92,9 @@ int main(int argc, char **argv) {
      * calculation */
     double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
     double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
-    double partMin[3], partMax[3];
     AtomForce *atomForce[NOSH_MAXCALC];
-    double ibForce[3], qfForce[3], dbForce[3], npForce[3], tenergy;
-    int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC], bytesTotal, highWater;
-    int calcid;
+    double tenergy;
+    int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
     /* THe real partition centers */
     double realCenter[3];
 

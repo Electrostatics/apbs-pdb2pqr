@@ -338,7 +338,7 @@ VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
   double *grad) {
 
     Vatom *atom;
-    double *x, tpot[MAXV], charge, dist;
+    double *x, charge, dist;
     int iatom, j;
 
     VASSERT(dim < 4);
