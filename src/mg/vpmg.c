@@ -1228,7 +1228,7 @@ VPRIVATE void fillcoCoefMol(Vpmg *thee) {
 	double epsw, epsp; double hx, hy, hzed, *apos, arad, accf, dx2, dy2, dz2;
     double arad2, stot2, itot2, rtot, rtot2, splineWin; 
 	int i, j, k, nx, ny, nz, iatom, imin, imax, jmin, jmax, kmin, kmax;
-    int surfMeth, acclo, accmid, acchi, a000, islap;
+    int surfMeth, acclo, accmid, acchi, a000;
 
     VASSERT(thee != VNULL);
     surfMeth = thee->surfMeth;
@@ -1281,11 +1281,6 @@ VPRIVATE void fillcoCoefMol(Vpmg *thee) {
      * Otherwise, this parameter is set to 0.0 */
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
-
-    /* This is a flag that gets set if the operator is a simple Laplacian;
-     * i.e., in the case of a homogenous dielectric and zero ionic strength */
-    if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
-    else islap = 0;
 
     /* Loop through the atoms and do the following:
      * 1.  Set ccf = -1.0, for all points inside the
@@ -1555,7 +1550,7 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
 	double dx2, dy2, dz2, stot2, itot2, rtot, rtot2;
     double splineWin, itot, ictot, ictot2, stot, sctot, sctot2, dist2, dist;
     double sm, sm2, tvalue, w2i, w3i;
-    int i, j, k, nx, ny, nz, iatom, surfMeth, islap, imin, imax, jmin, jmax;
+    int i, j, k, nx, ny, nz, iatom, surfMeth, imin, imax, jmin, jmax;
     int kmin, kmax;
 
     VASSERT(thee != VNULL);
@@ -1612,11 +1607,6 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
      * Otherwise, this parameter is set to 0.0 */
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
-
-    /* This is a flag that gets set if the operator is a simple Laplacian;
-     * i.e., in the case of a homogenous dielectric and zero ionic strength */
-    if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
-    else islap = 0;
 
     /* Loop through the atoms and do the following:
      * 1.  Set ccf = -1.0, for all points inside the
@@ -1760,8 +1750,8 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
     /* Convert characteristic functions to dielectric */
     for (i=0; i<(nx*ny*nz); i++) {
         thee->a1cf[i] = (epsw - epsp)*(thee->a1cf[i]) + epsp;
-        thee->a2cf[i] = (epsw - epsp)*(thee->a1cf[i]) + epsp;
-        thee->a3cf[i] = (epsw - epsp)*(thee->a1cf[i]) + epsp;
+        thee->a2cf[i] = (epsw - epsp)*(thee->a2cf[i]) + epsp;
+        thee->a3cf[i] = (epsw - epsp)*(thee->a3cf[i]) + epsp;
     }
 }
 
@@ -1779,7 +1769,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
 	double xmin, xmax, ymin, ymax, zmin, zmax, chi, ionmask, ionstr, xlen;
     double ylen, zlen, position[3], zmagic, irad, srad, zkappa2, epsw, epsp;
     double tkappa, eps, hx, hy, hzed, splineWin;
-	int i, j, k, nx, ny, nz, surfMeth, islap;
+	int i, j, k, nx, ny, nz, surfMeth;
 
     VASSERT(thee != VNULL);
     surfMeth = thee->surfMeth;
@@ -1824,11 +1814,6 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
      * Otherwise, this parameter is set to 0.0 */
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
-
-    /* This is a flag that gets set if the operator is a simple Laplacian;
-     * i.e., in the case of a homogenous dielectric and zero ionic strength */
-    if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
-    else islap = 0;
 
     if ((!thee->useDielXMap) || (!thee->useDielYMap) || (!thee->useDielZMap) ||
       ((!thee->useKappaMap)&&(ionstr>VPMGSMALL))) {
