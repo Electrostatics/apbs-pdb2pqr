@@ -111,7 +111,7 @@ struct Vpmg {
   double extNpEnergy;            /**< Stores contributions to the apolar
                                   *   energy from regions outside the problem
                                   *   domain */
-  int surfMeth;                  /**< Surface definition method */
+  double surfMeth;               /**< Surface definition method */
   double splineWin;              /**< Spline window parm for surf defs */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
                                   * called */

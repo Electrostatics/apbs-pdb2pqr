@@ -467,7 +467,7 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
-    double dist, *apos, arad, sm, sm2, w2i, w3i, mygrad;
+    double dist, *apos, arad, sm, sm2, w2i, mygrad;
     Vatom *atom;
     double totchi = 1.0;             /* Characteristic function value */
     double mychi = 1.0;           /* Char. func. value for given atom */
@@ -476,8 +476,7 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
     VASSERT(thee != NULL);
 
     /* Inverse squared window parameter */
-    w2i = 1.0/(win*win);
-    w2i = 1.0/(win*win*win);
+    w2i = 1.0/VSQR(win);
 
     /* The grad is zero by default */
     grad[0] = 0.0;
@@ -527,8 +526,8 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
         else {
             sm = dist - arad + win;
             sm2 = VSQR(sm);
-            mychi = 0.75*sm2*w2i -0.25*sm*sm2*w3i;
-            mygrad = 1.5*sm*w2i - 0.75*sm2*w3i;
+            mychi = 0.75*sm2*w2i -0.25*sm*sm2*w2i/win;
+            mygrad = 1.5*sm*w2i - 0.75*sm2*w2i/win;
         }
         /* Characteristic function for all atoms in solute */
         totchi = Vacc_splineAcc(thee, center, win, infrad);
@@ -555,7 +554,7 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
-    double dist2, dist, *apos, arad, sm, sm2, w2i, w3i;
+    double dist, *apos, arad, sm, sm2, w2i;
     Vatom *atom;
     double value = 1.0;             /* Characteristic function value */
     double tvalue = 1.0;           /* Char. func. value for given atom */
@@ -564,8 +563,7 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
     VASSERT(thee != NULL);
 
     /* Inverse squared window parameter */
-    w2i = 1.0/(win*win);
-    w3i = 1.0/(win*win*win);
+    w2i = 1.0/VSQR(win);
 
     if (thee->max_radius < (win + infrad)) {
         Vnm_print(2, "Vacc_splineAcc:  ERROR -- Vacc constructed with max_radius=%g;\n",
@@ -592,33 +590,38 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
      * overlap at which point we can determine that the point is not
      * accessible */
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+    /* First, reset the list of atom flags */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) 
+      thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
     /* Now loop through the atoms assembling the characteristic function */
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
         /* Check to see if we've counted this atom already */
-        atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
-        apos = Vatom_getPosition(atom);
-        /* Zero-radius atoms don't contribute */
-        if (Vatom_getRadius(atom) > 0.0) {
-            arad = Vatom_getRadius(atom) + infrad;
-            dist2 = (VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
-                + VSQR(apos[2]-center[2]));
-            /* If we're inside an atom, the entire characteristic function
-             * will be zero */
-            if (dist2 <= VSQR(arad - win)) {
-                tvalue = 0.0;
-                value = 0.0;
-                return value;
-            /* We're outside the smoothing window */
-            } else if (dist2 >= VSQR(arad + win)) {
-                tvalue = 1.0;
-            /* We're inside the smoothing window */
-            } else {
-                dist = VSQRT(dist2);
-                sm = dist - arad + win;
-                sm2 = VSQR(sm);
-                tvalue = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
-            }
-            value *= tvalue;
+        if (!(thee->atomFlags[thee->atomIDs[ui][iatom]])) {
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
+            atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+            apos = Vatom_getPosition(atom);
+            /* Zero-radius atoms don't contribute */
+            if (Vatom_getRadius(atom) > 0.0) {
+                arad = Vatom_getRadius(atom) + infrad;
+                dist = VSQRT(VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+                    + VSQR(apos[2]-center[2]));
+                /* If we're inside an atom, the entire characteristic function
+                 * will be zero */
+                if (dist <= (arad - win)) {
+                    tvalue = 0.0;
+                    value = 0.0;
+                    return value;
+                /* We're outside the smoothing window */
+                } else if (dist >= (arad + win)) {
+                    tvalue = 1.0;
+                /* We're inside the smoothing window */
+                } else {
+                    sm = dist - arad + win;
+                    sm2 = VSQR(sm);
+                    tvalue = 0.75*sm2*w2i - 0.25*sm*sm2*w2i/win;
+                }
+                value *= tvalue;
+            } 
         } 
     }
  

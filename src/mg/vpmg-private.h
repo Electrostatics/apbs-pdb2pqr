@@ -57,11 +57,6 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
 VPRIVATE double bcfl1sp(double size, double *apos, double charge,
   double xkappa, double pre1, double *pos);
 VPRIVATE void bcCalc(Vpmg *thee);
-VPRIVATE void fillcoCharge(Vpmg *thee);
-VPRIVATE void fillcoCoef(Vpmg *thee);
-VPRIVATE void fillcoCoefMol(Vpmg *thee);
-VPRIVATE void fillcoCoefMap(Vpmg *thee);
-VPRIVATE void fillcoCoefSpline(Vpmg *thee);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
