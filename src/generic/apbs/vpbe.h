@@ -115,8 +115,8 @@ typedef struct Vpbe {
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm);
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm, AM *am);
+VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am);
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 
@@ -126,6 +126,7 @@ VEXTERNC void    Vpbe_initialize(Vpbe *thee,
 
 VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
 VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
+VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
 VEXTERNC Vhash*  Vpbe_getVhash(Vpbe *thee);
 VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
 
