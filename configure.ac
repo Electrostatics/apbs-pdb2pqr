@@ -695,6 +695,20 @@ fi
 AC_SUBST(blas_lib)
 
 dnl # -----------------------
+dnl # If using Portland compilers, do not compile
+dnl # tools/mesh/uhbd_asc2bin.f
+dnl # -----------------------
+case $F77 in
+   pgf77*)
+      UHBD_PORTLAND=""
+      FFLAGS="${FFLAGS} -Mnomain";;
+   *)
+      UHBD_PORTLAND="Y";;
+esac
+AM_CONDITIONAL(UHBD_COMPILE, [test -n "${UHBD_PORTLAND}"])
+
+
+dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --with-arpack])

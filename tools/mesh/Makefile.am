@@ -12,7 +12,16 @@ INCLUDES           = @inc_list@
 AM_CFLAGS = @CFLAGS@
 AM_LDFLAGS = @LDFLAGS@ 
 
-noinst_PROGRAMS          = mgmesh dxmath mergedx uhbd_asc2bin smooth value dx2mol benchmark similarity analysis
+if UHBD_COMPILE
+UHBD                     = uhbd_asc2bin
+uhbd_asc2bin_SOURCES     = uhbd_asc2bin.f
+uhbd_asc2bin_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
+uhbd_asc2bin_LDFLAGS     = @LDFLAGS@ @FFLAGS@
+uhbd_asc2bin_CCLD        = $(F77)
+else
+UHBD =
+endif
+noinst_PROGRAMS          = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol benchmark similarity analysis
 mgmesh_SOURCES           = mgmesh.c 
 mgmesh_LDADD             = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS           = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -29,10 +38,6 @@ mergedx_SOURCES          = mergedx.c
 mergedx_LDADD            = ../../src/aaa_lib/libapbs.la @lib_list@
 mergedx_LDFLAGS          = ../../src/aaa_lib/libapbs.la @lib_list@
 mergedx_CCLD             = $(CC)
-uhbd_asc2bin_SOURCES     = uhbd_asc2bin.f
-uhbd_asc2bin_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
-uhbd_asc2bin_LDFLAGS     = @LDFLAGS@ @FFLAGS@
-uhbd_asc2bin_CCLD        = $(F77)
 value_SOURCES            = value.c 
 value_LDADD              = ../../src/aaa_lib/libapbs.la @lib_list@
 value_LDFLAGS            = @LDFLAGS@ @FFLAGS@
