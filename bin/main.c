@@ -205,10 +205,9 @@ int main(
     if (argc != 2) {
         Vnm_tprint(2, "ERROR -- CALLED WITH %d ARGUMENTS!\n", argc);
         Vnm_tprint(2, "%s\n", usage);
-        return APBSRC;
+	VJMPERR1(0);
     } 
     input_path = argv[1];
-
 
     /* *************** PARSE INPUT FILE ******************* */
     nosh = NOsh_ctor(rank, size);
@@ -216,28 +215,28 @@ int main(
     Vnm_tprint( 1, "Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
         Vnm_tprint( 2, "Error while parsing input file.\n");
-        return APBSRC;
+	VJMPERR1(0);
     } else Vnm_tprint( 1, "Parsed input file.\n");
     Vio_dtor(&sock);
 
     /* *************** LOAD MOLECULES ******************* */
     if (loadMolecules(nosh, alist) != 1) {
         Vnm_tprint(2, "Error reading molecules!\n");
-        return APBSRC;
+        VJMPERR1(0);
     }
 
     /* *************** LOAD MAPS ******************* */
     if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
         Vnm_tprint(2, "Error reading dielectric maps!\n");
-        return APBSRC;
+        VJMPERR1(0);
     }
     if (loadKappaMaps(nosh, kappaMap) != 1) {
         Vnm_tprint(2, "Error reading kappa maps!\n");
-        return APBSRC;
+        VJMPERR1(0);
     }
     if (loadChargeMaps(nosh, chargeMap) != 1) {
         Vnm_tprint(2, "Error reading charge maps!\n");
-        return APBSRC;
+        VJMPERR1(0);
     }
 
     /* *************** DO THE CALCULATIONS ******************* */
@@ -271,7 +270,7 @@ int main(
                   alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
                   pmgp, pmg)) {
                     Vnm_tprint( 2, "Error setting up MG calculation!\n");
-                    return APBSRC;
+                    VJMPERR1(0);
                 }
 
                 /* Print problem parameters */
@@ -281,13 +280,13 @@ int main(
                 /* Solve PDE */
                 if (solveMG(nosh, pmg[i], mgparm->type) != 1) {
                     Vnm_tprint(2, "Error solving PDE!\n");
-                    return APBSRC;
+                    VJMPERR1(0);
                 }
 
                 /* Set partition information for observables and I/O */
                 if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
                     Vnm_tprint(2, "Error setting partition info!\n");
-                    return APBSRC;
+                    VJMPERR1(0);
                 }
 
                 /* Write out energies */
@@ -342,7 +341,7 @@ int main(
                 Vnm_tprint( 1, "  Setting up problem...\n");
                 if (!initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk)) {
                     Vnm_tprint( 2, "Error setting up FE calculation!\n");
-                    return APBSRC;
+                    VJMPERR1(0);
                 }
 
                 /* Print problem parameters */
@@ -352,7 +351,7 @@ int main(
                 /* Refine mesh */
                 if (!preRefineFE(i, nosh, feparm, fetk)) {
                     Vnm_tprint( 2, "Error pre-refining mesh!\n");
-                    return APBSRC;
+                    VJMPERR1(0);
                 }
     
                 /* Solve-estimate-refine */
@@ -366,13 +365,13 @@ int main(
                     Vnm_tprint(1, "    Solve #%d...\n", isolve);
                     if (!solveFE(i, nosh, pbeparm, feparm, fetk)) {
                         Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
-                        return APBSRC;
+                        VJMPERR1(0);
                     }
                     if (!energyFE(nosh, i, fetk, &(nenergy[i]), 
                                 &(totEnergy[i]), &(qfEnergy[i]), 
                                 &(qmEnergy[i]), &(dielEnergy[i]))) {
                         Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
-                        return APBSRC;
+                        VJMPERR1(0);
                     }
                     if (!postRefineFE(i, nosh, feparm, fetk)) break;
                     bytesTotal = Vmem_bytesTotal();
@@ -449,4 +448,10 @@ int main(
     Vcom_finalize();
 
     return 0;
+
+  VERROR1:
+    Vcom_finalize();
+    Vcom_dtor(&com);
+    Vmem_dtor(&mem);
+    return APBSRC;
 }
