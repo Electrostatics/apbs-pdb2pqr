@@ -318,7 +318,8 @@ int main(int argc, char **argv) {
                     Vnm_print(2, "main:  Can't focus first calculation!\n");
                     return APBSRC;
                 } 
-                pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1]);
+                pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1],
+                  mgparm->calcenergy);
             } else {
                 if (i>0) Vpmg_dtor(&(pmg[i-1]));
                 pmg[i] = Vpmg_ctor(pmgp[i], pbe[i]);
@@ -536,6 +537,9 @@ to %s...\n",
 (%d)!\n",
                          mgparm->writeaccfmt);
             }
+
+            fflush(stdout);
+            fflush(stderr);
 
 
         /* Do FEM calculation */
