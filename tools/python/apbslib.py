@@ -103,6 +103,32 @@ class Vpmg(VpmgPtr):
 
 
 
+class VpbePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            apbslibc.delete_Vpbe(self.this)
+    def __setattr__(self,name,value):
+        if name == "acc" :
+            apbslibc.Vpbe_acc_set(self.this,value)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "acc" : 
+            return apbslibc.Vpbe_acc_get(self.this)
+        raise AttributeError,name
+    def __repr__(self):
+        return "<C Vpbe instance>"
+class Vpbe(VpbePtr):
+    def __init__(self) :
+        self.this = apbslibc.new_Vpbe()
+        self.thisown = 1
+
+
+
+
 class NOsh_calcPtr :
     def __init__(self,this):
         self.this = this
@@ -280,6 +306,11 @@ new_pmgplist = apbslibc.new_pmgplist
 
 new_pbelist = apbslibc.new_pbelist
 
+def get_Vpbe(arg0,arg1):
+    val = apbslibc.get_Vpbe(arg0,arg1)
+    val = VpbePtr(val)
+    return val
+
 new_atomforcelist = apbslibc.new_atomforcelist
 
 double_array = apbslibc.double_array
@@ -405,6 +436,10 @@ def printForce(arg0,arg1,arg2,arg3,arg4):
     return val
 
 startVio = apbslibc.startVio
+
+Vacc_molAcc = apbslibc.Vacc_molAcc
+
+Vacc_vdwAcc = apbslibc.Vacc_vdwAcc
 
 
 
