@@ -129,16 +129,18 @@ INCLUDES = @inc_list@
 LDFLAGS = @LDFLAGS@ @FLIBS@
 CCLD = $(F77)
 
-noinst_PROGRAMS = mgmesh dxmath
+noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 dxmath_SOURCES = dxmath.c 
 dxmath_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+uhbd_asc2bin_SOURCES = uhbd_asc2bin.f
+uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT)
+noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_dxmath_OBJECTS = dxmath.$(OBJEXT)
@@ -149,6 +151,10 @@ am_mgmesh_OBJECTS = mgmesh.$(OBJEXT)
 mgmesh_OBJECTS = $(am_mgmesh_OBJECTS)
 mgmesh_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 mgmesh_LDFLAGS =
+am_uhbd_asc2bin_OBJECTS = uhbd_asc2bin.$(OBJEXT)
+uhbd_asc2bin_OBJECTS = $(am_uhbd_asc2bin_OBJECTS)
+uhbd_asc2bin_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+uhbd_asc2bin_LDFLAGS =
 
 DEFS = @DEFS@
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
@@ -163,9 +169,16 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
-DIST_SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES)
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+FFLAGS = @FFLAGS@
+DIST_SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) \
+	$(uhbd_asc2bin_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES)
+SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(uhbd_asc2bin_SOURCES)
 
 all: all-am
 
@@ -194,6 +207,9 @@ dxmath$(EXEEXT): $(dxmath_OBJECTS) $(dxmath_DEPENDENCIES)
 mgmesh$(EXEEXT): $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES) 
 	@rm -f mgmesh$(EXEEXT)
 	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
+uhbd_asc2bin$(EXEEXT): $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_DEPENDENCIES) 
+	@rm -f uhbd_asc2bin$(EXEEXT)
+	$(F77LINK) $(uhbd_asc2bin_LDFLAGS) $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
@@ -209,6 +225,15 @@ distclean-compile:
 
 .c.lo:
 	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.f.o:
+	$(F77COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.f.obj:
+	$(F77COMPILE) -c -o $@ `cygpath -w $<`
+
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 uninstall-info-am:
 
 ETAGS = etags
