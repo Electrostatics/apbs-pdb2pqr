@@ -99,11 +99,27 @@ The Power3 IBM Blue Horizon system
 ----------------------------------
 Set the CC variable before ./configure:
 
-% setenv CC "mpcc -bmaxdata:0x80000000 -bmaxstack:0x10000000 \
+% setenv CC "mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
 
 Note that the actual command line declaration should contain no line breaks
-and continuations; these seem to screw up sed (used by configure) under AIX.
+and continuations; these seem to screw up sed (used by configure) under
+AIX.  The bmaxdata linker flag controls the amount of heap the program is
+allocated to allocate.  It is a hexadecimal number representing the number
+of bytes available.  The NPACI documentation suggests 0x80000000, which
+gives 2048 MB of heap space.  While the Blue Horizon nodes do have 8 GB of
+memory available per 8-processor node, much of this is taken up by the OS.
+In practice, for 8 tasks per node, about 400 MB of heap space is available
+to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
+In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
+384 MB heap space per task.
+
 Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
-compiling.
+compiling; configure seems to mess up the detection of the headers when
+building config.h.  
+
+Finally, a single electrostatics calculation via APBS requires so little
+communication, that it makes since to use the IP-based MPI implementation
+and thereby allow 8 tasks (processes) per node.  Check the NPACI
+documentation for more information on this.
