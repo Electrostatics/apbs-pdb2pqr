@@ -22,11 +22,11 @@ proc read_dx {fileName molNum} {
     scan $InputLine "origin %e %e %e" xOrigin yOrigin zOrigin
     set origin [list $xOrigin $yOrigin $zOrigin ]
     set InputLine [gets $in]
-    scan $InputLine "delta %e %e %e" dum1 dum2 zdel
+    scan $InputLine "delta %e %e %e" zdel dum2 dum1
     set InputLine [gets $in]
     scan $InputLine "delta %e %e %e" dum1 ydel dum2
     set InputLine [gets $in]
-    scan $InputLine "delta %e %e %e" xdel dum1 dum2
+    scan $InputLine "delta %e %e %e" dum2 dum1 xdel
     set xVec [list [expr $xdel * $xgrid] 0 0 ]
     set yVec [list 0 [expr $ydel * $ygrid] 0 ]
     set zVec [list 0 0 [expr $zdel * $zgrid] ]
