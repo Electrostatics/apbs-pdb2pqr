@@ -87,36 +87,36 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
   %ifnarch i386 i486 i586 i686
     echo ASSUMING i786 ARCH!!!
     export CC="icc" 
-    export CFLAGS="-O2 -tpp7 -static-libcxa" 
+    export CFLAGS="-O2 -tpp7 -static-libcxa -static" 
     export CXX="icc" 
-    export CXXFLAGS="-O2 -tpp7 -static-libcxa" 
+    export CXXFLAGS="-O2 -tpp7 -static-libcxa -static" 
     export F77="ifort" 
-    export FFLAGS="-O2 -tpp7 -static-libcxa" 
-    export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
-    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+    export FFLAGS="-O2 -tpp7 -static-libcxa -static" 
+    export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
     make
   %else
     %ifarch i686
       echo CONFIGURING FOR i686 ARCH
       export CC="icc" 
-      export CFLAGS="-O2 -tpp6 -static-libcxa" 
+      export CFLAGS="-O2 -tpp6 -static-libcxa -static" 
       export CXX="icc" 
-      export CXXFLAGS="-O2 -tpp6 -static-libcxa" 
+      export CXXFLAGS="-O2 -tpp6 -static-libcxa -static" 
       export F77="ifort" 
-      export FFLAGS="-O2 -tpp6 -static-libcxa" 
-      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
-      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+      export FFLAGS="-O2 -tpp6 -static-libcxa -static" 
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
     %else
       echo CONFIGURING FOR GENERIC i386 ARCH
       export CC="icc" 
-      export CFLAGS="-O2 -static-libcxa" 
+      export CFLAGS="-O2 -static-libcxa -static" 
       export CXX="icc" 
-      export CXXFLAGS="-O2 -static-libcxa" 
+      export CXXFLAGS="-O2 -static-libcxa -static" 
       export F77="ifort" 
-      export FFLAGS="-O2 -static-libcxa" 
-      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
-      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+      export FFLAGS="-O2 -static-libcxa -static" 
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
     %endif
   %endif
