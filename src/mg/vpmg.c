@@ -1053,6 +1053,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
             position[1] = apos[1] - ymin;
             position[2] = apos[2] - zmin;
 
+/* Avoid a whole bunch of testing in the case of a uniform dielectric */
+if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
             /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
              * ASSIGNMENT (Steps #1-3) */
             if (surfMeth == 2) itot2 = VSQR(irad + arad + splineWin);     
@@ -1109,6 +1111,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
                     } /* k loop */
                 } /* j loop */
             } /* i loop */
+}
+/* END: Avoid a whole bunch of testing in the case of a uniform dielectric */
 
             /* FILL IN SOURCE TERM ARRAY */
             /* Scale the charge to be a delta function */
