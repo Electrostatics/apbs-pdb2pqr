@@ -839,10 +839,14 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         vec[IJK(i,j,k)] = 0.0;
                         if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
                             for (l=0; l<pbe->numIon; l++) {
-                                /** FIX ME */
-                                vec[IJK(i,j,k)] += (pbe->ionConc[l]
-                                  * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)], 
-                                  &ichop));
+                                if (pbetype == PBE_NPBE) {
+                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
+                                        * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)], 
+                                        &ichop));
+                                } else if (pbetype == PBE_LPBE){
+                                    vec[IJK(i,j,k)] += (pbe->ionConc[l]
+                                        * (1 - pbe->ionQ[l]*thee->u[IJK(i,j,k)]));
+                                }
                             }
                         } 
                     }
