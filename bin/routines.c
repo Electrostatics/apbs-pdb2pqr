@@ -67,6 +67,7 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i, j, rc;
     double q; 
+    Vio *sock = VNULL;
     Vatom *atom = VNULL;
     Vparam *param = VNULL;
 
@@ -103,8 +104,20 @@ type (%d)!\n", nosh->parmfmt);
             case NMF_PQR:
                 Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
                   nosh->molpath[i]);
-                rc = Valist_readPQR(alist[i], "FILE", "ASC", VNULL,
-                  nosh->molpath[i]);
+                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+                if (sock == VNULL) {
+                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                if (Vio_accept(sock, 0) < 0) {
+                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                rc = Valist_readPQR(alist[i], sock);
+                Vio_acceptFree(sock);
+                Vio_dtor(&sock);
                 break;
             case NMF_PDB:
                 /* Load parameters */
@@ -115,8 +128,20 @@ specifying PARM file!\n");
                 }
                 Vnm_tprint( 1, "Reading PDB-format atom data from %s.\n",
                   nosh->molpath[i]);
-                rc = Valist_readPDB(alist[i], param, "FILE", "ASC", VNULL,
-                  nosh->molpath[i]);
+                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+                if (sock == VNULL) {
+                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                if (Vio_accept(sock, 0) < 0) {
+                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                rc = Valist_readPDB(alist[i], param, sock);
+                Vio_acceptFree(sock);
+                Vio_dtor(&sock);
                 break;
             default:
                 Vnm_tprint(2, "NOsh:  Error!  Undefined molecule file type \
