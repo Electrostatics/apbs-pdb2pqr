@@ -504,23 +504,34 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     for (isimp=0; isimp<num; isimp++) nsqmNew[isimp] = 0;
 
     /* Loop throught the affected atoms to determine how many atoms each
-     * simplex will get.  
-     * IF AN ATOM WILL BE ASSIGNED TO MORE THAN ONE SIMPLEX, IT'S CHARGE IS
-     * DIVIDED BY THE TOTAL NUMBER OF SIMPLICES TO WHICH IT WILL BE
-     * ASSIGNED.  WE MAKE NO PROVISIONS FOR UNREFINEMENT OF SIMPLICES, SO
-     * THIS DIVISION IS PERMANENT. */
+     * simplex will get. */
     for (iatom=0; iatom<nqParent; iatom++) {
+
         atomID = qParent[iatom];
         atom = Valist_getAtom(thee->alist, atomID);
         position = Vatom_getPosition(atom);
         nsimps = 0;
 
+        jsimp = 0;
+
         for (isimp=0; isimp<num; isimp++) {
             simplex = simps[isimp];
             if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
                 nsqmNew[isimp]++;
+                jsimp = 1;
             }
         }
+ 
+        VASSERT(jsimp != 0);
+    }
+
+    /* Sanity check that we didn't lose any atoms... */
+    iatom = 0;
+    for (isimp=0; isimp<num; isimp++) iatom += nsqmNew[isimp];
+    if (iatom < nqParent) {
+        Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n", 
+            nqParent - iatom, nqParent);
+        VASSERT(0);
     }
 
     /* Allocate the storage */
@@ -549,15 +560,6 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
                 jsimp++;
             }
         }
-    }
-
-    /* Sanity check that we didn't lose any atoms... */
-    iatom = 0;
-    for (isimp=0; isimp<num; isimp++) iatom += nsqmNew[isimp];
-    if (iatom < nqParent) {
-        Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n", 
-            nqParent - iatom, nqParent);
-        VASSERT(0);
     }
 
     /* Update the QSM map using the old and new SQM lists */
