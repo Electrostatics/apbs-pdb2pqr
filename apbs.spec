@@ -147,6 +147,11 @@ make install
 mv examples ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/examples
 mv tools  ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/tools
 
+# Link the binary to the bin dir instead of the platform-specific dir
+pushd ${RPM_BUILD_ROOT}/%{prefix}/bin
+ln -s */apbs apbs
+popd
+
 %clean
 rm -rf ${RPM_BUILD_ROOT}
 
