@@ -37,7 +37,7 @@
 // File:     vunit.h    < vunit.c >
 //
 // Purpose:  Class Vunit:  
-// A unit conversion class.
+// A unit conversion class.  All units in MKSA/IU unless otherwise noted
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -63,5 +63,9 @@
 #define Vunit_Na		6.0221367e+23
 #define Vunit_pi		3.1415927e+00
 #define Vunit_eps0		8.8541878e-12
+/* e_c^2/\AA in ESU units => kcal/mol */
+#define Vunit_esu_ec2A		3.3206364e+02
+/* k_b in ESU units => kcal/mol */
+#define Vunit_esu_kb            1.9871913e-03
 
 #endif /* ifndef _VUNIT_H_ */
