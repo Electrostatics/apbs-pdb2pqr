@@ -254,7 +254,7 @@ c*
 c*          *** check for trouble on the coarse grid ***
             if (iters_s .ge. itmax_s) then
                call vnmpri(2,'% MVCS: > max iters on coarse grid: ',
-           2      36, iters_s)
+     2        36, iters_s)
             endif
 c*
 c*       *** use direct method? ***
@@ -275,7 +275,7 @@ c*          *** call dpbsl to solve ***
             call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
             call vnmprt(2,'% MVCS: invalid coarse solver requested...',
-        2      42)
+     2        42)
          endif
 c*      
 c*       *** compute the stopping test ***
@@ -422,7 +422,7 @@ c*
 c*          *** check for trouble on the coarse grid ***
             if (iters_s .ge. itmax_s) then
                call vnmpri(2,'% MVCS: iters on coarse grid: ',
-           2      30, iters_s)
+     2            30, iters_s)
             endif
 c*
 c*       *** use direct method? ***
@@ -443,7 +443,7 @@ c*          *** call dpbsl to solve ***
             call fboundPMG00(nxf,nyf,nzf,x(iz(1,lev)))
          else
             call vnmprt(2,'% MVCS: invalid coarse solver requested...',
-        2      42)
+     2         42)
          endif
 c*      
 c* *********************************************************************
