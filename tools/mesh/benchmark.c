@@ -1,7 +1,7 @@
 /**
- *  @file    read.c
+ *  @file    benchmark.c
  *  @author  Nathan Baker
- *  @brief   Sample program that illustrates OpenDX data I/O
+ *  @brief   Sample program for benchmarking I/O
  *  @version $Id$
  *  @attention
  *  @verbatim
@@ -110,9 +110,19 @@ int main(int argc, char **argv) {
     }
     Vio_setWhiteChars(sock, MCwhiteChars);
     Vio_setCommChars(sock, MCcommChars);
-    while (Vio_scanf(sock, "%s", tok) == 1) {
-        Vnm_print(1, "Read token '%s' from socket\n", tok);
-    }
+    VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+    Vnm_print(1, "Read token '%s' from socket\n", tok);
+    VASSERT(Vio_scanf(sock, "%d", &itmp) == 1);
+    Vnm_print(1, "Read integer '%d' from socket\n", itmp);
+    VASSERT(itmp == test_int);
+    VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+    Vnm_print(1, "Read token '%s' from socket\n", tok);
+    VASSERT(Vio_scanf(sock, "%l", &dtmp) == 1);
+    Vnm_print(1, "Read double '%g' from socket\n", dtmp);
+    VASSERT(dtmp == test_double);
+    VASSERT(Vio_scanf(sock, "%e", &dtmp) == 1);
+    Vnm_print(1, "Read exponential '%g' from socket\n", dtmp);
+    VASSERT(dtmp == test_exp);
     Vio_acceptFree(sock);
     Vio_dtor(&sock);
 
