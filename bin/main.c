@@ -26,9 +26,9 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2003.  Washington University in St. Louis.
+ * Copyright (c) 2002-2004.  Washington University in St. Louis.
  * All Rights Reserved.
- * Portions Copyright (c) 1999-2003.  The Regents of the University of
+ * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 {"\n\n\
     ----------------------------------------------------------------------\n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
-    Version 0.2.6 (January 17, 2003)\n\
+    Version 0.3.0\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. Biochemistry and Molecular Biophysics\n\
@@ -117,7 +117,7 @@ int main(int argc, char **argv) {
     \n\
     Additional contributing authors listed in the code documentation.\n\
     \n\
-    Copyright (c) 2002-2003.  Washington University in St. Louis.\n\
+    Copyright (c) 2002-2004.  Washington University in St. Louis.\n\
     All Rights Reserved.\n\
     Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
     California.\n\
