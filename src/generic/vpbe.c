@@ -766,30 +766,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) { 
-
-    double energy = 0.0;
-    int isimp, nsimps;
-    int level;
-
-    SS *simp;
-    Alg *alg;
-    Emat emat;
-
-    level = AM_maxLevel(am);
-    alg = AM_alg(am, level);
-    nsimps = Vpbe_numSS(thee->gm); 
-
-    for (isimp=0; isimp<nsimps; isimp++) {
-        simp = Vgm_SS(gm, isimp);
-        /* Only work on the simps that belong to the selected partition, unless
-         * no partition was selected */
-        if ((SS_chart(simp) == color) || (color < 0)) {
-            /* Build the stiffness matrix and load vector for this element */
-            Alg_assemEmat(alg, simp, 0, u, ud, &emat);
-            /* Now what do we do? */
-            VASSERT(0);
-        }
-    }
+    VASSERT(0);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
