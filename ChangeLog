@@ -1,4 +1,12 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.3.2       ??-??-04
+#############################################################################
+  - BUG FIXES
+    * The dimensions of the fine grids in the pka-lig example calculations
+      were increased to give more reliable results (albeit ones which don't
+      agree with the reported UHBD values as well).
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.1       04-13-04
 #############################################################################
   - NEW FEATURES
