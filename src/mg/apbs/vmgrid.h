@@ -53,6 +53,7 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vgrid.h"
+#include "apbs/apbs.h"
 
 /** @def VMGRIDMAX   The maximum number of levels in the grid hiearchy
  *  @ingroup Vmgrid
