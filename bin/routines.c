@@ -650,7 +650,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
     
-    int j, bytesTotal, highWater;
+    int j, bytesTotal, highWater, imol;
     double sparm, iparm;
     Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
 
@@ -658,8 +658,16 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
     if (mgparm->cmeth == 1) {
-        for (j=0; j<3; j++) 
-          mgparm->center[j] = (alist[mgparm->centmol-1])->center[j];
+        for (j=0; j<3; j++) {
+            imol = mgparm->centmol-1;
+            if (imol < nosh->nmol) {
+                mgparm->center[j] = (alist[imol])->center[j];
+            } else{ 
+                Vnm_tprint(2, "ERROR!  Bogus molecule number (%d) for \
+fgcent/cgcent!\n",  (imol+1));
+                return 0;
+            }
+        }
     }
 
     /* If we're a parallel calculation, update the grid center based on
