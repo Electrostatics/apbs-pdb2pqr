@@ -259,7 +259,8 @@ class Psize:
 			str = str + "Coarse grid dims = %.3f x %.3f x %.3f A\n" % (clen[0],
 clen[1], clen[2])
 			str = str + "Fine grid dims = %.3f x %.3f x %.3f A\n" % (flen[0], flen[1], flen[2])
-			str = str + "Num. fine grid pts. (for %.3f spacing) = %i x %i x %i\n" % (self.constants["SPACE"], n[0], n[1], n[2])
+			str = str + "Num. fine grid pts. = %i x %i x %i\n" % (n[0], n[1], n[2])
+			str = str + "Fine mesh spacing = %g x %g x %g A\n" % (flen[0]/(n[0]-1), flen[1]/(n[1]-1), flen[2]/(n[2]-1))
 			str = str + "Estimated mem. required for sequential solve = %.3f MB\n" % gmem
 		
 			ntot = n[0]*n[1]*n[2]
