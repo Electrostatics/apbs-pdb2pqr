@@ -8995,6 +8995,11 @@ case $host_os in
    *)
       PY_CFLAGS="";;
 esac
+case $host_cpu in
+   x86_64*)
+      PY_CFLAGS="";;
+esac
+
 PY_SHARED=$PY_SHARED
 
 PY_LDEXTRA=$PY_LDEXTRA
