@@ -42,7 +42,7 @@
 
 #include "apbscfg.h"
 
-int F77MAIN(int argc, char **argv) {
+int main(int argc, char **argv) {
 
     int i, lev;
     int maxvert = 700;
