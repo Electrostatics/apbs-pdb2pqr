@@ -3340,7 +3340,6 @@ trap 'rm -fr `echo "
     tst/vacc/Makefile
     tst/vmetis/Makefile
     tst/vpmg/Makefile
-    tst/vgreen/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
@@ -3500,7 +3499,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     tst/vacc/Makefile
     tst/vmetis/Makefile
     tst/vpmg/Makefile
-    tst/vgreen/Makefile
 
     inc/Makefile
     inc/apbs/Makefile
