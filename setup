@@ -13,3 +13,14 @@ autoconf
 autoheader
 automake
 # aclocal
+
+cd test
+rm -f config.cache
+libtoolize --automake --force --copy
+aclocal
+autoconf
+autoheader
+automake
+# aclocal
+
+cd ..

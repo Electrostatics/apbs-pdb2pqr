@@ -3,7 +3,7 @@ read
 end
 elec
     mg-manual                          # Use the multigrid method
-    dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
+    dime 129 129 129                   # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
     nlev 4                             # Number of levels in multilevel
                                        #   hierarchy (usually 'l' from above
@@ -47,10 +47,10 @@ elec
                                        #  2 => write out atom-level forces
     write pot dx potential             # Potential I/O
     write sspl dx accessibility        # Solvent accessibility I/O
-    write ndens dx ion-density         # Ion number density
-    write qdens dx charge-density      # Ion charge density
-    write edens dx energy-density      # Energy density
-    write charge dx charge             # Biomolecule charge distribution
+    #write ndens dx ion-density         # Ion number density
+    #write qdens dx charge-density      # Ion charge density
+    #write edens dx energy-density      # Energy density
+    #write charge dx charge             # Biomolecule charge distribution
 end
 
 quit

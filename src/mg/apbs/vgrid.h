@@ -8,43 +8,41 @@
  *  @author  Nathan Baker and Steve Bond
  *  @brief   Potential oracle for Cartesian mesh data
  *  @version $Id$
+ *
  *  @attention
  *  @verbatim
  *
-
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
  * Nathan A. Baker (baker@biochem.wustl.edu)
  * Dept. of Biochemistry and Molecular Biophysics
+ * Center for Computational Biology
  * Washington University in St. Louis
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2003.  Washington University in St. Louis.
+ * Copyright (c) 2003.  Washington University in St. Louis.
  * All Rights Reserved.
- *
- * Portions Copyright (c) 1999-2002.  The Regents of the University of
+ * Portions Copyright (c) 1999-2003.  The Regents of the University of
  * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for educational, research, and not-for-profit purposes,
- * without fee and without a signed licensing agreement, is hereby granted,
- * provided that the above copyright notice, this paragraph and the
- * following two paragraphs appear in all copies, modifications, and
- * distributions.
+ * This file is part of APBS.
  *
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
- * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
- * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * APBS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
- * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
-
+ * APBS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with APBS; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ *
  * @endverbatim
  */
 

@@ -1,39 +1,42 @@
-/** @mainpage APBS User's Guide
+/** 
+ * @mainpage APBS Users Guide
  *  
- *  <center>APBS was written by Nathan A. Baker.<br>
- *          Additional contributing authors listed in the code documentation.
+ * <center>
+ * APBS was written by Nathan A. Baker.<br>
+ * Additional contributing authors listed in the code documentation.
  * </center>
  * 
  * <hr width="100%">
- * <hr width="100%">
  * @section license License
  *
- * <blockquote>
- * Copyright (c) 2002-2003.  Washington University in St. Louis.
- * All Rights Reserved.
- *
- * Portions Copyright (c) 1999-2002.  The Regents of the University of
- * California.  
- * Portions Copyright (c) 1995.  Michael Holst.
- *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for educational, research, and not-for-profit purposes,
- * without fee and without a signed licensing agreement, is hereby granted,
- * provided that the above copyright notice, this paragraph and the
- * following two paragraphs appear in all copies, modifications, and
- * distributions.
- *
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
- * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
- * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
- * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
- * </blockquote>
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ * <br><br>
+ * Nathan A. Baker (baker@biochem.wustl.edu) <br>
+ * Dept. of Biochemistry and Molecular Biophysics <br>
+ * Center for Computational Biology <br>
+ * Washington University in St. Louis <br>
+ * <br><br>
+ * Additional contributing authors listed in the code documentation.
+ * <br><br>
+ * Copyright (c) 2003.  Washington University in St. Louis.<br>
+ * All Rights Reserved.<br>
+ * Portions Copyright (c) 1999-2003.  The Regents of the University of
+ * California.  <br>
+ * Portions Copyright (c) 1995.  Michael Holst.<br>
+ * <p>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the <a href="http://www.gnu.org/licenses/gpl.txt">GNU
+ * General Public License</a> as published by the Free Software Foundation;
+ * either version 2 of the License, or (at your option) any later version.
+ * <p>
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  * 
  *  <hr width="100%">
  *  @section toc   Table of Contents
@@ -53,6 +56,7 @@
  *    <li> @ref elec
  *    <li> @ref print
  *    </ul>
+ *  <li> @ref lists
  *  <li> @ref bugs
  *  <li> @ref license
  *  <li> @ref programming
@@ -70,6 +74,24 @@
  * 
  *  <hr width="100%">
  *  @section intro Introduction
+ *
+ * APBS is a software package for the numerical solution of the
+ * Poisson-Boltzmann equation (PBE), one of the most popular continuum models
+ * for describing electrostatic interactions between molecular solutes in
+ * salty, aqueous media. Continuum electrostatics plays an important role in
+ * several areas of biomolecular simulation, including:
+ * <ul>
+ * <li> simulation of diffusional processes to determine ligand-protein and
+ * <li> protein-protein binding kinetics,
+ * <li> implicit solvent molecular dynamics of biomolecules ,
+ * <li> solvation and binding energy calculations to determine 
+ *      ligand-protein and protein-protein equilibrium binding constants and 
+ *      aid in rational drug design,
+ * <li> and biomolecular titration studies.
+ * </ul>
+ * APBS was designed to efficiently evaluate electrostatic properties for such
+ * simulations for a wide range of length scales to enable the investigation of
+ * molecules with tens to millions of atoms.
  * 
  *  <p> APBS was primarily written by <a
  *  href="http://www.biochem.wustl.edu/~baker">Nathan
@@ -94,6 +116,12 @@
  *   paper)</a>
  *  </blockquote>
  * 
+ * <p> 
+ * For more information on Poisson-Boltzmann methods and theory, please visit
+ * the excellent <a
+ * href="http://www.biophysics.org/btol/compute.html#3C">Introduction to
+ * Continnuum Electrostatics</a> chapter (by Mike Gilson) of the <a
+ * href="http://www.biophysics.org/btol/">Biophysics Textbook On-line</a>.
  * <p>
  * This version of the APBS code contains sequential and parallel fast
  * multigrid Poisson-Boltzmann solver.  Subsequent releases will include
@@ -169,7 +197,7 @@
  * <pre>
  * # cd ${TOP}
  * # gzip -dc maloc.tar.gz | tar xvf -
- * # gzip -dc apbs-0.2.5.tar.gz | tar xvf -
+ * # gzip -dc apbs-0.2.6.tar.gz | tar xvf -
  * </pre>
  * <li> Compile and install the MALOC libraries.  You should read the MALOC
  * installation guide before doing this, but if you just want a simple
@@ -475,10 +503,10 @@
  * 
  * @subsection example-code Example code
  * <p>
- * There is a more concise source-code-only driver for APBS in
- * <code>test/mg</code> that should provide a starting point for those who wish
- * to integrate APBS into their own applications.  Such users should also
- * become familiar with the APBS @ref programming.
+ * The main driver code <code>bin/main.c</code> and <code>bin/routines.c</code>
+ * should provide a starting point for those who wish to integrate APBS into
+ * their own applications.  Such users should also become familiar with the
+ * APBS @ref programming.
  * 
  * <hr width="100%">
  * @section usage Using the APBS executable
@@ -1120,6 +1148,24 @@
  * <b>NOTE:</b> It is important to realize that, in the case of automatic
  * focusing (mg-auto), PRINT works using ELEC statement numbers, not the
  * calculation numbers which appear while APBS is running.
+ * 
+ * <hr width="100%">
+ * @section lists APBS mailing lists
+ * <p> There are two mailing lists available for the APBS software.  
+ * <ul>
+ * <li> Announcements.  Users can stay informed about APBS-related news
+ * (updates, bugs, etc.) on this low-traffic list.<br>
+ * <a href="http://cholla.wustl.edu/mailman/listinfo/apbs-announce">List
+ * information</a><br>
+ * <a href="http://cholla.wustl.edu/pipermail/apbs-announce/">List
+ * archives</a>
+ * <li> User discussion.  Users can discuss various aspects of APBS and get
+ * help with problems on this list.<br>
+ * <a href="http://cholla.wustl.edu/mailman/listinfo/apbs-users">List
+ * information</a><br>
+ * <a href="http://cholla.wustl.edu/pipermail/apbs-users/">List
+ * archives</a>
+ * 
  * 
  * <hr width="100%">
  * @section bugs Bugs and reporting problems

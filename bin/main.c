@@ -28,28 +28,25 @@
  *
  * Copyright (c) 2003.  Washington University in St. Louis.
  * All Rights Reserved.
- *
  * Portions Copyright (c) 1999-2003.  The Regents of the University of
  * California.  
  * Portions Copyright (c) 1995.  Michael Holst.
  *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for educational, research, and not-for-profit purposes,
- * without fee and without a signed licensing agreement, is hereby granted,
- * provided that the above copyright notice, this paragraph and the
- * following two paragraphs appear in all copies, modifications, and
- * distributions.
+ * This file is part of APBS.
  *
- * IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
- * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
- * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE
- * AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * APBS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- * THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY, PROVIDED
- * HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * APBS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with APBS; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * @endverbatim
  */
@@ -103,36 +100,35 @@ int main(int argc, char **argv) {
     char header[] = 
 {"\n\n\
     ----------------------------------------------------------------------\n\
-    Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.2.5 (November 21, 2003)\n\
+    APBS -- Adaptive Poisson-Boltzmann Solver\n\
+    Version 0.2.6 (January 17, 2003)\n\
     \n\
-    Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
-    Dept. of Biochemistry and Molecular Biophysics\n\
+    Nathan A. Baker (baker@biochem.wustl.edu)\n\
+    Dept. Biochemistry and Molecular Biophysics\n\
     Center for Computational Biology\n\
-    Washington University in St. Louis\n\n\
-    Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 2003.  Washington University in St. Louis.\n\
-    All Rights Reserved.\n\n\
-    Portions Copyright (c) 1999-2003.  The Regents of the University of \n\
+    Washington University in St. Louis\n\
+    \n\
+    Additional contributing authors listed in the code documentation.\n\
+    \n\
+    Copyright (c) 2002-2003.  Washington University in St. Louis.\n\
+    All Rights Reserved.\n\
+    Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
     California.\n\
-    Portions Copyright (c) 1995.  Michael Holst.\n\n\
-    Permission to use, copy, modify, and distribute this software and its\n\
-    documentation for educational, research, and not-for-profit purposes,\n\
-    without fee and without a signed licensing agreement, is hereby granted,\n\
-    provided that the above copyright notice, this paragraph and the\n\
-    following two paragraphs appear in all copies, modifications, and\n\
-    distributions.\n\n\
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,\n\
-    INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST\n\
-    PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,\n\
-    EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH\n\
-    DAMAGE.\n\n\
-    THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT\n\
-    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\n\
-    PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF\n\
-    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\
-    OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
-    MODIFICATIONS.\n\
+    Portions Copyright (c) 1995.  Michael Holst.\n\
+    \n\
+    This program is free software; you can redistribute it and/or modify\n\
+    it under the terms of the GNU General Public License as published by\n\
+    the Free Software Foundation; either version 2 of the License, or\n\
+    (at your option) any later version.\n\
+    \n\
+    This program is distributed in the hope that it will be useful,\n\
+    but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+    GNU General Public License for more details.\n\
+    \n\
+    You should have received a copy of the GNU General Public License\n\
+    along with this program; if not, write to the Free Software\n\
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA\n\
     ----------------------------------------------------------------------\n\
     \n\n"};
     char *usage = 

@@ -11,36 +11,33 @@ c* APBS -- Adaptive Poisson-Boltzmann Solver
 c*
 c* Nathan A. Baker (baker@biochem.wustl.edu)
 c* Dept. of Biochemistry and Molecular Biophysics
+c* Center for Computational Biology
 c* Washington University in St. Louis
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 2002-2003.  Washington University in St. Louis.
+c* Copyright (c) 2003.  Washington University in St. Louis.
 c* All Rights Reserved.
-c*
-c* Portions Copyright (c) 1999-2002.  The Regents of the University of
-c* California.  
+c* Portions Copyright (c) 1999-2003.  The Regents of the University 
+c* of California.  
 c* Portions Copyright (c) 1995.  Michael Holst.
 c*
-c* Permission to use, copy, modify, and distribute this software and 
-c* its documentation for educational, research, and not-for-profit 
-c* purposes, without fee and without a signed licensing agreement, is 
-c* hereby granted, provided that the above copyright notice, this 
-c* paragraph and the following two paragraphs appear in all copies, 
-c* modifications, and distributions.
+c* This file is part of APBS.
 c*
-c* IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT, 
-c* INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING 
-c* LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS 
-c* DOCUMENTATION, EVEN IF THE * AUTHORS HAVE BEEN ADVISED OF THE 
-c* POSSIBILITY OF SUCH DAMAGE.
+c* APBS is free software; you can redistribute it and/or modify
+c* it under the terms of the GNU General Public License as published
+c* by c* the Free Software Foundation; either version 2 of the 
+c* License, or (at your option) any later version.
 c*
-c* THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT 
-c* NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND 
-c* FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING 
-c* DOCUMENTATION, IF ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  
-c* THE AUTHORS HAVE NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, 
-c* UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+c* APBS is distributed in the hope that it will be useful,
+c* but WITHOUT ANY WARRANTY; without even the implied warranty of
+c* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+c* GNU General Public License for more details.
+c*
+c* You should have received a copy of the GNU General Public License
+c* along with APBS; if not, write to the Free Software
+c* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
+c* 02111-1307  USA
 c*
 c* @endverbatim
 c**************************************************************************

@@ -1,36 +1,34 @@
 dnl ##########################################################################
 dnl APBS -- Adaptive Poisson-Boltzmann Solver
 dnl 
-dnl   Nathan A. Baker (baker@biochem.wustl.edu)
-dnl   Dept. of Biochemistry and Molecular Biophysics
-dnl   Washington University in St. Louis
+dnl Nathan A. Baker (baker@biochem.wustl.edu)
+dnl Dept. of Biochemistry and Molecular Biophysics
+dnl Center for Computational Biology
+dnl Washington University in St. Louis
 dnl 
-dnl   Additional contributing authors listed in the code documentation.
+dnl Additional contributing authors listed in the code documentation.
 dnl 
-dnl   Copyright (c) 2003.  Washington University in St. Louis
-dnl   All Rights Reserved.
-dnl
-dnl   Portions Copyright (c) 1999-2003.  The Regents of the University of 
-dnl   California.
-dnl   Portions Copyright (c) 1995.  Michael Holst.
-dnl  
-dnl   Permission to use, copy, modify, and distribute this software and its
-dnl   documentation for educational, research, and not-for-profit purposes,
-dnl   without fee and without a signed licensing agreement, is hereby granted,
-dnl   provided that the above copyright notice, this paragraph and the
-dnl   following two paragraphs appear in all copies, modifications, and
-dnl   distributions.
-dnl  
-dnl   IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,
-dnl   INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST
-dnl   PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
-dnl   EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-dnl  
-dnl   THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT
-dnl   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-dnl   PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF ANY,
-dnl   PROVIDED HEREUNDER IS PROVIDED "AS IS".  THE AUTHORS HAVE NO OBLIGATION
-dnl   TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+dnl Copyright (c) 2003.  Washington University in St. Louis.
+dnl All Rights Reserved.
+dnl Portions Copyright (c) 1999-2003.  The Regents of the University of
+dnl California.  
+dnl Portions Copyright (c) 1995.  Michael Holst.
+dnl 
+dnl This file is part of APBS.
+dnl 
+dnl APBS is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl 
+dnl APBS is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl 
+dnl You should have received a copy of the GNU General Public License
+dnl along with APBS; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 dnl ##########################################################################
 
 dnl ##########################################################################
@@ -44,7 +42,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [0.2.5], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [0.2.6], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -82,7 +80,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 0.2.5)
+AM_INIT_AUTOMAKE(apbs, 0.2.6)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";
