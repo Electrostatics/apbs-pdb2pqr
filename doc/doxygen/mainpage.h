@@ -241,12 +241,18 @@
  * <li>Intel ix86 processor family (Windows)<br>
  * Currently, APBS compiles runs under the <a
  * href="http://www.cygwin.com">Cygwin Windows UNIX environment</a>, which is
- * available for most flavors of Windows.
+ * available for most flavors of Windows.  You'll need to install the entire
+ * Cygwin development "tree" (in the installer GUI) as well as the readline
+ * source code in order to get MALOC working.  Also, it is recommended that you
+ * upgrade to the latest version of gcc/g77/g++.
  * <li>Intel ix86 processor family (Linux)<br>
- * Ideally, you should use the <a
+ * First, you should go get the BLAS libraries provided by the <a
+ * href="http://www.intel.com/software/products/mkl/mkl52">Intel Math Kernel
+ * Library</a> (look for the free evaluation version).  Next, you should
+ * definitely use the <a
  * href="http://www.intel.com/software/products/compilers/">Intel compilers</a>
- * for Linux (free!).  If you have access to these compilers, set the following
- * environmental variables
+ * for Linux (also free!).  If you have access to these compilers, set the
+ * following environmental variables
  * <pre>
  *   CC=icc
  *   CXX=icc
@@ -528,7 +534,10 @@
  * </ul>
  * The x-shifted dielectric map is read from <i>path-x</i>, the y-shifted
  * map is read from <i>path-y</i>, and the z-shifted map is read from
- * <i>path-z</i>.
+ * <i>path-z</i>.  <b>Note:  if you choose this option and a non-zero ionic
+ * strength (see <a href="#ion"><code>ion</code></a> statement), then you
+ * <i>must</i> also include a <a href="#read-kappa"><code>kappa</code></a>
+ * READ statement.</b>
  * <dt> <a name="read-kappa"><code>kappa</code></a> <i>format</i> <i>path</i>
  * <dd> Read in the \f$\overline{\kappa}^2(x)\f$ map from the file <i>path</i>.
  * The values in this file have units of \f$\AA^{-2}\f$.  Acceptable
@@ -536,6 +545,8 @@
  * <ul>
  * <li> <code>dx</code> for OpenDX format
  * </ul>
+ * <b>Note:  if you choose this option, then you <i>must</i> also include a <a
+ * href="#read-diel"><code>diel</code></a> READ statement.</b>
  * <dt> <code>charge</code> <i>format</i> <i>path</i>
  * <dd> Read in the molecular charge distribution from the file <i>path</i>.
  * The values in this file have units of <code>e_c</code>, the electron charge
