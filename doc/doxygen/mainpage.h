@@ -27,7 +27,8 @@
  *    </ul>
  *  <li> @ref lists
  *  <li> @ref bugs
- *  <li> @ref license
+ *  <li> @ref reading
+ *  <li> @ref authors
  *  <li> @ref programming
  *    <ul> 
  *    <li> @ref style
@@ -98,9 +99,10 @@
  *  href="http://www.biochem.wustl.edu/~baker">Nathan
  * Baker</a> during his graduate work with <a
  * href="http://mccammon.ucsd.edu/">J.  Andrew McCammon</a> and <a
- * href="http://www.scicomp.ucsd.edu/~mholst/">Michael Holst</a>.  APBS relies
- * several libraries written by Mike Holst and members of the Holst group.
- * These include <a
+ * href="http://www.scicomp.ucsd.edu/~mholst/">Michael Holst</a>.  A complete
+ * list of authors is available <a href="#authors">here</a>.  APBS
+ * relies several libraries written by Mike Holst and members of the Holst
+ * group.  These include <a
  * href="http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html">PMG</a>
  * (multigrid solver for Cartesian mesh discretization), <a
  * href="http://www.fetk.org">FEtk</a> (provides finite element framework,
@@ -126,7 +128,9 @@
  * in detail <a href="#test">in this document</a>.  I've also prepared a brief
  * but more generic set of notes on PB energy calculations with APBS (avilable
  * in <a href="pb_data.pdf">PDF</a> or <a
- * href="pb_data.ps">Postscript</a>).  
+ * href="pb_data.ps">Postscript</a>).  Finally, a number of the papers
+ * describing APBS are listed in the <a href="#reading">Further Reading</a>
+ * section of this document.
  * <p>
  * This version of the APBS code contains sequential and parallel fast
  * multigrid Poisson-Boltzmann solver.  Subsequent releases will include
@@ -306,16 +310,23 @@
  *  CFLAGS='-O2 -tpp6'
  *  FFLAGS='-O2 -tpp6'
  * </pre>
- * If you insist on using the GNU compilers, you will end up with slower code
- * (by up to a factor of 3!).  However, you will likely want to use the
- * following settings to make it as fast as possible:
+ * <b>However, please note that Intel compilers are currently not supported
+ * under RedHat 9 and do not seem to work with this OS (without substantial
+ * effort).  Therefore, you will need use GNU compilers for these systems.</b>
+ * <p>
+ * If you use the GNU compilers, you will end up with slower code.
+ * However, you will likely want to use the following settings to make it as
+ * fast as possible:
  * <pre>
  *   CC=gcc
  *   CXX=g++
  *   F77=g77
- *   CFLAGS='-O3 -ffast-math -m486 -funroll-loops'
- *   FFLAGS='-O3 -ffast-math -m486 -funroll-loops'
+ *   CFLAGS='-O2 -ffast-math -m486 -funroll-loops'
+ *   FFLAGS='-O2 -ffast-math -m486 -funroll-loops'
  * </pre>
+ * <b>Please note that there have been reports that using the -O3 and/or the
+ * -march=pentium4 flags can results in versions of APBS which give incorrect
+ * numerical results.</b>
  * <li> NPACI IBM RS/6000 Power3 Blue Horizon supercomputer
  * <p>
  * The login nodes (tfXXXi or tflogin) of Blue Horizon recently stopped
@@ -1552,32 +1563,46 @@
  * <li> BioInform
  * </ul>
  * 
+ * <hr>
+ * @section authors Author List
+ * <p>
+ * The current author list is:
+ * <ul>
+ * <li> <a href="http://agave.wustl.edu/">Nathan Baker</a>:  primary author
+ * <li> <a href="http://www.scicomp.ucsd.edu/~mholst">Mike Holst</a>:  advisor,
+ *      author of several routines scattered about APBS, and author of PMG (the
+ *      multigrid library used by this code), author of
+ *      MALOC (hardware abstraction library used by this code), author of FEtk
+ *      (finite element library incorporated in developmental versions of this
+ *      code) 
+ * <li> <a href="http://mccammon.ucsd.edu">J. Andrew McCammon</a>:  advisor, 
+ *      financial and equipment support
+ * <li> Robert Konecny:  contributor (parameters, CHARMM FORTRAN interface)
+ * <li> Todd Dolinsky:  contributor (Python wrappers and tools)
+ * <li> <a href="http://biomed.wustl.edu/faculty/sept">Dave Sept</a>:
+ *      contributor (scripts and tools, VMD compatibility, general suggestions
+ *      about functionality) 
+ * <li> Chiansan Ma:  contributor (scripts)
+ * <li> <a href="http://www.biochem.uiowa.edu/faculty/elcock/">Adrian
+ *      Elcock</a>: contributor (parameter files) 
+ * <li> Tongye Shen:  contributor (finite element mesh generation)
+ * <li> Larry Canino:  contributor (solvent accessibility functions)
+ * <li> Jung-Hsin Lin:  contributor (OpenDX to MOLMOL conversion)
+ * <li> <a href="http://www.cs.uiuc.edu/people/faculty/bond.html">Steve
+*       Bond</a>:  contributor (FEtk finite element library compatibility and
+*       Vopot functions)
+ * <li> <a href="http://www.ks.uiuc.edu/~justin/">Justin Gullingsgrud</a>:
+ *      optimization of the boundary condition calculation functions called by
+ *      Vpmg_setup
+ * </ul>
+ *
+ * <hr>
  * @section programming Programmer's Guide
  * <p>
  * This documentation provides information about the programming interface
  * provided by the APBS software and a general guide to linking to the APBS
  * libraries.  Information about installation, configuration, and general usage
  * can be found in the <a href="user.html">User's Guide</a>.
- * 
- * <p>
- * APBS was primarily written by <a href="http://www.biochem.wustl.edu/~baker/">Nathan
- * Baker</a> during his graduate work with <a
- * href="http://mccammon.ucsd.edu/">J.  Andrew McCammon</a> and <a
- * href="http://www.scicomp.ucsd.edu/~mholst/">Michael Holst</a>.  APBS relies
- * several libraries written by Mike Holst and members of the Holst group.
- * These include <a
- * href="http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html">PMG</a>
- * (multigrid solver for Cartesian mesh discretization), <a
- * href="http://www.fetk.org">FEtk</a> (provides finite element framework,
- * error estimators, and solvers), and <a
- * href="http://scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC</a>
- * (hardware abstraction library for code portability).
- * 
- * <p>
- * <i>Please acknowledge your use of APBS</i> by citing N. A. Baker, D. Sept,
- * S. Joseph, M. J. Holst, J. A. McCammon.  Electrostatics of nanosystems:
- * application to microtubules and the ribosome.  <i>Proc. Natl.  Acad. Sci.
- * USA</i> <b>98</b>, 10037-10041 2001.
  * 
  *  @subsection style Programming Style
  * 
