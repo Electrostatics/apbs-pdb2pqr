@@ -106,5 +106,6 @@ VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts, double radius);
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center);
+VEXTERNC int Vacc_memChk(Vacc *thee);
 
 #endif    /* ifndef _VACC_H_ */

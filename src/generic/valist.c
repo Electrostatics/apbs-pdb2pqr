@@ -287,3 +287,23 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_memChk
+//
+// Purpose:  Get total memory (in bytes) allocated for this object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Valist_memChk(Valist *thee) {
+
+  int memUse = 0;
+
+  VASSERT(thee != NULL);
+
+  memUse = memUse + sizeof(Valist);
+  memUse = memUse + (thee->number)*sizeof(Vatom);
+
+  return memUse;
+
+}
+

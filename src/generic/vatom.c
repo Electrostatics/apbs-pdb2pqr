@@ -193,3 +193,12 @@ VPUBLIC double Vatom_getCharge(Vatom *thee) {
    return thee->charge; 
 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_memChk
+//
+// Purpose:  Return the number of bytes used by this object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vatom_memChk(Vatom *thee) { return sizeof(Vatom); }
