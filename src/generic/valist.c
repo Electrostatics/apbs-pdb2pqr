@@ -398,7 +398,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
                         (sscanf(tok, "%s%d%s", stmp, &itmp, stmp) == 1) &&
                         (sscanf(tok, "%d%s", &itmp, stmp) == 1) &&
                         (sscanf(tok, "%s%d", &itmp) == 1)) {
-                    Vnm_print(1, "DEBUG:  parsed %s as integer.\n", tok);
+                    /* Vnm_print(1, "DEBUG:  parsed %s as integer.\n", tok); */
                     gotit = 1;
                     break;
                 }
@@ -452,7 +452,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
                         radius);
                 return 0;
             }
-            Vnm_print(1, "DEBUG:  x = %g, y = %g, z = %g, charge = %g, radius = %g\n", pos[0], pos[1], pos[2], charge, radius);
+            /* Vnm_print(1, "DEBUG:  x = %g, y = %g, z = %g, charge = %g, radius = %g\n", pos[0], pos[1], pos[2], charge, radius); */
 
             /* Allocate more space for the new atom (if necessary) */
             if (thee->number == (nalloc-1)) {
