@@ -63,22 +63,6 @@
                            * mesh into */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmg: External FORTRAN routines
-/////////////////////////////////////////////////////////////////////////// */
-#define MGSZ mgsz
-#define PACKMG packmg
-#define CGMGDRIV cgmgdriv
-#define NEWDRIV newdriv
-#define MGDRIV mgdriv
-#define NCGHSDRIV ncghsdriv
-#define NSORDRIV nsordriv
-#define NGSRBDRIV ngsrbdriv
-#define NWJACDRIV nwjacdriv
-#define NRICHDRIV nrichdriv
-#define MYRAND myrand
-#define TSECND tsecnd
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Definition
 /////////////////////////////////////////////////////////////////////////// */
 

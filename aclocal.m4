@@ -1,7 +1,7 @@
-dnl aclocal.m4 generated automatically by aclocal 1.3
+dnl aclocal.m4 generated automatically by aclocal 1.4
 
-dnl Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
-dnl This Makefile.in is free software; the Free Software Foundation
+dnl Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+dnl This file is free software; the Free Software Foundation
 dnl gives unlimited permission to copy and/or distribute it,
 dnl with or without modifications, as long as this notice is preserved.
 
@@ -10,7 +10,104 @@ dnl but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 dnl even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 dnl PARTICULAR PURPOSE.
 
-dnl acinclude.m4 generated manually by michael
+dnl acinclude.m4 generated manually by Nathan Baker
+
+dnl Test for the name mangling scheme used by the Fortran 77 compiler.
+dnl Two variables are set by this macro:
+dnl
+dnl        f77_case: Set to either "upper" or "lower", depending on the
+dnl                  case of the name mangling.
+dnl
+dnl  f77_underscore: Set to either "no", "single" or "double", depending
+dnl                  on how underscores (i.e. "_") are appended to
+dnl                  identifiers, if at all.
+dnl
+dnl                  If no underscores are appended, then the value is
+dnl                  "no".
+dnl
+dnl                  If a single underscore is appended, even with
+dnl                  identifiers which already contain an underscore
+dnl                  somewhere in their name, then the value is
+dnl                  "single".
+dnl
+dnl                  If a single underscore is appended *and* two
+dnl                  underscores are appended to identifiers which
+dnl                  already contain an underscore somewhere in their
+dnl                  name, then the value is "double".
+dnl
+dnl   This was adapted by Nathan Baker from an e-mail by Steven G. Johnson on
+dnl   the Autoconf mailing list.  
+dnl
+AC_DEFUN(AC_F77_FCN_MANGLE,
+[
+AC_REQUIRE([AC_PROG_CC])
+AC_REQUIRE([AC_PROG_F77])
+AC_MSG_CHECKING(how f77 mangles function names)
+cat > mangle-func.f <<EOF
+      subroutine foobar()
+      return
+      end
+      subroutine foo_bar()
+      return
+      end
+EOF
+ac_try='$F77 -c $FFLAGS mangle-func.f 1>&AC_FD_CC'
+if AC_TRY_EVAL(ac_try); then
+  ac_try=""
+else
+  echo "configure: failed program was:" >&AC_FD_CC
+  cat mangle-func.f >&AC_FD_CC
+  rm -f mangle-func*
+  AC_MSG_ERROR(failed to compile fortran test program)
+fi
+
+ac_f77_mangle_type=unknown
+AC_LANG_SAVE
+AC_LANG_C
+ac_save_LIBS="$LIBS"
+LIBS="mangle-func.o $LIBS"
+AC_TRY_LINK(,foobar();,
+     ac_f77_mangle_type=lowercase,
+     AC_TRY_LINK(,foobar_();,
+          ac_f77_mangle_type=lowercase-underscore,
+          AC_TRY_LINK(,FOOBAR();,
+               ac_f77_mangle_type=uppercase,
+               AC_TRY_LINK(,FOOBAR_();,
+                    ac_f77_mangle_type=uppercase-underscore))))
+LIBS="$ac_save_LIBS"
+AC_LANG_RESTORE
+AC_MSG_RESULT($ac_f77_mangle_type)
+
+case $ac_f77_mangle_type in
+        unknown)
+                AC_MSG_ERROR(unknown fortran name-mangling scheme)
+                ;;
+        lowercase)
+                AC_DEFINE(VF77_NOUNDERSCORE)
+                AC_DEFINE(VF77_LOWERCASE)
+                mangle_try=foo_bar_
+                ;;
+        lowercase-underscore)
+                AC_DEFINE(VF77_ONEUNDERSCORE)
+                AC_DEFINE(VF77_LOWERCASE)
+                mangle_try=foo_bar__
+                ;;
+        uppercase)
+                AC_DEFINE(VF77_NOUNDERSCORE)
+                AC_DEFINE(VF77_UPPERCASE)
+                mangle_try=FOO_BAR_
+                ;;
+        uppercase-underscore)
+                AC_DEFINE(VF77_ONEUNDERSCORE)
+                AC_DEFINE(VF77_UPPERCASE)
+                mangle_try=FOO_BAR__
+                ;;
+esac
+
+])
+
+
+
 
 
 # Do all the work for Automake.  This macro actually does too much --
@@ -23,7 +120,7 @@ dnl Usage:
 dnl AM_INIT_AUTOMAKE(package,version, [no-define])
 
 AC_DEFUN(AM_INIT_AUTOMAKE,
-[AC_REQUIRE([AM_PROG_INSTALL])
+[AC_REQUIRE([AC_PROG_INSTALL])
 PACKAGE=[$1]
 AC_SUBST(PACKAGE)
 VERSION=[$2]
@@ -33,8 +130,8 @@ if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   AC_MSG_ERROR([source directory already configured; run "make distclean" there first])
 fi
 ifelse([$3],,
-AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE")
-AC_DEFINE_UNQUOTED(VERSION, "$VERSION"))
+AC_DEFINE_UNQUOTED(PACKAGE, "$PACKAGE", [Name of package])
+AC_DEFINE_UNQUOTED(VERSION, "$VERSION", [Version number of package]))
 AC_REQUIRE([AM_SANITY_CHECK])
 AC_REQUIRE([AC_ARG_PROGRAM])
 dnl FIXME This is truly gross.
@@ -45,15 +142,6 @@ AM_MISSING_PROG(AUTOMAKE, automake, $missing_dir)
 AM_MISSING_PROG(AUTOHEADER, autoheader, $missing_dir)
 AM_MISSING_PROG(MAKEINFO, makeinfo, $missing_dir)
 AC_REQUIRE([AC_PROG_MAKE_SET])])
-
-
-# serial 1
-
-AC_DEFUN(AM_PROG_INSTALL,
-[AC_REQUIRE([AC_PROG_INSTALL])
-test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
-AC_SUBST(INSTALL_SCRIPT)dnl
-])
 
 #
 # Check to make sure that the build environment is sane.

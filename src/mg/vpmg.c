@@ -42,6 +42,7 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "vpmg-private.h"
 #include "apbs/vpmg.h"
 
 #define VPMGSMALL 1e-14
@@ -57,15 +58,6 @@ VEMBED(rcsid="$Id$")
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmg: Private methods
-/////////////////////////////////////////////////////////////////////////// */
-#define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
-#define IJKx(j,k,i) (((i)*(ny)*(nz))+((k)*(ny))+(j))
-#define IJKy(i,k,j) (((j)*(nx)*(nz))+((k)*(nx))+(i))
-#define IJKz(i,j,k) (((k)*(nx)*(ny))+((j)*(nx))+(i))
-
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  focusFillBound
@@ -541,7 +533,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
+    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
@@ -584,7 +576,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
-    PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+    F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
       &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
@@ -658,7 +650,7 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
+    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
@@ -716,7 +708,7 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       sizeof(double));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
-    PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+    F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
       &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
@@ -753,56 +745,56 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
     switch(thee->pmgp->meth) {
         /* CGMG (linear) */
         case 0:
-            CGMGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+            F77CGMGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* Newton (nonlinear) */
         case 1:
-            NEWDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
+            F77NEWDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
               thee->fcf, thee->tcf);
             break;
         /* MG (linear/nonlinear) */
         case 2:
-	    MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* CGHS (linear/nonlinear) */
         case 3: 
-	    NCGHSDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77NCGHSDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* SOR (linear/nonlinear) */
         case 4:
-	    NSORDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77NSORDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* GSRB (linear/nonlinear) */
         case 5:
-	    NGSRBDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77NGSRBDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf); 
             break;
         /* WJAC (linear/nonlinear) */
         case 6:
-	    NWJACDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77NWJACDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* RICH (linear/nonlinear) */
         case 7:
-	    NRICHDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    F77NRICHDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
