@@ -85,11 +85,11 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
   %ifnarch i386 i486 i586 i686
     echo ASSUMING i786 ARCH!!!
     export CC="icc" 
-    export CFLAGS="-O3 -tpp7 -static-libcxa" 
+    export CFLAGS="-O2 -tpp7 -static-libcxa" 
     export CXX="icc" 
-    export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
-    export F77="ifc" 
-    export FFLAGS="-O3 -tpp7 -static-libcxa" 
+    export CXXFLAGS="-O2 -tpp7 -static-libcxa" 
+    export F77="ifort" 
+    export FFLAGS="-O2 -tpp7 -static-libcxa" 
     export LDFLAGS="-static-libcxa"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
     make
@@ -97,22 +97,22 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
     %ifarch i686
       echo CONFIGURING FOR i686 ARCH
       export CC="icc" 
-      export CFLAGS="-O3 -tpp6 -static-libcxa" 
+      export CFLAGS="-O2 -tpp6 -static-libcxa" 
       export CXX="icc" 
-      export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
-      export F77="ifc" 
-      export FFLAGS="-O3 -tpp6 -static-libcxa" 
+      export CXXFLAGS="-O2 -tpp6 -static-libcxa" 
+      export F77="ifort" 
+      export FFLAGS="-O2 -tpp6 -static-libcxa" 
       export LDFLAGS="-static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
       make
     %else
       echo CONFIGURING FOR GENERIC i386 ARCH
       export CC="icc" 
-      export CFLAGS="-O3 -static-libcxa" 
+      export CFLAGS="-O2 -static-libcxa" 
       export CXX="icc" 
-      export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
-      export F77="ifc" 
-      export FFLAGS="-O3 -static-libcxa" 
+      export CXXFLAGS="-O2 -static-libcxa" 
+      export F77="ifort" 
+      export FFLAGS="-O2 -static-libcxa" 
       export LDFLAGS="-static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
       make
