@@ -188,16 +188,79 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
 //           cflag=1 ==> Mean Curvature (Laplace)
 //           cflag=2 ==> Gauss Curvature
 //           cflag=3 ==> True Maximal Curvature
+//   If we are off the grid, we can still evaluate the Laplacian; assuming, we
+//   are away from the molecular surface, it is simply equal to the DH factor.
 //
 // Authors:  Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag, 
   double *value) {
 
-    if (!Vgrid_curvature(thee->grid, pt, cflag, value)) {
+    Vatom *atom;
+    int i, iatom;
+    double u, T, charge, eps_w, xkappa, dist, size, val, *position, zkappa2;
+    Valist *alist;
+
+    VASSERT(thee != VNULL);
+
+    eps_w = Vpbe_getSolventDiel(thee->pbe);
+    xkappa = (1.0e10)*Vpbe_getXkappa(thee->pbe);
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    T = Vpbe_getTemperature(thee->pbe);
+    alist = Vpbe_getValist(thee->pbe);
+
+    u = 0;
+
+    if (Vgrid_curvature(thee->grid, pt, cflag, value)) return 1;
+    else if (cflag != 1) {
         Vnm_print(2, "Vopot_curvature:  Off mesh!\n");
-        return 0;
-    } 
+        return 1;
+    } else {
+
+        switch (thee->bcfl) {
+
+            case 0:
+                u = 0;
+                break;
+
+            case 1:
+                size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
+                position = Vpbe_getSoluteCenter(thee->pbe);
+                charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
+                dist = 0;
+                for (i=0; i<3; i++)
+                  dist += VSQR(position[i] - pt[i]);
+                dist = (1.0e-10)*VSQRT(dist);
+                if (xkappa != 0.0) 
+                  u = zkappa2*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                break;
+
+            case 2:
+                u = 0;
+                for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                    atom = Valist_getAtom(alist, iatom);
+                    position = Vatom_getPosition(atom);
+                    charge = Vunit_ec*Vatom_getCharge(atom);
+                    size = (1e-10)*Vatom_getRadius(atom);
+                    dist = 0;
+                    for (i=0; i<3; i++)
+                      dist += VSQR(position[i] - pt[i]);
+                    dist = (1.0e-10)*VSQRT(dist);
+                    if (xkappa != 0.0)
+                      val = zkappa2*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                    u = u + val;
+                }
+                break;
+
+            default:
+                Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
+                  thee->bcfl);
+                return 0;        
+                break;
+        }
+
+        *value = u;
+    }
 
     return 1;
 
@@ -210,9 +273,83 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
 
+    Vatom *atom;
+    int i, iatom;
+    double u, T, charge, eps_w, xkappa, size, val, *position;
+    double dx, dy, dz, dist;
+    Valist *alist;
+
+    VASSERT(thee != VNULL);
+
+    eps_w = Vpbe_getSolventDiel(thee->pbe);
+    xkappa = (1.0e10)*Vpbe_getXkappa(thee->pbe);
+    T = Vpbe_getTemperature(thee->pbe);
+    alist = Vpbe_getValist(thee->pbe);
+
+
     if (!Vgrid_gradient(thee->grid, pt, grad)) {
-        Vnm_print(2, "Vopot_curvature:  Off mesh!\n");
-        return 0;
+
+        switch (thee->bcfl) {
+
+            case 0:
+                grad[0] = 0.0;
+                grad[1] = 0.0;
+                grad[2] = 0.0;
+                break;
+
+            case 1:
+                grad[0] = 0.0;
+                grad[1] = 0.0;
+                grad[2] = 0.0;
+                size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
+                position = Vpbe_getSoluteCenter(thee->pbe);
+                charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
+                dx = position[0] - pt[0];
+                dy = position[1] - pt[1];
+                dz = position[2] - pt[2];
+                dist = VSQR(dx) + VSQR(dy) + VSQR(dz);
+                dist = (1.0e-10)*VSQRT(dist);
+                val = (charge)/(4*VPI*Vunit_eps0*eps_w);
+                if (xkappa != 0.0) 
+                  val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                val = val*Vunit_ec/(Vunit_kb*T);
+                grad[0] = val*dx/dist*(-1.0/dist/dist + xkappa/dist);
+                grad[1] = val*dy/dist*(-1.0/dist/dist + xkappa/dist);
+                grad[2] = val*dz/dist*(-1.0/dist/dist + xkappa/dist);
+                break;
+
+            case 2:
+                grad[0] = 0.0;
+                grad[1] = 0.0;
+                grad[2] = 0.0;
+                for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                    atom = Valist_getAtom(alist, iatom);
+                    position = Vatom_getPosition(atom);
+                    charge = Vunit_ec*Vatom_getCharge(atom);
+                    size = (1e-10)*Vatom_getRadius(atom);
+                    dx = position[0] - pt[0];
+                    dy = position[1] - pt[1];
+                    dz = position[2] - pt[2];
+                    dist = VSQR(dx) + VSQR(dy) + VSQR(dz);
+                    dist = (1.0e-10)*VSQRT(dist);
+                    val = (charge)/(4*VPI*Vunit_eps0*eps_w);
+                    if (xkappa != 0.0)
+                      val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+                    val = val*Vunit_ec/(Vunit_kb*T);
+                    grad[0] += (val*dx/dist*(-1.0/dist/dist + xkappa/dist));
+                    grad[1] += (val*dy/dist*(-1.0/dist/dist + xkappa/dist));
+                    grad[2] += (val*dz/dist*(-1.0/dist/dist + xkappa/dist));
+                }
+                break;
+
+            default:
+                Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
+                  thee->bcfl);
+                return 0;        
+                break;
+        }
+
+        return 1;
     } 
 
     return 1;
