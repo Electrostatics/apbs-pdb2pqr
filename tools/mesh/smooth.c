@@ -62,7 +62,7 @@ int usage(int rc) {
     ----------------------------------------------------------------------\n\
     This driver program convolves grid data with various filters.  It is\n\
     invoked as:\n\
-      dx-math <args>\n\n\
+      smooth <args>\n\n\
     where <args> is a list of the following arguments:\n\
       REQUIRED GENERAL ARGUMENTS:\n\
       --format=<format>  where <format> specifies the data format and is one\n\

@@ -262,7 +262,7 @@ AC_CHECK_HEADER(maloc/maloc.h,
     [maloc_found="";maloc_inc=""])
 if test -n "${maloc_found}"; then
     AC_CHECK_LIB(maloc,maloc_link,
-        [maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc -lvf2c"],
+        [maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc"],
         [maloc_found="";maloc_lib=""],
         [${maloc_lib_path}-lmaloc -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 fi
