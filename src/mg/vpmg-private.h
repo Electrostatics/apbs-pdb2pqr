@@ -45,6 +45,7 @@
 #define _VPMG_PRIVATE_H_
 
 #include "apbscfg.h"
+#include "apbs/vpmg.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
