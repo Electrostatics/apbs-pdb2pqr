@@ -183,15 +183,11 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     } else {
 
         *value = 0;
-        VJMPERR1(0);
+        return 0;
 
     }
 
     return 0;
-
-    VERROR1:
-        Vnm_print(0, "Vgrid_curvature:  Off mesh!\n");
-        return 0; 
 
 }
 
