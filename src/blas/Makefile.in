@@ -214,7 +214,7 @@ all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .y .l .H .h .m .C .cc .c .f .java .o .lo .obj
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  src/blas/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status

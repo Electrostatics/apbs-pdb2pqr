@@ -46,6 +46,8 @@
 #ifndef _APBS_H_
 #define _APBS_H_
 
+#include "apbscfg.h"
+
 #include "maloc/maloc.h"
 #include "apbs/vacc.h"
 #include "apbs/vatom.h"
@@ -59,5 +61,13 @@
 #include "apbs/vcap.h"
 #include "apbs/vopot.h"
 #include "apbs/vgrid.h"
+
+#if defined(HAVE_MC_H)
+#   include "apbs/vfetk.h"
+#endif
+#if defined(HAVE_MCX_H)
+#   include "apbs/vpee.h"
+#endif
+
 
 #endif /* _APBS_H_ */

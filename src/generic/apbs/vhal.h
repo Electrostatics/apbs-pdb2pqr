@@ -278,6 +278,23 @@ typedef enum Vdata_Format Vdata_Format;
  */
 #   define VINLINE_VPMG 
 
+#if defined(VF77_UPPERCASE)
+#   if defined(VF77_NOUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) NAME
+#   endif
+#   if defined(VF77_ONEUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) NAME ## _
+#   endif
+#else
+#   if defined(VF77_NOUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) name
+#   endif
+#   if defined(VF77_ONEUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) name ## _
+#   endif
+#endif
+
+
 
 #endif
 
