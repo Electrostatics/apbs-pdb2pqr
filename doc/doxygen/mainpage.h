@@ -281,24 +281,37 @@
  *   CFLAGS='-O3 -ffast-math -m486 -funroll-loops'
  *   FFLAGS='-O3 -ffast-math -m486 -funroll-loops'
  * </pre>
- * <li> NPACI IBM RS/6000 Power3 Blue Horizon supercomputer<br>
- * In all cases, set the following variables before ./configure:
+ * <li> NPACI IBM RS/6000 Power3 Blue Horizon supercomputer
+ * <p>
+ * The login nodes (tfXXXi or tflogin) of Blue Horizon recently stopped
+ * allowing interactive jobs.  This is bad news for the autoconf-based
+ * configure script, since this script runs several executables to test from
+ * functionality.  Therefore, this code must be compiled on the interactive
+ * nodes (b80login.sdsc.edu).  The following variables must be set before
+ * ./configure: 
  * <pre>
- *     CC=cc 
- *     F77=xlf
+ *     MP_EUILIB=ip
+ *     CC=mpcc 
+ *     F77=mpxlf
  *     CFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
  *                   -L/usr/local/apps/mass -lmass \
- *                   -L/usr/lpp/ppe.poe/lib -L/usr/lpp/ppe.poe/lib/ip -lvtd \
  *                   -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 \
  *                   -qcache=auto"
  *     FFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
  *                   -L/usr/local/apps/mass -lmass 
- *                   -L/usr/lpp/ppe.poe/lib -L/usr/lpp/ppe.poe/lib/ip -lvtd \
  *                   -O3 -qstrict \
  *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
  *     FETK_MPI_INCLUDE=/usr/lpp/ppe.poe/include
  *     FETK_MPI_LIBRARY=/usr/lpp/ppe.poe/lib
  * </pre>
+ * and installation (should) proceed normally.  However, I've personally
+ * experienced all sorts of strangeness on this machine.  Be sure to watch out
+ * for varying OS versions across the login and interactive nodes, undefined
+ * poe variables (usually of the form MP_*), and undefined NLSPATH (which pops
+ * up in a non-deterministic fashion and can often be fixed by simply logging
+ * out, getting some coffee, and logging back in).  Aren't supercomputers
+ * great?
+ * <p>
  * Note that the actual command line declaration should contain no line breaks
  * and continuations; these seem to screw up sed (used by configure) under
  * AIX.  The bmaxdata linker flag controls the amount of heap the program is
