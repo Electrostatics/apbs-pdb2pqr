@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.5  2004/09/24 18:49:19  apbs
- * TJD:  Added initial wrappers for interfacing with PDB2PQR
+ * Revision 1.6  2004/09/27 19:24:52  apbs
+ * TJD:  Created Vio_setup wrapper function to allow APBS to read data files directly from a socket (string)
  *
  ************************************************************************/
 
@@ -1231,6 +1231,19 @@ Valist *make_Valist(Valist **args, int n){
     args[n] = Valist_ctor();    
     return args[n];
 }
+extern int NOsh_parse(NOsh *,Vio *);
+
+Vio * Vio_setup(char *key, const char *iodev, const char *iofmt, const char *iohost, const char *iofile, char * string){
+    Vio *sock = VNULL;
+    char buf[VMAX_BUFSIZE];
+    int bufsize = 0;
+    bufsize = strlen(string);
+    VASSERT( bufsize <= VMAX_BUFSIZE );
+    strncpy(buf, string, VMAX_BUFSIZE);
+    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)));
+    Vio_bufTake(sock, buf, bufsize);
+    return sock;
+}
 extern int loadMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
 extern void killMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
 extern int loadDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
@@ -1968,6 +1981,54 @@ static PyObject *_wrap_make_Valist(PyObject *self, PyObject *args) {
     }
     _result = (Valist *)make_Valist(_arg0,_arg1);
     SWIG_MakePtr(_ptemp, (char *) _result,"_Valist_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_NOsh_parse(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    NOsh * _arg0;
+    Vio * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:NOsh_parse",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of NOsh_parse. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Vio_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of NOsh_parse. Expected _Vio_p.");
+        return NULL;
+        }
+    }
+    _result = (int )NOsh_parse(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vio_setup(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vio * _result;
+    char * _arg0;
+    char * _arg1;
+    char * _arg2;
+    char * _arg3;
+    char * _arg4;
+    char * _arg5;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ssssss:Vio_setup",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5)) 
+        return NULL;
+    _result = (Vio *)Vio_setup(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vio_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3687,6 +3748,8 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "loadDielMaps", _wrap_loadDielMaps, 1 },
 	 { "killMolecules", _wrap_killMolecules, 1 },
 	 { "loadMolecules", _wrap_loadMolecules, 1 },
+	 { "Vio_setup", _wrap_Vio_setup, 1 },
+	 { "NOsh_parse", _wrap_NOsh_parse, 1 },
 	 { "make_Valist", _wrap_make_Valist, 1 },
 	 { "set_entry", _wrap_set_entry, 1 },
 	 { "get_entry", _wrap_get_entry, 1 },
