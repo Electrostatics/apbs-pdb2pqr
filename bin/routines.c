@@ -1773,7 +1773,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 
     /* Build mesh */
     Vnm_tprint(0, "Setting up mesh...\n");
-    Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->domainLength);
+    Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
     /* Uniformly refine the mesh a bit */
     for (j=0; j<2; j++) {
         AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
@@ -1804,8 +1804,8 @@ VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
   Vfetk *fetk[NOSH_MAXCALC]) {
 
     Vnm_tprint(1, "  Domain size:  %g A x %g A x %g A\n", 
-      feparm->domainLength[0], feparm->domainLength[1],
-      feparm->domainLength[2]);
+      feparm->glen[0], feparm->glen[1],
+      feparm->glen[2]);
     switch(feparm->ekey) {
         case FET_SIMP:
             Vnm_tprint(1, "  Per-simplex error tolerance:  %g\n", feparm->etol);

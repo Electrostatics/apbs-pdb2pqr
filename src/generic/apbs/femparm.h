@@ -120,8 +120,8 @@ struct sFEMparm {
                   * 1 = yes) */
     FEMparm_CalcType type;  /**<  Calculation type */
     int settype;  /**< Boolean */
-    double domainLength[3];  /**< Domain side lengths (in &Aring;) */
-    int setdomainLength;  /**< Boolean */
+    double glen[3];  /**< Domain side lengths (in &Aring;) */
+    int setglen;  /**< Boolean */
     double etol;  /**< Error tolerance for refinement; interpretation depends 
                    * on the adaptive refinement method chosen */
     int setetol;  /**< Boolean */
