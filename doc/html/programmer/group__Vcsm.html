@@ -119,13 +119,12 @@ Declaration of the Vcsm class as the Vcsm structure.
 External function for FEtk Gem class to use during mesh refinement.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Gem (FEtk geometry manager) object </td></tr>
-    <tr><td valign=top><em>externalUpdate</em>&nbsp;</td><td>Function pointer for function to call during mesh refinement </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>externalUpdate</em>&nbsp;</td><td>
+The FEtk geometry managery Function pointer for call during mesh refinement </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a10" doxytag="vcsm.h::Vcsm_ctor"></a><p>
@@ -171,14 +170,13 @@ Construct Vcsm object.
 <li>The map is not built until Vcsm_init is called </li>
 </ul>
 </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atoms </td></tr>
-    <tr><td valign=top><em>gm</em>&nbsp;</td><td>FEtk geometry manager (defines mesh) </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to newly allocated Vcsm object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>gm</em>&nbsp;</td><td>
+List of atoms FEtk geometry manager defining the mesh </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a11" doxytag="vcsm.h::Vcsm_ctor2"></a><p>
@@ -230,15 +228,15 @@ FORTRAN stub to construct Vcsm object.
 <li>The map is not built until Vcsm_init is called </li>
 </ul>
 </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to space for Vcsm object </td></tr>
-    <tr><td valign=top><em>alist</em>&nbsp;</td><td>List of atoms </td></tr>
-    <tr><td valign=top><em>gm</em>&nbsp;</td><td>FEtk geometry manager (defines mesh) </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>alist</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+<tr><td valign=top><em>gm</em>&nbsp;</td><td>
+The list of atoms The FEtk geometry manager defining the mesh </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a12" doxytag="vcsm.h::Vcsm_dtor"></a><p>
@@ -270,12 +268,12 @@ FORTRAN stub to construct Vcsm object.
 Destroy Vcsm object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to memory location for Vcsm object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to memory location for Vcsm object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a13" doxytag="vcsm.h::Vcsm_dtor2"></a><p>
@@ -307,12 +305,12 @@ Destroy Vcsm object.
 FORTRAN stub to destroy Vcsm object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to Vcsm object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to Vcsm object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="vcsm.h::Vcsm_getAtom"></a><p>
@@ -359,15 +357,15 @@ FORTRAN stub to destroy Vcsm object.
 Get particular atom associated with a simplex.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Index of atom in Vcsm list for this simplex </td></tr>
-    <tr><td valign=top><em>isimp</em>&nbsp;</td><td>Simplex ID </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Array of atoms associated with a simplex </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+<tr><td valign=top><em>isimp</em>&nbsp;</td><td>
+Index of atom in Vcsm list ofr this simplex Simplex ID </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a5" doxytag="vcsm.h::Vcsm_getAtomIndex"></a><p>
@@ -414,15 +412,15 @@ Get particular atom associated with a simplex.
 Get ID of particular atom in a simplex.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>isimp</em>&nbsp;</td><td>Simplex ID </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Index of atom in Vcsm list for this simplex </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Index of atom in Valist object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+<tr><td valign=top><em>isimp</em>&nbsp;</td><td>
+Index of atom in Vcsm list for this simplex Simplex ID </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a3" doxytag="vcsm.h::Vcsm_getNumberAtoms"></a><p>
@@ -463,14 +461,13 @@ Get ID of particular atom in a simplex.
 Get number of atoms associated with a simplex.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>isimp</em>&nbsp;</td><td>Simplex ID </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Number of atoms associated with a simplex </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>isimp</em>&nbsp;</td><td>
+The Vcsm object Simplex ID </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a6" doxytag="vcsm.h::Vcsm_getNumberSimplices"></a><p>
@@ -511,14 +508,13 @@ Get number of atoms associated with a simplex.
 Get number of simplices associated with an atom.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Valist atom index </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Number of simplices associated with an atom </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+The Vcsm object The Valist atom index </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a7" doxytag="vcsm.h::Vcsm_getSimplex"></a><p>
@@ -565,15 +561,15 @@ Get number of simplices associated with an atom.
 Get particular simplex associated with an atom.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Valist atom index </td></tr>
-    <tr><td valign=top><em>isimp</em>&nbsp;</td><td>Index of simplex in Vcsm list </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to simplex object </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>isimp</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+Index of simplex in Vcsm list Valist atom index </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a8" doxytag="vcsm.h::Vcsm_getSimplexIndex"></a><p>
@@ -620,15 +616,15 @@ Get particular simplex associated with an atom.
 Get index particular simplex associated with an atom.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-    <tr><td valign=top><em>iatom</em>&nbsp;</td><td>Valist atom index </td></tr>
-    <tr><td valign=top><em>isimp</em>&nbsp;</td><td>Index of simplex in Vcsm list </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Gem index of specified simplex </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>isimp</em>&nbsp;</td><td>
+THe Vcsm object </td></tr>
+<tr><td valign=top><em>iatom</em>&nbsp;</td><td>
+Index of simplex in Vcsm list Index of atom in Valist </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a2" doxytag="vcsm.h::Vcsm_getValist"></a><p>
@@ -660,13 +656,13 @@ Get index particular simplex associated with an atom.
 Get atom list.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to Valist atom list </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a14" doxytag="vcsm.h::Vcsm_init"></a><p>
@@ -698,13 +694,13 @@ Get atom list.
 Initialize charge-simplex map with mesh and atom data.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object to be initialized </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Note:</b></dt><dd>The initial mesh must be sufficiently coarse for the assignment procedures to be efficient </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a9" doxytag="vcsm.h::Vcsm_memChk"></a><p>
@@ -736,13 +732,13 @@ Initialize charge-simplex map with mesh and atom data.
 Return the memory used by this structure (and its contents) in bytes.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>The memory used by this structure and its contents in bytes </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a15" doxytag="vcsm.h::Vcsm_update"></a><p>
@@ -789,18 +785,18 @@ Return the memory used by this structure (and its contents) in bytes.
 Update the charge-simplex and simplex-charge maps after refinement.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vcsm object to be updated </td></tr>
-    <tr><td valign=top><em>simps</em>&nbsp;</td><td>List of pointer to newly created (by refinement) simplex objects. The first simplex is expected to be derived from the parent simplex and therefore have the same ID. The remaining simplices are the children and should represent new entries in the charge-simplex map. </td></tr>
-    <tr><td valign=top><em>num</em>&nbsp;</td><td>Number of simplices in simps list </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>simps</em>&nbsp;</td><td>
+The Vcsm object </td></tr>
+<tr><td valign=top><em>num</em>&nbsp;</td><td>
+List of pointer to newly created (by refinement) simplex objects. The first simplex is expected to be derived from the parent simplex and therefore have the same ID. The remaining simplices are the children and should represent new entries in the charge-simplex map. Number of simplices in simps list </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Mon Apr 19 16:11:38 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Tue Apr 20 07:58:08 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

@@ -61,12 +61,13 @@
 /** @brief   External function for FEtk Gem class to use during mesh refinement
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @param   thee   Gem (FEtk geometry manager) object
- *  @param   externalUpdate  Function pointer for function to call during 
- *           mesh refinement
  */
-VEXTERNC void Gem_setExternalUpdateFunction(Gem *thee,
-    void (*externalUpdate)(SS **simps, int num));
+VEXTERNC void Gem_setExternalUpdateFunction(
+        Gem *thee, /** The FEtk geometry managery */ 
+        void (*externalUpdate)(SS **simps, int num) /** Function pointer for
+                                                      call during mesh
+                                                      refinement */
+        );
 
 /** @brief   Charge-simplex map class
  *  @ingroup Vcsm
@@ -116,77 +117,85 @@ typedef struct sVcsm Vcsm;
     /** @brief   Get atom list
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
      *  @return  Pointer to Valist atom list
      */
-    VEXTERNC Valist* Vcsm_getValist(Vcsm *thee);
+    VEXTERNC Valist* Vcsm_getValist(
+            Vcsm *thee /** The Vcsm object */
+            );
 
     /** @brief   Get number of atoms associated with a simplex
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   isimp Simplex ID
      *  @return  Number of atoms associated with a simplex
      */
-    VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
+    VEXTERNC int Vcsm_getNumberAtoms(
+            Vcsm *thee,  /** The Vcsm object */
+            int isimp  /** Simplex ID */
+            );
 
     /** @brief   Get particular atom associated with a simplex
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   iatom Index of atom in Vcsm list for this simplex
-     *  @param   isimp Simplex ID
      *  @return  Array of atoms associated with a simplex
      */
-    VEXTERNC Vatom*  Vcsm_getAtom(Vcsm *thee, int iatom, int isimp);
+    VEXTERNC Vatom* Vcsm_getAtom(
+            Vcsm *thee,  /** The Vcsm object */
+            int iatom,  /** Index of atom in Vcsm list ofr this simplex */
+            int isimp  /** Simplex ID */
+            );
 
     /** @brief   Get ID of particular atom in a simplex
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   isimp Simplex ID
-     *  @param   iatom Index of atom in Vcsm list for this simplex
      *  @return  Index of atom in Valist object
      */
-    VEXTERNC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
+    VEXTERNC int Vcsm_getAtomIndex(
+            Vcsm *thee,  /** The Vcsm object */
+            int iatom,  /** Index of atom in Vcsm list for this simplex */
+            int isimp  /** Simplex ID */
+            );
 
     /** @brief   Get number of simplices associated with an atom
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   iatom  Valist atom index
      *  @return  Number of simplices associated with an atom
      */
-    VEXTERNC int     Vcsm_getNumberSimplices(Vcsm *thee, int iatom);
+    VEXTERNC int Vcsm_getNumberSimplices(
+            Vcsm *thee,  /** The Vcsm object */
+            int iatom  /** The Valist atom index */
+            );
 
     /** @brief   Get particular simplex associated with an atom
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   iatom  Valist atom index
-     *  @param   isimp  Index of simplex in Vcsm list
      *  @return  Pointer to simplex object
      */ 
-    VEXTERNC SS*     Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom);
+    VEXTERNC SS* Vcsm_getSimplex(
+            Vcsm *thee,  /** The Vcsm object */
+            int isimp,  /** Index of simplex in Vcsm list */
+            int iatom  /** Valist atom index */
+            );
 
     /** @brief   Get index particular simplex associated with an atom
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
-     *  @param   iatom  Valist atom index
-     *  @param   isimp  Index of simplex in Vcsm list
      *  @return  Gem index of specified simplex
      */ 
-    VEXTERNC int     Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom);
+    VEXTERNC int Vcsm_getSimplexIndex(
+            Vcsm *thee,  /** THe Vcsm object */
+            int isimp,  /** Index of simplex in Vcsm list */
+            int iatom  /** Index of atom in Valist */
+            );
 
     /** @brief   Return the memory used by this structure (and its contents)
      *           in bytes
      *  @ingroup Vcsm
      *  @author  Nathan Baker
-     *  @param   thee  Vcsm object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC unsigned long int Vcsm_memChk(Vcsm *thee);
+    VEXTERNC unsigned long int Vcsm_memChk(
+            Vcsm *thee /** The Vcsm object */
+            );
 
 #else /* if defined(VINLINE_VCSM) */
 #   define Vcsm_getValist(thee) ((thee)->alist)
@@ -209,11 +218,12 @@ typedef struct sVcsm Vcsm;
  *  @note    \li The initial mesh must be sufficiently coarse for the assignment
  *             procedures to be efficient
  *           \li The map is not built until Vcsm_init is called
- *  @param   alist  List of atoms
- *  @param   gm     FEtk geometry manager (defines mesh)
  *  @return  Pointer to newly allocated Vcsm object 
  */
-VEXTERNC Vcsm*   Vcsm_ctor(Valist *alist, Gem *gm);
+VEXTERNC Vcsm* Vcsm_ctor(
+        Valist *alist,  /** List of atoms */
+        Gem *gm  /** FEtk geometry manager defining the mesh */
+        );
 
 /** @brief   FORTRAN stub to construct Vcsm object
  *  @ingroup Vcsm 
@@ -221,49 +231,54 @@ VEXTERNC Vcsm*   Vcsm_ctor(Valist *alist, Gem *gm);
  *  @note    \li The initial mesh must be sufficiently coarse for the assignment
  *             procedures to be efficient
  *           \li The map is not built until Vcsm_init is called
- *  @param   thee   Pointer to space for Vcsm object
- *  @param   alist  List of atoms
- *  @param   gm     FEtk geometry manager (defines mesh)
  *  @return  1 if successful, 0 otherwise 
  */
-VEXTERNC int     Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm);
+VEXTERNC int Vcsm_ctor2(
+        Vcsm *thee,  /** The Vcsm object */
+        Valist *alist,  /** The list of atoms */
+        Gem *gm  /** The FEtk geometry manager defining the mesh */
+        );
 
 /** @brief   Destroy Vcsm object
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @param   thee Pointer to memory location for Vcsm object
  */
-VEXTERNC void    Vcsm_dtor(Vcsm **thee);
+VEXTERNC void Vcsm_dtor(
+        Vcsm **thee  /** Pointer to memory location for Vcsm object */
+        );
 
 /** @brief   FORTRAN stub to destroy Vcsm object
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @param   thee Pointer to Vcsm object
  */
-VEXTERNC void    Vcsm_dtor2(Vcsm *thee);
+VEXTERNC void Vcsm_dtor2(
+        Vcsm *thee /** Pointer to Vcsm object */
+        );
 
 /** @brief   Initialize charge-simplex map with mesh and atom data
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @param   thee Vcsm object to be initialized
  *  @note    The initial mesh must be sufficiently coarse for the assignment
  *            procedures to be efficient
  */
-VEXTERNC void    Vcsm_init(Vcsm *thee);
+VEXTERNC void Vcsm_init(
+        Vcsm *thee /** The Vcsm object */
+        );
 
 /** @brief   Update the charge-simplex and simplex-charge maps after
  *           refinement
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @param   thee  Vcsm object to be updated
- *  @param   simps List of pointer to newly created (by refinement) simplex
- *           objects.  The first simplex is expected to be derived from the
- *           parent simplex and therefore have the same ID.  The remaining
- *           simplices are the children and should represent new entries in the
- *           charge-simplex map.
- *  @param   num   Number of simplices in simps list
  *  @return  1 if successful, 0 otherwise 
  */
-VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);
+VEXTERNC int Vcsm_update(
+        Vcsm *thee, /** The Vcsm object */
+        SS **simps, /** List of pointer to newly created (by refinement)
+                      simplex objects.  The first simplex is expected to be
+                      derived from the parent simplex and therefore have the
+                      same ID.  The remaining simplices are the children and
+                      should represent new entries in the charge-simplex map. */
+        int num /** Number of simplices in simps list */
+        );
 
 #endif /* ifndef _VCSM_H_ */
