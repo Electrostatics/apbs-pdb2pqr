@@ -52,6 +52,7 @@ int main(int argc, char **argv) {
     /* OBJECTS */
     Valist *alist;
     Vacc  *acc;
+    Vatom *atom;
 
     /* VACC PARAMETERS */
     double probe_radius = 1.4;
@@ -76,6 +77,7 @@ int main(int argc, char **argv) {
     double x, y, z;
     double w = 1.0;
     double vec[3];
+    int i;
 
     /* TIMING VARIABLES */
     double t;
@@ -86,10 +88,15 @@ int main(int argc, char **argv) {
  
     char *usage = "\n\nUsage: acc <-vdw|-ivdw|-mol|-sasa> <molecule.pqr>"
                   "\tWhere -vdw   => volume inside VdW surface\n"
-                  "\t\t-ivdw  => volume inside VdW surface inflated by probe radius\n"
+                  "\t\t-ivdw  => volume inside VdW surface inflated by probe\
+ radius\n"
                   "\t\t-mol   => volume inside molecular surface\n"
-                  "\t\t-sasa  => solvent-accessible surface area\n"
-                  "\tand <molecule.pqr> is the path to the molecule structure in PQR format\n\n";
+                  "\t\t-sasa  => unweighted solvent-accessible surface area\n"
+                  "\t\t-wsasa => weighted solvent-accessible surface area\n"
+                  "\t\t          (uses \"charge\" column of PQR format for\
+ weights)\n"
+                  "\tand <molecule.pqr> is the path to the molecule structure\
+ in PQR format\n\n";
 
     if (argc != 3) {
         printf("\n*** Syntax error: got %d arguments, expected 2.\n",argc);
@@ -100,6 +107,7 @@ int main(int argc, char **argv) {
     else if (strcmp(argv[1], "-ivdw") == 0) method = 1;
     else if (strcmp(argv[1], "-mol") == 0) method = 2;
     else if (strcmp(argv[1], "-sasa") == 0) method = 3;
+    else if (strcmp(argv[1], "-wsasa") == 0) method = 4;
     else {
         printf("\n*** Syntax error: invalid argument '%s'.\n", argv[1]);
         printf("%s", usage);
@@ -204,10 +212,25 @@ int main(int argc, char **argv) {
             break;
 
         case 3:
-            printf("\nSOLVENT-ACCESSIBLE SURFACE AREA\n");
+            printf("\nUNWEIGHTED SOLVENT-ACCESSIBLE SURFACE AREA\n");
             sasa = Vacc_totalSASA(acc, probe_radius);
-            printf("\tApprox. SASA = %4.3f A^2\n", sasa);
+            printf("\tApprox. SASA = %1.12e A^2\n", sasa);
         
+            Valist_dtor(&alist);
+            Vacc_dtor(&acc);
+            break;
+
+        case 4:
+            printf("\nWEIGHTED SOLVENT-ACCESSIBLE SURFACE AREA\n");
+            printf("\tNOTE: Using the \"charge\" column of the PQR file as\
+ weights...\n");
+            sasa = 0;
+            for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+                atom = Valist_getAtom(alist, i);
+                sasa += (Vatom_getCharge(atom)*Vacc_atomSASA(acc, 
+                         probe_radius, i));
+            }
+            printf("\tApprox. weighted SASA = %1.12e A^2\n", sasa);
             Valist_dtor(&alist);
             Vacc_dtor(&acc);
             break;
