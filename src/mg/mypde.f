@@ -137,54 +137,54 @@ c* Added by NAB to allow different ions with different charges
       stop
 
 c*    print *, 'HELLO FROM C_SCAL'
-      c_scal2 = 0.0
-
+c*      c_scal2 = 0.0
+c*
 c*    Loop over all the ions
-      do 39 iion = 1, nion
+c*      do 39 iion = 1, nion
 c*       Assemble the ion-specific coefficient
-         coef2 = -1.0 * coef * kappa(iion)
+c*         coef2 = -1.0 * coef * kappa(iion)
 c*       Assemble the ion-specific potential value
-         u2 = -1.0 * u * charge(iion)
+c*         u2 = -1.0 * u * charge(iion)
 c*
 c*       *** check if full exp requested ***
-         if (ipkey .eq. 0) then
+c*         if (ipkey .eq. 0) then
 c*
 c*         *** initialize chopped counter ***
-           ichopped = 0
+c*           ichopped = 0
 c*
 c*         *** am_zero is 0 if coef2 zero, and 1 if coef nonzero ***
-           am_zero = dmin1(ZSMALL,dabs(coef2)) * ZLARGE
+c*           am_zero = dmin1(ZSMALL,dabs(coef2)) * ZLARGE
 c*
 c*         *** am_neg is chopped u if u negative, 0 if u positive ***
-           am_neg = dmax1( dmin1(u2,0.0d0) , SINH_MIN)
+c*           am_neg = dmax1( dmin1(u2,0.0d0) , SINH_MIN)
 c*
 c*         *** am_neg is chopped u if u positive, 0 if u negative ***
-           am_pos = dmin1( dmax1(u2,0.0d0) , SINH_MAX)
+c*           am_pos = dmin1( dmax1(u2,0.0d0) , SINH_MAX)
 c*
 c*         *** finally determine the function value ***
-           argument = am_zero * ( am_neg + am_pos )
-           c_scal2 = c_scal2 + coef2 * exp ( argument )
+c*           argument = am_zero * ( am_neg + am_pos )
+c*           c_scal2 = c_scal2 + coef2 * exp ( argument )
 c*
 c*         *** count chopped values ***
-           ichopped_neg = idnint(aint(am_neg / SINH_MIN))
-           ichopped_pos = idnint(aint(am_pos / SINH_MAX))
-           ichopped = ichopped
-     2         + idnint(am_zero) * (ichopped_neg + ichopped_pos)
+c*           ichopped_neg = idnint(aint(am_neg / SINH_MIN))
+c*           ichopped_pos = idnint(aint(am_pos / SINH_MAX))
+c*           ichopped = ichopped
+c*     2         + idnint(am_zero) * (ichopped_neg + ichopped_pos)
 c*
 c*      *** else if polynomial requested ***
-        elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
-     2          (ipkey .le. MAXPOLY)) then
-          call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
-     2      44)
+c*        elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
+c*     2          (ipkey .le. MAXPOLY)) then
+c*          call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
+c*     2      44)
 c*      *** else return linear approximation ***
-        else
-           c_scal2 = c_scal2 + coef2 * u2
+c*        else
+c*           c_scal2 = c_scal2 + coef2 * u2
 c* *****   print*,'% C_SCAL: using linear approximation...'
-        endif
- 39   continue
-
-      c_scal = c_scal2
-
+c*        endif
+c*  39   continue
+c*
+c*      c_scal = c_scal2
+c*
 c*
 c* ****** info ***
 c* ***if (ichopped .gt. 0) then
@@ -226,53 +226,53 @@ c* Added by NAB to allow different ions with different charges
      2    48)
       stop
 
-      dc_scal2 = 0.0
+c*      dc_scal2 = 0.0
 c*    print *, 'HELLO FROM DC_SCAL'
-
-      do 39 iion = 1, nion
-        coef2 = coef * kappa(iion) * charge(iion)
-        u2 = -1.0 * u * charge(iion)
+c*
+c*      do 39 iion = 1, nion
+c*        coef2 = coef * kappa(iion) * charge(iion)
+c*        u2 = -1.0 * u * charge(iion)
 c*
 c*      *** check if full exp requested ***
-        if (ipkey .eq. 0) then
+c*        if (ipkey .eq. 0) then
 c*
 c*         *** initialize chopped counter ***
-           ichopped = 0
+c*           ichopped = 0
 c*
 c*         *** am_zero is 0 if coef zero, and 1 if coef nonzero ***
-           am_zero = dmin1(ZSMALL,dabs(coef2)) * ZLARGE
+c*           am_zero = dmin1(ZSMALL,dabs(coef2)) * ZLARGE
 c*
 c*         *** am_neg is chopped u if u negative, 0 if u positive ***
-           am_neg = dmax1( dmin1(u2,0.0d0) , SINH_MIN)
+c*           am_neg = dmax1( dmin1(u2,0.0d0) , SINH_MIN)
 c*
 c*         *** am_neg is chopped u if u positive, 0 if u negative ***
-           am_pos = dmin1( dmax1(u2,0.0d0) , SINH_MAX)
+c*           am_pos = dmin1( dmax1(u2,0.0d0) , SINH_MAX)
 c*
 c*         *** finally determine the function value ***
-           argument = am_zero * ( am_neg + am_pos )
-           dc_scal2 = dc_scal2 + coef2 * exp ( argument )
+c*           argument = am_zero * ( am_neg + am_pos )
+c*           dc_scal2 = dc_scal2 + coef2 * exp ( argument )
 c*
 c*         *** count chopped values ***
-           ichopped_neg = idnint(aint(am_neg / SINH_MIN))
-           ichopped_pos = idnint(aint(am_pos / SINH_MAX))
-           ichopped = ichopped
-     2         + idnint(am_zero) * (ichopped_neg + ichopped_pos)
+c*           ichopped_neg = idnint(aint(am_neg / SINH_MIN))
+c*           ichopped_pos = idnint(aint(am_pos / SINH_MAX))
+c*           ichopped = ichopped
+c*     2         + idnint(am_zero) * (ichopped_neg + ichopped_pos)
 c*
 c*      *** else if polynomial requested ***
-        elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
-     2          (ipkey .le. MAXPOLY)) then
-          call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
-     2      44)
+c*        elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
+c*     2          (ipkey .le. MAXPOLY)) then
+c*          call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
+c*     2      44)
 c*
 c*      *** else return linear approximation ***
-        else
-           dc_scal2 = dc_scal2 + coef*kappa(iion)*charge(iion)
+c*        else
+c*           dc_scal2 = dc_scal2 + coef*kappa(iion)*charge(iion)
 c* ***** print*,'% DC_SCAL: using linear approximation...'
-        endif
-
- 39   continue
-
-      dc_scal = dc_scal2
+c*        endif
+c*
+c*  39   continue
+c*
+c*      dc_scal = dc_scal2
 c*
 c* ****** info ***
 c* ***if (ichopped .gt. 0) then
@@ -399,36 +399,40 @@ c*      *** else if polynomial requested ***
      2          (ipkey .le. MAXPOLY)) then
           call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
      2      44)
+          stop
 c*
 c*      *** else return linear approximation ***
         else
+           call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION UNAVAILABLE',
+     2      40)
+           stop
 c*
 c*         *** info ***
 c* *****   print*,'% C_VEC: using linear for degree given:   ',ipkey
 c*
 c*         *** do parallel loops ***
-           do 50 ii = 1, nproc
-              do 51 i = 1+(ipara*(ii-1)), ipara*ii
+c*           do 50 ii = 1, nproc
+c*              do 51 i = 1+(ipara*(ii-1)), ipara*ii
 c*
 c*               *** am_zero is 0 if coef zero, and 1 if coef nonzero ***
-                 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i))) * ZLARGE
-                 argument = am_zero * zu2 * uin(i)
+c*                 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i))) * ZLARGE
+c*                 argument = am_zero * zu2 * uin(i)
 c*
 c*               *** make the linear term ***
-                 uout(i) = uout(i) + zcf2 * coef(i) * argument
- 51         continue
- 50      continue
+c*                 uout(i) = uout(i) + zcf2 * coef(i) * argument
+c* 51         continue
+c* 50      continue
 c*
 c*       *** do vector loops ***
-         do 60 i = ipara*nproc+1, n
+c*         do 60 i = ipara*nproc+1, n
 c*
 c*          *** am_zero is 0 if coef zero, and 1 if coef nonzero ***
-            am_zero = dmin1(ZSMALL,dabs(coef(i))) * ZLARGE
-            argument = am_zero * uin(i)
+c*            am_zero = dmin1(ZSMALL,dabs(coef(i))) * ZLARGE
+c*            argument = am_zero * uin(i)
 c*
 c*          *** make the linear term ***
-            uout(i) = uout(i) + zcf2 * coef(i) * argument
- 60      continue
+c*            uout(i) = uout(i) + zcf2 * coef(i) * argument
+c* 60      continue
 c*
 c*      *** end if ***
         endif
@@ -552,28 +556,32 @@ c*      *** else if polynomial requested ***
 
           call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION UNAVAILABLE',
      2      44)
+          stop
 *
 c*      *** else return linear approximation ***
         else
+           call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION UNAVAILABLE',
+     2      40)
+           stop
 c*
 c*         *** info ***
 c* *****   print*,'% DC_VEC: using linear for degree given:  ',ipkey
 c*
 c*         *** do parallel loops ***
-           do 50 ii = 1, nproc
-              do 51 i = 1+(ipara*(ii-1)), ipara*ii
+c*           do 50 ii = 1, nproc
+c*              do 51 i = 1+(ipara*(ii-1)), ipara*ii
 c*
 c*               *** make the linear term ***
-                 uout(i) = uout(i)+coef(i)*kappa(iion)*charge(iion)
- 51           continue
- 50        continue
+c*                 uout(i) = uout(i)+coef(i)*kappa(iion)*charge(iion)
+c* 51           continue
+c* 50        continue
 c*
 c*         *** do vector loops ***
-           do 60 i = ipara*nproc+1, n
+c*           do 60 i = ipara*nproc+1, n
 c*
 c*            *** make the linear term ***
-              uout(i) = uout(i) + coef(i)*kappa(iion)*charge(iion)
- 60        continue
+c*              uout(i) = uout(i) + coef(i)*kappa(iion)*charge(iion)
+c* 60        continue
 c*
 c*      *** end if ***
         endif

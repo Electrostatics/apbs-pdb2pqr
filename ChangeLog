@@ -14,6 +14,8 @@ BETA PUBLIC RELEASE VERSION 0.3.2       ??-??-04
       ELEC ION statements.
     * Added a stability fix for printing charge densities for LPBE-type
       calculations.
+    * Fixed a bug in NPBE calculations which led to incorrect charge 
+      densities.
 	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.1       04-13-04
