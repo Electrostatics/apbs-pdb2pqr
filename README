@@ -31,13 +31,4 @@ TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
 MODIFICATIONS. 
 ------------------------------------------------------------------------
 
-APBS is an adaptive multilevel finite element Poisson-Boltzmann solver for
-quantitatively determining the electrostatic properties of biomolecules in
-aqueous monovalent salt solutions.  This software uses the MC library for
-the adaptive multilevel finite element solution of nonlinear elliptic
-partial differential equations.
-
-APBS was primarily written by Nathan Baker as part of his graduate and
-postgraduate work with J. Andrew McCammon and Michael Holst at UCSD.
-
 Please see doc/index.html for more information.
