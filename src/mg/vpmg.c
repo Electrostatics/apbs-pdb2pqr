@@ -414,8 +414,7 @@ VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
 
         /* Compute the distance (in units of m) */
         dist = 0;
-        for (i=0; i<3; i++) 
-            dist += ((position[i] - x[i])*(position[i] - x[i])); 
+        for (i=0; i<3; i++) dist += VSQR(position[i] - x[i]);
         dist = (1.0e-10)*VSQRT(dist);
 
         /* Compute the potential in J/electron */
@@ -433,20 +432,18 @@ VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
             atom = Valist_getAtom(alist, iatom);
             position = Vatom_getPosition(atom);
-            charge = Vunit_ec*Vatom_getCharge(atom);
+            charge = Vatom_getCharge(atom);
             size = (1e-10)*Vatom_getRadius(atom);
             dist = 0;
-            for (i=0; i<3; i++)
-               dist += ((position[i] - x[i])*(position[i] - x[i]));
+            for (i=0; i<3; i++) dist += VSQR(position[i] - x[i]);
             dist = (1.0e-10)*VSQRT(dist);
-            val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
+            val = (charge)/(dist);
             if (xkappa != 0.0)
               val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-            val = val*Vunit_ec/(Vunit_kb*T);
             pot = pot + val;
         }
 
-        return pot;
+        return pot*(Vunit_ec*Vunit_ec)/(Vunit_kb*T*4*VPI*Vunit_eps0*eps_w);
     } else if (flag == 4) {
         Vnm_print(2, "VPMG::bcCalc -- not appropriate for focusing!\n");
         VASSERT(0);
@@ -806,7 +803,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     double hx, hy, hzed, *apos, arad;
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
     int imin, imax, jmin, jmax, kmin, kmax;
-    double dx2, dy2, dz2, rtot2;
+    double dx2, dy2, dz2, arad2, stot2, itot2, rtot, rtot2;
     int acclo, accmid, acchi, a000;
 
 
@@ -873,10 +870,11 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
      */
     /* Fill source term array */
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
         atom = Valist_getAtom(alist, iatom);
         apos = Vatom_getPosition(atom);
         arad = Vatom_getRadius(atom);
-        charge = zmagic*Vatom_getCharge(atom)/hx/hy/hzed;
+        charge = Vatom_getCharge(atom);
 
         /* Make sure we're on the grid */
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
@@ -902,67 +900,63 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 
             /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
              * ASSIGNMENT (Steps #1-3) */
-            rtot2 = VSQR(irad + arad);
-            dx = irad + arad + hx;
+            itot2 = VSQR(irad + arad);     
+            stot2 = VSQR(srad + arad);
+            arad2 = VSQR(arad);
+            /* We'll search over grid points which are in the greater of these
+             * two radii */
+            rtot = VMAX2((irad + arad), (srad + arad));
+            rtot2 = VMAX2(itot2, stot2);
+            dx = rtot + 0.5*hx;
             imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
             imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
             for (i=imin; i<=imax; i++) {
                 dx2 = VSQR(position[0] - hx*i);
-                if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + hy;
-                else dy = hy;
+                if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+                else dy = 0.5*hy;
                 jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
                 jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
                 for (j=jmin; j<=jmax; j++) {
                     dy2 = VSQR(position[1] - hy*j);
-                    if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2) + hzed;
-                    else dz = hzed;
+                    if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
+                    else dz = 0.5*hzed;
                     kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
                     kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
                     for (k=kmin; k<=kmax; k++) {
+                        dz2 = VSQR(k*hzed - position[2]);
                         /* See if grid point is inside ivdw radius and set ccf
                          * accordingly */
-                        if ( (VSQR(k*hzed - position[2]) 
-                              + VSQR(j*hy - position[1]) 
-                              + VSQR(i*hx - position[0])) <= rtot2) 
+                        if ((dz2 + dy2 + dx2) <= itot2) 
                           thee->ccf[IJK(i,j,k)] = -1.0;
                         /* See if x-shifted grid point is inside ivdw rad. */
-                        if ( (VSQR(k*hzed - position[2]) 
-                              + VSQR(j*hy - position[1]) 
-                              + VSQR((i+0.5)*hx - position[0])) <= rtot2) {
+                        if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=stot2) {
                             /* See if inside vdw rad */
-                            if ( (VSQR(k*hzed - position[2])
-                                 + VSQR(j*hy - position[1])
-                                 + VSQR((i+0.5)*hx - position[0])) 
-                                 <= VSQR(arad)) thee->a1cf[IJK(i,j,k)] = -2.0;
+                            if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=arad2) 
+                              thee->a1cf[IJK(i,j,k)] = -2.0;
                             else thee->a1cf[IJK(i,j,k)] = -1.0;
                         } 
                         /* See if y-shifted grid point is inside ivdw rad. */
-                        if ( (VSQR(k*hzed - position[2])
-                              + VSQR((j+0.5)*hy - position[1])
-                              + VSQR(i*hx - position[0])) <= rtot2) {
+                        if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) <= stot2) {
                             /* See if inside vdw rad */
-                            if ( (VSQR(k*hzed - position[2])
-                                 + VSQR((j+0.5)*hy - position[1])
-                                 + VSQR(i*hx - position[0])) 
-                                 <= VSQR(arad)) thee->a2cf[IJK(i,j,k)] = -2.0;
+                            if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)<=arad2) 
+                              thee->a2cf[IJK(i,j,k)] = -2.0;
                             else thee->a2cf[IJK(i,j,k)] = -1.0;
                         }        
                         /* See if z-shifted grid point is inside ivdw rad. */
-                        if ( (VSQR((k+0.5)*hzed - position[2])
-                              + VSQR(j*hy - position[1])
-                              + VSQR(i*hx - position[0])) <= rtot2) {
+                        if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=stot2) {
                             /* See if inside vdw rad */
-                            if ( (VSQR((k+0.5)*hzed - position[2])
-                                 + VSQR(j*hy - position[1])
-                                 + VSQR(i*hx - position[0])) 
-                                 <= VSQR(arad)) thee->a3cf[IJK(i,j,k)] = -2.0;
+                            if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=arad2)
+                              thee->a3cf[IJK(i,j,k)] = -2.0;
                             else thee->a3cf[IJK(i,j,k)] = -1.0;
                         }        
-                    }
-                }
-            }
+                    } /* k loop */
+                } /* j loop */
+            } /* i loop */
 
             /* FILL IN SOURCE TERM ARRAY */
+            /* Scale the charge to be a delta function */
+            charge = charge*zmagic/(hx*hy*hzed);
+
             /* Figure out which vertices we're next to */
             ifloat = position[0]/hx;
             jfloat = position[1]/hy;
@@ -1007,20 +1001,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 
                 /* The diagonal tensor (2nd derivative) entries.  Each of these
                  * entries is evaluated ad the grid edges midpoints.  */
-                if (thee->a1cf[IJK(i,j,k)] == -2.0)
-                  thee->a1cf[IJK(i,j,k)] = epsp;
-                if (thee->a2cf[IJK(i,j,k)] == -2.0)
-                  thee->a2cf[IJK(i,j,k)] = epsp;
-                if (thee->a3cf[IJK(i,j,k)] == -2.0)
-                  thee->a3cf[IJK(i,j,k)] = epsp;
-                if (thee->a1cf[IJK(i,j,k)] == 0.0)
-                  thee->a1cf[IJK(i,j,k)] = epsw;
-                if (thee->a2cf[IJK(i,j,k)] == 0.0)
-                  thee->a2cf[IJK(i,j,k)] = epsw;
-                if (thee->a3cf[IJK(i,j,k)] == 0.0)
-                  thee->a3cf[IJK(i,j,k)] = epsw;
-
                 switch (epsmeth) {
+
                   /* No dielectric smoothing */
                   case 0: 
                     /* x-direction */
@@ -1064,7 +1046,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
                     if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
                         (thee->a2cf[IJK(i,j,k)] == -1.0) ||
                         (thee->a3cf[IJK(i,j,k)] == -1.0)) {
-                        position[0] = thee->xf[i] + 0.5*hx;
+                        position[0] = thee->xf[i];
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k];
                         a000 = Vacc_molAcc(acc, position, srad);
@@ -1115,6 +1097,19 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
                     Vnm_print(2, "Vpmg_fillco:  Bad epsmeth (%d)!\n", epsmeth);
                     VASSERT(0);
                 }
+                /* Fill in the remaining dielectric values */
+                if (thee->a1cf[IJK(i,j,k)] == -2.0)
+                  thee->a1cf[IJK(i,j,k)] = epsp;
+                if (thee->a2cf[IJK(i,j,k)] == -2.0)
+                  thee->a2cf[IJK(i,j,k)] = epsp;
+                if (thee->a3cf[IJK(i,j,k)] == -2.0)
+                  thee->a3cf[IJK(i,j,k)] = epsp;
+                if (thee->a1cf[IJK(i,j,k)] == 0.0)
+                  thee->a1cf[IJK(i,j,k)] = epsw;
+                if (thee->a2cf[IJK(i,j,k)] == 0.0)
+                  thee->a2cf[IJK(i,j,k)] = epsw;
+                if (thee->a3cf[IJK(i,j,k)] == 0.0)
+                  thee->a3cf[IJK(i,j,k)] = epsw;
             }
         }
     }
@@ -1188,20 +1183,142 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 
+    double energy = 0.0;
+
     VASSERT(thee != VNULL);
     VASSERT(thee->filled);
 
     if (thee->pmgp->nonlin) {
         Vnm_print(2, "Vpmg_energy:  NPBE energy routines not implemented yet!\n");
-        return 0.0;
+        energy = 0.0;
     } else {
-        return Vpmg_qfEnergy(thee, extFlag);
+        energy = Vpmg_qfEnergy(thee);
+        if (extFlag == 1) energy += (thee->extEnergy);
     }
 
-    return 0.0;
+    return energy;
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_dielEnergy
+//
+// Purpose:  Using the solution at the finest mesh level, get the electrostatic
+//           energy due to the interaction of the mobile charges with the
+//           potential:  
+//             \[ G = -\frac{1}{2} \int \epsilon (\nabla u)^2 dx \].
+//           and return the result in units of $k_B T$.  Clearly, no
+//           self-interaction terms are removed.
+//
+// Notes:    The value of this observable may be modified by setting
+//           restrictions on the subdomain over which it is calculated.  Such
+//           limits can be set via Vpmg_setPart and are generally useful for
+//           parallel runs.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_dielEnergy(Vpmg *thee) {
+
+    double hx, hy, hzed, energy, nrgx, nrgy, nrgz, T, pvecx, pvecy, pvecz;
+    int i, j, k, nx, ny, nz;
+ 
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    energy = 0.0;
+
+    /* Refill the dieletric coefficient arrays */
+    Vpmg_fillco(thee, 1, 0);
+
+    for (k=0; k<(nz-1); k++) {
+        for (j=0; j<(ny-1); j++) {
+            for (i=0; i<(nx-1); i++) {
+                pvecx = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i+1,j,k)]);
+                pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j+1,k)]);
+                pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k+1)]);
+                nrgx = thee->a1cf[IJK(i,j,k)]*pvecx
+                  * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i+1,j,k)])/hx);
+                nrgy = thee->a2cf[IJK(i,j,k)]*pvecy
+                  * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i,j+1,k)])/hy);
+                nrgz = thee->a3cf[IJK(i,j,k)]*pvecz
+                  * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i,j,k+1)])/hzed);
+                energy += (nrgx + nrgy + nrgz);
+            }
+        }
+    }
+
+    energy = 0.5*energy*hx*hy*hzed;
+    T = Vpbe_getTemperature(thee->pbe);
+    energy = energy/Vpbe_getZmagic(thee->pbe);
+
+    return energy;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_qmEnergy
+//
+// Purpose:  Using the solution at the finest mesh level, get the electrostatic
+//           energy due to the interaction of the mobile charges with the
+//           potential.  For the NPBE, this is
+//             \[ G = -\int \kappa^2(\cosh u - 1) dx \]
+//           while for the LPBE it is
+//             \[ G = -\frac{1}{2} \kappa^2 \int u^2 dx \]
+//           and return the result in units of $k_B T$.  Clearly, no
+//           self-interaction terms are removed.
+//
+// Notes:    The value of this observable may be modified by setting
+//           restrictions on the subdomain over which it is calculated.  Such
+//           limits can be set via Vpmg_setPart and are generally useful for
+//           parallel runs.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
+
+    double hx, hy, hzed, energy;
+    int i, nx, ny, nz;
+ 
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    energy = 0.0;
+
+    if (thee->pmgp->nonlin) {
+        Vnm_print(0, "Vpmg_qmEnergy:  Calculating nonlinear energy\n");
+        for (i=0; i<(nx*ny*nz); i++) {
+            /* Avoid problems with the cosh */
+            if (thee->pvec[i]*thee->ccf[i] > 0) 
+              energy += (thee->pvec[i]*thee->ccf[i]*(VCOSH(thee->u[i])-1.0));
+        }
+    } else {
+        Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
+        for (i=0; i<(nx*ny*nz); i++) {
+            /* Avoid problems with large potential values */
+            if (thee->pvec[i]*thee->ccf[i] > 0) 
+              energy += (thee->pvec[i]*thee->ccf[i]*VSQR(thee->u[i]));
+        }
+        energy = 0.5*energy;
+    }
+    energy = -1.0*energy*hx*hy*hzed;
+
+    return energy;
+}
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_qfEnergy
@@ -1226,7 +1343,7 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
+VPUBLIC double Vpmg_qfEnergy(Vpmg *thee) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
     double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
@@ -1310,7 +1427,6 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
     }
 
     energy = 0.5*energy;
-    if (extFlag == 1) energy += (thee->extEnergy);
     return energy;
 }
     
