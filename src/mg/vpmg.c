@@ -342,7 +342,9 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
     /* Set the new external energy contribution to zero.  Any external
      * contributions from higher levels will be included in the appropriate
      * energy function call. */
-    thee->extEnergy = 0;
+    thee->extQmEnergy = 0;
+    thee->extQfEnergy = 0;
+    thee->extDiEnergy = 0;
 
     /* New problem dimensions */
     hxNEW = thee->pmgp->hx;
@@ -368,8 +370,11 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
     /* Invert partition mask */
     for (i=0; i<(nxOLD*nyOLD*nzOLD); i++) 
       pmgOLD->pvec[i] = (!(pmgOLD->pvec[i]));
-    /* Now calculate the energy on that subset of the domain */
-    thee->extEnergy = Vpmg_energy(pmgOLD, 1);
+    /* Now calculate the energy on inverted subset of the domain */
+    Vnm_print(0, "VPMG::extEnergy: Calculating energy contributions for focusing\n");
+    thee->extQmEnergy = Vpmg_qmEnergy(pmgOLD, 1);
+    thee->extQfEnergy = Vpmg_qfEnergy(pmgOLD, 1);
+    thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
     Vpmg_unsetPart(pmgOLD);
 }
 
@@ -696,7 +701,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     Vpmg_unsetPart(thee);
 
     /* Ignore external energy contributions */
-    thee->extEnergy = 0;
+    thee->extQmEnergy = 0;
+    thee->extDiEnergy = 0;
+    thee->extQfEnergy = 0;
 
     thee->filled = 0;
 
@@ -1180,6 +1187,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 		   * based on the usual dielectric smoothing formula:
 		   * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
                   case 1:
+                    a000 = 1.0;
                     if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
                         (thee->a2cf[IJK(i,j,k)] == -1.0) ||
                         (thee->a3cf[IJK(i,j,k)] == -1.0)) {
@@ -1277,20 +1285,24 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 
-    double energy = 0.0;
+    double totEnergy = 0.0;
+    double dielEnergy = 0.0;
+    double qmEnergy = 0.0;
+    double qfEnergy = 0.0;
 
     VASSERT(thee != VNULL);
     VASSERT(thee->filled);
 
     if (thee->pmgp->nonlin) {
-        Vnm_print(2, "Vpmg_energy:  NPBE energy routines not implemented yet!\n");
-        energy = 0.0;
+        qmEnergy = Vpmg_qmEnergy(thee, extFlag);
+        qfEnergy = Vpmg_qfEnergy(thee, extFlag);
+        dielEnergy = Vpmg_dielEnergy(thee, extFlag);
+        totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
-        energy = Vpmg_qfEnergy(thee);
-        if (extFlag == 1) energy += (thee->extEnergy);
+        totEnergy = 0.5*Vpmg_qfEnergy(thee, extFlag);
     }
 
-    return energy;
+    return totEnergy;
 
 }
 
@@ -1311,7 +1323,7 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_dielEnergy(Vpmg *thee) {
+VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 
     double hx, hy, hzed, energy, nrgx, nrgy, nrgz, T, pvecx, pvecy, pvecz;
     int i, j, k, nx, ny, nz;
@@ -1353,6 +1365,8 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee) {
     T = Vpbe_getTemperature(thee->pbe);
     energy = energy/Vpbe_getZmagic(thee->pbe);
 
+    if (extFlag == 1) energy += (thee->extDiEnergy);
+
     return energy;
 }
 
@@ -1375,7 +1389,7 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
+VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
 
     double hx, hy, hzed, energy;
     int i, nx, ny, nz;
@@ -1412,8 +1426,10 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
         }
         energy = 0.5*energy;
     }
-    energy = -1.0*energy*hx*hy*hzed;
+    energy = energy*hx*hy*hzed;
     energy = energy/Vpbe_getZmagic(thee->pbe);
+
+    if (extFlag == 1) energy += thee->extQmEnergy;
 
     return energy;
 }
@@ -1424,9 +1440,10 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
 // Purpose:  Using the solution at the finest mesh level, get the electrostatic
 //           energy due to the interaction of the fixed charges with the
 //           potential: 
-//             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
+//             \[ G = \sum_i q_i u(r_i) \]
 //           and return the result in units of $k_B T$.  Clearly, no
-//           self-interaction terms are removed.
+//           self-interaction terms are removed.  A factor a 1/2 has to be
+//           included to convert this 
 //
 // Args:     extFlag => If this was a focused calculation, then it is possible
 //                      to include the energy contributions from the outside
@@ -1441,7 +1458,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_qfEnergy(Vpmg *thee) {
+VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
     double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
@@ -1524,7 +1541,10 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee) {
         }
     }
 
-    energy = 0.5*energy;
+    energy = energy;
+
+    if (extFlag) energy += thee->extQfEnergy;
+ 
     return energy;
 }
     
@@ -1702,6 +1722,9 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     double dtmp;
     char tok[VMAX_BUFSIZE];
     Vio *sock;
+    char *MCwhiteChars = " =,;\t\n";
+    char *MCcommChars  = "#%";
+
 
     /* Set up the virtual socket */
     sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
@@ -1715,6 +1738,10 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
           fname);
         return;
     }
+
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
+    
 
     /* Read in the DX regular positions */
     /* Get "object" */
