@@ -10,36 +10,26 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# APBS -- Adaptive Poisson-Boltzmann Solver
-#
-#  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-#  Dept. of Chemistry and Biochemistry
-#  Dept. of Mathematics, Scientific Computing Group
-#  University of California, San Diego 
-#
-#  Additional contributing authors listed in the code documentation.
-#
-# Copyright © 1999. The Regents of the University of California (Regents).
-# All Rights Reserved. 
-# 
-# Permission to use, copy, modify, and distribute this software and its
-# documentation for educational, research, and not-for-profit purposes,
-# without fee and without a signed licensing agreement, is hereby granted,
-# provided that the above copyright notice, this paragraph and the
-# following two paragraphs appear in all copies, modifications, and
-# distributions.
-# 
-# IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-# SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-# ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-# REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-# 
-# REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-# PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-# ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-# TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-# MODIFICATIONS. 
+### ##########################################################################
+### MC = < Manifold Code >
+### Copyright (C) 1994--2000  Michael Holst
+###
+### This program is free software; you can redistribute it and/or modify it
+### under the terms of the GNU General Public License as published by the
+### Free Software Foundation; either version 2 of the License, or (at your
+### option) any later version.
+###
+### This program is distributed in the hope that it will be useful,
+### but WITHOUT ANY WARRANTY; without even the implied warranty of
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+### See the GNU General Public License for more details.
+###
+### You should have received a copy of the GNU General Public License along
+### with this program; if not, write to the Free Software Foundation, Inc.,
+### 675 Mass Ave, Cambridge, MA 02139, USA.
+###
+### rcsid="$Id$"
+### ##########################################################################
 
 
 SHELL = @SHELL@
@@ -60,7 +50,6 @@ localstatedir = @localstatedir@
 libdir = @libdir@
 infodir = @infodir@
 mandir = @mandir@
-includedir = @includedir@
 oldincludedir = /usr/include
 
 DESTDIR =
@@ -69,7 +58,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -101,10 +90,9 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 CC = @CC@
 CPP = @CPP@
-CXX = @CXX@
 DLLTOOL = @DLLTOOL@
-F77 = @F77@
-FLIBS = @FLIBS@
+FETK_VERSION = @FETK_VERSION@
+LEX = @LEX@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
@@ -112,44 +100,42 @@ OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
-arpack_lib = @arpack_lib@
-cxxfmmsrc = @cxxfmmsrc@
+YACC = @YACC@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
-fetk_do_bin = @fetk_do_bin@
-fetk_do_src = @fetk_do_src@
-fetk_do_test = @fetk_do_test@
-inc_list = @inc_list@
-lib_list = @lib_list@
 liberty_lib = @liberty_lib@
-maloc_inc = @maloc_inc@
-maloc_lib = @maloc_lib@
 math_lib = @math_lib@
-mc_inc = @mc_inc@
-mc_lib = @mc_lib@
-mcx_inc = @mcx_inc@
-mcx_lib = @mcx_lib@
-mpi_bin = @mpi_bin@
 mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 nsl_lib = @nsl_lib@
 pedantic_ansi = @pedantic_ansi@
+rl_inc = @rl_inc@
 rl_lib = @rl_lib@
 socket_lib = @socket_lib@
-stdcxx_lib = @stdcxx_lib@
 thread_lib = @thread_lib@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
+zfence = @zfence@
 
 AUTOMAKE_OPTIONS = no-dependencies
-SUFFIXES = .H .h .C .c .f .o
+SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
+always_built_SUBDIRS = 
+SUBDIRS = $(always_built_SUBDIRS) .
 
-always_built_SUBDIRS = vatom vacc vpbe vgreen @fetk_do_src@ @pmg_do_src@ nosh
+ALOC_HEADS = aloc.h   vio.h viso.h vmem.h vnm.h vset.h
+VSH_HEADS = vsh.h
+PSH_HEADS = psh.h   vmp.h vcom.h vmpi.h
 
-SUBDIRS = $(always_built_SUBDIRS)
+MALOC_HEADS = maloc.h
+OTHER_HEADS = ${ALOC_HEADS} ${VSH_HEADS} ${PSH_HEADS}
+
+includedir = ${prefix}/include/maloc
+include_HEADERS = ${MALOC_HEADS} ${OTHER_HEADS}
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
-CONFIG_HEADER = ../apbscfg.h
+CONFIG_HEADER = ../../../src/aaa_inc/maloccf.h
 CONFIG_CLEAN_FILES = 
+HEADERS =  $(include_HEADERS)
+
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -159,14 +145,29 @@ TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .C .H .c .f .h .o
+.SUFFIXES: .C .H .c .cc .f .h .java .l .m .o .y
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/aaa_inc/maloc/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+
+install-includeHEADERS: $(include_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(includedir)
+	@list='$(include_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$p; \
+	done
+
+uninstall-includeHEADERS:
+	@$(NORMAL_UNINSTALL)
+	list='$(include_HEADERS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(includedir)/$$p; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -259,7 +260,7 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src
+subdir = src/aaa_inc/maloc
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -293,20 +294,21 @@ installcheck: installcheck-recursive
 install-exec-am:
 install-exec: install-exec-recursive
 
-install-data-am:
+install-data-am: install-includeHEADERS
 install-data: install-data-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-recursive
-uninstall-am:
+uninstall-am: uninstall-includeHEADERS
 uninstall: uninstall-recursive
-all-am: Makefile
+all-am: Makefile $(HEADERS)
 all-redirect: all-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs: installdirs-recursive
 installdirs-am:
+	$(mkinstalldirs)  $(DESTDIR)$(includedir)
 
 
 mostlyclean-generic:
@@ -322,11 +324,11 @@ mostlyclean-am:  mostlyclean-tags mostlyclean-generic
 
 mostlyclean: mostlyclean-recursive
 
-clean-am:  clean-tags clean-generic mostlyclean-am
+clean-am:  clean-tags clean-generic mostlyclean-am clean-local
 
 clean: clean-recursive
 
-distclean-am:  distclean-tags distclean-generic clean-am
+distclean-am:  distclean-tags distclean-generic clean-am distclean-local
 	-rm -f libtool
 
 distclean: distclean-recursive
@@ -338,11 +340,11 @@ maintainer-clean-am:  maintainer-clean-tags maintainer-clean-generic \
 
 maintainer-clean: maintainer-clean-recursive
 
-.PHONY: install-data-recursive uninstall-data-recursive \
-install-exec-recursive uninstall-exec-recursive installdirs-recursive \
-uninstalldirs-recursive all-recursive check-recursive \
-installcheck-recursive info-recursive dvi-recursive \
-mostlyclean-recursive distclean-recursive clean-recursive \
+.PHONY: uninstall-includeHEADERS install-includeHEADERS \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
+uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
+all-recursive check-recursive installcheck-recursive info-recursive \
+dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
 dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
@@ -351,6 +353,11 @@ uninstall-am uninstall all-redirect all-am all installdirs-am \
 installdirs mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
+
+distclean-local: clean-local
+
+clean-local:
+	-rm -f ${OTHER_HEADS}
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
