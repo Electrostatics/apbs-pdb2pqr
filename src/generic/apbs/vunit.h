@@ -61,6 +61,7 @@
 #define Vunit_ec		1.6021773e-19
 #define Vunit_kb		1.3806581e-23
 #define Vunit_Na		6.0221367e+23
+#define Vunit_pi		3.1415927e+00
 #define Vunit_eps0		8.8541878e-12
 
 #endif /* ifndef _VUNIT_H_ */

@@ -60,11 +60,11 @@
 #include "apbs/vunit.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class Vcsm: Parameters and datatypes
+// Class Vpbe: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class Vcsm: Definition
+// Class Vpbe: Definition
 /////////////////////////////////////////////////////////////////////////// */
 
 typedef struct Vpbe { 
@@ -74,10 +74,13 @@ typedef struct Vpbe {
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
   AM *am;             /* Algebraic multilevel structure; wraps solver
-                       * portion of MC */
+                       * portion of MC.  am is the AM object for the problem to
+                       * be solved.  amRef is an optional AM object for a
+                       * reference problem to be solved on the same mesh. */
 
 
-  Vhash *hash;        /* Atomic hash table */
+  Vhash *solvHash;    /* Atomic hash table for solvent accessibility */
+  Vhash *ionHash;     /* Atomic hash table for ionic accessibility */
   Vcsm *csm;          /* Charge-simplex map */
 
   double ionConc;     /* Ionic strength (M) */
@@ -85,7 +88,12 @@ typedef struct Vpbe {
   double soluteDiel;  /* Solute dielectric constant (unitless) */
   double solventDiel; /* Solvent dielectric constant (unitless) */
   double solventRadius;
-                      /* Solvent radius (angstroms) */
+                      /* Solvent probe radius (angstroms) for accessibility;
+                       * determining defining volumes for the dielectric
+                       * coefficient */
+  double ionRadius;   /* Ion probe radius (angstroms) for accessibility;
+                       * determining defining volumes for the ionic strength
+                       * coefficient */
 
   double xkappa;      /* Debye-Huckel parameter */
   double deblen;      /* Debye length */
@@ -100,8 +108,6 @@ typedef struct Vpbe {
                       /* Charge of solute molecule (e) */
 
   int paramFlag;      /* Check to see if the parameters have been set */
-  int csmFlag;        /* Check to see if the charge-simplex map has been
-                       * constructued */
   
 } Vpbe;
 
@@ -122,17 +128,19 @@ VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am);
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 
-VEXTERNC void    Vpbe_initialize(Vpbe *thee, 
-                    double ionConc, double T, double soluteDiel, 
-                    double solventDiel, double solventRadius); 
+VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius, 
+                    double T, double soluteDiel, double solventDiel, 
+                    double solventRadius); 
 
 VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
 VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
 VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
-VEXTERNC Vhash*  Vpbe_getVhash(Vpbe *thee);
+VEXTERNC Vhash*  Vpbe_getSolventHash(Vpbe *thee);
+VEXTERNC Vhash*  Vpbe_getIonHash(Vpbe *thee);
 VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
 
 VEXTERNC double Vpbe_getIonConc(Vpbe *thee);
+VEXTERNC double Vpbe_getIonRadius(Vpbe *thee);
 VEXTERNC double Vpbe_getTemperature(Vpbe *thee);           
 VEXTERNC double Vpbe_getSoluteDiel(Vpbe *thee); 
 VEXTERNC double* Vpbe_getSoluteCenter(Vpbe *thee);
@@ -146,5 +154,6 @@ VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
 VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, int *length);
 VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, int color);
+VEXTERNC double Vpbe_getCoulombEnergy1(Vpbe *thee);
 
 #endif /* ifndef _VALIST_H_ */
