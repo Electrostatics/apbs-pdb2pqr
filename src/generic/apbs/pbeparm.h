@@ -71,77 +71,73 @@
  */
 struct PBEparm {
 
-    int molid;                 /**< Molecule ID to perform calculation on */
-    int setmolid;              /**< Flag, @see molid */
-    int useDielMap;            /**< Indicates whether we use an external
-                                * dielectric maps (note plural) */
-    int dielMapID;             /**< Dielectric map ID (if used) */
-    int useKappaMap;           /**< Indicates whether we use an external
-                                * kappa map */
-    int kappaMapID;            /**< Kappa map ID (if used) */
-    int useChargeMap;          /**< Indicates whether we use an external
-                                * charge distribution map */
-    int chargeMapID;           /**< Charge distribution map ID (if used) */
-    int nonlin;                /**< 0 => LPBE, 1 => NPBE */
-    int setnonlin;             /**< Flag, @see nonlin */
-    int bcfl;                  /**< Boundary condition: 0 => zero, 1 => single
-                                * Debye-Huckel sphere, 2 => multiple Debye-
-                                * Huckel spheres, 4 => focusing */
-    int setbcfl;               /**< Flag, @see bcfl */
-    int nion;                  /**< Number of counterion species */
-    int setnion;               /**< Flag, @see nion */
-    double ionq[MAXION];       /**< Counterion charges (in e) */
-    double ionc[MAXION];       /**< Counterion concentrations (in M) */
-    double ionr[MAXION];       /**< Counterion radii (in A) */
-    int setion[MAXION];        /**< Flag, @see ionq */
-    double pdie;               /**< Solute dielectric */
-    int setpdie;               /**< Flag, @see pdie */
-    double sdie;               /**< Solvent dielectric */
-    int setsdie;               /**< Flag, @see sdie */
-    Vchrg_Meth chgm;           /**< Charge discretization method */
-    int setchgm;               /**< Flag, @see chgm */
-    Vsurf_Meth srfm;           /**< Surface calculation method */
-    int setsrfm;               /**< Flag, @see srfm */
-    double srad;               /**< Solvent radius */
-    int setsrad;               /**< Flag, @see srad */
-    double swin;               /**< Cubic spline window */
-    int setswin;               /**< Flag, @see swin */
-    double temp;               /**< Temperature (in K) */
-    int settemp;               /**< Flag, @see temp */
-    double gamma;              /**< Surface tension for apolar energies/forces
-                                * (in kJ/mol/A^2) */
-    int setgamma;              /**< Flag, @see gamma */
-    int calcenergy;            /**< Energy calculation
-				* \li 0: don't calculate out energy
-                                * \li 1: calculate total energy 
-				* \li 2: calculate atom-level total energies
-				*        and all energy components*/
-    int setcalcenergy;         /**< Flag, @see calcenergy */
-    int calcforce;             /**< Atomic forces I/O 
-                                * \li 0: don't calculate forces
-                                * \li 1: calculate net forces on molecule
-                                * \li 2: calculate atom-level forces */
-    int setcalcforce;          /**< Flag, @see calcforce */
-    int numwrite;              /**< Number of write statements encountered */
+    int molid;  /**< Molecule ID to perform calculation on */
+    int setmolid;  /**< Flag, @see molid */
+    int useDielMap;  /**< Indicates whether we use an external
+                      * dielectric maps (note plural) */
+    int dielMapID;  /**< Dielectric map ID (if used) */
+    int useKappaMap;  /**< Indicates whether we use an external
+                       * kappa map */
+    int kappaMapID;  /**< Kappa map ID (if used) */
+    int useChargeMap;  /**< Indicates whether we use an external
+                        * charge distribution map */
+    int chargeMapID;  /**< Charge distribution map ID (if used) */
+    int nonlin;  /**< 0 => LPBE, 1 => NPBE */
+    int setnonlin;  /**< Flag, @see nonlin */
+    Vbcfl bcfl;  /**< Boundary condition method */
+    int setbcfl;  /**< Flag, @see bcfl */
+    int nion;  /**< Number of counterion species */
+    int setnion;  /**< Flag, @see nion */
+    double ionq[MAXION];  /**< Counterion charges (in e) */
+    double ionc[MAXION];  /**< Counterion concentrations (in M) */
+    double ionr[MAXION];  /**< Counterion radii (in A) */
+    int setion[MAXION];  /**< Flag, @see ionq */
+    double pdie;  /**< Solute dielectric */
+    int setpdie;  /**< Flag, @see pdie */
+    double sdie;  /**< Solvent dielectric */
+    int setsdie;  /**< Flag, @see sdie */
+    Vchrg_Meth chgm;  /**< Charge discretization method */
+    int setchgm;  /**< Flag, @see chgm */
+    Vsurf_Meth srfm;  /**< Surface calculation method */
+    int setsrfm;  /**< Flag, @see srfm */
+    double srad;  /**< Solvent radius */
+    int setsrad;  /**< Flag, @see srad */
+    double swin;  /**< Cubic spline window */
+    int setswin;  /**< Flag, @see swin */
+    double temp;  /**< Temperature (in K) */
+    int settemp;  /**< Flag, @see temp */
+    double gamma;  /**< Surface tension for apolar energies/forces
+                    * (in kJ/mol/A^2) */
+    int setgamma;  /**< Flag, @see gamma */
+    int calcenergy;  /**< Energy calculation
+                      * \li 0: don't calculate out energy
+                      * \li 1: calculate total energy 
+                      * \li 2: calculate atom-level total energies
+                      * and all energy components*/
+    int setcalcenergy;  /**< Flag, @see calcenergy */
+    int calcforce;  /**< Atomic forces I/O 
+                     * \li 0: don't calculate forces
+                     * \li 1: calculate net forces on molecule
+                     * \li 2: calculate atom-level forces */
+    int setcalcforce;  /**< Flag, @see calcforce */
+    int numwrite;  /**< Number of write statements encountered */
     char writestem[PBEPARM_MAXWRITE][VMAX_ARGLEN]; /**< File stem to write 
-                                * data to */
-    Vdata_Type writetype[PBEPARM_MAXWRITE]; /**< What data to write */
-    Vdata_Format writefmt[PBEPARM_MAXWRITE]; /**< File format to write data 
-                                * in */
-    int writemat;              /**< Write out the operator matrix? 
-                                    \li 0 => no 
-                                    \li 1 => yes */
-    int setwritemat;           /**< Flag, @see writemat */
-    char writematstem[VMAX_ARGLEN];    /**< File stem to write mat */
-    int writematflag;          /**< What matrix should we write:
-                                    \li 0 => Poisson (differential operator)
-                                    \li 1 => Poisson-Boltzmann operator
-					     linearized around solution (if
-                                             applicable) */
+                                                    * data to */
+    Vdata_Type writetype[PBEPARM_MAXWRITE];  /**< What data to write */
+    Vdata_Format writefmt[PBEPARM_MAXWRITE];  /**< File format to write data 
+                                               * in */
+    int writemat;  /**< Write out the operator matrix? 
+                    * \li 0 => no 
+                    * \li 1 => yes */
+    int setwritemat;  /**< Flag, @see writemat */
+    char writematstem[VMAX_ARGLEN];  /**< File stem to write mat */
+    int writematflag;  /**< What matrix should we write:
+                        * \li 0 => Poisson (differential operator)
+                        * \li 1 => Poisson-Boltzmann operator linearized around
+                        * solution (if applicable) */
 
-
-    int parsed;                /**< Has this been filled with anything other
-				* than the default values? */
+    int parsed;  /**< Has this been filled with anything other
+                  * than the default values? */
 };
 
 /** @typedef PBEparm

@@ -61,6 +61,75 @@
 #include "apbs/vcap.h"
 
 /**
+ * @brief  Linear solver type 
+ * @ingroup Vfetk
+ * @notes  Do not change these values; they correspond to settings in FEtk
+ */
+enum Vfetk_LsolvType {
+    VLT_SLU=0,  /**< SuperLU direct solve */
+    VLT_MG=1,  /**< Multigrid */
+    VLT_CG=2,  /**< Conjugate gradient */
+    VLT_BCG=3  /**< BiCGStab */
+};
+
+/**
+ * @brief  Declare FEMparm_LsolvType type
+ * @ingroup  Vfetk
+ */
+typedef enum Vfetk_LsolvType Vfetk_LsolvType;
+
+/**
+ * @brief  Non-linear solver type 
+ * @ingroup Vfetk
+ * @notes  Do not change these values; they correspond to settings in FEtk
+ */
+enum Vfetk_NsolvType {
+    VNT_NEW=0,  /**< Newton solver */
+    VNT_INC=1,  /**< Incremental */
+    VNT_ARC=2  /**< Psuedo-arclength */
+};
+
+/**
+ * @brief  Declare FEMparm_NsolvType type
+ * @ingroup  Vfetk
+ */
+typedef enum Vfetk_NsolvType Vfetk_NsolvType;
+
+/**
+ * @brief  Initial guess type
+ * @ingroup Vfetk
+ * @notes  Do not change these values; they correspond to settings in FEtk
+ */
+enum Vfetk_GuessType {
+    VGT_ZERO=0,  /**< Zero initial guess */
+    VGT_DIRI=1,  /**< Dirichlet boundary condition initial guess */
+    VGT_PREV=2  /**< Previous level initial guess */
+};
+
+/**
+ * @brief  Declare FEMparm_GuessType type
+ * @ingroup  Vfetk
+ */
+typedef enum Vfetk_GuessType Vfetk_GuessType;
+
+/**
+ * @brief  Preconditioner type
+ * @ingroup Vfetk
+ * @notes  Do not change these values; they correspond to settings in FEtk
+ */
+enum Vfetk_PrecType {
+    VPT_IDEN=0,  /**< Identity matrix */
+    VPT_DIAG=1,  /**< Diagonal scaling */
+    VPT_MG=2  /**< Multigrid */
+};
+
+/**
+ * @brief  Declare FEMparm_GuessType type
+ * @ingroup  Vfetk
+ */
+typedef enum Vfetk_GuessType Vfetk_GuessType;
+
+/**
  *  @struct  Vfetk
  *  @ingroup Vfetk
  *  @author  Nathan Baker
@@ -72,15 +141,23 @@
  */
 struct Vfetk { 
 
-  Vmem *vmem;         /**< Memory management object */
-  Gem *gm;            /**< Grid manager (container class for master vertex
-                       * and simplex lists as well as prolongation
-                       * operator for updating after refinement ) */
-  AM *am;             /**< Multilevel algebra manager */
+  Vmem *vmem;  /**< Memory management object */
+  Gem *gm;  /**< Grid manager (container class for master vertex
+             * and simplex lists as well as prolongation operator for updating
+             * after refinement ) */
+  AM *am;  /**< Multilevel algebra manager */
+  Vpbe *pbe;  /**< Poisson-Boltzmann object */
+  Vcsm *csm;  /**< Charge-simplex map */
+  Vfetk_LsolvType lkey;  /**< Linear solver method */
+  int lmax;  /**< Maximum number of linear solver iterations */
+  double ltol;  /**< Residual tolerance for linear solver */
+  Vfetk_NsolvType nkey;  /**< Nonlinear solver method */
+  int nmax;  /**< Maximum number of nonlinear solver iterations */
+  double ntol;  /**< Residual tolerance for nonlinear solver */
+  Vfetk_GuessType gues;  /**< Initial guess method */
+  int pjac;  /**< Flag to print the jacobians (usually set this to -1, 
+              * please) */
 
-  Vpbe *pbe;          /**< Poisson-Boltzmann object */
-  Vcsm *csm;          /**< Charge-simplex map */
-  
 };
 
 /** @typedef Vfetk
@@ -88,10 +165,6 @@ struct Vfetk {
  *  @brief   Declaration of the Vfetk class as the Vfetk structure
  */
 typedef struct Vfetk Vfetk;
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vfetk: Inlineable methods (vfetk.c)
-/////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VFETK)
 

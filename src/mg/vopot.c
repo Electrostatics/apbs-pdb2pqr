@@ -43,6 +43,7 @@
 
 #include "apbscfg.h"
 #include "apbs/vopot.h"
+#include "apbs/pbeparm.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -50,7 +51,7 @@ VEMBED(rcsid="$Id$")
 // Routine:  Vopot_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl) {
+VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, Vbcfl bcfl) {
 
     Vopot *thee = VNULL;
 
@@ -65,13 +66,9 @@ VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl) {
 // Routine:  Vopot_ctor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, int bcfl) {
+VPUBLIC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, Vbcfl bcfl) {
 
     if (thee == VNULL) return 0;
-    if ((bcfl < 0) || (bcfl > 2)) {
-        Vnm_print(2, "Vopot_ctor:  Bogus bcfl flag (%d)!\n", bcfl);
-        return 0;
-    }
     thee->bcfl = bcfl;
     thee->grid = grid;
     thee->pbe = pbe;
@@ -128,11 +125,11 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
 
         switch (thee->bcfl) {
 
-            case 0:
+            case BCFL_ZERO:
                 u = 0;
                 break;
 
-            case 1:
+            case BCFL_SDH:
                 size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
                 position = Vpbe_getSoluteCenter(thee->pbe);
                 charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
@@ -147,7 +144,7 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
                 u = val;
                 break;
 
-            case 2:
+            case BCFL_MDH:
                 u = 0;
                 for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
                     atom = Valist_getAtom(alist, iatom);
@@ -165,6 +162,16 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
                     u = u + val;
                 }
                 break;
+
+            case BCFL_UNUSED:
+                Vnm_print(2, "Vopot_pot:  Invalid bcfl flag (%d)!\n", 
+                  thee->bcfl);
+                return 0;
+
+            case BCFL_FOCUS:
+                Vnm_print(2, "Vopot_pot:  Invalid bcfl flag (%d)!\n", 
+                  thee->bcfl);
+                return 0;
 
             default:
                 Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
@@ -219,11 +226,11 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
 
         switch (thee->bcfl) {
 
-            case 0:
+            case BCFL_ZERO:
                 u = 0;
                 break;
 
-            case 1:
+            case BCFL_SDH:
                 size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
                 position = Vpbe_getSoluteCenter(thee->pbe);
                 charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
@@ -235,7 +242,7 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
                   u = zkappa2*(exp(-xkappa*(dist-size))/(1+xkappa*size));
                 break;
 
-            case 2:
+            case BCFL_MDH:
                 u = 0;
                 for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
                     atom = Valist_getAtom(alist, iatom);
@@ -251,6 +258,14 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
                     u = u + val;
                 }
                 break;
+
+            case BCFL_UNUSED:
+                Vnm_print(2, "Vopot_pot:  Invlid bcfl (%d)!\n", thee->bcfl);
+                return 0;
+
+            case BCFL_FOCUS:
+                Vnm_print(2, "Vopot_pot:  Invlid bcfl (%d)!\n", thee->bcfl);
+                return 0;
 
             default:
                 Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
@@ -291,13 +306,13 @@ VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
 
         switch (thee->bcfl) {
 
-            case 0:
+            case BCFL_ZERO:
                 grad[0] = 0.0;
                 grad[1] = 0.0;
                 grad[2] = 0.0;
                 break;
 
-            case 1:
+            case BCFL_SDH:
                 grad[0] = 0.0;
                 grad[1] = 0.0;
                 grad[2] = 0.0;
@@ -318,7 +333,7 @@ VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
                 grad[2] = val*dz/dist*(-1.0/dist/dist + xkappa/dist);
                 break;
 
-            case 2:
+            case BCFL_MDH:
                 grad[0] = 0.0;
                 grad[1] = 0.0;
                 grad[2] = 0.0;
@@ -342,6 +357,14 @@ VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
                 }
                 break;
 
+            case BCFL_UNUSED:
+                Vnm_print(2, "Vopot:  Invalid bcfl (%d)!\n", thee->bcfl);
+                return 0;
+
+            case BCFL_FOCUS:
+                Vnm_print(2, "Vopot:  Invalid bcfl (%d)!\n", thee->bcfl);
+                return 0;
+
             default:
                 Vnm_print(2, "Vopot_pot:  Bogus thee->bcfl flag (%d)!\n", 
                   thee->bcfl);
@@ -353,7 +376,6 @@ VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
     } 
 
     return 1;
-
 
 }
 

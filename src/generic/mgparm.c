@@ -47,18 +47,9 @@
 #include "apbs/mgparm.h"
 #include "apbs/vstring.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class MGparm: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_MGPARM)
 
-/* No inlineables */
-
 #endif /* if !defined(VINLINE_MGPARM) */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class MGparm: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
 
 VPUBLIC void MGparm_setCenterX(MGparm *thee, double x) {
     VASSERT(thee != VNULL);
@@ -121,12 +112,7 @@ VPUBLIC double MGparm_getHz(MGparm *thee) {
     return thee->grid[2];
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_ctor
-//
-// Author: Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC MGparm* MGparm_ctor(int type) {
+VPUBLIC MGparm* MGparm_ctor(MGparm_CalcType type) {
 
     /* Set up the structure */
     MGparm *thee = VNULL;
@@ -137,12 +123,7 @@ VPUBLIC MGparm* MGparm_ctor(int type) {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_ctor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
+VPUBLIC int MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
 
     int i;
 
@@ -182,11 +163,6 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
     return 1; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void MGparm_dtor(MGparm **thee) {
     if ((*thee) != VNULL) {
         MGparm_dtor2(*thee);
@@ -195,20 +171,8 @@ VPUBLIC void MGparm_dtor(MGparm **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_dtor2
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void MGparm_dtor2(MGparm *thee) { ; }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_check
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int MGparm_check(MGparm *thee) { 
 
     int rc, i, tdime[3], ti, tnlev[3], nlev;
@@ -228,7 +192,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
 
     /* Check sequential manual & dummy settings */
-    if ((thee->type == 0) || (thee->type == 3)) {
+    if ((thee->type == MCT_MAN) || (thee->type == MCT_DUM)) {
         if ((!thee->setgrid) && (!thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
             rc = 0;
@@ -244,7 +208,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
  
     /* Check sequential and parallel automatic focusing settings */
-    if ((thee->type == 1) || (thee->type == 2)) {
+    if ((thee->type == MCT_AUT) || (thee->type == MCT_PAR)) {
         if (!thee->setcglen) {
             Vnm_print(2, "MGparm_check:  CGLEN not set!\n");
             rc = 0;
@@ -264,7 +228,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
 
     /* Check parallel automatic focusing settings */
-    if (thee->type == 2) {
+    if (thee->type == MCT_PAR) {
         if (!thee->setpdime) {
             Vnm_print(2, "MGparm_check:  PDIME not set!\n");
             rc = 0;
@@ -335,11 +299,6 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     return rc;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_copy
-//  
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
     int i;
@@ -403,11 +362,6 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGparm_parseToken
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock) {
 
@@ -507,7 +461,7 @@ keyword!\n", tok);
 GCENT MOL keyword!\n", tok);
                     return -1;
                 } else {
-                    thee->cmeth = 1;
+                    thee->cmeth = MCM_MOL;
                     thee->centmol = ti;
                 }
             } else {
@@ -588,7 +542,7 @@ keyword!\n", tok);
 CGCENT MOL keyword!\n", tok);
                     return -1;
                 } else {
-                    thee->ccmeth = 1;
+                    thee->ccmeth = MCM_MOL;
                     thee->ccentmol = ti;
                 }
             } else {
@@ -627,7 +581,7 @@ CGCENT keyword!\n", tok);
 FGCENT MOL keyword!\n", tok);
                      return -1;
                 } else {
-                    thee->fcmeth = 1;
+                    thee->fcmeth = MCM_MOL;
                     thee->fcentmol = ti;
                 }
             } else {

@@ -51,6 +51,7 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+#include "apbs/vstring.h"
 
 /**
  *  @struct  Vgrid

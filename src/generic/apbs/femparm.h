@@ -53,6 +53,57 @@
 /* Generic header files */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+#include "apbs/vstring.h"
+
+/**
+ * @brief  Adaptive refinment error estimate tolerance key
+ * @ingroup FEMparm
+ */
+enum FEMparm_EtolType {
+    FET_SIMP=0,  /**< per-simplex error tolerance */
+    FET_GLOB=1,  /**< global error tolerance */
+    FET_FRAC=2   /**< fraction of simplices we want to have refined */
+};
+
+/**
+ * @brief  Declare FEparm_EtolType type
+ * @ingroup  FEMparm
+ */
+typedef enum FEMparm_EtolType FEMparm_EtolType;
+
+/**
+ * @brief  Adaptive refinment error estimator method
+ * @ingroup FEMparm
+ * @notes  Do not change these values; they correspond to settings in FEtk
+ */
+enum FEMparm_EstType {
+    FRT_UNIF=0,  /**< Uniform refinement */
+    FRT_GEOM=1,  /**< Geometry-based (i.e. surfaces and charges) refinement */
+    FRT_RESI=2,  /**< Nonlinear residual estimate-based refinement */
+    FRT_DUAL=3,  /**< Dual-solution weight nonlinear residual estimate-based
+                  * refinement */ 
+    FRT_LOCA=4  /**< Local problem error estimate-based refinement */
+};
+
+/**
+ * @brief  Declare FEMparm_EstType type
+ * @ingroup  FEMparm
+ */
+typedef enum FEMparm_EstType FEMparm_EstType;
+
+/**
+ * @brief  Calculation type 
+ * @ingroup FEMparm
+ */
+enum FEMparm_CalcType {
+    FCT_MAN=0  /**< fe-manual */
+};
+
+/**
+ * @brief  Declare FEMparm_CalcType type
+ * @ingroup  FEMparm
+ */
+typedef enum FEMparm_CalcType FEMparm_CalcType;
 
 /**
  *  @struct  FEMparm
@@ -62,9 +113,42 @@
  */
 struct FEMparm {
    
-    int parsed;         /**< Flag:  Has this structure been filled with
-                         * anything other than * the default values? (0 = no,
-                         * 1 = yes) */
+    int parsed;  /**< Flag:  Has this structure been filled with
+                  * anything other than * the default values? (0 = no,
+                  * 1 = yes) */
+    FEMparm_CalcType type;  /**<  Calculation type */
+    int settype;  /**< Boolean */
+    double domainRadius;  /**< Domain radius (in &Aring;) */
+    int setdomainRadius;  /**< Boolean */
+    double etol;  /**< Error tolerance for refinement; interpretation depends 
+                   * on the adaptive refinement method chosen */
+    int setetol;  /**< Boolean */
+    FEMparm_EtolType ekey;  /**< Adaptive refinment interpretation of error 
+                            * tolerance */
+    int setekey;  /**< Boolean */
+    FEMparm_EstType akeyPRE;  /**< Adaptive refinment error estimator method 
+                               * for pre-solution refine.  Note, this should
+                               * either be FRT_UNIF or FRT_GEOM.  */
+    int setakeyPRE;  /**< Boolean */
+    FEMparm_EstType akeySOLVE;  /**< Adaptive refinment error estimator method 
+                               * for a posteriori solution-based refinement. */
+    int setakeySOLVE;  /**< Boolean */
+    int targetNum;    /**< Initial mesh will continue to be marked and refined
+                        * with the method specified by akeyPRE until the mesh
+                        * contains this many simplies or until targetRes is
+                        * reached. */
+    int settargetNum;  /**< Boolean */
+    double targetRes; /**< Initial mesh will continue to be marked and refined
+                        * with the method specified by akeyPRE until the mesh
+                        * contains no markable simplices with longest edges
+                        * above this size or until targetNum is reached. */
+    int settargetRes;  /**< Boolean */
+    int maxsolve;  /**< Maximum number of solve-estimate-refine cycles */
+    int setmaxsolve;  /**< Boolean */
+    int maxvert;  /**< Maximum number of vertices in mesh (ignored if less 
+                   * than zero) */
+    int setmaxvert;  /**< Boolean */
+
 };
 
 /** @typedef FEMparm
@@ -80,39 +164,55 @@ typedef struct FEMparm FEMparm;
 /** @brief   Construct FEMparm
  *  @ingroup FEMparm
  *  @author  Nathan Baker
+ *  @param  type  FEM calculation type
  *  @returns Newly allocated and initialized Vpmgp object
  */
-VEXTERNC FEMparm* FEMparm_ctor();
+VEXTERNC FEMparm* FEMparm_ctor(FEMparm_CalcType type);
 
 /** @brief   FORTRAN stub to construct FEMparm
  *  @ingroup FEMparm
  *  @author  Nathan Baker
  *  @param   thee Pointer to allocated FEMparm object
+ *  @param  type  FEM calculation type
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int       FEMparm_ctor2(FEMparm *thee);
+VEXTERNC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type);
 
 /** @brief   Object destructor
  *  @ingroup FEMparm
  *  @author  Nathan Baker
  *  @param   thee  Pointer to memory location of FEMparm object
  */
-VEXTERNC void      FEMparm_dtor(FEMparm **thee);
+VEXTERNC void FEMparm_dtor(FEMparm **thee);
 
 /** @brief   FORTRAN stub for object destructor
  *  @ingroup FEMparm
  *  @author  Nathan Baker
  *  @param   thee  Pointer to FEMparm object
  */
-VEXTERNC void      FEMparm_dtor2(FEMparm *thee);
+VEXTERNC void FEMparm_dtor2(FEMparm *thee);
 
-/** @brief   Consistency check for parameter values stored in object
- *  @ingroup FEMparm
- *  @author  Nathan Baker
- *  @param   thee   FEMparm object
- *  @returns 1 if OK, 0 otherwise
+/** 
+ * @brief   Consistency check for parameter values stored in object
+ * @ingroup FEMparm
+ * @author  Nathan Baker
+ * @param   thee   FEMparm object
+ * @returns 1 if OK, 0 otherwise
  */
-VEXTERNC int       FEMparm_check(FEMparm *thee);
+VEXTERNC int FEMparm_check(FEMparm *thee);
+
+/** 
+ * @brief   Parse an MG keyword from an input file
+ * @ingroup MGparm
+ * @author  Nathan Baker
+ * @param   thee   MGparm object 
+ * @param   tok    Token to parse
+ * @param   sock   Stream for more tokens
+ * @return   1 if matched and assigned; -1 if matched, but there's
+ * some sort of error (i.e., too few args); 0 if not matched
+ */
+VEXTERNC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE], 
+  Vio *sock);
 
 #endif 
 

@@ -545,15 +545,15 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
     Vnm_tprint( 1, "  Molecule ID: %d\n", pbeparm->molid);
     if (pbeparm->nonlin) Vnm_tprint( 1, "  Nonlinear PBE\n");
     else Vnm_tprint( 1, "  Linearized PBE\n");
-    if (pbeparm->bcfl == 0) {
+    if (pbeparm->bcfl == BCFL_ZERO) {
         Vnm_tprint( 1, "  Zero boundary conditions\n");
-    } else if (pbeparm->bcfl == 1) {
+    } else if (pbeparm->bcfl == BCFL_SDH) {
         Vnm_tprint( 1, "  Single Debye-Huckel sphere boundary \
 conditions\n");
-    } else if (pbeparm->bcfl == 2) {
+    } else if (pbeparm->bcfl == BCFL_MDH) {
         Vnm_tprint( 1, "  Multiple Debye-Huckel sphere boundary \
 conditions\n");
-    } else if (pbeparm->bcfl == 4) {
+    } else if (pbeparm->bcfl == BCFL_FOCUS) {
         Vnm_tprint( 1, "  Boundary conditions from focusing\n");
     }
     Vnm_tprint( 1, "  %d ion species (%4.3f M ionic strength):\n",
@@ -740,7 +740,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     Vnm_tstart(27, "Setup timer");
 
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
-    if (mgparm->cmeth == 1) {
+    if (mgparm->cmeth == MCM_MOL) {
         for (j=0; j<3; j++) {
             imol = mgparm->centmol-1;
             if (imol < nosh->nmol) {
@@ -779,7 +779,7 @@ fgcent/cgcent!\n",  (imol+1));
     pmgp[i]->xcent = realCenter[0];
     pmgp[i]->ycent = realCenter[1];
     pmgp[i]->zcent = realCenter[2];
-    if (pbeparm->bcfl == 4) {
+    if (pbeparm->bcfl == BCFL_FOCUS) {
         if (i == 0) {
             Vnm_tprint( 2, "Can't focus first calculation!\n");
             return 0;

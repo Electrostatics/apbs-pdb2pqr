@@ -59,6 +59,7 @@
 #include "apbs/vgrid.h"
 #include "apbs/vunit.h"
 #include "apbs/vpbe.h"
+#include "apbs/pbeparm.h"
 
 /**
  *  @struct  Vopot
@@ -70,10 +71,8 @@ struct Vopot {
 
     Vgrid *grid;  /**< Grid object containing potential data (in units kT/e) */
     Vpbe   *pbe;  /**< Pointer to PBE object */
-    int bcfl;     /**< Boundary condition flag for returning potential values
-                   * at points off the grid.  0 is zero potential, 1 is single
-                   * sphere Debye-Huckel approximation, and 2 is multiple
-                   * sphere Debye-Huckel approximation */
+    Vbcfl bcfl;  /**< Boundary condition flag for returning potential
+                  * values at points off the grid. */
 };
 
 /** @typedef Vopot
@@ -89,12 +88,9 @@ typedef struct Vopot Vopot;
  *  @param   grid  Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
- *                 \li 0:  Zero potential
- *                 \li 1:  Single sphere Debye-Huckel approximation
- *                 \li 2:  Multiple sphere Debye-Huckel approximation
  *  @returns Newly allocated and initialized Vopot object
  */
-VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl);
+VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, Vbcfl bcfl);
 
 /** @brief   Initialize Vopot object with values obtained from Vpmg_readDX (for
  *           example)
@@ -104,12 +100,9 @@ VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl);
  *  @param   grid  Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
- *                 \li 0:  Zero potential
- *                 \li 1:  Single sphere Debye-Huckel approximation
- *                 \li 2:  Multiple sphere Debye-Huckel approximation
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, int bcfl);
+VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, Vbcfl bcfl);
 
 /** @brief   Get potential value (from mesh or approximation) at a point
  *  @ingroup Vopot
