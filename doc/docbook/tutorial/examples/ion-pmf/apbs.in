@@ -1,0 +1,143 @@
+read 
+    mol pqr complex.pqr    # Two-ion complex
+    mol pqr mol1.pqr       # Ion 1
+    mol pqr mol2.pqr       # Ion 2
+end
+elec name comp_solv        # Solvated complex
+    mg-manual
+    dime 97 33 33          # Grid dimensions
+    nlev 4                 # Multigrid levels
+    glen 24 12 12          # Grid lengths
+    gcent 6 0 0            # Grid center on (6.0, 0.0, 0.0)
+    mol 1 
+    lpbe                   # Linearized PB
+    bcfl mdh               # Full multipole boundary condition
+    ion 1 0.000 2.0        # Zero ionic strength
+    ion -1 0.000 2.0       # Zero ionic strength
+    pdie 1.0               # Solute dielectric
+    sdie 78.54             # Solvent dielectric
+    chgm spl2              # Cubic spline charge discretization
+    srfm mol               # Molecular surface
+    srad 1.4               # Solvent probe radius
+    swin 0.3               # Surface spline window
+    temp 298.15            # Temperature
+    gamma 0.00072          # Apolar coefficient
+    write pot dx pot-solv  # Inhomogeneous dielectric potential
+    calcenergy total       # Total energy
+    calcforce no           # No forces
+end
+elec name comp_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 1
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+    write pot dx pot-vac
+end
+elec name ion1_solv
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 2
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 78.54
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion1_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 2
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion2_solv
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 3
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 78.54
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion2_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 3
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+
+print energy comp_solv - comp_vac - ion1_solv + ion1_vac - ion2_solv + ion2_vac end
+
+quit

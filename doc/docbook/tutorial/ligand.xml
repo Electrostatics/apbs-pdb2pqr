@@ -1,0 +1,330 @@
+<chapter id="ligand-sect"> <title>Protein-ligand binding</title>
+  <para>
+    This section outlines the calculation of the electrostatic binding energy
+    for the protein kinase A complex with the inhibitor balanol.  This example
+    was provided by Chung Wong <email>c4wong@ucsd.edu</email> and is related
+    to the work described in 
+    <ulink url="http://dx.doi.org/10.1021/jm000443d">Wong CF, et al. J Med
+      Chem, 44 (10) 1530-1539 (2001).</ulink>
+  </para>
+
+  <sect1> <title>PQR files</title>
+    <para>The PQR files were prepared by Chung Wong from an energy-refined
+      version of PDB file <ulink url="http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=1BX6">1BX6</ulink>
+      with CHARMM22 charges and radii.  The individual PQR files can be
+      dowloaded:
+      <itemizedlist>
+        <listitem>
+          <para> 
+            <ulink url="examples/ligand/bx6_7_apo_apbs.pqr"><foreignphrase>apo</foreignphrase>
+              protein kinase A</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <ulink url="examples/ligand/bx6_7_lig_apbs.pqr">balanol</ulink>
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <ulink url="examples/ligand/bx6_7_bin_apbs.pqr">protein kinase
+              A/balanol complex</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+      <important>
+        <para>You may have to right-click the links to save, rather than
+          display, the PQR files.
+        </para>
+      </important>
+    </para>
+    <para>
+      These PQR files can be visualized via VMD:
+      <screen>
+        <prompt>$</prompt> <userinput>vmd -pdb</userinput> <replaceable>file.pqr</replaceable>
+      </screen>
+      where <replaceable>file.pqr</replaceable> is the name of the downloaded
+      PQR file.
+      An example of the complex structure is shown in the following figure.
+      <figure> <title>PKA-balanol complex</title>
+        <graphic fileref="images/pka-balanol.png"></graphic>
+      </figure>
+    </para>
+  </sect1>
+
+  <sect1> <title>Visualization of the electrostatic potentials</title>
+    <para>This section of the example illustrates the calculation of
+      lower-resolution electrostatic potentials suitable for interactive
+      display and manipulation.  First, we need to calculate electrostatic
+      potentials for the three molecules.  This is done with the following
+      APBS input file which can be downloaded 
+      <ulink url="examples/ligand/apbs-graphics.in">here</ulink>.
+      <example> <title>PKA/balanol/complex visualization APBS input</title>
+        <programlisting>
+read 
+    mol pqr bx6_7_lig_apbs.pqr  # Read balanol (mol 1)
+    mol pqr bx6_7_apo_apbs.pqr  # Read PKA (mol 2)
+    mol pqr bx6_7_bin_apbs.pqr  # Read complex (mol 3)
+end
+elec name bal
+    mg-manual                          # Use the multigrid method
+    dime 97 97 97                      # Grid dimensions
+    nlev 4                             # Multigrid levels
+    glen 70 70 70                      # Grid length
+    gcent mol 3                        # Center on complex
+    mol 1                              
+    lpbe                               
+    bcfl sdh                           # Monopole boundary conditions
+    ion 1 0.000 2.0                    # Zero ionic strength
+    ion -1 0.000 2.0                   
+    pdie 2.0                           # Solute dielectric
+    sdie 78.00                         # Solvent dielectric
+    chgm spl0                          # Charge disc method (linear)
+    srfm smol                          # Smoothed molecular surface
+    srad 0.0                           # Solvent radius
+    swin 0.3                           # Surface cubic spline window
+    temp 298.15                        # Temperature
+    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
+    calcenergy no
+    calcforce no
+    write pot dx ligand                # Write potential to ligand.dx
+end
+elec name pka
+    mg-manual                          
+    dime 97 97 97                      
+    nlev 4                             
+    glen 70 70 70
+    gcent mol 3
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+   write pot dx apo
+end
+elec name complex
+    mg-manual
+    dime 97 97 97
+    nlev 4
+    glen 70 70 70
+    gcent mol 3
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+    write pot dx complex
+end
+
+quit
+        </programlisting>
+      </example>
+      This APBS run can then be performed by typing:
+      <screen>
+        <prompt>$</prompt> <userinput>apbs <replaceable>apbs-graphics.in</replaceable></userinput>
+      </screen>
+      (assuming the above input file was named
+      <replaceable>apbs-graphics.in</replaceable>) and takes roughly 2 minutes
+      on a 2.2 GHz Intel Pentium 4.
+    </para>
+    <para>
+      In what follows, we use the Tcl
+      scripts 
+      <ulink url="examples/ligand/my_functions"><filename>my_functions</filename></ulink>
+      and 
+      <ulink url="examples/ligand/all.vmd"><filename>all.vmd</filename></ulink> 
+      to visualize the electrostatic potential data using VMD.  The
+      <filename>my_function</filename> Tcl script contains functions to load
+      all 3 data sets; the user simply needs to type (at the system prompt):
+      <screen>
+        <prompt>$</prompt> <userinput>vmd -e all.vmd</userinput>
+      </screen>
+      to load the ligand electrostatic potential into VMD.  VMD will display
+      the +1 kT/e potential isocontour as a blue transparent surface and the
+      -1 kT/e isocontour as a red surface as illustrated in the following
+      figure.
+      <figure> <title>Balanol electrostatic potential</title>
+        <graphic fileref="images/balanol-pot.png"></graphic>
+      </figure>
+    </para>
+    <para>
+      The next command loads the apo PKA electrostatic potential and is run
+      <emphasis>from within VMD</emphasis>:
+      <screen>
+        <prompt>vmd &gt;</prompt> <userinput>load_apo</userinput>
+      </screen>
+      which should yield an image that looks something like the following:
+      <figure> <title>Balanol electrostatic potential</title>
+        <graphic fileref="images/pka-pot.png"></graphic>
+      </figure>
+    </para>
+    <para>
+      Finally, the complex can be loaded by typing,
+      <emphasis>from within VMD</emphasis>:
+      <screen>
+        <prompt>vmd &gt;</prompt> <userinput>load_complex</userinput>
+      </screen>
+      this renders the electrostatic potential of the ligand in the context of
+      the complex and allows the user to examine charge/potential
+      complementarity in the system.
+      <figure> <title>Balanol electrostatic potential</title>
+        <graphic fileref="images/pka-balanol-pot.png"></graphic>
+      </figure>
+    </para>
+  </sect1>
+
+  <sect1> <title>Binding energy calculation</title>
+    <para>
+      Calculation of electrostatic binding energies for the PKA-balanol system
+      requires higher-resolution electrostatics calculations than could be
+      easily visualized in the previous section.  We will use focusing to
+      generate the finer data from the coarser calculations performed in the
+      earlier calculations.  This procedure is outlined in the following APBS
+      input file which is available for download 
+      <ulink url="examples/ligand/apbs-energy.in">here</ulink>.
+      <example> <title>Balanol-PKA energy calculation APBS input</title>
+        <programlisting>
+read 
+    mol pqr bx6_7_lig_apbs.pqr  # Balanol
+    mol pqr bx6_7_apo_apbs.pqr  # Protein kinase A
+    mol pqr bx6_7_bin_apbs.pqr  # Complex
+end
+
+elec name bal                # BALANOL ENERGY CALCULATION
+    mg-auto   
+    dime 65 65 65            # Grid dimensions
+    cglen 70 70 70           # Coarse grid lengths
+    cgcent mol 3             # Coarse grid centered on the complex
+    fglen 16 16 16           # Fine grid lengths
+    fgcent mol 1             # Fine grid centered on the complex
+    mol 1                    
+    lpbe                     # Linearized PB
+    bcfl sdh                 # Monopole boundary condition
+    ion 1 0.000 2.0          # Zero ionic strength
+    ion -1 0.000 2.0         
+    pdie 2.0                 # Solute dielectric
+    sdie 78.00               # Solvent dielectric
+    chgm spl0                # Linear charge discretization
+    srfm smol                # Smoothed molecular surface
+    srad 0.0                 # Solvent probe radius
+    swin 0.3                 # Surface spline window (not used)
+    temp 298.15              # Temperature
+    gamma 0.105              # Surface tension (not used)
+    calcenergy total
+    calcforce no
+end
+
+elec name pka                # PROTEIN KINASE A CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3       
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+elec name complex            # COMPLEX CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3       
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+print energy complex - pka - bal end
+
+quit
+        </programlisting>
+      </example>
+      <note>
+        <para>
+          This APBS input file represents a "non-canonical" method for
+          computing energies.  In any electrostatic energy calculation, care
+          needs to be taken to remove self-interaction terms.  This removal is
+          usually accomplished via a solvation energy calculation (cf. 
+          <link linkend="born-sect">the Born example</link>).  However, in
+          this example, we remove the self-interaction energies via a series
+          of calculations which use <emphasis>exactly</emphasis> the same grid
+          spacings, lengths, and centers.  Since all atoms in the complex are
+          present in the <foreignphrase>apo</foreignphrase> protein and
+          ligand, the self-interaction terms are effectively removed.
+        </para>
+      </note>
+      This example can be run by typing (from the system prompt):
+      <screen>
+        <prompt>$</prompt> <userinput>apbs <replaceable>apbs-energy.in</replaceable></userinput>
+      </screen>
+      (assuming the downloaded input file was name
+      <replaceable>apbs-energy.in</replaceable>).  This example takes roughly
+      2 minutes no a 2.2 GHz Intel Pentium 4 and should give a binding energy
+      of 5.8 kJ/mol -- which is in good agreement with the reported results.
+    </para>
+    <para>
+      One question that should arise is:  why is the binding unfavorable?  The
+      Coulombic contribution to the binding energy is favorable (you can use
+      the APBS program <filename>coulomb</filename> to evaluate this); but
+      there is a substantial polar desolvation penalty for binding of the
+      substrate to the protein.  However, our current calculation has
+      neglected apolar contributions to the energy.  These terms, which usally
+      scale with the surface area, favor the binding.  Using the APBS program
+      <filename>acc</filename>, we can determine that over 1000
+      A<superscript>2</superscript> of solvent-accessible surface area
+      is lost when the complex is formed.  Using even conservative values of
+      the apolar energy surface tension (which usually ranges between 0.105 to
+      210 kJ/A<superscript>2</superscript>), we can see that this buried
+      surface area provides stabilization to the complex.
+    </para>
+  </sect1>
+
+</chapter>

@@ -1,0 +1,156 @@
+<?xml version='1.0'?> <!-- -*- xml -*- -->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY apbsver "0.3.0">
+<!ENTITY apbsdat "FEB 2004">
+<!ENTITY license SYSTEM "license.xml">
+<!ENTITY born-sect SYSTEM "born.xml">
+<!ENTITY ligand-sect SYSTEM "ligand.xml">
+<!ENTITY condensation-sect SYSTEM "condensation.xml">
+<!ENTITY ion-pmf-sect SYSTEM "ion-pmf.xml">
+]>
+
+<book>
+  <bookinfo>
+    <title>APBS Tutorial</title>
+    <subtitle>(Actively under development)</subtitle>
+    <author>
+      <firstname>Nathan</firstname>
+      <surname>Baker</surname>
+      <affiliation>
+        <orgname>Washington University in St. Louis</orgname>
+        <orgdiv>Department of Biochemistry and Molecular Biophysics</orgdiv>
+        <orgdiv>Center for Computational Biology</orgdiv>
+      </affiliation>
+      <address>
+        <street>700 S. Euclid Ave.</street>
+        <street>Campus Box 8036</street>
+        <city>St. Louis</city>
+        <state>MO</state>
+        <postcode>63110</postcode>
+        <country>USA</country>
+        <email>baker@biochem.wustl.edu</email>
+      </address>
+    </author>
+    <date>19 MAR 2004</date>
+    <copyright>
+      <year>2002</year>
+      <year>2003</year>
+      <year>2004</year>
+      <holder>Washington University in St. Louis</holder>
+    </copyright>
+    <legalnotice>
+      <para>This file is part of APBS.</para>
+      <para>This program is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as published
+      by the Free Software Foundation; either version 2 of the License, or (at
+      your option) any later version.</para>
+      <para>This program is distributed in the hope that it will be useful, but
+      WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+      Public License for more details.</para>
+      <para>You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software Foundation,
+      Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</para>
+    </legalnotice>
+    <date>&apbsdat;</date>
+    <edition>APBS version &apbsver;</edition>
+  </bookinfo>
+
+  <toc></toc>
+
+  <chapter id="introduction-sect"> <title>Getting started</title>
+
+    <warning>
+      <para>This is my first attempt at a tutorial and it is actively under
+        development.  Please let me know if you encounter any problems;
+        suggestions about modifications/additions are always welcome.
+      </para>
+    </warning>
+
+
+    <para>
+      This tutorial is designed to help users get acquainted with
+      computational electrostatics calculations using APBS.  In order to
+      perform the provided examples, you will need:
+      <itemizedlist>
+        <listitem>
+          <para>
+            The latest version of APBS 
+            (<ulink url="http://agave.wustl.edu">http://agave.wustl.edu</ulink>)
+            to perform the electrostatics calculations.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            VMD 
+            (<ulink url="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</ulink>)
+            to visualize the molecular structures and electrostatic
+            potentials.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Gnuplot
+            (<ulink url="http://www.gnuplot.info/">http://www.gnuplot.info/</ulink>)
+            to plot energies, etc.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Bash (<ulink url="http://www.gnu.org/software/bash/bash.html">http://www.gnu.org/software/bash/bash.html</ulink>; standard on most
+            Linux, MacOS X)
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Python (<ulink url="http://www.python.org/">http://www.python.org/</ulink>; standard on most
+            Linux, MacOS X)
+          </para>
+        </listitem>
+      </itemizedlist>
+      Furthermore, these examples all assume that the above programs are in
+      your system path (i.e., can be run simply by typing the program name).
+    </para>
+
+    <para>
+      The following examples demonstrate some of the basic electrostatics
+      which require modest computational resources; i.e., can be performed
+      using in 0-5 min on a modern PC.  
+      <important>
+        <para> These examples build on one another and are designed to be
+          carried out in order.  Please read through each section completely
+          before trying the example.  
+        </para>
+      </important>
+      <warning>
+        <para> This tutorial require several files (linked to from the
+          individual examples) be downloaded.  It is recommended that you
+          create a separate subdirectory (e.g., 
+          <userinput>mkdir foo; cd foo</userinput>) for each example.  Also
+          many browsers will display, rather than save the example files.
+          Right-clicking on the link (or the displayed file) should present
+          you with the option to save the file.
+        </para>
+      </warning>
+    </para>
+  </chapter>
+
+  &born-sect;
+  &ion-pmf-sect;
+  &ligand-sect;
+  &condensation-sect;
+
+  <chapter>  <title>More examples...</title>
+    <para>  In addition to the relatively simple applications presented here,
+      there are a number of additional examples distributed with the APBS
+      software package 
+      (<ulink
+        url="http://agave.wustl.edu/apbs/">http://agave.wustl.edu/apbs/</ulink>)
+      which include ionization energies, protein-protein interactions, parallel 
+      calculations, etc.
+    </para>
+  </chapter>
+
+</book>
+      
