@@ -47,6 +47,14 @@
 #define _VAPBSHAL_H_
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Macros for space allocation.
+/////////////////////////////////////////////////////////////////////////// */
+#define MAXMOL 5             /* The maximum number of molecules that can be
+                                involved in a single PBE calculation */
+#define MAXFOCUS 5           /* The maximum number of times an MG calculation 
+                                can be focused */
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Inlining via macros for speed.
 // 
 // If you want to debug, do not define these
