@@ -474,22 +474,24 @@ keyword!\n", tok);
             return -1;
         }
         thee->writeacc = ti;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (strcasecmp(tok, "dx") == 0) {
-            thee->writeaccfmt = 0;
-        } else if (strcasecmp(tok, "avs") == 0) {
-            thee->writeaccfmt = 1;
-        } else if (strcasecmp(tok, "uhbd") == 0) {
-            thee->writeaccfmt = 2;
-        } else {
-            Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
+        if (ti != 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (strcasecmp(tok, "dx") == 0) {
+                thee->writeaccfmt = 0;
+            } else if (strcasecmp(tok, "avs") == 0) {
+                thee->writeaccfmt = 1;
+            } else if (strcasecmp(tok, "uhbd") == 0) {
+                thee->writeaccfmt = 2;
+            } else {
+                Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
 WRITEPOT keyword!\n", tok);
-            return -1;
+                return -1;
+            }
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            strncpy(thee->writeaccstem, tok, VMAX_ARGLEN);
+            thee->setwriteacc = 1;
+            return 1;
         }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        strncpy(thee->writeaccstem, tok, VMAX_ARGLEN);
-        thee->setwriteacc = 1;
-        return 1;
     }
 
     return 0;

@@ -279,10 +279,8 @@ c*    *** setup for the iteration ***
       elseif (iters .eq. -1) then
          call vtstop(40, 'MG iteration', 12)
          if (iok .eq. 1) then
-            call vnmprt(0, '-1, 0, 0', 7)
 c*          write(6,100) -1,0.0d0,0.0d0,cputme
          elseif (iok .eq. 2) then
-            call vnmprt(0, '-1, 0, 0', 7)
 c*          write(6,110) -1,0.0d0,0.0d0,cputme
          endif
          goto 99

@@ -103,8 +103,6 @@ int main(int argc, char **argv) {
     /* THe real partition centers */
     double realCenter[3];
 
-
-
     /* Instructions: */
     char *header = "\n\n\
     ----------------------------------------------------------------------\n\
