@@ -63,7 +63,7 @@
 /** 
  * @brief  Set this macro to 1 for hierarchical basis, 0 for normal solver
  * @ingroup  Frontend */
-#define USEHB 0
+#define USEHB 1
 
 /**
  * @brief  Structure to hold atomic forces

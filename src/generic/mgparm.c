@@ -269,7 +269,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                 tdime[i] = thee->dime[i];
                 ti = tdime[i] - 1;
                 tnlev[i] = 0;
-		/* Find the maximum number of times this dimension can be
+                /* Find the maximum number of times this dimension can be
                  * divided by two */
                 while (1) {
                     if (VODD(ti)) break;
@@ -277,10 +277,10 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                     ti = (int)ceil(0.5*ti);
                 }
                 (tnlev[i])--;
-	       /* We'd like to have at least VMGNLEV levels in the multigrid
-		* hierarchy.  This means that the dimension needs to be
-		* c*2^VMGNLEV + 1, where c is an integer. */
-                if ((tdime[i] > 17) && (tnlev[i] < VMGNLEV)) {
+                /* We'd like to have at least VMGNLEV levels in the multigrid
+                 * hierarchy.  This means that the dimension needs to be
+                 * c*2^VMGNLEV + 1, where c is an integer. */
+                if ((tdime[i] > 65) && (tnlev[i] < VMGNLEV)) {
                     Vnm_print(2, "NOsh:  Bad dime[%d]  = %d (%d nlev)!\n",
                       i, tdime[i], tnlev[i]);
                     ti = (int)(tdime[i]/VPOW(2.,(VMGNLEV+1)));

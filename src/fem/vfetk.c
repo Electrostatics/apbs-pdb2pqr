@@ -2080,7 +2080,9 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     /* For non-regularized PBE, check charge-simplex map */
     if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
         natoms = Vcsm_getNumberAtoms(csm, SS_id(simp));
-        if (natoms > 0) return 1;
+        if (natoms > 0) {
+            return 1;
+        }
     }
 
     /* We would like to resolve the mesh between the van der Waals surface the
@@ -2091,21 +2093,27 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
             refAcc = Vacc_molAcc(acc, vx[0], srad);
             for (i=1; i<(dim+1); i++) {
                 myAcc = Vacc_molAcc(acc, vx[i], srad);
-                if (myAcc != refAcc) return 1;
+                if (myAcc != refAcc) {
+                    return 1;
+                }
             }
             break;
         case VSM_MOLSMOOTH:
             refAcc = Vacc_molAcc(acc, vx[0], srad);
             for (i=1; i<(dim+1); i++) {
                 myAcc = Vacc_molAcc(acc, vx[i], srad);
-                if (myAcc != refAcc) return 1;
+                if (myAcc != refAcc) {
+                    return 1;
+                }
             }
             break;
         case VSM_SPLINE:
             refAcc = Vacc_splineAcc(acc, vx[0], swin, 0.0);
             for (i=1; i<(dim+1); i++) {
                 myAcc = Vacc_splineAcc(acc, vx[i], swin, 0.0);
-                if (myAcc != refAcc) return 1;
+                if (myAcc != refAcc) {
+                    return 1;
+                }
             }
             break;
         default:

@@ -1759,9 +1759,12 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
     Vnm_tprint(0, "Setting up mesh...\n");
     Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->domainLength);
     /* Uniformly refine the mesh a bit */
-    for (j=0; j<5; j++) {
+    for (j=0; j<2; j++) {
         AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
-        AM_refine(fetk[icalc]->am, 0, USEHB);
+        AM_refine(fetk[icalc]->am, 2, USEHB);
+        Vnm_redirect(0);
+        Gem_shapeChk(fetk[icalc]->gm);
+        Vnm_redirect(1);
     }
 
     /* Setup time statistics */
@@ -1982,6 +1985,7 @@ before you solve!\n");
             Vnm_tprint(1, "  Hit vertex number limit.\n");
             break;
         }
+        Vnm_print(1, "DEBUG -- akeyPRE = %d\n", feparm->akeyPRE);
         marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
           feparm->ekey, feparm->etol);
         if (marked == 0) {
@@ -2099,7 +2103,8 @@ VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
             break;
     }
 
-    marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
+    Vnm_print(1, "DEBUG -- akeySOLVE = %d\n", feparm->akeySOLVE);
+    marked = AM_markRefine(fetk[icalc]->am, feparm->akeySOLVE, -1, 
       feparm->ekey, feparm->etol);
     if (marked == 0) {
         Vnm_tprint(1, "      Marked 0 simps; hit error/size tolerance.\n");
@@ -2110,6 +2115,9 @@ VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
     AM_refine(fetk[icalc]->am, 0, USEHB);
     nverts = Gem_numVV(fetk[icalc]->gm);
     Vnm_tprint(1, "      Done refining; have %d verts.\n", nverts);
+    Vnm_redirect(0);
+    Gem_shapeChk(fetk[icalc]->gm);
+    Vnm_redirect(1);
 
     return 1;
 }

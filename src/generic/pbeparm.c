@@ -451,7 +451,7 @@ keyword!\n", tok);
             thee->setsrfm = 1;
             return 1;
         } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
-            thee->srfm = VSM_MOLSMOOTH;
+            thee->srfm = VSM_SPLINE;
             thee->setsrfm = 1;
             return 1;
         } else {
