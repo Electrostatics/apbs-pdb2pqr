@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 # You may need to edit the above to point to your version of Python 2.0
 
@@ -61,6 +61,10 @@ class Psize:
 		for line in file.readlines():
 			if string.find(line,"ATOM") == 0:
 				words = string.split(line[31:61])
+				if len(words) < 4:
+					sys.stderr.write("Can't parse following line:\n")
+					sys.stderr.write("%s\n" % line)
+					sys.exit(2)
 				self.gotatom = self.gotatom + 1
 				self.q = self.q + float(words[3])
 				if self.min[0] > float(words[0]): self.min[0] = float(words[0])
@@ -287,7 +291,7 @@ def usage():
 	psize = Psize()
 	usage = "\n"
 	usage = usage + "Psize script\n"
-	usage = usage + "Usage: psize.py <filename> [opts]\n"
+	usage = usage + "Usage: psize.py [opts] <filename>\n"
 	usage = usage + "Optional Arguments:\n"
 	usage = usage + "  --help               : Display this text\n"
 	usage = usage + "  --CFAC=<value>       : Factor by which to expand mol dimsto\n"
@@ -329,17 +333,18 @@ def main():
 	import getopt
 	filename = ""
 	shortOptList = ""
-	longOptList = ["help", "GMEMCEIL="]
-	if len(sys.argv) == 1: usage()
-	else:
-		filename = sys.argv[1]
-		sys.argv.pop(1)
-		if string.find(filename, ".pqr") == -1:
-			usage()
+	longOptList = ["help", "CFAC=", "SPACE=", "GMEMFAC=", "GMEMCEIL=", \
+		"OFAC=", "REDFAC=", "TFAC_ALPHA=", "TFAC_XEON=", "TFAC_ALPHA="]
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
-	except getopt.GetoptError:
+	except getopt.GetoptError, details:
+		sys.stderr.write("Option error (%s)!\n" % details)
 		usage()
+	if len(args) != 1: 
+		sys.stderr.write("Invalid argument list!\n")
+		usage()
+	else:
+		filename = args[0]
 
 	psize = Psize()	
 

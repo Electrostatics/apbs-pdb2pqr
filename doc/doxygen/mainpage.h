@@ -301,10 +301,12 @@
  *   export MP_EUILIB CC F77 CFLAGS FFLAGS
  * 
  *   cd ${TOP}/maloc
+ *   cat configure | sed -e "s/cross_compiling=no/cross_compiling=yes/g" > configure
  *   ./configure --prefix=${TOP}/dist --enable-mpi
  *   make && make install
  * 
  *   cd ${TOP}/apbs
+ *   cat configure | sed -e "s/cross_compiling=no/cross_compiling=yes/g" > configure
  *   ./configure --prefix=${TOP}/dist --with-blas=${BLASPATH}
  *   make && make install
  * </pre>
