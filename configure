@@ -10793,7 +10793,7 @@ PY_LINKFLAGS=${CFLAGS}
 PY_CC=${CC}
 case $host_cpu in
    x86_64*)
-      if test "${F&&}" = "pgf77"; then
+      if test "${F77}" = "pgf77"; then
 	  PY_CC=${F77}
       else
 	  PY_CFLAGS=""
