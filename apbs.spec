@@ -99,6 +99,8 @@ export CC='ccc'
 export CFLAGS='-O2 -arch ev6'
 export F77='fort'
 export FFLAGS='-O2 -arch ev6'
+./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+make
 %endif
 
 %install
