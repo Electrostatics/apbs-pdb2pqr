@@ -61,6 +61,15 @@ struct PBEparm {
 
     int molid;                 /**< Molecule ID to perform calculation on */
     int setmolid;              /**< Flag, @see molid */
+    int useDielMap;            /**< Indicates whether we use an external
+                                * dielectric map */
+    int dielMapID;             /**< Dielectric map ID (if used) */
+    int useKappaMap;           /**< Indicates whether we use an external
+                                * kappa map */
+    int kappaMapID;            /**< Kappa map ID (if used) */
+    int useChargeMap;          /**< Indicates whether we use an external
+                                * charge distribution map */
+    int chargeMapID;           /**< Charge distribution map ID (if used) */
     int nonlin;                /**< 0 => LPBE, 1 => NPBE */
     int setnonlin;             /**< Flag, @see nonlin */
     int bcfl;                  /**< Boundary condition: 0 => zero, 1 => single

@@ -115,11 +115,11 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
 
     } else {
 
-#if (VOPOT_BCFL == 0)
+#if defined(VOPOT_BCFL_0) 
 
         u = 0;
 
-#elseif (VOPOT_BCFL == 1)
+#elseif defined(VOPOT_BCFL_1)
 
         size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
         position = Vpbe_getSoluteCenter(thee->pbe);
@@ -135,7 +135,7 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
         u = val;
 
 
-#elseif (VOPOT_BCFL == 2)
+#elseif defined(VOPOT_BCFL_2)
 
         u = 0;
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {

@@ -336,7 +336,7 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
+VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname) {
 
     int i, j, k, itmp, u;
@@ -359,12 +359,12 @@ VPUBLIC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     if (sock == VNULL) {
         Vnm_print(2, "Vgrid_readDX: Problem opening virtual socket %s\n",
           fname);
-        return;
+        return 0;
     }
     if (Vio_accept(sock, 0) < 0) {
         Vnm_print(2, "Vgrid_readDX: Problem accepting virtual socket %s\n",
           fname);
-        return;
+        return 0;
     }
 
     Vio_setWhiteChars(sock, MCwhiteChars);
@@ -517,7 +517,7 @@ VPUBLIC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
       sizeof(double));
     if (thee->data == VNULL) {
         Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");
-        return;
+        return 0;
     }
                      
     for (k=0; k<thee->nz; k++) {
@@ -535,19 +535,19 @@ VPUBLIC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     Vio_acceptFree(sock);
     Vio_dtor(&sock);
 
-    return;
+    return 1;
 
   VERROR1:
     Vio_dtor(&sock);
     Vnm_print(2, "Vgrid_readDX:  Format problem with input file <%s>\n",
       fname);
-    return;
+    return 0;
 
   VERROR2:
     Vio_dtor(&sock);
     Vnm_print(2, "Vgrid_readDX:  I/O problem with input file <%s>\n",
       fname);
-    return;
+    return 0;
 
 
 

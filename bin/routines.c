@@ -95,6 +95,120 @@ VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  loadDielMaps
+// 
+// Purpose:  Load dielectric maps from files
+// 
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->ndiel > 0) 
+      Vnm_tprint( 1, "main:  Got paths for %d dielectric maps\n", nosh->ndiel);
+    else return 1;
+
+    for (i=0; i<nosh->ndiel; i++) {
+        Vnm_tprint( 1, "main:  Reading dielectric map data from %s:\n",
+          nosh->dielpath[i]);
+        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        if (nosh->dielfmt[i] == 0) {
+            if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->dielpath[i]) 
+              != 1) {
+                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                  nosh->dielpath[i]);
+                return 0;
+            }
+        } else {
+            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  loadKappaMaps
+//
+// Purpose:  Load kappa maps from files
+//
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->nkappa > 0) 
+      Vnm_tprint( 1, "main:  Got paths for %d kappa maps\n", nosh->nkappa);
+    else return 1;
+
+    for (i=0; i<nosh->nkappa; i++) {
+        Vnm_tprint( 1, "main:  Reading kappa map data from %s:\n",
+          nosh->kappapath[i]);
+        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        if (nosh->kappafmt[i] == 0) {
+            if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->kappapath[i]) 
+              != 1) {
+                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                  nosh->kappapath[i]);
+                return 0;
+            }
+        } else {
+            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  loadChargeMaps
+// 
+// Purpose:  Load charge maps from files
+//
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+
+    int i;
+
+    if (nosh->ncharge > 0)
+      Vnm_tprint( 1, "main:  Got paths for %d charge maps\n", nosh->ncharge);
+    else return 1;
+
+    for (i=0; i<nosh->ncharge; i++) {
+        Vnm_tprint( 1, "main:  Reading kappa map data from %s:\n",
+          nosh->chargepath[i]);
+        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+        if (nosh->chargefmt[i] == 0) {
+            if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, nosh->chargepath[i])
+              != 1) {
+                Vnm_tprint( 2, "main:  Fatal error while reading from %s\n",
+                  nosh->chargepath[i]);
+                return 0;
+            }
+        } else {
+            Vnm_tprint( 2, "main:  INVALID FORMAT!\n");
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  printPBEPARM
 //
 // Purpose:  Print useful stuff from the PBE parameter file
@@ -230,11 +344,13 @@ VPUBLIC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm, 
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
-  Valist *alist[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], 
-  Vpmg *pmg[NOSH_MAXCALC]) {
+  Valist *alist[NOSH_MAXMOL], Vgrid *dielMap[NOSH_MAXMOL],
+  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
     
     int j, bytesTotal, highWater;
     double sparm, iparm;
+    Vgrid *theDielMap, *theKappaMap, *theChargeMap;
 
     Vnm_tstart(27, "Setup timer");
 
@@ -285,7 +401,17 @@ VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
         Vpmgp_dtor(&(pmgp[i-1]));
         Vpbe_dtor(&(pbe[i-1]));
     }
-    Vpmg_fillco(pmg[i], pbeparm->srfm, pbeparm->swin);
+    if (pbeparm->useDielMap) theDielMap = dielMap[pbeparm->dielMapID-1];
+    else theDielMap = VNULL;
+    if (pbeparm->useKappaMap) theKappaMap = kappaMap[pbeparm->kappaMapID-1];
+    else theKappaMap = VNULL;
+    if (pbeparm->useChargeMap) theChargeMap = chargeMap[pbeparm->chargeMapID-1];
+    else theChargeMap = VNULL;
+    Vpmg_fillco(pmg[i], 
+      pbeparm->srfm, pbeparm->swin,
+      pbeparm->useDielMap, theDielMap,
+      pbeparm->useKappaMap, theKappaMap,
+      pbeparm->useChargeMap, theChargeMap);
 
     /* Setup time statistics */
     Vnm_tstop(27, "Setup timer");

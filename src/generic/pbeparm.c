@@ -108,6 +108,9 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->nion = 0;
     thee->swin = 0;
     thee->srad = 1.4;
+    thee->useDielMap = 0;
+    thee->useKappaMap = 0;
+    thee->useChargeMap = 0;
 
     return 1; 
 }
@@ -230,6 +233,12 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 
     thee->molid = parm->molid;
     thee->setmolid = parm->setmolid;
+    thee->useDielMap = parm->useDielMap;
+    thee->dielMapID = parm->dielMapID;
+    thee->useKappaMap = parm->useKappaMap;
+    thee->kappaMapID = parm->kappaMapID;
+    thee->useChargeMap = parm->useChargeMap;
+    thee->chargeMapID = parm->chargeMapID;
     thee->nonlin = parm->nonlin; 
     thee->setnonlin = parm->setnonlin;
     thee->bcfl = parm->bcfl;
@@ -272,7 +281,7 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setwritemat = parm->setwritemat;
     for (i=0; i<VMAX_ARGLEN; i++) thee->writematstem[i] = parm->writematstem[i];
     thee->writematflag = parm->writematflag;
-
+   
     thee->parsed = parm->parsed;
 
 }

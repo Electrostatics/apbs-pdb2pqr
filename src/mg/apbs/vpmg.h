@@ -56,6 +56,7 @@
 #include "apbs/valist.h"
 #include "apbs/vacc.h"
 #include "apbs/vcap.h"
+#include "apbs/vgrid.h"
 
  
 
@@ -112,6 +113,15 @@ struct Vpmg {
   double splineWin;              /**< Spline window parm for surf defs */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
                                   * called */
+  int useDielMap;                /**< Indicates whether Vpmg_fillco was called
+                                  * with an external dielectric map */
+  Vgrid *dielMap;                /**< External dielectric map */
+  int useKappaMap;               /**< Indicates whether Vpmg_fillco was called
+                                  * with an external kappa map */
+  Vgrid *kappaMap;               /**< External kappa map */
+  int useChargeMap;              /**< Indicates whether Vpmg_fillco was called
+                                  * with an external charge distribution map */
+  Vgrid *chargeMap;              /**< External charge distribution map */
 };
 
 /** @typedef Vpmg
@@ -233,9 +243,26 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *                  value at three points
  *            \li 2:  spline-based accessibility with epsparm =
  *                  windowing parameter (<1.0, please)
- *  @param   splineWin  Spline window (for use with surfMeth = 2)
+ *  @param   splineWin    Spline window (for use with surfMeth = 2)
+ *  @param   useDielMap   Specifies whether to use (1) or ignore (0) the 
+ *                        dielMap arguement
+ *  @param   dielMap      Pointer to a Vgrid object containing an external
+ *                        dielectric map.  Can be VNULL if useDielMap is 0.
+ *  @param   useKappaMap  Specifies whether to use (1) or ignore (0) the 
+ *                        kappaMap arguement
+ *  @param   kappaMap     Pointer to a Vgrid object containing an external
+ *                        kappa map.  Can be VNULL if useKappaMap is 0.
+ *  @param   useChargeMap Specifies whether to use (1) or ignore (0) the 
+ *                        chargeMap arguement
+ *  @param   chargeMap    Pointer to a Vgrid object containing an external
+ *                        charge distribution map.  Can be VNULL if
+ *                        useChargeMap is 0.
  */
-VEXTERNC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin);
+VEXTERNC void Vpmg_fillco(Vpmg *thee, 
+  int surfMeth,      double splineWin,
+  int useDielMap,   Vgrid *dielMap, 
+  int useKappaMap,  Vgrid *kappaMap,
+  int useChargeMap, Vgrid *chargeMap);
 
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg

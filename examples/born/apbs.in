@@ -2,7 +2,7 @@ read
     mol pqr ion.pqr                      # Read molecule 1
 end
 elec
-    mg                                 # Use the multigrid method
+    mg-manual                          # Use the multigrid method
     dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
     nlev 4                             # Number of levels in multilevel
@@ -59,7 +59,7 @@ elec
 				       #  1 => yes Formats: uhbd, dx, avs
 end
 elec
-    mg                                 # Use the multigrid method
+    mg-manual                          # Use the multigrid method
     dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
     nlev 4                             # Number of levels in multilevel

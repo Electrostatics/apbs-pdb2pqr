@@ -194,8 +194,8 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
         if (Vstring_strcasecmp(tok, "read") == 0) {
             Vnm_print(0, "NOsh: Parsing READ section\n");
             if (!NOsh_parseREAD(thee, sock)) return 0;
-            Vnm_print(0, "NOsh: Done parsing READ section (nmol = %d)\n",
-              thee->nmol);
+            Vnm_print(0, "NOsh: Done parsing READ section (nmol=%d, ndiel=%d, \
+nkappa=%d, ncharge=%d)\n", thee->nmol, thee->ndiel, thee->nkappa, thee->ncharge);
         } else if (Vstring_strcasecmp(tok, "print") == 0) {
             Vnm_print(0, "NOsh: Parsing PRINT section\n");
             if (!NOsh_parsePRINT(thee, sock)) return 0;
