@@ -110,15 +110,20 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->bcfl = 1;
     thee->key = 0;
     thee->iperf = 0;
-    if (nonlin ==  0) thee->meth = 2;
-    else thee->meth = 1;
+#if 0                            /* This is guaranteed to converge */
+    thee->meth = 2;
+    thee->mgcoar = 2;
+    thee->mgsolv = 1;
+#else                            /* But this is faster */
+    thee->meth = 0;
+    thee->mgcoar = 2;
+    thee->mgsolv = 0;
+#endif
     thee->mgkey = 0;
     thee->nu1 = 2;
     thee->nu2 = 2;
     thee->mgsmoo = 1;
     thee->mgprol = 0;
-    thee->mgcoar = 2;
-    thee->mgsolv = 1;
     thee->mgdisc = 0;
     thee->omegal = 8.0e-1;
     thee->omegan = 9.0e-1;
