@@ -71,4 +71,8 @@ Dave Sept                          Provided algorithms for diffusion-based
 Philippe Hunenberger               Provided example code for parsing of
 <phil@igc.phys.chem.ethz.ch>       PDB files in valist/valist.c
 
+Gary Huber                         Provided C++ fast multipole code.
+<ghuber@ucsd.edu>          
+                                   
+
 
