@@ -42,6 +42,7 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "supermatrix.h"
 
 #if defined(HAVE_FETK_H)
 #include "apbs/vfetk.h"
@@ -382,8 +383,7 @@ VPUBLIC double Vfetk_getLinearEnergy1(Vfetk *thee, int color) {
 //           to calculate the energy
 //           
 // Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.  THIS FUNCTION DOES NOT WORK FOR ANY
-//           METHOD RIGHT NOW.
+//           assem.c routines in MC. 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -394,8 +394,6 @@ VPUBLIC double Vfetk_getEnergyNorm2(Vfetk *thee, int color) {
     Alg *alg; 
     int level;
     double norm2;
-
-    Vnm_print(2, "Vfetk_getEnergyNorm2: This routine is horribly broken!\n");
 
     /* Get the max level from AM */
     level = AM_maxLevel(thee->am);
@@ -420,6 +418,69 @@ VPUBLIC double Vfetk_getEnergyNorm2(Vfetk *thee, int color) {
 
     return norm2;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_getPoissonDet
+//
+// Purpose:  Calculate the determinant of the differential operator
+//                 A u = -\nabla cdot \epsilon \nabla u
+//           in the current finite element basis.
+//           
+// Notes:    Uses SLU factorization and will be very slow for large matrices.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
+
+    Bmat *A;
+    Zslu *slu;
+    Bvec *diag;
+    /* Begin SuperLU-specific objects */
+    SuperMatrix *L, *U;
+    SCformat *Astore;
+    /* End SuperLU-specific objects */
+    Alg *alg; 
+    int level;
+    double det;
+
+    VASSERT(thee != VNULL);
+
+    /* Get the max level from AM */
+    level = AM_maxLevel(thee->am);
+    /* Get the alg object at that level */
+    alg = AM_alg(thee->am, level);
+
+    if (color>=0) Vnm_print(2,"Vfetk_getPoissonDet: color argument ignored!\n");
+    Vnm_print(2,"Vfetk_getPoissonDet: this routine will destroy stiffness matrix!!\n");
+
+    /* Get stiffness matrix */
+    A = alg->A;
+
+    /* Au = A u */
+    Vnm_print(1, "Vfetk_getPoissonDet: factoring stiffness matrix...\n");
+    fflush(stdout);
+    if (Bmat_sluFactor(A) == 0) {
+        Vnm_print(2, "Vfetk_getPoissonDet:  Error factoring matrix!\n");
+        Vnm_print(2, "Vfetk_getPoissonDet:  Last state = %d\n", A->state);
+        return 0.0;
+    }
+
+    /* Print out the diagonal of the upper triangle of the newly factored
+     * matrix */
+    slu = A->slu;
+    L = (SuperMatrix *)(slu->L);
+    U = (SuperMatrix *)(slu->U);
+    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d COLUMNS\n", U->ncol);
+    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d ROWS\n", U->nrow);
+    Astore = (SCformat *)(U->Store);
+    Vnm_print(1, "I THINK THE FACTORED MATRIX HAS %d NON-ZEROS\n", Astore->nnz);
+    Vnm_print(1, "PRINTING FACTORS:\n");
+    dPrint_CompCol_Matrix("U", U); 
+    dPrint_SuperNode_Matrix("L", L);
+
+    return 0.0;
+}
+    
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_getLinearEnergy2
@@ -440,19 +501,21 @@ VPUBLIC double Vfetk_getEnergyNorm2(Vfetk *thee, int color) {
 // Notes:    Large portions of this routine are borrowed from Mike Holst's
 //           assem.c routines in MC.  
 //
+//           THIS ROUTINE IS BROKEN!!!!  IT NEEDS A SURFACE INTEGRAL
+//           CONTRIBUTION:
+//              -\int_\partial \Omega u \epsilon \nabla u \cdot n ds
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vfetk_getLinearEnergy2(Vfetk *thee, int color) {
 
     double energy = 0.0;
 
-    Vnm_print(2, "Vfetk_getLinearEnergy2: WARNING! This routine may be broken!\n");
+    Vnm_print(2, "Vfetk_getLinearEnergy2: WARNING -- surface integral neglected!\n");
 
     /* Calculate the energy norm */
     energy = Vfetk_getEnergyNorm2(thee, color);
-    energy = energy/Vunit_pi/Vunit_pi/16.0;
-    energy = energy*Vunit_eps0*10e-10;
-    energy = energy/Vunit_ec/Vunit_ec*(Vunit_kb*thee->pbe->T);
+    energy = 0.5*energy/Vpbe_getZmagic(thee->pbe);
 
     return energy;
 }
