@@ -47,6 +47,8 @@
 #include "apbs/mgparm.h"
 #include "apbs/vstring.h"
 
+VEMBED(rcsid="$Id$")
+
 #if !defined(VINLINE_MGPARM)
 
 #endif /* if !defined(VINLINE_MGPARM) */
