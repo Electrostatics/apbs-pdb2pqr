@@ -975,6 +975,8 @@
  *   <dl>
  *   <dt> <code>energy</code> <dd>  Perform the calculations on the total
  *   energy 
+ *   <dt> <code>force</code> <dd>  Perform the calculations on the force
+ *   components
  *   </dl>
  *   <dt> <i>id</i> 
  *   <dd> ELEC statement ID (they are assigned in increasing order of

@@ -3,6 +3,7 @@ BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
 #############################################################################
 
   * Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
+  * Added 'print force ...' support for input files
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.1       04-23-02

@@ -154,7 +154,9 @@ struct NOsh {
     int chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
                                           * formats (0=>OpenDX) */
     int nprint;                          /**< How many print sections? */
-    int printwhat[NOSH_MAXPRINT];        /**< What do we print (0=>energy) */
+    int printwhat[NOSH_MAXPRINT];        /**< What do we print:
+                                          * \li 0 = energy
+                                          * \li 1 = force */
     int printnarg[NOSH_MAXPRINT];        /**< How many arguments in energy 
                                           * list */
     int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP]; /**< ELEC id (see elec2calc) */

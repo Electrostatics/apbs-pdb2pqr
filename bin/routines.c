@@ -1252,7 +1252,7 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i) {
 
     int j, calcid;
-    double ltenergy, gtenergy;
+    double ltenergy, gtenergy, scalar;
 
     Vnm_tprint( 1, "main:  print energy %d ", nosh->printcalc[i][0]);
     for (j=1; j<nosh->printnarg[i]; j++) {
@@ -1278,25 +1278,229 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     }
     for (j=1; j<nosh->printnarg[i]; j++) {
         calcid = nosh->elec2calc[nosh->printcalc[i][j]-1];
-        if (nosh->calc[calcid].pbeparm->calcenergy != 0) {
-            if (nosh->printop[i][j-1] == 0)
-              ltenergy = ltenergy + Vunit_kb * (1e-3) * Vunit_Na *
-                nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
-            else if (nosh->printop[i][j-1] == 1)
-              ltenergy = ltenergy - Vunit_kb * (1e-3) * Vunit_Na *
-                nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
-        } else {
-            Vnm_tprint( 2, "main:    Didn't calculate energy in \
-Calculation #%d\n", calcid+1);
+        /* Add or subtract? */
+        if (nosh->printop[i][j-1] == 0) scalar = 1.0;
+        else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
+        /* Accumulate */
+        ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+          nosh->calc[calcid].pbeparm->temp * totEnergy[calcid]);
+    }
+
+    Vnm_tprint( 1, "main:    Local net energy (PE %d) = %1.12E kJ/mol\n", 
+      Vcom_rank(com), ltenergy);
+    Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
+    Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+    Vnm_tprint( 1, "main:    Global net energy = %1.12E kJ/mol\n", gtenergy);
+
+    return 1;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  printForce
+//
+// Purpose:  Execute a PRINT ENERGY statement
+//
+// Args:     i     Index of energy statement to print
+//
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
+  AtomForce *atomForce[NOSH_MAXCALC], int i) {
+
+    int ipr, ifr, ivc, calcid, refnforce, refcalcforce;
+    double temp, scalar;
+    AtomForce *lforce, *gforce, *aforce;
+
+    Vnm_tprint( 1, "main:  print force %d ", nosh->printcalc[i][0]);
+    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
+        if (nosh->printop[i][ipr-1] == 0)
+          Vnm_print(1, "+ ");
+        else if (nosh->printop[i][ipr-1] == 1)
+          Vnm_print(1, "- ");
+        else {
+            Vnm_tprint( 2, "main:  Undefined PRINT operation!\n");
+            return 0;
+        }
+        Vnm_print(1, "%d ", nosh->printcalc[i][ipr]);
+    }
+    Vnm_print(1, "end\n");
+
+    /* First, go through and make sure we did the same type of force
+     * evaluation in each of the requested calculations */
+    calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
+    refnforce = nforce[calcid];
+    refcalcforce = nosh->calc[calcid].pbeparm->calcforce;
+    if (refcalcforce == 0) {
+        Vnm_tprint( 2, "main:    Didn't calculate force in calculation \
+#%d\n", calcid+1);
+        return 0;
+    }
+    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
+        calcid = nosh->elec2calc[nosh->printcalc[i][ipr]-1];
+        if (nosh->calc[calcid].pbeparm->calcforce != refcalcforce) {
+            Vnm_tprint(2, "main:    Inconsistent calcforce declarations in \
+calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
+calcid+1);
+            return 0;
+        }
+        if (nforce[calcid] != refnforce) {
+            Vnm_tprint(2, "main:    Inconsistent number of forces evaluated in \
+calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
+calcid+1);
             return 0;
         }
     }
 
-    Vnm_tprint( 1, "main:    Local answer (PE %d) = %1.12E kJ/mol\n", 
-      Vcom_rank(com), ltenergy);
-    Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
-    Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-    Vnm_tprint( 1, "main:    Global answer = %1.12E kJ/mol\n", gtenergy);
+    /* Now, allocate space to accumulate the forces */
+    lforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+    gforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+
+    /* Now, accumulate the forces */
+    calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
+    aforce = atomForce[calcid];
+    temp = nosh->calc[calcid].pbeparm->temp;
+
+    /* Load up the first calculation */
+    if (refcalcforce == 1) {
+        /* Set to total force */
+        for (ivc=0; ivc<3; ivc++) {
+            lforce[0].qfForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc];
+            lforce[0].ibForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc];
+            lforce[0].dbForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc];
+            lforce[0].npForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc];
+        }
+    } else if (refcalcforce == 2) { 
+        for (ifr=0; ifr<refnforce; ifr++) {
+            for (ivc=0; ivc<3; ivc++) {
+                lforce[ifr].qfForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc];
+                lforce[ifr].ibForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc];
+                lforce[ifr].dbForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc];
+                lforce[ifr].npForce[ivc] = 
+              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc];
+            }
+        }
+    }
+
+    /* Load up the rest of the calculations */
+    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
+        calcid = nosh->elec2calc[nosh->printcalc[i][ipr]-1];
+        temp = nosh->calc[calcid].pbeparm->temp;
+        aforce = atomForce[calcid];
+        /* Get operation */
+        if (nosh->printop[i][ipr-1] == 0) scalar = +1.0;
+        else if (nosh->printop[i][ipr-1] == 1) scalar = -1.0;
+        else scalar = 0.0;
+        /* Accumulate */
+        if (refcalcforce == 1) {
+            /* Set to total force */
+            for (ivc=0; ivc<3; ivc++) {
+                lforce[0].qfForce[ivc] += 
+                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc]);
+                lforce[0].ibForce[ivc] += 
+                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc]);
+                lforce[0].dbForce[ivc] += 
+                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc]);
+                lforce[0].npForce[ivc] +=
+                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc]);
+            }
+        } else if (refcalcforce == 2) {
+            for (ifr=0; ifr<refnforce; ifr++) {
+                for (ivc=0; ivc<3; ivc++) {
+                    lforce[ifr].qfForce[ivc] += 
+               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc]);
+                    lforce[ifr].ibForce[ivc] += 
+               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc]);
+                    lforce[ifr].dbForce[ivc] += 
+               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc]);
+                    lforce[ifr].npForce[ivc] += 
+               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc]);
+                }
+            }
+        }
+    }
+
+    Vnm_tprint( 0, "printEnergy:  Performing VERY INEFFICIENT global reduction (sum)\n");
+    for (ifr=0; ifr<refnforce; ifr++) {
+        Vcom_reduce(com, lforce[ifr].qfForce, gforce[ifr].qfForce, 3, 2, 0);
+        Vcom_reduce(com, lforce[ifr].ibForce, gforce[ifr].ibForce, 3, 2, 0);
+        Vcom_reduce(com, lforce[ifr].dbForce, gforce[ifr].dbForce, 3, 2, 0);
+        Vcom_reduce(com, lforce[ifr].npForce, gforce[ifr].npForce, 3, 2, 0);
+    }
+   
+#if 1
+    if (refcalcforce == 1) {
+        Vnm_tprint( 1, "main:    Local net fixed charge force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].qfForce[0],
+lforce[0].qfForce[1], lforce[0].qfForce[2]);
+        Vnm_tprint( 1, "main:    Local net ionic boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].ibForce[0],
+lforce[0].ibForce[1], lforce[0].ibForce[2]);
+        Vnm_tprint( 1, "main:    Local net dielectric boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].dbForce[0],
+lforce[0].dbForce[1], lforce[0].dbForce[2]);
+        Vnm_tprint( 1, "main:    Local net apolar boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].npForce[0],
+lforce[0].npForce[1], lforce[0].npForce[2]);
+    } else if (refcalcforce == 2) {
+        for (ifr=0; ifr<refnforce; ifr++) {
+            Vnm_tprint( 1, "main:    Local fixed charge force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].qfForce[0],
+lforce[ifr].qfForce[1], lforce[ifr].qfForce[2]);
+        Vnm_tprint( 1, "main:    Local ionic boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].ibForce[0],
+lforce[ifr].ibForce[1], lforce[ifr].ibForce[2]);
+        Vnm_tprint( 1, "main:    Local dielectric boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].dbForce[0],
+lforce[ifr].dbForce[1], lforce[ifr].dbForce[2]);
+        Vnm_tprint( 1, "main:    Local apolar boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].npForce[0],
+lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
+        }
+    }
+#endif
+ 
+    if (refcalcforce == 1) {
+        Vnm_tprint( 1, "main:    Global net fixed charge force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].qfForce[0], 
+gforce[0].qfForce[1], gforce[0].qfForce[2]);
+        Vnm_tprint( 1, "main:    Global net ionic boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].ibForce[0], 
+gforce[0].ibForce[1], gforce[0].ibForce[2]);
+        Vnm_tprint( 1, "main:    Global net dielectric boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].dbForce[0], 
+gforce[0].dbForce[1], gforce[0].dbForce[2]);
+        Vnm_tprint( 1, "main:    Global net apolar boundary force = \
+(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].npForce[0], 
+gforce[0].npForce[1], gforce[0].npForce[2]);
+    } else if (refcalcforce == 2) {
+        for (ifr=0; ifr<refnforce; ifr++) {
+            Vnm_tprint( 1, "main:    Global fixed charge force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].qfForce[0], 
+gforce[ifr].qfForce[1], gforce[ifr].qfForce[2]);
+        Vnm_tprint( 1, "main:    Global ionic boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].ibForce[0],
+gforce[ifr].ibForce[1], gforce[ifr].ibForce[2]);
+        Vnm_tprint( 1, "main:    Global dielectric boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].dbForce[0],
+gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
+        Vnm_tprint( 1, "main:    Global apolar boundary force \
+(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].npForce[0],
+gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
+        }
+    }
+
+    Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&lforce));
+    Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&gforce));
 
     return 1;
 

@@ -271,6 +271,9 @@ int main(int argc, char **argv) {
         /* Print energy */
         if (nosh->printwhat[i] == 0) {
             printEnergy(com, nosh, totEnergy, i);
+        /* Print force */
+        } else if (nosh->printwhat[i] == 1) {
+            printForce(com, nosh, nforce, atomForce, i);
         } else {
             Vnm_tprint( 2, "main:  Undefined PRINT keyword!\n");
             break;
