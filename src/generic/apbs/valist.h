@@ -49,7 +49,7 @@
 
 #include "apbs/vatom.h"
 #include "mc/vhal.h"
-#include "mc/vram.h"
+#include "mc/vmem.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Valist: Parameters and datatypes
@@ -63,6 +63,7 @@ typedef struct Valist {
 
   int number;         /* Number of atoms in list */
   Vatom *atoms;       /* Atom list */
+  Vmem *vmem;         /* Memory management object */
 
 } Valist;
 
