@@ -273,12 +273,14 @@ VEXTERNC double  Vfetk_qfEnergy(Vfetk *thee, int color);
  *           \li Uses LU factorization and can be very memory- and time-consuming
  *           for large matrices.
  *  @param   thee  Vfetk object
+ *  @param   color Partition to evaluate over (ignored if <0)
  *  @param   flag  Operator to evaluate:
  *           \li 0:  Helmholtz operator (NPBE tangent operator evaluated at zero
  *                 solution)
  *           \li 1:  Response function (NPBE tangent operator evaluated at NPBE
  *                 solution)
  *  @return  The log determinant of the specified operator
+ *  @bug     color argument ignored
  */
 VEXTERNC double Vfetk_lnDet(Vfetk *thee, int color, int flag);
 
