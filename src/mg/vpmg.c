@@ -332,20 +332,19 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
 
-    double hxNEW, hyNEW, hzNEW, xminNEW, yminNEW, zminNEW, xmaxNEW, ymaxNEW;
-    double zmaxNEW;
+    double hxNEW, hyNEW, hzNEW;
+    double xminNEW, yminNEW, zminNEW;
+    double xmaxNEW, ymaxNEW, zmaxNEW;
     int nxNEW, nyNEW, nzNEW;
-    int ihi, ilo, jhi, jlo, khi, klo, iatom;
-    double x, y, z, ifloat, jfloat, kfloat, *position;
-    Valist *alist; 
-    Vatom *atom;
+    int nxOLD, nyOLD, nzOLD;
+    int i;
 
     /* Set the new external energy contribution to zero.  Any external
      * contributions from higher levels will be included in the appropriate
      * energy function call. */
     thee->extEnergy = 0;
 
-    /* Calculate new problem dimensions */
+    /* New problem dimensions */
     hxNEW = thee->pmgp->hx;
     hyNEW = thee->pmgp->hy;
     hzNEW = thee->pmgp->hzed;
@@ -359,47 +358,19 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
     zminNEW = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
     zmaxNEW = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
 
-    /* Loop through the atoms, marking those outside the current domain */
-    alist = Vpbe_getValist(pmgOLD->pbe);
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-        atom = Valist_getAtom(alist, iatom);
-        position = Vatom_getPosition(atom);
-        x = position[0];
-        y = position[1];
-        z = position[2];
-        ifloat = (x - xminNEW)/hxNEW;
-        jfloat = (y - yminNEW)/hyNEW;
-        kfloat = (z - zminNEW)/hzNEW;
-        ihi = (int)ceil(ifloat);
-        ilo = (int)floor(ifloat);
-        jhi = (int)ceil(jfloat);
-        jlo = (int)floor(jfloat);
-        khi = (int)ceil(kfloat);
-        klo = (int)floor(kfloat);
+    /* Old problem dimensions */
+    nxOLD = pmgOLD->pmgp->nx;
+    nyOLD = pmgOLD->pmgp->ny;
+    nzOLD = pmgOLD->pmgp->nz;
 
-        /* See if this atom is outside the new problem domain and mark it if it
-         * is */
-        if ((ihi<nxNEW) && (jhi<nyNEW) && (khi<nzNEW) &&
-            (ilo>=0) && (jlo>=0) && (klo>=0)) Vatom_setPartID(atom, 0);
-        else Vatom_setPartID(atom, 1);
-    }
-
+    /* Create a partition based on the new problem dimensions */
+    Vpmg_setPart(pmgOLD, xminNEW, yminNEW, zminNEW, xmaxNEW, ymaxNEW, zmaxNEW);
+    /* Invert partition mask */
+    for (i=0; i<(nxOLD*nyOLD*nzOLD); i++) 
+      pmgOLD->pvec[i] = (!(pmgOLD->pvec[i]));
     /* Now calculate the energy on that subset of the domain */
-    pmgOLD->partFlag = 1;
-    if (pmgOLD->pmgp->nonlin == 0) {
-        /* For linear calculations, we can just use the subset of atoms we
-         * just marked. */
-        thee->extEnergy = Vpmg_getLinearEnergy1(pmgOLD, 1);
-    } else {
-        /* For nonlinear calculations, we need to do a volume integral */
-        Vnm_print(1, "extEnergy:  Focusing does not work with NPBE yet!\n");
-        VASSERT(0);
-    } 
-    pmgOLD->partFlag = 0;
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-        atom = Valist_getAtom(alist, iatom);
-        Vatom_setPartID(atom, 0);
-    }
+    thee->extEnergy = Vpmg_energy(pmgOLD, 1);
+    Vpmg_unsetPart(pmgOLD);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -521,9 +492,7 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
-    int iatom, nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
-    Vatom *atom;
-    Valist *alist;
+    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
 
     /* Get the parameters */    
     VASSERT(pmgp != VNULL); 
@@ -545,7 +514,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
         thee->pmgp->nrwk += (2*nf);
     }
 
-    Vnm_print(2, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
+    Vnm_print(0, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
       thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz, thee->pmgp->nlev);
 
     /* Allocate storage */
@@ -581,6 +550,8 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       10*(thee->pmgp->nx)*(thee->pmgp->nz), sizeof(double));
     thee->gzcf = (double *)Vmem_malloc(thee->vmem, 
       10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
+    thee->pvec = (int *)Vmem_malloc(thee->vmem, 
+      (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(int));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
     F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
@@ -595,22 +566,12 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
     /* Turn off restriction of observable calculations to a specific 
      * partition */
-    thee->partFlag = 0;
-    thee->partLower[0] = 0;
-    thee->partLower[1] = 0;
-    thee->partLower[2] = 0;
-    thee->partUpper[0] = 0;
-    thee->partUpper[1] = 0;
-    thee->partUpper[2] = 0;
-    alist = Vpbe_getValist(thee->pbe);
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-        atom = Valist_getAtom(alist,iatom);
-        Vatom_setPartID(atom,1);
-    }
-
+    Vpmg_unsetPart(thee);
 
     /* Ignore external energy contributions */
     thee->extEnergy = 0;
+
+    thee->filled = 0;
 
     return 1;
 }
@@ -719,6 +680,8 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       sizeof(double));
     thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz), 
       sizeof(double));
+    thee->pvec = (int *)Vmem_malloc(thee->vmem, 
+      (thee->pmgp->nz)*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(int));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
     F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
@@ -734,14 +697,9 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
 
     /* Turn off restriction of observable calculations to a specific 
      * partition */
-    thee->partFlag = 0;
-    thee->partLower[0] = 0;
-    thee->partLower[1] = 0;
-    thee->partLower[2] = 0;
-    thee->partUpper[0] = 0;
-    thee->partUpper[1] = 0;
-    thee->partUpper[2] = 0;
+    Vpmg_unsetPart(thee);
 
+    thee->filled = 0;
 
     return 1;
 }
@@ -832,9 +790,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 //                            smoothing
 //                       1 => smoothing based on a harmonic average of the
 //                            value at three points
-//                       2 => cubic spline approximation of step discontinuity;
-//                            set epsparm to the desired width of the step
-//                            function smoothing
 //           epsparm  Parameter for dielectric discretizing functions
 //
 // Author:   Nathan Baker
@@ -848,11 +803,12 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
     double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
-    double hx, hy, hzed;
+    double hx, hy, hzed, *apos, arad;
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
-    int acclo, accmid, acchi;
+    int imin, imax, jmin, jmax, kmin, kmax;
+    double dx2, dy2, dz2, rtot2;
+    int acclo, accmid, acchi, a000;
 
-    if (epsmeth == 2) Vnm_print(2, "Vpmg_fillco:  WARNING!!! epsmeth = 2 is horribly broken!!!\n");
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -897,145 +853,35 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
     for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hzed;
 
-    /* Fill the coefficient arrays */
-    for (k=0; k<nz; k++) {
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
-
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
-
-                /* the scalar (0th derivative) entry */
-                if (Vacc_ivdwAcc(acc, position, irad) == 1) 
-                  thee->ccf[IJK(i,j,k)] = zkappa2;
-                else thee->ccf[IJK(i,j,k)] = 0.0;
-
-                /* the chosen true solution */
-                thee->tcf[IJK(i,j,k)] = 0.0;
-
-                /* Clear out the load vector */
-                thee->fcf[IJK(i,j,k)] = 0.0;
-
-                /* The diagonal tensor (2nd derivative) entries.  Each of these
-                 * entries is evaluated ad the grid edges midpoints.  */
-                switch (epsmeth) {
-                  /* No dielectric smoothing */
-                  case 0: 
-                    /* x-direction */
-                    position[0] = thee->xf[i] + 0.5*hx;
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k];
-                    if (Vacc_molAcc(acc, position, srad) == 0) 
-                      thee->a1cf[IJK(i,j,k)] = epsp; 
-                    else thee->a1cf[IJK(i,j,k)] = epsw; 
-                    /* y-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j] + 0.5*hy;
-                    position[2] = thee->zf[k];
-                    if (Vacc_molAcc(acc, position, srad) == 0) 
-                      thee->a2cf[IJK(i,j,k)] = epsp; 
-                    else thee->a2cf[IJK(i,j,k)] = epsw; 
-                    /* z-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k] + 0.5*hzed;
-                    if (Vacc_molAcc(acc, position, srad) == 0) 
-                      thee->a3cf[IJK(i,j,k)] = epsp; 
-                    else thee->a3cf[IJK(i,j,k)] = epsw; 
-                    break; 
-
-                  /* A very rudimentary form of dielectric smoothing.
-                   * Specifically, the dielectric will be evaluated at the mid
-		   * point and the two flanking mesh points.  The fraction of
-		   * the grid edge in the solvent will then be calculated from
-		   * these three values (i.e., either 0, 1/3, 2/3, or 1).  The
-		   * dielectric value at the midpoint will then be assigned
-		   * based on the usual dielectric smoothing formula:
-		   * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
-                  case 1:
-                    /* x-direction */
-                    position[0] = thee->xf[i] + 0.5*hx;
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k];
-                    accmid = Vacc_molAcc(acc, position, srad);
-                    position[0] = thee->xf[i];
-                    acclo = Vacc_molAcc(acc, position, srad);
-                    position[0] = thee->xf[i] + hx;
-                    acchi = Vacc_molAcc(acc, position, srad);
-                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                    thee->a1cf[IJK(i,j,k)] = 
-                      epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    /* y-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j] + 0.5*hy;
-                    position[2] = thee->zf[k];
-                    accmid = Vacc_molAcc(acc, position, srad);
-                    position[1] = thee->yf[j];
-                    acclo = Vacc_molAcc(acc, position, srad);
-                    position[1] = thee->yf[j] + hy;
-                    acchi = Vacc_molAcc(acc, position, srad);
-                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                    thee->a2cf[IJK(i,j,k)] = 
-                      epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    /* z-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k] + 0.5*hzed;
-                    accmid = Vacc_molAcc(acc, position, srad);
-                    position[2] = thee->zf[k];
-                    acclo = Vacc_molAcc(acc, position, srad);
-                    position[2] = thee->zf[k] + hzed;
-                    acchi = Vacc_molAcc(acc, position, srad);
-                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                    thee->a3cf[IJK(i,j,k)] = 
-                      epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    break;
-
-                  /* Cubic spline approximation to dielectric step
-                   * discontinuity */
-                  case 2:
-                    /* x-direction */
-                    position[0] = thee->xf[i] + 0.5*hx;
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k];
-                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
-                    thee->a1cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
-                    /* y-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j] + 0.5*hy;
-                    position[2] = thee->zf[k];
-                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
-                    thee->a2cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
-                    /* z-direction */
-                    position[0] = thee->xf[i];
-                    position[1] = thee->yf[j];
-                    position[2] = thee->zf[k] + 0.5*hzed;
-                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
-                    thee->a3cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
-                    break;
-
-                  /* Oops, invalid epsmeth */
-                  default:
-                    Vnm_print(2, "Vpmg_fillco:  Bad epsmeth (%d)!\n", epsmeth);
-                    VASSERT(0);
-                }
-            }
-        }
+    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
+    for (i=0; i<(nx*ny*nz); i++) {
+        thee->tcf[i] = 0.0;
+        thee->fcf[i] = 0.0;
+        thee->ccf[i] = 0.0;
+        thee->a1cf[i] = 0.0;
+        thee->a2cf[i] = 0.0;
+        thee->a3cf[i] = 0.0;
     }
 
+    /* Loop through the atoms and do the following:
+     * 1.  Set ccf = -1.0 for all points inside the inflated van der Waals
+     *     radii
+     * 2.  Set a{123}cf = -1.0 if a point is inside the inflated van der Waals
+     *     radii
+     * 3.  Set a{123}cf = -2.0 if a point is inside the van der Waals radii
+     * 4.  Fill in the source term array
+     */
     /* Fill source term array */
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
         atom = Valist_getAtom(alist, iatom);
-
-        position[0] = Vatom_getPosition(atom)[0];
-        position[1] = Vatom_getPosition(atom)[1];
-        position[2] = Vatom_getPosition(atom)[2];
+        apos = Vatom_getPosition(atom);
+        arad = Vatom_getRadius(atom);
+        charge = zmagic*Vatom_getCharge(atom)/hx/hy/hzed;
 
         /* Make sure we're on the grid */
-        if ((position[0]<=xmin) || (position[0]>=xmax)  || \
-            (position[1]<=ymin) || (position[1]>=ymax)  || \
-            (position[2]<=zmin) || (position[2]>=zmax)) {
+        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+            (apos[2]<=zmin) || (apos[2]>=zmax)) {
             if (thee->pmgp->bcfl != 4) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
                   iatom, position[0], position[1], position[2]);
@@ -1049,10 +895,78 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
             fflush(stderr);
         } else {
 
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
+             * ASSIGNMENT (Steps #1-3) */
+            rtot2 = VSQR(irad + arad);
+            dx = irad + arad + hx;
+            imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
+            imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+            for (i=imin; i<=imax; i++) {
+                dx2 = VSQR(position[0] - hx*i);
+                if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + hy;
+                else dy = hy;
+                jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
+                jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
+                for (j=jmin; j<=jmax; j++) {
+                    dy2 = VSQR(position[1] - hy*j);
+                    if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2) + hzed;
+                    else dz = hzed;
+                    kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
+                    kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
+                    for (k=kmin; k<=kmax; k++) {
+                        /* See if grid point is inside ivdw radius and set ccf
+                         * accordingly */
+                        if ( (VSQR(k*hzed - position[2]) 
+                              + VSQR(j*hy - position[1]) 
+                              + VSQR(i*hx - position[0])) <= rtot2) 
+                          thee->ccf[IJK(i,j,k)] = -1.0;
+                        /* See if x-shifted grid point is inside ivdw rad. */
+                        if ( (VSQR(k*hzed - position[2]) 
+                              + VSQR(j*hy - position[1]) 
+                              + VSQR((i+0.5)*hx - position[0])) <= rtot2) {
+                            /* See if inside vdw rad */
+                            if ( (VSQR(k*hzed - position[2])
+                                 + VSQR(j*hy - position[1])
+                                 + VSQR((i+0.5)*hx - position[0])) 
+                                 <= VSQR(arad)) thee->a1cf[IJK(i,j,k)] = -2.0;
+                            else thee->a1cf[IJK(i,j,k)] = -1.0;
+                        } 
+                        /* See if y-shifted grid point is inside ivdw rad. */
+                        if ( (VSQR(k*hzed - position[2])
+                              + VSQR((j+0.5)*hy - position[1])
+                              + VSQR(i*hx - position[0])) <= rtot2) {
+                            /* See if inside vdw rad */
+                            if ( (VSQR(k*hzed - position[2])
+                                 + VSQR((j+0.5)*hy - position[1])
+                                 + VSQR(i*hx - position[0])) 
+                                 <= VSQR(arad)) thee->a2cf[IJK(i,j,k)] = -2.0;
+                            else thee->a2cf[IJK(i,j,k)] = -1.0;
+                        }        
+                        /* See if z-shifted grid point is inside ivdw rad. */
+                        if ( (VSQR((k+0.5)*hzed - position[2])
+                              + VSQR(j*hy - position[1])
+                              + VSQR(i*hx - position[0])) <= rtot2) {
+                            /* See if inside vdw rad */
+                            if ( (VSQR((k+0.5)*hzed - position[2])
+                                 + VSQR(j*hy - position[1])
+                                 + VSQR(i*hx - position[0])) 
+                                 <= VSQR(arad)) thee->a3cf[IJK(i,j,k)] = -2.0;
+                            else thee->a3cf[IJK(i,j,k)] = -1.0;
+                        }        
+                    }
+                }
+            }
+
+            /* FILL IN SOURCE TERM ARRAY */
             /* Figure out which vertices we're next to */
-            ifloat = (position[0] - xmin)/(hx);
-            jfloat = (position[1] - ymin)/(hy);
-            kfloat = (position[2] - zmin)/(hzed);
+            ifloat = position[0]/hx;
+            jfloat = position[1]/hy;
+            kfloat = position[2]/hzed;
 
             ihi = (int)ceil(ifloat);
             ilo = (int)floor(ifloat);
@@ -1062,7 +976,6 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
             klo = (int)floor(kfloat);
 
             /* Now assign fractions of the charge to the nearby verts */
-            charge = zmagic*Vatom_getCharge(atom)/hx/hy/hzed;
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
@@ -1075,6 +988,134 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
             thee->fcf[IJK(ilo,jhi,klo)] += ((1.0-dx)*dy*(1.0-dz)*charge);
             thee->fcf[IJK(ilo,jlo,klo)] += ((1.0-dx)*(1.0-dy)*(1.0-dz)*charge);
 
+        }
+    }
+
+    /* Interpret markings and fill the coefficient arrays */
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+
+                position[0] = thee->xf[i];
+                position[1] = thee->yf[j];
+                position[2] = thee->zf[k];
+
+                /* the scalar (0th derivative) entry */
+                if (thee->ccf[IJK(i,j,k)] == -1.0)
+                  thee->ccf[IJK(i,j,k)] = 0.0;
+                else thee->ccf[IJK(i,j,k)] = zkappa2;
+
+                /* The diagonal tensor (2nd derivative) entries.  Each of these
+                 * entries is evaluated ad the grid edges midpoints.  */
+                if (thee->a1cf[IJK(i,j,k)] == -2.0)
+                  thee->a1cf[IJK(i,j,k)] = epsp;
+                if (thee->a2cf[IJK(i,j,k)] == -2.0)
+                  thee->a2cf[IJK(i,j,k)] = epsp;
+                if (thee->a3cf[IJK(i,j,k)] == -2.0)
+                  thee->a3cf[IJK(i,j,k)] = epsp;
+                if (thee->a1cf[IJK(i,j,k)] == 0.0)
+                  thee->a1cf[IJK(i,j,k)] = epsw;
+                if (thee->a2cf[IJK(i,j,k)] == 0.0)
+                  thee->a2cf[IJK(i,j,k)] = epsw;
+                if (thee->a3cf[IJK(i,j,k)] == 0.0)
+                  thee->a3cf[IJK(i,j,k)] = epsw;
+
+                switch (epsmeth) {
+                  /* No dielectric smoothing */
+                  case 0: 
+                    /* x-direction */
+                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i] + 0.5*hx;
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k];
+                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                          thee->a1cf[IJK(i,j,k)] = epsp; 
+                        else thee->a1cf[IJK(i,j,k)] = epsw; 
+                    }
+                    /* y-direction */
+                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j] + 0.5*hy;
+                        position[2] = thee->zf[k];
+                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                          thee->a2cf[IJK(i,j,k)] = epsp; 
+                        else thee->a2cf[IJK(i,j,k)] = epsw; 
+                    }
+                    /* z-direction */
+                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k] + 0.5*hzed;
+                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                          thee->a3cf[IJK(i,j,k)] = epsp; 
+                        else thee->a3cf[IJK(i,j,k)] = epsw; 
+                    }
+                    break; 
+
+                  /* A very rudimentary form of dielectric smoothing.
+                   * Specifically, the dielectric will be evaluated at the mid
+		   * point and the two flanking mesh points.  The fraction of
+		   * the grid edge in the solvent will then be calculated from
+		   * these three values (i.e., either 0, 1/3, 2/3, or 1).  The
+		   * dielectric value at the midpoint will then be assigned
+		   * based on the usual dielectric smoothing formula:
+		   * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
+                  case 1:
+                    if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
+                        (thee->a2cf[IJK(i,j,k)] == -1.0) ||
+                        (thee->a3cf[IJK(i,j,k)] == -1.0)) {
+                        position[0] = thee->xf[i] + 0.5*hx;
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k];
+                        a000 = Vacc_molAcc(acc, position, srad);
+                    }
+                    /* x-direction */
+                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i] + 0.5*hx;
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k];
+                        acclo = a000;
+                        accmid = Vacc_molAcc(acc, position, srad);
+                        position[0] = thee->xf[i] + hx;
+                        acchi = Vacc_molAcc(acc, position, srad);
+                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
+                        thee->a1cf[IJK(i,j,k)] = 
+                          epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    }
+                    /* y-direction */
+                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j] + 0.5*hy;
+                        position[2] = thee->zf[k];
+                        accmid = Vacc_molAcc(acc, position, srad);
+                        acclo = a000;
+                        position[1] = thee->yf[j] + hy;
+                        acchi = Vacc_molAcc(acc, position, srad);
+                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
+                        thee->a2cf[IJK(i,j,k)] = 
+                          epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    }
+                    /* z-direction */
+                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                        position[0] = thee->xf[i];
+                        position[1] = thee->yf[j];
+                        position[2] = thee->zf[k] + 0.5*hzed;
+                        accmid = Vacc_molAcc(acc, position, srad);
+                        acclo = a000;
+                        position[2] = thee->zf[k] + hzed;
+                        acchi = Vacc_molAcc(acc, position, srad);
+                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
+                        thee->a3cf[IJK(i,j,k)] = 
+                          epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    }
+                    break;
+
+                  /* Oops, invalid epsmeth */
+                  default:
+                    Vnm_print(2, "Vpmg_fillco:  Bad epsmeth (%d)!\n", epsmeth);
+                    VASSERT(0);
+                }
+            }
         }
     }
 
@@ -1128,20 +1169,49 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
             }
         }
     }
+
+    thee->filled = 1;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_energy
+//
+// Purpose:  Return the energy in units of $k_B T$.  
+//
+// Args:     extFlag => If this was a focused calculation, then it is possible
+//                      to include the energy contributions from the outside
+//                      the focused domain.  This should be on (=1) for
+//                      sequential focusing calculations and off (=0) for
+//                      parallel calculations.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+
+    if (thee->pmgp->nonlin) {
+        Vnm_print(2, "Vpmg_energy:  NPBE energy routines not implemented yet!\n");
+        return 0.0;
+    } else {
+        return Vpmg_qfEnergy(thee, extFlag);
+    }
+
+    return 0.0;
+
+}
+
     
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_getLinearEnergy1
+// Routine:  Vpmg_qfEnergy
 //
-// Purpose:  using the solution at the finest mesh level, get the
-//           electrostatic energy using the free energy functional for the
-//           linearized Poisson-Boltzmann equation without removing any
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with
-//           the same relative permittivity as the interior of the protein).
-//           In other words, we calculate
+// Purpose:  Using the solution at the finest mesh level, get the electrostatic
+//           energy due to the interaction of the fixed charges with the
+//           potential: 
 //             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
-//           and return the result in units of $k_B T$.  
+//           and return the result in units of $k_B T$.  Clearly, no
+//           self-interaction terms are removed.
 //
 // Args:     extFlag => If this was a focused calculation, then it is possible
 //                      to include the energy contributions from the outside
@@ -1152,16 +1222,17 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 // Notes:    The value of this observable may be modified by setting
 //           restrictions on the subdomain over which it is calculated.  Such
 //           limits can be set via Vpmg_setPart and are generally useful for
-//           parallel runs.  In such cases, the values are calculated on the
-//           interval [min, max).
+//           parallel runs.  
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
+VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
     double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
     double charge, kfloat, dx, dy, dz, energy, uval, *position;
+    double *u;
+    int *pvec;
     Valist *alist;
     Vatom *atom; 
     Vpbe *pbe;
@@ -1183,6 +1254,9 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
     xmin = thee->xf[0];
     ymin = thee->yf[0];
     zmin = thee->zf[0];
+
+    u = thee->u;
+    pvec = thee->pvec;
   
     energy = 0.0;
 
@@ -1190,42 +1264,48 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
         /* Get atomic information */
         atom = Valist_getAtom(alist, iatom);
 
-        if ((thee->partFlag == 0) || (Vatom_getPartID(atom) == 1)) {
+        position = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
 
-            position = Vatom_getPosition(atom);
-            charge = Vatom_getCharge(atom);
+        /* Figure out which vertices we're next to */
+        ifloat = (position[0] - xmin)/hx;
+        jfloat = (position[1] - ymin)/hy;
+        kfloat = (position[2] - zmin)/hzed;
+        ihi = (int)ceil(ifloat);
+        ilo = (int)floor(ifloat);
+        jhi = (int)ceil(jfloat);
+        jlo = (int)floor(jfloat);
+        khi = (int)ceil(kfloat);
+        klo = (int)floor(kfloat);
 
-            /* Figure out which vertices we're next to */
-            ifloat = (position[0] - xmin)/hx;
-            jfloat = (position[1] - ymin)/hy;
-            kfloat = (position[2] - zmin)/hzed;
-            ihi = (int)ceil(ifloat);
-            ilo = (int)floor(ifloat);
-            jhi = (int)ceil(jfloat);
-            jlo = (int)floor(jfloat);
-            khi = (int)ceil(kfloat);
-            klo = (int)floor(kfloat);
-    
-            if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
-                (ilo>=0) && (jlo>=0) && (klo>=0)) {
-    
-                /* Now get trilinear interpolation constants */
-                dx = ifloat - (double)(ilo);
-                dy = jfloat - (double)(jlo);
-                dz = kfloat - (double)(klo);
-                uval =  dx*dy*dz*(thee->u[IJK(ihi,jhi,khi)])
-                      + dx*(1.0-dy)*dz*(thee->u[IJK(ihi,jlo,khi)])
-                      + dx*dy*(1.0-dz)*(thee->u[IJK(ihi,jhi,klo)])
-                      + dx*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ihi,jlo,klo)])
-                      + (1.0-dx)*dy*dz*(thee->u[IJK(ilo,jhi,khi)])
-                      + (1.0-dx)*(1.0-dy)*dz*(thee->u[IJK(ilo,jlo,khi)])
-                      + (1.0-dx)*dy*(1.0-dz)*(thee->u[IJK(ilo,jhi,klo)])
-                      + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
-                energy += (uval*charge);
-            } else if (thee->pmgp->bcfl != 4) {
-                Vnm_print(2, "Vpmg_getLE1:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
-                    iatom, position[0], position[1], position[2]);
-            }
+        if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
+            (ilo>=0) && (jlo>=0) && (klo>=0)) {
+
+            /* Now get trilinear interpolation constants */
+            dx = ifloat - (double)(ilo);
+            dy = jfloat - (double)(jlo);
+            dz = kfloat - (double)(klo);
+            uval =  
+              dx*dy*dz
+               *(u[IJK(ihi,jhi,khi)]*(double)(pvec[IJK(ihi,jhi,khi)]))
+            + dx*(1.0-dy)*dz
+               *(u[IJK(ihi,jlo,khi)]*(double)(pvec[IJK(ihi,jlo,khi)]))
+            + dx*dy*(1.0-dz)
+               *(u[IJK(ihi,jhi,klo)]*(double)(pvec[IJK(ihi,jhi,klo)]))
+            + dx*(1.0-dy)*(1.0-dz)
+               *(u[IJK(ihi,jlo,klo)]*(double)(pvec[IJK(ihi,jlo,klo)]))
+            + (1.0-dx)*dy*dz
+               *(u[IJK(ilo,jhi,khi)]*(double)(pvec[IJK(ilo,jhi,khi)]))
+            + (1.0-dx)*(1.0-dy)*dz
+               *(u[IJK(ilo,jlo,khi)]*(double)(pvec[IJK(ilo,jlo,khi)]))
+            + (1.0-dx)*dy*(1.0-dz)
+               *(u[IJK(ilo,jhi,klo)]*(double)(pvec[IJK(ilo,jhi,klo)]))
+            + (1.0-dx)*(1.0-dy)*(1.0-dz)
+               *(u[IJK(ilo,jlo,klo)]*(double)(pvec[IJK(ilo,jlo,klo)]));
+            energy += (uval*charge);
+        } else if (thee->pmgp->bcfl != 4) {
+            Vnm_print(2, "Vpmg_qfEnergy:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
+                iatom, position[0], position[1], position[2]);
         }
     }
 
@@ -1293,6 +1373,8 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
       (void **)&(thee->gycf));
     Vmem_free(thee->vmem, 10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double),
       (void **)&(thee->gzcf));
+    Vmem_free(thee->vmem, (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), 
+      sizeof(int), (void **)&(thee->pvec));
 
     Vmem_dtor(&(thee->vmem));
 }
@@ -1353,6 +1435,7 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
     Vio_printf(sock, "%12.6E%12.6E%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
+    icol = 0;
     for (k=0; k<thee->pmgp->nz; k++) {
         Vio_printf(sock, "\n%7d%7d%7d\n", k+1, thee->pmgp->nx, thee->pmgp->ny);
         icol = 0;
@@ -1652,6 +1735,7 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
     /* Write off the DX data */
     Vio_printf(sock, "object 3 class array type double rank 0 items %d data follows\n",
       (thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz));
+    icol = 0;
     for (k=0; k<thee->pmgp->nz; k++) {
         for (j=0; j<thee->pmgp->ny; j++) {
             for (i=0; i<thee->pmgp->nx; i++) {
@@ -1694,32 +1778,52 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
 VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax) {
 
-    Valist *alist;
-    Vatom *atom;
-    int iatom;
-    double *position;
+    int i, j, k, nx, ny, nz;
 
-    /* Store the partition information */
-    thee->partFlag = 1;
-    thee->partLower[0] = xmin;
-    thee->partLower[1] = ymin;
-    thee->partLower[2] = zmin;
-    thee->partUpper[0] = xmax;
-    thee->partUpper[1] = ymax;
-    thee->partUpper[2] = zmax;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
 
-    /* Flag the atoms as one of the following:
-     *   - Belonging to this partition (partID = 1)
-     *   - Not belonging to this partition (partID = 0) */
-    alist = Vpbe_getValist(thee->pbe);
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-        atom = Valist_getAtom(alist,iatom);
-        position = Vatom_getPosition(atom);
-        if ((position[0]>=xmin)&&(position[0]<xmax)
-          &&(position[1]>=ymin)&&(position[1]<ymax)
-          &&(position[2]>=zmin)&&(position[2]<zmax)) Vatom_setPartID(atom,1);
-        else Vatom_setPartID(atom,0);
+    /* We need have called Vpmg_fillco first */
+    VASSERT(thee->filled == 1);
+
+    /* Load up pvec */
+    for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0;
+    for (i=0; i<nx; i++) {
+        if ( (thee->xf[i]<=xmax) && 
+             (thee->xf[i]>=xmin)) {
+            for (j=0; j<thee->pmgp->ny; j++) {
+                if ( (thee->yf[j]<=ymax) && 
+                     (thee->yf[j]>=ymin)) {
+                    for (k=0; k<thee->pmgp->nz; k++) {
+                        if ( (thee->zf[k]<=zmax) && 
+                             (thee->zf[k]>=zmin)) thee->pvec[IJK(i,j,k)] = 1;
+                    }
+                }
+            }
+        }
     }
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_unsetPart
+//
+// Purpose:  Remove partition information
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
+
+    int i, nx, ny, nz;
+
+    VASSERT(thee != VNULL);
+
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+
+    for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 1;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1904,101 +2008,6 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_getAnorm
-//
-// Purpose:  Calculate the A-norm of a vector (on the finest level of the
-//           mesh):
-//                     u' * A * u
-//
-// Notes:    The user is responsible for the dimensions of this vector, they
-//           should be nx*ny*nz, where these are the dimensions of the fine
-//           mesh.  Also, the partial differential equation should haev been
-//           constructed (on all levels).
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_getAnorm(Vpmg *thee, double *u) {
-
-    double anorm = 0.0;
-    int icalc = 0;
-
-    Vnm_print(2, "Vpmg_getAnorm:  Sorry, this function is broken!\n");
-    return 0.0;
-
-#if 0
-    F77VPMGANORM(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-       thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-       thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-       thee->fcf, thee->tcf, &icalc, &anorm);
-    return anorm;
-#endif
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_getAdet
-//
-// Purpose:  Calculate the determinant of the differential operator A.
-//
-// Args:     det[2]    This is where the determinant is stored:
-//                     det(A) = adet[0] * 10^(adet[1])
-//
-// Returns:  Noting; adet
-//
-// Notes:    This destroys the matrix (and may take a very long time)
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_getAdet(Vpmg *thee, double det[2]) {
-
-    double *acB, *rpcB; 
-    int *ipcB;
-    int n, m, lda, info;
-
-    Vnm_print(2, "Vpmg_getAnorm:  Sorry, this function is broken!\n");
-
-#if 0
-    det[0] = 0.0;
-    det[1] = 0.0;
-    info = 0;
-
-    /* Figure out the storage we need to factor the matrix */
-    n = (thee->pmgp->nx-2)*(thee->pmgp->ny-2)*(thee->pmgp->nz-2);
-    m = (thee->pmgp->nx-2)*(thee->pmgp->ny-2) + (thee->pmgp->nx-2) + 1;
-    lda = m + 1;
-
-    /* Allocate the storage */
-    Vnm_print(0, "Vpmg_getAdet: allocating %d doubles\n", lda*n);
-    acB = VNULL;
-    acB = Vmem_malloc(thee->vmem, lda*n, sizeof(double));
-    VASSERT(acB != VNULL); 
-    ipcB = VNULL;
-    ipcB = Vmem_malloc(thee->vmem, 100, sizeof(int));
-    VASSERT(ipcB != VNULL); 
-    rpcB = VNULL;
-    rpcB = Vmem_malloc(thee->vmem, 100, sizeof(double));
-    VASSERT(rpcB != VNULL); 
-
-    /* Convert the finest level sparse operator matrix into banded form and 
-     * store it, in factored form, in acB */
-    F77VPMGABAND(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-              thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-              thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf, ipcB, rpcB, acB);
-
-    /* Compute the determinant from the factored matrix */
-    F77DPBDI(acB, &lda, &n, &m, &(det[0]));
-
-    /* Free the matrix storage */
-    Vmem_free(thee->vmem, lda*n, sizeof(double), (void **)&acB);
-    Vmem_free(thee->vmem, 100, sizeof(int), (void **)&ipcB);
-    Vmem_free(thee->vmem, 100, sizeof(double), (void **)&rpcB);
-#endif
-
-}
-
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_fillAcc
 //
 // Purpose:  Fill the specified array with accessibility values
@@ -2058,40 +2067,6 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
             }
         }
     }
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_getLinearEnergy2
-//
-// Purpose:  using the solution at the finest mesh level, get the
-//           electrostatic energy using the free energy functional for the
-//           linearized Poisson-Boltzmann equation without removing any
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with
-//           the same relative permittivity as the interior of the protein).
-//           In this case, we calculate
-//             \[ G = - \int \epsilon (\nabla u)^2 dx \]
-//           and return the result in units of $k_B T$.  
-//
-// Args:     extFlag => If this was a focused calculation, then it is possible
-//                      to include the energy contributions from the outside
-//                      the focused domain.  This should be on (=1) for
-//                      sequential focusing calculations and off (=0) for
-//                      parallel calculations.
-//     
-// Notes:    The value of this observable may be modified by setting
-//           restrictions on the subdomain over which it is calculated.  Such
-//           limits can be set via Vpmg_setPart and are generally useful for
-//           parallel runs.  In such cases, the values are calculated on the
-//           interval [min, max).
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_getLinearEnergy2(Vpmg *thee, int extFlag) {
-
-    Vnm_print(2, "Vpmg_getLinearEnergy2:  Not implemented!\n");
-
-    return 0.0;
 }
 
 #undef VPMGSMALL

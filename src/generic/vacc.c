@@ -112,7 +112,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     int nx, int ny, int nz, int nsphere) {
 
     /* Grid variables */
-    int i;
+    int i, totatoms;
     double x, y, z, *coord;
     double x_max, y_max, z_max;
     double x_min, y_min, z_min;
@@ -123,7 +123,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     int ui;
     /* Atom radius */
     double rmax;
-    double rtot;
+    double rtot, rtot2;
+    double dx, dy, dz, dx2, dy2, dz2;
     Vatom *atom;
 
     VASSERT(alist != VNULL);
@@ -208,14 +209,27 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
          * direction. */
         i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
         i_min = (int)(floor( (x - rtot)/(thee->hx) ));
-        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
-        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
-        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
-        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+        /* The over-zealous way to assign atoms:
+         * j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+         * j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+         * k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+         * k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+         */
  
         /* Now find and assign the grid points */
+        rtot2 = VSQR(rtot);
         for ( ii = i_min; ii < i_max; ii++) {
+            dx2 = VSQR(x - (thee->hx)*ii);
+            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2);
+            else dy = 0;
+            j_min = (int)(floor((y-dy)/(thee->hy)));
+            j_max = (int)(ceil((y+dy)/(thee->hy)));
             for ( jj = j_min; jj < j_max; jj++) {
+                dy2 = VSQR(y - (thee->hy)*jj);
+                if (rtot2 > (dx2 + dy2)) dz = VSQRT(rtot2 - dx2 - dy2);
+                else dz = 0;
+                k_min = (int)(floor((z-dz)/(thee->hzed)));
+                k_max = (int)(ceil((z+dz)/(thee->hzed)));
                 for ( kk = k_min; kk < k_max; kk++) {
                     ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
                     (thee->natoms[ui])++;
@@ -225,15 +239,19 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     } /* for i =0:natoms */
 
     /* Allocate the space to store the pointers to the atoms */
+    totatoms = 0;
     for (i=0; i<thee->n; i++) {
         if ((thee->natoms)[i] > 0) {
+            /* Vnm_print(1, "Vacc_ctor: natoms = %d\n", thee->natoms[i]); */
             thee->atomIDs[i] = Vmem_malloc(thee->vmem, thee->natoms[i],
               sizeof(int));
             VASSERT(thee->atomIDs[i] != VNULL);
+            totatoms += thee->natoms[i];
         }
         /* Clear the counter for later use */
         thee->natoms[i] = 0;
     }
+    Vnm_print(0, "Vacc_ctor2:  Have %d atom entries\n", totatoms);
  
     /* Assign the atoms to grid points */
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
@@ -250,14 +268,27 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
          * direction. */
         i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
         i_min = (int)(floor( (x - rtot)/(thee->hx) ));
-        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
-        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
-        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
-        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+        /* THe over-zealous way to assign atoms: 
+         * j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+         * j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+         * k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+         * k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+         */
 
         /* Now find and assign the grid points */
+        rtot2 = VSQR(rtot);
         for ( ii = i_min; ii < i_max; ii++) {
+            dx2 = VSQR(x - (thee->hx)*ii);
+            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2);
+            else dy = 0;
+            j_min = (int)(floor((y-dy)/(thee->hy)));
+            j_max = (int)(ceil((y+dy)/(thee->hy)));
             for ( jj = j_min; jj < j_max; jj++) {
+                dy2 = VSQR(y - (thee->hy)*jj);
+                if (rtot2 > (dx2 + dy2)) dz = VSQRT(rtot2 - dx2 - dy2);
+                else dz = 0;
+                k_min = (int)(floor((z-dz)/(thee->hzed)));
+                k_max = (int)(ceil((z+dz)/(thee->hzed)));
                 for ( kk = k_min; kk < k_max; kk++) {
                     ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
                     thee->atomIDs[ui][thee->natoms[ui]] = i;
@@ -315,75 +346,6 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vacc_splineAcc
-//
-// Purpose:  Similar to Vacc_ivdwAcc, except returns a value between 0 and 1
-//           determined by a cubic spline approximation to the step function
-//           smoothed over an interval of width a centered at radius R:
-//             p_i(d_i) = frac{(a+r_i-d_i)(a-2(r_i-d_i))}{2a^3} 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double radius, 
-  double alpha) {
-
-
-    int centeri, centerj, centerk;  /* Grid-based coordinates */
-    int ui;                         /* Natural array coordinates */
-    int iatom;                      /* Counters */
-    double dist, *apos, arad;
-    double acc, acci;
-    Vatom *atom;
-
-    /* We can only test probes with radii less than the max specified */
-    VASSERT(thee != VNULL);
-    if ((radius+0.5*alpha) > thee->max_radius) {
-        Vnm_print(2, "Vacc_splineAcc: got radius+alpha/2 (%g) bigger than max radius (%g)\n",
-          radius+0.5*alpha, thee->max_radius);
-         VASSERT(0);
-    }
-
-    /* Convert to grid based coordinates */
-    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
-    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
-
-    /* Check to make sure we're on the grid; if not, we're definitely
-     * accessible */
-    if ((centeri < 0) || (centeri >= thee->nx) || \
-        (centerj < 0) || (centerj >= thee->ny) || \
-        (centerk < 0) || (centerk >= thee->nz)) return 1;
-
-    /* If we're still here, then we need to check each atom until we find an
-     * overlap at which point we can determine that the point is not
-     * accessible */
-    acc = 1.0;
-    ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
-    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
-        atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
-        apos = Vatom_getPosition(atom);
-        arad = Vatom_getRadius(atom);
-        dist = (apos[0]-center[0])*(apos[0]-center[0]) +
-               + (apos[1]-center[1])*(apos[1]-center[1])
-               + (apos[2]-center[2])*(apos[2]-center[2]);
-        if (dist<(arad-0.5*alpha)) {
-            acc = 0.0;
-            break;
-        } else if (dist>(arad+0.5*alpha)) {
-            acc = 1.0*acc;
-        } else {
-            acci = 0.5*(arad-dist+alpha)*VSQR(alpha-2*arad
-              +2*dist)/(alpha*alpha*alpha);
-            acc = acci*acc;
-        }
-    }
-
-    return acc;
-
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_vdwAcc
 //
 // Purpose:  Determines if a point is within the union of the atomic spheres
@@ -399,12 +361,12 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
     int iatom;                      /* Counters */
     double dist;
     Vatom *atom;
-    double vec[3];
+    double *vec;
 
     /* Convert to grid based coordinates */
-    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
-    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+    centeri = (int)((center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)((center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)((center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
    
     /* Check to make sure we're on the grid; if not, we're definitely 
      * accessible */ 
@@ -418,11 +380,10 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, double center[3]) {
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
         atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
-        vec[0] = (Vatom_getPosition(atom))[0];
-        vec[1] = (Vatom_getPosition(atom))[1];
-        vec[2] = (Vatom_getPosition(atom))[2];
-        dist = VSQRT(VSQR(center[0]-vec[0])+VSQR(center[1]-vec[1])+VSQR(center[2]-vec[2]));
-        if (dist < Vatom_getRadius(atom)) return 0;
+        vec = Vatom_getPosition(atom);
+        dist = VSQR(center[0]-vec[0]) + VSQR(center[1]-vec[1])
+          + VSQR(center[2]-vec[2]);
+        if (dist < VSQR(Vatom_getRadius(atom))) return 0;
     }
 
     /* If we're still here, then the point is accessible */
@@ -497,11 +458,9 @@ VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius,
         if (thee->atomIDs[ui][iatom] != atomID) {
             atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
             apos = Vatom_getPosition(atom);
-            arad = Vatom_getRadius(atom);
-            dist = (apos[0]-center[0])*(apos[0]-center[0]) +
-                   + (apos[1]-center[1])*(apos[1]-center[1])
-                   + (apos[2]-center[2])*(apos[2]-center[2]);
-            if (dist < ((arad+radius)*(arad+radius))) return 0;
+            dist = VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+                   + VSQR(apos[2]-center[2]);
+            if (dist < VSQR(Vatom_getRadius(atom)+radius)) return 0;
         }
     }
 

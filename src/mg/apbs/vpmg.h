@@ -83,13 +83,12 @@ typedef struct Vpmg {
   double *u;                     /* Solution */
   double *xf, *yf, *zf;          /* Mesh point coordinates */
   double *gxcf, *gycf, *gzcf;    /* Boundary conditions */
-  int partFlag;                  /* Flag which restricts calculation of
-                                  * energies to the specified partition */
-  double partLower[3];           /* Lower corner of partition */
-  double partUpper[3];           /* Upper corner of partition */
+  int *pvec;                     /* Partition mask array */
   double extEnergy;              /* Storing the contribution to the energy from
                                   * regions outside the immediate problem
                                   * domain */
+  int filled;                    /* Indicates whether Vpmg_fillco has been
+                                  * called */
 
 } Vpmg;
 
@@ -116,10 +115,10 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 
 VEXTERNC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
-VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag);
-VEXTERNC double Vpmg_getLinearEnergy2(Vpmg *thee, int extFlag);
-VEXTERNC double Vpmg_getAnorm(Vpmg *thee, double *u);
-VEXTERNC void Vpmg_getAdet(Vpmg *thee, double det[2]);
+VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int iop);
 VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
@@ -130,6 +129,7 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
   int *nz, double **data);
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
+VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
 
 #endif    /* ifndef _VPMG_H_ */
