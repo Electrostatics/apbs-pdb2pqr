@@ -7,6 +7,11 @@
 ## ###########################################################################
 
 AUTOMAKE_OPTIONS = no-dependencies
-SUFFIXES = .H .h .C .cc .c .f .o
+SUFFIXES = .H .h .C .c .f .o
+CCLD = $(F77)
 
-SUBDIRS = mesh manip opendx @arpack_do_tools@
+noinst_PROGRAMS  = driver
+driver_SOURCES   = driver.c readhb.f ardriv.f
+driver_LDADD     = ../../src/aaa_lib/libapbs.la @arpack_lib@ @lib_list@
+INCLUDES         = @inc_list@
+CFLAGS           = @CFLAGS@
