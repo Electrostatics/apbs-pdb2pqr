@@ -1,23 +1,3 @@
-### ##########################################################################
-### MALOC = < Minimal Abstraction Layer for Object-oriented C >
-### Copyright (C) 1994--2000  Michael Holst
-###
-### This program is free software; you can redistribute it and/or modify it
-### under the terms of the GNU General Public License as published by the
-### Free Software Foundation; either version 2 of the License, or (at your
-### option) any later version.
-###
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-### See the GNU General Public License for more details.
-###
-### You should have received a copy of the GNU General Public License along
-### with this program; if not, write to the Free Software Foundation, Inc.,
-### 675 Mass Ave, Cambridge, MA 02139, USA.
-###
-### rcsid="$Id$"
-### ##########################################################################
 
 ## ###########################################################################
 ## File:    Makefile.am
@@ -37,25 +17,18 @@ SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
 always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 
-BOTH_LIBS = ../aloc/libaloc.la
-VSH_LIBS  = ../vsh/libvsh.la
-PSH_LIBS  = ../psh/libpsh.la
-
-ZFENCE_LIBS = ../zfence/libefence.la
-
-if BUILD_ZFENCE
-LIBEFENCE = libefence.la
-else
-LIBEFENCE =
-endif
+GEN_LIBS = ../generic/libapbsgen.la
+FEM_LIBS  = @fetk_do_lib@
+PMG_LIBS  = ../mg/libapbsmg.la
 
 libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
 lib_LTLIBRARIES = libapbs.la
 
 libapbs_la_SOURCES = apbs_link.c
-libapbs_la_LIBADD  = ${ALOC_LIBS} ${VSH_LIBS} ${PSH_LIBS}
-libapbs_la_LDFLAGS = -version-info ${FETK_VERSION}
+libapbs_la_LIBADD  = ${GEN_LIBS} ${FEM_LIBS} ${PMG_LIBS}
+libapbs_la_LDFLAGS = -version-info ${APBS_VERSION}
 
-INCLUDES         =
+INCLUDES         = -I../generic -I../mg -I../fem @inc_list@
 AM_CFLAGS        = @wall_pedantic@
+LDFLAGS          = @LDFLAGS@ @FLIBS@
 

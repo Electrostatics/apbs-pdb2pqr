@@ -9,14 +9,12 @@
 ##     COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 ##     LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 ##
-## Author:  Nathan Baker and Michael Holst
+## Author:  Michael Holst
 ## ###########################################################################
 
 AUTOMAKE_OPTIONS = no-dependencies
-SUFFIXES = .H .h .C .c .f .o
+SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
+always_built_SUBDIRS = apbs
+SUBDIRS = $(always_built_SUBDIRS) .
+LDFLAGS          = @LDFLAGS@ @FLIBS@
 
-noinst_PROGRAMS  = acc 
-acc_SOURCES      = acc.c 
-acc_LDADD        = ../../src/aaa_lib/libapbs.la @lib_list@
-INCLUDES         = @inc_list@
-CFLAGS           = @CFLAGS@

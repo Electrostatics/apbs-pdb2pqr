@@ -43,7 +43,9 @@
 
 #include "apbscfg.h"
 #include "apbs/vgreen.h"
-#include "cxxfmm.h"
+#if defined(USE_CXX_FMM)
+#    include "cxxfmm/cxxfmm.h"
+#endif
 
 #define DTORCXXFMM      Vgreen_dtorCXXFMM__FP6Vgreen
 #define FIELDCXXFMM     Vgreen_fieldCXXFMM__FP6VgreenPdT1
