@@ -117,6 +117,9 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 VEXTERNC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
 VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_getLinearEnergy2(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_getAnorm(Vpmg *thee, double *u);
+VEXTERNC void Vpmg_getAdet(Vpmg *thee, double det[2]);
 VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,

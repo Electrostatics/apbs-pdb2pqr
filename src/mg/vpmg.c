@@ -1680,6 +1680,92 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_getAnorm
+//
+// Purpose:  Calculate the A-norm of a vector (on the finest level of the
+//           mesh):
+//                     u' * A * u
+//
+// Notes:    The user is responsible for the dimensions of this vector, they
+//           should be nx*ny*nz, where these are the dimensions of the fine
+//           mesh.  Also, the partial differential equation should haev been
+//           constructed (on all levels).
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_getAnorm(Vpmg *thee, double *u) {
+
+    double anorm = 0.0;
+    int icalc = 0;
+
+    F77VPMGANORM(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+       thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+       thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+       thee->fcf, thee->tcf, &icalc, &anorm);
+
+    return anorm;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_getAdet
+//
+// Purpose:  Calculate the determinant of the differential operator A.
+//
+// Args:     det[2]    This is where the determinant is stored:
+//                     det(A) = adet[0] * 10^(adet[1])
+//
+// Returns:  Noting; adet
+//
+// Notes:    This destroys the matrix (and may take a very long time)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_getAdet(Vpmg *thee, double det[2]) {
+
+    double *acB, *rpcB; 
+    int *ipcB;
+    int n, m, lda, info;
+
+    det[0] = 0.0;
+    det[1] = 0.0;
+    info = 0;
+
+    /* Figure out the storage we need to factor the matrix */
+    n = (thee->pmgp->nx-2)*(thee->pmgp->ny-2)*(thee->pmgp->nz-2);
+    m = (thee->pmgp->nx-2)*(thee->pmgp->ny-2) + (thee->pmgp->nx-2) + 1;
+    lda = m + 1;
+
+    /* Allocate the storage */
+    Vnm_print(0, "Vpmg_getAdet: allocating %d doubles\n", lda*n);
+    acB = VNULL;
+    acB = Vmem_malloc(thee->vmem, lda*n, sizeof(double));
+    VASSERT(acB != VNULL); 
+    ipcB = VNULL;
+    ipcB = Vmem_malloc(thee->vmem, 100, sizeof(int));
+    VASSERT(ipcB != VNULL); 
+    rpcB = VNULL;
+    rpcB = Vmem_malloc(thee->vmem, 100, sizeof(double));
+    VASSERT(rpcB != VNULL); 
+
+    /* Convert the finest level sparse operator matrix into banded form and 
+     * store it, in factored form, in acB */
+    F77VPMGABAND(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+              thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+              thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+              thee->fcf, thee->tcf, ipcB, rpcB, acB);
+
+    /* Compute the determinant from the factored matrix */
+    F77DPBDI(acB, &lda, &n, &m, &(det[0]));
+
+    /* Free the matrix storage */
+    Vmem_free(thee->vmem, lda*n, sizeof(double), (void **)&acB);
+    Vmem_free(thee->vmem, 100, sizeof(int), (void **)&ipcB);
+    Vmem_free(thee->vmem, 100, sizeof(double), (void **)&rpcB);
+
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_fillAcc
 //
 // Purpose:  Fill the specified array with accessibility values
@@ -1741,5 +1827,38 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
     }
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_getLinearEnergy2
+//
+// Purpose:  using the solution at the finest mesh level, get the
+//           electrostatic energy using the free energy functional for the
+//           linearized Poisson-Boltzmann equation without removing any
+//           self-interaction terms (i.e., removing the reference state of
+//           isolated charges present in an infinite dielectric continuum with
+//           the same relative permittivity as the interior of the protein).
+//           In this case, we calculate
+//             \[ G = - \int \epsilon (\nabla u)^2 dx \]
+//           and return the result in units of $k_B T$.  
+//
+// Args:     extFlag => If this was a focused calculation, then it is possible
+//                      to include the energy contributions from the outside
+//                      the focused domain.  This should be on (=1) for
+//                      sequential focusing calculations and off (=0) for
+//                      parallel calculations.
+//     
+// Notes:    The value of this observable may be modified by setting
+//           restrictions on the subdomain over which it is calculated.  Such
+//           limits can be set via Vpmg_setPart and are generally useful for
+//           parallel runs.  In such cases, the values are calculated on the
+//           interval [min, max).
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_getLinearEnergy2(Vpmg *thee, int extFlag) {
+
+    Vnm_print(2, "Vpmg_getLinearEnergy2:  Not implemented!\n");
+
+    return 0.0;
+}
 
 #undef VPMGSMALL
