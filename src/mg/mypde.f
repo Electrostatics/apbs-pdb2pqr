@@ -383,7 +383,7 @@ c*
 c*         *** info ***
            if (ichopped .gt. 0) then
            call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
-       2      41, ichopped)
+     2      41, ichopped)
            endif
 c*
 c*      *** else if polynomial requested ***
@@ -535,7 +535,7 @@ c*
 c*         *** info ***
            if (ichopped .gt. 0) then
            call vnmpri(2,'% DC_VEC: trapped exp overflows:         ',
-       2      41, ichopped)
+     2       41, ichopped)
            endif
 c*
 c*      *** else if polynomial requested ***

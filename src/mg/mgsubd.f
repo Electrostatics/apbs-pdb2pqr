@@ -567,7 +567,7 @@ c*                   write(6,100)'% BUILDOPS: (GALER) ',nxx,nyy,nzz
      2               tcf(iz(1,lev-1)),tcf(iz(1,lev)))
                else
                   call vnmprt(2,'% BUILDOPS: bad mgcoar key given...',
-              2      35)
+     2               35)
                endif
 c*
 c*             *** now initialize the differential operator offset ***
