@@ -232,7 +232,7 @@
  * Of course, every machine seems to behave a bit differently.  One general
  * improvement is the use of vendor-provided BLAS libraries via the
  * <code>--with-blas</code> configure flag.  Specifically, if you installed
- * your machine's libblas.a in the directory <code>/blas/is/here<code>, you
+ * your machine's libblas.a in the directory <code>/blas/is/here</code>, you
  * would configure APBS as:
  * <pre>
  * # ./configure --with-blas=/blas/is/here ...

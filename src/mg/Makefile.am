@@ -19,7 +19,7 @@ libapbsmg_la_SOURCES  = vpmg.c vpmg-setup.c vpmg-force.c vpmg-energy.c \
   mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
   nrchdrvd.f nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rchd.f \
-  smoothd.f sord.f wjd.f mypde.f vpmgf.f vgrid.c vopot.c
+  smoothd.f sord.f wjd.f mypde.f vpmgf.f vmgrid.c vgrid.c vopot.c
 INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@
 CFLAGS             = @CFLAGS@
