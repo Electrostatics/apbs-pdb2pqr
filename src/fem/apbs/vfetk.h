@@ -415,27 +415,6 @@ VEXTERNC double  Vfetk_dqmEnergy(Vfetk *thee, int color);
  */
 VEXTERNC double  Vfetk_qfEnergy(Vfetk *thee, int color);
 
-/** @brief   Calculate the log determinant of the specified operator.
- *  @ingroup Vfetk
- *  @author  Nathan Baker and Stephen Bond
- *  @note    \li Only works with symmetric positive definite matrices
- *           \li Uses LU or Recycled Cholesky factorization and can be 
- *           very memory- and time-consuming for large matrices.
- *  @param   thee  Vfetk object
- *  @param   color Partition to evaluate over (ignored if <0)
- *  @param   oflag  Operator to evaluate:
- *           \li 0:  Helmholtz operator (NPBE tangent operator evaluated at zero
- *                 solution)
- *           \li 1:  Response function (NPBE tangent operator evaluated at NPBE
- *                 solution)
- *  @param   mflag  Method to use:
- *           \li 0:  Full nonsymmetric SuperLU factor with ROW/COL reordering
- *           \li 1:  Recycled symmetric Cholesky factor with no reordering
- *  @return  The log determinant of the specified operator
- *  @bug     color argument ignored
- */
-VEXTERNC double Vfetk_lnDet(Vfetk *thee, int color, int oflag, int mflag);
-
 /** @brief   Return the memory used by this structure (and its contents)
  *           in bytes
  *  @ingroup Vfetk
@@ -472,28 +451,6 @@ VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);
  *  @bug     Hardwired to only handle the single block symmetric case.
  */
 VEXTERNC void    Bmat_printHB(Bmat *thee, char *fname);
-
-/** @brief   Assembles the Cholesky factorization of a Bmat.
- * 
- *  @ingroup Vfetk
- *  @author  Stephen Bond
- *  @note    This is a friend function of Bmat
- *  @param   thee Bmat object
- *  @param   flag  Type of factor to be assembled:
- *           \li 0:  Full Cholesky factor
- *           \li 1:  Diagonal of the Cholesky factor
- */
-VEXTERNC int     Bmat_choleskyFactor(Bmat *thee, int flag);
-
-/** 
- * @brief   Returns the log(abs(det(D))) of a diagonal Mat, D.
- * @ingroup Vfetk
- * @author  Stephen Bond
- * @note    This is a friend function of Mat
- * @param   thee Mat object
- * @bug     Only works for Mat's of type RLN, CLN, or DRC.
- */
-VEXTERNC double  Mat_lnDetDiag(Mat *thee);
 
 /** 
  * @brief   Generates a simple cubic tetrahedral mesh
