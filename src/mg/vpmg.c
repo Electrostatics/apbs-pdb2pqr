@@ -2024,7 +2024,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 
     double *apos, position[3], arad, hx, hy, hzed, izmagic;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
-    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, gamma;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, gamma, kT;
     double npFmag, *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
     double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
     double dHzijkm1[3];
@@ -2054,7 +2054,8 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     acc = pbe->acc;
     epsp = Vpbe_getSoluteDiel(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
-    gamma = Vpbe_getGamma(pbe);
+    kT = Vpbe_getTemperature(pbe)*(1e-3)*Vunit_Na*Vunit_kb;
+    gamma = Vpbe_getGamma(pbe)/kT;
     izmagic = 1.0/Vpbe_getZmagic(pbe);
 
     /* Mesh info */
