@@ -58,6 +58,12 @@
                               * hierarchies */
 #define VREDFRAC 0.25        /* Max reduction of grid spacing in focusing
                               * calculations */
+#define VAPBS_RIGHT 0        /* Directions for looking at parallel focusing */
+#define VAPBS_FRONT 1        /* partitions; consistent with PMG if RIGHT = */
+#define VAPBS_UP    2        /* EAST, BACK = SOUTH */
+#define VAPBS_LEFT  3
+#define VAPBS_BACK  4
+#define VAPBS_DOWN  5
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Inlining via macros for speed.

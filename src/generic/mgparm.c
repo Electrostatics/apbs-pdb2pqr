@@ -122,6 +122,7 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
     thee->setpdime = 0;
     thee->setrank = 0;
     thee->setofrac = 0;
+    for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 1;
 
     return 1; 
 }
@@ -290,6 +291,7 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
     
     thee->type = parm->type;
+    thee->parsed = parm->parsed;
 
     /* *** GENERIC PARAMETERS *** */
     for (i=0; i<3; i++) thee->dime[i] = parm->dime[i];
@@ -319,13 +321,15 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     thee->fcmeth = parm->fcmeth;
     for (i=0; i<3; i++) thee->fcenter[i] = parm->fcenter[i];
     thee->setfgcent = parm->setfgcent;
-    thee->ccentmol = parm->ccentmol;
+    thee->fcentmol = parm->fcentmol;
 
     /* *** TYPE 2 PARMS *** */
     for (i=0; i<3; i++) 
       thee->partDisjCenterShift[i] = parm->partDisjCenterShift[i];
     for (i=0; i<3; i++) 
       thee->partDisjLength[i] = parm->partDisjLength[i];
+    for (i=0; i<3; i++) 
+      thee->partDisjOwnSide[i] = parm->partDisjOwnSide[i];
     for (i=0; i<3; i++) 
       thee->partOlapCenterShift[i] = parm->partOlapCenterShift[i];
     for (i=0; i<3; i++) 
@@ -626,12 +630,12 @@ keyword!\n", tok);
         return 1;
     } else if (strcasecmp(tok, "ofrac") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
+        if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "NOsh:  Read non-int (%s) while parsing OFRAC \
 keyword!\n", tok);
             return -1;
         }
-        thee->ofrac = ti;
+        thee->ofrac = tf;
         thee->setofrac = 1;
         return 1;
     }
