@@ -1,6 +1,14 @@
 #############################################################################
-BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
+BETA PUBLIC RELEASE VERSION 0.3.0       ??-??-04
 #############################################################################
+  APBS is now supported by the NIH via NIGMS grant ...
+
+  CHANGES THAT AFFECT USERS:
+  * Optimization of Vpmg boundary condition routines (thanks to Justin
+    Gullingsgrud)
+
+#############################################################################
+BETA PUBLIC RELEASE VERSION 0.2.6       01-17-03
 
   CHANGES THAT AFFECT USERS:
   - NEW FEATURES
