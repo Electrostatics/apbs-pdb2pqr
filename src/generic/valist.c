@@ -45,16 +45,20 @@
 
 VEMBED(rcsid="$Id$")
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Valist: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE char *MCwhiteChars = " =,;\t\n";
+VPRIVATE char *MCcommChars  = "#%";
+
+/**
+ * @brief  Get statistics on a newly read-in atom list 
+ * @author  Nathan Baker
+ * @ingroup  Valist
+ * @param  thee  Valist object
+ * @return  1 if successful, 0 otherwise
+ */
+VPRIVATE int getStatistics(Valist *thee);
+
 #if !defined(VINLINE_VATOM)
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getCenterCoord
-// 
-// Author:   Nathan Baker 
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Valist_getCenterX(Valist *thee) {
  
   VASSERT(thee != NULL);
@@ -74,13 +78,6 @@ VPUBLIC double Valist_getCenterZ(Valist *thee) {
 
 }
 
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getAtomList
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
 
   VASSERT(thee != NULL);
@@ -88,11 +85,6 @@ VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getNumberAtoms
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
 
   VASSERT(thee != NULL);
@@ -100,11 +92,6 @@ VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getAtom
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
   VASSERT(thee != NULL);
@@ -113,11 +100,6 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_memChk
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Valist_memChk(Valist *thee) {
 
   if (thee == NULL) return 0;
@@ -127,15 +109,6 @@ VPUBLIC int Valist_memChk(Valist *thee) {
 
 #endif /* if !defined(VINLINE_VATOM) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Valist: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_ctor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Valist_ctor() {
 
     /* Set up the structure */
@@ -147,11 +120,6 @@ VPUBLIC Valist* Valist_ctor() {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_ctor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Valist_ctor2(Valist *thee) {
   
     thee->atoms = VNULL;
@@ -164,11 +132,6 @@ VPUBLIC int Valist_ctor2(Valist *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor(Valist **thee)
 {
     if ((*thee) != VNULL) {
@@ -178,11 +141,6 @@ VPUBLIC void Valist_dtor(Valist **thee)
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_dtor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor2(Valist *thee) {
 
     Vmem_free(thee->vmem, thee->number, sizeof(Vatom), (void **)&(thee->atoms));
@@ -192,143 +150,377 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
     Vmem_dtor(&(thee->vmem));
 } 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_readPQR
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
-  const char *thost, const char *fname) {
+VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev, 
+  const char *iofmt, const char *thost, const char *fname) {
 
-    FILE *pqrf;                 /* PQR file pointer */
-    char line[101];             /* To hold lines from the PQR file */
-    int maxl = 100;
-    /* Counters */
-    int i;
-    /* Information to be gleaned from PQR file */
-    double x, y, z, charge, radius;
+    /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
+     * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
+
+    Vio *sock = VNULL;
+    Vatom *atoms = VNULL;
+    Vatom *tatoms = VNULL;
+    Vparam_AtomData *atomData = VNULL;
+    char tok[VMAX_BUFSIZE], tokArray[4][VMAX_BUFSIZE];
+    char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
+    int nalloc, itmp, i, gotit;
+    double dtmp, x, y, z, charge, radius;
     double pos[3];
  
     VASSERT(thee != VNULL);
     thee->number = 0;
 
-    /* Make sure we're reading in an ASCII file */
-    if ((!strcmp(iodev,"FILE")) && (!strcmp(iodev,"file"))) {
-        Vnm_print(2, "Valist_readPQR:  This routine cannot read from type %s.\n", 
-          iodev);
+    /* Open socket for reading */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Valist_readPDB: Problem opening virtual socket %s\n",
+          fname);
         return 0;
     }
-    if ((!strcmp(iofmt,"ASC")) && (!strcmp(iofmt,"asc"))) {
-        Vnm_print(2, "Valist_readPQR:  This routine cannot read type %s.\n",
-          iofmt);
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Vgrid_readPDB: Problem accepting virtual socket %s\n",
+          fname);
         return 0;
     }
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
 
-    /* Open data files */
-    pqrf = fopen(fname,"r");
-    if (pqrf == NULL) {
-        Vnm_print(2, "Valist_readPQR: Error opening %s\n",fname);
-        return 0;
-    }
+    /* Allocate some initial space for the atoms */
+    nalloc = 200;
+    atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vatom));
 
-    thee->center[0] = 0.;
-    thee->center[1] = 0.;
-    thee->center[2] = 0.;
-    thee->maxcrd[0] = -VLARGE;
-    thee->maxcrd[1] = -VLARGE;
-    thee->maxcrd[2] = -VLARGE;
-    thee->mincrd[0] = VLARGE;
-    thee->mincrd[1] = VLARGE;
-    thee->mincrd[2] = VLARGE;
-    thee->maxrad = 0.;
-    thee->charge = 0.;
-
-    /* Now we read some lines and count the atoms. */
+    /* Read until we run out of lines */
+    thee->number = 0;
     while (1) {
 
-        if (fgets(line,maxl,pqrf) == NULL) break;
+        if (Vio_scanf(sock, "%s", tok) != 1) break;
+        if ((Vstring_strcasecmp(tok, "ATOM") == 0) || 
+            (Vstring_strcasecmp(tok, "HETATM") == 0)) {
 
-        /* Check to see if we got an ATOM line */
-        if ( !strncmp(line,"ATOM",4) ) (thee->number)++;
-    
+            /* Grab serial */
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &itmp) != 1) {
+                Vnm_print(2, "Valist_readPDB:  Error while parsing serial!\n");
+                return 0;
+            }
+
+            /* Grab name */
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (strlen(tok) < VMAX_ARGLEN) strcpy(atomName, tok);
+            else {
+                Vnm_print(2, "Valist_readPDB:  Atom name (%s) too long!\n",
+                  tok);
+                return 0;
+            }
+
+            /* We don't care about any of the next 1-3 fields; the next thing
+             * we're looking for is resSeq (integer) */
+            gotit = 0;
+            for (i=0; i<4; i++) {
+                VJMPERR1(Vio_scanf(sock, "%s", tokArray[i]) == 1);
+                if (sscanf(tokArray[i], "%d", &itmp) == 1) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (!gotit) {
+                Vnm_print(2, "Valist_readPDB:  Can't find resSeq!\n");
+                return 0;
+            }
+
+            /* We don't care about any of the next 1 fields; the next thing
+             * we're looking for is x (float) */
+            gotit = 0;
+            for (i=0; i<2; i++) {
+                VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%lf", &dtmp) == 1) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (!gotit) {
+                Vnm_print(2, "Valist_readPDB:  Can't find x!\n");
+                return 0;
+            }
+            pos[0] = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPDB:  Can't find y!\n");
+                return 0;
+            }
+            pos[1] = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPDB:  Can't find z!\n");
+                return 0;
+            }
+            pos[2] = dtmp;
+
+            /* Try to find the parameters.  We have to loop through all the
+             * entries in tokArray because we can't be sure which is the
+             * actual resName */
+            gotit = 0;
+            for (i=0; i<4; i++) {
+                if (strlen(tokArray[i]) < VMAX_ARGLEN) {
+                    strcpy(resName, tokArray[i]);
+                } else {
+                    Vnm_print(2, "Valist_readPDB:  Residue name (%s) too long!\n", tokArray[i]);
+                    return 0;
+                }
+                atomData = Vparam_getAtomData(param, resName, atomName);
+                if (atomData != VNULL) {
+                    gotit = 1;
+                    charge = atomData->charge;
+                    radius = atomData->radius;
+                    break;
+                }
+            }
+            if (!gotit) {
+                Vnm_print(2, "Couldn't find parmeters for atom %d %d!\n", 
+                  atomName, resName);
+                return 0;
+            }
+
+            /* Allocate more space for the new atom (if necessary) */
+            if (thee->number == (nalloc-1)) {
+                tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vatom));
+                VASSERT(tatoms != VNULL);
+                for (i=0; i<thee->number; i++) {
+                    Vatom_copyTo(&(atoms[i]), &(tatoms[i]));
+                    Vatom_dtor2(&(atoms[i]));
+                }
+                Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
+                nalloc = 2*nalloc;
+                atoms = tatoms;
+                tatoms = VNULL;
+            }
+            Vatom_setPosition(&(atoms[thee->number]), pos);
+            Vatom_setCharge(&(atoms[thee->number]), charge);
+            Vatom_setRadius(&(atoms[thee->number]), radius);
+            (thee->number)++;
+
+        } /* if ATOM or HETATM */
+    } /* while we haven't run out of tokens */
+
+
+#if defined(VDEBUG)
+    Vnm_print(1, "Valist_readPDB: Counted %d atoms\n",thee->number);
+    fflush(stdout);
+#endif
+
+
+    /* Allocate the necessary space for the actual atom array */
+    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
+    VASSERT(thee->atoms != VNULL);
+    for (i=0; i<thee->number; i++) {
+        Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
+        Vatom_dtor2(&(atoms[i]));
     }
+    Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
+
+    /* Close socket */
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
+      
+    return getStatistics(thee);
+
+VERROR1:
+    Vnm_print(2, "Valist_readPDB:  Ran out of tokens!\n");
+    return 0;
+
+}
+
+VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname) {
+
+    /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
+     * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
+
+    Vio *sock = VNULL;
+    Vatom *atoms = VNULL;
+    Vatom *tatoms = VNULL;
+    char tok[VMAX_BUFSIZE]; 
+    int nalloc, itmp, i, gotit;
+    double dtmp, x, y, z, charge, radius;
+    double pos[3];
+ 
+    VASSERT(thee != VNULL);
+    thee->number = 0;
+
+    /* Open socket for reading */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Valist_readPQR: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Valist_readPQR: Problem accepting virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
+
+    /* Allocate some initial space for the atoms */
+    nalloc = 200;
+    atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vatom));
+
+    /* Read until we run out of lines */
+    thee->number = 0;
+    while (1) {
+
+        if (Vio_scanf(sock, "%s", tok) != 1) break;
+        if ((Vstring_strcasecmp(tok, "ATOM") == 0) || 
+            (Vstring_strcasecmp(tok, "HETATM") == 0)) {
+
+            /* Grab serial */
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &itmp) != 1) {
+                Vnm_print(2, "Valist_readPQR:  Error while parsing serial!\n");
+                return 0;
+            }
+
+            /* Grab name */
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+
+            /* We don't care about any of the next 1-3 fields; the next thing
+             * we're looking for is resSeq (integer) */
+            gotit = 0;
+            for (i=0; i<4; i++) {
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%d", &itmp) == 1) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (!gotit) {
+                Vnm_print(2, "Valist_readPQR:  Can't find resSeq!\n");
+                return 0;
+            }
+
+            /* We don't care about any of the next 1 fields; the next thing
+             * we're looking for is x (float) */
+            gotit = 0;
+            for (i=0; i<2; i++) {
+                VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%lf", &dtmp) == 1) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (!gotit) {
+                Vnm_print(2, "Valist_readPQR:  Can't find x!\n");
+                return 0;
+            }
+            pos[0] = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPQR:  Can't find y!\n");
+                return 0;
+            }
+            pos[1] = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPQR:  Can't find z!\n");
+                return 0;
+            }
+            pos[2] = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPQR:  Can't find charge!\n");
+                return 0;
+            }
+            charge = dtmp;
+            VASSERT(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readPQR:  Can't find radius!\n");
+                return 0;
+            }
+            radius = dtmp;
+
+            /* Allocate more space for the new atom (if necessary) */
+            if (thee->number == (nalloc-1)) {
+                tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vatom));
+                VASSERT(tatoms != VNULL);
+                for (i=0; i<thee->number; i++) {
+                    Vatom_copyTo(&(atoms[i]), &(tatoms[i]));
+                    Vatom_dtor2(&(atoms[i]));
+                }
+                Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
+                nalloc = 2*nalloc;
+                atoms = tatoms;
+                tatoms = VNULL;
+            }
+            Vatom_setCharge(&(atoms[thee->number]), charge);
+            Vatom_setRadius(&(atoms[thee->number]), radius);
+            Vatom_setPosition(&(atoms[thee->number]), pos);
+            (thee->number)++;
+        } /* if ATOM or HETATM */
+    } /* while we haven't run out of tokens */
+
 
 #if defined(VDEBUG)
     Vnm_print(1, "Valist_readPQR: Counted %d atoms\n",thee->number);
     fflush(stdout);
 #endif
 
-    /* Allocate the necessary space for the atom array */
+    /* Allocate the necessary space for the actual atom array */
     thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
     VASSERT(thee->atoms != VNULL);
+    for (i=0; i<thee->number; i++) {
+        Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
+        Vatom_dtor2(&(atoms[i]));
+    }
+    Vmem_free(thee->vmem, nalloc, sizeof(Vatom), (void **)&atoms);
+
+    /* Close socket */
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
       
+    return getStatistics(thee);
 
-    /* Rewind the file pointer (use rewind to clear the error
-       indicator, too) */
-    rewind(pqrf);
+VERROR1:
+    Vnm_print(2, "Valist_readPQR:  Ran out of tokens!\n");
+    return 0;
 
-    i = 0;
-    while (1) {
+}
 
-        if (fgets(line,maxl,pqrf) == NULL) {
-            Vnm_print(2, "Valist_readPQR: Read EOF instead of atom\n");
-            fflush(stderr);
-            return 0;
+VPRIVATE int getStatistics(Valist *thee) {
+
+    Vatom *atom;
+    int i, j;
+
+    VASSERT(thee != VNULL);
+
+    thee->center[0] = 0.;
+    thee->center[1] = 0.;
+    thee->center[2] = 0.;
+    thee->maxrad = 0.;
+    thee->charge = 0.;
+
+    if (thee->number == 0) return 0;
+
+    /* Reset stat variables */
+    atom = &(thee->atoms[0]);
+    for (i=0; i<3; i++) {
+        thee->maxcrd[i] = thee->mincrd[i] = atom->position[i];
+    }
+    thee->maxrad = atom->radius;
+    thee->charge = atom->charge;
+
+    for (i=0; i<thee->number; i++) {
+
+        atom = &(thee->atoms[i]);
+        for (j=0; j<3; j++) {
+            if (atom->position[j] < thee->mincrd[j]) 
+              thee->mincrd[j] = atom->position[j];
+            if (atom->position[j] > thee->maxcrd[j]) 
+              thee->maxcrd[j] = atom->position[j];
         }
+        if (atom->radius > thee->maxrad) thee->maxrad = atom->radius;
+        thee->charge = thee->charge + atom->charge;
 
-        /* Check to see if we got an ATOM line */
-        if ( !strncmp(line,"ATOM",4)) {
-#if 0
-            /* Try to parse a line with chain IDs and with an integer
-             * residue ID */
-	    if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d %*2s %lf%lf%lf%lf%lf",
-              &x,&y,&z,&charge,&radius) == 5)) {;}
-            /* Try to parse a line with chain IDs and with an string
-             * residue ID */
-	    else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s %*2s %lf%lf%lf%lf%lf",
-              &x,&y,&z,&charge,&radius) == 5)) {;}
-            /* Try to parse a line without chain IDs and with an integer
-             * residue ID */
-#endif
-	    if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
-              &x,&y,&z,&charge,&radius) == 5)) {;}
-            /* Try to parse a line without chain IDs and with a string
-             * residue ID */
-            else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
-              &x,&y,&z,&charge,&radius) == 5)) {;}
-            else {
-                Vnm_print(2, "Valist_readPQR:  FATAL sscanf (formatting) \
-error reading: \n    %s\n", line);
-                return 0;
-            }
-
-            if (x < thee->mincrd[0]) thee->mincrd[0] = x;
-            if (y < thee->mincrd[1]) thee->mincrd[1] = y;
-            if (z < thee->mincrd[2]) thee->mincrd[2] = z;
-            if (x > thee->maxcrd[0]) thee->maxcrd[0] = x;
-            if (y > thee->maxcrd[1]) thee->maxcrd[1] = y;
-            if (z > thee->maxcrd[2]) thee->maxcrd[2] = z;
-            if (radius > thee->maxrad) thee->maxrad = radius;
-            thee->charge = thee->charge + charge;
-
-            /* Put it in the atom list */
-            pos[0] = x;
-            pos[1] = y;
-            pos[2] = z;
-            Vatom_setPosition(&(thee->atoms)[i],pos);
-            Vatom_setCharge(&(thee->atoms)[i],charge);
-            Vatom_setRadius(&(thee->atoms)[i],radius);
-
-            /* Update the number of atoms we've found */
-            i++;
-
-            /* Have we gotten all the entries? */
-            if (i == thee->number)  break;
-
-        } else {
-            Vnm_print(2, "Valist_readPQR:  IGNORED line: \n    %s\n", line);
-        }
-    } /* while(1) */
+    } 
 
     thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
     thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
@@ -337,11 +529,6 @@ error reading: \n    %s\n", line);
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_buildMesh
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_buildMesh(Valist *thee, double size, const char *iodev,
   const char *iofmt, const char *thost, const char *fname) {
 
