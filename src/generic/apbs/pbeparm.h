@@ -96,17 +96,9 @@ struct PBEparm {
     int setpdie;               /**< Flag, @see pdie */
     double sdie;               /**< Solvent dielectric */
     int setsdie;               /**< Flag, @see sdie */
-    int chgm;                  /**< Charge discretization method
-                                * \li 0:  Linear spline method (traditional)
-                                * \li 1:  Cubic spline method
-                                */
-    int setchgm;               /**< Flag, @see shgm */
-    int srfm;                  /**< Surface calculation method
-				* \li 0: Mol surface for epsilon; inflated VdW
-				*   for kappa; no smoothing 
-                                * \li 1: As 0 with harmoic average
-                                *   smoothing
-                                * \li 2: Cubic spline */
+    Vchrg_Meth chgm;           /**< Charge discretization method */
+    int setchgm;               /**< Flag, @see chgm */
+    Vsurf_Meth srfm;           /**< Surface calculation method */
     int setsrfm;               /**< Flag, @see srfm */
     double srad;               /**< Solvent radius */
     int setsrad;               /**< Flag, @see srad */

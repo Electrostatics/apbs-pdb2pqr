@@ -956,9 +956,9 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm,
         }
         for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) { 
             if (nosh->bogus == 0) {
-                Vpmg_qfForce(pmg, qfForce, j);
-                Vpmg_ibForce(pmg, ibForce, j);
-                Vpmg_dbnpForce(pmg, dbForce, npForce, j);
+                Vpmg_qfForce(pmg, qfForce, j, pbeparm->chgm);
+                Vpmg_ibForce(pmg, ibForce, j, pbeparm->srfm);
+                Vpmg_dbnpForce(pmg, dbForce, npForce, j, pbeparm->srfm);
             } else {
                 for (k=0; k<3; k++) {
                     qfForce[k] = 0; 
@@ -1004,10 +1004,10 @@ molecule %d\n", pbeparm->molid);
           sizeof(AtomForce));
         for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
             if (nosh->bogus == 0) {
-                Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j);
-                Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j);
+                Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, pbeparm->chgm);
+                Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j, pbeparm->srfm);
                 Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
-                  (*atomForce)[j].npForce, j);
+                  (*atomForce)[j].npForce, j, pbeparm->srfm);
             } else {
                 for (k=0; k<3; k++) {
                     (*atomForce)[j].qfForce[k] = 0;

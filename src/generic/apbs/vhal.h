@@ -55,6 +55,57 @@
 /**
  *  @ingroup Vhal
  *  @author  Nathan Baker
+ *  @brief   Types of molecular surface definitions
+ */
+enum Vsurf_Meth {
+	VSM_MOL=0, /**<  Ion accessibility is defined using inflated van der Waals
+				*    radii, the dielectric coefficient ( ) is defined using the
+				*    molecular (Conolly) surface definition without 
+                *    smoothing */
+    VSM_MOLSMOOTH=1, /**<  As VSM_MOL but with a simple harmonic average
+                      *    smoothing */
+	VSM_SPLINE=2     /**<  Spline-based surface definitions. This is primarily
+					  * for use with force calculations, since it requires
+					  * substantial reparameterization of radii. This is based
+					  * on the work of Im et al, Comp. Phys.  Comm. 111 ,
+					  * (1998) and uses a cubic spline to define a smoothly
+					  * varying characteristic function for the surface-based
+					  * parameters. Ion accessibility is defined using inflated
+					  * van der Waals radii with the spline function and the
+					  * dielectric coefficient is defined using the standard
+					  * van der Waals radii with the spline function.  */
+};
+
+/** @typedef Vsurf_Meth
+ *  @ingroup Vhal
+ *  @brief   Declaration of the Vsurf_Meth type as the Vsurf_Meth enum
+ */
+typedef enum Vsurf_Meth Vsurf_Meth;
+
+/**
+ *  @ingroup Vhal
+ *  @author  Nathan Baker
+ *  @brief   Types of charge discretization methods
+ */
+enum Vchrg_Meth {
+	VCM_TRIL=0,  /**< Trilinear interpolation of charge to 8 nearest grid
+                  *   points.  The traditional method; not particularly good to
+                  *   use with PBE forces. */
+    VCM_BSPL2=1  /**< Cubic B-spline across nearest- and
+				  *   next-nearest-neighbors.  Mainly for use in grid-sensitive
+				  *   applications (such as force calculations). */
+};
+
+/** @typedef Vchrg_Meth
+ *  @ingroup Vhal
+ *  @brief   Declaration of the Vchrg_Meth type as the Vchrg_Meth enum
+ */
+typedef enum Vchrg_Meth Vchrg_Meth;
+
+
+/**
+ *  @ingroup Vhal
+ *  @author  Nathan Baker
  *  @brief   Types of (scalar) data that can be written out of APBS
  */
 enum Vdata_Type {

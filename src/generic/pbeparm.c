@@ -216,11 +216,12 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: CHGM not set!\n");
         return 0;
     }
-    if (((thee->srfm==0) || (thee->srfm==1)) && (!thee->setsrad)) {
+    if (((thee->srfm==VSM_MOL) || (thee->srfm==VSM_MOLSMOOTH)) \
+      && (!thee->setsrad)) {
         Vnm_print(2, "PBEparm_check: SRAD not set!\n");
         return 0;
     }
-    if ((thee->srfm==2) && (!thee->setswin)) {
+    if ((thee->srfm==VSM_SPLINE) && (!thee->setswin)) {
         Vnm_print(2, "PBEparm_check: SWIN not set!\n");
         return 0;
     }
