@@ -777,7 +777,9 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
    AM *am;
 #if defined(HAVE_PMGC_H)
    MGmlsys *mlsys;
-   MGarray *uMG, *fMG;
+   int I0, I1, J0, J1, K0, K1, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
+   double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hz, ifloat, jfloat;
+   double kfloat, dx, dy, dz;
 #endif
 
    VASSERT(thee != VNULL);
@@ -853,16 +855,72 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
         mlsys = (MGmlsys *)system;
         VASSERT(mlsys != VNULL);
 
-        /* Get the fine level solution and source */
-        uMG = mlsys->s[0]->u;
-        fMG = mlsys->s[0]->fc;
+        /* Get the fine level solution */
+        sol = MGarray_d(mlsys->s[0]->u);
 
-        /* The energy is 1/2 if the dot product of the solution and RHS... */
-        energy = 0.5*MGarray_Xdot(uMG, fMG);
-        /* ...scaled by the mesh spacing */
-        energy = energy*(mlsys->s[0]->xc[1] - mlsys->s[0]->xc[0]);
-        energy = energy*(mlsys->s[0]->yc[1] - mlsys->s[0]->yc[0]);
-        energy = energy*(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
+        energy = 0.0;
+        natoms = Valist_getNumberAtoms(thee->alist);
+        for (iatom=0; iatom<natoms; iatom++) {
+            /* Get atom information */
+            charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
+            position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
+
+            /* Get mesh information */
+            I0 = MGlsys_I0g(mlsys->s[0]);
+            I1 = MGlsys_I1g(mlsys->s[0]);
+            J0 = MGlsys_J0g(mlsys->s[0]);
+            J1 = MGlsys_J1g(mlsys->s[0]);
+            K0 = MGlsys_K0g(mlsys->s[0]);
+            K1 = MGlsys_K1g(mlsys->s[0]);
+            nx = MGlsys_nxg(mlsys->s[0]);
+            ny = MGlsys_nyg(mlsys->s[0]);
+            nz = MGlsys_nzg(mlsys->s[0]);
+            hx = VABS(mlsys->s[0]->xc[1] - mlsys->s[0]->xc[0]);
+            hy = VABS(mlsys->s[0]->yc[1] - mlsys->s[0]->yc[0]);
+            hz = VABS(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
+            xmax = mlsys->s[0]->xc[nx-1];
+            xmin = mlsys->s[0]->xc[0];
+            ymax = mlsys->s[0]->yc[ny-1];
+            ymin = mlsys->s[0]->yc[0];
+            zmax = mlsys->s[0]->zc[nz-1];
+            zmin = mlsys->s[0]->zc[0];
+
+            /* Make sure we're on the grid */
+            if ((position[0]<=xmin) || (position[0]>=xmax)  || \
+              (position[1]<=ymin) || (position[1]>=ymax)  || \
+              (position[2]<=zmin) || (position[2]>=zmax)) {
+                Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
+                iatom, position[0], position[1], position[2]);
+            } else {
+                /* Figure out which vertices we're next to */
+                ifloat = (position[0] - xmin)/hx;
+                jfloat = (position[1] - xmin)/hy;
+                kfloat = (position[2] - xmin)/hz;
+
+                ihi = (int)ceil(ifloat);
+                ilo = (int)floor(ifloat);
+                jhi = (int)ceil(jfloat);
+                jlo = (int)floor(jfloat);
+                khi = (int)ceil(kfloat);
+                klo = (int)floor(kfloat);
+
+                /* Now get trilinear interpolation constants */
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                uval =  dx*dy*dz*sol[II(ihi,jhi,khi)]
+                      + dx*(1.0-dy)*dz*sol[II(ihi,jlo,khi)]
+                      + dx*dy*(1.0-dz)*sol[II(ihi,jhi,klo)]
+                      + dx*(1.0-dy)*(1.0-dz)*sol[II(ihi,jlo,klo)]
+                      + (1.0-dx)*dy*dz*sol[II(ilo,jhi,khi)]
+                      + (1.0-dx)*(1.0-dy)*dz*sol[II(ilo,jlo,khi)]
+                      + (1.0-dx)*dy*(1.0-dz)*sol[II(ilo,jhi,klo)]
+                      + (1.0-dx)*(1.0-dy)*(1.0-dz)*sol[II(ilo,jlo,klo)];
+                energy += (uval*charge);
+            }
+        }
+
+        energy = 0.5*hx*hy*hz*energy;
 
         return energy;
 #else /* if defined(HAVE_PMGC_H) */
