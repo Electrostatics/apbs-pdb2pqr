@@ -1,0 +1,417 @@
+/**
+ *  @file    vparam.c
+ *  @ingroup Vparam
+ *  @author  Nathan Baker
+ *  @brief   Class Vparam methods
+ *  @version $Id$
+ *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (baker@biochem.wustl.edu)
+ * Dept. of Biochemistry and Molecular Biophysics
+ * Center for Computational Biology
+ * Washington University in St. Louis
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 2003.  Washington University in St. Louis.
+ * All Rights Reserved.
+ * Portions Copyright (c) 1999-2003.  The Regents of the University of
+ * California.  
+ * Portions Copyright (c) 1995.  Michael Holst.
+ *
+ * This file is part of APBS.
+ *
+ * APBS is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * APBS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with APBS; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+ *
+ * @endverbatim
+ */
+
+#include "apbscfg.h"
+#include "apbs/vparam.h"
+
+#if defined(HAVE_MC_H)
+#include "mc/mc.h"
+#endif
+
+VEMBED(rcsid="$Id$")
+
+/**
+ * @brief  Read a single line of the flat file database
+ * @author  Nathan Baker
+ * @ingroup  Vparam
+ * @param  sock  Socket ready for reading
+ * @param  atom  Atom to hold parsed data
+ * @returns 1 if successful, 0 otherwise
+ */
+VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom);
+
+#if !defined(VINLINE_VPARAM)
+
+VPUBLIC int Vparam_memChk(Vparam *thee) {
+    if (thee == VNULL) return 0;
+    return Vmem_bytes(thee->vmem);
+}
+
+#endif /* if !defined(VINLINE_VPARAM) */
+
+VPUBLIC Vparam_AtomData* Vparam_AtomData_ctor() {
+
+    Vparam_AtomData *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vparam_AtomData) );
+    VASSERT(thee != VNULL);
+    VASSERT(Vparam_AtomData_ctor2(thee));
+
+    return thee;
+}
+
+VPUBLIC int Vparam_AtomData_ctor2(Vparam_AtomData *thee) { return 1; }
+
+VPUBLIC void Vparam_AtomData_dtor(Vparam_AtomData **thee) {
+    
+    if ((*thee) != VNULL) {
+        Vparam_AtomData_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(Vparam_AtomData), (void **)thee);
+        (*thee) = VNULL;
+    }
+
+}
+
+VPUBLIC void Vparam_AtomData_dtor2(Vparam_AtomData *thee) { ; }
+
+VPUBLIC Vparam_ResData* Vparam_ResData_ctor(Vmem *mem) {
+
+    Vparam_ResData *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(mem, 1, sizeof(Vparam_ResData) );
+    VASSERT(thee != VNULL);
+    VASSERT(Vparam_ResData_ctor2(thee, mem));
+
+    return thee;
+}
+
+VPUBLIC int Vparam_ResData_ctor2(Vparam_ResData *thee, Vmem *mem) { 
+    
+    if (thee == VNULL) {
+        Vnm_print(2, "Vparam_ResData_ctor2:  Got VNULL thee!\n");
+        return 0;
+    }
+    thee->vmem = mem;
+    thee->nAtomData = 0;
+    thee->atomData = VNULL;
+
+    return 1;
+}
+
+VPUBLIC void Vparam_ResData_dtor(Vparam_ResData **thee) {
+    
+    if ((*thee) != VNULL) {
+        Vparam_ResData_dtor2(*thee);
+        Vmem_free((*thee)->vmem, 1, sizeof(Vparam_ResData), (void **)thee);
+        (*thee) = VNULL;
+    }
+
+}
+
+VPUBLIC void Vparam_ResData_dtor2(Vparam_ResData *thee) { 
+    
+    if (thee == VNULL) return; 
+    if (thee->nAtomData > 0) {
+        Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData), 
+          (void **)&(thee->atomData));
+    }
+    thee->nAtomData = 0;
+    thee->atomData = VNULL;
+}
+
+VPUBLIC Vparam* Vparam_ctor() {
+
+    Vparam *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vparam) );
+    VASSERT(thee != VNULL);
+    VASSERT(Vparam_ctor2(thee));
+
+    return thee;
+}
+
+VPUBLIC int Vparam_ctor2(Vparam *thee) {
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vparam_ctor2: got VNULL thee!\n");
+        return 0;
+    }
+
+    thee->vmem = VNULL;
+    thee->vmem = Vmem_ctor("APBS:VPARAM");
+    if (thee->vmem) {
+        Vnm_print(2, "Vparam_ctor2:  failed to init Vmem!\n");
+        return 0;
+    }
+
+    thee->nResData = 0;
+    thee->resData = VNULL;
+
+    return 1;
+}
+
+VPUBLIC void Vparam_dtor(Vparam **thee) {
+    
+    if ((*thee) != VNULL) {
+        Vparam_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(Vparam), (void **)thee);
+        (*thee) = VNULL;
+    }
+
+}
+
+VPUBLIC void Vparam_dtor2(Vparam *thee) {
+
+    int i;
+
+    if (thee == VNULL) return;
+
+    /* Destroy the residue data */
+    for (i=0; i<thee->nResData; i++) Vparam_ResData_dtor2(&(thee->resData[i]));
+    if (thee->nResData > 0) Vmem_free(thee->vmem, thee->nResData, 
+      sizeof(Vparam_ResData), (void **)&(thee->resData));
+    thee->nResData = 0;
+    thee->resData = VNULL;
+
+    if (thee->vmem != VNULL) Vmem_dtor(&(thee->vmem));
+    thee->vmem = VNULL;
+
+}
+
+VPUBLIC Vparam_ResData* Vparam_getResData(Vparam *thee, 
+  char resName[VMAX_ARGLEN]) {
+
+    int i;
+    Vparam_ResData *res = VNULL;
+
+    VASSERT(thee != VNULL);
+
+    if ((thee->nResData == 0) || (thee->resData == VNULL)) {
+        res = VNULL;
+        return res;
+    }
+
+
+    /* Look for the matching residue */
+    for (i=0; i<thee->nResData; i++) {
+        res = &(thee->resData[i]);
+        if (Vstring_strcasecmp(resName, res->name) == 0) return res;
+    }
+
+    /* Didn't find a matching residue */
+    res = VNULL;
+    return res;
+}
+
+VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee, 
+  char resName[VMAX_ARGLEN], char atomName[VMAX_ARGLEN]) {
+
+    int i, j;
+    Vparam_ResData *res = VNULL;
+    Vparam_AtomData *atom = VNULL;
+
+    VASSERT(thee != VNULL);
+
+    if ((thee->nResData == 0) || (thee->resData == VNULL)) {
+        atom = VNULL;
+        return atom;
+    }
+
+    /* Look for the matching residue */
+    for (i=0; i<thee->nResData; i++) {
+        res = &(thee->resData[i]);
+        if (Vstring_strcasecmp(resName, res->name) == 0) {
+            /* Look for the matching atom */
+            for (j=0; j<res->nAtomData; j++) {
+                atom = &(res->atomData[i]);
+                if (Vstring_strcasecmp(atomName, atom->atomName) == 0) {
+                    return atom;
+                }
+            }
+        }
+    }
+
+    /* Didn't find a matching atom/residue */
+    atom = VNULL;
+    return atom;
+}
+
+VPUBLIC int Vparam_readFlatFile(Vparam *thee, Vio *sock) {
+
+    int i, iatom, ires, natoms, nalloc;
+    Vparam_AtomData *atoms = VNULL;
+    Vparam_AtomData *tatoms = VNULL;
+    Vparam_AtomData *atom = VNULL;
+    Vparam_ResData *res = VNULL;
+    char currResName[VMAX_ARGLEN];
+
+    VASSERT(thee != VNULL);
+
+    /* Clear existing parameters */
+    if (thee->nResData > 0) {
+        Vnm_print(2, "WARNING -- CLEARING PARAMETER DATABASE!\n");
+        for (i=0; i<thee->nResData; i++) {
+            Vparam_ResData_dtor2(&(thee->resData[i]));
+        }
+        Vmem_free(thee->vmem, thee->nResData, 
+          sizeof(Vparam_ResData), (void **)&(thee->resData));
+    }
+
+    /* Initial space for atoms */
+    nalloc = 200;
+    natoms = 0;
+    atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
+
+    /* Read until we run out of entries, allocating space as needed */
+    while (1) {
+        if (natoms >= nalloc) {
+            tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
+            VASSERT(tatoms != VNULL);
+            for (i=0; i<natoms; i++) {
+                Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
+            }
+            Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), 
+              (void **)&(atoms));
+            atoms = tatoms; 
+            tatoms = VNULL;
+            nalloc = 2*nalloc;
+        }
+        atom = &(atoms[natoms]);
+        if (!readFlatFileLine(sock, atom)) break;
+        natoms++;
+    }
+    if (natoms == 0) return 0;
+
+    /* Count the number of residues */
+    thee->nResData = 0;
+    strcpy(currResName, atoms[0].resName);
+    (thee->nResData)++;
+    for (i=0; i<natoms; i++) {
+        if (Vstring_strcasecmp(atoms[i].resName, currResName) != 0) {
+            strcpy(currResName, atoms[0].resName);
+            (thee->nResData)++;
+        }
+    }
+
+    /* Create the residues */
+    thee->resData = Vmem_malloc(thee->vmem, thee->nResData, 
+      sizeof(Vparam_ResData));
+    VASSERT(thee->resData != VNULL);
+    for (i=0; i<(thee->nResData); i++) {
+        res = &(thee->resData[i]);
+        Vparam_ResData_ctor2(res, thee->vmem);
+    }
+
+    /* Count the number of atoms per residue */
+    ires = 0;
+    res = &(thee->resData[ires]);
+    res->nAtomData = 1;
+    strcpy(res->name, atoms[0].resName);
+    for (i=0; i<natoms; i++) {
+        if (Vstring_strcasecmp(atoms[i].resName, res->name) != 0) {
+            (ires)++;
+            res = &(thee->resData[ires]);
+            res->nAtomData = 1;
+            strcpy(res->name, atoms[0].resName);
+        } else (res->nAtomData)++;
+    }
+
+    /* Allocate per-residue space for atoms */
+    for (ires=0; ires<thee->nResData; ires++) {
+        res = &(thee->resData[ires]);
+        res->atomData = Vmem_malloc(thee->vmem, res->nAtomData, 
+          sizeof(Vparam_AtomData));
+    }
+
+    /* Copy atoms into residues */
+    ires = 0;
+    iatom = 0;
+    res = &(thee->resData[ires]);
+    Vparam_AtomData_copyTo(&(atoms[0]), &(res->atomData[iatom]));
+    for (i=0; i<natoms; i++) {
+        iatom++;
+        if (Vstring_strcasecmp(atoms[i].resName, res->name) != 0) {
+            (ires)++;
+            iatom = 0;
+            res = &(thee->resData[ires]);
+        }
+        Vparam_AtomData_copyTo(&(atoms[i]), &(res->atomData[iatom]));
+    }
+
+    /* Destroy temporary atom space */
+    Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), (void **)&(atoms));
+
+    return 1;
+
+}
+
+VEXTERNC void Vparam_AtomData_copyTo(Vparam_AtomData *thee,
+  Vparam_AtomData *dest) {
+
+    VASSERT(thee != VNULL);
+    VASSERT(dest != VNULL);
+
+    strcpy(dest->atomName, thee->atomName);
+    strcpy(dest->resName, thee->resName);
+    dest->charge = thee->charge;
+    dest->radius = thee->radius;
+    dest->epsilon = thee->epsilon;
+
+}
+
+VEXTERNC void Vparam_AtomData_copyFrom(Vparam_AtomData *thee,
+  Vparam_AtomData *src) {  Vparam_AtomData_copyTo(src, thee); }
+
+VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom) {
+
+    double dtmp;
+    char tok[VMAX_BUFSIZE];
+
+    VASSERT(atom != VNULL);
+
+    if (Vio_scanf(sock, "%s", tok) != 1) return 0;
+    if (strlen(tok) > VMAX_ARGLEN) {
+        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n", 
+          tok, strlen(tok));
+        return 0;
+    }
+    strcpy(atom->resName, tok);
+    if (Vio_scanf(sock, "%s", tok) != 1) return 0;
+    if (strlen(tok) > VMAX_ARGLEN) {
+        Vnm_print(2, "Vparam_readFlatFile:  string (%s) too long (%d)!\n", 
+          tok, strlen(tok));
+        return 0;
+    }
+    strcpy(atom->atomName, tok);
+    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    atom->charge = dtmp;
+    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    atom->radius = dtmp;
+    if (Vio_scanf(sock, "%lf", &dtmp) != 1) return 0;
+    atom->epsilon = dtmp;
+
+    return 1;
+}

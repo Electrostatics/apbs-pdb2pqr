@@ -48,7 +48,7 @@
  *    <li> @ref exec
  *    <li> @ref test
  *    <li> @ref tools
- *    <li> @ref example-code
+ *    <li> @ref examplecode
  *    </ul>
  *  <li> @ref usage
  *    <ul>
@@ -410,98 +410,145 @@
  * cases as well as anticipated results.
  * 
  * @subsection tools Tools, scripts, and parameters
- * The <code>apbs/tools</code> directory contains several (hopefully) useful
- * accessories for working with APBS:
- * <dl>
- * <dt><a href="http://nbcr.sdsc.edu/pdb2pqr/index.html">PDB2PQR web service</a>
- * <dd>Fix, protonate, and convert a PDB file to PQR format using an
- * NBCR-supported web portal with a <a
- * href="http://www.cmbi.kun.nl/whatif/">WHATIF</a> backend.  Provided by Jens
- * Nielsen and Jerry Greenberg; supported by NBCR.
- * <dt>arpack/driver  <dd>If APBS linked with ARPACK, perform eigenvalue
- * analyses of matrices produced by APBS.  Written by Nathan Baker.
- * <dt>conversion/pdb2qr  <dd> Convert a PDB file to PQR format (as read by
- * APBS) with the help of a parameter file (see conversion/param).  Contributed
- * by Dave Sept.
- * <dt>conversion/pdb2qcd  <dd> Convert a QCD file (i.e., UHBD format for a
- * molecule) to PQR format.  Written by Nathan Baker.
- * <dt>conversion/amber2charmm <dd> A script which converts a PDB file with
- * AMBER atom names to a PDB file with CHARMm atom names.  Useful for
- * preprocessing files before converting with pdb2pqr.  Written by Nathan
- * Baker.
- * <dt> conversion/WHATIF2AMBER.sed <dd> A sed script for converting a PDB file
- * with WHATIF atom names to a PDB file with CHARMm atom names.  Useful for
- * preprocessing files before converting with pdb2pqr.  Contributed by Chiansan
- * Ma.
- * <dt> conversion/param <dd> A collection of parameter files in UHBD format
- * (contributed by Dave Sept and Adrian Elcock) suitable for use with pdb2pqr.
- *
- * <dt> manip/acc <dd> A program for calculating molecular volumes, surface
- * areas, etc. from molecules in PQR format.  Written by Nathan Baker.
- * <dt> manip/born <dd> A crude program for calculating Generalized Born
- * energies.  Written by Nathan Baker (and not really debugged).
- * <dt> manip/collisions <dd> Useful for looking for collisions between two
- * molecules when trying to set up a binding energy calculation.  Contributed by
- * Dave Sept.
- * <dt> manip/coulomb <dd> A simple program for printing out forces and
- * energies as calculated (analytically) from Coulomb's law.  Written by Nathan
- * Baker.
- * <dt> manip/psize.py <dd> Get the dimensions and center of a molecule in PQR
- * format.  Very useful for setting up input files (i.e., grid dimensions,
- * lengths, spacings, etc.) for APBS calculations.   Contributed by Todd
- * Dolinsky and Nathan Baker.
- * <dt> manip/psize <dd> Get the dimensions and center of a molecule in PQR
- * format.  Very useful for setting up input files (i.e., grid dimensions,
- * lengths, spacings, etc.) for APBS calculations.  NOTE:  THIS SCRIPT HAS BEEN
- * SUPERCEDED BY manip/psize.py.  Contributed by Dave Sept; modified by Nathan
- * Baker and Todd Dolinsky.
- * <dt> manip/shift <dd> Move the center of a molecule in PQR format around.
- * Contributed by Dave Sept.
- *
- * <dt> mesh/mgmesh <dd> List acceptable grid dimensions/multigrid levels
- * combinations.  Saves considerable headaches with math. :)
- * <dt> mesh/dxmath <dd> Perform arithmetic operations on OpenDX-format grids
- * and scalar quantities.  Similar to UHBD's <code>gridcalc</code> utility; run
- * code with no arguments for instructions.
- * <dt> mesh/uhbd_asc2bin <dd> Converts UHBD-format grid files from ASCII to
- * binary.  Contributed by Dave Sept.
+ * <ul>
+ * <li> Parameterization
+ *   <ul>
+ *   <li><a href="http://nbcr.sdsc.edu/pdb2pqr/index.html">PDB2PQR web
+ *   service</a><br>
+ *   Fix, protonate, and convert a PDB file to PQR format using an
+ *   NBCR-supported web portal with a <a
+ *   href="http://www.cmbi.kun.nl/whatif/">WHATIF</a> backend.  Provided by
+ *   Jens Nielsen and Jerry Greenberg; supported by NBCR.
+ *   <li> apbs/tools/conversion/pdb2pqr.awk<br> 
+ *   Convert a PDB file to PQR format (as read by APBS) with the help of one of
+ *   the following UHBD-format parameter files:
+ *     <ul>
+ *     <li> apbs/tools/conversion/param/pdb2pqr/amber-param.dat  <br>  
+ *     All-atom charges and radii from AMBER94 parameter set; polar hydrogens
+ *     given 1 &Aring radius.  Contributed by Adrian Elcock; modified by Nathan
+ *     Baker.
+ *     <li> apbs/tools/conversion/param/pdb2pqr/c-alpha.dat  <br>  
+ *     C-alpha charges for reduced representations of protein structures.
+ *     Contributed by Dave Sept and Adrian Elcock.
+ *     <li> apbs/tools/conversion/param/pdb2pqr/charmm-param.dat  <br>
+ *     All-atom charges and radii from CHARMM23 force field.  Contributed by
+ *     Adrian Elcock; modified by Robert Konecny.
+ *     <li> apbs/tools/conversion/param/pdb2pqr/jim-opls.dat  <br>
+ *     OPLS force field charges and radii; contributed by Jim Briggs.
+ *     <li> apbs/tools/conversion/param/pdb2pqr/weiner86-param.dat  <br>
+ *     Weiner '86 force field charges and radii.  Contributed by Chiansan Ma
+ *     and Nathan Baker.
+ *     </ul>
+ *   This script was contributed by Dave Sept.
+ *   <li>apbs/tools/conversion/qcd2pqr.awk  <br> 
+ *   Convert a QCD file (i.e., UHBD format for a molecule) to PQR format.
+ *   Written by Nathan Baker.
+ *   <li>apbs/tools/conversion/amber2charmm.sh <br> 
+ *   A script which converts a PDB file with AMBER atom names to a PDB file
+ *   with CHARMm atom names.  Useful for preprocessing files before converting
+ *   with pdb2pqr.  Written by Nathan Baker.
+ *   <li>apbs/tools/conversion/WHATIF2AMBER.sed <br> 
+ *   A sed script for converting a PDB file with WHATIF atom names to a PDB
+ *   file with CHARMm atom names.  Useful for preprocessing files before
+ *   converting with pdb2pqr.  Contributed by Chiansan Ma.
+ *   </ul>
+ * <li> Eigenvalue solver
+ *   <ul>
+ *   <li>apbs/tools/arpack/driver  <br>
+ *   If APBS is linked with ARPACK, this routine will perform eigenvalue
+ *   analyses of matrices produced by APBS.  Written by Nathan Baker.
+ *   </ul>
+ * <li> Analytical electrostatic- and solvation-related properties
+ *   <ul>
+ *   <li> apbs/tools/manip/acc <br> 
+ *   A program for calculating molecular volumes, surface areas, etc. from
+ *   molecules in PQR format.  Written by Nathan Baker.
+ *   <li> apbs/tools/manip/born <br> 
+ *   A crude program for calculating Generalized Born energies.  Written by
+ *   Nathan Baker (and not really debugged).
+ *   <li>apbs/tools/manip/coulomb <br> 
+ *   A simple program for printing out forces and energies as calculated
+ *   (analytically) from Coulomb's law.  Written by Nathan Baker.
+ *   </ul>
+ * <li> Tools for problem setup
+ *   <ul>
+ *   <li> apbs/tools/manip/psize.py <br> 
+ *   Get the dimensions and center of a molecule in PQR format.  Very useful
+ *   for setting up input files (i.e., grid dimensions, lengths, spacings,
+ *   etc.) for APBS calculations.  Contributed by Todd Dolinsky and
+ *   Nathan Baker.  
+ *   <li> apbs/tools/manip/psize <br> 
+ *   Get the dimensions and center of a molecule in PQR format.  Very useful
+ *   for setting up input files (i.e., grid dimensions, lengths, spacings,
+ *   etc.) for APBS calculations.  NOTE:  THIS SCRIPT HAS BEEN
+ *   SUPERCEDED BY manip/psize.py.  Contributed by Dave Sept; modified by
+ *   Nathan Baker and Todd Dolinsky.
+ *   <li> apbs/tools/manip/collisions <br> 
+ *   Useful for looking for collisions between two molecules when trying to set
+ *   up a binding energy calculation.  Contributed by Dave Sept.
+ *   <li> apbs/tools/manip/shift <br> 
+ *   Move the center of a molecule in PQR format around.  Contributed by Dave
+ *   Sept.
+ *   </ul>
+ * <li> Mesh manipulation and tools
+ *   <ul>
+ *   <li> apbs/tools/mesh/mgmesh <br> 
+ *   List acceptable grid dimensions/multigrid levels combinations for
+ *   mg-manual calculations.  Saves considerable headaches with math.
+ *   <li> apbs/tools/mesh/dxmath <br> 
+ *   Perform arithmetic operations on OpenDX-format grids and scalar
+ *   quantities.  Similar to UHBD's <code>gridcalc</code> utility; run code
+ *   with no arguments for instructions.
+ *   <li> apbs/tools/mesh/uhbd_asc2bin <br> 
+ *   Converts UHBD-format grid files from ASCII to binary.  Contributed by Dave
+ *   Sept.
+ *   <li> apbs/tools/opendx/average <br> 
+ *   Basically example code for OpenDX manipulation in APBS.  Averages
+ *   potential along an axis.  Written by Nathan Baker
+ *   <li> apbs/tools/opendx/benchmark <br> 
+ *   Calculates time to read/write OpenDX data.  Written by Nathan Baker.
+ *   <li> apbs/tools/opendx/read  <br> 
+ *   Basic example code for OpenDX manipulation in APBS.  Reads in DX file and
+ *   spits out some information.  Written by Nathan Baker.
+ *   </ul>
+ * <li> Visualization
+ *   <ul>
+ *   <li> apbs/tools/opendx/potacc.* <br> 
+ *   <a href="http://www.opendx.org">OpenDX</a> visual program (*.net) and
+ *   accessory files for looking at potentials and molecular surfaces.  Written
+ *   by Nathan Baker.
+ *   <li> apbs/tools/opendx/pot.* <br> 
+ *   <a href="http://www.opendx.org">OpenDX</a> visual program (*.net) and
+ *   accessory files for looking at potentials only.  Written by Nathan Baker.
+ *   <li> apbs/opendx/multipot.* <br> 
+ *   Sample <a href="http://www.opendx.org">OpenDX</a> visual program (*.net)
+ *   and accessory files for looking at potentials as output by a parallel
+ *   focusing calculation.  Written by Nathan Baker.
+ *   <li> apbs/tools/vmd/read_dx 
+ *   <br> Tcl commands for visualizing electrostatic potentials in <a
+ *   href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.  Contributed by Dave
+ *   Sept; modified by Nathan Baker.
+ *   <li> apbs/tools/vmd/loadstuff.vmd <br> 
+ *   Sample command script for visualizing electrostatic potentials in <a
+ *   href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.  Contributed by Dave
+ *   Sept; modified by Nathan Baker
+ *   <li> apbs/tools/opendx/dx2mol <br> 
+ *   For converting the OpenDX format of the electrostatic potential to the
+ *   <a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">
+ *   MOLMOL</a> format.  Contributed by Jung-Hsin Lin.
+ *   </ul>
+ * <li> Python tools and wrappers
+ *   <ul>
+ *   <li> apbs/tools/python/Makefile <br> 
+ *   Run to generate Python-wrapped APBS code.  Written by Todd Dolinksy with
+ *   help from Alex Gillet and Michel Sanner.
+ *   <li> python/main.py <br> 
+ *   Example Python driver code for used with the APBS Python library.  Written
+ *   by Todd Dolinsky and Nathan Baker.
+ *   </ul>
+ * </ul>
  * 
- * <dt> opendx/average <dd> Basically example code for OpenDX manipulation in
- * APBS.  Averages potential along an axis.  Written by Nathan Baker
- * <dt> opendx/benchmark <dd> Calculates time to read/write OpenDX data.
- * Written by Nathan Baker.
- * <dt> opendx/read  <dd> Basic example code for OpenDX manipulation in
- * APBS.  Reads in DX file and spits out some information.  Written by Nathan
- * Baker.
- * <dt> opendx/dx2mol <dd> For converting the OpenDX format of the
- * electrostatic potential to the MOLMOL format. MOLMOL is a popular free
- * molecular display program (<a
- * href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>).
- * Contributed by Jung-Hsin Lin.
- * <dt> opendx/potacc.* <dd> OpenDX visual program (*.net) and accessory files
- * for looking at potentials and molecular surfaces.  Written by Nathan Baker.
- * <dt> opendx/pot.* <dd> OpenDX visual program (*.net) and accessory files for
- * looking at potentials only.  Written by Nathan Baker.
- * <dt> opendx/multipot.* <dd> Sample OpenDX visual program (*.net) and
- * accessory files for looking at potentials as output by a parallel focusing
- * calculation.  Written by Nathan Baker.
- * 
- * <dt> python/Makefile <dd> Run to generate Python-wrapped APBS code.
- * Written by Todd Dolinksy with help from Alex Gillet and Michel Sanner.
- * <dt> python/main.py <dd> Example Python driver code for used with the 
- * APBS Python library.  Written by Todd Dolinsky and Nathan Baker.
- *
- * <dt> vmd/read_dx </dt> <dd> Tcl commands for visualizing electrostatic
- * potentials in <a href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.
- * Contributed by Dave Sept; modified by Nathan Baker.
- * <dt> vmd/loadstuff.vmd </dt>  <dd> Sample command script for visualizing
- * electrostatic potentials in <a
- * href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a>.  Contributed by Dave
- * Sept; modified by Nathan Baker
- * 
- * </dl>
- * 
- * @subsection example-code Example code
+ * @subsection examplecode Example code
  * <p>
  * The main driver code <code>bin/main.c</code> and <code>bin/routines.c</code>
  * should provide a starting point for those who wish to integrate APBS into
@@ -741,6 +788,7 @@
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
  * <li> <a href="#sdie">sdie</a>
+ * <li> <a href="#srfm">srfm</a>
  * <li> <a href="#chgm">chgm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>
@@ -789,6 +837,7 @@
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
  * <li> <a href="#sdie">sdie</a>
+ * <li> <a href="#srfm">srfm</a>
  * <li> <a href="#chgm">chgm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>

@@ -155,7 +155,7 @@ VEXTERNC void    Vgreen_dtor2(Vgreen *thee);
  *           Returns the potential \f$\phi\f$ defined by
  *           \f[ \phi(r) = \sum_i \frac{q_i e^{-\kappa r_i}}{r_i} \f]
  * 
- *           where \f$\kappa\f$ is the inverse screening length (in \f$\AA\f$),
+ *           where \f$\kappa\f$ is the inverse screening length (in &Aring;)
  *           \f$q_i\f$ is the atomic charge (in e), and \f$r_i\f$ r_i is the
  *           distance from atom \f$i\f$ to the observation point \f$r\f$.  The
  *           potential is scaled to units of V.
@@ -180,10 +180,10 @@ VEXTERNC double  Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
  *           \f[ \nabla \phi(r) = \nabla \sum_i \frac{q_i e^{-\kappa r_i}}{r_i}
  *           \f]
  *
- *           where \f$\kappa\f$ is the inverse screening length (in \f$\AA\f$),
+ *           where \f$\kappa\f$ is the inverse screening length (in &Aring;).
  *           \f$q_i\f$ is the atomic charge (in e), and \f$r_i\f$ r_i is the
  *           distance from atom \f$i\f$ to the observation point \f$r\f$.  The
- *           potential is scaled to units of V/\f$\AA\f$.
+ *           potential is scaled to units of V/&Aring;.
  *
  *  @ingroup Vgreen
  *  @author  Nathan Baker
@@ -193,7 +193,7 @@ VEXTERNC double  Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
  *  @param   position  The coordinates of \f$r\f$ (see above)
  *  @param   dim  The dimension of the space in which this is evaluated
  *  @param   kappa The value of \f$\kappa\f$ (see above)
- *  @param   grad The field as defined above in units of V/\f$\AA\f$
+ *  @param   grad The field as defined above in units of V/&Aring;
  */
 VEXTERNC void    Vgreen_helmholtzD(Vgreen *thee, double *position, 
                    double dim, double kappa, double *grad);
@@ -223,7 +223,7 @@ VEXTERNC double  Vgreen_coulomb(Vgreen *thee, double *position, double dim);
  *           \f[ \nabla \phi(r) = \sum_i \frac{q_i}{r_i} \f]
  *           where \f$q_i\f$ is the atomic charge (in e) and \f$r_i\f$ is the
  *           distance to the observation point \f$r\f$.  The field is
- *           scaled to units of V/\f$\AA\f$.
+ *           scaled to units of V/&Aring;.
  *
  *  @ingroup Vgreen
  *  @author  Nathan Baker

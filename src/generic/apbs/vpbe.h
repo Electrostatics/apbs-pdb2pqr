@@ -254,7 +254,7 @@ typedef struct Vpbe Vpbe;
      *  @ingroup Vpbe
      *  @author  Nathan Baker
      *  @param   thee Vpbe object
-     *  @return  Bulk Debye-Huckel parameter (\f$\AA^{-1}\f$)
+     *  @return  Bulk Debye-Huckel parameter (&Aring;)
      */
     VEXTERNC double  Vpbe_getXkappa(Vpbe *thee);
 
@@ -262,7 +262,7 @@ typedef struct Vpbe Vpbe;
      *  @ingroup Vpbe
      *  @author  Nathan Baker
      *  @param   thee Vpbe object
-     *  @return  Debye-Huckel screening length (\f$\AA\f$)
+     *  @return  Debye-Huckel screening length (&Aring;)
      */
     VEXTERNC double  Vpbe_getDeblen(Vpbe *thee);
 
