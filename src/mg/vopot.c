@@ -51,13 +51,13 @@ VEMBED(rcsid="$Id$")
 // Routine:  Vopot_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, Vbcfl bcfl) {
+VPUBLIC Vopot* Vopot_ctor(Vmgrid *mgrid, Vpbe *pbe, Vbcfl bcfl) {
 
     Vopot *thee = VNULL;
 
     thee = Vmem_malloc(VNULL, 1, sizeof(Vopot));
     VASSERT(thee != VNULL);
-    VASSERT(Vopot_ctor2(thee, grid, pbe, bcfl));
+    VASSERT(Vopot_ctor2(thee, mgrid, pbe, bcfl));
 
     return thee;
 }
@@ -66,11 +66,11 @@ VPUBLIC Vopot* Vopot_ctor(Vgrid *grid, Vpbe *pbe, Vbcfl bcfl) {
 // Routine:  Vopot_ctor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, Vbcfl bcfl) {
+VPUBLIC int Vopot_ctor2(Vopot *thee, Vmgrid *mgrid, Vpbe *pbe, Vbcfl bcfl) {
 
     if (thee == VNULL) return 0;
     thee->bcfl = bcfl;
-    thee->grid = grid;
+    thee->mgrid = mgrid;
     thee->pbe = pbe;
 
     return 1;
@@ -117,7 +117,7 @@ VPUBLIC int Vopot_pot(Vopot *thee, double pt[3], double *value) {
     u = 0;
 
     /* See if we're on the mesh */
-    if (Vgrid_value(thee->grid, pt, &u)) {
+    if (Vmgrid_value(thee->mgrid, pt, &u)) {
 
         *value = u;
 
@@ -218,7 +218,7 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
 
     u = 0;
 
-    if (Vgrid_curvature(thee->grid, pt, cflag, value)) return 1;
+    if (Vmgrid_curvature(thee->mgrid, pt, cflag, value)) return 1;
     else if (cflag != 1) {
         Vnm_print(2, "Vopot_curvature:  Off mesh!\n");
         return 1;
@@ -302,7 +302,7 @@ VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
     alist = Vpbe_getValist(thee->pbe);
 
 
-    if (!Vgrid_gradient(thee->grid, pt, grad)) {
+    if (!Vmgrid_gradient(thee->mgrid, pt, grad)) {
 
         switch (thee->bcfl) {
 
