@@ -3,9 +3,9 @@ BETA PUBLIC RELEASE VERSION 0.2.3       10-09-02
 #############################################################################
 
   * Fixed bugs in salt-dependent Helmholtz/nonlinear term of PBE affecting
-	both LPBE and NPBE calculations.  This bug fix changes most energies 
-	by < 2 kJ/mol; however, it is recommended that users upgrade.  Huge
-    thanks to Michael Grabe!!
+	both LPBE and NPBE calculations.  While this bug fix only changes most 
+    energies by < 2 kJ/mol, it is recommended that all users upgrade.  Many
+    thanks to Michael Grabe for finding and carefully documenting this bug!
   * A parameter (chgm) has been added which controls the charge discretization
     method used.  Therefore, this version contains substantial changes in both
 	the API and input file syntax.  Specifically:
