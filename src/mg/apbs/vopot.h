@@ -5,7 +5,7 @@
 /**
  *  @file    vopot.h
  *  @ingroup Vopot
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Steve Bond
  *  @brief   Potential oracle for Cartesian mesh data
  *  @version $Id$
  *  @attention
@@ -158,11 +158,24 @@ VEXTERNC void Vopot_dtor2(Vopot *thee);
  *  @ingroup Vopot
  *  @author  Steve Bond and Nathan Baker
  *  @param   thee   Pointer to Vopot object
+ *  @param   pt     Location to evaluate second derivative
  *  @param   cflag  
- *             \li  Return Laplacian ($u_{xx} + u_{yy} + u_{zz}$)
- *             \li  Return $\max ( u_{xx}, u_{yy}, u_{zz} )$
+ *             \li  0:  Reduced Maximal Curvature
+ *             \li  1:  Mean Curvature (Laplace)
+ *             \li  2:  Gauss Curvature
+ *             \li  3:  True Maximal Curvature
  *  @return  Specified curvature value
  */
 VEXTERNC double Vopot_curvature(Vopot *thee, double pt[3], int cflag );
+
+/** @brief   Get first derivative values at a point
+ *  @ingroup Vopot
+ *  @author  Nathan Baker and Steve Bond
+ *  @param   thee   Pointer to Vopot object
+ *  @param   pt     Location to evaluate gradient
+ *  @param   grad   Gradient
+ */
+VEXTERNC void Vopot_gradient(Vopot *thee, double pt[3], double grad[3] );
+
 
 #endif
