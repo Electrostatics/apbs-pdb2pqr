@@ -45,16 +45,11 @@
 #include "apbs/pbeparm.h"
 #include "apbs/vstring.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class PBEparm: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
+VEMBED(rcsid="$Id$")
+
 #if !defined(VINLINE_MGPARM)
 
 #endif /* if !defined(VINLINE_MGPARM) */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class PBEparm: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
 
 VPUBLIC double PBEparm_getIonCharge(PBEparm *thee, int i) {
     VASSERT(thee != VNULL);
@@ -73,11 +68,6 @@ VPUBLIC double PBEparm_getIonRadius(PBEparm *thee, int i) {
 }
 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_ctor
-//
-// Author: Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC PBEparm* PBEparm_ctor() {
 
     /* Set up the structure */
@@ -89,17 +79,6 @@ VPUBLIC PBEparm* PBEparm_ctor() {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_ctor2
-//
-// Purpose:  Construct the PBEparm object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
 
     int i;
@@ -134,11 +113,6 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     return 1; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void PBEparm_dtor(PBEparm **thee) {
     if ((*thee) != VNULL) {
         PBEparm_dtor2(*thee);
@@ -147,24 +121,8 @@ VPUBLIC void PBEparm_dtor(PBEparm **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_dtor2
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void PBEparm_dtor2(PBEparm *thee) { ; }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_check
-//
-// Purpose:  Check the parameter settings for internal consistency
-//
-// Returns:  1 if OK, 0 otherwise
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int PBEparm_check(PBEparm *thee) { 
 
     int i;
@@ -226,22 +184,13 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: GAMMA not set!\n");
         return 0;
     }
-    if (!thee->setcalcenergy) thee->calcenergy = 0;
-    if (!thee->setcalcforce) thee->calcforce = 0;
+    if (!thee->setcalcenergy) thee->calcenergy = PCE_NO;
+    if (!thee->setcalcforce) thee->calcforce = PCF_NO;
     if (!thee->setwritemat) thee->writemat = 0;
 
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_copy
-//  
-// Purpose:  Copy parm into thee
-//
-// Args:     parm    object to copy into thee
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 
     int i, j;
@@ -303,24 +252,567 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  PBEparm_parseToken
-//
-// Purpose:  Parse a PBE keyword
-//
-// Returns:  1 if matched and assigned
-//          -1 if matched, but there's some sort of error (i.e., too few args)
-//           0 if not matched
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int PBEparm_parseLPBE(PBEparm *thee, Vio *sock) {
+    thee->pbetype = PBE_LPBE;
+    thee->setpbetype = 1;
+    return 1;
+}
+
+VPRIVATE int PBEparm_parseNPBE(PBEparm *thee, Vio *sock) {
+    thee->pbetype = PBE_NPBE;
+    thee->setpbetype = 1;
+    return 1;
+}
+
+VPRIVATE int PBEparm_parseMOL(PBEparm *thee, Vio *sock) {
+    int ti;
+    char tok[VMAX_BUFSIZE];
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-int (%s) while parsing MOL \
+keyword!\n", tok);
+        return -1;
+    } 
+    thee->molid = ti;
+    thee->setmolid = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseLRPBE(PBEparm *thee, Vio *sock) {
+    thee->pbetype = PBE_LRPBE;
+    thee->setpbetype = 1;
+    return 1;
+}
+
+VPRIVATE int PBEparm_parseNRPBE(PBEparm *thee, Vio *sock) {
+    thee->pbetype = PBE_NRPBE;
+    thee->setpbetype = 1;
+    return 1;
+}
+
+VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+
+    /* We can either parse int flag... */
+    if (sscanf(tok, "%d", &ti) == 1) {
+
+        thee->bcfl = ti;
+        thee->setbcfl = 1;
+        /* Warn that this usage is deprecated */
+        Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"bcfl %d\" \
+statement\n", ti);
+        Vnm_print(2, "parsePBE:  Please use \"bcfl ");
+        switch (thee->bcfl) { 
+            case BCFL_ZERO: 
+                Vnm_print(2, "zero");
+                break;
+            case BCFL_SDH:
+                Vnm_print(2, "sdh");
+                break;
+            case BCFL_MDH:
+                Vnm_print(2, "mdh");
+                break;
+            case BCFL_FOCUS:
+                Vnm_print(2, "focus");
+                break;
+            default:
+                Vnm_print(2, "UKNOWN");
+                break;
+        }
+        Vnm_print(2, "\" instead.\n");
+        return 1;
+
+    /* ...or the word */
+    } else {
+
+        if (Vstring_strcasecmp(tok, "zero") == 0) {
+            thee->bcfl = BCFL_ZERO;
+            thee->setbcfl = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "sdh") == 0) {
+            thee->bcfl = BCFL_SDH;
+            thee->setbcfl = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "mdh") == 0) {
+            thee->bcfl = BCFL_MDH;
+            thee->setbcfl = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "focus") == 0) {
+            thee->bcfl = BCFL_FOCUS;
+            thee->setbcfl = 1;
+            return 1;
+        } else {
+            Vnm_print(2, "NOsh:  parsed unknown BCFL parameter (%s)!\n",
+              tok);
+            return -1;
+        }
+    }
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->ionq[thee->nion] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->ionc[thee->nion] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->ionr[thee->nion] = tf;
+    thee->setion[thee->nion] = 1;
+    (thee->nion)++;
+    thee->setnion = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parsePDIE(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing PDIE \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->pdie = tf;
+    thee->setpdie = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseSDIE(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDIE \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->sdie = tf;
+    thee->setsdie = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseSRFM(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+
+    /* Parse old-style int arg */ 
+    if (sscanf(tok, "%d", &ti) == 1) {
+        thee->srfm = ti;
+        thee->setsrfm = 1;
+
+        Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"srfm %d\" \
+statement.\n", ti);
+        Vnm_print(2, "parsePBE:  Please use \"srfm ");
+        switch (thee->srfm) {
+            case VSM_MOL:
+                Vnm_print(2, "mol");
+                break;
+            case VSM_MOLSMOOTH:
+                Vnm_print(2, "smol");
+                break;
+            case VSM_SPLINE:
+                Vnm_print(2, "spl2");
+                break;
+            default:
+                Vnm_print(2, "UNKNOWN");
+                break;
+        }
+        Vnm_print(2, "\" instead.\n");
+        return 1;
+
+    /* Parse newer text-based args */
+    } else if (Vstring_strcasecmp(tok, "mol") == 0) {
+        thee->srfm = VSM_MOL;
+        thee->setsrfm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "smol") == 0) {
+        thee->srfm = VSM_MOLSMOOTH;
+        thee->setsrfm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
+        thee->srfm = VSM_SPLINE;
+        thee->setsrfm = 1;
+        return 1;
+    } else {
+        Vnm_print(2, "NOsh:  Unrecongnized keyword (%s) when parsing \
+srfm!\n", tok);
+        return -1;
+    }
+
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseSRAD(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SRAD \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->srad = tf;
+    thee->setsrad = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseSWIN(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SWIN \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->swin = tf;
+    thee->setswin = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseTEMP(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TEMP \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->temp = tf;
+    thee->settemp = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseGAMMA(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GAMMA \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->gamma = tf;
+    thee->setgamma = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseUSEMAP(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    Vnm_print(0, "PBEparm_parseToken:  Read %s...\n", tok);
+    if (Vstring_strcasecmp(tok, "diel") == 0) {
+        thee->useDielMap = 1;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP DIEL keyword!\n", tok);
+            return -1;
+        } 
+        thee->dielMapID = ti;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
+        thee->useKappaMap = 1;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP KAPPA keyword!\n", tok);
+            return -1;
+        }
+        thee->kappaMapID = ti;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+        thee->useChargeMap = 1;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) { 
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP CHARGE keyword!\n", tok);
+            return -1;
+        }
+        thee->chargeMapID = ti;
+        return 1;
+    } else {
+        Vnm_print(2, "NOsh:  Read undefined keyword (%s) while parsing \
+USEMAP statement!\n", tok);
+        return -1;
+    }
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseCALCENERGY(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    /* Parse number */
+    if (sscanf(tok, "%d", &ti) == 1) {
+        thee->calcenergy = ti;
+        thee->setcalcenergy = 1;
+
+        Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"calcenergy \
+%d\" statement.\n", ti);
+        Vnm_print(2, "parsePBE:  Please use \"calcenergy ");
+        switch (thee->calcenergy) {
+            case PCE_NO:
+                Vnm_print(2, "no");
+                break;
+            case PCE_TOTAL:
+                Vnm_print(2, "total");
+                break;
+            case PCE_COMPS:
+                Vnm_print(2, "comps");
+                break;
+            default:
+                Vnm_print(2, "UNKNOWN");
+                break;
+        }
+        Vnm_print(2, "\" instead.\n");
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "no") == 0) {
+        thee->calcenergy = PCE_NO;
+        thee->setcalcenergy = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "total") == 0) {
+        thee->calcenergy = PCE_TOTAL;
+        thee->setcalcenergy = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "comps") == 0) {
+        thee->calcenergy = PCE_COMPS;
+        thee->setcalcenergy = 1;
+        return 1;
+    } else {
+        Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
+calcenergy!\n", tok);
+        return -1;
+    }
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseCALCFORCE(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    /* Parse number */
+    if (sscanf(tok, "%d", &ti) == 1) {
+        thee->calcforce = ti;
+        thee->setcalcforce = 1;
+
+        Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"calcforce \
+%d\" statement.\n", ti);
+        Vnm_print(2, "parsePBE:  Please use \"calcforce ");
+        switch (thee->calcenergy) {
+            case PCF_NO:
+                Vnm_print(2, "no");
+                break;
+            case PCF_TOTAL:
+                Vnm_print(2, "total");
+                break;
+            case PCF_COMPS:
+                Vnm_print(2, "comps");
+                break;
+            default:
+                Vnm_print(2, "UNKNOWN");
+                break;
+        }
+        Vnm_print(2, "\" instead.\n");
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "no") == 0) {
+        thee->calcforce = PCF_NO;
+        thee->setcalcforce = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "total") == 0) {
+        thee->calcforce = PCF_TOTAL;
+        thee->setcalcforce = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "comps") == 0) {
+        thee->calcforce = PCF_COMPS;
+        thee->setcalcforce = 1;
+        return 1;
+    } else {
+        Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
+calcforce!\n", tok);
+        return -1;
+    }
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    Vdata_Type writetype;
+    Vdata_Format writefmt;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "pot") == 0) {
+        writetype = VDT_POT;
+    } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+        writetype = VDT_CHARGE;
+    } else if (Vstring_strcasecmp(tok, "smol") == 0) {
+        writetype = VDT_SMOL;
+    } else if (Vstring_strcasecmp(tok, "dielx") == 0) {
+        writetype = VDT_DIELX;
+    } else if (Vstring_strcasecmp(tok, "diely") == 0) {
+        writetype = VDT_DIELY;
+    } else if (Vstring_strcasecmp(tok, "dielz") == 0) {
+        writetype = VDT_DIELZ;
+    } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
+        writetype = VDT_KAPPA;
+    } else if (Vstring_strcasecmp(tok, "sspl") == 0) {
+        writetype = VDT_SSPL;
+    } else if (Vstring_strcasecmp(tok, "vdw") == 0) {
+        writetype = VDT_VDW;
+    } else if (Vstring_strcasecmp(tok, "ivdw") == 0) {
+        writetype = VDT_IVDW;
+    } else if (Vstring_strcasecmp(tok, "lap") == 0) {
+        writetype = VDT_LAP;
+    } else if (Vstring_strcasecmp(tok, "edens") == 0) {
+        writetype = VDT_EDENS;
+    } else if (Vstring_strcasecmp(tok, "ndens") == 0) {
+        writetype = VDT_NDENS;
+    } else if (Vstring_strcasecmp(tok, "qdens") == 0) {
+        writetype = VDT_QDENS;
+    } else {
+        Vnm_print(2, "PBEparm_parse:  Invalid data type (%s) to write!\n",
+           tok);
+        return -1;
+    }
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "dx") == 0) {
+        writefmt = VDF_DX;
+    } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
+        writefmt = VDF_UHBD;
+    } else if (Vstring_strcasecmp(tok, "avs") == 0) {
+        writefmt = VDF_AVS;
+    } else {
+        Vnm_print(2, "PBEparm_parse:  Invalid data format (%s) to write!\n",
+           tok);
+        return -1;
+    }
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
+    thee->writetype[thee->numwrite] = writetype;
+    thee->writefmt[thee->numwrite] = writefmt;
+    (thee->numwrite)++;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseWRITEMAT(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "poisson") == 0) {
+        thee->writematflag = 0;
+    } else if (Vstring_strcasecmp(tok, "full") == 0) {
+        thee->writematflag = 1;
+    } else {
+        Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
+WRITEMAT keyword!\n", tok);
+        return -1;
+    }
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    strncpy(thee->writematstem, tok, VMAX_ARGLEN);
+    thee->setwritemat = 1;
+    thee->writemat = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+
+}
+
 VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock) {
 
-    int ti;
-    double tf;
-    Vdata_Type writetype;
-    Vdata_Format writefmt;
 
     if (thee == VNULL) {
         Vnm_print(2, "parsePBE:  got NULL thee!\n");
@@ -334,332 +826,45 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
     Vnm_print(0, "parsePBE:  trying %s...\n", tok);
 
     if (Vstring_strcasecmp(tok, "mol") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing MOL \
-keyword!\n", tok);
-            return -1;
-        } 
-        thee->molid = ti;
-        thee->setmolid = 1;
-        return 1;
+        return PBEparm_parseMOL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "lpbe") == 0) {
-        thee->pbetype = PBE_LPBE;
-        thee->setpbetype = 1;
-        return 1;
+        return PBEparm_parseLPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "npbe") == 0) {
-        thee->pbetype = PBE_NPBE;
-        thee->setpbetype = 1;
-        return 1;
+        return PBEparm_parseNPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "lrpbe") == 0) {
-        thee->pbetype = PBE_LRPBE;
-        thee->setpbetype = 1;
-        return 1;
+        return PBEparm_parseLRPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "nrpbe") == 0) {
-        thee->pbetype = PBE_NRPBE;
-        thee->setpbetype = 1;
-        return 1;
+        return PBEparm_parseNRPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        /* We can either parse int flag... */
-        if (sscanf(tok, "%d", &ti) == 1) {
-            thee->bcfl = ti;
-            thee->setbcfl = 1;
-            return 1;
-        /* ...or the word */
-        } else {
-            if (Vstring_strcasecmp(tok, "zero") == 0) {
-                thee->bcfl = BCFL_ZERO;
-                thee->setbcfl = 1;
-                return 1;
-            } else if (Vstring_strcasecmp(tok, "sdh") == 0) {
-                thee->bcfl = BCFL_SDH;
-                thee->setbcfl = 1;
-                return 1;
-            } else if (Vstring_strcasecmp(tok, "mdh") == 0) {
-                thee->bcfl = BCFL_MDH;
-                thee->setbcfl = 1;
-                return 1;
-            } else if (Vstring_strcasecmp(tok, "focus") == 0) {
-                thee->bcfl = BCFL_FOCUS;
-                thee->setbcfl = 1;
-                return 1;
-            } else {
-                Vnm_print(2, "NOsh:  parsed unknown BCFL parameter (%s)!\n",
-                  tok);
-                return -1;
-            }
-        }
+        return PBEparm_parseBCFL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "ion") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->ionq[thee->nion] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->ionc[thee->nion] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ION \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->ionr[thee->nion] = tf;
-        thee->setion[thee->nion] = 1;
-        (thee->nion)++;
-        thee->setnion = 1;
-        return 1;
+        return PBEparm_parseION(thee, sock);
     } else if (Vstring_strcasecmp(tok, "pdie") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing PDIE \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->pdie = tf;
-        thee->setpdie = 1;
-        return 1;
+        return PBEparm_parsePDIE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdie") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDIE \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->sdie = tf;
-        thee->setsdie = 1;
-        return 1;
+        return PBEparm_parseSDIE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "srfm") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 1) {
-            thee->srfm = ti;
-            thee->setsrfm = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "mol") == 0) {
-            thee->srfm = VSM_MOL;
-            thee->setsrfm = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "smol") == 0) {
-            thee->srfm = VSM_MOLSMOOTH;
-            thee->setsrfm = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
-            thee->srfm = VSM_SPLINE;
-            thee->setsrfm = 1;
-            return 1;
-        } else {
-            Vnm_print(2, "NOsh:  Unrecongnized keyword (%s) when parsing \
-srfm!\n", tok);
-            return -1;
-        }
+        return PBEparm_parseSRFM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "srad") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SRAD \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->srad = tf;
-        thee->setsrad = 1;
-        return 1;
+        return PBEparm_parseSRAD(thee, sock);
     } else if (Vstring_strcasecmp(tok, "swin") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-           Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SWIN \
-keyword!\n", tok);
-           return -1;
-        }
-        thee->swin = tf;
-        thee->setswin = 1;
-        return 1;
+        return PBEparm_parseSWIN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "temp") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TEMP \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->temp = tf;
-        thee->settemp = 1; 
-        return 1;
+        return PBEparm_parseTEMP(thee, sock);
     } else if (Vstring_strcasecmp(tok, "gamma") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GAMMA \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->gamma = tf;
-        thee->setgamma = 1;
-        return 1;
+        return PBEparm_parseGAMMA(thee, sock);
     } else if (Vstring_strcasecmp(tok, "usemap") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        Vnm_print(0, "PBEparm_parseToken:  Read %s...\n", tok);
-        if (Vstring_strcasecmp(tok, "diel") == 0) {
-            thee->useDielMap = 1;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
-            if (sscanf(tok, "%d", &ti) == 0) {
-                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-USEMAP DIEL keyword!\n", tok);
-                return -1;
-            } 
-            thee->dielMapID = ti;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
-            thee->useKappaMap = 1;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%d", &ti) == 0) {
-                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-USEMAP KAPPA keyword!\n", tok);
-                return -1;
-            }
-            thee->kappaMapID = ti;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "charge") == 0) {
-            thee->useChargeMap = 1;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%d", &ti) == 0) { 
-                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-USEMAP CHARGE keyword!\n", tok);
-                return -1;
-            }
-            thee->chargeMapID = ti;
-            return 1;
-        } else {
-            Vnm_print(2, "NOsh:  Read undefined keyword (%s) while parsing \
-USEMAP statement!\n", tok);
-            return -1;
-        }
+        return PBEparm_parseUSEMAP(thee, sock);
     } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 1) {
-            thee->calcenergy = ti;
-            thee->setcalcenergy = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "no") == 0) {
-            thee->calcenergy = 0;
-            thee->setcalcenergy = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "total") == 0) {
-            thee->calcenergy = 1;
-            thee->setcalcenergy = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "comps") == 0) {
-            thee->calcenergy = 2;
-            thee->setcalcenergy = 1;
-            return 1;
-        } else {
-            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
-calcenergy!\n", tok);
-            return -1;
-        }
+        return PBEparm_parseCALCENERGY(thee, sock);
     } else if (Vstring_strcasecmp(tok, "calcforce") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 1) {
-            thee->calcforce = ti;
-            thee->setcalcforce = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "no") == 0) {
-            thee->calcforce = 0;
-            thee->setcalcforce = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "total") == 0) {
-            thee->calcforce = 1;
-            thee->setcalcforce = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "comps") == 0) {
-            thee->calcforce = 2;
-            thee->setcalcforce = 1;
-            return 1;
-        } else {
-            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
-calcforce!\n", tok);
-            return -1;
-        }
+        return PBEparm_parseCALCFORCE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "write") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (Vstring_strcasecmp(tok, "pot") == 0) {
-            writetype = VDT_POT;
-        } else if (Vstring_strcasecmp(tok, "charge") == 0) {
-            writetype = VDT_CHARGE;
-        } else if (Vstring_strcasecmp(tok, "smol") == 0) {
-            writetype = VDT_SMOL;
-        } else if (Vstring_strcasecmp(tok, "dielx") == 0) {
-            writetype = VDT_DIELX;
-        } else if (Vstring_strcasecmp(tok, "diely") == 0) {
-            writetype = VDT_DIELY;
-        } else if (Vstring_strcasecmp(tok, "dielz") == 0) {
-            writetype = VDT_DIELZ;
-        } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
-            writetype = VDT_KAPPA;
-        } else if (Vstring_strcasecmp(tok, "sspl") == 0) {
-            writetype = VDT_SSPL;
-        } else if (Vstring_strcasecmp(tok, "vdw") == 0) {
-            writetype = VDT_VDW;
-        } else if (Vstring_strcasecmp(tok, "ivdw") == 0) {
-            writetype = VDT_IVDW;
-        } else if (Vstring_strcasecmp(tok, "lap") == 0) {
-            writetype = VDT_LAP;
-        } else if (Vstring_strcasecmp(tok, "edens") == 0) {
-            writetype = VDT_EDENS;
-        } else if (Vstring_strcasecmp(tok, "ndens") == 0) {
-            writetype = VDT_NDENS;
-        } else if (Vstring_strcasecmp(tok, "qdens") == 0) {
-            writetype = VDT_QDENS;
-        } else {
-            Vnm_print(2, "PBEparm_parse:  Invalid data type (%s) to write!\n",
-               tok);
-            return -1;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (Vstring_strcasecmp(tok, "dx") == 0) {
-            writefmt = VDF_DX;
-        } else if (Vstring_strcasecmp(tok, "uhbd") == 0) {
-            writefmt = VDF_UHBD;
-        } else if (Vstring_strcasecmp(tok, "avs") == 0) {
-            writefmt = VDF_AVS;
-        } else {
-            Vnm_print(2, "PBEparm_parse:  Invalid data format (%s) to write!\n",
-               tok);
-            return -1;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
-        thee->writetype[thee->numwrite] = writetype;
-        thee->writefmt[thee->numwrite] = writefmt;
-        (thee->numwrite)++;
-        return 1;
-
+        return PBEparm_parseWRITE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (Vstring_strcasecmp(tok, "poisson") == 0) {
-            thee->writematflag = 0;
-        } else if (Vstring_strcasecmp(tok, "full") == 0) {
-            thee->writematflag = 1;
-        } else {
-            Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
-WRITEMAT keyword!\n", tok);
-            return -1;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        strncpy(thee->writematstem, tok, VMAX_ARGLEN);
-        thee->setwritemat = 1;
-        thee->writemat = 1;
-        return 1;
-
+        return PBEparm_parseWRITEMAT(thee, sock);
     }
 
     return 0;
-
-    VERROR1:
-        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-        return -1;
 
 }

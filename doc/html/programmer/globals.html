@@ -37,7 +37,9 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 : <a class="el" href="nosh_8h.html#a35">nosh.h</a><li>eNOsh_MolFormat
 : <a class="el" href="nosh_8h.html#a34">nosh.h</a><li>eNOsh_ParmFormat
 : <a class="el" href="nosh_8h.html#a36">nosh.h</a><li>eNOsh_PrintType
-: <a class="el" href="nosh_8h.html#a37">nosh.h</a><li>eVbcfl
+: <a class="el" href="nosh_8h.html#a37">nosh.h</a><li>ePBEparm_calcEnergy
+: <a class="el" href="pbeparm_8h.html#a14">pbeparm.h</a><li>ePBEparm_calcForce
+: <a class="el" href="pbeparm_8h.html#a15">pbeparm.h</a><li>eVbcfl
 : <a class="el" href="vhal_8h.html#a19">vhal.h</a><li>eVchrg_Meth
 : <a class="el" href="vhal_8h.html#a20">vhal.h</a><li>eVdata_Format
 : <a class="el" href="vhal_8h.html#a22">vhal.h</a><li>eVdata_Type
@@ -190,18 +192,26 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 : <a class="el" href="vhal_8h.html#a18a26">vhal.h</a><li>PBE_NPBE
 : <a class="el" href="vhal_8h.html#a18a25">vhal.h</a><li>PBE_NRPBE
 : <a class="el" href="vhal_8h.html#a18a27">vhal.h</a><li>PBEparm
-: <a class="el" href="pbeparm_8h.html#a0">pbeparm.h</a><li>PBEparm_check()
-: <a class="el" href="pbeparm_8h.html#a8">pbeparm.h</a><li>PBEparm_copy()
-: <a class="el" href="pbeparm_8h.html#a9">pbeparm.h</a><li>PBEparm_ctor()
-: <a class="el" href="pbeparm_8h.html#a4">pbeparm.h</a><li>PBEparm_ctor2()
-: <a class="el" href="pbeparm_8h.html#a5">pbeparm.h</a><li>PBEparm_dtor()
-: <a class="el" href="pbeparm_8h.html#a6">pbeparm.h</a><li>PBEparm_dtor2()
-: <a class="el" href="pbeparm_8h.html#a7">pbeparm.h</a><li>PBEparm_getIonCharge()
-: <a class="el" href="pbeparm_8h.html#a1">pbeparm.h</a><li>PBEparm_getIonConc()
-: <a class="el" href="pbeparm_8h.html#a2">pbeparm.h</a><li>PBEparm_getIonRadius()
-: <a class="el" href="pbeparm_8h.html#a3">pbeparm.h</a><li>PBEPARM_MAXWRITE
-: <a class="el" href="pbeparm_8h.html#a11">pbeparm.h</a><li>PBEparm_parseToken()
-: <a class="el" href="pbeparm_8h.html#a10">pbeparm.h</a><li>postRefineFE()
+: <a class="el" href="pbeparm_8h.html#a2">pbeparm.h</a><li>PBEparm_calcEnergy
+: <a class="el" href="pbeparm_8h.html#a0">pbeparm.h</a><li>PBEparm_calcForce
+: <a class="el" href="pbeparm_8h.html#a1">pbeparm.h</a><li>PBEparm_check()
+: <a class="el" href="pbeparm_8h.html#a10">pbeparm.h</a><li>PBEparm_copy()
+: <a class="el" href="pbeparm_8h.html#a11">pbeparm.h</a><li>PBEparm_ctor()
+: <a class="el" href="pbeparm_8h.html#a6">pbeparm.h</a><li>PBEparm_ctor2()
+: <a class="el" href="pbeparm_8h.html#a7">pbeparm.h</a><li>PBEparm_dtor()
+: <a class="el" href="pbeparm_8h.html#a8">pbeparm.h</a><li>PBEparm_dtor2()
+: <a class="el" href="pbeparm_8h.html#a9">pbeparm.h</a><li>PBEparm_getIonCharge()
+: <a class="el" href="pbeparm_8h.html#a3">pbeparm.h</a><li>PBEparm_getIonConc()
+: <a class="el" href="pbeparm_8h.html#a4">pbeparm.h</a><li>PBEparm_getIonRadius()
+: <a class="el" href="pbeparm_8h.html#a5">pbeparm.h</a><li>PBEPARM_MAXWRITE
+: <a class="el" href="pbeparm_8h.html#a13">pbeparm.h</a><li>PBEparm_parseToken()
+: <a class="el" href="pbeparm_8h.html#a12">pbeparm.h</a><li>PCE_COMPS
+: <a class="el" href="pbeparm_8h.html#a14a6">pbeparm.h</a><li>PCE_NO
+: <a class="el" href="pbeparm_8h.html#a14a4">pbeparm.h</a><li>PCE_TOTAL
+: <a class="el" href="pbeparm_8h.html#a14a5">pbeparm.h</a><li>PCF_COMPS
+: <a class="el" href="pbeparm_8h.html#a15a9">pbeparm.h</a><li>PCF_NO
+: <a class="el" href="pbeparm_8h.html#a15a7">pbeparm.h</a><li>PCF_TOTAL
+: <a class="el" href="pbeparm_8h.html#a15a8">pbeparm.h</a><li>postRefineFE()
 : <a class="el" href="routines_8h.html#a31">routines.h</a><li>preRefineFE()
 : <a class="el" href="routines_8h.html#a28">routines.h</a><li>printEnergy()
 : <a class="el" href="routines_8h.html#a22">routines.h</a><li>printFEPARM()
@@ -551,7 +561,7 @@ Here is a list of all documented functions, variables, defines, enums, and typed
 : <a class="el" href="routines_8h.html#a32">routines.h</a><li>writedataMG()
 : <a class="el" href="routines_8h.html#a20">routines.h</a><li>writematMG()
 : <a class="el" href="routines_8h.html#a21">routines.h</a></ul>
-<hr><address style="align: right;"><small>Generated on Tue Apr 20 11:25:02 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 08:22:49 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

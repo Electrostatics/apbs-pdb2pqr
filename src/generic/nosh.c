@@ -46,6 +46,8 @@
 #include "apbs/nosh.h"
 #include "apbs/vstring.h"
 
+
+VEMBED(rcsid="$Id$")
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock);

@@ -18,39 +18,62 @@
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html">sPBEparm</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Parameter structure for PBE variables from input files.</em> <a href="structsPBEparm.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top><a name="a11" doxytag="PBEparm::PBEPARM_MAXWRITE"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a11">PBEPARM_MAXWRITE</a>&nbsp;&nbsp;&nbsp;10</td></tr>
+<tr><td nowrap align=right valign=top><a name="a13" doxytag="PBEparm::PBEPARM_MAXWRITE"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>&nbsp;&nbsp;&nbsp;10</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Number of things that can be written out in a single calculation.</em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
-<tr><td nowrap align=right valign=top>typedef <a class="el" href="structsPBEparm.html">sPBEparm</a>&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a0">PBEparm</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the PBEparm class as the PBEparm structure.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__PBEparm.html#a14">ePBEparm_calcEnergy</a>&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a0">PBEparm_calcEnergy</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Define ePBEparm_calcEnergy enumeration as PBEparm_calcEnergy.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__PBEparm.html#a15">ePBEparm_calcForce</a>&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a1">PBEparm_calcForce</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Define ePBEparm_calcForce enumeration as PBEparm_calcForce.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef <a class="el" href="structsPBEparm.html">sPBEparm</a>&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a2">PBEparm</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the PBEparm class as the PBEparm structure.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
+<tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a14">ePBEparm_calcEnergy</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a14a4">PCE_NO</a> = 0, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a14a5">PCE_TOTAL</a> = 1, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a14a6">PCE_COMPS</a> = 2
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Define energy calculation enumeration.</em> <a href="#a14">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a15">ePBEparm_calcForce</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a15a7">PCF_NO</a> = 0, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a15a8">PCF_TOTAL</a> = 1, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__PBEparm.html#a15a9">PCF_COMPS</a> = 2
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Define force calculation enumeration.</em> <a href="#a15">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a1">PBEparm_getIonCharge</a> (PBEparm *thee, int iion)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get charge (e) of specified ion species.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a2">PBEparm_getIonConc</a> (PBEparm *thee, int iion)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get concentration (M) of specified ion species.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a3">PBEparm_getIonRadius</a> (PBEparm *thee, int iion)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Get radius (A) of specified ion species.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>PBEparm *&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a4">PBEparm_ctor</a> ()</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Construct PBEparm object.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a5">PBEparm_ctor2</a> (PBEparm *thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct PBEparm object.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a6">PBEparm_dtor</a> (PBEparm **thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Object destructor.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a7">PBEparm_dtor2</a> (PBEparm *thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub for object destructor.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a8">PBEparm_check</a> (PBEparm *thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Consistency check for parameter values stored in object.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a9">PBEparm_copy</a> (PBEparm *thee, PBEparm *parm)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Copy PBEparm object into thee.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a10">PBEparm_parseToken</a> (PBEparm *thee, char tok[VMAX_BUFSIZE], Vio *sock)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Parse a keyword from an input file.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a3">PBEparm_getIonCharge</a> (PBEparm *thee, int iion)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get charge (e) of specified ion species.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a4">PBEparm_getIonConc</a> (PBEparm *thee, int iion)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get concentration (M) of specified ion species.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a5">PBEparm_getIonRadius</a> (PBEparm *thee, int iion)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get radius (A) of specified ion species.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>PBEparm *&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a6">PBEparm_ctor</a> ()</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct PBEparm object.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a7">PBEparm_ctor2</a> (PBEparm *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct PBEparm object.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a8">PBEparm_dtor</a> (PBEparm **thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Object destructor.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a9">PBEparm_dtor2</a> (PBEparm *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub for object destructor.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a10">PBEparm_check</a> (PBEparm *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Consistency check for parameter values stored in object.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a11">PBEparm_copy</a> (PBEparm *thee, PBEparm *parm)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Copy PBEparm object into thee.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__PBEparm.html#a12">PBEparm_parseToken</a> (PBEparm *thee, char tok[VMAX_BUFSIZE], Vio *sock)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Parse a keyword from an input file.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Parameter structure for PBE variables independent of solver.
 <p>
 <hr><h2>Typedef Documentation</h2>
-<a name="a0" doxytag="pbeparm.h::PBEparm"></a><p>
+<a name="a2" doxytag="pbeparm.h::PBEparm"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -74,8 +97,125 @@ Declaration of the PBEparm class as the PBEparm structure.
     </td>
   </tr>
 </table>
+<a name="a0" doxytag="pbeparm.h::PBEparm_calcEnergy"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__PBEparm.html#a14">ePBEparm_calcEnergy</a> PBEparm_calcEnergy
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Define ePBEparm_calcEnergy enumeration as PBEparm_calcEnergy.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a1" doxytag="pbeparm.h::PBEparm_calcForce"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__PBEparm.html#a15">ePBEparm_calcForce</a> PBEparm_calcForce
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Define ePBEparm_calcForce enumeration as PBEparm_calcForce.
+<p>
+    </td>
+  </tr>
+</table>
+<hr><h2>Enumeration Type Documentation</h2>
+<a name="a14" doxytag="pbeparm.h::ePBEparm_calcEnergy"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> enum ePBEparm_calcEnergy
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Define energy calculation enumeration.
+<p>
+<dl compact><dt><b>Enumeration values: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em><a name="a14a4" doxytag="PCE_NO"></a><em>PCE_NO</em></em>&nbsp;</td><td>
+Do not perform energy calculation </td></tr>
+<tr><td valign=top><em><a name="a14a5" doxytag="PCE_TOTAL"></a><em>PCE_TOTAL</em></em>&nbsp;</td><td>
+Calculate total energy only </td></tr>
+<tr><td valign=top><em><a name="a14a6" doxytag="PCE_COMPS"></a><em>PCE_COMPS</em></em>&nbsp;</td><td>
+Calculate per-atom energy components </td></tr>
+</table>
+</dl>
+    </td>
+  </tr>
+</table>
+<a name="a15" doxytag="pbeparm.h::ePBEparm_calcForce"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> enum ePBEparm_calcForce
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Define force calculation enumeration.
+<p>
+<dl compact><dt><b>Enumeration values: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em><a name="a15a7" doxytag="PCF_NO"></a><em>PCF_NO</em></em>&nbsp;</td><td>
+Do not perform force calculation </td></tr>
+<tr><td valign=top><em><a name="a15a8" doxytag="PCF_TOTAL"></a><em>PCF_TOTAL</em></em>&nbsp;</td><td>
+Calculate total force only </td></tr>
+<tr><td valign=top><em><a name="a15a9" doxytag="PCF_COMPS"></a><em>PCF_COMPS</em></em>&nbsp;</td><td>
+Calculate per-atom force components </td></tr>
+</table>
+</dl>
+    </td>
+  </tr>
+</table>
 <hr><h2>Function Documentation</h2>
-<a name="a8" doxytag="pbeparm.h::PBEparm_check"></a><p>
+<a name="a10" doxytag="pbeparm.h::PBEparm_check"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -113,7 +253,7 @@ Consistency check for parameter values stored in object.
     </td>
   </tr>
 </table>
-<a name="a9" doxytag="pbeparm.h::PBEparm_copy"></a><p>
+<a name="a11" doxytag="pbeparm.h::PBEparm_copy"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -160,7 +300,7 @@ Copy PBEparm object into thee.
     </td>
   </tr>
 </table>
-<a name="a4" doxytag="pbeparm.h::PBEparm_ctor"></a><p>
+<a name="a6" doxytag="pbeparm.h::PBEparm_ctor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -192,7 +332,7 @@ Construct PBEparm object.
     </td>
   </tr>
 </table>
-<a name="a5" doxytag="pbeparm.h::PBEparm_ctor2"></a><p>
+<a name="a7" doxytag="pbeparm.h::PBEparm_ctor2"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -230,7 +370,7 @@ FORTRAN stub to construct PBEparm object.
     </td>
   </tr>
 </table>
-<a name="a6" doxytag="pbeparm.h::PBEparm_dtor"></a><p>
+<a name="a8" doxytag="pbeparm.h::PBEparm_dtor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -267,7 +407,7 @@ Object destructor.
     </td>
   </tr>
 </table>
-<a name="a7" doxytag="pbeparm.h::PBEparm_dtor2"></a><p>
+<a name="a9" doxytag="pbeparm.h::PBEparm_dtor2"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -304,7 +444,7 @@ FORTRAN stub for object destructor.
     </td>
   </tr>
 </table>
-<a name="a1" doxytag="pbeparm.h::PBEparm_getIonCharge"></a><p>
+<a name="a3" doxytag="pbeparm.h::PBEparm_getIonCharge"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -352,7 +492,7 @@ Get charge (e) of specified ion species.
     </td>
   </tr>
 </table>
-<a name="a2" doxytag="pbeparm.h::PBEparm_getIonConc"></a><p>
+<a name="a4" doxytag="pbeparm.h::PBEparm_getIonConc"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -400,7 +540,7 @@ Get concentration (M) of specified ion species.
     </td>
   </tr>
 </table>
-<a name="a3" doxytag="pbeparm.h::PBEparm_getIonRadius"></a><p>
+<a name="a5" doxytag="pbeparm.h::PBEparm_getIonRadius"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -448,7 +588,7 @@ Get radius (A) of specified ion species.
     </td>
   </tr>
 </table>
-<a name="a10" doxytag="pbeparm.h::PBEparm_parseToken"></a><p>
+<a name="a12" doxytag="pbeparm.h::PBEparm_parseToken"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -503,7 +643,7 @@ Parse a keyword from an input file.
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Tue Apr 20 11:25:02 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 08:22:49 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

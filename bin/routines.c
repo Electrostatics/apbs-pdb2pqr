@@ -529,11 +529,11 @@ definition; no smoothing\n");
     Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
     Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
       pbeparm->gamma);
-    if (pbeparm->calcenergy == 1) Vnm_tprint( 1, "  Electrostatic \
+    if (pbeparm->calcenergy != PCE_NO) Vnm_tprint( 1, "  Electrostatic \
 energies will be calculated\n");
-    if (pbeparm->calcforce == 1) Vnm_tprint( 1, "  Net solvent \
+    if (pbeparm->calcforce == PCF_TOTAL) Vnm_tprint( 1, "  Net solvent \
 forces will be calculated \n");
-    if (pbeparm->calcforce == 2) Vnm_tprint( 1, "  All-atom \
+    if (pbeparm->calcforce == PCF_COMPS) Vnm_tprint( 1, "  All-atom \
 solvent forces will be calculated\n");
     for (i=0; i<pbeparm->numwrite; i++) {
         switch (pbeparm->writetype[i]) {
@@ -907,7 +907,7 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
 
     extEnergy = 1;
 
-    if (pbeparm->calcenergy == 1) {
+    if (pbeparm->calcenergy == PCE_TOTAL) {
         *nenergy = 1;
         /* Some processors don't count */
         if (nosh->bogus == 0) {
@@ -917,7 +917,7 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
 %1.12E kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 #endif
         } else *totEnergy = 0;
-    } else if (pbeparm->calcenergy == 2) {
+    } else if (pbeparm->calcenergy == PCE_COMPS) {
         *nenergy = 1;
         *totEnergy = Vpmg_energy(pmg, extEnergy);
         *qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
@@ -950,7 +950,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
     int j, k;
     double qfForce[3], dbForce[3], ibForce[3], npForce[3];
 
-    if (pbeparm->calcforce == 1) {
+    if (pbeparm->calcforce == PCF_TOTAL) {
         *nforce = 1;
         *atomForce = (AtomForce *)Vmem_malloc(mem, 1, sizeof(AtomForce));
         /* Clear out force arrays */
@@ -1003,7 +1003,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[2]);
-    } else if (pbeparm->calcforce == 2) {
+    } else if (pbeparm->calcforce == PCF_COMPS) {
         *nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
         *atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
           sizeof(AtomForce));
@@ -1451,7 +1451,7 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     }
     Vnm_tprint(1, "end\n");
     calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
-    if (nosh->calc[calcid].pbeparm->calcenergy != 0) {
+    if (nosh->calc[calcid].pbeparm->calcenergy != PCE_NO) {
         ltenergy = Vunit_kb * (1e-3) * Vunit_Na *
           nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
     } else {
@@ -1514,7 +1514,7 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
     calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
     refnforce = nforce[calcid];
     refcalcforce = nosh->calc[calcid].pbeparm->calcforce;
-    if (refcalcforce == 0) {
+    if (refcalcforce == PCF_NO) {
         Vnm_tprint( 2, "  Didn't calculate force in calculation \
 #%d\n", calcid+1);
         return 0;
@@ -1545,7 +1545,7 @@ calcid+1);
     temp = nosh->calc[calcid].pbeparm->temp;
 
     /* Load up the first calculation */
-    if (refcalcforce == 1) {
+    if (refcalcforce == PCF_TOTAL) {
         /* Set to total force */
         for (ivc=0; ivc<3; ivc++) {
             lforce[0].qfForce[ivc] = 
@@ -1557,7 +1557,7 @@ calcid+1);
             lforce[0].npForce[ivc] = 
               Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc];
         }
-    } else if (refcalcforce == 2) { 
+    } else if (refcalcforce == PCF_COMPS) { 
         for (ifr=0; ifr<refnforce; ifr++) {
             for (ivc=0; ivc<3; ivc++) {
                 lforce[ifr].qfForce[ivc] = 
@@ -1582,7 +1582,7 @@ calcid+1);
         else if (nosh->printop[i][ipr-1] == 1) scalar = -1.0;
         else scalar = 0.0;
         /* Accumulate */
-        if (refcalcforce == 1) {
+        if (refcalcforce == PCF_TOTAL) {
             /* Set to total force */
             for (ivc=0; ivc<3; ivc++) {
                 lforce[0].qfForce[ivc] += 
@@ -1594,7 +1594,7 @@ calcid+1);
                 lforce[0].npForce[ivc] +=
                  (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc]);
             }
-        } else if (refcalcforce == 2) {
+        } else if (refcalcforce == PCF_COMPS) {
             for (ifr=0; ifr<refnforce; ifr++) {
                 for (ivc=0; ivc<3; ivc++) {
                     lforce[ifr].qfForce[ivc] += 
@@ -1619,7 +1619,7 @@ calcid+1);
     }
    
 #if 0
-    if (refcalcforce == 1) {
+    if (refcalcforce == PCF_TOTAL) {
         Vnm_tprint( 1, "  Local net fixed charge force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].qfForce[0],
 lforce[0].qfForce[1], lforce[0].qfForce[2]);
@@ -1632,7 +1632,7 @@ lforce[0].dbForce[1], lforce[0].dbForce[2]);
         Vnm_tprint( 1, "  Local net apolar boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].npForce[0],
 lforce[0].npForce[1], lforce[0].npForce[2]);
-    } else if (refcalcforce == 2) {
+    } else if (refcalcforce == PCF_COMPS) {
         for (ifr=0; ifr<refnforce; ifr++) {
             Vnm_tprint( 1, "  Local fixed charge force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].qfForce[0],
@@ -1650,7 +1650,7 @@ lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
     }
 #endif
  
-    if (refcalcforce == 1) {
+    if (refcalcforce == PCF_TOTAL) {
         Vnm_tprint( 1, "  Printing net forces (kJ/mol/A).\n");
         Vnm_tprint( 1, "  Legend:\n");
         Vnm_tprint( 1, "    tot -- Total force\n");
@@ -1678,7 +1678,7 @@ gforce[0].dbForce[1], gforce[0].dbForce[2]);
         Vnm_tprint( 1, "  np  %1.12E  %1.12E  %1.12E\n", gforce[0].npForce[0], 
 gforce[0].npForce[1], gforce[0].npForce[2]);
 
-    } else if (refcalcforce == 2) {
+    } else if (refcalcforce == PCF_COMPS) {
 
         Vnm_tprint( 1, "  Printing per-atom forces (kJ/mol/A).\n");
         Vnm_tprint( 1, "  Legend:\n");
@@ -1739,7 +1739,7 @@ VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     if (mgparm->type == 2) extEnergy = 0;
     else extEnergy = 1;
 
-    if (pbeparm->calcenergy > 0) {
+    if (pbeparm->calcenergy != PCE_NO) {
         *nenergy = 1;
         /* Some processors don't count */
         if (nosh->bogus == 0) {
@@ -2074,7 +2074,7 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 #endif
     } else *totEnergy = 0;
 
-    if (pbeparm->calcenergy == 2) {
+    if (pbeparm->calcenergy == PCE_COMPS) {
 
         Vnm_tprint(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
         Vnm_tprint(2, "E-mail baker@biochem.wustl.edu if you want this.\n");

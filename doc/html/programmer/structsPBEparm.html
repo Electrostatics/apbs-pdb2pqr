@@ -49,9 +49,9 @@
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m29">settemp</a></td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m30">gamma</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m31">setgamma</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m32">calcenergy</a></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="group__PBEparm.html#a0">PBEparm_calcEnergy</a>&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m32">calcenergy</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m33">setcalcenergy</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m34">calcforce</a></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="group__PBEparm.html#a1">PBEparm_calcForce</a>&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m34">calcforce</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m35">setcalcforce</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m36">numwrite</a></td></tr>
 <tr><td nowrap align=right valign=top>char&nbsp;</td><td valign=bottom><a class="el" href="structsPBEparm.html#m37">writestem</a> [PBEPARM_MAXWRITE][VMAX_ARGLEN]</td></tr>
@@ -99,7 +99,7 @@ Boundary condition method     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int sPBEparm::calcenergy
+          <td class="md" nowrap valign="top"> <a class="el" href="group__PBEparm.html#a0">PBEparm_calcEnergy</a> sPBEparm::calcenergy
       </table>
     </td>
   </tr>
@@ -112,12 +112,7 @@ Boundary condition method     </td>
     <td>
 
 <p>
-Energy calculation <ul>
-<li>0: don't calculate out energy </li>
-<li>1: calculate total energy </li>
-<li>2: calculate atom-level total energies and all energy components </li>
-</ul>
-    </td>
+Energy calculation flag     </td>
   </tr>
 </table>
 <a name="m34" doxytag="sPBEparm::calcforce"></a><p>
@@ -126,7 +121,7 @@ Energy calculation <ul>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int sPBEparm::calcforce
+          <td class="md" nowrap valign="top"> <a class="el" href="group__PBEparm.html#a1">PBEparm_calcForce</a> sPBEparm::calcforce
       </table>
     </td>
   </tr>
@@ -139,12 +134,7 @@ Energy calculation <ul>
     <td>
 
 <p>
-Atomic forces I/O <ul>
-<li>0: don't calculate forces </li>
-<li>1: calculate net forces on molecule </li>
-<li>2: calculate atom-level forces </li>
-</ul>
-    </td>
+Atomic forces calculation     </td>
   </tr>
 </table>
 <a name="m7" doxytag="sPBEparm::chargeMapID"></a><p>
@@ -1096,7 +1086,7 @@ What data to write     </td>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="pbeparm_8h-source.html">pbeparm.h</a></ul>
-<hr><address style="align: right;"><small>Generated on Tue Apr 20 11:25:01 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 08:22:48 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

@@ -61,6 +61,38 @@
 #define PBEPARM_MAXWRITE 10
 
 /**
+ * @ingroup PBEparm
+ * @brief  Define energy calculation enumeration
+ */
+enum ePBEparm_calcEnergy {
+    PCE_NO=0, /**< Do not perform energy calculation */
+    PCE_TOTAL=1, /**< Calculate total energy only */
+    PCE_COMPS=2 /**< Calculate per-atom energy components */
+};
+
+/**
+ * @ingroup PBEparm
+ * @brief  Define ePBEparm_calcEnergy enumeration as PBEparm_calcEnergy
+ */
+typedef enum ePBEparm_calcEnergy PBEparm_calcEnergy;
+
+/**
+ * @ingroup PBEparm
+ * @brief  Define force calculation enumeration
+ */
+enum ePBEparm_calcForce {
+    PCF_NO=0, /**< Do not perform force calculation */
+    PCF_TOTAL=1, /**< Calculate total force only */
+    PCF_COMPS=2 /**< Calculate per-atom force components */
+};
+
+/**
+ * @ingroup PBEparm
+ * @brief  Define ePBEparm_calcForce enumeration as PBEparm_calcForce
+ */
+typedef enum ePBEparm_calcForce PBEparm_calcForce;
+
+/**
  *  @ingroup PBEparm
  *  @author  Nathan Baker
  *  @brief   Parameter structure for PBE variables from input files
@@ -106,16 +138,9 @@ struct sPBEparm {
     double gamma;  /**< Surface tension for apolar energies/forces
                     * (in kJ/mol/A^2) */
     int setgamma;  /**< Flag, @see gamma */
-    int calcenergy;  /**< Energy calculation
-                      * \li 0: don't calculate out energy
-                      * \li 1: calculate total energy 
-                      * \li 2: calculate atom-level total energies
-                      * and all energy components*/
+    PBEparm_calcEnergy calcenergy;  /**< Energy calculation flag */
     int setcalcenergy;  /**< Flag, @see calcenergy */
-    int calcforce;  /**< Atomic forces I/O 
-                     * \li 0: don't calculate forces
-                     * \li 1: calculate net forces on molecule
-                     * \li 2: calculate atom-level forces */
+    PBEparm_calcForce calcforce;  /**< Atomic forces calculation */
     int setcalcforce;  /**< Flag, @see calcforce */
     int numwrite;  /**< Number of write statements encountered */
     char writestem[PBEPARM_MAXWRITE][VMAX_ARGLEN]; /**< File stem to write 

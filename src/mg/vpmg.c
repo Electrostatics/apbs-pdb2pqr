@@ -145,7 +145,7 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD, 
-  MGparm *mgparm, int energyFlag) {
+  MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
 
     Vpmg *thee = VNULL;
 
