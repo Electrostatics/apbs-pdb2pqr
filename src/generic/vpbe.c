@@ -44,6 +44,11 @@
 #include "apbs/vpbe.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Class Vpbe: Private method declaration
+/////////////////////////////////////////////////////////////////////////// */
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VPBE)
@@ -687,6 +692,8 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    sol = Vpbe_getSolution(thee, am, &nsol);
    VASSERT(sol != VNULL);
 
+   Vnm_print(2, "Vpbe_getLinearEnergy2: WARNING! This routine may be broken!\n");
+
    /* Make sure the number of entries in the solution array matches the
     * number of vertices currently in the mesh */
    if (nsol != Vgm_numVV(thee->gm)) {
@@ -737,6 +744,88 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
 
    /* Return the energy */
    return 0.5*energy;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getEnergyNorm2
+//
+// Purpose:  Calculate the square of the energy norm, i.e.
+//                 u^T A u
+//           The argument color allows the user to control the partition on
+//           which this energy is calculated; if (color == -1) no restrictions
+//           are used.  The solution is obtained from the finest level of the
+//           passed AM object, but atomic data from the Vpbe object is used to
+//           calculate the energy
+//           
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           assem.c routines in MC.
+//           
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getEnergyNorm2(Vpbe *thee, Alg *alg, int color) {
+
+    Bmat *A;
+    Bvec *u, *Au;
+    double norm2;
+
+    /* Solution + Dirichlet conditions */
+    Bvec_copy(alg->W[W_w0], alg->W[W_u]);
+    u = alg->W[W_w0];
+    Bvec_axpy(u, alg->W[W_ud], 1.);
+    /* Stiffness matrix */
+    A = alg->A;
+    /* Work space */
+    Au = alg->W[W_w1];
+
+    if (color>=0) Vnm_print(2,"Vpbe_getEnergyNorm: color argument ignored!\n");
+
+    /* Au = A u */
+    Bvec_matvec(Au, u, A, 0);
+    /* Calculate (u,Au) */
+    norm2 = Bvec_dot(u,Au);
+
+    return norm2;
+}
+    
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getLinearEnergy2
+//
+// Purpose:  Calculate the energy from the energy norm, i.e. 
+//                 G = (u, A u)/(8 pi)
+//           for the linearized Poisson-Boltzmann equation without removing any
+//           self-interaction terms (i.e., removing the reference state of
+//           isolated charges present in an infinite dielectric continuum with
+//           the same relative permittivity as the interior of the protein).
+//           Return the result in units of $k_B T$.  The argument color allows
+//           the user to control the partition on which this energy is
+//           calculated; if (color == -1) no restrictions are used.  The
+//           solution is obtained from the finest level of the passed AM
+//           object, but atomic data from the Vpbe object is used to calculate
+//           the energy.
+//
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           assem.c routines in MC.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) {
+
+    double energy = 0.0;
+    Alg *alg;    
+
+    /* Get the algebra object for the finest level */
+    alg = AM_alg(am, AM_maxLevel(am));
+
+    /* Calculate the energy norm */
+    energy = Vpbe_getEnergyNorm2(thee, alg, color);
+
+    energy = energy/Vunit_pi/Vunit_pi/16.0;
+    energy = energy*Vunit_eps0*10e-10;
+    energy = energy/Vunit_ec/Vunit_ec*(Vunit_kb*thee->T);
+
+    return energy;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

@@ -51,6 +51,7 @@
 #include "mc/vram.h"
 #include "mc/ves.h"
 #include "mc/am.h"
+#include "mc/alg.h"
 #include "mc/bvec.h"
 
 #include "apbs/vhal.h"
@@ -166,6 +167,8 @@ VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
                     double solventRadius); 
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
 VEXTERNC double  Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
+VEXTERNC double  Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color);
+VEXTERNC double  Vpbe_getEnergyNorm2(Vpbe *thee, Alg *am, int color);
 VEXTERNC double  Vpbe_getCoulombEnergy1(Vpbe *thee);
 VEXTERNC int     Vpbe_memChk(Vpbe *thee);
 VEXTERNC void    Vpbe_setAtomColors(Vpbe *thee);
