@@ -108,10 +108,9 @@ VEXTERNC int   Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
 VEXTERNC void  Vpee_dtor(Vpee **thee);
 VEXTERNC void  Vpee_dtor2(Vpee *thee);
 
-VEXTERNC int   Vpee_numSS(Vpee *thee);
-VEXTERNC void  Vpee_estimate(Vpee *thee, AM *am, int level, int akey); 
 VEXTERNC int   Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, 
-                 int rcol, double etol);
+                 int rcol, double etol, int bkey);
 VEXTERNC int   Vpee_memChk(Vpee *thee);
+VEXTERNC int   Vpee_numSS(Vpee *thee);
 
 #endif    /* ifndef _VPEE_H_ */

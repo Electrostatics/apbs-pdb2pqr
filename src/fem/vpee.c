@@ -42,12 +42,17 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "mc/mc.h"
+
 #include "apbs/vpee.h"
 
-VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
-VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
-VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
 VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
+VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol);
+VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
+VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
+VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
+
+
 
 VEMBED(rcsid="$Id$")
 
@@ -221,85 +226,6 @@ VPUBLIC void Vpee_dtor(Vpee **thee) {
 VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpee_estimate
-//
-// Purpose:  Generate per-simplex error esimates.
-//
-// Args:     am            A pointer to the AM object from which the 
-//                         solution/error should be obtained
-//           level         The solution level in the AM object to be used
-//           akey          The marking method:
-//                           2 => Residual-based error estimate
-//                           3 => Local problem-based error estimate
-//                           4 => Dual problem-based error estimate
-//
-// Notes:    This is pretty much a rip-off of AM_markRefine.
-//
-// Author:   Nathan Baker (and Michael Holst: the author of AM_markRefine, on
-//           which this is based)
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpee_estimate(Vpee *thee, AM *am, int level, int akey) {
-
-    Alg *alg;
-    double errEst = 0.0;
-    SS *sm;
-    int smid;
-
-    VASSERT(thee != VNULL);
-
-    /* Get the Alg object from AM */
-    VASSERT((level >= am->minLevel) && (level <= am->maxLevel));
-    alg = AM_alg(am, level);
-    VASSERT(alg != VNULL);
-
-    /* input check and some i/o */
-    if ( ! ((2 <= akey) && (akey <= 4)) ) {
-        Vnm_print(0,"Vpee_estimate: bad estimate key; returning...\n");
-        return;
-    } else if (akey == 2) {
-        Vnm_print(0,"Vpee_estimate: using Alg_estNonlinResid().\n");
-    } else if (akey == 3) {
-        Vnm_print(0,"Vpee_estimate: using Alg_estLocalProblem().\n");
-    } else if (akey == 4) {
-        Vnm_print(0,"Vpee_estimate: using Alg_estDualProblem().\n");
-    }
-
-    Vnm_tstart(30, "error estimation");
-
-    /* traverse the simplices and estimate the error */
-    Vnm_print(0,"Vpee_estimate: estimating error..");
-    alg->gerror = 0.0;
-    smid = 0;
-    while (smid < Gem_numSS(thee->gm)) {
-        sm = Gem_SS(thee->gm,smid);
-
-        if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
-
-        /* Produce an error estimate for this element */
-        if (akey == 1) errEst = 0.0;
-        else if (akey == 2) {
-            errEst = Alg_estNonlinResid(alg, sm, W_u, W_ud, W_f);
-        } else if (akey == 3) {
-            errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
-        } else if (akey == 4) {
-            errEst = Alg_estDualProblem(alg, sm, W_u,W_ud,W_f);
-        }
-        VASSERT( errEst >= 0. );
-
-        /* store the estimate */
-        Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
-
-        /* accumlate into the global error */
-        alg->gerror += errEst*errEst;
-
-        smid++;
-    }
-
-    Vnm_tstop(30, "error estimation");
-}
-
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_markRefine
 //
 // Purpose:  A wrapper/reimplementation of AM_markRefine that allows for more
@@ -321,9 +247,14 @@ VPUBLIC void Vpee_estimate(Vpee *thee, AM *am, int level, int akey) {
 //                                attenuated according to killFlag and used,
 //                                in conjunction with etol, to mark simplices
 //                                for refinement
-//           rcol          The ID of the main partition on which to mark (or -1
-//                           if all partitions should be marked)
+//           rcol          The ID of the main partition on which to mark (or 
+//                         -1 if all partitions should be marked).  Note that
+//                         we should have (rcol == thee->localPartID) for 
+//                         (thee->killFlag == 2 or 3)
 //           etol          The error tolerance criterion for marking
+//           bkey          How the error tolerance is interpreted:
+//                          0 => Simplex marked if error>etol
+//                          1 => Simplex marked if error>(etol^2/numS)^{1/2}
 //
 // Returns:  The number of simplices marked for refinement.
 //
@@ -333,15 +264,15 @@ VPUBLIC void Vpee_estimate(Vpee *thee, AM *am, int level, int akey) {
 //           which this is based)
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol, 
-  double etol) {
+  double etol, int bkey) {
 
     Alg *alg;
-    int markMe, marked = 0;
-    int i, ivert, smid, count, currentQ;
+    int marked = 0;
+    int markMe, i, smid, count, currentQ;
     double minError = 0.0;
     double maxError = 0.0;
     double errEst = 0.0;
-    double dist, dx, dy, dz;
+    double mlevel, barrier;
     SS *sm;
 
 
@@ -365,11 +296,17 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         return marked;
     }
 
-    /* Check the relevant I/O */
-    if (akey == 1) {
-        Vnm_print(0,"Vpee_markRefine: using user-defined markSimplex().\n");
+    /* Informative I/O */
+    if (akey == 2) {
+        Vnm_print(0,"Alg_estRefine: using Alg_estNonlinResid().\n");
+    } else if (akey == 3) {
+        Vnm_print(0,"Alg_estRefine: using Alg_estLocalProblem().\n");
+    } else if (akey == 4) {
+        Vnm_print(0,"Alg_estRefine: using Alg_estDualProblem().\n");
     } else {
-        Vnm_print(0,"Vpee_markRefine: using PRE-CALCULATED error estimate.\n");
+        Vnm_print(0,"Alg_estRefine: bad key given; simplices marked = %d\n",
+            marked);
+        return marked;
     }
     if (thee->killFlag == 0) {
         Vnm_print(0, "Vpee_markRefine: No error attenuation -- simplices in all partitions will be marked.\n");
@@ -387,8 +324,25 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         return marked;
     }
 
+    /* set the barrier type */
+    mlevel = (etol*etol) / Gem_numSS(thee->gm);
+    if (bkey == 0) {
+        barrier = (etol*etol);
+        Vnm_print(0,"Alg_estRefine: forcing [err per S] < [TOL] = %g\n",
+            barrier);
+    } else if (bkey == 1) {
+        barrier = mlevel;
+        Vnm_print(0,
+            "Alg_estRefine: forcing [err per S] < [(TOL^2/numS)^{1/2}] = %g\n",
+            VSQRT(barrier));
+    } else {
+        Vnm_print(0,"Alg_estRefine: bad bkey given; simplices marked = %d\n",
+            marked);
+        return marked;
+    }
+
     /* timer */
-    Vnm_tstart(30, "simplex marking");
+    Vnm_tstart(30, "error estimation");
 
     /* count = num generations to produce from marked simplices (minimally) */
     count = 1; /* must be >= 1 */
@@ -421,92 +375,104 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     }
     Vnm_print(0,"..done.\n");
 
+    /* NON-ERROR-BASED METHODS */
+    /* Simplex flag clearing */
+    if (akey == -1) return marked;
+    /* Uniform & user-defined refinement*/
+    if ((akey == 0) || (akey == 1)) {
+        smid = 0;
+        while ( smid < Gem_numSS(thee->gm)) {
+            /* Get the simplex and find out if it's markable */
+            sm = Gem_SS(thee->gm,smid);
+            markMe = Vpee_ourSimp(thee, sm, rcol);
+            if (markMe) {
+                if (akey == 0) {
+                    marked++;
+                    Gem_appendSQ(thee->gm,currentQ, sm); 
+                    SS_setRefineKey(sm,currentQ,1);     
+                    SS_setRefinementCount(sm,count);   
+                } else if (Vpee_userDefined(thee, sm)) {
+                    marked++;
+                    Gem_appendSQ(thee->gm,currentQ, sm); 
+                    SS_setRefineKey(sm,currentQ,1);     
+                    SS_setRefinementCount(sm,count);   
+                }
+            }
+            smid++;
+        }
+    }
+
+    /* ERROR-BASED METHODS */
     /* gerror = global error accumulation */
     alg->gerror = 0.;
 
-    /* traverse the simplices and estimate the error */
+    /* traverse the simplices and process the error estimates */
     Vnm_print(0,"Vpee_markRefine: estimating error..");
     smid = 0;
     while ( smid < Gem_numSS(thee->gm)) {
+
+        /* Get the simplex and find out if it's markable */
         sm = Gem_SS(thee->gm,smid);
+        markMe = Vpee_ourSimp(thee, sm, rcol);
 
         if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
 
-        /* Produce an error estimate for this element */
-        if (akey == 1) errEst = 0.0;
-        else if ((akey >= 2) && (akey <= 4)) {
-            errEst = Bvec_val( alg->WE[ WE_err ], 0, smid );
-        }
-        VASSERT( errEst >= 0. );
-
-        /* Figure out whether or not the simplex gets marked. */
-        markMe = 0;
-        if (thee->killFlag == 0) {
-            if (akey == 1) markMe = Vpee_userDefined(thee, sm);
-            else if (akey == 2) {
-                if (errEst > etol) markMe = 1;
-            }
-        } else if (thee->killFlag == 1) {
-            if ( (SS_chart(sm) == rcol) || (rcol < 0)) {
-                if (akey == 1) markMe = Vpee_userDefined(thee, sm);
-                else if (akey == 2) {
-                    if (errEst > etol) markMe = 1;
-                }
-            } 
-        } else if (thee->killFlag == 2) {
-            if (rcol < 0) {
-                if (akey == 1) markMe = Vpee_userDefined(thee, sm);
-                else if (akey == 2) {
-                    if (errEst > etol) markMe = 1;
-                }
-            } else {
-                /* Find the closest distance between this simplex and the 
-                 * center of the local partition and check it against 
-                 * (thee->localPartRadius*thee->killParam) */
-                dist = 0;
-                for (ivert=0; ivert<SS_dimVV(sm); ivert++) {
-                    dx = VV_coord(SS_vertex(sm, ivert), 0) -
-                      thee->localPartCenter[0];
-                    dy = VV_coord(SS_vertex(sm, ivert), 1) -
-                      thee->localPartCenter[1];
-                    dz = VV_coord(SS_vertex(sm, ivert), 2) -
-                      thee->localPartCenter[2];
-                    dist = VSQRT((dx*dx + dy*dy + dz*dz));
-                }
-                if (dist < thee->localPartRadius*thee->killParam) {
-                    if (akey == 1) markMe = Vpee_userDefined(thee, sm);
-                    else if (akey == 2) {
-                        if (errEst > etol) markMe = 1;
-                    }
-                } 
-            }
-        } else if (thee->killFlag == 3) {
-            VASSERT(0);
-        } else VASSERT(0);
-
-        /* If it's supposed to be marked; mark it */
+        /* Produce an error estimate for this element if it is in the set */
         if (markMe) {
-            marked++;
-            Gem_appendSQ(thee->gm,currentQ, sm); /*add to refinement Q*/
-            SS_setRefineKey(sm,currentQ,1);      /* note now on refine Q */
-            SS_setRefinementCount(sm,count);     /* refine X many times? */
-        }
-     
-        /* Accounting just for our partition */ 
-        if ( (SS_chart(sm) == rcol) || (rcol < 0)) {
+            if (akey == 2) {
+                errEst = Alg_estNonlinResid(alg, sm, W_u,W_ud,W_f);
+            } else if (akey == 3) {
+                errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
+            } else if (akey == 4) {
+                errEst = Alg_estDualProblem(alg, sm, W_u,W_ud,W_f);
+            }
+            VASSERT( errEst >= 0. );
+
+            /* if error estimate above tol, mark element for refinement */
+            if ( errEst > barrier ) {
+                marked++;
+                Gem_appendSQ(thee->gm,currentQ, sm); /*add to refinement Q*/
+                SS_setRefineKey(sm,currentQ,1);      /* note now on refine Q */
+                SS_setRefinementCount(sm,count);     /* refine X many times? */
+            }
+
             /* keep track of min/max errors over the mesh */
-            minError = VMIN2( VABS(errEst), minError );
-            maxError = VMAX2( VABS(errEst), maxError );
+            minError = VMIN2( VSQRT(VABS(errEst)), minError );
+            maxError = VMAX2( VSQRT(VABS(errEst)), maxError );
+
+            /* store the estimate */
+            Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
+
+            /* accumlate into global error (errEst is SQUAREd already) */
+            alg->gerror += errEst;
+
+        /* otherwise store a zero for the estimate */
+        } else {
+            Bvec_set( alg->WE[ WE_err ], 0, smid, 0. );
         }
-    
+
         smid++;
     }
 
     /* do some i/o */
-    Vnm_print(0, "Vpee_markRefine:  [marked=<%d>]\n", marked);
-    Vnm_print(0, "Vpee_markRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
-        etol, maxError, minError);
-    Vnm_tstop(30, "simplex marking");
+    Vnm_print(0,"..done.  [marked=<%d/%d>]\n",marked,Gem_numSS(thee->gm));
+    Vnm_print(0,"Alg_estRefine: TOL=<%g>  Global_Error=<%g>\n",
+        etol, alg->gerror);
+    Vnm_print(0,"Alg_estRefine: (TOL^2/numS)^{1/2}=<%g>  Max_Ele_Error=<%g>\n",
+        VSQRT(mlevel),maxError);
+    Vnm_tstop(30, "error estimation");
+
+    /* check for making the error tolerance */
+    if ((bkey == 1) && (alg->gerror <= etol)) {
+        Vnm_print(0,
+            "Alg_estRefine: *********************************************\n");
+        Vnm_print(0,
+            "Alg_estRefine: Global Error criterion met; setting marked=0.\n");
+        Vnm_print(0,
+            "Alg_estRefine: *********************************************\n");
+        marked = 0;
+    }
+
 
     /* return */
     return marked;
@@ -555,4 +521,51 @@ VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
     return thee->gm->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm), 
              SS_type(sm), fType, vType, chart, vx, sm);
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpee_ourSimp
+//
+// Purpose:  Reduce code bloat by wrapping up the common steps for determining
+//           whether the given simplex can be marked (i.e., belongs to our
+//           partition or overlap region)
+//
+// Returns:  1 if could be marked, 0 otherwise
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol) {
+
+    int ivert;
+    double dist, dx, dy, dz;
+
+    if (thee->killFlag == 0) return 1;
+    else if (thee->killFlag == 1) {
+        if ((SS_chart(sm) == rcol) || (rcol < 0)) return 1;
+    } else if (thee->killFlag == 2) {
+        if (rcol < 0) return 1;
+        else {
+            /* We can only do distance-based searches on the local partition */
+            VASSERT(rcol == thee->localPartID);
+            /* Find the closest distance between this simplex and the
+             * center of the local partition and check it against
+             * (thee->localPartRadius*thee->killParam) */
+            dist = 0;
+            for (ivert=0; ivert<SS_dimVV(sm); ivert++) {
+                dx = VV_coord(SS_vertex(sm, ivert), 0) -
+                  thee->localPartCenter[0];
+                dy = VV_coord(SS_vertex(sm, ivert), 1) -
+                  thee->localPartCenter[1];
+                dz = VV_coord(SS_vertex(sm, ivert), 2) -
+                  thee->localPartCenter[2];
+                dist = VSQRT((dx*dx + dy*dy + dz*dz));
+            }
+            if (dist < thee->localPartRadius*thee->killParam) return 1;
+        }
+    } else if (thee->killFlag == 3) VASSERT(0);
+    else VASSERT(0);
+
+    return 0;
+
+}
+
 
