@@ -240,10 +240,10 @@ int main(int argc, char **argv) {
               &(atomForce[i]), alist);
 
             /* Write out potential */
-            writepotMG(com, pbeparm, pmg[i]);
+            writepotMG(com, nosh, pbeparm, pmg[i]);
             
             /* Write accessibility */
-            writeaccMG(com, pbeparm, pmg[i]);
+            writeaccMG(com, nosh, pbeparm, pmg[i]);
 
             fflush(stdout);
             fflush(stderr);

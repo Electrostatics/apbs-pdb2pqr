@@ -90,8 +90,8 @@ VEXTERNC int energyMG(Vcom *com, NOsh* nosh, int icalc, Vpmg *pmg,
   double *dielEnergy);
 VEXTERNC int forceMG(Vcom *com, Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
-VEXTERNC int writepotMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg);
-VEXTERNC int writeaccMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg);
+VEXTERNC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+VEXTERNC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i);
 
