@@ -85,7 +85,7 @@ typedef struct Vatom {
     VEXTERNC int     Vatom_memChk(Vatom *thee);
 #else /* if defined(VINLINE_VATOM) */
 #   define Vatom_getPosition(thee) ((thee)->position)
-#   define Vatom_setRadius(thee, radius) ((thee)->radius = radius)
+#   define Vatom_setRadius(thee, tRadius) ((thee)->radius = (tRadius))
 #   define Vatom_getRadius(thee) ((thee)->radius)
 #   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (tpartID))
 #   define Vatom_getPartID(thee) ((thee)->partID)
