@@ -1786,6 +1786,8 @@
                       <para>Dielectric function map (as read by <command>read
                           map</command> <replaceable>dielx diely
                           dielx</replaceable>); this causes the
+                        <link linkend="pdie"><command>pdie</command></link>,
+                        <link linkend="sdie"><command>sdie</command></link>,
                         <link linkend="srad"><command>srad</command></link>, 
                         <link linkend="swin"><command>swin</command></link>, and
                         <link linkend="srfm"><command>srfm</command></link>
@@ -1800,12 +1802,13 @@
                       <para>Mobile ion-accessibility function map (as read by
                         <command>read map</command>
                         <replaceable>kappa</replaceable>); this causes the
-                        <link linkend="swin"><command>swin</command></link>, 
-                        <link linkend="srfm"><command>srfm</command></link>,
-                        and
-                        <link linkend="kappa"><command>ion</command></link>
+                        <link linkend="swin"><command>swin</command></link> and 
+                        <link linkend="srfm"><command>srfm</command></link>
                         parameters and the radii of the biomolecular atoms to be
                         ignored when computing mobile ion values for the PBE.
+                        The 
+                        <link linkend="ion"><command>ion</command></link>
+                        parameter is not ignored and will still be used.
                       </para>
                     </listitem>
                   </varlistentry>

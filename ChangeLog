@@ -3,12 +3,15 @@ BETA PUBLIC RELEASE VERSION 0.3.2       ??-??-04
 #############################################################################
   - NEW FEATURES
     * Updated tutorial with more mg-auto examples
+    * Updated apbs.spec file for generating RPMs on more platforms.
   - BUG FIXES
     * The dimensions of the fine grids in the pka-lig example calculations
       were increased to give more reliable results (albeit ones which don't
       agree with the reported UHBD values as well).
     * hz in mgparse.c causes name clash with AIX environmental variable;
-    fixed.
+      fixed.
+    * Fixed documentation to state that using a kappa map does not ignore
+      ELEC ION statements.
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.1       04-13-04
