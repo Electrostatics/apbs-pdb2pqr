@@ -132,7 +132,7 @@ VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
 VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
 VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
 VEXTERNC Vacc*  Vpbe_getSolventAcc(Vpbe *thee);
-VEXTERNC Vacc*  Vpbe_getIonAccash(Vpbe *thee);
+VEXTERNC Vacc*  Vpbe_getIonAcc(Vpbe *thee);
 VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
 
 VEXTERNC double Vpbe_getIonConc(Vpbe *thee);
