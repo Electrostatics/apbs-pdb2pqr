@@ -77,8 +77,8 @@ typedef struct Vacc {
   double hx, hy, hzed;
   /* Grid dimensions, n = nx*nz*ny */
   int nx, ny, nz, n;
-  /* Probe radius */
-  double probe_radius;
+  /* Maximum probe radius */
+  double max_radius;
 
 } Vacc;
 
@@ -94,18 +94,18 @@ typedef struct Vacc {
 // Class Vacc: Non-Inlineable methods (vacc.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vacc* Vacc_ctor(Valist *alist, double probe_radius, int nx, 
+VEXTERNC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx, 
                int ny, int nz, int nsphere);
-VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius, 
+VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius, 
              int nx, int ny, int nz, int nsphere);
 VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
-VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts, double radius);
+VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
 
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
-VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center);
-VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center);
+VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);
+VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC int Vacc_memChk(Vacc *thee);
 
 #endif    /* ifndef _VACC_H_ */

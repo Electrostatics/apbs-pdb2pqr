@@ -68,7 +68,7 @@ VEMBED(rcsid="$Id$")
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vacc* Vacc_ctor(Valist *alist, double probe_radius, int nx,
+VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
     int ny, int nz, int nsphere) {
 
 
@@ -77,7 +77,7 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double probe_radius, int nx,
     /* Set up the structure */
     thee = Vram_ctor( 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
-    VASSERT( Vacc_ctor2(thee, alist, probe_radius, nx, ny, nz, nsphere));
+    VASSERT( Vacc_ctor2(thee, alist, max_radius, nx, ny, nz, nsphere));
 
     return thee;
 }
@@ -89,7 +89,7 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double probe_radius, int nx,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
+VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     int nx, int ny, int nz, int nsphere) {
 
     /* Grid variables */
@@ -104,8 +104,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     /* Natural grid coordinate (array position) */
     int ui;
     /* Atom radius */
-    double max_radius;
-    double tot_r;
+    double rmax;
+    double rtot;
     /* A list of how many atoms we've already stored at each grid point */
     int *nputatoms;
     /* Atom list */
@@ -138,7 +138,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     /* Find dimensions of protein and atoms*/
     x_max = y_max = z_max = -VLARGE;
     x_min = y_min = z_min = VLARGE;
-    max_radius = -1.0;
+    rmax = -1.0;
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         x = (Vatom_getPosition(atom_list + i))[0];
         y = (Vatom_getPosition(atom_list + i))[1];
@@ -149,23 +149,23 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
         if (x > x_max) x_max = x;
         if (y > y_max) y_max = y;
         if (z > z_max) z_max = z;
-        if (Vatom_getRadius(atom_list + i) > max_radius) {
-            max_radius = Vatom_getRadius(atom_list + i );
+        if (Vatom_getRadius(atom_list + i) > rmax) {
+            rmax = Vatom_getRadius(atom_list + i );
         }
     }
 
     /* Set the probe radius */
-    thee->probe_radius = probe_radius;
+    thee->max_radius = max_radius;
 
     /* Set up grid spacings, 2.84 > 2*sqrt(2) */
-    thee->hx = (x_max - x_min + 2.84*(max_radius+thee->probe_radius))/(thee->nx-2);
-    thee->hy = (y_max - y_min + 2.84*(max_radius+thee->probe_radius))/(thee->ny-2);
-    thee->hzed = (z_max - z_min + 2.84*(max_radius+thee->probe_radius))/(thee->nz-2);
+    thee->hx = (x_max - x_min + 2.84*(rmax+thee->max_radius))/(thee->nx-2);
+    thee->hy = (y_max - y_min + 2.84*(rmax+thee->max_radius))/(thee->ny-2);
+    thee->hzed = (z_max - z_min + 2.84*(rmax+thee->max_radius))/(thee->nz-2);
  
     /* Inflate the grid a bit 1.42 > sqrt(2) */
-    (thee->grid_lower_corner)[0] = x_min-1.42*(max_radius+thee->probe_radius)-thee->hx;
-    (thee->grid_lower_corner)[1] = y_min-1.42*(max_radius+thee->probe_radius)-thee->hy;
-    (thee->grid_lower_corner)[2] = z_min-1.42*(max_radius+thee->probe_radius)-thee->hzed;
+    (thee->grid_lower_corner)[0] = x_min-1.42*(rmax+thee->max_radius)-thee->hx;
+    (thee->grid_lower_corner)[1] = y_min-1.42*(rmax+thee->max_radius)-thee->hy;
+    (thee->grid_lower_corner)[2] = z_min-1.42*(rmax+thee->max_radius)-thee->hzed;
 
     /* Find out how many atoms are associated with each grid point */
     for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
@@ -179,19 +179,19 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
                 - (thee->grid_lower_corner)[2];
 
         /* Get the range the atom radius + probe radius spans */
-        tot_r = Vatom_getRadius(&(atom_list[i])) + thee->probe_radius;
+        rtot = Vatom_getRadius(&(atom_list[i])) + thee->max_radius;
     
         /* Calculate the range of grid points the inflated atom spans in the x 
            direction .
            I admit, this method for determing the accessible grid points isn't
            very fancy, but I kept getting crap for answers with Pythagorean's
            Thm */
-        i_max = (int)( ceil( (x + tot_r)/(thee->hx) ));
-        i_min = (int)(floor( (x - tot_r)/(thee->hx) ));
-        j_max = (int)( ceil( (y + tot_r)/(thee->hy) ));
-        j_min = (int)(floor( (y - tot_r)/(thee->hy) ));
-        k_max = (int)( ceil( (z + tot_r)/(thee->hzed) ));
-        k_min = (int)(floor( (z - tot_r)/(thee->hzed) ));
+        i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
+        i_min = (int)(floor( (x - rtot)/(thee->hx) ));
+        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
  
         /* Now find and assign the grid points */
         for ( ii = i_min; ii <= i_max; ii++) {
@@ -204,7 +204,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
                     rz = VABS((double)(kk)*(thee->hzed) - z);
                     if (rz > thee->hzed) rz = rz - thee->hzed;
                     /* Fudge to correct for numerical problems */
-                    if ((rx*rx + ry*ry + rz*rz) <= (tot_r*tot_r )) {
+                    if ((rx*rx + ry*ry + rz*rz) <= (rtot*rtot )) {
                         ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
                        (thee->natoms[ui])++;
                     }  /* if ... */
@@ -234,7 +234,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
         z = (Vatom_getPosition(atom_list +i))[2] - (thee->grid_lower_corner)[2];
 
     /* Get the range the atom radius + probe radius spans */
-    tot_r = ((alist->atoms)[i]).radius + thee->probe_radius;
+    rtot = ((alist->atoms)[i]).radius + thee->max_radius;
     
     /* Calculate the range of grid points the inflated atom spans in the x 
        direction 
@@ -243,12 +243,12 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
        very fancy, but I kept getting crap for answers with Pythagorean's
        Thm */
 
-    i_max = (int)( ceil( (x + tot_r)/(thee->hx) ));
-    i_min = (int)(floor( (x - tot_r)/(thee->hx) ));
-    j_max = (int)( ceil( (y + tot_r)/(thee->hy) ));
-    j_min = (int)(floor( (y - tot_r)/(thee->hy) ));
-    k_max = (int)( ceil( (z + tot_r)/(thee->hzed) ));
-    k_min = (int)(floor( (z - tot_r)/(thee->hzed) ));
+    i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
+    i_min = (int)(floor( (x - rtot)/(thee->hx) ));
+    j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+    j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+    k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+    k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
 
     /* Now find and assign the grid points */
     for ( ii = i_min; ii <= i_max; ii++) {
@@ -261,7 +261,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
           rz = VABS((double)(kk)*(thee->hzed) - z);
           if (rz > thee->hzed) rz = rz - thee->hzed;
           /* Fudge to correct for numerical problems */
-          if ((rx*rx + ry*ry + rz*rz) <= (tot_r*tot_r )) {
+          if ((rx*rx + ry*ry + rz*rz) <= (rtot*rtot )) {
             ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
             thee->atoms[ui][nputatoms[ui]] = &(alist->atoms[i]);
             (nputatoms[ui])++;
@@ -274,7 +274,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
   Vram_dtor((Vram **)&nputatoms,thee->n,sizeof(int));
 
   /* Set up points on the surface of a sphere */
-  thee->sphere = Vacc_sphere(thee, &(thee->nsphere), thee->probe_radius);
+  thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
   VASSERT(thee->sphere != VNULL);
 
   return 1;
@@ -380,13 +380,17 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center) {
+VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
 
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
     double dist;
     Vec3 vec;
+
+    /* We can only test probes with radii less than the max specified */
+    VASSERT(thee != VNULL);
+    VASSERT(radius <= thee->max_radius);
 
     /* Convert to grid based coordinates */
     centeri = VRINT( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
@@ -409,7 +413,7 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center) {
         vec[2] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[2];
         dist = Vec3_dif2(center,vec);
         if (dist < 
-           (Vatom_getRadius((thee->atoms)[ui][iatom])+thee->probe_radius) )
+           (Vatom_getRadius((thee->atoms)[ui][iatom])+radius) )
           return 0;
     }
 
@@ -420,33 +424,33 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_molAcc
 //
-// Purpose:  Determine accessibility of a probe (of radius probe_radius)
+// Purpose:  Determine accessibility of a probe (of radius radius)
 //           at a given point, given a collection of atomic spheres.
 //           Returns 1 if accessible.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center) {
+VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius) {
 
     int ipt;
     Vec3 vec;
 
     /* ******* CHECK IF OUTSIDE ATOM+PROBE RADIUS SURFACE ***** */
-    if (Vacc_ivdwAcc(thee, center)) return 1;
+    if (Vacc_ivdwAcc(thee, center, radius)) return 1;
 
     /* ******* CHECK IF INSIDE ATOM RADIUS SURFACE ***** */
     if (!Vacc_vdwAcc(thee, center)) return 0;
 
     /* ******* CHECK IF OUTSIDE MOLECULAR SURFACE ***** */
-    /* Let S be the sphere of radius probe_radius centered at the point we are
+    /* Let S be the sphere of radius radius centered at the point we are
      * testing.  We are outside the molecular surface if there is a point on
      * the surface of S that is outside the atom+probe radius surface */
     VASSERT(thee->sphere != VNULL);
     for (ipt=0; ipt<thee->nsphere; ipt++) {
-        vec[0] = thee->sphere[ipt][0] + center[0];
-        vec[1] = thee->sphere[ipt][1] + center[1];
-        vec[2] = thee->sphere[ipt][2] + center[2];
-        if (Vacc_ivdwAcc(thee, vec)) return 1;
+        vec[0] = radius*thee->sphere[ipt][0] + center[0];
+        vec[1] = radius*thee->sphere[ipt][1] + center[1];
+        vec[2] = radius*thee->sphere[ipt][2] + center[2];
+        if (Vacc_ivdwAcc(thee, vec, radius)) return 1;
     }
 
     /* If all else failed, we are not inside the molecular surface */
@@ -457,7 +461,7 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center) {
 // Routine:  Vacc_sphere
 //
 // Purpose:  Generates thee->npts somewhat uniformly distributed across a
-//           sphere of specified radius centered at the origin.  Returns a
+//           sphere of unit radius centered at the origin.  Returns a
 //           (npts x 3) double array, which you are resposible for destroying,
 //           of approximatel the specified number of points; the actual number
 //           is stored in the argument npts.  This routine was shamelessly
@@ -466,7 +470,7 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center) {
 // Author:   Nathan Baker (original FORTRAN routine from UHBD by Michael
 //           Gilson)
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts, double radius) {
+VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
 
     double **points = VNULL;
     int nactual, i, itheta, ntheta, iphi, nphimax, nphi;
@@ -510,9 +514,9 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts, double radius) {
                 phi = dphi*((double)(iphi));
                 sinphi = VSIN(phi);
                 cosphi = VCOS(phi);
-                points[nactual][0] = radius * cosphi * sintheta;
-                points[nactual][1] = radius * sinphi * sintheta;
-                points[nactual][2] = radius * costheta;
+                points[nactual][0] = cosphi * sintheta;
+                points[nactual][1] = sinphi * sintheta;
+                points[nactual][2] = costheta;
                 nactual++;
             }
         }

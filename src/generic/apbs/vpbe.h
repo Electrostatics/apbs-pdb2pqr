@@ -75,8 +75,7 @@ typedef struct Vpbe {
                        * operator for updating after refinement ) */
 
 
-  Vacc *solvAcc;      /* Accessibility object for solvent accessibility */
-  Vacc *ionAcc;       /* Accessibility object for ionic accessibility */
+  Vacc *acc;          /* Accessibility object */
   Vcsm *csm;          /* Charge-simplex map */
 
   double ionConc;     /* Ionic strength (M) */
@@ -131,8 +130,7 @@ VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
 VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
 VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
 VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
-VEXTERNC Vacc*  Vpbe_getSolventAcc(Vpbe *thee);
-VEXTERNC Vacc*  Vpbe_getIonAcc(Vpbe *thee);
+VEXTERNC Vacc*  Vpbe_getVacc(Vpbe *thee);
 VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
 
 VEXTERNC double Vpbe_getIonConc(Vpbe *thee);
