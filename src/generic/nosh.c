@@ -550,7 +550,8 @@ PRINT section!\n",
         } else {
      
             /* Grab a calculation ID */
-            if (sscanf(tok, "%d", &ti) == 1 && Vstring_isdigit(tok) == 1) {
+            if ((sscanf(tok, "%d", &ti) == 1) && 
+                    (Vstring_isdigit(tok) == 1)) {
                 if (expect == 0) {
                     thee->printcalc[idx][thee->printnarg[idx]] = ti;
                     expect = 1;
