@@ -211,6 +211,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
   double etol, int bkey) {
 
     Alg *alg;
+    Aprx *aprx;
     int marked = 0;
     int markMe, i, smid, count, currentQ;
     double minError = 0.0;
@@ -226,6 +227,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     VASSERT((level >= am->minLevel) && (level <= am->maxLevel));
     alg = AM_alg(am, level);
     VASSERT(alg != VNULL);
+    aprx = alg->aprx;
 
     /* input check and some i/o */
     if ( ! ((-1 <= akey) && (akey <= 4)) ) {
@@ -348,7 +350,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     /* ERROR-BASED METHODS */
     /* gerror = global error accumulation */
-    alg->gerror = 0.;
+    aprx->gerror = 0.;
 
     /* traverse the simplices and process the error estimates */
     Vnm_print(0,"Vpee_markRefine: estimating error..");
@@ -385,14 +387,14 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             maxError = VMAX2( VSQRT(VABS(errEst)), maxError );
 
             /* store the estimate */
-            Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
+            Bvec_set( aprx->WE[ WE_err ], 0, smid, errEst );
 
             /* accumlate into global error (errEst is SQUAREd already) */
-            alg->gerror += errEst;
+            aprx->gerror += errEst;
 
         /* otherwise store a zero for the estimate */
         } else {
-            Bvec_set( alg->WE[ WE_err ], 0, smid, 0. );
+            Bvec_set( aprx->WE[ WE_err ], 0, smid, 0. );
         }
 
         smid++;
@@ -401,13 +403,13 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     /* do some i/o */
     Vnm_print(0,"..done.  [marked=<%d/%d>]\n",marked,Gem_numSS(thee->gm));
     Vnm_print(0,"Alg_estRefine: TOL=<%g>  Global_Error=<%g>\n",
-        etol, alg->gerror);
+        etol, aprx->gerror);
     Vnm_print(0,"Alg_estRefine: (TOL^2/numS)^{1/2}=<%g>  Max_Ele_Error=<%g>\n",
         VSQRT(mlevel),maxError);
     Vnm_tstop(30, "error estimation");
 
     /* check for making the error tolerance */
-    if ((bkey == 1) && (alg->gerror <= etol)) {
+    if ((bkey == 1) && (aprx->gerror <= etol)) {
         Vnm_print(0,
             "Alg_estRefine: *********************************************\n");
         Vnm_print(0,
@@ -460,7 +462,7 @@ VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
             vx[ivert][icoord] = VV_coord(SS_vertex(sm,ivert), icoord );
         }
     }
-    return thee->gm->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm), 
+    return thee->gm->pde->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm), 
              SS_type(sm), fType, vType, chart, vx, sm);
 }
 
