@@ -1,4 +1,13 @@
 #############################################################################
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.6       XX-XX-01
+#############################################################################
+This version is a public (beta) release candidate and includes the following
+bug-fixes and features:
+  * Fix printf formatting in UHBD potential output
+  * Added input file support for parallel focusing
+  * Fixed small bug in parsing writeacc syntax (thanks, Dave)
+
+#############################################################################
 PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.5       10-25-01
 #############################################################################
 This version features minor bug fixes and several new features:

@@ -66,14 +66,16 @@ c*    *** decode some parameters ***
 c*
 c*    *** some checks on input ***
       if ((nlev.le.0).or.(nx.le.0).or.(ny.le.0).or.(nz.le.0)) then
-         print*,'% NEWDRIV:  nx,ny,nz, and nlev must be positive...'
+       call vnmprt(2, 'NEWDRIV:  nx,ny,nz,nlev must be positive...',
+     1    48)
          ierror = -1
          iparm(51) = ierror 
          return
       endif
       mxlv = maxlev(nx,ny,nz)
       if (nlev.gt.mxlv) then
-         print*,'% NEWDRIV:  max levels for your grid size is: ',mxlv
+         call vnmpri(2, 'NEWDRIV:  max lev for your grid size is: ',
+     1      12, mxlv)
          ierror = -2
          iparm(51) = ierror 
          return
@@ -91,8 +93,10 @@ c*    *** allocate space for two additional work vectors ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% NEWDRIV: real    work space must be: ',iretot
-         print*,'% NEWDRIV: integer work space must be: ',iintot
+         call vnmpri(2,'NEWDRIV: real    work space must be: ',
+     1     45, iretot)
+         call vnmpri(2,'NEWDRIV: integer work space must be: ',
+     1     45, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -244,7 +248,7 @@ c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fbound00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
-      print*,' new = [ '
+c*    print*,' new = [ '
 c*
 c*    *** start timer ***
       call vtstrt(30, 'NEWDRIV2: solve', 15)
@@ -266,16 +270,16 @@ c*    *** call specified multigrid method ***
      4      a1cf,a2cf,a3cf,
      5      ipc,rpc,pc,ac,cc,fc,tcf)
       else
-         print*,'% NEWDRIV2: bad mgkey given '
+         call vnmprt(2,'NEWDRIV2: bad mgkey given ', 26)
       endif
 c*
 c*    *** stop timer ***
       call vtstop(30, 'NEWDRIV2: solve', 15)
 c*
 c*    *** MATLAB ***
-      write(*,100) 'new_sf',tsetupf,'new_sc',tsetupc,
-     2   'new_st',(tsetupf+tsetupc),'new_so',tsolve
- 100  format(' ];',4(' ',a7,'=',1pe9.3,';'))
+c*    write(*,100) 'new_sf',tsetupf,'new_sc',tsetupc,
+c*   2   'new_st',(tsetupf+tsetupc),'new_so',tsolve
+c* 100  format(' ];',4(' ',a7,'=',1pe9.3,';'))
 c*
 c*    *** restore boundary conditions ***
       ibound = 1

@@ -2928,10 +2928,8 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
             } 
         }
 
-        if ((xok && yok) && zok) {
-            Vnm_print(0, "HAVE ATOM %d\n", i);
-            atom->partID = 1;
-        } else atom->partID = 0;
+        if ((xok && yok) && zok) atom->partID = 1;
+        else atom->partID = 0;
     }
 
 

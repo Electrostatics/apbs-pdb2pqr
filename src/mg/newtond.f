@@ -144,8 +144,8 @@ c*    *** recover level information ***
 c*
 c*    *** do some i/o if requested ***
       if (iinfo.ne.0) then
-         write(6,100)'% NEWTON: starting: ',nx,ny,nz
- 100     format(a,(2x,' [',i3,',',i3,',',i3,'] '))
+c*         write(6,100)'% NEWTON: starting: ',nx,ny,nz
+c* 100     format(a,(2x,' [',i3,',',i3,',',i3,'] '))
       endif
 c*
 c*    *** initial wall clock ***
@@ -190,11 +190,11 @@ c*       *** simply take norm of rhs for a zero initial guess ***
      4      tru(iz(1,lev)),w1,w2)
          rsden = dsqrt(xdot(nx,ny,nz,tru(iz(1,lev)),w1))
       else
-         print*,'% NEWTON: bad istop value... '
+         call vnmprt(0, 'NEWTON: bad istop value... ', 27)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% NEWTON: rhs is zero...'
+         call vnmprt(2, 'NEWTON: rhs is zero...', 22)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -221,7 +221,7 @@ c* *** begin the loop
 c* *********************************************************************
 c*
 c*    *** setup for the looping ***
-      print*,'% NEWTON: damping enabled...'
+      call vnmprt(0, 'NEWTON: damping enabled...', 26)
       idamp  = 1
       iters  = 0 
  30   continue
@@ -255,7 +255,7 @@ c*       NAB 06-18-01:  IF COMPLEX PROBLEMS NOT CONVERGING, SET THIS
 c*       TO MACHINE EPSILON.  THIS MAKES IT USE THE EXACT JACOBIAN
 c*       RATHER THAN THE APPROXIMATE FORM (AS HERE)
          errtol_s  = dmin1((0.9*xnorm_old),(bigc*xnorm_old**ord))
-         print*,'% NEWTON: using errtol_s: ',errtol_s
+         call vnmprd(0, 'NEWTON: using errtol_s: ', 24, errtol_s)
 c*
 c*       *** do a linear multigrid solve of the newton equations ***
          call azeros(nx,ny,nz,xtmp(iz(1,lev)))
@@ -299,9 +299,11 @@ c*          *** damping is still enabled -- doit ***
             iter_d  = 0
             itmax_d = 10
             mode    = 0
-            write(6,110)
-     2         'NEWTON: attempting damping: iter_d, relres = ',
-     3         iter_d,(xnorm_new/xnorm_den)
+            call vnmprd(0,'NEWTON: attempting damping, relres = ',
+     1        37, (xnorm_new/xnorm_den))
+c*          write(6,110)
+c*   2         'NEWTON: attempting damping: iter_d, relres = ',
+c*   3         iter_d,(xnorm_new/xnorm_den)
  110           format('% ',a,i5,1pe10.2)
  11         continue
                if (iter_d .ge. itmax_d) goto 12
@@ -328,9 +330,11 @@ c*             *** new damped correction, residual, and its norm ***
 c*
 c*             *** next iter... ***
                iter_d = iter_d + 1
-               write(6,110)
-     2            'NEWTON: attempting damping: iter_d, relres = ',
-     3            iter_d,(xnorm_new/xnorm_den)
+               call vnmprd(0,'NEWTON: attempting damping, relres = ',
+     1            37, (xnorm_new/xnorm_den))
+c*             write(6,110)
+c*   2            'NEWTON: attempting damping: iter_d, relres = ',
+c*   3            iter_d,(xnorm_new/xnorm_den)
             goto 11 
 c*
 c*          *** accept the previous newton step ***
@@ -339,13 +343,15 @@ c*          *** accept the previous newton step ***
             call xcopy(nx,ny,nz,w3,w0)
             xnorm_new = xnorm_med
             xnorm_old = xnorm_new
-            write(6,110)
-     2         'NEWTON: damping accepted:   iter_d, relres = ',
-     3         iter_d-1,(xnorm_new/xnorm_den)
+            call vnmprd(0,'NEWTON: damping accepted, relres = ',
+     1        35, (xnorm_new/xnorm_den))
+c*          write(6,110)
+c*   2         'NEWTON: damping accepted:   iter_d, relres = ',
+c*   3         iter_d-1,(xnorm_new/xnorm_den)
 c*
 c*          *** determine whether or not to disable damping ***
             if ((iter_d-1) .eq. 0) then
-               print*,'% NEWTON: damping disabled...'
+               call vnmprt(0, 'NEWTON: damping disabled...', 27)
                idamp = 0
             endif
          else
@@ -389,7 +395,7 @@ c*       *** compute/check the current stopping test ***
      4            w1,w2,w3)
                rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
             else
-               print*,'% NEWTON: bad istop value... '
+               call vnmprt(2, 'NEWTON: bad istop value... ', 27)
             endif
             call prtstp (iok,iters,rsnrm,rsden,orsnrm)
             if ((rsnrm/rsden) .le. errtol) goto 99
