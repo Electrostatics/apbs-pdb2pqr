@@ -12,7 +12,9 @@ INCLUDES           = @inc_list@
 LDFLAGS            = @LDFLAGS@ @FLIBS@
 CCLD = $(F77)
 
-noinst_PROGRAMS    = mgmesh 
+noinst_PROGRAMS    = mgmesh dxmath
 mgmesh_SOURCES     = mgmesh.c 
 mgmesh_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
+dxmath_SOURCES     = dxmath.c 
+dxmath_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
 
