@@ -55,16 +55,246 @@ VEMBED(rcsid="$Id$")
 #endif /* if !defined(VINLINE_VACC) */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmg: Non-inlineable methods
+// Routine:  rworkIndices
+//
+// Purpose:  Get the (C-style) integer index denoting the start of the
+//           differential operator array in thee->rwork
+//
+// Args:     k_cc  Set to index for linearized nonlinear operator array N'(u)
+//                 at finest level
+//           k_fc  Set to index for source array
+//                 at finest level
+//           k_ac  Set to index for operator matrix
+//                 at finest level
+//
+// Notes:    The indexing here is taken from Mike's mgdriv FORTRAN
+//           routine.  We need to make sure we still have a viable Vpmgp object
+//           laying around.
+//
+// Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD);
-VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag);
-VPRIVATE void bcfl1(double size, double *apos, double charge,
-  double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf,
-  double *xf, double *yf, double *zf, int nx, int ny, int nz);
-VPRIVATE double bcfl1sp(double size, double *apos, double charge,
-  double xkappa, double pre1, double *pos);
-VPRIVATE void bcCalc(Vpmg *thee);
+VPRIVATE void rworkIndices(Vpmg *thee, int *k_cc, int *k_fc, int *k_ac) {
+
+    int k_rpc, k_pc;
+    int nx, ny, nz, nlev, nxc, nyc, nzc, nf, nc, narr, narrc, n_rpc, n_iz;
+    int n_ipc, nrwk, niwk;
+
+    /* Grab the first set of parameters from MGSZ */
+    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+      &(thee->pmgp->mgsolv), &nx, &ny, &nz, &nlev, &nxc, &nyc, &nzc, &nf, &nc, 
+      &narr, &narrc, &n_rpc, &n_iz, &n_ipc, &nrwk, &niwk);
+
+    /* This is where the rpc array starts (default) */
+    k_rpc = 1;
+
+    /* Here are where the other arrays start (variable) */
+    *k_cc  = k_rpc + n_rpc;
+    *k_fc  = *k_cc  + narr;
+    k_pc  = *k_fc  + narr;
+    *k_ac  = k_pc  + 27*narrc;
+
+    /* We shouldn't be normally be able to stop here, since these arrays
+     * contain vectors and matrices for all levels of the hierarchy.  However,
+     * PMG puts the finest level at the start of each array (see buildstr in
+     * mgsubd.f).  Therefore, the indices we've found so far simply need to be
+     * converted into C-style indices (0-start arrays instead of 1-start
+     * arrays) to get the fine level indices in rwork. */
+
+    /* Turn these all into C-style indices */
+    (*k_cc)--;
+    (*k_fc)--;
+    (*k_ac)--;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_colCompF
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_colCompF(Vpmg *thee, int *nrow, int *ncol, int *nonz,
+  double **nzval, int **rowind, int **colptr, int flag) {
+
+    int i, *colp, *rowi;
+
+    Vpmg_colCompC(thee, nrow, ncol, nonz, nzval, rowind, colptr, flag);
+
+    colp = *colptr;
+    rowi = *rowind;
+
+    for (i=0; i<(*ncol+1); i++) (colp[i]++);
+    for (i=0; i<*nonz; i++) (rowi[i]++);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_printColComp
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_printColComp(int nrow, int ncol, int nonz, 
+  double *nzval, int *rowind, int *colptr, 
+  char path[72], char title[72], char mxtype[3]) {
+
+    F77PCOLCOMP(&nrow, &ncol, &nonz, nzval, rowind, colptr, path, title, 
+      mxtype);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_colCompC
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_colCompC(Vpmg *thee, int *nrow, int *ncol, int *nonz,
+  double **nzval, int **rowind, int **colptr, int flag) {
+
+    int nn, nx, ny, nz;
+    int k_ac, k_cc, k_fc;
+    int oCstart, uCstart, oEstart, oNstart;
+    int i, inonz, jsub1, jsub2, jsub3, jsup1, jsup2, jsup3;
+    double *ac, *cc, *nzva;
+    int *colp, *rowi;
+
+    /* Calculate the total number of unknowns */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    nn = nx*ny*nz;
+    *ncol = nn;
+    *nrow = nn;
+
+    /* Calculate the number of non-zero matrix entries:
+     *    nn       nonzeros on diagonal
+     *    nn-1     nonzeros on first off-diagonal
+     *    nn-nx    nonzeros on second off-diagonal
+     *    nn-nx*ny nonzeros on third off-diagonal
+     * 
+     *    7*nn-2*nx*ny-2*nx-2 TOTAL non-zeros
+     */
+    *nonz = 7*nn - 2*nx*ny - 2*nx - 2;
+
+    /* Allocate space for the arrays */
+    *nzval  = Vmem_malloc(thee->vmem, *nonz, sizeof(double));
+    *rowind = Vmem_malloc(thee->vmem, *nonz, sizeof(int));
+    *colptr = Vmem_malloc(thee->vmem, (*ncol+1), sizeof(int));
+    nzva = *nzval;
+    rowi = *rowind;
+    colp = *colptr;
+
+    /* Get the rwork indices for the arrays of interest */
+    rworkIndices(thee, &k_cc, &k_fc, &k_ac);
+
+    /* Get the arrays of interest */
+    ac = &(thee->rwork[k_ac]);
+    cc = &(thee->rwork[k_cc]);
+
+    /* Now that we have the operator matrix, here's how we index it: */
+    oCstart = 0;     /* The main diagonal starts here */
+    oEstart = nn;    /* The first off-diagonal starts here */
+    oNstart = 2*nn;  /* The second off-diagonal starts here */
+    uCstart = 3*nn;  /* The third off-diagonal starts here */
+   
+    /* Hop through the rows and get to work (THE MATRIX IS SYMMETRIC!!!) */ 
+    inonz = 0;
+
+    /* The first row is special */
+    colp[0] = 0;
+    /* Diagonal */
+    if (flag == 0) nzva[inonz] = ac[oCstart + 0];
+    else if (flag == 1) nzva[inonz] = ac[oCstart + 0] + cc[0];
+    else VASSERT(0);
+    rowi[inonz] = 0;
+    inonz++;
+    /* Super-diagonal 1 */
+    jsup1 = 0 + 1;
+    nzva[inonz] = ac[oEstart + 0];
+    rowi[inonz] = jsup1;
+    inonz++;
+    /* Super-diagonal 2 */
+    jsup2 = 0 + nx;
+    nzva[inonz] = ac[oNstart + 0];
+    rowi[inonz] = jsup2;
+    inonz++;
+    /* Super-diagonal 3 */
+    jsup3 = 0+nx*ny;
+    nzva[inonz] = ac[uCstart + 0];
+    rowi[inonz] = jsup3;
+    inonz++;
+  
+    /* Do the rest of the rows */
+    for (i=1; i<nn; i++) {
+        /* Store where this column starts */
+        colp[i] = inonz;
+
+        /* Sub-diagonal 3 */
+        jsub3 = i - nx * ny; 
+        if ((jsub3 > 0) || (jsub3 < nn)) {
+            nzva[inonz] = ac[uCstart + i];
+            rowi[inonz] = jsub3;
+            inonz++;
+        }
+
+        /* Sub-diagonal 2 */
+        jsub2 = i - nx; 
+        if ((jsub2 > 0) || (jsub2 < nn)) {
+            nzva[inonz] = ac[oNstart + i];
+            rowi[inonz] = jsub2;
+            inonz++;
+        }
+
+        /* Sub-diagonal 1 */
+        jsub1 = i - 1; 
+        if ((jsub1 > 0) || (jsub1 < nn)) {
+            nzva[inonz] = ac[oEstart + i];
+            rowi[inonz] = jsub1;
+            inonz++;
+        }
+
+        /* Diagonal */
+        if (flag == 0) nzva[inonz] = ac[oCstart + i];
+        else if (flag == 1) nzva[inonz] = ac[oCstart + i] + cc[i];
+        rowi[inonz] = i;
+        inonz++;
+
+        /* Super-diagonal 1 */
+        jsup1 = i + 1; 
+        if ((jsup1 > 0) || (jsup1 < nn)) {
+            nzva[inonz] = ac[oEstart + i];
+            rowi[inonz] = jsup1;
+            inonz++;
+        }
+
+
+        /* Super-diagonal 2 */
+        jsup2 = i + nx; 
+        if ((jsup2 > 0) || (jsup2 < nn)) {
+            nzva[inonz] = ac[oNstart + i];
+            rowi[inonz] = jsup2;
+            inonz++;
+        }
+
+
+        /* Super-diagonal 3 */
+        jsup3 = i+nx*ny;
+        if ((jsup3 > 0) || (jsup3 < nn)) {
+            nzva[inonz] = ac[uCstart + i];
+            rowi[inonz] = jsup3;
+            inonz++;
+        }
+
+    } /* for i=1:nn */
+
+    colp[*ncol] = inonz;
+
+    /* Sanity check */
+    if (inonz != (*nonz)) {
+        Vnm_print(2, "columnCompress:  Error expected %d non-zeros, got %d\n",
+          *nonz, inonz);
+        VASSERT(0);
+    }
+        
+}
 
 
 /* ///////////////////////////////////////////////////////////////////////////

@@ -48,8 +48,26 @@
 #include "apbs/vpmg.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Private routines
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD);
+VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag);
+VPRIVATE void bcfl1(double size, double *apos, double charge,
+  double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf,
+  double *xf, double *yf, double *zf, int nx, int ny, int nz);
+VPRIVATE double bcfl1sp(double size, double *apos, double charge,
+  double xkappa, double pre1, double *pos);
+VPRIVATE void bcCalc(Vpmg *thee);
+VPRIVATE void rworkIndices(Vpmg *thee, int *k_cc, int *k_fc, int *k_ac);
+
+/* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
 /////////////////////////////////////////////////////////////////////////// */
+#define F77PCOLCOMP VF77_MANGLE(pcolcomp, PCOLCOMP)
+VEXTERNC void F77PCOLCOMP(int *nrow, int *ncol, int *nonz, 
+  double *nzval, int *rowind, int *colptr, 
+  char *path, char *title, char *mxtype);
+
 #define F77MGSZ VF77_MANGLE(mgsz, MGSZ)
 VEXTERNC void F77MGSZ(int *mgcoar, int *mgdisc, int *mgsolv, int *nx, int *ny,
   int *nz, int *nlev, int *nxc, int *nyc, int *nyz, int *nf, int *nc, 
