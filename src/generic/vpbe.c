@@ -539,6 +539,7 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
     Vacc_dtor(&(thee->acc));
+    Vgreen_dtor(&(thee->green));
     Vmem_dtor(&(thee->vmem));
     if (thee->methFlag == 0) Vcsm_dtor(&(thee->csm));
 }

@@ -184,25 +184,8 @@ VPUBLIC void Vgreen_dtor2(Vgreen *thee) {
 VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim, 
   double kappa) { 
 
-    Vatom *atom;
-    double *x, pot, charge, dist;
-    int iatom, j;
-
-    VASSERT(dim < 4);
-    pot = 0;
-   
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        atom = Valist_getAtom(thee->alist, iatom);
-        x = Vatom_getPosition(atom);
-        charge = Vatom_getCharge(atom);
-        dist = 0;
-        for (j=0; j<dim; j++) 
-          dist = dist + (x[j] - position[j])*(x[j] - position[j]);
-        dist = VSQRT(dist);
-        pot = pot + charge*exp(-kappa*dist)/dist;
-    }
-
-    return pot*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
+    VASSERT(0);
+    return 0.;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -232,29 +215,8 @@ VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
 VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position, 
   double dim, double kappa, double *grad) {
 
-    Vatom *atom;
-    double *x, tpot[MAXV], charge, dist;
-    int iatom, j;
-
-    VASSERT(dim < 4);
-    for (j=0; j<dim; j++) grad[j] = 0;
-
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        atom = Valist_getAtom(thee->alist, iatom);
-        x = Vatom_getPosition(atom);
-        charge = Vatom_getCharge(atom);
-        dist = 0;
-        for (j=0; j<dim; j++)
-          dist = dist + (x[j] - position[j])*(x[j] - position[j]);
-        for (j=0; j<dim; j++) {
-            tpot[j] = 1/VSQRT(dist) + kappa;
-            tpot[j] = -charge*(position[j] - x[j])*tpot[j]/dist;
-            tpot[j] = exp(-kappa*VSQRT(dist))*tpot[j];
-            grad[j] = grad[j] + tpot[j];
-        }
-    }
-    for (j=0; j<dim; j++) 
-        grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
+    VASSERT(0);
+    return 0.;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -293,7 +255,7 @@ VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
         dist = 0;
         for (j=0; j<dim; j++) 
           dist += ((x[j] - position[j])*(x[j] - position[j]));
-        dist = 10e-10*VSQRT(dist);
+        dist = 1.0e-10*VSQRT(dist);
         pot += (charge/dist);
     }
 
@@ -340,9 +302,9 @@ VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
         for (j=0; j<dim; j++) 
           dist += ((x[j] - position[j])*(x[j] - position[j]));
         for (j=0; j<dim; j++) 
-          grad[j] += (-charge*(position[j] - x[j])/dist/VSQRT(dist));
+          grad[j] -= (charge*(position[j] - x[j])/dist/VSQRT(dist));
     }
     for (j=0; j<dim; j++) 
-      grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*10e-10);
+      grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*(1.0e-10));
 }
 
