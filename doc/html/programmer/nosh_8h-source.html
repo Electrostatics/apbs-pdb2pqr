@@ -19,152 +19,159 @@
 00058 <span class="preprocessor">#include "<a class="code" href="mgparm_8h.html">apbs/mgparm.h</a>"</span>
 00059 <span class="preprocessor">#include "<a class="code" href="femparm_8h.html">apbs/femparm.h</a>"</span>
 00060 
-<a name="l00063"></a><a class="code" href="group__NOsh.html#a28">00063</a> <span class="preprocessor">#define NOSH_MAXMOL 20</span>
+<a name="l00063"></a><a class="code" href="group__NOsh.html#a29">00063</a> <span class="preprocessor">#define NOSH_MAXMOL 20</span>
 00064 <span class="preprocessor"></span>
-<a name="l00067"></a><a class="code" href="group__NOsh.html#a29">00067</a> <span class="preprocessor">#define NOSH_MAXCALC 20</span>
+<a name="l00067"></a><a class="code" href="group__NOsh.html#a30">00067</a> <span class="preprocessor">#define NOSH_MAXCALC 20</span>
 00068 <span class="preprocessor"></span>
-<a name="l00071"></a><a class="code" href="group__NOsh.html#a30">00071</a> <span class="preprocessor">#define NOSH_MAXPRINT 20</span>
+<a name="l00071"></a><a class="code" href="group__NOsh.html#a31">00071</a> <span class="preprocessor">#define NOSH_MAXPRINT 20</span>
 00072 <span class="preprocessor"></span>
-<a name="l00075"></a><a class="code" href="group__NOsh.html#a31">00075</a> <span class="preprocessor">#define NOSH_MAXPOP 20</span>
+<a name="l00075"></a><a class="code" href="group__NOsh.html#a32">00075</a> <span class="preprocessor">#define NOSH_MAXPOP 20</span>
 00076 <span class="preprocessor"></span>
-<a name="l00081"></a><a class="code" href="group__NOsh.html#a32">00081</a> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a32">eNOsh_MolFormat</a> {
-00082     <a class="code" href="group__NOsh.html#a32a8">NMF_PQR</a>=0,  
-00083     <a class="code" href="group__NOsh.html#a32a9">NMF_PDB</a>=1  
+<a name="l00081"></a><a class="code" href="group__NOsh.html#a33">00081</a> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a33">eNOsh_MolFormat</a> {
+00082     <a class="code" href="group__NOsh.html#a33a9">NMF_PQR</a>=0,  
+00083     <a class="code" href="group__NOsh.html#a33a10">NMF_PDB</a>=1  
 00084 };
 00085 
-<a name="l00090"></a><a class="code" href="group__NOsh.html#a0">00090</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a32">eNOsh_MolFormat</a> <a class="code" href="group__NOsh.html#a0">NOsh_MolFormat</a>;
+<a name="l00090"></a><a class="code" href="group__NOsh.html#a0">00090</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a33">eNOsh_MolFormat</a> <a class="code" href="group__NOsh.html#a0">NOsh_MolFormat</a>;
 00091 
-<a name="l00096"></a><a class="code" href="group__NOsh.html#a33">00096</a> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a33">eNOsh_ParmFormat</a> {
-00097     <a class="code" href="group__NOsh.html#a33a10">NPF_FLAT</a>=0  
-00098 };
-00099 
-<a name="l00104"></a><a class="code" href="group__NOsh.html#a1">00104</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a33">eNOsh_ParmFormat</a> <a class="code" href="group__NOsh.html#a1">NOsh_ParmFormat</a>;
-00105 
-<a name="l00111"></a><a class="code" href="structsNOsh__calc.html">00111</a> <span class="keyword">struct </span><a class="code" href="structsNOsh__calc.html">sNOsh_calc</a> {
-00112 
-<a name="l00113"></a><a class="code" href="structsNOsh__calc.html#m0">00113</a>     <a class="code" href="structsMGparm.html">MGparm</a> *<a class="code" href="structsNOsh__calc.html#m0">mgparm</a>;         
-<a name="l00114"></a><a class="code" href="structsNOsh__calc.html#m1">00114</a>     <a class="code" href="structsFEMparm.html">FEMparm</a> *<a class="code" href="structsNOsh__calc.html#m1">femparm</a>;       
-<a name="l00115"></a><a class="code" href="structsNOsh__calc.html#m2">00115</a>     <a class="code" href="structsPBEparm.html">PBEparm</a> *<a class="code" href="structsNOsh__calc.html#m2">pbeparm</a>;       
-<a name="l00116"></a><a class="code" href="structsNOsh__calc.html#m3">00116</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh__calc.html#m3">calctype</a>;           
-00118 };
-00119 
-<a name="l00124"></a><a class="code" href="group__NOsh.html#a34">00124</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsNOsh__calc.html">sNOsh_calc</a> <a class="code" href="group__NOsh.html#a34">NOsh_calc</a>;
-00125 
-<a name="l00131"></a><a class="code" href="structsNOsh.html">00131</a> <span class="keyword">struct </span><a class="code" href="structsNOsh.html">sNOsh</a> {
-00132 
-<a name="l00133"></a><a class="code" href="structsNOsh.html#m0">00133</a>     <a class="code" href="group__NOsh.html#a34">NOsh_calc</a> <a class="code" href="structsNOsh.html#m0">calc</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXCALC</a>];        
-<a name="l00136"></a><a class="code" href="structsNOsh.html#m1">00136</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m1">ncalc</a>;                           
-<a name="l00138"></a><a class="code" href="structsNOsh.html#m2">00138</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m2">nelec</a>;                           
-<a name="l00140"></a><a class="code" href="structsNOsh.html#m3">00140</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m3">ispara</a>;                          
-<a name="l00142"></a><a class="code" href="structsNOsh.html#m4">00142</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m4">proc_rank</a>;                       
-<a name="l00144"></a><a class="code" href="structsNOsh.html#m5">00144</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m5">proc_size</a>;                       
-<a name="l00146"></a><a class="code" href="structsNOsh.html#m6">00146</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m6">bogus</a>;                           
-<a name="l00153"></a><a class="code" href="structsNOsh.html#m7">00153</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m7">elec2calc</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXCALC</a>];         
-<a name="l00168"></a><a class="code" href="structsNOsh.html#m8">00168</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m8">nmol</a>;  
-<a name="l00169"></a><a class="code" href="structsNOsh.html#m9">00169</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m9">molpath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
-<a name="l00170"></a><a class="code" href="structsNOsh.html#m10">00170</a>     <a class="code" href="group__NOsh.html#a0">NOsh_MolFormat</a> <a class="code" href="structsNOsh.html#m10">molfmt</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>];  
-<a name="l00171"></a><a class="code" href="structsNOsh.html#m11">00171</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m11">gotparm</a>;  
-<a name="l00172"></a><a class="code" href="structsNOsh.html#m12">00172</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m12">parmpath</a>[VMAX_ARGLEN];   
-<a name="l00173"></a><a class="code" href="structsNOsh.html#m13">00173</a>     <a class="code" href="group__NOsh.html#a1">NOsh_ParmFormat</a> <a class="code" href="structsNOsh.html#m13">parmfmt</a>;  
-<a name="l00174"></a><a class="code" href="structsNOsh.html#m14">00174</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m14">ndiel</a>;                           
-<a name="l00175"></a><a class="code" href="structsNOsh.html#m15">00175</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m15">dielXpath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
-<a name="l00177"></a><a class="code" href="structsNOsh.html#m16">00177</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m16">dielYpath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
-<a name="l00179"></a><a class="code" href="structsNOsh.html#m17">00179</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m17">dielZpath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
-<a name="l00181"></a><a class="code" href="structsNOsh.html#m18">00181</a>     <a class="code" href="group__Vhal.html#a24">Vdata_Format</a> <a class="code" href="structsNOsh.html#m18">dielfmt</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>];           
-<a name="l00183"></a><a class="code" href="structsNOsh.html#m19">00183</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m19">nkappa</a>;                          
-<a name="l00184"></a><a class="code" href="structsNOsh.html#m20">00184</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m20">kappapath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
-<a name="l00186"></a><a class="code" href="structsNOsh.html#m21">00186</a>     <a class="code" href="group__Vhal.html#a24">Vdata_Format</a> <a class="code" href="structsNOsh.html#m21">kappafmt</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>];          
-<a name="l00188"></a><a class="code" href="structsNOsh.html#m22">00188</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m22">ncharge</a>;                         
-<a name="l00189"></a><a class="code" href="structsNOsh.html#m23">00189</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m23">chargepath</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
-<a name="l00191"></a><a class="code" href="structsNOsh.html#m24">00191</a>     <a class="code" href="group__Vhal.html#a24">Vdata_Format</a> <a class="code" href="structsNOsh.html#m24">chargefmt</a>[<a class="code" href="group__NOsh.html#a28">NOSH_MAXMOL</a>];         
-<a name="l00193"></a><a class="code" href="structsNOsh.html#m25">00193</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m25">nprint</a>;                          
-<a name="l00194"></a><a class="code" href="structsNOsh.html#m26">00194</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m26">printwhat</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXPRINT</a>];        
-<a name="l00197"></a><a class="code" href="structsNOsh.html#m27">00197</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m27">printnarg</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXPRINT</a>];        
-<a name="l00199"></a><a class="code" href="structsNOsh.html#m28">00199</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m28">printcalc</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXPRINT</a>][<a class="code" href="group__NOsh.html#a31">NOSH_MAXPOP</a>]; 
-<a name="l00200"></a><a class="code" href="structsNOsh.html#m29">00200</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m29">printop</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXPRINT</a>][<a class="code" href="group__NOsh.html#a31">NOSH_MAXPOP</a>];  
-<a name="l00202"></a><a class="code" href="structsNOsh.html#m30">00202</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m30">parsed</a>;                          
-<a name="l00204"></a><a class="code" href="structsNOsh.html#m31">00204</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m31">elecname</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXCALC</a>][VMAX_ARGLEN]; 
-00207 };
-00208 
-<a name="l00213"></a><a class="code" href="group__NOsh.html#a2">00213</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsNOsh.html">sNOsh</a> <a class="code" href="group__NOsh.html#a2">NOsh</a>;
-00214 
-00215 <span class="comment">/* </span>
-00216 <span class="comment">// Class NOsh: Inlineable methods (mcsh.c)</span>
-00218 <span class="comment">#if !defined(VINLINE_NOSH)</span>
-00226 <span class="comment">    char* NOsh_getMolpath(NOsh *thee, int imol);</span>
-00227 <span class="comment"></span>
-00235 <span class="comment">    char* NOsh_getDielXpath(NOsh *thee, int imap);</span>
-00236 <span class="comment"></span>
-00244 <span class="comment">    char* NOsh_getDielYpath(NOsh *thee, int imap);</span>
-00245 <span class="comment"></span>
-00253 <span class="comment">    char* NOsh_getDielZpath(NOsh *thee, int imap);</span>
-00254 <span class="comment"></span>
-00262 <span class="comment">    char* NOsh_getKappapath(NOsh *thee, int imap);</span>
-00263 <span class="comment"></span>
-00271 <span class="comment">    char* NOsh_getChargepath(NOsh *thee, int imap);</span>
-00272 <span class="comment"></span>
-00280 <span class="comment">    NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);</span>
-00281 <span class="comment"></span>
-00289 <span class="comment">    int NOsh_getDielfmt(NOsh *thee, int imap);</span>
-00290 <span class="comment"></span>
-00298 <span class="comment">    int NOsh_getKappafmt(NOsh *thee, int imap);</span>
-00299 <span class="comment"></span>
-00307 <span class="comment">    int NOsh_getChargefmt(NOsh *thee, int imap);</span>
-00308 <span class="comment"></span>
-00309 <span class="comment">#else</span>
-00310 <span class="comment"></span>
-00311 <span class="comment">#   define NOsh_getMolpath(thee, imol) ((thee)-&gt;molpath[(imol)])</span>
-00312 <span class="comment">#   define NOsh_getDielXpath(thee, imol) ((thee)-&gt;dielXpath[(imol)])</span>
-00313 <span class="comment">#   define NOsh_getDielYpath(thee, imol) ((thee)-&gt;dielYpath[(imol)])</span>
-00314 <span class="comment">#   define NOsh_getDielZpath(thee, imol) ((thee)-&gt;dielZpath[(imol)])</span>
-00315 <span class="comment">#   define NOsh_getKappapath(thee, imol) ((thee)-&gt;kappapath[(imol)])</span>
-00316 <span class="comment">#   define NOsh_getChargepath(thee, imol) ((thee)-&gt;chargepath[(imol)])</span>
-00317 <span class="comment">#   define NOsh_getCalc(thee, icalc) ((thee)-&gt;calc[(icalc)])</span>
-00318 <span class="comment">#   define NOsh_getDielfmt(thee, imap) ((thee)-&gt;dielfmt[(imap)])</span>
-00319 <span class="comment">#   define NOsh_getKappafmt(thee, imap) ((thee)-&gt;kappafmt[(imap)])</span>
-00320 <span class="comment">#   define NOsh_getChargefmt(thee, imap) ((thee)-&gt;chargefmt[(imap)])</span>
-00321 <span class="comment"></span>
-00322 <span class="comment">#endif</span>
+<a name="l00096"></a><a class="code" href="group__NOsh.html#a34">00096</a> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a34">eNOsh_CalcType</a> {
+00097     <a class="code" href="group__NOsh.html#a34a11">NCT_MG</a>=0,  
+00098     <a class="code" href="group__NOsh.html#a34a12">NCT_FEM</a>=1  
+00099 };
+00100 
+<a name="l00105"></a><a class="code" href="group__NOsh.html#a1">00105</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a34">eNOsh_CalcType</a> <a class="code" href="group__NOsh.html#a1">NOsh_CalcType</a>;
+00106 
+<a name="l00111"></a><a class="code" href="group__NOsh.html#a35">00111</a> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a35">eNOsh_ParmFormat</a> {
+00112     <a class="code" href="group__NOsh.html#a35a13">NPF_FLAT</a>=0  
+00113 };
+00114 
+<a name="l00119"></a><a class="code" href="group__NOsh.html#a2">00119</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__NOsh.html#a35">eNOsh_ParmFormat</a> <a class="code" href="group__NOsh.html#a2">NOsh_ParmFormat</a>;
+00120 
+<a name="l00126"></a><a class="code" href="structsNOsh__calc.html">00126</a> <span class="keyword">struct </span><a class="code" href="structsNOsh__calc.html">sNOsh_calc</a> {
+00127 
+<a name="l00128"></a><a class="code" href="structsNOsh__calc.html#m0">00128</a>     <a class="code" href="structsMGparm.html">MGparm</a> *<a class="code" href="structsNOsh__calc.html#m0">mgparm</a>;         
+<a name="l00129"></a><a class="code" href="structsNOsh__calc.html#m1">00129</a>     <a class="code" href="structsFEMparm.html">FEMparm</a> *<a class="code" href="structsNOsh__calc.html#m1">femparm</a>;       
+<a name="l00130"></a><a class="code" href="structsNOsh__calc.html#m2">00130</a>     <a class="code" href="structsPBEparm.html">PBEparm</a> *<a class="code" href="structsNOsh__calc.html#m2">pbeparm</a>;       
+<a name="l00131"></a><a class="code" href="structsNOsh__calc.html#m3">00131</a>     <a class="code" href="group__NOsh.html#a1">NOsh_CalcType</a> <a class="code" href="structsNOsh__calc.html#m3">calctype</a>; 
+00133 };
+00134 
+<a name="l00139"></a><a class="code" href="group__NOsh.html#a36">00139</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsNOsh__calc.html">sNOsh_calc</a> <a class="code" href="group__NOsh.html#a36">NOsh_calc</a>;
+00140 
+<a name="l00146"></a><a class="code" href="structsNOsh.html">00146</a> <span class="keyword">struct </span><a class="code" href="structsNOsh.html">sNOsh</a> {
+00147 
+<a name="l00148"></a><a class="code" href="structsNOsh.html#m0">00148</a>     <a class="code" href="group__NOsh.html#a36">NOsh_calc</a> <a class="code" href="structsNOsh.html#m0">calc</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXCALC</a>];        
+<a name="l00151"></a><a class="code" href="structsNOsh.html#m1">00151</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m1">ncalc</a>;                           
+<a name="l00153"></a><a class="code" href="structsNOsh.html#m2">00153</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m2">nelec</a>;                           
+<a name="l00155"></a><a class="code" href="structsNOsh.html#m3">00155</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m3">ispara</a>;                          
+<a name="l00157"></a><a class="code" href="structsNOsh.html#m4">00157</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m4">proc_rank</a>;                       
+<a name="l00159"></a><a class="code" href="structsNOsh.html#m5">00159</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m5">proc_size</a>;                       
+<a name="l00161"></a><a class="code" href="structsNOsh.html#m6">00161</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m6">bogus</a>;                           
+<a name="l00168"></a><a class="code" href="structsNOsh.html#m7">00168</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m7">elec2calc</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXCALC</a>];         
+<a name="l00183"></a><a class="code" href="structsNOsh.html#m8">00183</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m8">nmol</a>;  
+<a name="l00184"></a><a class="code" href="structsNOsh.html#m9">00184</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m9">molpath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
+<a name="l00185"></a><a class="code" href="structsNOsh.html#m10">00185</a>     <a class="code" href="group__NOsh.html#a0">NOsh_MolFormat</a> <a class="code" href="structsNOsh.html#m10">molfmt</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>];  
+<a name="l00186"></a><a class="code" href="structsNOsh.html#m11">00186</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m11">gotparm</a>;  
+<a name="l00187"></a><a class="code" href="structsNOsh.html#m12">00187</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m12">parmpath</a>[VMAX_ARGLEN];   
+<a name="l00188"></a><a class="code" href="structsNOsh.html#m13">00188</a>     <a class="code" href="group__NOsh.html#a2">NOsh_ParmFormat</a> <a class="code" href="structsNOsh.html#m13">parmfmt</a>;  
+<a name="l00189"></a><a class="code" href="structsNOsh.html#m14">00189</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m14">ndiel</a>;                           
+<a name="l00190"></a><a class="code" href="structsNOsh.html#m15">00190</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m15">dielXpath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
+<a name="l00192"></a><a class="code" href="structsNOsh.html#m16">00192</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m16">dielYpath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
+<a name="l00194"></a><a class="code" href="structsNOsh.html#m17">00194</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m17">dielZpath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN]; 
+<a name="l00196"></a><a class="code" href="structsNOsh.html#m18">00196</a>     <a class="code" href="group__Vhal.html#a26">Vdata_Format</a> <a class="code" href="structsNOsh.html#m18">dielfmt</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>];           
+<a name="l00198"></a><a class="code" href="structsNOsh.html#m19">00198</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m19">nkappa</a>;                          
+<a name="l00199"></a><a class="code" href="structsNOsh.html#m20">00199</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m20">kappapath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
+<a name="l00201"></a><a class="code" href="structsNOsh.html#m21">00201</a>     <a class="code" href="group__Vhal.html#a26">Vdata_Format</a> <a class="code" href="structsNOsh.html#m21">kappafmt</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>];          
+<a name="l00203"></a><a class="code" href="structsNOsh.html#m22">00203</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m22">ncharge</a>;                         
+<a name="l00204"></a><a class="code" href="structsNOsh.html#m23">00204</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m23">chargepath</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>][VMAX_ARGLEN];   
+<a name="l00206"></a><a class="code" href="structsNOsh.html#m24">00206</a>     <a class="code" href="group__Vhal.html#a26">Vdata_Format</a> <a class="code" href="structsNOsh.html#m24">chargefmt</a>[<a class="code" href="group__NOsh.html#a29">NOSH_MAXMOL</a>];         
+<a name="l00208"></a><a class="code" href="structsNOsh.html#m25">00208</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m25">nprint</a>;                          
+<a name="l00209"></a><a class="code" href="structsNOsh.html#m26">00209</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m26">printwhat</a>[<a class="code" href="group__NOsh.html#a31">NOSH_MAXPRINT</a>];        
+<a name="l00212"></a><a class="code" href="structsNOsh.html#m27">00212</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m27">printnarg</a>[<a class="code" href="group__NOsh.html#a31">NOSH_MAXPRINT</a>];        
+<a name="l00214"></a><a class="code" href="structsNOsh.html#m28">00214</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m28">printcalc</a>[<a class="code" href="group__NOsh.html#a31">NOSH_MAXPRINT</a>][<a class="code" href="group__NOsh.html#a32">NOSH_MAXPOP</a>]; 
+<a name="l00215"></a><a class="code" href="structsNOsh.html#m29">00215</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m29">printop</a>[<a class="code" href="group__NOsh.html#a31">NOSH_MAXPRINT</a>][<a class="code" href="group__NOsh.html#a32">NOSH_MAXPOP</a>];  
+<a name="l00217"></a><a class="code" href="structsNOsh.html#m30">00217</a>     <span class="keywordtype">int</span> <a class="code" href="structsNOsh.html#m30">parsed</a>;                          
+<a name="l00219"></a><a class="code" href="structsNOsh.html#m31">00219</a>     <span class="keywordtype">char</span> <a class="code" href="structsNOsh.html#m31">elecname</a>[<a class="code" href="group__NOsh.html#a30">NOSH_MAXCALC</a>][VMAX_ARGLEN]; 
+00222 };
+00223 
+<a name="l00228"></a><a class="code" href="group__NOsh.html#a3">00228</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsNOsh.html">sNOsh</a> <a class="code" href="group__NOsh.html#a3">NOsh</a>;
+00229 
+00230 <span class="comment">/* </span>
+00231 <span class="comment">// Class NOsh: Inlineable methods (mcsh.c)</span>
+00233 <span class="comment">#if !defined(VINLINE_NOSH)</span>
+00241 <span class="comment">    char* NOsh_getMolpath(NOsh *thee, int imol);</span>
+00242 <span class="comment"></span>
+00250 <span class="comment">    char* NOsh_getDielXpath(NOsh *thee, int imap);</span>
+00251 <span class="comment"></span>
+00259 <span class="comment">    char* NOsh_getDielYpath(NOsh *thee, int imap);</span>
+00260 <span class="comment"></span>
+00268 <span class="comment">    char* NOsh_getDielZpath(NOsh *thee, int imap);</span>
+00269 <span class="comment"></span>
+00277 <span class="comment">    char* NOsh_getKappapath(NOsh *thee, int imap);</span>
+00278 <span class="comment"></span>
+00286 <span class="comment">    char* NOsh_getChargepath(NOsh *thee, int imap);</span>
+00287 <span class="comment"></span>
+00295 <span class="comment">    NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);</span>
+00296 <span class="comment"></span>
+00304 <span class="comment">    int NOsh_getDielfmt(NOsh *thee, int imap);</span>
+00305 <span class="comment"></span>
+00313 <span class="comment">    int NOsh_getKappafmt(NOsh *thee, int imap);</span>
+00314 <span class="comment"></span>
+00322 <span class="comment">    int NOsh_getChargefmt(NOsh *thee, int imap);</span>
 00323 <span class="comment"></span>
-00324 <span class="comment"></span>
-00325 <span class="comment">/* </span>
-00326 <span class="comment">// Class NOsh: Non-inlineable methods (mcsh.c)</span>
-00328 <span class="comment"></span>
-00336 <span class="comment">int NOsh_printWhat(NOsh *thee, int iprint);</span>
-00337 <span class="comment"></span>
-00347 <span class="comment">char* NOsh_elecname(NOsh *thee, int ielec);</span>
-00348 <span class="comment"></span>
-00356 <span class="comment">int NOsh_elec2calc(NOsh *thee, int icalc);</span>
-00357 <span class="comment"></span>
-00365 <span class="comment">int NOsh_printNarg(NOsh *thee, int iprint);</span>
-00366 <span class="comment"></span>
-00375 <span class="comment">int NOsh_printOp(NOsh *thee, int iprint, int iarg);</span>
-00376 <span class="comment"></span>
-00387 <span class="comment">int NOsh_printCalc(NOsh *thee, int iprint, int iarg);</span>
-00388 <span class="comment"></span>
-00398 <span class="comment">NOsh* NOsh_ctor(int rank, int size);</span>
-00399 <span class="comment"></span>
-00410 <span class="comment">int   NOsh_ctor2(NOsh *thee, int rank, int size);</span>
-00411 <span class="comment"></span>
-00417 <span class="comment">void  NOsh_dtor(NOsh **thee);</span>
-00418 <span class="comment"></span>
-00424 <span class="comment">void  NOsh_dtor2(NOsh *thee);</span>
-00425 <span class="comment"></span>
-00433 <span class="comment">int   NOsh_parse(NOsh *thee, Vio *sock);</span>
-00434 <span class="comment"></span>
-00443 <span class="comment">int   NOsh_parseFile(NOsh *thee, char *filename);</span>
-00444 <span class="comment"></span>
-00458 <span class="comment">int NOsh_setupMGMANUAL(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
+00324 <span class="comment">#else</span>
+00325 <span class="comment"></span>
+00326 <span class="comment">#   define NOsh_getMolpath(thee, imol) ((thee)-&gt;molpath[(imol)])</span>
+00327 <span class="comment">#   define NOsh_getDielXpath(thee, imol) ((thee)-&gt;dielXpath[(imol)])</span>
+00328 <span class="comment">#   define NOsh_getDielYpath(thee, imol) ((thee)-&gt;dielYpath[(imol)])</span>
+00329 <span class="comment">#   define NOsh_getDielZpath(thee, imol) ((thee)-&gt;dielZpath[(imol)])</span>
+00330 <span class="comment">#   define NOsh_getKappapath(thee, imol) ((thee)-&gt;kappapath[(imol)])</span>
+00331 <span class="comment">#   define NOsh_getChargepath(thee, imol) ((thee)-&gt;chargepath[(imol)])</span>
+00332 <span class="comment">#   define NOsh_getCalc(thee, icalc) ((thee)-&gt;calc[(icalc)])</span>
+00333 <span class="comment">#   define NOsh_getDielfmt(thee, imap) ((thee)-&gt;dielfmt[(imap)])</span>
+00334 <span class="comment">#   define NOsh_getKappafmt(thee, imap) ((thee)-&gt;kappafmt[(imap)])</span>
+00335 <span class="comment">#   define NOsh_getChargefmt(thee, imap) ((thee)-&gt;chargefmt[(imap)])</span>
+00336 <span class="comment"></span>
+00337 <span class="comment">#endif</span>
+00338 <span class="comment"></span>
+00339 <span class="comment"></span>
+00340 <span class="comment">/* </span>
+00341 <span class="comment">// Class NOsh: Non-inlineable methods (mcsh.c)</span>
+00343 <span class="comment"></span>
+00351 <span class="comment">int NOsh_printWhat(NOsh *thee, int iprint);</span>
+00352 <span class="comment"></span>
+00362 <span class="comment">char* NOsh_elecname(NOsh *thee, int ielec);</span>
+00363 <span class="comment"></span>
+00371 <span class="comment">int NOsh_elec2calc(NOsh *thee, int icalc);</span>
+00372 <span class="comment"></span>
+00380 <span class="comment">int NOsh_printNarg(NOsh *thee, int iprint);</span>
+00381 <span class="comment"></span>
+00390 <span class="comment">int NOsh_printOp(NOsh *thee, int iprint, int iarg);</span>
+00391 <span class="comment"></span>
+00402 <span class="comment">int NOsh_printCalc(NOsh *thee, int iprint, int iarg);</span>
+00403 <span class="comment"></span>
+00413 <span class="comment">NOsh* NOsh_ctor(int rank, int size);</span>
+00414 <span class="comment"></span>
+00425 <span class="comment">int   NOsh_ctor2(NOsh *thee, int rank, int size);</span>
+00426 <span class="comment"></span>
+00432 <span class="comment">void  NOsh_dtor(NOsh **thee);</span>
+00433 <span class="comment"></span>
+00439 <span class="comment">void  NOsh_dtor2(NOsh *thee);</span>
+00440 <span class="comment"></span>
+00448 <span class="comment">int   NOsh_parse(NOsh *thee, Vio *sock);</span>
+00449 <span class="comment"></span>
+00458 <span class="comment">int   NOsh_parseFile(NOsh *thee, char *filename);</span>
 00459 <span class="comment"></span>
-00474 <span class="comment">int NOsh_setupMGAUTO(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
-00475 <span class="comment"></span>
-00490 <span class="comment">int NOsh_setupMGPARA(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
-00491 <span class="comment"></span>
-00492 <span class="comment"></span>
-00493 <span class="comment">#endif </span>
-00494 <span class="comment"></span>
-00495 <span class="comment"></span>
-</pre></div><hr><address style="align: right;"><small>Generated on Tue Apr 13 08:51:49 2004 for APBS by
+00473 <span class="comment">int NOsh_setupMGMANUAL(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
+00474 <span class="comment"></span>
+00489 <span class="comment">int NOsh_setupMGAUTO(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
+00490 <span class="comment"></span>
+00505 <span class="comment">int NOsh_setupMGPARA(NOsh *thee, MGparm *mgparm, PBEparm *pbeparm);</span>
+00506 <span class="comment"></span>
+00507 <span class="comment"></span>
+00508 <span class="comment">#endif </span>
+00509 <span class="comment"></span>
+00510 <span class="comment"></span>
+</pre></div><hr><address style="align: right;"><small>Generated on Mon Apr 19 14:38:39 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
