@@ -34,9 +34,9 @@
 //////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// File:     vcell.c
+// File:     vacc.c
 //
-// Purpose:  Class Valist: methods.
+// Purpose:  Class Vacc: methods.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -95,7 +95,6 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     /* Grid variables */
     int i;
     double x, y, z;
-    double rx, ry, rz;
     double x_max, y_max, z_max;
     double x_min, y_min, z_min;
     int ii, jj, kk;
