@@ -138,7 +138,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     thee->nz = nz;
     thee->n = nx*ny*nz;
     if ((nx < 3) || (ny < 3) || (nz < 3)) {
-        Vnm_print(2, "Vacc_ctor2:  nx, ny, nz must be greater than 2!\n);
+        Vnm_print(2, "Vacc_ctor2:  nx, ny, nz must be greater than 2!\n");
         return 0;
     }
     Vnm_print(0, "Vacc_ctor2:  Using %d x %d x %d hash table\n", nx, ny, nz);
