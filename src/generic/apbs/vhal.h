@@ -82,6 +82,27 @@ enum Vsurf_Meth {
 typedef enum Vsurf_Meth Vsurf_Meth;
 
 /**
+ * @ingroup  Vhal
+ * @author  Nathan Baker
+ * @brief  Types of boundary conditions 
+ */
+enum Vbcfl {
+    BCFL_ZERO=0,  /**< Zero Dirichlet boundary conditions */
+    BCFL_SDH=1,  /**< Single-sphere Debye-Huckel Dirichlet boundary 
+                  * condition */
+    BCFL_MDH=2,  /**< Multiple-sphere Debye-Huckel Dirichlet boundary 
+                  * condition */
+    BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
+    BCFL_FOCUS=4  /**< Focusing Dirichlet boundary condition */
+};
+
+/**
+ * @brief  Declare Vbcfl type
+ * @ingroup  Vhal
+ */
+typedef enum Vbcfl Vbcfl;
+
+/**
  *  @ingroup Vhal
  *  @author  Nathan Baker
  *  @brief   Types of charge discretization methods

@@ -55,6 +55,37 @@
 #include "apbs/vhal.h"
 
 /**
+ * @brief  Calculation type 
+ * @ingroup MGparm
+ */
+enum MGparm_CalcType {
+    MCT_MAN=0,  /**< mg-manual */
+    MCT_AUT=1,  /**< mg-auto */
+    MCT_PAR=2,  /**< mg-para */
+    MCT_DUM=3  /**< mg-dummy */
+};
+
+/**
+ * @brief  Declare MGparm_CalcType type
+ * @ingroup  MGparm
+ */
+typedef enum MGparm_CalcType MGparm_CalcType;
+
+/**
+ * @brief  Centering method
+ * @ingroup MGparm
+ */
+enum MGparm_CentMeth {
+    MCM_PNT=0,  /**< Center on a molecule */
+    MCM_MOL=1  /**< Center on a point */
+};
+
+/**
+ * @brief  Declare MGparm_CentMeth type
+ * @ingroup  MGparm
+ */
+typedef enum MGparm_CentMeth MGparm_CentMeth;
+/**
  *  @struct  MGparm
  *  @ingroup MGparm
  *  @author  Nathan Baker
@@ -65,84 +96,73 @@
  */
 struct MGparm {
 
-    int type;                   /**< What type of MG calculation?
-                                 *   \li 0: sequential manual
-                                 *   \li 1: sequential auto-focus
-                                 *   \li 2: parallel auto-focus 
-                                 *   \li 3: dummy calculation for coefficient
-                                 *          I/O */
-    int parsed;                 /**< Has this structure been filled? (0 = no,
-                                 * 1 = yes) */
+    MGparm_CalcType type;  /**< What type of MG calculation? */
+    int parsed;  /**< Has this structure been filled? (0 = no, 1 = yes) */
 
     /* *** GENERIC PARAMETERS *** */
-    int dime[3];               /**< Grid dimensions */
-    int setdime;               /**< Flag, @see dime */
+    int dime[3];  /**< Grid dimensions */
+    int setdime;  /**< Flag, @see dime */
 
     /* *** TYPE 0 PARAMETERS (SEQUENTIAL MANUAL) *** */
-    int nlev;                  /**< Levels in multigrid hierarchy 
-                                *   @deprecated Just ignored now */
-    int setnlev;               /**< Flag, @see nlev */
-    double grid[3];            /**< Grid spacings */
-    int setgrid;               /**< Flag, @see grid */
-    double glen[3];            /**< Grid side lengths. */
-    int setglen;               /**< Flag, @see glen */
-    int cmeth;                 /**< Centering method:  
-                                *   \li 0: center on point, 
-                                *   \li 1: center on molecule */
-    double center[3];          /**< Grid center. If ispart = 0, then this is
-				* only meaningful if cmeth = 0.  However, if
-				* ispart = 1 and cmeth = 0, then this is the
-				* center of the non-disjoint (overlapping)
-				* partition.  If ispart = 1 and cmeth = 1, then
-				* this is the vector that must be added to the
-				* center of the molecule to give the center of
-				* the non-disjoint partition.  */
-    int centmol;               /**< Particular molecule on which we want to
-                                * center the grid */
-    int setgcent;              /**< Flag, @see cmeth */
+    int nlev;  /**< Levels in multigrid hierarchy 
+                *   @deprecated Just ignored now */
+    int setnlev;  /**< Flag, @see nlev */
+    double grid[3];  /**< Grid spacings */
+    int setgrid;  /**< Flag, @see grid */
+    double glen[3];  /**< Grid side lengths. */
+    int setglen;  /**< Flag, @see glen */
+    MGparm_CentMeth cmeth;  /**< Centering method */  
+    double center[3];  /**< Grid center. If ispart = 0, then this is
+                        * only meaningful if cmeth = 0.  However, if
+                        * ispart = 1 and cmeth = MCM_PNT, then this is the
+                        * center of the non-disjoint (overlapping)
+                        * partition.  If ispart = 1 and cmeth = MCM_MOL, then
+                        * this is the vector that must be added to the
+                        * center of the molecule to give the center of
+                        * the non-disjoint partition.  */
+    int centmol;  /**< Particular molecule on which we want to center the 
+                   * grid */
+    int setgcent;  /**< Flag, @see cmeth */
 
     /* ******** TYPE 1 & 2 PARAMETERS (SEQUENTIAL & PARALLEL AUTO-FOCUS) *** */
-    double cglen[3];           /**< Coarse grid side lengths */
-    int setcglen;              /**< Flag, @see cglen */
-    double fglen[3];           /**< Fine grid side lengths */
-    int setfglen;              /**< Flag, @see fglen */
-    int ccmeth;                /**< Coarse grid centering method:  0 => center
-				* on point, 1 => center on molecule */
-    double ccenter[3];         /**< Coarse grid center.  */
-    int ccentmol;              /**< Particular molecule on which we want to
-                                * center the coarse grid */
-    int setcgcent;             /**< Flag, @see ccmeth */
-    int fcmeth;                /**< Fine grid centering method:  0 => center on
-                                * point, 1 => center on molecule */
-    double fcenter[3];         /**< Fine grid center.  */
-    int fcentmol;              /**< Particular molecule on which we want to
-                                * center the fine grid */
-    int setfgcent;             /**< Flag, @see fcmeth */
+    double cglen[3];  /**< Coarse grid side lengths */
+    int setcglen;  /**< Flag, @see cglen */
+    double fglen[3];  /**< Fine grid side lengths */
+    int setfglen;  /**< Flag, @see fglen */
+    MGparm_CentMeth ccmeth;  /**< Coarse grid centering method */
+    double ccenter[3];  /**< Coarse grid center.  */
+    int ccentmol;  /**< Particular molecule on which we want to center the 
+                    * coarse grid */
+    int setcgcent;  /**< Flag, @see ccmeth */
+    MGparm_CentMeth fcmeth;  /**< Fine grid centering method */
+    double fcenter[3];  /**< Fine grid center.  */
+    int fcentmol;  /**< Particular molecule on which we want to center the 
+                    * fine grid */
+    int setfgcent;  /**< Flag, @see fcmeth */
 
 
     /* ********* TYPE 2 PARAMETERS (PARALLEL AUTO-FOCUS) ******** */
-    double partDisjCenterShift[3];       /**< When added to the actual (local)
-                                          * mesh center, this gives the center
-                                          * of the disjoint partitions */
-    double partDisjLength[3];            /**< This gives the lengths of the
-                                          * disjoint partitions */
-    int partDisjOwnSide[6];              /**< Tells whether the boundary points
-                                          * are ours (1) or not (0) */
-    double partOlapCenterShift[3];       /**< When added to the actual (local)
-                                          * mesh center, this gives the center
-                                          * of the overlapping partitions */
-    double partOlapLength[3];            /**< This gives the lengths of the
-                                          * overlapping partitions */
+    double partDisjCenterShift[3];  /**< When added to the actual (local)
+                                     * mesh center, this gives the center
+                                     * of the disjoint partitions */
+    double partDisjLength[3];  /**< This gives the lengths of the disjoint 
+                                * partitions */
+    int partDisjOwnSide[6];  /**< Tells whether the boundary points are ours 
+                              * (1) or not (0) */
+    double partOlapCenterShift[3];  /**< When added to the actual (local)
+                                     * mesh center, this gives the center
+                                     * of the overlapping partitions */
+    double partOlapLength[3];  /**< This gives the lengths of the
+                                * overlapping partitions */
 
-    int pdime[3];                        /**< Grid of processors to be used in
-                                          * calculation */
-    int setpdime;                        /**< Flag, @see pdime */
-    int proc_rank;                       /**< Rank of this processor */
-    int setrank;                         /**< Flag, @see proc_rank */
-    int proc_size;                       /**< Total number of processors */
-    int setsize;                         /**< Flag, @see proc_size */
-    double ofrac;                        /**< Overlap fraction between procs */
-    int setofrac;                        /**< Flag, @see ofrac */
+    int pdime[3];  /**< Grid of processors to be used in calculation */
+    int setpdime;  /**< Flag, @see pdime */
+    int proc_rank;  /**< Rank of this processor */
+    int setrank;  /**< Flag, @see proc_rank */
+    int proc_size;  /**< Total number of processors */
+    int setsize;  /**< Flag, @see proc_size */
+    double ofrac;  /**< Overlap fraction between procs */
+    int setofrac;  /**< Flag, @see ofrac */
 
 };
 
@@ -276,24 +296,18 @@ VEXTERNC double MGparm_getPartOlapCenterShiftZ(MGparm *thee);
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   type Type of MG calculation
- *                \li 0: sequential manual
- *                \li 1: sequential auto-focus
- *                \li 2: parallel auto-focus
  *  @returns Newly allocated and initialized MGparm object
  */
-VEXTERNC MGparm*  MGparm_ctor(int type);
+VEXTERNC MGparm*  MGparm_ctor(MGparm_CalcType type);
 
 /** @brief   FORTRAN stub to construct MGparm object
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee Space for MGparm object
  *  @param   type Type of MG calculation
- *                \li 0: sequential manual
- *                \li 1: sequential auto-focus
- *                \li 2: parallel auto-focus
  *  @returns 1 if succesful, 0 otherwise
  */
-VEXTERNC int      MGparm_ctor2(MGparm *thee, int type);
+VEXTERNC int      MGparm_ctor2(MGparm *thee, MGparm_CalcType type);
 
 /** @brief   Object destructor
  *  @ingroup MGparm

@@ -46,18 +46,12 @@
 #include "apbs/nosh.h"
 #include "apbs/vstring.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Private method declaration
-/////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock);
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock);
-VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm);
+VEXTERNC int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm);
 VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_NOSH)
 
     VPUBLIC char* NOsh_getMolpath(NOsh *thee, int imol) {
@@ -113,31 +107,31 @@ VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
 
 #endif /* if !defined(VINLINE_NOSH) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
 VPUBLIC int NOsh_printWhat(NOsh *thee, int iprint) {
     VASSERT(thee != VNULL);
     VASSERT(iprint < thee->nprint);
     return thee->printwhat[iprint];
 }
+
 VPUBLIC int NOsh_printNarg(NOsh *thee, int iprint) {
     VASSERT(thee != VNULL);
 	VASSERT(iprint < thee->nprint);
     return thee->printnarg[iprint];
 }
+
 VPUBLIC int NOsh_elec2calc(NOsh *thee, int icalc) {
     VASSERT(thee != VNULL);
 	VASSERT(icalc < thee->ncalc);
     return thee->elec2calc[icalc];
 }
+
 VPUBLIC int NOsh_printOp(NOsh *thee, int iprint, int iarg) {
     VASSERT(thee != VNULL);
     VASSERT(iprint < thee->nprint);
     VASSERT(iarg < thee->printnarg[iprint]);
     return thee->printop[iprint][iarg];
 }
+
 VPUBLIC int NOsh_printCalc(NOsh *thee, int iprint, int iarg) {
     VASSERT(thee != VNULL);
     VASSERT(iprint < thee->nprint);
@@ -145,11 +139,6 @@ VPUBLIC int NOsh_printCalc(NOsh *thee, int iprint, int iarg) {
     return thee->printcalc[iprint][iarg];
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:   NOsh_ctor
-//
-// Author:    Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC NOsh* NOsh_ctor(int rank, int size) {
 
     /* Set up the structure */
@@ -161,11 +150,6 @@ VPUBLIC NOsh* NOsh_ctor(int rank, int size) {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_ctor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
 
     int i;
@@ -194,11 +178,6 @@ VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
     return 1; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void NOsh_dtor(NOsh **thee) {
     if ((*thee) != VNULL) {
         NOsh_dtor2(*thee);
@@ -207,11 +186,6 @@ VPUBLIC void NOsh_dtor(NOsh **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_dtor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void NOsh_dtor2(NOsh *thee) { 
    
     int i;
@@ -226,11 +200,6 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parseFile
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int NOsh_parseFile(NOsh *thee, char *filename) {
 
     Vio *sock;
@@ -243,11 +212,6 @@ VPUBLIC int NOsh_parseFile(NOsh *thee, char *filename) {
     return rc;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parse
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
  
     char *MCwhiteChars = " =,;\t\n";
@@ -318,17 +282,6 @@ nkappa=%d, ncharge=%d)\n", thee->nmol, thee->ndiel, thee->nkappa, thee->ncharge)
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parseREAD
-//
-// Purpose:  Parse an input file READ section
-//
-// Returns:  1 if successful, 0 otherwise
-//
-// Notes:    Should only be called from NOsh_parse()
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
@@ -462,17 +415,6 @@ section!\n");
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parsePRINT
-//
-// Purpose:  Parse an input file PRINT section
-//
-// Returns:  1 if successful, 0 otherwise
-//
-// Notes:    Should only be called from NOsh_parse()
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
@@ -599,21 +541,10 @@ section!\n");
 
 }
 
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parseELEC
-//
-// Purpose:  Parse an input file ELEC section
-//
-// Returns:  1 if successful, 0 otherwise
-//
-// Notes:    Should only be called from NOsh_parse()
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
  
     MGparm *tmgparms[NOSH_MAXCALC];
+    MGparm_CalcType type;
     int i;
 
     char tok[VMAX_BUFSIZE];
@@ -647,31 +578,19 @@ run!\n");
     /* The next token HAS to be the method */
     if (Vio_scanf(sock, "%s", tok) == 1) {
         if (Vstring_strcasecmp(tok, "mg-manual") == 0) {
-            return NOsh_parseMG(thee, sock, 0);
+            type = MCT_MAN;
+            return NOsh_parseMG(thee, sock, type);
         } else if (Vstring_strcasecmp(tok, "mg-auto") == 0) {
-            return NOsh_parseMG(thee, sock, 1);
+            type = MCT_AUT;
+            return NOsh_parseMG(thee, sock, type);
         } else if (Vstring_strcasecmp(tok, "mg-para") == 0) {
-            return NOsh_parseMG(thee, sock, 2);
+            type = MCT_PAR;
+            return NOsh_parseMG(thee, sock, type);
         } else if (Vstring_strcasecmp(tok, "mg-dummy") == 0) {
-            return NOsh_parseMG(thee, sock, 3);
-        } else if (Vstring_strcasecmp(tok, "fem") == 0) {
-            /* Check to see if he have any room left for this type of
-             * calculation, if so: set the calculation type, update the number
-             * of calculations of this type, and parse the rest of the section
-             */
-            if (thee->ncalc >= NOSH_MAXCALC) {
-                Vnm_print(2, "NOsh:  Too many calculations in this run!\n");
-                Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
-                  NOSH_MAXCALC);
-                return 1;
-            }
-            (thee->ncalc)++;
-            thee->calc[thee->ncalc - 1].calctype = 1;
-            Vnm_print(0, "NOsh: Parsing parameters for FEM calculation #%d\n",
-              thee->ncalc);
-            thee->calc[thee->ncalc-1].femparm = FEMparm_ctor();
-            thee->elec2calc[thee->nelec-1] = thee->ncalc-1;
-            return NOsh_parseFEM(thee,sock,thee->calc[thee->ncalc-1].femparm);
+            type = MCT_DUM;
+            return NOsh_parseMG(thee, sock, type);
+        } else if (Vstring_strcasecmp(tok, "fe-manual") == 0) {
+            return NOsh_parseFEM(thee, sock, FCT_MAN);
         } else {
             Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") must be the first keyword in the ELEC section\n");
             return 0;
@@ -687,39 +606,4 @@ run!\n");
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  NOsh_parseFEM
-//
-// Purpose:  Parse an input file ELEC section for the FEM method
-//
-// Returns:  1 if successful, 0 otherwise
-//
-// Notes:    Should only be called from NOsh_parse()
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int NOsh_parseFEM(NOsh *thee, Vio *sock, FEMparm *parm) {
 
-    if (thee == VNULL) {
-        Vnm_print(2, "NOsh_parseFEM:  Got NULL thee!\n");
-        return 0;
-    }
-
-    if (parm == VNULL) {
-        Vnm_print(2, "NOsh_parseFEM:  Got NULL parm!\n");
-        return 0;
-    }
-
-    if (sock == VNULL) {
-        Vnm_print(2, "NOsh_parseFEM:  Got pointer to NULL socket!\n");
-        return 0;
-    }
-
-    if (thee->parsed) {
-        Vnm_print(2, "NOsh_parseFEM:  Already parsed an input file!\n");
-        return 0;
-    }
-
-    Vnm_print(2, "NOsh_parseFEM:  FEM not availble yet; igoring this section!\n");
-    return 1;
-}

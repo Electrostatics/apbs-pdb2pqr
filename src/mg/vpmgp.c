@@ -108,7 +108,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
                               * 2 (for debugging NPBE), higher values give 
                               * too much output */
-    thee->bcfl = 1;
+    thee->bcfl = BCFL_SDH;
     thee->key = 0;
     thee->iperf = 0;
     if (thee->nonlin == 1) { 
