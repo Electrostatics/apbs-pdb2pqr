@@ -592,4 +592,50 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
    return thee->soluteCharge; 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSolution
+//
+// Purpose:  Get the electrostatic potential (in units of kT/e) at the
+//           finest level as a (newly allocated) array of doubles and store
+//           the length in *length.
+//           You'd better destroy the returned array later!
+//
+// Author:   Nathan Baker and Michael Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double* Vpbe_getSolution(Vpbe *thee, int *length) { 
+
+   int level, i;
+   double *solution;
+   double *theAnswer;
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->am != VNULL);
+   VASSERT(thee->gm != VNULL);
+
+   /* Get the max level from AM */
+   level = AM_maxLevel(thee->am);
+
+   /* Copy the solution into the w0 vector */
+   Bvec_copy(AM_alg(thee->am, level)->W[W_w0], 
+     AM_alg(thee->am, level)->W[W_u]);
+   /* Add the Dirichlet conditions */
+   Bvec_axpy(AM_alg(thee->am, level)->W[W_w0], 
+     AM_alg(thee->am, level)->W[W_ud], 1.);
+   /* Get the data from the Bvec */
+   solution = Bvec_data(AM_alg(thee->am, level)->W[W_w0], 0);
+   /* Get the length of the data from the Bvec */
+   *length = Bvec_numRT(AM_alg(thee->am, level)->W[W_w0]);
+   /* Make sure that we got scalar data (only one block) for the solution
+    * to the PBE */
+   VASSERT(1 == Bvec_numB(AM_alg(thee->am, level)->W[W_w0]));
+   /* Allocate space for the returned vector and copy the solution into it */
+   theAnswer = VNULL;
+   theAnswer = Vram_ctor(*length, sizeof(double));
+   VASSERT(theAnswer != VNULL);
+   for (i=0; i<*length; i++) theAnswer[i] = solution[i];
+   
+   return theAnswer;
+}
+
+
 
