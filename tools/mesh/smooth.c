@@ -239,7 +239,7 @@ int gaussian(Vgrid *grid, double stddev, double bandwidth) {
                         } /* ii loop */
                     } /* jj loop */
                 } /* kk loop */
-                if (norm > 0) newData[IJK(i,j,k)] = hx*hy*hzed*u/norm;
+                if (norm > 0) newData[IJK(i,j,k)] = u/norm;
                 else newData[IJK(i,j,k)] = 0;
             } /* i loop */
         } /* j loop */
