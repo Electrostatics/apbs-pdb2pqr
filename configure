@@ -810,7 +810,7 @@ fi
 
 PACKAGE=apbs
 
-VERSION=0.1.4
+VERSION=0.1.5
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -892,7 +892,7 @@ else
 fi
 
 
-APBS_VERSION="0.1.4"
+APBS_VERSION="0.1.5"
 
 ACLOCAL=":";
 AUTOCONF=":";
