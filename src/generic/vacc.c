@@ -87,6 +87,26 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
     thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
     VASSERT( Vacc_ctor2(thee, alist, max_radius, nx, ny, nz, nsphere));
+    return thee;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_ctorFocus
+//
+// Author:   Nathan Baker, Todd Dolinsky
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vacc* Vacc_ctorFocus(Valist *alist, double max_radius, int nx,
+    int ny, int nz, int nsphere,double x_min, double y_min, 
+	double z_min, double x_max, double y_max, double z_max) {
+
+
+    Vacc *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
+    VASSERT( thee != VNULL);
+    VASSERT( Vacc_ctor2Focus(thee, alist, max_radius, nx, ny, nz, nsphere,
+						x_min, y_min, z_min, x_max, y_max, z_max));
 
     return thee;
 }
@@ -288,6 +308,192 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 
     return 1;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_ctor2Focus
+//
+// Author:   Nathan Baker, Todd Dolinsky
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vacc_ctor2Focus(Vacc *thee, Valist *alist, double max_radius,
+    int nx, int ny, int nz, int nsphere, double x_min, double y_min, 
+	double z_min, double x_max, double y_max, double z_max) {
+
+    /* Grid variables */
+    int i;
+    double x, y, z, *coord;
+    int ii, jj, kk, totatoms;
+    int i_min, j_min, k_min;
+    int i_max, j_max, k_max;
+    /* Natural grid coordinate (array position) */
+    int ui;
+    /* Atom radius */
+    double rmax;
+    double rtot, rtot2;
+    Vatom *atom;
+
+    VASSERT(alist != VNULL);
+    thee->alist = alist;
+
+    /* Set up memory management object */
+    thee->vmem = Vmem_ctor("APBS::VACC");
+
+    /* Set up grid dimensions */
+    thee->nx = nx;
+    thee->ny = ny;
+    thee->nz = nz;
+    thee->n = nx*ny*nz;
+    if ((nx < 3) || (ny < 3) || (nz < 3)) {
+        Vnm_print(2, "Vacc_ctorFocus:  nx, ny, nz must be greater than 2!\n");
+        return 0;
+    }
+    Vnm_print(0, "Vacc_ctorFocus:  Using %d x %d x %d hash table\n", nx, ny, nz);
+    Vnm_print(0, "Vacc_ctorFocus:  Using %g max radius\n", max_radius);
+ 
+    /* Set up probe information */
+    thee->nsphere = nsphere;
+    thee->max_radius = max_radius;
+    Vnm_print(0, "Vacc_ctorFocus:  Constructing sphere...\n");
+    thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
+    VASSERT(thee->sphere != VNULL);
+ 
+    /* Allocate space */
+    thee->natoms = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
+    VASSERT(thee->natoms != VNULL);
+    for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
+    thee->atomFlags = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
+    VASSERT(thee->atomFlags != VNULL);
+    for (i=0; i<thee->n; i++) (thee->atomFlags)[i] = 0;
+    thee->atomIDs = Vmem_malloc(thee->vmem, thee->n, sizeof(int *));
+    VASSERT(thee->atomIDs != VNULL);
+    for (i=0; i<thee->n; i++) (thee->atomIDs)[i] = VNULL;
+    thee->area = Vmem_malloc(thee->vmem, Valist_getNumberAtoms(alist), 
+        sizeof(double));
+    VASSERT(thee->area != VNULL);
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) thee->area[i] = 0;
+
+    /* Find dimensions of protein and atoms */
+    rmax = -1.0;
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        if (Vatom_getRadius(atom) > rmax) rmax = Vatom_getRadius(atom);
+    }
+
+    /* Set up grid spacings, 2.84 > 2*sqrt(2) */
+    thee->hx = (x_max - x_min + 2.84*(rmax+thee->max_radius))/(thee->nx - 1);
+    thee->hy = (y_max - y_min + 2.84*(rmax+thee->max_radius))/(thee->ny - 1);
+    thee->hzed = (z_max - z_min + 2.84*(rmax+thee->max_radius))/(thee->nz - 1);
+ 
+    /* Inflate the grid a bit 1.42 > sqrt(2) */
+    (thee->grid_lower_corner)[0] = x_min-1.42*(rmax+thee->max_radius);
+    (thee->grid_lower_corner)[1] = y_min-1.42*(rmax+thee->max_radius);
+    (thee->grid_lower_corner)[2] = z_min-1.42*(rmax+thee->max_radius);
+
+    Vnm_print(0, "Vacc_ctorFocus:  Grid lower corner = (%g, %g, %g)\n",
+      (thee->grid_lower_corner)[0], (thee->grid_lower_corner)[1],
+      (thee->grid_lower_corner)[2]);
+    Vnm_print(0, "Vacc_ctorFocus:  Grid lengths = (%g, %g, %g)\n",
+      thee->hx*(thee->nx - 1), thee->hy*(thee->ny - 1), 
+      thee->hzed*(thee->nz - 1));
+
+    /* Find out how many atoms are associated with each grid point */
+    totatoms = 0;
+    for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
+        atom = Valist_getAtom(alist, i);
+        /* Get the position in the grid's frame of reference */
+        coord = Vatom_getPosition(atom);
+        x = coord[0] - (thee->grid_lower_corner)[0];
+        y = coord[1] - (thee->grid_lower_corner)[1];
+        z = coord[2] - (thee->grid_lower_corner)[2];
+
+        /* Get the range the atom radius + probe radius spans */
+        rtot = Vatom_getRadius(atom) + thee->max_radius;
+    
+        /* Calculate the range of grid points the inflated atom spans in the x 
+         * direction. */
+        i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
+        i_max = VMIN2(i_max, nx-1);
+        i_min = (int)(floor( (x - rtot)/(thee->hx) ));
+        i_min = VMAX2(i_min, 0);
+        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+        j_max = VMIN2(j_max, ny-1);
+        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+        j_min = VMAX2(j_min, 0);
+        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+        k_max = VMIN2(k_max, nz-1);
+        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+        k_min = VMAX2(k_min, 0);
+
+#if 0
+        Vnm_print(0, "VACC DEBUG: %d <= i <= %d\n", i_min, i_max);
+        Vnm_print(0, "VACC DEBUG: %d <= j <= %d\n", j_min, j_max);
+        Vnm_print(0, "VACC DEBUG: %d <= k <= %d\n", k_min, k_max);
+#endif
+
+        /* Now find and assign the grid points */
+        for ( ii = i_min; ii <= i_max; ii++) {
+            for ( jj = j_min; jj <= j_max; jj++) {
+                for ( kk = k_min; kk <= k_max; kk++) {
+                    ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
+                    (thee->natoms[ui])++;
+                    totatoms += thee->natoms[ui];
+                } 
+            } 
+        } 
+    } /* for i =0:natoms */
+    Vnm_print(0, "Vacc_ctorFocus:  Have %d atom entries\n", totatoms);
+
+    /* Allocate the space to store the pointers to the atoms */
+    for (i=0; i<thee->n; i++) {
+        if ((thee->natoms)[i] > 0) {
+            thee->atomIDs[i] = Vmem_malloc(thee->vmem, thee->natoms[i],
+              sizeof(int));
+            VASSERT(thee->atomIDs[i] != VNULL);
+        }
+        /* Clear the counter for later use */
+        thee->natoms[i] = 0;
+    }
+ 
+    /* Assign the atoms to grid points */
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        /* Get the position in the grid's frame of reference */
+        x = (Vatom_getPosition(atom))[0] - (thee->grid_lower_corner)[0];
+        y = (Vatom_getPosition(atom))[1] - (thee->grid_lower_corner)[1];
+        z = (Vatom_getPosition(atom))[2] - (thee->grid_lower_corner)[2];
+
+        /* Get the range the atom radius + probe radius spans */
+        rtot = Vatom_getRadius(atom) + thee->max_radius;
+        rtot2 = VSQR(rtot);
+
+        /* Now find and assign the grid points */
+        i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
+        i_max = VMIN2(i_max, nx-1);
+        i_min = (int)(floor( (x - rtot)/(thee->hx) ));
+        i_min = VMAX2(i_min, 0);
+        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+        j_max = VMIN2(j_max, ny-1);
+        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+        j_min = VMAX2(j_min, 0);
+        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+        k_max = VMIN2(k_max, nz-1);
+        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+        k_min = VMAX2(k_min, 0);
+        /* Now find and assign the grid points */
+        for ( ii = i_min; ii <= i_max; ii++) {
+            for ( jj = j_min; jj <= j_max; jj++) {
+                for ( kk = k_min; kk <= k_max; kk++) {
+
+                    ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
+                    thee->atomIDs[ui][thee->natoms[ui]] = i;
+                    (thee->natoms[ui])++;
+                }
+            }
+        }
+    } /* for i =0:natoms */
+
+    return 1;
+}
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_dtor

@@ -48,7 +48,6 @@
 // Class Vpbe: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
 #define MAX_SPLINE_WINDOW 0.5
-#define MAX_HASH_DIM 75
 #define VACC_SPHERE 200
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -297,17 +296,18 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
                     double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,
-                    double solventRadius) {
+                    double solventRadius, int focusFlag) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-      T, gamma, soluteDiel, solventDiel, solventRadius) );
+      T, gamma, soluteDiel, solventDiel, solventRadius, focusFlag) );
 
     return thee;
 }
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_ctor2
@@ -317,7 +317,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
                     double *ionConc, double *ionRadii,
                     double *ionQ, double T, double gamma, double soluteDiel,
-                    double solventDiel, double solventRadius) {
+                    double solventDiel, double solventRadius, int focusFlag) {
 
     int i, iatom;
     double atomRadius;
@@ -325,7 +325,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
     double center[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
     double x, y, z, netCharge;
-    double nhash;
+    double nhash[3];
     const double N_A = 6.022045000e+23;
     const double e_c = 4.803242384e-10;
     const double k_B = 1.380662000e-16;
@@ -459,13 +459,25 @@ function\n", thee->maxIonRadius);
     if (thee->maxIonRadius > thee->solventRadius) 
       radius = thee->maxIonRadius + MAX_SPLINE_WINDOW;
     else radius = thee->solventRadius + MAX_SPLINE_WINDOW;
-    nhash = VPOW(8.0*(double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
-    if (((int)nhash) < 3) nhash = 3;
-    if (((int)nhash) > MAX_HASH_DIM) nhash = MAX_HASH_DIM;
-    Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object with %d^3 hash table\n",
-      (int)nhash); 
-    thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
-      (int)(nhash), VACC_SPHERE);
+	
+	nhash[0] = (thee->soluteXlen)/0.5;
+	nhash[1] = (thee->soluteYlen)/0.5;
+	nhash[2] = (thee->soluteZlen)/0.5;
+	
+	for (i=0;i<3;i++){
+	  if (((int)nhash[i]) < 3) nhash[i] = 3;
+	  if (((int)nhash[i]) > MAX_HASH_DIM) nhash[i] = MAX_HASH_DIM;
+	}
+    Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object with %d x %d x %d hash table\n",
+      (int)nhash[0], (int)nhash[1], (int)nhash[2]); 
+
+	if (focusFlag == 0){
+	  thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash[0]), (int)(nhash[1]),
+							(int)(nhash[2]), VACC_SPHERE);
+	} else {
+	  thee->acc = Vacc_ctorFocus(thee->alist, radius, (int)(nhash[0]), (int)(nhash[1]),
+								 (int)(nhash[2]), VACC_SPHERE, xmin, ymin, zmin, xmax, ymax, zmax);
+	}
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
     VASSERT(thee->acc != VNULL);
 

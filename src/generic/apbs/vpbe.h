@@ -325,12 +325,14 @@ typedef struct sVpbe Vpbe;
  *  @param   soluteDiel Solute dielectric constant
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
+ *  @param   focusFlag 1 if Focusing operation, 0 otherwise
  *  @return  Pointer to newly allocated Vpbe object
  */
+
 VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
 		    double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,  
-                    double solventRadius);
+                    double solventRadius, int focusFlag);
 
 /** @brief   FORTRAN stub to construct Vpbe objct
  *  @ingroup Vpbe
@@ -360,12 +362,13 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  *  @param   soluteDiel Solute dielectric constant
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
+ *  @param   focusFlag 1 if Focusing operation, 0 otherwise
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
 		    double *ionConc, double *ionRadii, double *ionQ, 
                     double T, double gamma, double soluteDiel, 
-                    double solventDiel, double solventRadius);
+                    double solventDiel, double solventRadius, int focusFlag);
 
 /** @brief   Get information about the counterion species present
  *  @ingroup Vpbe
