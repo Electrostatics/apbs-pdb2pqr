@@ -560,9 +560,9 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
         totchi = Vacc_splineAcc(thee, center, win, infrad);
         /* Now assemble the grad vector */
         VASSERT(mychi > 0.0);
-        grad[0] = (totchi*mygrad/mychi)*((center[0] - apos[0])/dist);
-        grad[1] = (totchi*mygrad/mychi)*((center[1] - apos[1])/dist);
-        grad[2] = (totchi*mygrad/mychi)*((center[2] - apos[2])/dist);
+        grad[0] = -(totchi*mygrad/mychi)*((center[0] - apos[0])/dist);
+        grad[1] = -(totchi*mygrad/mychi)*((center[1] - apos[1])/dist);
+        grad[2] = -(totchi*mygrad/mychi)*((center[2] - apos[2])/dist);
     } 
 
 

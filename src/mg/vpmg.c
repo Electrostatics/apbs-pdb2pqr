@@ -1436,6 +1436,19 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     ymax = thee->pmgp->ymax;
     zmax = thee->pmgp->zmax;
 
+    /* Sanity check: there is no force if there is zero ionic strength */
+    if (zkappa2 < VPMGSMALL) {
+        Vnm_print(2, "Vpmg_ibForce:  No force for zero ionic strength!\n");
+        return;
+    }
+
+    /* Bail on focusing cases right now; not sure what to do */
+    if (thee->pmgp->bcfl == 4) {
+        Vnm_print(2, "Vpmg_ibForce:  Sorry, but force evaluation doesn't work with focusing (yet).\n");
+        VASSERT(0);
+    }
+
+
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
@@ -1585,6 +1598,18 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     ymax = thee->pmgp->ymax;
     zmax = thee->pmgp->zmax;
     u = thee->u;
+
+    /* Sanity check: there is no force if there is zero ionic strength */
+    if (VABS(epsp-epsw) < VPMGSMALL) {
+       Vnm_print(0, "Vpmg_dbnpForce: No force for uniform dielectric!\n");
+       return;
+    }
+
+    /* Bail on focusing cases right now; not sure what to do */
+    if (thee->pmgp->bcfl == 4) {
+        Vnm_print(2, "Vpmg_ibForce:  Sorry, but force evaluation doesn't work with focusing (yet).\n");
+        VASSERT(0);
+    }
 
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
@@ -1786,6 +1811,12 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
     ymax = thee->pmgp->ymax;
     zmax = thee->pmgp->zmax;
     u = thee->u;
+
+    /* Bail on focusing cases right now; not sure what to do */
+    if (thee->pmgp->bcfl == 4) {
+        Vnm_print(2, "Vpmg_ibForce:  Sorry, but force evaluation doesn't work with focusing (yet).\n");
+        VASSERT(0);
+    }
 
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax) || (apos[1]<=ymin) || \
