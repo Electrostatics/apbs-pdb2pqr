@@ -92,8 +92,8 @@ VEXTERNC int     Valist_ctor2(Valist *thee);
 VEXTERNC void    Valist_dtor(Valist **thee);
 VEXTERNC void    Valist_dtor2(Valist *thee);
 
-VEXTERNC int     Valist_readPQR(Valist *thee, char *path);
-VEXTERNC int     Valist_readPDB(Valist *thee, char *path, char *parameter_path);
+VEXTERNC int     Valist_readPQR(Valist *thee, const char *iodev, 
+                 const char *iofmt, const char *thost, const char *fname);
 VEXTERNC void    Valist_buildMesh(Valist *thee, double size, const char *iodev,
                    const char *iofmt, const char *thost, const char *fname);
 
