@@ -797,7 +797,6 @@
  * <li> <a href="#gamma">gamma</a> 
  * <li> <a href="#calcenergy">calcenergy</a> 
  * <li> <a href="#calcforce">calcforce</a> 
- * <li> <a href="#calcforce">calcforce</a> 
  * <li> <a href="#write">write</a> (optional)
  * <li> <a href="#writemat">writemat</a> (optional)
  * </ul>
@@ -838,7 +837,6 @@
  * <li> <a href="#temp">temp</a>
  * <li> <a href="#gamma">gamma</a>
  * <li> <a href="#calcenergy">calcenergy</a>
- * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#write">write</a> (optional)
  * <li> <a href="#writemat">writemat</a> (optional)
@@ -887,7 +885,6 @@
  * <li> <a href="#temp">temp</a>
  * <li> <a href="#gamma">gamma</a>
  * <li> <a href="#calcenergy">calcenergy</a>
- * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#calcforce">calcforce</a>
  * <li> <a href="#write">write</a> (optional)
  * <li> <a href="#writemat">writemat</a> (optional)
@@ -948,18 +945,18 @@
  * <dt> <a name="bcfl">bcfl</a> <i>flag</i>
  * <dd> Boundary condition flag; where <i>flag</i> is one of the following:
  *    <dl>
- *    <dt> 0
+ *    <dt> <code>zero</code> or <code>0</code>
  *    <dd> Zero boundary conditions.
- *    <dt> 1
+ *    <dt> <code>sdh</code> or <code>1</code>
  *    <dd> Boundary conditions assigned using the analytical
  *    (Debye-H&uuml;ckel) expression for a single spherical ion with the
  *    molecule's radius and net charge.
- *     <dt> 2
+ *     <dt> <code>mdh</code> or <code>2</code>
  *     <dd> The analytical (Debye-H&uuml;ckel) expression for a single
  *     spherical ion is used for each ion (i.e., superposition) to assign
  *     boundary conditions.  Tends to capture more moments of the molecular
  *     multipole, but is (much) slower to evaluate.
- *     <dt> 4 
+ *     <dt> <code>focus</code> or <code>4</code>
  *     <dd> The solution from the previous calculation is used to assign
  *     boundary conditions for the current calculation.  Clearly, the domain
  *     for the current calculation must be a subset of the previous domain.
@@ -983,10 +980,10 @@
  * <dd> Method used to define the various charge discretization methods:
  * <i>flag</i> is one of the following:
  *     <dl>
- *     <dt> 0
+ *     <dt> <code>spl0</code> or <code>0</code>
  *     <dd> Traditional trilinear hat-function discretization (linear splines);
  *          charge is mapped onto nearest-neighbor grid points
- *     <dt> 1
+ *     <dt> <code>spl2</code> or <code>1</code>
  *     <dd> Cubic B-spline discretization; charge is mapped onto nearest- and
  *     next-nearest-neighbor grid points
  *     </dl>
@@ -994,17 +991,17 @@
  * <dd> Method used to define the various surface-based coefficients;
  * <i>flag</i> is one of the following:
  *     <dl>
- *     <dt> 0
+ *     <dt> <code>mol</code> or <code>0</code>
  *     <dd> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
  *     inflated van der Waals radii, the dielectric coefficient
  *     (\f$\epsilon(x)\f$) is defined using the molecular (Conolly) surface
  *     definition without smoothing.
- *     <dt> 1
+ *     <dt> <code>smol</code> or <code>1</code>
  *     <dd> Ion accessibility (\f$\overline{\kappa}^2(x)\f$) is defined using
  *     inflated van der Waals radii, the dielectric coefficient
  *     (\f$\epsilon(x)\f$) is defined using the molecular (Conolly) surface
  *     definition with a simple harmonic average smoothing.
- *     <dt> 2
+ *     <dt> <code>spl2</code> or <code>2</code>
  *     <dd> Spline-based surface definitions.  This is primarily for use with
  *     force calculations, since it requires substantial reparameterization of
  *     radii.  This is based on the work of Im et al, <i>Comp. Phys. Comm.</i>
@@ -1053,11 +1050,11 @@
  * <dd> OPTIONAL KEYWORD.  Controls electrostatic energy output.  Values for
  *      <i>flag</i> are:
  *      <dl>
- *      <dt> 0
+ *      <dt> <code>no</code> or <code>0</code>
  *      <dd> No energies are written.
- *      <dt> 1
+ *      <dt> <code>total</code> or <code>1</code>
  *      <dd> Total electrostatic energies are written to stdout.
- *      <dt> 2
+ *      <dt> <code>comps</code> or <code>2</code>
  *      <dd> Total electrostatic energies and individual per-atom components
  *      are written to stdout.
  *     </dl>
@@ -1072,11 +1069,11 @@
  * <dd> OPTIONAL KEYWORD.  Controls electrostatic force output.  Values for
  *      <i>flag</i> are:
  *      <dl>
- *      <dt> 0
+ *      <dt> <code>no</code> or <code>0</code>
  *      <dd> No forces are written.
- *      <dt> 1
+ *      <dt> <code>total</code> or <code>1</code>
  *      <dd> Net forces on molecule are written to stdout.
- *      <dt> 2
+ *      <dt> <code>comps</code> or <code>2</code>
  *      <dd> Forces on each atom are written to stdout.
  *      </dl>
  *      Note that this option must be used consistently for all calculations
