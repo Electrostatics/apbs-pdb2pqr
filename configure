@@ -9925,7 +9925,7 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_maloc_maloc_link" >&5
 echo "${ECHO_T}$ac_cv_lib_maloc_maloc_link" >&6
 if test $ac_cv_lib_maloc_maloc_link = yes; then
-  maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc -lvf2c"
+  maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc"
 else
   maloc_found="";maloc_lib=""
 fi
