@@ -537,31 +537,6 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) {
 //       angstroms^{-2},
 //       we multiply by 1.0e8, yielding the 7046.528838 above.
 //
-//       important note:  in delphi, rhs_sca is multiplied against
-//       the charges to yield directly the integrated function values
-//       at grid points.  this is correct since the charges are represented
-//       as *delta functions*, the "h^3" term does NOT appear after the
-//       volume integrals are done as a result.  thus, since our generic
-//       discretization module integrates this as a normal function,
-//       yielding the h^3 term, we must account for it in the function
-//       (i.e., divide by h^3 here).  thus, our scaling is:
-//
-//          zmagic  = 7046.528838 / h^3.
-//
-//    notes on scale and meshsize in delphi:
-//    --------------------------------------
-//
-//       scale = 1 / h.
-//       to properly discretize the original pde on the domain, we
-//       reconstruct the domain from the mesh size and the number of
-//       points.
-//
-//          meshsize = h = 1 / scale
-//          hx = hy = hz = h
-//          xmin = ymin = zmin = 0.0
-//          xmax = ymax = zmax = 65.0 * h
-//
-//
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
@@ -613,7 +588,7 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     else radius = thee->solventRadius;
     nhash = 2.0*VPOW((double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
     thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
-      (int)(nhash), 100);
+      (int)(nhash), 200);
     VASSERT(thee->acc != VNULL);
 
     /* Compute charge-simplex map */
