@@ -7,38 +7,35 @@ c*  @attention
 c*  @verbatim
 c*
 c* APBS -- Adaptive Poisson-Boltzmann Solver
-c*
-c* Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-c* Dept. of Chemistry and Biochemistry
-c* University of California, San Diego
-c*
-c* Additional contributing authors listed in the code documentation.
-c*
-c* Copyright (c) 1999-2002.  Washington University in St. Louis.
+c* 
+c*   Nathan A. Baker (baker@biochem.wustl.edu)
+c*   Dept. Biochemistry and Molecular Biophysics
+c*   Center for Computational Biology
+c*   Washington University in St. Louis
+c* 
+c*   Additional contributing authors listed in the code documentation.
+c* 
+c* Copyright (c) 2002-2003.  Washington University in St. Louis.
 c* All Rights Reserved.
-c*
-c* Copyright (c) 1999-2002.  The Regents of the University of California.
+c* Portions Copyright (c) 1999-2002.  The Regents of the University 
+c*   of California.  
 c* Portions Copyright (c) 1995.  Michael Holst.
-c*
-c* Permission to use, copy, modify, and distribute this software and its
-c* documentation for educational, research, and not-for-profit purposes,
-c* without fee and without a signed licensing agreement, is hereby granted,
-c* provided that the above copyright notice, this paragraph and the
-c* following two paragraphs appear in all copies, modifications, and
-c* distributions.
-c*
-c* IN NO EVENT SHALL THE AUTHOR BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-c* SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-c* ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-c* THE AUTHOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-c*
-c* REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-c* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-c* PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-c* ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  THE AUTHOR HAS NO OBLIGATION
-c* TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-c* MODIFICATIONS.
-c*
+c* 
+c* This program is free software; you can redistribute it and/or modify
+c* it under the terms of the GNU General Public License as published 
+c* by the Free Software Foundation; either version 2 of the License, 
+c* or (at your option) any later version.
+c* 
+c* This program is distributed in the hope that it will be useful,
+c* but WITHOUT ANY WARRANTY; without even the implied warranty 
+c* of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+c* GNU General Public License for more details.
+c* 
+c* You should have received a copy of the GNU General Public 
+c* License along with this program; if not, write to the Free
+c* Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+c* MA  02111-1307  USA
+c* 
 c* @endverbatim
 c**************************************************************************
       subroutine readhbhead(nrow, ncol, nnzero, path)
