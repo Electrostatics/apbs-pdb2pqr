@@ -284,9 +284,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
 
         /* Check to see if we got an ATOM line */
         if ( !strncmp(line,"ATOM",4)) {
-	    if ((sscanf(line, "ATOM%*7d  %*4s%*4s %*1s %*5d    %lf%lf%lf%lf%lf",
-              &x,&y,&z,&charge,&radius) == 5)) {;}
-	    else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
+	    if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
               &x,&y,&z,&charge,&radius) == 5)) {;}
             else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
               &x,&y,&z,&charge,&radius) == 5)) {;}
