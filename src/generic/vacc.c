@@ -160,12 +160,12 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     /* Set up grid spacings, 2.84 > 2*sqrt(2) */
     thee->hx = (x_max - x_min + 2.84*(max_radius+thee->probe_radius))/(thee->nx-2);
     thee->hy = (y_max - y_min + 2.84*(max_radius+thee->probe_radius))/(thee->ny-2);
-    thee->hz = (z_max - z_min + 2.84*(max_radius+thee->probe_radius))/(thee->nz-2);
+    thee->hzed = (z_max - z_min + 2.84*(max_radius+thee->probe_radius))/(thee->nz-2);
  
     /* Inflate the grid a bit 1.42 > sqrt(2) */
     (thee->grid_lower_corner)[0] = x_min-1.42*(max_radius+thee->probe_radius)-thee->hx;
     (thee->grid_lower_corner)[1] = y_min-1.42*(max_radius+thee->probe_radius)-thee->hy;
-    (thee->grid_lower_corner)[2] = z_min-1.42*(max_radius+thee->probe_radius)-thee->hz;
+    (thee->grid_lower_corner)[2] = z_min-1.42*(max_radius+thee->probe_radius)-thee->hzed;
 
     /* Find out how many atoms are associated with each grid point */
     for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
@@ -190,8 +190,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
         i_min = (int)(floor( (x - tot_r)/(thee->hx) ));
         j_max = (int)( ceil( (y + tot_r)/(thee->hy) ));
         j_min = (int)(floor( (y - tot_r)/(thee->hy) ));
-        k_max = (int)( ceil( (z + tot_r)/(thee->hz) ));
-        k_min = (int)(floor( (z - tot_r)/(thee->hz) ));
+        k_max = (int)( ceil( (z + tot_r)/(thee->hzed) ));
+        k_min = (int)(floor( (z - tot_r)/(thee->hzed) ));
  
         /* Now find and assign the grid points */
         for ( ii = i_min; ii <= i_max; ii++) {
@@ -201,8 +201,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
                     if (rx > thee->hx) rx = rx - thee->hx;
                     ry = VABS((double)(jj)*(thee->hy) - y);
                     if (ry > thee->hy) ry = ry - thee->hy;
-                    rz = VABS((double)(kk)*(thee->hz) - z);
-                    if (rz > thee->hz) rz = rz - thee->hz;
+                    rz = VABS((double)(kk)*(thee->hzed) - z);
+                    if (rz > thee->hzed) rz = rz - thee->hzed;
                     /* Fudge to correct for numerical problems */
                     if ((rx*rx + ry*ry + rz*rz) <= (tot_r*tot_r )) {
                         ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
@@ -247,8 +247,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     i_min = (int)(floor( (x - tot_r)/(thee->hx) ));
     j_max = (int)( ceil( (y + tot_r)/(thee->hy) ));
     j_min = (int)(floor( (y - tot_r)/(thee->hy) ));
-    k_max = (int)( ceil( (z + tot_r)/(thee->hz) ));
-    k_min = (int)(floor( (z - tot_r)/(thee->hz) ));
+    k_max = (int)( ceil( (z + tot_r)/(thee->hzed) ));
+    k_min = (int)(floor( (z - tot_r)/(thee->hzed) ));
 
     /* Now find and assign the grid points */
     for ( ii = i_min; ii <= i_max; ii++) {
@@ -258,8 +258,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
           if (rx > thee->hx) rx = rx - thee->hx;
           ry = VABS((double)(jj)*(thee->hy) - y);
           if (ry > thee->hy) ry = ry - thee->hy;
-          rz = VABS((double)(kk)*(thee->hz) - z);
-          if (rz > thee->hz) rz = rz - thee->hz;
+          rz = VABS((double)(kk)*(thee->hzed) - z);
+          if (rz > thee->hzed) rz = rz - thee->hzed;
           /* Fudge to correct for numerical problems */
           if ((rx*rx + ry*ry + rz*rz) <= (tot_r*tot_r )) {
             ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
@@ -319,7 +319,7 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     Vnm_print(2,"vacc: Destroying thee->natoms\n");
     Vram_dtor((Vram **)&(thee->natoms),thee->n, sizeof(int));
     Vnm_print(2,"vacc: Destroying thee->sphere entries\n");
-    for (i=0; i<thee->nspherespherspheree; i++) 
+    for (i=0; i<thee->nsphere; i++) 
       Vram_dtor((Vram **)&((thee->sphere)[i]), 3, sizeof(double));
     Vnm_print(2,"vacc: Destroying thee->sphere\n");
     Vram_dtor((Vram **)&(thee->sphere), thee->nsphere, sizeof(double *));
@@ -346,7 +346,7 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
     /* Convert to grid based coordinates */
     centeri = VRINT( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
     centerj = VRINT( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hz);
+    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
    
     /* Check to make sure we're on the grid; if not, we're definitely 
      * accessible */ 
@@ -391,7 +391,7 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center) {
     /* Convert to grid based coordinates */
     centeri = VRINT( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
     centerj = VRINT( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hz);
+    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
 
     /* Check to make sure we're on the grid; if not, we're definitely
      * accessible */
