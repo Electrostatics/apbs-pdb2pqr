@@ -698,6 +698,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     Vio_setCommChars(sock, MCcommChars);
 
     Vnm_print(0, "Vgrid_writeDX:  Writing to virtual socket...\n");
+
     if (usepart) {
         /* Get the lower corner and number of grid points for the local
          * partition */
@@ -847,7 +848,7 @@ class field\n");
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nx, ny, nz);
 
-        sprintf(precFormat, Vprecision, xminPART, yminPART, zminPART);
+        sprintf(precFormat, Vprecision, xmin, ymin, zmin);
         Vio_printf(sock, "origin %s\n", precFormat);
         sprintf(precFormat, Vprecision, hx, 0.0, 0.0);
         Vio_printf(sock, "delta %s\n", precFormat);
