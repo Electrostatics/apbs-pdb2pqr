@@ -478,15 +478,15 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     /* Get "counts" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "counts"));
-    /* Get nz */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%d", &(thee->nz)));
-    /* Get ny */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%d", &(thee->ny)));
     /* Get nx */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%d", &(thee->nx)));
+    /* Get ny */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &(thee->ny)));
+    /* Get nz */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &(thee->nz)));
     Vnm_print(0, "Vgrid_readDX:  Grid dimensions %d x %d x %d grid\n", 
      thee->nx, thee->ny, thee->nz);
     /* Get "origin" */
@@ -506,6 +506,9 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     /* Get "delta" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "delta"));
+    /* Get hx */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hx)));
     /* Get 0.0 */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
@@ -514,9 +517,6 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
     VJMPERR1(dtmp == 0.0);
-    /* Get hz */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hzed)));
     /* Get "delta" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "delta"));
@@ -534,19 +534,19 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     /* Get "delta" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "delta"));
-    /* Get hx */
+    /* Get 0.0 */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hx)));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get hz */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hzed)));
     Vnm_print(0, "Vgrid_readDX:  Grid spacings = (%g, %g, %g)\n",
       thee->hx, thee->hy, thee->hzed);
-    /* Get 0.0 */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
-    VJMPERR1(dtmp == 0.0);
-    /* Get 0.0 */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
-    VJMPERR1(dtmp == 0.0);
     /* Get "object" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "object"));
@@ -612,9 +612,9 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
         return 0;
     }
                      
-    for (k=0; k<thee->nz; k++) {
+    for (i=0; i<thee->nx; i++) {
         for (j=0; j<thee->ny; j++) {
-            for (i=0; i<thee->nx; i++) {
+            for (k=0; k<thee->nz; k++) {
                 u = k*(thee->nx)*(thee->ny)+j*(thee->nx)+i;
                 VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
                 VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
@@ -623,8 +623,8 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
         }
     }
 	 
-	 /* calculate grid maxima */
-	 thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
+    /* calculate grid maxima */
+    thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
     thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
     thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
 
@@ -776,9 +776,9 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
           nxPART, nyPART, nzPART);
         Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xminPART, yminPART,
           zminPART);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
           nxPART, nyPART, nzPART);
@@ -787,9 +787,9 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
 data follows\n", (nxPART*nyPART*nzPART));
         icol = 0;
-        for (k=0; k<nz; k++) {
+        for (i=0; i<nx; i++) {
             for (j=0; j<ny; j++) {
-                for (i=0; i<nx; i++) {
+                for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
                     if (pvec[u] != 0) {
                         Vio_printf(sock, "%12.6E ", thee->data[u]);
@@ -825,9 +825,9 @@ class field\n");
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nx, ny, nz);
         Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
         Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0); 
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
     
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
@@ -837,9 +837,9 @@ class field\n");
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
 data follows\n", (nx*ny*nz));
         icol = 0;
-        for (k=0; k<nz; k++) {
+        for (i=0; i<nx; i++) {
             for (j=0; j<ny; j++) { 
-                for (i=0; i<nx; i++) {
+                for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
                     Vio_printf(sock, "%12.6E ", thee->data[u]);
                     icol++;

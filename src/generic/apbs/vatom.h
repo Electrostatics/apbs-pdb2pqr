@@ -163,7 +163,7 @@ typedef struct Vatom Vatom;
  *  @ingroup Vatom
  *  @returns Pointer to newly allocated Vatom object
  */
-VEXTERNC Vatom * Vatom_ctor();
+VEXTERNC Vatom* Vatom_ctor();
 
 /** @brief   FORTRAN stub constructor for the Vatom class 
  *  @author  Nathan Baker

@@ -2,7 +2,7 @@ read
     mol pqr fas2.pqr                   # Read molecule 1
 end
 elec
-    mg-dummy                           # Use the multigrid method
+    mg-manual                          # Use the multigrid method
     dime 97 97 97                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
     nlev 4                             # Number of levels in multilevel
