@@ -10524,16 +10524,26 @@ mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
 if test -z "${with_fetk}"; then
-    { echo "$as_me:$LINENO: checking for FEtk libraries and headers......" >&5
-echo "$as_me: checking for FEtk libraries and headers......" >&6;}
+    { echo "$as_me:$LINENO: checking for FETK_INCLUDE..." >&5
+echo "$as_me: checking for FETK_INCLUDE..." >&6;}
     if test -n "${FETK_INCLUDE}"; then
         mc_inc_path="-I${FETK_INCLUDE} ";
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
     else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
         mc_inc_path="-I${HOME}/include ";
     fi
+    { echo "$as_me:$LINENO: checking for FETK_LIBRARY..." >&5
+echo "$as_me: checking for FETK_LIBRARY..." >&6;}
     if test -n "${FETK_LIBRARY}"; then
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
         mc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
     else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
         mc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
     fi
         LDFLAGS_SAVE=${LDFLAGS};
@@ -10541,6 +10551,8 @@ echo "$as_me: checking for FEtk libraries and headers......" >&6;}
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mc_found="";
+    { echo "$as_me:$LINENO: checking for mc/mc.h..." >&5
+echo "$as_me: checking for mc/mc.h..." >&6;}
     if test "${ac_cv_header_mc_mc_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mc/mc.h" >&5
 echo $ECHO_N "checking for mc/mc.h... $ECHO_C" >&6
@@ -10678,6 +10690,10 @@ fi
 
 
     if test -n "${mc_found}"; then
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+        { echo "$as_me:$LINENO: checking for -lmc..." >&5
+echo "$as_me: checking for -lmc..." >&6;}
         echo "$as_me:$LINENO: checking for mc_link in -lmc" >&5
 echo $ECHO_N "checking for mc_link in -lmc... $ECHO_C" >&6
 if test "${ac_cv_lib_mc_mc_link+set}" = set; then
@@ -10738,14 +10754,250 @@ else
   mc_found="";mc_lib=""
 fi
 
+        if test -n "${mc_found}"; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+        else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        fi
+    else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
     fi
+        LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${mc_lib_path};
+    CPPFLAGS=${mc_inc_path};
+    mcx_found="";
+    { echo "$as_me:$LINENO: checking for mcx/mcx.h..." >&5
+echo "$as_me: checking for mcx/mcx.h..." >&6;}
+    if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for mcx/mcx.h" >&5
+echo $ECHO_N "checking for mcx/mcx.h... $ECHO_C" >&6
+if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mcx_mcx_h" >&5
+echo "${ECHO_T}$ac_cv_header_mcx_mcx_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking mcx/mcx.h usability" >&5
+echo $ECHO_N "checking mcx/mcx.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <mcx/mcx.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking mcx/mcx.h presence" >&5
+echo $ECHO_N "checking mcx/mcx.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <mcx/mcx.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc in
+  yes:no )
+    { echo "$as_me:$LINENO: WARNING: mcx/mcx.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: mcx/mcx.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mcx/mcx.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: mcx/mcx.h: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+  no:yes )
+    { echo "$as_me:$LINENO: WARNING: mcx/mcx.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: mcx/mcx.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mcx/mcx.h: check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: mcx/mcx.h: check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mcx/mcx.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: mcx/mcx.h: proceeding with the preprocessor's result" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------ ##
+## Report this to bug-autoconf@gnu.org. ##
+## ------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for mcx/mcx.h" >&5
+echo $ECHO_N "checking for mcx/mcx.h... $ECHO_C" >&6
+if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_mcx_mcx_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mcx_mcx_h" >&5
+echo "${ECHO_T}$ac_cv_header_mcx_mcx_h" >&6
+
+fi
+if test $ac_cv_header_mcx_mcx_h = yes; then
+  mcx_found="yes";mcx_inc="${mc_inc_path}"
+else
+  mcx_found="";mc_inc=""
+fi
+
+
+    if test -n "${mcx_found}"; then
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+        { echo "$as_me:$LINENO: checking for -lmcx..." >&5
+echo "$as_me: checking for -lmcx..." >&6;}
+        echo "$as_me:$LINENO: checking for mcx_link in -lmcx" >&5
+echo $ECHO_N "checking for mcx_link in -lmcx... $ECHO_C" >&6
+if test "${ac_cv_lib_mcx_mcx_link+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char mcx_link ();
+int
+main ()
+{
+mcx_link ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mcx_mcx_link=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mcx_mcx_link=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mcx_mcx_link" >&5
+echo "${ECHO_T}$ac_cv_lib_mcx_mcx_link" >&6
+if test $ac_cv_lib_mcx_mcx_link = yes; then
+  mcx_found="yes";mcx_lib="${mc_lib_path}-lmcx"
+else
+  mcx_found="";mcx_lib=""
+fi
+
+        if test -n "${mcx_found}"; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+        else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+        fi
+    else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+    if test -n "${mcx_found}"; then
+        mc_inc="${mc_inc} ${mcx_inc}"
+        mc_lib="${mc_lib} ${mcx_lib}"
+    else
+        mc_found=""
+    fi
+
 
         LDFLAGS=${LDFLAGS_SAVE};
     CPPFLAGS=${CPPFLAGS_SAVE};
 
     if test -n "${mc_found}"; then
-        echo "$as_me:$LINENO: result: *** FEtk component MC found:  enabled. ***" >&5
-echo "${ECHO_T}*** FEtk component MC found:  enabled. ***" >&6
+        echo "$as_me:$LINENO: result: *** FEtk components found:  enabled. ***" >&5
+echo "${ECHO_T}*** FEtk components found:  enabled. ***" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MC_H
@@ -10754,8 +11006,8 @@ _ACEOF
         mc_do_src="vcsm.c vfetk.c vpee.c"
         mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
     else
-        echo "$as_me:$LINENO: result: *** FEtk component MC not found:  disabled. ***" >&5
-echo "${ECHO_T}*** FEtk component MC not found:  disabled. ***" >&6
+        echo "$as_me:$LINENO: result: *** FEtk component not found:  disabled. ***" >&5
+echo "${ECHO_T}*** FEtk component not found:  disabled. ***" >&6
     fi
 else
     echo "$as_me:$LINENO: result: *** FEtk disabled at user request. ***" >&5
