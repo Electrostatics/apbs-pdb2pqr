@@ -173,7 +173,7 @@ THISLIB = generic
 noinst_LTLIBRARIES = libapbsgen.la
 libapbsgen_la_SOURCES = nosh.c mgparm.c mgparse.c femparm.c pbeparm.c \
                          vacc.c valist.c vatom.c vgreen.c vpbe.c vcap.c \
-                         vstring.c
+                         vstring.c vparam.c
 
 INCLUDES = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg -I${top_srcdir}/src/aaa_inc @inc_list@ 
 AM_CFLAGS = @wall_pedantic_ansi@ @CFLAGS@
@@ -188,7 +188,7 @@ libapbsgen_la_LDFLAGS =
 libapbsgen_la_LIBADD =
 am_libapbsgen_la_OBJECTS = nosh.lo mgparm.lo mgparse.lo femparm.lo \
 	pbeparm.lo vacc.lo valist.lo vatom.lo vgreen.lo vpbe.lo vcap.lo \
-	vstring.lo
+	vstring.lo vparam.lo
 libapbsgen_la_OBJECTS = $(am_libapbsgen_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc

@@ -84,7 +84,7 @@ typedef struct Vatom Vatom;
      *  @ingroup Vatom
      *  @author  Nathan Baker
      *  @param   thee  Vatom object
-     *  @returns Pointer to 3*double array of atomic coordinates (in \f$\AA\f$)
+     *  @returns Pointer to 3*double array of atomic coordinates (in &Aring;)
      */
     VEXTERNC double* Vatom_getPosition(Vatom *thee);
 
@@ -92,7 +92,7 @@ typedef struct Vatom Vatom;
      *  @ingroup Vatom
      *  @author  Nathan Baker
      *  @param   thee    Vatom object
-     *  @param   radius  Atomic radius (in \f$\AA\f$)
+     *  @param   radius  Atomic radius (in &Aring;)
      */
     VEXTERNC void    Vatom_setRadius(Vatom *thee, double radius);
 
@@ -100,7 +100,7 @@ typedef struct Vatom Vatom;
      *  @ingroup Vatom
      *  @author  Nathan Baker
      *  @param   thee  Vatom object
-     *  @returns Atomic radius (in \f$\AA\f$)
+     *  @returns Atomic radius (in &Aring;)
      */
     VEXTERNC double  Vatom_getRadius(Vatom *thee);
 
@@ -195,7 +195,7 @@ VEXTERNC void    Vatom_dtor2(Vatom *thee);
  *  @ingroup Vatom
  *  @author  Nathan Baker
  *  @param   thee   Vatom object to be modified
- *  @param   position  Coordinates (in \f$\AA\f$)
+ *  @param   position  Coordinates (in &Aring;)
  */
 VEXTERNC void   Vatom_setPosition(Vatom *thee, double position[3]);
 

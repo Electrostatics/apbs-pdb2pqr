@@ -176,7 +176,7 @@ VEXTERNC int MGparm_getNy(MGparm *thee);
  */
 VEXTERNC int MGparm_getNz(MGparm *thee);
 
-/** @brief   Get grid spacing in x direction (\f$\AA\f$)
+/** @brief   Get grid spacing in x direction (&Aring;)
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
@@ -184,7 +184,7 @@ VEXTERNC int MGparm_getNz(MGparm *thee);
  */
 VEXTERNC double MGparm_getHx(MGparm *thee);
 
-/** @brief   Get grid spacing in y direction (\f$\AA\f$)
+/** @brief   Get grid spacing in y direction (&Aring;)
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
@@ -192,7 +192,7 @@ VEXTERNC double MGparm_getHx(MGparm *thee);
  */
 VEXTERNC double MGparm_getHy(MGparm *thee);
 
-/** @brief   Get grid spacing in z direction (\f$\AA\f$)
+/** @brief   Get grid spacing in z direction (&Aring;)
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
