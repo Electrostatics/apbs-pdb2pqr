@@ -97,7 +97,7 @@ VPUBLIC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, double
 VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
   double killParam) {
 
-    int ivert, isimp, nLocalVerts;
+    int ivert, nLocalVerts;
     SS *simp;
     VV *vert;
     double radius, dx, dy, dz;
@@ -415,15 +415,17 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
 
             /* accumlate into the global error */
-            alg->gerror += errEst;
+            alg->gerror += errEst*errEst;
         }
     
         smid++;
     }
 
+    alg->gerror = VSQRT(alg->gerror)/((double)(Vgm_numSS(thee->gm)));
+
     /* do some i/o */
-    Vnm_print(0,"..done.  [marked=<%d>  gerror=<%g>]\n", marked, alg->gerror);
-    Vnm_print(0,"Alg_estRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
+    Vnm_print(0,"Vpee_markRefine:  [marked=<%d>  gerror=<%g>]\n", marked, alg->gerror);
+    Vnm_print(0,"Vpee_markRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
         etol, maxError, minError);
     Vnm_tstop(30, "error estimation");
 
