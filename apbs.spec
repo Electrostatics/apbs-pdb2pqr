@@ -157,6 +157,20 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
    make
 %endif
 
+# For Itanium IA64 using intel-mkl BLAS
+# NOTE: you must set the INTEL_BLAS environment variable to the BLAS lib dir!
+# From intel-mkl notes: Use the following linking flag order:
+#       -lmkl_lapack -lmkl_ipf -lguide 
+
+%ifarch ia64
+   export CC=icc
+   export CFLAGS='-fPIC -static' 
+   export F77=ifort
+   export FFLAGS='-fPIC -static'
+   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -lguide -ldl" --with-blas-name="mkl_lapack"
+   make
+%endif
+
 %install
 mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
 make install
