@@ -101,13 +101,13 @@ VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonConc
+// Routine:  Vpbe_getBulkIonicStrength
 //
-// Purpose:  Get the ionic strength in M
+// Purpose:  Get the bulk ionic strength in M
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getIonConc(Vpbe *thee) { 
+VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
@@ -187,23 +187,23 @@ VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonRadius
+// Routine:  Vpbe_getMaxIonRadius
 //
-// Purpose:  Get the ion probe radius in angstroms 
+// Purpose:  Get the maximum ion probe radius in angstroms 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getIonRadius(Vpbe *thee) { 
+VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->ionRadius; 
+   return thee->maxIonRadius; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getXkappa
 //
-// Purpose:  Get the Debye-Huckel parameter in reciprocal angstroms
+// Purpose:  Get the bulk Debye-Huckel parameter in reciprocal angstroms
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -217,7 +217,7 @@ VPUBLIC double Vpbe_getXkappa(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getDeblen
 //
-// Purpose:  Get the Debye length in angstroms
+// Purpose:  Get the bulk Debye length in angstroms
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -231,7 +231,7 @@ VPUBLIC double Vpbe_getDeblen(Vpbe *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getZkappa2
 //
-// Purpose:  Get the squared modified Debye-Huckel parameter
+// Purpose:  Get the bulk squared modified Debye-Huckel parameter
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -331,8 +331,11 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 //
 // Purpose:  Set up parameters, Vacc objects, and charge-simplex map
 //
-// Arguments: ionConc       = ionic strength in M
-//            ionRadius     = ionic probe radius in A
+// Arguments: alist         = list of solute atoms
+//            ionNum        = total number of counterion species
+//            ionConc       = array of counterion concentrations (M)
+//            ionRadii      = array of counterion radii (A)
+//            ionQ          = array of counterion charges (e)
 //            T             = temperature in K
 //            soluteDiel    = solute dielectric (unitless)
 //            solventDiel   = solvent dielectric (unitless)
@@ -365,15 +368,17 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 //
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, double ionConc, double ionRadius,
-  double T, double soluteDiel, double solventDiel, double solventRadius) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
+                    double *ionRadii, double *ionQ, double T,
+                    double soluteDiel, double solventDiel,
+                    double solventRadius) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, ionConc, ionRadius, T, soluteDiel, 
-      solventDiel, solventRadius) );
+    VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
+      T, soluteDiel, solventDiel, solventRadius) );
 
     return thee;
 }
@@ -389,16 +394,17 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, double ionConc, double ionRadius,
 //
 // Author:   Nathan Baker and Mike Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc, 
-  double ionRadius, double T, double soluteDiel, double solventDiel, 
-  double solventRadius) {
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
+                    double *ionConc, double *ionRadii,
+                    double *ionQ, double T, double soluteDiel,
+                    double solventDiel, double solventRadius) {
 
-    int iatom;
+    int i, iatom;
     double atomRadius;
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
-    double x, y, z;
+    double x, y, z, netCharge;
     double nhash;
     const double N_A = 6.022045000e+23;
     const double e_c = 4.803242384e-10;
@@ -467,8 +473,30 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
     thee->soluteCharge = charge;
 
     /* Set parameters */
-    thee->ionConc = ionConc;
-    thee->ionRadius = ionRadius;
+    thee->numIon = ionNum;
+    if (thee->numIon >= MAXION) {
+        Vnm_print(2, "Vpbe_ctor2:  Too many ion species (MAX = %d)!\n",
+          MAXION);
+        return 0;
+    }
+    thee->bulkIonicStrength = 0.0;
+    thee->maxIonRadius = 0.0;
+    netCharge = 0.0;
+    for (i=0; i<thee->numIon; i++) {
+        thee->ionConc[i] = ionConc[i];
+        thee->ionRadii[i] = ionRadii[i];
+        if (ionRadii[i] > thee->maxIonRadius) thee->maxIonRadius = ionRadii[i];
+        thee->ionQ[i] = ionQ[i];
+        thee->bulkIonicStrength += (0.5*ionConc[i]*VSQR(ionQ[i]));
+        netCharge += (ionConc[i]*ionQ[i]);
+    } 
+    Vnm_print(1, "Vpbe_ctor:  Using max ion radius (%g A) for exclusion \
+function\n", thee->maxIonRadius);
+    if (netCharge != 0.0) {
+        Vnm_print(2, "Vpbe_ctor2:  You have a counterion charge imbalance!\n");
+        Vnm_print(2, "Vpbe_ctor2:  Net charge conc. = %g M\n", netCharge);
+        return 0;
+    }
     thee->T = T;
     thee->soluteDiel = soluteDiel;
     thee->solventDiel = solventDiel;
@@ -484,12 +512,17 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
      * zmagic  = (4 * pi * e_c^2) / (k_B T)   (we scale the diagonal later)
      *         = 7046.528838
      */
-    if ((thee->T == 0.) || (thee->ionConc == 0.)) {
+    if (thee->T == 0.0) {
+        Vnm_print(2, "Vpbe_ctor2:  You set the temperature to 0 K.\n");
+        Vnm_print(2, "Vpbe_ctor2:  That violates the 3rd Law of Thermo.!");
+        return 0;
+    }
+    if (thee->bulkIonicStrength == 0.) {
         thee->xkappa  = 0.;
         thee->deblen  = 0.;
         thee->zkappa2 = 0.;
     } else {
-        thee->xkappa  = VSQRT( thee->ionConc * 1.0e-16 *
+        thee->xkappa  = VSQRT( thee->bulkIonicStrength * 1.0e-16 *
             ((8.0 * pi * N_A * e_c*e_c) / 
             (1000.0 * thee->solventDiel * k_B * T))
         );
@@ -503,8 +536,8 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
      *   - Place some limits on the size of the hash table in the case of very
      *     large molecules
      */
-    if (thee->ionRadius > thee->solventRadius) 
-      radius = thee->ionRadius + MAX_SPLINE_WINDOW;
+    if (thee->maxIonRadius > thee->solventRadius) 
+      radius = thee->maxIonRadius + MAX_SPLINE_WINDOW;
     else radius = thee->solventRadius + MAX_SPLINE_WINDOW;
     nhash = VPOW(8.0*(double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
     if (((int)nhash) < 3) nhash = 3;
@@ -622,4 +655,35 @@ VPUBLIC int Vpbe_memChk(Vpbe *thee) {
     memUse = memUse + Vacc_memChk(thee->acc);
 
     return memUse;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getIons
+//
+// Purpose:  Loads up some arrays with counterion data
+//
+// Arguments:  nion => replaced with number of counterion species
+//             ionConc => counterion concentrations (M)
+//             ionRadii => counterion radii (A)
+//             ionQ => counterion charges (e)
+//
+// Returns: number of counterions
+//      
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],
+  double ionRadii[MAXION], double ionQ[MAXION]) {
+
+    int i;
+
+    VASSERT(thee != VNULL);
+  
+    *nion = thee->numIon;
+    for (i=0; i<(*nion); i++) {
+        ionConc[i] = thee->ionConc[i];
+        ionRadii[i] = thee->ionRadii[i];
+        ionQ[i] = thee->ionQ[i];
+    }
+
+    return nion;
 }

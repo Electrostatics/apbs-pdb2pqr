@@ -66,6 +66,7 @@
 #define F77DPBDI      VF77_MANGLE(dpbdi, DPBDI)
 #define F77EIGDRIV    VF77_MANGLE(eigdriv, EIGDRIV)
 #define F77ANORMDRIV  VF77_MANGLE(anormdriv, ANORMDRIV)
+#define F77MYPDEFINIT  VF77_MANGLE(mypdefinit, MYPDEFINIT)
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Private methods

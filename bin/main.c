@@ -311,8 +311,12 @@ definition; no smoothing\n");
             else sparm = mgparm->srad;
             if (mgparm->nion > 0) iparm = mgparm->ionr[0];
             else iparm = 0.0;
-            pbe[i] = Vpbe_ctor(alist[mgparm->molid-1], ionstr, 
-              iparm, mgparm->temp, mgparm->pdie, mgparm->sdie, sparm);
+for (j=0; j<mgparm->nion; j++)
+              ionstr += 0.5*(VSQR(mgparm->ionq[j])*mgparm->ionc[j]);
+
+            pbe[i] = Vpbe_ctor(alist[mgparm->molid-1], mgparm->nion,
+              mgparm->ionc, mgparm->ionr, mgparm->ionq, mgparm->temp, 
+              mgparm->pdie, mgparm->sdie, sparm);
             Vnm_print(1,"main:    Setting up PDE...\n");
             pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1], 
               mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],

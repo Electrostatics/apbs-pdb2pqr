@@ -631,6 +631,9 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
     int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
+    int i, nion;
+    double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION], zkappa2, zks2;
+    double ionstr;
 
     /* Get the parameters */    
     VASSERT(pmgp != VNULL); 
@@ -706,6 +709,17 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
      * partition */
     Vpmg_unsetPart(thee);
 
+    /* Initialize ion concentrations and valencies in PMG routines */
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
+    if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
+    else zks2 = 0.0;
+    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+    for (i=0; i<nion; i++) {
+        ionConc[i] = zks2 * ionConc[i] * ionQ[i];
+    }
+    F77MYPDEFINIT(&nion, ionQ, ionConc);
+
     /* Ignore external energy contributions */
     thee->extQmEnergy = 0;
     thee->extDiEnergy = 0;
@@ -758,7 +772,9 @@ VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
 VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
   int energyFlag) {
 
-    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
+    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc, i, nion;
+    double ionstr, zkappa2, zks2, ionQ[MAXION], ionConc[MAXION];
+    double ionRadii[MAXION];
 
     /* Get the parameters */    
     VASSERT(pmgp != VNULL); 
@@ -849,6 +865,16 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
       &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
       &(thee->pmgp->irite), &(thee->pmgp->iperf));
 
+    /* Initialize ion concentrations and valencies in PMG routines */
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
+    if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
+    else zks2 = 0.0;
+    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+    for (i=0; i<nion; i++) {
+        ionConc[i] = zks2 * ionConc[i] * ionQ[i];
+    }
+    F77MYPDEFINIT(&nion, ionQ, ionConc);
 
     /* Turn off restriction of observable calculations to a specific 
      * partition */
@@ -974,7 +1000,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     pbe = thee->pbe;
     acc = pbe->acc;
     alist = pbe->alist;
-    irad = Vpbe_getIonRadius(pbe);
+    irad = Vpbe_getMaxIonRadius(pbe);
     srad = Vpbe_getSolventRadius(pbe);
     zmagic = Vpbe_getZmagic(pbe);
     zkappa2 = Vpbe_getZkappa2(pbe);
@@ -1181,19 +1207,21 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                 position[1] = thee->yf[j];
                 position[2] = thee->zf[k];
 
-                /* the scalar (0th derivative) entry */
+                /* the scalar (0th derivative) entry.  This is simply a number
+                 * between 0 and 1; the actual coefficent value is calculated
+                 * in mypde.f */
                 if (surfMeth == 2) {
                     if (thee->ccf[IJK(i,j,k)] == -1.0) {
                        gpos[0] = i*hx + xmin;
                        gpos[1] = j*hy + ymin;
                        gpos[2] = k*hzed + zmin;
-                       thee->ccf[IJK(i,j,k)] = zkappa2*Vacc_splineAcc(acc,
+                       thee->ccf[IJK(i,j,k)] = Vacc_splineAcc(acc,
                          gpos, splineWin, irad);
                     }
                 } else {
                     if (thee->ccf[IJK(i,j,k)] == -1.0) 
                       thee->ccf[IJK(i,j,k)] = 0.0;
-                    else thee->ccf[IJK(i,j,k)] = zkappa2;
+                    else thee->ccf[IJK(i,j,k)] = 1.0;
                 }
 
                 /* The diagonal tensor (2nd derivative) entries.  Each of these
@@ -1451,7 +1479,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     pbe = thee->pbe;
     acc = pbe->acc;
     alist = pbe->alist;
-    irad = Vpbe_getIonRadius(pbe);
+    irad = Vpbe_getMaxIonRadius(pbe);
     zkappa2 = Vpbe_getZkappa2(pbe);
     izmagic = 1.0/Vpbe_getZmagic(pbe);
 
@@ -1539,19 +1567,21 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
                             /* Nonlinear forces not done */
                             VASSERT(0);
                         } else {
+                            /* Use of bulk factor (zkappa2) OK here becuase
+                             * LPBE force approximation */
                             fmag = VSQR(thee->u[IJK(i,j,k)]);
-                            force[0] += (fmag*tgrad[0]);
-                            force[1] += (fmag*tgrad[1]);
-                            force[2] += (fmag*tgrad[2]);
+                            force[0] += (zkappa2*fmag*tgrad[0]);
+                            force[1] += (zkappa2*fmag*tgrad[1]);
+                            force[2] += (zkappa2*fmag*tgrad[2]);
                         }
                     }
                 } /* k loop */
             } /* j loop */
         } /* i loop */
     } 
-    force[0] = force[0] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
-    force[1] = force[1] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
-    force[2] = force[2] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
+    force[0] = force[0] * 0.5 * hx * hy * hzed * izmagic;
+    force[1] = force[1] * 0.5 * hx * hy * hzed * izmagic;
+    force[2] = force[2] * 0.5 * hx * hy * hzed * izmagic;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -2059,8 +2089,9 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
 
-    double hx, hy, hzed, energy;
-    int i, nx, ny, nz;
+    double hx, hy, hzed, energy, ionConc[MAXION], ionRadii[MAXION];
+    double ionQ[MAXION], zkappa2, ionstr, zks2;
+    int i, j, nx, ny, nz, nion, ichop, nchop;
  
     VASSERT(thee != VNULL);
     VASSERT(thee->filled);
@@ -2072,30 +2103,42 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     hx = thee->pmgp->hx;
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
 
     /* Bail if we're at zero ionic strength */
-    if (Vpbe_getZkappa2(thee->pbe) == 0.0) {
+    if (zkappa2 == 0.0) {
         Vnm_print(0, "Vpmg_qmEnergy:  Zero energy for zero ionic strength!\n");
         return 0.0;
     }
+    zks2 = 0.5*zkappa2/ionstr;
 
     /* Because PMG seems to overwrite some of the coefficient arrays... */
     Vpmg_fillco(thee, thee->surfMeth, thee->splineWin);
 
     energy = 0.0;
-
+    nchop = 0;
+    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
     if (thee->pmgp->nonlin) {
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating nonlinear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            /* Avoid problems with the cosh */
-            if (thee->pvec[i]*thee->ccf[i] > 0) 
-              energy += (thee->pvec[i]*thee->ccf[i]*(VCOSH(thee->u[i])-1.0));
+            if (thee->pvec[i]*thee->ccf[i] > 0) {
+                for (j=0; j<nion; j++) {
+                    energy += (thee->pvec[i]*thee->ccf[i]*zks2
+                      * ionConc[j] * VSQR(ionQ[j]) 
+                      * (Vcap_cosh(ionQ[j]*thee->u[i], &ichop)-1.0));
+                    nchop += ichop;
+                }
+            }
         }
+        if (nchop > 0) Vnm_print(2, "Vpmg_qmEnergy:  Chopped COSH %d times!\n",
+          nchop);
     } else {
+        /* Zkappa2 OK here b/c LPBE approx */
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
             if (thee->pvec[i]*thee->ccf[i] > 0) 
-              energy += (thee->pvec[i]*thee->ccf[i]*VSQR(thee->u[i]));
+              energy += (thee->pvec[i]*zkappa2*thee->ccf[i]*VSQR(thee->u[i]));
         }
         energy = 0.5*energy;
     }
