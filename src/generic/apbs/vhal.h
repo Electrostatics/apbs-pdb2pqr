@@ -233,7 +233,7 @@ typedef enum eVdata_Format Vdata_Format;
 /** @brief  Our dimension
  * @ingroup Vhal
  */
-#define VAPBS_DIM 4
+#define VAPBS_DIM 3
 
 /** @brief   Face definition for a volume
  *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 

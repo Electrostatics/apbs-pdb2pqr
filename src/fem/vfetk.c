@@ -74,6 +74,43 @@ VPRIVATE double Vfetk_qfEnergyAtom(
 VPRIVATE Vfetk_LocalVar var;
 
 /**
+ * @brief  MCSF-format cube mesh (all Dirichlet)
+ * @ingroup Vfetk
+ * @author  Based on mesh by Mike Holst
+ */
+VPRIVATE char *cubeString =
+"mcsf_begin=1;\n\
+\n\
+dim=3;\n\
+dimii=3;\n\
+vertices=8;\n\
+simplices=6;\n\
+\n\
+vert=[\n\
+0 0 -0.5 -0.5 -0.5\n\
+1 0  0.5 -0.5 -0.5\n\
+2 0 -0.5  0.5 -0.5\n\
+3 0  0.5  0.5 -0.5\n\
+4 0 -0.5 -0.5  0.5\n\
+5 0  0.5 -0.5  0.5\n\
+6 0 -0.5  0.5  0.5\n\
+7 0  0.5  0.5  0.5\n\
+];\n\
+\n\
+simp=[\n\
+0 0 0 0 1 0 1 0 5 1 2\n\
+1 0 0 0 1 1 0 0 5 2 4\n\
+2 0 0 0 1 0 1 1 5 3 2\n\
+3 0 0 0 1 0 1 3 5 7 2\n\
+4 0 0 1 1 0 0 2 5 7 6\n\
+5 0 0 1 1 0 0 2 5 6 4\n\
+];\n\
+\n\
+mcsf_end=1;\n\
+\n\
+";
+
+/**
  * @brief  Return the smoothed value of the dielectric coefficient at the
  * current point using a fast, chart-based method
  * @ingroup  Vfetk
@@ -745,38 +782,6 @@ VPUBLIC unsigned long int Vfetk_memChk(Vfetk *thee) {
     return memUse;
 }
 
-VPRIVATE char *cubeString =
-"mcsf_begin=1;\n\
-\n\
-dim=3;\n\
-dimii=3;\n\
-vertices=8;\n\
-simplices=6;\n\
-\n\
-vert=[\n\
-0 0 -0.5 -0.5 -0.5\n\
-1 0  0.5 -0.5 -0.5\n\
-2 0 -0.5  0.5 -0.5\n\
-3 0  0.5  0.5 -0.5\n\
-4 0 -0.5 -0.5  0.5\n\
-5 0  0.5 -0.5  0.5\n\
-6 0 -0.5  0.5  0.5\n\
-7 0  0.5  0.5  0.5\n\
-];\n\
-\n\
-simp=[\n\
-0 0 0 0 1 0 1 0 5 1 2\n\
-1 0 0 0 1 1 0 0 5 2 4\n\
-2 0 0 0 1 0 1 1 5 3 2\n\
-3 0 0 0 1 0 1 3 5 7 2\n\
-4 0 0 1 1 0 0 2 5 7 6\n\
-5 0 0 1 1 0 0 2 5 6 4\n\
-];\n\
-\n\
-mcsf_end=1;\n\
-\n\
-";
-
 
 VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
 
@@ -864,15 +869,8 @@ VPUBLIC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Bmat_printHB
-//
-// Purpose:  Prints a Bmat in sparse Harwell-Boeing format
-//
-//  Author:  Stephen Bond (following HB matrix user's guide)
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
-{
+VPUBLIC void Bmat_printHB( Bmat *thee, char *fname ) {
+
     Mat *Ablock;
     MATsym pqsym;
     int i, j, jj;
@@ -1508,7 +1506,12 @@ VPUBLIC void Vfetk_PDE_Fu(PDE *thee, int key, double F[]) {
 
 }
 
-VPUBLIC double Vfetk_PDE_Fu_v(PDE *thee, int key, double V[], double dV[][3]) {
+VPUBLIC double Vfetk_PDE_Fu_v(
+        PDE *thee, 
+        int key, 
+        double V[], 
+        double dV[][VAPBS_DIM]
+        ) {
 
     Vhal_PBEType type;
     int i;
@@ -1552,8 +1555,14 @@ to PBE!\n");
     return value;
 }
 
-VPUBLIC double Vfetk_PDE_DFu_wv(PDE *thee, int key, double W[], double dW[][3],
-  double V[], double dV[][3]) {
+VPUBLIC double Vfetk_PDE_DFu_wv(
+        PDE *thee, 
+        int key, 
+        double W[], 
+        double dW[][VAPBS_DIM], 
+        double V[], 
+        double dV[][3]
+        ) {
 
     Vhal_PBEType type;
     int i;
