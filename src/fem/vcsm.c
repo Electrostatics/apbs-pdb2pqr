@@ -47,16 +47,9 @@
 #if defined(HAVE_MC_H)
 #include "apbs/vcsm.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vcsm: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
+/* Inlineable methods */
 #if !defined(VINLINE_VCSM)
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getValist
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) { 
 
    VASSERT(thee != VNULL);
@@ -64,11 +57,6 @@ VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getNumberAtoms
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
 
    VASSERT(thee != VNULL);
@@ -77,11 +65,6 @@ VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getAtom
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
 
 
@@ -93,11 +76,6 @@ VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getAtomIndex
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
 
 
@@ -109,11 +87,6 @@ VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getNumberSimplices
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
 
 
@@ -124,11 +97,6 @@ VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getSimplex
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
 
 
@@ -139,11 +107,6 @@ VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getSimplexIndex
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
 
 
@@ -154,11 +117,6 @@ VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_memChk
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC unsigned long int Vcsm_memChk(Vcsm *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
@@ -166,15 +124,6 @@ VPUBLIC unsigned long int Vcsm_memChk(Vcsm *thee) {
 
 #endif /* if !defined(VINLINE_VCSM) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vcsm: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_ctor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
 
     /* Set up the structure */
@@ -186,11 +135,6 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_ctor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) { 
  
     VASSERT( thee != VNULL );
@@ -214,11 +158,6 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) {
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_init
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
@@ -313,8 +252,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
      * placed in at simplex */
     for (iatom=0; iatom<thee->natom; iatom++) {
         if (thee->nqsm[iatom] == 0) {
-            Vnm_print(2,"Vcsm_init: Atom %d not placed in simplex!\n", iatom);
-            Vnm_print(2,"Vcsm_init: Your mesh sucks (too small?)!\n");
+            Vnm_print(2, "Vcsm_init: Atom %d not placed in simplex!\n", iatom);
             VASSERT(0);
         }
     }
@@ -338,11 +276,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     thee->initFlag = 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_dtor(Vcsm **thee) {
     if ((*thee) != VNULL) {
         Vcsm_dtor2(*thee);
@@ -351,11 +284,6 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_dtor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_dtor2(Vcsm *thee) { 
     int i;
 
@@ -382,11 +310,6 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
     Vmem_dtor(&(thee->vmem));
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_update
-//
-// Author:   Nathan Baker
-///////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
     /* Counters */
@@ -538,8 +461,9 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Setup the new entries in the array */
     for (iatom=0;iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
-        qsmNew[iatom] = Vmem_malloc(thee->vmem, dnqsm[iatom] + thee->nqsm[atomID], 
-                                  sizeof(int));
+        qsmNew[iatom] = Vmem_malloc(thee->vmem, 
+                (dnqsm[iatom] + thee->nqsm[atomID]), 
+                sizeof(int));
         nqsmNew[iatom] = 0;
         VASSERT(qsmNew[iatom] != VNULL);
     }

@@ -49,6 +49,24 @@
 #include "apbs/vfetk.h"
 
 /**
+ * @brief  Calculuate the contribution to the charge-potential energy from one
+ * atom
+ * @ingroup Vfetk
+ * @author  Nathan Baker
+ * @param  thee  current Vfetk object
+ * @param  iatom  current atom index
+ * @param  color  simplex subset (partition) under consideration
+ * @param  sol  current solution
+ * @returns Per-atom energy
+ */
+VPRIVATE double Vfetk_qfEnergyAtom(
+        Vfetk *thee, 
+        int iatom, 
+        int color, 
+        double *sol
+        );
+
+/**
  * @brief  Container for local variables
  * @ingroup  Vfetk
  * @bug  Not thread-safe
@@ -87,8 +105,12 @@ VPRIVATE double kappa2();
  * @param  coeff  coefficient value at each vertex
  * @notes  Thread-safe
  * @return smoothed value of coefficieent at point of interest */
-VPRIVATE double smooth(int nverts, double dist[4], double coeff[4],
-  int meth);
+VPRIVATE double smooth(
+        int nverts, 
+        double dist[VAPBS_NVS], 
+        double coeff[VAPBS_NVS],
+        int meth
+        );
 
 
 /**
@@ -102,7 +124,11 @@ VPRIVATE double smooth(int nverts, double dist[4], double coeff[4],
  * @notes  Thread-safe
  * @returns  Multi-sphere Debye-Huckel potential in kT/e
  */
-VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]);
+VPRIVATE double debye_U(
+        Vpbe *pbe, 
+        int d, 
+        double x[]
+        );
 
 /**
  * @brief  Return the difference between the analytical multi-sphere
@@ -115,7 +141,11 @@ VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]);
  * @param  x  Coordinates of point of interest (in &Aring;)
  * @notes  Thread-safe
  * @returns  Multi-sphere Debye-Huckel potential in kT/e */
-VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]);
+VPRIVATE double debye_Udiff(
+        Vpbe *pbe, 
+        int d, 
+        double x[]
+        );
 
 /**
  * @brief  Calculate the Coulomb's
@@ -131,8 +161,15 @@ VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]);
  * @param  dU  Set to potential gradient (in kT/e/&Aring;)
  * @param  d2U  Set to Laplacian of potential (in \f$kT e^{-1} \AA^{-2}\f$)
  * @returns  Multi-sphere Debye-Huckel potential in kT/e */
-VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U, 
-  double dU[], double *d2U);
+VPRIVATE void coulomb(
+        Vpbe *pbe, 
+        int d, 
+        double x[], 
+        double eps, 
+        double *U, 
+        double dU[], 
+        double *d2U
+        );
 
 /**
  * @brief  2D linear master simplex information generator
@@ -144,8 +181,15 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U,
  * @param c  dunno
  * @param cx  dunno 
  * @notes  Trust in Mike */
-VPRIVATE void init_2DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
-  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]);
+VPRIVATE void init_2DP1(
+        int dimIS[], 
+        int *ndof, 
+        int dof[], 
+        double c[][VMAXP], 
+        double cx[][VMAXP], 
+        double cy[][VMAXP], 
+        double cz[][VMAXP]
+        );
 
 /**
  * @brief  3D linear master simplex information generator
@@ -159,8 +203,15 @@ VPRIVATE void init_2DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
  * @param cy dunno
  * @param cz dunno 
  * @notes  Trust in Mike */
-VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
-  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]);
+VPRIVATE void init_3DP1(
+        int dimIS[], 
+        int *ndof, 
+        int dof[], 
+        double c[][VMAXP], 
+        double cx[][VMAXP], 
+        double cy[][VMAXP], 
+        double cz[][VMAXP]
+        );
 
 /**
  * @brief  Setup coefficients of polynomials from integer table data
@@ -176,9 +227,17 @@ VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
  * @param icy  dunno
  * @param icz  dunno
  * @notes  Trust in Mike */
-VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP], 
-  double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP], 
-  int icy[][VMAXP], int icz[][VMAXP]);
+VPRIVATE void setCoef(
+        int numP, 
+        double c[][VMAXP], 
+        double cx[][VMAXP], 
+        double cy[][VMAXP], 
+        double cz[][VMAXP], 
+        int ic[][VMAXP], 
+        int icx[][VMAXP], 
+        int icy[][VMAXP], 
+        int icz[][VMAXP]
+        );
 
 /**
  * @brief  Evaluate a collection of at most cubic polynomials at a
@@ -206,7 +265,12 @@ VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP],
  *            + c16*y*y*z + c17*x*z*z + c18*y*z*z
  * </pre>
  */
-VPRIVATE void polyEval(int numP, double p[], double c[][VMAXP], double xv[]);
+VPRIVATE void polyEval(
+        int numP, 
+        double p[], 
+        double c[][VMAXP], 
+        double xv[]
+        );
 
 /**
  * @brief  I have no clue what this variable does, but we need it to initialize
@@ -284,8 +348,8 @@ VPRIVATE int lgr_2DP1z[3][VMAXP] = {
  * (0, 0, 1)         p[3](x,y,z) = z
  * </pre>
  */
-VPRIVATE int dim_3DP1 = 4;
-VPRIVATE int lgr_3DP1[4][VMAXP] = {
+VPRIVATE int dim_3DP1 = VAPBS_NVS;
+VPRIVATE int lgr_3DP1[VAPBS_NVS][VMAXP] = {
 /*c0  c1  c2  c3 ---------------------------------------------------------- */
 /* 1   x   y   z ---------------------------------------------------------- */
 {  2, -2, -2, -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
@@ -293,7 +357,7 @@ VPRIVATE int lgr_3DP1[4][VMAXP] = {
 {  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
 {  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
 };
-VPRIVATE int lgr_3DP1x[4][VMAXP] = {
+VPRIVATE int lgr_3DP1x[VAPBS_NVS][VMAXP] = {
 /*c0 ---------------------------------------------------------------------- */
 /* 1 ---------------------------------------------------------------------- */
 { -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
@@ -301,7 +365,7 @@ VPRIVATE int lgr_3DP1x[4][VMAXP] = {
 {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
 {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
 };
-VPRIVATE int lgr_3DP1y[4][VMAXP] = {
+VPRIVATE int lgr_3DP1y[VAPBS_NVS][VMAXP] = {
 /*c0 ---------------------------------------------------------------------- */
 /* 1 ---------------------------------------------------------------------- */
 { -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
@@ -309,7 +373,7 @@ VPRIVATE int lgr_3DP1y[4][VMAXP] = {
 {  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
 {  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
 };
-VPRIVATE int lgr_3DP1z[4][VMAXP] = {
+VPRIVATE int lgr_3DP1z[VAPBS_NVS][VMAXP] = {
 /*c0 ---------------------------------------------------------------------- */
 /* 1 ---------------------------------------------------------------------- */
 { -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
@@ -391,7 +455,7 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vhal_PBEType type) {
 VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
 
     int i;
-    double center[3];
+    double center[VAPBS_DIM];
 
     /* Make sure things have been properly initialized & store them */
     VASSERT(pbe != VNULL);
@@ -544,80 +608,106 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 
 
 VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
+ 
+    double *sol; int nsol;
+    int iatom, natoms;
+    double energy = 0.0;
+ 
+    AM *am;
+ 
+    VASSERT(thee != VNULL);
+    am = thee->am;
+ 
+    /* Get the finest level solution */
+    sol= VNULL;
+    sol = Vfetk_getSolution(thee, &nsol);
+    VASSERT(sol != VNULL);
+ 
+    /* Make sure the number of entries in the solution array matches the
+     * number of vertices currently in the mesh */
+    if (nsol != Gem_numVV(thee->gm)) {
+       Vnm_print(2, "Vfetk_qfEnergy: Number of unknowns in solution does not match\n");
+       Vnm_print(2, "Vfetk_qfEnergy: number of vertices in mesh!!!  Bailing out!\n");
+       VASSERT(0);
+    }
+ 
+    /* Now we do the sum over atoms... */
+    natoms = Valist_getNumberAtoms(thee->pbe->alist);
+    for (iatom=0; iatom<natoms; iatom++) {
+ 
+        energy = energy + Vfetk_qfEnergyAtom(thee, iatom, color, sol);
+ 
+    } /* end for iatom */
+ 
+    /* Destroy the finest level solution */
+    Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
+ 
+    /* Return the energy */
+    return energy;
+}
 
-   double *sol; int nsol;
-   double charge;
-   double phi[4], phix[4][3], *position;
-   int iatom, natoms;
-   int isimp, nsimps;
-   int icolor;
-   int ivert;
-   SS *simp;
-   double energy = 0.0;
-   double uval;
+VPRIVATE double Vfetk_qfEnergyAtom(
+        Vfetk *thee, 
+        int iatom, 
+        int color, 
+        double *sol) {
 
-   AM *am;
+    Vatom *atom;
+    double charge;
+    double phi[VAPBS_NVS], phix[VAPBS_NVS][3], *position;
+    double uval;
+    double energy = 0.0;
+    int isimp, nsimps;
+    SS *simp;
+    int icolor, ivert, usingColor;
 
-   VASSERT(thee != VNULL);
-   am = thee->am;
 
-   /* Get the finest level solution */
-   sol= VNULL;
-   sol = Vfetk_getSolution(thee, &nsol);
-   VASSERT(sol != VNULL);
+    /* Get atom information */
+    atom = Valist_getAtom(thee->pbe->alist, iatom);
+    icolor = Vfetk_getAtomColor(thee, iatom);
+    charge = Vatom_getCharge(atom);
+    position = Vatom_getPosition(atom);
 
-   /* Make sure the number of entries in the solution array matches the
-    * number of vertices currently in the mesh */
-   if (nsol != Gem_numVV(thee->gm)) {
-      Vnm_print(2, "Vfetk_getLinearEnergy1: Number of unknowns in solution does not match\n");
-      Vnm_print(2, "Vfetk_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
-      VASSERT(0);
-   }
+    /* Find out if we're using colors */
+    usingColor = (color >= 0);
 
-   /* Now we do the sum over atoms... */
-   natoms = Valist_getNumberAtoms(thee->pbe->alist);
-   for (iatom=0; iatom<natoms; iatom++) {
-       /* Get atom information */
-       icolor = Vfetk_getAtomColor(thee, iatom);
-       charge = Vatom_getCharge(Valist_getAtom(thee->pbe->alist, iatom));
-       position = Vatom_getPosition(Valist_getAtom(thee->pbe->alist, iatom));
-       /* Check if this atom belongs to the specified partition */
-       if ((color>=0) && (icolor<0)) {
-           Vnm_print(2, "Vfetk_getLinearEnergy1: Atom colors not set!\n");
-           VASSERT(0);
-       }
-       if ((icolor==color) || (color<0)) {
-           /* Loop over the simps associated with this atom */
-           nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
-           /* Get the first simp of the correct color; we can use just one
-            * simplex for energy evaluations, but not for force
-            * evaluations */
-           for (isimp=0; isimp<nsimps; isimp++) {
-               simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
-               /* If we've asked for a particular partition AND if the atom
-                * is our partition, then compute the energy */
-               if ((SS_chart(simp)==color)||(color<0)) {
-                   /* Get the value of each basis function evaluated at this
-                    * point */
-                   Gem_pointInSimplexVal(thee->gm, simp, position, phi, phix);
-                   for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
-                       uval = sol[VV_id(SS_vertex(simp,ivert))];
-                       energy += (charge*phi[ivert]*uval);
-                   } /* end for ivert */
-                   /* We only use one simplex of the appropriate color for
-                    * energy calculations, so break here */
-                   break;
-               } /* endif (color) */
-           } /* end for isimp */
-       }
-   } /* end for iatom */
+    if (usingColor && (icolor<0)) {
+        Vnm_print(2, "Vfetk_qfEnergy: Atom colors not set!\n");
+        VASSERT(0);
+    }
 
-   /* Destroy the finest level solution */
-   Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
+    /* Check if this atom belongs to the specified partition */
+    if ((icolor==color) || (!usingColor)) {
+        /* Loop over the simps associated with this atom */
+        nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
+ 
+        /* Get the first simp of the correct color; we can use just one
+         * simplex for energy evaluations, but not for force
+         * evaluations */
+        for (isimp=0; isimp<nsimps; isimp++) {
+ 
+            simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
+ 
+            /* If we've asked for a particular partition AND if the atom
+             * is our partition, then compute the energy */
+            if ((SS_chart(simp)==color)||(color<0)) {
+                /* Get the value of each basis function evaluated at this
+                 * point */
+                Gem_pointInSimplexVal(thee->gm, simp, position, phi, phix);
+                for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
+                    uval = sol[VV_id(SS_vertex(simp,ivert))];
+                    energy += (charge*phi[ivert]*uval);
+                } /* end for ivert */
+                /* We only use one simplex of the appropriate color for
+                 * energy calculations, so break here */
+                break;
+            } /* endif (color) */
+        } /* end for isimp */
+    }
 
-   /* Return the energy */
    return energy;
 }
+
 
 VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 
@@ -1413,7 +1503,7 @@ VPUBLIC void Vfetk_PDE_dtor2(PDE *thee) {
     var.fetk = VNULL; 
 }
 
-VPRIVATE double smooth(int nverts, double dist[4], double coeff[4], int meth) {
+VPRIVATE double smooth(int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NVS], int meth) {
 
     int i;
     double weight;
@@ -1486,7 +1576,7 @@ VPRIVATE double diel() {
 VPRIVATE double kappa2() {
 
     int i, j;
-    double dist[5], coeff[5], irad, swin, *vx;
+    double dist[5], coeff[5], irad, swin, *vx, kappa2val;
     Vsurf_Meth srfm;
     Vacc *acc = VNULL;
     PBEparm *pbeparm = VNULL;
@@ -1498,10 +1588,12 @@ VPRIVATE double kappa2() {
     swin = pbeparm->swin;
     acc = var.fetk->pbe->acc;
 
+    kappa2val = -999999.0;
+
     if (var.zks2 < VSMALL) return 0.0;
     switch (srfm) {
         case VSM_MOL:
-            return (var.zks2*Vacc_ivdwAcc(acc, var.xq, irad));
+            kappa2val = (var.zks2*Vacc_ivdwAcc(acc, var.xq, irad));
             break;
         case VSM_MOLSMOOTH:
             for (i=0; i<var.nverts; i++) {
@@ -1513,15 +1605,17 @@ VPRIVATE double kappa2() {
                 dist[i] = VSQRT(dist[i]);
                 coeff[i] = var.zks2*Vacc_ivdwAcc(acc, var.xq, irad);
             }
-            return smooth(var.nverts, dist, coeff, 1);
+            kappa2val = smooth(var.nverts, dist, coeff, 1);
             break;
         case VSM_SPLINE:
-            return (var.zks2*Vacc_splineAcc(acc, var.xq, swin, irad));
+            kappa2val = (var.zks2*Vacc_splineAcc(acc, var.xq, swin, irad));
             break;
         default:
             Vnm_print(2, "Undefined surface method (%d)!\n", srfm);
             VASSERT(0);
     }
+
+    return kappa2val;
 }
 
 VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]) {
@@ -1925,7 +2019,7 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
 
     int iatom, jatom, natoms, atomIndex, atomList[VATOMMAX], nAtomList;
     int gotAtom, numSring, isimp, ivert, sid;
-    double *position, charge, phi[4], phix[4][3], value;
+    double *position, charge, phi[VAPBS_NVS], phix[VAPBS_NVS][3], value;
     Vatom *atom;
     Vhal_PBEType pdekey;
     SS *sring[VRINGMAX];
@@ -2045,7 +2139,7 @@ VPUBLIC void Vfetk_PDE_mapBoundary(int dim, int dimII, int vertexType,
 }
 
 VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
-  int faceType[4], int vertexType[4], int chart[], double vx[][3],
+  int faceType[VAPBS_NVS], int vertexType[VAPBS_NVS], int chart[], double vx[][3],
   void *simplex) {
 
     double targetRes, edgeLength, srad, swin, myAcc, refAcc;
@@ -2259,7 +2353,7 @@ VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP],
 VPUBLIC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof, 
   int dof[]) {
 
-    int qorder, bump, dimIS[4];
+    int qorder, bump, dimIS[VAPBS_NVS];
 
     /* necessary quadrature order to return at the end */
     qorder = P_DEG;
@@ -2344,7 +2438,7 @@ VPRIVATE void init_2DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
     dof[2] = 0;
     dof[3] = 0;
     *ndof  = 0;
-    for (i=0; i<4; i++) *ndof += dimIS[i] * dof[i];
+    for (i=0; i<VAPBS_NVS; i++) *ndof += dimIS[i] * dof[i];
     VASSERT( *ndof == dim_2DP1 );
     VASSERT( *ndof <= VMAXP );
 
@@ -2363,7 +2457,7 @@ VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
     dof[2] = 0;
     dof[3] = 0;
     *ndof  = 0;
-    for (i=0; i<4; i++) *ndof += dimIS[i] * dof[i];
+    for (i=0; i<VAPBS_NVS; i++) *ndof += dimIS[i] * dof[i];
     VASSERT( *ndof == dim_3DP1 );
     VASSERT( *ndof <= VMAXP );
 
