@@ -301,12 +301,19 @@ typedef enum Vdata_Format Vdata_Format;
 
 /* String embedding for ident */
 #if defined(HAVE_EMBED)
+/**
+ * @brief  Allows embedding of RCS ID tags in object files.
+ * @author Mike Holst
+ * @ingroup Vhal */
 #    define VEMBED(rctag) \
          VPRIVATE const char* rctag; \
          static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
 #else
+/**
+ * @brief  Allows embedding of RCS ID tags in object files.
+ * @author Mike Holst
+ * @ingroup Vhal */
 #    define VEMBED(rctag)
 #endif /* if defined(HAVE_EMBED) */
-
 
 #endif /* #ifndef _VAPBSHAL_H_ */

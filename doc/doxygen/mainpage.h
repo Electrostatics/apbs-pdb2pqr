@@ -1165,7 +1165,7 @@
  * information</a><br>
  * <a href="http://cholla.wustl.edu/pipermail/apbs-users/">List
  * archives</a>
- * 
+ * </ul>
  * 
  * <hr width="100%">
  * @section bugs Bugs and reporting problems

@@ -1,5 +1,13 @@
 #############################################################################
-BETA PUBLIC RELEASE VERSION 0.2.6       01-17-02
+BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
+#############################################################################
+
+  * Made autoconf/automake configure setup more robust on Solaris 8 platforms
+    (thanks to Ben Carrington!)
+  * Fixed minor bugs in documentation formatting
+ 
+#############################################################################
+BETA PUBLIC RELEASE VERSION 0.2.6       01-17-03
 #############################################################################
  
   * Changed license to GPL 
