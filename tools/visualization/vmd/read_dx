@@ -1,17 +1,25 @@
-# DX formatted potential grid reader for VMD
-# - Dave Sept - Washington University
+# read_dx:         An OpenDX-format grid reader for VMD
+# Primary author:  Dave Sept - Washington University
+# Hacked by:       Nathan Baker - Washington University
+# Version:         $Id$
 #
 proc read_dx {fileName molNum} {
 #
 # This procedure reads in a dx grid and associates it with
 # the molecule <molNum>
 #
-    puts "Reading in dx data..."
+    puts "read_dx:  A program to read APBS OpenDX-format data into VMD"
+    puts "Authors:  Dave Sept and Nathan Baker"
+    puts "WARNING!  THIS PROGRAM ASSUMES YOU HAVE THE DATA ORDERED SUCH"
+    puts "THAT Z INCREASES MOST QUICKLY, Y INCREASES NEXT MOST QUICKLY,"
+    puts "AND X INCREASES MOST SLOWLY."
+    puts ""
+    puts "Reading header information..."
     set valList ""
     set count 0
     set in [open $fileName r]
-    set InputLine [gets $in]
-    puts $InputLine
+    set TitleLine [gets $in]
+    puts "Grid title:  $TitleLine"
     set InputLine [gets $in]
     set InputLine [gets $in]
     set InputLine [gets $in]
@@ -21,6 +29,7 @@ proc read_dx {fileName molNum} {
     set InputLine [gets $in]
     scan $InputLine "origin %e %e %e" xOrigin yOrigin zOrigin
     set origin [list $xOrigin $yOrigin $zOrigin ]
+    puts "Origin at: $xOrigin $yOrigin $zOrigin" 
     set InputLine [gets $in]
     scan $InputLine "delta %e %e %e" zdel dum2 dum1
     set InputLine [gets $in]
@@ -35,6 +44,7 @@ proc read_dx {fileName molNum} {
     set InputLine [gets $in]
     set InputLine [gets $in]
     set total [expr int($xgrid* $ygrid * $zgrid / 3)]
+    puts "Reading data values..."
     while {$count < $total} {
         set InputLine [gets $in]
 	  scan $InputLine "%e %e %e" v1 v2 v3
@@ -50,13 +60,27 @@ proc read_dx {fileName molNum} {
 	  scan $InputLine "%e"  v1
         lappend valList $v1
     }
-    close $in      
-      
-    puts "Length of list is [llength $valList]"
-    puts "Now to show surface in vmd..."
-    puts "Origin at: $xOrigin $yOrigin $zOrigin" 
-    mol volume $molNum "APBS Potential"  $origin $xVec $yVec $zVec $xgrid $ygrid $zgrid $valList
 
+    # The value list we read has z increasing most quickly; however, VMD wants
+    # x to increase most quickly
+	puts "Reordering data values..."
+    set dataList ""
+    for {set k 0} {$k<$zgrid} {incr k} {
+        for {set j 0} {$j<$ygrid} {incr j} {
+            for {set i 0} {$i<$xgrid} {incr i} {
+                set u [expr $i * $zgrid * $ygrid + $j * $zgrid + $k]
+                lappend dataList [lindex $valList $u]
+            }
+        }
+    }
+
+      
+    puts "Length of original list is [llength $valList]"
+    puts "Length of reordered list is [llength $dataList]"
+    puts "Passing volume data for molecule $molNum to VMD..."
+    mol volume $molNum $TitleLine  $origin $xVec $yVec $zVec $xgrid $ygrid $zgrid $dataList
+
+    close $in      
 }
 
 
