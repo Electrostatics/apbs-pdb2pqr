@@ -51,7 +51,7 @@ LDFLAGS            = @LDFLAGS@ @FLIBS@
 
 noinst_PROGRAMS    = mgmesh accmap
 mgmesh_SOURCES     = mgmesh.c mypde.f
-mgmesh_LDADD       = ${math_lib}
+mgmesh_LDADD       = -lapbs @lib_list@
 accmap_SOURCES     = accmap.c mypde.f
 accmap_LDADD       = -lapbs @lib_list@
 
