@@ -61,7 +61,7 @@ VEMBED(rcsid="$Id$")
 VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72], 
   char mxtype[3], int flag) {
 
-    int i, nn, nxm2, nym2, nzm2, ncol, nrow, nonz; 
+    int nn, nxm2, nym2, nzm2, ncol, nrow, nonz; 
     double *nzval;
     int *colptr, *rowind;
 
@@ -1558,9 +1558,9 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
     Valist *alist;
     Vpbe *pbe;
     Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax, chi, ionmask, ionstr;
-    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
-    double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat;
+    double charge, dx, dy, dz, epsw, epsp, zmagic;
     double hx, hy, hzed, *apos, arad;
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
 
@@ -1571,13 +1571,9 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
     pbe = thee->pbe;
     acc = pbe->acc;
     alist = pbe->alist;
-    irad = Vpbe_getMaxIonRadius(pbe);
-    srad = Vpbe_getSolventRadius(pbe);
-    zmagic = Vpbe_getZmagic(pbe);
-    zkappa2 = Vpbe_getZkappa2(pbe);
-    ionstr = Vpbe_getBulkIonicStrength(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
     epsp = Vpbe_getSoluteDiel(pbe);
+    zmagic = Vpbe_getZmagic(pbe);
 
     /* Mesh info */
     nx = thee->pmgp->nx;
@@ -1689,18 +1685,11 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
   int useKappaMap,  Vgrid *kappaMap, 
   int useChargeMap, Vgrid *chargeMap) {
 
-    Vacc *acc;
-    Valist *alist;
     Vpbe *pbe;
-    Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax, chi, ionmask, ionstr;
-    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
-    double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
-    double hx, hy, hzed, *apos, arad, gpos[3];
-    int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
-    int imin, imax, jmin, jmax, kmin, kmax;
-    double dx2, dy2, dz2, arad2, stot2, itot2, rtot, rtot2;
-    int acclo, accmid, acchi, a000, islap;
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, hx, hy, hzed;
+    double epsw, epsp, ionstr;
+    int i, nx, ny, nz, islap;
 
     VASSERT(thee != VNULL);
     thee->surfMeth = surfMeth;
@@ -1714,12 +1703,6 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
 
     /* Get PBE info */
     pbe = thee->pbe;
-    acc = pbe->acc;
-    alist = pbe->alist;
-    irad = Vpbe_getMaxIonRadius(pbe);
-    srad = Vpbe_getSolventRadius(pbe);
-    zmagic = Vpbe_getZmagic(pbe);
-    zkappa2 = Vpbe_getZkappa2(pbe);
     ionstr = Vpbe_getBulkIonicStrength(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
     epsp = Vpbe_getSoluteDiel(pbe);
@@ -1757,16 +1740,9 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     thee->rparm[6] = zmin;
     thee->rparm[7] = zmax;
 
-    /* This is a floating point parameter related to the non-zero nature of the
-     * bulk ionic strength.  If the ionic strength is greater than zero; this
-     * parameter is set to 1.0 and later scaled by the appropriate pre-factors.
-     * Otherwise, this parameter is set to 0.0 */
-    if (ionstr > VPMGSMALL) ionmask = 1.0;
-    else ionmask = 0.0;
-
     /* This is a flag that gets set if the operator is a simple Laplacian;
      * i.e., in the case of a homogenous dielectric and zero ionic strength */
-    if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
+    if ((ionstr < VPMGSMALL) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
     else islap = 0;
 
     /* Fill the mesh point coordinate arrays */
