@@ -156,6 +156,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
 thread_lib = @thread_lib@
+tree_lib = @tree_lib@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
@@ -199,7 +200,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	all-recursive install-data-recursive install-exec-recursive \
 	installdirs-recursive install-recursive uninstall-recursive \
 	check-recursive installcheck-recursive
-DIST_COMMON = README Makefile.am Makefile.in
+DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
 SOURCES = $(libapbsfem_la_SOURCES)
 

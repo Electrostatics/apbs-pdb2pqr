@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES           = @inc_list@
 
-noinst_PROGRAMS          = mgmesh dxmath uhbd_asc2bin smooth norm
+noinst_PROGRAMS          = mgmesh dxmath uhbd_asc2bin smooth norm value
 mgmesh_SOURCES           = mgmesh.c 
 mgmesh_LDADD             = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS           = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -31,3 +31,7 @@ norm_SOURCES             = norm.c
 norm_LDADD               = ../../src/aaa_lib/libapbs.la @lib_list@
 norm_LDFLAGS             = @LDFLAGS@ @FLIBS@
 norm_CCLD                = $(F77)
+value_SOURCES            = value.c 
+value_LDADD              = ../../src/aaa_lib/libapbs.la @lib_list@
+value_LDFLAGS            = @LDFLAGS@ @FLIBS@
+value_CCLD               = $(F77)

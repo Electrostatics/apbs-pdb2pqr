@@ -46,6 +46,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
       qcd2pqr -> qcd2pqr.awk
 
   CHANGES THAT AFFECT DEVELOPERS:
+  * Changed Vgreen interface and improved efficiency
   * Added several norm and seminorm functions to Vgrid class
   * Altered --with-blas syntax in configure scripts and removed --disable-blas
   * Documented high-level frontend routines

@@ -184,8 +184,8 @@ struct sVfetk_LocalVar {
     double vx[4][3];  /**< Vertex coordinates */
     double xq[3];  /**< Quadrature pt */
     double U[MAXV];  /**< Solution value */
-    double W;  /**< Coulomb regularization term scalar value */
     double dU[MAXV][3];  /**< Solution gradient */
+    double W;  /**< Coulomb regularization term scalar value */
     double dW[3];  /**< Coulomb regularization term gradient */
     double d2W;  /**< Coulomb regularization term Laplacia */
     int sType;  /**< Simplex type */

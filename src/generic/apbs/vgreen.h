@@ -69,13 +69,17 @@
  */
 struct sVgreen { 
 
-  Valist *alist;      /**< Atom (charge) list for Green's function */
-  Vmem *vmem;         /**< Memory management object */
-  int initFlagCXXFMM; /**< Flag to indicate whether the C++ FMM object has been
-                       * initialized 
-                       * @deprecated Not used until we can find a stable 3D FMM
-                       * routine */
-
+  Valist *alist;  /**< Atom (charge) list for Green's function */
+  Vmem *vmem;  /**< Memory management object */
+  double *xp;  /**< Array of particle x-coordinates for use with 
+                * treecode routines */
+  double *yp;  /**< Array of particle y-coordinates for use with 
+                * treecode routines */
+  double *zp;  /**< Array of particle z-coordinates for use with 
+                * treecode routines */
+  double *qp;  /**< Array of particle charges for use with 
+                * treecode routines */
+  int np;  /**< Set to size of above arrays */
 };
 
 /** 
@@ -132,21 +136,21 @@ VEXTERNC Vgreen* Vgreen_ctor(Valist *alist);
  *  @param   alist  Atom (charge) list associated with object
  *  @return  1 if successful, 0 otherwise
  */
-VEXTERNC int     Vgreen_ctor2(Vgreen *thee, Valist *alist);
+VEXTERNC int Vgreen_ctor2(Vgreen *thee, Valist *alist);
 
 /** @brief   Destruct the Green's function oracle
  *  @ingroup Vgreen
  *  @author  Nathan Baker
  *  @param   thee Pointer to memory location for object
  */
-VEXTERNC void    Vgreen_dtor(Vgreen **thee);
+VEXTERNC void Vgreen_dtor(Vgreen **thee);
 
 /** @brief   FORTRAN stub to destruct the Green's function oracle
  *  @ingroup Vgreen
  *  @author  Nathan Baker
  *  @param   thee Pointer to object
  */
-VEXTERNC void    Vgreen_dtor2(Vgreen *thee);
+VEXTERNC void Vgreen_dtor2(Vgreen *thee);
 
 /** @brief   Get the Green's function for Helmholtz's equation integrated over
  *           the atomic point charges
@@ -164,13 +168,16 @@ VEXTERNC void    Vgreen_dtor2(Vgreen *thee);
  *  @bug     Not implemented yet
  *  @note    Not implemented yet
  *  @param   thee  Vgreen object
- *  @param   position  The coordinates of \f$r\f$ (see above)
- *  @param   dim  The dimension of the space in which this is evaluated
+ *  @param   npos  Number of positions to evaluate
+ *  @param   x  The npos x-coordinates 
+ *  @param   y  The npos y-coordinates 
+ *  @param   z  The npos z-coordinates 
+ *  @param   val  The npos values
  *  @param   kappa The value of \f$\kappa\f$ (see above)
- *  @return  The potential value as defined above in units of V
+ *  @return  1 if successful, 0 otherwise
  */
-VEXTERNC double  Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
-                   double kappa);
+VEXTERNC int Vgreen_helmholtz(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *val, double kappa);
 
 /** @brief   Get the gradient of Green's function for Helmholtz's equation
  *           integrated over the atomic point charges
@@ -189,13 +196,18 @@ VEXTERNC double  Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
  *  @bug     Not implemented yet
  *  @note    Not implemented yet
  *  @param   thee  Vgreen object
- *  @param   position  The coordinates of \f$r\f$ (see above)
- *  @param   dim  The dimension of the space in which this is evaluated
+ *  @param   npos  The number of positions to evaluate
+ *  @param   x  The npos x-coordinates
+ *  @param   y  The npos y-coordinates
+ *  @param   z  The npos z-coordinates
+ *  @param   gradx  The npos gradient x-components
+ *  @param   grady  The npos gradient y-components
+ *  @param   gradz  The npos gradient z-components
  *  @param   kappa The value of \f$\kappa\f$ (see above)
- *  @param   grad The field as defined above in units of V/&Aring;
+ *  @return  int 1 if sucessful, 0 otherwise
  */
-VEXTERNC void    Vgreen_helmholtzD(Vgreen *thee, double *position, 
-                   double dim, double kappa, double *grad);
+VEXTERNC int Vgreen_helmholtzD(Vgreen *thee, int npos, double *x, double *y, 
+  double *z, double *gradx, double *grady, double *gradz, double kappa);
 
 /** @brief   Get the Coulomb's Law Green's function (solution to Laplace's
  *           equation) integrated over the atomic point charges
@@ -209,11 +221,15 @@ VEXTERNC void    Vgreen_helmholtzD(Vgreen *thee, double *position,
  *  @ingroup Vgreen
  *  @author  Nathan Baker
  *  @param   thee Vgreen object
- *  @param   position  The coordinates of \f$r\f$ (see above)
- *  @param   dim  The dimension of the problem domain
- *  @return  The potential defined above in units of V
+ *  @param   npos  The number of positions to evaluate
+ *  @param   x  The npos x-coordinates
+ *  @param   y  The npos y-coordinates
+ *  @param   z  The npos z-coordinates
+ *  @param   val  The npos values
+ *  @return  1 if successful, 0 otherwise
  */
-VEXTERNC double  Vgreen_coulomb(Vgreen *thee, double *position, double dim);
+VEXTERNC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *val);
 
 /** @brief   Get gradient of the Coulomb's Law Green's function (solution to
  *           Laplace's equation) integrated over the atomic point charges
@@ -227,11 +243,17 @@ VEXTERNC double  Vgreen_coulomb(Vgreen *thee, double *position, double dim);
  *  @ingroup Vgreen
  *  @author  Nathan Baker
  *  @param   thee Vgreen object
- *  @param   position  The coordinates of \f$r\f$ (see above)
- *  @param   dim  The dimension of the problem domain
- *  @param   grad The field defined above in units of V
+ *  @param   npos  The number of positions to evaluate
+ *  @param   x  The npos x-coordinates
+ *  @param   y  The npos y-coordinates
+ *  @param   z  The npos z-coordinates
+ *  @param   pot    The npos potential values
+ *  @param   gradx  The npos gradient x-components
+ *  @param   grady  The npos gradient y-components
+ *  @param   gradz  The npos gradient z-components
+ *  @return  1 if successful, 0 otherwise
  */
-VEXTERNC void    Vgreen_coulombD(Vgreen *thee, double *position, double dim,
-                   double *grad);
+VEXTERNC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *pot, double *gradx, double *grady, double *gradz);
 
 #endif /* ifndef _VGREEN_H_ */

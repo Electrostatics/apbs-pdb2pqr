@@ -431,6 +431,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
 
     /* Store local copy of myself */
     var.fetk = thee;
+    var.green = VNULL;
 
     /* Set up the external Gem subdivision hook */
     Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);

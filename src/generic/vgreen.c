@@ -43,26 +43,90 @@
 
 #include "apbscfg.h"
 #include "apbs/vgreen.h"
-#if defined(USE_CXX_FMM)
-#    include "cxxfmm/cxxfmm.h"
-#endif
 
-#define DTORCXXFMM      Vgreen_dtorCXXFMM__FP6Vgreen
-#define FIELDCXXFMM     Vgreen_fieldCXXFMM__FP6VgreenPdT1
-#define INITCXXFMM      Vgreen_initCXXFMM__FP6Vgreendiiiddd
-#define POTCXXFMM       Vgreen_potentialCXXFMM__FP6VgreenPd
-#define UPDATECXXFMM    Vgreen_updateCXXFMM__FP6Vgreen
+/* Define wrappers for F77 treecode routines */
+#ifdef HAVE_TREE
+#  define F77TREEPEFORCE VF77_MANGLE(treepeforce, TREEPEFORCE)
+#  define F77DIRECT_ENG_FORCE VF77_MANGLE(direct_eng_force, DIRECT_ENG_FORCE)
+#  define F77CLEANUP VF77_MANGLE(mycleanup, MYCLEANUP)
+#  define F77TREE_COMPP VF77_MANGLE(mytree_compp, MYTREE_COMP)
+#  define F77TREE_COMPFP VF77_MANGLE(mytree_compfp, MYTREE_COMPFP)
+#  define F77CREATE_TREE VF77_MANGLE(mycreate_tree, MYCREATE_TREE)
+#  define F77INITLEVELS VF77_MANGLE(myinitlevels, MYINITLEVELS)
+#  define F77SETUP VF77_MANGLE(mysetup, MYSETUP)
+#endif  /* ifdef HAVE_TREE */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vgreen: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
+/* Some constants associated with the tree code */
+#ifdef HAVE_TREE
+    /**
+     * @brief  Lower distance cutoff for electrostatic interactions 
+     * @ingroup  Vgreen */
+#   define FMM_DIST_TOL VSMALL
+    /** 
+     * @brief  Flag for energy and force evaluation:
+     *         \li 1 =>  evaluate energy only
+     *         \li 2 =>  evaluate energy and force
+     * @ingroup  Vgreen */
+#   define FMM_IFLAG 2
+    /**
+     * @brief  Order of multipole expansion
+     * @ingroup  Vgreen */
+#   define FMM_ORDER 4
+    /**
+     * @brief  Multipole acceptance criterion
+     * @ingroup  Vgreen */
+#   define FMM_THETA 0.5
+    /**
+     * @brief  Maximum number of particles per node
+     * @ingroup  Vgreen */
+#   define FMM_MAXPARNODE 150
+    /**
+     * @brief  Switch for oct-tree construction
+     * @ingroup  Vgreen */
+#   define FMM_SHRINK 1
+    /**
+     * @brief  Minimum treecode level
+     * @ingroup  Vgreen */
+#   define FMM_MINLEVEL 50000
+    /**
+     * @brief  Maximum treecode level
+     * @ingroup  Vgreen */
+#   define FMM_MAXLEVEL 0
+#endif  /* ifdef HAVE_TREE */
+
+
+/**
+ * @brief  Setup treecode internal structures 
+ * @ingroup  Vgreen
+ * @author  Nathan Baker
+ * @param  thee  Vgreen object
+ * @return  1 if successful, 0 otherwise
+ */
+VPRIVATE int treesetup(Vgreen *thee);
+
+/**
+ * @brief  Clean up treecode internal structures 
+ * @ingroup  Vgreen
+ * @author  Nathan Baker
+ * @param  thee  Vgreen object
+ * @return  1 if successful, 0 otherwise
+ */
+VPRIVATE int treecleanup(Vgreen *thee);
+
+/**
+ * @brief  Calculate forces or potential
+ * @ingroup  Vgreen
+ * @author  Nathan Baker
+ * @param  thee  Vgreen object
+ * @return  1 if successful, 0 otherwise
+ */
+VPRIVATE int treecalc(Vgreen *thee, double *xtar, double *ytar, double *ztar,
+        double *qtar, int numtars, double *tpengtar, double *x, double *y,
+        double *z, double *q, int numpars, double *fx, double *fy, double *fz,
+        int iflag, int farrdim, int arrdim);
+
 #if !defined(VINLINE_VGREEN)
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_getValist
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) { 
 
    VASSERT(thee != VNULL);
@@ -70,27 +134,13 @@ VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_memChk
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vgreen_memChk(Vgreen *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
 }
 
-#endif /* if !defined(VINLINE_VCSM) */
+#endif /* if !defined(VINLINE_VGREEN) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vgreen: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_ctor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
 
     /* Set up the structure */
@@ -102,11 +152,6 @@ VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
     return thee;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_ctor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) { 
  
     VASSERT( thee != VNULL );
@@ -120,48 +165,18 @@ VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) {
     }
 
     thee->alist = alist;
-    thee->initFlagCXXFMM = 0;
+
+    /* Setup FMM tree (if applicable) */
+#ifdef HAVE_TREE
+    if (!treesetup(thee)) {
+        Vnm_print(2, "Vgreen_ctor2:  Error setting up FMM tree!\n");
+        return 0;
+    }
+#endif /* ifdef HAVE_TREE */
    
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_initFMM
-//
-// Purpose:  Construct the Vgreen FMM object
-//
-// Args:     spacing   Spacing for the FMM cells
-//           n[xyz]    Number of FMM cells in the specified direction
-//           [xyz]low  Lower corner of the cells
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgreen_initFMM(Vgreen *thee, double spacing, int nx, int ny,
-  int nz, double xlow, double ylow, double zlow) {
-
-    VASSERT( thee != VNULL );
-
-#if defined(USE_CXX_FMM)
-    INITCXXFMM(thee, spacing, nx, ny, nz, xlow, ylow, zlow);
-    thee->initFlagCXXFMM = 1;
-#else
-    Vnm_print(2, "Vgreen_initFMM: Not compiled with FMM support!\n");
-    VASSERT(0);
-#endif 
-
-}
-
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_dtor
-//
-// Purpose:  Destroy the charge-simplex map.
-// 
-// Notes:    Since the grid manager and atom list were allocated outside of
-//           the Vgreen routines, they are not destroyed.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgreen_dtor(Vgreen **thee) {
     if ((*thee) != VNULL) {
         Vgreen_dtor2(*thee);
@@ -170,116 +185,284 @@ VPUBLIC void Vgreen_dtor(Vgreen **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_dtor2
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgreen_dtor2(Vgreen *thee) { 
 
+    treecleanup(thee);
     Vmem_dtor(&(thee->vmem));
 
-#if defined(USE_CXX_FMM)
-    if (thee->initFlagCXXFMM) DTORCXXFMM(thee);
-#endif
+}
+
+VPUBLIC int Vgreen_helmholtz(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *val, double kappa) {
+
+    Vnm_print(2, "Error -- Vgreen_helmholtz not implemented yet!\n");
+    return 0;
+}
+
+VPUBLIC int Vgreen_helmholtzD(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *gradx, double *grady, double *gradz, double kappa) {
+
+    Vnm_print(2, "Error -- Vgreen_helmholtzD not implemented yet!\n");
+    return 0;
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_helmholtz
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim, 
-  double kappa) { 
-
-    VASSERT(0);
-    return 0.;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_helmholtzD
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position, 
-  double dim, double kappa, double *grad) {
-    VASSERT(0);
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_coulomb
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
+VPUBLIC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
+  double *z, double *val) {
 
     Vatom *atom;
-    double *x, pot, charge, dist;
-    int iatom, j;
+    double *apos, charge, dist, dx, dy, dz, scale;
+    double *q, qtemp, fx, fy, fz;
+    int iatom, ipos;
 
-    VASSERT(dim < 4);
-    pot = 0;
-  
-#if defined(USE_CXX_FMM)
-    VASSERT(thee->initFlagCXXFMM);
-    Vnm_print(2, "Vgreen_coulomb: pos = (%g, %g, %g)\n", position[0],
-position[1], position[2]);
-    pot = POTCXXFMM(thee, position);
-#else
-    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
-        atom = Valist_getAtom(thee->alist, iatom);
-        x = Vatom_getPosition(atom);
-        charge = Vatom_getCharge(atom);
-        dist = 0;
-        for (j=0; j<dim; j++) 
-          dist += ((x[j] - position[j])*(x[j] - position[j]));
-        dist = 1.0e-10*VSQRT(dist);
-        pot += (charge/dist);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgreen_coulomb:  Got NULL thee!\n");
+        return 0;
     }
-#endif
 
-    return pot*Vunit_ec/(4*Vunit_pi*Vunit_eps0);
-}
+    for (ipos=0; ipos<npos; ipos++) val[ipos] = 0.0;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgreen_coulombD
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-#ifndef MAXV
-#define MAXV 5
-#endif
-VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
-  double *grad) {
+#ifdef HAVE_TREE  
 
-    Vatom *atom;
-    double *x, charge, dist;
-    int iatom, j;
+    /* Allocate charge array (if necessary) */
+    if (npos > 1) {
+        q = VNULL;
+        q = Vmem_malloc(thee->vmem, npos, sizeof(double));
+        if (q == VNULL) {
+            Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
+            return 0;
+        }
+    } else {
+        q = &(qtemp);
+    }
+    for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
 
-    VASSERT(dim < 4);
+    /* Calculate */
+    treecalc(thee, x, y, z, q, npos, val, thee->xp, thee->yp, thee->zp,
+      thee->qp, thee->np, &fx, &fy, &fz, 1, 1, thee->np);
+
+    /* De-allocate charge array (if necessary) */
+    if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
     
-    for (j=0; j<dim; j++) grad[j] = 0;
-  
-#if defined(USE_CXX_FMM)
-    VASSERT(thee->initFlagCXXFMM);
-    FIELDCXXFMM(thee, position, grad);
-#else
+    return 1;
+
+#else /* ifdef HAVE_TREE */
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
-        x = Vatom_getPosition(atom);
+        apos = Vatom_getPosition(atom);
         charge = Vatom_getCharge(atom);
-        dist = 0;
-        for (j=0; j<dim; j++) 
-          dist += ((x[j] - position[j])*(x[j] - position[j]));
-        for (j=0; j<dim; j++) 
-          grad[j] -= (charge*(position[j] - x[j])/dist/VSQRT(dist));
+        for (ipos=0; ipos<npos; ipos++) {
+            dx = apos[0] - x[ipos];
+            dy = apos[1] - y[ipos];
+            dz = apos[2] - z[ipos];
+            dist = VSQRT(VSQR(dx) + VSQR(dy) + VSQR(dz));
+            if (dist > VSMALL) val[ipos] += (charge/dist);
+        }
     }
 #endif
 
-    for (j=0; j<dim; j++) 
-      grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*(1.0e-10));
+    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*1.0e-10);
+    for (ipos=0; ipos<npos; ipos++) val[ipos] = val[ipos]*scale;
+
+    return 1;
+}
+
+VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
+        double *z, double *pot, double *gradx, double *grady, double *gradz) {
+
+    Vatom *atom;
+    double *apos, charge, dist, dist2, idist3, dy, dz, dx, scale;
+    double *q, qtemp;
+    int iatom, ipos;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgreen_coulombD:  Got VNULL thee!\n");
+        return 0;
+    }
+
+    for (ipos=0; ipos<npos; ipos++) {
+        pot[ipos] = 0.0;
+        gradx[ipos] = 0.0;
+        grady[ipos] = 0.0;
+        gradz[ipos] = 0.0;
+    }
+
+#ifdef HAVE_TREE
+
+    if (npos > 1) {
+        q = VNULL;
+        q = Vmem_malloc(thee->vmem, npos, sizeof(double));
+        if (q == VNULL) {
+            Vnm_print(2, "Vgreen_coulomb:  Error allocating charge array!\n");
+            return 0;
+        }
+    } else {
+        q = &(qtemp);
+    }
+    for (ipos=0; ipos<npos; ipos++) q[ipos] = 1.0;
+
+    /* Calculate */
+    treecalc(thee, x, y, z, q, npos, pot, thee->xp, thee->yp, thee->zp,
+            thee->qp, thee->np, gradx, grady, gradz, 2, npos, thee->np);
+
+    /* De-allocate charge array (if necessary) */
+    if (npos > 1) Vmem_free(thee->vmem, npos, sizeof(double), (void **)&q);
+
+#else /* ifdef HAVE_TREE */
+  
+    for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
+        atom = Valist_getAtom(thee->alist, iatom);
+        apos = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
+        for (ipos=0; ipos<npos; ipos++) {
+            dx = apos[0] - x[ipos];
+            dy = apos[1] - y[ipos];
+            dz = apos[2] - z[ipos];
+            dist2 = VSQR(dx) + VSQR(dy) + VSQR(dz);
+            dist = VSQRT(dist2);
+            if (dist > VSMALL) {
+                idist3 = 1.0/(dist*dist2);
+                gradx[ipos] -= (charge*dx*idist3);
+                grady[ipos] -= (charge*dy*idist3);
+                gradz[ipos] -= (charge*dz*idist3);
+                pot[ipos] += (charge/dist);
+            } 
+        }
+    }
+
+#endif
+
+    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*(1.0e-10));
+    for (ipos=0; ipos<npos; ipos++) {
+        gradx[ipos] = gradx[ipos]*scale;
+        grady[ipos] = grady[ipos]*scale;
+        gradz[ipos] = gradz[ipos]*scale;
+        pot[ipos] = pot[ipos]*scale;
+    }
+
+    return 1;
+}
+
+VPRIVATE int treesetup(Vgreen *thee) {
+
+#ifdef HAVE_TREE
+
+    double dist_tol = FMM_DIST_TOL;
+    int iflag = FMM_IFLAG;
+    double order = FMM_ORDER;
+    int theta = FMM_THETA;
+    int shrink = FMM_SHRINK;
+    int maxparnode = FMM_MAXPARNODE;
+    int minlevel = FMM_MINLEVEL;
+    int maxlevel = FMM_MAXLEVEL;
+    int level = 0;
+    int one = 1;
+    Vatom *atom;
+    double xyzminmax[6], *pos;
+    int i;
+
+    /* Set up particle arrays with atomic coordinates and charges */
+    Vnm_print(0, "treesetup:  Initializing FMM particle arrays...\n");
+    thee->np = Valist_getNumberAtoms(thee->alist);
+    thee->xp = VNULL;
+    thee->xp = (double *)Vmem_malloc(thee->vmem, thee->np, sizeof(double));
+    if (thee->xp == VNULL) {
+        Vnm_print(2, "Vgreen_ctor2:  Failed to allocate %d*sizeof(double)!\n",
+          thee->np);
+        return 0;
+    }
+    thee->yp = VNULL;
+    thee->yp = (double *)Vmem_malloc(thee->vmem, thee->np, sizeof(double));
+    if (thee->yp == VNULL) {
+        Vnm_print(2, "Vgreen_ctor2:  Failed to allocate %d*sizeof(double)!\n",
+          thee->np);
+        return 0;
+    }
+    thee->zp = VNULL;
+    thee->zp = (double *)Vmem_malloc(thee->vmem, thee->np, sizeof(double));
+    if (thee->zp == VNULL) {
+        Vnm_print(2, "Vgreen_ctor2:  Failed to allocate %d*sizeof(double)!\n",
+          thee->np);
+        return 0;
+    }
+    thee->qp = VNULL;
+    thee->qp = (double *)Vmem_malloc(thee->vmem, thee->np, sizeof(double));
+    if (thee->qp == VNULL) {
+        Vnm_print(2, "Vgreen_ctor2:  Failed to allocate %d*sizeof(double)!\n",
+          thee->np);
+        return 0;
+    }
+    for (i=0; i<thee->np; i++) {
+        atom = Valist_getAtom(thee->alist, i);
+        pos = Vatom_getPosition(atom);
+        thee->xp[i] = pos[0];
+        thee->yp[i] = pos[1];
+        thee->zp[i] = pos[2];
+        thee->qp[i] = Vatom_getCharge(atom);
+    }
+
+    Vnm_print(0, "treesetup:  Initializing levels...\n");
+    F77INITLEVELS(&minlevel, &maxlevel);
+
+    Vnm_print(0, "treesetup:  Creating tree...\n");
+    F77CREATE_TREE(&one, &(thee->np), thee->xp, thee->yp, thee->zp, thee->qp, 
+      &shrink, &maxparnode, xyzminmax, &level, &(thee->np));
+
+    return 1;
+
+#else /* ifdef HAVE_TREE */
+
+    Vnm_print(2, "treecalc:  Error!  APBS not linked with treecode!\n");
+    return 0;
+
+#endif /* ifdef HAVE_TREE */
+}
+
+VPRIVATE int treecleanup(Vgreen *thee) {
+
+#ifdef HAVE_TREE
+
+    Vmem_free(thee->vmem, thee->np, sizeof(double), (void **)&(thee->xp));
+    Vmem_free(thee->vmem, thee->np, sizeof(double), (void **)&(thee->yp));
+    Vmem_free(thee->vmem, thee->np, sizeof(double), (void **)&(thee->zp));
+    Vmem_free(thee->vmem, thee->np, sizeof(double), (void **)&(thee->qp));
+    F77CLEANUP();
+
+    return 1;
+
+#else /* ifdef HAVE_TREE */
+
+    Vnm_print(2, "treecalc:  Error!  APBS not linked with treecode!\n");
+    return 0;
+
+#endif /* ifdef HAVE_TREE */
+}
+
+VPRIVATE int treecalc(Vgreen *thee, double *xtar, double *ytar, double *ztar,
+        double *qtar, int numtars, double *tpengtar, double *x, double *y,
+        double *z, double *q, int numpars, double *fx, double *fy, double *fz,
+        int iflag, int farrdim, int arrdim) {
+
+#ifdef HAVE_TREE
+    int i, level, err, maxlevel, minlevel, one;
+    double xyzminmax[6];
+
+
+    if (iflag != 1) {
+        F77TREE_COMPFP(xtar, ytar, ztar, qtar, &numtars, tpengtar, x, y, z, q,
+                fx, fy, fz, &numpars, &farrdim, &arrdim);
+    } else {
+        F77TREE_COMPP(xtar, ytar, ztar, qtar, &numtars, tpengtar, &farrdim, x,
+                y, z, q, &numpars, &arrdim);
+    }
+
+    return 1;
+
+#else /* ifdef HAVE_TREE */
+
+    Vnm_print(2, "treecalc:  Error!  APBS not linked with treecode!\n");
+    return 0;
+
+#endif /* ifdef HAVE_TREE */
 }
 

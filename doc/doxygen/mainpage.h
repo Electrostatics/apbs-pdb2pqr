@@ -502,6 +502,9 @@
  *   Given an OpenDX grid-based dataset, this program produces various norms,
  *   semi-norms, and <a
  *   href="http://s9000.furman.edu/~ejorgens/cheers/archives/normisms.html">Norm-isms</a>
+ *   <li> apbs/tools/mesh/value <br>
+ *   Given an OpenDX grid-based dataset, this program produces information
+ *   about the solution at a given point
  *   <li> apbs/tools/mesh/uhbd_asc2bin <br> 
  *   Converts UHBD-format grid files from ASCII to binary.  Contributed by Dave
  *   Sept.

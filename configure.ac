@@ -499,8 +499,8 @@ if test -z "${with_fetk}"; then
     
 
     dnl # Return LDFLAGS and CPPFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
+    LDFLAGS=${LDFLAGS_SAVE}
+    CPPFLAGS=${CPPFLAGS_SAVE}
 
     if test -n "${mc_found}"; then
         AC_MSG_RESULT([FEtk component MC found:  enabled.])
@@ -524,6 +524,25 @@ AC_SUBST(mcx_lib)
 AC_SUBST(mcx_inc)
 AC_SUBST(mc_lib)
 AC_SUBST(mc_inc)
+
+dnl # Check for various optional MCX functions 
+AC_CHECK_LIB(mcx_vor,Vor_delaunay,
+        [vor_found="yes"],
+        [vor_found=""],
+        [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+if test -n "${vor_found}"; then
+    vor_lib="${mcx_lib_path} -lmcx_vor"
+    AC_DEFINE([HAVE_VOR], [], [have the Vor library])
+fi
+AC_CHECK_LIB(mcx_vmetis,Vmetis_ctor,
+        [vmetis_found="yes"],
+        [vmetis_found=""],
+        [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+if test -n "${vmetis_found}"; then
+    vmetis_lib="${mcx_lib_path} -lmcx_vmetis"
+    AC_DEFINE([HAVE_VMETIS], [], [have the Vmetis library])
+fi
+
 AC_MSG_RESULT([---------- end configuring for FEtk linkage --------------])
 
 AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
@@ -671,6 +690,24 @@ AC_SUBST(arpack_lib)
 AC_SUBST(arpack_do_tools)
 
 dnl # -----------------------
+dnl # CHECK FOR FMM LIBRARY
+dnl # -----------------------
+AC_LANG_FORTRAN77
+LDFLAGS_SAVE=${LDFLAGS};
+AC_CHECK_LIB(tree,treepeforce,
+        [tree_found="yes"],
+        [tree_found=""],
+        [${mcx_lib_path} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+if test -n "${vmetis_found}"; then
+    tree_lib="${mcx_lib_path} -ltree"
+    AC_DEFINE([HAVE_TREE], [], [have the FMM library])
+else
+    tree_lib=""
+fi
+AC_LANG_C
+AC_SUBST(tree_lib)
+
+dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT INLINE FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --disable-inline])
@@ -697,7 +734,7 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+lib_list="-L${top_srcdir}/lib ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
