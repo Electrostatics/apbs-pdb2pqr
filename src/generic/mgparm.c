@@ -322,8 +322,14 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     thee->ccentmol = parm->ccentmol;
 
     /* *** TYPE 2 PARMS *** */
-    for (i=0; i<3; i++) thee->partCenterShift[i] = parm->partCenterShift[i];
-    for (i=0; i<3; i++) thee->partCenterLength[i] = parm->partCenterLength[i];
+    for (i=0; i<3; i++) 
+      thee->partDisjCenterShift[i] = parm->partDisjCenterShift[i];
+    for (i=0; i<3; i++) 
+      thee->partDisjLength[i] = parm->partDisjLength[i];
+    for (i=0; i<3; i++) 
+      thee->partOlapCenterShift[i] = parm->partOlapCenterShift[i];
+    for (i=0; i<3; i++) 
+      thee->partOlapLength[i] = parm->partOlapLength[i];
     for (i=0; i<3; i++) thee->pdime[i] = parm->pdime[i];
     thee->setpdime = parm->setpdime;
     thee->rank = parm->rank;
