@@ -93,11 +93,13 @@
         </para>
       </sect3>
       <sect3> <title>PyMOL</title>
-        <para>PyMOL (<ulink url="http://pymol.sourceforge.net/">http://pymol.sourceforge.net/</ulink>)
-          Python-based a molecular graphics program.  Michael Lerner
-          <email>mlerner@umich.edu</email> has written a module to
-          read APBS electrostatics output into PyMOL; this module is available
-          from <ulink url="http://www-personal.umich.edu/~mlerner/Pymol/">http://www-personal.umich.edu/~mlerner/Pymol/</ulink>.
+        <para>PyMOL (<ulink url="http://pymol.org/">http://pymol.org/</ulink>)
+          Python-based a molecular graphics program.  Upcoming versions of
+          PyMOL may directly support APBS integration.  In the meantime,
+          Michael Lerner <email>mlerner@umich.edu</email> has written a module
+          to read APBS electrostatics output into PyMOL; this module is
+          available
+          from <ulink url="http://www.umich.edu/~mlerner/PyMOL/">http://www.umich.edu/~mlerner/PyMOL/</ulink>.
         </para>
       </sect3>
 
