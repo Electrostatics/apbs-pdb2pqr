@@ -90,7 +90,7 @@ typedef struct sValist Valist;
  *  @return  Array of atom objects 
  */
 VEXTERNC Vatom* Valist_getAtomList(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 /** @brief   Get x-coordinate of molecule center
@@ -99,7 +99,7 @@ VEXTERNC Vatom* Valist_getAtomList(
  *  @return  X-coordinate of molecule center
  */
 VEXTERNC double Valist_getCenterX(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 /** @brief   Get y-coordinate of molecule center
@@ -108,7 +108,7 @@ VEXTERNC double Valist_getCenterX(
  *  @return  Y-coordinate of molecule center
  */ 
 VEXTERNC double Valist_getCenterY(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 /** @brief   Get z-coordinate of molecule center
@@ -117,7 +117,7 @@ VEXTERNC double Valist_getCenterY(
  *  @return  Z-coordinate of molecule center
  */ 
 VEXTERNC double Valist_getCenterZ(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 /** @brief   Get number of atoms in the list
@@ -126,7 +126,7 @@ VEXTERNC double Valist_getCenterZ(
  *  @return  Number of atoms in list 
  */
 VEXTERNC int Valist_getNumberAtoms(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 /** @brief   Get pointer to particular atom in list
@@ -135,8 +135,8 @@ VEXTERNC int Valist_getNumberAtoms(
  *  @return  Pointer to atom object i
  */
 VEXTERNC Vatom* Valist_getAtom(
-        Valist *thee, /** Atom list object */
-        int i /** Index of atom in list */
+        Valist *thee, /**< Atom list object */
+        int i /**< Index of atom in list */
         );
 
 /** @brief   Get total memory allocated for this object and its members
@@ -145,7 +145,7 @@ VEXTERNC Vatom* Valist_getAtom(
  *  @return  Total memory in bytes
  */
 VEXTERNC unsigned long int Valist_memChk(
-        Valist *thee /** Atom list object */
+        Valist *thee /**< Atom list object */
         );
 
 #else /* if defined(VINLINE_VATOM) */
@@ -171,7 +171,7 @@ VEXTERNC Valist* Valist_ctor();
  *  @returns 1 if successful, 0 otherwise
  */
 VEXTERNC int Valist_ctor2(
-        Valist *thee /** Storage for new atom list */
+        Valist *thee /**< Storage for new atom list */
         );
 
 /** @brief   Destroys atom list object
@@ -179,7 +179,7 @@ VEXTERNC int Valist_ctor2(
  *  @author  Nathan Baker
  */
 VEXTERNC void Valist_dtor(
-        Valist **thee /** Pointer to storage for atom list */
+        Valist **thee /**< Pointer to storage for atom list */
         );
 
 /** @brief   FORTRAN stub to destroy atom list object
@@ -187,7 +187,7 @@ VEXTERNC void Valist_dtor(
  *  @author  Nathan Baker
  */
 VEXTERNC void Valist_dtor2(
-        Valist *thee /** Pointer to atom list object */
+        Valist *thee /**< Pointer to atom list object */
         );
 
 /** 
@@ -202,8 +202,8 @@ VEXTERNC void Valist_dtor2(
  *            structures with coordinates > 999 or < -999.
  */
 VEXTERNC int Valist_readPQR(
-        Valist *thee, /** Atom list object */
-        Vio *sock /** Socket reading for reading PQR file */
+        Valist *thee, /**< Atom list object */
+        Vio *sock /**< Socket reading for reading PQR file */
         );
 
 /** 
@@ -216,9 +216,9 @@ VEXTERNC int Valist_readPQR(
  * coordinates > 999 or < -999.
  */
 VEXTERNC int Valist_readPDB(
-        Valist *thee, /** Atom list object */
-        Vparam *param, /** A pre-initialized parameter object */
-        Vio *sock /** Socket read for reading PDB file */
+        Valist *thee, /**< Atom list object */
+        Vparam *param, /**< A pre-initialized parameter object */
+        Vio *sock /**< Socket read for reading PDB file */
         );
 
 #endif /* ifndef _VALIST_H_ */
