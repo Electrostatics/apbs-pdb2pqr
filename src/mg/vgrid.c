@@ -198,6 +198,35 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
           + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->data[IJK(ilo,jlo,klo)]);
 
         *value = u;
+        if (isnan(u)) {
+            Vnm_print(2, "Vgrid_value:  Got NaN!\n");
+            Vnm_print(2, "Vgrid_value:  (x, y, z) = (%4.3f, %4.3f, %4.3f)\n", 
+                    pt[0], pt[1], pt[2]);
+            Vnm_print(2, "Vgrid_value:  (ihi, jhi, khi) = (%d, %d, %d)\n", 
+                    ihi, jhi, khi);
+            Vnm_print(2, "Vgrid_value:  (ilo, jlo, klo) = (%d, %d, %d)\n", 
+                    ilo, jlo, klo);
+            Vnm_print(2, "Vgrid_value:  (nx, ny, nz) = (%d, %d, %d)\n", 
+                    nx, ny, nz);
+            Vnm_print(2, "Vgrid_value:  (dx, dy, dz) = (%4.3f, %4.3f, %4.3f)\n", 
+                    dx, dy, dz);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,khi)] = %g\n", 
+                    thee->data[IJK(ihi,jhi,khi)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,khi)] = %g\n", 
+                    thee->data[IJK(ihi,jlo,khi)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jhi,klo)] = %g\n", 
+                    thee->data[IJK(ihi,jhi,klo)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ihi,jlo,klo)] = %g\n", 
+                    thee->data[IJK(ihi,jlo,klo)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,khi)] = %g\n", 
+                    thee->data[IJK(ilo,jhi,khi)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,khi)] = %g\n", 
+                    thee->data[IJK(ilo,jlo,khi)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jhi,klo)] = %g\n", 
+                    thee->data[IJK(ilo,jhi,klo)]);
+            Vnm_print(2, "Vgrid_value:  data[IJK(ilo,jlo,klo)] = %g\n", 
+                    thee->data[IJK(ilo,jlo,klo)]);
+        }
         return 1;
 
     } else {
@@ -285,7 +314,6 @@ VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
     return 1;
 
     VERROR1:
-        Vnm_print(0, "Vgrid_curvature:  Off mesh!\n");
         return 0; 
 
 }
@@ -359,7 +387,6 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
     return 1;
 
     VERROR1:
-        Vnm_print(0, "Vgrid_gradient:  Off mesh!\n");
         return 0; 
 
 }

@@ -160,6 +160,7 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
     thee->setsize = 0;
     thee->setofrac = 0;
     for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 1;
+	thee->setasync = 0;
 
     return 1; 
 }
@@ -353,7 +354,7 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
       thee->partDisjCenterShift[i] = parm->partDisjCenterShift[i];
     for (i=0; i<3; i++) 
       thee->partDisjLength[i] = parm->partDisjLength[i];
-    for (i=0; i<3; i++) 
+    for (i=0; i<6; i++) 
       thee->partDisjOwnSide[i] = parm->partDisjOwnSide[i];
     for (i=0; i<3; i++) 
       thee->partOlapCenterShift[i] = parm->partOlapCenterShift[i];
@@ -367,6 +368,8 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     thee->setsize = parm->setsize;
     thee->ofrac = parm->ofrac;
     thee->setofrac = parm->setofrac;
+	thee->setasync = parm->setasync;
+	thee->async = parm->async;
 
 }
 
@@ -673,9 +676,18 @@ keyword!\n", tok);
         thee->ofrac = tf;
         thee->setofrac = 1;
         return 1;
-    }
-
-
+    }   else if (Vstring_strcasecmp(tok, "async") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%i", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing ASYNC \
+keyword!\n", tok);
+            return -1;
+        }
+        thee->async = ti;
+        thee->setasync = 1;
+        return 1;
+    } 
+   
     return 0;
 
     VERROR1:

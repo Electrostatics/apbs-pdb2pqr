@@ -34,7 +34,7 @@ elec
     calcforce no
     write pot dx potential
     write sspl dx accessibility
-    #write ndens dx ion-density
+    write kappa dx kappa
     #write qdens dx charge-density
     #write edens dx energy-density
     write charge dx charge

@@ -109,14 +109,12 @@
  * (hardware abstraction library for code portability).
  * 
  * <p>
- * <font color="red">
- * <i>Please acknowledge your use of APBS</i> by citing: <br>
+ * <i><b>Please acknowledge your use of APBS</b></i> by citing: <br>
  *   N. A. Baker, D.  Sept, S.  Joseph, M. J. Holst, J. A. McCammon.
  *   Electrostatics of nanosystems: application to microtubules and the
  *   ribosome.  <i>Proc. Natl.  Acad. Sci.  USA</i> <b>98</b>, 10037-10041,
  *   2001.  <a href="http://www.pnas.org/cgi/reprint/181342398v1">(Link to
  *   paper)</a>
- * </font>
  * 
  * <p> 
  * For more information on Poisson-Boltzmann methods and theory, please visit
@@ -150,7 +148,9 @@
  * It may also be useful to have
  * <ul>
  * <li> A version of MPI for parallel jobs (try <a
- * href="http://www-unix.mcs.anl.gov/mpi/mpich/">MPICH</a>)
+ * href="http://www-unix.mcs.anl.gov/mpi/mpich/">MPICH</a>).  However, this is
+ * not necessary if the <a href="#async">async</a> option is used in parallel
+ * runs.
  * <li> <a href="http://www.opendx.org/">OpenDX</a> for general visualization
  * <li> <a href="http://www.ks.uiuc.edu/Research/vmd/">VMD</a> for biomolecule
  * visualization
@@ -880,6 +880,7 @@
  * <ul>
  * <li> <a href="#pdime">pdime</a>
  * <li> <a href="#ofrac">ofrac</a>
+ * <li> <a href="#async">async</a>
  * <li> <a href="#dime">dime</a>
  * <li> <a href="#cglen">cglen</a>
  * <li> <a href="#fglen">fglen</a>
@@ -1279,6 +1280,20 @@
  * <br> The amount of overlap to include between processors' meshes.  This
  * should be between 0 and 1; empirical evidence suggests that 0.1 is a good
  * choice.
+ *
+ * <li> <a name="async"><code>async</code></a> <i>rank</i>
+ * <br> This <b>optional</b> keyword allows users to perform the different
+ * tasks in a parallel run asynchronously.  Specifically, a processor
+ * masquerades as process <i>rank</i> in a parallel focusing run and provides
+ * output (data files and energies/forces) appropriate to that processor's
+ * local partition.  The user must then assemble the results after all
+ * processes complete.  This option is good for two things:
+ *   <ul>
+ *   <li>Scheduling on-demand resources:  this makes it easy for users to
+ *   backfill into the available processes in a queue
+ *   <li>Running on limited resources:  this enables users without access to
+ *   large parallel machines to still perform the same calculations.
+ *   </ul>
  * 
  * <li> <a name="domainLength"><code>domainLength</code></a> 
  * <i>xlen</i> <i>ylen</i> <i>zlen</i>

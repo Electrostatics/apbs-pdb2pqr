@@ -3,6 +3,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 #############################################################################
 
   CHANGES THAT AFFECT USERS:
+  * Added new asynchronous mode in mg-para parallel calculations to enable
+    running on-demand and/or limited resources
   * Finished fe-manual mode for ELEC calculations -- this is the adaptive
     finite element solver
   * Fixed bug when writing out number/charge density:  unrealistic densities
