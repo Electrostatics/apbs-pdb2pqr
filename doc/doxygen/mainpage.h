@@ -287,22 +287,26 @@
  * allowing interactive jobs.  This is bad news for the autoconf-based
  * configure script, since this script runs several executables to test from
  * functionality.  Therefore, this code must be compiled on the interactive
- * nodes (b80login.sdsc.edu).  The following variables must be set before
- * ./configure: 
+ * nodes (b80login.sdsc.edu).  The following will compile APBS on Blue Horizon:
  * <pre>
- *     MP_EUILIB=ip
- *     CC=mpcc 
- *     F77=mpxlf
- *     CFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
- *                   -L/usr/local/apps/mass -lmass \
- *                   -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 \
- *                   -qcache=auto"
- *     FFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
- *                   -L/usr/local/apps/mass -lmass 
- *                   -O3 -qstrict \
- *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
- *     FETK_MPI_INCLUDE=/usr/lpp/ppe.poe/include
- *     FETK_MPI_LIBRARY=/usr/lpp/ppe.poe/lib
+ *   BLASPATH=/usr/lib; export BLASPATH
+ *   FETK_INCLUDE=${TOP}/dist/include; export FETK_INCLUDE
+ *   FETK_LIBRARY=${TOP}/dist/lib; export FETK_LIBRARY
+ * 
+ *   MP_EUILIB=us
+ *   CC=mpcc 
+ *   F77=mpxlf95 
+ *   CFLAGS="-bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
+ *   FFLAGS="-qfixed=132 -bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
+ *   export MP_EUILIB CC F77 CFLAGS FFLAGS
+ * 
+ *   cd ${TOP}/maloc
+ *   ./configure --prefix=${TOP}/dist --enable-mpi
+ *   make && make install
+ * 
+ *   cd ${TOP}/apbs
+ *   ./configure --prefix=${TOP}/dist --with-blas=${BLASPATH}
+ *   make && make install
  * </pre>
  * and installation (should) proceed normally.  However, I've personally
  * experienced all sorts of strangeness on this machine.  Be sure to watch out
