@@ -1929,13 +1929,6 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
         return;
     }
 
-    /* Bail on focusing cases right now; not sure what to do */
-    if (thee->pmgp->bcfl == 4) {
-        Vnm_print(2, "Vpmg_ibForce:  Sorry, but force evaluation doesn't work with focusing (yet).\n");
-        VASSERT(0);
-    }
-
-
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
