@@ -71,23 +71,23 @@ case $ac_f77_mangle_type in
                 AC_MSG_ERROR(unknown fortran name-mangling scheme)
                 ;;
         lowercase)
-                AC_DEFINE(VF77_NOUNDERSCORE)
-                AC_DEFINE(VF77_LOWERCASE)
+                AC_DEFINE([VF77_NOUNDERSCORE], [], [no F77 underscore])
+                AC_DEFINE([VF77_LOWERCASE], [], [F77 lowercase])
                 mangle_try=foo_bar_
                 ;;
         lowercase-underscore)
-                AC_DEFINE(VF77_ONEUNDERSCORE)
-                AC_DEFINE(VF77_LOWERCASE)
+                AC_DEFINE([VF77_ONEUNDERSCORE], [], [one F77 underscore])
+                AC_DEFINE([VF77_LOWERCASE], [], [F77 lowercase])
                 mangle_try=foo_bar__
                 ;;
         uppercase)
-                AC_DEFINE(VF77_NOUNDERSCORE)
-                AC_DEFINE(VF77_UPPERCASE)
+                AC_DEFINE([VF77_NOUNDERSCORE], [], [no F77 underscore])
+                AC_DEFINE([VF77_UPPERCASE], [], [F77 uppercase])
                 mangle_try=FOO_BAR_
                 ;;
         uppercase-underscore)
-                AC_DEFINE(VF77_ONEUNDERSCORE)
-                AC_DEFINE(VF77_UPPERCASE)
+                AC_DEFINE([VF77_ONEUNDERSCORE], [], [one F77 underscore])
+                AC_DEFINE([VF77_UPPERCASE], [], [F77 uppercase])
                 mangle_try=FOO_BAR__
                 ;;
 esac

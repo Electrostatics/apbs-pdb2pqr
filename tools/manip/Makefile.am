@@ -18,4 +18,4 @@ coulomb_LDADD    = ../../src/aaa_lib/libapbs.la @lib_list@
 born_SOURCES     = born.c 
 born_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
 INCLUDES         = @inc_list@
-CFLAGS           = @CFLAGS@
+AM_CFLAGS           = @CFLAGS@

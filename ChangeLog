@@ -11,6 +11,7 @@ BETA PUBLIC RELEASE VERSION 0.2.5       11-21-02
   * Removed annoying excess verbosity from Vgrid.
   * Updated Blue Horizon compilation instructions (thanks to Robert Konecny and
     Giri Chukkapalli)
+  * Updated autoconf/automake/libtool setup and added --disable-tools option
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.4       10-21-02
