@@ -9,7 +9,7 @@ This version contains a few bug fixes, including
   * Change in directory structure
   * Fixed centering bug in main driver
   * Fixed error message bug in VPMG class
-  * Fixed grid length bug in VPMG class
+  * Fixed grid length bug (popped up during sanity checks) in VPMG class
   * Switched to libtool for linking
 
 #############################################################################
