@@ -44,7 +44,7 @@
 #include "apbscfg.h"
 #include "apbs/apbs.h"
 
-#define SHORTINT int
+#define SHORTINT short
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define INTERVAL(x,a,b) (((x) >= (a)) && ((x) <= (b)))
 
@@ -54,7 +54,7 @@ VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
   const char *iodev, const char *iofmt, const char *thost, const char *fname);
 VPRIVATE int Vgrid_value2(Vgrid *thee, double pt[3], double *value);
 VPRIVATE int Char_parseARGV(int argc, char **argv, int *nx, int *ny, int *nz, 
-  char ***fnams, int *numfnams, char *outname, int *vflag);
+  int *pad, char ***fnams, int *numfnams, char *outname, int *vflag);
 
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
@@ -68,20 +68,27 @@ int main(int argc, char **argv) {
     double xmin, ymin, zmin, xmax, ymax, zmax;
     char **fnams = VNULL;
     SHORTINT *carray = VNULL;
-    char *usage = "[-v -quiet -o out.dx] nx ny nz file1.dx [file2.dx ...]\n";
+    char *usage0 = "[FLAGS] nx ny nz file1.dx [file2.dx ...]\n";
+    char *help0 = "-v               Default (off)";
+    char *help1 = "-quiet           Default (off)";
+    char *help2 = "-pad integer     Default (1)";
+    char *help3 = "-o filename.dx   Default (gridmerged.dx)";
     char *snam = "# main:  ";
     char outname[80];
     Vgrid *grid, *mgrid;
+    int pad = 1;
 
     Vio_start();
     sprintf(outname,"gridmerged.dx");
 
     /* **************** PARSE INPUT ARGS ***************** */
 
-    if ( Char_parseARGV(argc, argv, &nx, &ny, &nz, 
+    if ( Char_parseARGV(argc, argv, &nx, &ny, &nz, &pad,
                         &fnams, &numfnams, outname, &vflag) != 0 ) {
         Vnm_print(2,"\nImproper or Unrecognized Switches?\nUsage: ");
-        Vnm_print(2,"%s %s\n",argv[0],usage);
+        Vnm_print(2,"%s %s\n",argv[0],usage0);
+        Vnm_print(2,"Flags:\t\t%s\n\t\t%s\n\t\t%s\n\t\t%s\n",
+                  help0, help1, help2, help3);
         return -1;
     }
 
@@ -164,12 +171,16 @@ int main(int argc, char **argv) {
         Vnm_tstop(26, "DATA READ");
         Vnm_print(vvlev, "%s  Merging data from %s...\n",snam,fnams[count]);
         Vnm_tstart(26, "MERGING");
-        xmin = grid->xmin - grid->hx   - VSMALL;
-        ymin = grid->ymin - grid->hy   - VSMALL;
-        zmin = grid->zmin - grid->hzed - VSMALL;
-        xmax = grid->xmax + grid->hx   + VSMALL;
-        ymax = grid->ymax + grid->hy   + VSMALL;
-        zmax = grid->zmax + grid->hzed + VSMALL;
+        xmin = grid->xmin - pad*grid->hx   - VSMALL;
+        ymin = grid->ymin - pad*grid->hy   - VSMALL;
+        zmin = grid->zmin - pad*grid->hzed - VSMALL;
+        xmax = grid->xmax + pad*grid->hx   + VSMALL;
+        ymax = grid->ymax + pad*grid->hy   + VSMALL;
+        zmax = grid->zmax + pad*grid->hzed + VSMALL;
+        Vnm_print(vvlev, "%s  MIN (%g,%g,%g) IMIN (%g,%g,%g)\n",snam,
+                          grid->xmin,grid->ymin,grid->zmin,xmin,ymin,zmin);
+        Vnm_print(vvlev, "%s  MAX (%g,%g,%g) IMAX (%g,%g,%g)\n",snam,
+                          grid->xmax,grid->ymax,grid->zmax,xmax,ymax,zmax);
         for (i=0; i<nx; i++) {
             pt[0] = mgrid->xmin + i*mgrid->hx;
             if(INTERVAL(pt[0],xmin,xmax)) {
@@ -206,7 +217,7 @@ int main(int argc, char **argv) {
     for (i=0; i<nx; i++) {
         for (j=0; j<ny; j++) {
             for (k=0; k<nz; k++) {
-                if ( carray[IJK(i,j,k)] > 0 ) {
+                if ( carray[IJK(i,j,k)] >= 1 ) {
                     (mgrid->data)[IJK(i,j,k)] /= carray[IJK(i,j,k)];
                 } else {
                     Vnm_print(2,"%s %s %s (%g,%g,%g)\n",snam,
@@ -417,19 +428,41 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
     ifloat = (pt[0] - xmin)/hx;
     jfloat = (pt[1] - ymin)/hy;
     kfloat = (pt[2] - zmin)/hzed;
-    /* If the point is outside the mesh, push it to the mesh */
-    if ( ifloat < 0.0 ) ifloat = 0.0;
-    if ( ifloat >= nx ) ifloat = nx - 1.0;
-    if ( jfloat < 0.0 ) jfloat = 0.0;
-    if ( jfloat >= ny ) jfloat = ny - 1.0;
-    if ( kfloat < 0.0 ) kfloat = 0.0;
-    if ( kfloat >= nz ) kfloat = nz - 1.0;
     ihi = (int)ceil(ifloat);
     jhi = (int)ceil(jfloat);
     khi = (int)ceil(kfloat);
     ilo = (int)floor(ifloat);
     jlo = (int)floor(jfloat);
     klo = (int)floor(kfloat);
+
+    /* If the point is outside the mesh, push it to the mesh */
+    if ( ilo < 0 ) {
+        ilo = 0;
+        ihi = ilo + 1;
+        ifloat = (double)(ilo);
+    } else if ( ihi >= nx ) {
+        ihi = nx - 1;
+        ilo = ihi - 1;
+        ifloat = (double)(ihi);
+    }
+    if ( jlo < 0 ) {
+        jlo = 0;
+        jhi = jlo + 1;
+        jfloat = (double)(jlo);
+    } else if ( jhi >= ny ) {
+        jhi = ny - 1;
+        jlo = jhi - 1;
+        jfloat = (double)(jhi);
+    }
+    if ( klo < 0 ) {
+        klo = 0;
+        khi = klo + 1;
+        kfloat = (double)(klo);
+    } else if ( khi >= nz ) {
+        khi = nz - 1;
+        klo = khi - 1;
+        kfloat = (double)(khi);
+    } 
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
@@ -456,7 +489,7 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
 }
 
 VPRIVATE int Char_parseARGV(int argc, char **argv,
-  int *nx, int *ny, int *nz, char ***fnams, int *numfnams, 
+  int *nx, int *ny, int *nz, int *pad, char ***fnams, int *numfnams, 
   char *outname, int *vflag)
 {
     int i, j, hflag, nflags, sflag;
@@ -476,6 +509,12 @@ VPRIVATE int Char_parseARGV(int argc, char **argv,
                 if( i < argc ) {
                     nflags++;
                     sprintf(outname,"%s",argv[i]);
+                }
+            } else if (!strcmp(argv[i],"-pad")) {
+                i++;
+                if( i < argc ) {
+                    nflags++;
+                    (*pad) = atoi(argv[i]);
                 }
             } else {
                 hflag = 1;
@@ -498,6 +537,9 @@ VPRIVATE int Char_parseARGV(int argc, char **argv,
         if( argv[i][0] == '-' ) {
             j++;
             if (!strcmp(argv[i],"-o")) {
+                i++;
+                j++;
+            } else if (!strcmp(argv[i],"-pad")) {
                 i++;
                 j++;
             }
