@@ -136,6 +136,7 @@ if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
   fi
 fi
 AC_F77_NOFORMAIN
+FFLAGS="${FLIBS} ${FFLAGS}"
 AC_F77_FCN_MANGLE()
 AC_LANG_C
 AC_PROG_CPP
@@ -758,7 +759,7 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+lib_list="${FLIBS} -L${top_srcdir}/lib ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
