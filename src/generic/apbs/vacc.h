@@ -49,6 +49,7 @@
 
 #include "mc/vhal.h"
 #include "mc/vec3.h"
+#include "mc/vmem.h"
 
 #include "apbs/valist.h"
 #include "apbs/vunit.h"
@@ -62,6 +63,9 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 typedef struct Vacc {
+
+  /* Memory management object for this class */
+  Vmem *vmem;
 
   /* An array of arrays of pointers to atoms */
   Vatom ***atoms;
