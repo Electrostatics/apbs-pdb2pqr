@@ -43,12 +43,10 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Destroys atom list object.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a11">Valist_dtor2</a> (Valist *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to destroy atom list object.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (Valist *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (Valist *thee, Vio *sock)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill atom list with information from a PQR file.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a13">Valist_readPDB</a> (Valist *thee, <a class="el" href="structVparam.html">Vparam</a> *param, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a13">Valist_readPDB</a> (Valist *thee, <a class="el" href="structVparam.html">Vparam</a> *param, Vio *sock)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill atom list with information from a PDB file.</em> <a href="#a13"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a14">Valist_buildMesh</a> (Valist *thee, double size, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Build rectangular prismatic finite element mesh which surrounds molecule contained in Valist object.</em> <a href="#a14"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Container class for list of atom objects.
@@ -79,83 +77,6 @@ Declaration of the Valist class as the Valist structure.
   </tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a name="a14" doxytag="valist.h::Valist_buildMesh"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> void Valist_buildMesh </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structsValist.html">Valist</a> *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>thee</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>size</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iodev</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iofmt</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>thost</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>fname</em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Build rectangular prismatic finite element mesh which surrounds molecule contained in Valist object.
-<p>
-The mesh will have rectangular sides and consist of 6 simplices and 8 vertices will all boundaries Dirichlet. The mesh will be written to the sock specified by the parameters below.<p>
-<dl compact><dt><b><a class="el" href="bug.html#_bug000003">Bug:</a></b></dt><dd>This routine has not been tested.</dd></dl>
-<dl compact><dt><b>Author:</b></dt><dd>Nathan Baker (mesh topology based on MCSF file by Mike Holst) </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object to use as reference for the mesh </td></tr>
-    <tr><td valign=top><em>size</em>&nbsp;</td><td>The factor by which the mesh is larger than the biomolecule. In other words, if the smallest box containing the biomolecule is dx x dy x dz, then the mesh built by this routine will have dimensions (size*dx) x (size*dy) x (size*dz). </td></tr>
-    <tr><td valign=top><em>iodev</em>&nbsp;</td><td>Output device type (FILE/BUFF/UNIX/INET) </td></tr>
-    <tr><td valign=top><em>iofmt</em>&nbsp;</td><td>Output device format (ASCII/XDR) </td></tr>
-    <tr><td valign=top><em>thost</em>&nbsp;</td><td>Output hostname (for sockets) </td></tr>
-    <tr><td valign=top><em>fname</em>&nbsp;</td><td>Output FILE/BUFF/UNIX/INET name </td></tr>
-  </table>
-</dl>
-    </td>
-  </tr>
-</table>
 <a name="a8" doxytag="valist.h::Valist_ctor"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
@@ -217,13 +138,13 @@ Construct the atom list object.
 FORTRAN stub to construct the atom list object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Storage for new atom list </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Storage for new atom list </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a10" doxytag="valist.h::Valist_dtor"></a><p>
@@ -255,12 +176,12 @@ FORTRAN stub to construct the atom list object.
 Destroys atom list object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to memory location for atom list object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to storage for atom list </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a11" doxytag="valist.h::Valist_dtor2"></a><p>
@@ -292,12 +213,12 @@ Destroys atom list object.
 FORTRAN stub to destroy atom list object.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Pointer to atom list object </td></tr>
-  </table>
-</dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Pointer to atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a6" doxytag="valist.h::Valist_getAtom"></a><p>
@@ -338,14 +259,13 @@ FORTRAN stub to destroy atom list object.
 Get pointer to particular atom in list.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-    <tr><td valign=top><em>i</em>&nbsp;</td><td>Index of atom of interest </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to atom object i </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>i</em>&nbsp;</td><td>
+Atom list object Index of atom in list </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a1" doxytag="valist.h::Valist_getAtomList"></a><p>
@@ -377,13 +297,13 @@ Get pointer to particular atom in list.
 Get actual array of atom objects from the list.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Array of atom objects </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a2" doxytag="valist.h::Valist_getCenterX"></a><p>
@@ -415,13 +335,13 @@ Get actual array of atom objects from the list.
 Get x-coordinate of molecule center.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>X-coordinate of molecule center </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a3" doxytag="valist.h::Valist_getCenterY"></a><p>
@@ -453,13 +373,13 @@ Get x-coordinate of molecule center.
 Get y-coordinate of molecule center.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Y-coordinate of molecule center </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a4" doxytag="valist.h::Valist_getCenterZ"></a><p>
@@ -491,13 +411,13 @@ Get y-coordinate of molecule center.
 Get z-coordinate of molecule center.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Z-coordinate of molecule center </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a5" doxytag="valist.h::Valist_getNumberAtoms"></a><p>
@@ -529,13 +449,13 @@ Get z-coordinate of molecule center.
 Get number of atoms in the list.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Number of atoms in list </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a7" doxytag="valist.h::Valist_memChk"></a><p>
@@ -567,13 +487,13 @@ Get number of atoms in the list.
 Get total memory allocated for this object and its members.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Total memory in bytes </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>thee</em>&nbsp;</td><td>
+Atom list object </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a13" doxytag="valist.h::Valist_readPDB"></a><p>
@@ -596,26 +516,8 @@ Get total memory allocated for this object and its members.
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iodev</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iofmt</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>thost</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>fname</em></td>
+          <td class="md" nowrap>Vio *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>sock</em></td>
         </tr>
         <tr>
           <td></td>
@@ -637,24 +539,17 @@ Get total memory allocated for this object and its members.
 <p>
 Fill atom list with information from a PDB file.
 <p>
-<dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object to be filled </td></tr>
-    <tr><td valign=top><em>param</em>&nbsp;</td><td>A pre-initialized parameter object </td></tr>
-    <tr><td valign=top><em>iodev</em>&nbsp;</td><td>Input device type (FILE/BUFF/UNIX/INET) </td></tr>
-    <tr><td valign=top><em>iofmt</em>&nbsp;</td><td>Input device format (ASCII/XDR) </td></tr>
-    <tr><td valign=top><em>thost</em>&nbsp;</td><td>Input hostname (for sockets) </td></tr>
-    <tr><td valign=top><em>fname</em>&nbsp;</td><td>Input FILE/BUFF/UNIX/INET name </td></tr>
-  </table>
-</dl>
+<dl compact><dt><b>Author:</b></dt><dd>Nathan Baker, Todd Dolinsky </dd></dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
-<dl compact><dt><b>Note:</b></dt><dd><ul>
-<li>A PQR file has PDB structure with charge and radius in the last two columns instead of weight and occupancy </li>
-<li>We don't actually respect PDB format; instead recognize whitespace- or tab-delimited fields which allows us to deal with structures with coordinates &gt; 999 or &lt; -999. </li>
-</ul>
-</dd></dl>
-    </td>
+<dl compact><dt><b>Note:</b></dt><dd>We don't actually respect PDB format; instead recognize whitespace- or tab-delimited fields which allows us to deal with structures with coordinates &gt; 999 or &lt; -999. </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>param</em>&nbsp;</td><td>
+Atom list object </td></tr>
+<tr><td valign=top><em>sock</em>&nbsp;</td><td>
+A pre-initialized parameter object Socket read for reading PDB file </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
 <a name="a12" doxytag="valist.h::Valist_readPQR"></a><p>
@@ -671,26 +566,8 @@ Fill atom list with information from a PDB file.
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iodev</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>iofmt</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>thost</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>const char *&nbsp;</td>
-          <td class="mdname" nowrap>&nbsp; <em>fname</em></td>
+          <td class="md" nowrap>Vio *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>sock</em></td>
         </tr>
         <tr>
           <td></td>
@@ -713,25 +590,21 @@ Fill atom list with information from a PDB file.
 Fill atom list with information from a PQR file.
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Parameters:</b></dt><dd>
-  <table border="0" cellspacing="2" cellpadding="0">
-    <tr><td valign=top><em>thee</em>&nbsp;</td><td>Valist object to be filled </td></tr>
-    <tr><td valign=top><em>iodev</em>&nbsp;</td><td>Input device type (FILE/BUFF/UNIX/INET) </td></tr>
-    <tr><td valign=top><em>iofmt</em>&nbsp;</td><td>Input device format (ASCII/XDR) </td></tr>
-    <tr><td valign=top><em>thost</em>&nbsp;</td><td>Input hostname (for sockets) </td></tr>
-    <tr><td valign=top><em>fname</em>&nbsp;</td><td>Input FILE/BUFF/UNIX/INET name </td></tr>
-  </table>
-</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
 <dl compact><dt><b>Note:</b></dt><dd><ul>
 <li>A PQR file has PDB structure with charge and radius in the last two columns instead of weight and occupancy </li>
 <li>We don't actually respect PDB format; instead recognize whitespace- or tab-delimited fields which allows us to deal with structures with coordinates &gt; 999 or &lt; -999. </li>
 </ul>
 </dd></dl>
-    </td>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>sock</em>&nbsp;</td><td>
+Atom list object Socket reading for reading PQR file </td></tr>
+</table>
+</dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Apr 30 10:46:13 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 14:00:04 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

@@ -34,54 +34,73 @@
 00083 
 00084 <span class="preprocessor">#if !defined(VINLINE_VATOM)</span>
 00085 <span class="preprocessor"></span>
-00092     <a class="code" href="structsVatom.html">Vatom</a>* <a class="code" href="group__Valist.html#a1">Valist_getAtomList</a>(Valist *thee);
-00093 
-00100     <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a2">Valist_getCenterX</a>(Valist *thee);
-00101 
-00108     <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a3">Valist_getCenterY</a>(Valist *thee);
-00109 
-00116     <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a4">Valist_getCenterZ</a>(Valist *thee);
-00117 
-00118 
-00125     <span class="keywordtype">int</span>    <a class="code" href="group__Valist.html#a5">Valist_getNumberAtoms</a>(Valist *thee);
-00126 
-00134     <a class="code" href="structsVatom.html">Vatom</a>* <a class="code" href="group__Valist.html#a6">Valist_getAtom</a>(Valist *thee, <span class="keywordtype">int</span> i);
-00135 
-00142     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a7">Valist_memChk</a>(Valist *thee);
-00143 
-00144 <span class="preprocessor">#else </span><span class="comment">/* if defined(VINLINE_VATOM) */</span>
-00145 <span class="preprocessor">#   define Valist_getAtomList(thee) ((thee)-&gt;atoms)</span>
-00146 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getNumberAtoms(thee) ((thee)-&gt;number)</span>
-00147 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getAtom(thee, i) (&amp;((thee)-&gt;atoms[i]))</span>
-00148 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_memChk(thee) (Vmem_bytes((thee)-&gt;vmem))</span>
-00149 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterX(thee) ((thee)-&gt;center[0])</span>
-00150 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterY(thee) ((thee)-&gt;center[1])</span>
-00151 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterZ(thee) ((thee)-&gt;center[2])</span>
-00152 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VATOM) */</span>
-00153 
-00154 <span class="comment">/* </span>
-00155 <span class="comment">// Class Valist: Non-Inlineable methods (valist.c)</span>
-00157 <span class="comment"></span>
-00163 <span class="comment">Valist* Valist_ctor();</span>
-00164 <span class="comment"></span>
-00171 <span class="comment">int     Valist_ctor2(Valist *thee);</span>
-00172 <span class="comment"></span>
-00178 <span class="comment">void    Valist_dtor(Valist **thee);</span>
-00179 <span class="comment"></span>
-00185 <span class="comment">void    Valist_dtor2(Valist *thee);</span>
-00186 <span class="comment"></span>
-00203 <span class="comment">int Valist_readPQR(Valist *thee, const char *iodev, </span>
-00204 <span class="comment">  const char *iofmt, const char *thost, const char *fname);</span>
-00205 <span class="comment"></span>
-00223 <span class="comment">int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,</span>
-00224 <span class="comment">  const char *iofmt, const char *thost, const char *fname);</span>
-00225 <span class="comment"></span>
-00247 <span class="comment">void    Valist_buildMesh(Valist *thee, double size, const char *iodev,</span>
-00248 <span class="comment">                   const char *iofmt, const char *thost, const char *fname);</span>
-00249 <span class="comment"></span>
-00250 <span class="comment">#endif /* ifndef _VALIST_H_ */</span>
-00251 
-</pre></div><hr><address style="align: right;"><small>Generated on Fri Apr 30 10:46:06 2004 for APBS by
+00092 <a class="code" href="structsVatom.html">Vatom</a>* <a class="code" href="group__Valist.html#a1">Valist_getAtomList</a>(
+00093         Valist *thee 
+00094         );
+00095 
+00101 <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a2">Valist_getCenterX</a>(
+00102         Valist *thee 
+00103         );
+00104 
+00110 <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a3">Valist_getCenterY</a>(
+00111         Valist *thee 
+00112         );
+00113 
+00119 <span class="keywordtype">double</span> <a class="code" href="group__Valist.html#a4">Valist_getCenterZ</a>(
+00120         Valist *thee 
+00121         );
+00122 
+00128 <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a5">Valist_getNumberAtoms</a>(
+00129         Valist *thee 
+00130         );
+00131 
+00137 <a class="code" href="structsVatom.html">Vatom</a>* <a class="code" href="group__Valist.html#a6">Valist_getAtom</a>(
+00138         Valist *thee, 
+00139         <span class="keywordtype">int</span> i 
+00140         );
+00141 
+00147 <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a7">Valist_memChk</a>(
+00148         Valist *thee 
+00149         );
+00150 
+00151 <span class="preprocessor">#else </span><span class="comment">/* if defined(VINLINE_VATOM) */</span>
+00152 <span class="preprocessor">#   define Valist_getAtomList(thee) ((thee)-&gt;atoms)</span>
+00153 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getNumberAtoms(thee) ((thee)-&gt;number)</span>
+00154 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getAtom(thee, i) (&amp;((thee)-&gt;atoms[i]))</span>
+00155 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_memChk(thee) (Vmem_bytes((thee)-&gt;vmem))</span>
+00156 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterX(thee) ((thee)-&gt;center[0])</span>
+00157 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterY(thee) ((thee)-&gt;center[1])</span>
+00158 <span class="preprocessor"></span><span class="preprocessor">#   define Valist_getCenterZ(thee) ((thee)-&gt;center[2])</span>
+00159 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VATOM) */</span>
+00160 
+00166 <a class="code" href="group__Valist.html#a0">Valist</a>* <a class="code" href="group__Valist.html#a8">Valist_ctor</a>();
+00167 
+00173 <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a9">Valist_ctor2</a>(
+00174         Valist *thee 
+00175         );
+00176 
+00181 <span class="keywordtype">void</span> <a class="code" href="group__Valist.html#a10">Valist_dtor</a>(
+00182         Valist **thee 
+00183         );
+00184 
+00189 <span class="keywordtype">void</span> <a class="code" href="group__Valist.html#a11">Valist_dtor2</a>(
+00190         Valist *thee 
+00191         );
+00192 
+00204 <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a12">Valist_readPQR</a>(
+00205         Valist *thee, 
+00206         Vio *sock 
+00207         );
+00208 
+00218 <span class="keywordtype">int</span> <a class="code" href="group__Valist.html#a13">Valist_readPDB</a>(
+00219         Valist *thee, 
+00220         <a class="code" href="structVparam.html">Vparam</a> *param, 
+00221         Vio *sock 
+00222         );
+00223 
+00224 <span class="preprocessor">#endif </span><span class="comment">/* ifndef _VALIST_H_ */</span>
+00225 
+</pre></div><hr><address style="align: right;"><small>Generated on Fri Apr 30 13:59:56 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

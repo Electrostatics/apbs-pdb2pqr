@@ -83,63 +83,70 @@ typedef struct sValist Valist;
 
 #if !defined(VINLINE_VATOM)
 
-    /** @brief   Get actual array of atom objects from the list
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  Array of atom objects 
-     */
-    VEXTERNC Vatom* Valist_getAtomList(Valist *thee);
+/** 
+ * @brief   Get actual array of atom objects from the list
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Array of atom objects 
+ */
+VEXTERNC Vatom* Valist_getAtomList(
+        Valist *thee /** Atom list object */
+        );
 
-    /** @brief   Get x-coordinate of molecule center
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  X-coordinate of molecule center
-     */
-    VEXTERNC double Valist_getCenterX(Valist *thee);
+/** @brief   Get x-coordinate of molecule center
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  X-coordinate of molecule center
+ */
+VEXTERNC double Valist_getCenterX(
+        Valist *thee /** Atom list object */
+        );
 
-    /** @brief   Get y-coordinate of molecule center
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  Y-coordinate of molecule center
-     */ 
-    VEXTERNC double Valist_getCenterY(Valist *thee);
+/** @brief   Get y-coordinate of molecule center
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Y-coordinate of molecule center
+ */ 
+VEXTERNC double Valist_getCenterY(
+        Valist *thee /** Atom list object */
+        );
 
-    /** @brief   Get z-coordinate of molecule center
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  Z-coordinate of molecule center
-     */ 
-    VEXTERNC double Valist_getCenterZ(Valist *thee);
+/** @brief   Get z-coordinate of molecule center
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Z-coordinate of molecule center
+ */ 
+VEXTERNC double Valist_getCenterZ(
+        Valist *thee /** Atom list object */
+        );
 
+/** @brief   Get number of atoms in the list
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Number of atoms in list 
+ */
+VEXTERNC int Valist_getNumberAtoms(
+        Valist *thee /** Atom list object */
+        );
 
-    /** @brief   Get number of atoms in the list
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  Number of atoms in list 
-     */
-    VEXTERNC int    Valist_getNumberAtoms(Valist *thee);
+/** @brief   Get pointer to particular atom in list
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Pointer to atom object i
+ */
+VEXTERNC Vatom* Valist_getAtom(
+        Valist *thee, /** Atom list object */
+        int i /** Index of atom in list */
+        );
 
-    /** @brief   Get pointer to particular atom in list
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @param   i    Index of atom of interest
-     *  @return  Pointer to atom object i
-     */
-    VEXTERNC Vatom* Valist_getAtom(Valist *thee, int i);
-
-    /** @brief   Get total memory allocated for this object and its members
-     *  @ingroup Valist
-     *  @author  Nathan Baker
-     *  @param   thee Valist object
-     *  @return  Total memory in bytes
-     */
-    VEXTERNC unsigned long int Valist_memChk(Valist *thee);
+/** @brief   Get total memory allocated for this object and its members
+ *  @ingroup Valist
+ *  @author  Nathan Baker
+ *  @return  Total memory in bytes
+ */
+VEXTERNC unsigned long int Valist_memChk(
+        Valist *thee /** Atom list object */
+        );
 
 #else /* if defined(VINLINE_VATOM) */
 #   define Valist_getAtomList(thee) ((thee)->atoms)
@@ -151,10 +158,6 @@ typedef struct sValist Valist;
 #   define Valist_getCenterZ(thee) ((thee)->center[2])
 #endif /* if !defined(VINLINE_VATOM) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Valist: Non-Inlineable methods (valist.c)
-/////////////////////////////////////////////////////////////////////////// */
-
 /** @brief   Construct the atom list object
  *  @ingroup Valist
  *  @author  Nathan Baker
@@ -165,34 +168,32 @@ VEXTERNC Valist* Valist_ctor();
 /** @brief   FORTRAN stub to construct the atom list object
  *  @ingroup Valist
  *  @author  Nathan Baker
- *  @param   thee Storage for new atom list
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int     Valist_ctor2(Valist *thee);
+VEXTERNC int Valist_ctor2(
+        Valist *thee /** Storage for new atom list */
+        );
 
 /** @brief   Destroys atom list object
  *  @ingroup Valist
  *  @author  Nathan Baker
- *  @param   thee Pointer to memory location for atom list object
  */
-VEXTERNC void    Valist_dtor(Valist **thee);
+VEXTERNC void Valist_dtor(
+        Valist **thee /** Pointer to storage for atom list */
+        );
 
 /** @brief   FORTRAN stub to destroy atom list object
  *  @ingroup Valist
  *  @author  Nathan Baker
- *  @param   thee Pointer to atom list object
  */
-VEXTERNC void    Valist_dtor2(Valist *thee);
+VEXTERNC void Valist_dtor2(
+        Valist *thee /** Pointer to atom list object */
+        );
 
 /** 
  * @brief  Fill atom list with information from a PQR file
  * @ingroup Valist
  * @author  Nathan Baker
- * @param   thee  Valist object to be filled
- * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
- * @param   iofmt  Input device format (ASCII/XDR)
- * @param   thost  Input hostname (for sockets)
- * @param   fname  Input FILE/BUFF/UNIX/INET name
  * @return  1 if successful, 0 otherwise
  * @note  \li A PQR file has PDB structure with charge and radius in the last
  *            two columns instead of weight and occupancy
@@ -200,51 +201,24 @@ VEXTERNC void    Valist_dtor2(Valist *thee);
  *            whitespace- or tab-delimited fields which allows us to deal with
  *            structures with coordinates > 999 or < -999.
  */
-VEXTERNC int Valist_readPQR(Valist *thee, const char *iodev, 
-  const char *iofmt, const char *thost, const char *fname);
+VEXTERNC int Valist_readPQR(
+        Valist *thee, /** Atom list object */
+        Vio *sock /** Socket reading for reading PQR file */
+        );
 
 /** 
  * @brief  Fill atom list with information from a PDB file
  * @ingroup Valist
- * @author  Nathan Baker
- * @param   thee  Valist object to be filled
- * @param   param  A pre-initialized parameter object
- * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
- * @param   iofmt  Input device format (ASCII/XDR)
- * @param   thost  Input hostname (for sockets)
- * @param   fname  Input FILE/BUFF/UNIX/INET name
+ * @author  Nathan Baker, Todd Dolinsky
  * @return  1 if successful, 0 otherwise
- * @note  \li A PQR file has PDB structure with charge and radius in the last
- *            two columns instead of weight and occupancy
- *        \li We don't actually respect PDB format; instead recognize
- *            whitespace- or tab-delimited fields which allows us to deal with
- *            structures with coordinates > 999 or < -999.
+ * @note  We don't actually respect PDB format; instead recognize whitespace-
+ * or tab-delimited fields which allows us to deal with structures with
+ * coordinates > 999 or < -999.
  */
-VEXTERNC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
-  const char *iofmt, const char *thost, const char *fname);
-
-/** @brief   Build rectangular prismatic finite element mesh which surrounds
- *           molecule contained in Valist object.
- * 
- *           The mesh will have rectangular sides and consist of 6 simplices
- *           and 8 vertices will all boundaries Dirichlet.  The mesh will be
- *           written to the sock specified by the parameters below.
- * 
- *  @bug     This routine has not been tested.
- *  @ingroup Valist
- *  @author  Nathan Baker (mesh topology based on MCSF file by Mike Holst)
- *  @param   thee   Valist object to use as reference for the mesh
- *  @param   size   The factor by which the mesh is larger than the
- *                  biomolecule.  In other words, if the smallest box
- *                  containing the biomolecule is dx x dy x dz, then the mesh
- *                  built by this routine will have dimensions (size*dx) x
- *                  (size*dy) x (size*dz).
- *  @param   iodev  Output device type (FILE/BUFF/UNIX/INET)
- *  @param   iofmt  Output device format (ASCII/XDR)
- *  @param   thost  Output hostname (for sockets)
- *  @param   fname  Output FILE/BUFF/UNIX/INET name
- */
-VEXTERNC void    Valist_buildMesh(Valist *thee, double size, const char *iodev,
-                   const char *iofmt, const char *thost, const char *fname);
+VEXTERNC int Valist_readPDB(
+        Valist *thee, /** Atom list object */
+        Vparam *param, /** A pre-initialized parameter object */
+        Vio *sock /** Socket read for reading PDB file */
+        );
 
 #endif /* ifndef _VALIST_H_ */

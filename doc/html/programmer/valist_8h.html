@@ -70,12 +70,10 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td>&nbsp;</td><td><font size=-1><em>Destroys atom list object.</em> <a href="group__Valist.html#a10"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a11">Valist_dtor2</a> (<a class="el" href="structsValist.html">Valist</a> *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to destroy atom list object.</em> <a href="group__Valist.html#a11"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (<a class="el" href="structsValist.html">Valist</a> *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (<a class="el" href="structsValist.html">Valist</a> *thee, Vio *sock)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill atom list with information from a PQR file.</em> <a href="group__Valist.html#a12"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a13">Valist_readPDB</a> (<a class="el" href="structsValist.html">Valist</a> *thee, <a class="el" href="structVparam.html">Vparam</a> *param, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a13">Valist_readPDB</a> (<a class="el" href="structsValist.html">Valist</a> *thee, <a class="el" href="structVparam.html">Vparam</a> *param, Vio *sock)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill atom list with information from a PDB file.</em> <a href="group__Valist.html#a13"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Valist.html#a14">Valist_buildMesh</a> (<a class="el" href="structsValist.html">Valist</a> *thee, double size, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Build rectangular prismatic finite element mesh which surrounds molecule contained in Valist object.</em> <a href="group__Valist.html#a14"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Valist.
@@ -117,7 +115,7 @@ Contains declarations for class Valist.
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * </pre></div></dd></dl>
-<hr><address style="align: right;"><small>Generated on Fri Apr 30 10:46:09 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri Apr 30 13:59:59 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

@@ -316,10 +316,11 @@ VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
 %s!\n", tok);
     } 
 
+    return 1;
+
 
     VERROR1:
-        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
-section!\n");
+        Vnm_print(2, "NOsh_parseREAD_MOL:  Ran out of tokens while parsing READ section!\n");
         return 0;
 
 }
@@ -346,9 +347,10 @@ VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
 %s!\n", tok);
     } 
 
+    return 1;
+
     VERROR1:
-        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
-section!\n");
+        Vnm_print(2, "NOsh_parseREAD_PARM:  Ran out of tokens while parsing READ section!\n");
         return 0;
 
 }
@@ -380,8 +382,10 @@ VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
 %s!\n", tok);
     } 
 
+    return 1;
+
     VERROR1:
-        Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+        Vnm_print(2, "NOsh_parseREAD_DIEL:  Ran out of tokens while parsing READ \
 section!\n");
         return 0;
 
@@ -405,6 +409,8 @@ VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
 %s!\n", tok);
     }
+
+    return 1;
 
     VERROR1:
         Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
@@ -431,6 +437,8 @@ VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
 %s!\n", tok);
     }
+
+    return 1;
 
     VERROR1:
         Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
