@@ -751,10 +751,17 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
-      &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
-      &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
-      &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
+    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+      &(thee->pmgp->mgsolv), &(thee->pmgp->nx), &(thee->pmgp->ny),
+      &(thee->pmgp->nz), &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, 
+      &(thee->pmgp->narr), &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), 
+      &(thee->pmgp->niwk));
+
+    /* We need some additional storage if: nonlinear & newton OR cgmg */
+    if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
+        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*nf);
+    }
+
 
     /* Overwrite any default or user-specified boundary condition arguments; we
      * are now committed to a calculation via focusing */
