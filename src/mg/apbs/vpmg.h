@@ -65,18 +65,18 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: External FORTRAN routines
 /////////////////////////////////////////////////////////////////////////// */
-#define MGSZ mgsz_
-#define PACKMG packmg_
-#define CGMGDRIV cgmgdriv_ 
-#define NEWDRIV newdriv_ 
-#define MGDRIV mgdriv_ 
-#define NCGHSDRIV ncghsdriv_ 
-#define NSORDRIV nsordriv_
-#define NGSRBDRIV ngsrbdriv_
-#define NWJACDRIV nwjacdriv_
-#define NRICHDRIV nrichdriv_
-#define MYRAND myrand_
-#define TSECND tsecnd_
+#define MGSZ mgsz
+#define PACKMG packmg
+#define CGMGDRIV cgmgdriv
+#define NEWDRIV newdriv
+#define MGDRIV mgdriv
+#define NCGHSDRIV ncghsdriv
+#define NSORDRIV nsordriv
+#define NGSRBDRIV ngsrbdriv
+#define NWJACDRIV nwjacdriv
+#define NRICHDRIV nrichdriv
+#define MYRAND myrand
+#define TSECND tsecnd
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Definition

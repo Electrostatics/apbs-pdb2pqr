@@ -175,9 +175,9 @@ typedef struct Vpmgp {
 /////////////////////////////////////////////////////////////////////////// */
 
 VEXTERNC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, 
-  double hx, double hy, double hz, int nonlin);
+  double hx, double hy, double hzed, int nonlin);
 VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev, 
-  double hx, double hy, double hz, int nonlin);
+  double hx, double hy, double hzed, int nonlin);
 VEXTERNC void Vpmgp_dtor(Vpmgp **thee);
 VEXTERNC void Vpmgp_dtor2(Vpmgp *thee);
 
