@@ -163,7 +163,7 @@
  * <pre>
  * # cd ${TOP}
  * # gzip -dc maloc.tar.gz | tar xvf -
- * # gzip -dc apbs-0.2.0.tar.gz | tar xvf -
+ * # gzip -dc apbs-0.2.1.tar.gz | tar xvf -
  * </pre>
  * <li> Compile and install the MALOC libraries.  You should read the MALOC
  * installation guide before doing this, but if you just want a simple
@@ -256,7 +256,8 @@
  * In practice, for 8 tasks per node, about 400 MB of heap space is available
  * to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
  * In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
- * 384 MB heap space per task.
+ * 384 MB heap space per task.  The use of vendor-supplied BLAS is also
+ * recommended!
  * <li> Sun <br>
  * If you're compiling this on an Alpha platform (Linux or OSF), you definitely
  * need to use the Sun compilers, GCC generates <i>very slow</i> executables.
@@ -640,7 +641,7 @@
  * <br><br><a name="mg-para"><b>Automatic multigrid parallel focusing
  * calculation syntax (mg-para)</b></a>
  * <br><br>
- * <i>PLEASE NOTE:  In versions 0.2.0 and earlier,
+ * <i>PLEASE NOTE:  In versions 0.2.1 and earlier,
  * parallel focusing should not be used for energy calculations if the fine
  * grid does not completely contain all atoms of interest!</i>
  * <br><br>
