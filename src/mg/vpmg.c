@@ -715,6 +715,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
     else zks2 = 0.0;
     Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
     for (i=0; i<nion; i++) {
         ionConc[i] = zks2 * ionConc[i] * ionQ[i];
     }
@@ -871,7 +872,9 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
     if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
     else zks2 = 0.0;
     Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+    Vnm_print(2, "Got %d ions:\n", nion);
     for (i=0; i<nion; i++) {
+        Vnm_print(2, "\t%g e at %g M\n", ionQ[i], ionConc[i]);
         ionConc[i] = zks2 * ionConc[i] * ionQ[i];
     }
     F77MYPDEFINIT(&nion, ionQ, ionConc);
@@ -983,14 +986,14 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     Valist *alist;
     Vpbe *pbe;
     Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax, chi;
+    double xmin, xmax, ymin, ymax, zmin, zmax, chi, ionmask, ionstr;
     double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
     double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
     double hx, hy, hzed, *apos, arad, gpos[3];
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
     int imin, imax, jmin, jmax, kmin, kmax;
     double dx2, dy2, dz2, arad2, stot2, itot2, rtot, rtot2;
-    int acclo, accmid, acchi, a000;
+    int acclo, accmid, acchi, a000, islap;
 
     VASSERT(thee != VNULL);
     thee->surfMeth = surfMeth;
@@ -1004,6 +1007,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     srad = Vpbe_getSolventRadius(pbe);
     zmagic = Vpbe_getZmagic(pbe);
     zkappa2 = Vpbe_getZkappa2(pbe);
+    ionstr = Vpbe_getBulkIonicStrength(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
     epsp = Vpbe_getSoluteDiel(pbe);
 
@@ -1040,6 +1044,18 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     thee->rparm[6] = zmin;
     thee->rparm[7] = zmax;
 
+    /* This is a floating point parameter related to the non-zero nature of the
+     * bulk ionic strength.  If the ionic strength is greater than zero; this
+     * parameter is set to 1.0 and later scaled by the appropriate pre-factors.
+     * Otherwise, this parameter is set to 0.0 */
+    if (ionstr > VPMGSMALL) ionmask = 1.0;
+    else ionmask = 0.0;
+
+    /* This is a flag that gets set if the operator is a simple Laplacian;
+     * i.e., in the case of a homogenous dielectric and zero ionic strength */
+    if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
+    else islap = 0;
+
     /* Fill the mesh point coordinate arrays */
     for (i=0; i<nx; i++) thee->xf[i] = xmin + i*hx;
     for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
@@ -1055,17 +1071,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
         thee->a3cf[i] = 0.0;
     }
 
-    Vnm_print(0, "Vpmg_fillco:  marking ion and solvent accessibility\n");
-
-    /* Loop through the atoms and do the following:
-     * 1.  Set ccf = -1.0, for all points inside the
-     *     (possibly spline-based) inflated van der Waals surface
-     * 2.  Set a{123}cf = -1.0 if a point is inside the inflated van der Waals
-     *     radii
-     * 3.  Set a{123}cf = -2.0 if a point is inside the van der Waals radii
-     * 4.  Fill in the source term array
-     */
-    /* Fill source term array */
+    /* Fill in the source term (atomic charges) */
+    Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
         atom = Valist_getAtom(alist, iatom);
@@ -1096,74 +1103,6 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
             position[1] = apos[1] - ymin;
             position[2] = apos[2] - zmin;
 
-/* Avoid a whole bunch of testing in the case of a uniform dielectric */
-if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
-            /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
-             * ASSIGNMENT (Steps #1-3) */
-            if (surfMeth == 2) itot2 = VSQR(irad + arad + splineWin);     
-            else itot2 = VSQR(irad + arad);
-            if (surfMeth == 2) stot2 = VSQR(arad + splineWin);
-            else stot2 = VSQR(srad + arad);
-            arad2 = VSQR(arad);
-            /* We'll search over grid points which are in the greater of these
-             * two radii */
-            rtot = VMAX2((irad + arad), (srad + arad));
-            rtot2 = VMAX2(itot2, stot2);
-            dx = rtot + 0.5*hx;
-            imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
-            imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
-            for (i=imin; i<=imax; i++) {
-                dx2 = VSQR(position[0] - hx*i);
-                if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
-                else dy = 0.5*hy;
-                jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
-                jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
-                for (j=jmin; j<=jmax; j++) {
-                    dy2 = VSQR(position[1] - hy*j);
-                    if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
-                    else dz = 0.5*hzed;
-                    kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
-                    kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
-                    for (k=kmin; k<=kmax; k++) {
-                        dz2 = VSQR(k*hzed - position[2]);
-                        /* See if grid point is inside ivdw radius and set ccf
-                         * accordingly (do spline assignment here) */
-                        if ((dz2 + dy2 + dx2) <= itot2) 
-                            thee->ccf[IJK(i,j,k)] = -1.0;
-                        /* See if x-shifted grid point is inside ivdw rad. */
-                        if (thee->a1cf[IJK(i,j,k)] != -2.0) {
-                            if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=stot2) {
-                                /* See if inside vdw rad */
-                                if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=arad2) 
-                                  thee->a1cf[IJK(i,j,k)] = -2.0;
-                                else thee->a1cf[IJK(i,j,k)] = -1.0;
-                            } 
-                        }
-                        /* See if y-shifted grid point is inside ivdw rad. */
-                        if (thee->a2cf[IJK(i,j,k)] != -2.0) {
-                            if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) <= stot2) {
-                                /* See if inside vdw rad */
-                                if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)<=arad2) 
-                                  thee->a2cf[IJK(i,j,k)] = -2.0;
-                                else thee->a2cf[IJK(i,j,k)] = -1.0;
-                            }        
-                        }
-                        /* See if z-shifted grid point is inside ivdw rad. */
-                        if (thee->a3cf[IJK(i,j,k)] != -2.0) {
-                            if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=stot2) {
-                                /* See if inside vdw rad */
-                                if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=arad2)
-                                  thee->a3cf[IJK(i,j,k)] = -2.0;
-                                else thee->a3cf[IJK(i,j,k)] = -1.0;
-                            }        
-                        }
-                    } /* k loop */
-                } /* j loop */
-            } /* i loop */
-}
-/* END: Avoid a whole bunch of testing in the case of a uniform dielectric */
-
-            /* FILL IN SOURCE TERM ARRAY */
             /* Scale the charge to be a delta function */
             charge = charge*zmagic/(hx*hy*hzed);
 
@@ -1191,187 +1130,315 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
             thee->fcf[IJK(ilo,jlo,khi)] += ((1.0-dx)*(1.0-dy)*dz*charge);
             thee->fcf[IJK(ilo,jhi,klo)] += ((1.0-dx)*dy*(1.0-dz)*charge);
             thee->fcf[IJK(ilo,jlo,klo)] += ((1.0-dx)*(1.0-dy)*(1.0-dz)*charge);
+        } /* endif (on the mesh) */
+    } /* endfor (each atom) */
 
-        }
-    }
+    /* THE FOLLOWING NEEDS TO BE DONE IF WE'RE NOT USING A SIMPLE LAPLACIAN
+     * OPERATOR */
+    if (!islap) {
 
-    Vnm_print(0, "Vpmg_fillco:  filling coefficient arrays\n");
+        Vnm_print(0, "Vpmg_fillco:  marking ion and solvent accessibility.\n");
 
-    /* Interpret markings and fill the coefficient arrays */
-    for (k=0; k<nz; k++) {
+        /* Loop through the atoms and do the following:
+         * 1.  Set ccf = -1.0, for all points inside the
+         *     (possibly spline-based) inflated van der Waals surface
+	 * 2.  Set a{123}cf = -1.0 if a point is inside the inflated van der
+	 *     Waals radii
+	 * 3.  Set a{123}cf = -2.0 if a point is inside the van der Waals radii
+	 * 4.  Fill in the source term array
+         */
+        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
+            atom = Valist_getAtom(alist, iatom);
+            apos = Vatom_getPosition(atom);
+            arad = Vatom_getRadius(atom);
+            charge = Vatom_getCharge(atom);
 
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
-
-                /* the scalar (0th derivative) entry.  This is simply a number
-                 * between 0 and 1; the actual coefficent value is calculated
-                 * in mypde.f */
-                if (surfMeth == 2) {
-                    if (thee->ccf[IJK(i,j,k)] == -1.0) {
-                       gpos[0] = i*hx + xmin;
-                       gpos[1] = j*hy + ymin;
-                       gpos[2] = k*hzed + zmin;
-                       thee->ccf[IJK(i,j,k)] = Vacc_splineAcc(acc,
-                         gpos, splineWin, irad);
-                    }
-                } else {
-                    if (thee->ccf[IJK(i,j,k)] == -1.0) 
-                      thee->ccf[IJK(i,j,k)] = 0.0;
-                    else thee->ccf[IJK(i,j,k)] = 1.0;
+            /* Make sure we're on the grid */
+            if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+                (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+                (apos[2]<=zmin) || (apos[2]>=zmax)) {
+                if (thee->pmgp->bcfl != 4) {
+                    Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
+ %4.3f) is off the mesh (ignoring):\n",
+                      iatom, apos[0], apos[1], apos[2]);
+                    Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", 
+                      xmin, xmax);
+                    Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", 
+                      ymin, ymax);
+                    Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", 
+                      zmin, zmax);
                 }
+                fflush(stderr);
+            } else { /* if we're on the mesh */
 
-                /* The diagonal tensor (2nd derivative) entries.  Each of these
-                 * entries is evaluated ad the grid edges midpoints.  */
-                switch (surfMeth) {
+                /* Convert the atom position to grid reference frame */
+                position[0] = apos[0] - xmin;
+                position[1] = apos[1] - ymin;
+                position[2] = apos[2] - zmin;
+   
+                /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
+                 * ASSIGNMENT (Steps #1-3) */
+                if (surfMeth == 2) itot2 = VSQR(irad + arad + splineWin);     
+                else itot2 = VSQR(irad + arad);
+                if (surfMeth == 2) stot2 = VSQR(arad + splineWin);
+                else stot2 = VSQR(srad + arad);
+                arad2 = VSQR(arad);
+		/* We'll search over grid points which are in the greater of
+                 * these two radii */
+                rtot = VMAX2((irad + arad), (srad + arad));
+                rtot2 = VMAX2(itot2, stot2);
+                dx = rtot + 0.5*hx;
+                imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
+                imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+                for (i=imin; i<=imax; i++) {
+                    dx2 = VSQR(position[0] - hx*i);
+                    if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+                    else dy = 0.5*hy;
+                    jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
+                    jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
+                    for (j=jmin; j<=jmax; j++) {
+                        dy2 = VSQR(position[1] - hy*j);
+                        if (rtot2 > (dx2+dy2)) 
+                          dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
+                        else dz = 0.5*hzed;
+                        kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
+                        kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
+                        for (k=kmin; k<=kmax; k++) {
+                            dz2 = VSQR(k*hzed - position[2]);
+			    /* See if grid point is inside ivdw radius and set
+                             * ccf accordingly (do spline assignment here) */
+                            if ((dz2 + dy2 + dx2) <= itot2) 
+                              thee->ccf[IJK(i,j,k)] = -1.0;
+			    /* See if x-shifted grid point is inside ivdw rad */
+                            if (thee->a1cf[IJK(i,j,k)] != -2.0) {
+                                if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))
+                                     <=stot2) {
+                                    /* See if inside vdw rad */
+                                    if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))
+                                         <=arad2) 
+                                      thee->a1cf[IJK(i,j,k)] = -2.0;
+                                     else thee->a1cf[IJK(i,j,k)] = -1.0;
+                                } 
+                            }
+                            /* See if y-shifted grid point is inside ivdw rad */
+                            if (thee->a2cf[IJK(i,j,k)] != -2.0) {
+                                if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) 
+                                     <= stot2) {
+                                    /* See if inside vdw rad */
+                                    if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)
+                                         <=arad2) 
+                                      thee->a2cf[IJK(i,j,k)] = -2.0;
+                                    else thee->a2cf[IJK(i,j,k)] = -1.0;
+                                }        
+                            }
+                            /* See if z-shifted grid point is inside ivdw rad */
+                            if (thee->a3cf[IJK(i,j,k)] != -2.0) {
+                                if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)
+                                     <=stot2) {
+                                    /* See if inside vdw rad */
+                                    if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)
+                                         <=arad2)
+                                      thee->a3cf[IJK(i,j,k)] = -2.0;
+                                    else thee->a3cf[IJK(i,j,k)] = -1.0;
+                                }        
+                            }
+                        } /* k loop */
+                    } /* j loop */
+                } /* i loop */
+            } /* endif (on the mesh) */
+        } /* endfor (over all atoms) */
 
-                  /* No dielectric smoothing */
-                  case 0: 
-                    /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i] + 0.5*hx;
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
-                          thee->a1cf[IJK(i,j,k)] = epsp; 
-                        else thee->a1cf[IJK(i,j,k)] = epsw; 
-                    }
-                    /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j] + 0.5*hy;
-                        position[2] = thee->zf[k];
-                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
-                          thee->a2cf[IJK(i,j,k)] = epsp; 
-                        else thee->a2cf[IJK(i,j,k)] = epsw; 
-                    }
-                    /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k] + 0.5*hzed;
-                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
-                          thee->a3cf[IJK(i,j,k)] = epsp; 
-                        else thee->a3cf[IJK(i,j,k)] = epsw; 
-                    }
-                    break; 
+        Vnm_print(0, "Vpmg_fillco:  filling coefficient arrays\n");
+        /* Interpret markings and fill the coefficient arrays */
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k];
 
-                  /* A very rudimentary form of dielectric smoothing.
-                   * Specifically, the dielectric will be evaluated at the mid
-		   * point and the two flanking mesh points.  The fraction of
-		   * the grid edge in the solvent will then be calculated from
-		   * these three values (i.e., either 0, 1/3, 2/3, or 1).  The
-		   * dielectric value at the midpoint will then be assigned
-		   * based on the usual dielectric smoothing formula:
-		   * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
-                  case 1:
-                    a000 = 1.0;
-                    if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
-                        (thee->a2cf[IJK(i,j,k)] == -1.0) ||
-                        (thee->a3cf[IJK(i,j,k)] == -1.0)) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        a000 = Vacc_fastMolAcc(acc, position, srad);
+		    /* the scalar (0th derivative) entry.  This is simply a
+		     * number between 0 and 1; the actual coefficent value is
+		     * calculated in mypde.f */
+                    if (surfMeth == 2) {
+                        if (thee->ccf[IJK(i,j,k)] == -1.0) {
+                           gpos[0] = i*hx + xmin;
+                           gpos[1] = j*hy + ymin;
+                           gpos[2] = k*hzed + zmin;
+                           thee->ccf[IJK(i,j,k)] = 
+                             ionmask * Vacc_splineAcc(acc, gpos, splineWin, 
+                             irad);
+                        } else thee->ccf[IJK(i,j,k)] = ionmask;
+                    } else {
+                        if (thee->ccf[IJK(i,j,k)] == -1.0) 
+                          thee->ccf[IJK(i,j,k)] = 0.0;
+                        else thee->ccf[IJK(i,j,k)] = ionmask;
                     }
-                    /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i] + 0.5*hx;
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        acclo = a000;
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        position[0] = thee->xf[i] + hx;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
-                        thee->a1cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j] + 0.5*hy;
-                        position[2] = thee->zf[k];
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        acclo = a000;
-                        position[1] = thee->yf[j] + hy;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
-                        thee->a2cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k] + 0.5*hzed;
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        acclo = a000;
-                        position[2] = thee->zf[k] + hzed;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid+(double)acclo)/3.0;
-                        thee->a3cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    break;
 
-                  /* Spline-based accessibility function for force
-                   * calculations.  See Im et al, Comp Phys Comm 111, (1998)
-                   * 59--75. */
-                  case 2:
-                    /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] < 0.0) {
-                        position[0] = thee->xf[i] + 0.5*hx;
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
-                        thee->a1cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
-                    }
-                    /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] < 0.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j] + 0.5*hy;
-                        position[2] = thee->zf[k];
-                        chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
-                        thee->a2cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
-                    }
-                    /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] < 0.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k] + 0.5*hzed;
-                        chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
-                        thee->a3cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
-                    }
-                    break;
+		    /* The diagonal tensor (2nd derivative) entries.  Each of
+                     * these entries is evaluated ad the grid edges midpoints */
+                    switch (surfMeth) {
+
+                      /* No dielectric smoothing */
+                      case 0: 
+                        /* x-direction */
+                        if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i] + 0.5*hx;
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k];
+                            if (Vacc_fastMolAcc(acc, position, srad) == 0) 
+                              thee->a1cf[IJK(i,j,k)] = epsp; 
+                            else thee->a1cf[IJK(i,j,k)] = epsw; 
+                        }
+                        /* y-direction */
+                        if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j] + 0.5*hy;
+                            position[2] = thee->zf[k];
+                            if (Vacc_fastMolAcc(acc, position, srad) == 0) 
+                              thee->a2cf[IJK(i,j,k)] = epsp; 
+                            else thee->a2cf[IJK(i,j,k)] = epsw; 
+                        }
+                        /* z-direction */
+                        if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k] + 0.5*hzed;
+                            if (Vacc_fastMolAcc(acc, position, srad) == 0) 
+                              thee->a3cf[IJK(i,j,k)] = epsp; 
+                            else thee->a3cf[IJK(i,j,k)] = epsw; 
+                        }
+                        break; 
+    
+                      /* A very rudimentary form of dielectric smoothing.
+		       * Specifically, the dielectric will be evaluated at the
+		       * mid point and the two flanking mesh points.  The
+		       * fraction of the grid edge in the solvent will then be
+		       * calculated from these three values (i.e., either 0,
+		       * 1/3, 2/3, or 1).  The dielectric value at the midpoint
+		       * will then be assigned based on the usual dielectric
+		       * smoothing formula: \epsilon_s\epsilon_i/(a\epsilon_s +
+		       * (1-a)\epsilon_i)  */
+                      case 1:
+                        a000 = 1.0;
+                        if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
+                            (thee->a2cf[IJK(i,j,k)] == -1.0) ||
+                            (thee->a3cf[IJK(i,j,k)] == -1.0)) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k];
+                            a000 = Vacc_fastMolAcc(acc, position, srad);
+                        }
+                        /* x-direction */
+                        if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i] + 0.5*hx;
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k];
+                            acclo = a000;
+                            accmid = Vacc_molAcc(acc, position, srad);
+                            position[0] = thee->xf[i] + hx;
+                            acchi = Vacc_molAcc(acc, position, srad);
+                            accf = ((double)acchi+(double)accmid
+                              +(double)acclo)/3.0;
+                            thee->a1cf[IJK(i,j,k)] = 
+                              epsw*epsp/((1-accf)*epsw + accf*epsp);
+                        }
+                        /* y-direction */
+                        if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j] + 0.5*hy;
+                            position[2] = thee->zf[k];
+                            accmid = Vacc_molAcc(acc, position, srad);
+                            acclo = a000;
+                            position[1] = thee->yf[j] + hy;
+                            acchi = Vacc_molAcc(acc, position, srad);
+                            accf = ((double)acchi+(double)accmid
+                              +(double)acclo)/3.0;
+                            thee->a2cf[IJK(i,j,k)] = 
+                              epsw*epsp/((1-accf)*epsw + accf*epsp);
+                        }
+                        /* z-direction */
+                        if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k] + 0.5*hzed;
+                            accmid = Vacc_molAcc(acc, position, srad);
+                            acclo = a000;
+                            position[2] = thee->zf[k] + hzed;
+                            acchi = Vacc_molAcc(acc, position, srad);
+                            accf = ((double)acchi+(double)accmid
+                              +(double)acclo)/3.0;
+                            thee->a3cf[IJK(i,j,k)] = 
+                              epsw*epsp/((1-accf)*epsw + accf*epsp);
+                        }
+                        break;
+
+                      /* Spline-based accessibility function for force
+		       * calculations.  See Im et al, Comp Phys Comm 111,
+		       * (1998) 59--75. */
+                      case 2:
+                        /* x-direction */
+                        if (thee->a1cf[IJK(i,j,k)] < 0.0) {
+                            position[0] = thee->xf[i] + 0.5*hx;
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k];
+                            chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
+                            thee->a1cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                        }
+                        /* y-direction */
+                        if (thee->a2cf[IJK(i,j,k)] < 0.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j] + 0.5*hy;
+                            position[2] = thee->zf[k];
+                            chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
+                            thee->a2cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                        }
+                        /* z-direction */
+                        if (thee->a3cf[IJK(i,j,k)] < 0.0) {
+                            position[0] = thee->xf[i];
+                            position[1] = thee->yf[j];
+                            position[2] = thee->zf[k] + 0.5*hzed;
+                            chi = Vacc_splineAcc(acc, position, splineWin, 0.0);
+                            thee->a3cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
+                        }
+                        break;
 
 
-                  /* Oops, invalid surfMeth */
-                  default:
-                    Vnm_print(2, "Vpmg_fillco:  Bad surfMeth (%d)!\n", surfMeth);
-                    VASSERT(0);
-                }
-                /* Fill in the remaining dielectric values */
-                if (thee->a1cf[IJK(i,j,k)] == -2.0)
-                  thee->a1cf[IJK(i,j,k)] = epsp;
-                if (thee->a2cf[IJK(i,j,k)] == -2.0)
-                  thee->a2cf[IJK(i,j,k)] = epsp;
-                if (thee->a3cf[IJK(i,j,k)] == -2.0)
-                  thee->a3cf[IJK(i,j,k)] = epsp;
-                if (thee->a1cf[IJK(i,j,k)] == 0.0)
-                  thee->a1cf[IJK(i,j,k)] = epsw;
-                if (thee->a2cf[IJK(i,j,k)] == 0.0)
-                  thee->a2cf[IJK(i,j,k)] = epsw;
-                if (thee->a3cf[IJK(i,j,k)] == 0.0)
-                  thee->a3cf[IJK(i,j,k)] = epsw;
-            }
+                      /* Oops, invalid surfMeth */
+                      default:
+                        Vnm_print(2, "Vpmg_fillco:  Bad surfMeth (%d)!\n", 
+                          surfMeth);
+                        VASSERT(0);
+                    } /* end switch(surfMeth) */
+
+                    /* Fill in the remaining dielectric values */
+                    if (thee->a1cf[IJK(i,j,k)] == -2.0)
+                      thee->a1cf[IJK(i,j,k)] = epsp;
+                    if (thee->a2cf[IJK(i,j,k)] == -2.0)
+                      thee->a2cf[IJK(i,j,k)] = epsp;
+                    if (thee->a3cf[IJK(i,j,k)] == -2.0)
+                      thee->a3cf[IJK(i,j,k)] = epsp;
+                    if (thee->a1cf[IJK(i,j,k)] == 0.0)
+                      thee->a1cf[IJK(i,j,k)] = epsw;
+                    if (thee->a2cf[IJK(i,j,k)] == 0.0)
+                      thee->a2cf[IJK(i,j,k)] = epsw;
+                    if (thee->a3cf[IJK(i,j,k)] == 0.0)
+                      thee->a3cf[IJK(i,j,k)] = epsw;
+                } /* i loop */
+            } /* j loop */
+        } /* k loop */
+
+        Vnm_print(0, "Vpmg_fillco:  done filling coefficient arrays\n");
+    } else { /* else (!islap) ==> It's a Laplacian operator! */
+
+        for (i=0; i<(nx*ny*nz); i++) {
+            thee->ccf[i] = 0.0;
+            thee->a1cf[i] = epsp;
+            thee->a2cf[i] = epsp;
+            thee->a3cf[i] = epsp;
         }
-    }
-
-    Vnm_print(0, "Vpmg_fillco:  done filling coefficient arrays\n");
+    } /* endif (!islap) */
 
     /* Fill the boundary arrays (except when focusing, bcfl = 4) */
     if (thee->pmgp->bcfl != 4) {
@@ -1990,12 +2057,14 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     VASSERT(thee != VNULL);
     VASSERT(thee->filled);
 
-    if (thee->pmgp->nonlin) {
+    if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
+        Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");
         qmEnergy = Vpmg_qmEnergy(thee, extFlag);
         qfEnergy = Vpmg_qfEnergy(thee, extFlag);
         dielEnergy = Vpmg_dielEnergy(thee, extFlag);
         totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
+        Vnm_print(2, "Vpmg_energy:  calculating only q-phi energy\n");
         totEnergy = 0.5*Vpmg_qfEnergy(thee, extFlag);
     }
 
@@ -2289,6 +2358,9 @@ VPUBLIC void Vpmg_dtor(Vpmg **thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dtor2(Vpmg *thee) { 
+
+    /* Clear out the FORTRAN arrays */
+    F77MYPDEFCLEAR();
 
     /* Clean up the storage */
     Vmem_free(thee->vmem, 100, sizeof(int), (void **)&(thee->iparm));
