@@ -192,8 +192,10 @@ int *int_array(int size){
 void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
     
     Vatom *atoms = VNULL;
+    Vatom *atom;
     int i;
- 
+    int j;
+
     double pos[3];
     atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
     thee->number = 0;
@@ -216,9 +218,6 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
     }
     Vmem_free(thee->vmem, size, sizeof(Vatom), (void **)&atoms);
     
-    Vatom *atom;
-    int j;
-
     VASSERT(thee != VNULL);
 
     thee->center[0] = 0.;
