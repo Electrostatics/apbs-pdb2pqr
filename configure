@@ -2927,7 +2927,7 @@ fi
 if test -z "${pal_found}"; then
     { echo "configure: error: PAL libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
 else
-    echo "$ac_t""PAL libraries AND headers were found ...rocking on..." 1>&6
+    echo "$ac_t""PAL libraries AND headers were found" 1>&6
 fi
 
 LDFLAGS=${LDFLAGS_SAVE};
@@ -3041,7 +3041,7 @@ fi
 if test -z "${mc_found}"; then
     { echo "configure: error: MC libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
 else
-    echo "$ac_t""MC libraries AND headers were found ...rocking on..." 1>&6
+    echo "$ac_t""MC libraries AND headers were found" 1>&6
 fi
 
 LDFLAGS=${LDFLAGS_SAVE};
@@ -3130,7 +3130,7 @@ fi
 if test -z "${mcx_found}"; then
     { echo "configure: error: MCX libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
 else
-    echo "$ac_t""MCX libraries AND headers were found ...rocking on..." 1>&6
+    echo "$ac_t""MCX libraries AND headers were found" 1>&6
 fi
 
 LDFLAGS=${LDFLAGS_SAVE};
