@@ -676,12 +676,18 @@ AC_MSG_CHECKING([for --with-blas])
 if test -n "${blas_lib}"; then
     AC_MSG_RESULT([yes])
 
-    AC_MSG_RESULT([Looking for BLAS with ${F77} ${blas_lib}])
+    AC_ARG_WITH(blas_name,
+        [AC_HELP_STRING([--with-blas-name=NAME],
+                  [name of BLAS library, defaults to blas])],
+        [ blas_name="${withval}"],
+        [ blas_name=blas]
+    )
+    AC_MSG_RESULT([Looking for BLAS using ${blas_lib}])
     AC_LANG_FORTRAN77
     LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
     LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
-    AC_CHECK_LIB(blas,dscal,
+    AC_CHECK_LIB(${blas_name},dscal,
         [blas_found="yes"],
         [blas_found=""],
         [${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
