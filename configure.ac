@@ -153,11 +153,31 @@ if test -n "${py_path}"; then
    if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
       PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
    else
-	  PYCFLAGS=""
+	  PY_CFLAGS=""
    fi
 else
-   PYCFLAGS=""
+   PY_CFLAGS=""
 fi
+
+dnl # Platform specific linking flags
+PY_LDEXTRA=""
+PY_SHARED=""
+case $host_os in
+   linux*) 
+      PY_SHARED="-shared";;
+   irix*) 
+      PY_SHARED="-shared"
+      PY_LDEXTRA="-lftn -lm";;
+   sun|solaris**) 
+      PY_SHARED="-G"
+      PY_LDEXTRA="-lF77 -lm -lM77 -lsunmath";;
+   cygwin|mingw32|windows**)
+      PY_CFLAGS="";;
+   *) 
+      PY_CFLAGS="";;
+esac
+AC_SUBST(PY_SHARED,[$PY_SHARED])
+AC_SUBST(PY_LDEXTRA,[$PY_LDEXTRA])
 AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
 AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
 
