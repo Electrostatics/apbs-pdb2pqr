@@ -161,6 +161,14 @@
               data to <ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">MOLMOL format</ulink>. 
               Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</para>
           </listitem>
+          <listitem>
+            <para><filename>tools/mesh/dx2uhbd</filename></para>
+            <para>Converts 
+              <link linkend="opendx-format">OpenDX format</link>
+              data to UHBD format. 
+              Contributed by Robert Konecny.</para>
+          </listitem>
+
         </itemizedlist>
       </sect3>
 
