@@ -50,4 +50,3 @@ SUFFIXES = .H .h .C .c .f .o
 always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vmetis
 
 SUBDIRS = $(always_built_SUBDIRS)
-INCLUDES = @mcdir@/inc

@@ -2118,13 +2118,19 @@ echo $ac_n "checking for MC configuration""... $ac_c" 1>&6
 echo "configure:2119: checking for MC configuration" >&5
 if test -e $mcdir/inc/config.h; then
     echo "$ac_t""yes" 1>&6
+    mclib="-L${mcdir}/lib -lvmc -lvsolv -lvpde -lvgm -lvor -lvto -lvmp -lvnm -lvslu -lvblas"
+    mcinc="-I${mcdir}/inc"
 else
     echo "$ac_t""the MC package in ${mcdir} is not configured" 1>&6
     { echo "configure: error: Fully configured MC installation is required!" 1>&2; exit 1; }
+    mclib=""
+    mcinc=""
 fi
 
+
+
 echo $ac_n "checking for an directory containing PMGC""... $ac_c" 1>&6
-echo "configure:2128: checking for an directory containing PMGC" >&5
+echo "configure:2134: checking for an directory containing PMGC" >&5
 # Check whether --with-pmgc or --without-pmgc was given.
 if test "${with_pmgc+set}" = set; then
   withval="$with_pmgc"
@@ -2137,24 +2143,32 @@ fi
 if test -d $pmgcdir; then
     echo "$ac_t""${pmgcdir}" 1>&6
     
-    pmgcdirinc="${pmgcdir}/inc"
 else
     echo "$ac_t""no" 1>&6
-    pmgcdirinc="."
 fi
 echo $ac_n "checking for PMGC configuration""... $ac_c" 1>&6
-echo "configure:2147: checking for PMGC configuration" >&5
+echo "configure:2151: checking for PMGC configuration" >&5
 if test -e $pmgcdir/inc/config.h; then
     echo "$ac_t""yes" 1>&6
     cat >> confdefs.h <<\EOF
 #define HAVE_PMGC_H 1
 EOF
 
-    pmgc="mg"
+    pmgcbin="mg"
+    pmgclib="-L${pmgcdir}/lib -lmgpde -lmgmlsys -lmglsys -lmgbuild -lmgops -lmgarray -lmgla -lmgparms -lmgmesh"
+    pmgcinc="-I${pmgcdir}/inc"
 else
     echo "$ac_t""the PMGC package in ${pmgcdir} is not configured" 1>&6
-    pmgc=""
+    pmgcbin=""
+    pmgcinc=""
+    pmgclib=""
 fi
+
+
+
+
+apbsinc="-I${apbsdir}/inc"
+apbslib="-L${apbsdir}/lib -lvmetis -lvpee -lvpbe -lvcsm -lvacc -lvatom"
 
 
 
@@ -2342,9 +2356,14 @@ s%@efence@%$efence%g
 s%@mpi_lib@%$mpi_lib%g
 s%@mpi_inc@%$mpi_inc%g
 s%@mcdir@%$mcdir%g
+s%@mclib@%$mclib%g
+s%@mcinc@%$mcinc%g
 s%@pmgcdir@%$pmgcdir%g
-s%@pmgc@%$pmgc%g
-s%@pmgcdirinc@%$pmgcdirinc%g
+s%@pmgcbin@%$pmgcbin%g
+s%@pmgcinc@%$pmgcinc%g
+s%@pmgclib@%$pmgclib%g
+s%@apbsinc@%$apbsinc%g
+s%@apbslib@%$apbslib%g
 
 CEOF
 EOF
