@@ -1,11 +1,7 @@
 read 
-    file mol1.pqr                      # Read molecule 1
-end
-read 
-    file mol2.pqr                      # Read molecule 1
-end
-read 
-    file complex.pqr                      # Read molecule 1
+    mol pqr mol1.pqr                      # Read molecule 1
+    mol pqr mol2.pqr                      # Read molecule 1
+    mol pqr complex.pqr                      # Read molecule 1
 end
 elec
     mg                                 # Use the multigrid method

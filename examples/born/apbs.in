@@ -1,5 +1,5 @@
 read 
-    file ion.pqr                      # Read molecule 1
+    mol pqr ion.pqr                      # Read molecule 1
 end
 elec
     mg                                 # Use the multigrid method
