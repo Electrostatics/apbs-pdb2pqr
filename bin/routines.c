@@ -563,10 +563,12 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
 // 
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writepotMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char outpath[VMAX_ARGLEN];
     char writepotstem[VMAX_ARGLEN];
+
+    if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
     snprintf(writepotstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writepotstem,
@@ -619,10 +621,12 @@ to %s...\n", outpath);
 // 
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writeaccMG(Vcom *com, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writeaccstem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
+
+    if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
     snprintf(writeaccstem, VMAX_ARGLEN, "%s-PE%d", pbeparm->writeaccstem,
