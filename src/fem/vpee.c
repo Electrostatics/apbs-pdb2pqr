@@ -41,7 +41,9 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "apbscfg.h"
 #include "apbs/vpee.h"
+
 VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
@@ -74,7 +76,7 @@ VEMBED(rcsid="$Id$")
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, double
+VPUBLIC Vpee* Vpee_ctor(Gem *gm, int localPartID, int killFlag, double
   killParam) {
 
     Vpee *thee = VNULL;
@@ -94,7 +96,7 @@ VPUBLIC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, double
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
+VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
   double killParam) {
 
     int ivert, nLocalVerts;
@@ -137,8 +139,8 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
     thee->localPartCenter[1] = 0.0;
     thee->localPartCenter[2] = 0.0;
     nLocalVerts = 0;
-    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) {
-        vert = Vgm_VV(thee->gm, ivert);
+    for (ivert=0; ivert<Gem_numVV(thee->gm); ivert++) {
+        vert = Gem_VV(thee->gm, ivert);
         simp = VV_firstSS(vert);
         VASSERT(simp != VNULL);
         while (simp != VNULL) {
@@ -168,8 +170,8 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
      * partition.  We need to keep track of vertices so we don't double count 
      * them. */
     thee->localPartRadius = 0.0;
-    for (ivert=0; ivert<Vgm_numVV(thee->gm); ivert++) {
-        vert = Vgm_VV(thee->gm, ivert);
+    for (ivert=0; ivert<Gem_numVV(thee->gm); ivert++) {
+        vert = Gem_VV(thee->gm, ivert);
         simp = VV_firstSS(vert);
         VASSERT(simp != VNULL);
         while (simp != VNULL) {
@@ -268,8 +270,8 @@ VPUBLIC void Vpee_estimate(Vpee *thee, AM *am, int level, int akey) {
     Vnm_print(0,"Vpee_estimate: estimating error..");
     alg->gerror = 0.0;
     smid = 0;
-    while ( (smid < Vgm_numSS(thee->gm)) && (!Vsig_sigInt()) ) {
-        sm = Vgm_SS(thee->gm,smid);
+    while (smid < Gem_numSS(thee->gm)) {
+        sm = Gem_SS(thee->gm,smid);
 
         if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
 
@@ -359,7 +361,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     /* For uniform markings, we have no effect */
     if ((-1 <= akey) && (akey <= 0)) {
-        marked = Vgm_markRefine(thee->gm, akey, rcol);
+        marked = Gem_markRefine(thee->gm, akey, rcol);
         return marked;
     }
 
@@ -393,26 +395,26 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     /* check the refinement Q for emptyness */
     currentQ = 0;
-    if (Vgm_numSQ(thee->gm,currentQ) > 0) {
+    if (Gem_numSQ(thee->gm,currentQ) > 0) {
         Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             currentQ);
-        Vgm_resetSQ(thee->gm,currentQ);
+        Gem_resetSQ(thee->gm,currentQ);
         Vnm_print(2,"..done.\n");
     }
-    if (Vgm_numSQ(thee->gm,!currentQ) > 0) {
+    if (Gem_numSQ(thee->gm,!currentQ) > 0) {
         Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             !currentQ);
-        Vgm_resetSQ(thee->gm,!currentQ);
+        Gem_resetSQ(thee->gm,!currentQ);
         Vnm_print(2,"..done.\n");
     }
-    VASSERT( Vgm_numSQ(thee->gm,currentQ)  == 0 );
-    VASSERT( Vgm_numSQ(thee->gm,!currentQ) == 0 );
+    VASSERT( Gem_numSQ(thee->gm,currentQ)  == 0 );
+    VASSERT( Gem_numSQ(thee->gm,!currentQ) == 0 );
 
     /* clear everyone's refinement flags */
     Vnm_print(0,"Vpee_markRefine: clearing all simplex refinement flags..");
-    for (i=0; i<Vgm_numSS(thee->gm); i++) {
+    for (i=0; i<Gem_numSS(thee->gm); i++) {
         if ( (i>0) && (i % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",i);
-        sm = Vgm_SS(thee->gm,i);
+        sm = Gem_SS(thee->gm,i);
         SS_setRefineKey(sm,currentQ,0);
         SS_setRefineKey(sm,!currentQ,0);
         SS_setRefinementCount(sm,0);
@@ -425,8 +427,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     /* traverse the simplices and estimate the error */
     Vnm_print(0,"Vpee_markRefine: estimating error..");
     smid = 0;
-    while ( (smid < Vgm_numSS(thee->gm)) && (!Vsig_sigInt()) ) {
-        sm = Vgm_SS(thee->gm,smid);
+    while ( smid < Gem_numSS(thee->gm)) {
+        sm = Gem_SS(thee->gm,smid);
 
         if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
 
@@ -485,7 +487,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         /* If it's supposed to be marked; mark it */
         if (markMe) {
             marked++;
-            Vgm_appendSQ(thee->gm,currentQ, sm); /*add to refinement Q*/
+            Gem_appendSQ(thee->gm,currentQ, sm); /*add to refinement Q*/
             SS_setRefineKey(sm,currentQ,1);      /* note now on refine Q */
             SS_setRefinementCount(sm,count);     /* refine X many times? */
         }
@@ -522,8 +524,8 @@ VPUBLIC int Vpee_numSS(Vpee *thee) {
     int num = 0;
     int isimp;
 
-    for (isimp=0; isimp<Vgm_numSS(thee->gm); isimp++) {
-        if (SS_chart(Vgm_SS(thee->gm, isimp)) == thee->localPartID) num++;
+    for (isimp=0; isimp<Gem_numSS(thee->gm); isimp++) {
+        if (SS_chart(Gem_SS(thee->gm, isimp)) == thee->localPartID) num++;
     }
 
     return num;
@@ -542,15 +544,15 @@ VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
     int ivert, icoord, chart[4], fType[4], vType[4];
     double vx[4][3];
 
-    for (ivert=0; ivert<Vgm_dimVV(thee->gm); ivert++) {
+    for (ivert=0; ivert<Gem_dimVV(thee->gm); ivert++) {
         fType[ivert] = SS_faceType(sm,ivert);
         vType[ivert] = VV_type(SS_vertex(sm,ivert) );
         chart[ivert] = VV_chart(SS_vertex(sm,ivert) );
-        for (icoord=0; icoord<Vgm_dimII(thee->gm); icoord++) {
+        for (icoord=0; icoord<Gem_dimII(thee->gm); icoord++) {
             vx[ivert][icoord] = VV_coord(SS_vertex(sm,ivert), icoord );
         }
     }
-    return thee->gm->markSimplex(Vgm_dim(thee->gm), Vgm_dimII(thee->gm), 
+    return thee->gm->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm), 
              SS_type(sm), fType, vType, chart, vx, sm);
 }
 

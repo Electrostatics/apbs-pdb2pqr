@@ -47,9 +47,7 @@
 #ifndef _VALIST_H_
 #define _VALIST_H_
 
-#include "mc/vhal.h"
-#include "mc/vmem.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
 

@@ -47,12 +47,7 @@
 #ifndef _VACC_H_
 #define _VACC_H_
 
-#include "mc/vhal.h"
-#include "mc/vec3.h"
-#include "mc/vset.h"
-#include "mc/vmem.h"
-#include "mc/vgm.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/valist.h"
 #include "apbs/vunit.h"
@@ -111,7 +106,7 @@ VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
-VEXTERNC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Vgm *gm,
+VEXTERNC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
   char *iodev, char *iofmt, char *iohost, char *iofile);
 
 

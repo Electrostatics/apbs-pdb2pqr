@@ -41,6 +41,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
+#include "apbscfg.h"
 #include "apbs/vatom.h"
 
 VEMBED(rcsid="$Id$")

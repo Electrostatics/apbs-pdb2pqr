@@ -59,12 +59,7 @@
 #ifndef _VPEE_H
 #define _VPEE_H
 
-#include "mc/vgm.h"
-#include "mc/am.h"
-#include "mc/alg.h"
-#include "mc/ves.h"
-#include "mc/vmem.h"
-
+#include "mc/mc.h"
 #include "apbs/vhal.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -77,7 +72,7 @@
 
 typedef struct Vpee {
 
-  Vgm *gm;                     /* Grid manager */
+  Gem *gm;                     /* Grid manager */
   int localPartID;             /* The local partition ID: i.e. the partition 
                                 * whose boundary simplices we're keeping
                                 * track of */
@@ -106,9 +101,9 @@ typedef struct Vpee {
 // Class Vpee: Non-Inlineable methods (vpee.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, 
+VEXTERNC Vpee* Vpee_ctor(Gem *gm, int localPartID, int killFlag, 
                  double killParam);
-VEXTERNC int   Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
+VEXTERNC int   Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
                  double killParam);
 VEXTERNC void  Vpee_dtor(Vpee **thee);
 VEXTERNC void  Vpee_dtor2(Vpee *thee);
