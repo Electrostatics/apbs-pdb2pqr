@@ -56,6 +56,17 @@ typedef struct {
     double *data;
 } Vgrid;
 
+%inline %{
+void delVgrid(Vgrid *thee){
+    if (thee != VNULL) {
+        Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+          (void **)&(thee->data));
+        Vmem_free(VNULL, 1, sizeof(Vgrid), (void **)&thee);
+        thee = VNULL;
+    }
+}
+%}
+
 extern Vgrid* Vgrid_ctor(int nx, int ny, int nz, double hx, double hy,
 						 double hzed, double xmin, double ymin, double zmin, 
 						 double *data);
