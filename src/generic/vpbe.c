@@ -497,7 +497,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
             (1000.0 * thee->solventDiel * k_B * T))
         );
         thee->deblen  = 1. / thee->xkappa;
-        thee->zkappa2 = thee->solventDiel * VPOW(thee->xkappa,2.);
+        thee->zkappa2 = thee->solventDiel * VSQR(thee->xkappa);
     }
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
 
