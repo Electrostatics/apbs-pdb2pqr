@@ -50,6 +50,8 @@
 // Class Vfetk: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
 
+VPRIVATE void Bmat_printHB( Bmat *thee, char *fname);
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
@@ -610,6 +612,179 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
     Gem_countChk(gm);
 
     return 0;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Bmat_printHB
+//
+// Purpose:  Prints a Bmat in sparse Harwell-Boeing format
+//
+// Authors:  Stephen Bond and Nathan Baker
+//           (following HB matrix user's guide)
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void Bmat_printHB( Bmat *thee, char *fname ) 
+{
+    Mat *Ablock;
+    MATsym pqsym;
+    int i, j, jj, k;
+    int *IA, *JA;
+    double *D, *L;
+    FILE *fp;
+
+    char mtitle[72];
+    char mkey[8] = {"8charkey"};
+    int totc = 0, ptrc = 0, indc = 0, valc = 0;
+    char mxtyp[3] = {"RUA"}; /* Real Unsymmetric Assembled */
+    int nrow = 0, ncol = 0, numZ = 0;
+    char ptrfmt[16] = {"(8I9)"};     /* 8 per line of size 9 */
+    char indfmt[16] = {"(8I9)"};     /* 8 per line of size 9 */
+    char valfmt[20] = {"(4E19.12)"}; /* 4 per line of size 19.12 */
+    char rhsfmt[20] = {"(4E19.12)"}; /* 4 per line of size 19.12 */
+
+    VASSERT( thee->numB == 1 );             /* HARDWIRE FOR NOW */
+    Ablock = thee->AD[0][0];
+
+    VASSERT( Mat_format( Ablock ) == DRC_FORMAT );  /* HARDWIRE FOR NOW */
+
+    pqsym = Mat_sym( Ablock );
+
+    if ( pqsym == IS_SYM ) {
+        mxtyp[1] = 'S';
+    } else if ( pqsym == ISNOT_SYM ) {
+        mxtyp[1] = 'U';
+    } else {
+        VASSERT( 0 );
+    }
+
+    nrow = Bmat_numRT( thee ); /* Number of rows */
+    ncol = Bmat_numCT( thee ); /* Number of cols */
+    numZ = Bmat_numZT( thee ); /* Number of entries */
+
+    ptrc = ceil( (Bmat_numCT( thee ) + 1) / 8 ); /* 8 pointers per line */
+    indc = ceil( Bmat_numZT( thee ) / 8 );       /* 8 indices per line */
+    valc = ceil( Bmat_numZT( thee ) / 4 );       /* 4 values per line */
+    totc = ptrc + indc + valc;
+
+    sprintf( mtitle, "Harwell-Boeing format %s matrix  %s\n",
+             thee->name, fname );
+
+    /* Step 0:  Open the file for writing */
+
+    fp = fopen( fname, "w" );
+    if (fp == VNULL) {
+        Vnm_print(2,"Bmat_printHB:  Ouch couldn't open file <%s>\n",fname);
+        return;
+    }
+
+    /* Step 1:  Print the header information */
+    
+    fprintf( fp, "%-72s%-8s\n",mtitle, mkey );
+    fprintf( fp, "%14d%14d%14d%14d%14d\n",totc, ptrc, indc, valc, 0 );
+    fprintf( fp, "%3s%11s%14d%14d%14d\n",mxtyp, " ", nrow, ncol, numZ );
+    fprintf( fp, "%-16s%-16s%-20s%-20s\n", ptrfmt, indfmt, valfmt, rhsfmt );
+
+    /* Step 2:  Print the pointer information */
+
+    IA = Ablock->IA;
+
+    if ( pqsym == IS_SYM ) {
+        
+        k = 0;
+        for (i=0; i<(ncol+1); i++) {
+            fprintf( fp, "%9d ", Ablock->IA[i] + (i+1) );
+            if ( ( (i+1) % 8 ) == 0 ) {
+                fprintf( fp, "\n" );
+                k++;
+            }
+        }
+        
+        if ( ( (ncol+1) % 8 ) != 0 ) {
+            fprintf( fp, "\n" );
+            k++;
+        }
+
+        VASSERT( k == ptrc ); /* DEBUGGING CHECK (REMOVE LATER) */
+
+    } else {
+        
+        VASSERT( 0 ); /* NOT CODED YET */
+    }
+
+    /* Step 3:  Print the index information */
+
+    JA = Ablock->JA;
+
+    if ( pqsym == IS_SYM ) {
+        
+        k = 0;
+        j = 0;
+        for (i=0; i<ncol; i++) {
+            fprintf( fp, "%9d ", i + 1); /* Index for the diagonal */
+            if ( ( (j+1) % 8 ) == 0 ) {
+                fprintf( fp, "\n" );
+                k++;
+            }
+            j++;
+            for (jj=IA[i]; jj<IA[i+1]; jj++) {
+                fprintf( fp, "%9d ", JA[jj] + 1 );
+                if ( ( (j+1) % 8 ) == 0 ) {
+                    fprintf( fp, "\n" );
+                    k++;
+                }
+                j++;
+            }
+        }
+        
+        if ( ( j % 8 ) != 0 ) {
+            fprintf( fp, "\n" );
+            k++;
+        }
+
+        VASSERT( k == indc ); /* DEBUGGING CHECK (REMOVE LATER) */
+
+    } else {
+        
+        VASSERT( 0 ); /* NOT CODED YET */
+    }
+
+    /* Step 4:  Print the value information */
+
+    D = Ablock->diag;
+    L = Ablock->offL;
+
+    if ( pqsym == IS_SYM ) {
+        
+        k = 0;
+        j = 0;
+        for (i=0; i<ncol; i++) {
+            fprintf( fp, "%19.12E ", D[i] );
+            if ( ( (j+1) % 4 ) == 0 ) {
+                fprintf( fp, "\n" );
+                k++;
+            }
+            j++;
+            for (jj=IA[i]; jj<IA[i+1]; jj++) {
+                fprintf( fp, "%19.12E ", L[jj] );
+                if ( ( (j+1) % 4 ) == 0 ) {
+                    fprintf( fp, "\n" );
+                    k++;
+                }
+                j++;
+            }
+        }
+        
+        if ( ( j % 4 ) != 0 ) {
+            fprintf( fp, "\n" );
+            k++;
+        }
+
+        VASSERT( k == valc ); /* DEBUGGING CHECK (REMOVE LATER) */
+
+    } else {
+        
+        VASSERT( 0 ); /* NOT CODED YET */
+    }
+
 }
 
 #endif
