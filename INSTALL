@@ -164,6 +164,8 @@ installation commands for the APBS package would be
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + 3.  PLATFORM-SPECIFIC INSTRUCTIONS
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For any system, you can override the compiler defaults by setting the
+environmental variables CC and F77.
 ========================================================================
 3.1 Intel ix86 processor family with GCC 2.95.1 compiler
 ========================================================================
