@@ -294,6 +294,85 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  extEnergy
+//
+// Purpose:  Calculate energy from region outside of current (focused) domain
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
+
+    double hxNEW, hyNEW, hzNEW, xminNEW, yminNEW, zminNEW, xmaxNEW, ymaxNEW;
+    double zmaxNEW;
+    int nxNEW, nyNEW, nzNEW;
+    int ihi, ilo, jhi, jlo, khi, klo, iatom;
+    double x, y, z, ifloat, jfloat, kfloat, *position;
+    Valist *alist; 
+    Vatom *atom;
+
+    /* Set the new external energy contribution to zero.  Any external
+     * contributions from higher levels will be included in the appropriate
+     * energy function call. */
+    thee->extEnergy = 0;
+
+    /* Calculate new problem dimensions */
+    hxNEW = thee->pmgp->hx;
+    hyNEW = thee->pmgp->hy;
+    hzNEW = thee->pmgp->hz;
+    nxNEW = thee->pmgp->nx;
+    nyNEW = thee->pmgp->ny;
+    nzNEW = thee->pmgp->nz;
+    xminNEW = thee->pmgp->xcent - ((double)(nxNEW-1)*hxNEW)/2.0;
+    xmaxNEW = thee->pmgp->xcent + ((double)(nxNEW-1)*hxNEW)/2.0;
+    yminNEW = thee->pmgp->ycent - ((double)(nyNEW-1)*hyNEW)/2.0;
+    ymaxNEW = thee->pmgp->ycent + ((double)(nyNEW-1)*hyNEW)/2.0;
+    zminNEW = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
+    zmaxNEW = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
+
+    /* Loop through the atoms, marking those outside the current domain */
+    alist = Vpbe_getValist(pmgOLD->pbe);
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist, iatom);
+        position = Vatom_getPosition(atom);
+        x = position[0];
+        y = position[1];
+        z = position[2];
+        ifloat = (x - xminNEW)/hxNEW;
+        jfloat = (y - yminNEW)/hyNEW;
+        kfloat = (z - zminNEW)/hzNEW;
+        ihi = (int)ceil(ifloat);
+        ilo = (int)floor(ifloat);
+        jhi = (int)ceil(jfloat);
+        jlo = (int)floor(jfloat);
+        khi = (int)ceil(kfloat);
+        klo = (int)floor(kfloat);
+
+        /* See if this atom is outside the new problem domain and mark it if it
+         * is */
+        if ((ihi<nxNEW) && (jhi<nyNEW) && (khi<nzNEW) &&
+            (ilo>=0) && (jlo>=0) && (klo>=0)) Vatom_setPartID(atom, 0);
+        else Vatom_setPartID(atom, 1);
+    }
+
+    /* Now calculate the energy on that subset of the domain */
+    pmgOLD->partFlag = 1;
+    if (pmgOLD->pmgp->nonlin == 0) {
+        /* For linear calculations, we can just use the subset of atoms we
+         * just marked. */
+        thee->extEnergy = Vpmg_getLinearEnergy1(pmgOLD, 1);
+    } else {
+        /* For nonlinear calculations, we need to do a volume integral */
+        Vnm_print(1, "extEnergy:  Focusing does not work with NPBE yet!\n");
+        VASSERT(0);
+    } 
+    pmgOLD->partFlag = 0;
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist, iatom);
+        Vatom_setPartID(atom, 0);
+    }
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  bcCalc
 //
 // Purpose:  Dirichlet boundary function and initial approximation function.
@@ -487,6 +566,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     thee->partUpper[1] = 0;
     thee->partUpper[2] = 0;
 
+    /* Ignore external energy contributions */
+    thee->extEnergy = 0;
+
     return 1;
 }
 
@@ -561,6 +643,9 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
     /* Fill boundaries */
     focusFillBound(thee, pmgOLD);
 
+    /* Calculate energetic contributions from region outside focusing domain */
+    extEnergy(thee, pmgOLD);
+
     /* Destroy old Vpmg object */
     Vpmg_dtor(&pmgOLD);
 
@@ -603,9 +688,17 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
       &(thee->pmgp->irite), &(thee->pmgp->iperf));
 
+
     /* Turn off restriction of observable calculations to a specific 
      * partition */
     thee->partFlag = 0;
+    thee->partLower[0] = 0;
+    thee->partLower[1] = 0;
+    thee->partLower[2] = 0;
+    thee->partUpper[0] = 0;
+    thee->partUpper[1] = 0;
+    thee->partUpper[2] = 0;
+
 
     return 1;
 }
@@ -830,12 +923,16 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
         if ((position[0]<=xmin) || (position[0]>=xmax)  || \
             (position[1]<=ymin) || (position[1]>=ymax)  || \
             (position[2]<=zmin) || (position[2]>=zmax)) {
-            Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is
-off the mesh (ignoring):\n",
-            iatom, position[0], position[1], position[2]);
-            Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", xmin, xmax);
-            Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", ymin, ymax);
-            Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", zmin, zmax);
+            if (thee->pmgp->bcfl != 4) {
+                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+                  iatom, position[0], position[1], position[2]);
+                Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", 
+                  xmin, xmax);
+                Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", 
+                  ymin, ymax);
+                Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", 
+                  zmin, zmax);
+            }
             fflush(stderr);
         } else {
 
@@ -932,6 +1029,12 @@ off the mesh (ignoring):\n",
 //           In other words, we calculate
 //             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
 //           and return the result in units of $k_B T$.  
+//
+// Args:     extFlag => If this was a focused calculation, then it is possible
+//                      to include the energy contributions from the outside
+//                      the focused domain.  This should be on (=1) for
+//                      sequential focusing calculations and off (=0) for
+//                      parallel calculations.
 //     
 // Notes:    The value of this observable may be modified by setting
 //           restrictions on the subdomain over which it is calculated.  Such
@@ -941,7 +1044,7 @@ off the mesh (ignoring):\n",
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
+VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
     double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hz, ifloat, jfloat;
@@ -1006,13 +1109,15 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
                       + (1.0-dx)*dy*(1.0-dz)*(thee->u[IJK(ilo,jhi,klo)])
                       + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
                 energy += (uval*charge);
-            } else {
+            } else if (thee->pmgp->bcfl != 4) {
                 Vnm_print(2, "Vpmg_getLE1:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
                     iatom, position[0], position[1], position[2]);
+            }
         }
     }
 
     energy = 0.5*energy;
+    if (extFlag == 1) energy += (thee->extEnergy);
     return energy;
 }
     

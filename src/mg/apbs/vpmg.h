@@ -101,6 +101,9 @@ typedef struct Vpmg {
                                   * energies to the specified partition */
   double partLower[3];           /* Lower corner of partition */
   double partUpper[3];           /* Upper corner of partition */
+  double extEnergy;              /* Storing the contribution to the energy from
+                                  * regions outside the immediate problem
+                                  * domain */
 
 } Vpmg;
 
@@ -127,7 +130,7 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 
 VEXTERNC void Vpmg_fillco(Vpmg *thee);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
-VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee);
+VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag);
 VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, 
            double *data);
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
