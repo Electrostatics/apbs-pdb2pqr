@@ -49,7 +49,7 @@
 
 #include "mc/vhal.h"
 #include "mc/vgm.h"
-#include "mc/vram.h"
+#include "mc/vmem.h"
 #include "mc/ves.h"
 
 #include "apbs/vatom.h"
@@ -93,6 +93,7 @@ typedef struct Vcsm {
                        * mesh partitions. */
   int initFlag;       /* Indicates whether the maps have been initialized
                        * yet */
+  Vmem *vmem;         /* Memory management object */
 
 } Vcsm;
 

@@ -297,14 +297,8 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Valist_memChk(Valist *thee) {
 
-  int memUse = 0;
-
   VASSERT(thee != NULL);
-
-  memUse = memUse + sizeof(Valist);
-  memUse = memUse + (thee->number)*sizeof(Vatom);
-
-  return memUse;
+  return Vmem_bytes(thee->vmem);
 
 }
 
