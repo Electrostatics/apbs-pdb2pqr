@@ -27,11 +27,6 @@ elec                   ! calculate the electrostatic potential
     sdie 78.4
     rion 2.0
     nmap 1.4           ! use probe-accessible surface
-    bcfl 2             ! using boundary condition 2
+    bcfl 1             ! using boundary condition 2
     gcent   2.821 -0.073 0.815 
 end
-print elec zenerg all end
-print elec energy all end
-print elec self   all end
-print elec fdcoul all end
-print elec tenerg all end

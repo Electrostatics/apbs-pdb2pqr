@@ -636,9 +636,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
 
-    /* If nonlinear & newton, then we need some additional storage */
-    if ((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1)) {
-        thee->pmgp->nrwk += (2*nf);
+    /* We need some additional storage if: nonlinear & newton OR cgmg */
+    if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
+        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*nf);
     }
 
     Vnm_print(0, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
