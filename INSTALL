@@ -40,6 +40,26 @@ machine (and on any WinNT machine with the GNU-Win32 tools gzip and tar).
 
     gzip -dc apbs.tgz | tar xvf -
 
+====================================
+Installing the prerequisite software
+====================================
+APBS requires the multilevel finite element library MC, available from the 
+Holst research group (http://www.scicomp.ucsd.edu/~mholst).  MC should be 
+configured to use special hooks for interfacing with APBS by including the 
+"--enable-vhack" option, i.e.
+
+      ./configure --enable-vhack
+
+If APBS is to be compiled with parallel support, MC should also be configured 
+to use MPI, by including the "--enable-mpi", "--with-mpilib", and 
+"--with-mpiinc" flags during configure.  For example,
+
+      ./configure --enable-vhack --enable-mpi --with-mpilib=PATH1  \
+          --with-mpiinc=PATH2
+
+Follow the rest of the instructions included with the MC distribution to 
+compile a working version of MC before proceeding with the APBS installation.
+
 ======================================================================
 Building the package using the GNU "configure" shell script and "make"
 ======================================================================
@@ -47,11 +67,22 @@ Building the package using the GNU "configure" shell script and "make"
 The "configure" shell script in the APBS_ROOT directory (the toplevel directory
 created when you unpacked the APBS tgz file) will build the entire package.
 This is a standard GNU autoconf-generated configuration script.
-You should be able to simply type:
+If you're not interested in running APBS with MPI support, you should be able 
+to simply type:
 
     ./configure 
     make
     make install
+
+If you need MPI support, replace the above with 
+
+    ./configure --enable-vhack --enable-mpi --with-mpilib=PATH1  \
+          --with-mpiinc=PATH2
+    make
+    make install
+
+where PATH1 is the path to the directory in which libmpi.a resides and 
+PATH2 is the path to the directory in which mpi.h resides.
 
 If you ever need to rebuild the configure script or Makefile.in files that 
 configure uses, the procedure is rougly as follows.  You first run aclocal to 
