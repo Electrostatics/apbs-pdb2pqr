@@ -284,8 +284,20 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
 
         /* Check to see if we got an ATOM line */
         if ( !strncmp(line,"ATOM",4)) {
-	    if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
+            /* Try to parse a line with chain IDs and with an integer
+             * residue ID */
+	    if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d %*2s %lf%lf%lf%lf%lf",
               &x,&y,&z,&charge,&radius) == 5)) {;}
+            /* Try to parse a line with chain IDs and with an string
+             * residue ID */
+	    else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s %*2s %lf%lf%lf%lf%lf",
+              &x,&y,&z,&charge,&radius) == 5)) {;}
+            /* Try to parse a line without chain IDs and with an integer
+             * residue ID */
+	    else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
+              &x,&y,&z,&charge,&radius) == 5)) {;}
+            /* Try to parse a line without chain IDs and with a string
+             * residue ID */
             else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
               &x,&y,&z,&charge,&radius) == 5)) {;}
             else {

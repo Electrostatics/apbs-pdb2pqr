@@ -44,6 +44,8 @@
 #include "apbscfg.h"
 #include "apbs/vfetk.h"
 
+#if defined(HAVE_FETK_H)
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
@@ -653,4 +655,4 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
     return 0;
 }
 
-
+#endif

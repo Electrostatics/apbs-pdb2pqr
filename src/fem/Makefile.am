@@ -8,7 +8,7 @@
 ##     COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 ##     LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
 ##
-## Author:  Michael Holst
+## Author:  Nathan Baker and Michael Holst
 ## ###########################################################################
 
 AUTOMAKE_OPTIONS = no-dependencies
@@ -18,7 +18,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = fem
 
 noinst_LTLIBRARIES = libapbsfem.la
-libapbsfem_la_SOURCES  = @fetk_do_src@
+libapbsfem_la_SOURCES  = vfetk.c vcsm.c vpee.c dummy.c
 INCLUDES           = -I../generic -I../mg @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@
 CFLAGS             = @CFLAGS@

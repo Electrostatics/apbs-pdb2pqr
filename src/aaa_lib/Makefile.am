@@ -18,7 +18,7 @@ always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 
 GEN_LIBS = ../generic/libapbsgen.la
-FEM_LIBS  = @fetk_do_lib@
+FEM_LIBS  = ../fem/libapbsfem.la 
 PMG_LIBS  = ../mg/libapbsmg.la
 
 libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
