@@ -41,6 +41,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
   CHANGES THAT AFFECT DEVELOPERS:
   * Altered --with-blas syntax in configure scripts and removed --disable-blas
   * Documented high-level frontend routines
+  * Cool new class and header-file dependency graphs courtesy of Doxygen and
+    Graphviz
   * Added substantial mypde.c-based functionality to Vfetk
   * Moved chgm from PBEparm to MGparm
   * Minor changes to Vfetk: removed genIcos and added genCube
