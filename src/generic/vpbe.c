@@ -920,7 +920,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
             }
         }
 
-        energy = 0.5*hx*hy*hz*energy;
+        energy = 0.5*energy;
 
         return energy;
 #else /* if defined(HAVE_PMGC_H) */
