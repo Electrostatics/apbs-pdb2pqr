@@ -169,7 +169,7 @@
  * <pre>
  * # cd ${TOP}
  * # gzip -dc maloc.tar.gz | tar xvf -
- * # gzip -dc apbs-0.2.2.tar.gz | tar xvf -
+ * # gzip -dc apbs-0.2.3.tar.gz | tar xvf -
  * </pre>
  * <li> Compile and install the MALOC libraries.  You should read the MALOC
  * installation guide before doing this, but if you just want a simple
