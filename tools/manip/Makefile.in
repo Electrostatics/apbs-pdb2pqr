@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -73,14 +73,18 @@ CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
 F77 = @F77@
 FLIBS = @FLIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
@@ -125,6 +129,7 @@ CFLAGS = @CFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../../src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES = 
+noinst_PROGRAMS =  acc$(EXEEXT) coulomb$(EXEEXT)
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -132,10 +137,10 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../../src/aaa_inc
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-acc_OBJECTS =  acc.o
+acc_OBJECTS =  acc.$(OBJEXT)
 acc_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 acc_LDFLAGS = 
-coulomb_OBJECTS =  coulomb.o
+coulomb_OBJECTS =  coulomb.$(OBJEXT)
 coulomb_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 coulomb_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -154,7 +159,7 @@ OBJECTS = $(acc_OBJECTS) $(coulomb_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .C .H .S .c .f .h .lo .o .s
+.SUFFIXES: .C .H .S .c .f .h .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu tools/manip/Makefile
 
@@ -175,6 +180,11 @@ maintainer-clean-noinstPROGRAMS:
 .c.o:
 	$(COMPILE) -c $<
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -183,6 +193,7 @@ maintainer-clean-noinstPROGRAMS:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -210,12 +221,12 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-acc: $(acc_OBJECTS) $(acc_DEPENDENCIES)
-	@rm -f acc
+acc$(EXEEXT): $(acc_OBJECTS) $(acc_DEPENDENCIES)
+	@rm -f acc$(EXEEXT)
 	$(LINK) $(acc_LDFLAGS) $(acc_OBJECTS) $(acc_LDADD) $(LIBS)
 
-coulomb: $(coulomb_OBJECTS) $(coulomb_DEPENDENCIES)
-	@rm -f coulomb
+coulomb$(EXEEXT): $(coulomb_OBJECTS) $(coulomb_DEPENDENCIES)
+	@rm -f coulomb$(EXEEXT)
 	$(LINK) $(coulomb_LDFLAGS) $(coulomb_OBJECTS) $(coulomb_LDADD) $(LIBS)
 
 tags: TAGS

@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
     char *header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.1.6 (November 17, 2001)\n\
+    Version 0.1.7 (December 13, 2001)\n\
     \n\
     Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
     Dept. of Chemistry and Biochemistry\n\
@@ -169,7 +169,8 @@ int main(int argc, char **argv) {
     Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
       __TIME__);
     if (argc != 2) {
-        Vnm_tprint( 2,"%s\n", usage);
+        Vnm_tprint(2, "ERROR -- CALLED WITH %d ARGUMENTS!\n", argc);
+        Vnm_tprint(2, "%s\n", usage);
         return APBSRC;
     } 
     input_path = argv[1];
@@ -290,8 +291,8 @@ int main(int argc, char **argv) {
     Vnm_print(1, "\n\n");
     Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
-    Vcom_finalize();
     Vcom_dtor(&com);
+    Vcom_finalize();
 
     return 0;
 

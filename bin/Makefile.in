@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -104,14 +104,18 @@ CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
 F77 = @F77@
 FLIBS = @FLIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
@@ -156,13 +160,14 @@ LDFLAGS = @LDFLAGS@ @FLIBS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES = 
+bin_PROGRAMS =  apbs$(EXEEXT)
 PROGRAMS =  $(bin_PROGRAMS)
 
 
 DEFS = @DEFS@ -I. -I$(srcdir) -I../src/aaa_inc
 CPPFLAGS = @CPPFLAGS@
 LIBS = @LIBS@
-apbs_OBJECTS =  main.o routines.o
+apbs_OBJECTS =  main.$(OBJEXT) routines.$(OBJEXT)
 apbs_DEPENDENCIES =  ../src/aaa_lib/libapbs.la
 apbs_LDFLAGS = 
 CFLAGS = @CFLAGS@
@@ -181,7 +186,7 @@ OBJECTS = $(apbs_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .C .H .S .c .cc .f .h .lo .o .s
+.SUFFIXES: .C .H .S .c .cc .f .h .lo .o .obj .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu bin/Makefile
 
@@ -218,6 +223,11 @@ uninstall-binPROGRAMS:
 .c.o:
 	$(COMPILE) -c $<
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -226,6 +236,7 @@ uninstall-binPROGRAMS:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -253,8 +264,8 @@ distclean-libtool:
 
 maintainer-clean-libtool:
 
-apbs: $(apbs_OBJECTS) $(apbs_DEPENDENCIES)
-	@rm -f apbs
+apbs$(EXEEXT): $(apbs_OBJECTS) $(apbs_DEPENDENCIES)
+	@rm -f apbs$(EXEEXT)
 	$(LINK) $(apbs_LDFLAGS) $(apbs_OBJECTS) $(apbs_LDADD) $(LIBS)
 
 tags: TAGS

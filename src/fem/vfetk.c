@@ -435,85 +435,6 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_energyNorm
-//
-// Purpose:  Calculate (u, A u), where 
-//              flag = 0     A is the tangent operator evaluated at u = 0
-//                           (Helmholtz equation energy norm)
-//              flag = 1     A is the dual tangent operator operator evaluated
-//                           at current solution
-//              flag = 2     A is the tangent operator evaluated at the current
-//                           solution
-//           
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC. 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_energyNorm(Vfetk *thee, int flag) {
-
-    Bvec *u, *Au;
-    Bmat *A;
-    Alg *alg; 
-    int level, ip[10];
-    double rp[10];
-    double norm2;
-
-    /* Get the max level from AM */
-    level = AM_maxLevel(thee->am);
-    /* Get the alg object at that level */
-    alg = AM_alg(thee->am, level);
-    Alg_assem(alg, flag, W_u, W_ud, W_f, ip, rp);
-
-    /* Solution + Dirichlet conditions */
-    Bvec_copy(alg->W[W_w0], alg->W[W_u]);
-    u = alg->W[W_w0];
-    Bvec_axpy(u, alg->W[W_ud], 1.);
-    /* Stiffness matrix */
-    A = alg->A;
-    /* Work space */
-    Au = alg->W[W_w1];
-
-    /* Au = A u */
-    Bvec_matvec(Au, u, A, 0);
-    /* Calculate (u,Au) */
-    norm2 = Bvec_dot(u,Au);
-
-    return norm2;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_dielEnergy
-//
-// Purpose:  Calculate
-//             \[ G = -\frac{1}{2} \int \epsilon (\nabla u)^2 dx \].
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           internal AM object, but atomic data from the Vpbe object is used
-//           to calculate the energy
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           eval.c routines in MC.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_dielEnergy(Vfetk *thee, int color) {
-
-    Alg *alg;
-    SS *sm;
-    int smid;
-    double totVal, simVal;
-
-    if (color>=0) 
-      Vnm_print(2, "Vfetk_dielEnergy:  partition information ignored!\n");
-
-    totVal = 0.25*Vfetk_energyNorm(thee, 0)/Vpbe_getZmagic(thee->pbe);
-
-    return totVal;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_buildFunc
 //
 // Purpose:  Build finite element functions.
@@ -597,145 +518,13 @@ VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_qmEnergy
-//
-// Purpose:  Calculate mobile ion energy in kT.
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           internal AM object, but atomic data from the Vpbe object is used
-//           to calculate the energy
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.
-//
-//           IT IS POSSIBLE THAT THIS ROUTINE IS BROKEN
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_qmEnergy(Vfetk *thee, int color, int nonlin) { 
-
-    Alg *alg;
-    SS *sm;
-    int smid;
-    double totVal, simVal;
-
-    totVal = 0;
-
-    alg = AM_alg(thee->am, AM_maxLevel(thee->am));
-
-    if (Vpbe_getZkappa2(thee->pbe) == 0.0) {
-        Vnm_print(0, "Vfetk_qmEnergy:  Zero energy for zero ionic strength!\n");
-        return 0.0;
-    }
-
-    for (smid=0; smid<Gem_numSS(thee->gm); smid++) {
-        sm = Gem_SS(thee->gm, smid);
-        if ((SS_chart(sm) == color) || (color < 0)) {
-            simVal = Vfetk_qmEnergySimplex(thee, sm, nonlin); 
-            totVal += simVal;
-        }
-    }
-
-    return totVal/Vpbe_getZmagic(thee->pbe);
-
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_qmEnergySimplex
-//
-// Purpose:  Calculate mobile ion energy in a single simplex without scaling
-//           the units back to kT.
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           internal AM object, but atomic data from the Vpbe object is used
-//           to calculate the energy
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           eval.c routines in MC.
-//           This routine IS NOT OPTIMIZED!!!
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_qmEnergySimplex(Vfetk *thee, SS *sm, int nonlin) {
-
-    Alg *alg;
-    Vpbe *pbe;
-    Vacc *acc;
-    int i, m, face, nion, ichop, nchop;
-    double Dw, value, nval, zkappa2, zks2, ionstr;
-    double xm[3], U[MAXV], dU[MAXV][3], Ut[MAXV], dUt[MAXV][3];
-    double phi[4], phix[4][3];
-    double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION];
-    Re *re;
-    TT t;
-
-    value = 0;
-
-    /* Get relevant objects */
-    alg = AM_alg(thee->am, AM_maxLevel(thee->am));
-    pbe = thee->pbe;
-    acc = pbe->acc;
-
-    /* Get ion information */
-    zkappa2 = Vpbe_getZkappa2(pbe);
-    ionstr = Vpbe_getBulkIonicStrength(pbe);
-    if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
-    else zks2 = 0.0;
-    Vpbe_getIons(pbe, &nion, ionConc, ionRadii, ionQ);
-
-    /* volume trans from master to this element (and back) */
-    Gem_buildVolumeTrans(thee->gm,sm,&t);
-
-    /* hard-code element for now... */
-    re = alg->re[0];
-
-    /* Cycle thru quad points */
-    face = -1;
-    nchop = 0;
-    for (m=0; m<Re_numQ_hi(re,face); m++) {
-      
-        /* jacobian and quadrature weight */
-        Dw = t.D * Re_w_hi(re,m,face);
-
-        /* evaluate solution/gradient/model at current quad point */
-        Vfetk_buildFunc(alg, re, &t, m, face, W_u, W_ud, W_ut, xm, phi,
-          phix, U, dU, Ut, dUt);
-
-        /* evaluate integrand element:  (u+ud) - ut */
-        if (Vacc_ivdwAcc(acc, xm, Vpbe_getMaxIonRadius(pbe))) {
-            if (nonlin) {
-                nval = 0.;
-                for (i=0; i<nion; i++) {
-                    nval += (zks2 * ionConc[i] * VSQR(ionQ[i]) 
-                      * (Vcap_exp(-ionQ[i]*U[0], &ichop)-1.0));
-                    nchop += ichop;
-                }
-                value += ( Dw * nval );
-            } else {
-                nval = 0.5*zkappa2*VSQR(U[0]);
-                value += ( Dw * nval );
-            }
-        }
-
-    } /* m; loop over volume quadrature points */
-
-    if (nchop > 0) Vnm_print(2, "Vfetk_qmEnergySimplex:  Chopped COSH %d \
-times!\n", nchop);
-
-    return value;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_getDeterminant
+// Routine:  Vfetk_lnDet
 //
 // Purpose:  Calculate the log of the determinant of the specified operator:
 //             flag = 0         Helmholtz operator (PBE tangent operator
 //                              evaluated at u = 0)
-//             flag = 1         Dual tangent operator
-//             flag = 2         Tangent operator (response function)
+//             flag = 1         Tangent operator at current solution (response 
+//                              function)
 //           in the current finite element basis.
 //           
 // Notes:    Uses SLU factorization and will be very slow for large matrices.
@@ -749,16 +538,11 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     Bvec *diag;
     Bvec *u, *ud;
     int pnumR[MAXV];
-    /* Begin SuperLU-specific objects */
-    SuperMatrix *L;
-    SCformat *Astore;
-    int i, j, k, c, d, n, nsup;
-    double Lii, *dp;
-    int *col_to_sup, *sup_to_col, *rowind, *rowind_colptr;
-    /* End SuperLU-specific objects */
+
     Alg *alg; 
     AM *am;
     int level, ip[10];
+    int evalKey, tangKey, energyKey, residKey, massKey;
     double lndet, det, rp[10];
 
     VASSERT(thee != VNULL);
@@ -767,14 +551,24 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
 
     if (color>=0) Vnm_print(2,"Vfetk_lnDet: color argument ignored!\n");
 
+    /* Figure out key settings */
+    evalKey = flag;
+    energyKey = 1;
+    residKey = 0;
+    tangKey = 1;
+    massKey = 0;
+    if (flag == 0) tangKey = 0;
+    else if (flag == 1) tangKey = 1;
+
     /* Get the max level from AM */
     level = AM_maxLevel(thee->am);
 
     /* Assemble the requested operator */
     Vnm_print(1, "Vfetk_lnDet: assembling operator...\n");
-    AM_zeroMatrix(thee->am, level);
+    AM_zeroA(thee->am, level);
     AM_init(am, level, W_f, 0.);
-    AM_assem(am, level, flag, W_u, W_ud, W_f, ip, rp);
+    AM_assem(am, level, evalKey, energyKey, residKey, tangKey, massKey, 
+      W_u, W_ud, W_f, ip, rp);
 
     /* Au = A u */
     alg = AM_alg(thee->am, level);
@@ -786,52 +580,9 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
         Vnm_print(2, "Vfetk_lnDet:  Last state = %d\n", A->state);
         return 0.0;
     }
-
-    /* According to Sherry Li, author of SuperLU:
-     * The diagonal blocks of both L and U are stored in the L matrix,
-     * which is returned from dgstrf().  The L matrix is a supernodal matrix,
-     * its structure is called SCformat in supermatrix.h.  This is also
-     * illustrated by a small 5x5 example in Section 2.3 of the Users' Guide,
-     * see Figures 2.1 and 2.3.   This example is in the code
-     * EXAMPLE/superlu.c.  Since L is unit-diagonal, so the ones are not
-     * stored. Instead, the diagonal stored in L is really the diagonal for U.
-     * Therefore, you only need to extract those diagonal elements.  One
-     * routine that you can hack to get the diagonal is
-     * dPrint_SuperNode_Matrix() in dutil.c.  Another tricky part is the sign
-     * of the determinant. Since I am doing the following factorization Pr*A*Pc
-     * = LU, i.e., both row and column permutations may be applied, they are
-     * called perm_r and perm_c in the code. Their determinants will be 1 or
-     * -1, but you need to find out the sign by going through these
-     * permutations. */
-
     slu = A->slu;
-    L = (SuperMatrix *)(slu->L);
-    /* Stolen from dPrint_SuperNode_Matrix (SuperLU 2.0) */
-    Vnm_print(1, "Vfetk_lnDet:  Calculating log determinant \
-(assuming SPD!)...\n");
-    n = L->ncol;
-    Astore = (SCformat *)(L->Store);
-    dp = (double *) Astore->nzval;
-    col_to_sup = Astore->col_to_sup;
-    sup_to_col = Astore->sup_to_col;
-    rowind_colptr = Astore->rowind_colptr;
-    rowind = Astore->rowind;
-    lndet = 0;
-    det = 1;
-    for (k = 0; k <= Astore->nsuper+1; ++k) {
-        c = sup_to_col[k];
-        nsup = sup_to_col[k+1] - c;
-        for (j = c; j < c + nsup; ++j) {
-            d = Astore->nzval_colptr[j];
-            for (i = rowind_colptr[c]; i < rowind_colptr[c+1]; ++i) {
-                if (rowind[i] == j) {
-                    Lii = dp[d++];
-                    lndet += log(VABS(Lii));
-                } else d++;
-            }
-        }
-    }
-    Vnm_print(0, "Vfetk_lnDet:  ln(det(A)) = %g\n", lndet);
+
+    lndet = Zslu_lnDet(slu);
 
     return lndet;
 }
