@@ -71,8 +71,10 @@ VEMBED(rcsid="$Id$")
 VPUBLIC Vacc* Vacc_ctor(Valist *alist, double probe_radius, int nx,
     int ny, int nz, int nsphere) {
 
-    /* Set up the structure */
+
     Vacc *thee = VNULL;
+
+    /* Set up the structure */
     thee = Vram_ctor( 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
     VASSERT( Vacc_ctor2(thee, alist, probe_radius, nx, ny, nz, nsphere));
@@ -122,12 +124,15 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
         return 0;
     }
     for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
+
     if ((thee->atoms = Vram_ctor(thee->n,(sizeof(Vatom **)))) == VNULL) {
         fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
         return 0;
     }
+    for (i=0; i<thee->n; i++) (thee->atoms)[i] = VNULL;
 
     /* Get atom list */
+    VASSERT(alist != VNULL);
     atom_list = Valist_getAtomList(alist);
 
     /* Find dimensions of protein and atoms*/
@@ -161,24 +166,17 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     (thee->grid_lower_corner)[0] = x_min-1.42*(max_radius+thee->probe_radius)-thee->hx;
     (thee->grid_lower_corner)[1] = y_min-1.42*(max_radius+thee->probe_radius)-thee->hy;
     (thee->grid_lower_corner)[2] = z_min-1.42*(max_radius+thee->probe_radius)-thee->hz;
-#ifdef DEBUG_NAB
-    Vnm_pVRINT(1,"Spacings = (%f,%f,%f)\n",thee->hx,thee->hy,thee->hz);
-    Vnm_pVRINT(1,"Lower corner = (%f,%f,%f)\n",thee->grid_lower_corner[0], \
-      thee->grid_lower_corner[1],thee->grid_lower_corner[2]);
-#endif
 
     /* Find out how many atoms are associated with each grid point */
-    if ((thee->natoms = Vram_ctor(thee->n, sizeof(int))) == VNULL) {
-        fprintf(stderr,"Vacc_ctor2: Failed to allocate RAM.\n");
-        return 0;
-    }
-    for (i=0;i<thee->n;i++) thee->natoms[i] = 0;
     for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
  
         /* Get the position in the grid's frame of reference */
-        x = (Vatom_getPosition(atom_list + i))[0] - (thee->grid_lower_corner)[0];
-        y = (Vatom_getPosition(atom_list + i))[1] - (thee->grid_lower_corner)[1];
-        z = (Vatom_getPosition(atom_list + i))[2] - (thee->grid_lower_corner)[2];
+        x = (Vatom_getPosition(atom_list+i))[0] 
+                - (thee->grid_lower_corner)[0];
+        y = (Vatom_getPosition(atom_list+i))[1] 
+                - (thee->grid_lower_corner)[1];
+        z = (Vatom_getPosition(atom_list+i))[2] 
+                - (thee->grid_lower_corner)[2];
 
         /* Get the range the atom radius + probe radius spans */
         tot_r = Vatom_getRadius(&(atom_list[i])) + thee->probe_radius;
@@ -188,7 +186,6 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
            I admit, this method for determing the accessible grid points isn't
            very fancy, but I kept getting crap for answers with Pythagorean's
            Thm */
-
         i_max = (int)( ceil( (x + tot_r)/(thee->hx) ));
         i_min = (int)(floor( (x - tot_r)/(thee->hx) ));
         j_max = (int)( ceil( (y + tot_r)/(thee->hy) ));
@@ -219,10 +216,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
     /* Allocate the space to store the pointers to the atoms */
     for (i=0;i<thee->n;i++) {
         if ((thee->natoms)[i] > 0) {
-            if (((thee->atoms)[i] = Vram_ctor((thee->natoms)[i],sizeof(Vatom *))) == VNULL) {
-                fprintf(stderr,"Vacc_ctor2: Failed to allocate space.\n");
-                return 0;
-            }
+            thee->atoms[i] = Vram_ctor((thee->natoms)[i],sizeof(Vatom *));
+            VASSERT(thee->atoms[i] != VNULL);
         }
     }
 
@@ -280,6 +275,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double probe_radius,
 
   /* Set up points on the surface of a sphere */
   thee->sphere = Vacc_sphere(thee, &(thee->nsphere), thee->probe_radius);
+  VASSERT(thee->sphere != VNULL);
 
   return 1;
 }
@@ -451,30 +447,46 @@ VPUBLIC int Vacc_molAcc(Vacc *thee, Vec3 center) {
 //
 // Purpose:  Generates thee->npts somewhat uniformly distributed across a
 //           sphere of specified radius centered at the origin.  Returns a
-//           vector, which you are resposible for destroying, of approximatel
-//           the specified number of points; the actual number is stored in the
-//           argument npts.  This routine was shamelessly ripped off of
-//           sphere.F from UHBD as developed by Michael K. Gilson
+//           (npts x 3) double array, which you are resposible for destroying,
+//           of approximatel the specified number of points; the actual number
+//           is stored in the argument npts.  This routine was shamelessly
+//           ripped off of sphere.F from UHBD as developed by Michael K. Gilson
 //
 // Author:   Nathan Baker (original FORTRAN routine from UHBD by Michael
 //           Gilson)
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vec3* Vacc_sphere(Vacc *thee, int *npts, double radius) {
+VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts, double radius) {
 
-    Vec3 *points = VNULL;
-    int nactual, itheta, ntheta, iphi, nphimax, nphi;
+    double **points = VNULL;
+    int nactual, i, itheta, ntheta, iphi, nphimax, nphi;
     double frac;
     double sintheta, costheta, theta, dtheta;
     double sinphi, cosphi, phi, dphi;
-
-    points = Vram_ctor(*npts, sizeof(Vec3));
-    VASSERT(points != VNULL);
 
     frac = ((double)(*npts))/4.0;
     ntheta = VRINT(VSQRT(Vunit_pi*frac));
     dtheta = Vunit_pi/((double)(ntheta));
     nphimax = 2*ntheta;
 
+    /* COUNT THE ACTUAL NUMBER OF POINTS TO BE USED */
+    nactual = 0;
+    for (itheta=0; itheta<ntheta; itheta++) {
+        theta = dtheta*((double)(itheta));
+        sintheta = VSIN(theta);
+        costheta = VCOS(theta);
+        nphi = VRINT(sintheta*nphimax);
+        nactual += nphi;
+    }
+
+    /* ALLOCATE THE SPACE FOR THE POINTS */
+    points = Vram_ctor(nactual, sizeof(double *));
+    VASSERT(points != VNULL);
+    for (i=0; i<nactual; i++) {
+        points[i] = Vram_ctor(3, sizeof(double));
+        VASSERT(points[i] != VNULL);
+    }
+
+    /* ASSIGN THE POINTS */
     nactual = 0;
     for (itheta=0; itheta<ntheta; itheta++) {
         theta = dtheta*((double)(itheta));
