@@ -228,7 +228,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_dtor(Vcsm **thee) {
-    Vcsm_freeArrays(*thee);
     if ((*thee) != VNULL) {
         Vcsm_dtor2(*thee);
         Vram_dtor((Vram **)thee, 1, sizeof(Vcsm));
@@ -243,7 +242,10 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vcsm_dtor2(Vcsm *thee) { ; }
+VPUBLIC void Vcsm_dtor2(Vcsm *thee) { 
+    Vnm_print(2, "Vcsm_dtor2: freeing arrays");
+    Vcsm_freeArrays(thee);
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_freeArrays

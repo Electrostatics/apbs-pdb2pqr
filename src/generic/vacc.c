@@ -307,13 +307,21 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
     int i;
-    for (i=0; i<thee->n; i++)
-      Vram_dtor((Vram **)&((thee->atoms)[i]), (thee->natoms)[i],
-        sizeof(Vatom *));
+    Vnm_print(2,"vacc: Destroying thee->atoms entries\n");
+    for (i=0; i<thee->n; i++) {
+        if (thee->natoms[i] > 0)  {
+            Vram_dtor((Vram **)&((thee->atoms)[i]), (thee->natoms)[i],
+            sizeof(Vatom *));
+        }
+    }
+    Vnm_print(2,"vacc: Destroying thee->atoms\n");
     Vram_dtor((Vram **)&(thee->atoms), thee->n, sizeof(Vatom **));
+    Vnm_print(2,"vacc: Destroying thee->natoms\n");
     Vram_dtor((Vram **)&(thee->natoms),thee->n, sizeof(int));
-    for (i=0; i<thee->n; i++) 
+    Vnm_print(2,"vacc: Destroying thee->sphere entries\n");
+    for (i=0; i<thee->nspherespherspheree; i++) 
       Vram_dtor((Vram **)&((thee->sphere)[i]), 3, sizeof(double));
+    Vnm_print(2,"vacc: Destroying thee->sphere\n");
     Vram_dtor((Vram **)&(thee->sphere), thee->nsphere, sizeof(double *));
 }
 
