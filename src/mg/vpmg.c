@@ -374,6 +374,102 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  bcfl1
+//
+// Purpose:  Increment all the boundary points by 
+//              pre1*(charge/d)*(exp(-xkappa*(d-size))/(1+xkappa*size)
+//
+// Args:     apos is a 3-vector
+//
+// Author:   Nathan Baker and Michael Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void bcfl1(double size, double *apos, double charge, 
+  double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf,
+  double *xf, double *yf, double *zf, int nx, int ny, int nz) {
+
+    int i, j, k;
+    double dist, val;
+    double gpos[3];
+
+    /* the "i" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        for (j=0; j<ny; j++) {
+            gpos[1] = yf[j];
+            gpos[0] = xf[0];
+            dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
+              + VSQR(gpos[2]-apos[2]));
+            if (xkappa != 0.0) {
+                val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+                       / (1+xkappa*size);
+            } else {
+                val = pre1*(charge/dist);
+            } 
+            gxcf[IJKx(j,k,0)] += val;
+            gpos[0] = xf[nx-1];
+            dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
+              + VSQR(gpos[2]-apos[2]));
+            if (xkappa != 0.0) {
+                val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+                       / (1+xkappa*size);
+            } else {
+                val = pre1*(charge/dist);
+            }
+            gxcf[IJKx(j,k,1)] += val;
+        }
+    }
+
+    /* the "j" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        for (i=0; i<nx; i++) {
+            gpos[0] = xf[i];
+            gpos[1] = yf[0];
+            dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
+              + VSQR(gpos[2]-apos[2]));
+            if (xkappa != 0.0) {
+                val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+                       / (1+xkappa*size);
+            } else {
+                val = pre1*(charge/dist);
+            }
+            gycf[IJKy(i,k,0)] += val;
+            gpos[1] = yf[ny-1];
+            dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
+              + VSQR(gpos[2]-apos[2]));
+            if (xkappa != 0.0) {
+                val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+                       / (1+xkappa*size);
+            } else {
+                val = pre1*(charge/dist);
+            }
+            gycf[IJKy(i,k,1)] += val;
+        }
+    }
+
+    /* the "k" boundaries (dirichlet) */
+    for (j=0; j<ny; j++) {
+        gpos[1] = yf[j];
+        for (i=0; i<nx; i++) {
+            gpos[0] = xf[i];
+            gpos[2] = zf[0];
+            dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
+              + VSQR(gpos[2]-apos[2]));
+            if (xkappa != 0.0) {
+                val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+                       / (1+xkappa*size);
+            } else {
+                val = pre1*(charge/dist);
+            }
+            gzcf[IJKz(i,j,0)] += val;
+            gpos[2] = zf[nz-1];
+            gzcf[IJKz(i,j,1)] += val;
+        }
+    }
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  bcCalc
 //
 // Purpose:  Dirichlet boundary function and initial approximation function.
@@ -387,63 +483,98 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
+VPRIVATE void bcCalc(Vpmg *thee) {
 
-    double size, *position, charge, xkappa, eps_w, dist, T, val, pot;
-    int i, iatom;
+    int flag, nx, ny, nz;
+    double size, *position, charge, xkappa, eps_w, dist, T, val, pot, pre1;
+    int i, j, k, iatom;
+    Vpbe *pbe;
     Vatom *atom;
     Valist *alist;
+    
+    pbe = thee->pbe;
+    flag = thee->pmgp->bcfl;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
 
-    if (flag == 0) {
-        return 0.0;
-    } else if (flag == 1) {
-        /* Get the solute radius in meters and position in angstroms */
-        size = (1.0e-10)*Vpbe_getSoluteRadius(pbe);
+    /* Zero out the boundaries */
+    /* the "i" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            thee->gxcf[IJKx(j,k,0)] = 0.0;
+            thee->gxcf[IJKx(j,k,1)] = 0.0;
+            thee->gxcf[IJKx(j,k,2)] = 0.0;
+            thee->gxcf[IJKx(j,k,3)] = 0.0;
+        }
+    }
+
+    /* the "j" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        for (i=0; i<nx; i++) {
+            thee->gycf[IJKy(i,k,0)] = 0.0;
+            thee->gycf[IJKy(i,k,1)] = 0.0;
+            thee->gycf[IJKy(i,k,2)] = 0.0;
+            thee->gycf[IJKy(i,k,3)] = 0.0;
+        }
+    }
+
+    /* the "k" boundaries (dirichlet) */
+    for (j=0; j<ny; j++) {
+        for (i=0; i<nx; i++) {
+            thee->gzcf[IJKz(i,j,0)] = 0.0;
+            thee->gzcf[IJKz(i,j,1)] = 0.0;
+            thee->gzcf[IJKz(i,j,2)] = 0.0;
+            thee->gzcf[IJKz(i,j,3)] = 0.0;
+        }
+    }
+
+    /* For each "atom" (only one for bcfl=1), we use the following formula to
+     * calculate the boundary conditions: 
+     *    g(x) = \frac{q e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+     *          * \frac{exp(-xkappa*(d - a))}{1+xkappa*a}
+     *          * 1/d
+     * where d = ||x - x_0|| (in m) and a is the size of the atom (in m).
+     * We only need to evaluate some of these prefactors once:
+     *    pre1 = \frac{e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+     * which gives the potential as
+     *    g(x) = pre1 * q/d * \frac{exp(-xkappa*(d - a))}{1+xkappa*a} 
+     */
+    eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
+    T = Vpbe_getTemperature(pbe);               /* K             */
+    pre1 = (Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T);
+
+    /* Finally, if we convert keep xkappa in A^{-1} and scale pre1 by
+     * m/A, then we will only need to deal with distances and sizes in
+     * Angstroms rather than meters.                                       */
+    xkappa = Vpbe_getXkappa(pbe);              /* A^{-1}        */
+    pre1 = pre1*(1.0e10);
+   
+    /*  If we have zero boundary conditions, we're done */
+    if (flag == 0) return;
+
+    /*  For single DH sphere BC's, we only have one "atom" to deal with; get
+     *  its information and */
+    else if (flag == 1) {
+
+        size = Vpbe_getSoluteRadius(pbe);
         position = Vpbe_getSoluteCenter(pbe);
-
-        /* We keep the charge relative to units of ec that are factored out;
-         * this term should be dimensionless. The dielectric is unitless. */
         charge = Vunit_ec*Vpbe_getSoluteCharge(pbe);
-        eps_w = Vpbe_getSolventDiel(pbe);
 
-        /* Get xkappa in units of inverse meters */
-        xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
+        bcfl1(size, position, charge, xkappa, pre1,
+          thee->gxcf, thee->gycf, thee->gzcf, 
+          thee->xf, thee->yf, thee->zf, nx, ny, nz);
 
-        /* The temperature is in units of K */
-        T = Vpbe_getTemperature(pbe);
-
-        /* Compute the distance (in units of m) */
-        dist = 0;
-        for (i=0; i<3; i++) dist += VSQR(position[i] - x[i]);
-        dist = (1.0e-10)*VSQRT(dist);
-
-        /* Compute the potential in J/electron */
-        val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
-        if (xkappa != 0.0) val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-        /* Scale the potential to be dimensionless */
-        val = val*Vunit_ec/(Vunit_kb*T);
-        return val;
     } else if (flag == 2) {
-        pot = 0.0;
-        eps_w = Vpbe_getSolventDiel(pbe);
-        xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
-        T = Vpbe_getTemperature(pbe);
-        alist = Vpbe_getValist(pbe);
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
             atom = Valist_getAtom(alist, iatom);
             position = Vatom_getPosition(atom);
             charge = Vatom_getCharge(atom);
-            size = (1e-10)*Vatom_getRadius(atom);
-            dist = 0;
-            for (i=0; i<3; i++) dist += VSQR(position[i] - x[i]);
-            dist = (1.0e-10)*VSQRT(dist);
-            val = (charge)/(dist);
-            if (xkappa != 0.0)
-              val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-            pot = pot + val;
+            size = Vatom_getRadius(atom);
+            bcfl1(size, position, charge, xkappa, pre1,
+              thee->gxcf, thee->gycf, thee->gzcf, 
+              thee->xf, thee->yf, thee->zf, nx, ny, nz);
         }
-
-        return pot*(Vunit_ec*Vunit_ec)/(Vunit_kb*T*4*VPI*Vunit_eps0*eps_w);
     } else if (flag == 4) {
         Vnm_print(2, "VPMG::bcCalc -- not appropriate for focusing!\n");
         VASSERT(0);
@@ -452,8 +583,6 @@ VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
           flag);
         VASSERT(0);
     }
-
-    return 0;
 }
 
 
@@ -1115,55 +1244,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
     }
 
     /* Fill the boundary arrays (except when focusing, bcfl = 4) */
-    if (thee->pmgp->bcfl != 4) {
-        /* the "i" boundaries (dirichlet) */
-        for (k=0; k<nz; k++) {
-            for (j=0; j<ny; j++) {
-                position[0] = thee->xf[0];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
-                thee->gxcf[IJKx(j,k,0)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                position[0] = thee->xf[nx-1];
-                thee->gxcf[IJKx(j,k,1)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                thee->gxcf[IJKx(j,k,2)] = 0.0;
-                thee->gxcf[IJKx(j,k,3)] = 0.0;
-            }
-        }
-
-        /* the "j" boundaries (dirichlet) */
-        for (k=0; k<nz; k++) {
-            for (i=0; i<nx; i++) {
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[0];
-                position[2] = thee->zf[k];
-                thee->gycf[IJKy(i,k,0)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                position[1] = thee->yf[ny-1];
-                thee->gycf[IJKy(i,k,1)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                thee->gycf[IJKy(i,k,2)] = 0.0;
-                thee->gycf[IJKy(i,k,3)] = 0.0;
-            }
-        }
-
-        /* the "k" boundaries (dirichlet) */
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[0];
-                thee->gzcf[IJKz(i,j,0)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                position[2] = thee->zf[nz-1];
-                thee->gzcf[IJKz(i,j,1)] = bcCalc(pbe, position, 
-                  thee->pmgp->bcfl);
-                thee->gzcf[IJKz(i,j,2)] = 0.0;
-                thee->gzcf[IJKz(i,j,3)] = 0.0;
-            }
-        }
-    }
+    if (thee->pmgp->bcfl != 4) bcCalc(thee);
 
     thee->filled = 1;
 }
