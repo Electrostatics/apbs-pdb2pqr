@@ -463,7 +463,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=work/bin/noshell.c
+ac_unique_file=work/bin/fem/noshell.c
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -2148,8 +2148,10 @@ if test -e $pmgcdir/inc/config.h; then
 #define HAVE_PMGC_H 1
 EOF
 
+    pmgc="mg"
 else
     echo "$ac_t""the PMGC package in ${pmgcdir} is not configured" 1>&6
+    pmgc=""
 fi
 
 
@@ -2276,6 +2278,8 @@ trap 'rm -fr `echo "
 
     work/Makefile
     work/bin/Makefile
+    work/bin/fem/Makefile
+    work/bin/mg/Makefile
  inc/config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -2336,6 +2340,7 @@ s%@mpi_lib@%$mpi_lib%g
 s%@mpi_inc@%$mpi_inc%g
 s%@mcdir@%$mcdir%g
 s%@pmgcdir@%$pmgcdir%g
+s%@pmgc@%$pmgc%g
 
 CEOF
 EOF
@@ -2395,6 +2400,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
 
     work/Makefile
     work/bin/Makefile
+    work/bin/fem/Makefile
+    work/bin/mg/Makefile
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
