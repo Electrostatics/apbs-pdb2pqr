@@ -5,6 +5,7 @@
 // Purpose:  Convert OpenDx format potential to MolMol format
 //
 // Author:   Jung-Hsin Lin (bits added/modified by Nathan Baker)
+//           Additional changes by Fred Damberger
 //
 // rcsid="$Id$"
 /////////////////////////////////////////////////////////////////////////// */
@@ -19,6 +20,7 @@ int main(int argc, char **argv) {
 
     /* *************** VARIABLES ******************* */
     int u, i, j, k, nx, ny, nz;
+    int n;
     double avg;
     double hy, hx, hzed, xmin, ymin, zmin;
     Vio *sock;
@@ -85,12 +87,17 @@ int main(int argc, char **argv) {
     Vio_printf(sock, "%8.3f %4d %5.3f\n",ymin,ny,hy); 
     Vio_printf(sock, "%8.3f %4d %5.3f\n",zmin,nz,hzed); 
 
+    n = 0;
     for (k=0; k<nz; k++) {
         for (j=0; j<ny; j++) {
             for (i=0; i<nz; i++) {
+                n++;
                 u = nx*ny*k + nx*j + i;
                 Vio_printf(sock, "%10.3e ", grid->data[u]);
-                if ( u%10 == 9 ) Vio_printf(sock, "\n"); 
+                if (n == 10) {
+                    Vio_printf(sock, "\n");
+                    n = 0;
+                }
             }
         }
     }

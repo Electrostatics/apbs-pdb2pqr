@@ -159,7 +159,7 @@
             <para>Converts 
               <link linkend="opendx-format">OpenDX format</link>
               data to <ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">MOLMOL format</ulink>. 
-              Contributed by Jung-Hsin Lin.</para>
+              Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</para>
           </listitem>
         </itemizedlist>
       </sect3>
