@@ -274,10 +274,18 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
             if (Vstring_strcasecmp(tok, "dx") == 0) {
                 dielfmt = 0;
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                Vnm_print(0, "NOsh: Storing dielectric map %d path %s\n", 
-                  thee->ndiel, tok);
+                Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+                strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                Vnm_print(0, "NOsh: Storing y-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+                strncpy(thee->dielYpath[thee->ndiel], tok, VMAX_ARGLEN);
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                Vnm_print(0, "NOsh: Storing z-shifted dielectric map %d path \
+%s\n", thee->ndiel, tok);
+                strncpy(thee->dielZpath[thee->ndiel], tok, VMAX_ARGLEN);
                 thee->dielfmt[thee->ndiel] = dielfmt;
-                strncpy(thee->dielpath[thee->ndiel], tok, VMAX_ARGLEN);
                 (thee->ndiel)++;
             } else { 
                 Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \

@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
     Vpmgp *pmgp[NOSH_MAXCALC];
     Vpbe *pbe[NOSH_MAXCALC];
     Valist *alist[NOSH_MAXMOL];
-    Vgrid *dielMap[NOSH_MAXMOL];
+    Vgrid *dielXMap[NOSH_MAXMOL],*dielYMap[NOSH_MAXMOL],*dielZMap[NOSH_MAXMOL];
     Vgrid *kappaMap[NOSH_MAXMOL];
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
     }
 
     /* *************** LOAD MAPS ******************* */
-    if (loadDielMaps(com, nosh, dielMap) != 1) {
+    if (loadDielMaps(com, nosh, dielXMap, dielYMap, dielZMap) != 1) {
         Vnm_tprint(2, "main:  Error reading dielectric maps!\n");
         return APBSRC;
     }
@@ -214,7 +214,8 @@ int main(int argc, char **argv) {
             /* Set up problem */
             Vnm_tprint( 1, "main:    Setting up problem...\n");
             if (!initMG(com, i, nosh, mgparm, pbeparm, realCenter, pbe, 
-              alist, dielMap, kappaMap, chargeMap, pmgp, pmg)) {
+              alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
+              pmgp, pmg)) {
                 Vnm_tprint( 2, "main:  Error setting up MG calculation!\n");
                 return APBSRC;
             }

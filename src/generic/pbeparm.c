@@ -436,6 +436,7 @@ keyword!\n", tok);
         return 1;
     } else if (Vstring_strcasecmp(tok, "usemap") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "PBEparm_parseToken:  Read %s...\n", tok);
         if (Vstring_strcasecmp(tok, "diel") == 0) {
             thee->useDielMap = 1;
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
@@ -445,6 +446,7 @@ USEMAP DIEL keyword!\n", tok);
                 return -1;
             } 
             thee->dielMapID = ti;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
             thee->useKappaMap = 1;
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -454,6 +456,7 @@ USEMAP KAPPA keyword!\n", tok);
                 return -1;
             }
             thee->kappaMapID = ti;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "charge") == 0) {
             thee->useChargeMap = 1;
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -463,6 +466,7 @@ USEMAP CHARGE keyword!\n", tok);
                 return -1;
             }
             thee->chargeMapID = ti;
+            return 1;
         } else {
             Vnm_print(2, "NOsh:  Read undefined keyword (%s) while parsing \
 USEMAP statement!\n", tok);
@@ -496,6 +500,14 @@ WRITEFORCE keyword!\n", tok);
             writetype = VDT_CHARGE;
         } else if (Vstring_strcasecmp(tok, "smol") == 0) {
             writetype = VDT_SMOL;
+        } else if (Vstring_strcasecmp(tok, "dielx") == 0) {
+            writetype = VDT_DIELX;
+        } else if (Vstring_strcasecmp(tok, "diely") == 0) {
+            writetype = VDT_DIELY;
+        } else if (Vstring_strcasecmp(tok, "dielz") == 0) {
+            writetype = VDT_DIELZ;
+        } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
+            writetype = VDT_KAPPA;
         } else if (Vstring_strcasecmp(tok, "sspl") == 0) {
             writetype = VDT_SSPL;
         } else if (Vstring_strcasecmp(tok, "vdw") == 0) {

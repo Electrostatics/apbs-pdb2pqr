@@ -111,9 +111,15 @@ struct Vpmg {
   double splineWin;              /**< Spline window parm for surf defs */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
                                   * called */
-  int useDielMap;                /**< Indicates whether Vpmg_fillco was called
-                                  * with an external dielectric map */
-  Vgrid *dielMap;                /**< External dielectric map */
+  int useDielXMap;               /**< Indicates whether Vpmg_fillco was called
+                                  * with an external x-shifted dielectric map */
+  Vgrid *dielXMap;               /**< External x-shifted dielectric map */
+  int useDielYMap;               /**< Indicates whether Vpmg_fillco was called
+                                  * with an external y-shifted dielectric map */
+  Vgrid *dielYMap;               /**< External y-shifted dielectric map */
+  int useDielZMap;               /**< Indicates whether Vpmg_fillco was called
+                                  * with an external z-shifted dielectric map */
+  Vgrid *dielZMap;               /**< External z-shifted dielectric map */
   int useKappaMap;               /**< Indicates whether Vpmg_fillco was called
                                   * with an external kappa map */
   Vgrid *kappaMap;               /**< External kappa map */
@@ -242,10 +248,21 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *            \li 2:  spline-based accessibility with epsparm =
  *                  windowing parameter (<1.0, please)
  *  @param   splineWin    Spline window (for use with surfMeth = 2)
- *  @param   useDielMap   Specifies whether to use (1) or ignore (0) the 
- *                        dielMap arguement
- *  @param   dielMap      Pointer to a Vgrid object containing an external
- *                        dielectric map.  Can be VNULL if useDielMap is 0.
+ *  @param   useDielXMap  Specifies whether to use (1) or ignore (0) the 
+ *                        dielXMap arguement
+ *  @param   dielXMap     Pointer to a Vgrid object containing an external
+ *                        x-shifted dielectric map.  Can be VNULL if 
+ *                        useDielMap is 0.
+ *  @param   useDielYMap  Specifies whether to use (1) or ignore (0) the 
+ *                        dielYMap arguement
+ *  @param   dielYMap     Pointer to a Vgrid object containing an external
+ *                        y-shifted dielectric map.  Can be VNULL if 
+ *                        useDielMap is 0.
+ *  @param   useDielZMap  Specifies whether to use (1) or ignore (0) the 
+ *                        dielZMap arguement
+ *  @param   dielZMap     Pointer to a Vgrid object containing an external
+ *                        z-shifted dielectric map.  Can be VNULL if 
+ *                        useDielMap is 0.
  *  @param   useKappaMap  Specifies whether to use (1) or ignore (0) the 
  *                        kappaMap arguement
  *  @param   kappaMap     Pointer to a Vgrid object containing an external
@@ -258,9 +275,11 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  */
 VEXTERNC void Vpmg_fillco(Vpmg *thee, 
   int surfMeth,      double splineWin,
-  int useDielMap,   Vgrid *dielMap, 
-  int useKappaMap,  Vgrid *kappaMap,
-  int useChargeMap, Vgrid *chargeMap);
+  int useDielXMap,   Vgrid *dielXMap, 
+  int useDielYMap,   Vgrid *dielYMap, 
+  int useDielZMap,   Vgrid *dielZMap, 
+  int useKappaMap,   Vgrid *kappaMap,
+  int useChargeMap,  Vgrid *chargeMap);
 
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg

@@ -1001,7 +1001,8 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
     focusFillBound(thee, pmgOLD);
 
     /* Ignore old maps */
-    if (pmgOLD->useDielMap || pmgOLD->useKappaMap || pmgOLD->useChargeMap)
+    if (pmgOLD->useDielXMap || pmgOLD->useDielYMap || pmgOLD->useDielZMap ||
+        pmgOLD->useKappaMap || pmgOLD->useChargeMap)
        Vnm_print(2, "\
 Vpmg_ctor2Focus:  WARNING!  Ignoring coefficient and charge distribution\n\
 Vpmg_ctor2Focus:  maps during focusing!\n");
@@ -1086,6 +1087,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* Newton (nonlinear) */
         case 1:
@@ -1093,6 +1095,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* MG (linear/nonlinear) */
         case 2:
@@ -1100,6 +1103,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* CGHS (linear/nonlinear) */
         case 3: 
@@ -1107,6 +1111,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* SOR (linear/nonlinear) */
         case 4:
@@ -1114,6 +1119,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* GSRB (linear/nonlinear) */
         case 5:
@@ -1121,6 +1127,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf); 
+            thee->filled = 0;
             break;
         /* WJAC (linear/nonlinear) */
         case 6:
@@ -1128,6 +1135,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* RICH (linear/nonlinear) */
         case 7:
@@ -1135,6 +1143,7 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
+            thee->filled = 0;
             break;
         /* Error handling */
         default: 
@@ -1159,7 +1168,7 @@ VPRIVATE void fillcoCoef(Vpmg *thee) {
     double xmin, xmax, ymin, ymax, zmin, zmax, chi, ionmask, ionstr;
     double xlen, ylen, zlen, position[3];
     double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
-    double hx, hy, hzed, *apos, arad, gpos[3], accf;
+    double tkappa, eps, hx, hy, hzed, *apos, arad, gpos[3], accf;
     double dx2, dy2, dz2, arad2, stot2, itot2, rtot, rtot2, splineWin;
     int i, j, k, nx, ny, nz, iatom;
     int imin, imax, jmin, jmax, kmin, kmax, surfMeth;
@@ -1214,9 +1223,11 @@ VPRIVATE void fillcoCoef(Vpmg *thee) {
     if ((ionmask == 0.0) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
     else islap = 0;
 
-    if ((!thee->useDielMap) || ((!thee->useKappaMap)&&(ionstr>VPMGSMALL))) {
+    if ((!thee->useDielXMap) || (!thee->useDielYMap) || (!thee->useDielZMap) ||
+      ((!thee->useKappaMap)&&(ionstr>VPMGSMALL))) {
 
-        if (thee->useDielMap || thee->useKappaMap) {
+        if (thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
+            thee->useKappaMap) {
             Vnm_print(2, "\
 Vpmg_fillco:  You don't cut any overhead if you only use EITHER the\n\
 Vpmg_fillco:  dielectric OR the kappa map; you need to use both to see\n\
@@ -1363,13 +1374,15 @@ Vpmg_fillco:  a substantial decrease in setup time.\n");
                     }
                 } else { /* if (thee->useKappaMap) */
                     VASSERT(Vgrid_value(thee->kappaMap, position, 
-                      &chi));
-                    thee->ccf[IJK(i,j,k)] = ionmask*chi;
+                      &tkappa));
+                    thee->ccf[IJK(i,j,k)] = tkappa;
                 } /* endif (thee->useKappaMap) */
 
                 /* The diagonal tensor (2nd derivative) entries.  Each of
                  * these entries is evaluated ad the grid edges midpoints */
-                if (!thee->useDielMap) {
+                if ((!thee->useDielXMap) || (!thee->useDielYMap) || 
+                    (!thee->useDielZMap)) {
+                    Vnm_print(0, "Vpmg_fillco:  Not using grid-based maps\n");
                     switch (surfMeth) {
 
                       /* No dielectric smoothing */
@@ -1521,25 +1534,47 @@ Vpmg_fillco:  a substantial decrease in setup time.\n");
                       thee->a2cf[IJK(i,j,k)] = epsw;
                     if (thee->a3cf[IJK(i,j,k)] == 0.0)
                       thee->a3cf[IJK(i,j,k)] = epsw;
-                } else { /* if (thee->useDielMap) */
+
+                } 
+                if (thee->useDielXMap) { 
+
                     position[0] = thee->xf[i] + 0.5*hx;
                     position[1] = thee->yf[j];
                     position[2] = thee->zf[k];
-                    VASSERT(Vgrid_value(thee->dielMap, position, 
-                      &chi));
-                    thee->a1cf[IJK(i,j,k)] = epsp+(epsw-epsp)*chi;
+                    if (!Vgrid_value(thee->dielXMap, position, 
+                      &eps)) {
+                        Vnm_print(2, "Vpmg_fillco:  Off dielXMap at:\n");
+                        Vnm_print(2, "Vpmg_fillco:  (x,y,z) = (%g,%g %g)\n",
+                          position[0], position[1], position[2]);
+                        Vnm_print(2, "Vpmg_fillco:  (i,j,k) = (%d,%d,%d)\n",
+                          i,j,k);
+                        Vnm_print(2, "Vpmg_fillco:  low. corn.=(%g,%g%g)\n",
+                          thee->dielXMap->xmin, thee->dielXMap->ymin,
+                          thee->dielXMap->zmin);
+                        VASSERT(0);
+                    }
+                    thee->a1cf[IJK(i,j,k)] = eps;
+
+                } 
+                if (thee->useDielYMap) { 
+
                     position[0] = thee->xf[i];
                     position[1] = thee->yf[j] + 0.5*hy;
                     position[2] = thee->zf[k];
-                    VASSERT(Vgrid_value(thee->dielMap, position, 
-                      &chi));
-                    thee->a2cf[IJK(i,j,k)] = epsp+(epsw-epsp)*chi;
+                    if (!Vgrid_value(thee->dielYMap, position, 
+                      &eps)) VASSERT(0);
+                    thee->a2cf[IJK(i,j,k)] = eps;
+
+                } 
+                if (thee->useDielZMap) { 
+
                     position[0] = thee->xf[i];
                     position[1] = thee->yf[j];
                     position[2] = thee->zf[k] + 0.5*hzed;
-                    VASSERT(Vgrid_value(thee->dielMap, position,
-                      &chi));
-                    thee->a3cf[IJK(i,j,k)] = epsp+(epsw-epsp)*chi;
+                    if (!Vgrid_value(thee->dielZMap, position,
+                      &eps)) VASSERT(0);
+                    thee->a3cf[IJK(i,j,k)] = eps;
+
                 } /* endif (thee->useDielMap) */
             } /* i loop */
         } /* j loop */
@@ -1681,9 +1716,11 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_fillco(Vpmg *thee, 
   int surfMeth, double splineWin, 
-  int useDielMap,   Vgrid *dielMap, 
-  int useKappaMap,  Vgrid *kappaMap, 
-  int useChargeMap, Vgrid *chargeMap) {
+  int useDielXMap,   Vgrid *dielXMap, 
+  int useDielYMap,   Vgrid *dielYMap, 
+  int useDielZMap,   Vgrid *dielZMap, 
+  int useKappaMap,   Vgrid *kappaMap, 
+  int useChargeMap,  Vgrid *chargeMap) {
 
     Vpbe *pbe;
     double xmin, xmax, ymin, ymax, zmin, zmax;
@@ -1694,8 +1731,12 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     VASSERT(thee != VNULL);
     thee->surfMeth = surfMeth;
     thee->splineWin = splineWin;
-    thee->useDielMap = useDielMap;
-    if (thee->useDielMap) thee->dielMap = dielMap;
+    thee->useDielXMap = useDielXMap;
+    if (thee->useDielXMap) thee->dielXMap = dielXMap;
+    thee->useDielYMap = useDielYMap;
+    if (thee->useDielYMap) thee->dielYMap = dielYMap;
+    thee->useDielZMap = useDielZMap;
+    if (thee->useDielZMap) thee->dielZMap = dielZMap;
     thee->useKappaMap = useKappaMap;
     if (thee->useKappaMap) thee->kappaMap = kappaMap;
     thee->useChargeMap = useChargeMap;
@@ -1805,7 +1846,7 @@ VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma,
     double npF[3];                  /* Non-polar boundary force */
 
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
  
     Vpmg_dbnpForce(thee, qfF, npF, gamma, atomID);
     Vpmg_ibForce(thee, dbF, atomID); 
@@ -1835,7 +1876,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
    
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
    
     acc = thee->pbe->acc;
     atom = Valist_getAtom(thee->pbe->alist, atomID);
@@ -1976,7 +2017,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
 
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
 
     acc = thee->pbe->acc;
     atom = Valist_getAtom(thee->pbe->alist, atomID);
@@ -2181,7 +2222,7 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
     int nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
 
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
 
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);
@@ -2306,7 +2347,7 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     double qfEnergy = 0.0;
 
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
 
     if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
         Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");
@@ -2340,7 +2381,7 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
     int i, j, k, nx, ny, nz;
  
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
 
     /* Get the mesh information */
     nx = thee->pmgp->nx;
@@ -2355,7 +2396,9 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
     /* Refill the dieletric coefficient arrays */
     Vpmg_fillco(thee, 
       thee->surfMeth, thee->splineWin,
-      thee->useDielMap, thee->dielMap,
+      thee->useDielXMap, thee->dielXMap,
+      thee->useDielYMap, thee->dielYMap,
+      thee->useDielZMap, thee->dielZMap,
       thee->useKappaMap, thee->kappaMap,
       thee->useChargeMap, thee->chargeMap);
 
@@ -2395,7 +2438,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     int i, j, nx, ny, nz, nion, ichop, nchop;
  
     VASSERT(thee != VNULL);
-    VASSERT(thee->filled);
+    /* VASSERT(thee->filled); */
 
     /* Get the mesh information */
     nx = thee->pmgp->nx;
@@ -2417,7 +2460,9 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     /* Because PMG seems to overwrite some of the coefficient arrays... */
     Vpmg_fillco(thee, 
       thee->surfMeth, thee->splineWin,
-      thee->useDielMap, thee->dielMap,
+      thee->useDielXMap, thee->dielXMap,
+      thee->useDielYMap, thee->dielYMap,
+      thee->useDielZMap, thee->dielZMap,
       thee->useKappaMap, thee->kappaMap,
       thee->useChargeMap, thee->chargeMap);
 
@@ -2707,7 +2752,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     zok = 0;
 
     /* We need have called Vpmg_fillco first */
-    VASSERT(thee->filled == 1);
+    /* VASSERT(thee->filled == 1); */
 
     alist = thee->pbe->alist;
 
@@ -2850,7 +2895,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
     Vpbe *pbe = VNULL;
     Vgrid *grid = VNULL;
     double position[3], hx, hy, hzed, xmin, ymin, zmin;
-    double grad[3],  eps, epsp, epss;
+    double grad[3], eps, epsp, epss, zmagic;
     int i, j, k, l, nx, ny, nz, ichop;
 
     pbe = thee->pbe;
@@ -2866,21 +2911,83 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
     zmin = thee->pmgp->zmin;
     epsp = Vpbe_getSoluteDiel(pbe);
     epss = Vpbe_getSolventDiel(pbe);
+    zmagic = Vpbe_getZmagic(pbe);
 
     switch (type) {
 
         case VDT_CHARGE:
 
-            /* Fill the mesh point coordinate arrays */
-            for (i=0; i<nx; i++) thee->xf[i] = xmin + i*hx;
-            for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
-            for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hzed;
-            /* Reset the fcf array */
-            for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
-            /* Call the charge discretization routine */
-            fillcoCharge(thee);
+            /* Call the coefficient discretization routine */
+            if (!thee->filled) 
+              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->useDielXMap, thee->dielXMap,
+                thee->useDielYMap, thee->dielYMap,
+                thee->useDielZMap, thee->dielZMap,
+                thee->useKappaMap, thee->kappaMap,
+                thee->useChargeMap, thee->chargeMap);
+                
             /* Copy the charge array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->fcf[i];
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->fcf[i]/zmagic;
+            break;
+
+        case VDT_DIELX:
+
+            /* Call the coefficient discretization routine */
+            if (!thee->filled)
+              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->useDielXMap, thee->dielXMap,
+                thee->useDielYMap, thee->dielYMap,
+                thee->useDielZMap, thee->dielZMap,
+                thee->useKappaMap, thee->kappaMap,
+                thee->useChargeMap, thee->chargeMap);
+
+            /* Copy the x-shifted dielectric array into the argument vector */
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a1cf[i];
+            break;
+
+        case VDT_DIELY:
+
+            /* Call the coefficient discretization routine */
+            if (!thee->filled)
+              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->useDielXMap, thee->dielXMap,
+                thee->useDielYMap, thee->dielYMap,
+                thee->useDielZMap, thee->dielZMap,
+                thee->useKappaMap, thee->kappaMap,
+                thee->useChargeMap, thee->chargeMap);
+
+            /* Copy the y-shifted dielectric array into the argument vector */
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a2cf[i];
+            break;
+
+        case VDT_DIELZ:
+
+            /* Call the coefficient discretization routine */
+            if (!thee->filled)
+              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->useDielXMap, thee->dielXMap,
+                thee->useDielYMap, thee->dielYMap,
+                thee->useDielZMap, thee->dielZMap,
+                thee->useKappaMap, thee->kappaMap,
+                thee->useChargeMap, thee->chargeMap);
+
+            /* Copy the z-shifted dielectric array into the argument vector */
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a3cf[i];
+            break;
+
+        case VDT_KAPPA:
+
+            /* Call the coefficient discretization routine */
+            if (!thee->filled)
+              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->useDielXMap, thee->dielXMap,
+                thee->useDielYMap, thee->dielYMap,
+                thee->useDielZMap, thee->dielZMap,
+                thee->useKappaMap, thee->kappaMap,
+                thee->useChargeMap, thee->chargeMap);
+
+            /* Copy the kappa array into the argument vector */
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->ccf[i];
             break;
 
         case VDT_POT:

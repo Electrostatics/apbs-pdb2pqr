@@ -133,8 +133,12 @@ struct NOsh {
     char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
     char molfmt[NOSH_MAXMOL];            /**< Mol files formats (0=>PQR) */
     int ndiel;                           /**< Number of dielectric maps */
-    char dielpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to dielectric map
-                                          * files */
+    char dielXpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to x-shifted 
+                                               * dielectric map files */
+    char dielYpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to y-shifted 
+                                               * dielectric map files */
+    char dielZpath[NOSH_MAXMOL][VMAX_ARGLEN]; /**< Paths to z-shifted 
+                                               * dielectric map files */
     char dielfmt[NOSH_MAXMOL];           /**< Dielectric maps file 
                                           * formats (0=>OpenDX) */
     int nkappa;                          /**< Number of kappa maps */

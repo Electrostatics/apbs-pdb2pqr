@@ -64,12 +64,20 @@ enum Vdata_Type {
     VDT_IVDW,   /**< Ion accessibility/inflated van der Waals (1 =
                  * accessible, 0 = inaccessible) */
     VDT_LAP,    /**< Laplacian of potential (kT/e/A^2) */
-    VDT_EDENS,  /**< Energy density $\epsilon (\nabla u)^2$, where $u$ is
-	         * potential (kT/e/A)^2 */
-    VDT_NDENS,  /**< Ion number density $\sum c_i \exp (-q_i u)^2$, 
+    VDT_EDENS,  /**< Energy density \f$\epsilon (\nabla u)^2\f$, where \f$u\f$
+                 * is potential (kT/e/A)^2 */
+    VDT_NDENS,  /**< Ion number density \f$\sum c_i \exp (-q_i u)^2\f$, 
 	         * where $u$ is potential (output in M) */
-    VDT_QDENS   /**< Ion charge density $\sum q_i c_i \exp (-q_i u)^2$,
-	         * where $u$ is potential (output in e_c M) */
+    VDT_QDENS,  /**< Ion charge density $\sum q_i c_i \exp (-q_i u)^2$,
+	         * where $u$ is potential (output in \f$e_c M\f$) */
+    VDT_DIELX,  /**< Dielectric x-shifted map as calculated with the currently
+                 * specified scheme (dimensionless) */
+    VDT_DIELY,  /**< Dielectric y-shifted map as calculated with the currently
+                 * specified scheme (dimensionless) */
+    VDT_DIELZ,  /**< Dielectric y-shifted map as calculated with the currently
+                 * specified scheme (dimensionless) */
+    VDT_KAPPA   /**< Kappa map as calculated with the currently
+                 * specified scheme (\f$A^{-3}\f$) */
 };
 
 /** @typedef Vdata_Type
