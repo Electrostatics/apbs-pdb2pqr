@@ -7,6 +7,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       dx files.
     * Modified the tools/python/noinput.py example to show the ability to get
       and print energy and force vectors directly into Python arrays.
+    * Added dx2uhbd tool to tools/mesh for converting from dx format to UHBD
+      format (Thanks to Robert Konecny)
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
