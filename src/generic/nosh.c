@@ -102,8 +102,8 @@ VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
     VPUBLIC int NOsh_getChargefmt(NOsh *thee, int i) {
         VASSERT(thee != VNULL);
         VASSERT(i < thee->ncharge);
-        return (thee->chargefmt[i]);
-    }
+        return (thee->chargefmt[i]);    }
+
 
 #endif /* if !defined(VINLINE_NOSH) */
 
@@ -418,7 +418,8 @@ section!\n");
 VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int ti, idx, expect;
+	char name[VMAX_BUFSIZE];
+    int ti, idx, expect, i;
 
     if (thee == VNULL) {
         Vnm_print(2, "NOsh_parse:  Got NULL thee!\n");
@@ -520,6 +521,25 @@ section while reading %s!\n", tok);
 section while reading %s!\n", tok);
                     return 0;
                 }
+			/* Grab a calculation name from elec ID */
+			} else if (sscanf(tok, "%s", name) == 1) {
+			    if (expect == 0) {
+				    for (i=1;i<thee->nelec+1;i++){
+					    if (Vstring_strcasecmp(thee->elecname[i], name) == 0){
+						    thee->printcalc[idx][thee->printnarg[idx]] = i;
+							expect = 1;
+							break;
+					    }
+				    }
+					if (expect == 0) {
+					  Vnm_print(2, "No ELEC statement has been named %s!\n", name);
+					  return 0;
+					}
+                } else {
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT \
+section while reading %s!\n", tok);
+                    return 0;
+                }
             /* Got bad operation */
             } else {
                 Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while \
@@ -575,27 +595,36 @@ run!\n");
         return 1;
     } else (thee->nelec)++;
 
-    /* The next token HAS to be the method */
-    if (Vio_scanf(sock, "%s", tok) == 1) {
-        if (Vstring_strcasecmp(tok, "mg-manual") == 0) {
-            type = MCT_MAN;
-            return NOsh_parseMG(thee, sock, type);
-        } else if (Vstring_strcasecmp(tok, "mg-auto") == 0) {
-            type = MCT_AUT;
-            return NOsh_parseMG(thee, sock, type);
-        } else if (Vstring_strcasecmp(tok, "mg-para") == 0) {
-            type = MCT_PAR;
-            return NOsh_parseMG(thee, sock, type);
-        } else if (Vstring_strcasecmp(tok, "mg-dummy") == 0) {
-            type = MCT_DUM;
-            return NOsh_parseMG(thee, sock, type);
-        } else if (Vstring_strcasecmp(tok, "fe-manual") == 0) {
-            return NOsh_parseFEM(thee, sock, FCT_MAN);
-        } else {
-            Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") must be the first keyword in the ELEC section\n");
-            return 0;
-        }
-    } else {
+    /* The next token HAS to be the method OR "name" */
+	if (Vio_scanf(sock, "%s", tok) == 1) {
+	    if (Vstring_strcasecmp(tok, "name") == 0) {
+		    Vio_scanf(sock, "%s", tok);
+            strncpy(thee->elecname[thee->nelec], tok, VMAX_ARGLEN);
+			Vnm_print(0, "Setting ELEC statement %d name as %s\n", thee->nelec, tok);
+			if (Vio_scanf(sock, "%s", tok) != 1) {
+			   Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while reading ELEC section!\n");
+			   return 0;
+			}
+		}
+		if (Vstring_strcasecmp(tok, "mg-manual") == 0) {
+		    type = MCT_MAN;
+		    return NOsh_parseMG(thee, sock, type);
+		} else if (Vstring_strcasecmp(tok, "mg-auto") == 0) {
+		    type = MCT_AUT;
+		    return NOsh_parseMG(thee, sock, type);
+		} else if (Vstring_strcasecmp(tok, "mg-para") == 0) {
+		    type = MCT_PAR;
+			return NOsh_parseMG(thee, sock, type);
+		} else if (Vstring_strcasecmp(tok, "mg-dummy") == 0) {
+		    type = MCT_DUM;
+			return NOsh_parseMG(thee, sock, type);
+		} else if (Vstring_strcasecmp(tok, "fe-manual") == 0) {
+		    return NOsh_parseFEM(thee, sock, FCT_MAN);
+		} else {
+		    Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") or \"name\" must be the first keyword in the ELEC section\n");
+			return 0;
+		} 
+	} else {
         Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while reading ELEC section!\n");
         return 0;
     } 

@@ -201,6 +201,8 @@ struct sNOsh {
                                           * subtract) */
     int parsed;                          /**< Have we parsed an input file
                                           * yet? */
+    char elecname[NOSH_MAXCALC][VMAX_ARGLEN]; /**< Optional name for ELEC
+										        * statement */
 
 };
 
