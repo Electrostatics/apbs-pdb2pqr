@@ -54,7 +54,7 @@
 #include "mc/mc.h"
 #include "apbs/vhal.h"
 #include "apbs/vatom.h"
-#include "apbs/valist.h"
+/* #include "apbs/valist.h" */
 #include "apbs/vcsm.h"
 #include "apbs/vpbe.h"
 #include "apbs/vunit.h"

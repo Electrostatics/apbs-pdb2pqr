@@ -54,6 +54,7 @@
 /* Generic headers */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+#include "apbs/valist.h"
 
 /* Specific headers */
 #include "mc/mc.h"
