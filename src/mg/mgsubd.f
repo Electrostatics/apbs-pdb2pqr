@@ -105,9 +105,10 @@ c*    *** find the coarser grid size ***
 c*
 c*    *** check a few things ***
       if (((nnew-1)*2).ne.(nold-1)) 
-     2   print*,'% CORSR:  may not corsen grid this far... '
+     2   call vnmprt(2, 'CORSR:  may not corsen grid this far... ', 40)
       if (nnew .lt. 1)
-     2   print*,'% CORSR:  have corsenned grid below zero... '
+     2   call vnmprt(2, 'CORSR:  have corsenned grid below zero... ', 
+     3      42)
 c*
 c*    *** return and end ***
       return
@@ -264,14 +265,13 @@ c* *********************************************************************
 c*
 c*    *** initializing timer ***
       if (iters .eq. -99) then
-         print*,'% PRTSTP: initializing timer...'
-         call tstart(bf,oh)
+         call vtstrt(40, 'MG iteration', 12)
          cputme = 0.0d0
          goto 99
 c*
 c*    *** setup for the iteration ***
       elseif (iters .eq. -1) then
-         call tstop(bf,oh,cputme)
+         call vtstop(40, 'MG iteration', 12)
          if (iok .eq. 1) then
             write(6,100) -1,0.0d0,0.0d0,cputme
          elseif (iok .eq. 2) then
@@ -283,7 +283,7 @@ c*    *** during the iteration ***
       else
 c*
 c*       *** stop the timer ***
-         call tstop(bf,oh,cputme)
+         call vtstop(40, 'MG iteration', 12)
 c*
 c*       *** relative residual ***
          if (rsden .eq. 0.0d0) then

@@ -201,7 +201,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'CGMGDRIV2: fine problem setup', 29)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -211,11 +211,10 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% CGMGDRIV2: fine problem setup time: ',tsetupf
+      call vtstop(30, 'CGMGDRIV2: fine problem setup', 29)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'CGMGDRIV2: coarse problem setup', 31)
 c*
 c*    *** build op and rhs on all coarse grids ***
       ido = 1
@@ -225,8 +224,7 @@ c*    *** build op and rhs on all coarse grids ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupc)
-      print*,'% CGMGDRIV2: coarse problem setup time: ',tsetupc
+      call vtstop(30, 'CGMGDRIV2: coarse problem setup', 31)
 c*
 c* ******************************************************************
 c* *** this overwrites the rhs array provided by pde specification
@@ -248,7 +246,7 @@ c*    *** MATLAB ***
       print*,' cgmg = [ '
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'CGMGDRIV2: solve', 16)
 c*
 c*    *** call specified multigrid method ***
       nlev_real = nlev
@@ -271,8 +269,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% CGMGDRIV2: solve time: ',tsolve
+      call vtstop(30, 'CGMGDRIV2: solve', 16)
 c*
 c*    *** MATLAB ***
       write(*,100) 'cgmg_sf',tsetupf,'cgmg_sc',tsetupc,

@@ -64,7 +64,8 @@ c*    *** do in one step ***
          call cghs(nx,ny,nz,ipc,rpc,ac,cc,fc,x,w1,w2,r,
      2      itmax,iters,errtol,omega,iresid,iadjoint)
       else
-         print*,'% SMOOTH: bad smoothing routine specified...'
+         call vnmpri(2, '% SMOOTH: bad smoothing routine specified = ', 
+     2      42, meth)
       endif
 c*
 c*    *** return and end ***

@@ -62,7 +62,7 @@ c*    *** do in one step ***
      4      x,w1,w2,r,
      5      itmax,iters,errtol,omega,iresid,iadjoint)
       else
-         print*,'% RICH: invalid stencil type given...'
+         call vnmprt(2, '% RICH: invalid stencil type given...', 33)
       endif
 c*
 c*    *** return and end ***

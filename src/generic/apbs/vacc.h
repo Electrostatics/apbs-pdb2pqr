@@ -115,6 +115,6 @@ VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double radius,
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
 VEXTERNC double Vacc_totalSASA(Vacc *thee, double radius);
 VEXTERNC double Vacc_atomSASA(Vacc *thee, double radius, int iatom);
-
+VEXTERNC void Vacc_getNborAtoms(Vacc *thee, double coord[3], int *atomIDs[6]);
 
 #endif    /* ifndef _VACC_H_ */
