@@ -18,6 +18,12 @@ Header files:
 // Generic array of doubles:
 
 %inline %{
+double *null_array(){
+     return NULL;
+}
+%}
+
+%inline %{
 double *double_array(int size) {
      return (double *) malloc(size*sizeof(double));
   }
@@ -47,6 +53,7 @@ typedef struct {
 	double xmin;
 	double ymin;
 	double zmin;
+    double *data;
 } Vgrid;
 
 extern Vgrid* Vgrid_ctor(int nx, int ny, int nz, double hx, double hy,
@@ -61,9 +68,9 @@ extern void Vgrid_dtor2(Vgrid *thee);
 extern int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag, double *curv);
 extern int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]);
 
-extern void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, int *pvec);
+extern void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, double *pvec);
 
-extern void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, int *pvec);
+extern void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, double *pvec);
 
 extern int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname);
 

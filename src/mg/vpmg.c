@@ -437,6 +437,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                 (bflags[VAPBS_UP] == 1)) zok = 0.5;
             else zok = 0;
         }
+
         atom->partID = xok*yok*zok;     
     }
 
@@ -446,20 +447,20 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
        Points on the boundary depend on the presence of an adjacent
        processor. */
 
-    for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0;
+    for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0.0;
     for (i=0; i<nx; i++) {
-        xok = 0;
+        xok = 0.0;
         x = i*hx + xmin;
-        if ((x < (upperCorner[0]-hx/2)) && (x > (lowerCorner[0]+hx/2))) xok = 1;
+        if ((x < (upperCorner[0]-hx/2)) && (x > (lowerCorner[0]+hx/2))) xok = 1.0;
         else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
-                 (bflags[VAPBS_LEFT] == 0)) xok = 1;
+                 (bflags[VAPBS_LEFT] == 0)) xok = 1.0;
         else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
                  (bflags[VAPBS_LEFT] == 1)) xok = 0.5;
         else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
-                 (bflags[VAPBS_RIGHT] == 0)) xok = 1;
+                 (bflags[VAPBS_RIGHT] == 0)) xok = 1.0;
         else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
                  (bflags[VAPBS_RIGHT] == 1)) xok = 0.5;
-        else if ((x > (upperCorner[0] + hx/2)) || (x < (lowerCorner[0] - hx/2))) xok = 0;
+        else if ((x > (upperCorner[0] + hx/2)) || (x < (lowerCorner[0] - hx/2))) xok = 0.0;
         else if ((x < (upperCorner[0] + hx/2)) || (x > (lowerCorner[0] - hx/2))){
             x0 = VMAX2(x - hx/2, lowerCorner[0]);
             x1 = VMIN2(x + hx/2, upperCorner[0]);
@@ -467,21 +468,21 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
             VASSERT(xok >= 0.0);
             VASSERT(xok <= 1.0);
         }
-        else xok=0;
+        else xok=0.0;
      
         for (j=0; j<ny; j++) {
-            yok = 0;
+            yok = 0.0;
             y = j*hy + ymin;
-            if ((y < (upperCorner[1]-hy/2)) && (y > (lowerCorner[1]+hy/2))) yok = 1;
+            if ((y < (upperCorner[1]-hy/2)) && (y > (lowerCorner[1]+hy/2))) yok = 1.0;
             else if ((VABS(y - lowerCorner[1]) < VPMGSMALL) && 
-                     (bflags[VAPBS_BACK] == 0)) yok = 1;
+                     (bflags[VAPBS_BACK] == 0)) yok = 1.0;
             else if ((VABS(y - lowerCorner[1]) < VPMGSMALL) && 
                      (bflags[VAPBS_BACK] == 1)) yok = 0.5;
             else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
-                     (bflags[VAPBS_FRONT] == 0)) yok = 1;
+                     (bflags[VAPBS_FRONT] == 0)) yok = 1.0;
             else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
                      (bflags[VAPBS_FRONT] == 1)) yok = 0.5;
-            else if ((y > (upperCorner[1] + hy/2)) || (y < (lowerCorner[1] - hy/2))) yok=0;
+            else if ((y > (upperCorner[1] + hy/2)) || (y < (lowerCorner[1] - hy/2))) yok=0.0;
             else if ((y < (upperCorner[1] + hy/2)) || (y > (lowerCorner[1] - hy/2))){
                 y0 = VMAX2(y - hy/2, lowerCorner[1]);
                 y1 = VMIN2(y + hy/2, upperCorner[1]);
@@ -489,22 +490,21 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                 VASSERT(yok >= 0.0);
                 VASSERT(yok <= 1.0);
             }
-            else yok=0;
-
+            else yok=0.0;
 
             for (k=0; k<nz; k++) {
-                zok = 0; 
+                zok = 0.0; 
                 z = k*hzed + zmin;
-                if ((z < (upperCorner[2]-hzed/2)) && (z > (lowerCorner[2]+hzed/2))) zok = 1;
+                if ((z < (upperCorner[2]-hzed/2)) && (z > (lowerCorner[2]+hzed/2))) zok = 1.0;
                 else if ((VABS(z - lowerCorner[2]) < VPMGSMALL) && 
-                         (bflags[VAPBS_DOWN] == 0)) zok = 1;
+                         (bflags[VAPBS_DOWN] == 0)) zok = 1.0;
                 else if ((VABS(z - lowerCorner[2]) < VPMGSMALL) && 
                          (bflags[VAPBS_DOWN] == 1)) zok = 0.5;
                 else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
-                         (bflags[VAPBS_UP] == 0)) zok = 1;
+                         (bflags[VAPBS_UP] == 0)) zok = 1.0;
                 else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
                          (bflags[VAPBS_UP] == 1)) zok = 0.5;
-                else if ((z > (upperCorner[2] + hzed/2)) || (z < (lowerCorner[2] - hzed/2))) zok=0;
+                else if ((z > (upperCorner[2] + hzed/2)) || (z < (lowerCorner[2] - hzed/2))) zok=0.0;
                 else if ((z < (upperCorner[2] + hzed/2)) || (z > (lowerCorner[2] - hzed/2))){
                     z0 = VMAX2(z - hzed/2, lowerCorner[2]);
                     z1 = VMIN2(z + hzed/2, upperCorner[2]);
@@ -512,13 +512,14 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                     VASSERT(zok >= 0.0);
                     VASSERT(zok <= 1.0);
                 }
-                else zok = 0;
-
-                thee->pvec[IJK(i,j,k)] = xok*yok*zok;
+                else zok = 0.0;
+                
+                if (VABS(xok*yok*zok) < VPMGSMALL) thee->pvec[IJK(i,j,k)] = 0.0;
+                else thee->pvec[IJK(i,j,k)] = xok*yok*zok;
                
             }
         }
-    }
+    } 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
