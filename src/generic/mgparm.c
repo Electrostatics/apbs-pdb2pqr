@@ -88,6 +88,9 @@ VPUBLIC int MGparm_ctor2(MGparm *thee) {
 
     if (thee == VNULL) return 0;
 
+    thee->nlev = -1;
+    for (i=0; i<3; i++) thee->dime[i] = -1;
+
     thee->parsed = 0;
 
     thee->setdime = 0;
@@ -151,7 +154,7 @@ VPUBLIC void MGparm_dtor2(MGparm *thee) { ; }
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int MGparm_check(MGparm *thee) { 
 
-    int i;
+    int i, tdime[3], ti, tnlev[3], nlev;
 
     /* Check to see if we were even filled... */
     if (!thee->parsed) {
@@ -160,35 +163,35 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
     /* Check to see that everything was set */
     if (!thee->setdime) {
-        Vnm_print(2, "NOsh: DIME not set!\n");
+        Vnm_print(2, "NOsh:  DIME not set!\n");
         return 0;
     }
     if (!thee->setnlev) {
-        Vnm_print(2, "NOsh: NLEV not set!\n");
+        Vnm_print(2, "NOsh:  NLEV not set!\n");
         return 0;
     }
     if ((!thee->setgrid) && (!thee->setglen)) {
-        Vnm_print(2, "NOsh: Neither GRID nor GLEN set!\n");
+        Vnm_print(2, "NOsh:  Neither GRID nor GLEN set!\n");
         return 0;
     }
     if ((thee->setgrid) && (thee->setglen)) {
-        Vnm_print(2, "NOsh: Both GRID and GLEN set!\n");
+        Vnm_print(2, "NOsh:  Both GRID and GLEN set!\n");
         return 0;
     }
     if (!thee->setgcent) {
-        Vnm_print(2, "NOsh: GCENT not set!\n");
+        Vnm_print(2, "NOsh:  GCENT not set!\n");
         return 0;
     }
     if (!thee->setmolid) {
-        Vnm_print(2, "NOsh: MOL not set!\n");
+        Vnm_print(2, "NOsh:  MOL not set!\n");
         return 0;
     }
     if (!thee->setnonlin) {
-        Vnm_print(2, "NOsh: LPBE or NPBE not set!\n");
+        Vnm_print(2, "NOsh:  LPBE or NPBE not set!\n");
         return 0;
     }
     if (!thee->setbcfl) {
-        Vnm_print(2, "NOsh: BCFL not set!\n");
+        Vnm_print(2, "NOsh:  BCFL not set!\n");
         return 0;
     }
     if (!thee->setnion) {
@@ -233,6 +236,52 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     if (!thee->setcalcforce) thee->calcforce = 0;
     if (!thee->setwritepot) thee->writepot = 0;
     if (!thee->setwriteacc) thee->writeacc = 0;
+
+    /* We're going to perform a sanity check on nlev and dime, but only in the
+     * case where nlev and dime have been set to non-negative values.  This
+     * allows us to ignore phony settings as established temporarily during
+     * automatic focusing. */
+    if ((thee->nlev >= 0) && (thee->dime[0] >= 0) &&
+        (thee->dime[1] >= 0) && (thee->dime[2] >= 0)) {
+	/* Calculate the actual number of grid points and nlev to satisfy the
+	 * formula:  n = c * 2^(l+1) + 1, where n is the number of grid points,
+	 * c is an integer, and l is the number of levels */
+        for (i=0; i<3; i++) {
+            tdime[i] = thee->dime[i];
+            ti = tdime[i] - 1;
+            tnlev[i] = 0;
+            /* Find the maximum number of times this dimension can be divided by
+             * two */
+            while (1) {
+                if (VODD(ti)) break;
+                (tnlev[i])++;
+                ti = (int)ceil(0.5*ti);
+            }
+            (tnlev[i])--;
+            /* We'd like to have at least 4 levels in the multigrid hierarchy.
+	     * This means that the dimension needs to be c*32 + 1, where c is
+	     * an integer. */
+            if (tnlev[i] < 4) {
+                Vnm_print(2, "NOsh:  Bad dime[%d]  = %d (%d nlev)!\n",
+                  i, tdime[i], tnlev[i]);
+                ti = (int)(tdime[i]/32.0);
+                if (ti < 1) ti = 1;
+                tdime[i] = ti*32 + 1;
+                tnlev[i] = 4;
+                Vnm_print(2, "NOsh:  Reset dime[%d] to %d and nlev to 4.\n", 
+                  i, tdime[i]);
+            }
+        }
+	/* The actual number of levels we'll be using is the smallest number of
+         * possible levels in any dimensions */
+        nlev = VMIN2(tnlev[0], tnlev[1]);
+        nlev = VMIN2(nlev, tnlev[2]);
+        /* Set the number of levels and dimensions */
+        Vnm_print(0, "NOsh:  nlev = %d, dime = (%d, %d, %d)\n", nlev, tdime[0],
+          tdime[1], tdime[2]);
+        thee->nlev = nlev;
+        for (i=0; i<3; i++) thee->dime[i] = tdime[i];
+    }
 
     return 1;
 }
