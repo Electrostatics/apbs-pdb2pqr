@@ -112,8 +112,8 @@ VPRIVATE void Vacc_getMolDims(
     *x_max = -VLARGE;
     *y_max = -VLARGE;
     *z_max = -VLARGE;
-    *x_min = -VLARGE;
-    *y_min = -VLARGE;
+    *x_min = VLARGE;
+    *y_min = VLARGE;
     *z_min = VLARGE;
     *r_max = -1.0;
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
@@ -140,8 +140,8 @@ VPRIVATE int Vacc_setupGrid(Vacc *thee) {
     double xlen, ylen, zlen;
 
     /* Get molecule dimensions */
-    Vacc_getMolDims(thee, &x_max, &x_min, &y_max, &y_min, &z_max, 
-            &z_min, &r_max);
+    Vacc_getMolDims(thee, &x_min, &x_max, &y_min, &y_max, &z_min, 
+            &z_max, &r_max);
  
     /* Set up grid spacings */
     xlen = x_max-x_min + 2.0*VACC_INFLATE*(r_max+thee->max_radius);
