@@ -66,7 +66,7 @@
  */
 #define MAXFOCUS 5
 
-/** @brief   Desired number of levels in a multigrid calculations
+/** @brief   Minimum number of levels in a multigrid calculations
  *  @ingroup Vhal
  */
 #define VMGNLEV 4

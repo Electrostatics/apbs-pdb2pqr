@@ -173,89 +173,146 @@ c**************************************************************************
       implicit none
 
       integer          ipc(*), rowind(*), colptr(*),
-     1                 flag, nx, ny, nz
+     1                 flag, nx, ny, nz, nxm2, nym2, nzm2, ii,jj,kk,ll,
+     2                 i, j, k, l, inonz, iirow, nn, nrow, ncol, nonz,
+     3                 irow, n
       double precision oE(nx,ny,nz), oN(nx,ny,nz), uC(nx,ny,nz),
      1                 cc(nx,ny,nz), oC(nx,ny,nz), rpc(*), values(*)
-      integer          i, j, k, l, inonz, irow, nn, nrow, ncol, nonz
+      logical          doit
+    
 
 
 c*    Get some column, row, and nonzero information
-      nn   = nx*ny*nz
+      n = nx*ny*nz
+      nxm2 = nx - 2
+      nym2 = ny - 2
+      nzm2 = nz - 2
+      nn   = nxm2*nym2*nzm2
       ncol = nn
       nrow = nn
-      nonz = 7*nn - 2*nx*ny - 2*nx - 2
+      nonz = 7*nn - 2*nxm2*nym2 - 2*nxm2 - 2
 
 c*    Intialize some pointers
       inonz = 1
 
-      do 10 k=1, nz
-        do 11 j=1, ny
-          do 12 i=1, nx
+c*    Run over the dimensions of the matrix (non-zero only in the interior 
+c*    of the mesh
+      do 10 k=2, nz-1
+c*      Offset the index to the output grid index
+        kk = k - 1
+        do 11 j=2, ny-1
+c*        Offset the index to the output grid index
+          jj = j - 1
+          do 12 i=2, nx-1
+c*          Offset the index to the output grid index
+            ii = i - 1
 
-c*        Get the (i,j,k) row number in natural ordering
-          l = (k-1)*nx*ny + (j-1)*nx + (i-1) + 1
+c*          Get the output (i,j,k) row number in natural ordering
+            ll = (kk-1)*nxm2*nym2 + (jj-1)*nxm2 + (ii-1) + 1
+             l = (k -1)*nx  *ny   + (j -1)*nx   + (i -1) + 1 
 
-c*        Store where this column starts
-          colptr(l) = inonz
+c*          Store where this column starts
+            colptr(ll) = inonz
 
-c*        SUB-DIAGONAL 3
-          irow = l - nx * ny
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -uC(i,j,k)
-            rowind(inonz) = irow
+c*          SUB-DIAGONAL 3
+            iirow = ll - nxm2 * nym2
+            irow = l - nx * ny
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -uC(i,j,k-1)
+c*            if (uC(i,j,k-1).eq.0) then
+c*                write (*,*) 'SUB3 uC(', i, ' ', j, ' ', k-1, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif
+
+c*          SUB-DIAGONAL 2 
+            iirow = ll - nxm2
+            irow = l - nx
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -oN(i,j-1,k)
+c*            if (oN(i,j-1,k).eq.0) then
+c*                write (*,*) 'SUB2 oN(', i, ' ', j-1, ' ', k, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif 
+
+c*          SUB-DIAGONAL 1 
+            iirow = ll - 1
+            irow = l - 1
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -oE(i-1,j,k)
+c*            if (oE(i-1,j,k).eq.0) then
+c*                write (*,*) 'SUB1 oE(', i-1, ' ', j, ' ', k, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif 
+
+c*          DIAGONAL 
+            iirow = ll
+            irow = l
+c*          if (oC(i,j,k).eq.0) then
+c*              write (*,*) 'oC(', i, ' ', j, ' ', k, ') ZERO!'
+c*          endif
+            if (flag.eq.0) then
+              values(inonz) = oC(i,j,k)
+            elseif (flag.eq.1) then
+              values(inonz) = oC(i,j,k) + cc(i,j,k)
+            else
+              stop 'PMGF1'
+            endif
+            rowind(inonz) = iirow
             inonz = inonz + 1
-          endif
+  
+c*          SUPER-DIAGONAL 1
+            iirow = ll + 1
+            irow = l + 1
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -oE(i,j,k)
+c*            if (oE(i,j,k).eq.0) then
+c*                write (*,*) 'SUP1 oE(', i, ' ', j, ' ', k, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif
 
-c*        SUB-DIAGONAL 2 
-          irow = l - nx
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -oN(i,j,k)
-            rowind(inonz) = irow
-            inonz = inonz + 1
-          endif
-
-c*        SUB-DIAGONAL 1 
-          irow = l - 1
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -oE(i,j,k)
-            rowind(inonz) = irow
-            inonz = inonz + 1
-          endif
-
-c*        DIAGONAL 
-          if (flag.eq.0) then
-            values(inonz) = oC(i,j,k)
-          elseif (flag.eq.1) then
-            values(inonz) = oC(i,j,k) + cc(i,j,k)
-          else
-            stop 'PMGF1'
-          endif
-          rowind(inonz) = l
-          inonz = inonz + 1
-
-c*        SUPER-DIAGONAL 1
-          irow = l + 1
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -oE(i,j,k)
-            rowind(inonz) = irow
-            inonz = inonz + 1
-          endif
-
-c*        SUPER-DIAGONAL 2
-          irow = l + nx
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -oN(i,j,k)
-            rowind(inonz) = irow
-            inonz = inonz + 1
-          endif
-
-c*        SUPER-DIAGONAL 3
-          irow = l + nx*ny
-          if ((irow.ge.1).and.(irow.le.nn)) then
-            values(inonz) = -uC(i,j,k)
-            rowind(inonz) = irow
-            inonz = inonz + 1
-          endif
+c*          SUPER-DIAGONAL 2
+            iirow = ll + nxm2
+            irow = l + nx
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -oN(i,j,k)
+c*            if (oN(i,j,k).eq.0) then
+c*                write (*,*) 'SUP2 oN(', i, ' ', j, ' ', k, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif 
+ 
+c*          SUPER-DIAGONAL 3
+            iirow = ll + nxm2*nym2
+            irow = l + nx*ny
+            doit = (iirow.ge.1).and.(iirow.le.nn)
+            doit = doit.and.(irow.ge.1).and.(irow.le.n)
+            if (doit) then
+              values(inonz) = -uC(i,j,k)
+c*            if (uC(i,j,k).eq.0) then
+c*                write (*,*) 'SUP3 uC(', i, ' ', j, ' ', k, ') ZERO!'
+c*            endif
+              rowind(inonz) = iirow
+              inonz = inonz + 1
+            endif
 
  12       continue
  11     continue
@@ -268,21 +325,6 @@ c*        SUPER-DIAGONAL 3
         write (*,*) 'BCOLCOMP4:  ERROR -- NONZ = ', nonz
         stop 'PMGF2'
       endif 
-
-c      do 13 k=1, nz
-c        do 14 j=1, ny
-c          do 15 i=1, nx
-c
-c          l = (k-1)*nx*ny + (j-1)*nx + (i-1) + 1
-c 
-c          if (values(l).eq.0) then
-c              write (*,*) i, ', ', j, ', ', k, ': ZERO'
-c          endif
-c
-c 15       continue
-c 14     continue
-c 13   continue
-
 
       return 
       end
