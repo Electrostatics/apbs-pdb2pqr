@@ -107,8 +107,11 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
 
 
     /* Default parameters */
-    thee->errtol = 1.0e-9;
-    thee->itmax = 100;
+    thee->errtol = 1.0e-6;   /* Here are a few comments.  Mike had this set to
+                              * 1e-9; convential wisdom sets this at 1e-6 for
+                              * the PBE; Ray Luo sets this at 1e-3 for his
+                              * accelerated PBE (for dynamics, etc.) */
+    thee->itmax = 200;
     thee->istop = 1;
     thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
                               * 2 (for debugging NPBE), higher values give 
