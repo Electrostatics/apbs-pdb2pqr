@@ -74,6 +74,9 @@ typedef struct Vpmgp {
     int nrwk;                    /* Real work storage */
     int niwk;                    /* Integer work storage */
     int narr;                    /* Array work storage */
+    int ipkey;                   /* Toggles nonlinearity (set by nonlin)
+                                  *   0 => Linearized PBE
+                                  *   1 => Nonlinear PBE */
 
     /* ********** PARAMETERS WITH DEFAULT VALUES ********** */
     double xcent, ycent, zcent;  /* Grid center [0, 0, 0]  */
@@ -91,7 +94,7 @@ typedef struct Vpmgp {
                                   *   1 => some
                                   *   2 => lots
                                   *   3 => more */
-    int ipkey;                   /* Problem-specific parameter [default = 0] 
+    int bcfl;                    /* Boundary condition method [default = 0]
                                   *   0 => boundary condition approximated by
                                   *        single Debye-Huckel sphere for
                                   *        entire molecule

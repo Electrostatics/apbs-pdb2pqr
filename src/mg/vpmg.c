@@ -149,14 +149,14 @@ VPUBLIC double myGreens(Vpbe *pbe, double x[], int flag) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp) {
+VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 
     Vpmg *thee = VNULL;
 
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
     VASSERT( thee != VNULL);
-    VASSERT(Vpmg_ctor2(thee, pmgp));
+    VASSERT(Vpmg_ctor2(thee, pmgp, pbe));
 
     return thee;
 }
@@ -170,13 +170,20 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp) {
+VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
     int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
 
     /* Get the parameters */    
     VASSERT(pmgp != VNULL); 
+    VASSERT(pbe != VNULL); 
     thee->pmgp = pmgp;
+    thee->pbe = pbe;
+
+    if (thee->pmgp->nonlin != 0) {
+        Vnm_print(2, "Vpmg_ctor2: Sorry, nonlinear PBE support not available yet.\n");
+        VASSERT(0);
+    }
 
     /* Set up the memory */
     thee->vmem = Vmem_ctor("APBS:VPMG");
@@ -317,10 +324,11 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_fillco(Vpmg *thee, Vpbe *pbe) {
+VPUBLIC void Vpmg_fillco(Vpmg *thee) {
 
     Vacc *acc;
     Valist *alist;
+    Vpbe *pbe;
     Vatom *atom;
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
@@ -330,7 +338,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, Vpbe *pbe) {
     int acclo, accmid, acchi;
 
     /* Get PBE info */
-    VASSERT(pbe != VNULL);
+    pbe = thee->pbe;
     acc = pbe->acc;
     alist = pbe->alist;
     irad = Vpbe_getIonRadius(pbe);
@@ -495,10 +503,10 @@ off the mesh (ignoring)!\n",
             position[1] = thee->yf[j];
             position[2] = thee->zf[k];
             thee->gxcf[IJKx(j,k,0)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             position[0] = thee->xf[nx-1];
             thee->gxcf[IJKx(j,k,1)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             thee->gxcf[IJKx(j,k,2)] = 0.0;
             thee->gxcf[IJKx(j,k,3)] = 0.0;
         }
@@ -511,10 +519,10 @@ off the mesh (ignoring)!\n",
             position[1] = thee->yf[0];
             position[2] = thee->zf[k];
             thee->gycf[IJKy(i,k,0)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             position[1] = thee->yf[ny-1];
             thee->gycf[IJKy(i,k,1)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             thee->gycf[IJKy(i,k,2)] = 0.0;
             thee->gycf[IJKy(i,k,3)] = 0.0;
         }
@@ -527,10 +535,10 @@ off the mesh (ignoring)!\n",
             position[1] = thee->yf[j];
             position[2] = thee->zf[0];
             thee->gzcf[IJKz(i,j,0)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             position[2] = thee->zf[nz-1];
             thee->gzcf[IJKz(i,j,1)] = myGreens(pbe, position, 
-              thee->pmgp->ipkey);
+              thee->pmgp->bcfl);
             thee->gzcf[IJKz(i,j,2)] = 0.0;
             thee->gzcf[IJKz(i,j,3)] = 0.0;
         }
@@ -552,15 +560,16 @@ off the mesh (ignoring)!\n",
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, Vpbe *pbe) {
+VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
     double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hz, ifloat, jfloat;
     double charge, kfloat, dx, dy, dz, energy, uval, *position;
     Valist *alist;
     Vatom *atom; 
+    Vpbe *pbe;
 
-    VASSERT(pbe != VNULL);
+    pbe = thee->pbe;
     alist = pbe->alist;
     VASSERT(alist != VNULL);
 

@@ -68,6 +68,8 @@ typedef struct Vpmg {
 
   Vmem *vmem;                    /* Memory management object for this class */
   Vpmgp *pmgp;                   /* Parameters */
+  Vpbe *pbe;                     /* Information about the PBE system */
+
   int *iparm;                    /* Passing int parameters to FORTRAN */
   double *rparm;                 /* Passing real parameters to FORTRAN */
   int *iwork;                    /* Work array */
@@ -96,13 +98,13 @@ typedef struct Vpmg {
 // Class Vpmg: Non-Inlineable methods (vpmg.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpmg* Vpmg_ctor(Vpmgp *parms);
-VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms);
+VEXTERNC Vpmg* Vpmg_ctor(Vpmgp *parms, Vpbe *pbe);
+VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
 VEXTERNC void Vpmg_dtor(Vpmg **thee);
 VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 
-VEXTERNC void Vpmg_fillco(Vpmg *thee, Vpbe *pbe);
+VEXTERNC void Vpmg_fillco(Vpmg *thee);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
-VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee, Vpbe *pbe);
+VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee);
 
 #endif    /* ifndef _VPMG_H_ */

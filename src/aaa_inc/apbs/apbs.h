@@ -54,5 +54,7 @@
 #include "apbs/vpbe.h"
 #include "apbs/vunit.h"
 #include "apbs/vgreen.h"
+#include "apbs/vpmg.h"
+#include "apbs/vpmgp.h"
 
 #endif /* _APBS_H_ */
