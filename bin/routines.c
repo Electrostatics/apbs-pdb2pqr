@@ -173,7 +173,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielXMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "  Volume integral = %3.2e A^3\n", 
+            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n", 
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -206,7 +206,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielYMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "  Volume integral = %3.2e A^3\n",
+            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -241,7 +241,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielZMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_print(2, "  Volume integral = %3.2e A^3\n",
+            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -320,7 +320,7 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_print(2, "  Volume integral = %3.2e A^3\n", sum);
+            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n", sum);
 
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -392,7 +392,7 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_print(2, "  Charge map integral = %3.2e e\n", sum);
+            Vnm_tprint(2, "  Charge map integral = %3.2e e\n", sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;
@@ -492,69 +492,69 @@ solvent forces will be calculated\n");
     for (i=0; i<pbeparm->numwrite; i++) {
         switch (pbeparm->writetype[i]) {
             case VDT_CHARGE:
-                Vnm_print(1, "  Charge distribution to be written to ");
+                Vnm_tprint(1, "  Charge distribution to be written to ");
                 break;
             case VDT_POT:
-                Vnm_print(1, "  Potential to be written to ");
+                Vnm_tprint(1, "  Potential to be written to ");
                 break;
             case VDT_SMOL:
-                Vnm_print(1, "  Molecular solvent accessibility \
+                Vnm_tprint(1, "  Molecular solvent accessibility \
 to be written to ");
                 break;
             case VDT_SSPL:
-                Vnm_print(1, "  Spline-based solvent accessibility \
+                Vnm_tprint(1, "  Spline-based solvent accessibility \
 to be written to ");
                 break;
             case VDT_VDW:
-                Vnm_print(1, "  van der Waals solvent accessibility \
+                Vnm_tprint(1, "  van der Waals solvent accessibility \
 to be written to ");
                 break;
             case VDT_IVDW:
-                Vnm_print(1, "  Ion accessibility to be written to ");
+                Vnm_tprint(1, "  Ion accessibility to be written to ");
                 break;
             case VDT_LAP:
-                Vnm_print(1, "  Potential Laplacian to be written to ");
+                Vnm_tprint(1, "  Potential Laplacian to be written to ");
                 break;
             case VDT_EDENS:
-                Vnm_print(1, "  Energy density to be written to ");
+                Vnm_tprint(1, "  Energy density to be written to ");
                 break;
             case VDT_NDENS:
-                Vnm_print(1, "  Ion number density to be written to ");
+                Vnm_tprint(1, "  Ion number density to be written to ");
                 break;
             case VDT_QDENS:
-                Vnm_print(1, "  Ion charge density to be written to ");
+                Vnm_tprint(1, "  Ion charge density to be written to ");
                 break;
             case VDT_DIELX:
-                Vnm_print(1, "  X-shifted dielectric map to be written \
+                Vnm_tprint(1, "  X-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_DIELY:
-                Vnm_print(1, "  Y-shifted dielectric map to be written \
+                Vnm_tprint(1, "  Y-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_DIELZ:
-                Vnm_print(1, "  Z-shifted dielectric map to be written \
+                Vnm_tprint(1, "  Z-shifted dielectric map to be written \
 to ");
                 break;
             case VDT_KAPPA:
-                Vnm_print(1, "  Kappa map to be written to ");
+                Vnm_tprint(1, "  Kappa map to be written to ");
                 break;
             default: 
-                Vnm_print(2, "  Invalid data type for writing!\n");
+                Vnm_tprint(2, "  Invalid data type for writing!\n");
                 break;
         }
         switch (pbeparm->writefmt[i]) {
             case VDF_DX:
-                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "dx");
+                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "dx");
                 break;
             case VDF_UHBD:
-                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "grd");
+                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "grd");
                 break;
             case VDF_AVS:
-                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
+                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
                 break;
             default: 
-                Vnm_print(2, "  Invalid format for writing!\n");
+                Vnm_tprint(2, "  Invalid format for writing!\n");
                 break;
         }
  
@@ -785,9 +785,9 @@ VPUBLIC int setPartMG(MGparm *mgparm, Vpmg *pmg) {
             partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
               + 0.5*mgparm->partDisjLength[j];
         }
-        Vnm_print(0, "Disj part lower corner = (%g, %g, %g)\n",
+        Vnm_tprint(0, "Disj part lower corner = (%g, %g, %g)\n",
           partMin[0], partMin[1], partMin[2]);
-        Vnm_print(0, "Disj part upper corner = (%g, %g, %g)\n",
+        Vnm_tprint(0, "Disj part upper corner = (%g, %g, %g)\n",
           partMax[0], partMax[1], partMax[2]);
     } else {
         for (j=0; j<3; j++) {
@@ -1079,10 +1079,10 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     
     if (pbeparm->writemat == 1) {
         if (snprintf(outpath, 72, "%s.%s", writematstem, "mat") == -1) {
-            Vnm_print(2, "  Matrix output path truncated to: %s\n", 
+            Vnm_tprint(2, "  Matrix output path truncated to: %s\n", 
               outpath);
-            Vnm_print(2, "  72-character limit exceeded!\n");
-            Vnm_print(2, "  Skipping matrix I/O!\n");
+            Vnm_tprint(2, "  72-character limit exceeded!\n");
+            Vnm_tprint(2, "  Skipping matrix I/O!\n");
             return 1;
         }
         mxtype[0] = 'R';
@@ -1147,7 +1147,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_CHARGE:
  
-                Vnm_print(1, "  Writing charge distribution to ");
+                Vnm_tprint(1, "  Writing charge distribution to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1160,7 +1160,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_POT:
  
-                Vnm_print(1, "  Writing potential to ");
+                Vnm_tprint(1, "  Writing potential to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1173,7 +1173,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_SMOL:
 
-                Vnm_print(1, "  Writing molecular accessibility to ");
+                Vnm_tprint(1, "  Writing molecular accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1188,7 +1188,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_SSPL:
 
-                Vnm_print(1, "  Writing spline-based accessibility to ");
+                Vnm_tprint(1, "  Writing spline-based accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1203,7 +1203,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_VDW:
 
-                Vnm_print(1, "  Writing van der Waals accessibility to ");
+                Vnm_tprint(1, "  Writing van der Waals accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1216,7 +1216,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_IVDW:
 
-                Vnm_print(1, "  Writing ion accessibility to ");
+                Vnm_tprint(1, "  Writing ion accessibility to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1232,7 +1232,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_LAP:
 
-                Vnm_print(1, "  Writing potential Laplacian to ");
+                Vnm_tprint(1, "  Writing potential Laplacian to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1246,7 +1246,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_EDENS:
 
-                Vnm_print(1, "  Writing energy density to ");
+                Vnm_tprint(1, "  Writing energy density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1260,7 +1260,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_NDENS:
 
-                Vnm_print(1, "  Writing number density to ");
+                Vnm_tprint(1, "  Writing number density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1274,7 +1274,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_QDENS:
 
-                Vnm_print(1, "  Writing charge density to ");
+                Vnm_tprint(1, "  Writing charge density to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1288,7 +1288,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELX:
 
-                Vnm_print(1, "  Writing x-shifted dielectric map to ");
+                Vnm_tprint(1, "  Writing x-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent + 0.5*hx;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1302,7 +1302,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELY:
 
-                Vnm_print(1, "  Writing y-shifted dielectric map to ");
+                Vnm_tprint(1, "  Writing y-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent + 0.5*hy;
                 zcent = pmg->pmgp->zcent;
@@ -1316,7 +1316,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_DIELZ:
 
-                Vnm_print(1, "  Writing z-shifted dielectric map to ");
+                Vnm_tprint(1, "  Writing z-shifted dielectric map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent + 0.5*hzed;
@@ -1330,7 +1330,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDT_KAPPA:
 
-                Vnm_print(1, "  Writing kappa map to ");
+                Vnm_tprint(1, "  Writing kappa map to ");
                 xcent = pmg->pmgp->xcent;
                 ycent = pmg->pmgp->ycent;
                 zcent = pmg->pmgp->zcent;
@@ -1344,7 +1344,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             default:
 
-                Vnm_print(2, "Invalid data type for writing!\n");
+                Vnm_tprint(2, "Invalid data type for writing!\n");
                 return 0;
                 break;
         }
@@ -1360,7 +1360,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDF_DX:
                 sprintf(outpath, "%s.%s", writestem, "dx");
-                Vnm_print(1, "%s\n", outpath);
+                Vnm_tprint(1, "%s\n", outpath);
                 grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
                   pmg->rwork);
                 Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, title,
@@ -1370,14 +1370,14 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
             case VDF_AVS:
                 sprintf(outpath, "%s.%s", writestem, "ucd");
-                Vnm_print(1, "%s\n", outpath);
-                Vnm_print(2, "Sorry, AVS format isn't supported for \
+                Vnm_tprint(1, "%s\n", outpath);
+                Vnm_tprint(2, "Sorry, AVS format isn't supported for \
 uniform meshes yet!\n");
                 break;
 
             case VDF_UHBD:
                 sprintf(outpath, "%s.%s", writestem, "grd");
-                Vnm_print(1, "%s\n", outpath);
+                Vnm_tprint(1, "%s\n", outpath);
                 grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
                   pmg->rwork);
                 Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, title,
@@ -1386,7 +1386,7 @@ uniform meshes yet!\n");
                 break;
 
             default:
-                Vnm_print(2, "Bogus data format (%d)!\n", 
+                Vnm_tprint(2, "Bogus data format (%d)!\n", 
                   pbeparm->writefmt[i]);
                 break;
         }
@@ -1416,16 +1416,16 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     Vnm_tprint( 1, "print energy %d ", nosh->printcalc[i][0]);
     for (j=1; j<nosh->printnarg[i]; j++) {
         if (nosh->printop[i][j-1] == 0)
-          Vnm_print(1, "+ ");
+          Vnm_tprint(1, "+ ");
         else if (nosh->printop[i][j-1] == 1)
-          Vnm_print(1, "- ");
+          Vnm_tprint(1, "- ");
         else {
             Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
-        Vnm_print(1, "%d ", nosh->printcalc[i][j]);
+        Vnm_tprint(1, "%d ", nosh->printcalc[i][j]);
     }
-    Vnm_print(1, "end\n");
+    Vnm_tprint(1, "end\n");
     calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
     if (nosh->calc[calcid].pbeparm->calcenergy != 0) {
         ltenergy = Vunit_kb * (1e-3) * Vunit_Na *
@@ -1476,16 +1476,16 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
     Vnm_tprint( 1, "print force %d ", nosh->printcalc[i][0]);
     for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
         if (nosh->printop[i][ipr-1] == 0)
-          Vnm_print(1, "+ ");
+          Vnm_tprint(1, "+ ");
         else if (nosh->printop[i][ipr-1] == 1)
-          Vnm_print(1, "- ");
+          Vnm_tprint(1, "- ");
         else {
             Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
-        Vnm_print(1, "%d ", nosh->printcalc[i][ipr]);
+        Vnm_tprint(1, "%d ", nosh->printcalc[i][ipr]);
     }
-    Vnm_print(1, "end\n");
+    Vnm_tprint(1, "end\n");
 
     /* First, go through and make sure we did the same type of force
      * evaluation in each of the requested calculations */
