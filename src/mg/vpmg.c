@@ -738,7 +738,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         position[1] = j*hy + ymin;
                         position[2] = k*hzed + zmin;
                         vec[IJK(i,j,k)] = 0.0;
-                        if (Vacc_molAcc(acc, position, pbe->maxIonRadius)) {
+                        if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
                             for (l=0; l<pbe->numIon; l++) {
                               vec[IJK(i,j,k)] += (pbe->ionConc[l]
                                 * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)], 
@@ -760,7 +760,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         position[1] = j*hy + ymin;
                         position[2] = k*hzed + zmin;
                         vec[IJK(i,j,k)] = 0.0;
-                        if (Vacc_molAcc(acc, position, pbe->maxIonRadius)) {
+                        if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
                             for (l=0; l<pbe->numIon; l++) {
                               vec[IJK(i,j,k)] += (pbe->ionConc[l] 
                                 * pbe->ionQ[l]

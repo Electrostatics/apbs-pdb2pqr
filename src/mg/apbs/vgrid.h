@@ -268,7 +268,7 @@ VEXTERNC double Vgrid_integrate(Vgrid *thee);
  * @param  thee  Vgrid object
  * @returns  \f$L_1\f$ norm of data 
  * @brief  Get the \f$L_1\f$ norm of the data.  This returns the integral:
- *   \f[ \| u \|_{L_1} = \left( \int_\Omega | u(x) | dx \right)^{1/2} \f] 
+ *   \f[ \| u \|_{L_1} = \int_\Omega | u(x) | dx  \f] 
  */
 VEXTERNC double Vgrid_normL1(Vgrid *thee);
 

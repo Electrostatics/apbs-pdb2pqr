@@ -5,6 +5,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
   CHANGES THAT AFFECT USERS:
   * Finished fe-manual mode for ELEC calculations -- this is the adaptive
     finite element solver
+  * Fixed bug when writing out number/charge density:  unrealistic densities
+    reported inside iVdW surface.
   * Added documetnation for fe-manual
   * Fixed bug in VMD read_dx utility
   * Added following aliases for some of the more obscure parameters in the
