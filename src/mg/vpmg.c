@@ -954,7 +954,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
 
     VASSERT(thee != VNULL);
     thee->surfMeth = surfMeth;
-    thee->splineWin = surfMeth;
+    thee->splineWin = splineWin;
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -1265,7 +1265,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
                    * 59--75. */
                   case 2:
                     /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
+                    if (thee->a1cf[IJK(i,j,k)] < 0.0) {
                         position[0] = thee->xf[i] + 0.5*hx;
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k];
@@ -1273,7 +1273,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
                         thee->a1cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
                     }
                     /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
+                    if (thee->a2cf[IJK(i,j,k)] < 0.0) {
                         position[0] = thee->xf[i];
                         position[1] = thee->yf[j] + 0.5*hy;
                         position[2] = thee->zf[k];
@@ -1281,7 +1281,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
                         thee->a2cf[IJK(i,j,k)] = epsp + (epsw - epsp)*chi;
                     }
                     /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
+                    if (thee->a3cf[IJK(i,j,k)] < 0.0) {
                         position[0] = thee->xf[i];
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k] + 0.5*hzed;
@@ -1356,6 +1356,10 @@ VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma,
     Vpmg_ibForce(thee, dbF, atomID); 
     Vpmg_qfForce(thee, ibF, atomID); 
 
+    force[0] = qfF[0] + dbF[0] + npF[0] + ibF[0];
+    force[1] = qfF[1] + dbF[1] + npF[1] + ibF[1];
+    force[2] = qfF[2] + dbF[2] + npF[2] + ibF[2];
+
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1391,6 +1395,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     double *apos, position[3], arad, irad, zkappa2, hx, hy, hzed;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2;
     double rtot, dx, dx2, dy, dy2, dz, dz2, gpos[3], tgrad[3], fmag;
+    double izmagic;
     int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
    
     VASSERT(thee != VNULL);
@@ -1412,6 +1417,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
     alist = pbe->alist;
     irad = Vpbe_getIonRadius(pbe);
     zkappa2 = Vpbe_getZkappa2(pbe);
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
 
     /* Mesh info */
     nx = thee->pmgp->nx;
@@ -1494,9 +1500,9 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
             } /* j loop */
         } /* i loop */
     } 
-    force[0] = force[0] * zkappa2 * hx * hy * hzed/(8.0*VPI);
-    force[1] = force[1] * zkappa2 * hx * hy * hzed/(8.0*VPI);
-    force[2] = force[2] * zkappa2 * hx * hy * hzed/(8.0*VPI);
+    force[0] = force[0] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
+    force[1] = force[1] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
+    force[2] = force[2] * 0.5 * zkappa2 * hx * hy * hzed * izmagic;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1531,7 +1537,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     Vpbe *pbe;
     Vatom *atom;
 
-    double *apos, position[3], arad, srad, hx, hy, hzed;
+    double *apos, position[3], arad, hx, hy, hzed, izmagic;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
     double rtot, dx, dx2, dy, dy2, dz, gpos[3], tgrad[3], dbFmag, epsw;
     double npFmag, *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
@@ -1558,9 +1564,9 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     /* Get PBE info */
     pbe = thee->pbe;
     acc = pbe->acc;
-    srad = Vpbe_getIonRadius(pbe);
     epsp = Vpbe_getSoluteDiel(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
 
     /* Mesh info */
     nx = thee->pmgp->nx;
@@ -1603,23 +1609,17 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
         position[2] = apos[2] - zmin;
 
         /* Integrate over points within this atom's (inflated) radius */
-        rtot = (srad + arad + thee->splineWin);
+        rtot = (arad + thee->splineWin);
         rtot2 = VSQR(rtot);
-        dx = rtot + 0.5*hx;
-        imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
-        imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+        dx = rtot/hx;
+        imin = VMAX2(1,(int)floor((position[0]-rtot)/hx));
+        imax = VMIN2(nx-2,(int)ceil((position[0]+rtot)/hx));
+        jmin = VMAX2(1,(int)floor((position[1]-rtot)/hy));
+        jmax = VMIN2(ny-2,(int)ceil((position[1]+rtot)/hy));
+        kmin = VMAX2(1,(int)floor((position[2]-rtot)/hzed));
+        kmax = VMIN2(nz-2,(int)ceil((position[2]+rtot)/hzed));
         for (i=imin; i<=imax; i++) {
-            dx2 = VSQR(position[0] - hx*i);
-            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
-            else dy = 0.5*hy;
-            jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
-            jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
             for (j=jmin; j<=jmax; j++) {
-                dy2 = VSQR(position[1] - hy*j);
-                if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
-                else dz = 0.5*hzed;
-                kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
-                kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
                 for (k=kmin; k<=kmax; k++) {
                     /* i,j,k */
                     gpos[0] = (i+0.5)*hx + xmin;
@@ -1714,13 +1714,13 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
                 } /* k loop */
             } /* j loop */
         } /* i loop */
-  
-        dbForce[0] = -dbForce[0] * hx * hy * hzed * (epsw - epsp)/(8.0*VPI);
-        dbForce[1] = -dbForce[1] * hx * hy * hzed * (epsw - epsp)/(8.0*VPI);
-        dbForce[2] = -dbForce[2] * hx * hy * hzed * (epsw - epsp)/(8.0*VPI);
-        npForce[0] = -npForce[0] * hx * hy * hzed * gamma;
-        npForce[1] = -npForce[1] * hx * hy * hzed * gamma;
-        npForce[2] = -npForce[2] * hx * hy * hzed * gamma;
+        
+        dbForce[0] = -dbForce[0]*hx*hy*hzed*(epsw-epsp)*0.5*izmagic;
+        dbForce[1] = -dbForce[1]*hx*hy*hzed*(epsw-epsp)*0.5*izmagic;
+        dbForce[2] = -dbForce[2]*hx*hy*hzed*(epsw-epsp)*0.5*izmagic;
+        npForce[0] = -npForce[0]*hx*hy*hzed*gamma;
+        npForce[1] = -npForce[1]*hx*hy*hzed*gamma;
+        npForce[2] = -npForce[2]*hx*hy*hzed*gamma;
     }
 }
 
@@ -1815,35 +1815,50 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
         dx = ifloat - (double)(ilo);
         dy = jfloat - (double)(jlo);
         dz = kfloat - (double)(klo);
+
+        Vnm_print(1, "Vpmg_qfForce: (DEBUG) u ~ %g\n", 
+          dx    *dy    *dz    *u[IJK(ihi,jhi,khi)]
+         +dx    *dy    *(1-dz)*u[IJK(ihi,jhi,klo)]
+         +dx    *(1-dy)*dz    *u[IJK(ihi,jlo,khi)]
+         +dx    *(1-dy)*(1-dz)*u[IJK(ihi,jlo,klo)]
+         +(1-dx)*dy    *dz    *u[IJK(ilo,jhi,khi)]
+         +(1-dx)*dy    *(1-dz)*u[IJK(ilo,jhi,klo)]
+         +(1-dx)*(1-dy)*dz    *u[IJK(ilo,jlo,khi)]
+         +(1-dx)*(1-dy)*(1-dz)*u[IJK(ilo,jlo,klo)]);
+
+
         if (dx > VPMGSMALL) {
-            force[0] = -charge*(dy*dz*u[IJK(ihi,jhi,khi)]
-                      + dy*(1-dz)*u[IJK(ihi,jhi,klo)]
-                      + (1-dy)*dz*u[IJK(ihi,jlo,khi)]
-                      + (1-dy)*(1-dz)*u[IJK(ihi,jlo,klo)]
-                      - dy*dz*u[IJK(ilo,jhi,khi)]
-                      - dy*(1-dz)*u[IJK(ilo,jhi,klo)]
-                      - (1-dy)*dz*u[IJK(ilo,jlo,khi)]
-                      - (1-dy)*(1-dz)*u[IJK(ilo,jlo,klo)])/hx;
+            force[0] = 
+              -charge*(dy    *dz    *u[IJK(ihi,jhi,khi)]
+                     + dy    *(1-dz)*u[IJK(ihi,jhi,klo)]
+                     + (1-dy)*dz    *u[IJK(ihi,jlo,khi)]
+                     + (1-dy)*(1-dz)*u[IJK(ihi,jlo,klo)]
+                     - dy    *dz    *u[IJK(ilo,jhi,khi)]
+                     - dy    *(1-dz)*u[IJK(ilo,jhi,klo)]
+                     - (1-dy)*dz    *u[IJK(ilo,jlo,khi)]
+                     - (1-dy)*(1-dz)*u[IJK(ilo,jlo,klo)])/hx;
         } else force[0] = 0;
         if (dy > VPMGSMALL) {
-            force[1] = -charge*(dx*dz*u[IJK(ihi,jhi,khi)]
-                      + dx*(1-dz)*u[IJK(ihi,jhi,klo)]
-                      - dx*dz*u[IJK(ihi,jlo,khi)]
-                      - dx*(1-dz)*u[IJK(ihi,jlo,klo)]
-                      + (1-dx)*dz*u[IJK(ilo,jhi,khi)]
-                      + (1-dx)*(1-dz)*u[IJK(ilo,jhi,klo)]
-                      - (1-dx)*dz*u[IJK(ilo,jlo,khi)]
-                      - (1-dx)*(1-dz)*u[IJK(ilo,jlo,klo)])/hy;
+            force[1] = 
+              -charge*(dx    *dz    *u[IJK(ihi,jhi,khi)]
+                     + dx    *(1-dz)*u[IJK(ihi,jhi,klo)]
+                     - dx    *dz    *u[IJK(ihi,jlo,khi)]
+                     - dx    *(1-dz)*u[IJK(ihi,jlo,klo)]
+                     + (1-dx)*dz    *u[IJK(ilo,jhi,khi)]
+                     + (1-dx)*(1-dz)*u[IJK(ilo,jhi,klo)]
+                     - (1-dx)*dz    *u[IJK(ilo,jlo,khi)]
+                     - (1-dx)*(1-dz)*u[IJK(ilo,jlo,klo)])/hy;
         } else force[1] = 0;
         if (dz > VPMGSMALL) {
-            force[2] = -charge*(dy*dx*u[IJK(ihi,jhi,khi)]
-                      - dy*dx*u[IJK(ihi,jhi,klo)]
-                      + (1-dy)*dx*u[IJK(ihi,jlo,khi)]
-                      - (1-dy)*dx*u[IJK(ihi,jlo,klo)]
-                      + dy*(1-dx)*u[IJK(ilo,jhi,khi)]
-                      - dy*(1-dx)*u[IJK(ilo,jhi,klo)]
-                      + (1-dy)*(1-dx)*u[IJK(ilo,jlo,khi)]
-                      - (1-dy)*(1-dx)*u[IJK(ilo,jlo,klo)])/hzed;
+            force[2] = 
+              -charge*(dy    *dx    *u[IJK(ihi,jhi,khi)]
+                     - dy    *dx    *u[IJK(ihi,jhi,klo)]
+                     + (1-dy)*dx    *u[IJK(ihi,jlo,khi)]
+                     - (1-dy)*dx    *u[IJK(ihi,jlo,klo)]
+                     + dy    *(1-dx)*u[IJK(ilo,jhi,khi)]
+                     - dy    *(1-dx)*u[IJK(ilo,jhi,klo)]
+                     + (1-dy)*(1-dx)*u[IJK(ilo,jlo,khi)]
+                     - (1-dy)*(1-dx)*u[IJK(ilo,jlo,klo)])/hzed;
         } else force[2] = 0;
     }
 }
@@ -1947,7 +1962,6 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
     }
 
     energy = 0.5*energy*hx*hy*hzed;
-    T = Vpbe_getTemperature(thee->pbe);
     energy = energy/Vpbe_getZmagic(thee->pbe);
 
     if (extFlag == 1) energy += (thee->extDiEnergy);
@@ -2697,6 +2711,7 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 //                  0 => Mol surf (uses parm)
 //                  1 => VdW surf
 //                  2 => Inflated VdW surf (uses parm)
+//                  3 => Spline surface (uses parm)
 //           parm  Parameter for surface definition
 //
 // Author:   Nathan Baker
@@ -2722,6 +2737,9 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
     } else if (meth == 2) {
         Vnm_print(0, "Vpmg_fillAcc: using inflated van der Waals surface with %g A probe\n",
           parm);
+    } else if (meth == 3) {
+        Vnm_print(0, "Vpmg_fillAcc: using spline surface with %g window\n",
+          parm);
     } else {
         Vnm_print(2, "Vpmg_fillAcc: invalid surface method (%d)!\n", meth);
         VASSERT(0);
@@ -2738,11 +2756,13 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
 
                 /* the scalar (0th derivative) entry */
                 if (meth == 0) {
-                    vec[IJK(i,j,k)] = (double)(Vacc_molAcc(acc,position,parm));
+                    vec[IJK(i,j,k)] = (Vacc_molAcc(acc,position,parm));
                 } else if (meth == 1) {
-                    vec[IJK(i,j,k)] = (double)(Vacc_vdwAcc(acc,position));
+                    vec[IJK(i,j,k)] = (Vacc_vdwAcc(acc,position));
                 } else if (meth == 2) {
-                    vec[IJK(i,j,k)] = (double)(Vacc_ivdwAcc(acc,position,parm));
+                    vec[IJK(i,j,k)] = (Vacc_ivdwAcc(acc,position,parm));
+                } else if (meth == 3) {
+                    vec[IJK(i,j,k)] = (Vacc_splineAcc(acc,position,parm,0.0));
                 }
             }
         }
