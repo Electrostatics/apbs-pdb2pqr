@@ -272,45 +272,53 @@ if test -z "${mpi_use}"; then
 else
 
     dnl # MPI header location ENV specification
+    AC_MSG_CHECKING([for FETK_MPI_INCLUDE environmental variable])
     if test -n "${FETK_MPI_INCLUDE}"; then
-        mpi_inc_path_env="-I${FETK_MPI_INCLUDE} ";
+        mpi_inc_path_env="${FETK_MPI_INCLUDE} ";
+        AC_MSG_RESULT([yes])
     else
         mpi_inc_path_env="";
+        AC_MSG_RESULT([no])
     fi
 
     dnl # MPI library location ENV specification
+    AC_MSG_CHECKING([for FETK_MPI_LIBRARY environmental variable])
     if test -n "${FETK_MPI_LIBRARY}"; then
-        mpi_lib_path_env="-L${FETK_MPI_LIBRARY} ";
+        mpi_lib_path_env="${FETK_MPI_LIBRARY} ";
+        AC_MSG_RESULT([yes])
     else
         mpi_lib_path_env="";
+        AC_MSG_RESULT([no])
     fi
 
     dnl # MPI header location ARG specification (override environment)
-    AC_MSG_CHECKING([whether you specified location of <mpi.h>])
+    AC_MSG_CHECKING([for --with-mpiinc option])
     AC_ARG_WITH(mpiinc,
         [AC_HELP_STRING([--with-mpiinc=PATH], [directory containing <mpi.h>])],
         [mpi_inc_path="-I${with_mpiinc} "; AC_MSG_RESULT([yes])],
-        [mpi_inc_path="${mpi_inc_path_env}"; AC_MSG_RESULT([no])]
+        [mpi_inc_path="-I${mpi_inc_path_env}"; AC_MSG_RESULT([no])]
     )
 
     dnl # MPI library location ARG specification (override environment)
-    AC_MSG_CHECKING([whether you specified location of <libmpi.a>])
+    AC_MSG_CHECKING([for --with-mpilib option])
     AC_ARG_WITH(mpilib,
         [AC_HELP_STRING([--with-mpilib=PATH], 
                         [directory containing <libmpi.a>])],
         [mpi_lib_path="-L${with_mpilib} "; AC_MSG_RESULT([yes])],
-        [mpi_lib_path="${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
+        [mpi_lib_path="-L${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
     )
     dnl # Setup temp LDFLAGS and look for MPI library/header
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mpi_lib_path} ${nsl_lib} ${socket_lib};
-    CPPFLAGS=${mpi_inc_path};
+    LDFLAGS_SAVE=${LDFLAGS}
+    CPPFLAGS_SAVE=${CPPFLAGS}
+    LDFLAGS="${mpi_lib_path} ${nsl_lib} ${socket_lib} ${mpi_lib_path}";
+    CPPFLAGS="${mpi_inc_path}";
     mpi_use="";
+    AC_MSG_RESULT([Looking for MPI header with ${mpi_inc_path}...])
     AC_CHECK_HEADER(mpi.h,
         [mpi_use="yes";mpi_inc="${mpi_inc_path}"],
         [mpi_use="";mpi_inc=""])
     if test -n "${mpi_use}"; then
+        AC_MSG_RESULT([Looking for MPI library with ${mpi_lib_path}...])
         AC_CHECK_LIB(mpi,main,
             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
             [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
@@ -327,14 +335,13 @@ else
         AC_ERROR([MPI library or header is missing!!])
 
     else
-        AC_MSG_RESULT([MPI library and header were found:  MPI enabled])
         AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
     fi
 
     dnl # Return LDFLAGS and CPPFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
 fi
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
 AC_SUBST(mpi_bin)
@@ -385,9 +392,7 @@ if test -n "${rl_use}"; then
     if test -z "${rl_use}"; then
         AC_MSG_RESULT([MALOC was compiled with READLINE enabled])
         AC_MSG_RESULT([MALOC needs to link against the READLINE library])
-        AC_MSG_ERROR([READLINE cannot be found now...EXITING ON ERROR])
-    else
-        AC_MSG_RESULT([READLINE library found])
+        AC_MSG_ERROR([READLINE cannot be found!])
     fi
 fi
 AC_SUBST(rl_lib)
@@ -404,11 +409,6 @@ dnl # '--disable-fetk' flag.
 dnl # -----------------------
 dnl # MC header location ENV specification
 AC_MSG_RESULT([---------- begin configuring for FEtk linkage --------------])
-AC_ARG_ENABLE(fetk,
-    [AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
-    [ with_fetk="no" ],
-    [ with_fetk=""    ]
-)
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 use_fetk=""
 mc_lib=""
@@ -416,7 +416,14 @@ mc_inc=""
 mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
+AC_MSG_CHECKING([for --disable-fetk])
+AC_ARG_ENABLE(fetk,
+    [AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
+    [ with_fetk="no" ],
+    [ with_fetk=""    ]
+)
 if test -z "${with_fetk}"; then
+    AC_MSG_RESULT([no])
     AC_MSG_CHECKING([for FETK_INCLUDE])
     if test -n "${FETK_INCLUDE}"; then
         mc_inc_path="-I${FETK_INCLUDE} ";
@@ -482,6 +489,7 @@ if test -z "${with_fetk}"; then
         AC_MSG_RESULT([FEtk component not found:  disabled.])
     fi
 else
+    AC_MSG_RESULT([yes])
     AC_MSG_RESULT([FEtk disabled at user request.])
 fi
 AC_SUBST(mc_lib)
@@ -496,7 +504,7 @@ AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
 dnl # -----------------------
 dnl # HANDLE SYMBOL EMBEDDING
 dnl # -----------------------
-AC_MSG_CHECKING([whether EMBED macro can be used without compilation errors])
+AC_MSG_CHECKING([for EMBED macro can be used])
 AC_TRY_COMPILE(,
     [#define EMBED(rctag) \
      static const char* rctag; \
@@ -510,7 +518,7 @@ AC_MSG_RESULT(${embed_ok})
 dnl # --------------------------------
 dnl # HANDLE ANSI/PEDANTIC COMPILATION
 dnl # --------------------------------
-AC_MSG_CHECKING([whether you want pedantic ANSI compilation])
+AC_MSG_CHECKING([--enable-pansi])
 AC_ARG_ENABLE(pansi,
     [AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
     [pansi_use="yes"],
@@ -548,7 +556,7 @@ dnl # HANDLE THE TOOLS DIRECTORY
 dnl # Disable compilation of executables in the tools directory with the
 dnl # '--disable-tools' flag (for Alpha).
 dnl # -----------------------
-AC_MSG_CHECKING([whether you want to compile the tools])
+AC_MSG_CHECKING([for --disable-tools])
 AC_ARG_ENABLE(tools,
     [AC_HELP_STRING([--disable-tools],[disable tool compilation])],
     [ with_tools="no" ],
@@ -567,7 +575,6 @@ AC_SUBST(apbs_do_tools)
 dnl # -----------------------
 dnl # HANDLE THE BLAS LIBRARIES
 dnl # -----------------------
-AC_MSG_CHECKING([whether you want the included BLAS routines])
 AC_ARG_ENABLE(blas,
     [AC_HELP_STRING([--disable-blas],[disable local BLAS compilation])],
     [ disable_blas="yes" ],
@@ -583,13 +590,16 @@ AC_ARG_WITH(blas,
     [ blas_lib="" ]
 )
 # INTERPRET THIS MESS
+AC_MSG_CHECKING([for --with-blas])
 if test -n "${blas_lib}"; then
-    AC_MSG_RESULT([no; you have your own])
+    AC_MSG_RESULT([yes])
 else
+    AC_MSG_RESULT([no])
+    AC_MSG_CHECKING([for --disable-blas])
     if test -n "${disable_blas}"; then
-       AC_MSG_RESULT([no; you must be linking against it elsewhere])
+       AC_MSG_RESULT([yes (you'd better have your own in LDFLAGS!)])
     else 
-       AC_MSG_RESULT([yes])
+       AC_MSG_RESULT([no])
        blas_do_src="blas"
        AC_DEFINE([USE_PMG_BLAS], [], [use built-in BLAS])
        blas_lib="../blas/libapbsblas.la"
@@ -601,7 +611,7 @@ AC_SUBST(blas_do_src)
 dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO COMPILE C++ FMM CODE
 dnl # -----------------------
-AC_MSG_CHECKING([whether you want fancy C++ FMM functions])
+AC_MSG_CHECKING([for --enable-cxxfmm])
 AC_ARG_ENABLE(cxxfmm,
     [AC_HELP_STRING([--enable-cxxfmm], [enable the C++ FMM CODE (BROKEN!!!)])],
     [ cxxfmm_use="yes"],
@@ -629,7 +639,7 @@ AC_SUBST(stdcxx_lib)
 dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
 dnl # -----------------------
-AC_MSG_CHECKING([whether you want ARPACK functions])
+AC_MSG_CHECKING([for --with-arpack])
 AC_ARG_WITH(arpack,
     [AC_HELP_STRING([--with-arpack=PATH],
                     [enable ARPACK functions (specify path to lib)])],
@@ -649,7 +659,7 @@ AC_SUBST(arpack_do_tools)
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT INLINE FUNCTIONS
 dnl # -----------------------
-AC_MSG_CHECKING([whether you want inlined functions])
+AC_MSG_CHECKING([for --disable-inline])
 AC_ARG_ENABLE(inline,
     [AC_HELP_STRING([--disable-inline],[disable inline functions (macros)])],
     [ use_inline="${enableval}"],
@@ -678,11 +688,6 @@ inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
-
-AC_MSG_RESULT([APBS to be linked with following libraries:  ${lib_list}])
-AC_MSG_RESULT([APBS to be compiled with following includes:  ${inc_list}])
-
-
 dnl ##########################################################################
 dnl 11. generate the makefiles
 dnl ##########################################################################
@@ -707,4 +712,10 @@ AC_OUTPUT([
 
     bin/Makefile
 ])
+
+AC_MSG_RESULT([])
+AC_MSG_RESULT([APBS to be linked with following libraries:  ${lib_list}])
+AC_MSG_RESULT([APBS to be compiled with following includes:  ${inc_list}])
+AC_MSG_RESULT([])
+AC_MSG_RESULT([Please type "make; make install"])
 

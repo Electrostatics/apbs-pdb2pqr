@@ -183,10 +183,10 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	installdirs-recursive install-recursive uninstall-recursive \
 	check-recursive installcheck-recursive
 DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
-	Makefile.in NEWS acinclude.m4 aclocal.m4 config/config.guess \
-	config/config.sub config/install-sh config/ltconfig \
-	config/ltmain.sh config/missing config/mkinstalldirs configure \
-	configure.ac
+	Makefile.in NEWS acinclude.m4 aclocal.m4 config/compile \
+	config/config.guess config/config.sub config/install-sh \
+	config/ltconfig config/ltmain.sh config/missing \
+	config/mkinstalldirs configure configure.ac
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 

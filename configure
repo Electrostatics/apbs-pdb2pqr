@@ -9736,20 +9736,32 @@ if test -z "${mpi_use}"; then
 echo "${ECHO_T}MALOC not compiled with MPI:  MPI disabled" >&6
 else
 
-        if test -n "${FETK_MPI_INCLUDE}"; then
-        mpi_inc_path_env="-I${FETK_MPI_INCLUDE} ";
+        echo "$as_me:$LINENO: checking for FETK_MPI_INCLUDE environmental variable" >&5
+echo $ECHO_N "checking for FETK_MPI_INCLUDE environmental variable... $ECHO_C" >&6
+    if test -n "${FETK_MPI_INCLUDE}"; then
+        mpi_inc_path_env="${FETK_MPI_INCLUDE} ";
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
     else
         mpi_inc_path_env="";
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
     fi
 
-        if test -n "${FETK_MPI_LIBRARY}"; then
-        mpi_lib_path_env="-L${FETK_MPI_LIBRARY} ";
+        echo "$as_me:$LINENO: checking for FETK_MPI_LIBRARY environmental variable" >&5
+echo $ECHO_N "checking for FETK_MPI_LIBRARY environmental variable... $ECHO_C" >&6
+    if test -n "${FETK_MPI_LIBRARY}"; then
+        mpi_lib_path_env="${FETK_MPI_LIBRARY} ";
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
     else
         mpi_lib_path_env="";
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
     fi
 
-        echo "$as_me:$LINENO: checking whether you specified location of <mpi.h>" >&5
-echo $ECHO_N "checking whether you specified location of <mpi.h>... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for --with-mpiinc option" >&5
+echo $ECHO_N "checking for --with-mpiinc option... $ECHO_C" >&6
 
 # Check whether --with-mpiinc or --without-mpiinc was given.
 if test "${with_mpiinc+set}" = set; then
@@ -9757,13 +9769,13 @@ if test "${with_mpiinc+set}" = set; then
   mpi_inc_path="-I${with_mpiinc} "; echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-  mpi_inc_path="${mpi_inc_path_env}"; echo "$as_me:$LINENO: result: no" >&5
+  mpi_inc_path="-I${mpi_inc_path_env}"; echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 
 fi;
 
-        echo "$as_me:$LINENO: checking whether you specified location of <libmpi.a>" >&5
-echo $ECHO_N "checking whether you specified location of <libmpi.a>... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for --with-mpilib option" >&5
+echo $ECHO_N "checking for --with-mpilib option... $ECHO_C" >&6
 
 # Check whether --with-mpilib or --without-mpilib was given.
 if test "${with_mpilib+set}" = set; then
@@ -9771,15 +9783,17 @@ if test "${with_mpilib+set}" = set; then
   mpi_lib_path="-L${with_mpilib} "; echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-  mpi_lib_path="${mpi_lib_path_env}"; echo "$as_me:$LINENO: result: no" >&5
+  mpi_lib_path="-L${mpi_lib_path_env}"; echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 
 fi;
-        LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mpi_lib_path} ${nsl_lib} ${socket_lib};
-    CPPFLAGS=${mpi_inc_path};
+        LDFLAGS_SAVE=${LDFLAGS}
+    CPPFLAGS_SAVE=${CPPFLAGS}
+    LDFLAGS="${mpi_lib_path} ${nsl_lib} ${socket_lib} ${mpi_lib_path}";
+    CPPFLAGS="${mpi_inc_path}";
     mpi_use="";
+    echo "$as_me:$LINENO: result: Looking for MPI header with ${mpi_inc_path}..." >&5
+echo "${ECHO_T}Looking for MPI header with ${mpi_inc_path}..." >&6
     if test "${ac_cv_header_mpi_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mpi.h" >&5
 echo $ECHO_N "checking for mpi.h... $ECHO_C" >&6
@@ -9917,6 +9931,8 @@ fi
 
 
     if test -n "${mpi_use}"; then
+        echo "$as_me:$LINENO: result: Looking for MPI library with ${mpi_lib_path}..." >&5
+echo "${ECHO_T}Looking for MPI library with ${mpi_lib_path}..." >&6
         echo "$as_me:$LINENO: checking for main in -lmpi" >&5
 echo $ECHO_N "checking for main in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_main+set}" = set; then
@@ -10040,8 +10056,6 @@ echo "$as_me: error: MPI library or header is missing!!" >&2;}
    { (exit 1); exit 1; }; }
 
     else
-        echo "$as_me:$LINENO: result: MPI library and header were found:  MPI enabled" >&5
-echo "${ECHO_T}MPI library and header were found:  MPI enabled" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MPI_H
@@ -10049,9 +10063,9 @@ _ACEOF
 
     fi
 
-        LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-fi
+    fi
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
 
 
 
@@ -10324,12 +10338,9 @@ fi
 echo "${ECHO_T}MALOC was compiled with READLINE enabled" >&6
         echo "$as_me:$LINENO: result: MALOC needs to link against the READLINE library" >&5
 echo "${ECHO_T}MALOC needs to link against the READLINE library" >&6
-        { { echo "$as_me:$LINENO: error: READLINE cannot be found now...EXITING ON ERROR" >&5
-echo "$as_me: error: READLINE cannot be found now...EXITING ON ERROR" >&2;}
+        { { echo "$as_me:$LINENO: error: READLINE cannot be found!" >&5
+echo "$as_me: error: READLINE cannot be found!" >&2;}
    { (exit 1); exit 1; }; }
-    else
-        echo "$as_me:$LINENO: result: READLINE library found" >&5
-echo "${ECHO_T}READLINE library found" >&6
     fi
 fi
 
@@ -10338,6 +10349,14 @@ echo "${ECHO_T}---------- end configuring for MALOC linkage --------------" >&6
 
 echo "$as_me:$LINENO: result: ---------- begin configuring for FEtk linkage --------------" >&5
 echo "${ECHO_T}---------- begin configuring for FEtk linkage --------------" >&6
+use_fetk=""
+mc_lib=""
+mc_inc=""
+mc_do_src=""
+mc_do_lib=""
+mc_do_test=""
+echo "$as_me:$LINENO: checking for --disable-fetk" >&5
+echo $ECHO_N "checking for --disable-fetk... $ECHO_C" >&6
 # Check whether --enable-fetk or --disable-fetk was given.
 if test "${enable_fetk+set}" = set; then
   enableval="$enable_fetk"
@@ -10346,13 +10365,9 @@ else
    with_fetk=""
 
 fi;
-use_fetk=""
-mc_lib=""
-mc_inc=""
-mc_do_src=""
-mc_do_lib=""
-mc_do_test=""
 if test -z "${with_fetk}"; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
     echo "$as_me:$LINENO: checking for FETK_INCLUDE" >&5
 echo $ECHO_N "checking for FETK_INCLUDE... $ECHO_C" >&6
     if test -n "${FETK_INCLUDE}"; then
@@ -10809,6 +10824,8 @@ _ACEOF
 echo "${ECHO_T}FEtk component not found:  disabled." >&6
     fi
 else
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
     echo "$as_me:$LINENO: result: FEtk disabled at user request." >&5
 echo "${ECHO_T}FEtk disabled at user request." >&6
 fi
@@ -10823,8 +10840,8 @@ echo "${ECHO_T}---------- end configuring for FEtk linkage --------------" >&6
 echo "$as_me:$LINENO: result: ------------ begin processing APBS configure options ----------" >&5
 echo "${ECHO_T}------------ begin processing APBS configure options ----------" >&6
 
-echo "$as_me:$LINENO: checking whether EMBED macro can be used without compilation errors" >&5
-echo $ECHO_N "checking whether EMBED macro can be used without compilation errors... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for EMBED macro can be used" >&5
+echo $ECHO_N "checking for EMBED macro can be used... $ECHO_C" >&6
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -10872,8 +10889,8 @@ echo "$as_me:$LINENO: result: ${embed_ok}" >&5
 echo "${ECHO_T}${embed_ok}" >&6
 
 
-echo "$as_me:$LINENO: checking whether you want pedantic ANSI compilation" >&5
-echo $ECHO_N "checking whether you want pedantic ANSI compilation... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking --enable-pansi" >&5
+echo $ECHO_N "checking --enable-pansi... $ECHO_C" >&6
 # Check whether --enable-pansi or --disable-pansi was given.
 if test "${enable_pansi+set}" = set; then
   enableval="$enable_pansi"
@@ -10982,8 +10999,8 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether you want to compile the tools" >&5
-echo $ECHO_N "checking whether you want to compile the tools... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for --disable-tools" >&5
+echo $ECHO_N "checking for --disable-tools... $ECHO_C" >&6
 # Check whether --enable-tools or --disable-tools was given.
 if test "${enable_tools+set}" = set; then
   enableval="$enable_tools"
@@ -11004,8 +11021,6 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether you want the included BLAS routines" >&5
-echo $ECHO_N "checking whether you want the included BLAS routines... $ECHO_C" >&6
 # Check whether --enable-blas or --disable-blas was given.
 if test "${enable_blas+set}" = set; then
   enableval="$enable_blas"
@@ -11027,16 +11042,22 @@ else
 
 fi;
 # INTERPRET THIS MESS
+echo "$as_me:$LINENO: checking for --with-blas" >&5
+echo $ECHO_N "checking for --with-blas... $ECHO_C" >&6
 if test -n "${blas_lib}"; then
-    echo "$as_me:$LINENO: result: no; you have your own" >&5
-echo "${ECHO_T}no; you have your own" >&6
-else
-    if test -n "${disable_blas}"; then
-       echo "$as_me:$LINENO: result: no; you must be linking against it elsewhere" >&5
-echo "${ECHO_T}no; you must be linking against it elsewhere" >&6
-    else
-       echo "$as_me:$LINENO: result: yes" >&5
+    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+else
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    echo "$as_me:$LINENO: checking for --disable-blas" >&5
+echo $ECHO_N "checking for --disable-blas... $ECHO_C" >&6
+    if test -n "${disable_blas}"; then
+       echo "$as_me:$LINENO: result: yes (you'd better have your own in LDFLAGS!)" >&5
+echo "${ECHO_T}yes (you'd better have your own in LDFLAGS!)" >&6
+    else
+       echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
        blas_do_src="blas"
 
 cat >>confdefs.h <<\_ACEOF
@@ -11049,8 +11070,8 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether you want fancy C++ FMM functions" >&5
-echo $ECHO_N "checking whether you want fancy C++ FMM functions... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for --enable-cxxfmm" >&5
+echo $ECHO_N "checking for --enable-cxxfmm... $ECHO_C" >&6
 # Check whether --enable-cxxfmm or --disable-cxxfmm was given.
 if test "${enable_cxxfmm+set}" = set; then
   enableval="$enable_cxxfmm"
@@ -11145,8 +11166,8 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether you want ARPACK functions" >&5
-echo $ECHO_N "checking whether you want ARPACK functions... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for --with-arpack" >&5
+echo $ECHO_N "checking for --with-arpack... $ECHO_C" >&6
 
 # Check whether --with-arpack or --without-arpack was given.
 if test "${with_arpack+set}" = set; then
@@ -11168,8 +11189,8 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether you want inlined functions" >&5
-echo $ECHO_N "checking whether you want inlined functions... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for --disable-inline" >&5
+echo $ECHO_N "checking for --disable-inline... $ECHO_C" >&6
 # Check whether --enable-inline or --disable-inline was given.
 if test "${enable_inline+set}" = set; then
   enableval="$enable_inline"
@@ -11203,13 +11224,6 @@ top_srcdir="`pwd`"
 lib_list="-L${top_srcdir}/lib ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
 
-
-
-
-echo "$as_me:$LINENO: result: APBS to be linked with following libraries:  ${lib_list}" >&5
-echo "${ECHO_T}APBS to be linked with following libraries:  ${lib_list}" >&6
-echo "$as_me:$LINENO: result: APBS to be compiled with following includes:  ${inc_list}" >&5
-echo "${ECHO_T}APBS to be compiled with following includes:  ${inc_list}" >&6
 
 
 
@@ -12587,4 +12601,15 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
+
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result: APBS to be linked with following libraries:  ${lib_list}" >&5
+echo "${ECHO_T}APBS to be linked with following libraries:  ${lib_list}" >&6
+echo "$as_me:$LINENO: result: APBS to be compiled with following includes:  ${inc_list}" >&5
+echo "${ECHO_T}APBS to be compiled with following includes:  ${inc_list}" >&6
+echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+echo "$as_me:$LINENO: result: Please type \"make; make install\"" >&5
+echo "${ECHO_T}Please type \"make; make install\"" >&6
 

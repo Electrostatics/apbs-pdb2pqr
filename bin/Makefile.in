@@ -175,6 +175,7 @@ apbs_LDADD = ../src/aaa_lib/libapbs.la @lib_list@
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c
 libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
+libapbsmainroutines_la_CFLAGS = AM_CFLAGS
 
 INCLUDES = @inc_list@
 AM_LDFLAGS = @LDFLAGS@ @FLIBS@
@@ -185,7 +186,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libapbsmainroutines_la_LIBADD =
-am_libapbsmainroutines_la_OBJECTS = routines.lo
+am_libapbsmainroutines_la_OBJECTS = libapbsmainroutines_la-routines.lo
 libapbsmainroutines_la_OBJECTS = $(am_libapbsmainroutines_la_OBJECTS)
 bin_PROGRAMS = apbs$(EXEEXT)
 PROGRAMS = $(bin_PROGRAMS)
@@ -245,6 +246,7 @@ clean-libLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+libapbsmainroutines_la-routines.lo: routines.c
 libapbsmainroutines.la: $(libapbsmainroutines_la_OBJECTS) $(libapbsmainroutines_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libapbsmainroutines_la_LDFLAGS) $(libapbsmainroutines_la_OBJECTS) $(libapbsmainroutines_la_LIBADD) $(LIBS)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
@@ -294,6 +296,15 @@ distclean-compile:
 
 .c.lo:
 	$(LTCOMPILE) -c -o $@ `test -f '$<' || echo '$(srcdir)/'`$<
+
+libapbsmainroutines_la-routines.o: routines.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapbsmainroutines_la_CFLAGS) $(CFLAGS) -c -o libapbsmainroutines_la-routines.o `test -f 'routines.c' || echo '$(srcdir)/'`routines.c
+
+libapbsmainroutines_la-routines.obj: routines.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapbsmainroutines_la_CFLAGS) $(CFLAGS) -c -o libapbsmainroutines_la-routines.obj `if test -f 'routines.c'; then $(CYGPATH_W) 'routines.c'; else $(CYGPATH_W) '$(srcdir)/routines.c'`
+
+libapbsmainroutines_la-routines.lo: routines.c
+	$(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapbsmainroutines_la_CFLAGS) $(CFLAGS) -c -o libapbsmainroutines_la-routines.lo `test -f 'routines.c' || echo '$(srcdir)/'`routines.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
