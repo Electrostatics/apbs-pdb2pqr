@@ -73,8 +73,10 @@ c*    *** compute required work array sizes ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% NGSRBDRIV: real    work space must be: ',iretot
-         print*,'% NGSRBDRIV: integer work space must be: ',iintot
+         call vnmpri(2,'% NGSRBDRIV: real    work space must be: ',
+     2      41, iretot)
+         call vnmpri(2,'% NGSRBDRIV: integer work space must be: ',
+     2      41, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -187,14 +189,14 @@ c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fboundPMG00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
-      print*,' gsrb = [ '
+      call vnmprt(2,' gsrb = [ ',10)
 c*
 c*    *** start timer ***
       call vtstrt(30, 'NGSRBDRIV2: solve', 17)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
-         print*,'% NGSRBDRIV2: linear mode...'
+         call vnmprt(2,'% NGSRBDRIV2: linear mode...',28)
          iok  = 1
          ilev = 1
          call gsrbgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -203,7 +205,7 @@ c*    *** call specified multigrid method ***
      4      ipc,rpc,ac,cc,fc,tcf)
       endif
       if ((mode .eq. 1) .or. (mode .eq. 2)) then
-         print*,'% NGSRBDRIV2: nonlinear mode...'
+         call vnmprt(2,'% NGSRBDRIV2: nonlinear mode...',31)
          iok  = 1
          ilev = 1
          call ngsrbgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -290,11 +292,11 @@ c*       *** simply take norm of rhs for a zero initial guess ***
          call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1,w2)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% NGSRBGO: bad istop value... '
+         call vnmprt(2,'% NGSRBGO: bad istop value... ',30)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% NGSRBGO:  rhs is zero '
+         call vnmprt(2,'% NGSRBGO:  rhs is zero ',24)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -341,7 +343,7 @@ c*       *** compute/check the current stopping test ***
             call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2,r)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% NGSRBGO: bad istop value... '
+            call vnmprt(2,'% NGSRBGO: bad istop value... ',30)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99
@@ -410,11 +412,11 @@ c*    *** compute denominator for stopping criterion ***
          call matvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% GSRBGO: bad istop value... '
+         call vnmprt(2,'% GSRBGO: bad istop value... ',29)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% GSRBGO:  rhs is zero '
+         call vnmprt(2,'% GSRBGO:  rhs is zero ',23)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -461,7 +463,7 @@ c*       *** compute/check the current stopping test ***
             call matvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% GSRBGO: bad istop value... '
+            call vnmprt(2,'% GSRBGO: bad istop value... ',29)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99

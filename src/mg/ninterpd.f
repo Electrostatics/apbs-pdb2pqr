@@ -64,7 +64,7 @@ c*    *** doit ***
      8      ac(1,5),ac(1,6),ac(1,7),ac(1,8),ac(1,9),ac(1,10),ac(1,11),
      9      ac(1,12),ac(1,13),ac(1,14),cc,fc)
       else
-         print*,'% NINTERP: invalid stencil type given...'
+         call vnmprt(2,'% NINTERP: invalid stencil type given...',40)
       endif
 c*
 c*    *** return and end ***
@@ -670,7 +670,8 @@ c*    *** verify correctness of the output boundary points ***
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
-         print*,'% NINTERP7: 1d newton tolerance failures: ',ifail_tol
+         call vnmpri(2,'% NINTERP7: 1d newton tolerance failures: ',
+     2      42, ifail_tol)
       endif
 c*
 c*    *** return and end ***
@@ -1296,7 +1297,8 @@ c*    *** verify correctness of the output boundary points ***
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
-         print*,'% NINTERP27: 1d newton tolerance failures: ',ifail_tol
+         call vnmpri(2,'% NINTERP27: 1d newton tolerance failures: ',
+     2      43, ifail_tol)
       endif
 c*
 c*    *** return and end ***

@@ -62,7 +62,7 @@ c*    *** do in one step ***
      4      x,w1,w2,r,
      5      itmax,iters,errtol,omega,iresid,iadjoint)
       else
-         print*,'% NWJAC: invalid stencil type given...'
+         call vnmprt(2,'% NWJAC: invalid stencil type given...',38)
       endif
 c*
 c*    *** return and end ***
@@ -284,7 +284,8 @@ c*    *** if specified, return the new residual as well ***
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
-         print*,'% NWJAC: 1d newton tolerance failures:    ',ifail_tol
+         call vnmpri(2,'% NWJAC: 1d newton tolerance failures:    ',
+     2      42, ifail_tol)
       endif
 c*
 c*    *** return and end ***
@@ -537,7 +538,8 @@ c*    *** if specified, return the new residual as well ***
 c*
 c*    *** messages ***
       if (ifail_tol .gt. 0) then
-         print*,'% NWJAC: 1d newton tolerance failures:    ',ifail_tol
+         call vnmpri(2,'% NWJAC: 1d newton tolerance failures:    ',
+     2      42, ifail_tol)
       endif
 c*
 c*    *** return and end ***

@@ -294,7 +294,7 @@ c*
 c*       *** relative residual ***
          if (rsden .eq. 0.0d0) then
             relres = 1.0e6
-            print*,'% PRTSTP: avoided division by zero'
+            call vnmprt(2,'% PRTSTP: avoided division by zero',34)
          else
             relres = rsnrm/rsden
          endif
@@ -302,7 +302,7 @@ c*
 c*       *** contraction number ***
          if (orsnrm .eq. 0.0d0) then
             contrac = 1.0e6
-            print*,'% PRTSTP: avoided division by zero'
+            call vnmprt(2,'% PRTSTP: avoided division by zero',34)
          else
             contrac = rsnrm/orsnrm
          endif
@@ -566,7 +566,8 @@ c*                   write(6,100)'% BUILDOPS: (GALER) ',nxx,nyy,nzz
                   call extrac(nxold,nyold,nzold,nxx,nyy,nzz,
      2               tcf(iz(1,lev-1)),tcf(iz(1,lev)))
                else
-                  print*,'% BUILDOPS: bad mgcoar key given...'
+                  call vnmprt(2,'% BUILDOPS: bad mgcoar key given...',
+              2      35)
                endif
 c*
 c*             *** now initialize the differential operator offset ***
@@ -587,7 +588,8 @@ c*       *** build a sparse format coarse grid operator ***
      2         ipc(iz(5,lev)),rpc(iz(6,lev)),ac(iz(7,lev)),
      3         ipc(iz(5,lev+1)),rpc(iz(6,lev+1)),ac(iz(7,lev+1)))
             if (key .eq. 1) then
-               print*,'% BUILDOPS: changing your MGSOLV to iterative...'
+               call vnmprt(2,'% BUILDOPS: changing your MGSOLV ',33)
+               call vnmprt(2,'% BUILDOPS: to iterative...',27)
                mgsolv = 0
             endif
          endif
@@ -626,7 +628,8 @@ c*    *** how far to step into the coefficient arrays ***
       jadd   = (nyf-1)/(ny-1)
       kadd   = (nzf-1)/(nz-1)
       if ((iadd.ne.2).or.(jadd.ne.2).or.(kadd.ne.2)) then
-         print*,'% BUILDCOPY0: problem with grid dimensions...'
+         call vnmprt(2,'% BUILDCOPY0: problem with grid dimensions...',
+     2      45)
       endif
 c*
 c*    *** compute the coarse grid pde coefficients ***
@@ -750,7 +753,8 @@ c*    *** how far to step into the coefficient arrays ***
       jadd   = (nyf-1)/(ny-1)
       kadd   = (nzf-1)/(nz-1)
       if ((iadd.ne.2).or.(jadd.ne.2).or.(kadd.ne.2)) then
-         print*,'% BUILDHARM0: problem with grid dimensions...'
+         call vnmprt(2,'% BUILDHARM0: problem with grid dimensions...',
+     2      45)
       endif
 c*
 c*    *** compute the coarse grid pde coefficients ***

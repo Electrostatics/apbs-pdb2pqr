@@ -63,7 +63,8 @@ c*       print*,'% BUILDA:   (FEM) performing discretization...'
      4      ac(1,9),ac(1,10),ac(1,11),ac(1,12),ac(1,13),ac(1,14),
      5      xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf)
       else
-         print*,'% BUILDA: invalid discretization requested...'
+         call vnmprt(2,'% BUILDA: invalid discretization requested...',
+     2      45)
       endif
 c*
 c*    *** return and end ***

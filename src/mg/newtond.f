@@ -412,13 +412,12 @@ c*    *** a few things ***
 c*
 c*    *** condition estimate of final jacobian ***
       if (iinfo .gt. 2) then
-         print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-     2         ,'%%%%%%%%%%'
+         call vnmprt(2,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',32)
          write(6,200)'% NEWTON: JACOBIAN ANALYSIS==>',nx,ny,nz
  200     format(a,' [',i3,',',i3,',',i3,'] ')
 c*
 c*       *** largest eigenvalue of the jacobian matrix ***
-         print*,'% NEWTON: power calculating rho(JAC)...'
+         call vnmprt(2,'% NEWTON: power calculating rho(JAC)...',39)
          itmax_p   = 1000
          errtol_p  = 1.0e-4
          iters_p   = 0
@@ -427,12 +426,13 @@ c*       *** largest eigenvalue of the jacobian matrix ***
      2      ipc,rpc,ac,cprime,
      3      w0,w1,w2,w3,
      4      rho_max,rho_max_mod,errtol_p,itmax_p,iters_p,iinfo_p)
-         print*,'% NEWTON: power iters   = ',iters_p
-         print*,'% NEWTON: power eigmax  = ',rho_max
-         print*,'% NEWTON: power (MODEL) = ',rho_max_mod
+         call vnmpri(2,'% NEWTON: power iters   = ',26,iters_p)
+         call vnmprd(2,'% NEWTON: power eigmax  = ',26,rho_max)
+         call vnmprd(2,'% NEWTON: power (MODEL) = ',26,rho_max_mod)
 c*
 c*       *** smallest eigenvalue of the system matrix A ***
-         print*,'% NEWTON: ipower calculating lambda_min(JAC)...'
+         call vnmprt(2,'% NEWTON: ipower calculating ',29)
+         call vnmprt(2,'% NEWTON: lambda_min(JAC)...',28)
          itmax_p   = 1000
          errtol_p  = 1.0e-4
          iters_p   = 0
@@ -444,16 +444,16 @@ c*       *** smallest eigenvalue of the system matrix A ***
      4      nlev,ilev,nlev_real,mgsolv,
      5      iok_p,iinfo_p,epsiln,errtol,omega,nu1,nu2,mgsmoo,
      6      ipc,rpc,pc,ac,cprime,tru)
-         print*,'% NEWTON: ipower iters   = ',iters_p
-         print*,'% NEWTON: ipower eigmin  = ',rho_min
-         print*,'% NEWTON: ipower (MODEL) = ',rho_min_mod
+         call vnmpri(2,'% NEWTON: ipower iters   = ',27,iters_p)
+         call vnmprd(2,'% NEWTON: ipower eigmin  = ',27,rho_min)
+         call vnmprd(2,'% NEWTON: ipower (MODEL) = ',27,rho_min_mod)
 c*
 c*       *** condition number estimate ***
-         print*,'% NEWTON: condition number  = ',rho_max/rho_min
-         print*,'% NEWTON: condition (MODEL) = ',
-     2      rho_max_mod/rho_min_mod
-         print*,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'
-     2         ,'%%%%%%%%%%'
+         call vnmprd(2,'% NEWTON: condition number  = ',
+     2      30, rho_max/rho_min)
+         call vnmprd(2,'% NEWTON: condition (MODEL) = ',
+     2      30, rho_max_mod/rho_min_mod)
+         call vnmprt(2,'%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%',32)
       endif
 c*
 c*    *** return and end ***

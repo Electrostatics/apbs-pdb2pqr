@@ -65,7 +65,7 @@ c*       print*,'% BUILDBAND: building 27-pt banded coarse operator...'
      4      ac(1,10),ac(1,11),ac(1,12),ac(1,13),ac(1,14),
      5      ipcB,rpcB,acB,n,m,lda)
       else
-         print*,'% BUILDBAND: invalid stencil type given...'
+         call vnmprt(2,'% BUILDBAND: invalid stencil type given...',42)
       endif
 c*
 c*    *** print matrices ***
@@ -81,8 +81,9 @@ CZZZZ call dpbco(acB,lda,n,m,rcond,w1,info)
       ipcB(4) = 1
       if (info .ne. 0) then
 CZZZZ    print*,'% BUILDBAND: dpbco rcond:   ',rcond
-         print*,'% BUILDBAND: dpbfa problem: ',info
-         print*,'% BUILDBAND: leading principle minor not PD...'
+         call vnmpri(2,'% BUILDBAND: dpbfa problem: ',28,info)
+         call vnmprt(2,'% BUILDBAND: leading principle minor not PD...',
+     2      46)
          key = 1
       endif
 c*    print*,'% BUILDBAND: dpbfa banded factorization complete.'

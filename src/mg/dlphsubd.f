@@ -49,7 +49,7 @@ c* *********************************************************************
       double precision phi(*),crg(*)
 c*
 c*    *** i/o ***
-      print*,'% DELGET: stub routine...no function...'
+      call vnmprt(2,'% DELGET: stub routine...no function...',39)
 c*
 c*    *** end it ***
       return

@@ -51,7 +51,7 @@ c*    *** do in oNe step ***
       elseif (numdia .eq. 27) then
          call matvec27(nx,ny,nz,ipc,rpc,ac,cc,x,y)
       else
-         print*,'% MATVEC: invalid stencil type given...'
+         call vnmprt(2,'% MATVEC: invalid stencil type given...',39)
       endif
 c*
 c*    *** return and end ***
@@ -234,7 +234,7 @@ c*    *** do in oNe step ***
       elseif (numdia .eq. 27) then
          call mresid27(nx,ny,nz,ipc,rpc,ac,cc,fc,x,r)
       else
-         print*,'% MRESID: invalid stencil type given...'
+         call vnmprt(2,'% MRESID: invalid stencil type given...',39)
       endif
 c*
 c*    *** return and end ***
@@ -418,7 +418,7 @@ c*    *** do in oNe step ***
       elseif (numdia .eq. 27) then
          call nmatvec27(nx,ny,nz,ipc,rpc,ac,cc,x,y,w1)
       else
-         print*,'% NMATVEC: invalid stencil type given...'
+         call vnmprt(2,'% NMATVEC: invalid stencil type given...',40)
       endif
 c*
 c*    *** return and end ***
@@ -615,7 +615,7 @@ c*    *** do in oNe step ***
       elseif (numdia .eq. 27) then
          call nmresid27(nx,ny,nz,ipc,rpc,ac,cc,fc,x,r,w1)
       else
-         print*,'% NMRESID: invalid stencil type given...'
+         call vnmprt(2,'% NMRESID: invalid stencil type given...',40)
       endif
 c*
 c*    *** return and end ***
