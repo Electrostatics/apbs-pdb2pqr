@@ -119,7 +119,7 @@ typedef struct Vpbe {
 
 #if !defined(VINLINE_VPBE)
     VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
-    VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
+    VEXTERNC Gem*    Vpbe_getGem(Vpbe *thee);
     VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
     VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
     VEXTERNC double  Vpbe_getIonConc(Vpbe *thee);
@@ -141,7 +141,7 @@ typedef struct Vpbe {
     VEXTERNC int     Vpbe_getAtomColor(Vpbe *thee, int iatom);
 #else /* if defined(VINLINE_VPBE) */
 #   define Vpbe_getValist(thee) ((thee)->alist)
-#   define Vpbe_getVgm(thee) ((thee)->gm)
+#   define Vpbe_getGem(thee) ((thee)->gm)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
 #   define Vpbe_getVcsm(thee) ((thee)->csm)
 #   define Vpbe_getIonConc(thee) ((thee)->ionConc)
