@@ -44,6 +44,8 @@
 #include "apbscfg.h"
 #include "apbs/vpmg.h"
 
+#define VPMGSMALL 1e-14
+
 VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -113,9 +115,21 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
 
     /* Sanity check: make sure we're within the old mesh */
-    if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
-        (xminNEW<xminOLD) || (yminNEW<yminOLD) || (zminNEW<zminOLD)) {
+    if (((xmaxNEW-xmaxOLD)>VPMGSMALL) || 
+        ((ymaxNEW-ymaxOLD)>VPMGSMALL) || 
+        ((zmaxNEW-zmaxOLD)>VPMGSMALL) ||
+        ((xminOLD-xminNEW)>VPMGSMALL) || 
+        ((yminOLD-yminNEW)>VPMGSMALL) || 
+        ((zminOLD-zminNEW)>VPMGSMALL)) {
         Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
+        Vnm_print(2, "VPMG::focusFillBound -- New mesh mins = %g, %g, %g\n",
+          xminNEW, yminNEW, zminNEW);
+        Vnm_print(2, "VPMG::focusFillBound -- New mesh maxs = %g, %g, %g\n",
+          xmaxNEW, ymaxNEW, zmaxNEW);
+        Vnm_print(2, "VPMG::focusFillBound -- Old mesh mins = %g, %g, %g\n",
+          xminOLD, yminOLD, zminOLD);
+        Vnm_print(2, "VPMG::focusFillBound -- Old mesh maxs = %g, %g, %g\n",
+          xmaxOLD, ymaxOLD, zmaxOLD);
         fflush(stderr);
         VASSERT(0);
     }
@@ -132,11 +146,17 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             jfloat = (y - yminOLD)/hyOLD;
             kfloat = (z - zminOLD)/hzOLD;
             ihi = (int)ceil(ifloat);
+            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
             ilo = (int)floor(ifloat);
+            if (ilo < 0) ilo = 0;
             jhi = (int)ceil(jfloat);
+            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
             jlo = (int)floor(jfloat);
+            if (jlo < 0) jlo = 0;
             khi = (int)ceil(kfloat);
+            if (khi > (nzOLD-1)) khi = nzOLD-1;
             klo = (int)floor(kfloat);
+            if (klo < 0) klo = 0;
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
@@ -156,7 +176,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xmaxNEW;
             ifloat = (x - xminOLD)/hxOLD;
             ihi = (int)ceil(ifloat);
+            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
             ilo = (int)floor(ifloat);
+            if (ilo < 0) ilo = 0;
             dx = ifloat - (double)(ilo);
             nx = nxOLD; ny = nyOLD; nz = nzOLD;
             uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
@@ -189,11 +211,17 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             jfloat = (y - yminOLD)/hyOLD;
             kfloat = (z - zminOLD)/hzOLD;
             ihi = (int)ceil(ifloat);
+            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
             ilo = (int)floor(ifloat);
+            if (ilo < 0) ilo = 0;
             jhi = (int)ceil(jfloat);
+            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
             jlo = (int)floor(jfloat);
+            if (jlo < 0) jlo = 0;
             khi = (int)ceil(kfloat);
+            if (khi > (nzOLD-1)) khi = nzOLD-1;
             klo = (int)floor(kfloat);
+            if (klo < 0) klo = 0;
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
@@ -213,7 +241,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             y = ymaxNEW;
             jfloat = (y - yminOLD)/hyOLD;
             jhi = (int)ceil(jfloat);
+            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
             jlo = (int)floor(jfloat);
+            if (jlo < 0) jlo = 0;
             dy = jfloat - (double)(jlo);
             nx = nxOLD; ny = nyOLD; nz = nzOLD;
             uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
@@ -246,11 +276,17 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             jfloat = (y - yminOLD)/hyOLD;
             kfloat = (z - zminOLD)/hzOLD;
             ihi = (int)ceil(ifloat);
+            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
             ilo = (int)floor(ifloat);
+            if (ilo < 0) ilo = 0;
             jhi = (int)ceil(jfloat);
+            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
             jlo = (int)floor(jfloat);
+            if (jlo < 0) jlo = 0;
             khi = (int)ceil(kfloat);
+            if (khi > (nzOLD-1)) khi = nzOLD-1;
             klo = (int)floor(kfloat);
+            if (klo < 0) klo = 0;
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
@@ -270,7 +306,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             z = zmaxNEW;
             kfloat = (z - zminOLD)/hzOLD;
             khi = (int)ceil(kfloat);
+            if (khi > (nzOLD-1)) khi = nzOLD-1;
             klo = (int)floor(kfloat);
+            if (klo < 0) klo = 0;
             dz = kfloat - (double)(klo);
             nx = nxOLD; ny = nyOLD; nz = nzOLD;
             uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
@@ -1292,3 +1330,4 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
     }
 }
 
+#undef VPMGSMALL
