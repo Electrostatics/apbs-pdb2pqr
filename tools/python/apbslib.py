@@ -286,6 +286,18 @@ double_array = apbslibc.double_array
 
 int_array = apbslibc.int_array
 
+Valist_load = apbslibc.Valist_load
+
+def getPotentials(arg0,arg1,arg2,arg3):
+    val = apbslibc.getPotentials(arg0.this,arg1.this,arg2.this,arg3)
+    return val
+
+get_entry = apbslibc.get_entry
+
+set_entry = apbslibc.set_entry
+
+make_Valist = apbslibc.make_Valist
+
 def loadMolecules(arg0,arg1):
     val = apbslibc.loadMolecules(arg0.this,arg1)
     return val

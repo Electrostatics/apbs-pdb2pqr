@@ -186,6 +186,128 @@ int *int_array(int size){
 }
 %}
 
+%inline %{
+void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
+    
+    Vatom *atoms = VNULL;
+    int i;
+ 
+    double pos[3];
+    atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
+    thee->number = 0;
+    for (i=0;i<size;i++){
+        pos[0] = x[i];
+        pos[1] = y[i];
+        pos[2] = z[i];
+        Vatom_setCharge(&(atoms[thee->number]), chg[i]);
+        Vatom_setRadius(&(atoms[thee->number]), rad[i]);
+        Vatom_setPosition(&(atoms[thee->number]), pos);
+        (thee->number)++;
+      
+    }
+  
+    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
+    VASSERT(thee->atoms != VNULL);
+    for (i=0; i<thee->number; i++) {
+        Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
+        Vatom_dtor2(&(atoms[i]));
+    }
+    Vmem_free(thee->vmem, size, sizeof(Vatom), (void **)&atoms);
+    
+    Vatom *atom;
+    int j;
+
+    VASSERT(thee != VNULL);
+
+    thee->center[0] = 0.;
+    thee->center[1] = 0.;
+    thee->center[2] = 0.;
+    thee->maxrad = 0.;
+    thee->charge = 0.;
+
+    /* Reset stat variables */
+    atom = &(thee->atoms[0]);
+    for (i=0; i<3; i++) {
+        thee->maxcrd[i] = thee->mincrd[i] = atom->position[i];
+    }
+    thee->maxrad = atom->radius;
+    thee->charge = 0.0;
+   
+    for (i=0; i<thee->number; i++) {
+
+        atom = &(thee->atoms[i]);
+        for (j=0; j<3; j++) {
+            if (atom->position[j] < thee->mincrd[j]) 
+              thee->mincrd[j] = atom->position[j];
+            if (atom->position[j] > thee->maxcrd[j]) 
+              thee->maxcrd[j] = atom->position[j];
+        }
+        if (atom->radius > thee->maxrad) thee->maxrad = atom->radius;
+        thee->charge = thee->charge + atom->charge;
+    } 
+  
+    thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
+    thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
+    thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
+}
+%}
+
+%inline %{
+double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
+    Vgrid *grid;
+    Vatom *atom; 
+    int i, rc, nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+    double value;
+    double *position, *values;
+    
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(double)));
+    nx = pmg->pmgp->nx;
+    ny = pmg->pmgp->ny;
+    nz = pmg->pmgp->nz;
+    hx = pmg->pmgp->hx;
+    hy = pmg->pmgp->hy;
+    hzed = pmg->pmgp->hzed;
+    xcent = pmg->pmgp->xcent;
+    ycent = pmg->pmgp->ycent;
+    zcent = pmg->pmgp->zcent;
+    xmin = xcent - 0.5*(nx-1)*hx;
+    ymin = ycent - 0.5*(ny-1)*hy;
+    zmin = zcent - 0.5*(nz-1)*hzed;
+   
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
+    grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+                  pmg->rwork);
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        atom = Valist_getAtom(alist, i);
+        position = Vatom_getPosition(atom); 
+        Vgrid_value(grid, position, &value);
+        values[i] = value; 
+    } 
+    Vgrid_dtor(&grid);    
+    return values;
+}
+%}
+
+%inline %{
+double get_entry(double *array, int i){
+	    return array[i];
+  }
+%}
+
+%inline %{
+void set_entry(double *array, int i, double val){
+	    array[i] = val;
+  }
+%}
+
+%inline %{
+Valist *make_Valist(Valist **args, int n){
+    args[n] = Valist_ctor();    
+    return args[n];
+}
+%}
+
 // Functions from routines.h:
 
 typedef struct {
