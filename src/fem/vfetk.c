@@ -42,15 +42,22 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+
+#ifdef HAVE_FETK_H
+
+#include "apbs/vfetk.h"
+
 #include "supermatrix.h"
 #include "Cnames.h"
 
-#if defined(HAVE_FETK_H)
-#include "apbs/vfetk.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
+    TT *t, int qp, int face, int u, int ud, int ut,
+    double xq[], double phi[4], double phix[4][3],
+    double U[], double dU[][3], double Ut[], double dUt[][3]);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Inlineable methods
@@ -277,7 +284,61 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_getLinearEnergy1
+// Routine:  Vfetk_energy
+//
+// Purpose:  Using the solution at the finest mesh level, get the
+//           electrostatic energy using the free energy functional for the
+//           Poisson-Boltzmann equation without removing any
+//           self-interaction terms (i.e., removing the reference state of
+//           isolated charges present in an infinite dielectric continuum with
+//           the same relative permittivity as the interior of the protein)
+//           and return the result in units of $k_B T$.  The argument color
+//           allows the user to control the partition on which this energy
+//           is calculated; if (color == -1) no restrictions are used.
+//           The solution is obtained from the finest level of the passed AM
+//           object, but atomic data from the Vfetk object is used to
+//           calculate the energy
+//
+// Args:     color        Partition ID
+//           nonlin       NPBE (1) or LPBE (0) energy
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
+
+    double totEnergy = 0.0;
+    double dielEnergy = 0.0;
+    double qfEnergy = 0.0;
+    double qmEnergy = 0.0;
+
+    VASSERT(thee != VNULL);
+
+    if (nonlin && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
+        Vnm_print(0, "Vfetk_energy:  calculating full PBE energy\n");
+        Vnm_print(0, "Vfetk_energy:  bulk ionic strength = %g M\n",
+          Vpbe_getBulkIonicStrength(thee->pbe));
+        qmEnergy = Vfetk_qmEnergy(thee, color, nonlin);
+        Vnm_print(0, "Vfetk_energy:  qmEnergy = %g kT\n", qmEnergy);
+        qfEnergy = Vfetk_qfEnergy(thee, color);
+        Vnm_print(0, "Vfetk_energy:  qfEnergy = %g kT\n", qfEnergy);
+        dielEnergy = Vfetk_dielEnergy(thee, color);
+        Vnm_print(0, "Vfetk_energy:  dielEnergy = %g kT\n", dielEnergy);
+
+        totEnergy = qfEnergy - dielEnergy - qmEnergy;
+    } else {
+        Vnm_print(0, "Vfetk_energy:  calculating only q-phi energy\n");
+        qfEnergy = Vfetk_qfEnergy(thee, color);
+        Vnm_print(0, "Vfetk_energy:  qfEnergy = %g kT\n", qfEnergy);
+        totEnergy = 0.5*qfEnergy;
+    }
+
+    return totEnergy;
+
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_qfEnergy
 //
 // Purpose:  Using the solution at the finest mesh level, get the 
 //           electrostatic energy using the free energy functional for the 
@@ -286,7 +347,7 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 //           isolated charges present in an infinite dielectric continuum with 
 //           the same relative permittivity as the interior of the protein).
 //           In other words, we calculate
-//             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
+//             \[ G = \sum_i q_i u(r_i) \]
 //           and return the result in units of $k_B T$.  The argument color
 //           allows the user to control the partition on which this energy
 //           is calculated; if (color == -1) no restrictions are used.
@@ -294,9 +355,11 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 //           object, but atomic data from the Vfetk object is used to
 //           calculate the energy
 //
+// Args:     color    Partition ID
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_getLinearEnergy1(Vfetk *thee, int color) { 
+VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) { 
 
    double *sol; int nsol;
    double charge;
@@ -369,37 +432,39 @@ VPUBLIC double Vfetk_getLinearEnergy1(Vfetk *thee, int color) {
    Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
     
    /* Return the energy */
-   return 0.5*energy;
+   return energy;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_getEnergyNorm2
+// Routine:  Vfetk_energyNorm
 //
-// Purpose:  Calculate the square of the energy norm, i.e.
-//                 u^T A u
-//           The argument color allows the user to control the partition on
-//           which this energy is calculated; if (color == -1) no restrictions
-//           are used.  The solution is obtained from the finest level of the
-//           internal AM object, but atomic data from the Vpbe object is used
-//           to calculate the energy
+// Purpose:  Calculate (u, A u), where 
+//              flag = 0     A is the tangent operator evaluated at u = 0
+//                           (Poisson equation energy norm)
+//              flag = 1     A is the dual tangent operator operator evaluated
+//                           at current solution
+//              flag = 2     A is the tangent operator evaluated at the current
+//                           solution
 //           
 // Notes:    Large portions of this routine are borrowed from Mike Holst's
 //           assem.c routines in MC. 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_getEnergyNorm2(Vfetk *thee, int color) {
+VPUBLIC double Vfetk_energyNorm(Vfetk *thee, int flag) {
 
-    Bmat *A;
     Bvec *u, *Au;
+    Bmat *A;
     Alg *alg; 
-    int level;
+    int level, ip[10];
+    double rp[10];
     double norm2;
 
     /* Get the max level from AM */
     level = AM_maxLevel(thee->am);
     /* Get the alg object at that level */
     alg = AM_alg(thee->am, level);
+    Alg_assem(alg, flag, W_u, W_ud, W_f, ip, rp);
 
     /* Solution + Dirichlet conditions */
     Bvec_copy(alg->W[W_w0], alg->W[W_u]);
@@ -410,14 +475,234 @@ VPUBLIC double Vfetk_getEnergyNorm2(Vfetk *thee, int color) {
     /* Work space */
     Au = alg->W[W_w1];
 
-    if (color>=0) Vnm_print(2,"Vfetk_getEnergyNorm: color argument ignored!\n");
-
     /* Au = A u */
     Bvec_matvec(Au, u, A, 0);
     /* Calculate (u,Au) */
     norm2 = Bvec_dot(u,Au);
 
     return norm2;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_dielEnergy
+//
+// Purpose:  Calculate
+//             \[ G = -\frac{1}{2} \int \epsilon (\nabla u)^2 dx \].
+//           The argument color allows the user to control the partition on
+//           which this energy is calculated; if (color == -1) no restrictions
+//           are used.  The solution is obtained from the finest level of the
+//           internal AM object, but atomic data from the Vpbe object is used
+//           to calculate the energy
+//
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           eval.c routines in MC.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_dielEnergy(Vfetk *thee, int color) {
+
+    Alg *alg;
+    SS *sm;
+    int smid;
+    double totVal, simVal;
+
+    Vnm_print(2, "Vfetk_dielEnergy:  partition information ignored!\n");
+
+    totVal = 0.25*Vfetk_energyNorm(thee, 0)/Vpbe_getZmagic(thee->pbe);
+
+    return totVal;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_buildFunc
+//
+// Purpose:  Build finite element functions.
+//
+// Author:   Michael Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void Vfetk_buildFunc(Alg *thee, Re *re,
+    TT *t, int qp, int face, int u, int ud, int ut,
+    double xq[], double phi[4], double phix[4][3], 
+    double U[], double dU[][3], double Ut[], double dUt[][3])
+{
+    int i, j, k;
+    double u_u[4][MAXV], u_ud[4][MAXV], u_t[4][MAXV];
+
+    /* Get quad pt by mapping master el quad pt to this el */
+    for (i=0; i<Gem_dimII(thee->gm); i++) {
+        xq[i] = t->bb[i];
+        for (j=0;j<Gem_dimII(thee->gm);j++)
+            xq[i] += ( t->ff[i][j] * Re_x_hi(re,qp,j,face) );
+    }
+
+    /* Get basis functions; transform grads to arbitrary elm */
+    for (i=0; i<Gem_dimVV(thee->gm); i++) {
+        phi[i] = Re_phi_hi(re,qp,i,face);
+        for (j=0; j<Gem_dim(thee->gm); j++) {
+            phix[i][j] = 0.;
+            for (k=0; k<Gem_dim(thee->gm); k++)
+                phix[i][j] += ( t->gg[k][j] * Re_phix2_hi(re,qp,i,k,face) );
+        }
+    }
+
+    /* Setup for initialize of [U+UD] and [dU+dUD] and [Ut] and [dUt] */
+    for (j=0; j<Gem_dimVV(thee->gm); j++) {
+        for (i=0; i<Alg_vec(thee); i++) {
+            u_u[j][i]  = Bvec_val( thee->W[u],  i, t->vid[j] );
+            u_ud[j][i] = Bvec_val( thee->W[ud], i, t->vid[j] );
+            u_t[j][i]  = Bvec_val( thee->W[ut], i, t->vid[j] );
+        }
+    }
+
+    /* Initialize [U+UD] and [dU+dUD] and [Ut] and [dUt] */
+    for (i=0; i<Alg_vec(thee); i++) {
+        U[i]  = 0.;
+        Ut[i] = 0.;
+        for (k=0; k<Gem_dim(thee->gm); k++) {
+            dU[i][k]  = 0.;
+            dUt[i][k] = 0.;
+            for (j=0; j<Gem_dimVV(thee->gm); j++) {
+                if (k==0) {
+                    U[i]  += phi[j] * ( u_u[j][i] + u_ud[j][i] );
+                    Ut[i] += phi[j] * u_t[j][i];
+                }
+                dU[i][k]  += phix[j][k] * ( u_u[j][i] + u_ud[j][i] );
+                dUt[i][k] += phix[j][k] * u_t[j][i];
+            }
+        }
+    }
+}
+
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_qmEnergy
+//
+// Purpose:  Calculate mobile ion energy in kT.
+//           The argument color allows the user to control the partition on
+//           which this energy is calculated; if (color == -1) no restrictions
+//           are used.  The solution is obtained from the finest level of the
+//           internal AM object, but atomic data from the Vpbe object is used
+//           to calculate the energy
+//
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           assem.c routines in MC.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_qmEnergy(Vfetk *thee, int color, int nonlin) { 
+
+    Alg *alg;
+    SS *sm;
+    int smid;
+    double totVal, simVal;
+
+    totVal = 0;
+
+    alg = AM_alg(thee->am, AM_maxLevel(thee->am));
+
+    if (Vpbe_getZkappa2(thee->pbe) == 0.0) {
+        Vnm_print(0, "Vfetk_qmEnergy:  Zero energy for zero ionic strength!\n");
+        return 0.0;
+    }
+
+    for (smid=0; smid<Gem_numSS(thee->gm); smid++) {
+        sm = Gem_SS(thee->gm, smid);
+        if ((SS_chart(sm) == color) || (color < 0)) {
+            simVal = Vfetk_qmEnergySimplex(thee, sm, nonlin); 
+            totVal += simVal;
+        }
+    }
+
+    return totVal/Vpbe_getZmagic(thee->pbe);
+
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_qmEnergySimplex
+//
+// Purpose:  Calculate mobile ion energy in a single simplex without scaling
+//           the units back to kT.
+//           The argument color allows the user to control the partition on
+//           which this energy is calculated; if (color == -1) no restrictions
+//           are used.  The solution is obtained from the finest level of the
+//           internal AM object, but atomic data from the Vpbe object is used
+//           to calculate the energy
+//
+// Notes:    Large portions of this routine are borrowed from Mike Holst's
+//           eval.c routines in MC.
+//           This routine IS NOT OPTIMIZED!!!
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vfetk_qmEnergySimplex(Vfetk *thee, SS *sm, int nonlin) {
+
+    Alg *alg;
+    Vpbe *pbe;
+    Vacc *acc;
+    int i, m, face, nion, ichop, nchop;
+    double Dw, value, nval, zkappa2, zks2, ionstr;
+    double xm[3], U[MAXV], dU[MAXV][3], Ut[MAXV], dUt[MAXV][3];
+    double phi[4], phix[4][3];
+    double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION];
+    Re *re;
+    TT t;
+
+    value = 0;
+
+    /* Get relevant objects */
+    alg = AM_alg(thee->am, AM_maxLevel(thee->am));
+    pbe = thee->pbe;
+    acc = pbe->acc;
+
+    /* Get ion information */
+    zkappa2 = Vpbe_getZkappa2(pbe);
+    ionstr = Vpbe_getBulkIonicStrength(pbe);
+    if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
+    else zks2 = 0.0;
+    Vpbe_getIons(pbe, &nion, ionConc, ionRadii, ionQ);
+
+    /* volume trans from master to this element (and back) */
+    Gem_buildVolumeTrans(thee->gm,sm,&t);
+
+    /* hard-code element for now... */
+    re = alg->re[0];
+
+    /* Cycle thru quad points */
+    face = -1;
+    nchop = 0;
+    for (m=0; m<Re_numQ_hi(re,face); m++) {
+      
+        /* jacobian and quadrature weight */
+        Dw = t.D * Re_w_hi(re,m,face);
+
+        /* evaluate solution/gradient/model at current quad point */
+        Vfetk_buildFunc(alg, re, &t, m, face, W_u, W_ud, W_ut, xm, phi,
+          phix, U, dU, Ut, dUt);
+
+        /* evaluate integrand element:  (u+ud) - ut */
+        if (Vacc_ivdwAcc(acc, xm, Vpbe_getMaxIonRadius(pbe))) {
+            if (nonlin) {
+                nval = 0.;
+                for (i=0; i<nion; i++) {
+                    nval += (zks2 * ionConc[i] * VSQR(ionQ[i]) 
+                      * (Vcap_exp(-ionQ[i]*U[0], &ichop)-1.0));
+                    nchop += ichop;
+                }
+                value += ( Dw * nval );
+            } else {
+                nval = 0.5*zkappa2*VSQR(U[0]);
+                value += ( Dw * nval );
+            }
+        }
+
+    } /* m; loop over volume quadrature points */
+
+    if (nchop > 0) Vnm_print(2, "Vfetk_qmEnergySimplex:  Chopped COSH %d \
+times!\n", nchop);
+
+    return value;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -519,44 +804,6 @@ VPUBLIC double Vfetk_getPoissonDet(Vfetk *thee, int color) {
 }
     
     
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vfetk_getLinearEnergy2
-//
-// Purpose:  Calculate the energy from the energy norm, i.e. 
-//                 G = (u, A u)/(8 pi)
-//           for the linearized Poisson-Boltzmann equation without removing any
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with
-//           the same relative permittivity as the interior of the protein).
-//           Return the result in units of $k_B T$.  The argument color allows
-//           the user to control the partition on which this energy is
-//           calculated; if (color == -1) no restrictions are used.  The
-//           solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vfetk object is used to calculate
-//           the energy.
-//
-// Notes:    Large portions of this routine are borrowed from Mike Holst's
-//           assem.c routines in MC.  
-//
-//           THIS ROUTINE IS BROKEN!!!!  IT NEEDS A SURFACE INTEGRAL
-//           CONTRIBUTION:
-//              -\int_\partial \Omega u \epsilon \nabla u \cdot n ds
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_getLinearEnergy2(Vfetk *thee, int color) {
-
-    double energy = 0.0;
-
-    Vnm_print(2, "Vfetk_getLinearEnergy2: WARNING -- surface integral neglected!\n");
-
-    /* Calculate the energy norm */
-    energy = Vfetk_getEnergyNorm2(thee, color);
-    energy = 0.5*energy/Vpbe_getZmagic(thee->pbe);
-
-    return energy;
-}
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_setAtomColors
 //

@@ -37,7 +37,7 @@ SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
 always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 
-BOTH_HEADS  = apbs.h femparm.h mgparm.h nosh.h pbeparm.h vacc.h valist.h \
+BOTH_HEADS  = femparm.h mgparm.h nosh.h pbeparm.h vacc.h valist.h \
               vatom.h vcap.h vgreen.h vhal.h vpbe.h vunit.h 
 PMG_HEADS   = vpmg.h vpmgp.h 
 FETK_HEADS  = vfetk.h vcsm.h vpee.h

@@ -858,7 +858,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
     else zks2 = 0.0;
     Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
-    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
     for (i=0; i<nion; i++) {
         ionConc[i] = zks2 * ionConc[i] * ionQ[i];
     }
@@ -2209,7 +2208,9 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
         totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
         Vnm_print(0, "Vpmg_energy:  calculating only q-phi energy\n");
-        totEnergy = 0.5*Vpmg_qfEnergy(thee, extFlag);
+        qfEnergy = Vpmg_qfEnergy(thee, extFlag);
+        Vnm_print(0, "Vpmg_energy:  qfEnergy = %g kT\n", qfEnergy);
+        totEnergy = 0.5*qfEnergy;
     }
 
     return totEnergy;
@@ -2339,12 +2340,12 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
                 for (j=0; j<nion; j++) {
                     energy += (thee->pvec[i]*thee->ccf[i]*zks2
                       * ionConc[j] * VSQR(ionQ[j]) 
-                      * (Vcap_cosh(ionQ[j]*thee->u[i], &ichop)-1.0));
+                      * (Vcap_exp(-ionQ[j]*thee->u[i], &ichop)-1.0));
                     nchop += ichop;
                 }
             }
         }
-        if (nchop > 0) Vnm_print(2, "Vpmg_qmEnergy:  Chopped COSH %d times!\n",
+        if (nchop > 0) Vnm_print(2, "Vpmg_qmEnergy:  Chopped EXP %d times!\n",
           nchop);
     } else {
         /* Zkappa2 OK here b/c LPBE approx */
