@@ -66,6 +66,233 @@ VEMBED(rcsid="$Id$")
 
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  focusFillBound
+//
+// Purpose:  Fill boundaries with old values before destroying
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
+
+    double hxOLD, hyOLD, hzOLD, xminOLD, yminOLD, zminOLD, xmaxOLD, ymaxOLD;
+    double zmaxOLD;
+    int nxOLD, nyOLD, nzOLD;
+    double hxNEW, hyNEW, hzNEW, xminNEW, yminNEW, zminNEW, xmaxNEW, ymaxNEW;
+    double zmaxNEW;
+    int nxNEW, nyNEW, nzNEW;
+    int i, j, k, ihi, ilo, jhi, jlo, khi, klo, nx, ny, nz;
+    double x, y, z, dx, dy, dz, ifloat, jfloat, kfloat, uval;
+
+
+    /* Calculate new problem dimensions */
+    hxNEW = thee->pmgp->hx;
+    hyNEW = thee->pmgp->hy;
+    hzNEW = thee->pmgp->hz;
+    nxNEW = thee->pmgp->nx;
+    nyNEW = thee->pmgp->ny;
+    nzNEW = thee->pmgp->nz;
+    xminNEW = thee->pmgp->xcent - ((double)(nxNEW-1)*hxNEW)/2.0;
+    xmaxNEW = thee->pmgp->xcent + ((double)(nxNEW-1)*hxNEW)/2.0;
+    yminNEW = thee->pmgp->ycent - ((double)(nyNEW-1)*hyNEW)/2.0;
+    ymaxNEW = thee->pmgp->ycent + ((double)(nyNEW-1)*hyNEW)/2.0;
+    zminNEW = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
+    zmaxNEW = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
+
+    /* Relevant old problem parameters */
+    hxOLD = pmgOLD->pmgp->hx;
+    hyOLD = pmgOLD->pmgp->hy;
+    hzOLD = pmgOLD->pmgp->hy;
+    nxOLD = pmgOLD->pmgp->nx;
+    nyOLD = pmgOLD->pmgp->ny;
+    nzOLD = pmgOLD->pmgp->ny;
+    xminOLD = pmgOLD->pmgp->xcent - ((double)(nxOLD-1)*hxOLD)/2.0;
+    xmaxOLD = pmgOLD->pmgp->xcent + ((double)(nxOLD-1)*hxOLD)/2.0;
+    yminOLD = pmgOLD->pmgp->ycent - ((double)(nyOLD-1)*hyOLD)/2.0;
+    ymaxOLD = pmgOLD->pmgp->ycent + ((double)(nyOLD-1)*hyOLD)/2.0;
+    zminOLD = pmgOLD->pmgp->zcent - ((double)(nzOLD-1)*hzOLD)/2.0;
+    zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
+
+    /* Sanity check: make sure we're within the old mesh */
+    if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
+        (xminNEW<xminOLD) || (yminNEW<yminOLD) || (zminNEW<zminOLD)) {
+        Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
+        VASSERT(0);
+    }
+
+    
+    /* Fill the "i" boundaries (dirichlet) */
+    for (k=0; k<nzNEW; k++) {
+        for (j=0; j<nyNEW; j++) {
+            /* Low X face */
+            x = xminNEW;
+            y = yminNEW + j*hyNEW;
+            z = zminNEW + k*hzNEW;
+            ifloat = (x - xminOLD)/hxOLD;
+            jfloat = (y - yminOLD)/hyOLD;
+            kfloat = (z - zminOLD)/hzOLD;
+            ihi = (int)ceil(ifloat);
+            ilo = (int)floor(ifloat);
+            jhi = (int)ceil(jfloat);
+            jlo = (int)floor(jfloat);
+            khi = (int)ceil(kfloat);
+            klo = (int)floor(kfloat);
+            dx = ifloat - (double)(ilo);
+            dy = jfloat - (double)(jlo);
+            dz = kfloat - (double)(klo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gxcf[IJKx(j,k,0)] = uval;
+
+            /* High X face */
+            x = xmaxNEW;
+            ifloat = (x - xminOLD)/hxOLD;
+            ihi = (int)ceil(ifloat);
+            ilo = (int)floor(ifloat);
+            dx = ifloat - (double)(ilo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gxcf[IJKx(j,k,1)] = uval;
+            
+            /* Zero Neumann conditions */             
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gxcf[IJKx(j,k,2)] = 0.0;
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gxcf[IJKx(j,k,3)] = 0.0;
+        }
+    }
+
+    /* Fill the "j" boundaries (dirichlet) */
+    for (k=0; k<nzNEW; k++) {
+        for (i=0; i<nxNEW; i++) {
+            /* Low Y face */
+            x = xminNEW + i*hxNEW;
+            y = yminNEW;
+            z = zminNEW + k*hzNEW;
+            ifloat = (x - xminOLD)/hxOLD;
+            jfloat = (y - yminOLD)/hyOLD;
+            kfloat = (z - zminOLD)/hzOLD;
+            ihi = (int)ceil(ifloat);
+            ilo = (int)floor(ifloat);
+            jhi = (int)ceil(jfloat);
+            jlo = (int)floor(jfloat);
+            khi = (int)ceil(kfloat);
+            klo = (int)floor(kfloat);
+            dx = ifloat - (double)(ilo);
+            dy = jfloat - (double)(jlo);
+            dz = kfloat - (double)(klo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gycf[IJKy(i,k,0)] = uval;
+
+            /* High Y face */
+            y = ymaxNEW;
+            jfloat = (y - yminOLD)/hyOLD;
+            jhi = (int)ceil(jfloat);
+            jlo = (int)floor(jfloat);
+            dy = jfloat - (double)(jlo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gycf[IJKy(i,k,1)] = uval;
+
+            /* Zero Neumann conditions */
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gycf[IJKy(i,k,2)] = 0.0;
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gycf[IJKy(i,k,3)] = 0.0;
+        }
+    }
+
+    /* Fill the "k" boundaries (dirichlet) */
+    for (j=0; j<nyNEW; j++) {
+        for (i=0; i<nxNEW; i++) {
+            /* Low Z face */
+            x = xminNEW + i*hxNEW;
+            y = yminNEW + j*hyNEW;
+            z = zminNEW;
+            ifloat = (x - xminOLD)/hxOLD;
+            jfloat = (y - yminOLD)/hyOLD;
+            kfloat = (z - zminOLD)/hzOLD;
+            ihi = (int)ceil(ifloat);
+            ilo = (int)floor(ifloat);
+            jhi = (int)ceil(jfloat);
+            jlo = (int)floor(jfloat);
+            khi = (int)ceil(kfloat);
+            klo = (int)floor(kfloat);
+            dx = ifloat - (double)(ilo);
+            dy = jfloat - (double)(jlo);
+            dz = kfloat - (double)(klo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gzcf[IJKz(i,j,0)] = uval;
+
+            /* High Z face */
+            z = zmaxNEW;
+            kfloat = (z - zminOLD)/hzOLD;
+            khi = (int)ceil(kfloat);
+            klo = (int)floor(kfloat);
+            dz = kfloat - (double)(klo);
+            nx = nxOLD; ny = nyOLD; nz = nzOLD;
+            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
+                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
+                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
+                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
+                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
+                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
+                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gzcf[IJKz(i,j,1)] = uval;
+
+            /* Zero Neumann conditions */
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gzcf[IJKz(i,j,2)] = 0.0;
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            thee->gzcf[IJKz(i,j,3)] = 0.0;
+        }
+    }
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  bcCalc
 //
 // Purpose:  Dirichlet boundary function and initial approximation function.
@@ -140,7 +367,7 @@ VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
 
         return pot;
     } else if (flag == 4) {
-        Vnm_print(2, "VPMG::bcCalc -- focusing (bcfl = 4) not implemented!\n");
+        Vnm_print(2, "VPMG::bcCalc -- not appropriate for focusing!\n");
         VASSERT(0);
     } else {
         Vnm_print(2, "VPMG::bcCalc -- invalid boundary condition flag (%d)!\n",
@@ -155,8 +382,9 @@ VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctor
 //
-// Purpose:  Construct the PMG parameter object; see header file for more
-//           information
+// Purpose:  Construct the PMG object from scratch using the solver parameters
+//           specifed by the passed Vpmgp object and the equation data from
+//           the Vpbe object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -175,7 +403,7 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctor2
 //
-// Purpose:  Construct the PMG parameter object
+// Purpose:  Construct the PMG object
 //
 // Notes:    See header files for default parameter values
 //
@@ -251,6 +479,121 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     return 1;
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_ctorFocus
+//
+// Purpose:  Construct the PMG object by focusing.  In other words, use the
+//           solution from the passed Vpmg object to set the boundary
+//           conditions for the new Vpmg object.  IN THE PROCESS, THE OLD VPMG
+//           OBJECT IS DESTROYED.  The solver parameters specifed by the passed
+//           Vpmgp object and the equation data from the Vpbe object are also
+//           used.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
+
+    Vpmg *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
+    VASSERT( thee != VNULL);
+    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD));
+
+    return thee;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_ctor2Focus
+//
+// Purpose:  Construct the PMG object
+//
+// Notes:    See Vpmg_ctor2Focus description
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
+
+    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
+
+    /* Get the parameters */    
+    VASSERT(pmgp != VNULL); 
+    VASSERT(pbe != VNULL); 
+    VASSERT(pmgOLD != VNULL); 
+    thee->pmgp = pmgp;
+    thee->pbe = pbe;
+
+    /* Set up the memory */
+    thee->vmem = Vmem_ctor("APBS:VPMG");
+
+    /* Calculate storage requirements */
+    mgsz_(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
+      &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
+      &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
+      &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
+
+    /* Overwrite any default or user-specified boundary condition arguments; we
+     * are now committed to a calculation via focusing */
+    if (thee->pmgp->bcfl != 4) {
+        Vnm_print(2, "Vpmg_ctor2Focus: reset boundary condition flag to 4!\n");
+        thee->pmgp->bcfl = 4;
+    }
+
+    /* Allocate storage for boundaries */
+    thee->gxcf = (double *)Vmem_malloc(thee->vmem, 
+      10*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
+    thee->gycf = (double *)Vmem_malloc(thee->vmem, 
+      10*(thee->pmgp->nx)*(thee->pmgp->nz), sizeof(double));
+    thee->gzcf = (double *)Vmem_malloc(thee->vmem, 
+      10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
+
+    /* Fill boundaries */
+    focusFillBound(thee, pmgOLD);
+
+    /* Destroy old Vpmg object */
+    Vpmg_dtor(&pmgOLD);
+
+    /* Allocate storage for everything else */
+    thee->iparm = (int *)Vmem_malloc(thee->vmem, 100, sizeof(int));
+    thee->rparm = (double *)Vmem_malloc(thee->vmem, 100, sizeof(double));
+    thee->iwork = (int *)Vmem_malloc(thee->vmem, thee->pmgp->niwk, 
+      sizeof(int));
+    thee->rwork = (double *)Vmem_malloc(thee->vmem, thee->pmgp->nrwk, 
+      sizeof(double));
+    thee->a1cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->a2cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->a3cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->ccf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->fcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->tcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->u = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr, 
+      sizeof(double));
+    thee->xf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nx), 
+      sizeof(double));
+    thee->yf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->ny), 
+      sizeof(double));
+    thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz), 
+      sizeof(double));
+
+    /* Plop some of the parameters into the iparm and rparm arrays */
+    packmg_(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+      &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
+      &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
+      &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
+      &(thee->pmgp->ipcon), &(thee->pmgp->nonlin), &(thee->pmgp->mgsmoo),
+      &(thee->pmgp->mgprol), &(thee->pmgp->mgcoar), &(thee->pmgp->mgsolv),
+      &(thee->pmgp->mgdisc), &(thee->pmgp->iinfo), &(thee->pmgp->errtol),
+      &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
+      &(thee->pmgp->irite), &(thee->pmgp->iperf));
+
+    return 1;
+}
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_solve
 //
@@ -505,51 +848,54 @@ off the mesh (ignoring)!\n",
         }
     }
 
-    /* the "i" boundaries (dirichlet) */
-    for (k=0; k<nz; k++) {
+    /* Fill the boundary arrays (except when focusing, bcfl = 4) */
+    if (thee->pmgp->bcfl != 4) {
+        /* the "i" boundaries (dirichlet) */
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                position[0] = thee->xf[0];
+                position[1] = thee->yf[j];
+                position[2] = thee->zf[k];
+                thee->gxcf[IJKx(j,k,0)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                position[0] = thee->xf[nx-1];
+                thee->gxcf[IJKx(j,k,1)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                thee->gxcf[IJKx(j,k,2)] = 0.0;
+                thee->gxcf[IJKx(j,k,3)] = 0.0;
+            }
+        }
+
+        /* the "j" boundaries (dirichlet) */
+        for (k=0; k<nz; k++) {
+            for (i=0; i<nx; i++) {
+                position[0] = thee->xf[i];
+                position[1] = thee->yf[0];
+                position[2] = thee->zf[k];
+                thee->gycf[IJKy(i,k,0)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                position[1] = thee->yf[ny-1];
+                thee->gycf[IJKy(i,k,1)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                thee->gycf[IJKy(i,k,2)] = 0.0;
+                thee->gycf[IJKy(i,k,3)] = 0.0;
+            }
+        }
+
+        /* the "k" boundaries (dirichlet) */
         for (j=0; j<ny; j++) {
-            position[0] = thee->xf[0];
-            position[1] = thee->yf[j];
-            position[2] = thee->zf[k];
-            thee->gxcf[IJKx(j,k,0)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            position[0] = thee->xf[nx-1];
-            thee->gxcf[IJKx(j,k,1)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            thee->gxcf[IJKx(j,k,2)] = 0.0;
-            thee->gxcf[IJKx(j,k,3)] = 0.0;
-        }
-    }
-
-    /* the "j" boundaries (dirichlet) */
-    for (k=0; k<nz; k++) {
-        for (i=0; i<nx; i++) {
-            position[0] = thee->xf[i];
-            position[1] = thee->yf[0];
-            position[2] = thee->zf[k];
-            thee->gycf[IJKy(i,k,0)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            position[1] = thee->yf[ny-1];
-            thee->gycf[IJKy(i,k,1)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            thee->gycf[IJKy(i,k,2)] = 0.0;
-            thee->gycf[IJKy(i,k,3)] = 0.0;
-        }
-    }
-
-    /* the "k" boundaries (dirichlet) */
-    for (j=0; j<ny; j++) {
-        for (i=0; i<nx; i++) {
-            position[0] = thee->xf[i];
-            position[1] = thee->yf[j];
-            position[2] = thee->zf[0];
-            thee->gzcf[IJKz(i,j,0)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            position[2] = thee->zf[nz-1];
-            thee->gzcf[IJKz(i,j,1)] = bcCalc(pbe, position, 
-              thee->pmgp->bcfl);
-            thee->gzcf[IJKz(i,j,2)] = 0.0;
-            thee->gzcf[IJKz(i,j,3)] = 0.0;
+            for (i=0; i<nx; i++) {
+                position[0] = thee->xf[i];
+                position[1] = thee->yf[j];
+                position[2] = thee->zf[0];
+                thee->gzcf[IJKz(i,j,0)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                position[2] = thee->zf[nz-1];
+                thee->gzcf[IJKz(i,j,1)] = bcCalc(pbe, position, 
+                  thee->pmgp->bcfl);
+                thee->gzcf[IJKz(i,j,2)] = 0.0;
+                thee->gzcf[IJKz(i,j,3)] = 0.0;
+            }
         }
     }
 }
