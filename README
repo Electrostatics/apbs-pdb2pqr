@@ -1,3 +1,4 @@
+=======
 APBS -- Adaptive Poisson-Boltzmann Solver
 
   Nathan A. Baker (nbaker@wasabi.ucsd.edu)
@@ -40,5 +41,4 @@ APBS is written in Michael Holst's Clean-C and can be compiled with either
 C or C++ compilers.
 
 Please see doc/ for more information about the APBS software and ./INSTALL
-for installation instructions.
-
+for installation instructions.  
