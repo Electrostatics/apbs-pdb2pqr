@@ -351,7 +351,7 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
     else radius = thee->solventRadius;
     nhash = 2.0*VPOW((double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
-#if 1
+#if 0
     thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
       (int)(nhash), 100);
 #else
@@ -736,7 +736,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
                    break;
                } /* endif (color) */
            } /* end for isimp */
-       } /* if (icolor == color) */
+       } 
    } /* end for iatom */
 
    /* Destroy the finest level solution */
