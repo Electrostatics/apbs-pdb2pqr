@@ -18,7 +18,8 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = generic
 
 noinst_LTLIBRARIES = libapbsgen.la
-libapbsgen_la_SOURCES  = nosh.c vacc.c valist.c vatom.c vgreen.c vpbe.c vcap.c
+libapbsgen_la_SOURCES  = nosh.c mgparm.c femparm.c vacc.c valist.c vatom.c \
+                         vgreen.c vpbe.c vcap.c
 INCLUDES           = -I../fem -I../mg @inc_list@ 
 AM_CFLAGS          = @wall_pedantic_ansi@
 LDFLAGS          = @LDFLAGS@ @FLIBS@

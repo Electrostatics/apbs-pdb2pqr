@@ -34,68 +34,37 @@
 //////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// File:     nosh.h    
+// File:     femparm.h    
 //
-// Purpose:  No shell class (i.e., fixed format input files)
+// Purpose:  A set of useful parameters for a generic multigrid calculation
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _NOSH_H_
-#define _NOSH_H_
-
-#define NOSH_MAXMOL 20
-#define NOSH_MAXMGPARM 20
-#define NOSH_MAXFEMPARM 20
-#define NOSH_MAXCALC 20
-#define NOSH_MAXPRINT 20
-#define NOSH_MAXPOP 20
+#ifndef _FEMPARM_H_
+#define _FEMPARM_H_
 
 #include "apbs/apbs.h"
 #include "maloc/maloc.h"
-#include "apbs/femparm.h"
-#include "apbs/mgparm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Definition
+// Class FEMparm: Definition
 /////////////////////////////////////////////////////////////////////////// */
-
-typedef struct NOsh {
-
-    MGparm *mgparm[NOSH_MAXMGPARM];           /* Parameter objects for MG 
-                                               * types of calculations */
-    FEMparm *femparm[NOSH_MAXFEMPARM];        /* Parameter objects for FEM 
-                                               * types of calculations */
-    int ncalc;                                /* The number of calculations to 
-                                               * be done */
-    int imgcalc, ifemcalc, nmgcalc, nfemcalc; /* Counters for the various MG 
-                                               * and FEM calculations */
-    int calctype[NOSH_MAXCALC];               /* The list of calculations: 0 =>
-                                               * multigrid and 1 => FEM */
-    int nmol;                                 /* Number of molecules */
-    char molpath[NOSH_MAXMOL][VMAX_ARGLEN];  /* Paths to mol files */
-    int nprint;                               /* How many print sections? */
-    int printwhat[NOSH_MAXPRINT];
-                                              /* What do we print (0=>energy) */
-    int printnarg[NOSH_MAXPRINT];             /* How many arguments in energy 
-                                               * list */
-    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP];/* Calculation id */
-    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  /* Operation id (0 = add, 1 = 
-                                               * subtract) */
-  int parsed;                                 /* Have we parsed an input file
-                                               * yet? */
-
-} NOsh;
+typedef struct FEMparm {
+   
+    int parsed;                /* Has this been filled with anything other than
+                                * the default values? */
+} FEMparm;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC NOsh* NOsh_ctor();
-VEXTERNC int   NOsh_ctor2(NOsh *thee);
-VEXTERNC void  NOsh_dtor(NOsh **thee);
-VEXTERNC void  NOsh_dtor2(NOsh *thee);
-VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
+VEXTERNC FEMparm* FEMparm_ctor();
+VEXTERNC int     FEMparm_ctor2(FEMparm *thee);
+VEXTERNC void    FEMparm_dtor(FEMparm **thee);
+VEXTERNC void    FEMparm_dtor2(FEMparm *thee);
+VEXTERNC int     FEMparm_check(FEMparm *thee);
 
 #endif 
 
