@@ -101,7 +101,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     /* Relevant old problem parameters */
     hxOLD = pmgOLD->pmgp->hx;
     hyOLD = pmgOLD->pmgp->hy;
-    hzOLD = pmgOLD->pmgp->hy;
+    hzOLD = pmgOLD->pmgp->hz;
     nxOLD = pmgOLD->pmgp->nx;
     nyOLD = pmgOLD->pmgp->ny;
     nzOLD = pmgOLD->pmgp->ny;
