@@ -306,8 +306,7 @@ typedef enum Vdata_Format Vdata_Format;
          static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
 #else
 #    define VEMBED(rctag)
-#endif
+#endif /* if defined(HAVE_EMBED) */
 
 
-
-#endif
+#endif /* #ifndef _VAPBSHAL_H_ */
