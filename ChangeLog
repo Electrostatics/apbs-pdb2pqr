@@ -1,4 +1,19 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
+#############################################################################
+  - NEW FEATURES
+    * Added tools/python/vgrid to the autoconf script. The directory compiles
+      with the rest of the Python utilities and is used for manipulating
+      dx files.
+    * Modified the tools/python/noinput.py example to show the ability to get
+      and print energy and force vectors directly into Python arrays.
+  - BUG FIXES
+    * Fixed a bug in vacc.c where atoms with radii less than 1A were not
+      considered instead of atoms with no radii.
+    * Fixed error in tools/mesh/dx2mol.c (Thanks to Fred Damberger)
+	
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04
 #############################################################################
   - NEW FEATURES
