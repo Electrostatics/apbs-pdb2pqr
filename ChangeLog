@@ -1,4 +1,13 @@
 #############################################################################
+VERSION 0.1.2       XX-XX-01
+#############################################################################
+This version contains a few bug fixes, including
+  * Some comments in the manual
+  * Various FEtk-related things (no particular impact to the user)
+  * Improvements to the test systems
+  * Change in the format for printing energies.
+
+#############################################################################
 VERSION 0.1.1       08-29-01
 #############################################################################
 I am slightly less pleased to announce the first bug-fix for APBS, version

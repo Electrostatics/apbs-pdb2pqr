@@ -356,15 +356,16 @@ int main(int argc, char **argv) {
                 nenergy[i] = 1;
                 totEnergy[i] =
                   Vpmg_energy(pmg[i],1);
-                Vnm_print(1, "main:    Total electrostatic energy = %g kJ/mol\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
+                Vnm_print(1, "main:    Total electrostatic energy = %1.12E\
+ kJ/mol\n", Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
             } else if (mgparm->calcenergy == 2) {
                 nenergy[i] = 1;
                 totEnergy[i] = Vpmg_energy(pmg[i],1);
                 qfEnergy[i] = Vpmg_qfEnergy(pmg[i],1);
                 qmEnergy[i] = Vpmg_qmEnergy(pmg[i],1);
                 dielEnergy[i] = Vpmg_dielEnergy(pmg[i],1);
-                Vnm_print(1, "main:    Total electrostatic energy = %4g kJ/mol\n", 
+                Vnm_print(1, "main:    Total electrostatic energy = %1.12E\
+ kJ/mol\n", 
                   Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
                 Vnm_print(1, "main:    Fixed charge energy = %g kJ/mol\n", 
                   Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*qfEnergy[i]);
@@ -597,7 +598,7 @@ to %s...\n",
                     break;
                 }
             }
-            Vnm_print(1, "main:    Answer = %g kJ/mol\n", tenergy);
+            Vnm_print(1, "main:    Answer = %1.12E kJ/mol\n", tenergy);
         } else {
             Vnm_print(2, "main:  Undefined PRINT keyword!\n");
             break;
