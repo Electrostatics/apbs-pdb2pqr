@@ -3,6 +3,10 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 #############################################################################
 
   CHANGES THAT AFFECT USERS:
+  * Added new READ options "PARM" and "MOL PDB", see documentation for more
+    information.  These options allow users to use unparameterized PDB files
+    together with a parameter database.
+  * Updated the documentation
   * Now include support for chain IDs and other optional fields in PQR/PDB
     files
   * Added support for parsing PDB files
@@ -22,6 +26,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
   * Made Vopot more robust
   * Created Vparam class for parameter file parsing
   * Added vparam* parameter database flat files to tools/conversion/param
+  * Changed several type/method flags in NOsh to enumerations for safety
  
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.6       01-17-03
