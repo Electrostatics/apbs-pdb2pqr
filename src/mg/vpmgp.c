@@ -109,7 +109,8 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->bcfl = 1;
     thee->key = 0;
     thee->iperf = 0;
-    thee->meth = 2;
+    if (nonlin ==  0) thee->meth = 2;
+    else thee->meth = 1;
     thee->mgkey = 0;
     thee->nu1 = 2;
     thee->nu2 = 2;
