@@ -9,6 +9,14 @@ BODY {
 }
 
 /* Headers */
+H1 {
+    font-family: Helvetica, Arial, Verdana, sans-serif;
+    font-weight: normal;
+    background: transparent;
+    margin-bottom: 4pt; 
+    margin-top: 4pt;
+    text-align: center;
+}
 H1, H2, H3, H4	{
     font-family: Helvetica, Arial, Verdana, sans-serif;
     font-weight: normal;

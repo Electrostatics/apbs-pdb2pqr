@@ -81,13 +81,13 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
                    nosh->parmpath);
                 if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
                   nosh->parmpath) != 1) {
-                    Vnm_print(2, "NOsh:  Error reading parameter\
+                    Vnm_tprint(2, "NOsh:  Error reading parameter\
  file (%s)!\n", nosh->parmpath);
                     return 0;
                 }
                 break;
             default:
-                Vnm_print(2, "NOsh:  Error! Undefined parameter file \
+                Vnm_tprint(2, "NOsh:  Error! Undefined parameter file \
 type (%d)!\n", nosh->parmfmt);
                 return 0;
         } /* switch parmfmt */
@@ -105,7 +105,7 @@ type (%d)!\n", nosh->parmfmt);
             case NMF_PDB:
                 /* Load parameters */
                 if (!nosh->gotparm) {
-                    Vnm_print(2, "NOsh:  Error!  Can't read PDB without \
+                    Vnm_tprint(2, "NOsh:  Error!  Can't read PDB without \
 specifying PARM file!\n");
                     return 0;
                 }
@@ -115,7 +115,7 @@ specifying PARM file!\n");
                   nosh->molpath[i]);
                 break;
             default:
-                Vnm_print(2, "NOsh:  Error!  Undefined molecule file type \
+                Vnm_tprint(2, "NOsh:  Error!  Undefined molecule file type \
 (%d)!\n", nosh->molfmt[i]);
                 return 0;
         } /* switch molfmt */
@@ -138,9 +138,9 @@ specifying PARM file!\n");
             q += VSQR(Vatom_getCharge(atom));
         }
         if (q < (1e-6)) {
-            Vnm_print(2, "Molecule #%d is uncharged!\n");
-            Vnm_print(2, "Sum square charge = %g\n", q);
-            Vnm_print(2, "Bailing out!\n");
+            Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+            Vnm_tprint(2, "Sum square charge = %g\n", q);
+            Vnm_tprint(2, "Bailing out!\n");
         }
     }
 
@@ -1667,6 +1667,11 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 
     Vnm_tstart(27, "Setup timer");
 
+    /* Print some warning messages */
+    if (pbeparm->useDielMap)  Vnm_tprint(2, "FEM ignoring dielectric map!\n");
+    if (pbeparm->useKappaMap)  Vnm_tprint(2, "FEM ignoring kappa map!\n");
+    if (pbeparm->useChargeMap)  Vnm_tprint(2, "FEM ignoring charge map!\n");
+
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
     Vnm_tprint(0, "Re-centering mesh...\n");
     theMol = pbeparm->molid-1;
@@ -1724,7 +1729,8 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
     return 1;
 }
 
-VPUBLIC void printFEPARM(FEMparm *feparm) {
+VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm, 
+  Vfetk *fetk[NOSH_MAXCALC]) {
 
     Vnm_tprint(1, "  Domain size:  %g A x %g A x %g A\n", 
       feparm->domainLength[0], feparm->domainLength[1],
@@ -1783,19 +1789,15 @@ before you solve!\n");
             break;
         case FRT_RESI:
             Vnm_tprint(1, "  Residual-based a posteriori refinement.\n");
-            VASSERT(0);
             break;
         case FRT_DUAL:
             Vnm_tprint(1, "  Dual-based a posteriori refinement.\n");
-            VASSERT(0);
             break;
         case FRT_LOCA:
             Vnm_tprint(1, "  Local-based a posteriori refinement.\n");
-            VASSERT(0);
             break;
         default:
             Vnm_tprint(2, "Invalid akeySOLVE (%d)!\n", feparm->akeySOLVE);
-            VASSERT(0);
             break;
     }
     Vnm_tprint(1, "  Refinement of initial mesh to ~%d vertices\n", 
@@ -1806,6 +1808,80 @@ before you solve!\n");
       feparm->maxsolve);
     Vnm_tprint(1, "  Maximum number of vertices in mesh:  %d\n",
       feparm->maxvert);
+
+    /* FOLLOWING IS SOLVER-RELATED; BAIL IF NOT SOLVING */
+    if (nosh->bogus)  return;
+    if (USEHB) {
+        Vnm_tprint(1, "  HB linear solver:  AM_hPcg\n");
+    } else {
+        Vnm_tprint(1, "  Non-HB linear solver:  ");
+        switch (fetk[icalc]->lkey) {
+            case VLT_SLU:
+                Vnm_print(1, "SLU direct\n");
+                break;
+            case VLT_MG:
+                Vnm_print(1, "multigrid\n");
+                break;
+            case VLT_CG:
+                Vnm_print(1, "conjugate gradient\n");
+                break;
+            case VLT_BCG:
+                Vnm_print(1, "BiCGStab\n");
+                break;
+            default:
+                Vnm_print(1, "???\n");
+                break;
+        }
+    }
+    Vnm_tprint(1, "  Linear solver tol.:  %g\n", fetk[icalc]->ltol);
+    Vnm_tprint(1, "  Linear solver max. iters.:  %d\n", fetk[icalc]->lmax);
+    Vnm_tprint(1, "  Linear solver preconditioner:  ");
+    switch (fetk[icalc]->lprec) {
+        case VPT_IDEN:
+            Vnm_print(1, "identity\n");
+            break;
+        case VPT_DIAG:
+            Vnm_print(1, "diagonal\n");
+            break;
+        case VPT_MG:
+            Vnm_print(1, "multigrid\n");
+            break;
+        default:
+            Vnm_print(1, "???\n");
+            break;
+    }
+    Vnm_tprint(1, "  Nonlinear solver:  ");
+    switch (fetk[icalc]->nkey) {
+        case VNT_NEW:
+            Vnm_print(1, "newton\n");
+            break;
+        case VNT_INC:
+            Vnm_print(1, "incremental\n");
+            break;
+        case VNT_ARC:
+            Vnm_print(1, "pseudo-arclength\n");
+            break;
+        default:
+            Vnm_print(1, "??? ");
+            break;
+    }
+    Vnm_tprint(1, "  Nonlinear solver tol.:  %g\n", fetk[icalc]->ntol);
+    Vnm_tprint(1, "  Nonlinear solver max. iters.:  %d\n", fetk[icalc]->nmax);
+    Vnm_tprint(1, "     Initial guess:  ");
+    switch (fetk[icalc]->gues) {
+        case VGT_ZERO:
+            Vnm_tprint(1, "zero\n");
+            break;
+        case VGT_DIRI:
+            Vnm_tprint(1, "boundary function\n");
+            break;
+        case VGT_PREV:
+            Vnm_tprint(1, "interpolated previous solution\n");
+            break;
+        default:
+            Vnm_tprint(1, "???\n");
+            break;
+    }
 
 }
 
@@ -1846,7 +1922,7 @@ before you solve!\n");
             break;
     }
 
-    Vnm_print(1, "  Initial mesh has %d vertices\n", 
+    Vnm_tprint(1, "  Initial mesh has %d vertices\n", 
       Gem_numVV(fetk[icalc]->gm));
     while (1) {
         nverts = Gem_numVV(fetk[icalc]->gm);
@@ -1860,12 +1936,12 @@ before you solve!\n");
             Vnm_tprint(1, "  Marked 0 simps; hit error/size tolerance.\n");
             break;
         }
-        Vnm_print(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
+        Vnm_tprint(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
           marked);
         AM_refine(fetk[icalc]->am, 0, USEHB);
     }
     nverts = Gem_numVV(fetk[icalc]->gm);
-    Vnm_print(1, "  Done refining; have %d verts.\n", nverts);
+    Vnm_tprint(1, "  Done refining; have %d verts.\n", nverts);
 
     return 1;
 }
@@ -1916,7 +1992,7 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
         } else VASSERT(0);
 
 #ifndef VAPBSQUIET
-        Vnm_tprint(1, "    Total electrostatic energy = %1.12E kJ/mol\n", 
+        Vnm_tprint(1, "      Total electrostatic energy = %1.12E kJ/mol\n", 
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         fflush(stdout);
 #endif
@@ -1924,8 +2000,8 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 
     if (pbeparm->calcenergy == 2) {
 
-        Vnm_print(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
-        Vnm_print(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
+        Vnm_tprint(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
+        Vnm_tprint(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
         *qfEnergy = 0;
         *qmEnergy = 0;
         *dielEnergy = 0;
@@ -1935,4 +2011,204 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
     return 1;
 }
 
+VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm, 
+  Vfetk *fetk[NOSH_MAXCALC]) {
+
+    int nverts, marked;
+
+    nverts = Gem_numVV(fetk[icalc]->gm);
+    if (nverts > feparm->maxvert) {
+        Vnm_tprint(1, "    Current number of vertices (%d) exceeds max (%d)!\n",
+          nverts, feparm->maxvert);
+        return 0;
+    }
+    Vnm_tprint(1, "      Mesh currently has %d vertices\n", nverts);
+
+    switch(feparm->akeySOLVE) {
+        case FRT_UNIF:
+            Vnm_tprint(1, "      Commencing uniform refinement.\n");
+            break;
+        case FRT_GEOM:
+            Vnm_tprint(1, "      Commencing geometry-based refinement.\n");
+            break;
+        case FRT_RESI:
+            Vnm_tprint(1, "      Commencing residual-based refinement.\n");
+            break;
+        case FRT_DUAL:
+            Vnm_tprint(1, "      Commencing dual problem-based refinement.\n");
+            break;
+        case FRT_LOCA:
+            Vnm_tprint(1, "      Commencing local-based refinement.\n.");
+            break;
+        default:
+            Vnm_tprint(2, "      Error -- unknown refinement type (%d)!\n", 
+              feparm->akeySOLVE);
+            return 0;
+            break;
+    }
+
+    marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
+      feparm->ekey, feparm->etol);
+    if (marked == 0) {
+        Vnm_tprint(1, "      Marked 0 simps; hit error/size tolerance.\n");
+        return 0;
+    }
+    Vnm_tprint(1, "      Have %d verts, marked %d.  Refining...\n", nverts,
+      marked);
+    AM_refine(fetk[icalc]->am, 0, USEHB);
+    nverts = Gem_numVV(fetk[icalc]->gm);
+    Vnm_tprint(1, "      Done refining; have %d verts.\n", nverts);
+
+    return 1;
+}
+
+
+VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
+
+    char writestem[VMAX_ARGLEN];
+    char outpath[VMAX_ARGLEN];
+    int i, nx, ny, nz, writeit;
+    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+    AM *am;
+    Bvec *vec;
+
+    if (nosh->bogus) return 1;
+
+    am = fetk->am;
+    vec = am->w0;
+  
+    for (i=0; i<pbeparm->numwrite; i++) { 
+
+        switch (pbeparm->writetype[i]) {
+
+            writeit = 1;
+
+            case VDT_CHARGE:
+ 
+                Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_POT:
+ 
+                Vnm_tprint(1, "    Writing potential to ");
+                Vfetk_fillArray(fetk, vec, VDT_POT);
+                break;
+
+            case VDT_SMOL:
+
+                Vnm_tprint(1, "    Writing molecular accessibility to ");
+                Vfetk_fillArray(fetk, vec, VDT_SMOL);
+                break;
+
+            case VDT_SSPL:
+
+                Vnm_tprint(1, "    Writing spline-based accessibility to ");
+                Vfetk_fillArray(fetk, vec, VDT_SSPL);
+                break;
+
+            case VDT_VDW:
+
+                Vnm_tprint(1, "    Writing van der Waals accessibility to ");
+                Vfetk_fillArray(fetk, vec, VDT_VDW);
+                break;
+
+            case VDT_IVDW:
+
+                Vnm_tprint(1, "    Writing ion accessibility to ");
+                Vfetk_fillArray(fetk, vec, VDT_IVDW);
+                break;
+
+            case VDT_LAP:
+
+                Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_EDENS:
+
+                Vnm_tprint(2, "    Sorry; can't write energy density for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_NDENS:
+
+                Vnm_tprint(1, "    Writing number density to ");
+                Vfetk_fillArray(fetk, vec, VDT_NDENS);
+                break;
+
+            case VDT_QDENS:
+
+                Vnm_tprint(1, "    Writing charge density to ");
+                Vfetk_fillArray(fetk, vec, VDT_QDENS);
+                break;
+
+            case VDT_DIELX:
+
+                Vnm_tprint(2, "    Sorry; can't write x-shifted dielectric map for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_DIELY:
+
+                Vnm_tprint(2, "    Sorry; can't write y-shifted dielectric map for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_DIELZ:
+
+                Vnm_tprint(2, "    Sorry; can't write z-shifted dielectric map for FEM!\n");
+                writeit = 0;
+                break;
+
+            case VDT_KAPPA:
+
+                Vnm_tprint(1, "    Sorry; can't write kappa map for FEM!\n");
+                writeit = 0;
+                break;
+
+            default:
+
+                Vnm_tprint(2, "Invalid data type for writing!\n");
+                writeit = 0;
+                return 0;
+        }
+
+        if (!writeit) return 0;
+
+
+#ifdef HAVE_MPI_H
+        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
+#else
+        sprintf(writestem, "%s", pbeparm->writestem[i]);
+#endif
+
+        switch (pbeparm->writefmt[i]) {
+
+            case VDF_DX:
+                sprintf(outpath, "%s.%s", writestem, "dx");
+                Vnm_tprint(1, "%s\n", outpath);
+                Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_DX);
+                break;
+
+            case VDF_AVS:
+                sprintf(outpath, "%s.%s", writestem, "ucd");
+                Vnm_tprint(1, "%s\n", outpath);
+                Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_AVS);
+                break;
+
+            case VDF_UHBD:
+                Vnm_tprint(2, "UHBD format not supported for FEM!\n");
+                break;
+
+            default:
+                Vnm_tprint(2, "Bogus data format (%d)!\n", 
+                  pbeparm->writefmt[i]);
+                break;
+        }
+                
+    }
+
+    return 1;
+}
 

@@ -913,4 +913,34 @@ VEXTERNC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock);
  * @bug  This function is not thread-safe */
 VEXTERNC void Vfetk_dumpLocalVar();
 
+/**
+ * @brief  Fill an array with the specified data
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  thee  Vfetk object
+ * @param  vec  FEtk Bvec vector to use
+ * @param  type  Type of data to write
+ * @note  This function is thread-safe 
+ * @bug  Several values of type are not implemented
+ * @return  1 if successful, 0 otherwise */  
+VEXTERNC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type);
+
+/**
+ * @brief  Write out data
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  thee  Vfetk object
+ * @param  vec  FEtk Bvec vector to use
+ * @param  format  Format for data
+ * @param iodev  Output device type (FILE/BUFF/UNIX/INET)
+ * @param iofmt  Output device format (ASCII/XDR)
+ * @param thost  Output hostname (for sockets)
+ * @param fname  Output FILE/BUFF/UNIX/INET name
+ * @note  This function is thread-safe 
+ * @bug  Some values of format are not implemented
+ * @return  1 if successful, 0 otherwise */  
+VEXTERNC int Vfetk_write(Vfetk *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, Bvec *vec, Vdata_Format format);
+
+
 #endif /* ifndef _VFETK_H_ */

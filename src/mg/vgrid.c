@@ -714,7 +714,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         } else {
             Vnm_print(0, "Vgrid_writeDX:  Writing comments for %s format.\n",
               iofmt);
-            Vio_printf(sock, "# Data from APBS\n");
+            Vio_printf(sock, "# Data from %s\n", PACKAGE_STRING);
             Vio_printf(sock, "# \n");
             Vio_printf(sock, "# %s\n", title);
             Vio_printf(sock, "# \n");
@@ -770,7 +770,7 @@ class field\n");
         } else {
             Vnm_print(0, "Vgrid_writeDX:  Writing comments for %s format.\n",
               iofmt);
-            Vio_printf(sock, "# Data from APBS\n");
+            Vio_printf(sock, "# Data from %s\n", PACKAGE_STRING);
             Vio_printf(sock, "# \n");
             Vio_printf(sock, "# %s\n", title);
             Vio_printf(sock, "# \n");

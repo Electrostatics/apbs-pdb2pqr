@@ -1,10 +1,45 @@
 /** 
+ * <center>
  * @mainpage APBS Users Guide
  *  
- * <center>
  * APBS was written by Nathan A. Baker.<br>
  * Additional contributing authors listed in the code documentation.
  * </center>
+ * 
+ *  <hr width="100%">
+ *  @section toc   Table of Contents
+ *  <ul>
+ *  <li> @ref license
+ *  <li> @ref intro
+ *  <li> @ref installation
+ *  <li> @ref tour
+ *    <ul>
+ *    <li> @ref exec
+ *    <li> @ref test
+ *    <li> @ref tools
+ *    <li> @ref examplecode
+ *    </ul>
+ *  <li> @ref usage
+ *    <ul>
+ *    <li> @ref read
+ *    <li> @ref elec
+ *    <li> @ref print
+ *    </ul>
+ *  <li> @ref lists
+ *  <li> @ref bugs
+ *  <li> @ref license
+ *  <li> @ref programming
+ *    <ul> 
+ *    <li> @ref style
+ *    <li> @ref api
+ *      <ul>
+ *      <li> <a href="modules.html">Modules</a>
+ *      <li> <a href="annotated.html">Class list</a>
+ *      <li> <a href="functions.html">Class members</a>
+ *      <li> <a href="globals.html">Class methods</a>
+ *      </ul>
+ *    </ul>
+ *  </ul>
  * 
  * <hr width="100%">
  * @section license License
@@ -37,40 +72,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
- * 
- *  <hr width="100%">
- *  @section toc   Table of Contents
- *  <ul>
- *  <li> @ref intro
- *  <li> @ref installation
- *  <li> @ref tour
- *    <ul>
- *    <li> @ref exec
- *    <li> @ref test
- *    <li> @ref tools
- *    <li> @ref examplecode
- *    </ul>
- *  <li> @ref usage
- *    <ul>
- *    <li> @ref read
- *    <li> @ref elec
- *    <li> @ref print
- *    </ul>
- *  <li> @ref lists
- *  <li> @ref bugs
- *  <li> @ref license
- *  <li> @ref programming
- *    <ul> 
- *    <li> @ref style
- *    <li> @ref api
- *      <ul>
- *      <li> <a href="modules.html">Modules</a>
- *      <li> <a href="annotated.html">Class list</a>
- *      <li> <a href="functions.html">Class members</a>
- *      <li> <a href="globals.html">Class methods</a>
- *      </ul>
- *    </ul>
- *  </ul>
  * 
  *  <hr width="100%">
  *  @section intro Introduction
@@ -241,7 +242,7 @@
  * <i><b>If you have vendor-supplied BLAS libraries for your
  * platform, set the environmental variable <pre>BLASPATH</pre> to their
  * location and use them with APBS by inkoving the 
- * <pre>--with-blas=${BLASPATH}</pre> flag during configurationa.</b></i>
+ * <pre>--with-blas=${BLASPATH}</pre> flag during configuration.</b></i>
  * <li> You should now find the APBS executable in the
  * <code>${TOP}/dist/bin/${triplet}</code> directory,
  * </ol>
@@ -266,8 +267,8 @@
  * where the <code>...</code> denotes other configure options you need.  Here
  * are a few additional notes on installing APBS on various platforms; if you
  * encounter any interesting configuration/compilation behavior or useful
- * optimization tricks, please <a href="mailto:baker@biochem.wustl.edu">let me
- * know</a>.  
+ * optimization tricks, please <a href="mailto:apbs-users@cholla.wustl.edu">let
+ * me know</a>.  
  * <ul>
  * <li>Intel ix86 processor family (Windows)<br>
  * Currently, APBS compiles runs under the <a
@@ -755,10 +756,10 @@
  * sets up the problem and skips the solver step.  This is useful for setting
  * up charge, dielectric, etc. grids for use in other runs.
  * 
- * <li> <a href="#fem"><code>fem</code></a> for adaptive finite element
- * calculations.  This function will not be (publically) available until the
- * release of the Holst group's <a href="htp://www.fetk.org">FEtk</a> software
- * package.
+ * <li> <a href="#fe-manual"><code>fe-manual</code></a> for adaptive finite
+ * element calculations.  This function will not be (publicly) available until
+ * the release of the Holst group's <a href="htp://www.fetk.org">FEtk</a>
+ * software package.
  * </ul>
  * 
  * <br><br><a name="mg-manual"><b>Manual multigrid calculation syntax
@@ -888,6 +889,57 @@
  * <li> <a href="#writemat">writemat</a> (optional)
  * </ul>
  * 
+ * <br><br><a name="fe-manual"><b>Manual finite element calculation syntax
+ * (fe-manual)</b></a>
+ * <br><br>
+ * <i>PLEASE NOTE:  This mode of execution is experimental and does not
+ * run very quickly yet.  For performance-sensitive applications, please use
+ * the multigrid modes above.</i>
+ * <br><br>
+ * This section always has the form
+ * <pre>
+ * elec
+ *   fe-manual
+ *   ...
+ * end
+ * </pre>
+ * where the <code>...</code> denotes the various parameter keywords listed
+ * below.  This form of multigrid calculations is most useful for focusing; the
+ * user simply provides information about the coarsest and finest meshes
+ * desired and the code sets up the rest, including number of focusing levels,
+ * centers, dimensions, etc.<br> As before, <i>there are no default parameter
+ * values</i>.  Therefore, unless otherwise indicated, all of the following
+ * keywords should be specified:
+ * <ul>
+ * <li> <a href="#domainLength">domainLength</a>
+ * <li> <a href="#etol">etol</a>
+ * <li> <a href="#ekey">ekey</a>
+ * <li> <a href="#akeyPRE">akeyPRE</a>
+ * <li> <a href="#akeySOLVE">akeySOLVE</a>
+ * <li> <a href="#targetNum">targetNum</a>
+ * <li> <a href="#targetRes">targetRes</a>
+ * <li> <a href="#maxsolve">maxsolve</a>
+ * <li> <a href="#maxvert">maxvert</a>
+ * <li> <a href="#mol">mol</a>
+ * <li> <a href="#lpbe">lpbe</a>, <a href="#npbe">npbe</a>, 
+ *      <a href="#lrpbe">lrpbe</a>, or <a href="#nrpbe">nrpbe</a>
+ * <li> <a href="#bcfl">bcfl</a>
+ * <li> <a href="#ion">ion</a> (optional)
+ * <li> <a href="#pdie">pdie</a>
+ * <li> <a href="#sdie">sdie</a>
+ * <li> <a href="#srfm">srfm</a>
+ * <li> <a href="#chgm">chgm</a>
+ * <li> <a href="#usemap">usemap</a> (optional)
+ * <li> <a href="#srad">srad</a>
+ * <li> <a href="#swin">swin</a>
+ * <li> <a href="#temp">temp</a>
+ * <li> <a href="#gamma">gamma</a>
+ * <li> <a href="#calcenergy">calcenergy</a>
+ * <li> <a href="#calcforce">calcforce</a>
+ * <li> <a href="#write">write</a> (optional)
+ * <li> <a href="#writemat">writemat</a> (optional)
+ * </ul>
+ *
  * <br><br><a name="keywords"><b>Keyword definitions</b></a>
  * <br><br>
  * <ul>
@@ -916,7 +968,7 @@
  * <br> The mesh grid spacing (in &Aring;); may be different in each direction.
  * Either this keyword or <href="#name">glen</a> must be specified.
  *
- * <li> <a name="grid">glen> <i>xlen ylen zlen</i></a>
+ * <li> <a name="glen">glen <i>xlen ylen zlen</i></a>
  * <br> The mesh lengths (in &Aring;); may be different in each direction.
  * Either this keyword or <a href="#grid">grid</a> must be specified.
  * 
@@ -933,12 +985,14 @@
  * section; this is the molecule for which the PBE is solved.
  *
  * <li> <a name="lpbe">lpbe</a> 
- * <br> Specifies that the linearized PBE should be solved.  (See also <a
- * href="#npbe">npbe</a>).
+ * <br> Specifies that the linearized PBE should be solved.  
+ * Either this keyword or one of <a href="#npbe">npbe</a>, <a
+ * href="#lrpbe">lrpbe</a>, or <a href="#nrpbe">nrpbe</a> must be present.
  * 
  * <li> <a name="npbe">npbe</a>
- * <br> Specifies that the nonlinear (full) PBE should be solved.  (See also <a
- * href="#lpbe">lpbe</a>).
+ * <br> Specifies that the nonlinear (full) PBE should be solved. 
+ * Either this keyword or one of <a href="#npbe">npbe</a>, <a
+ * href="#lrpbe">lrpbe</a>, or <a href="#nrpbe">nrpbe</a> must be present.
  *
  * <li> <a name="bcfl">bcfl</a> <i>flag</i>
  * <br> Boundary condition flag; where <i>flag</i> is one of the following:
@@ -1089,47 +1143,70 @@
  *      <li> <i>type</i>
  *      <br> <ul>
  *           <li> <code>charge</code>  Write out the biomolecular charge
- *           distribution in units of e
- *           <li> <code>pot</code>  Write out potential in units of kT/e
+ *           distribution in units of e 
+ *           <i>MG only</i>
+ *           <li> <code>pot</code>  Write out potential in units of kT/e 
+ *           <i>MG and FEM</i>
  *           <li> <code>smol</code> Write out solvent accessibility defined by
  *           molecular/Connolly surface definition (1 = accessible, 0 =
- *           inaccessible)
+ *           inaccessible) 
+ *           <i>MG and FEM</i>
  *           <li> <code>sspl</code> Write out spline-based solvent
- *           accessibility (1 = accessible, 0 = inaccessible)
+ *           accessibility (1 = accessible, 0 = inaccessible) 
+ *           <i>MG and FEM</i>
  *           <li> <code>vdw</code> Write out van der Waals-based accessibility
- *           (1 = accessible, 0 = inaccessible)
+ *           (1 = accessible, 0 = inaccessible) 
+ *           <i>MG and FEM</i>
  *           <li> <code>ivdw</code> Write out ion accessibility/inflated van
- *           der Waals (1 = accessible, 0 = inaccessible)
+ *           der Waals (1 = accessible, 0 = inaccessible) 
+ *           <i>MG and FEM</i>
  *           <li> <code>lap</code> Write out Laplacian of potential
- *           (kT/e/\f$\AA^2\f$)
+ *           (kT/e/\f$\AA^2\f$) 
+ *           <i>MG only</i>
  *           <li> <code>edens</code> Write out energy density 
  *           \f$\epsilon (\nabla u)^2\f$, where \f$u\f$ is potential
- *           \f$(kT/e/A)^2\f$
+ *           \f$(kT/e/A)^2\f$ 
+ *           <i>MG only</i>
  *           <li> <code>ndens</code> Write out ion number density \f$\sum c_i
  *           \exp (-q_i u)^2\f$, where \f$u\f$ is potential (output in M)
+ *           <i>MG and FEM</i>
  *           <li> <code>qdens</code> Write out ion charge density \f$\sum q_i
  *           c_i \exp (-q_i u)^2\f$, where \f$u\f$ is potential (output in e_c
- *           M)
+ *           M) 
+ *           <i>MG and FEM</i>
  *           <li> <code>dielx</code> Write out the x-shifted dielectric map of
  *           the dielectric function \f$\epsilon(x)\f$ for use in subsequent
  *           calculations (see <a href="#read-diel"><code>read diel</code></a>
  *           (unitless)
+ *           <i>MG only</i>
  *           <li> <code>diely</code> Write out the y-shifted dielectric map of
  *           the dielectric function \f$\epsilon(x)\f$ for use in subsequent
  *           calculations (see <a href="#read-diel"><code>read diel</code></a>
  *           (unitless)
+ *           <i>MG only</i>
  *           <li> <code>dielz</code> Write out the z-shifted dielectric map of
  *           the dielectric function \f$\epsilon(x)\f$ for use in subsequent
  *           calculations (see <a href="#read-diel"><code>read diel</code></a>
  *           (unitless)
+ *           <i>MG only</i>
  *           <li> <code>kappa</code> Write out the map of the function
  *           \f$\overline{\kappa}^2(x)\f$ for use in subsequent calculations
  *           (see <a href="#read-kappa"><code>read kappa</code></a> (units of
  *           \f$\AA^{-2}\f$)
+ *           <i>MG only</i>
  *           </ul>
  *      <li> <i>format</i>
- *      <br> <code>dx</code> for OpenDX format, <code>avs</code> for AVS UCD
- *      format, <code>uhbd</code> for UHBD format.
+ *           <ul>
+ *           <li><code>dx</code> <a href="http://www.opendx.org">OpenDX</a> 
+ *               format
+ *               <i>MG and FEM</i>
+ *           <li><code>avs</code> <a href="http://www.avs.com">AVS</a> UCD
+ *               format
+ *               <i>FEM only</i>
+ *           <li><code>uhbd</code> <a
+ *               href="http://mccammon.ucsd.edu/uhbd.html">UHBD</a> format
+ *               <i>MG only</i>
+ *           </ul>
  *      <li> <i>stem</i>
  *      <br> The filename will be <i>stem</i>.XXX, where XXX is determined from
  *      the file format.
@@ -1188,6 +1265,96 @@
  * should be between 0 and 1; empirical evidence suggests that 0.1 is a good
  * choice.
  * 
+ * <li> <a name="domainLength"><code>domainLength</code></a> 
+ * <i>xlen</i> <i>ylen</i> <i>zlen</i>
+ * <br> The domain length in each direction (in &Aring;)
+ * 
+ * <li> <a name="etol"><code>etol</code></a> <i>etol</i>
+ * <br> Error tolerance for adaptive refinement (see <a href="#ekey">ekey</a>)
+ * 
+ * <li> <a name="ekey"><code>ekey</code></a> <i>key</i>
+ * <br> Error tolerance key:
+ *   <ul>
+ *   <li> <code>simp</code> -- <a href="#etol">etol</a> is interpreted as
+ *        per-simplex error tolerance
+ *   <li> <code>glob</code> -- <a href="#etol">etol</a> is interpreted as
+ *        global error tolerance
+ *   <li> <code>frac</code> -- <a href="#etol">etol</a> is interpreted as
+ *        fraction of simplices you want refined
+ *   </ul>
+ * 
+ * <li> <a name="akeyPRE"><code>akeyPRE</code></a> <i>key</i>
+ * <br> Key for adpative pre-solve refinement:
+ *   <ul>
+ *   <li> <code>unif</code> -- uniform refinement
+ *   <li> <code>geom</code> -- geometry-based refinement
+ *   <li> <code>resi</code> -- residual-based refinement
+ *   <li> <code>dual</code> -- dual-based refinement
+ *   <li> <code>loca</code> -- local-based refinement
+ *   </ul>
+ *
+ * <li> <a name="akeySOLVE"><code>akeySOLVE</code></a> <i>key</i>
+ * <br> Key for adpative pre-solve refinement:
+ *   <ul>
+ *   <li> <code>unif</code> -- uniform refinement
+ *   <li> <code>geom</code> -- geometry-based refinement
+ *   <li> <code>resi</code> -- residual-based refinement
+ *   <li> <code>dual</code> -- dual-based refinement
+ *   <li> <code>loca</code> -- local-based refinement
+ *   </ul>
+ *
+ * <li> <a name="targetNum"><code>targetNum</code></a> <i>number</i>
+ * <br> Target number of vertices in mesh before starting solver (used for <i>a
+ * priori</i> refinement); the mesh is refined with the <a
+ * href="#akeyPRE">akeyPRE</a> method until this number of vertices is reached
+ * or <a href="#targetRes">targetRes</a> resolution.
+ *
+ * <li> <a name="targetRes"><code>targetRes</code></a> <i>res</i>
+ * <br> Target resolution (in &Aring;) of simplices in mesh; refinment will
+ * continue until the longest edge of every candidate simplex is below this
+ * value.
+ *
+ * <li> <a name="maxsolve"><code>maxsolve</code></a> <i>number</i>
+ * <br> Number of times to perform the solve-estimate-refine cycle; i.e., the
+ * number of times to 
+ *   <ol>
+ *   <li> solve the problem, 
+ *   <li> estimate the error,
+ *   <li> and refine the mesh.
+ *   </ol>
+ * The solve-estimate-refine cycle continues this many times or until <a
+ * href="#targetRes">targetRes</a> or <a href="#maxvert">maxvert</a> is
+ * reached.
+ *
+ * <li> <a name="maxvert"><code>maxvert</code></a> <i>number</i>
+ * <br> Maximum number of vertices in mesh (see <a
+ * href="#maxsolve">maxsolve</a>)
+ *
+ * <li> <a name="lrpbe"><code>lrpbe</code></a>
+ * <br> Specifies the linearized form of the regularized PBE equation (RPBE).
+ * The regularized PBE equation replaces the point charge distribution with the
+ * corresponding Green's function.  As a result of this replacement, the
+ * solution corresponds to the reaction field instead of the total potential;
+ * the total potential can be recovered by adding the approrriate Coulombic
+ * terms to the solution.  Likewise, this equation immediately yields the
+ * solvation energy without the need for reference calculations.  Either this
+ * keyword or one of <a href="#npbe">npbe</a>, <a href="#lpbe">lpbe</a>, or <a
+ * href="#nrpbe">nrpbe</a> must be present.  
+ * <b>NOTE:  this function is only available for FEM-based solvers (i.e., <a
+ * href="#fe-manual">fe-manual</a>).</b>
+ * 
+ * <li> <a name="nrpbe"><code>nrpbe</code></a>
+ * <br> Specifies the full form of the regularized PBE equation (RPBE).
+ * The regularized PBE equation replaces the point charge distribution with the
+ * corresponding Green's function.  As a result of this replacement, the
+ * solution corresponds to the reaction field instead of the total potential;
+ * the total potential can be recovered by adding the approrriate Coulombic
+ * terms to the solution.  Likewise, this equation immediately yields the
+ * solvation energy without the need for reference calculations.  Either this
+ * keyword or one of <a href="#npbe">npbe</a>, <a href="#lpbe">lpbe</a>, or <a
+ * href="#lrpbe">lrpbe</a> must be present.
+ * <b>NOTE:  this function is only available for FEM-based solvers (i.e., <a
+ * href="#fe-manual">fe-manual</a>).</b>
  * 
  * </ul>
  *  
