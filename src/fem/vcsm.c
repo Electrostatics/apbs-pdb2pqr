@@ -204,7 +204,8 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
      * placed in at simplex */
     for (iatom=0; iatom<thee->natom; iatom++) {
         if (thee->nqsm[iatom] == 0) {
-            Vnm_print(2,"Vcsm_init: atom %d not placed in simplex!\n");
+            Vnm_print(2,"Vcsm_init: Atom %d not placed in simplex!\n");
+            Vnm_print(2,"Vcsm_init: Your mesh sucks (too small?)!\n");
             VASSERT(0);
         }
     }
