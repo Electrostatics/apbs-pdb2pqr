@@ -106,17 +106,21 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     /* Atom radius */
     double rmax;
     double rtot;
-    /* A list of how many atoms we've already stored at each grid point */
-    int *nputatoms;
-    /* Atom list */
-    Vatom *atom_list;
+    Vatom *atom;
+
+    VASSERT(alist != VNULL);
 
     /* Set up grid dimensions */
     thee->nx = nx;
     thee->ny = ny;
-    thee->nz = ny;
-    thee->nsphere = nsphere;
+    thee->nz = nz;
     thee->n = nx*ny*nz;
+ 
+    /* Set up probe information */
+    thee->nsphere = nsphere;
+    thee->max_radius = max_radius;
+    thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
+    VASSERT(thee->sphere != VNULL);
 
     /* Allocate space */
     if ((thee->natoms = Vram_ctor(thee->n,(sizeof(int)))) == VNULL) {
@@ -124,68 +128,60 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
         return 0;
     }
     for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
-
     if ((thee->atoms = Vram_ctor(thee->n,(sizeof(Vatom **)))) == VNULL) {
         fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
         return 0;
     }
     for (i=0; i<thee->n; i++) (thee->atoms)[i] = VNULL;
 
-    /* Get atom list */
-    VASSERT(alist != VNULL);
-    atom_list = Valist_getAtomList(alist);
 
     /* Find dimensions of protein and atoms*/
     x_max = y_max = z_max = -VLARGE;
     x_min = y_min = z_min = VLARGE;
     rmax = -1.0;
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        x = (Vatom_getPosition(atom_list + i))[0];
-        y = (Vatom_getPosition(atom_list + i))[1];
-        z = (Vatom_getPosition(atom_list + i))[2];
+        atom = Valist_getAtom(alist, i);
+        x = (Vatom_getPosition(atom))[0];
+        y = (Vatom_getPosition(atom))[1];
+        z = (Vatom_getPosition(atom))[2];
         if (x < x_min) x_min = x;
         if (y < y_min) y_min = y;
         if (z < z_min) z_min = z;
         if (x > x_max) x_max = x;
         if (y > y_max) y_max = y;
         if (z > z_max) z_max = z;
-        if (Vatom_getRadius(atom_list + i) > rmax) {
-            rmax = Vatom_getRadius(atom_list + i );
-        }
+        if (Vatom_getRadius(atom) > rmax) rmax = Vatom_getRadius(atom);
     }
 
-    /* Set the probe radius */
-    thee->max_radius = max_radius;
-
     /* Set up grid spacings, 2.84 > 2*sqrt(2) */
-    thee->hx = (x_max - x_min + 2.84*(rmax+thee->max_radius))/(thee->nx-2);
-    thee->hy = (y_max - y_min + 2.84*(rmax+thee->max_radius))/(thee->ny-2);
-    thee->hzed = (z_max - z_min + 2.84*(rmax+thee->max_radius))/(thee->nz-2);
+    thee->hx = (x_max - x_min + 2.84*(rmax+thee->max_radius))/thee->nx;
+    thee->hy = (y_max - y_min + 2.84*(rmax+thee->max_radius))/thee->ny;
+    thee->hzed = (z_max - z_min + 2.84*(rmax+thee->max_radius))/thee->nz;
  
     /* Inflate the grid a bit 1.42 > sqrt(2) */
+#if 0
     (thee->grid_lower_corner)[0] = x_min-1.42*(rmax+thee->max_radius)-thee->hx;
     (thee->grid_lower_corner)[1] = y_min-1.42*(rmax+thee->max_radius)-thee->hy;
     (thee->grid_lower_corner)[2] = z_min-1.42*(rmax+thee->max_radius)-thee->hzed;
+#else
+    (thee->grid_lower_corner)[0] = x_min-1.42*(rmax+thee->max_radius);
+    (thee->grid_lower_corner)[1] = y_min-1.42*(rmax+thee->max_radius);
+    (thee->grid_lower_corner)[2] = z_min-1.42*(rmax+thee->max_radius);
+#endif
 
     /* Find out how many atoms are associated with each grid point */
     for (i=0;i<Valist_getNumberAtoms(alist);i++) { 
- 
+        atom = Valist_getAtom(alist, i);
         /* Get the position in the grid's frame of reference */
-        x = (Vatom_getPosition(atom_list+i))[0] 
-                - (thee->grid_lower_corner)[0];
-        y = (Vatom_getPosition(atom_list+i))[1] 
-                - (thee->grid_lower_corner)[1];
-        z = (Vatom_getPosition(atom_list+i))[2] 
-                - (thee->grid_lower_corner)[2];
+        x = (Vatom_getPosition(atom))[0] - (thee->grid_lower_corner)[0];
+        y = (Vatom_getPosition(atom))[1] - (thee->grid_lower_corner)[1];
+        z = (Vatom_getPosition(atom))[2] - (thee->grid_lower_corner)[2];
 
         /* Get the range the atom radius + probe radius spans */
-        rtot = Vatom_getRadius(&(atom_list[i])) + thee->max_radius;
+        rtot = Vatom_getRadius(atom) + thee->max_radius;
     
         /* Calculate the range of grid points the inflated atom spans in the x 
-           direction .
-           I admit, this method for determing the accessible grid points isn't
-           very fancy, but I kept getting crap for answers with Pythagorean's
-           Thm */
+         * direction. */
         i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
         i_min = (int)(floor( (x - rtot)/(thee->hx) ));
         j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
@@ -194,90 +190,60 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
         k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
  
         /* Now find and assign the grid points */
-        for ( ii = i_min; ii <= i_max; ii++) {
-            for ( jj = j_min; jj <= j_max; jj++) {
-                for ( kk = k_min; kk <= k_max; kk++) {
-                    rx = VABS((double)(ii)*(thee->hx) - x);
-                    if (rx > thee->hx) rx = rx - thee->hx;
-                    ry = VABS((double)(jj)*(thee->hy) - y);
-                    if (ry > thee->hy) ry = ry - thee->hy;
-                    rz = VABS((double)(kk)*(thee->hzed) - z);
-                    if (rz > thee->hzed) rz = rz - thee->hzed;
-                    /* Fudge to correct for numerical problems */
-                    if ((rx*rx + ry*ry + rz*rz) <= (rtot*rtot )) {
-                        ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
-                       (thee->natoms[ui])++;
-                    }  /* if ... */
-                } /* for (kk ... */
-            } /* for (jj ... */
-        } /* for (ii ... */
-    } /* for i =0;i<Valist_getNumberAtoms(alist);i++) */
+        for ( ii = i_min; ii < i_max; ii++) {
+            for ( jj = j_min; jj < j_max; jj++) {
+                for ( kk = k_min; kk < k_max; kk++) {
+                    ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
+                    (thee->natoms[ui])++;
+                } 
+            } 
+        } 
+    } /* for i =0:natoms */
 
     /* Allocate the space to store the pointers to the atoms */
-    for (i=0;i<thee->n;i++) {
+    for (i=0; i<thee->n; i++) {
         if ((thee->natoms)[i] > 0) {
-            thee->atoms[i] = Vram_ctor((thee->natoms)[i],sizeof(Vatom *));
+            thee->atoms[i] = Vram_ctor(thee->natoms[i], sizeof(Vatom *));
             VASSERT(thee->atoms[i] != VNULL);
         }
+        /* Clear the counter for later use */
+        thee->natoms[i] = 0;
     }
-
-    if (( nputatoms = Vram_ctor(thee->n,sizeof(int))) == VNULL) {
-        fprintf(stderr,"Vacc_ctor2: Failed to allocate space.\n");
-        return 0;
-    }
-    for (i=0;i<thee->n;i++) nputatoms[i] = 0;
-    for (i=0;i<alist->number;i++) { 
  
+    /* Assign the atoms to grid points */
+    for (i=0;i<Valist_getNumberAtoms(alist);i++) {
+        atom = Valist_getAtom(alist, i);
         /* Get the position in the grid's frame of reference */
-        x = (Vatom_getPosition(atom_list +i))[0] - (thee->grid_lower_corner)[0];
-        y = (Vatom_getPosition(atom_list +i))[1] - (thee->grid_lower_corner)[1];
-        z = (Vatom_getPosition(atom_list +i))[2] - (thee->grid_lower_corner)[2];
+        x = (Vatom_getPosition(atom))[0] - (thee->grid_lower_corner)[0];
+        y = (Vatom_getPosition(atom))[1] - (thee->grid_lower_corner)[1];
+        z = (Vatom_getPosition(atom))[2] - (thee->grid_lower_corner)[2];
 
-    /* Get the range the atom radius + probe radius spans */
-    rtot = ((alist->atoms)[i]).radius + thee->max_radius;
-    
-    /* Calculate the range of grid points the inflated atom spans in the x 
-       direction 
-       
-       I admit, this method for determing the accessible grid points isn't
-       very fancy, but I kept getting crap for answers with Pythagorean's
-       Thm */
+        /* Get the range the atom radius + probe radius spans */
+        rtot = Vatom_getRadius(atom) + thee->max_radius;
 
-    i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
-    i_min = (int)(floor( (x - rtot)/(thee->hx) ));
-    j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
-    j_min = (int)(floor( (y - rtot)/(thee->hy) ));
-    k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
-    k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
+        /* Calculate the range of grid points the inflated atom spans in the x
+         * direction. */
+        i_max = (int)( ceil( (x + rtot)/(thee->hx) ));
+        i_min = (int)(floor( (x - rtot)/(thee->hx) ));
+        j_max = (int)( ceil( (y + rtot)/(thee->hy) ));
+        j_min = (int)(floor( (y - rtot)/(thee->hy) ));
+        k_max = (int)( ceil( (z + rtot)/(thee->hzed) ));
+        k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
 
-    /* Now find and assign the grid points */
-    for ( ii = i_min; ii <= i_max; ii++) {
-      for ( jj = j_min; jj <= j_max; jj++) {
-        for ( kk = k_min; kk <= k_max; kk++) {
-          rx = VABS((double)(ii)*(thee->hx) - x);
-          if (rx > thee->hx) rx = rx - thee->hx;
-          ry = VABS((double)(jj)*(thee->hy) - y);
-          if (ry > thee->hy) ry = ry - thee->hy;
-          rz = VABS((double)(kk)*(thee->hzed) - z);
-          if (rz > thee->hzed) rz = rz - thee->hzed;
-          /* Fudge to correct for numerical problems */
-          if ((rx*rx + ry*ry + rz*rz) <= (rtot*rtot )) {
-            ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
-            thee->atoms[ui][nputatoms[ui]] = &(alist->atoms[i]);
-            (nputatoms[ui])++;
-          }                                                
+        /* Now find and assign the grid points */
+        for ( ii = i_min; ii < i_max; ii++) {
+            for ( jj = j_min; jj < j_max; jj++) {
+                for ( kk = k_min; kk < k_max; kk++) {
+                    ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
+                    thee->atoms[ui][thee->natoms[ui]] = atom;
+                    (thee->natoms[ui])++;
+                }
+            }
         }
-      }
-    }
-  } 
+    } /* for i =0:natoms */
 
-  Vram_dtor((Vram **)&nputatoms,thee->n,sizeof(int));
 
-  /* Set up points on the surface of a sphere */
-  thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
-  VASSERT(thee->sphere != VNULL);
-
-  return 1;
+    return 1;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -344,9 +310,9 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
     Vec3 vec;
 
     /* Convert to grid based coordinates */
-    centeri = VRINT( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
-    centerj = VRINT( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
    
     /* Check to make sure we're on the grid; if not, we're definitely 
      * accessible */ 
@@ -393,9 +359,9 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
     VASSERT(radius <= thee->max_radius);
 
     /* Convert to grid based coordinates */
-    centeri = VRINT( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
-    centerj = VRINT( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
-    centerk = VRINT( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
 
     /* Check to make sure we're on the grid; if not, we're definitely
      * accessible */
@@ -412,8 +378,7 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
         vec[1] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[1];
         vec[2] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[2];
         dist = Vec3_dif2(center,vec);
-        if (dist < 
-           (Vatom_getRadius((thee->atoms)[ui][iatom])+radius) )
+        if (dist < (Vatom_getRadius((thee->atoms)[ui][iatom])+radius) )
           return 0;
     }
 
