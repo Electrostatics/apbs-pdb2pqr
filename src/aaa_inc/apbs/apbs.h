@@ -55,5 +55,6 @@
 #include "apbs/vgreen.h"
 #include "apbs/vpmg.h"
 #include "apbs/vpmgp.h"
+#include "apbs/vfetk.h"
 
 #endif /* _APBS_H_ */

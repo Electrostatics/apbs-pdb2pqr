@@ -103,7 +103,7 @@ VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *apbe, Gem *gm, AM *am);
 VEXTERNC void    Vfetk_dtor(Vfetk **thee);
 VEXTERNC void    Vfetk_dtor2(Vfetk *thee);
 
-VEXTERNC double* Vfetk_getSolution(Vfetk *thee, AM *am, int *length);
+VEXTERNC double* Vfetk_getSolution(Vfetk *thee, int *length);
 VEXTERNC double  Vfetk_getLinearEnergy1(Vfetk *thee, int color);
 VEXTERNC double  Vfetk_getLinearEnergy2(Vfetk *thee, int color);
 VEXTERNC double  Vfetk_getEnergyNorm2(Vfetk *thee, int color);
