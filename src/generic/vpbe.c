@@ -472,11 +472,20 @@ function\n", thee->maxIonRadius);
       (int)nhash[0], (int)nhash[1], (int)nhash[2]); 
 
 	if (focusFlag == 0){
-	  thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash[0]), (int)(nhash[1]),
-							(int)(nhash[2]), VACC_SPHERE);
+	  thee->acc = Vacc_ctor(thee->alist, 
+              radius, 
+              (int)(nhash[0]), 
+              (int)(nhash[1]), 
+              (int)(nhash[2]), 
+              VACC_SPHERE);
 	} else {
-	  thee->acc = Vacc_ctorFocus(thee->alist, radius, (int)(nhash[0]), (int)(nhash[1]),
-								 (int)(nhash[2]), VACC_SPHERE, xmin, ymin, zmin, xmax, ymax, zmax);
+	  thee->acc = Vacc_ctorFocus(thee->alist, 
+              radius, 
+              (int)(nhash[0]), 
+              (int)(nhash[1]), 
+              (int)(nhash[2]), 
+              VACC_SPHERE, 
+              xmin, ymin, zmin, xmax, ymax, zmax);
 	}
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
     VASSERT(thee->acc != VNULL);
