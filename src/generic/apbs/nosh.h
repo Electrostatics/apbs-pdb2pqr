@@ -119,6 +119,21 @@ enum eNOsh_ParmFormat {
 typedef enum eNOsh_ParmFormat NOsh_ParmFormat;
 
 /**
+ * @brief  NOsh print types
+ * @ingroup  NOsh
+ */
+enum eNOsh_PrintType {
+    NPT_ENERGY=0, /**< Energy */
+    NPT_FORCE=1 /**< Force */
+};
+
+/**
+ * @brief Declare NOsh_PrintType type
+ * @ingroup NOsh
+ */
+typedef enum eNOsh_PrintType NOsh_PrintType;
+
+/**
  *  @ingroup NOsh
  *  @author  Nathan Baker
  *  @brief   Calculation class for use when parsing fixed format input files
@@ -206,9 +221,9 @@ struct sNOsh {
     Vdata_Format chargefmt[NOSH_MAXMOL];         /**< Charge maps file 
                                           * formats (0=>OpenDX) */
     int nprint;                          /**< How many print sections? */
-    int printwhat[NOSH_MAXPRINT];        /**< What do we print:
-                                          * \li 0 = energy
-                                          * \li 1 = force */
+    NOsh_PrintType printwhat[NOSH_MAXPRINT];  /**< What do we print:
+                                               * \li 0 = energy
+                                               * \li 1 = force */
     int printnarg[NOSH_MAXPRINT];        /**< How many arguments in energy 
                                           * list */
     int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP]; /**< ELEC id (see elec2calc) */
@@ -348,7 +363,7 @@ typedef struct sNOsh NOsh;
  *  @param   iprint ID of PRINT statement
  *  @returns An integer ID of the observable to print (@see printwhat)
  */
-VEXTERNC int NOsh_printWhat(NOsh *thee, int iprint);
+VEXTERNC NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint);
 
 /** @brief   Return an integer mapping of an ELEC statement to a calculation ID
  *           (@see elec2calc)
@@ -450,7 +465,7 @@ VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
 /** @brief   Parse an input file only from a file
  *  @note    Included for SWIG wrapper compatibility
  *  @ingroup NOsh
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee      Pointer to NOsh object
  *  @param   filename  Name/path of readable file
  *  @return  1 if successful, 0 otherwise
