@@ -49,6 +49,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 
   CHANGES THAT AFFECT DEVELOPERS:
   * Changed Vgreen interface and improved efficiency
+  * Changed Vopot interface to support multiple grids
   * Added several norm and seminorm functions to Vgrid class
   * Altered --with-blas syntax in configure scripts and removed --disable-blas
   * Documented high-level frontend routines

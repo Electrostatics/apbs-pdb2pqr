@@ -56,7 +56,7 @@
 /* Specific headers */
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
-#include "apbs/vgrid.h"
+#include "apbs/vmgrid.h"
 #include "apbs/vunit.h"
 #include "apbs/vpbe.h"
 #include "apbs/pbeparm.h"
@@ -68,7 +68,8 @@
  */
 struct sVopot {
 
-    Vgrid *grid;  /**< Grid object containing potential data (in units kT/e) */
+    Vmgrid *mgrid;  /**< Multiple grid object containing potential data (in
+                     * units kT/e) */
     Vpbe   *pbe;  /**< Pointer to PBE object */
     Vbcfl bcfl;  /**< Boundary condition flag for returning potential
                   * values at points off the grid. */
@@ -84,24 +85,26 @@ typedef struct sVopot Vopot;
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
- *  @param   grid  Grid object containing potential data (in units kT/e)
+ *  @param   mgrid  Multiple grid object containing potential data (in units
+ *                  kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
  *  @returns Newly allocated and initialized Vopot object
  */
-VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, Vbcfl bcfl);
+VEXTERNC Vopot*  Vopot_ctor(Vmgrid *mgrid, Vpbe *pbe, Vbcfl bcfl);
 
 /** @brief   Initialize Vopot object with values obtained from Vpmg_readDX (for
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Pointer to newly allocated Vopot object
- *  @param   grid  Grid object containing potential data (in units kT/e)
+ *  @param   grid  Multiple grid object containing potential data (in units
+ *                 kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int Vopot_ctor2(Vopot *thee, Vgrid *grid, Vpbe *pbe, Vbcfl bcfl);
+VEXTERNC int Vopot_ctor2(Vopot *thee, Vmgrid *mgrid, Vpbe *pbe, Vbcfl bcfl);
 
 /** @brief   Get potential value (from mesh or approximation) at a point
  *  @ingroup Vopot

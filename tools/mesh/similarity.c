@@ -473,6 +473,11 @@ int main(int argc, char **argv) {
     hx = scalar1->hx; hy = scalar1->hy; hzed = scalar1->hzed; 
     dvol = (hx*hy*hzed);
     xmin = scalar1->xmin; ymin = scalar1->ymin; zmin = scalar1->zmin; 
+    norm1_L1 = 0; norm1_L2 = 0; snorm1_H1 = 0; norm1_H1 = 0;
+    norm2_L1 = 0; norm2_L2 = 0; snorm2_H1 = 0; norm2_H1 = 0;
+    normDiff_L1 = 0; normDiff_L2 = 0; snormDiff_H1 = 0; normDiff_H1 = 0;
+    ip_L2 = 0; ip_H1 = 0;
+    svol = 0; gvol = 0;
     for (i=0; i<nx; i++) {
         p1[0] = i*hx + xmin;
         for (j=0; j<ny; j++) {
@@ -501,7 +506,7 @@ int main(int argc, char **argv) {
                 /* Measures based on scalars */
                 if (onGridS1 && onGridS2) {
                     val1 = sval1*mval1;
-                    val2 = sval1*mval1;
+                    val2 = sval2*mval2;
                     dval = mval1*mval2*(sval1 - sval2);
                     /* L2 */
                     norm1_L2 += VSQR(val1);
@@ -581,9 +586,15 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Difference absolute H1 semi-norm = %1.12E\n", snormDiff_H1);
     Vnm_print(1, "Absolute H1 inner product        = %1.12E\n", ip_H1);
     Vnm_print(1, "Hodgkin H1 inner product         = %1.12E\n", 
-            2*ip_H1/(VSQR(norm1_H1)+VSQR(norm2_H1)));
+            2*ip_H1/(VSQR(snorm1_H1)+VSQR(snorm2_H1)));
     Vnm_print(1, "Carbo H1 inner product           = %1.12E\n", 
-            ip_H1/(norm1_H1*norm2_H1));
+            ip_H1/(snorm1_H1*snorm2_H1));
+    Vnm_print(1, "Absolute H1+L2 inner product     = %1.12E\n", 
+            (ip_H1+ip_L2));
+    Vnm_print(1, "Hodgkin H1+L2 inner product      = %1.12E\n", 
+            2*(ip_H1+ip_L2)/(VSQR(norm1_H1)+VSQR(norm2_H1)));
+    Vnm_print(1, "Carbo H1+L2 inner product        = %1.12E\n", 
+            (ip_H1+ip_L2)/(norm1_H1*norm2_H1));
 
     return 0;
 }
