@@ -75,7 +75,7 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
     Vacc *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vram_ctor( 1, sizeof(Vacc) );
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
     VASSERT( Vacc_ctor2(thee, alist, max_radius, nx, ny, nz, nsphere));
 
@@ -109,6 +109,9 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 
     VASSERT(alist != VNULL);
 
+    /* Set up memory management object */
+    thee->vmem = Vmem_ctor("APBS::VACC");
+
     /* Set up grid dimensions */
     thee->nx = nx;
     thee->ny = ny;
@@ -122,12 +125,12 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     VASSERT(thee->sphere != VNULL);
 
     /* Allocate space */
-    if ((thee->natoms = Vram_ctor(thee->n,(sizeof(int)))) == VNULL) {
+    if ((thee->natoms = Vmem_malloc(thee->vmem, thee->n,(sizeof(int)))) == VNULL) {
         fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
         return 0;
     }
     for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
-    if ((thee->atoms = Vram_ctor(thee->n,(sizeof(Vatom **)))) == VNULL) {
+    if ((thee->atoms = Vmem_malloc(thee->vmem, thee->n,(sizeof(Vatom **)))) == VNULL) {
         fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
         return 0;
     }
@@ -202,7 +205,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     /* Allocate the space to store the pointers to the atoms */
     for (i=0; i<thee->n; i++) {
         if ((thee->natoms)[i] > 0) {
-            thee->atoms[i] = Vram_ctor(thee->natoms[i], sizeof(Vatom *));
+            thee->atoms[i] = Vmem_malloc(thee->vmem, thee->natoms[i], sizeof(Vatom *));
             VASSERT(thee->atoms[i] != VNULL);
         }
         /* Clear the counter for later use */
@@ -256,7 +259,7 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
     
     if ((*thee) != VNULL) {
         Vacc_dtor2(*thee);
-        Vram_dtor((Vram **)thee, 1, sizeof(Vacc));
+        Vmem_free(VNULL, 1, sizeof(Vacc), (void **)thee);
         (*thee) = VNULL;
     }
 
@@ -275,19 +278,18 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     Vnm_print(2,"vacc: Destroying thee->atoms entries\n");
     for (i=0; i<thee->n; i++) {
         if (thee->natoms[i] > 0)  {
-            Vram_dtor((Vram **)&((thee->atoms)[i]), (thee->natoms)[i],
-            sizeof(Vatom *));
+            Vmem_free(thee->vmem, (thee->natoms)[i], sizeof(Vatom *), 
+              (void **)&(thee->atoms[i]));
         }
     }
-    Vnm_print(2,"vacc: Destroying thee->atoms\n");
-    Vram_dtor((Vram **)&(thee->atoms), thee->n, sizeof(Vatom **));
-    Vnm_print(2,"vacc: Destroying thee->natoms\n");
-    Vram_dtor((Vram **)&(thee->natoms),thee->n, sizeof(int));
-    Vnm_print(2,"vacc: Destroying thee->sphere entries\n");
+    Vmem_free(thee->vmem, thee->n, sizeof(Vatom **), (void **)&(thee->atoms));
+    Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->natoms));
     for (i=0; i<thee->nsphere; i++) 
-      Vram_dtor((Vram **)&((thee->sphere)[i]), 3, sizeof(double));
-    Vnm_print(2,"vacc: Destroying thee->sphere\n");
-    Vram_dtor((Vram **)&(thee->sphere), thee->nsphere, sizeof(double *));
+      Vmem_free(thee->vmem, 3, sizeof(double), (void **)&(thee->sphere[i]));
+    Vmem_free(thee->vmem, thee->nsphere, sizeof(double *), 
+      (void **)&(thee->sphere));
+
+    Vmem_dtor(&(thee->vmem));
 }
 
 
@@ -458,10 +460,10 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
     }
 
     /* ALLOCATE THE SPACE FOR THE POINTS */
-    points = Vram_ctor(nactual, sizeof(double *));
+    points = Vmem_malloc(thee->vmem, nactual, sizeof(double *));
     VASSERT(points != VNULL);
     for (i=0; i<nactual; i++) {
-        points[i] = Vram_ctor(3, sizeof(double));
+        points[i] = Vmem_malloc(thee->vmem, 3, sizeof(double));
         VASSERT(points[i] != VNULL);
     }
 
