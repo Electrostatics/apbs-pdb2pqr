@@ -1851,6 +1851,7 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
         dy = jfloat - (double)(jlo);
         dz = kfloat - (double)(klo);
 
+#if 0
         Vnm_print(1, "Vpmg_qfForce: (DEBUG) u ~ %g\n", 
           dx    *dy    *dz    *u[IJK(ihi,jhi,khi)]
          +dx    *dy    *(1-dz)*u[IJK(ihi,jhi,klo)]
@@ -1860,6 +1861,7 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
          +(1-dx)*dy    *(1-dz)*u[IJK(ilo,jhi,klo)]
          +(1-dx)*(1-dy)*dz    *u[IJK(ilo,jlo,khi)]
          +(1-dx)*(1-dy)*(1-dz)*u[IJK(ilo,jlo,klo)]);
+#endif
 
 
         if (dx > VPMGSMALL) {

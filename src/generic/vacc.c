@@ -193,10 +193,10 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     (thee->grid_lower_corner)[1] = y_min-1.42*(rmax+thee->max_radius);
     (thee->grid_lower_corner)[2] = z_min-1.42*(rmax+thee->max_radius);
 
-    Vnm_print(1, "Vacc_ctor2:  Grid lower corner = (%g, %g, %g)\n",
+    Vnm_print(0, "Vacc_ctor2:  Grid lower corner = (%g, %g, %g)\n",
       (thee->grid_lower_corner)[0], (thee->grid_lower_corner)[1],
       (thee->grid_lower_corner)[2]);
-    Vnm_print(1, "Vacc_ctor2:  Grid lengths = (%g, %g, %g)\n",
+    Vnm_print(0, "Vacc_ctor2:  Grid lengths = (%g, %g, %g)\n",
       thee->hx*(thee->nx - 1), thee->hy*(thee->ny - 1), 
       thee->hzed*(thee->nz - 1));
 

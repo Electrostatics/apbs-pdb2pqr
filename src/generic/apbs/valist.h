@@ -62,6 +62,11 @@
 typedef struct Valist { 
 
   int number;         /* Number of atoms in list */
+  double center[3];   /* Molecule center (xmin - xmax)/2, etc.*/
+  double mincrd[3];   /* Minimum coordinates */
+  double maxcrd[3];   /* Maximum coordinates */
+  double maxrad;      /* Maximum radius */
+  double charge;      /* Net charge */
   Vatom *atoms;       /* Atom list */
   Vmem *vmem;         /* Memory management object */
 
