@@ -207,10 +207,10 @@
  * # make
  * # make install
  * </pre>
- * <font color="red">If you have vendor-supplied BLAS libraries for your
+ * <i><b>If you have vendor-supplied BLAS libraries for your
  * platform, set the environmental variable <pre>BLASPATH</pre> to their
  * location and use them with APBS by inkoving the 
- * <pre>--with-blas=${BLASPATH}</pre> flag during configurationa.</font>
+ * <pre>--with-blas=${BLASPATH}</pre> flag during configurationa.</b></i>
  * <li> You should now find the APBS executable in the
  * <code>${TOP}/dist/bin/${triplet}</code> directory,
  * </ol>
@@ -224,26 +224,61 @@
  * process.
  * 
  * <br><b><a name="machine-specific">Machine-specific notes</a></b>
- * Of course, every machine seems to behave a bit differently.  Here are a few
- * notes; if you encounter interesting configuration/compilation behavior,
- * please <a href="mailto:nbaker@mccammon.ucsd.edu">let me know</a>.
+ * Of course, every machine seems to behave a bit differently.  One general
+ * improvement is the use of vendor-provided BLAS libraries via the
+ * <code>--with-blas</code> configure flag.  Specifically, if you installed
+ * your machine's libblas.a in the directory <code>/blas/is/here<code>, you
+ * would configure APBS as:
+ * <pre>
+ * # ./configure --with-blas=/blas/is/here ...
+ * </pre>
+ * where the <code>...</code> denotes other configure options you need.  Here
+ * are a few additional notes on installing APBS on various platforms; if you
+ * encounter any interesting configuration/compilation behavior or useful
+ * optimization tricks, please <a href="mailto:nbaker@mccammon.ucsd.edu">let me
+ * know</a>.  
  * <ul>
  * <li>Intel ix86 processor family (Windows)<br>
  * Currently, APBS compiles runs under the <a
  * href="http://www.cygwin.com">Cygwin Windows UNIX environment</a>, which is
  * available for most flavors of Windows.
  * <li>Intel ix86 processor family (Linux)<br>
- * For fast(er) production runs, try setting the CC variable before trying the
- * above installation procedure:
+ * Ideally, you should use the <a
+ * href="http://www.intel.com/software/products/compilers/">Intel compilers</a>
+ * for Linux (free!).  If you have access to these compilers, set the following
+ * environmental variables
  * <pre>
- *   CC="gcc -O3 -ffast-math -m486 -funroll-loops"
+ *   CC=icc
+ *   CXX=icc
+ *   F77=ifc
  * </pre>
- * or, preferably, replace the GNU compilers with the Intel C and FORTRAN
- * compilers.
+ * You will also want to set some optimization flags; these vary from system to
+ * system and you should read the compiler documentation to find out what's
+ * right for your machine.  However, as an example, I use the following for my
+ * Pentium III Xeon:
+ * <pre>
+ *  CFLAGS='-O2 -tpp6'
+ *  FFLAGS='-O2 -tpp6'
+ * </pre>
+ * If you insist on using the GNU compilers, you will end up with slower code
+ * (by up to a factor of 3!).  However, you will likely want to use the
+ * following settings to make it as fast as possible:
+ * <pre>
+ *   CC=gcc
+ *   CXX=g++
+ *   F77=g77
+ *   CFLAGS='-O3 -ffast-math -m486 -funroll-loops'
+ *   FFLAGS='-O3 -ffast-math -m486 -funroll-loops'
+ * </pre>
  * <li> NPACI IBM RS/6000 Power3 Blue Horizon supercomputer<br>
  * In all cases, set the CC variable before ./configure:
  * <pre>
- *     CC="mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
+ *     CC=mpcc 
+ *     F77=mpxlf
+ *     CFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
+ *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
+ *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
+ *     FFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
  *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
  *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
  * </pre>
@@ -270,7 +305,8 @@
  *     CXX='cxx'; export CXX
  *     F77='fort'; export F77
  * </pre>
- * It's also worthwhile to add the '-arch' flag (via the CFLAGS variable).
+ * It's also worthwhile to add the '-arch' flag (via the CFLAGS variable) and,
+ * <i>as always</i>, use vendor BLAS.
  * </ul>
  * 
  * <hr width="100%">
@@ -530,8 +566,8 @@
  * systems in a <a href="http://www.pnas.org/cgi/reprint/181342398v1">parallel
  * focusing fashion</a>.  While this method does provide support for decreasing
  * the domain size from a coarse (large) global grid to a fine (smaller) global
- * grid, <font color="red"><i>it should not be used to look at subsets of
- * biomolecules such as titration sites, etc</i></font>.  Such subset
+ * grid, <i>it should not be used to look at subsets of
+ * biomolecules such as titration sites, etc</i>.  Such subset
  * calculations require more complicated energy evaluation which is not yet
  * supported by <code>mg-para</code>.  However, since parallel focusing was
  * designed to provide detailed evaluation of the electrostatic potential on a
@@ -547,7 +583,8 @@
  * focusing is not automated as it is in <a
  * href="#mg-auto"><code>mg-auto</code></a> calculations and parallel focusing
  * (i.e., <a href="#mg-para"><code>mg-para</code></a>) is very difficult with
- * this keyword.  <i>This is intended for more experienced users.</i>
+ * this keyword.  <i><blink>This is intended for more experienced
+ * users.</blink></i>
  * 
  * <li> <a href="#mg-manual"><code>mg-dummy</code></a> has <i>exactly</i> the
  * same syntax as <a href="#mg-manual"><code>mg-manual</code></a>, but simply
@@ -693,14 +730,18 @@
  * <dt> <a name="dime">dime <i>nx</i> <i>ny</i> <i>nz</i></a> 
  * <dd> Number of grid points in the x, y, and z directions.  The <i>nx</i>,
  * <i>ny</i>, and <i>nz</i> are related to the value <i>l</i> specified in the
- * <a href="#nlev"><code>nlev</code></a> keyword by the formula <pre>nx = c *
- * 2^(l+1) + 1</pre>, where c is an integer.  Use the program
+ * <a href="#nlev"><code>nlev</code></a> keyword by the formula 
+ * <pre>
+ *   nx = c 2^(l+1) + 1
+ * </pre>, where c is an integer.  Use the program
  * <code>apbs/tools/mesh/mgmesh</code> to find the correct values of <i>nx</i>,
  * <i>ny</i>, and <i>nz</i>.  The most common values are 65, 97, and 161 (can
  * be different in each direction); these are all compatible with <code>nlev
  * 4</code>.  If you happen to pick an "bad" value for the dimensions
  * (<i>i.e.</i>, mismatch with <code>nlev</code>), the code will adjust the
- * specified dime to more appropriate values.
+ * specified dime <i>downwards</i> to more appropriate values.  
+ * <i>This means that "bad" values will typically result in
+ * lower resolution/accuracy calculations!</i>
  *  
  * <dt> <a name="nlev">nlev <i>l</i></a>
  * <dd> The number of levels in the multilevel hierarchy.  Dependent on the
@@ -825,9 +866,8 @@
  * 
  * <dt> <a name="gamma">gamma</a> <i>parameter</i>
  * <dd> Surface tension parameter for apolar forces (in kJ/mol/&Aring;).  Often
- * 0.105 kJ/mol/\f$\AA\f$. <font color="red">This parameter is only used if
- * forces are calculated but still must be present for other
- * calculations.</font>
+ * 0.105 kJ/mol/\f$\AA\f$. <i>This parameter is only used if forces are
+ * calculated but still must be present for other calculations.</i>
  * 
  * <dt> <a name="calcenergy">calcenergy</a> <i>flag</i>
  * <dd> OPTIONAL KEYWORD.  Controls electrostatic energy output.  Values for
