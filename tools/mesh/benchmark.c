@@ -92,8 +92,8 @@ int main(int argc, char **argv) {
     }
     Vio_setWhiteChars(sock, MCwhiteChars);
     Vio_setCommChars(sock, MCcommChars);
-    snprintf(test_string, VMAX_BUFSIZE, "integer %d double %4.3f exponential \
-%12.5e\n", test_int, test_double, test_exp);
+    sprintf(test_string, "integer %d double %4.3f exponential %12.5e\n", 
+      test_int, test_double, test_exp);
     Vnm_print(1, "Writing '%s' to socket\n", test_string);
     Vio_printf(sock, "%s", test_string);
     Vio_connectFree(sock);

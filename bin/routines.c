@@ -1109,26 +1109,41 @@ VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
 VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writematstem[VMAX_ARGLEN];
-    char outpath[72];
+    char outpath[VMAX_ARGLEN];
     char mxtype[3];
+    int strlenmax;
 
     if (nosh->bogus) return 1;
 
 #ifdef HAVE_MPI_H
-    sprintf(writematstem, "%s-PE%d", pbeparm->writematstem,
-      rank);
+    strlenmax = VMAX_ARGLEN-14;
+    if (strlen(pbeparm->writematstem) > strlenmax) {
+        Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+          pbeparm->writematstem, strlenmax);
+        Vnm_tprint(2, "  Not writing matrix!\n");
+        return 0;
+    }
+    sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
 #else
+    strlenmax = VMAX_ARGLEN-1;
+    if (strlen(pbeparm->writematstem) > strlenmax) {
+        Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+          pbeparm->writematstem, strlenmax);
+        Vnm_tprint(2, "  Not writing matrix!\n");
+        return 0;
+    }
     sprintf(writematstem, "%s", pbeparm->writematstem);
 #endif
     
     if (pbeparm->writemat == 1) {
-        if (snprintf(outpath, 72, "%s.%s", writematstem, "mat") == -1) {
-            Vnm_tprint(2, "  Matrix output path truncated to: %s\n", 
-              outpath);
-            Vnm_tprint(2, "  72-character limit exceeded!\n");
-            Vnm_tprint(2, "  Skipping matrix I/O!\n");
-            return 1;
+        strlenmax = VMAX_ARGLEN-5;
+        if (strlen(pbeparm->writematstem) > strlenmax) {
+            Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+              pbeparm->writematstem, strlenmax);
+            Vnm_tprint(2, "  Not writing matrix!\n");
+            return 0;
         }
+        sprintf(outpath, "%s.%s", writematstem, "mat");
         mxtype[0] = 'R';
         mxtype[1] = 'S';
         mxtype[2] = 'A';
@@ -1298,8 +1313,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0);
-                sprintf(title, 
-                  "ENERGY DENSITY (kT/e/A)^2");
+                sprintf(title, "ENERGY DENSITY (kT/e/A)^2");
                 break;
 
             case VDT_NDENS:
