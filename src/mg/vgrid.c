@@ -622,6 +622,11 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
             }
         }
     }
+	 
+	 /* calculate grid maxima */
+	 thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
+    thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
+    thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
 
     /* Close off the socket */
     Vio_acceptFree(sock);
