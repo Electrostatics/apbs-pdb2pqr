@@ -143,9 +143,8 @@ struct sMGparm {
 
 
     /* ********* TYPE 2 PARAMETERS (PARALLEL AUTO-FOCUS) ******** */
-    double partDisjCenterShift[3];  /**< When added to the actual (local)
-                                     * mesh center, this gives the center
-                                     * of the disjoint partitions */
+    double partDisjLowerCorner[3];  /**< Lower corner of disjoint parts */
+    double partDisjUpperCorner[3];  /**< Lower corner of disjoint parts */
     double partDisjLength[3];  /**< This gives the lengths of the disjoint 
                                 * partitions */
     int partDisjOwnSide[6];  /**< Tells whether the boundary points are ours 
