@@ -159,7 +159,9 @@ typedef struct Vpmgp {
                                   *   2 => ICCGDW
                                   *   3 => MICCGDW
                                   *   4 => none */
-
+    double xlen, ylen, zlen;     /* Domain dimensions */
+    double xmin, ymin, zmin;     /* Domain dimensions */
+    double xmax, ymax, zmax;     /* Domain dimensions */
 } Vpmgp;
 
 /* ///////////////////////////////////////////////////////////////////////////

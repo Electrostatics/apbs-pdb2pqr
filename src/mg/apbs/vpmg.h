@@ -87,6 +87,8 @@ typedef struct Vpmg {
   double extDiEnergy;            /* Storing contributions to the energy from */
   double extQmEnergy;            /* regions outside the immediate problem */
   double extQfEnergy;            /* domain */
+  double surfMeth;               /* Surface definition method */
+  double splineWin;              /* Spline window parm for surf defs */
   int filled;                    /* Indicates whether Vpmg_fillco has been
                                   * called */
 
@@ -119,6 +121,11 @@ VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
 VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
 VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
 VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
+VEXTERNC void Vpmg_force(Vpmg *thee, double *force, double gamma, int atomID);
+VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID);
+VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
+  double gamma, int atomID);
+VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID);
 VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
@@ -135,18 +142,6 @@ VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
 VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
-/* ********************* Force stuff ************************ */
-VEXTERNC void Vpmg_map_vdwDiel(Vpmg *thee);
-VEXTERNC void Vpmg_map_sasDiel(Vpmg *thee);
-VEXTERNC void Vpmg_setDiel(Vpmg *thee, int id, double *center,
-  double radius, double eps1, double eps2, int fuzz);
-VEXTERNC void Vpmg_getCFForce(Vpmg *thee, double **force);  // Coulombic
-VEXTERNC void Vpmg_getRFForce(Vpmg *thee, double **force);  // Reaction
-VEXTERNC void Vpmg_getVBForce(Vpmg *thee, double **force);  // VDW
-VEXTERNC void Vpmg_getSBForce(Vpmg *thee, double **force);  // SAS
-VEXTERNC void Vpmg_getDBForce(Vpmg *thee, double **force);  // dielectric
-VEXTERNC void Vpmg_interpolate(Vpmg *thee, Vec3 point, int option,
-  double *u, Vec3 *grad_u);
 
 
 #endif    /* ifndef _VPMG_H_ */

@@ -121,6 +121,7 @@ typedef struct Vpbe {
     VEXTERNC double  Vpbe_getSolventDiel(Vpbe *thee);
     VEXTERNC double  Vpbe_getSolventRadius(Vpbe *thee);
     VEXTERNC double  Vpbe_getIonRadius(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSplineWin(Vpbe *thee);
     VEXTERNC double  Vpbe_getXkappa(Vpbe *thee);
     VEXTERNC double  Vpbe_getDeblen(Vpbe *thee);
     VEXTERNC double  Vpbe_getZkappa2(Vpbe *thee);
