@@ -1677,5 +1677,44 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_fillAcc
+//
+// Purpose:  Fill the specified array with accessibility values
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec) {
+
+    Vacc *acc = VNULL;
+    Vpbe *pbe = VNULL;
+    double srad, position[3];
+    int i, j, k, nx, ny, nz;
+
+    pbe = thee->pbe;
+    acc = Vpbe_getVacc(pbe);
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    srad = Vpbe_getSolventRadius(pbe);
+
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+
+                position[0] = thee->xf[i];
+                position[1] = thee->yf[j];
+                position[2] = thee->zf[k];
+
+                /* the scalar (0th derivative) entry */
+                if (Vacc_molAcc(acc, position, srad) == 1)
+                  vec[IJK(i,j,k)] = 1.0;
+                else vec[IJK(i,j,k)] = 0.0;
+
+            }
+        }
+    }
+}
+
 
 #undef VPMGSMALL
