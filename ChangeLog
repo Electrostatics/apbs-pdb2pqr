@@ -2,6 +2,8 @@
 BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
 #############################################################################
 
+  * Made main driver code completely memory-leak free (i.e., if you wanted to
+    wrap it and call it repeatedly -- Thanks to Robert Konecny)
   * Fixed main driver code for compatibility with SGI compilers (Thanks to
     Fabrice Leclerc)
   * Made focused evaluation of forces more sensible.
