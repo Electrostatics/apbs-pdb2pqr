@@ -87,7 +87,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     /* Calculate new problem dimensions */
     hxNEW = thee->pmgp->hx;
     hyNEW = thee->pmgp->hy;
-    hzNEW = thee->pmgp->hz;
+    hzNEW = thee->pmgp->hzed;
     nxNEW = thee->pmgp->nx;
     nyNEW = thee->pmgp->ny;
     nzNEW = thee->pmgp->nz;
@@ -101,7 +101,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     /* Relevant old problem parameters */
     hxOLD = pmgOLD->pmgp->hx;
     hyOLD = pmgOLD->pmgp->hy;
-    hzOLD = pmgOLD->pmgp->hz;
+    hzOLD = pmgOLD->pmgp->hzed;
     nxOLD = pmgOLD->pmgp->nx;
     nyOLD = pmgOLD->pmgp->ny;
     nzOLD = pmgOLD->pmgp->nz;
@@ -318,7 +318,7 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
     /* Calculate new problem dimensions */
     hxNEW = thee->pmgp->hx;
     hyNEW = thee->pmgp->hy;
-    hzNEW = thee->pmgp->hz;
+    hzNEW = thee->pmgp->hzed;
     nxNEW = thee->pmgp->nx;
     nyNEW = thee->pmgp->ny;
     nzNEW = thee->pmgp->nz;
@@ -794,7 +794,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat, accf;
     double zmagic, irad, srad, charge, dx, dy, dz, zkappa2, epsw, epsp;
-    double hx, hy, hz;
+    double hx, hy, hzed;
     int i, j, k, nx, ny, nz, iatom, ihi, ilo, jhi, jlo, khi, klo;
     int acclo, accmid, acchi;
 
@@ -815,12 +815,12 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
     nz = thee->pmgp->nz;
     hx = thee->pmgp->hx;
     hy = thee->pmgp->hy;
-    hz = thee->pmgp->hz;
+    hzed = thee->pmgp->hzed;
    
     /* Define the total domain size */
     xlen = hx*(nx - 1);
     ylen = hy*(ny - 1);
-    zlen = hz*(nz - 1);
+    zlen = hzed*(nz - 1);
 
     /* Define the min/max dimensions */
     xmin = thee->pmgp->xcent - (xlen/2.0);
@@ -839,7 +839,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
     /* Fill the mesh point coordinate arrays */
     for (i=0; i<nx; i++) thee->xf[i] = xmin + i*hx;
     for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
-    for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hz;
+    for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hzed;
 
     /* Fill the coefficient arrays */
     for (k=0; k<nz; k++) {
@@ -898,11 +898,11 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
                 /* y-direction */
                 position[0] = thee->xf[i];
                 position[1] = thee->yf[j];
-                position[2] = thee->zf[k] + hz/2.0;
+                position[2] = thee->zf[k] + hzed/2.0;
                 accmid = Vacc_molAcc(acc, position, srad);
                 position[2] = thee->zf[k];
                 acclo = Vacc_molAcc(acc, position, srad);
-                position[2] = thee->zf[k] + hz;
+                position[2] = thee->zf[k] + hzed;
                 acchi = Vacc_molAcc(acc, position, srad);
                 accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
                 thee->a3cf[IJK(i,j,k)] = 
@@ -939,7 +939,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
             /* Figure out which vertices we're next to */
             ifloat = (position[0] - xmin)/(hx);
             jfloat = (position[1] - ymin)/(hy);
-            kfloat = (position[2] - zmin)/(hz);
+            kfloat = (position[2] - zmin)/(hzed);
 
             ihi = (int)ceil(ifloat);
             ilo = (int)floor(ifloat);
@@ -949,7 +949,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
             klo = (int)floor(kfloat);
 
             /* Now assign fractions of the charge to the nearby verts */
-            charge = zmagic*Vatom_getCharge(atom)/hx/hy/hz;
+            charge = zmagic*Vatom_getCharge(atom)/hx/hy/hzed;
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
@@ -1047,7 +1047,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
 VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
-    double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hz, ifloat, jfloat;
+    double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
     double charge, kfloat, dx, dy, dz, energy, uval, *position;
     Valist *alist;
     Vatom *atom; 
@@ -1063,7 +1063,7 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
     nz = thee->pmgp->nz;
     hx = thee->pmgp->hx;
     hy = thee->pmgp->hy;
-    hz = thee->pmgp->hz;
+    hzed = thee->pmgp->hzed;
     xmax = thee->xf[nx-1];
     ymax = thee->yf[ny-1];
     zmax = thee->zf[nz-1];
@@ -1085,7 +1085,7 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee, int extFlag) {
             /* Figure out which vertices we're next to */
             ifloat = (position[0] - xmin)/hx;
             jfloat = (position[1] - ymin)/hy;
-            kfloat = (position[2] - zmin)/hz;
+            kfloat = (position[2] - zmin)/hzed;
             ihi = (int)ceil(ifloat);
             ilo = (int)floor(ifloat);
             jhi = (int)ceil(jfloat);
@@ -1205,8 +1205,8 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title,
     double xmin, ymin, zmin;
 
     VASSERT(thee != VNULL);
-    if ((thee->pmgp->hx!=thee->pmgp->hy) || (thee->pmgp->hy!=thee->pmgp->hz) 
-      || (thee->pmgp->hx!=thee->pmgp->hz)) {
+    if ((thee->pmgp->hx!=thee->pmgp->hy) || (thee->pmgp->hy!=thee->pmgp->hzed) 
+      || (thee->pmgp->hx!=thee->pmgp->hzed)) {
         Vnm_print(2, "Vpmg_writeUHBD: can't write UHBD mesh with non-uniform spacing\n");
         return;
     }
@@ -1221,7 +1221,7 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title,
     /* Write out the header */
     xmin = thee->pmgp->xcent - (thee->pmgp->hx)*(thee->pmgp->nx-1);
     ymin = thee->pmgp->ycent - (thee->pmgp->hy)*(thee->pmgp->ny-1);
-    zmin = thee->pmgp->zcent - (thee->pmgp->hz)*(thee->pmgp->nz-1);
+    zmin = thee->pmgp->zcent - (thee->pmgp->hzed)*(thee->pmgp->nz-1);
     fprintf(fp, "%72s\n", title);
     fprintf(fp, "%12.6E%12.6E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0, 
       thee->pmgp->nz, 1, thee->pmgp->nz);

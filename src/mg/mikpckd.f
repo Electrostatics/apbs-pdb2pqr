@@ -427,20 +427,20 @@ c* *********************************************************************
       integer          nx,ny,nz,i,j,k,iflag
       double precision x(nx,ny,nz)
       double precision xdum
-      real rand
+      real myrand
 c*
 cmdir 0 0
 c*
 c*    *** do it ***
       iflag = 1
-      xdum  = dble(rand(iflag))
+      xdum  = dble(myrand(iflag))
 cmdir 3 1
       do 10 k = 2, nz-1
 cmdir 3 2
          do 11 j = 2, ny-1
 cmdir 3 3
             do 12 i = 2, nx-1
-               x(i,j,k) = dble(rand(iflag))
+               x(i,j,k) = dble(myrand(iflag))
  12         continue
  11      continue
  10   continue
@@ -531,7 +531,7 @@ c* *********************************************************************
       double precision xdum
       integer          n,i,ii,nproc,ipara,ivect
       parameter        (nproc=1)
-      real rand
+      real myrand
 c*
 cmdir 0 0
 c*
@@ -540,21 +540,21 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
       ipara = n / nproc
       ivect = mod(n,nproc)
       iflag = 1
-      xdum  = dble(rand(iflag))
+      xdum  = dble(myrand(iflag))
 c*
 c*    *** do parallel loops ***
 cmdir 2 1
       do 10 ii = 1, nproc
 cmdir 2 2
          do 11 i = 1+(ipara*(ii-1)), ipara*ii
-            x(i) = dble(rand(iflag))
+            x(i) = dble(myrand(iflag))
  11      continue
  10   continue
 c*
 c*    *** do vector loops ***
 cmdir 1 1
       do 20 i = ipara*nproc+1, n
-         x(i) = dble(rand(iflag))
+         x(i) = dble(myrand(iflag))
  20   continue
 c*
 c*    *** return and end ***

@@ -65,14 +65,14 @@ VEMBED(rcsid="$Id$")
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx, 
-  double hy, double hz, int nonlin) {
+  double hy, double hzed, int nonlin) {
 
     Vpmgp *thee = VNULL;
 
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmgp) );
     VASSERT( thee != VNULL);
-    VASSERT(Vpmgp_ctor2(thee, nx, ny, nz, nlev, hx, hy, hz, nonlin));
+    VASSERT(Vpmgp_ctor2(thee, nx, ny, nz, nlev, hx, hy, hzed, nonlin));
 
     return thee;
 }
@@ -87,7 +87,7 @@ VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx,
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
-  double hx, double hy, double hz, int nonlin) {
+  double hx, double hy, double hzed, int nonlin) {
 
     /* Specified parameters */
     thee->nx = nx;
@@ -95,7 +95,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->nz = nz;
     thee->hx = hx;
     thee->hy = hy;
-    thee->hz = hz;
+    thee->hzed = hzed;
     thee->nlev = nlev; 
     thee->nonlin = nonlin;
     if (nonlin == 0) thee->ipkey = -1;
