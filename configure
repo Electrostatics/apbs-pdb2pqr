@@ -7033,7 +7033,7 @@ EOF
 
         mc_do_src="vcsm.c vfetk.c vpee.c"
         mc_do_lib="../fem/libapbsfem.la"
-        mc_do_test="fem reg-fem"
+        mc_do_test="fem reg-fem lndet"
         if test -n "${mcx_found}"; then
             echo "$ac_t""*** FEtk components MCX found:  enabled. ***" 1>&6
             cat >> confdefs.h <<\EOF
@@ -7294,6 +7294,7 @@ trap 'rm -fr `echo "
     test/vgreen/Makefile
     test/fem/Makefile
     test/reg-fem/Makefile
+    test/lndet/Makefile
     test/mg/Makefile
  src/aaa_inc/apbscfg.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -7460,6 +7461,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     test/vgreen/Makefile
     test/fem/Makefile
     test/reg-fem/Makefile
+    test/lndet/Makefile
     test/mg/Makefile
 "}
 EOF
