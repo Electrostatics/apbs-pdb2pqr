@@ -224,7 +224,7 @@ int main(int argc, char **argv) {
             printPBEPARM(com, pbeparm);
 
             /* Solve PDE */
-            if (solveMG(com, pmg[i]) != 1) {
+            if (solveMG(com, pmg[i], mgparm->type) != 1) {
                 Vnm_tprint(2, "main:  Error solving PDE!\n");
                 return APBSRC;
             }
@@ -244,12 +244,9 @@ int main(int argc, char **argv) {
             forceMG(com, mem, nosh, pbeparm, pmg[i], &(nforce[i]), 
               &(atomForce[i]), alist);
 
-            /* Write out potential */
-            writepotMG(com, nosh, pbeparm, pmg[i]);
+            /* Write out data folks might want */
+            writedataMG(com, nosh, pbeparm, pmg[i]);
             
-            /* Write accessibility */
-            writeaccMG(com, nosh, pbeparm, pmg[i]);
-
             /* Write matrix */
             writematMG(com, nosh, pbeparm, pmg[i]);
 

@@ -47,6 +47,55 @@
 #ifndef _VAPBSHAL_H_
 #define _VAPBSHAL_H_
 
+/**
+ *  @ingroup Vhal
+ *  @author  Nathan Baker
+ *  @brief   Types of (scalar) data that can be written out of APBS
+ */
+enum Vdata_Type {
+    VDT_CHARGE, /**< Charge distribution (e) */
+    VDT_POT,    /**< Potential (kT/e) */
+    VDT_SMOL,   /**< Solvent accessibility defined by molecular/Connolly
+                 * surface definition (1 = accessible, 0 = inaccessible) */
+    VDT_SSPL,   /**< Spline-based solvent accessibility (1 = accessible, 0 =
+                 * inaccessible) */
+    VDT_VDW,    /**< van der Waals-based accessibility (1 = accessible, 0 =
+                 * inaccessible) */
+    VDT_IVDW,   /**< Ion accessibility/inflated van der Waals (1 =
+                 * accessible, 0 = inaccessible) */
+    VDT_LAP,    /**< Laplacian of potential (kT/e/A^2) */
+    VDT_EDENS,  /**< Energy density $\epsilon (\nabla u)^2$, where $u$ is
+	         * potential (kT/e/A)^2 */
+    VDT_NDENS,  /**< Ion number density $\sum c_i \exp (-q_i u)^2$, 
+	         * where $u$ is potential (output in M) */
+    VDT_QDENS   /**< Ion charge density $\sum q_i c_i \exp (-q_i u)^2$,
+	         * where $u$ is potential (output in e_c M) */
+};
+
+/** @typedef Vdata_Type
+ *  @ingroup Vhal
+ *  @brief   Declaration of the Vdata_Type type as the Vdata_Type enum
+ */
+typedef enum Vdata_Type Vdata_Type;
+
+/**
+ *  @ingroup Vhal
+ *  @author  Nathan Baker
+ *  @brief   Format of data that can be written out of APBS
+ */
+enum Vdata_Format {
+    VDF_DX,   /**< OpenDX (Data Explorer) format */
+    VDF_UHBD, /**< UHBD format */
+    VDF_AVS   /**< AVS UCD format */
+};
+
+/** @typedef Vdata_Format
+ *  @ingroup Vhal
+ *  @brief   Declaration of the Vdata_Format type as the Vdata_Format enum
+ */
+typedef enum Vdata_Format Vdata_Format;
+
+
 /** @brief The maximum number of molecules that can be involved in a single 
  *         PBE calculation
  *  @ingroup Vhal 

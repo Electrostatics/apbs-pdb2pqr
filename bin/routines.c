@@ -271,25 +271,61 @@ energies will be calculated\n");
 forces will be calculated \n");
     if (pbeparm->calcforce == 2) Vnm_tprint( 1, "main:    All-atom \
 solvent forces will be calculated\n");
-    if (pbeparm->writepot == 1) {
-        if (pbeparm->writepotfmt == 0) Vnm_tprint( 1, "main:    Potential \
-to be written to %s.%s in DX format\n", pbeparm->writepotstem, "dx");
-        if (pbeparm->writepotfmt == 1) Vnm_tprint( 1, "main:    Potential \
-to be written to %s.%s in AVS format\n", pbeparm->writepotstem, "ucd");
-        if (pbeparm->writepotfmt == 2) Vnm_tprint( 1, "main:    Potential \
-to be written to %s.%s in UHBD format\n", pbeparm->writepotstem, "grd");
+    for (i=0; i<pbeparm->numwrite; i++) {
+        switch (pbeparm->writetype[i]) {
+            case VDT_CHARGE:
+                Vnm_print(1, "main:    Charge distribution to be written to ");
+                break;
+            case VDT_POT:
+                Vnm_print(1, "main:    Potential to be written to ");
+                break;
+            case VDT_SMOL:
+                Vnm_print(1, "main:    Molecular solvent accessibility \
+to be written to ");
+                break;
+            case VDT_SSPL:
+                Vnm_print(1, "main:    Spline-based solvent accessibility \
+to be written to ");
+                break;
+            case VDT_VDW:
+                Vnm_print(1, "main:    van der Waals solvent accessibility \
+to be written to ");
+                break;
+            case VDT_IVDW:
+                Vnm_print(1, "main:    Ion accessibility to be written to ");
+                break;
+            case VDT_LAP:
+                Vnm_print(1, "main:    Potential Laplacian to be written to ");
+                break;
+            case VDT_EDENS:
+                Vnm_print(1, "main:    Energy density to be written to ");
+                break;
+            case VDT_NDENS:
+                Vnm_print(1, "main:    Ion number density to be written to ");
+                break;
+            case VDT_QDENS:
+                Vnm_print(1, "main:    Ion charge density to be written to ");
+                break;
+            default: 
+                Vnm_print(2, "main:    Invalid data type for writing!\n");
+                break;
+        }
+        switch (pbeparm->writefmt[i]) {
+            case VDF_DX:
+                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "dx");
+                break;
+            case VDF_UHBD:
+                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "grd");
+                break;
+            case VDF_AVS:
+                Vnm_print(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
+                break;
+            default: 
+                Vnm_print(2, "main:    Invalid format for writing!\n");
+                break;
+        }
+ 
     }
-    if (pbeparm->writeacc == 1) {
-        if (pbeparm->writeaccfmt == 0) 
-          Vnm_tprint( 1, "main:    Accessibility to be written to \
-%s.%s in DX format\n", pbeparm->writeaccstem, "dx");
-        if (pbeparm->writeaccfmt == 1)
-          Vnm_tprint( 1, "main:    Accessibility to be written to \
-%s.%s in AVS format\n", pbeparm->writeaccstem, "ucd");
-        if (pbeparm->writeaccfmt == 2) 
-          Vnm_tprint( 1, "main:    Accessibility to be written to \
-%sd.%s in UHBD format\n", pbeparm->writeaccstem, "grd");
-     }
 
 }
 
@@ -433,15 +469,28 @@ VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
 //
 // Purpose:  Solve a PDE wth MG 
 //
+// Args:     type   MGparm::type
+//
 // Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int solveMG(Vcom *com, Vpmg *pmg) {
+VPUBLIC int solveMG(Vcom *com, Vpmg *pmg, int type) {
+
+    int nx, ny, nz, i;
 
     Vnm_tstart(28, "Solver timer");
-    Vnm_tprint( 1,"main:    Solving PDE (see io.mc* for details)...\n");
-    Vpmg_solve(pmg);
+    if (type != 3) {
+        Vnm_tprint( 1,"main:    Solving PDE (see io.mc* for details)...\n");
+        Vpmg_solve(pmg);
+    } else {
+        Vnm_tprint( 1,"main:    Skipping solve for mg-dummy run; zeroing \
+solution array\n");
+        nx = pmg->pmgp->nx;
+        ny = pmg->pmgp->ny;
+        nz = pmg->pmgp->nz;
+        for (i=0; i<nx*ny*nz; i++) pmg->u[i] = 0.0;
+    }
     Vnm_tstop(27, "Solver timer");
 
     return 1;
@@ -681,79 +730,6 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
     return 1;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  writepotMG
-//
-// Purpose:  Write out potential for MG calculation
-//
-// Returns:  1 if sucessful, 0 otherwise
-//
-// Notes:    currently ignores partition information when writing out potential
-// 
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writepotMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
-
-    char outpath[VMAX_ARGLEN];
-    char writepotstem[VMAX_ARGLEN];
-    int nx, ny, nz;
-    double hx, hy, hzed, xcent, ycent, zcent;
-    Vgrid *grid; 
-
-    if (nosh->bogus) return 1;
-
-#ifdef HAVE_MPI_H
-    sprintf(writepotstem, "%s-PE%d", pbeparm->writepotstem,
-      Vcom_rank(com));
-#else
-    sprintf(writepotstem, "%s", pbeparm->writepotstem);
-#endif
-
-
-    if (pbeparm->writepot == 1) {
-        nx = pmg->pmgp->nx;
-        ny = pmg->pmgp->ny;
-        nz = pmg->pmgp->nz;
-        hx = pmg->pmgp->hx;
-        hy = pmg->pmgp->hy;
-        hzed = pmg->pmgp->hzed;
-        xcent = pmg->pmgp->xcent;
-        ycent = pmg->pmgp->ycent;
-        zcent = pmg->pmgp->zcent;
-        grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed,
-          xcent-0.5*(nx-1)*hx, ycent-0.5*(ny-1)*hy, zcent-0.5*(nz-1)*hzed,
-          pmg->u);
-
-        /* In DX format */
-        if (pbeparm->writepotfmt == 0) {
-            sprintf(outpath, "%s.%s", writepotstem, "dx");
-            Vnm_tprint( 1, "main:    Writing potential in DX format \
-to %s...\n", outpath);
-            Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
-              pmg->pvec);
-
-         /* In AVS format */
-         } else if (pbeparm->writepotfmt == 1) {
-             sprintf(outpath, "%s.%s", writepotstem, "ucd");
-             Vnm_tprint( 2, "main:    Sorry, AVS format isn't supported \
-for multigrid calculations yet!\n");
-             return 0;
-         /* In UHBD format */
-         } else if (pbeparm->writepotfmt == 2) {
-             sprintf(outpath, "%s.%s", writepotstem, "grd");
-             Vnm_tprint( 1, "main:    Writing potential in UHBD format \
-to %s...\n", outpath);
-             Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, "POTENTIAL", 
-               pmg->pvec);
-         } else {
-             Vnm_tprint( 2, "main:    Bogus potential file format (%d)!\n",
-               pbeparm->writepotfmt);
-             return 0;
-         }
-    }
-
-    return 1;
-}   
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  writematMG
@@ -810,77 +786,173 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
 
     return 1;
 }
+
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  writeaccMG
+// Routine:  writedataMG
 //
-// Purpose:  Write out solvent accessibility for MG calculation
+// Purpose:  Write out data from  MG calculation
 //
 // Returns:  1 if sucessful, 0 otherwise
 //
-// Notes:    currently ignores partition information when writing out acc
-// 
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writeaccMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
-    char writeaccstem[VMAX_ARGLEN];
+    char writestem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
-    int nx, ny, nz;
-    double hx, hy, hzed, xcent, ycent, zcent;
+    char title[72];
+    int i, nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
     Vgrid *grid; 
 
     if (nosh->bogus) return 1;
 
+    nx = pmg->pmgp->nx;
+    ny = pmg->pmgp->ny;
+    nz = pmg->pmgp->nz;
+    hx = pmg->pmgp->hx;
+    hy = pmg->pmgp->hy;
+    hzed = pmg->pmgp->hzed;
+    xcent = pmg->pmgp->xcent;
+    ycent = pmg->pmgp->ycent;
+    zcent = pmg->pmgp->zcent;
+    xmin = pmg->pmgp->xcent - 0.5*(nx-1)*hx;
+    ymin = pmg->pmgp->ycent - 0.5*(ny-1)*hy;
+    zmin = pmg->pmgp->zcent - 0.5*(nz-1)*hzed;
+  
+    for (i=0; i<pbeparm->numwrite; i++) { 
+
+        switch (pbeparm->writetype[i]) {
+
+            case VDT_CHARGE:
+ 
+                Vnm_print(1, "main:  Writing charge distribution to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0);
+                sprintf(title, "CHARGE DISTRIBUTION (e)");
+                break;
+
+            case VDT_POT:
+ 
+                Vnm_print(1, "main:  Writing potential to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
+                sprintf(title, "POTENTIAL (kT/e)");
+                break;
+
+            case VDT_SMOL:
+
+                Vnm_print(1, "main:  Writing molecular accessibility to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, pbeparm->srad);
+                sprintf(title, 
+                  "SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
+                  pbeparm->srad);
+                break;
+
+            case VDT_SSPL:
+
+                Vnm_print(1, "main:  Writing spline-based accessibility to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL, pbeparm->swin);
+                sprintf(title, 
+                  "SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
+                  pbeparm->swin);
+                break;
+
+            case VDT_VDW:
+
+                Vnm_print(1, "main:  Writing van der Waals accessibility to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0);
+                sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
+                break;
+
+            case VDT_IVDW:
+
+                Vnm_print(1, "main:  Writing ion accessibility to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
+                  pmg->pbe->maxIonRadius);
+                sprintf(title, 
+                  "ION ACCESSIBILITY -- SPLINE (%4.3f RADIUS)",
+                  pmg->pbe->maxIonRadius);
+                break;
+
+            case VDT_LAP:
+
+                Vnm_print(1, "main:  Writing potential Laplacian to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0);
+                sprintf(title, 
+                  "POTENTIAL LAPLACIAN (kT/e/A^2)");
+                break;
+
+            case VDT_EDENS:
+
+                Vnm_print(1, "main:  Writing energy density to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0);
+                sprintf(title, 
+                  "ENERGY DENSITY (kT/e/A)^2");
+                break;
+
+            case VDT_NDENS:
+
+                Vnm_print(1, "main:  Writing number density to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0);
+                sprintf(title, 
+                  "ION NUMBER DENSITY (M)");
+                break;
+
+            case VDT_QDENS:
+
+                Vnm_print(1, "main:  Writing charge density to ");
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0);
+                sprintf(title, 
+                  "ION CHARGE DENSITY (e_c * M)");
+                break;
+
+            default:
+
+                Vnm_print(2, "Invalid data type for writing!\n");
+                break;
+        }
+
+
 #ifdef HAVE_MPI_H
-    sprintf(writeaccstem, "%s-PE%d", pbeparm->writeaccstem,
-      Vcom_rank(com));
+        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], Vcom_rank(com));
 #else
-    sprintf(writeaccstem, "%s", pbeparm->writeaccstem);
+        sprintf(writestem, "%s", pbeparm->writestem[i]);
 #endif
-    
-    if (pbeparm->writeacc == 1) {
 
-        nx = pmg->pmgp->nx;
-        ny = pmg->pmgp->ny;
-        nz = pmg->pmgp->nz;
-        hx = pmg->pmgp->hx;
-        hy = pmg->pmgp->hy;
-        hzed = pmg->pmgp->hzed;
-        xcent = pmg->pmgp->xcent;
-        ycent = pmg->pmgp->ycent;
-        zcent = pmg->pmgp->zcent;
-        Vpmg_fillAcc(pmg, pmg->rwork, 3, 0.3);
-        grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed,
-          xcent-0.5*(nx-1)*hx, ycent-0.5*(ny-1)*hy, zcent-0.5*(nz-1)*hzed,
-          pmg->rwork);
+        switch (pbeparm->writefmt[i]) {
 
-        /* In DX format */
-        if (pbeparm->writeaccfmt == 0) {
-            sprintf(outpath, "%s.%s", writeaccstem, "dx");
-            Vnm_tprint( 1, "main:    Writing accessibility in DX format \
-to %s...\n", outpath);
-            Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, "ACCESSIBILITY", 
-              pmg->pvec);
+            case VDF_DX:
+                sprintf(outpath, "%s.%s", writestem, "dx");
+                Vnm_print(1, "%s\n", outpath);
+                grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+                  pmg->rwork);
+                Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, title,
+                  pmg->pvec);
+                Vgrid_dtor(&grid);
+                break;
 
-         /* In AVS format */
-         } else if (pbeparm->writeaccfmt == 1) {
-             sprintf(outpath, "%s.%s", writeaccstem, "ucd");
-             Vnm_tprint( 2, "main:    Sorry, AVS format isn't supported\
-for multigrid calculations yet!\n");
-             return 0;
+            case VDF_AVS:
+                sprintf(outpath, "%s.%s", writestem, "ucd");
+                Vnm_print(1, "%s\n", outpath);
+                Vnm_print(2, "main:  Sorry, AVS format isn't supported for \
+uniform meshes yet!\n");
+                break;
 
-         /* In UHBD format */
-         } else if (pbeparm->writeaccfmt == 2) {
-             sprintf(outpath, "%s.%s", writeaccstem, "grd");
-             Vnm_tprint( 1, "main:    Writing accessibility in UHBD \
-format to %s...\n", outpath);
-             Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, 
-               "ACCESSIBILITY", pmg->pvec);
-         } else {
-             Vnm_tprint( 2, "main:    Bogus accessibility file format\
-(%d)!\n", pbeparm->writeaccfmt);
-             return 0;
-         }
+            case VDF_UHBD:
+                sprintf(outpath, "%s.%s", writestem, "grd");
+                Vnm_print(1, "%s\n", outpath);
+                grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+                  pmg->rwork);
+                Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, title,
+                  pmg->pvec);
+                Vgrid_dtor(&grid);
+                break;
+
+            default:
+                Vnm_print(2, "main:  Bogus data format (%d)!\n", 
+                  pbeparm->writefmt[i]);
+                break;
+        }
+                
     }
 
     return 1;
