@@ -124,7 +124,7 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
 
     VASSERT(thee != VNULL);
 
-    natoms = Valist_getNumberAtoms(thee->alist);
+    natoms = Valist_getNumberAtoms(Vpbe_getValist(thee->pbe));
     VASSERT(iatom < natoms);
 
     return thee->csm->colors[iatom];
@@ -173,12 +173,6 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) { 
-
-    int iatom;
-    double atomRadius;
-    Vatom *atom;
-    double center[3] = {0.0, 0.0, 0.0};
-    double disp[3], dist, radius, charge, maxX, maxY, maxZ;
 
     /* Make sure things have been properly initialized & store them */
     VASSERT(pbe != VNULL);
@@ -317,7 +311,7 @@ VPUBLIC double Vfetk_getLinearEnergy1(Vfetk *thee, int color) {
     
    /* Get the finest level solution */
    sol= VNULL;
-   sol = Vfetk_getSolution(thee, am, &nsol);
+   sol = Vfetk_getSolution(thee, &nsol);
    VASSERT(sol != VNULL);
 
    /* Make sure the number of entries in the solution array matches the
@@ -329,12 +323,12 @@ VPUBLIC double Vfetk_getLinearEnergy1(Vfetk *thee, int color) {
    }
     
    /* Now we do the sum over atoms... */
-   natoms = Valist_getNumberAtoms(thee->alist);
+   natoms = Valist_getNumberAtoms(thee->pbe->alist);
    for (iatom=0; iatom<natoms; iatom++) {
        /* Get atom information */
        icolor = Vfetk_getAtomColor(thee, iatom);
-       charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
-       position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
+       charge = Vatom_getCharge(Valist_getAtom(thee->pbe->alist, iatom));
+       position = Vatom_getPosition(Valist_getAtom(thee->pbe->alist, iatom));
        /* Check if this atom belongs to the specified partition */
        if ((color>=0) && (icolor<0)) {
            Vnm_print(2, "Vfetk_getLinearEnergy1: Atom colors not set!\n");
@@ -455,7 +449,7 @@ VPUBLIC double Vfetk_getLinearEnergy2(Vfetk *thee, int color) {
     energy = Vfetk_getEnergyNorm2(thee, color);
     energy = energy/Vunit_pi/Vunit_pi/16.0;
     energy = energy*Vunit_eps0*10e-10;
-    energy = energy/Vunit_ec/Vunit_ec*(Vunit_kb*thee->T);
+    energy = energy/Vunit_ec/Vunit_ec*(Vunit_kb*thee->pbe->T);
 
     return energy;
 }
@@ -481,13 +475,7 @@ VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 
     VASSERT(thee != VNULL);
 
-    if (thee->methFlag != 0) {
-        Vnm_print(2, "Vfetk_setAtomColors: ignoring call for methFlag = %d\n",
-          thee->methFlag);
-        return;
-    }
-
-    natoms = Valist_getNumberAtoms(thee->alist);
+    natoms = Valist_getNumberAtoms(thee->pbe->alist);
     for (i=0; i<natoms; i++) {
         simp = Vcsm_getSimplex(thee->csm, 0, i);
         thee->csm->colors[i] = SS_chart(simp);
@@ -509,8 +497,7 @@ VPUBLIC int Vfetk_memChk(Vfetk *thee) {
     if (thee == VNULL) return 0;
 
     memUse = memUse + sizeof(Vfetk);
-    if (thee->methFlag == 0) memUse = memUse + Vcsm_memChk(thee->csm);
-    memUse = memUse + Vacc_memChk(thee->acc);
+    memUse = memUse + Vcsm_memChk(thee->csm);
 
     return memUse;
 }
