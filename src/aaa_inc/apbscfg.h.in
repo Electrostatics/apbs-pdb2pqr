@@ -1,4 +1,4 @@
-/* src/aaa_inc/apbscfg.h.in.  Generated from configure.ac by autoheader.  */
+/* src/aaa_inc/apbscfg.h.in.  Generated from configure.in by autoheader.  */
 /**
  *  @file    acconfig.h
  *  @author  Nathan Baker and Mike Holst
