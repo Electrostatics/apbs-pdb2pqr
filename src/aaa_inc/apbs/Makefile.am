@@ -40,13 +40,14 @@ SUBDIRS = $(always_built_SUBDIRS) .
 BOTH_HEADS  = nosh.h vacc.h valist.h vatom.h vgreen.h vhal.h vpbe.h \
   vunit.h apbssh.h
 PMG_HEADS   = vpmg.h vpmgp.h mgsh.h
-FETK_HEADS   = vfetk.h vcsm.h vpee.h
+FETK_HEADS   = @fetk_do_inc@
+EXTRA_HEADERS = 
 
 APBS_HEADS = apbs.h
 OTHER_HEADS = ${BOTH_HEADS} ${PMG_HEADS} ${FETK_HEADS}
 
 includedir = ${prefix}/include/apbs
-include_HEADERS = ${APBS_HEADS} ${OTHER_HEADS}
+include_HEADERS = ${APBS_HEADS} ${OTHER_HEADS} ${EXTRA_HEADERS}
 
 distclean-local: clean-local
 
