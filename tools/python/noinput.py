@@ -118,7 +118,7 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.3.1\n\
+    Version 0.3.2\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
