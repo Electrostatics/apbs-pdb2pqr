@@ -477,6 +477,9 @@ sections\n",
     if (Vstring_strcasecmp(tok, "energy") == 0) {
         thee->printwhat[idx] = 0;
         thee->printnarg[idx] = 0;
+    } else if (Vstring_strcasecmp(tok, "force") == 0) {
+        thee->printwhat[idx] = 1;
+        thee->printnarg[idx] = 0;
     } else {
         Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing \
 PRINT section!\n",

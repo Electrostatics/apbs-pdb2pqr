@@ -1,0 +1,304 @@
+<html>
+
+<head>
+<title>APBS ion pmf test case</title>
+</head>
+
+<body bgcolor="#ffffff">
+<h1 align="center"> APBS ion pmf test case </h1>
+
+<center>
+$Id$
+</center>
+
+<br><br><br>
+<p>
+This is the two-ion test case for force evaluation from the Im et al. <i>Comput.
+Phys. Commun.</i> <b>111</b>, 59--75 (1998) paper.  The output of these run(s)
+are solvation energies for ion pairs (convert to total energy by adding
+Coulombic forces) and solvation force components.  Molecule 0 is fixed (at
+x=-3) and molecule 1 was moved.
+
+<p>
+To run this test case, simply edit the <code>runme</code> to provide the
+correct value for the variable <code>bindir</code> (where your APBS binary is
+located) and type <code>./runme</code>.
+
+<p>
+Here's the output you can look for in the individual output files
+<dl>
+  <dt> "Total force on atom ..."
+  <dd> For the first calculation, this is the force (kJ/mol/A) on the given
+       atom in solvent with no self energies/forces removed.  For the second
+	   calculation, this is the force (kJ/mol/A) on the given atom in vacuum
+	   with no self energies/forces removed.  In other words, these number are
+       basically useless by themselves; their difference gives the total
+       solvation force on the specified atom.
+  <dt> "Fixed charge force on atom ..."
+  <dd> For the first calculation, this is the charge-field force (kJ/mol/A) on
+	   the given atom in solvent with no self energies/forces removed.  For the
+	   second calculation, this is the charge-field force (kJ/mol/A) on the
+	   given atom in vacuum with no self energies/forces removed.  In other
+	   words, these number are basically useless by themselves; their
+	   difference gives the reaction field solvation force on the specified
+       atom.
+  <dt> "Ionic boundary force on atom..."
+  <dd> For the first calculation, this would be the ionic boundary force
+       (kJ/mol/A) on the given atom in the solvent if the ionic strength
+       weren't set to zero.  For the second calculation, this is identically
+       zero (or very small).
+  <dt> "Dielectric boundary force on atom ..."
+  <dd> For the first calculation, this is the dielectric boundary force
+	   (kJ/mol/A) on the given atom in solvent.  For the second calculation,
+       this is identically zero (or very small).
+  <dt> "Apolar boundary force on atom ..."
+  <dd> For the first calculation, this is the apolar (surface area dependent)
+	   boundary force (kJ/mol/A) on the given atom in solvent.  For the second
+       calculation, this is identically zero (or very small).
+  <dt> "Global fixed charge force on atom ..."
+  <dd> This is the reaction field force (kJ/mol/A) on the specified atom.
+  <dt> "Global ionic boundary force on atom ..."
+  <dd> This would be the ionic boundary force (kJ/mol/A) on the specified atom
+       if the ionic strength weren't set to zero.
+  <dt> "Global dielectric boundary force on atom ..."
+  <dd> This is the dielectric boundary force (kJ/mol/A) on the specified atom.
+  <dt> "Global apolar boundary force on atom ..."
+  <dd> This is the apolar boundary force (kJ/mol/A) on the specified atom.
+</dl>
+
+<p>
+And here's the notation we'll use for the results you should observe (all
+values in kJ/mol/A):
+<dl>
+  <dt> Solv (runme)
+  <dd> Solvation energy (kJ/mol) from this calculation
+  <dt> Solv (Roux)
+  <dd> Solvation energy from the Roux paper (see above); this was
+       <i>visually approximated</i> from a graph and therefore probably not
+very close to what they actually obtained
+  <dt> RF (runme)
+  <dd> Reaction field force from this calculation
+  <dt> RF (Roux)
+  <dd> Reaction field force from the Roux paper (see above); this was
+       <i>visually approximated</i> from a graph and therefore probably not
+very close to what they actually obtained
+  <dt> DB (runme)
+  <dd> Dielectric boundary force from this calculation
+  <dt> DB (Roux)
+  <dd> Dielectric boundary force from the Roux paper (see above); this was
+       <i>visually approximated</i> from a graph and therefore probably not
+very close to what they actually obtained
+  <dt> IB (runme)
+  <dd> Ionic boundary force from this calculation
+  <dt> IB (Roux)
+  <dd> Ionic boundary force from the Roux paper (see above); this was
+       <i>visually approximated</i> from a graph and therefore probably not
+very close to what they actually obtained
+  <dt> NP (runme)
+  <dd> Apolar boundary force from this calculation
+  <dt> NP (Roux)
+  <dd> Apolar boundary force from the Roux paper (see above); this was
+       <i>visually approximated</i> from a graph and therefore probably not
+very close to what they actually obtained
+</dl>
+
+<table border="1">
+<tr>
+<th>Mol 1 location</th>
+<th>Solv (runme)</th>
+<th>Solv (Roux)</th>
+<th colspan="2">RF (runme)</th>
+<th colspan="2">RF (Roux)</th>
+<th colspan="2">DB (runme)</th>
+<th colspan="2">DB (Roux)</th>
+<th colspan="2">IB (runme)</th>
+<th colspan="2">IB (Roux)</th>
+<th colspan="2">NP (runme)</th>
+<th colspan="2">NP (Roux)</th>
+</tr>
+<tr>
+<th></th>
+<th>Complex</th>
+<th>Complex</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+<th>Mol 0</th><th>Mol 1</th>
+</tr>
+<tr>
+  <td>-3.00</td>
+  <td>-1.4941E+03</td>
+  <td></td>
+  <td>2.0671E-01</td><td>2.0671E-01</td>
+  <td>0.0E+00</td><td>0.0E+00</td>
+  <td>-9.7575E-01</td><td>-9.7575E-01</td>
+  <td>0.0E+00</td><td>0.0E+00</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>-4.1069E-05</td><td>04.1069E-05</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>-2.50</td>
+  <td>-1.4529E+03</td>
+  <td></td>
+  <td>1.0947E+01</td><td>-1.2476E+01</td>
+  <td>8.4E+00</td><td>-1.3E+01</td>
+  <td>1.1390E+02</td><td>-1.0268E+02</td>
+  <td>1.1E+02</td><td>-1.1E+02</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>1.8527E-02</td><td>-1.8546E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>-2.00</td>
+  <td>-1.3952E+03</td>
+  <td></td>
+  <td>3.7894E+01</td><td>-3.6310E+01</td>
+  <td>3.8E+01</td><td>-3.4E+01</td>
+  <td>7.7637E+01</td><td>-7.7547E+01</td>
+  <td>8.2E+01</td><td>-8.2E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>2.9091E-02</td><td>-2.1027E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>-1.50</td>
+  <td>-1.3430E+03</td>
+  <td></td>
+  <td>6.4344E+01</td><td>-5.7731E+01</td>
+  <td>6.3E+01</td><td>-5.5E+01</td>
+  <td>4.2190E+01</td><td>-4.0318E+01</td>
+  <td>4.2E+01</td><td>-4.0E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>2.1425E-02</td><td>-2.1420E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>-1.00</td>
+  <td>-1.2974E+03</td>
+  <td></td>
+  <td>8.6638E+01</td><td>-8.6808E+01</td>
+  <td>8.8E+01</td><td>-8.8E+01</td>
+  <td>5.6696E+00</td><td>-2.8578E+00</td>
+  <td>4.2E+00</td><td>-4.2E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>-2.1446E-02</td><td>-2.1500E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>-0.50</td>
+  <td>-1.2539E+03</td>
+  <td></td>
+  <td>1.0053E+02</td><td>-1.0125E+02</td>
+  <td>1.0E+02</td><td>-1.0E+02</td>
+  <td>-1.1362E+01</td><td>2.2136E+01</td>
+  <td>-1.2E+01</td><td>1.6E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>2.1611E-02</td><td>-2.1175E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td> 0.00</td>
+  <td>-1.2121E+03</td>
+  <td></td>
+  <td>1.0591E+02</td><td><font color="red">0.0000E+00</font></td>
+  <td>1.1E+02</td><td><font color="red">0</font></td>
+  <td>-2.1509E+01</td><td>2.9697E+01</td>
+  <td>-2.1E+01</td><td>2.1E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>2.1818E-02</td><td>-2.0587E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>0.50</td>
+  <td>-1.1699E+03</td>
+  <td></td>
+  <td>1.0066E+02</td><td>-1.0172E+02</td>
+  <td>9.6E+01</td><td>-9.8E+01</td>
+  <td>-1.0538E+01</td><td>4.8631E+00</td>
+  <td>-1.1E+01</td><td>4.2E+00</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>1.9770E-02</td><td>-2.1488E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>1.00</td>
+  <td>-1.1255E+03</td>
+  <td></td>
+  <td>8.2252E+01</td><td>-8.7276E+01</td>
+  <td>8.4E+01</td><td>-8.8E+01</td>
+  <Td>6.2949E+00</td><td>2.9928E+00</td>
+  <td>4.2E+00</td><td>0.0E+00</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>1.1729E-02</td><td>-1.9759E-02</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>1.50</td>
+  <td>-1.0876E+03</td>
+  <td></td>
+  <td>6.5317E+01</td><td>-6.4707E+01</td>
+  <td>6.7E+01</td><td>-6.5E+01</td>
+  <td>7.2732E+00</td><td>3.1037E+00</td>
+  <td>6.3E+00</td><td>4.2E+00</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>4.5705E-04</td><td>-1.6387E-03</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>2.00</td>
+  <td>-1.0570E+03</td>
+  <td></td>
+  <td>5.3014E+01</td><td>-5.4596E+01</td>
+  <td>5.3E+01</td><td>-5.3E+01</td>
+  <td>7.2734E+00</td><td>1.8664E+00</td>
+  <td>6.3E+01</td><td>6.3E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>-2.7801E-05</td><td>9.5249E-06</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>2.50</td>
+  <td>-1.0322E+03</td>
+  <td>-1.0333E+03</td>
+  <td>4.3782E+01</td><td>-4.6578E+01</td>
+  <td>4.6E+01</td><td>-4.8E+01</td>
+  <td>7.2276E+00</td><td>-2.3296E+00</td>
+  <td>6.3E+01</td><td>-2.1E+01</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>-2.7801E-05</td><td>-2.6274E-05</td>
+  <td></td><td></td>
+</tr>
+<tr>
+  <td>3.00</td>
+  <td>-1.0114E+03</td>
+  <td>-1.0128E+03</td>
+  <td>3.6786E+01</td><td>-3.6786E+01</td>
+  <td>3.8E+01</td><td>-3.8E+01</td>
+  <td>7.1825E+00</td><td>-7.1824E+00</td>
+  <td>6.3E+00</td><td>-6.3E+00</td>
+  <td>0</td><td>0</td>
+  <td>0</td><td>0</td>
+  <td>-2.7801E-05</td><td>2.7801E-05</td>
+  <td></td><td></td>
+</tr>
+</table>
+
+</body>
+</html>

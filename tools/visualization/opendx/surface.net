@@ -1,16 +1,20 @@
 //
-// time: Mon May  6 15:40:45 2002
+// time: Mon May  6 16:02:50 2002
 //
 // version: 3.1.2 (format), 4.1.3 (DX)
 //
 //
+//
+// macro reference (direct): vrmlexport /usr/local/dx/java/server/dxmacros/vrmlmac.net
+include "vrmlmac.net"
+//
 // MODULE main
 //
 // comment: Transforms molecular accessibility data into triagulated surface by isocontouring at 0.5 and discretizing resulting surface to desired accuracy.
-// page assignment: image	order=4, windowed=0, showing=1
+// page assignment: image	order=4, windowed=0, showing=0
 // page assignment: import	order=2, windowed=0, showing=0
-// page assignment: iso_or_glyph	order=3, windowed=0, showing=0
-// workspace: width = 609, height = 527
+// page assignment: iso_or_glyph	order=3, windowed=0, showing=1
+// workspace: width = 449, height = 607
 // layout: snap = 0, width = 50, height = 50, align = NN
 //
 macro main(
@@ -18,8 +22,8 @@ macro main(
 ) {
     // 
     // node FileSelector[1]: x = 62, y = 110, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "accessibility.dx"
-    // output[2]: visible = 1, type = 32, value = "accessibility.dx"
+    // output[1]: visible = 1, type = 32, value = "/home/nbaker/coding/manifold/mesh-gen/test/mache/ache-wild.acc.dx"
+    // output[2]: visible = 1, type = 32, value = "ache-wild.acc.dx"
     // page group: import
     //
     // 
@@ -108,7 +112,7 @@ main_Color_5_out_1 =
     main_Color_5_in_5
     ) [instance: 5, cache: 1];
     // 
-    // node ShowConnections[1]: x = 295, y = 423, inputs = 1, label = ShowConnections
+    // node ShowConnections[1]: x = 41, y = 459, inputs = 1, label = ShowConnections
     // page group: iso_or_glyph
     //
 main_ShowConnections_1_out_1 = 
@@ -116,7 +120,7 @@ main_ShowConnections_1_out_1 =
     main_Color_5_out_1
     ) [instance: 1, cache: 1];
     // 
-    // node Transmitter[2]: x = 131, y = 559, inputs = 1, label = isosurface_or_glyphs
+    // node Transmitter[2]: x = 37, y = 545, inputs = 1, label = isosurface_or_glyphs
     // page group: iso_or_glyph
     //
 isosurface_or_glyphs = main_ShowConnections_1_out_1;
@@ -143,27 +147,11 @@ main_AutoCamera_1_out_1 =
     main_AutoCamera_1_in_9
     ) [instance: 1, cache: 1];
     // 
-    // node FileSelector[2]: x = 385, y = 149, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "surface.wrl"
-    // output[2]: visible = 1, type = 32, value = "surface.wrl"
-    // page group: image
+    // node FileSelector[3]: x = 360, y = 311, inputs = 0, label = FileSelector
+    // output[1]: visible = 1, type = 32, value = "surface"
+    // output[2]: visible = 1, type = 32, value = "surface"
+    // page group: iso_or_glyph
     //
-    // 
-    // node String[2]: x = 560, y = 203, inputs = 0, label = String
-    // output[1]: visible = 1, type = 32, value = NULL
-    // page group: image
-    //
-    // 
-    // node Export[1]: x = 339, y = 271, inputs = 3, label = Export
-    // input[2]: defaulting = 1, visible = 1, type = 32, value = "surface"
-    // input[3]: defaulting = 1, visible = 1, type = 32, value = "vrml"
-    // page group: image
-    //
-    Export(
-    main_Receiver_3_out_1,
-    main_FileSelector_2_out_1,
-    main_String_2_out_1
-    ) [instance: 1, cache: 1];
     // 
     // node Reset[4]: x = 280, y = 372, inputs = 6, label = Reset
     // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_4_out_1"
@@ -179,13 +167,13 @@ main_AutoCamera_1_out_1 =
     // node Image[5]: x = 102, y = 465, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_5"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [0.0128546 -2.84207 -2.60337]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [29.5934 342.744 32.6445]
-    // input[7]: defaulting = 0, visible = 0, type = 5, value = 108.597
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-35.3442 20.6234 12.145]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-226.299 125.013 219.23]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 47.2905
     // input[8]: defaulting = 0, visible = 0, type = 1, value = 640
-    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.751
-    // input[10]: defaulting = 0, visible = 0, type = 8, value = [-0.397291 0.126709 -0.908903]
-    // input[11]: defaulting = 1, visible = 0, type = 5, value = 17.7049
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.75
+    // input[10]: defaulting = 0, visible = 0, type = 8, value = [-0.546075 0.428781 -0.719687]
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 9.00099
     // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
@@ -196,12 +184,12 @@ main_AutoCamera_1_out_1 =
     // input[20]: visible = 1
     // input[21]: visible = 1
     // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
-    // input[41]: defaulting = 0, visible = 0, type = 32, value = "panzoom"
+    // input[41]: defaulting = 0, visible = 0, type = 32, value = "rotate"
     // input[42]: defaulting = 0, visible = 0, type = 32, value = "Gridded_3D_1var_notseries"
     // page group: image
     // title: value = Gridded_3D_1var_notseries
     // depth: value = 24
-    // window: position = (0.4297,0.3721), size = 0.5109x0.5117
+    // window: position = (0.4422,0.3779), size = 0.5109x0.5117
     // internal caching: 1
     //
 main_Image_5_out_1,
@@ -259,7 +247,7 @@ main_Image_5_out_3 =
     main_Image_5_in_49
     ) [instance: 5, cache: 1];
     // 
-    // node Print[2]: x = 429, y = 280, inputs = 3, label = Print
+    // node Print[2]: x = 193, y = 338, inputs = 3, label = Print
     // input[2]: defaulting = 0, visible = 1, type = 32, value = "rd"
     // page group: iso_or_glyph
     //
@@ -268,10 +256,29 @@ main_Image_5_out_3 =
     main_Print_2_in_2,
     main_Print_2_in_3
     ) [instance: 2, cache: 1];
+    // 
+    // node vrmlexport[2]: x = 285, y = 427, inputs = 2, label = vrmlexport
+    // page group: iso_or_glyph
+    //
+main_vrmlexport_2_out_1 = 
+    vrmlexport(
+    main_SimplifySurface_1_out_1,
+    main_FileSelector_3_out_1
+    ) [instance: 2, cache: 1];
+    // 
+    // node Print[4]: x = 373, y = 517, inputs = 3, label = Print
+    // input[2]: defaulting = 0, visible = 1, type = 32, value = "rd"
+    // page group: iso_or_glyph
+    //
+    Print(
+    main_vrmlexport_2_out_1,
+    main_Print_4_in_2,
+    main_Print_4_in_3
+    ) [instance: 4, cache: 1];
 // network: end of macro body
 CacheScene(main_Image_5_in_1, main_Image_5_out_1, main_Image_5_out_2);
 }
-main_FileSelector_1_out_1 = "accessibility.dx";
+main_FileSelector_1_out_1 = "/home/nbaker/coding/manifold/mesh-gen/test/mache/ache-wild.acc.dx";
 main_String_1_out_1 = "dx";
 main_Import_1_in_2 = NULL;
 main_Import_1_in_4 = NULL;
@@ -322,8 +329,7 @@ main_AutoCamera_1_in_7 = NULL;
 main_AutoCamera_1_in_8 = NULL;
 main_AutoCamera_1_in_9 = NULL;
 main_AutoCamera_1_out_1 = NULL;
-main_FileSelector_2_out_1 = "surface.wrl";
-main_String_2_out_1 = NULL;
+main_FileSelector_3_out_1 = "surface";
 main_Reset_4_in_1 = "main_Reset_4_out_1";
 main_Reset_4_in_2 = 0;
 main_Reset_4_in_3 = 0;
@@ -646,12 +652,12 @@ macro Image(
 main_Image_5_in_1 = "Image_5";
 main_Image_5_in_3 = "X24,,Gridded_3D_1var_notseries";
 main_Image_5_in_4 = 1;
-main_Image_5_in_5 = [0.0128546 -2.84207 -2.60337];
-main_Image_5_in_6 = [29.5934 342.744 32.6445];
-main_Image_5_in_7 = 108.597;
+main_Image_5_in_5 = [-35.3442 20.6234 12.145];
+main_Image_5_in_6 = [-226.299 125.013 219.23];
+main_Image_5_in_7 = 47.2905;
 main_Image_5_in_8 = 640;
-main_Image_5_in_9 = 0.751;
-main_Image_5_in_10 = [-0.397291 0.126709 -0.908903];
+main_Image_5_in_9 = 0.75;
+main_Image_5_in_10 = [-0.546075 0.428781 -0.719687];
 main_Image_5_in_11 = NULL;
 main_Image_5_in_12 = 0;
 main_Image_5_in_13 = NULL;
@@ -679,7 +685,7 @@ main_Image_5_in_37 = NULL;
 main_Image_5_in_38 = NULL;
 main_Image_5_in_39 = NULL;
 main_Image_5_in_40 = NULL;
-main_Image_5_in_41 = "panzoom";
+main_Image_5_in_41 = "rotate";
 main_Image_5_in_42 = "Gridded_3D_1var_notseries";
 main_Image_5_in_43 = NULL;
 main_Image_5_in_44 = NULL;
@@ -690,6 +696,9 @@ main_Image_5_in_48 = NULL;
 main_Image_5_in_49 = NULL;
 main_Print_2_in_2 = "rd";
 main_Print_2_in_3 = NULL;
+main_vrmlexport_2_out_1 = NULL;
+main_Print_4_in_2 = "rd";
+main_Print_4_in_3 = NULL;
 Executive("product version 4 1 3");
 $sync
 main();

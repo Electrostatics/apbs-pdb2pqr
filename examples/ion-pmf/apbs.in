@@ -1,6 +1,4 @@
 read 
-    mol pqr mol1.pqr                      # Read molecule 1
-    mol pqr mol2.pqr                      # Read molecule 1
     mol pqr complex.pqr                      # Read molecule 1
 end
 elec
@@ -37,13 +35,13 @@ elec
     srad 1.4                           # Solvent radius
     swin 0.3                           # Surface cubic spline window
     temp 298.15                        # Temperature
-    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
+    gamma 0.00072                      # Surface tension (in kJ/mol/A^2)
     calcenergy 1                       # Energy I/O (to stdout)
                                        #  0 => don't write out energy
                                        #  1 => write out total energy
                                        #  2 => write out total energy and all
                                        #       components
-    calcforce 0                        # Atomic forces I/O (to stdout)
+    calcforce 2                        # Atomic forces I/O (to stdout)
                                        #  0 => don't write out forces
                                        #  1 => write out net forces on molecule
                                        #  2 => write out atom-level forces
@@ -61,7 +59,7 @@ elec
     gcent 0.0 0.0 0.0                  # This can either be 'mol n' to center
                                        #   on a specific molecule or (x, y, z)
                                        #   coordinates
-    mol 2                              # Which molecule (1, 2, ...)
+    mol 1                              # Which molecule (1, 2, ...)
     lpbe                               # lpbe/npbe = linear/nonlinear PBE
     bcfl 2                             # Boundary condition flag
                                        #  0 => Zero
@@ -71,7 +69,7 @@ elec
     ion 1 0.000 2.0                    # Counterion declaration:
     ion -1 0.000 2.0                   #  ion <charge> <conc (M)> <radius>
     pdie 1.0                           # Solute dielectric
-    sdie 78.54                         # Solvent dielectric
+    sdie 1.0                           # Solvent dielectric
     srfm 2                             # Surface calculation method
                                        #  0 => Mol surface for epsilon;
                                        #       inflated VdW for kappa; no
@@ -82,52 +80,7 @@ elec
     srad 1.4                           # Solvent radius
     swin 0.3                           # Surface cubic spline window
     temp 298.15                        # Temperature
-    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
-    calcenergy 1                       # Energy I/O (to stdout)
-                                       #  0 => don't write out energy
-                                       #  1 => write out total energy
-                                       #  2 => write out total energy and all
-                                       #       components
-    calcforce 0                        # Atomic forces I/O (to stdout)
-                                       #  0 => don't write out forces
-                                       #  1 => write out net forces on molecule
-                                       #  2 => write out atom-level forces
-end
-elec
-    mg-manual                          # Use the multigrid method
-    dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
-                                       #   (in x, y, z)
-    nlev 4                             # Number of levels in multilevel
-                                       #   hierarchy (usually 'l' from above
-                                       #   definition)
-    grid 0.21 0.21 0.21                # Grid spacings (A)
-    # glen 100 100 100                 # You can EITHER specify the grid
-                                       # lengths OR the grid spacing
-    gcent 0.0 0.0 0.0                  # This can either be 'mol n' to center
-                                       #   on a specific molecule or (x, y, z)
-                                       #   coordinates
-    mol 3                              # Which molecule (1, 2, ...)
-    lpbe                               # lpbe/npbe = linear/nonlinear PBE
-    bcfl 2                             # Boundary condition flag
-                                       #  0 => Zero
-                                       #  1 => Single DH sphere
-                                       #  2 => Multiple DH spheres
-                                       #  4 => Focusing
-    ion 1 0.000 2.0                    # Counterion declaration:
-    ion -1 0.000 2.0                   #  ion <charge> <conc (M)> <radius>
-    pdie 1.0                           # Solute dielectric
-    sdie 78.54                         # Solvent dielectric
-    srfm 2                             # Surface calculation method
-                                       #  0 => Mol surface for epsilon;
-                                       #       inflated VdW for kappa; no
-                                       #       smoothing
-                                       #  1 => As 0 with harmoic average
-                                       #       smoothing
-                                       #  2 => Cubic spline 
-    srad 1.4                           # Solvent radius
-    swin 0.3                           # Surface cubic spline window
-    temp 298.15                        # Temperature
-    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
+    gamma 0.000                        # Surface tension (in kJ/mol/A^2)
     calcenergy 1                       # Energy I/O (to stdout)
                                        #  0 => don't write out energy
                                        #  1 => write out total energy
@@ -139,6 +92,14 @@ elec
                                        #  2 => write out atom-level forces
 end
 
-print energy 3 - 2 - 1 end
+# THIS GIVES THE SOLVATION ENERGY OF THE COMPLEX
+print energy 1 - 2 end
+
+# THIS GIVES THE SOLVATION FORCES ON THE COMPLEX
+#   Global fixed charge force = total reaction field force
+#   Global dielectric boundary force = total dielectric boundary force
+#   Global ionic boundary force = total ionic boundary force
+#   Global apolar boundary force = total apolar boundary force
+print force 1 - 2 end
 
 quit
