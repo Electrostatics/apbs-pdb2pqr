@@ -416,15 +416,17 @@ VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
 VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
     /* Counters */
-    int isimp, jsimp, iatom, atomID, simpID;
+    int isimp, jsimp, iatom, jatom, atomID, simpID;
     int nsimps, gotMem;
     /* Object info */
     Vatom *atom;
     SS *simplex;
     double *position;
     /* Lists */
-    int *qParent; int nqParent;
-    int **sqmNew; int *nsqmNew;
+    int *qParent, nqParent;
+    int **sqmNew, *nsqmNew;
+    int *affAtoms, nAffAtoms;
+    int *dnqsm, *nqsmNew, **qsmNew;
 
     VASSERT(thee != VNULL);
     VASSERT(thee->initFlag);
@@ -461,10 +463,6 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
         }
         return 1;
     }
-
-    /*
-     * printf("Vcsm_update: Updating Simp %d and children\n", SS_id(simps[0]));
-     */
 
     /* The more complicated case has occured; the parent simplex had one or
      * more charges.  First, generate the list of affected charges. */
@@ -525,15 +523,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
     /* Sanity check that we didn't lose any atoms... */
     iatom = 0;
-    for (isimp=0; isimp<num; isimp++) {
-        if (nsqmNew[isimp] > 0) {
-            /*
-             * printf("Vcsm_update: Simp %d has %d atoms.\n",
-             *   SS_id(simps[isimp]), nsqmNew[isimp]);
-             */
-        } 
-        iatom += nsqmNew[isimp];
-    }
+    for (isimp=0; isimp<num; isimp++) iatom += nsqmNew[isimp];
     if (iatom < nqParent) {
         Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n", 
             nqParent - iatom, nqParent);
@@ -553,9 +543,9 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     dnqsm = Vram_ctor(nAffAtoms, sizeof(int));
     VASSERT(dnqsm != VNULL);
     nqsmNew = Vram_ctor(nAffAtoms, sizeof(int));
-    VASSERT(nqsm != VNULL);
+    VASSERT(nqsmNew != VNULL);
     qsmNew = Vram_ctor(nAffAtoms, sizeof(int*));
-    VASSERT(nqsm != VNULL);
+    VASSERT(qsmNew != VNULL);
     for (iatom=0; iatom<nAffAtoms; iatom++) {
         dnqsm[iatom] = -1;
         atomID = affAtoms[iatom];
@@ -569,7 +559,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Setup the new entries in the array */
     for (iatom=0;iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
-        qsmNew[iatom] = Vram_ctor(dqsm[iatom] + thee->nqsm[atomID], 
+        qsmNew[iatom] = Vram_ctor(dnqsm[iatom] + thee->nqsm[atomID], 
                                   sizeof(int));
         nqsmNew[iatom] = 0;
         VASSERT(qsmNew[iatom] != VNULL);
@@ -577,21 +567,42 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Fill the new entries in the array */
     /* First, do the modified entries */
     for (isimp=0; isimp<num; isimp++) {
-        atomID
-STOPPED!
+        simpID = SS_id(simps[isimp]);
+        for (iatom=0; iatom<nsqmNew[isimp]; iatom++) {
+            atomID = sqmNew[isimp][iatom];
+            for (jatom=0; jatom<nAffAtoms; jatom++) {
+                if (atomID == affAtoms[jatom]) break;
+            }
+            if (jatom < nAffAtoms) {
+                qsmNew[jatom][nqsmNew[jatom]] = simpID;
+                nqsmNew[jatom]++;
+            } 
+        }
     }
     /* Now do the unmodified entries */
     for (iatom=0; iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
         for (isimp=0; isimp<thee->nqsm[atomID]; isimp++) {
-            if (thee->qsm[atomID][isimp] != SS_id(simps[0])) {
-                qsmNew[iatom][nqsmNew[iatom]] = thee->qsm[atomID][isimp];
+            for (jsimp=0; jsimp<num; jsimp++) {
+                simpID = SS_id(simps[jsimp]);
+                if (thee->qsm[atomID][isimp] == simpID) break;
             }
-            nqsmNew[iatom]++;
+            if (jsimp == num) {
+                qsmNew[iatom][nqsmNew[iatom]] = thee->qsm[atomID][isimp];
+                nqsmNew[iatom]++;
+            }
         }
     }
 
-    /* Replace the existing SQM entries in the table */
+    /* Replace the existing entries in the table.  Do the QSM entires
+     * first, since they require affAtoms = thee->sqm[simps[0]] */
+    for (iatom=0; iatom<nAffAtoms; iatom++) {
+        atomID = affAtoms[iatom]; 
+        Vram_dtor((Vram **)&(thee->qsm[atomID]), thee->nqsm[atomID], 
+          sizeof(int));
+        thee->qsm[atomID] = qsmNew[iatom];
+        thee->nqsm[atomID] = nqsmNew[iatom];
+    }
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
         if (thee->nsqm[simpID] > 0) Vram_dtor((Vram **)&(thee->sqm[simpID]),
@@ -599,7 +610,6 @@ STOPPED!
         thee->sqm[simpID] = sqmNew[isimp];
         thee->nsqm[simpID] = nsqmNew[isimp];
     }
-
 
     return 1;
 
