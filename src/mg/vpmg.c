@@ -54,248 +54,59 @@ VEMBED(rcsid="$Id$")
 #if !defined(VINLINE_VACC)
 #endif /* if !defined(VINLINE_VACC) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  rworkIndices
-//
-// Purpose:  Get the (C-style) integer index denoting the start of the
-//           differential operator array in thee->rwork
-//
-// Args:     k_cc  Set to index for linearized nonlinear operator array N'(u)
-//                 at finest level
-//           k_fc  Set to index for source array
-//                 at finest level
-//           k_ac  Set to index for operator matrix
-//                 at finest level
-//
-// Notes:    The indexing here is taken from Mike's mgdriv FORTRAN
-//           routine.  We need to make sure we still have a viable Vpmgp object
-//           laying around.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void rworkIndices(Vpmg *thee, int *k_cc, int *k_fc, int *k_ac) {
-
-    int k_rpc, k_pc;
-    int nx, ny, nz, nlev, nxc, nyc, nzc, nf, nc, narr, narrc, n_rpc, n_iz;
-    int n_ipc, nrwk, niwk;
-
-    /* Grab the first set of parameters from MGSZ */
-    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
-      &(thee->pmgp->mgsolv), &nx, &ny, &nz, &nlev, &nxc, &nyc, &nzc, &nf, &nc, 
-      &narr, &narrc, &n_rpc, &n_iz, &n_ipc, &nrwk, &niwk);
-
-    /* This is where the rpc array starts (default) */
-    k_rpc = 1;
-
-    /* Here are where the other arrays start (variable) */
-    *k_cc  = k_rpc + n_rpc;
-    *k_fc  = *k_cc  + narr;
-    k_pc  = *k_fc  + narr;
-    *k_ac  = k_pc  + 27*narrc;
-
-    /* We shouldn't be normally be able to stop here, since these arrays
-     * contain vectors and matrices for all levels of the hierarchy.  However,
-     * PMG puts the finest level at the start of each array (see buildstr in
-     * mgsubd.f).  Therefore, the indices we've found so far simply need to be
-     * converted into C-style indices (0-start arrays instead of 1-start
-     * arrays) to get the fine level indices in rwork. */
-
-    /* Turn these all into C-style indices */
-    (*k_cc)--;
-    (*k_fc)--;
-    (*k_ac)--;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_colCompF
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_colCompF(Vpmg *thee, int *nrow, int *ncol, int *nonz,
-  double **nzval, int **rowind, int **colptr, int flag) {
-
-    int i, *colp, *rowi;
-
-    Vpmg_colCompC(thee, nrow, ncol, nonz, nzval, rowind, colptr, flag);
-
-    colp = *colptr;
-    rowi = *rowind;
-
-    for (i=0; i<(*ncol+1); i++) (colp[i]++);
-    for (i=0; i<*nonz; i++) (rowi[i]++);
-
-}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_printColComp
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_printColComp(int nrow, int ncol, int nonz, 
-  double *nzval, int *rowind, int *colptr, 
-  char path[72], char title[72], char mxtype[3]) {
+VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72], 
+  char mxtype[3], int flag) {
 
-    F77PCOLCOMP(&nrow, &ncol, &nonz, nzval, rowind, colptr, path, title, 
-      mxtype);
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_colCompC
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_colCompC(Vpmg *thee, int *nrow, int *ncol, int *nonz,
-  double **nzval, int **rowind, int **colptr, int flag) {
-
-    int nn, nx, ny, nz;
-    int k_ac, k_cc, k_fc;
-    int oCstart, uCstart, oEstart, oNstart;
-    int i, inonz, jsub1, jsub2, jsub3, jsup1, jsup2, jsup3;
-    double *ac, *cc, *nzva;
-    int *colp, *rowi;
+    int i, nn, nx, ny, nz, ncol, nrow, nonz; 
+    double *nzval;
+    int *colptr, *rowind;
 
     /* Calculate the total number of unknowns */
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
     nn = nx*ny*nz;
-    *ncol = nn;
-    *nrow = nn;
+    ncol = nn;
+    nrow = nn;
 
     /* Calculate the number of non-zero matrix entries:
      *    nn       nonzeros on diagonal
      *    nn-1     nonzeros on first off-diagonal
      *    nn-nx    nonzeros on second off-diagonal
      *    nn-nx*ny nonzeros on third off-diagonal
-     * 
+     *
      *    7*nn-2*nx*ny-2*nx-2 TOTAL non-zeros
      */
-    *nonz = 7*nn - 2*nx*ny - 2*nx - 2;
+    nonz = 7*nn - 2*nx*ny - 2*nx - 2;
+    nzval  = Vmem_malloc(thee->vmem, nonz, sizeof(double));
+    rowind = Vmem_malloc(thee->vmem, nonz, sizeof(int));
+    colptr = Vmem_malloc(thee->vmem, (ncol+1), sizeof(int));
 
-    /* Allocate space for the arrays */
-    *nzval  = Vmem_malloc(thee->vmem, *nonz, sizeof(double));
-    *rowind = Vmem_malloc(thee->vmem, *nonz, sizeof(int));
-    *colptr = Vmem_malloc(thee->vmem, (*ncol+1), sizeof(int));
-    nzva = *nzval;
-    rowi = *rowind;
-    colp = *colptr;
+    F77BCOLCOMP(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+      nzval, rowind, colptr, &flag);
 
-    /* Get the rwork indices for the arrays of interest */
-    rworkIndices(thee, &k_cc, &k_fc, &k_ac);
-
-    /* Get the arrays of interest */
-    ac = &(thee->rwork[k_ac]);
-    cc = &(thee->rwork[k_cc]);
-
-    /* Now that we have the operator matrix, here's how we index it: */
-    oCstart = 0;     /* The main diagonal starts here */
-    oEstart = nn;    /* The first off-diagonal starts here */
-    oNstart = 2*nn;  /* The second off-diagonal starts here */
-    uCstart = 3*nn;  /* The third off-diagonal starts here */
-   
-    /* Hop through the rows and get to work (THE MATRIX IS SYMMETRIC!!!) */ 
-    inonz = 0;
-
-    /* The first row is special */
-    colp[0] = 0;
-    /* Diagonal */
-    if (flag == 0) nzva[inonz] = ac[oCstart + 0];
-    else if (flag == 1) nzva[inonz] = ac[oCstart + 0] + cc[0];
-    else VASSERT(0);
-    rowi[inonz] = 0;
-    inonz++;
-    /* Super-diagonal 1 */
-    jsup1 = 0 + 1;
-    nzva[inonz] = ac[oEstart + 0];
-    rowi[inonz] = jsup1;
-    inonz++;
-    /* Super-diagonal 2 */
-    jsup2 = 0 + nx;
-    nzva[inonz] = ac[oNstart + 0];
-    rowi[inonz] = jsup2;
-    inonz++;
-    /* Super-diagonal 3 */
-    jsup3 = 0+nx*ny;
-    nzva[inonz] = ac[uCstart + 0];
-    rowi[inonz] = jsup3;
-    inonz++;
-  
-    /* Do the rest of the rows */
-    for (i=1; i<nn; i++) {
-        /* Store where this column starts */
-        colp[i] = inonz;
-
-        /* Sub-diagonal 3 */
-        jsub3 = i - nx * ny; 
-        if ((jsub3 > 0) || (jsub3 < nn)) {
-            nzva[inonz] = ac[uCstart + i];
-            rowi[inonz] = jsub3;
-            inonz++;
-        }
-
-        /* Sub-diagonal 2 */
-        jsub2 = i - nx; 
-        if ((jsub2 > 0) || (jsub2 < nn)) {
-            nzva[inonz] = ac[oNstart + i];
-            rowi[inonz] = jsub2;
-            inonz++;
-        }
-
-        /* Sub-diagonal 1 */
-        jsub1 = i - 1; 
-        if ((jsub1 > 0) || (jsub1 < nn)) {
-            nzva[inonz] = ac[oEstart + i];
-            rowi[inonz] = jsub1;
-            inonz++;
-        }
-
-        /* Diagonal */
-        if (flag == 0) nzva[inonz] = ac[oCstart + i];
-        else if (flag == 1) nzva[inonz] = ac[oCstart + i] + cc[i];
-        rowi[inonz] = i;
-        inonz++;
-
-        /* Super-diagonal 1 */
-        jsup1 = i + 1; 
-        if ((jsup1 > 0) || (jsup1 < nn)) {
-            nzva[inonz] = ac[oEstart + i];
-            rowi[inonz] = jsup1;
-            inonz++;
-        }
-
-
-        /* Super-diagonal 2 */
-        jsup2 = i + nx; 
-        if ((jsup2 > 0) || (jsup2 < nn)) {
-            nzva[inonz] = ac[oNstart + i];
-            rowi[inonz] = jsup2;
-            inonz++;
-        }
-
-
-        /* Super-diagonal 3 */
-        jsup3 = i+nx*ny;
-        if ((jsup3 > 0) || (jsup3 < nn)) {
-            nzva[inonz] = ac[uCstart + i];
-            rowi[inonz] = jsup3;
-            inonz++;
-        }
-
-    } /* for i=1:nn */
-
-    colp[*ncol] = inonz;
-
-    /* Sanity check */
-    if (inonz != (*nonz)) {
-        Vnm_print(2, "columnCompress:  Error expected %d non-zeros, got %d\n",
-          *nonz, inonz);
-        VASSERT(0);
+#if 0
+    for (i=0; i<nn; i++) {
+        Vnm_print(1, "nnz(%d) = %g\n", i, nzval[i]);
     }
-        
-}
+#endif
 
+    /* I do not understand why I need to pass nzval in this way, but it
+     * works... */
+    F77PCOLCOMP(&nrow, &ncol, &nonz, &(nzval[0]), rowind, colptr, path, title, 
+      mxtype);
+
+    Vmem_free(thee->vmem, (ncol+1), sizeof(int), (void **)&colptr);
+    Vmem_free(thee->vmem, nonz, sizeof(int), (void **)&rowind);
+    Vmem_free(thee->vmem, nonz, sizeof(double), (void **)&nzval);
+
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  focusFillBound
@@ -437,8 +248,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,0)] = uval;
 
             /* High X face */
@@ -474,9 +288,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 pos[0] = x; pos[1] = y; pos[2] = z;
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,1)] = uval;
             
             /* Zero Neumann conditions */             
@@ -525,9 +342,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 pos[0] = x; pos[1] = y; pos[2] = z;
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,0)] = uval;
 
             /* High Y face */
@@ -564,8 +384,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,1)] = uval;
 
             /* Zero Neumann conditions */
@@ -615,8 +438,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,0)] = uval;
 
             /* High Z face */
@@ -653,8 +479,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
+                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+%g, %g!\n", x, y, z);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
+            nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,1)] = uval;
 
             /* Zero Neumann conditions */
@@ -723,13 +552,12 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
         atom->partID = !(atom->partID);
     }
     /* Now calculate the energy on inverted subset of the domain */
-    Vnm_print(0, "VPMG::extEnergy: Calculating mobile ion energy contributions for focusing\n");
     thee->extQmEnergy = Vpmg_qmEnergy(pmgOLD, 1);
-    Vnm_print(0, "VPMG::extEnergy: Calculating fixed charge energy contributions for focusing\n");
+    Vnm_print(0, "VPMG::extEnergy: extQmEnergy = %g kT\n", thee->extQmEnergy);
     thee->extQfEnergy = Vpmg_qfEnergy(pmgOLD, 1);
-    Vnm_print(0, "VPMG::extEnergy: Calculating dielectric energy contributions for focusing\n");
+    Vnm_print(0, "VPMG::extEnergy: extQfEnergy = %g kT\n", thee->extQfEnergy);
     thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
-    Vnm_print(0, "VPMG::extEnergy: Done calculating energy contributions for focusing\n");
+    Vnm_print(0, "VPMG::extEnergy: extDiEnergy = %g kT\n", thee->extDiEnergy);
     Vpmg_unsetPart(pmgOLD);
 }
 
@@ -996,7 +824,6 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
-    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
     int i, nion;
     double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION], zkappa2, zks2;
     double ionstr;
@@ -1013,12 +840,15 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     /* Calculate storage requirements */
     F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
-      &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
-      &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
+      &(thee->pmgp->nlev), &(thee->pmgp->nxc), &(thee->pmgp->nyc), 
+      &(thee->pmgp->nzc), &(thee->pmgp->nf), &(thee->pmgp->nc), 
+      &(thee->pmgp->narr), &(thee->pmgp->narrc), &(thee->pmgp->n_rpc),
+      &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), &(thee->pmgp->nrwk),
+      &(thee->pmgp->niwk));
 
     /* We need some additional storage if: nonlinear & newton OR cgmg */
     if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
-        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*nf);
+        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
 
     Vnm_print(0, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
@@ -1120,7 +950,7 @@ VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
 VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
   int energyFlag) {
 
-    int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc, i, nion;
+    int i, nion;
     double ionstr, zkappa2, zks2, ionQ[MAXION], ionConc[MAXION];
     double ionRadii[MAXION];
 
@@ -1137,13 +967,16 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
     /* Calculate storage requirements */
     F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
       &(thee->pmgp->mgsolv), &(thee->pmgp->nx), &(thee->pmgp->ny),
-      &(thee->pmgp->nz), &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, 
-      &(thee->pmgp->narr), &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), 
-      &(thee->pmgp->niwk));
+      &(thee->pmgp->nz), &(thee->pmgp->nlev), &(thee->pmgp->nxc),
+      &(thee->pmgp->nyc), &(thee->pmgp->nzc), &(thee->pmgp->nf),
+      &(thee->pmgp->nc), &(thee->pmgp->narr), &(thee->pmgp->narrc),
+      &(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc),
+      &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
+
 
     /* We need some additional storage if: nonlinear & newton OR cgmg */
     if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
-        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*nf);
+        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
 
 
@@ -2517,8 +2350,6 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
         } 
     }
 
-    energy = energy;
-
     if (extFlag) energy += thee->extQfEnergy;
  
     return energy;
@@ -3176,46 +3007,29 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
         if ((atom->position[0] < upperCorner[0]) &&
             (atom->position[0] > lowerCorner[0])) xok = 1;
         else {
-            if (atom->position[0] == lowerCorner[0]) {
-                if (bflags[VAPBS_LEFT] == 1) xok = 1;
-                else xok = 0;
-                Vnm_print(0, "ATOM %d on LEFT face (x = %g; bflag = %d)\n", i,
-                  lowerCorner[0], bflags[VAPBS_LEFT]);
-            } 
-            if (atom->position[0] == upperCorner[0]) {
-                if (bflags[VAPBS_RIGHT] == 1) xok = 1;
-                else xok = 0;
-                Vnm_print(0, "ATOM %d on RIGHT face (x = %g, bflag = %d)\n", i,
-                  upperCorner[0], bflags[VAPBS_RIGHT]);
-            } 
+            if ((atom->position[0] == lowerCorner[0]) &&
+                (bflags[VAPBS_LEFT] == 1)) xok = 1;
+            else if ((atom->position[0] == upperCorner[0]) &&
+                     (bflags[VAPBS_RIGHT] == 1)) xok = 1;
+            else xok = 0; 
         }
         if ((atom->position[1] < upperCorner[1]) &&
             (atom->position[1] > lowerCorner[1])) yok = 1;
         else {
-            if (atom->position[1] == lowerCorner[1]) {
-                if (bflags[VAPBS_BACK] == 1) yok = 1;
-                else yok = 0;
-                Vnm_print(0, "ATOM %d on BACK face\n", i);
-            } 
-            if (atom->position[1] == upperCorner[1]) {
-                if (bflags[VAPBS_FRONT] == 1) yok = 1;
-                else yok = 0;
-                Vnm_print(0, "ATOM %d on FRONT face\n", i);
-            } 
+            if ((atom->position[1] == lowerCorner[1]) &&
+                (bflags[VAPBS_BACK] == 1)) yok = 1;
+            else if ((atom->position[1] == upperCorner[1]) &&
+                     (bflags[VAPBS_FRONT] == 1)) yok = 1;
+            else yok = 0;
         }
         if ((atom->position[2] < upperCorner[2]) &&
             (atom->position[2] > lowerCorner[2])) zok = 1;
         else {
-            if (atom->position[2] == lowerCorner[2]) {
-                if (bflags[VAPBS_DOWN] == 1) zok = 1;
-                else zok = 0;
-                Vnm_print(0, "ATOM %d on DOWN face\n", i);
-            } 
-            if (atom->position[2] == upperCorner[2]) {
-                if (bflags[VAPBS_UP] == 1) zok = 1;
-                else zok = 0;
-                Vnm_print(0, "ATOM %d on UP face\n", i);
-            } 
+            if ((atom->position[2] == lowerCorner[2]) &&
+                (bflags[VAPBS_DOWN] == 1)) zok = 1;
+            else if ((atom->position[2] == upperCorner[2]) &&
+                     (bflags[VAPBS_UP] == 1)) zok = 1;
+            else zok = 0; 
         }
 
         if ((xok && yok) && zok) atom->partID = 1;
@@ -3232,8 +3046,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
         else { 
             if ((x == lowerCorner[0]) && 
                 (bflags[VAPBS_LEFT] == 1)) xok = 1;
-            else xok = 0;
-            if ((x == upperCorner[0]) &&
+            else if ((x == upperCorner[0]) &&
                 (bflags[VAPBS_RIGHT] == 1)) xok = 1;
             else xok = 0;
         }
@@ -3246,8 +3059,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                 else {
                     if ((y == lowerCorner[1]) &&
                         (bflags[VAPBS_BACK] == 1)) yok = 1;
-                    else yok = 0;
-                    if ((y == upperCorner[1]) &&
+                    else if ((y == upperCorner[1]) &&
                         (bflags[VAPBS_FRONT] == 1)) yok = 1;
                     else yok = 0;
                 }
@@ -3260,8 +3072,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                         else {
                             if ((z == lowerCorner[2]) &&
                                 (bflags[VAPBS_DOWN] == 1)) zok = 1;
-                            else zok = 0;
-                            if ((z == upperCorner[2]) &&
+                            else if ((z == upperCorner[2]) &&
                                 (bflags[VAPBS_UP] == 1)) zok = 1;
                             else zok = 0;
 

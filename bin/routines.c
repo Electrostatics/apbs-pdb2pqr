@@ -608,6 +608,61 @@ to %s...\n", outpath);
 }   
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  writematMG
+//
+// Purpose:  Write out matrix for MG calculation
+//
+// Returns:  1 if sucessful, 0 otherwise
+//
+// Notes:    currently ignores partition information when writing out acc
+// 
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int writematMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+
+    char writematstem[VMAX_ARGLEN];
+    char outpath[VMAX_ARGLEN];
+    char mxtype[3];
+
+    if (nosh->bogus) return 1;
+
+#ifdef HAVE_MPI_H
+    sprintf(writematstem, "%s-PE%d", pbeparm->writematstem,
+      Vcom_rank(com));
+#else
+    sprintf(writematstem, "%s", pbeparm->writematstem);
+#endif
+    
+    if (pbeparm->writemat == 1) {
+        /* Poisson operator only */
+        sprintf(outpath, "%s.%s", writematstem, "mat");
+        mxtype[0] = 'R';
+        mxtype[1] = 'S';
+        mxtype[2] = 'A';
+        if (pbeparm->writematflag == 0) {
+            Vnm_tprint( 1, "main:    Writing Poisson operator matrix \
+to %s...\n", outpath);
+
+         /* Linearization of Poisson-Boltzmann operator around solution */
+         } else if (pbeparm->writematflag == 1) {
+            Vnm_tprint( 1, "main:    Writing linearization of full \
+Poisson-Boltzmann operator matrix to %s...\n", outpath);
+
+         } else {
+             Vnm_tprint( 2, "main:    Bogus matrix specification\
+(%d)!\n", pbeparm->writematflag);
+             return 0;
+         }
+
+         Vnm_tprint(0, "main:    Printing operator...\n");
+         Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
+           pbeparm->writematflag);
+
+    }
+
+    return 1;
+}
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  writeaccMG
 //
 // Purpose:  Write out solvent accessibility for MG calculation

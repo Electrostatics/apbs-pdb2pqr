@@ -85,13 +85,13 @@ int main(int argc, char **argv) {
             atom2 = Valist_getAtom(alist, j);
             pos2 = Vatom_getPosition(atom2);
             charge2 = Vatom_getCharge(atom2);
-            dist = (1e-8)*VSQRT(VSQR(pos1[0]-pos2[0]) + VSQR(pos1[1]-pos2[1])
+            dist = VSQRT(VSQR(pos1[0]-pos2[0]) + VSQR(pos1[1]-pos2[1])
                                + VSQR(pos1[2]-pos2[2]));
             energy += (charge1*charge2/dist);
         }
     }
 
-    energy = energy*(1e-3)*Vunit_ec*Vunit_ec*Vunit_Na/(4*VPI*Vunit_eps0);
+    energy = energy*(1e-3)*(1e10)*Vunit_ec*Vunit_ec*Vunit_Na/(4*VPI*Vunit_eps0);
  
     printf("Energy = %1.12e kJ/mol in vacuum.\n", energy);
 

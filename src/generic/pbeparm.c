@@ -268,6 +268,11 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setwriteacc = parm->setwriteacc;
     for (i=0; i<VMAX_ARGLEN; i++) thee->writeaccstem[i] = parm->writeaccstem[i];
     thee->writeaccfmt = parm->writeaccfmt;
+    thee->writemat = parm->writemat;
+    thee->setwritemat = parm->setwritemat;
+    for (i=0; i<VMAX_ARGLEN; i++) thee->writematstem[i] = parm->writematstem[i];
+    thee->writematflag = parm->writematflag;
+
     thee->parsed = parm->parsed;
 
 }
@@ -469,7 +474,7 @@ WRITEPOT keyword!\n", tok);
     } else if (Vstring_strcasecmp(tok, "writeacc") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing WRITEACC \
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEACC \
 keyword!\n", tok);
             return -1;
         } 
@@ -483,13 +488,36 @@ keyword!\n", tok);
             thee->writeaccfmt = 2;
         } else {
             Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
-WRITEPOT keyword!\n", tok);
+WRITEACC keyword!\n", tok);
             return -1;
         }
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         strncpy(thee->writeaccstem, tok, VMAX_ARGLEN);
         thee->setwriteacc = 1;
         return 1;
+    } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing WRITEMAT \
+keyword!\n", tok);
+            return -1;
+        }
+        thee->writemat = ti;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (Vstring_strcasecmp(tok, "poisson") == 0) {
+            thee->writematflag = 0;
+        } else if (Vstring_strcasecmp(tok, "full") == 0) {
+            thee->writematflag = 1;
+        } else {
+            Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
+WRITEMAT keyword!\n", tok);
+            return -1;
+        }
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        strncpy(thee->writematstem, tok, VMAX_ARGLEN);
+        thee->setwriteacc = 1;
+        return 1;
+
     }
 
     return 0;

@@ -77,6 +77,16 @@ struct Vpmgp {
                               \li 2: linear then nonlinear */
 
     /* ********** DERIVED PARAMETERS ********** */
+    int nxc;             /**< Coarse level grid x dimensions */
+    int nyc;             /**< Coarse level grid y dimensions */
+    int nzc;             /**< Coarse level grid z dimensions */
+    int nf;              /**< Number of fine grid unknowns */
+    int nc;              /**< Number of coarse grid unknowns */
+    int narrc;           /**< Size of vector on coarse level */
+    int n_rpc;           /**< Real info work array required storage */
+    int n_iz;            /**< Integer storage parameter (index max) */
+    int n_ipc;           /**< Integer info work array required storage */
+
     int nrwk;            /**< Real work storage */
     int niwk;            /**< Integer work storage */
     int narr;            /**< Array work storage */

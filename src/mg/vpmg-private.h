@@ -63,6 +63,10 @@ VPRIVATE void rworkIndices(Vpmg *thee, int *k_cc, int *k_fc, int *k_ac);
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
 /////////////////////////////////////////////////////////////////////////// */
+#define F77BCOLCOMP VF77_MANGLE(bcolcomp, BCOLCOMP)
+VEXTERNC void F77BCOLCOMP(int *iparm, double *rparm, int *iwork, 
+  double *rwork, double *nzval, int *rowind, int *colptr, int *flag);
+
 #define F77PCOLCOMP VF77_MANGLE(pcolcomp, PCOLCOMP)
 VEXTERNC void F77PCOLCOMP(int *nrow, int *ncol, int *nonz, 
   double *nzval, int *rowind, int *colptr, 

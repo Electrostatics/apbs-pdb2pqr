@@ -235,6 +235,9 @@ int main(int argc, char **argv) {
             /* Write accessibility */
             writeaccMG(com, nosh, pbeparm, pmg[i]);
 
+            /* Write matrix */
+            writematMG(com, nosh, pbeparm, pmg[i]);
+
             fflush(stdout);
             fflush(stderr);
 

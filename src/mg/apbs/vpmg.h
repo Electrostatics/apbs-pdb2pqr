@@ -555,77 +555,11 @@ VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
  */
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
 
-/** @brief   Build a column-compressed (Harwell-Boeing) representation of a
- *           fine-level operator with indices defined in C style (0-start
- *           arrays)
- *  @ingroup Vpmg
- *  @author  Nathan Baker
- *  @param   thee   Vpmg object
- *  @param   nrow   Set to number of rows in matrix
- *  @param   ncol   Set to number of columns in matrix
- *  @param   nonz   Set to number of non-zeros in matrix
- *  @param   nzval  Set to an array of doubles (length nonz) which contains the
- *                  non-zero values of the matrix.  The array is allocated by
- *                  this routine and the user is responsible for its
- *                  destruction.
- *  @param   rowind Set to an array of integers (length nonz) which contains the
- *                  row indices for values of the matrix (assumes C-style
- *                  indices, 0-start).  The array is allocated by this routine
- *                  and the user is responsible for its destruction.
- *  @param   colptr Set to an array of integers (length ncol+1) which contains
- *                  the indices in array nzval which indicate the start of each
- *                  column (assumes C-style indices, 0-start).  The array is
- *                  allocated by this routine and the user is responsible for
- *                  its destruction.
- *  @note  All of these arrays are allocated by this routine and the user is
- *         responsible for their destruction.
- */
-VEXTERNC void Vpmg_colCompC(Vpmg *thee, int *nrow, int *ncol, int *nonz,
-  double **nzval, int **rowind, int **colptr, int flag);
-
-/** @brief   Build a column-compressed (Harwell-Boeing) representation of a
- *           fine-level operator with indices defined in FORTRAN style (1-start
- *           arrays)
- *  @ingroup Vpmg
- *  @author  Nathan Baker
- *  @param   thee   Vpmg object
- *  @param   nrow   Set to number of rows in matrix
- *  @param   ncol   Set to number of columns in matrix
- *  @param   nonz   Set to number of non-zeros in matrix
- *  @param   nzval  Set to an array of doubles (length nonz) which contains the
- *                  non-zero values of the matrix.  The array is allocated by
- *                  this routine and the user is responsible for its
- *                  destruction.
- *  @param   rowind Set to an array of integers (length nonz) which contains
- *                  the row indices for values of the matrix (assumes
- *                  FORTRAN-style indices, 1-start).  The array is allocated by
- *                  this routine and the user is responsible for its
- *                  destruction.
- *  @param   colptr Set to an array of integers (length ncol+1) which contains
- *                  the indices in array nzval which indicate the start of each
- *                  column (assumes FORTRAN-style indices, 1-start).  The array
- *                  is allocated by this routine and the user is responsible
- *                  for its destruction.
- *  @note  All of these arrays are allocated by this routine and the user is
- *         responsible for their destruction.
- */
-VEXTERNC void Vpmg_colCompF(Vpmg *thee, int *nrow, int *ncol, int *nonz,
-  double **nzval, int **rowind, int **colptr, int flag);
-
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee   Vpmg object
- *  @param   nrow   Number of rows in matrix
- *  @param   ncol   Number of columns in matrix
- *  @param   nonz   Number of non-zeros in matrix
- *  @param   nzval  An array of nonz doubles representing the values of the
- *                  non-zeros of the matrix
- *  @param   rowind An array of nonz integers representing the row indices of
- *                  the non-zeros of the matrix
- *  @param   colptr An array of (ncol+1) integers representing the starting
- *                  indices (in nzval and rowind) of the columns of the matrix
  *  @param   path   The file to which the matrix is to be written
  *  @param   title  The title of the matrix
  *  @param   mxtype The type of REAL-valued matrix, a 3-character string of the
@@ -635,9 +569,12 @@ VEXTERNC void Vpmg_colCompF(Vpmg *thee, int *nrow, int *ncol, int *nonz,
  *                  \li H:  Hermitian matrix
  *                  \li Z:  Skew symmetric matrix
  *                  \li R:  Rectangular
+ *  @param   flag   The operator to compress:
+ *                  \li 0:  Just the Poisson operator
+ *                  \li 1:  The linearization of the full Poisson-Boltzmann
+ *                          operator around the current solution
  */
-VEXTERNC void Vpmg_printColComp(int nrow, int ncol, int nonz,
-  double *nzval, int *rowind, int *colptr, 
-  char path[72], char title[72], char mxtype[3]);
+VEXTERNC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72],
+  char mxtype[3], int flag);
 
 #endif    /* ifndef _VPMG_H_ */

@@ -211,6 +211,7 @@ c*
 c*             *** the coefficient and source function ***
                fc(i,j,k) = coef_fc * fcf(i,j,k)
                cc(i,j,k) = coef_fc * ccf(i,j,k)
+ 
 c*
 c*             *** the diagonal for matvecs and smoothings ***
                oC(i,j,k)  = 
