@@ -44,13 +44,14 @@
 
 #include "apbscfg.h"
 #include "maloc/maloc.h"
+#include "apbs/apbs.h"
 
 
 int main(int argc, char **argv) {
 
     int i, lev;
     int maxvert = 700;
-    int minlev = 3;
+    int minlev = VMGNLEV;
     double newval, oldval;
 
     Vio_start();

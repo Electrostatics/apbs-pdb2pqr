@@ -983,27 +983,26 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
                 (*atomForce)[0].npForce[k] += npForce[k];
             }
         }
-        Vnm_tprint( 1, "  Net fixed charge force on molecule %d\n",
+        Vnm_tprint( 1, "  Printing net forces for molecule %d (kJ/mol/A)\n",
           pbeparm->molid);
-        Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
+        Vnm_tprint( 1, "  Legend:\n");
+        Vnm_tprint( 1, "    qf  -- fixed charge force\n");
+        Vnm_tprint( 1, "    db  -- dielectric boundary force\n");
+        Vnm_tprint( 1, "    ib  -- ionic boundary force\n");
+        Vnm_tprint( 1, "    np  -- nonpolar force\n");
+        Vnm_tprint( 1, "  qf  %4.3e  %4.3e  %4.3e\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[2]);
-        Vnm_tprint( 1, "  Net ionic boundary force on molecule %d\n",
-          pbeparm->molid);
-        Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
+        Vnm_tprint( 1, "  ib  %4.3e  %4.3e  %4.3e\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[2]);
-        Vnm_tprint( 1, "  Net dielectric boundary force on \
-molecule %d\n", pbeparm->molid);
-        Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
+        Vnm_tprint( 1, "  db  %4.3e  %4.3e  %4.3e\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
-        Vnm_tprint( 1, "  Net apolar force on molecule %d\n",
-          pbeparm->molid);
-        Vnm_tprint( 1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
+        Vnm_tprint( 1, "  np  %4.3e  %4.3e  %4.3e\n",
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[1],
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[2]);
@@ -1011,6 +1010,13 @@ molecule %d\n", pbeparm->molid);
         *nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
         *atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
           sizeof(AtomForce));
+        Vnm_tprint( 1, "  Printing per-atom forces for molecule %d (kJ/mol/A)\n",
+          pbeparm->molid);
+        Vnm_tprint( 1, "  Legend:\n");
+        Vnm_tprint( 1, "    tot n -- total force for atom n\n");
+        Vnm_tprint( 1, "    qf  n -- fixed charge force for atom n\n");
+        Vnm_tprint( 1, "    db  n -- dielectric boundary force for atom n\n");
+        Vnm_tprint( 1, "    ib  n -- ionic boundary force for atom n\n");
         for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
             if (nosh->bogus == 0) {
                 Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, mgparm->chgm);
@@ -1025,8 +1031,7 @@ molecule %d\n", pbeparm->molid);
                     (*atomForce)[j].npForce[k] = 0;
                 }
             }
-            Vnm_tprint( 1, "  Total force on atom %d, molecule %d \
-= (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n", j, pbeparm->molid,
+            Vnm_tprint( 1, "  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
               Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                 (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
                 (*atomForce)[j].dbForce[0]+(*atomForce)[j].npForce[0]),
@@ -1036,23 +1041,19 @@ molecule %d\n", pbeparm->molid);
               Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                 (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
                 (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
-            Vnm_tprint( 1, "  Fixed charge force on atom %d, \
-molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
+            Vnm_tprint( 1, "  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[2]);
-            Vnm_tprint( 1, "  Ionic boundary force on atom %d, \
-molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
+            Vnm_tprint( 1, "  ib  %d  %4.3e  %4.3e  %4.3e\n", j, 
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[2]);
-            Vnm_tprint( 1, "  Dielectric boundary force on atom \
-%d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
+            Vnm_tprint( 1, "  db  %d  %4.3e  %4.3e  %4.3e\n", j, 
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[2]);
-            Vnm_tprint( 1, "  Apolar force on atom %d, molecule %d \
-= (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
+            Vnm_tprint( 1, "  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[0],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[1],
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[2]);
@@ -1486,6 +1487,7 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
 
     int ipr, ifr, ivc, calcid, refnforce, refcalcforce;
     double temp, scalar;
+    double totforce[3];
     AtomForce *lforce, *gforce, *aforce;
 
     if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[i][0]], "") == 0){
@@ -1619,7 +1621,7 @@ calcid+1);
         Vcom_reduce(com, lforce[ifr].npForce, gforce[ifr].npForce, 3, 2, 0);
     }
    
-#if 1
+#if 0
     if (refcalcforce == 1) {
         Vnm_tprint( 1, "  Local net fixed charge force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].qfForce[0],
@@ -1652,41 +1654,70 @@ lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
 #endif
  
     if (refcalcforce == 1) {
-        Vnm_tprint( 1, "  Global net fixed charge force = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].qfForce[0], 
+        Vnm_tprint( 1, "  Printing net forces (kJ/mol/A).\n");
+        Vnm_tprint( 1, "  Legend:\n");
+        Vnm_tprint( 1, "    tot -- Total force\n");
+        Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
+        Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
+        Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
+        Vnm_tprint( 1, "    np  -- Nonpolar boundary force\n");
+
+        for (i=0; i<3; i++) {
+            totforce[i] = 
+                gforce[0].qfForce[i] 
+              + gforce[0].ibForce[i] 
+              + gforce[0].npForce[i]
+              + gforce[0].dbForce[i];
+        }
+
+        Vnm_tprint( 1, "  tot %1.12E  %1.12E  %1.12E\n", totforce[0], 
+totforce[1], totforce[2]);
+        Vnm_tprint( 1, "  qf  %1.12E  %1.12E  %1.12E\n", gforce[0].qfForce[0], 
 gforce[0].qfForce[1], gforce[0].qfForce[2]);
-        Vnm_tprint( 1, "  Global net ionic boundary force = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].ibForce[0], 
+        Vnm_tprint( 1, "  ib  %1.12E  %1.12E  %1.12E\n", gforce[0].ibForce[0], 
 gforce[0].ibForce[1], gforce[0].ibForce[2]);
-        Vnm_tprint( 1, "  Global net dielectric boundary force = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].dbForce[0], 
+        Vnm_tprint( 1, "  db  %1.12E  %1.12E  %1.12E\n", gforce[0].dbForce[0], 
 gforce[0].dbForce[1], gforce[0].dbForce[2]);
-        Vnm_tprint( 1, "  Global net apolar boundary force = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", gforce[0].npForce[0], 
+        Vnm_tprint( 1, "  np  %1.12E  %1.12E  %1.12E\n", gforce[0].npForce[0], 
 gforce[0].npForce[1], gforce[0].npForce[2]);
+
     } else if (refcalcforce == 2) {
+
+        Vnm_tprint( 1, "  Printing per-atom forces (kJ/mol/A).\n");
+        Vnm_tprint( 1, "  Legend:\n");
+        Vnm_tprint( 1, "    tot n -- Total force for atom n\n");
+        Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
+        Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
+        Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
+        Vnm_tprint( 1, "    np  n -- Nonpolar boundary force for atom n\n");
+        Vnm_tprint( 1, "    tot all -- Total force for system\n");
+
+        totforce[0] = 0.0;
+        totforce[1] = 0.0;
+        totforce[2] = 0.0;
+
         for (ifr=0; ifr<refnforce; ifr++) {
-            Vnm_tprint( 1, "  Global fixed charge force \
-(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].qfForce[0], 
-gforce[ifr].qfForce[1], gforce[ifr].qfForce[2]);
-        Vnm_tprint( 1, "  Global ionic boundary force \
-(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].ibForce[0],
-gforce[ifr].ibForce[1], gforce[ifr].ibForce[2]);
-        Vnm_tprint( 1, "  Global dielectric boundary force \
-(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].dbForce[0],
-gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
-        Vnm_tprint( 1, "  Global apolar boundary force \
-(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, gforce[ifr].npForce[0],
-gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
-        Vnm_tprint( 1, "  Global total force (atom %d) = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, 
+            Vnm_tprint( 1, "  qf  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+gforce[ifr].qfForce[0], gforce[ifr].qfForce[1], gforce[ifr].qfForce[2]);
+            Vnm_tprint( 1, "  ib  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+gforce[ifr].ibForce[0], gforce[ifr].ibForce[1], gforce[ifr].ibForce[2]);
+            Vnm_tprint( 1, "  db  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+gforce[ifr].dbForce[0], gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
+            Vnm_tprint( 1, "  np  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+gforce[ifr].npForce[0], gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
+            Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 (gforce[ifr].npForce[0] + gforce[ifr].dbForce[0] + gforce[ifr].ibForce[0] +
 gforce[ifr].qfForce[0]),
 (gforce[ifr].npForce[1] + gforce[ifr].dbForce[1] + gforce[ifr].ibForce[1] +
 gforce[ifr].qfForce[1]),
 (gforce[ifr].npForce[2] + gforce[ifr].dbForce[2] + gforce[ifr].ibForce[2] +
 gforce[ifr].qfForce[2]));
+            for (i=0; i<3; i++) {
+                totforce[i] += (gforce[ifr].npForce[i] + gforce[ifr].dbForce[i] + gforce[ifr].ibForce[i] + gforce[ifr].qfForce[i]);
+            }
         }
+        Vnm_tprint( 1, "  tot all %1.12E  %1.12E  %1.12E\n", totforce[0],
+totforce[1], totforce[2]);
     }
 
     Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&lforce));

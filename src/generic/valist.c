@@ -156,6 +156,8 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
     /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
      * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
 
+#define DEBUGREADPDB 0
+
     Vio *sock = VNULL;
     Vatom *atoms = VNULL;
     Vatom *tatoms = VNULL;
@@ -196,6 +198,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
         if ((Vstring_strcasecmp(tok, "ATOM") == 0) || 
             (Vstring_strcasecmp(tok, "HETATM") == 0)) {
 
+
             /* Grab serial */
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (sscanf(tok, "%d", &itmp) != 1) {
@@ -203,7 +206,11 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
                 return 0;
             }
 
-            /* Grab name */
+#if DEBUGREADPDB
+            Vnm_print(1, "Valist_readPDB:  serial = %d\n", itmp);
+#endif
+
+            /* Grab atom name */
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (strlen(tok) < VMAX_ARGLEN) strcpy(atomName, tok);
             else {
@@ -212,25 +219,36 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
                 return 0;
             }
 
-            /* We don't care about any of the next 1-3 fields; the next thing
-             * we're looking for is resSeq (integer) */
+#if DEBUGREADPDB
+            Vnm_print(1, "Valist_readPDB:  atomName = %s\n", atomName);
+#endif
+
+            /* Grab residue name */
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (strlen(tok) < VMAX_ARGLEN) strcpy(resName, tok);
+            else {
+                Vnm_print(2, "Valist_readPDB:  Residue name (%s) too long!\n",
+                  tok);
+                return 0;
+            }
+
+#if DEBUGREADPDB
+            Vnm_print(1, "Valist_readPDB:  resName = %s\n", resName);
+#endif
+
+            /* Grab residue number */
             gotit = 0;
             ntok = 0;
-            for (i=0; i<4; i++) {
-                VJMPERR1(Vio_scanf(sock, "%s", tokArray[i]) == 1);
-                ntok++;
-                if ((sscanf(tok, "%d", &itmp) == 1) && 
-                        (sscanf(tok, "%s%d%s", stmp, &itmp, stmp) == 1) &&
-                        (sscanf(tok, "%d%s", &itmp, stmp) == 1) &&
-                        (sscanf(tok, "%s%d", &itmp) == 1)) {
-                    gotit = 1;
-                    break;
-                }
-            }
-            if (!gotit) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if ((sscanf(tok, "%d", &itmp) != 1)) {
                 Vnm_print(2, "Valist_readPDB:  Can't find resSeq!\n");
                 return 0;
             }
+
+#if DEBUGREADPDB
+            Vnm_print(1, "Valist_readPDB:  resSeq = %d\n", itmp);
+#endif
+
 
             /* We don't care about any of the next 1 fields; the next thing
              * we're looking for is x (float) */
@@ -260,31 +278,23 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
             }
             pos[2] = dtmp;
 
+#if DEBUGREADPDB
+            Vnm_print(1, "Valist_readPDB:  pos = (%g, %g, %g)\n", pos[0], pos[1], pos[2]);
+#endif
+
+
             /* Try to find the parameters.  We have to loop through all the
              * entries in tokArray because we can't be sure which is the
              * actual resName */
-            gotit = 0;
-            for (i=0; i<ntok; i++) {
-                if (strlen(tokArray[i]) < VMAX_ARGLEN) {
-                    strcpy(resName, tokArray[i]);
-                    atomData = Vparam_getAtomData(param, resName, atomName);
-                    if (atomData != VNULL) {
-                        gotit = 1;
-                        charge = atomData->charge;
-                        radius = atomData->radius;
-                        break;
-                    }
-                }
+            atomData = Vparam_getAtomData(param, resName, atomName);
+            if (atomData != VNULL) {
+                gotit = 1;
+                charge = atomData->charge;
+                radius = atomData->radius;
             }
             if (!gotit) {
                 Vnm_print(2, "Valist_readPDB:  Couldn't find parameters for \
-atom=%s using following residue names as guesses: ");
-                for (i=0; i<ntok; i++) {
-                    if (strlen(tokArray[i]) < VMAX_ARGLEN) {
-                        Vnm_print(2, " %s,", tokArray[i]);
-                    }
-                }
-                Vnm_print(2, "\n");
+atom = %s, residue = %s\n", atomName, resName);
                 return 0;
             }
 
@@ -332,6 +342,8 @@ atom=%s using following residue names as guesses: ");
 VERROR1:
     Vnm_print(2, "Valist_readPDB:  Ran out of tokens!\n");
     return 0;
+
+#undef DEBUGREADPDB
 
 }
 
@@ -397,7 +409,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
                 if ((sscanf(tok, "%d", &itmp) == 1) && 
                         (sscanf(tok, "%s%d%s", stmp, &itmp, stmp) == 1) &&
                         (sscanf(tok, "%d%s", &itmp, stmp) == 1) &&
-                        (sscanf(tok, "%s%d", &itmp) == 1)) {
+                        (sscanf(tok, "%s%d", stmp, &itmp) == 1)) {
                     /* Vnm_print(1, "DEBUG:  parsed %s as integer.\n", tok); */
                     gotit = 1;
                     break;
