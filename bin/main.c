@@ -311,7 +311,7 @@ definition; no smoothing\n");
             else sparm = mgparm->srad;
             if (mgparm->nion > 0) iparm = mgparm->ionr[0];
             else iparm = 0.0;
-for (j=0; j<mgparm->nion; j++)
+            for (j=0; j<mgparm->nion; j++)
               ionstr += 0.5*(VSQR(mgparm->ionq[j])*mgparm->ionc[j]);
 
             pbe[i] = Vpbe_ctor(alist[mgparm->molid-1], mgparm->nion,
