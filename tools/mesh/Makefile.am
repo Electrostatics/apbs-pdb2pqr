@@ -47,8 +47,12 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-noinst_PROGRAMS  = mgmesh 
+LINK    = $(F77) $(LDFLAGS) -o $@
+
+noinst_PROGRAMS  = mgmesh accmap
 mgmesh_SOURCES     = mgmesh.c 
 mgmesh_LDADD       = ${math_lib}
-INCLUDES         = -I${top_srcdir}/inc 
+accmap_SOURCES     = accmap.c
+accmap_LDADD       = -L../../../lib -lapbs @mc_lib@ @mcx_lib@ @pal_lib@ @thread_lib@ @mpi_lib@ @math_lib@ @rl_lib@ @socket_lib@ @nsl_lib@ @stdcxx_lib@
+INCLUDES         = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ @mpi_inc@ 
 

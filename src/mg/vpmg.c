@@ -1684,13 +1684,20 @@ VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
 //
 // Purpose:  Fill the specified array with accessibility values
 //
+// Args:     vec   The vector to be filled (must be nx*ny*nz in length)
+//           meth  The accessibility definition to use:
+//                  0 => Mol surf (uses parm)
+//                  1 => VdW surf
+//                  2 => Inflated VdW surf (uses parm)
+//           parm  Parameter for surface definition
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec) {
+VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
 
     Vacc *acc = VNULL;
     Vpbe *pbe = VNULL;
-    double srad, position[3];
+    double position[3];
     int i, j, k, nx, ny, nz;
 
     pbe = thee->pbe;
@@ -1698,7 +1705,20 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec) {
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
-    srad = Vpbe_getSolventRadius(pbe);
+
+    if (meth == 0) {
+        Vnm_print(0, "Vpmg_fillAcc: using molecular surface with %g A probe\n",
+          parm);
+    } else if (meth == 1) {
+        Vnm_print(0, "Vpmg_fillAcc: using van der Waals surface\n");
+    } else if (meth == 2) {
+        Vnm_print(0, "Vpmg_fillAcc: using inflated van der Waals surface with %g A probe\n",
+          parm);
+    } else {
+        Vnm_print(2, "Vpmg_fillAcc: invalid surface method (%d)!\n", meth);
+        VASSERT(0);
+    }
+
 
     for (k=0; k<nz; k++) {
         for (j=0; j<ny; j++) {
@@ -1709,10 +1729,13 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec) {
                 position[2] = thee->zf[k];
 
                 /* the scalar (0th derivative) entry */
-                if (Vacc_molAcc(acc, position, srad) == 1)
-                  vec[IJK(i,j,k)] = 1.0;
-                else vec[IJK(i,j,k)] = 0.0;
-
+                if (meth == 0) {
+                    vec[IJK(i,j,k)] = (double)(Vacc_molAcc(acc,position,parm));
+                } else if (meth == 1) {
+                    vec[IJK(i,j,k)] = (double)(Vacc_vdwAcc(acc,position));
+                } else if (meth == 2) {
+                    vec[IJK(i,j,k)] = (double)(Vacc_ivdwAcc(acc,position,parm));
+                }
             }
         }
     }

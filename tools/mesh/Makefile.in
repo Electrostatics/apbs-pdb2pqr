@@ -137,10 +137,14 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-noinst_PROGRAMS = mgmesh 
+LINK = $(F77) $(LDFLAGS) -o $@
+
+noinst_PROGRAMS = mgmesh accmap
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ${math_lib}
-INCLUDES = -I${top_srcdir}/inc 
+accmap_SOURCES = accmap.c
+accmap_LDADD = -L../../../lib -lapbs @mc_lib@ @mcx_lib@ @pal_lib@ @thread_lib@ @mpi_lib@ @math_lib@ @rl_lib@ @socket_lib@ @nsl_lib@ @stdcxx_lib@
+INCLUDES = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ @mpi_inc@ 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../apbscfg.h
 CONFIG_CLEAN_FILES = 
@@ -154,10 +158,12 @@ LIBS = @LIBS@
 mgmesh_OBJECTS =  mgmesh.o
 mgmesh_DEPENDENCIES = 
 mgmesh_LDFLAGS = 
+accmap_OBJECTS =  accmap.o
+accmap_DEPENDENCIES = 
+accmap_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
-LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -165,8 +171,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(mgmesh_SOURCES)
-OBJECTS = $(mgmesh_OBJECTS)
+SOURCES = $(mgmesh_SOURCES) $(accmap_SOURCES)
+OBJECTS = $(mgmesh_OBJECTS) $(accmap_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -210,6 +216,10 @@ maintainer-clean-compile:
 mgmesh: $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES)
 	@rm -f mgmesh
 	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
+
+accmap: $(accmap_OBJECTS) $(accmap_DEPENDENCIES)
+	@rm -f accmap
+	$(LINK) $(accmap_LDFLAGS) $(accmap_OBJECTS) $(accmap_LDADD) $(LIBS)
 
 tags: TAGS
 
