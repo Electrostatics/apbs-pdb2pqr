@@ -448,12 +448,15 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
        processor. */
 
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0.0;
+
     for (i=0; i<nx; i++) {
         xok = 0.0;
         x = i*hx + xmin;
-        if ((x < (upperCorner[0]-hx/2)) && (x > (lowerCorner[0]+hx/2))) xok = 1.0;
-        else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
-                 (bflags[VAPBS_LEFT] == 0)) xok = 1.0;
+        if ( (x < (upperCorner[0]-hx/2)) && 
+             (x > (lowerCorner[0]+hx/2))
+           ) xok = 1.0;
+        else if ( (VABS(x - lowerCorner[0]) < VPMGSMALL) && 
+                  (bflags[VAPBS_LEFT] == 0)) xok = 1.0;
         else if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
                  (bflags[VAPBS_LEFT] == 1)) xok = 0.5;
         else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
@@ -461,14 +464,29 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
         else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
                  (bflags[VAPBS_RIGHT] == 1)) xok = 0.5;
         else if ((x > (upperCorner[0] + hx/2)) || (x < (lowerCorner[0] - hx/2))) xok = 0.0;
-        else if ((x < (upperCorner[0] + hx/2)) || (x > (lowerCorner[0] - hx/2))){
+        else if ((x < (upperCorner[0] + hx/2)) || (x > (lowerCorner[0] - hx/2))) {
             x0 = VMAX2(x - hx/2, lowerCorner[0]);
             x1 = VMIN2(x + hx/2, upperCorner[0]);
             xok = VABS(x1-x0)/hx;
-            VASSERT(xok >= 0.0);
-            VASSERT(xok <= 1.0);
-        }
-        else xok=0.0;
+
+            if (xok < 0.0) {
+                if (VABS(xok) < VPMGSMALL) xok = 0.0;
+                else {
+                    Vnm_print(2, "Vpmg_setPart:  fell off x-interval (%1.12E)!\n",
+                            xok);
+                    VASSERT(0);
+                }
+            } 
+            if (xok > 1.0) {
+                if (VABS(xok - 1.0) < VPMGSMALL) xok = 1.0;
+                else {
+                    Vnm_print(2, "Vpmg_setPart:  fell off x-interval (%1.12E)!\n",
+                            xok);
+                    VASSERT(0);
+                }
+            } 
+
+        } else xok = 0.0;
      
         for (j=0; j<ny; j++) {
             yok = 0.0;
@@ -487,8 +505,23 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                 y0 = VMAX2(y - hy/2, lowerCorner[1]);
                 y1 = VMIN2(y + hy/2, upperCorner[1]);
                 yok = VABS(y1-y0)/hy;
-                VASSERT(yok >= 0.0);
-                VASSERT(yok <= 1.0);
+
+                if (yok < 0.0) {
+                    if (VABS(yok) < VPMGSMALL) yok = 0.0;
+                    else {
+                        Vnm_print(2, "Vpmg_setPart:  fell off y-interval (%1.12E)!\n",
+                                yok);
+                        VASSERT(0);
+                    }
+                } 
+                if (yok > 1.0) {
+                    if (VABS(yok - 1.0) < VPMGSMALL) yok = 1.0;
+                    else {
+                        Vnm_print(2, "Vpmg_setPart:  fell off y-interval (%1.12E)!\n",
+                                yok);
+                        VASSERT(0);
+                    }
+                } 
             }
             else yok=0.0;
 
@@ -509,8 +542,23 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                     z0 = VMAX2(z - hzed/2, lowerCorner[2]);
                     z1 = VMIN2(z + hzed/2, upperCorner[2]);
                     zok = VABS(z1-z0)/hzed;
-                    VASSERT(zok >= 0.0);
-                    VASSERT(zok <= 1.0);
+
+                    if (zok < 0.0) {
+                        if (VABS(zok) < VPMGSMALL) zok = 0.0;
+                        else {
+                            Vnm_print(2, "Vpmg_setPart:  fell off z-interval (%1.12E)!\n",
+                                    zok);
+                            VASSERT(0);
+                        }
+                    } 
+                    if (zok > 1.0) {
+                        if (VABS(zok - 1.0) < VPMGSMALL) zok = 1.0;
+                        else {
+                            Vnm_print(2, "Vpmg_setPart:  fell off z-interval (%1.12E)!\n",
+                                    zok);
+                            VASSERT(0);
+                        }
+                    } 
                 }
                 else zok = 0.0;
                 
