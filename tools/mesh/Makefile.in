@@ -182,7 +182,7 @@ AM_LDFLAGS = @LDFLAGS@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_LDFLAGS = @LDFLAGS@ @FFLAGS@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_CCLD = $(F77)
-noinst_PROGRAMS = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol benchmark similarity analysis
+noinst_PROGRAMS = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -211,6 +211,8 @@ analysis_SOURCES = analysis.c
 analysis_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 dx2mol_SOURCES = dx2mol.c 
 dx2mol_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+dx2uhbd_SOURCES = dx2uhbd.c 
+dx2uhbd_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
@@ -218,13 +220,14 @@ CONFIG_CLEAN_FILES =
 @UHBD_COMPILE_TRUE@noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) \
 @UHBD_COMPILE_TRUE@	mergedx$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
 @UHBD_COMPILE_TRUE@	smooth$(EXEEXT) value$(EXEEXT) \
-@UHBD_COMPILE_TRUE@	dx2mol$(EXEEXT) benchmark$(EXEEXT) \
-@UHBD_COMPILE_TRUE@	similarity$(EXEEXT) analysis$(EXEEXT)
+@UHBD_COMPILE_TRUE@	dx2mol$(EXEEXT) dx2uhbd$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	benchmark$(EXEEXT) similarity$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	analysis$(EXEEXT)
 @UHBD_COMPILE_FALSE@noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) \
 @UHBD_COMPILE_FALSE@	mergedx$(EXEEXT) smooth$(EXEEXT) \
 @UHBD_COMPILE_FALSE@	value$(EXEEXT) dx2mol$(EXEEXT) \
-@UHBD_COMPILE_FALSE@	benchmark$(EXEEXT) similarity$(EXEEXT) \
-@UHBD_COMPILE_FALSE@	analysis$(EXEEXT)
+@UHBD_COMPILE_FALSE@	dx2uhbd$(EXEEXT) benchmark$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	similarity$(EXEEXT) analysis$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_analysis_OBJECTS = analysis.$(OBJEXT)
@@ -239,6 +242,10 @@ am_dx2mol_OBJECTS = dx2mol.$(OBJEXT)
 dx2mol_OBJECTS = $(am_dx2mol_OBJECTS)
 dx2mol_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 dx2mol_LDFLAGS =
+am_dx2uhbd_OBJECTS = dx2uhbd.$(OBJEXT)
+dx2uhbd_OBJECTS = $(am_dx2uhbd_OBJECTS)
+dx2uhbd_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+dx2uhbd_LDFLAGS =
 am_dxmath_OBJECTS = dxmath.$(OBJEXT)
 dxmath_OBJECTS = $(am_dxmath_OBJECTS)
 dxmath_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
@@ -280,11 +287,11 @@ F77LD = $(F77)
 F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) \
-	$(dx2mol_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) \
-	$(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) \
-	$(uhbd_asc2bin_SOURCES) $(value_SOURCES)
+	$(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) \
+	$(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) \
+	$(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
+SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 
 all: all-am
 
@@ -311,6 +318,9 @@ benchmark$(EXEEXT): $(benchmark_OBJECTS) $(benchmark_DEPENDENCIES)
 dx2mol$(EXEEXT): $(dx2mol_OBJECTS) $(dx2mol_DEPENDENCIES) 
 	@rm -f dx2mol$(EXEEXT)
 	$(LINK) $(dx2mol_LDFLAGS) $(dx2mol_OBJECTS) $(dx2mol_LDADD) $(LIBS)
+dx2uhbd$(EXEEXT): $(dx2uhbd_OBJECTS) $(dx2uhbd_DEPENDENCIES) 
+	@rm -f dx2uhbd$(EXEEXT)
+	$(LINK) $(dx2uhbd_LDFLAGS) $(dx2uhbd_OBJECTS) $(dx2uhbd_LDADD) $(LIBS)
 dxmath$(EXEEXT): $(dxmath_OBJECTS) $(dxmath_DEPENDENCIES) 
 	@rm -f dxmath$(EXEEXT)
 	$(LINK) $(dxmath_LDFLAGS) $(dxmath_OBJECTS) $(dxmath_LDADD) $(LIBS)
