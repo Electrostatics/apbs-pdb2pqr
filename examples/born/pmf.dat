@@ -1,13 +1,13 @@
 # One ion (+1), zero ionic strength, 298.15 K, 78.5 dielectric -- 
-# energies calculated with respect to vacuum and in units of kJ/mol, 
-# times in seconds (for 1 * 500 MHz PIII with 384 MB RAM).  
+# energies calculated with respect to vacuum and in units of kJ/mol
+# APBS/MC calculations to >30000 vertices
+# APBS/PMG calculations on 97^3 0.2 A mesh 
 #
-#
-# Rad (A)	True E	APBS E	# Unknowns	Time (s)	Max Mem (MB)
-1.00		-686	-686	51839		338		75.56
-2.00		-343	-344	51707		323		75.26
-3.00		-228	-229	51159		303		73.79
-4.00		-172	-172	45379		239		60.53
-5.00		-137	-138	45379		234		60.53
-6.00		-114	-115	39425		225		54.00
-7.00		-98.0	-98.6	32525		152		47.09
+# Rad (A)  Analytical    APBS/MC        APBS/PMG
+#---------------------------------------------------------------------------
+1.00       -6.85695e+02	 -6.929870e+02  -6.985700e+02
+2.00       -3.42848e+02  -3.468645e+02  -3.442183e+02
+3.00       -2.28565e+02  -2.312688e+02  -2.293510e+02
+4.00       -1.71424e+02  -1.724572e+02  -1.729808e+02
+5.00       -1.37139e+02  -1.379879e+02  -1.377883e+02
+6.00       -1.14283e+02  -1.150489e+02  -1.148212e+02
