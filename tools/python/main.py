@@ -57,14 +57,14 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.2.6 (January 17, 2003)\n\
+    Version 0.3.0\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
     Center for Computational Biology\n\
     Washington University in St. Louis\n\
     Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 2002-2003. Washington University in St. Louis\n\
+    Copyright (c) 2002-2004. Washington University in St. Louis\n\
     All Rights Reserved.\n\n\
     Portions copyright (c) 1999-2002.  University of California.\n\
     Portions copyright (c) 1995.  Michael Holst.\n\n\

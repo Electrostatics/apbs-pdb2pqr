@@ -54,9 +54,9 @@
  * <br><br>
  * Additional contributing authors listed in the code documentation.
  * <br><br>
- * Copyright (c) 2003.  Washington University in St. Louis.<br>
+ * Copyright (c) 2002-2004.  Washington University in St. Louis.<br>
  * All Rights Reserved.<br>
- * Portions Copyright (c) 1999-2003.  The Regents of the University of
+ * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  <br>
  * Portions Copyright (c) 1995.  Michael Holst.<br>
  * <p>
@@ -208,7 +208,7 @@
  * <pre>
  * # cd ${TOP}
  * # gzip -dc maloc.tar.gz | tar xvf -
- * # gzip -dc apbs-0.2.6.tar.gz | tar xvf -
+ * # gzip -dc apbs-0.3.0.tar.gz | tar xvf -
  * </pre>
  * <li> Compile and install the MALOC libraries.  You should read the MALOC
  * installation guide before doing this, but if you just want a simple
