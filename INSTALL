@@ -160,6 +160,19 @@ communication, that it makes since to use the IP-based MPI implementation
 and thereby allow 8 tasks (processes) per node.  Check the NPACI
 documentation for more information on this.
 
+-------------------
+NPACI/SDSC Cray T3E
+-------------------
+Configure MC with 
+
+   ./configure --enable-vhack --enable-mpi --with-mpilib=/opt/ctl/mpt/mpt/lib \
+       --with-mpiinc=/opt/ctl/mpt/mpt/include
+
+and APBS with
+
+   ./configure --enable-mpi --with-mpilib=/opt/ctl/mpt/mpt/lib \
+       --with-mpiinc=/opt/ctl/mpt/mpt/include
+
 --------------------
 SDSC Sun E10K System
 --------------------
