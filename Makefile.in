@@ -97,11 +97,11 @@ MAKEINFO = @MAKEINFO@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
-ef = @ef@
-ef_lib = @ef_lib@
+efence = @efence@
 liberty_lib = @liberty_lib@
 math_lib = @math_lib@
 mcdir = @mcdir@
+mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 
 AUTOMAKE_OPTIONS = no-dependencies
