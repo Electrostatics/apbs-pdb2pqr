@@ -655,11 +655,6 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
         for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
     }
 
-    Vnm_print(2, "CENTER = %1.12E, %1.12E %1.12E\n", mgparm->center[0],
-      mgparm->center[1], mgparm->center[2]);
-    Vnm_print(2, "REALCENTER = %1.12E, %1.12E %1.12E\n", realCenter[0],
-      realCenter[1], realCenter[2]);
-
     /* Set up PBE object */
     if (pbeparm->srfm == 2) sparm = pbeparm->swin;
     else sparm = pbeparm->srad;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bindir='../../../dist/bin/i686-pc-linux/'
+bindir='../../../dist/bin/i686-pc-linux-gnu/'
 
 radii='1.00 2.00 3.00 4.00 5.00 6.00'
 

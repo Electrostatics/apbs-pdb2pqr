@@ -265,11 +265,8 @@ int main(int argc, char **argv) {
             /* get apolar energy */
             npenergyMG(nosh, i, pmg[i], &(nenergy[i]),
                        &(npEnergy[i]));
-	    npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3) *
-		Vunit_Na*(npEnergy[i]);
-
-
-	    printf("apbs_driver: npenergy: %f\n", npEnergy[i]);
+	        npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(npEnergy[i]);
+	        Vnm_print(0, "Apolar energy: %f kJ/mol\n", npEnergy[i]);
 
 
             /* Write out forces */
