@@ -68,7 +68,7 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vcsm *thee = VNULL;
-    thee = Vram_ctor( 1, sizeof(Vcsm) );
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vcsm) );
     VASSERT( thee != VNULL);
     VASSERT( Vcsm_ctor2(thee, alist, gm));
 
@@ -89,6 +89,9 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
 VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) { 
  
     VASSERT( thee != VNULL );
+
+    /* Memory management object */
+    thee->vmem = Vmem_ctor("APBS:VCSM");
 
     /* Set up the atom list and grid manager */
     if( alist == VNULL) {
@@ -130,14 +133,16 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     VASSERT(thee->nsimp > 0);
 
     /* Set up the array of colors and initialize all to -1 */
-    thee->colors = Vram_ctor(thee->natom, sizeof(int));
+    thee->colors = Vmem_malloc(thee->vmem, thee->natom, sizeof(int));
     VASSERT(thee->colors != VNULL);
     for (iatom=0; iatom<thee->natom; iatom++) thee->colors[iatom] = -1;
 
     /* Allocate and initialize space for the first dimensions of the 
      * simplex-charge map, the simplex array, and the counters */
-    VASSERT( (thee->sqm = Vram_ctor(thee->nsimp, sizeof(int *))) != VNULL);
-    VASSERT( (thee->nsqm = Vram_ctor(thee->nsimp, sizeof(int))) != VNULL);
+    thee->sqm = Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int *));
+    VASSERT(thee->sqm != VNULL);
+    thee->nsqm = Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int));
+    VASSERT(thee->nsqm != VNULL);
     for (isimp=0; isimp<thee->nsimp; isimp++) (thee->nsqm)[isimp] = 0;
 
     /* Count the number of charges per simplex. */
@@ -157,7 +162,8 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Allocate the space for the simplex-charge map */
     for (isimp=0; isimp<thee->nsimp; isimp++) {
         if ((thee->nsqm)[isimp] > 0) {
-            thee->sqm[isimp] = Vram_ctor((thee->nsqm)[isimp], sizeof(int));
+            thee->sqm[isimp] = Vmem_malloc(thee->vmem, (thee->nsqm)[isimp], 
+              sizeof(int));
             VASSERT(thee->sqm[isimp] != VNULL);
         }
     }
@@ -181,8 +187,10 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     thee->msimp = thee->nsimp;
 
     /* Allocate space for the charge-simplex map */
-    VASSERT( (thee->qsm = Vram_ctor(thee->natom, sizeof(int *))) != VNULL);
-    VASSERT( (thee->nqsm = Vram_ctor(thee->natom, sizeof(int))) != VNULL);
+    thee->qsm = Vmem_malloc(thee->vmem, thee->natom, sizeof(int *));
+    VASSERT(thee->qsm != VNULL);
+    thee->nqsm = Vmem_malloc(thee->vmem, thee->natom, sizeof(int));
+    VASSERT(thee->nqsm != VNULL);
     for (iatom=0; iatom<thee->natom; iatom++) (thee->nqsm)[iatom] = 0;
     /* Loop through the list of simplices and count the number of times
      * each atom appears */
@@ -203,8 +211,9 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Allocate the appropriate amount of space for each entry in the
      * charge-simplex map and clear the counter for re-use in assignment */
     for (iatom=0; iatom<thee->natom; iatom++) {
-        VASSERT(((thee->qsm)[iatom] = Vram_ctor((thee->nqsm)[iatom],
-                                            sizeof(int)) ) != VNULL);
+        thee->qsm[iatom] = Vmem_malloc(thee->vmem, (thee->nqsm)[iatom],
+          sizeof(int));
+        VASSERT(thee->qsm[iatom] != VNULL);
         thee->nqsm[iatom] = 0;
     }
     /* Assign the simplices to atoms */
@@ -232,7 +241,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
 VPUBLIC void Vcsm_dtor(Vcsm **thee) {
     if ((*thee) != VNULL) {
         Vcsm_dtor2(*thee);
-        Vram_dtor((Vram **)thee, 1, sizeof(Vcsm));
+        Vmem_free(VNULL, 1, sizeof(Vcsm), (void **)thee);
         (*thee) = VNULL;
     }
 }
@@ -250,20 +259,26 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
     if ((thee != VNULL) && thee->initFlag) {
 
         for (i=0; i<thee->msimp; i++) {
-            if (thee->nsqm[i] > 0) Vram_dtor((Vram **)&(thee->sqm[i]),
-               thee->nsqm[i], sizeof(int));
+            if (thee->nsqm[i] > 0) Vmem_free(thee->vmem, thee->nsqm[i], 
+              sizeof(int), (void **)&(thee->sqm[i]));
         }
         for (i=0; i<thee->natom; i++) {
-            if (thee->nqsm[i] > 0) Vram_dtor((Vram **)&(thee->qsm[i]),
-               thee->nqsm[i], sizeof(int));
+            if (thee->nqsm[i] > 0) Vmem_free(thee->vmem, thee->nqsm[i], 
+              sizeof(int), (void **)&(thee->qsm[i]));
         }
-        Vram_dtor((Vram **)&(thee->sqm), thee->msimp, sizeof(int *));
-        Vram_dtor((Vram **)&(thee->nsqm), thee->msimp, sizeof(int));
-        Vram_dtor((Vram **)&(thee->qsm), thee->natom, sizeof(int *));
-        Vram_dtor((Vram **)&(thee->nqsm), thee->natom, sizeof(int));
-        Vram_dtor((Vram **)&(thee->colors), thee->natom, sizeof(int));
+        Vmem_free(thee->vmem, thee->msimp, sizeof(int *), 
+          (void **)&(thee->sqm));
+        Vmem_free(thee->vmem, thee->msimp, sizeof(int),
+          (void **)&(thee->nsqm));
+        Vmem_free(thee->vmem, thee->natom, sizeof(int *), 
+          (void **)&(thee->qsm));
+        Vmem_free(thee->vmem, thee->natom, sizeof(int),
+          (void **)&(thee->nqsm));
+        Vmem_free(thee->vmem, thee->natom, sizeof(int), 
+          (void **)&(thee->colors));
 
     }
+    Vmem_dtor(&(thee->vmem));
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -436,12 +451,12 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     while (!gotMem) {
         if (isimp > thee->msimp) {
             isimp = 2 * isimp;
-            VASSERT( (thee->nsqm = 
-              Vram_realloc((Vram **)&(thee->nsqm), thee->msimp, sizeof(int), 
-              isimp)) != VNULL); 
-            VASSERT( (thee->sqm = 
-              Vram_realloc((Vram **)&(thee->sqm), thee->msimp, sizeof(int *), 
-              isimp)) != VNULL); 
+            thee->nsqm = Vmem_realloc(thee->vmem, thee->msimp, sizeof(int), 
+              (void **)&(thee->nsqm), isimp);
+            VASSERT(thee->nsqm != VNULL);
+            thee->sqm = Vmem_realloc(thee->vmem, thee->msimp, sizeof(int *), 
+              (void **)&(thee->sqm), isimp);
+            VASSERT(thee->sqm != VNULL);
             thee->msimp = isimp;
         } else gotMem = 1;
     }
@@ -468,8 +483,10 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     nqParent = thee->nsqm[isimp];
     qParent = thee->sqm[isimp];
 
-    VASSERT( (sqmNew = Vram_ctor(num, sizeof(int *))) != VNULL);
-    VASSERT( (nsqmNew = Vram_ctor(num, sizeof(int))) != VNULL);
+    sqmNew = Vmem_malloc(thee->vmem, num, sizeof(int *));
+    VASSERT(sqmNew != VNULL);
+    nsqmNew = Vmem_malloc(thee->vmem, num, sizeof(int));
+    VASSERT(nsqmNew != VNULL);
     for (isimp=0; isimp<num; isimp++) nsqmNew[isimp] = 0;
 
     /* Loop throught the affected atoms to determine how many atoms each
@@ -495,7 +512,8 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Allocate the storage */
     for (isimp=0; isimp<num; isimp++) {
         if (nsqmNew[isimp] > 0) {
-            sqmNew[isimp] = Vram_ctor(nsqmNew[isimp], sizeof(int));
+            sqmNew[isimp] = Vmem_malloc(thee->vmem, nsqmNew[isimp], 
+              sizeof(int));
             VASSERT(sqmNew[isimp] != VNULL);
         }
     }
@@ -538,11 +556,11 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
      * However, it is possible that a subdivision could cause an atom to be
      * shared by two child simplices.  Here we record the change, if any,
      * in the number of simplices associated with each atom. */
-    dnqsm = Vram_ctor(nAffAtoms, sizeof(int));
+    dnqsm = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
     VASSERT(dnqsm != VNULL);
-    nqsmNew = Vram_ctor(nAffAtoms, sizeof(int));
+    nqsmNew = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
     VASSERT(nqsmNew != VNULL);
-    qsmNew = Vram_ctor(nAffAtoms, sizeof(int*));
+    qsmNew = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int*));
     VASSERT(qsmNew != VNULL);
     for (iatom=0; iatom<nAffAtoms; iatom++) {
         dnqsm[iatom] = -1;
@@ -557,7 +575,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Setup the new entries in the array */
     for (iatom=0;iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
-        qsmNew[iatom] = Vram_ctor(dnqsm[iatom] + thee->nqsm[atomID], 
+        qsmNew[iatom] = Vmem_malloc(thee->vmem, dnqsm[iatom] + thee->nqsm[atomID], 
                                   sizeof(int));
         nqsmNew[iatom] = 0;
         VASSERT(qsmNew[iatom] != VNULL);
@@ -596,24 +614,24 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
      * first, since they require affAtoms = thee->sqm[simps[0]] */
     for (iatom=0; iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom]; 
-        Vram_dtor((Vram **)&(thee->qsm[atomID]), thee->nqsm[atomID], 
-          sizeof(int));
+        Vmem_free(thee->vmem, thee->nqsm[atomID], sizeof(int), 
+          (void **)&(thee->qsm[atomID]));
         thee->qsm[atomID] = qsmNew[iatom];
         thee->nqsm[atomID] = nqsmNew[iatom];
     }
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
-        if (thee->nsqm[simpID] > 0) Vram_dtor((Vram **)&(thee->sqm[simpID]),
-          thee->nsqm[simpID], sizeof(int));
+        if (thee->nsqm[simpID] > 0) Vmem_free(thee->vmem, thee->nsqm[simpID], 
+          sizeof(int), (void **)&(thee->sqm[simpID]));
         thee->sqm[simpID] = sqmNew[isimp];
         thee->nsqm[simpID] = nsqmNew[isimp];
     }
 
-    Vram_dtor((Vram **)&sqmNew, num, sizeof(int *));
-    Vram_dtor((Vram **)&nsqmNew, num, sizeof(int));
-    Vram_dtor((Vram **)&qsmNew, nAffAtoms, sizeof(int *));
-    Vram_dtor((Vram **)&nqsmNew, nAffAtoms, sizeof(int));
-    Vram_dtor((Vram **)&dnqsm, nAffAtoms, sizeof(int));
+    Vmem_free(thee->vmem, num, sizeof(int *), (void **)&sqmNew);
+    Vmem_free(thee->vmem, num, sizeof(int), (void **)&nsqmNew);
+    Vmem_free(thee->vmem, nAffAtoms, sizeof(int *), (void **)&qsmNew);
+    Vmem_free(thee->vmem, nAffAtoms, sizeof(int), (void **)&nqsmNew);
+    Vmem_free(thee->vmem, nAffAtoms, sizeof(int), (void **)&dnqsm);
 
 
     return 1;
@@ -628,31 +646,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_memChk(Vcsm *thee)
-{
-    int i;
-    int memUse = 0;
-
+VPUBLIC int Vcsm_memChk(Vcsm *thee) {
     VASSERT(thee != VNULL);
-
-    memUse = memUse + sizeof(Vcsm);
-    /* thee->sqm first dimension */
-    memUse = memUse + (thee->msimp)*sizeof(int *);
-    /* thee->sqm second dimension */
-    for (i=0; i<thee->nsimp; i++) 
-      memUse = memUse + (thee->nsqm[i])*sizeof(int);
-    /* thee->nsqm */
-    memUse = memUse + (thee->msimp)*sizeof(int);
-    /* thee->qsm first dimension */
-    memUse = memUse + (thee->natom)*sizeof(int *);
-    /* thee->qsm second dimension */
-    for (i=0; i<thee->natom; i++)
-      memUse = memUse + (thee->nqsm[i])*sizeof(int);
-    /* thee->nqsm */
-    memUse = memUse + (thee->natom)*sizeof(int);
-    /* thee->colors */
-    memUse = memUse + (thee->natom)*sizeof(int);
-
-    return memUse;
+    return Vmem_bytes(thee->vmem);
 }
-

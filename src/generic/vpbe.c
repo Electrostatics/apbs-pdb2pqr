@@ -68,7 +68,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
-    thee = Vram_ctor( 1, sizeof(Vpbe) );
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, gm));
 
@@ -93,6 +93,9 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge;
+
+    /* Set up memory management object */
+    thee->vmem = Vmem_ctor("APBS::VPBE");
 
     VASSERT(thee != VNULL);
     if (alist == VNULL) {
@@ -158,7 +161,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee) != VNULL) {
         Vpbe_dtor2(*thee);
-        Vram_dtor((Vram *)thee, 1, sizeof(Vpbe) );
+        Vmem_free(VNULL, 1, sizeof(Vpbe), (void **)thee);
         (*thee) = VNULL;
     }
 }
@@ -171,10 +174,9 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
-    Vnm_print(2,"Vpbe_dtor2: Destroying VCSM\n");
     Vcsm_dtor(&(thee->csm));
-    Vnm_print(2,"Vpbe_dtor2: Destroying VACC\n");
     Vacc_dtor(&(thee->acc));
+    Vmem_dtor(&(thee->vmem));
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -640,7 +642,7 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) {
    VASSERT(1 == Bvec_numB(AM_alg(am, level)->W[W_w0]));
    /* Allocate space for the returned vector and copy the solution into it */
    theAnswer = VNULL;
-   theAnswer = Vram_ctor(*length, sizeof(double));
+   theAnswer = Vmem_malloc(VNULL, *length, sizeof(double));
    VASSERT(theAnswer != VNULL);
    for (i=0; i<*length; i++) theAnswer[i] = solution[i];
    
@@ -738,7 +740,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    } /* end for iatom */
 
    /* Destroy the finest level solution */
-   Vram_dtor((Vram **)&sol, nsol, sizeof(double));
+   Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
 
    /* Return the energy */
    return 0.5*energy;

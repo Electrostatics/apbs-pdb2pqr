@@ -500,23 +500,8 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
 // Author:   Nathan Baker 
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vacc_memChk(Vacc *thee) {
-    int i;
-    int memUsed = 0;
 
     VASSERT(thee != VNULL);
+    return Vmem_bytes(thee->vmem);
 
-    /* The size of thee */
-    memUsed = memUsed + sizeof(Vacc);
-    /* The size of thee->natoms */
-    memUsed = memUsed + (thee->n)*sizeof(int);
-    /* The size of thee->atoms */
-    memUsed = memUsed + (thee->n)*sizeof(Vatom **);
-    /* The size of thee->atoms[i] */
-    for (i=0; i<thee->n; i++) 
-      memUsed = memUsed + (thee->natoms[i])*sizeof(Vatom *);
-    /* The size of thee->sphere */
-    memUsed = memUsed + (thee->nsphere)*sizeof(double *);
-    memUsed = memUsed + (thee->nsphere)*3*sizeof(double);
-
-    return memUsed;
 }

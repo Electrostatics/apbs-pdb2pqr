@@ -77,6 +77,7 @@ typedef struct Vpbe {
 
   Vacc *acc;          /* Accessibility object */
   Vcsm *csm;          /* Charge-simplex map */
+  Vmem *vmem;         /* Memory management object */
 
   double ionConc;     /* Ionic strength (M) */
   double T;           /* Temperature (K) */
