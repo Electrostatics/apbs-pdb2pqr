@@ -1,18 +1,21 @@
 #############################################################################
-VERSION 0.1.2       XX-XX-01
+VERSION 0.1.2       09-02-01
 #############################################################################
-This version contains a few bug fixes, including
-  * Some comments in the manual
+This version is mainly designed to increase portability by switching to libtool
+for library creation and linking.  Of course, it also contains a few bug fixes.
+Highlights include:
+  * Changes to the User Manual
+  * Addition of a Programmer's Manual
   * Various FEtk-related things (no particular impact to the user)
   * Improvements to the test systems
-  * Change in the format for printing energies.
+  * Change in the format for printing energies
   * Change in directory structure
-  * Fixed centering bug in main driver
+  * Fixed centering bug in main driver (only impacted I/o)
   * Fixed error message bug in VPMG class
   * Fixed grid length bug (popped up during sanity checks) in VPMG class
   * Switched to libtool for linking
 Note that Compaq Tru64 Alpha users may still experience problems while
-compiling due to some strangess with linking C and FORTRAN objects.
+compiling due to some strangness with linking C and FORTRAN objects.
 
 #############################################################################
 VERSION 0.1.1       08-29-01
