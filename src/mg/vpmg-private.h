@@ -56,7 +56,6 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
 VPRIVATE double bcfl1sp(double size, double *apos, double charge,
   double xkappa, double pre1, double *pos);
 VPRIVATE void bcCalc(Vpmg *thee);
-VPRIVATE void rworkIndices(Vpmg *thee, int *k_cc, int *k_fc, int *k_ac);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 

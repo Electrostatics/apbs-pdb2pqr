@@ -4,6 +4,14 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
   * Inclusion of SWIG wrappers for use with Python (contributed by Alexandre
     Gillet)
   * Improvement of VMD visualization scripts (contributed by Dave Sept)
+  * Syntax changes
+    - The writepot and writeacc keywords have been generalized.  The syntax is
+      now:  write pot dx potential
+            write acc dx potential
+            etc.
+    - The read keywords has been generalized.  The correct syntax for reading
+      in a molecule is now:  read mol mol.pqr end
+ 
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02

@@ -52,9 +52,9 @@ int main(int argc, char **argv) {
     /* *************** VARIABLES ******************* */
     int u, i, j, k, nx, ny, nz;
     double avg;
-    double *data = VNULL;
     double hy, hx, hzed, xmin, ymin, zmin;
     Vio *sock;
+    Vgrid *grid;
     char *inpath = VNULL;
     char *outpath = VNULL;
     char *iodev = "FILE";
@@ -87,8 +87,17 @@ int main(int argc, char **argv) {
     }
 
     /* Read DX format file */ 
-    Vpmg_readDX("FILE", "ASC", VNULL, inpath, 
-      &nx, &ny, &nz, &hx, &hy, &hzed, &xmin, &ymin, &zmin, &data);
+    grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+    Vgrid_readDX(grid, "FILE", "ASC", VNULL, inpath);
+    nx = grid->nx;
+    ny = grid->ny;
+    nz = grid->nz;
+    hx = grid->hx;
+    hy = grid->hy;
+    hzed = grid->hzed;
+    xmin = grid->xmin,
+    ymin = grid->ymin,
+    zmin = grid->zmin;
 
     /* Intialize socket for writing */
     sock = Vio_ctor(iodev,iofmt,thost, outpath, "w");
@@ -112,7 +121,7 @@ int main(int argc, char **argv) {
         for (j=0; j<ny; j++) {
             for (i=0; i<nz; i++) {
                 u = nx*ny*k + nx*j + i;
-                Vio_printf(sock, "%10.3e ", data[u]);
+                Vio_printf(sock, "%10.3e ", grid->data[u]);
                 if ( u%10 == 9 ) Vio_printf(sock, "\n"); 
             }
         }

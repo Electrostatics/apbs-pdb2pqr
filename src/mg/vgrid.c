@@ -42,6 +42,10 @@
 
 VEMBED(rcsid="$Id$")
 
+#if !defined(VINLINE_VGRID)
+    VPUBLIC int Vgrid_memChk(Vgrid *thee) { return Vmem_bytes(thee->mem); }
+#endif
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgrid_ctor
 // Author:   Nathan Baker
@@ -49,14 +53,14 @@ VEMBED(rcsid="$Id$")
 VPUBLIC Vgrid* Vgrid_ctor(int nx, int ny, int nz,
                   double hx, double hy, double hzed,
                   double xmin, double ymin, double zmin,
-                  double *data, Vpbe *pbe) {
+                  double *data) {
 
     Vgrid *thee = VNULL;
 
     thee = Vmem_malloc(VNULL, 1, sizeof(Vgrid));
     VASSERT(thee != VNULL);
     VASSERT(Vgrid_ctor2(thee, nx, ny, nz, hx, hy, hzed,
-                  xmin, ymin, zmin, data, pbe));
+                  xmin, ymin, zmin, data));
 
     return thee;
 }
@@ -68,7 +72,7 @@ VPUBLIC Vgrid* Vgrid_ctor(int nx, int ny, int nz,
 VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
                   double hx, double hy, double hzed,
                   double xmin, double ymin, double zmin,
-                  double *data, Vpbe *pbe) {
+                  double *data) {
 
     if (thee == VNULL) return 0;
     thee->nx = nx;
@@ -80,8 +84,15 @@ VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
     thee->xmin = xmin;
     thee->ymin = ymin;
     thee->zmin = zmin;
-    thee->data = data;
-    thee->pbe = pbe;
+    if (data == VNULL) {
+        thee->ctordata = 0;
+        thee->readdata = 0;
+    } else {
+        thee->ctordata = 1;
+        thee->data = data;
+    }
+
+    thee->mem = Vmem_ctor("APBS:VGRID");
 
     return 1;
 }
@@ -103,26 +114,29 @@ VPUBLIC void Vgrid_dtor(Vgrid **thee) {
 // Routine:  Vgrid_dtor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgrid_dtor2(Vgrid *thee) { return; }
+VPUBLIC void Vgrid_dtor2(Vgrid *thee) { 
+
+    if (thee->readdata) {
+        Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+          (void **)&(thee->data));
+    }
+    Vmem_dtor(&(thee->mem));
+
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgrid_pot
+// Routine:  Vgrid_value
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
-VPUBLIC double Vgrid_pot(Vgrid *thee, double pt[3]) {
+VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 
     int nx, ny, nz, ihi, jhi, khi, ilo, jlo, klo;
     double hx, hy, hzed, xmin, ymin, zmin, ifloat, jfloat, kfloat;
-    double u, dx, dy, dz, T, charge, eps_w, xkappa, dist;
-    Valist *alist;
+    double u, dx, dy, dz;
 
     VASSERT(thee != VNULL);
-
-    eps_w = Vpbe_getSolventDiel(thee->pbe);
-    xkappa = (1.0e10)*Vpbe_getXkappa(thee->pbe);
-    T = Vpbe_getTemperature(thee->pbe);
-    alist = Vpbe_getValist(thee->pbe);
+    VASSERT(thee->ctordata || thee->readdata);
 
     nx = thee->nx;
     ny = thee->ny;
@@ -162,52 +176,21 @@ VPUBLIC double Vgrid_pot(Vgrid *thee, double pt[3]) {
           + (1.0-dx)*dy      *(1.0-dz)*(thee->data[IJK(ilo,jhi,klo)])
           + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->data[IJK(ilo,jlo,klo)]);
 
+        *value = u;
+        return 1;
+
     } else {
 
-#if (VOPOT_BCFL == 0)
-
-        u = 0;
-
-#elseif (VOPOT_BCFL == 1)
-
-        size = (1.0e-10)*Vpbe_getSoluteRadius(thee->pbe);
-        position = Vpbe_getSoluteCenter(thee->pbe);
-        charge = Vunit_ec*Vpbe_getSoluteCharge(thee->pbe);
-        dist = 0;
-        for (i=0; i<d; i++)
-          dist += ((position[i] - pt[i])*(position[i] - pt[i]));
-        dist = (1.0e-10)*VSQRT(dist);
-        val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
-        if (xkappa != 0.0) val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-        val = val*Vunit_ec/(Vunit_kb*T);
-
-        u = val;
-
-
-#elseif (VOPOT_BCFL == 2)
-
-        u = 0;
-        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-            atom = Valist_getAtom(alist, iatom);
-            position = Vatom_getPosition(atom);
-            charge = Vunit_ec*Vatom_getCharge(atom);
-            size = (1e-10)*Vatom_getRadius(atom);
-            dist = 0;
-            for (i=0; i<d; i++)
-              dist += ((position[i] - pt[i])*(position[i] - pt[i]));
-            dist = (1.0e-10)*VSQRT(dist);
-            val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
-            if (xkappa != 0.0)
-              val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
-            val = val*Vunit_ec/(Vunit_kb*T);
-            u = u + val;
-        }
-
-#endif
+        *value = 0;
+        VJMPERR1(0);
 
     }
 
-    return u;
+    return 0;
+
+    VERROR1:
+        Vnm_print(0, "Vgrid_curvature:  Off mesh!\n");
+        return 0; 
 
 }
 
@@ -221,11 +204,15 @@ VPUBLIC double Vgrid_pot(Vgrid *thee, double pt[3]) {
 //
 // Authors:  Stephen Bond and Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vgrid_curvature(Vgrid *thee, double pt[3], int cflag)
-{
+VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag, 
+  double *value) {
+
     double hx, hy, hzed, curv;
     double dxx, dyy, dzz;
     double uleft, umid, uright, testpt[3];
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->ctordata || thee->readdata);
 
     hx = thee->hx;
     hy = thee->hy;
@@ -238,31 +225,31 @@ VPUBLIC double Vgrid_curvature(Vgrid *thee, double pt[3], int cflag)
     testpt[2] = pt[2];
 
     /* Compute 2nd derivative in the x-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &umid));
     testpt[0] = pt[0] - hx;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uleft));
     testpt[0] = pt[0] + hx;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uright));
     testpt[0] = pt[0];
 
     dxx = (uright - 2*umid + uleft)/(hx*hx);
 
     /* Compute 2nd derivative in the y-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &umid));
     testpt[1] = pt[1] - hy;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uleft));
     testpt[1] = pt[1] + hy;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uright));
     testpt[1] = pt[1];
 
     dyy = (uright - 2*umid + uleft)/(hy*hy);
 
     /* Compute 2nd derivative in the z-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &umid));
     testpt[2] = pt[2] - hzed;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uleft));
     testpt[2] = pt[2] + hzed;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1(Vgrid_value( thee, testpt, &uright));
 
     dzz = (uright - 2*umid + uleft)/(hzed*hzed);
 
@@ -277,7 +264,12 @@ VPUBLIC double Vgrid_curvature(Vgrid *thee, double pt[3], int cflag)
         VASSERT( 0 ); /* Feature Not Coded Yet! */
     }
 
-    return curv;
+    *value = curv;
+    return 1;
+
+    VERROR1:
+        Vnm_print(0, "Vgrid_curvature:  Off mesh!\n");
+        return 0; 
 
 }
 
@@ -286,10 +278,13 @@ VPUBLIC double Vgrid_curvature(Vgrid *thee, double pt[3], int cflag)
 //
 // Authors:  Nathan Baker and Stephen Bond
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
+VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 
     double hx, hy, hzed;
     double uleft, umid, uright, testpt[3];
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->ctordata || thee->readdata);
 
     hx = thee->hx;
     hy = thee->hy;
@@ -300,33 +295,572 @@ VPUBLIC void Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
     testpt[2] = pt[2];
 
     /* Compute derivative in the x-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &umid));
     testpt[0] = pt[0] - hx;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
     testpt[0] = pt[0] + hx;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uright));
     testpt[0] = pt[0];
 
     grad[0] = (uright - uleft)/(2*hx);
 
     /* Compute derivative in the y-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &umid));
     testpt[1] = pt[1] - hy;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
     testpt[1] = pt[1] + hy;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uright));
     testpt[1] = pt[1];
 
     grad[1] = (uright - uleft)/(2*hy);
 
     /* Compute derivative in the z-direction */
-    umid = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &umid));
     testpt[2] = pt[2] - hzed;
-    uleft = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uleft));
     testpt[2] = pt[2] + hzed;
-    uright = Vgrid_pot( thee, testpt );
+    VJMPERR1( Vgrid_value( thee, testpt, &uright));
 
     grad[2] = (uright - uleft)/(2*hzed);
 
+    return 1;
+
+    VERROR1:
+        Vnm_print(0, "Vgrid_gradient:  Off mesh!\n");
+        return 0; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgrid_readDX
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname) {
+
+    int i, j, k, itmp, u;
+    double dtmp;
+    char tok[VMAX_BUFSIZE];
+    Vio *sock;
+    char *MCwhiteChars = " =,;\t\n";
+    char *MCcommChars  = "#%";
+
+    /* Check to see if the existing data is null and, if not, clear it out */
+    if (thee->data != VNULL) {
+        Vnm_print(1, "Vgrid_readDX:  destroying existing data!\n");
+	Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+          (void **)&(thee->data)); }
+    thee->readdata = 1;
+    thee->ctordata = 0;
+
+    /* Set up the virtual socket */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vgrid_readDX: Problem opening virtual socket %s\n",
+          fname);
+        return;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Vgrid_readDX: Problem accepting virtual socket %s\n",
+          fname);
+        return;
+    }
+
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
+
+
+    /* Read in the DX regular positions */
+    /* Get "object" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "object"));
+    /* Get "1" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "class" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "class"));
+    /* Get "gridpositions" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "gridpositions"));
+    /* Get "counts" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "counts"));
+    /* Get nz */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &(thee->nz)));
+    /* Get ny */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &(thee->ny)));
+    /* Get nx */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &(thee->nx)));
+    Vnm_print(0, "Vgrid_readDX:  Grid dimensions %d x %d x %d grid\n", 
+     thee->nx, thee->ny, thee->nz);
+    /* Get "origin" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "origin"));
+    /* Get zmin */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->zmin)));
+    /* Get ymin */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->ymin)));
+    /* Get xmin */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->xmin)));
+    Vnm_print(0, "Vgrid_readDX:  Grid origin = (%g, %g, %g)\n",
+      thee->xmin, thee->ymin, thee->zmin);
+    /* Get "delta" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "delta"));
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get hz */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hzed)));
+    /* Get "delta" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "delta"));
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get hy */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hy)));
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get "delta" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "delta"));
+    /* Get hx */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &(thee->hx)));
+    Vnm_print(0, "Vgrid_readDX:  Grid spacings = (%g, %g, %g)\n",
+      thee->hx, thee->hy, thee->hzed);
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get 0.0 */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+    VJMPERR1(dtmp == 0.0);
+    /* Get "object" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "object"));
+    /* Get "2" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "class" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "class"));
+    /* Get "gridconnections" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "gridconnections"));
+    /* Get "counts" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "counts"));
+    /* Get the dimensions again */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "object" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "object"));
+    /* Get # */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "class" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "class"));
+    /* Get "array" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "array"));
+    /* Get "type" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "type"));
+    /* Get "double" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "double"));
+    /* Get "rank" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "rank"));
+    /* Get # */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "items" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "items"));
+    /* Get # */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(1 == sscanf(tok, "%d", &itmp));
+    VJMPERR1(((thee->nx)*(thee->ny)*(thee->nz)) == itmp);
+    /* Get "data" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "data"));
+    /* Get "follows" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "follows"));
+
+    /* Allocate space for the data */
+    Vnm_print(0, "Vgrid_readDX:  allocating %d x %d x %d doubles for storage\n",
+      thee->nx, thee->ny, thee->nz);
+    thee->data = VNULL;
+    thee->data = Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
+      sizeof(double));
+    if (thee->data == VNULL) {
+        Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");
+        return;
+    }
+                     
+    for (k=0; k<thee->nz; k++) {
+        for (j=0; j<thee->ny; j++) {
+            for (i=0; i<thee->nx; i++) {
+                u = k*(thee->nx)*(thee->ny)+j*(thee->nx)+i;
+                VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+                VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+                (thee->data)[u] = dtmp;
+            }
+        }
+    }
+
+    /* Close off the socket */
+    Vio_acceptFree(sock);
+    Vio_dtor(&sock);
+
+    return;
+
+  VERROR1:
+    Vio_dtor(&sock);
+    Vnm_print(2, "Vgrid_readDX:  Format problem with input file <%s>\n",
+      fname);
+    return;
+
+  VERROR2:
+    Vio_dtor(&sock);
+    Vnm_print(2, "Vgrid_readDX:  I/O problem with input file <%s>\n",
+      fname);
+    return;
+
+
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgrid_writeDX
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, int *pvec) {
+
+    double xmin, ymin, zmin, hx, hy, hzed;
+    int nx, ny, nz;
+    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    double x, y, z, xminPART, yminPART, zminPART;
+    Vio *sock;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->ctordata || thee->readdata);
+
+    hx = thee->hx;
+    hy = thee->hy; 
+    hzed = thee->hzed; 
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+    xmin = thee->xmin;
+    ymin = thee->ymin;
+    zmin = thee->zmin;
+
+    if (pvec == VNULL) usepart = 0;
+    else usepart = 1;
+
+    /* Set up the virtual socket */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"w");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vgrid_writeDX: Problem opening virtual socket %s\n",
+          fname);
+        return;
+    }
+    if (Vio_connect(sock, 0) < 0) {
+        Vnm_print(2, "Vgrid_writeDX: Problem connecting virtual socket %s\n",
+          fname);
+        return; 
+    }
+
+    if (usepart) {
+        /* Get the lower corner and number of grid points for the local
+         * partition */
+        xminPART = VLARGE;
+        yminPART = VLARGE;
+        zminPART = VLARGE;
+        nxPART = 0;
+        nyPART = 0;
+        nzPART = 0;
+        /* First, search for the lower corner */
+        for (k=0; k<nz; k++) {
+            z = k*hzed + zmin;
+            for (j=0; j<ny; j++) {
+                y = j*hy + ymin;
+                for (i=0; i<nx; i++) {
+                    x = i*hx + xmin;
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        if (x < xminPART) xminPART = x;
+                        if (y < yminPART) yminPART = y;
+                        if (z < zminPART) zminPART = z;
+                    }
+                }
+            }
+        }
+        /* Now search for the number of grid points in the z direction */
+        for (k=0; k<nz; k++) {
+            gotit = 0;
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nzPART++;
+        }
+        /* Now search for the number of grid points in the y direction */
+        for (j=0; j<ny; j++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nyPART++;
+        }
+        /* Now search for the number of grid points in the x direction */
+        for (i=0; i<nx; i++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break; 
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nxPART++;
+        }
+
+        if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
+            Vnm_print(0, "Vgrid_writeUHBD:  printing only subset of domain\n");
+        }
+
+
+        /* Write off the title */
+        Vio_printf(sock, "# Data from APBS\n");
+        Vio_printf(sock, "# \n");
+        Vio_printf(sock, "# %s\n", title);
+        Vio_printf(sock, "# \n");
+
+        /* Write off the DX regular positions */
+        Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
+          nzPART, nyPART, nxPART);
+        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xminPART, yminPART,
+          zminPART);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
+        /* Write off the DX regular connections */
+        Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
+          nzPART, nyPART, nxPART);
+
+        /* Write off the DX data */
+        Vio_printf(sock, "object 3 class array type double rank 0 items %d \
+data follows\n", (nxPART*nyPART*nzPART));
+        icol = 0;
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    u = k*(nx)*(ny)+j*(nx)+i;
+                    if (pvec[u] != 0) {
+                        Vio_printf(sock, "%12.6E ", thee->data[u]);
+                        icol++;
+                        if (icol == 3) {
+                            icol = 0;
+                            Vio_printf(sock, "\n");
+                        }
+                    }
+                }
+            }
+        }
+
+        if (icol != 0) Vio_printf(sock, "\n");
+
+        /* Create the field */
+        Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
+        Vio_printf(sock, "object \"regular positions regular connections\" \
+class field\n");
+        Vio_printf(sock, "component \"positions\" value 1\n");
+        Vio_printf(sock, "component \"connections\" value 2\n");
+        Vio_printf(sock, "component \"data\" value 3\n");
+
+    } else {
+
+        /* Write off the title */
+        Vio_printf(sock, "# Data from APBS/PMG\n");
+        Vio_printf(sock, "# \n");
+        Vio_printf(sock, "# %s\n", title);
+        Vio_printf(sock, "# \n");
+
+        /* Write off the DX regular positions */
+        Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
+          nz, ny, nx);
+        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0); 
+    
+        /* Write off the DX regular connections */
+        Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
+          nz, ny, nx);
+
+        /* Write off the DX data */
+        Vio_printf(sock, "object 3 class array type double rank 0 items %d \
+data follows\n", (nx*ny*nz));
+        icol = 0;
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) { 
+                for (i=0; i<nx; i++) {
+                    u = k*(nx)*(ny)+j*(nx)+i;
+                    Vio_printf(sock, "%12.6E ", thee->data[u]);
+                    icol++;
+                    if (icol == 3) {
+                        icol = 0;
+                        Vio_printf(sock, "\n");
+                    }
+                }
+            }
+        }
+        if (icol != 0) Vio_printf(sock, "\n");
+           
+        /* Create the field */
+        Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
+        Vio_printf(sock, "object \"regular positions regular connections\"
+class field\n");
+        Vio_printf(sock, "component \"positions\" value 1\n");
+        Vio_printf(sock, "component \"connections\" value 2\n");
+        Vio_printf(sock, "component \"data\" value 3\n");
+    }
+
+    /* Close off the socket */
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgrid_writeUHBD
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, int *pvec) {
+
+    int icol, i, j, k, u, nx, ny, nz, gotit;
+    double xmin, ymin, zmin, hzed, hy, hx;
+    Vio *sock;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->ctordata || thee->readdata);
+
+    if ((thee->hx!=thee->hy) || (thee->hy!=thee->hzed)
+      || (thee->hx!=thee->hzed)) {
+        Vnm_print(2, "Vgrid_writeUHBD: can't write UHBD mesh with non-uniform
+spacing\n");
+        return;
+    }
+
+    /* Set up the virtual socket */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"w");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vgrid_writeUHBD: Problem opening virtual socket %s\n",
+          fname);
+        return;
+    }
+    if (Vio_connect(sock, 0) < 0) {
+        Vnm_print(2, "Vgrid_writeUHBD: Problem connecting virtual socket %s\n",
+          fname);
+        return;
+    }
+
+    /* Get the lower corner and number of grid points for the local
+     * partition */
+    hx = thee->hx;
+    hy = thee->hy;
+    hzed = thee->hzed;
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+    xmin = thee->xmin;
+    ymin = thee->ymin;
+    zmin = thee->zmin;
+
+    /* Let interested folks know that partition information is ignored */
+    if (pvec != VNULL) {
+        gotit = 0;
+        for (i=0; i<(nx*ny*nz); i++) {
+            if (pvec[i] == 0) {
+                gotit = 1;
+                break;
+            }
+        }
+        if (gotit) {
+            Vnm_print(2, "Vgrid_writeUHBD:  IGNORING PARTITION INFORMATION!\n");
+            Vnm_print(2, "Vgrid_writeUHBD:  This means I/O from parallel runs \
+will have significant overlap.\n");
+        }
+    }
+
+    /* Write out the header */
+    Vio_printf(sock, "%72s\n", title);
+    Vio_printf(sock, "%12.5E%12.5E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0,
+      nz, 1, nz);
+    Vio_printf(sock, "%7d%7d%7d%12.5E%12.5E%12.5E%12.5E\n", nx, ny, nz,
+      hx, xmin, ymin, zmin);
+    Vio_printf(sock, "%12.5E%12.5E%12.5E%12.5E\n", 0.0, 0.0, 0.0, 0.0);
+    Vio_printf(sock, "%12.5E%12.5E%7d%7d", 0.0, 0.0, 0, 0);
+
+    /* Write out the entries */
+    icol = 0;
+    for (k=0; k<nz; k++) {
+        Vio_printf(sock, "\n%7d%7d%7d\n", k+1, thee->nx, thee->ny);
+        icol = 0;
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                icol++;
+                Vio_printf(sock, " %12.5E", thee->data[u]);
+                if (icol == 6) {
+                    icol = 0;
+                    Vio_printf(sock, "\n");
+                }
+            }
+        }
+    }
+    if (icol != 0) Vio_printf(sock, "\n");
+
+    /* Close off the socket */
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
 }
 
