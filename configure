@@ -11459,46 +11459,28 @@ if test -n "${blas_lib}"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 
-    echo "$as_me:$LINENO: result: Looking for BLAS with ${CC} ${blas_lib}" >&5
-echo "${ECHO_T}Looking for BLAS with ${CC} ${blas_lib}" >&6
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+    echo "$as_me:$LINENO: result: Looking for BLAS with ${F77} ${blas_lib}" >&5
+echo "${ECHO_T}Looking for BLAS with ${F77} ${blas_lib}" >&6
+    ac_ext=f
+ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
+ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
     LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${blas_lib};
-    echo "$as_me:$LINENO: checking for dscal in -lblas" >&5
+    LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
+
+echo "$as_me:$LINENO: checking for dscal in -lblas" >&5
 echo $ECHO_N "checking for dscal in -lblas... $ECHO_C" >&6
 if test "${ac_cv_lib_blas_dscal+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lblas ${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
+LIBS="-lblas ${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char dscal ();
-int
-main ()
-{
-dscal ();
-  ;
-  return 0;
-}
+      program main
+      call dscal
+      end
 _ACEOF
 rm -f conftest.$ac_objext conftest$ac_exeext
 if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
@@ -11537,90 +11519,18 @@ fi
 echo "$as_me: error: BLAS libraries or headers missing:  exiting on error!" >&2;}
    { (exit 1); exit 1; }; }
     fi
+    ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 else
     echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
     blas_lib_path="${maloc_lib_path}"
-    blas_lib="${blas_lib_path} -lvf2c ${blas_lib_path} -lblas"
-
-    ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${blas_lib_path};
-    echo "$as_me:$LINENO: checking for dscal in -lblas" >&5
-echo $ECHO_N "checking for dscal in -lblas... $ECHO_C" >&6
-if test "${ac_cv_lib_blas_dscal+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lblas ${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char dscal ();
-int
-main ()
-{
-dscal ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_blas_dscal=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_blas_dscal=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_blas_dscal" >&5
-echo "${ECHO_T}$ac_cv_lib_blas_dscal" >&6
-if test $ac_cv_lib_blas_dscal = yes; then
-  blas_found="yes"
-else
-  blas_found=""
-fi
-
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-    if test -z "${blas_found}"; then
-        { { echo "$as_me:$LINENO: error: BLAS libraries or headers missing:  exiting on error!" >&5
-echo "$as_me: error: BLAS libraries or headers missing:  exiting on error!" >&2;}
-   { (exit 1); exit 1; }; }
-    fi
-
+    blas_lib="${blas_lib_path} -lblas ${blas_lib_path} -lvf2c"
 fi
 
 
@@ -11653,7 +11563,6 @@ ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
 LDFLAGS_SAVE=${LDFLAGS};
-
 echo "$as_me:$LINENO: checking for treepeforce in -ltree" >&5
 echo $ECHO_N "checking for treepeforce in -ltree... $ECHO_C" >&6
 if test "${ac_cv_lib_tree_treepeforce+set}" = set; then
@@ -11696,8 +11605,8 @@ else
   tree_found=""
 fi
 
-if test -n "${vmetis_found}"; then
-    tree_lib="${mcx_lib_path} -ltree"
+if test -n "${tree_found}"; then
+    tree_lib="${mc_lib_path} -ltree"
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_TREE

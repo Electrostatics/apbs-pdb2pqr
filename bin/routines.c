@@ -746,7 +746,9 @@ fgcent/cgcent!\n",  (imol+1));
       pbeparm->useChargeMap, theChargeMap);
 
     /* Print a few derived parameters */
+#ifndef VAPBSQUIET
     Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+#endif
 
     /* Setup time statistics */
     Vnm_tstop(27, "Setup timer");
@@ -1658,6 +1660,8 @@ VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     return 1;
 }
 
+#ifdef HAVE_MC_H
+
 VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
   Vfetk *fetk[NOSH_MAXCALC]) {
@@ -2211,4 +2215,4 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 
     return 1;
 }
-
+#endif /* ifdef HAVE_MCX_H */
