@@ -55,7 +55,7 @@ libvpmg_a_SOURCES = buildAd.f buildBd.f buildGd.f buildPd.f cgd.f cgmgd.f \
 	newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f nrchdrvd.f \
 	nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f pded.f powerd.f \
 	rand.c rchd.f secd.c smoothd.f sord.f wjd.f vpmgp.c vpmg.c
-INCLUDES         = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ 
+INCLUDES         = @inc_list@
 CFLAGS            = @CFLAGS@
 
 all-local:

@@ -53,6 +53,6 @@ noinst_PROGRAMS  = mgmesh accmap
 mgmesh_SOURCES     = mgmesh.c 
 mgmesh_LDADD       = ${math_lib}
 accmap_SOURCES     = accmap.c
-accmap_LDADD       = -L../../../lib -lapbs @mc_lib@ @mcx_lib@ @pal_lib@ @thread_lib@ @mpi_lib@ @math_lib@ @rl_lib@ @socket_lib@ @nsl_lib@ @stdcxx_lib@
-INCLUDES         = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ @mpi_inc@ 
+accmap_LDADD       = -lapbs @lib_list@
+INCLUDES         = @inc_list@
 
