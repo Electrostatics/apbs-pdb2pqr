@@ -2365,6 +2365,216 @@ VPUBLIC void Vfetk_dumpLocalVar() {
 
 };
 
+VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
 
+    int i, j, ichop;
+    double coord[3], chi, q, conc, val;
+    VV *vert;
+    Bvec *u, *u_d;
+    AM *am;
+    Gem *gm;
+    PBEparm *pbeparm;
+    Vacc *acc;
+    Vpbe *pbe;
+
+    gm = thee->gm;
+    am = thee->am;
+    pbe = thee->pbe;
+    pbeparm = thee->pbeparm;
+    acc = pbe->acc;
+
+    /* Make sure vec has enough rows to accomodate the vertex data */
+    if (Bvec_numR(vec, 0) != Gem_numVV(gm)) {
+        Vnm_print(2, "Vfetk_fillArray:  insufficient space in Bvec!\n");
+        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numR(vec, 0),
+          Gem_numVV(gm));
+        return 0;
+    }
+
+    switch (type) {
+
+        case VDT_CHARGE:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out charge distribution!\n");
+            return 0;
+            break;
+
+        case VDT_POT:
+            u = am->u;
+            u_d = am->ud;
+            /* Copy in solution */
+            Bvec_copy(vec, u);
+            /* Add dirichlet condition */
+            Bvec_axpy(vec, u_d, 1.0);
+            break;
+
+        case VDT_SMOL:
+            for (i=0; i<Gem_numVV(gm); i++) {
+                vert = Gem_VV(gm, i);
+                for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
+                chi = Vacc_molAcc(acc, coord, pbe->solventRadius);
+                Bvec_set(vec, 0, i, chi);
+            }
+            break;
+
+        case VDT_SSPL:
+            for (i=0; i<Gem_numVV(gm); i++) {
+                vert = Gem_VV(gm, i);
+                for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
+                chi = Vacc_splineAcc(acc, coord, pbeparm->swin, 0.0);
+                Bvec_set(vec, 0, i, chi);
+            }
+            break;
+
+        case VDT_VDW:
+            for (i=0; i<Gem_numVV(gm); i++) {
+                vert = Gem_VV(gm, i);
+                for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
+                chi = Vacc_vdwAcc(acc, coord);
+                Bvec_set(vec, 0, i, chi);
+            }
+            break;
+
+        case VDT_IVDW:
+            for (i=0; i<Gem_numVV(gm); i++) {
+                vert = Gem_VV(gm, i);
+                for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
+                chi = Vacc_ivdwAcc(acc, coord, pbe->maxIonRadius);
+                Bvec_set(vec, 0, i, chi);
+            }
+            break;
+
+        case VDT_LAP:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out Laplacian!\n");
+            return 0;
+            break;
+
+        case VDT_EDENS:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out energy density!\n");
+            return 0;
+            break;
+
+        case VDT_NDENS:
+            u = am->u;
+            u_d = am->ud;
+            /* Copy in solution */
+            Bvec_copy(vec, u);
+            /* Add dirichlet condition */
+            Bvec_axpy(vec, u_d, 1.0);
+            /* Load up ions */
+            ichop = 0;
+            for (i=0; i<Gem_numVV(gm); i++) {
+                val = 0;
+                for (j=0; j<pbe->numIon; j++) {
+                    q = pbe->ionQ[j];
+                    conc = pbe->ionConc[j];
+                    val += (conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
+                }
+                Bvec_set(vec, 0, i, val);
+            }
+            break;
+
+        case VDT_QDENS:
+            u = am->u;
+            u_d = am->ud;
+            /* Copy in solution */
+            Bvec_copy(vec, u);
+            /* Add dirichlet condition */
+            Bvec_axpy(vec, u_d, 1.0);
+            /* Load up ions */
+            ichop = 0;
+            for (i=0; i<Gem_numVV(gm); i++) {
+                val = 0;
+                for (j=0; j<pbe->numIon; j++) {
+                    q = pbe->ionQ[j];
+                    conc = pbe->ionConc[j];
+                    val += (q*conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
+                }
+                Bvec_set(vec, 0, i, val);
+            }
+            break;
+
+        case VDT_DIELX:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out x-shifted diel!\n");
+            return 0;
+            break;
+
+        case VDT_DIELY:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out y-shifted diel!\n");
+            return 0;
+            break;
+
+        case VDT_DIELZ:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out z-shifted diel!\n");
+            return 0;
+            break;
+
+        case VDT_KAPPA:
+            Vnm_print(2, "Vfetk_fillArray:  can't write out kappa!\n");
+            return 0;
+            break;
+
+        default:
+            Vnm_print(2, "Vfetk_fillArray:  invalid data type (%d)!\n", type);
+            return 0;
+            break;
+    }
+
+    return 1;
+}
+
+VPUBLIC int Vfetk_write(Vfetk *thee,  const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, Bvec *vec, Vdata_Format format) {
+
+    int i, j, ichop;
+    Aprx *aprx;
+    Gem *gm;
+    Vio *sock;
+
+    VASSERT(thee != VNULL);
+    aprx = thee->aprx;
+    gm = thee->gm;
+
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"w");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vfetk_write: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    if (Vio_connect(sock, 0) < 0) {
+        Vnm_print(2, "Vfetk_write: Problem connecting to virtual socket %s\n",
+          fname);
+        return 0;
+    }
+
+    /* Make sure vec has enough rows to accomodate the vertex data */
+    if (Bvec_numR(vec, 0) != Gem_numVV(gm)) {
+        Vnm_print(2, "Vfetk_fillArray:  insufficient space in Bvec!\n");
+        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numR(vec, 0),
+          Gem_numVV(gm));
+        return 0;
+    }
+
+    switch (format) {
+
+        case VDF_DX:
+            Aprx_writeSOL(aprx, sock, vec, "DX");
+            break;
+        case VDF_AVS:
+            Aprx_writeSOL(aprx, sock, vec, "UCD");
+            break;
+        case VDF_UHBD:
+            Vnm_print(2, "Vfetk_write:  UHBD format not supported!\n");
+            return 0;
+        default:
+            Vnm_print(2, "Vfetk_write:  Invalid data format (%d)!\n", format);
+            return 0;
+    }
+
+
+    Vio_connectFree(sock);
+    Vio_dtor(&sock);
+
+    return 1;
+}
 
 #endif

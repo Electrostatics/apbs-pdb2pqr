@@ -166,8 +166,12 @@ VEXTERNC void printPBEPARM(PBEparm *pbeparm);
  * @brief  Print out FE-specific params loaded from input
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param  feparm  FEMparm object */
-VEXTERNC void printFEPARM(FEMparm *feparm);
+ * @param  icalc  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param fetk  Array of FE solver objects  */
+VEXTERNC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
 
 /**
  * @brief  Print out MG-specific params loaded from input
@@ -388,7 +392,7 @@ VEXTERNC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 
 /**
  * @brief  Pre-refine mesh before solve
- * @ingroup  Vfetk
+ * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  i  Calculation index
  * @param  nosh  Master parameter object
@@ -400,7 +404,7 @@ VEXTERNC int preRefineFE(int i, NOsh *nosh, FEMparm *feparm,
 
 /**
  * @brief  Partition mesh (if applicable)
- * @ingroup  Vfetk
+ * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  i  Calculation index
  * @param  nosh  Master parameter object
@@ -412,7 +416,7 @@ VEXTERNC int partFE(int i, NOsh *nosh, FEMparm *feparm,
 
 /**
  * @brief  Solve-estimate-refine
- * @ingroup  Vfetk
+ * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  i  Calculation index
  * @param  nosh  Master parameter object
@@ -422,5 +426,31 @@ VEXTERNC int partFE(int i, NOsh *nosh, FEMparm *feparm,
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int solveFE(int i, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
   Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Estimate error, mark mesh, and refine mesh after solve
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  icalc  Calculation index
+ * @param  nosh  Master parameter object
+ * @param feparm  FE-specific parameters 
+ * @param fetk  Array of FE solver objects 
+ * @return  1 if successful, 0 otherwise -- note that a 0 will likely imply
+ * that either the max number of vertices have been met or no vertices were
+ * marked for refinement.  In either case, this should not be treated as a
+ * fatal error.  */
+VEXTERNC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
+  Vfetk *fetk[NOSH_MAXCALC]);
+
+/**
+ * @brief  Write FEM data to files
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  rank  Rank of processor (for parallel runs)
+ * @param  nosh  NOsh object
+ * @param  pbeparm  PBEparm object
+ * @param  fetk  FEtk object (with solution)
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk);
 
 #endif
