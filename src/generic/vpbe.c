@@ -348,11 +348,13 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     /* Compute accessibility objects */
     if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
     else radius = thee->solventRadius;
-    nhash = VPOW((double)(Valist_getNumberAtoms(thee->alist)), 1.0/3.0);
-    Vnm_print(2, "Vcsm_ctor2: Using %d x %d x %d hash table\n", ceil(nhash),
-      ceil(nhash), ceil(nhash));
-    thee->acc = Vacc_ctor(thee->alist, radius, ceil(nhash), ceil(nhash),
-      ceil(nhash), 100);
+    nhash = 2.0*VPOW((double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
+#if 1
+    thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
+      (int)(nhash), 100);
+#else
+    thee->acc = Vacc_ctor(thee->alist, radius, 110, 110, 110, 100);
+#endif
     VASSERT(thee->acc != VNULL);
 
     /* Compute charge-simplex map */
