@@ -266,17 +266,18 @@ VPUBLIC void killDielMaps(NOsh *nosh,
 
     int i;
 
+    if (nosh->ndiel > 0) {
 #ifndef VAPBSQUIET
-    if (nosh->ndiel > 0) Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
-        nosh->ndiel);
+	Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
+		    nosh->ndiel);
 #endif
-    else return;
-
-    for (i=0; i<nosh->ndiel; i++) {
-        Vgrid_dtor(&(dielXMap[i]));
-        Vgrid_dtor(&(dielYMap[i]));
-        Vgrid_dtor(&(dielZMap[i]));
+	for (i=0; i<nosh->ndiel; i++) {
+	    Vgrid_dtor(&(dielXMap[i]));
+	    Vgrid_dtor(&(dielYMap[i]));
+	    Vgrid_dtor(&(dielZMap[i]));
+	}
     }
+    else return;
 
 }
 
@@ -342,13 +343,13 @@ VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i;
 
-    if (nosh->nkappa > 0) 
+    if (nosh->nkappa > 0) {
 #ifndef VAPBSQUIET
       Vnm_tprint( 1, "Destroying %d kappa maps\n", nosh->nkappa);
 #endif
+      for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
+    }
     else return;
-
-    for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
 
 }
 
@@ -413,13 +414,15 @@ VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i;
 
-    if (nosh->ncharge > 0)
+    if (nosh->ncharge > 0) {
 #ifndef VAPBSQUIET
       Vnm_tprint( 1, "Destroying %d charge maps\n", nosh->ncharge);
 #endif
-    else return;
 
-    for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
+      for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
+    }
+
+    else return;
 
 }
 
