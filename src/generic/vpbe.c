@@ -64,13 +64,13 @@
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
+VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm, AM *am) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vram_ctor( 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
-    VASSERT( Vpbe_ctor2(thee, alist, gm));
+    VASSERT( Vpbe_ctor2(thee, alist, gm, am));
 
     return thee;
 }
@@ -86,7 +86,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) { 
+VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am) { 
 
     int iatom;
     double atomRadius;
@@ -104,9 +104,15 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
         return 0;
     }
 
+    if (am == VNULL) {
+        Vnm_print(1,"Vpbe_ctor2: Got null pointer to AM object!\n");
+        return 0;
+    }
+
     /* Set pointers */
     thee->alist = alist;
     thee->gm = gm;
+    thee->am = am;
     thee->paramFlag = 0;
 
     /* Set up charge-simplex map */
@@ -371,6 +377,20 @@ VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    return thee->gm; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getAM
+//
+// Purpose:  Get a pointer to the AM (linear algebra manager) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC AM* Vpbe_getAM(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->am; 
 
 }
 
