@@ -111,6 +111,7 @@ VEXTERNC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
 VEXTERNC void Vpee_dtor(Vpee **thee);
 VEXTERNC void Vpee_dtor2(Vpee *thee);
 
+VEXTERNC int Vpee_numSS(Vpee *thee);
 VEXTERNC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, 
    int rcol, double etol);
 VEXTERNC int Vpee_memChk(Vpee *thee);

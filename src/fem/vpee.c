@@ -452,6 +452,24 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpee_numSS
+//
+// Purpose:  Return the number of simplices with chart == thee->localPartID
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpee_numSS(Vpee *thee) {
+    int num = 0;
+    int isimp;
+
+    for (isimp=0; isimp<Vgm_numSS(thee->gm); isimp++) {
+        if (SS_chart(Vgm_SS(thee->gm, isimp)) == thee->localPartID) num++;
+    }
+
+    return num;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_userDefined
 //
 // Purpose:  Reduce code bloat by wrapping up the common steps for getting the
