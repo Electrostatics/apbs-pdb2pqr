@@ -745,31 +745,6 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getLinearEnergy2
-//
-// Purpose:  Using the solution at the finest mesh level, get the 
-//           electrostatic energy using the free energy functional for the 
-//           linearized Poisson-Boltzmann equation without removing any 
-//           self-interaction terms (i.e., removing the reference state of
-//           isolated charges present in an infinite dielectric continuum with 
-//           the same relative permittivity as the interior of the protein).
-//           In other words, we calculate
-//             \[ G = (1/2) (A u, u) \]
-//           where $A$ is the stiffness matrix, and return the result in 
-//           units of $k_B T$.  The argument color
-//           allows the user to control the partition on which this energy
-//           is calculated; if (color == -1) no restrictions are used.
-//           The solution is obtained from the finest level of the passed AM
-//           object, but atomic data from the Vpbe object is used to
-//           calculate the energy
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) { 
-    VASSERT(0);
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getCoulombEnergy1
 //
 // Purpose:  Perform an inefficient double sum to calculate the Coulombic
