@@ -16,11 +16,11 @@ noinst_LTLIBRARIES = libapbsgen.la
 libapbsgen_la_SOURCES  = nosh.c mgparm.c mgparse.c femparm.c pbeparm.c \
                          vacc.c valist.c vatom.c vgreen.c vpbe.c vcap.c \
                          vstring.c
-INCLUDES           = -I../fem -I../mg @inc_list@ 
+INCLUDES           = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg @inc_list@ 
 AM_CFLAGS          = @wall_pedantic_ansi@
 LDFLAGS          = @LDFLAGS@ @FLIBS@
 
 
 all-local:
-	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ../aaa_inc/apbs/.
+	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
 

@@ -20,12 +20,16 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
     energy component information
   * A new option has been added to tools/manip/acc to give per-atom solvent-
     accessible surface area contributions
+  * A new option has been added to tools/manip/coulomb to give per-atom 
+    electrostatic energies
   * Added tools/mesh/dxmath for performing arithmetic on grid-based data (i.e.,
     adding potential results from two calculations, etc.)
   * Added tools/mesh/uhbd_asc2bin for converting UHBD-format grid files from
     ASCII to binary (contributed by Dave Sept)
   * Improvement of VMD visualization scripts (contributed by Dave Sept)
   * The API has changed significantly; please see the Programmer's Manual.
+  * Working (but still experimental) Python wrappers for major APBS functions.
+  * More flexible installation capabilities (pointed out by Steve Bond)
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02

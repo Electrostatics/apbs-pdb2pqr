@@ -19,12 +19,12 @@ libapbsmg_la_SOURCES  = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f \
   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
   nrchdrvd.f nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rchd.f \
   smoothd.f sord.f wjd.f mypde.f vpmgf.f vgrid.c vopot.c
-INCLUDES           = -I../generic -I../fem @inc_list@
+INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@
 CFLAGS             = @CFLAGS@
 LDFLAGS          = @LDFLAGS@ @FLIBS@
 
 
 all-local:
-	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ../aaa_inc/apbs/.
+	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
 
