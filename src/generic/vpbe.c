@@ -504,10 +504,10 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
     /* Compute accessibility objects */
     if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
     else radius = thee->solventRadius;
-    nhash = VPOW((double)Valist_getNumberAtoms(thee->alist)/5.0, 1.0/3.0);
+    nhash = VPOW(8.0*(double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
     if (((int)nhash) == 0) nhash = 2;
     Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object...\n"); 
-    thee->acc = Vacc_ctor(thee->alist, 1.6*radius, (int)(nhash), (int)(nhash),
+    thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
       (int)(nhash), 200);
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
     VASSERT(thee->acc != VNULL);

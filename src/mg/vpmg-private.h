@@ -63,8 +63,10 @@
 #define F77TSECND     VF77_MANGLE(tsecnd, TSECND)
 #define F77VPMGANORM  VF77_MANGLE(vpmganorm, VPMGANORM)
 #define F77VPMGABAND  VF77_MANGLE(vpmgaband, VPMGABAND)
-#define F77DPBFA  VF77_MANGLE(dpbfa, DPBFA)
-#define F77DPBDI  VF77_MANGLE(dpbdi, DPBDI)
+#define F77DPBFA      VF77_MANGLE(dpbfa, DPBFA)
+#define F77DPBDI      VF77_MANGLE(dpbdi, DPBDI)
+#define F77EIGDRIV    VF77_MANGLE(eigdriv, EIGDRIV)
+#define F77ANORMDRIV  VF77_MANGLE(anormdriv, ANORMDRIV)
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Private methods

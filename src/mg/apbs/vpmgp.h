@@ -181,6 +181,4 @@ VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
 VEXTERNC void Vpmgp_dtor(Vpmgp **thee);
 VEXTERNC void Vpmgp_dtor2(Vpmgp *thee);
 
-VEXTERNC double Vpmgp_getLinearEnergy1(Vpmgp *thee);
-
 #endif    /* ifndef _VPMGP_H_ */
