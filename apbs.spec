@@ -17,6 +17,7 @@ Version: 0.2.5
 Release: 1
 Copyright: GPL
 Group: Applications/Science
+Vendor: Baker Research Group, Washington University in St. Louis
 Prefix: /usr/local
 Buildroot: %{_topdir}/buildroot
 Requires: maloc
@@ -55,7 +56,6 @@ Requires: maloc, apbs = %{version}-%{release}
 %description examples
 This package contains examples for APBS
 
-%ifarch %{ix86}
 %package tools
 Summary: Tools for APBS
 Group: Applications/Science
@@ -63,7 +63,6 @@ Prefix: %{prefix}
 Requires: maloc, apbs = %{version}-%{release}
 %description tools
 This package contains tools for APBS
-%endif
 
 %prep
 %setup -n apbs-%{version}
@@ -76,36 +75,47 @@ export FETK_PREFIX=`rpm -q maloc --queryformat "%{INSTALLPREFIX}"`
 export FETK_INCLUDE=$FETK_PREFIX/include
 export FETK_LIBRARY=$FETK_PREFIX/lib
 
-
 # We're assuming Intel compilers for Intel platforms.  These are the specific
 # Intel platforms we'll support:
-%ifarch i787 {
-  export CC="icc" 
-  export CFLAGS="-O3 -tpp7 -static-libcxa" 
-  export F77="ifc" 
-  export FFLAGS="-O3 -tpp7 -static-libcxa" 
-  export LDFLAGS="-static-libcxa"
-  ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-  make
-%else
-  %ifarch i686
+arch=%_arch
+host=%_host
+echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
+%ifarch %{ix86}
+  echo GOT INTEL ix86 ARCH
+  %ifnarch i386 i486 i586 i686
+    echo ASSUMING i786 ARCH!!!
     export CC="icc" 
-    export CFLAGS="-O3 -tpp6 -static-libcxa" 
+    export CFLAGS="-O3 -tpp7 -static-libcxa" 
+    export CXX="icc" 
+    export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
     export F77="ifc" 
-    export FFLAGS="-O3 -tpp6 -static-libcxa" 
+    export FFLAGS="-O3 -tpp7 -static-libcxa" 
     export LDFLAGS="-static-libcxa"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
     make
   %else
-    %ifarch %{ix86}
+    %ifarch i686
+      echo CONFIGURING FOR i686 ARCH
+      export CC="icc" 
+      export CFLAGS="-O3 -tpp6 -static-libcxa" 
+      export CXX="icc" 
+      export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
+      export F77="ifc" 
+      export FFLAGS="-O3 -tpp6 -static-libcxa" 
+      export LDFLAGS="-static-libcxa"
+      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+      make
+    %else
+      echo CONFIGURING FOR GENERIC i386 ARCH
       export CC="icc" 
       export CFLAGS="-O3 -static-libcxa" 
+      export CXX="icc" 
+      export CXXFLAGS="-O3 -tpp7 -static-libcxa" 
       export F77="ifc" 
       export FFLAGS="-O3 -static-libcxa" 
       export LDFLAGS="-static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
       make 
-    %endif
   %endif
 %endif
 
@@ -135,9 +145,7 @@ mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
 make install
 
 mv examples ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/examples
-%ifarch %{ix86}
 mv tools  ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/tools
-%endif
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
@@ -156,8 +164,6 @@ rm -rf ${RPM_BUILD_ROOT}
 %files examples
 %defattr(-,root,root)
 %{prefix}/apbs-%{version}/examples
-%ifarch %{ix86}
-  %files tools
-  %defattr(-,root,root)
-  %{prefix}/apbs-%{version}/tools
-%endif
+%files tools
+%defattr(-,root,root)
+%{prefix}/apbs-%{version}/tools
