@@ -421,9 +421,9 @@ int main(
     /* Memory statistics */
     bytesTotal = Vmem_bytesTotal();
     highWater = Vmem_highWaterTotal();
-    Vnm_tprint( 1, "Final memory usage:  %4.3f MB total, \
-%4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
-      (double)(highWater)/(1024.*1024.));
+    Vnm_tprint( 1, "Final memory usage:  %4.3f MB total, %4.3f MB high water\n", 
+            (double)(bytesTotal)/(1024.*1024.), 
+            (double)(highWater)/(1024.*1024.));
 
     /* Clean up MALOC structures */
     Vcom_dtor(&com);
