@@ -47,6 +47,7 @@
 #include "apbscfg.h"
 #include "vpmg-private.h"
 #include "apbs/vpmg.h"
+#include "apbs/vhal.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -396,9 +397,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
         x = i*hx + xmin;
         if ((x < upperCorner[0]) && (x > lowerCorner[0])) xok = 1;
         else { 
-            if ((x == lowerCorner[0]) && 
+            if ((VABS(x - lowerCorner[0]) < VPMGSMALL) && 
                 (bflags[VAPBS_LEFT] == 1)) xok = 1;
-            else if ((x == upperCorner[0]) &&
+            else if ((VABS(x - upperCorner[0]) < VPMGSMALL) &&
                 (bflags[VAPBS_RIGHT] == 1)) xok = 1;
             else xok = 0;
         }
@@ -409,9 +410,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                 if ((y < upperCorner[1]) && 
                     (y > lowerCorner[1])) yok = 1;
                 else {
-                    if ((y == lowerCorner[1]) &&
+                    if ((VABS(y - lowerCorner[1]) < VPMGSMALL) &&
                         (bflags[VAPBS_BACK] == 1)) yok = 1;
-                    else if ((y == upperCorner[1]) &&
+                    else if ((VABS(y - upperCorner[1]) < VPMGSMALL) &&
                         (bflags[VAPBS_FRONT] == 1)) yok = 1;
                     else yok = 0;
                 }
@@ -422,9 +423,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
                         if ((z < upperCorner[2]) && 
                             (z > lowerCorner[2])) zok = 1;
                         else {
-                            if ((z == lowerCorner[2]) &&
+                            if ((VABS(z - lowerCorner[2]) < VPMGSMALL) &&
                                 (bflags[VAPBS_DOWN] == 1)) zok = 1;
-                            else if ((z == upperCorner[2]) &&
+                            else if ((VABS(z - upperCorner[2]) < VPMGSMALL) &&
                                 (bflags[VAPBS_UP] == 1)) zok = 1;
                             else zok = 0;
 

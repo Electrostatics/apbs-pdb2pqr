@@ -1,5 +1,5 @@
 read 
-    mol pqr fas2.pqr                   # Read molecule 1
+    mol pqr mache.pqr                   # Read molecule 1
 end
 elec
     mg-manual                          # Use the multigrid method
@@ -8,7 +8,7 @@ elec
     nlev 4                             # Number of levels in multilevel
                                        #   hierarchy (usually 'l' from above
                                        #   definition)
-    glen 70 50 60
+    glen 100 100 100
                                        # lengths OR the grid spacing
     gcent mol 1                        # This can either be 'mol n' to center
                                        #   on a specific molecule or (x, y, z)

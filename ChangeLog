@@ -2,6 +2,8 @@
 BETA PUBLIC RELEASE VERSION 0.2.3       ??-??-02
 #############################################################################
 
+  * Fixed problems with "slicing" off chunks of the mesh during I/O of focused
+    calculations
   * A parameter (chgm) has been added which controls the charge discretization
     method used.  Therefore, this version contains substantial changes in both
 	the API and input file syntax.  Specifically:

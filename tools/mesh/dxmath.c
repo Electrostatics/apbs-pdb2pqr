@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
             return ERRRC;
         }
     } 
-    Vio_dtor(&sock);
+    Vio_acceptFree(sock);
 
     /* Spit out what we parsed: */
     Vnm_print(1, "main:  Performing following operations:\n");
