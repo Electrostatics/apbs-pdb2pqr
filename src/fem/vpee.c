@@ -424,8 +424,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     alg->gerror = VSQRT(alg->gerror)/((double)(Vgm_numSS(thee->gm)));
 
     /* do some i/o */
-    Vnm_print(0,"Vpee_markRefine:  [marked=<%d>  gerror=<%g>]\n", marked, alg->gerror);
-    Vnm_print(0,"Vpee_markRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
+    Vnm_print(2,"Vpee_markRefine:  [marked=<%d>  gerror=<%g>]\n", marked, alg->gerror);
+    Vnm_print(2,"Vpee_markRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
         etol, maxError, minError);
     Vnm_tstop(30, "error estimation");
 
