@@ -201,57 +201,6 @@ dnl ##########################################################################
 dnl 10. checks for anything else
 dnl ##########################################################################
 
-dnl # -----------------------
-dnl # HANDLE SYMBOL EMBEDDING
-dnl # -----------------------
-AC_MSG_CHECKING([whether EMBED macro can be used without compilation errors])
-AC_TRY_COMPILE(,
-    [#define EMBED(rctag) \
-     static const char* rctag; \
-     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
-     EMBED(rcsid)],
-    [embed_ok=yes; AC_DEFINE([HAVE_EMBED], [], [EMBED macro can be used])],
-    [embed_ok=no])
-AC_MSG_RESULT(${embed_ok})
-
-AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
-
-dnl # --------------------------------
-dnl # HANDLE ANSI/PEDANTIC COMPILATION
-dnl # --------------------------------
-AC_MSG_CHECKING([whether you want pedantic ANSI compilation])
-AC_ARG_ENABLE(pansi,
-    [AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
-    [pansi_use="yes"],
-    [pansi_use=""   ]
-)
-if test -z "${pansi_use}"; then
-    AC_MSG_RESULT([no])
-    wall=""
-    wall_pedantic=""
-    wall_pedantic_ansi=""
-    pedantic_ansi=""
-    dnl # --------------------------
-    dnl # We only look for the non-ANSI strcasecmp if configure wasn't invoked
-    dnl # with --enable-pansi
-    dnl # --------------------------
-    try_strcasecmp="";
-    AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
-    if test -n "${try_strcasecmp}"; then
-        AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
-    fi
-else
-    AC_MSG_RESULT([yes])
-    wall="-Wall"
-    wall_pedantic="-Wall -pedantic"
-    wall_pedantic_ansi="-Wall -pedantic -ansi"
-    pedantic_ansi="-pedantic -ansi"
-fi
-AC_SUBST(wall)
-AC_SUBST(wall_pedantic)
-AC_SUBST(wall_pedantic_ansi)
-AC_SUBST(pedantic_ansi)
-
 AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
 
 dnl # ----------------------
@@ -300,7 +249,7 @@ if test -n "${maloc_found}"; then
         [${maloc_lib_path}-lmaloc ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 fi
 if test -z "${maloc_found}"; then
-    AC_MSG_ERROR([** MALOC libraries or headers missing:  exiting on error! ***])
+    AC_MSG_ERROR([MALOC libraries or headers missing:  exiting on error!])
 fi
 dnl # Return LDFLAGS and CPPFLAGS to normal
 LDFLAGS=${LDFLAGS_SAVE};
@@ -319,7 +268,7 @@ AC_CHECK_LIB(maloc,maloc_needs_mpi,
     [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 mpi_inc="";
 if test -z "${mpi_use}"; then
-    AC_MSG_RESULT([*** MALOC not compiled with MPI:  MPI disabled  ***])
+    AC_MSG_RESULT([MALOC not compiled with MPI:  MPI disabled])
 else
 
     dnl # MPI header location ENV specification
@@ -372,10 +321,13 @@ else
         fi
     fi
     if test -z "${mpi_use}"; then
-        AC_MSG_RESULT([*** MPI library or header is missing:  MPI disabled ***])
-        AC_MSG_RESULT([*** Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY ***])
+        AC_MSG_RESULT([MALOC was compiled with MPI enabled])
+        AC_MSG_RESULT([MALOC needs to link against the MPI library])
+        AC_MSG_RESULT([Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY])
+        AC_ERROR([MPI library or header is missing!!])
+
     else
-        AC_MSG_RESULT([*** MPI library and header were found:  MPI enabled ***])
+        AC_MSG_RESULT([MPI library and header were found:  MPI enabled])
         AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
     fi
 
@@ -441,25 +393,6 @@ fi
 AC_SUBST(rl_lib)
 AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
 
-
-dnl # -----------------------
-dnl # HANDLE THE TOOLS DIRECTORY
-dnl # Disable compilation of executables in the tools directory with the
-dnl # '--disable-tools' flag (for Alpha).
-dnl # -----------------------
-AC_ARG_ENABLE(tools,
-    [AC_HELP_STRING([--disable-tools],[disable tool compilation])],
-    [ with_tools="no" ],
-    [ with_tools=""    ]
-)
-apbs_do_tools=""
-if test -z "${with_tools}"; then
-    apbs_do_tools="tools"
-else
-    AC_MSG_RESULT([*** tool compilation disabled at user request. ***])
-fi
-AC_SUBST(apbs_do_tools)
-
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
 dnl # HANDLE THE FEtk LIBRARIES
@@ -470,6 +403,7 @@ dnl # which depend on FEtk.  Compilation can also be disabled by the
 dnl # '--disable-fetk' flag.
 dnl # -----------------------
 dnl # MC header location ENV specification
+AC_MSG_RESULT([---------- begin configuring for FEtk linkage --------------])
 AC_ARG_ENABLE(fetk,
     [AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
     [ with_fetk="no" ],
@@ -540,21 +474,95 @@ if test -z "${with_fetk}"; then
     CPPFLAGS=${CPPFLAGS_SAVE};
 
     if test -n "${mc_found}"; then
-        AC_MSG_RESULT([*** FEtk components found:  enabled. ***])
+        AC_MSG_RESULT([FEtk components found:  enabled.])
         AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
         mc_do_src="vcsm.c vfetk.c vpee.c"
         mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
     else
-        AC_MSG_RESULT([*** FEtk component not found:  disabled. ***])
+        AC_MSG_RESULT([FEtk component not found:  disabled.])
     fi
 else
-    AC_MSG_RESULT([*** FEtk disabled at user request. ***])
+    AC_MSG_RESULT([FEtk disabled at user request.])
 fi
 AC_SUBST(mc_lib)
 AC_SUBST(mc_inc)
 AC_SUBST(mc_do_src)
 AC_SUBST(mc_do_test)
 AC_SUBST(mc_do_lib)
+AC_MSG_RESULT([---------- end configuring for FEtk linkage --------------])
+
+AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
+
+dnl # -----------------------
+dnl # HANDLE SYMBOL EMBEDDING
+dnl # -----------------------
+AC_MSG_CHECKING([whether EMBED macro can be used without compilation errors])
+AC_TRY_COMPILE(,
+    [#define EMBED(rctag) \
+     static const char* rctag; \
+     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+     EMBED(rcsid)],
+    [embed_ok=yes; AC_DEFINE([HAVE_EMBED], [], [EMBED macro can be used])],
+    [embed_ok=no])
+AC_MSG_RESULT(${embed_ok})
+
+
+dnl # --------------------------------
+dnl # HANDLE ANSI/PEDANTIC COMPILATION
+dnl # --------------------------------
+AC_MSG_CHECKING([whether you want pedantic ANSI compilation])
+AC_ARG_ENABLE(pansi,
+    [AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
+    [pansi_use="yes"],
+    [pansi_use=""   ]
+)
+if test -z "${pansi_use}"; then
+    AC_MSG_RESULT([no])
+    wall=""
+    wall_pedantic=""
+    wall_pedantic_ansi=""
+    pedantic_ansi=""
+    dnl # --------------------------
+    dnl # We only look for the non-ANSI strcasecmp if configure wasn't invoked
+    dnl # with --enable-pansi
+    dnl # --------------------------
+    try_strcasecmp="";
+    AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
+    if test -n "${try_strcasecmp}"; then
+        AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
+    fi
+else
+    AC_MSG_RESULT([yes])
+    wall="-Wall"
+    wall_pedantic="-Wall -pedantic"
+    wall_pedantic_ansi="-Wall -pedantic -ansi"
+    pedantic_ansi="-pedantic -ansi"
+fi
+AC_SUBST(wall)
+AC_SUBST(wall_pedantic)
+AC_SUBST(wall_pedantic_ansi)
+AC_SUBST(pedantic_ansi)
+
+dnl # -----------------------
+dnl # HANDLE THE TOOLS DIRECTORY
+dnl # Disable compilation of executables in the tools directory with the
+dnl # '--disable-tools' flag (for Alpha).
+dnl # -----------------------
+AC_MSG_CHECKING([whether you want to compile the tools])
+AC_ARG_ENABLE(tools,
+    [AC_HELP_STRING([--disable-tools],[disable tool compilation])],
+    [ with_tools="no" ],
+    [ with_tools=""    ]
+)
+apbs_do_tools=""
+if test -z "${with_tools}"; then
+    AC_MSG_RESULT([yes])
+    apbs_do_tools="tools"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(apbs_do_tools)
+
 
 dnl # -----------------------
 dnl # HANDLE THE BLAS LIBRARIES
@@ -658,6 +666,8 @@ else
     fi
 fi
 
+AC_MSG_RESULT([------------- end processing APBS configure options -----------])
+
 dnl # -----------------------
 dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
@@ -668,7 +678,10 @@ inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
-AC_MSG_RESULT([------------- end processing APBS configure options -----------])
+
+AC_MSG_RESULT([APBS to be linked with following libraries:  ${lib_list}])
+AC_MSG_RESULT([APBS to be compiled with following includes:  ${inc_list}])
+
 
 dnl ##########################################################################
 dnl 11. generate the makefiles
