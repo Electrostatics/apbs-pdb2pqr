@@ -2203,6 +2203,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 for (j=0; j<pbe->numIon; j++) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
+                    /** FIX ME */
                     val += (conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
                 }
                 Bvec_set(vec, 0, i, val);
@@ -2223,6 +2224,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 for (j=0; j<pbe->numIon; j++) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
+                    /** FIX ME */
                     val += (q*conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
                 }
                 Bvec_set(vec, 0, i, val);
