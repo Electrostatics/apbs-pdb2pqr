@@ -66,18 +66,20 @@ VEMBED(rcsid="$Id$")
 
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  MGpde_anaU
+// Routine:  bcCalc
 //
 // Purpose:  Dirichlet boundary function and initial approximation function.
 //
 // Args:     x    = position vector
 //           flag = evaluation flag 
-//                    0 => single Debye-Huckel sphere
-//                    1 => Debye-Huckel sphere for each atom
+//                    0 => zero B.C.
+//                    1 => single Debye-Huckel sphere
+//                    2 => Debye-Huckel sphere for each atom
+//                    4 => focusing
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double myGreens(Vpbe *pbe, double x[], int flag) {
+VPRIVATE double bcCalc(Vpbe *pbe, double x[], int flag) {
 
     double size, *position, charge, xkappa, eps_w, dist, T, val, pot;
     int i, iatom;
@@ -85,6 +87,8 @@ VPUBLIC double myGreens(Vpbe *pbe, double x[], int flag) {
     Valist *alist;
 
     if (flag == 0) {
+        return 0.0;
+    } else if (flag == 1) {
         /* Get the solute radius in meters and position in angstroms */
         size = (1.0e-10)*Vpbe_getSoluteRadius(pbe);
         position = Vpbe_getSoluteCenter(pbe);
@@ -112,7 +116,7 @@ VPUBLIC double myGreens(Vpbe *pbe, double x[], int flag) {
         /* Scale the potential to be dimensionless */
         val = val*Vunit_ec/(Vunit_kb*T);
         return val;
-    } else if (flag == 1) {
+    } else if (flag == 2) {
         pot = 0.0;
         eps_w = Vpbe_getSolventDiel(pbe);
         xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
@@ -135,7 +139,14 @@ VPUBLIC double myGreens(Vpbe *pbe, double x[], int flag) {
         }
 
         return pot;
-    } 
+    } else if (flag == 4) {
+        Vnm_print(2, "VPMG::bcCalc -- focusing (bcfl = 4) not implemented!\n");
+        VASSERT(0);
+    } else {
+        Vnm_print(2, "VPMG::bcCalc -- invalid boundary condition flag (%d)!\n",
+          flag);
+        VASSERT(0);
+    }
 
     return 0;
 }
@@ -497,10 +508,10 @@ off the mesh (ignoring)!\n",
             position[0] = thee->xf[0];
             position[1] = thee->yf[j];
             position[2] = thee->zf[k];
-            thee->gxcf[IJKx(j,k,0)] = myGreens(pbe, position, 
+            thee->gxcf[IJKx(j,k,0)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             position[0] = thee->xf[nx-1];
-            thee->gxcf[IJKx(j,k,1)] = myGreens(pbe, position, 
+            thee->gxcf[IJKx(j,k,1)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             thee->gxcf[IJKx(j,k,2)] = 0.0;
             thee->gxcf[IJKx(j,k,3)] = 0.0;
@@ -513,10 +524,10 @@ off the mesh (ignoring)!\n",
             position[0] = thee->xf[i];
             position[1] = thee->yf[0];
             position[2] = thee->zf[k];
-            thee->gycf[IJKy(i,k,0)] = myGreens(pbe, position, 
+            thee->gycf[IJKy(i,k,0)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             position[1] = thee->yf[ny-1];
-            thee->gycf[IJKy(i,k,1)] = myGreens(pbe, position, 
+            thee->gycf[IJKy(i,k,1)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             thee->gycf[IJKy(i,k,2)] = 0.0;
             thee->gycf[IJKy(i,k,3)] = 0.0;
@@ -529,10 +540,10 @@ off the mesh (ignoring)!\n",
             position[0] = thee->xf[i];
             position[1] = thee->yf[j];
             position[2] = thee->zf[0];
-            thee->gzcf[IJKz(i,j,0)] = myGreens(pbe, position, 
+            thee->gzcf[IJKz(i,j,0)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             position[2] = thee->zf[nz-1];
-            thee->gzcf[IJKz(i,j,1)] = myGreens(pbe, position, 
+            thee->gzcf[IJKz(i,j,1)] = bcCalc(pbe, position, 
               thee->pmgp->bcfl);
             thee->gzcf[IJKz(i,j,2)] = 0.0;
             thee->gzcf[IJKz(i,j,3)] = 0.0;
