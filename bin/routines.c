@@ -731,16 +731,51 @@ fgcent/cgcent!\n",  (imol+1));
         Vpmgp_dtor(&(pmgp[i-1]));
         Vpbe_dtor(&(pbe[i-1]));
     }
-    if (pbeparm->useDielMap) theDielXMap = dielXMap[pbeparm->dielMapID-1];
-    else theDielXMap = VNULL;
-    if (pbeparm->useDielMap) theDielYMap = dielYMap[pbeparm->dielMapID-1];
-    else theDielYMap = VNULL;
-    if (pbeparm->useDielMap) theDielZMap = dielZMap[pbeparm->dielMapID-1];
-    else theDielZMap = VNULL;
-    if (pbeparm->useKappaMap) theKappaMap = kappaMap[pbeparm->kappaMapID-1];
-    else theKappaMap = VNULL;
-    if (pbeparm->useChargeMap) theChargeMap = chargeMap[pbeparm->chargeMapID-1];
-    else theChargeMap = VNULL;
+    if (pbeparm->useDielMap) {
+        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+            theDielXMap = dielXMap[pbeparm->dielMapID-1];
+        } else {
+            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n", 
+                    pbeparm->dielMapID);
+            return 0;
+        }
+    } else theDielXMap = VNULL;
+    if (pbeparm->useDielMap) {
+        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+            theDielYMap = dielYMap[pbeparm->dielMapID-1];
+        } else {
+            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
+                    pbeparm->dielMapID);
+            return 0;
+        }
+    } else theDielYMap = VNULL;
+    if (pbeparm->useDielMap) {
+        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+            theDielZMap = dielZMap[pbeparm->dielMapID-1];
+        } else {
+            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
+                    pbeparm->dielMapID);
+            return 0;
+        }
+    } else theDielZMap = VNULL;
+    if (pbeparm->useKappaMap) {
+        if ((pbeparm->kappaMapID-1) < nosh->nkappa) {
+            theKappaMap = kappaMap[pbeparm->kappaMapID-1];
+        } else {
+            Vnm_print(2, "Error!  %d is not a valid kappa map ID!\n",
+                    pbeparm->kappaMapID);
+            return 0;
+        }
+    } else theKappaMap = VNULL;
+    if (pbeparm->useChargeMap) {
+        if ((pbeparm->chargeMapID-1) < nosh->ncharge) {
+            theChargeMap = chargeMap[pbeparm->chargeMapID-1];
+        } else {
+            Vnm_print(2, "Error!  %d is not a valid charge map ID!\n",
+                    pbeparm->chargeMapID);
+            return 0;
+        }
+    } else theChargeMap = VNULL;
     Vpmg_fillco(pmg[i], 
       pbeparm->srfm, pbeparm->swin, mgparm->chgm,
       pbeparm->useDielMap, theDielXMap,
