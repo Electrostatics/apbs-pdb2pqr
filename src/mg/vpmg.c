@@ -1840,6 +1840,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
             thee->a2cf[i] = epsp;
             thee->a3cf[i] = epsp;
         }
+
     } /* endif (!islap) */
 
     /* Fill the boundary arrays (except when focusing, bcfl = 4) */
@@ -2355,23 +2356,28 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     double dielEnergy = 0.0;
     double qmEnergy = 0.0;
     double qfEnergy = 0.0;
+    double npEnergy = 0.0;
 
     VASSERT(thee != VNULL);
     /* VASSERT(thee->filled); */
 
+    Vnm_print(0, "Vpmg_energy:  calculating apolar energy\n");
+    npEnergy = Vpmg_npEnergy(thee, extFlag);
+    Vnm_print(0, "Vpmg_energy:  npEnergy = %1.12E kT\n", npEnergy);
+
     if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
         Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");
         qmEnergy = Vpmg_qmEnergy(thee, extFlag);
-        Vnm_print(0, "Vpmg_energy:  qmEnergy = %g kT\n", qmEnergy);
+        Vnm_print(0, "Vpmg_energy:  qmEnergy = %1.12E kT\n", qmEnergy);
         qfEnergy = Vpmg_qfEnergy(thee, extFlag);
-        Vnm_print(0, "Vpmg_energy:  qfEnergy = %g kT\n", qfEnergy);
+        Vnm_print(0, "Vpmg_energy:  qfEnergy = %1.12E kT\n", qfEnergy);
         dielEnergy = Vpmg_dielEnergy(thee, extFlag);
-        Vnm_print(0, "Vpmg_energy:  dielEnergy = %g kT\n", dielEnergy);
+        Vnm_print(0, "Vpmg_energy:  dielEnergy = %1.12E kT\n", dielEnergy);
         totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
         Vnm_print(0, "Vpmg_energy:  calculating only q-phi energy\n");
         qfEnergy = Vpmg_qfEnergy(thee, extFlag);
-        Vnm_print(0, "Vpmg_energy:  qfEnergy = %g kT\n", qfEnergy);
+        Vnm_print(0, "Vpmg_energy:  qfEnergy = %1.12E kT\n", qfEnergy);
         totEnergy = 0.5*qfEnergy;
     }
 
@@ -2464,18 +2470,18 @@ VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
       thee->useKappaMap, thee->kappaMap,
       thee->useChargeMap, thee->chargeMap);
 
-    for (k=0; k<(nz-1); k++) {
-        for (j=0; j<(ny-1); j++) {
-            for (i=0; i<(nx-1); i++) {
-                pvecx = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i+1,j,k)]);
-                pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j+1,k)]);
-                pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k+1)]);
+    for (k=1; k<nz; k++) {
+        for (j=1; j<ny; j++) {
+            for (i=1; i<nx; i++) {
+                pvecx = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i-1,j,k)]);
+                pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j-1,k)]);
+                pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k-1)]);
                 nrgx = pvecx
-                 * VSQR((thee->a1cf[IJK(i,j,k)]-thee->a1cf[IJK(i+1,j,k)])/hx);
+                 * VSQR((thee->a1cf[IJK(i,j,k)]-thee->a1cf[IJK(i-1,j,k)])/hx);
                 nrgy = pvecy
-                 * VSQR((thee->a2cf[IJK(i,j,k)]-thee->a2cf[IJK(i,j+1,k)])/hy);
+                 * VSQR((thee->a2cf[IJK(i,j,k)]-thee->a2cf[IJK(i,j-1,k)])/hy);
                 nrgz = pvecz
-                 * VSQR((thee->a3cf[IJK(i,j,k)]-thee->a3cf[IJK(i,j,k+1)])/hzed);
+                 * VSQR((thee->a3cf[IJK(i,j,k)]-thee->a3cf[IJK(i,j,k-1)])/hzed);
                 energy += VSQRT(nrgx + nrgy + nrgz);
             }
         }
@@ -2500,7 +2506,7 @@ VPUBLIC double Vpmg_npEnergy(Vpmg *thee, int extFlag) {
     temp = Vpbe_getTemperature(thee->pbe);
     gamma = gamma/(1e-3*Vunit_Na*Vunit_kb*temp);
 
-    if (VABS(epsp-epss) < VSMALL) {
+    if ((VABS(epsp-epss) < VSMALL) || (gamma < VSMALL)) {
         Vnm_print(2, "Vpmg_npEnergy:  No apolar energy for equal \
 protein/solvent dielectric values!");
         return 0.0;
