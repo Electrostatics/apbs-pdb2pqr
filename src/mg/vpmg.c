@@ -424,7 +424,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    mgsz_(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
+    MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
@@ -467,7 +467,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
-    packmg_(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+    PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
       &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
@@ -476,6 +476,16 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       &(thee->pmgp->mgdisc), &(thee->pmgp->iinfo), &(thee->pmgp->errtol),
       &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
       &(thee->pmgp->irite), &(thee->pmgp->iperf));
+
+    /* Turn off restriction of observable calculations to a specific 
+     * partition */
+    thee->partFlag = 0;
+    thee->partLower[0] = 0;
+    thee->partLower[1] = 0;
+    thee->partLower[2] = 0;
+    thee->partUpper[0] = 0;
+    thee->partUpper[1] = 0;
+    thee->partUpper[2] = 0;
 
     return 1;
 }
@@ -528,7 +538,7 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    mgsz_(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
+    MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc), &(thee->pmgp->mgsolv),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
@@ -583,7 +593,7 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       sizeof(double));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
-    packmg_(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+    PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
       &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
@@ -593,8 +603,13 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
       &(thee->pmgp->irite), &(thee->pmgp->iperf));
 
+    /* Turn off restriction of observable calculations to a specific 
+     * partition */
+    thee->partFlag = 0;
+
     return 1;
 }
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_solve
 //
@@ -607,56 +622,56 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
     switch(thee->pmgp->meth) {
         /* CGMG (linear) */
         case 0:
-            cgmgdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+            CGMGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* Newton (nonlinear) */
         case 1:
-            newdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
+            NEWDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
               thee->fcf, thee->tcf);
             break;
         /* MG (linear/nonlinear) */
         case 2:
-	    mgdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* CGHS (linear/nonlinear) */
         case 3: 
-	    ncghsdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    NCGHSDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* SOR (linear/nonlinear) */
         case 4:
-	    nsordriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    NSORDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* GSRB (linear/nonlinear) */
         case 5:
-	    ngsrbdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    NGSRBDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf); 
             break;
         /* WJAC (linear/nonlinear) */
         case 6:
-	    nwjacdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    NWJACDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
             break;
         /* RICH (linear/nonlinear) */
         case 7:
-	    nrichdriv_(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+	    NRICHDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
@@ -917,6 +932,12 @@ off the mesh (ignoring):\n",
 //           In other words, we calculate
 //             \[ G = \frac{1}{2} \sum_i q_i u(r_i) \]
 //           and return the result in units of $k_B T$.  
+//     
+// Notes:    The value of this observable may be modified by setting
+//           restrictions on the subdomain over which it is calculated.  Such
+//           limits can be set via Vpmg_setPart and are generally useful for
+//           parallel runs.  In such cases, the values are calculated on the
+//           interval [min, max).
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -952,39 +973,42 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
         /* Get atomic information */
         atom = Valist_getAtom(alist, iatom);
-        charge = Vatom_getCharge(atom);
-        position = Vatom_getPosition(atom);
 
-        /* Figure out which vertices we're next to */
-        ifloat = (position[0] - xmin)/hx;
-        jfloat = (position[1] - ymin)/hy;
-        kfloat = (position[2] - zmin)/hz;
-        ihi = (int)ceil(ifloat);
-        ilo = (int)floor(ifloat);
-        jhi = (int)ceil(jfloat);
-        jlo = (int)floor(jfloat);
-        khi = (int)ceil(kfloat);
-        klo = (int)floor(kfloat);
+        if ((thee->partFlag == 0) || (Vatom_getPartID(atom) == 1)) {
 
-        if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
-            (ilo>=0) && (jlo>=0) && (klo>=0)) {
+            position = Vatom_getPosition(atom);
+            charge = Vatom_getCharge(atom);
 
-            /* Now get trilinear interpolation constants */
-            dx = ifloat - (double)(ilo);
-            dy = jfloat - (double)(jlo);
-            dz = kfloat - (double)(klo);
-            uval =  dx*dy*dz*(thee->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(thee->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(thee->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(thee->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(thee->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(thee->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
-            energy += (uval*charge);
-        } else {
-            Vnm_print(2, "Vpmg_getLE1:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
-                iatom, position[0], position[1], position[2]);
+            /* Figure out which vertices we're next to */
+            ifloat = (position[0] - xmin)/hx;
+            jfloat = (position[1] - ymin)/hy;
+            kfloat = (position[2] - zmin)/hz;
+            ihi = (int)ceil(ifloat);
+            ilo = (int)floor(ifloat);
+            jhi = (int)ceil(jfloat);
+            jlo = (int)floor(jfloat);
+            khi = (int)ceil(kfloat);
+            klo = (int)floor(kfloat);
+    
+            if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
+                (ilo>=0) && (jlo>=0) && (klo>=0)) {
+    
+                /* Now get trilinear interpolation constants */
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                uval =  dx*dy*dz*(thee->u[IJK(ihi,jhi,khi)])
+                      + dx*(1.0-dy)*dz*(thee->u[IJK(ihi,jlo,khi)])
+                      + dx*dy*(1.0-dz)*(thee->u[IJK(ihi,jhi,klo)])
+                      + dx*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ihi,jlo,klo)])
+                      + (1.0-dx)*dy*dz*(thee->u[IJK(ilo,jhi,khi)])
+                      + (1.0-dx)*(1.0-dy)*dz*(thee->u[IJK(ilo,jlo,khi)])
+                      + (1.0-dx)*dy*(1.0-dz)*(thee->u[IJK(ilo,jhi,klo)])
+                      + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
+                energy += (uval*charge);
+            } else {
+                Vnm_print(2, "Vpmg_getLE1:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
+                    iatom, position[0], position[1], position[2]);
         }
     }
 
@@ -1119,5 +1143,47 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title,
     } 
     if (icol != 0) fprintf(fp, "\n");
     fclose(fp);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_setPart
+//
+// Purpose:  Set partition information which restricts the calculation of
+//           observables to a (rectangular) subset of the problem domain
+//
+// Args:     [xyz]min => lower corner
+//           [xyz]max => upper corner
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
+           double xmax, double ymax, double zmax) {
+
+    Valist *alist;
+    Vatom *atom;
+    int iatom;
+    double *position;
+
+    /* Store the partition information */
+    thee->partFlag = 1;
+    thee->partLower[0] = xmin;
+    thee->partLower[1] = ymin;
+    thee->partLower[2] = zmin;
+    thee->partUpper[0] = xmax;
+    thee->partUpper[1] = ymax;
+    thee->partUpper[2] = zmax;
+
+    /* Flag the atoms as one of the following:
+     *   - Belonging to this partition (partID = 1)
+     *   - Not belonging to this partition (partID = 0) */
+    alist = Vpbe_getValist(thee->pbe);
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist,iatom);
+        position = Vatom_getPosition(atom);
+        if ((position[0]>=xmin)&&(position[0]<xmax)
+          &&(position[1]>=ymin)&&(position[1]<ymax)
+          &&(position[2]>=zmin)&&(position[2]<zmax)) Vatom_setPartID(atom,1);
+        else Vatom_setPartID(atom,0);
+    }
 }
 

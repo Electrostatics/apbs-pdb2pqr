@@ -59,6 +59,22 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
+#define VPMGMAXPART 2000  /* The max number of partitions we can divide the
+                           * mesh into */
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Class Vpmg: External FORTRAN routines
+/////////////////////////////////////////////////////////////////////////// */
+#define MGSZ mgsz_
+#define PACKMG packmg_
+#define CGMGDRIV cgmgdriv_ 
+#define NEWDRIV newdriv_ 
+#define MGDRIV mgdriv_ 
+#define NCGHSDRIV ncghsdriv_ 
+#define NSORDRIV nsordriv_
+#define NGSRBDRIV ngsrbdriv_
+#define NWJACDRIV nwjacdriv_
+#define NRICHDRIV nrichdriv_
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Definition
@@ -81,6 +97,10 @@ typedef struct Vpmg {
   double *u;                     /* Solution */
   double *xf, *yf, *zf;          /* Mesh point coordinates */
   double *gxcf, *gycf, *gzcf;    /* Boundary conditions */
+  int partFlag;                  /* Flag which restricts calculation of
+                                  * energies to the specified partition */
+  double partLower[3];           /* Lower corner of partition */
+  double partUpper[3];           /* Upper corner of partition */
 
 } Vpmg;
 
@@ -108,6 +128,9 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 VEXTERNC void Vpmg_fillco(Vpmg *thee);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
 VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee);
-VPUBLIC  void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, double *data);
+VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, 
+           double *data);
+VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
+           double xmax, double ymax, double zmax);
 
 #endif    /* ifndef _VPMG_H_ */

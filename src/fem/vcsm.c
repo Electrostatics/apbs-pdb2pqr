@@ -277,11 +277,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     thee->nsimp = Gem_numSS(thee->gm);
     VASSERT(thee->nsimp > 0);
 
-    /* Set up the array of colors and initialize all to -1 */
-    thee->colors = Vmem_malloc(thee->vmem, thee->natom, sizeof(int));
-    VASSERT(thee->colors != VNULL);
-    for (iatom=0; iatom<thee->natom; iatom++) thee->colors[iatom] = -1;
-
     /* Allocate and initialize space for the first dimensions of the 
      * simplex-charge map, the simplex array, and the counters */
     thee->sqm = Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int *));
@@ -420,8 +415,6 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
           (void **)&(thee->qsm));
         Vmem_free(thee->vmem, thee->natom, sizeof(int),
           (void **)&(thee->nqsm));
-        Vmem_free(thee->vmem, thee->natom, sizeof(int), 
-          (void **)&(thee->colors));
 
     }
     Vmem_dtor(&(thee->vmem));

@@ -110,6 +110,7 @@ mc_inc = @mc_inc@
 mc_lib = @mc_lib@
 mcx_inc = @mcx_inc@
 mcx_lib = @mcx_lib@
+mpi_bin = @mpi_bin@
 mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 nsl_lib = @nsl_lib@

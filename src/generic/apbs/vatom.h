@@ -66,6 +66,7 @@ typedef struct Vatom {
     Vec3 position;     /* Atomic position */
     double radius;     /* Atomic radius   */
     double charge;     /* Atomic charge   */
+    int partID;        /* Partition ID    */
 
 } Vatom;
 
@@ -77,13 +78,17 @@ typedef struct Vatom {
     VEXTERNC double* Vatom_getPosition(Vatom *thee);
     VEXTERNC void    Vatom_setRadius(Vatom *thee, double radius);
     VEXTERNC double  Vatom_getRadius(Vatom *thee);
+    VEXTERNC void    Vatom_setPartID(Vatom *thee, int partID);
+    VEXTERNC int     Vatom_getPartID(Vatom *thee);
     VEXTERNC void    Vatom_setCharge(Vatom *thee, double charge);
     VEXTERNC double  Vatom_getCharge(Vatom *thee);
-    VEXTERNC int    Vatom_memChk(Vatom *thee);
+    VEXTERNC int     Vatom_memChk(Vatom *thee);
 #else /* if defined(VINLINE_VATOM) */
 #   define Vatom_getPosition(thee) ((thee)->position)
 #   define Vatom_setRadius(thee, radius) ((thee)->radius = radius)
 #   define Vatom_getRadius(thee) ((thee)->radius)
+#   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (tpartID))
+#   define Vatom_getPartID(thee) ((thee)->partID)
 #   define Vatom_setCharge(thee, charge) ((thee)->charge = charge)
 #   define Vatom_getCharge(thee) ((thee)->charge)
 #   define Vatom_memChk(thee) (sizeof(Vatom))
