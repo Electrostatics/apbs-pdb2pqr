@@ -373,11 +373,440 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
 }
 
+VPRIVATE int MGparm_parseDIME(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0){
+        Vnm_print(2, "parseMG:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+        return -1;
+    } else thee->dime[0] = ti;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+        return -1;
+    } else thee->dime[1] = ti;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+        return -1;
+    } else thee->dime[2] = ti;
+    thee->setdime = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseCHGM(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 1) {
+        thee->chgm = ti;
+        thee->setchgm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl0") == 0) {
+        thee->chgm = VCM_TRIL;
+        thee->setchgm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
+        thee->chgm = VCM_BSPL2;
+        thee->setchgm = 1;
+        return 1;
+    } else {
+        Vnm_print(2, "NOsh:  Unrecognized parameter (%s) when parsing \
+chgm!\n", tok);
+        return -1;
+    }
+    return -1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseNLEV(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing NLEV \
+keyword!\n", tok);
+        return -1;
+    } else thee->nlev = ti;
+    thee->setnlev = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseGRID(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+        return -1;
+    } else thee->grid[0] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+        return -1;
+    } else thee->grid[1] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+        return -1;
+    } else thee->grid[2] = tf;
+    thee->setgrid = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseGLEN(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->glen[0] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->glen[1] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->glen[2] = tf;
+    thee->setglen = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseGCENT(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+    int ti;
+
+    /* If the next token isn't a float, it probably means we want to
+     * center on a molecule */
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        if (Vstring_strcasecmp(tok, "mol") == 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &ti) == 0) {
+                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+GCENT MOL keyword!\n", tok);
+                return -1;
+            } else {
+                thee->cmeth = MCM_MOL;
+                thee->centmol = ti;
+            }
+        } else {
+            Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+GCENT!\n", tok);
+            return -1;
+        }
+    } else {
+        thee->center[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+GCENT keyword!\n", tok);
+            return -1;
+        }
+        thee->center[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+GCENT keyword!\n", tok);
+            return -1;
+        } 
+        thee->center[2] = tf;
+    }
+    thee->setgcent = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseCGLEN(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->cglen[0] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->cglen[1] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->cglen[2] = tf;
+    thee->setcglen = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseFGLEN(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->fglen[0] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->fglen[1] = tf;
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+        return -1;
+    } else thee->fglen[2] = tf;
+    thee->setfglen = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseCGCENT(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+    int ti;
+
+    /* If the next token isn't a float, it probably means we want to
+     * center on a molecule */
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        if (Vstring_strcasecmp(tok, "mol") == 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &ti) == 0) {
+                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+CGCENT MOL keyword!\n", tok);
+                return -1;
+            } else {
+                thee->ccmeth = MCM_MOL;
+                thee->ccentmol = ti;
+            }
+        } else {
+            Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+CGCENT!\n", tok);
+            return -1;
+            }
+    } else {
+        thee->ccenter[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+CGCENT keyword!\n", tok);
+            return -1;
+        }
+        thee->ccenter[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+CGCENT keyword!\n", tok);
+            return -1;
+        }
+        thee->ccenter[2] = tf;
+    }
+    thee->setcgcent = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseFGCENT(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+    int ti;
+
+    /* If the next token isn't a float, it probably means we want to
+     * center on a molecule */
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        if (Vstring_strcasecmp(tok, "mol") == 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &ti) == 0) {
+                 Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+FGCENT MOL keyword!\n", tok);
+                 return -1;
+            } else {
+                thee->fcmeth = MCM_MOL;
+                thee->fcentmol = ti;
+            }
+        } else {
+            Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+FGCENT!\n", tok);
+            return -1;
+        }
+    } else {
+        thee->fcenter[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+FGCENT keyword!\n", tok);
+            return -1;
+        }
+        thee->fcenter[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+FGCENT keyword!\n", tok);
+            return -1;
+        }
+        thee->fcenter[2] = tf;
+    }
+    thee->setfgcent = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parsePDIME(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    /* Read the number of grid points */
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+        return -1;
+    } else {
+        thee->pdime[0] = ti;
+    }
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+        return -1;
+    } else {
+        thee->pdime[1] = ti;
+    }
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+        return -1;
+    } else {
+        thee->pdime[2] = ti;
+    }
+    thee->setpdime = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseOFRAC(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-int (%s) while parsing OFRAC \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->ofrac = tf;
+    thee->setofrac = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int MGparm_parseASYNC(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    int ti;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%i", &ti) == 0) {
+        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing ASYNC \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->async = ti;
+    thee->setasync = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
+}
+
 VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock) {
-
-    int ti;
-    double tf;
 
     if (thee == VNULL) {
         Vnm_print(2, "parseMG:  got NULL thee!\n"); 
@@ -389,309 +818,36 @@ VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
     }
 
     if (Vstring_strcasecmp(tok, "dime") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0){
-            Vnm_print(2, "parseMG:  Read non-integer (%s) while parsing DIME \
-keyword!\n", tok);
-            return -1;
-        } else thee->dime[0] = ti;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
-keyword!\n", tok);
-            return -1;
-        } else thee->dime[1] = ti;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
-keyword!\n", tok);
-            return -1;
-        } else thee->dime[2] = ti;
-        thee->setdime = 1;
-        return 1;
+        return MGparm_parseDIME(thee, sock);
     } else if (Vstring_strcasecmp(tok, "chgm") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 1) {
-            thee->chgm = ti;
-            thee->setchgm = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "spl0") == 0) {
-            thee->chgm = VCM_TRIL;
-            thee->setchgm = 1;
-            return 1;
-        } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
-            thee->chgm = VCM_BSPL2;
-            thee->setchgm = 1;
-            return 1;
-        } else {
-            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) when parsing \
-chgm!\n", tok);
-            return -1;
-        }
+        return MGparm_parseCHGM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "nlev") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing NLEV \
-keyword!\n", tok);
-            return -1;
-        } else thee->nlev = ti;
-        thee->setnlev = 1;
-        return 1;
+        return MGparm_parseNLEV(thee, sock);
     } else if (Vstring_strcasecmp(tok, "grid") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
-keyword!\n", tok);
-            return -1;
-        } else thee->grid[0] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
-keyword!\n", tok);
-            return -1;
-        } else thee->grid[1] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
-keyword!\n", tok);
-            return -1;
-        } else thee->grid[2] = tf;
-        thee->setgrid = 1;
-        return 1;
+        return MGparm_parseGRID(thee, sock);
     } else if (Vstring_strcasecmp(tok, "glen") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->glen[0] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->glen[1] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->glen[2] = tf;
-        thee->setglen = 1;
-        return 1;
+        return MGparm_parseGLEN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "gcent") == 0) {
-        /* If the next token isn't a float, it probably means we want to
-         * center on a molecule */
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            if (Vstring_strcasecmp(tok, "mol") == 0) {
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                if (sscanf(tok, "%d", &ti) == 0) {
-                    Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-GCENT MOL keyword!\n", tok);
-                    return -1;
-                } else {
-                    thee->cmeth = MCM_MOL;
-                    thee->centmol = ti;
-                }
-            } else {
-                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
-GCENT!\n", tok);
-                return -1;
-            }
-        } else {
-            thee->center[0] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-GCENT keyword!\n", tok);
-                return -1;
-            }
-            thee->center[1] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-GCENT keyword!\n", tok);
-                return -1;
-            } 
-            thee->center[2] = tf;
-        }
-        thee->setgcent = 1;
-        return 1;
+        return MGparm_parseGCENT(thee, sock);
     } else if (Vstring_strcasecmp(tok, "cglen") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->cglen[0] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->cglen[1] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->cglen[2] = tf;
-        thee->setcglen = 1;
-        return 1;
+        return MGparm_parseCGLEN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "fglen") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->fglen[0] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->fglen[1] = tf;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
-keyword!\n", tok);
-            return -1;
-        } else thee->fglen[2] = tf;
-        thee->setfglen = 1;
-        return 1;
+        return MGparm_parseFGLEN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "cgcent") == 0) {
-        /* If the next token isn't a float, it probably means we want to
-         * center on a molecule */
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            if (Vstring_strcasecmp(tok, "mol") == 0) {
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                if (sscanf(tok, "%d", &ti) == 0) {
-                    Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-CGCENT MOL keyword!\n", tok);
-                    return -1;
-                } else {
-                    thee->ccmeth = MCM_MOL;
-                    thee->ccentmol = ti;
-                }
-            } else {
-                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
-CGCENT!\n", tok);
-                return -1;
-                }
-        } else {
-            thee->ccenter[0] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-CGCENT keyword!\n", tok);
-                return -1;
-            }
-            thee->ccenter[1] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-CGCENT keyword!\n", tok);
-                return -1;
-            }
-            thee->ccenter[2] = tf;
-        }
-        thee->setcgcent = 1;
-        return 1;
+        return MGparm_parseCGCENT(thee, sock);
     } else if (Vstring_strcasecmp(tok, "fgcent") == 0) {
-        /* If the next token isn't a float, it probably means we want to
-         * center on a molecule */
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            if (Vstring_strcasecmp(tok, "mol") == 0) {
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                if (sscanf(tok, "%d", &ti) == 0) {
-                     Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-FGCENT MOL keyword!\n", tok);
-                     return -1;
-                } else {
-                    thee->fcmeth = MCM_MOL;
-                    thee->fcentmol = ti;
-                }
-            } else {
-                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
-FGCENT!\n", tok);
-                return -1;
-            }
-        } else {
-            thee->fcenter[0] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-FGCENT keyword!\n", tok);
-                return -1;
-            }
-            thee->fcenter[1] = tf;
-            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-            if (sscanf(tok, "%lf", &tf) == 0) {
-                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
-FGCENT keyword!\n", tok);
-                return -1;
-            }
-            thee->fcenter[2] = tf;
-        }
-        thee->setfgcent = 1;
-        return 1;
+        return MGparm_parseFGCENT(thee, sock);
     } else if (Vstring_strcasecmp(tok, "pdime") == 0) {
-        /* Read the number of grid points */
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
-keyword!\n", tok);
-            return -1;
-        } else {
-            thee->pdime[0] = ti;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
-keyword!\n", tok);
-            return -1;
-        } else {
-            thee->pdime[1] = ti;
-        }
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
-keyword!\n", tok);
-            return -1;
-        } else {
-            thee->pdime[2] = ti;
-        }
-        thee->setpdime = 1;
-        return 1;
+        return MGparm_parsePDIME(thee, sock);
     } else if (Vstring_strcasecmp(tok, "ofrac") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing OFRAC \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->ofrac = tf;
-        thee->setofrac = 1;
-        return 1;
-    }   else if (Vstring_strcasecmp(tok, "async") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%i", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing ASYNC \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->async = ti;
-        thee->setasync = 1;
-        return 1;
-    } 
+        return MGparm_parseOFRAC(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "async") == 0) {
+        return MGparm_parseASYNC(thee, sock);
+    } else {
+        Vnm_print(2, "parseMG:  Unrecognized keyword (%s)!\n", tok);
+        return -1;
+    }
    
     return 0;
-
-    VERROR1:
-        Vnm_print(2, "parseMG:  ran out of tokens!\n");
-        return -1;
 
 }
