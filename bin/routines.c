@@ -116,7 +116,10 @@ VPUBLIC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i;
 
+#ifndef VAPBSQUIET
     Vnm_tprint( 1, "Destroying %d molecules\n", nosh->nmol);
+#endif
+
     for (i=0; i<nosh->nmol; i++) Valist_dtor(&(alist[i]));
 
 }
@@ -263,8 +266,10 @@ VPUBLIC void killDielMaps(NOsh *nosh,
 
     int i;
 
+#ifndef VAPBSQUIET
     if (nosh->ndiel > 0) Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
         nosh->ndiel);
+#endif
     else return;
 
     for (i=0; i<nosh->ndiel; i++) {
@@ -338,7 +343,9 @@ VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
     int i;
 
     if (nosh->nkappa > 0) 
+#ifndef VAPBSQUIET
       Vnm_tprint( 1, "Destroying %d kappa maps\n", nosh->nkappa);
+#endif
     else return;
 
     for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
@@ -407,7 +414,9 @@ VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
     int i;
 
     if (nosh->ncharge > 0)
+#ifndef VAPBSQUIET
       Vnm_tprint( 1, "Destroying %d charge maps\n", nosh->ncharge);
+#endif
     else return;
 
     for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
@@ -683,9 +692,12 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     /* Memory statistics */
     bytesTotal = Vmem_bytesTotal();
     highWater = Vmem_highWaterTotal();
+
+#ifndef VAPBSQUIET
     Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
 %4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
       (double)(highWater)/(1024.*1024.));
+#endif
 
 
     return 1;
@@ -704,7 +716,9 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
     
     int i;
 
+#ifndef VAPBSQUIET
     Vnm_tprint(1, "Destroying multigrid structures.\n");
+#endif
 
     Vpbe_dtor(&(pbe[nosh->ncalc-1]));
     Vpmg_dtor(&(pmg[nosh->ncalc-1]));
@@ -729,7 +743,9 @@ VPUBLIC int solveMG(Vpmg *pmg, int type) {
 
     Vnm_tstart(28, "Solver timer");
     if (type != 3) {
+#ifndef VAPBSQUIET
         Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
+#endif
         Vpmg_solve(pmg);
     } else {
         Vnm_tprint( 1,"  Skipping solve for mg-dummy run; zeroing \
@@ -825,8 +841,10 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
         /* Some processors don't count */
         if (nosh->bogus == 0) {
             *totEnergy = Vpmg_energy(pmg, extEnergy);
+#ifndef VAPBSQUIET
             Vnm_tprint( 1, "  Total electrostatic energy = \
 %1.12E kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
+#endif
         } else *totEnergy = 0;
     } else if (pbeparm->calcenergy == 2) {
         *nenergy = 1;
@@ -998,7 +1016,13 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void killEnergy() { Vnm_tprint(1, "No energy arrays to destroy.\n"); }
+VPUBLIC void killEnergy() { 
+
+#ifndef VAPBSQUIET
+    Vnm_tprint(1, "No energy arrays to destroy.\n"); 
+#endif
+
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  killForce
@@ -1012,7 +1036,9 @@ VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
 
     int i;
 
+#ifndef VAPBSQUIET
     Vnm_tprint(1, "Destroying force arrays.\n");
+#endif
 
     for (i=0; i<nosh->ncalc; i++) {
 

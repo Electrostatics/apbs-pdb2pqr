@@ -408,8 +408,10 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
         thee->bulkIonicStrength += (0.5*ionConc[i]*VSQR(ionQ[i]));
         netCharge += (ionConc[i]*ionQ[i]);
     } 
+#ifndef VAPBSQUIET
     Vnm_print(1, "Vpbe_ctor:  Using max ion radius (%g A) for exclusion \
 function\n", thee->maxIonRadius);
+#endif
     if (netCharge != 0.0) {
         Vnm_print(2, "Vpbe_ctor2:  You have a counterion charge imbalance!\n");
         Vnm_print(2, "Vpbe_ctor2:  Net charge conc. = %g M\n", netCharge);
