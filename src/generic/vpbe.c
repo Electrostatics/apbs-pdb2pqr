@@ -280,6 +280,48 @@ VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteMaxX
+//
+// Purpose:  Get the max distance of solute molecule's atoms from center of
+//           solute mol in x-direction
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteMaxX(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteMaxX; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteMaxY
+//
+// Purpose:  Get the max distance of solute molecule's atoms from center of
+//           solute mol in Y-direction
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteMaxY(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteMaxY; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteMaxZ
+//
+// Purpose:  Get the max distance of solute molecule's atoms from center of
+//           solute mol in Z-direction
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteMaxZ(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteMaxZ; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteCharge
 //
 // Purpose:  Get the charge of the solute molecule
@@ -365,7 +407,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) {
     double atomRadius;
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
-    double disp[3], dist, radius, charge;
+    double disp[3], dist, radius, charge, maxX, maxY, maxZ;
 
     /* Set up memory management object */
     thee->vmem = Vmem_ctor("APBS::VPBE");
@@ -403,6 +445,9 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) {
 
     /* Determine solute radius and charge*/
     radius = 0;
+    maxX = 0;
+    maxY = 0;
+    maxZ = 0;
     charge = 0;
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
@@ -413,9 +458,18 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag) {
         dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]); 
         dist = VSQRT(dist) + atomRadius;
         if (dist > radius) radius = dist;
+        if ((VABS(disp[0]) + atomRadius) > maxX) 
+          maxX = (VABS(disp[0]) + atomRadius);
+        if ((VABS(disp[1]) + atomRadius) > maxY) 
+          maxY = (VABS(disp[1]) + atomRadius);
+        if ((VABS(disp[2]) + atomRadius) > maxZ) 
+          maxZ = (VABS(disp[2]) + atomRadius);
         charge += Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
     }
     thee->soluteRadius = radius;
+    thee->soluteMaxX = maxX;
+    thee->soluteMaxY = maxY;
+    thee->soluteMaxZ = maxZ;
     thee->soluteCharge = charge;
 
     /* **** METHOD-SPECIFIC STUFF **** */
