@@ -60,7 +60,7 @@
 //           and assign vertices to atoms
 //
 // Notes:    The initial mesh must be sufficiently coarse for the
-//           assignment procedures to be efficient
+//           assignment procedures to be efficient.  
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -117,7 +117,6 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am) {
 
     /* Set up charge-simplex map */
     VASSERT((thee->csm = Vcsm_ctor(thee->alist, thee->gm)) != VNULL);
-    thee->csmFlag = 1;
 
     /* Determine solute center */
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
@@ -163,9 +162,12 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
-    if ((*thee)->csmFlag) Vcsm_dtor(&((*thee)->csm));
-    if ((*thee)->paramFlag) Vhash_dtor(&((*thee)->hash));
     if ((*thee) != VNULL) {
+        Vcsm_dtor(&((*thee)->csm));
+        if ((*thee)->paramFlag) {
+            Vhash_dtor(&((*thee)->solvHash));
+            Vhash_dtor(&((*thee)->ionHash));
+        }
         Vpbe_dtor2(*thee);
         Vram_dtor((Vram *)thee, 1, sizeof(Vpbe) );
         (*thee) = VNULL;
@@ -187,6 +189,7 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
 // Purpose:  Set up parameters
 //
 // Arguments: ionConc       = ionic strength in M
+//            ionRadius     = ionic probe radius in A
 //            T             = temperature in K
 //            soluteDiel    = solute dielectric (unitless)
 //            solventDiel   = solvent dielectric (unitless)
@@ -234,7 +237,6 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
 //
 //       kappa         = 1 / deblen
 //                     = 0.328191663 * I_s^{1/2}    angstroms^{-1}
-
 //
 //       \bar{kappa}^2 = eps_w * kappa^2    angstroms^{-2}
 //
@@ -305,9 +307,9 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_initialize(Vpbe *thee,
-                    double ionConc, double T, double soluteDiel,
-                    double solventDiel, double solventRadius) {
+VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
+                    double T, double soluteDiel, double solventDiel, 
+                    double solventRadius) {
 
     const double N_A = 6.022045000e+23;
     const double e_c = 4.803242384e-10;
@@ -316,6 +318,7 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee,
  
     /* Set parameters */
     thee->ionConc = ionConc;
+    thee->ionRadius = ionRadius;
     thee->T = T;
     thee->soluteDiel = soluteDiel;
     thee->solventDiel = solventDiel;
@@ -345,8 +348,10 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee,
     }
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
 
-    /* Compute atomic hash table */
-    VASSERT( (thee->hash = Vhash_ctor(thee->alist, thee->solventRadius, 
+    /* Compute atomic hash tables */
+    VASSERT( (thee->solvHash = Vhash_ctor(thee->alist, thee->solventRadius, 
+                                      110, 110, 110)) != VNULL);
+    VASSERT( (thee->ionHash = Vhash_ctor(thee->alist, thee->ionRadius, 
                                       110, 110, 110)) != VNULL);
 
     thee->paramFlag = 1;
@@ -395,17 +400,34 @@ VPUBLIC AM* Vpbe_getAM(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVhash
+// Routine:  Vpbe_getSolventHash
 //
-// Purpose:  Get a pointer to the Vhash (atomic hash table) object
+// Purpose:  Get a pointer to the Vhash (atomic hash table) object for solvent
+//           accessiblity
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vhash* Vpbe_getVhash(Vpbe *thee) { 
+VPUBLIC Vhash* Vpbe_getSolventHash(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->hash; 
+   return thee->solvHash; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getIonHash
+//
+// Purpose:  Get a pointer to the Vhash (atomic hash table) object for ionic
+//           accessibility
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vhash* Vpbe_getIonHash(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->ionHash; 
 
 }
 
@@ -419,7 +441,6 @@ VPUBLIC Vhash* Vpbe_getVhash(Vpbe *thee) {
 VPUBLIC Vcsm* Vpbe_getVcsm(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
-   VASSERT(thee->csmFlag);
    return thee->csm; 
 
 }
@@ -495,6 +516,20 @@ VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) {
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
    return thee->solventRadius; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getIonRadius
+//
+// Purpose:  Get the ion probe radius in angstroms 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getIonRadius(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->ionRadius; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -665,7 +700,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
    int ivert;
    SS *simp;
    double energy = 0.0;
-   double efac, uval;
+   double uval;
 
    VASSERT(thee != VNULL);
    VASSERT(thee->am != VNULL);
@@ -709,7 +744,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
                Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
                for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
                    uval = sol[VV_id(SS_vertex(simp,ivert))];
-                   energy += (efac*charge*phi[ivert]*uval);
+                   energy += (charge*phi[ivert]*uval);
                } /* end for ivert */
                break;
            } /* endif (color) */
@@ -723,6 +758,57 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, int color) {
    return 0.5*energy;
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getCoulombEnergy1
+//
+// Purpose:  Perform an inefficient double sum to calculate the Coulombic
+//           energy of a set of charges in a homogeneous dielectric (with
+//           permittivity equal to the protein interior) and zero ionic
+//           strength.  Result is returned in units of k_B T.  The sum can be
+//           restriction to charges present in simplices of specified color
+//           (pcolor); if (color == -1) no restrictions are used.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 
+    int i, j, k, natoms;
 
+    double dist, *ipos, *jpos, icharge, jcharge;
+    double energy = 0.0;
+    double eps, T;
+    Vatom *iatom, *jatom;
+    Valist *alist;
+ 
+    VASSERT(thee != VNULL);
+    alist = Vpbe_getValist(thee);
+    VASSERT(alist != VNULL);
+    natoms = Valist_getNumberAtoms(alist);
+  
+    /* Do the sum */ 
+    for (i=0; i<natoms; i++) {
+        iatom = Valist_getAtom(alist,i);
+        icharge = Vatom_getCharge(iatom);
+        ipos = Vatom_getPosition(iatom);
+        for (j=i+1; j<natoms; j++) {
+            jatom = Valist_getAtom(alist,j);
+            jcharge = Vatom_getCharge(jatom);
+            jpos = Vatom_getPosition(jatom);
+            dist = 0;
+            for (k=0; k<3; k++) dist += ((ipos[k]-jpos[k])*(ipos[k]-jpos[k]));
+            dist = VSQRT(dist);
+            printf("%e A distance between atoms %d and %d\n", dist, i, j);
+            energy = energy + icharge*jcharge/dist;
+        }
+    }
 
+    /* Convert the result to J */
+    T = Vpbe_getTemperature(thee);
+    eps = Vpbe_getSoluteDiel(thee);
+    energy = energy*Vunit_ec*Vunit_ec/(4*Vunit_pi*Vunit_eps0*eps*(1.0e-10));
+   
+    /* Scale by Boltzmann energy */
+    energy = energy/(Vunit_kb*T);
+
+    return energy;
+}
