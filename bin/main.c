@@ -245,13 +245,13 @@ int main(int argc, char **argv) {
             printPBEPARM(pbeparm);
 
             /* Solve PDE */
-            if (solveMG(pmg[i], mgparm->type) != 1) {
+            if (solveMG(nosh, pmg[i], mgparm->type) != 1) {
                 Vnm_tprint(2, "Error solving PDE!\n");
                 return APBSRC;
             }
 
             /* Set partition information for observables and I/O */
-            if (setPartMG(mgparm, pmg[i]) != 1) {
+            if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
                 Vnm_tprint(2, "Error setting partition info!\n");
                 return APBSRC;
             }
