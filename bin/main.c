@@ -71,6 +71,9 @@ int main(int argc, char **argv) {
     Vpmgp *pmgp[NOSH_MAXCALC];
     Vpbe *pbe[NOSH_MAXCALC];
     Valist *alist[NOSH_MAXMOL];
+    Vgrid *dielMap[NOSH_MAXMOL];
+    Vgrid *kappaMap[NOSH_MAXMOL];
+    Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
     int i, rank, size;
 
@@ -118,7 +121,7 @@ int main(int argc, char **argv) {
     THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT\n\
     LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\n\
     PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF\n\
-    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\ 
+    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\
     OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
     MODIFICATIONS.\n\
     ----------------------------------------------------------------------\n\
@@ -179,6 +182,20 @@ int main(int argc, char **argv) {
         return APBSRC;
     }
 
+    /* *************** LOAD MAPS ******************* */
+    if (loadDielMaps(com, nosh, dielMap) != 1) {
+        Vnm_tprint(2, "main:  Error reading dielectric maps!\n");
+        return APBSRC;
+    }
+    if (loadKappaMaps(com, nosh, kappaMap) != 1) {
+        Vnm_tprint(2, "main:  Error reading kappa maps!\n");
+        return APBSRC;
+    }
+    if (loadChargeMaps(com, nosh, chargeMap) != 1) {
+        Vnm_tprint(2, "main:  Error reading charge maps!\n");
+        return APBSRC;
+    }
+
     /* *************** DO THE CALCULATIONS ******************* */
     Vnm_tprint( 1, "main:  Preparing to run %d PBE calculations.\n",
       nosh->ncalc);
@@ -197,7 +214,7 @@ int main(int argc, char **argv) {
             /* Set up problem */
             Vnm_tprint( 1, "main:    Setting up problem...\n");
             if (!initMG(com, i, nosh, mgparm, pbeparm, realCenter, pbe, 
-              alist, pmgp, pmg)) {
+              alist, dielMap, kappaMap, chargeMap, pmgp, pmg)) {
                 Vnm_tprint( 2, "main:  Error setting up MG calculation!\n");
                 return APBSRC;
             }

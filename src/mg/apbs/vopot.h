@@ -70,13 +70,27 @@ struct Vopot {
  */
 typedef struct Vopot Vopot;
 
-/** @def     VOPOT_BCFL  Controls behavior of potential outside mesh, 0 =>
+/** @def     VOPOT_BCFL_0  Controls behavior of potential outside mesh, sets
+ *                            potential to zero
  *                       zero potential, 1 => single Debye-Huckel sphere
  *                       approximation, 2 => multiple Debye-Huckel sphere
  *                       approximation (slow)
  *  @ingroup Vopot
  */
-#define VOPOT_BCFL 1
+/* #define VOPOT_BCFL_0 */
+
+/** @def     VOPOT_BCFL_1  Controls behavior of potential outside mesh, sets
+ * *                            potential to single Debye-Huckel sphere approx
+ *  @ingroup Vopot
+ */
+#define VOPOT_BCFL_1
+
+/** @def     VOPOT_BCFL_2  Controls behavior of potential outside mesh, sets
+ * *                            potential to multi Debye-Huckel sphere approx
+ *  @ingroup Vopot
+ */
+#define VOPOT_BCFL_2
+
 
 /** @brief   Construct Vopot object with values obtained from Vpmg_readDX (for
  *           example)

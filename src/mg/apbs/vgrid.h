@@ -46,9 +46,6 @@
 #define _VGRID_H_
 
 #include "maloc/maloc.h"
-#include "apbs/vunit.h"
-#include "apbs/vpmg.h"
-#include "apbs/vpbe.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -246,8 +243,9 @@ VEXTERNC void Vgrid_writeDX(Vgrid *thee, const char *iodev,
  *  @param   iofmt  Input device format (ASCII/XDR)
  *  @param   thost  Input hostname (for sockets)
  *  @param   fname  Input FILE/BUFF/UNIX/INET name
+ *  @returns 1 if sucessful, 0 otherwise
  */
-VEXTERNC void Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
+VEXTERNC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname);
 
 #endif

@@ -71,12 +71,16 @@ typedef struct AtomForce {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VEXTERNC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+VEXTERNC int loadDielMaps(Vcom *com, NOsh *nosh, Vgrid *diel[NOSH_MAXMOL]);
+VEXTERNC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+VEXTERNC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 VEXTERNC void printPBEPARM(Vcom *com, PBEparm *pbeparm);
 VEXTERNC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]);
 VEXTERNC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
-  Valist *alist[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], 
-  Vpmg *pmg[NOSH_MAXCALC]);
+  Valist *alist[NOSH_MAXMOL], Vgrid *dielMap[NOSH_MAXMOL], 
+  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 VEXTERNC int solveMG(Vcom *com, Vpmg *pmg);
 VEXTERNC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg);
 VEXTERNC int energyMG(Vcom *com, NOsh* nosh, int icalc, Vpmg *pmg,
