@@ -38,8 +38,9 @@ have a signficant modification or addition to the APBS code that you would
 like to see included in subsequent distributions, please contact Nathan
 Baker (nbaker@mccammon.ucsd.edu).
 
-Note that APBS is built on top of the MC adaptive multilevel finite element
-libraries written by Michael Holst.
+Note that APBS is built on top of the FEtk adaptive multilevel finite element
+libraries written by the Michael Holst research group.  The PQR format used for
+molecular structures was developed by the Don Bashford (TSRI) research group.
 
 ==========================================================================
 Authors                            Contributions
@@ -57,11 +58,17 @@ Michael Holst                      Primary author of FETK & PMG.  Provided
 				      - Some of the mesh and protein coordinate
 				        files under work/
                                       - PMG driver code examples
-
-Philippe Hunenberger               Provided example code for parsing of
-<phil@igc.phys.chem.ethz.ch>       PDB files in valist/valist.c
+                                   Provided complete code for:
+                                      - PMG FORTRAN routines found under 
+					src/vpmg.  See src/vpmg/README and 
+                                        src/vpmg/LICENSE for more information.
 
 Dave Sept                          Provided algorithms for diffusion-based
 <dsept@mccammon.ucsd.edu>          error estimate smoothing and several of the
                                    biomolecular solvation/binding energy test
                                    cases
+
+Philippe Hunenberger               Provided example code for parsing of
+<phil@igc.phys.chem.ethz.ch>       PDB files in valist/valist.c
+
+

@@ -42,7 +42,7 @@ Please see the README file for more information
     1.1  Obtaining APBS
     1.2  Prerequisites
     1.3  Recommended directory structure
-    1.4  Compilation of the MCtk and PMG prerequisites
+    1.4  Compilation of the FEtk prerequisites
     1.5  Compilation of APBS
 2. Additional install intructions for parallel machines
 3. Platform-specific instructions
@@ -61,20 +61,18 @@ APBS is available from http://wasabi.ucsd.edu/~nbaker/research/pbe.html
 ========================================================================
 1.2 Prerequisites
 ========================================================================
-APBS is built on the Holst research group's MCtk (MC toolkit), available
+APBS is built on the Holst research group's FEtk (MC toolkit), available
 from http://scicomp.ucsd.edu/~mholst/codes/mctk/index.html.
-You will need the MC and MCX components of MCtk.  The PMGC library, available
-from http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html, is also required if
-uniform-mesh multigrid functionality is desired.  Please read the instructions
+You will need the MC and MCX components of FEtk.  Please read the instructions
 below before installing any of these packages.
        
 ========================================================================
 1.3 Recommended directory structure
 ========================================================================
-It is recommended that APBS and the MCtk header files and libraries share a
+It is recommended that APBS and the FEtk header files and libraries share a
 common install directory.  For the purpose of these instructions, we will
-assume that all APBS and MCtk components are installed under the directory
-$MANIFOLD.  Un-archive the MCtk and PMGC components into this directory:
+assume that all APBS and FEtk components are installed under the directory
+$MANIFOLD.  Un-archive the FEtk components into this directory:
 
       cd $MANIFOLD
       gzip -dc mctk.tar.gz | tar xvf -
@@ -91,12 +89,11 @@ and set the MC_INCLUDE and MC_LIBRARY environmental variables to this path
       setenv MC_LIBRARY $MANIFOLD/dist/lib
 
 ========================================================================
-1.4 Compilation of the MCtk and PMGC prerequisites
+1.4 Compilation of the FEtk prerequisites
 ========================================================================
 See the INSTALL files of the individual packages for more information.
 Make sure that you have set $MC_INCLUDE and $MC_LIBRARY as indicated above.
-You then simply need to configure, build, and install the MCtk and PMGC
-packages.
+You then simply need to configure, build, and install the FEtk packages.
 
     cd $MANIFOLD/mctk/mc
     ./configure --prefix=${MANIFOLD}/dist --enable-vhack
@@ -132,9 +129,7 @@ You then simply need to configure, build, and install the APBS packages
     make
     make install
 
-If PMGC was not installed in the previous steps, the installation will succeed,
-but uniform-mesh multigrid support will not available.  If you made a mess and
-need to start over, simply
+If you made a mess and need to start over, simply
 
     make distclean
 
@@ -155,7 +150,7 @@ environmental variable MC_MPI_LIBRARY
 
     setenv MC_MPI_LIBRARY (the directory that contains libmpi.a)
 
-The above instructions for compiling MCtk, PMGC, and APBS can then be followed
+The above instructions for compiling FEtk and APBS can then be followed
 with one modification.  For _ALL_ packages, the option "--enable-mpi"
 must be added to the `./configure` command line.  For example, the new
 installation commands for the APBS package would be
@@ -198,7 +193,7 @@ to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
 In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
 384 MB heap space per task.
 
-You should also configure MCtk, PMGC, and APBS to use MPI as described above.
+You should also configure FEtk and APBS to use MPI as described above.
 Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
 compiling; configure seems to mess up the detection of the headers when
 building config.h.  
@@ -212,6 +207,6 @@ documentation for more information on this.
 3.3 Sun compilers
 ========================================================================
 Sun compilers are very strange; I have not been able to use them to compile
-MCtk/PMGC/APBS.  Use gcc instead:
+FEtk/APBS.  Use gcc instead:
     
     setenv CC gcc

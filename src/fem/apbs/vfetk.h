@@ -34,123 +34,80 @@
 //////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// File:     vpmgp.c
+// File:     vfetk.h    < vfetk.c >
 //
-// Purpose:  Class Vpmgp: methods.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-
-#include "apbscfg.h"
-#include "apbs/vpmgp.h"
-
-VEMBED(rcsid="$Id$")
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmgp: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-#if !defined(VINLINE_VACC)
-#endif /* if !defined(VINLINE_VACC) */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmgp: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmgp_ctor
-//
-// Purpose:  Construct the PMG parameter object; see header file for more
-//           information
+// Purpose:  
+//    Class Vfetk:  
+//      Provides the interface to FEtk for solution of the PBE
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx, 
-  double hy, double hz, int nonlin) {
 
-    Vpmgp *thee = VNULL;
+#ifndef _VFETK_H_
+#define _VFETK_H_
 
-    /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vpmgp) );
-    VASSERT( thee != VNULL);
-    VASSERT(Vpmgp_ctor2(thee, nx, ny, nz, nlev, hx, hy, hz, nonlin));
-
-    return thee;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmgp_ctor2
-//
-// Purpose:  Construct the PMG parameter object
-//
-// Notes:    See header files for default parameter values
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
-  double hx, double hy, double hz, int nonlin) {
-
-    /* Specified parameters */
-    thee->nx = nx;
-    thee->ny = ny;
-    thee->nz = nz;
-    thee->hx = hx;
-    thee->hy = hy;
-    thee->hz = hz;
-    thee->nlev = nlev; 
-    thee->nonlin = nonlin;
-    if (nonlin == 0) thee->ipkey = 0;
-    else thee->ipkey = 1;
-
-    /* Default parameters */
-    thee->errtol = 1.0e-9;
-    thee->itmax = 100;
-    thee->istop = 1;
-    thee->iinfo = 1;
-    thee->bcfl = 0;
-    thee->key = 0;
-    thee->iperf = 0;
-    thee->meth = 2;
-    thee->mgkey = 0;
-    thee->nu1 = 2;
-    thee->nu2 = 2;
-    thee->mgsmoo = 1;
-    thee->mgprol = 0;
-    thee->mgcoar = 2;
-    thee->mgsolv = 1;
-    thee->mgdisc = 0;
-    thee->omegal = 8.0e-1;
-    thee->omegan = 9.0e-1;
-    thee->ipcon = 3;
-    thee->irite = 8;
-    thee->xcent = 0.0;
-    thee->ycent = 0.0;
-    thee->zcent = 0.0;
-
-    return 1;
-}
+#include "mc/mc.h"
+#include "apbs/vhal.h"
+#include "apbs/vatom.h"
+#include "apbs/valist.h"
+#include "apbs/vcsm.h"
+#include "apbs/vpbe.h"
+#include "apbs/vunit.h"
+#include "apbs/vgreen.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmgp_dtor
-//
-// Purpose:  Clean up
-//
-// Author:   Nathan Baker
+// Class Vfetk: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmgp_dtor(Vpmgp **thee) {
-    
-    if ((*thee) != VNULL) {
-        Vpmgp_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vpmgp), (void **)thee);
-        (*thee) = VNULL;
-    }
-
-}
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmgp_dtor2
-//
-// Purpose:  Clean up
-//
-// Author:   Nathan Baker
+// Class Vfetk: Definition
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmgp_dtor2(Vpmgp *thee) { ; }
+
+typedef struct Vfetk { 
+
+  Vmem *vmem;         /* Memory management object */
+  Gem *gm;            /* Grid manager (container class for master vertex
+                       * and simplex lists as well as prolongation
+                       * operator for updating after refinement ) */
+  AM *am;             /* Multilevel algebra manager */
+
+  Vpbe *pbe;          /* Poisson-Boltzmann object */
+  Vcsm *csm;          /* Charge-simplex map */
+  
+} Vfetk;
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Class Vfetk: Inlineable methods (vfetk.c)
+/////////////////////////////////////////////////////////////////////////// */
+
+#if !defined(VINLINE_VFETK)
+    VEXTERNC Gem*    Vfetk_getGem(Vfetk *thee);
+    VEXTERNC AM*     Vfetk_getAM(Vfetk *thee);
+    VEXTERNC Vpbe*   Vfetk_getVpbe(Vfetk *thee);
+    VEXTERNC Vcsm*   Vfetk_getVcsm(Vfetk *thee);
+    VEXTERNC int     Vfetk_getAtomColor(Vfetk *thee, int iatom);
+#else /* if defined(VINLINE_VFETK) */
+#   define Vfetk_getGem(thee) ((thee)->gm)
+#   define Vfetk_getAM(thee) ((thee)->am)
+#   define Vfetk_getVpbe(thee) ((thee)->pbe)
+#   define Vfetk_getVcsm(thee) ((thee)->csm)
+#   define Vfetk_getAtomColor(thee, iatom) ((thee)->csm->colors[iatom])
+#endif /* if !defined(VINLINE_VFETK) */
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Class Vfetk: Non-Inlineable methods (vfetk.c)
+/////////////////////////////////////////////////////////////////////////// */
+
+VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am);
+VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *apbe, Gem *gm, AM *am);
+VEXTERNC void    Vfetk_dtor(Vfetk **thee);
+VEXTERNC void    Vfetk_dtor2(Vfetk *thee);
+
+VEXTERNC double* Vfetk_getSolution(Vfetk *thee, AM *am, int *length);
+VEXTERNC double  Vfetk_getLinearEnergy1(Vfetk *thee, int color);
+VEXTERNC double  Vfetk_getLinearEnergy2(Vfetk *thee, int color);
+VEXTERNC double  Vfetk_getEnergyNorm2(Vfetk *thee, int color);
+VEXTERNC int     Vfetk_memChk(Vfetk *thee);
+VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);
+
+#endif /* ifndef _VFETK_H_ */
