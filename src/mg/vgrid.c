@@ -55,6 +55,8 @@ VEMBED(rcsid="$Id$")
 
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
+VPRIVATE double Vcompare;
+VPRIVATE char Vprecision[26];
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgrid_ctor
@@ -108,6 +110,10 @@ VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
 
     thee->mem = Vmem_ctor("APBS:VGRID");
 
+    Vcompare = pow(10,-1*(VGRID_DIGITS - 2));
+    sprintf(Vprecision,"%%12.%de %%12.%de %%12.%de", VGRID_DIGITS,
+            VGRID_DIGITS, VGRID_DIGITS);
+
     return 1;
 }
 
@@ -135,7 +141,7 @@ VPUBLIC void Vgrid_dtor2(Vgrid *thee) {
           (void **)&(thee->data));
     }
     Vmem_dtor(&(thee->mem));
-
+ 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -172,22 +178,23 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     zmax = thee->zmax;
 
     u = 0;
-
+   
     ifloat = (pt[0] - xmin)/hx;
     jfloat = (pt[1] - ymin)/hy;
     kfloat = (pt[2] - zmin)/hzed;
+
     ihi = (int)ceil(ifloat);
     jhi = (int)ceil(jfloat);
     khi = (int)ceil(kfloat);
     ilo = (int)floor(ifloat);
     jlo = (int)floor(jfloat);
     klo = (int)floor(kfloat);
-	if (VABS(pt[0] - xmin) < VSMALL) ilo = 0;
-	if (VABS(pt[1] - ymin) < VSMALL) jlo = 0;
-	if (VABS(pt[2] - zmin) < VSMALL) klo = 0;
-	if (VABS(pt[0] - xmax) < VSMALL) ihi = nx-1;
-	if (VABS(pt[1] - ymax) < VSMALL) jhi = ny-1;
-	if (VABS(pt[2] - zmax) < VSMALL) khi = nz-1;
+	if (VABS(pt[0] - xmin) < Vcompare) ilo = 0;
+	if (VABS(pt[1] - ymin) < Vcompare) jlo = 0;
+	if (VABS(pt[2] - zmin) < Vcompare) klo = 0;
+	if (VABS(pt[0] - xmax) < Vcompare) ihi = nx-1;
+	if (VABS(pt[1] - ymax) < Vcompare) jhi = ny-1;
+	if (VABS(pt[2] - zmax) < Vcompare) khi = nz-1;
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
@@ -649,6 +656,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
     double x, y, z, xminPART, yminPART, zminPART;
     Vio *sock;
+    char precFormat[VMAX_BUFSIZE];
 
     if (thee == VNULL) {
         Vnm_print(2, "Vgrid_writeDX:  Error -- got VNULL thee!\n");
@@ -777,15 +785,20 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nxPART, nyPART, nzPART);
-        Vio_printf(sock, "origin %12.6e %12.6e %12.6e\n", xminPART, yminPART,
-          zminPART);
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", hx, 0.0, 0.0);
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, hy, 0.0);
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, 0.0, hzed);
+        
+        sprintf(precFormat, Vprecision, xminPART, yminPART, zminPART);
+        Vio_printf(sock, "origin %s\n", precFormat);
+        sprintf(precFormat, Vprecision, hx, 0.0, 0.0);
+        Vio_printf(sock, "delta %s\n", precFormat);
+        sprintf(precFormat, Vprecision, 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %s\n", precFormat);
+        sprintf(precFormat, Vprecision, 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %s\n", precFormat);
+        
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
           nxPART, nyPART, nzPART);
-
+ 
         /* Write off the DX data */
         Vio_printf(sock, "object 3 class array type double rank 0 items %d \
 data follows\n", (nxPART*nyPART*nzPART));
@@ -833,10 +846,15 @@ class field\n");
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nx, ny, nz);
-        Vio_printf(sock, "origin %12.6e %12.6e %12.6e\n", xmin, ymin, zmin);
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", hx, 0.0, 0.0); 
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, hy, 0.0);
-        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, 0.0, hzed);
+
+        sprintf(precFormat, Vprecision, xminPART, yminPART, zminPART);
+        Vio_printf(sock, "origin %s\n", precFormat);
+        sprintf(precFormat, Vprecision, hx, 0.0, 0.0);
+        Vio_printf(sock, "delta %s\n", precFormat);
+        sprintf(precFormat, Vprecision, 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %s\n", precFormat);
+        sprintf(precFormat, Vprecision, 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %s\n", precFormat);
     
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",

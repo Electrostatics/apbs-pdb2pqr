@@ -53,6 +53,11 @@
 #include "apbs/vhal.h"
 #include "apbs/vstring.h"
 
+
+/** @brief Number of decimal places for comparisons and formatting
+ *  @ingroup Vgrid */
+#define VGRID_DIGITS 6
+
 /**
  *  @ingroup Vgrid
  *  @author  Nathan Baker
