@@ -162,7 +162,10 @@ VPUBLIC Vatom* Vatom_ctor() {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vatom_ctor2(Vatom *thee) { return 1; }
+VPUBLIC int Vatom_ctor2(Vatom *thee) { 
+    thee->partID = -1;
+    return 1; 
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vatom_dtor

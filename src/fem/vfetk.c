@@ -127,7 +127,7 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
     natoms = Valist_getNumberAtoms(Vpbe_getValist(thee->pbe));
     VASSERT(iatom < natoms);
 
-    return thee->csm->colors[iatom];
+    return Vatom_getPartID(Valist_getAtom(Vpbe_getValist(thee->pbe), iatom));
 }
 #endif /* if !defined(VINLINE_VFETK) */
 
@@ -472,14 +472,16 @@ VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 
 #define VMAXLOCALCOLORSDONTREUSETHISVARIABLE 1024
     SS *simp;
+    Vatom *atom;
     int i, natoms;
 
     VASSERT(thee != VNULL);
 
     natoms = Valist_getNumberAtoms(thee->pbe->alist);
     for (i=0; i<natoms; i++) {
+        atom = Valist_getAtom(thee->pbe->alist, i);
         simp = Vcsm_getSimplex(thee->csm, 0, i);
-        thee->csm->colors[i] = SS_chart(simp);
+        Vatom_setPartID(atom, SS_chart(simp));
     }
 
 }

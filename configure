@@ -15,6 +15,12 @@ ac_default_prefix=${HOME}
 ac_help="$ac_help
   --enable-pansi          enable pedantic ANSI compilation"
 ac_help="$ac_help
+  --enable-mpi            enable the MPI communication layer (BROKEN!)"
+ac_help="$ac_help
+  --with-mpiinc=PATH      directory containing <mpi.h> "
+ac_help="$ac_help
+  --with-mpilib=PATH      directory containing <libmpi.a> "
+ac_help="$ac_help
   --with-mcinc=PATH       directory containing <mc/mc.h> "
 ac_help="$ac_help
   --with-mclib=PATH       directory containing <libmc.a> "
@@ -22,12 +28,6 @@ ac_help="$ac_help
   --with-mcxinc=PATH      directory containing <mcx/mcx.h> "
 ac_help="$ac_help
   --with-mcxlib=PATH      directory containing <libmcx.a> "
-ac_help="$ac_help
-  --enable-mpi            enable the MPI communication layer (BROKEN!)"
-ac_help="$ac_help
-  --with-mpiinc=PATH      directory containing <mpi.h> "
-ac_help="$ac_help
-  --with-mpilib=PATH      directory containing <libmpi.a> "
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -2205,264 +2205,8 @@ fi
 
 
 
-echo $ac_n "checking whether your environment defines MC_INCLUDE""... $ac_c" 1>&6
-echo "configure:2210: checking whether your environment defines MC_INCLUDE" >&5
-if test -n "${MC_INCLUDE}"; then
-    echo "$ac_t""yes" 1>&6
-    mc_inc_path_env="-I${MC_INCLUDE} ";
-else
-    echo "$ac_t""no" 1>&6
-    mc_inc_path_env="-I${HOME}/include ";
-fi
-
-echo $ac_n "checking whether your environment defines MC_LIBRARY""... $ac_c" 1>&6
-echo "configure:2220: checking whether your environment defines MC_LIBRARY" >&5
-if test -n "${MC_LIBRARY}"; then
-    echo "$ac_t""yes" 1>&6
-    mc_lib_path_env="-L${MC_LIBRARY}/${mc_cpu_vendor_os} ";
-else
-    echo "$ac_t""no" 1>&6
-    mc_lib_path_env="-L${HOME}/lib/${mc_cpu_vendor_os} ";
-fi
-
-echo $ac_n "checking whether you specified location of <mc/mc.h>""... $ac_c" 1>&6
-echo "configure:2230: checking whether you specified location of <mc/mc.h>" >&5
-# Check whether --with-mcinc or --without-mcinc was given.
-if test "${with_mcinc+set}" = set; then
-  withval="$with_mcinc"
-  mc_inc_path="-I${with_mcinc} "; echo "$ac_t""yes" 1>&6
-else
-  mc_inc_path="${mc_inc_path_env}"; echo "$ac_t""no" 1>&6
-
-fi
-
-
-echo $ac_n "checking whether you specified location of <libmc.a>""... $ac_c" 1>&6
-echo "configure:2242: checking whether you specified location of <libmc.a>" >&5
-# Check whether --with-mclib or --without-mclib was given.
-if test "${with_mclib+set}" = set; then
-  withval="$with_mclib"
-  mc_lib_path="-L${with_mclib}/${mc_cpu_vendor_os} "; echo "$ac_t""yes" 1>&6
-else
-  mc_lib_path="${mc_lib_path_env}"; echo "$ac_t""no" 1>&6
-
-fi
-
-
-LDFLAGS_SAVE=${LDFLAGS};
-CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${mc_lib_path} ${nsl_lib} ${socket_lib};
-CPPFLAGS=${mc_inc_path};
-mc_found="";
-ac_safe=`echo "mc/mc.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for mc/mc.h""... $ac_c" 1>&6
-echo "configure:2260: checking for mc/mc.h" >&5
-if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  cat > conftest.$ac_ext <<EOF
-#line 2265 "configure"
-#include "confdefs.h"
-#include <mc/mc.h>
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2270: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=yes"
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=no"
-fi
-rm -f conftest*
-fi
-if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  mc_found="yes";mc_inc="${mc_inc_path}"
-else
-  echo "$ac_t""no" 1>&6
-mc_found="";mc_inc=""
-fi
-
-if test -n "${mc_found}"; then
-        echo $ac_n "checking for MC_link in -lmc""... $ac_c" 1>&6
-echo "configure:2294: checking for MC_link in -lmc" >&5
-ac_lib_var=`echo mc'_'MC_link | sed 'y%./+-%__p_%'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lmc ${mc_lib_path}-lmc ${math_lib} -lnsl -lsocket $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 2302 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char MC_link();
-
-int main() {
-MC_link()
-; return 0; }
-EOF
-if { (eval echo configure:2313: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  mc_found="yes";mc_lib="${mc_lib_path}-lmc"
-else
-  echo "$ac_t""no" 1>&6
-mc_found="";mc_lib=""
-fi
-
-fi
-if test -z "${mc_found}"; then
-    { echo "configure: error: MC libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
-else
-    echo "$ac_t""MC libraries AND headers were found ...rocking on..." 1>&6
-fi
-
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
-
-
-
-echo $ac_n "checking whether you specified location of <mcx/mcx.h>""... $ac_c" 1>&6
-echo "configure:2347: checking whether you specified location of <mcx/mcx.h>" >&5
-# Check whether --with-mcxinc or --without-mcxinc was given.
-if test "${with_mcxinc+set}" = set; then
-  withval="$with_mcxinc"
-  mcx_inc_path="-I${with_mcxinc} "; echo "$ac_t""yes" 1>&6
-else
-  mcx_inc_path="${mc_inc_path_env}"; echo "$ac_t""no" 1>&6
-
-fi
-
-
-echo $ac_n "checking whether you specified location of <libmcx.a>""... $ac_c" 1>&6
-echo "configure:2359: checking whether you specified location of <libmcx.a>" >&5
-# Check whether --with-mcxlib or --without-mcxlib was given.
-if test "${with_mcxlib+set}" = set; then
-  withval="$with_mcxlib"
-  mcx_lib_path="-L${with_mcxlib}/${mc_cpu_vendor_os} ";
-echo "$ac_t""yes" 1>&6
-else
-  mcx_lib_path="${mc_lib_path_env}"; echo "$ac_t""no" 1>&6
-
-fi
-
-
-LDFLAGS_SAVE=${LDFLAGS};
-CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${mcx_lib_path} ${nsl_lib} ${socket_lib};
-CPPFLAGS=${mcx_inc_path};
-mcx_found="";
-ac_safe=`echo "mcx/mcx.h" | sed 'y%./+-%__p_%'`
-echo $ac_n "checking for mcx/mcx.h""... $ac_c" 1>&6
-echo "configure:2378: checking for mcx/mcx.h" >&5
-if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  cat > conftest.$ac_ext <<EOF
-#line 2383 "configure"
-#include "confdefs.h"
-#include <mcx/mcx.h>
-EOF
-ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2388: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
-ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
-if test -z "$ac_err"; then
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=yes"
-else
-  echo "$ac_err" >&5
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_header_$ac_safe=no"
-fi
-rm -f conftest*
-fi
-if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  mcx_found="yes";mcx_inc="${mcx_inc_path}"
-else
-  echo "$ac_t""no" 1>&6
-mcx_found="";mcx_inc=""
-fi
-
-if test -n "${mcx_found}"; then
-    echo $ac_n "checking for MCX_link in -lmcx""... $ac_c" 1>&6
-echo "configure:2412: checking for MCX_link in -lmcx" >&5
-ac_lib_var=`echo mcx'_'MCX_link | sed 'y%./+-%__p_%'`
-if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  ac_save_LIBS="$LIBS"
-LIBS="-lmcx ${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${math_lib} -lnsl -lsocket $LIBS"
-cat > conftest.$ac_ext <<EOF
-#line 2420 "configure"
-#include "confdefs.h"
-/* Override any gcc2 internal prototype to avoid an error.  */
-/* We use char because int might match the return type of a gcc2
-    builtin and then its argument prototype would still apply.  */
-char MCX_link();
-
-int main() {
-MCX_link()
-; return 0; }
-EOF
-if { (eval echo configure:2431: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=yes"
-else
-  echo "configure: failed program was:" >&5
-  cat conftest.$ac_ext >&5
-  rm -rf conftest*
-  eval "ac_cv_lib_$ac_lib_var=no"
-fi
-rm -f conftest*
-LIBS="$ac_save_LIBS"
-
-fi
-if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
-  echo "$ac_t""yes" 1>&6
-  mcx_found="yes";mcx_lib="${mcx_lib_path}-lmcx"
-else
-  echo "$ac_t""no" 1>&6
-mcx_found="";mcx_lib=""
-fi
-
-fi
-if test -z "${mcx_found}"; then
-    { echo "configure: error: MCX libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
-else
-    echo "$ac_t""MCX libraries AND headers were found" 1>&6
-fi
-
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
-
-
-
-
 echo $ac_n "checking whether you want MPI""... $ac_c" 1>&6
-echo "configure:2466: checking whether you want MPI" >&5
+echo "configure:2210: checking whether you want MPI" >&5
 # Check whether --enable-mpi or --disable-mpi was given.
 if test "${enable_mpi+set}" = set; then
   enableval="$enable_mpi"
@@ -2480,7 +2224,7 @@ else
     echo "$ac_t""yes ...poking around for it" 1>&6
 
         echo $ac_n "checking whether your environment defines MC_MPI_INCLUDE""... $ac_c" 1>&6
-echo "configure:2484: checking whether your environment defines MC_MPI_INCLUDE" >&5
+echo "configure:2228: checking whether your environment defines MC_MPI_INCLUDE" >&5
     if test -n "${MC_MPI_INCLUDE}"; then
         echo "$ac_t""yes" 1>&6
         mpi_inc_path_env="-I${MC_MPI_INCLUDE} ";
@@ -2490,7 +2234,7 @@ echo "configure:2484: checking whether your environment defines MC_MPI_INCLUDE" 
     fi
 
         echo $ac_n "checking whether your environment defines MC_MPI_LIBRARY""... $ac_c" 1>&6
-echo "configure:2494: checking whether your environment defines MC_MPI_LIBRARY" >&5
+echo "configure:2238: checking whether your environment defines MC_MPI_LIBRARY" >&5
     if test -n "${MC_MPI_LIBRARY}"; then
         echo "$ac_t""yes" 1>&6
         mpi_lib_path_env="-L${MC_MPI_LIBRARY} ";
@@ -2500,7 +2244,7 @@ echo "configure:2494: checking whether your environment defines MC_MPI_LIBRARY" 
     fi
 
         echo $ac_n "checking whether you specified location of <mpi.h>""... $ac_c" 1>&6
-echo "configure:2504: checking whether you specified location of <mpi.h>" >&5
+echo "configure:2248: checking whether you specified location of <mpi.h>" >&5
     # Check whether --with-mpiinc or --without-mpiinc was given.
 if test "${with_mpiinc+set}" = set; then
   withval="$with_mpiinc"
@@ -2512,7 +2256,7 @@ fi
 
 
         echo $ac_n "checking whether you specified location of <libmpi.a>""... $ac_c" 1>&6
-echo "configure:2516: checking whether you specified location of <libmpi.a>" >&5
+echo "configure:2260: checking whether you specified location of <libmpi.a>" >&5
     # Check whether --with-mpilib or --without-mpilib was given.
 if test "${with_mpilib+set}" = set; then
   withval="$with_mpilib"
@@ -2529,17 +2273,17 @@ fi
     mpi_use="";
     ac_safe=`echo "mpi.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for mpi.h""... $ac_c" 1>&6
-echo "configure:2533: checking for mpi.h" >&5
+echo "configure:2277: checking for mpi.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 2538 "configure"
+#line 2282 "configure"
 #include "confdefs.h"
 #include <mpi.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:2543: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:2287: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -2563,7 +2307,7 @@ fi
 
     if test -n "${mpi_use}"; then
         echo $ac_n "checking for main in -lmpi""... $ac_c" 1>&6
-echo "configure:2567: checking for main in -lmpi" >&5
+echo "configure:2311: checking for main in -lmpi" >&5
 ac_lib_var=`echo mpi'_'main | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2571,14 +2315,14 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lmpi ${mpi_lib_path} $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2575 "configure"
+#line 2319 "configure"
 #include "confdefs.h"
 
 int main() {
 main()
 ; return 0; }
 EOF
-if { (eval echo configure:2582: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2326: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2593,15 +2337,15 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi"
+  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"
 else
   echo "$ac_t""no" 1>&6
-mpi_use="";mpi_lib=""
+mpi_use="";mpi_lib="";mpi_bin=""
 fi
 
         if test -z "${mpi_use}"; then
             echo $ac_n "checking for main in -lmpich""... $ac_c" 1>&6
-echo "configure:2605: checking for main in -lmpich" >&5
+echo "configure:2349: checking for main in -lmpich" >&5
 ac_lib_var=`echo mpich'_'main | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -2609,14 +2353,14 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lmpich ${mpi_lib_path} $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 2613 "configure"
+#line 2357 "configure"
 #include "confdefs.h"
 
 int main() {
 main()
 ; return 0; }
 EOF
-if { (eval echo configure:2620: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:2364: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -2652,6 +2396,263 @@ EOF
         LDFLAGS=${LDFLAGS_SAVE};
     CPPFLAGS=${CPPFLAGS_SAVE};
 fi
+
+
+
+
+echo $ac_n "checking whether your environment defines MC_INCLUDE""... $ac_c" 1>&6
+echo "configure:2405: checking whether your environment defines MC_INCLUDE" >&5
+if test -n "${MC_INCLUDE}"; then
+    echo "$ac_t""yes" 1>&6
+    mc_inc_path_env="-I${MC_INCLUDE} ";
+else
+    echo "$ac_t""no" 1>&6
+    mc_inc_path_env="-I${HOME}/include ";
+fi
+
+echo $ac_n "checking whether your environment defines MC_LIBRARY""... $ac_c" 1>&6
+echo "configure:2415: checking whether your environment defines MC_LIBRARY" >&5
+if test -n "${MC_LIBRARY}"; then
+    echo "$ac_t""yes" 1>&6
+    mc_lib_path_env="-L${MC_LIBRARY}/${mc_cpu_vendor_os} ";
+else
+    echo "$ac_t""no" 1>&6
+    mc_lib_path_env="-L${HOME}/lib/${mc_cpu_vendor_os} ";
+fi
+
+echo $ac_n "checking whether you specified location of <mc/mc.h>""... $ac_c" 1>&6
+echo "configure:2425: checking whether you specified location of <mc/mc.h>" >&5
+# Check whether --with-mcinc or --without-mcinc was given.
+if test "${with_mcinc+set}" = set; then
+  withval="$with_mcinc"
+  mc_inc_path="-I${with_mcinc} "; echo "$ac_t""yes" 1>&6
+else
+  mc_inc_path="${mc_inc_path_env}"; echo "$ac_t""no" 1>&6
+
+fi
+
+
+echo $ac_n "checking whether you specified location of <libmc.a>""... $ac_c" 1>&6
+echo "configure:2437: checking whether you specified location of <libmc.a>" >&5
+# Check whether --with-mclib or --without-mclib was given.
+if test "${with_mclib+set}" = set; then
+  withval="$with_mclib"
+  mc_lib_path="-L${with_mclib}/${mc_cpu_vendor_os} "; echo "$ac_t""yes" 1>&6
+else
+  mc_lib_path="${mc_lib_path_env}"; echo "$ac_t""no" 1>&6
+
+fi
+
+
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${mc_lib_path} ${nsl_lib} ${socket_lib};
+CPPFLAGS=${mc_inc_path};
+mc_found="";
+ac_safe=`echo "mc/mc.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for mc/mc.h""... $ac_c" 1>&6
+echo "configure:2455: checking for mc/mc.h" >&5
+if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2460 "configure"
+#include "confdefs.h"
+#include <mc/mc.h>
+EOF
+ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
+{ (eval echo configure:2465: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+if test -z "$ac_err"; then
+  rm -rf conftest*
+  eval "ac_cv_header_$ac_safe=yes"
+else
+  echo "$ac_err" >&5
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_header_$ac_safe=no"
+fi
+rm -f conftest*
+fi
+if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  mc_found="yes";mc_inc="${mc_inc_path}"
+else
+  echo "$ac_t""no" 1>&6
+mc_found="";mc_inc=""
+fi
+
+if test -n "${mc_found}"; then
+        echo $ac_n "checking for MC_link in -lmc""... $ac_c" 1>&6
+echo "configure:2489: checking for MC_link in -lmc" >&5
+ac_lib_var=`echo mc'_'MC_link | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lmc ${mc_lib_path}-lmc ${math_lib} $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2497 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char MC_link();
+
+int main() {
+MC_link()
+; return 0; }
+EOF
+if { (eval echo configure:2508: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  mc_found="yes";mc_lib="${mc_lib_path}-lmc"
+else
+  echo "$ac_t""no" 1>&6
+mc_found="";mc_lib=""
+fi
+
+fi
+if test -z "${mc_found}"; then
+    { echo "configure: error: MC libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
+else
+    echo "$ac_t""MC libraries AND headers were found ...rocking on..." 1>&6
+fi
+
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
+
+
+
+echo $ac_n "checking whether you specified location of <mcx/mcx.h>""... $ac_c" 1>&6
+echo "configure:2542: checking whether you specified location of <mcx/mcx.h>" >&5
+# Check whether --with-mcxinc or --without-mcxinc was given.
+if test "${with_mcxinc+set}" = set; then
+  withval="$with_mcxinc"
+  mcx_inc_path="-I${with_mcxinc} "; echo "$ac_t""yes" 1>&6
+else
+  mcx_inc_path="${mc_inc_path_env}"; echo "$ac_t""no" 1>&6
+
+fi
+
+
+echo $ac_n "checking whether you specified location of <libmcx.a>""... $ac_c" 1>&6
+echo "configure:2554: checking whether you specified location of <libmcx.a>" >&5
+# Check whether --with-mcxlib or --without-mcxlib was given.
+if test "${with_mcxlib+set}" = set; then
+  withval="$with_mcxlib"
+  mcx_lib_path="-L${with_mcxlib}/${mc_cpu_vendor_os} ";
+echo "$ac_t""yes" 1>&6
+else
+  mcx_lib_path="${mc_lib_path_env}"; echo "$ac_t""no" 1>&6
+
+fi
+
+
+LDFLAGS_SAVE=${LDFLAGS};
+CPPFLAGS_SAVE=${CPPFLAGS};
+LDFLAGS=${mcx_lib_path} ${nsl_lib} ${socket_lib};
+CPPFLAGS=${mcx_inc_path};
+mcx_found="";
+ac_safe=`echo "mcx/mcx.h" | sed 'y%./+-%__p_%'`
+echo $ac_n "checking for mcx/mcx.h""... $ac_c" 1>&6
+echo "configure:2573: checking for mcx/mcx.h" >&5
+if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 2578 "configure"
+#include "confdefs.h"
+#include <mcx/mcx.h>
+EOF
+ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
+{ (eval echo configure:2583: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
+if test -z "$ac_err"; then
+  rm -rf conftest*
+  eval "ac_cv_header_$ac_safe=yes"
+else
+  echo "$ac_err" >&5
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_header_$ac_safe=no"
+fi
+rm -f conftest*
+fi
+if eval "test \"`echo '$ac_cv_header_'$ac_safe`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  mcx_found="yes";mcx_inc="${mcx_inc_path}"
+else
+  echo "$ac_t""no" 1>&6
+mcx_found="";mcx_inc=""
+fi
+
+if test -n "${mcx_found}"; then
+    echo $ac_n "checking for MCX_link in -lmcx""... $ac_c" 1>&6
+echo "configure:2607: checking for MCX_link in -lmcx" >&5
+ac_lib_var=`echo mcx'_'MCX_link | sed 'y%./+-%__p_%'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-lmcx ${mcx_lib_path}-lmcx ${mpi_lib_path} ${mc_lib_path}-lmc ${math_lib} $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 2615 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char MCX_link();
+
+int main() {
+MCX_link()
+; return 0; }
+EOF
+if { (eval echo configure:2626: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+  mcx_found="yes";mcx_lib="${mcx_lib_path}-lmcx"
+else
+  echo "$ac_t""no" 1>&6
+mcx_found="";mcx_lib=""
+fi
+
+fi
+if test -z "${mcx_found}"; then
+    { echo "configure: error: MCX libraries OR headers missing ...EXITING ON ERROR" 1>&2; exit 1; }
+else
+    echo "$ac_t""MCX libraries AND headers were found" 1>&6
+fi
+
+LDFLAGS=${LDFLAGS_SAVE};
+CPPFLAGS=${CPPFLAGS_SAVE};
+
 
 
 
@@ -2864,12 +2865,13 @@ s%@wall@%$wall%g
 s%@wall_pedantic@%$wall_pedantic%g
 s%@wall_pedantic_ansi@%$wall_pedantic_ansi%g
 s%@pedantic_ansi@%$pedantic_ansi%g
+s%@mpi_lib@%$mpi_lib%g
+s%@mpi_inc@%$mpi_inc%g
+s%@mpi_bin@%$mpi_bin%g
 s%@mc_lib@%$mc_lib%g
 s%@mc_inc@%$mc_inc%g
 s%@mcx_lib@%$mcx_lib%g
 s%@mcx_inc@%$mcx_inc%g
-s%@mpi_lib@%$mpi_lib%g
-s%@mpi_inc@%$mpi_inc%g
 
 CEOF
 EOF
