@@ -818,9 +818,20 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 //
 // Purpose:  Fill the coefficient arrays prior to solving the equation
 //
+// Args:     epsmeth  The method to use to generate discretizations of the 
+//                    dielectric functions:
+//                       0 => straight discretization (collocation-like), no
+//                            smoothing
+//                       1 => smoothing based on a harmonic average of the
+//                            value at three points
+//                       2 => cubic spline approximation of step discontinuity;
+//                            set epsparm to the desired width of the step
+//                            function smoothing
+//           epsparm  Parameter for dielectric discretizing functions
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_fillco(Vpmg *thee) {
+VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 
     Vacc *acc;
     Valist *alist;
@@ -897,51 +908,108 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
                 thee->fcf[IJK(i,j,k)] = 0.0;
 
                 /* The diagonal tensor (2nd derivative) entries.  Each of these
-                 * entries is evaluated ad the grid edges midpoints.  We will
-                 * implement a very rudimentary form of dielectric smoothing.
-                 * Specifically, the dielectric will be evaluated at the mid
-                 * point and the two flanking mesh points.  The fraction of the
-                 * grid edge in the solvent will then be calculated from these
-                 * three values (i.e., either 0, 1/3, 2/3, or 1).  The
-                 * dielectric value at the midpoint will then be assigned based
-                 * on the usual dielectric smoothing formula:
-                 * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
-                /* x-direction */
-                position[0] = thee->xf[i] + hx/2.0;
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
-                accmid = Vacc_molAcc(acc, position, srad);
-                position[0] = thee->xf[i];
-                acclo = Vacc_molAcc(acc, position, srad);
-                position[0] = thee->xf[i] + hx;
-                acchi = Vacc_molAcc(acc, position, srad);
-                accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                thee->a1cf[IJK(i,j,k)] = 
-                  epsw*epsp/((1-accf)*epsw + accf*epsp);
-                /* y-direction */
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j] + hy/2.0;
-                position[2] = thee->zf[k];
-                accmid = Vacc_molAcc(acc, position, srad);
-                position[1] = thee->yf[j];
-                acclo = Vacc_molAcc(acc, position, srad);
-                position[1] = thee->yf[j] + hy;
-                acchi = Vacc_molAcc(acc, position, srad);
-                accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                thee->a2cf[IJK(i,j,k)] = 
-                  epsw*epsp/((1-accf)*epsw + accf*epsp);
-                /* y-direction */
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k] + hzed/2.0;
-                accmid = Vacc_molAcc(acc, position, srad);
-                position[2] = thee->zf[k];
-                acclo = Vacc_molAcc(acc, position, srad);
-                position[2] = thee->zf[k] + hzed;
-                acchi = Vacc_molAcc(acc, position, srad);
-                accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
-                thee->a3cf[IJK(i,j,k)] = 
-                  epsw*epsp/((1-accf)*epsw + accf*epsp);
+                 * entries is evaluated ad the grid edges midpoints.  */
+                switch (epsmeth) {
+                  /* No dielectric smoothing */
+                  case 0: 
+                    /* x-direction */
+                    position[0] = thee->xf[i] + 0.5*hx;
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k];
+                    if (Vacc_molAcc(acc, position, srad) == 0) 
+                      thee->a1cf[IJK(i,j,k)] = epsp; 
+                    else thee->a1cf[IJK(i,j,k)] = epsw; 
+                    /* y-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j] + 0.5*hy;
+                    position[2] = thee->zf[k];
+                    if (Vacc_molAcc(acc, position, srad) == 0) 
+                      thee->a2cf[IJK(i,j,k)] = epsp; 
+                    else thee->a2cf[IJK(i,j,k)] = epsw; 
+                    /* z-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k] + 0.5*hzed;
+                    if (Vacc_molAcc(acc, position, srad) == 0) 
+                      thee->a3cf[IJK(i,j,k)] = epsp; 
+                    else thee->a3cf[IJK(i,j,k)] = epsw; 
+                    break; 
+
+                  /* A very rudimentary form of dielectric smoothing.
+                   * Specifically, the dielectric will be evaluated at the mid
+		   * point and the two flanking mesh points.  The fraction of
+		   * the grid edge in the solvent will then be calculated from
+		   * these three values (i.e., either 0, 1/3, 2/3, or 1).  The
+		   * dielectric value at the midpoint will then be assigned
+		   * based on the usual dielectric smoothing formula:
+		   * \epsilon_s\epsilon_i/(a\epsilon_s + (1-a)\epsilon_i)  */
+                  case 1:
+                    /* x-direction */
+                    position[0] = thee->xf[i] + 0.5*hx;
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k];
+                    accmid = Vacc_molAcc(acc, position, srad);
+                    position[0] = thee->xf[i];
+                    acclo = Vacc_molAcc(acc, position, srad);
+                    position[0] = thee->xf[i] + hx;
+                    acchi = Vacc_molAcc(acc, position, srad);
+                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
+                    thee->a1cf[IJK(i,j,k)] = 
+                      epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    /* y-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j] + 0.5*hy;
+                    position[2] = thee->zf[k];
+                    accmid = Vacc_molAcc(acc, position, srad);
+                    position[1] = thee->yf[j];
+                    acclo = Vacc_molAcc(acc, position, srad);
+                    position[1] = thee->yf[j] + hy;
+                    acchi = Vacc_molAcc(acc, position, srad);
+                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
+                    thee->a2cf[IJK(i,j,k)] = 
+                      epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    /* z-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k] + 0.5*hzed;
+                    accmid = Vacc_molAcc(acc, position, srad);
+                    position[2] = thee->zf[k];
+                    acclo = Vacc_molAcc(acc, position, srad);
+                    position[2] = thee->zf[k] + hzed;
+                    acchi = Vacc_molAcc(acc, position, srad);
+                    accf = ((double)acchi + (double)accmid + (double)acclo)/3.0;
+                    thee->a3cf[IJK(i,j,k)] = 
+                      epsw*epsp/((1-accf)*epsw + accf*epsp);
+                    break;
+
+                  /* Cubic spline approximation to dielectric step
+                   * discontinuity */
+                  case 2:
+                    /* x-direction */
+                    position[0] = thee->xf[i] + 0.5*hx;
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k];
+                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
+                    thee->a1cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
+                    /* y-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j] + 0.5*hy;
+                    position[2] = thee->zf[k];
+                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
+                    thee->a2cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
+                    /* z-direction */
+                    position[0] = thee->xf[i];
+                    position[1] = thee->yf[j];
+                    position[2] = thee->zf[k] + 0.5*hzed;
+                    accf = Vacc_splineAcc(acc, position, srad, epsparm);
+                    thee->a3cf[IJK(i,j,k)] = (epsw-epsp)*accf + epsp;
+                    break;
+
+                  /* Oops, invalid epsmeth */
+                  default:
+                    Vnm_print(2, "Vpmg_fillco:  Bad epsmeth (%d)!\n", epsmeth);
+                    VASSERT(0);
+                }
             }
         }
     }

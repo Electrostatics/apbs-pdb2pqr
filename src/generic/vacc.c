@@ -310,6 +310,74 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     Vmem_dtor(&(thee->vmem));
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_splineAcc
+//
+// Purpose:  Similar to Vacc_ivdwAcc, except returns a value between 0 and 1
+//           determined by a cubic spline approximation to the step function
+//           smoothed over an interval of width a centered at radius R:
+//             p_i(d_i) = frac{(a+r_i-d_i)(a-2(r_i-d_i))}{2a^3} 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_splineAcc(Vacc *thee, Vec3 center, double radius, 
+  double alpha) {
+
+
+    int centeri, centerj, centerk;  /* Grid-based coordinates */
+    int ui;                         /* Natural array coordinates */
+    int iatom;                      /* Counters */
+    double dist, *apos, arad;
+    double acc, acci;
+    Vatom *atom;
+
+    /* We can only test probes with radii less than the max specified */
+    VASSERT(thee != VNULL);
+    if ((radius+0.5*alpha) > thee->max_radius) {
+        Vnm_print(2, "Vacc_splineAcc: got radius+alpha/2 (%g) bigger than max radius (%g)\n",
+          radius+0.5*alpha, thee->max_radius);
+         VASSERT(0);
+    }
+
+    /* Convert to grid based coordinates */
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+
+    /* Check to make sure we're on the grid; if not, we're definitely
+     * accessible */
+    if ((centeri < 0) || (centeri >= thee->nx) || \
+        (centerj < 0) || (centerj >= thee->ny) || \
+        (centerk < 0) || (centerk >= thee->nz)) return 1;
+
+    /* If we're still here, then we need to check each atom until we find an
+     * overlap at which point we can determine that the point is not
+     * accessible */
+    acc = 1.0;
+    ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
+        atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+        apos = Vatom_getPosition(atom);
+        arad = Vatom_getRadius(atom);
+        dist = (apos[0]-center[0])*(apos[0]-center[0]) +
+               + (apos[1]-center[1])*(apos[1]-center[1])
+               + (apos[2]-center[2])*(apos[2]-center[2]);
+        if (dist<(arad-0.5*alpha)) {
+            acc = 0.0;
+            break;
+        } else if (dist>(arad+0.5*alpha)) {
+            acc = 1.0*acc;
+        } else {
+            acci = 0.5*(arad-dist+alpha)*VSQR(alpha-2*arad
+              +2*dist)/(alpha*alpha*alpha);
+            acc = acci*acc;
+        }
+    }
+
+    return acc;
+
+
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_vdwAcc
