@@ -2,6 +2,21 @@
 BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
 #############################################################################
 
+  The code did not work,
+  It was broken today, 
+  So I sat in my office,
+  All that bright, sunny day.
+
+  I sat there with Purify (c),
+  We sat there we two,
+  And I said:
+  "How I wish NULL != this->foo"
+
+  APBS did not work at all. 
+  So I we could do was 
+  gdb! gdb! gdb! gdb! 
+  I did not like it.
+
   * Made focused evaluation of forces more sensible.
   * Added 'print force' statement
   * Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
