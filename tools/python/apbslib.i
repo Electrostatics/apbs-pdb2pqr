@@ -1,7 +1,9 @@
 /* Input file for creating Python wrappers for APBS via swig
    Author: Todd Dolinsky
    Email: todd@ccb.wustl.edu
- 
+*/
+
+/* 
 Header files:
 -----------------------
 */ 
@@ -26,7 +28,7 @@ Structures and functions to be wrapped:
 typedef struct {
 	MGparm();
 	~MGparm();
-	int type;                                           
+	MGparm_CalcType type;                                           
 } MGparm; 
       
 // Functions and Constructors from pbeparm.h:
@@ -138,14 +140,14 @@ AtomForce **new_atomforcelist(int maxargs) {
 }
 %}
 
-// Stubs for deleting structures
-
+// Stubs for deleting structures - not currently used
+/*
 %inline %{
 NOsh **getNosh(NOsh *thee){
-   return &thee;
+	return &thee;
 }
 %}
-
+/*
 %inline %{
 Vcom **getCom(Vcom *thee){
    return &thee;
@@ -157,6 +159,7 @@ Vmem **getMem(Vmem *thee){
    return &thee;
 }
 %}
+*/
 
 // Generic array of doubles:
 
@@ -201,14 +204,14 @@ extern int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 extern void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-extern int solveMG(NOsh *nosh, Vpmg *pmg, int type);
+extern int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
 extern int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
 extern int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
 extern int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, double *npEnergy);
 extern void killEnergy();
-extern int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
+extern int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
 extern void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC]);
