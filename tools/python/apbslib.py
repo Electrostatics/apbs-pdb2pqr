@@ -154,12 +154,17 @@ class NOshPtr :
         if name == "nprint" :
             apbslibc.NOsh_nprint_set(self.this,value)
             return
+        if name == "nelec" :
+            apbslibc.NOsh_nelec_set(self.this,value)
+            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "ncalc" : 
             return apbslibc.NOsh_ncalc_get(self.this)
         if name == "nprint" : 
             return apbslibc.NOsh_nprint_get(self.this)
+        if name == "nelec" : 
+            return apbslibc.NOsh_nelec_get(self.this)
         raise AttributeError,name
     def __repr__(self):
         return "<C NOsh instance>"
@@ -217,6 +222,14 @@ Vmem_dtor = apbslibc.Vmem_dtor
 def NOsh_getCalc(arg0,arg1):
     val = apbslibc.NOsh_getCalc(arg0.this,arg1)
     val = NOsh_calcPtr(val)
+    return val
+
+def NOsh_elecname(arg0,arg1):
+    val = apbslibc.NOsh_elecname(arg0.this,arg1)
+    return val
+
+def NOsh_elec2calc(arg0,arg1):
+    val = apbslibc.NOsh_elec2calc(arg0.this,arg1)
     return val
 
 def NOsh_printWhat(arg0,arg1):

@@ -1,4 +1,4 @@
-apbslib.precious.c
+apbslib.python.c
 
 [ Python Module : apbslib ]
 
@@ -18,7 +18,7 @@ del this
         [ Destructor: returns void  ]
 
 self.type
-        [ Member data: returns int  ]
+        [ Member data: returns MGparm_CalcType * ]
 
 2.  class PBEparm
 =================
@@ -123,10 +123,19 @@ self.ncalc
 self.nprint
         [ Member data: returns int  ]
 
+self.nelec
+        [ Member data: returns int  ]
+
 ----------
 
 NOsh_getCalc(thee,icalc)
         [ returns NOsh_calc * ]
+
+NOsh_elecname(thee,ielec)
+        [ returns char * ]
+
+NOsh_elec2calc(thee,icalc)
+        [ returns int  ]
 
 NOsh_printWhat(thee,iprint)
         [ returns int  ]
@@ -305,12 +314,6 @@ new_pbelist(maxargs)
 
 new_atomforcelist(maxargs)
 
-getNosh(thee)
-
-getCom(thee)
-
-getMem(thee)
-
 double_array(size)
 
 int_array(size)
@@ -358,7 +361,7 @@ npenergyMG(nosh,icalc,pmg,nenergy,npEnergy)
 
 killEnergy()
 
-forceMG(mem,nosh,pbeparm,pmg,nforce,atomForce,alist)
+forceMG(mem,nosh,pbeparm,mgparm,pmg,nforce,atomForce,alist)
 
 killForce(mem,nosh,nforce,atomForce)
 
