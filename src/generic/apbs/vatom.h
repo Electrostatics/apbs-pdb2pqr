@@ -152,7 +152,7 @@ typedef struct sVatom Vatom;
 #   define Vatom_getRadius(thee) ((thee)->radius)
 #   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (double)(tpartID))
 #   define Vatom_getPartID(thee) ((thee)->partID)
-#   define Vatom_setCharge(thee, charge) ((thee)->charge = charge)
+#   define Vatom_setCharge(thee, tCharge) ((thee)->charge = (tCharge))
 #   define Vatom_getCharge(thee) ((thee)->charge)
 #   define Vatom_memChk(thee) (sizeof(Vatom))
 #endif /* if !defined(VINLINE_VATOM) */
