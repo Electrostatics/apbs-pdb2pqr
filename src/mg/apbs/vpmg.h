@@ -115,8 +115,20 @@ struct Vpmg {
   double extNpEnergy;            /**< Stores contributions to the apolar
                                   *   energy from regions outside the problem
                                   *   domain */
-  int surfMeth;                  /**< Surface definition method */
+  int surfMeth;                  /**< Surface definition method:
+                                  *   \li 0:  Mol surface for epsilon; inflated
+                                  *   VdW for kappa; no smoothing
+                                  *   \li 1:  As 0 with harmoic average
+                                  *   smoothing
+                                  *   \li 2:  Cubic spline 
+                                  */
   double splineWin;              /**< Spline window parm for surf defs */
+  int chargeMeth;                /**< Charge discretization method:
+                                  *   \li 0:  Linear B-spline (first-order,
+                                  *   AKA hats) -- the traditional choice
+                                  *   \li 1:  Cubic B-spline (second-order,
+                                  *   AKA anti-aliased)
+                                  */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
                                   * called */
   int useDielXMap;               /**< Indicates whether Vpmg_fillco was called
@@ -249,7 +261,7 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee  Vpmg object
- *  @param   surfMeth
+ *  @param   surfMeth  Surface discretization
  *            \li 0:  straight discretization (collocation-like), no
  *                  smoothing
  *            \li 1:  smoothing based on a harmonic average of the
@@ -257,6 +269,9 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *            \li 2:  spline-based accessibility with epsparm =
  *                  windowing parameter (<1.0, please)
  *  @param   splineWin    Spline window (for use with surfMeth = 2)
+ *  @param   chargeMeth   Charge discretization
+ *            \li 0:  Traditional hats (first order B-spline)
+ *            \li 1:  Cubic spline (second order B-spline, anti-aliased)
  *  @param   useDielXMap  Specifies whether to use (1) or ignore (0) the 
  *                        dielXMap arguement
  *  @param   dielXMap     Pointer to a Vgrid object containing an external
@@ -283,7 +298,7 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *                        useChargeMap is 0.
  */
 VEXTERNC void Vpmg_fillco(Vpmg *thee, 
-  int surfMeth,      double splineWin,
+  int surfMeth,      double splineWin,  int chargeMeth,
   int useDielXMap,   Vgrid *dielXMap, 
   int useDielYMap,   Vgrid *dielYMap, 
   int useDielZMap,   Vgrid *dielZMap, 

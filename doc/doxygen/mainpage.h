@@ -658,6 +658,7 @@
  * <li> <a href="#pdie">pdie</a>
  * <li> <a href="#sdie">sdie</a>
  * <li> <a href="#srfm">srfm</a>
+ * <li> <a href="#chgm">chgm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a> 
  * <li> <a href="#swin">swin</a> 
@@ -698,7 +699,7 @@
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
  * <li> <a href="#sdie">sdie</a>
- * <li> <a href="#srfm">srfm</a>
+ * <li> <a href="#chgm">chgm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>
  * <li> <a href="#swin">swin</a>
@@ -746,7 +747,7 @@
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
  * <li> <a href="#sdie">sdie</a>
- * <li> <a href="#srfm">srfm</a>
+ * <li> <a href="#chgm">chgm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>
  * <li> <a href="#swin">swin</a>
@@ -845,6 +846,17 @@
  * <dt> <a name="sdie">sdie</a> <i>dielectric</i>
  * <dd> Solvent dielectric constant (unitless).  Typically 78.54 (water).
  * 
+ * <dt> <a name="chgm">chgm</a> <i>flag</i>
+ * <dd> Method used to define the various charge discretization methods:
+ * <i>flag</i> is one of the following:
+ *     <dl>
+ *     <dt> 0
+ *     <dd> Traditional hat-function discretization (linear splines); charge is
+ *     mapped onto nearest-neighbor grid points
+ *     <dt> 1
+ *     <dd> Cubic B-spline discretization; charge is mapped onto nearest- and
+ *     next-nearest-neighbor grid points
+ *     </dl>
  * <dt> <a name="srfm">srfm</a> <i>flag</i>
  * <dd> Method used to define the various surface-based coefficients;
  * <i>flag</i> is one of the following:

@@ -500,6 +500,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
             /* Call the coefficient discretization routine */
             if (!thee->filled) 
               Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->chargeMeth,
                 thee->useDielXMap, thee->dielXMap,
                 thee->useDielYMap, thee->dielYMap,
                 thee->useDielZMap, thee->dielZMap,
@@ -515,6 +516,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
             /* Call the coefficient discretization routine */
             if (!thee->filled)
               Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->chargeMeth,
                 thee->useDielXMap, thee->dielXMap,
                 thee->useDielYMap, thee->dielYMap,
                 thee->useDielZMap, thee->dielZMap,
@@ -530,6 +532,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
             /* Call the coefficient discretization routine */
             if (!thee->filled)
               Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->chargeMeth,
                 thee->useDielXMap, thee->dielXMap,
                 thee->useDielYMap, thee->dielYMap,
                 thee->useDielZMap, thee->dielZMap,
@@ -545,6 +548,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
             /* Call the coefficient discretization routine */
             if (!thee->filled)
               Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->chargeMeth,
                 thee->useDielXMap, thee->dielXMap,
                 thee->useDielYMap, thee->dielYMap,
                 thee->useDielZMap, thee->dielZMap,
@@ -560,6 +564,7 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
             /* Call the coefficient discretization routine */
             if (!thee->filled)
               Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
+                thee->chargeMeth,
                 thee->useDielXMap, thee->dielXMap,
                 thee->useDielYMap, thee->dielYMap,
                 thee->useDielZMap, thee->dielZMap,
