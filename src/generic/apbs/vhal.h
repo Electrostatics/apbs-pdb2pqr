@@ -316,8 +316,11 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #   define VINLINE_VPMG 
 
+/** @brief   Defines the maximum hash table size in any direction
+ *  @ingroup Vhal
+ */
 
-
+#   define MAX_HASH_DIM 75
 
 #endif
 

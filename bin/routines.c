@@ -645,7 +645,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
     
-    int j, bytesTotal, highWater, imol;
+    int j, bytesTotal, highWater, imol, focusFlag;
     double sparm, iparm;
     Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
 
@@ -682,9 +682,17 @@ fgcent/cgcent!\n",  (imol+1));
     else sparm = pbeparm->srad;
     if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
     else iparm = 0.0;
-    pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
-      pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
+	if (pbeparm->bcfl == BCFL_FOCUS) {
+	  if (i == 0) {
+            Vnm_tprint( 2, "Can't focus first calculation!\n");
+            return 0;
+        }
+	  focusFlag = 1;
+	} else focusFlag = 0;
+	
+	pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
+		  pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
+		  pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag);
 
     /* Set up PDE object */
     Vnm_tprint(0, "Setting up PDE object...\n");
@@ -1705,7 +1713,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
   Vfetk *fetk[NOSH_MAXCALC]) {
     
-    int j, bytesTotal, highWater, theMol;
+    int j, bytesTotal, highWater, theMol, focusFlag;
     double sparm, iparm, center[3];
 
     Vnm_tstart(27, "Setup timer");
@@ -1734,9 +1742,10 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
     else sparm = pbeparm->srad;
     if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
     else iparm = 0.0;
+	focusFlag = 0;
     pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
       pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
+      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag);
 
     /* Print a few derived parameters */
     Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));

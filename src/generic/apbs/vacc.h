@@ -153,6 +153,47 @@ VEXTERNC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
 VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius, 
              int nx, int ny, int nz, int nsphere);
 
+/** @brief   FORTRAN stub to construct the accessibility object for a subdomain
+ *  @ingroup Vacc
+ *  @author  Nathan Baker, Todd Dolinsky
+ *  @param   alist      List of atom objects
+ *  @param   max_radius Maximum probe radius to be queried
+ *  @param   nx         Number of grid points in hash table (x)
+ *  @param   ny         Number of grid points in hash table (y)
+ *  @param   nz         Number of grid points in hash table (z)
+ *  @param   nsphere    Number of points on surface of reference sphere
+ *  @param   x_min      Minimum location in X direction
+ *  @param   y_min      Minimum location in Y direction
+ *  @param   z_min      Minimum location in Z direction
+ *  @param   x_max      Maximum location in X direction
+ *  @param   y_max      Maximum location in Y direction
+ *  @param   z_max      Maximum location in Z direction
+ *  @returns Newly allocated Vacc object */
+VEXTERNC Vacc* Vacc_ctorFocus(Valist *alist, double max_radius, 
+             int nx, int ny, int nz, int nsphere, double x_min, double y_min, 
+			 double z_min, double x_max, double y_max, double z_max);
+
+/** @brief   FORTRAN stub to construct the accessibility object for a subdomain
+ *  @ingroup Vacc
+ *  @author  Nathan Baker, Todd Dolinsky
+ *  @param   thee       Allocated Vacc memory
+ *  @param   alist      List of atom objects
+ *  @param   max_radius Maximum probe radius to be queried
+ *  @param   nx         Number of grid points in hash table (x)
+ *  @param   ny         Number of grid points in hash table (y)
+ *  @param   nz         Number of grid points in hash table (z)
+ *  @param   nsphere    Number of points on surface of reference sphere
+ *  @param   x_min      Minimum location in X direction
+ *  @param   y_min      Minimum location in Y direction
+ *  @param   z_min      Minimum location in Z direction
+ *  @param   x_max      Maximum location in X direction
+ *  @param   y_max      Maximum location in Y direction
+ *  @param   z_max      Maximum location in Z direction
+ *  @returns 1 if successful, 0 otherwise */
+VEXTERNC int Vacc_ctor2Focus(Vacc *thee, Valist *alist, double max_radius, 
+             int nx, int ny, int nz, int nsphere, double x_min, double y_min, 
+			 double z_min, double x_max, double y_max, double z_max);
+
 /** @brief   Destroy object
  *  @ingroup Vacc
  *  @author  Nathan Baker
