@@ -152,4 +152,15 @@ VEXTERNC void Vopot_dtor(Vopot **thee);
  */
 VEXTERNC void Vopot_dtor2(Vopot *thee);
 
+/** @brief   Get second derivative values at a point
+ *  @ingroup Vopot
+ *  @author  Steve Bond and Nathan Baker
+ *  @param   thee   Pointer to Vopot object
+ *  @param   cflag  
+ *             \li  Return Laplacian ($u_{xx} + u_{yy} + u_{zz}$)
+ *             \li  Return $\max ( u_{xx}, u_{yy}, u_{zz} )$
+ *  @return  Specified curvature value
+ */
+VEXTERNC double Vopot_curvature(Vopot *thee, double pt[3], int cflag );
+
 #endif

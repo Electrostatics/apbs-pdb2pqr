@@ -161,10 +161,10 @@ VEXTERNC void    Valist_dtor2(Valist *thee);
  *  @ingroup Valist
  *  @author  Nathan Baker
  *  @param   thee  Valist object to be filled
- *  @param   iodev  Output device type (FILE/BUFF/UNIX/INET)
- *  @param   iofmt  Output device format (ASCII/XDR)
- *  @param   thost  Output hostname (for sockets)
- *  @param   fname  Output FILE/BUFF/UNIX/INET name
+ *  @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
+ *  @param   iofmt  Input device format (ASCII/XDR)
+ *  @param   thost  Input hostname (for sockets)
+ *  @param   fname  Input FILE/BUFF/UNIX/INET name
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int     Valist_readPQR(Valist *thee, const char *iodev, 

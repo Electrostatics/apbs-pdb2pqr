@@ -1,4 +1,11 @@
-proc read_dx {fileName} {
+# DX formatted potential grid reader for VMD
+# - Dave Sept - Washington University
+#
+proc read_dx {fileName molNum} {
+#
+# This procedure reads in a dx grid and associates it with
+# the molecule <molNum>
+#
     puts "Reading in dx data..."
     set valList ""
     set count 0
@@ -46,21 +53,22 @@ proc read_dx {fileName} {
     close $in      
       
     puts "Length of list is [llength $valList]"
-    # puts "valList(0)= [lindex $valList 0], valList(27) = [lindex $valList 27]"
     puts "Now to show surface in vmd..."
-    # The vmd tcl command to load the volume data and build the isosurface
-    # allows non-orthogonal vectors.  Here we just
     puts "Origin at: $xOrigin $yOrigin $zOrigin" 
-    mol volume top "APBS Potential"  $origin $xVec $yVec $zVec $xgrid $ygrid $zgrid $valList
+    mol volume $molNum "APBS Potential"  $origin $xVec $yVec $zVec $xgrid $ygrid $zgrid $valList
 
 }
 
-proc add_contour {value color} {
-        set repnum [molinfo 0 get numreps]
-        mol color colorid $color
-        mol material Transparent
-        mol addrep 0
-        mol selection all
-        mol modstyle $repnum 0 Isosurface $value 0.0 0.0 0.0
-}
 
+proc add_contour {molNum value color} {
+#
+# This procedure adds an isocontour to molecule <molNum>
+# with the value <value> and colors it with colorId <color>
+#
+	set repnum [molinfo $molNum  get numreps]
+	mol color colorid $color
+	mol material Transparent
+	mol addrep $molNum
+	mol selection all
+	mol modstyle $repnum $molNum Isosurface $value 0.0 0.0 0.0
+}
