@@ -65,3 +65,29 @@ VPUBLIC int Vstring_strcasecmp(const char *s1, const char *s2) {
 #endif
 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vstring_isdigit
+//
+//           Improves upon sscanf to see if a token is an int or not
+//           
+//           Returns isdigit: 1 if a digit, 0 otherwise
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vstring_isdigit(const char *tok) {
+    int i, isdigit, ti;
+    char checkchar[1];
+	char name[VMAX_BUFSIZE];
+    strcpy(name,tok);
+    isdigit = 1;
+    for(i=0; ; i++){
+      checkchar[0] =  name[i];
+      if (name[i] == '\0'){ 
+        break;
+      } 
+      if (sscanf(checkchar, "%d", &ti) != 1){
+        isdigit = 0;
+        break;
+      }
+    }
+    return isdigit;
+}

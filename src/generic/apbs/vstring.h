@@ -66,4 +66,12 @@
  */
 VEXTERNC int Vstring_strcasecmp(const char *s1, const char *s2);
 
+/** @brief   A modified sscanf that examines the complete string
+ *  @ingroup Vstring
+ *  @author  Todd Dolinsky
+ *  @param   tok   The string to examine
+ *  @return  1 if the entire string is an integer, 0 if otherwise.
+ */
+VEXTERNC int Vstring_isdigit(const char *tok);
+
 #endif    /* ifndef _VSTRING_H_ */
