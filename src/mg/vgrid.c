@@ -5,7 +5,7 @@
  *  @ingroup Vgrid
  *  @version $Id$
  *  @attention
- *  @verbatim
+ *  @verbatim 
  *
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
