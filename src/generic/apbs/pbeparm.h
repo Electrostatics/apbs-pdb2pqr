@@ -175,29 +175,32 @@ typedef struct sPBEparm PBEparm;
 /** @brief   Get charge (e) of specified ion species
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee PBEparm object
- *  @param   iion Ion species ID
  *  @returns Charge of ion species (e)
  */
-VEXTERNC double PBEparm_getIonCharge(PBEparm *thee, int iion);
+VEXTERNC double PBEparm_getIonCharge(
+        PBEparm *thee, /** PBEparm object */
+        int iion  /** Ion species ID/index */
+        );
 
 /** @brief   Get concentration (M) of specified ion species
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee PBEparm object
- *  @param   iion Ion species ID
  *  @returns Concentration of ion species (M)
  */
-VEXTERNC double PBEparm_getIonConc(PBEparm *thee, int iion);
+VEXTERNC double PBEparm_getIonConc(
+        PBEparm *thee, /** PBEparm object */
+        int iion /** Ion species ID/index */
+        );
 
 /** @brief   Get radius (A) of specified ion species
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee PBEparm object
- *  @param   iion Ion species ID
  *  @returns Radius of ion species (A)
  */
-VEXTERNC double PBEparm_getIonRadius(PBEparm *thee, int iion);
+VEXTERNC double PBEparm_getIonRadius(
+        PBEparm *thee, /** PBEparm object */ 
+        int iion /** Ion species ID/index */
+        );
 
 
 /** @brief   Construct PBEparm object
@@ -210,52 +213,57 @@ VEXTERNC PBEparm* PBEparm_ctor();
 /** @brief   FORTRAN stub to construct PBEparm object
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee Space for PBEparm object
  *  @returns 1 if succesful, 0 otherwise
  */
-VEXTERNC int      PBEparm_ctor2(PBEparm *thee);
+VEXTERNC int PBEparm_ctor2(
+        PBEparm *thee /** Memory location for object */
+        );
 
 /** @brief   Object destructor
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee  Pointer to memory location of PBEparm object
  */
-VEXTERNC void     PBEparm_dtor(PBEparm **thee);
+VEXTERNC void PBEparm_dtor(
+        PBEparm **thee /** Pointer to memory location of object */
+        );
 
 /** @brief   FORTRAN stub for object destructor
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee  Pointer to PBEparm object
  */
-VEXTERNC void     PBEparm_dtor2(PBEparm *thee);
+VEXTERNC void PBEparm_dtor2(
+        PBEparm *thee /** Pointer to object to be destroyed */
+        );
 
 /** @brief   Consistency check for parameter values stored in object
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee   PBEparm object
  *  @returns 1 if OK, 0 otherwise
  */
-VEXTERNC int      PBEparm_check(PBEparm *thee);
+VEXTERNC int PBEparm_check(
+        PBEparm *thee /** Object to be checked */
+        );
 
 /** @brief   Copy PBEparm object into thee
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee   PBEparm object (target for copy)
- *  @param   parm   PBEparm object (source for copy)
  */
-VEXTERNC void     PBEparm_copy(PBEparm *thee, PBEparm *parm);
+VEXTERNC void PBEparm_copy(
+        PBEparm *thee, /** Target for copy */
+        PBEparm *parm /** Source for copy */
+        );
 
 /** @brief   Parse a keyword from an input file
  *  @ingroup PBEparm
  *  @author  Nathan Baker
- *  @param   thee   PBEparm object
- *  @param   tok    Token to parse
- *  @param   sock   Stream for more tokens
  *  @return   1 if matched and assigned; -1 if matched, but there's some sort
  *            of error (i.e., too few args); 0 if not matched
  */
-VEXTERNC int      PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
-                    Vio *sock);
+VEXTERNC int PBEparm_parseToken(
+        PBEparm *thee, /** Parsing object */
+        char tok[VMAX_BUFSIZE], /** Token to parse */ 
+        Vio *sock /** Socket for additional tokens */
+        );
 
 
 #endif 
