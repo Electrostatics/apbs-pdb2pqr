@@ -1,5 +1,9 @@
 /** @mainpage APBS Programmer's Guide
  *  
+ *  <center>APBS was written by Nathan A. Baker.<br>
+ *  Copyright 1997-2002.</center><br><br>
+ * 
+ *
  *  <center><b><i>This is a pre-beta version of the
  *  code.</b></i></center>
  * 
