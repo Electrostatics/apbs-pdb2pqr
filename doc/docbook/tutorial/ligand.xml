@@ -69,8 +69,8 @@ end
 elec name bal
     mg-auto                          # Use the multigrid method
     dime 97 97 97                      # Grid dimensions
-    flen 70 70 70                      # Grid length
-    fcent mol 3                        # Center on complex
+    fglen 70 70 70                      # Grid length
+    fgcent mol 3                        # Center on complex
     cglen 80 80 80                      # Grid length
     cgcent mol 3                        # Center on complex
     mol 1                              
@@ -93,8 +93,8 @@ end
 elec name pka
     mg-auto                          
     dime 97 97 97                      
-    flen 70 70 70 
-    fcent mol 3  
+    fglen 70 70 70 
+    fgcent mol 3  
     cglen 80 80 80
     cgcent mol 3 
     mol 2
@@ -117,8 +117,8 @@ end
 elec name complex
     mg-auto
     dime 97 97 97
-    flen 70 70 70 
-    fcent mol 3  
+    fglen 70 70 70 
+    fgcent mol 3  
     cglen 80 80 80
     cgcent mol 3 
     mol 3
