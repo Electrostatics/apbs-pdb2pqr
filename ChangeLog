@@ -6,13 +6,6 @@ BETA PUBLIC RELEASE VERSION 0.2.3       10-09-02
 	both LPBE and NPBE calculations.  This bug fix changes most energies 
 	by < 2 kJ/mol; however, it is recommended that users upgrade.  Huge
     thanks to Michael Grabe!!
-  * Updated authors list
-  * New CHARMM parameters -- Robert Konecny
-  * Added more verbosity to error with NPBE forces
-  * Added working Python wrappers -- Todd Dolinksy
-  * Modified VMD scripts read_dx and loadstuff.vmd
-  * Fixed problems with "slicing" off chunks of the mesh during I/O of focused
-    calculations
   * A parameter (chgm) has been added which controls the charge discretization
     method used.  Therefore, this version contains substantial changes in both
 	the API and input file syntax.  Specifically:
@@ -21,8 +14,15 @@ BETA PUBLIC RELEASE VERSION 0.2.3       10-09-02
     - Vpmg_*Force functions require additional arguments
     - Input files must now contain the keyword "chgm #" where # is an integer
     Please see the documentation for more information.
+  * Fixed problems with "slicing" off chunks of the mesh during I/O of focused
+    calculations
+  * Updated authors list
+  * New CHARMM parameters -- Robert Konecny
   * Created enumerations for common surface and charge discretization methods
   * Added Vmgrid class to support easy manipulation of nested grid data
+  * Added more verbosity to error with NPBE forces
+  * Added working Python wrappers -- Todd Dolinksy
+  * Modified VMD scripts read_dx and loadstuff.vmd
 
 
 #############################################################################
