@@ -10316,7 +10316,7 @@ echo "${ECHO_T}*** FEtk component MC found:  enabled. ***" >&6
 _ACEOF
 
         mc_do_src="vcsm.c vfetk.c vpee.c"
-        mc_do_lib="../fem/libapbsfem.la"
+        mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
         mc_do_test="fem reg-fem lndet"
         if test -n "${mcx_found}"; then
             echo "$as_me:$LINENO: result: *** FEtk components MCX found:  enabled. ***" >&5
@@ -10326,7 +10326,7 @@ echo "${ECHO_T}*** FEtk components MCX found:  enabled. ***" >&6
 _ACEOF
 
             mcx_do_src="vpee.c"
-            mcx_do_lib="../fem/libapbsfem.la"
+            mcx_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
             mcx_do_test="vmetis"
         else
             echo "$as_me:$LINENO: result: *** FEtk omponent MCX not found:  disabled. ***" >&5

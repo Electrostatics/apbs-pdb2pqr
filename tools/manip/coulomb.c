@@ -50,21 +50,36 @@ int main(int argc, char **argv) {
     /* OBJECTS */
     Valist *alist;
     Vatom *atom1, *atom2;
-    double charge1, charge2, dist, *pos1, *pos2, energy;
+    double charge1, charge2, dist, *pos1, *pos2, energy, myenergy;
     int i, j;
+    int verbose = 0;
 
     /* SYSTEM PARAMETERS */
     char *path;
 
-    char *usage = "\n\nUsage: coulomb <molecule.pqr>\n\n"
-                  "\twhere <molecule.pqr> is the path to the molecule structure in PQR format\n\n";
+    char *usage = "\n\nUsage: coulomb [-v] <molecule.pqr>\n\n"
+                  "\twhere <molecule.pqr> is the path to the molecule\n"
+                  "\tstructure in PQR format.  This program supports the\n"
+                  "\tfollowing options:\n"
+                  "\t\t-v      Give per-atom energy information\n\n";
 
-    if (argc != 2) {
+    if ((argc > 3) || (argc < 2)) {
         printf("\n*** Syntax error: got %d arguments, expected 2.\n",argc);
         printf("%s", usage);
         exit(666);
     };
-    path = argv[1];
+    if (argc == 3) {
+        if (strcmp("-v", argv[1]) == 0) {
+            verbose = 1;
+        } else {
+            printf("Ignoring option %s\n", argv[1]);
+            verbose = 0;
+        }
+        path = argv[2];
+    } else {
+        verbose = 0;
+        path = argv[1];
+    }
 
     printf("Setting up atom list from %s\n", path);
     alist = Valist_ctor();
@@ -79,19 +94,27 @@ int main(int argc, char **argv) {
         atom1 = Valist_getAtom(alist, i);
         pos1 = Vatom_getPosition(atom1);
         charge1 = Vatom_getCharge(atom1);
-        for (j=i+1; j<Valist_getNumberAtoms(alist); j++) {
-            atom2 = Valist_getAtom(alist, j);
-            pos2 = Vatom_getPosition(atom2);
-            charge2 = Vatom_getCharge(atom2);
-            dist = VSQRT(VSQR(pos1[0]-pos2[0]) + VSQR(pos1[1]-pos2[1])
-                               + VSQR(pos1[2]-pos2[2]));
-            energy += (charge1*charge2/dist);
+        myenergy = 0;
+        for (j=0; j<Valist_getNumberAtoms(alist); j++) {
+            if (j != i) {
+                atom2 = Valist_getAtom(alist, j);
+                pos2 = Vatom_getPosition(atom2);
+                charge2 = Vatom_getCharge(atom2);
+                dist = VSQRT(VSQR(pos1[0]-pos2[0]) + VSQR(pos1[1]-pos2[1])
+                         + VSQR(pos1[2]-pos2[2]));
+                myenergy += 0.5*(charge1*charge2/dist);
+            }
         }
+        energy += myenergy;
+        myenergy = myenergy*(1e-3)*(1e10)*Vunit_ec*Vunit_ec
+          *Vunit_Na/(4*VPI*Vunit_eps0);
+        if (verbose) printf("\tAtom %d:  Energy = %1.12E kJ/mol\n", i,
+          myenergy);
     }
 
     energy = energy*(1e-3)*(1e10)*Vunit_ec*Vunit_ec*Vunit_Na/(4*VPI*Vunit_eps0);
  
-    printf("Energy = %1.12e kJ/mol in vacuum.\n", energy);
+    printf("Total energy = %1.12e kJ/mol in vacuum.\n", energy);
 
     return 0;
 }
