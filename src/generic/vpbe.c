@@ -69,13 +69,13 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVgm
+// Routine:  Vpbe_getGem
 //
 // Purpose:  Get a pointer to the Gem (grid manager) object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) { 
+VPUBLIC Gem* Vpbe_getGem(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->gm; 
