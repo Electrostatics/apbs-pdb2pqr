@@ -225,6 +225,16 @@ typedef enum eVdata_Format Vdata_Format;
  */ 
 #define VREDFRAC 0.25
 
+/** @brief  Number of vertices per simplex (hard-coded to 3D)
+ *  @ingroup Vhal
+ */
+#define VAPBS_NVS 4
+
+/** @brief  Our dimension
+ * @ingroup Vhal
+ */
+#define VAPBS_DIM 4
+
 /** @brief   Face definition for a volume
  *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
  *  @ingroup Vhal
