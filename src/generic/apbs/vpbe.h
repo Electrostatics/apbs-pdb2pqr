@@ -420,6 +420,6 @@ VEXTERNC double  Vpbe_getCoulombEnergy1(Vpbe *thee);
  *  @param   thee  Vpbe object
  *  @return  The memory used by this structure and its contents in bytes
  */
-VEXTERNC int     Vpbe_memChk(Vpbe *thee);
+VEXTERNC unsigned long int Vpbe_memChk(Vpbe *thee);
 
 #endif /* ifndef _VPBE_H_ */

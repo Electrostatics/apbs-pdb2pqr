@@ -562,9 +562,9 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_memChk(Vpbe *thee) {
+VPUBLIC unsigned long int Vpbe_memChk(Vpbe *thee) {
    
-    int memUse = 0;
+    unsigned long int memUse = 0;
 
     if (thee == VNULL) return 0;
 
