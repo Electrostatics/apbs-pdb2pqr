@@ -61,6 +61,11 @@
 #include "apbs/vacc.h"
 #include "apbs/vunit.h"
 
+#if defined(HAVE_PMGC_H)
+#   include "pmgc/mgmlsys.h"
+#   include "pmgc/mgarray.h"
+#endif
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
@@ -178,7 +183,7 @@ VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
                     double T, double soluteDiel, double solventDiel, 
                     double solventRadius); 
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
-VEXTERNC double  Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
+VEXTERNC double  Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color);
 VEXTERNC double  Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color);
 VEXTERNC double  Vpbe_getEnergyNorm2(Vpbe *thee, Alg *am, int color);
 VEXTERNC double  Vpbe_getCoulombEnergy1(Vpbe *thee);

@@ -105,6 +105,7 @@ mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 pmgc = @pmgc@
 pmgcdir = @pmgcdir@
+pmgcdirinc = @pmgcdirinc@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
