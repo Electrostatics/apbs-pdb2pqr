@@ -107,21 +107,21 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
 
     /* Sanity check: make sure we're within the old mesh */
-    if (((xmaxNEW-xmaxOLD)>VPMGSMALL) || 
-        ((ymaxNEW-ymaxOLD)>VPMGSMALL) || 
-        ((zmaxNEW-zmaxOLD)>VPMGSMALL) ||
-        ((xminOLD-xminNEW)>VPMGSMALL) || 
-        ((yminOLD-yminNEW)>VPMGSMALL) || 
-        ((zminOLD-zminNEW)>VPMGSMALL)) {
+    Vnm_print(0, "VPMG::focusFillBound -- New mesh mins = %g, %g, %g\n",
+      xminNEW, yminNEW, zminNEW);
+    Vnm_print(0, "VPMG::focusFillBound -- New mesh maxs = %g, %g, %g\n",
+      xmaxNEW, ymaxNEW, zmaxNEW);
+    Vnm_print(0, "VPMG::focusFillBound -- Old mesh mins = %g, %g, %g\n",
+      xminOLD, yminOLD, zminOLD);
+    Vnm_print(0, "VPMG::focusFillBound -- Old mesh maxs = %g, %g, %g\n",
+      xmaxOLD, ymaxOLD, zmaxOLD);
+    if ((VABS(xmaxNEW-xmaxOLD)>VPMGSMALL) || 
+        (VABS(ymaxNEW-ymaxOLD)>VPMGSMALL) || 
+        (VABS(zmaxNEW-zmaxOLD)>VPMGSMALL) ||
+        (VABS(xminOLD-xminNEW)>VPMGSMALL) || 
+        (VABS(yminOLD-yminNEW)>VPMGSMALL) || 
+        (VABS(zminOLD-zminNEW)>VPMGSMALL)) {
         Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
-        Vnm_print(2, "VPMG::focusFillBound -- New mesh mins = %g, %g, %g\n",
-          xminNEW, yminNEW, zminNEW);
-        Vnm_print(2, "VPMG::focusFillBound -- New mesh maxs = %g, %g, %g\n",
-          xmaxNEW, ymaxNEW, zmaxNEW);
-        Vnm_print(2, "VPMG::focusFillBound -- Old mesh mins = %g, %g, %g\n",
-          xminOLD, yminOLD, zminOLD);
-        Vnm_print(2, "VPMG::focusFillBound -- Old mesh maxs = %g, %g, %g\n",
-          xmaxOLD, ymaxOLD, zmaxOLD);
         fflush(stderr);
         VASSERT(0);
     }
@@ -2417,15 +2417,17 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 //           data => nx*ny*nz length array of data
 //
 // Notes:    The mesh spacing should be uniform
-//           Format changed frmo %12.6E to %12.5E
+//           Format changed from %12.6E to %12.5E
+//           Respects partition information
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt, 
   const char *thost, const char *fname, char *title, double *data) {
 
-    int icol, i, j, k, u;
-    double xmin, ymin, zmin;
+    int icol, i, j, k, u, nx, ny, nz, nxPART, nyPART, nzPART;
+    double xmin, ymin, zmin, xminPART, yminPART, zminPART, hzed, hy, hx;
+    double x, y, z;
     Vio *sock;
 
     VASSERT(thee != VNULL);
@@ -2448,31 +2450,76 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
         return;
     }
 
+    /* Get the lower corner and number of grid points for the local 
+     * partition */
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
+    ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
+    zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
+    xminPART = thee->pmgp->xcent + 0.5*(hx)*(nx-1);
+    yminPART = thee->pmgp->ycent + 0.5*(hy)*(ny-1);
+    zminPART = thee->pmgp->zcent + 0.5*(hzed)*(nz-1);
+    nxPART = 0;
+    nyPART = 0; 
+    nzPART = 0;
+    for (k=0; k<nz; k++) {
+        u = k*(nx)*(ny);
+        if (thee->pvec[u] == 1) {
+            nz++;
+            z = k*hzed + xmin;
+            if (z < zminPART) zminPART = z;
+        }
+        for (j=0; j<thee->pmgp->ny; j++) {
+            u = k*(nx)*(ny)+j*(nx);
+            if (thee->pvec[u] == 1) {
+                ny++;
+                y = j*hy + ymin;
+                if (y < yminPART) yminPART = y;
+            }
+            for (i=0; i<nx; i++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (thee->pvec[u] != 0) {
+                    nx++;
+                    x = i*hx + xmin;
+                    if (x < xminPART) xminPART = x;
+                }
+            } 
+        }
+    }
+
+    if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
+        Vnm_print(0, "Vpmg_writeUHBD:  printing only subset of domain\n");
+    }
+
     /* Write out the header */
-    xmin = thee->pmgp->xcent - 0.5*(thee->pmgp->hx)*(thee->pmgp->nx-1);
-    ymin = thee->pmgp->ycent - 0.5*(thee->pmgp->hy)*(thee->pmgp->ny-1);
-    zmin = thee->pmgp->zcent - 0.5*(thee->pmgp->hzed)*(thee->pmgp->nz-1);
     Vio_printf(sock, "%72s\n", title);
     Vio_printf(sock, "%12.6E%12.6E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0, 
-      thee->pmgp->nz, 1, thee->pmgp->nz);
-    Vio_printf(sock, "%7d%7d%7d%12.6E%12.6E%12.6E%12.6E\n", thee->pmgp->nx,
-      thee->pmgp->ny, thee->pmgp->nz, thee->pmgp->hx, xmin, ymin, zmin);
+      nzPART, 1, nzPART);
+    Vio_printf(sock, "%7d%7d%7d%12.6E%12.6E%12.6E%12.6E\n", nxPART,
+      nyPART, nzPART, hx, xminPART, yminPART, zminPART);
     Vio_printf(sock, "%12.6E%12.6E%12.6E%12.6E\n", 0.0, 0.0, 0.0, 0.0);
     Vio_printf(sock, "%12.6E%12.6E%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
     icol = 0;
-    for (k=0; k<thee->pmgp->nz; k++) {
+    for (k=0; k<nz; k++) {
         Vio_printf(sock, "\n%7d%7d%7d\n", k+1, thee->pmgp->nx, thee->pmgp->ny);
         icol = 0;
-        for (j=0; j<thee->pmgp->ny; j++) {
-            for (i=0; i<thee->pmgp->nx; i++) {
-                u = k*(thee->pmgp->nx)*(thee->pmgp->ny)+j*(thee->pmgp->nx)+i;
-                icol++;
-                Vio_printf(sock, " %12.6E", data[u]);
-                if (icol == 6) {
-                    icol = 0;
-                    Vio_printf(sock, "\n");
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (thee->pvec[u] != 0) {
+                    icol++;
+                    Vio_printf(sock, " %12.6E", data[u]);
+                    if (icol == 6) {
+                        icol = 0;
+                        Vio_printf(sock, "\n");
+                    }
                 }
             }
         }
@@ -2728,6 +2775,7 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
 //           data => nx*ny*nz length array of data
 //
 // Notes:    All dimension information is given in order: z, y, x
+//           Does not currently respect partition information
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
