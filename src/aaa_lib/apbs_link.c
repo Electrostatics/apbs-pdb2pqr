@@ -38,6 +38,12 @@
  * @endverbatim
  */
 
+#if defined(HAVE_MC_H)
+    void apbs_needs_mc(void) { }
+#endif
+#if defined(HAVE_MCX_H)
+    void apbs_needs_mcx(void) { }
+#endif
 
 void apbs_link(void)
 {
