@@ -3512,7 +3512,7 @@ fi
 
 top_srcdir="`pwd`"
 lib_list="-L${top_srcdir}/lib ${mc_lib} ${mcx_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
-inc_list="${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc} -I${top_srcdir}/inc"
+inc_list="-I${top_srcdir}/inc ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 
 
 
