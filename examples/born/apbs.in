@@ -12,7 +12,7 @@ read
 end
 
 # CALCULATE POTENTIAL FOR SOLVATED STATE
-elec
+elec name solvated
     mg-manual
     dime 65 65 65
     nlev 4 
@@ -34,7 +34,7 @@ elec
 end
 
 # CALCULATE POTENTIAL FOR REFERENCE STATE
-elec
+elec name reference
     mg-manual
     dime 65 65 65
     nlev 4
@@ -56,7 +56,7 @@ elec
 end
 
 # COMBINE TO FORM SOLVATION ENERGY
-print energy 1 - 2 end
+print energy solvated - reference end
 
 # SO LONG
 quit

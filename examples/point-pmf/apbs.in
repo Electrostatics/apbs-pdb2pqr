@@ -13,7 +13,7 @@ read
 end
 
 # COMPONENT 1 ENERGY
-elec
+elec name point1
     mg-manual
     dime 65 65 65
     nlev 4
@@ -35,7 +35,7 @@ elec
 end
 
 # COMPONENT 2 ENERGY
-elec
+elec name point2
     mg-manual
     dime 65 65 65
     nlev 4
@@ -57,7 +57,7 @@ elec
 end
 
 # COMPLEX ENERGY 
-elec
+elec name complex
     mg-manual
     dime 65 65 65
     nlev 4
@@ -79,9 +79,9 @@ elec
 end
 
 # BINDING ENERGY
-print energy 3 - 2 - 1 end
+print energy complex - point1 - point2 end
 
 # BINDING FORCE
-print force 3 - 2 - 1 end
+print force complex - point1 - point2 end
 
 quit
