@@ -125,17 +125,19 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 CCLD = $(F77)
 
-noinst_PROGRAMS = acc coulomb
+noinst_PROGRAMS = acc coulomb born
 acc_SOURCES = acc.c 
 acc_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 coulomb_SOURCES = coulomb.c 
 coulomb_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+born_SOURCES = born.c 
+born_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 INCLUDES = @inc_list@
 CFLAGS = @CFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../../src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES = 
-noinst_PROGRAMS =  acc$(EXEEXT) coulomb$(EXEEXT)
+noinst_PROGRAMS =  acc$(EXEEXT) coulomb$(EXEEXT) born$(EXEEXT)
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -149,6 +151,9 @@ acc_LDFLAGS =
 coulomb_OBJECTS =  coulomb.$(OBJEXT)
 coulomb_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 coulomb_LDFLAGS = 
+born_OBJECTS =  born.$(OBJEXT)
+born_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
+born_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
@@ -159,8 +164,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(acc_SOURCES) $(coulomb_SOURCES)
-OBJECTS = $(acc_OBJECTS) $(coulomb_OBJECTS)
+SOURCES = $(acc_SOURCES) $(coulomb_SOURCES) $(born_SOURCES)
+OBJECTS = $(acc_OBJECTS) $(coulomb_OBJECTS) $(born_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -233,6 +238,10 @@ acc$(EXEEXT): $(acc_OBJECTS) $(acc_DEPENDENCIES)
 coulomb$(EXEEXT): $(coulomb_OBJECTS) $(coulomb_DEPENDENCIES)
 	@rm -f coulomb$(EXEEXT)
 	$(LINK) $(coulomb_LDFLAGS) $(coulomb_OBJECTS) $(coulomb_LDADD) $(LIBS)
+
+born$(EXEEXT): $(born_OBJECTS) $(born_DEPENDENCIES)
+	@rm -f born$(EXEEXT)
+	$(LINK) $(born_LDFLAGS) $(born_OBJECTS) $(born_LDADD) $(LIBS)
 
 tags: TAGS
 
