@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
     This driver program calculates electrostatic potentials, energies,\n\
     and forces using both multigrid and finite element methods.\n\
     It is invoked as:\n\n\
-      apbs <apbs.in>\n\
+      apbs apbs.in\n\n\
     where apbs.in is a formatted input file.\n\
     ----------------------------------------------------------------------\n\n";
 
