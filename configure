@@ -469,7 +469,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib wall wall_pedantic wall_pedantic_ansi pedantic_ansi maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib apbs_do_tools mc_lib mc_inc mc_do_src mc_do_test mc_do_lib blas_lib blas_do_src cxxfmmsrc stdcxx_lib arpack_lib arpack_do_tools lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mc_lib mc_inc mc_do_src mc_do_test mc_do_lib wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib blas_do_src cxxfmmsrc stdcxx_lib arpack_lib arpack_do_tools lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1034,9 +1034,9 @@ Optional Features:
   --enable-static=PKGS  build static libraries default=yes
   --enable-fast-install=PKGS  optimize for fast installation default=yes
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-fetk          disable FEtk features
   --enable-pansi          enable pedantic ANSI compilation
   --disable-tools         disable tool compilation
-  --disable-fetk          disable FEtk features
   --disable-blas          disable local BLAS compilation
   --enable-cxxfmm         enable the C++ FMM CODE (BROKEN!!!)
   --disable-inline        disable inline functions (macros)
@@ -9420,167 +9420,6 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking whether EMBED macro can be used without compilation errors" >&5
-echo $ECHO_N "checking whether EMBED macro can be used without compilation errors... $ECHO_C" >&6
-cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-int
-main ()
-{
-#define EMBED(rctag) \
-     static const char* rctag; \
-     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
-     EMBED(rcsid)
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  embed_ok=yes;
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_EMBED
-_ACEOF
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-embed_ok=no
-fi
-rm -f conftest.$ac_objext conftest.$ac_ext
-echo "$as_me:$LINENO: result: ${embed_ok}" >&5
-echo "${ECHO_T}${embed_ok}" >&6
-
-echo "$as_me:$LINENO: result: ------------ begin processing APBS configure options ----------" >&5
-echo "${ECHO_T}------------ begin processing APBS configure options ----------" >&6
-
-echo "$as_me:$LINENO: checking whether you want pedantic ANSI compilation" >&5
-echo $ECHO_N "checking whether you want pedantic ANSI compilation... $ECHO_C" >&6
-# Check whether --enable-pansi or --disable-pansi was given.
-if test "${enable_pansi+set}" = set; then
-  enableval="$enable_pansi"
-  pansi_use="yes"
-else
-  pansi_use=""
-
-fi;
-if test -z "${pansi_use}"; then
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    wall=""
-    wall_pedantic=""
-    wall_pedantic_ansi=""
-    pedantic_ansi=""
-                    try_strcasecmp="";
-    echo "$as_me:$LINENO: checking for strcasecmp" >&5
-echo $ECHO_N "checking for strcasecmp... $ECHO_C" >&6
-if test "${ac_cv_func_strcasecmp+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-/* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char strcasecmp (); below.  */
-#include <assert.h>
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char strcasecmp ();
-/* The GNU C library defines this for functions which it implements
-    to always fail with ENOSYS.  Some functions are actually named
-    something starting with __ and the normal name is an alias.  */
-#if defined (__stub_strcasecmp) || defined (__stub___strcasecmp)
-choke me
-#else
-char (*f) () = strcasecmp;
-#endif
-#ifdef __cplusplus
-}
-#endif
-
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_func_strcasecmp=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_func_strcasecmp=no
-fi
-rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
-fi
-echo "$as_me:$LINENO: result: $ac_cv_func_strcasecmp" >&5
-echo "${ECHO_T}$ac_cv_func_strcasecmp" >&6
-if test $ac_cv_func_strcasecmp = yes; then
-  try_strcasecmp=""
-else
-  try_strcasecmp="yes"
-fi
-
-    if test -n "${try_strcasecmp}"; then
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_STRCASECMP
-_ACEOF
-
-    fi
-else
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    wall="-Wall"
-    wall_pedantic="-Wall -pedantic"
-    wall_pedantic_ansi="-Wall -pedantic -ansi"
-    pedantic_ansi="-pedantic -ansi"
-fi
-
-
-
-
-
 echo "$as_me:$LINENO: result: ---------- begin configuring for MALOC linkage ------------" >&5
 echo "${ECHO_T}---------- begin configuring for MALOC linkage ------------" >&6
 
@@ -9820,8 +9659,8 @@ fi
 
 fi
 if test -z "${maloc_found}"; then
-    { { echo "$as_me:$LINENO: error: ** MALOC libraries or headers missing:  exiting on error! ***" >&5
-echo "$as_me: error: ** MALOC libraries or headers missing:  exiting on error! ***" >&2;}
+    { { echo "$as_me:$LINENO: error: MALOC libraries or headers missing:  exiting on error!" >&5
+echo "$as_me: error: MALOC libraries or headers missing:  exiting on error!" >&2;}
    { (exit 1); exit 1; }; }
 fi
 LDFLAGS=${LDFLAGS_SAVE};
@@ -9893,8 +9732,8 @@ fi
 
 mpi_inc="";
 if test -z "${mpi_use}"; then
-    echo "$as_me:$LINENO: result: *** MALOC not compiled with MPI:  MPI disabled  ***" >&5
-echo "${ECHO_T}*** MALOC not compiled with MPI:  MPI disabled  ***" >&6
+    echo "$as_me:$LINENO: result: MALOC not compiled with MPI:  MPI disabled" >&5
+echo "${ECHO_T}MALOC not compiled with MPI:  MPI disabled" >&6
 else
 
         if test -n "${FETK_MPI_INCLUDE}"; then
@@ -10190,13 +10029,19 @@ fi
         fi
     fi
     if test -z "${mpi_use}"; then
-        echo "$as_me:$LINENO: result: *** MPI library or header is missing:  MPI disabled ***" >&5
-echo "${ECHO_T}*** MPI library or header is missing:  MPI disabled ***" >&6
-        echo "$as_me:$LINENO: result: *** Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY ***" >&5
-echo "${ECHO_T}*** Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY ***" >&6
+        echo "$as_me:$LINENO: result: MALOC was compiled with MPI enabled" >&5
+echo "${ECHO_T}MALOC was compiled with MPI enabled" >&6
+        echo "$as_me:$LINENO: result: MALOC needs to link against the MPI library" >&5
+echo "${ECHO_T}MALOC needs to link against the MPI library" >&6
+        echo "$as_me:$LINENO: result: Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY" >&5
+echo "${ECHO_T}Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY" >&6
+        { { echo "$as_me:$LINENO: error: MPI library or header is missing!!" >&5
+echo "$as_me: error: MPI library or header is missing!!" >&2;}
+   { (exit 1); exit 1; }; }
+
     else
-        echo "$as_me:$LINENO: result: *** MPI library and header were found:  MPI enabled ***" >&5
-echo "${ECHO_T}*** MPI library and header were found:  MPI enabled ***" >&6
+        echo "$as_me:$LINENO: result: MPI library and header were found:  MPI enabled" >&5
+echo "${ECHO_T}MPI library and header were found:  MPI enabled" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MPI_H
@@ -10491,24 +10336,8 @@ fi
 echo "$as_me:$LINENO: result: ---------- end configuring for MALOC linkage --------------" >&5
 echo "${ECHO_T}---------- end configuring for MALOC linkage --------------" >&6
 
-
-# Check whether --enable-tools or --disable-tools was given.
-if test "${enable_tools+set}" = set; then
-  enableval="$enable_tools"
-   with_tools="no"
-else
-   with_tools=""
-
-fi;
-apbs_do_tools=""
-if test -z "${with_tools}"; then
-    apbs_do_tools="tools"
-else
-    echo "$as_me:$LINENO: result: *** tool compilation disabled at user request. ***" >&5
-echo "${ECHO_T}*** tool compilation disabled at user request. ***" >&6
-fi
-
-
+echo "$as_me:$LINENO: result: ---------- begin configuring for FEtk linkage --------------" >&5
+echo "${ECHO_T}---------- begin configuring for FEtk linkage --------------" >&6
 # Check whether --enable-fetk or --disable-fetk was given.
 if test "${enable_fetk+set}" = set; then
   enableval="$enable_fetk"
@@ -10966,8 +10795,8 @@ _ACEOF
     CPPFLAGS=${CPPFLAGS_SAVE};
 
     if test -n "${mc_found}"; then
-        echo "$as_me:$LINENO: result: *** FEtk components found:  enabled. ***" >&5
-echo "${ECHO_T}*** FEtk components found:  enabled. ***" >&6
+        echo "$as_me:$LINENO: result: FEtk components found:  enabled." >&5
+echo "${ECHO_T}FEtk components found:  enabled." >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MC_H
@@ -10976,16 +10805,202 @@ _ACEOF
         mc_do_src="vcsm.c vfetk.c vpee.c"
         mc_do_lib="${top_srcdir}/src/fem/libapbsfem.la"
     else
-        echo "$as_me:$LINENO: result: *** FEtk component not found:  disabled. ***" >&5
-echo "${ECHO_T}*** FEtk component not found:  disabled. ***" >&6
+        echo "$as_me:$LINENO: result: FEtk component not found:  disabled." >&5
+echo "${ECHO_T}FEtk component not found:  disabled." >&6
     fi
 else
-    echo "$as_me:$LINENO: result: *** FEtk disabled at user request. ***" >&5
-echo "${ECHO_T}*** FEtk disabled at user request. ***" >&6
+    echo "$as_me:$LINENO: result: FEtk disabled at user request." >&5
+echo "${ECHO_T}FEtk disabled at user request." >&6
 fi
 
 
 
+
+
+echo "$as_me:$LINENO: result: ---------- end configuring for FEtk linkage --------------" >&5
+echo "${ECHO_T}---------- end configuring for FEtk linkage --------------" >&6
+
+echo "$as_me:$LINENO: result: ------------ begin processing APBS configure options ----------" >&5
+echo "${ECHO_T}------------ begin processing APBS configure options ----------" >&6
+
+echo "$as_me:$LINENO: checking whether EMBED macro can be used without compilation errors" >&5
+echo $ECHO_N "checking whether EMBED macro can be used without compilation errors... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+#define EMBED(rctag) \
+     static const char* rctag; \
+     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+     EMBED(rcsid)
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  embed_ok=yes;
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_EMBED
+_ACEOF
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+embed_ok=no
+fi
+rm -f conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: ${embed_ok}" >&5
+echo "${ECHO_T}${embed_ok}" >&6
+
+
+echo "$as_me:$LINENO: checking whether you want pedantic ANSI compilation" >&5
+echo $ECHO_N "checking whether you want pedantic ANSI compilation... $ECHO_C" >&6
+# Check whether --enable-pansi or --disable-pansi was given.
+if test "${enable_pansi+set}" = set; then
+  enableval="$enable_pansi"
+  pansi_use="yes"
+else
+  pansi_use=""
+
+fi;
+if test -z "${pansi_use}"; then
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    wall=""
+    wall_pedantic=""
+    wall_pedantic_ansi=""
+    pedantic_ansi=""
+                    try_strcasecmp="";
+    echo "$as_me:$LINENO: checking for strcasecmp" >&5
+echo $ECHO_N "checking for strcasecmp... $ECHO_C" >&6
+if test "${ac_cv_func_strcasecmp+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+#line $LINENO "configure"
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char strcasecmp (); below.  */
+#include <assert.h>
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char strcasecmp ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined (__stub_strcasecmp) || defined (__stub___strcasecmp)
+choke me
+#else
+char (*f) () = strcasecmp;
+#endif
+#ifdef __cplusplus
+}
+#endif
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+         { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_func_strcasecmp=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_func_strcasecmp=no
+fi
+rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
+fi
+echo "$as_me:$LINENO: result: $ac_cv_func_strcasecmp" >&5
+echo "${ECHO_T}$ac_cv_func_strcasecmp" >&6
+if test $ac_cv_func_strcasecmp = yes; then
+  try_strcasecmp=""
+else
+  try_strcasecmp="yes"
+fi
+
+    if test -n "${try_strcasecmp}"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRCASECMP
+_ACEOF
+
+    fi
+else
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    wall="-Wall"
+    wall_pedantic="-Wall -pedantic"
+    wall_pedantic_ansi="-Wall -pedantic -ansi"
+    pedantic_ansi="-pedantic -ansi"
+fi
+
+
+
+
+
+echo "$as_me:$LINENO: checking whether you want to compile the tools" >&5
+echo $ECHO_N "checking whether you want to compile the tools... $ECHO_C" >&6
+# Check whether --enable-tools or --disable-tools was given.
+if test "${enable_tools+set}" = set; then
+  enableval="$enable_tools"
+   with_tools="no"
+else
+   with_tools=""
+
+fi;
+apbs_do_tools=""
+if test -z "${with_tools}"; then
+    echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    apbs_do_tools="tools"
+else
+    echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
 
 
 
@@ -11181,14 +11196,21 @@ echo "${ECHO_T}yes" >&6
     fi
 fi
 
+echo "$as_me:$LINENO: result: ------------- end processing APBS configure options -----------" >&5
+echo "${ECHO_T}------------- end processing APBS configure options -----------" >&6
+
 top_srcdir="`pwd`"
 lib_list="-L${top_srcdir}/lib ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${stdcxx_lib}"
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mpi_inc}"
 
 
 
-echo "$as_me:$LINENO: result: ------------- end processing APBS configure options -----------" >&5
-echo "${ECHO_T}------------- end processing APBS configure options -----------" >&6
+
+echo "$as_me:$LINENO: result: APBS to be linked with following libraries:  ${lib_list}" >&5
+echo "${ECHO_T}APBS to be linked with following libraries:  ${lib_list}" >&6
+echo "$as_me:$LINENO: result: APBS to be compiled with following includes:  ${inc_list}" >&5
+echo "${ECHO_T}APBS to be compiled with following includes:  ${inc_list}" >&6
+
 
 
                                                                                                                                                       ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/opendx/Makefile tools/arpack/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile"
@@ -11919,22 +11941,22 @@ s,@liberty_lib@,$liberty_lib,;t t
 s,@nsl_lib@,$nsl_lib,;t t
 s,@socket_lib@,$socket_lib,;t t
 s,@thread_lib@,$thread_lib,;t t
-s,@wall@,$wall,;t t
-s,@wall_pedantic@,$wall_pedantic,;t t
-s,@wall_pedantic_ansi@,$wall_pedantic_ansi,;t t
-s,@pedantic_ansi@,$pedantic_ansi,;t t
 s,@maloc_lib@,$maloc_lib,;t t
 s,@maloc_inc@,$maloc_inc,;t t
 s,@mpi_lib@,$mpi_lib,;t t
 s,@mpi_inc@,$mpi_inc,;t t
 s,@mpi_bin@,$mpi_bin,;t t
 s,@rl_lib@,$rl_lib,;t t
-s,@apbs_do_tools@,$apbs_do_tools,;t t
 s,@mc_lib@,$mc_lib,;t t
 s,@mc_inc@,$mc_inc,;t t
 s,@mc_do_src@,$mc_do_src,;t t
 s,@mc_do_test@,$mc_do_test,;t t
 s,@mc_do_lib@,$mc_do_lib,;t t
+s,@wall@,$wall,;t t
+s,@wall_pedantic@,$wall_pedantic,;t t
+s,@wall_pedantic_ansi@,$wall_pedantic_ansi,;t t
+s,@pedantic_ansi@,$pedantic_ansi,;t t
+s,@apbs_do_tools@,$apbs_do_tools,;t t
 s,@blas_lib@,$blas_lib,;t t
 s,@blas_do_src@,$blas_do_src,;t t
 s,@cxxfmmsrc@,$cxxfmmsrc,;t t

@@ -21,7 +21,8 @@ distclean-local: clean-local
 clean-local: clean-ac
 	
 clean-ac:
-	-rm -f dummy*.o mangle-func* noformain*
+	-rm -f dummy*.o mangle-func* noformain* work.pc*
+	-rm -rf autom4te.cache
 
 install-data-local:
 	-rm -f ./bin/apbs
