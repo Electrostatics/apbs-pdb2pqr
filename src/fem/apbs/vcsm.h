@@ -86,6 +86,8 @@ typedef struct Vcsm {
   int **qsm;          /* The inverse of sqm; the list of simplices
                        * associated with a given charge */
   int *nqsm;          /* The length of the simplex lists in thee->qsm */
+  int *colors;        /* A list of atom colors for association with specific
+                       * mesh partitions. */
   int initFlag;       /* Indicates whether the maps have been initialized
                        * yet */
 
@@ -121,5 +123,6 @@ VEXTERNC void    Vcsm_init(Vcsm *thee);
 VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);
 VEXTERNC int     Vcsm_memChk(Vcsm *thee);
 VEXTERNC void    Vcsm_setAtomColors(Vcsm *thee);
+VEXTERNC int     Vcsm_getAtomColor(Vcsm *thee, int iatom);
 
 #endif /* ifndef _VALIST_H_ */

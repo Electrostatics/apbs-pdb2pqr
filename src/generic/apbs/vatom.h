@@ -67,8 +67,6 @@ typedef struct Vatom {
     Vec3 position;     /* Atomic position */
     double radius;     /* Atomic radius   */
     double charge;     /* Atomic charge   */
-    int color;         /* An index which can store the mesh partition color, if
-                        * applicable */
 
 } Vatom;
 
@@ -96,7 +94,5 @@ VEXTERNC double   Vatom_getRadius(Vatom *thee);
 VEXTERNC void   Vatom_setCharge(Vatom *thee, double charge);
 VEXTERNC double   Vatom_getCharge(Vatom *thee);
 VEXTERNC int   Vatom_memChk(Vatom *thee);
-VEXTERNC int Vatom_getColor(Vatom *thee);
-VEXTERNC void Vatom_setColor(Vatom *thee, int color);
 
 #endif /* ifndef _VATOM_H_ */

@@ -129,6 +129,11 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     thee->nsimp = thee->gm->numSS;
     VASSERT(thee->nsimp > 0);
 
+    /* Set up the array of colors and initialize all to -1 */
+    thee->colors = Vram_ctor(thee->natom, sizeof(int));
+    VASSERT(thee->colors != VNULL);
+    for (iatom=0; iatom<thee->natom; iatom++) thee->colors[iatom] = -1;
+
     /* Allocate and initialize space for the first dimensions of the 
      * simplex-charge map, the simplex array, and the counters */
     VASSERT( (thee->sqm = Vram_ctor(thee->nsimp, sizeof(int *))) != VNULL);
@@ -256,6 +261,7 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
         Vram_dtor((Vram **)&(thee->nsqm), thee->msimp, sizeof(int));
         Vram_dtor((Vram **)&(thee->qsm), thee->natom, sizeof(int *));
         Vram_dtor((Vram **)&(thee->nqsm), thee->natom, sizeof(int));
+        Vram_dtor((Vram **)&(thee->colors), thee->natom, sizeof(int));
 
     }
 }
@@ -644,6 +650,8 @@ VPUBLIC int Vcsm_memChk(Vcsm *thee)
       memUse = memUse + (thee->nqsm[i])*sizeof(int);
     /* thee->nqsm */
     memUse = memUse + (thee->natom)*sizeof(int);
+    /* thee->colors */
+    memUse = memUse + (thee->natom)*sizeof(int);
 
     return memUse;
 }
@@ -664,8 +672,6 @@ VPUBLIC void Vcsm_setAtomColors(Vcsm *thee) {
     int nsimps;
     SS *simp;
     int iatom;
-    Vatom *atom;
-    int color;
 
     VASSERT(thee != VNULL);
     VASSERT(thee->initFlag);
@@ -678,9 +684,23 @@ VPUBLIC void Vcsm_setAtomColors(Vcsm *thee) {
         VASSERT(nsimps > 0);
         /* Get the simplex color */
         simp = Vgm_SS(thee->gm, thee->qsm[iatom][0]);
-        color = SS_chart(simp);
-        /* Transfer the color to the atom */
-        atom = Valist_getAtom(thee->alist, iatom);
-        Vatom_setColor(atom, color);
+        thee->colors[iatom] = SS_chart(simp);
     }
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getAtomColor
+//
+// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
+//           hasn't been initialized yet.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getAtomColor(Vcsm *thee, int iatom) {
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->initFlag);
+    VASSERT(iatom < thee->natom);
+
+    return thee->colors[iatom];
 }
