@@ -103,7 +103,6 @@ liberty_lib = @liberty_lib@
 math_lib = @math_lib@
 mcdir = @mcdir@
 mpi_lib = @mpi_lib@
-sav = @sav@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
