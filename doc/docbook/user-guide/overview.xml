@@ -290,16 +290,20 @@
 
   </sect1>
 
-  <sect1 id="examples-sect">  <title>Examples</title>
-    <para>The APBS sub-directory <filename>examples</filename> contains several
-    test systems and example scripts which show how to use APBS for binding
-    energy, solvation energy, and force calculations. The file
-    <filename>examples/README.html</filename> contains descriptions of the test
-    cases as well as anticipated results.  
+  <sect1 id="examples-sect">  <title>Examples and tutorial</title>
+    <para>The APBS sub-directory <filename>examples</filename> contains
+      several test systems and example scripts which show how to use APBS for
+      binding energy, solvation energy, and force calculations. The file
+      <filename>examples/README.html</filename> contains descriptions of the
+      test cases as well as anticipated results.  
+    </para>
+    <para>Additional examples are provided as part of the APBS tutorial
+      (<filename>doc/html/tutorial/</filename>), described in more detail in
+      the <link linkend="documentation-sect">Documentation section</link>.
     </para>
   </sect1>
 
-  <sect1>  <title>Documentation</title>
+  <sect1 id="documentation-sect">  <title>Documentation</title>
     <para>The APBS sub-directory <filename>doc</filename> contains guides for
       using APBS and developing code based on APBS libraries.  The
       subdirectories include:
@@ -311,6 +315,10 @@
         <listitem>
           <para><filename>doc/html/programmer/index.html</filename></para>
           <para>HTML-format Programmer Guide </para>
+        </listitem>
+        <listitem>
+          <para><filename>doc/html/tutorial/index.html</filename></para>
+          <para>HTML-format APBS tutorial </para>
         </listitem>
       </itemizedlist>
     </para>
