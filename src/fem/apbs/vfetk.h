@@ -308,4 +308,15 @@ VEXTERNC int     Vfetk_memChk(Vfetk *thee);
  */
 VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);
 
+/** @brief   Writes a Bmat to disk in Harwell-Boeing sparse matrix format.
+ * 
+ *  @ingroup Vfetk
+ *  @author  Stephen Bond
+ *  @note    This is a friend function of Bmat
+ *  @param   thee Bmat object
+ *  @param   fname char Output filename
+ *  @bug     Hardwired to only handle the single block symmetric case.
+ */
+VEXTERNC void    Bmat_printHB(Bmat *thee, char *fname);
+
 #endif /* ifndef _VFETK_H_ */

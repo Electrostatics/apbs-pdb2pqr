@@ -50,8 +50,6 @@
 // Class Vfetk: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
 
-VPRIVATE void Bmat_printHB( Bmat *thee, char *fname);
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vfetk: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
@@ -62,10 +60,10 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname);
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Gem* Vfetk_getGem(Vfetk *thee) { 
+VPUBLIC Gem* Vfetk_getGem(Vfetk *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->gm; 
+   return thee->gm;
 
 }
 
@@ -74,10 +72,10 @@ VPUBLIC Gem* Vfetk_getGem(Vfetk *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC AM* Vfetk_getAM(Vfetk *thee) { 
+VPUBLIC AM* Vfetk_getAM(Vfetk *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->am; 
+   return thee->am;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -85,10 +83,10 @@ VPUBLIC AM* Vfetk_getAM(Vfetk *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpbe* Vfetk_getVpbe(Vfetk *thee) { 
+VPUBLIC Vpbe* Vfetk_getVpbe(Vfetk *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->pbe; 
+   return thee->pbe;
 
 }
 
@@ -97,10 +95,10 @@ VPUBLIC Vpbe* Vfetk_getVpbe(Vfetk *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) { 
+VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) {
 
    VASSERT(thee != VNULL);
-   return thee->csm; 
+   return thee->csm;
 
 }
 
@@ -147,7 +145,7 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) { 
+VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) {
 
     /* Make sure things have been properly initialized & store them */
     VASSERT(pbe != VNULL);
@@ -167,7 +165,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) {
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
 
-    return 1; 
+    return 1;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -188,7 +186,7 @@ VPUBLIC void Vfetk_dtor(Vfetk **thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vfetk_dtor2(Vfetk *thee) { 
+VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
     Vmem_dtor(&(thee->vmem));
     Vcsm_dtor(&(thee->csm));
 }
@@ -198,7 +196,7 @@ VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
 //
 // Author:   Nathan Baker and Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) { 
+VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
 
    int level, i;
    double *solution;
@@ -228,7 +226,7 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
    theAnswer = Vmem_malloc(VNULL, *length, sizeof(double));
    VASSERT(theAnswer != VNULL);
    for (i=0; i<(*length); i++) theAnswer[i] = solution[i];
-   
+
    return theAnswer;
 }
 
@@ -274,7 +272,7 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) { 
+VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 
    double *sol; int nsol;
    double charge;
@@ -291,7 +289,7 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 
    VASSERT(thee != VNULL);
    am = thee->am;
-    
+
    /* Get the finest level solution */
    sol= VNULL;
    sol = Vfetk_getSolution(thee, &nsol);
@@ -304,7 +302,7 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
       Vnm_print(2, "Vfetk_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
       VASSERT(0);
    }
-    
+
    /* Now we do the sum over atoms... */
    natoms = Valist_getNumberAtoms(thee->pbe->alist);
    for (iatom=0; iatom<natoms; iatom++) {
@@ -317,15 +315,15 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
            Vnm_print(2, "Vfetk_getLinearEnergy1: Atom colors not set!\n");
            VASSERT(0);
        }
-       if ((icolor==color) || (color<0)) { 
+       if ((icolor==color) || (color<0)) {
            /* Loop over the simps associated with this atom */
            nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
            /* Get the first simp of the correct color; we can use just one
-            * simplex for energy evaluations, but not for force 
+            * simplex for energy evaluations, but not for force
             * evaluations */
            for (isimp=0; isimp<nsimps; isimp++) {
                simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
-               /* If we've asked for a particular partition AND if the atom 
+               /* If we've asked for a particular partition AND if the atom
                 * is our partition, then compute the energy */
                if ((SS_chart(simp)==color)||(color<0)) {
                    /* Get the value of each basis function evaluated at this
@@ -340,12 +338,12 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
                    break;
                } /* endif (color) */
            } /* end for isimp */
-       } 
+       }
    } /* end for iatom */
 
    /* Destroy the finest level solution */
    Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
-    
+
    /* Return the energy */
    return energy;
 }
@@ -355,7 +353,7 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) { 
+VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 
     return AM_evalJ(thee->am, AM_maxLevel(thee->am));
 
@@ -371,7 +369,7 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     Bmat *A;
     Zslu *slu;
 
-    Alg *alg; 
+    Alg *alg;
     AM *am;
     int level, ip[10];
     int evalKey, tangKey, energyKey, residKey, massKey;
@@ -399,7 +397,7 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
     Vnm_print(1, "Vfetk_lnDet: assembling operator...\n");
     AM_zeroA(thee->am, level);
     AM_init(am, level, W_f, 0.);
-    AM_assem(am, level, evalKey, energyKey, residKey, tangKey, massKey, 
+    AM_assem(am, level, evalKey, energyKey, residKey, tangKey, massKey,
       W_u, W_ud, W_f, ip, rp);
 
     /* Au = A u */
@@ -418,8 +416,8 @@ VPUBLIC double Vfetk_lnDet(Vfetk *thee, int color, int flag) {
 
     return lndet;
 }
-    
-    
+
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_setAtomColors
 //
@@ -451,7 +449,7 @@ VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vfetk_memChk(Vfetk *thee) {
-   
+
     int memUse = 0;
 
     if (thee == VNULL) return 0;
@@ -464,13 +462,13 @@ VPUBLIC int Vfetk_memChk(Vfetk *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vfetk_genIcosGem
-//  
+//
 // Purpose:   Given a non-NULL (but with 0 vertices) Gem object, create an
 //            icosahedral domain with the outer boundary set to Dirichlet.
 //
 // Arguments: radius -- distance of outer vertices from center
 //            center -- center of mesh
-//  
+//
 // Returns:  0 if successful
 //
 // Author:   Tongye Shen and Nathan Baker
@@ -499,7 +497,7 @@ VPUBLIC int Vfetk_genIcosGem(Gem *gm, double radius, double center[3]) {
                           -5.257311e-01,  0.000000e+00,  8.506508e-01
                          };
     int numVV, chartV, numSS;
-    int vnum, vtp, vtpI; 
+    int vnum, vtp, vtpI;
     int fnum[3], ftp[3], ftpB[3];
 
     /* THIS ROUTINE IS BROKEN!!! */
@@ -528,7 +526,7 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
     Vnm_print(0, "Vbnd_genIcosGem: Reseting manifold structures.\n");
     Gem_reset(gm, theDim, theDimII);
 
-    
+
     /* Create the vertices */
     for (i=0; i<numVV; i++) {
         vx = Gem_createAndInitVV(gm);
@@ -538,16 +536,16 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
         VV_setType(vx, 0);
         VV_setId(vx, i);
         VV_setChart(vx, chartV);
-    
+
         /* set the vertex coordinates */
         VV_setCoord(vx, 0, radius*xyzdata[3*i]+center[0]);
         VV_setCoord(vx, 1, radius*xyzdata[3*i+1]+center[1]);
         VV_setCoord(vx, 2, radius*xyzdata[3*i+2]+center[2]);
     }
-    
+
     /* Create the simplices */
     for (i=0; i<numSS; i++) {
-    
+
         /* create the new simplex */
         sm = Gem_createAndInitSS(gm);
         SS_setReality(sm, 0);
@@ -575,7 +573,7 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
             vx = SS_vertex( sm, vnum );
             /* get face numbers of two/three faces which touch vertex vnum */
             fnum[0] = vmapOV3[vnum][0];
-            fnum[1] = vmapOV3[vnum][1];  
+            fnum[1] = vmapOV3[vnum][1];
             fnum[2] = vmapOV3[vnum][2];  /* 2D: third face always interior */
             /* some shorthand notation... */
             vtp     = VV_type(vx);
@@ -619,10 +617,9 @@ numSS=%d\n", theDim, theDimII, numVV, numSS);
 //
 // Purpose:  Prints a Bmat in sparse Harwell-Boeing format
 //
-// Authors:  Stephen Bond and Nathan Baker
-//           (following HB matrix user's guide)
+//  Author:  Stephen Bond (following HB matrix user's guide)
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void Bmat_printHB( Bmat *thee, char *fname ) 
+VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
 {
     Mat *Ablock;
     MATsym pqsym;
@@ -631,15 +628,15 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     double *D, *L;
     FILE *fp;
 
-    char mtitle[72];
-    char mkey[8] = {"8charkey"};
+    char mmtitle[72];
+    char mmkey[] = {"8charkey"};
     int totc = 0, ptrc = 0, indc = 0, valc = 0;
-    char mxtyp[3] = {"RUA"}; /* Real Unsymmetric Assembled */
+    char mxtyp[] = {"RUA"}; /* Real Unsymmetric Assembled */
     int nrow = 0, ncol = 0, numZ = 0;
-    char ptrfmt[16] = {"(8I9)"};     /* 8 per line of size 9 */
-    char indfmt[16] = {"(8I9)"};     /* 8 per line of size 9 */
-    char valfmt[20] = {"(4E19.12)"}; /* 4 per line of size 19.12 */
-    char rhsfmt[20] = {"(4E19.12)"}; /* 4 per line of size 19.12 */
+    char ptrfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
+    char indfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
+    char valfmt[] = {"(4E19.12)           "}; /* 4 per line of size 19.12 */
+    char rhsfmt[] = {"(4E19.12)           "}; /* 4 per line of size 19.12 */
 
     VASSERT( thee->numB == 1 );             /* HARDWIRE FOR NOW */
     Ablock = thee->AD[0][0];
@@ -652,6 +649,7 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
         mxtyp[1] = 'S';
     } else if ( pqsym == ISNOT_SYM ) {
         mxtyp[1] = 'U';
+        VASSERT( 0 ); /* NOT CODED YET */
     } else {
         VASSERT( 0 );
     }
@@ -660,15 +658,30 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     ncol = Bmat_numCT( thee ); /* Number of cols */
     numZ = Bmat_numZT( thee ); /* Number of entries */
 
-    ptrc = ceil( (Bmat_numCT( thee ) + 1) / 8 ); /* 8 pointers per line */
-    indc = ceil( Bmat_numZT( thee ) / 8 );       /* 8 indices per line */
-    valc = ceil( Bmat_numZT( thee ) / 4 );       /* 4 values per line */
+    if ( ( (Bmat_numCT( thee ) + 1) % 8 ) == 0 ) { /* 8 pointers per line */
+        ptrc = (Bmat_numCT( thee ) + 1) / 8;
+    } else {
+        ptrc = (int) ( (Bmat_numCT( thee ) + 1) / 8 ) + 1;
+    }
+
+    if ( (Bmat_numZT( thee ) % 8 ) == 0 ) { /* 8 indices per line */
+        indc = Bmat_numZT( thee ) / 8;
+    } else {
+        indc = (int) ( Bmat_numZT( thee ) / 8 ) + 1;
+    }
+
+    if ( ( Bmat_numZT( thee ) % 4 ) == 0 ) { /* 4 values per line */
+        valc = Bmat_numZT( thee ) / 4;
+    } else {
+        valc = (int) ( Bmat_numZT( thee ) / 4 ) + 1;
+    }
+
     totc = ptrc + indc + valc;
 
-    sprintf( mtitle, "Harwell-Boeing format %s matrix  %s\n",
+    sprintf( mmtitle, "Harwell-Boeing format %s matrix  <%s>",
              thee->name, fname );
 
-    /* Step 0:  Open the file for writing */
+   /* Step 0:  Open the file for writing */
 
     fp = fopen( fname, "w" );
     if (fp == VNULL) {
@@ -677,10 +690,10 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     }
 
     /* Step 1:  Print the header information */
-    
-    fprintf( fp, "%-72s%-8s\n",mtitle, mkey );
-    fprintf( fp, "%14d%14d%14d%14d%14d\n",totc, ptrc, indc, valc, 0 );
-    fprintf( fp, "%3s%11s%14d%14d%14d\n",mxtyp, " ", nrow, ncol, numZ );
+
+    fprintf( fp, "%-72s%-8s\n", mmtitle, mmkey );
+    fprintf( fp, "%14d%14d%14d%14d%14d\n", totc, ptrc, indc, valc, 0 );
+    fprintf( fp, "%3s%11s%14d%14d%14d\n", mxtyp, " ", nrow, ncol, numZ );
     fprintf( fp, "%-16s%-16s%-20s%-20s\n", ptrfmt, indfmt, valfmt, rhsfmt );
 
     /* Step 2:  Print the pointer information */
@@ -688,25 +701,20 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     IA = Ablock->IA;
 
     if ( pqsym == IS_SYM ) {
-        
-        k = 0;
+
         for (i=0; i<(ncol+1); i++) {
             fprintf( fp, "%9d ", Ablock->IA[i] + (i+1) );
             if ( ( (i+1) % 8 ) == 0 ) {
                 fprintf( fp, "\n" );
-                k++;
             }
         }
-        
+
         if ( ( (ncol+1) % 8 ) != 0 ) {
             fprintf( fp, "\n" );
-            k++;
         }
 
-        VASSERT( k == ptrc ); /* DEBUGGING CHECK (REMOVE LATER) */
-
     } else {
-        
+
         VASSERT( 0 ); /* NOT CODED YET */
     }
 
@@ -715,35 +723,30 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     JA = Ablock->JA;
 
     if ( pqsym == IS_SYM ) {
-        
+
         k = 0;
         j = 0;
         for (i=0; i<ncol; i++) {
             fprintf( fp, "%9d ", i + 1); /* Index for the diagonal */
             if ( ( (j+1) % 8 ) == 0 ) {
                 fprintf( fp, "\n" );
-                k++;
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
                 fprintf( fp, "%9d ", JA[jj] + 1 );
                 if ( ( (j+1) % 8 ) == 0 ) {
                     fprintf( fp, "\n" );
-                    k++;
                 }
                 j++;
             }
         }
-        
+
         if ( ( j % 8 ) != 0 ) {
             fprintf( fp, "\n" );
-            k++;
         }
 
-        VASSERT( k == indc ); /* DEBUGGING CHECK (REMOVE LATER) */
-
     } else {
-        
+
         VASSERT( 0 ); /* NOT CODED YET */
     }
 
@@ -753,37 +756,34 @@ VPRIVATE void Bmat_printHB( Bmat *thee, char *fname )
     L = Ablock->offL;
 
     if ( pqsym == IS_SYM ) {
-        
+
         k = 0;
         j = 0;
         for (i=0; i<ncol; i++) {
             fprintf( fp, "%19.12E ", D[i] );
             if ( ( (j+1) % 4 ) == 0 ) {
                 fprintf( fp, "\n" );
-                k++;
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
                 fprintf( fp, "%19.12E ", L[jj] );
                 if ( ( (j+1) % 4 ) == 0 ) {
                     fprintf( fp, "\n" );
-                    k++;
                 }
                 j++;
             }
         }
-        
+
         if ( ( j % 4 ) != 0 ) {
             fprintf( fp, "\n" );
-            k++;
         }
 
-        VASSERT( k == valc ); /* DEBUGGING CHECK (REMOVE LATER) */
+   } else {
 
-    } else {
-        
         VASSERT( 0 ); /* NOT CODED YET */
     }
+
+    fclose( fp );
 
 }
 
