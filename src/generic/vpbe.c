@@ -714,7 +714,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
            Vnm_print(2, "Vpbe_getLinearEnergy1: Atom colors not set!\n");
            VASSERT(0);
        }
-       if (icolor == color) { 
+       if ((icolor==color) || (color<0)) { 
            /* Loop over the simps associated with this atom */
            nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
            /* Get the first simp of the correct color; we can use just one
@@ -818,7 +818,6 @@ VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
 #define VMAXLOCALCOLORSDONTREUSETHISVARIABLE 1024
     SS *simp;
     int i, natoms;
-    int ncolors, nac[VMAXLOCALCOLORSDONTREUSETHISVARIABLE];
 
     VASSERT(thee != VNULL);
 
@@ -828,20 +827,6 @@ VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
         thee->csm->colors[i] = SS_chart(simp);
     }
 
-    /* Bookkeeping */
-    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
-    for (i=0; i<Vgm_numSS(thee->gm); i++) {
-        simp = Vgm_SS(thee->gm, i);
-        nac[SS_chart(simp)] = 1;
-    }
-    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) 
-      if (nac[i] == 0) break;
-    ncolors = i;
-    for (i=0; i<natoms; i++) {
-        simp = Vcsm_getSimplex(thee->csm, 0, i);
-        (nac[SS_chart(simp)])++;
-    }
-    for (i=0; i<ncolors; i++) Vnm_print(2, "Vpbe_setAtomColors: Part %d has %d atoms\n", i, nac[i]);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
