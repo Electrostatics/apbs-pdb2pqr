@@ -1438,8 +1438,7 @@
       <para>Specify the amount of overlap to include between the individual
         processors meshes in a parallel focusing calculation (see 
         <link linkend="ofrac"><command>ofrac</command></link>).  This should be
-        a value between 0 and 1; empirical evidence suggests that 0.1 is a good
-        choice.
+        a value between 0 and 1.
         <variablelist>
           <varlistentry>
             <term> <replaceable>frac</replaceable> </term>
@@ -1449,6 +1448,86 @@
             </listitem>
           </varlistentry>
         </variablelist>
+        <tip>
+          <para>
+          Empirical evidence suggests that an <command>ofrac</command> value
+          of 0.1 is sufficient to generate stable energies.  However, this
+          value may not be sufficient to generate stable forces and/or good
+          quality isocontours.  For example, the following table illustrates
+          the change in energies and visual artifacts in isocontours as a
+          function of <command>ofrac</command> values for a small peptide 
+          (<ulink url="http://www.rcsb.org/pdb/cgi/explore.cgi?job=chains&amp;pdbId=2PHK">2PHK</ulink>:B).
+          <table> <title>Sensitivity of 2PHK:B solvation energy calculations
+              to <command>ofrac</command> values.</title>
+            <tgroup cols="3">
+              <thead>
+                <row>
+                  <entry><command>ofrac</command> value</entry>
+                  <entry>Energy (kJ/mol)</entry>
+                  <entry>Visual artifact in &plusmn; 1 kT/e iscontour?</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry>0.05</entry> 
+                  <entry>342.79</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.06</entry>
+                  <entry>342.00</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.07</entry>
+                  <entry>341.12</entry>
+                  <entry>Yes</entry>
+                </row>
+                <row>
+                  <entry>0.08</entry>
+                  <entry>341.14</entry>
+                  <entry>Yes</entry>
+                </row>
+                <row>
+                  <entry>0.09</entry>
+                  <entry>342.02</entry>
+                  <entry>Yes</entry>
+                </row>
+                <row>
+                  <entry>0.10</entry>
+                  <entry>340.84</entry>
+                  <entry>Yes</entry>
+                </row>
+                <row>
+                  <entry>0.11</entry>
+                  <entry>339.67</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.12</entry>
+                  <entry>341.10</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.13</entry>
+                  <entry>341.10</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.14</entry>
+                  <entry>341.32</entry>
+                  <entry>No</entry>
+                </row>
+                <row>
+                  <entry>0.15</entry>
+                  <entry>341.54</entry>
+                  <entry>No</entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+          </para>
+        </tip>
       </para>
     </listitem>
 
