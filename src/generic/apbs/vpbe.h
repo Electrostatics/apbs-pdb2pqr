@@ -61,7 +61,6 @@
 #include "apbs/vunit.h"
 #include "apbs/vatom.h"
 #include "apbs/vacc.h"
-#include "apbs/vgreen.h"
 
 /**
  *  @ingroup Vpbe
@@ -74,7 +73,6 @@ struct sVpbe {
 
   Valist *alist;      /**< Atom (charge) list */
   Vacc *acc;          /**< Accessibility object */
-  Vgreen *green;      /**< Green's function oracle */
 
   double T;           /**< Temperature (K) */
   double gamma;       /**< Apolar coefficient (kJ/mol/A/A) */
@@ -136,14 +134,6 @@ typedef struct sVpbe Vpbe;
      *  @return  Pointer to internal Vacc object
      */
     VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
-
-    /** @brief   Get Green's function oracle
-     *  @ingroup Vpbe
-     *  @author  Nathan Baker
-     *  @param   thee Vpbe object
-     *  @return  Pointer to internal Vgreen object
-     */
-    VEXTERNC Vgreen* Vpbe_getVgreen(Vpbe *thee);
 
     /** @brief   Get bulk ionic strength
      *  @ingroup Vpbe
@@ -284,7 +274,6 @@ typedef struct sVpbe Vpbe;
 #else /* if defined(VINLINE_VPBE) */
 #   define Vpbe_getValist(thee) ((thee)->alist)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
-#   define Vpbe_getVgreen(thee) ((thee)->green)
 #   define Vpbe_getBulkIonicStrength(thee) ((thee)->bulkIonicStrength)
 #   define Vpbe_getTemperature(thee) ((thee)->T)           
 #   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 

@@ -431,7 +431,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
 
     /* Store local copy of myself */
     var.fetk = thee;
-    var.green = VNULL;
+    var.initGreen = 0;
 
     /* Set up the external Gem subdivision hook */
     Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);
@@ -1594,52 +1594,93 @@ VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
     return pot;
 }
 
-VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U, 
+VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U, 
   double dU[], double *d2U) {
 
-    double *position, charge, dist, dist2, T, val, vec[3];
     int iatom, i;
+    double T, pot, fx, fy, fz, x, y, z, scale;
+    double *position, charge, dist, dist2, val, vec[3], dUold[3], Uold;
     Valist *alist;
     Vatom *atom;
 
+    /* Initialize variables */
     T = Vpbe_getTemperature(pbe);
     alist = Vpbe_getValist(pbe);
-    val = 0;
-    *U = 0;
-    *d2U = 0;
-    for (i=0; i<d; i++) dU[i] = 0;
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-        atom = Valist_getAtom(alist, iatom);
-        position = Vatom_getPosition(atom);
-        charge = Vatom_getCharge(atom);
-        dist2 = 0;
-        for (i=0; i<d; i++) {
-            vec[i] = (position[i] - x[i]);
-            dist2 += VSQR(vec[i]);
-        }
-        dist = VSQRT(dist2);
+    pot = 0;  fx = 0; fy = 0; fz = 0;
+    x = pt[0]; y = pt[1]; z = pt[2];
 
-        /* POTENTIAL */
-        *U = *U + charge/dist;
-
-        /* GRADIENT */
-        for (i=0; i<d; i++) dU[i] = dU[i] + vec[i]*charge/(dist2*dist);
-
-        /* LAPLACIAN */
-        *d2U = *d2U + 3*VSQR(vec[i])*charge/(dist2*dist2*dist)
-          - charge/(dist2*dist);
+    /* Calculate */
+    if (!Vgreen_coulombD(var.green, 1, &x, &y, &z, &pot, &fx, &fy, &fz)) {
+        Vnm_print(2, "Error calculating Green's function!\n");
+        VASSERT(0);
     }
+
 
     /* Scale the results */
-    *U   = (*U)  *VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
-    *d2U = (*d2U)*VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
-    for (i=0; i<d; i++) {
-        dU[i] = dU[i] *VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    scale = Vunit_ec/(eps*Vunit_kb*T);
+    *U = pot*scale;
+    *d2U = 0.0;
+    dU[0] = -fx*scale;
+    dU[1] = -fy*scale;
+    dU[2] = -fz*scale;
+
+#if 0
+    /* Compare with old results */
+    val = 0.0;
+    Uold = 0.0; dUold[0] = 0.0; dUold[1] = 0.0; dUold[2] = 0.0;
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+       atom = Valist_getAtom(alist, iatom);
+       position = Vatom_getPosition(atom);
+       charge = Vatom_getCharge(atom);
+       dist2 = 0;
+       for (i=0; i<d; i++) {
+           vec[i] = (position[i] - pt[i]);
+           dist2 += VSQR(vec[i]);
+       }
+       dist = VSQRT(dist2);
+
+       /* POTENTIAL */
+       Uold = Uold + charge/dist;
+
+       /* GRADIENT */
+       for (i=0; i<d; i++) dUold[i] = dUold[i] + vec[i]*charge/(dist2*dist);
+
     }
+    Uold = Uold*VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    for (i=0; i<d; i++) {
+        dUold[i] = dUold[i]*VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    }
+
+    printf("Unew - Uold = %g - %g = %g\n", *U, Uold, (*U - Uold));
+    printf("||dUnew - dUold||^2 = %g\n", (VSQR(dU[0] - dUold[0]) 
+                + VSQR(dU[1] - dUold[1]) + VSQR(dU[2] - dUold[2])));
+    printf("dUnew[0] = %g, dUold[0] = %g\n", dU[0], dUold[0]);
+    printf("dUnew[1] = %g, dUold[1] = %g\n", dU[1], dUold[1]);
+    printf("dUnew[2] = %g, dUold[2] = %g\n", dU[2], dUold[2]);
+
+#endif
 
 }
 
-VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { ; }
+VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
+
+#if 0
+    /* Re-initialize the Green's function oracle in case the atom list has
+     * changed */    
+    if (var.initGreen) {
+        Vgreen_dtor(&(var.green));
+        var.initGreen = 0;
+    }
+    var.green = Vgreen_ctor(var.fetk->pbe->alist);
+    var.initGreen = 1;
+#else
+    if (!var.initGreen) {
+        var.green = Vgreen_ctor(var.fetk->pbe->alist);
+        var.initGreen = 1;
+    }
+#endif
+
+}
 
 VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
   double tvx[][3], void *data) {

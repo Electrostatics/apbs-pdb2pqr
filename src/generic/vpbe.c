@@ -69,19 +69,6 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVgreen
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgreen* Vpbe_getVgreen(Vpbe *thee) {
-
-   VASSERT(thee != VNULL);
-   return thee->green;
-
-}
-
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getVacc
 //
 // Purpose:  Get a pointer to the Vacc accessibility object 
@@ -358,9 +345,6 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
     thee->alist = alist;
     thee->paramFlag = 0;
 
-    /* Set up Green's function oracle */
-    thee->green = Vgreen_ctor(alist);
-
     /* Determine solute center */
     center[0] = thee->alist->center[0];
     center[1] = thee->alist->center[1];
@@ -510,7 +494,6 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
     Vacc_dtor(&(thee->acc));
-    Vgreen_dtor(&(thee->green));
     Vmem_dtor(&(thee->vmem));
 }
 
