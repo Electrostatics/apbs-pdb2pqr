@@ -134,8 +134,6 @@ c* Added by NAB to allow different ions with different charges
 
       c_scal2 = 0.0
 
-      print *, 'in c_scal'
-
 c*    Loop over all the ions
       do 39 iion = 1, nion
 c*       Assemble the ion-specific coefficient
@@ -315,8 +313,6 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
         uout(i) = 0
  38   continue
 
-      call vnmprt(2, 'in c_vec', 10)
-
       do 39 iion = 1, nion
 c*      Assemble the ion-specific coefficient
         zcf2 = -1.0 * kappa(iion)
@@ -464,8 +460,6 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
       n     = nx * ny * nz
       ipara = n / nproc
       ivect = mod(n,nproc)
-
-      call vnmprt(2, 'in c_vec', 11)
 
       do 38 i = 1, n
         uout(i) = 0.0
