@@ -44,4 +44,5 @@ aclocal
 autoconf
 autoheader
 automake
-libtoolize -f
+# libtoolize -f
+# aclocal
