@@ -82,7 +82,7 @@ typedef struct Vopot Vopot;
  *           example)
  *  @ingroup Vopot
  *  @author  Nathan Baker
- *  @param   Vgrid Grid object containing potential data (in units kT/e)
+ *  @param   grid  Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
  *                 \li 0:  Zero potential
@@ -97,7 +97,7 @@ VEXTERNC Vopot*  Vopot_ctor(Vgrid *grid, Vpbe *pbe, int bcfl);
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Pointer to newly allocated Vopot object
- *  @param   Vgrid Grid object containing potential data (in units kT/e)
+ *  @param   grid  Grid object containing potential data (in units kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid
  *                 \li 0:  Zero potential

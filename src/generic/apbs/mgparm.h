@@ -205,7 +205,7 @@ VEXTERNC double MGparm_getHz(MGparm *thee);
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
- *  @param   thee  x-coordinate
+ *  @param   x     x-coordinate
  */
 VEXTERNC void MGparm_setCenterX(MGparm *thee, double x);
 
@@ -213,7 +213,7 @@ VEXTERNC void MGparm_setCenterX(MGparm *thee, double x);
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
- *  @param   thee  y-coordinate
+ *  @param   y     y-coordinate
  */  
 VEXTERNC void MGparm_setCenterY(MGparm *thee, double y);
 
@@ -221,7 +221,7 @@ VEXTERNC void MGparm_setCenterY(MGparm *thee, double y);
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee  MGparm object
- *  @param   thee  z-coordinate
+ *  @param   z     z-coordinate
  */
 VEXTERNC void MGparm_setCenterZ(MGparm *thee, double z);
 

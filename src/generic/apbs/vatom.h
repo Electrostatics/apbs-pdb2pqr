@@ -173,7 +173,7 @@ VEXTERNC Vatom* Vatom_ctor();
 /** @brief   FORTRAN stub constructor for the Vatom class 
  *  @author  Nathan Baker
  *  @ingroup Vatom
- *  @param   Pointer to Vatom allocated memory location
+ *  @param   thee Pointer to Vatom allocated memory location
  *  @returns 1 if succesful, 0 otherwise
  */
 VEXTERNC int     Vatom_ctor2(Vatom *thee);

@@ -244,7 +244,7 @@ VEXTERNC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius);
  *  @returns Characteristic function value between 1.0 (accessible) and 0.0
  *          (inaccessible)
  */
-VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
+VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
   double infrad);
 
 /** @brief   Report spline-based accessibility for a given atom
@@ -259,10 +259,12 @@ VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
  *  @param   center Probe center coordinates (point to test)
  *  @param   win    Spline window
  *  @param   infrad Inflation radius (for ion-accessibility)
+ *  @param   atomID ID of atom for which this characteric function value should
+ *           be calculated
  *  @returns Characteristic function value between 1.0 (accessible) and 0.0
  *          (inaccessible)
  */
-VEXTERNC double Vacc_splineAccAtom(Vacc *thee, double center[3], double window,
+VEXTERNC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
   double infrad, int atomID);
 
 /** @brief   Report gradient of spline-based accessibility with respect to a

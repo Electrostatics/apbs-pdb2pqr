@@ -107,7 +107,7 @@
  * <b>Prerequisites</b>:<br> 
  * You will definitely need
  * <ul>
- * <li> The latest version of <a href="http://mccammon.ucsd.edu/apbs">APBS</a>
+ * <li> The latest version of <a href="http://agave.wustl.edu/apbs">APBS</a>
  * <li> <a
  * href="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC</a>
  * (a hardware abstraction library)
@@ -169,7 +169,7 @@
  * <pre>
  * # cd ${TOP}
  * # gzip -dc maloc.tar.gz | tar xvf -
- * # gzip -dc apbs-0.2.1.tar.gz | tar xvf -
+ * # gzip -dc apbs-0.2.2.tar.gz | tar xvf -
  * </pre>
  * <li> Compile and install the MALOC libraries.  You should read the MALOC
  * installation guide before doing this, but if you just want a simple
@@ -240,7 +240,7 @@
  * where the <code>...</code> denotes other configure options you need.  Here
  * are a few additional notes on installing APBS on various platforms; if you
  * encounter any interesting configuration/compilation behavior or useful
- * optimization tricks, please <a href="mailto:nbaker@mccammon.ucsd.edu">let me
+ * optimization tricks, please <a href="mailto:baker@biochem.wustl.edu">let me
  * know</a>.  
  * <ul>
  * <li>Intel ix86 processor family (Windows)<br>
@@ -282,16 +282,18 @@
  *   FFLAGS='-O3 -ffast-math -m486 -funroll-loops'
  * </pre>
  * <li> NPACI IBM RS/6000 Power3 Blue Horizon supercomputer<br>
- * In all cases, set the CC variable before ./configure:
+ * In all cases, set the following variables before ./configure:
  * <pre>
- *     CC=mpcc 
- *     F77=mpxlf
+ *     CC=cc 
+ *     F77=xlf
  *     CFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
  *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
  *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
  *     FFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
  *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
  *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
+ *     FETK_MPI_INCLUDE=/usr/lpp/ppe.poe/include
+ *     FETK_MPI_LIBRARY=/usr/lpp/ppe.poe/lib
  * </pre>
  * Note that the actual command line declaration should contain no line breaks
  * and continuations; these seem to screw up sed (used by configure) under
@@ -304,7 +306,7 @@
  * to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
  * In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
  * 384 MB heap space per task.  The use of vendor-supplied BLAS is also
- * recommended!
+ * recommended!  
  * <li> Sun <br>
  * If you're compiling this on a Sun platform, you definitely
  * need to use the Sun compilers, GCC generates <i>very slow</i> executables.

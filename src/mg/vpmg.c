@@ -327,6 +327,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
     ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
     zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
+
     xok = 0;
     yok = 0;
     zok = 0;

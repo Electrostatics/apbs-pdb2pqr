@@ -164,7 +164,7 @@ VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am);
  *  @ingroup Vfetk
  *  @author  Nathan Baker
  *  @param   thee Vfetk obeject memory address
- *  @param   pbe  Vpbe (PBE manager) object
+ *  @param   apbe  Vpbe (PBE manager) object
  *  @param   gm   Gem (geometry manager) object
  *  @param   am   AM (algebra manager) object
  *  @return  1 if successful, 0 otherwise

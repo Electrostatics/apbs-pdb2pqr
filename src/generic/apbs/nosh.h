@@ -310,7 +310,7 @@ VEXTERNC int NOsh_printWhat(NOsh *thee, int iprint);
  *  @returns An integer mapping of an ELEC statement to a calculation ID
  *           (@see elec2calc)
  */
-VEXTERNC int NOsh_elec2calc(NOsh *thee, int iprint);
+VEXTERNC int NOsh_elec2calc(NOsh *thee, int icalc);
 
 /** @brief   Return number of arguments to PRINT statement (@see printnarg)
  *  @ingroup NOsh

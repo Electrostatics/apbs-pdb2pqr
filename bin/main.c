@@ -92,6 +92,7 @@ int main(int argc, char **argv) {
      * calculation */
     double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
     double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
+    double npEnergy[NOSH_MAXCALC];
     AtomForce *atomForce[NOSH_MAXCALC];
     int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
     /* THe real partition centers */
@@ -260,6 +261,16 @@ int main(int argc, char **argv) {
             energyMG(nosh, i, pmg[i], &(nenergy[i]), 
               &(totEnergy[i]), &(qfEnergy[i]), &(qmEnergy[i]), 
               &(dielEnergy[i]));
+
+            /* get apolar energy */
+            npenergyMG(nosh, i, pmg[i], &(nenergy[i]),
+                       &(npEnergy[i]));
+	    npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3) *
+		Vunit_Na*(npEnergy[i]);
+
+
+	    printf("apbs_driver: npenergy: %f\n", npEnergy[i]);
+
 
             /* Write out forces */
             forceMG(mem, nosh, pbeparm, pmg[i], &(nforce[i]), 
