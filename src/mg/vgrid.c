@@ -948,12 +948,12 @@ will have significant overlap.\n");
     Vio_printf(sock, "%12.5e%12.5e%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0,
       nz, 1, nz);
     Vio_printf(sock, "%7d%7d%7d%12.5e%12.5e%12.5e%12.5e\n", nx, ny, nz,
-      hx, xmin, ymin, zmin);
+      hx, (xmin-hx), (ymin-hx), (zmin-hx));
     Vio_printf(sock, "%12.5e%12.5e%12.5e%12.5e\n", 0.0, 0.0, 0.0, 0.0);
     Vio_printf(sock, "%12.5e%12.5e%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
-    icol = 0;
+    icol = 0; 
     for (k=0; k<nz; k++) {
         Vio_printf(sock, "\n%7d%7d%7d\n", k+1, thee->nx, thee->ny);
         icol = 0;
