@@ -1,5 +1,12 @@
 #############################################################################
-PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.8       01-29-01
+BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02
+#############################################################################
+This version is a public (beta) release candidate and includes slight
+modification of the user and programmer's guides and a few additional API
+features.  This release requires a new version of MALOC.
+
+#############################################################################
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.8       01-29-02
 #############################################################################
 This version is a public (beta) release candidate and includes the following
 bug-fixes:
