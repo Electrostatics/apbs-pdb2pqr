@@ -142,7 +142,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
     thee->localPartCenter[2] =
       thee->localPartCenter[2]/((double)(nLocalVerts));
     Vnm_print(2, "Vpee_ctor2: Part %d centered at (%4.3f, %4.3f, %4.3f)\n",
-      thee->localPartCenter[0], thee->localPartCenter[1],
+      thee->localPartID, thee->localPartCenter[0], thee->localPartCenter[1],
       thee->localPartCenter[2]);
 
 
