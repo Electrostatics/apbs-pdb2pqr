@@ -647,3 +647,40 @@ VPUBLIC int Vcsm_memChk(Vcsm *thee)
 
     return memUse;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_setAtomColors
+//
+// Purpose:  Transfer color information from partitioned mesh to the atoms.
+//           In the case that a charge is shared between two partitions, the
+//           partition color of the first simplex is selected.  Due to the
+//           arbitrary nature of this selection, THIS METHOD SHOULD ONLY BE
+//           USED IMMEDIATELY AFTER PARTITIONING!!!
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vcsm_setAtomColors(Vcsm *thee) {
+
+    int nsimps;
+    SS *simp;
+    int iatom;
+    Vatom *atom;
+    int color;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->initFlag);
+
+    for (iatom=0; iatom<thee->natom; iatom++) {
+        /* Since this routine doesn't need to be particularly fast, we'll do a
+         * quick check to make sure all atoms are associated with simplices on
+         * the mesh */
+        nsimps = thee->nqsm[iatom];
+        VASSERT(nsimps > 0);
+        /* Get the simplex color */
+        simp = Vgm_SS(thee->gm, thee->qsm[iatom][0]);
+        color = SS_chart(simp);
+        /* Transfer the color to the atom */
+        atom = Valist_getAtom(thee->alist, iatom);
+        Vatom_setColor(atom, color);
+    }
+}

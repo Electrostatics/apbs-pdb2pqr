@@ -195,6 +195,34 @@ VPUBLIC double Vatom_getCharge(Vatom *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_getColor
+//
+// Purpose:  Return atom color  (for association with mesh partitions)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vatom_getColor(Vatom *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->color; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_setColor
+//
+// Purpose:  Set atom color  (for association with mesh partitions)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vatom_setColor(Vatom *thee, int color) { 
+
+   VASSERT(thee != VNULL);
+   thee->color = color; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vatom_memChk
 //
 // Purpose:  Return the number of bytes used by this object
