@@ -89,5 +89,6 @@ VEXTERNC int    Valist_readPDB(Valist *thee, char *path,
 VEXTERNC Vatom* Valist_getAtomList(Valist *thee);
 VEXTERNC Vatom* Valist_getAtom(Valist *thee, int i);
 VEXTERNC int    Valist_getNumberAtoms(Valist *thee);
+VEXTERNC int    Valist_memChk(Valist *thee);
 
 #endif /* ifndef _VALIST_H_ */

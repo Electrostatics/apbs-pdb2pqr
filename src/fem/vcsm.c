@@ -258,14 +258,18 @@ VPRIVATE void Vcsm_freeArrays(Vcsm *thee) {
     if ((thee != VNULL) && thee->initFlag) {
 
         Vnm_print(0,"Vcsm_freeArrays: freeing sqm entries.\n"); 
-        for (i=0; i<thee->nsimp; i++) {
+        for (i=0; i<thee->msimp; i++) {
             if (thee->nsqm[i] > 0) Vram_dtor((Vram **)&(thee->sqm[i]),
                thee->nsqm[i], sizeof(int));
         }
-        Vnm_print(0,"Vcsm_freeArrays: freeing sqm.\n"); 
-        Vram_dtor((Vram **)&(thee->sqm), 1, sizeof(int *));
-        Vnm_print(0,"Vcsm_freeArrays: freeing nsqm.\n"); 
-        Vram_dtor((Vram **)&(thee->nsqm), 1, sizeof(int));
+        for (i=0; i<thee->natom; i++) {
+            if (thee->nqsm[i] > 0) Vram_dtor((Vram **)&(thee->qsm[i]),
+               thee->nqsm[i], sizeof(int));
+        }
+        Vram_dtor((Vram **)&(thee->sqm), thee->msimp, sizeof(int *));
+        Vram_dtor((Vram **)&(thee->nsqm), thee->msimp, sizeof(int));
+        Vram_dtor((Vram **)&(thee->qsm), thee->natom, sizeof(int *));
+        Vram_dtor((Vram **)&(thee->nqsm), thee->natom, sizeof(int));
 
     }
 }
@@ -613,10 +617,52 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
         thee->nsqm[simpID] = nsqmNew[isimp];
     }
 
+    Vram_dtor((Vram **)&sqmNew, num, sizeof(int *));
+    Vram_dtor((Vram **)&nsqmNew, num, sizeof(int));
+    Vram_dtor((Vram **)&qsmNew, nAffAtoms, sizeof(int *));
+    Vram_dtor((Vram **)&nqsmNew, nAffAtoms, sizeof(int));
+    Vram_dtor((Vram **)&dnqsm, nAffAtoms, sizeof(int));
+
+
     return 1;
 
 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_memChk
+//
+// Purpose:  Return number of bytes used by this object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_memChk(Vcsm *thee)
+{
+    int i;
+    int memUse = 0;
+
+    VASSERT(thee != VNULL);
+
+    memUse = memUse + sizeof(Vcsm);
+    /* thee->sqm first dimension */
+    memUse = memUse + (thee->msimp)*sizeof(int *);
+    /* thee->sqm second dimension */
+    for (i=0; i<thee->nsimp; i++) 
+      memUse = memUse + (thee->nsqm[i])*sizeof(int);
+    /* thee->nsqm */
+    memUse = memUse + (thee->msimp)*sizeof(int);
+    /* thee->qsm first dimension */
+    memUse = memUse + (thee->natom)*sizeof(int *);
+    /* thee->qsm second dimension */
+    for (i=0; i<thee->natom; i++)
+      memUse = memUse + (thee->nqsm[i])*sizeof(int);
+    /* thee->nqsm */
+    memUse = memUse + (thee->natom)*sizeof(int);
+
+    return memUse;
+}
+
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vram_realloc
@@ -625,7 +671,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 //
 // Author:   Michael Holst
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vram *Vram_realloc(Vram **thee, int num, int size, int newNum)
+VPRIVATE Vram *Vram_realloc(Vram **thee, int num, int size, int newNum)
 {
     Vram *tee = Vram_ctor(newNum, size);
     memcpy(tee, (*thee), size*VMIN2(num,newNum));

@@ -307,11 +307,14 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
     int i;
-    for (i=0; i<thee->n; i++) {
-        Vram_dtor((Vram **)&((thee->atoms)[i]),(thee->natoms)[i],sizeof(Vatom *));
-    }
+    for (i=0; i<thee->n; i++)
+      Vram_dtor((Vram **)&((thee->atoms)[i]), (thee->natoms)[i],
+        sizeof(Vatom *));
+    Vram_dtor((Vram **)&(thee->atoms), thee->n, sizeof(Vatom **));
     Vram_dtor((Vram **)&(thee->natoms),thee->n, sizeof(int));
-    Vram_dtor((Vram **)&(thee->sphere),thee->nsphere, sizeof(Vec3));
+    for (i=0; i<thee->n; i++) 
+      Vram_dtor((Vram **)&((thee->sphere)[i]), 3, sizeof(double));
+    Vram_dtor((Vram **)&(thee->sphere), thee->nsphere, sizeof(double *));
 }
 
 
@@ -509,4 +512,33 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts, double radius) {
 
     *npts = nactual;
     return points;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_memChk
+//
+// Purpose:  Returns the number of bytes used by the specified object.
+//
+// Author:   Nathan Baker 
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vacc_memChk(Vacc *thee) {
+    int i;
+    int memUsed = 0;
+
+    VASSERT(thee != VNULL);
+
+    /* The size of thee */
+    memUsed = memUsed + sizeof(Vacc);
+    /* The size of thee->natoms */
+    memUsed = memUsed + (thee->n)*sizeof(int);
+    /* The size of thee->atoms */
+    memUsed = memUsed + (thee->n)*sizeof(Vatom **);
+    /* The size of thee->atoms[i] */
+    for (i=0; i<thee->n; i++) 
+      memUsed = memUsed + (thee->natoms[i])*sizeof(Vatom *);
+    /* The size of thee->sphere */
+    memUsed = memUsed + (thee->nsphere)*sizeof(double *);
+    memUsed = memUsed + (thee->nsphere)*3*sizeof(double);
+
+    return memUsed;
 }

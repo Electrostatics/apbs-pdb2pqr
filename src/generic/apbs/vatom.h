@@ -93,5 +93,6 @@ VEXTERNC void     Vatom_setRadius(Vatom *thee, double radius);
 VEXTERNC double   Vatom_getRadius(Vatom *thee);
 VEXTERNC void   Vatom_setCharge(Vatom *thee, double charge);
 VEXTERNC double   Vatom_getCharge(Vatom *thee);
+VEXTERNC int   Vatom_memChk(Vatom *thee);
 
 #endif /* ifndef _VATOM_H_ */

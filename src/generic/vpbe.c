@@ -797,3 +797,24 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 
     return energy;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_memChk
+//
+// Purpose:  Returns the bytes used by the specified object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpbe_memChk(Vpbe *thee) {
+   
+    int memUse = 0;
+
+    VASSERT(thee != VNULL);
+
+    memUse = memUse + sizeof(Vpbe);
+    memUse = memUse + Vcsm_memChk(thee->csm);
+    memUse = memUse + Vacc_memChk(thee->solvAcc);
+    memUse = memUse + Vacc_memChk(thee->ionAcc);
+
+    return memUse;
+}
