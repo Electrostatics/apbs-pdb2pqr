@@ -95,16 +95,19 @@ host_triplet = @host@
 target_alias = @target_alias@
 target_triplet = @target@
 ACLOCAL = @ACLOCAL@
+AS = @AS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
-CXXCPP = @CXXCPP@
+DLLTOOL = @DLLTOOL@
 F77 = @F77@
+LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
+OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
@@ -146,7 +149,7 @@ SUFFIXES = .H .h .C .c .f .o
 always_built_SUBDIRS = vatom vacc vpbe vgreen @fetk_do_src@ @pmg_do_src@ 
 
 SUBDIRS = $(always_built_SUBDIRS)
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../apbscfg.h
 CONFIG_CLEAN_FILES = 
 DIST_COMMON =  Makefile.am Makefile.in
@@ -326,6 +329,7 @@ clean-am:  clean-tags clean-generic mostlyclean-am
 clean: clean-recursive
 
 distclean-am:  distclean-tags distclean-generic clean-am
+	-rm -f libtool
 
 distclean: distclean-recursive
 
