@@ -110,15 +110,23 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->bcfl = 1;
     thee->key = 0;
     thee->iperf = 0;
-#if 0                            /* This is guaranteed to converge */
-    thee->meth = 2;
-    thee->mgcoar = 2;
-    thee->mgsolv = 1;
-#else                            /* But this is faster */
-    thee->meth = 0;
-    thee->mgcoar = 2;
-    thee->mgsolv = 0;
+    if (thee->nonlin == 1) { 
+        Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgcoar = 2, mgsolv = 0\n");
+        thee->meth = 1;
+        thee->mgcoar = 2;
+        thee->mgsolv = 0;
+    } else {                 
+        Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgcoar = 2, mgsolv = 0\n");
+#if 1                               /* Fastest convergence */
+        thee->meth = 0;
+        thee->mgcoar = 2;
+        thee->mgsolv = 0;
+#else                               /* Most rigorous (good for testing) */
+        thee->meth = 2;
+        thee->mgcoar = 2;
+        thee->mgsolv = 1;
 #endif
+    }
     thee->mgkey = 0;
     thee->nu1 = 2;
     thee->nu2 = 2;
