@@ -132,7 +132,7 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ kappa
       common /MYPDEF/ nion
 
-      print *, 'HELLO FROM C_SCAL'
+c*    print *, 'HELLO FROM C_SCAL'
       c_scal2 = 0.0
 
 c*    Loop over all the ions
@@ -219,7 +219,7 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ nion
 
       dc_scal2 = 0.0
-      print *, 'HELLO FROM DC_SCAL'
+c*    print *, 'HELLO FROM DC_SCAL'
 
       do 39 iion = 1, nion
         coef2 = coef * kappa(iion) * charge(iion)
@@ -304,7 +304,7 @@ c* Added by NAB to allow different ions with different charges
       common /MYPDEF/ kappa
       common /MYPDEF/ nion
 
-      print *, 'HELLO FROM C_VEC'
+c*    print *, 'HELLO FROM C_VEC'
 
 c*
 c*    *** find parallel loops (ipara), remainder (ivect) ***
@@ -418,7 +418,7 @@ c*          *** am_zero is 0 if coef zero, and 1 if coef nonzero ***
             argument = am_zero * uin(i)
 c*
 c*          *** make the linear term ***
-            uout(i) = zcf2 * coef(i) * argument
+            uout(i) = uout(i) + zcf2 * coef(i) * argument
  60      continue
 c*
 c*      *** end if ***
@@ -464,7 +464,7 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
       ipara = n / nproc
       ivect = mod(n,nproc)
 
-      print *, 'HELLO FROM DC_VEC'
+c*    print *, 'HELLO FROM DC_VEC'
 
       do 38 i = 1, n
         uout(i) = 0.0
