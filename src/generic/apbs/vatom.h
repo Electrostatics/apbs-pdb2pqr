@@ -51,7 +51,7 @@
 #define _VATOM_H_
 
 #include "mc/vhal.h"
-#include "mc/vram.h"
+#include "mc/vmem.h"
 #include "mc/vec3.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
