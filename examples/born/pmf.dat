@@ -1,0 +1,14 @@
+# One ion (+1), zero ionic strength, 15 levels of uniform refinement,
+# 298.15 K, 78.5 dielectric -- energies calculated with respect to vacuum
+# and in units of kJ/mol, times in seconds.  Tra = traditional PBE... Reg =
+# regularized
+#
+#
+# Rad (A)	Tra E	Reg E	True E
+1.00		-715	-707	-686
+2.00		-358	-354	-343
+3.00		-239	-236	-228
+4.00		-179	-178	-172
+5.00		-143	-142	-137
+6.00		-120	-118	-114
+7.00		-103	-101	-98.0
