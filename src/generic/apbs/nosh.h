@@ -82,7 +82,7 @@ typedef struct NOsh {
     int nelec;
     int ispara;                          /* (1 => is a parallel calculation, 
                                           *  0 => is not) */
-    int rank;                            /* Processor rank for parallel
+    Vcom *com;                           /* Communications object for parallel
                                           * focusing calculations */
     int bogus;                           /* A flag which tells routines using
                                           * NOsh that this particular NOsh is
@@ -127,8 +127,8 @@ typedef struct NOsh {
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC NOsh* NOsh_ctor(int rank);
-VEXTERNC int   NOsh_ctor2(NOsh *thee, int rank);
+VEXTERNC NOsh* NOsh_ctor(Vcom *com);
+VEXTERNC int   NOsh_ctor2(NOsh *thee, Vcom *com);
 VEXTERNC void  NOsh_dtor(NOsh **thee);
 VEXTERNC void  NOsh_dtor2(NOsh *thee);
 VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);

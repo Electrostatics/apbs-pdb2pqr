@@ -43,7 +43,6 @@
 
 #include "apbscfg.h"
 #include "apbs/nosh.h"
-#include "mgparaparm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Private method declaration
@@ -68,17 +67,17 @@ VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:   NOsh_ctor
 //
-// Argument:  rank     Processor rank for parallel focusing
+// Argument:  com     Communications object
 //
 // Author:    Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC NOsh* NOsh_ctor(int rank) {
+VPUBLIC NOsh* NOsh_ctor(Vcom *com) {
 
     /* Set up the structure */
     NOsh *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(NOsh) );
     VASSERT( thee != VNULL);
-    VASSERT( NOsh_ctor2(thee, rank) );
+    VASSERT( NOsh_ctor2(thee, com) );
 
     return thee;
 }
@@ -88,21 +87,19 @@ VPUBLIC NOsh* NOsh_ctor(int rank) {
 //
 // Purpose:  Construct the NOsh object
 //
-// Argument: rank   Processor rank for parallel focusing
-//
 // Returns:  1 if sucessful, 0 otherwise
 //
 // Notes:    Constructor broken into two parts for FORTRAN users.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int NOsh_ctor2(NOsh *thee, int rank) {
+VPUBLIC int NOsh_ctor2(NOsh *thee, Vcom *com) {
 
     int i;
 
     if (thee == VNULL) return 0;
 
-    thee->rank = rank;
+    thee->com = com;
  
     thee->ispara = 0;
     thee->parsed = 0;

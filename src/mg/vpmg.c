@@ -2425,7 +2425,7 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt, 
   const char *thost, const char *fname, char *title, double *data) {
 
-    int icol, i, j, k, u, nx, ny, nz, nxPART, nyPART, nzPART;
+    int icol, i, j, k, u, nx, ny, nz, nxPART, nyPART, nzPART, gotit;
     double xmin, ymin, zmin, xminPART, yminPART, zminPART, hzed, hy, hx;
     double x, y, z;
     Vio *sock;
@@ -2467,29 +2467,74 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
     nxPART = 0;
     nyPART = 0; 
     nzPART = 0;
+    /* Get the lower corner and number of grid points for the local
+     * partition */
+    xminPART = xmin + (hx)*(nx-1);
+    yminPART = ymin + (hy)*(ny-1);
+    zminPART = zmin + (hzed)*(nz-1);
+    nxPART = 0;
+    nyPART = 0;
+    nzPART = 0;
+    /* First, search for the lower corner */
     for (k=0; k<nz; k++) {
-        u = k*(nx)*(ny);
-        if (thee->pvec[u] == 1) {
-            nz++;
-            z = k*hzed + xmin;
-            if (z < zminPART) zminPART = z;
-        }
-        for (j=0; j<thee->pmgp->ny; j++) {
-            u = k*(nx)*(ny)+j*(nx);
-            if (thee->pvec[u] == 1) {
-                ny++;
-                y = j*hy + ymin;
-                if (y < yminPART) yminPART = y;
+        z = k*hzed + xmin;
+        for (j=0; j<ny; j++) {
+            y = j*hy + ymin;
+            for (i=0; i<nx; i++) {
+                x = i*hx + xmin;
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (thee->pvec[u] != 0) {
+                    if (x < xminPART) xminPART = x;
+                    if (y < yminPART) yminPART = y;
+                    if (z < zminPART) zminPART = z;
+                }
             }
+        }
+    }
+    /* Now search for the number of grid points in the z direction */
+    for (k=0; k<nz; k++) {
+        gotit = 0;
+        for (j=0; j<ny; j++) {
             for (i=0; i<nx; i++) {
                 u = k*(nx)*(ny)+j*(nx)+i;
                 if (thee->pvec[u] != 0) {
-                    nx++;
-                    x = i*hx + xmin;
-                    if (x < xminPART) xminPART = x;
+                    gotit = 1;
+                    break;
                 }
-            } 
+            }
+            if (gotit) break;
         }
+        if (gotit) nzPART++;
+    }
+    /* Now search for the number of grid points in the y direction */
+    for (j=0; j<ny; j++) {
+        gotit = 0;
+        for (k=0; k<nz; k++) {
+            for (i=0; i<nx; i++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (thee->pvec[u] != 0) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (gotit) break;
+        }
+        if (gotit) nyPART++;
+    }
+    /* Now search for the number of grid points in the x direction */
+    for (i=0; i<nx; i++) {
+        gotit = 0;
+        for (k=0; k<nz; k++) {
+            for (j=0; j<ny; j++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
+                if (thee->pvec[u] != 0) {
+                    gotit = 1;
+                    break;
+                }
+            }
+            if (gotit) break;
+        }
+        if (gotit) nxPART++;
     }
 
     if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
@@ -2795,7 +2840,7 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
     ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
     zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
 
-    Vpmg_writeDX2(iodev, iofmt, thost, fname, title, data, pvec,
+    Vpmg_writeDX2(iodev, iofmt, thost, fname, title, data, thee->pvec,
       hx, hy, hzed, nx, ny, nz, xmin, ymin, zmin);
 }
 
@@ -2822,7 +2867,8 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
   double hx, double hy, double hzed, int nx, int ny, int nz, 
   double xmin, double ymin, double zmin) {
 
-    int icol, i, j, k, u, usepart;
+    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    double x, y, z, xminPART, yminPART, zminPART;
     Vio *sock;
 
     if (pvec == VNULL) usepart = 0;
@@ -2844,36 +2890,74 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
     if (usepart) {
         /* Get the lower corner and number of grid points for the local
          * partition */
-        xminPART = xmin + (hx)*(nx-1);
-        yminPART = ymin + (hy)*(ny-1);
-        zminPART = zmin + (hzed)*(nz-1);
+        xminPART = VLARGE;
+        yminPART = VLARGE;
+        zminPART = VLARGE;
         nxPART = 0;
         nyPART = 0;
         nzPART = 0;
+        /* First, search for the lower corner */
         for (k=0; k<nz; k++) {
-            u = k*(nx)*(ny);
-            if (pvec[u] == 1) {
-                nz++;
-                z = k*hzed + xmin;
-                if (z < zminPART) zminPART = z;
-            }
-            for (j=0; j<thee->pmgp->ny; j++) {
-                u = k*(nx)*(ny)+j*(nx);
-                if (pvec[u] == 1) {
-                    ny++;
-                    y = j*hy + ymin;
-                    if (y < yminPART) yminPART = y;
-                }
+            z = k*hzed + zmin;
+            for (j=0; j<ny; j++) {
+                y = j*hy + ymin;
                 for (i=0; i<nx; i++) {
-                    u = k*(nx)*(ny)+j*(nx)+i;
-                    if (pvec[u] != 0) {
-                        nx++;
-                        x = i*hx + xmin;
+                    x = i*hx + xmin;
+                    if (pvec[IJK(i,j,k)] != 0) {
                         if (x < xminPART) xminPART = x;
+                        if (y < yminPART) yminPART = y;
+                        if (z < zminPART) zminPART = z;
                     }
                 }
             }
         }
+        /* Now search for the number of grid points in the z direction */
+        for (k=0; k<nz; k++) {
+            gotit = 0;
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nzPART++;
+        }
+        /* Now search for the number of grid points in the y direction */
+        for (j=0; j<ny; j++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nyPART++;
+        }
+        /* Now search for the number of grid points in the x direction */
+        for (i=0; i<nx; i++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    if (pvec[IJK(i,j,k)] != 0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nxPART++;
+        }
+
+        if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
+            Vnm_print(0, "Vpmg_writeUHBD:  printing only subset of domain\n");
+        }
+            
 
         /* Write off the title */
         Vio_printf(sock, "# Electrostatic potential data from APBS/PMG\n");
@@ -2913,6 +2997,7 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
                 }
             }
         }
+
         if (icol != 0) Vio_printf(sock, "\n");
                     
         /* Create the field */
@@ -2921,77 +3006,7 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
         Vio_printf(sock, "component \"positions\" value 1\n");
         Vio_printf(sock, "component \"connections\" value 2\n");
         Vio_printf(sock, "component \"data\" value 3\n");
-    }
-    
-    /* Close off the socket */
-    Vio_connectFree(sock);
-    Vio_dtor(&sock);
 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_setPart
-//
-// Purpose:  Set partition information which restricts the calculation of
-//           observables to a (rectangular) subset of the problem domain
-// 
-// Args:     lowerCorner   Partition lower corner
-//           upperCorner   Partition upper corner
-//           bflags        Whether or not a particular processor owns a face of
-//                         it's partition.  This keeps things disjoint.
-//
-// Notes:    Each partition 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
-  double upperCorner[3], int bflags[6]) {
-
-    Valist *alist;
-    Vatom *atom;
-    int i, j, k, nx, ny, nz, xok, yok, zok;
-
-    nx = thee->pmgp->nx;
-    ny = thee->pmgp->ny;
-    nz = thee->pmgp->nz;
-
-    /* We need have called Vpmg_fillco first */
-    VASSERT(thee->filled == 1);
-
-    alist = thee->pbe->alist;
-
-    Vnm_print(0, "Vpmg_setPart:  lower corner = (%g, %g, %g)\n",
-      lowerCorner[0], lowerCorner[1], lowerCorner[2]);
-    Vnm_print(0, "Vpmg_setPart:  upper corner = (%g, %g, %g)\n",
-      upperCorner[0], upperCorner[1], upperCorner[2]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[FRONT] = %d\n", 
-      bflags[VAPBS_FRONT]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[BACK] = %d\n", 
-      bflags[VAPBS_BACK]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[LEFT] = %d\n", 
-      bflags[VAPBS_LEFT]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[RIGHT] = %d\n", 
-      bflags[VAPBS_RIGHT]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[UP] = %d\n", 
-      bflags[VAPBS_UP]);
-    Vnm_print(0, "Vpmg_setPart:  bflag[DOWN] = %d\n", 
-      bflags[VAPBS_DOWN]);
-
-    /* Identify atoms as inside or outside */
-    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        atom = Valist_getAtom(alist, i);
-        if ((atom->position[0] < upperCorner[0]) &&
-            (atom->position[0] > lowerCorner[0])) xok = 1;
-        else {
-            if (atom->position[0] == lowerCorner[0]) {
-                if (bflags[VAPBS_LEFT] == 1) xok = 1;
-                else xok = 0;
-                Vnm_print(0, "ATOM %d on LEFT face (x = %g; bflag = %d)\n", i,
-                  lowerCorner[0], bflags[VAPBS_LEFT]);
-            } 
-            if (atom->position[0] == upperCorner[0]) {
-                if (bflags[VAPBS_RIGHT] == 1) xok = 1;
-   
     } else { 
     
         /* Write off the title */
@@ -3066,10 +3081,17 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     Valist *alist;
     Vatom *atom;
     int i, j, k, nx, ny, nz, xok, yok, zok;
+    double xmin, ymin, zmin, x, y, z, hx, hy, hzed;
 
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
+    ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
+    zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
 
     /* We need have called Vpmg_fillco first */
     VASSERT(thee->filled == 1);
@@ -3149,41 +3171,53 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     /* Load up pvec */
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0;
     for (i=0; i<nx; i++) {
-        if (bflags[VAPBS_LEFT] == 1) xok = 1;
-        else if (thee->xf[i] == lowerCorner[0]) xok = 0;
-        if (bflags[VAPBS_RIGHT] == 1) xok = 1;
-        else if (thee->xf[i] == upperCorner[0]) xok = 0;
-        if ((thee->xf[i] < upperCorner[0]) && 
-            (thee->xf[i] > lowerCorner[0])) xok = 1;
-        else xok = 0;
-
+        xok = 0;
+        x = i*hx + xmin;
+        if ((x < upperCorner[0]) && (x > lowerCorner[0])) xok = 1;
+        else { 
+            if ((x == lowerCorner[0]) && 
+                (bflags[VAPBS_LEFT] == 1)) xok = 1;
+            else xok = 0;
+            if ((x == upperCorner[0]) &&
+                (bflags[VAPBS_RIGHT] == 1)) xok = 1;
+            else xok = 0;
+        }
         if (xok) {
-            for (j=0; j<thee->pmgp->ny; j++) {
-                if (bflags[VAPBS_BACK] == 1) yok = 1;
-                else if (thee->yf[i] == lowerCorner[1]) yok = 0;
-                if (bflags[VAPBS_FRONT] == 1) yok = 1;
-                else if (thee->yf[i] == upperCorner[1]) yok = 0;
-                if ((thee->yf[i] < upperCorner[1]) && 
-                    (thee->yf[i] > lowerCorner[1])) yok = 1;
-                else yok = 0;
-
+            for (j=0; j<ny; j++) {
+                yok = 0;
+                y = j*hy + ymin;
+                if ((y < upperCorner[1]) && 
+                    (y > lowerCorner[1])) yok = 1;
+                else {
+                    if ((y == lowerCorner[1]) &&
+                        (bflags[VAPBS_BACK] == 1)) yok = 1;
+                    else yok = 0;
+                    if ((y == upperCorner[1]) &&
+                        (bflags[VAPBS_FRONT] == 1)) yok = 1;
+                    else yok = 0;
+                }
                 if (yok) {
-                    for (k=0; k<thee->pmgp->nz; k++) {
-                        if (bflags[VAPBS_DOWN] == 1) zok = 1;
-                        else if (thee->zf[i] == lowerCorner[2]) zok = 0;
-                        if (bflags[VAPBS_UP] == 1) zok = 1;
-                        else if (thee->zf[i] == upperCorner[2]) zok = 0;
-                        if ((thee->zf[i] < upperCorner[2]) && 
-                            (thee->zf[i] > lowerCorner[2])) zok = 1;
-                        else zok = 0;
+                    for (k=0; k<nz; k++) {
+                        zok = 0; 
+                        z = k*hzed + zmin;
+                        if ((z < upperCorner[2]) && 
+                            (z > lowerCorner[2])) zok = 1;
+                        else {
+                            if ((z == lowerCorner[2]) &&
+                                (bflags[VAPBS_DOWN] == 1)) zok = 1;
+                            else zok = 0;
+                            if ((z == upperCorner[2]) &&
+                                (bflags[VAPBS_UP] == 1)) zok = 1;
+                            else zok = 0;
 
+                        }
                         if (zok) thee->pvec[IJK(i,j,k)] = 1;
+                        else thee->pvec[IJK(i,j,k)] = 0;
                     }
                 }
             }
         }
     }
-
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
