@@ -335,11 +335,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
 
+    Vatom *atom;
     double hxNEW, hyNEW, hzNEW;
-    double xminNEW, yminNEW, zminNEW;
-    double xmaxNEW, ymaxNEW, zmaxNEW;
+    double lowerCorner[3], upperCorner[3];
     int nxNEW, nyNEW, nzNEW;
-    int nxOLD, nyOLD, nzOLD;
+    int nxOLD, nyOLD, nzOLD, bflags[6];
     int i;
 
     /* Set the new external energy contribution to zero.  Any external
@@ -356,12 +356,12 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
     nxNEW = thee->pmgp->nx;
     nyNEW = thee->pmgp->ny;
     nzNEW = thee->pmgp->nz;
-    xminNEW = thee->pmgp->xcent - ((double)(nxNEW-1)*hxNEW)/2.0;
-    xmaxNEW = thee->pmgp->xcent + ((double)(nxNEW-1)*hxNEW)/2.0;
-    yminNEW = thee->pmgp->ycent - ((double)(nyNEW-1)*hyNEW)/2.0;
-    ymaxNEW = thee->pmgp->ycent + ((double)(nyNEW-1)*hyNEW)/2.0;
-    zminNEW = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
-    zmaxNEW = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
+    lowerCorner[0] = thee->pmgp->xcent - ((double)(nxNEW-1)*hxNEW)/2.0;
+    upperCorner[0] = thee->pmgp->xcent + ((double)(nxNEW-1)*hxNEW)/2.0;
+    lowerCorner[1] = thee->pmgp->ycent - ((double)(nyNEW-1)*hyNEW)/2.0;
+    upperCorner[1] = thee->pmgp->ycent + ((double)(nyNEW-1)*hyNEW)/2.0;
+    lowerCorner[2] = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
+    upperCorner[2] = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
 
     /* Old problem dimensions */
     nxOLD = pmgOLD->pmgp->nx;
@@ -369,10 +369,16 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
     nzOLD = pmgOLD->pmgp->nz;
 
     /* Create a partition based on the new problem dimensions */
-    Vpmg_setPart(pmgOLD, xminNEW, yminNEW, zminNEW, xmaxNEW, ymaxNEW, zmaxNEW);
+    for (i=0; i<6; i++) bflags[i] = 1;
+    Vpmg_setPart(pmgOLD, lowerCorner, upperCorner, bflags);
     /* Invert partition mask */
-    for (i=0; i<(nxOLD*nyOLD*nzOLD); i++) 
-      pmgOLD->pvec[i] = (!(pmgOLD->pvec[i]));
+    for (i=0; i<(nxOLD*nyOLD*nzOLD); i++) {
+        pmgOLD->pvec[i] = (!(pmgOLD->pvec[i]));
+    }
+    for (i=0; i<Valist_getNumberAtoms(thee->pbe->alist); i++) {
+        atom = Valist_getAtom(thee->pbe->alist, i);
+        atom->partID = !(atom->partID);
+    }
     /* Now calculate the energy on inverted subset of the domain */
     Vnm_print(0, "VPMG::extEnergy: Calculating mobile ion energy contributions for focusing\n");
     thee->extQmEnergy = Vpmg_qmEnergy(pmgOLD, 1);
@@ -872,9 +878,7 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
     if (ionstr > 0.0) zks2 = 0.5*zkappa2/ionstr;
     else zks2 = 0.0;
     Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
-    Vnm_print(2, "Got %d ions:\n", nion);
     for (i=0; i<nion; i++) {
-        Vnm_print(2, "\t%g e at %g M\n", ionQ[i], ionConc[i]);
         ionConc[i] = zks2 * ionConc[i] * ionQ[i];
     }
     F77MYPDEFINIT(&nion, ionQ, ionConc);
@@ -2067,7 +2071,7 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
         Vnm_print(0, "Vpmg_energy:  dielEnergy = %g kT\n", dielEnergy);
         totEnergy = qfEnergy - dielEnergy - qmEnergy;
     } else {
-        Vnm_print(2, "Vpmg_energy:  calculating only q-phi energy\n");
+        Vnm_print(0, "Vpmg_energy:  calculating only q-phi energy\n");
         totEnergy = 0.5*Vpmg_qfEnergy(thee, extFlag);
     }
 
@@ -2298,35 +2302,31 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
         khi = (int)ceil(kfloat);
         klo = (int)floor(kfloat);
 
-        if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
-            (ilo>=0) && (jlo>=0) && (klo>=0)) {
+        if (atom->partID) {
 
-            /* Now get trilinear interpolation constants */
-            dx = ifloat - (double)(ilo);
-            dy = jfloat - (double)(jlo);
-            dz = kfloat - (double)(klo);
-            uval =  
-              dx*dy*dz
-               *(u[IJK(ihi,jhi,khi)]*(double)(pvec[IJK(ihi,jhi,khi)]))
-            + dx*(1.0-dy)*dz
-               *(u[IJK(ihi,jlo,khi)]*(double)(pvec[IJK(ihi,jlo,khi)]))
-            + dx*dy*(1.0-dz)
-               *(u[IJK(ihi,jhi,klo)]*(double)(pvec[IJK(ihi,jhi,klo)]))
-            + dx*(1.0-dy)*(1.0-dz)
-               *(u[IJK(ihi,jlo,klo)]*(double)(pvec[IJK(ihi,jlo,klo)]))
-            + (1.0-dx)*dy*dz
-               *(u[IJK(ilo,jhi,khi)]*(double)(pvec[IJK(ilo,jhi,khi)]))
-            + (1.0-dx)*(1.0-dy)*dz
-               *(u[IJK(ilo,jlo,khi)]*(double)(pvec[IJK(ilo,jlo,khi)]))
-            + (1.0-dx)*dy*(1.0-dz)
-               *(u[IJK(ilo,jhi,klo)]*(double)(pvec[IJK(ilo,jhi,klo)]))
-            + (1.0-dx)*(1.0-dy)*(1.0-dz)
-               *(u[IJK(ilo,jlo,klo)]*(double)(pvec[IJK(ilo,jlo,klo)]));
-            energy += (uval*charge);
-        } else if (thee->pmgp->bcfl != 4) {
-            Vnm_print(2, "Vpmg_qfEnergy:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
+            if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
+                (ilo>=0) && (jlo>=0) && (klo>=0)) {
+
+                /* Now get trilinear interpolation constants */
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                uval =  
+                  dx*dy*dz*u[IJK(ihi,jhi,khi)]
+                + dx*(1.0-dy)*dz*u[IJK(ihi,jlo,khi)]
+                + dx*dy*(1.0-dz)*u[IJK(ihi,jhi,klo)]
+                + dx*(1.0-dy)*(1.0-dz)*u[IJK(ihi,jlo,klo)]
+                + (1.0-dx)*dy*dz*u[IJK(ilo,jhi,khi)]
+                + (1.0-dx)*(1.0-dy)*dz*u[IJK(ilo,jlo,khi)]
+                + (1.0-dx)*dy*(1.0-dz)*u[IJK(ilo,jhi,klo)]
+                + (1.0-dx)*(1.0-dy)*(1.0-dz)*u[IJK(ilo,jlo,klo)];
+                energy += (uval*charge);
+            } else if (thee->pmgp->bcfl != 4) {
+                Vnm_print(2, "Vpmg_qfEnergy:  Atom #%d at (%4.3f, %4.3f, \
+%4.3f) is off the mesh (ignoring)!\n",
                 iatom, position[0], position[1], position[2]);
-        }
+            }
+        } 
     }
 
     energy = energy;
@@ -2417,6 +2417,7 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 //           data => nx*ny*nz length array of data
 //
 // Notes:    The mesh spacing should be uniform
+//           Format changed frmo %12.6E to %12.5E
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -2836,16 +2837,22 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
 //
 // Purpose:  Set partition information which restricts the calculation of
 //           observables to a (rectangular) subset of the problem domain
+// 
+// Args:     lowerCorner   Partition lower corner
+//           upperCorner   Partition upper corner
+//           bflags        Whether or not a particular processor owns a face of
+//                         it's partition.  This keeps things disjoint.
 //
-// Args:     [xyz]min => lower corner
-//           [xyz]max => upper corner
+// Notes:    Each partition 
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
-           double xmax, double ymax, double zmax) {
+VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
+  double upperCorner[3], int bflags[6]) {
 
-    int i, j, k, nx, ny, nz;
+    Valist *alist;
+    Vatom *atom;
+    int i, j, k, nx, ny, nz, xok, yok, zok;
 
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
@@ -2854,17 +2861,112 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
     /* We need have called Vpmg_fillco first */
     VASSERT(thee->filled == 1);
 
+    alist = thee->pbe->alist;
+
+    Vnm_print(0, "Vpmg_setPart:  lower corner = (%g, %g, %g)\n",
+      lowerCorner[0], lowerCorner[1], lowerCorner[2]);
+    Vnm_print(0, "Vpmg_setPart:  upper corner = (%g, %g, %g)\n",
+      upperCorner[0], upperCorner[1], upperCorner[2]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[FRONT] = %d\n", 
+      bflags[VAPBS_FRONT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[BACK] = %d\n", 
+      bflags[VAPBS_BACK]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[LEFT] = %d\n", 
+      bflags[VAPBS_LEFT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[RIGHT] = %d\n", 
+      bflags[VAPBS_RIGHT]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[UP] = %d\n", 
+      bflags[VAPBS_UP]);
+    Vnm_print(0, "Vpmg_setPart:  bflag[DOWN] = %d\n", 
+      bflags[VAPBS_DOWN]);
+
+    /* Identify atoms as inside or outside */
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        if ((atom->position[0] < upperCorner[0]) &&
+            (atom->position[0] > lowerCorner[0])) xok = 1;
+        else {
+            if (atom->position[0] == lowerCorner[0]) {
+                if (bflags[VAPBS_LEFT] == 1) xok = 1;
+                else xok = 0;
+                Vnm_print(0, "ATOM %d on LEFT face (x = %g; bflag = %d)\n", i,
+                  lowerCorner[0], bflags[VAPBS_LEFT]);
+            } 
+            if (atom->position[0] == upperCorner[0]) {
+                if (bflags[VAPBS_RIGHT] == 1) xok = 1;
+                else xok = 0;
+                Vnm_print(0, "ATOM %d on RIGHT face (x = %g, bflag = %d)\n", i,
+                  upperCorner[0], bflags[VAPBS_RIGHT]);
+            } 
+        }
+        if ((atom->position[1] < upperCorner[1]) &&
+            (atom->position[1] > lowerCorner[1])) yok = 1;
+        else {
+            if (atom->position[1] == lowerCorner[1]) {
+                if (bflags[VAPBS_BACK] == 1) yok = 1;
+                else yok = 0;
+                Vnm_print(0, "ATOM %d on BACK face\n", i);
+            } 
+            if (atom->position[1] == upperCorner[1]) {
+                if (bflags[VAPBS_FRONT] == 1) yok = 1;
+                else yok = 0;
+                Vnm_print(0, "ATOM %d on FRONT face\n", i);
+            } 
+        }
+        if ((atom->position[2] < upperCorner[2]) &&
+            (atom->position[2] > lowerCorner[2])) zok = 1;
+        else {
+            if (atom->position[2] == lowerCorner[2]) {
+                if (bflags[VAPBS_DOWN] == 1) zok = 1;
+                else zok = 0;
+                Vnm_print(0, "ATOM %d on DOWN face\n", i);
+            } 
+            if (atom->position[2] == upperCorner[2]) {
+                if (bflags[VAPBS_UP] == 1) zok = 1;
+                else zok = 0;
+                Vnm_print(0, "ATOM %d on UP face\n", i);
+            } 
+        }
+
+        if ((xok && yok) && zok) {
+            Vnm_print(0, "HAVE ATOM %d\n", i);
+            atom->partID = 1;
+        } else atom->partID = 0;
+    }
+
+
     /* Load up pvec */
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 0;
     for (i=0; i<nx; i++) {
-        if ( (thee->xf[i]<=xmax) && 
-             (thee->xf[i]>=xmin)) {
+        if (bflags[VAPBS_LEFT] == 1) xok = 1;
+        else if (thee->xf[i] == lowerCorner[0]) xok = 0;
+        if (bflags[VAPBS_RIGHT] == 1) xok = 1;
+        else if (thee->xf[i] == upperCorner[0]) xok = 0;
+        if ((thee->xf[i] < upperCorner[0]) && 
+            (thee->xf[i] > lowerCorner[0])) xok = 1;
+        else xok = 0;
+
+        if (xok) {
             for (j=0; j<thee->pmgp->ny; j++) {
-                if ( (thee->yf[j]<=ymax) && 
-                     (thee->yf[j]>=ymin)) {
+                if (bflags[VAPBS_BACK] == 1) yok = 1;
+                else if (thee->yf[i] == lowerCorner[1]) yok = 0;
+                if (bflags[VAPBS_FRONT] == 1) yok = 1;
+                else if (thee->yf[i] == upperCorner[1]) yok = 0;
+                if ((thee->yf[i] < upperCorner[1]) && 
+                    (thee->yf[i] > lowerCorner[1])) yok = 1;
+                else yok = 0;
+
+                if (yok) {
                     for (k=0; k<thee->pmgp->nz; k++) {
-                        if ( (thee->zf[k]<=zmax) && 
-                             (thee->zf[k]>=zmin)) thee->pvec[IJK(i,j,k)] = 1;
+                        if (bflags[VAPBS_DOWN] == 1) zok = 1;
+                        else if (thee->zf[i] == lowerCorner[2]) zok = 0;
+                        if (bflags[VAPBS_UP] == 1) zok = 1;
+                        else if (thee->zf[i] == upperCorner[2]) zok = 0;
+                        if ((thee->zf[i] < upperCorner[2]) && 
+                            (thee->zf[i] > lowerCorner[2])) zok = 1;
+                        else zok = 0;
+
+                        if (zok) thee->pvec[IJK(i,j,k)] = 1;
                     }
                 }
             }
@@ -2883,14 +2985,21 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
 VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 
     int i, nx, ny, nz;
+    Vatom *atom;
+    Valist *alist;
 
     VASSERT(thee != VNULL);
 
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
+    alist = thee->pbe->alist;
 
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 1;
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        atom->partID = 1;
+    }
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

@@ -141,8 +141,8 @@ VEXTERNC void Vpmg_readDX(const char *iodev, const char *iofmt,
   const char *thost, const char *fname, int *nx, int *ny, int *nz,
   double *hx, double *hy, double *hzed, double *xmin, double *ymin, 
   double *zmin, double **data);
-VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
-           double xmax, double ymax, double zmax);
+VEXTERNC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
+  double upperCorner[3], int bflags[6]);
 VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);
 

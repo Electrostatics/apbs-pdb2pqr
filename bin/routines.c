@@ -334,7 +334,6 @@ VPUBLIC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg) {
             partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
               + 0.5*mgparm->partDisjLength[j];
         }
-
         Vnm_print(0, "main:  Disj part lower corner = (%g, %g, %g)\n",
           partMin[0], partMin[1], partMin[2]);
         Vnm_print(0, "main:  Disj part upper corner = (%g, %g, %g)\n",

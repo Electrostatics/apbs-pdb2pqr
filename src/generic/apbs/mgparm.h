@@ -111,6 +111,8 @@ typedef struct MGparm {
                                           * of the disjoint partitions */
     double partDisjLength[3];            /* This gives the lengths of the
                                           * disjoint partitions */
+    int partDisjOwnSide[6];              /* Tells whether the boundary points
+                                          * are ours (1) or not (0) */
     double partOlapCenterShift[3];       /* When added to the actual (local)
                                           * mesh center, this gives the center
                                           * of the overlapping partitions */
@@ -122,7 +124,7 @@ typedef struct MGparm {
     int setpdime;
     int rank;                            /* Rank of this processor */
     int setrank;
-    int ofrac;                           /* Overlap fraction between procs */
+    double ofrac;                        /* Overlap fraction between procs */
     int setofrac; 
 
 } MGparm;
