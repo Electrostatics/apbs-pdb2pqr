@@ -57,6 +57,7 @@
 #include "apbs/valist.h"
 #include "apbs/vcsm.h"
 #include "apbs/vhash.h"
+#include "apbs/vunit.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Parameters and datatypes
