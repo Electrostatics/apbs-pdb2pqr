@@ -630,7 +630,7 @@ VPUBLIC double Vacc_totalSASA(Vacc *thee, double radius) {
 
     return area;
 
-};
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_atomSASA
@@ -669,4 +669,4 @@ VPUBLIC double Vacc_atomSASA(Vacc *thee, double srad, int iatom) {
 
     return area;
 
-};
+}
