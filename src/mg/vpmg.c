@@ -36,8 +36,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // File:     vpmg.c
 //
-// Purpose:  Class Vpmg: methods.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
@@ -747,11 +745,6 @@ VPRIVATE void bcCalc(Vpmg *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctor
-//
-// Purpose:  Construct the PMG object from scratch using the solver parameters
-//           specifed by the passed Vpmgp object and the equation data from
-//           the Vpbe object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
@@ -768,11 +761,6 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctor2
-//
-// Purpose:  Construct the PMG object
-//
-// Notes:    See header files for default parameter values
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
@@ -879,14 +867,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctorFocus
-//
-// Purpose:  Construct the PMG object by focusing.  In other words, use the
-//           solution from the passed Vpmg object to set the boundary
-//           conditions for the new Vpmg object.  IN THE PROCESS, THE OLD VPMG
-//           OBJECT IS DESTROYED.  The solver parameters specifed by the passed
-//           Vpmgp object and the equation data from the Vpbe object are also
-//           used.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD, 
@@ -904,16 +884,6 @@ VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ctor2Focus
-//
-// Purpose:  Construct the PMG object
-//
-// Notes:    See Vpmg_ctor2Focus description
-//
-// Args:     energyFlag (0 ==> don't calculate any energy contribution from
-//           outside focusing area, 1 ==> calculate total energy contribution
-//           from outside focusing area, 2 ==> calculate energy component
-//           contributions)
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
@@ -1034,9 +1004,6 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_solve
-//
-// Purpose:  Solve the equation
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_solve(Vpmg *thee) {
@@ -1109,19 +1076,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_fillco
-//
-// Purpose:  Fill the coefficient arrays prior to solving the equation
-//
-// Args:     surfMeth The method to use to generate discretizations of the 
-//                    dielectric functions:
-//                       0 => straight discretization (collocation-like), no
-//                            smoothing
-//                       1 => smoothing based on a harmonic average of the
-//                            value at three points
-//                       2 => spline-based accessibility with epsparm =
-//                            windowing parameter (<1.0, please)
-//           splineWin  Spline window
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
@@ -1596,24 +1550,6 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_force
-//
-// Purpose:  Return the force on the specified atom in units of $k_B T/A$.
-//
-// Notes:    Using the force evaluation methods of Im et al (Roux group),
-//           Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
-//           whole (self-interactions included) force -- reaction field forces
-//           will have to be calculated at higher level.
-//
-//           No contributions are made from higher levels of focusing.
-//
-//           This is currently implemented in a very inefficient fashion
-//           becuase I'm not sure which of the PMG coefficient arrays can be
-//           re-used and which are overwritten by PMG.
-//
-// Args:     force  --> space for 3*double
-//           atomID --> Valist ID of desired atom
-//           win    --> spile window used for accessibility
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma, 
@@ -1639,25 +1575,6 @@ VPUBLIC void Vpmg_force(Vpmg *thee, double *force, double gamma,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_ibForce
-//
-// Purpose:  Return the ionic boundary force on the specified atom in
-//           units of $k_B T/A$.
-//
-// Notes:    Using the force evaluation methods of Im et al (Roux group),
-//           Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
-//           whole (self-interactions included) force -- reaction field forces
-//           will have to be calculated at higher level.
-//
-//           No contributions are made from higher levels of focusing.
-//
-//           This is currently implemented in a very inefficient fashion
-//           becuase I'm not sure which of the PMG coefficient arrays can be
-//           re-used and which are overwritten by PMG.
-//
-// Args:     force  --> space for 3*double
-//           atomID --> Valist ID of desired atom
-//           win    --> spline window used for accessibility
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
@@ -1797,27 +1714,6 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_dbnpForce
-//
-// Purpose:  Return the dielectric boundary and apolar solvation forces on the
-//           specified atom in units of $k_B T/A$.
-//
-// Notes:    Using the force evaluation methods of Im et al (Roux group),
-//           Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
-//           whole (self-interactions included) force -- reaction field forces
-//           will have to be calculated at higher level.
-//
-//           No contributions are made from higher levels of focusing.
-//
-//           This is currently implemented in a very inefficient fashion
-//           becuase I'm not sure which of the PMG coefficient arrays can be
-//           re-used and which are overwritten by PMG.
-//
-// Args:     dbForce  --> space for 3*double storing dielectric boudnary force
-//           npForce  --> space for 3*double storing non-polar force
-//           gamma --> nonpolar force parameter (units of kT/A^2)
-//           atomID --> Valist ID of desired atom
-//           win    --> spline window used for accessibility
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce, 
@@ -2028,25 +1924,6 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_qfForce
-//
-// Purpose:  Return the charge-field force on the specified atom in units of
-//           $k_B T/A$.
-//
-// Notes:    Using the force evaluation methods of Im et al (Roux group),
-//           Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
-//           whole (self-interactions included) force -- reaction field forces
-//           will have to be calculated at higher level.
-//
-//           No contributions are made from higher levels of focusing.
-//
-//           This is currently implemented in a very inefficient fashion
-//           becuase I'm not sure which of the PMG coefficient arrays can be
-//           re-used and which are overwritten by PMG.
-//
-// Args:     force  --> space for 3*double storing force
-//           atomID --> Valist ID of desired atom
-//           win    --> spline window used for accessibility
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
@@ -2175,20 +2052,6 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_energy
-//
-// Purpose:  Return the energy in units of $k_B T$.
-//
-// Args:     extFlag => If this was a focused calculation, then it is possible
-//                      to include the energy contributions from the outside
-//                      the focused domain.  This should be on (=1) for
-//                      sequential focusing calculations and off (=0) for
-//                      parallel calculations.
-//
-// Notes:    The NPBE energy calculation here is rather inaccurate since it
-//           uses \int \epsilon (\nabla u)^2 dx rather than the more elaborate
-//           surface integral scheme of Micu et al (J Comp Phys 136:263-271,
-//           1997)
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
@@ -2225,19 +2088,6 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_dielEnergy
-//
-// Purpose:  Using the solution at the finest mesh level, get the electrostatic
-//           energy due to the interaction of the mobile charges with the
-//           potential:  
-//             \[ G = -\frac{1}{2} \int \epsilon (\nabla u)^2 dx \].
-//           and return the result in units of $k_B T$.  Clearly, no
-//           self-interaction terms are removed.
-//
-// Notes:    The value of this observable may be modified by setting
-//           restrictions on the subdomain over which it is calculated.  Such
-//           limits can be set via Vpmg_setPart and are generally useful for
-//           parallel runs.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
@@ -2288,21 +2138,6 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_qmEnergy
-//
-// Purpose:  Using the solution at the finest mesh level, get the electrostatic
-//           energy due to the interaction of the mobile charges with the
-//           potential.  For the NPBE, this is
-//             \[ G = -\int \kappa^2(\cosh u - 1) dx \]
-//           while for the LPBE it is
-//             \[ G = -\frac{1}{2} \kappa^2 \int u^2 dx \]
-//           and return the result in units of $k_B T$.  Clearly, no
-//           self-interaction terms are removed.
-//
-// Notes:    The value of this observable may be modified by setting
-//           restrictions on the subdomain over which it is calculated.  Such
-//           limits can be set via Vpmg_setPart and are generally useful for
-//           parallel runs.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
@@ -2370,26 +2205,6 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_qfEnergy
-//
-// Purpose:  Using the solution at the finest mesh level, get the electrostatic
-//           energy due to the interaction of the fixed charges with the
-//           potential: 
-//             \[ G = \sum_i q_i u(r_i) \]
-//           and return the result in units of $k_B T$.  Clearly, no
-//           self-interaction terms are removed.  A factor a 1/2 has to be
-//           included to convert this 
-//
-// Args:     extFlag => If this was a focused calculation, then it is possible
-//                      to include the energy contributions from the outside
-//                      the focused domain.  This should be on (=1) for
-//                      sequential focusing calculations and off (=0) for
-//                      parallel calculations.
-//     
-// Notes:    The value of this observable may be modified by setting
-//           restrictions on the subdomain over which it is calculated.  Such
-//           limits can be set via Vpmg_setPart and are generally useful for
-//           parallel runs.  
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
@@ -2480,9 +2295,6 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_dtor
-//
-// Purpose:  Clean up
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dtor(Vpmg **thee) {
@@ -2497,9 +2309,6 @@ VPUBLIC void Vpmg_dtor(Vpmg **thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_dtor2
-//
-// Purpose:  Clean up
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dtor2(Vpmg *thee) { 
@@ -2548,20 +2357,6 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_writeUHBD
-//
-// Purpose:  Write out a PMG array in UHBD grid format (ASCII)
-//
-// Args:     iodev        ==> output device type (file/buff/unix/inet)
-//           iofmt        ==> output device format (ascii/xdr)
-//           thost        ==> output hostname (for sockets)
-//           fname        ==> output file/buff/unix/inet name
-//           title => title to be inserted in grid
-//           data => nx*ny*nz length array of data
-//
-// Notes:    The mesh spacing should be uniform
-//           Format changed from %12.6E to %12.5E
-//           THIS ROUTINE DOES NOT RESPECT partition information
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt, 
@@ -2652,20 +2447,6 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_readDX
-//
-// Purpose:  Read in a PMG array in OpenDX grid format 
-//
-// Args:     iodev      ==> output device type (file/buff/unix/inet)
-//           iofmt      ==> output device format (ascii/xdr)
-//           thost      ==> output hostname (for sockets)
-//           fname      ==> output file/buff/unix/inet name
-//           n{x,y,z}   ==> data array dimensions
-//           h{x,y,z}   ==> mesh spacings
-//           {x,y,z}min ==> lower grid corner
-//           data       ==> nx*ny*nz length array of data (allocated in this
-//                          routine)
-//
-// Notes:    All dimension information is given in order: z, y, x
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -2884,18 +2665,6 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_writeDX
 //
-// Purpose:  Write out a PMG array in OpenDX grid format (ASCII)
-//
-// Args:     iodev        ==> output device type (file/buff/unix/inet)
-//           iofmt        ==> output device format (ascii/xdr)
-//           thost        ==> output hostname (for sockets)
-//           fname        ==> output file/buff/unix/inet name
-//           title => title to be inserted in grid
-//           data => nx*ny*nz length array of data
-//
-// Notes:    All dimension information is given in order: z, y, x
-//           Does not currently respect partition information
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
@@ -2921,18 +2690,6 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_writeDX2
-//
-// Purpose:  Write out a PMG array in OpenDX grid format (ASCII)
-//
-// Args:     iodev        ==> output device type (file/buff/unix/inet)
-//           iofmt        ==> output device format (ascii/xdr)
-//           thost        ==> output hostname (for sockets)
-//           fname        ==> output file/buff/unix/inet name
-//           title        ==> title to be inserted in grid
-//           data         ==> nx*ny*nz length array of data
-//           pvec         ==> nx*ny*nz length array of partition masks (1 if in
-//                            partition, 0 otherwise).  This array can be VNULL
-//                            if no masking is desired.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -3137,16 +2894,6 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_setPart
 //
-// Purpose:  Set partition information which restricts the calculation of
-//           observables to a (rectangular) subset of the problem domain
-// 
-// Args:     lowerCorner   Partition lower corner
-//           upperCorner   Partition upper corner
-//           bflags        Whether or not a particular processor owns a face of
-//                         it's partition.  This keeps things disjoint.
-//
-// Notes:    Each partition 
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
@@ -3300,8 +3047,6 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_unsetPart
 //
-// Purpose:  Remove partition information
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
@@ -3326,16 +3071,6 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_fillAcc
-//
-// Purpose:  Fill the specified array with accessibility values
-//
-// Args:     vec   The vector to be filled (must be nx*ny*nz in length)
-//           meth  The accessibility definition to use:
-//                  0 => Mol surf (uses parm)
-//                  1 => VdW surf
-//                  2 => Inflated VdW surf (uses parm)
-//                  3 => Spline surface (uses parm)
-//           parm  Parameter for surface definition
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
