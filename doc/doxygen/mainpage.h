@@ -259,7 +259,7 @@
  * 384 MB heap space per task.  The use of vendor-supplied BLAS is also
  * recommended!
  * <li> Sun <br>
- * If you're compiling this on an Alpha platform (Linux or OSF), you definitely
+ * If you're compiling this on a Sun platform, you definitely
  * need to use the Sun compilers, GCC generates <i>very slow</i> executables.
  * <li> Alpha <br>
  * If you're compiling this on an Alpha platform (Linux or OSF), you definitely
@@ -269,7 +269,7 @@
  *     CXX='cxx'; export CXX
  *     F77='fort'; export F77
  * </pre>
- * It's also worthwhile to add the '-arch' flag.
+ * It's also worthwhile to add the '-arch' flag (via the CFLAGS variable).
  * </ul>
  * 
  * <hr width="100%">
