@@ -56,8 +56,8 @@ int main(int argc, char **argv) {
     double *pos, energy, zmagic, disp[3], force[3];
     double *fx, *fy, *fz, *pot, *xp, *yp, *zp, *qp;
     int i, j;
-    int verbose = 0;
-    int doforce = 1;
+    int doenergy = 0;
+    int doforce = 0;
 
     /* SYSTEM PARAMETERS */
     char *path;
@@ -69,12 +69,12 @@ medium with dielectric constant 1 (vacumm).  It is very important to\n\
 realize that all energies, forces, etc. are calculated with this\n\
 dielectric constant of 1 and must be scaled to be compared with other\n\
 calculations.\n\n\
-Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
+Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
    where <molecule.pqr> is the path to the molecule\n\
-   structure in PQR format.  This program supports the\n\
-   following options:\n\
-       -v      give per-atom information\n\
-       -f      calculate forces in addition to energies\n\n";
+   structure in PQR format.  By default the total energies and forces\n\
+   will be printed. This program also supports the following options:\n\
+       -e      give per-atom energies\n\
+       -f      give per-atom forces\n\n";
 
     Vio_start();
 
@@ -86,20 +86,24 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
     };
     if (argc > 2) {
         for (i=1; i<(argc-1); i++) {
-            if (strcmp("-v", argv[i]) == 0) {
-                Vnm_print(1, "Providing per-atom information...\n");
-                verbose = 1;
+            if (strcmp("-e", argv[i]) == 0) {
+                Vnm_print(1, "Providing per-atom energies...\n");
+                doenergy = 1;
             } else if (strcmp("-f", argv[i]) == 0) {
-                Vnm_print(1, "Calculating forces...\n");
+                Vnm_print(1, "Providing per-atom forces...\n");
                 doforce = 1;
+            } else if (strcmp("-ef", argv[i]) == 0 || \
+                       strcmp("-fe", argv[i]) == 0){
+                Vnm_print(1, "Providing per-atom forces and energies...\n");
+                doforce = 1; 
+                doenergy = 1;
+              
             } else {
                 Vnm_print(2, "Ignoring option %s\n", argv[i]);
-                verbose = 0;
             }
         }
         path = argv[argc-1];
     } else {
-        verbose = 0;
         path = argv[1];
     }
 
@@ -165,17 +169,17 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
         force[0] += fx[i];
         force[1] += fy[i];
         force[2] += fz[i];
-        if (verbose) {
-            Vnm_print(1, "\tAtom %d:  Energy  = %1.12E kJ/mol\n", i, pot[i]);
-            if (doforce) {
-                Vnm_print(1, "\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i, 
-                  fx[i]);
-                Vnm_print(1, "\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i, 
-                  fy[i]);
-                Vnm_print(1, "\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i, 
-                  fz[i]);
-            }
+        if (doenergy) {
+            Vnm_print(1, "\tAtom %d:  Energy  = %1.12E kJ/mol\n", i+1, pot[i]);
         }
+        if (doforce) {
+          Vnm_print(1, "\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i+1, 
+                    fx[i]);
+          Vnm_print(1, "\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i+1, 
+                    fy[i]);
+          Vnm_print(1, "\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i+1, 
+                    fz[i]);
+        }    
     }
 
     Vnm_print(1, "\n\n-------------------------------------------------------\n");
