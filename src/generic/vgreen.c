@@ -214,9 +214,7 @@ VPUBLIC double Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgreen_helmholtzD(Vgreen *thee, double *position, 
   double dim, double kappa, double *grad) {
-
     VASSERT(0);
-    return 0.;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
