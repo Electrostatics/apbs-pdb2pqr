@@ -104,6 +104,8 @@ int main(int argc, char **argv) {
                   "\tand <molecule.pqr> is the path to the molecule structure\
  in PQR format\n\n";
 
+    Vio_start();
+
     if (argc != 3) {
         Vnm_print(1, "\n*** Syntax error: got %d arguments, expected 2.\n",
           argc);

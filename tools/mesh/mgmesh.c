@@ -53,6 +53,8 @@ int main(int argc, char **argv) {
     int minlev = 3;
     double newval, oldval;
 
+    Vio_start();
+
     Vnm_print(1, "\n\nThis program determines the acceptable meshpoint number\n"
                  "and level combinations for the PMG multigrid libraries and\n"
                  "%d or more levels in the mesh (because you typically use\n"

@@ -77,6 +77,8 @@ int main(int argc, char **argv) {
                   "      <path>   is the path to the matrix in Harwell-\n"
                   "               Boeing format.\n\n";
 
+    Vio_start();
+
     if (argc != 4) {
         Vnm_print(2, "ERROR:  Got %d arguments, expected 4!", argc);
         Vnm_print(1, "%s", usage);

@@ -254,4 +254,65 @@ VEXTERNC void Vgrid_writeDX(Vgrid *thee, const char *iodev,
 VEXTERNC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname);
 
+/**
+ * @brief  Get the integral of the data
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  Integral of data */
+VEXTERNC double Vgrid_integrate(Vgrid *thee);
+
+/**
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  \f$L_1\f$ norm of data 
+ * @brief  Get the \f$L_1\f$ norm of the data.  This returns the integral:
+ *   \f[ \| u \|_{L_1} = \left( \int_\Omega | u(x) | dx \right)^{1/2} \f] 
+ */
+VEXTERNC double Vgrid_normL1(Vgrid *thee);
+
+/**
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  \f$L_2\f$ norm of data 
+ * @brief  Get the \f$L_2\f$ norm of the data.  This returns the integral:
+ *   \f[ \| u \|_{L_2} = \left( \int_\Omega | u(x) |^2 dx \right)^{1/2} \f] 
+ */
+VEXTERNC double Vgrid_normL2(Vgrid *thee);
+
+/**
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  \f$L\infty\f$ norm of data 
+ * @brief  Get the \f$L_\infty\f$ norm of the data.  This returns the integral:
+ *   \f[ \| u \|_{L_\infty} = \sup_{x \in \Omega} | u(x) | \f]
+ */
+VEXTERNC double Vgrid_normLinf(Vgrid *thee);
+
+/**
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  Integral of data 
+ * @brief  Get the \f$H_1\f$ semi-norm of the data.  
+ * This returns the integral:
+ *   \f[ | u |_{H_1} = \left( \int_\Omega |\nabla u(x)|^2 dx \right)^{1/2} \f] 
+ */
+VEXTERNC double Vgrid_seminormH1(Vgrid *thee);
+
+/**
+ * @ingroup  Vgrid
+ * @author  Nathan Baker
+ * @param  thee  Vgrid object
+ * @returns  Integral of data 
+ * @brief  Get the \f$H_1\f$ norm (or energy norm) of the data.  
+ * This returns the integral:
+ *   \f[ \| u \|_{H_1} = \left( \int_\Omega |\nabla u(x)|^2 dx 
+ *                     +        \int_\Omega |u(x)|^2 dx \right)^{1/2} \f] 
+ */
+VEXTERNC double Vgrid_normH1(Vgrid *thee);
+
 #endif

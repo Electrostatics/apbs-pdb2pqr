@@ -146,13 +146,16 @@ dnl ##########################################################################
 dnl 3. checks for libraries
 dnl ##########################################################################
 dnl # Check for the math library.
+AC_LANG_C
 AC_CHECK_LIB(m,pow,[math_lib="-lm"],[math_lib=""])
 AC_SUBST(math_lib)
 dnl # Check for the liberty library
+AC_LANG_C
 AC_CHECK_LIB(iberty,strerrno,[liberty_lib="-liberty"],[liberty_lib=""])
 AC_SUBST(liberty_lib)
 dnl # Check for "gethostbyname" and nsl library
 nsl_lib="";
+AC_LANG_C
 AC_CHECK_FUNC(gethostbyname,[try_nsl=""],[try_nsl="yes"])
 if test -n "${try_nsl}"; then
     AC_CHECK_LIB(nsl,gethostbyname,[nsl_lib="-lnsl"],[nsl_lib=""])
@@ -160,6 +163,7 @@ fi
 AC_SUBST(nsl_lib)
 dnl # Check for "connect" and socket library
 socket_lib="";
+AC_LANG_C
 AC_CHECK_FUNC(connect,[try_socket=""],[try_socket="yes"])
 if test -n "${try_socket}"; then
     AC_CHECK_LIB(socket,connect,[socket_lib="-lsocket"],[socket_lib=""])
@@ -167,11 +171,25 @@ fi
 AC_SUBST(socket_lib)
 dnl # Check for "thr_create()" and thread library
 thread_lib="";
+AC_LANG_C
 AC_CHECK_FUNC(thr_create,[try_thread=""],[try_thread="yes"])
 if test -n "${try_thread}"; then
     AC_CHECK_LIB(thread,thr_create,[thread_lib="-lthread"],[thread_lib=""])
 fi
 AC_SUBST(thread_lib)
+dnl # CHECK FOR TIME
+try_time=""
+AC_LANG_C
+AC_CHECK_FUNC(time,[AC_DEFINE([HAVE_TIME_FUNC], [], [have the time() function])], [])
+dnl # CHECK FOR RAND
+try_rand=""
+AC_LANG_C
+AC_CHECK_FUNC(rand,[AC_DEFINE([HAVE_RAND_FUNC], [], [have the rand() function])], [])
+dnl # CHECK FOR SRAND
+try_srand=""
+AC_LANG_C
+AC_CHECK_FUNC(srand,[AC_DEFINE([HAVE_SRAND_FUNC], [], [have the srand() function])], [])
+
 
 dnl ##########################################################################
 dnl 4. checks for header files
