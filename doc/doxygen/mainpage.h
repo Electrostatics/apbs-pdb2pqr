@@ -425,7 +425,7 @@
  *     <ul>
  *     <li> apbs/tools/conversion/param/pdb2pqr/amber-param.dat  <br>  
  *     All-atom charges and radii from AMBER94 parameter set; polar hydrogens
- *     given 1 &Aring radius.  Contributed by Adrian Elcock; modified by Nathan
+ *     given 1 &Aring; radius.  Contributed by Adrian Elcock; modified by Nathan
  *     Baker.
  *     <li> apbs/tools/conversion/param/pdb2pqr/c-alpha.dat  <br>  
  *     C-alpha charges for reduced representations of protein structures.
@@ -647,14 +647,16 @@
  *       format.
  *  <li><code>pdb</code>.  The molecule file is in PDB format as described at
  *  <a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards</a>.  
- *  <b>IMPORTANT NOTEs:</b> 
+ *  <b>NOTE:
  *  <ol>
- *  <li> PDB input files must be accompanied by a <a href="#read-parm">"READ 
+ *  <li>PDB input files must be accompanied by a <a href="#read-parm">"READ 
  *  PARM"</a> statement to obtain charge and radius parameters.
  *  <li>We make one significant exception to the PDB format; we require
  *  whitespace-, tab-, or newline-delimited fields.  This exception enables the
- *  study of molecules with coordinates substantially outside the &#241;999.0
- *  range.  
+ *  study of molecules with coordinates substantially outside the 
+ *  \f$\pm 999.0\f$ range. 
+ *  </ol>
+ *  </b>
  *  </ul>
  * <dt> <a name="read-parm"><code>parm</code></a> <i>format</i> <i>path</i>
  * <dd> Read in a database from <i>path</i> with charges and radii for use with
