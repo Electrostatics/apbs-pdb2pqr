@@ -2155,7 +2155,7 @@ if test -e $pmgcdir/inc/config.h; then
 EOF
 
     pmgcbin="mg"
-    pmgclib="-L${pmgcdir}/lib -lmgpde -lmgmlsys -lmglsys -lmgbuild -lmgops -lmgarray -lmgla -lmgparms -lmgmesh"
+    pmgclib="-L${pmgcdir}/lib -lmgpde -lmgmlsys -lmglsys -lmgbuild -lmgops -lmgarray -lmgla -lmgparms -mgpara -lmgmesh"
     pmgcinc="-I${pmgcdir}/inc"
 else
     echo "$ac_t""the PMGC package in ${pmgcdir} is not configured" 1>&6
