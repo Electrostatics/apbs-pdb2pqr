@@ -49,22 +49,13 @@ Nathan Baker                       Primary author
 <nbaker@wasabi.ucsd.edu>
 
 Michael Holst                      Primary author of MC.  Provided
-<mholst@math.ucsd.edu>             templates for:
+<mholst@math.ucsd.edu>              templates for:
                                       Source code directory structure and
                                         autoconf files
                                       Driver PDE program files in the work
                                         directory
                                    Some of the mesh and protein coordinate
                                       files under work/
-                                   Interface to Donald Bashford's SAV
-                                     code (vsav; joint with Wang and 
-                                     Baker)
-
-Donald Bashford                    SAV solvent accessible surface code
-
-Feng Wang                          Interface to Donald Bashford's SAV
-<fwang@math.uci.edu>                 code (vsav; joint with Holst and
-                                     Baker)
 
 Philippe Hunenberger               Provided example code for parsing of
 <phil@igc.phys.chem.ethz.ch>         PDB files in valist/valist.c
