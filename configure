@@ -2168,7 +2168,7 @@ fi
 
 
 apbsinc="-I${apbsdir}/inc"
-apbslib="-L${apbsdir}/lib -lvmetis -lvpee -lvpbe -lvcsm -lvacc -lvatom"
+apbslib="-L${apbsdir}/lib -lvgrid -lvmetis -lvpee -lvpbe -lvcsm -lvacc -lvatom"
 
 
 
@@ -2286,6 +2286,7 @@ trap 'rm -fr `echo "
     src/vpbe/Makefile
     src/vpee/Makefile
     src/vmetis/Makefile
+    src/vgrid/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
@@ -2415,6 +2416,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/vpbe/Makefile
     src/vpee/Makefile
     src/vmetis/Makefile
+    src/vgrid/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
