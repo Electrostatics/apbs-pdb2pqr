@@ -2507,9 +2507,11 @@ VPUBLIC double Vpmg_npEnergy(Vpmg *thee, int extFlag) {
     gamma = gamma/(1e-3*Vunit_Na*Vunit_kb*temp);
 
     if ((VABS(epsp-epss) < VSMALL) || (gamma < VSMALL)) {
+#ifndef VAPBSQUIET
         Vnm_print(2, "Vpmg_npEnergy:  No apolar energy for equal \
 protein/solvent dielectric values!");
         return 0.0;
+#endif
     } 
 
     area = Vpmg_dielGradNorm(thee);
