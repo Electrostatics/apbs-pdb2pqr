@@ -10,36 +10,35 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-# APBS -- Adaptive Poisson-Boltzmann Solver
-#
+#  APBS -- Adaptive Poisson-Boltzmann Solver
+# 
 #  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
 #  Dept. of Chemistry and Biochemistry
-#  Dept. of Mathematics, Scientific Computing Group
 #  University of California, San Diego 
-#
+# 
 #  Additional contributing authors listed in the code documentation.
-#
-# Copyright © 1999. The Regents of the University of California (Regents).
-# All Rights Reserved. 
 # 
-# Permission to use, copy, modify, and distribute this software and its
-# documentation for educational, research, and not-for-profit purposes,
-# without fee and without a signed licensing agreement, is hereby granted,
-# provided that the above copyright notice, this paragraph and the
-# following two paragraphs appear in all copies, modifications, and
-# distributions.
+#  Copyright (c) 1999-2002. The Regents of the University of California
+#                           (Regents).  All Rights Reserved.
 # 
-# IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-# SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-# ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-# REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
+#  Permission to use, copy, modify, and distribute this software and its
+#  documentation for educational, research, and not-for-profit purposes,
+#  without fee and without a signed licensing agreement, is hereby granted,
+#  provided that the above copyright notice, this paragraph and the
+#  following two paragraphs appear in all copies, modifications, and
+#  distributions.
 # 
-# REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-# PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-# ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-# TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-# MODIFICATIONS. 
+#  IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+#  SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+#  ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+#  REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# 
+#  REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+#  PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+#  ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+#  TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+#  MODIFICATIONS.
 
 
 SHELL = @SHELL@
@@ -120,18 +119,20 @@ VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
-fetk_do_bin = @fetk_do_bin@
-fetk_do_lib = @fetk_do_lib@
-fetk_do_src = @fetk_do_src@
-fetk_do_test = @fetk_do_test@
 inc_list = @inc_list@
 lib_list = @lib_list@
 liberty_lib = @liberty_lib@
 maloc_inc = @maloc_inc@
 maloc_lib = @maloc_lib@
 math_lib = @math_lib@
+mc_do_lib = @mc_do_lib@
+mc_do_src = @mc_do_src@
+mc_do_test = @mc_do_test@
 mc_inc = @mc_inc@
 mc_lib = @mc_lib@
+mcx_do_lib = @mcx_do_lib@
+mcx_do_src = @mcx_do_src@
+mcx_do_test = @mcx_do_test@
 mcx_inc = @mcx_inc@
 mcx_lib = @mcx_lib@
 mpi_bin = @mpi_bin@

@@ -3,12 +3,7 @@
 ##
 ## Purpose: Automatically generate Makefile.in for autoconf using automake.
 ##
-## Notes:   The final makefile produced by autoconf will use the following:
-##
-##     COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
-##     LINK = $(CC) $(CFLAGS) $(LDFLAGS) -o $@
-##
-## Author:  Michael Holst
+## Author:  Nathan Baker
 ## ###########################################################################
 
 AUTOMAKE_OPTIONS = no-dependencies

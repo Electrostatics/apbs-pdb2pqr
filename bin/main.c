@@ -1,60 +1,54 @@
-/* ///////////////////////////////////////////////////////////////////////////
-/// APBS -- Adaptive Poisson-Boltzmann Solver
-///
-///  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-///  Dept. of Chemistry and Biochemistry
-///  Dept. of Mathematics, Scientific Computing Group
-///  University of California, San Diego 
-///
-///  Additional contributing authors listed in the code documentation.
-///
-/// Copyright © 1999. The Regents of the University of California (Regents).
-/// All Rights Reserved. 
-/// 
-/// Permission to use, copy, modify, and distribute this software and its
-/// documentation for educational, research, and not-for-profit purposes,
-/// without fee and without a signed licensing agreement, is hereby granted,
-/// provided that the above copyright notice, this paragraph and the
-/// following two paragraphs appear in all copies, modifications, and
-/// distributions.
-/// 
-/// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-/// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-/// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-/// REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-/// 
-/// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-/// PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-/// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-/// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-/// MODIFICATIONS. 
-///
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// File:     main.c
-//
-// Purpose:  APBS ``front end" using formatted input files
-//
-// Arguments:    
-//           This driver program represents a mish-mash of instructions for
-//           calculating electrostatic potentials, as well as free energies of 
-//           binding and solvation.  It is invoked as:
-//
-//               apbs apbs.in
-//
-//           where apbs.in is a formatted input file (see example).
-//
-// Notes:    Doesn't have parallel implementation yet
-//
-// Returns:  APBSRC (defined below) on failure, 0 otherwise
-//
-// Author:   Nathan Baker
-//
-// rcsid="$Id$"
-/////////////////////////////////////////////////////////////////////////// */
+/**
+ *  @file    main.c
+ *  @author  Nathan Baker
+ *  @brief   APBS "front end" program using formatted input files.
+ * 
+ *           This driver program represents a mish-mash of
+ *           instructions for
+ *           calculating electrostatic potentials, as well as free energies of
+ *           binding and solvation.  It is invoked as:
+ *
+ *               apbs apbs.in
+ *
+ *           where apbs.in is a formatted input file (see documentation and
+ *           examples).
+ * 
+ *  @version $Id$
+ *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+ * Dept. of Chemistry and Biochemistry
+ * University of California, San Diego 
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 1999-2002. The Regents of the University of California
+ *                          (Regents).  All Rights Reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for educational, research, and not-for-profit purposes,
+ * without fee and without a signed licensing agreement, is hereby granted,
+ * provided that the above copyright notice, this paragraph and the
+ * following two paragraphs appear in all copies, modifications, and
+ * distributions.
+ *
+ * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+ * MODIFICATIONS.
+ *
+ * @endverbatim
+ */
 
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
@@ -109,7 +103,7 @@ int main(int argc, char **argv) {
     Dept. of Mathematics, Scientific Computing Group\n\
     University of California, San Diego \n\n\
     Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 1999-2001.\n\
+    Copyright (c) 1999-2002.\n\
     The Regents of the University of California (Regents).\n\
     All Rights Reserved.\n\n\
     Permission to use, copy, modify, and distribute this software and its\n\

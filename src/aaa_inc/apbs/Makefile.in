@@ -10,27 +10,6 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 
-### ##########################################################################
-### MC = < Manifold Code >
-### Copyright (C) 1994--2000  Michael Holst
-###
-### This program is free software; you can redistribute it and/or modify it
-### under the terms of the GNU General Public License as published by the
-### Free Software Foundation; either version 2 of the License, or (at your
-### option) any later version.
-###
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-### See the GNU General Public License for more details.
-###
-### You should have received a copy of the GNU General Public License along
-### with this program; if not, write to the Free Software Foundation, Inc.,
-### 675 Mass Ave, Cambridge, MA 02139, USA.
-###
-### rcsid="$Id$"
-### ##########################################################################
-
 
 SHELL = @SHELL@
 
@@ -109,18 +88,20 @@ VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
-fetk_do_bin = @fetk_do_bin@
-fetk_do_lib = @fetk_do_lib@
-fetk_do_src = @fetk_do_src@
-fetk_do_test = @fetk_do_test@
 inc_list = @inc_list@
 lib_list = @lib_list@
 liberty_lib = @liberty_lib@
 maloc_inc = @maloc_inc@
 maloc_lib = @maloc_lib@
 math_lib = @math_lib@
+mc_do_lib = @mc_do_lib@
+mc_do_src = @mc_do_src@
+mc_do_test = @mc_do_test@
 mc_inc = @mc_inc@
 mc_lib = @mc_lib@
+mcx_do_lib = @mcx_do_lib@
+mcx_do_src = @mcx_do_src@
+mcx_do_test = @mcx_do_test@
 mcx_inc = @mcx_inc@
 mcx_lib = @mcx_lib@
 mpi_bin = @mpi_bin@

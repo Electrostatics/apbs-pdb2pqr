@@ -1,49 +1,49 @@
-/* ///////////////////////////////////////////////////////////////////////////
-/// APBS -- Adaptive Poisson-Boltzmann Solver
-///
-///  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-///  Dept. of Chemistry and Biochemistry
-///  Dept. of Mathematics, Scientific Computing Group
-///  University of California, San Diego 
-///
-///  Additional contributing authors listed in the code documentation.
-///
-/// Copyright © 1999. The Regents of the University of California (Regents).
-/// All Rights Reserved. 
-/// 
-/// Permission to use, copy, modify, and distribute this software and its
-/// documentation for educational, research, and not-for-profit purposes,
-/// without fee and without a signed licensing agreement, is hereby granted,
-/// provided that the above copyright notice, this paragraph and the
-/// following two paragraphs appear in all copies, modifications, and
-/// distributions.
-/// 
-/// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-/// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-/// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-/// REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-/// 
-/// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-/// PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-/// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-/// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-/// MODIFICATIONS. 
-//////////////////////////////////////////////////////////////////////////// 
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
+/**
+ *  @file    vfetk.c
+ *  @ingroup Vfetk
+ *  @author  Nathan Baker
+ *  @brief   Class Vfetk methods
+ *  @version $Id$
+ *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+ * Dept. of Chemistry and Biochemistry
+ * University of California, San Diego 
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 1999-2002. The Regents of the University of California
+ *                          (Regents).  All Rights Reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for educational, research, and not-for-profit purposes,
+ * without fee and without a signed licensing agreement, is hereby granted,
+ * provided that the above copyright notice, this paragraph and the
+ * following two paragraphs appear in all copies, modifications, and
+ * distributions.
+ *
+ * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+ * MODIFICATIONS.
+ *
+ * @endverbatim
+ */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// File:     vfetk.c
-//
-// Purpose:  Class Vfetk: methods. 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
 
-#ifdef HAVE_FETK_H
+#ifdef HAVE_MC_H
 
 #include "apbs/vfetk.h"
 
@@ -217,7 +217,7 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
    /* Add the Dirichlet conditions */
    Bvec_axpy(alg->W[W_w0], alg->W[W_ud], 1.);
    /* Get the data from the Bvec */
-   solution = Bvec_data(alg->W[W_w0], 0);
+   solution = Bvec_addr(alg->W[W_w0], 0);
    /* Get the length of the data from the Bvec */
    *length = Bvec_numRT(alg->W[W_w0]);
    /* Make sure that we got scalar data (only one block) for the solution
