@@ -797,7 +797,6 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
             dist = 0;
             for (k=0; k<3; k++) dist += ((ipos[k]-jpos[k])*(ipos[k]-jpos[k]));
             dist = VSQRT(dist);
-            printf("%e A distance between atoms %d and %d\n", dist, i, j);
             energy = energy + icharge*jcharge/dist;
         }
     }
