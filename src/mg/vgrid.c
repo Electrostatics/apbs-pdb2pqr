@@ -407,14 +407,11 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
 
     /* Read in the DX regular positions */
     /* Get "object" */
-    Vnm_print(1, "Scanning for object\n");
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "object"));
     /* Get "1" */
-    Vnm_print(1, "Scanning for 1\n");
     VJMPERR2(1 == Vio_scanf(sock, "%d", &itmp));
     /* Get "class" */
-    Vnm_print(1, "Scanning for class\n");
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "class"));
     /* Get "gridpositions" */

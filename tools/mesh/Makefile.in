@@ -126,10 +126,13 @@ SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES = @inc_list@
 CCLD = $(F77)
 
-noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin
+noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin smooth
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
+smooth_SOURCES = smooth.c 
+smooth_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+smooth_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
 dxmath_SOURCES = dxmath.c 
 dxmath_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 dxmath_LDFLAGS = @LDFLAGS@ @FLIBS@
@@ -139,7 +142,8 @@ uhbd_asc2bin_LDFLAGS = @LDFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = ../../src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES = 
-noinst_PROGRAMS =  mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT)
+noinst_PROGRAMS =  mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
+smooth$(EXEEXT)
 PROGRAMS =  $(noinst_PROGRAMS)
 
 
@@ -153,6 +157,8 @@ dxmath_OBJECTS =  dxmath.$(OBJEXT)
 dxmath_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 uhbd_asc2bin_OBJECTS =  uhbd_asc2bin.$(OBJEXT)
 uhbd_asc2bin_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
+smooth_OBJECTS =  smooth.$(OBJEXT)
+smooth_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 FFLAGS = @FFLAGS@
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
 LTF77COMPILE = $(LIBTOOL) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
@@ -169,8 +175,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(mgmesh_SOURCES) $(dxmath_SOURCES) $(uhbd_asc2bin_SOURCES)
-OBJECTS = $(mgmesh_OBJECTS) $(dxmath_OBJECTS) $(uhbd_asc2bin_OBJECTS)
+SOURCES = $(mgmesh_SOURCES) $(dxmath_SOURCES) $(uhbd_asc2bin_SOURCES) $(smooth_SOURCES)
+OBJECTS = $(mgmesh_OBJECTS) $(dxmath_OBJECTS) $(uhbd_asc2bin_OBJECTS) $(smooth_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -247,6 +253,10 @@ dxmath$(EXEEXT): $(dxmath_OBJECTS) $(dxmath_DEPENDENCIES)
 uhbd_asc2bin$(EXEEXT): $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_DEPENDENCIES)
 	@rm -f uhbd_asc2bin$(EXEEXT)
 	$(F77LINK) $(uhbd_asc2bin_LDFLAGS) $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_LDADD) $(LIBS)
+
+smooth$(EXEEXT): $(smooth_OBJECTS) $(smooth_DEPENDENCIES)
+	@rm -f smooth$(EXEEXT)
+	$(LINK) $(smooth_LDFLAGS) $(smooth_OBJECTS) $(smooth_LDADD) $(LIBS)
 .f.o:
 	$(F77COMPILE) -c $<
 .f.obj:

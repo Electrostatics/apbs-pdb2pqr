@@ -189,7 +189,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielXMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n", 
+            Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", 
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -222,7 +222,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielYMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n",
+            Vnm_tprint(1, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -257,7 +257,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
             for (ii=0; ii<(nx*ny*nz); ii++)
               sum += (dielZMap[i]->data[ii]);
             sum = sum*hx*hy*hzed;
-            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n",
+            Vnm_tprint(1, "  Volume integral = %3.2e A^3\n",
               sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -336,7 +336,7 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_tprint(2, "  Volume integral = %3.2e A^3\n", sum);
+            Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
@@ -408,7 +408,7 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
             for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
               sum += (map[i]->data[ii]);
             sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-            Vnm_tprint(2, "  Charge map integral = %3.2e e\n", sum);
+            Vnm_tprint(1, "  Charge map integral = %3.2e e\n", sum);
         } else {
             Vnm_tprint( 2, "INVALID FORMAT!\n");
             return 0;

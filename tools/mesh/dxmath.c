@@ -1,7 +1,7 @@
 /**
  *  @file    dx-math.c
  *  @author  Nathan Baker
- *  @brief   Sample program that illustrates OpenDX data I/O
+ *  @brief   Arithmetic with DX files
  *  @version $Id$
  */
 
