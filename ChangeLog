@@ -7,6 +7,7 @@ bug-fixes and features:
   * Added input file support for parallel focusing
   * Fixed small bug in parsing writeacc syntax (thanks, Dave)
   * Added output file support for parallel focusing
+  * Changed some documentation
 
 #############################################################################
 PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.5       10-25-01

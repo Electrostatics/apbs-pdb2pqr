@@ -58,6 +58,14 @@ VEMBED(rcsid="$Id$")
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD);
+VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag);
+VPRIVATE void bcfl1(double size, double *apos, double charge,
+  double xkappa, double pre1, double *gxcf, double *gycf, double *gzcf,
+  double *xf, double *yf, double *zf, int nx, int ny, int nz);
+VPRIVATE double bcfl1sp(double size, double *apos, double charge,
+  double xkappa, double pre1, double *pos);
+VPRIVATE void bcCalc(Vpmg *thee);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  focusFillBound
@@ -68,6 +76,8 @@ VEMBED(rcsid="$Id$")
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 
+    Vpbe *pbe;
+    Valist *alist;
     double hxOLD, hyOLD, hzOLD, xminOLD, yminOLD, zminOLD, xmaxOLD, ymaxOLD;
     double zmaxOLD;
     int nxOLD, nyOLD, nzOLD;
@@ -76,7 +86,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     int nxNEW, nyNEW, nzNEW;
     int i, j, k, ihi, ilo, jhi, jlo, khi, klo, nx, ny, nz;
     double x, y, z, dx, dy, dz, ifloat, jfloat, kfloat, uval;
-
+    double eps_w, T, pre1, xkappa, size, *apos, charge, pos[3];
 
     /* Calculate new problem dimensions */
     hxNEW = thee->pmgp->hx;
@@ -106,6 +116,34 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     zminOLD = pmgOLD->pmgp->zcent - ((double)(nzOLD-1)*hzOLD)/2.0;
     zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
 
+    /* BOUNDARY CONDITION SETUP FOR POINTS OFF OLD MESH:
+     * For each "atom" (only one for bcfl=1), we use the following formula to
+     * calculate the boundary conditions:
+     *    g(x) = \frac{q e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+     *          * \frac{exp(-xkappa*(d - a))}{1+xkappa*a}
+     *          * 1/d
+     * where d = ||x - x_0|| (in m) and a is the size of the atom (in m).
+     * We only need to evaluate some of these prefactors once:
+     *    pre1 = \frac{e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+     * which gives the potential as
+     *    g(x) = pre1 * q/d * \frac{exp(-xkappa*(d - a))}{1+xkappa*a}
+     */
+    pbe = thee->pbe;
+    alist = thee->pbe->alist;
+    eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
+    T = Vpbe_getTemperature(pbe);               /* K             */
+    pre1 = (Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T);
+
+    /* Finally, if we convert keep xkappa in A^{-1} and scale pre1 by
+     * m/A, then we will only need to deal with distances and sizes in
+     * Angstroms rather than meters.                                       */
+    xkappa = Vpbe_getXkappa(pbe);              /* A^{-1}        */
+    pre1 = pre1*(1.0e10);
+    size = Vpbe_getSoluteRadius(pbe);
+    apos = Vpbe_getSoluteCenter(pbe);
+    charge = Vunit_ec*Vpbe_getSoluteCharge(pbe);
+
+
     /* Sanity check: make sure we're within the old mesh */
     Vnm_print(0, "VPMG::focusFillBound -- New mesh mins = %g, %g, %g\n",
       xminNEW, yminNEW, zminNEW);
@@ -134,26 +172,28 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xminNEW;
             y = yminNEW + j*hyNEW;
             z = zminNEW + k*hzNEW;
-            ifloat = (x - xminOLD)/hxOLD;
-            jfloat = (y - yminOLD)/hyOLD;
-            kfloat = (z - zminOLD)/hzOLD;
-            ihi = (int)ceil(ifloat);
-            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
-            ilo = (int)floor(ifloat);
-            if (ilo < 0) ilo = 0;
-            jhi = (int)ceil(jfloat);
-            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
-            jlo = (int)floor(jfloat);
-            if (jlo < 0) jlo = 0;
-            khi = (int)ceil(kfloat);
-            if (khi > (nzOLD-1)) khi = nzOLD-1;
-            klo = (int)floor(kfloat);
-            if (klo < 0) klo = 0;
-            dx = ifloat - (double)(ilo);
-            dy = jfloat - (double)(jlo);
-            dz = kfloat - (double)(klo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -161,19 +201,37 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gxcf[IJKx(j,k,0)] = uval;
 
             /* High X face */
             x = xmaxNEW;
-            ifloat = (x - xminOLD)/hxOLD;
-            ihi = (int)ceil(ifloat);
-            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
-            ilo = (int)floor(ifloat);
-            if (ilo < 0) ilo = 0;
-            dx = ifloat - (double)(ilo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -181,7 +239,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gxcf[IJKx(j,k,1)] = uval;
             
             /* Zero Neumann conditions */             
@@ -199,26 +261,28 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xminNEW + i*hxNEW;
             y = yminNEW;
             z = zminNEW + k*hzNEW;
-            ifloat = (x - xminOLD)/hxOLD;
-            jfloat = (y - yminOLD)/hyOLD;
-            kfloat = (z - zminOLD)/hzOLD;
-            ihi = (int)ceil(ifloat);
-            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
-            ilo = (int)floor(ifloat);
-            if (ilo < 0) ilo = 0;
-            jhi = (int)ceil(jfloat);
-            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
-            jlo = (int)floor(jfloat);
-            if (jlo < 0) jlo = 0;
-            khi = (int)ceil(kfloat);
-            if (khi > (nzOLD-1)) khi = nzOLD-1;
-            klo = (int)floor(kfloat);
-            if (klo < 0) klo = 0;
-            dx = ifloat - (double)(ilo);
-            dy = jfloat - (double)(jlo);
-            dz = kfloat - (double)(klo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -226,19 +290,37 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gycf[IJKy(i,k,0)] = uval;
 
             /* High Y face */
             y = ymaxNEW;
-            jfloat = (y - yminOLD)/hyOLD;
-            jhi = (int)ceil(jfloat);
-            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
-            jlo = (int)floor(jfloat);
-            if (jlo < 0) jlo = 0;
-            dy = jfloat - (double)(jlo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -246,7 +328,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gycf[IJKy(i,k,1)] = uval;
 
             /* Zero Neumann conditions */
@@ -264,26 +350,28 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xminNEW + i*hxNEW;
             y = yminNEW + j*hyNEW;
             z = zminNEW;
-            ifloat = (x - xminOLD)/hxOLD;
-            jfloat = (y - yminOLD)/hyOLD;
-            kfloat = (z - zminOLD)/hzOLD;
-            ihi = (int)ceil(ifloat);
-            if (ihi > (nxOLD-1)) ihi = nxOLD-1;
-            ilo = (int)floor(ifloat);
-            if (ilo < 0) ilo = 0;
-            jhi = (int)ceil(jfloat);
-            if (jhi > (nyOLD-1)) jhi = nyOLD-1;
-            jlo = (int)floor(jfloat);
-            if (jlo < 0) jlo = 0;
-            khi = (int)ceil(kfloat);
-            if (khi > (nzOLD-1)) khi = nzOLD-1;
-            klo = (int)floor(kfloat);
-            if (klo < 0) klo = 0;
-            dx = ifloat - (double)(ilo);
-            dy = jfloat - (double)(jlo);
-            dz = kfloat - (double)(klo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -291,19 +379,37 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gzcf[IJKz(i,j,0)] = uval;
 
             /* High Z face */
             z = zmaxNEW;
-            kfloat = (z - zminOLD)/hzOLD;
-            khi = (int)ceil(kfloat);
-            if (khi > (nzOLD-1)) khi = nzOLD-1;
-            klo = (int)floor(kfloat);
-            if (klo < 0) klo = 0;
-            dz = kfloat - (double)(klo);
-            nx = nxOLD; ny = nyOLD; nz = nzOLD;
-            uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
+            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
+                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+                ifloat = (x - xminOLD)/hxOLD;
+                jfloat = (y - yminOLD)/hyOLD;
+                kfloat = (z - zminOLD)/hzOLD;
+                ihi = (int)ceil(ifloat);
+                if (ihi > (nxOLD-1)) ihi = nxOLD-1;
+                ilo = (int)floor(ifloat);
+                if (ilo < 0) ilo = 0;
+                jhi = (int)ceil(jfloat);
+                if (jhi > (nyOLD-1)) jhi = nyOLD-1;
+                jlo = (int)floor(jfloat);
+                if (jlo < 0) jlo = 0;
+                khi = (int)ceil(kfloat);
+                if (khi > (nzOLD-1)) khi = nzOLD-1;
+                klo = (int)floor(kfloat);
+                if (klo < 0) klo = 0;
+                dx = ifloat - (double)(ilo);
+                dy = jfloat - (double)(jlo);
+                dz = kfloat - (double)(klo);
+                nx = nxOLD; ny = nyOLD; nz = nzOLD;
+                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
                   + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
                   + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
                   + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
@@ -311,7 +417,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
                   + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
-            nx = nxNEW; ny = nyNEW; nz = nzNEW;
+                nx = nxNEW; ny = nyNEW; nz = nzNEW;
+            } else {
+                pos[0] = x; pos[1] = y; pos[2] = z;
+                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
+            }
             thee->gzcf[IJKz(i,j,1)] = uval;
 
             /* Zero Neumann conditions */
@@ -388,6 +498,33 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
     thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
     Vnm_print(0, "VPMG::extEnergy: Done calculating energy contributions for focusing\n");
     Vpmg_unsetPart(pmgOLD);
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  bcfl1sp
+//
+// Purpose:  Return the value of
+//              pre1*(charge/d)*(exp(-xkappa*(d-size))/(1+xkappa*size)
+//
+// Args:     apos and pos are 3-vectors
+//
+// Author:   Nathan Baker and Michael Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE double bcfl1sp(double size, double *apos, double charge, 
+  double xkappa, double pre1, double *pos) {
+
+    double dist, val;
+
+    dist = VSQRT(VSQR(pos[0]-apos[0]) + VSQR(pos[1]-apos[1])
+      + VSQR(pos[2]-apos[2]));
+    if (xkappa != 0.0) {
+        val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
+          / (1+xkappa*size);
+    } else {
+        val = pre1*(charge/dist);
+    } 
+
+    return val;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
