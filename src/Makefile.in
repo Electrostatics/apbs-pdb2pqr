@@ -127,7 +127,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vgrid vgreen
+always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vpmg vgrid vgreen
 
 SUBDIRS = $(always_built_SUBDIRS)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

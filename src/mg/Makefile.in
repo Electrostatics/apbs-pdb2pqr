@@ -129,8 +129,9 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
 libdir = ${top_srcdir}/lib
-noinst_LIBRARIES = libvacc.a
-libvacc_a_SOURCES = vacc.c 
+noinst_LIBRARIES = libvpmg.a
+libvpmg_a_SOURCES = buildAd.f buildBd.f buildGd.f buildPd.f cgd.f cgmgd.f 	cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f mblasd.f mgcsd.f 	mgdrvd.f mgfasd.f mgsubd.f  mikpckd.f mlinpckd.f ncgd.f ncgdrvd.f 	newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f nrchdrvd.f 	nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f pded.f powerd.f 	rand.c rchd.f secd.c smoothd.f sord.f wjd.f vpmgp.c vpmg.c
+
 INCLUDES = -I${top_srcdir}/inc @mc_inc@ @mcx_inc@ @pmgc_inc@
 CFLAGS = @CFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -143,27 +144,36 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libvacc_a_LIBADD = 
-libvacc_a_OBJECTS =  vacc.o
+libvpmg_a_LIBADD = 
+libvpmg_a_OBJECTS =  buildAd.o buildBd.o buildGd.o buildPd.o cgd.o \
+cgmgd.o cgmgdrvd.o dlphsubd.o gsd.o mainsubd.o matvecd.o mblasd.o \
+mgcsd.o mgdrvd.o mgfasd.o mgsubd.o mikpckd.o mlinpckd.o ncgd.o \
+ncgdrvd.o newdrvd.o newtond.o ngsd.o ngsdrvd.o ninterpd.o nrchd.o \
+nrchdrvd.o nsmoothd.o nsord.o nsordrvd.o nwjd.o nwjdrvd.o pded.o \
+powerd.o rand.o rchd.o secd.o smoothd.o sord.o wjd.o vpmgp.o vpmg.o
 AR = ar
+FFLAGS = @FFLAGS@
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(LDFLAGS) -o $@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON =  README Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(libvacc_a_SOURCES)
-OBJECTS = $(libvacc_a_OBJECTS)
+SOURCES = $(libvpmg_a_SOURCES)
+OBJECTS = $(libvpmg_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .C .H .S .c .cc .f .h .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/vacc/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/vpmg/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -198,10 +208,12 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-libvacc.a: $(libvacc_a_OBJECTS) $(libvacc_a_DEPENDENCIES)
-	-rm -f libvacc.a
-	$(AR) cru libvacc.a $(libvacc_a_OBJECTS) $(libvacc_a_LIBADD)
-	$(RANLIB) libvacc.a
+libvpmg.a: $(libvpmg_a_OBJECTS) $(libvpmg_a_DEPENDENCIES)
+	-rm -f libvpmg.a
+	$(AR) cru libvpmg.a $(libvpmg_a_OBJECTS) $(libvpmg_a_LIBADD)
+	$(RANLIB) libvpmg.a
+.f.o:
+	$(F77COMPILE) -c $<
 
 tags: TAGS
 
@@ -234,7 +246,7 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/vacc
+subdir = src/vpmg
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \

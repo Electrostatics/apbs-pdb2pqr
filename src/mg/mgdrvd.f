@@ -532,7 +532,7 @@ c*    *** box or fem on fine grid? ***
       elseif (mgdisc .eq. 1) then
          num_nf_oper = 14
       else
-         print*,'% MGSZ: invalid mgdisc parameter...'
+         print*,'% MGSZ: invalid mgdisc parameter... ', mgdisc
       endif
 c*
 c*    *** galerkin or standard coarsening? ***
