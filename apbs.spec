@@ -115,7 +115,8 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export FFLAGS="-O3 -static-libcxa" 
       export LDFLAGS="-static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-      make 
+      make
+    %endif
   %endif
 %endif
 
