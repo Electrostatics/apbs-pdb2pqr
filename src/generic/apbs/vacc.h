@@ -55,6 +55,7 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vacc: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
+#define VACCMAXNBOR 20
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vacc: Definition
@@ -63,12 +64,13 @@
 typedef struct Vacc {
 
   Vmem *vmem;                    /* Memory management object for this class */
-  Vatom ***atoms;                /* An array of arrays of pointers to atoms */
+  Valist *alist;                 /* Valist structure for list of atoms */
+  int **atomIDs;                 /* An array of arrays of atom IDs in alist */
   int *natoms;                   /* An array telling how many pointers are 
                                   * stored in atoms[i] */
   double **sphere;               /* An array of points on the surface of a 
                                   * sphere */
-  int nsphere;
+  int nsphere;                   /* The number of points in thee->sphere */
   Vset acc;                      /* An integer array (to be treated as 
                                   * bitfields) of Vset type with length equal 
                                   * to the number of vertices in the mesh */
@@ -77,6 +79,9 @@ typedef struct Vacc {
   int nx, ny, nz, n;             /* Hash table grid dimensions, 
                                   * n = nx*nz*ny */
   double max_radius;             /* Maximum probe radius */
+  double *area;                  /* The contribution to the solvent-accessible
+                                  * surface area from each atom.  This array is
+                                  * filled by Vacc_totalSASA */
 
 } Vacc;
 
@@ -108,6 +113,8 @@ VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
 VEXTERNC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
   char *iodev, char *iofmt, char *iohost, char *iofile);
+VEXTERNC double Vacc_totalSASA(Vacc *thee, double radius);
+VEXTERNC double Vacc_atomSASA(Vacc *thee, double radius, int iatom);
 
 
 #endif    /* ifndef _VACC_H_ */

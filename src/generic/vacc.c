@@ -68,6 +68,7 @@ VPUBLIC int Vacc_memChk(Vacc *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vacc: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int ivdwAccExclus(Vacc *thee, Vec3 center, double radius, int atomID);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_ctor
@@ -122,6 +123,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     Vatom *atom;
 
     VASSERT(alist != VNULL);
+    thee->alist = alist;
 
     /* Set up memory management object */
     thee->vmem = Vmem_ctor("APBS::VACC");
@@ -139,19 +141,18 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     VASSERT(thee->sphere != VNULL);
 
     /* Allocate space */
-    if ((thee->natoms = Vmem_malloc(thee->vmem, thee->n,(sizeof(int)))) == VNULL) {
-        fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
-        return 0;
-    }
+    thee->natoms = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
+    VASSERT(thee->natoms != VNULL);
     for (i=0; i<thee->n; i++) (thee->natoms)[i] = 0;
-    if ((thee->atoms = Vmem_malloc(thee->vmem, thee->n,(sizeof(Vatom **)))) == VNULL) {
-        fprintf(stderr, "Vacc_ctor2: Failed to allocate space.\n");
-        return 0;
-    }
-    for (i=0; i<thee->n; i++) (thee->atoms)[i] = VNULL;
+    thee->atomIDs = Vmem_malloc(thee->vmem, thee->n, sizeof(int *));
+    VASSERT(thee->atomIDs != VNULL);
+    for (i=0; i<thee->n; i++) (thee->atomIDs)[i] = VNULL;
+    thee->area = Vmem_malloc(thee->vmem, Valist_getNumberAtoms(alist), 
+        sizeof(double));
+    VASSERT(thee->area != VNULL);
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) thee->area[i] = 0;
 
-
-    /* Find dimensions of protein and atoms*/
+    /* Find dimensions of protein and atoms */
     x_max = y_max = z_max = -VLARGE;
     x_min = y_min = z_min = VLARGE;
     rmax = -1.0;
@@ -220,15 +221,16 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     /* Allocate the space to store the pointers to the atoms */
     for (i=0; i<thee->n; i++) {
         if ((thee->natoms)[i] > 0) {
-            thee->atoms[i] = Vmem_malloc(thee->vmem, thee->natoms[i], sizeof(Vatom *));
-            VASSERT(thee->atoms[i] != VNULL);
+            thee->atomIDs[i] = Vmem_malloc(thee->vmem, thee->natoms[i],
+              sizeof(int));
+            VASSERT(thee->atomIDs[i] != VNULL);
         }
         /* Clear the counter for later use */
         thee->natoms[i] = 0;
     }
  
     /* Assign the atoms to grid points */
-    for (i=0;i<Valist_getNumberAtoms(alist);i++) {
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
         /* Get the position in the grid's frame of reference */
         x = (Vatom_getPosition(atom))[0] - (thee->grid_lower_corner)[0];
@@ -252,7 +254,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
             for ( jj = j_min; jj < j_max; jj++) {
                 for ( kk = k_min; kk < k_max; kk++) {
                     ui = (thee->nz)*(thee->ny)*ii + (thee->nz)*jj + kk;
-                    thee->atoms[ui][thee->natoms[ui]] = atom;
+                    thee->atomIDs[ui][thee->natoms[ui]] = i;
                     (thee->natoms[ui])++;
                 }
             }
@@ -290,19 +292,18 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
     int i;
-    Vnm_print(0,"vacc: Destroying thee->atoms entries\n");
     for (i=0; i<thee->n; i++) {
-        if (thee->natoms[i] > 0)  {
-            Vmem_free(thee->vmem, (thee->natoms)[i], sizeof(Vatom *), 
-              (void **)&(thee->atoms[i]));
-        }
+	if (thee->natoms[i] > 0)  Vmem_free(thee->vmem, (thee->natoms)[i],
+          sizeof(int), (void **)&(thee->atomIDs[i]));
     }
-    Vmem_free(thee->vmem, thee->n, sizeof(Vatom **), (void **)&(thee->atoms));
+    Vmem_free(thee->vmem, thee->n, sizeof(int *), (void **)&(thee->atomIDs));
     Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->natoms));
     for (i=0; i<thee->nsphere; i++) 
       Vmem_free(thee->vmem, 3, sizeof(double), (void **)&(thee->sphere[i]));
     Vmem_free(thee->vmem, thee->nsphere, sizeof(double *), 
       (void **)&(thee->sphere));
+    Vmem_free(thee->vmem, Valist_getNumberAtoms(thee->alist),
+      sizeof(double), (void **)&(thee->area));
 
     Vmem_dtor(&(thee->vmem));
 }
@@ -323,6 +324,7 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
     double dist;
+    Vatom *atom;
     Vec3 vec;
 
     /* Convert to grid based coordinates */
@@ -341,11 +343,12 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
      * accessible */
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
-        vec[0] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[0];
-        vec[1] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[1];
-        vec[2] = (Vatom_getPosition((thee->atoms)[ui][iatom]))[2];
+        atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+        vec[0] = (Vatom_getPosition(atom))[0];
+        vec[1] = (Vatom_getPosition(atom))[1];
+        vec[2] = (Vatom_getPosition(atom))[2];
         dist = Vec3_dif2(center,vec);
-        if (dist < Vatom_getRadius((thee->atoms)[ui][iatom])) return 0;
+        if (dist < Vatom_getRadius(atom)) return 0;
     }
 
     /* If we're still here, then the point is accessible */
@@ -364,10 +367,34 @@ VPUBLIC int Vacc_vdwAcc(Vacc *thee, Vec3 center) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
 
+    return ivdwAccExclus(thee, center, radius, -1);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  ivdwAccExclus
+//
+// Purpose:  Determines if a point is within the union of the spheres centered
+//           at the atomic centers with radii equal to the sum of their van
+//           der Waals radii and the probe radius.  Does not include
+//           contributions from the specified atom.
+//
+// Args:     center => point to be tested
+//           radius => radius to inflate by
+//           atomID  => atom to ignore (-1 if none)
+//           
+//           Returns 1 if accessible (outside the molecular volume).
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int ivdwAccExclus(Vacc *thee, Vec3 center, double radius, 
+  int atomID) {
+
     int centeri, centerj, centerk;  /* Grid-based coordinates */
     int ui;                         /* Natural array coordinates */
     int iatom;                      /* Counters */
     double dist, *apos, arad;
+    Vatom *atom;
 
     /* We can only test probes with radii less than the max specified */
     VASSERT(thee != VNULL);
@@ -393,12 +420,15 @@ VPUBLIC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius) {
      * accessible */
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
-        apos = Vatom_getPosition((thee->atoms)[ui][iatom]);
-        arad = Vatom_getRadius((thee->atoms)[ui][iatom]);
-        dist = (apos[0]-center[0])*(apos[0]-center[0]) +
-               + (apos[1]-center[1])*(apos[1]-center[1])
-               + (apos[2]-center[2])*(apos[2]-center[2]);
-        if (dist < ((arad+radius)*(arad+radius))) return 0;
+        if (thee->atomIDs[ui][iatom] != atomID) {
+            atom = Valist_getAtom(thee->alist, thee->atomIDs[ui][iatom]);
+            apos = Vatom_getPosition(atom);
+            arad = Vatom_getRadius(atom);
+            dist = (apos[0]-center[0])*(apos[0]-center[0]) +
+                   + (apos[1]-center[1])*(apos[1]-center[1])
+                   + (apos[2]-center[2])*(apos[2]-center[2]);
+            if (dist < ((arad+radius)*(arad+radius))) return 0;
+        }
     }
 
     /* If we're still here, then the point is accessible */
@@ -560,3 +590,64 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
     return points;
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_totalSASA
+//
+// Purpose:  Calculates the solvent-accessible area of the entire molecule
+//
+// Args:     radius  The radius of the solvent probe in Angstroms
+//
+// Author:   Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_totalSASA(Vacc *thee, double radius) { 
+
+    int i;
+    double area = 0.0;
+
+    for (i=0; i<Valist_getNumberAtoms(thee->alist); i++) {
+        thee->area[i] = Vacc_atomSASA(thee, radius, i);
+        area += (thee->area[i]);
+    }
+
+    return area;
+
+};
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_atomSASA
+//
+// Purpose:  Calculates the contribution to the PROBE-CENTERED
+//           solvent-accessible area from this atom
+//
+// Args:     radius  The radius of the solvent probe in Angstroms
+//           iatom   Index of the atom in thee->alist
+//
+// Author:   Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_atomSASA(Vacc *thee, double srad, int iatom) { 
+
+    int ipt, covered;
+    double area = 0.0;
+    double *tPos, tRad, vec[3];
+    Vatom *thisAtom;
+
+    /* Get the atom information */
+    thisAtom = Valist_getAtom(thee->alist, iatom);
+    tPos = Vatom_getPosition(thisAtom);
+    tRad = Vatom_getRadius(thisAtom);
+
+    covered = 0;
+    for (ipt=0; ipt<thee->nsphere; ipt++) {
+        vec[0] = (tRad+srad)*thee->sphere[ipt][0] + tPos[0];
+        vec[1] = (tRad+srad)*thee->sphere[ipt][1] + tPos[1];
+        vec[2] = (tRad+srad)*thee->sphere[ipt][2] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+
+    /* We will return UHBD's asas2: probe-centered solvent-accessible surface
+     * area */
+    area = area/((double)(thee->nsphere))*4.0*VPI*(tRad+srad)*(tRad+srad);
+
+    return area;
+
+};
