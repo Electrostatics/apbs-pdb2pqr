@@ -62,8 +62,8 @@ struct sVatom {
     double position[3];     /**< Atomic position */
     double radius;          /**< Atomic radius   */
     double charge;          /**< Atomic charge   */
-    int partID;             /**< Partition ID for assigning atoms to particular
-                             *   processors and/or partitions   */
+    double partID;          /**< Partition value for assigning atoms to 
+                             *   particular processors and/or partitions   */
 
 };
 
@@ -119,7 +119,7 @@ typedef struct sVatom Vatom;
      *  @return  Partition ID; a negative value means this atom is not
      *           assigned to any partition
      */
-    VEXTERNC int     Vatom_getPartID(Vatom *thee);
+    VEXTERNC double     Vatom_getPartID(Vatom *thee);
 
     /** @brief   Set atomic charge
      *  @ingroup Vatom
@@ -150,7 +150,7 @@ typedef struct sVatom Vatom;
 #   define Vatom_getPosition(thee) ((thee)->position)
 #   define Vatom_setRadius(thee, tRadius) ((thee)->radius = (tRadius))
 #   define Vatom_getRadius(thee) ((thee)->radius)
-#   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (tpartID))
+#   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (double)(tpartID))
 #   define Vatom_getPartID(thee) ((thee)->partID)
 #   define Vatom_setCharge(thee, charge) ((thee)->charge = charge)
 #   define Vatom_getCharge(thee) ((thee)->charge)

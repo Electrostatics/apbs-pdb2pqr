@@ -2,7 +2,12 @@
 BETA PUBLIC RELEASE VERSION 0.3.1       ??-??-??
 #############################################################################
   * New APBS tutorial
-
+  - BUG FIXES
+    * Fixed bug in parallel calculations where atoms or points on a border
+      between two processors were not included.  Modified setup algorithm for 
+      parallel calculations to allow partitions to obtain grid points and 
+      spacing from the global grid information.
+	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.0       02-01-04
 #############################################################################

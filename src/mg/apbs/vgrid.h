@@ -215,13 +215,15 @@ VEXTERNC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3] );
  * @param   thost  Output hostname (for sockets)
  * @param   fname  Output FILE/BUFF/UNIX/INET name
  * @param   title  Title to be inserted in grid file
- * @param   pvec   Partition information (1=>point in current partition, 
- *                 0=>point not in current partition)
+ * @param   pvec   Partition weight (
+ *                 if 1: point in current partition, 
+ *                 if 0 point not in current partition
+ *                 if > 0 && < 1 point on/near boundary )
  * @bug     This routine does not respect partition information
  */
 VEXTERNC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, 
   const char *iofmt, const char *thost, const char *fname, char *title, 
-  int *pvec);
+  double *pvec);
 
 /** @brief  Write out the data in OpenDX grid format 
  * @ingroup Vgrid
@@ -232,13 +234,15 @@ VEXTERNC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev,
  * @param   thost  Output hostname (for sockets)
  * @param   fname  Output FILE/BUFF/UNIX/INET name
  * @param   title  Title to be inserted in grid file
- * @param   pvec   Partition information (1=>point in current partition,
- *                 0=>point not in current partition)
+ * @param   pvec   Partition weight (
+ *                 if 1: point in current partition, 
+ *                 if 0 point not in current partition
+ *                 if > 0 && < 1 point on/near boundary )
  * @bug     This routine does not respect partition information
  */
 VEXTERNC void Vgrid_writeDX(Vgrid *thee, const char *iodev, 
   const char *iofmt,  const char *thost, const char *fname, char *title, 
-  int *pvec);
+  double *pvec);
 
 /** @brief   Read in data in OpenDX grid format
  *  @note    All dimension information is given in order: z, y, x
