@@ -45,7 +45,7 @@
 VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
 VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
-
+VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
 
 VEMBED(rcsid="$Id$")
 
@@ -255,8 +255,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     Alg *alg;
     int markMe, marked = 0;
-    int i, ivert, icoord, chart[4], fType[4], vType[4], smid, count, currentQ;
-    double vx[4][3];
+    int i, ivert, smid, count, currentQ;
     double minError = 0.0;
     double maxError = 0.0;
     double errEst = 0.0;
@@ -323,16 +322,16 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     /* check the refinement Q for emptyness */
     currentQ = 0;
     if (Vgm_numSQ(thee->gm,currentQ) > 0) {
-        Vnm_print(0,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
+        Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             currentQ);
         Vgm_resetSQ(thee->gm,currentQ);
-        Vnm_print(0,"..done.\n");
+        Vnm_print(2,"..done.\n");
     }
     if (Vgm_numSQ(thee->gm,!currentQ) > 0) {
-        Vnm_print(0,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
+        Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             !currentQ);
         Vgm_resetSQ(thee->gm,!currentQ);
-        Vnm_print(0,"..done.\n");
+        Vnm_print(2,"..done.\n");
     }
     VASSERT( Vgm_numSQ(thee->gm,currentQ)  == 0 );
     VASSERT( Vgm_numSQ(thee->gm,!currentQ) == 0 );
@@ -344,7 +343,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         sm = Vgm_SS(thee->gm,i);
         SS_setRefineKey(sm,currentQ,0);
         SS_setRefineKey(sm,!currentQ,0);
-        SS_setRefinementCount(sm,0); /* refine X many times? */
+        SS_setRefinementCount(sm,0);
     }
     Vnm_print(0,"..done.\n");
 
@@ -360,20 +359,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
 
         /* Produce an error estimate for this element */
-        if (akey == 1) {
-            for (ivert=0; ivert<Vgm_dimVV(thee->gm); ivert++) {
-                    fType[ivert] = SS_faceType(sm,ivert);
-                    vType[ivert] = VV_type(SS_vertex(sm,ivert) );
-                    chart[ivert] = VV_chart(SS_vertex(sm,ivert) );
-                    for (icoord=0; icoord<Vgm_dimII(thee->gm); icoord++) {
-                        vx[ivert][icoord] = VV_coord(SS_vertex(sm,ivert),
-                          icoord );
-                    }
-                }
-
-            errEst = (double)(thee->gm->markSimplex(Vgm_dim(thee->gm),
-              Vgm_dimII(thee->gm), SS_type(sm), fType, vType, chart, vx, sm));
-        } else if (akey == 2) {
+        if (akey == 1) errEst = 0.0;
+        else if (akey == 2) {
             errEst = Alg_estNonlinResid(alg, sm, W_u, W_ud, W_f);
         } else if (akey == 3) {
             errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
@@ -385,47 +372,44 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         /* Figure out whether or not the simplex gets marked. */
         markMe = 0;
         if (thee->killFlag == 0) {
-            if (akey == 1) {
-                if (errEst > 0) markMe = 1;
-            } else if (akey == 2) {
+            if (akey == 1) markMe = Vpee_userDefined(thee, sm);
+            else if (akey == 2) {
                 if (errEst > etol) markMe = 1;
             }
         } else if (thee->killFlag == 1) {
             if ( (SS_chart(sm) == rcol) || (rcol < 0)) {
-                if (akey == 1) {
-                    if (errEst > 0) markMe = 1;
-                } else if (akey == 2) {
+                if (akey == 1) markMe = Vpee_userDefined(thee, sm);
+                else if (akey == 2) {
                     if (errEst > etol) markMe = 1;
                 }
             } 
         } else if (thee->killFlag == 2) {
             if (rcol < 0) {
-                if (akey == 1) {
-                    if (errEst > 0) markMe = 1;
-                } else if (akey == 2) {
+                if (akey == 1) markMe = Vpee_userDefined(thee, sm);
+                else if (akey == 2) {
                     if (errEst > etol) markMe = 1;
                 }
-            }
-            /* Find the closest distance between this simplex and the center of
-             * the local partition and check it against
-             * (thee->localPartRadius*thee->killParam) */
-            dist = 0;
-            for (ivert=0; ivert<SS_dimVV(sm); ivert++) {
-                dx = VV_coord(SS_vertex(sm, ivert), 0) -
-                  thee->localPartCenter[0];
-                dy = VV_coord(SS_vertex(sm, ivert), 1) -
-                  thee->localPartCenter[1];
-                dz = VV_coord(SS_vertex(sm, ivert), 2) -
-                  thee->localPartCenter[2];
-                dist = VSQRT((dx*dx + dy*dy + dz*dz));
-            }
-            if (dist < thee->localPartRadius*thee->killParam) {
-                if (akey == 1) {
-                    if (errEst > 0) markMe = 1;
-                } else if (akey == 2) {
-                    if (errEst > etol) markMe = 1;
+            } else {
+                /* Find the closest distance between this simplex and the 
+                 * center of the local partition and check it against 
+                 * (thee->localPartRadius*thee->killParam) */
+                dist = 0;
+                for (ivert=0; ivert<SS_dimVV(sm); ivert++) {
+                    dx = VV_coord(SS_vertex(sm, ivert), 0) -
+                      thee->localPartCenter[0];
+                    dy = VV_coord(SS_vertex(sm, ivert), 1) -
+                      thee->localPartCenter[1];
+                    dz = VV_coord(SS_vertex(sm, ivert), 2) -
+                      thee->localPartCenter[2];
+                    dist = VSQRT((dx*dx + dy*dy + dz*dz));
                 }
-            } 
+                if (dist < thee->localPartRadius*thee->killParam) {
+                    if (akey == 1) markMe = Vpee_userDefined(thee, sm);
+                    else if (akey == 2) {
+                        if (errEst > etol) markMe = 1;
+                    }
+                } 
+            }
         } else if (thee->killFlag == 3) {
             VASSERT(0);
         } else VASSERT(0);
@@ -467,4 +451,28 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpee_userDefined
+//
+// Purpose:  Reduce code bloat by wrapping up the common steps for getting the
+//           user-defined error estimate
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
+
+    int ivert, icoord, chart[4], fType[4], vType[4];
+    double vx[4][3];
+
+    for (ivert=0; ivert<Vgm_dimVV(thee->gm); ivert++) {
+        fType[ivert] = SS_faceType(sm,ivert);
+        vType[ivert] = VV_type(SS_vertex(sm,ivert) );
+        chart[ivert] = VV_chart(SS_vertex(sm,ivert) );
+        for (icoord=0; icoord<Vgm_dimII(thee->gm); icoord++) {
+            vx[ivert][icoord] = VV_coord(SS_vertex(sm,ivert), icoord );
+        }
+    }
+    return thee->gm->markSimplex(Vgm_dim(thee->gm), Vgm_dimII(thee->gm), 
+             SS_type(sm), fType, vType, chart, vx, sm);
+}
 
