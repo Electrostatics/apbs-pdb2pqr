@@ -2108,7 +2108,7 @@ trap 'rm -fr `echo "
     src/vacc/Makefile
     src/vcsm/Makefile
     src/vpbe/Makefile
-    src/vgsm/Makefile
+    src/vpbm/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
@@ -2225,7 +2225,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/vacc/Makefile
     src/vcsm/Makefile
     src/vpbe/Makefile
-    src/vgsm/Makefile
+    src/vpbm/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
