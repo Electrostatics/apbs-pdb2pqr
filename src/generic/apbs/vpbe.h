@@ -73,10 +73,6 @@ typedef struct Vpbe {
   Vgm *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
-  AM *am;             /* Algebraic multilevel structure; wraps solver
-                       * portion of MC.  am is the AM object for the problem to
-                       * be solved.  amRef is an optional AM object for a
-                       * reference problem to be solved on the same mesh. */
 
 
   Vhash *solvHash;    /* Atomic hash table for solvent accessibility */
@@ -123,8 +119,8 @@ typedef struct Vpbe {
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm, AM *am);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, AM *am);
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm);
+VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm);
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 
@@ -152,8 +148,8 @@ VEXTERNC double Vpbe_getXkappa(Vpbe *thee);
 VEXTERNC double Vpbe_getDeblen(Vpbe *thee);
 VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
 VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
-VEXTERNC double* Vpbe_getSolution(Vpbe *thee, int *length);
-VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, int color);
+VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
+VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
 VEXTERNC double Vpbe_getCoulombEnergy1(Vpbe *thee);
 
 #endif /* ifndef _VALIST_H_ */
