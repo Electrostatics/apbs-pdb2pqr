@@ -198,6 +198,9 @@ struct sVfetk_LocalVar {
     double DB;  /**< Entire ionic strength term derivative */
     double jumpDiel;  /**< Dielectric value on one side of a simplex face */
     Vfetk *fetk;  /**< Pointer to the VFETK object */
+    Vgreen *green;  /**< Pointer to a Green's function object */
+    int initGreen;  /**< Boolean to designate whether Green's function 
+                     * has been initialized */
     SS *simp;  /**< Pointer to the latest simplex object; set in initElement() 
                 *  and delta() */
     VV *verts[4];  /**< Pointer to the latest vertices; set in initElement */

@@ -44,6 +44,8 @@
 #include "apbscfg.h"
 #include "apbs/vgreen.h"
 
+#undef HAVE_TREE
+
 /* Define wrappers for F77 treecode routines */
 #ifdef HAVE_TREE
 #  define F77TREEPEFORCE VF77_MANGLE(treepeforce, TREEPEFORCE)
@@ -187,7 +189,9 @@ VPUBLIC void Vgreen_dtor(Vgreen **thee) {
 
 VPUBLIC void Vgreen_dtor2(Vgreen *thee) { 
 
+#if HAVE_TREE
     treecleanup(thee);
+#endif
     Vmem_dtor(&(thee->vmem));
 
 }
@@ -332,7 +336,7 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
 
 #endif
 
-    scale = Vunit_ec/(4*Vunit_pi*Vunit_eps0*(1.0e-10));
+    scale = Vunit_ec/(4*VPI*Vunit_eps0*(1.0e-10));
     for (ipos=0; ipos<npos; ipos++) {
         gradx[ipos] = gradx[ipos]*scale;
         grady[ipos] = grady[ipos]*scale;
@@ -401,6 +405,11 @@ VPRIVATE int treesetup(Vgreen *thee) {
         thee->qp[i] = Vatom_getCharge(atom);
     }
 
+    Vnm_print(0, "treesetup:  Setting things up...\n");
+    F77SETUP(thee->xp, thee->yp, thee->zp, &(thee->np), &order, &theta, &iflag,
+            &dist_tol, xyzminmax, &(thee->np));
+
+
     Vnm_print(0, "treesetup:  Initializing levels...\n");
     F77INITLEVELS(&minlevel, &maxlevel);
 
@@ -412,7 +421,7 @@ VPRIVATE int treesetup(Vgreen *thee) {
 
 #else /* ifdef HAVE_TREE */
 
-    Vnm_print(2, "treecalc:  Error!  APBS not linked with treecode!\n");
+    Vnm_print(2, "treesetup:  Error!  APBS not linked with treecode!\n");
     return 0;
 
 #endif /* ifdef HAVE_TREE */
@@ -432,7 +441,7 @@ VPRIVATE int treecleanup(Vgreen *thee) {
 
 #else /* ifdef HAVE_TREE */
 
-    Vnm_print(2, "treecalc:  Error!  APBS not linked with treecode!\n");
+    Vnm_print(2, "treecleanup:  Error!  APBS not linked with treecode!\n");
     return 0;
 
 #endif /* ifdef HAVE_TREE */

@@ -145,9 +145,9 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
             pot, fx, fy, fz);
 
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        fx[i] *= (0.5*qp[i]*zmagic);
-        fy[i] *= (0.5*qp[i]*zmagic);
-        fz[i] *= (0.5*qp[i]*zmagic);
+        fx[i] *= (-0.5*qp[i]*zmagic);
+        fy[i] *= (-0.5*qp[i]*zmagic);
+        fz[i] *= (-0.5*qp[i]*zmagic);
         pot[i] *= (0.5*qp[i]*zmagic);
         energy += pot[i];
         force[0] += fx[i];
@@ -171,6 +171,25 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
     Vnm_print(1, "Total x-force = %1.12e kJ/mol/A in vacuum.\n", force[0]);
     Vnm_print(1, "Total y-force = %1.12e kJ/mol/A in vacuum.\n", force[1]);
     Vnm_print(1, "Total z-force = %1.12e kJ/mol/A in vacuum.\n", force[2]);
+
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&fx);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&fy);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&fz);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&pot);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&xp);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&yp);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&zp);
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+      (void **)&qp);
+    Vgreen_dtor(&green);
+    Valist_dtor(&alist);
 
     return 0;
 }
