@@ -147,8 +147,14 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     double xmax, ymax, zmax;
     double u, dx, dy, dz;
 
-    VASSERT(thee != VNULL);
-    VASSERT(thee->ctordata || thee->readdata);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_value:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_value:  Error -- no data available!\n");
+        VASSERT(0);
+    }
 
     nx = thee->nx;
     ny = thee->ny;
@@ -257,8 +263,14 @@ VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
     double dxx, dyy, dzz;
     double uleft, umid, uright, testpt[3];
 
-    VASSERT(thee != VNULL);
-    VASSERT(thee->ctordata || thee->readdata);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_curvature:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_curvature:  Error -- no data available!\n");
+        VASSERT(0);
+    }
 
     hx = thee->hx;
     hy = thee->hy;
@@ -307,6 +319,7 @@ VPUBLIC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
     } else if ( cflag == 1 ) {
         curv = (dxx + dyy + dzz)/3.0;
     } else {
+        Vnm_print(2, "Vgrid_curvature:  support for cflag = %d not available!\n", cflag);
         VASSERT( 0 ); /* Feature Not Coded Yet! */
     }
 
@@ -329,8 +342,14 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
     double uleft, umid, uright, testpt[3];
     int haveleft, haveright;
 
-    VASSERT(thee != VNULL);
-    VASSERT(thee->ctordata || thee->readdata);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_gradient:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_gradient:  Error -- no data available!\n");
+        VASSERT(0);
+    }
 
     hx = thee->hx;
     hy = thee->hy;
@@ -629,8 +648,14 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     double x, y, z, xminPART, yminPART, zminPART;
     Vio *sock;
 
-    VASSERT(thee != VNULL);
-    VASSERT(thee->ctordata || thee->readdata);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_writeDX:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_writeDX:  Error -- no data available!\n");
+        VASSERT(0);
+    }
 
     hx = thee->hx;
     hy = thee->hy; 
@@ -860,8 +885,14 @@ VPUBLIC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt,
     double xmin, ymin, zmin, hzed, hy, hx;
     Vio *sock;
 
-    VASSERT(thee != VNULL);
-    VASSERT(thee->ctordata || thee->readdata);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_writeUHBD:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_writeUHBD:  Error -- no data available!\n");
+        VASSERT(0);
+    }
 
     if ((thee->hx!=thee->hy) || (thee->hy!=thee->hzed)
       || (thee->hx!=thee->hzed)) {
