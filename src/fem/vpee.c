@@ -54,9 +54,12 @@
 
 VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
 VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol);
-VEXTERNC double Alg_estNonlinResid(Alg *thee, SS *sm, int u, int ud, int f);
-VEXTERNC double Alg_estLocalProblem(Alg *thee, SS *sm, int u, int ud, int f);
-VEXTERNC double Alg_estDualProblem(Alg *thee, SS *sm, int u, int ud, int f);
+VEXTERNC double Aprx_estNonlinResid(Aprx *thee, SS *sm,
+    Bvec *u, Bvec *ud, Bvec *f);
+VEXTERNC double Aprx_estLocalProblem(Aprx *thee, SS *sm,
+    Bvec *u, Bvec *ud, Bvec *f);
+VEXTERNC double Aprx_estDualProblem(Aprx *thee, SS *sm,
+    Bvec *u, Bvec *ud, Bvec *f);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpee: Non-inlineable methods
@@ -103,7 +106,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
     } else if (killFlag == 2) {
         Vnm_print(0, "Vpee_ctor2: Error ignored outside sphere with radius %4.3f times the radius of the circumscribing sphere\n", killParam);
         if (killParam < 1.0) {
-          Vnm_print(2, "Vpee_ctor2: Warning! Parameter killParam = %4.3 < 1.0!\n", 
+          Vnm_print(2, "Vpee_ctor2: Warning! Parameter killParam = %4.3 < 1.0!\n",
             killParam);
           Vnm_print(2, "Vpee_ctor2: This may result in non-optimal marking and refinement!\n");
         }
@@ -113,15 +116,15 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
         Vnm_print(2, "Vpee_ctor2: UNRECOGNIZED killFlag PARAMETER! BAILING!.\n");
         VASSERT(0);
     }
-        
+
     thee->gm = gm;
     thee->localPartID = localPartID;
     thee->killFlag = killFlag;
     thee->killParam = killParam;
     thee->mem = Vmem_ctor("APBS::VPEE");
 
-    /* Now, figure out the center of geometry for the local partition.  The 
-     * general plan is to loop through the vertices, loop through the 
+    /* Now, figure out the center of geometry for the local partition.  The
+     * general plan is to loop through the vertices, loop through the
      * vertices' simplex lists and find the vertices with simplices containing
      * chart values we're interested in. */
     thee->localPartCenter[0] = 0.0;
@@ -156,7 +159,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
 
 
     /* Now, figure out the radius of the sphere circumscribing the local
-     * partition.  We need to keep track of vertices so we don't double count 
+     * partition.  We need to keep track of vertices so we don't double count
      * them. */
     thee->localPartRadius = 0.0;
     for (ivert=0; ivert<Gem_numVV(thee->gm); ivert++) {
@@ -177,7 +180,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
         }
     }
     thee->localPartRadius = VSQRT(thee->localPartRadius);
-    Vnm_print(0, "Vpee_ctor2: Part %d has circumscribing sphere of radius %4.3f\n", 
+    Vnm_print(0, "Vpee_ctor2: Part %d has circumscribing sphere of radius %4.3f\n",
       thee->localPartID, thee->localPartRadius);
 
     return 1;
@@ -189,7 +192,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpee_dtor(Vpee **thee) {
-    
+
     if ((*thee) != VNULL) {
         Vpee_dtor2(*thee);
         Vmem_free(VNULL, 1, sizeof(Vpee), (void **)thee);
@@ -211,10 +214,9 @@ VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
 // Author:   Nathan Baker (and Michael Holst: the author of AM_markRefine, on
 //           which this is based)
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol, 
+VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
   double etol, int bkey) {
 
-    Alg *alg;
     Aprx *aprx;
     int marked = 0;
     int markMe, i, smid, count, currentQ;
@@ -227,11 +229,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     VASSERT(thee != VNULL);
 
-    /* Get the Alg object from AM */
-    VASSERT((level >= am->minLevel) && (level <= am->maxLevel));
-    alg = AM_alg(am, level);
-    VASSERT(alg != VNULL);
-    aprx = alg->aprx;
+    /* Get the Aprx object from AM */
+    aprx = am->aprx;
 
     /* input check and some i/o */
     if ( ! ((-1 <= akey) && (akey <= 4)) ) {
@@ -248,13 +247,13 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     /* Informative I/O */
     if (akey == 2) {
-        Vnm_print(0,"Alg_estRefine: using Alg_estNonlinResid().\n");
+        Vnm_print(0,"Vpee_estRefine: using Aprx_estNonlinResid().\n");
     } else if (akey == 3) {
-        Vnm_print(0,"Alg_estRefine: using Alg_estLocalProblem().\n");
+        Vnm_print(0,"Vpee_estRefine: using Aprx_estLocalProblem().\n");
     } else if (akey == 4) {
-        Vnm_print(0,"Alg_estRefine: using Alg_estDualProblem().\n");
+        Vnm_print(0,"Vpee_estRefine: using Aprx_estDualProblem().\n");
     } else {
-        Vnm_print(0,"Alg_estRefine: bad key given; simplices marked = %d\n",
+        Vnm_print(0,"Vpee_estRefine: bad key given; simplices marked = %d\n",
             marked);
         return marked;
     }
@@ -263,12 +262,12 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     } else if (thee->killFlag == 1) {
         Vnm_print(0, "Vpee_markRefine: Maximum error attenuation -- only simplices in local partition will be marked.\n");
     } else if (thee->killFlag == 2) {
-        Vnm_print(0, "Vpee_markRefine: Spherical error attenutation -- simplices within a sphere of %4.3f times the size of the partition will be marked\n", 
+        Vnm_print(0, "Vpee_markRefine: Spherical error attenutation -- simplices within a sphere of %4.3f times the size of the partition will be marked\n",
           thee->killParam);
     } else if (thee->killFlag == 2) {
         Vnm_print(0, "Vpee_markRefine: Neighbor-based error attenuation -- simplices in the local and neighboring partitions will be marked [NOT IMPLEMENTED]!\n");
         VASSERT(0);
-    } else {    
+    } else {
         Vnm_print(2,"Vpee_markRefine: bogus killFlag given; simplices marked = %d\n",
             marked);
         return marked;
@@ -278,15 +277,14 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     mlevel = (etol*etol) / Gem_numSS(thee->gm);
     if (bkey == 0) {
         barrier = (etol*etol);
-        Vnm_print(0,"Alg_estRefine: forcing [err per S] < [TOL] = %g\n",
+        Vnm_print(0,"Vpee_estRefine: forcing [err per S] < [TOL] = %g\n",
             barrier);
     } else if (bkey == 1) {
         barrier = mlevel;
-        Vnm_print(0,
-            "Alg_estRefine: forcing [err per S] < [(TOL^2/numS)^{1/2}] = %g\n",
+        Vnm_print(0,"Vpee_estRefine: forcing [err per S] < [(TOL^2/numS)^{1/2}] = %g\n",
             VSQRT(barrier));
     } else {
-        Vnm_print(0,"Alg_estRefine: bad bkey given; simplices marked = %d\n",
+        Vnm_print(0,"Vpee_estRefine: bad bkey given; simplices marked = %d\n",
             marked);
         return marked;
     }
@@ -338,14 +336,14 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             if (markMe) {
                 if (akey == 0) {
                     marked++;
-                    Gem_appendSQ(thee->gm,currentQ, sm); 
-                    SS_setRefineKey(sm,currentQ,1);     
-                    SS_setRefinementCount(sm,count);   
+                    Gem_appendSQ(thee->gm,currentQ, sm);
+                    SS_setRefineKey(sm,currentQ,1);
+                    SS_setRefinementCount(sm,count);
                 } else if (Vpee_userDefined(thee, sm)) {
                     marked++;
-                    Gem_appendSQ(thee->gm,currentQ, sm); 
-                    SS_setRefineKey(sm,currentQ,1);     
-                    SS_setRefinementCount(sm,count);   
+                    Gem_appendSQ(thee->gm,currentQ, sm);
+                    SS_setRefineKey(sm,currentQ,1);
+                    SS_setRefinementCount(sm,count);
                 }
             }
             smid++;
@@ -370,11 +368,11 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
         /* Produce an error estimate for this element if it is in the set */
         if (markMe) {
             if (akey == 2) {
-                errEst = Alg_estNonlinResid(alg, sm, W_u,W_ud,W_f);
+                errEst = Aprx_estNonlinResid(aprx, sm, am->u,am->ud,am->f);
             } else if (akey == 3) {
-                errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
+                errEst = Aprx_estLocalProblem(aprx, sm, am->u,am->ud,am->f);
             } else if (akey == 4) {
-                errEst = Alg_estDualProblem(alg, sm, W_u,W_ud,W_f);
+                errEst = Aprx_estDualProblem(aprx, sm, am->u,am->ud,am->f);
             }
             VASSERT( errEst >= 0. );
 
@@ -391,14 +389,14 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             maxError = VMAX2( VSQRT(VABS(errEst)), maxError );
 
             /* store the estimate */
-            Bvec_set( aprx->WE[ WE_err ], 0, smid, errEst );
+            Bvec_set( aprx->wev, 0, smid, errEst );
 
             /* accumlate into global error (errEst is SQUAREd already) */
             aprx->gerror += errEst;
 
         /* otherwise store a zero for the estimate */
         } else {
-            Bvec_set( aprx->WE[ WE_err ], 0, smid, 0. );
+            Bvec_set( aprx->wev, 0, smid, 0. );
         }
 
         smid++;
@@ -406,20 +404,20 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
     /* do some i/o */
     Vnm_print(0,"..done.  [marked=<%d/%d>]\n",marked,Gem_numSS(thee->gm));
-    Vnm_print(0,"Alg_estRefine: TOL=<%g>  Global_Error=<%g>\n",
+    Vnm_print(0,"Vpee_estRefine: TOL=<%g>  Global_Error=<%g>\n",
         etol, aprx->gerror);
-    Vnm_print(0,"Alg_estRefine: (TOL^2/numS)^{1/2}=<%g>  Max_Ele_Error=<%g>\n",
+    Vnm_print(0,"Vpee_estRefine: (TOL^2/numS)^{1/2}=<%g>  Max_Ele_Error=<%g>\n",
         VSQRT(mlevel),maxError);
     Vnm_tstop(30, "error estimation");
 
     /* check for making the error tolerance */
     if ((bkey == 1) && (aprx->gerror <= etol)) {
         Vnm_print(0,
-            "Alg_estRefine: *********************************************\n");
+            "Vpee_estRefine: *********************************************\n");
         Vnm_print(0,
-            "Alg_estRefine: Global Error criterion met; setting marked=0.\n");
+            "Vpee_estRefine: Global Error criterion met; setting marked=0.\n");
         Vnm_print(0,
-            "Alg_estRefine: *********************************************\n");
+            "Vpee_estRefine: *********************************************\n");
         marked = 0;
     }
 
@@ -466,7 +464,7 @@ VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
             vx[ivert][icoord] = VV_coord(SS_vertex(sm,ivert), icoord );
         }
     }
-    return thee->gm->pde->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm), 
+    return thee->gm->pde->markSimplex(Gem_dim(thee->gm), Gem_dimII(thee->gm),
              SS_type(sm), fType, vType, chart, vx, sm);
 }
 
