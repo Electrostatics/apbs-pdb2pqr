@@ -133,10 +133,12 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     thee->ny = ny;
     thee->nz = nz;
     thee->n = nx*ny*nz;
+    Vnm_print(0, "Vacc_ctor2:  Using %d x %d x %d hash table\n", nx, ny, nz);
  
     /* Set up probe information */
     thee->nsphere = nsphere;
     thee->max_radius = max_radius;
+    Vnm_print(0, "Vacc_ctor2:  Constructing sphere...\n");
     thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
     VASSERT(thee->sphere != VNULL);
 
