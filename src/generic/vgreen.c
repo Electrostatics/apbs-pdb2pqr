@@ -342,8 +342,6 @@ VPUBLIC int Vgreen_coulombD_direct(Vgreen *thee, int npos,
         grady[ipos] = grady[ipos]*scale;
         gradz[ipos] = gradz[ipos]*scale;
         pot[ipos] = pot[ipos]*scale;
-        printf("gradx = %g, grady = %g, gradz = %g, pot = %g\n", gradx[ipos], grady[ipos], gradz[ipos], pot[ipos]);
-
     }
 
     return 1;
@@ -399,7 +397,6 @@ VPUBLIC int Vgreen_coulombD(Vgreen *thee, int npos, double *x, double *y,
         grady[ipos] = grady[ipos]*scale;
         gradz[ipos] = gradz[ipos]*scale;
         pot[ipos] = pot[ipos]*scale;
-        printf("gradx = %g, grady = %g, gradz = %g, pot = %g\n", gradx[ipos], grady[ipos], gradz[ipos], pot[ipos]);
     }
 
     return 1;
@@ -530,6 +527,7 @@ VPRIVATE int treecalc(Vgreen *thee, double *xtar, double *ytar, double *ztar,
         F77TREE_COMPP(xtar, ytar, ztar, qtar, &numtars, tpengtar, &farrdim, x,
                 y, z, q, &numpars, &arrdim);
     }
+
 
     return 1;
 
