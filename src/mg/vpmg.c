@@ -145,14 +145,14 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD, 
-  int energyFlag) {
+  MGparm *mgparm, int energyFlag) {
 
     Vpmg *thee = VNULL;
 
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
     VASSERT( thee != VNULL);
-    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD, energyFlag));
+    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD, mgparm, energyFlag));
 
     return thee;
 }
@@ -374,6 +374,10 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
       lowerCorner[0], lowerCorner[1], lowerCorner[2]);
     Vnm_print(0, "Vpmg_setPart:  upper corner = (%g, %g, %g)\n",
       upperCorner[0], upperCorner[1], upperCorner[2]);
+    Vnm_print(0, "Vpmg_setPart:  actual minimums = (%g, %g, %g)\n",
+      xmin, ymin, zmin);
+    Vnm_print(0, "Vpmg_setPart:  actual maximums = (%g, %g, %g)\n",
+      xmin+hx*(nx-1), ymin+hy*(ny-1), zmin+hzed*(nz-1));
     Vnm_print(0, "Vpmg_setPart:  bflag[FRONT] = %d\n", 
       bflags[VAPBS_FRONT]);
     Vnm_print(0, "Vpmg_setPart:  bflag[BACK] = %d\n", 

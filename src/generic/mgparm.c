@@ -159,7 +159,7 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
     thee->setrank = 0;
     thee->setsize = 0;
     thee->setofrac = 0;
-    for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 1;
+    for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 0;
 	thee->setasync = 0;
 
     return 1; 
