@@ -351,9 +351,7 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
     /* *** TYPE 2 PARMS *** */
     for (i=0; i<3; i++) 
-      thee->partDisjLowerCorner[i] = parm->partDisjLowerCorner[i];
-    for (i=0; i<3; i++) 
-      thee->partDisjUpperCorner[i] = parm->partDisjUpperCorner[i];
+      thee->partDisjCenterShift[i] = parm->partDisjCenterShift[i];
     for (i=0; i<3; i++) 
       thee->partDisjLength[i] = parm->partDisjLength[i];
     for (i=0; i<6; i++) 

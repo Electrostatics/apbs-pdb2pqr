@@ -868,10 +868,10 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 
     if (mgparm->type == 2) {
         for (j=0; j<3; j++) {
-            partMin[j] = mgparm->center[j] 
-                + mgparm->partDisjLowerCorner[j];
-            partMax[j] = mgparm->center[j] 
-                + mgparm->partDisjUpperCorner[j];
+            partMin[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
+              - 0.5*mgparm->partDisjLength[j];
+            partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
+              + 0.5*mgparm->partDisjLength[j];
         }
         Vnm_tprint(0, "Disj part lower corner = (%g, %g, %g)\n",
           partMin[0], partMin[1], partMin[2]);
