@@ -52,6 +52,7 @@
 #include "mc/mc.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
+#include "apbs/vunit.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vgreen: Parameters and datatypes
@@ -90,6 +91,10 @@ VEXTERNC void    Vgreen_dtor(Vgreen **thee);
 VEXTERNC void    Vgreen_dtor2(Vgreen *thee);
 VEXTERNC double  Vgreen_helmholtz(Vgreen *thee, double *position, double dim,
                    double kappa);
+VEXTERNC void    Vgreen_helmholtzD(Vgreen *thee, double *position, 
+                   double dim, double kappa, double *grad);
 VEXTERNC double  Vgreen_coulomb(Vgreen *thee, double *position, double dim);
+VEXTERNC void    Vgreen_coulombD(Vgreen *thee, double *position, double dim,
+                   double *grad);
 
 #endif /* ifndef _VGREEN_H_ */

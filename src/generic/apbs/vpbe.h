@@ -53,6 +53,7 @@
 #include "apbs/vcsm.h"
 #include "apbs/vacc.h"
 #include "apbs/vunit.h"
+#include "apbs/vgreen.h"
 
 #if defined(HAVE_PMGC_H)
 #   include "pmgc/mgmlsys.h"
@@ -77,6 +78,7 @@ typedef struct Vpbe {
 
   Vacc *acc;          /* Accessibility object */
   Vcsm *csm;          /* Charge-simplex map */
+  Vgreen *green;      /* Green's function oracle */
   Vmem *vmem;         /* Memory management object */
 
   int methFlag;       /* Method of solution
@@ -121,6 +123,7 @@ typedef struct Vpbe {
     VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
     VEXTERNC Gem*    Vpbe_getGem(Vpbe *thee);
     VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
+    VEXTERNC Vgreen* Vpbe_getVgreen(Vpbe *thee);
     VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
     VEXTERNC double  Vpbe_getIonConc(Vpbe *thee);
     VEXTERNC double  Vpbe_getTemperature(Vpbe *thee);           
@@ -143,6 +146,7 @@ typedef struct Vpbe {
 #   define Vpbe_getValist(thee) ((thee)->alist)
 #   define Vpbe_getGem(thee) ((thee)->gm)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
+#   define Vpbe_getVgreen(thee) ((thee)->green)
 #   define Vpbe_getVcsm(thee) ((thee)->csm)
 #   define Vpbe_getIonConc(thee) ((thee)->ionConc)
 #   define Vpbe_getTemperature(thee) ((thee)->T)           
