@@ -200,6 +200,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
       &(thee->pmgp->nlev), &nxc, &nyc, &nzc, &nf, &nc, &(thee->pmgp->narr),
       &narrc, &n_rpc, &n_iz, &n_ipc, &(thee->pmgp->nrwk), &(thee->pmgp->niwk));
 
+    Vnm_print(2, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
+      thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz, thee->pmgp->nlev);
+
     /* Allocate storage */
     thee->iparm = (int *)Vmem_malloc(thee->vmem, 100, sizeof(int));
     thee->rparm = (double *)Vmem_malloc(thee->vmem, 100, sizeof(double));
@@ -475,8 +478,8 @@ off the mesh (ignoring)!\n",
 
             /* Figure out which vertices we're next to */
             ifloat = (position[0] - xmin)/(hx);
-            jfloat = (position[1] - xmin)/(hy);
-            kfloat = (position[2] - xmin)/(hz);
+            jfloat = (position[1] - ymin)/(hy);
+            kfloat = (position[2] - zmin)/(hz);
 
             ihi = (int)ceil(ifloat);
             ilo = (int)floor(ifloat);
@@ -601,24 +604,19 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
         charge = Vatom_getCharge(atom);
         position = Vatom_getPosition(atom);
 
-        /* Make sure the atom is on the grid */
-        if ((position[0]<=xmin) || (position[0]>=xmax)  || \
-            (position[1]<=ymin) || (position[1]>=ymax)  || \
-            (position[2]<=zmin) || (position[2]>=zmax)) {
-            Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f)
-is off the mesh (ignoring)!\n",
-                iatom, position[0], position[1], position[2]);
-        } else {
-            /* Figure out which vertices we're next to */
-            ifloat = (position[0] - xmin)/hx;
-            jfloat = (position[1] - xmin)/hy;
-            kfloat = (position[2] - xmin)/hz;
-            ihi = (int)ceil(ifloat);
-            ilo = (int)floor(ifloat);
-            jhi = (int)ceil(jfloat);
-            jlo = (int)floor(jfloat);
-            khi = (int)ceil(kfloat);
-            klo = (int)floor(kfloat);
+        /* Figure out which vertices we're next to */
+        ifloat = (position[0] - xmin)/hx;
+        jfloat = (position[1] - ymin)/hy;
+        kfloat = (position[2] - zmin)/hz;
+        ihi = (int)ceil(ifloat);
+        ilo = (int)floor(ifloat);
+        jhi = (int)ceil(jfloat);
+        jlo = (int)floor(jfloat);
+        khi = (int)ceil(kfloat);
+        klo = (int)floor(kfloat);
+
+        if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
+            (ilo>=0) && (jlo>=0) && (klo>=0)) {
 
             /* Now get trilinear interpolation constants */
             dx = ifloat - (double)(ilo);
@@ -633,6 +631,10 @@ is off the mesh (ignoring)!\n",
                   + (1.0-dx)*dy*(1.0-dz)*(thee->u[IJK(ilo,jhi,klo)])
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
             energy += (uval*charge);
+        } else {
+            Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f)
+is off the mesh (ignoring)!\n",
+                iatom, position[0], position[1], position[2]);
         }
     }
 
