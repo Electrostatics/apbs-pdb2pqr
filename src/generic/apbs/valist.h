@@ -55,6 +55,7 @@
 
 /* Headers specific to this file */
 #include "apbs/vatom.h"
+#include "apbs/vparam.h"
 
 /** 
  *  @struct  Valist
@@ -188,22 +189,44 @@ VEXTERNC void    Valist_dtor(Valist **thee);
  */
 VEXTERNC void    Valist_dtor2(Valist *thee);
 
-/** @brief   Fill atom list with information from a PQR file
- *  @note     \liA PQR file has PDB structure with charge and radius in the last
- *             two columns instead of weight and occupancy
- *            \liThe original PDB reading algorithm was based on routines by Phil
- *             Hunenberger; it has since been modified by Nathan Baker
- *  @ingroup Valist
- *  @author  Nathan Baker
- *  @param   thee  Valist object to be filled
- *  @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
- *  @param   iofmt  Input device format (ASCII/XDR)
- *  @param   thost  Input hostname (for sockets)
- *  @param   fname  Input FILE/BUFF/UNIX/INET name
- *  @return  1 if successful, 0 otherwise
+/** 
+ * @brief  Fill atom list with information from a PQR file
+ * @ingroup Valist
+ * @author  Nathan Baker
+ * @param   thee  Valist object to be filled
+ * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
+ * @param   iofmt  Input device format (ASCII/XDR)
+ * @param   thost  Input hostname (for sockets)
+ * @param   fname  Input FILE/BUFF/UNIX/INET name
+ * @return  1 if successful, 0 otherwise
+ * @note  \li A PQR file has PDB structure with charge and radius in the last
+ *            two columns instead of weight and occupancy
+ *        \li We don't actually respect PDB format; instead recognize
+ *            whitespace- or tab-delimited fields which allows us to deal with
+ *            structures with coordinates > 999 or < -999.
  */
-VEXTERNC int     Valist_readPQR(Valist *thee, const char *iodev, 
-                 const char *iofmt, const char *thost, const char *fname);
+VEXTERNC int Valist_readPQR(Valist *thee, const char *iodev, 
+  const char *iofmt, const char *thost, const char *fname);
+
+/** 
+ * @brief  Fill atom list with information from a PDB file
+ * @ingroup Valist
+ * @author  Nathan Baker
+ * @param   thee  Valist object to be filled
+ * @param   param  A pre-initialized parameter object
+ * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
+ * @param   iofmt  Input device format (ASCII/XDR)
+ * @param   thost  Input hostname (for sockets)
+ * @param   fname  Input FILE/BUFF/UNIX/INET name
+ * @return  1 if successful, 0 otherwise
+ * @note  \li A PQR file has PDB structure with charge and radius in the last
+ *            two columns instead of weight and occupancy
+ *        \li We don't actually respect PDB format; instead recognize
+ *            whitespace- or tab-delimited fields which allows us to deal with
+ *            structures with coordinates > 999 or < -999.
+ */
+VEXTERNC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
+  const char *iofmt, const char *thost, const char *fname);
 
 /** @brief   Build rectangular prismatic finite element mesh which surrounds
  *           molecule contained in Valist object.

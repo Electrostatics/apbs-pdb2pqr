@@ -199,4 +199,22 @@ VEXTERNC void    Vatom_dtor2(Vatom *thee);
  */
 VEXTERNC void   Vatom_setPosition(Vatom *thee, double position[3]);
 
+/**
+ * @brief  Copy information to another atom
+ * @ingroup  Vatom
+ * @author  Nathan Baker
+ * @param  thee Source for atom information
+ * @param  dest Destination for atom information
+ */
+VEXTERNC void Vatom_copyTo(Vatom *thee, Vatom *dest);
+
+/**
+ * @brief  Copy information to another atom
+ * @ingroup  Vatom
+ * @author  Nathan Baker
+ * @param  thee Destination for atom information
+ * @param  src Source for atom information
+ */
+VEXTERNC void Vatom_copyFrom(Vatom *thee, Vatom *src);
+
 #endif /* ifndef _VATOM_H_ */
