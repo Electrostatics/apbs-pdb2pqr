@@ -54,8 +54,17 @@
 /* have the time() function */
 #undef HAVE_TIME_FUNC
 
+/* have the FMM library */
+#undef HAVE_TREE
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* have the Vmetis library */
+#undef HAVE_VMETIS
+
+/* have the Vor library */
+#undef HAVE_VOR
 
 /* Name of package */
 #undef PACKAGE

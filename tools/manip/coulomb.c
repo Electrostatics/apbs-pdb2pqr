@@ -40,20 +40,20 @@
  * @endverbatim
  */
 #include <sys/times.h>
-#include <unistd.h>
 
 #include "apbscfg.h"
-#include "apbs/vatom.h"
-#include "apbs/valist.h"
-#include "apbs/vacc.h"
+#include "maloc/maloc.h"
+#include "apbs/apbs.h"
 
 int main(int argc, char **argv) {
 
     /* OBJECTS */
-    Valist *alist;
-    Vatom *atom1, *atom2;
-    double charge1, charge2, dist, dist2, *pos1, *pos2, energy, myenergy;
-    double zmagic, disp[3], force[3], myforce[3];
+    Valist *alist = VNULL;
+    Vatom *atom = VNULL;
+    Vgreen *green = VNULL;
+
+    double *pos, energy, zmagic, disp[3], force[3];
+    double *fx, *fy, *fz, *pot, *xp, *yp, *zp, *qp;
     int i, j;
     int verbose = 0;
     int doforce = 1;
@@ -78,20 +78,21 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
     Vio_start();
 
     if ((argc > 4) || (argc < 2)) {
-        printf("\n*** Syntax error: got %d arguments, expected 2.\n",argc);
-        printf("%s", usage);
+        Vnm_print(2, "\n*** Syntax error: got %d arguments, expected 2.\n",
+           argc);
+        Vnm_print(2, "%s", usage);
         exit(666);
     };
     if (argc > 2) {
         for (i=1; i<(argc-1); i++) {
             if (strcmp("-v", argv[i]) == 0) {
-                printf("Providing per-atom information...\n");
+                Vnm_print(1, "Providing per-atom information...\n");
                 verbose = 1;
             } else if (strcmp("-f", argv[i]) == 0) {
-                printf("Calculating forces...\n");
+                Vnm_print(1, "Calculating forces...\n");
                 doforce = 1;
             } else {
-                printf("Ignoring option %s\n", argv[i]);
+                Vnm_print(2, "Ignoring option %s\n", argv[i]);
                 verbose = 0;
             }
         }
@@ -101,73 +102,75 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
         path = argv[1];
     }
 
-    printf("Setting up atom list from %s\n", path);
+    Vnm_print(1, "Setting up atom list from %s.\n", path);
     alist = Valist_ctor();
     Valist_readPQR(alist, "FILE", "ASC", VNULL, path);
-    printf("Read %d atoms\n", Valist_getNumberAtoms(alist));
+    Vnm_print(1, "Read %d atoms\n", Valist_getNumberAtoms(alist));
 
-    /* ENergy scaling factor */
-    zmagic  = (1e-3)*(1e10)*Vunit_ec*Vunit_ec*Vunit_Na/(4*VPI*Vunit_eps0);
+    Vnm_print(1, "Setting up Green's function object.\n");
+    green = Vgreen_ctor(alist);
 
+    /* Initialize variables */
+    Vnm_print(1, "Dielectric constant = 1 (vacuum)\n"); 
+    Vnm_print(1, "Distances in Angstroms\n");
+    Vnm_print(1, "Charges in electrons\n");
+    zmagic  = (1e-3)*Vunit_ec*Vunit_Na;
     energy = 0.0;
     force[0] = 0.0; force[1] = 0.0; force[2] = 0.0;
-    
-    printf("Using vacuum dielectric, distance in Ang, and charge in e....\n");
-    printf("Calculating...\n");
-    fflush(stdout);
+
+    Vnm_print(1, "Allocating space for solution...\n");
+    fx = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    fy = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    fz = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    pot = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    xp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    yp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    zp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+    qp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        atom1 = Valist_getAtom(alist, i);
-        pos1 = Vatom_getPosition(atom1);
-        charge1 = Vatom_getCharge(atom1);
-        myenergy = 0.0;
-        myforce[0] = 0.0; myforce[1] = 0.0; myforce[2] = 0.0;
-        for (j=0; j<Valist_getNumberAtoms(alist); j++) {
-            if (j != i) {
-                atom2 = Valist_getAtom(alist, j);
-                pos2 = Vatom_getPosition(atom2);
-                charge2 = Vatom_getCharge(atom2);
-                disp[0] = pos1[0] - pos2[0];
-                disp[1] = pos1[1] - pos2[1];
-                disp[2] = pos1[2] - pos2[2];
-                dist2 = (VSQR(disp[0]) + VSQR(disp[1]) + VSQR(disp[2]));
-                dist = VSQRT(dist2);
-                myenergy += 0.5*(charge1*charge2/dist);
-                myforce[0] -= (0.5*disp[0]*(charge1*charge2/(dist*dist2)));
-                myforce[1] -= (0.5*disp[1]*(charge1*charge2/(dist*dist2)));
-                myforce[2] -= (0.5*disp[2]*(charge1*charge2/(dist*dist2)));
-            }
-        }
-        energy += myenergy;
-        force[0] += myforce[0];
-        force[1] += myforce[1];
-        force[2] += myforce[2];
-        myenergy = myenergy*zmagic;
-        myforce[0] = myforce[0]*zmagic;
-        myforce[1] = myforce[1]*zmagic;
-        myforce[2] = myforce[2]*zmagic;
+        fx[i] = 0.0; 
+        fy[i] = 0.0; 
+        fz[i] = 0.0;
+        pot[i] = 0.0;
+        atom = Valist_getAtom(alist, i);
+        pos = Vatom_getPosition(atom);
+        xp[i] = pos[0]; 
+        yp[i] = pos[1]; 
+        zp[i] = pos[2];
+        qp[i] = Vatom_getCharge(atom);
+    }
+
+    Vnm_print(1, "Calculating...\n");
+    Vgreen_coulombD(green, Valist_getNumberAtoms(alist), xp, yp, zp, 
+            pot, fx, fy, fz);
+
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        fx[i] *= (0.5*qp[i]*zmagic);
+        fy[i] *= (0.5*qp[i]*zmagic);
+        fz[i] *= (0.5*qp[i]*zmagic);
+        pot[i] *= (0.5*qp[i]*zmagic);
+        energy += pot[i];
+        force[0] += fx[i];
+        force[1] += fy[i];
+        force[2] += fz[i];
         if (verbose) {
-            printf("\tAtom %d:  Energy  = %1.12E kJ/mol\n", i, myenergy);
+            Vnm_print(1, "\tAtom %d:  Energy  = %1.12E kJ/mol\n", i, pot[i]);
             if (doforce) {
-                printf("\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i, 
-                  myforce[0]);
-                printf("\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i, 
-                  myforce[1]);
-                printf("\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i, 
-                  myforce[2]);
+                Vnm_print(1, "\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i, 
+                  fx[i]);
+                Vnm_print(1, "\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i, 
+                  fy[i]);
+                Vnm_print(1, "\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i, 
+                  fz[i]);
             }
         }
     }
 
-    energy = energy*zmagic;
-    force[0] = force[0]*zmagic;
-    force[1] = force[1]*zmagic;
-    force[2] = force[2]*zmagic;
- 
-    printf("\n\n-------------------------------------------------------\n");
-    printf("Total energy = %1.12e kJ/mol in vacuum.\n", energy);
-    printf("Total x-force = %1.12e kJ/mol/A in vacuum.\n", force[0]);
-    printf("Total y-force = %1.12e kJ/mol/A in vacuum.\n", force[1]);
-    printf("Total z-force = %1.12e kJ/mol/A in vacuum.\n", force[2]);
+    Vnm_print(1, "\n\n-------------------------------------------------------\n");
+    Vnm_print(1, "Total energy = %1.12e kJ/mol in vacuum.\n", energy);
+    Vnm_print(1, "Total x-force = %1.12e kJ/mol/A in vacuum.\n", force[0]);
+    Vnm_print(1, "Total y-force = %1.12e kJ/mol/A in vacuum.\n", force[1]);
+    Vnm_print(1, "Total z-force = %1.12e kJ/mol/A in vacuum.\n", force[2]);
 
     return 0;
 }

@@ -156,6 +156,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
 thread_lib = @thread_lib@
+tree_lib = @tree_lib@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
@@ -164,7 +165,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES = @inc_list@
 
-noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin smooth norm
+noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin smooth norm value
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -185,12 +186,16 @@ norm_SOURCES = norm.c
 norm_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 norm_LDFLAGS = @LDFLAGS@ @FLIBS@
 norm_CCLD = $(F77)
+value_SOURCES = value.c 
+value_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+value_LDFLAGS = @LDFLAGS@ @FLIBS@
+value_CCLD = $(F77)
 subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
 noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
-	smooth$(EXEEXT) norm$(EXEEXT)
+	smooth$(EXEEXT) norm$(EXEEXT) value$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_dxmath_OBJECTS = dxmath.$(OBJEXT)
@@ -208,6 +213,9 @@ smooth_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_uhbd_asc2bin_OBJECTS = uhbd_asc2bin.$(OBJEXT)
 uhbd_asc2bin_OBJECTS = $(am_uhbd_asc2bin_OBJECTS)
 uhbd_asc2bin_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+am_value_OBJECTS = value.$(OBJEXT)
+value_OBJECTS = $(am_value_OBJECTS)
+value_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
 depcomp =
@@ -225,9 +233,9 @@ F77LD = $(F77)
 F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(norm_SOURCES) \
-	$(smooth_SOURCES) $(uhbd_asc2bin_SOURCES)
+	$(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(norm_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES)
+SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(norm_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 
 all: all-am
 
@@ -260,6 +268,9 @@ smooth$(EXEEXT): $(smooth_OBJECTS) $(smooth_DEPENDENCIES)
 uhbd_asc2bin$(EXEEXT): $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_DEPENDENCIES) 
 	@rm -f uhbd_asc2bin$(EXEEXT)
 	$(F77LINK) $(uhbd_asc2bin_LDFLAGS) $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_LDADD) $(LIBS)
+value$(EXEEXT): $(value_OBJECTS) $(value_DEPENDENCIES) 
+	@rm -f value$(EXEEXT)
+	$(LINK) $(value_LDFLAGS) $(value_OBJECTS) $(value_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
