@@ -281,3 +281,52 @@ VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag)
 
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vopot_gradient
+//
+// Authors:  Nathan Baker and Stephen Bond
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
+
+    double hx, hy, hzed;
+    double uleft, umid, uright, testpt[3];
+
+    hx = thee->hx;
+    hy = thee->hy;
+    hzed = thee->hzed;
+
+    testpt[0] = pt[0];
+    testpt[1] = pt[1];
+    testpt[2] = pt[2];
+
+    /* Compute derivative in the x-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0] - hx;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0] + hx;
+    uright = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0];
+
+    grad[0] = (uright - uleft)/(2*hx);
+
+    /* Compute derivative in the y-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1] - hy;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1] + hy;
+    uright = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1];
+
+    grad[1] = (uright - uleft)/(2*hy);
+
+    /* Compute derivative in the z-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[2] = pt[2] - hzed;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[2] = pt[2] + hzed;
+    uright = Vopot_pot( thee, testpt );
+
+    grad[2] = (uright - uleft)/(2*hzed);
+
+}
+
