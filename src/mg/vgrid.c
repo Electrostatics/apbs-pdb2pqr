@@ -40,12 +40,16 @@
 
 #include "apbscfg.h"
 #include "apbs/vgrid.h"
+#include "apbs/vstring.h"
 
 VEMBED(rcsid="$Id$")
 
 #if !defined(VINLINE_VGRID)
     VPUBLIC int Vgrid_memChk(Vgrid *thee) { return Vmem_bytes(thee->mem); }
 #endif
+
+VPRIVATE char *MCwhiteChars = " =,;\t\n";
+VPRIVATE char *MCcommChars  = "#%";
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgrid_ctor
@@ -168,6 +172,12 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
     ilo = (int)floor(ifloat);
     jlo = (int)floor(jfloat);
     klo = (int)floor(kfloat);
+	if (VABS(pt[0] - xmin) < VSMALL) ilo = 0;
+	if (VABS(pt[1] - ymin) < VSMALL) jlo = 0;
+	if (VABS(pt[2] - zmin) < VSMALL) klo = 0;
+	if (VABS(pt[0] - xmax) < VSMALL) ihi = nx-1;
+	if (VABS(pt[1] - ymax) < VSMALL) jhi = ny-1;
+	if (VABS(pt[2] - zmax) < VSMALL) khi = nz-1;
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
@@ -184,78 +194,6 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
           + (1.0-dx)*(1.0-dy)*dz      *(thee->data[IJK(ilo,jlo,khi)])
           + (1.0-dx)*dy      *(1.0-dz)*(thee->data[IJK(ilo,jhi,klo)])
           + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->data[IJK(ilo,jlo,klo)]);
-
-        *value = u;
-        return 1;
-
-    } else if (VABS(pt[0] - xmin) < VSMALL) {
-
-        dy = jfloat - (double)(jlo);
-        dz = kfloat - (double)(klo);
-        u = dy      *dz      *(thee->data[IJK(0, jhi,khi)])
-          + (1.0-dy)*dz      *(thee->data[IJK(0, jlo,khi)])
-          + dy      *(1.0-dz)*(thee->data[IJK(0, jhi,klo)])
-          + (1.0-dy)*(1.0-dz)*(thee->data[IJK(0, jlo,klo)]);
-
-        *value = u;
-        return 1;
-    
-    } else if (VABS(pt[0] - xmax) < VSMALL) {
-
-        dy = jfloat - (double)(jlo);
-        dz = kfloat - (double)(klo);
-        u = dy      *dz      *(thee->data[IJK((nx-1),jhi,khi)])
-          + (1.0-dy)*dz      *(thee->data[IJK((nx-1),jlo,khi)])
-          + dy      *(1.0-dz)*(thee->data[IJK((nx-1),jhi,klo)])
-          + (1.0-dy)*(1.0-dz)*(thee->data[IJK((nx-1),jlo,klo)]);
-
-        *value = u;
-        return 1;
-
-    } else if (VABS(pt[1] - ymin) < VSMALL) {
-
-        dx = ifloat - (double)(ilo);
-        dz = kfloat - (double)(klo);
-        u = dx      *dz      *(thee->data[IJK(ihi,0,khi)])
-          + dx      *(1.0-dz)*(thee->data[IJK(ihi,0,klo)])
-          + (1.0-dx)*dz      *(thee->data[IJK(ilo,0,khi)])
-          + (1.0-dx)*(1.0-dz)*(thee->data[IJK(ilo,0,klo)]);
-
-        *value = u;
-        return 1;
-
-    } else if (VABS(pt[1] - ymax) < VSMALL) {
-
-        dx = ifloat - (double)(ilo);
-        dz = kfloat - (double)(klo);
-        u = dx      *dz      *(thee->data[IJK(ihi,(ny-1),khi)])
-          + dx      *(1.0-dz)*(thee->data[IJK(ihi,(ny-1),klo)])
-          + (1.0-dx)*dz      *(thee->data[IJK(ilo,(ny-1),khi)])
-          + (1.0-dx)*(1.0-dz)*(thee->data[IJK(ilo,(ny-1),klo)]);
-
-        *value = u;
-        return 1;
-
-    } else if (VABS(pt[2] - zmin) < VSMALL) {
-
-        dx = ifloat - (double)(ilo);
-        dy = jfloat - (double)(jlo);
-        u = dx      *dy      *(thee->data[IJK(ihi,jhi,0)])
-          + dx      *(1.0-dy)*(thee->data[IJK(ihi,jlo,0)])
-          + (1.0-dx)*dy      *(thee->data[IJK(ilo,jhi,0)])
-          + (1.0-dx)*(1.0-dy)*(thee->data[IJK(ilo,jlo,0)]);
-
-        *value = u;
-        return 1;
-
-    } else if (VABS(pt[2] - zmax) < VSMALL) {
-
-        dx = ifloat - (double)(ilo);
-        dy = jfloat - (double)(jlo);
-        u = dx      *dy      *(thee->data[IJK(ihi,jhi,(nz-1))])
-          + dx      *(1.0-dy)*(thee->data[IJK(ihi,jlo,(nz-1))])
-          + (1.0-dx)*dy      *(thee->data[IJK(ilo,jhi,(nz-1))])
-          + (1.0-dx)*(1.0-dy)*(thee->data[IJK(ilo,jlo,(nz-1))]);
 
         *value = u;
         return 1;
@@ -436,8 +374,6 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     double dtmp;
     char tok[VMAX_BUFSIZE];
     Vio *sock;
-    char *MCwhiteChars = " =,;\t\n";
-    char *MCcommChars  = "#%";
 
     /* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
@@ -463,14 +399,16 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     Vio_setWhiteChars(sock, MCwhiteChars);
     Vio_setCommChars(sock, MCcommChars);
 
-
     /* Read in the DX regular positions */
     /* Get "object" */
+    Vnm_print(1, "Scanning for object\n");
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "object"));
     /* Get "1" */
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    Vnm_print(1, "Scanning for 1\n");
+    VJMPERR2(1 == Vio_scanf(sock, "%d", &itmp));
     /* Get "class" */
+    Vnm_print(1, "Scanning for class\n");
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "class"));
     /* Get "gridpositions" */
@@ -682,9 +620,10 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
     else usepart = 1;
 
     /* Set up the virtual socket */
+    Vnm_print(0, "Vgrid_writeDX:  Opening virtual socket...\n");
     sock = Vio_ctor(iodev,iofmt,thost,fname,"w");
     if (sock == VNULL) {
-        Vnm_print(2, "Vgrid_writeDX: Problem opening virtual socket %s\n",
+        Vnm_print(2, "Vgrid_writeDX:  Problem opening virtual socket %s\n",
           fname);
         return;
     }
@@ -694,6 +633,10 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         return; 
     }
 
+    Vio_setWhiteChars(sock, MCwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
+
+    Vnm_print(0, "Vgrid_writeDX:  Writing to virtual socket...\n");
     if (usepart) {
         /* Get the lower corner and number of grid points for the local
          * partition */
@@ -766,20 +709,26 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
         }
 
 
-        /* Write off the title */
-        Vio_printf(sock, "# Data from APBS\n");
-        Vio_printf(sock, "# \n");
-        Vio_printf(sock, "# %s\n", title);
-        Vio_printf(sock, "# \n");
+        /* Write off the title (if we're not XDR) */
+        if (Vstring_strcasecmp(iofmt, "XDR") == 0) {
+            Vnm_print(0, "Vgrid_writeDX:  Skipping comments for XDR format.\n");
+        } else {
+            Vnm_print(0, "Vgrid_writeDX:  Writing comments for %s format.\n",
+              iofmt);
+            Vio_printf(sock, "# Data from APBS\n");
+            Vio_printf(sock, "# \n");
+            Vio_printf(sock, "# %s\n", title);
+            Vio_printf(sock, "# \n");
+        }
 
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nxPART, nyPART, nzPART);
-        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xminPART, yminPART,
+        Vio_printf(sock, "origin %12.6e %12.6e %12.6e\n", xminPART, yminPART,
           zminPART);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", hx, 0.0, 0.0);
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, 0.0, hzed);
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
           nxPART, nyPART, nzPART);
@@ -793,7 +742,7 @@ data follows\n", (nxPART*nyPART*nzPART));
                 for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
                     if (pvec[u] != 0) {
-                        Vio_printf(sock, "%12.6E ", thee->data[u]);
+                        Vio_printf(sock, "%12.6e ", thee->data[u]);
                         icol++;
                         if (icol == 3) {
                             icol = 0;
@@ -816,19 +765,26 @@ class field\n");
 
     } else {
 
-        /* Write off the title */
-        Vio_printf(sock, "# Data from APBS/PMG\n");
-        Vio_printf(sock, "# \n");
-        Vio_printf(sock, "# %s\n", title);
-        Vio_printf(sock, "# \n");
+        /* Write off the title (if we're not XDR) */
+        if (Vstring_strcasecmp(iofmt, "XDR") == 0) {
+            Vnm_print(0, "Vgrid_writeDX:  Skipping comments for XDR format.\n");
+        } else {
+            Vnm_print(0, "Vgrid_writeDX:  Writing comments for %s format.\n",
+              iofmt);
+            Vio_printf(sock, "# Data from APBS\n");
+            Vio_printf(sock, "# \n");
+            Vio_printf(sock, "# %s\n", title);
+            Vio_printf(sock, "# \n");
+        }
+
 
         /* Write off the DX regular positions */
         Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
           nx, ny, nz);
-        Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0); 
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
-        Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+        Vio_printf(sock, "origin %12.6e %12.6e %12.6e\n", xmin, ymin, zmin);
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", hx, 0.0, 0.0); 
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, hy, 0.0);
+        Vio_printf(sock, "delta %12.6e %12.6e %12.6e\n", 0.0, 0.0, hzed);
     
         /* Write off the DX regular connections */
         Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
@@ -842,7 +798,7 @@ data follows\n", (nx*ny*nz));
             for (j=0; j<ny; j++) { 
                 for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
-                    Vio_printf(sock, "%12.6E ", thee->data[u]);
+                    Vio_printf(sock, "%12.6e ", thee->data[u]);
                     icol++;
                     if (icol == 3) {
                         icol = 0;
@@ -931,12 +887,12 @@ will have significant overlap.\n");
 
     /* Write out the header */
     Vio_printf(sock, "%72s\n", title);
-    Vio_printf(sock, "%12.5E%12.5E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0,
+    Vio_printf(sock, "%12.5e%12.5e%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0,
       nz, 1, nz);
-    Vio_printf(sock, "%7d%7d%7d%12.5E%12.5E%12.5E%12.5E\n", nx, ny, nz,
+    Vio_printf(sock, "%7d%7d%7d%12.5e%12.5e%12.5e%12.5e\n", nx, ny, nz,
       hx, xmin, ymin, zmin);
-    Vio_printf(sock, "%12.5E%12.5E%12.5E%12.5E\n", 0.0, 0.0, 0.0, 0.0);
-    Vio_printf(sock, "%12.5E%12.5E%7d%7d", 0.0, 0.0, 0, 0);
+    Vio_printf(sock, "%12.5e%12.5e%12.5e%12.5e\n", 0.0, 0.0, 0.0, 0.0);
+    Vio_printf(sock, "%12.5e%12.5e%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
     icol = 0;
@@ -947,7 +903,7 @@ will have significant overlap.\n");
             for (i=0; i<nx; i++) {
                 u = k*(nx)*(ny)+j*(nx)+i;
                 icol++;
-                Vio_printf(sock, " %12.5E", thee->data[u]);
+                Vio_printf(sock, " %12.5e", thee->data[u]);
                 if (icol == 6) {
                     icol = 0;
                     Vio_printf(sock, "\n");
