@@ -125,7 +125,7 @@ VEXTERNC double Vacc_atomSASA(Vacc *thee, double radius, int iatom);
 VEXTERNC void Vacc_getNborAtoms(Vacc *thee, double coord[3], int *atomIDs[6]);
 /* ** FORCE EVALUATION STUFF ** */
 VEXTERNC double** Vacc_qrule(Vacc *thee, int *npts);
-VEXTERNC int Vacc_contact(Vacc *thee, Vec3 center, double radius, 
+VEXTERNC int Vacc_contact(Vacc *thee, double center[3], double radius, 
   int *ncontact, int *contacts);
 VEXTERNC double** Vacc_srf(Vacc *thee, double probe_radius, int *npts);
 VEXTERNC double** Vacc_SRsrf(Vacc *thee, double probe_radius, int *npts);

@@ -113,10 +113,10 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 
     /* Grid variables */
     int i;
-    double x, y, z, *coord, dx, dy, dz, dx2, dy2, dz2;
+    double x, y, z, *coord;
     double x_max, y_max, z_max;
     double x_min, y_min, z_min;
-    int ii, jj, kk, totatoms, dumi;
+    int ii, jj, kk, totatoms;
     int i_min, j_min, k_min;
     int i_max, j_max, k_max;
     /* Natural grid coordinate (array position) */
@@ -521,6 +521,7 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
   char *iodev, char *iofmt, char *iohost, char *iofile) {
 
     double *accVals[MAXV], coord[3];
+    Vio *sock;
     int ivert, icoord;
 
     for (ivert=0; ivert<MAXV; ivert++) accVals[ivert] = VNULL;
@@ -540,7 +541,9 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
             accVals[1][ivert] = (double)Vacc_vdwAcc(thee, coord);
         } else VASSERT(0);
     }
-    Gem_writeGMV(gm, iodev, iofmt, iohost, iofile, 1, accVals);
+    sock = Vio_ctor(iodev, iofmt, iohost, iofile, "w");
+    Gem_writeGMV(gm, sock, 1, accVals);
+    Vio_dtor(&sock);
     Vmem_free(thee->vmem, Gem_numVV(gm), sizeof(double), 
       (void **)&(accVals[0]));
     Vmem_free(thee->vmem, Gem_numVV(gm), sizeof(double), 
