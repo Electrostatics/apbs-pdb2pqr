@@ -9,7 +9,7 @@
  * @section license License
  *
  * <blockquote>
- * Copyright (c) 2002.  Washington University in St. Louis.
+ * Copyright (c) 2002-2003.  Washington University in St. Louis.
  * All Rights Reserved.
  *
  * Portions Copyright (c) 1999-2002.  The Regents of the University of

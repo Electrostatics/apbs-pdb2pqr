@@ -15,6 +15,8 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
+ * Copyright (c) 2002-2003.  Washington University in St. Louis.
+ * All Rights Reserved.
  * Copyright (c) 1999-2002.  The Regents of the University of California.
  * Portions Copyright (c) 1995.  Michael Holst.
  *
