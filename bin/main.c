@@ -155,6 +155,8 @@ int main(int argc, char **argv) {
     Vio_start();
     Vnm_tstart(26, "APBS WALL CLOCK");
     Vnm_print(1, "%s", header);
+    Vnm_print(1, "This executable compiled on %s at %s\n\n", __DATE__, 
+      __TIME__);
     if (argc != 2) {
         Vnm_print(2,"%s\n", usage);
         return APBSRC;
