@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
     Vgrid *kappaMap[NOSH_MAXMOL];
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
-    int i, rank, size, isolve;
+    int i, rank, size, isolve, k;
     unsigned long int bytesTotal, highWater;
 
     /* These variables require some explaining... The energy double arrays
@@ -233,9 +233,16 @@ int main(int argc, char **argv) {
 
         /* ***** Do MG calculation ***** */
         if (nosh->calc[i].calctype == 0) {
-
-            Vnm_tprint( 1, "CALCULATION #%d: MULTIGRID\n", i+1);
-
+            for (k=0; k<nosh->nelec; k++){
+              if (nosh->elec2calc[k] >= i){
+                break;
+              }
+            }
+            if (Vstring_strcasecmp(nosh->elecname[k+1], "") == 0){
+              Vnm_tprint( 1, "CALCULATION #%d: MULTIGRID\n", i+1);
+            } else {
+              Vnm_tprint( 1, "CALCULATION #%d (%s): MULTIGRID\n", i+1, nosh->elecname[k+1]);
+            }
             /* Useful local variables */
             mgparm = nosh->calc[i].mgparm;
             pbeparm = nosh->calc[i].pbeparm;
@@ -294,8 +301,17 @@ int main(int argc, char **argv) {
         } else {
 
 #ifdef HAVE_MC_H
-            Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
-
+            for (k=0; k<nosh->nelec; k++){
+              if (nosh->elec2calc[k] >= i){
+                break;
+              }
+            }
+            if (Vstring_strcasecmp(nosh->elecname[i+1], "") == 0){
+              Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
+            } else {
+              Vnm_tprint( 1, "CALCULATION #%d (%s): FINITE ELEMENT\n", i+1, nosh->elecname[k+1]);
+            }
+          
             /* Useful local variables */
             feparm = nosh->calc[i].femparm;
             pbeparm = nosh->calc[i].pbeparm;
