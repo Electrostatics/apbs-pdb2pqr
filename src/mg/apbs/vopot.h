@@ -98,7 +98,7 @@ VEXTERNC Vopot*  Vopot_ctor(Vmgrid *mgrid, Vpbe *pbe, Vbcfl bcfl);
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @param   thee  Pointer to newly allocated Vopot object
- *  @param   grid  Multiple grid object containing potential data (in units
+ *  @param   mgrid  Multiple grid object containing potential data (in units
  *                 kT/e)
  *  @param   pbe   Pointer to Vpbe object for parameters
  *  @param   bcfl  Boundary condition to use for potential values off the grid

@@ -199,7 +199,7 @@ struct sNOsh {
     int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP]; /**< ELEC id (see elec2calc) */
     int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  /**< Operation id (0 = add, 1 = 
                                           * subtract) */
-  int parsed;                            /**< Have we parsed an input file
+    int parsed;                          /**< Have we parsed an input file
                                           * yet? */
 
 };
@@ -414,7 +414,7 @@ VEXTERNC void  NOsh_dtor2(NOsh *thee);
 
 /** @brief   Parse an input file from a socket
  *  @ingroup NOsh
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee  Pointer to NOsh object
  *  @param   sock  Stream of tokens to parse
  *  @return  1 if successful, 0 otherwise

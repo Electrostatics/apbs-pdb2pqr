@@ -87,7 +87,7 @@ enum eMGparm_CentMeth {
 typedef enum eMGparm_CentMeth MGparm_CentMeth;
 /**
  *  @ingroup MGparm
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @brief   Parameter structure for MG-specific variables from input files
  *  @note    If you add/delete/change something in this class, the member
  *           functions -- especially MGparm_copy -- must be modified
@@ -164,7 +164,8 @@ struct sMGparm {
     int setsize;  /**< Flag, @see proc_size */
     double ofrac;  /**< Overlap fraction between procs */
     int setofrac;  /**< Flag, @see ofrac */
-
+    int async; /**< Processor ID for asynchronous calculation */
+    int setasync; /**< Flag, @see asynch */
 };
 
 /** @typedef MGparm
@@ -303,7 +304,7 @@ VEXTERNC MGparm*  MGparm_ctor(MGparm_CalcType type);
 
 /** @brief   FORTRAN stub to construct MGparm object
  *  @ingroup MGparm
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee Space for MGparm object
  *  @param   type Type of MG calculation
  *  @returns 1 if succesful, 0 otherwise
@@ -334,7 +335,7 @@ VEXTERNC int      MGparm_check(MGparm *thee);
 
 /** @brief   Copy MGparm object into thee
  *  @ingroup MGparm
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee   MGparm object (target for copy)
  *  @param   parm   MGparm object (source for copy)
  */
@@ -342,7 +343,7 @@ VEXTERNC void     MGparm_copy(MGparm *thee, MGparm *parm);
 
 /** @brief   Parse an MG keyword from an input file
  *  @ingroup MGparm
- *  @author  Nathan Baker
+ *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee   MGparm object 
  *  @param   tok    Token to parse
  *  @param   sock   Stream for more tokens

@@ -118,6 +118,19 @@ int invertTransform(double A[3][3], double b[3], double C[3][3], double d[3]) {
     C[2][1] = ( A[0][1]*A[2][0]-A[0][0]*A[2][1])/detA;
     C[2][2] = (-A[0][1]*A[1][0]+A[0][0]*A[1][1])/detA;
 
+    printf("%4.3f %4.3f %4.3f\n", 
+            A[0][0]*C[0][0] + A[0][1]*C[1][0] + A[0][2]*C[2][0],
+            A[0][0]*C[0][1] + A[0][1]*C[1][1] + A[0][2]*C[2][1],
+            A[0][0]*C[0][2] + A[0][1]*C[1][2] + A[0][2]*C[2][2]);
+    printf("%4.3f %4.3f %4.3f\n", 
+            A[1][0]*C[0][0] + A[1][1]*C[1][0] + A[1][2]*C[2][0],
+            A[1][0]*C[0][1] + A[1][1]*C[1][1] + A[1][2]*C[2][1],
+            A[1][0]*C[0][2] + A[1][1]*C[1][2] + A[1][2]*C[2][2]);
+    printf("%4.3f %4.3f %4.3f\n", 
+            A[2][0]*C[0][0] + A[2][1]*C[1][0] + A[2][2]*C[2][0],
+            A[2][0]*C[0][1] + A[2][1]*C[1][1] + A[2][2]*C[2][1],
+            A[2][0]*C[0][2] + A[2][1]*C[1][2] + A[2][2]*C[2][2]);
+
     /* Compute d */
     d[0] = -(C[0][0]*b[0]+C[0][1]*b[1]+C[0][2]*b[2]);
     d[1] = -(C[1][0]*b[0]+C[1][1]*b[1]+C[1][2]*b[2]);
@@ -508,6 +521,7 @@ int main(int argc, char **argv) {
                     val1 = sval1*mval1;
                     val2 = sval2*mval2;
                     dval = mval1*mval2*(sval1 - sval2);
+
                     /* L2 */
                     norm1_L2 += VSQR(val1);
                     norm2_L2 += VSQR(val2);
@@ -519,6 +533,22 @@ int main(int argc, char **argv) {
                     normDiff_L1 += VABS(dval);
                     /* Volume */
                     svol += dvol;
+
+                    if (isnan(norm1_L2) || isnan(norm2_L2)) {
+                        Vnm_print(2, "ERROR!  Got NaN!\n");
+                        Vnm_print(2, "p1 = (%1.12E, %1.12E, %1.12E)\n", 
+                                p1[0], p1[1], p1[2]);
+                        Vnm_print(2, "p2 = (%1.12E, %1.12E, %1.12E)\n", 
+                                p2[0], p2[1], p2[2]);
+                        Vnm_print(2, "mval1 = %1.12E\n", mval1);
+                        Vnm_print(2, "mval2 = %1.12E\n", mval2);
+                        Vnm_print(2, "sval1 = %1.12E\n", sval1);
+                        Vnm_print(2, "sval2 = %1.12E\n", sval2);
+                        Vnm_print(2, "val1 = %1.12E\n", val1);
+                        Vnm_print(2, "val2 = %1.12E\n", val2);
+                        Vnm_print(2, "dval = %1.12E\n", dval);
+                        VASSERT(0);
+                    }
                 }
 
                 /* Measures based on gradients */
@@ -545,9 +575,15 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Volume used to calculate H1 measures        = %1.12E\n", 
             gvol);
     /* L2 */
+    printf("norm1_L2^2 = %1.12E\n", norm1_L2);
     norm1_L2 = VSQRT(norm1_L2*dvol);
+    printf("norm1_L2 = %1.12E\n", norm1_L2);
+    printf("norm2_L2^2 = %1.12E\n", norm2_L2);
     norm2_L2 = VSQRT(norm2_L2*dvol);
+    printf("norm2_L2 = %1.12E\n", norm2_L2);
+    printf("normDiff_L2^2 = %1.12E\n", normDiff_L2);
     normDiff_L2 = VSQRT(normDiff_L2*dvol);
+    printf("normDiff_L2 = %1.12E\n", normDiff_L2);
     ip_L2 = ip_L2*dvol;
     Vnm_print(1, "Set 1 absolute L2 norm           = %1.12E\n", norm1_L2);
     Vnm_print(1, "Set 2 absolute L2 norm           = %1.12E\n", norm2_L2);
