@@ -146,8 +146,8 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
                 if (usedVert[VV_id(vert)] == 0) {
                     usedVert[VV_id(vert)] = 1;
                     thee->localPartCenter[0] += VV_coord(vert, 0);
-                    thee->localPartCenter[1] += VV_coord(vert, 0);
-                    thee->localPartCenter[2] += VV_coord(vert, 0);
+                    thee->localPartCenter[1] += VV_coord(vert, 1);
+                    thee->localPartCenter[2] += VV_coord(vert, 2);
                     nLocalVerts++;
                 }
             }
