@@ -627,7 +627,7 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
     MATsym pqsym;
     int i, j, jj;
     int *IA, *JA;
-    double *D, *L;
+    double *D, *L, *U;
     FILE *fp;
 
     char mmtitle[72];
@@ -635,10 +635,11 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
     int totc = 0, ptrc = 0, indc = 0, valc = 0;
     char mxtyp[] = {"RUA"}; /* Real Unsymmetric Assembled */
     int nrow = 0, ncol = 0, numZ = 0;
-    char ptrfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
-    char indfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
-    char valfmt[] = {"(6E13.6)            "}; /* 6 per line of size 13.6 */
-    char rhsfmt[] = {"(6E13.6)            "}; /* 6 per line of size 13.6 */
+    int numZdigits = 0, nrowdigits = 0;
+    int nptrline = 8, nindline = 8, nvalline = 5;
+    char ptrfmt[] = {"(8I10)          "}, ptrfmtstr[] = {"%10d"};
+    char indfmt[] = {"(8I10)          "}, indfmtstr[] = {"%10d"};
+    char valfmt[] = {"(5E16.8)            "}, valfmtstr[] = {"%16.8E"};
 
     VASSERT( thee->numB == 1 );             /* HARDWIRE FOR NOW */
     Ablock = thee->AD[0][0];
@@ -651,36 +652,32 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
         mxtyp[1] = 'S';
     } else if ( pqsym == ISNOT_SYM ) {
         mxtyp[1] = 'U';
-        VASSERT( 0 ); /* NOT CODED YET */
     } else {
-        VASSERT( 0 );
+        VASSERT( 0 ); /* NOT VALID */
     }
 
     nrow = Bmat_numRT( thee ); /* Number of rows */
     ncol = Bmat_numCT( thee ); /* Number of cols */
     numZ = Bmat_numZT( thee ); /* Number of entries */
 
-    if ( ( (Bmat_numCT( thee ) + 1) % 8 ) == 0 ) { /* 8 pointers per line */
-        ptrc = (Bmat_numCT( thee ) + 1) / 8;
-    } else {
-        ptrc = (int) ( (Bmat_numCT( thee ) + 1) / 8 ) + 1;
-    }
+    nrowdigits = (int) (log( nrow )/log( 10 )) + 1;
+    numZdigits = (int) (log( numZ )/log( 10 )) + 1;
 
-    if ( (Bmat_numZT( thee ) % 8 ) == 0 ) { /* 8 indices per line */
-        indc = Bmat_numZT( thee ) / 8;
-    } else {
-        indc = (int) ( Bmat_numZT( thee ) / 8 ) + 1;
-    }
+    nptrline = (int) ( 80 / (numZdigits + 1) );
+    nindline = (int) ( 80 / (nrowdigits + 1) );
 
-    if ( ( Bmat_numZT( thee ) % 6 ) == 0 ) { /* 6 values per line */
-        valc = Bmat_numZT( thee ) / 6;
-    } else {
-        valc = (int) ( Bmat_numZT( thee ) / 6 ) + 1;
-    }
+    sprintf(ptrfmt,"(%dI%d)",nptrline,numZdigits+1);
+    sprintf(ptrfmtstr,"%%%dd",numZdigits+1);
+    sprintf(indfmt,"(%dI%d)",nindline,nrowdigits+1);
+    sprintf(indfmtstr,"%%%dd",nrowdigits+1);
+
+    ptrc = (int) ( ( (ncol + 1) - 1 ) / nptrline ) + 1;
+    indc = (int) ( (numZ - 1) / nindline ) + 1;
+    valc = (int) ( (numZ - 1) / nvalline ) + 1;
 
     totc = ptrc + indc + valc;
 
-    sprintf( mmtitle, "Harwell-Boeing format %s matrix  <%s>",
+    sprintf( mmtitle, "Sparse '%s' Matrix - Harwell-Boeing Format - '%s'",
              thee->name, fname );
 
    /* Step 0:  Open the file for writing */
@@ -696,25 +693,26 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
     fprintf( fp, "%-72s%-8s\n", mmtitle, mmkey );
     fprintf( fp, "%14d%14d%14d%14d%14d\n", totc, ptrc, indc, valc, 0 );
     fprintf( fp, "%3s%11s%14d%14d%14d\n", mxtyp, " ", nrow, ncol, numZ );
-    fprintf( fp, "%-16s%-16s%-20s%-20s\n", ptrfmt, indfmt, valfmt, rhsfmt );
+    fprintf( fp, "%-16s%-16s%-20s%-20s\n", ptrfmt, indfmt, valfmt, "6E13.5" );
 
     IA = Ablock->IA;
     JA = Ablock->JA;
     D = Ablock->diag;
     L = Ablock->offL;
+    U = Ablock->offU;
 
     if ( pqsym == IS_SYM ) {
 
         /* Step 2:  Print the pointer information */
 
         for (i=0; i<(ncol+1); i++) {
-            fprintf( fp, "%9d", Ablock->IA[i] + (i+1) );
-            if ( ( (i+1) % 8 ) == 0 ) {
+            fprintf( fp, ptrfmtstr, Ablock->IA[i] + (i+1) );
+            if ( ( (i+1) % nptrline ) == 0 ) {
                 fprintf( fp, "\n" );
             }
         }
 
-        if ( ( (ncol+1) % 8 ) != 0 ) {
+        if ( ( (ncol+1) % nptrline ) != 0 ) {
             fprintf( fp, "\n" );
         }
 
@@ -722,21 +720,21 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
 
         j = 0;
         for (i=0; i<ncol; i++) {
-            fprintf( fp, "%9d", i + 1); /* Index for the diagonal */
-            if ( ( (j+1) % 8 ) == 0 ) {
+            fprintf( fp, indfmtstr, i+1); /* diagonal */
+            if ( ( (j+1) % nindline ) == 0 ) {
                 fprintf( fp, "\n" );
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
-                fprintf( fp, "%9d", JA[jj] + 1 );
-                if ( ( (j+1) % 8 ) == 0 ) {
+                fprintf( fp, indfmtstr, JA[jj] + 1 ); /* lower triangle */
+                if ( ( (j+1) % nindline ) == 0 ) {
                     fprintf( fp, "\n" );
                 }
                 j++;
             }
         }
-        
-        if ( ( j % 8 ) != 0 ) {
+
+        if ( ( j % nindline ) != 0 ) {
             fprintf( fp, "\n" );
         }
 
@@ -744,31 +742,30 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
 
         j = 0;
         for (i=0; i<ncol; i++) {
-            fprintf( fp, "%13.6E", D[i] );
-            if ( ( (j+1) % 6 ) == 0 ) {
+            fprintf( fp, valfmtstr, D[i] );
+            if ( ( (j+1) % nvalline ) == 0 ) {
                 fprintf( fp, "\n" );
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
-                fprintf( fp, "%13.6E", L[jj] );
-                if ( ( (j+1) % 6 ) == 0 ) {
+                fprintf( fp, valfmtstr, L[jj] );
+                if ( ( (j+1) % nvalline ) == 0 ) {
                     fprintf( fp, "\n" );
                 }
                 j++;
             }
         }
-
-        if ( ( j % 6 ) != 0 ) {
+            
+        if ( ( j % nvalline ) != 0 ) {
             fprintf( fp, "\n" );
         }
-
+        
     } else { /* ISNOT_SYM */
-
+        
         VASSERT( 0 ); /* NOT CODED YET */
     }
 
     /* Step 5:  Close the file */
-
     fclose( fp );
 
 }
