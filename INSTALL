@@ -30,107 +30,159 @@ TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
 MODIFICATIONS. 
 ------------------------------------------------------------------------
 
-==============================
-Unpacking the gzipped tar file
-==============================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ INTRODUCTION
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Please see the README file for more information
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ CONTENTS
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+1.  General install instructions for sequential machines
+    1.1  Obtaining APBS
+    1.2  Prerequisites
+    1.3  Recommended directory structure
+    1.4  Compilation of the MCtk and PMG prerequisites
+    1.5  Compilation of APBS
+2. Additional install intructions for parallel machines
+3. Platform-specific instructions
+    3.1 Intel ix86 processor family with GCC 2.95.1 compiler
+    3.2 NPACI IBM RS/6000 Power3 Blue Horizon supercomputer
+    3.3 Sun compilers
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ 1. GENERAL INSTALL INSTRUCTIONS FOR SEQUENTIAL MACHINES
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+========================================================================
+1.1 Obtaining APBS
+========================================================================
+APBS is available from http://wasabi.ucsd.edu/~nbaker/research/pbe.html
+
+========================================================================
+1.2 Prerequisites
+========================================================================
+APBS is built on the Holst research group's MCtk (MC toolkit), available
+from http://scicomp.ucsd.edu/~mholst/codes/mctk/index.html.
+You will need the MC and MCX components of MCtk.  The PMGC library, available
+from http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html, is also required if
+uniform-mesh multigrid functionality is desired.  Please read the instructions
+below before installing any of these packages.
+       
+========================================================================
+1.3 Recommended directory structure
+========================================================================
+It is recommended that APBS and the MCtk header files and libraries share a
+common install directory.  For the purpose of these instructions, we will
+assume that all APBS and MCtk components are installed under the directory
+$MANIFOLD.  Un-archive the MCtk and PMGC components into this directory:
+
+      cd $MANIFOLD
+      gzip -dc mctk.tar.gz | tar xvf -
+      gzip -dc pmgc.tar.gz | tar xvf -
+
+to generate the $MANIFOLD/mctk and $MANIFOLD/pmgc subdirectories.  Also create
+a directory for the installation of header files and libraries
+
+      mkdir $MANIFOLD/dist
+
+and set the MC_INCLUDE and MC_LIBRARY environmental variables to this path
+
+      setenv MC_INCLUDE $MANIFOLD/dist/include
+      setenv MC_LIBRARY $MANIFOLD/dist/lib
+
+========================================================================
+1.4 Compilation of the MCtk and PMGC prerequisites
+========================================================================
+See the INSTALL files of the individual packages for more information.
+Make sure that you have set $MC_INCLUDE and $MC_LIBRARY as indicated above.
+You then simply need to configure, build, and install the MCtk and PMGC
+packages.
+
+    cd $MANIFOLD/mctk/mc
+    ./configure --prefix=${MANIFOLD}/dist --enable-vhack
+    make
+    make install
+    cd $MANIFOLD/mctk/mcx
+    ./configure --prefix=${MANIFOLD}/dist 
+    make
+    make install
+    cd $MANIFOLD/pmgc
+    ./configure --prefix=${MANIFOLD}/dist 
+    make
+    make install
+
+If you made a mess and need to start over, simply
+
+    make distclean
+
+========================================================================
+1.5 Compilation of APBS
+========================================================================
 APBS is distributed as a gzipped tar file, "apbs.tgz".  The following command
 will unpack APBS into a number of files and subdirectories on any UNIX 
 machine (and on any WinNT machine with the GNU-Win32 tools gzip and tar).
 
-    gzip -dc apbs.tgz | tar xvf -
+    cd $MANIFOLD
+    gzip -dc apbs.tar.gz | tar xvf -
 
-====================================
-Installing the prerequisite software
-====================================
-APBS requires the multilevel finite element library MC, available from the 
-Holst research group (http://www.scicomp.ucsd.edu/~mholst).  MC should be 
-configured to use special hooks for interfacing with APBS by including the 
-"--enable-vhack" option, i.e.
+You then simply need to configure, build, and install the APBS packages
 
-      ./configure --enable-vhack
-
-If APBS is to be compiled with parallel support, MC should also be configured 
-to use MPI, by including the "--enable-mpi", "--with-mpilib", and 
-"--with-mpiinc" flags during configure.  For example,
-
-      ./configure --enable-vhack --enable-mpi --with-mpilib=PATH1  \
-          --with-mpiinc=PATH2
-
-Follow the rest of the instructions included with the MC distribution to 
-compile a working version of MC before proceeding with the APBS installation.
-
-======================================================================
-Building the package using the GNU "configure" shell script and "make"
-======================================================================
-
-The "configure" shell script in the APBS_ROOT directory (the toplevel directory
-created when you unpacked the APBS tgz file) will build the entire package.
-This is a standard GNU autoconf-generated configuration script.
-If you're not interested in running APBS with MPI support, you should be able 
-to simply type:
-
-    ./configure 
+    cd $MANIFOLD/mctk/apbs
+    ./configure --prefix=${MANIFOLD}/dist 
     make
     make install
 
-If you need MPI support, replace the above with 
+If PMGC was not installed in the previous steps, the installation will succeed,
+but uniform-mesh multigrid support will not available.  If you made a mess and
+need to start over, simply
 
-    ./configure --enable-vhack --enable-mpi --with-mpilib=MC_MPI_LIBRARY  \
-          --with-mpiinc=MC_MPI_INCLUDE
+    make distclean
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ 2. ADDITIONAL INSTALL INSTRUCTIONS FOR PARALLEL MACHINES
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+If you are on a parallel platform and wish to enable the parallel features of
+APBS, locate the MPI header file and library directories.  Specifically, find
+the directory that contains mpi.h and set the environmental variable
+MC_MPI_INCLUDE 
+
+    setenv MC_MPI_INCLUDE (the directory that contains mpi.h)
+
+You need to do the same thing for the libmpi.a library.  Note that for MPICH
+MPI distributions, you may actually need to create a symbolic link from
+libmpich.a to libmpi.a.  After this directory has been located, set the
+environmental variable MC_MPI_LIBRARY
+
+    setenv MC_MPI_LIBRARY (the directory that contains libmpi.a)
+
+The above instructions for compiling MCtk, PMGC, and APBS can then be followed
+with one modification.  For _ALL_ packages, the option "--enable-mpi"
+must be added to the `./configure` command line.  For example, the new
+installation commands for the APBS package would be
+
+    cd $MANIFOLD/mctk/apbs
+    ./configure --prefix=${MANIFOLD}/dist --enable-mpi
     make
     make install
 
-where MC_MPI_LIBRARY is the path to the directory in which libmpi.a resides 
-and MC_MPI_INCLUDE is the path to the directory in which mpi.h resides.
 
-If you ever need to rebuild the configure script or Makefile.in files that 
-configure uses, the procedure is rougly as follows.  You first run aclocal to 
-generate some m4 macros in the file aclocal.m4 which automake needs to use.
-You then run autoconf to generate the master configure script in the root 
-directory, from the input file configure.in.  You then run autoheader to
-generate a config.h.in file from configure.in that will be used by configure
-to generate a config.h file for the package.  You then finally run automake to
-generate a Makefile.in file from each Makefile.am in various subdirectories 
-specified in configure.in.  The script configure then generates the header
-config.h from config.h.in as well as the final Makefile in each directory from
-the Makefile.in files previously generated by automake.  I.e., you would do:
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ 3.  PLATFORM-SPECIFIC INSTRUCTIONS
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+========================================================================
+3.1 Intel ix86 processor family with GCC 2.95.1 compiler
+========================================================================
+For fast(er) production runs, try setting the CC variable before issuing the 
+configure commands:
 
-    rm -f config.cache
-    aclocal
-    autoconf
-    autoheader
-    automake
+    setenv CC "gcc -O3 -ffast-math -m486 -funroll-loops"
 
-You would then configure and build as before:
+========================================================================
+3.2 NPACI IBM RS/6000 Power3 Blue Horizon supercomputer
+========================================================================
+In all cases, set the CC variable before ./configure:
 
-    ./configure
-    make
-    make install
-
-======================================================================
-Notes for installation on various platforms
-======================================================================
-----------------------------------
-Intel ix86 processor family with GCC 2.95.1 compiler
-----------------------------------
-Set the CC variable before ./configure depending on what you want to do:
-
-  Figure out why the code isn't working:
-  % setenv CC "gcc -Wall -g -O"
-
-  Do production runs
-  % setenv CC "gcc -O3 -ffast-math -m486 -funroll-loops"
-
-Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
-compiling.
-
-----------------------------------
-The Power3 IBM Blue Horizon system
-----------------------------------
-Set the CC variable before ./configure:
-
-% setenv CC "mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
+    setenv CC "mpcc -bmaxdata:0x???????? -bmaxstack:0x10000000 \
                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
 
@@ -146,38 +198,20 @@ to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
 In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
 384 MB heap space per task.
 
-You should configure APBS to use MPI:
-
-     ./configure --enable-mpi --with-mpilib=/usr/lpp/ppe.poe/lib \
-        --with-mpiinc=/usr/lpp/ppe.poe/include
-
+You should also configure MCtk, PMGC, and APBS to use MPI as described above.
 Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
 compiling; configure seems to mess up the detection of the headers when
 building config.h.  
 
-Finally, a single electrostatics calculation via APBS requires so little
-communication, that it makes since to use the IP-based MPI implementation
+Finally, since a single electrostatics calculation via APBS requires so little
+communication, it makes since to use the IP-based MPI implementation
 and thereby allow 8 tasks (processes) per node.  Check the NPACI
 documentation for more information on this.
 
--------------------
-NPACI/SDSC Cray T3E
--------------------
-Configure MC with 
-
-   ./configure --enable-vhack --enable-mpi --with-mpilib=/opt/ctl/mpt/mpt/lib \
-       --with-mpiinc=/opt/ctl/mpt/mpt/include
-
-and APBS with
-
-   ./configure --enable-mpi --with-mpilib=/opt/ctl/mpt/mpt/lib \
-       --with-mpiinc=/opt/ctl/mpt/mpt/include
-
---------------------
-SDSC Sun E10K System
---------------------
-The Sun compiler is very strange.  I used gcc instead.
-CC=gcc
-MC_MPI_LIBRARY=/usr/local/apps/mpi-1.0.13/lib/solaris/ch_p4
-MC_MPI_INCLUDE=/usr/local/apps/mpi-1.0.13/include
-
+========================================================================
+3.3 Sun compilers
+========================================================================
+Sun compilers are very strange; I have not been able to use them to compile
+MCtk/PMGC/APBS.  Use gcc instead:
+    
+    setenv CC gcc
