@@ -54,7 +54,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
-    thee = (Vpbe*)calloc( 1, sizeof(Vpbe) );
+    thee = Vram_ctor( 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, gm));
 
@@ -147,7 +147,7 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee)->paramFlag) Vhash_dtor(&((*thee)->hash));
     if ((*thee) != VNULL) {
         Vpbe_dtor2(*thee);
-        free( *thee );
+        Vram_dtor(thee, 1, sizeof(Vpbe) );
         (*thee) = VNULL;
     }
 }

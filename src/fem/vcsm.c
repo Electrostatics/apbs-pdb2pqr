@@ -40,6 +40,7 @@
 //
 /////////////////////////////////////////////////////////////////////////// */
 VPRIVATE void Vcsm_freeArrays(Vcsm *thee);
+VPRIVATE Vram* Vram_realloc(Vram **thee, int num, int size, int newNum);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_ctor
@@ -56,7 +57,7 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vcsm *thee = VNULL;
-    thee = (Vcsm*)calloc( 1, sizeof(Vcsm) );
+    thee = Vram_ctor( 1, sizeof(Vcsm) );
     VASSERT( thee != VNULL);
     VASSERT( Vcsm_ctor2(thee, alist, gm));
 
@@ -105,10 +106,10 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
     int iatom, isimp, jsimp;
-    int nsimps, gotSimp;
+    int gotSimp;
     /* Atomic information */
     Vatom *atom;
-    double *position, charge, nsimpsf;
+    double *position;
     /* Simplex/Vertex information */
     SS *simplex;
 
@@ -177,6 +178,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
         }
     }
 
+    thee->msimp = thee->nsimp;
     thee->initFlag = 1;
 }
 
@@ -194,7 +196,7 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
     Vcsm_freeArrays(*thee);
     if ((*thee) != VNULL) {
         Vcsm_dtor2(*thee);
-        free( *thee );
+        Vram_dtor((Vram **)thee, 1, sizeof(Vcsm));
         (*thee) = VNULL;
     }
 }
@@ -222,12 +224,13 @@ VPRIVATE void Vcsm_freeArrays(Vcsm *thee) {
 
         Vnm_print(0,"Vcsm_freeArrays: freeing sqm entries.\n"); 
         for (i=0; i<thee->nsimp; i++) {
-            if (thee->nsqm[i] > 0) free(thee->sqm[i]);
+            if (thee->nsqm[i] > 0) Vram_dtor((Vram **)&(thee->sqm[i]),
+               thee->nsqm[i], sizeof(int));
         }
         Vnm_print(0,"Vcsm_freeArrays: freeing sqm.\n"); 
-        free(thee->sqm);
+        Vram_dtor((Vram **)&(thee->sqm), 1, sizeof(int *));
         Vnm_print(0,"Vcsm_freeArrays: freeing nsqm.\n"); 
-        free(thee->nsqm);
+        Vram_dtor((Vram **)&(thee->nsqm), 1, sizeof(int));
 
     }
 }
@@ -334,7 +337,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Object info */
     Vatom *atom;
     SS *simplex;
-    double *position, charge, nsimpsf;
+    double *position;
     /* Lists */
     int *qParent; int nqParent;
     int **sqmNew; int *nsqmNew;
@@ -349,18 +352,29 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     while (!gotMem) {
         if (isimp > thee->msimp) {
             isimp = 2 * isimp;
-            printf("Vcsm_update: going to allocate %d entries\n", isimp);
+       
+#if 0
+            printf("WARNING: USING SYSTEM REALLOC\n");
+            VASSERT( (thee->nsqm =
+               realloc(thee->nsqm, isimp * sizeof(int))) != VNULL);
+            VASSERT( (thee->sqm =
+               realloc(thee->sqm, isimp * sizeof(int *))) != VNULL);
+#else
             VASSERT( (thee->nsqm = 
-              realloc(thee->nsqm, isimp * sizeof(int))) != VNULL); 
+              Vram_realloc((Vram **)&(thee->nsqm), thee->msimp, sizeof(int), 
+              isimp)) != VNULL); 
             VASSERT( (thee->sqm = 
-              realloc(thee->sqm, isimp * sizeof(int *))) != VNULL); 
+              Vram_realloc((Vram **)&(thee->sqm), thee->msimp, sizeof(int *), 
+              isimp)) != VNULL); 
+#endif
             thee->msimp = isimp;
-            printf("Vcsm_update: reallocated %d entries\n",thee->msimp);
         } else gotMem = 1;
     }
     /* Initialize the nsqm entires we just allocated */
-    for (isimp = thee->nsimp; isimp<thee->nsimp+num-1 ; isimp++) 
-      thee->nsqm[isimp] = 0;
+    for (isimp = thee->nsimp; isimp<thee->nsimp+num-1 ; isimp++) {
+       thee->nsqm[isimp] = 0;
+    }
+    
     thee->nsimp = thee->nsimp + num - 1;
 
     /* There's a simple case to deal with:  if simps[0] didn't have a
@@ -454,7 +468,8 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Replace the existing entries in the table */
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
-        if (thee->nsqm[simpID] > 0) free(thee->sqm[simpID]);
+        if (thee->nsqm[simpID] > 0) Vram_dtor((Vram **)&(thee->sqm[simpID]),
+          thee->nsqm[simpID], sizeof(int));
         thee->sqm[simpID] = sqmNew[isimp];
         thee->nsqm[simpID] = nsqmNew[isimp];
     }
@@ -464,4 +479,20 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vram_realloc
+//
+// Purpose:  A logged version of realloc (using this is usually a bad idea)
+//
+// Author:   Michael Holst
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vram *Vram_realloc(Vram **thee, int num, int size, int newNum)
+{
+    Vram *tee = Vram_ctor(newNum, size);
+    memcpy(tee, (*thee), size*VMIN2(num,newNum));
+    Vram_dtor((Vram **)thee, num, size);                  
+    return tee;                
+}
+
 

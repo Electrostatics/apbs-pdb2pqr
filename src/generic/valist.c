@@ -54,7 +54,7 @@ VPUBLIC Valist* Valist_ctor() {
 
     /* Set up the structure */
     Valist *thee = VNULL;
-    thee = (Valist*)calloc( 1, sizeof(Valist) );
+    thee = Vram_ctor( 1, sizeof(Valist) );
     VASSERT( thee != VNULL);
     VASSERT( Valist_ctor2(thee));
  
@@ -92,7 +92,7 @@ VPUBLIC void Valist_dtor(Valist **thee)
 {
     if ((*thee) != VNULL) {
         Valist_dtor2(*thee);
-        free( *thee );
+        Vram_dtor((Vram **)thee, 1, sizeof(Valist));
         (*thee) = VNULL;
     }
 }
@@ -106,7 +106,7 @@ VPUBLIC void Valist_dtor(Valist **thee)
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor2(Valist *thee) {
 
-    free(thee->atoms);
+    Vram_dtor((Vram **)&(thee->atoms), thee->number, sizeof(Vatom));
     thee->atoms = VNULL;
     thee->number = 0;
 
