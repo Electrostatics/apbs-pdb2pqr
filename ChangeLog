@@ -9,7 +9,6 @@ and portability, including:
   * Removed -g from compiler flags during linking of C and FORTAN under OSF
     (thanks to Dagmar Floeck and Julie Mitchell for help debugging this
      problem)
-  * APBS 
 
 #############################################################################
 PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.2       09-02-01
