@@ -823,19 +823,20 @@ VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
     VASSERT(thee != VNULL);
 
     natoms = Valist_getNumberAtoms(thee->alist);
-
-    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
     for (i=0; i<natoms; i++) {
         simp = Vcsm_getSimplex(thee->csm, 0, i);
         thee->csm->colors[i] = SS_chart(simp);
-        nac[SS_chart(simp)] = 1;
     }
 
     /* Bookkeeping */
+    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
+    for (i=0; i<Vgm_numSS(thee->gm); i++) {
+        simp = Vgm_SS(thee->gm, i);
+        nac[SS_chart(simp)] = 1;
+    }
     for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) 
       if (nac[i] == 0) break;
     ncolors = i;
-    for (i=0; i<VMAXLOCALCOLORSDONTREUSETHISVARIABLE; i++) nac[i] = 0;
     for (i=0; i<natoms; i++) {
         simp = Vcsm_getSimplex(thee->csm, 0, i);
         (nac[SS_chart(simp)])++;
