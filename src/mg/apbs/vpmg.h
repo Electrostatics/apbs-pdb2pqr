@@ -108,6 +108,9 @@ struct Vpmg {
   double extQfEnergy;            /**< Stores contributions to the fixed charge
                                   *   energy from regions outside the problem
                                   *   domain */
+  double extNpEnergy;            /**< Stores contributions to the apolar
+                                  *   energy from regions outside the problem
+                                  *   domain */
   double surfMeth;               /**< Surface definition method */
   double splineWin;              /**< Spline window parm for surf defs */
   int filled;                    /**< Indicates whether Vpmg_fillco has been
@@ -412,6 +415,59 @@ VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
  */
 VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
 
+/** @brief Get the "apolar" energy
+ *
+ *           Using the dielectric map at the finest mesh level, calculate the
+ *           surface area in a manner consistent with the force evaluation
+ *           routines of Im et al (see Vpmg_dbnpForce and Vpmg_dielGradNorm):
+ *              \f[ A = \frac{1}{\epsilon_s-\epsilon_p} \int \| \nabla
+ *              \epsilon \| dx \f]
+ *           where \f$\epsilon\f$ is the dielectric parameter, \f$\epsilon_s\f$
+ *           is the dielectric constant for the solvent and \f$\epsilon_p\f$ is
+ *           the dielectric constant for the protein.  The apolar energy is
+ *           then,
+ *              \f[G_{np} = \gamma S \f]
+ *           where \f$\gamma\f$ is the apolar coefficient set in Vpbe (see
+ *           Vpbe_ctor).  The energy is returned in units of \f$k_b T\f$.
+ *  @ingroup Vpmg
+ *  @author  Nathan Baker
+ *  @note    I personally feel that this routine should not find its way into
+ *           the main APBS driver.  In this case, the apolar energy is
+ *           calculated in a manner consistent with the force evaluation, but
+ *           it is not the only possible apolar energy definition...
+ *           The value of this observable may be modified by setting
+ *           restrictions on the subdomain over which it is calculated.  Such
+ *           limits can be set via Vpmg_setPart and are generally useful for
+ *           parallel runs.
+ *  @param   thee   Vpmg object
+ *  @param   extFlag If this was a focused calculation, then it is possible
+ *                   to include the energy contributions from the outside
+ *                   the focused domain.  This should be on (=1) for
+ *                   sequential focusing calculations and off (=0) for
+ *                   parallel calculations.
+ *  @returns The apolar energy in units of \f$k_B T\f$.
+ */
+VEXTERNC double Vpmg_npEnergy(Vpmg *thee, int extFlag);
+
+/** @brief Get the integral of the gradient of the dielectric function
+ *
+ *           Using the dielectric map at the finest mesh level, calculate the
+ *           integral of the norm of the dielectric function gradient
+ *           routines of Im et al (see Vpmg_dbnpForce for reference):
+ *              \f[ \int \| \nabla \epsilon \| dx \f]
+ *           where \f$\epsilon\f$ is the dielectric parameter.
+ *           The integral is returned in units of A^2.
+ * 
+ *  @ingroup Vpmg
+ *  @author  Nathan Baker
+ *           restrictions on the subdomain over which it is calculated.  Such
+ *           limits can be set via Vpmg_setPart and are generally useful for
+ *           parallel runs.
+ *  @param   thee   Vpmg object
+ *  @returns The integral in units of A^2.
+ */
+VEXTERNC double Vpmg_dielGradNorm(Vpmg *thee);
+
 /** @brief    Calculate the total force on the specified atom in units of
  *            \f$k_B T/\AA\f$
  *  @ingroup Vpmg
@@ -426,11 +482,9 @@ VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
  *           re-used and which are overwritten by PMG.
  *  @param   thee  Vpmg object
  *  @param   force 3*double space to hold the force in units of \f$k_B T/\AA\f$
- *  @param   gamma Apolar force parameter (surface tension) with units \f$k_B
- *                 T/\AA^2\f$
  *  @param   atomID  Valist ID of desired atom
  */
-VEXTERNC void Vpmg_force(Vpmg *thee, double *force, double gamma, int atomID);
+VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID);
 
 /** @brief    Calculate the "charge-field" force on the specified atom in units
  *           of \f$k_B T/\AA\f$
@@ -467,12 +521,10 @@ VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID);
  *           units of \f$k_B T/\AA\f$ 
  *  @param   npForce 3*double space to hold the apolar boudnary force in
  *           units of \f$k_B T/\AA\f$ 
- *  @param   gamma Apolar force parameter (surface tension) with units
- *           \f$k_B T/\AA^2\f$
  *  @param   atomID  Valist ID of desired atom
  */
 VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
-  double gamma, int atomID);
+  int atomID);
 
 /** @brief   Calculate the osmotic pressure on the specified atom in units of
  *           \f$k_B T/\AA\f$

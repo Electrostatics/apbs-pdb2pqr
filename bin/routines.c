@@ -643,7 +643,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     else iparm = 0.0;
     pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
       pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-      pbeparm->pdie, pbeparm->sdie, sparm);
+      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
 
     /* Set up PDE object */
     pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
@@ -914,7 +914,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm,
             if (nosh->bogus == 0) {
                 Vpmg_qfForce(pmg, qfForce, j);
                 Vpmg_ibForce(pmg, ibForce, j);
-                Vpmg_dbnpForce(pmg, dbForce, npForce, pbeparm->gamma, j);
+                Vpmg_dbnpForce(pmg, dbForce, npForce, j);
             } else {
                 for (k=0; k<3; k++) {
                     qfForce[k] = 0; 
@@ -963,7 +963,7 @@ molecule %d\n", pbeparm->molid);
                 Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j);
                 Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j);
                 Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
-                  (*atomForce)[j].npForce, pbeparm->gamma, j);
+                  (*atomForce)[j].npForce, j);
             } else {
                 for (k=0; k<3; k++) {
                     (*atomForce)[j].qfForce[k] = 0;

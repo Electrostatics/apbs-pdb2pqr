@@ -133,6 +133,19 @@ VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getGamma
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getGamma(Vpbe *thee) {
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->gamma;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_getSoluteCenter
 //
 // Author:   Nathan Baker
@@ -293,7 +306,7 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
-                    double *ionRadii, double *ionQ, double T,
+                    double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,
                     double solventRadius) {
 
@@ -302,7 +315,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-      T, soluteDiel, solventDiel, solventRadius) );
+      T, gamma, soluteDiel, solventDiel, solventRadius) );
 
     return thee;
 }
@@ -314,7 +327,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
                     double *ionConc, double *ionRadii,
-                    double *ionQ, double T, double soluteDiel,
+                    double *ionQ, double T, double gamma, double soluteDiel,
                     double solventDiel, double solventRadius) {
 
     int i, iatom;
@@ -418,6 +431,7 @@ function\n", thee->maxIonRadius);
         return 0;
     }
     thee->T = T;
+    thee->gamma = gamma;
     thee->soluteDiel = soluteDiel;
     thee->solventDiel = solventDiel;
     thee->solventRadius = solventRadius;

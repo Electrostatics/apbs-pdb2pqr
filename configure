@@ -10554,7 +10554,7 @@ echo "$as_me:$LINENO: result: ------------- end processing APBS configure option
 echo "${ECHO_T}------------- end processing APBS configure options -----------" >&6
 
 
-ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/opendx/Makefile tools/arpack/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile test/Makefile test/vmetis/Makefile test/vgreen/Makefile test/fem/Makefile test/reg-fem/Makefile test/lndet/Makefile test/mg/Makefile"
+ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/opendx/Makefile tools/arpack/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile test/Makefile test/vmetis/Makefile test/vgreen/Makefile test/fem/Makefile test/reg-fem/Makefile test/lndet/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -11064,7 +11064,6 @@ do
   "test/fem/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/fem/Makefile" ;;
   "test/reg-fem/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/reg-fem/Makefile" ;;
   "test/lndet/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/lndet/Makefile" ;;
-  "test/mg/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/mg/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "src/aaa_inc/apbscfg.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/aaa_inc/apbscfg.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
