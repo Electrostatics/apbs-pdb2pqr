@@ -141,6 +141,17 @@ int main(
     along with this program; if not, write to the Free Software\n\
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA\n\
     ----------------------------------------------------------------------\n\
+    APBS uses PMG and FEtk to solve the Poisson-Boltzmann equation\n\
+    numerically.  FEtk and PMG are developed and maintained by the Holst\n\
+    Research Group at UC San Diego.  PMG is designed to solve the nonlinear\n\
+    Poisson-Boltzmann equation and similar problems with linear space and\n\
+    time complexity through the use of box methods, inexact Newton methods,\n\
+    and algebraic multilevel methods.  FEtk is designed to solve general\n\
+    coupled systems of nonlinear partial differential equations accurately\n\
+    and efficiently using adaptive multilevel finite element methods,\n\
+    inexact Newton methods, and algebraic multilevel methods.  More\n\
+    information about PMG and FEtk may be found at <http://www.FEtk.ORG>.\n\
+    ----------------------------------------------------------------------\n\
     \n\n"};
     char *usage = 
 {"\n\n\
