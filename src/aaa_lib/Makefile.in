@@ -170,9 +170,9 @@ SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
 always_built_SUBDIRS = 
 SUBDIRS = $(always_built_SUBDIRS) .
 
-GEN_LIBS = ${top_srcdir}/src/generic/libapbsgen.la
-FEM_LIBS = ${top_srcdir}/src/fem/libapbsfem.la 
-PMG_LIBS = ${top_srcdir}/src/mg/libapbsmg.la
+GEN_LIBS = ${top_builddir}/src/generic/libapbsgen.la
+FEM_LIBS = ${top_builddir}/src/fem/libapbsfem.la 
+PMG_LIBS = ${top_builddir}/src/mg/libapbsmg.la
 BLAS_LIBS = @blas_lib@
 lib_LTLIBRARIES = libapbs.la
 
@@ -189,9 +189,9 @@ CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
-libapbs_la_DEPENDENCIES = ${top_srcdir}/src/generic/libapbsgen.la \
-	${top_srcdir}/src/fem/libapbsfem.la \
-	${top_srcdir}/src/mg/libapbsmg.la
+libapbs_la_DEPENDENCIES = ${top_builddir}/src/generic/libapbsgen.la \
+	${top_builddir}/src/fem/libapbsfem.la \
+	${top_builddir}/src/mg/libapbsmg.la
 am_libapbs_la_OBJECTS = apbs_link.lo
 libapbs_la_OBJECTS = $(am_libapbs_la_OBJECTS)
 
