@@ -1,0 +1,66 @@
+proc read_dx {fileName} {
+    puts "Reading in dx data..."
+    set valList ""
+    set count 0
+    set in [open $fileName r]
+    set InputLine [gets $in]
+    puts $InputLine
+    set InputLine [gets $in]
+    set InputLine [gets $in]
+    set InputLine [gets $in]
+    set InputLine [gets $in]
+    scan $InputLine "object 1 class gridpositions counts %i %i %i" zgrid ygrid xgrid
+    puts "Grid Points per Dimension = x:$xgrid y:$ygrid z:$zgrid"
+    set InputLine [gets $in]
+    scan $InputLine "origin %e %e %e" xOrigin yOrigin zOrigin
+    set origin [list $xOrigin $yOrigin $zOrigin ]
+    set InputLine [gets $in]
+    scan $InputLine "delta %e %e %e" dum1 dum2 zdel
+    set InputLine [gets $in]
+    scan $InputLine "delta %e %e %e" dum1 ydel dum2
+    set InputLine [gets $in]
+    scan $InputLine "delta %e %e %e" xdel dum1 dum2
+    set xVec [list [expr $xdel * $xgrid] 0 0 ]
+    set yVec [list 0 [expr $ydel * $ygrid] 0 ]
+    set zVec [list 0 0 [expr $zdel * $zgrid] ]
+    puts "Grid Spacing = x:$xdel y:$ydel z:$zdel"
+    # two more object lines - not needed
+    set InputLine [gets $in]
+    set InputLine [gets $in]
+    set total [expr int($xgrid* $ygrid * $zgrid / 3)]
+    while {$count < $total} {
+        set InputLine [gets $in]
+	  scan $InputLine "%e %e %e" v1 v2 v3
+        lappend valList $v1 $v2 $v3
+        incr count
+    }
+    if {[expr $xgrid * $ygrid * $zgrid - 3 * $total] == 2} {
+	  scan $InputLine "%e %e" v1 v2
+        lappend valList $v1 $v2
+    }
+
+    if {[expr $xgrid * $ygrid * $zgrid - 3 * $total] == 1} {
+	  scan $InputLine "%e"  v1
+        lappend valList $v1
+    }
+    close $in      
+      
+    puts "Length of list is [llength $valList]"
+    # puts "valList(0)= [lindex $valList 0], valList(27) = [lindex $valList 27]"
+    puts "Now to show surface in vmd..."
+    # The vmd tcl command to load the volume data and build the isosurface
+    # allows non-orthogonal vectors.  Here we just
+    puts "Origin at: $xOrigin $yOrigin $zOrigin" 
+    mol volume top "APBS Potential"  $origin $xVec $yVec $zVec $xgrid $ygrid $zgrid $valList
+
+}
+
+proc add_contour {value color} {
+        set repnum [molinfo 0 get numreps]
+        mol color colorid $color
+        mol material Transparent
+        mol addrep 0
+        mol selection all
+        mol modstyle $repnum 0 Isosurface $value 0.0 0.0 0.0
+}
+
