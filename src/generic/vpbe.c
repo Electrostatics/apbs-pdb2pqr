@@ -754,12 +754,14 @@ VPUBLIC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length) {
 //           object, but atomic data from the Vpbe object is used to
 //           calculate the energy
 //
-// Notes:    Currently only meaningful for MC invocations of Vpbe (returns
-//           0.0 otherwise)
+// Notes:    For MC implementations, the variable "system" should be a pointer 
+//           to the AM object for the system.  
+//           For PMGC implementations, the variable "system" should be a pointer
+//           to the MGmlsys object for the system.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) { 
+VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) { 
 
    double *sol; int nsol;
    double charge;
@@ -772,75 +774,100 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    double energy = 0.0;
    double uval;
 
+   AM *am;
+#if defined(HAVE_PMGC_H)
+   MGmlsys *mlsys;
+   MGarray *uMG, *fMG;
+#endif
+
    VASSERT(thee != VNULL);
 
-   if (thee->methFlag != 0) {
-       Vnm_print(2, "Vpbe_getLinearEnergy1: Not implemented for methFlag %d\n",
-         thee->methFlag);
-       return 0.0;
-   }
+   if (thee->methFlag == 0) {
 
-   VASSERT(am != VNULL);
-   VASSERT(thee->gm != VNULL);
-   VASSERT(thee->alist != VNULL);
-   VASSERT(thee->csm != VNULL);
-
-   /* Get the finest level solution */
-   sol= VNULL;
-   sol = Vpbe_getSolution(thee, am, &nsol);
-   VASSERT(sol != VNULL);
-
-
-   /* Make sure the number of entries in the solution array matches the
-    * number of vertices currently in the mesh */
-   if (nsol != Vgm_numVV(thee->gm)) {
-      Vnm_print(2, "Vpbe_getLinearEnergy1: Number of unknowns in solution does not match\n");
-      Vnm_print(2, "Vpbe_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
-      VASSERT(0);
-   }
-
-   /* Now we do the sum over atoms... */
-   natoms = Valist_getNumberAtoms(thee->alist);
-   for (iatom=0; iatom<natoms; iatom++) {
-       /* Get atom information */
-       icolor = Vpbe_getAtomColor(thee, iatom);
-       charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
-       position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
-       /* Check if this atom belongs to the specified partition */
-       if ((color>=0) && (icolor<0)) {
-           Vnm_print(2, "Vpbe_getLinearEnergy1: Atom colors not set!\n");
-           VASSERT(0);
+       am = (AM *)system;
+       VASSERT(am != VNULL);
+       VASSERT(thee->gm != VNULL);
+       VASSERT(thee->alist != VNULL);
+       VASSERT(thee->csm != VNULL);
+    
+       /* Get the finest level solution */
+       sol= VNULL;
+       sol = Vpbe_getSolution(thee, am, &nsol);
+       VASSERT(sol != VNULL);
+    
+    
+       /* Make sure the number of entries in the solution array matches the
+        * number of vertices currently in the mesh */
+       if (nsol != Vgm_numVV(thee->gm)) {
+          Vnm_print(2, "Vpbe_getLinearEnergy1: Number of unknowns in solution does not match\n");
+          Vnm_print(2, "Vpbe_getLinearEnergy1: number of vertices in mesh!!!  Bailing out!\n");
+          VASSERT(0);
        }
-       if ((icolor==color) || (color<0)) { 
-           /* Loop over the simps associated with this atom */
-           nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
-           /* Get the first simp of the correct color; we can use just one
-            * simplex for energy evaluations, but not for force evaluations */
-           for (isimp=0; isimp<nsimps; isimp++) {
-               simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
-               /* If we've asked for a particular partition AND if the atom 
-                * is our partition, then compute the energy */
-               if ((SS_chart(simp)==color)||(color<0)) {
-                   /* Get the value of each basis function evaluated at this
-                    * point */
-                   Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
-                   for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
-                       uval = sol[VV_id(SS_vertex(simp,ivert))];
-                       energy += (charge*phi[ivert]*uval);
-                   } /* end for ivert */
-                   /* We only use one simplex of the appropriate color for
-                    * energy calculations, so break here */
-                   break;
-               } /* endif (color) */
-           } /* end for isimp */
-       } 
-   } /* end for iatom */
+    
+       /* Now we do the sum over atoms... */
+       natoms = Valist_getNumberAtoms(thee->alist);
+       for (iatom=0; iatom<natoms; iatom++) {
+           /* Get atom information */
+           icolor = Vpbe_getAtomColor(thee, iatom);
+           charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
+           position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
+           /* Check if this atom belongs to the specified partition */
+           if ((color>=0) && (icolor<0)) {
+               Vnm_print(2, "Vpbe_getLinearEnergy1: Atom colors not set!\n");
+               VASSERT(0);
+           }
+           if ((icolor==color) || (color<0)) { 
+               /* Loop over the simps associated with this atom */
+               nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
+               /* Get the first simp of the correct color; we can use just one
+                * simplex for energy evaluations, but not for force 
+                * evaluations */
+               for (isimp=0; isimp<nsimps; isimp++) {
+                   simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
+                   /* If we've asked for a particular partition AND if the atom 
+                    * is our partition, then compute the energy */
+                   if ((SS_chart(simp)==color)||(color<0)) {
+                       /* Get the value of each basis function evaluated at this
+                        * point */
+                       Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
+                       for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
+                           uval = sol[VV_id(SS_vertex(simp,ivert))];
+                           energy += (charge*phi[ivert]*uval);
+                       } /* end for ivert */
+                       /* We only use one simplex of the appropriate color for
+                        * energy calculations, so break here */
+                       break;
+                   } /* endif (color) */
+               } /* end for isimp */
+           } 
+       } /* end for iatom */
+    
+       /* Destroy the finest level solution */
+       Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
+    
+       /* Return the energy */
+       return 0.5*energy;
 
-   /* Destroy the finest level solution */
-   Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
+    } else if (thee->methFlag == 1) {
+#if defined(HAVE_PMGC_H)
+        mlsys = (MGmlsys *)system;
+        VASSERT(mlsys != VNULL);
 
-   /* Return the energy */
-   return 0.5*energy;
+        /* Get the fine level solution and source */
+        uMG = mlsys->s[0]->u;
+        fMG = mlsys->s[0]->fc;
+
+        /* The energy is 1/2 if the dot product of the solution and the RHS */
+        return (0.5*MGarray_Xdot(uMG, fMG));
+#else /* if defined(HAVE_PMGC_H) */
+        Vnm_print(2, "Vpbe_getLinearEnergy1: Not compiled with PMGC!\n");
+        VASSERT(0);
+#endif
+    } else {
+        Vnm_print(2, "Vpbe_getLinearEnergy1: invalid solution method (methFlag = %d)\n", 
+          thee->methFlag);
+        return 0.0;
+    }
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

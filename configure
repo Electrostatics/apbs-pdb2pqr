@@ -2137,11 +2137,13 @@ fi
 if test -d $pmgcdir; then
     echo "$ac_t""${pmgcdir}" 1>&6
     
+    pmgcdirinc="${pmgcdir}/inc"
 else
     echo "$ac_t""no" 1>&6
+    pmgcdirinc="."
 fi
 echo $ac_n "checking for PMGC configuration""... $ac_c" 1>&6
-echo "configure:2145: checking for PMGC configuration" >&5
+echo "configure:2147: checking for PMGC configuration" >&5
 if test -e $pmgcdir/inc/config.h; then
     echo "$ac_t""yes" 1>&6
     cat >> confdefs.h <<\EOF
@@ -2153,6 +2155,7 @@ else
     echo "$ac_t""the PMGC package in ${pmgcdir} is not configured" 1>&6
     pmgc=""
 fi
+
 
 
 echo "$ac_t""------------- end processing APBS configure options -----------" 1>&6
@@ -2341,6 +2344,7 @@ s%@mpi_inc@%$mpi_inc%g
 s%@mcdir@%$mcdir%g
 s%@pmgcdir@%$pmgcdir%g
 s%@pmgc@%$pmgc%g
+s%@pmgcdirinc@%$pmgcdirinc%g
 
 CEOF
 EOF
