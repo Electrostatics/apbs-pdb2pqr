@@ -19,6 +19,8 @@ BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
       information.
     - The "mg" keyword is no longer supported; all input files should use
       "mg-manual" or one of the other alternatives instead.
+  * Added mesh/dxmath for performing arithmetic on grid-based data (i.e.,
+    adding potential results from two calculations, etc.)
  
 
 #############################################################################
