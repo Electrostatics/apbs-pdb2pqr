@@ -1,0 +1,8 @@
+digraph inheritance
+{
+  Node89 [shape="box",label="Vparam",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node90 -> Node89 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="resData",fontname="Helvetica"];
+  Node90 [shape="box",label="Vparam_ResData",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structVparam__ResData.html"];
+  Node91 -> Node90 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="atomData",fontname="Helvetica"];
+  Node91 [shape="box",label="sVparam_AtomData",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVparam__AtomData.html"];
+}

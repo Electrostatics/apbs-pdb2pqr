@@ -1,0 +1,8 @@
+digraph inheritance
+{
+  Node296 [shape="box",label="vpmg.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node297 -> Node296 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node297 [shape="box",label="apbs.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$apbs_8h.html"];
+  Node298 -> Node297 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node298 [shape="box",label="routines.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$routines_8h.html"];
+}

@@ -1,0 +1,12 @@
+digraph inheritance
+{
+  Node189 [shape="box",label="vgrid.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node190 -> Node189 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node190 [shape="box",label="maloc/maloc.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="grey75"];
+  Node191 -> Node189 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node191 [shape="box",label="apbs/vhal.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$vhal_8h.html"];
+  Node192 -> Node189 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node192 [shape="box",label="apbs/vstring.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$vstring_8h.html"];
+  Node190 -> Node192 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node191 -> Node192 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+}

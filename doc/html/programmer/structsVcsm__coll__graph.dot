@@ -1,0 +1,8 @@
+digraph inheritance
+{
+  Node29 [shape="box",label="sVcsm",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node30 -> Node29 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="alist",fontname="Helvetica"];
+  Node30 [shape="box",label="sValist",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsValist.html"];
+  Node31 -> Node30 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="atoms",fontname="Helvetica"];
+  Node31 [shape="box",label="sVatom",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVatom.html"];
+}

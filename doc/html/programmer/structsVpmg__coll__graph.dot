@@ -1,0 +1,15 @@
+digraph inheritance
+{
+  Node79 [shape="box",label="sVpmg",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node80 -> Node79 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="pbe",fontname="Helvetica"];
+  Node80 [shape="box",label="sVpbe",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVpbe.html"];
+  Node81 -> Node80 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="acc",fontname="Helvetica"];
+  Node81 [shape="box",label="sVacc",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVacc.html"];
+  Node82 -> Node81 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="alist",fontname="Helvetica"];
+  Node82 [shape="box",label="sValist",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="red",URL="$structsValist.html"];
+  Node82 -> Node80 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="alist",fontname="Helvetica"];
+  Node84 -> Node79 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="chargeMap\ndielZMap\ndielYMap\ndielXMap\nkappaMap",fontname="Helvetica"];
+  Node84 [shape="box",label="sVgrid",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVgrid.html"];
+  Node85 -> Node79 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="pmgp",fontname="Helvetica"];
+  Node85 [shape="box",label="sVpmgp",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVpmgp.html"];
+}

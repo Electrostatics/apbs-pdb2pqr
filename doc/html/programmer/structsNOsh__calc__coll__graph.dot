@@ -1,0 +1,10 @@
+digraph inheritance
+{
+  Node13 [shape="box",label="sNOsh_calc",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node14 -> Node13 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="mgparm",fontname="Helvetica"];
+  Node14 [shape="box",label="sMGparm",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsMGparm.html"];
+  Node15 -> Node13 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="femparm",fontname="Helvetica"];
+  Node15 [shape="box",label="sFEMparm",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsFEMparm.html"];
+  Node16 -> Node13 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="pbeparm",fontname="Helvetica"];
+  Node16 [shape="box",label="sPBEparm",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsPBEparm.html"];
+}

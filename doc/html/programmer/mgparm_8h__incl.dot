@@ -1,0 +1,8 @@
+digraph inheritance
+{
+  Node38 [shape="box",label="mgparm.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
+  Node39 -> Node38 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node39 [shape="box",label="maloc/maloc.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="grey75"];
+  Node40 -> Node38 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
+  Node40 [shape="box",label="apbs/vhal.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$vhal_8h.html"];
+}
