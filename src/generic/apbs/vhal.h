@@ -172,6 +172,13 @@ typedef enum Vdata_Format Vdata_Format;
  */
 #define VAPBS_DOWN  5
 
+/** @brief   A small number used in Vpmg to decide if points are on/off
+ *           grid-lines or non-zer0 (etc.)
+ *  @ingroup Vhal
+ */
+#define VPMGSMALL 1e-12
+
+
 #if defined(VDEBUG)
 #   if !defined(APBS_NOINLINE)
 #       define APBS_NOINLINE 1
@@ -219,6 +226,7 @@ typedef enum Vdata_Format Vdata_Format;
  *  @ingroup Vhal
  */
 #   define VINLINE_VPMG 
+
 
 #endif
 

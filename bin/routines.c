@@ -637,14 +637,21 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     int j, bytesTotal, highWater;
     double sparm, iparm;
     Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
+    double rsmall = 1e-10;
 
     Vnm_tstart(27, "Setup timer");
 
-    /* Fix mesh center for "GCENT MOL #" types of declarations */
+    /* Fix mesh center for "GCENT MOL #" types of declarations. */
     if (mgparm->cmeth == 1) {
         for (j=0; j<3; j++) 
           mgparm->center[j] = (alist[mgparm->centmol-1])->center[j];
     }
+
+    /* If we're doing a force calculation, add a small offset to the
+     * coordinates to reduce the chance that an atom will inadvertantly lie on
+     * a grid line */
+    if (pbeparm->calcforce > 0) 
+      for (j=0; j<3; j++) mgparm->center[j] += (2*VPMGSMALL);
 
     /* If we're a parallel calculation, update the grid center based on
      * the appropriate shifts */
