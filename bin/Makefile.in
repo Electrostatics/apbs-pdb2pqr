@@ -117,6 +117,7 @@ arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
 fetk_cpu_vendor_os = @fetk_cpu_vendor_os@
 fetk_do_bin = @fetk_do_bin@
+fetk_do_inc = @fetk_do_inc@
 fetk_do_lib = @fetk_do_lib@
 fetk_do_src = @fetk_do_src@
 fetk_do_test = @fetk_do_test@
