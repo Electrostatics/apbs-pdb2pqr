@@ -8,21 +8,9 @@ Header files:
      
 %{
 #define APBS_SWIG 1
-#include "maloc/viso.h" 
+#include "maloc/maloc.h"
 #include "apbscfg.h" 
 #include "routines.h"
-#include "apbs/apbs.h"  
-#include "apbs/nosh.h"
-#include "apbs/mgparm.h" 
-#include "apbs/pbeparm.h" 
-#include "apbs/vpmgp.h"
-#include "apbs/vpmg.h"
-#include "apbs/vpbe.h"
-#include "apbs/valist.h" 
-#include "apbs/vgrid.h"
-#include "apbs/vunit.h"
-#include "maloc/vmem.h"
-#include "maloc/vcom.h" 
 %} 
 
 /* 
