@@ -849,7 +849,7 @@ data follows\n", (nx*ny*nz));
            
         /* Create the field */
         Vio_printf(sock, "attribute \"dep\" string \"positions\"\n");
-        Vio_printf(sock, "object \"regular positions regular connections\"
+        Vio_printf(sock, "object \"regular positions regular connections\" \
 class field\n");
         Vio_printf(sock, "component \"positions\" value 1\n");
         Vio_printf(sock, "component \"connections\" value 2\n");
@@ -877,7 +877,7 @@ VPUBLIC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev, const char *iofmt,
 
     if ((thee->hx!=thee->hy) || (thee->hy!=thee->hzed)
       || (thee->hx!=thee->hzed)) {
-        Vnm_print(2, "Vgrid_writeUHBD: can't write UHBD mesh with non-uniform
+        Vnm_print(2, "Vgrid_writeUHBD: can't write UHBD mesh with non-uniform \
 spacing\n");
         return;
     }
