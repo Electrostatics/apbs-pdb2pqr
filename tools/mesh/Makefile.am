@@ -9,8 +9,10 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES           = @inc_list@
+AM_CFLAGS = @CFLAGS@
+AM_LDFLAGS = @LDFLAGS@ @FLIBS@
 
-noinst_PROGRAMS          = mgmesh dxmath uhbd_asc2bin smooth norm value
+noinst_PROGRAMS          = mgmesh dxmath uhbd_asc2bin smooth norm value dx2mol benchmark similarity analysis
 mgmesh_SOURCES           = mgmesh.c 
 mgmesh_LDADD             = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS           = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -35,3 +37,12 @@ value_SOURCES            = value.c
 value_LDADD              = ../../src/aaa_lib/libapbs.la @lib_list@
 value_LDFLAGS            = @LDFLAGS@ @FLIBS@
 value_CCLD               = $(F77)
+benchmark_SOURCES = benchmark.c 
+benchmark_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+similarity_SOURCES = similarity.c 
+similarity_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+analysis_SOURCES = analysis.c 
+analysis_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+dx2mol_SOURCES = dx2mol.c 
+dx2mol_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+
