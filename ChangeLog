@@ -6,7 +6,8 @@ BETA PUBLIC RELEASE VERSION 0.2.4       ??-??-02
 	can perturb results for systems where the grid boundaries are particularly
 	close to the biomolecule.  However, most systems using settings suggested
 	by the psize script appear largely unaffected.  Thanks to Michael Grabe for
-    finding this bug.
+    finding this bug (you can stop finding bugs now...)
+  * Updated VMD scripts to agree with current OpenDX output format
   * A COMMENT:  As far as I can tell, the current version of OpenDX-formatted
     output (same as version 0.2.3) is fully compliant with the OpenDX
     standards (see, for example, 
