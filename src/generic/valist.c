@@ -201,7 +201,8 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Valist_readPQR(Valist *thee, char *path) {
+VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
+  const char *thost, const char *fname) {
 
     FILE *pqrf;                 /* PQR file pointer */
     char line[101];             /* To hold lines from the PQR file */
@@ -215,10 +216,22 @@ VPUBLIC int Valist_readPQR(Valist *thee, char *path) {
     VASSERT(thee != VNULL);
     thee->number = 0;
 
+    /* Make sure we're reading in an ASCII file */
+    if ((!strcmp(iodev,"FILE")) && (!strcmp(iodev,"file"))) {
+        Vnm_print(2, "Valist_readPQR:  This routine cannot read from type %s.\n", 
+          iodev);
+        return 0;
+    }
+    if ((!strcmp(iofmt,"ASC")) && (!strcmp(iofmt,"asc"))) {
+        Vnm_print(2, "Valist_readPQR:  This routine cannot read type %s.\n",
+          iofmt);
+        return 0;
+    }
+
     /* Open data files */
-    pqrf = fopen(path,"r");
+    pqrf = fopen(fname,"r");
     if (pqrf == NULL) {
-        fprintf(stderr,"Valist_readPQR: Error opening %s\n",path);
+        fprintf(stderr,"Valist_readPQR: Error opening %s\n",fname);
         return 0;
     }
 
@@ -283,25 +296,6 @@ VPUBLIC int Valist_readPQR(Valist *thee, char *path) {
     } /* while(1) */
 
     return 1;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_readPDB
-//
-// Purpose:  Fill atom list with information from a PDB file
-//
-// Notes:    The PDB reader routine was borrowed from Phil Hunenberger
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Valist_readPDB(Valist *thee, char *path, char *parameter_path) {
-
-  VASSERT(thee != VNULL);
-
-  fprintf(stderr,"Valist_readPDB: I haven't gotten around to writing the PDB reader yet.\n");
-  fprintf(stderr,"Valist_readPDB: Until then, use awk and Valist_readPQR.\n");
-  return 0;
-
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

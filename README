@@ -37,8 +37,8 @@ aqueous monovalent salt solutions.  This software uses the MC library for
 the adaptive multilevel finite element solution of nonlinear elliptic
 partial differential equations.
 
-APBS is written in Michael Holst's Clean-C and can be compiled with either
-C or C++ compilers.
+APBS was primarily written by Nathan Baker as part of his graduate and
+postgraduate work with J. Andrew McCammon and Michael Holst at UCSD.
 
 Please see doc/ for more information about the APBS software and ./INSTALL
 for installation instructions.  

@@ -3153,8 +3153,8 @@ cat >> confdefs.h <<\EOF
 #define USE_PMG 1
 EOF
 
-pmg_do_src="vpmg"
-pmg_do_bin="mg"
+pmg_do_src="vpmg mgsh"
+pmg_do_bin="mg mgsh"
 pmg_do_tst="vpmg"
 
 
@@ -3385,6 +3385,7 @@ trap 'rm -fr `echo "
     src/vgreen/tst-compiler/Makefile
     src/vpmg/Makefile
     src/vfetk/Makefile
+    src/mgsh/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
@@ -3402,6 +3403,7 @@ trap 'rm -fr `echo "
     work/bin/fem/Makefile
     work/bin/reg-fem/Makefile
     work/bin/mg/Makefile
+    work/bin/mgsh/Makefile
  apbscfg.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -3554,6 +3556,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     src/vgreen/tst-compiler/Makefile
     src/vpmg/Makefile
     src/vfetk/Makefile
+    src/mgsh/Makefile
 
     tst/Makefile
     tst/vcsm/Makefile
@@ -3571,6 +3574,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     work/bin/fem/Makefile
     work/bin/reg-fem/Makefile
     work/bin/mg/Makefile
+    work/bin/mgsh/Makefile
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
