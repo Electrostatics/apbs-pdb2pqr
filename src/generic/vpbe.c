@@ -692,7 +692,6 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    sol = Vpbe_getSolution(thee, am, &nsol);
    VASSERT(sol != VNULL);
 
-   Vnm_print(2, "Vpbe_getLinearEnergy2: WARNING! This routine may be broken!\n");
 
    /* Make sure the number of entries in the solution array matches the
     * number of vertices currently in the mesh */
@@ -815,6 +814,7 @@ VPUBLIC double Vpbe_getLinearEnergy2(Vpbe *thee, AM *am, int color) {
     double energy = 0.0;
     Alg *alg;    
 
+    Vnm_print(2, "Vpbe_getLinearEnergy2: WARNING! This routine may be broken!\n");
     /* Get the algebra object for the finest level */
     alg = AM_alg(am, AM_maxLevel(am));
 
