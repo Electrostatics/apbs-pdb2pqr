@@ -1498,7 +1498,7 @@ ac_link='${F77-f77} -o conftest${ac_exeext} $FFLAGS $LDFLAGS conftest.$ac_ext $L
 cross_compiling=$ac_cv_prog_f77_cross
 
 short_os=`echo ${host_os} | sed 's/osf.*/osf/g'`;
-if test ${short_os} == 'osf'; then
+if test ${short_os} = "osf"; then
   echo "$ac_t""Disabling debugger compiler flags to avert OSF weirdness" 1>&6
   if test -z ${FFLAGS}; then
       FFLAGS="";
