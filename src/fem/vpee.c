@@ -219,26 +219,106 @@ VPUBLIC void Vpee_dtor(Vpee **thee) {
 VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpee_estimate
+//
+// Purpose:  Generate per-simplex error esimates.
+//
+// Args:     am            A pointer to the AM object from which the 
+//                         solution/error should be obtained
+//           level         The solution level in the AM object to be used
+//           akey          The marking method:
+//                           2 => Residual-based error estimate
+//                           3 => Local problem-based error estimate
+//                           4 => Dual problem-based error estimate
+//
+// Notes:    This is pretty much a rip-off of AM_markRefine.
+//
+// Author:   Nathan Baker (and Michael Holst: the author of AM_markRefine, on
+//           which this is based)
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpee_estimate(Vpee *thee, AM *am, int level, int akey) {
+
+    Alg *alg;
+    double errEst = 0.0;
+    SS *sm;
+    int smid;
+
+    VASSERT(thee != VNULL);
+
+    /* Get the Alg object from AM */
+    VASSERT((level >= am->minLevel) && (level <= am->maxLevel));
+    alg = AM_alg(am, level);
+    VASSERT(alg != VNULL);
+
+    /* input check and some i/o */
+    if ( ! ((2 <= akey) && (akey <= 4)) ) {
+        Vnm_print(0,"Vpee_estimate: bad estimate key; returning...\n");
+        return;
+    } else if (akey == 2) {
+        Vnm_print(0,"Vpee_estimate: using Alg_estNonlinResid().\n");
+    } else if (akey == 3) {
+        Vnm_print(0,"Vpee_estimate: using Alg_estLocalProblem().\n");
+    } else if (akey == 4) {
+        Vnm_print(0,"Vpee_estimate: using Alg_estDualProblem().\n");
+    }
+
+    Vnm_tstart(30, "error estimation");
+
+    /* traverse the simplices and estimate the error */
+    Vnm_print(0,"Vpee_estimate: estimating error..");
+    alg->gerror = 0.0;
+    smid = 0;
+    while ( (smid < Vgm_numSS(thee->gm)) && (!Vsig_sigInt()) ) {
+        sm = Vgm_SS(thee->gm,smid);
+
+        if ( (smid>0) && (smid % VPRTKEY) == 0 ) Vnm_print(0,"[MS:%d]",smid);
+
+        /* Produce an error estimate for this element */
+        if (akey == 1) errEst = 0.0;
+        else if (akey == 2) {
+            errEst = Alg_estNonlinResid(alg, sm, W_u, W_ud, W_f);
+        } else if (akey == 3) {
+            errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
+        } else if (akey == 4) {
+            errEst = Alg_estDualProblem(alg, sm, W_u,W_ud,W_f);
+        }
+        VASSERT( errEst >= 0. );
+
+        /* store the estimate */
+        Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
+
+        /* accumlate into the global error */
+        alg->gerror += errEst*errEst;
+
+        smid++;
+    }
+
+    Vnm_tstop(30, "error estimation");
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_markRefine
 //
 // Purpose:  A wrapper/reimplementation of AM_markRefine that allows for more
 //           flexible attenuation of error-based markings outside the local
-//           partition.  Specifically, the error in each simplex is estimated
-//           using the user-specified error estimator and then modified by the
-//           method (see killFlag) specified in the Vpee constructor.  This
-//           allows the user to confine refinement to an arbitrary area around
+//           partition.  The error in each simplex is modified by the method
+//           (see killFlag) specified in the Vpee constructor.  This allows the
+//           user to confine refinement to an arbitrary area around
 //           the local partition.
 //
 // Args:     am            A pointer to the AM object from which the
 //                         solution/error should be obtained
 //           level         The solution level in the AM object to be used
 //           akey          The marking method:
-//                          -1 => Reset markings  \
-//                           0 => Uniform          >--> killFlag has no effect
-//                           1 => User defined    /
-//                           2 => Nonlinear residual indicator
-//                           3 => Local problem indicator
-//                           4 => Dual problem indicator
+//                          -1 => Reset markings  --> killFlag has no effect
+//                           0 => Uniform        
+//                           1 => User defined (geometry-based)
+//                          >1 => A numerical estimate for the error has 
+//                                already been set in am and should be
+//                                attenuated according to killFlag and used,
+//                                in conjunction with etol, to mark simplices
+//                                for refinement
 //           rcol          The ID of the main partition on which to mark (or -1
 //                           if all partitions should be marked)
 //           etol          The error tolerance criterion for marking
@@ -286,16 +366,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     /* Check the relevant I/O */
     if (akey == 1) {
         Vnm_print(0,"Vpee_markRefine: using user-defined markSimplex().\n");
-    } else if (akey == 2) {
-        Vnm_print(0,"Vpee_markRefine: using Alg_estNonlinResid().\n");
-    } else if (akey == 3) {
-        Vnm_print(0,"Vpee_markRefine: using Alg_estLocalProblem().\n");
-    } else if (akey == 4) {
-        Vnm_print(0,"Vpee_markRefine: using Alg_estDualProblem().\n");
     } else {
-        Vnm_print(2,"Vpee_markRefine: bad  refine key %d given; simplices marked = %d\n",
-            akey, marked);
-        return marked;
+        Vnm_print(0,"Vpee_markRefine: using PRE-CALCULATED error estimate.\n");
     }
     if (thee->killFlag == 0) {
         Vnm_print(0, "Vpee_markRefine: No error attenuation -- simplices in all partitions will be marked.\n");
@@ -314,7 +386,7 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     }
 
     /* timer */
-    Vnm_tstart(30, "error estimation");
+    Vnm_tstart(30, "simplex marking");
 
     /* count = num generations to produce from marked simplices (minimally) */
     count = 1; /* must be >= 1 */
@@ -360,12 +432,8 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
 
         /* Produce an error estimate for this element */
         if (akey == 1) errEst = 0.0;
-        else if (akey == 2) {
-            errEst = Alg_estNonlinResid(alg, sm, W_u, W_ud, W_f);
-        } else if (akey == 3) {
-            errEst = Alg_estLocalProblem(alg, sm, W_u,W_ud,W_f);
-        } else if (akey == 4) {
-            errEst = Alg_estDualProblem(alg, sm, W_u,W_ud,W_f);
+        else if ((akey >= 2) && (akey <= 4)) {
+            errEst = Bvec_val( alg->WE[ WE_err ], 0, smid );
         }
         VASSERT( errEst >= 0. );
 
@@ -427,24 +495,16 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             /* keep track of min/max errors over the mesh */
             minError = VMIN2( VABS(errEst), minError );
             maxError = VMAX2( VABS(errEst), maxError );
-
-            /* store the estimate */
-            Bvec_set( alg->WE[ WE_err ], 0, smid, errEst );
-
-            /* accumlate into the global error */
-            alg->gerror += errEst*errEst;
         }
     
         smid++;
     }
 
-    alg->gerror = VSQRT(alg->gerror)/((double)(Vgm_numSS(thee->gm)));
-
     /* do some i/o */
-    Vnm_print(0, "Vpee_markRefine:  [marked=<%d>  gerror=<%g>]\n", marked, alg->gerror);
+    Vnm_print(0, "Vpee_markRefine:  [marked=<%d>]\n", marked);
     Vnm_print(0, "Vpee_markRefine: elevel=<%g>  maxError=<%g>  minError=<%g>\n",
         etol, maxError, minError);
-    Vnm_tstop(30, "error estimation");
+    Vnm_tstop(30, "simplex marking");
 
     /* return */
     return marked;

@@ -107,15 +107,16 @@ typedef struct Vpee {
 /////////////////////////////////////////////////////////////////////////// */
 
 VEXTERNC Vpee* Vpee_ctor(Vgm *gm, int localPartID, int killFlag, 
-  double killParam);
-VEXTERNC int Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
-  double killParam);
-VEXTERNC void Vpee_dtor(Vpee **thee);
-VEXTERNC void Vpee_dtor2(Vpee *thee);
+                 double killParam);
+VEXTERNC int   Vpee_ctor2(Vpee *thee, Vgm *gm, int localPartID, int killFlag,
+                 double killParam);
+VEXTERNC void  Vpee_dtor(Vpee **thee);
+VEXTERNC void  Vpee_dtor2(Vpee *thee);
 
-VEXTERNC int Vpee_numSS(Vpee *thee);
-VEXTERNC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, 
-   int rcol, double etol);
-VEXTERNC int Vpee_memChk(Vpee *thee);
+VEXTERNC int   Vpee_numSS(Vpee *thee);
+VEXTERNC void  Vpee_estimate(Vpee *thee, AM *am, int level, int akey); 
+VEXTERNC int   Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, 
+                 int rcol, double etol);
+VEXTERNC int   Vpee_memChk(Vpee *thee);
 
 #endif    /* ifndef _VPEE_H_ */
