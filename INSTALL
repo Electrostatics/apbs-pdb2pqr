@@ -223,4 +223,6 @@ need to use the Alpha compilers:
     CXX='cxx'; export CXX   
     F77='fort'; export F77   
 
-It's also worthwhile to add the '-arch' flag
+It's also worthwhile to add the '-arch' flag.  To get Alpha FORTRAN to link
+programs where the main() routine is in C, you need to add the '-nofor_main'
+option -- I haven't figured out how to include this in Autoconf yet.
