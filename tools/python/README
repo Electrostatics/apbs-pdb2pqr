@@ -1,6 +1,9 @@
 README for tools/Python directory
 ---------------------------------
 
+Author: Todd Dolinsky (todd@ccb.wustl.edu)
+Date: 1/14/2004
+
 This directory contains Python wrappers for APBS.
 
 Files:
@@ -10,12 +13,28 @@ Files:
                   for the APBS functions defined in routines.c
     apbslibc.so - Generated shared object file
     main.py     - Driver file for APBS code; mimics main.c
+    apbs.in     - Example APBS input file for Born Ion example
 
 To run the Python-wrapper version of APBS, make sure you have a working
-version of Python installed.  The wrappers are compiled during the 
-initial installation process.  Type
+version of Python installed.  By default, the wrappers are compiled during the 
+initial configure process if Python is detected on the system.*  Type
 
 python main.py <input file>
 
 to run APBS on an input file in Python.  The input file must be the same
 format as the standard APBS input files - see documentation for formatting.
+
+
+* The main configure script needs additional libraries to compile correctly,
+and thus may not work on all systems.  Current status:
+
+Linux       - Working
+Irix/SGI    - Support built in, untested
+Sun/Solaris - Support built in, untested
+Cygwin      - No support (by default, the directory is not compiled)
+
+If you are using Windows/Cygwin, it is suggested that you modify the Makefile to change all .so objects to .dll, and to add the path to libpython2.X.dll.a (where X is the python version) to PY_LDEXTRA .
+
+
+
+    

@@ -469,7 +469,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL py_path PY_CFLAGS PY_PRESENT_TRUE PY_PRESENT_FALSE math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 FLIBS CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL py_path PY_SHARED PY_LDEXTRA PY_CFLAGS PY_PRESENT_TRUE PY_PRESENT_FALSE math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -8951,11 +8951,32 @@ if test -n "${py_path}"; then
    if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
       PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
    else
-	  PYCFLAGS=""
+	  PY_CFLAGS=""
    fi
 else
-   PYCFLAGS=""
+   PY_CFLAGS=""
 fi
+
+PY_LDEXTRA=""
+PY_SHARED=""
+case $host_os in
+   linux*)
+      PY_SHARED="-shared";;
+   irix*)
+      PY_SHARED="-shared"
+      PY_LDEXTRA="-lftn -lm";;
+   sun|solaris**)
+      PY_SHARED="-G"
+      PY_LDEXTRA="-lF77 -lm -lM77 -lsunmath";;
+   cygwin|mingw32|windows**)
+      PY_CFLAGS="";;
+   *)
+      PY_CFLAGS="";;
+esac
+PY_SHARED=$PY_SHARED
+
+PY_LDEXTRA=$PY_LDEXTRA
+
 PY_CFLAGS=$PY_CFLAGS
 
 
@@ -12522,6 +12543,8 @@ s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
 s,@py_path@,$py_path,;t t
+s,@PY_SHARED@,$PY_SHARED,;t t
+s,@PY_LDEXTRA@,$PY_LDEXTRA,;t t
 s,@PY_CFLAGS@,$PY_CFLAGS,;t t
 s,@PY_PRESENT_TRUE@,$PY_PRESENT_TRUE,;t t
 s,@PY_PRESENT_FALSE@,$PY_PRESENT_FALSE,;t t
