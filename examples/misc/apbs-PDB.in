@@ -1,0 +1,43 @@
+##########################################################################
+### POTENTIAL CALCULATION FROM PDB FILE
+### $Id$
+###
+### Please see APBS documentation (http://agave.wustl.edu/apbs/doc/) for
+### syntax help.
+##########################################################################
+
+read 
+    mol pdb mache.pqr
+    parm flat param.dat
+end
+
+elec name viz
+    mg-manual
+    dime 129 129 129
+    nlev 4
+    glen 100 100 100
+    gcent mol 1
+    mol 1
+    lpbe
+    bcfl sdh
+    ion 1 0.150 2.0
+    ion -1 0.150 2.0
+    pdie 1.0
+    sdie 78.54 
+    chgm spl0
+    srfm smol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+    write pot dx potential
+    write sspl dx accessibility
+    #write ndens dx ion-density
+    #write qdens dx charge-density
+    #write edens dx energy-density
+    #write charge dx charge
+end
+
+quit
