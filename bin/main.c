@@ -526,20 +526,18 @@ int main(int argc, char **argv) {
                 /* In AVS format */
                 } else if (mgparm->writeaccfmt == 1) {
                     sprintf(outpath, "%s.%s", mgparm->writeaccstem, "ucd");
-                    Vnm_print(2, "main:    Sorry, AVS format isn't supported
+                    Vnm_print(2, "main:    Sorry, AVS format isn't supported\
 for multigrid calculations yet!\n");
                 /* In UHBD format */
                 } else if (mgparm->writeaccfmt == 2) {
                     sprintf(outpath, "%s.%s", mgparm->writeaccstem, "grd");
-                    Vnm_print(1, "main:    Writing accessibility in UHBD format
-to %s...\n",
-                      outpath);
+                    Vnm_print(1, "main:    Writing accessibility in UHBD\
+ format to %s...\n", outpath);
                     Vpmg_fillAcc(pmg[i], pmg[i]->rwork, 3, 0.3);
                     Vpmg_writeUHBD(pmg[i], "FILE", "ASC", VNULL, outpath,
                       "ACCESSIBILITY", pmg[i]->rwork);
-                } else Vnm_print(2, "main:    Bogus accessibility file format
-(%d)!\n",
-                         mgparm->writeaccfmt);
+                } else Vnm_print(2, "main:    Bogus accessibility file format\
+(%d)!\n", mgparm->writeaccfmt);
             }
 
             fflush(stdout);

@@ -547,7 +547,7 @@ VPUBLIC int Vfetk_genIcosGem(Gem *gm, double radius, double center[3]) {
 
     /* Make sure this is an empty Gem object */
     if (Gem_numVV(gm) != 0) {
-        Vnm_print(2, "Vbnd_genIcosGem:  Error!  Gem object has non-zero 
+        Vnm_print(2, "Vbnd_genIcosGem:  Error! Gem object has non-zero \
 number of vertices!\n");
         return -1;
     }
@@ -562,9 +562,8 @@ number of vertices!\n");
     /* Dump parameters for debugging info */
     Vnm_print(0, "Vbnd_genIcosGem:  radius = %g, center = (%g, %g, %g)\n",
       radius, center[0], center[1], center[2]);
-    Vnm_print(0, "Vbnd_genIcosGem:  theDim=%d, theDimII=%d, numVV=%d,
-numSS=%d\n",
-      theDim, theDimII, numVV, numSS);
+    Vnm_print(0, "Vbnd_genIcosGem:  theDim=%d, theDimII=%d, numVV=%d, \
+numSS=%d\n", theDim, theDimII, numVV, numSS);
     Vnm_print(0, "Vbnd_genIcosGem: Reseting manifold structures.\n");
     Gem_reset(gm, theDim, theDimII);
 
