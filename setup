@@ -54,3 +54,5 @@ autoheader
 echo "setup:  automake"
 automake
 
+echo "setup:  libtoolize"
+libtoolize -f
