@@ -23,7 +23,7 @@
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a0">Vpmg</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vpmg class as the Vpmg structure.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a1">Vpmg_memChk</a> (Vpmg *thee)</td></tr>
+<tr><td nowrap align=right valign=top>unsigned long int&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a1">Vpmg_memChk</a> (Vpmg *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Return the memory used by this structure (and its contents) in bytes.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>Vpmg *&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a2">Vpmg_ctor</a> (<a class="el" href="structsVpmgp.html">Vpmgp</a> *parms, <a class="el" href="structsVpbe.html">Vpbe</a> *<a class="el" href="structsVpmg.html#m2">pbe</a>)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Constructor for the Vpmg class (no focusing).</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
@@ -1002,7 +1002,7 @@ Calculate the osmotic pressure on the specified atom in units of <img align="top
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int Vpmg_memChk </td>
+          <td class="md" nowrap valign="top"> unsigned long int Vpmg_memChk </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsVpmg.html">Vpmg</a> *&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp; <em>thee</em>          </td>
@@ -1452,7 +1452,7 @@ Set partition information which restricts the calculation of observables to a (r
     <tr><td valign=top><em>thee</em>&nbsp;</td><td>Vpmg object </td></tr>
     <tr><td valign=top><em>lowerCorner</em>&nbsp;</td><td>Partition lower corner </td></tr>
     <tr><td valign=top><em>upperCorner</em>&nbsp;</td><td>Partition upper corner </td></tr>
-    <tr><td valign=top><em>bflags</em>&nbsp;</td><td>Whether or not a particular processor owns a face of it's partition. This keeps things disjoint. 0 if the face is not owned by this partition and 1 otherwise. </td></tr>
+    <tr><td valign=top><em>bflags</em>&nbsp;</td><td>Whether or not a particular processor is on the boundary with another partition. 0 if the face is not bounded (next to) another partition, and 1 otherwise. </td></tr>
   </table>
 </dl>
     </td>
@@ -1532,7 +1532,7 @@ Remove partition restrictions.
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Feb 20 15:41:37 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Tue Mar 30 14:24:01 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

@@ -45,7 +45,7 @@
 <a name="l00101"></a><a class="code" href="structsVpmg.html#m17">00101</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m17">gxcf</a>;                  
 <a name="l00102"></a><a class="code" href="structsVpmg.html#m18">00102</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m18">gycf</a>;                  
 <a name="l00103"></a><a class="code" href="structsVpmg.html#m19">00103</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m19">gzcf</a>;                  
-<a name="l00104"></a><a class="code" href="structsVpmg.html#m20">00104</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVpmg.html#m20">pvec</a>;                     
+<a name="l00104"></a><a class="code" href="structsVpmg.html#m20">00104</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m20">pvec</a>;                  
 <a name="l00105"></a><a class="code" href="structsVpmg.html#m21">00105</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m21">extDiEnergy</a>;            
 <a name="l00108"></a><a class="code" href="structsVpmg.html#m22">00108</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m22">extQmEnergy</a>;            
 <a name="l00111"></a><a class="code" href="structsVpmg.html#m23">00111</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m23">extQfEnergy</a>;            
@@ -73,7 +73,7 @@
 00147 <span class="comment"></span>
 00148 <span class="comment">#if !defined(VINLINE_VPMG)</span>
 00149 <span class="comment"></span>
-00157 <span class="comment">    int Vpmg_memChk(Vpmg *thee);</span>
+00157 <span class="comment">    unsigned long int Vpmg_memChk(Vpmg *thee);</span>
 00158 <span class="comment"></span>
 00159 <span class="comment">#else /* if defined(VINLINE_VPMG) */</span>
 00160 
@@ -148,7 +148,7 @@
 00611 <span class="comment"></span>
 00612 <span class="comment">#endif    /* ifndef _VPMG_H_ */</span>
 00613 
-</pre></div><hr><address style="align: right;"><small>Generated on Fri Feb 20 15:41:29 2004 for APBS by
+</pre></div><hr><address style="align: right;"><small>Generated on Tue Mar 30 14:22:12 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

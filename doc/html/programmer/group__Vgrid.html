@@ -21,7 +21,7 @@
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVgrid.html">sVgrid</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a0">Vgrid</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vgrid class as the <a class="el" href="structsVgrid.html">sVgrid</a> structure.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a1">Vgrid_memChk</a> (Vgrid *thee)</td></tr>
+<tr><td nowrap align=right valign=top>unsigned long int&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a1">Vgrid_memChk</a> (Vgrid *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Return the memory used by this structure (and its contents) in bytes.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>Vgrid *&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a2">Vgrid_ctor</a> (int <a class="el" href="structsVgrid.html#m0">nx</a>, int <a class="el" href="structsVgrid.html#m1">ny</a>, int <a class="el" href="structsVgrid.html#m2">nz</a>, double <a class="el" href="structsVgrid.html#m3">hx</a>, double <a class="el" href="structsVgrid.html#m4">hy</a>, double <a class="el" href="structsVgrid.html#m5">hzed</a>, double <a class="el" href="structsVgrid.html#m6">xmin</a>, double <a class="el" href="structsVgrid.html#m7">ymin</a>, double <a class="el" href="structsVgrid.html#m8">zmin</a>, double *<a class="el" href="structsVgrid.html#m12">data</a>)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Construct Vgrid object with values obtained from Vpmg_readDX (for example).</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
@@ -37,9 +37,9 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Get second derivative values at a point.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a8">Vgrid_gradient</a> (Vgrid *thee, double pt[3], double grad[3])</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get first derivative values at a point.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a9">Vgrid_writeUHBD</a> (Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, int *pvec)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a9">Vgrid_writeUHBD</a> (Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, double *pvec)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Write out the data in UHBD grid format.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a10">Vgrid_writeDX</a> (Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, int *pvec)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a10">Vgrid_writeDX</a> (Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, char *title, double *pvec)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Write out the data in OpenDX grid format.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vgrid.html#a11">Vgrid_readDX</a> (Vgrid *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Read in data in OpenDX grid format.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
@@ -556,7 +556,7 @@ Get the integral of the data.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int Vgrid_memChk </td>
+          <td class="md" nowrap valign="top"> unsigned long int Vgrid_memChk </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsVgrid.html">Vgrid</a> *&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>&nbsp; <em>thee</em>          </td>
@@ -962,7 +962,7 @@ Get potential value (from mesh or approximation) at a point.
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap>int *&nbsp;</td>
+          <td class="md" nowrap>double *&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>pvec</em></td>
         </tr>
         <tr>
@@ -994,7 +994,7 @@ Write out the data in OpenDX grid format.
     <tr><td valign=top><em>thost</em>&nbsp;</td><td>Output hostname (for sockets) </td></tr>
     <tr><td valign=top><em>fname</em>&nbsp;</td><td>Output FILE/BUFF/UNIX/INET name </td></tr>
     <tr><td valign=top><em>title</em>&nbsp;</td><td>Title to be inserted in grid file </td></tr>
-    <tr><td valign=top><em>pvec</em>&nbsp;</td><td>Partition information (1=&gt;point in current partition, 0=&gt;point not in current partition) </td></tr>
+    <tr><td valign=top><em>pvec</em>&nbsp;</td><td>Partition weight ( if 1: point in current partition, if 0 point not in current partition if &gt; 0 &amp;&amp; &lt; 1 point on/near boundary ) </td></tr>
   </table>
 </dl>
 <dl compact><dt><b><a class="el" href="bug.html#_bug000002">Bug:</a></b></dt><dd>This routine does not respect partition information </dd></dl>
@@ -1045,7 +1045,7 @@ Write out the data in OpenDX grid format.
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap>int *&nbsp;</td>
+          <td class="md" nowrap>double *&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>pvec</em></td>
         </tr>
         <tr>
@@ -1082,14 +1082,14 @@ Write out the data in UHBD grid format.
     <tr><td valign=top><em>thost</em>&nbsp;</td><td>Output hostname (for sockets) </td></tr>
     <tr><td valign=top><em>fname</em>&nbsp;</td><td>Output FILE/BUFF/UNIX/INET name </td></tr>
     <tr><td valign=top><em>title</em>&nbsp;</td><td>Title to be inserted in grid file </td></tr>
-    <tr><td valign=top><em>pvec</em>&nbsp;</td><td>Partition information (1=&gt;point in current partition, 0=&gt;point not in current partition) </td></tr>
+    <tr><td valign=top><em>pvec</em>&nbsp;</td><td>Partition weight ( if 1: point in current partition, if 0 point not in current partition if &gt; 0 &amp;&amp; &lt; 1 point on/near boundary ) </td></tr>
   </table>
 </dl>
 <dl compact><dt><b><a class="el" href="bug.html#_bug000001">Bug:</a></b></dt><dd>This routine does not respect partition information </dd></dl>
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Fri Feb 20 15:41:37 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Tue Mar 30 14:24:01 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
