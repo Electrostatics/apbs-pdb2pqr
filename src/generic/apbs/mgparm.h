@@ -106,11 +106,17 @@ typedef struct MGparm {
 
 
     /* ********* TYPE 2 PARAMETERS (PARALLEL AUTO-FOCUS) ******** */
-    double partCenterShift[3];           /* When added to the actual (local)
+    double partDisjCenterShift[3];       /* When added to the actual (local)
                                           * mesh center, this gives the center
-                                          * of the disjoint partition */
-    double partCenterLength[3];          /* This gives the lengths of the
-                                          * disjoint partition */
+                                          * of the disjoint partitions */
+    double partDisjLength[3];            /* This gives the lengths of the
+                                          * disjoint partitions */
+    double partOlapCenterShift[3];       /* When added to the actual (local)
+                                          * mesh center, this gives the center
+                                          * of the overlapping partitions */
+    double partOlapLength[3];            /* This gives the lengths of the
+                                          * overlapping partitions */
+
     int pdime[3];                        /* Grid of processors to be used in
                                           * calculation */
     int setpdime;

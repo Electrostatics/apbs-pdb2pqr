@@ -224,6 +224,14 @@ int main(int argc, char **argv) {
                 mgparm->center[1] = (alist[mgparm->centmol-1])->center[1];
                 mgparm->center[2] = (alist[mgparm->centmol-1])->center[2];
             }
+            /* If we're a parallel calculation, update the grid center based on
+             * the appropriate shifts */
+            if (mgparm->type == 2) {
+                mgparm->center[0] += mgparm->partOlapCenterShift[0];
+                mgparm->center[1] += mgparm->partOlapCenterShift[1];
+                mgparm->center[2] += mgparm->partOlapCenterShift[2];
+            }
+            /* Check the BC */
             if ((pbeparm->bcfl == 4) && (i == 0)) {
                 Vnm_print(2, "main: Can't focus first calculation!\n");
                 return APBSRC;
