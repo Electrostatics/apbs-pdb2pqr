@@ -107,10 +107,12 @@ VEXTERNC void    Vfetk_dtor2(Vfetk *thee);
 VEXTERNC double* Vfetk_getSolution(Vfetk *thee, int *length);
 VEXTERNC double  Vfetk_energy(Vfetk *thee, int color, int nonlin);
 VEXTERNC double  Vfetk_qmEnergy(Vfetk *thee, int color, int nonlin);
+VEXTERNC double  Vfetk_dqmEnergy(Vfetk *thee, int color);
 VEXTERNC double  Vfetk_qfEnergy(Vfetk *thee, int color);
 VEXTERNC double  Vfetk_dielEnergy(Vfetk *thee, int color);
 VEXTERNC double  Vfetk_qmEnergySimplex(Vfetk *thee, SS *sm, int nonlin);
 VEXTERNC double  Vfetk_energyNorm(Vfetk *thee, int flag);
+VEXTERNC double Vfetk_lnDet(Vfetk *thee, int color, int flag);
 
 VEXTERNC int     Vfetk_memChk(Vfetk *thee);
 VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);

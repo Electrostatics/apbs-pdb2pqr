@@ -1,7 +1,7 @@
 //
-// time: Tue Jul 17 14:32:14 2001
+// time: Mon Nov 26 08:32:19 2001
 //
-// version: 3.1.2 (format), 4.1.0 (DX)
+// version: 3.1.2 (format), 4.1.3 (DX)
 //
 //
 // MODULE main
@@ -11,21 +11,231 @@
 // comment: The potential data file should store the data in scalar format, preferably with units of (kT/e).  The default isosurface for the potential data is determined by OpenDx.  The surface data file should store the data in scalar format with values of 1.0 outside the biomolecule and values of 0.0 inside the biomolecule.  The default isosurface for the surface is 0.5.
 // comment: 
 // comment: Written by Nathan Baker, last modified 02/07/01.
-// page assignment: image	order=6, windowed=0, showing=0
+// page assignment: image	order=6, windowed=0, showing=1
 // page assignment: import_acc	order=2, windowed=0, showing=0
 // page assignment: import_pot	order=3, windowed=0, showing=0
-// page assignment: iso_acc	order=5, windowed=0, showing=1
+// page assignment: iso_acc	order=5, windowed=0, showing=0
 // page assignment: iso_pot	order=4, windowed=0, showing=0
-// workspace: width = 417, height = 489
+// workspace: width = 291, height = 399
 // layout: snap = 0, width = 50, height = 50, align = NN
 //
 macro main(
 ) -> (
 ) {
     // 
+    // node FileSelector[1]: x = 22, y = 24, inputs = 0, label = FileSelector
+    // output[1]: visible = 1, type = 32, value = "/home/nbaker/tmp/16pk/16pk-pot.dx"
+    // output[2]: visible = 1, type = 32, value = "16pk-pot.dx"
+    // page group: import_pot
+    //
+    // 
+    // node String[1]: x = 162, y = 26, inputs = 0, label = String
+    // output[1]: visible = 1, type = 32, value = "dx"
+    // page group: import_pot
+    //
+    // 
+    // node Import[1]: x = 40, y = 136, inputs = 6, label = Import
+    // input[1]: defaulting = 1, visible = 1, type = 32, value = "/usr/lpp/dx/samples/data/southeastern_topo.dx"
+    // page group: import_pot
+    //
+main_Import_1_out_1 = 
+    Import(
+    main_FileSelector_1_out_1,
+    main_Import_1_in_2,
+    main_String_1_out_1,
+    main_Import_1_in_4,
+    main_Import_1_in_5,
+    main_Import_1_in_6
+    ) [instance: 1, cache: 1];
+    // 
+    // node Transmitter[1]: x = 37, y = 301, inputs = 1, label = imported_pot
+    // page group: import_pot
+    //
+imported_pot = main_Import_1_out_1;
+    // 
+    // node Receiver[1]: x = 153, y = 11, inputs = 1, label = imported_pot
+    // page group: iso_pot
+    //
+main_Receiver_1_out_1[cache: 0] = imported_pot;
+    // 
+    // node Reset[1]: x = 161, y = 135, inputs = 6, label = Reset
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_1_out_1"
+    // input[2]: defaulting = 0, visible = 0, type = 29, value = 0
+    // input[3]: defaulting = 0, visible = 0, type = 3, value = 0
+    // input[4]: defaulting = 1, visible = 0, type = 29, value = 1
+    // input[5]: defaulting = 1, visible = 0, type = 29, value = 0
+    // output[1]: visible = 1, type = 29, value = 0
+    // page group: iso_pot
+    // toggle : 0
+    //
+    // 
+    // node Scalar[3]: x = 94, y = 132, inputs = 11, label = Scalar
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Scalar_3"
+    // input[3]: defaulting = 0, visible = 0, type = 5, value = -1.0
+    // input[4]: defaulting = 1, visible = 1, type = 3, value = 0
+    // input[5]: defaulting = 1, visible = 0, type = 5, value = -465.67319
+    // input[6]: defaulting = 1, visible = 0, type = 5, value = 471.99911
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 1
+    // output[1]: visible = 1, type = 5, value = -1.0
+    // page group: iso_pot
+    //
+main_Scalar_3_out_1[cache: 2] = 
+    Scalar(
+    main_Scalar_3_in_1,
+    main_Receiver_1_out_1,
+    main_Scalar_3_in_3,
+    main_Reset_1_out_1,
+    main_Scalar_3_in_5,
+    main_Scalar_3_in_6,
+    main_Scalar_3_in_7,
+    main_Scalar_3_in_8,
+    main_Scalar_3_in_9,
+    main_Scalar_3_in_10,
+    main_Scalar_3_in_11
+    ) [instance: 3, cache: 1];
+    // 
+    // node Isosurface[2]: x = 4, y = 131, inputs = 6, label = Isosurface
+    // input[3]: defaulting = 0, visible = 1, type = 1, value = 1
+    // page group: iso_pot
+    //
+main_Isosurface_2_out_1 = 
+    Isosurface(
+    main_Receiver_1_out_1,
+    main_Scalar_3_out_1,
+    main_Isosurface_2_in_3,
+    main_Isosurface_2_in_4,
+    main_Isosurface_2_in_5,
+    main_Isosurface_2_in_6
+    ) [instance: 2, cache: 1];
+    // 
+    // node Color[5]: x = 29, y = 287, inputs = 5, label = Red
+    // input[2]: defaulting = 0, visible = 1, type = 32, value = "red"
+    // input[3]: defaulting = 0, visible = 1, type = 5, value = 1.0
+    // page group: iso_pot
+    //
+main_Color_5_out_1 = 
+    Color(
+    main_Isosurface_2_out_1,
+    main_Color_5_in_2,
+    main_Color_5_in_3,
+    main_Color_5_in_4,
+    main_Color_5_in_5
+    ) [instance: 5, cache: 1];
+    // 
+    // node Reset[5]: x = 439, y = 123, inputs = 6, label = Reset
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_5_out_1"
+    // input[2]: defaulting = 0, visible = 0, type = 29, value = 0
+    // input[3]: defaulting = 0, visible = 0, type = 3, value = 0
+    // input[4]: defaulting = 1, visible = 0, type = 29, value = 1
+    // input[5]: defaulting = 1, visible = 0, type = 29, value = 0
+    // output[1]: visible = 1, type = 29, value = 0
+    // page group: iso_pot
+    // toggle : 0
+    //
+    // 
+    // node Scalar[4]: x = 376, y = 126, inputs = 11, label = Scalar
+    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Scalar_4"
+    // input[3]: defaulting = 0, visible = 0, type = 5, value = 1.0
+    // input[4]: defaulting = 1, visible = 1, type = 3, value = 0
+    // input[5]: defaulting = 1, visible = 0, type = 5, value = -465.67319
+    // input[6]: defaulting = 1, visible = 0, type = 5, value = 471.99911
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
+    // input[9]: defaulting = 1, visible = 0, type = 1, value = 1
+    // output[1]: visible = 1, type = 5, value = 1.0
+    // page group: iso_pot
+    //
+main_Scalar_4_out_1[cache: 2] = 
+    Scalar(
+    main_Scalar_4_in_1,
+    main_Receiver_1_out_1,
+    main_Scalar_4_in_3,
+    main_Reset_5_out_1,
+    main_Scalar_4_in_5,
+    main_Scalar_4_in_6,
+    main_Scalar_4_in_7,
+    main_Scalar_4_in_8,
+    main_Scalar_4_in_9,
+    main_Scalar_4_in_10,
+    main_Scalar_4_in_11
+    ) [instance: 4, cache: 1];
+    // 
+    // node Isosurface[3]: x = 282, y = 127, inputs = 6, label = Isosurface
+    // input[3]: defaulting = 0, visible = 1, type = 1, value = 1
+    // page group: iso_pot
+    //
+main_Isosurface_3_out_1 = 
+    Isosurface(
+    main_Receiver_1_out_1,
+    main_Scalar_4_out_1,
+    main_Isosurface_3_in_3,
+    main_Isosurface_3_in_4,
+    main_Isosurface_3_in_5,
+    main_Isosurface_3_in_6
+    ) [instance: 3, cache: 1];
+    // 
+    // node Color[6]: x = 283, y = 287, inputs = 5, label = Blue
+    // input[2]: defaulting = 0, visible = 1, type = 32, value = "blue"
+    // input[3]: defaulting = 0, visible = 1, type = 5, value = 1.0
+    // page group: iso_pot
+    //
+main_Color_6_out_1 = 
+    Color(
+    main_Isosurface_3_out_1,
+    main_Color_6_in_2,
+    main_Color_6_in_3,
+    main_Color_6_in_4,
+    main_Color_6_in_5
+    ) [instance: 6, cache: 1];
+    // 
+    // node Collect[3]: x = 175, y = 383, inputs = 2, label = Collect
+    // page group: iso_pot
+    //
+main_Collect_3_out_1 = 
+    Collect(
+    main_Color_5_out_1,
+    main_Color_6_out_1
+    ) [instance: 3, cache: 1];
+    // 
+    // node Transmitter[2]: x = 179, y = 493, inputs = 1, label = isoed_pot
+    // page group: iso_pot
+    //
+isoed_pot = main_Collect_3_out_1;
+    // 
+    // node Receiver[3]: x = 61, y = 18, inputs = 1, label = isoed_pot
+    // page group: image
+    //
+main_Receiver_3_out_1[cache: 0] = isoed_pot;
+    // 
+    // node Collect[2]: x = 149, y = 146, inputs = 2, label = Collect
+    // page group: image
+    //
+main_Collect_2_out_1 = 
+    Collect(
+    main_Collect_2_in_1,
+    main_Receiver_3_out_1
+    ) [instance: 2, cache: 1];
+    // 
+    // node AutoCamera[1]: x = 199, y = 231, inputs = 9, label = AutoCamera
+    // input[2]: defaulting = 0, visible = 1, type = 32, value = "off-diagonal"
+    // page group: image
+    //
+main_AutoCamera_1_out_1 = 
+    AutoCamera(
+    main_Collect_2_out_1,
+    main_AutoCamera_1_in_2,
+    main_AutoCamera_1_in_3,
+    main_AutoCamera_1_in_4,
+    main_AutoCamera_1_in_5,
+    main_AutoCamera_1_in_6,
+    main_AutoCamera_1_in_7,
+    main_AutoCamera_1_in_8,
+    main_AutoCamera_1_in_9
+    ) [instance: 1, cache: 1];
+    // 
     // node FileSelector[2]: x = 16, y = 11, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "/home/nbaker/potential/50S/accessiblity-0.dx"
-    // output[2]: visible = 1, type = 32, value = "accessiblity-0.dx"
+    // output[1]: visible = 1, type = 32, value = "/home/nbaker/tmp/16pk/16pk-acc.dx"
+    // output[2]: visible = 1, type = 32, value = "16pk-acc.dx"
     // page group: import_acc
     //
     // 
@@ -72,36 +282,6 @@ main_Isosurface_4_out_1 =
     main_Isosurface_4_in_6
     ) [instance: 4, cache: 1];
     // 
-    // node FileSelector[1]: x = 22, y = 24, inputs = 0, label = FileSelector
-    // output[1]: visible = 1, type = 32, value = "/home/nbaker/potential/50S/potential-0.dx"
-    // output[2]: visible = 1, type = 32, value = "potential-0.dx"
-    // page group: import_pot
-    //
-    // 
-    // node String[1]: x = 162, y = 26, inputs = 0, label = String
-    // output[1]: visible = 1, type = 32, value = "dx"
-    // page group: import_pot
-    //
-    // 
-    // node Import[1]: x = 40, y = 136, inputs = 6, label = Import
-    // input[1]: defaulting = 1, visible = 1, type = 32, value = "/usr/lpp/dx/samples/data/southeastern_topo.dx"
-    // page group: import_pot
-    //
-main_Import_1_out_1 = 
-    Import(
-    main_FileSelector_1_out_1,
-    main_Import_1_in_2,
-    main_String_1_out_1,
-    main_Import_1_in_4,
-    main_Import_1_in_5,
-    main_Import_1_in_6
-    ) [instance: 1, cache: 1];
-    // 
-    // node Transmitter[1]: x = 37, y = 301, inputs = 1, label = imported_pot
-    // page group: import_pot
-    //
-imported_pot = main_Import_1_out_1;
-    // 
     // node Receiver[6]: x = 255, y = 5, inputs = 1, label = imported_pot
     // page group: iso_acc
     //
@@ -119,17 +299,17 @@ main_Map_1_out_1 =
     ) [instance: 1, cache: 1];
     // 
     // node Colormap[1]: x = 263, y = 159, inputs = 19, label = Colormap
-    // input[1]: defaulting = 0, visible = 0, type = 16777224, value = { [0.46474359 1.0] [0.49038462 0.67368421] }
-    // input[2]: defaulting = 0, visible = 0, type = 16777224, value = { [0.46794872 1.0] [0.47435897 0.010526316] [0.49358974 1.0] }
+    // input[1]: defaulting = 0, visible = 0, type = 16777224, value = { [0.48717949 1.0] [0.51282051 0.66315789] }
+    // input[2]: defaulting = 0, visible = 0, type = 16777224, value = { [0.48717949 1.0] [0.49679487 0.021052632] [0.51282051 1.0] }
     // input[3]: defaulting = 0, visible = 0, type = 16777224, value = { [0.0 1.0] [1.0 1.0] }
     // input[4]: defaulting = 0, visible = 0, type = 16777224, value = { [0.0 1.0] [1.0 1.0] }
     // input[5]: defaulting = 0, visible = 0, type = 32, value = "Colormap_1"
-    // input[7]: defaulting = 1, visible = 0, type = 5, value = -200.0
-    // input[8]: defaulting = 1, visible = 0, type = 5, value = 200.0
+    // input[7]: defaulting = 1, visible = 0, type = 5, value = -100.0
+    // input[8]: defaulting = 1, visible = 0, type = 5, value = 100.0
     // input[9]: defaulting = 1, visible = 0, type = 1, value = 20
-    // input[12]: defaulting = 0, visible = 0, type = 16777221, value = { -200.0 200.0 }
-    // input[17]: defaulting = 0, visible = 0, type = 5, value = -414.59
-    // input[18]: defaulting = 0, visible = 0, type = 5, value = 599.17188
+    // input[12]: defaulting = 0, visible = 0, type = 16777221, value = { -100.0 100.0 }
+    // input[17]: defaulting = 0, visible = 0, type = 5, value = -465.67319
+    // input[18]: defaulting = 0, visible = 0, type = 5, value = 471.99911
     // page group: iso_acc
     // window: position = (0.0000,0.0000), size = 0.5078x0.4395
     //
@@ -202,186 +382,6 @@ main_Collect_4_out_1 =
     main_ColorBar_2_out_1
     ) [instance: 4, cache: 1];
     // 
-    // node Transmitter[4]: x = 192, y = 427, inputs = 1, label = iosed_acc
-    // page group: iso_acc
-    //
-iosed_acc = main_Collect_4_out_1;
-    // 
-    // node Receiver[5]: x = 220, y = 19, inputs = 1, label = iosed_acc
-    // page group: image
-    //
-main_Receiver_5_out_1[cache: 0] = iosed_acc;
-    // 
-    // node Collect[2]: x = 149, y = 146, inputs = 2, label = Collect
-    // page group: image
-    //
-main_Collect_2_out_1 = 
-    Collect(
-    main_Collect_2_in_1,
-    main_Receiver_5_out_1
-    ) [instance: 2, cache: 1];
-    // 
-    // node AutoCamera[1]: x = 199, y = 231, inputs = 9, label = AutoCamera
-    // input[2]: defaulting = 0, visible = 1, type = 32, value = "off-diagonal"
-    // page group: image
-    //
-main_AutoCamera_1_out_1 = 
-    AutoCamera(
-    main_Collect_2_out_1,
-    main_AutoCamera_1_in_2,
-    main_AutoCamera_1_in_3,
-    main_AutoCamera_1_in_4,
-    main_AutoCamera_1_in_5,
-    main_AutoCamera_1_in_6,
-    main_AutoCamera_1_in_7,
-    main_AutoCamera_1_in_8,
-    main_AutoCamera_1_in_9
-    ) [instance: 1, cache: 1];
-    // 
-    // node Receiver[1]: x = 153, y = 11, inputs = 1, label = imported_pot
-    // page group: iso_pot
-    //
-main_Receiver_1_out_1[cache: 0] = imported_pot;
-    // 
-    // node Reset[1]: x = 161, y = 135, inputs = 6, label = Reset
-    // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_1_out_1"
-    // input[2]: defaulting = 0, visible = 0, type = 29, value = 0
-    // input[3]: defaulting = 0, visible = 0, type = 3, value = 0
-    // input[4]: defaulting = 1, visible = 0, type = 29, value = 1
-    // input[5]: defaulting = 1, visible = 0, type = 29, value = 0
-    // output[1]: visible = 1, type = 29, value = 0
-    // page group: iso_pot
-    // toggle : 0
-    //
-    // 
-    // node Scalar[3]: x = 94, y = 132, inputs = 11, label = Scalar
-    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Scalar_3"
-    // input[3]: defaulting = 0, visible = 0, type = 5, value = -1.0
-    // input[4]: defaulting = 1, visible = 1, type = 3, value = 0
-    // input[5]: defaulting = 1, visible = 0, type = 5, value = -414.59
-    // input[6]: defaulting = 1, visible = 0, type = 5, value = 599.172
-    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
-    // input[9]: defaulting = 1, visible = 0, type = 1, value = 1
-    // output[1]: visible = 1, type = 5, value = -1.0
-    // page group: iso_pot
-    //
-main_Scalar_3_out_1[cache: 2] = 
-    Scalar(
-    main_Scalar_3_in_1,
-    main_Receiver_1_out_1,
-    main_Scalar_3_in_3,
-    main_Reset_1_out_1,
-    main_Scalar_3_in_5,
-    main_Scalar_3_in_6,
-    main_Scalar_3_in_7,
-    main_Scalar_3_in_8,
-    main_Scalar_3_in_9,
-    main_Scalar_3_in_10,
-    main_Scalar_3_in_11
-    ) [instance: 3, cache: 1];
-    // 
-    // node Isosurface[2]: x = 4, y = 131, inputs = 6, label = Isosurface
-    // input[3]: defaulting = 0, visible = 1, type = 1, value = 1
-    // page group: iso_pot
-    //
-main_Isosurface_2_out_1 = 
-    Isosurface(
-    main_Receiver_1_out_1,
-    main_Scalar_3_out_1,
-    main_Isosurface_2_in_3,
-    main_Isosurface_2_in_4,
-    main_Isosurface_2_in_5,
-    main_Isosurface_2_in_6
-    ) [instance: 2, cache: 1];
-    // 
-    // node Color[5]: x = 29, y = 287, inputs = 5, label = Red
-    // input[2]: defaulting = 0, visible = 1, type = 32, value = "red"
-    // input[3]: defaulting = 0, visible = 1, type = 5, value = 1.0
-    // page group: iso_pot
-    //
-main_Color_5_out_1 = 
-    Color(
-    main_Isosurface_2_out_1,
-    main_Color_5_in_2,
-    main_Color_5_in_3,
-    main_Color_5_in_4,
-    main_Color_5_in_5
-    ) [instance: 5, cache: 1];
-    // 
-    // node Reset[5]: x = 439, y = 123, inputs = 6, label = Reset
-    // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_5_out_1"
-    // input[2]: defaulting = 0, visible = 0, type = 29, value = 0
-    // input[3]: defaulting = 0, visible = 0, type = 3, value = 0
-    // input[4]: defaulting = 1, visible = 0, type = 29, value = 1
-    // input[5]: defaulting = 1, visible = 0, type = 29, value = 0
-    // output[1]: visible = 1, type = 29, value = 0
-    // page group: iso_pot
-    // toggle : 0
-    //
-    // 
-    // node Scalar[4]: x = 376, y = 126, inputs = 11, label = Scalar
-    // input[1]: defaulting = 0, visible = 0, type = 32, value = "Scalar_4"
-    // input[3]: defaulting = 0, visible = 0, type = 5, value = 1.0
-    // input[4]: defaulting = 1, visible = 1, type = 3, value = 0
-    // input[5]: defaulting = 1, visible = 0, type = 5, value = -414.59
-    // input[6]: defaulting = 1, visible = 0, type = 5, value = 599.172
-    // input[7]: defaulting = 1, visible = 0, type = 5, value = 1.0
-    // input[9]: defaulting = 1, visible = 0, type = 1, value = 1
-    // output[1]: visible = 1, type = 5, value = 1.0
-    // page group: iso_pot
-    //
-main_Scalar_4_out_1[cache: 2] = 
-    Scalar(
-    main_Scalar_4_in_1,
-    main_Receiver_1_out_1,
-    main_Scalar_4_in_3,
-    main_Reset_5_out_1,
-    main_Scalar_4_in_5,
-    main_Scalar_4_in_6,
-    main_Scalar_4_in_7,
-    main_Scalar_4_in_8,
-    main_Scalar_4_in_9,
-    main_Scalar_4_in_10,
-    main_Scalar_4_in_11
-    ) [instance: 4, cache: 1];
-    // 
-    // node Isosurface[3]: x = 282, y = 127, inputs = 6, label = Isosurface
-    // input[3]: defaulting = 0, visible = 1, type = 1, value = 1
-    // page group: iso_pot
-    //
-main_Isosurface_3_out_1 = 
-    Isosurface(
-    main_Receiver_1_out_1,
-    main_Scalar_4_out_1,
-    main_Isosurface_3_in_3,
-    main_Isosurface_3_in_4,
-    main_Isosurface_3_in_5,
-    main_Isosurface_3_in_6
-    ) [instance: 3, cache: 1];
-    // 
-    // node Color[6]: x = 283, y = 287, inputs = 5, label = Blue
-    // input[2]: defaulting = 0, visible = 1, type = 32, value = "blue"
-    // input[3]: defaulting = 0, visible = 1, type = 5, value = 1.0
-    // page group: iso_pot
-    //
-main_Color_6_out_1 = 
-    Color(
-    main_Isosurface_3_out_1,
-    main_Color_6_in_2,
-    main_Color_6_in_3,
-    main_Color_6_in_4,
-    main_Color_6_in_5
-    ) [instance: 6, cache: 1];
-    // 
-    // node Collect[3]: x = 175, y = 383, inputs = 2, label = Collect
-    // page group: iso_pot
-    //
-main_Collect_3_out_1 = 
-    Collect(
-    main_Color_5_out_1,
-    main_Color_6_out_1
-    ) [instance: 3, cache: 1];
-    // 
     // node Reset[4]: x = 230, y = 318, inputs = 6, label = Reset
     // input[1]: defaulting = 0, visible = 0, type = 32, value = "main_Reset_4_out_1"
     // input[2]: defaulting = 0, visible = 0, type = 29, value = 0
@@ -396,13 +396,13 @@ main_Collect_3_out_1 =
     // node Image[5]: x = 132, y = 337, inputs = 49, label = Image
     // input[1]: defaulting = 0, visible = 0, type = 67108863, value = "Image_5"
     // input[4]: defaulting = 0, visible = 0, type = 1, value = 1
-    // input[5]: defaulting = 0, visible = 0, type = 8, value = [33.1424 104.1 116.983]
-    // input[6]: defaulting = 0, visible = 0, type = 8, value = [-915.939 90.7493 97.8853]
-    // input[7]: defaulting = 0, visible = 0, type = 5, value = 350.27
-    // input[8]: defaulting = 0, visible = 0, type = 1, value = 976
-    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.718
-    // input[10]: defaulting = 0, visible = 0, type = 8, value = [0.0118998 -0.99452 0.103868]
-    // input[11]: defaulting = 1, visible = 0, type = 5, value = 20.9043
+    // input[5]: defaulting = 0, visible = 0, type = 8, value = [-7.16433 41.5086 6.34112]
+    // input[6]: defaulting = 0, visible = 0, type = 8, value = [145.877 194.55 194.843]
+    // input[7]: defaulting = 0, visible = 0, type = 5, value = 153.81
+    // input[8]: defaulting = 0, visible = 0, type = 1, value = 640
+    // input[9]: defaulting = 0, visible = 0, type = 5, value = 0.75
+    // input[10]: defaulting = 0, visible = 0, type = 8, value = [-0.336092 0.845976 -0.413966]
+    // input[11]: defaulting = 1, visible = 0, type = 5, value = 30.0001
     // input[12]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[14]: defaulting = 0, visible = 0, type = 1, value = 1
     // input[15]: defaulting = 1, visible = 0, type = 32, value = "none"
@@ -412,7 +412,7 @@ main_Collect_3_out_1 =
     // input[19]: defaulting = 0, visible = 0, type = 1, value = 0
     // input[20]: visible = 1
     // input[21]: visible = 1
-    // input[25]: defaulting = 0, visible = 0, type = 32, value = "50S-pot-front.tiff"
+    // input[25]: defaulting = 0, visible = 0, type = 32, value = "16pk-iso.tiff"
     // input[26]: defaulting = 0, visible = 0, type = 32, value = "tiff"
     // input[29]: defaulting = 1, visible = 0, type = 3, value = 0
     // input[41]: defaulting = 0, visible = 0, type = 32, value = "rotate"
@@ -420,7 +420,7 @@ main_Collect_3_out_1 =
     // page group: image
     // title: value = Gridded_3D_1var_notseries
     // depth: value = 24
-    // window: position = (0.0820,0.0244), size = 0.7734x0.7266
+    // window: position = (0.2766,0.1309), size = 0.5109x0.5117
     // internal caching: 1
     //
 main_Image_5_out_1,
@@ -478,34 +478,19 @@ main_Image_5_out_3 =
     main_Image_5_in_49
     ) [instance: 5, cache: 1];
     // 
-    // node Transmitter[2]: x = 179, y = 493, inputs = 1, label = isoed_pot
-    // page group: iso_pot
+    // node Transmitter[4]: x = 192, y = 427, inputs = 1, label = iosed_acc
+    // page group: iso_acc
     //
-isoed_pot = main_Collect_3_out_1;
+iosed_acc = main_Collect_4_out_1;
     // 
-    // node Receiver[3]: x = 61, y = 18, inputs = 1, label = isoed_pot
+    // node Receiver[5]: x = 220, y = 19, inputs = 1, label = iosed_acc
     // page group: image
     //
-main_Receiver_3_out_1[cache: 0] = isoed_pot;
+main_Receiver_5_out_1[cache: 0] = iosed_acc;
 // network: end of macro body
 CacheScene(main_Image_5_in_1, main_Image_5_out_1, main_Image_5_out_2);
 }
-main_FileSelector_2_out_1 = "/home/nbaker/potential/50S/accessiblity-0.dx";
-main_String_2_out_1 = "dx";
-main_Import_2_in_2 = NULL;
-main_Import_2_in_4 = NULL;
-main_Import_2_in_5 = NULL;
-main_Import_2_in_6 = NULL;
-main_Import_2_out_1 = NULL;
-main_Transmitter_3_out_1 = NULL;
-main_Receiver_4_out_1 = NULL;
-main_Isosurface_4_in_2 = 0.5;
-main_Isosurface_4_in_3 = 1;
-main_Isosurface_4_in_4 = NULL;
-main_Isosurface_4_in_5 = NULL;
-main_Isosurface_4_in_6 = NULL;
-main_Isosurface_4_out_1 = NULL;
-main_FileSelector_1_out_1 = "/home/nbaker/potential/50S/potential-0.dx";
+main_FileSelector_1_out_1 = "/home/nbaker/tmp/16pk/16pk-pot.dx";
 main_String_1_out_1 = "dx";
 main_Import_1_in_2 = NULL;
 main_Import_1_in_4 = NULL;
@@ -513,63 +498,6 @@ main_Import_1_in_5 = NULL;
 main_Import_1_in_6 = NULL;
 main_Import_1_out_1 = NULL;
 main_Transmitter_1_out_1 = NULL;
-main_Receiver_6_out_1 = NULL;
-main_Map_1_in_3 = NULL;
-main_Map_1_in_4 = NULL;
-main_Map_1_out_1 = NULL;
-main_Colormap_1_in_1 = { [0.46474359 1.0] [0.49038462 0.67368421] };
-main_Colormap_1_in_2 = { [0.46794872 1.0] [0.47435897 0.010526316] [0.49358974 1.0] };
-main_Colormap_1_in_3 = { [0.0 1.0] [1.0 1.0] };
-main_Colormap_1_in_4 = { [0.0 1.0] [1.0 1.0] };
-main_Colormap_1_in_5 = "Colormap_1";
-main_Colormap_1_in_7 = NULL;
-main_Colormap_1_in_8 = NULL;
-main_Colormap_1_in_9 = NULL;
-main_Colormap_1_in_10 = NULL;
-main_Colormap_1_in_11 = NULL;
-main_Colormap_1_in_12 = { -200.0 200.0 };
-main_Colormap_1_in_13 = NULL;
-main_Colormap_1_in_14 = NULL;
-main_Colormap_1_in_15 = NULL;
-main_Colormap_1_in_16 = NULL;
-main_Colormap_1_in_17 = -414.59;
-main_Colormap_1_in_18 = 599.17188;
-main_Colormap_1_in_19 = NULL;
-main_Colormap_1_out_1 = NULL;
-main_Color_7_in_3 = 1.0;
-main_Color_7_in_4 = NULL;
-main_Color_7_in_5 = NULL;
-main_Color_7_out_1 = NULL;
-main_ColorBar_2_in_2 = NULL;
-main_ColorBar_2_in_3 = NULL;
-main_ColorBar_2_in_4 = NULL;
-main_ColorBar_2_in_5 = NULL;
-main_ColorBar_2_in_6 = NULL;
-main_ColorBar_2_in_7 = NULL;
-main_ColorBar_2_in_8 = NULL;
-main_ColorBar_2_in_9 = NULL;
-main_ColorBar_2_in_10 = NULL;
-main_ColorBar_2_in_11 = NULL;
-main_ColorBar_2_in_12 = NULL;
-main_ColorBar_2_in_13 = NULL;
-main_ColorBar_2_in_14 = NULL;
-main_ColorBar_2_in_15 = NULL;
-main_ColorBar_2_in_16 = NULL;
-main_ColorBar_2_out_1 = NULL;
-main_Collect_4_out_1 = NULL;
-main_Transmitter_4_out_1 = NULL;
-main_Receiver_5_out_1 = NULL;
-main_Collect_2_in_1 = NULL;
-main_Collect_2_out_1 = NULL;
-main_AutoCamera_1_in_2 = "off-diagonal";
-main_AutoCamera_1_in_3 = NULL;
-main_AutoCamera_1_in_4 = NULL;
-main_AutoCamera_1_in_5 = NULL;
-main_AutoCamera_1_in_6 = NULL;
-main_AutoCamera_1_in_7 = NULL;
-main_AutoCamera_1_in_8 = NULL;
-main_AutoCamera_1_in_9 = NULL;
-main_AutoCamera_1_out_1 = NULL;
 main_Receiver_1_out_1 = NULL;
 main_Reset_1_in_1 = "main_Reset_1_out_1";
 main_Reset_1_in_2 = 0;
@@ -626,6 +554,78 @@ main_Color_6_in_4 = NULL;
 main_Color_6_in_5 = NULL;
 main_Color_6_out_1 = NULL;
 main_Collect_3_out_1 = NULL;
+main_Transmitter_2_out_1 = NULL;
+main_Receiver_3_out_1 = NULL;
+main_Collect_2_in_1 = NULL;
+main_Collect_2_out_1 = NULL;
+main_AutoCamera_1_in_2 = "off-diagonal";
+main_AutoCamera_1_in_3 = NULL;
+main_AutoCamera_1_in_4 = NULL;
+main_AutoCamera_1_in_5 = NULL;
+main_AutoCamera_1_in_6 = NULL;
+main_AutoCamera_1_in_7 = NULL;
+main_AutoCamera_1_in_8 = NULL;
+main_AutoCamera_1_in_9 = NULL;
+main_AutoCamera_1_out_1 = NULL;
+main_FileSelector_2_out_1 = "/home/nbaker/tmp/16pk/16pk-acc.dx";
+main_String_2_out_1 = "dx";
+main_Import_2_in_2 = NULL;
+main_Import_2_in_4 = NULL;
+main_Import_2_in_5 = NULL;
+main_Import_2_in_6 = NULL;
+main_Import_2_out_1 = NULL;
+main_Transmitter_3_out_1 = NULL;
+main_Receiver_4_out_1 = NULL;
+main_Isosurface_4_in_2 = 0.5;
+main_Isosurface_4_in_3 = 1;
+main_Isosurface_4_in_4 = NULL;
+main_Isosurface_4_in_5 = NULL;
+main_Isosurface_4_in_6 = NULL;
+main_Isosurface_4_out_1 = NULL;
+main_Receiver_6_out_1 = NULL;
+main_Map_1_in_3 = NULL;
+main_Map_1_in_4 = NULL;
+main_Map_1_out_1 = NULL;
+main_Colormap_1_in_1 = { [0.48717949 1.0] [0.51282051 0.66315789] };
+main_Colormap_1_in_2 = { [0.48717949 1.0] [0.49679487 0.021052632] [0.51282051 1.0] };
+main_Colormap_1_in_3 = { [0.0 1.0] [1.0 1.0] };
+main_Colormap_1_in_4 = { [0.0 1.0] [1.0 1.0] };
+main_Colormap_1_in_5 = "Colormap_1";
+main_Colormap_1_in_7 = NULL;
+main_Colormap_1_in_8 = NULL;
+main_Colormap_1_in_9 = NULL;
+main_Colormap_1_in_10 = NULL;
+main_Colormap_1_in_11 = NULL;
+main_Colormap_1_in_12 = { -100.0 100.0 };
+main_Colormap_1_in_13 = NULL;
+main_Colormap_1_in_14 = NULL;
+main_Colormap_1_in_15 = NULL;
+main_Colormap_1_in_16 = NULL;
+main_Colormap_1_in_17 = -465.67319;
+main_Colormap_1_in_18 = 471.99911;
+main_Colormap_1_in_19 = NULL;
+main_Colormap_1_out_1 = NULL;
+main_Color_7_in_3 = 1.0;
+main_Color_7_in_4 = NULL;
+main_Color_7_in_5 = NULL;
+main_Color_7_out_1 = NULL;
+main_ColorBar_2_in_2 = NULL;
+main_ColorBar_2_in_3 = NULL;
+main_ColorBar_2_in_4 = NULL;
+main_ColorBar_2_in_5 = NULL;
+main_ColorBar_2_in_6 = NULL;
+main_ColorBar_2_in_7 = NULL;
+main_ColorBar_2_in_8 = NULL;
+main_ColorBar_2_in_9 = NULL;
+main_ColorBar_2_in_10 = NULL;
+main_ColorBar_2_in_11 = NULL;
+main_ColorBar_2_in_12 = NULL;
+main_ColorBar_2_in_13 = NULL;
+main_ColorBar_2_in_14 = NULL;
+main_ColorBar_2_in_15 = NULL;
+main_ColorBar_2_in_16 = NULL;
+main_ColorBar_2_out_1 = NULL;
+main_Collect_4_out_1 = NULL;
 main_Reset_4_in_1 = "main_Reset_4_out_1";
 main_Reset_4_in_2 = 0;
 main_Reset_4_in_3 = 0;
@@ -948,12 +948,12 @@ macro Image(
 main_Image_5_in_1 = "Image_5";
 main_Image_5_in_3 = "X24,,Gridded_3D_1var_notseries";
 main_Image_5_in_4 = 1;
-main_Image_5_in_5 = [33.1424 104.1 116.983];
-main_Image_5_in_6 = [-915.939 90.7493 97.8853];
-main_Image_5_in_7 = 350.27;
-main_Image_5_in_8 = 976;
-main_Image_5_in_9 = 0.718;
-main_Image_5_in_10 = [0.0118998 -0.99452 0.103868];
+main_Image_5_in_5 = [-7.16433 41.5086 6.34112];
+main_Image_5_in_6 = [145.877 194.55 194.843];
+main_Image_5_in_7 = 153.81;
+main_Image_5_in_8 = 640;
+main_Image_5_in_9 = 0.75;
+main_Image_5_in_10 = [-0.336092 0.845976 -0.413966];
 main_Image_5_in_11 = NULL;
 main_Image_5_in_12 = 0;
 main_Image_5_in_13 = NULL;
@@ -965,7 +965,7 @@ main_Image_5_in_18 = NULL;
 main_Image_5_in_19 = 0;
 main_Image_5_in_22 = NULL;
 main_Image_5_in_23 = NULL;
-main_Image_5_in_25 = "50S-pot-front.tiff";
+main_Image_5_in_25 = "16pk-iso.tiff";
 main_Image_5_in_26 = "tiff";
 main_Image_5_in_27 = NULL;
 main_Image_5_in_28 = NULL;
@@ -990,7 +990,7 @@ main_Image_5_in_46 = NULL;
 main_Image_5_in_47 = NULL;
 main_Image_5_in_48 = NULL;
 main_Image_5_in_49 = NULL;
-main_Transmitter_2_out_1 = NULL;
-Executive("product version 4 1 0");
+main_Transmitter_4_out_1 = NULL;
+Executive("product version 4 1 3");
 $sync
 main();
