@@ -115,9 +115,11 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-noinst_PROGRAMS = acc 
+noinst_PROGRAMS = acc coulomb
 acc_SOURCES = acc.c 
 acc_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+coulomb_SOURCES = coulomb.c 
+coulomb_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 INCLUDES = @inc_list@
 CFLAGS = @CFLAGS@
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -133,6 +135,9 @@ LIBS = @LIBS@
 acc_OBJECTS =  acc.o
 acc_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
 acc_LDFLAGS = 
+coulomb_OBJECTS =  coulomb.o
+coulomb_DEPENDENCIES =  ../../src/aaa_lib/libapbs.la
+coulomb_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
@@ -144,8 +149,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = gtar
 GZIP_ENV = --best
-SOURCES = $(acc_SOURCES)
-OBJECTS = $(acc_OBJECTS)
+SOURCES = $(acc_SOURCES) $(coulomb_SOURCES)
+OBJECTS = $(acc_OBJECTS) $(coulomb_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -208,6 +213,10 @@ maintainer-clean-libtool:
 acc: $(acc_OBJECTS) $(acc_DEPENDENCIES)
 	@rm -f acc
 	$(LINK) $(acc_LDFLAGS) $(acc_OBJECTS) $(acc_LDADD) $(LIBS)
+
+coulomb: $(coulomb_OBJECTS) $(coulomb_DEPENDENCIES)
+	@rm -f coulomb
+	$(LINK) $(coulomb_LDFLAGS) $(coulomb_OBJECTS) $(coulomb_LDADD) $(LIBS)
 
 tags: TAGS
 
