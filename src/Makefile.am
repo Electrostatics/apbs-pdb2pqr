@@ -15,6 +15,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = generic mg @fetk_do_src@
+always_built_SUBDIRS = generic mg fem
 
 SUBDIRS = $(always_built_SUBDIRS) aaa_inc aaa_lib .
