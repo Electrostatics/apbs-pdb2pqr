@@ -5,6 +5,8 @@ APBS is now supported by the NIH via NIGMS grant GM69702-01.
 
   CHANGES THAT AFFECT USERS:
   - NEW FEATURES
+    * New version of the documentation
+    * New directory structure in tools/
     * Finished fe-manual mode for ELEC calculations -- this is the adaptive
       finite element solver
     * Added documetnation for fe-manual
@@ -67,7 +69,8 @@ APBS is now supported by the NIH via NIGMS grant GM69702-01.
       (thanks to Ben Carrington)
 
   CHANGES THAT AFFECT DEVELOPERS:
-  * Added function for calculating norms on DX grids: see tools/mesh/norm
+  * New docuemtnation setup
+  * New tools/ directory structure
   * Changed Vgreen interface and improved efficiency
   * Changed Vopot interface to support multiple grids
   * Added several norm and seminorm functions to Vgrid class

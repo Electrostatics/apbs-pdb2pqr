@@ -774,7 +774,6 @@ AC_OUTPUT([
     tools/Makefile
     tools/mesh/Makefile
     tools/manip/Makefile
-    tools/opendx/Makefile
     tools/python/Makefile
     tools/arpack/Makefile
 
