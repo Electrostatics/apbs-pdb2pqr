@@ -113,18 +113,18 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
 
     /* Sanity check on input values */
     if (killFlag == 0) {
-        Vnm_print(2, "Vpee_ctor2: No error attenuation outside partition.\n");
+        Vnm_print(0, "Vpee_ctor2: No error attenuation outside partition.\n");
     } else if (killFlag == 1) {
-        Vnm_print(2, "Vpee_ctor2: Error outside local partition ignored.\n");
+        Vnm_print(0, "Vpee_ctor2: Error outside local partition ignored.\n");
     } else if (killFlag == 2) {
-        Vnm_print(2, "Vpee_ctor2: Error ignored outside sphere with radius %4.3f times the radius of the circumscribing sphere\n", killParam);
+        Vnm_print(0, "Vpee_ctor2: Error ignored outside sphere with radius %4.3f times the radius of the circumscribing sphere\n", killParam);
         if (killParam < 1.0) {
           Vnm_print(2, "Vpee_ctor2: Warning! Parameter killParam = %4.3 < 1.0!\n", 
             killParam);
           Vnm_print(2, "Vpee_ctor2: This may result in non-optimal marking and refinement!\n");
         }
     } else if (killFlag == 3) {
-        Vnm_print(2, "Vpee_ctor2: Error outside local partition and immediate neighbors ignored [NOT IMPLEMENTED].\n");
+        Vnm_print(0, "Vpee_ctor2: Error outside local partition and immediate neighbors ignored [NOT IMPLEMENTED].\n");
     } else {
         Vnm_print(2, "Vpee_ctor2: UNRECOGNIZED killFlag PARAMETER! BAILING!.\n");
         VASSERT(0);
@@ -166,7 +166,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
       thee->localPartCenter[1]/((double)(nLocalVerts));
     thee->localPartCenter[2] =
       thee->localPartCenter[2]/((double)(nLocalVerts));
-    Vnm_print(2, "Vpee_ctor2: Part %d centered at (%4.3f, %4.3f, %4.3f)\n",
+    Vnm_print(0, "Vpee_ctor2: Part %d centered at (%4.3f, %4.3f, %4.3f)\n",
       thee->localPartID, thee->localPartCenter[0], thee->localPartCenter[1],
       thee->localPartCenter[2]);
 
@@ -193,7 +193,7 @@ VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
         }
     }
     thee->localPartRadius = VSQRT(thee->localPartRadius);
-    Vnm_print(2, "Vpee_ctor2: Part %d has circumscribing sphere of radius %4.3f\n", 
+    Vnm_print(0, "Vpee_ctor2: Part %d has circumscribing sphere of radius %4.3f\n", 
       thee->localPartID, thee->localPartRadius);
 
     return 1;
@@ -350,16 +350,16 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
     /* check the refinement Q for emptyness */
     currentQ = 0;
     if (Gem_numSQ(thee->gm,currentQ) > 0) {
-        Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
+        Vnm_print(0,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             currentQ);
         Gem_resetSQ(thee->gm,currentQ);
-        Vnm_print(2,"..done.\n");
+        Vnm_print(0,"..done.\n");
     }
     if (Gem_numSQ(thee->gm,!currentQ) > 0) {
-        Vnm_print(2,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
+        Vnm_print(0,"Vpee_markRefine: non-empty refinement Q%d....clearing..",
             !currentQ);
         Gem_resetSQ(thee->gm,!currentQ);
-        Vnm_print(2,"..done.\n");
+        Vnm_print(0,"..done.\n");
     }
     VASSERT( Gem_numSQ(thee->gm,currentQ)  == 0 );
     VASSERT( Gem_numSQ(thee->gm,!currentQ) == 0 );

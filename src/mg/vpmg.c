@@ -180,11 +180,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
     thee->pmgp = pmgp;
     thee->pbe = pbe;
 
-    if (thee->pmgp->nonlin != 0) {
-        Vnm_print(2, "Vpmg_ctor2: Sorry, nonlinear PBE support not available yet.\n");
-        VASSERT(0);
-    }
-
     /* Set up the memory */
     thee->vmem = Vmem_ctor("APBS:VPMG");
 

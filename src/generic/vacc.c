@@ -290,7 +290,7 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
     int i;
-    Vnm_print(2,"vacc: Destroying thee->atoms entries\n");
+    Vnm_print(0,"vacc: Destroying thee->atoms entries\n");
     for (i=0; i<thee->n; i++) {
         if (thee->natoms[i] > 0)  {
             Vmem_free(thee->vmem, (thee->natoms)[i], sizeof(Vatom *), 
