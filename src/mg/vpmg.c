@@ -115,12 +115,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
       xminOLD, yminOLD, zminOLD);
     Vnm_print(0, "VPMG::focusFillBound -- Old mesh maxs = %g, %g, %g\n",
       xmaxOLD, ymaxOLD, zmaxOLD);
-    if ((VABS(xmaxNEW-xmaxOLD)>VPMGSMALL) || 
-        (VABS(ymaxNEW-ymaxOLD)>VPMGSMALL) || 
-        (VABS(zmaxNEW-zmaxOLD)>VPMGSMALL) ||
-        (VABS(xminOLD-xminNEW)>VPMGSMALL) || 
-        (VABS(yminOLD-yminNEW)>VPMGSMALL) || 
-        (VABS(zminOLD-zminNEW)>VPMGSMALL)) {
+
+    /* The following is obsolete; we'll substitute analytical boundary
+     * condition values when the new mesh falls outside the old */
+    if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
+        (xminOLD>xminNEW) || (yminOLD>yminNEW) || (zminOLD>zminNEW)) {
+
         Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
         fflush(stderr);
         VASSERT(0);
