@@ -77,35 +77,56 @@ export FETK_INCLUDE=$FETK_PREFIX/include
 export FETK_LIBRARY=$FETK_PREFIX/lib
 
 
-# We're assuming Intel compilers for Intel platforms
-%ifarch i686
+# We're assuming Intel compilers for Intel platforms.  These are the specific
+# Intel platforms we'll support:
+%ifarch i787
   export CC="icc" 
-  export CFLAGS="-O3 -tpp6 -static-libcxa" 
+  export CFLAGS="-O3 -tpp7 -static-libcxa" 
   export F77="ifc" 
-  export FFLAGS="-O3 -tpp6 -static-libcxa" 
+  export FFLAGS="-O3 -tpp7 -static-libcxa" 
   export LDFLAGS="-static-libcxa"
   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
   make
 %else
-  %ifarch %{ix86}
+  %ifarch i686
     export CC="icc" 
-    export CFLAGS="-O3 -static-libcxa" 
+    export CFLAGS="-O3 -tpp6 -static-libcxa" 
     export F77="ifc" 
-    export FFLAGS="-O3 -static-libcxa" 
+    export FFLAGS="-O3 -tpp6 -static-libcxa" 
     export LDFLAGS="-static-libcxa"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-    make 
+    make
   %else
-    %ifarch alpha
-      export CC='ccc'
-      export CFLAGS='-O2 -arch ev6'
-      export F77='fort'
-      export FFLAGS='-O2 -arch ev6'
-      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
-      make
+    %ifarch %{ix86}
+      export CC="icc" 
+      export CFLAGS="-O3 -static-libcxa" 
+      export F77="ifc" 
+      export FFLAGS="-O3 -static-libcxa" 
+      export LDFLAGS="-static-libcxa"
+      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+      make 
     %endif
   %endif
 %endif
+
+# We're assuming Compaq compilers for Alpha/Linux platforms.  These are
+# the specific Alpha platforms we'll support:
+%ifarch alphaev6
+  export CC='ccc'
+  export CFLAGS='-O2 -arch ev6'
+  export F77='fort'
+  export FFLAGS='-O2 -arch ev6'
+  ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
+  make
+%else
+  export CC='ccc'
+  export CFLAGS='-O2'
+  export F77='fort'
+  export FFLAGS='-O2'
+  ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
+  make
+%endif
+
 
 %install
 mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
