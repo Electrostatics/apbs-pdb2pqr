@@ -482,19 +482,35 @@ conditions\n");
     }
     Vnm_tprint( 1, "  Solute dielectric: %4.3f\n", pbeparm->pdie);
     Vnm_tprint( 1, "  Solvent dielectric: %4.3f\n", pbeparm->sdie);
-    if (pbeparm->srfm == 0) {
-        Vnm_tprint( 1, "  Using \"molecular\" surface \
+    switch (pbeparm->srfm) {
+        case 0:
+            Vnm_tprint( 1, "  Using \"molecular\" surface \
 definition; no smoothing\n");
-        Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
-          pbeparm->srad);
-    } else if (pbeparm->srfm == 1) {
-        Vnm_tprint( 1, "  Using \"molecular\" surface definition;\
+            Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
+              pbeparm->srad);
+            break;
+        case 1:
+            Vnm_tprint( 1, "  Using \"molecular\" surface definition;\
  harmonic average smoothing\n");
-        Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
-          pbeparm->srad);
-    } else if (pbeparm->srfm == 2) {
-        Vnm_tprint( 1, "  Using spline-based surface definition;\
+            Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
+              pbeparm->srad);
+            break;
+        case 2:
+            Vnm_tprint( 1, "  Using spline-based surface definition;\
  window = %4.3f\n", pbeparm->swin);
+            break;
+        default:
+            break;
+    }
+    switch (pbeparm->chgm) {
+        case 0:
+            Vnm_tprint(1, "  Using linear spline charge discretization.\n");
+            break;
+        case 1:
+            Vnm_tprint(1, "  Using cubic spline charge discretization.\n");
+            break;
+        default:
+            break;
     }
     Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
     Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
@@ -698,7 +714,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     if (pbeparm->useChargeMap) theChargeMap = chargeMap[pbeparm->chargeMapID-1];
     else theChargeMap = VNULL;
     Vpmg_fillco(pmg[i], 
-      pbeparm->srfm, pbeparm->swin,
+      pbeparm->srfm, pbeparm->swin, pbeparm->chgm,
       pbeparm->useDielMap, theDielXMap,
       pbeparm->useDielMap, theDielYMap,
       pbeparm->useDielMap, theDielZMap,

@@ -118,6 +118,7 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setpdie = 0;
     thee->setsdie = 0;
     thee->setsrfm = 0;
+    thee->setchgm = 0;
     thee->setsrad = 0;
     thee->setswin = 0; 
     thee->settemp = 0;
@@ -211,6 +212,10 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: SRFM not set!\n");
         return 0;
     }
+    if (!thee->setchgm) {
+        Vnm_print(2, "PBEparm_check: CHGM not set!\n");
+        return 0;
+    }
     if (((thee->srfm==0) || (thee->srfm==1)) && (!thee->setsrad)) {
         Vnm_print(2, "PBEparm_check: SRAD not set!\n");
         return 0;
@@ -274,6 +279,8 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setpdie = parm->setpdie;
     thee->sdie = parm->sdie;
     thee->setsdie = parm->setsdie;
+    thee->chgm = parm->chgm;
+    thee->setchgm = parm->setchgm;
     thee->srfm = parm->srfm;
     thee->setsrfm = parm->setsrfm;
     thee->srad = parm->srad;
@@ -415,6 +422,16 @@ keyword!\n", tok);
         }
         thee->srfm = ti;
         thee->setsrfm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "chgm") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing SRFM \
+keyword!\n", tok);
+            return -1;
+        }
+        thee->chgm = ti;
+        thee->setchgm = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "srad") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);

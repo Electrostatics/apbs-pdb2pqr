@@ -25,7 +25,8 @@ elec
     ion -1 0.000 2.0                   #  ion <charge> <conc (M)> <radius>
     pdie 1.0                           # Solute dielectric
     sdie 78.54                         # Solvent dielectric
-    srfm 1                             # Surface calculation method
+    chgm 1                             # Charge disc method (linear)
+    srfm 0                             # Surface calculation method
                                        #  0 => Mol surface for epsilon;
                                        #       inflated VdW for kappa; no
                                        #       smoothing
@@ -70,7 +71,8 @@ elec
     ion -1 0.000 2.0                   #  ion <charge> <conc (M)> <radius>
     pdie 1.0                           # Solute dielectric
     sdie 1.0                           # Solvent dielectric
-    srfm 1                             # Surface calculation method
+    chgm 1                             # Charge disc method (linear)
+    srfm 0                             # Surface calculation method
                                        #  0 => Mol surface for epsilon;
                                        #       inflated VdW for kappa; no
                                        #       smoothing

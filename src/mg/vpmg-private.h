@@ -49,6 +49,7 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Private routines
 /////////////////////////////////////////////////////////////////////////// */
+VPRIVATE double bspline2(double x);
 VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD);
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag);
 VPRIVATE void bcfl1(double size, double *apos, double charge,
@@ -62,6 +63,9 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee);
 VPRIVATE void fillcoCoefMol(Vpmg *thee);
 VPRIVATE void fillcoCoefSpline(Vpmg *thee);
 VPRIVATE void fillcoCharge(Vpmg *thee);
+VPRIVATE void fillcoChargeMap(Vpmg *thee);
+VPRIVATE void fillcoChargeSpline1(Vpmg *thee);
+VPRIVATE void fillcoChargeSpline2(Vpmg *thee);
 
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
