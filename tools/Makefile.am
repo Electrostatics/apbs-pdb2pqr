@@ -1,4 +1,4 @@
-## ###########################################################################
+### ##########################################################################
 # APBS -- Adaptive Poisson-Boltzmann Solver
 #
 #  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
@@ -29,7 +29,7 @@
 # ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
 # TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
 # MODIFICATIONS. 
-## ###########################################################################
+### ##########################################################################
 
 ## ###########################################################################
 ## File:    Makefile.am
@@ -47,10 +47,4 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = tools src tst inc lib work
-
-distclean-local: clean-local
-
-clean-local:
-	-rm -f ./lib/*.a
-
+SUBDIRS = mesh

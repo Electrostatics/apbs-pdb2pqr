@@ -3324,6 +3324,9 @@ ac_given_INSTALL="$INSTALL"
 trap 'rm -fr `echo "
     Makefile
 
+    tools/Makefile
+    tools/mesh/Makefile
+
     src/Makefile
     src/vatom/Makefile
     src/vacc/Makefile
@@ -3347,7 +3350,6 @@ trap 'rm -fr `echo "
     lib/Makefile
 
     work/Makefile
-    work/util/Makefile
     work/bin/Makefile
     work/bin/fem/Makefile
     work/bin/reg-fem/Makefile
@@ -3483,6 +3485,9 @@ cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile
 
+    tools/Makefile
+    tools/mesh/Makefile
+
     src/Makefile
     src/vatom/Makefile
     src/vacc/Makefile
@@ -3506,7 +3511,6 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile
     lib/Makefile
 
     work/Makefile
-    work/util/Makefile
     work/bin/Makefile
     work/bin/fem/Makefile
     work/bin/reg-fem/Makefile
