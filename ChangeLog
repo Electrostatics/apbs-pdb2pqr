@@ -1,5 +1,5 @@
 #############################################################################
-PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.5       XX-XX-XX
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.5       10-25-01
 #############################################################################
 This version features minor bug fixes and several new features:
   * Fixed shift in center of geometry for OpenDX I/O
