@@ -2,10 +2,14 @@ from vgrid import *
 import sys
 from sys import stdout, stderr
 
+"""
+    read.py - An example script for interfacing Python with APBS
+              Vgrid routines
+"""
 header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.2.5 (November 21, 2002)\n\
+    Version 0.3.1 (April, 2004)\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
