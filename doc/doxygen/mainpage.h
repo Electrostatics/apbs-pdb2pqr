@@ -287,10 +287,14 @@
  *     CC=cc 
  *     F77=xlf
  *     CFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
- *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
- *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
+ *                   -L/usr/local/apps/mass -lmass \
+ *                   -L/usr/lpp/ppe.poe/lib -L/usr/lpp/ppe.poe/lib/ip -lvtd \
+ *                   -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 \
+ *                   -qcache=auto"
  *     FFLAGS="-bmaxdata:0x???????? -bmaxstack:0x10000000 \
- *                   -L/usr/local/apps/mass -lmass -O3 -qstrict \
+ *                   -L/usr/local/apps/mass -lmass 
+ *                   -L/usr/lpp/ppe.poe/lib -L/usr/lpp/ppe.poe/lib/ip -lvtd \
+ *                   -O3 -qstrict \
  *                   -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"
  *     FETK_MPI_INCLUDE=/usr/lpp/ppe.poe/include
  *     FETK_MPI_LIBRARY=/usr/lpp/ppe.poe/lib
@@ -1095,16 +1099,9 @@
  * </ul>
  * 
  * <p> Problems can be reported to the APBS User mailing list at <a
- * href="mailto:apbs-users@mccammon.ucsd.edu">apbs-users@mccammon.ucsd.edu</a>.
- * To subscribe, simply send an e-mail to <a
- * href="mailto:majordomo@mccammon.ucsd.edu">majordomo@mccammon.ucsd.edu</a>
- * with the body
- * <pre>
- *    subscribe apbs-users
- * </pre>
- * However, while the code is in beta, you should also e-mail
- * the problem to <a
- * href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>.
+ * href="mailto:apbs-users@cholla.wustl..edu">apbs-users@cholla.wustl.edu</a>.
+ * To subscribe, simply visit 
+ * <a href="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</a>.
  * 
  * <hr width="100%">
  * @section reading Further reading
