@@ -7,9 +7,9 @@
 ##############################################################################
 
 rm -f config.cache
+libtoolize --automake --force --copy
 aclocal
 autoconf
 autoheader
 automake
-# libtoolize -f
 # aclocal

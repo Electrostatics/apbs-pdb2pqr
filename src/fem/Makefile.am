@@ -15,9 +15,8 @@ THISLIB = fem
 noinst_LTLIBRARIES = libapbsfem.la
 libapbsfem_la_SOURCES  = vfetk.c vcsm.c vpee.c dummy.c
 INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/mg @inc_list@
-AM_CFLAGS          = @wall_pedantic_ansi@
-CFLAGS             = @CFLAGS@
-LDFLAGS          = @LDFLAGS@ @FLIBS@
+AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
+AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
 
 
 all-local:

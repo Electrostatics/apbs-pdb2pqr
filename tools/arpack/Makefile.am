@@ -14,4 +14,4 @@ noinst_PROGRAMS  = driver
 driver_SOURCES   = driver.c readhb.f ardriv.f
 driver_LDADD     = ../../src/aaa_lib/libapbs.la @arpack_lib@ @lib_list@
 INCLUDES         = @inc_list@
-CFLAGS           = @CFLAGS@
+AM_CFLAGS           = @CFLAGS@

@@ -22,4 +22,4 @@ libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
 
 
 INCLUDES         = @inc_list@
-LDFLAGS          = @LDFLAGS@ @FLIBS@
+AM_LDFLAGS          = @LDFLAGS@ @FLIBS@
