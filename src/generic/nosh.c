@@ -358,11 +358,11 @@ VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
 VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int dielfmt;
+    Vdata_Format dielfmt;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
-        dielfmt = 0;
+        dielfmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
 %s\n", thee->ndiel, tok);
@@ -394,11 +394,11 @@ section!\n");
 VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int kappafmt;
+    Vdata_Format kappafmt;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
-        kappafmt = 0;
+        kappafmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
           thee->nkappa, tok);
@@ -422,11 +422,11 @@ section!\n");
 VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int chargefmt;
+    Vdata_Format chargefmt;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
-        chargefmt = 0;
+        chargefmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
           thee->ncharge, tok);
@@ -646,8 +646,8 @@ section!\n");
 
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
  
-    MGparm *tmgparms[NOSH_MAXCALC];
     MGparm_CalcType type;
+    MGparm *tmgparms[NOSH_MAXCALC];
     int i;
 
     char tok[VMAX_BUFSIZE];
@@ -707,13 +707,9 @@ run!\n");
 		    Vnm_print(2, "NOsh_parseELEC: The method (\"mg\" or \"fem\") or \"name\" must be the first keyword in the ELEC section\n");
 			return 0;
 		} 
-	} else {
-        Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while reading ELEC section!\n");
-        return 0;
-    } 
+	} 
 
-    /* We ran out of tokens! */
-    Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while parsing ELEC section!\n");
+    Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while reading ELEC section!\n");
     return 0;
 
 }

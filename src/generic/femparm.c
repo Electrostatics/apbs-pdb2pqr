@@ -240,6 +240,7 @@ VPRIVATE int FEMparm_parseAKEYPRE(FEMparm *thee, Vio *sock) {
     }
 
     return rc;
+
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
     return -1;
@@ -279,7 +280,6 @@ VERROR1:
 VPRIVATE int FEMparm_parseTARGETNUM(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
     int ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -299,7 +299,6 @@ VERROR1:
 VPRIVATE int FEMparm_parseTARGETRES(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
     double tf;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);

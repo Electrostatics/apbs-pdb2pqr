@@ -63,10 +63,6 @@
 
 #include "maloc/maloc.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vcap: Non-Inlineable methods (vcap.c)
-/////////////////////////////////////////////////////////////////////////// */
-
 /** @brief   Provide a capped exp() function
  *
  *           If the argument x of Vcap_exp() exceeds EXPMAX or EXPMIN, then we
@@ -83,11 +79,12 @@
  *
  *  @ingroup Vcap
  *  @author  Nathan Baker (based on FORTRAN code by Mike Holst)
- *  @param   x     Argument to exp()
- *  @param   ichop set to 1 if exp function capped
  *  @return  exp(x) or capped equivalent
  */
-VEXTERNC double Vcap_exp(double x, int *ichop);
+VEXTERNC double Vcap_exp(
+        double x, /**< Argument to exp() */
+        int *ichop /**< Set to 1 if function capped, 0 otherwise */
+        );
 
 
 /** @brief   Provide a capped sinh() function
@@ -106,11 +103,12 @@ VEXTERNC double Vcap_exp(double x, int *ichop);
  *
  *  @ingroup Vcap
  *  @author  Nathan Baker (based on FORTRAN code by Mike Holst)
- *  @param   x     Argument to sinh()
- *  @param   ichop set to 1 if sinh function capped
  *  @return  sinh(x) or capped equivalent
  */
-VEXTERNC double Vcap_sinh(double x, int *ichop);
+VEXTERNC double Vcap_sinh(
+        double x, /**< Argument to sinh() */
+        int *ichop /**< Set to 1 if function capped, 0 otherwise */
+        );
 
 /** @brief   Provide a capped cosh() function
  *
@@ -128,10 +126,11 @@ VEXTERNC double Vcap_sinh(double x, int *ichop);
  *
  *  @ingroup Vcap
  *  @author  Nathan Baker (based on FORTRAN code by Mike Holst)
- *  @param   x     Argument to cosh()
- *  @param   ichop set to 1 if cosh function capped
  *  @return  cosh(x) or capped equivalent
  */
-VEXTERNC double Vcap_cosh(double x, int *ichop);
+VEXTERNC double Vcap_cosh(
+        double x, /**< Argument to cosh() */
+        int *ichop /**< Set to 1 if function capped, 0 otherwise */
+        );
 
 #endif    /* ifndef _VCAP_H_ */

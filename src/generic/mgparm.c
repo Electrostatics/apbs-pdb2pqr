@@ -273,8 +273,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                 tnlev[i] = 0;
                 /* Find the maximum number of times this dimension can be
                  * divided by two */
-                while (1) {
-                    if (VODD(ti)) break;
+                while (VEVEN(ti)) {
                     (tnlev[i])++;
                     ti = (int)ceil(0.5*ti);
                 }
@@ -287,7 +286,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                       i, tdime[i], tnlev[i]);
                     ti = (int)(tdime[i]/VPOW(2.,(VMGNLEV+1)));
                     if (ti < 1) ti = 1;
-                    tdime[i] = ti*VPOW(2.,(VMGNLEV+1)) + 1;
+                    tdime[i] = ti*(int)(VPOW(2.,(VMGNLEV+1))) + 1;
                     tnlev[i] = 4;
                     Vnm_print(2, "NOsh:  Reset dime[%d] to %d and \
 (nlev = %d).\n", i, tdime[i], VMGNLEV);
@@ -415,6 +414,20 @@ VPRIVATE int MGparm_parseCHGM(MGparm *thee, Vio *sock) {
     if (sscanf(tok, "%d", &ti) == 1) {
         thee->chgm = ti;
         thee->setchgm = 1;
+        Vnm_print(2, "NOsh:  Warning -- parsed deprecated statment \"chgm %d\".\n", ti);
+        Vnm_print(2, "NOsh:  Please use \"chgm ");
+        switch (thee->chgm) {
+            case VCM_TRIL:
+                Vnm_print(2, "spl0");
+                break;
+            case VCM_BSPL2:
+                Vnm_print(2, "spl2");
+                break;
+            default:
+                Vnm_print(2, "UNKNOWN");
+                break;
+        }
+        Vnm_print(2, "\" instead!\n");
         return 1;
     } else if (Vstring_strcasecmp(tok, "spl0") == 0) {
         thee->chgm = VCM_TRIL;

@@ -147,9 +147,9 @@ VPRIVATE int Vacc_setupGrid(Vacc *thee) {
     xlen = x_max-x_min + 2.0*VACC_INFLATE*(r_max+thee->max_radius);
     ylen = y_max-y_min + 2.0*VACC_INFLATE*(r_max+thee->max_radius);
     zlen = z_max-z_min + 2.0*VACC_INFLATE*(r_max+thee->max_radius);
-    thee->hx = xlen/((float)(thee->nx - 1));
-    thee->hy = ylen/((float)(thee->ny - 1));
-    thee->hzed = zlen/((float)(thee->nz - 1));
+    thee->hx = xlen/((double)(thee->nx - 1));
+    thee->hy = ylen/((double)(thee->ny - 1));
+    thee->hzed = zlen/((double)(thee->nz - 1));
     Vnm_print(0, "Vacc_ctor2:  Grid lengths = (%g, %g, %g)\n",
             xlen, ylen, zlen);
  
@@ -377,24 +377,6 @@ VPRIVATE int Vacc_assignAtoms(Vacc *thee) {
 
 VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     int nx, int ny, int nz, int nsphere) {
-
-    /* Grid variables */
-    int i;
-    double x, y, z, *coord;
-    int ii, jj, kk, totatoms;
-    int i_min, j_min, k_min;
-    int i_max, j_max, k_max;
-
-    /* Mol variables */
-    double x_max, y_max, z_max;
-    double x_min, y_min, z_min;
-    double r_max;
-
-    /* Natural grid coordinate (array position) */
-    int ui;
-    /* Atom radius */
-    double rtot, rtot2;
-    Vatom *atom;
 
     /* Check and store parameters */
     if (!Vacc_storeParms(thee, alist, max_radius, nx, ny, nz, nsphere)) {
@@ -1155,7 +1137,7 @@ VPUBLIC double Vacc_totalSASA(Vacc *thee, double radius) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vacc_atomSASA(Vacc *thee, double srad, int iatom) { 
 
-    int ipt, covered;
+    int ipt;
     double area = 0.0;
     double *tPos, tRad, vec[3];
     Vatom *thisAtom;
@@ -1165,7 +1147,6 @@ VPUBLIC double Vacc_atomSASA(Vacc *thee, double srad, int iatom) {
     tPos = Vatom_getPosition(thisAtom);
     tRad = Vatom_getRadius(thisAtom);
 
-    covered = 0;
     for (ipt=0; ipt<thee->nsphere; ipt++) {
         vec[0] = (tRad+srad)*thee->sphere[ipt][0] + tPos[0];
         vec[1] = (tRad+srad)*thee->sphere[ipt][1] + tPos[1];
