@@ -1184,7 +1184,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     int i, nx, ny, nz;
     double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
     Vgrid *grid; 
-
+   
     if (nosh->bogus) return 1;
 
   
@@ -1196,7 +1196,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
         hx = pmg->pmgp->hx;
         hy = pmg->pmgp->hy;
         hzed = pmg->pmgp->hzed;
-
+  
         switch (pbeparm->writetype[i]) {
 
             case VDT_CHARGE:
@@ -1208,7 +1208,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, "CHARGE DISTRIBUTION (e)");
                 break;
 
@@ -1221,7 +1222,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, "POTENTIAL (kT/e)");
                 break;
 
@@ -1234,7 +1236,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, pbeparm->srad);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, pbeparm->srad, 
+                  pbeparm->pbetype);
                 sprintf(title, 
                   "SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
                   pbeparm->srad);
@@ -1249,7 +1252,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL, pbeparm->swin);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL, pbeparm->swin, 
+                  pbeparm->pbetype);
                 sprintf(title, 
                   "SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
                   pbeparm->swin);
@@ -1264,7 +1268,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
                 break;
 
@@ -1278,7 +1283,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
                 Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
-                  pmg->pbe->maxIonRadius);
+                  pmg->pbe->maxIonRadius, pbeparm->pbetype);
                 sprintf(title, 
                   "ION ACCESSIBILITY -- SPLINE (%4.3f RADIUS)",
                   pmg->pbe->maxIonRadius);
@@ -1293,7 +1298,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, 
                   "POTENTIAL LAPLACIAN (kT/e/A^2)");
                 break;
@@ -1307,7 +1313,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, "ENERGY DENSITY (kT/e/A)^2");
                 break;
 
@@ -1320,7 +1327,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, 
                   "ION NUMBER DENSITY (M)");
                 break;
@@ -1334,7 +1342,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title, 
                   "ION CHARGE DENSITY (e_c * M)");
                 break;
@@ -1348,7 +1357,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title,
                   "X-SHIFTED DIELECTRIC MAP");
                 break;
@@ -1362,7 +1372,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title,
                   "Y-SHIFTED DIELECTRIC MAP");
                 break;
@@ -1376,7 +1387,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title,
                   "Z-SHIFTED DIELECTRIC MAP");
                 break;
@@ -1390,7 +1402,8 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
                 xmin = xcent - 0.5*(nx-1)*hx;
                 ymin = ycent - 0.5*(ny-1)*hy;
                 zmin = zcent - 0.5*(nz-1)*hzed;
-                Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0);
+                Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
+                  pbeparm->pbetype);
                 sprintf(title,
                   "KAPPA MAP");
                 break;

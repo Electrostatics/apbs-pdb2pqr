@@ -12,7 +12,9 @@ BETA PUBLIC RELEASE VERSION 0.3.2       ??-??-04
       fixed.
     * Fixed documentation to state that using a kappa map does not ignore
       ELEC ION statements.
-
+    * Added a stability fix for printing charge densities for LPBE-type
+      calculations.
+	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.1       04-13-04
 #############################################################################
