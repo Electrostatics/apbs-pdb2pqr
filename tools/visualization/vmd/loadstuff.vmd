@@ -1,5 +1,5 @@
   source read_dx 
-  mol load pdb ../cdom_model_101_ni.pdb
-  read_dx pot-NiCl2.dx 0
+  mol load pdb mol.pqr
+  read_dx pot.dx 0
 
   add_contour 0 -1.0 1
