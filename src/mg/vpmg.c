@@ -814,7 +814,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
         if ((position[0]<=xmin) || (position[0]>=xmax)  || \
             (position[1]<=ymin) || (position[1]>=ymax)  || \
             (position[2]<=zmin) || (position[2]>=zmax)) {
-            Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is
+            Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is
 off the mesh (ignoring)!\n",
             iatom, position[0], position[1], position[2]);
         } else {
