@@ -34,38 +34,27 @@
 //////////////////////////////////////////////////////////////////////////// */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// File:     mgparm.h    
+// File:     pbeparse.h    
 //
-// Purpose:  A set of useful parameters for a generic multigrid calculation
+// Purpose:  A set of useful parameters and parsing methods for a generic PBE
+//           calculation
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _MGPARM_H_
-#define _MGPARM_H_
+#ifndef _PBEPARSE_H_
+#define _PBEPARSE_H_
 
 #include "apbs/apbs.h"
 #include "maloc/maloc.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class MGparm: Definition
+// Class PBEparse: Definition
+//
+// If you add/change something here, it must be added/changed in PBEparse_copy
 /////////////////////////////////////////////////////////////////////////// */
-typedef struct MGparm {
-   
-    int dime[3];               /* Grid dimensions */
-    int setdime;
-    int nlev;                  /* Levels in multigrid hierarchy */
-    int setnlev;
-    double grid[3];            /* Grid spacings */
-    int setgrid;
-    double glen[3];            /* Grid side lengths */
-    int setglen;
-    int cmeth;                 /* Centering method: 0 => center on point, 
-                                * 1 => center on molecule */
-    double center[3];          /* Grid center */
-    int setgcent;  
-    int centmol;               /* Particular molecule on which we want to
-                                * center the grid */
+typedef struct PBEparse {
+
     int molid;                 /* Molecule ID to perform calculation on */
     int setmolid;
     int nonlin;                /* 0 => LPBE, 1 => NPBE */
@@ -126,18 +115,18 @@ typedef struct MGparm {
 
     int parsed;                /* Has this been filled with anything other than
                                 * the default values? */
-} MGparm;
+} PBEparse;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC MGparm* MGparm_ctor();
-VEXTERNC int     MGparm_ctor2(MGparm *thee);
-VEXTERNC void    MGparm_dtor(MGparm **thee);
-VEXTERNC void    MGparm_dtor2(MGparm *thee);
-VEXTERNC int     MGparm_check(MGparm *thee);
-VEXTERNC void    MGparm_copy(MGparm *thee, MGparm *parm);
+VEXTERNC PBEparse* PBEparse_ctor();
+VEXTERNC int     PBEparse_ctor2(PBEparse *thee);
+VEXTERNC void    PBEparse_dtor(PBEparse **thee);
+VEXTERNC void    PBEparse_dtor2(PBEparse *thee);
+VEXTERNC int     PBEparse_check(PBEparse *thee);
+VEXTERNC void    PBEparse_copy(PBEparse *thee, PBEparse *parm);
 
 #endif 
 
