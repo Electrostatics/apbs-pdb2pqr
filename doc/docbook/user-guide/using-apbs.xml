@@ -19,8 +19,10 @@
           is a Python-based molecular visualization package which provides an
           interface to APBS.  It not only permits visualization of APBS results
           but it also integrates setup and executation of APBS calculations.
-          The PMV/APBS interface is under active development and future
-          versions will offer even more setup, visualization, and analysis
+          The PMV/APBS interface 
+          (<ulink url="http://mccammon.ucsd.edu/pmv_apbs/">http://mccammon.ucsd.edu/pmv_apbs/</ulink>)
+          is under active development and future versions will offer even more
+          setup, visualization, and analysis
           functionality.
         </para>
         <para>The APBS interface is distributed with recent beta versions of
