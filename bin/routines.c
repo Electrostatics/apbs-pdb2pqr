@@ -357,10 +357,8 @@ VPUBLIC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg) {
 // Purpose:  Calculate and write out energies for MG calculation
 //
 // Args:     nosh       Holds input file information
-//           pbeparm    PBE parameters for this calculation
 //           pmg        Holds solution
-//           nenergy    stores a flag (0, 1, 2) that indicates whether no,
-//                      total, or all energies were evaluated
+//           icalc      Calculation index in nosh
 //           totEnergy  set to total energy
 //           qfEnergy   set to charge-phi energy
 //           qmEnergy   set to mobile ion energy
@@ -370,24 +368,36 @@ VPUBLIC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int energyMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, 
+VPUBLIC int energyMG(Vcom *com, NOsh *nosh, int icalc, Vpmg *pmg, 
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy) {
+
+    MGparm *mgparm;
+    PBEparm *pbeparm;
+    int extEnergy;              /* When focusing, do we include energy 
+                                 * contributions from outside the local 
+                                 * partition? */
+
+    mgparm = nosh->calc[icalc].mgparm;
+    pbeparm = nosh->calc[icalc].pbeparm;
+
+    if (mgparm->type == 2) extEnergy = 0;
+    else extEnergy = 1;
 
     if (pbeparm->calcenergy == 1) {
         *nenergy = 1;
         /* Some processors don't count */
         if (nosh->bogus == 0) {
-            *totEnergy = Vpmg_energy(pmg, 1);
+            *totEnergy = Vpmg_energy(pmg, extEnergy);
             Vcom_print(com, 1, "main:    Total electrostatic energy = \
 %1.12E kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         } else *totEnergy = 0;
     } else if (pbeparm->calcenergy == 2) {
         *nenergy = 1;
-        *totEnergy = Vpmg_energy(pmg, 1);
-        *qfEnergy = Vpmg_qfEnergy(pmg, 1);
-        *qmEnergy = Vpmg_qmEnergy(pmg, 1);
-        *dielEnergy = Vpmg_dielEnergy(pmg, 1);
+        *totEnergy = Vpmg_energy(pmg, extEnergy);
+        *qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
+        *qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
+        *dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
         Vcom_print(com, 1, "main:    Total electrostatic energy = %1.12E\
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         Vcom_print(com, 1, "main:    Fixed charge energy = %g kJ/mol\n",

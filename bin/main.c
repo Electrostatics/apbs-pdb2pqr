@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     char *input_path = VNULL;
     char outpath[VMAX_ARGLEN];
     double iparm, sparm;
-    int i, j, imgcalc, ifemcalc, rank;
+    int i, j, rank;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -189,8 +189,6 @@ int main(int argc, char **argv) {
     /* *************** DO THE CALCULATIONS ******************* */
     Vcom_print(com, 1, "main:  Preparing to run %d PBE calculations.\n",
       nosh->ncalc);
-    imgcalc = 0;
-    ifemcalc = 0;
     for (i=0; i<nosh->ncalc; i++) {
         Vcom_print(com, 1, "main:  ----------------------------------------\n");
 
@@ -200,9 +198,8 @@ int main(int argc, char **argv) {
             Vcom_print(com, 1, "main:  CALCULATION #%d: MULTIGRID\n", i+1);
 
             /* Useful local variables */
-            mgparm = nosh->calc[imgcalc].mgparm;
-            pbeparm = nosh->calc[imgcalc].pbeparm;
-            imgcalc++;
+            mgparm = nosh->calc[i].mgparm;
+            pbeparm = nosh->calc[i].pbeparm;
 
             /* Set up problem */
             Vcom_print(com, 1, "main:    Setting up problem...\n");
@@ -223,7 +220,7 @@ int main(int argc, char **argv) {
             setPartMG(com, mgparm, pmg[i]);
 
             /* Write out energies */
-            energyMG(com, nosh, pbeparm, pmg[i], &(nenergy[i]), 
+            energyMG(com, nosh, i, pmg[i], &(nenergy[i]), 
               &(totEnergy[i]), &(qfEnergy[i]), &(qmEnergy[i]), 
               &(dielEnergy[i]));
 

@@ -85,7 +85,7 @@ VEXTERNC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
   Vpmg *pmg[NOSH_MAXCALC]);
 VEXTERNC int solveMG(Vcom *com, Vpmg *pmg);
 VEXTERNC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg);
-VEXTERNC int energyMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg,
+VEXTERNC int energyMG(Vcom *com, NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
 VEXTERNC int forceMG(Vcom *com, Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
