@@ -668,6 +668,7 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    double phi[4], phix[4][3], *position;
    int iatom, natoms;
    int isimp, nsimps;
+   int icolor;
    int ivert;
    SS *simp;
    double energy = 0.0;
@@ -695,31 +696,35 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color) {
    /* Now we do the sum over atoms... */
    natoms = Valist_getNumberAtoms(thee->alist);
    for (iatom=0; iatom<natoms; iatom++) {
+       /* Get atom information */
+       icolor = Vcsm_getAtomColor(thee->csm, iatom);
        charge = Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
        position = Vatom_getPosition(Valist_getAtom(thee->alist, iatom));
-       /* Loop over the simps associated with this atom */
-       nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
-       /* Don't overcount q*phi contributions if found in more than one
-        * simplex.  Since the solution is piecewise linear (i.e.,
-        * continuous), FOR THE ENERGY ONLY, we should be able to integrate
-        * the delta function in only one of the simplices.  Note that this
-        * is a completely different story for the forces...
-        */
-       for (isimp=0; isimp<nsimps; isimp++) {
-           simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
-           /* Loop through the list of simplices to see if any belong to
-            * our partition */
-           if ((SS_chart(simp)==color)||(color<0)) {
-               /* Get the value of each basis function evaluated at this
-                * point */
-               Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
-               for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
-                   uval = sol[VV_id(SS_vertex(simp,ivert))];
-                   energy += (charge*phi[ivert]*uval);
-               } /* end for ivert */
-               break;
-           } /* endif (color) */
-       } /* end for isimp */
+       /* Check if this atom belongs to the specified partition */
+       if (color>=0) VASSERT(icolor>=0);
+       if (icolor == color) { 
+           /* Loop over the simps associated with this atom */
+           nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
+           /* Get the first simp of the correct color; we can use just one
+            * simplex for energy evaluations, but not for force evaluations */
+           for (isimp=0; isimp<nsimps; isimp++) {
+               simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
+               /* If we've asked for a particular partition AND if the atom 
+                * is our partition, then compute the energy */
+               if ((SS_chart(simp)==color)||(color<0)) {
+                   /* Get the value of each basis function evaluated at this
+                    * point */
+                   Vgm_pointInSimplexVal(thee->gm, simp, position, phi, phix);
+                   for (ivert=0; ivert<SS_dimVV(simp); ivert++) {
+                       uval = sol[VV_id(SS_vertex(simp,ivert))];
+                       energy += (charge*phi[ivert]*uval);
+                   } /* end for ivert */
+                   /* We only use one simplex of the appropriate color for
+                    * energy calculations, so break here */
+                   break;
+               } /* endif (color) */
+           } /* end for isimp */
+       } /* if (icolor == color) */
    } /* end for iatom */
 
    /* Destroy the finest level solution */
