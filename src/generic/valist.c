@@ -233,7 +233,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     /* Open data files */
     pqrf = fopen(fname,"r");
     if (pqrf == NULL) {
-        fprintf(stderr,"Valist_readPQR: Error opening %s\n",fname);
+        Vnm_print(2, "Valist_readPQR: Error opening %s\n",fname);
         return 0;
     }
 
@@ -260,7 +260,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     }
 
 #if defined(VDEBUG)
-    printf("Valist_readPQR: Counted %d atoms\n",thee->number);
+    Vnm_print(1, "Valist_readPQR: Counted %d atoms\n",thee->number);
     fflush(stdout);
 #endif
 
@@ -277,20 +277,23 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     while (1) {
 
         if (fgets(line,maxl,pqrf) == NULL) {
-            fprintf(stderr,"Valist_readPQR: Read EOF instead of atom\n");
+            Vnm_print(2, "Valist_readPQR: Read EOF instead of atom\n");
             fflush(stderr);
             return 0;
         }
 
         /* Check to see if we got an ATOM line */
         if ( !strncmp(line,"ATOM",4)) {
-            if ( (sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf", 
-                   &x,&y,&z,&charge,&radius) == 5) != 1) {
-                if ( (sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
-                   &x,&y,&z,&charge,&radius) == 5) != 1) {
-                    fprintf(stderr,"Valist_readPQR:  FATAL sscanf (formatting) error reading: \n    %s\n", line);
-                    return 0;
-                }
+	    if ((sscanf(line, "ATOM%*7d  %*4s%*4s %*1s %*5d    %lf%lf%lf%lf%lf",
+              &x,&y,&z,&charge,&radius) == 5)) {;}
+	    else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5d    %lf%lf%lf%lf%lf",
+              &x,&y,&z,&charge,&radius) == 5)) {;}
+            else if ((sscanf(line,"ATOM%*7d  %*4s%*4s%*5s    %lf%lf%lf%lf%lf",
+              &x,&y,&z,&charge,&radius) == 5)) {;}
+            else {
+                Vnm_print(2, "Valist_readPQR:  FATAL sscanf (formatting) \
+error reading: \n    %s\n", line);
+                return 0;
             }
 
             if (x < thee->mincrd[0]) thee->mincrd[0] = x;
@@ -316,7 +319,9 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
             /* Have we gotten all the entries? */
             if (i == thee->number)  break;
 
-        }  /* !strncmp(line,"ATOM",4) */
+        } else {
+            Vnm_print(2, "Valist_readPQR:  IGNORED line: \n    %s\n", line);
+        }
     } /* while(1) */
 
     thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
