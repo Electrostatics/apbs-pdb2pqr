@@ -142,6 +142,24 @@ AC_PROG_CPP
 AC_DISABLE_SHARED
 AM_PROG_LIBTOOL
 
+dnl # Check for Python (for wrappers)
+AC_PATH_PROG(py_path, python)
+if test -n "${py_path}"; then
+   changequote(<<, >>)dnl
+   PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
+   changequote([, ])dnl
+   PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'` 
+   if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION"
+   else
+	  PYCFLAGS=""
+   fi
+else
+   PYCFLAGS=""
+fi
+AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
+AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
+
 dnl ##########################################################################
 dnl 3. checks for libraries
 dnl ##########################################################################
@@ -189,7 +207,6 @@ dnl # CHECK FOR SRAND
 try_srand=""
 AC_LANG_C
 AC_CHECK_FUNC(srand,[AC_DEFINE([HAVE_SRAND_FUNC], [], [have the srand() function])], [])
-
 
 dnl ##########################################################################
 dnl 4. checks for header files
@@ -736,6 +753,7 @@ AC_OUTPUT([
     tools/mesh/Makefile
     tools/manip/Makefile
     tools/opendx/Makefile
+    tools/python/Makefile
     tools/arpack/Makefile
 
     src/Makefile
