@@ -71,6 +71,9 @@
 #undef VF77_UPPERCASE
 #undef VF77_LOWERCASE
 
+/* Define if you have the <dlfcn.h> header file.  */
+#undef HAVE_DLFCN_H
+
 /* Name of package */
 #undef PACKAGE
 

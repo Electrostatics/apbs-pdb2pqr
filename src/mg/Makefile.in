@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4-p5 from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -73,14 +73,18 @@ CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
 DLLTOOL = @DLLTOOL@
+ECHO = @ECHO@
+EXEEXT = @EXEEXT@
 F77 = @F77@
 FLIBS = @FLIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAKEINFO = @MAKEINFO@
 OBJDUMP = @OBJDUMP@
+OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
+STRIP = @STRIP@
 VERSION = @VERSION@
 arpack_lib = @arpack_lib@
 cxxfmmsrc = @cxxfmmsrc@
@@ -119,7 +123,12 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = mg
 
 noinst_LTLIBRARIES = libapbsmg.la
-libapbsmg_la_SOURCES = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f   buildPd.f cgd.f cgmgd.f cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f   mblasd.f mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f   nrchdrvd.f nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rchd.f   smoothd.f sord.f wjd.f mypde.f
+libapbsmg_la_SOURCES = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f \
+  buildPd.f cgd.f cgmgd.f cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f \
+  mblasd.f mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
+  ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
+  nrchdrvd.f nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rchd.f \
+  smoothd.f sord.f wjd.f mypde.f
 
 INCLUDES = -I../generic -I../fem @inc_list@
 AM_CFLAGS = @wall_pedantic_ansi@
@@ -164,7 +173,7 @@ OBJECTS = $(libapbsmg_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .C .H .S .c .cc .f .h .java .l .lo .m .o .s .y
+.SUFFIXES: .C .H .S .c .cc .f .h .java .l .lo .m .o .obj .s .y
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/mg/Makefile
 
@@ -185,6 +194,11 @@ maintainer-clean-noinstLTLIBRARIES:
 .c.o:
 	$(COMPILE) -c $<
 
+# FIXME: We should only use cygpath when building on Windows,
+# and only if it is available.
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+
 .s.o:
 	$(COMPILE) -c $<
 
@@ -193,6 +207,7 @@ maintainer-clean-noinstLTLIBRARIES:
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
+	-rm -f *.$(OBJEXT)
 
 clean-compile:
 
@@ -224,6 +239,8 @@ libapbsmg.la: $(libapbsmg_la_OBJECTS) $(libapbsmg_la_DEPENDENCIES)
 	$(F77LINK)  $(libapbsmg_la_LDFLAGS) $(libapbsmg_la_OBJECTS) $(libapbsmg_la_LIBADD) $(LIBS)
 .f.o:
 	$(F77COMPILE) -c $<
+.f.obj:
+	$(F77COMPILE) -c `cygpath -w $<`
 .f.lo:
 	$(LTF77COMPILE) -c $<
 
@@ -263,7 +280,7 @@ maintainer-clean-recursive:
 	dot_seen=no; \
 	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
 	  rev="$$subdir $$rev"; \
-	  test "$$subdir" = "." && dot_seen=yes; \
+	  test "$$subdir" != "." || dot_seen=yes; \
 	done; \
 	test "$$dot_seen" = "no" && rev=". $$rev"; \
 	target=`echo $@ | sed s/-recursive//`; \

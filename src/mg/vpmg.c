@@ -67,6 +67,7 @@ VPRIVATE double bcfl1sp(double size, double *apos, double charge,
   double xkappa, double pre1, double *pos);
 VPRIVATE void bcCalc(Vpmg *thee);
 
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  focusFillBound
 //
@@ -92,6 +93,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     hxNEW = thee->pmgp->hx;
     hyNEW = thee->pmgp->hy;
     hzNEW = thee->pmgp->hzed;
+    nx =  thee->pmgp->nx;
+    ny =  thee->pmgp->ny;
+    nz =  thee->pmgp->nz;
     nxNEW = thee->pmgp->nx;
     nyNEW = thee->pmgp->ny;
     nzNEW = thee->pmgp->nz;
@@ -1825,7 +1829,7 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 
     double *apos, position[3], arad, hx, hy, hzed, izmagic;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
-    double rtot, dx, dx2, dy, dy2, dz, gpos[3], tgrad[3], dbFmag, epsw;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw;
     double npFmag, *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
     double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
     double dHzijkm1[3];
@@ -2051,7 +2055,7 @@ VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID) {
     
     double *apos, position[3], hx, hy, hzed;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
-    double dx, dy, dz, gpos[3], tgrad[3];
+    double dx, dy, dz;
     double *u, charge, ifloat, jfloat, kfloat;
     int nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
 
@@ -2238,7 +2242,7 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 
-    double hx, hy, hzed, energy, nrgx, nrgy, nrgz, T, pvecx, pvecy, pvecz;
+    double hx, hy, hzed, energy, nrgx, nrgy, nrgz, pvecx, pvecy, pvecz;
     int i, j, k, nx, ny, nz;
  
     VASSERT(thee != VNULL);
@@ -2556,16 +2560,15 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 //
 // Notes:    The mesh spacing should be uniform
 //           Format changed from %12.6E to %12.5E
-//           Respects partition information
+//           THIS ROUTINE DOES NOT RESPECT partition information
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt, 
   const char *thost, const char *fname, char *title, double *data) {
 
-    int icol, i, j, k, u, nx, ny, nz, nxPART, nyPART, nzPART, gotit;
-    double xmin, ymin, zmin, xminPART, yminPART, zminPART, hzed, hy, hx;
-    double x, y, z;
+    int icol, i, j, k, u, nx, ny, nz, gotit;
+    double xmin, ymin, zmin, hzed, hy, hx;
     Vio *sock;
 
     VASSERT(thee != VNULL);
@@ -2599,94 +2602,29 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
     xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
     ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
     zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
-    xminPART = thee->pmgp->xcent + 0.5*(hx)*(nx-1);
-    yminPART = thee->pmgp->ycent + 0.5*(hy)*(ny-1);
-    zminPART = thee->pmgp->zcent + 0.5*(hzed)*(nz-1);
-    nxPART = 0;
-    nyPART = 0; 
-    nzPART = 0;
-    /* Get the lower corner and number of grid points for the local
-     * partition */
-    xminPART = xmin + (hx)*(nx-1);
-    yminPART = ymin + (hy)*(ny-1);
-    zminPART = zmin + (hzed)*(nz-1);
-    nxPART = 0;
-    nyPART = 0;
-    nzPART = 0;
-    /* First, search for the lower corner */
-    for (k=0; k<nz; k++) {
-        z = k*hzed + xmin;
-        for (j=0; j<ny; j++) {
-            y = j*hy + ymin;
-            for (i=0; i<nx; i++) {
-                x = i*hx + xmin;
-                u = k*(nx)*(ny)+j*(nx)+i;
-                if (thee->pvec[u] != 0) {
-                    if (x < xminPART) xminPART = x;
-                    if (y < yminPART) yminPART = y;
-                    if (z < zminPART) zminPART = z;
-                }
-            }
-        }
-    }
-    /* Now search for the number of grid points in the z direction */
-    for (k=0; k<nz; k++) {
-        gotit = 0;
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
-                u = k*(nx)*(ny)+j*(nx)+i;
-                if (thee->pvec[u] != 0) {
-                    gotit = 1;
-                    break;
-                }
-            }
-            if (gotit) break;
-        }
-        if (gotit) nzPART++;
-    }
-    /* Now search for the number of grid points in the y direction */
-    for (j=0; j<ny; j++) {
-        gotit = 0;
-        for (k=0; k<nz; k++) {
-            for (i=0; i<nx; i++) {
-                u = k*(nx)*(ny)+j*(nx)+i;
-                if (thee->pvec[u] != 0) {
-                    gotit = 1;
-                    break;
-                }
-            }
-            if (gotit) break;
-        }
-        if (gotit) nyPART++;
-    }
-    /* Now search for the number of grid points in the x direction */
-    for (i=0; i<nx; i++) {
-        gotit = 0;
-        for (k=0; k<nz; k++) {
-            for (j=0; j<ny; j++) {
-                u = k*(nx)*(ny)+j*(nx)+i;
-                if (thee->pvec[u] != 0) {
-                    gotit = 1;
-                    break;
-                }
-            }
-            if (gotit) break;
-        }
-        if (gotit) nxPART++;
-    }
 
-    if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
-        Vnm_print(0, "Vpmg_writeUHBD:  printing only subset of domain\n");
+    /* Let interested folks know that partition information is ignored */
+    gotit = 0;
+    for (i=0; i<(nx*ny*nz); i++) {
+        if (thee->pvec[i] == 0) {
+            gotit = 1;
+            break;
+        }
     }
-
+    if (gotit) { 
+        Vnm_print(2, "Vpmg_writeUHBD:  IGNORING PARTITION INFORMATION!\n");
+        Vnm_print(2, "Vpmg_writeUHBD:  This means I/O from parallel runs will\
+ have significant overlap.\n");
+    }
+ 
     /* Write out the header */
     Vio_printf(sock, "%72s\n", title);
-    Vio_printf(sock, "%12.6E%12.6E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0, 
-      nzPART, 1, nzPART);
-    Vio_printf(sock, "%7d%7d%7d%12.6E%12.6E%12.6E%12.6E\n", nxPART,
-      nyPART, nzPART, hx, xminPART, yminPART, zminPART);
-    Vio_printf(sock, "%12.6E%12.6E%12.6E%12.6E\n", 0.0, 0.0, 0.0, 0.0);
-    Vio_printf(sock, "%12.6E%12.6E%7d%7d", 0.0, 0.0, 0, 0);
+    Vio_printf(sock, "%12.5E%12.5E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0, 
+      nz, 1, nz);
+    Vio_printf(sock, "%7d%7d%7d%12.5E%12.5E%12.5E%12.5E\n", nx, ny, nz, 
+      hx, xmin, ymin, zmin);
+    Vio_printf(sock, "%12.5E%12.5E%12.5E%12.5E\n", 0.0, 0.0, 0.0, 0.0);
+    Vio_printf(sock, "%12.5E%12.5E%7d%7d", 0.0, 0.0, 0, 0);
 
     /* Write out the entries */
     icol = 0;
@@ -2696,13 +2634,11 @@ VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
         for (j=0; j<ny; j++) {
             for (i=0; i<nx; i++) {
                 u = k*(nx)*(ny)+j*(nx)+i;
-                if (thee->pvec[u] != 0) {
-                    icol++;
-                    Vio_printf(sock, " %12.6E", data[u]);
-                    if (icol == 6) {
-                        icol = 0;
-                        Vio_printf(sock, "\n");
-                    }
+                icol++;
+                Vio_printf(sock, " %12.5E", data[u]);
+                if (icol == 6) {
+                    icol = 0;
+                    Vio_printf(sock, "\n");
                 }
             }
         }
@@ -3230,6 +3166,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
     ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
     zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
+    xok = 0;
+    yok = 0;
+    zok = 0;
 
     /* We need have called Vpmg_fillco first */
     VASSERT(thee->filled == 1);

@@ -49,16 +49,67 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // External FORTRAN ROUTINES 
 /////////////////////////////////////////////////////////////////////////// */
-#define F77MGSZ       VF77_MANGLE(mgsz, MGSZ)
-#define F77PACKMG     VF77_MANGLE(packmg, PACKMG)
-#define F77CGMGDRIV   VF77_MANGLE(cgmgdriv, CGMGDRIV)
+#define F77MGSZ VF77_MANGLE(mgsz, MGSZ)
+VEXTERNC void F77MGSZ(int *mgcoar, int *mgdisc, int *mgsolv, int *nx, int *ny,
+  int *nz, int *nlev, int *nxc, int *nyc, int *nyz, int *nf, int *nc, 
+  int *narr, int *narrc, int *n_rpc, int *n_iz, int *n_ipc, int *nrwk, 
+  int *niwk);
+
+#define F77PACKMG VF77_MANGLE(packmg, PACKMG)
+VEXTERNC void F77PACKMG(int *iparm, double *rparm, int *nrwk, int *niwk,
+  int *nx, int *ny, int *nz, int *nlev, int *nu1, int *nu2, int *mgkey, 
+  int *itmax, int *istop, int *ipcon, int *nonlin, int *mgsmoo, int *mgprol, 
+  int *mgcoar, int *mgsolv, int *mgdisc, int *iinfo, double *errtol,
+  int *ipkey, double *omegal, double *omegan, int *irite, int *iperf);
+
+#define F77CGMGDRIV VF77_MANGLE(cgmgdriv, CGMGDRIV)
+VEXTERNC void F77CGMGDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NEWDRIV    VF77_MANGLE(newdriv, NEWDRIV)
+VEXTERNC void F77NEWDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77MGDRIV     VF77_MANGLE(mgdriv, MGDRIV)
+VEXTERNC void F77MGDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NCGHSDRIV  VF77_MANGLE(ncghsdriv, NCGHSDRIV)
+VEXTERNC void F77NCGHSDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NSORDRIV   VF77_MANGLE(nsordriv, NSORDRIV)
+VEXTERNC void F77NSORDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NGSRBDRIV  VF77_MANGLE(ngsrbdriv, NGSRBDRIV)
+VEXTERNC void F77NGSRBDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NWJACDRIV  VF77_MANGLE(nwjacdriv, NWJACDRIV)
+VEXTERNC void F77NWJACDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77NRICHDRIV  VF77_MANGLE(nrichdriv, NRICHDRIV)
+VEXTERNC void F77NRICHDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf, double *tcf);
+
 #define F77TSECND     VF77_MANGLE(tsecnd, TSECND)
 #define F77VPMGANORM  VF77_MANGLE(vpmganorm, VPMGANORM)
 #define F77VPMGABAND  VF77_MANGLE(vpmgaband, VPMGABAND)
@@ -66,8 +117,12 @@
 #define F77DPBDI      VF77_MANGLE(dpbdi, DPBDI)
 #define F77EIGDRIV    VF77_MANGLE(eigdriv, EIGDRIV)
 #define F77ANORMDRIV  VF77_MANGLE(anormdriv, ANORMDRIV)
-#define F77MYPDEFINIT  VF77_MANGLE(mypdefinit, MYPDEFINIT)
-#define F77MYPDEFCLEAR  VF77_MANGLE(mypdefclear, MYPDEFCLEAR)
+
+#define F77MYPDEFINIT VF77_MANGLE(mypdefinit, MYPDEFINIT)
+VEXTERNC void F77MYPDEFINIT(int *nion, double *ionQ, double *ionConc);
+
+#define F77MYPDEFCLEAR VF77_MANGLE(mypdefclear, MYPDEFCLEAR)
+VEXTERNC void F77MYPDEFCLEAR();
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Private methods

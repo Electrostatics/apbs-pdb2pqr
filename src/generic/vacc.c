@@ -659,9 +659,7 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
                     tvalue = 0.75*sm2*w2i - 0.25*sm*sm2*w2i/win;
                 }
                 value *= tvalue;
-            } else Vnm_print(0, "Vacc_splineAcc:  Ignoring zero-radius atom #%d\n",
-                     thee->atomIDs[ui][iatom]);
-
+            } 
         } 
     }
  
