@@ -78,16 +78,16 @@ $Id$
 <h3>Results</h3>
 <table align="center" border="1">
 <tr>
-<th>APBS Version</th>
-<th>actin-dimer</th>
-<th>born</th>
-<th>FKBP</th>
-<th>hca-bind</th>
-<th>ionize</th>
-<th>ion-protein</th>
-<th>pka-lig</th>
-<th>point-pmf</th>
-<th>solv</th>
+<th width="10%">APBS Version</th>
+<th width="10%">actin-dimer</th>
+<th width="10%">born ion</th>
+<th width="10%">FKBP</th>
+<th width="10%">hca-bind</th>
+<th width="10%">ionize</th>
+<th width="10%">ion-protein</th>
+<th width="10%">pka-lig</th>
+<th width="10%">point-pmf</th>
+<th width="10%">solv</th>
 </tr>
 <tr>
 <td>UHBD/<font color="blue">Analytical</font></td>
@@ -97,8 +97,8 @@ $Id$
   <ul>
   <li>1D7H-DMSO:
     <ul>
-    <li> DGbind(solv.):  -19.097 kJ/mol
-    <li> DGbind(Coul.):   15.103 kJ/mol
+    <li> DGbind(solv.):   19.097 kJ/mol
+    <li> DGbind(Coul.):  -15.103 kJ/mol
     <li> DGbind:           3.994 kJ/mol
     </ul>
   <li>1D7I-DSS:
@@ -172,8 +172,8 @@ $Id$
   <ul>
   <li>1D7H-DMSO:
     <ul>
-    <li> DGbind(solv.):  -18.591 kJ/mol
-    <li> DGbind(Coul.):   15.103 kJ/mol
+    <li> DGbind(solv.):   18.591 kJ/mol
+    <li> DGbind(Coul.):  -15.103 kJ/mol
     <li> DGbind:           3.488 kJ/mol
     </ul>
   <li>1D7I-DSS:
@@ -233,14 +233,14 @@ I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
 </tr>
 <td>0.2.0</td>
 <td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):  
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 
+     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   91.939 kJ/mol
+     <li> Sequential (2-level focus to <=0.725 A, NPBE): ??? kJ/mol
      </ul>
 </td>
 <td> <ul>
-     <li> kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
-     <li> kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
-     <li> kJ/mol<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A,
+     <li> -229.72 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
+     <li> -227.19 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
+     <li> -226.228 kJ/mol<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A,
           srfm 1)
      </ul>
 </td>
@@ -248,27 +248,25 @@ I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
   <ul>
   <li>1D7H-DMSO:
     <ul>
-    <li> DGbind(solv.):   kJ/mol
-    <li> DGbind(Coul.):   kJ/mol
-    <li> DGbind:          kJ/mol
+    <li> DGbind(solv.):   14.589 kJ/mol
+    <li> DGbind(Coul.):  -15.103 kJ/mol
+    <li> DGbind:          -0.514 kJ/mol
     </ul>
   <li>1D7I-DSS:
     <ul>
-    <li> DGbind(solv.):   kJ/mol
-    <li> DGbind(Coul.):   kJ/mol
-    <li> DGbind:          kJ/mol
+    <li> DGbind(solv.):    14.387 kJ/mol 
+    <li> DGbind(Coul.):   -11.975 kJ/mol
+    <li> DGbind:           2.412 kJ/mol
     </ul>
+    <font color="red">Slightly different parameters than 0.1.8
+     validation</font>
   </ul>
 </td>
 <td> 
 <font color="red">
 2-level focus to 0.225, srfm 1, VdW surf:
     <ul>
-    <li> Complex solv. G:        kJ/mol
-    <li> HCA solv. G:            kJ/mol
-    <li> Acetazolamide solv. G:  kJ/mol
-    <li> Coulomb G (analytic):   kJ/mol
-    <li> BINDING ENERGY:         kJ/mol
+    <li> Directly-calculated binding energy:  -57.711 kJ/mol
     </ul>
 <br>
 I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
@@ -276,34 +274,34 @@ I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
 </td>
 <td>3-level focus to 0.094 A spacing (srfm 0): 
   <ul>
-  <li> Acetic acid solv. G:  kJ/mol
-  <li> Acetate solv. G:   kJ/mol
-  <li> Proton solv. G:   kJ/mol
-  <li> IONIZATION ENERGY:   kJ/mol
+  <li> Acetic acid solv. G:  -22.627 kJ/mol
+  <li> Acetate solv. G:   -195.305 kJ/mol
+  <li> Proton solv. G:   -290.859 kJ/mol
+  <li> IONIZATION ENERGY:   -463.537 kJ/mol
 </td>
 <td> 0.53 A resolution, NPBE:
   <ul>
-  <li> kJ/mol (prot. diel. of 12)
-  <li> kJ/mol (prot. diel. of 2)
+  <li> 18.895 kJ/mol (prot. diel. of 12)
+  <li> 21.453 kJ/mol (prot. diel. of 2)
   </ul>
 <td> 2-level focusing to 0.250 A spacing:
   <ul>
-  <li> kJ/mol (vdw-based dielectric)
-  <li> kJ/mol (mol surf-based dielectric)
+  <li> 6.647 kJ/mol (vdw-based dielectric)
+  <li> 97.015 kJ/mol (mol surf-based dielectric)
   </ul>
 </td>
 <td><ul>
-    <li> kJ/mol (1 A dist)
-    <li> kJ/mol (2 A dist)
-    <li> kJ/mol (3 A dist)
-    <li> kJ/mol (4 A dist)
+    <li> 18.31 kJ/mol (1 A dist)
+    <li> 8.91 kJ/mol (2 A dist)
+    <li> 5.91 kJ/mol (3 A dist)
+    <li> 4.43 kJ/mol (4 A dist)
     </ul>
 </td>
 <td> 0.250 A spacing, zero probe radius, srfm 1
   <ul>
-  <li> Methanol:  kJ/mol
-  <li> Methoxide: kJ/mol
-  <li> Difference:  kJ/mol
+  <li> Methanol:  -36.222 kJ/mol
+  <li> Methoxide: -391.800 kJ/mol
+  <li> Difference:  -355.577 kJ/mol
   </ul>
 </td>
 </tr>
