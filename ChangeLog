@@ -6,6 +6,11 @@ This version contains a few bug fixes, including
   * Various FEtk-related things (no particular impact to the user)
   * Improvements to the test systems
   * Change in the format for printing energies.
+  * Change in directory structure
+  * Fixed centering bug in main driver
+  * Fixed error message bug in VPMG class
+  * Fixed grid length bug in VPMG class
+  * Switched to libtool for linking
 
 #############################################################################
 VERSION 0.1.1       08-29-01
