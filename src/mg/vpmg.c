@@ -1607,7 +1607,7 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
   int *nx, int *ny, int *nz, 
   double *hx, double *hy, double *hzed, 
   double *xmin, double *ymin, double *zmin,
-  double *data) {
+  double **data) {
 
     int i, j, k, itmp, u;
     double dtmp;
@@ -1631,9 +1631,11 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     /* Get "object" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "object"));
-    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     /* Get "1" */
-    VJMPERR1(!strcmp(tok, "object"));
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    /* Get "class" */
+    VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+    VJMPERR1(!strcmp(tok, "class"));
     /* Get "gridpositions" */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "gridpositions"));
@@ -1649,6 +1651,7 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     /* Get nx */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%d", nx));
+    Vnm_print(0, "Vpmg_readDX:  Grid dimensions %d x %d x %d grid\n", *nx, *ny, *nz);
     /* Get "origin" */ 
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "origin"));
@@ -1661,6 +1664,8 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     /* Get xmin */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", xmin));
+    Vnm_print(0, "Vpmg_readDX:  Grid origin = (%g, %g, %g)\n", 
+      *xmin, *ymin, *zmin);
     /* Get "delta" */ 
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(!strcmp(tok, "delta"));
@@ -1695,6 +1700,8 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     /* Get hx */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", hx));
+    Vnm_print(0, "Vpmg_readDX:  Grid spacings = (%g, %g, %g)\n", 
+      *hx, *hy, *hzed);
     /* Get 0.0 */
     VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
     VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
@@ -1758,9 +1765,11 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
     VJMPERR1(!strcmp(tok, "follows"));
 
     /* Allocate space for the data */
-    data = VNULL;
-    data = Vmem_malloc(VNULL, (*nx)*(*ny)*(*nz), sizeof(double));
-    if (data == VNULL) {
+    Vnm_print(0, "Vpmg_readDX:  allocating %d x %d x %d doubles for storage\n",
+      *nx, *ny, *nz);
+    *data = VNULL;
+    *data = Vmem_malloc(VNULL, (*nx)*(*ny)*(*nz), sizeof(double));
+    if (*data == VNULL) {
         Vnm_print(2, "Vpmg_readDX:  Unable to allocate space for data!\n");
         return;
     }
@@ -1771,7 +1780,7 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
                 u = k*(*nx)*(*ny)+j*(*nx)+i;
                 VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
                 VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
-                data[u] = dtmp;
+                (*data)[u] = dtmp;
             }
         }
     }
@@ -1798,8 +1807,6 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
 
 }
 
-
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpmg_writeDX
 //
@@ -1819,8 +1826,39 @@ VPUBLIC void Vpmg_readDX(const char *iodev, const char *iofmt,
 VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data) {
 
+    double xmin, ymin, zmin, hx, hy, hzed;
+    int nx, ny, nz;
+
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    xmin = thee->pmgp->xcent - 0.5*hx*(nx-1);
+    ymin = thee->pmgp->ycent - 0.5*hy*(ny-1);
+    zmin = thee->pmgp->zcent - 0.5*hzed*(nz-1);
+
+    Vpmg_writeDX2(iodev, iofmt, thost, fname, title, data,
+      hx, hy, hzed, nx, ny, nz, xmin, ymin, zmin);
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_writeDX2
+//
+// Purpose:  Write out a PMG array in OpenDX grid format (ASCII)
+//
+// Notes:    See Vpmg_writeDX
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, double *data,
+  double hx, double hy, double hzed, int nx, int ny, int nz, 
+  double xmin, double ymin, double zmin) {
+
     int icol, i, j, k, u;
-    double xmin, ymin, zmin;
     Vio *sock;
 
     /* Set up the virtual socket */
@@ -1844,27 +1882,24 @@ VPUBLIC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
 
     /* Write off the DX regular positions */
     Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
-      thee->pmgp->nz, thee->pmgp->ny, thee->pmgp->nx);
-    xmin = thee->pmgp->xcent - 0.5*(thee->pmgp->hx)*(thee->pmgp->nx-1);
-    ymin = thee->pmgp->ycent - 0.5*(thee->pmgp->hy)*(thee->pmgp->ny-1);
-    zmin = thee->pmgp->zcent - 0.5*(thee->pmgp->hzed)*(thee->pmgp->nz-1);
+      nz, ny, nx);
     Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", zmin, ymin, xmin);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, thee->pmgp->hzed);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, thee->pmgp->hy, 0.0);
-    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", thee->pmgp->hx, 0.0, 0.0);
+    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
+    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
+    Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
 
     /* Write off the DX regular connections */
     Vio_printf(sock, "object 2 class gridconnections counts %d %d %d\n",
-      thee->pmgp->nz, thee->pmgp->ny, thee->pmgp->nx);
+      nz, ny, nx);
 
     /* Write off the DX data */
     Vio_printf(sock, "object 3 class array type double rank 0 items %d data follows\n",
-      (thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz));
+      (nx*ny*nz));
     icol = 0;
-    for (k=0; k<thee->pmgp->nz; k++) {
-        for (j=0; j<thee->pmgp->ny; j++) {
-            for (i=0; i<thee->pmgp->nx; i++) {
-                u = k*(thee->pmgp->nx)*(thee->pmgp->ny)+j*(thee->pmgp->nx)+i;
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                u = k*(nx)*(ny)+j*(nx)+i;
                 Vio_printf(sock, "%12.6E ", data[u]);
                 icol++;
                 if (icol == 3) {
@@ -1949,187 +1984,6 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
     nz = thee->pmgp->nz;
 
     for (i=0; i<(nx*ny*nz); i++) thee->pvec[i] = 1;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_readArrayDX
-//
-// Purpose:  Read and allocate an array from a DX file
-//
-// Args:     iodev    ==> output device type (file/buff/unix/inet)
-//           iofmt    ==> output device format (ascii/xdr)
-//           thost    ==> output hostname (for sockets)
-//           fname    ==> output file/buff/unix/inet name
-//           n[xyz]   ==> mesh dimensions
-//           h[xyz]   ==> mesh spacings
-//           [xyz]low ==> mesh lower corner
-//           data     ==> A pointer to a pointer which will become an array of
-//                        doubles containing the data (allocated in this
-//                        function)
-//
-// Notes:    The array "data" is allocated by this function!
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, double *xlow, double *ylow, 
-  double *zlow, double *hx, double *hy, double *hzed, int *nx, int *ny, 
-  int *nz, double **data) {
-
-    int u, inum;
-    double dnum;
-    char tok[VMAX_BUFSIZE];
-    Vio *sock;
-  
-    int iodebug = 0;
-
-    /* Set up the virtual socket */
-    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
-    if (sock == VNULL) {
-        Vnm_print(2, "Vpmg_readArrayDX: Problem opening virtual socket %s\n",
-          fname);
-        return 0;
-    }
-    if (Vio_accept(sock, 0) < 0) {
-        Vnm_print(2, "Vpmg_readArrayDX: Problem connecting virtual socket %s\n",
-          fname);
-        return 0;
-    }
-    Vio_setCommChars(sock, "#");
-
-    /* Grab the "object" line which contains the mesh dimensions */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "object")); 
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(inum == 1);
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "class")); 
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "gridpositions")); 
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "counts")); 
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    *nz = inum;
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    *ny = inum;
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    *nx = inum;
-
-    Vnm_print(iodebug, "Vpmg_readArrayDX: Mesh dimensions = %d x %d x %d.\n",
-      *nx, *ny, *nz);
-
-    /* Grab the "origin" line which contains the lower corner coords */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "origin")); 
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *zlow = dnum;
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *ylow = dnum;
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *xlow = dnum;
-
-    Vnm_print(iodebug, "Vpmg_readArrayDX: Mesh origin = (%g, %g, %g).\n",
-      *xlow, *ylow, *zlow);
-    
-    /* Grab the "z" direction mesh spacing */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "delta"));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *hzed = dnum;
-
-    /* Grab the "y" direction mesh spacing */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "delta"));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *hy = dnum;
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-
-    /* Grab the "x" direction mesh spacing */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "delta"));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    *hx = dnum;
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-    VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-
-    Vnm_print(iodebug, "Vpmg_readArrayDX: Mesh spacing = (%g, %g, %g).\n",
-      *hx, *hy, *hzed);
-
-    /* Grab a line we don't care about */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "object"));
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(2 == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "class"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "gridconnections"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "counts"));
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(*nz == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(*ny == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(*nx == inum);
-
-    /* Grab another line we don't care about */
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "object"));
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(3 == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "class"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "array"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "type"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "double"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "rank"));
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1(0 == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "items"));
-    VJMPERR1(1 == Vio_scanf(sock, "%d", &inum));
-    VJMPERR1((*nx)*(*ny)*(*nz) == inum);
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "data"));
-    VJMPERR1(1 == Vio_scanf(sock, "%s", tok));
-    VJMPERR1(!strcmp(tok, "follows"));
-    
-    /* Allocate space for the data */
-    *data = (double *)Vmem_malloc(VNULL, (*nx)*(*ny)*(*nz), sizeof(double));
-    if (*data == VNULL) {
-        Vnm_print(2, "Vpmg_readArrayDX:  Failed to allocate array space!\n");
-        return 0;
-    } 
-
-    /* Read in the data */
-    u = 0;
-    while (1) {
-        VJMPERR1(1 == Vio_scanf(sock, "%le", &dnum));
-        (*data)[u] = dnum;
-        u++;
-        if (u == (*nx)*(*ny)*(*nz)) break;
-    }
- 
-    /* Close off the socket */
-    Vio_connectFree(sock);
-    Vio_dtor(&sock);
-
-    return 1;
-
-  VERROR1:
-    Vio_dtor(&sock);
-    Vnm_print(2, "Vpmg_readArrayDX: Format problem with input file %s\n", fname);
-    return 0;
-
-
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

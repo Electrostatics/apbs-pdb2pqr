@@ -123,10 +123,14 @@ VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
-VPUBLIC int Vpmg_readArrayDX(const char *iodev, const char *iofmt,
-  const char *thost, const char *fname, double *xlow, double *ylow, 
-  double *zlow, double *hx, double *hy, double *hzed, int *nx, int *ny, 
-  int *nz, double **data);
+VEXTERNC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, char *title, double *data,
+  double hx, double hy, double hzed, int nx, int ny, int nz,
+  double xmin, double ymin, double zmin);
+VEXTERNC void Vpmg_readDX(const char *iodev, const char *iofmt,
+  const char *thost, const char *fname, int *nx, int *ny, int *nz,
+  double *hx, double *hy, double *hzed, double *xmin, double *ymin, 
+  double *zmin, double **data);
 VEXTERNC void Vpmg_setPart(Vpmg *thee, double xmin, double ymin, double zmin,
            double xmax, double ymax, double zmax);
 VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
