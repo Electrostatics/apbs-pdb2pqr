@@ -2474,7 +2474,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     if (thee->pmgp->nonlin) {
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating nonlinear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            if (thee->pvec[i]*thee->ccf[i] > 0) {
+            if (thee->pvec[i]*thee->ccf[i] > VSMALL) {
                 for (j=0; j<nion; j++) {
                     energy += (thee->pvec[i]*thee->ccf[i]*zks2
                       * ionConc[j] * VSQR(ionQ[j]) 
@@ -2489,7 +2489,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
         /* Zkappa2 OK here b/c LPBE approx */
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            if (thee->pvec[i]*thee->ccf[i] > 0) 
+            if (thee->pvec[i]*thee->ccf[i] > VSMALL) 
               energy += (thee->pvec[i]*zkappa2*thee->ccf[i]*VSQR(thee->u[i]));
         }
         energy = 0.5*energy;
