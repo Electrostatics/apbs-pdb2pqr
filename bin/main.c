@@ -270,7 +270,7 @@ int main(int argc, char **argv) {
 
 
             /* Write out forces */
-            forceMG(mem, nosh, pbeparm, pmg[i], &(nforce[i]), 
+            forceMG(mem, nosh, pbeparm, mgparm, pmg[i], &(nforce[i]), 
               &(atomForce[i]), alist);
 
             /* Write out data folks might want */

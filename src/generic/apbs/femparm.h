@@ -118,8 +118,8 @@ struct FEMparm {
                   * 1 = yes) */
     FEMparm_CalcType type;  /**<  Calculation type */
     int settype;  /**< Boolean */
-    double domainRadius;  /**< Domain radius (in &Aring;) */
-    int setdomainRadius;  /**< Boolean */
+    double domainLength[3];  /**< Domain side lengths (in &Aring;) */
+    int setdomainLength;  /**< Boolean */
     double etol;  /**< Error tolerance for refinement; interpretation depends 
                    * on the adaptive refinement method chosen */
     int setetol;  /**< Boolean */

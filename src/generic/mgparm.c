@@ -139,6 +139,7 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
 
     /* *** GENERIC PARAMETERS *** */
     thee->setdime = 0;
+    thee->setchgm = 0;
 
     /* *** TYPE 0 PARAMETERS *** */
     thee->nlev = VMGNLEV;
@@ -190,6 +191,11 @@ VPUBLIC int MGparm_check(MGparm *thee) {
         Vnm_print(2, "MGparm_check:  DIME not set!\n");
         rc = 0;
     }
+    if (!thee->setchgm) {
+        Vnm_print(2, "MGparm_check: CHGM not set!\n");
+        return 0;
+    }
+
 
     /* Check sequential manual & dummy settings */
     if ((thee->type == MCT_MAN) || (thee->type == MCT_DUM)) {
@@ -313,6 +319,8 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     /* *** GENERIC PARAMETERS *** */
     for (i=0; i<3; i++) thee->dime[i] = parm->dime[i];
     thee->setdime = parm->setdime;
+    thee->chgm = parm->chgm;
+    thee->setchgm = parm->setchgm;
 
     /* *** TYPE 0 PARMS *** */
     thee->nlev = parm->nlev;
@@ -398,6 +406,25 @@ keyword!\n", tok);
         } else thee->dime[2] = ti;
         thee->setdime = 1;
         return 1;
+    } else if (Vstring_strcasecmp(tok, "chgm") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 1) {
+            thee->chgm = ti;
+            thee->setchgm = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "spl0") == 0) {
+            thee->chgm = VCM_TRIL;
+            thee->setchgm = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
+            thee->chgm = VCM_BSPL2;
+            thee->setchgm = 1;
+            return 1;
+        } else {
+            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) when parsing \
+chgm!\n", tok);
+            return -1;
+        }
     } else if (Vstring_strcasecmp(tok, "nlev") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {

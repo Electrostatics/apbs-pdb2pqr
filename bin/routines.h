@@ -1,7 +1,12 @@
 /**
+ * @defgroup  Frontend  High-level front-end routines
+ */
+
+/**
  *  @file    routines.h
  *  @author  Nathan Baker
  *  @brief   Header file for front end auxiliary routines
+ *  @ingroup  Frontend
  *  @version $Id$
  *  @attention
  *  @verbatim
@@ -50,65 +55,287 @@
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
 
+/**
+ * @brief  Return code for APBS during failure
+ * @ingroup  Frontend */
 #define APBSRC 13
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class:    AtomForce
-//
-// Purpose:  Container class for atomic forces
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-typedef struct AtomForce {
-   double ibForce[3];
-   double qfForce[3];
-   double dbForce[3];
-   double npForce[3];
-} AtomForce;
+/**
+ * @brief  Structure to hold atomic forces
+ * @ingroup  Frontend
+ * @author  Nathan Baker */
+struct AtomForce {
+   double ibForce[3];  /**< Ion-boundary force */
+   double qfForce[3];  /**< Charge-field force */
+   double dbForce[3];  /**< Dielectric boundary force */
+   double npForce[3];  /**< Apolar force */
+};
 
+/**
+ * @brief  Define AtomForce type
+ * @ingroup  Frontend */
+typedef struct AtomForce AtomForce;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// PUBLIC ROUTINES
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
+/**
+ * @brief  Load the molecules given in NOsh into atom lists
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  alist  List of atom list objects
+ * @returns  1 if successful, 0 otherwise */
 VEXTERNC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+
+/**
+ * @brief  Destroy the loaded molecules
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  alist  List of atom list objects */
 VEXTERNC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+
+/**
+ * @brief  Load the dielectric maps given in NOsh into grid objects
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  dielXMap  List of x-shifted dielectric maps
+ * @param  dielYMap  List of y-shifted dielectric maps
+ * @param  dielZMap  List of x-shifted dielectric maps
+ * @returns  1 if successful, 0 otherwise */
 VEXTERNC int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
-Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+
+/**
+ * @brief  Destroy the loaded dielectric
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  dielXMap  List of x-shifted dielectric maps
+ * @param  dielYMap  List of y-shifted dielectric maps
+ * @param  dielZMap  List of x-shifted dielectric maps */
 VEXTERNC void killDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
-Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+
+/**
+ * @brief  Load the kappa maps given in NOsh into grid objects
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  kappa  List of kappa maps
+ * @returns  1 if successful, 0 otherwise */
 VEXTERNC int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+
+/**
+ * @brief  Destroy the loaded kappa maps 
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  kappa  List of kappa maps */
 VEXTERNC void killKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+
+/**
+ * @brief  Load the charge maps given in NOsh into grid objects
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  charge  List of kappa maps
+ * @returns  1 if successful, 0 otherwise */
 VEXTERNC int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+
+/**
+ * @brief  Destroy the loaded charge maps 
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  nosh  NOsh object with input file information
+ * @param  charge  List of charge maps */
 VEXTERNC void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+
+/**
+ * @brief  Print out generic PBE params loaded from input
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  pbeparm  PBEparm object */
 VEXTERNC void printPBEPARM(PBEparm *pbeparm);
+
+/**
+ * @brief  Print out MG-specific params loaded from input
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  realCenter  Center of mesh for actual calculation
+ * @param  mgparm  MGparm object */
 VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
-VEXTERNC int initMG(int i, NOsh *nosh, MGparm *mgparm,
+
+/**
+ * @brief  Initialize an MG calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param icalc  Index of calculation in pmg/pmpg arrays
+ * @param nosh  Object with parsed input file parameters
+ * @param mgparm  Object with MG-specific parameters
+ * @param pbeparm  Object with generic PBE parameters 
+ * @param realCenter  The actual center of the current mesh
+ * @param pbe  Array of Vpbe objects (one for each calc)
+ * @param alist  Array of atom lists
+ * @param dielXMap  Array of x-shifted dielectric maps 
+ * @param dielYMap  Array of y-shifted dielectric maps 
+ * @param dielZMap  Array of z-shifted dielectric maps 
+ * @param kappaMap  Array of kappa maps 
+ * @param chargeMap  Array of charge maps 
+ * @param pmgp  Array of MG parameter objects (one for each calc)
+ * @param pmg  Array of MG objects (one for each calc)
+ * @return  1 if succesful, 0 otherwise */
+VEXTERNC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+
+/**
+ * @brief  Kill structures initialized during an MG calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param pbe  Array of Vpbe objects (one for each calc)
+ * @param pmgp  Array of MG parameter objects (one for each calc)
+ * @param pmg  Array of MG objects (one for each calc) */
 VEXTERNC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-VEXTERNC int solveMG(NOsh *nosh, Vpmg *pmg, int type);
+
+/**
+ * @brief  Solve the PBE with MG
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param pmg  MG objects for this calculation
+ * @param type  Type of MG calculation
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
+
+/**
+ * @brief  Set MG partitions for calculating observables and performing I/O
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param mgparm  MG parameters from input file
+ * @param pmg  MG object 
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
+
+/**
+ * @brief  Calculate electrostatic energies from MG solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param icalc  Index of calculation 
+ * @param pmg  MG object 
+ * @param nenergy  Set to number of entries in energy arrays
+ * @param totEnergy  Set to total energy (in kT)
+ * @param qfEnergy  Set to charge-potential energy (in kT)
+ * @param qmEnergy  Set to mobile ion energy (in kT)
+ * @param dielEnergy  Set to polarization energy (in kT)
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
-VEXTERNC int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, double *npEnergy);
+
+/**
+ * @brief  Calculate apolar energies from MG solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param nosh  Object with parsed input file parameters
+ * @param icalc  Index of calculation 
+ * @param pmg  MG object 
+ * @param nenergy  Set to number of entries in energy arrays
+ * @param npEnergy  Set to apolar energy (in kT)
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, 
+  double *npEnergy);
+
+/** 
+ * @brief  Kill arrays allocated for energies
+ * @ingroup  Frontend
+ * @author  Nathan Baker */
 VEXTERNC void killEnergy();
-VEXTERNC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
+
+/**
+ * @brief  Calculate forces from MG solution
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  mem  Memory management object
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param  mgparm  MG-specific parmaeters
+ * @param pmg  MG object
+ * @param nforce  Set to number of forces in arrays
+ * @param  atomForce  List of atom forces
+ * @param  alist  List of atom lists
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm,  MGparm *mgparm,
   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]);
+
+/**
+ * @brief  Free memory from MG force calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  mem  Memory management object
+ * @param  nosh  Parameters from input file
+ * @param  nforce  Number of forces in arrays
+ * @param  atomForce  List of atom forces */
 VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC]);
+
+/**
+ * @brief  Write out observables from MG calculation to file
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  rank  Processor rank (if parallel calculation)
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param pmg  MG object
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+
+/**
+ * @brief  Write out operator matrix from MG calculation to file
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  rank  Processor rank (if parallel calculation)
+ * @param  nosh  Parameters from input file
+ * @param  pbeparm  Generic PBE parameters
+ * @param pmg  MG object
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+
+/** 
+ * @brief  Combine and pretty-print energy data
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  com  Communications object
+ * @param  nosh  Parameters from input file
+ * @param  totEnergy  Array of energies from different calculations
+ * @param  i  Index of energy statement to print
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
   int i);
+
+/** 
+ * @brief  Combine and pretty-print force data
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @param  com  Communications object
+ * @param  nosh  Parameters from input file
+ * @param  nforce  Number of forces calculated
+ * @param  atomForce  Array of force structures
+ * @param  i  Index of force statement to print
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC], int i);
+
+/**
+ * @brief  Wrapper to start MALOC Vio layer
+ * @ingroup  Frontend
+ * @author  Nathan Baker and Robert Konecny */
 VEXTERNC void startVio();
 
 #endif

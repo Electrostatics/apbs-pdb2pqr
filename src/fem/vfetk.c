@@ -48,6 +48,292 @@
 
 #include "apbs/vfetk.h"
 
+/**
+ * @brief  Container for local variables
+ * @ingroup  Vfetk
+ * @bug  Not thread-safe
+ */
+VPRIVATE Vfetk_LocalVar var;
+
+/**
+ * @brief  Return the smoothed value of the dielectric coefficient at the
+ * current point using a fast, chart-based method
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @returns  Value of dielectric coefficient
+ * @bug  Not thread-safe
+ */
+VPRIVATE double diel();
+
+/**
+ * @brief  Return the smoothed value of the mobile ion coefficient at the
+ * current point using a fast, chart-based method
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @returns  Value of mobile ion coefficient
+ * @bug  Not thread-safe
+ */
+VPRIVATE double kappa2();
+
+/**
+ * @brief  Smooths a mesh-based coefficient with a simple harmonic function
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  meth  Method for smoothing
+ *   \li  0 ==> arithmetic mean (gives bad results)
+ *   \li  1 ==> geometric mean
+ * @param  nverts  Number of vertices 
+ * @param  dist  distance from point to each vertex
+ * @param  coeff  coefficient value at each vertex
+ * @notes  Thread-safe
+ * @return smoothed value of coefficieent at point of interest */
+VPRIVATE double smooth(int nverts, double dist[4], double coeff[4],
+  int meth);
+
+
+/**
+ * @brief  Return the analytical multi-sphere Debye-Huckel approximation (in
+ * kT/e) at the specified point
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  pbe  Vpbe object
+ * @param  d  Dimension of x
+ * @param  x  Coordinates of point of interest (in &Aring;)
+ * @notes  Thread-safe
+ * @returns  Multi-sphere Debye-Huckel potential in kT/e
+ */
+VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]);
+
+/**
+ * @brief  Return the difference between the analytical multi-sphere
+ * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
+ * point 
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  pbe  Vpbe object
+ * @param  d  Dimension of x
+ * @param  x  Coordinates of point of interest (in &Aring;)
+ * @notes  Thread-safe
+ * @returns  Multi-sphere Debye-Huckel potential in kT/e */
+VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]);
+
+/**
+ * @brief  Calculate the Coulomb's
+ * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
+ * point 
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  pbe  Vpbe object
+ * @param  d  Dimension of x
+ * @param  x  Coordinates of point of interest (in &Aring;)
+ * @param  eps  Dielectric constant
+ * @param  U  Set to potential (in kT/e)
+ * @param  dU  Set to potential gradient (in kT/e/&Aring;)
+ * @param  d2U  Set to Laplacian of potential (in \f$kT e^{-1} \AA^{-2}\f$)
+ * @returns  Multi-sphere Debye-Huckel potential in kT/e */
+VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U, 
+  double dU[], double *d2U);
+
+/**
+ * @brief  2D linear master simplex information generator
+ * @ingroup  Vfetk
+ * @author  Mike Holst
+ * @param dimIS  dunno
+ * @param ndof  dunno
+ * @param dof  dunno
+ * @param c  dunno
+ * @param cx  dunno 
+ * @notes  Trust in Mike */
+VPRIVATE void init_2DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
+  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]);
+
+/**
+ * @brief  3D linear master simplex information generator
+ * @ingroup  Vfetk
+ * @author  Mike Holst
+ * @param  dimIS  dunno
+ * @param ndof dunno
+ * @param dof dunno
+ * @param c dunno
+ * @param cx dunno
+ * @param cy dunno
+ * @param cz dunno 
+ * @notes  Trust in Mike */
+VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
+  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]);
+
+/**
+ * @brief  Setup coefficients of polynomials from integer table data
+ * @ingroup  Vfetk
+ * @author  Mike Holst
+ * @param numP  dunno
+ * @param c  dunno
+ * @param cx  dunno
+ * @param cy  dunno
+ * @param cz  dunno
+ * @param ic  dunno
+ * @param icx  dunno
+ * @param icy  dunno
+ * @param icz  dunno
+ * @notes  Trust in Mike */
+VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP], 
+  double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP], 
+  int icy[][VMAXP], int icz[][VMAXP]);
+
+/**
+ * @brief  Evaluate a collection of at most cubic polynomials at a
+ * specified point in at most R^3.
+ * @ingroup  Vfetk
+ * @author  Mike Holst
+ * @param numP  the number of polynomials to evaluate
+ * @param p  the results of the evaluation
+ * @param c   the coefficients of each polynomial
+ * @param xv  the point (x,y,z) to evaluate the polynomials.
+ * @notes  Mike says:
+ * <pre>
+ *  Note that "VMAXP" must be >= 19 for cubic polynomials.
+ *  The polynomials are build from the coefficients c[][] as
+ *  follows.  To build polynomial "k", fix k and set:
+ *  
+ *  c0=c[k][0], c1=c[k][1], .... , cp=c[k][p]
+ *  
+ *  Then evaluate as:
+ *  
+ *  p3(x,y,z) = c0 + c1*x + c2*y + c3*z
+ *            + c4*x*x + c5*y*y + c6*z*z + c7*x*y + c8*x*z + c9*y*z
+ *            + c10*x*x*x + c11*y*y*y + c12*z*z*z
+ *            + c13*x*x*y + c14*x*x*z + c15*x*y*y
+ *            + c16*y*y*z + c17*x*z*z + c18*y*z*z
+ * </pre>
+ */
+VPRIVATE void polyEval(int numP, double p[], double c[][VMAXP], double xv[]);
+
+/**
+ * @brief  I have no clue what this variable does, but we need it to initialize
+ * the simplices
+ * @ingroup  Vfetk
+ * @author  Mike Holst */
+VPRIVATE int dim_2DP1 = 3;
+
+/**
+ * @brief  I have no clue what these variable do, but we need it to initialize
+ * the simplices
+ * @ingroup  Vfetk
+ * @author  Mike Holst 
+ * @notes  Mike says:
+ * <pre>
+ *  2D-P1 Basis:
+ *  
+ *  p1(x,y) = c0 + c1*x + c2*y
+ *  
+ *  Lagrange Point    Lagrange Basis Function Definition
+ *  --------------    ----------------------------------
+ *  (0, 0)            p[0](x,y) = 1 - x - y
+ *  (1, 0)            p[1](x,y) = x
+ *  (0, 1)            p[2](x,y) = y
+ *  </pre>
+ */
+VPRIVATE int lgr_2DP1[3][VMAXP] = {
+/*c0  c1  c2  c3
+* ---------------------------------------------------------- */
+/* 1   x   y   z
+* ---------------------------------------------------------- */
+{  2, -2, -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_2DP1x[3][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{ -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_2DP1y[3][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{ -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_2DP1z[3][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+
+
+/**
+ * @brief  I have no clue what these variable do, but we need it to initialize
+ * the simplices
+ * @ingroup  Vfetk
+ * @author  Mike Holst 
+ * @notes  Mike says:
+ * <pre>
+ * 3D-P1 Basis:
+ * 
+ * p1(x,y,z) = c0 + c1*x + c2*y + c3*z
+ * 
+ * Lagrange Point    Lagrange Basis Function Definition
+ * --------------    ----------------------------------
+ * (0, 0, 0)         p[0](x,y,z) = 1 - x - y - z
+ * (1, 0, 0)         p[1](x,y,z) = x
+ * (0, 1, 0)         p[2](x,y,z) = y
+ * (0, 0, 1)         p[3](x,y,z) = z
+ * </pre>
+ */
+VPRIVATE int dim_3DP1 = 4;
+VPRIVATE int lgr_3DP1[4][VMAXP] = {
+/*c0  c1  c2  c3 ---------------------------------------------------------- */
+/* 1   x   y   z ---------------------------------------------------------- */
+{  2, -2, -2, -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_3DP1x[4][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{ -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_3DP1y[4][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{ -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 }
+};
+VPRIVATE int lgr_3DP1z[4][VMAXP] = {
+/*c0 ---------------------------------------------------------------------- */
+/* 1 ---------------------------------------------------------------------- */
+{ -2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+{  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
+};
+
+/**
+ * @brief  Another Holst variable
+ * @ingroup  Vfetk
+ * @author  Mike Holst
+ * @notes  Mike says: 1 = linear, 2 = quadratic */
+const int P_DEG=1;
+    
+/**
+ * @brief  Another Holst variable
+ * @ingroup  Vfetk
+ * @author  Mike Holst */
+VPRIVATE int numP;
+VPRIVATE double c[VMAXP][VMAXP];
+VPRIVATE double cx[VMAXP][VMAXP];
+VPRIVATE double cy[VMAXP][VMAXP];
+VPRIVATE double cz[VMAXP][VMAXP];
 
 #if !defined(VINLINE_VFETK)
 
@@ -91,40 +377,79 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
 }
 #endif /* if !defined(VINLINE_VFETK) */
 
-VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Gem *gm, AM *am) {
+VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type) {
 
     /* Set up the structure */
     Vfetk *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vfetk) );
     VASSERT(thee != VNULL);
-    VASSERT(Vfetk_ctor2(thee, pbe, gm, am));
+    VASSERT(Vfetk_ctor2(thee, pbe, type));
 
     return thee;
 }
 
-VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Gem *gm, AM *am) {
+VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type) {
+
+    int i;
 
     /* Make sure things have been properly initialized & store them */
     VASSERT(pbe != VNULL);
     VASSERT(pbe->alist != VNULL);
     VASSERT(pbe->acc != VNULL);
-    VASSERT(gm != VNULL);
-    VASSERT(am != VNULL);
-    thee->pbe = pbe;
-    thee->gm = gm;
-    thee->am = am;
+
+    /* Store PBE type -- right now we only handle linearized RPBE */
+    if (type != PBE_LRPBE) {
+        Vnm_print(2, "Vfetk_ctor2:  Sorry, we only handle PBE_LRPBE right \
+now!\n");
+        return 0;
+    }
+    thee->type = type;
 
     /* Set up memory management object */
     thee->vmem = Vmem_ctor("APBS::VFETK");
 
+    /* Set up FEtk objects */
+    thee->pde = Vfetk_PDE_ctor(thee);
+    thee->gm = Gem_ctor(thee->vmem, thee->pde);
+    thee->aprx = Aprx_ctor(thee->vmem, thee->gm, thee->pde);
+    thee->am = AM_ctor(thee->vmem, thee->aprx);
+
     /* Set up charge-simplex map */
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
-#if 0
-    Vcsm_init(thee->csm); /* Catch 22 */
-#endif
+
+    /* Store local copy of myself */
+    var.fetk = thee;
+
+    /* Set up the external Gem subdivision hook */
+    Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);
+
+    /* Set up ion-related variables */
+    /* Set up ionic strength stuff */
+    var.zkappa2 = Vpbe_getZkappa2(var.fetk->pbe);
+    var.ionstr = Vpbe_getBulkIonicStrength(var.fetk->pbe);
+    if (var.ionstr > 0.0) var.zks2 = 0.5*var.zkappa2/var.ionstr;
+    else var.zks2 = 0.0;
+    Vpbe_getIons(var.fetk->pbe, &(var.nion), var.ionConc, var.ionRadii,
+      var.ionQ);
+    for (i=0; i<var.nion; i++) {
+        var.ionConc[i] = var.zks2 * var.ionConc[i] * var.ionQ[i];
+    }
+
+    /* Set parameter objects to NULL */
+    thee->pbeparm = VNULL;
+    thee->feparm = VNULL;
+
 
     return 1;
+}
+
+VPUBLIC void Vfetk_setParameters(Vfetk *thee, PBEparm *pbeparm, 
+  FEMparm *feparm) {
+
+    VASSERT(thee != VNULL);
+    thee->feparm = feparm;
+    thee->pbeparm = pbeparm;
 }
 
 VPUBLIC void Vfetk_dtor(Vfetk **thee) {
@@ -136,8 +461,12 @@ VPUBLIC void Vfetk_dtor(Vfetk **thee) {
 }
 
 VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
-    Vmem_dtor(&(thee->vmem));
     Vcsm_dtor(&(thee->csm));
+    AM_dtor(&(thee->am));
+    Aprx_dtor(&(thee->aprx));
+    Gem_dtor(&(thee->gm));
+    Vfetk_PDE_dtor(&(thee->pde));
+    Vmem_dtor(&(thee->vmem));
 }
 
 VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
@@ -382,143 +711,94 @@ VPUBLIC int Vfetk_memChk(Vfetk *thee) {
     return memUse;
 }
 
-VPUBLIC int Vfetk_genIcosGem(Gem *gm, double radius, double center[3]) {
-
-    VV *vx;
-    SS *sm;
-    int i, j, theDim, theDimII;
-    int topdata[80] = {1,6,12,0, 1,12,4,0, 1,4,8,0, 1,8,10,0, 1,10,6,0,
-                       2,9,11,0, 2,5,9,0,  2,3,5,0, 2,7,3,0,  2,11,7,0,
-                       7,6,10,0, 3,10,8,0, 5,8,4,0, 9,4,12,0, 11,12,6,0,
-                       8,5,3,0,  4,9,5,0,  12,11,9,0, 6,7,11,0, 10,3,7,0 };
-    double xyzdata[39] = { 0.000000e+00,  0.000000e+00,  0.000000e+00,
-                           5.257311e-01,  0.000000e+00,  8.506508e-01,
-                          -5.257311e-01,  0.000000e+00, -8.506508e-01,
-                           5.257311e-01,  0.000000e+00, -8.506508e-01,
-                           0.000000e+00,  8.506508e-01,  5.257311e-01,
-                           0.000000e+00,  8.506508e-01, -5.257311e-01,
-                           0.000000e+00, -8.506508e-01,  5.257311e-01,
-                           0.000000e+00, -8.506508e-01, -5.257311e-01,
-                           8.506508e-01,  5.257311e-01,  0.000000e+00,
-                          -8.506508e-01,  5.257311e-01,  0.000000e+00,
-                           8.506508e-01, -5.257311e-01,  0.000000e+00,
-                          -8.506508e-01, -5.257311e-01,  0.000000e+00,
-                          -5.257311e-01,  0.000000e+00,  8.506508e-01
-                         };
-    int numVV, chartV, numSS;
-    int vnum, vtp, vtpI;
-    int fnum[3], ftp[3], ftpB[3];
-
-    /* THIS ROUTINE IS BROKEN!!! */
-    VASSERT(0);
-
-    /* Make sure this is an empty Gem object */
-    if (Gem_numVV(gm) != 0) {
-        Vnm_print(2, "Vbnd_genIcosGem:  Error! Gem object has non-zero \
-number of vertices!\n");
-        return -1;
-    }
+VPRIVATE char *cubeString =
+"mcsf_begin=1;\n\
+\n\
+dim=3;\n\
+dimii=3;\n\
+vertices=8;\n\
+simplices=6;\n\
+\n\
+vert=[\n\
+0 0 -0.5 -0.5 -0.5\n\
+1 0  0.5 -0.5 -0.5\n\
+2 0 -0.5  0.5 -0.5\n\
+3 0  0.5  0.5 -0.5\n\
+4 0 -0.5 -0.5  0.5\n\
+5 0  0.5 -0.5  0.5\n\
+6 0 -0.5  0.5  0.5\n\
+7 0  0.5  0.5  0.5\n\
+];\n\
+\n\
+simp=[\n\
+0 0 0 0 1 0 1 0 5 1 2\n\
+1 0 0 0 1 1 0 0 5 2 4\n\
+2 0 0 0 1 0 1 1 5 3 2\n\
+3 0 0 0 1 0 1 3 5 7 2\n\
+4 0 0 1 1 0 0 2 5 7 6\n\
+5 0 0 1 1 0 0 2 5 6 4\n\
+];\n\
+\n\
+mcsf_end=1;\n\
+\n\
+";
 
 
-    /* Set up parameters for 3D domain */
-    theDim = 3;
-    theDimII = 3;
-    numVV = 13;
-    numSS = 20;
-    chartV = 0;
+VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
 
-    /* Dump parameters for debugging info */
-    Vnm_print(0, "Vbnd_genIcosGem:  radius = %g, center = (%g, %g, %g)\n",
-      radius, center[0], center[1], center[2]);
-    Vnm_print(0, "Vbnd_genIcosGem:  theDim=%d, theDimII=%d, numVV=%d, \
-numSS=%d\n", theDim, theDimII, numVV, numSS);
-    Vnm_print(0, "Vbnd_genIcosGem: Reseting manifold structures.\n");
-    Gem_reset(gm, theDim, theDimII);
+    AM *am = VNULL;
+    Gem *gm = VNULL;
 
+    VASSERT(thee != VNULL);
+    am = thee->am;
+    VASSERT(am != VNULL);
+    gm = thee->gm;
+    VASSERT(gm != VNULL);
 
-    /* Create the vertices */
-    for (i=0; i<numVV; i++) {
-        vx = Gem_createAndInitVV(gm);
-        VV_setReality(vx, 0);
-        VV_setDim(vx, theDim);
-        VV_setClass(vx, 0);
-        VV_setType(vx, 0);
-        VV_setId(vx, i);
-        VV_setChart(vx, chartV);
+    /** @note This code is based on Gem_makeCube by Mike Holst */
 
-        /* set the vertex coordinates */
-        VV_setCoord(vx, 0, radius*xyzdata[3*i]+center[0]);
-        VV_setCoord(vx, 1, radius*xyzdata[3*i+1]+center[1]);
-        VV_setCoord(vx, 2, radius*xyzdata[3*i+2]+center[2]);
-    }
+    int skey = 0;  /**< Simplex format */
+    char *key = "r";  /**< Read */
+    char *iodev = "BUFF";  /**< Buffer */
+    char *iofmt = "ASC";  /**< ASCII */
+    char *iohost = "localhost";  /**< localhost (dummy) */
+    char *iofile = "0";  /**< socket 0 (dummy) */
+    Vio *sock = VNULL;
+    char buf[VMAX_BUFSIZE];
+    int bufsize = 0;
+    VV *vx = VNULL;
+    int i, j;
+    double x;
 
-    /* Create the simplices */
-    for (i=0; i<numSS; i++) {
+    /* Write mesh string to buffer and read back */
+    bufsize = strlen(cubeString);
+    VASSERT( bufsize <= VMAX_BUFSIZE );
+    strncpy(buf, cubeString, VMAX_BUFSIZE);
+    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
+    Vio_bufTake(sock, buf, bufsize);
+    AM_read(am, skey, sock);
 
-        /* create the new simplex */
-        sm = Gem_createAndInitSS(gm);
-        SS_setReality(sm, 0);
-        SS_setDim(sm, theDim);
-        SS_setClass(sm, theDim);
-        SS_setType(sm, 0);
-        SS_setId(sm, i);
-        SS_setChart(sm, 0);
-
-        /* set the simplex face types and vertex labels */
-        SS_setFaceType( sm, 0, 0 );
-        SS_setFaceType( sm, 1, 0 );
-        SS_setFaceType( sm, 2, 0 );
-        SS_setFaceType( sm, 3, 1 );
-        (gm->numBF)++;
-        for (j=0; j<theDim+1; j++) {
-            vx = Gem_VV(gm, topdata[4*i+j] );
-            SS_setVertex( sm, j, vx );
+    /* Scale (unit) cube */
+    for (i=0; i<Gem_numVV(gm); i++) {
+        vx = Gem_VV(gm, i);
+        for (j=0; j<3; j++) {
+            x = VV_coord(vx, j);
+            x *= length[j];
+            VV_setCoord(vx, j, x);
         }
-
-        /* calculate (our contribution to) vertex types from our face types */
-        for (j=0; j<theDim+1; j++) {
-            /* get the vertex in question */
-            vnum = j;
-            vx = SS_vertex( sm, vnum );
-            /* get face numbers of two/three faces which touch vertex vnum */
-            fnum[0] = vmapOV3[vnum][0];
-            fnum[1] = vmapOV3[vnum][1];
-            fnum[2] = vmapOV3[vnum][2];  /* 2D: third face always interior */
-            /* some shorthand notation... */
-            vtp     = VV_type(vx);
-            vtpI    = VINTERIOR( VV_type(vx) );
-            ftp[0]  = SS_faceType(sm,fnum[0]);
-            ftp[1]  = SS_faceType(sm,fnum[1]);
-            ftp[2]  = SS_faceType(sm,fnum[2]);
-            ftpB[0] = VBOUNDARY( SS_faceType(sm,fnum[0]) );
-            ftpB[1] = VBOUNDARY( SS_faceType(sm,fnum[1]) );
-            ftpB[2] = VBOUNDARY( SS_faceType(sm,fnum[2]) );
-            /* if any of the faces are Boundary, then mark vertex Boundary */
-            if ( ftpB[0] || ftpB[1] || ftpB[2] ) {
-
-                /* deal with existing vertex type */
-                if (vtpI) (gm->numBV)++;
-
-                /* okay, determine max boundary flag (including vtp) */
-                if (ftpB[0]) vtp = VMAX2(vtp,ftp[0]);
-                if (ftpB[1]) vtp = VMAX2(vtp,ftp[1]);
-                if (ftpB[2]) vtp = VMAX2(vtp,ftp[2]);
-
-                /* set the type */
-                VV_setType(vx, vtp);
-            }
-
-            /* build the ringed vertex datastructure */
-        }
-        SS_buildRing(sm);
     }
 
-    /* create initial edge markings in the simplices */
-    Gem_markEdges(gm);
-    /* count v/e/f/s and check the mesh */
-    Gem_countChk(gm);
+    /* Add new center */
+    for (i=0; i<Gem_numVV(gm); i++) {
+        vx = Gem_VV(gm, i);
+        for (j=0; j<3; j++) {
+            x = VV_coord(vx, j);
+            x += center[j];
+            VV_setCoord(vx, j, x);
+        }
+    }
 
-    return 0;
+    return 1;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1024,7 +1304,950 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
 
     /* Step 5:  Close the file */
     fclose( fp );
+}
+
+VPUBLIC PDE* Vfetk_PDE_ctor(Vfetk *fetk) {
+
+    PDE *thee = VNULL;
+
+    thee = Vmem_malloc(fetk->vmem, 1, sizeof(PDE));
+    VASSERT(thee != VNULL);
+    VASSERT(Vfetk_PDE_ctor2(thee, fetk));
+
+    return thee;
+}
+
+VPUBLIC int Vfetk_PDE_ctor2(PDE *thee, Vfetk *fetk) {
+
+    int i;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vfetk_PDE_ctor2:  Got NULL thee!\n");
+        return 0;
+    }
+
+    /* Store a local copy of the Vfetk class */
+    var.fetk = fetk;
+
+    /* PDE-specific parameters and function pointers */
+    thee->initAssemble = Vfetk_PDE_initAssemble;
+    thee->initElement  = Vfetk_PDE_initElement;
+    thee->initFace     = Vfetk_PDE_initFace;
+    thee->initPoint    = Vfetk_PDE_initPoint;
+    thee->Fu           = Vfetk_PDE_Fu;
+    thee->Fu_v         = Vfetk_PDE_Fu_v;
+    thee->DFu_wv       = Vfetk_PDE_DFu_wv;
+    thee->delta        = Vfetk_PDE_delta;
+    thee->u_D          = Vfetk_PDE_u_D;
+    thee->u_T          = Vfetk_PDE_u_T;
+    thee->Ju           = Vfetk_PDE_Ju;
+    thee->vec          = 1; /* FIX! */
+    thee->sym[0][0]    = 1;
+    thee->est[0]       = 1.0;
+    for (i=0; i<VMAX_BDTYPE; i++) thee->bmap[0][i] = i;
+
+    /* Manifold-specific function pointers */
+    thee->bisectEdge  = Vfetk_PDE_bisectEdge;
+    thee->mapBoundary = Vfetk_PDE_mapBoundary;
+    thee->markSimplex = Vfetk_PDE_markSimplex;
+    thee->oneChart    = Vfetk_PDE_oneChart;
+
+    /* Element-specific function pointers */
+    thee->simplexBasisInit = Vfetk_PDE_simplexBasisInit;
+    thee->simplexBasisForm = Vfetk_PDE_simplexBasisForm;
+
+    return 1;
+}
+
+VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
+
+    if ((*thee) != VNULL) {
+        Vfetk_PDE_dtor2(*thee);
+        Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee);
+        (*thee) = VNULL;
+    }
+}
+
+VPUBLIC void Vfetk_PDE_dtor2(PDE *thee) { 
+    var.fetk = VNULL; 
+}
+
+VPRIVATE double smooth(int nverts, double dist[4], double coeff[4], int meth) {
+
+    int i;
+    double weight;
+    double num = 0;
+    double den = 0;
+
+    for (i=0; i<nverts; i++) {
+        if (dist[i] < VSMALL) return coeff[i];
+        weight = 1.0/dist[i];
+        if (meth == 0) {
+            num += (weight * coeff[i]);
+            den += weight; 
+        } else if (meth == 1) { 
+            if (coeff[i] < VSMALL) VASSERT(0); 
+            num += weight; den += (weight/coeff[i]); 
+        } else VASSERT(0); 
+    } 
+    
+    return (num/den);
 
 }
+
+VPRIVATE double diel() {
+
+    int i, j;
+    double epsp, epsw, dist[5], coeff[5], srad, swin, *vx;
+    Vsurf_Meth srfm;
+    Vacc *acc;
+    PBEparm *pbeparm;
+
+    epsp = Vpbe_getSoluteDiel(var.fetk->pbe);
+    epsw = Vpbe_getSolventDiel(var.fetk->pbe);
+    VASSERT(var.fetk->pbeparm != VNULL);
+    pbeparm = var.fetk->pbeparm;
+    srfm = pbeparm->srfm;
+    srad = pbeparm->srad;
+    swin = pbeparm->swin;
+    acc = var.fetk->pbe->acc;
+
+    if (VABS(epsp - epsw) < VSMALL) return epsp;
+    switch (srfm) {
+        case VSM_MOL:
+            return ((epsw-epsp)*Vacc_molAcc(acc, var.xq, srad) + epsp);
+            break;
+        case VSM_MOLSMOOTH:
+            for (i=0; i<var.nverts; i++) {
+                dist[i] = 0;
+                vx = var.vx[i];
+                for (j=0; j<3; j++) {
+                    dist[i] += VSQR(var.xq[j] - vx[j]);
+                }
+                dist[i] = VSQRT(dist[i]);
+                coeff[i] = (epsw-epsp)*Vacc_molAcc(acc, var.xq, srad) + epsp;
+            }
+            return smooth(var.nverts, dist, coeff, 1);
+            break;
+        case VSM_SPLINE:
+            return ((epsw-epsp)*Vacc_splineAcc(acc, var.xq, swin, 0.0) + epsp);
+            break;
+        default:
+            Vnm_print(2, "Undefined surface method (%d)!\n", srfm);
+            VASSERT(0);
+    }
+}
+
+VPRIVATE double kappa2() {
+
+    int i, j;
+    double dist[5], coeff[5], irad, swin, *vx;
+    Vsurf_Meth srfm;
+    Vacc *acc = VNULL;
+    PBEparm *pbeparm = VNULL;
+
+    VASSERT(var.fetk->pbeparm != VNULL);
+    pbeparm = var.fetk->pbeparm;
+    srfm = pbeparm->srfm;
+    irad = Vpbe_getMaxIonRadius(var.fetk->pbe);
+    swin = pbeparm->swin;
+    acc = var.fetk->pbe->acc;
+
+    if (var.zks2 < VSMALL) return 0.0;
+    switch (srfm) {
+        case VSM_MOL:
+            return (var.zks2*Vacc_ivdwAcc(acc, var.xq, irad));
+            break;
+        case VSM_MOLSMOOTH:
+            for (i=0; i<var.nverts; i++) {
+                dist[i] = 0;
+                vx = var.vx[i];
+                for (j=0; j<3; j++) {
+                    dist[i] += VSQR(var.xq[j] - vx[j]);
+                }
+                dist[i] = VSQRT(dist[i]);
+                coeff[i] = var.zks2*Vacc_ivdwAcc(acc, var.xq, irad);
+            }
+            return smooth(var.nverts, dist, coeff, 1);
+            break;
+        case VSM_SPLINE:
+            return (var.zks2*Vacc_splineAcc(acc, var.xq, swin, irad));
+            break;
+        default:
+            Vnm_print(2, "Undefined surface method (%d)!\n", srfm);
+            VASSERT(0);
+    }
+}
+
+VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]) {
+
+    double size, *position, charge, xkappa, eps_w, dist, T, pot, val;
+    int iatom, i;
+    Valist *alist;
+    Vatom *atom;
+
+    eps_w = Vpbe_getSolventDiel(pbe);
+    xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
+    T = Vpbe_getTemperature(pbe);
+    alist = Vpbe_getValist(pbe);
+    val = 0;
+    pot = 0;
+
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist, iatom);
+        position = Vatom_getPosition(atom);
+        charge = Vunit_ec*Vatom_getCharge(atom);
+        size = (1e-10)*Vatom_getRadius(atom);
+        dist = 0;
+        for (i=0; i<d; i++) {
+            dist += VSQR(position[i] - x[i]);
+        }
+        dist = (1.0e-10)*VSQRT(dist);
+        val = (charge)/(4*VPI*Vunit_eps0*eps_w*dist);
+        if (xkappa != 0.0) {
+            val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
+        }
+        val = val*Vunit_ec/(Vunit_kb*T);
+        pot = pot + val;
+    }
+
+    return pot;
+}
+
+VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
+
+    double size, *position, charge, xkappa, eps_w, eps_p, dist, T, pot, val;
+    int iatom, i;
+    Valist *alist;
+    Vatom *atom;
+
+    eps_w = Vpbe_getSolventDiel(pbe);
+    eps_p = Vpbe_getSoluteDiel(pbe);
+    xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
+    T = Vpbe_getTemperature(pbe);
+    alist = Vpbe_getValist(pbe);
+    val = 0;
+    pot = 0;
+
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist, iatom);
+        position = Vatom_getPosition(atom);
+        charge = Vunit_ec*Vatom_getCharge(atom);
+        size = (1e-10)*Vatom_getRadius(atom);
+        dist = 0;
+        for (i=0; i<d; i++) dist += VSQR(position[i] - x[i]);
+        dist = (1.0e-10)*VSQRT(dist);
+        val = (Vunit_ec*charge)/(4*VPI*Vunit_eps0*Vunit_kb*T*dist);
+        if (xkappa > VSMALL) {
+            val = val*(exp(-xkappa*(dist-size))/(eps_w*(1+xkappa*size)) - \
+              1/(eps_p));
+        } else val = val*(1/(eps_w) - 1/(eps_p));
+        pot = pot + val;
+    }
+    return pot;
+}
+
+VPRIVATE void coulomb(Vpbe *pbe, int d, double x[], double eps, double *U, 
+  double dU[], double *d2U) {
+
+    double *position, charge, dist, dist2, T, val, vec[3];
+    int iatom, i;
+    Valist *alist;
+    Vatom *atom;
+
+    T = Vpbe_getTemperature(pbe);
+    alist = Vpbe_getValist(pbe);
+    val = 0;
+    *U = 0;
+    *d2U = 0;
+    for (i=0; i<d; i++) dU[i] = 0;
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+        atom = Valist_getAtom(alist, iatom);
+        position = Vatom_getPosition(atom);
+        charge = Vatom_getCharge(atom);
+        dist2 = 0;
+        for (i=0; i<d; i++) {
+            vec[i] = (position[i] - x[i]);
+            dist2 += VSQR(vec[i]);
+        }
+        dist = VSQRT(dist2);
+
+        /* POTENTIAL */
+        *U = *U + charge/dist;
+
+        /* GRADIENT */
+        for (i=0; i<d; i++) dU[i] = dU[i] + vec[i]*charge/(dist2*dist);
+
+        /* LAPLACIAN */
+        *d2U = *d2U + 3*VSQR(vec[i])*charge/(dist2*dist2*dist)
+          - charge/(dist2*dist);
+    }
+
+    /* Scale the results */
+    *U   = (*U)  *VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    *d2U = (*d2U)*VSQR(Vunit_ec)*(1.0e10)/(4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    for (i=0; i<d; i++) {
+        dU[i] = dU[i] *VSQR(Vunit_ec)*(1.0e10) / \
+          (4*VPI*Vunit_eps0*eps*Vunit_kb*T);
+    }
+
+}
+
+VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { ; }
+
+VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
+  double tvx[][3], void *data) {
+
+    int currentMol = 0;
+    int i, j;
+    int bit = (int)VPOW(2, 2*currentMol);
+    double epsp, epsw;
+
+    /* We assume that the simplex has been passed in as the void *data * *
+     * argument.  Store it */
+    VASSERT(data != NULL);
+    var.simp = (SS *)data;
+
+    /* save the element type */
+    var.sType = elementType;
+
+    /* Grab the vertices from this simplex */
+    var.nverts = thee->dim+1;
+    for (i=0; i<thee->dim+1; i++) var.verts[i] = SS_vertex(var.simp, i);
+
+    /* Vertex locations of this simplex */
+    for (i=0; i<thee->dim+1; i++) {
+        for (j=0; j<thee->dim; j++) {
+            var.vx[i][j] = tvx[i][j];
+        }
+    }
+
+    /* Set the dielectric constant for this element for use in the jump term *
+     * of the residual-based error estimator.  The value is set to the average
+     * * value of the vertices */
+    epsp = Vpbe_getSoluteDiel(var.fetk->pbe);
+    epsw = Vpbe_getSolventDiel(var.fetk->pbe);
+    if (VABS(epsw-epsp) > VSMALL) {
+        var.jumpDiel = 0;
+        for (i=0; i<thee->dim+1; i++) {
+            if ((VV_chart(var.verts[i]) & bit) != 0) {
+                var.jumpDiel += epsw;
+            } else var.jumpDiel += epsp;
+        }
+        var.jumpDiel = var.jumpDiel/((double)(var.nverts));
+    }
+}
+
+VPUBLIC void Vfetk_PDE_initFace(PDE *thee, int faceType, int chart, 
+  double tnvec[]) {
+
+    int i;
+
+    /* unit normal vector of this face */
+    for (i=0; i<thee->dim; i++) var.nvec[i] = tnvec[i];
+
+    /* save the face type */
+    var.fType = faceType;
+}
+
+VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart, 
+  double txq[], double tU[], double tdU[][3]) {
+
+    int i, j, ichop;
+    double u2, coef2, eps_p;
+    Vfetk_PBEType pdekey;
+    Vpbe *pbe = VNULL;
+
+    eps_p = Vpbe_getSoluteDiel(var.fetk->pbe);
+    pdekey = var.fetk->type;
+    pbe = var.fetk->pbe;
+
+    /* the point, the solution value and gradient, and the Coulomb value and *
+     * gradient at the point */
+    for (i=0; i<thee->vec; i++) {
+        var.U[i] = tU[i];
+        if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE))
+          coulomb(pbe, thee->dim, txq, eps_p, &(var.W), var.dW, &(var.d2W));
+        for (j=0; j<thee->dim; j++) {
+            var.xq[j] = txq[j];
+            var.dU[i][j] = tdU[i][j];
+        }
+    }
+
+    /* interior form case */
+    if (pointType == 0) {
+
+        /* Get the dielectric values */
+        var.diel  = diel();
+        var.kappa2  = kappa2();
+        var.A = var.diel;
+        var.F = (var.diel - eps_p);
+
+        switch (pdekey) {
+
+            case PBE_LPBE:
+                var.B = var.kappa2*2.0*var.ionstr*var.U[0];
+                var.DB = var.kappa2*2.0*var.ionstr;
+                break;
+
+            case PBE_NPBE:
+                var.B  = 0;
+                var.DB  = 0;
+                if (var.kappa2 > VSMALL) {
+                    for (i=0; i<var.nion; i++) {
+                        /* NONLINEAR TERM */
+                        coef2 = -1.0 * var.kappa2 * var.ionConc[i];
+                        u2 = -1.0 * var.U[0] * var.ionQ[i];
+                        var.B += (coef2 * Vcap_exp(u2, &ichop));
+                        /* LINEARIZED TERM */
+                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        u2 = -1.0 * var.U[0] * var.ionQ[i];
+                        var.DB += (coef2 * Vcap_exp(u2, &ichop));
+                    }
+                } 
+                break;
+
+            case PBE_LRPBE:
+                var.B  = var.kappa2*2.0*var.ionstr*(var.U[0]+var.W);
+                var.DB  = var.kappa2*2.0*var.ionstr;
+                break;
+
+            case PBE_NRPBE: 
+                var.B  = 0;
+                var.DB  = 0;
+                if (var.kappa2 > VSMALL) {
+                    for (i=0; i<var.nion; i++) {
+                        /* NONLINEAR TERM */
+                        coef2 = -1.0 * var.kappa2 * var.ionConc[i];
+                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+                        var.B += (coef2 * Vcap_exp(u2, &ichop));
+
+                        /* LINEARIZED TERM */
+                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+                        var.DB += (coef2 * Vcap_exp(u2, &ichop));
+                    }
+                }
+                break;
+
+            default:
+                Vnm_print(2, "Vfetk_PDE_initPoint:  Unknown PBE type (%d)!\n",
+                  pdekey);
+                VASSERT(0);
+                break;
+        }
+
+    /* boundary form case */
+    } else VASSERT(0);
+
+}
+
+VPUBLIC void Vfetk_PDE_Fu(PDE *thee, int key, double F[]) {
+
+    Vnm_print(2, "Vfetk_PDE_Fu:  Setting error to zero!\n");
+
+    F[0] = 0.;
+
+}
+
+VPUBLIC double Vfetk_PDE_Fu_v(PDE *thee, int key, double V[], double dV[][3]) {
+
+    Vfetk_PBEType type;
+    int i;
+    double value = 0;
+
+    type = var.fetk->type;
+
+    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
+        /* interior form case */
+        if (key == 0) {
+            value = var.B * V[0];
+            for (i=0; i<thee->dim; i++)
+              value += ( var.A * var.dU[0][i] * dV[0][i] );
+
+        /* boundary form case */
+        } else { /* (key == 1) */
+            Vnm_print(2, "Vfetk_PDE_Fu_v:  Boundary weak form not applicable \
+to PBE!\n");
+            VASSERT(0);
+        }
+    } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
+        /* interior form case */
+        if (key == 0) {
+            value = var.B * V[0];
+            for (i=0; i<thee->dim; i++) {
+                value += (var.A * var.dU[0][i] * dV[0][i]);
+                if (var.F > VSMALL) value += (var.F * var.dW[i] * dV[0][i]);
+            }
+        /* boundary form case */
+        } else { /* (key == 1) */
+            Vnm_print(2, "Vfetk_PDE_Fu_v:  Boundary weak form not applicable \
+to PBE!\n");
+            VASSERT(0);
+        }
+    } else {
+        Vnm_print(2, "Vfetk_PDE_Fu_v:  Invalid PBE type (%d)!\n", type);
+        VASSERT(0);
+    }
+
+    return value;
+}
+
+VPUBLIC double Vfetk_PDE_DFu_wv(PDE *thee, int key, double W[], double dW[][3],
+  double V[], double dV[][3]) {
+
+    Vfetk_PBEType type;
+    int i;
+    double value = 0;
+
+    type = var.fetk->type;
+
+    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
+        if (key == 0) { /* interior form case */
+            value = var.DB * W[0] * V[0];
+            for (i=0; i<thee->dim; i++)
+              value += ( var.A * dW[0][i] * dV[0][i] );
+        
+        } else { /* boundary form case */
+            Vnm_print(2, "Vfetk_PDE_DFu_wv:  Boundary weak form not \
+applicable to PBE!\n");
+            VASSERT(0);
+        }
+    } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
+        if (key == 0) { /* interior form */
+            value = var.DB * W[0] * V[0];
+            for (i=0; i<thee->dim; i++)
+              value += ( var.A * dW[0][i] * dV[0][i] );
+        } else { /* boundary form case */
+            Vnm_print(2, "Vfetk_PDE_DFu_wv:  Boundary weak form not \
+applicable to PBE!\n");
+            VASSERT(0);
+        }
+    } else {
+        Vnm_print(2, "Vfetk_PDE_DFu_v:  Invalid PBE type (%d)!\n", type);
+        VASSERT(0);
+    }
+
+    return value;
+}
+
+/** @brief  Maximum number of simplices in a simplex ring 
+ *  @ingroup  Vfetk */
+#define VRINGMAX 1000
+/** @brief  Maximum number of atoms associated with a vertex
+ *  @ingroup  Vfetk */
+#define VATOMMAX 1000000
+VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
+  void *user, double F[]) {
+
+    int iatom, jatom, natoms, atomIndex, atomList[VATOMMAX], nAtomList;
+    int gotAtom, numSring, isimp, ivert, sid;
+    double *position, charge, phi[4], phix[4][3], value;
+    Vatom *atom;
+    Vfetk_PBEType pdekey;
+    SS *sring[VRINGMAX];
+    VV *vertex = (VV *)user;
+
+    if ((pdekey == PBE_LPBE) || (pdekey == PBE_NPBE)) {
+        VASSERT( vertex != VNULL);
+        numSring = 0;
+        sring[numSring] = VV_firstSS(vertex);
+        while (sring[numSring] != VNULL) {
+            numSring++;
+            sring[numSring] = SS_link(sring[numSring-1], vertex);
+        }
+        VASSERT( numSring > 0 );
+        VASSERT( numSring <= VRINGMAX );
+
+        /* Move around the simplex ring and determine the charge locations */
+        F[0] = 0.;
+        charge = 0.;
+        nAtomList = 0;
+        for (isimp=0; isimp<numSring; isimp++) {
+            sid = SS_id(sring[isimp]);
+            natoms = Vcsm_getNumberAtoms(Vfetk_getVcsm(var.fetk), sid);
+            for (iatom=0; iatom<natoms; iatom++) {
+                /* Get the delta function information * */ 
+                atomIndex = Vcsm_getAtomIndex(Vfetk_getVcsm(var.fetk), 
+                  iatom, sid);
+                gotAtom = 0;
+                for (jatom=0; jatom<nAtomList; jatom++) {
+                    if (atomList[jatom] == atomIndex) {
+                        gotAtom = 1;
+                        break;
+                    }
+                }
+                if (!gotAtom) {
+                    VASSERT(nAtomList < VATOMMAX);
+                    atomList[nAtomList] = atomIndex;
+                    nAtomList++;
+
+                    atom = Vcsm_getAtom(Vfetk_getVcsm(var.fetk), iatom, sid);
+                    charge = Vatom_getCharge(atom);
+                    position = Vatom_getPosition(atom);
+
+                    /* Get the test function value at the delta function I
+                     * used to do a VASSERT to make sure the point was in the
+                     * simplex (i.e., make sure round-off error isn't an
+                     * issue), but round off errors became an issue */
+                    if (!Gem_pointInSimplexVal(Vfetk_getGem(var.fetk),
+                      sring[isimp], position, phi, phix)) {
+                        if (!Gem_pointInSimplex(Vfetk_getGem(var.fetk),
+                          sring[isimp], position)) {
+                            Vnm_print(2, "delta: Both Gem_pointInSimplexVal \
+and Gem_pointInSimplex detected misplaced point charge!\n");
+                            Vnm_print(2, "delta: I think you have problems: \
+phi = {");
+                            for (ivert=0; ivert<Gem_dimVV(Vfetk_getGem(var.fetk)); ivert++) Vnm_print(2, "%e ", phi[ivert]);
+                                                                                                            Vnm_print(2, "}\n");
+                        }
+                    }
+                    value = 0;
+                    for (ivert=0; ivert<Gem_dimVV(Vfetk_getGem(var.fetk)); ivert++) {
+                        if (VV_id(SS_vertex(sring[isimp], ivert)) == VV_id(vertex)) value += phi[ivert];
+                    }
+
+                    F[0] += (value * Vpbe_getZmagic(var.fetk->pbe) * charge);
+                } /* if !gotAtom */
+            } /* for iatom */
+        } /* for isimp */
+
+    } else if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE)) {
+        F[0] = 0.0;
+    } else { VASSERT(0); }
+}
+
+VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
+  double F[]) {
+
+    if ((var.fetk->type == PBE_LPBE) || (var.fetk->type == PBE_NPBE)) {
+        F[0] = debye_U(var.fetk->pbe, thee->dim, txq);
+    } else if ((var.fetk->type == PBE_LRPBE) || (var.fetk->type == PBE_NRPBE)) {
+        F[0] = debye_Udiff(var.fetk->pbe, thee->dim, txq);
+    } else VASSERT(0);
+}
+
+VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
+  double F[]) { F[0] = 0.; }
+
+VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType, 
+  int chart[], double vx[][3]) {
+    int i;
+    for (i=0; i<dimII; i++) vx[2][i] = .5 * (vx[0][i] + vx[1][i]);
+}
+
+VPUBLIC void Vfetk_PDE_mapBoundary(int dim, int dimII, int vertexType,
+  int chart, double vx[3]) { ; }
+
+VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
+  int faceType[4], int vertexType[4], int chart[], double vx[][3],
+  void *simplex) {
+
+    double targetRes, maxRad, edgeLength, srad, swin;
+    int i, refAccLo, refAccHi, myAccLo, myAccHi, myAcc, natoms;
+    Vsurf_Meth srfm;
+    Vfetk_PBEType type;
+    FEMparm *feparm = VNULL;
+    PBEparm *pbeparm = VNULL;
+    Vpbe *pbe = VNULL;
+    Vacc *acc = VNULL;
+    Vcsm *csm = VNULL;
+    SS *simp = VNULL;
+
+    VASSERT(var.fetk->feparm != VNULL);
+    feparm = var.fetk->feparm;
+    VASSERT(var.fetk->pbeparm != VNULL);;
+    pbeparm = var.fetk->pbeparm;
+    pbe = var.fetk->pbe;
+    csm = Vfetk_getVcsm(var.fetk);
+    acc = pbe->acc;
+    targetRes = feparm->targetRes;
+    srfm = pbeparm->srfm;
+    swin = pbeparm->swin;
+    simp = (SS *)simplex;
+    type = var.fetk->type;
+
+    /* Check to see if this simplex is smaller than the target size */
+    Gem_longestEdge(var.fetk->gm, simp, &edgeLength);
+    if (edgeLength < targetRes) return 0;
+
+    /* For non-regularized PBE, check charge-simplex map */
+    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
+        natoms = Vcsm_getNumberAtoms(csm, SS_id(simp));
+        if (natoms > 0) return 1;
+    }
+
+    /* We would like to resolve the mesh between the van der Waals surface the
+     * max distance from this surface where there could be coefficient 
+     * changes */
+    switch(srfm) {
+        case VSM_MOL:
+            maxRad=VMAX2(Vpbe_getMaxIonRadius(pbe),Vpbe_getSolventRadius(pbe));
+            break;
+        case VSM_MOLSMOOTH:
+            maxRad=VMAX2(Vpbe_getMaxIonRadius(pbe),Vpbe_getSolventRadius(pbe));
+            break;
+        case VSM_SPLINE:
+            maxRad = Vpbe_getMaxIonRadius(pbe);
+            maxRad += swin;
+            break;
+        default:
+            VASSERT(0);
+            break;
+    }
+    refAccLo = VRINT(Vacc_vdwAcc(acc, vx[0]));
+    if (refAccLo) refAccHi = VRINT(Vacc_ivdwAcc(acc, vx[0], maxRad));
+    else refAccHi = 0;
+    for (i=1; i<(dim+1); i++) {
+        myAccLo = VRINT(Vacc_vdwAcc(acc, vx[i]));
+        if (myAccLo != refAccLo) return 1;
+        if (myAccLo) myAccHi = VRINT(Vacc_ivdwAcc(acc, vx[i], maxRad));
+        else myAccHi = 0;
+        if (myAccHi != refAccHi) return 1;
+    }
+
+    return 0;
+}
+
+VPUBLIC void Vfetk_PDE_oneChart(int dim, int dimII, int objType, int chart[],
+  double vx[][3], int dimV) { ; }
+
+VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) { 
+
+    int i, ichop;
+    double dielE, qmE, coef2, u2;
+    double value = 0.;
+    Vfetk_PBEType type;
+
+    type = var.fetk->type;
+
+    /* interior form case */
+    if (key == 0) {
+        dielE = 0;
+        for (i=0; i<3; i++) dielE += VSQR(var.dU[0][i]);
+        dielE = dielE*var.diel;
+
+        switch (type) {
+            case PBE_LPBE:
+                if (var.kappa2 > VSMALL) {
+                    qmE = var.kappa2*2.0*var.ionstr*VSQR(var.U[0]);
+                } else qmE = 0;
+                break;
+            case PBE_NPBE:
+                if (var.kappa2 > VSMALL) {
+                    qmE = 0.;
+                    for (i=0; i<var.nion; i++) {
+                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        u2 = -1.0 * (var.U[0]) * var.ionQ[i];
+                        qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
+                    }
+                } else qmE = 0;
+                break;
+            case PBE_LRPBE:
+                if (var.kappa2 > VSMALL) {
+                    qmE = var.kappa2*2.0*var.ionstr*VSQR(var.U[0] + var.W);
+                } else qmE = 0;
+                break;
+            case PBE_NRPBE:
+                if (var.kappa2 > VSMALL) {
+                    qmE = 0.;
+                    for (i=0; i<var.nion; i++) {
+                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+                        qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
+                    }
+                } else qmE = 0;
+                break;
+            default:
+                Vnm_print(2, "Vfetk_PDE_Ju:  Invalid PBE type (%d)!\n", type);
+                VASSERT(0);
+                break;
+        }
+
+        value = 0.5*(dielE + qmE)/Vpbe_getZmagic(var.fetk->pbe);
+
+    /* boundary form case */
+    } else if (key == 1) {
+        value = 0.0;
+
+    /* how did we get here? */
+    } else VASSERT(0);
+
+    return value;
+
+}
+
+VPUBLIC void Vfetk_externalUpdateFunction(SS **simps, int num) {
+
+    int rc;
+
+    rc = Vcsm_update(Vfetk_getVcsm(var.fetk), simps, num);
+
+    if (!rc) { 
+        Vnm_print(2, "Error while updating charge-simplex map!\n");
+        VASSERT(0);
+    }
+}
+
+VPRIVATE void polyEval(int numP, double p[], double c[][VMAXP], double xv[]) {
+    int i;
+    double x, y, z;
+
+    x = xv[0]; 
+    y = xv[1]; 
+    z = xv[2]; 
+    for (i=0; i<numP; i++) {
+        p[i] = c[i][0]
+             + c[i][1]  * x
+             + c[i][2]  * y
+             + c[i][3]  * z
+             + c[i][4]  * x*x
+             + c[i][5]  * y*y
+             + c[i][6]  * z*z
+             + c[i][7]  * x*y
+             + c[i][8]  * x*z
+             + c[i][9]  * y*z
+             + c[i][10] * x*x*x
+             + c[i][11] * y*y*y
+             + c[i][12] * z*z*z
+             + c[i][13] * x*x*y
+             + c[i][14] * x*x*z
+             + c[i][15] * x*y*y
+             + c[i][16] * y*y*z
+             + c[i][17] * x*z*z
+             + c[i][18] * y*z*z;
+    }
+}
+
+VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP], 
+  double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP], 
+  int icy[][VMAXP], int icz[][VMAXP]) {
+
+    int i, j;
+    for (i=0; i<numP; i++) {
+        for (j=0; j<VMAXP; j++) {
+            c[i][j]  = 0.5 * (double)ic[i][j];
+            cx[i][j] = 0.5 * (double)icx[i][j];
+            cy[i][j] = 0.5 * (double)icy[i][j];
+            cz[i][j] = 0.5 * (double)icz[i][j];
+        }
+    }
+}
+
+VPUBLIC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof, 
+  int dof[]) {
+
+    int qorder, bump, dimIS[4];
+
+    /* necessary quadrature order to return at the end */
+    qorder = P_DEG;
+
+    /* deal with bump function requests */
+    if ((key == 0) || (key == 1)) {
+        bump = 0;
+    } else if ((key == 2) || (key == 3)) {
+        bump = 1;
+    } else { VASSERT(0); }
+
+    /* for now use same element for all components, both trial and test */
+    if (dim==2) {
+        /* 2D simplex dimensions */
+        dimIS[0] = 3;  /* number of vertices             */
+        dimIS[1] = 3;  /* number of edges                */
+        dimIS[2] = 0;  /* number of faces (3D only)      */
+        dimIS[3] = 1;  /* number of simplices (always=1) */
+        if (bump==0) {
+            if (P_DEG==1) {
+                init_2DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else if (P_DEG==2) {
+                init_2DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else if (P_DEG==3) {
+                init_2DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else Vnm_print(2, "..bad order..");
+        } else if (bump==1) {
+            if (P_DEG==1) {
+                init_2DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else Vnm_print(2, "..bad order..");
+        } else Vnm_print(2, "..bad bump..");
+    } else if (dim==3) {
+        /* 3D simplex dimensions */
+        dimIS[0] = 4;  /* number of vertices             */
+        dimIS[1] = 6;  /* number of edges                */
+        dimIS[2] = 4;  /* number of faces (3D only)      */
+        dimIS[3] = 1;  /* number of simplices (always=1) */
+        if (bump==0) {
+            if (P_DEG==1) {
+                init_3DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else if (P_DEG==2) {
+                init_3DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else if (P_DEG==3) {
+                init_3DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else Vnm_print(2, "..bad order..");
+        } else if (bump==1) {
+            if (P_DEG==1) {
+                init_3DP1(dimIS, ndof, dof, c, cx, cy, cz);
+            } else Vnm_print(2, "..bad order..");
+        } else Vnm_print(2, "..bad bump..");
+    } else Vnm_print(2, "..bad dimension..");
+
+    /* save number of DF */
+    numP = *ndof;
+
+    /* return the required quarature order */
+    return qorder;
+}
+
+VPUBLIC void Vfetk_PDE_simplexBasisForm(int key, int dim, int comp, int pdkey, 
+  double xq[], double basis[]) {
+
+    if (pdkey == 0) {
+        polyEval(numP, basis, c, xq);
+    } else if (pdkey == 1) {
+        polyEval(numP, basis, cx, xq);
+    } else if (pdkey == 2) {
+        polyEval(numP, basis, cy, xq);
+    } else if (pdkey == 3) {
+        polyEval(numP, basis, cz, xq);
+    } else { VASSERT(0); }
+}
+
+VPRIVATE void init_2DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
+  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]) {
+
+    int i;
+
+    /* dof number and locations */
+    dof[0] = 1;
+    dof[1] = 0;
+    dof[2] = 0;
+    dof[3] = 0;
+    *ndof  = 0;
+    for (i=0; i<4; i++) *ndof += dimIS[i] * dof[i];
+    VASSERT( *ndof == dim_2DP1 );
+    VASSERT( *ndof <= VMAXP );
+
+    /* coefficients of the polynomials */
+    setCoef( *ndof, c, cx, cy, cz, lgr_2DP1, lgr_2DP1x, lgr_2DP1y, lgr_2DP1z );
+}
+
+VPRIVATE void init_3DP1(int dimIS[], int *ndof, int dof[], double c[][VMAXP],
+  double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP]) {
+
+    int i;
+
+    /* dof number and locations */
+    dof[0] = 1;
+    dof[1] = 0;
+    dof[2] = 0;
+    dof[3] = 0;
+    *ndof  = 0;
+    for (i=0; i<4; i++) *ndof += dimIS[i] * dof[i];
+    VASSERT( *ndof == dim_3DP1 );
+    VASSERT( *ndof <= VMAXP );
+
+    /* coefficients of the polynomials */
+    setCoef( *ndof, c, cx, cy, cz, lgr_3DP1, lgr_3DP1x, lgr_3DP1y, lgr_3DP1z );
+}
+
 
 #endif

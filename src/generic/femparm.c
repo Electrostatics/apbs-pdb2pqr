@@ -68,7 +68,7 @@ VPUBLIC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type) {
     thee->type = type;
     thee->settype = 1;
 
-    thee->setdomainRadius = 0;
+    thee->setdomainLength = 0;
     thee->setetol = 0;
     thee->setekey = 0;
     thee->setakeyPRE = 0;
@@ -104,8 +104,8 @@ VPUBLIC int FEMparm_check(FEMparm *thee) {
         Vnm_print(2, "FEMparm_check:  type not set!\n");
         rc = 0;
     }
-    if (!thee->setdomainRadius) {
-        Vnm_print(2, "FEMparm_check:  domainRadius not set!\n");
+    if (!thee->setdomainLength) {
+        Vnm_print(2, "FEMparm_check:  domainLength not set!\n");
         rc = 0;
     }
     if (!thee->setetol) {
@@ -147,7 +147,7 @@ VPUBLIC int FEMparm_check(FEMparm *thee) {
 VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
 
-    int ti;
+    int i, ti;
     double tf;
 
     if (thee == VNULL) {
@@ -160,15 +160,17 @@ VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
-    if (Vstring_strcasecmp(tok, "domainRadius") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%lf", &tf) == 0) {
-            Vnm_print(2, "parseFE:  Read non-double (%s) while parsing \
+    if (Vstring_strcasecmp(tok, "domainLength") == 0) {
+        for (i=0; i<3; i++) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "parseFE:  Read non-double (%s) while parsing \
 DOMAINRADIUS keyword!\n", tok);
-            return -1;
-        } 
-        thee->domainRadius = tf;
-        thee->setdomainRadius = 1;
+                return -1;
+            } 
+            thee->domainLength[i] = tf;
+        }
+        thee->setdomainLength = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "etol") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -185,12 +187,15 @@ ETOL keyword!\n", tok);
         if (Vstring_strcasecmp(tok, "simp") == 0) {
             thee->ekey = FET_SIMP;
             thee->setekey = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "glob") == 0) {
             thee->ekey = FET_GLOB;
             thee->setekey = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "frac") == 0) {
             thee->ekey = FET_FRAC;
             thee->setekey = 1;
+            return 1;
         } else {
             Vnm_print(2, "parseFE:  undefined value (%s) for ekey!\n", tok);
             return -1;
@@ -200,18 +205,23 @@ ETOL keyword!\n", tok);
         if (Vstring_strcasecmp(tok, "unif") == 0) {
             thee->akeyPRE = FRT_UNIF;
             thee->setakeyPRE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "geom") == 0) {
             thee->akeyPRE = FRT_GEOM;
             thee->setakeyPRE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "resi") == 0) {
             thee->akeyPRE = FRT_RESI;
             thee->setakeyPRE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "dual") == 0) {
             thee->akeyPRE = FRT_DUAL;
             thee->setakeyPRE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "loca") == 0) {
             thee->akeyPRE = FRT_LOCA;
             thee->setakeyPRE = 1;
+            return 1;
         } else {
             Vnm_print(2, "parseFE:  undefined value (%s) for akeyPRE!\n", tok);
             return -1;
@@ -221,18 +231,23 @@ ETOL keyword!\n", tok);
         if (Vstring_strcasecmp(tok, "unif") == 0) {
             thee->akeySOLVE = FRT_UNIF;
             thee->setakeySOLVE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "geom") == 0) {
             thee->akeySOLVE = FRT_GEOM;
             thee->setakeySOLVE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "resi") == 0) {
             thee->akeySOLVE = FRT_RESI;
             thee->setakeySOLVE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "dual") == 0) {
             thee->akeySOLVE = FRT_DUAL;
             thee->setakeySOLVE = 1;
+            return 1;
         } else if (Vstring_strcasecmp(tok, "loca") == 0) {
             thee->akeySOLVE = FRT_LOCA;
             thee->setakeySOLVE = 1;
+            return 1;
         } else {
             Vnm_print(2, "parseFE:  undefined value (%s) for akeyPRE!\n", tok);
             return -1;
@@ -245,6 +260,7 @@ ETOL keyword!\n", tok);
         }
         thee->targetNum = ti;
         thee->settargetNum = 1;
+        return 1;
     } else if (Vstring_strcasecmp(tok, "targetRes") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%f", &tf) == 0) {
@@ -254,6 +270,7 @@ ETOL keyword!\n", tok);
         }
         thee->targetRes = tf;
         thee->settargetRes = 1;
+        return 1;
     } else if (Vstring_strcasecmp(tok, "maxsolve") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
@@ -262,6 +279,7 @@ ETOL keyword!\n", tok);
         }
         thee->maxsolve = ti;
         thee->setmaxsolve = 1;
+        return 1;
     } else if (Vstring_strcasecmp(tok, "maxvert") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
@@ -270,6 +288,7 @@ ETOL keyword!\n", tok);
         }
         thee->maxvert = ti;
         thee->setmaxvert = 1;
+        return 1;
     }
 
 

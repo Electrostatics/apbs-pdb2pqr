@@ -116,7 +116,6 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setpdie = 0;
     thee->setsdie = 0;
     thee->setsrfm = 0;
-    thee->setchgm = 0;
     thee->setsrad = 0;
     thee->setswin = 0; 
     thee->settemp = 0;
@@ -210,10 +209,6 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: SRFM not set!\n");
         return 0;
     }
-    if (!thee->setchgm) {
-        Vnm_print(2, "PBEparm_check: CHGM not set!\n");
-        return 0;
-    }
     if (((thee->srfm==VSM_MOL) || (thee->srfm==VSM_MOLSMOOTH)) \
       && (!thee->setsrad)) {
         Vnm_print(2, "PBEparm_check: SRAD not set!\n");
@@ -278,8 +273,6 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setpdie = parm->setpdie;
     thee->sdie = parm->sdie;
     thee->setsdie = parm->setsdie;
-    thee->chgm = parm->chgm;
-    thee->setchgm = parm->setchgm;
     thee->srfm = parm->srfm;
     thee->setsrfm = parm->setsrfm;
     thee->srad = parm->srad;
@@ -358,14 +351,35 @@ keyword!\n", tok);
         return 1;
     } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing BCFL \
-keyword!\n", tok);
-            return -1;
-        } 
-        thee->bcfl = ti;
-        thee->setbcfl = 1;
-        return 1;
+        /* We can either parse int flag... */
+        if (sscanf(tok, "%d", &ti) == 1) {
+            thee->bcfl = ti;
+            thee->setbcfl = 1;
+            return 1;
+        /* ...or the word */
+        } else {
+            if (Vstring_strcasecmp(tok, "zero") == 0) {
+                thee->bcfl = BCFL_ZERO;
+                thee->setbcfl = 1;
+                return 1;
+            } else if (Vstring_strcasecmp(tok, "sdh") == 0) {
+                thee->bcfl = BCFL_SDH;
+                thee->setbcfl = 1;
+                return 1;
+            } else if (Vstring_strcasecmp(tok, "mdh") == 0) {
+                thee->bcfl = BCFL_MDH;
+                thee->setbcfl = 1;
+                return 1;
+            } else if (Vstring_strcasecmp(tok, "focus") == 0) {
+                thee->bcfl = BCFL_FOCUS;
+                thee->setbcfl = 1;
+                return 1;
+            } else {
+                Vnm_print(2, "NOsh:  parsed unknown BCFL parameter (%s)!\n",
+                  tok);
+                return -1;
+            }
+        }
     } else if (Vstring_strcasecmp(tok, "ion") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
@@ -414,24 +428,27 @@ keyword!\n", tok);
         return 1;
     } else if (Vstring_strcasecmp(tok, "srfm") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing SRFM \
-keyword!\n", tok);
+        if (sscanf(tok, "%d", &ti) == 1) {
+            thee->srfm = ti;
+            thee->setsrfm = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "mol") == 0) {
+            thee->srfm = VSM_MOL;
+            thee->setsrfm = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "smol") == 0) {
+            thee->srfm = VSM_MOLSMOOTH;
+            thee->setsrfm = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
+            thee->srfm = VSM_MOLSMOOTH;
+            thee->setsrfm = 1;
+            return 1;
+        } else {
+            Vnm_print(2, "NOsh:  Unrecongnized keyword (%s) when parsing \
+srfm!\n", tok);
             return -1;
         }
-        thee->srfm = ti;
-        thee->setsrfm = 1;
-        return 1;
-    } else if (Vstring_strcasecmp(tok, "chgm") == 0) {
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing SRFM \
-keyword!\n", tok);
-            return -1;
-        }
-        thee->chgm = ti;
-        thee->setchgm = 1;
-        return 1;
     } else if (Vstring_strcasecmp(tok, "srad") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%lf", &tf) == 0) {
@@ -512,24 +529,51 @@ USEMAP statement!\n", tok);
         }
     } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-WRITEENERGY keyword!\n", tok);
+        if (sscanf(tok, "%d", &ti) == 1) {
+            return -1;
+            thee->calcenergy = ti;
+            thee->setcalcenergy = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "no") == 0) {
+            thee->calcenergy = 0;
+            thee->setcalcenergy = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "total") == 0) {
+            thee->calcenergy = 1;
+            thee->setcalcenergy = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "comps") == 0) {
+            thee->calcenergy = 2;
+            thee->setcalcenergy = 1;
+            return 1;
+        } else {
+            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
+calcenergy!\n", tok);
             return -1;
         }
-        thee->calcenergy = ti;
-        thee->setcalcenergy = 1;
-        return 1;
     } else if (Vstring_strcasecmp(tok, "calcforce") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%d", &ti) == 0) {
-            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
-WRITEFORCE keyword!\n", tok);
+        if (sscanf(tok, "%d", &ti) == 1) {
+            thee->calcforce = ti;
+            thee->setcalcforce = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "no") == 0) {
+            thee->calcforce = 0;
+            thee->setcalcforce = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "total") == 0) {
+            thee->calcforce = 1;
+            thee->setcalcforce = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "comps") == 0) {
+            thee->calcforce = 2;
+            thee->setcalcforce = 1;
+            return 1;
+        } else {
+            Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
+calcforce!\n", tok);
             return -1;
         }
-        thee->calcforce = ti;
-        thee->setcalcforce = 1;
-        return 1;
     } else if (Vstring_strcasecmp(tok, "write") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (Vstring_strcasecmp(tok, "pot") == 0) {

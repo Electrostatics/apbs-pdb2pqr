@@ -3,6 +3,25 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 #############################################################################
 
   CHANGES THAT AFFECT USERS:
+  * Added following aliases for some of the more obscure parameters in the
+    input files:
+      chgm 0 ==> chgm spl0
+      chgm 1 ==> chgm spl2
+      srfm 0 ==> srfm mol
+      srfm 1 ==> srfm smol
+      srfm 2 ==> srfm spl2
+      bcfl 0 ==> bcfl zero
+      bcfl 1 ==> bcfl sdh
+      bcfl 2 ==> bcfl mdh
+      bcfl 4 ==> bcfl focus
+      calcenergy 0 ==> calcenergy no
+      calcenergy 1 ==> calcenergy total
+      calcenergy 2 ==> calcenergy comps
+      calcforce 0 ==> calcforce no
+      calcforce 1 ==> calcforce total
+      calcforce 2 ==> calcforce comps
+    Example input files have been updated to reflect this change.  NOTE:
+    the code is backward-compliant; i.e., old input files WILL still work.
   * Added new READ options "PARM" and "MOL PDB", see documentation for more
     information.  These options allow users to use unparameterized PDB files
     together with a parameter database.
@@ -20,6 +39,12 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
       qcd2pqr -> qcd2pqr.awk
 
   CHANGES THAT AFFECT DEVELOPERS:
+  * Documented high-level frontend routines
+  * Added substantial mypde.c-based functionality to Vfetk
+  * Moved chgm from PBEparm to MGparm
+  * Minor changes to Vfetk: removed genIcos and added genCube
+  * FEM solution of RPBE working again (see test/reg-fem) and is probably
+    more up-to-date than test/fem
   * Updated API documentation
   * Changed many NOsh, FEMparm, MGparm variables to enums
   * Changes to Valist and Vatom classes
