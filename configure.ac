@@ -469,11 +469,19 @@ esac
 dnl # The Python wrappers use different flags
 dnl # On different architectures
 
-IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+IS_STATIC=`echo ${LDFLAGS} | grep static`
 PY_LINKFLAGS=${CFLAGS}
+PY_CC=${CC}
 case $host_cpu in
    x86_64*)
-      PY_CFLAGS="";;
+      if test "${F&&}" = "pgf77"; then
+	  PY_CC=${F77}
+      else
+	  PY_CFLAGS=""
+      fi
+      if test -n "${IS_STATIC}"; then
+	  PY_CFLAGS=""
+      fi;;
    powerpc64*)
       PY_CFLAGS="";;
    i*86)
@@ -523,6 +531,7 @@ AC_SUBST(PY_SHARED,[$PY_SHARED])
 AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
 AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
 AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
+AC_SUBST(PY_CC,[$PY_CC])
 AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
 AC_MSG_RESULT([---------- end configuring for Python wrappers --------------])
 

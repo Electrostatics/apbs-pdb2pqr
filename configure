@@ -469,7 +469,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_PRESENT_TRUE PY_PRESENT_FALSE mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os fetk_cpu_vendor_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE F77 FFLAGS ac_ct_F77 CPP LN_S ECHO RANLIB ac_ct_RANLIB EGREP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib maloc_lib maloc_inc mpi_lib mpi_inc mpi_bin rl_lib py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_CC PY_PRESENT_TRUE PY_PRESENT_FALSE mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -10788,11 +10788,15 @@ case $host_os in
 esac
 
 
-IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+IS_STATIC=`echo ${LDFLAGS} | grep static`
 PY_LINKFLAGS=${CFLAGS}
+PY_CC=${CC}
 case $host_cpu in
    x86_64*)
-      PY_CFLAGS="";;
+      PY_CC=${F77}
+      if test -n "${IS_STATIC}"; then
+	  PY_CFLAGS=""
+      fi;;
    powerpc64*)
       PY_CFLAGS="";;
    i*86)
@@ -10965,6 +10969,8 @@ PY_LDFLAGS=$PY_LDFLAGS
 PY_CFLAGS=$PY_CFLAGS
 
 PY_LINKFLAGS=$PY_LINKFLAGS
+
+PY_CC=$PY_CC
 
 
 
@@ -12794,6 +12800,7 @@ s,@PY_SHARED@,$PY_SHARED,;t t
 s,@PY_LDFLAGS@,$PY_LDFLAGS,;t t
 s,@PY_CFLAGS@,$PY_CFLAGS,;t t
 s,@PY_LINKFLAGS@,$PY_LINKFLAGS,;t t
+s,@PY_CC@,$PY_CC,;t t
 s,@PY_PRESENT_TRUE@,$PY_PRESENT_TRUE,;t t
 s,@PY_PRESENT_FALSE@,$PY_PRESENT_FALSE,;t t
 s,@mcx_lib@,$mcx_lib,;t t
