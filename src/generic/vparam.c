@@ -74,7 +74,7 @@ VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom);
 
 #if !defined(VINLINE_VPARAM)
 
-VPUBLIC int Vparam_memChk(Vparam *thee) {
+VPUBLIC unsigned long int Vparam_memChk(Vparam *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
 }

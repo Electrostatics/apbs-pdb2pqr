@@ -140,7 +140,7 @@ typedef struct Vparam Vparam;
      *  @param   thee  Vparam object
      *  @returns Number of bytes allocated for object
      */
-    VEXTERNC int Vparam_memChk(Vparam *thee);
+    VEXTERNC unsigned long int Vparam_memChk(Vparam *thee);
 
 #else /* if defined(VINLINE_VPARAM) */
 

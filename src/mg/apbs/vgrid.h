@@ -94,7 +94,7 @@ typedef struct sVgrid Vgrid;
      *  @param   thee  Vgrid object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC int Vgrid_memChk(Vgrid *thee);
+    VEXTERNC unsigned long int Vgrid_memChk(Vgrid *thee);
 
 #else /* if defined(VINLINE_VGRID) */
 

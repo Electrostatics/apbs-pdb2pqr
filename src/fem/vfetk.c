@@ -710,7 +710,7 @@ VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 
 }
 
-VPUBLIC int Vfetk_memChk(Vfetk *thee) {
+VPUBLIC unsigned long int Vfetk_memChk(Vfetk *thee) {
 
     int memUse = 0;
 

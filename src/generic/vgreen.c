@@ -134,7 +134,7 @@ VPUBLIC Valist* Vgreen_getValist(Vgreen *thee) {
 
 }
 
-VPUBLIC int Vgreen_memChk(Vgreen *thee) {
+VPUBLIC unsigned long int Vgreen_memChk(Vgreen *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
 }

@@ -1107,7 +1107,7 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
     }
     sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
 #else
-    strlenmax = int(VMAX_ARGLEN)-1;
+    strlenmax = (int)(VMAX_ARGLEN)-1;
     if (strlen(pbeparm->writematstem) > strlenmax) {
         Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
           pbeparm->writematstem, strlenmax);

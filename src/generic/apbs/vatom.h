@@ -144,7 +144,7 @@ typedef struct sVatom Vatom;
      *  @param   thee  Vpmg object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC int     Vatom_memChk(Vatom *thee);
+    VEXTERNC unsigned long int Vatom_memChk(Vatom *thee);
 
 #else /* if defined(VINLINE_VATOM) */
 #   define Vatom_getPosition(thee) ((thee)->position)

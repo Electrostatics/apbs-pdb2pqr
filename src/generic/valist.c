@@ -100,7 +100,7 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
 }
 
-VPUBLIC int Valist_memChk(Valist *thee) {
+VPUBLIC unsigned long int Valist_memChk(Valist *thee) {
 
   if (thee == NULL) return 0;
   return Vmem_bytes(thee->vmem);

@@ -159,7 +159,7 @@ VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_memChk(Vcsm *thee) {
+VPUBLIC unsigned long int Vcsm_memChk(Vcsm *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
 }

@@ -139,7 +139,7 @@ typedef struct sValist Valist;
      *  @param   thee Valist object
      *  @return  Total memory in bytes
      */
-    VEXTERNC int    Valist_memChk(Valist *thee);
+    VEXTERNC unsigned long int Valist_memChk(Valist *thee);
 
 #else /* if defined(VINLINE_VATOM) */
 #   define Valist_getAtomList(thee) ((thee)->atoms)
