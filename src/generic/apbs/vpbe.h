@@ -81,6 +81,10 @@ typedef struct Vpbe {
   Vcsm *csm;          /* Charge-simplex map */
   Vmem *vmem;         /* Memory management object */
 
+  int methFlag;       /* Method of solution
+                       *  0 ==> MC (adaptive multilevel FEM) 
+                       *  1 ==> PMGC (multigrid) */
+
   double ionConc;     /* Ionic strength (M) */
   double T;           /* Temperature (K) */
   double soluteDiel;  /* Solute dielectric constant (unitless) */
@@ -157,8 +161,8 @@ typedef struct Vpbe {
 // Class Vpbe: Non-Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm);
-VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm);
+VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, Vgm *gm, int methFlag);
+VEXTERNC int     Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm, int methFlag);
 VEXTERNC void    Vpbe_dtor(Vpbe **thee);
 VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 
