@@ -1618,24 +1618,24 @@ VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     return 1;
 }
 
-VPUBLIC int initFE(int i, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
+VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
   Vfetk *fetk[NOSH_MAXCALC]) {
     
-    int j, bytesTotal, highWater, imol;
+    int j, bytesTotal, highWater, theMol;
     double sparm, iparm, center[3];
 
     Vnm_tstart(27, "Setup timer");
 
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
     Vnm_tprint(0, "Re-centering mesh...\n");
-    imol = pbeparm->molid-1;
+    theMol = pbeparm->molid-1;
     for (j=0; j<3; j++) {
-        if (imol < nosh->nmol) {
-            center[j] = (alist[imol])->center[j];
+        if (theMol < nosh->nmol) {
+            center[j] = (alist[theMol])->center[j];
         } else{ 
             Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
-              (imol+1));
+              (theMol+1));
             return 0;
         }
     }
@@ -1646,26 +1646,26 @@ VPUBLIC int initFE(int i, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
     else sparm = pbeparm->srad;
     if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
     else iparm = 0.0;
-    pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
+    pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
       pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
       pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
 
     /* Print a few derived parameters */
-    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
 
     /* Set up FEtk objects */
     Vnm_tprint(0, "Setting up FEtk object...\n");
-    if (pbeparm->nonlin)  fetk[i] = Vfetk_ctor(pbe[i], PBE_NRPBE);
-    else fetk[i] = Vfetk_ctor(pbe[i], PBE_LRPBE);
-    Vfetk_setParameters(fetk[i], pbeparm, feparm);
+    if (pbeparm->nonlin)  fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_NRPBE);
+    else fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_LRPBE);
+    Vfetk_setParameters(fetk[icalc], pbeparm, feparm);
 
     /* Build mesh */
     Vnm_tprint(0, "Setting up mesh...\n");
-    Vfetk_genCube(fetk[i], alist[imol]->center, feparm->domainLength);
+    Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->domainLength);
     /* Uniformly refine the mesh a bit */
-    for (j=0; j<5; j++) {
-        AM_markRefine(fetk[i]->am, 0, -1, 0, 0);
-        Aprx_refine(fetk[i]->aprx, 0, USEHB);
+    for (j=0; j<3; j++) {
+        AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
+        AM_refine(fetk[icalc]->am, 0, USEHB);
     }
 
     /* Setup time statistics */
@@ -1770,14 +1770,14 @@ before you solve!\n");
 
 }
 
-VPUBLIC int partFE(int i, NOsh *nosh, FEMparm *feparm, 
+VPUBLIC int partFE(int icalc, NOsh *nosh, FEMparm *feparm, 
   Vfetk *fetk[NOSH_MAXCALC]) {
 
-    Vfetk_setAtomColors(fetk[i]);
+    Vfetk_setAtomColors(fetk[icalc]);
     return 1;
 }
 
-VPUBLIC int preRefineFE(int i, NOsh *nosh, FEMparm *feparm, 
+VPUBLIC int preRefineFE(int icalc, NOsh *nosh, FEMparm *feparm, 
   Vfetk *fetk[NOSH_MAXCALC]) {
 
     int nverts, marked;
@@ -1807,13 +1807,15 @@ before you solve!\n");
             break;
     }
 
+    Vnm_print(1, "  Initial mesh has %d vertices\n", 
+      Gem_numVV(fetk[icalc]->gm));
     while (1) {
-        nverts = Gem_numVV(fetk[i]->gm);
+        nverts = Gem_numVV(fetk[icalc]->gm);
         if (nverts > feparm->targetNum) {
             Vnm_tprint(1, "  Hit vertex number limit.\n");
             break;
         }
-        marked = AM_markRefine(fetk[i]->am, feparm->akeyPRE, -1, 
+        marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
           feparm->ekey, feparm->etol);
         if (marked == 0) {
             Vnm_tprint(1, "  Marked 0 simps; hit error/size tolerance.\n");
@@ -1821,36 +1823,38 @@ before you solve!\n");
         }
         Vnm_print(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
           marked);
-        Aprx_refine(fetk[i]->aprx, 0, USEHB);
+        AM_refine(fetk[icalc]->am, 0, USEHB);
     }
-    nverts = Gem_numVV(fetk[i]->gm);
+    nverts = Gem_numVV(fetk[icalc]->gm);
     Vnm_print(1, "  Done refining; have %d verts.\n", nverts);
 
     return 1;
 }
 
-VPUBLIC int solveFE(int i, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm, 
+VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm, 
   Vfetk *fetk[NOSH_MAXCALC]) {
 
-    AM *am;
     int lkeyHB = 3;  /**<  AM_hPcg */
 
-    am = fetk[i]->am;
-
     if (pbeparm->nonlin) {
-        AM_nSolve(am, fetk[i]->nkey, fetk[i]->nmax, fetk[i]->ntol, 
-          fetk[i]->lkey, fetk[i]->lmax, fetk[i]->ltol, fetk[i]->lprec, 
-          fetk[i]->gues, fetk[i]->pjac);
+        AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
+          fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
+          fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
+          fetk[icalc]->pjac);
     } else {
         if (USEHB) {
             printf("lkey = %d, lmax = %d, ltol = %g, gues = %d, pjac = %d\n",
-             lkeyHB, fetk[i]->lmax, fetk[i]->ltol, fetk[i]->gues,
-             fetk[i]->pjac);
-            AM_hlSolve(fetk[i]->am, 0, lkeyHB, fetk[i]->lmax, fetk[i]->ltol,
-              fetk[i]->gues, fetk[i]->pjac);
+              lkeyHB, fetk[icalc]->lmax, fetk[icalc]->ltol, fetk[icalc]->gues,
+              fetk[icalc]->pjac);
+            AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
+              fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
         } else {
-            AM_lSolve(fetk[i]->am, 0, fetk[i]->lkey, fetk[i]->lmax, 
-              fetk[i]->ltol, fetk[i]->lprec, fetk[i]->gues, fetk[i]->pjac);
+            printf("lkey = %d, lmax = %d, ltol = %g, lprec = %d, gues = %d, pjac = %d\n",
+              fetk[icalc]->lkey, fetk[icalc]->lmax, fetk[icalc]->ltol, 
+              fetk[icalc]->lprec, fetk[icalc]->gues, fetk[icalc]->pjac);
+            AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
+              fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
+              fetk[icalc]->pjac);
         }
     }
 
@@ -1861,7 +1865,6 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy) {
 
-    int i;
     double tenergy;
     FEMparm *feparm;
     PBEparm *pbeparm;
@@ -1873,7 +1876,7 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 
     /* Some processors don't count */
     if (nosh->bogus == 0) {
-        *totEnergy = Vfetk_energy(fetk[i], -1, pbeparm->nonlin);
+        *totEnergy = Vfetk_energy(fetk[icalc], -1, pbeparm->nonlin);
 #ifndef VAPBSQUIET
         Vnm_tprint(1, "    Total electrostatic energy = %1.12E kJ/mol\n", 
           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));

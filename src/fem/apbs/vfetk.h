@@ -226,6 +226,11 @@ struct sVfetk_LocalVar {
     double zks2; /**< Ionic strength parameters */
     double ionstr; /**< Ionic strength parameters (M) */
     int nion;  /**<  Number of ion species */
+    double Fu_v;  /**< Store Fu_v value */
+    double DFu_wv;  /**< Store DFu_wv value */
+    double delta;  /**< Store delta value */
+    double u_D;  /**< Store Dirichlet value */
+    double u_T;  /**< Store true value */
 };
 
 /** 
@@ -917,5 +922,12 @@ VEXTERNC void Vfetk_PDE_simplexBasisForm(int key, int dim, int comp,
  * @param  skey  Format key (0 => simplex format)
  * @note  @see Vfetk_genCube */
 VEXTERNC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock);
+
+/**
+ * @brief  Debugging routine to print out local variables used by PDE object
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @bug  This function is not thread-safe */
+VEXTERNC void Vfetk_dumpLocalVar();
 
 #endif /* ifndef _VFETK_H_ */

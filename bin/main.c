@@ -426,13 +426,11 @@ conformity.\n");
                     Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
                     return APBSRC;
                 }
-                Vnm_redirect(0);
                 if (!energyFE(nosh, i, fetk, &(nenergy[i]), &(totEnergy[i]), 
                   &(qfEnergy[i]), &(qmEnergy[i]), &(dielEnergy[i]))) {
                     Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
                     return APBSRC;
                 }
-                Vnm_redirect(1);
             }
 
             Vnm_tprint(2, "WHOOPS!  FEM NOT COMPLETE YET!\n");
