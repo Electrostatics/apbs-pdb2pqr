@@ -224,9 +224,11 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
         k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
         k_min = VMAX2(k_min, 0);
 
+/* 
         Vnm_print(0, "VACC DEBUG: %d <= i <= %d\n", i_min, i_max);
         Vnm_print(0, "VACC DEBUG: %d <= j <= %d\n", j_min, j_max);
         Vnm_print(0, "VACC DEBUG: %d <= k <= %d\n", k_min, k_max);
+*/
 
         /* Now find and assign the grid points */
         for ( ii = i_min; ii <= i_max; ii++) {
