@@ -55,6 +55,7 @@ CPPFLAGS = @CPPFLAGS@
 CXX = @CXX@
 CXXDEPMODE = @CXXDEPMODE@
 CXXFLAGS = @CXXFLAGS@
+CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 ECHO = @ECHO@
@@ -98,6 +99,10 @@ ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
+am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
+am__fastdepCC_TRUE = @am__fastdepCC_TRUE@
+am__fastdepCXX_FALSE = @am__fastdepCXX_FALSE@
+am__fastdepCXX_TRUE = @am__fastdepCXX_TRUE@
 am__include = @am__include@
 am__quote = @am__quote@
 apbs_do_tools = @apbs_do_tools@
@@ -168,7 +173,7 @@ CLEANFILES = apbslibc.so
 
 @PY_PRESENT_TRUE@noinst_PROGRAMS = apbslibc.so
 @PY_PRESENT_TRUE@apbslibc_so_SOURCES = apbslib.c
-@PY_PRESENT_TRUE@apbslibc_so_LDADD = $(LDFLAGS) -lapbsmainroutines -lapbs -lmaloc -lblas -lvf2c
+@PY_PRESENT_TRUE@apbslibc_so_LDADD = ../../bin/libapbsmainroutines.la ../../src/aaa_lib/libapbs.la @lib_list@   
 @PY_PRESENT_TRUE@apbslibc_so_LDFLAGS = -shared 
 subdir = tools/python
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -180,7 +185,9 @@ PROGRAMS = $(noinst_PROGRAMS)
 
 @PY_PRESENT_TRUE@am_apbslibc_so_OBJECTS = apbslib.$(OBJEXT)
 apbslibc_so_OBJECTS = $(am_apbslibc_so_OBJECTS)
-@PY_PRESENT_TRUE@apbslibc_so_DEPENDENCIES =
+@PY_PRESENT_TRUE@apbslibc_so_DEPENDENCIES = \
+@PY_PRESENT_TRUE@	../../bin/libapbsmainroutines.la \
+@PY_PRESENT_TRUE@	../../src/aaa_lib/libapbs.la
 @PY_PRESENT_FALSE@apbslibc_so_DEPENDENCIES =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc

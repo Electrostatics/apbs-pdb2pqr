@@ -148,9 +148,10 @@ if test -n "${py_path}"; then
    changequote(<<, >>)dnl
    PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
    changequote([, ])dnl
-   PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'` 
+   PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+   PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
    if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION"
+      PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
    else
 	  PYCFLAGS=""
    fi
