@@ -53,6 +53,7 @@
 #include "mc/am.h"
 #include "mc/bvec.h"
 
+#include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
 #include "apbs/vcsm.h"
@@ -112,7 +113,43 @@ typedef struct Vpbe {
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VPBE)
+    VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
+    VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
+    VEXTERNC Vacc*   Vpbe_getVacc(Vpbe *thee);
+    VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
+    VEXTERNC double  Vpbe_getIonConc(Vpbe *thee);
+    VEXTERNC double  Vpbe_getTemperature(Vpbe *thee);           
+    VEXTERNC double  Vpbe_getSoluteDiel(Vpbe *thee); 
+    VEXTERNC double  Vpbe_getSoluteRadius(Vpbe *thee);
+    VEXTERNC double* Vpbe_getSoluteCenter(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSoluteCharge(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSolventDiel(Vpbe *thee);
+    VEXTERNC double  Vpbe_getSolventRadius(Vpbe *thee);
+    VEXTERNC double  Vpbe_getIonRadius(Vpbe *thee);
+    VEXTERNC double  Vpbe_getXkappa(Vpbe *thee);
+    VEXTERNC double  Vpbe_getDeblen(Vpbe *thee);
+    VEXTERNC double  Vpbe_getZkappa2(Vpbe *thee);
+    VEXTERNC double  Vpbe_getZmagic(Vpbe *thee);
+    VEXTERNC int     Vpbe_getAtomColor(Vpbe *thee, int iatom);
 #else /* if defined(VINLINE_VPBE) */
+#   define Vpbe_getValist(thee) ((thee)->alist)
+#   define Vpbe_getVgm(thee) ((thee)->gm)
+#   define Vpbe_getVacc(thee) ((thee)->acc)
+#   define Vpbe_getVcsm(thee) ((thee)->csm)
+#   define Vpbe_getIonConc(thee) ((thee)->ionConc)
+#   define Vpbe_getTemperature(thee) ((thee)->T)           
+#   define Vpbe_getSoluteDiel(thee) ((thee)->soluteDiel) 
+#   define Vpbe_getSoluteCenter(thee) ((thee)->soluteCenter)
+#   define Vpbe_getSoluteRadius(thee) ((thee)->soluteRadius)
+#   define Vpbe_getSoluteCharge(thee) ((thee)->soluteCharge)
+#   define Vpbe_getSolventDiel(thee) ((thee)->solventDiel)
+#   define Vpbe_getSolventRadius(thee) ((thee)->solventRadius)
+#   define Vpbe_getIonRadius(thee) ((thee)->ionRadius)
+#   define Vpbe_getXkappa(thee) ((thee)->xkappa)
+#   define Vpbe_getDeblen(thee) ((thee)->deblen)
+#   define Vpbe_getZkappa2(thee) ((thee)->zkappa2)
+#   define Vpbe_getZmagic(thee) ((thee)->zmagic)
+#   define Vpbe_getAtomColor(thee, iatom) ((thee)->csm->colors[iatom])
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -127,32 +164,11 @@ VEXTERNC void    Vpbe_dtor2(Vpbe *thee);
 VEXTERNC void    Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius, 
                     double T, double soluteDiel, double solventDiel, 
                     double solventRadius); 
-
-VEXTERNC Valist* Vpbe_getValist(Vpbe *thee);
-VEXTERNC Vgm*    Vpbe_getVgm(Vpbe *thee);
-VEXTERNC AM*     Vpbe_getAM(Vpbe *thee);
-VEXTERNC Vacc*  Vpbe_getVacc(Vpbe *thee);
-VEXTERNC Vcsm*   Vpbe_getVcsm(Vpbe *thee);
-
-VEXTERNC double Vpbe_getIonConc(Vpbe *thee);
-VEXTERNC double Vpbe_getIonRadius(Vpbe *thee);
-VEXTERNC double Vpbe_getTemperature(Vpbe *thee);           
-VEXTERNC double Vpbe_getSoluteDiel(Vpbe *thee); 
-VEXTERNC double* Vpbe_getSoluteCenter(Vpbe *thee);
-VEXTERNC double Vpbe_getSoluteRadius(Vpbe *thee);
-VEXTERNC double Vpbe_getSoluteCharge(Vpbe *thee);
-VEXTERNC double Vpbe_getSolventDiel(Vpbe *thee);
-VEXTERNC double Vpbe_getSolventRadius(Vpbe *thee);
-VEXTERNC double Vpbe_getXkappa(Vpbe *thee);
-VEXTERNC double Vpbe_getDeblen(Vpbe *thee);
-VEXTERNC double Vpbe_getZkappa2(Vpbe *thee);
-VEXTERNC double Vpbe_getZmagic(Vpbe *thee);
 VEXTERNC double* Vpbe_getSolution(Vpbe *thee, AM *am, int *length);
-VEXTERNC double Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
-VEXTERNC double Vpbe_getCoulombEnergy1(Vpbe *thee);
-VEXTERNC int    Vpbe_memChk(Vpbe *thee);
-VEXTERNC void   Vpbe_setAtomColors(Vpbe *thee);
-VEXTERNC int    Vpbe_getAtomColor(Vpbe *thee, int iatom);
+VEXTERNC double  Vpbe_getLinearEnergy1(Vpbe *thee, AM *am, int color);
+VEXTERNC double  Vpbe_getCoulombEnergy1(Vpbe *thee);
+VEXTERNC int     Vpbe_memChk(Vpbe *thee);
+VEXTERNC void    Vpbe_setAtomColors(Vpbe *thee);
 
 
 #endif /* ifndef _VALIST_H_ */

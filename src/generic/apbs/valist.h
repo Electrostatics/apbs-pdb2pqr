@@ -47,9 +47,11 @@
 #ifndef _VALIST_H_
 #define _VALIST_H_
 
-#include "apbs/vatom.h"
 #include "mc/vhal.h"
 #include "mc/vmem.h"
+
+#include "apbs/vhal.h"
+#include "apbs/vatom.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Valist: Parameters and datatypes
@@ -72,7 +74,15 @@ typedef struct Valist {
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VATOM)
+    VEXTERNC Vatom* Valist_getAtomList(Valist *thee);
+    VEXTERNC int    Valist_getNumberAtoms(Valist *thee);
+    VEXTERNC Vatom* Valist_getAtom(Valist *thee, int i);
+    VEXTERNC int    Valist_memChk(Valist *thee);
 #else /* if defined(VINLINE_VATOM) */
+#   define Valist_getAtomList(thee) ((thee)->atoms)
+#   define Valist_getNumberAtoms(thee) ((thee)->number)
+#   define Valist_getAtom(thee, i) (&((thee)->atoms[i]))
+#   define Valist_memChk(thee) (Vmem_bytes((thee)->vmem))
 #endif /* if !defined(VINLINE_VATOM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -87,9 +97,5 @@ VEXTERNC void   Valist_dtor2(Valist *thee);
 VEXTERNC int    Valist_readPQR(Valist *thee, char *path);
 VEXTERNC int    Valist_readPDB(Valist *thee, char *path, 
                   char *parameter_path);
-VEXTERNC Vatom* Valist_getAtomList(Valist *thee);
-VEXTERNC Vatom* Valist_getAtom(Valist *thee, int i);
-VEXTERNC int    Valist_getNumberAtoms(Valist *thee);
-VEXTERNC int    Valist_memChk(Valist *thee);
 
 #endif /* ifndef _VALIST_H_ */

@@ -52,6 +52,7 @@
 #include "mc/vmem.h"
 #include "mc/ves.h"
 
+#include "apbs/vhal.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
 
@@ -102,7 +103,25 @@ typedef struct Vcsm {
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VCSM)
+    VEXTERNC Valist* Vcsm_getValist(Vcsm *thee);
+    VEXTERNC Vgm*    Vcsm_getVgm(Vcsm *thee);
+    VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
+    VEXTERNC Vatom*  Vcsm_getAtom(Vcsm *thee, int iatom, int isimp);
+    VEXTERNC int     Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
+    VEXTERNC int     Vcsm_getNumberSimplices(Vcsm *thee, int iatom);
+    VEXTERNC SS*     Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom);
+    VEXTERNC int     Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom);
+    VEXTERNC int     Vcsm_memChk(Vcsm *thee);
 #else /* if defined(VINLINE_VCSM) */
+#   define Vcsm_getValist(thee) ((thee)->alist)
+#   define Vcsm_getVgm(thee) ((thee)->gm)
+#   define Vcsm_getNumberAtoms(thee, isimp) ((thee)->nsqm[isimp])
+#   define Vcsm_getAtom(thee, iatom, isimp) (Valist_getAtom((thee)->alist, ((thee)->sqm)[isimp][iatom]))
+#   define Vcsm_getAtomIndex(thee, iatom, isimp) (((thee)->sqm)[isimp][iatom])
+#   define Vcsm_getNumberSimplices(thee, iatom) (((thee)->nqsm)[iatom])
+#   define Vcsm_getSimplex(thee, isimp, iatom) (Vgm_SS((thee)->gm, ((thee)->qsm)[iatom][isimp]))
+#   define Vcsm_getSimplexIndex(thee, isimp, iatom) (((thee)->qsm)[iatom][isimp])
+#   define Vcsm_memChk(thee) (Vmem_bytes((thee)->vmem))
 #endif /* if !defined(VINLINE_VCSM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -114,17 +133,8 @@ VEXTERNC int     Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm);
 VEXTERNC void    Vcsm_dtor(Vcsm **thee);
 VEXTERNC void    Vcsm_dtor2(Vcsm *thee);
 
-VEXTERNC Valist* Vcsm_getValist(Vcsm *thee);
-VEXTERNC Vgm*    Vcsm_getVgm(Vcsm *thee);
-VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
-VEXTERNC Vatom*  Vcsm_getAtom(Vcsm *thee, int iatom, int isimp);
-VEXTERNC int     Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
-VEXTERNC int     Vcsm_getNumberSimplices(Vcsm *thee, int iatom);
-VEXTERNC SS*     Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom);
-VEXTERNC int     Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom);
 
 VEXTERNC void    Vcsm_init(Vcsm *thee);
 VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);
-VEXTERNC int     Vcsm_memChk(Vcsm *thee);
 
 #endif /* ifndef _VALIST_H_ */

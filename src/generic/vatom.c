@@ -49,81 +49,6 @@ VEMBED(rcsid="$Id$")
 // Class Vatom: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VATOM)
-#endif /* if !defined(VINLINE_VATOM) */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vatom: Non-inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vatom_ctor
-//
-// Purpose:  Construct the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vatom* Vatom_ctor() {
-
-    /* Set up the structure */
-    Vatom *thee = VNULL;
-    thee = (Vatom *)Vmem_malloc( VNULL, 1, sizeof(Vatom) );
-    VASSERT( thee != VNULL);
-    VASSERT( Vatom_ctor2(thee));
-
-    return thee;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vatom_ctor2
-//
-// Purpose:  Construct the atom object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vatom_ctor2(Vatom *thee) { return 1; }
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vatom_dtor
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vatom_dtor(Vatom **thee) {
-    if ((*thee) != VNULL) {
-        Vatom_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vatom), (void **)thee);
-        (*thee) = VNULL;
-    }
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vatom_dtor2
-//
-// Purpose:  Destroy the atom object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vatom_dtor2(Vatom *thee) { ; }
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vatom_setPosition
-//
-// Purpose:  Set atom position (as Vec3 vector)
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vatom_setPosition(Vatom *thee, Vec3 position) { 
-
-   VASSERT(thee != VNULL);
-   (thee->position)[0] = position[0]; 
-   (thee->position)[1] = position[1]; 
-   (thee->position)[2] = position[2]; 
-
-}
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vatom_getPosition
 //
@@ -202,3 +127,79 @@ VPUBLIC double Vatom_getCharge(Vatom *thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vatom_memChk(Vatom *thee) { return sizeof(Vatom); }
+
+#endif /* if !defined(VINLINE_VATOM) */
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Class Vatom: Non-inlineable methods
+/////////////////////////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_ctor
+//
+// Purpose:  Construct the atom object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vatom* Vatom_ctor() {
+
+    /* Set up the structure */
+    Vatom *thee = VNULL;
+    thee = (Vatom *)Vmem_malloc( VNULL, 1, sizeof(Vatom) );
+    VASSERT( thee != VNULL);
+    VASSERT( Vatom_ctor2(thee));
+
+    return thee;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_ctor2
+//
+// Purpose:  Construct the atom object
+//
+// Notes:    Constructor broken into two parts for FORTRAN users.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vatom_ctor2(Vatom *thee) { return 1; }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_dtor
+//
+// Purpose:  Destroy the atom object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vatom_dtor(Vatom **thee) {
+    if ((*thee) != VNULL) {
+        Vatom_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(Vatom), (void **)thee);
+        (*thee) = VNULL;
+    }
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_dtor2
+//
+// Purpose:  Destroy the atom object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vatom_dtor2(Vatom *thee) { ; }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vatom_setPosition
+//
+// Purpose:  Set atom position (as Vec3 vector)
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vatom_setPosition(Vatom *thee, Vec3 position) { 
+
+   VASSERT(thee != VNULL);
+   (thee->position)[0] = position[0]; 
+   (thee->position)[1] = position[1]; 
+   (thee->position)[2] = position[2]; 
+
+}
+

@@ -53,6 +53,7 @@
 #include "mc/vmem.h"
 #include "mc/vgm.h"
 
+#include "apbs/vhal.h"
 #include "apbs/valist.h"
 #include "apbs/vunit.h"
 
@@ -89,7 +90,9 @@ typedef struct Vacc {
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VACC)
+    VEXTERNC int Vacc_memChk(Vacc *thee);
 #else /* if defined(VINLINE_VACC) */
+#   define Vacc_memChk(thee) (Vmem_bytes((thee)->vmem))
 #endif /* if !defined(VINLINE_VACC) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -103,7 +106,6 @@ VEXTERNC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 VEXTERNC void Vacc_dtor(Vacc **thee);
 VEXTERNC void Vacc_dtor2(Vacc *thee);
 
-VEXTERNC int Vacc_memChk(Vacc *thee);
 
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);

@@ -47,6 +47,149 @@
 // Class Vcsm: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VCSM)
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getValist
+//
+// Purpose:  Get a pointer to the Valist (atom list) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->alist;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getVgm
+//
+// Purpose:  Get a pointer to the Vgm (grid manager) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vgm* Vcsm_getVgm(Vcsm *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->gm; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getNumberAtoms
+//
+// Purpose:  Get the number of atoms associated with simplex isimp.  
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+   return thee->nsqm[isimp];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getAtom
+//
+// Purpose:  Get the iatom-th atom associated with isimp-th simplex.  
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   VASSERT(iatom < (thee->nsqm)[isimp]);
+   return Valist_getAtom(thee->alist, (thee->sqm)[isimp][iatom]);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getAtomIndex
+//
+// Purpose:  Get the iatom-th atom associated with isimp-th simplex.
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   VASSERT(iatom < (thee->nsqm)[isimp]);
+   return (thee->sqm)[isimp][iatom];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getNumberSimplices
+//
+// Purpose:  Get the number of simplices associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return (thee->nqsm)[iatom];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getSimplex
+//
+// Purpose:  Get simplex isimp associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return Vgm_SS(thee->gm, (thee->qsm)[iatom][isimp]);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_getSimplexIndex
+//
+// Purpose:  Get simplex isimp associated with atom iatom
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
+
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->initFlag);
+
+   return (thee->qsm)[iatom][isimp];
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vcsm_memChk
+//
+// Purpose:  Return number of bytes used by this object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vcsm_memChk(Vcsm *thee) {
+    VASSERT(thee != VNULL);
+    return Vmem_bytes(thee->vmem);
+}
+
 #endif /* if !defined(VINLINE_VCSM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -283,136 +426,6 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getValist
-//
-// Purpose:  Get a pointer to the Valist (atom list) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->alist;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getVgm
-//
-// Purpose:  Get a pointer to the Vgm (grid manager) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgm* Vcsm_getVgm(Vcsm *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->gm; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getNumberAtoms
-//
-// Purpose:  Get the number of atoms associated with simplex isimp.  
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-   return thee->nsqm[isimp];
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getAtom
-//
-// Purpose:  Get the iatom-th atom associated with isimp-th simplex.  
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
-
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-
-   VASSERT(iatom < (thee->nsqm)[isimp]);
-   return Valist_getAtom(thee->alist, (thee->sqm)[isimp][iatom]);
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getAtomIndex
-//
-// Purpose:  Get the iatom-th atom associated with isimp-th simplex.
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
-
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-
-   VASSERT(iatom < (thee->nsqm)[isimp]);
-   return (thee->sqm)[isimp][iatom];
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getNumberSimplices
-//
-// Purpose:  Get the number of simplices associated with atom iatom
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
-
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-
-   return (thee->nqsm)[iatom];
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getSimplex
-//
-// Purpose:  Get simplex isimp associated with atom iatom
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
-
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-
-   return Vgm_SS(thee->gm, (thee->qsm)[iatom][isimp]);
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getSimplexIndex
-//
-// Purpose:  Get simplex isimp associated with atom iatom
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
-
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->initFlag);
-
-   return (thee->qsm)[iatom][isimp];
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_update
 //
 // Purpose:  Update the charge-vertex and vertex-charge maps after
@@ -640,14 +653,3 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_memChk
-//
-// Purpose:  Return number of bytes used by this object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vcsm_memChk(Vcsm *thee) {
-    VASSERT(thee != VNULL);
-    return Vmem_bytes(thee->vmem);
-}

@@ -49,6 +49,19 @@ VEMBED(rcsid="$Id$")
 // Class Vacc: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VACC)
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_memChk
+//
+// Purpose:  Returns the number of bytes used by the specified object.
+//
+// Author:   Nathan Baker 
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vacc_memChk(Vacc *thee) {
+    VASSERT(thee != VNULL);
+    return Vmem_bytes(thee->vmem);
+}
+
 #endif /* if !defined(VINLINE_VACC) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -542,16 +555,3 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
     return points;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vacc_memChk
-//
-// Purpose:  Returns the number of bytes used by the specified object.
-//
-// Author:   Nathan Baker 
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vacc_memChk(Vacc *thee) {
-
-    VASSERT(thee != VNULL);
-    return Vmem_bytes(thee->vmem);
-
-}
