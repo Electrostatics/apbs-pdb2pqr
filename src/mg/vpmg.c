@@ -2495,7 +2495,7 @@ VPUBLIC double Vpmg_npEnergy(Vpmg *thee, int extFlag) {
     epss = Vpbe_getSolventDiel(thee->pbe);
     gamma = Vpbe_getGamma(thee->pbe);
     temp = Vpbe_getTemperature(thee->pbe);
-    gamma = gamma/(Vunit_kb*temp);
+    gamma = gamma/(1e-3*Vunit_Na*Vunit_kb*temp);
 
     if (VABS(epsp-epss) < VSMALL) {
         Vnm_print(2, "Vpmg_npEnergy:  No apolar energy for equal \
