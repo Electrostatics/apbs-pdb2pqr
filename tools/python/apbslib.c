@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.7  2004/10/07 15:11:39  apbs
- * TJD: Fixed wrapper for Vpmg_fillArray fix
+ * Revision 1.8  2004/11/04 21:50:58  apbs
+ * TJD: Minor wrapper change for initial compatibility with x86-64
  *
  ************************************************************************/
 
@@ -1123,8 +1123,10 @@ int *int_array(int size){
 void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
     
     Vatom *atoms = VNULL;
+    Vatom *atom;
     int i;
- 
+    int j;
+
     double pos[3];
     atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
     thee->number = 0;
@@ -1147,9 +1149,6 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
     }
     Vmem_free(thee->vmem, size, sizeof(Vatom), (void **)&atoms);
     
-    Vatom *atom;
-    int j;
-
     VASSERT(thee != VNULL);
 
     thee->center[0] = 0.;
