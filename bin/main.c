@@ -152,6 +152,10 @@ int main(
     inexact Newton methods, and algebraic multilevel methods.  More\n\
     information about PMG and FEtk may be found at <http://www.FEtk.ORG>.\n\
     ----------------------------------------------------------------------\n\
+    Please cite your use of APBS as:\n\
+       Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
+       nanosystems: application to microtubules and the ribosome. Proc.\n\
+       Natl. Acad. Sci. USA 98, 10037-10041 2001.\n\
     \n\n"};
     char *usage = 
 {"\n\n\
