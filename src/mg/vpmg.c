@@ -1001,8 +1001,6 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     thee->pmgp->ymin = ymin;
     zmin = thee->pmgp->zcent - (zlen/2.0);
     thee->pmgp->zmin = zmin;
-    Vnm_print(1, "VPMG DEBUG: zmin = %g, zcent = %g, zlen = %g\n", zmin,
-      thee->pmgp->zcent, zlen);
     xmax = thee->pmgp->xcent + (xlen/2.0);
     thee->pmgp->xmax = xmax;
     ymax = thee->pmgp->ycent + (ylen/2.0);

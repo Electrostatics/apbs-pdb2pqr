@@ -105,8 +105,6 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     if (nonlin == 0) thee->ipkey = -1;
     else thee->ipkey = 0;
 
-    Vnm_print(1, "VPMGP DEBUG:  nz = %d, hzed = %g, zlen = %g\n",
-      nz, hzed, thee->zlen);
 
     /* Default parameters */
     thee->errtol = 1.0e-9;
