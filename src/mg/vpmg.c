@@ -116,6 +116,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
         (xminNEW<xminOLD) || (yminNEW<yminOLD) || (zminNEW<zminOLD)) {
         Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
+        fflush(stderr);
         VASSERT(0);
     }
 
@@ -815,8 +816,12 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee) {
             (position[1]<=ymin) || (position[1]>=ymax)  || \
             (position[2]<=zmin) || (position[2]>=zmax)) {
             Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is
-off the mesh (ignoring)!\n",
+off the mesh (ignoring):\n",
             iatom, position[0], position[1], position[2]);
+            Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", xmin, xmax);
+            Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", ymin, ymax);
+            Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", zmin, zmax);
+            fflush(stderr);
         } else {
 
             /* Figure out which vertices we're next to */
@@ -978,8 +983,7 @@ VPUBLIC double Vpmg_getLinearEnergy1(Vpmg *thee) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->u[IJK(ilo,jlo,klo)]);
             energy += (uval*charge);
         } else {
-            Vnm_print(2, "MGpde_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f)
-is off the mesh (ignoring)!\n",
+            Vnm_print(2, "Vpmg_getLE1:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring)!\n",
                 iatom, position[0], position[1], position[2]);
         }
     }
