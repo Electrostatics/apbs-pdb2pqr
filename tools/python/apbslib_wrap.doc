@@ -331,6 +331,16 @@ Valist_load(thee,size,x,y,z,chg,rad)
 
 getPotentials(nosh,pbeparm,pmg,alist)
 
+getqfForces(atomForce,alist)
+
+getibForces(atomForce,alist)
+
+getdbForces(atomForce,alist)
+
+getnpForces(atomForce,alist)
+
+get_double_entry(array,i)
+
 get_entry(array,i)
 
 set_entry(array,i,val)

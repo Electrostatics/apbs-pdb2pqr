@@ -292,6 +292,16 @@ def getPotentials(arg0,arg1,arg2,arg3):
     val = apbslibc.getPotentials(arg0.this,arg1.this,arg2.this,arg3)
     return val
 
+getqfForces = apbslibc.getqfForces
+
+getibForces = apbslibc.getibForces
+
+getdbForces = apbslibc.getdbForces
+
+getnpForces = apbslibc.getnpForces
+
+get_double_entry = apbslibc.get_double_entry
+
 get_entry = apbslibc.get_entry
 
 set_entry = apbslibc.set_entry

@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.8  2004/11/04 21:50:58  apbs
- * TJD: Minor wrapper change for initial compatibility with x86-64
+ * Revision 1.9  2005/01/25 21:18:48  apbs
+ * TJD:  Added ability to get/print both energy and force vectors in Python via noinput.py
  *
  ************************************************************************/
 
@@ -1218,6 +1218,74 @@ double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
     return values;
 }
 
+double **getqfForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].qfForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+
+double **getibForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].ibForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+
+double **getdbForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].dbForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+
+double **getnpForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].npForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+
+double *get_double_entry(double **array, int i){
+	    return array[i];
+  }
+
 double get_entry(double *array, int i){
 	    return array[i];
   }
@@ -1913,6 +1981,149 @@ static PyObject *_wrap_getPotentials(PyObject *self, PyObject *args) {
         }
     }
     _result = (double *)getPotentials(_arg0,_arg1,_arg2,_arg3);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_getqfForces(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double ** _result;
+    AtomForce ** _arg0;
+    Valist * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:getqfForces",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getqfForces. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getqfForces. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (double **)getqfForces(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_getibForces(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double ** _result;
+    AtomForce ** _arg0;
+    Valist * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:getibForces",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getibForces. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getibForces. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (double **)getibForces(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_getdbForces(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double ** _result;
+    AtomForce ** _arg0;
+    Valist * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:getdbForces",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getdbForces. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getdbForces. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (double **)getdbForces(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_getnpForces(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double ** _result;
+    AtomForce ** _arg0;
+    Valist * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:getnpForces",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getnpForces. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getnpForces. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (double **)getnpForces(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_get_double_entry(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double * _result;
+    double ** _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:get_double_entry",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_double_entry. Expected _double_pp.");
+        return NULL;
+        }
+    }
+    _result = (double *)get_double_entry(_arg0,_arg1);
     SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -3752,6 +3963,11 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "make_Valist", _wrap_make_Valist, 1 },
 	 { "set_entry", _wrap_set_entry, 1 },
 	 { "get_entry", _wrap_get_entry, 1 },
+	 { "get_double_entry", _wrap_get_double_entry, 1 },
+	 { "getnpForces", _wrap_getnpForces, 1 },
+	 { "getdbForces", _wrap_getdbForces, 1 },
+	 { "getibForces", _wrap_getibForces, 1 },
+	 { "getqfForces", _wrap_getqfForces, 1 },
 	 { "getPotentials", _wrap_getPotentials, 1 },
 	 { "Valist_load", _wrap_Valist_load, 1 },
 	 { "int_array", _wrap_int_array, 1 },
