@@ -106,7 +106,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->itmax = 100;
     thee->istop = 1;
     thee->iinfo = 1;
-    thee->bcfl = 0;
+    thee->bcfl = 1;
     thee->key = 0;
     thee->iperf = 0;
     thee->meth = 2;

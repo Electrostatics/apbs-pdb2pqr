@@ -97,12 +97,17 @@ typedef struct Vpmgp {
                                   *   1 => some
                                   *   2 => lots
                                   *   3 => more */
-    int bcfl;                    /* Boundary condition method [default = 0]
-                                  *   0 => boundary condition approximated by
+    int bcfl;                    /* Boundary condition method [default = 1]
+                                  *   0 => zero boundary conditions
+                                  *   1 => boundary condition approximated by
                                   *        single Debye-Huckel sphere for
                                   *        entire molecule
-                                  *   1 => boundary condition approximated by 
-                                  *        Debye-Huckel spheres for each atom */
+                                  *   2 => boundary condition approximated by 
+                                  *        Debye-Huckel spheres for each atom 
+                                  *   4 => boundary condition determined from 
+                                  *        previously calculated solution 
+                                  *        (i.e., for focusing calculations)
+                                  */
     int key;                     /* Print solution to file [default = 0] 
                                   *   0 => no
                                   *   1 => yes */
