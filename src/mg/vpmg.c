@@ -697,4 +697,69 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
     Vmem_dtor(&(thee->vmem));
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_writeUHBD
+//
+// Purpose:  Write out a PMG array in UHBD grid format (ASCII)
+//
+// Args:     path => file name
+//           title => title to be inserted in grid
+//           data => nx*ny*nz length array of data
+//
+// Notes:    The mesh spacing should be uniform
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, 
+  double *data) {
+
+    FILE *fp = VNULL;
+    int icol, i, j, k, u;
+    double xmin, ymin, zmin;
+
+    VASSERT(thee != VNULL);
+    if ((thee->pmgp->hx!=thee->pmgp->hy) || (thee->pmgp->hy!=thee->pmgp->hz) 
+      || (thee->pmgp->hx!=thee->pmgp->hz)) {
+        Vnm_print(2, "Vpmg_writeUHBD: can't write UHBD mesh with non-uniform spacing\n");
+        return;
+    }
+
+    /* Open the file */
+    fp = fopen(path, "w");
+    if (fp == VNULL) {
+        Vnm_print(2, "Vgrid_writeUHBD: Error opening %s for writing!\n", path);
+        return;
+    }
+
+    /* Write out the header */
+    xmin = thee->pmgp->xcent - (thee->pmgp->hx)*(thee->pmgp->nx-1);
+    ymin = thee->pmgp->ycent - (thee->pmgp->hy)*(thee->pmgp->ny-1);
+    zmin = thee->pmgp->zcent - (thee->pmgp->hz)*(thee->pmgp->nz-1);
+    fprintf(fp, "%72s\n", title);
+    fprintf(fp, "%12.6E%12.6E%7d%7d%7d%7d%7d\n", 1.0, 0.0, -1, 0, 
+      thee->pmgp->nz, 1, thee->pmgp->nz);
+    fprintf(fp, "%7d%7d%7d%12.6E%12.6E%12.6E%12.6E\n", thee->pmgp->nx,
+      thee->pmgp->ny, thee->pmgp->nz, thee->pmgp->hx, xmin, ymin, zmin);
+    fprintf(fp, "%12.6E%12.6E%12.6E%12.6E\n", 0.0, 0.0, 0.0, 0.0);
+    fprintf(fp, "%12.6E%12.6E%7d%7d", 0.0, 0.0, 0, 0);
+
+    /* Write out the entries */
+    for (k=0; k<thee->pmgp->nz; k++) {
+        fprintf(fp, "\n%7d%7d%7d\n", k+1, thee->pmgp->nx, thee->pmgp->ny);
+        icol = 0;
+        for (j=0; j<thee->pmgp->ny; j++) {
+            for (i=0; i<thee->pmgp->nx; i++) {
+                u = k*(thee->pmgp->nx)*(thee->pmgp->ny)+j*(thee->pmgp->nx)+i;
+                icol++;
+                fprintf(fp, " %12.6E", data[u]);
+                if (icol == 6) {
+                    icol = 0;
+                    fprintf(fp, "\n");
+                }
+            }
+        }
+    } 
+    if (icol != 0) fprintf(fp, "\n");
+    fclose(fp);
+}
 

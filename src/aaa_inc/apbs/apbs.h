@@ -46,7 +46,6 @@
 
 #include "apbs/vacc.h"
 #include "apbs/vatom.h"
-#include "apbs/vgrid.h"
 #include "apbs/vpee.h"
 #include "apbs/valist.h"
 #include "apbs/vcsm.h"

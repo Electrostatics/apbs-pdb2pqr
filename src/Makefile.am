@@ -47,6 +47,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vpmg vgrid vgreen
+always_built_SUBDIRS = vatom vacc vcsm vpbe vpee vpmg vgreen
 
 SUBDIRS = $(always_built_SUBDIRS)

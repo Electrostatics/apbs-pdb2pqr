@@ -106,5 +106,6 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 VEXTERNC void Vpmg_fillco(Vpmg *thee);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
 VEXTERNC double Vpmg_getLinearEnergy1(Vpmg *thee);
+VPUBLIC void Vpmg_writeUHBD(Vpmg *thee, char *path, char *title, double *data);
 
 #endif    /* ifndef _VPMG_H_ */
