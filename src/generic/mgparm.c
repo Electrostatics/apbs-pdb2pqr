@@ -51,6 +51,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_MGPARM)
 
+/* No inlineables */
+
 #endif /* if !defined(VINLINE_MGPARM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -163,7 +165,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
 
     /* Check sequential manual settings */
-    if ((thee->type == 0) || (thee->type == 2)) {
+    if (thee->type == 0) {
         if ((!thee->setgrid) && (!thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
             rc = 0;
@@ -176,26 +178,10 @@ VPUBLIC int MGparm_check(MGparm *thee) {
             Vnm_print(2, "MGparm_check:  GCENT not set!\n");
             rc = 0;
         }
-        if (thee->setcglen) {
-            Vnm_print(2, "MGparm_check:  CGLEN not a valid keyword!\n");
-            rc = 0;
-        }
-        if (thee->setfglen) {
-            Vnm_print(2, "MGparm_check:  FGLEN not a valid keyword!\n");
-            rc = 0;
-        }
-        if (thee->setcgcent) {
-            Vnm_print(2, "MGparm_check:  CGCENT not a valid keyword!\n");
-            rc = 0;
-        }
-        if (thee->setfgcent) {
-            Vnm_print(2, "MGparm_check:  FGCENT not a valid keyword!\n");
-            rc = 0;
-        }
     }
  
     /* Check sequential and parallel automatic focusing settings */
-    if (thee->type == 1)  {
+    if ((thee->type == 1) || (thee->type == 2)) {
         if (!thee->setcglen) {
             Vnm_print(2, "MGparm_check:  CGLEN not set!\n");
             rc = 0;
@@ -212,15 +198,6 @@ VPUBLIC int MGparm_check(MGparm *thee) {
             Vnm_print(2, "MGparm_check:  FGCENT not set!\n");
             rc = 0;
         }
-        if (thee->setglen) {
-            Vnm_print(2, "MGparm_check:  GLEN not a valid keyword!\n");
-            rc = 0;
-        }
-        if (thee->setgcent) {
-            Vnm_print(2, "MGparm_check:  GCENT not a valid keyword!\n");
-            rc = 0;
-        }
-
     }
 
     /* Check parallel automatic focusing settings */
