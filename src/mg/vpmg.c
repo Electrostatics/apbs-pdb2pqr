@@ -98,8 +98,10 @@ VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72],
     rowind = Vmem_malloc(thee->vmem, nonz, sizeof(int));
     colptr = Vmem_malloc(thee->vmem, (ncol+1), sizeof(int));
 
+#ifndef VAPBSQUIET
     Vnm_print(1, "Vpmg_printColComp:  Allocated space for %d nonzeros\n",
       nonz);
+#endif
 
     F77BCOLCOMP(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
       nzval, rowind, colptr, &flag);
@@ -2537,7 +2539,11 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
 
     /* Bail if we're at zero ionic strength */
     if (zkappa2 == 0.0) {
+
+#ifndef VAPBSQUIET
         Vnm_print(0, "Vpmg_qmEnergy:  Zero energy for zero ionic strength!\n");
+#endif
+
         return 0.0;
     }
     zks2 = 0.5*zkappa2/ionstr;
