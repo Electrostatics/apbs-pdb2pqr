@@ -68,7 +68,7 @@ VPUBLIC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type) {
     thee->type = type;
     thee->settype = 1;
 
-    thee->setdomainLength = 0;
+    thee->setglen = 0;
     thee->setetol = 0;
     thee->setekey = 0;
     thee->setakeyPRE = 0;
@@ -104,8 +104,8 @@ VPUBLIC int FEMparm_check(FEMparm *thee) {
         Vnm_print(2, "FEMparm_check:  type not set!\n");
         rc = 0;
     }
-    if (!thee->setdomainLength) {
-        Vnm_print(2, "FEMparm_check:  domainLength not set!\n");
+    if (!thee->setglen) {
+        Vnm_print(2, "FEMparm_check:  glen not set!\n");
         rc = 0;
     }
     if (!thee->setetol) {
@@ -160,7 +160,7 @@ VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
-    if (Vstring_strcasecmp(tok, "domainLength") == 0) {
+    if (Vstring_strcasecmp(tok, "glen") == 0) {
         for (i=0; i<3; i++) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (sscanf(tok, "%lf", &tf) == 0) {
@@ -168,9 +168,9 @@ VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
 DOMAINRADIUS keyword!\n", tok);
                 return -1;
             } 
-            thee->domainLength[i] = tf;
+            thee->glen[i] = tf;
         }
-        thee->setdomainLength = 1;
+        thee->setglen = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "etol") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
