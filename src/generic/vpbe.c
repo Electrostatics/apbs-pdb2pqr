@@ -159,8 +159,8 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee) != VNULL) {
         Vcsm_dtor(&((*thee)->csm));
         if ((*thee)->paramFlag) {
-            Vhash_dtor(&((*thee)->solvHash));
-            Vhash_dtor(&((*thee)->ionHash));
+            Vacc_dtor(&((*thee)->solvAcc));
+            Vacc_dtor(&((*thee)->ionAcc));
         }
         Vpbe_dtor2(*thee);
         Vram_dtor((Vram *)thee, 1, sizeof(Vpbe) );
@@ -180,7 +180,7 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_initialize
 //
-// Purpose:  Set up parameters, hash tables, and charge-simplex map
+// Purpose:  Set up parameters, Vacc objects, and charge-simplex map
 //
 // Arguments: ionConc       = ionic strength in M
 //            ionRadius     = ionic probe radius in A
@@ -342,11 +342,11 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     }
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
 
-    /* Compute atomic hash tables */
-    VASSERT( (thee->solvHash = Vhash_ctor(thee->alist, thee->solventRadius, 
-                                      110, 110, 110)) != VNULL);
-    VASSERT( (thee->ionHash = Vhash_ctor(thee->alist, thee->ionRadius, 
-                                      110, 110, 110)) != VNULL);
+    /* Compute accessibility objects */
+    VASSERT( (thee->solvAcc = Vacc_ctor(thee->alist, thee->solventRadius, 
+                                      110, 110, 110, 100)) != VNULL);
+    VASSERT( (thee->ionAcc = Vacc_ctor(thee->alist, thee->ionRadius, 
+                                      110, 110, 110, 100)) != VNULL);
 
     /* Compute charge-simplex map */
     Vcsm_init(thee->csm);
@@ -383,34 +383,34 @@ VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventHash
+// Routine:  Vpbe_getSolventAcc
 //
-// Purpose:  Get a pointer to the Vhash (atomic hash table) object for solvent
+// Purpose:  Get a pointer to the Vacc accessibility object for solvent
 //           accessiblity
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vhash* Vpbe_getSolventHash(Vpbe *thee) { 
+VPUBLIC Vacc* Vpbe_getSolventAcc(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->solvHash; 
+   return thee->solvAcc; 
 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonHash
+// Routine:  Vpbe_getIonAcc
 //
-// Purpose:  Get a pointer to the Vhash (atomic hash table) object for ionic
+// Purpose:  Get a pointer to the Vacc accessiblity object for ionic
 //           accessibility
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vhash* Vpbe_getIonHash(Vpbe *thee) { 
+VPUBLIC Vacc* Vpbe_getIonAcc(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->ionHash; 
+   return thee->ionAcc; 
 
 }
 
