@@ -66,6 +66,8 @@ typedef struct Vgreen {
 
   Valist *alist;      /* Atom (charge) list */
   Vmem *vmem;         /* Memory management object */
+  int initFlagCXXFMM; /* Flag to indicate whether the C++ FMM object has been
+                       * initialized */
 
 } Vgreen;
 

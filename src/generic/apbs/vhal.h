@@ -57,6 +57,9 @@
 #   define VINLINE_VCSM
 #   define VINLINE_VPBE
 #   define VINLINE_VPEE
+#   define VINLINE_VGREEN
+#   define VINLINE_VFETK
+#   define VINLINE_VPMG
 #endif
 
 

@@ -42,12 +42,20 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "cxxfmm.h"
 #include "apbs/vgreen.h"
+
+#define dtorCXXFMM      Vgreen_dtorCXXFMM__FP6Vgreen
+#define fieldCXXFMM     Vgreen_fieldCXXFMM__FP6VgreenPdT1
+#define initCXXFMM      Vgreen_initCXXFMM__FP6Vgreendiiiddd
+#define potentialCXXFMM Vgreen_potentialCXXFMM__FP6VgreenPd
+#define updateCXXFMM    Vgreen_updateCXXFMM__FP6Vgreen
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vgreen: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
-#if !defined(VINLINE_VCSM)
+#if !defined(VINLINE_VGREEN)
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_getValist
@@ -95,7 +103,7 @@ VPUBLIC Vgreen* Vgreen_ctor(Valist *alist) {
 
     /* Set up the structure */
     Vgreen *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vgreen) );
+    thee = (Vgreen *)Vmem_malloc(VNULL, 1, sizeof(Vgreen) );
     VASSERT( thee != VNULL);
     VASSERT( Vgreen_ctor2(thee, alist));
 
@@ -124,10 +132,39 @@ VPUBLIC int Vgreen_ctor2(Vgreen *thee, Valist *alist) {
     if(alist == VNULL) {
         Vnm_print(2,"Vgreen_ctor2: got null pointer to Valist object!\n");
     }
+
     thee->alist = alist;
+    thee->initFlagCXXFMM = 0;
    
     return 1;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vgreen_initFMM
+//
+// Purpose:  Construct the Vgreen FMM object
+//
+// Args:     spacing   Spacing for the FMM cells
+//           n[xyz]    Number of FMM cells in the specified direction
+//           [xyz]low  Lower corner of the cells
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgreen_initFMM(Vgreen *thee, double spacing, int nx, int ny,
+  int nz, double xlow, double ylow, double zlow) {
+
+    VASSERT( thee != VNULL );
+
+#if defined(USE_CXX_FMM)
+    initCXXFMM(thee, spacing, nx, ny, nz, xlow, ylow, zlow);
+    thee->initFlagCXXFMM = 1;
+#else
+    Vnm_print(2, "Vgreen_initFMM: Not compiled with FMM support!\n");
+    VASSERT(0);
+#endif 
+
+}
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgreen_dtor
@@ -157,6 +194,11 @@ VPUBLIC void Vgreen_dtor(Vgreen **thee) {
 VPUBLIC void Vgreen_dtor2(Vgreen *thee) { 
 
     Vmem_dtor(&(thee->vmem));
+
+#if defined(USE_CXX_FMM)
+    if (thee->initFlagCXXFMM) dtorCXXFMM(thee);
+#endif
+
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -245,7 +287,11 @@ VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
 
     VASSERT(dim < 4);
     pot = 0;
-   
+  
+#if defined(USE_CXX_FMM)
+    VASSERT(thee->initFlagCXXFMM);
+    pot = potentialCXXFMM(thee, position);
+#else
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
         x = Vatom_getPosition(atom);
@@ -256,6 +302,7 @@ VPUBLIC double Vgreen_coulomb(Vgreen *thee, double *position, double dim) {
         dist = 1.0e-10*VSQRT(dist);
         pot += (charge/dist);
     }
+#endif
 
     return pot*Vunit_ec/(4*Vunit_pi*Vunit_eps0);
 }
@@ -291,7 +338,11 @@ VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
     VASSERT(dim < 4);
     
     for (j=0; j<dim; j++) grad[j] = 0;
-   
+  
+#if defined(USE_CXX_FMM)
+    VASSERT(thee->initFlagCXXFMM);
+    fieldCXXFMM(thee, position, grad);
+#else
     for (iatom=0; iatom<Valist_getNumberAtoms(thee->alist); iatom++) {
         atom = Valist_getAtom(thee->alist, iatom);
         x = Vatom_getPosition(atom);
@@ -302,6 +353,8 @@ VPUBLIC void Vgreen_coulombD(Vgreen *thee, double *position, double dim,
         for (j=0; j<dim; j++) 
           grad[j] -= (charge*(position[j] - x[j])/dist/VSQRT(dist));
     }
+#endif
+
     for (j=0; j<dim; j++) 
       grad[j] = grad[j]*Vunit_ec/(4*Vunit_pi*Vunit_eps0*(1.0e-10));
 }
