@@ -44,6 +44,12 @@ APBS is now supported by the NIH via NIGMS grant GM69702-01.
         amber2charmm -> amber2charmm.sh
         pdb2pqr -> pdb2pqr.awk
         qcd2pqr -> qcd2pqr.awk
+    * Added a new Python-based pdb2pqr (tools/conversion/pdb2pqr) script that 
+      allows users to choose parameters from different forcefields.
+    * Updated Python wrappers (tools/python) and added the python directory to 
+      autoconf/automake.
+    * Reformatted examples/README.html for readability.
+
   - BUG FIXES
     * Fixed bug in PQR parsing that can cause PDB/PQR files to be mis-read when
       they contain residues with numbers in their names (Thanks to Robert

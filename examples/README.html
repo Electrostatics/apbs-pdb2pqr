@@ -13,733 +13,611 @@ $Id$
 
 <br><br><br>
 
-<h3>Example directories</h3>
-<ul>
-<li>actin-dimer
+<h3>Results</h3>
+
+<h4>Actin-Dimer</h4>
   <ul>
   <li>Source:  Dave Sept
   <li>Description:  Calculate binding energies for actin dimers.  This is an
       example of a large biomolecule binding energy calculation that often
       requires parallel focusing.
   </ul>
-<li>born
-  <ul>
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>Parallel, 8 proc, ~0.9 A spacing, LPBE</td>
+<td>91.67</td>
+<td>91.939</td>
+<td>91.945</td>
+<td>91.9450</td>
+<td>90.2543</td>
+<td>90.2573</td>
+<td>90.2573</td>
+<td>90.2573</td>
+<td>90.2573</td>
+<td>106.7<BR>
+(1.00 A res., NPBE)<BR></td>
+</tr>
+<tr>
+<td>Sequential, 2-level focus to <=0.725 A, NPBE</td>
+<td>90.84</td>
+<td>90.829</td>
+<td>90.829</td>
+<td>90.829</td>
+<td>88.6064</td>
+<td>88.6101</td>
+<td>88.6101</td>
+<td>88.6101</td>
+<td>88.6101</td>
+<td>106.7<BR>
+(1.00 A res., NPBE)<BR></td>
+</tr>
+</table>
+
+<P>
+
+<h4>Born Ion</h4>
+ <ul>
   <li>Source:  Nathan Baker
   <li>Description:  Calculate solvation energies for ions of various sizes and
       compare to the analytical results.
   </ul>
-<li>FKBP
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 0</td>
+<td>-229.72</td>
+<td>-229.72</td>
+<td>-229.72</td>
+<td>-229.725</td>
+<td>-229.7250</td>
+<td>-229.7250</td>
+<td>-229.7250</td>
+<td>-229.7250</td>
+<td>-229.7250</td>
+<td>-228.57 kJ/mol<BR>
+(3 A sphere)</td>
+</tr>
+<tr>
+<td>3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 1</td>
+<td>-227.19</td>
+<td>-227.19</td>
+<td>-227.19</td>
+<td>-227.186</td>
+<td>-227.1859</td>
+<td>-227.1859</td>
+<td>-229.7248</td>
+<td>-229.7248</td>
+<td>-229.7248</td>
+<td>-228.57 kJ/mol<BR>
+(3 A sphere)</td>
+</tr>
+<tr>
+<td>3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm 1, chgm 1</td>
+<td>-226.23</td>
+<td>-226.228</td>
+<td>-230.77 (srfm 0)</td>
+<td>-226.2276</td>
+<td>-226.2276</td>
+<td>-226.2276</td>
+<td>-229.5849</td>
+<td>-229.5849</td>
+<td>-229.5849</td><td>-228.57 kJ/mol<BR>
+(3 A sphere)</td>
+</tr>
+</table>
+
+<P>
+
+
+<h4>FKBP</h4>
   <ul>
   <li>Source: Jung-Hsin Lin
   <li>Description:  Binding of various (small) ligands to FKBP.  Analogous to
       HCA binding case (except it works).
   </ul>
-<li>hca-bind
-  <ul>
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind(solv)</td>
+<td>18.591</td>
+<td>14.589</td>
+<td>14.589</td>
+<td>14.5886</td>
+<td>15.0097</td>
+<td>15.0089</td>
+<td>15.0089</td>
+<td>15.0089</td>
+<td>15.0089</td>
+<td>19.097</td>
+</tr>
+<tr>
+<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind(Coul)</td>
+<td>-15.103</td>
+<td>-15.103</td>
+<td>-15.093</td>
+<td>-15.0930</td>
+<td>-15.0930</td>
+<td>-15.0930</td>
+<td>-15.0930</td>
+<td>-15.0930</td>
+<td>-15.0930</td>
+<td>-15.103</td>
+</tr>
+<tr>
+<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind</td>
+<td>3.448</td>
+<td>-0.514</td>
+<td>-0.504</td>
+<td>-0.5043</td>
+<td>-0.0833</td>
+<td>-0.0841</td>
+<td>-0.0841</td>
+<td>-0.0841</td>
+<td>-0.0841</td>
+<td>3.994</td>
+</tr>
+<tr>
+<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind(solv)</td>
+<td>15.210</td>
+<td>14.387</td>
+<td>14.387</td>
+<td>14.3865</td>
+<td>14.4261</td>
+<td>14.4254</td>
+<td>14.4254</td>
+<td>14.4254</td>
+<td>14.4254</td>
+<td>16.231</td>
+</tr>
+<tr>
+<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind(Coul)</td>
+<td>-11.975</td>
+<td>-11.975</td>
+<td>-11.967</td>
+<td>-11.9670</td>
+<td>-11.9670</td>
+<td>-11.9670</td>
+<td>-11.9670</td>
+<td>-11.9670</td>
+<td>-11.9670</td
+<td>-11.975</td>
+</tr>
+<tr>
+<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind</td>
+<td>3.235</td>
+<td>2.412</td>
+<td>2.420</td>
+<td>2.4195</td>
+<td>2.4591</td>
+<td>2.4585</td>
+<td>2.4585</td>
+<td>2.4585</td>
+<td>2.4585</td>
+<td>4.256</td>
+</tr>
+</table>
+
+<P>
+
+<h4>hca-bind</h4>
+ <ul>
   <li>Source:  UHBD 
   <li>Description:  Calculate the binding of a small molecule (acetazolamide)
       to a medium-sized protein (human carbonic anhydrase).
   </ul>
-<li>ionize
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>2-level focus to 0.225 A, srfm 1, VdW surf, Directly-calculated Binding Energy</td>
+<td>-58.51</td>
+<td>-57.711</td>
+<td>-57.112</td>
+<td>-57.1123</td>
+<td>-57.1123</td>
+<td>-57.1192</td>
+<td>-57.1192</td>
+<td>-57.1192</td>
+<td>-57.1192</td>
+<td>-70.00</td>
+</tr>
+</table>
+
+<P>
+
+<h4>ionize</h4>
   <ul>
   <li>Source: UHBD
   <li>Description:  Calculate electrostatic contributions to the ionization
       energy of acetic acid.
    </ul>
-<li>ion-pmf
-  <ul>
-  <li>Source:  Nathan Baker (based on force evaluation papers by Im, Beglov,
-      and Roux)
-  <li>Description:  Calculate forces and energies for two charged ions and
-      various separations.
-  </ul>
-<li>ion-protein
-  <ul>
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>3-level focusing to 0.094 A, Acetic acid solv. G</td>
+<td>-22.63</td>
+<td>-22.627</td>
+<td>-22.627</td>
+<td>-22.628</td>
+<td>-22.629</td>
+<td>-22.6787</td>
+<td>-22.6787</td>
+<td>-22.6787</td>
+<td>-22.6787</td>
+<td>-22.22</td>
+</tr>
+<tr>
+<td>3-level focusing to 0.094 A, Acetate solv. G</td>
+<td>-195.31</td>
+<td>-195.305</td>
+<td>-195.305</td>
+<td>-195.3051</td>
+<td>-195.3135</td>
+<td>-199.7462</td>
+<td>-199.7462</td>
+<td>-199.7462</td>
+<td>-199.7462</td>
+<td>-198.04</td>
+</tr>
+<tr>
+<td>3-level focusing to 0.094 A, Proton solv. G</td>
+<td>290.86</td>
+<td>-290.859</td>
+<td>-290.859</td>
+<td>-290.8591</td>
+<td>-290.8751</td>
+<td>-297.4599</td>
+<td>-297.4599</td>
+<td>-297.4599</td>
+<td>-297.4599</td>
+<td>-295.79</td>
+</tr>
+<tr>
+<td>3-level focusing to 0.094 A, Ionization Energy</td>
+<td>-463.54</td>
+<td>-463.537</td>
+<td>-463.537</td>
+<td>-463.5373</td>
+<td>-463.5617</td>
+<td>-474.5273</td>
+<td>-474.5273</td>
+<td>-474.5273</td>
+<td>-474.5273</td>
+<td>-471.61</td>
+</tr>
+</table>
+
+<P>
+
+<h4>ion-protein</h4>
+ <ul>
   <li>Source:  Dave Sept
   <li>Description:  Calculate energy of placing an ion near a macromolecule
   </ul>
-<li>misc
-  <ul>
-  <li>Source:  ???
-  <li>Description:  Macromolecules with fun potentials to experiment with
-      visualization.
-  </ul>
-<li>pka-lig
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>0.53 A resolution, NPBE, prot. diel. of 12</td>
+<td>18.90</td>
+<td>18.895</td>
+<td>18.895</td>
+<td>18.8953</td>
+<td>17.4049</td>
+<td>17.4207</td>
+<td>17.4207</td>
+<td>17.4207</td>
+<td>17.4207</td>
+<td>18.39</td>
+</tr>
+<tr>
+<td>0.53 A resolution, NPBE, prot. diel. of 2</td>
+<td>21.45</td>
+<td>21.453</td>
+<td>21.453</td>
+<td>21.4530</td>
+<td>19.8652</td>
+<td>19.8794</td>
+<td>19.8794</td>
+<td>19.8794</td>
+<td>19.8794</td>
+<td>23.58</td>
+</tr>
+</table>
+
+<P>
+
+<h4>pka-lig</h4>
   <ul>
   <li>Source:  Chung Wong
   <li>Description:  Calculate binding energies of a ligand to protein kinase A.
   </ul>
-<li>point-pmf
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>2-level focusing to 0.250 A spacing, vdw-based dielectric</td>
+<td>6.65</td>
+<td>6.647</td>
+<td>6.647</td>
+<td>6.6465</td>
+<td>6.6465</td>
+<td>6.6465</td>
+<td>6.6465</td>
+<td>6.6465</td>
+<td>6.6465</td>
+<td>8.876</td>
+</tr>
+<tr>
+<td>2-level focusing to 0.250 A spacing, mol surf-based dielectric</td>
+<td>97.01</td>
+<td>97.015</td>
+<td>97.015</td>
+<td>97.0147</td>
+<td>97.0147</td>
+<td>97.0147</td>
+<td>97.0147</td>
+<td>97.0147</td>
+<td>97.0147</td>
+<td>86.50</td>
+</tr>
+</table>
+
+<P>
+
+<h4>point-pmf</h4>
   <ul>
   <li>Source:  Nathan Baker
   <li>Description:  See how well we do reproducing Coulomb's law.
   </ul>
-<li>solv
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>1 A dist</td>
+<td>18.308</td>
+<td>18.31</td>
+<td>18.308</td>
+<td>18.3082</td>
+<td>18.3082</td>
+<td>18.3082</td>
+<td>18.3082</td>
+<td>18.3082</td>
+<td>18.3082</td>
+<td>17.686</td>
+</tr>
+<tr>
+<td>2 A dist</td>
+<td>8.907</td>
+<td>8.91</td>
+<td>8.907</td>
+<td>8.9067</td>
+<td>8.9067</td>
+<td>8.9067</td>
+<td>8.9067</td>
+<td>8.9067</td>
+<td>8.9067</td>
+<td>8.843</td>
+</tr>
+<tr>
+<td>3 A dist</td>
+<td>5.910</td>
+<td>5.91</td>
+<td>5.910</td>
+<td>5.9096</td>
+<td>5.9096</td>
+<td>5.9096</td>
+<td>5.9096</td>
+<td>5.9096</td>
+<td>5.9096</td>
+<td>5.89533</td>
+</tr>
+<tr>
+<td>4 A dist</td>
+<td>4.430</td>
+<td>4.43</td>
+<td>4.430</td>
+<td>4.4301</td>
+<td>4.4301</td>
+<td>4.4301</td>
+<td>4.4301</td>
+<td>4.4301</td>
+<td>4.4301</td>
+<td>4.4215</td>
+</tr>
+</table>
+
+<P>
+
+<h4>solv</h4>
   <ul>
   <li>Source:  UHBD
   <li>Description:  Calculate the solvation energies of methanol and methoxide.
   </ul>
-</ul>
+<table align="center" border="1" cellpadding="3" cellspacing="3">
+<tr>
+<th>&nbsp;</th>
+<th colspan="9">APBS Version - Results in kJ/mol<th>
+</tr>
+<tr>
+<th>Example</th>
+<th>0.1.8</th>
+<th>0.2.0</th>
+<th>0.2.1</th>
+<th>0.2.2</th>
+<th>0.2.3</th>
+<th>0.2.4</th>
+<th>0.2.5</th>
+<th>0.2.6</th>
+<th>0.3.0</th>
+<th>UHBD/Analytical</th>
+</tr>
+<tr>
+<td>Methanol, 0.250 A spacing, zero probe radius, srfm 1</td>
+<td>-36.222</td>
+<td>-36.222</td>
+<td>-36.222</td>
+<td>-36.2223</td>
+<td>-36.2223</td>
+<td>-36.2486</td>
+<td>-36.6249</td>
+<td>-36.6249</td>
+<td>-36.6249</td>
+<td>-35.595</td>
+</tr>
+<tr>
+<td>Methoxide, 0.250 A spacing, zero probe radius, srfm 1 </td>
+<td>-391.800</td>
+<td>-391.800</td>
+<td>-391.800</td>
+<td>-391.7995</td>
+<td>-391.7995</td>
+<td>-390.4119</td>
+<td>-390.4119</td>
+<td>-390.4119</td>
+<td>-390.4119</td>
 
-<h3>Results</h3>
-<table align="center" border="1">
-<tr>
-<th width="10%">APBS Version</th>
-<th width="10%">actin-dimer</th>
-<th width="10%">born ion</th>
-<th width="10%">FKBP</th>
-<th width="10%">hca-bind</th>
-<th width="10%">ionize</th>
-<th width="10%">ion-protein</th>
-<th width="10%">pka-lig</th>
-<th width="10%">point-pmf</th>
-<th width="10%">solv</th>
+<td>-390.023</td>
 </tr>
-<tr>
-<td>UHBD/<font color="blue">Analytical</font></td>
-<td>+106.7 kJ/mol<br>(1.00 A res., NPBE)</td>
-<td><font color="blue">-228.57 kJ/mol<br>(3 A sphere)</font></td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):   19.097 kJ/mol
-    <li> DGbind(Coul.):  -15.103 kJ/mol
-    <li> DGbind:           3.994 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.):   16.231 kJ/mol
-    <li> DGbind(Coul.):  -11.975 kJ/mol
-    <li> DGbind:           4.256 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td>
-  2-level focusing to 0.225 A:
-  <ul>
-  <li> Complex solv. G: -7931.26 kJ/mol
-  <li> HCA solv. G: -8225.13 kJ/mol
-  <li> Acetazolamide solv. G:  -171.81 kJ/mol
-  <li> Coulomb G (analytic):  -535.62 kJ/mol
-  <li> BINDING ENERGY:  -70.00 kJ/mol
-  </ul>
-</td>
-<td>3-level focusing to 0.200 A:
-  <ul>
-  <li>Acetic acid solv. G:  -22.22 kJ/mol
-  <li>Acetate solv. G:  -198.04 kJ/mol
-  <li>Proton solv. G:  -295.79 kJ/mol
-  <li>IONIZATION ENERGY:  -471.61 kJ/mol
-  </ul>
-</td>
-<td>0.5 A resolution, NPBE, mol-based surface:
-  <ul>
-  <li> 18.39 kJ/mol (prot. diel. of 12)
-  <li> 23.58 kJ/mol (prot. diel. of 2)
-  </ul>
-<td>0.300 A resolution
-  <ul>
-  <li> 8.876 kJ/mol (vdw-based dielectric)
-  <li> 86.50 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><font color="blue">
-    <ul>
-    <li> 17.686 kJ/mol (1 A dist)
-    <li> 8.843  kJ/mol (2 A dist)
-    <li> 5.89533  kJ/mol (3 A dist)
-    <li> 4.4215  kJ/mol (4 A dist)
-    </ul>
-    </font>
-</td>
-<td>0.250 A grid spacing
-  <ul>
-  <li> Methanol:  -35.595 kJ/mol
-  <li> Methoxide:  -390.023 kJ/mol
-  <li> Difference:  -354.424 kJ/mol
-  </ul>
-</tr>
-<tr>
-<td>0.1.8</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):  91.67 kJ/mol
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.84 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li>-229.72 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
-     <li>-227.19 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
-     <li>-226.23 kJ/mol<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A,
-          srfm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):   18.591 kJ/mol
-    <li> DGbind(Coul.):  -15.103 kJ/mol
-    <li> DGbind:           3.488 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.):   15.210 kJ/mol
-    <li> DGbind(Coul.):  -11.975 kJ/mol
-    <li> DGbind:           3.235 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-<font color="red">
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Complex solv. G:       -8940.26 kJ/mol
-    <li> HCA solv. G:           -9243.06 kJ/mol
-    <li> Acetazolamide solv. G: -173.96 kJ/mol
-    <li> Coulomb G (analytic):   -535.27 kJ/mol
-    <li> BINDING ENERGY:          -58.51 kJ/mol
-    </ul>
-<br>
-I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
-</font>
-</td>
-<td>3-level focus to 0.094 A spacing (srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G:  -22.63 kJ/mol
-  <li> Acetate solv. G:  -195.31 kJ/mol
-  <li> Proton solv. G:  -290.86 kJ/mol
-  <li> IONIZATION ENERGY:  -463.54 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 18.90 kJ/mol (prot. diel. of 12)
-  <li> 21.45 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li>  6.65 kJ/mol (vdw-based dielectric)
-  <li> 97.01 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.308 kJ/mol (1 A dist)
-    <li> 8.907  kJ/mol (2 A dist)
-    <li> 5.910  kJ/mol (3 A dist)
-    <li> 4.430  kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.222 kJ/mol
-  <li> Methoxide:  -391.800 kJ/mol
-  <li> Difference:  -355.577 kJ/mol
-  </ul>
-</td>
-</tr>
-<td>0.2.0</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   91.939 kJ/mol
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.829 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.72 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
-     <li> -227.19 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
-     <li> -226.228 kJ/mol<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A,
-          srfm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):   14.589 kJ/mol
-    <li> DGbind(Coul.):  -15.103 kJ/mol
-    <li> DGbind:          -0.514 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.):    14.387 kJ/mol 
-    <li> DGbind(Coul.):   -11.975 kJ/mol
-    <li> DGbind:           2.412 kJ/mol
-    </ul>
-    <font color="red">Slightly different parameters than 0.1.8
-     validation</font>
-  </ul>
-</td>
-<td> 
-<font color="red">
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy:  -57.711 kJ/mol
-    </ul>
-<br>
-I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
-</font>
-</td>
-<td>3-level focus to 0.094 A spacing (srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G:  -22.627 kJ/mol
-  <li> Acetate solv. G:   -195.305 kJ/mol
-  <li> Proton solv. G:   -290.859 kJ/mol
-  <li> IONIZATION ENERGY:   -463.537 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 18.895 kJ/mol (prot. diel. of 12)
-  <li> 21.453 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.647 kJ/mol (vdw-based dielectric)
-  <li> 97.015 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.31 kJ/mol (1 A dist)
-    <li> 8.91 kJ/mol (2 A dist)
-    <li> 5.91 kJ/mol (3 A dist)
-    <li> 4.43 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.222 kJ/mol
-  <li> Methoxide: -391.800 kJ/mol
-  <li> Difference:  -355.577 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.1</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   91.945 kJ/mol
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.829 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.72 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
-     <li> -227.19 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
-     <li> -230.77 kJ/mol<br>(3 A sphere, 4-proc 2-level para focus to 0.103 A,
-          <font color="red">srfm 0</font>)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  14.589 kJ/mol
-    <li> DGbind(Coul.):  -15.093 kJ/mol
-    <li> DGbind:         -0.504 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.):    14.387 kJ/mol 
-    <li> DGbind(Coul.):    -11.967 kJ/mol
-    <li> DGbind:           2.420 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-<font color="red">
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy:  -57.112 kJ/mol
-    </ul>
-<br>
-I'M NOT SURE WHAT'S WRONG WITH THIS EXAMPLE
-</font>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G:  -22.627 kJ/mol
-  <li> Acetate solv. G:   -195.305 kJ/mol
-  <li> Proton solv. G:   -290.859 kJ/mol
-  <li> IONIZATION ENERGY:   -463.537 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 18.895 kJ/mol (prot. diel. of 12)
-  <li> 21.453 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.647 kJ/mol (vdw-based dielectric)
-  <li> 97.015 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.308 kJ/mol (1 A dist)
-    <li> 8.907 kJ/mol (2 A dist)
-    <li> 5.910 kJ/mol (3 A dist)
-    <li> 4.430 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.222 kJ/mol
-  <li> Methoxide: -391.800 kJ/mol
-  <li> Difference:  -355.577 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.2</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   91.9450 kJ/mol 
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 90.829 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.725 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0)
-     <li> -227.186 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1)
-     <li> -226.2276 kJ/mol<br>(3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  14.5886 kJ/mol
-    <li> DGbind(Coul.): -15.0930 kJ/mol
-    <li> DGbind: -0.5043 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.): 14.3865 kJ/mol
-    <li> DGbind(Coul.): -11.9670 kJ/mol
-    <li> DGbind:      2.4195 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy: -57.1123 kJ/mol
-    </ul>
-<br>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G: -22.6268 kJ/mol
-  <li> Acetate solv. G:  -195.3051 kJ/mol
-  <li> Proton solv. G:  -290.8591 kJ/mol
-  <li> IONIZATION ENERGY: -463.5373 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 18.8953 kJ/mol (prot. diel. of 12)
-  <li> 21.4530 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.6465 kJ/mol (vdw-based dielectric)
-  <li> 97.0147 (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.3082 kJ/mol (1 A dist)
-    <li> 8.9067 kJ/mol (2 A dist)
-    <li> 5.9096 kJ/mol (3 A dist)
-    <li> 4.4301 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.2223 kJ/mol
-  <li> Methoxide: -391.7995 kJ/mol
-  <li> Difference:  -355.5772 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.3</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   90.2543 kJ/mol 
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 88.6064 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.7250 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0, chgm 0)
-     <li> -227.1859 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1, chgm 1)
-     <li> -226.2276 kJ/mol<br>(3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm
-1, chgm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  15.0097 kJ/mol
-    <li> DGbind(Coul.): -15.0930 kJ/mol
-    <li> DGbind: -0.0833 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.): 14.4261 kJ/mol
-    <li> DGbind(Coul.): -11.9670 kJ/mol
-    <li> DGbind:      2.4591 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy: -57.1123 kJ/mol
-    </ul>
-<br>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G: -22.6269 kJ/mol
-  <li> Acetate solv. G:  -195.3135 kJ/mol
-  <li> Proton solv. G:  -290.8751 kJ/mol
-  <li> IONIZATION ENERGY: -463.5617 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 17.4049 kJ/mol (prot. diel. of 12)
-  <li> 19.8652 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.6465 kJ/mol (vdw-based dielectric)
-  <li> 97.0147 (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.3082 kJ/mol (1 A dist)
-    <li> 8.9067 kJ/mol (2 A dist)
-    <li> 5.9096 kJ/mol (3 A dist)
-    <li> 4.4301 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.2223 kJ/mol
-  <li> Methoxide: -391.7995 kJ/mol
-  <li> Difference:  -355.5771 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.4</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):   90.2573 kJ/mol 
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 88.6101 kJ/mol
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.7250 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 0, chgm 0)
-     <li> -227.1859 kJ/mol<br>(3 A sphere, 2-level focus to 0.188 A, srfm 1, chgm 1)
-     <li> -226.2276 kJ/mol<br>(3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm
-1, chgm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  15.0089 kJ/mol
-    <li> DGbind(Coul.): -15.0930 kJ/mol
-    <li> DGbind: -0.0841 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.): 14.4254 kJ/mol
-    <li> DGbind(Coul.): -11.9670 kJ/mol
-    <li> DGbind:      2.4585 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy: -57.1192 kJ/mol
-    </ul>
-<br>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G: -22.6787 kJ/mol
-  <li> Acetate solv. G:  -199.7462 kJ/mol
-  <li> Proton solv. G:  -297.4599 kJ/mol
-  <li> IONIZATION ENERGY: -474.5273 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 17.4207 kJ/mol (prot. diel. of 12)
-  <li> 19.8794 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.6465 kJ/mol (vdw-based dielectric)
-  <li> 97.0147 (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.3082 kJ/mol (1 A dist)
-    <li> 8.9067 kJ/mol (2 A dist)
-    <li> 5.9096 kJ/mol (3 A dist)
-    <li> 4.4301 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.2486 kJ/mol
-  <li> Methoxide: -390.4119 kJ/mol
-  <li> Difference:  -354.1632 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.5</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):  90.2573 kJ/mol
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 88.6101 kJ/mol 
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.7250 kJ/mol<br>(3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 0)
-     <li> -229.7248 kJ/mol<br>(3 A sphere, 3-level focus to 0.188 A, srfm 1, chgm 1)
-     <li> -229.5849 kJ/mol<br>(3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm
-1, chgm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  15.0089 kJ/mol
-    <li> DGbind(Coul.): -15.0930 kJ/mol
-    <li> DGbind: -0.0841 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.): 14.4254 kJ/mol
-    <li> DGbind(Coul.): -11.9670 kJ/mol
-    <li> DGbind:      2.4585 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy: -57.1192 kJ/mol
-    </ul>
-<br>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G: -22.6787 kJ/mol
-  <li> Acetate solv. G:  -199.7462 kJ/mol
-  <li> Proton solv. G:  -297.4599 kJ/mol
-  <li> IONIZATION ENERGY: -474.5273 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 17.4207 kJ/mol (prot. diel. of 12)
-  <li> 19.8794 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.6465 kJ/mol (vdw-based dielectric)
-  <li> 97.0147 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.3082 kJ/mol (1 A dist)
-    <li> 8.9067 kJ/mol (2 A dist)
-    <li> 5.9096 kJ/mol (3 A dist)
-    <li> 4.4301 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.6249 kJ/mol
-  <li> Methoxide: -390.4119 kJ/mol
-  <li> Difference:  -354.1632 kJ/mol
-  </ul>
-</td>
-</tr>
-<tr>
-<td>0.2.6</td>
-<td> <ul>
-     <li> Parallel (8 proc, ~0.9 A spacing, LPBE):  90.2573 kJ/mol
-     <li> Sequential (2-level focus to <=0.725 A, NPBE): 88.6101 kJ/mol 
-     </ul>
-</td>
-<td> <ul>
-     <li> -229.7250 kJ/mol<br>(3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 0)
-     <li> -229.7248 kJ/mol<br>(3 A sphere, 3-level focus to 0.188 A, srfm 1, chgm 1)
-     <li> -229.5849 kJ/mol<br>(3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm
-1, chgm 1)
-     </ul>
-</td>
-<td>2-level focusing to 0.225 A, VdW surface:
-  <ul>
-  <li>1D7H-DMSO:
-    <ul>
-    <li> DGbind(solv.):  15.0089 kJ/mol
-    <li> DGbind(Coul.): -15.0930 kJ/mol
-    <li> DGbind: -0.0841 kJ/mol
-    </ul>
-  <li>1D7I-DSS:
-    <ul>
-    <li> DGbind(solv.): 14.4254 kJ/mol
-    <li> DGbind(Coul.): -11.9670 kJ/mol
-    <li> DGbind:      2.4585 kJ/mol
-    </ul>
-  </ul>
-</td>
-<td> 
-2-level focus to 0.225, srfm 1, VdW surf:
-    <ul>
-    <li> Directly-calculated binding energy: -57.1192 kJ/mol
-    </ul>
-<br>
-</td>
-<td>3-level focus to 0.094 A spacing (vdw surf, srfm 0): 
-  <ul>
-  <li> Acetic acid solv. G: -22.6787 kJ/mol
-  <li> Acetate solv. G:  -199.7462 kJ/mol
-  <li> Proton solv. G:  -297.4599 kJ/mol
-  <li> IONIZATION ENERGY: -474.5273 kJ/mol
-</td>
-<td> 0.53 A resolution, NPBE:
-  <ul>
-  <li> 17.4207 kJ/mol (prot. diel. of 12)
-  <li> 19.8794 kJ/mol (prot. diel. of 2)
-  </ul>
-<td> 2-level focusing to 0.250 A spacing:
-  <ul>
-  <li> 6.6465 kJ/mol (vdw-based dielectric)
-  <li> 97.0147 kJ/mol (mol surf-based dielectric)
-  </ul>
-</td>
-<td><ul>
-    <li> 18.3082 kJ/mol (1 A dist)
-    <li> 8.9067 kJ/mol (2 A dist)
-    <li> 5.9096 kJ/mol (3 A dist)
-    <li> 4.4301 kJ/mol (4 A dist)
-    </ul>
-</td>
-<td> 0.250 A spacing, zero probe radius, srfm 1
-  <ul>
-  <li> Methanol:  -36.6249 kJ/mol
-  <li> Methoxide: -390.4119 kJ/mol
-  <li> Difference:  -354.1632 kJ/mol
-  </ul>
-</td>
+<td>Difference</td>
+<td>-355.577</td>
+<td>-355.577</td>
+<td>-355.577</td>
+<td>-355.5772</td>
+<td>-355.5771</td>
+<td>-354.1632</td>
+<td>-354.1632</td>
+<td>-354.1632</td>
+<td>-354.1632</td>
+<td>-354.424</td>
 </tr>
 </table>
 
-</body>
-
-</html>
-</table>
-
-</body>
-
-</html>
+<P>
+</BODY>
+</HTML>
