@@ -87,7 +87,7 @@
           <listitem>
             <para><filename>tools/conversion/WHATIF2AMBER.sed</filename></para>
             <para>A sed script for converting a PDB file with WHATIF atom names
-            to a PDB file with CHARMm atom names. Useful for preprocessing
+            to a PDB file with AMBER atom names. Useful for preprocessing
             files before converting with pdb2pqr. Contributed by Chiansan
             Ma.</para>
           </listitem>
