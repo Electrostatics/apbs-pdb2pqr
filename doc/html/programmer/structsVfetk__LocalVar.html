@@ -29,13 +29,13 @@ Collaboration diagram for sVfetk_LocalVar:<p><center><img src="structsVfetk__Loc
 <center><font size="2">[<a href="graph_legend.html">legend</a>]</font></center><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Data Fields</h2></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m0">nvec</a> [3]</td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m1">vx</a> [4][3]</td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m2">xq</a> [3]</td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m0">nvec</a> [VAPBS_DIM]</td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m1">vx</a> [4][VAPBS_DIM]</td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m2">xq</a> [VAPBS_DIM]</td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m3">U</a> [MAXV]</td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m4">dU</a> [MAXV][3]</td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m4">dU</a> [MAXV][VAPBS_DIM]</td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m5">W</a></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m6">dW</a> [3]</td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m6">dW</a> [VAPBS_DIM]</td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m7">d2W</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m8">sType</a></td></tr>
 <tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVfetk__LocalVar.html#m9">fType</a></td></tr>
@@ -232,7 +232,7 @@ Dielectric value     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::dU[MAXV][3]
+          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::dU[MAXV][VAPBS_DIM]
       </table>
     </td>
   </tr>
@@ -254,7 +254,7 @@ Solution gradient     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::dW[3]
+          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::dW[VAPBS_DIM]
       </table>
     </td>
   </tr>
@@ -562,7 +562,7 @@ Number of ion species     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::nvec[3]
+          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::nvec[VAPBS_DIM]
       </table>
     </td>
   </tr>
@@ -738,7 +738,7 @@ Pointer to the latest vertices; set in initElement     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::vx[4][3]
+          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::vx[4][VAPBS_DIM]
       </table>
     </td>
   </tr>
@@ -782,7 +782,7 @@ Coulomb regularization term scalar value     </td>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::xq[3]
+          <td class="md" nowrap valign="top"> double sVfetk_LocalVar::xq[VAPBS_DIM]
       </table>
     </td>
   </tr>
@@ -844,7 +844,7 @@ Ionic strength parameters     </td>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="vfetk_8h-source.html">vfetk.h</a></ul>
-<hr><address style="align: right;"><small>Generated on Mon Apr 19 14:39:02 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Mon Apr 19 16:11:36 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

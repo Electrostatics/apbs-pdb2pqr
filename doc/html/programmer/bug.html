@@ -68,7 +68,7 @@
 </dl>
 <p>
 <a name="_bug000014"/></a> <dl>
-<dt>Global <a class="el" href="group__Vfetk.html#a33">Vfetk_PDE_DFu_wv</a> (PDE *thee, int key, double W[], double dW[][3], double V[], double dV[][3]) </dt>
+<dt>Global <a class="el" href="group__Vfetk.html#a33">Vfetk_PDE_DFu_wv</a> (PDE *thee, int key, double W[], double dW[][VAPBS_DIM], double V[], double dV[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
@@ -79,12 +79,12 @@ This function is not implemented (sets error to zero) </dd>
 </dl>
 <p>
 <a name="_bug000013"/></a> <dl>
-<dt>Global <a class="el" href="group__Vfetk.html#a32">Vfetk_PDE_Fu_v</a> (PDE *thee, int key, double V[], double dV[][3]) </dt>
+<dt>Global <a class="el" href="group__Vfetk.html#a32">Vfetk_PDE_Fu_v</a> (PDE *thee, int key, double V[], double dV[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
 <a name="_bug000009"/></a> <dl>
-<dt>Global <a class="el" href="group__Vfetk.html#a28">Vfetk_PDE_initElement</a> (PDE *thee, int elementType, int chart, double tvx[][3], void *data) </dt>
+<dt>Global <a class="el" href="group__Vfetk.html#a28">Vfetk_PDE_initElement</a> (PDE *thee, int elementType, int chart, double tvx[][VAPBS_DIM], void *data) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
@@ -94,7 +94,7 @@ This function is not implemented (sets error to zero) </dd>
 </dl>
 <p>
 <a name="_bug000011"/></a> <dl>
-<dt>Global <a class="el" href="group__Vfetk.html#a30">Vfetk_PDE_initPoint</a> (PDE *thee, int pointType, int chart, double txq[], double tU[], double tdU[][3]) </dt>
+<dt>Global <a class="el" href="group__Vfetk.html#a30">Vfetk_PDE_initPoint</a> (PDE *thee, int pointType, int chart, double txq[], double tU[], double tdU[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe <p>
 This function uses pre-defined boudnary definitions for the molecular surface.</dd>
 </dl>
@@ -105,7 +105,7 @@ This function uses pre-defined boudnary definitions for the molecular surface.</
 </dl>
 <p>
 <a name="_bug000018"/></a> <dl>
-<dt>Global <a class="el" href="group__Vfetk.html#a39">Vfetk_PDE_markSimplex</a> (int dim, int dimII, int simplexType, int faceType[4], int vertexType[4], int chart[], double vx[][3], void *simplex) </dt>
+<dt>Global <a class="el" href="group__Vfetk.html#a39">Vfetk_PDE_markSimplex</a> (int dim, int dimII, int simplexType, int faceType[VAPBS_NVS], int vertexType[VAPBS_NVS], int chart[], double vx[][VAPBS_DIM], void *simplex) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
@@ -134,7 +134,7 @@ This function is not thread-safe.</dd>
 <dt>Global <a class="el" href="group__Frontend.html#a27">initFE</a> (int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], Vfetk *fetk[NOSH_MAXCALC]) </dt>
 <dd>THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE</dd>
 </dl>
-<hr><address style="align: right;"><small>Generated on Mon Apr 19 14:39:03 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Mon Apr 19 16:11:38 2004 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
