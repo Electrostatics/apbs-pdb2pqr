@@ -1488,7 +1488,11 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
     double temp, scalar;
     AtomForce *lforce, *gforce, *aforce;
 
-    Vnm_tprint( 1, "print force %d ", nosh->printcalc[i][0]);
+    if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[i][0]], "") == 0){
+      Vnm_tprint( 1, "print force %d ", nosh->printcalc[i][0]);
+    } else {
+      Vnm_tprint( 1, "print force %d (%s) ", nosh->printcalc[i][0], nosh->elecname[nosh->printcalc[i][0]]);
+    }
     for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
         if (nosh->printop[i][ipr-1] == 0)
           Vnm_tprint(1, "+ ");
@@ -1498,7 +1502,11 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
             Vnm_tprint( 2, "Undefined PRINT operation!\n");
             return 0;
         }
-        Vnm_tprint(1, "%d ", nosh->printcalc[i][ipr]);
+        if (Vstring_strcasecmp(nosh->elecname[ipr+1], "") == 0){
+          Vnm_tprint( 1, "%d ", nosh->printcalc[i][ipr]);
+        } else {
+          Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[i][ipr], nosh->elecname[nosh->printcalc[i][ipr]]);
+        }
     }
     Vnm_tprint(1, "end\n");
 
