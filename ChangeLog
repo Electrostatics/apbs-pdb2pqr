@@ -1,1 +1,13 @@
-There have been a lot of changes.
+08-29-01  Version 0.1.0
+  This is a pre-beta release designed to allow interested users to get familiar
+  with the code.   It is not currently fully functional; it only provides for
+  the sequential multigrid (Cartesian mesh) solution of the linearized and
+  nonlinear Poisson-Boltzmann equation.   User-friendly parallel support will
+  be incorporated into the next release.  Other limitations that may effect
+  performance are:
+    * No finite element support.  This is awaiting the public release of the
+      Holst group's FEtk
+    * Somewhat inefficient coefficient evaluation (i.e., problem setup).  This
+      should be fixed in the next release or two.
+  In summary, this release represents a request for help in breaking the code
+  and finding its deficiencies before a public beta.
