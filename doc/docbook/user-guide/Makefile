@@ -1,4 +1,4 @@
-htmldir=../html/user-guide
+htmldir=../../html/user-guide
 default: db2html
 db2html:
 	db2html user-guide.xml
