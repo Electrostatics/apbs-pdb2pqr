@@ -50,6 +50,7 @@
 #include "mc/vgm.h"
 #include "mc/vram.h"
 #include "mc/ves.h"
+#include "mc/am.h"
 
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
@@ -70,6 +71,9 @@ typedef struct Vpbe {
   Vgm *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
+  AM *am;             /* Algebraic multilevel structure; wraps solver
+                       * portion of MC */
+
 
   Vhash *hash;        /* Atomic hash table */
   Vcsm *csm;          /* Charge-simplex map */
