@@ -76,7 +76,9 @@ VPUBLIC void startVio() { Vio_start(); }
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
-    int i;
+    int i, j;
+    double q; 
+    Vatom *atom;
 
     Vnm_tprint( 1, "Got PQR paths for %d molecules\n", nosh->nmol);
     if (nosh->nmol <= 0) {
@@ -101,6 +103,17 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
               alist[i]->center[0], alist[i]->center[1], alist[i]->center[2]);
             Vnm_tprint( 1, "  Net charge %3.2e e\n",
               alist[i]->charge);        
+            /* Check for uncharged molecule */
+            q = 0;
+            for (j=0; j<Valist_getNumberAtoms(alist[i]); j++) {
+                atom = Valist_getAtom(alist[i], j);
+                q += VSQR(Vatom_getCharge(atom));
+            }
+            if (q < (1e-6)) {
+                Vnm_print(2, "Molecule #%d is uncharged!\n");
+                Vnm_print(2, "Sum square charge = %g\n", q);
+                Vnm_print(2, "Bailing out!\n");
+            }
         }
     }
 

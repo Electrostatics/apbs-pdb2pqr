@@ -53,9 +53,6 @@
  * @endverbatim
  */
 
- * @endverbatim
- */
-
 #include "apbscfg.h"
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
