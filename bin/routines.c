@@ -42,8 +42,12 @@
 
 #include "apbscfg.h"
 #include "maloc/maloc.h"  
-#include "mc/mc.h"  
-#include "mcx/mcx.h"  
+#ifdef HAVE_MC_H
+#  include "mc/mc.h"  
+#endif
+#ifdef HAVE_MCX_H
+#  include "mcx/mcx.h"  
+#endif
 
 #include "apbs/apbs.h"  
 #include "apbs/vhal.h"  
