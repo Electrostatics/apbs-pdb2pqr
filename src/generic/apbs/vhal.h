@@ -167,7 +167,13 @@ typedef enum Vdata_Format Vdata_Format;
  */
 #define VAPBS_DOWN  5
 
-#if !defined(VDEBUG)
+#if defined(VDEBUG)
+#   if !defined(APBS_NOINLINE)
+#       define APBS_NOINLINE 1
+#   endif
+#endif
+
+#if !defined(APBS_NOINLINE)
 
 /** @brief   Turns on inlining macros in Vacc class if defined
  *  @ingroup Vhal
@@ -207,7 +213,7 @@ typedef enum Vdata_Format Vdata_Format;
 /** @brief   Turns on inlining macros in Vpmg class if defined
  *  @ingroup Vhal
  */
-#   define VINLINE_VPMG
+#   define VINLINE_VPMG 
 
 #endif
 

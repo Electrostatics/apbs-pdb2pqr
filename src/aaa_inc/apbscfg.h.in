@@ -1,4 +1,4 @@
-/* src/aaa_inc/apbscfg.h.in.  Generated from configure.in by autoheader.  */
+/* src/aaa_inc/apbscfg.h.in.  Generated from configure.ac by autoheader.  */
 /**
  *  @file    acconfig.h
  *  @author  Nathan Baker and Mike Holst
@@ -73,8 +73,11 @@
 /* Do I have strcasecmp? */
 #undef HAVE_STRCASECMP
 
-/* Do I have strcasecmp? */
+/* Do I use the C++ fast multipole code? */
 #undef USE_CXX_FMM
+
+/* Do I use inline functions? */
+#undef APBS_NOINLINE
 
 /* F77 name mangling */
 #undef VF77_NOUNDERSCORE

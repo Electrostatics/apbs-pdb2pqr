@@ -204,7 +204,7 @@ VEXTERNC void  NOsh_dtor(NOsh **thee);
  */
 VEXTERNC void  NOsh_dtor2(NOsh *thee);
 
-/** @brief   Parse an input file
+/** @brief   Parse an input file from a socket
  *  @ingroup NOsh
  *  @author  Nathan Baker
  *  @param   thee  Pointer to NOsh object
@@ -212,6 +212,16 @@ VEXTERNC void  NOsh_dtor2(NOsh *thee);
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
+
+/** @brief   Parse an input file only from a file
+ *  @note    Included for SWIG wrapper compatibility
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee      Pointer to NOsh object
+ *  @param   filename  Name/path of readable file
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int   NOsh_parseFile(NOsh *thee, char *filename);
 
 /** @brief   Setup NOsh, MGparm, and PBEparm objects for a MG-MANUAL ELEC
  *           calculation

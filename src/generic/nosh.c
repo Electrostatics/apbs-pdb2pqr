@@ -144,6 +144,23 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  NOsh_parseFile
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int NOsh_parseFile(NOsh *thee, char *filename) {
+
+    Vio *sock;
+    int rc;
+
+    sock = Vio_ctor("FILE", "ASC", VNULL, filename, "r");
+    rc = NOsh_parse(thee, sock);
+    Vio_dtor(&sock);
+
+    return rc;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  NOsh_parse
 //
 // Author:   Nathan Baker
