@@ -623,7 +623,7 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
 {
     Mat *Ablock;
     MATsym pqsym;
-    int i, j, jj, k;
+    int i, j, jj;
     int *IA, *JA;
     double *D, *L;
     FILE *fp;
@@ -635,8 +635,8 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
     int nrow = 0, ncol = 0, numZ = 0;
     char ptrfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
     char indfmt[] = {"(8I9)           "}; /* 8 per line of size 9 */
-    char valfmt[] = {"(4E19.12)           "}; /* 4 per line of size 19.12 */
-    char rhsfmt[] = {"(4E19.12)           "}; /* 4 per line of size 19.12 */
+    char valfmt[] = {"(6E13.6)            "}; /* 6 per line of size 13.6 */
+    char rhsfmt[] = {"(6E13.6)            "}; /* 6 per line of size 13.6 */
 
     VASSERT( thee->numB == 1 );             /* HARDWIRE FOR NOW */
     Ablock = thee->AD[0][0];
@@ -670,10 +670,10 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
         indc = (int) ( Bmat_numZT( thee ) / 8 ) + 1;
     }
 
-    if ( ( Bmat_numZT( thee ) % 4 ) == 0 ) { /* 4 values per line */
-        valc = Bmat_numZT( thee ) / 4;
+    if ( ( Bmat_numZT( thee ) % 6 ) == 0 ) { /* 6 values per line */
+        valc = Bmat_numZT( thee ) / 6;
     } else {
-        valc = (int) ( Bmat_numZT( thee ) / 4 ) + 1;
+        valc = (int) ( Bmat_numZT( thee ) / 6 ) + 1;
     }
 
     totc = ptrc + indc + valc;
@@ -696,14 +696,17 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
     fprintf( fp, "%3s%11s%14d%14d%14d\n", mxtyp, " ", nrow, ncol, numZ );
     fprintf( fp, "%-16s%-16s%-20s%-20s\n", ptrfmt, indfmt, valfmt, rhsfmt );
 
-    /* Step 2:  Print the pointer information */
-
     IA = Ablock->IA;
+    JA = Ablock->JA;
+    D = Ablock->diag;
+    L = Ablock->offL;
 
     if ( pqsym == IS_SYM ) {
 
+        /* Step 2:  Print the pointer information */
+
         for (i=0; i<(ncol+1); i++) {
-            fprintf( fp, "%9d ", Ablock->IA[i] + (i+1) );
+            fprintf( fp, "%9d", Ablock->IA[i] + (i+1) );
             if ( ( (i+1) % 8 ) == 0 ) {
                 fprintf( fp, "\n" );
             }
@@ -713,75 +716,56 @@ VPUBLIC void Bmat_printHB( Bmat *thee, char *fname )
             fprintf( fp, "\n" );
         }
 
-    } else {
+        /* Step 3:  Print the index information */
 
-        VASSERT( 0 ); /* NOT CODED YET */
-    }
-
-    /* Step 3:  Print the index information */
-
-    JA = Ablock->JA;
-
-    if ( pqsym == IS_SYM ) {
-
-        k = 0;
         j = 0;
         for (i=0; i<ncol; i++) {
-            fprintf( fp, "%9d ", i + 1); /* Index for the diagonal */
+            fprintf( fp, "%9d", i + 1); /* Index for the diagonal */
             if ( ( (j+1) % 8 ) == 0 ) {
                 fprintf( fp, "\n" );
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
-                fprintf( fp, "%9d ", JA[jj] + 1 );
+                fprintf( fp, "%9d", JA[jj] + 1 );
                 if ( ( (j+1) % 8 ) == 0 ) {
                     fprintf( fp, "\n" );
                 }
                 j++;
             }
         }
-
+        
         if ( ( j % 8 ) != 0 ) {
             fprintf( fp, "\n" );
         }
 
-    } else {
+        /* Step 4:  Print the value information */
 
-        VASSERT( 0 ); /* NOT CODED YET */
-    }
-
-    /* Step 4:  Print the value information */
-
-    D = Ablock->diag;
-    L = Ablock->offL;
-
-    if ( pqsym == IS_SYM ) {
-
-        k = 0;
         j = 0;
         for (i=0; i<ncol; i++) {
-            fprintf( fp, "%19.12E ", D[i] );
-            if ( ( (j+1) % 4 ) == 0 ) {
+            fprintf( fp, "%13.6E", D[i] );
+            if ( ( (j+1) % 6 ) == 0 ) {
                 fprintf( fp, "\n" );
             }
             j++;
             for (jj=IA[i]; jj<IA[i+1]; jj++) {
-                fprintf( fp, "%19.12E ", L[jj] );
-                if ( ( (j+1) % 4 ) == 0 ) {
+                fprintf( fp, "%13.6E", L[jj] );
+                if ( ( (j+1) % 6 ) == 0 ) {
                     fprintf( fp, "\n" );
                 }
                 j++;
             }
         }
 
-        if ( ( j % 4 ) != 0 ) {
+        if ( ( j % 6 ) != 0 ) {
             fprintf( fp, "\n" );
         }
 
-   } else {
+    } else { /* ISNOT_SYM */
 
         VASSERT( 0 ); /* NOT CODED YET */
     }
+
+    /* Step 5:  Close the file */
 
     fclose( fp );
 
