@@ -309,15 +309,15 @@
       subdirectories include:
       <itemizedlist>
         <listitem>
-          <para><filename>doc/html/index.html</filename></para>
+          <para><ulink url="../user-guide/index.html"><filename>doc/html/user-guide/index.html</filename></ulink></para>
           <para>HTML-format User Guide </para>
         </listitem>
         <listitem>
-          <para><filename>doc/html/programmer/index.html</filename></para>
+          <para><ulink url="../programmer/index.html"><filename>doc/html/programmer/index.html</filename></ulink></para>
           <para>HTML-format Programmer Guide </para>
         </listitem>
         <listitem>
-          <para><filename>doc/html/tutorial/index.html</filename></para>
+          <para><ulink url="../tutorial/index.html"><filename>doc/html/tutorial/index.html</filename></ulink></para>
           <para>HTML-format APBS tutorial </para>
         </listitem>
       </itemizedlist>
