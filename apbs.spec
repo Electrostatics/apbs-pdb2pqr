@@ -72,8 +72,10 @@ This package contains tools for APBS
 # export FETK_INCLUDE=%{prefix}/lib
 # export FETK_LIBRARY=%{prefix}/include
 export FETK_PREFIX=`rpm -q maloc --queryformat "%{INSTALLPREFIX}"`
-export FETK_INCLUDE=$FETK_PREFIX/include
-export FETK_LIBRARY=$FETK_PREFIX/lib
+export FETK_INCLUDE=${FETK_PREFIX}/include
+export FETK_LIBRARY=${FETK_PREFIX}/lib
+echo "FETK_INCLUDE = " $FETK_INCLUDE
+echo "FETK_LIBRARY = " $FETK_LIBRARY
 
 # We're assuming Intel compilers for Intel platforms.  These are the specific
 # Intel platforms we'll support:
@@ -90,7 +92,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
     export CXXFLAGS="-O2 -tpp7 -static-libcxa" 
     export F77="ifort" 
     export FFLAGS="-O2 -tpp7 -static-libcxa" 
-    export LDFLAGS="-static-libcxa"
+    export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
     make
   %else
@@ -102,7 +104,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CXXFLAGS="-O2 -tpp6 -static-libcxa" 
       export F77="ifort" 
       export FFLAGS="-O2 -tpp6 -static-libcxa" 
-      export LDFLAGS="-static-libcxa"
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
       make
     %else
@@ -113,7 +115,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CXXFLAGS="-O2 -static-libcxa" 
       export F77="ifort" 
       export FFLAGS="-O2 -static-libcxa" 
-      export LDFLAGS="-static-libcxa"
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
       make
     %endif
