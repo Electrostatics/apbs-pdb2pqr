@@ -210,7 +210,31 @@ VEXTERNC int Vgreen_helmholtzD(Vgreen *thee, int npos, double *x, double *y,
   double *z, double *gradx, double *grady, double *gradz, double kappa);
 
 /** @brief   Get the Coulomb's Law Green's function (solution to Laplace's
- *           equation) integrated over the atomic point charges
+ *           equation) integrated over the atomic point charges using direct
+ *           summation
+ * 
+ *           Returns the potential \f$\phi\f$ defined by 
+ *           \f[ \phi(r) = \sum_i \frac{q_i}{r_i} \f]
+ *           where \f$q_i\f$ is the atomic charge (in e) and \f$r_i\f$ is the
+ *           distance to the observation point \f$r\f$.  The potential is
+ *           scaled to units of V.
+ *
+ *  @ingroup Vgreen
+ *  @author  Nathan Baker
+ *  @param   thee Vgreen object
+ *  @param   npos  The number of positions to evaluate
+ *  @param   x  The npos x-coordinates
+ *  @param   y  The npos y-coordinates
+ *  @param   z  The npos z-coordinates
+ *  @param   val  The npos values
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int Vgreen_coulomb_direct(Vgreen *thee, int npos, double *x, 
+        double *y, double *z, double *val);
+
+/** @brief   Get the Coulomb's Law Green's function (solution to Laplace's
+ *           equation) integrated over the atomic point charges using direct
+ *           summation or H. E. Johnston, R. Krasny FMM library (if available)
  * 
  *           Returns the potential \f$\phi\f$ defined by 
  *           \f[ \phi(r) = \sum_i \frac{q_i}{r_i} \f]
@@ -232,7 +256,36 @@ VEXTERNC int Vgreen_coulomb(Vgreen *thee, int npos, double *x, double *y,
   double *z, double *val);
 
 /** @brief   Get gradient of the Coulomb's Law Green's function (solution to
- *           Laplace's equation) integrated over the atomic point charges
+ *           Laplace's equation) integrated over the atomic point charges using
+ *           direct summation
+ *
+ *           Returns the field \f$\nabla \phi\f$ defined by
+ *           \f[ \nabla \phi(r) = \sum_i \frac{q_i}{r_i} \f]
+ *           where \f$q_i\f$ is the atomic charge (in e) and \f$r_i\f$ is the
+ *           distance to the observation point \f$r\f$.  The field is
+ *           scaled to units of V/&Aring;.
+ *
+ *  @ingroup Vgreen
+ *  @author  Nathan Baker
+ *  @param   thee Vgreen object
+ *  @param   npos  The number of positions to evaluate
+ *  @param   x  The npos x-coordinates
+ *  @param   y  The npos y-coordinates
+ *  @param   z  The npos z-coordinates
+ *  @param   pot    The npos potential values
+ *  @param   gradx  The npos gradient x-components
+ *  @param   grady  The npos gradient y-components
+ *  @param   gradz  The npos gradient z-components
+ *  @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int Vgreen_coulombD_direct(Vgreen *thee, int npos, double *x, 
+        double *y, double *z, double *pot, double *gradx, double *grady, double
+        *gradz);
+
+/** @brief   Get gradient of the Coulomb's Law Green's function (solution to
+ *           Laplace's equation) integrated over the atomic point charges using
+ *           either direct summation or H. E. Johnston/R. Krasny FMM library
+ *           (if available)
  *
  *           Returns the field \f$\nabla \phi\f$ defined by
  *           \f[ \nabla \phi(r) = \sum_i \frac{q_i}{r_i} \f]
