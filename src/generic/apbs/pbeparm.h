@@ -110,8 +110,8 @@ struct PBEparm {
     int calcenergy;            /**< Energy calculation
 				* \li 0: don't calculate out energy
                                 * \li 1: calculate total energy 
-                                * \li 2: calculate total energy and all energy
-                                *      components*/
+				* \li 2: calculate atom-level total energies
+				*        and all energy components*/
     int setcalcenergy;         /**< Flag, @see calcenergy */
     int calcforce;             /**< Atomic forces I/O 
                                 * \li 0: don't calculate forces

@@ -556,6 +556,10 @@ VPUBLIC int energyMG(Vcom *com, NOsh *nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy) {
 
+    Valist *alist;
+    Vatom *atom;
+    int i;
+    double tenergy;
     MGparm *mgparm;
     PBEparm *pbeparm;
     int extEnergy;              /* When focusing, do we include energy 
@@ -585,11 +589,21 @@ VPUBLIC int energyMG(Vcom *com, NOsh *nosh, int icalc, Vpmg *pmg,
         Vnm_tprint( 1, "main:    Total electrostatic energy = %1.12E \
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         Vnm_tprint( 1, "main:    Fixed charge energy = %g kJ/mol\n",
-           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
+           0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
         Vnm_tprint( 1, "main:    Mobile charge energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qmEnergy));
         Vnm_tprint( 1, "main:    Dielectric energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
+        Vnm_tprint( 1, "main:    Dielectric energy = %g kJ/mol\n",
+           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
+        Vnm_tprint( 1, "main:    Per-atom energies:\n");
+        alist = pmg->pbe->alist;
+        for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+            atom = Valist_getAtom(alist, i); 
+            tenergy = Vpmg_qfAtomEnergy(pmg, atom);
+            Vnm_tprint( 1, "main:        Atom %d:  %1.12E kJ/mol\n", i,
+              0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*tenergy);
+        }
     } else *nenergy = 0;
 
     return 1;

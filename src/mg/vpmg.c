@@ -2494,6 +2494,7 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
     energy = 0.0;
 
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
         /* Get atomic information */
         atom = Valist_getAtom(alist, iatom);
 
@@ -2541,6 +2542,80 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
     if (extFlag) energy += thee->extQfEnergy;
  
     return energy;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpmg_dtor
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom) {
+
+    int nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
+    double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
+    double charge, kfloat, dx, dy, dz, energy, uval, *position;
+    double *u;
+
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xmax = thee->xf[nx-1];
+    ymax = thee->yf[ny-1];
+    zmax = thee->zf[nz-1];
+    xmin = thee->xf[0];
+    ymin = thee->yf[0];
+    zmin = thee->zf[0];
+
+    u = thee->u;
+
+    energy = 0.0;
+
+
+    position = Vatom_getPosition(atom);
+    charge = Vatom_getCharge(atom);
+
+    /* Figure out which vertices we're next to */
+    ifloat = (position[0] - xmin)/hx;
+    jfloat = (position[1] - ymin)/hy;
+    kfloat = (position[2] - zmin)/hzed;
+    ihi = (int)ceil(ifloat);
+    ilo = (int)floor(ifloat);
+    jhi = (int)ceil(jfloat);
+    jlo = (int)floor(jfloat);
+    khi = (int)ceil(kfloat);
+    klo = (int)floor(kfloat);
+
+    if (atom->partID) {
+
+        if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
+            (ilo>=0) && (jlo>=0) && (klo>=0)) {
+
+            /* Now get trilinear interpolation constants */
+            dx = ifloat - (double)(ilo);
+            dy = jfloat - (double)(jlo);
+            dz = kfloat - (double)(klo);
+            uval =
+              dx*dy*dz*u[IJK(ihi,jhi,khi)]
+            + dx*(1.0-dy)*dz*u[IJK(ihi,jlo,khi)]
+            + dx*dy*(1.0-dz)*u[IJK(ihi,jhi,klo)]
+            + dx*(1.0-dy)*(1.0-dz)*u[IJK(ihi,jlo,klo)]
+            + (1.0-dx)*dy*dz*u[IJK(ilo,jhi,khi)]
+            + (1.0-dx)*(1.0-dy)*dz*u[IJK(ilo,jlo,khi)]
+            + (1.0-dx)*dy*(1.0-dz)*u[IJK(ilo,jhi,klo)]
+            + (1.0-dx)*(1.0-dy)*(1.0-dz)*u[IJK(ilo,jlo,klo)];
+            energy += (uval*charge);
+        } else if (thee->pmgp->bcfl != 4) {
+            Vnm_print(2, "Vpmg_qfAtomEnergy:  Atom at (%4.3f, %4.3f, \
+%4.3f) is off the mesh (ignoring)!\n",
+            position[0], position[1], position[2]);
+        }
+    } 
+
+    return energy; 
 }
     
 /* ///////////////////////////////////////////////////////////////////////////

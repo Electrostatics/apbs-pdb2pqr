@@ -311,17 +311,38 @@ VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
  */
 VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
 
+/** @brief   Get the per-atom "fixed charge" contribution to the electrostatic
+ *           energy
+ *
+ *           Using the solution at the finest mesh level, get the
+ *           electrostatic energy due to the interaction of the fixed charges
+ *           with the potential: \f[ G = q u(r), \f] where \f$q\f$ is the
+ *           charge and \f$r\f$ is the location of the atom of interest.  The
+ *           result is returned in units of \f$k_B T\f$.  Clearly, no
+ *           self-interaction terms are removed.  A factor a 1/2 has to be
+ *           included to convert this to a real energy.
+ *
+ *  @ingroup Vpmg
+ *  @author  Nathan Baker
+ *  @note    The value of this observable may be modified by setting
+ *           restrictions on the subdomain over which it is calculated.  Such
+ *           limits can be set via Vpmg_setPart and are generally useful for
+ *           parallel runs.
+ *  @param   thee   Vpmg object
+ *  @param   atom   The atom for which to calculate the energy.
+ *  @returns The fixed charge electrostatic energy in units of \f$k_B T\f$.
+ */
+VEXTERNC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom);
+
 /** @brief Get the "mobile charge" contribution to the electrostatic energy.
  *
  *           Using the solution at the finest mesh level, get the
  *           electrostatic energy due to the interaction of the mobile charges 
  *           with the potential: 
  *              \f[ G = \frac{1}{4 I_s} \sum_i c_i q_i^2 \int
- *              \overline{\kappa}^2(x) e^{-q_i u(x)} dx + \frac{1}{2} \int
- *              \epsilon ( \nabla u )^2 dx \f]
+ *              \overline{\kappa}^2(x) e^{-q_i u(x)} dx \f]
  *           for the NPBE and
- *              \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx +
- *              \frac{1}{2} \int \epsilon ( \nabla u )^2 dx \f]
+ *              \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx \f]
  *           for the LPBE.  Here \f$i\f$ denotes the counterion species, 
  *           \f$I_s\f$ is the bulk ionic strength, \f$\overline{\kappa}^2(x)\f$
  *           is the modified Debye-Huckel parameter, \f$c_i\f$ is the 
