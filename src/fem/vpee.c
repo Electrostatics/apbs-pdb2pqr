@@ -42,10 +42,9 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
-#include "mc/mc.h"
 
 #if defined(HAVE_FETK_H)
-
+#include "mc/mc.h"
 #include "apbs/vpee.h"
 
 VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
