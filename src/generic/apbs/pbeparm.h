@@ -42,18 +42,18 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _PBEPARSE_H_
-#define _PBEPARSE_H_
+#ifndef _PBEPARM_H_
+#define _PBEPARM_H_
 
 #include "apbs/apbs.h"
 #include "maloc/maloc.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class PBEparse: Definition
+// Class PBEparm: Definition
 //
-// If you add/change something here, it must be added/changed in PBEparse_copy
+// If you add/change something here, it must be added/changed in PBEparm_copy
 /////////////////////////////////////////////////////////////////////////// */
-typedef struct PBEparse {
+typedef struct PBEparm {
 
     int molid;                 /* Molecule ID to perform calculation on */
     int setmolid;
@@ -115,18 +115,21 @@ typedef struct PBEparse {
 
     int parsed;                /* Has this been filled with anything other than
                                 * the default values? */
-} PBEparse;
+} PBEparm;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-VEXTERNC PBEparse* PBEparse_ctor();
-VEXTERNC int     PBEparse_ctor2(PBEparse *thee);
-VEXTERNC void    PBEparse_dtor(PBEparse **thee);
-VEXTERNC void    PBEparse_dtor2(PBEparse *thee);
-VEXTERNC int     PBEparse_check(PBEparse *thee);
-VEXTERNC void    PBEparse_copy(PBEparse *thee, PBEparse *parm);
+VEXTERNC PBEparm* PBEparm_ctor();
+VEXTERNC int      PBEparm_ctor2(PBEparm *thee);
+VEXTERNC void     PBEparm_dtor(PBEparm **thee);
+VEXTERNC void     PBEparm_dtor2(PBEparm *thee);
+VEXTERNC int      PBEparm_check(PBEparm *thee);
+VEXTERNC void     PBEparm_copy(PBEparm *thee, PBEparm *parm);
+VEXTERNC int      PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
+                    Vio *sock);
+
 
 #endif 
 

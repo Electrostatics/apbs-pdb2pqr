@@ -60,6 +60,7 @@
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
 #include "apbs/mgparm.h"  
+#include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
 
 #define APBSRC 13
@@ -77,6 +78,7 @@ int main(int argc, char **argv) {
 
     NOsh *nosh = VNULL;
     MGparm *mgparm = VNULL;
+    PBEparm *pbeparm = VNULL;
     FEMparm *femparm = VNULL;
     Vmem *mem = VNULL;
     Vio *sock = VNULL;
@@ -166,7 +168,7 @@ int main(int argc, char **argv) {
     input_path = argv[1];
 
     /* *************** PARSE INPUT FILE ******************* */
-    nosh = NOsh_ctor();
+    nosh = NOsh_ctor(0);
     sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
     Vnm_print(1, "main:  Parsing input file %s...\n", input_path);
     if (!NOsh_parse(nosh, sock)) {
@@ -204,6 +206,7 @@ int main(int argc, char **argv) {
         /* Do MG calculation */
         if (nosh->calc[i].calctype == 0) {
             mgparm = nosh->calc[imgcalc].mgparm;
+            pbeparm = nosh->calc[imgcalc].pbeparm;
             imgcalc++;
             /* Set up missing MG parameters */
             if (mgparm->setgrid == 0) {
@@ -221,13 +224,13 @@ int main(int argc, char **argv) {
                 mgparm->center[1] = (alist[mgparm->centmol-1])->center[1];
                 mgparm->center[2] = (alist[mgparm->centmol-1])->center[2];
             }
-            if ((mgparm->bcfl == 4) && (i == 0)) {
+            if ((pbeparm->bcfl == 4) && (i == 0)) {
                 Vnm_print(2, "main: Can't focus first calculation!\n");
                 return APBSRC;
             }
             ionstr = 0.0;
-            for (j=0; j<mgparm->nion; j++) 
-              ionstr += 0.5*(VSQR(mgparm->ionq[j])*mgparm->ionc[j]);
+            for (j=0; j<pbeparm->nion; j++) 
+              ionstr += 0.5*(VSQR(pbeparm->ionq[j])*pbeparm->ionc[j]);
             /* Print MG parameters */
             Vnm_print(1, "main:  CALCULATION #%d: MULTIGRID\n", i+1);
             Vnm_print(1, "main:    Grid dimensions: %d x %d x %d\n", 
@@ -239,102 +242,104 @@ int main(int argc, char **argv) {
             Vnm_print(1, "main:    Grid center: (%4.3f, %4.3f, %4.3f)\n", 
               mgparm->center[0], mgparm->center[1], mgparm->center[2]);
             Vnm_print(1, "main:    Multigrid levels: %d\n", mgparm->nlev);
-            Vnm_print(1, "main:    Molecule ID: %d\n", mgparm->molid);
-            if (mgparm->nonlin) Vnm_print(1, "main:    Nonlinear PBE\n");
+            Vnm_print(1, "main:    Molecule ID: %d\n", pbeparm->molid);
+            if (pbeparm->nonlin) Vnm_print(1, "main:    Nonlinear PBE\n");
             else Vnm_print(1, "main:    Linearized PBE\n");
-            if (mgparm->bcfl == 0) {
+            if (pbeparm->bcfl == 0) {
                 Vnm_print(1, "main:    Zero boundary conditions\n"); 
-            } else if (mgparm->bcfl == 1) {
+            } else if (pbeparm->bcfl == 1) {
                 Vnm_print(1, "main:    Single Debye-Huckel sphere boundary \
 conditions\n"); 
-            } else if (mgparm->bcfl == 2) {
+            } else if (pbeparm->bcfl == 2) {
                 Vnm_print(1, "main:    Multiple Debye-Huckel sphere boundary \
 conditions\n"); 
-            } else if (mgparm->bcfl == 4) {
+            } else if (pbeparm->bcfl == 4) {
                 Vnm_print(1, "main:    Boundary conditions from focusing\n"); 
             }
             Vnm_print(1, "main:    %d ion species (%4.3f M ionic strength):\n",
-              mgparm->nion, ionstr);
-            for (j=0; j<mgparm->nion; j++) {
+              pbeparm->nion, ionstr);
+            for (j=0; j<pbeparm->nion; j++) {
                 Vnm_print(1, "main:      %4.3f A-radius, %4.3f e-charge, \
-%4.3f M concentration\n", mgparm->ionr[j], mgparm->ionq[j], mgparm->ionc[j]);
+%4.3f M concentration\n", pbeparm->ionr[j], pbeparm->ionq[j], pbeparm->ionc[j]);
             }
-            Vnm_print(1, "main:    Solute dielectric: %4.3f\n", mgparm->pdie);
-            Vnm_print(1, "main:    Solvent dielectric: %4.3f\n", mgparm->sdie);
-            if (mgparm->srfm == 0) {
+            Vnm_print(1, "main:    Solute dielectric: %4.3f\n", pbeparm->pdie);
+            Vnm_print(1, "main:    Solvent dielectric: %4.3f\n", pbeparm->sdie);
+            if (pbeparm->srfm == 0) {
                 Vnm_print(1, "main:    Using \"molecular\" surface \
 definition; no smoothing\n");
                 Vnm_print(1, "main:    Solvent probe radius: %4.3f A\n", 
-                  mgparm->srad);
-            } else if (mgparm->srfm == 1) {
-                Vnm_print(1, "main:    Using \"molecular\" surface definition; harmonic average smoothing\n");
+                  pbeparm->srad);
+            } else if (pbeparm->srfm == 1) {
+                Vnm_print(1, "main:    Using \"molecular\" surface definition;\
+ harmonic average smoothing\n");
                 Vnm_print(1, "main:    Solvent probe radius: %4.3f A\n", 
-                  mgparm->srad);
-            } else if (mgparm->srfm == 2) {
-                Vnm_print(1, "main:    Using spline-based surface definition; window = %4.3f\n",
-                  mgparm->swin);
+                  pbeparm->srad);
+            } else if (pbeparm->srfm == 2) {
+                Vnm_print(1, "main:    Using spline-based surface definition;\
+ window = %4.3f\n",
+                  pbeparm->swin);
             }
-            Vnm_print(1, "main:    Temperature:  %4.3f K\n", mgparm->temp);
+            Vnm_print(1, "main:    Temperature:  %4.3f K\n", pbeparm->temp);
             Vnm_print(1, "main:    Surface tension:  %4.3f kJ/mol/A^2\n",
-              mgparm->gamma);
-            if (mgparm->calcenergy == 1) 
+              pbeparm->gamma);
+            if (pbeparm->calcenergy == 1) 
               Vnm_print(1, "main:    Electrostatic energies will be calculated\n");
-            if (mgparm->calcforce == 1)              
+            if (pbeparm->calcforce == 1)              
               Vnm_print(1, "main:    Net solvent forces will be calculated \n");
-            if (mgparm->calcforce == 2)              
+            if (pbeparm->calcforce == 2)              
               Vnm_print(1, "main:    All-atom solvent forces will be calculated\n");
-            if (mgparm->writepot == 1) {
-                if (mgparm->writepotfmt == 0) 
+            if (pbeparm->writepot == 1) {
+                if (pbeparm->writepotfmt == 0) 
                   Vnm_print(1, "main:    Potential to be written to %s.%s in DX format\n",
-                    mgparm->writepotstem, "dx");
-                if (mgparm->writepotfmt == 1) 
+                    pbeparm->writepotstem, "dx");
+                if (pbeparm->writepotfmt == 1) 
                   Vnm_print(1, "main:    Potential to be written to %s.%s in AVS format\n",
-                    mgparm->writepotstem, "ucd");
-                if (mgparm->writepotfmt == 2) 
+                    pbeparm->writepotstem, "ucd");
+                if (pbeparm->writepotfmt == 2) 
                   Vnm_print(1, "main:    Potential to be written to %s.%s in UHBD format\n",
-                    mgparm->writepotstem, "grd");
+                    pbeparm->writepotstem, "grd");
             }
-            if (mgparm->writeacc == 1) {
-                if (mgparm->writeaccfmt == 0) 
+            if (pbeparm->writeacc == 1) {
+                if (pbeparm->writeaccfmt == 0) 
                   Vnm_print(1, "main:    Accessibility to be written to %s.%s in DX format\n",
-                    mgparm->writeaccstem, "dx");
-                if (mgparm->writeaccfmt == 1) 
+                    pbeparm->writeaccstem, "dx");
+                if (pbeparm->writeaccfmt == 1) 
                   Vnm_print(1, "main:    Accessibility to be written to %s.%s in AVS format\n",
-                    mgparm->writeaccstem, "ucd");
-                if (mgparm->writeaccfmt == 2) 
+                    pbeparm->writeaccstem, "ucd");
+                if (pbeparm->writeaccfmt == 2) 
                   Vnm_print(1, "main:    Accessibility to be written to %sd.%s in UHBD format\n",
-                    mgparm->writeaccstem, "grd");
+                    pbeparm->writeaccstem, "grd");
             }
 
             /* *************** PROBLEM SETUP ******************* */
             Vnm_tstart(27, "Setup timer");
             Vnm_print(1,"main:    Setting up parameters and accessibility object...\n");
-            if (mgparm->srfm == 2) sparm = mgparm->swin;
-            else sparm = mgparm->srad;
-            if (mgparm->nion > 0) iparm = mgparm->ionr[0];
+            if (pbeparm->srfm == 2) sparm = pbeparm->swin;
+            else sparm = pbeparm->srad;
+            if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
             else iparm = 0.0;
-            for (j=0; j<mgparm->nion; j++)
-              ionstr += 0.5*(VSQR(mgparm->ionq[j])*mgparm->ionc[j]);
+            for (j=0; j<pbeparm->nion; j++)
+              ionstr += 0.5*(VSQR(pbeparm->ionq[j])*pbeparm->ionc[j]);
 
-            pbe[i] = Vpbe_ctor(alist[mgparm->molid-1], mgparm->nion,
-              mgparm->ionc, mgparm->ionr, mgparm->ionq, mgparm->temp, 
-              mgparm->pdie, mgparm->sdie, sparm);
+            pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
+              pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp, 
+              pbeparm->pdie, pbeparm->sdie, sparm);
             Vnm_print(1,"main:    Setting up PDE...\n");
             pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1], 
               mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
-              mgparm->grid[2], mgparm->nonlin);
-            pmgp[i]->bcfl = mgparm->bcfl;
+              mgparm->grid[2], pbeparm->nonlin);
+            pmgp[i]->bcfl = pbeparm->bcfl;
             pmgp[i]->xcent = mgparm->center[0];
             pmgp[i]->ycent = mgparm->center[1];
             pmgp[i]->zcent = mgparm->center[2];
             /* See if we're supposed to be focusing this calculation */
-            if (mgparm->bcfl == 4) {
+            if (pbeparm->bcfl == 4) {
                 if (i == 0) {
                     Vnm_print(2, "main:  Can't focus first calculation!\n");
                     return APBSRC;
                 } 
                 pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1],
-                  mgparm->calcenergy);
+                  pbeparm->calcenergy);
             } else {
                 if (i>0) Vpmg_dtor(&(pmg[i-1]));
                 pmg[i] = Vpmg_ctor(pmgp[i], pbe[i]);
@@ -344,7 +349,7 @@ definition; no smoothing\n");
                 Vpmgp_dtor(&(pmgp[i-1]));
                 Vpbe_dtor(&(pbe[i-1]));
             } 
-            Vpmg_fillco(pmg[i], mgparm->srfm, mgparm->swin);
+            Vpmg_fillco(pmg[i], pbeparm->srfm, pbeparm->swin);
             Vnm_redirect(0);
             Vnm_tstop(27, "Setup timer");
             Vnm_redirect(1);
@@ -364,13 +369,13 @@ definition; no smoothing\n");
 
             /* *************** POST-PROCESSING ******************* */
             /* Write out energies */
-            if (mgparm->calcenergy == 1) {
+            if (pbeparm->calcenergy == 1) {
                 nenergy[i] = 1;
                 totEnergy[i] =
                   Vpmg_energy(pmg[i],1);
                 Vnm_print(1, "main:    Total electrostatic energy = %1.12E\
- kJ/mol\n", Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
-            } else if (mgparm->calcenergy == 2) {
+ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
+            } else if (pbeparm->calcenergy == 2) {
                 nenergy[i] = 1;
                 totEnergy[i] = Vpmg_energy(pmg[i],1);
                 qfEnergy[i] = Vpmg_qfEnergy(pmg[i],1);
@@ -378,16 +383,16 @@ definition; no smoothing\n");
                 dielEnergy[i] = Vpmg_dielEnergy(pmg[i],1);
                 Vnm_print(1, "main:    Total electrostatic energy = %1.12E\
  kJ/mol\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*totEnergy[i]);
                 Vnm_print(1, "main:    Fixed charge energy = %g kJ/mol\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*qfEnergy[i]);
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*qfEnergy[i]);
                 Vnm_print(1, "main:    Mobile charge energy = %g kJ/mol\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*qmEnergy[i]);
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*qmEnergy[i]);
                 Vnm_print(1, "main:    Dielectric energy = %g kJ/mol\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*dielEnergy[i]);
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*dielEnergy[i]);
             } else nenergy[i] = 0;
             /* Print forces */
-            if (mgparm->calcforce == 1) {
+            if (pbeparm->calcforce == 1) {
                 nforce[i] = 1;
                 atomForce[i] = (AtomForce *)Vmem_malloc(mem, 1,
                   sizeof(AtomForce));
@@ -403,10 +408,10 @@ definition; no smoothing\n");
                 atomForce[i][0].npForce[0] = 0;
                 atomForce[i][0].npForce[1] = 0;
                 atomForce[i][0].npForce[2] = 0;
-                for (j=0;j<Valist_getNumberAtoms(alist[mgparm->molid-1]);j++) {
+                for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
                     Vpmg_qfForce(pmg[i], qfForce, j);
                     Vpmg_ibForce(pmg[i], ibForce, j);
-                    Vpmg_dbnpForce(pmg[i], dbForce, npForce, mgparm->gamma, j);
+                    Vpmg_dbnpForce(pmg[i], dbForce, npForce, pbeparm->gamma, j);
                     atomForce[i][0].qfForce[0] += qfForce[0];
                     atomForce[i][0].qfForce[1] += qfForce[1];
                     atomForce[i][0].qfForce[2] += qfForce[2];
@@ -421,135 +426,135 @@ definition; no smoothing\n");
                     atomForce[i][0].npForce[2] += npForce[2];
                 }
                 Vnm_print(1, "main:    Net total force on molecule %d\n", 
-                  mgparm->molid);
+                  pbeparm->molid);
                 Vnm_print(1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                     atomForce[i][0].qfForce[0] + atomForce[i][0].ibForce[0] +
                     atomForce[i][0].dbForce[0] + atomForce[i][0].npForce[0]),
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                     atomForce[i][0].qfForce[1] + atomForce[i][0].ibForce[1] +
                     atomForce[i][0].dbForce[1] + atomForce[i][0].npForce[1]),
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                     atomForce[i][0].qfForce[2] + atomForce[i][0].ibForce[2] +
                     atomForce[i][0].dbForce[2] + atomForce[i][0].npForce[2]));
                 Vnm_print(1, "main:    Net fixed charge force on molecule %d\n",
-                  mgparm->molid);
+                  pbeparm->molid);
                 Vnm_print(1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[0], 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[1],
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[2]); 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[0], 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[1],
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].qfForce[2]); 
                 Vnm_print(1, "main:    Net ionic boundary force on molecule %d\n",
-                  mgparm->molid);
+                  pbeparm->molid);
                 Vnm_print(1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n", 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[0], 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[1], 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[2]); 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[0], 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[1], 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].ibForce[2]); 
                 Vnm_print(1, "main:    Net dielectric boundary force on molecule %d\n",
-                  mgparm->molid);
+                  pbeparm->molid);
                 Vnm_print(1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[0], 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[1],
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[2]); 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[0], 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[1],
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].dbForce[2]); 
                 Vnm_print(1, "main:    Net apolar force on molecule %d\n",
-                  mgparm->molid);
+                  pbeparm->molid);
                 Vnm_print(1, "           = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[0], 
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[1],
-                  Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[2]); 
-            } else if (mgparm->calcforce == 2) {
-                nforce[i] = Valist_getNumberAtoms(alist[mgparm->molid-1]);
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[0], 
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[1],
+                  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][0].npForce[2]); 
+            } else if (pbeparm->calcforce == 2) {
+                nforce[i] = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
                 atomForce[i] = (AtomForce *)Vmem_malloc(mem, nforce[i],
                   sizeof(AtomForce));
                 atomForce[i][0].npForce[2] = 0;
-                for (j=0;j<Valist_getNumberAtoms(alist[mgparm->molid-1]);j++) {
+                for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
                     Vpmg_qfForce(pmg[i], atomForce[i][j].qfForce, j);
                     Vpmg_ibForce(pmg[i], atomForce[i][j].ibForce, j);
                     Vpmg_dbnpForce(pmg[i], atomForce[i][j].dbForce,
-                      atomForce[i][j].npForce, mgparm->gamma, j);
+                      atomForce[i][j].npForce, pbeparm->gamma, j);
                     Vnm_print(1, "main:    Total force on atom %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/(mol A)\n",
-                      j, mgparm->molid,
-                      Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                      j, pbeparm->molid,
+                      Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                         atomForce[i][j].qfForce[0]+atomForce[i][j].ibForce[0]+ 
                         atomForce[i][j].dbForce[0]+atomForce[i][j].npForce[0]),
-                      Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                      Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                         atomForce[i][j].qfForce[1]+atomForce[i][j].ibForce[1]+
                         atomForce[i][j].dbForce[1]+atomForce[i][j].npForce[1]),
-                      Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*(
+                      Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
                         atomForce[i][j].qfForce[2]+atomForce[i][j].ibForce[2]+
                         atomForce[i][j].dbForce[2]+atomForce[i][j].npForce[2]));
                     Vnm_print(1, "main:    Fixed charge force on atom %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n",
-                     j, mgparm->molid,
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[0], 
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[1],
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[2]);
+                     j, pbeparm->molid,
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[0], 
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[1],
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].qfForce[2]);
                     Vnm_print(1, "main:    Ionic boundary force on atom %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n",
-                     j, mgparm->molid,
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[0], 
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[1],
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[2]);
+                     j, pbeparm->molid,
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[0], 
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[1],
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].ibForce[2]);
                     Vnm_print(1, "main:    Dielectric boundary force on atom %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n",
-                     j, mgparm->molid,
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[0], 
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[1],
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[2]);
+                     j, pbeparm->molid,
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[0], 
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[1],
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].dbForce[2]);
                     Vnm_print(1, "main:    Apolar force on atom %d, molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n",
-                      j, mgparm->molid,
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[0], 
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[1],
-                     Vunit_kb*mgparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[2]);
+                      j, pbeparm->molid,
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[0], 
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[1],
+                     Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*atomForce[i][j].npForce[2]);
                 }
             } else nforce[i] = 0;
 
             /* Write potential */
-            if (mgparm->writepot == 1) {
+            if (pbeparm->writepot == 1) {
                 /* In DX format */
-                if (mgparm->writepotfmt == 0) {
-                    sprintf(outpath, "%s.%s", mgparm->writepotstem, "dx");
+                if (pbeparm->writepotfmt == 0) {
+                    sprintf(outpath, "%s.%s", pbeparm->writepotstem, "dx");
                     Vnm_print(1, "main:    Writing potential in DX format to %s...\n", 
                       outpath);
                     Vpmg_writeDX(pmg[i], "FILE", "ASC", VNULL, outpath,
                       "POTENTIAL", pmg[i]->u);
 
                 /* In AVS format */
-                } else if (mgparm->writepotfmt == 1) {
-                    sprintf(outpath, "%s.%s", mgparm->writepotstem, "ucd");
+                } else if (pbeparm->writepotfmt == 1) {
+                    sprintf(outpath, "%s.%s", pbeparm->writepotstem, "ucd");
                     Vnm_print(2, "main:    Sorry, AVS format isn't supported for multigrid calculations yet!\n");
                 /* In UHBD format */
-                } else if (mgparm->writepotfmt == 2) {
-                    sprintf(outpath, "%s.%s", mgparm->writepotstem, "grd");
+                } else if (pbeparm->writepotfmt == 2) {
+                    sprintf(outpath, "%s.%s", pbeparm->writepotstem, "grd");
                     Vnm_print(1, "main:    Writing potential in UHBD format to %s...\n", 
                       outpath);
                     Vpmg_writeUHBD(pmg[i], "FILE", "ASC", VNULL, outpath,
                       "POTENTIAL", pmg[i]->u);
                 } else Vnm_print(2, "main:    Bogus potential file format (%d)!\n", 
-                         mgparm->writepotfmt);
+                         pbeparm->writepotfmt);
             }
             
             /* Write accessibility */
-            if (mgparm->writeacc == 1) {
+            if (pbeparm->writeacc == 1) {
                 /* In DX format */
-                if (mgparm->writeaccfmt == 0) {
-                    sprintf(outpath, "%s.%s", mgparm->writeaccstem, "dx");
+                if (pbeparm->writeaccfmt == 0) {
+                    sprintf(outpath, "%s.%s", pbeparm->writeaccstem, "dx");
                     Vnm_print(1, "main:    Writing accessibility in DX format to %s...\n", outpath);
                     Vpmg_fillAcc(pmg[i], pmg[i]->rwork, 3, 0.3);
                     Vpmg_writeDX(pmg[i], "FILE", "ASC", VNULL, outpath,
                       "ACCESSIBILITY", pmg[i]->rwork);
 
                 /* In AVS format */
-                } else if (mgparm->writeaccfmt == 1) {
-                    sprintf(outpath, "%s.%s", mgparm->writeaccstem, "ucd");
+                } else if (pbeparm->writeaccfmt == 1) {
+                    sprintf(outpath, "%s.%s", pbeparm->writeaccstem, "ucd");
                     Vnm_print(2, "main:    Sorry, AVS format isn't supported\
 for multigrid calculations yet!\n");
                 /* In UHBD format */
-                } else if (mgparm->writeaccfmt == 2) {
-                    sprintf(outpath, "%s.%s", mgparm->writeaccstem, "grd");
+                } else if (pbeparm->writeaccfmt == 2) {
+                    sprintf(outpath, "%s.%s", pbeparm->writeaccstem, "grd");
                     Vnm_print(1, "main:    Writing accessibility in UHBD\
  format to %s...\n", outpath);
                     Vpmg_fillAcc(pmg[i], pmg[i]->rwork, 3, 0.3);
                     Vpmg_writeUHBD(pmg[i], "FILE", "ASC", VNULL, outpath,
                       "ACCESSIBILITY", pmg[i]->rwork);
                 } else Vnm_print(2, "main:    Bogus accessibility file format\
-(%d)!\n", mgparm->writeaccfmt);
+(%d)!\n", pbeparm->writeaccfmt);
             }
 
             fflush(stdout);
@@ -588,9 +593,9 @@ for multigrid calculations yet!\n");
             }
             Vnm_print(1, "end\n");
             calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
-            if (nosh->calc[calcid].mgparm->calcenergy != 0) {
+            if (nosh->calc[calcid].pbeparm->calcenergy != 0) {
                 tenergy = Vunit_kb * (1e-3) * Vunit_Na * 
-                  nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
+                  nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
             } else {
                 Vnm_print(2, "main:    Didn't calculate energy in Calculation \
 #%d\n", 
@@ -599,13 +604,13 @@ for multigrid calculations yet!\n");
             }
             for (j=1; j<nosh->printnarg[i]; j++) {
                 calcid = nosh->elec2calc[nosh->printcalc[i][j]-1];
-                if (nosh->calc[calcid].mgparm->calcenergy != 0) {
+                if (nosh->calc[calcid].pbeparm->calcenergy != 0) {
                     if (nosh->printop[i][j-1] == 0)
                       tenergy = tenergy + Vunit_kb * (1e-3) * Vunit_Na *
-                        nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
+                        nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
                     else if (nosh->printop[i][j-1] == 1)
                       tenergy = tenergy - Vunit_kb * (1e-3) * Vunit_Na * 
-                        nosh->calc[calcid].mgparm->temp * totEnergy[calcid];
+                        nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
                 } else {  
                     Vnm_print(2, "main:    Didn't calculate energy in Calculation #%d\n", 
                       calcid+1);

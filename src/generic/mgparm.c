@@ -42,6 +42,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
+#include "apbs/apbs.h"
+#include "apbs/vhal.h"
 #include "apbs/mgparm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -58,15 +60,19 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_ctor
 //
+// Argument:  type   Type of MG calculation: 0 => sequential manual
+//                                           1 => sequential auto-focus
+//                                           2 => parallel auto-focus
+//
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC MGparm* MGparm_ctor() {
+VPUBLIC MGparm* MGparm_ctor(int type) {
 
     /* Set up the structure */
     MGparm *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(MGparm));
     VASSERT( thee != VNULL);
-    VASSERT( MGparm_ctor2(thee) );
+    VASSERT( MGparm_ctor2(thee, type) );
 
     return thee;
 }
@@ -82,41 +88,40 @@ VPUBLIC MGparm* MGparm_ctor() {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int MGparm_ctor2(MGparm *thee) {
+VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
 
     int i;
 
     if (thee == VNULL) return 0;
 
-    thee->nlev = -1;
-    for (i=0; i<3; i++) thee->dime[i] = -1;
+    for (i=0; i<3; i++) {
+        thee->dime[i] = -1;
+        thee->pdime[i] = 1;
+    }
 
     thee->parsed = 0;
+    thee->type = type;
 
+    /* *** GENERIC PARAMETERS *** */
     thee->setdime = 0;
-    thee->setnlev = 0;
+
+    /* *** TYPE 0 PARAMETERS *** */
+    thee->nlev = VMGNLEV;
+    thee->setnlev = 1;
     thee->setgrid = 0;
     thee->setglen = 0;
     thee->setgcent = 0;  
-    thee->setmolid = 0;
-    thee->setnonlin = 0;
-    thee->setbcfl = 0;
-    thee->setnion = 0;
-    for (i=0; i<MAXION; i++) thee->setion[i] = 0;
-    thee->setpdie = 0;
-    thee->setsdie = 0;
-    thee->setsrfm = 0;
-    thee->setsrad = 0;
-    thee->setswin = 0; 
-    thee->settemp = 0;
-    thee->setgamma = 0;
-    thee->setcalcenergy = 0;      
-    thee->setcalcforce = 0;       
-    thee->setwritepot = 0; 
-    thee->setwriteacc = 0; 
-    thee->nion = 0;
-    thee->swin = 0;
-    thee->srad = 1.4;
+
+    /* *** TYPE 1 & 2 PARAMETERS *** */
+    thee->setcglen = 0;
+    thee->setfglen = 0;
+    thee->setcgcent = 0;
+    thee->setfgcent = 0;
+
+    /* *** TYPE 2 PARAMETERS *** */
+    thee->setpdime = 0;
+    thee->setrank = 0;
+    thee->setofrac = 0;
 
     return 1; 
 }
@@ -154,95 +159,76 @@ VPUBLIC void MGparm_dtor2(MGparm *thee) { ; }
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int MGparm_check(MGparm *thee) { 
 
-    int i, tdime[3], ti, tnlev[3], nlev;
+    int rc, i, tdime[3], ti, tnlev[3], nlev;
+
+    rc = 1;
 
     /* Check to see if we were even filled... */
     if (!thee->parsed) {
         Vnm_print(2, "MGparm_check:  not filled!\n");
         return 0;
     }
-    /* Check to see that everything was set */
+
+    /* Check generic settings */
     if (!thee->setdime) {
-        Vnm_print(2, "NOsh:  DIME not set!\n");
-        return 0;
+        Vnm_print(2, "MGparm_check:  DIME not set!\n");
+        rc = 0;
     }
-    if (!thee->setnlev) {
-        Vnm_print(2, "NOsh:  NLEV not set!\n");
-        return 0;
-    }
-    if ((!thee->setgrid) && (!thee->setglen)) {
-        Vnm_print(2, "NOsh:  Neither GRID nor GLEN set!\n");
-        return 0;
-    }
-    if ((thee->setgrid) && (thee->setglen)) {
-        Vnm_print(2, "NOsh:  Both GRID and GLEN set!\n");
-        return 0;
-    }
-    if (!thee->setgcent) {
-        Vnm_print(2, "NOsh:  GCENT not set!\n");
-        return 0;
-    }
-    if (!thee->setmolid) {
-        Vnm_print(2, "NOsh:  MOL not set!\n");
-        return 0;
-    }
-    if (!thee->setnonlin) {
-        Vnm_print(2, "NOsh:  LPBE or NPBE not set!\n");
-        return 0;
-    }
-    if (!thee->setbcfl) {
-        Vnm_print(2, "NOsh:  BCFL not set!\n");
-        return 0;
-    }
-    if (!thee->setnion) {
-        thee->setnion = 1;
-        thee->nion = 0;
-    } 
-    for (i=0; i<thee->nion; i++) {
-        if (!thee->setion[i]) {
-            Vnm_print(2, "NOsh: ION #%d not set!\n",i);
-            return 0;
+
+    /* Check sequential manual settings */
+    if (thee->type == 0) {
+        if ((!thee->setgrid) && (!thee->setglen)) {
+            Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
+            rc = 0;
+        }
+        if ((thee->setgrid) && (thee->setglen)) {
+            Vnm_print(2, "MGparm_check:  Both GRID and GLEN set!\n");
+            rc = 0;
+        }
+        if (!thee->setgcent) {
+            Vnm_print(2, "MGparm_check:  GCENT not set!\n");
+            rc = 0;
         }
     }
-    if (!thee->setpdie) {
-        Vnm_print(2, "NOsh: PDIE not set!\n");
-        return 0;
+ 
+    /* Check sequential and parallel automatic focusing settings */
+    if ((thee->type == 1) || (thee->type == 2)) {
+        if (!thee->setcglen) {
+            Vnm_print(2, "MGparm_check:  CGLEN not set!\n");
+            rc = 0;
+        }
+        if (!thee->setfglen) {
+            Vnm_print(2, "MGparm_check:  FGLEN not set!\n");
+            rc = 0;
+        }
+        if (!thee->setcgcent) {
+            Vnm_print(2, "MGparm_check:  CGCENT not set!\n");
+            rc = 0;
+        }
+        if (!thee->setfgcent) {
+            Vnm_print(2, "MGparm_check:  FGCENT not set!\n");
+            rc = 0;
+        }
     }
-    if (!thee->setsdie) {
-        Vnm_print(2, "NOsh: SDIE not set!\n");
-        return 0;
-    }
-    if (!thee->setsrfm) {
-        Vnm_print(2, "NOsh: SRFM not set!\n");
-        return 0;
-    }
-    if (((thee->srfm==0) || (thee->srfm==1)) && (!thee->setsrad)) {
-        Vnm_print(2, "NOsh: SRAD not set!\n");
-        return 0;
-    }
-    if ((thee->srfm==2) && (!thee->setswin)) {
-        Vnm_print(2, "NOsh: SWIN not set!\n");
-        return 0;
-    }
-    if (!thee->settemp) {
-        Vnm_print(2, "NOsh: TEMP not set!\n");
-        return 0;
-    }
-    if (!thee->setgamma) {
-        Vnm_print(2, "NOsh: GAMMA not set!\n");
-        return 0;
-    }
-    if (!thee->setcalcenergy) thee->calcenergy = 0;
-    if (!thee->setcalcforce) thee->calcforce = 0;
-    if (!thee->setwritepot) thee->writepot = 0;
-    if (!thee->setwriteacc) thee->writeacc = 0;
 
-    /* We're going to perform a sanity check on nlev and dime, but only in the
-     * case where nlev and dime have been set to non-negative values.  This
-     * allows us to ignore phony settings as established temporarily during
-     * automatic focusing. */
-    if ((thee->nlev >= 0) && (thee->dime[0] >= 0) &&
-        (thee->dime[1] >= 0) && (thee->dime[2] >= 0)) {
+    /* Check parallel automatic focusing settings */
+    if (thee->type == 2) {
+        if (!thee->setpdime) {
+            Vnm_print(2, "MGparm_check:  PDIME not set!\n");
+            rc = 0;
+        }
+        if (!thee->setrank) {
+            Vnm_print(2, "MGparm_check:  RANK not set!\n");
+            rc = 0;
+        }
+        if (!thee->setofrac) {
+            Vnm_print(2, "MGparm_check:  OFRAC not set!\n");
+            rc = 0;
+        }
+    }
+ 
+    /* Perform a sanity check on nlev and dime, resetting values as necessary */
+    if (rc == 1) {
 	/* Calculate the actual number of grid points and nlev to satisfy the
 	 * formula:  n = c * 2^(l+1) + 1, where n is the number of grid points,
 	 * c is an integer, and l is the number of levels */
@@ -258,18 +244,18 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                 ti = (int)ceil(0.5*ti);
             }
             (tnlev[i])--;
-            /* We'd like to have at least 4 levels in the multigrid hierarchy.
-	     * This means that the dimension needs to be c*32 + 1, where c is
-	     * an integer. */
-            if (tnlev[i] < 4) {
+	    /* We'd like to have at least VMGNLEV levels in the multigrid
+	     * hierarchy.  This means that the dimension needs to be c*2^VMGNLEV
+	     * + 1, where c is an integer. */
+            if (tnlev[i] < VMGNLEV) {
                 Vnm_print(2, "NOsh:  Bad dime[%d]  = %d (%d nlev)!\n",
                   i, tdime[i], tnlev[i]);
-                ti = (int)(tdime[i]/32.0);
+                ti = (int)(tdime[i]/VPOW(2.,(VMGNLEV+1)));
                 if (ti < 1) ti = 1;
-                tdime[i] = ti*32 + 1;
+                tdime[i] = ti*VPOW(2.,(VMGNLEV+1)) + 1;
                 tnlev[i] = 4;
-                Vnm_print(2, "NOsh:  Reset dime[%d] to %d and nlev to 4.\n", 
-                  i, tdime[i]);
+                Vnm_print(2, "NOsh:  Reset dime[%d] to %d and (nlev = %d).\n", 
+                  i, tdime[i], VMGNLEV);
             }
         }
 	/* The actual number of levels we'll be using is the smallest number of
@@ -283,7 +269,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
         for (i=0; i<3; i++) thee->dime[i] = tdime[i];
     }
 
-    return 1;
+    return rc;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -302,8 +288,14 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     VASSERT(thee != VNULL);
     VASSERT(parm != VNULL);
 
+    
+    thee->type = parm->type;
+
+    /* *** GENERIC PARAMETERS *** */
     for (i=0; i<3; i++) thee->dime[i] = parm->dime[i];
     thee->setdime = parm->setdime;
+
+    /* *** TYPE 0 PARMS *** */
     thee->nlev = parm->nlev;
     thee->setnlev = parm->setnlev;
     for (i=0; i<3; i++) thee->grid[i] = parm->grid[i];
@@ -314,46 +306,335 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     for (i=0; i<3; i++) thee->center[i] = parm->center[i];
     thee->setgcent = parm->setgcent;
     thee->centmol = parm->centmol;
-    thee->molid = parm->molid;
-    thee->setmolid = parm->setmolid;
-    thee->nonlin = parm->nonlin; 
-    thee->setnonlin = parm->setnonlin;
-    thee->bcfl = parm->bcfl;
-    thee->setbcfl = parm->setbcfl;
-    thee->nion = parm->nion;
-    thee->setnion = parm->setnion;
-    for (i=0; i<MAXION; i++) {
-        thee->ionq[i] = parm->ionq[i];
-        thee->ionc[i] = parm->ionc[i];
-        thee->ionr[i] = parm->ionr[i];
-        thee->setion[i] = parm->setion[i];
-    };
-    thee->pdie = parm->pdie;
-    thee->setpdie = parm->setpdie;
-    thee->sdie = parm->sdie;
-    thee->setsdie = parm->setsdie;
-    thee->srfm = parm->srfm;
-    thee->setsrfm = parm->setsrfm;
-    thee->srad = parm->srad;
-    thee->setsrad = parm->setsrad;
-    thee->swin = parm->swin;
-    thee->setswin = parm->setswin;
-    thee->temp = parm->temp;
-    thee->settemp = parm->settemp;
-    thee->gamma = parm->gamma;
-    thee->setgamma = parm->setgamma;
-    thee->calcenergy = parm->calcenergy;
-    thee->setcalcenergy = parm->setcalcenergy;
-    thee->calcforce = parm->calcforce;
-    thee->setcalcforce = parm->setcalcforce;
-    thee->writepot = parm->writepot;
-    thee->setwritepot = parm->setwritepot;
-    for (i=0; i<VMAX_ARGLEN; i++) thee->writepotstem[i] = parm->writepotstem[i];
-    thee->writepotfmt = parm->writepotfmt;
-    thee->writeacc = parm->writeacc;
-    thee->setwriteacc = parm->setwriteacc;
-    for (i=0; i<VMAX_ARGLEN; i++) thee->writeaccstem[i] = parm->writeaccstem[i];
-    thee->writeaccfmt = parm->writeaccfmt;
-    thee->parsed = parm->parsed;
+
+    /* *** TYPE 1 & 2 PARMS *** */
+    for (i=0; i<3; i++) thee->cglen[i] = parm->cglen[i];
+    thee->setcglen = parm->setcglen;
+    for (i=0; i<3; i++) thee->fglen[i] = parm->fglen[i];
+    thee->setfglen = parm->setfglen;
+    thee->ccmeth = parm->ccmeth;
+    for (i=0; i<3; i++) thee->ccenter[i] = parm->ccenter[i];
+    thee->setcgcent = parm->setcgcent;
+    thee->ccentmol = parm->ccentmol;
+    thee->fcmeth = parm->fcmeth;
+    for (i=0; i<3; i++) thee->fcenter[i] = parm->fcenter[i];
+    thee->setfgcent = parm->setfgcent;
+    thee->ccentmol = parm->ccentmol;
+
+    /* *** TYPE 2 PARMS *** */
+    for (i=0; i<3; i++) thee->partCenterShift[i] = parm->partCenterShift[i];
+    for (i=0; i<3; i++) thee->partCenterLength[i] = parm->partCenterLength[i];
+    for (i=0; i<3; i++) thee->pdime[i] = parm->pdime[i];
+    thee->setpdime = parm->setpdime;
+    thee->rank = parm->rank;
+    thee->setrank = parm->setrank;
+    thee->ofrac = parm->ofrac;
+    thee->setofrac = parm->setofrac;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  MGparm_parseToken
+//
+// Purpose:  Parse an MG keyword
+//
+// Returns:  1 if matched and assigned
+//          -1 if matched, but there's some sort of error (i.e., too few args)
+//           0 if not matched
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
+  Vio *sock) {
+
+    int ti;
+    double tf;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "parseMG:  got NULL thee!\n"); 
+        return -1;
+    }
+    if (sock == VNULL) {
+        Vnm_print(2, "parseMG:  got NULL socket!\n"); 
+        return -1;
+    }
+
+    if (strcasecmp(tok, "dime") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0){
+            Vnm_print(2, "parseMG:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+            return -1;
+        } else thee->dime[0] = ti;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+            return -1;
+        } else thee->dime[1] = ti;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+keyword!\n", tok);
+            return -1;
+        } else thee->dime[2] = ti;
+        thee->setdime = 1;
+        return 1;
+    } else if (strcasecmp(tok, "nlev") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing NLEV \
+keyword!\n", tok);
+            return -1;
+        } else thee->nlev = ti;
+        thee->setnlev = 1;
+        return 1;
+    } else if (strcasecmp(tok, "grid") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+            return -1;
+        } else thee->grid[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+            return -1;
+        } else thee->grid[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
+keyword!\n", tok);
+            return -1;
+        } else thee->grid[2] = tf;
+        thee->setgrid = 1;
+        return 1;
+    } else if (strcasecmp(tok, "glen") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->glen[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->glen[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->glen[2] = tf;
+        thee->setglen = 1;
+        return 1;
+    } else if (strcasecmp(tok, "gcent") == 0) {
+        /* If the next token isn't a float, it probably means we want to
+         * center on a molecule */
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            if (strcasecmp(tok, "mol") == 0) {
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%d", &ti) == 0) {
+                    Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+GCENT MOL keyword!\n", tok);
+                    return -1;
+                } else {
+                    thee->cmeth = 1;
+                    thee->centmol = ti;
+                }
+            } else {
+                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+GCENT!\n", tok);
+                return -1;
+            }
+        } else {
+            thee->center[0] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+GCENT keyword!\n", tok);
+                return -1;
+            }
+            thee->center[1] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+GCENT keyword!\n", tok);
+                return -1;
+            } 
+            thee->center[2] = tf;
+        }
+        thee->setgcent = 1;
+        return 1;
+    } else if (strcasecmp(tok, "cglen") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->cglen[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->cglen[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing CGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->cglen[2] = tf;
+        thee->setcglen = 1;
+        return 1;
+    } else if (strcasecmp(tok, "fglen") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->fglen[0] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->fglen[1] = tf;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            Vnm_print(2, "NOsh:  Read non-float (%s) while parsing FGLEN \
+keyword!\n", tok);
+            return -1;
+        } else thee->fglen[2] = tf;
+        thee->setfglen = 1;
+        return 1;
+    } else if (strcasecmp(tok, "cgcent") == 0) {
+        /* If the next token isn't a float, it probably means we want to
+         * center on a molecule */
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            if (strcasecmp(tok, "mol") == 0) {
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%d", &ti) == 0) {
+                    Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+CGCENT MOL keyword!\n", tok);
+                    return -1;
+                } else {
+                    thee->ccmeth = 1;
+                    thee->ccentmol = ti;
+                }
+            } else {
+                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+CGCENT!\n", tok);
+                return -1;
+                }
+        } else {
+            thee->ccenter[0] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+CGCENT keyword!\n", tok);
+                return -1;
+            }
+            thee->ccenter[1] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+CGCENT keyword!\n", tok);
+                return -1;
+            }
+            thee->ccenter[2] = tf;
+        }
+        thee->setcgcent = 1;
+        return 1;
+    } else if (strcasecmp(tok, "fgcent") == 0) {
+        /* If the next token isn't a float, it probably means we want to
+         * center on a molecule */
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%lf", &tf) == 0) {
+            if (strcasecmp(tok, "mol") == 0) {
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                if (sscanf(tok, "%d", &ti) == 0) {
+                     Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+FGCENT MOL keyword!\n", tok);
+                     return -1;
+                } else {
+                    thee->fcmeth = 1;
+                    thee->fcentmol = ti;
+                }
+            } else {
+                Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
+FGCENT!\n", tok);
+                return -1;
+            }
+        } else {
+            thee->fcenter[0] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+FGCENT keyword!\n", tok);
+                return -1;
+            }
+            thee->fcenter[1] = tf;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%lf", &tf) == 0) {
+                Vnm_print(2, "NOsh:  Read non-float (%s) while parsing \
+FGCENT keyword!\n", tok);
+                return -1;
+            }
+            thee->fcenter[2] = tf;
+        }
+        thee->setfgcent = 1;
+        return 1;
+    } else if (strcasecmp(tok, "pdime") == 0) {
+        /* Read the number of grid points */
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+            return -1;
+        } else {
+            thee->pdime[0] = ti;
+        }
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+            return -1;
+        } else {
+            thee->pdime[1] = ti;
+        }
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing PDIME \
+keyword!\n", tok);
+            return -1;
+        } else {
+            thee->pdime[2] = ti;
+        }
+        thee->setpdime = 1;
+        return 1;
+    } else if (strcasecmp(tok, "ofrac") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing OFRAC \
+keyword!\n", tok);
+            return -1;
+        }
+        thee->ofrac = ti;
+        thee->setofrac = 1;
+        return 1;
+    }
+
+
+    return 0;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return -1;
 
 }

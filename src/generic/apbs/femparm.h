@@ -29,51 +29,43 @@
 /// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
 /// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
 /// MODIFICATIONS. 
-////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////// 
 /// rcsid="$Id$"
 //////////////////////////////////////////////////////////////////////////// */
 
-
 /* ///////////////////////////////////////////////////////////////////////////
-// File:     vhal.h   
+// File:     femparm.h    
 //
-// Purpose:  
-//      Provides macros for general configuration of APBS.
+// Purpose:  A set of useful parameters for a generic multigrid calculation
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#ifndef _VAPBSHAL_H_
-#define _VAPBSHAL_H_
+#ifndef _FEMPARM_H_
+#define _FEMPARM_H_
+
+#include "apbs/apbs.h"
+#include "maloc/maloc.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Macros for space allocation.
+// Class FEMparm: Definition
 /////////////////////////////////////////////////////////////////////////// */
-#define MAXMOL 5             /* The maximum number of molecules that can be
-                                involved in a single PBE calculation */
-#define MAXION 10            /* The maximum number of ion species */
-#define MAXFOCUS 5           /* The maximum number of times an MG calculation 
-                                can be focused */
-#define VMGNLEV 4            /* Desired number of levels in multigrid
-                              * hierarchies */
-#define VREDFRAC 0.25        /* Max reduction of grid spacing in focusing
-                              * calculations */
+typedef struct FEMparm {
+   
+    int parsed;                /* Has this been filled with anything other than
+                                * the default values? */
+} FEMparm;
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Inlining via macros for speed.
-// 
-// If you want to debug, do not define these
+// Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
-#if !defined(VDEBUG)
-#   define VINLINE_VACC
-#   define VINLINE_VATOM
-#   define VINLINE_VCSM
-#   define VINLINE_VPBE
-#   define VINLINE_VPEE
-#   define VINLINE_VGREEN
-#   define VINLINE_VFETK
-#   define VINLINE_VPMG
-#endif
 
+VEXTERNC FEMparm* FEMparm_ctor();
+VEXTERNC int       FEMparm_ctor2(FEMparm *thee);
+VEXTERNC void      FEMparm_dtor(FEMparm **thee);
+VEXTERNC void      FEMparm_dtor2(FEMparm *thee);
+VEXTERNC int       FEMparm_check(FEMparm *thee);
+VEXTERNC void      FEMparm_copy(FEMparm *thee, FEMparm *parm);
 
-#endif
+#endif 
+
