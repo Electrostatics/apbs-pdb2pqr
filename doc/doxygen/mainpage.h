@@ -584,7 +584,7 @@
  * <li> <a href="#bcfl">bcfl</a>
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
- * <li> <a href="#sdie">pdie</a>
+ * <li> <a href="#sdie">sdie</a>
  * <li> <a href="#srfm">srfm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a> 
@@ -625,7 +625,7 @@
  * <li> <a href="#bcfl">bcfl</a>
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
- * <li> <a href="#sdie">pdie</a>
+ * <li> <a href="#sdie">sdie</a>
  * <li> <a href="#srfm">srfm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>
@@ -673,7 +673,7 @@
  * <li> <a href="#bcfl">bcfl</a>
  * <li> <a href="#ion">ion</a> (optional)
  * <li> <a href="#pdie">pdie</a>
- * <li> <a href="#sdie">pdie</a>
+ * <li> <a href="#sdie">sdie</a>
  * <li> <a href="#srfm">srfm</a>
  * <li> <a href="#usemap">usemap</a> (optional)
  * <li> <a href="#srad">srad</a>
