@@ -94,6 +94,8 @@ RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
+UHBD_COMPILE_FALSE = @UHBD_COMPILE_FALSE@
+UHBD_COMPILE_TRUE = @UHBD_COMPILE_TRUE@
 VERSION = @VERSION@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -172,7 +174,13 @@ INCLUDES = @inc_list@
 AM_CFLAGS = @CFLAGS@
 AM_LDFLAGS = @LDFLAGS@ 
 
-noinst_PROGRAMS = mgmesh dxmath mergedx uhbd_asc2bin smooth value dx2mol benchmark similarity analysis
+@UHBD_COMPILE_TRUE@UHBD = uhbd_asc2bin
+@UHBD_COMPILE_FALSE@UHBD = 
+@UHBD_COMPILE_TRUE@uhbd_asc2bin_SOURCES = uhbd_asc2bin.f
+@UHBD_COMPILE_TRUE@uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+@UHBD_COMPILE_TRUE@uhbd_asc2bin_LDFLAGS = @LDFLAGS@ @FFLAGS@
+@UHBD_COMPILE_TRUE@uhbd_asc2bin_CCLD = $(F77)
+noinst_PROGRAMS = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol benchmark similarity analysis
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -189,10 +197,6 @@ mergedx_SOURCES = mergedx.c
 mergedx_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mergedx_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
 mergedx_CCLD = $(CC)
-uhbd_asc2bin_SOURCES = uhbd_asc2bin.f
-uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
-uhbd_asc2bin_LDFLAGS = @LDFLAGS@ @FFLAGS@
-uhbd_asc2bin_CCLD = $(F77)
 value_SOURCES = value.c 
 value_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 value_LDFLAGS = @LDFLAGS@ @FFLAGS@
@@ -209,10 +213,16 @@ subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) mergedx$(EXEEXT) \
-	uhbd_asc2bin$(EXEEXT) smooth$(EXEEXT) value$(EXEEXT) \
-	dx2mol$(EXEEXT) benchmark$(EXEEXT) similarity$(EXEEXT) \
-	analysis$(EXEEXT)
+@UHBD_COMPILE_TRUE@noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	mergedx$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	smooth$(EXEEXT) value$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	dx2mol$(EXEEXT) benchmark$(EXEEXT) \
+@UHBD_COMPILE_TRUE@	similarity$(EXEEXT) analysis$(EXEEXT)
+@UHBD_COMPILE_FALSE@noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	mergedx$(EXEEXT) smooth$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	value$(EXEEXT) dx2mol$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	benchmark$(EXEEXT) similarity$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	analysis$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_analysis_OBJECTS = analysis.$(OBJEXT)
@@ -243,9 +253,11 @@ similarity_LDFLAGS =
 am_smooth_OBJECTS = smooth.$(OBJEXT)
 smooth_OBJECTS = $(am_smooth_OBJECTS)
 smooth_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
-am_uhbd_asc2bin_OBJECTS = uhbd_asc2bin.$(OBJEXT)
+@UHBD_COMPILE_TRUE@am_uhbd_asc2bin_OBJECTS = uhbd_asc2bin.$(OBJEXT)
 uhbd_asc2bin_OBJECTS = $(am_uhbd_asc2bin_OBJECTS)
-uhbd_asc2bin_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+@UHBD_COMPILE_TRUE@uhbd_asc2bin_DEPENDENCIES = \
+@UHBD_COMPILE_TRUE@	../../src/aaa_lib/libapbs.la
+@UHBD_COMPILE_FALSE@uhbd_asc2bin_DEPENDENCIES =
 am_value_OBJECTS = value.$(OBJEXT)
 value_OBJECTS = $(am_value_OBJECTS)
 value_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
