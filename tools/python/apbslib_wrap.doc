@@ -337,6 +337,10 @@ set_entry(array,i,val)
 
 make_Valist(args,n)
 
+NOsh_parse(thee,sock)
+
+Vio_setup(key,iodev,iofmt,iohost,iofile,string)
+
 8.1.  class AtomForce
 ---------------------
 

@@ -100,7 +100,7 @@ extern int NOsh_elec2calc(NOsh *thee, int icalc);
 extern NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint); 
 extern int NOsh_ctor2(NOsh *thee, int rank, int size);
 extern void NOsh_dtor(NOsh **thee); 
-extern int NOsh_parseFile(NOsh *thee, char *filename); 
+extern int NOsh_parseFile(NOsh *thee, char *filename);
 
 // Functions for python implementation of objects that are arrays:
 // Note: Currently does not support NOSH_MAXMOL, NOSH_MAXCALC
@@ -185,6 +185,8 @@ int *int_array(int size){
      return (int *) malloc(size*sizeof(int));
 }
 %}
+
+// Functions for PDB2PQR interface
 
 %inline %{
 void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
@@ -305,6 +307,24 @@ void set_entry(double *array, int i, double val){
 Valist *make_Valist(Valist **args, int n){
     args[n] = Valist_ctor();    
     return args[n];
+}
+%}
+
+// Additional functions for reading input from buffers
+
+extern int NOsh_parse(NOsh *thee, Vio *sock);
+
+%inline %{
+Vio * Vio_setup(char *key, const char *iodev, const char *iofmt, const char *iohost, const char *iofile, char * string){
+    Vio *sock = VNULL;
+    char buf[VMAX_BUFSIZE];
+    int bufsize = 0;
+    bufsize = strlen(string);
+    VASSERT( bufsize <= VMAX_BUFSIZE );
+    strncpy(buf, string, VMAX_BUFSIZE);
+    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)));
+    Vio_bufTake(sock, buf, bufsize);
+    return sock;
 }
 %}
 

@@ -298,6 +298,12 @@ set_entry = apbslibc.set_entry
 
 make_Valist = apbslibc.make_Valist
 
+def NOsh_parse(arg0,arg1):
+    val = apbslibc.NOsh_parse(arg0.this,arg1)
+    return val
+
+Vio_setup = apbslibc.Vio_setup
+
 def loadMolecules(arg0,arg1):
     val = apbslibc.loadMolecules(arg0.this,arg1)
     return val
