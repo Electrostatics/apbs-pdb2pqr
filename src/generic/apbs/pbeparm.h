@@ -116,6 +116,17 @@ struct PBEparm {
     char writeaccstem[VMAX_ARGLEN];    /**< File stem to write pot */
     int writeaccfmt;           /**< Potential file formats: 0 => dx, 1 => avs, 
                                 * 2 => UHBD */
+    int writemat;              /**< Write out the operator matrix? 
+                                    \li 0 => no 
+                                    \li 1 => yes */
+    int setwritemat;           /**< Flag, @see writemat */
+    char writematstem[VMAX_ARGLEN];    /**< File stem to write mat */
+    int writematflag;          /**< What matrix should we write:
+                                    \li 0 => Poisson (differential operator)
+                                    \li 1 => Poisson-Boltzmann operator
+					     linearized around solution (if
+                                             applicable) */
+
 
     int parsed;                /**< Has this been filled with anything other
 				* than the default values? */
