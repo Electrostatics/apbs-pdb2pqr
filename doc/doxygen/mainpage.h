@@ -482,6 +482,9 @@
  *   <li> apbs/tools/manip/asynchronize.sh <br>
  *   Convert a <a href="#mg-para>mg-para</a> calculation into a <a
  *   href="#mg-async">mg-async</a> calculation.
+ *   <li> apbs/tools/manip/inputgen.py <br> 
+ *   Generate an APBS input file from PQR data using specified parameters.
+ *   Contributed by Todd Dolinsky and Nathan Baker.
  *   <li> apbs/tools/manip/psize.py <br> 
  *   Get the dimensions and center of a molecule in PQR format.  Very useful
  *   for setting up input files (i.e., grid dimensions, lengths, spacings,

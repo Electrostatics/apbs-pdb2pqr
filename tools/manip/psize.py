@@ -1,14 +1,50 @@
-#!/usr/bin/env python2
-
+#!/usr/bin/python2
 # You may need to edit the above to point to your version of Python 2.0
 
-#
-# psize.py -- Get dimensions and other interesting information from a PQR file
+# psize.py 
+# Get dimensions and other interesting information from a PQR file
 #
 # Originally written by Dave Sept
 # Additional APBS-specific features added by Nathan Baker
 # Ported to Python/Psize class by Todd Dolinsky and subsequently hacked by
 # Nathan Baker
+#
+# Version:  $Id$
+#
+# APBS -- Adaptive Poisson-Boltzmann Solver
+#
+# Nathan A. Baker (baker@biochem.wustl.edu)
+# Dept. of Biochemistry and Molecular Biophysics
+# Center for Computational Biology
+# Washington University in St. Louis
+#
+# Additional contributing authors listed in the code documentation.
+#
+# Copyright (c) 2003.  Washington University in St. Louis.
+# All Rights Reserved.
+# Portions Copyright (c) 1999-2003.  The Regents of the University of
+# California.
+# Portions Copyright (c) 1995.  Michael Holst.
+#
+# This file is part of APBS.
+#
+# APBS is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# APBS is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with APBS; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+#
+
+
+
 #
 
 # User - Definable Variables: Default values
@@ -60,8 +96,9 @@ class Psize:
 		file = open(filename, "r")
 		for line in file.readlines():
 			if string.find(line,"ATOM") == 0:
-				words = string.split(line[31:61])
-				if len(words) < 4:
+				subline = string.replace(line[30:], "-", " -")
+				words = string.split(subline)
+				if len(words) < 4:	
 					sys.stderr.write("Can't parse following line:\n")
 					sys.stderr.write("%s\n" % line)
 					sys.exit(2)
@@ -121,6 +158,8 @@ class Psize:
 		for i in range(3):
 			tn[i] = int(flen[i]/self.constants["SPACE"] + 0.5)
 			self.n[i] = 32*(int((tn[i] - 1) / 32 + 0.5)) + 1
+			if self.n[i] < 33:
+				self.n[i] = 33
 		return self.n
 
 	def setSmallest(self, n):
@@ -334,8 +373,7 @@ def main():
 	import getopt
 	filename = ""
 	shortOptList = ""
-	longOptList = ["help", "CFAC=", "SPACE=", "GMEMFAC=", "GMEMCEIL=", \
-		"OFAC=", "REDFAC=", "TFAC_ALPHA=", "TFAC_XEON=", "TFAC_ALPHA="]
+	longOptList = ["help", "CFAC=", "FADD=", "SPACE=", "GMEMFAC=", "GMEMCEIL=", "OFAC=", "REDFAC=", "TFAC_ALPHA=", "TFAC_XEON=", "TFAC_ALPHA="]
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
 	except getopt.GetoptError, details:
@@ -353,23 +391,25 @@ def main():
 		if o == "--help":
 			usage()
 		if o == "--CFAC":
-			psize.setConstant("CFAC", int(a))
+			psize.setConstant("CFAC", float(a))
+		if o == "--FADD":
+			psize.setConstant("FADD", int(a))
 		if o == "--SPACE":
-			psize.setConstant("SPACE", int(a))
+			psize.setConstant("SPACE", float(a))
 		if o == "--GMEMFAC":
 			psize.setConstant("GMEMFAC", int(a))
 		if o == "--GMEMCEIL":
 			psize.setConstant("GMEMCEIL",  int(a))
 		if o == "--OFAC":
-			psize.setConstant("OFAC", int(a))
+			psize.setConstant("OFAC", float(a))
 		if o == "--REDFAC":
-			psize.setConstant("REDFAC", int(a))
+			psize.setConstant("REDFAC", float(a))
 		if o == "--TFAC_ALPHA":
-			psize.setConstant("TFAC_ALPHA", int(a))
+			psize.setConstant("TFAC_ALPHA", float(a))
 		if o == "--TFAC_XEON":
-			psize.setConstant("TFAC_XEON",  int(a))
+			psize.setConstant("TFAC_XEON",  float(a))
 		if o == "--TFAC_SPARC":	
-			psize.setConstant("TFAC_SPARC",  int(a))
+			psize.setConstant("TFAC_SPARC",  float(a))
 
 	psize.runPsize(filename)
 	sys.stdout.write("Default constants used (./psize.py --help for more information):\n")

@@ -3,6 +3,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 #############################################################################
 
   CHANGES THAT AFFECT USERS:
+  * New apbs/tools/manip/inputgen.py script to automatically generate input
+    APBS files from PQR data
   * Fixed bug in PQR parsing that can cause PDB/PQR files to be mis-read when
     they contain residues with numbers in their names (Thanks to Robert Konecny
     and Joanna Trylska)
