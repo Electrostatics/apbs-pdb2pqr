@@ -379,6 +379,8 @@ VEXTERNC void startVio();
  * @param pbe  Array of PBE objects 
  * @param alist Array of atom lists 
  * @param fetk  Array of FE solver objects 
+ * @bug  THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE
+ * @todo  THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
