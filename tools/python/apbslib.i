@@ -291,6 +291,85 @@ double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
 %}
 
 %inline %{
+double **getqfForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].qfForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+%}
+
+%inline %{
+double **getibForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].ibForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+%}
+
+%inline %{
+double **getdbForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].dbForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+%}
+
+%inline %{
+double **getnpForces(AtomForce **atomForce, Valist *alist){
+    int i, j;
+    double **values;
+    double *holder; 
+  
+    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        for (j=0;j<3;j++){
+            holder[j] = (*atomForce)[i].npForce[j];
+        }
+        values[i] = holder;
+    }   
+    return values;
+}
+%}
+
+
+%inline %{
+double *get_double_entry(double **array, int i){
+	    return array[i];
+  }
+%}
+
+%inline %{
 double get_entry(double *array, int i){
 	    return array[i];
   }
