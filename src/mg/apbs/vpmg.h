@@ -43,6 +43,7 @@
 //      provided with the PMG code.
 //     
 // Author:   Nathan Baker
+//           Force evaluation routines by Larry Canino
 /////////////////////////////////////////////////////////////////////////// */
 
 #ifndef _VPMG_H_
@@ -84,11 +85,16 @@ typedef struct Vpmg {
   double *xf, *yf, *zf;          /* Mesh point coordinates */
   double *gxcf, *gycf, *gzcf;    /* Boundary conditions */
   int *pvec;                     /* Partition mask array */
-  double extEnergy;              /* Storing the contribution to the energy from
-                                  * regions outside the immediate problem
-                                  * domain */
+  double extDiEnergy;            /* Storing contributions to the energy from */
+  double extQmEnergy;            /* regions outside the immediate problem */
+  double extQfEnergy;            /* domain */
   int filled;                    /* Indicates whether Vpmg_fillco has been
                                   * called */
+
+  /* ** FORCE EVALUATION STUFF ** */
+  double **occa;                 /* Occlusion map for "above" grid point */
+  double **occb;                 /* Occlusion map for "below" grid point */
+
 
 } Vpmg;
 
@@ -116,9 +122,9 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
 VEXTERNC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm);
 VEXTERNC void Vpmg_solve(Vpmg *thee);
 VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
-VEXTERNC double Vpmg_qfEnergy(Vpmg *thee);
-VEXTERNC double Vpmg_qmEnergy(Vpmg *thee);
-VEXTERNC double Vpmg_dielEnergy(Vpmg *thee);
+VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
 VEXTERNC void Vpmg_writeUHBD(Vpmg *thee, const char *iodev, const char *iofmt,
   const char *thost, const char *fname, char *title, double *data);
 VEXTERNC void Vpmg_writeDX(Vpmg *thee, const char *iodev, const char *iofmt,
