@@ -95,8 +95,8 @@ VEXTERNC int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 VEXTERNC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-VEXTERNC int solveMG(Vpmg *pmg, int type);
-VEXTERNC int setPartMG(MGparm *mgparm, Vpmg *pmg);
+VEXTERNC int solveMG(NOsh *nosh, Vpmg *pmg, int type);
+VEXTERNC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);

@@ -756,11 +756,16 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int solveMG(Vpmg *pmg, int type) {
+VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, int type) {
 
     int nx, ny, nz, i;
 
+   
+    if (nosh->bogus) return 1;
+
     Vnm_tstart(28, "Solver timer");
+
+
     if (type != 3) {
 #ifndef VAPBSQUIET
         Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
@@ -789,10 +794,12 @@ solution array\n");
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int setPartMG(MGparm *mgparm, Vpmg *pmg) {
+VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 
     int j;
     double partMin[3], partMax[3];
+
+    if (nosh->bogus) return 1;
 
     if (mgparm->type == 2) {
         for (j=0; j<3; j++) {
