@@ -186,7 +186,7 @@ VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_initialize
 //
-// Purpose:  Set up parameters
+// Purpose:  Set up parameters, hash tables, and charge-simplex map
 //
 // Arguments: ionConc       = ionic strength in M
 //            ionRadius     = ionic probe radius in A
@@ -353,6 +353,9 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
                                       110, 110, 110)) != VNULL);
     VASSERT( (thee->ionHash = Vhash_ctor(thee->alist, thee->ionRadius, 
                                       110, 110, 110)) != VNULL);
+
+    /* Compute charge-simplex map */
+    Vcsm_init(thee->csm);
 
     thee->paramFlag = 1;
 }
