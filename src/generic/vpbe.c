@@ -70,7 +70,7 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Gem* Vpbe_getVgreen(Vpbe *thee) {
+VPUBLIC Vgreen* Vpbe_getVgreen(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    return thee->green;
@@ -102,8 +102,7 @@ VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
    VASSERT(thee->paramFlag);
-   return thee->ionConc; 
-
+   return thee->bulkIonicStrength; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

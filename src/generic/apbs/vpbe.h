@@ -235,14 +235,6 @@ typedef struct Vpbe Vpbe;
      */
     VEXTERNC double  Vpbe_getSolventRadius(Vpbe *thee);
 
-    /** @brief   Get spline window for spline-based accessibility
-     *  @ingroup Vpbe
-     *  @author  Nathan Baker
-     *  @param   thee Vpbe object
-     *  @return  Spline window for spline-based accessibility (A)
-     */
-    VEXTERNC double  Vpbe_getSplineWin(Vpbe *thee);
-
     /** @brief   Get Debye-Huckel parameter 
      *  @ingroup Vpbe
      *  @author  Nathan Baker
