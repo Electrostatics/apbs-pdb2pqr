@@ -2,6 +2,8 @@
 BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
 #############################################################################
 
+  * Changed coordinate indexing in some energy calculations
+  * Updated documentation to reflect recent changes on Blue Horizon
   * Improved speed of problem setup BUT NOW RESTRICT use of input coefficient
     maps (see documentation)
   * Updated documentation, placing particular emphasis on use of Intel
