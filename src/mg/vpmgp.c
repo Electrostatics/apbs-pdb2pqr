@@ -36,7 +36,8 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // File:     vpmgp.c
 //
-// Purpose:  Class Vpmgp: methods.
+// Purpose:  Class Vpmgp: methods.  This class wraps options which get passed
+//                                  to the FORTRAN PMG code by Mike Holst.
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */

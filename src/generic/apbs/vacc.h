@@ -110,6 +110,8 @@ VEXTERNC void Vacc_dtor2(Vacc *thee);
 VEXTERNC int Vacc_vdwAcc(Vacc *thee, Vec3 center);
 VEXTERNC int Vacc_ivdwAcc(Vacc *thee, Vec3 center, double radius);
 VEXTERNC int Vacc_molAcc(Vacc *thee, Vec3 center, double radius);
+VEXTERNC double Vacc_splineAcc(Vacc *thee, Vec3 center, double radius, 
+  double alpha);
 VEXTERNC double** Vacc_sphere(Vacc *thee, int *npts);
 VEXTERNC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
   char *iodev, char *iofmt, char *iohost, char *iofile);
