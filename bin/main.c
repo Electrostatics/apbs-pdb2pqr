@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 {"\n\n\
     ----------------------------------------------------------------------\n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
-    Version 0.3.0\n\
+    Version 0.3.1\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. Biochemistry and Molecular Biophysics\n\
