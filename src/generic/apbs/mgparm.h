@@ -137,6 +137,7 @@ VEXTERNC int     MGparm_ctor2(MGparm *thee);
 VEXTERNC void    MGparm_dtor(MGparm **thee);
 VEXTERNC void    MGparm_dtor2(MGparm *thee);
 VEXTERNC int     MGparm_check(MGparm *thee);
+VEXTERNC void    MGparm_copy(MGparm *thee, MGparm *parm);
 
 #endif 
 

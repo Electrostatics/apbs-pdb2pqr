@@ -45,8 +45,6 @@
 #define _NOSH_H_
 
 #define NOSH_MAXMOL 20
-#define NOSH_MAXMGPARM 20
-#define NOSH_MAXFEMPARM 20
 #define NOSH_MAXCALC 20
 #define NOSH_MAXPRINT 20
 #define NOSH_MAXPOP 20
@@ -57,33 +55,58 @@
 #include "apbs/mgparm.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Class NOsh_calc: A small class which allows NOsh to keep track of various
+//                  calculations in a relatively straightforward way.
+/////////////////////////////////////////////////////////////////////////// */
+typedef struct NOsh_calc {
+
+    MGparm *mgparm;                      /* Multigrid parameters */
+    FEMparm *femparm;                    /* Finite element parameters */
+    int calctype;                        /* 0 => multigrid, 1 => FEM */
+
+} NOsh_calc;
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Definition
 /////////////////////////////////////////////////////////////////////////// */
 
 typedef struct NOsh {
 
-    MGparm *mgparm[NOSH_MAXMGPARM];           /* Parameter objects for MG 
-                                               * types of calculations */
-    FEMparm *femparm[NOSH_MAXFEMPARM];        /* Parameter objects for FEM 
-                                               * types of calculations */
-    int ncalc;                                /* The number of calculations to 
-                                               * be done */
-    int imgcalc, ifemcalc, nmgcalc, nfemcalc; /* Counters for the various MG 
-                                               * and FEM calculations */
-    int calctype[NOSH_MAXCALC];               /* The list of calculations: 0 =>
-                                               * multigrid and 1 => FEM */
-    int nmol;                                 /* Number of molecules */
-    char molpath[NOSH_MAXMOL][VMAX_ARGLEN];  /* Paths to mol files */
-    int nprint;                               /* How many print sections? */
-    int printwhat[NOSH_MAXPRINT];
-                                              /* What do we print (0=>energy) */
-    int printnarg[NOSH_MAXPRINT];             /* How many arguments in energy 
-                                               * list */
-    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP];/* Calculation id */
-    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  /* Operation id (0 = add, 1 = 
-                                               * subtract) */
-  int parsed;                                 /* Have we parsed an input file
-                                               * yet? */
+    NOsh_calc calc[NOSH_MAXCALC];        /* The array of calculation objects */
+
+    int ncalc;                           /* The number of calculations in the
+                                          * calc array */
+    int nelec;
+    int elec2calc[NOSH_MAXCALC];         /* A mapping between ELEC statements
+					  * which appear in the input file and
+					  * calc objects stored above.  Since
+					  * we allow both normal and focused
+					  * multigrid, there isn't a 1-to-1
+					  * correspondence between ELEC
+					  * statements and actual calcualtions.
+					  * This can really confuse operations
+					  * which work on specific calculations
+					  * further down the road (like PRINT).
+					  * Therefore this array is the initial
+					  * point of entry for any
+					  * calculation-specific operation.  It
+					  * points to a specific entry in the
+					  * calc array. */
+    int nmol;                            /* Number of molecules */
+    char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   
+                                         /* Paths to mol files */
+    int nprint;                          /* How many print sections? */
+    int printwhat[NOSH_MAXPRINT];        /* What do we print (0=>energy) */
+    int printnarg[NOSH_MAXPRINT];        /* How many arguments in energy 
+                                          * list */
+    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP];
+                                         /* ELEC id (see elec2calc) */
+    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  
+                                         /* Operation id (0 = add, 1 = 
+                                          * subtract) */
+  int parsed;                            /* Have we parsed an input file
+                                          * yet? */
 
 } NOsh;
 
