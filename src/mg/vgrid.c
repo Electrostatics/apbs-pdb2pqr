@@ -706,7 +706,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
                 y = j*hy + ymin;
                 for (i=0; i<nx; i++) {
                     x = i*hx + xmin;
-                    if (pvec[IJK(i,j,k)] != 0) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
                         if (x < xminPART) xminPART = x;
                         if (y < yminPART) yminPART = y;
                         if (z < zminPART) zminPART = z;
@@ -719,7 +719,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
             gotit = 0;
             for (j=0; j<ny; j++) {
                 for (i=0; i<nx; i++) {
-                    if (pvec[IJK(i,j,k)] != 0) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
                         gotit = 1;
                         break;
                     }
@@ -733,7 +733,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
             gotit = 0;
             for (k=0; k<nz; k++) {
                 for (i=0; i<nx; i++) {
-                    if (pvec[IJK(i,j,k)] != 0) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
                         gotit = 1;
                         break;
                     }
@@ -747,7 +747,7 @@ VPUBLIC void Vgrid_writeDX(Vgrid *thee, const char *iodev, const char *iofmt,
             gotit = 0;
             for (k=0; k<nz; k++) {
                 for (j=0; j<ny; j++) {
-                    if (pvec[IJK(i,j,k)] != 0) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
                         gotit = 1;
                         break; 
                     }
@@ -794,7 +794,7 @@ data follows\n", (nxPART*nyPART*nzPART));
             for (j=0; j<ny; j++) {
                 for (k=0; k<nz; k++) {
                     u = k*(nx)*(ny)+j*(nx)+i;
-                    if (pvec[u] != 0) {
+                    if (pvec[u] > 0.0) {
                         Vio_printf(sock, "%12.6e ", thee->data[u]);
                         icol++;
                         if (icol == 3) {
@@ -817,7 +817,6 @@ class field\n");
         Vio_printf(sock, "component \"data\" value 3\n");
 
     } else {
-
         /* Write off the title (if we're not XDR) */
         if (Vstring_strcasecmp(iofmt, "XDR") == 0) {
             Vnm_print(0, "Vgrid_writeDX:  Skipping comments for XDR format.\n");

@@ -1,7 +1,10 @@
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.1       ??-??-??
 #############################################################################
-  * New APBS tutorial
+  - NEW FEATURES
+    * New APBS tutorial
+    * New tools/python/vgrid/mergedx.py script to merge dx files generated
+      from parallel APBS runs back into a single dx file.
   - BUG FIXES
     * Fixed bug in parallel calculations where atoms or points on a border
       between two processors were not included.  Modified setup algorithm for 
