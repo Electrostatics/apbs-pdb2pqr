@@ -51,6 +51,7 @@
 #define _VSTRING_H_
 
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
 
 /** @brief   Case-insensitive string comparison (BSD standard)
  *  @ingroup Vstring

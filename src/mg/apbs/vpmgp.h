@@ -56,8 +56,6 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
-#include "apbs/valist.h"
-#include "apbs/vunit.h"
 
 /**
  *  @struct  Vpmgp

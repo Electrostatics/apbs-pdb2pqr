@@ -50,9 +50,13 @@
 #ifndef _VACC_H_
 #define _VACC_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+
+/* Headers specific to this file */
 #include "apbs/valist.h"
+#include "apbs/vatom.h"
 #include "apbs/vunit.h"
 
 /** @brief Maximum number of neighbors used in an accessibility calculation 

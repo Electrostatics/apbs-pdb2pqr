@@ -42,26 +42,35 @@
  * @endverbatim
  */
 
-
 #ifndef _APBS_H_
 #define _APBS_H_
 
-#include "apbscfg.h"
-
+/* MALOC headers */
 #include "maloc/maloc.h"
+
+/* Generic headers */
+#include "apbs/femparm.h"
+#include "apbs/mgparm.h"
+#include "apbs/nosh.h"
+#include "apbs/pbeparm.h"
 #include "apbs/vacc.h"
-#include "apbs/vatom.h"
 #include "apbs/valist.h"
+#include "apbs/vatom.h"
+#include "apbs/vcap.h"
+#include "apbs/vgreen.h"
 #include "apbs/vhal.h"
 #include "apbs/vpbe.h"
+#include "apbs/vstring.h"
 #include "apbs/vunit.h"
-#include "apbs/vgreen.h"
+
+/* MG headers */
+#include "apbs/vgrid.h"
+#include "apbs/vmgrid.h"
+#include "apbs/vopot.h"
 #include "apbs/vpmg.h"
 #include "apbs/vpmgp.h"
-#include "apbs/vcap.h"
-#include "apbs/vopot.h"
-#include "apbs/vgrid.h"
 
+/* FEM headers */
 #if defined(HAVE_MC_H)
 #   include "apbs/vfetk.h"
 #endif
@@ -69,5 +78,4 @@
 #   include "apbs/vpee.h"
 #endif
 
-
-#endif /* _APBS_H_ */
+#endif /* ifndef _APBS_H_ */

@@ -51,9 +51,15 @@
 #ifndef _VOPOT_H_
 #define _VOPOT_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
-#include "apbs/vunit.h"
+#include "apbs/vhal.h"
+
+/* Specific headers */
+#include "apbs/vatom.h"
+#include "apbs/valist.h"
 #include "apbs/vgrid.h"
+#include "apbs/vunit.h"
 #include "apbs/vpbe.h"
 
 /**

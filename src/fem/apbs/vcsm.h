@@ -51,11 +51,12 @@
 #ifndef _VCSM_H_
 #define _VCSM_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
-#include "mc/mc.h"
 #include "apbs/vhal.h"
-#include "apbs/vatom.h"
-#include "apbs/valist.h"
+
+/* Specific headers */
+#include "mc/mc.h"
 
 /** @brief   External function for FEtk Gem class to use during mesh refinement
  *  @ingroup Vcsm

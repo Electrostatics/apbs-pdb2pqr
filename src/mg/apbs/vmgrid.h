@@ -51,9 +51,12 @@
 #ifndef _VMGRID_H_
 #define _VMGRID_H_
 
+/* Generic headers */
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
+
+/* Headers specific to this file */
 #include "apbs/vgrid.h"
-#include "apbs/apbs.h"
 
 /** @def VMGRIDMAX   The maximum number of levels in the grid hiearchy
  *  @ingroup Vmgrid

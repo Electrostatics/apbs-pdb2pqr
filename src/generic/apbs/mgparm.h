@@ -52,8 +52,8 @@
 #ifndef _MGPARM_H_
 #define _MGPARM_H_
 
-#include "apbs/apbs.h"
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
 
 /**
  *  @struct  MGparm

@@ -51,8 +51,9 @@
 #ifndef _FEMPARM_H_
 #define _FEMPARM_H_
 
-#include "apbs/apbs.h"
+/* Generic header files */
 #include "maloc/maloc.h"
+#include "apbs/vhal.h"
 
 /**
  *  @struct  FEMparm
