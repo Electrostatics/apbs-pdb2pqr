@@ -327,6 +327,16 @@ double_array(size)
 
 int_array(size)
 
+Valist_load(thee,size,x,y,z,chg,rad)
+
+getPotentials(nosh,pbeparm,pmg,alist)
+
+get_entry(array,i)
+
+set_entry(array,i,val)
+
+make_Valist(args,n)
+
 8.1.  class AtomForce
 ---------------------
 

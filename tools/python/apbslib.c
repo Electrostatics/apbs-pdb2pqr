@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.4  2004/04/26 20:56:13  apbs
- * TJD: Another Python wrapper NOsh_printWhat fix.
+ * Revision 1.5  2004/09/24 18:49:19  apbs
+ * TJD:  Added initial wrappers for interfacing with PDB2PQR
  *
  ************************************************************************/
 
@@ -1119,6 +1119,118 @@ double *double_array(int size) {
 int *int_array(int size){
      return (int *) malloc(size*sizeof(int));
 }
+
+void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
+    
+    Vatom *atoms = VNULL;
+    int i;
+ 
+    double pos[3];
+    atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
+    thee->number = 0;
+    for (i=0;i<size;i++){
+        pos[0] = x[i];
+        pos[1] = y[i];
+        pos[2] = z[i];
+        Vatom_setCharge(&(atoms[thee->number]), chg[i]);
+        Vatom_setRadius(&(atoms[thee->number]), rad[i]);
+        Vatom_setPosition(&(atoms[thee->number]), pos);
+        (thee->number)++;
+      
+    }
+  
+    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
+    VASSERT(thee->atoms != VNULL);
+    for (i=0; i<thee->number; i++) {
+        Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
+        Vatom_dtor2(&(atoms[i]));
+    }
+    Vmem_free(thee->vmem, size, sizeof(Vatom), (void **)&atoms);
+    
+    Vatom *atom;
+    int j;
+
+    VASSERT(thee != VNULL);
+
+    thee->center[0] = 0.;
+    thee->center[1] = 0.;
+    thee->center[2] = 0.;
+    thee->maxrad = 0.;
+    thee->charge = 0.;
+
+    /* Reset stat variables */
+    atom = &(thee->atoms[0]);
+    for (i=0; i<3; i++) {
+        thee->maxcrd[i] = thee->mincrd[i] = atom->position[i];
+    }
+    thee->maxrad = atom->radius;
+    thee->charge = 0.0;
+   
+    for (i=0; i<thee->number; i++) {
+
+        atom = &(thee->atoms[i]);
+        for (j=0; j<3; j++) {
+            if (atom->position[j] < thee->mincrd[j]) 
+              thee->mincrd[j] = atom->position[j];
+            if (atom->position[j] > thee->maxcrd[j]) 
+              thee->maxcrd[j] = atom->position[j];
+        }
+        if (atom->radius > thee->maxrad) thee->maxrad = atom->radius;
+        thee->charge = thee->charge + atom->charge;
+    } 
+  
+    thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
+    thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
+    thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
+}
+
+double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
+    Vgrid *grid;
+    Vatom *atom; 
+    int i, rc, nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+    double value;
+    double *position, *values;
+    
+    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(double)));
+    nx = pmg->pmgp->nx;
+    ny = pmg->pmgp->ny;
+    nz = pmg->pmgp->nz;
+    hx = pmg->pmgp->hx;
+    hy = pmg->pmgp->hy;
+    hzed = pmg->pmgp->hzed;
+    xcent = pmg->pmgp->xcent;
+    ycent = pmg->pmgp->ycent;
+    zcent = pmg->pmgp->zcent;
+    xmin = xcent - 0.5*(nx-1)*hx;
+    ymin = ycent - 0.5*(ny-1)*hy;
+    zmin = zcent - 0.5*(nz-1)*hzed;
+   
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0);
+    grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+                  pmg->rwork);
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        atom = Valist_getAtom(alist, i);
+        position = Vatom_getPosition(atom); 
+        Vgrid_value(grid, position, &value);
+        values[i] = value; 
+    } 
+    Vgrid_dtor(&grid);    
+    return values;
+}
+
+double get_entry(double *array, int i){
+	    return array[i];
+  }
+
+void set_entry(double *array, int i, double val){
+	    array[i] = val;
+  }
+
+Valist *make_Valist(Valist **args, int n){
+    args[n] = Valist_ctor();    
+    return args[n];
+}
 extern int loadMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
 extern void killMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
 extern int loadDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
@@ -1683,6 +1795,179 @@ static PyObject *_wrap_int_array(PyObject *self, PyObject *args) {
         return NULL;
     _result = (int *)int_array(_arg0);
     SWIG_MakePtr(_ptemp, (char *) _result,"_int_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Valist_load(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Valist * _arg0;
+    int  _arg1;
+    double * _arg2;
+    double * _arg3;
+    double * _arg4;
+    double * _arg5;
+    double * _arg6;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+    char * _argc4 = 0;
+    char * _argc5 = 0;
+    char * _argc6 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sisssss:Valist_load",&_argc0,&_arg1,&_argc2,&_argc3,&_argc4,&_argc5,&_argc6)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Valist_load. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of Valist_load. Expected _double_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of Valist_load. Expected _double_p.");
+        return NULL;
+        }
+    }
+    if (_argc4) {
+        if (SWIG_GetPtr(_argc4,(void **) &_arg4,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of Valist_load. Expected _double_p.");
+        return NULL;
+        }
+    }
+    if (_argc5) {
+        if (SWIG_GetPtr(_argc5,(void **) &_arg5,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of Valist_load. Expected _double_p.");
+        return NULL;
+        }
+    }
+    if (_argc6) {
+        if (SWIG_GetPtr(_argc6,(void **) &_arg6,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of Valist_load. Expected _double_p.");
+        return NULL;
+        }
+    }
+    Valist_load(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_getPotentials(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double * _result;
+    NOsh * _arg0;
+    PBEparm * _arg1;
+    Vpmg * _arg2;
+    Valist * _arg3;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ssss:getPotentials",&_argc0,&_argc1,&_argc2,&_argc3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getPotentials. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_PBEparm_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getPotentials. Expected _PBEparm_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_Vpmg_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of getPotentials. Expected _Vpmg_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of getPotentials. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (double *)getPotentials(_arg0,_arg1,_arg2,_arg3);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_get_entry(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double  _result;
+    double * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:get_entry",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_entry. Expected _double_p.");
+        return NULL;
+        }
+    }
+    _result = (double )get_entry(_arg0,_arg1);
+    _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_set_entry(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    double * _arg0;
+    int  _arg1;
+    double  _arg2;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sid:set_entry",&_argc0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of set_entry. Expected _double_p.");
+        return NULL;
+        }
+    }
+    set_entry(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_make_Valist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Valist * _result;
+    Valist ** _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:make_Valist",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of make_Valist. Expected _Valist_pp.");
+        return NULL;
+        }
+    }
+    _result = (Valist *)make_Valist(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Valist_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -3402,6 +3687,11 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "loadDielMaps", _wrap_loadDielMaps, 1 },
 	 { "killMolecules", _wrap_killMolecules, 1 },
 	 { "loadMolecules", _wrap_loadMolecules, 1 },
+	 { "make_Valist", _wrap_make_Valist, 1 },
+	 { "set_entry", _wrap_set_entry, 1 },
+	 { "get_entry", _wrap_get_entry, 1 },
+	 { "getPotentials", _wrap_getPotentials, 1 },
+	 { "Valist_load", _wrap_Valist_load, 1 },
 	 { "int_array", _wrap_int_array, 1 },
 	 { "double_array", _wrap_double_array, 1 },
 	 { "new_atomforcelist", _wrap_new_atomforcelist, 1 },
