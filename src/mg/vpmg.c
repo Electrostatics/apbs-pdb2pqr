@@ -991,8 +991,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
    
     /* Define the total domain size */
     xlen = thee->pmgp->xlen;
-    ylen = thee->pmgp->xlen;
-    zlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
 
     /* Define the min/max dimensions */
     xmin = thee->pmgp->xcent - (xlen/2.0);
@@ -1001,6 +1001,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
     thee->pmgp->ymin = ymin;
     zmin = thee->pmgp->zcent - (zlen/2.0);
     thee->pmgp->zmin = zmin;
+    Vnm_print(1, "VPMG DEBUG: zmin = %g, zcent = %g, zlen = %g\n", zmin,
+      thee->pmgp->zcent, zlen);
     xmax = thee->pmgp->xcent + (xlen/2.0);
     thee->pmgp->xmax = xmax;
     ymax = thee->pmgp->ycent + (ylen/2.0);
@@ -1052,8 +1054,9 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
             if (thee->pmgp->bcfl != 4) {
-                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-                  iatom, position[0], position[1], position[2]);
+                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f)\
+ is off the mesh (ignoring):\n",
+                  iatom, apos[0], apos[1], apos[2]);
                 Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", 
                   xmin, xmax);
                 Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", 
