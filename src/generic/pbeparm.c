@@ -434,6 +434,40 @@ keyword!\n", tok);
         thee->gamma = tf;
         thee->setgamma = 1;
         return 1;
+    } else if (Vstring_strcasecmp(tok, "usemap") == 0) {
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (Vstring_strcasecmp(tok, "diel") == 0) {
+            thee->useDielMap = 1;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
+            if (sscanf(tok, "%d", &ti) == 0) {
+                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP DIEL keyword!\n", tok);
+                return -1;
+            } 
+            thee->dielMapID = ti;
+        } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
+            thee->useKappaMap = 1;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &ti) == 0) {
+                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP KAPPA keyword!\n", tok);
+                return -1;
+            }
+            thee->kappaMapID = ti;
+        } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+            thee->useChargeMap = 1;
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (sscanf(tok, "%d", &ti) == 0) { 
+                Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+USEMAP CHARGE keyword!\n", tok);
+                return -1;
+            }
+            thee->chargeMapID = ti;
+        } else {
+            Vnm_print(2, "NOsh:  Read undefined keyword (%s) while parsing \
+USEMAP statement!\n", tok);
+            return -1;
+        }
     } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {

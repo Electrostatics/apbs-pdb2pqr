@@ -236,7 +236,7 @@ VEXTERNC void Vgrid_writeDX(Vgrid *thee, const char *iodev,
 
 /** @brief   Read in data in OpenDX grid format
  *  @note    All dimension information is given in order: z, y, x
- *  @ingroup Vpmg
+ *  @ingroup Vgrid
  *  @author  Nathan Baker
  *  @param   thee   Vgrid object
  *  @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
