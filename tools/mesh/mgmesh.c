@@ -41,9 +41,8 @@
 /////////////////////////////////////////////////////////////////////////// */
 
 #include "apbscfg.h"
-#include "fortlink.h"
 
-int themain(int argc, char **argv) {
+int F77MAIN(int argc, char **argv) {
 
     int i, lev;
     int maxvert = 700;
