@@ -117,7 +117,7 @@ always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 
 GEN_LIBS = ../generic/libapbsgen.la
-FEM_LIBS = @fetk_do_lib@
+FEM_LIBS = ../fem/libapbsfem.la 
 PMG_LIBS = ../mg/libapbsmg.la
 
 libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
@@ -139,7 +139,8 @@ LTLIBRARIES =  $(lib_LTLIBRARIES)
 DEFS = @DEFS@ -I. -I$(srcdir) -I../../src/aaa_inc
 CPPFLAGS = @CPPFLAGS@
 LIBS = @LIBS@
-libapbs_la_DEPENDENCIES =  ../generic/libapbsgen.la ../mg/libapbsmg.la
+libapbs_la_DEPENDENCIES =  ../generic/libapbsgen.la ../fem/libapbsfem.la \
+../mg/libapbsmg.la
 libapbs_la_OBJECTS =  apbs_link.lo
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

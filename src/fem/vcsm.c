@@ -44,6 +44,8 @@
 #include "apbscfg.h"
 #include "apbs/vcsm.h"
 
+#if defined(HAVE_FETK_H)
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
@@ -650,3 +652,4 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
 }
 
+#endif

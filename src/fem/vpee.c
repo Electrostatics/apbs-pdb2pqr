@@ -44,6 +44,8 @@
 #include "apbscfg.h"
 #include "mc/mc.h"
 
+#if defined(HAVE_FETK_H)
+
 #include "apbs/vpee.h"
 
 VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
@@ -568,4 +570,4 @@ VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol) {
 
 }
 
-
+#endif

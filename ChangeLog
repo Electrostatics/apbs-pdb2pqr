@@ -1,5 +1,17 @@
 #############################################################################
-VERSION 0.1.2       09-02-01
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.3       XX-XX-01
+#############################################################################
+This version features a few improvements in scripts, PDB parsing flexibility,
+and portability, including:
+  * Dave Sept upgraded the psize and shift scripts to allow more flexibility in
+    PDB formats.
+  * Chain ID support has been added to the PDB/PQR parser
+  * Removed -g from compiler flags during linking of C and FORTAN under OSF
+    (thanks to Dagmar Floeck and Julie Mitchell for help debugging this
+     problem)
+
+#############################################################################
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.2       09-02-01
 #############################################################################
 This version is mainly designed to increase portability by switching to libtool
 for library creation and linking.  Of course, it also contains a few bug fixes.
@@ -18,7 +30,7 @@ Note that Compaq Tru64 Alpha users may still experience problems while
 compiling due to some strangess with linking C and FORTRAN objects.
 
 #############################################################################
-VERSION 0.1.1       08-29-01
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.1       08-29-01
 #############################################################################
 I am slightly less pleased to announce the first bug-fix for APBS, version
 0.1.1.  This fixes compilation problems that popped up for several folks,
@@ -28,7 +40,7 @@ including:
   * Installation of binary in machine-specific directory
 
 #############################################################################
-VERSION 0.1.0       08-29-01
+PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.0       08-29-01
 #############################################################################
 I am pleased to announce the availability of a pre-beta version of the
 Adaptive Poisson-Boltzmann Solver (APBS) code to selected research
