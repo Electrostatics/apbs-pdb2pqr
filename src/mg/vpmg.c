@@ -601,7 +601,7 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
-  double parm) {
+  double parm, Vhal_PBEType pbetype) {
 
     Vacc *acc = VNULL;
     Vpbe *pbe = VNULL;
@@ -861,10 +861,16 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         vec[IJK(i,j,k)] = 0.0;
                         if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
                             for (l=0; l<pbe->numIon; l++) {
-                              vec[IJK(i,j,k)] += (pbe->ionConc[l] 
-                                * pbe->ionQ[l]
-                                * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
-                                &ichop));
+                                if (pbetype == PBE_NPBE) {
+                                    vec[IJK(i,j,k)] += (pbe->ionConc[l] 
+                                        * pbe->ionQ[l]
+                                        * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
+                                        &ichop));
+                                } else if (pbetype == PBE_LPBE) {
+                                    vec[IJK(i,j,k)] += (pbe->ionConc[l] 
+                                        * pbe->ionQ[l]
+                                        * (1 - pbe->ionQ[l]*thee->u[IJK(i,j,k)]));
+                                }
                             }
                         }
                     }

@@ -572,14 +572,15 @@ VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
 /** @brief   Fill the specified array with accessibility values 
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee   Vpmg object
- *  @param   vec    An array nx*ny*nz in length to contain the accessibility
- *                  values (where nx, ny, nz are the numbers of grid points)
- *  @param   type   Which data to write
- *  @param   parm   Parameter for data definition (if needed)
+ *  @param   thee    Vpmg object
+ *  @param   vec     An array nx*ny*nz in length to contain the accessibility
+ *                   values (where nx, ny, nz are the numbers of grid points)
+ *  @param   type    Which data to write
+ *  @param   parm    Parameter for data definition (if needed)
+ *  @param   pbetype Parameter for PBE type (if needed)
  */
 VEXTERNC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
-  double parm);
+  double parm, Vhal_PBEType pbetype);
 
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  
