@@ -6,6 +6,8 @@ bug-fixes:
   * Fixed I/O for potential in UHBD format (thanks, Richard!)
   * Re-arranged garbage collection routines in driver code
   * Improved FORTRAN/C interfaces
+  * Re-configured autoconf/libtool setup for more accurate library version
+    number reporting
 
 #############################################################################
 PRE-BETA (NOT FOR PUBLIC RELEASE) VERSION 0.1.6       11-17-01
