@@ -186,7 +186,10 @@ int main(int argc, char **argv) {
     Vio_dtor(&sock);
 
     /* *************** LOAD MOLECULES ******************* */
-    loadMolecules(com, nosh, alist);
+    if (loadMolecules(com, nosh, alist) != 1) {
+        Vnm_tprint(2, "main:  Error reading molecules!\n");
+        return APBSRC;
+    }
 
     /* *************** DO THE CALCULATIONS ******************* */
     Vnm_tprint( 1, "main:  Preparing to run %d PBE calculations.\n",
@@ -216,10 +219,16 @@ int main(int argc, char **argv) {
             printPBEPARM(com, pbeparm);
 
             /* Solve PDE */
-            solveMG(com, pmg[i]);
+            if (solveMG(com, pmg[i]) != 1) {
+                Vnm_tprint(2, "main:  Error solving PDE!\n");
+                return APBSRC;
+            }
 
             /* Set partition information for observables and I/O */
-            setPartMG(com, mgparm, pmg[i]);
+            if (setPartMG(com, mgparm, pmg[i]) != 1) {
+                Vnm_tprint(2, "main:  Error setting partition info!\n");
+                return APBSRC;
+            }
 
             /* Write out energies */
             energyMG(com, nosh, i, pmg[i], &(nenergy[i]), 
