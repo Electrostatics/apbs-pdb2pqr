@@ -33,10 +33,18 @@ This directory contains SWIG interfaces for wrapping APBS routines into Python. 
 
 	  where X.Y is the version of Python you wish to compile for
 
-	Note: You may need to hand-edit the FORTRAN compiler option in the
-		LDSHARED variable in the Makefile
+	D. The default Fortran compiler is g77, which is found in the 
+	  variable LDSHARED.  If you would like to use Intel's Fortran
+	  compiler (ifc), you will need to link to two additional libraries,
+          libg2c and lstdc++ .
 
-	D. If all goes well, a SWIG-generated C file is created in the
+	  These may be found (on this machine, at least) at
+		/usr/lib/gcc-lib/i386-glibc21-linux/egcs-2.91.66
+
+	  Thus the complete command is of the form:
+		ifc -shared -o apbslibc.so apbslib.o -L../../../dist/lib/i686-pc-linux-gnu/ -lapbsmainroutines -lapbs -lmaloc -L/usr/lib/gcc-lib/i386-glibc21-linux/egcs-2.91.66 -lstdc++ -lg2c
+
+	E. If all goes well, a SWIG-generated C file is created in the
            directory.
 
 6.  To run the Python wrappers, type
