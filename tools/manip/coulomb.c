@@ -51,6 +51,7 @@ int main(int argc, char **argv) {
     Valist *alist = VNULL;
     Vatom *atom = VNULL;
     Vgreen *green = VNULL;
+    Vio *sock = VNULL;
 
     double *pos, energy, zmagic, disp[3], force[3];
     double *fx, *fy, *fz, *pot, *xp, *yp, *zp, *qp;
@@ -104,7 +105,18 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
 
     Vnm_print(1, "Setting up atom list from %s.\n", path);
     alist = Valist_ctor();
-    Valist_readPQR(alist, "FILE", "ASC", VNULL, path);
+    sock = Vio_ctor("FILE", "ASC", VNULL, path, "r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Problem opening virtual socket %s!\n", 
+                  path);
+        return 0;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Problem accepting virtual socket %s!\n",
+                  path);
+        return 0;
+    }
+    Valist_readPQR(alist,sock);
     Vnm_print(1, "Read %d atoms\n", Valist_getNumberAtoms(alist));
 
     Vnm_print(1, "Setting up Green's function object.\n");
