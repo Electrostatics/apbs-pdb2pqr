@@ -637,7 +637,6 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     int j, bytesTotal, highWater;
     double sparm, iparm;
     Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
-    double rsmall = 1e-10;
 
     Vnm_tstart(27, "Setup timer");
 
@@ -651,7 +650,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
      * coordinates to reduce the chance that an atom will inadvertantly lie on
      * a grid line */
     if (pbeparm->calcforce > 0) 
-      for (j=0; j<3; j++) mgparm->center[j] += (2*VPMGSMALL);
+      for (j=0; j<3; j++) mgparm->center[j] += (200*VPMGSMALL);
 
     /* If we're a parallel calculation, update the grid center based on
      * the appropriate shifts */
@@ -768,7 +767,9 @@ VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, int type) {
     int nx, ny, nz, i;
 
    
-    if (nosh->bogus) return 1;
+    if (nosh != VNULL) {
+        if (nosh->bogus) return 1;
+    }
 
     Vnm_tstart(28, "Solver timer");
 
