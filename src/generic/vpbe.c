@@ -466,6 +466,8 @@ function\n", thee->maxIonRadius);
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
     VASSERT(thee->acc != VNULL);
 
+    thee->paramFlag = 1;
+
     return 1; 
 }
 

@@ -57,24 +57,103 @@ VEXTERNC int NOsh_parseMG(NOsh *thee, Vio *sock, int type);
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_NOSH)
 
+    VPUBLIC char* NOsh_getMolpath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->molpath[imol];
+    }
+    VPUBLIC char* NOsh_getDielXpath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->dielXpath[imol];
+    }
+    VPUBLIC char* NOsh_getDielYpath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->dielYpath[imol];
+    }
+    VPUBLIC char* NOsh_getDielZpath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->dielZpath[imol];
+    }
+    VPUBLIC char* NOsh_getKappapath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->kappapath[imol];
+    }
+    VPUBLIC char* NOsh_getChargepath(NOsh *thee, int imol) {
+        VASSERT(thee != VNULL);
+        VASSERT(imol < thee->nmol);
+        return thee->chargepath[imol];
+    }
+    VPUBLIC NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc) {
+        VASSERT(thee != VNULL);
+        VASSERT(icalc < thee->ncalc);
+        return &(thee->calc[icalc]);
+    }
+    VPUBLIC int NOsh_getDielfmt(NOsh *thee, int i) {
+        VASSERT(thee != VNULL);
+        VASSERT(i < thee->ndiel);
+        return (thee->dielfmt[i]);
+    }
+    VPUBLIC int NOsh_getKappafmt(NOsh *thee, int i) {
+        VASSERT(thee != VNULL);
+        VASSERT(i < thee->nkappa);
+        return (thee->kappafmt[i]);
+    }
+    VPUBLIC int NOsh_getChargefmt(NOsh *thee, int i) {
+        VASSERT(thee != VNULL);
+        VASSERT(i < thee->ncharge);
+        return (thee->chargefmt[i]);
+    }
+
 #endif /* if !defined(VINLINE_NOSH) */
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 
+VPUBLIC int NOsh_printWhat(NOsh *thee, int iprint) {
+    VASSERT(thee != VNULL);
+    VASSERT(iprint < thee->nprint);
+    return thee->printwhat[iprint];
+}
+VPUBLIC int NOsh_printNarg(NOsh *thee, int iprint) {
+    VASSERT(thee != VNULL);
+	VASSERT(iprint < thee->nprint);
+    return thee->printnarg[iprint];
+}
+VPUBLIC int NOsh_elec2calc(NOsh *thee, int icalc) {
+    VASSERT(thee != VNULL);
+	VASSERT(icalc < thee->ncalc);
+    return thee->elec2calc[icalc];
+}
+VPUBLIC int NOsh_printOp(NOsh *thee, int iprint, int iarg) {
+    VASSERT(thee != VNULL);
+    VASSERT(iprint < thee->nprint);
+    VASSERT(iarg < thee->printnarg[iprint]);
+    return thee->printop[iprint][iarg];
+}
+VPUBLIC int NOsh_printCalc(NOsh *thee, int iprint, int iarg) {
+    VASSERT(thee != VNULL);
+    VASSERT(iprint < thee->nprint);
+    VASSERT(iarg < thee->printnarg[iprint]);
+    return thee->printcalc[iprint][iarg];
+}
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:   NOsh_ctor
 //
 // Author:    Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC NOsh* NOsh_ctor(Vcom *com) {
+VPUBLIC NOsh* NOsh_ctor(int rank, int size) {
 
     /* Set up the structure */
     NOsh *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(NOsh) );
     VASSERT( thee != VNULL);
-    VASSERT( NOsh_ctor2(thee, com) );
+    VASSERT( NOsh_ctor2(thee, rank, size) );
 
     return thee;
 }
@@ -84,13 +163,14 @@ VPUBLIC NOsh* NOsh_ctor(Vcom *com) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int NOsh_ctor2(NOsh *thee, Vcom *com) {
+VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
 
     int i;
 
     if (thee == VNULL) return 0;
 
-    thee->com = com;
+    thee->proc_rank = rank;
+    thee->proc_size = size;
  
     thee->ispara = 0;
     thee->parsed = 0;

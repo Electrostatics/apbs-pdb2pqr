@@ -52,6 +52,16 @@
 VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  startVio
+//
+// Purpose:  Wrapper for Vio_start
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void startVio() { Vio_start(); }
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  loadMolecules
 //
 // Purpose:  Load molecules from files
@@ -60,7 +70,7 @@ VEMBED(rcsid="$Id$")
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
+VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
     int i;
 
@@ -103,7 +113,7 @@ VPUBLIC int loadMolecules(Vcom *com, NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh, 
+VPUBLIC int loadDielMaps(NOsh *nosh, 
   Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
   Vgrid *dielZMap[NOSH_MAXMOL]) {
 
@@ -232,7 +242,7 @@ VPUBLIC int loadDielMaps(Vcom *com, NOsh *nosh,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i, ii;
     double sum;
@@ -283,7 +293,7 @@ VPUBLIC int loadKappaMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 
     int i, ii;
     double sum;
@@ -333,7 +343,7 @@ VPUBLIC int loadChargeMaps(Vcom *com, NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void printPBEPARM(Vcom *com, PBEparm *pbeparm) {
+VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
     
     int i;
     double ionstr = 0.0;
@@ -469,7 +479,7 @@ to ");
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]) {
+VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 
     if (mgparm->type == 2) {
         Vnm_tprint( 1, "main:    Partition overlap fraction = %g\n", 
@@ -509,7 +519,7 @@ VPUBLIC void printMGPARM(Vcom *com, MGparm *mgparm, double realCenter[3]) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm, 
+VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm, 
   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
@@ -613,7 +623,7 @@ VPUBLIC int initMG(Vcom *com, int i, NOsh *nosh, MGparm *mgparm,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int solveMG(Vcom *com, Vpmg *pmg, int type) {
+VPUBLIC int solveMG(Vpmg *pmg, int type) {
 
     int nx, ny, nz, i;
 
@@ -644,7 +654,7 @@ solution array\n");
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg) {
+VPUBLIC int setPartMG(MGparm *mgparm, Vpmg *pmg) {
 
     int j;
     double partMin[3], partMax[3];
@@ -690,7 +700,7 @@ VPUBLIC int setPartMG(Vcom *com, MGparm *mgparm, Vpmg *pmg) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int energyMG(Vcom *com, NOsh *nosh, int icalc, Vpmg *pmg, 
+VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg, 
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy) {
 
@@ -732,8 +742,6 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qmEnergy));
         Vnm_tprint( 1, "main:    Dielectric energy = %g kJ/mol\n",
            Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
-        Vnm_tprint( 1, "main:    Dielectric energy = %g kJ/mol\n",
-           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
         Vnm_tprint( 1, "main:    Per-atom energies:\n");
         alist = pmg->pbe->alist;
         for (i=0; i<Valist_getNumberAtoms(alist); i++) {
@@ -767,7 +775,7 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int forceMG(Vcom *com, Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
+VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, 
    Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]) {
 
     int j, k;
@@ -894,7 +902,7 @@ molecule %d = (%4.3e, %4.3e, %4.3e) kJ/mol/A\n", j, pbeparm->molid,
 // 
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writematMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writematstem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
@@ -904,7 +912,7 @@ VPUBLIC int writematMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
 #ifdef HAVE_MPI_H
     sprintf(writematstem, "%s-PE%d", pbeparm->writematstem,
-      Vcom_rank(com));
+      rank);
 #else
     sprintf(writematstem, "%s", pbeparm->writematstem);
 #endif
@@ -948,7 +956,7 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
+VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writestem[VMAX_ARGLEN];
     char outpath[VMAX_ARGLEN];
@@ -1177,7 +1185,7 @@ VPUBLIC int writedataMG(Vcom *com, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
 
 #ifdef HAVE_MPI_H
-        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], Vcom_rank(com));
+        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
 #else
         sprintf(writestem, "%s", pbeparm->writestem[i]);
 #endif
@@ -1242,9 +1250,9 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     Vnm_tprint( 1, "main:  print energy %d ", nosh->printcalc[i][0]);
     for (j=1; j<nosh->printnarg[i]; j++) {
         if (nosh->printop[i][j-1] == 0)
-          Vnm_print(1, "+ ", nosh->printcalc[i][j]);
+          Vnm_print(1, "+ ");
         else if (nosh->printop[i][j-1] == 1)
-          Vnm_print(1, "- ", nosh->printcalc[i][j]);
+          Vnm_print(1, "- ");
         else {
             Vnm_tprint( 2, "main:  Undefined PRINT operation!\n");
             return 0;
@@ -1286,3 +1294,4 @@ Calculation #%d\n", calcid+1);
     return 1;
 
 }
+

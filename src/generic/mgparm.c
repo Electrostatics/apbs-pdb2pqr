@@ -57,6 +57,67 @@
 // Class MGparm: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 
+VPUBLIC void MGparm_setCenterX(MGparm *thee, double x) {
+    VASSERT(thee != VNULL);
+    thee->center[0] = x;
+}
+VPUBLIC void MGparm_setCenterY(MGparm *thee, double y) {
+    VASSERT(thee != VNULL);
+    thee->center[1] = y;
+}
+VPUBLIC void MGparm_setCenterZ(MGparm *thee, double z) {
+    VASSERT(thee != VNULL);
+    thee->center[2] = z;
+}
+VPUBLIC double MGparm_getCenterX(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->center[0];
+}
+VPUBLIC double MGparm_getCenterY(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->center[1];
+}
+VPUBLIC double MGparm_getCenterZ(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->center[2];
+}
+VPUBLIC double MGparm_getPartOlapCenterShiftX(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->partOlapCenterShift[0];
+}
+VPUBLIC double MGparm_getPartOlapCenterShiftY(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->partOlapCenterShift[1];
+}
+VPUBLIC double MGparm_getPartOlapCenterShiftZ(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->partOlapCenterShift[2];
+}
+VPUBLIC int MGparm_getNx(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->dime[0];
+}
+VPUBLIC int MGparm_getNy(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->dime[1];
+}
+VPUBLIC int MGparm_getNz(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->dime[2];
+}
+VPUBLIC double MGparm_getHx(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->grid[0];
+}
+VPUBLIC double MGparm_getHy(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->grid[1];
+}
+VPUBLIC double MGparm_getHz(MGparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->grid[2];
+}
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_ctor
 //
@@ -110,7 +171,8 @@ VPUBLIC int MGparm_ctor2(MGparm *thee, int type) {
 
     /* *** TYPE 2 PARAMETERS *** */
     thee->setpdime = 0;
-    thee->setcom = 0;
+    thee->setrank = 0;
+    thee->setsize = 0;
     thee->setofrac = 0;
     for (i=0; i<6; i++) thee->partDisjOwnSide[i] = 1;
 
@@ -204,8 +266,12 @@ VPUBLIC int MGparm_check(MGparm *thee) {
             Vnm_print(2, "MGparm_check:  PDIME not set!\n");
             rc = 0;
         }
-        if (!thee->setcom) {
-            Vnm_print(2, "MGparm_check:  COM not set!\n");
+        if (!thee->setrank) {
+            Vnm_print(2, "MGparm_check:  PROC_RANK not set!\n");
+            rc = 0;
+        }
+        if (!thee->setsize) {
+            Vnm_print(2, "MGparm_check:  PROC_SIZE not set!\n");
             rc = 0;
         }
         if (!thee->setofrac) {
@@ -325,8 +391,10 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
       thee->partOlapLength[i] = parm->partOlapLength[i];
     for (i=0; i<3; i++) thee->pdime[i] = parm->pdime[i];
     thee->setpdime = parm->setpdime;
-    thee->com = parm->com;
-    thee->setcom = parm->setcom;
+    thee->proc_rank = parm->proc_rank;
+    thee->setrank = parm->setrank;
+    thee->proc_size = parm->proc_size;
+    thee->setsize = parm->setsize;
     thee->ofrac = parm->ofrac;
     thee->setofrac = parm->setofrac;
 
