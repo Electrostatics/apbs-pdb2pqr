@@ -1981,6 +1981,7 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID) {
                           atomID, tgrad);
                         if (thee->pmgp->nonlin) {
                             /* Nonlinear forces not done */
+                            Vnm_print(2, "Vpmg_ibForce:  No NPBE forces yet!\n");
                             VASSERT(0);
                         } else {
                             /* Use of bulk factor (zkappa2) OK here becuase
@@ -2064,12 +2065,6 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     if (VABS(epsp-epsw) < VPMGSMALL) {
        Vnm_print(0, "Vpmg_dbnpForce: No force for uniform dielectric!\n");
        return;
-    }
-
-    /* Bail on focusing cases right now; not sure what to do */
-    if (thee->pmgp->bcfl == 4) {
-        Vnm_print(2, "Vpmg_ibForce:  Sorry, but force evaluation doesn't work with focusing (yet).\n");
-        VASSERT(0);
     }
 
     /* Make sure we're on the grid */
