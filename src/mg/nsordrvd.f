@@ -73,8 +73,10 @@ c*    *** compute required work array sizes ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% NSORDRIV: real    work space must be: ',iretot
-         print*,'% NSORDRIV: integer work space must be: ',iintot
+         call vnmpri(2, '% NSORDRIV: real    work space must be: ',
+     2      38, iretot)
+         call vnmpri(2, '% NSORDRIV: integer work space must be: ',
+     2      38, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -155,7 +157,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NSORDRIV2: fine problem setup', 29)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -165,8 +167,7 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% NSORDRIV2: fine problem setup time: ',tsetupf
+      call vtstop(30, 'NSORDRIV2: fine problem setup', 29)
       tsetupc = 0.0d0
 c*
 c* ******************************************************************
@@ -188,14 +189,14 @@ c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fbound00(nx,ny,nz,u)
 c*
 c*    *** MATLAB ***
-      print*,' sor = [ '
+      call vnmprt(0, ' sor = [ ', 9)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NSORDRIV2: solve', 16)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
-         print*,'% NSORDRIV2: linear mode...'
+         call vnmprt(2, '% NSORDRIV2: linear mode...', 25)
          iok  = 1
          ilev = 1
          call sorgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -204,7 +205,7 @@ c*    *** call specified multigrid method ***
      4      ipc,rpc,ac,cc,fc,tcf)
       endif
       if ((mode .eq. 1) .or. (mode .eq. 2)) then
-         print*,'% NSORDRIV2: nonlinear mode...'
+         call vnmprt(2, '% NSORDRIV2: nonlinear mode...', 28)
          iok  = 1
          ilev = 1
          call nsorgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -214,8 +215,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% NSORDRIV2: solve time: ',tsolve
+      call vtstop(30, 'NSORDRIV2: solve', 16)
 c*
 c*    *** MATLAB ***
       write(*,100) 'sor_sf',tsetupf,'sor_sc',tsetupc,
@@ -292,11 +292,11 @@ c*       *** simply take norm of rhs for a zero initial guess ***
          call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1,w2)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% NSORGO: bad istop value... '
+         call vnmpri(2, '% NSORGO: bad istop value: ', 25, istop)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% NSORGO: rhs is zero '
+         call vnmprt(2, '% NSORGO: rhs is zero ', 20)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -343,7 +343,7 @@ c*       *** compute/check the current stopping test ***
             call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2,r)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% NSORGO: bad istop value... '
+            call vnmpri(2, '% NSORGO: bad istop value: ', 25, istop)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99
@@ -412,11 +412,11 @@ c*    *** compute denominator for stopping criterion ***
          call matvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% SORGO: bad istop value... '
+         call vnmpri(2, '% SORGO: bad istop value: ', 24, istop)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% SORGO: rhs is zero '
+         call vnmprt(2, '% SORGO: rhs is zero', 18)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -463,7 +463,7 @@ c*       *** compute/check the current stopping test ***
             call matvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% SORGO: bad istop value... '
+            call vnmpri(2, '% SORGO: bad istop value: ', 24, istop)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99

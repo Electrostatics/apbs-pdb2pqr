@@ -214,7 +214,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     /* Information to be gleaned from PQR file */
     double x, y, z, charge, radius;
     double pos[3];
-
+ 
     VASSERT(thee != VNULL);
     thee->number = 0;
 

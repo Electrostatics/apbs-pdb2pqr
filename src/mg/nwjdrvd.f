@@ -73,8 +73,10 @@ c*    *** compute required work array sizes ***
 c*
 c*    *** some more checks on input ***
       if ((nrwk.lt.iretot) .or. (niwk.lt.iintot)) then
-         print*,'% NWJACDRIV: real    work space must be: ',iretot
-         print*,'% NWJACDRIV: integer work space must be: ',iintot
+         call vnmpri(2, 'NWJACDRIV: real    work space must be: ', 
+     2      39, iretot)
+         call vnmpri(2, 'NWJACDRIV: integer work space must be: ', 
+     2      39, iintot)
          ierror = -3
          iparm(51) = ierror 
          return
@@ -155,7 +157,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NWJACDRIV2: fine problem setup', 30)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -165,9 +167,7 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% NWJACDRIV2: fine problem setup time: ',tsetupf
-      tsetupc = 0.0d0
+      call vtstop(30, 'NWJACDRIV2: fine problem setup', 30)
 c*
 c* ******************************************************************
 c* *** this overwrites the rhs array provided by pde specification
@@ -187,15 +187,12 @@ c*
 c*    *** impose zero dirichlet boundary conditions (now in source fcn) ***
       call fbound00(nx,ny,nz,u)
 c*
-c*    *** MATLAB ***
-      print*,' wjac = [ '
-c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NWJACDRIV2: solve', 17)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
-         print*,'% NWJACDRIV2: linear mode...'
+         call vnmprt(0, 'NWJACDRIV2: linear mode...', 26)
          iok  = 1
          ilev = 1
          call wjacgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -204,7 +201,7 @@ c*    *** call specified multigrid method ***
      4      ipc,rpc,ac,cc,fc,tcf)
       endif
       if ((mode .eq. 1) .or. (mode .eq. 2)) then
-         print*,'% NWJACDRIV2: nonlinear mode...'
+         call vnmprt(0, 'NWJACDRIV2: nonlinear mode...', 29)
          iok  = 1
          ilev = 1
          call nwjacgo(nx,ny,nz,u,w0,a1cf,a2cf,
@@ -214,8 +211,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% NWJACDRIV2: solve time: ',tsolve
+      call vtstop(30, 'NWJACDRIV2: solve', 17)
 c*
 c*    *** MATLAB ***
       write(*,100) 'wjac_sf',tsetupf,'wjac_sc',tsetupc,
@@ -292,11 +288,11 @@ c*       *** simply take norm of rhs for a zero initial guess ***
          call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1,w2)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% NWJACGO: bad istop value... '
+         call vnmpri(2, 'NWJACGO: bad istop value: ', 26, istop)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% NWJACGO: rhs is zero '
+         call vnmprt(2, 'NWJACGO: rhs is zero', 20)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -343,7 +339,7 @@ c*       *** compute/check the current stopping test ***
             call nmatvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2,r)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% NWJACGO: bad istop value... '
+            call vnmpri(2, 'NWJACGO: bad istop value: ', 26, istop)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99
@@ -412,11 +408,11 @@ c*    *** compute denominator for stopping criterion ***
          call matvec(nx,ny,nz,ipc,rpc,ac,cc,tru,w1)
          rsden = dsqrt(xdot(nx,ny,nz,tru,w1))
       else
-         print*,'% WJACGO: bad istop value... '
+         call vnmpri(2, 'WJACGO: bad istop value: ', 25, istop)
       endif
       if (rsden.eq.0.0d0) then
          rsden = 1.0d0
-         print*,'% WJACGO: rhs is zero '
+         call vnmprt(2, 'WJACGO: rhs is zero', 20)
       endif
       rsnrm = rsden
       orsnrm = rsnrm
@@ -463,7 +459,7 @@ c*       *** compute/check the current stopping test ***
             call matvec(nx,ny,nz,ipc,rpc,ac,cc,w1,w2)
             rsnrm = dsqrt(xdot(nx,ny,nz,w1,w2))
          else
-            print*,'% WJACGO: bad istop value... '
+            call vnmpri(2 ,'WJACGO: bad istop value: ', 24, istop)
          endif
          call prtstp (iok,iters,rsnrm,rsden,orsnrm)
          if ((rsnrm/rsden) .le. errtol) goto 99

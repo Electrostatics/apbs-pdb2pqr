@@ -150,7 +150,7 @@ SUFFIXES = .H .h .C .cc .c .f .o
 
 libdir = ${top_srcdir}/lib
 noinst_LIBRARIES = libvpmg.a
-libvpmg_a_SOURCES = buildAd.f buildBd.f buildGd.f buildPd.f cgd.f cgmgd.f 	cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f mblasd.f mgcsd.f 	mgdrvd.f mgfasd.f mgsubd.f  mikpckd.f mlinpckd.f ncgd.f ncgdrvd.f 	newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f nrchdrvd.f 	nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f rand.c         rchd.f secd.c smoothd.f sord.f wjd.f         vpmgp.c vpmg.c 
+libvpmg_a_SOURCES = buildAd.f buildBd.f buildGd.f buildPd.f cgd.f cgmgd.f 	cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f mblasd.f mgcsd.f 	mgdrvd.f mgfasd.f mgsubd.f  mikpckd.f mlinpckd.f ncgd.f ncgdrvd.f 	newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f nrchdrvd.f 	nsmoothd.f nsord.f nsordrvd.f nwjd.f nwjdrvd.f powerd.f  rchd.f         smoothd.f sord.f wjd.f vpmgp.c vpmg.c 
 
 INCLUDES = @inc_list@
 CFLAGS = @CFLAGS@
@@ -170,7 +170,7 @@ cgmgd.o cgmgdrvd.o dlphsubd.o gsd.o mainsubd.o matvecd.o mblasd.o \
 mgcsd.o mgdrvd.o mgfasd.o mgsubd.o mikpckd.o mlinpckd.o ncgd.o \
 ncgdrvd.o newdrvd.o newtond.o ngsd.o ngsdrvd.o ninterpd.o nrchd.o \
 nrchdrvd.o nsmoothd.o nsord.o nsordrvd.o nwjd.o nwjdrvd.o powerd.o \
-rand.o rchd.o secd.o smoothd.o sord.o wjd.o vpmgp.o vpmg.o
+rchd.o smoothd.o sord.o wjd.o vpmgp.o vpmg.o
 AR = ar
 FFLAGS = @FFLAGS@
 F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)

@@ -155,7 +155,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NGSRBDRIV2: fine problem setup', 30)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -165,8 +165,7 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% NGSRBDRIV2: fine problem setup time: ',tsetupf
+      call vtstop(30, 'NGSRBDRIV2: fine problem setup', 30)
       tsetupc = 0.0d0
 c*
 c* ******************************************************************
@@ -191,7 +190,7 @@ c*    *** MATLAB ***
       print*,' gsrb = [ '
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NGSRBDRIV2: solve', 17)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
@@ -214,8 +213,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% NGSRBDRIV2: solve time: ',tsolve
+      call vtstop(30, 'NGSRBDRIV2: solve', 17)
 c*
 c*    *** MATLAB ***
       write(*,100) 'gsrb_sf',tsetupf,'gsrb_sc',tsetupc,

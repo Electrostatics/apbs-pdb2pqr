@@ -205,7 +205,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'MGDRIV2: fine problem setup', 17)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -215,11 +215,10 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% MGDRIV2: fine problem setup time: ',tsetupf
+      call vtstop(30, 'MGDRIV2: fine problem setup', 17)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'MGDRIV2: coarse problem setup', 19)
 c*
 c*    *** build op and rhs on all coarse grids ***
       ido = 1
@@ -229,8 +228,7 @@ c*    *** build op and rhs on all coarse grids ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupc)
-      print*,'% MGDRIV2: coarse problem setup time: ',tsetupc
+      call vtstop(30, 'MGDRIV2: coarse problem setup', 19)
 c*
 c*    *** determine machine epsilon ***
       epsiln = epsmac(0)
@@ -352,7 +350,7 @@ c*    *** MATLAB ***
       print*,' mg = [ '
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'MGDRIV2: solve', 14)
 c*
 c*    *** call specified multigrid method ***
       if ((mode .eq. 0) .or. (mode .eq. 2)) then
@@ -395,8 +393,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% MGDRIV2: solve time: ',tsolve
+      call vtstop(30, 'MGDRIV2: solve', 14)
 c*
 c*    *** MATLAB ***
       write(*,100) 'mg_sf',tsetupf,'mg_sc',tsetupc,

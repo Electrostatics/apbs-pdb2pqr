@@ -202,7 +202,7 @@ c*    *** build the multigrid data structure in iz ***
       call buildstr (nx,ny,nz,nlev,iz)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NEWDRIV2: fine problem setup', 28)
 c*
 c*    *** build op and rhs on fine grid ***
       ido = 0
@@ -212,11 +212,10 @@ c*    *** build op and rhs on fine grid ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupf)
-      print*,'% NEWDRIV2: fine problem setup time: ',tsetupf
+      call vtstop(30, 'NEWDRIV2: fine problem setup', 28)
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NEWDRIV2: coarse problem setup', 30)
 c*
 c*    *** build op and rhs on all coarse grids ***
       ido = 1
@@ -226,8 +225,7 @@ c*    *** build op and rhs on all coarse grids ***
      4   xf,yf,zf,gxcf,gycf,gzcf,a1cf,a2cf,a3cf,ccf,fcf,tcf)
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsetupc)
-      print*,'% NEWDRIV2: coarse problem setup time: ',tsetupc
+      call vtstop(30, 'NEWDRIV2: coarse problem setup', 30)
 c*
 c* ******************************************************************
 c* *** this overwrites the rhs array provided by pde specification
@@ -249,7 +247,7 @@ c*    *** MATLAB ***
       print*,' new = [ '
 c*
 c*    *** start timer ***
-      call tstart(bf,oh)
+      call vtstrt(30, 'NEWDRIV2: solve', 15)
 c*
 c*    *** call specified multigrid method ***
       nlev_real = nlev
@@ -272,8 +270,7 @@ c*    *** call specified multigrid method ***
       endif
 c*
 c*    *** stop timer ***
-      call tstop(bf,oh,tsolve)
-      print*,'% NEWDRIV2: solve time: ',tsolve
+      call vtstop(30, 'NEWDRIV2: solve', 15)
 c*
 c*    *** MATLAB ***
       write(*,100) 'new_sf',tsetupf,'new_sc',tsetupc,
