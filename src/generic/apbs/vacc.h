@@ -243,12 +243,31 @@ VEXTERNC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius);
 VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
   double infrad);
 
+/** @brief   Report spline-based accessibility for a given atom
+ *
+ *  Determine accessibility at a given point for a given atomic
+ *  spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998)
+ *  definition suitable for force evalation; basically a cubic spline.
+ *
+ *  @ingroup Vacc
+ *  @author  Nathan Baker
+ *  @param   thee   Vacc object
+ *  @param   center Probe center coordinates (point to test)
+ *  @param   win    Spline window
+ *  @param   infrad Inflation radius (for ion-accessibility)
+ *  @returns Characteristic function value between 1.0 (accessible) and 0.0
+ *          (inaccessible)
+ */
+VEXTERNC double Vacc_splineAccAtom(Vacc *thee, double center[3], double window,
+  double infrad, int atomID);
+
 /** @brief   Report gradient of spline-based accessibility with respect to a
- *           particular atom
+ *           particular atom normalized by the accessibility value due to that
+ *           atom at that point (see Vpmg_splineAccAtom)
  *
  *  Determine accessibility at a given point, given a collection of atomic
  *  spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998)
- *  definition suitable for force evalation; basically a cubic spline.
+ *  definition suitable for force evalation; basically a cubic spline. 
  *
  *  @ingroup Vacc
  *  @author  Nathan Baker
@@ -259,7 +278,7 @@ VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
  *  @param   atomID Valist ID of atom used in calculation
  *  @param   force  Stores gradient of accesibility (3-vector)
  */
-VEXTERNC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
+VEXTERNC void Vacc_splineAccGradAtom(Vacc *thee, double center[3], double win,
   double infrad, int atomID, double *force);
 
 /** @brief Set up an array of points for the reference sphere

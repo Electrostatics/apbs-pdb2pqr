@@ -13,7 +13,8 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = mg
 
 noinst_LTLIBRARIES = libapbsmg.la
-libapbsmg_la_SOURCES  = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f \
+libapbsmg_la_SOURCES  = vpmg.c vpmg-setup.c vpmg-force.c vpmg-energy.c \
+  vpmgp.c buildAd.f buildBd.f buildGd.f \
   buildPd.f cgd.f cgmgd.f cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f \
   mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
