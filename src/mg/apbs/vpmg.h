@@ -75,6 +75,8 @@
 #define NGSRBDRIV ngsrbdriv_
 #define NWJACDRIV nwjacdriv_
 #define NRICHDRIV nrichdriv_
+#define MYRAND myrand_
+#define TSECND tsecnd_
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Definition

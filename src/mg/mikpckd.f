@@ -72,7 +72,7 @@ c*       sun 4
 c*       sun 3
 c*       alliant fx/80
 c*
-c*    this routine is also correct for the native "TSECND" (which is
+c*    this routine is also correct for the native "tsecnd" (which is
 c*    for multitasked programs, rather than "second" for single task
 c*    programs) routine on the following machines:
 c*
@@ -82,14 +82,14 @@ c* author:  michael holst
 c* *********************************************************************
       implicit         none
       double precision before,overhd,garbge,t0,t1
-      double precision TSECND
+      double precision tsecnd
 c*
 c*    *** compute overhead and mark timer ***
-      garbge = TSECND()
-      t0     = TSECND()
-      t1     = TSECND()
+      garbge = tsecnd()
+      t0     = tsecnd()
+      t1     = tsecnd()
       overhd = t1 - t0
-      before = TSECND()
+      before = tsecnd()
 c*
 c*    *** return and end ***
       return
@@ -108,7 +108,7 @@ c*       sun 4
 c*       sun 3
 c*       alliant fx/80
 c*
-c*    this routine is also correct for the native "TSECND" (which is
+c*    this routine is also correct for the native "tsecnd" (which is
 c*    for multitasked programs, rather than "second" for single task
 c*    programs) routine on the following machines:
 c*
@@ -118,10 +118,10 @@ c* author:  michael holst
 c* *********************************************************************
       implicit         none
       double precision before,overhd,cputme,after
-      double precision TSECND
+      double precision tsecnd
 c*
 c*    *** stop timer, compute elapsed time, add to time counter ***
-      after  = TSECND()
+      after  = tsecnd()
       cputme = (after - before) - overhd
 c*
 c*    *** return and end ***
@@ -427,20 +427,20 @@ c* *********************************************************************
       integer          nx,ny,nz,i,j,k,iflag
       double precision x(nx,ny,nz)
       double precision xdum
-      real MYRAND
+      real myrand
 c*
 cmdir 0 0
 c*
 c*    *** do it ***
       iflag = 1
-      xdum  = dble(MYRAND(iflag))
+      xdum  = dble(myrand(iflag))
 cmdir 3 1
       do 10 k = 2, nz-1
 cmdir 3 2
          do 11 j = 2, ny-1
 cmdir 3 3
             do 12 i = 2, nx-1
-               x(i,j,k) = dble(MYRAND(iflag))
+               x(i,j,k) = dble(myrand(iflag))
  12         continue
  11      continue
  10   continue
@@ -531,7 +531,7 @@ c* *********************************************************************
       double precision xdum
       integer          n,i,ii,nproc,ipara,ivect
       parameter        (nproc=1)
-      real MYRAND
+      real myrand
 c*
 cmdir 0 0
 c*
@@ -540,21 +540,21 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
       ipara = n / nproc
       ivect = mod(n,nproc)
       iflag = 1
-      xdum  = dble(MYRAND(iflag))
+      xdum  = dble(myrand(iflag))
 c*
 c*    *** do parallel loops ***
 cmdir 2 1
       do 10 ii = 1, nproc
 cmdir 2 2
          do 11 i = 1+(ipara*(ii-1)), ipara*ii
-            x(i) = dble(MYRAND(iflag))
+            x(i) = dble(myrand(iflag))
  11      continue
  10   continue
 c*
 c*    *** do vector loops ***
 cmdir 1 1
       do 20 i = ipara*nproc+1, n
-         x(i) = dble(MYRAND(iflag))
+         x(i) = dble(myrand(iflag))
  20   continue
 c*
 c*    *** return and end ***
