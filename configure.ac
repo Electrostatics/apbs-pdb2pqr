@@ -161,17 +161,18 @@ else
 fi
 
 dnl # Platform specific linking flags
-PY_LDEXTRA=""
+PY_LDFLAGS=""
 PY_SHARED=""
+PY_LINKFLAGS=""
 case $host_os in
    linux*) 
       PY_SHARED="-shared";;
    irix*) 
       PY_SHARED="-shared"
-      PY_LDEXTRA="-lftn -lm";;
+      PY_LDFLAGS="-lftn -lm";;
    sun|solaris**) 
       PY_SHARED="-G"
-      PY_LDEXTRA="-lF77 -lm -lM77 -lsunmath";;
+      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
    cygwin|mingw32|windows**)
       PY_CFLAGS="";;
    *) 
@@ -182,11 +183,32 @@ case $host_cpu in
       PY_CFLAGS="";;
    powerpc64*)
       PY_CFLAGS="";;
+   ia64*)
+      PY_LINKFLAGS=${CFLAGS}
+      IS_STATIC=`echo ${LDFLAGS} | grep static-libcxa`
+      if test "${CC}" = "icc"; then
+          AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+	  if test -n "${ifcore_lib}"; then
+	      PY_LDFLAGS=${ifcore_lib}
+	  else
+	      PY_CFLAGS=""	
+	  fi
+	  if test -n "${IS_STATIC}"; then
+	      if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+	          PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	      else
+                  PY_CFLAGS=""
+	      fi 
+          fi
+      else
+          PY_CFLAGS=""
+      fi 
 esac
 
 AC_SUBST(PY_SHARED,[$PY_SHARED])
-AC_SUBST(PY_LDEXTRA,[$PY_LDEXTRA])
+AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
 AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
+AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
 AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_CFLAGS}"])
 
 dnl ##########################################################################
@@ -321,7 +343,6 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(maloc_lib)
 AC_SUBST(maloc_inc)
 
-
 dnl # ----------------------
 dnl # HANDLE THE MPI LIBRARY
 dnl # ----------------------
@@ -442,7 +463,7 @@ if test -n "${rl_use}"; then
     fi
 
     dnl # Setup temp LDFLAGS and look for READLINE library
-    LDFLAGS_SAVE=${LDFLAGS};
+  
     LDFLAGS=${rl_lib_path};
     AC_CHECK_LIB(ncurses,tgetnum,
         [ncurses_lib="-lncurses"],
@@ -460,7 +481,7 @@ if test -n "${rl_use}"; then
     fi
 
     dnl # Return LDFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE};
+    LDFLAGS=${LDFLAGS2_SAVE};
 
     dnl # Final decision
     if test -z "${rl_use}"; then
@@ -472,6 +493,7 @@ fi
 LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(rl_lib)
+
 AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
 
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
@@ -530,8 +552,6 @@ if test -z "${with_fetk}"; then
         [mc_found="";mc_lib=""],
         [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     dnl # Setup temp LDFLAGS and look for MCX library/header
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
     mcx_found="";
