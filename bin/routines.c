@@ -1828,36 +1828,12 @@ VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
         case FRT_GEOM:
             Vnm_tprint(1, "  Geometry-based pre-solve refinement.\n");
             break;
-        case FRT_RESI:
-            Vnm_tprint(1, "  Residual-based pre-solve refinement.\n");
-            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
-before you solve!\n");
-            VASSERT(0);
-            break;
-        case FRT_DUAL:
-            Vnm_tprint(1, "  Dual-based pre-solve refinement.\n");
-            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
-before you solve!\n");
-            VASSERT(0);
-            break;
-        case FRT_LOCA:
-            Vnm_tprint(1, "  Local-based pre-solve refinement.\n");
-            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
-before you solve!\n");
-            VASSERT(0);
-            break;
         default:
             Vnm_tprint(2, "Invalid akeyPRE (%d)!\n", feparm->akeyPRE);
             VASSERT(0);
             break;
     }
     switch(feparm->akeySOLVE) {
-        case FRT_UNIF:
-            Vnm_tprint(1, "  Uniform a posteriori refinement.\n");
-            break;
-        case FRT_GEOM:
-            Vnm_tprint(1, "  Geometry-based a posteriori refinement.\n");
-            break;
         case FRT_RESI:
             Vnm_tprint(1, "  Residual-based a posteriori refinement.\n");
             break;
