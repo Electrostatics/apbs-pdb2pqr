@@ -15,6 +15,6 @@ CLEANFILES       = apbslibc.so
 if PY_PRESENT
    noinst_PROGRAMS       = apbslibc.so
    apbslibc_so_SOURCES   = apbslib.c
-   apbslibc_so_LDADD     = $(LDFLAGS) -lapbsmainroutines -lapbs -lmaloc -lblas -lvf2c
+   apbslibc_so_LDADD     = ../../bin/libapbsmainroutines.la ../../src/aaa_lib/libapbs.la @lib_list@   
    apbslibc_so_LDFLAGS   = -shared 
 endif
