@@ -275,9 +275,9 @@ def main():
         stdout.write("---------------------------------------------\n")
         stdout.write("PRINT STATEMENTS\n")
     for iprint in xrange(nosh.nprint):
-        if NOsh_printWhat(nosh, iprint) == 0:
+        if NOsh_printWhat(nosh, iprint) == NPT_ENERGY:
             printEnergy(com, nosh, totEnergy, iprint)
-        elif NOsh_printWhat(nosh, iprint) == 1:
+        elif NOsh_printWhat(nosh, iprint) == NPT_FORCE:
             printForce(com, nosh, nforce, atomforce, iprint)
         else:
             stdout.write("Undefined PRINT keyword!\n")

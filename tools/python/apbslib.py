@@ -157,6 +157,9 @@ class NOshPtr :
         if name == "nelec" :
             apbslibc.NOsh_nelec_set(self.this,value)
             return
+        if name == "printwhat" :
+            apbslibc.NOsh_printwhat_set(self.this,value)
+            return
         self.__dict__[name] = value
     def __getattr__(self,name):
         if name == "ncalc" : 
@@ -165,6 +168,8 @@ class NOshPtr :
             return apbslibc.NOsh_nprint_get(self.this)
         if name == "nelec" : 
             return apbslibc.NOsh_nelec_get(self.this)
+        if name == "printwhat" : 
+            return apbslibc.NOsh_printwhat_get(self.this)
         raise AttributeError,name
     def __repr__(self):
         return "<C NOsh instance>"
@@ -378,3 +383,5 @@ startVio = apbslibc.startVio
 #-------------- VARIABLE WRAPPERS ------------------
 
 APBS_SWIG = apbslibc.APBS_SWIG
+NPT_ENERGY = apbslibc.NPT_ENERGY
+NPT_FORCE = apbslibc.NPT_FORCE
