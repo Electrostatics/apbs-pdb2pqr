@@ -56,7 +56,7 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Vgm *gm) {
 
     /* Set up the structure */
     Vcsm *thee = VNULL;
-    thee = (Vcsm*)calloc( 1, sizeof(Vcsm) );
+    thee = (Vcsm*)Vram_ctor( 1, sizeof(Vcsm) );
     VASSERT( thee != VNULL);
     VASSERT( Vcsm_ctor2(thee, alist, gm));
 
@@ -104,79 +104,62 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Vgm *gm) {
 VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
-    int iatom, isimp, jsimp;
-    int nsimps, gotSimp;
+    int iatom, isimp;
+    int gotSimp;
+    char setid[80];
     /* Atomic information */
     Vatom *atom;
-    double *position, charge, nsimpsf;
+    double *position;
     /* Simplex/Vertex information */
     SS *simplex;
 
     VASSERT(thee != NULL);
+    Vnm_tstart(65, "charge-simplex map init");
     thee->natom = Valist_getNumberAtoms(thee->alist);
-    thee->nsimp = thee->gm->numSS;
-    VASSERT(thee->nsimp > 0);
 
-    /* Allocate and initialize space for the first dimensions of the 
-     * simplex-charge map, the simplex array, and the counters */
-    VASSERT( (thee->sqm = Vram_ctor(thee->nsimp, sizeof(int *))) != VNULL);
-    VASSERT( (thee->nsqm = Vram_ctor(thee->nsimp, sizeof(int))) != VNULL);
-    for (isimp=0; isimp<thee->nsimp; isimp++) (thee->nsqm)[isimp] = 0;
+    /* Allocate a Vset (dynamic array) which contains pointers to
+     * additional Vset objects (the rows of this array) */
+    Vnm_print(0, "Vcsm_init: Constructing initial sqm object for %d simps\n", 
+      Vgm_numSS(thee->gm));
+    thee->sqm = Vset_ctor("CSM.SQM", sizeof(Vset *), VMAX_OBJECTS);
+    for (isimp=0; isimp<Vgm_numSS(thee->gm); isimp++) {
+        sprintf(setid, "CSM.SQM[%d]", isimp);
+        /* Obfuscated C at its best... Allocate a new (Vset *) entry for
+         * integer objects in 
+         * the dynamic array.  This gets returned as a (Vset **).
+         * Dereference this and use it as the pointer to a new Vset object
+         */
+        *(Vset **)Vset_create(thee->sqm) = \
+           Vset_ctor(setid, sizeof(int), VMAX_OBJECTS);
+    }
 
-    /* Count the number of charges per simplex.
-     * IF AN ATOM IS IN MORE THAN ONE SIMPLEX, COUNT THE TOTAL NUMBER OF
-     * SIMPLICES IT RESIDES IN AND DIVIDE THE ATOMIC CHARGE BY THAT NUMBER.
-     * WE ASSUME THAT SIMPLICES ARE NEVER UNREFINED, SO ONCE AN ATOM'S
-     * CHARGE IS DIVIDED IT WILL NEVER BE REINTEGRATED */
+    /* Place charges in simplices...  */
+    Vnm_print(0, "Vcsm_init: Placing charges in simplices.\n");
     for (iatom=0; iatom<thee->natom; iatom++) {
+        /* Get the atomic position */
         atom = Valist_getAtom(thee->alist, iatom);
         position = Vatom_getPosition(atom);
+
         gotSimp = 0;
-        for (isimp=0; isimp<thee->nsimp; isimp++) {
+        for (isimp=0; isimp<Vset_num(thee->sqm); isimp++) {
             simplex = Vgm_SS(thee->gm, isimp);
             if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                (thee->nsqm)[isimp]++;
+                *(int *)Vset_create(*(Vset **)Vset_access(thee->sqm,
+                    isimp)) = iatom;
                 gotSimp = 1;
              }
         }
+
         if (!gotSimp) {
-            Vnm_print(2, "Vcsm_init: Atom #%d (%4.3f, %4.3f, %4.3f) was not located in a simplex!\n", 
-                iatom, position[0], position[1], position[2]);
-            Vnm_print(2, "Vcsm_init: Confirming...\n");
-            for (isimp=0; isimp<thee->nsimp; isimp++) {
-                simplex = Vgm_SS(thee->gm, isimp);
-                if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                    Vnm_print(2, "Vcsm_init:     Atom %d IN simplex %d!!!\n", iatom, isimp);
-                 } else Vnm_print(2, "Vcsm_init:     Atom %d not in simplex %d\n", iatom, isimp);
-            }
+            Vnm_print(2, "Vcsm_init: Atom #%d", iatom);
+            Vnm_print(2, " (%4.3f, %4.3f, %4.3f)", position[0], position[1], 
+              position[2]);
+            Vnm_print(2, " was not located in a simplex!\n"); 
             VASSERT(0);
         }
     }
 
-    /* Allocate the space for the simplex-charge map */
-    for (isimp=0; isimp<thee->nsimp; isimp++) {
-        if ((thee->nsqm)[isimp] > 0) {
-            VASSERT(((thee->sqm)[isimp] = Vram_ctor((thee->nsqm)[isimp],
-                                            sizeof(int)) ) != VNULL);
-        }
-    }
-
-    /* Finally, set up the map */
-    for (isimp=0; isimp<thee->nsimp; isimp++) {
-        jsimp = 0;
-        simplex = Vgm_SS(thee->gm, isimp);
-        for (iatom=0; iatom<thee->natom; iatom++) {
-            atom = Valist_getAtom(thee->alist, iatom);
-            position = Vatom_getPosition(atom);
-            /* Check to see if the atom's in this simplex */
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                /* Assign the entries in the next vacant spot */
-                (thee->sqm)[isimp][jsimp] = iatom;
-                jsimp++;
-            }
-        }
-    }
-
+    Vnm_tstop(65, "charge-simplex map init");
     thee->initFlag = 1;
 }
 
@@ -221,13 +204,10 @@ VPRIVATE void Vcsm_freeArrays(Vcsm *thee) {
     if ((thee != VNULL) && thee->initFlag) {
 
         Vnm_print(0,"Vcsm_freeArrays: freeing sqm entries.\n"); 
-        for (i=0; i<thee->nsimp; i++) {
-            if (thee->nsqm[i] > 0) free(thee->sqm[i]);
-        }
+        for (i=0; i<Vset_num(thee->sqm); i++) 
+          Vset_dtor((Vset **)Vset_access(thee->sqm, i));
         Vnm_print(0,"Vcsm_freeArrays: freeing sqm.\n"); 
-        free(thee->sqm);
-        Vnm_print(0,"Vcsm_freeArrays: freeing nsqm.\n"); 
-        free(thee->nsqm);
+        Vset_dtor(&(thee->sqm));
 
     }
 }
@@ -268,10 +248,13 @@ VPUBLIC Vgm* Vcsm_getVgm(Vcsm *thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
+  
+   Vset *set;
 
    VASSERT(thee != VNULL);
    VASSERT(thee->initFlag);
-   return thee->nsqm[isimp];
+   set = *(Vset **)Vset_access(thee->sqm, isimp);
+   return Vset_num(set);
 
 }
 
@@ -284,12 +267,15 @@ VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
 
+   Vset *set;
 
    VASSERT(thee != VNULL);
    VASSERT(thee->initFlag);
 
-   VASSERT(iatom < (thee->nsqm)[isimp]);
-   return Valist_getAtom(thee->alist, (thee->sqm)[isimp][iatom]);
+   set = *(Vset **)Vset_access(thee->sqm, isimp);
+   VASSERT(iatom < Vset_num(set));
+ 
+   return Valist_getAtom(thee->alist, *Vset_access(set, iatom));
 
 }
 
@@ -302,12 +288,15 @@ VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
 
+   Vset *set;
 
    VASSERT(thee != VNULL);
    VASSERT(thee->initFlag);
 
-   VASSERT(iatom < (thee->nsqm)[isimp]);
-   return (thee->sqm)[isimp][iatom];
+   set = *(Vset **)Vset_access(thee->sqm, isimp);
+   VASSERT(iatom < Vset_num(set));
+ 
+   return *Vset_access(set, iatom);
 
 }
 
@@ -330,89 +319,46 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
 
     /* Counters */
     int isimp, jsimp, iatom, atomID, simpID;
-    int nsimps, gotMem;
-    /* Object info */
     Vatom *atom;
     SS *simplex;
-    double *position, charge, nsimpsf;
-    /* Lists */
-    int *qParent; int nqParent;
-    int **sqmNew; int *nsqmNew;
+    double *position;
+    char setid[80];
+    Vset *qParent;
+    Vset **sqmNew;
 
     VASSERT(thee != VNULL);
     VASSERT(thee->initFlag);
 
-    /* If we don't have enough memory to accommodate the new entries, 
-     * add more by doubling the existing amount */
-    isimp = thee->nsimp + num - 1;
-    gotMem = 0;
-    while (!gotMem) {
-        if (isimp > thee->msimp) {
-            isimp = 2 * isimp;
-            printf("Vcsm_update: going to allocate %d entries\n", isimp);
-            VASSERT( (thee->nsqm = 
-              realloc(thee->nsqm, isimp * sizeof(int))) != VNULL); 
-            VASSERT( (thee->sqm = 
-              realloc(thee->sqm, isimp * sizeof(int *))) != VNULL); 
-            thee->msimp = isimp;
-            printf("Vcsm_update: reallocated %d entries\n",thee->msimp);
-        } else gotMem = 1;
+    /* Get the number new simplices and initialize */
+    isimp = Vset_num(thee->sqm) + num - 1;
+
+    Vnm_print(0, "Vcsm_init: Adding %d entries to CSM (%d entries)\n",
+       num, Vset_num(thee->sqm));
+    for (isimp = 0; isimp<num; isimp++) {
+        sprintf(setid, "CSM.SQM[%d]", isimp);
+        /* Obfuscated C at its best... Allocate a new (Vset *) entry for
+         * integer objects in 
+         * the dynamic array.  This gets returned as a (Vset **).
+         * Dereference this and use it as the pointer to a new Vset object
+         */
+        *(Vset **)Vset_create(thee->sqm) = \
+           Vset_ctor(setid, sizeof(int), VMAX_OBJECTS);
     }
-    /* Initialize the nsqm entires we just allocated */
-    for (isimp = thee->nsimp; isimp<thee->nsimp+num-1 ; isimp++) 
-      thee->nsqm[isimp] = 0;
-    thee->nsimp = thee->nsimp + num - 1;
 
     /* There's a simple case to deal with:  if simps[0] didn't have a
      * charge in the first place */
     isimp = SS_id(simps[0]);
-    if (thee->nsqm[isimp] == 0) {
-        for (isimp=1; isimp<num; isimp++) {
-            thee->nsqm[SS_id(simps[isimp])] = 0;
-        }
-        return 1;
-    }
-
-    /*
-     * printf("Vcsm_update: Updating Simp %d and children\n", SS_id(simps[0]));
-     */
+    if (Vset_num(*(Vset **)Vset_access(thee->sqm, isimp)) == 0) return 1;
 
     /* The more complicated case has occured; the parent simplex had one or
      * more charges.  First, generate the list of affected charges. */
     isimp = SS_id(simps[0]);
-    nqParent = thee->nsqm[isimp];
-    qParent = thee->sqm[isimp];
+    qParent = *(Vset **)Vset_access(thee->sqm, isimp);
 
-    VASSERT( (sqmNew = Vram_ctor(num, sizeof(int *))) != VNULL);
-    VASSERT( (nsqmNew = Vram_ctor(num, sizeof(int))) != VNULL);
-    for (isimp=0; isimp<num; isimp++) nsqmNew[isimp] = 0;
-
-    /* Loop throught the affected atoms to determine how many atoms each
-     * simplex will get.  
-     * IF AN ATOM WILL BE ASSIGNED TO MORE THAN ONE SIMPLEX, IT'S CHARGE IS
-     * DIVIDED BY THE TOTAL NUMBER OF SIMPLICES TO WHICH IT WILL BE
-     * ASSIGNED.  WE MAKE NO PROVISIONS FOR UNREFINEMENT OF SIMPLICES, SO
-     * THIS DIVISION IS PERMANENT. */
-    for (iatom=0; iatom<nqParent; iatom++) {
-        atomID = qParent[iatom];
-        atom = Valist_getAtom(thee->alist, atomID);
-        position = Vatom_getPosition(atom);
-        nsimps = 0;
-
-        for (isimp=0; isimp<num; isimp++) {
-            simplex = simps[isimp];
-            if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                nsqmNew[isimp]++;
-            }
-        }
-    }
-
-    /* Allocate the storage */
+    VASSERT( (sqmNew = Vram_ctor(num, sizeof(Vset *))) != VNULL);
     for (isimp=0; isimp<num; isimp++) {
-        if (nsqmNew[isimp] > 0) {
-            sqmNew[isimp] = Vram_ctor(nsqmNew[isimp], sizeof(int));
-            VASSERT(sqmNew[isimp] != VNULL);
-        }
+        sprintf(setid, "CSM.TMP[%d]", isimp);
+        sqmNew[isimp] = Vset_ctor(setid, sizeof(int), VMAX_OBJECTS);
     }
 
     /* Assign charges to simplices */
@@ -422,14 +368,13 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
         simplex = simps[isimp];
 
         /* Loop over the atoms associated with the parent simplex */
-        for (iatom=0; iatom<nqParent; iatom++) {
+        for (iatom=0; iatom<Vset_num(qParent); iatom++) {
 
-            atomID = qParent[iatom];
+            atomID = *(int *)Vset_access(qParent, iatom);
             atom = Valist_getAtom(thee->alist, atomID);
             position = Vatom_getPosition(atom);
             if (Vgm_pointInSimplex(thee->gm, simplex, position)) {
-                sqmNew[isimp][jsimp] = atomID;
-                jsimp++;
+                *(int *)Vset_create(sqmNew[isimp]) = atomID;
             }
         }
     }
@@ -437,31 +382,24 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Sanity check that we didn't lose any atoms... */
     iatom = 0;
     for (isimp=0; isimp<num; isimp++) {
-        if (nsqmNew[isimp] > 0) {
-            /*
-             * printf("Vcsm_update: Simp %d has %d atoms.\n",
-             *   SS_id(simps[isimp]), nsqmNew[isimp]);
-             */
-        } 
-        iatom += nsqmNew[isimp];
+        iatom += Vset_num(sqmNew[isimp]);
     }
-    if (iatom < nqParent) {
+    if (iatom < Vset_num(qParent)) {
         Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n", 
-            nqParent - iatom, nqParent);
+            Vset_num(qParent) - iatom, Vset_num(qParent));
         VASSERT(0);
     }
 
     /* Replace the existing entries in the table */
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
-        if (thee->nsqm[simpID] > 0) free(thee->sqm[simpID]);
-        thee->sqm[simpID] = sqmNew[isimp];
-        thee->nsqm[simpID] = nsqmNew[isimp];
+        Vset_dtor((Vset **)Vset_access(thee->sqm, simpID));
+        *(Vset **)Vset_access(thee->sqm, simpID) = sqmNew[isimp];
     }
 
+    Vram_dtor((Vram **)&sqmNew, num, sizeof(Vset *));
 
+    Vnm_tstop(65, "charge-simplex map update");
     return 1;
-
-
 }
 
