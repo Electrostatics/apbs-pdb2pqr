@@ -2672,7 +2672,7 @@ VPUBLIC void Vpmg_writeDX2(const char *iodev, const char *iofmt,
     /* Write off the DX regular positions */
     Vio_printf(sock, "object 1 class gridpositions counts %d %d %d\n",
       nz, ny, nx);
-    Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", zmin, ymin, xmin);
+    Vio_printf(sock, "origin %12.6E %12.6E %12.6E\n", xmin, ymin, zmin);
     Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, 0.0, hzed);
     Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", 0.0, hy, 0.0);
     Vio_printf(sock, "delta %12.6E %12.6E %12.6E\n", hx, 0.0, 0.0);
@@ -2794,7 +2794,7 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
 
     Vacc *acc = VNULL;
     Vpbe *pbe = VNULL;
-    double position[3];
+    double position[3], hx, hy, hzed, xmin, ymin, zmin;
     int i, j, k, nx, ny, nz;
 
     pbe = thee->pbe;
@@ -2802,6 +2802,12 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
 
     if (meth == 0) {
         Vnm_print(0, "Vpmg_fillAcc: using molecular surface with %g A probe\n",
@@ -2824,9 +2830,9 @@ VPUBLIC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm) {
         for (j=0; j<ny; j++) {
             for (i=0; i<nx; i++) {
 
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
+                position[0] = i*hx + xmin;
+                position[1] = j*hy + ymin;
+                position[2] = k*hzed + zmin;
 
                 /* the scalar (0th derivative) entry */
                 if (meth == 0) {
