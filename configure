@@ -3321,7 +3321,7 @@ s%@build_alias@%$build_alias%g
 s%@build_cpu@%$build_cpu%g
 s%@build_vendor@%$build_vendor%g
 s%@build_os@%$build_os%g
-s%@mc_cpu_vendor_os@%$mc_cpu_vendor_os%g
+s%@fetk_cpu_vendor_os@%$fetk_cpu_vendor_os%g
 s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
 s%@INSTALL_SCRIPT@%$INSTALL_SCRIPT%g
 s%@INSTALL_DATA@%$INSTALL_DATA%g
