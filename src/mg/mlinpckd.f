@@ -483,6 +483,7 @@ c
       s = 10.0d0
       do 50 i = 1, n
          det(1) = abd(m+1,i)**2*det(1)
+         print *, 'det = ', det(1)
 c     ...exit
          if (det(1) .eq. 0.0d0) go to 60
    10    if (det(1) .ge. 1.0d0) go to 20

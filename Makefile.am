@@ -51,6 +51,8 @@ SUBDIRS = src tst inc lib work tools
 
 distclean-local: clean-local
 
-clean-local:
-	-rm -f ./lib/*.a
+clean-local: clean-ac
+	-rm -f ./lib/*.a 
+clean-ac:
+	-rm -f dummy*.o mangle-func.*
 

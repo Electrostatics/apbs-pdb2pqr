@@ -61,6 +61,10 @@
 #define F77NRICHDRIV  VF77_MANGLE(nrichdriv, NRICHDRIV)
 #define F77MYRAND     VF77_MANGLE(myrand, MYRAND)
 #define F77TSECND     VF77_MANGLE(tsecnd, TSECND)
+#define F77VPMGANORM  VF77_MANGLE(vpmganorm, VPMGANORM)
+#define F77VPMGABAND  VF77_MANGLE(vpmgaband, VPMGABAND)
+#define F77DPBFA  VF77_MANGLE(dpbfa, DPBFA)
+#define F77DPBDI  VF77_MANGLE(dpbdi, DPBDI)
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmg: Private methods
