@@ -39,8 +39,11 @@
 #include "mc/vram.h"
 #include "mc/ves.h"
 
+
 #include "mc/vatom.h"
 #include "mc/valist.h"
+#include "mc/vlink.h"
+#include "mc/vpool.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Parameters and datatypes
@@ -55,24 +58,20 @@ typedef struct Vcsm {
   Valist *alist;      /* Atom (charge) list */
   int natom;          /* Size of thee->alist; redundant, but useful for
                        * convenience */
+  Vpool *pool;        /* A pool of Vlink objects */
   Vgm *gm;            /* Grid manager (container class for master vertex
                        * and simplex lists as well as prolongation
                        * operator for updating after refinement ) */
-  int **sqm;          /* The map which gives the list charges associated with
+  Vlink **sqm;        /* The map which gives the list charges associated with
                        * each simplex in gm->simplices.  The indices of
                        * the first dimension are associated with the
-                       * simplex ID's in Vgm.  Each charge list (second 
-                       * dimension) contains entries corresponding to
-                       * indicies in thee->alist with lengths given in 
-                       * thee->nsqm */
-  int *nsqm;          /* The length of the charge lists in thee->sqm */
+                       * simplex ID's in Vgm.  This is an array of pointers
+                       * to the first items in linked lists of charges
+                       * (Vlink objects) */
   int nsimp;          /* The _currently used) length of sqm, nsqm -- may not 
                        * always be up-to-date with Vgm */
   int msimp;          /* The maximum number of entries that can be 
                        * accomodated by sqm or nsqm  -- saves on realloc's */
-  int **qsm;          /* The inverse of sqm; the list of simplices
-                       * associated with a given charge */
-  int *nqsm;          /* The length of the simplex lists in thee->qsm */
   int initFlag;       /* Indicates whether the maps have been initialized
                        * yet */
 
@@ -99,7 +98,6 @@ VEXTERNC Valist* Vcsm_getValist(Vcsm *thee);
 VEXTERNC Vgm*    Vcsm_getVgm(Vcsm *thee);
 VEXTERNC int     Vcsm_getNumberAtoms(Vcsm *thee, int isimp);
 VEXTERNC Vatom*  Vcsm_getAtom(Vcsm *thee, int iatom, int isimp);
-VEXTERNC int     Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp);
 
 VEXTERNC void    Vcsm_init(Vcsm *thee);
 VEXTERNC int     Vcsm_update(Vcsm *thee, SS **simps, int num);
