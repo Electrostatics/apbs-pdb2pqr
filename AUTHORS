@@ -1,0 +1,176 @@
+### ##########################################################################
+### MC = < Manifold Code >
+### Copyright (C) 1993  Michael Holst
+### Copyright (C) 1999  Contributing authors listed in the code documentation
+###                     retain the copyrights to their code contributions.
+###
+### The program MC is copyrighted software, and there are restrictions on its
+### use, modification, and distribution; please refer to the document COPYING
+### which accompanies this software.
+###
+### This program is distributed in the hope that it will be useful,
+### but WITHOUT ANY WARRANTY; without even the implied warranty of
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+### See the document COPYING for more details.
+###
+### You should have received a copy of the COPYING file with this program;
+### if not, write to the author Michael Holst at:  mholst@math.ucsd.edu
+###
+### rcsid="$Id$"
+### ##########################################################################
+
+MC (Manifold Code) was developed by Michael Holst over a number of years,
+beginning in October 1993.
+
+    ======================================================================
+    Copyright (C) 1993  Michael Holst
+
+    Michael Holst               TELE:  (858) 534-4899
+    Department of Mathematics   FAX:   (858) 534-5273
+    UC San Diego, AP&M 5739     EMAIL: mholst@math.ucsd.edu
+    La Jolla, CA 92093 USA      WEB:   http://www.scicomp.ucsd.edu/~mholst
+    ======================================================================
+
+The 35,000+ lines were written and debugged by the author primarily
+on a 90Mhz Pentium PC with a FireGL video card running Linux, using
+only GNU software development tools.
+
+A number of generous and gifted people have contributed pieces of code to MC,
+and are listed below, alongside their contributions.  Each author retains the
+copyrights to the individual pieces of code which they contribute to MC,
+in the GNU spirit.
+
+NOTE: At this time, MC is NOT being freely distributed.  Please read the
+      information below about contributing to MC and about working with
+      and redistributing MC.
+
+
+================================================
+Authors                            Contributions
+================================================
+
+Michael Holst                      The primary author and ringleader
+<mholst@math.ucsd.edu>
+                                   The core MC libraries:
+                                       vhal.h (hardware abstaction layer)
+                                       vnm (Vnm,Vio,Vram,Vsig)
+                                       vto (Vset,Vec3,Mat3,Vec,Bvec,Pmat,Bmat)
+                                       vgm (Vel,Ves,Vgm)
+                                       vmc (Vre,Alg,AM,PDE)
+                                       vgl (Vgl,Vglm,Ogl,Oglps)
+
+                                   Interfaces to supporting libraries:
+
+                                       vblas (interface to CBLAS)
+                                       vslu (interface to SuperLU)
+                                       vor (interface to HULL)
+                                       vmpi/oracle (a bad attempt at MPI)
+
+
+
+Randy Bank                         <mc/src/vgl/oglps.c[h]> (joint w/ Holst)
+<reb@sdna1.ucsd.edu>               <mc/src/vgl/vglm.c[h]> (joint w/ Holst)
+                                       
+Karen Camarda                      <mc/src/vmc/eval.c> (joint w/ Holst)
+<kcamarda@astro.psu.edu>
+
+Doug Arnold                        <mclab/drawmcsf.m>
+<dna@math.psu.edu>
+
+David Bernstein                    Several binary black hole meshes <mcsf/*>
+<David.Bernstein@Tanner.Com>
+
+Feng Wang                          vsav interface to SAV (joint w/ Holst)
+<fwang@math.uci.edu>
+
+Nathan Baker                       <mc/src/vnm/vcom.c> (MPI; joint w/ Holst)
+<nbaker@math.ucsd.edu>
+
+
+================================================
+Other software included with the MC distribution
+================================================
+
+While not required to compile or use MC, several other packages (or subsets
+of packages) are included with the MC distribution.  Each of these packages
+has a separate set of developers, and may have its own redistribution rules;
+see the appropriate subdirectories in the source tree.  The extra packages 
+are as follows:
+
+   <MC_ROOT/src/vgm/pred.c> -- J. Shewchuk's geometric "predicates.c"
+   <MC_ROOT/src/ef/*>       -- B. Perens' Electric Fence (A malloc debugger)
+   <MC_ROOT/src/glw/*>      -- B. Paul's GLw widgets (An OpenGL "GLw" widget)
+   <MC_ROOT/src/vblas/*>    -- Subset of the CBLAS library (C version of BLAS)
+   <MC_ROOT/src/vor/*>      -- Subset of K. Clarkson's HULL (delaunay code)
+   <MC_ROOT/src/vsav/*>     -- Subset of D. Bashford's SAV (SolvAccVol)
+   <MC_ROOT/src/vslu/*>     -- Subset of SuperLU library (sparse direct solver)
+
+
+===============================
+Redistributing MC (PLEASE READ)
+===============================
+
+Please read the "copying" file included with MC.  Here is a brief summary:
+
+      MC is not a yet GNU code; it is not yet covered by the GNU GPL.
+                  
+I.e., MC is not currently redistributable, AT ALL.  In particular, I do not
+want my contributions redistributed yet, AT ALL (until after tenure :).  If
+you decide to let other people use any MC-related code that YOU write, please
+remember that unless we have an a priori agreement, you are NOT allowed to
+distribute any of the core MC libraries that I have written.  While this
+policy will change, MC is currently NOT a redistributable code.
+
+===============================================
+Guidelines for Contributing to MC (PLEASE READ)
+===============================================
+
+If you are using MC and have written a new method for one of the MC class
+libraries, or if you have simply made a change to an existing method, and
+you would like your changes to be added permanently to the master CVS archive
+which I use to maintain MC (so that your changes or additions will be
+available to you and others in the future), please contact me about this.
+
+Here are the rules you must agree to live by in order to have your
+contribution included permanently in the CVS source tree:
+
+   (1) The contribution must add significant new or improved functionality
+       to MC (to keep the number of changes I must deal with managable).
+       Minor changes or small bug fixes to existing class libraries will
+       be gladly accepted, but your name will not necessarily be added
+       to the author list unless the changes are significant.
+
+   (2) The contribution must be general in nature, and must not build in
+       problem-specific details into the core MC libraries.  (Of course, if
+       your contribution is a PDE description file, then it can be very
+       problem specific.)
+
+   (3) The contribution must adhere to the "Clean C" coding style guidelines
+       listed in the file "hacking", and it must be consistent with the
+       overall coding style and design of MC.
+
+   (4) Any changes you make must be completely documented in the header block
+       of each individual method that you modify.  In addition, your name
+       should be added to the list of authors in the header block for the
+       specific method (so that you can be held accountable later :), and your
+       contributions should be (briefly) summarized on the line containing
+       your name.  You retain the copyrights to your contribution (see below).
+       You do not need to edit the 20-line copyright notice at the top of the
+       files in MC (it is automatically generated by a shell script, and any
+       changes you make to those 20 lines will be lost).
+
+   (5) You must agree to license your contribution to me and to the world
+       under the GNU GPL (the GNU General Public License).  This means that
+       you retain the copyright to your specific code contribution, but it
+       makes it possible for me and others to use your code in MC, and it
+       protects you in the sense that anyone attempting to sell your
+       contributions for profit must also make available, on request, your
+       original source code with your author information attached.  If you
+       later decide to change your contribution to a non-GPL license, I will
+       remove your contribution from MC (no offense taken).  Please read the
+       "copying.gnu" file for details about the GNU GPL.
+
+   (6) The primary author (Michael Holst) makes all final decisions regarding
+       (a) additions or changes to the CVS source tree, (b) major design
+       changes, and (c) the overall development direction for MC.
+
