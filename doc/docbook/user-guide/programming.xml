@@ -1,0 +1,8 @@
+<chapter id="programming-sect"> <title>Programming</title>
+  <para>Users who are interested in developing code for or with APBS should
+    consult the Programmer's Guide, available in HTML format at
+    <filename>
+      <ulink url="programmer/index.html">doc/programmer/index.html</ulink>
+    </filename>.
+  </para>
+</chapter>

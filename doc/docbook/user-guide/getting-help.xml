@@ -1,0 +1,64 @@
+<chapter> <title>Getting help</title>
+  <para>APBS follows an open source software development model and relies
+    heavily on the user community for feedback to enhance the software,
+    identify bugs, etc. </para>
+  <sect1 id="mailing-lists"> <title>User forums</title>
+    <para> 
+      There are two mailing lists for the APBS software:
+      <variablelist>
+        <varlistentry>
+          <term> Announcements 
+          </term>
+          <listitem>
+            <para>
+              This is a very low-traffic list to inform users of new APBS
+              releases and APBS-related software (PDB2PQR, etc.).
+              news (updates, bugs, etc.) on this low-traffic list.
+              <itemizedlist>
+                <listitem>
+                  <para>List information:  
+                    <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-announce">http://cholla.wustl.edu/mailman/listinfo/apbs-announce</ulink>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>List archives:  
+                    <ulink url="http://cholla.wustl.edu/pipermail/apbs-announce/">http://cholla.wustl.edu/pipermail/apbs-announce/</ulink>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term> User discussion </term>
+          <listitem>
+            <para>
+              This higher-traffic list is the primary forum for discussion of
+              APBS functionality, usage, possible enhancements, and bugs.
+              <itemizedlist>
+                <listitem>
+                  <para>List information:  
+                    <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</ulink>
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>List archives:  <ulink
+                      url="http://cholla.wustl.edu/pipermail/apbs-users/">http://cholla.wustl.edu/pipermail/apbs-users/</ulink>
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </para>
+  </sect1>
+  <sect1> <title>Bug and other problems</title>
+    <para> 
+      Bugs or potential bugs, problems, etc. should be reported to the
+      APBS-USERS 
+      (<ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</ulink>)
+      mailing list (see <link linkend="mailing-lists">User forums</link>).
+    </para>
+  </sect1>
+</chapter>

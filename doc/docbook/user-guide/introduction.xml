@@ -1,0 +1,140 @@
+<chapter id="introduction-sect"> <title>Introduction</title>
+
+  <para>APBS is a software package for the numerical solution of the
+    Poisson-Boltzmann equation (PBE), one of the most popular continuum models
+    for describing electrostatic interactions between molecular solutes in
+    salty, aqueous media. Continuum electrostatics plays an important role in
+    several areas of biomolecular simulation, including:
+    <itemizedlist>
+      <listitem>
+        <para>simulation of diffusional processes to determine ligand-protein
+          and protein-protein binding kinetics,</para>
+      </listitem>
+      <listitem>
+        <para>implicit solvent molecular dynamics of biomolecules,</para>
+      </listitem>
+      <listitem>
+        <para>solvation and binding energy calculations to determine
+          ligand-protein and protein-protein equilibrium binding constants and
+          aid in rational drug design,</para>
+      </listitem>
+      <listitem>
+        <para>and biomolecular titration studies.</para>
+      </listitem>
+    </itemizedlist>
+    APBS was designed to efficiently evaluate electrostatic properties for
+    such simulations for a wide range of length scales to enable the investigation
+    of molecules with tens to millions of atoms.</para>
+
+  <formalpara> <title>Financial support</title>
+    <para>The development of APBS has been supported financially by:
+      <itemizedlist>
+        <listitem>
+          <para><ulink url="http://www.nih.gov">National Institutes of 
+            Health</ulink> (grant GM069702-01)</para>
+        </listitem>
+        <listitem>
+          <para><ulink url="http://www.npaci.edu">National Partnership for Advanced
+            Computational Infrastructure</ulink></para>
+        </listitem>
+        <listitem>
+          <para><ulink url="http://nbcr.sdsc.edu">National Biomedical Computation
+            Resource</ulink></para>
+        </listitem>
+       </itemizedlist>
+    </para>
+  </formalpara>
+
+  <formalpara id="citing"> <title>Citing APBS</title>
+    <para>Please acknowledge your use of APBS by citing:
+      <blockquote> 
+        <para> 
+          <ulink url="http://www.pnas.org/cgi/content/abstract/98/18/10037"> 
+            Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA.  Electrostatics of
+            nanosystems: application to microtubules and the ribosome.
+            <citetitle>Proc Natl Acad Sci USA</citetitle> 98, 10037-10041, 2001.
+          </ulink>  
+        </para> 
+      </blockquote>
+    </para>
+  </formalpara>
+
+  <formalpara id="authors"> <title>Contributing authors</title>
+    <para>APBS was primarily written by Nathan Baker during his graduate work
+      with J. Andrew McCammon and Michael Holst and extensively developed over
+      the subsequent years.  APBS uses several libraries written by Mike Holst
+      and members of the Holst group, including:  
+      <ulink url="http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html">PMG</ulink> 
+      (multigrid solver for Cartesian mesh discretization), 
+      <ulink url="http://www.fetk.org">FEtk</ulink> 
+      (provides finite element framework, error estimators, and solvers), and 
+      <ulink url="http://scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC
+      </ulink> (hardware abstraction library for code portability).
+      Additionally, a number of people have made important contributions to enhance
+      APBS functionality and usability.  The full author list (in alphabetical
+      order) is:
+      <itemizedlist>
+        <listitem>
+          <para>Nathan A. Baker</para>
+          <para>Primary author</para> 
+        </listitem>
+        <listitem>
+          <para>Steve Bond</para>
+          <para>Contributor:  FEtk library compatibility and Vopot functions</para>
+        </listitem>
+        <listitem>
+          <para>Larry Canino</para>
+          <para>Contributor: solvent accessibility function modification</para>
+        </listitem>
+        <listitem>
+          <para>Todd Dolinsky</para>
+          <para>Contributor: Python wrappers, PDB2PQR, examples,and other
+          tools</para> 
+        </listitem>
+        <listitem> 
+          <para>Adrian Elcock</para>
+          <para>Contributor: parameter files</para>
+        </listitem>
+        <listitem>
+          <para>Michael J. Holst</para>
+          <para>Advisor and author of several routines scattered about APBS,
+            and author of PMG (the multigrid library used by this code), author
+            of MALOC (hardware abstraction library used by this code), author
+            of FEtk (finite element library incorporated in developmental
+            versions of this code)
+          </para>
+        </listitem>
+        <listitem>
+          <para>Robert Konecny</para>
+          <para>Contributor: parameters, CHARMM FORTRAN interface</para>
+        </listitem>
+        <listitem>
+          <para>Jung-Hsin Lin</para>
+          <para>Contributor:  OpenDX to MOLMOL conversion</para>
+        </listitem>
+        <listitem>
+          <para>Chiansan Ma</para>
+          <para>Contributor: format conversion scripts</para>
+        </listitem>
+        <listitem>
+          <para>J. Andrew McCammon</para>
+          <para>Advisor, financial and equipment support, functionality
+          suggestions</para> 
+        </listitem> 
+        <listitem>
+          <para>Jens Nielsen</para>
+          <para>Contributor: PDB2PQR</para>
+        </listitem>
+        <listitem>
+          <para>David Sept</para>
+          <para> Contributor:  scripts and tools, VMD compatibility, general
+          suggestions about functionality </para>
+        </listitem>
+        <listitem>
+          <para>Tongye Shen</para>
+          <para>Contributor:  finite element mesh generation</para>
+        </listitem>
+      </itemizedlist>
+    </para>
+  </formalpara>
+</chapter>
