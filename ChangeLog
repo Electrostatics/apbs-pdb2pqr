@@ -1,4 +1,10 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.2.2       ??-??-02
+#############################################################################
+
+  * Fixed bug in OpenDX input/output (OpenDX documentation is lousy!)
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.1       04-23-02
 #############################################################################
 This version requires the latest version of MALOC to work properly!
