@@ -17,7 +17,7 @@ NOSH_MAXCALC = 20
 header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.2.2 (August 14, 2002)\n\
+    Version 0.2.3 (October 9, 2002)\n\
     \n\
     Nathan A. Baker (nbaker@wasabi.ucsd.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
