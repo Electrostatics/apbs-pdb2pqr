@@ -269,6 +269,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     double *position;
     /* Simplex/Vertex information */
     SS *simplex;
+    /* Basis function values */
 
     VASSERT(thee != VNULL);
     thee->natom = Valist_getNumberAtoms(thee->alist);
