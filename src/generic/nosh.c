@@ -179,6 +179,7 @@ VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
     thee->parsed = 0;
     thee->ncalc = 0;
     thee->nmol = 0;
+    thee->gotparm = 0;
     thee->ncharge = 0;
     thee->ndiel = 0;
     thee->nkappa = 0;
@@ -331,7 +332,9 @@ nkappa=%d, ncharge=%d)\n", thee->nmol, thee->ndiel, thee->nkappa, thee->ncharge)
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int molfmt, dielfmt, chargefmt, kappafmt;
+    int dielfmt, chargefmt, kappafmt;
+    NOsh_MolFormat molfmt;
+    NOsh_ParmFormat parmfmt;
 
     if (thee == VNULL) {
         Vnm_print(2, "NOsh_parse:  Got NULL thee!\n");
@@ -357,7 +360,15 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
         } else if (Vstring_strcasecmp(tok, "mol") == 0) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
             if (Vstring_strcasecmp(tok, "pqr") == 0) {
-                molfmt = 0;
+                molfmt = NMF_PQR;
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
+                  thee->nmol, tok);
+                thee->molfmt[thee->nmol] = molfmt;
+                strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
+                (thee->nmol)++;
+            } else if (Vstring_strcasecmp(tok, "pdb") == 0) {
+                molfmt = NMF_PDB;
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
                 Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
                   thee->nmol, tok);
@@ -365,7 +376,24 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
                 strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
                 (thee->nmol)++;
             } else {
-                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
+                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined mol format \
+%s!\n", tok);
+            } 
+        } else if (Vstring_strcasecmp(tok, "parm") == 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+            if (Vstring_strcasecmp(tok, "flat") == 0) {
+                parmfmt = NPF_FLAT;
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+                if (thee->gotparm) {
+                    Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
+                    Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
+                } else {
+                    thee->parmfmt = parmfmt;
+                    thee->gotparm = 1;
+                    strncpy(thee->parmpath, tok, VMAX_ARGLEN);
+                }
+            } else {
+                Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined parm format \
 %s!\n", tok);
             } 
         } else if (Vstring_strcasecmp(tok, "diel") == 0) {

@@ -74,7 +74,7 @@ VPUBLIC void startVio() { Vio_start(); }
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
     
-    int i, j;
+    int i, j, rc;
     double q; 
     Vatom *atom;
 
@@ -89,12 +89,21 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
         Vnm_tprint( 1, "Reading atom data from %s:\n",
           nosh->molpath[i]);
         alist[i] = Valist_ctor();
-        if (Valist_readPQR(alist[i], "FILE", "ASC", VNULL,
-          nosh->molpath[i]) != 1) {
-            Vnm_tprint( 2, "Fatal error while reading from %s\n",
-              nosh->molpath[i]);
-            return 0;
-        } else {
+        switch (nosh->molfmt) {
+            case NMF_PQR:
+                rc = Valist_readPQR(alist[i], "FILE", "ASC", VNULL,
+                  nosh->molpath[i]);
+                break;
+            case NMF_PDB:
+                STOPPED HERE.
+                break;
+            default:
+                Vnm_print(2, "
+
+                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
+                      nosh->molpath[i]);
+                    return 0;
+                 } else {
             Vnm_tprint( 1, "  %d atoms\n",
               Valist_getNumberAtoms(alist[i]));
             Vnm_tprint( 1, "  Centered at (%4.3e, %4.3e, %4.3e)\n",
