@@ -27,8 +27,7 @@
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 
-#include "mc/vatom.h"
-#include "mc/vec3.h"
+#include "apbs/vatom.h"
 
 VEMBED(rcsid="$Id$")
 

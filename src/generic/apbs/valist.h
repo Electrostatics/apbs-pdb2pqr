@@ -32,8 +32,8 @@
 #ifndef _VALIST_H_
 #define _VALIST_H_
 
+#include "apbs/vatom.h"
 #include "mc/vhal.h"
-#include "mc/vatom.h"
 #include "mc/vram.h"
 
 /* ///////////////////////////////////////////////////////////////////////////

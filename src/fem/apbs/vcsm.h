@@ -39,8 +39,8 @@
 #include "mc/vram.h"
 #include "mc/ves.h"
 
-#include "mc/vatom.h"
-#include "mc/valist.h"
+#include "apbs/vatom.h"
+#include "apbs/valist.h"
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Parameters and datatypes
