@@ -44,11 +44,6 @@
 #include "apbscfg.h"
 #include "apbs/vcap.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcap_exp
-//
-// Author:  Nathan Baker (based on PMG by Mike Holst)
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vcap_exp(double x, int *ichop) {
 
     /* The two chopped arguments */
@@ -65,11 +60,6 @@ VPUBLIC double Vcap_exp(double x, int *ichop) {
     return VEXP(x);
 }
     
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcap_sinh
-//
-// Author:  Nathan Baker (based on PMG by Mike Holst)
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vcap_sinh(double x, int *ichop) {
 
     /* The two chopped arguments */
@@ -86,11 +76,6 @@ VPUBLIC double Vcap_sinh(double x, int *ichop) {
     return VSINH(x);
 }
     
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcap_cosh
-//
-// Author:  Nathan Baker (based on PMG by Mike Holst)
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vcap_cosh(double x, int *ichop) {
 
     /* The two chopped arguments */

@@ -73,19 +73,15 @@ struct sVatom {
  */
 typedef struct sVatom Vatom;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vatom: Inlineable methods (vatom.c)
-/////////////////////////////////////////////////////////////////////////// */
-
 #if !defined(VINLINE_VATOM)
 
-    /** @brief   Get atomic position
-     *  @ingroup Vatom
-     *  @author  Nathan Baker
-     *  @param   thee  Vatom object
-     *  @returns Pointer to 3*double array of atomic coordinates (in &Aring;)
-     */
-    VEXTERNC double* Vatom_getPosition(Vatom *thee);
+/** @brief   Get atomic position
+ *  @ingroup Vatom
+ *  @author  Nathan Baker
+ *  @param   thee  Vatom object
+ *  @returns Pointer to 3*double array of atomic coordinates (in &Aring;)
+ */
+VEXTERNC double* Vatom_getPosition(Vatom *thee);
 
     /** @brief   Set atomic radius
      *  @ingroup Vatom
