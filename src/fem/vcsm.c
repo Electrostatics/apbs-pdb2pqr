@@ -54,8 +54,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getValist
 //
-// Purpose:  Get a pointer to the Valist (atom list) object
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) { 
@@ -66,23 +64,7 @@ VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vcsm_getVgm
-//
-// Purpose:  Get a pointer to the Gem (grid manager) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgm* Vcsm_getVgm(Vcsm *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->gm; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getNumberAtoms
-//
-// Purpose:  Get the number of atoms associated with simplex isimp.  
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -96,8 +78,6 @@ VPUBLIC int Vcsm_getNumberAtoms(Vcsm *thee, int isimp) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getAtom
-//
-// Purpose:  Get the iatom-th atom associated with isimp-th simplex.  
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -115,8 +95,6 @@ VPUBLIC Vatom* Vcsm_getAtom(Vcsm *thee, int iatom, int isimp) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getAtomIndex
 //
-// Purpose:  Get the iatom-th atom associated with isimp-th simplex.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
@@ -133,8 +111,6 @@ VPUBLIC int Vcsm_getAtomIndex(Vcsm *thee, int iatom, int isimp) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getNumberSimplices
 //
-// Purpose:  Get the number of simplices associated with atom iatom
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
@@ -149,8 +125,6 @@ VPUBLIC int Vcsm_getNumberSimplices(Vcsm *thee, int iatom) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getSimplex
-//
-// Purpose:  Get simplex isimp associated with atom iatom
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -167,8 +141,6 @@ VPUBLIC SS* Vcsm_getSimplex(Vcsm *thee, int isimp, int iatom) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_getSimplexIndex
 //
-// Purpose:  Get simplex isimp associated with atom iatom
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
@@ -183,8 +155,6 @@ VPUBLIC int Vcsm_getSimplexIndex(Vcsm *thee, int isimp, int iatom) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_memChk
-//
-// Purpose:  Return number of bytes used by this object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -202,12 +172,6 @@ VPUBLIC int Vcsm_memChk(Vcsm *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_ctor
 //
-// Purpose:  Construct the charge-vertex map, assign atoms to vertices,
-//           and assign vertices to atoms
-//
-// Notes:    The initial mesh must be sufficiently coarse for the
-//           assignment procedures to be efficient
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
@@ -223,12 +187,6 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_ctor2
-//
-// Purpose:  Construct the Vcsm object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -258,8 +216,6 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_init
 //
-// Purpose:  Initialize the charge-simplex map with mesh and charge data.
-// 
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_init(Vcsm *thee) {
@@ -374,11 +330,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_dtor
 //
-// Purpose:  Destroy the charge-simplex map.
-// 
-// Notes:    Since the grid manager and atom list were allocated outside of
-//           the Vcsm routines, they are not destroyed.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vcsm_dtor(Vcsm **thee) {
@@ -391,8 +342,6 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_dtor2
-//
-// Purpose:  Destroy the atom object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -424,16 +373,6 @@ VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcsm_update
-//
-// Purpose:  Update the charge-vertex and vertex-charge maps after
-//           refinement
-//
-// Args:     Takes list of simplices.  The first simplex is derived from
-//           the parent simplex and therefore has the same ID.  The
-//           remaining simplices are the children and should represent new
-//           entries in the charge-simplex maps.
-//
-// Returns:  1 if successful, 0 otherwise
 //
 // Author:   Nathan Baker
 ///////////////////////////////////////////////////////////////////////////// */

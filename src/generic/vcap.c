@@ -44,31 +44,8 @@
 #include "apbscfg.h"
 #include "apbs/vcap.h"
 
-#define EXPMAX  85.00
-#define EXPMIN -85.00
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcap_exp
-//
-// Purpose:  Provide a capped exp() function
-//
-// Notes: From Mike's PMG FORTRAN CODE:
-//
-//   c* to control overflow in the hyperbolic and exp functions, note
-//   c* that the following are the argument limits of the various 
-//   c* functions on various machines after which overflow occurs:
-//   c* 
-//   c*  Convex C240, Sun 3/60, Sun SPARC, IBM RS/6000:
-//   c* 
-//   c*    sinh, cosh, exp:     maximal argument (abs value) =  88.0d0
-//   c*    dsinh, dcosh, dexp:  maximal argument (abs value) = 709.0d0
-//
-//   If the argument of Vcap_exp() exceeds EXPMAX or EXPMIN, then we replace it
-//   with exp(EXPMAX or EXPMIN).
-//
-// Arguments:
-//   x = argument
-//   ichop = set to 1 if EXP is chopped, zero otherwise
 //
 // Author:  Nathan Baker (based on PMG by Mike Holst)
 /////////////////////////////////////////////////////////////////////////// */
@@ -91,26 +68,6 @@ VPUBLIC double Vcap_exp(double x, int *ichop) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcap_sinh
 //
-// Purpose:  Provide a capped exp() function
-//
-// Notes: From Mike's PMG FORTRAN CODE:
-//
-//   c* to control overflow in the hyperbolic and exp functions, note
-//   c* that the following are the argument limits of the various 
-//   c* functions on various machines after which overflow occurs:
-//   c* 
-//   c*  Convex C240, Sun 3/60, Sun SPARC, IBM RS/6000:
-//   c* 
-//   c*    sinh, cosh, exp:     maximal argument (abs value) =  88.0d0
-//   c*    dsinh, dcosh, dexp:  maximal argument (abs value) = 709.0d0
-//
-//   If the argument of Vcap_sinh() exceeds EXPMAX or EXPMIN, then we replace it
-//   with sinh(EXPMAX or EXPMIN).
-//
-// Arguments:
-//   x = argument
-//   ichop = set to 1 if SINH is chopped, zero otherwise
-//
 // Author:  Nathan Baker (based on PMG by Mike Holst)
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vcap_sinh(double x, int *ichop) {
@@ -131,26 +88,6 @@ VPUBLIC double Vcap_sinh(double x, int *ichop) {
     
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vcap_cosh
-//
-// Purpose:  Provide a capped cosh() function
-//
-// Notes: From Mike's PMG FORTRAN CODE:
-//
-//   c* to control overflow in the hyperbolic and exp functions, note
-//   c* that the following are the argument limits of the various 
-//   c* functions on various machines after which overflow occurs:
-//   c* 
-//   c*  Convex C240, Sun 3/60, Sun SPARC, IBM RS/6000:
-//   c* 
-//   c*    sinh, cosh, exp:     maximal argument (abs value) =  88.0d0
-//   c*    dsinh, dcosh, dexp:  maximal argument (abs value) = 709.0d0
-//
-//   If the argument of Vcap_cosh() exceeds EXPMAX or EXPMIN, then we replace it
-//   with cosh(EXPMAX or EXPMIN).
-//
-// Arguments:
-//   x = argument
-//   ichop = set to 1 if COSH is chopped, zero otherwise
 //
 // Author:  Nathan Baker (based on PMG by Mike Holst)
 /////////////////////////////////////////////////////////////////////////// */

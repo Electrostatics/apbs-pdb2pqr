@@ -1,39 +1,4 @@
-/* ///////////////////////////////////////////////////////////////////////////
-/// APBS -- Adaptive Poisson-Boltzmann Solver
-///
-///  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-///  Dept. of Chemistry and Biochemistry
-///  Dept. of Mathematics, Scientific Computing Group
-///  University of California, San Diego 
-///
-///  Additional contributing authors listed in the code documentation.
-///
-/// Copyright © 1999. The Regents of the University of California (Regents).
-/// All Rights Reserved. 
-/// 
-/// Permission to use, copy, modify, and distribute this software and its
-/// documentation for educational, research, and not-for-profit purposes,
-/// without fee and without a signed licensing agreement, is hereby granted,
-/// provided that the above copyright notice, this paragraph and the
-/// following two paragraphs appear in all copies, modifications, and
-/// distributions.
-/// 
-/// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-/// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-/// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-/// REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-/// 
-/// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-/// PARTICULAR PURPOSE.  THE SOFTWARE AND PMGOMPANYING DOCUMENTATION, IF
-/// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-/// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-/// MODIFICATIONS. 
-////////////////////////////////////////////////////////////////////////////
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
-
-/** @defgroup Vpmg Vpmg
+/** @defgroup Vpmg Vpmg class
  *  @brief  A wrapper for Mike Holst's PMG multigrid code.  
  *  @note   Many of the routines and macros are borrowed from the main.c driver
  *          (written by Mike Holst) provided with the PMG code.
@@ -45,6 +10,40 @@
  *  @brief    Contains declarations for class Vpmg
  *  @version  $Id$
  *  @author   Nathan A. Baker
+ *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+ * Dept. of Chemistry and Biochemistry
+ * University of California, San Diego
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 1999-2002. The Regents of the University of California 
+ *                          (Regents).  All Rights Reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for educational, research, and not-for-profit purposes,
+ * without fee and without a signed licensing agreement, is hereby granted,
+ * provided that the above copyright notice, this paragraph and the
+ * following two paragraphs appear in all copies, modifications, and
+ * distributions.
+ *
+ * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+ * MODIFICATIONS.
+ *
+ * @endverbatim
  */
 
 
@@ -177,11 +176,11 @@ VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
  *  @param   pbe    PBE parameter object
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
  *  @param   energyFlag  
- *             - 0:  Don't calculate any energy contribution from
+ *             \li 0:  Don't calculate any energy contribution from
  *                   outside focusing area 
- *             - 1:  Calculate total energy contribution from outside 
+ *             \li 1:  Calculate total energy contribution from outside 
  *                   focusing area
- *             - 2:  Calculate energy component contributions
+ *             \li 2:  Calculate energy component contributions
  *  @returns Pointer to the newly allocated Vpmg object
  */
 VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
@@ -201,24 +200,24 @@ VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
  *  @param   pbe    PBE parameter object 
  *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
  *  @param   energyFlag  
- *             - 0:  Don't calculate any energy contribution from
+ *             \li 0:  Don't calculate any energy contribution from
  *                   outside focusing area 
- *             - 1:  Calculate total energy contribution from outside
+ *             \li 1:  Calculate total energy contribution from outside
  *                   focusing area
- *             - 2:  Calculate energy component contributions
+ *             \li 2:  Calculate energy component contributions
  *  @returns 1 if successful, 0 otherwise
  */
 VEXTERNC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
   int energyFlag);
 
-/** @brief   Object desctructor
+/** @brief   Object destructor
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee   Pointer to memory location of object to be destroyed
  */
 VEXTERNC void Vpmg_dtor(Vpmg **thee);
 
-/** @brief   FORTRAN stub object desctructor
+/** @brief   FORTRAN stub object destructor
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @param   thee   Pointer to object to be destroyed
@@ -230,11 +229,11 @@ VEXTERNC void Vpmg_dtor2(Vpmg *thee);
  *  @author  Nathan Baker
  *  @param   thee  Vpmg object
  *  @param   surfMeth
- *            - 0:  straight discretization (collocation-like), no
+ *            \li 0:  straight discretization (collocation-like), no
  *                  smoothing
- *            - 1:  smoothing based on a harmonic average of the
+ *            \li 1:  smoothing based on a harmonic average of the
  *                  value at three points
- *            - 2:  spline-based accessibility with epsparm =
+ *            \li 2:  spline-based accessibility with epsparm =
  *                  windowing parameter (<1.0, please)
  *  @param   splineWin  Spline window (for use with surfMeth = 2)
  */
@@ -294,10 +293,12 @@ VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
  *           Using the solution at the finest mesh level, get the
  *           electrostatic energy due to the interaction of the mobile charges 
  *           with the potential: 
- *              \f[ G = \frac{1}{2 I_s} \sum_i c_i q_i^2 \int
- *              \overline{\kappa}^2(x) e^{-q_i u(x)} dx \f]
+ *              \f[ G = \frac{1}{4 I_s} \sum_i c_i q_i^2 \int
+ *              \overline{\kappa}^2(x) e^{-q_i u(x)} dx + \frac{1}{2} \int
+ *              \epsilon ( \nabla u )^2 dx \f]
  *           for the NPBE and
- *              \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx \f]
+ *              \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx +
+ *              \frac{1}{2} \int \epsilon ( \nabla u )^2 dx \f]
  *           for the LPBE.  Here \f$i\f$ denotes the counterion species, 
  *           \f$I_s\f$ is the bulk ionic strength, \f$\overline{\kappa}^2(x)\f$
  *           is the modified Debye-Huckel parameter, \f$c_i\f$ is the 
@@ -351,12 +352,12 @@ VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
  *            \f$k_B T/\AA\f$
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @note    - Using the force evaluation methods of Im et al (Roux group),
+ *  @note    \li Using the force evaluation methods of Im et al (Roux group),
  *             Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
  *             whole (self-interactions included) force -- reaction field
  *             forces will have to be calculated at higher level.
- *           - No contributions are made from higher levels of focusing.
- *           - This is currently implemented in a very inefficient fashion
+ *           \li No contributions are made from higher levels of focusing.
+ *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
  *  @param   thee  Vpmg object
@@ -371,12 +372,12 @@ VEXTERNC void Vpmg_force(Vpmg *thee, double *force, double gamma, int atomID);
  *           of \f$k_B T/\AA\f$
  * @ingroup  Vpmg
  * @author   Nathan Baker
- * @note     - Using the force evaluation methods of Im et al (Roux group),
+ * @note     \li Using the force evaluation methods of Im et al (Roux group),
  *             Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
- *           - No contributions are made from higher levels of focusing. 
- *           - This is currently implemented in a very inefficient fashion
+ *           \li No contributions are made from higher levels of focusing. 
+ *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
  * @param    thee  Vpmg object
@@ -389,12 +390,12 @@ VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID);
  *           specified atom in units of \f$k_B T/\AA\f$
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @note    - Using the force evaluation methods of Im et al (Roux group),
+ *  @note    \li Using the force evaluation methods of Im et al (Roux group),
  *             Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
- *           - No contributions are made from higher levels of focusing. 
- *           - This is currently implemented in a very inefficient fashion
+ *           \li No contributions are made from higher levels of focusing. 
+ *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
  *  @param   thee  Vpmg object
@@ -413,12 +414,12 @@ VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
  *           \f$k_B T/\AA\f$
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @note    - Using the force evaluation methods of Im et al (Roux group),
+ *  @note    \li Using the force evaluation methods of Im et al (Roux group),
  *             Comput Phys Commun, 111, 59--75 (1998).  However, this gives the
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
- *           - No contributions are made from higher levels of focusing. 
- *           - This is currently implemented in a very inefficient fashion
+ *           \li No contributions are made from higher levels of focusing. 
+ *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
  *  @param   thee    Vpmg object
@@ -429,9 +430,9 @@ VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID);
 
 /** @brief Write out a PMG array in UHBD grid format (ASCII)
- *  @note   - The mesh spacing should be uniform
- *          - Format changed from %12.6E to %12.5E
- *          - THIS ROUTINE DOES NOT RESPECT partition information
+ *  @note   \li The mesh spacing should be uniform
+ *          \li Format changed from %12.6E to %12.5E
+ *          \li THIS ROUTINE DOES NOT RESPECT partition information
  * @ingroup Vpmg
  * @author  Nathan Baker
  * @param   iodev  Output device type (FILE/BUFF/UNIX/INET)
@@ -546,10 +547,10 @@ VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
  *  @param   vec    An array nx*ny*nz in length to contain the accessibility
  *                  values (where nx, ny, nz are the numbers of grid points)
  *  @param   meth   Accessibility definition to use:
- *                  - 0:  Mol surf (uses parm as probe radius)
- *                  - 1:  VdW surf (ignores parm)
- *                  - 2:  Inflated VdW surf (uses parm as probe radius)
- *                  - 3:  Spline surface (uses parm as spline window)
+ *                  \li 0:  Mol surf (uses parm as probe radius)
+ *                  \li 1:  VdW surf (ignores parm)
+ *                  \li 2:  Inflated VdW surf (uses parm as probe radius)
+ *                  \li 3:  Spline surface (uses parm as spline window)
  *  @param   parm  Parameter for surface definition
  */
 VEXTERNC void Vpmg_fillAcc(Vpmg *thee, double *vec, int meth, double parm);

@@ -1,49 +1,4 @@
-/* ///////////////////////////////////////////////////////////////////////////
-/// APBS -- Adaptive Poisson-Boltzmann Solver
-///
-///  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-///  Dept. of Chemistry and Biochemistry
-///  Dept. of Mathematics, Scientific Computing Group
-///  University of California, San Diego 
-///
-///  Additional contributing authors listed in the code documentation.
-///
-/// Copyright © 1999. The Regents of the University of California (Regents).
-/// All Rights Reserved. 
-/// 
-/// Permission to use, copy, modify, and distribute this software and its
-/// documentation for educational, research, and not-for-profit purposes,
-/// without fee and without a signed licensing agreement, is hereby granted,
-/// provided that the above copyright notice, this paragraph and the
-/// following two paragraphs appear in all copies, modifications, and
-/// distributions.
-/// 
-/// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-/// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-/// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-/// REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-/// 
-/// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-/// PARTICULAR PURPOSE.  THE SOFTWARE AND PMGPOMPANYING DOCUMENTATION, IF
-/// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-/// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-/// MODIFICATIONS. 
-////////////////////////////////////////////////////////////////////////////
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
-
-/* ///////////////////////////////////////////////////////////////////////////
-// File:     vpmgpp.h    < vpmgpp.c >
-//
-// Purpose:
-//    Class Vpmgpp:
-//      Parameter structure for Mike Holst's PMGP code
-//     
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-
-/** @defgroup Vpmgp Vpmgp
+/** @defgroup Vpmgp Vpmgp class
  *  @brief  Parameter structure for Mike Holst's PMGP code
  *  @note   Variables and many default values taken directly from PMG
  */
@@ -55,6 +10,40 @@
  *  @version  $Id$
  *  @author   Nathan A. Baker
  *  @note     Variables and many default values taken directly from PMG
+  *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+ * Dept. of Chemistry and Biochemistry
+ * University of California, San Diego
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 1999-2002. The Regents of the University of California 
+ *                          (Regents).  All Rights Reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for educational, research, and not-for-profit purposes,
+ * without fee and without a signed licensing agreement, is hereby granted,
+ * provided that the above copyright notice, this paragraph and the
+ * following two paragraphs appear in all copies, modifications, and
+ * distributions.
+ *
+ * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+ * MODIFICATIONS.
+ *
+ * @endverbatim
  */
 
 
@@ -83,19 +72,19 @@ struct Vpmgp {
     double hy;           /**< Grid y spacings [no default]  */
     double hzed;         /**< Grid z spacings [no default]  */
     int nonlin;          /**< Problem type [no default]
-                              - 0: linear
-                              - 1: nonlinear
-                              - 2: linear then nonlinear */
+                              \li 0: linear
+                              \li 1: nonlinear
+                              \li 2: linear then nonlinear */
 
     /* ********** DERIVED PARAMETERS ********** */
     int nrwk;            /**< Real work storage */
     int niwk;            /**< Integer work storage */
     int narr;            /**< Array work storage */
     int ipkey;           /**< Toggles nonlinearity (set by nonlin)
-                              -  -1: Linearized PBE
-                              -   0: Nonlinear PBE with capped sinh 
+                              \li  -1: Linearized PBE
+                              \li   0: Nonlinear PBE with capped sinh 
                                      term [default]
-                              -  >1: Polynomial approximation to sinh, 
+                              \li  >1: Polynomial approximation to sinh, 
                                      note that ipkey must be odd  */
 
     /* ********** PARAMETERS WITH DEFAULT VALUES ********** */
@@ -105,78 +94,78 @@ struct Vpmgp {
     double errtol;       /**< Desired error tolerance [default = 1e-9] */
     int itmax;           /**< Maximum number of iters [default = 100] */
     int istop;           /**< Stopping criterion [default = 1]
-                              - 0: residual
-                              - 1: relative residual
-                              - 2: diff
-                              - 3: errc
-                              - 4: errd
-                              - 5: aerrd */
+                              \li 0: residual
+                              \li 1: relative residual
+                              \li 2: diff
+                              \li 3: errc
+                              \li 4: errd
+                              \li 5: aerrd */
     int iinfo;           /**< Runtime status messages [default = 1]
-                              - 0: none
-                              - 1: some
-                              - 2: lots
-                              - 3: more */
+                              \li 0: none
+                              \li 1: some
+                              \li 2: lots
+                              \li 3: more */
     int bcfl;            /**< Boundary condition method [default = 1]
-                              -   0: zero boundary conditions
-                              -   1: boundary condition approximated by
+                              \li   0: zero boundary conditions
+                              \li   1: boundary condition approximated by
                                       single Debye-Huckel sphere for
                                       entire molecule
-                              -   2: boundary condition approximated by 
+                              \li   2: boundary condition approximated by 
                                       Debye-Huckel spheres for each atom 
-                              -   4: boundary condition determined from 
+                              \li   4: boundary condition determined from 
                                       previously calculated solution 
                                       (i.e., for focusing calculations) */
     int key;             /**< Print solution to file [default = 0] 
-                              -   0: no
-                              -   1: yes */
+                              \li   0: no
+                              \li   1: yes */
     int iperf;           /**< Analysis of the operator [default = 0]
-                              -   0: no
-                              -   1: condition number
-                              -   2: spectral radius
-                              -   3: cond. number & spectral radius */
+                              \li   0: no
+                              \li   1: condition number
+                              \li   2: spectral radius
+                              \li   3: cond. number & spectral radius */
     int meth;            /**< Solution method [default = 2]
-                              -   0: conjugate gradient multigrid
-                              -   1: newton
-                              -   2: multigrid
-                              -   3: conjugate gradient
-                              -   4: sucessive overrelaxation
-                              -   5: red-black gauss-seidel
-                              -   6: weighted jacobi
-                              -   7: richardson */
+                              \li   0: conjugate gradient multigrid
+                              \li   1: newton
+                              \li   2: multigrid
+                              \li   3: conjugate gradient
+                              \li   4: sucessive overrelaxation
+                              \li   5: red-black gauss-seidel
+                              \li   6: weighted jacobi
+                              \li   7: richardson */
     int mgkey;           /**< Multigrid method [default = 0]
-                              -   0: variable v-cycle
-                              -   1: nested iteration */
+                              \li   0: variable v-cycle
+                              \li   1: nested iteration */
     int nu1;             /**< Number of pre-smoothings [default = 2] */
     int nu2;             /**< Number of post-smoothings [default = 2] */
     int mgsmoo;          /**< Smoothing method [default = 1]
-                              -   0: weighted jacobi
-                              -   1: gauss-seidel
-                              -   2: SOR
-                              -   3: richardson
-                              -   4: cghs */
+                              \li   0: weighted jacobi
+                              \li   1: gauss-seidel
+                              \li   2: SOR
+                              \li   3: richardson
+                              \li   4: cghs */
     int mgprol;          /**< Prolongation method [default = 0]
-                              -   0: trilinear
-                              -   1: operator-based
-                              -   2: mod. operator-based */
+                              \li   0: trilinear
+                              \li   1: operator-based
+                              \li   2: mod. operator-based */
     int mgcoar;          /**< Coarsening method [default = 2]
-                              -   0: standard
-                              -   1: harmonic
-                              -   2: galerkin */
+                              \li   0: standard
+                              \li   1: harmonic
+                              \li   2: galerkin */
     int mgsolv;          /**< Coarse equation solve method [default = 1]
-                              -   0: cghs
-                              -   1: banded linpack */
+                              \li   0: cghs
+                              \li   1: banded linpack */
     int mgdisc;          /**< Discretization method [default = 0]
-                              -   0: finite volume
-                              -   1: finite element */
+                              \li   0: finite volume
+                              \li   1: finite element */
     double omegal;       /**< Linear relax parameter [default = 8e-1] */
     double omegan;       /**< Nonlin relax parameter [default = 9e-1] */
     int irite;           /**< FORTRAN output unit [default = 8] */
     int ipcon;           /**< Preconditioning method [default = 3]
-                              -   0: diagonal
-                              -   1: ICCG 
-                              -   2: ICCGDW
-                              -   3: MICCGDW
-                              -   4: none */
+                              \li   0: diagonal
+                              \li   1: ICCG 
+                              \li   2: ICCGDW
+                              \li   3: MICCGDW
+                              \li   4: none */
     double xlen;        /**< Domain x length */
     double ylen;        /**< Domain y length */
     double zlen;        /**< Domain z length */
@@ -217,8 +206,8 @@ typedef struct Vpmgp Vpmgp;
  *  @param   hy    Grid spacing in y direction
  *  @param   hzed  Grid spacing in z direction
  *  @param   nonlin  Nonlinearity flag
- *                   - 0: Linearized PBE
- *                   - 1: Nonlinear PBE
+ *                   \li 0: Linearized PBE
+ *                   \li 1: Nonlinear PBE
  *  @returns Newly allocated and initialized Vpmgp object
  */
 VEXTERNC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, 
@@ -237,9 +226,9 @@ VEXTERNC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev,
  *  @param   hy    Grid spacing in y direction
  *  @param   hzed  Grid spacing in z direction
  *  @param   nonlin  Nonlinearity flag
- *                   - 0: Linearized PBE
- *                   - 1: Nonlinear PBE
- *  @returns Initialized Vpmgp object
+ *                   \li 0: Linearized PBE
+ *                   \li 1: Nonlinear PBE
+ *  @returns 1 if successful, 0 otherwise
  */
 VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev, 
   double hx, double hy, double hzed, int nonlin);

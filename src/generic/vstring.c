@@ -36,8 +36,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // File:     vstring.c 
 //
-// Purpose:  Useful non-ANSI string functions
-//     
 // Author:   Various authors for each function
 /////////////////////////////////////////////////////////////////////////// */
 
@@ -46,11 +44,6 @@
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vstring_strcasecmp
-//
-// Purpose:  Case-insensitive string comparison (BSD standard)
-//
-// Author:   This function contains, if !defined(HAVE_STRCASECMP), 
-//           code by the following authors:
 //
 //           Copyright (c) 1988-1993 The Regents of the University of
 //                         California.  

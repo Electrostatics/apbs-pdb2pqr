@@ -58,8 +58,6 @@ VEMBED(rcsid="$Id$")
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_memChk
 //
-// Purpose:  Returns the number of bytes used by the specified object.
-//
 // Author:   Nathan Baker 
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vacc_memChk(Vacc *thee) {
@@ -76,14 +74,6 @@ VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius, int atom
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_ctor
-//
-// Purpose:  Construct the accessibility object
-// Notes:    probe_radius is the probe radius (in A) for constructing the 
-//             solvent-accessible surface
-//           nx, ny, nz are the number of cells (in each direction) to divide
-//             the system into for faster access
-//           nsph is the number of points (on the surface of the sphere) used
-//             to assess solvent accessibility
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -103,8 +93,6 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_ctor2
-//
-// Purpose:  Construct the accessibility table object
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -304,8 +292,6 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_dtor
 //
-// Purpose:  Clean up
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vacc_dtor(Vacc **thee) {
@@ -320,8 +306,6 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_dtor2
-//
-// Purpose:  Clean up
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -347,11 +331,6 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_vdwAcc
-//
-// Purpose:  Determines if a point is within the union of the atomic spheres
-//           (with radii equal to their van der Waals radii).
-//           Returns the characteristic function value: 1.0 => accessible; 
-//           0.0 => inaccessible
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -393,11 +372,6 @@ VPUBLIC double Vacc_vdwAcc(Vacc *thee, double center[3]) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_ivdwAcc
-//
-// Purpose:  Determines if a point is within the union of the spheres centered
-//           at the atomic centers with radii equal to the sum of their van 
-//           der Waals radii and the probe radius.
-//           Returns value between 1.0 (if accessible) and 0.0
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -573,16 +547,6 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_splineAcc
 //
-// Purpose:  Determine accessibility at a given point, given a collection of
-//           atomic spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111,
-//           59--75, 1998) definition suitable for force evalation; basically a
-//           cubic spline.  Returns value between 1.0 (if accessible) and 0.0
-//           (inaccessible).
-//
-// Args:     Instead of a probe radius, we use a smoothing window parameter.
-//           However, a ``inflation" term can be included to account for
-//           probe-centered surfaces as in ion-accesibility, etc.
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win, 
@@ -668,11 +632,6 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_molAcc
 //
-// Purpose:  Determine accessibility of a probe (of radius radius)
-//           at a given point, given a collection of atomic spheres.  Uses
-//           molecular (Connolly) surface definition.
-//           Returns value between 1.0 (if accessible) and 0.0 (inaccessible).
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
@@ -704,16 +663,6 @@ VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_fastMolAcc
-//
-// Purpose:  Given a point which is INSIDE the collection of inflated van der
-//           Waals spheres, but OUTSIDE the collection of non-inflated van der
-//           Waals spheres, determine accessibility of a probe (of radius
-//           radius) at a given point, given a collection of atomic spheres.
-//           Uses molecular (Connolly) surface definition.  Returns value
-//           between 1.0 (if accessible) and 0.0 (inaccessible).
-//
-// NOTE THAT THIS ASSUMES YOU HAVE TESTED THAT THIS POINT IS DEFINITELY INSIDE
-// THE INFLATED AND NON-INFLATED VAN DER WAALS SURFACES!
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -797,13 +746,6 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_sphere
 //
-// Purpose:  Generates thee->npts somewhat uniformly distributed across a
-//           sphere of unit radius centered at the origin.  Returns a
-//           (npts x 3) double array, which you are resposible for destroying,
-//           of approximatel the specified number of points; the actual number
-//           is stored in the argument npts.  This routine was shamelessly
-//           ripped off of sphere.F from UHBD as developed by Michael K. Gilson
-//
 // Author:   Nathan Baker (original FORTRAN routine from UHBD by Michael
 //           Gilson)
 /////////////////////////////////////////////////////////////////////////// */
@@ -865,10 +807,6 @@ VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_totalSASA
-//
-// Purpose:  Calculates the solvent-accessible area of the entire molecule
-//
-// Args:     radius  The radius of the solvent probe in Angstroms
 //
 // Author:   Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
 /////////////////////////////////////////////////////////////////////////// */

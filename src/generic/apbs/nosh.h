@@ -1,52 +1,66 @@
-/* ///////////////////////////////////////////////////////////////////////////
-/// APBS -- Adaptive Poisson-Boltzmann Solver
-///
-///  Nathan A. Baker (nbaker@wasabi.ucsd.edu)
-///  Dept. of Chemistry and Biochemistry
-///  Dept. of Mathematics, Scientific Computing Group
-///  University of California, San Diego 
-///
-///  Additional contributing authors listed in the code documentation.
-///
-/// Copyright © 1999. The Regents of the University of California (Regents).
-/// All Rights Reserved. 
-/// 
-/// Permission to use, copy, modify, and distribute this software and its
-/// documentation for educational, research, and not-for-profit purposes,
-/// without fee and without a signed licensing agreement, is hereby granted,
-/// provided that the above copyright notice, this paragraph and the
-/// following two paragraphs appear in all copies, modifications, and
-/// distributions.
-/// 
-/// IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
-/// SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
-/// ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
-/// REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.  
-/// 
-/// REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
-/// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-/// PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
-/// ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
-/// TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
-/// MODIFICATIONS. 
-//////////////////////////////////////////////////////////////////////////// 
-/// rcsid="$Id$"
-//////////////////////////////////////////////////////////////////////////// */
+/** @defgroup NOsh NOsh class
+ *  @brief    Class for parsing for fixed format input files
+ */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// File:     nosh.h    
-//
-// Purpose:  No shell class (i.e., fixed format input files)
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
+/**
+ *  @file     nosh.h
+ *  @ingroup  NOsh
+ *  @brief    Contains declarations for class NOsh
+ *  @version  $Id$
+ *  @author   Nathan A. Baker
+ *  @attention
+ *  @verbatim
+ *
+ * APBS -- Adaptive Poisson-Boltzmann Solver
+ *
+ * Nathan A. Baker (nbaker@wasabi.ucsd.edu)
+ * Dept. of Chemistry and Biochemistry
+ * University of California, San Diego
+ *
+ * Additional contributing authors listed in the code documentation.
+ *
+ * Copyright (c) 1999-2002. The Regents of the University of California 
+ *                          (Regents).  All Rights Reserved.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for educational, research, and not-for-profit purposes,
+ * without fee and without a signed licensing agreement, is hereby granted,
+ * provided that the above copyright notice, this paragraph and the
+ * following two paragraphs appear in all copies, modifications, and
+ * distributions.
+ *
+ * IN NO EVENT SHALL REGENTS BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT,
+ * SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS,
+ * ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF
+ * REGENTS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * REGENTS SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF
+ * ANY, PROVIDED HEREUNDER IS PROVIDED "AS IS".  REGENTS HAS NO OBLIGATION
+ * TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+ * MODIFICATIONS.
+ *
+ * @endverbatim
+ */
 
 #ifndef _NOSH_H_
 #define _NOSH_H_
 
+/** @brief Maximum number of molecules in a run 
+ *  @ingroup NOsh */
 #define NOSH_MAXMOL 20
+
+/** @brief Maximum number of calculations in a run 
+ *  @ingroup NOsh */
 #define NOSH_MAXCALC 20
+
+/** @brief Maximum number of PRINT statements in a run 
+ *  @ingroup NOsh */
 #define NOSH_MAXPRINT 20
+
+/** @brief Maximum number of operations in a PRINT statement
+ *  @ingroup NOsh */
 #define NOSH_MAXPOP 20
 
 #include "apbs/apbs.h"
@@ -55,43 +69,54 @@
 #include "apbs/mgparm.h"
 #include "apbs/pbeparm.h"
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh_calc: A small class which allows NOsh to keep track of various
-//                  calculations in a relatively straightforward way.
-/////////////////////////////////////////////////////////////////////////// */
-typedef struct NOsh_calc {
+/**
+ *  @struct  NOsh_calc
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @brief   Calculation class for use when parsing fixed format input files
+ */
+struct NOsh_calc {
 
-    MGparm *mgparm;                      /* Multigrid parameters */
-    FEMparm *femparm;                    /* Finite element parameters */
-    PBEparm *pbeparm;                    /* Generic PBE parameters */
-    int calctype;                        /* 0 => multigrid, 1 => FEM */
+    MGparm *mgparm;         /**< Multigrid parameters */
+    FEMparm *femparm;       /**< Finite element parameters */
+    PBEparm *pbeparm;       /**< Generic PBE parameters */
+    int calctype;           /**< 0: multigrid, 1: FEM */
 
-} NOsh_calc;
+};
 
+/** @typedef NOsh_calc
+ *  @ingroup NOsh
+ *  @brief   Declaration of the NOsh_calc class as the NOsh_calc structure
+ */
+typedef struct NOsh_calc NOsh_calc;
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class NOsh: Definition
-/////////////////////////////////////////////////////////////////////////// */
+/**
+ *  @struct  NOsh
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @brief   Class for parsing fixed format input files
+ */
+struct NOsh {
 
-typedef struct NOsh {
+    NOsh_calc calc[NOSH_MAXCALC];        /**< The array of calculation objects
+                                          */
 
-    NOsh_calc calc[NOSH_MAXCALC];        /* The array of calculation objects */
-
-    int ncalc;                           /* The number of calculations in the
-                                          * calc array */
-    int nelec;
-    int ispara;                          /* (1 => is a parallel calculation, 
-                                          *  0 => is not) */
-    Vcom *com;                           /* Communications object for parallel
+    int ncalc;                           /**< The number of calculations in the
+					  * calc array */
+    int nelec;                           /**< The number of elec statements in
+                                          * the input file */
+    int ispara;                          /**< 1 => is a parallel calculation, 
+                                          *  0 => is not */
+    Vcom *com;                           /**< Communications object for parallel
                                           * focusing calculations */
-    int bogus;                           /* A flag which tells routines using
+    int bogus;                           /**< A flag which tells routines using
                                           * NOsh that this particular NOsh is
                                           * broken -- useful for parallel
                                           * focusing calculations where the
                                           * user gave us too many processors 
                                           * (1 => ignore this NOsh; 
                                           *  0 => this NOsh is OK) */
-    int elec2calc[NOSH_MAXCALC];         /* A mapping between ELEC statements
+    int elec2calc[NOSH_MAXCALC];         /**< A mapping between ELEC statements
 					  * which appear in the input file and
 					  * calc objects stored above.  Since
 					  * we allow both normal and focused
@@ -106,31 +131,68 @@ typedef struct NOsh {
 					  * calculation-specific operation.  It
 					  * points to a specific entry in the
 					  * calc array. */
-    int nmol;                            /* Number of molecules */
-    char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   
-                                         /* Paths to mol files */
-    int nprint;                          /* How many print sections? */
-    int printwhat[NOSH_MAXPRINT];        /* What do we print (0=>energy) */
-    int printnarg[NOSH_MAXPRINT];        /* How many arguments in energy 
+    int nmol;                            /**< Number of molecules */
+    char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
+    int nprint;                          /**< How many print sections? */
+    int printwhat[NOSH_MAXPRINT];        /**< What do we print (0=>energy) */
+    int printnarg[NOSH_MAXPRINT];        /**< How many arguments in energy 
                                           * list */
-    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP];
-                                         /* ELEC id (see elec2calc) */
-    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  
-                                         /* Operation id (0 = add, 1 = 
+    int printcalc[NOSH_MAXPRINT][NOSH_MAXPOP]; /**< ELEC id (see elec2calc) */
+    int printop[NOSH_MAXPRINT][NOSH_MAXPOP];  /**< Operation id (0 = add, 1 = 
                                           * subtract) */
-  int parsed;                            /* Have we parsed an input file
+  int parsed;                            /**< Have we parsed an input file
                                           * yet? */
 
-} NOsh;
+};
+
+/** @typedef NOsh
+ *  @ingroup NOsh
+ *  @brief   Declaration of the NOsh class as the NOsh structure
+ */ 
+typedef struct NOsh NOsh;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Non-inlineable methods (mcsh.c)
 /////////////////////////////////////////////////////////////////////////// */
 
+/** @brief   Construct NOsh
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   com   Communications object
+ *  @returns Newly allocated and initialized NOsh object
+ */
 VEXTERNC NOsh* NOsh_ctor(Vcom *com);
+
+/** @brief   FORTRAN stub to construct NOsh
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee  Space for NOsh objet
+ *  @param   com   Communications object
+ *  @returns 1 if successful, 0 otherwise
+ */
 VEXTERNC int   NOsh_ctor2(NOsh *thee, Vcom *com);
+
+/** @brief   Object destructor
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee  Pointer to memory location of NOsh object
+ */
 VEXTERNC void  NOsh_dtor(NOsh **thee);
+
+/** @brief   FORTRAN stub for object destructor
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee  Pointer to NOsh object
+ */
 VEXTERNC void  NOsh_dtor2(NOsh *thee);
+
+/** @brief   Parse an input file
+ *  @ingroup NOsh
+ *  @author  Nathan Baker
+ *  @param   thee  Pointer to NOsh object
+ *  @param   sock  Stream of tokens to parse
+ *  @return  1 if successful, 0 otherwise
+ */
 VEXTERNC int   NOsh_parse(NOsh *thee, Vio *sock);
 
 #endif 

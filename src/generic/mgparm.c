@@ -61,10 +61,6 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_ctor
 //
-// Argument:  type   Type of MG calculation: 0 => sequential manual
-//                                           1 => sequential auto-focus
-//                                           2 => parallel auto-focus
-//
 // Author: Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC MGparm* MGparm_ctor(int type) {
@@ -80,12 +76,6 @@ VPUBLIC MGparm* MGparm_ctor(int type) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_ctor2
-//
-// Purpose:  Construct the MGparm object
-//
-// Notes:    Constructor broken into two parts for FORTRAN users.
-//
-// Returns:  1 if sucessful, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -152,10 +142,6 @@ VPUBLIC void MGparm_dtor2(MGparm *thee) { ; }
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_check
-//
-// Purpose:  Check the parameter settings for internal consistency
-//
-// Returns:  1 if OK, 0 otherwise
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
@@ -277,10 +263,6 @@ VPUBLIC int MGparm_check(MGparm *thee) {
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_copy
 //  
-// Purpose:  Copy parm into thee
-//
-// Args:     parm    object to copy into thee
-//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
@@ -346,12 +328,6 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  MGparm_parseToken
-//
-// Purpose:  Parse an MG keyword
-//
-// Returns:  1 if matched and assigned
-//          -1 if matched, but there's some sort of error (i.e., too few args)
-//           0 if not matched
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
