@@ -1179,6 +1179,11 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int epsmeth, double epsparm) {
 //                      sequential focusing calculations and off (=0) for
 //                      parallel calculations.
 //
+// Notes:    The NPBE energy calculation here is rather inaccurate since it
+//           uses \int \epsilon (\nabla u)^2 dx rather than the more elaborate
+//           surface integral scheme of Micu et al (J Comp Phys 136:263-271,
+//           1997)
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
@@ -1297,6 +1302,9 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
 
+    /* Because PMG seems to overwrite some of the coefficient arrays... */
+    Vpmg_fillco(thee, 1, 0);
+
     energy = 0.0;
 
     if (thee->pmgp->nonlin) {
@@ -1316,6 +1324,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee) {
         energy = 0.5*energy;
     }
     energy = -1.0*energy*hx*hy*hzed;
+    energy = energy/Vpbe_getZmagic(thee->pbe);
 
     return energy;
 }
