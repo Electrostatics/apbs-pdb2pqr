@@ -177,6 +177,11 @@ case $host_os in
    *) 
       PY_CFLAGS="";;
 esac
+case $host_cpu in
+   x86_64*)
+      PY_CFLAGS="";;
+esac
+
 AC_SUBST(PY_SHARED,[$PY_SHARED])
 AC_SUBST(PY_LDEXTRA,[$PY_LDEXTRA])
 AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])

@@ -142,6 +142,20 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
   %endif
 %endif
 
+# For Portland group compilers on the AMD Opteron
+# NOTE: you must set the PGI_BLAS environment variable to the BLAS lib dir!
+
+%ifarch x86_64
+   export CC=pgcc
+   export CFLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export F77=pgf77
+   export FFLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export F77FLAGS='-O2 -fastsse -fPIC -Bstatic'
+   export CXX=pgf77
+   export CXXFLAGS='-O2 -fastsse -fPIC -Bstatic'
+   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${PGI_BLAS} -lblas"
+   make
+%endif
 
 %install
 mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
