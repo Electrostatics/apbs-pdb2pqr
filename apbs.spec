@@ -134,7 +134,7 @@ rm -rf ${RPM_BUILD_ROOT}
 %defattr(-,root,root)
 %{prefix}/apbs-%{version}/examples
 %ifarch %{ix86}
-%files tools
+  %files tools
+  %defattr(-,root,root)
+  %{prefix}/apbs-%{version}/tools
 %endif
-%defattr(-,root,root)
-%{prefix}/apbs-%{version}/tools
