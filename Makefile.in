@@ -191,7 +191,7 @@ DIST_COMMON = README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 	Makefile.in NEWS acinclude.m4 aclocal.m4 config/config.guess \
 	config/config.sub config/install-sh config/ltconfig \
 	config/ltmain.sh config/missing config/mkinstalldirs configure \
-	configure.in
+	configure.ac
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
@@ -200,7 +200,7 @@ all: all-recursive
 
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.in $(ACLOCAL_M4)
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
 	  $(AUTOMAKE) --gnu  Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -208,10 +208,10 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure:  $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4):  configure.in acinclude.m4
+$(ACLOCAL_M4):  configure.ac acinclude.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 mostlyclean-libtool:

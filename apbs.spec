@@ -55,6 +55,7 @@ Requires: maloc, apbs = %{version}-%{release}
 %description examples
 This package contains examples for APBS
 
+%ifarch %{ix86}
 %package tools
 Summary: Tools for APBS
 Group: Applications/Science
@@ -62,6 +63,7 @@ Prefix: %{prefix}
 Requires: maloc, apbs = %{version}-%{release}
 %description tools
 This package contains tools for APBS
+%endif
 
 %prep
 %setup -n apbs-%{version}
@@ -76,31 +78,33 @@ export FETK_LIBRARY=$FETK_PREFIX/lib
 
 
 # We're assuming Intel compilers for Intel platforms
-%ifarch i386
-export CC="icc" 
-export CFLAGS="-O3 -static-libcxa" 
-export F77="ifc" 
-export FFLAGS="-O3 -static-libcxa" 
-export LDFLAGS="-static-libcxa"
-./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-make 
-%endif
 %ifarch i686
-export CC="icc" 
-export CFLAGS="-O3 -tpp6 -static-libcxa" 
-export F77="ifc" 
-export FFLAGS="-O3 -tpp6 -static-libcxa" 
-export LDFLAGS="-static-libcxa"
-./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-make
-%endif
-%ifarch alpha
-export CC='ccc'
-export CFLAGS='-O2 -arch ev6'
-export F77='fort'
-export FFLAGS='-O2 -arch ev6'
-./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
-make
+  export CC="icc" 
+  export CFLAGS="-O3 -tpp6 -static-libcxa" 
+  export F77="ifc" 
+  export FFLAGS="-O3 -tpp6 -static-libcxa" 
+  export LDFLAGS="-static-libcxa"
+  ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+  make
+%else
+  %ifarch %{ix86}
+    export CC="icc" 
+    export CFLAGS="-O3 -static-libcxa" 
+    export F77="ifc" 
+    export FFLAGS="-O3 -static-libcxa" 
+    export LDFLAGS="-static-libcxa"
+    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix}
+    make 
+  %else
+    %ifarch alpha
+      export CC='ccc'
+      export CFLAGS='-O2 -arch ev6'
+      export F77='fort'
+      export FFLAGS='-O2 -arch ev6'
+      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
+      make
+    %endif
+  %endif
 %endif
 
 %install
@@ -108,7 +112,9 @@ mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
 make install
 
 mv examples ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/examples
+%ifarch %{ix86}
 mv tools  ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/tools
+%endif
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
@@ -127,6 +133,8 @@ rm -rf ${RPM_BUILD_ROOT}
 %files examples
 %defattr(-,root,root)
 %{prefix}/apbs-%{version}/examples
+%ifarch %{ix86}
 %files tools
+%endif
 %defattr(-,root,root)
 %{prefix}/apbs-%{version}/tools
