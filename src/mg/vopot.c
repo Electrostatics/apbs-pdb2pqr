@@ -211,3 +211,87 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
     return u;
 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vopot_curvature
+//
+//   Notes:  cflag=0 ==> Laplace
+//           cflag=1 ==> Maximum
+//
+// Authors:  Stephen Bond and Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag )
+{
+    double hx, hy, hzed, val, curv;
+    double uleft, umid, uright, testpt[3];
+
+    hx = thee->hx;
+    hy = thee->hy;
+    hzed = thee->hzed;
+
+    curv = 0.0;
+
+    testpt[0] = pt[0];
+    testpt[1] = pt[1];
+    testpt[2] = pt[2];
+
+    /* Compute 2nd derivative in the x-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0] - hx;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0] + hx;
+    uright = Vopot_pot( thee, testpt );
+    testpt[0] = pt[0];
+
+    val = (uright - 2*umid + uleft)/(hx*hx);
+
+    if ( cflag == 0 ) {
+        curv += val;
+    } else if ( cflag == 1 ) {
+        val = fabs( val );
+        curv = ( val > curv ) ? val : curv;
+    } else {
+        VASSERT( 0 );
+    }
+
+    /* Compute 2nd derivative in the y-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1] - hy;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1] + hy;
+    uright = Vopot_pot( thee, testpt );
+    testpt[1] = pt[1];
+
+    val = (uright - 2*umid + uleft)/(hy*hy); 
+
+    if ( cflag == 0 ) {
+        curv += val;
+    } else if ( cflag == 1 ) {
+        val = fabs( val );
+        curv = ( val > curv ) ? val : curv;
+    } else {
+        VASSERT( 0 );
+    }
+
+    /* Compute 2nd derivative in the z-direction */
+    umid = Vopot_pot( thee, testpt );
+    testpt[2] = pt[2] - hzed;
+    uleft = Vopot_pot( thee, testpt );
+    testpt[2] = pt[2] + hzed; 
+    uright = Vopot_pot( thee, testpt );
+    
+    val = (uright - 2*umid + uleft)/(hzed*hzed);
+    
+    if ( cflag == 0 ) { 
+        curv += val;
+    } else if ( cflag == 1 ) {
+        val = fabs( val ); 
+        curv = ( val > curv ) ? val : curv;
+    } else {
+        VASSERT( 0 );
+    } 
+
+    return curv; 
+    
+}
+

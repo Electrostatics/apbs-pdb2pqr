@@ -1,4 +1,11 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.2.1       ??-??-02
+#############################################################################
+  * Inclusion of SWIG wrappers for use with Python (contributed by Alexandre
+    Gillet)
+  * Improvement of VMD visualization scripts (contributed by Dave Sept)
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.2.0       03-20-02
 #############################################################################
 This version is a public (beta) release candidate and includes:
