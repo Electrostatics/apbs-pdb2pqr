@@ -250,6 +250,10 @@ c*       *** algorithm 5.3 in the thesis, test version (1') ***
 c*       *** global-superlinear convergence ***
          bigc = 1.0d0
          ord  = 2.0d0
+
+c*       NAB 06-18-01:  IF COMPLEX PROBLEMS NOT CONVERGING, SET THIS
+c*       TO MACHINE EPSILON.  THIS MAKES IT USE THE EXACT JACOBIAN
+c*       RATHER THAN THE APPROXIMATE FORM (AS HERE)
          errtol_s  = dmin1((0.9*xnorm_old),(bigc*xnorm_old**ord))
          print*,'% NEWTON: using errtol_s: ',errtol_s
 c*
@@ -259,9 +263,14 @@ c*       *** do a linear multigrid solve of the newton equations ***
          istop_s   = 0
          iters_s   = 0
          ierror_s  = 0
+c*       NAB 06-18-01 -- WHAT THIS USED TO BE:
          iok_s     = 0
          iinfo_s   = 0
          if ((iinfo .ge. 2) .and. (ilev .eq. 1)) iok_s = 2
+c*       WHAT IT'S CHANGED TO:
+         if (iinfo .ge. 2) iinfo_s = iinfo
+         iok_s = 2
+c*       END OF NAB HACK
          call mvcs(nx,ny,nz,xtmp,iz,w0,w1,w2,w3,
      2      istop_s,itmax_s,iters_s,ierror_s,
      3      nlev,ilev,nlev_real,mgsolv,

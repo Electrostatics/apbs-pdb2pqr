@@ -106,7 +106,9 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->errtol = 1.0e-9;
     thee->itmax = 100;
     thee->istop = 1;
-    thee->iinfo = 1;
+    thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
+                              * 2 (for debugging NPBE), higher values give 
+                              * too much output */
     thee->bcfl = 1;
     thee->key = 0;
     thee->iperf = 0;
