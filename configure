@@ -723,7 +723,7 @@ else
 fi
 
 
-PACKAGE=mcpb
+PACKAGE=apbs
 
 VERSION=1.0
 
