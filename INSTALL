@@ -49,7 +49,7 @@ created when you unpacked the APBS tgz file) will build the entire package.
 This is a standard GNU autoconf-generated configuration script.
 You should be able to simply type:
 
-    ./configure
+    ./configure 
     make
     make install
 
@@ -114,6 +114,11 @@ In practice, for 8 tasks per node, about 400 MB of heap space is available
 to each task (this means OS-related tasks take up nearly 5 GB of memory!) .
 In any case, -bmaxdata:0x18000000 seems to be a safe choice as it provides
 384 MB heap space per task.
+
+You should configure APBS to use MPI:
+
+     ./configure --enable-mpi --with-mpilib=/usr/lpp/ppe.poe/lib \
+        --with-mpiinc=/usr/lpp/ppe.poe/include
 
 Check to make sure the HAVE_MPI_H flag has been set in inc/config.h before
 compiling; configure seems to mess up the detection of the headers when
