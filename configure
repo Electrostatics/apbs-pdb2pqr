@@ -3404,8 +3404,8 @@ cat >> confdefs.h <<\EOF
 #define USE_PMG 1
 EOF
 
-pmg_do_src="vpmg mgsh"
-pmg_do_bin="mg mgsh"
+pmg_do_src="vpmg"
+pmg_do_bin="mg"
 pmg_do_tst=""
 
 
