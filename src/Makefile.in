@@ -101,13 +101,15 @@ efence = @efence@
 liberty_lib = @liberty_lib@
 math_lib = @math_lib@
 mcdir = @mcdir@
+metis_inc = @metis_inc@
+metis_lib = @metis_lib@
 mpi_inc = @mpi_inc@
 mpi_lib = @mpi_lib@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = vatom vacc vcsm vpbe vtree vpbm vpee
+always_built_SUBDIRS = vatom vacc vcsm vpbe vpbm vpee vmetis
 
 SUBDIRS = $(always_built_SUBDIRS)
 INCLUDES = @mcdir@/inc
