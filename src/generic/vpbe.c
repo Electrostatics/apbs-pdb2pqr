@@ -857,11 +857,17 @@ VPUBLIC double Vpbe_getLinearEnergy1(Vpbe *thee, void *system, int color) {
         uMG = mlsys->s[0]->u;
         fMG = mlsys->s[0]->fc;
 
-        /* The energy is 1/2 if the dot product of the solution and the RHS */
-        return (0.5*MGarray_Xdot(uMG, fMG));
+        /* The energy is 1/2 if the dot product of the solution and RHS... */
+        energy = 0.5*MGarray_Xdot(uMG, fMG);
+        /* ...scaled by the mesh spacing */
+        energy = energy*(mlsys->s[0]->xc[1] - mlsys->s[0]->xc[0]);
+        energy = energy*(mlsys->s[0]->yc[1] - mlsys->s[0]->yc[0]);
+        energy = energy*(mlsys->s[0]->zc[1] - mlsys->s[0]->zc[0]);
+
+        return energy;
 #else /* if defined(HAVE_PMGC_H) */
         Vnm_print(2, "Vpbe_getLinearEnergy1: Not compiled with PMGC!\n");
-        VASSERT(0);
+        return 0.0;
 #endif
     } else {
         Vnm_print(2, "Vpbe_getLinearEnergy1: invalid solution method (methFlag = %d)\n", 
