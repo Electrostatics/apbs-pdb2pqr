@@ -240,9 +240,11 @@ int main(int argc, char **argv) {
             if (mgparm->bcfl == 0) {
                 Vnm_print(1, "main:    Zero boundary conditions\n"); 
             } else if (mgparm->bcfl == 1) {
-                Vnm_print(1, "main:    Single Debye-Huckel sphere boundary conditions\n"); 
+                Vnm_print(1, "main:    Single Debye-Huckel sphere boundary \
+                   conditions\n"); 
             } else if (mgparm->bcfl == 2) {
-                Vnm_print(1, "main:    Multiple Debye-Huckel sphere boundary conditions\n"); 
+                Vnm_print(1, "main:    Multiple Debye-Huckel sphere boundary \
+                  conditions\n"); 
             } else if (mgparm->bcfl == 4) {
                 Vnm_print(1, "main:    Boundary conditions from focusing\n"); 
             }

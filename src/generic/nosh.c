@@ -333,7 +333,8 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
 
     idx = thee->nprint;
     if (thee->nprint >= NOSH_MAXPRINT) {
-        Vnm_print(2, "NOsh_parse:  Exceeded max number (%d) of PRINT sections\n", 
+        Vnm_print(2, "NOsh_parse:  Exceeded max number (%d) of PRINT \
+sections\n", 
           NOSH_MAXPRINT);
         return 0;
     }
@@ -345,7 +346,8 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
         thee->printwhat[idx] = 0;
         thee->printnarg[idx] = 0;
     } else {
-        Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing PRINT section!\n",
+        Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing \
+PRINT section!\n",
           tok);
         return 0;
     }
@@ -373,7 +375,8 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
                     thee->printcalc[idx][thee->printnarg[idx]] = ti;
                     expect = 1;
                 } else {
-                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT \
+section while reading %s!\n", tok);
                     return 0;
                 }
             /* Grab addition operation */
@@ -383,12 +386,14 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
                     (thee->printnarg[idx])++;
                     expect = 0;
                     if (thee->printnarg[idx] >= NOSH_MAXPOP) {
-                        Vnm_print(2, "NOsh_parsePRINT:  Exceeded max number (%d) of arguments for PRINT section!\n", 
+                        Vnm_print(2, "NOsh_parsePRINT:  Exceeded max number \
+(%d) of arguments for PRINT section!\n", 
                           NOSH_MAXPOP);
                         return 0;
                     }
                 } else {
-                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT \
+section while reading %s!\n", tok);
                     return 0;
                 }
             /* Grab subtraction operation */
@@ -398,17 +403,20 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
                     (thee->printnarg[idx])++;
                     expect = 0;
                     if (thee->printnarg[idx] >= NOSH_MAXPOP) {
-                        Vnm_print(2, "NOsh_parseREAD:  Exceeded max number (%d) of arguments for PRINT section!\n", 
+                        Vnm_print(2, "NOsh_parseREAD:  Exceeded max number \
+(%d) of arguments for PRINT section!\n", 
                           NOSH_MAXPOP);
                         return 0;
                     }
                 } else {
-                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT section while reading %s!\n", tok);
+                    Vnm_print(2, "NOsh_parsePRINT:  Syntax error in PRINT \
+section while reading %s!\n", tok);
                     return 0;
                 }
             /* Got bad operation */
             } else {
-                Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing PRINT section!\n",
+                Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while \
+parsing PRINT section!\n",
                   tok);
                 return 0;
             } 
@@ -420,7 +428,8 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
 
     /* We ran out of tokens! */
     VERROR1:
-       Vnm_print(2, "NOsh_parsePRINT:  Ran out of tokens while parsing PRINT section!\n");
+       Vnm_print(2, "NOsh_parsePRINT:  Ran out of tokens while parsing PRINT \
+section!\n");
        return 0;
 
 }
@@ -459,7 +468,8 @@ VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
 
     /* Update the calculation number */
     if (thee->ncalc >= NOSH_MAXCALC) {
-        Vnm_print(2, "NOsh:  Too many electrostatics calculations in this run!\n");
+        Vnm_print(2, "NOsh:  Too many electrostatics calculations in this \
+run!\n");
         Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n", 
           NOSH_MAXCALC);
         return 1;
@@ -467,7 +477,8 @@ VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
     (thee->ncalc)++;
 
     if (thee->nmgcalc >= NOSH_MAXMGPARM) {
-        Vnm_print(2, "NOsh:  Too many multigrid electrostatics calculations in this run!\n");
+        Vnm_print(2, "NOsh:  Too many multigrid electrostatics calculations \
+in this run!\n");
         Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n", 
           NOSH_MAXMGPARM);
         return 1;
@@ -481,8 +492,10 @@ VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
              * of calculations of this type, and parse the rest of the section
              */
             if (thee->nmgcalc >= NOSH_MAXMGPARM) {
-                Vnm_print(2, "NOsh:  Too many multigrid electrostatics calculations in this run!\n");
-                Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
+                Vnm_print(2, "NOsh:  Too many multigrid electrostatics \
+calculations in this run!\n");
+                Vnm_print(2, "NOsh:  Current max is %d; ignoring this \
+calculation\n",
                   NOSH_MAXMGPARM);
                 return 1;
             }
@@ -1004,6 +1017,7 @@ keyword!\n",
     return 0;
 
     VERROR1:
-       Vnm_print(2, "NOsh_parseMG:  Ran out of tokens while parsing ELEC section!\n");
+       Vnm_print(2, "NOsh_parseMG:  Ran out of tokens while parsing ELEC \
+section!\n");
        return 0;
 }

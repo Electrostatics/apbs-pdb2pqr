@@ -1,4 +1,13 @@
 #############################################################################
+VERSION 0.1.1       08-29-01
+#############################################################################
+I am slightly less pleased to announce the first bug-fix for APBS, version
+0.1.1.  This fixes compilation problems that popped up for several folks,
+including:
+  * Syntax errors with non-GNU compilers
+  * Errors in the installation instructions
+
+#############################################################################
 VERSION 0.1.0       08-29-01
 #############################################################################
 I am pleased to announce the availability of a pre-beta version of the
