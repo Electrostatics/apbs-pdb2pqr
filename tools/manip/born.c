@@ -116,6 +116,8 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
        -v      give per-atom information\n\
        -f      calculate forces in addition to energies\n\n";
 
+    Vio_start();
+
     if ((argc > 5) || (argc < 3)) {
         printf("\n*** Syntax error: got %d arguments, expected 2.\n",argc);
         printf("%s", usage);

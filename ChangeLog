@@ -29,6 +29,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
   * Added new READ options "PARM" and "MOL PDB", see documentation for more
     information.  These options allow users to use unparameterized PDB files
     together with a parameter database.
+  * Added function for calculating norms on DX grids: see tools/mesh/norm
   * Updated the documentation
   * Now include support for chain IDs and other optional fields in PQR/PDB
     files
@@ -43,6 +44,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
       qcd2pqr -> qcd2pqr.awk
 
   CHANGES THAT AFFECT DEVELOPERS:
+  * Added several norm and seminorm functions to Vgrid class
   * Altered --with-blas syntax in configure scripts and removed --disable-blas
   * Documented high-level frontend routines
   * Cool new class and header-file dependency graphs courtesy of Doxygen and

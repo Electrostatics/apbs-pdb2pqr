@@ -49,6 +49,7 @@ VEMBED(rcsid="$Id$")
 #if !defined(VINLINE_VGRID)
     VPUBLIC int Vgrid_memChk(Vgrid *thee) { return Vmem_bytes(thee->mem); }
 #endif
+#define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 
 VPRIVATE char *MCwhiteChars = " =,;\t\n";
 VPRIVATE char *MCcommChars  = "#%";
@@ -139,7 +140,6 @@ VPUBLIC void Vgrid_dtor2(Vgrid *thee) {
 // Routine:  Vgrid_value
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-#define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 
     int nx, ny, nz, ihi, jhi, khi, ilo, jlo, klo;
@@ -915,5 +915,180 @@ will have significant overlap.\n");
     /* Close off the socket */
     Vio_connectFree(sock);
     Vio_dtor(&sock);
+}
+
+VPUBLIC double Vgrid_integrate(Vgrid *thee) {
+
+    int i, j, k, nx, ny, nz;
+    double sum;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_integrate:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+
+    sum = 0.0;
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                sum = sum + thee->data[IJK(i,j,k)];
+            }
+        }
+    }
+
+    sum = sum*(thee->hx)*(thee->hy)*(thee->hzed);
+
+    return sum;
+
+}
+
+
+VPUBLIC double Vgrid_normL1(Vgrid *thee) {
+
+    int i, j, k, nx, ny, nz;
+    double sum;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_normL1:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+
+    sum = 0.0;
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                sum = sum + VABS(thee->data[IJK(i,j,k)]);
+            }
+        }
+    }
+
+    sum = sum*(thee->hx)*(thee->hy)*(thee->hzed);
+
+    return sum;
+
+}
+
+VPUBLIC double Vgrid_normL2(Vgrid *thee) {
+
+    int i, j, k, nx, ny, nz;
+    double sum;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_normL2:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+
+    sum = 0.0;
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                sum = sum + VSQR(thee->data[IJK(i,j,k)]);
+            }
+        }
+    }
+
+    sum = sum*(thee->hx)*(thee->hy)*(thee->hzed);
+
+    return VSQRT(sum);
+
+}
+
+VPUBLIC double Vgrid_seminormH1(Vgrid *thee) {
+
+    int i, j, k, d, nx, ny, nz;
+    double pt[3], grad[3], sum, hx, hy, hzed, xmin, ymin, zmin;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_seminormH1:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+    hx = thee->hx;
+    hy = thee->hy;
+    hzed = thee->hzed;
+    xmin = thee->xmin;
+    ymin = thee->ymin;
+    zmin = thee->zmin;
+
+    sum = 0.0;
+    for (k=0; k<nz; k++) {
+        pt[2] = k*hzed + zmin;
+        for (j=0; j<ny; j++) {
+            pt[1] = j*hy + ymin;
+            for (i=0; i<nx; i++) {
+                pt[0] = i*hx + xmin;
+                VASSERT(Vgrid_gradient(thee, pt, grad));
+                for (d=0; d<3; d++) sum = sum + VSQR(grad[d]);
+            }
+        }
+    }
+
+    sum = sum*(hx)*(hy)*(hzed);
+
+    return VSQRT(sum);
+
+}
+
+VPUBLIC double Vgrid_normH1(Vgrid *thee) {
+
+    double sum = 0.0;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_normH1:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    sum = VSQR(Vgrid_seminormH1(thee)) + VSQR(Vgrid_normL2(thee));
+
+    return VSQRT(sum);
+
+}
+
+VPUBLIC double Vgrid_normLinf(Vgrid *thee) {
+
+    int i, j, k, nx, ny, nz, gotval;
+    double sum, val;
+
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_normLinf:  Got VNULL thee!\n");
+        VASSERT(0);
+    }
+
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+
+    sum = 0.0;
+    gotval = 0;
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                val = VABS(thee->data[IJK(i,j,k)]);
+                if (!gotval) {
+                    gotval = 1;
+                    sum = val;
+                } 
+                if (val > sum) sum = val;
+            }
+        }
+    }
+
+    return sum;
+
 }
 

@@ -164,7 +164,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 INCLUDES = @inc_list@
 
-noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin smooth
+noinst_PROGRAMS = mgmesh dxmath uhbd_asc2bin smooth norm
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -181,12 +181,16 @@ uhbd_asc2bin_SOURCES = uhbd_asc2bin.f
 uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 uhbd_asc2bin_LDFLAGS = @LDFLAGS@
 uhbd_asc2bin_CCLD = $(F77)
+norm_SOURCES = norm.c 
+norm_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+norm_LDFLAGS = @LDFLAGS@ @FLIBS@
+norm_CCLD = $(F77)
 subdir = tools/mesh
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
 noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) uhbd_asc2bin$(EXEEXT) \
-	smooth$(EXEEXT)
+	smooth$(EXEEXT) norm$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_dxmath_OBJECTS = dxmath.$(OBJEXT)
@@ -195,6 +199,9 @@ dxmath_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_mgmesh_OBJECTS = mgmesh.$(OBJEXT)
 mgmesh_OBJECTS = $(am_mgmesh_OBJECTS)
 mgmesh_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+am_norm_OBJECTS = norm.$(OBJEXT)
+norm_OBJECTS = $(am_norm_OBJECTS)
+norm_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_smooth_OBJECTS = smooth.$(OBJEXT)
 smooth_OBJECTS = $(am_smooth_OBJECTS)
 smooth_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
@@ -217,10 +224,10 @@ LTF77COMPILE = $(LIBTOOL) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
 F77LD = $(F77)
 F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(smooth_SOURCES) \
-	$(uhbd_asc2bin_SOURCES)
+DIST_SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(norm_SOURCES) \
+	$(smooth_SOURCES) $(uhbd_asc2bin_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES)
+SOURCES = $(dxmath_SOURCES) $(mgmesh_SOURCES) $(norm_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES)
 
 all: all-am
 
@@ -244,6 +251,9 @@ dxmath$(EXEEXT): $(dxmath_OBJECTS) $(dxmath_DEPENDENCIES)
 mgmesh$(EXEEXT): $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES) 
 	@rm -f mgmesh$(EXEEXT)
 	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
+norm$(EXEEXT): $(norm_OBJECTS) $(norm_DEPENDENCIES) 
+	@rm -f norm$(EXEEXT)
+	$(LINK) $(norm_LDFLAGS) $(norm_OBJECTS) $(norm_LDADD) $(LIBS)
 smooth$(EXEEXT): $(smooth_OBJECTS) $(smooth_DEPENDENCIES) 
 	@rm -f smooth$(EXEEXT)
 	$(LINK) $(smooth_LDFLAGS) $(smooth_OBJECTS) $(smooth_LDADD) $(LIBS)

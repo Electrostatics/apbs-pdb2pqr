@@ -75,6 +75,8 @@ Usage: coulomb [-v] [-f] <molecule.pqr>\n\n\
        -v      give per-atom information\n\
        -f      calculate forces in addition to energies\n\n";
 
+    Vio_start();
+
     if ((argc > 4) || (argc < 2)) {
         printf("\n*** Syntax error: got %d arguments, expected 2.\n",argc);
         printf("%s", usage);
