@@ -1664,7 +1664,7 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U,
 
 VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
 
-#if 0
+#if 1
     /* Re-initialize the Green's function oracle in case the atom list has
      * changed */    
     if (var.initGreen) {
