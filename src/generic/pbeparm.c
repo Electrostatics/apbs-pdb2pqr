@@ -109,7 +109,7 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->parsed = 0;
 
     thee->setmolid = 0;
-    thee->setnonlin = 0;
+    thee->setpbetype = 0;
     thee->setbcfl = 0;
     thee->setnion = 0;
     for (i=0; i<MAXION; i++) thee->setion[i] = 0;
@@ -179,8 +179,8 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check:  MOL not set!\n");
         return 0;
     }
-    if (!thee->setnonlin) {
-        Vnm_print(2, "PBEparm_check:  LPBE or NPBE not set!\n");
+    if (!thee->setpbetype) {
+        Vnm_print(2, "PBEparm_check:  LPBE/NPBE/LRPBE/NRPBE not set!\n");
         return 0;
     }
     if (!thee->setbcfl) {
@@ -257,8 +257,8 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->kappaMapID = parm->kappaMapID;
     thee->useChargeMap = parm->useChargeMap;
     thee->chargeMapID = parm->chargeMapID;
-    thee->nonlin = parm->nonlin; 
-    thee->setnonlin = parm->setnonlin;
+    thee->pbetype = parm->pbetype; 
+    thee->setpbetype = parm->setpbetype;
     thee->bcfl = parm->bcfl;
     thee->setbcfl = parm->setbcfl;
     thee->nion = parm->nion;
@@ -331,6 +331,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
+    Vnm_print(0, "parsePBE:  trying %s...\n", tok);
+
     if (Vstring_strcasecmp(tok, "mol") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 0) {
@@ -342,12 +344,20 @@ keyword!\n", tok);
         thee->setmolid = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "lpbe") == 0) {
-        thee->nonlin = 0;
-        thee->setnonlin = 1;
+        thee->pbetype = PBE_LPBE;
+        thee->setpbetype = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "npbe") == 0) {
-        thee->nonlin = 1;
-        thee->setnonlin = 1;
+        thee->pbetype = PBE_NPBE;
+        thee->setpbetype = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "lrpbe") == 0) {
+        thee->pbetype = PBE_LRPBE;
+        thee->setpbetype = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "nrpbe") == 0) {
+        thee->pbetype = PBE_NRPBE;
+        thee->setpbetype = 1;
         return 1;
     } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -530,7 +540,6 @@ USEMAP statement!\n", tok);
     } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
         if (sscanf(tok, "%d", &ti) == 1) {
-            return -1;
             thee->calcenergy = ti;
             thee->setcalcenergy = 1;
             return 1;

@@ -81,8 +81,8 @@ struct sPBEparm {
     int useChargeMap;  /**< Indicates whether we use an external
                         * charge distribution map */
     int chargeMapID;  /**< Charge distribution map ID (if used) */
-    int nonlin;  /**< 0 => LPBE, 1 => NPBE */
-    int setnonlin;  /**< Flag, @see nonlin */
+    Vhal_PBEType pbetype;  /**< Which version of the PBE are we solving? */
+    int setpbetype;  /**< Flag, @see pbetype */
     Vbcfl bcfl;  /**< Boundary condition method */
     int setbcfl;  /**< Flag, @see bcfl */
     int nion;  /**< Number of counterion species */
