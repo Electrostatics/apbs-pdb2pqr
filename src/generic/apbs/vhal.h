@@ -77,7 +77,7 @@ enum Vdata_Type {
     VDT_DIELZ,  /**< Dielectric y-shifted map as calculated with the currently
                  * specified scheme (dimensionless) */
     VDT_KAPPA   /**< Kappa map as calculated with the currently
-                 * specified scheme (\f$A^{-3}\f$) */
+                 * specified scheme (\f\AA$^{-3}$\f) */
 };
 
 /** @typedef Vdata_Type
