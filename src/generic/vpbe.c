@@ -157,11 +157,6 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, Vgm *gm) {
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee) != VNULL) {
-        Vcsm_dtor(&((*thee)->csm));
-        if ((*thee)->paramFlag) {
-            Vacc_dtor(&((*thee)->solvAcc));
-            Vacc_dtor(&((*thee)->ionAcc));
-        }
         Vpbe_dtor2(*thee);
         Vram_dtor((Vram *)thee, 1, sizeof(Vpbe) );
         (*thee) = VNULL;
@@ -175,7 +170,14 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpbe_dtor2(Vpbe *thee) { ; }
+VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
+    Vnm_print(2,"Vpbe_dtor2: Destroying VCSM\n");
+    Vcsm_dtor(&(thee->csm));
+    Vnm_print(2,"Vpbe_dtor2: Destroying solvent VACC\n");
+    Vacc_dtor(&(thee->solvAcc));
+    Vnm_print(2,"Vpbe_dtor2: Destroying ion VACC\n");
+    Vacc_dtor(&(thee->ionAcc));
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpbe_initialize
