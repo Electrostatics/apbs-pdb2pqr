@@ -39,6 +39,7 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
       qcd2pqr -> qcd2pqr.awk
 
   CHANGES THAT AFFECT DEVELOPERS:
+  * Altered --with-blas syntax in configure scripts and removed --disable-blas
   * Documented high-level frontend routines
   * Added substantial mypde.c-based functionality to Vfetk
   * Moved chgm from PBEparm to MGparm

@@ -56,7 +56,7 @@
  *  @author  Nathan Baker
  *  @brief   Types of molecular surface definitions
  */
-enum Vsurf_Meth {
+enum eVsurf_Meth {
 	VSM_MOL=0, /**<  Ion accessibility is defined using inflated van der Waals
 				*    radii, the dielectric coefficient ( ) is defined using the
 				*    molecular (Conolly) surface definition without 
@@ -79,14 +79,14 @@ enum Vsurf_Meth {
  *  @ingroup Vhal
  *  @brief   Declaration of the Vsurf_Meth type as the Vsurf_Meth enum
  */
-typedef enum Vsurf_Meth Vsurf_Meth;
+typedef enum eVsurf_Meth Vsurf_Meth;
 
 /**
  * @ingroup  Vhal
  * @author  Nathan Baker
  * @brief  Types of boundary conditions 
  */
-enum Vbcfl {
+enum eVbcfl {
     BCFL_ZERO=0,  /**< Zero Dirichlet boundary conditions */
     BCFL_SDH=1,  /**< Single-sphere Debye-Huckel Dirichlet boundary 
                   * condition */
@@ -100,14 +100,14 @@ enum Vbcfl {
  * @brief  Declare Vbcfl type
  * @ingroup  Vhal
  */
-typedef enum Vbcfl Vbcfl;
+typedef enum eVbcfl Vbcfl;
 
 /**
  *  @ingroup Vhal
  *  @author  Nathan Baker
  *  @brief   Types of charge discretization methods
  */
-enum Vchrg_Meth {
+enum eVchrg_Meth {
 	VCM_TRIL=0,  /**< Trilinear interpolation of charge to 8 nearest grid
                   *   points.  The traditional method; not particularly good to
                   *   use with PBE forces. */
@@ -120,7 +120,7 @@ enum Vchrg_Meth {
  *  @ingroup Vhal
  *  @brief   Declaration of the Vchrg_Meth type as the Vchrg_Meth enum
  */
-typedef enum Vchrg_Meth Vchrg_Meth;
+typedef enum eVchrg_Meth Vchrg_Meth;
 
 
 /**
@@ -128,7 +128,7 @@ typedef enum Vchrg_Meth Vchrg_Meth;
  *  @author  Nathan Baker
  *  @brief   Types of (scalar) data that can be written out of APBS
  */
-enum Vdata_Type {
+enum eVdata_Type {
     VDT_CHARGE, /**< Charge distribution (e) */
     VDT_POT,    /**< Potential (kT/e) */
     VDT_SMOL,   /**< Solvent accessibility defined by molecular/Connolly
@@ -143,9 +143,9 @@ enum Vdata_Type {
     VDT_EDENS,  /**< Energy density \f$\epsilon (\nabla u)^2\f$, where \f$u\f$
                  * is potential (kT/e/A)^2 */
     VDT_NDENS,  /**< Ion number density \f$\sum c_i \exp (-q_i u)^2\f$, 
-	         * where $u$ is potential (output in M) */
-    VDT_QDENS,  /**< Ion charge density $\sum q_i c_i \exp (-q_i u)^2$,
-	         * where $u$ is potential (output in \f$e_c M\f$) */
+	         * where \f$u\f$ is potential (output in M) */
+    VDT_QDENS,  /**< Ion charge density \f$\sum q_i c_i \exp (-q_i u)^2\f$,
+	         * where \f$u\f$ is potential (output in \f$e_c M\f$) */
     VDT_DIELX,  /**< Dielectric x-shifted map as calculated with the currently
                  * specified scheme (dimensionless) */
     VDT_DIELY,  /**< Dielectric y-shifted map as calculated with the currently
@@ -153,21 +153,21 @@ enum Vdata_Type {
     VDT_DIELZ,  /**< Dielectric y-shifted map as calculated with the currently
                  * specified scheme (dimensionless) */
     VDT_KAPPA   /**< Kappa map as calculated with the currently
-                 * specified scheme (\f\AA$^{-3}$\f) */
+                 * specified scheme (\f$\AA^{-3}\f$) */
 };
 
 /** @typedef Vdata_Type
  *  @ingroup Vhal
  *  @brief   Declaration of the Vdata_Type type as the Vdata_Type enum
  */
-typedef enum Vdata_Type Vdata_Type;
+typedef enum eVdata_Type Vdata_Type;
 
 /**
  *  @ingroup Vhal
  *  @author  Nathan Baker
  *  @brief   Format of data that can be written out of APBS
  */
-enum Vdata_Format {
+enum eVdata_Format {
     VDF_DX=0,  /**< OpenDX (Data Explorer) format */
     VDF_UHBD=1, /**< UHBD format */
     VDF_AVS=2  /**< AVS UCD format */
@@ -177,7 +177,7 @@ enum Vdata_Format {
  *  @ingroup Vhal
  *  @brief   Declaration of the Vdata_Format type as the Vdata_Format enum
  */
-typedef enum Vdata_Format Vdata_Format;
+typedef enum eVdata_Format Vdata_Format;
 
 
 /** @brief The maximum number of molecules that can be involved in a single 

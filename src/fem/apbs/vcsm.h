@@ -72,7 +72,7 @@ VEXTERNC void Gem_setExternalUpdateFunction(Gem *thee,
  *  @ingroup Vcsm
  *  @author  Nathan Baker
  */
-struct Vcsm { 
+struct sVcsm { 
 
   Valist *alist;      /**< Atom (charge) list */
   int natom;          /**< Size of thee->alist; redundant, but useful for
@@ -101,11 +101,11 @@ struct Vcsm {
 
 };
 
-/** @typedef Vcsm
+/** 
  *  @ingroup Vcsm
  *  @brief   Declaration of the Vcsm class as the Vcsm structure
  */
-typedef struct Vcsm Vcsm;
+typedef struct sVcsm Vcsm;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vcsm: Inlineable methods (vcsm.c)

@@ -66,7 +66,7 @@
  * @brief  Version of PB equation to solve
  * @ingroup  Vfetk
  */
-enum Vfetk_PBEType {
+enum eVfetk_PBEType {
     PBE_LPBE,  /**< Linearized Poisson-Boltzmann equation */
     PBE_NPBE,  /**< Nonlinear (full) Poisson-Boltzmann equation */
     PBE_LRPBE,  /**< Linearzed regularized Poisson-Boltzmann equation */
@@ -77,14 +77,14 @@ enum Vfetk_PBEType {
  * @brief  Declare FEMparm_PBEType type
  * @ingroup  Vfetk
  */
-typedef enum Vfetk_PBEType Vfetk_PBEType;
+typedef enum eVfetk_PBEType Vfetk_PBEType;
 
 /**
  * @brief  Linear solver type 
  * @ingroup Vfetk
- * @notes  Do not change these values; they correspond to settings in FEtk
+ * @note  Do not change these values; they correspond to settings in FEtk
  */
-enum Vfetk_LsolvType {
+enum eVfetk_LsolvType {
     VLT_SLU=0,  /**< SuperLU direct solve */
     VLT_MG=1,  /**< Multigrid */
     VLT_CG=2,  /**< Conjugate gradient */
@@ -95,14 +95,14 @@ enum Vfetk_LsolvType {
  * @brief  Declare FEMparm_LsolvType type
  * @ingroup  Vfetk
  */
-typedef enum Vfetk_LsolvType Vfetk_LsolvType;
+typedef enum eVfetk_LsolvType Vfetk_LsolvType;
 
 /**
  * @brief  Non-linear solver type 
  * @ingroup Vfetk
- * @notes  Do not change these values; they correspond to settings in FEtk
+ * @note  Do not change these values; they correspond to settings in FEtk
  */
-enum Vfetk_NsolvType {
+enum eVfetk_NsolvType {
     VNT_NEW=0,  /**< Newton solver */
     VNT_INC=1,  /**< Incremental */
     VNT_ARC=2  /**< Psuedo-arclength */
@@ -112,14 +112,14 @@ enum Vfetk_NsolvType {
  * @brief  Declare FEMparm_NsolvType type
  * @ingroup  Vfetk
  */
-typedef enum Vfetk_NsolvType Vfetk_NsolvType;
+typedef enum eVfetk_NsolvType Vfetk_NsolvType;
 
 /**
  * @brief  Initial guess type
  * @ingroup Vfetk
- * @notes  Do not change these values; they correspond to settings in FEtk
+ * @note  Do not change these values; they correspond to settings in FEtk
  */
-enum Vfetk_GuessType {
+enum eVfetk_GuessType {
     VGT_ZERO=0,  /**< Zero initial guess */
     VGT_DIRI=1,  /**< Dirichlet boundary condition initial guess */
     VGT_PREV=2  /**< Previous level initial guess */
@@ -129,14 +129,14 @@ enum Vfetk_GuessType {
  * @brief  Declare FEMparm_GuessType type
  * @ingroup  Vfetk
  */
-typedef enum Vfetk_GuessType Vfetk_GuessType;
+typedef enum eVfetk_GuessType Vfetk_GuessType;
 
 /**
  * @brief  Preconditioner type
  * @ingroup Vfetk
- * @notes  Do not change these values; they correspond to settings in FEtk
+ * @note  Do not change these values; they correspond to settings in FEtk
  */
-enum Vfetk_PrecType {
+enum eVfetk_PrecType {
     VPT_IDEN=0,  /**< Identity matrix */
     VPT_DIAG=1,  /**< Diagonal scaling */
     VPT_MG=2  /**< Multigrid */
@@ -146,10 +146,9 @@ enum Vfetk_PrecType {
  * @brief  Declare FEMparm_GuessType type
  * @ingroup  Vfetk
  */
-typedef enum Vfetk_GuessType Vfetk_GuessType;
+typedef enum eVfetk_PrecType Vfetk_PrecType;
 
 /**
- *  @struct  Vfetk
  *  @ingroup Vfetk
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vfetk class/module
@@ -158,7 +157,7 @@ typedef enum Vfetk_GuessType Vfetk_GuessType;
  *  (written by Mike Holst) provided with the PMG code.
  *
  */
-struct Vfetk { 
+struct sVfetk { 
 
   Vmem *vmem;  /**< Memory management object */
   Gem *gm;  /**< Grid manager (container class for master vertex
@@ -176,27 +175,28 @@ struct Vfetk {
   int nmax;  /**< Maximum number of nonlinear solver iterations */
   double ntol;  /**< Residual tolerance for nonlinear solver */
   Vfetk_GuessType gues;  /**< Initial guess method */
+  Vfetk_PrecType lprec;  /**< Linear preconditioner */
   int pjac;  /**< Flag to print the jacobians (usually set this to -1, 
               * please) */
   PBEparm *pbeparm;  /**<  Generic PB parameters */
   FEMparm *feparm;  /**<  FEM-specific parameters */
   Vfetk_PBEType type;  /**< Version of PBE to solve */
+  int level;  /**< Refinement level (starts at 0) */
 
 };
 
 /** @typedef Vfetk
  *  @ingroup Vfetk
  *  @brief   Declaration of the Vfetk class as the Vfetk structure */
-typedef struct Vfetk Vfetk;
+typedef struct sVfetk Vfetk;
 
 /**
- * @struct
  * @brief  Vfetk LocalVar subclass
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @brief  Contains variables used when solving the PDE with FEtk
  */
-struct Vfetk_LocalVar {
+struct sVfetk_LocalVar {
     double nvec[3];  /**< Normal vector for a simplex face */
     double vx[4][3];  /**< Vertex coordinates */
     double xq[3];  /**< Quadrature pt */
@@ -228,11 +228,11 @@ struct Vfetk_LocalVar {
     int nion;  /**<  Number of ion species */
 };
 
-/** @typedef Vfetk_LocalVar
+/** 
  *  @ingroup Vfetk
  *  @brief   Declaration of the Vfetk_LocalVar subclass as the Vfetk_LocalVar 
  *           structure */
-typedef struct Vfetk_LocalVar Vfetk_LocalVar;
+typedef struct sVfetk_LocalVar Vfetk_LocalVar;
 
 #if !defined(VINLINE_VFETK)
 
@@ -297,7 +297,7 @@ typedef struct Vfetk_LocalVar Vfetk_LocalVar;
  * @param  pbe  Vpbe (PBE manager) object
  * @param  type  Version of PBE to solve
  * @return  Pointer to newly allocated Vfetk object 
- * @notes  This sets up the Gem, AM, and Aprx FEtk objects but does not create
+ * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
  *         Vfetk_genCube */
 VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type);
@@ -310,7 +310,7 @@ VEXTERNC Vfetk*  Vfetk_ctor(Vpbe *pbe, Vfetk_PBEType type);
  * @param  pbe  Vpbe (PBE manager) object
  * @param  type  Version of PBE to solve
  * @return  1 if successful, 0 otherwise
- * @notes  This sets up the Gem, AM, and Aprx FEtk objects but does not create
+ * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
  *         Vfetk_genCube */
 VEXTERNC int     Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vfetk_PBEType type);
@@ -539,7 +539,7 @@ VEXTERNC int Vfetk_PDE_ctor2(PDE *thee, Vfetk *fetk);
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @param  thee Pointer to PDE object memory
- * @notes  Thread-safe
+ * @note  Thread-safe
  */
 VEXTERNC void Vfetk_PDE_dtor(PDE **thee);
 
@@ -548,7 +548,7 @@ VEXTERNC void Vfetk_PDE_dtor(PDE **thee);
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @param  thee Pointer to PDE object
- * @notes  Thread-safe
+ * @note  Thread-safe
  */
 VEXTERNC void Vfetk_PDE_dtor2(PDE *thee);
 
@@ -559,7 +559,7 @@ VEXTERNC void Vfetk_PDE_dtor2(PDE *thee);
  * @param  thee PDE object
  * @param ip  Integer parameter array (not used)
  * @param rp  Double parameter array (not used)
- * @notes  Thread-safe */
+ * @note  Thread-safe */
 VEXTERNC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]);
 
 /** 
@@ -572,6 +572,7 @@ VEXTERNC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]);
  *                bitfield for molecular accessibiliity)
  * @param tvx  Vertex coordinates
  * @param data  Simplex pointer
+ * @todo  Jump term is not implemented
  * @bug This function is not thread-safe */
 VEXTERNC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
   double tvx[][3], void *data);
@@ -709,7 +710,7 @@ VEXTERNC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
  * @param  chart  Chart in which vertex coordinates are provided
  * @param  txq  Vertex coordinates
  * @param  F  Set to true solution value
- * @notes  This function only returns zero.
+ * @note  This function only returns zero.
  * @bug  This function is not thread-safe. */
 VEXTERNC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
   double F[]);
@@ -729,7 +730,7 @@ VEXTERNC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
  *   \li  vx[0]  First vertex coordinates 
  *   \li  vx[1]  Second vertex coordinates
  *   \li  vx[2]  Set to new vertex coordinates 
- * @notes  This function is thread-safe. */
+ * @note  This function is thread-safe. */
 VEXTERNC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType, 
   int chart[], double vx[][3]);
 
@@ -742,7 +743,7 @@ VEXTERNC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType,
  * @param  vertexType  type of boundary vertex
  * @param  chart  Vertex chart
  * @param  vx  Vertex coordinates
- * @notes  This function is thread-safe and is a no-op */
+ * @note  This function is thread-safe and is a no-op */
 VEXTERNC void Vfetk_PDE_mapBoundary(int dim, int dimII, int vertexType, 
   int chart, double vx[3]);
 
@@ -776,7 +777,7 @@ VEXTERNC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
  * @param  chart  Charts of vertices
  * @param  vx  Vertex coordinates 
  * @param  dimV  Number of vertices 
- * @notes  Thread-safe; a no-op */
+ * @note  Thread-safe; a no-op */
 VEXTERNC void Vfetk_PDE_oneChart(int dim, int dimII, int objType, int chart[],
   double vx[][3], int dimV);
 
@@ -820,7 +821,7 @@ VEXTERNC void Vfetk_externalUpdateFunction(SS **simps, int num);
  * @param comp which component of elliptic system to produce basis for
  * @param ndof set to number of degrees of freedom
  * @param dof set to degree of freedom per v/e/f/s
- * @notes
+ * @note
  *   @verbatim
  *   The basis ordering is important.  For a fixed quadrature
  *   point iq, you must follow the following ordering in p[iq][],
@@ -906,5 +907,15 @@ VEXTERNC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof,
  */
 VEXTERNC void Vfetk_PDE_simplexBasisForm(int key, int dim, int comp,
     int pdkey, double xq[], double basis[]);
+
+/**
+ * @brief  Read in mesh and initialize associated internal structures
+ * @ingroup  Vfetk
+ * @author  Nathan Baker
+ * @param  thee  Vfetk object
+ * @param  sock  Socket ready for reading
+ * @param  skey  Format key (0 => simplex format)
+ * @note  @see Vfetk_genCube */
+VEXTERNC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock);
 
 #endif /* ifndef _VFETK_H_ */

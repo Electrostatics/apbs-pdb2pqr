@@ -66,10 +66,12 @@ int main(int argc, char **argv) {
 
     NOsh *nosh = VNULL;
     MGparm *mgparm = VNULL;
+    FEMparm *feparm = VNULL;
     PBEparm *pbeparm = VNULL;
     Vmem *mem = VNULL;
     Vcom *com = VNULL;
     Vio *sock = VNULL;
+    Vfetk *fetk[NOSH_MAXCALC];
     Vpmg *pmg[NOSH_MAXCALC];
     Vpmgp *pmgp[NOSH_MAXCALC];
     Vpbe *pbe[NOSH_MAXCALC];
@@ -78,7 +80,7 @@ int main(int argc, char **argv) {
     Vgrid *kappaMap[NOSH_MAXMOL];
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
-    int i, rank, size, bytesTotal, highWater;
+    int i, rank, size, bytesTotal, highWater, isolve;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -156,6 +158,7 @@ int main(int argc, char **argv) {
     for (i=0; i<NOSH_MAXCALC; i++) {
         pmg[i] = VNULL;
         pmgp[i] = VNULL;
+        fetk[i] = VNULL;
         pbe[i] = VNULL;
         qfEnergy[i] = 0;
         qmEnergy[i] = 0;
@@ -284,7 +287,155 @@ int main(int argc, char **argv) {
 
         /* ***** Do FEM calculation ***** */
         } else {
-            Vnm_tprint( 2, "main: FEM shell support not implemented yet\n");
+            Vnm_tprint( 1, "CALCULATION #%d: FINITE ELEMENT\n", i+1);
+
+            /* Useful local variables */
+            feparm = nosh->calc[i].femparm;
+            pbeparm = nosh->calc[i].pbeparm;
+
+            /* Warn the user about some things */
+            Vnm_print(2, "#################### WARNING ####################\n");
+            Vnm_print(2, "## FE support is currently very experimental!  ##\n");
+            Vnm_print(2, "#################### WARNING ####################\n");
+
+            /* Set up problem */
+            Vnm_tprint( 1, "  Setting up problem...\n");
+            if (!initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk)) {
+                Vnm_tprint( 2, "Error setting up FE calculation!\n");
+                return APBSRC;
+            }
+
+            /* Print problem parameters */
+            printFEPARM(feparm);
+            printPBEPARM(pbeparm);
+
+            /* Refine mesh */
+            if (!preRefineFE(i, nosh, feparm, fetk)) {
+                Vnm_tprint( 2, "Error pre-refining mesh!\n");
+                return APBSRC;
+            }
+
+            /* Solve-estimate-refine */
+            Vnm_tprint(1, "  Commencing solve-estimate-refine with following procedure:\n");
+            Vnm_tprint(1, "  1. Solve with...\n");
+            if (USEHB) {
+                Vnm_tprint(1, "     HB linear solver:  AM_hPcg\n");
+            } else {
+                Vnm_tprint(1, "     Non-HB linear solver:  ");
+                switch (fetk[i]->lkey) {
+                    case VLT_SLU:
+                        Vnm_print(1, "SLU direct\n");
+                        break;
+                    case VLT_MG:
+                        Vnm_print(1, "multigrid\n");
+                        break;
+                    case VLT_CG:
+                        Vnm_print(1, "conjugate gradient\n");
+                        break;
+                    case VLT_BCG:
+                        Vnm_print(1, "BiCGStab\n");
+                        break;
+                    default:
+                        Vnm_print(1, "???\n");
+                        break;
+                }
+            }
+            Vnm_tprint(1, "     Linear solver tol.:  %g\n", fetk[i]->ltol);
+            Vnm_tprint(1, "     Linear solver max. iters.:  %d\n", 
+              fetk[i]->lmax);
+            Vnm_tprint(1, "     Linear solver preconditioner:  ");
+            switch (fetk[i]->lprec) {
+                case VPT_IDEN:
+                    Vnm_print(1, "identity\n");
+                    break;
+                case VPT_DIAG:
+                    Vnm_print(1, "diagonal\n");
+                    break;
+                case VPT_MG:
+                    Vnm_print(1, "multigrid\n");
+                    break;
+                default:
+                    Vnm_print(1, "???\n");
+                    break;
+            }
+            Vnm_tprint(1, "     Nonlinear solver:  ");
+            switch (fetk[i]->nkey) {
+                case VNT_NEW:
+                    Vnm_print(1, "newton\n");
+                    break;
+                case VNT_INC:
+                    Vnm_print(1, "incremental\n");
+                    break;
+                case VNT_ARC:
+                    Vnm_print(1, "pseudo-arclength\n");
+                    break;
+                default:
+                    Vnm_print(1, "??? ");
+                    break;
+            }
+            Vnm_tprint(1, "     Nonlinear solver tol.:  %g\n", fetk[i]->ntol);
+            Vnm_tprint(1, "     Nonlinear solver max. iters.:  %d\n", 
+              fetk[i]->nmax);
+            Vnm_tprint(1, "     Initial guess:  ");
+            switch (fetk[i]->gues) {
+                case VGT_ZERO:
+                    Vnm_tprint(1, "zero\n");
+                    break;
+                case VGT_DIRI:
+                    Vnm_tprint(1, "boundary function\n");
+                    break;
+                case VGT_PREV:
+                    Vnm_tprint(1, "interpolated previous solution\n");
+                    break;
+                default:
+                    Vnm_tprint(1, "???\n");
+                    break;
+            }
+            Vnm_tprint(1, "  2. Calculate solvation energy.\n");
+            Vnm_tprint(1, "  3. Estimate with...\n");
+            switch (feparm->akeySOLVE) {
+                case FRT_UNIF:
+                    Vnm_tprint(1, "     Uniform marking.\n");
+                    break;
+                case FRT_GEOM:
+                    Vnm_tprint(1, "     Geometry-based marking, lower \
+threshold:  %g A\n", feparm->targetRes);
+                    break;
+                case FRT_RESI:
+                    Vnm_tprint(1, "     Residual error estimator, tolerance \
+= %g\n", feparm->etol);
+                    break;
+                case FRT_DUAL:
+                    Vnm_tprint(1, "     Dual error estimator, tolerance \
+= %g\n", feparm->etol);
+                    break;
+                case FRT_LOCA:
+                    Vnm_tprint(1, "     Local error estimator, tolerance \
+= %g\n", feparm->etol);
+                    break;
+                default:
+                    Vnm_tprint(1, "     ???, tolerance = %g\n", feparm->etol);
+                    break;
+            }
+            Vnm_tprint(1, "  4. Refine with longest-edge bisection to \
+conformity.\n");
+
+            for (isolve=0; isolve<feparm->maxsolve; isolve++) {
+                Vnm_tprint(1, "    Solve #%d...\n", isolve);
+                if (!solveFE(i, nosh, pbeparm, feparm, fetk)) {
+                    Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+                    return APBSRC;
+                }
+                Vnm_redirect(0);
+                if (!energyFE(nosh, i, fetk, &(nenergy[i]), &(totEnergy[i]), 
+                  &(qfEnergy[i]), &(qmEnergy[i]), &(dielEnergy[i]))) {
+                    Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
+                    return APBSRC;
+                }
+                Vnm_redirect(1);
+            }
+
+            Vnm_tprint(2, "WHOOPS!  FEM NOT COMPLETE YET!\n");
             return APBSRC;
         }
     } 

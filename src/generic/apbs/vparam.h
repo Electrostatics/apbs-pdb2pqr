@@ -56,7 +56,6 @@
 #include "apbs/vstring.h"
 
 /**
- *  @struct  Vparam_AtomData
  *  @ingroup  Vparam
  *  @author  Nathan Baker
  *  @brief  AtomData sub-class; stores atom data
@@ -72,7 +71,7 @@
  *  \f$i\f$ and \f$j\f$, and \f$\sigma_{ij} = \sigma_i + \sigma_j\f$ is the sum
  *  of the van der Waals radii.
  */
-struct Vparam_AtomData {
+struct sVparam_AtomData {
     char atomName[VMAX_ARGLEN];  /**< Atom name */
     char resName[VMAX_ARGLEN];  /**< Residue name */
     double charge;  /**< Atom charge (in e) */
@@ -81,12 +80,12 @@ struct Vparam_AtomData {
                       * kJ/mol) */
 };
 
-/** @typedef Vparam_AtomData
+/** 
  *  @ingroup Vparam
- *  @brief   Declaration of the Vparam_AtomData class as the Vparam_AtomData
+ *  @brief   Declaration of the Vparam_AtomData class as the sVparam_AtomData
  *           structure
  */
-typedef struct Vparam_AtomData Vparam_AtomData;
+typedef struct sVparam_AtomData Vparam_AtomData;
 
 /**
  *  @struct  Vparam_ResData

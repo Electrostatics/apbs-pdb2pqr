@@ -54,12 +54,11 @@
 #include "apbs/vstring.h"
 
 /**
- *  @struct  Vgrid
  *  @ingroup Vgrid
  *  @author  Nathan Baker
  *  @brief   Electrostatic potential oracle for Cartesian mesh data
  */
-struct Vgrid {
+struct sVgrid {
 
     int nx;       /**< Number grid points in x direction */
     int ny;       /**< Number grid points in y direction */
@@ -80,11 +79,11 @@ struct Vgrid {
     Vmem *mem;    /**< Memory manager object */
 };
 
-/** @typedef Vgrid
+/** 
  *  @ingroup Vgrid
- *  @brief   Declaration of the Vgrid class as the Vgrid structure
+ *  @brief   Declaration of the Vgrid class as the sVgrid structure
  */
-typedef struct Vgrid Vgrid;
+typedef struct sVgrid Vgrid;
 
 #if !defined(VINLINE_VGRID)
 

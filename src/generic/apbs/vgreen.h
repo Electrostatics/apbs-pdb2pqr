@@ -63,12 +63,11 @@
 
 
 /**
- *  @struct  Vgreen
  *  @ingroup Vgreen
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vgreen class/module
  */
-struct Vgreen { 
+struct sVgreen { 
 
   Valist *alist;      /**< Atom (charge) list for Green's function */
   Vmem *vmem;         /**< Memory management object */
@@ -79,11 +78,11 @@ struct Vgreen {
 
 };
 
-/** @typedef Vgreen
+/** 
  *  @ingroup Vgreen
  *  @brief   Declaration of the Vgreen class as the Vgreen structure
  */
-typedef struct Vgreen Vgreen;
+typedef struct sVgreen Vgreen;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vgreen: Inlineable methods (vgreen.c)

@@ -263,7 +263,7 @@ ETOL keyword!\n", tok);
         return 1;
     } else if (Vstring_strcasecmp(tok, "targetRes") == 0) {
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (sscanf(tok, "%f", &tf) == 0) {
+        if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "parseFE:  read non-double (%s) for targetNum!\n", 
               tok);
             return -1;

@@ -41,6 +41,10 @@
  */
 
 #include "apbscfg.h"
+#include "maloc/maloc.h"  
+#include "mc/mc.h"  
+#include "mcx/mcx.h"  
+
 #include "apbs/apbs.h"  
 #include "apbs/vhal.h"  
 #include "apbs/nosh.h"  
@@ -48,7 +52,6 @@
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
-#include "maloc/maloc.h"  
 
 #include "routines.h"
 
@@ -1614,3 +1617,281 @@ VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
 
     return 1;
 }
+
+VPUBLIC int initFE(int i, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
+  Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
+  Vfetk *fetk[NOSH_MAXCALC]) {
+    
+    int j, bytesTotal, highWater, imol;
+    double sparm, iparm, center[3];
+
+    Vnm_tstart(27, "Setup timer");
+
+    /* Fix mesh center for "GCENT MOL #" types of declarations. */
+    Vnm_tprint(0, "Re-centering mesh...\n");
+    imol = pbeparm->molid-1;
+    for (j=0; j<3; j++) {
+        if (imol < nosh->nmol) {
+            center[j] = (alist[imol])->center[j];
+        } else{ 
+            Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
+              (imol+1));
+            return 0;
+        }
+    }
+    
+    /* Set up PBE object */
+    Vnm_tprint(0, "Setting up PBE object...\n");
+    if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
+    else sparm = pbeparm->srad;
+    if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
+    else iparm = 0.0;
+    pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
+      pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
+      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm);
+
+    /* Print a few derived parameters */
+    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+
+    /* Set up FEtk objects */
+    Vnm_tprint(0, "Setting up FEtk object...\n");
+    if (pbeparm->nonlin)  fetk[i] = Vfetk_ctor(pbe[i], PBE_NRPBE);
+    else fetk[i] = Vfetk_ctor(pbe[i], PBE_LRPBE);
+    Vfetk_setParameters(fetk[i], pbeparm, feparm);
+
+    /* Build mesh */
+    Vnm_tprint(0, "Setting up mesh...\n");
+    Vfetk_genCube(fetk[i], alist[imol]->center, feparm->domainLength);
+    /* Uniformly refine the mesh a bit */
+    for (j=0; j<5; j++) {
+        AM_markRefine(fetk[i]->am, 0, -1, 0, 0);
+        Aprx_refine(fetk[i]->aprx, 0, USEHB);
+    }
+
+    /* Setup time statistics */
+    Vnm_tstop(27, "Setup timer");
+
+    /* Memory statistics */
+    bytesTotal = Vmem_bytesTotal();
+    highWater = Vmem_highWaterTotal();
+
+#ifndef VAPBSQUIET
+    Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
+%4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
+      (double)(highWater)/(1024.*1024.));
+#endif
+
+
+    return 1;
+}
+
+VPUBLIC void printFEPARM(FEMparm *feparm) {
+
+    Vnm_tprint(1, "  Domain size:  %g A x %g A x %g A\n", 
+      feparm->domainLength[0], feparm->domainLength[1],
+      feparm->domainLength[2]);
+    switch(feparm->ekey) {
+        case FET_SIMP:
+            Vnm_tprint(1, "  Per-simplex error tolerance:  %g\n", feparm->etol);
+            break;
+        case FET_GLOB:
+            Vnm_tprint(1, "  Global error tolerance:  %g\n", feparm->etol);
+            break;
+        case FET_FRAC:
+            Vnm_tprint(1, "  Fraction of simps to refine:  %g\n", feparm->etol);
+            break;
+        default:
+            Vnm_tprint(2, "Invalid ekey (%d)!\n", feparm->ekey);
+            VASSERT(0);
+            break;
+    }
+    switch(feparm->akeyPRE) {
+        case FRT_UNIF:
+            Vnm_tprint(1, "  Uniform pre-solve refinement.\n");
+            break;
+        case FRT_GEOM:
+            Vnm_tprint(1, "  Geometry-based pre-solve refinement.\n");
+            break;
+        case FRT_RESI:
+            Vnm_tprint(1, "  Residual-based pre-solve refinement.\n");
+            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
+before you solve!\n");
+            VASSERT(0);
+            break;
+        case FRT_DUAL:
+            Vnm_tprint(1, "  Dual-based pre-solve refinement.\n");
+            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
+before you solve!\n");
+            VASSERT(0);
+            break;
+        case FRT_LOCA:
+            Vnm_tprint(1, "  Local-based pre-solve refinement.\n");
+            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
+before you solve!\n");
+            VASSERT(0);
+            break;
+        default:
+            Vnm_tprint(2, "Invalid akeyPRE (%d)!\n", feparm->akeyPRE);
+            VASSERT(0);
+            break;
+    }
+    switch(feparm->akeySOLVE) {
+        case FRT_UNIF:
+            Vnm_tprint(1, "  Uniform a posteriori refinement.\n");
+            break;
+        case FRT_GEOM:
+            Vnm_tprint(1, "  Geometry-based a posteriori refinement.\n");
+            break;
+        case FRT_RESI:
+            Vnm_tprint(1, "  Residual-based a posteriori refinement.\n");
+            VASSERT(0);
+            break;
+        case FRT_DUAL:
+            Vnm_tprint(1, "  Dual-based a posteriori refinement.\n");
+            VASSERT(0);
+            break;
+        case FRT_LOCA:
+            Vnm_tprint(1, "  Local-based a posteriori refinement.\n");
+            VASSERT(0);
+            break;
+        default:
+            Vnm_tprint(2, "Invalid akeySOLVE (%d)!\n", feparm->akeySOLVE);
+            VASSERT(0);
+            break;
+    }
+    Vnm_tprint(1, "  Refinement of initial mesh to ~%d vertices\n", 
+      feparm->targetNum);
+    Vnm_tprint(1, "  Geometry-based refinment lower bound:  %g A\n",
+      feparm->targetRes);
+    Vnm_tprint(1, "  Maximum number of solve-estimate-refine cycles:  %d\n",
+      feparm->maxsolve);
+    Vnm_tprint(1, "  Maximum number of vertices in mesh:  %d\n",
+      feparm->maxvert);
+
+}
+
+VPUBLIC int partFE(int i, NOsh *nosh, FEMparm *feparm, 
+  Vfetk *fetk[NOSH_MAXCALC]) {
+
+    Vfetk_setAtomColors(fetk[i]);
+    return 1;
+}
+
+VPUBLIC int preRefineFE(int i, NOsh *nosh, FEMparm *feparm, 
+  Vfetk *fetk[NOSH_MAXCALC]) {
+
+    int nverts, marked;
+
+    switch(feparm->akeyPRE) {
+        case FRT_UNIF:
+            Vnm_tprint(1, "  Commencing uniform refinement to %d verts.\n",
+              feparm->targetNum);
+            break;
+        case FRT_GEOM:
+            Vnm_tprint(1, "  Commencing geometry-based refinement to %d \
+verts or %g A resolution.\n", feparm->targetNum, feparm->targetRes);
+            break;
+        case FRT_RESI:
+            VASSERT(0);
+            break;
+        case FRT_DUAL:
+            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
+before you solve!\n");
+            VASSERT(0);
+            break;
+        case FRT_LOCA:
+            VASSERT(0);
+            break;
+        default:
+            VASSERT(0);
+            break;
+    }
+
+    while (1) {
+        nverts = Gem_numVV(fetk[i]->gm);
+        if (nverts > feparm->targetNum) {
+            Vnm_tprint(1, "  Hit vertex number limit.\n");
+            break;
+        }
+        marked = AM_markRefine(fetk[i]->am, feparm->akeyPRE, -1, 
+          feparm->ekey, feparm->etol);
+        if (marked == 0) {
+            Vnm_tprint(1, "  Marked 0 simps; hit error/size tolerance.\n");
+            break;
+        }
+        Vnm_print(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
+          marked);
+        Aprx_refine(fetk[i]->aprx, 0, USEHB);
+    }
+    nverts = Gem_numVV(fetk[i]->gm);
+    Vnm_print(1, "  Done refining; have %d verts.\n", nverts);
+
+    return 1;
+}
+
+VPUBLIC int solveFE(int i, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm, 
+  Vfetk *fetk[NOSH_MAXCALC]) {
+
+    AM *am;
+    int lkeyHB = 3;  /**<  AM_hPcg */
+
+    am = fetk[i]->am;
+
+    if (pbeparm->nonlin) {
+        AM_nSolve(am, fetk[i]->nkey, fetk[i]->nmax, fetk[i]->ntol, 
+          fetk[i]->lkey, fetk[i]->lmax, fetk[i]->ltol, fetk[i]->lprec, 
+          fetk[i]->gues, fetk[i]->pjac);
+    } else {
+        if (USEHB) {
+            printf("lkey = %d, lmax = %d, ltol = %g, gues = %d, pjac = %d\n",
+             lkeyHB, fetk[i]->lmax, fetk[i]->ltol, fetk[i]->gues,
+             fetk[i]->pjac);
+            AM_hlSolve(fetk[i]->am, 0, lkeyHB, fetk[i]->lmax, fetk[i]->ltol,
+              fetk[i]->gues, fetk[i]->pjac);
+        } else {
+            AM_lSolve(fetk[i]->am, 0, fetk[i]->lkey, fetk[i]->lmax, 
+              fetk[i]->ltol, fetk[i]->lprec, fetk[i]->gues, fetk[i]->pjac);
+        }
+    }
+
+    return 1;
+}
+
+VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC], 
+  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
+  double *dielEnergy) {
+
+    int i;
+    double tenergy;
+    FEMparm *feparm;
+    PBEparm *pbeparm;
+
+    feparm = nosh->calc[icalc].femparm;
+    pbeparm = nosh->calc[icalc].pbeparm;
+
+    *nenergy = 1;
+
+    /* Some processors don't count */
+    if (nosh->bogus == 0) {
+        *totEnergy = Vfetk_energy(fetk[i], -1, pbeparm->nonlin);
+#ifndef VAPBSQUIET
+        Vnm_tprint(1, "    Total electrostatic energy = %1.12E kJ/mol\n", 
+          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
+        fflush(stdout);
+#endif
+    } else *totEnergy = 0;
+
+    if (pbeparm->calcenergy == 2) {
+
+        Vnm_print(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
+        Vnm_print(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
+        *qfEnergy = 0;
+        *qmEnergy = 0;
+        *dielEnergy = 0;
+
+    } else *nenergy = 0;
+
+    return 1;
+}
+
+

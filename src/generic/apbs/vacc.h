@@ -64,12 +64,11 @@
 #define VACCMAXNBOR 20
 
 /**
- *  @struct  Vacc
  *  @ingroup Vacc
  *  @author  Nathan Baker
  *  @brief   Oracle for solvent- and ion-accessibility around a biomolecule
  */
-struct Vacc {
+struct sVacc {
 
   Vmem *vmem;               /**< Memory management object for this class */
   Valist *alist;            /**< Valist structure for list of atoms */
@@ -97,11 +96,11 @@ struct Vacc {
                              * filled by Vacc_totalSASA */
 };
 
-/** @typedef Vacc
+/** 
  *  @ingroup Vacc
  *  @brief   Declaration of the Vacc class as the Vacc structure
  */
-typedef struct Vacc Vacc;
+typedef struct sVacc Vacc;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vacc: Inlineable methods (vacc.c)

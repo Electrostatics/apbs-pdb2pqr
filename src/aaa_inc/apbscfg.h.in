@@ -69,9 +69,6 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* use built-in BLAS */
-#undef USE_PMG_BLAS
-
 /* Version number of package */
 #undef VERSION
 

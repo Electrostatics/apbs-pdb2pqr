@@ -64,12 +64,11 @@
 #include "apbs/vgreen.h"
 
 /**
- *  @struct  Vpbe
  *  @ingroup Vpbe
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vpbe class/module
  */
-struct Vpbe { 
+struct sVpbe { 
 
   Vmem *vmem;         /**< Memory management object */
 
@@ -110,11 +109,11 @@ struct Vpbe {
   
 };
 
-/** @typedef Vpbe
+/** 
  *  @ingroup Vpbe
  *  @brief   Declaration of the Vpbe class as the Vpbe structure
  */
-typedef struct Vpbe Vpbe;
+typedef struct sVpbe Vpbe;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods (vpbe.c)
@@ -312,7 +311,7 @@ typedef struct Vpbe Vpbe;
 /** @brief   Construct Vpbe object
  *  @ingroup Vpbe
  *  @author  Nathan Baker and Mike Holst
- *  @notes   This is partially based on some of Mike Holst's PMG code.  Here
+ *  @note   This is partially based on some of Mike Holst's PMG code.  Here
  *           are a few of the original function comments:
  *           kappa is defined as follows:
  *           \f[ \kappa^2 = \frac{8 \pi N_A e_c^2 I_s}{1000 \epsilon_w k_B T}
@@ -347,7 +346,7 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 /** @brief   FORTRAN stub to construct Vpbe objct
  *  @ingroup Vpbe
  *  @author  Nathan Baker and Mike Holst
- *  @notes   This is partially based on some of Mike Holst's PMG code.  Here
+ *  @note   This is partially based on some of Mike Holst's PMG code.  Here
  *           are a few of the original function comments:
  *           kappa is defined as follows:
  *           \f[ \kappa^2 = \frac{8 \pi N_A e_c^2 I_s}{1000 eps_w k_B T} \f]

@@ -244,9 +244,9 @@ AC_CHECK_HEADER(maloc/maloc.h,
     [maloc_found="";maloc_inc=""])
 if test -n "${maloc_found}"; then
     AC_CHECK_LIB(maloc,maloc_link,
-        [maloc_found="yes";maloc_lib="${maloc_lib_path}-lmaloc"],
+        [maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc -lvf2c"],
         [maloc_found="";maloc_lib=""],
-        [${maloc_lib_path}-lmaloc ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${maloc_lib_path}-lmaloc -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 fi
 if test -z "${maloc_found}"; then
     AC_MSG_ERROR([MALOC libraries or headers missing:  exiting on error!])
@@ -269,7 +269,7 @@ mpi_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_mpi,
     [mpi_use="yes"],
     [mpi_use=""],
-    [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    [${maloc_lib_path}-lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
 mpi_inc="";
@@ -364,7 +364,7 @@ rl_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_rl,
     [rl_use="yes"],
     [rl_use=""],
-    [${maloc_lib_path}-lmaloc ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    [${maloc_lib_path}-lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 if test -n "${rl_use}"; then
 
     dnl # READLINE library location ENV specification
@@ -584,38 +584,53 @@ AC_SUBST(apbs_do_tools)
 dnl # -----------------------
 dnl # HANDLE THE BLAS LIBRARIES
 dnl # -----------------------
-AC_ARG_ENABLE(blas,
-    [AC_HELP_STRING([--disable-blas],[disable local BLAS compilation])],
-    [ disable_blas="yes" ],
-    [ disable_blas=""]
-)
-# BEGIN FETK LIBRARY/HEADER TEST BLOCK
-blas_do_src=""
 blas_lib=""
 AC_ARG_WITH(blas,
-    [AC_HELP_STRING([--with-blas=PATH],
-                    [link to user-specified BLAS (specify path to lib)])],
-    [ blas_lib="-lblas -L${withval}"],
+    [AC_HELP_STRING([--with-blas=LDFLAGS],
+                  [link to user-specified BLAS (specify flags to pass to ld)])],
+    [ blas_lib="${withval}"],
     [ blas_lib="" ]
 )
-# INTERPRET THIS MESS
 AC_MSG_CHECKING([for --with-blas])
 if test -n "${blas_lib}"; then
     AC_MSG_RESULT([yes])
+
+    AC_MSG_RESULT([Looking for BLAS with ${CC} ${blas_lib}])
+    AC_LANG_C
+    LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${blas_lib};
+    AC_CHECK_LIB(blas,dscal,
+        [blas_found="yes"],
+        [blas_found=""],
+        [${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+    if test -z "${blas_found}"; then
+        AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
+    fi
+
 else
     AC_MSG_RESULT([no])
-    AC_MSG_CHECKING([for --disable-blas])
-    if test -n "${disable_blas}"; then
-       AC_MSG_RESULT([yes (you'd better have your own in LDFLAGS!)])
-    else 
-       AC_MSG_RESULT([no])
-       blas_do_src="blas"
-       AC_DEFINE([USE_PMG_BLAS], [], [use built-in BLAS])
-       blas_lib="../blas/libapbsblas.la"
+    blas_lib_path="${maloc_lib_path}"
+    blas_lib="${blas_lib_path} -lvf2c ${blas_lib_path} -lblas"
+
+    AC_LANG_C
+    LDFLAGS_SAVE=${LDFLAGS};
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    LDFLAGS=${blas_lib_path};
+    AC_CHECK_LIB(blas,dscal,
+        [blas_found="yes"],
+        [blas_found=""],
+        [${blas_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    LDFLAGS=${LDFLAGS_SAVE};
+    CPPFLAGS=${CPPFLAGS_SAVE};
+    if test -z "${blas_found}"; then
+        AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
     fi
+
 fi
 AC_SUBST(blas_lib)
-AC_SUBST(blas_do_src)
 
 dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
@@ -664,7 +679,7 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+lib_list="-L${top_srcdir}/lib ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)

@@ -78,7 +78,7 @@
  * @brief  Molecule file format types
  * @ingroup NOsh
  */
-enum NOsh_MolFormat {
+enum eNOsh_MolFormat {
     NMF_PQR=0,  /**< PQR format */
     NMF_PDB=1  /**< PDB format */
 };
@@ -87,13 +87,13 @@ enum NOsh_MolFormat {
  * @brief  Declare NOsh_MolFormat type
  * @ingroup  NOsh
  */
-typedef enum NOsh_MolFormat NOsh_MolFormat;
+typedef enum eNOsh_MolFormat NOsh_MolFormat;
 
 /**
  * @brief  Parameter file format types
  * @ingroup NOsh
  */
-enum NOsh_ParmFormat {
+enum eNOsh_ParmFormat {
     NPF_FLAT=0  /**< Flat-file format */
 };
 
@@ -101,15 +101,14 @@ enum NOsh_ParmFormat {
  * @brief  Declare NOsh_ParmFormat type
  * @ingroup  NOsh
  */
-typedef enum NOsh_ParmFormat NOsh_ParmFormat;
+typedef enum eNOsh_ParmFormat NOsh_ParmFormat;
 
 /**
- *  @struct  NOsh_calc
  *  @ingroup NOsh
  *  @author  Nathan Baker
  *  @brief   Calculation class for use when parsing fixed format input files
  */
-struct NOsh_calc {
+struct sNOsh_calc {
 
     MGparm *mgparm;         /**< Multigrid parameters */
     FEMparm *femparm;       /**< Finite element parameters */
@@ -122,15 +121,14 @@ struct NOsh_calc {
  *  @ingroup NOsh
  *  @brief   Declaration of the NOsh_calc class as the NOsh_calc structure
  */
-typedef struct NOsh_calc NOsh_calc;
+typedef struct sNOsh_calc NOsh_calc;
 
 /**
- *  @struct  NOsh
  *  @ingroup NOsh
  *  @author  Nathan Baker
  *  @brief   Class for parsing fixed format input files
  */
-struct NOsh {
+struct sNOsh {
 
     NOsh_calc calc[NOSH_MAXCALC];        /**< The array of calculation objects
                                           */
@@ -206,11 +204,11 @@ struct NOsh {
 
 };
 
-/** @typedef NOsh
+/** 
  *  @ingroup NOsh
  *  @brief   Declaration of the NOsh class as the NOsh structure
  */ 
-typedef struct NOsh NOsh;
+typedef struct sNOsh NOsh;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class NOsh: Inlineable methods (mcsh.c)

@@ -62,12 +62,11 @@
 #include "apbs/pbeparm.h"
 
 /**
- *  @struct  Vopot
  *  @ingroup Vopot
  *  @author  Nathan Baker
  *  @brief   Electrostatic potential oracle for Cartesian mesh data
  */
-struct Vopot {
+struct sVopot {
 
     Vgrid *grid;  /**< Grid object containing potential data (in units kT/e) */
     Vpbe   *pbe;  /**< Pointer to PBE object */
@@ -75,11 +74,11 @@ struct Vopot {
                   * values at points off the grid. */
 };
 
-/** @typedef Vopot
+/** 
  *  @ingroup Vopot
  *  @brief   Declaration of the Vopot class as the Vopot structure
  */
-typedef struct Vopot Vopot;
+typedef struct sVopot Vopot;
 
 /** @brief   Construct Vopot object with values obtained from Vpmg_readDX (for
  *           example)

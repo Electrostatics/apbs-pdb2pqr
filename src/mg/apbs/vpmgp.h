@@ -56,12 +56,11 @@
 #include "apbs/vhal.h"
 
 /**
- *  @struct  Vpmgp
  *  @ingroup Vpmgp
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vpmgp class/module
  */
-struct Vpmgp {
+struct sVpmgp {
 
     /* ********** USER-SPECIFIED PARAMETERS ********** */
     int nx;  /**< Grid x dimensions [no default]  */
@@ -178,11 +177,11 @@ struct Vpmgp {
     double zmax;  /**< Domain upper z corner */
 };
 
-/** @typedef Vpmgp
+/** 
  *  @ingroup Vpmgp
- *  @brief   Declaration of the Vpmgp class as the Vpmgp structure
+ *  @brief   Declaration of the Vpmgp class as the sVpmgp structure
  */
-typedef struct Vpmgp Vpmgp;
+typedef struct sVpmgp Vpmgp;
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpmgp: Inlineable methods (vpmgp.c)
