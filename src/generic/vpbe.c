@@ -47,6 +47,267 @@
 // Class Vpbe: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VPBE)
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getValist
+//
+// Purpose:  Get a pointer to the Valist (atom list) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->alist;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getVgm
+//
+// Purpose:  Get a pointer to the Vgm (grid manager) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->gm; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getVacc
+//
+// Purpose:  Get a pointer to the Vacc accessibility object 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->acc; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getVcsm
+//
+// Purpose:  Get a pointer to the Vcsm (charge-simplex map) object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vcsm* Vpbe_getVcsm(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->csm; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getIonConc
+//
+// Purpose:  Get the ionic strength in M
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getIonConc(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->ionConc; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getTemperature
+//
+// Purpose:  Get the temperature in K
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getTemperature(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->T; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteDiel
+//
+// Purpose:  Get the solute dielectric
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->soluteDiel; 
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteCenter
+//
+// Purpose:  Get the center of the solute molecule
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteCenter; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSolventDiel
+//
+// Purpose:  Get the solvent dielectric
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->solventDiel; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSolventRadius
+//
+// Purpose:  Get the solvent radius in angstroms
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->solventRadius; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getIonRadius
+//
+// Purpose:  Get the ion probe radius in angstroms 
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getIonRadius(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->ionRadius; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getXkappa
+//
+// Purpose:  Get the Debye-Huckel parameter in reciprocal angstroms
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getXkappa(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->xkappa; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getDeblen
+//
+// Purpose:  Get the Debye length in angstroms
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getDeblen(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->deblen; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getZkappa2
+//
+// Purpose:  Get the squared modified Debye-Huckel parameter
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->zkappa2; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getZmagic
+//
+// Purpose:  Get the delta function scaling factor
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getZmagic(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   VASSERT(thee->paramFlag);
+   return thee->zmagic; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteRadius
+//
+// Purpose:  Get the radius of the solute molecule
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteRadius; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getSoluteCharge
+//
+// Purpose:  Get the charge of the solute molecule
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) { 
+
+   VASSERT(thee != VNULL);
+   return thee->soluteCharge; 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vpbe_getAtomColor
+//
+// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
+//           hasn't been initialized yet.
+//
+// Note:     This is a friend function of Vcsm
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
+
+    int natoms;
+
+    VASSERT(thee != VNULL);
+
+    natoms = Valist_getNumberAtoms(thee->alist);
+    VASSERT(iatom < natoms);
+
+    return thee->csm->colors[iatom];
+}
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -351,257 +612,14 @@ VPUBLIC void Vpbe_initialize(Vpbe *thee, double ionConc, double ionRadius,
     if (thee->ionRadius > thee->solventRadius) radius = thee->ionRadius;
     else radius = thee->solventRadius;
     nhash = 2.0*VPOW((double)Valist_getNumberAtoms(thee->alist), 1.0/3.0);
-#if 1
     thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
       (int)(nhash), 100);
-#else
-    thee->acc = Vacc_ctor(thee->alist, radius, 110, 110, 110, 100);
-#endif
     VASSERT(thee->acc != VNULL);
 
     /* Compute charge-simplex map */
     Vcsm_init(thee->csm);
 
     thee->paramFlag = 1;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getValist
-//
-// Purpose:  Get a pointer to the Valist (atom list) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->alist;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVgm
-//
-// Purpose:  Get a pointer to the Vgm (grid manager) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgm* Vpbe_getVgm(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->gm; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVacc
-//
-// Purpose:  Get a pointer to the Vacc accessibility object 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->acc; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVcsm
-//
-// Purpose:  Get a pointer to the Vcsm (charge-simplex map) object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vcsm* Vpbe_getVcsm(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->csm; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonConc
-//
-// Purpose:  Get the ionic strength in M
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getIonConc(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->ionConc; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getTemperature
-//
-// Purpose:  Get the temperature in K
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getTemperature(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->T; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteDiel
-//
-// Purpose:  Get the solute dielectric
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->soluteDiel; 
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventDiel
-//
-// Purpose:  Get the solvent dielectric
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->solventDiel; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventRadius
-//
-// Purpose:  Get the solvent radius in angstroms
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->solventRadius; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIonRadius
-//
-// Purpose:  Get the ion probe radius in angstroms 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getIonRadius(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->ionRadius; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getXkappa
-//
-// Purpose:  Get the Debye-Huckel parameter in reciprocal angstroms
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getXkappa(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->xkappa; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getDeblen
-//
-// Purpose:  Get the Debye length in angstroms
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getDeblen(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->deblen; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getZkappa2
-//
-// Purpose:  Get the squared modified Debye-Huckel parameter
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->zkappa2; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getZmagic
-//
-// Purpose:  Get the delta function scaling factor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getZmagic(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->zmagic; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteCenter
-//
-// Purpose:  Get the center of the solute molecule
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->soluteCenter; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteRadius
-//
-// Purpose:  Get the radius of the solute molecule
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->soluteRadius; 
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteCharge
-//
-// Purpose:  Get the charge of the solute molecule
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) { 
-
-   VASSERT(thee != VNULL);
-   return thee->soluteCharge; 
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -829,27 +847,6 @@ VPUBLIC void Vpbe_setAtomColors(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getAtomColor
-//
-// Purpose:  Get mesh color information from the atoms.  Returns -1 if the atom
-//           hasn't been initialized yet.
-//
-// Note:     This is a friend function of Vcsm
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpbe_getAtomColor(Vpbe *thee, int iatom) {
-
-    int natoms;
-
-    VASSERT(thee != VNULL);
-
-    natoms = Valist_getNumberAtoms(thee->alist);
-    VASSERT(iatom < natoms);
-
-    return thee->csm->colors[iatom];
-}
 
 
 /* ///////////////////////////////////////////////////////////////////////////

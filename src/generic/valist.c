@@ -50,6 +50,64 @@ VEMBED(rcsid="$Id$")
 // Class Valist: Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VATOM)
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_getAtomList
+//
+// Purpose:  Get atom list
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
+
+  VASSERT(thee != NULL);
+  return thee->atoms;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_getNumberAtoms
+//
+// Purpose:  Get number of atoms in atom list
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
+
+  VASSERT(thee != NULL);
+  return thee->number;
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_getAtom
+//
+// Purpose:  Get pointer to atom i
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
+
+  VASSERT(thee != NULL);
+  VASSERT(i < thee->number);
+  return &(thee->atoms[i]);
+
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Valist_memChk
+//
+// Purpose:  Get total memory (in bytes) allocated for this object
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Valist_memChk(Valist *thee) {
+
+  VASSERT(thee != NULL);
+  return Vmem_bytes(thee->vmem);
+
+}
+
 #endif /* if !defined(VINLINE_VATOM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -242,63 +300,6 @@ VPUBLIC int Valist_readPDB(Valist *thee, char *path, char *parameter_path) {
   fprintf(stderr,"Valist_readPDB: I haven't gotten around to writing the PDB reader yet.\n");
   fprintf(stderr,"Valist_readPDB: Until then, use awk and Valist_readPQR.\n");
   return 0;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getAtomList
-//
-// Purpose:  Get atom list
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
-
-  VASSERT(thee != NULL);
-  return thee->atoms;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getNumberAtoms
-//
-// Purpose:  Get number of atoms in atom list
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
-
-  VASSERT(thee != NULL);
-  return thee->number;
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_getAtom
-//
-// Purpose:  Get pointer to atom i
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
-
-  VASSERT(thee != NULL);
-  VASSERT(i < thee->number);
-  return &(thee->atoms[i]);
-
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Valist_memChk
-//
-// Purpose:  Get total memory (in bytes) allocated for this object
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Valist_memChk(Valist *thee) {
-
-  VASSERT(thee != NULL);
-  return Vmem_bytes(thee->vmem);
 
 }
 

@@ -54,6 +54,8 @@
 #include "mc/vmem.h"
 #include "mc/vec3.h"
 
+#include "apbs/vhal.h"
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vatom: Parameters and datatypes
 /////////////////////////////////////////////////////////////////////////// */
@@ -75,7 +77,19 @@ typedef struct Vatom {
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VATOM)
+    VEXTERNC double* Vatom_getPosition(Vatom *thee);
+    VEXTERNC void    Vatom_setRadius(Vatom *thee, double radius);
+    VEXTERNC double  Vatom_getRadius(Vatom *thee);
+    VEXTERNC void    Vatom_setCharge(Vatom *thee, double charge);
+    VEXTERNC double  Vatom_getCharge(Vatom *thee);
+    VEXTERNC int    Vatom_memChk(Vatom *thee);
 #else /* if defined(VINLINE_VATOM) */
+#   define Vatom_getPosition(thee) ((thee)->position)
+#   define Vatom_setRadius(thee, radius) ((thee)->radius = radius)
+#   define Vatom_getRadius(thee) ((thee)->radius)
+#   define Vatom_setCharge(thee, charge) ((thee)->charge = charge)
+#   define Vatom_getCharge(thee) ((thee)->charge)
+#   define Vatom_memChk(thee) (sizeof(Vatom))
 #endif /* if !defined(VINLINE_VATOM) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -88,11 +102,5 @@ VEXTERNC void    Vatom_dtor(Vatom **thee);
 VEXTERNC void    Vatom_dtor2(Vatom *thee);
 
 VEXTERNC void   Vatom_setPosition(Vatom *thee, Vec3 position);
-VEXTERNC double* Vatom_getPosition(Vatom *thee);
-VEXTERNC void     Vatom_setRadius(Vatom *thee, double radius);
-VEXTERNC double   Vatom_getRadius(Vatom *thee);
-VEXTERNC void   Vatom_setCharge(Vatom *thee, double charge);
-VEXTERNC double   Vatom_getCharge(Vatom *thee);
-VEXTERNC int   Vatom_memChk(Vatom *thee);
 
 #endif /* ifndef _VATOM_H_ */
