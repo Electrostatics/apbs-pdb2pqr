@@ -515,7 +515,7 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
   double infrad, int atomID) {
 
     int centeri, centerj, centerk;  
-    double dist, *apos, arad, sm, sm2, w2i, w3i, value;
+    double dist, *apos, arad, sm, sm2, w2i, w3i, value, stot, sctot;
     Vatom *atom;
 
 
@@ -530,15 +530,17 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
     /* Zero-radius atoms don't contribute */
     if (Vatom_getRadius(atom) > 0.0) {
         arad = Vatom_getRadius(atom) + infrad;
+        stot = arad + win;
+        sctot = VMAX2(0, (arad - win));
         dist = VSQRT(VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
           + VSQR(apos[2]-center[2]));
         /* If we're inside an atom, the entire characteristic function
          * will be zero */
-        if (dist <= (arad - win)) {
+        if (dist <= sctot) {
             value = 0.0;
             return value;
         /* We're outside the smoothing window */
-        } else if (dist >= (arad + win)) {
+        } else if (dist >= stot) {
             value = 1.0;
         /* We're inside the smoothing window */
         } else {
@@ -603,8 +605,6 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
             value *= Vacc_splineAccAtom(thee, center, win, infrad, atomID);
             
             if (value < VSMALL) return value;
-            
-
         } 
     }
  
