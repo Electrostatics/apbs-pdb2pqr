@@ -3,6 +3,8 @@ BETA PUBLIC RELEASE VERSION 0.2.6       ??-??-03
 #############################################################################
 
   CHANGES THAT AFFECT USERS:
+  * Fixed bug in PQR parsing that can cause PDB/PQR files to be mis-read when
+    they contain residues with numbers in their names
   * Added new asynchronous mode in mg-para parallel calculations to enable
     running on-demand and/or limited resources
   * Finished fe-manual mode for ELEC calculations -- this is the adaptive

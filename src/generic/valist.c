@@ -160,7 +160,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
     Vatom *atoms = VNULL;
     Vatom *tatoms = VNULL;
     Vparam_AtomData *atomData = VNULL;
-    char tok[VMAX_BUFSIZE], tokArray[4][VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], tokArray[4][VMAX_BUFSIZE], stmp[VMAX_BUFSIZE];
     char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
     int nalloc, itmp, i, gotit, ntok;
     double dtmp, x, y, z, charge, radius;
@@ -219,7 +219,10 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, const char *iodev,
             for (i=0; i<4; i++) {
                 VJMPERR1(Vio_scanf(sock, "%s", tokArray[i]) == 1);
                 ntok++;
-                if (sscanf(tokArray[i], "%d", &itmp) == 1) {
+                if ((sscanf(tok, "%d", &itmp) == 1) && 
+                        (sscanf(tok, "%s%d%s", stmp, &itmp, stmp) == 1) &&
+                        (sscanf(tok, "%d%s", &itmp, stmp) == 1) &&
+                        (sscanf(tok, "%s%d", &itmp) == 1)) {
                     gotit = 1;
                     break;
                 }
@@ -341,7 +344,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
     Vio *sock = VNULL;
     Vatom *atoms = VNULL;
     Vatom *tatoms = VNULL;
-    char tok[VMAX_BUFSIZE]; 
+    char tok[VMAX_BUFSIZE], stmp[VMAX_BUFSIZE]; 
     int nalloc, itmp, i, gotit;
     double dtmp, x, y, z, charge, radius;
     double pos[3];
@@ -391,7 +394,11 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
             gotit = 0;
             for (i=0; i<4; i++) {
                 VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-                if (sscanf(tok, "%d", &itmp) == 1) {
+                if ((sscanf(tok, "%d", &itmp) == 1) && 
+                        (sscanf(tok, "%s%d%s", stmp, &itmp, stmp) == 1) &&
+                        (sscanf(tok, "%d%s", &itmp, stmp) == 1) &&
+                        (sscanf(tok, "%s%d", &itmp) == 1)) {
+                    Vnm_print(1, "DEBUG:  parsed %s as integer.\n", tok);
                     gotit = 1;
                     break;
                 }
@@ -440,6 +447,12 @@ VPUBLIC int Valist_readPQR(Valist *thee, const char *iodev, const char *iofmt,
                 return 0;
             }
             radius = dtmp;
+            if (radius < 0.0) {
+                Vnm_print(2, "Valist_readPQR:  radii can't be negative (%g)!\n",
+                        radius);
+                return 0;
+            }
+            Vnm_print(1, "DEBUG:  x = %g, y = %g, z = %g, charge = %g, radius = %g\n", pos[0], pos[1], pos[2], charge, radius);
 
             /* Allocate more space for the new atom (if necessary) */
             if (thee->number == (nalloc-1)) {
