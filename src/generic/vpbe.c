@@ -569,7 +569,7 @@ VPUBLIC unsigned long int Vpbe_memChk(Vpbe *thee) {
     if (thee == VNULL) return 0;
 
     memUse = memUse + sizeof(Vpbe);
-    memUse = memUse + Vacc_memChk(thee->acc);
+    memUse = memUse + (unsigned long int)Vacc_memChk(thee->acc);
 
     return memUse;
 }
