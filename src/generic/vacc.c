@@ -872,6 +872,44 @@ VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[3], double win,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+// Routine:  splineAcc
+// 
+// Private version of general spline-based accessiblity characteristic funciton
+// which *does not* clear out atom flags before each call.   This removes
+// several checks (on grid, thee->max_radius < (win + infrad)) that should be
+// made by the caller (that's why this is a private function!)
+//
+// ui -- cell index in hash table
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPRIVATE double splineAcc(Vacc *thee, int ui, double win, double infrad) {
+
+    int centeri, centerj, centerk, ui, iatom, atomID;      
+    double value = 1.0;            
+
+
+    VASSERT(thee != NULL);
+
+    /* Now loop through the atoms assembling the characteristic function */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
+
+        /* Check to see if we've counted this atom already */
+        if (!(thee->atomFlags[thee->atomIDs[ui][iatom]])) {
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
+
+            atomID = thee->atomIDs[ui][iatom];
+            value *= Vacc_splineAccAtom(thee, center, win, infrad, atomID);
+            
+            if (value < VSMALL) return value;
+        } 
+    }
+ 
+    return value;
+}
+
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_splineAcc
 //
 // Author:   Nathan Baker
@@ -910,24 +948,81 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[3], double win,
      * overlap at which point we can determine that the point is not
      * accessible */
     ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+
+
     /* First, reset the list of atom flags */
     for (iatom=0;iatom<(thee->natoms)[ui];iatom++) 
       thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
-    /* Now loop through the atoms assembling the characteristic function */
-    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
-        /* Check to see if we've counted this atom already */
-        if (!(thee->atomFlags[thee->atomIDs[ui][iatom]])) {
-            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
 
-            atomID = thee->atomIDs[ui][iatom];
-            value *= Vacc_splineAccAtom(thee, center, win, infrad, atomID);
-            
-            if (value < VSMALL) return value;
-        } 
-    }
- 
-    return value;
+    return splineAcc(thee, ui, win, infrad);
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_splineAccGrad
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win, 
+  double infrad, int atomID, double *grad) {
+
+    int centeri, centerj, centerk, ui, iatom, atomID;      
+    double value = 1.0;            
+
+
+    VASSERT(thee != NULL);
+
+    if (thee->max_radius < (win + infrad)) {
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Vacc constructed with max_radius=%g;\n",
+          thee->max_radius);
+        Vnm_print(2, "Vacc_splineAcc:  ERROR -- Insufficient for window=%g, inflation radius=%g\n", 
+          win, infrad);
+        VASSERT(0);
+    }
+
+    /* Convert to grid based coordinates */
+    centeri = (int)( (center[0] - (thee->grid_lower_corner)[0])/thee->hx);
+    centerj = (int)( (center[1] - (thee->grid_lower_corner)[1])/thee->hy);
+    centerk = (int)( (center[2] - (thee->grid_lower_corner)[2])/thee->hzed);
+
+    /* Check to make sure we're on the grid; if not, then our characteristic
+     * function is definitely unity */
+    if ((centeri < 0) || (centeri >= thee->nx) || \
+        (centerj < 0) || (centerj >= thee->ny) || \
+        (centerk < 0) || (centerk >= thee->nz)) {
+        return 1;
+    }
+
+    /* If we're still here, then we need to check each atom until we find an
+     * overlap at which point we can determine that the point is not
+     * accessible */
+    ui = (thee->nz)*(thee->ny)*centeri + (thee->nz)*centerj + centerk;
+
+    /* First, reset the list of atom flags for all atoms except the one of
+     * interest */
+    for (iatom=0;iatom<(thee->natoms)[ui];iatom++) {
+        if (thee->atomIDs[ui][iatom] == atomID) { 
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 1;
+        } else {
+            thee->atomFlags[thee->atomIDs[ui][iatom]] = 0;
+        }
+    }
+
+    value = splineAcc(thee, ui, win, infrad);
+
+    /* This is inefficient because we have to compute ui again in this
+     * function: */
+    Vacc_splineAccGradAtom(thee, center, win, infrad, atomID, grad);
+
+    for (i=0; i<DIMENSION_THAT_IS_THREE; i++) {
+        if (value < VSMALL) {
+            grad[i] = 0.0;
+        } else{
+            grad[i] *= value;  
+        }
+    }
+
+}
+
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vacc_molAcc
