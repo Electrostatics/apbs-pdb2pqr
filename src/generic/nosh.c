@@ -998,8 +998,8 @@ VPRIVATE int NOsh_parseMG(NOsh *thee, Vio *sock, NOsh_mgparm *parm) {
             } else if (strcasecmp(tok, "uhbd") == 0) {
                 parm->writeaccfmt = 2;
             } else {
-                Vnm_print(2, "NOsh:  Invalid format (%s) while parsing WRITEPOT
-keyword!\n",
+                Vnm_print(2, "NOsh:  Invalid format (%s) while parsing \
+WRITEPOT keyword!\n",
                   tok);
                 return 0;
             }

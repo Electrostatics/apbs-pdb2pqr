@@ -111,4 +111,6 @@ VEXTERNC double  Vfetk_getEnergyNorm2(Vfetk *thee, int color);
 VEXTERNC int     Vfetk_memChk(Vfetk *thee);
 VEXTERNC void    Vfetk_setAtomColors(Vfetk *thee);
 
+VEXTERNC int     Vfetk_genIcosGem(Gem *gm, double radius, double center[3]);
+
 #endif /* ifndef _VFETK_H_ */

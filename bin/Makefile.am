@@ -47,6 +47,7 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
+bindir = ${prefix}/bin/${fetk_cpu_vendor_os}
 bin_PROGRAMS     = apbs
 apbs_SOURCES     = main.c mypde.f
 apbs_LDADD       = -lapbs @lib_list@

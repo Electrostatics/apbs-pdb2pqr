@@ -504,3 +504,154 @@ VPUBLIC int Vfetk_memChk(Vfetk *thee) {
 
     return memUse;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vfetk_genIcosGem
+//  
+// Purpose:   Given a non-NULL (but with 0 vertices) Gem object, create an
+//            icosahedral domain with the outer boundary set to Dirichlet.
+//
+// Arguments: radius -- distance of outer vertices from center
+//            center -- center of mesh
+//  
+// Returns:  0 if successful
+//
+// Author:   Tongye Shen and Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vfetk_genIcosGem(Gem *gm, double radius, double center[3]) {
+
+    VV *vx;
+    SS *sm;
+    int i, j, theDim, theDimII;
+    int topdata[80] = {1,6,12,0, 1,12,4,0, 1,4,8,0, 1,8,10,0, 1,10,6,0,
+                       2,9,11,0, 2,5,9,0,  2,3,5,0, 2,7,3,0,  2,11,7,0,
+                       7,6,10,0, 3,10,8,0, 5,8,4,0, 9,4,12,0, 11,12,6,0,
+                       8,5,3,0,  4,9,5,0,  12,11,9,0, 6,7,11,0, 10,3,7,0 };
+    double xyzdata[39] = { 0.000000e+00,  0.000000e+00,  0.000000e+00,
+                           5.257311e-01,  0.000000e+00,  8.506508e-01,
+                          -5.257311e-01,  0.000000e+00, -8.506508e-01,
+                           5.257311e-01,  0.000000e+00, -8.506508e-01,
+                           0.000000e+00,  8.506508e-01,  5.257311e-01,
+                           0.000000e+00,  8.506508e-01, -5.257311e-01,
+                           0.000000e+00, -8.506508e-01,  5.257311e-01,
+                           0.000000e+00, -8.506508e-01, -5.257311e-01,
+                           8.506508e-01,  5.257311e-01,  0.000000e+00,
+                          -8.506508e-01,  5.257311e-01,  0.000000e+00,
+                           8.506508e-01, -5.257311e-01,  0.000000e+00,
+                          -8.506508e-01, -5.257311e-01,  0.000000e+00,
+                          -5.257311e-01,  0.000000e+00,  8.506508e-01
+                         };
+    int numVV, chartV, numSS;
+    int vnum, vtp, vtpI; 
+    int fnum[3], ftp[3], ftpB[3];
+
+    /* Make sure this is an empty Gem object */
+    if (Gem_numVV(gm) != 0) {
+        Vnm_print(2, "Vbnd_genIcosGem:  Error!  Gem object has non-zero 
+number of vertices!\n");
+        return -1;
+    }
+
+    /* Set up parameters for 3D domain */
+    theDim = 3;
+    theDimII = 3;
+    numVV = 13;
+    numSS = 20;
+    chartV = 0;
+
+    /* Dump parameters for debugging info */
+    Vnm_print(0, "Vbnd_genIcosGem:  radius = %g, center = (%g, %g, %g)\n",
+      radius, center[0], center[1], center[2]);
+    Vnm_print(0, "Vbnd_genIcosGem:  theDim=%d, theDimII=%d, numVV=%d,
+numSS=%d\n",
+      theDim, theDimII, numVV, numSS);
+    Vnm_print(0, "Vbnd_genIcosGem: Reseting manifold structures.\n");
+    Gem_reset(gm, theDim, theDimII);
+
+    
+    /* Create the vertices */
+    for (i=0; i<numVV; i++) {
+        vx = Gem_createAndInitVV(gm);
+        VV_setReality(vx, 0);
+        VV_setDim(vx, theDim);
+        VV_setClass(vx, 0);
+        VV_setType(vx, 0);
+        VV_setId(vx, i);
+        VV_setChart(vx, chartV);
+    
+        /* set the vertex coordinates */
+        VV_setCoord(vx, 0, radius*xyzdata[3*i]+center[0]);
+        VV_setCoord(vx, 1, radius*xyzdata[3*i+1]+center[1]);
+        VV_setCoord(vx, 2, radius*xyzdata[3*i+2]+center[2]);
+    }
+    
+    /* Create the simplices */
+    for (i=0; i<numSS; i++) {
+    
+        /* create the new simplex */
+        sm = Gem_createAndInitSS(gm);
+        SS_setReality(sm, 0);
+        SS_setDim(sm, theDim);
+        SS_setClass(sm, theDim);
+        SS_setType(sm, 0);
+        SS_setId(sm, i);
+        SS_setChart(sm, 0);
+
+        /* set the simplex face types and vertex labels */
+        SS_setFaceType( sm, 0, 0 );
+        SS_setFaceType( sm, 1, 0 );
+        SS_setFaceType( sm, 2, 0 );
+        SS_setFaceType( sm, 3, 1 );
+        (gm->numBF)++;
+        for (j=0; j<theDim+1; j++) {
+            vx = Gem_VV(gm, topdata[4*i+j] );
+            SS_setVertex( sm, j, vx );
+        }
+
+        /* calculate (our contribution to) vertex types from our face types */
+        for (j=0; j<theDim+1; j++) {
+            /* get the vertex in question */
+            vnum = j;
+            vx = SS_vertex( sm, vnum );
+            /* get face numbers of two/three faces which touch vertex vnum */
+            fnum[0] = vmapOV3[vnum][0];
+            fnum[1] = vmapOV3[vnum][1];  
+            fnum[2] = vmapOV3[vnum][2];  /* 2D: third face always interior */
+            /* some shorthand notation... */
+            vtp     = VV_type(vx);
+            vtpI    = VINTERIOR( VV_type(vx) );
+            ftp[0]  = SS_faceType(sm,fnum[0]);
+            ftp[1]  = SS_faceType(sm,fnum[1]);
+            ftp[2]  = SS_faceType(sm,fnum[2]);
+            ftpB[0] = VBOUNDARY( SS_faceType(sm,fnum[0]) );
+            ftpB[1] = VBOUNDARY( SS_faceType(sm,fnum[1]) );
+            ftpB[2] = VBOUNDARY( SS_faceType(sm,fnum[2]) );
+            /* if any of the faces are Boundary, then mark vertex Boundary */
+            if ( ftpB[0] || ftpB[1] || ftpB[2] ) {
+                /* deal with existing vertex type */
+                if (vtpI) (gm->numBV)++;
+
+
+                /* okay, determine max boundary flag (including vtp) */
+                if (ftpB[0]) vtp = VMAX2(vtp,ftp[0]);
+                if (ftpB[1]) vtp = VMAX2(vtp,ftp[1]);
+                if (ftpB[2]) vtp = VMAX2(vtp,ftp[2]);
+
+                /* set the type */
+                VV_setType(vx, vtp);
+            }
+
+            /* build the ringed vertex datastructure */
+        }
+        SS_buildRing(sm);
+    }
+
+    /* create initial edge markings in the simplices */
+    Gem_markEdges(gm);
+    /* count v/e/f/s and check the mesh */
+    Gem_countChk(gm);
+
+    return 0;
+}
+
+
