@@ -44,6 +44,7 @@
 #include "apbscfg.h"
 #include "apbs/apbs.h"
 
+#define SHORTINT int
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define INTERVAL(x,a,b) (((x) >= (a)) && ((x) <= (b)))
 
@@ -66,7 +67,7 @@ int main(int argc, char **argv) {
     double pt[3],value;
     double xmin, ymin, zmin, xmax, ymax, zmax;
     char **fnams = VNULL;
-    short *carray = VNULL;
+    SHORTINT *carray = VNULL;
     char *usage = "[-v -quiet -o out.dx] nx ny nz file1.dx [file2.dx ...]\n";
     char *snam = "# main:  ";
     char outname[80];
@@ -138,8 +139,8 @@ int main(int argc, char **argv) {
     mgrid->data = (double *)
        Vmem_malloc(mgrid->mem,(mgrid->nx*mgrid->ny*mgrid->nz),sizeof(double));
     mgrid->ctordata = 1;
-    carray = (short *)
-       Vmem_malloc(VNULL, (mgrid->nx*mgrid->ny*mgrid->nz), sizeof(short) );
+    carray = (SHORTINT *)
+       Vmem_malloc(VNULL, (mgrid->nx*mgrid->ny*mgrid->nz), sizeof(SHORTINT) );
 
     /* initialize the data of the merged grid with zeros */
     nx = mgrid->nx;
@@ -205,7 +206,7 @@ int main(int argc, char **argv) {
     for (i=0; i<nx; i++) {
         for (j=0; j<ny; j++) {
             for (k=0; k<nz; k++) {
-                if ( carray[IJK(i,j,k)] ) {
+                if ( carray[IJK(i,j,k)] > 0 ) {
                     (mgrid->data)[IJK(i,j,k)] /= carray[IJK(i,j,k)];
                 } else {
                     Vnm_print(2,"%s %s %s (%g,%g,%g)\n",snam,
@@ -224,7 +225,7 @@ int main(int argc, char **argv) {
     Vnm_print(vvlev, "%s  Writing merged data to %s...\n",snam,outname);
     Vgrid_writeDX(mgrid, "FILE", "ASC", VNULL, outname,"mergedx",VNULL);
 
-    Vmem_free(VNULL,(mgrid->nx*mgrid->ny*mgrid->nz), sizeof(short),
+    Vmem_free(VNULL,(mgrid->nx*mgrid->ny*mgrid->nz), sizeof(SHORTINT),
               (void **)&(carray));
     Vgrid_dtor( &mgrid );
 
@@ -416,44 +417,19 @@ VPUBLIC int Vgrid_value2(Vgrid *thee, double pt[3], double *value) {
     ifloat = (pt[0] - xmin)/hx;
     jfloat = (pt[1] - ymin)/hy;
     kfloat = (pt[2] - zmin)/hzed;
+    /* If the point is outside the mesh, push it to the mesh */
+    if ( ifloat < 0.0 ) ifloat = 0.0;
+    if ( ifloat >= nx ) ifloat = nx - 1.0;
+    if ( jfloat < 0.0 ) jfloat = 0.0;
+    if ( jfloat >= ny ) jfloat = ny - 1.0;
+    if ( kfloat < 0.0 ) kfloat = 0.0;
+    if ( kfloat >= nz ) kfloat = nz - 1.0;
     ihi = (int)ceil(ifloat);
     jhi = (int)ceil(jfloat);
     khi = (int)ceil(kfloat);
     ilo = (int)floor(ifloat);
     jlo = (int)floor(jfloat);
     klo = (int)floor(kfloat);
-
-    /* If the point is outside the mesh, push it to the mesh */
-    if ( ilo < 0 ) {
-        ilo = 0;
-        ihi = ilo + 1;
-        ifloat = 0.0;
-    } 
-    if ( ihi >= nx ) {
-        ihi = nx - 1;
-        ilo = ihi - 1;
-        ifloat = 0.0;
-    }
-    if ( jlo < 0 ) {
-        jlo = 0;
-        jhi = jlo + 1;
-        jfloat = 0.0;
-    } 
-    if ( jhi >= ny ) {
-        jhi = ny - 1;
-        jlo = jhi - 1;
-        jfloat = 0.0;
-    }
-    if ( klo < 0 ) {
-        klo = 0;
-        khi = klo + 1;
-        kfloat = 0.0;
-    } 
-    if ( khi >= nz ) {
-        khi = nz - 1;
-        klo = khi - 1;
-        kfloat = 0.0;
-    }
 
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
