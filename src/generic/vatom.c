@@ -66,7 +66,7 @@ VPUBLIC Vatom* Vatom_ctor() {
 
     /* Set up the structure */
     Vatom *thee = VNULL;
-    thee = (Vatom *)Vram_ctor( 1, sizeof(Vatom) );
+    thee = (Vatom *)Vmem_malloc( VNULL, 1, sizeof(Vatom) );
     VASSERT( thee != VNULL);
     VASSERT( Vatom_ctor2(thee));
 
@@ -94,7 +94,7 @@ VPUBLIC int Vatom_ctor2(Vatom *thee) { return 1; }
 VPUBLIC void Vatom_dtor(Vatom **thee) {
     if ((*thee) != VNULL) {
         Vatom_dtor2(*thee);
-        Vram_dtor((Vram **)thee, 1, sizeof(Vatom));
+        Vmem_free(VNULL, 1, sizeof(Vatom), (void **)thee);
         (*thee) = VNULL;
     }
 }

@@ -69,7 +69,7 @@ VPUBLIC Valist* Valist_ctor() {
 
     /* Set up the structure */
     Valist *thee = VNULL;
-    thee = Vram_ctor( 1, sizeof(Valist) );
+    thee = Vmem_malloc(VNULL, 1, sizeof(Valist));
     VASSERT( thee != VNULL);
     VASSERT( Valist_ctor2(thee));
  
@@ -92,6 +92,9 @@ VPUBLIC int Valist_ctor2(Valist *thee) {
     thee->atoms = VNULL;
     thee->number = 0;
 
+    /* Initialize the memory management object */
+    thee->vmem = Vmem_ctor("APBS:VALIST");
+
     return 1;    
 
 }
@@ -107,7 +110,7 @@ VPUBLIC void Valist_dtor(Valist **thee)
 {
     if ((*thee) != VNULL) {
         Valist_dtor2(*thee);
-        Vram_dtor((Vram **)thee, 1, sizeof(Valist));
+        Vmem_free(VNULL, 1, sizeof(Valist), (void **)thee);
         (*thee) = VNULL;
     }
 }
@@ -121,10 +124,11 @@ VPUBLIC void Valist_dtor(Valist **thee)
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Valist_dtor2(Valist *thee) {
 
-    Vram_dtor((Vram **)&(thee->atoms), thee->number, sizeof(Vatom));
+    Vmem_free(thee->vmem, thee->number, sizeof(Vatom), (void **)&(thee->atoms));
     thee->atoms = VNULL;
     thee->number = 0;
 
+    Vmem_dtor(&(thee->vmem));
 } 
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -175,11 +179,8 @@ VPUBLIC int Valist_readPQR(Valist *thee, char *path) {
 #endif
 
     /* Allocate the necessary space for the atom array */
-    if ((thee->atoms = Vram_ctor(thee->number,(sizeof(Vatom)))) == VNULL) {
-        fprintf(stderr,"Valist_readPQR: Failed to allocate atom array for %d atoms!\n",thee->number);
-        fflush(stderr);
-        return 0;
-    }
+    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
+    VASSERT(thee->atoms != VNULL);
       
 
     /* Rewind the file pointer (use rewind to clear the error
