@@ -426,7 +426,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
         netCharge += (ionConc[i]*ionQ[i]);
     } 
 #ifndef VAPBSQUIET
-    Vnm_print(1, "Vpbe_ctor:  Using max ion radius (%g A) for exclusion \
+    Vnm_print(1, "  Vpbe_ctor:  Using max ion radius (%g A) for exclusion \
 function\n", thee->maxIonRadius);
 #endif
     if (VABS(netCharge) > VSMALL) {

@@ -721,6 +721,9 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
       pbeparm->useKappaMap, theKappaMap,
       pbeparm->useChargeMap, theChargeMap);
 
+    /* Print a few derived parameters */
+    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+
     /* Setup time statistics */
     Vnm_tstop(27, "Setup timer");
 
