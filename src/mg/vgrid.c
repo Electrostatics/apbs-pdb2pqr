@@ -1,8 +1,8 @@
 /**
- *  @file    vopot.c
+ *  @file    vgrid.c
  *  @author  Nathan Baker
- *  @brief   Class Vopot methods
- *  @ingroup Vopot
+ *  @brief   Class Vgrid methods
+ *  @ingroup Vgrid
  *  @version $Id$
  *  @attention
  *  @verbatim
@@ -38,34 +38,34 @@
  */
 
 #include "apbscfg.h"
-#include "apbs/vopot.h"
+#include "apbs/vgrid.h"
 
 VEMBED(rcsid="$Id$")
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_ctor
+// Routine:  Vgrid_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vopot* Vopot_ctor(int nx, int ny, int nz,
+VPUBLIC Vgrid* Vgrid_ctor(int nx, int ny, int nz,
                   double hx, double hy, double hzed,
                   double xmin, double ymin, double zmin,
                   double *data, Vpbe *pbe) {
 
-    Vopot *thee = VNULL;
+    Vgrid *thee = VNULL;
 
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vopot));
+    thee = Vmem_malloc(VNULL, 1, sizeof(Vgrid));
     VASSERT(thee != VNULL);
-    VASSERT(Vopot_ctor2(thee, nx, ny, nz, hx, hy, hzed,
+    VASSERT(Vgrid_ctor2(thee, nx, ny, nz, hx, hy, hzed,
                   xmin, ymin, zmin, data, pbe));
 
     return thee;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_ctor2
+// Routine:  Vgrid_ctor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vopot_ctor2(Vopot *thee, int nx, int ny, int nz,
+VPUBLIC int Vgrid_ctor2(Vgrid *thee, int nx, int ny, int nz,
                   double hx, double hy, double hzed,
                   double xmin, double ymin, double zmin,
                   double *data, Vpbe *pbe) {
@@ -87,30 +87,30 @@ VPUBLIC int Vopot_ctor2(Vopot *thee, int nx, int ny, int nz,
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_dtor
+// Routine:  Vgrid_dtor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vopot_dtor(Vopot **thee) {
+VPUBLIC void Vgrid_dtor(Vgrid **thee) {
 
     if ((*thee) != VNULL) {
-        Vopot_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vopot), (void **)thee);
+        Vgrid_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(Vgrid), (void **)thee);
         (*thee) = VNULL;
     }
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_dtor2
+// Routine:  Vgrid_dtor2
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vopot_dtor2(Vopot *thee) { return; }
+VPUBLIC void Vgrid_dtor2(Vgrid *thee) { return; }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_pot
+// Routine:  Vgrid_pot
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
-VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
+VPUBLIC double Vgrid_pot(Vgrid *thee, double pt[3]) {
 
     int nx, ny, nz, ihi, jhi, khi, ilo, jlo, klo;
     double hx, hy, hzed, xmin, ymin, zmin, ifloat, jfloat, kfloat;
@@ -212,7 +212,7 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_curvature
+// Routine:  Vgrid_curvature
 //
 //   Notes:  cflag=0 ==> Reduced Maximal Curvature
 //           cflag=1 ==> Mean Curvature (Laplace)
@@ -221,7 +221,7 @@ VPUBLIC double Vopot_pot(Vopot *thee, double pt[3]) {
 //
 // Authors:  Stephen Bond and Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag)
+VPUBLIC double Vgrid_curvature(Vgrid *thee, double pt[3], int cflag)
 {
     double hx, hy, hzed, curv;
     double dxx, dyy, dzz;
@@ -238,31 +238,31 @@ VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag)
     testpt[2] = pt[2];
 
     /* Compute 2nd derivative in the x-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0] - hx;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0] + hx;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0];
 
     dxx = (uright - 2*umid + uleft)/(hx*hx);
 
     /* Compute 2nd derivative in the y-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1] - hy;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1] + hy;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1];
 
     dyy = (uright - 2*umid + uleft)/(hy*hy);
 
     /* Compute 2nd derivative in the z-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[2] = pt[2] - hzed;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[2] = pt[2] + hzed;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
 
     dzz = (uright - 2*umid + uleft)/(hzed*hzed);
 
@@ -282,11 +282,11 @@ VPUBLIC double Vopot_curvature(Vopot *thee, double pt[3], int cflag)
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vopot_gradient
+// Routine:  Vgrid_gradient
 //
 // Authors:  Nathan Baker and Stephen Bond
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
+VPUBLIC void Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 
     double hx, hy, hzed;
     double uleft, umid, uright, testpt[3];
@@ -300,31 +300,31 @@ VPUBLIC void Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
     testpt[2] = pt[2];
 
     /* Compute derivative in the x-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0] - hx;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0] + hx;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
     testpt[0] = pt[0];
 
     grad[0] = (uright - uleft)/(2*hx);
 
     /* Compute derivative in the y-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1] - hy;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1] + hy;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
     testpt[1] = pt[1];
 
     grad[1] = (uright - uleft)/(2*hy);
 
     /* Compute derivative in the z-direction */
-    umid = Vopot_pot( thee, testpt );
+    umid = Vgrid_pot( thee, testpt );
     testpt[2] = pt[2] - hzed;
-    uleft = Vopot_pot( thee, testpt );
+    uleft = Vgrid_pot( thee, testpt );
     testpt[2] = pt[2] + hzed;
-    uright = Vopot_pot( thee, testpt );
+    uright = Vgrid_pot( thee, testpt );
 
     grad[2] = (uright - uleft)/(2*hzed);
 
