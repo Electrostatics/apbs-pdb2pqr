@@ -306,8 +306,8 @@ c*
 c*       *** the i/o ***
          if (iok .eq. 1) then
             call vnmpri(0, 'PMG: iteration = ', 17, iters)
-            call vnmprd(0, 'PMG: relative residual = , ', 26, relres)
-            call vnmprd(0, 'PMG: contraction number = , ', 27, contrac)
+            call vnmprd(0, 'PMG: relative residual = ', 25, relres)
+            call vnmprd(0, 'PMG: contraction number = ', 26, contrac)
 c*          write(6,100) iters,relres,contrac,cputme
          elseif (iok .eq. 2) then
             call vnmpri(0, 'PMG: iteration = ', 17, iters)

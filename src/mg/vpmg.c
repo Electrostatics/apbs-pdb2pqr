@@ -328,9 +328,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 //
 // Purpose:  Calculate energy from region outside of current (focused) domain
 //
+// Arguments:  extFlag (1 => calculate total energy only, 2 => calculate energy
+//             components)
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
+VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, int extFlag) {
 
     double hxNEW, hyNEW, hzNEW;
     double xminNEW, yminNEW, zminNEW;
@@ -371,10 +374,13 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD) {
     for (i=0; i<(nxOLD*nyOLD*nzOLD); i++) 
       pmgOLD->pvec[i] = (!(pmgOLD->pvec[i]));
     /* Now calculate the energy on inverted subset of the domain */
-    Vnm_print(0, "VPMG::extEnergy: Calculating energy contributions for focusing\n");
+    Vnm_print(0, "VPMG::extEnergy: Calculating mobile ion energy contributions for focusing\n");
     thee->extQmEnergy = Vpmg_qmEnergy(pmgOLD, 1);
+    Vnm_print(0, "VPMG::extEnergy: Calculating fixed charge energy contributions for focusing\n");
     thee->extQfEnergy = Vpmg_qfEnergy(pmgOLD, 1);
+    Vnm_print(0, "VPMG::extEnergy: Calculating dielectric energy contributions for focusing\n");
     thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
+    Vnm_print(0, "VPMG::extEnergy: Done calculating energy contributions for focusing\n");
     Vpmg_unsetPart(pmgOLD);
 }
 
@@ -722,14 +728,15 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
+VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD, 
+  int energyFlag) {
 
     Vpmg *thee = VNULL;
 
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
     VASSERT( thee != VNULL);
-    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD));
+    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD, energyFlag));
 
     return thee;
 }
@@ -741,9 +748,15 @@ VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
 //
 // Notes:    See Vpmg_ctor2Focus description
 //
+// Args:     energyFlag (0 ==> don't calculate any energy contribution from
+//           outside focusing area, 1 ==> calculate total energy contribution
+//           from outside focusing area, 2 ==> calculate energy component
+//           contributions)
+//
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
+VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD,
+  int energyFlag) {
 
     int nxc, nyc, nzc, nf, nc, narrc, n_rpc, n_iz, n_ipc;
 
@@ -786,10 +799,11 @@ VPUBLIC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD) {
       10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
 
     /* Fill boundaries */
+    Vnm_print(0, "Vpmg_ctor2Focus:  Filling boundary with old solution!\n");
     focusFillBound(thee, pmgOLD);
 
     /* Calculate energetic contributions from region outside focusing domain */
-    extEnergy(thee, pmgOLD);
+    if (energyFlag != 0) extEnergy(thee, pmgOLD, energyFlag);
 
     /* Destroy old Vpmg object */
     Vpmg_dtor(&pmgOLD);
@@ -1015,6 +1029,8 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee, int surfMeth, double splineWin) {
         thee->a3cf[i] = 0.0;
     }
 
+    Vnm_print(0, "Vpmg_fillco:  marking ion and solvent accessibility\n");
+
     /* Loop through the atoms and do the following:
      * 1.  Set ccf = -1.0, for all points inside the
      *     (possibly spline-based) inflated van der Waals surface
@@ -1086,28 +1102,34 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                         /* See if grid point is inside ivdw radius and set ccf
                          * accordingly (do spline assignment here) */
                         if ((dz2 + dy2 + dx2) <= itot2) 
-                          thee->ccf[IJK(i,j,k)] = -1.0;
+                            thee->ccf[IJK(i,j,k)] = -1.0;
                         /* See if x-shifted grid point is inside ivdw rad. */
-                        if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=stot2) {
-                            /* See if inside vdw rad */
-                            if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=arad2) 
-                              thee->a1cf[IJK(i,j,k)] = -2.0;
-                            else thee->a1cf[IJK(i,j,k)] = -1.0;
-                        } 
+                        if (thee->a1cf[IJK(i,j,k)] != -2.0) {
+                            if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=stot2) {
+                                /* See if inside vdw rad */
+                                if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))<=arad2) 
+                                  thee->a1cf[IJK(i,j,k)] = -2.0;
+                                else thee->a1cf[IJK(i,j,k)] = -1.0;
+                            } 
+                        }
                         /* See if y-shifted grid point is inside ivdw rad. */
-                        if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) <= stot2) {
-                            /* See if inside vdw rad */
-                            if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)<=arad2) 
-                              thee->a2cf[IJK(i,j,k)] = -2.0;
-                            else thee->a2cf[IJK(i,j,k)] = -1.0;
-                        }        
+                        if (thee->a2cf[IJK(i,j,k)] != -2.0) {
+                            if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) <= stot2) {
+                                /* See if inside vdw rad */
+                                if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)<=arad2) 
+                                  thee->a2cf[IJK(i,j,k)] = -2.0;
+                                else thee->a2cf[IJK(i,j,k)] = -1.0;
+                            }        
+                        }
                         /* See if z-shifted grid point is inside ivdw rad. */
-                        if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=stot2) {
-                            /* See if inside vdw rad */
-                            if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=arad2)
-                              thee->a3cf[IJK(i,j,k)] = -2.0;
-                            else thee->a3cf[IJK(i,j,k)] = -1.0;
-                        }        
+                        if (thee->a3cf[IJK(i,j,k)] != -2.0) {
+                            if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=stot2) {
+                                /* See if inside vdw rad */
+                                if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)<=arad2)
+                                  thee->a3cf[IJK(i,j,k)] = -2.0;
+                                else thee->a3cf[IJK(i,j,k)] = -1.0;
+                            }        
+                        }
                     } /* k loop */
                 } /* j loop */
             } /* i loop */
@@ -1146,8 +1168,11 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
         }
     }
 
+    Vnm_print(0, "Vpmg_fillco:  filling coefficient arrays\n");
+
     /* Interpret markings and fill the coefficient arrays */
     for (k=0; k<nz; k++) {
+
         for (j=0; j<ny; j++) {
             for (i=0; i<nx; i++) {
 
@@ -1181,7 +1206,7 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                         position[0] = thee->xf[i] + 0.5*hx;
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k];
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
                           thee->a1cf[IJK(i,j,k)] = epsp; 
                         else thee->a1cf[IJK(i,j,k)] = epsw; 
                     }
@@ -1190,7 +1215,7 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                         position[0] = thee->xf[i];
                         position[1] = thee->yf[j] + 0.5*hy;
                         position[2] = thee->zf[k];
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
                           thee->a2cf[IJK(i,j,k)] = epsp; 
                         else thee->a2cf[IJK(i,j,k)] = epsw; 
                     }
@@ -1199,7 +1224,7 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                         position[0] = thee->xf[i];
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k] + 0.5*hzed;
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
+                        if (Vacc_fastMolAcc(acc, position, srad) == 0) 
                           thee->a3cf[IJK(i,j,k)] = epsp; 
                         else thee->a3cf[IJK(i,j,k)] = epsw; 
                     }
@@ -1221,7 +1246,7 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
                         position[0] = thee->xf[i];
                         position[1] = thee->yf[j];
                         position[2] = thee->zf[k];
-                        a000 = Vacc_molAcc(acc, position, srad);
+                        a000 = Vacc_fastMolAcc(acc, position, srad);
                     }
                     /* x-direction */
                     if (thee->a1cf[IJK(i,j,k)] == -1.0) {
@@ -1317,8 +1342,14 @@ if ((VABS(epsp-epsw) > VPMGSMALL) || (zkappa2 > VPMGSMALL)) {
         }
     }
 
+    Vnm_print(0, "Vpmg_fillco:  done filling coefficient arrays\n");
+
     /* Fill the boundary arrays (except when focusing, bcfl = 4) */
-    if (thee->pmgp->bcfl != 4) bcCalc(thee);
+    if (thee->pmgp->bcfl != 4) {
+        Vnm_print(0, "Vpmg_fillco:  filling boundary arrays\n");
+        bcCalc(thee);
+        Vnm_print(0, "Vpmg_fillco:  done filling boundary arrays\n");
+    }
 
     thee->filled = 1;
 }
@@ -2041,6 +2072,12 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
 
+    /* Bail if we're at zero ionic strength */
+    if (Vpbe_getZkappa2(thee->pbe) == 0.0) {
+        Vnm_print(0, "Vpmg_qmEnergy:  Zero energy for zero ionic strength!\n");
+        return 0.0;
+    }
+
     /* Because PMG seems to overwrite some of the coefficient arrays... */
     Vpmg_fillco(thee, thee->surfMeth, thee->splineWin);
 
@@ -2056,7 +2093,6 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     } else {
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            /* Avoid problems with large potential values */
             if (thee->pvec[i]*thee->ccf[i] > 0) 
               energy += (thee->pvec[i]*thee->ccf[i]*VSQR(thee->u[i]));
         }

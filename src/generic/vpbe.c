@@ -47,8 +47,9 @@
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
-#define MAX_SPLINE_WINDOW 1.0
+#define MAX_SPLINE_WINDOW 0.5
 #define MAX_HASH_DIM 75
+#define VACC_SPHERE 200
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods
@@ -511,7 +512,7 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, double ionConc,
     Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object with %d^3 hash table\n",
       (int)nhash); 
     thee->acc = Vacc_ctor(thee->alist, radius, (int)(nhash), (int)(nhash),
-      (int)(nhash), 200);
+      (int)(nhash), VACC_SPHERE);
     Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
     VASSERT(thee->acc != VNULL);
 

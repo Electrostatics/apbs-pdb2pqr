@@ -142,6 +142,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
         return 0;
     }
     Vnm_print(0, "Vacc_ctor2:  Using %d x %d x %d hash table\n", nx, ny, nz);
+    Vnm_print(0, "Vacc_ctor2:  Using %g max radius\n", max_radius);
  
     /* Set up probe information */
     thee->nsphere = nsphere;
@@ -228,11 +229,11 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
         k_min = (int)(floor( (z - rtot)/(thee->hzed) ));
         k_min = VMAX2(k_min, 0);
 
-/* 
+#if 0
         Vnm_print(0, "VACC DEBUG: %d <= i <= %d\n", i_min, i_max);
         Vnm_print(0, "VACC DEBUG: %d <= j <= %d\n", j_min, j_max);
         Vnm_print(0, "VACC DEBUG: %d <= k <= %d\n", k_min, k_max);
-*/
+#endif
 
         /* Now find and assign the grid points */
         for ( ii = i_min; ii <= i_max; ii++) {
@@ -703,6 +704,43 @@ VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
     /* If all else failed, we are not inside the molecular surface */
     return 0.0;
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+// Routine:  Vacc_fastMolAcc
+//
+// Purpose:  Given a point which is INSIDE the collection of inflated van der
+//           Waals spheres, but OUTSIDE the collection of non-inflated van der
+//           Waals spheres, determine accessibility of a probe (of radius
+//           radius) at a given point, given a collection of atomic spheres.
+//           Uses molecular (Connolly) surface definition.  Returns value
+//           between 1.0 (if accessible) and 0.0 (inaccessible).
+//
+// NOTE THAT THIS ASSUMES YOU HAVE TESTED THAT THIS POINT IS DEFINITELY INSIDE
+// THE INFLATED AND NON-INFLATED VAN DER WAALS SURFACES!
+//
+// Author:   Nathan Baker
+/////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius) {
+
+    int ipt;
+    double vec[3];
+
+    /* ******* CHECK IF OUTSIDE MOLECULAR SURFACE ***** */
+    /* Let S be the sphere of radius radius centered at the point we are
+     * testing.  We are outside the molecular surface if there is a point on
+     * the surface of S that is outside the atom+probe radius surface */
+    VASSERT(thee->sphere != VNULL);
+    for (ipt=0; ipt<thee->nsphere; ipt++) {
+        vec[0] = radius*thee->sphere[ipt][0] + center[0];
+        vec[1] = radius*thee->sphere[ipt][1] + center[1];
+        vec[2] = radius*thee->sphere[ipt][2] + center[2];
+        if (Vacc_ivdwAcc(thee, vec, radius)) return 1.0;
+    }
+
+    /* If all else failed, we are not inside the molecular surface */
+    return 0.0;
+}
+
 
 #if defined(HAVE_FETK_H)
 /* ///////////////////////////////////////////////////////////////////////////

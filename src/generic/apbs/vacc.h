@@ -111,6 +111,7 @@ VEXTERNC void Vacc_dtor2(Vacc *thee);
 VEXTERNC double Vacc_vdwAcc(Vacc *thee, double center[3]);
 VEXTERNC double Vacc_ivdwAcc(Vacc *thee, double center[3], double radius);
 VEXTERNC double Vacc_molAcc(Vacc *thee, double center[3], double radius);
+VEXTERNC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius);
 VEXTERNC double Vacc_splineAcc(Vacc *thee, double center[3], double window,
   double infrad);
 VEXTERNC void Vacc_splineAccGrad(Vacc *thee, double center[3], double win,
