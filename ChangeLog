@@ -13,7 +13,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
     * Fixed error in tools/mesh/dx2mol.c (Thanks to Fred Damberger)
-	
+    * Added an autoconf check to ensure that improper grid spacings will not
+      be assigned due to floating point rounding error
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04

@@ -135,6 +135,7 @@ if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
      CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
   fi
 fi
+AC_FPERROR
 AC_F77_NOFORMAIN
 FFLAGS="${FLIBS} ${FFLAGS}"
 AC_F77_FCN_MANGLE()
