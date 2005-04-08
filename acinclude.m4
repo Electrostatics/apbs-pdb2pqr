@@ -96,6 +96,52 @@ esac
 
 rm -f mangle-func.f mangle-func.o
 
+dnl Test for floating point error found in Intel compilers without
+dnl   -mp flag (and maybe other compilers as well?)
+dnl
+dnl   by Todd Dolinsky
+dnl
+
+AC_DEFUN(AC_FPERROR, [
+AC_REQUIRE([AC_PROG_CC])
+AC_MSG_CHECKING(if the compiler creates floating point errors)
+
+cat > fperror.c <<EOF
+    int main(){
+        double test, ofrac; 
+        int value;
+        value = 28;
+        ofrac = 0.1;
+        test = (33/(1 + 2*ofrac) + 0.5);
+        if ((int)test != value){
+            printf("Ut oh!");
+        }
+        return 0;
+    }
+EOF
+ac_try='$CC -c $CFLAGS fperror.c 1>&AC_FD_CC'
+if AC_TRY_EVAL(actry); then
+    $CC -o fperror.test $CFLAGS fperror.c
+    FPRESULTS=`./fperror.test`
+    if test -n "$FPRESULTS"; then
+        AC_MSG_RESULT([yes])
+        if test "${CC}" = "icc"; then
+            echo "Compiler causes floating point errors!" >&AC_FD_CC
+            rm -f fperror*
+            echo "*** For icc add -mp to the CFLAGS environment variable. ***"
+        fi
+        AC_MSG_ERROR(Compiled floating point errors!)
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    AC_MSG_RESULT([unknown])
+    echo "configure: failed program was:" >&AC_FD_CC
+    cat fperror.c >&AC_FD_CC
+    rm -f fperror*
+    AC_MSG_ERROR(failed to compile test C program)
+fi
+])
 
 dnl Test for the use of the -nofor_main option used by Alpha FORTRAN
 dnl
