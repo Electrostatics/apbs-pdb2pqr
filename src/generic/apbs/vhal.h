@@ -338,16 +338,18 @@ typedef enum eVdata_Format Vdata_Format;
 #if defined(VF77_UPPERCASE)
 #   if defined(VF77_NOUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) NAME
-#   endif
-#   if defined(VF77_ONEUNDERSCORE)
+#   elif defined(VF77_ONEUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) NAME ## _
+#   else
+#       define VF77_MANGLE(name,NAME) name
 #   endif
 #else
 #   if defined(VF77_NOUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) name
-#   endif
-#   if defined(VF77_ONEUNDERSCORE)
+#   elif defined(VF77_ONEUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) name ## _
+#   else
+#       define VF77_MANGLE(name,NAME) name
 #   endif
 #endif
 
