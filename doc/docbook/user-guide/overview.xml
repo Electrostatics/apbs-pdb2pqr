@@ -114,19 +114,11 @@
             <para><filename>apbs/tools/manip/inputgen.py</filename></para>
             <para>Generate an APBS input file from 
               <link linkend="pqr-format">PQR format</link> 
-              data using "suggested" parameters. Written by Todd Dolinsky and
+              data using "suggested" parameters. Also can decouple a parallel
+              calculation into a series of sequential (asynchronous)
+              calculations to be performed on a single processor.
+              Written by Todd Dolinsky and
               Nathan Baker.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/manip/asynchronize.sh</filename></para>
-            <para>Convert a 
-              <link linkend="mg-para">mg-para</link>
-              calculation into a set of 
-              <link linkend="async">async</link>
-              calculations.  This allows you to decouple a parallel calculation
-              into a series of sequential calcualtions to be performed on a
-              single processor.  Written by Todd Dolinsky and Nathan
-              Baker.</para>
           </listitem>
           <listitem>
             <para><filename>tools/mesh/mgmesh</filename></para>
