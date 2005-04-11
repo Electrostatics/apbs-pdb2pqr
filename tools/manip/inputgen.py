@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
 # You may need to edit the above to point to your version of Python
 
-
-
 #
 # inputgen.py 
 # Create an input file for APBS using psize data
@@ -271,6 +269,35 @@ class inputGen:
             file = open(outname, "w")
             file.write(self.getText())
             file.close()
+
+def splitInput(filename):
+    """
+        Split the parallel input file into multiple async file names
+    """
+    nproc = 0
+    file = open(filename)
+    text = ""
+    while 1:
+        line = file.readline()
+        if line == "": break
+        text += line
+        line = string.strip(line)
+        if line.startswith("pdime"): # Get # Procs
+            words = string.split(line)
+            nproc = int(words[1]) * int(words[2]) * int(words[3])
+
+    if nproc == 0:
+        sys.stderr.write("%s is not a valid APBS parallel input file!\n" % filename)
+        sys.stderr.write("The inputgen script was unable to asynchronize this file!\n")
+        sys.exit(2)
+
+    period = string.find(filename,".")
+    for i in range(nproc):
+        outname = filename[0:period] + "-PE%i.in" % i
+        outtext = string.replace(text, "mg-para\n","mg-para\n    async %i\n" % i)
+        outfile = open(outname, "w")
+        outfile.write(outtext)
+        outfile.close()
           
 def usage():
     """
@@ -278,10 +305,13 @@ def usage():
     """
     size = psize.Psize()
     usage = "\n"
-    usage = usage + "Inputgen script\n"
+    usage = usage + "Use this script to generate new APBS input files or split an existing\n"
+    usage = usage + "parallel input file into multiple async files.\n\n"
     usage = usage + "Usage: inputgen.py [opts] <filename>\n"
     usage = usage + "Optional Arguments:\n"
     usage = usage + "  --help               : Display this text\n"
+    usage = usage + "  --split              : Split an existing parallel input file to multiple\n"
+    usage = usage + "                         async input files.\n"
     usage = usage + "  --METHOD=<value>     : Force output file to write a specific APBS ELEC\n"
     usage = usage + "                         method.  Options are para (parallel), auto\n"
     usage = usage + "                         (automatic), manual (manual), or async (asynchronous).\n"
@@ -315,7 +345,7 @@ def main():
     import getopt
     filename = ""
     shortOptList = ""
-    longOptList = ["help","METHOD=","CFAC=","SPACE=","GMEMCEIL=","GMEMFAC=","OFAC=","REDFAC="]
+    longOptList = ["help","split","METHOD=","CFAC=","SPACE=","GMEMCEIL=","GMEMFAC=","OFAC=","REDFAC="]
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortOptList, longOptList)
@@ -332,10 +362,12 @@ def main():
     method = ""
     size = psize.Psize()
     async = 0
+    split = 0
     
     for o, a in opts:
         if o == "--help":
             usage()
+        if o == "--split": split = 1
         if o == "--METHOD":
             if a == "para":
                 sys.stdout.write("Forcing a parallel calculation\n")
@@ -366,7 +398,10 @@ def main():
         if o == "--REDFAC":
             size.setConstant("REDFAC", float(a))
 
-    igen = inputGen(filename, size, method, async)
-    igen.printInput()
+    if split == 1:
+        splitInput(filename)
+    else:
+        igen = inputGen(filename, size, method, async)
+        igen.printInput()
 
 if __name__ == "__main__": main()

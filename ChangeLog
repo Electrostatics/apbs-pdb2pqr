@@ -9,6 +9,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       and print energy and force vectors directly into Python arrays.
     * Added dx2uhbd tool to tools/mesh for converting from dx format to UHBD
       format (Thanks to Robert Konecny)
+    * Added ability of tools/manip/inputgen.py to split a single mg-para APBS
+      input file into multiple asynchronous input files.
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
