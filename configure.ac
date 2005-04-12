@@ -135,7 +135,6 @@ if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
      CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
   fi
 fi
-AC_FPERROR
 AC_F77_NOFORMAIN
 FFLAGS="${FLIBS} ${FFLAGS}"
 AC_F77_FCN_MANGLE()
@@ -207,6 +206,12 @@ dnl ##########################################################################
 dnl ##########################################################################
 dnl 7. checks for compiler characteristics
 dnl ##########################################################################
+
+dnl # ------------------------------------
+dnl # HANDLE COMPILER FLOATING POINT ERROR
+dnl # ------------------------------------
+
+AC_FPERROR
 
 dnl ##########################################################################
 dnl 8. checks for library functions

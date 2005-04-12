@@ -353,6 +353,15 @@ typedef enum eVdata_Format Vdata_Format;
 #   endif
 #endif
 
+/* Floating Point Error */
+#if defined(MACHINE_EPS)
+#     define VFLOOR(value) \
+              ((floor(value) != floor(value + MACHINE_EPS)) ? \
+              floor(value + MACHINE_EPS) : floor(value))
+#else
+#     define VFLOOR(value) floor(value)
+#endif
+
 /* String embedding for ident */
 #if defined(HAVE_EMBED)
 /**

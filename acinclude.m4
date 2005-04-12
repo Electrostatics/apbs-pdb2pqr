@@ -114,26 +114,28 @@ cat > fperror.c <<EOF
         ofrac = 0.1;
         test = (33/(1 + 2*ofrac) + 0.5);
         if ((int)test != value){
-            printf("Ut oh!");
+            printf("%.2E", 2*(value - test));
         }
         return 0;
     }
-EOF
-ac_try='$CC -c $CFLAGS fperror.c 1>&AC_FD_CC'
+EOF 
+actry='$CC -c $CFLAGS fperror.c 1>&AC_FD_CC'
 if AC_TRY_EVAL(actry); then
-    $CC -o fperror.test $CFLAGS fperror.c
-    FPRESULTS=`./fperror.test`
+    $CC -o fperror.test $CFLAGS fperror.c 
+    FPRESULTS=`./fperror.test`  
     if test -n "$FPRESULTS"; then
         AC_MSG_RESULT([yes])
+        echo "*** Warning: Compiler can cause floating point errors! ***"
         if test "${CC}" = "icc"; then
-            echo "Compiler causes floating point errors!" >&AC_FD_CC
-            rm -f fperror*
-            echo "*** For icc add -mp to the CFLAGS environment variable. ***"
+           echo "*** For icc add -mp flag if desired (see icc manual) ***"
         fi
-        AC_MSG_ERROR(Compiled floating point errors!)
+        AC_DEFINE([FLOAT_ERRORS], 1, [have floating point errors])
+        AC_DEFINE_UNQUOTED([MACHINE_EPS], $FPRESULTS, [machine error])
     else
         AC_MSG_RESULT([no])
+        AC_DEFINE([FLOAT_ERRORS], 0, [have floating point errors])
     fi
+    rm -f fperror*
 else
     AC_MSG_RESULT([unknown])
     echo "configure: failed program was:" >&AC_FD_CC
