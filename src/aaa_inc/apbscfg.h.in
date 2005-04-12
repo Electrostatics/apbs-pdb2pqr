@@ -3,6 +3,9 @@
 /* do not inline functions */
 #undef APBS_NOINLINE
 
+/* have floating point errors */
+#undef FLOAT_ERRORS
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
@@ -65,6 +68,9 @@
 
 /* have the Vor library */
 #undef HAVE_VOR
+
+/* machine error */
+#undef MACHINE_EPS
 
 /* Name of package */
 #undef PACKAGE

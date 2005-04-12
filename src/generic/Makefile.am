@@ -19,7 +19,5 @@ libapbsgen_la_SOURCES  = nosh.c mgparm.c mgparse.c femparm.c pbeparm.c \
 INCLUDES           = -I${top_srcdir}/src/fem -I${top_srcdir}/src/mg -I${top_srcdir}/src/aaa_inc @inc_list@ 
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
 
-
 all-local:
 	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
-
