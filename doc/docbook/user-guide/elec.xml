@@ -1409,7 +1409,7 @@
         calculation.  The product 
         <replaceable>npx</replaceable> &times;
         <replaceable>npy</replaceable> &times;
-        <replaceable>npz</replaceable> should be greater than or equal to the
+        <replaceable>npz</replaceable> should be less than or equal to the
         total number of processors with which APBS was invoked (usually via
         <command>mpirun</command>).  If more processors are provided at
         invocation than actually used during the run, the extra processors are
