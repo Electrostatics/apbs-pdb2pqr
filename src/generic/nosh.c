@@ -232,6 +232,7 @@ VPUBLIC int NOsh_parse(NOsh *thee, Vio *sock) {
 
     if (sock == VNULL) {
         Vnm_print(2, "NOsh_parse:  Got pointer to NULL socket!\n");
+        Vnm_print(2, "NOsh_parse:  The specified input file was not found!\n");
         return 0;
     } 
 
