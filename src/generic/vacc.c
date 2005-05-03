@@ -1043,6 +1043,11 @@ VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
     /* Let S be the sphere of radius radius centered at the point we are
      * testing.  We are outside the molecular surface if there is a point on
      * the surface of S that is outside the atom+probe radius surface */
+    /* THIS IS INCORRECT:  the correct behavior should check all points within
+     * S; not just one the surface.  Alternatively, we could check to see if
+     * the point of interest is within a sphere radius of SAS.  THIS IS
+     * AN OUTSTANDING BUG IN THE CODE!! 
+     * (Thanks to John Mongan and Jessica Swanson for finding this) */
     VASSERT(thee->sphere != VNULL);
     for (ipt=0; ipt<thee->nsphere; ipt++) {
         vec[0] = radius*thee->sphere[ipt][0] + center[0];
@@ -1069,6 +1074,11 @@ VPUBLIC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius) {
     /* Let S be the sphere of radius radius centered at the point we are
      * testing.  We are outside the molecular surface if there is a point on
      * the surface of S that is outside the atom+probe radius surface */
+    /* THIS IS INCORRECT:  the correct behavior should check all points within
+     * S; not just one the surface.  Alternatively, we could check to see if
+     * the point of interest is within a sphere radius of SAS.  THIS IS
+     * AN OUTSTANDING BUG IN THE CODE!! 
+     * (Thanks to John Mongan and Jessica Swanson for finding this) */
     VASSERT(thee->sphere != VNULL);
     for (ipt=0; ipt<thee->nsphere; ipt++) {
         vec[0] = radius*thee->sphere[ipt][0] + center[0];
