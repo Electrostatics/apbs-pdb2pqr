@@ -44,8 +44,8 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html">sVacc</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Oracle for solvent- and ion-accessibility around a biomolecule.</em> <a href="structsVacc.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top><a name="a18" doxytag="vacc.h::VACCMAXNBOR"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a18">VACCMAXNBOR</a>&nbsp;&nbsp;&nbsp;20</td></tr>
+<tr><td nowrap align=right valign=top><a name="a19" doxytag="vacc.h::VACCMAXNBOR"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a19">VACCMAXNBOR</a>&nbsp;&nbsp;&nbsp;20</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Maximum number of neighbors used in an accessibility calculation.</em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVacc.html">sVacc</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a0">Vacc</a></td></tr>
@@ -75,21 +75,23 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td>&nbsp;</td><td><font size=-1><em>Report molecular accessibility quickly.</em> <a href="group__Vacc.html#a11"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a12">Vacc_splineAcc</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Report spline-based accessibility.</em> <a href="group__Vacc.html#a12"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a13">Vacc_splineAccAtom</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad, int atomID)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Report spline-based accessibility for a given atom.</em> <a href="group__Vacc.html#a13"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a14">Vacc_splineAccGradAtom</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad, int atomID, double *force)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Report gradient of spline-based accessibility with respect to a particular atom normalized by the accessibility value due to that atom at that point (see Vpmg_splineAccAtom).</em> <a href="group__Vacc.html#a14"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double **&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a15">Vacc_sphere</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, int *npts)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Set up an array of points for the reference sphere.</em> <a href="group__Vacc.html#a15"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a16">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Calculates the solvent-accessible area of the entire molecules.</em> <a href="group__Vacc.html#a16"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a17">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, int iatom)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Calculates the solvent-accessible area due to the specified atom.</em> <a href="group__Vacc.html#a17"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a13">Vacc_splineAccGrad</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad, int atomID, double *grad)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Report gradient of spline-based accessibility for a given atom multiplied by the spline-based accessibility of all other atoms.</em> <a href="group__Vacc.html#a13"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a14">Vacc_splineAccAtom</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad, int atomID)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Report spline-based accessibility for a given atom.</em> <a href="group__Vacc.html#a14"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a15">Vacc_splineAccGradAtom</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[3], double win, double infrad, int atomID, double *force)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Report gradient of spline-based accessibility with respect to a particular atom normalized by the accessibility value due to that atom at that point (see Vpmg_splineAccAtom).</em> <a href="group__Vacc.html#a15"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double **&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a16">Vacc_sphereSurf</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, int *npts)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set up an array of points for the reference sphere.</em> <a href="group__Vacc.html#a16"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a17">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Calculates the solvent-accessible area of the entire molecules.</em> <a href="group__Vacc.html#a17"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a18">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, int iatom)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Calculates the solvent-accessible area due to the specified atom.</em> <a href="group__Vacc.html#a18"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Vacc.
 <p>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a>,v 2.24 2004/04/30 15:46:39 apbs Exp </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a>,v 2.26 2005/05/04 13:54:23 apbs Exp </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan A. Baker</dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
@@ -126,7 +128,7 @@ Contains declarations for class Vacc.
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * </pre></div></dd></dl>
-<hr><address style="align: right;"><small>Generated on Wed Nov 10 10:18:52 2004 for APBS by
+<hr><address style="align: right;"><small>Generated on Wed May 4 13:36:08 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

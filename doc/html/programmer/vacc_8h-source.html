@@ -19,7 +19,7 @@
 00058 <span class="preprocessor">#include "<a class="code" href="vatom_8h.html">apbs/vatom.h</a>"</span>
 00059 <span class="preprocessor">#include "<a class="code" href="vunit_8h.html">apbs/vunit.h</a>"</span>
 00060 
-<a name="l00064"></a><a class="code" href="group__Vacc.html#a18">00064</a> <span class="preprocessor">#define VACCMAXNBOR 20</span>
+<a name="l00064"></a><a class="code" href="group__Vacc.html#a19">00064</a> <span class="preprocessor">#define VACCMAXNBOR 20</span>
 00065 <span class="preprocessor"></span>
 <a name="l00071"></a><a class="code" href="structsVacc.html">00071</a> <span class="keyword">struct </span><a class="code" href="structsVacc.html">sVacc</a> {
 00072 
@@ -28,8 +28,8 @@
 <a name="l00075"></a><a class="code" href="structsVacc.html#m2">00075</a>   <span class="keywordtype">int</span> **<a class="code" href="structsVacc.html#m2">atomIDs</a>;            
 <a name="l00076"></a><a class="code" href="structsVacc.html#m3">00076</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVacc.html#m3">natoms</a>;              
 <a name="l00078"></a><a class="code" href="structsVacc.html#m4">00078</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVacc.html#m4">atomFlags</a>;           
-<a name="l00079"></a><a class="code" href="structsVacc.html#m5">00079</a>   <span class="keywordtype">double</span> **<a class="code" href="structsVacc.html#m5">sphere</a>;          
-<a name="l00081"></a><a class="code" href="structsVacc.html#m6">00081</a>   <span class="keywordtype">int</span> <a class="code" href="structsVacc.html#m6">nsphere</a>;              
+<a name="l00079"></a><a class="code" href="structsVacc.html#m5">00079</a>   <span class="keywordtype">double</span> **<a class="code" href="structsVacc.html#m5">sphereSurf</a>;      
+<a name="l00081"></a><a class="code" href="structsVacc.html#m6">00081</a>   <span class="keywordtype">int</span> <a class="code" href="structsVacc.html#m6">nsphereSurf</a>;          
 <a name="l00082"></a><a class="code" href="structsVacc.html#m7">00082</a>   Vset <a class="code" href="structsVacc.html#m7">acc</a>;                 
 <a name="l00085"></a><a class="code" href="structsVacc.html#m8">00085</a>   <span class="keywordtype">double</span> <a class="code" href="structsVacc.html#m8">grid_lower_corner</a>[3]; 
 <a name="l00086"></a><a class="code" href="structsVacc.html#m9">00086</a>   <span class="keywordtype">double</span> <a class="code" href="structsVacc.html#m9">hx</a>;                
@@ -129,61 +129,70 @@
 00239 <span class="comment">        double radius </span>
 00240 <span class="comment">        );</span>
 00241 <span class="comment"></span>
-00253 <span class="comment">double Vacc_molAcc(</span>
-00254 <span class="comment">        Vacc *thee, </span>
-00255 <span class="comment">        double center[3], </span>
-00256 <span class="comment">        double radius </span>
-00257 <span class="comment">        );</span>
-00258 <span class="comment"></span>
-00274 <span class="comment">double Vacc_fastMolAcc(</span>
-00275 <span class="comment">        Vacc *thee,  </span>
-00276 <span class="comment">        double center[3],  </span>
-00277 <span class="comment">        double radius </span>
-00278 <span class="comment">        );</span>
-00279 <span class="comment"></span>
-00291 <span class="comment">double Vacc_splineAcc(</span>
-00292 <span class="comment">        Vacc *thee, </span>
-00293 <span class="comment">        double center[3], </span>
-00294 <span class="comment">        double win, </span>
-00295 <span class="comment">        double infrad  </span>
-00296 <span class="comment">        );</span>
-00297 <span class="comment"></span>
-00309 <span class="comment">double Vacc_splineAccAtom(</span>
-00310 <span class="comment">        Vacc *thee, </span>
-00311 <span class="comment">        double center[3], </span>
-00312 <span class="comment">        double win, </span>
-00313 <span class="comment">        double infrad, </span>
-00314 <span class="comment">        int atomID </span>
-00315 <span class="comment">        );</span>
-00316 <span class="comment"></span>
-00328 <span class="comment">void Vacc_splineAccGradAtom(</span>
-00329 <span class="comment">        Vacc *thee, </span>
-00330 <span class="comment">        double center[3], </span>
-00331 <span class="comment">        double win, </span>
-00332 <span class="comment">        double infrad, </span>
-00333 <span class="comment">        int atomID, </span>
-00334 <span class="comment">        double *force </span>
-00335 <span class="comment">        );</span>
-00336 <span class="comment"></span>
-00351 <span class="comment">double** Vacc_sphere(</span>
-00352 <span class="comment">        Vacc *thee,  </span>
-00353 <span class="comment">        int *npts </span>
-00355 <span class="comment">        );</span>
-00356 <span class="comment"></span>
-00363 <span class="comment">double Vacc_totalSASA(</span>
-00364 <span class="comment">        Vacc *thee,  </span>
-00365 <span class="comment">        double radius  </span>
-00366 <span class="comment">        );</span>
-00367 <span class="comment"></span>
-00374 <span class="comment">double Vacc_atomSASA(</span>
-00375 <span class="comment">        Vacc *thee, </span>
-00376 <span class="comment">        double radius, </span>
-00377 <span class="comment">        int iatom </span>
+00256 <span class="comment">double Vacc_molAcc(</span>
+00257 <span class="comment">        Vacc *thee, </span>
+00258 <span class="comment">        double center[3], </span>
+00259 <span class="comment">        double radius </span>
+00260 <span class="comment">        );</span>
+00261 <span class="comment"></span>
+00280 <span class="comment">double Vacc_fastMolAcc(</span>
+00281 <span class="comment">        Vacc *thee,  </span>
+00282 <span class="comment">        double center[3],  </span>
+00283 <span class="comment">        double radius </span>
+00284 <span class="comment">        );</span>
+00285 <span class="comment"></span>
+00297 <span class="comment">double Vacc_splineAcc(</span>
+00298 <span class="comment">        Vacc *thee, </span>
+00299 <span class="comment">        double center[3], </span>
+00300 <span class="comment">        double win, </span>
+00301 <span class="comment">        double infrad  </span>
+00302 <span class="comment">        );</span>
+00303 <span class="comment"></span>
+00312 <span class="comment">void Vacc_splineAccGrad(</span>
+00313 <span class="comment">        Vacc *thee, </span>
+00314 <span class="comment">        double center[3], </span>
+00315 <span class="comment">        double win, </span>
+00316 <span class="comment">        double infrad,  </span>
+00317 <span class="comment">        int atomID, </span>
+00318 <span class="comment">        double *grad </span>
+00319 <span class="comment">        );</span>
+00320 <span class="comment"></span>
+00332 <span class="comment">double Vacc_splineAccAtom(</span>
+00333 <span class="comment">        Vacc *thee, </span>
+00334 <span class="comment">        double center[3], </span>
+00335 <span class="comment">        double win, </span>
+00336 <span class="comment">        double infrad, </span>
+00337 <span class="comment">        int atomID </span>
+00338 <span class="comment">        );</span>
+00339 <span class="comment"></span>
+00351 <span class="comment">void Vacc_splineAccGradAtom(</span>
+00352 <span class="comment">        Vacc *thee, </span>
+00353 <span class="comment">        double center[3], </span>
+00354 <span class="comment">        double win, </span>
+00355 <span class="comment">        double infrad, </span>
+00356 <span class="comment">        int atomID, </span>
+00357 <span class="comment">        double *force </span>
+00358 <span class="comment">        );</span>
+00359 <span class="comment"></span>
+00374 <span class="comment">double** Vacc_sphereSurf(</span>
+00375 <span class="comment">        Vacc *thee,  </span>
+00376 <span class="comment">        int *npts </span>
 00378 <span class="comment">        );</span>
 00379 <span class="comment"></span>
-00380 <span class="comment">#endif    /* ifndef _VACC_H_ */</span>
-00381 
-</pre></div><hr><address style="align: right;"><small>Generated on Wed Nov 10 10:18:49 2004 for APBS by
+00386 <span class="comment">double Vacc_totalSASA(</span>
+00387 <span class="comment">        Vacc *thee,  </span>
+00388 <span class="comment">        double radius  </span>
+00389 <span class="comment">        );</span>
+00390 <span class="comment"></span>
+00397 <span class="comment">double Vacc_atomSASA(</span>
+00398 <span class="comment">        Vacc *thee, </span>
+00399 <span class="comment">        double radius, </span>
+00400 <span class="comment">        int iatom </span>
+00401 <span class="comment">        );</span>
+00402 <span class="comment"></span>
+00403 <span class="comment">#endif    /* ifndef _VACC_H_ */</span>
+00404 
+</pre></div><hr><address style="align: right;"><small>Generated on Wed May 4 13:36:04 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
