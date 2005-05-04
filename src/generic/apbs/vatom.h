@@ -59,11 +59,12 @@
  */
 struct sVatom {
 
-    double position[3];     /**< Atomic position */
-    double radius;          /**< Atomic radius   */
-    double charge;          /**< Atomic charge   */
-    double partID;          /**< Partition value for assigning atoms to 
-                             *   particular processors and/or partitions   */
+    double position[3];  /**< Atomic position */
+    double radius;  /**< Atomic radius   */
+    double charge;  /**< Atomic charge   */
+    double partID;  /**< Partition value for assigning atoms to particular
+                     * processors and/or partitions   */
+    int id;  /**< Atomic ID -- this should be a unique non-negative integer */
 
 };
 
@@ -75,13 +76,13 @@ typedef struct sVatom Vatom;
 
 #if !defined(VINLINE_VATOM)
 
-/** @brief   Get atomic position
- *  @ingroup Vatom
- *  @author  Nathan Baker
- *  @param   thee  Vatom object
- *  @returns Pointer to 3*double array of atomic coordinates (in &Aring;)
- */
-VEXTERNC double* Vatom_getPosition(Vatom *thee);
+    /** @brief   Get atomic position
+     *  @ingroup Vatom
+     *  @author  Nathan Baker
+     *  @param   thee  Vatom object
+     *  @returns Pointer to 3*double array of atomic coordinates (in &Aring;)
+     */
+    VEXTERNC double* Vatom_getPosition(Vatom *thee);
 
     /** @brief   Set atomic radius
      *  @ingroup Vatom
@@ -117,6 +118,22 @@ VEXTERNC double* Vatom_getPosition(Vatom *thee);
      */
     VEXTERNC double     Vatom_getPartID(Vatom *thee);
 
+    /** @brief   Set atom ID
+     *  @ingroup Vatom
+     *  @author  Nathan Baker
+     *  @param   thee    Vatom object
+     *  @param   id  Unique non-negative number
+     */
+    VEXTERNC void Vatom_setAtomID(Vatom *thee, int id);
+
+    /** @brief   Get atom ID
+     *  @ingroup Vatom
+     *  @author  Nathan Baker
+     *  @param   thee    Vatom object
+     *  @return  Unique non-negative number
+     */
+    VEXTERNC double Vatom_getPartID(Vatom *thee);
+
     /** @brief   Set atomic charge
      *  @ingroup Vatom
      *  @author  Nathan Baker
@@ -148,6 +165,8 @@ VEXTERNC double* Vatom_getPosition(Vatom *thee);
 #   define Vatom_getRadius(thee) ((thee)->radius)
 #   define Vatom_setPartID(thee, tpartID) ((thee)->partID = (double)(tpartID))
 #   define Vatom_getPartID(thee) ((thee)->partID)
+#   define Vatom_setAtomID(thee, tatomID) ((thee)->id = (tatomID))
+#   define Vatom_getAtomID(thee) ((thee)->id)
 #   define Vatom_setCharge(thee, tCharge) ((thee)->charge = (tCharge))
 #   define Vatom_getCharge(thee) ((thee)->charge)
 #   define Vatom_memChk(thee) (sizeof(Vatom))

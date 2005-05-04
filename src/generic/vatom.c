@@ -69,6 +69,20 @@ VPUBLIC void Vatom_setPartID(Vatom *thee, int partID) {
 
 }
 
+VPUBLIC double Vatom_getAtomID(Vatom *thee) {
+
+   VASSERT(thee != VNULL);
+   return thee->atomID;
+
+}
+
+VPUBLIC void Vatom_setAtomID(Vatom *thee, int atomID) {
+
+   VASSERT(thee != VNULL);
+   thee->atomID = atomID;
+
+}
+
 VPUBLIC void Vatom_setRadius(Vatom *thee, double radius) { 
 
    VASSERT(thee != VNULL);
@@ -143,9 +157,8 @@ VPUBLIC void Vatom_copyTo(Vatom *thee, Vatom *dest) {
     VASSERT(thee != VNULL);
     VASSERT(dest != VNULL);
 
-    for (i=0; i<3; i++) dest->position[i] = thee->position[i];
-    dest->charge = thee->charge;
-    dest->radius = thee->radius;
+    memcpy(dest, thee, sizeof(Vatom));
+
 }
 
 VPUBLIC void Vatom_copyFrom(Vatom *thee, Vatom *src) {
