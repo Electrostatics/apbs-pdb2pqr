@@ -76,9 +76,9 @@ struct sVacc {
   int *natoms;              /**< An array telling how many pointers are 
                              * stored in atoms[i] */
   int *atomFlags;           /**< Flags for keeping track of atoms */
-  double **sphere;          /**< An array of points on the surface of a 
+  double **sphereSurf;      /**< An array of points on the surface of a 
                              * sphere */
-  int nsphere;              /**< The number of points in thee->sphere */
+  int nsphereSurf;          /**< The number of points in thee->sphere */
   Vset acc;                 /**< An integer array (to be treated as 
                              * bitfields) of Vset type with length equal 
                              * to the number of vertices in the mesh */
@@ -249,6 +249,9 @@ VEXTERNC double Vacc_ivdwAcc(
  *  @author  Nathan Baker
  *  @returns Characteristic function value between 1.0 (accessible) and 0.0
  *          (inaccessible)
+ *  @bug     This routine has a slight bug which can generate very small
+ *           internal regions of high dielectric (thanks to John Mongan and
+ *           Jess Swanson for finding this)
  */
 VEXTERNC double Vacc_molAcc(
         Vacc *thee, /** Accessibility object */
@@ -270,6 +273,9 @@ VEXTERNC double Vacc_molAcc(
  *  @author  Nathan Baker
  *  @returns Characteristic function value between 1.0 (accessible) and 0.0
  *          (inaccessible)
+ *  @bug     This routine has a slight bug which can generate very small
+ *           internal regions of high dielectric (thanks to John Mongan and
+ *           Jess Swanson for finding this)
  */
 VEXTERNC double Vacc_fastMolAcc(
         Vacc *thee,  /** Accessibility object */
@@ -365,7 +371,7 @@ VEXTERNC void Vacc_splineAccGradAtom(
  *  @author  Nathan Baker (original FORTRAN code by Mike Gilson)
  *  @return  Pointer to array of reference sphere points' coordinates
  */ 
-VEXTERNC double** Vacc_sphere(
+VEXTERNC double** Vacc_sphereSurf(
         Vacc *thee,  /** Accessibility object */
         int *npts /** Input:  requested number of points on sphere; Output:
                     set to actual number of points placed on sphere */
