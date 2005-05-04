@@ -62,7 +62,7 @@ VPUBLIC unsigned long int Vacc_memChk(Vacc *thee) {
 VPRIVATE int ivdwAccExclus(Vacc *thee, double center[3], double radius, int atomID);
 
 VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
-    int ny, int nz, int nsphere) {
+    int ny, int nz, int nsphereSurf) {
 
 
     Vacc *thee = VNULL;
@@ -70,12 +70,12 @@ VPUBLIC Vacc* Vacc_ctor(Valist *alist, double max_radius, int nx,
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
-    VASSERT( Vacc_ctor2(thee, alist, max_radius, nx, ny, nz, nsphere));
+    VASSERT( Vacc_ctor2(thee, alist, max_radius, nx, ny, nz, nsphereSurf));
     return thee;
 }
 
 VPUBLIC Vacc* Vacc_ctorFocus(Valist *alist, double max_radius, int nx,
-    int ny, int nz, int nsphere,double x_min, double y_min, 
+    int ny, int nz, int nsphereSurf, double x_min, double y_min, 
 	double z_min, double x_max, double y_max, double z_max) {
 
 
@@ -84,7 +84,7 @@ VPUBLIC Vacc* Vacc_ctorFocus(Valist *alist, double max_radius, int nx,
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
-    VASSERT( Vacc_ctor2Focus(thee, alist, max_radius, nx, ny, nz, nsphere,
+    VASSERT( Vacc_ctor2Focus(thee, alist, max_radius, nx, ny, nz, nsphereSurf,
 						x_min, y_min, z_min, x_max, y_max, z_max));
 
     return thee;
@@ -172,7 +172,7 @@ VPRIVATE int Vacc_storeParms(Vacc *thee,
         Valist *alist,
         double max_radius,
         int nx, int ny, int nz,
-        int nsphere) {
+        int nsphereSurf) {
 
     if (alist == VNULL) {
         Vnm_print(2, "Vacc_ctor2:  Got NULL Valist!\n");
@@ -196,8 +196,8 @@ VPRIVATE int Vacc_storeParms(Vacc *thee,
     thee->max_radius = max_radius;
     Vnm_print(0, "Vacc_ctor2:  Using %g max radius\n", max_radius);
 
-    thee->nsphere = nsphere;
-    Vnm_print(0, "Vacc_ctor2:  Using %d-point probe sphere\n", nsphere);
+    thee->nsphereSurf = nsphereSurf;
+    Vnm_print(0, "Vacc_ctor2:  Using %d-point probe sphere\n", nsphereSurf);
 
     return 1;
 }
@@ -376,10 +376,10 @@ VPRIVATE int Vacc_assignAtoms(Vacc *thee) {
 }
 
 VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
-    int nx, int ny, int nz, int nsphere) {
+    int nx, int ny, int nz, int nsphereSurf) {
 
     /* Check and store parameters */
-    if (!Vacc_storeParms(thee, alist, max_radius, nx, ny, nz, nsphere)) {
+    if (!Vacc_storeParms(thee, alist, max_radius, nx, ny, nz, nsphereSurf)) {
         Vnm_print(2, "Vacc_ctor2:  parameter check failed!\n");
         return 0;
     }
@@ -392,8 +392,8 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
     }
 
     /* Setup and check probe */
-    thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
-    if (thee->sphere == VNULL) {
+    thee->sphereSurf = Vacc_sphereSurf(thee, &(thee->nsphereSurf));
+    if (thee->sphereSurf == VNULL) {
         Vnm_print(2, "Vacc_ctor2:  probe sphere setup failed!\n");
         return 0;
     }
@@ -427,7 +427,7 @@ VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, double max_radius,
 // Author:   Nathan Baker, Todd Dolinsky
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vacc_ctor2Focus(Vacc *thee, Valist *alist, double max_radius,
-    int nx, int ny, int nz, int nsphere, double x_min, double y_min, 
+    int nx, int ny, int nz, int nsphereSurf, double x_min, double y_min, 
 	double z_min, double x_max, double y_max, double z_max) {
 
     /* Grid variables */
@@ -462,11 +462,11 @@ VPUBLIC int Vacc_ctor2Focus(Vacc *thee, Valist *alist, double max_radius,
     Vnm_print(0, "Vacc_ctorFocus:  Using %g max radius\n", max_radius);
  
     /* Set up probe information */
-    thee->nsphere = nsphere;
+    thee->nsphereSurf = nsphereSurf;
     thee->max_radius = max_radius;
     Vnm_print(0, "Vacc_ctorFocus:  Constructing sphere...\n");
-    thee->sphere = Vacc_sphere(thee, &(thee->nsphere));
-    VASSERT(thee->sphere != VNULL);
+    thee->sphereSurf = Vacc_sphereSurf(thee, &(thee->nsphereSurf));
+    VASSERT(thee->sphereSurf != VNULL);
  
     /* Allocate space */
     thee->natoms = Vmem_malloc(thee->vmem, thee->n, sizeof(int));
@@ -637,10 +637,10 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     Vmem_free(thee->vmem, thee->n, sizeof(int *), (void **)&(thee->atomIDs));
     Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->natoms));
     Vmem_free(thee->vmem, thee->n, sizeof(int), (void **)&(thee->atomFlags));
-    for (i=0; i<thee->nsphere; i++) 
-      Vmem_free(thee->vmem, 3, sizeof(double), (void **)&(thee->sphere[i]));
-    Vmem_free(thee->vmem, thee->nsphere, sizeof(double *), 
-      (void **)&(thee->sphere));
+    for (i=0; i<thee->nsphereSurf; i++) 
+      Vmem_free(thee->vmem, 3, sizeof(double), (void **)&(thee->sphereSurf[i]));
+    Vmem_free(thee->vmem, thee->nsphereSurf, sizeof(double *), 
+      (void **)&(thee->sphereSurf));
     Vmem_free(thee->vmem, Valist_getNumberAtoms(thee->alist),
       sizeof(double), (void **)&(thee->area));
 
@@ -1048,11 +1048,11 @@ VPUBLIC double Vacc_molAcc(Vacc *thee, double center[3], double radius) {
      * the point of interest is within a sphere radius of SAS.  THIS IS
      * AN OUTSTANDING BUG IN THE CODE!! 
      * (Thanks to John Mongan and Jessica Swanson for finding this) */
-    VASSERT(thee->sphere != VNULL);
-    for (ipt=0; ipt<thee->nsphere; ipt++) {
-        vec[0] = radius*thee->sphere[ipt][0] + center[0];
-        vec[1] = radius*thee->sphere[ipt][1] + center[1];
-        vec[2] = radius*thee->sphere[ipt][2] + center[2];
+    VASSERT(thee->sphereSurf != VNULL);
+    for (ipt=0; ipt<thee->nsphereSurf; ipt++) {
+        vec[0] = radius*thee->sphereSurf[ipt][0] + center[0];
+        vec[1] = radius*thee->sphereSurf[ipt][1] + center[1];
+        vec[2] = radius*thee->sphereSurf[ipt][2] + center[2];
         if (Vacc_ivdwAcc(thee, vec, radius)) return 1.0;
     }
 
@@ -1079,11 +1079,11 @@ VPUBLIC double Vacc_fastMolAcc(Vacc *thee, double center[3], double radius) {
      * the point of interest is within a sphere radius of SAS.  THIS IS
      * AN OUTSTANDING BUG IN THE CODE!! 
      * (Thanks to John Mongan and Jessica Swanson for finding this) */
-    VASSERT(thee->sphere != VNULL);
-    for (ipt=0; ipt<thee->nsphere; ipt++) {
-        vec[0] = radius*thee->sphere[ipt][0] + center[0];
-        vec[1] = radius*thee->sphere[ipt][1] + center[1];
-        vec[2] = radius*thee->sphere[ipt][2] + center[2];
+    VASSERT(thee->sphereSurf != VNULL);
+    for (ipt=0; ipt<thee->nsphereSurf; ipt++) {
+        vec[0] = radius*thee->sphereSurf[ipt][0] + center[0];
+        vec[1] = radius*thee->sphereSurf[ipt][1] + center[1];
+        vec[2] = radius*thee->sphereSurf[ipt][2] + center[2];
         if (Vacc_ivdwAcc(thee, vec, radius)) return 1.0;
     }
 
@@ -1148,12 +1148,12 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
 #endif /* defined(HAVE_MC_H) */
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vacc_sphere
+// Routine:  Vacc_sphereSurf
 //
 // Author:   Nathan Baker (original FORTRAN routine from UHBD by Michael
 //           Gilson)
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC double** Vacc_sphere(Vacc *thee, int *npts) {
+VPUBLIC double** Vacc_sphereSurf(Vacc *thee, int *npts) {
 
     double **points = VNULL;
     int nactual, i, itheta, ntheta, iphi, nphimax, nphi;
@@ -1251,16 +1251,16 @@ VPUBLIC double Vacc_atomSASA(Vacc *thee, double srad, int iatom) {
     tPos = Vatom_getPosition(thisAtom);
     tRad = Vatom_getRadius(thisAtom);
 
-    for (ipt=0; ipt<thee->nsphere; ipt++) {
-        vec[0] = (tRad+srad)*thee->sphere[ipt][0] + tPos[0];
-        vec[1] = (tRad+srad)*thee->sphere[ipt][1] + tPos[1];
-        vec[2] = (tRad+srad)*thee->sphere[ipt][2] + tPos[2];
+    for (ipt=0; ipt<thee->nsphereSurf; ipt++) {
+        vec[0] = (tRad+srad)*thee->sphereSurf[ipt][0] + tPos[0];
+        vec[1] = (tRad+srad)*thee->sphereSurf[ipt][1] + tPos[1];
+        vec[2] = (tRad+srad)*thee->sphereSurf[ipt][2] + tPos[2];
         if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
     }
 
     /* We will return UHBD's asas2: probe-centered solvent-accessible surface
      * area */
-    area = area/((double)(thee->nsphere))*4.0*VPI*(tRad+srad)*(tRad+srad);
+    area = area/((double)(thee->nsphereSurf))*4.0*VPI*(tRad+srad)*(tRad+srad);
 
     return area;
 
