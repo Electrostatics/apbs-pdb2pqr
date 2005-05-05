@@ -76,8 +76,8 @@ typedef enum eMGparm_CalcType MGparm_CalcType;
  * @ingroup MGparm
  */
 enum eMGparm_CentMeth {
-    MCM_PNT=0,  /**< Center on a molecule */
-    MCM_MOL=1  /**< Center on a point */
+    MCM_PNT=0, /**< Center on a point */ 
+    MCM_MOL=1  /**< Center on a molecule */
 };
 
 /**
