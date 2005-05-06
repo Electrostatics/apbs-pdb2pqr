@@ -2,6 +2,7 @@
 BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
 #############################################################################
   - NEW FEATURES
+    * New version of the 'acc' program available.
     * Added tools/python/vgrid to the autoconf script. The directory compiles
       with the rest of the Python utilities and is used for manipulating
       dx files.
@@ -12,6 +13,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Added ability of tools/manip/inputgen.py to split a single mg-para APBS
       input file into multiple asynchronous input files.
     * Added Vclist cell list class to replace internal hash table in Vacc
+	* Modified Vacc class to use Vclist, including changes to the Vacc
+	  interface (and required changes throughout the code)
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.

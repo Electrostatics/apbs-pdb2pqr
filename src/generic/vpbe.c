@@ -55,11 +55,6 @@
 /////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VPBE)
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getValist
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -67,13 +62,6 @@ VPUBLIC Valist* Vpbe_getValist(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getVacc
-//
-// Purpose:  Get a pointer to the Vacc accessibility object 
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -82,11 +70,6 @@ VPUBLIC Vacc* Vpbe_getVacc(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getBulkIonicStrength
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -94,11 +77,6 @@ VPUBLIC double Vpbe_getBulkIonicStrength(Vpbe *thee) {
    return thee->bulkIonicStrength; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getTemperature
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getTemperature(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -107,11 +85,6 @@ VPUBLIC double Vpbe_getTemperature(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteDiel
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -120,11 +93,6 @@ VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getGamma
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getGamma(Vpbe *thee) {
 
    VASSERT(thee != VNULL);
@@ -133,22 +101,12 @@ VPUBLIC double Vpbe_getGamma(Vpbe *thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteCenter
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->soluteCenter; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventDiel
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -156,11 +114,6 @@ VPUBLIC double Vpbe_getSolventDiel(Vpbe *thee) {
    return thee->solventDiel; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSolventRadius
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -168,11 +121,6 @@ VPUBLIC double Vpbe_getSolventRadius(Vpbe *thee) {
    return thee->solventRadius; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getMaxIonRadius
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -180,11 +128,6 @@ VPUBLIC double Vpbe_getMaxIonRadius(Vpbe *thee) {
    return thee->maxIonRadius; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getXkappa
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getXkappa(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -192,11 +135,6 @@ VPUBLIC double Vpbe_getXkappa(Vpbe *thee) {
    return thee->xkappa; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getDeblen
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getDeblen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -204,11 +142,6 @@ VPUBLIC double Vpbe_getDeblen(Vpbe *thee) {
    return thee->deblen; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getZkappa2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -216,11 +149,6 @@ VPUBLIC double Vpbe_getZkappa2(Vpbe *thee) {
    return thee->zkappa2; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getZmagic
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getZmagic(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -228,55 +156,30 @@ VPUBLIC double Vpbe_getZmagic(Vpbe *thee) {
    return thee->zmagic; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteRadius
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteRadius(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->soluteRadius; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteXlen
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteXlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->soluteXlen; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteYlen
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteYlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->soluteYlen; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteZlen
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteZlen(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
    return thee->soluteZlen; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getSoluteCharge
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -288,11 +191,6 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 // Class Vpbe: Non-inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_ctor
-//
-// Author: Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
                     double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,
@@ -309,20 +207,17 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 }
 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_ctor2
-//
-// Author:   Nathan Baker and Mike Holst
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
                     double *ionConc, double *ionRadii,
                     double *ionQ, double T, double gamma, double soluteDiel,
                     double solventDiel, double solventRadius, int focusFlag) {
 
-    int i, iatom;
+    int i, iatom, inhash[3];
     double atomRadius;
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
+    double lower_corner[3] = {0.0, 0.0, 0.0};
+    double upper_corner[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
     double x, y, z, netCharge;
     double nhash[3];
@@ -457,37 +352,32 @@ function\n", thee->maxIonRadius);
      *     large molecules
      */
     if (thee->maxIonRadius > thee->solventRadius) 
-      radius = thee->maxIonRadius + MAX_SPLINE_WINDOW;
+        radius = thee->maxIonRadius + MAX_SPLINE_WINDOW;
     else radius = thee->solventRadius + MAX_SPLINE_WINDOW;
 	
 	nhash[0] = (thee->soluteXlen)/0.5;
 	nhash[1] = (thee->soluteYlen)/0.5;
 	nhash[2] = (thee->soluteZlen)/0.5;
+    for (i=0; i<3; i++) inhash[i] = (int)(nhash[i]);
 	
-	for (i=0;i<3;i++){
-	  if (((int)nhash[i]) < 3) nhash[i] = 3;
-	  if (((int)nhash[i]) > MAX_HASH_DIM) nhash[i] = MAX_HASH_DIM;
+	for (i=0;i<3;i++){ 
+        if (inhash[i] < 3) inhash[i] = 3; 
+        if (inhash[i] > MAX_HASH_DIM) inhash[i] = MAX_HASH_DIM;
 	}
-    Vnm_print(0, "Vpbe_ctor2: Started constructing Vacc object with %d x %d x %d hash table\n",
-      (int)nhash[0], (int)nhash[1], (int)nhash[2]); 
+    Vnm_print(0, "Vpbe_ctor2:  Constructing Vclist with %d x %d x %d table\n", 
+            inhash[0], inhash[1], inhash[2]); 
 
+    /* This test doesn't really do anything... */
 	if (focusFlag == 0){
-	  thee->acc = Vacc_ctor(thee->alist, 
-              radius, 
-              (int)(nhash[0]), 
-              (int)(nhash[1]), 
-              (int)(nhash[2]), 
-              VACC_SPHERE);
-	} else {
-	  thee->acc = Vacc_ctorFocus(thee->alist, 
-              radius, 
-              (int)(nhash[0]), 
-              (int)(nhash[1]), 
-              (int)(nhash[2]), 
-              VACC_SPHERE, 
-              xmin, ymin, zmin, xmax, ymax, zmax);
-	}
-    Vnm_print(0, "Vpbe_ctor2: Done constructing Vacc object...\n"); 
+        thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
+                CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
+    } else {
+        thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
+                CLIST_MANUAL_DOMAIN, lower_corner, upper_corner);
+    } 
+    VASSERT(thee->clist != VNULL);
+    thee->acc = Vacc_ctor(thee->alist, thee->clist, VACC_SPHERE);
+	
     VASSERT(thee->acc != VNULL);
 
     thee->paramFlag = 1;
@@ -495,11 +385,6 @@ function\n", thee->maxIonRadius);
     return 1; 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_dtor
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     if ((*thee) != VNULL) {
         Vpbe_dtor2(*thee);
@@ -508,22 +393,12 @@ VPUBLIC void Vpbe_dtor(Vpbe **thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_dtor2
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpbe_dtor2(Vpbe *thee) { 
+    Vclist_dtor(&(thee->clist));
     Vacc_dtor(&(thee->acc));
     Vmem_dtor(&(thee->vmem));
 }
 
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getCoulombEnergy1
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
 
     int i, j, k, natoms;
@@ -566,11 +441,6 @@ VPUBLIC double Vpbe_getCoulombEnergy1(Vpbe *thee) {
     return energy;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_memChk
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC unsigned long int Vpbe_memChk(Vpbe *thee) {
    
     unsigned long int memUse = 0;
@@ -583,11 +453,6 @@ VPUBLIC unsigned long int Vpbe_memChk(Vpbe *thee) {
     return memUse;
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpbe_getIons
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],
   double ionRadii[MAXION], double ionQ[MAXION]) {
 

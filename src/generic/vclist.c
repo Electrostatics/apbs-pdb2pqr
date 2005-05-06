@@ -57,6 +57,11 @@ VPUBLIC unsigned long int Vclist_memChk(Vclist *thee) {
     return Vmem_bytes(thee->vmem);
 }
 
+VPUBLIC double Vclist_maxRadius(Vclist *thee) {
+    VASSERT(thee != VNULL);
+    return thee->max_radius;
+}
+
 #endif /* if !defined(VINLINE_VCLIST) */
 
 VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius, 
@@ -290,15 +295,9 @@ VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
     /* Allocate the space to store the pointers to the atoms */
     for (ui=0; ui<thee->n; ui++) {
         cell = &(thee->cells[ui]);
-        if (cell->natoms > 0) {
-            cell->atoms = Vmem_malloc(thee->vmem, cell->natoms, 
-                    sizeof(Vatom *));
-            if (cell->atoms == VNULL) {
-                Vnm_print(2, 
-           "Vclist_assignAtoms:  Failed to allocate space for %d (Vatom *)!\n",
-                        cell->natoms);
-                return 0;
-            }
+        if ( !VclistCell_ctor2(cell, cell->natoms) ) {
+            Vnm_print(2, "Vclist_assignAtoms:  cell error!\n");
+            return 0;
         }
         /* Clear the counter for later use */
         cell->natoms = 0;
@@ -334,7 +333,7 @@ VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
 /** Main (FORTRAN stub) constructor */
 VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         int npts[VAPBS_DIM], Vclist_DomainMode mode, 
-        double lower_corner[VAPBS_DIM],  double upper_corner[VAPBS_DIM]) {
+        double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM]) {
 
     int i;
     VclistCell *cell;
@@ -401,8 +400,7 @@ VPUBLIC void Vclist_dtor2(Vclist *thee) {
 
     for (i=0; i<thee->n; i++) {
         cell = &(thee->cells[i]);
-        Vmem_free(thee->vmem, cell->natoms, sizeof(Vatom *),
-            (void **)&(thee->cells));
+        VclistCell_dtor2(cell);
     }
     Vmem_free(thee->vmem, thee->n, sizeof(VclistCell), 
             (void **)&(thee->cells));
@@ -410,7 +408,6 @@ VPUBLIC void Vclist_dtor2(Vclist *thee) {
 
 }
 
-/** Get specific cell (or VNULL) */
 VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, double pos[VAPBS_DIM]) {
 
     int i, ic[VAPBS_DIM], ui;
@@ -429,6 +426,60 @@ VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, double pos[VAPBS_DIM]) {
     ui = (thee->npts[2])*(thee->npts[1])*ic[0] + (thee->npts[2])*ic[1] + ic[2];
 
     return &(thee->cells[ui]);
+
+}
+
+VPUBLIC VclistCell* VclistCell_ctor(int natoms) {
+
+    VclistCell *thee = VNULL;
+
+    /* Set up the structure */
+    thee = Vmem_malloc(VNULL, 1, sizeof(VclistCell));
+    VASSERT( thee != VNULL);
+    VASSERT( VclistCell_ctor2(thee, natoms) );
+
+    return thee;
+}
+
+VPUBLIC int VclistCell_ctor2(VclistCell *thee, int natoms) {
+
+    if (thee == VNULL) {
+        Vnm_print(2, "VclistCell_ctor2:  NULL thee!\n");
+        return 0;
+    }
+
+    thee->natoms = natoms;
+    if (thee->natoms > 0) {
+        thee->atoms = Vmem_malloc(VNULL, natoms, sizeof(Vatom *));
+        if (thee->atoms == VNULL) {
+            Vnm_print(2, 
+          "VclistCell_ctor2:  unable to allocate space for %d atom pointers!\n",
+              natoms);
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+
+VPUBLIC void VclistCell_dtor(VclistCell **thee) {
+    
+    if ((*thee) != VNULL) {
+        VclistCell_dtor2(*thee);
+        Vmem_free(VNULL, 1, sizeof(VclistCell), (void **)thee);
+        (*thee) = VNULL;
+    }
+
+}
+
+/** Main (stub) destructor */
+VPUBLIC void VclistCell_dtor2(VclistCell *thee) {
+
+    if (thee->natoms > 0) {
+        Vmem_free(VNULL, thee->natoms, sizeof(Vatom *), 
+                (void **)&(thee->atoms));
+    }
 
 }
 

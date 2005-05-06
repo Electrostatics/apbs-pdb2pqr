@@ -55,6 +55,7 @@
 
 /* Headers specific to this file */
 #include "apbs/valist.h"
+#include "apbs/vclist.h"
 #include "apbs/vatom.h"
 #include "apbs/vunit.h"
 
@@ -72,9 +73,7 @@ struct sVacc {
 
   Vmem *vmem;               /**< Memory management object for this class */
   Valist *alist;            /**< Valist structure for list of atoms */
-  int **atomIDs;            /**< An array of arrays of atom IDs in alist */
-  int *natoms;              /**< An array telling how many pointers are 
-                             * stored in atoms[i] */
+  Vclist *clist;            /**< Vclist structure for atom cell list */
   int *atomFlags;           /**< Flags for keeping track of atoms */
   double **sphereSurf;      /**< An array of points on the surface of a 
                              * sphere */
@@ -82,14 +81,6 @@ struct sVacc {
   Vset acc;                 /**< An integer array (to be treated as 
                              * bitfields) of Vset type with length equal 
                              * to the number of vertices in the mesh */
-  double grid_lower_corner[3]; /**< Hash table grid corner */
-  double hx;                /**< Hash table grid spacings */
-  double hy;                /**< Hash table grid spacings */
-  double hzed;              /**< Hash table grid spacings */
-  int nx;                   /**< Hash table grid dimensions */
-  int ny;                   /**< Hash table grid dimensions */
-  int nz;                   /**< Hash table grid dimensions */
-  int n;                    /**< n = nx*nz*ny */
   double max_radius;        /**< Maximum probe radius */
   double *area;             /**< The contribution to the solvent-accessible
                              * surface area from each atom.  This array is
@@ -129,10 +120,8 @@ typedef struct sVacc Vacc;
  *  @returns Newly allocated Vacc object */
 VEXTERNC Vacc* Vacc_ctor(
         Valist *alist, /** Molecule for accessibility queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int nx, /** Number of x-points in hash table */ 
-        int ny, /** Number of y-points in hash table */
-        int nz, /** Number of y-points in hash table */
+        Vclist *clist, /** Pre-constructed cell list for looking up atoms 
+                        * near specific positions */
         int nsphere /** Number of points on surface of reference sphere */
         );
 
@@ -143,52 +132,9 @@ VEXTERNC Vacc* Vacc_ctor(
 VEXTERNC int Vacc_ctor2(
         Vacc *thee, /** Memory for Vacc objet */
         Valist *alist, /** Molecule for accessibility queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int nx, /** Number of x-points in hash table */ 
-        int ny, /** Number of y-points in hash table */
-        int nz, /** Number of y-points in hash table */
+        Vclist *clist, /** Pre-constructed cell list for looking up atoms 
+                        * near specific positions */
         int nsphere /** Number of points on surface of reference sphere */
-        );
-
-/** @brief Constructor for an accessibility object for a subdomain of a
- * molecule
- * @ingroup Vacc
- * @author  Nathan Baker, Todd Dolinsky
- * @returns Newly allocated Vacc object */
-VEXTERNC Vacc* Vacc_ctorFocus(
-        Valist *alist, /** Molecule for accessibility queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int nx, /** Number of x-points in hash table */ 
-        int ny, /** Number of y-points in hash table */
-        int nz, /** Number of y-points in hash table */
-        int nsphere, /** Number of points on surface of reference sphere */
-        double x_min, /** Min x-coord of subdomain */
-        double y_min, /** Min y-coord of subdomain */ 
-        double z_min, /** Min z-coord of subdomain */
-        double x_max, /** Max x-coord of subdomain */
-        double y_max, /** Max y-coord of subdomain */
-        double z_max /** Max z-coord of subdomain */
-        );
-
-/** @brief   FORTRAN stub for constructor for an accessibility object for a
- * subdomain of a molecule
- *  @ingroup Vacc
- *  @author  Nathan Baker, Todd Dolinsky
- *  @returns 1 if successful, 0 otherwise */
-VEXTERNC int Vacc_ctor2Focus(
-        Vacc *thee, /** Previously-allocated Vacc memory */
-        Valist *alist, /** Molecule for accessibility queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int nx, /** Number of x-points in hash table */ 
-        int ny, /** Number of y-points in hash table */
-        int nz, /** Number of y-points in hash table */
-        int nsphere, /** Number of points on surface of reference sphere */
-        double x_min, /** Min x-coord of subdomain */
-        double y_min, /** Min y-coord of subdomain */ 
-        double z_min, /** Min z-coord of subdomain */
-        double x_max, /** Max x-coord of subdomain */
-        double y_max, /** Max y-coord of subdomain */
-        double z_max /** Max z-coord of subdomain */
         );
 
 /** @brief   Destroy object
@@ -219,7 +165,7 @@ VEXTERNC void Vacc_dtor2(
  */
 VEXTERNC double Vacc_vdwAcc(
         Vacc *thee,  /** Accessibility object */
-        double center[3] /** Probe center coordinates */
+        double center[VAPBS_DIM] /** Probe center coordinates */
         );
 
 /** @brief   Report inflated van der Waals accessibility
@@ -235,7 +181,7 @@ VEXTERNC double Vacc_vdwAcc(
  */
 VEXTERNC double Vacc_ivdwAcc(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double radius /** Probe radius (&Aring;) */
         );
 
@@ -255,7 +201,7 @@ VEXTERNC double Vacc_ivdwAcc(
  */
 VEXTERNC double Vacc_molAcc(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double radius /** Probe radius (in &Aring;) */
         );
 
@@ -279,7 +225,7 @@ VEXTERNC double Vacc_molAcc(
  */
 VEXTERNC double Vacc_fastMolAcc(
         Vacc *thee,  /** Accessibility object */
-        double center[3],  /** Probe center coordinates */
+        double center[VAPBS_DIM],  /** Probe center coordinates */
         double radius /** Probe radius (in &Aring;) */
         );
 
@@ -296,7 +242,7 @@ VEXTERNC double Vacc_fastMolAcc(
  */
 VEXTERNC double Vacc_splineAcc(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 
         double infrad  /** Inflation radius (&Aring;) for ion access. */
         );
@@ -311,10 +257,10 @@ VEXTERNC double Vacc_splineAcc(
  */
 VEXTERNC void Vacc_splineAccGrad(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 
         double infrad,  /** Inflation radius (&Aring;) for ion access. */
-        int atomID, /** Index of atom in Valist object */ 
+        Vatom *atom, /** Atom */ 
         double *grad /** 3-vector set to gradient of accessibility */
         );
 
@@ -331,10 +277,10 @@ VEXTERNC void Vacc_splineAccGrad(
  */
 VEXTERNC double Vacc_splineAccAtom(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 
         double infrad, /** Inflation radius (&Aring;) for ion access. */
-        int atomID /** Index of atom in Valist object */
+        Vatom *atom /** Atom */
         );
 
 /** @brief   Report gradient of spline-based accessibility with respect to a
@@ -350,11 +296,11 @@ VEXTERNC double Vacc_splineAccAtom(
  */
 VEXTERNC void Vacc_splineAccGradAtom(
         Vacc *thee, /** Accessibility object */
-        double center[3], /** Probe center coordinates */
+        double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 
         double infrad, /** Inflation radius (&Aring;) for ion access. */
-        int atomID, /** Index of atom in Valist object */ 
-        double *force /** 3-vector set to gradient of accessibility */
+        Vatom *atom, /** Atom */ 
+        double *force /** VAPBS_DIM-vector set to gradient of accessibility */
         );
 
 /** @brief Set up an array of points for the reference sphere
@@ -397,7 +343,7 @@ VEXTERNC double Vacc_totalSASA(
 VEXTERNC double Vacc_atomSASA(
         Vacc *thee, /** Acessibility object */
         double radius, /** Probe radius (&Aring;) */
-        int iatom /** Atom index in Valist object */
+        Vatom *atom /** Atom */
         );
 
 #endif    /* ifndef _VACC_H_ */
