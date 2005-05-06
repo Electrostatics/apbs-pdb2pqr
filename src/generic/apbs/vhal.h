@@ -349,6 +349,9 @@ typedef enum eVdata_Format Vdata_Format;
 #   elif defined(VF77_ONEUNDERSCORE)
 #       define VF77_MANGLE(name,NAME) name ## _
 #   else
+        /** @brief  Name-mangling macro for using FORTRAN functions in C code
+         *  @ingroup  Vhal
+         */
 #       define VF77_MANGLE(name,NAME) name
 #   endif
 #endif
@@ -359,6 +362,11 @@ typedef enum eVdata_Format Vdata_Format;
               ((floor(value) != floor(value + MACHINE_EPS)) ? \
               floor(value + MACHINE_EPS) : floor(value))
 #else
+      /** @brief  Wrapped floor to fix floating point issues in the Intel
+       * compiler
+       *  @author Todd Dolinksy
+       *  @ingroup Vhal
+       */
 #     define VFLOOR(value) floor(value)
 #endif
 

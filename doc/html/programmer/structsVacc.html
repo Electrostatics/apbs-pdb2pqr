@@ -16,30 +16,23 @@
 <p>
 Collaboration diagram for sVacc:<p><center><img src="structsVacc__coll__graph.png" border="0" usemap="#sVacc__coll__map" alt="Collaboration graph"></center>
 <map name="sVacc__coll__map">
-<area href="structsValist.html" shape="rect" coords="8,108,59,127" alt="">
-<area href="structsVatom.html" shape="rect" coords="7,17,60,36" alt="">
+<area href="structsValist.html" shape="rect" coords="56,107,107,126" alt="">
+<area href="structsVclist.html" shape="rect" coords="92,198,143,217" alt="">
+<area href="structsVatom.html" shape="rect" coords="103,17,156,35" alt="">
+<area href="structsVclistCell.html" shape="rect" coords="141,107,213,126" alt="">
 </map>
 <center><font size="2">[<a href="graph_legend.html">legend</a>]</font></center><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Data Fields</h2></td></tr>
 <tr><td nowrap align=right valign=top>Vmem *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m0">vmem</a></td></tr>
 <tr><td nowrap align=right valign=top><a class="el" href="structsValist.html">Valist</a> *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m1">alist</a></td></tr>
-<tr><td nowrap align=right valign=top>int **&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m2">atomIDs</a></td></tr>
-<tr><td nowrap align=right valign=top>int *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m3">natoms</a></td></tr>
-<tr><td nowrap align=right valign=top>int *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m4">atomFlags</a></td></tr>
-<tr><td nowrap align=right valign=top>double **&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m5">sphereSurf</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m6">nsphereSurf</a></td></tr>
-<tr><td nowrap align=right valign=top>Vset&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m7">acc</a></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m8">grid_lower_corner</a> [3]</td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m9">hx</a></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m10">hy</a></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m11">hzed</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m12">nx</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m13">ny</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m14">nz</a></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m15">n</a></td></tr>
-<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m16">max_radius</a></td></tr>
-<tr><td nowrap align=right valign=top>double *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m17">area</a></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVclist.html">Vclist</a> *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m2">clist</a></td></tr>
+<tr><td nowrap align=right valign=top>int *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m3">atomFlags</a></td></tr>
+<tr><td nowrap align=right valign=top>double **&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m4">sphereSurf</a></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m5">nsphereSurf</a></td></tr>
+<tr><td nowrap align=right valign=top>Vset&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m6">acc</a></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m7">max_radius</a></td></tr>
+<tr><td nowrap align=right valign=top>double *&nbsp;</td><td valign=bottom><a class="el" href="structsVacc.html#m8">area</a></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Oracle for solvent- and ion-accessibility around a biomolecule.
@@ -48,7 +41,7 @@ Oracle for solvent- and ion-accessibility around a biomolecule.
 
 <p>
 <hr><h2>Field Documentation</h2>
-<a name="m7" doxytag="sVacc::acc"></a><p>
+<a name="m6" doxytag="sVacc::acc"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -92,7 +85,7 @@ An integer array (to be treated as bitfields) of Vset type with length equal to 
 Valist structure for list of atoms     </td>
   </tr>
 </table>
-<a name="m17" doxytag="sVacc::area"></a><p>
+<a name="m8" doxytag="sVacc::area"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -114,7 +107,7 @@ Valist structure for list of atoms     </td>
 The contribution to the solvent-accessible surface area from each atom. This array is filled by Vacc_totalSASA     </td>
   </tr>
 </table>
-<a name="m4" doxytag="sVacc::atomFlags"></a><p>
+<a name="m3" doxytag="sVacc::atomFlags"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -136,13 +129,13 @@ The contribution to the solvent-accessible surface area from each atom. This arr
 Flags for keeping track of atoms     </td>
   </tr>
 </table>
-<a name="m2" doxytag="sVacc::atomIDs"></a><p>
+<a name="m2" doxytag="sVacc::clist"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int** sVacc::atomIDs
+          <td class="md" nowrap valign="top"> <a class="el" href="structsVclist.html">Vclist</a>* sVacc::clist
       </table>
     </td>
   </tr>
@@ -155,98 +148,10 @@ Flags for keeping track of atoms     </td>
     <td>
 
 <p>
-An array of arrays of atom IDs in alist     </td>
+Vclist structure for atom cell list     </td>
   </tr>
 </table>
-<a name="m8" doxytag="sVacc::grid_lower_corner"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> double sVacc::grid_lower_corner[3]
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid corner     </td>
-  </tr>
-</table>
-<a name="m9" doxytag="sVacc::hx"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> double sVacc::hx
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid spacings     </td>
-  </tr>
-</table>
-<a name="m10" doxytag="sVacc::hy"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> double sVacc::hy
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid spacings     </td>
-  </tr>
-</table>
-<a name="m11" doxytag="sVacc::hzed"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> double sVacc::hzed
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid spacings     </td>
-  </tr>
-</table>
-<a name="m16" doxytag="sVacc::max_radius"></a><p>
+<a name="m7" doxytag="sVacc::max_radius"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -268,51 +173,7 @@ Hash table grid spacings     </td>
 Maximum probe radius     </td>
   </tr>
 </table>
-<a name="m15" doxytag="sVacc::n"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> int sVacc::n
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-n = nx*nz*ny     </td>
-  </tr>
-</table>
-<a name="m3" doxytag="sVacc::natoms"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> int* sVacc::natoms
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-An array telling how many pointers are stored in atoms[i]     </td>
-  </tr>
-</table>
-<a name="m6" doxytag="sVacc::nsphereSurf"></a><p>
+<a name="m5" doxytag="sVacc::nsphereSurf"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -334,73 +195,7 @@ An array telling how many pointers are stored in atoms[i]     </td>
 The number of points in thee-&gt;sphere     </td>
   </tr>
 </table>
-<a name="m12" doxytag="sVacc::nx"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> int sVacc::nx
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid dimensions     </td>
-  </tr>
-</table>
-<a name="m13" doxytag="sVacc::ny"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> int sVacc::ny
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid dimensions     </td>
-  </tr>
-</table>
-<a name="m14" doxytag="sVacc::nz"></a><p>
-<table width="100%" cellpadding="2" cellspacing="0" border="0">
-  <tr>
-    <td class="md">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> int sVacc::nz
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-Hash table grid dimensions     </td>
-  </tr>
-</table>
-<a name="m5" doxytag="sVacc::sphereSurf"></a><p>
+<a name="m4" doxytag="sVacc::sphereSurf"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -446,7 +241,7 @@ Memory management object for this class     </td>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="vacc_8h-source.html">vacc.h</a></ul>
-<hr><address style="align: right;"><small>Generated on Wed May 4 13:36:12 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 6 05:40:33 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

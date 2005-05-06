@@ -130,9 +130,21 @@ typedef struct sVclist Vclist;
             Vclist *thee /** Object for memory check */
             );
 
+    /**
+     * @brief  Get the max probe radius value (in A) the cell list was
+     *         constructed with
+     * @ingroup Vclist
+     * @author Nathan Baker
+     * @returns Max probe radius (in A)
+     */
+    VEXTERNC double Vclist_maxRadius(
+            Vclist *thee /** Cell list object */
+            );
+
 #else /* if defined(VINLINE_VCLIST) */
 
 #   define Vclist_memChk(thee) (Vmem_bytes((thee)->vmem))
+#   define Vclist_maxRadius(thee) ((thee)->max_radius)
 
 #endif /* if !defined(VINLINE_VCLIST) */
 
@@ -203,6 +215,43 @@ VEXTERNC void Vclist_dtor2(
 VEXTERNC VclistCell* Vclist_getCell(
         Vclist *thee, /** Pointer to Vclist cell list */
         double position[VAPBS_DIM] /** Position to evaluate */
+        );
+
+/**
+ * @brief  Allocate and construct a cell list cell object
+ * @ingroup Vclist
+ * @author Nathan Baker
+ * @returns Pointer to newly-allocated and constructed object.
+ */
+VEXTERNC VclistCell* VclistCell_ctor(
+        int natoms  /** Number of atoms associated with this cell */
+        );
+
+/**
+ * @brief  Construct a cell list object
+ * @ingroup  Vclist
+ * @author  Nathan Baker
+ * @returns 1 if successful, 0 otherwise
+ */
+VEXTERNC int VclistCell_ctor2(
+        VclistCell *thee,  /** Memory location for object */
+        int natoms  /** Number of atoms associated with this cell */
+        );
+
+/** @brief   Destroy object
+ *  @ingroup Vclist
+ *  @author  Nathan Baker
+ */
+VEXTERNC void VclistCell_dtor(
+        VclistCell **thee /** Pointer to memory location of object */
+        );
+
+/** @brief   FORTRAN stub to destroy object
+ *  @ingroup Vclist
+ *  @author  Nathan Baker
+ */
+VEXTERNC void VclistCell_dtor2(
+        VclistCell *thee /** Pointer to object */
         );
 
 #endif    /* ifndef _VCLIST_H_ */

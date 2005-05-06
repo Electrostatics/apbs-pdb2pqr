@@ -61,6 +61,7 @@
 #include "apbs/vunit.h"
 #include "apbs/vatom.h"
 #include "apbs/vacc.h"
+#include "apbs/vclist.h"
 
 /**
  *  @ingroup Vpbe
@@ -72,6 +73,7 @@ struct sVpbe {
   Vmem *vmem;         /**< Memory management object */
 
   Valist *alist;      /**< Atom (charge) list */
+  Vclist *clist;      /**< Atom location cell list */
   Vacc *acc;          /**< Accessibility object */
 
   double T;           /**< Temperature (K) */
@@ -363,6 +365,7 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
  *  @param   focusFlag 1 if Focusing operation, 0 otherwise
+ *  @bug     The focusing flag is currently not used!!
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 

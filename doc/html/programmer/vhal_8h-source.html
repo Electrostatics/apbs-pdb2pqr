@@ -10,68 +10,68 @@
 00051 <span class="preprocessor">#ifndef _VAPBSHAL_H_</span>
 00052 <span class="preprocessor"></span><span class="preprocessor">#define _VAPBSHAL_H_</span>
 00053 <span class="preprocessor"></span>
-<a name="l00059"></a><a class="code" href="group__Vhal.html#a17">00059</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a17">eVsurf_Meth</a> {
-00060         <a class="code" href="group__Vhal.html#a17a23">VSM_MOL</a>=0, 
-00064     <a class="code" href="group__Vhal.html#a17a24">VSM_MOLSMOOTH</a>=1, 
-00066         <a class="code" href="group__Vhal.html#a17a25">VSM_SPLINE</a>=2     
+<a name="l00059"></a><a class="code" href="group__Vhal.html#a19">00059</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVsurf_Meth</a> {
+00060         <a class="code" href="group__Vhal.html#a19a23">VSM_MOL</a>=0, 
+00064     <a class="code" href="group__Vhal.html#a19a24">VSM_MOLSMOOTH</a>=1, 
+00066         <a class="code" href="group__Vhal.html#a19a25">VSM_SPLINE</a>=2     
 00076 };
 00077 
-<a name="l00082"></a><a class="code" href="group__Vhal.html#a23">00082</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a17">eVsurf_Meth</a> <a class="code" href="group__Vhal.html#a23">Vsurf_Meth</a>;
+<a name="l00082"></a><a class="code" href="group__Vhal.html#a25">00082</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVsurf_Meth</a> <a class="code" href="group__Vhal.html#a25">Vsurf_Meth</a>;
 00083 
-<a name="l00088"></a><a class="code" href="group__Vhal.html#a18">00088</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a18">eVhal_PBEType</a> {
-00089     <a class="code" href="group__Vhal.html#a18a26">PBE_LPBE</a>,  
-00090     <a class="code" href="group__Vhal.html#a18a27">PBE_NPBE</a>,  
-00091     <a class="code" href="group__Vhal.html#a18a28">PBE_LRPBE</a>,  
-00092     <a class="code" href="group__Vhal.html#a18a29">PBE_NRPBE</a>  
+<a name="l00088"></a><a class="code" href="group__Vhal.html#a20">00088</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVhal_PBEType</a> {
+00089     <a class="code" href="group__Vhal.html#a20a26">PBE_LPBE</a>,  
+00090     <a class="code" href="group__Vhal.html#a20a27">PBE_NPBE</a>,  
+00091     <a class="code" href="group__Vhal.html#a20a28">PBE_LRPBE</a>,  
+00092     <a class="code" href="group__Vhal.html#a20a29">PBE_NRPBE</a>  
 00093 };
 00094 
-<a name="l00099"></a><a class="code" href="group__Vhal.html#a0">00099</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a18">eVhal_PBEType</a> <a class="code" href="group__Vhal.html#a0">Vhal_PBEType</a>;
+<a name="l00099"></a><a class="code" href="group__Vhal.html#a0">00099</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVhal_PBEType</a> <a class="code" href="group__Vhal.html#a0">Vhal_PBEType</a>;
 00100 
 00101 
-<a name="l00107"></a><a class="code" href="group__Vhal.html#a19">00107</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVbcfl</a> {
-00108     <a class="code" href="group__Vhal.html#a19a30">BCFL_ZERO</a>=0,  
-00109     <a class="code" href="group__Vhal.html#a19a31">BCFL_SDH</a>=1,  
-00111     <a class="code" href="group__Vhal.html#a19a32">BCFL_MDH</a>=2,  
-00113     <a class="code" href="group__Vhal.html#a19a33">BCFL_UNUSED</a>=3,  
-00114     <a class="code" href="group__Vhal.html#a19a34">BCFL_FOCUS</a>=4  
+<a name="l00107"></a><a class="code" href="group__Vhal.html#a21">00107</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVbcfl</a> {
+00108     <a class="code" href="group__Vhal.html#a21a30">BCFL_ZERO</a>=0,  
+00109     <a class="code" href="group__Vhal.html#a21a31">BCFL_SDH</a>=1,  
+00111     <a class="code" href="group__Vhal.html#a21a32">BCFL_MDH</a>=2,  
+00113     <a class="code" href="group__Vhal.html#a21a33">BCFL_UNUSED</a>=3,  
+00114     <a class="code" href="group__Vhal.html#a21a34">BCFL_FOCUS</a>=4  
 00115 };
 00116 
-<a name="l00121"></a><a class="code" href="group__Vhal.html#a1">00121</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVbcfl</a> <a class="code" href="group__Vhal.html#a1">Vbcfl</a>;
+<a name="l00121"></a><a class="code" href="group__Vhal.html#a1">00121</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVbcfl</a> <a class="code" href="group__Vhal.html#a1">Vbcfl</a>;
 00122 
-<a name="l00128"></a><a class="code" href="group__Vhal.html#a20">00128</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVchrg_Meth</a> {
-00129         <a class="code" href="group__Vhal.html#a20a35">VCM_TRIL</a>=0,  
-00132     <a class="code" href="group__Vhal.html#a20a36">VCM_BSPL2</a>=1  
+<a name="l00128"></a><a class="code" href="group__Vhal.html#a22">00128</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVchrg_Meth</a> {
+00129         <a class="code" href="group__Vhal.html#a22a35">VCM_TRIL</a>=0,  
+00132     <a class="code" href="group__Vhal.html#a22a36">VCM_BSPL2</a>=1  
 00135 };
 00136 
-<a name="l00141"></a><a class="code" href="group__Vhal.html#a24">00141</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVchrg_Meth</a> <a class="code" href="group__Vhal.html#a24">Vchrg_Meth</a>;
+<a name="l00141"></a><a class="code" href="group__Vhal.html#a26">00141</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVchrg_Meth</a> <a class="code" href="group__Vhal.html#a26">Vchrg_Meth</a>;
 00142 
 00143 
-<a name="l00149"></a><a class="code" href="group__Vhal.html#a21">00149</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVdata_Type</a> {
-00150     <a class="code" href="group__Vhal.html#a21a37">VDT_CHARGE</a>, 
-00151     <a class="code" href="group__Vhal.html#a21a38">VDT_POT</a>,    
-00152     <a class="code" href="group__Vhal.html#a21a39">VDT_SMOL</a>,   
-00154     <a class="code" href="group__Vhal.html#a21a40">VDT_SSPL</a>,   
-00156     <a class="code" href="group__Vhal.html#a21a41">VDT_VDW</a>,    
-00158     <a class="code" href="group__Vhal.html#a21a42">VDT_IVDW</a>,   
-00160     <a class="code" href="group__Vhal.html#a21a43">VDT_LAP</a>,    
-00161     <a class="code" href="group__Vhal.html#a21a44">VDT_EDENS</a>,  
-00163     <a class="code" href="group__Vhal.html#a21a45">VDT_NDENS</a>,  
-00165     <a class="code" href="group__Vhal.html#a21a46">VDT_QDENS</a>,  
-00167     <a class="code" href="group__Vhal.html#a21a47">VDT_DIELX</a>,  
-00169     <a class="code" href="group__Vhal.html#a21a48">VDT_DIELY</a>,  
-00171     <a class="code" href="group__Vhal.html#a21a49">VDT_DIELZ</a>,  
-00173     <a class="code" href="group__Vhal.html#a21a50">VDT_KAPPA</a>   
+<a name="l00149"></a><a class="code" href="group__Vhal.html#a23">00149</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a23">eVdata_Type</a> {
+00150     <a class="code" href="group__Vhal.html#a23a37">VDT_CHARGE</a>, 
+00151     <a class="code" href="group__Vhal.html#a23a38">VDT_POT</a>,    
+00152     <a class="code" href="group__Vhal.html#a23a39">VDT_SMOL</a>,   
+00154     <a class="code" href="group__Vhal.html#a23a40">VDT_SSPL</a>,   
+00156     <a class="code" href="group__Vhal.html#a23a41">VDT_VDW</a>,    
+00158     <a class="code" href="group__Vhal.html#a23a42">VDT_IVDW</a>,   
+00160     <a class="code" href="group__Vhal.html#a23a43">VDT_LAP</a>,    
+00161     <a class="code" href="group__Vhal.html#a23a44">VDT_EDENS</a>,  
+00163     <a class="code" href="group__Vhal.html#a23a45">VDT_NDENS</a>,  
+00165     <a class="code" href="group__Vhal.html#a23a46">VDT_QDENS</a>,  
+00167     <a class="code" href="group__Vhal.html#a23a47">VDT_DIELX</a>,  
+00169     <a class="code" href="group__Vhal.html#a23a48">VDT_DIELY</a>,  
+00171     <a class="code" href="group__Vhal.html#a23a49">VDT_DIELZ</a>,  
+00173     <a class="code" href="group__Vhal.html#a23a50">VDT_KAPPA</a>   
 00175 };
 00176 
-<a name="l00181"></a><a class="code" href="group__Vhal.html#a25">00181</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVdata_Type</a> <a class="code" href="group__Vhal.html#a25">Vdata_Type</a>;
+<a name="l00181"></a><a class="code" href="group__Vhal.html#a27">00181</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a23">eVdata_Type</a> <a class="code" href="group__Vhal.html#a27">Vdata_Type</a>;
 00182 
-<a name="l00188"></a><a class="code" href="group__Vhal.html#a22">00188</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVdata_Format</a> {
-00189     <a class="code" href="group__Vhal.html#a22a51">VDF_DX</a>=0,  
-00190     <a class="code" href="group__Vhal.html#a22a52">VDF_UHBD</a>=1, 
-00191     <a class="code" href="group__Vhal.html#a22a53">VDF_AVS</a>=2  
+<a name="l00188"></a><a class="code" href="group__Vhal.html#a24">00188</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVdata_Format</a> {
+00189     <a class="code" href="group__Vhal.html#a24a51">VDF_DX</a>=0,  
+00190     <a class="code" href="group__Vhal.html#a24a52">VDF_UHBD</a>=1, 
+00191     <a class="code" href="group__Vhal.html#a24a53">VDF_AVS</a>=2  
 00192 };
 00193 
-<a name="l00198"></a><a class="code" href="group__Vhal.html#a26">00198</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVdata_Format</a> <a class="code" href="group__Vhal.html#a26">Vdata_Format</a>;
+<a name="l00198"></a><a class="code" href="group__Vhal.html#a28">00198</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVdata_Format</a> <a class="code" href="group__Vhal.html#a28">Vdata_Format</a>;
 00199 
 00200 
 <a name="l00205"></a><a class="code" href="group__Vhal.html#a2">00205</a> <span class="preprocessor">#define MAXMOL 5</span>
@@ -146,33 +146,35 @@
 00349 <span class="preprocessor"></span><span class="preprocessor">#   elif defined(VF77_ONEUNDERSCORE)</span>
 00350 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name ## _</span>
 00351 <span class="preprocessor"></span><span class="preprocessor">#   else</span>
-00352 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
-00353 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
-00354 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00355 <span class="preprocessor"></span>
-00356 <span class="comment">/* Floating Point Error */</span>
-00357 <span class="preprocessor">#if defined(MACHINE_EPS)</span>
-00358 <span class="preprocessor"></span><span class="preprocessor">#     define VFLOOR(value) \</span>
-00359 <span class="preprocessor">              ((floor(value) != floor(value + MACHINE_EPS)) ? \</span>
-00360 <span class="preprocessor">              floor(value + MACHINE_EPS) : floor(value))</span>
-00361 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00362 <span class="preprocessor"></span><span class="preprocessor">#     define VFLOOR(value) floor(value)</span>
-00363 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00364 <span class="preprocessor"></span>
-00365 <span class="comment">/* String embedding for ident */</span>
-00366 <span class="preprocessor">#if defined(HAVE_EMBED)</span>
-00367 <span class="preprocessor"></span>
-<a name="l00371"></a><a class="code" href="group__Vhal.html#a16">00371</a> <span class="preprocessor">#    define VEMBED(rctag) \</span>
-00372 <span class="preprocessor">         VPRIVATE const char* rctag; \</span>
-00373 <span class="preprocessor">         static void* use_rcsid=(0 ? &amp;use_rcsid : (void**)&amp;rcsid);</span>
-00374 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00352 <span class="preprocessor"></span>
+<a name="l00355"></a><a class="code" href="group__Vhal.html#a16">00355</a> <span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
+00356 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
+00357 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00358 <span class="preprocessor"></span>
+00359 <span class="comment">/* Floating Point Error */</span>
+00360 <span class="preprocessor">#if defined(MACHINE_EPS)</span>
+00361 <span class="preprocessor"></span><span class="preprocessor">#     define VFLOOR(value) \</span>
+00362 <span class="preprocessor">              ((floor(value) != floor(value + MACHINE_EPS)) ? \</span>
+00363 <span class="preprocessor">              floor(value + MACHINE_EPS) : floor(value))</span>
+00364 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00365 <span class="preprocessor"></span>
+<a name="l00370"></a><a class="code" href="group__Vhal.html#a17">00370</a> <span class="preprocessor">#     define VFLOOR(value) floor(value)</span>
+00371 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00372 <span class="preprocessor"></span>
+00373 <span class="comment">/* String embedding for ident */</span>
+00374 <span class="preprocessor">#if defined(HAVE_EMBED)</span>
 00375 <span class="preprocessor"></span>
-00379 <span class="preprocessor">#    define VEMBED(rctag)</span>
-00380 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if defined(HAVE_EMBED) */</span>
-00381 
-00382 <span class="preprocessor">#endif </span><span class="comment">/* #ifndef _VAPBSHAL_H_ */</span>
-00383 
-</pre></div><hr><address style="align: right;"><small>Generated on Wed May 4 13:36:04 2005 for APBS by
+<a name="l00379"></a><a class="code" href="group__Vhal.html#a18">00379</a> <span class="preprocessor">#    define VEMBED(rctag) \</span>
+00380 <span class="preprocessor">         VPRIVATE const char* rctag; \</span>
+00381 <span class="preprocessor">         static void* use_rcsid=(0 ? &amp;use_rcsid : (void**)&amp;rcsid);</span>
+00382 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00383 <span class="preprocessor"></span>
+00387 <span class="preprocessor">#    define VEMBED(rctag)</span>
+00388 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if defined(HAVE_EMBED) */</span>
+00389 
+00390 <span class="preprocessor">#endif </span><span class="comment">/* #ifndef _VAPBSHAL_H_ */</span>
+00391 
+</pre></div><hr><address style="align: right;"><small>Generated on Fri May 6 05:40:25 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

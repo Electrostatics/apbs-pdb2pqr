@@ -24,48 +24,72 @@
  * This file is part of APBS.
  *
  * APBS is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * it under the terms of the GNU General Public Liorise as published by
+ * the Free Software Foundation; either version 2 of the Liorise, or
  * (at your option) any later version.
  *
  * APBS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU General Public Liorise for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU General Public Liorise
  * along with APBS; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * @endverbatim
  */
 
-#include <sys/times.h>
-#include <unistd.h>
-
 #include "apbscfg.h"
 #include "apbs/vatom.h"
 #include "apbs/valist.h"
+#include "apbs/vclist.h"
 #include "apbs/vacc.h"
 
+/** 
+ * @brief  Print usage information
+ */
+int usage(
+        int rc /** Return code, passed through */
+        ) {
+
+    char *ustr = \
+      "\nUsage:  acc [options] <molecule.pqr>\n\n"
+      "\tThe [options] arguments can include any of the following:\n"
+      "\t\t--probe=<value>  Specify the probe radius (in Angstroms).\n"
+      "\t\t  Default = 1.4 A.\n"
+      "\t\t--vol-density=<value>  Specify the density of grid points to\n"
+      "\t\t  use for volume quadratures.  Default = 0.5 A.\n"
+      "\t\t--num-surf=<value>  Specify the num of grid points per atom\n"
+      "\t\t  use for surface quadratures.  Defult = 200.\n"
+      "\t\t--verbose  Increase the verbosity of the output to include\n"
+      "\t\t  per-atom information, where applicable\n"
+      "\t\t--area-only  Only calculate the surface areas\n"
+      "\t\t--help,-h  Print this message\n"
+      "\tand <molecule.pqr> is the path to the molecule structure in PQR\n"
+      "\tformat\n\n";
+
+    Vnm_print(2, "%s", ustr);
+
+    return rc;
+}
+
+/**
+ * @brief Main code
+ */
 int main(int argc, char **argv) {
 
     /* OBJECTS */
     Valist *alist;
+    Vclist *clist;
     Vacc  *acc;
     Vatom *atom;
     Vio *sock = VNULL;
-
-    /* VACC PARAMETERS */
-    double probe_radius = 1.4;
-    int nsphere = 200;
-    int nx = 50;
-    int ny = 50;
-    int nz = 50;
-    int method;
-
-    /* SYSTEM PARAMETERS */
+    char *substr;
     char *path;
+
+    /* VCLIST PARAMETERS */
+    int nhash[3] = {60, 60, 60};
 
     /* QUADRATURE VARIABLES */
     double vdwVol = 0.0;
@@ -73,60 +97,84 @@ int main(int argc, char **argv) {
     double molVol = 0.0;
     double sasa = 0.0;
     double atom_sasa = 0.0;
-    /* Quadrature steps */
-    double dx, dy, dz;
-    double x_len, y_len, z_len;
-    double x_cen, y_cen, z_cen;
-    double x, y, z;
-    double w = 1.0;
-    double vec[3];
-    int i;
 
-    /* TIMING VARIABLES */
-    double t;
-    clock_t start_t;
-    clock_t stop_t;
-    struct tms tmst;
-    long clktck = sysconf(_SC_CLK_TCK);
- 
-    char *usage = "\n\nUsage: acc <-vdw|-ivdw|-mol|-sasa> <molecule.pqr>"
-                  "\tWhere -vdw   => volume inside VdW surface\n"
-                  "\t\t-ivdw  => volume inside VdW surface inflated by probe\
- radius\n"
-                  "\t\t-mol   => volume inside molecular surface\n"
-                  "\t\t-sasa  => unweighted solvent-accessible surface area\n"
-                  "\t\t-wsasa => weighted solvent-accessible surface area\n"
-                  "\t\t          (uses \"charge\" column of PQR format for\
- weights)\n"
-                  "\t\t-vsasa => verbose unweighted solvent-accessible surface\
- area (prints\n"
-                  "\t\t          per-atom contributions for custom-weighted\
- calculations)\n"
-                  "\tand <molecule.pqr> is the path to the molecule structure\
- in PQR format\n\n";
+    /* Quadrature steps */
+    int i, npts[3];
+    double spacs[3], vec[3];
+    double w, wx, wy, wz, len, fn, x, y, z, vol;
+    double *lower_corner, *upper_corner;
+
+    /* Default parameters */
+    double probe_radius = 1.4;
+    double vol_density = 0.5;
+    double fVerbose = 0;
+    int fAreaOnly = 0;
+    int nsphere = 200;
 
     Vio_start();
 
-    if (argc != 3) {
-        Vnm_print(1, "\n*** Syntax error: got %d arguments, expected 2.\n",
-          argc);
-        Vnm_print(1, "%s", usage);
-        return 13;
-    };
-    if (strcmp(argv[1], "-vdw") == 0) method = 0;
-    else if (strcmp(argv[1], "-ivdw") == 0) method = 1;
-    else if (strcmp(argv[1], "-mol") == 0) method = 2;
-    else if (strcmp(argv[1], "-sasa") == 0) method = 3;
-    else if (strcmp(argv[1], "-wsasa") == 0) method = 4;
-    else if (strcmp(argv[1], "-vsasa") == 0) method = 5;
-    else {
-        Vnm_print(1, "\n*** Syntax error: invalid argument '%s'.\n", argv[1]);
-        Vnm_print(1, "%s", usage);
-        exit(666);
+    /* Check usage */
+    if (argc == 1) {
+        Vnm_print(2, "\nError:  didn't get any arguments!\n");
+        return usage(EXIT_FAILURE);
     }
-    path = argv[2];
+    /* Check for help */
+    for (i=1; i<argc; i++) {
+        if (strstr(argv[i], "--help") != NULL) return usage(EXIT_SUCCESS);
+        if (strstr(argv[i], "-h") != NULL) return usage(EXIT_SUCCESS);
+    }
+    /* Molecule path */
+    path = argv[argc-1];
+    /* Remaining options */
+    for (i=1; i<(argc-1); i++) {
+        /* Look for probe radius specification */
+        if (strstr(argv[i], "--probe=") != NULL) {
+            substr = strchr(argv[i], '=');
+            substr = substr + 1;
+            if (sscanf(substr, "%lf", &probe_radius) == 0) {
+                Vnm_print(2, 
+                        "\nError:  unable to parse (%s) as float!\n", 
+                        substr); 
+                return usage(EXIT_FAILURE);
+            } 
+        } else if (strstr(argv[i], "--vol-density=") != NULL) {
+            substr = strchr(argv[i], '=');
+            substr = substr + 1;
+            if (sscanf(substr, "%lf", &vol_density) == 0) {
+                Vnm_print(2, 
+                        "\nError:  unable to parse (%s) as float!\n", 
+                        substr); 
+                return usage(EXIT_FAILURE);
+            } 
+        } else if (strstr(argv[i], "--num-surf=") != NULL) {
+            substr = strchr(argv[i], '=');
+            substr = substr + 1;
+            if (sscanf(substr, "%d", &nsphere) == 0) {
+                Vnm_print(2, 
+                        "\nError:  unable to parse (%s) as int!\n", 
+                        substr); 
+                return usage(EXIT_FAILURE);
+            } 
+        } else if (strstr(argv[i], "--verbose") != NULL) {
+            fVerbose = 1;
+        } else if (strstr(argv[i], "--area-only") != NULL) {
+            fAreaOnly = 1;
+        } else {
+            Vnm_print(2, "\nError:  unknown option (%s)\n", argv[i]);
+            return usage(EXIT_FAILURE);
+        }
+    }
 
-    Vnm_print(1, "Setting up atom list from %s\n", path);
+    /* Parameters */
+    Vnm_print(1, "Molecule path:  %s\n", path);
+    Vnm_print(1, "Probe radius:  %g A\n", probe_radius);
+    Vnm_print(1, "Volume grid density:  %g A\n", vol_density);
+    Vnm_print(1, "Number of surface points per atom:  %d\n", nsphere);
+    if (fVerbose) Vnm_print(1, "Verbose output.\n");
+    if (fAreaOnly) Vnm_print(1, "Area-only output.\n");
+
+    /* Read atom list */
+    Vnm_print(1, "\nReading PQR file...\n");
     alist = Valist_ctor();
     sock = Vio_ctor("FILE", "ASC", VNULL, path, "r");
     if (sock == VNULL) {
@@ -141,144 +189,102 @@ int main(int argc, char **argv) {
     }
     Valist_readPQR(alist,sock);
 
-    Vnm_print(1, "Setting up VACC object\n");
-    Vnm_print(1, "\tProbe radius = %4.3f\n", probe_radius);
-    Vnm_print(1, "\tQuad sphere has %d pts\n", nsphere);
-    acc = Vacc_ctor(alist,probe_radius,nx,ny,nz,nsphere);
-    VASSERT(acc != VNULL);
-    dx = acc->hx; dy = acc->hy; dz = acc->hzed;
-    x_len = (acc->nx * acc->hx);
-    y_len = (acc->ny * acc->hy);
-    z_len = (acc->nz * acc->hzed);
-    x_cen = (acc->grid_lower_corner[0] + x_len/2);
-    y_cen = (acc->grid_lower_corner[1] + y_len/2);
-    z_cen = (acc->grid_lower_corner[2] + z_len/2);
+    /* Set up Vacc and Vclist */
+    Vnm_print(1, "Setting up hash table and accessibility object...\n");
+    clist = Vclist_ctor(alist, probe_radius, nhash, CLIST_AUTO_DOMAIN, 
+            VNULL, VNULL);
+    acc = Vacc_ctor(alist, clist, nsphere);
 
-    switch (method) {
-        case 0:
-            Vnm_print(1, "\nVAN DER WAALS VOLUME QUADRATURE\n");
-            /* Start the work steps */
-            start_t = times(&tmst);
-            for (x=x_cen-x_len; x<=x_cen+x_len; x=x+dx) {
-                for (y=y_cen-y_len; y<=y_cen+y_len; y=y+dy) {
-                    for (z=z_cen-z_len; z<=z_cen+z_len; z=z+dz) {
-        
-                        vec[0] = x; vec[1] = y; vec[2] = z;
-                        w = 1.0;
-                        if ((x==(x_cen-x_len)) || (x==(x_cen+x_len))) w=w*0.5;
-                        if ((y==(y_cen-y_len)) || (y==(y_cen+y_len))) w=w*0.5;
-                        if ((z==(z_cen-z_len)) || (z==(z_cen+z_len))) w=w*0.5;
-                        if (Vacc_vdwAcc(acc,vec) == 0) vdwVol += dx*dy*dz*w;
-                    }
+    if (!fAreaOnly) {
+
+        /* Set up quadrature */
+        lower_corner = clist->lower_corner;
+        upper_corner = clist->upper_corner;
+        vol = 1.0;
+        for (i=0; i<3; i++) {
+            len = upper_corner[i] - lower_corner[i];
+            vol *= len;
+            fn = len/vol_density + 1;
+            npts[i] = (int)ceil(fn);
+            spacs[i] = len/((double)(npts[i])-1.0);
+        }
+
+        Vnm_print(1, "Quadrature mesh spacing = (%g, %g, %g)\n",
+                spacs[0], spacs[1], spacs[2]);
+        Vnm_print(1, "Quadrature mesh points = (%d, %d, %d)\n",
+                npts[0], npts[1], npts[2]);
+
+        Vnm_print(1, "\nPerforming volume quadrature...\n");
+
+        for (x=lower_corner[0]; x<=upper_corner[0]; x=x+spacs[0]) {
+            if ( VABS(x - lower_corner[0]) < VSMALL) {
+                wx = 0.5;
+            } else if ( VABS(x - upper_corner[0]) < VSMALL) {
+                wx = 0.5;
+            } else {
+                wx = 1.0;
+            }
+            vec[0] = x;
+            for (y=lower_corner[1]; y<=upper_corner[1]; y=y+spacs[1]) {
+                if ( VABS(y - lower_corner[1]) < VSMALL) {
+                    wy = 0.5;
+                } else if ( VABS(y - upper_corner[1]) < VSMALL) {
+                    wy = 0.5;
+                } else {
+                    wy = 1.0;
                 }
-            }
-            stop_t = times(&tmst);
-            t = (double)(stop_t - start_t)/((double)clktck);
-            Vnm_print(1, "\tApprox. volume = %4.3f A^3\n",vdwVol);
-            Vnm_print(1, "\t%g sec for %d quad pts implies %g sec per pt.\n",
-              t, VRINT(8*x_len*y_len*z_len/(dx*dy*dz)), 
-              t/(8*x_len*y_len*z_len/(dx*dy*dz)));
-            fflush(stdout);
-            break;
-
-        case 1:
-            Vnm_print(1, "\nINFLATED VAN DER WAALS VOLUME QUADRATURE\n");
-            /* Start the work steps */
-            start_t = times(&tmst);
-            for (x=x_cen-x_len; x<=x_cen+x_len; x=x+dx) {
-                for (y=y_cen-y_len; y<=y_cen+y_len; y=y+dy) {
-                    for (z=z_cen-z_len; z<=z_cen+z_len; z=z+dz) {
-        
-                        vec[0] = x; vec[1] = y; vec[2] = z;
-                        w = 1.0;
-                        if ((x==(x_cen-x_len)) || (x==(x_cen+x_len))) w=w*0.5;
-                        if ((y==(y_cen-y_len)) || (y==(y_cen+y_len))) w=w*0.5;
-                        if ((z==(z_cen-z_len)) || (z==(z_cen+z_len))) w=w*0.5;
-                        if (Vacc_ivdwAcc(acc,vec,probe_radius) == 0) 
-                          ivdwVol += dx*dy*dz*w;
+                vec[1] = y;
+                for (z=lower_corner[2]; z<=upper_corner[2]; z=z+spacs[2]) {
+                    if ( VABS(z - lower_corner[2]) < VSMALL) {
+                        wz = 0.5;
+                    } else if ( VABS(z - upper_corner[2]) < VSMALL) {
+                        wz = 0.5;
+                    } else {
+                        wz = 1.0;
                     }
-                }
-            }
-            stop_t = times(&tmst);
-            t = (double)(stop_t - start_t)/((double)clktck);
-            Vnm_print(1, "\tApprox. volume = %4.3f A^3\n",ivdwVol);
-            Vnm_print(1, "\t%g sec for %d quad pts implies %g sec per pt.\n",
-              t, VRINT(8*x_len*y_len*z_len/(dx*dy*dz)), 
-              t/(8*x_len*y_len*z_len/(dx*dy*dz)));
-            fflush(stdout);
-            break;
+                    vec[2] = z;
 
-        case 2:
-            Vnm_print(1, "\nMOLECULAR (CONNOLLY) VOLUME QUADRATURE\n");
-            /* Start the work steps */
-            start_t = times(&tmst);
-            for (x=x_cen-x_len; x<=x_cen+x_len; x=x+dx) {
-                for (y=y_cen-y_len; y<=y_cen+y_len; y=y+dy) {
-                    for (z=z_cen-z_len; z<=z_cen+z_len; z=z+dz) {
-        
-                        vec[0] = x; vec[1] = y; vec[2] = z;
-                        w = 1.0;
-                        if ((x==(x_cen-x_len)) || (x==(x_cen+x_len))) w=w*0.5;
-                        if ((y==(y_cen-y_len)) || (y==(y_cen+y_len))) w=w*0.5;
-                        if ((z==(z_cen-z_len)) || (z==(z_cen+z_len))) w=w*0.5;
-                        if (Vacc_molAcc(acc,vec,probe_radius) == 0) 
-                          molVol += dx*dy*dz*w;
-                    }
-                }
-            }
-            stop_t = times(&tmst);
-            t = (double)(stop_t - start_t)/((double)clktck);
-            Vnm_print(1, "\tApprox. volume = %4.3f A^3\n",molVol);
-            Vnm_print(1, "\t%g sec for %d quad pts implies %g sec per pt.\n",
-              t, VRINT(8*x_len*y_len*z_len/(dx*dy*dz)), 
-              t/(8*x_len*y_len*z_len/(dx*dy*dz)));
-            fflush(stdout);
-            break;
+                    w = wx*wy*wz;
+                    
+                    /* printf("%g, %g, %g (%g)\n", x, y, z, w); */
 
-        case 3:
-            Vnm_print(1, "\nUNWEIGHTED SOLVENT-ACCESSIBLE SURFACE AREA\n");
-            sasa = Vacc_totalSASA(acc, probe_radius);
-            Vnm_print(1, "\tApprox. SASA = %1.12e A^2\n", sasa);
-        
-            Valist_dtor(&alist);
-            Vacc_dtor(&acc);
-            break;
+                    vdwVol += (w*(1.0-Vacc_vdwAcc(acc, vec)));
+                    ivdwVol += (w*(1.0-Vacc_ivdwAcc(acc, vec, probe_radius)));
+                    molVol += (w*(1.0-Vacc_molAcc(acc, vec, probe_radius)));
 
-        case 4:
-            Vnm_print(1, "\nWEIGHTED SOLVENT-ACCESSIBLE SURFACE AREA\n");
-            Vnm_print(1, "\tNOTE: Using the \"charge\" column of the PQR file\
- as weights...\n");
-            sasa = 0;
-            for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-                atom = Valist_getAtom(alist, i);
-                sasa += (Vatom_getCharge(atom)*Vacc_atomSASA(acc, 
-                         probe_radius, i));
-            }
-            Vnm_print(1, "\tApprox. weighted SASA = %1.12e A^2\n", sasa);
-            Valist_dtor(&alist);
-            Vacc_dtor(&acc);
-            break;
+                } /* z loop */
+            } /* y loop */
+        } /* x loop */
 
-        case 5:
-            Vnm_print(1, "\nVERBOSE UNWEIGHTED SOLVENT-ACCESSIBLE SURFACE\
- AREA\n");
-            sasa = 0;
-            for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-                atom = Valist_getAtom(alist, i);
-                atom_sasa = Vacc_atomSASA(acc, probe_radius, i);
-                Vnm_print(1, "\tAtom %d:  %1.12E A^2\n", i, atom_sasa);
-                sasa += atom_sasa;
-            }
-            Vnm_print(1, "\t--------------------------------------\n", sasa);
-            Vnm_print(1, "\tTOTAL:  %1.12e A^2\n", sasa);
-            Valist_dtor(&alist);
-            Vacc_dtor(&acc);
-            break;
+        w  = spacs[0]*spacs[1]*spacs[2];
+        vdwVol *= w;
+        ivdwVol *= w;
+        molVol *= w;
 
+        Vnm_print(1, "van der Waals volume = %g A^3\n", vdwVol);
+        Vnm_print(1, "Inflated van der Waals volume = %g A^3\n", ivdwVol);
+        Vnm_print(1, "Molecular volume = %g A^3\n", molVol);
 
-        default:
-            break;
-    }
-        
-    return 0;
+    } /* if !fAreaOnly */
+
+    Vnm_print(1, "\nCalculating solvent accessible surface areas...\n");
+    if (fVerbose) {
+
+        sasa = 0.0;
+        Vnm_print(1, "Atom\tArea (A^2)\n");
+        Vnm_print(1, "----\t------------------\n");
+        for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+            atom = Valist_getAtom(alist, i);
+            atom_sasa = Vacc_atomSASA(acc, probe_radius, atom);
+            sasa += atom_sasa;
+            Vnm_print(1, "%d\t%1.12E\n", atom->id, atom_sasa);
+        }
+        Vnm_print(1, "----\t------------------\n");
+        Vnm_print(1, "TOTL\t%1.12E\n", sasa);
+    } else {
+        Vnm_print(1, "Total SASA:  %1.12E\n", 
+                Vacc_totalSASA(acc, probe_radius));
+    } /* if fVerbose */
+
+    return EXIT_SUCCESS;
 }

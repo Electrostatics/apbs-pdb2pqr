@@ -27,6 +27,18 @@ Include dependency graph for vclist.h:<p><center><img src="vclist_8h__incl.png" 
 </map>
 
 <p>
+This graph shows which files directly or indirectly include this file:<p><center><img src="vclist_8h__dep__incl.png" border="0" usemap="#vclist.hdep_map" alt="Included by dependency graph"></center>
+<map name="vclist.hdep_map">
+<area href="vacc_8h.html" shape="rect" coords="60,294,111,313" alt="">
+<area href="vpmg_8h.html" shape="rect" coords="57,156,113,174" alt="">
+<area href="vpbe_8h.html" shape="rect" coords="123,225,176,244" alt="">
+<area href="apbs_8h.html" shape="rect" coords="125,86,176,105" alt="">
+<area href="vopot_8h.html" shape="rect" coords="188,156,241,174" alt="">
+<area href="vfetk_8h.html" shape="rect" coords="265,156,313,174" alt="">
+<area href="routines_8h.html" shape="rect" coords="117,17,184,36" alt="">
+</map>
+
+<p>
 <a href="vclist_8h-source.html">Go to the source code of this file.</a><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Data Structures</h2></td></tr>
@@ -35,38 +47,48 @@ Include dependency graph for vclist.h:<p><center><img src="vclist_8h__incl.png" 
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structsVclistCell.html">sVclistCell</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Atom cell list cell.</em> <a href="structsVclistCell.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vclist.html#a8">eVclist_DomainMode</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a9">Vclist_DomainMode</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of Vclist_DomainMode enumeration type.</em> <a href="group__Vclist.html#a9"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vclist.html#a13">eVclist_DomainMode</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a14">Vclist_DomainMode</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of Vclist_DomainMode enumeration type.</em> <a href="group__Vclist.html#a14"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVclistCell.html">sVclistCell</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a0">VclistCell</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the VclistCell class as the VclistCell structure.</em> <a href="group__Vclist.html#a0"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVclist.html">sVclist</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a1">Vclist</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vclist class as the Vclist structure.</em> <a href="group__Vclist.html#a1"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a8">eVclist_DomainMode</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vclist.html#a8a3">CLIST_AUTO_DOMAIN</a>, 
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a13">eVclist_DomainMode</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vclist.html#a13a3">CLIST_AUTO_DOMAIN</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vclist.html#a8a4">CLIST_MANUAL_DOMAIN</a>
+&nbsp;&nbsp;<a class="el" href="group__Vclist.html#a13a4">CLIST_MANUAL_DOMAIN</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Atom cell list domain setup mode.</em> <a href="group__Vclist.html#a8">More...</a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Atom cell list domain setup mode.</em> <a href="group__Vclist.html#a13">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
 <tr><td nowrap align=right valign=top>unsigned long int&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a2">Vclist_memChk</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get number of bytes in this object and its members.</em> <a href="group__Vclist.html#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a class="el" href="structsVclist.html">Vclist</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a3">Vclist_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, double max_radius, int npts[VAPBS_DIM], <a class="el" href="group__Vclist.html#a9">Vclist_DomainMode</a> mode, double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM])</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Construct the cell list object.</em> <a href="group__Vclist.html#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a4">Vclist_ctor2</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, double max_radius, int npts[VAPBS_DIM], <a class="el" href="group__Vclist.html#a9">Vclist_DomainMode</a> mode, double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM])</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct the cell list object.</em> <a href="group__Vclist.html#a4"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a5">Vclist_dtor</a> (<a class="el" href="structsVclist.html">Vclist</a> **thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Destroy object.</em> <a href="group__Vclist.html#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a6">Vclist_dtor2</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to destroy object.</em> <a href="group__Vclist.html#a6"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a class="el" href="structsVclistCell.html">VclistCell</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a7">Vclist_getCell</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee, double position[VAPBS_DIM])</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Return cell corresponding to specified position or return VNULL.</em> <a href="group__Vclist.html#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a3">Vclist_maxRadius</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the max probe radius value (in A) the cell list was constructed with.</em> <a href="group__Vclist.html#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVclist.html">Vclist</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a4">Vclist_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, double max_radius, int npts[VAPBS_DIM], <a class="el" href="group__Vclist.html#a14">Vclist_DomainMode</a> mode, double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM])</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct the cell list object.</em> <a href="group__Vclist.html#a4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a5">Vclist_ctor2</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, double max_radius, int npts[VAPBS_DIM], <a class="el" href="group__Vclist.html#a14">Vclist_DomainMode</a> mode, double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM])</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to construct the cell list object.</em> <a href="group__Vclist.html#a5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a6">Vclist_dtor</a> (<a class="el" href="structsVclist.html">Vclist</a> **thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Destroy object.</em> <a href="group__Vclist.html#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a7">Vclist_dtor2</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to destroy object.</em> <a href="group__Vclist.html#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVclistCell.html">VclistCell</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a8">Vclist_getCell</a> (<a class="el" href="structsVclist.html">Vclist</a> *thee, double position[VAPBS_DIM])</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Return cell corresponding to specified position or return VNULL.</em> <a href="group__Vclist.html#a8"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVclistCell.html">VclistCell</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a9">VclistCell_ctor</a> (int natoms)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Allocate and construct a cell list cell object.</em> <a href="group__Vclist.html#a9"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a10">VclistCell_ctor2</a> (<a class="el" href="structsVclistCell.html">VclistCell</a> *thee, int natoms)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Construct a cell list object.</em> <a href="group__Vclist.html#a10"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a11">VclistCell_dtor</a> (<a class="el" href="structsVclistCell.html">VclistCell</a> **thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Destroy object.</em> <a href="group__Vclist.html#a11"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vclist.html#a12">VclistCell_dtor2</a> (<a class="el" href="structsVclistCell.html">VclistCell</a> *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub to destroy object.</em> <a href="group__Vclist.html#a12"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Vclist.
 <p>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vclist_8h.html">vclist.h</a>,v 2.26 2005/05/04 13:54:23 apbs Exp </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vclist_8h.html">vclist.h</a>,v 1.1 2005/05/04 18:39:51 apbs Exp </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan A. Baker</dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
@@ -103,7 +125,7 @@ Contains declarations for class Vclist.
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * </pre></div></dd></dl>
-<hr><address style="align: right;"><small>Generated on Wed May 4 13:36:08 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 6 05:40:29 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
