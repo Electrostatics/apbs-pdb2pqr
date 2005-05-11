@@ -71,8 +71,10 @@ struct sVaccSurf {
     double *zpts;  /**< Array of point z-locations */
     int *bpts;  /**< Array of booleans indicating whether a point is (1) or is
                  * not (0) part of the surface */
-    double  area;  /**< Area spanned by these points */
+    double area;  /**< Area spanned by these points */
     int npts;  /**< Length of thee->xpts, ypts, zpts arrays */
+    double probe_radius;  /**< Probe radius (A) with which this surface was
+                     * constructed */
 };
 
 /** 
@@ -137,6 +139,7 @@ typedef struct sVacc Vacc;
  */
 VEXTERNC VaccSurf* VaccSurf_ctor(
         Vmem *mem,  /** Memory manager (can be VNULL) */
+        double probe_radius,  /** Probe radius (in A) for this surface */
         int nsphere  /** Number of points in sphere */
         );
 
@@ -150,6 +153,7 @@ VEXTERNC VaccSurf* VaccSurf_ctor(
 VEXTERNC int VaccSurf_ctor2(
         VaccSurf *thee,  /** Allocated memory */
         Vmem *mem,  /** Memory manager (can be VNULL) */
+        double probe_radius,  /** Probe radius (in A) for this surface */
         int nsphere  /** Number of points in sphere */
         );
 
@@ -431,6 +435,18 @@ VEXTERNC double Vacc_totalSASA(
  * @return  Atomic solvent accessible area (A^2)
  */
 VEXTERNC double Vacc_atomSASA(
+        Vacc *thee,  /** Accessibility object */
+        double radius,  /** Probe molecule radius (&Aring;) */
+        Vatom *atom  /** Atom of interest */
+        );
+
+/**
+ * @brief  Get the set of points for this atom's solvent-accessible surface
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ * @return  Pointer to VaccSurf object for this atom
+ */
+VEXTERNC VaccSurf* Vacc_atomSASPoints(
         Vacc *thee,  /** Accessibility object */
         double radius,  /** Probe molecule radius (&Aring;) */
         Vatom *atom  /** Atom of interest */

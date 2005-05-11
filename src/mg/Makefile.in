@@ -177,8 +177,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = mg
 
 noinst_LTLIBRARIES = libapbsmg.la
-libapbsmg_la_SOURCES = vpmg.c vpmg-setup.c vpmg-force.c vpmg-energy.c \
-  vpmgp.c buildAd.f buildBd.f buildGd.f \
+libapbsmg_la_SOURCES = vpmg.c vpmgp.c buildAd.f buildBd.f buildGd.f \
   buildPd.f cgd.f cgmgd.f cgmgdrvd.f dlphsubd.f gsd.f mainsubd.f matvecd.f \
   mgcsd.f mgdrvd.f mgfasd.f mgsubd.f mikpckd.f mlinpckd.f ncgd.f \
   ncgdrvd.f newdrvd.f newtond.f ngsd.f ngsdrvd.f ninterpd.f nrchd.f \
@@ -195,15 +194,14 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 
 libapbsmg_la_LDFLAGS =
 libapbsmg_la_LIBADD =
-am_libapbsmg_la_OBJECTS = vpmg.lo vpmg-setup.lo vpmg-force.lo \
-	vpmg-energy.lo vpmgp.lo buildAd.lo buildBd.lo buildGd.lo \
-	buildPd.lo cgd.lo cgmgd.lo cgmgdrvd.lo dlphsubd.lo gsd.lo \
-	mainsubd.lo matvecd.lo mgcsd.lo mgdrvd.lo mgfasd.lo mgsubd.lo \
-	mikpckd.lo mlinpckd.lo ncgd.lo ncgdrvd.lo newdrvd.lo newtond.lo \
-	ngsd.lo ngsdrvd.lo ninterpd.lo nrchd.lo nrchdrvd.lo nsmoothd.lo \
-	nsord.lo nsordrvd.lo nwjd.lo nwjdrvd.lo powerd.lo rchd.lo \
-	smoothd.lo sord.lo wjd.lo mypde.lo vpmgf.lo vmgrid.lo vgrid.lo \
-	vopot.lo
+am_libapbsmg_la_OBJECTS = vpmg.lo vpmgp.lo buildAd.lo buildBd.lo \
+	buildGd.lo buildPd.lo cgd.lo cgmgd.lo cgmgdrvd.lo dlphsubd.lo \
+	gsd.lo mainsubd.lo matvecd.lo mgcsd.lo mgdrvd.lo mgfasd.lo \
+	mgsubd.lo mikpckd.lo mlinpckd.lo ncgd.lo ncgdrvd.lo newdrvd.lo \
+	newtond.lo ngsd.lo ngsdrvd.lo ninterpd.lo nrchd.lo nrchdrvd.lo \
+	nsmoothd.lo nsord.lo nsordrvd.lo nwjd.lo nwjdrvd.lo powerd.lo \
+	rchd.lo smoothd.lo sord.lo wjd.lo mypde.lo vpmgf.lo vmgrid.lo \
+	vgrid.lo vopot.lo
 libapbsmg_la_OBJECTS = $(am_libapbsmg_la_OBJECTS)
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc

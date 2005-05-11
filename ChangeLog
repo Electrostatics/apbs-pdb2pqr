@@ -16,6 +16,7 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
 	* Modified Vacc class to use Vclist, including changes to the Vacc
 	  interface (and required changes throughout the code)
     * Consolidated Vpmg_ctor and Vpmg_ctorFocus into Vpmg_ctor
+	* Consolidated vpmg.c, vpmg-force.c, vpmg-energy.c, vpmg-setup.c
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
