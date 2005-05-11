@@ -23,7 +23,7 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVcsm.html#m0">sVcsm</a>, <a class="el" href="structsVpbe.html#m1">sVpbe</a>, <a class="el" href="structsVgreen.html#m0">sVgreen</a>, <a class="el" href="structsVclist.html#m1">sVclist</a>, <a class="el" href="structsVacc.html#m1">sVacc</a><li>am
 : <a class="el" href="structsVfetk.html#m2">sVfetk</a><li>aprx
 : <a class="el" href="structsVfetk.html#m3">sVfetk</a><li>area
-: <a class="el" href="structsVacc.html#m8">sVacc</a><li>async
+: <a class="el" href="structsVaccSurf.html#m5">sVaccSurf</a><li>async
 : <a class="el" href="structsMGparm.html#m41">sMGparm</a><li>atomData
 : <a class="el" href="structVparam__ResData.html#m3">Vparam_ResData</a><li>atomFlags
 : <a class="el" href="structsVacc.html#m3">sVacc</a><li>atomName
@@ -34,7 +34,8 @@ Here is a list of all documented struct and union fields with links to the struc
 <li>B
 : <a class="el" href="structsVfetk__LocalVar.html#m14">sVfetk_LocalVar</a><li>bcfl
 : <a class="el" href="structsPBEparm.html#m10">sPBEparm</a>, <a class="el" href="structsVpmgp.html#m28">sVpmgp</a>, <a class="el" href="structsVopot.html#m2">sVopot</a><li>bogus
-: <a class="el" href="structsNOsh.html#m6">sNOsh</a><li>bulkIonicStrength
+: <a class="el" href="structsNOsh.html#m6">sNOsh</a><li>bpts
+: <a class="el" href="structsVaccSurf.html#m4">sVaccSurf</a><li>bulkIonicStrength
 : <a class="el" href="structsVpbe.html#m9">sVpbe</a></ul>
 <h3><a name="index_c">- c -</a>
 </h3><ul>
@@ -186,13 +187,13 @@ Here is a list of all documented struct and union fields with links to the struc
 <h3><a name="index_m">- m -</a>
 </h3><ul>
 <li>max_radius
-: <a class="el" href="structsVclist.html#m5">sVclist</a>, <a class="el" href="structsVacc.html#m7">sVacc</a><li>maxcrd
+: <a class="el" href="structsVclist.html#m5">sVclist</a><li>maxcrd
 : <a class="el" href="structsValist.html#m3">sValist</a><li>maxIonRadius
 : <a class="el" href="structsVpbe.html#m10">sVpbe</a><li>maxrad
 : <a class="el" href="structsValist.html#m4">sValist</a><li>maxsolve
 : <a class="el" href="structsFEMparm.html#m17">sFEMparm</a><li>maxvert
 : <a class="el" href="structsFEMparm.html#m19">sFEMparm</a><li>mem
-: <a class="el" href="structsVpee.html#m6">sVpee</a>, <a class="el" href="structsVgrid.html#m15">sVgrid</a><li>meth
+: <a class="el" href="structsVpee.html#m6">sVpee</a>, <a class="el" href="structsVacc.html#m0">sVacc</a>, <a class="el" href="structsVaccSurf.html#m0">sVaccSurf</a>, <a class="el" href="structsVgrid.html#m15">sVgrid</a><li>meth
 : <a class="el" href="structsVpmgp.html#m31">sVpmgp</a><li>mgcoar
 : <a class="el" href="structsVpmgp.html#m37">sVpmgp</a><li>mgdisc
 : <a class="el" href="structsVpmgp.html#m39">sVpmgp</a><li>mgkey
@@ -239,12 +240,11 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVgreen.html#m6">sVgreen</a><li>npForce
 : <a class="el" href="structAtomForce.html#m3">AtomForce</a><li>nprint
 : <a class="el" href="structsNOsh.html#m25">sNOsh</a><li>npts
-: <a class="el" href="structsVclist.html#m3">sVclist</a><li>nqsm
+: <a class="el" href="structsVclist.html#m3">sVclist</a>, <a class="el" href="structsVaccSurf.html#m6">sVaccSurf</a><li>nqsm
 : <a class="el" href="structsVcsm.html#m8">sVcsm</a><li>nResData
 : <a class="el" href="structVparam.html#m1">Vparam</a><li>nrwk
 : <a class="el" href="structsVpmgp.html#m17">sVpmgp</a><li>nsimp
-: <a class="el" href="structsVcsm.html#m5">sVcsm</a><li>nsphereSurf
-: <a class="el" href="structsVacc.html#m5">sVacc</a><li>nsqm
+: <a class="el" href="structsVcsm.html#m5">sVcsm</a><li>nsqm
 : <a class="el" href="structsVcsm.html#m4">sVcsm</a><li>ntol
 : <a class="el" href="structsVfetk.html#m12">sVfetk</a><li>nu1
 : <a class="el" href="structsVpmgp.html#m33">sVpmgp</a><li>nu2
@@ -305,7 +305,8 @@ Here is a list of all documented struct and union fields with links to the struc
 </h3><ul>
 <li>radius
 : <a class="el" href="structsVparam__AtomData.html#m3">sVparam_AtomData</a>, <a class="el" href="structsVatom.html#m1">sVatom</a><li>readdata
-: <a class="el" href="structsVgrid.html#m13">sVgrid</a><li>resData
+: <a class="el" href="structsVgrid.html#m13">sVgrid</a><li>refSphere
+: <a class="el" href="structsVacc.html#m4">sVacc</a><li>resData
 : <a class="el" href="structVparam.html#m2">Vparam</a><li>resName
 : <a class="el" href="structsVparam__AtomData.html#m1">sVparam_AtomData</a><li>rparm
 : <a class="el" href="structsVpmg.html#m4">sVpmg</a><li>rwork
@@ -363,13 +364,14 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVpbe.html#m23">sVpbe</a><li>solventDiel
 : <a class="el" href="structsVpbe.html#m7">sVpbe</a><li>solventRadius
 : <a class="el" href="structsVpbe.html#m8">sVpbe</a><li>spacs
-: <a class="el" href="structsVclist.html#m9">sVclist</a><li>sphereSurf
-: <a class="el" href="structsVacc.html#m4">sVacc</a><li>splineWin
+: <a class="el" href="structsVclist.html#m9">sVclist</a><li>splineWin
 : <a class="el" href="structsVpmg.html#m26">sVpmg</a><li>sqm
 : <a class="el" href="structsVcsm.html#m3">sVcsm</a><li>srad
 : <a class="el" href="structsPBEparm.html#m24">sPBEparm</a><li>srfm
 : <a class="el" href="structsPBEparm.html#m22">sPBEparm</a><li>sType
-: <a class="el" href="structsVfetk__LocalVar.html#m8">sVfetk_LocalVar</a><li>surfMeth
+: <a class="el" href="structsVfetk__LocalVar.html#m8">sVfetk_LocalVar</a><li>surf
+: <a class="el" href="structsVacc.html#m5">sVacc</a><li>surf_density
+: <a class="el" href="structsVacc.html#m7">sVacc</a><li>surfMeth
 : <a class="el" href="structsVpmg.html#m25">sVpmg</a><li>swin
 : <a class="el" href="structsPBEparm.html#m26">sPBEparm</a></ul>
 <h3><a name="index_t">- t -</a>
@@ -399,7 +401,7 @@ Here is a list of all documented struct and union fields with links to the struc
 </h3><ul>
 <li>verts
 : <a class="el" href="structsVfetk__LocalVar.html#m21">sVfetk_LocalVar</a><li>vmem
-: <a class="el" href="structsVfetk.html#m0">sVfetk</a>, <a class="el" href="structsVcsm.html#m10">sVcsm</a>, <a class="el" href="structsVpbe.html#m0">sVpbe</a>, <a class="el" href="structVparam.html#m0">Vparam</a>, <a class="el" href="structVparam__ResData.html#m0">Vparam_ResData</a>, <a class="el" href="structsVgreen.html#m1">sVgreen</a>, <a class="el" href="structsVclist.html#m0">sVclist</a>, <a class="el" href="structsValist.html#m7">sValist</a>, <a class="el" href="structsVacc.html#m0">sVacc</a>, <a class="el" href="structsVpmg.html#m0">sVpmg</a><li>vx
+: <a class="el" href="structsVfetk.html#m0">sVfetk</a>, <a class="el" href="structsVcsm.html#m10">sVcsm</a>, <a class="el" href="structsVpbe.html#m0">sVpbe</a>, <a class="el" href="structVparam.html#m0">Vparam</a>, <a class="el" href="structVparam__ResData.html#m0">Vparam_ResData</a>, <a class="el" href="structsVgreen.html#m1">sVgreen</a>, <a class="el" href="structsVclist.html#m0">sVclist</a>, <a class="el" href="structsValist.html#m7">sValist</a>, <a class="el" href="structsVpmg.html#m0">sVpmg</a><li>vx
 : <a class="el" href="structsVfetk__LocalVar.html#m1">sVfetk_LocalVar</a></ul>
 <h3><a name="index_w">- w -</a>
 </h3><ul>
@@ -420,7 +422,8 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVpmgp.html#m44">sVpmgp</a><li>xmax
 : <a class="el" href="structsVpmgp.html#m50">sVpmgp</a>, <a class="el" href="structsVgrid.html#m9">sVgrid</a><li>xmin
 : <a class="el" href="structsVpmgp.html#m47">sVpmgp</a>, <a class="el" href="structsVgrid.html#m6">sVgrid</a><li>xp
-: <a class="el" href="structsVgreen.html#m2">sVgreen</a><li>xq
+: <a class="el" href="structsVgreen.html#m2">sVgreen</a><li>xpts
+: <a class="el" href="structsVaccSurf.html#m1">sVaccSurf</a><li>xq
 : <a class="el" href="structsVfetk__LocalVar.html#m2">sVfetk_LocalVar</a></ul>
 <h3><a name="index_y">- y -</a>
 </h3><ul>
@@ -430,7 +433,8 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVpmgp.html#m45">sVpmgp</a><li>ymax
 : <a class="el" href="structsVpmgp.html#m51">sVpmgp</a>, <a class="el" href="structsVgrid.html#m10">sVgrid</a><li>ymin
 : <a class="el" href="structsVpmgp.html#m48">sVpmgp</a>, <a class="el" href="structsVgrid.html#m7">sVgrid</a><li>yp
-: <a class="el" href="structsVgreen.html#m3">sVgreen</a></ul>
+: <a class="el" href="structsVgreen.html#m3">sVgreen</a><li>ypts
+: <a class="el" href="structsVaccSurf.html#m2">sVaccSurf</a></ul>
 <h3><a name="index_z">- z -</a>
 </h3><ul>
 <li>zcent
@@ -442,8 +446,9 @@ Here is a list of all documented struct and union fields with links to the struc
 : <a class="el" href="structsVpbe.html#m18">sVpbe</a><li>zmax
 : <a class="el" href="structsVpmgp.html#m52">sVpmgp</a>, <a class="el" href="structsVgrid.html#m11">sVgrid</a><li>zmin
 : <a class="el" href="structsVpmgp.html#m49">sVpmgp</a>, <a class="el" href="structsVgrid.html#m8">sVgrid</a><li>zp
-: <a class="el" href="structsVgreen.html#m4">sVgreen</a></ul>
-<hr><address style="align: right;"><small>Generated on Fri May 6 05:40:33 2005 for APBS by
+: <a class="el" href="structsVgreen.html#m4">sVgreen</a><li>zpts
+: <a class="el" href="structsVaccSurf.html#m3">sVaccSurf</a></ul>
+<hr><address style="align: right;"><small>Generated on Wed May 11 09:30:19 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

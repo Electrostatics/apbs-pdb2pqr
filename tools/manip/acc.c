@@ -59,9 +59,9 @@ int usage(
       "\t\t--probe=<value>  Specify the probe radius (in Angstroms).\n"
       "\t\t  Default = 1.4 A.\n"
       "\t\t--vol-density=<value>  Specify the density of grid points to\n"
-      "\t\t  use for volume quadratures.  Default = 0.5 A.\n"
-      "\t\t--num-surf=<value>  Specify the num of grid points per atom\n"
-      "\t\t  use for surface quadratures.  Defult = 200.\n"
+      "\t\t  use for volume quadratures.  Default = 2.0 A^{-3}.\n"
+      "\t\t--surf-density=<value>  Specify the density of grid points to\n"
+      "\t\t  use for area quadratures.  Default = 1.0 A^{-2}\n"
       "\t\t--verbose  Increase the verbosity of the output to include\n"
       "\t\t  per-atom information, where applicable\n"
       "\t\t--area-only  Only calculate the surface areas\n"
@@ -106,10 +106,10 @@ int main(int argc, char **argv) {
 
     /* Default parameters */
     double probe_radius = 1.4;
-    double vol_density = 0.5;
+    double vol_density = 2.0;
+    double surf_density = 1.0;
     double fVerbose = 0;
     int fAreaOnly = 0;
-    int nsphere = 200;
 
     Vio_start();
 
@@ -146,12 +146,12 @@ int main(int argc, char **argv) {
                         substr); 
                 return usage(EXIT_FAILURE);
             } 
-        } else if (strstr(argv[i], "--num-surf=") != NULL) {
+        } else if (strstr(argv[i], "--surf-density=") != NULL) {
             substr = strchr(argv[i], '=');
             substr = substr + 1;
-            if (sscanf(substr, "%d", &nsphere) == 0) {
+            if (sscanf(substr, "%lf", &surf_density) == 0) {
                 Vnm_print(2, 
-                        "\nError:  unable to parse (%s) as int!\n", 
+                        "\nError:  unable to parse (%s) as float!\n", 
                         substr); 
                 return usage(EXIT_FAILURE);
             } 
@@ -168,8 +168,8 @@ int main(int argc, char **argv) {
     /* Parameters */
     Vnm_print(1, "Molecule path:  %s\n", path);
     Vnm_print(1, "Probe radius:  %g A\n", probe_radius);
-    Vnm_print(1, "Volume grid density:  %g A\n", vol_density);
-    Vnm_print(1, "Number of surface points per atom:  %d\n", nsphere);
+    Vnm_print(1, "Volume point density:  %g A^{-3}\n", vol_density);
+    Vnm_print(1, "Surface point density:  %g A^{-2}\n", surf_density);
     if (fVerbose) Vnm_print(1, "Verbose output.\n");
     if (fAreaOnly) Vnm_print(1, "Area-only output.\n");
 
@@ -193,7 +193,7 @@ int main(int argc, char **argv) {
     Vnm_print(1, "Setting up hash table and accessibility object...\n");
     clist = Vclist_ctor(alist, probe_radius, nhash, CLIST_AUTO_DOMAIN, 
             VNULL, VNULL);
-    acc = Vacc_ctor(alist, clist, nsphere);
+    acc = Vacc_ctor(alist, clist, surf_density);
 
     if (!fAreaOnly) {
 
@@ -204,7 +204,7 @@ int main(int argc, char **argv) {
         for (i=0; i<3; i++) {
             len = upper_corner[i] - lower_corner[i];
             vol *= len;
-            fn = len/vol_density + 1;
+            fn = len*vol_density + 1;
             npts[i] = (int)ceil(fn);
             spacs[i] = len/((double)(npts[i])-1.0);
         }

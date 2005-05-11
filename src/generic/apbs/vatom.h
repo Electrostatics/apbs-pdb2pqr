@@ -64,7 +64,9 @@ struct sVatom {
     double charge;  /**< Atomic charge   */
     double partID;  /**< Partition value for assigning atoms to particular
                      * processors and/or partitions   */
-    int id;  /**< Atomic ID -- this should be a unique non-negative integer */
+    int id;  /**< Atomic ID; this should be a unique non-negative integer
+              * assigned based on the index of the atom in a Valist atom 
+              * array */
 
 };
 

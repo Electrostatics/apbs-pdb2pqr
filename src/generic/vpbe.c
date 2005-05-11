@@ -48,7 +48,7 @@
 // Class Vpbe: Private method declaration
 /////////////////////////////////////////////////////////////////////////// */
 #define MAX_SPLINE_WINDOW 0.5
-#define VACC_SPHERE 200
+#define VACC_SPHERE_DENSITY 1.5
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods
@@ -376,7 +376,7 @@ function\n", thee->maxIonRadius);
                 CLIST_MANUAL_DOMAIN, lower_corner, upper_corner);
     } 
     VASSERT(thee->clist != VNULL);
-    thee->acc = Vacc_ctor(thee->alist, thee->clist, VACC_SPHERE);
+    thee->acc = Vacc_ctor(thee->alist, thee->clist, VACC_SPHERE_DENSITY);
 	
     VASSERT(thee->acc != VNULL);
 
