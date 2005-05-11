@@ -187,6 +187,9 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
     Vnm_print(0, "Vclist_ctor2:  Using %d x %d x %d hash table\n", 
             npts[0], npts[1], npts[2]);
 
+    printf("DEBUG:  Resetting mode to AUTO...\n");
+    mode = CLIST_AUTO_DOMAIN;
+
     thee->mode = mode;
     switch (thee->mode) {
         case CLIST_AUTO_DOMAIN:
@@ -417,13 +420,18 @@ VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, double pos[VAPBS_DIM]) {
     for (i=0; i<VAPBS_DIM; i++) {
         c[i] = pos[i] - (thee->lower_corner)[i];
         ic[i] = (int)(c[i]/thee->spacs[i]);
-        if ( (ic[i] < 0) || (ic[i] >= thee->npts[i]) ) return VNULL;
+        if (ic[i] < 0) {
+            /* printf("OFF LOWER CORNER!\n"); */
+            return VNULL;
+        } else if (ic[i] >= thee->npts[i]) {
+            /* printf("OFF UPPER CORNER!\n"); */
+            return VNULL;
+        }
     }
 
     /* Get the array index */
     VASSERT(VAPBS_DIM == 3);
     ui = Vclist_arrayIndex(thee, ic[0], ic[1], ic[2]);
-    ui = (thee->npts[2])*(thee->npts[1])*ic[0] + (thee->npts[2])*ic[1] + ic[2];
 
     return &(thee->cells[ui]);
 

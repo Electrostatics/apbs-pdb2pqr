@@ -59,10 +59,27 @@
 #include "apbs/vatom.h"
 #include "apbs/vunit.h"
 
-/** @brief Maximum number of neighbors used in an accessibility calculation 
- *  @ingroup Vacc
+/** 
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ * @brief  Surface object list of per-atom surface points
  */
-#define VACCMAXNBOR 20
+struct sVaccSurf {
+    Vmem *mem;  /**< Memory object */
+    double *xpts;  /**< Array of point x-locations */
+    double *ypts;  /**< Array of point y-locations */
+    double *zpts;  /**< Array of point z-locations */
+    int *bpts;  /**< Array of booleans indicating whether a point is (1) or is
+                 * not (0) part of the surface */
+    double  area;  /**< Area spanned by these points */
+    int npts;  /**< Length of thee->xpts, ypts, zpts arrays */
+};
+
+/** 
+ *  @ingroup Vacc
+ *  @brief   Declaration of the VaccSurf class as the VaccSurf structure
+ */
+typedef struct sVaccSurf VaccSurf;
 
 /**
  *  @ingroup Vacc
@@ -71,20 +88,21 @@
  */
 struct sVacc {
 
-  Vmem *vmem;               /**< Memory management object for this class */
-  Valist *alist;            /**< Valist structure for list of atoms */
-  Vclist *clist;            /**< Vclist structure for atom cell list */
-  int *atomFlags;           /**< Flags for keeping track of atoms */
-  double **sphereSurf;      /**< An array of points on the surface of a 
-                             * sphere */
-  int nsphereSurf;          /**< The number of points in thee->sphere */
-  Vset acc;                 /**< An integer array (to be treated as 
-                             * bitfields) of Vset type with length equal 
-                             * to the number of vertices in the mesh */
-  double max_radius;        /**< Maximum probe radius */
-  double *area;             /**< The contribution to the solvent-accessible
-                             * surface area from each atom.  This array is
-                             * filled by Vacc_totalSASA */
+  Vmem *mem;  /**< Memory management object for this class */
+  Valist *alist;  /**< Valist structure for list of atoms */
+  Vclist *clist;  /**< Vclist structure for atom cell list */
+  int *atomFlags;  /**< Array of boolean flags of length
+                    * Valist_getNumberAtoms(thee->alist) to prevent
+                    * double-counting atoms during calculations */
+  VaccSurf *refSphere;  /**< Reference sphere for SASA calculations */
+  VaccSurf **surf;  /**< Array of surface points for each atom; is not 
+                    * initialized until needed (test against VNULL to
+                    * determine initialization state) */
+  Vset acc;  /**< An integer array (to be treated as bitfields) of Vset type
+              * with length equal to the number of vertices in the mesh */
+  double surf_density;  /**< Minimum solvent accessible surface point density
+                         * (in pts/A^2) */
+
 };
 
 /** 
@@ -106,23 +124,98 @@ typedef struct sVacc Vacc;
 
 #else /* if defined(VINLINE_VACC) */
 
-#   define Vacc_memChk(thee) (Vmem_bytes((thee)->vmem))
+#   define Vacc_memChk(thee) (Vmem_bytes((thee)->mem))
 
 #endif /* if !defined(VINLINE_VACC) */
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vacc: Non-Inlineable methods (vacc.c)
-/////////////////////////////////////////////////////////////////////////// */
+/** 
+ * @brief  Allocate and construct the surface object; do not assign surface
+ *         points to positions
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ * @returns  Newly allocated and constructed surface object 
+ */
+VEXTERNC VaccSurf* VaccSurf_ctor(
+        Vmem *mem,  /** Memory manager (can be VNULL) */
+        int nsphere  /** Number of points in sphere */
+        );
+
+/** 
+ * @brief  Construct the surface object using previously allocated memory; do
+ *         not assign surface points to positions
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ * @returns  1 if successful, 0 otherwise
+ */
+VEXTERNC int VaccSurf_ctor2(
+        VaccSurf *thee,  /** Allocated memory */
+        Vmem *mem,  /** Memory manager (can be VNULL) */
+        int nsphere  /** Number of points in sphere */
+        );
+
+/**
+ * @brief  Destroy the surface object and free its memory
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ */
+VEXTERNC void VaccSurf_dtor(
+        VaccSurf **thee  /** Object to be destroyed */
+        );
+
+/**
+ * @brief  Destroy the surface object
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ */
+VEXTERNC void VaccSurf_dtor2(
+        VaccSurf *thee  /** Object to be destroyed */
+        );
+
+/** 
+ * @brief Set up an array of points for a reference sphere of unit radius
+ *  
+ * Generates approximately npts # of points (actual number stored in
+ * thee->npts) somewhat uniformly distributed across a sphere of unit radius
+ * centered at the origin.  
+ * 
+ * @note  This routine was shamelessly ripped off from sphere.f from UHBD as
+ *        developed by Michael K. Gilson.
+ * 
+ * @ingroup Vacc
+ * @author  Nathan Baker (original FORTRAN code by Mike Gilson)
+ * @return  Reference sphere surface object
+ */ 
+VEXTERNC VaccSurf* VaccSurf_refSphere(
+        Vmem *mem,  /** Memory object */
+        int npts /** Requested number of points on sphere */
+        );
+
+/**
+ * @brief  Set up an array of points corresponding to the SAS due to a
+ *         particular atom.
+ * @ingroup  Vacc
+ * @author  Nathan Baker
+ * @return  Atom sphere surface object
+ */
+VEXTERNC VaccSurf* Vacc_atomSurf(
+        Vacc *thee,  /** Accessibility object for molecule */
+        Vatom *atom,  /** Atom for which the surface should be constructed */
+        VaccSurf *ref,  /** Reference sphere which sets the resolution for the
+                         * surface. @see VaccSurf_refSphere */
+        double probe_radius  /** Probe radius (in A) */
+        );
+
 
 /** @brief   Construct the accessibility object
  *  @ingroup Vacc
  *  @author  Nathan Baker
  *  @returns Newly allocated Vacc object */
 VEXTERNC Vacc* Vacc_ctor(
-        Valist *alist, /** Molecule for accessibility queries */
-        Vclist *clist, /** Pre-constructed cell list for looking up atoms 
+        Valist *alist,  /** Molecule for accessibility queries */
+        Vclist *clist,  /** Pre-constructed cell list for looking up atoms 
                         * near specific positions */
-        int nsphere /** Number of points on surface of reference sphere */
+        double surf_density  /** Minimum per-atom solvent accessible surface
+                             * point density (in pts/A^2)*/
         );
 
 /** @brief   FORTRAN stub to construct the accessibility object
@@ -134,7 +227,8 @@ VEXTERNC int Vacc_ctor2(
         Valist *alist, /** Molecule for accessibility queries */
         Vclist *clist, /** Pre-constructed cell list for looking up atoms 
                         * near specific positions */
-        int nsphere /** Number of points on surface of reference sphere */
+        double surf_density  /** Minimum per-atom solvent accessible surface
+                             * point density (in pts/A^2)*/
         );
 
 /** @brief   Destroy object
@@ -303,47 +397,43 @@ VEXTERNC void Vacc_splineAccGradAtom(
         double *force /** VAPBS_DIM-vector set to gradient of accessibility */
         );
 
-/** @brief Set up an array of points for the reference sphere
- *  
- *  Generates approximately npts # of points (actual number stored in npts)
- *  somewhat uniformly distributed across a sphere of unit radius centered at
- *  the origin.  Returns an (npts x 3) double array, which the user is
- *  responsible for destroying.
- * 
- *  @note  This routine was shamelessly ripped off from sphere.f from UHBD as
- *         developed by Michael K. Gilson.
- * 
- *  @ingroup Vacc
- *  @author  Nathan Baker (original FORTRAN code by Mike Gilson)
- *  @return  Pointer to array of reference sphere points' coordinates
- */ 
-VEXTERNC double** Vacc_sphereSurf(
+/** 
+ * @brief  Build the solvent accessible surface (SAS) and calculate the
+ *         solvent accessible surface area
+ * @ingroup Vacc
+ * @note  Similar to UHBD FORTRAN routine by Brock Luty
+ *        (returns UHBD's asas2)
+ * @author  Nathan Baker (original FORTRAN routine by Brock Luty)
+ * @return  Total solvent accessible area (A^2)
+ */
+VEXTERNC double Vacc_SASA(
         Vacc *thee,  /** Accessibility object */
-        int *npts /** Input:  requested number of points on sphere; Output:
-                    set to actual number of points placed on sphere */
+        double radius  /** Probe molecule radius (&Aring;) */
         );
 
-/** @brief   Calculates the solvent-accessible area of the entire molecules
- *  @ingroup Vacc
- *  @note    Shamelessly ripped off from UHBD FORTRAN routine by Brock Luty
- *  @author  Nathan Baker (original FORTRAN routine by Brock Luty)
- *  @return  Solvent accessible area
+/**
+ * @brief  Return the total solvent accessible surface area (SASA)
+ * @ingroup  Vacc
+ * @note  Alias for Vacc_SASA
+ * @author  Nathan Baker
+ * @return  Total solvent accessible area (A^2)
  */
 VEXTERNC double Vacc_totalSASA(
         Vacc *thee,  /** Accessibility object */
         double radius  /** Probe molecule radius (&Aring;) */
         );
 
-/** @brief   Calculates the solvent-accessible area due to the specified atom
- *  @ingroup Vacc
- *  @note    Shamelessly ripped off from UHBD FORTRAN routine by Brock Luty
- *  @author  Nathan Baker (original FORTRAN routine by Brock Luty)
- *  @return  Solvent accessible area
+/**
+ * @brief  Return the atomic solvent accessible surface area (SASA)
+ * @ingroup  Vacc
+ * @note  Alias for Vacc_SASA
+ * @author  Nathan Baker
+ * @return  Atomic solvent accessible area (A^2)
  */
 VEXTERNC double Vacc_atomSASA(
-        Vacc *thee, /** Acessibility object */
-        double radius, /** Probe radius (&Aring;) */
-        Vatom *atom /** Atom */
+        Vacc *thee,  /** Accessibility object */
+        double radius,  /** Probe molecule radius (&Aring;) */
+        Vatom *atom  /** Atom of interest */
         );
 
 #endif    /* ifndef _VACC_H_ */
