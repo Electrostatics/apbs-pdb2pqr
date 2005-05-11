@@ -187,9 +187,6 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
     Vnm_print(0, "Vclist_ctor2:  Using %d x %d x %d hash table\n", 
             npts[0], npts[1], npts[2]);
 
-    printf("DEBUG:  Resetting mode to AUTO...\n");
-    mode = CLIST_AUTO_DOMAIN;
-
     thee->mode = mode;
     switch (thee->mode) {
         case CLIST_AUTO_DOMAIN:

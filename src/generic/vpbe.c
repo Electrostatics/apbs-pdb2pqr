@@ -216,8 +216,6 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
     double atomRadius;
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
-    double lower_corner[3] = {0.0, 0.0, 0.0};
-    double upper_corner[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
     double x, y, z, netCharge;
     double nhash[3];
@@ -367,14 +365,8 @@ function\n", thee->maxIonRadius);
     Vnm_print(0, "Vpbe_ctor2:  Constructing Vclist with %d x %d x %d table\n", 
             inhash[0], inhash[1], inhash[2]); 
 
-    /* This test doesn't really do anything... */
-	if (focusFlag == 0){
-        thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
-                CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
-    } else {
-        thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
-                CLIST_MANUAL_DOMAIN, lower_corner, upper_corner);
-    } 
+    thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
+            CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
     VASSERT(thee->clist != VNULL);
     thee->acc = Vacc_ctor(thee->alist, thee->clist, VACC_SPHERE_DENSITY);
 	
