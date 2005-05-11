@@ -86,3 +86,4 @@
 \form#85:$u^*$
 \form#86:$e_c M$
 \form#87:$\AA^{-3}$
+\form#88:\[ G = \frac{1}{4 I_s} \sum_i c_i q_i^2 \int \kappa^2(x) e^{-q_i u(x)} dx \]

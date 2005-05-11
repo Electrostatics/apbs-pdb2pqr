@@ -82,60 +82,55 @@
  */
 struct sVpmg {
 
-  Vmem *vmem;                    /**< Memory management object for this class */
-  Vpmgp *pmgp;                   /**< Parameters */
-  Vpbe *pbe;                     /**< Information about the PBE system */
+  Vmem *vmem;  /**< Memory management object for this class */
+  Vpmgp *pmgp;  /**< Parameters */
+  Vpbe *pbe;  /**< Information about the PBE system */
 
-  int *iparm;                    /**< Passing int parameters to FORTRAN */
-  double *rparm;                 /**< Passing real parameters to FORTRAN */
-  int *iwork;                    /**< Work array */
-  double *rwork;                 /**< Work array */
-  double *a1cf;                  /**< Operator coefficient values (a11) */
-  double *a2cf;                  /**< Operator coefficient values (a22) */
-  double *a3cf;                  /**< Operator coefficient values (a33) */
-  double *ccf;                   /**< Helmholtz term */
-  double *fcf;                   /**< Right-hand side */
-  double *tcf;                   /**< True solution */
-  double *u;                     /**< Solution */
-  double *xf;                    /**< Mesh point x coordinates */
-  double *yf;                    /**< Mesh point y coordinates */
-  double *zf;                    /**< Mesh point z coordinates */
-  double *gxcf;                  /**< Boundary conditions for x faces */
-  double *gycf;                  /**< Boundary conditions for y faces */
-  double *gzcf;                  /**< Boundary conditions for z faces */
-  double *pvec;                  /**< Partition mask array */
-  double extDiEnergy;            /**< Stores contributions to the dielectric 
-                                  *   energy from regions outside the problem
-                                  *   domain */
-  double extQmEnergy;            /**< Stores contributions to the mobile ion
-                                  *   energy from regions outside the problem
-                                  *   domain */
-  double extQfEnergy;            /**< Stores contributions to the fixed charge
-                                  *   energy from regions outside the problem
-                                  *   domain */
-  double extNpEnergy;            /**< Stores contributions to the apolar
-                                  *   energy from regions outside the problem
-                                  *   domain */
-  Vsurf_Meth surfMeth;           /**< Surface definition method */
-  double splineWin;              /**< Spline window parm for surf defs */
-  Vchrg_Meth chargeMeth;         /**< Charge discretization method */
-  int filled;                    /**< Indicates whether Vpmg_fillco has been
-                                  * called */
-  int useDielXMap;               /**< Indicates whether Vpmg_fillco was called
-                                  * with an external x-shifted dielectric map */
-  Vgrid *dielXMap;               /**< External x-shifted dielectric map */
-  int useDielYMap;               /**< Indicates whether Vpmg_fillco was called
-                                  * with an external y-shifted dielectric map */
-  Vgrid *dielYMap;               /**< External y-shifted dielectric map */
-  int useDielZMap;               /**< Indicates whether Vpmg_fillco was called
-                                  * with an external z-shifted dielectric map */
-  Vgrid *dielZMap;               /**< External z-shifted dielectric map */
-  int useKappaMap;               /**< Indicates whether Vpmg_fillco was called
-                                  * with an external kappa map */
-  Vgrid *kappaMap;               /**< External kappa map */
-  int useChargeMap;              /**< Indicates whether Vpmg_fillco was called
-                                  * with an external charge distribution map */
-  Vgrid *chargeMap;              /**< External charge distribution map */
+  int *iparm;  /**< Passing int parameters to FORTRAN */
+  double *rparm;  /**< Passing real parameters to FORTRAN */
+  int *iwork;  /**< Work array */
+  double *rwork;  /**< Work array */
+  double *a1cf;  /**< Operator coefficient values (a11) */
+  double *a2cf;  /**< Operator coefficient values (a22) */
+  double *a3cf;  /**< Operator coefficient values (a33) */
+  double *ccf;  /**< Helmholtz term */
+  double *fcf;  /**< Right-hand side */
+  double *tcf;  /**< True solution */
+  double *u;  /**< Solution */
+  double *xf;  /**< Mesh point x coordinates */
+  double *yf;  /**< Mesh point y coordinates */
+  double *zf;  /**< Mesh point z coordinates */
+  double *gxcf;  /**< Boundary conditions for x faces */
+  double *gycf;  /**< Boundary conditions for y faces */
+  double *gzcf;  /**< Boundary conditions for z faces */
+  double *pvec;  /**< Partition mask array */
+  double extDiEnergy;  /**< Stores contributions to the dielectric energy from
+                        * regions outside the problem domain */
+  double extQmEnergy;  /**< Stores contributions to the mobile ion energy from
+                        * regions outside the problem domain */
+  double extQfEnergy;  /**< Stores contributions to the fixed charge energy
+                        * from regions outside the problem domain */
+  double extNpEnergy;  /**< Stores contributions to the apolar energy from
+                        * regions outside the problem domain */
+  Vsurf_Meth surfMeth;  /**< Surface definition method */
+  double splineWin;  /**< Spline window parm for surf defs */
+  Vchrg_Meth chargeMeth;  /**< Charge discretization method */
+  int filled;  /**< Indicates whether Vpmg_fillco has been called */
+  int useDielXMap;  /**< Indicates whether Vpmg_fillco was called with an
+                      external x-shifted dielectric map */
+  Vgrid *dielXMap;  /**< External x-shifted dielectric map */
+  int useDielYMap;  /**< Indicates whether Vpmg_fillco was called with an
+                     * external y-shifted dielectric map */
+  Vgrid *dielYMap;  /**< External y-shifted dielectric map */
+  int useDielZMap;  /**< Indicates whether Vpmg_fillco was called with an
+                     * external z-shifted dielectric map */
+  Vgrid *dielZMap;  /**< External z-shifted dielectric map */
+  int useKappaMap;  /**< Indicates whether Vpmg_fillco was called with an
+                     * external kappa map */
+  Vgrid *kappaMap;  /**< External kappa map */
+  int useChargeMap;  /**< Indicates whether Vpmg_fillco was called with an
+                      * external charge distribution map */
+  Vgrid *chargeMap;  /**< External charge distribution map */
 };
 
 /** 
@@ -153,10 +148,11 @@ typedef struct sVpmg Vpmg;
      *           in bytes
      *  @ingroup Vpmg
      *  @author  Nathan Baker
-     *  @param   thee  Vpmg object
      *  @return  The memory used by this structure and its contents in bytes
      */
-    VEXTERNC unsigned long int Vpmg_memChk(Vpmg *thee);
+    VEXTERNC unsigned long int Vpmg_memChk(
+            Vpmg *thee  /** Object for memory check */
+            );
 
 #else /* if defined(VINLINE_VPMG) */
 
@@ -167,124 +163,89 @@ typedef struct sVpmg Vpmg;
 /* /////////////////////////////////////////////////////////////////////////
 /// Non-inlineable methods
 //////////////////////////////////////////////////////////////////////////// */
-/** @brief   Constructor for the Vpmg class (no focusing)
+/** @brief   Constructor for the Vpmg class (allocates new memory)
  *  @author  Nathan Baker
  *  @ingroup Vpmg
- *  @param   parms  PMG parameter object
- *  @param   pbe    Object containing PBE-specific variables
  *  @returns Pointer to newly allocated Vpmg object 
  */
-VEXTERNC Vpmg* Vpmg_ctor(Vpmgp *parms, Vpbe *pbe);
+VEXTERNC Vpmg* Vpmg_ctor(
+        Vpmgp *parms,  /** PMG parameter object */
+        Vpbe *pbe,  /** PBE-specific variables */
+        int focusFlag,  /** 1 for focusing, 0 otherwise */
+        Vpmg *pmgOLD,  /** Old Vpmg object to use for boundary conditions */
+        MGparm *mgparm,  /** MGparm parameter object for boundary 
+                          * conditions */
+        PBEparm_calcEnergy energyFlag  /** What types of energies to 
+                                        * calculate */
+        );
 
-/** @brief   FORTRAN stub constructor for the Vpmg class (no focusing)
+/** 
+ * @brief  FORTRAN stub constructor for the Vpmg class (uses
+ *         previously-allocated memory)
  *  @author  Nathan Baker
  *  @ingroup Vpmg
- *  @param   thee   Pointer to newly-allocated Vpmg object
- *  @param   parms  PMG parameter object
- *  @param   pbe    Object containing PBE-specific variables
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int Vpmg_ctor2(Vpmg *thee, Vpmgp *parms, Vpbe *pbe);
-
-/** @brief   Constructor for the Vpmg class (with focusing)
- *  @note    Construct the PMG object by focusing.  In other words, use the
- *           solution from the passed Vpmg object to set the boundary
- *           conditions for the new Vpmg object.  IN THE PROCESS, THE OLD VPMG
- *           OBJECT IS DESTROYED.  The solver parameters specifed by the passed
- *           Vpmgp object and the equation data from the Vpbe object are also
- *           used.
- *  @author  Nathan Baker
- *  @ingroup Vpmg
- *  @param   parms  PMG parameter object for new mesh
- *  @param   pbe    PBE parameter object
- *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
- *  @param   mgparm MGparm parameter object (used for boundary conditions)
- *  @param   energyFlag  What types of energies to calculate
- *  @returns Pointer to the newly allocated Vpmg object
- */
-VEXTERNC Vpmg* Vpmg_ctorFocus(Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD, 
-  MGparm *mgparm, PBEparm_calcEnergy energyFlag);
-
-/** @brief   FORTRAN stub bonstructor for the Vpmg class (with focusing)
- *  @note    Construct the PMG object by focusing.  In other words, use the
- *           solution from the passed Vpmg object to set the boundary
- *           conditions for the new Vpmg object.  IN THE PROCESS, THE OLD VPMG
- *           OBJECT IS DESTROYED.  The solver parameters specifed by the passed
- *           Vpmgp object and the equation data from the Vpbe object are also
- *           used.
- *  @ingroup Vpmg
- *  @author  Nathan Baker
- *  @param   thee   Pointer to newly allocated Vpmg object
- *  @param   parms  PMG parameter object for new mesh
- *  @param   pbe    PBE parameter object 
- *  @param   pmgOLD Old Vpmg object to use for setting boundary conditions
- *  @param   mgparm MGparm parameter object (used for boundary conditions)
- *  @param   energyFlag  What types of energies to calculate
- *  @returns 1 if successful, 0 otherwise
- */
-VEXTERNC int Vpmg_ctor2Focus(Vpmg *thee, Vpmgp *parms, Vpbe *pbe, Vpmg *pmgOLD,
-  MGparm *mgparm, PBEparm_calcEnergy energyFlag);
+VEXTERNC int Vpmg_ctor2(
+        Vpmg *thee,  /** Memory location for object */
+        Vpmgp *parms,  /** PMG parameter object */
+        Vpbe *pbe,  /** PBE-specific variables */
+        int focusFlag,  /** 1 for focusing, 0 otherwise */
+        Vpmg *pmgOLD,  /** Old Vpmg object to use for boundary conditions (can
+                         be VNULL if focusFlag = 0) */
+        MGparm *mgparm,  /** MGparm parameter object for boundary 
+                          * conditions (can be VNULL if focusFlag = 0) */
+        PBEparm_calcEnergy energyFlag  /** What types of energies to 
+                                        * calculate (ignored if focusFlag
+                                        * = 0) */
+        );
 
 /** @brief   Object destructor
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee   Pointer to memory location of object to be destroyed
  */
-VEXTERNC void Vpmg_dtor(Vpmg **thee);
+VEXTERNC void Vpmg_dtor(
+        Vpmg **thee  /** Pointer to memory location of object to be 
+                      * destroyed */
+        );
 
 /** @brief   FORTRAN stub object destructor
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee   Pointer to object to be destroyed
  */
-VEXTERNC void Vpmg_dtor2(Vpmg *thee);
+VEXTERNC void Vpmg_dtor2(
+        Vpmg *thee  /** Pointer to object to be destroyed */
+        );
 
 /** @brief   Fill the coefficient arrays prior to solving the equation
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee  Vpmg object
- *  @param   surfMeth  Surface discretization method
- *  @param   splineWin    Spline window (for surfMeth = VSM_SPLINE)
- *  @param   chargeMeth   Charge discretization method
- *  @param   useDielXMap  Specifies whether to use (1) or ignore (0) the 
- *                        dielXMap arguement
- *  @param   dielXMap     Pointer to a Vgrid object containing an external
- *                        x-shifted dielectric map.  Can be VNULL if 
- *                        useDielMap is 0.
- *  @param   useDielYMap  Specifies whether to use (1) or ignore (0) the 
- *                        dielYMap arguement
- *  @param   dielYMap     Pointer to a Vgrid object containing an external
- *                        y-shifted dielectric map.  Can be VNULL if 
- *                        useDielMap is 0.
- *  @param   useDielZMap  Specifies whether to use (1) or ignore (0) the 
- *                        dielZMap arguement
- *  @param   dielZMap     Pointer to a Vgrid object containing an external
- *                        z-shifted dielectric map.  Can be VNULL if 
- *                        useDielMap is 0.
- *  @param   useKappaMap  Specifies whether to use (1) or ignore (0) the 
- *                        kappaMap arguement
- *  @param   kappaMap     Pointer to a Vgrid object containing an external
- *                        kappa map.  Can be VNULL if useKappaMap is 0.
- *  @param   useChargeMap Specifies whether to use (1) or ignore (0) the 
- *                        chargeMap arguement
- *  @param   chargeMap    Pointer to a Vgrid object containing an external
- *                        charge distribution map.  Can be VNULL if
- *                        useChargeMap is 0.
  */
-VEXTERNC void Vpmg_fillco(Vpmg *thee, 
-  Vsurf_Meth surfMeth,      double splineWin,  Vchrg_Meth chargeMeth,
-  int useDielXMap,   Vgrid *dielXMap, 
-  int useDielYMap,   Vgrid *dielYMap, 
-  int useDielZMap,   Vgrid *dielZMap, 
-  int useKappaMap,   Vgrid *kappaMap,
-  int useChargeMap,  Vgrid *chargeMap);
+VEXTERNC void Vpmg_fillco(
+        Vpmg *thee,  /** Vpmg object */ 
+        Vsurf_Meth surfMeth,  /** Surface discretization method */
+        double splineWin,  /** Spline window (in A) for surfMeth = 
+                            * VSM_SPLINE */
+        Vchrg_Meth chargeMeth,  /** Charge discretization method */ 
+        int useDielXMap,  /** Boolean to use dielectric map argument */
+        Vgrid *dielXMap,  /** External dielectric map */
+        int useDielYMap,  /** Boolean to use dielectric map argument */
+        Vgrid *dielYMap,  /** External dielectric map */
+        int useDielZMap,  /** Boolean to use dielectric map argument */
+        Vgrid *dielZMap,  /** External dielectric map */
+        int useKappaMap,  /** Boolean to use kappa map argument */
+        Vgrid *kappaMap,  /** External kappa map */
+        int useChargeMap,  /** Boolean to use charge map argument */
+        Vgrid *chargeMap  /** External charge map */
+        );
 
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee  Vpmg object
  */
-VEXTERNC void Vpmg_solve(Vpmg *thee);
+VEXTERNC void Vpmg_solve(
+        Vpmg *thee  /** Vpmg object */
+        );
 
 /** @brief   Get the total electrostatic energy.
  *  @ingroup Vpmg
@@ -293,22 +254,22 @@ VEXTERNC void Vpmg_solve(Vpmg *thee);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   extFlag If this was a focused calculation, then it is possible
- *                   to include the energy contributions from the outside
- *                   the focused domain.  This should be on (=1) for
- *                   sequential focusing calculations and off (=0) for
- *                   parallel calculations.
- *  @returns The electrostatic energy in units of \f$k_B T\f$.
+ *  @returns The electrostatic energy in units of k_B T.
  */
-VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_energy(
+        Vpmg *thee,  /** Vpmg object */
+        int extFlag  /** If this was a focused calculation, include (1 -- for
+                      * serial calculations) or ignore (0 -- for parallel
+                      * calculations) energy contributions from outside the
+                      * focusing domain */
+        );
 
 /** @brief   Get the "fixed charge" contribution to the electrostatic energy 
  *
  *           Using the solution at the finest mesh level, get the
  *           electrostatic energy due to the interaction of the fixed charges
  *           with the potential: \f[ G = \sum_i q_i u(r_i) \f]
- *           and return the result in units of \f$k_B T\f$.  Clearly, no
+ *           and return the result in units of k_B T.  Clearly, no
  *           self-interaction terms are removed.  A factor a 1/2 has to be
  *           included to convert this to a real energy.
  *
@@ -318,24 +279,24 @@ VEXTERNC double Vpmg_energy(Vpmg *thee, int extFlag);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   extFlag If this was a focused calculation, then it is possible
- *                   to include the energy contributions from the outside
- *                   the focused domain.  This should be on (=1) for
- *                   sequential focusing calculations and off (=0) for
- *                   parallel calculations.
- *  @returns The fixed charge electrostatic energy in units of \f$k_B T\f$.
+ *  @returns The fixed charge electrostatic energy in units of k_B T.
  */
-VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_qfEnergy(
+        Vpmg *thee,  /** Vpmg object */
+        int extFlag  /** If this was a focused calculation, include (1 -- for
+                      * serial calculations) or ignore (0 -- for parallel
+                      * calculations) energy contributions from outside the
+                      * focusing domain */
+        );
 
 /** @brief   Get the per-atom "fixed charge" contribution to the electrostatic
  *           energy
  *
  *           Using the solution at the finest mesh level, get the
  *           electrostatic energy due to the interaction of the fixed charges
- *           with the potential: \f[ G = q u(r), \f] where \f$q\f$ is the
- *           charge and \f$r\f$ is the location of the atom of interest.  The
- *           result is returned in units of \f$k_B T\f$.  Clearly, no
+ *           with the potential: \f[ G = q u(r), \f] where q$ is the
+ *           charge and r is the location of the atom of interest.  The
+ *           result is returned in units of k_B T.  Clearly, no
  *           self-interaction terms are removed.  A factor a 1/2 has to be
  *           included to convert this to a real energy.
  *
@@ -345,11 +306,12 @@ VEXTERNC double Vpmg_qfEnergy(Vpmg *thee, int extFlag);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   atom   The atom for which to calculate the energy.
- *  @returns The fixed charge electrostatic energy in units of \f$k_B T\f$.
+ *  @returns The fixed charge electrostatic energy in units of k_B T.
  */
-VEXTERNC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom);
+VEXTERNC double Vpmg_qfAtomEnergy(
+        Vpmg *thee,  /** The Vpmg object */
+        Vatom *atom  /** The atom for energy calculations */
+        );
 
 /** @brief Get the "mobile charge" contribution to the electrostatic energy.
  *
@@ -357,15 +319,15 @@ VEXTERNC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom);
  *           electrostatic energy due to the interaction of the mobile charges 
  *           with the potential: 
  *              \f[ G = \frac{1}{4 I_s} \sum_i c_i q_i^2 \int
- *              \overline{\kappa}^2(x) e^{-q_i u(x)} dx \f]
+ *              \kappa^2(x) e^{-q_i u(x)} dx \f]
  *           for the NPBE and
  *              \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx \f]
- *           for the LPBE.  Here \f$i\f$ denotes the counterion species, 
- *           \f$I_s\f$ is the bulk ionic strength, \f$\overline{\kappa}^2(x)\f$
- *           is the modified Debye-Huckel parameter, \f$c_i\f$ is the 
- *           concentration of species \f$i\f$, \f$q_i\f$ is the charge of
- *           species \f$i\f$, and \f$u(x)\f$ is the dimensionless electrostatic
- *           potential.  The energy is scaled to units of \f$k_b T\f$.
+ *           for the LPBE.  Here i denotes the counterion species, 
+ *           I_s is the bulk ionic strength, kappa^2(x)
+ *           is the modified Debye-Huckel parameter, c_i is the 
+ *           concentration of species i, q_i is the charge of
+ *           species i, and u(x) is the dimensionless electrostatic
+ *           potential.  The energy is scaled to units of k_b T.
  *
  *  @ingroup Vpmg
  *  @author  Nathan Baker
@@ -373,15 +335,16 @@ VEXTERNC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   extFlag If this was a focused calculation, then it is possible
- *                   to include the energy contributions from the outside
- *                   the focused domain.  This should be on (=1) for
- *                   sequential focusing calculations and off (=0) for
- *                   parallel calculations.
- *  @returns The mobile charge electrostatic energy in units of \f$k_B T\f$.
+ *  @returns The mobile charge electrostatic energy in units of k_B T.
  */
-VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_qmEnergy(
+        Vpmg *thee,  /** Vpmg object */
+        int extFlag  /** If this was a focused calculation, include (1 -- for
+                      * serial calculations) or ignore (0 -- for parallel
+                      * calculations) energy contributions from outside the
+                      * focusing domain */
+        );
+
 
 /** @brief Get the "polarization" contribution to the electrostatic energy.
  *
@@ -389,9 +352,9 @@ VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
  *           electrostatic energy due to the interaction of the mobile charges 
  *           with the potential: 
  *              \f[ G = \frac{1}{2} \int \epsilon (\nabla u)^2 dx \f]
- *           where \f$\epsilon\f$ is the dielectric parameter and \f$u(x)\f$ is
+ *           where epsilon is the dielectric parameter and u(x) is
  *           the dimensionless electrostatic potential.  The energy is scaled
- *           to units of \f$k_b T\f$.
+ *           to units of k_b T.
  *
  *  @ingroup Vpmg
  *  @author  Nathan Baker
@@ -399,15 +362,16 @@ VEXTERNC double Vpmg_qmEnergy(Vpmg *thee, int extFlag);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   extFlag If this was a focused calculation, then it is possible
- *                   to include the energy contributions from the outside
- *                   the focused domain.  This should be on (=1) for
- *                   sequential focusing calculations and off (=0) for
- *                   parallel calculations.
- *  @returns The polarization electrostatic energy in units of \f$k_B T\f$.
+ *  @returns The polarization electrostatic energy in units of k_B T.
  */
-VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_dielEnergy(
+        Vpmg *thee,  /** Vpmg object */
+        int extFlag  /** If this was a focused calculation, include (1 -- for
+                      * serial calculations) or ignore (0 -- for parallel
+                      * calculations) energy contributions from outside the
+                      * focusing domain */
+        );
+
 
 /** @brief Get the "apolar" energy
  *
@@ -416,13 +380,13 @@ VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
  *           routines of Im et al (see Vpmg_dbnpForce and Vpmg_dielGradNorm):
  *              \f[ A = \frac{1}{\epsilon_s-\epsilon_p} \int \| \nabla
  *              \epsilon \| dx \f]
- *           where \f$\epsilon\f$ is the dielectric parameter, \f$\epsilon_s\f$
- *           is the dielectric constant for the solvent and \f$\epsilon_p\f$ is
+ *           where epsilon is the dielectric parameter, epsilon_s
+ *           is the dielectric constant for the solvent and epsilon_p is
  *           the dielectric constant for the protein.  The apolar energy is
  *           then,
  *              \f[G_{np} = \gamma S \f]
- *           where \f$\gamma\f$ is the apolar coefficient set in Vpbe (see
- *           Vpbe_ctor).  The energy is returned in units of \f$k_b T\f$.
+ *           where gamma is the apolar coefficient set in Vpbe (see
+ *           Vpbe_ctor).  The energy is returned in units of k_b T.
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @note    I personally feel that this routine should not find its way into
@@ -433,15 +397,15 @@ VEXTERNC double Vpmg_dielEnergy(Vpmg *thee, int extFlag);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
- *  @param   extFlag If this was a focused calculation, then it is possible
- *                   to include the energy contributions from the outside
- *                   the focused domain.  This should be on (=1) for
- *                   sequential focusing calculations and off (=0) for
- *                   parallel calculations.
- *  @returns The apolar energy in units of \f$k_B T\f$.
+ *  @returns The apolar energy in units of k_B T.
  */
-VEXTERNC double Vpmg_npEnergy(Vpmg *thee, int extFlag);
+VEXTERNC double Vpmg_npEnergy(
+        Vpmg *thee,  /** Vpmg object */
+        int extFlag  /** If this was a focused calculation, include (1 -- for
+                      * serial calculations) or ignore (0 -- for parallel
+                      * calculations) energy contributions from outside the
+                      * focusing domain */
+        );
 
 /** @brief Get the integral of the gradient of the dielectric function
  *
@@ -449,7 +413,7 @@ VEXTERNC double Vpmg_npEnergy(Vpmg *thee, int extFlag);
  *           integral of the norm of the dielectric function gradient
  *           routines of Im et al (see Vpmg_dbnpForce for reference):
  *              \f[ \int \| \nabla \epsilon \| dx \f]
- *           where \f$\epsilon\f$ is the dielectric parameter.
+ *           where epsilon is the dielectric parameter.
  *           The integral is returned in units of A^2.
  * 
  *  @ingroup Vpmg
@@ -457,13 +421,14 @@ VEXTERNC double Vpmg_npEnergy(Vpmg *thee, int extFlag);
  *           restrictions on the subdomain over which it is calculated.  Such
  *           limits can be set via Vpmg_setPart and are generally useful for
  *           parallel runs.
- *  @param   thee   Vpmg object
  *  @returns The integral in units of A^2.
  */
-VEXTERNC double Vpmg_dielGradNorm(Vpmg *thee);
+VEXTERNC double Vpmg_dielGradNorm(
+        Vpmg *thee  /** Vpmg object */
+        );
 
 /** @brief    Calculate the total force on the specified atom in units of
- *            \f$k_B T/\AA\f$
+ *            k_B T/AA
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @note    \li Using the force evaluation methods of Im et al (Roux group),
@@ -474,17 +439,18 @@ VEXTERNC double Vpmg_dielGradNorm(Vpmg *thee);
  *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
- *  @param   thee  Vpmg object
- *  @param   force 3*double space to hold the force in units of \f$k_B T/\AA\f$
- *  @param   atomID  Valist ID of desired atom
- *  @param   srfm    Surface definition method
- *  @param   chgm    Charge discretization method
  */
-VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID, 
-  Vsurf_Meth srfm, Vchrg_Meth chgm);
+VEXTERNC void Vpmg_force(
+        Vpmg *thee,  /** Vpmg object */
+        double *force, /** 3*sizeof(double) space to hold the force in units
+                         of k_B T/AA */
+        int atomID,  /** Valist ID of desired atom */
+        Vsurf_Meth srfm,  /** Surface discretization method */ 
+        Vchrg_Meth chgm  /** Charge discretization method */
+        );
 
 /** @brief    Calculate the "charge-field" force on the specified atom in units
- *           of \f$k_B T/\AA\f$
+ *           of k_B T/AA
  * @ingroup  Vpmg
  * @author   Nathan Baker
  * @note     \li Using the force evaluation methods of Im et al (Roux group),
@@ -495,16 +461,17 @@ VEXTERNC void Vpmg_force(Vpmg *thee, double *force, int atomID,
  *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
- * @param    thee  Vpmg object
- * @param    force 3*double space to hold the force in units of \f$k_B T/\AA\f$
- * @param    atomID  Valist ID of desired atom
- * @param    chgm    Charge discretization method
  */
-VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID, 
-  Vchrg_Meth chgm);
+VEXTERNC void Vpmg_qfForce(
+        Vpmg *thee,  /** Vpmg object */
+        double *force, /** 3*sizeof(double) space to hold the force in units
+                         of k_B T/A */
+        int atomID,  /** Valist ID of desired atom */
+        Vchrg_Meth chgm  /** Charge discretization method */
+        );
 
 /** @brief   Calculate the dielectric boundary and apolar forces on the
- *           specified atom in units of \f$k_B T/\AA\f$
+ *           specified atom in units of k_B T/AA
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @note    \li Using the force evaluation methods of Im et al (Roux group),
@@ -515,19 +482,19 @@ VEXTERNC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID,
  *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
- *  @param   thee  Vpmg object
- *  @param   dbForce 3*double space to hold the dielectric boudnary force in
- *           units of \f$k_B T/\AA\f$ 
- *  @param   npForce 3*double space to hold the apolar boudnary force in
- *           units of \f$k_B T/\AA\f$ 
- *  @param   atomID  Valist ID of desired atom
- *  @param   srfm    Surface definition method
  */
-VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
-  int atomID, Vsurf_Meth srfm);
+VEXTERNC void Vpmg_dbnpForce(
+        Vpmg *thee,  /** Vpmg object */
+        double *dbForce, /** 3*sizeof(double) space to hold the dielectric
+                           boundary force in units of k_B T/AA */
+        double *npForce, /** 3*sizeof(double) space to hold the apolar
+                           boundary force in units of k_B T/AA */
+        int atomID,  /** Valist ID of desired atom */
+        Vsurf_Meth srfm  /** Surface discretization method */ 
+        );
 
 /** @brief   Calculate the osmotic pressure on the specified atom in units of
- *           \f$k_B T/\AA\f$
+ *           k_B T/AA
  *  @ingroup Vpmg
  *  @author  Nathan Baker
  *  @note    \li Using the force evaluation methods of Im et al (Roux group),
@@ -538,70 +505,73 @@ VEXTERNC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
  *           \li This is currently implemented in a very inefficient fashion
  *             becuase I'm not sure which of the PMG coefficient arrays can be
  *           re-used and which are overwritten by PMG.
- *  @param   thee    Vpmg object
- *  @param   force   3*double space to hold the force in units of \f$k_B
- *                   T/\AA\f$ 
- *  @param   atomID  Valist ID of desired atom
- *  @param   srfm    Surface definition method
  */
-VEXTERNC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID, 
-  Vsurf_Meth srfm);
+VEXTERNC void Vpmg_ibForce(
+        Vpmg *thee,  /** Vpmg object */
+        double *force, /** 3*sizeof(double) space to hold the 
+                           boundary force in units of k_B T/AA */
+        int atomID,  /** Valist ID of desired atom */
+        Vsurf_Meth srfm  /** Surface discretization method */ 
+        );
 
 /** @brief   Set partition information which restricts the calculation of
  *           observables to a (rectangular) subset of the problem domain
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee          Vpmg object
- *  @param   lowerCorner   Partition lower corner
- *  @param   upperCorner   Partition upper corner
- *  @param   bflags        Whether or not a particular processor is on the 
- *                         boundary with another partition.  0 if the face is
- *                         not bounded (next to) another partition, and 1 
- *                         otherwise.
  */
-VEXTERNC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
-  double upperCorner[3], int bflags[6]);
+VEXTERNC void Vpmg_setPart(
+        Vpmg *thee,  /** Vpmg object */
+        double lowerCorner[3],  /** Partition lower corner */ 
+        double upperCorner[3],  /** Partition upper corner */
+        int bflags[6]  /** Booleans indicating whether a particular processor
+                         is on the boundary with another partition.  0 if the
+                         face is not bounded (next to) another partition, and
+                         1 otherwise. */
+        );
 
 /** @brief   Remove partition restrictions
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee   Vpmg object 
  */
-VEXTERNC void Vpmg_unsetPart(Vpmg *thee);
+VEXTERNC void Vpmg_unsetPart(
+        Vpmg *thee  /** Vpmg object */
+        );
 
 /** @brief   Fill the specified array with accessibility values 
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee    Vpmg object
- *  @param   vec     An array nx*ny*nz in length to contain the accessibility
- *                   values (where nx, ny, nz are the numbers of grid points)
- *  @param   type    Which data to write
- *  @param   parm    Parameter for data definition (if needed)
- *  @param   pbetype Parameter for PBE type (if needed)
  */
-VEXTERNC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
-  double parm, Vhal_PBEType pbetype);
+VEXTERNC void Vpmg_fillArray(
+        Vpmg *thee,  /** Vpmg object */
+        double *vec,  /** A nx*ny*nz*sizeof(double) array to contain the
+                        values to be written */
+        Vdata_Type type,  /** What to write */ 
+        double parm,  /** Parameter for data type definition (if needed) */
+        Vhal_PBEType pbetype  /** Parameter for PBE type (if needed) */
+        );
 
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  
  *  @ingroup Vpmg
  *  @author  Nathan Baker
- *  @param   thee   Vpmg object
- *  @param   path   The file to which the matrix is to be written
- *  @param   title  The title of the matrix
- *  @param   mxtype The type of REAL-valued matrix, a 3-character string of the
- *                  form "R_A", where the blank can contain:
- *                  \li S:  Symmetric matrix
- *                  \li U:  Unsymmetric matrix
- *                  \li H:  Hermitian matrix
- *                  \li Z:  Skew symmetric matrix
- *                  \li R:  Rectangular
- *  @param   flag   The operator to compress:
- *                  \li 0:  Just the Poisson operator
- *                  \li 1:  The linearization of the full Poisson-Boltzmann
- *                          operator around the current solution
+ *  @bug  Can this path variable be replaced with a Vio socket?
  */
-VEXTERNC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72],
-  char mxtype[3], int flag);
+VEXTERNC void Vpmg_printColComp(
+        Vpmg *thee,  /**  Vpmg object */
+        char path[72],  /** The file to which the matrix is to be written */
+        char title[72],  /** The title of the matrix */
+        char mxtype[3],   /** The type of REAL-valued matrix, a 3-character
+                            string of the form "R_A" where the '_' can be one
+                            of:  
+                            \li S:  symmetric matrix
+                            \li U:  unsymmetric matrix
+                            \li H:  Hermitian matrix
+                            \li Z:  skew-symmetric matrix
+                            \li R:  rectangular matrix */
+        int flag  /** The operator to compress:
+                    \li 0:  Poisson operator
+                    \li 1:  Linearization of the full Poisson-Boltzmann
+                            operator around the current solution */
+        );
 
 #endif    /* ifndef _VPMG_H_ */

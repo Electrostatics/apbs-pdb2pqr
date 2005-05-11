@@ -754,11 +754,11 @@ fgcent/cgcent!\n",  (imol+1));
             Vnm_tprint( 2, "Can't focus first calculation!\n");
             return 0;
         }
-        pmg[i] = Vpmg_ctorFocus(pmgp[i], pbe[i], pmg[i-1],
+        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 1, pmg[i-1],
                        mgparm, pbeparm->calcenergy);       
     } else {
         if (i>0) Vpmg_dtor(&(pmg[i-1]));
-        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i]);
+        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, VNULL, PCE_NO);
     }
     if (i>0) {
         Vpmgp_dtor(&(pmgp[i-1]));
