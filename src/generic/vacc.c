@@ -616,8 +616,17 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
     /* Calculate the area */
     area = 0.0;
     for (i=0; i<natom; i++) {
+        atom = Valist_getAtom(thee->alist, i);
         asurf = thee->surf[i];
-        if (asurf != VNULL) area += (asurf->area);
+        /* See if this surface needs to be rebuilt */
+        if (asurf->probe_radius != radius) {
+            Vnm_print(2, "Vacc_SASA:  Warning -- probe radius changed from %g to %g!\n", 
+                    asurf->probe_radius, radius);
+            VaccSurf_dtor2(asurf);
+            thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+            asurf = thee->surf[i];
+        }
+        area += (asurf->area);
     }
 
     return area;
@@ -632,34 +641,44 @@ VPUBLIC double Vacc_totalSASA(Vacc *thee, double radius) {
 
 VPUBLIC double Vacc_atomSASA(Vacc *thee, double radius, Vatom *atom) {
 
-    VaccSurf *surf;
+    VaccSurf *asurf;
     int id;
 
     if (thee->surf == VNULL) Vacc_SASA(thee, radius);
 
     id = Vatom_getAtomID(atom);
-    surf = thee->surf[id];
+    asurf = thee->surf[id];
 
-    if (surf != VNULL) return surf->area;
-    else return 0.0;
+    /* See if this surface needs to be rebuilt */
+    if (asurf->probe_radius != radius) {
+        Vnm_print(2, "Vacc_SASA:  Warning -- probe radius changed from %g to %g!\n", 
+                asurf->probe_radius, radius);
+        VaccSurf_dtor2(asurf);
+        thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+        asurf = thee->surf[id];
+    }
+
+    return asurf->area;
 
 }
 
-VPUBLIC VaccSurf* VaccSurf_ctor(Vmem *mem, int nsphere) {
+VPUBLIC VaccSurf* VaccSurf_ctor(Vmem *mem, double probe_radius, int nsphere) {
     VaccSurf *thee;
 
     thee = Vmem_malloc(mem, 1, sizeof(Vacc) );
-    VASSERT( VaccSurf_ctor2(thee, mem, nsphere) );
+    VASSERT( VaccSurf_ctor2(thee, mem, probe_radius, nsphere) );
 
     return thee;
 }
 
-VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, int nsphere) {
+VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
+        int nsphere) {
 
     if (thee == VNULL) return 0;
 
     thee->mem = mem;
     thee->npts = nsphere;
+    thee->probe_radius = probe_radius;
     thee->area = 0.0;
 
     if (thee->npts > 0) {
@@ -717,7 +736,7 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
     atomID = Vatom_getAtomID(atom);
 
     if (arad < VSMALL) {
-        return VaccSurf_ctor(thee->mem, 0);
+        return VaccSurf_ctor(thee->mem, prad, 0);
     }
 
     rad = arad + prad;
@@ -738,7 +757,7 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
     }
 
     /* Allocate space for the points */
-    surf = VaccSurf_ctor(thee->mem, npts);
+    surf = VaccSurf_ctor(thee->mem, prad, npts);
 
     /* Assign the points */
     j = 0;
@@ -784,7 +803,7 @@ VPUBLIC VaccSurf* VaccSurf_refSphere(Vmem *mem, int npts) {
     }
 
     /* Allocate space for the points */
-    surf = VaccSurf_ctor(mem, nactual);
+    surf = VaccSurf_ctor(mem, 1.0, nactual);
 
     /* Clear out the boolean array */
     for (i=0; i<nactual; i++) surf->bpts[i] = 1;
@@ -815,3 +834,24 @@ VPUBLIC VaccSurf* VaccSurf_refSphere(Vmem *mem, int npts) {
     return surf;
 }
 
+VPUBLIC VaccSurf* Vacc_atomSASPoints(Vacc *thee, double radius, 
+        Vatom *atom) {
+
+    VaccSurf *asurf; 
+    int id;
+
+    if (thee->surf == VNULL) Vacc_SASA(thee, radius);
+    id = Vatom_getAtomID(atom);
+
+    /* See if this surface needs to be rebuilt */
+    if (asurf->probe_radius != radius) {
+        Vnm_print(2, "Vacc_SASA:  Warning -- probe radius changed from %g to %g!\n", 
+                asurf->probe_radius, radius);
+        VaccSurf_dtor2(asurf);
+        thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+        asurf = thee->surf[id];
+    }
+
+    return asurf;
+
+}
