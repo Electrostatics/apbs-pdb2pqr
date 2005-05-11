@@ -15,17 +15,20 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Added Vclist cell list class to replace internal hash table in Vacc
 	* Modified Vacc class to use Vclist, including changes to the Vacc
 	  interface (and required changes throughout the code)
+    * Consolidated Vpmg_ctor and Vpmg_ctorFocus into Vpmg_ctor
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
     * Fixed error in tools/mesh/dx2mol.c (Thanks to Fred Damberger)
     * Fixed floating point error which resulted in improper grid spacings for
       some cases.
-	* Identified a bug in Vacc_molAcc which generates spurious regions of high
+	* Fixed a bug in Vacc_molAcc which generates spurious regions of high
       internal dielectric for molecular surface-based dielectric definitions.
-	  These regions are very small and apparently affect energies by 1-2%.  We
-	  are working on a fix.  (Thanks to John Mongan and Jessica Swanson for
-	  finding this).
+	  These regions were very small and apparently affect energies by 1-2%.
+	  The new version of the molecular surface is somewhat more costly to
+	  calculate -- but we all should be using spline-based surfaces, anyway --
+	  right?  (Thanks to John Mongan and Jessica Swanson for finding this
+	  bug).
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04

@@ -216,6 +216,8 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
     double atomRadius;
     Vatom *atom;
     double center[3] = {0.0, 0.0, 0.0};
+    double lower_corner[3] = {0.0, 0.0, 0.0};
+    double upper_corner[3] = {0.0, 0.0, 0.0};
     double disp[3], dist, radius, charge, xmin, xmax, ymin, ymax, zmin, zmax;
     double x, y, z, netCharge;
     double nhash[3];

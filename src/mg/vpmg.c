@@ -48,16 +48,8 @@
 
 VEMBED(rcsid="$Id$")
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Class Vpmg: Inlineable methods
-/////////////////////////////////////////////////////////////////////////// */
 #if !defined(VINLINE_VPMG)
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_memChk
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC unsigned long int Vpmg_memChk(Vpmg *thee) {
     if (thee == VNULL) return 0;
     return Vmem_bytes(thee->vmem);
@@ -66,11 +58,6 @@ VPUBLIC unsigned long int Vpmg_memChk(Vpmg *thee) {
 #endif /* if !defined(VINLINE_VPMG) */
 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_printColComp
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72], 
   char mxtype[3], int flag) {
 
@@ -124,44 +111,20 @@ VPUBLIC void Vpmg_printColComp(Vpmg *thee, char path[72], char title[72],
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_ctor
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe) {
+VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe, int focusFlag, 
+        Vpmg *pmgOLD, MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
 
     Vpmg *thee = VNULL;
 
-    /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
-    VASSERT( thee != VNULL);
-    VASSERT(Vpmg_ctor2(thee, pmgp, pbe));
-
-    return thee;
-}
-
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_ctorFocus
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmg* Vpmg_ctorFocus(Vpmgp *pmgp, Vpbe *pbe, Vpmg *pmgOLD, 
-  MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
-
-    Vpmg *thee = VNULL;
-
-    /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vpmg) );
-    VASSERT( thee != VNULL);
-    VASSERT(Vpmg_ctor2Focus(thee, pmgp, pbe, pmgOLD, mgparm, energyFlag));
+    VASSERT(thee != VNULL);
+    VASSERT( Vpmg_ctor2(thee, pmgp, pbe, focusFlag, pmgOLD, mgparm, 
+                energyFlag) );
 
     return thee;
 }
 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_solve
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_solve(Vpmg *thee) {
 
     int i;
@@ -276,10 +239,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 }
 
     
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_dtor
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dtor(Vpmg **thee) {
     
     if ((*thee) != VNULL) {
@@ -290,10 +249,6 @@ VPUBLIC void Vpmg_dtor(Vpmg **thee) {
 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_dtor2
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_dtor2(Vpmg *thee) { 
 
     /* Clear out the FORTRAN arrays */
@@ -338,13 +293,8 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
     Vmem_dtor(&(thee->vmem));
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_setPart
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
-  double upperCorner[3], int bflags[6]) {
+VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3], 
+        double upperCorner[3], int bflags[6]) {
 
     Valist *alist;
     Vatom *atom;
@@ -570,11 +520,6 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
     } 
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_unsetPart
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 
     int i, nx, ny, nz;
@@ -595,11 +540,6 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
     }
 }
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vpmg_fillArray
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
   double parm, Vhal_PBEType pbetype) {
 
