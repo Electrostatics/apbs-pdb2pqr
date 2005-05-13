@@ -175,6 +175,63 @@ VPRIVATE void fillcoCoefMol(
         );
 
 /** 
+ * @brief  Fill ion (nonlinear) operator coefficient array from a molecular
+ * surface calculation
+ * @author  Nathan Baker
+ */
+VPRIVATE void fillcoCoefMolIon(
+        Vpmg *thee
+        );
+
+/** 
+ * @brief  Fill differential operator coefficient arrays from a molecular
+ *         surface calculation
+ * @note   This uses thee->ccf as temporary storage
+ * @author  Nathan Baker
+ */
+VPRIVATE void fillcoCoefMolDiel(
+        Vpmg *thee
+        );
+
+/** 
+ * @brief  Fill differential operator coefficient arrays from a molecular
+ *         surface calculation without smoothing
+ * @author  Nathan Baker
+ */
+VPRIVATE void fillcoCoefMolDielNoSmooth(
+        Vpmg *thee
+        );
+
+/** 
+ * @brief  Calculate molecular surface smoothing via a harmonic average for
+ *         grid midpoints (between i and i+1) per Davis ME, McCammon JA.  J
+ *         Comput Chem 12 (7) 909-12 (1991).  
+ * @author  Nathan Baker
+ */
+VPRIVATE double molSmoothHarm(
+        double epsw,  /** High dielectric */
+        double epsp,  /** Low dielectric */
+        double frac   /** Fraction of grid assigned to the high dielectric */
+        );
+
+/** 
+ * @brief  Fill differential operator coefficient arrays from a molecular
+ *         surface calculation without smoothing.
+ *
+ *         Molecular surface, dielectric smoothing following an implementation
+ *         of Davis ME, McCammon JA.  J Comput Chem 12 (7) 909-12 (1991).  
+ *
+ *         We're not using complete fractional occupancies -- instead, we're
+ *         estimating them from left-, mid-, and right-grid points.
+ *
+ * @note   This uses thee->ccf as temporary storage.
+ * @author  Nathan Baker
+ */
+VPRIVATE void fillcoCoefMolDielSmooth(
+        Vpmg *thee
+        );
+
+/** 
  * @brief  Fill operator coefficient arrays from a spline-based surface
  *         calculation
  * @author  Nathan Baker
@@ -248,6 +305,28 @@ VPRIVATE void qfForceSpline2(
         Vpmg *thee, 
         double *force,  /** Set to force */
         int atomID  /** Valist atom ID */
+        );
+
+/** 
+ * @brief  Mark the grid points inside a sphere with a particular value.  This
+ *         marks by resetting the the grid points inside the sphere to the
+ *         specified value.
+ * @author  Nathan Baker
+ */
+VPRIVATE void markSphere(
+        double rtot,  /** Sphere radius */
+        double *tpos,  /** Sphere position */
+        int nx,  /** Number of grid points */
+        int ny,  /** Number of grid points */
+        int nz,  /** Number of grid points */
+        double hx,  /** Grid spacing */
+        double hy,  /** Grid spacing */
+        double hzed,  /** Grid spacing */
+        double xmin,  /** Grid lower corner */
+        double ymin,  /** Grid lower corner */
+        double zmin,  /** Grid lower corner */
+        double *array,  /** Grid values */
+        double markVal  /** Value to mark with */
         );
 
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))

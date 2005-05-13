@@ -777,7 +777,8 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         position[1] = j*hy + ymin;
                         position[2] = k*hzed + zmin;
                         vec[IJK(i,j,k)] = 0.0;
-                        if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
+                        if ( VABS(Vacc_ivdwAcc(acc, 
+                               position, pbe->maxIonRadius) - 1.0) < VSMALL) {
                             for (l=0; l<pbe->numIon; l++) {
                                 if (pbetype == PBE_NPBE) {
                                     vec[IJK(i,j,k)] += (pbe->ionConc[l]
@@ -804,7 +805,8 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         position[1] = j*hy + ymin;
                         position[2] = k*hzed + zmin;
                         vec[IJK(i,j,k)] = 0.0;
-                        if (Vacc_ivdwAcc(acc, position, pbe->maxIonRadius)) {
+                        if ( VABS(Vacc_ivdwAcc(acc, 
+                               position, pbe->maxIonRadius) - 1.0) < VSMALL) {
                             for (l=0; l<pbe->numIon; l++) {
                                 if (pbetype == PBE_NPBE) {
                                     vec[IJK(i,j,k)] += (pbe->ionConc[l] 
@@ -1008,7 +1010,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
 
     /* Bail if we're at zero ionic strength */
-    if (zkappa2 == 0.0) {
+    if (zkappa2 < VSMALL) {
 
 #ifndef VAPBSQUIET
         Vnm_print(0, "Vpmg_qmEnergy:  Zero energy for zero ionic strength!\n");
@@ -1079,7 +1081,7 @@ VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
 VPRIVATE double Vpmg_qfEnergyPoint(Vpmg *thee, int extFlag) {
 
     int iatom, nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
-    double xmax, xmin, ymax, ymin, zmax, zmin, hx, hy, hzed, ifloat, jfloat;
+    double xmax, ymax, zmax, xmin, ymin, zmin, hx, hy, hzed, ifloat, jfloat;
     double charge, kfloat, dx, dy, dz, energy, uval, *position;
     double *u;
     double *pvec;
@@ -1233,9 +1235,8 @@ VPUBLIC double Vpmg_qfAtomEnergy(Vpmg *thee, Vatom *atom) {
     
 VPRIVATE double Vpmg_qfEnergyVolume(Vpmg *thee, int extFlag) {
 
-    double hx, hy, hzed, energy, ionConc[MAXION], ionRadii[MAXION];
-    double ionQ[MAXION], zkappa2, ionstr, zks2;
-    int i, j, nx, ny, nz, nion, ichop, nchop;
+    double hx, hy, hzed, energy;
+    int i, nx, ny, nz;
  
     VASSERT(thee != VNULL);
 
@@ -1273,7 +1274,7 @@ VPRIVATE double Vpmg_qfEnergyVolume(Vpmg *thee, int extFlag) {
 VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
         Vpmg *pmgOLD, MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
 
-    int i, j, nion, bflags[6];
+    int i, j, nion;
     double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION], zkappa2, zks2;
     double ionstr, partMin[3], partMax[3];
 
@@ -1958,7 +1959,7 @@ VPRIVATE double bcfl1sp(double size, double *apos, double charge,
 
     dist = VSQRT(VSQR(pos[0]-apos[0]) + VSQR(pos[1]-apos[1])
       + VSQR(pos[2]-apos[2]));
-    if (xkappa != 0.0) {
+    if (xkappa > VSMALL) {
         val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
           / (1+xkappa*size);
     } else {
@@ -1984,7 +1985,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[0] = xf[0];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -1994,7 +1995,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[0] = xf[nx-1];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -2012,7 +2013,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[1] = yf[0];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -2022,7 +2023,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[1] = yf[ny-1];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -2040,7 +2041,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[2] = zf[0];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -2050,7 +2051,7 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
             gpos[2] = zf[nz-1];
             dist = VSQRT(VSQR(gpos[0]-apos[0]) + VSQR(gpos[1]-apos[1])
               + VSQR(gpos[2]-apos[2]));
-            if (xkappa != 0.0) {
+            if (xkappa > VSMALL) {
                 val = pre1*(charge/dist)*VEXP(-xkappa*(dist-size))
                        / (1+xkappa*size);
             } else {
@@ -2298,18 +2299,30 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
 
 VPRIVATE void fillcoCoefMol(Vpmg *thee) {
 
+    if (thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
+      thee->useKappaMap)  {
+
+        fillcoCoefMap(thee);
+
+    } else { 
+
+        fillcoCoefMolDiel(thee); 
+        fillcoCoefMolIon(thee);
+
+    }
+
+}
+
+VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
+
     Vacc *acc;
     Valist *alist;
     Vpbe *pbe;
     Vatom *atom;
     double xmin, xmax, ymin, ymax, zmin, zmax, ionmask, ionstr;
-    double xlen, ylen, zlen, position[3];
-    double irad, srad, dx, dy, dz, epsw, epsp;
-    double hx, hy, hzed, *apos, arad, accf;
-    double dx2, dy2, dz2, arad2, stot2, itot2, rtot, rtot2;
-    int i, j, k, nx, ny, nz, iatom;
-    int imin, imax, jmin, jmax, kmin, kmax;
-    int acclo, accmid, acchi, a000;
+    double xlen, ylen, zlen, irad;
+    double hx, hy, hzed, *apos, arad;
+    int i, nx, ny, nz, iatom;
     Vsurf_Meth surfMeth;
 
     VASSERT(thee != VNULL);
@@ -2320,10 +2333,7 @@ VPRIVATE void fillcoCoefMol(Vpmg *thee) {
     acc = pbe->acc;
     alist = pbe->alist;
     irad = Vpbe_getMaxIonRadius(pbe);
-    srad = Vpbe_getSolventRadius(pbe);
     ionstr = Vpbe_getBulkIonicStrength(pbe);
-    epsw = Vpbe_getSolventDiel(pbe);
-    epsp = Vpbe_getSoluteDiel(pbe);
 
     /* Mesh info */
     nx = thee->pmgp->nx;
@@ -2353,26 +2363,115 @@ VPRIVATE void fillcoCoefMol(Vpmg *thee) {
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
 
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
+    /* Reset the ccf array, marking everything accessible */
+    for (i=0; i<(nx*ny*nz); i++) thee->ccf[i] = ionmask;
+
+    /* Loop through the atoms and set ccf = 0.0 (inaccessible) if a point
+     * is inside the ion-inflated van der Waals radii */
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+        arad = Vatom_getRadius(atom);
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+            (apos[2]<=zmin) || (apos[2]>=zmax)) {
+            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                Vnm_print(2, 
+"Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+                  iatom, apos[0], apos[1], apos[2]);
+                Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
+                  xmin, xmax);
+                Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
+                  ymin, ymax);
+                Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
+                  zmin, zmax);
+            }
+            fflush(stderr);
+
+        } else { /* if we're on the mesh */
+
+            /* Mark ions */
+            markSphere((irad+arad), apos, 
+                    nx, ny, nz,
+                    hx, hy, hzed,
+                    xmin, ymin, zmin,
+                    thee->ccf, 0.0);
+
+        } /* endif (on the mesh) */
+    } /* endfor (over all atoms) */
+
+}
+
+VPRIVATE void fillcoCoefMolDiel(Vpmg *thee) {
+
+    /* Now figure out what to do with the solvent accessibility */
+    switch (thee->surfMeth) {
+        case VSM_MOL:
+            fillcoCoefMolDielNoSmooth(thee);
+            break;
+        case VSM_MOLSMOOTH:
+            fillcoCoefMolDielSmooth(thee);
+            break;
+        default:
+            Vnm_print(2, "Error in surfMeth!\n");
+            VASSERT(0);
+    }
+}
+
+VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
+
+    Vacc *acc;
+    VaccSurf *asurf;
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, position[3];
+    double srad, epsw, epsp, deps;
+    double hx, hy, hzed, *apos, arad;
+    int i, nx, ny, nz, iatom, ipt;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    alist = pbe->alist;
+    srad = Vpbe_getSolventRadius(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    epsp = Vpbe_getSoluteDiel(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Reset the ccf, a1cf, a2cf, and a3cf arrays */
     for (i=0; i<(nx*ny*nz); i++) {
-        thee->ccf[i] = 0.0;
-        thee->a1cf[i] = 0.0;
-        thee->a2cf[i] = 0.0;
-        thee->a3cf[i] = 0.0;
+        thee->a1cf[i] = 1.0;
+        thee->a2cf[i] = 1.0;
+        thee->a3cf[i] = 1.0;
     }
 
-    if (thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
-      thee->useKappaMap) fillcoCoefMap(thee);
-
-
-    /* Loop through the atoms and do the following:
-     * 1.  Set ccf = -1.0, for all points inside the
-     *     (possibly spline-based) inflated van der Waals surface
-         * 2.  Set a{123}cf = -1.0 if a point is inside the inflated van der
-         *     Waals radii
-         * 3.  Set a{123}cf = -2.0 if a point is inside the van der Waals radii
-         * 4.  Fill in the source term array
-     */
+    /* Loop through the atoms and set a{123}cf = 0.0 (inaccessible)
+     * if a point is inside the solvent-inflated van der Waals radii */
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
         atom = Valist_getAtom(alist, iatom);
@@ -2387,236 +2486,289 @@ VPRIVATE void fillcoCoefMol(Vpmg *thee) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
  %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
-                Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", 
+                Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
                   xmin, xmax);
-                Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", 
+                Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
                   ymin, ymax);
-                Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", 
+                Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
                   zmin, zmax);
             }
             fflush(stderr);
+
         } else { /* if we're on the mesh */
 
-            /* Convert the atom position to grid reference frame */
-            position[0] = apos[0] - xmin;
-            position[1] = apos[1] - ymin;
-            position[2] = apos[2] - zmin;
+            if (arad > VSMALL) {
+                /* Mark x-shifted dielectric */
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        (xmin+0.5*hx), ymin, zmin,
+                        thee->a1cf, 0.0);
 
-            /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
-             * ASSIGNMENT (Steps #1-3) */
-            itot2 = VSQR(irad + arad);
-            stot2 = VSQR(srad + arad);
-            arad2 = VSQR(arad);
-           /* We'll search over grid points which are in the greater of
-             * these two radii */
-            rtot = VMAX2((irad + arad), (srad + arad));
-            rtot2 = VMAX2(itot2, stot2);
-            dx = rtot + 0.5*hx;
-            imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
-            imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
-            for (i=imin; i<=imax; i++) {
-                dx2 = VSQR(position[0] - hx*i);
-                if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
-                else dy = 0.5*hy;
-                jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
-                jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
-                for (j=jmin; j<=jmax; j++) {
-                    dy2 = VSQR(position[1] - hy*j);
-                    if (rtot2 > (dx2+dy2)) 
-                      dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
-                    else dz = 0.5*hzed;
-                    kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
-                    kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
-                    for (k=kmin; k<=kmax; k++) {
-                        dz2 = VSQR(k*hzed - position[2]);
-                        /* See if grid point is inside ivdw radius and set
-                         * ccf accordingly (do spline assignment here) */
-                        if ((dz2 + dy2 + dx2) <= itot2) 
-                          thee->ccf[IJK(i,j,k)] = -1.0;
-                        /* See if x-shifted grid point is inside ivdw rad */
-                        if (thee->a1cf[IJK(i,j,k)] != -2.0) {
-                            if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))
-                                 <=stot2) {
-                                /* See if inside vdw rad */
-                                if ((dz2+dy2+VSQR((i+0.5)*hx-position[0]))
-                                     <=arad2) 
-                                  thee->a1cf[IJK(i,j,k)] = -2.0;
-                                 else thee->a1cf[IJK(i,j,k)] = -1.0;
-                            } 
-                        }
-                        /* See if y-shifted grid point is inside ivdw rad */
-                        if (thee->a2cf[IJK(i,j,k)] != -2.0) {
-                            if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2) 
-                                 <= stot2) {
-                                /* See if inside vdw rad */
-                                if ((dz2+VSQR((j+0.5)*hy-position[1])+dx2)
-                                     <=arad2) 
-                                  thee->a2cf[IJK(i,j,k)] = -2.0;
-                                else thee->a2cf[IJK(i,j,k)] = -1.0;
-                            }        
-                        }
-                        /* See if z-shifted grid point is inside ivdw rad */
-                        if (thee->a3cf[IJK(i,j,k)] != -2.0) {
-                            if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)
-                                 <=stot2) {
-                                /* See if inside vdw rad */
-                                if ((VSQR((k+0.5)*hzed-position[2])+dy2+dx2)
-                                     <=arad2)
-                                  thee->a3cf[IJK(i,j,k)] = -2.0;
-                                else thee->a3cf[IJK(i,j,k)] = -1.0;
-                            }        
-                        }
-                    } /* k loop */
-                } /* j loop */
-            } /* i loop */
+                /* Mark y-shifted dielectric */
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, (ymin+0.5*hy), zmin,
+                        thee->a2cf, 0.0);
+
+                /* Mark z-shifted dielectric */
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, (zmin+0.5*hzed),
+                        thee->a3cf, 0.0);
+            }
+
         } /* endif (on the mesh) */
     } /* endfor (over all atoms) */
 
-    Vnm_print(0, "Vpmg_fillco:  filling coefficient arrays\n");
-    /* Interpret markings and fill the coefficient arrays */
-    for (k=0; k<nz; k++) {
-        for (j=0; j<ny; j++) {
-            for (i=0; i<nx; i++) {
-                position[0] = thee->xf[i];
-                position[1] = thee->yf[j];
-                position[2] = thee->zf[k];
+    /* We only need to do the next step for non-zero solvent radii */
+    if (srad > VSMALL) {
 
-                /* the scalar (0th derivative) entry.  This is simply a
-                 * number between 0 and 1; the actual coefficent value is
-                 * calculated in mypde.f */
-                if (thee->ccf[IJK(i,j,k)] == -1.0) 
-                  thee->ccf[IJK(i,j,k)] = 0.0;
-                else thee->ccf[IJK(i,j,k)] = ionmask;
+        /* Now loop over the solvent accessible surface points */
+        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+            atom = Valist_getAtom(alist, iatom);
+            asurf = Vacc_atomSASPoints(acc, srad, atom);
+    
+            /* Use each point on the SAS to reset the solvent accessibility */
+            for (ipt=0; ipt<(asurf->npts); ipt++) {
+    
+                position[0] = asurf->xpts[ipt];
+                position[1] = asurf->ypts[ipt];
+                position[2] = asurf->zpts[ipt];
+    
+                /* Mark x-shifted dielectric */
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        (xmin+0.5*hx), ymin, zmin,
+                        thee->a1cf, 1.0);
+    
+                /* Mark y-shifted dielectric */
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, (ymin+0.5*hy), zmin,
+                        thee->a2cf, 1.0);
+    
+                /* Mark z-shifted dielectric */
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, (zmin+0.5*hzed),
+                        thee->a3cf, 1.0);
+    
+            }
 
-                /* The diagonal tensor (2nd derivative) entries.  Each of
-                 * these entries is evaluated ad the grid edges midpoints */
-                switch (surfMeth) {
+        }
+    }
 
-                  /* No dielectric smoothing */
-                  case VSM_MOL: 
-                    /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i] + 0.5*hx;
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        /* NAB-DEBUG:  I've changed fastMolAcc -> molAcc */
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
-                          thee->a1cf[IJK(i,j,k)] = epsp; 
-                        else thee->a1cf[IJK(i,j,k)] = epsw; 
-                    }
-                    /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j] + 0.5*hy;
-                        position[2] = thee->zf[k];
-                        /* NAB-DEBUG:  I've changed fastMolAcc -> molAcc */
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
-                          thee->a2cf[IJK(i,j,k)] = epsp; 
-                        else thee->a2cf[IJK(i,j,k)] = epsw; 
-                    }
-                    /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k] + 0.5*hzed;
-                        /* NAB-DEBUG:  I've changed fastMolAcc -> molAcc */
-                        if (Vacc_molAcc(acc, position, srad) == 0) 
-                          thee->a3cf[IJK(i,j,k)] = epsp; 
-                        else thee->a3cf[IJK(i,j,k)] = epsw; 
-                    }
-                    break; 
-
-                  /* A very rudimentary form of dielectric smoothing.
-                   * Specifically, the dielectric will be evaluated at
-                   * the mid point and the two flanking mesh points.
-                   * The fraction of the grid edge in the solvent will
-                   * then be calculated from these three values (i.e.,
-                   * either 0, 1/3, 2/3, or 1).  The dielectric value
-                   * at the midpoint will then be assigned based on the
-                   * usual dielectric smoothing formula:
-                   * \epsilon_s\epsilon_i/(a\epsilon_s +
-                   * (1-a)\epsilon_i)  */
-                case VSM_MOLSMOOTH:
-                    a000 = 1.0;
-                    if ((thee->a1cf[IJK(i,j,k)] == -1.0) ||
-                        (thee->a2cf[IJK(i,j,k)] == -1.0) ||
-                        (thee->a3cf[IJK(i,j,k)] == -1.0)) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        /* NAB-DEBUG:  I've changed fastMolAcc -> molAcc */
-                        a000 = Vacc_molAcc(acc, position, srad);
-                    }
-                    /* x-direction */
-                    if (thee->a1cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i] + 0.5*hx;
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k];
-                        acclo = a000;
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        position[0] = thee->xf[i] + hx;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid
-                          +(double)acclo)/3.0;
-                        thee->a1cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    /* y-direction */
-                    if (thee->a2cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j] + 0.5*hy;
-                        position[2] = thee->zf[k];
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        acclo = a000;
-                        position[1] = thee->yf[j] + hy;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid
-                          +(double)acclo)/3.0;
-                        thee->a2cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    /* z-direction */
-                    if (thee->a3cf[IJK(i,j,k)] == -1.0) {
-                        position[0] = thee->xf[i];
-                        position[1] = thee->yf[j];
-                        position[2] = thee->zf[k] + 0.5*hzed;
-                        accmid = Vacc_molAcc(acc, position, srad);
-                        acclo = a000;
-                        position[2] = thee->zf[k] + hzed;
-                        acchi = Vacc_molAcc(acc, position, srad);
-                        accf = ((double)acchi+(double)accmid
-                          +(double)acclo)/3.0;
-                        thee->a3cf[IJK(i,j,k)] = 
-                          epsw*epsp/((1-accf)*epsw + accf*epsp);
-                    }
-                    break;
-
-                  /* Oops, invalid surfMeth */
-                  default:
-                    Vnm_print(2, "fillcoCoefMol:  Bad surfMeth (%d)!\n", 
-                      surfMeth);
-                    VASSERT(0);
-                } /* end switch(surfMeth) */
-
-                /* Fill in the remaining dielectric values */
-                if (thee->a1cf[IJK(i,j,k)] == -2.0)
-                  thee->a1cf[IJK(i,j,k)] = epsp;
-                if (thee->a2cf[IJK(i,j,k)] == -2.0)
-                  thee->a2cf[IJK(i,j,k)] = epsp;
-                if (thee->a3cf[IJK(i,j,k)] == -2.0)
-                  thee->a3cf[IJK(i,j,k)] = epsp;
-                if (thee->a1cf[IJK(i,j,k)] == 0.0)
-                  thee->a1cf[IJK(i,j,k)] = epsw;
-                if (thee->a2cf[IJK(i,j,k)] == 0.0)
-                  thee->a2cf[IJK(i,j,k)] = epsw;
-                if (thee->a3cf[IJK(i,j,k)] == 0.0)
-                  thee->a3cf[IJK(i,j,k)] = epsw;
-
-            } /* i loop */
-        } /* j loop */
-    } /* k loop */
+    /* Set the dielectric values from the accessibility */
+    deps = epsw - epsp;
+    for (i=0; i<(nx*ny*nz); i++) {
+        thee->a1cf[i] = deps*(thee->a1cf[i]) + epsp;
+        thee->a2cf[i] = deps*(thee->a2cf[i]) + epsp;
+        thee->a3cf[i] = deps*(thee->a3cf[i]) + epsp;
+    }
 
 }
+
+VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
+
+    Vacc *acc;
+    VaccSurf *asurf;
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, position[3], frac;
+    double srad, epsw, epsp, ap, am, a;
+    double hx, hy, hzed, *apos, arad;
+    int i, j, k, nx, ny, nz, iatom, ipt;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    alist = pbe->alist;
+    srad = Vpbe_getSolventRadius(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    epsp = Vpbe_getSoluteDiel(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Reset the ccf, a1cf, a2cf, and a3cf arrays */
+    for (i=0; i<(nx*ny*nz); i++) {
+        thee->ccf[i]  = 1.0;
+        thee->a1cf[i] = 1.0;
+        thee->a2cf[i] = 1.0;
+        thee->a3cf[i] = 1.0;
+    }
+
+    /* Loop through the atoms and set ccf to 0.0 (inaccessible) if a point is
+     * inside the solvent-inflated van der Waals radii */
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+        arad = Vatom_getRadius(atom);
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+            (apos[2]<=zmin) || (apos[2]>=zmax)) {
+            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
+ %4.3f) is off the mesh (ignoring):\n",
+                  iatom, apos[0], apos[1], apos[2]);
+                Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
+                  xmin, xmax);
+                Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
+                  ymin, ymax);
+                Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
+                  zmin, zmax);
+            }
+            fflush(stderr);
+
+        } else { /* if we're on the mesh */
+
+            if (arad > VSMALL) {
+                /* Mark unshifted dielectric */
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, zmin,
+                        thee->ccf, 0.0);
+
+                /* Mark shifted dielectrics */
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin+0.5*hx, ymin, zmin,
+                        thee->a1cf, 0.0);
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin+0.5*hy, zmin,
+                        thee->a2cf, 0.0);
+                markSphere((arad+srad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, zmin+0.5*hzed,
+                        thee->a3cf, 0.0);
+            }
+
+        } /* endif (on the mesh) */
+
+    } /* endfor (over all atoms) */
+
+    /* We only need to do the next step for non-zero solvent radii */
+    if (srad > VSMALL) {
+        /* Now use the SAS points to reset the dielectric */
+        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+    
+            atom = Valist_getAtom(alist, iatom);
+            asurf = Vacc_atomSASPoints(acc, srad, atom);
+    
+            /* Use each point on the SAS to reset the solvent
+             * accessibility and set grid length fractions */
+            for (ipt=0; ipt<(asurf->npts); ipt++) {
+                position[0] = asurf->xpts[ipt];
+                position[1] = asurf->ypts[ipt];
+                position[2] = asurf->zpts[ipt];
+    
+                /* Mark unshifted dielectric */
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, zmin,
+                        thee->ccf, 1.0);
+    
+                /* Mark shifted dielectrics */
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin+0.5*hx, ymin, zmin,
+                        thee->a1cf, 1.0);
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin+0.5*hy, zmin,
+                        thee->a2cf, 1.0);
+                markSphere(srad, position, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, zmin+0.5*hzed,
+                        thee->a3cf, 1.0);
+            }
+        }
+    }
+
+    /* Convert to dielectric values */
+    for (i=0; i<nx; i++) {
+        for (j=0; j<ny; j++) {
+            for (k=0; k<nz; k++) {
+
+                /* X-shifted */
+                a = thee->a1cf[IJK(i,j,k)];
+                am = thee->ccf[IJK(i,j,k)];
+                if (i < (nx-1)) ap = thee->ccf[IJK(i+1,j,k)];
+                else ap = a;
+                frac = (a + ap + am)/3.0;
+                thee->a1cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+
+                /* Y-shifted */
+                a = thee->a2cf[IJK(i,j,k)];
+                am = thee->ccf[IJK(i,j,k)];
+                if (j < (ny-1)) ap = thee->ccf[IJK(i,j+1,k)];
+                else ap = a;
+                frac = (a + ap + am)/3.0;
+                thee->a2cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+
+                /* Y-shifted */
+                a = thee->a3cf[IJK(i,j,k)];
+                am = thee->ccf[IJK(i,j,k)];
+                if (k < (nz-1)) ap = thee->ccf[IJK(i,j,k+1)];
+                else ap = a;
+                frac = (a + ap + am)/3.0;
+                thee->a3cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+
+            }
+        }
+    }
+
+}
+
+VPRIVATE double molSmoothHarm(double epsw, double epsp, double frac) {
+
+    double num, den, eps;
+
+    num = epsw*epsp;
+    den = epsp*frac + epsw*(1.0-frac);
+    eps = num/den;
+
+    return eps;
+}
+
 
 VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
 
@@ -4035,3 +4187,160 @@ VPRIVATE void qfForceSpline2(Vpmg *thee, double *force, int atomID) {
     }
 }
 
+VPRIVATE void markFrac(
+        double rtot, double *tpos,
+        int nx, int ny, int nz,
+        double hx, double hy, double hzed,
+        double xmin, double ymin, double zmin,
+        double *xarray, double *yarray, double *zarray) {
+
+    int i, j, k, imin, imax, jmin, jmax, kmin, kmax;
+    double dx, dx2, dy, dy2, dz, dz2, a000, a001, a010, a100, r2;
+    double x, xp, xm, y, yp, ym, zp, z, zm, xspan, yspan, zspan;
+    double rtot2, pos[3];
+
+    /* Convert to grid reference frame */
+    pos[0] = tpos[0] - xmin;
+    pos[1] = tpos[1] - ymin;
+    pos[2] = tpos[2] - zmin;
+
+    rtot2 = VSQR(rtot);
+
+    xspan = rtot + 2*hx;
+    imin = VMAX2(0, (int)ceil((pos[0] - xspan)/hx));
+    imax = VMIN2(nx-1, (int)floor((pos[0] + xspan)/hx));
+    for (i=imin; i<=imax; i++) {
+        x = hx*i;
+        dx2 = VSQR(pos[0] - x);
+        if (rtot2 > dx2) {
+            yspan = VSQRT(rtot2 - dx2) + 2*hy;
+        } else {
+            yspan = 2*hy;
+        }
+        jmin = VMAX2(0,(int)ceil((pos[1] - yspan)/hy));
+        jmax = VMIN2(ny-1,(int)floor((pos[1] + yspan)/hy));
+        for (j=jmin; j<=jmax; j++) {
+            y = hy*j;
+            dy2 = VSQR(pos[1] - y);
+            if (rtot2 > (dx2+dy2)) { 
+                zspan = VSQRT(rtot2-dx2-dy2) + 2*hzed; 
+            } else {
+                zspan = 2*hzed;
+            }
+            kmin = VMAX2(0,(int)ceil((pos[2] - zspan)/hzed));
+            kmax = VMIN2(nz-1,(int)floor((pos[2] + zspan)/hzed));
+            for (k=kmin; k<=kmax; k++) {
+                z = hzed*k;
+                dz2 = VSQR(pos[2] - z);
+
+                r2 = dx2 + dy2 + dz2;
+
+                /* We need to determine the inclusion value a000 at (i,j,k) */
+                if (r2 < rtot2) a000 = 1.0;
+                else a000 = 0.0;
+
+                /* We need to evaluate the values of x which intersect the
+                 * sphere and determine if these are in the interval 
+                 * [(i,j,k), (i+1,j,k)] */
+                if (r2 < (rtot2 - hx*hx)) a100 = 1.0;
+                else if (r2 > (rtot2 + hx*hx)) a100 = 0.0;
+                else if (rtot2 > (dy2 + dz2)) {
+                    dx = VSQRT(rtot2 - dy2 - dz2);
+                    xm = pos[0] - dx;
+                    xp = pos[0] + dx;
+                    if ((xm < x+hx) && (xm > x)) {
+                        a100 = (xm - x)/hx;
+                    } else if ((xp < x+hx) && (xp > x)) {
+                        a100 = (xp - x)/hx;
+                    }
+                } else a100 = 0.0;
+
+                /* We need to evaluate the values of y which intersect the
+                 * sphere and determine if these are in the interval 
+                 * [(i,j,k), (i,j+1,k)] */
+                if (r2 < (rtot2 - hy*hy)) a010 = 1.0;
+                else if (r2 > (rtot2 + hy*hy)) a010 = 0.0;
+                else if (rtot2 > (dx2 + dz2)) {
+                    dy = VSQRT(rtot2 - dx2 - dz2);
+                    ym = pos[1] - dy;
+                    yp = pos[1] + dy;
+                    if ((ym < y+hy) && (ym > y)) {
+                        a010 = (ym - y)/hy;
+                    } else if ((yp < y+hy) && (yp > y)) {
+                        a010 = (yp - y)/hy;
+                    }
+                } else a010 = 0.0;
+
+                /* We need to evaluate the values of y which intersect the
+                 * sphere and determine if these are in the interval 
+                 * [(i,j,k), (i,j,k+1)] */
+                if (r2 < (rtot2 - hzed*hzed)) a001 = 1.0;
+                else if (r2 > (rtot2 + hzed*hzed)) a001 = 0.0;
+                else if (rtot2 > (dx2 + dy2)) {
+                    dz = VSQRT(rtot2 - dx2 - dy2);
+                    zm = pos[2] - dz;
+                    zp = pos[2] + dz;
+                    if ((zm < z+hzed) && (zm > z)) {
+                        a001 = (zm - z)/hzed;
+                    } else if ((zp < z+hzed) && (zp > z)) {
+                        a001 = (zp - z)/hzed;
+                    }
+                } else a001 = 0.0;
+
+                if (a100 < xarray[IJK(i,j,k)]) xarray[IJK(i,j,k)] = a100;
+                if (a010 < yarray[IJK(i,j,k)]) yarray[IJK(i,j,k)] = a010;
+                if (a001 < zarray[IJK(i,j,k)]) zarray[IJK(i,j,k)] = a001;
+
+            } /* k loop */
+        } /* j loop */
+    } /* i loop */
+}
+
+VPRIVATE void markSphere(
+        double rtot, double *tpos,
+        int nx, int ny, int nz,
+        double hx, double hy, double hzed,
+        double xmin, double ymin, double zmin,
+        double *array, double markVal) {
+
+    int i, j, k, imin, imax, jmin, jmax, kmin, kmax;
+    double dx, dx2, dy, dy2, dz, dz2;
+    double rtot2, pos[3];
+
+    /* Convert to grid reference frame */
+    pos[0] = tpos[0] - xmin;
+    pos[1] = tpos[1] - ymin;
+    pos[2] = tpos[2] - zmin;
+
+    rtot2 = VSQR(rtot);
+
+    dx = rtot + 0.5*hx;
+    imin = VMAX2(0,(int)ceil((pos[0] - dx)/hx));
+    imax = VMIN2(nx-1,(int)floor((pos[0] + dx)/hx));
+    for (i=imin; i<=imax; i++) {
+        dx2 = VSQR(pos[0] - hx*i);
+        if (rtot2 > dx2) {
+            dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+        } else {
+            dy = 0.5*hy;
+        }
+        jmin = VMAX2(0,(int)ceil((pos[1] - dy)/hy));
+        jmax = VMIN2(ny-1,(int)floor((pos[1] + dy)/hy));
+        for (j=jmin; j<=jmax; j++) {
+            dy2 = VSQR(pos[1] - hy*j);
+            if (rtot2 > (dx2+dy2)) { 
+                dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed; 
+            } else {
+                dz = 0.5*hzed;
+            }
+            kmin = VMAX2(0,(int)ceil((pos[2] - dz)/hzed));
+            kmax = VMIN2(nz-1,(int)floor((pos[2] + dz)/hzed));
+            for (k=kmin; k<=kmax; k++) {
+                dz2 = VSQR(k*hzed - pos[2]);
+                if ((dz2 + dy2 + dx2) <= rtot2) {
+                    array[IJK(i,j,k)] = markVal;
+                }
+            } /* k loop */
+        } /* j loop */
+    } /* i loop */
+}

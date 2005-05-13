@@ -15,146 +15,276 @@
 
 <p>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a2">MAXMOL</a>&nbsp;&nbsp;&nbsp;5</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>The maximum number of molecules that can be involved in a single PBE calculation.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a3">MAXION</a>&nbsp;&nbsp;&nbsp;10</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>The maximum number of ion species that can be involved in a single PBE calculation.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a4" doxytag="Vhal::MAXFOCUS"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a4">MAXFOCUS</a>&nbsp;&nbsp;&nbsp;5</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a2">APBS_TIMER_WALL_CLOCK</a>&nbsp;&nbsp;&nbsp;26</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>APBS total execution timer ID.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a3">APBS_TIMER_SETUP</a>&nbsp;&nbsp;&nbsp;27</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>APBS setup timer ID.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a4">APBS_TIMER_SOLVER</a>&nbsp;&nbsp;&nbsp;28</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>APBS solver timer ID.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a5">APBS_TIMER_ENERGY</a>&nbsp;&nbsp;&nbsp;29</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>APBS energy timer ID.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a6">APBS_TIMER_FORCE</a>&nbsp;&nbsp;&nbsp;29</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>APBS force timer ID.</em> <a href="#a6"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a7">MAXMOL</a>&nbsp;&nbsp;&nbsp;5</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>The maximum number of molecules that can be involved in a single PBE calculation.</em> <a href="#a7"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a8">MAXION</a>&nbsp;&nbsp;&nbsp;10</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>The maximum number of ion species that can be involved in a single PBE calculation.</em> <a href="#a8"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a name="a9" doxytag="Vhal::MAXFOCUS"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a9">MAXFOCUS</a>&nbsp;&nbsp;&nbsp;5</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>The maximum number of times an MG calculation can be focused.</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a5" doxytag="Vhal::VMGNLEV"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a5">VMGNLEV</a>&nbsp;&nbsp;&nbsp;4</td></tr>
+<tr><td nowrap align=right valign=top><a name="a10" doxytag="Vhal::VMGNLEV"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a10">VMGNLEV</a>&nbsp;&nbsp;&nbsp;4</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Minimum number of levels in a multigrid calculations.</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a6" doxytag="Vhal::VREDFRAC"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a6">VREDFRAC</a>&nbsp;&nbsp;&nbsp;0.25</td></tr>
+<tr><td nowrap align=right valign=top><a name="a11" doxytag="Vhal::VREDFRAC"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a11">VREDFRAC</a>&nbsp;&nbsp;&nbsp;0.25</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Maximum reduction of grid spacing during a focusing calculation.</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a7" doxytag="Vhal::VAPBS_NVS"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a7">VAPBS_NVS</a>&nbsp;&nbsp;&nbsp;4</td></tr>
+<tr><td nowrap align=right valign=top><a name="a12" doxytag="Vhal::VAPBS_NVS"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a12">VAPBS_NVS</a>&nbsp;&nbsp;&nbsp;4</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Number of vertices per simplex (hard-coded to 3D).</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a8" doxytag="Vhal::VAPBS_DIM"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a8">VAPBS_DIM</a>&nbsp;&nbsp;&nbsp;3</td></tr>
+<tr><td nowrap align=right valign=top><a name="a13" doxytag="Vhal::VAPBS_DIM"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a13">VAPBS_DIM</a>&nbsp;&nbsp;&nbsp;3</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Our dimension.</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a9">VAPBS_RIGHT</a>&nbsp;&nbsp;&nbsp;0</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a9"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a10">VAPBS_FRONT</a>&nbsp;&nbsp;&nbsp;1</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a10"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a11">VAPBS_UP</a>&nbsp;&nbsp;&nbsp;2</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a11"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a12">VAPBS_LEFT</a>&nbsp;&nbsp;&nbsp;3</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a12"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a13">VAPBS_BACK</a>&nbsp;&nbsp;&nbsp;4</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a13"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a14">VAPBS_DOWN</a>&nbsp;&nbsp;&nbsp;5</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a14">VAPBS_RIGHT</a>&nbsp;&nbsp;&nbsp;0</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a14"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a15">VPMGSMALL</a>&nbsp;&nbsp;&nbsp;1e-12</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>A small number used in Vpmg to decide if points are on/off grid-lines or non-zer0 (etc.).</em> <a href="#a15"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a name="a16" doxytag="Vhal::VF77_MANGLE"></a>
-#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a16">VF77_MANGLE</a>(name, NAME)&nbsp;&nbsp;&nbsp;name</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a15">VAPBS_FRONT</a>&nbsp;&nbsp;&nbsp;1</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a15"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a16">VAPBS_UP</a>&nbsp;&nbsp;&nbsp;2</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a16"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a17">VAPBS_LEFT</a>&nbsp;&nbsp;&nbsp;3</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a17"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a18">VAPBS_BACK</a>&nbsp;&nbsp;&nbsp;4</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a18"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a19">VAPBS_DOWN</a>&nbsp;&nbsp;&nbsp;5</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Face definition for a volume.</em> <a href="#a19"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a20">VPMGSMALL</a>&nbsp;&nbsp;&nbsp;1e-12</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>A small number used in Vpmg to decide if points are on/off grid-lines or non-zer0 (etc.).</em> <a href="#a20"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a name="a21" doxytag="Vhal::VF77_MANGLE"></a>
+#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a21">VF77_MANGLE</a>(name, NAME)&nbsp;&nbsp;&nbsp;name</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Name-mangling macro for using FORTRAN functions in C code.</em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a17">VFLOOR</a>(value)&nbsp;&nbsp;&nbsp;floor(value)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Wrapped floor to fix floating point issues in the Intel compiler.</em> <a href="#a17"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a18">VEMBED</a>(rctag)</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Allows embedding of RCS ID tags in object files.</em> <a href="#a18"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a22">VFLOOR</a>(value)&nbsp;&nbsp;&nbsp;floor(value)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Wrapped floor to fix floating point issues in the Intel compiler.</em> <a href="#a22"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a23">VEMBED</a>(rctag)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Allows embedding of RCS ID tags in object files.</em> <a href="#a23"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a20">eVhal_PBEType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a0">Vhal_PBEType</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a25">eVhal_PBEType</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a0">Vhal_PBEType</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vhal_PBEType type as the Vhal_PBEType enum.</em> <a href="#a0"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a21">eVbcfl</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a1">Vbcfl</a></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a26">eVbcfl</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a1">Vbcfl</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declare Vbcfl type.</em> <a href="#a1"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a19">eVsurf_Meth</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a25">Vsurf_Meth</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vsurf_Meth type as the Vsurf_Meth enum.</em> <a href="#a25"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a22">eVchrg_Meth</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a26">Vchrg_Meth</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vchrg_Meth type as the Vchrg_Meth enum.</em> <a href="#a26"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a23">eVdata_Type</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a27">Vdata_Type</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vdata_Type type as the Vdata_Type enum.</em> <a href="#a27"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a24">eVdata_Format</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a28">Vdata_Format</a></td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vdata_Format type as the Vdata_Format enum.</em> <a href="#a28"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a24">eVsurf_Meth</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a30">Vsurf_Meth</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vsurf_Meth type as the Vsurf_Meth enum.</em> <a href="#a30"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a27">eVchrg_Meth</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a31">Vchrg_Meth</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vchrg_Meth type as the Vchrg_Meth enum.</em> <a href="#a31"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a28">eVdata_Type</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a32">Vdata_Type</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vdata_Type type as the Vdata_Type enum.</em> <a href="#a32"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>typedef enum <a class="el" href="group__Vhal.html#a29">eVdata_Format</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a33">Vdata_Format</a></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vdata_Format type as the Vdata_Format enum.</em> <a href="#a33"></a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a19">eVsurf_Meth</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a19a23">VSM_MOL</a> = 0, 
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a24">eVsurf_Meth</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a28">VSM_MOL</a> = 0, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a19a24">VSM_MOLSMOOTH</a> = 1, 
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a29">VSM_MOLSMOOTH</a> = 1, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a19a25">VSM_SPLINE</a> = 2
-<br>
- }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Types of molecular surface definitions.</em> <a href="#a19">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a20">eVhal_PBEType</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a20a26">PBE_LPBE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a20a27">PBE_NPBE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a20a28">PBE_LRPBE</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a20a29">PBE_NRPBE</a>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a30">VSM_SPLINE</a> = 2
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Version of PBE to solve.</em> <a href="#a20">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a21">eVbcfl</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a21a30">BCFL_ZERO</a> = 0, 
+<tr><td>&nbsp;</td><td><font size=-1><em>Types of molecular surface definitions.</em> <a href="#a24">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a25">eVhal_PBEType</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a25a31">PBE_LPBE</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a21a31">BCFL_SDH</a> = 1, 
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a25a32">PBE_NPBE</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a21a32">BCFL_MDH</a> = 2, 
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a25a33">PBE_LRPBE</a>, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a21a33">BCFL_UNUSED</a> = 3, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a21a34">BCFL_FOCUS</a> = 4
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a25a34">PBE_NRPBE</a>
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Types of boundary conditions.</em> <a href="#a21">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a22">eVchrg_Meth</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a22a35">VCM_TRIL</a> = 0, 
+<tr><td>&nbsp;</td><td><font size=-1><em>Version of PBE to solve.</em> <a href="#a25">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a26">eVbcfl</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a26a35">BCFL_ZERO</a> = 0, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a22a36">VCM_BSPL2</a> = 1
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a26a36">BCFL_SDH</a> = 1, 
 <br>
- }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Types of charge discretization methods.</em> <a href="#a22">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a23">eVdata_Type</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a37">VDT_CHARGE</a>, 
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a26a37">BCFL_MDH</a> = 2, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a38">VDT_POT</a>, 
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a26a38">BCFL_UNUSED</a> = 3, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a39">VDT_SMOL</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a40">VDT_SSPL</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a41">VDT_VDW</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a42">VDT_IVDW</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a43">VDT_LAP</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a44">VDT_EDENS</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a45">VDT_NDENS</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a46">VDT_QDENS</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a47">VDT_DIELX</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a48">VDT_DIELY</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a49">VDT_DIELZ</a>, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a23a50">VDT_KAPPA</a>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a26a39">BCFL_FOCUS</a> = 4
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Types of (scalar) data that can be written out of APBS.</em> <a href="#a23">More...</a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a24">eVdata_Format</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a51">VDF_DX</a> = 0, 
+<tr><td>&nbsp;</td><td><font size=-1><em>Types of boundary conditions.</em> <a href="#a26">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a27">eVchrg_Meth</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a27a40">VCM_TRIL</a> = 0, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a52">VDF_UHBD</a> = 1, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a24a53">VDF_AVS</a> = 2
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a27a41">VCM_BSPL2</a> = 1
 <br>
  }</td></tr>
-<tr><td>&nbsp;</td><td><font size=-1><em>Format of data that can be written out of APBS.</em> <a href="#a24">More...</a><em></em></font><br><br></td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Types of charge discretization methods.</em> <a href="#a27">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a28">eVdata_Type</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a42">VDT_CHARGE</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a43">VDT_POT</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a44">VDT_SMOL</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a45">VDT_SSPL</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a46">VDT_VDW</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a47">VDT_IVDW</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a48">VDT_LAP</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a49">VDT_EDENS</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a50">VDT_NDENS</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a51">VDT_QDENS</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a52">VDT_DIELX</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a53">VDT_DIELY</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a54">VDT_DIELZ</a>, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a28a55">VDT_KAPPA</a>
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Types of (scalar) data that can be written out of APBS.</em> <a href="#a28">More...</a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>enum &nbsp;</td><td valign=bottom><a class="el" href="group__Vhal.html#a29">eVdata_Format</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a29a56">VDF_DX</a> = 0, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a29a57">VDF_UHBD</a> = 1, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__Vhal.html#a29a58">VDF_AVS</a> = 2
+<br>
+ }</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Format of data that can be written out of APBS.</em> <a href="#a29">More...</a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 A "class" which consists solely of macro definitions which are used by several other classes.
 <p>
 <hr><h2>Define Documentation</h2>
-<a name="a3" doxytag="vhal.h::MAXION"></a><p>
+<a name="a5" doxytag="vhal.h::APBS_TIMER_ENERGY"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define APBS_TIMER_ENERGY&nbsp;&nbsp;&nbsp;29
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+APBS energy timer ID.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a6" doxytag="vhal.h::APBS_TIMER_FORCE"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define APBS_TIMER_FORCE&nbsp;&nbsp;&nbsp;29
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+APBS force timer ID.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a3" doxytag="vhal.h::APBS_TIMER_SETUP"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define APBS_TIMER_SETUP&nbsp;&nbsp;&nbsp;27
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+APBS setup timer ID.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a4" doxytag="vhal.h::APBS_TIMER_SOLVER"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define APBS_TIMER_SOLVER&nbsp;&nbsp;&nbsp;28
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+APBS solver timer ID.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a2" doxytag="vhal.h::APBS_TIMER_WALL_CLOCK"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> #define APBS_TIMER_WALL_CLOCK&nbsp;&nbsp;&nbsp;26
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+APBS total execution timer ID.
+<p>
+    </td>
+  </tr>
+</table>
+<a name="a8" doxytag="vhal.h::MAXION"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -178,7 +308,7 @@ The maximum number of ion species that can be involved in a single PBE calculati
     </td>
   </tr>
 </table>
-<a name="a2" doxytag="vhal.h::MAXMOL"></a><p>
+<a name="a7" doxytag="vhal.h::MAXMOL"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -202,7 +332,7 @@ The maximum number of molecules that can be involved in a single PBE calculation
     </td>
   </tr>
 </table>
-<a name="a13" doxytag="vhal.h::VAPBS_BACK"></a><p>
+<a name="a18" doxytag="vhal.h::VAPBS_BACK"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -227,7 +357,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a14" doxytag="vhal.h::VAPBS_DOWN"></a><p>
+<a name="a19" doxytag="vhal.h::VAPBS_DOWN"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -252,7 +382,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a10" doxytag="vhal.h::VAPBS_FRONT"></a><p>
+<a name="a15" doxytag="vhal.h::VAPBS_FRONT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -277,7 +407,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a12" doxytag="vhal.h::VAPBS_LEFT"></a><p>
+<a name="a17" doxytag="vhal.h::VAPBS_LEFT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -302,7 +432,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a9" doxytag="vhal.h::VAPBS_RIGHT"></a><p>
+<a name="a14" doxytag="vhal.h::VAPBS_RIGHT"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -327,7 +457,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a11" doxytag="vhal.h::VAPBS_UP"></a><p>
+<a name="a16" doxytag="vhal.h::VAPBS_UP"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -352,7 +482,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a18" doxytag="vhal.h::VEMBED"></a><p>
+<a name="a23" doxytag="vhal.h::VEMBED"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -384,7 +514,7 @@ Face definition for a volume.
     </td>
   </tr>
 </table>
-<a name="a17" doxytag="vhal.h::VFLOOR"></a><p>
+<a name="a22" doxytag="vhal.h::VFLOOR"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -414,7 +544,7 @@ Wrapped floor to fix floating point issues in the Intel compiler.
     </td>
   </tr>
 </table>
-<a name="a15" doxytag="vhal.h::VPMGSMALL"></a><p>
+<a name="a20" doxytag="vhal.h::VPMGSMALL"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -445,7 +575,7 @@ A small number used in Vpmg to decide if points are on/off grid-lines or non-zer
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__Vhal.html#a21">eVbcfl</a> Vbcfl
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__Vhal.html#a26">eVbcfl</a> Vbcfl
       </table>
     </td>
   </tr>
@@ -463,7 +593,7 @@ Declare Vbcfl type.
     </td>
   </tr>
 </table>
-<a name="a26" doxytag="vhal.h::Vchrg_Meth"></a><p>
+<a name="a31" doxytag="vhal.h::Vchrg_Meth"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -487,7 +617,7 @@ Declaration of the Vchrg_Meth type as the Vchrg_Meth enum.
     </td>
   </tr>
 </table>
-<a name="a28" doxytag="vhal.h::Vdata_Format"></a><p>
+<a name="a33" doxytag="vhal.h::Vdata_Format"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -511,7 +641,7 @@ Declaration of the Vdata_Format type as the Vdata_Format enum.
     </td>
   </tr>
 </table>
-<a name="a27" doxytag="vhal.h::Vdata_Type"></a><p>
+<a name="a32" doxytag="vhal.h::Vdata_Type"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -541,7 +671,7 @@ Declaration of the Vdata_Type type as the Vdata_Type enum.
     <td class="md">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__Vhal.html#a20">eVhal_PBEType</a> Vhal_PBEType
+          <td class="md" nowrap valign="top"> typedef enum <a class="el" href="group__Vhal.html#a25">eVhal_PBEType</a> Vhal_PBEType
       </table>
     </td>
   </tr>
@@ -559,7 +689,7 @@ Declaration of the Vhal_PBEType type as the Vhal_PBEType enum.
     </td>
   </tr>
 </table>
-<a name="a25" doxytag="vhal.h::Vsurf_Meth"></a><p>
+<a name="a30" doxytag="vhal.h::Vsurf_Meth"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -584,7 +714,7 @@ Declaration of the Vsurf_Meth type as the Vsurf_Meth enum.
   </tr>
 </table>
 <hr><h2>Enumeration Type Documentation</h2>
-<a name="a21" doxytag="vhal.h::eVbcfl"></a><p>
+<a name="a26" doxytag="vhal.h::eVbcfl"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -608,22 +738,22 @@ Types of boundary conditions.
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a21a30" doxytag="BCFL_ZERO"></a><em>BCFL_ZERO</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a35" doxytag="BCFL_ZERO"></a><em>BCFL_ZERO</em></em>&nbsp;</td><td>
 Zero Dirichlet boundary conditions </td></tr>
-<tr><td valign=top><em><a name="a21a31" doxytag="BCFL_SDH"></a><em>BCFL_SDH</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a36" doxytag="BCFL_SDH"></a><em>BCFL_SDH</em></em>&nbsp;</td><td>
 Single-sphere Debye-Huckel Dirichlet boundary condition </td></tr>
-<tr><td valign=top><em><a name="a21a32" doxytag="BCFL_MDH"></a><em>BCFL_MDH</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a37" doxytag="BCFL_MDH"></a><em>BCFL_MDH</em></em>&nbsp;</td><td>
 Multiple-sphere Debye-Huckel Dirichlet boundary condition </td></tr>
-<tr><td valign=top><em><a name="a21a33" doxytag="BCFL_UNUSED"></a><em>BCFL_UNUSED</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a38" doxytag="BCFL_UNUSED"></a><em>BCFL_UNUSED</em></em>&nbsp;</td><td>
 Unused boundary condition method (placeholder) </td></tr>
-<tr><td valign=top><em><a name="a21a34" doxytag="BCFL_FOCUS"></a><em>BCFL_FOCUS</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a26a39" doxytag="BCFL_FOCUS"></a><em>BCFL_FOCUS</em></em>&nbsp;</td><td>
 Focusing Dirichlet boundary condition </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a22" doxytag="vhal.h::eVchrg_Meth"></a><p>
+<a name="a27" doxytag="vhal.h::eVchrg_Meth"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -647,16 +777,16 @@ Types of charge discretization methods.
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a22a35" doxytag="VCM_TRIL"></a><em>VCM_TRIL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a27a40" doxytag="VCM_TRIL"></a><em>VCM_TRIL</em></em>&nbsp;</td><td>
 Trilinear interpolation of charge to 8 nearest grid points. The traditional method; not particularly good to use with PBE forces. </td></tr>
-<tr><td valign=top><em><a name="a22a36" doxytag="VCM_BSPL2"></a><em>VCM_BSPL2</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a27a41" doxytag="VCM_BSPL2"></a><em>VCM_BSPL2</em></em>&nbsp;</td><td>
 Cubic B-spline across nearest- and next-nearest-neighbors. Mainly for use in grid-sensitive applications (such as force calculations). </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a24" doxytag="vhal.h::eVdata_Format"></a><p>
+<a name="a29" doxytag="vhal.h::eVdata_Format"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -680,18 +810,18 @@ Format of data that can be written out of APBS.
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a24a51" doxytag="VDF_DX"></a><em>VDF_DX</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a29a56" doxytag="VDF_DX"></a><em>VDF_DX</em></em>&nbsp;</td><td>
 OpenDX (Data Explorer) format </td></tr>
-<tr><td valign=top><em><a name="a24a52" doxytag="VDF_UHBD"></a><em>VDF_UHBD</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a29a57" doxytag="VDF_UHBD"></a><em>VDF_UHBD</em></em>&nbsp;</td><td>
 UHBD format </td></tr>
-<tr><td valign=top><em><a name="a24a53" doxytag="VDF_AVS"></a><em>VDF_AVS</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a29a58" doxytag="VDF_AVS"></a><em>VDF_AVS</em></em>&nbsp;</td><td>
 AVS UCD format </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a23" doxytag="vhal.h::eVdata_Type"></a><p>
+<a name="a28" doxytag="vhal.h::eVdata_Type"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -715,40 +845,40 @@ Types of (scalar) data that can be written out of APBS.
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a23a37" doxytag="VDT_CHARGE"></a><em>VDT_CHARGE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a42" doxytag="VDT_CHARGE"></a><em>VDT_CHARGE</em></em>&nbsp;</td><td>
 Charge distribution (e) </td></tr>
-<tr><td valign=top><em><a name="a23a38" doxytag="VDT_POT"></a><em>VDT_POT</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a43" doxytag="VDT_POT"></a><em>VDT_POT</em></em>&nbsp;</td><td>
 Potential (kT/e) </td></tr>
-<tr><td valign=top><em><a name="a23a39" doxytag="VDT_SMOL"></a><em>VDT_SMOL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a44" doxytag="VDT_SMOL"></a><em>VDT_SMOL</em></em>&nbsp;</td><td>
 Solvent accessibility defined by molecular/Connolly surface definition (1 = accessible, 0 = inaccessible) </td></tr>
-<tr><td valign=top><em><a name="a23a40" doxytag="VDT_SSPL"></a><em>VDT_SSPL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a45" doxytag="VDT_SSPL"></a><em>VDT_SSPL</em></em>&nbsp;</td><td>
 Spline-based solvent accessibility (1 = accessible, 0 = inaccessible) </td></tr>
-<tr><td valign=top><em><a name="a23a41" doxytag="VDT_VDW"></a><em>VDT_VDW</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a46" doxytag="VDT_VDW"></a><em>VDT_VDW</em></em>&nbsp;</td><td>
 van der Waals-based accessibility (1 = accessible, 0 = inaccessible) </td></tr>
-<tr><td valign=top><em><a name="a23a42" doxytag="VDT_IVDW"></a><em>VDT_IVDW</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a47" doxytag="VDT_IVDW"></a><em>VDT_IVDW</em></em>&nbsp;</td><td>
 Ion accessibility/inflated van der Waals (1 = accessible, 0 = inaccessible) </td></tr>
-<tr><td valign=top><em><a name="a23a43" doxytag="VDT_LAP"></a><em>VDT_LAP</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a48" doxytag="VDT_LAP"></a><em>VDT_LAP</em></em>&nbsp;</td><td>
 Laplacian of potential (kT/e/A^2) </td></tr>
-<tr><td valign=top><em><a name="a23a44" doxytag="VDT_EDENS"></a><em>VDT_EDENS</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a49" doxytag="VDT_EDENS"></a><em>VDT_EDENS</em></em>&nbsp;</td><td>
 Energy density <img align="top" src="form_78.png"> , where <img align="top" src="form_79.png">  is potential (kT/e/A)^2 </td></tr>
-<tr><td valign=top><em><a name="a23a45" doxytag="VDT_NDENS"></a><em>VDT_NDENS</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a50" doxytag="VDT_NDENS"></a><em>VDT_NDENS</em></em>&nbsp;</td><td>
 Ion number density <img align="top" src="form_81.png"> , where <img align="top" src="form_79.png">  is potential (output in M) </td></tr>
-<tr><td valign=top><em><a name="a23a46" doxytag="VDT_QDENS"></a><em>VDT_QDENS</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a51" doxytag="VDT_QDENS"></a><em>VDT_QDENS</em></em>&nbsp;</td><td>
 Ion charge density <img align="top" src="form_82.png"> , where <img align="top" src="form_79.png">  is potential (output in <img align="top" src="form_86.png"> ) </td></tr>
-<tr><td valign=top><em><a name="a23a47" doxytag="VDT_DIELX"></a><em>VDT_DIELX</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a52" doxytag="VDT_DIELX"></a><em>VDT_DIELX</em></em>&nbsp;</td><td>
 Dielectric x-shifted map as calculated with the currently specified scheme (dimensionless) </td></tr>
-<tr><td valign=top><em><a name="a23a48" doxytag="VDT_DIELY"></a><em>VDT_DIELY</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a53" doxytag="VDT_DIELY"></a><em>VDT_DIELY</em></em>&nbsp;</td><td>
 Dielectric y-shifted map as calculated with the currently specified scheme (dimensionless) </td></tr>
-<tr><td valign=top><em><a name="a23a49" doxytag="VDT_DIELZ"></a><em>VDT_DIELZ</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a54" doxytag="VDT_DIELZ"></a><em>VDT_DIELZ</em></em>&nbsp;</td><td>
 Dielectric y-shifted map as calculated with the currently specified scheme (dimensionless) </td></tr>
-<tr><td valign=top><em><a name="a23a50" doxytag="VDT_KAPPA"></a><em>VDT_KAPPA</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a28a55" doxytag="VDT_KAPPA"></a><em>VDT_KAPPA</em></em>&nbsp;</td><td>
 Kappa map as calculated with the currently specified scheme (<img align="top" src="form_87.png"> ) </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a20" doxytag="vhal.h::eVhal_PBEType"></a><p>
+<a name="a25" doxytag="vhal.h::eVhal_PBEType"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -771,20 +901,20 @@ Version of PBE to solve.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a20a26" doxytag="PBE_LPBE"></a><em>PBE_LPBE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a25a31" doxytag="PBE_LPBE"></a><em>PBE_LPBE</em></em>&nbsp;</td><td>
 Traditional Poisson-Boltzmann equation, linearized </td></tr>
-<tr><td valign=top><em><a name="a20a27" doxytag="PBE_NPBE"></a><em>PBE_NPBE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a25a32" doxytag="PBE_NPBE"></a><em>PBE_NPBE</em></em>&nbsp;</td><td>
 Traditional Poisson-Boltzmann equation, full </td></tr>
-<tr><td valign=top><em><a name="a20a28" doxytag="PBE_LRPBE"></a><em>PBE_LRPBE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a25a33" doxytag="PBE_LRPBE"></a><em>PBE_LRPBE</em></em>&nbsp;</td><td>
 Regularized Poisson-Boltzmann equation, linearized </td></tr>
-<tr><td valign=top><em><a name="a20a29" doxytag="PBE_NRPBE"></a><em>PBE_NRPBE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a25a34" doxytag="PBE_NRPBE"></a><em>PBE_NRPBE</em></em>&nbsp;</td><td>
 &lt; Regularized Poisson-Boltzmann equation, full </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a name="a19" doxytag="vhal.h::eVsurf_Meth"></a><p>
+<a name="a24" doxytag="vhal.h::eVsurf_Meth"></a><p>
 <table width="100%" cellpadding="2" cellspacing="0" border="0">
   <tr>
     <td class="md">
@@ -808,18 +938,18 @@ Types of molecular surface definitions.
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a name="a19a23" doxytag="VSM_MOL"></a><em>VSM_MOL</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a24a28" doxytag="VSM_MOL"></a><em>VSM_MOL</em></em>&nbsp;</td><td>
 Ion accessibility is defined using inflated van der Waals radii, the dielectric coefficient ( ) is defined using the molecular (Conolly) surface definition without smoothing </td></tr>
-<tr><td valign=top><em><a name="a19a24" doxytag="VSM_MOLSMOOTH"></a><em>VSM_MOLSMOOTH</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a24a29" doxytag="VSM_MOLSMOOTH"></a><em>VSM_MOLSMOOTH</em></em>&nbsp;</td><td>
 As VSM_MOL but with a simple harmonic average smoothing </td></tr>
-<tr><td valign=top><em><a name="a19a25" doxytag="VSM_SPLINE"></a><em>VSM_SPLINE</em></em>&nbsp;</td><td>
+<tr><td valign=top><em><a name="a24a30" doxytag="VSM_SPLINE"></a><em>VSM_SPLINE</em></em>&nbsp;</td><td>
 Spline-based surface definitions. This is primarily for use with force calculations, since it requires substantial reparameterization of radii. This is based on the work of Im et al, Comp. Phys. Comm. 111 , (1998) and uses a cubic spline to define a smoothly varying characteristic function for the surface-based parameters. Ion accessibility is defined using inflated van der Waals radii with the spline function and the dielectric coefficient is defined using the standard van der Waals radii with the spline function. </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Wed May 11 12:10:41 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 13 10:20:08 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

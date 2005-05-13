@@ -27,9 +27,9 @@
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
 <tr><td nowrap align=right valign=top>unsigned long int&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a2">Vacc_memChk</a> (Vacc *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get number of bytes in this object and its members.</em> <a href="#a2"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a3">VaccSurf_ctor</a> (Vmem *<a class="el" href="structsVacc.html#m0">mem</a>, int nsphere)</td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a3">VaccSurf_ctor</a> (Vmem *<a class="el" href="structsVacc.html#m0">mem</a>, double probe_radius, int nsphere)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Allocate and construct the surface object; do not assign surface points to positions.</em> <a href="#a3"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a4">VaccSurf_ctor2</a> (<a class="el" href="structsVaccSurf.html">VaccSurf</a> *thee, Vmem *<a class="el" href="structsVacc.html#m0">mem</a>, int nsphere)</td></tr>
+<tr><td nowrap align=right valign=top>int&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a4">VaccSurf_ctor2</a> (<a class="el" href="structsVaccSurf.html">VaccSurf</a> *thee, Vmem *<a class="el" href="structsVacc.html#m0">mem</a>, double probe_radius, int nsphere)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Construct the surface object using previously allocated memory; do not assign surface points to positions.</em> <a href="#a4"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a5">VaccSurf_dtor</a> (<a class="el" href="structsVaccSurf.html">VaccSurf</a> **thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Destroy the surface object and free its memory.</em> <a href="#a5"></a><em></em></font><br><br></td></tr>
@@ -69,6 +69,8 @@
 <tr><td>&nbsp;</td><td><font size=-1><em>Return the total solvent accessible surface area (SASA).</em> <a href="#a22"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a23">Vacc_atomSASA</a> (Vacc *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Return the atomic solvent accessible surface area (SASA).</em> <a href="#a23"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td valign=bottom><a class="el" href="group__Vacc.html#a24">Vacc_atomSASPoints</a> (Vacc *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Get the set of points for this atom's solvent-accessible surface.</em> <a href="#a24"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Solvent- and ion-accessibility oracle.
@@ -169,6 +171,61 @@ Return the atomic solvent accessible surface area (SASA).
 <dl compact><dt><b>Note:</b></dt><dd>Alias for Vacc_SASA </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Atomic solvent accessible area (A^2) </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>atom</em>&nbsp;</td><td>
+Probe molecule radius (&Aring;) Atom of interest </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+<a name="a24" doxytag="vacc.h::Vacc_atomSASPoints"></a><p>
+<table width="100%" cellpadding="2" cellspacing="0" border="0">
+  <tr>
+    <td class="md">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> <a class="el" href="structsVaccSurf.html">VaccSurf</a>* Vacc_atomSASPoints </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>atom</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the set of points for this atom's solvent-accessible surface.
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Pointer to VaccSurf object for this atom </dd></dl>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>radius</em>&nbsp;</td><td>
@@ -483,7 +540,7 @@ Given a point which is INSIDE the collection of inflated van der Waals spheres, 
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
 <p>
-<dl compact><dt><b><a class="el" href="bug.html#_bug000004">Bug:</a></b></dt><dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd></dl>
+<dl compact><dt><b><a class="el" href="bug.html#_bug000005">Bug:</a></b></dt><dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd></dl>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>center</em>&nbsp;</td><td>
@@ -635,7 +692,7 @@ Determine accessibility of a probe (of radius radius) at a given point, given a 
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Characteristic function value between 1.0 (accessible) and 0.0 (inaccessible) </dd></dl>
 <p>
-<dl compact><dt><b><a class="el" href="bug.html#_bug000003">Bug:</a></b></dt><dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd></dl>
+<dl compact><dt><b><a class="el" href="bug.html#_bug000004">Bug:</a></b></dt><dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd></dl>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>center</em>&nbsp;</td><td>
@@ -1098,6 +1155,12 @@ Accessibility object Probe center coordinates </td></tr>
         <tr>
           <td></td>
           <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>probe_radius</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
           <td class="md" nowrap>int&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>nsphere</em></td>
         </tr>
@@ -1125,8 +1188,10 @@ Allocate and construct the surface object; do not assign surface points to posit
 <dl compact><dt><b>Returns:</b></dt><dd>Newly allocated and constructed surface object </dd></dl>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>probe_radius</em>&nbsp;</td><td>
+Memory manager (can be VNULL) </td></tr>
 <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
-Memory manager (can be VNULL) Number of points in sphere </td></tr>
+Probe radius (in A) for this surface Number of points in sphere </td></tr>
 </table>
 </dl>    </td>
   </tr>
@@ -1147,6 +1212,12 @@ Memory manager (can be VNULL) Number of points in sphere </td></tr>
           <td></td>
           <td class="md" nowrap>Vmem *&nbsp;</td>
           <td class="mdname" nowrap>&nbsp; <em>mem</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap>&nbsp; <em>probe_radius</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -1180,8 +1251,10 @@ Construct the surface object using previously allocated memory; do not assign su
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>mem</em>&nbsp;</td><td>
 Allocated memory </td></tr>
+<tr><td valign=top><em>probe_radius</em>&nbsp;</td><td>
+Memory manager (can be VNULL) </td></tr>
 <tr><td valign=top><em>nsphere</em>&nbsp;</td><td>
-Memory manager (can be VNULL) Number of points in sphere </td></tr>
+Probe radius (in A) for this surface Number of points in sphere </td></tr>
 </table>
 </dl>    </td>
   </tr>
@@ -1309,7 +1382,7 @@ Memory object Requested number of points on sphere </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<hr><address style="align: right;"><small>Generated on Wed May 11 12:10:41 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 13 10:20:08 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

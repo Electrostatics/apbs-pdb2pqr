@@ -17,139 +17,144 @@
 <dd>This routine does not respect partition information </dd>
 </dl>
 <p>
-<a name="_bug000004"/></a> <dl>
+<a name="_bug000003"/></a> <dl>
+<dt>Global <a class="el" href="group__Vpmg.html#a22">Vpmg_printColComp</a> (Vpmg *thee, char path[72], char title[72], char mxtype[3], int flag) </dt>
+<dd>Can this path variable be replaced with a Vio socket? </dd>
+</dl>
+<p>
+<a name="_bug000005"/></a> <dl>
 <dt>Global <a class="el" href="group__Vacc.html#a16">Vacc_fastMolAcc</a> (Vacc *thee, double center[VAPBS_DIM], double radius) </dt>
 <dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd>
 </dl>
 <p>
-<a name="_bug000003"/></a> <dl>
+<a name="_bug000004"/></a> <dl>
 <dt>Global <a class="el" href="group__Vacc.html#a15">Vacc_molAcc</a> (Vacc *thee, double center[VAPBS_DIM], double radius) </dt>
 <dd>This routine has a slight bug which can generate very small internal regions of high dielectric (thanks to John Mongan and Jess Swanson for finding this) </dd>
 </dl>
 <p>
-<a name="_bug000005"/></a> <dl>
+<a name="_bug000006"/></a> <dl>
 <dt>Global <a class="el" href="group__Vgreen.html#a7">Vgreen_helmholtz</a> (Vgreen *thee, int npos, double *x, double *y, double *z, double *val, double kappa) </dt>
 <dd>Not implemented yet</dd>
 </dl>
 <p>
-<a name="_bug000006"/></a> <dl>
+<a name="_bug000007"/></a> <dl>
 <dt>Global <a class="el" href="group__Vgreen.html#a8">Vgreen_helmholtzD</a> (Vgreen *thee, int npos, double *x, double *y, double *z, double *gradx, double *grady, double *gradz, double kappa) </dt>
 <dd>Not implemented yet</dd>
 </dl>
 <p>
-<a name="_bug000007"/></a> <dl>
+<a name="_bug000008"/></a> <dl>
 <dt>Global <a class="el" href="group__Vpbe.html#a21">Vpbe_ctor2</a> (Vpbe *thee, Valist *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag) </dt>
 <dd>The focusing flag is currently not used!!</dd>
 </dl>
 <p>
-<a name="_bug000008"/></a> <dl>
+<a name="_bug000009"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a21">Bmat_printHB</a> (Bmat *thee, char *fname) </dt>
 <dd>Hardwired to only handle the single block symmetric case. </dd>
 </dl>
 <p>
-<a name="_bug000023"/></a> <dl>
+<a name="_bug000024"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a46">Vfetk_dumpLocalVar</a> () </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000022"/></a> <dl>
+<a name="_bug000023"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a42">Vfetk_externalUpdateFunction</a> (SS **simps, int num) </dt>
 <dd>This function is not thread-safe. </dd>
 </dl>
 <p>
-<a name="_bug000024"/></a> <dl>
+<a name="_bug000025"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a47">Vfetk_fillArray</a> (Vfetk *thee, Bvec *vec, Vdata_Type type) </dt>
 <dd>Several values of type are not implemented</dd>
 </dl>
 <p>
-<a name="_bug000009"/></a> <dl>
+<a name="_bug000010"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a23">Vfetk_PDE_ctor</a> (Vfetk *fetk) </dt>
 <dd>Not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000010"/></a> <dl>
+<a name="_bug000011"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a24">Vfetk_PDE_ctor2</a> (PDE *thee, Vfetk *fetk) </dt>
 <dd>Not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000017"/></a> <dl>
+<a name="_bug000018"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a34">Vfetk_PDE_delta</a> (PDE *thee, int type, int chart, double txq[], void *user, double F[]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000016"/></a> <dl>
+<a name="_bug000017"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a33">Vfetk_PDE_DFu_wv</a> (PDE *thee, int key, double W[], double dW[][VAPBS_DIM], double V[], double dV[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000014"/></a> <dl>
+<a name="_bug000015"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a31">Vfetk_PDE_Fu</a> (PDE *thee, int key, double F[]) </dt>
 <dd>This function is not thread-safe <p>
 This function is not implemented (sets error to zero) </dd>
 </dl>
 <p>
-<a name="_bug000015"/></a> <dl>
+<a name="_bug000016"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a32">Vfetk_PDE_Fu_v</a> (PDE *thee, int key, double V[], double dV[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000011"/></a> <dl>
+<a name="_bug000012"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a28">Vfetk_PDE_initElement</a> (PDE *thee, int elementType, int chart, double tvx[][VAPBS_DIM], void *data) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000012"/></a> <dl>
+<a name="_bug000013"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a29">Vfetk_PDE_initFace</a> (PDE *thee, int faceType, int chart, double tnvec[]) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000013"/></a> <dl>
+<a name="_bug000014"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a30">Vfetk_PDE_initPoint</a> (PDE *thee, int pointType, int chart, double txq[], double tU[], double tdU[][VAPBS_DIM]) </dt>
 <dd>This function is not thread-safe <p>
 This function uses pre-defined boudnary definitions for the molecular surface.</dd>
 </dl>
 <p>
-<a name="_bug000021"/></a> <dl>
+<a name="_bug000022"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a41">Vfetk_PDE_Ju</a> (PDE *thee, int key) </dt>
 <dd>This function is not thread-safe.</dd>
 </dl>
 <p>
-<a name="_bug000020"/></a> <dl>
+<a name="_bug000021"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a39">Vfetk_PDE_markSimplex</a> (int dim, int dimII, int simplexType, int faceType[VAPBS_NVS], int vertexType[VAPBS_NVS], int chart[], double vx[][VAPBS_DIM], void *simplex) </dt>
 <dd>This function is not thread-safe</dd>
 </dl>
 <p>
-<a name="_bug000018"/></a> <dl>
+<a name="_bug000019"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a35">Vfetk_PDE_u_D</a> (PDE *thee, int type, int chart, double txq[], double F[]) </dt>
 <dd>This function is hard-coded to call only multiple-sphere Debye-H&uuml; functions. <p>
 This function is not thread-safe.</dd>
 </dl>
 <p>
-<a name="_bug000019"/></a> <dl>
+<a name="_bug000020"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a36">Vfetk_PDE_u_T</a> (PDE *thee, int type, int chart, double txq[], double F[]) </dt>
 <dd>This function is not thread-safe.</dd>
 </dl>
 <p>
-<a name="_bug000025"/></a> <dl>
+<a name="_bug000026"/></a> <dl>
 <dt>Global <a class="el" href="group__Vfetk.html#a48">Vfetk_write</a> (Vfetk *thee, const char *iodev, const char *iofmt, const char *thost, const char *fname, Bvec *vec, Vdata_Format format) </dt>
 <dd>Some values of format are not implemented</dd>
 </dl>
 <p>
-<a name="_bug000026"/></a> <dl>
+<a name="_bug000027"/></a> <dl>
 <dt>Global <a class="el" href="group__Vpee.html#a5">Vpee_markRefine</a> (Vpee *thee, AM *am, int level, int akey, int rcol, double etol, int bkey) </dt>
 <dd>This function is no longer up-to-date with FEtk and may not function properly </dd>
 </dl>
 <p>
-<a name="_bug000027"/></a> <dl>
+<a name="_bug000028"/></a> <dl>
 <dt>Global <a class="el" href="group__Frontend.html#a26">energyFE</a> (NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC], int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy) </dt>
 <dd>"calcenergy 2" does not work</dd>
 </dl>
 <p>
-<a name="_bug000028"/></a> <dl>
+<a name="_bug000029"/></a> <dl>
 <dt>Global <a class="el" href="group__Frontend.html#a27">initFE</a> (int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], Vfetk *fetk[NOSH_MAXCALC]) </dt>
 <dd>THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE</dd>
 </dl>
-<hr><address style="align: right;"><small>Generated on Wed May 11 12:10:40 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 13 10:20:08 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

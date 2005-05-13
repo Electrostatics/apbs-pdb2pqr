@@ -83,13 +83,13 @@
 <a name="l00174"></a><a class="code" href="group__Vfetk.html#a53">00174</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVfetk.html">sVfetk</a> <a class="code" href="group__Vfetk.html#a53">Vfetk</a>;
 00175 
 <a name="l00182"></a><a class="code" href="structsVfetk__LocalVar.html">00182</a> <span class="keyword">struct </span><a class="code" href="structsVfetk__LocalVar.html">sVfetk_LocalVar</a> {
-<a name="l00183"></a><a class="code" href="structsVfetk__LocalVar.html#m0">00183</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m0">nvec</a>[<a class="code" href="group__Vhal.html#a8">VAPBS_DIM</a>];  
-<a name="l00184"></a><a class="code" href="structsVfetk__LocalVar.html#m1">00184</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m1">vx</a>[4][<a class="code" href="group__Vhal.html#a8">VAPBS_DIM</a>];  
-<a name="l00185"></a><a class="code" href="structsVfetk__LocalVar.html#m2">00185</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m2">xq</a>[<a class="code" href="group__Vhal.html#a8">VAPBS_DIM</a>];  
+<a name="l00183"></a><a class="code" href="structsVfetk__LocalVar.html#m0">00183</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m0">nvec</a>[<a class="code" href="group__Vhal.html#a13">VAPBS_DIM</a>];  
+<a name="l00184"></a><a class="code" href="structsVfetk__LocalVar.html#m1">00184</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m1">vx</a>[4][<a class="code" href="group__Vhal.html#a13">VAPBS_DIM</a>];  
+<a name="l00185"></a><a class="code" href="structsVfetk__LocalVar.html#m2">00185</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m2">xq</a>[<a class="code" href="group__Vhal.html#a13">VAPBS_DIM</a>];  
 <a name="l00186"></a><a class="code" href="structsVfetk__LocalVar.html#m3">00186</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m3">U</a>[MAXV];  
-<a name="l00187"></a><a class="code" href="structsVfetk__LocalVar.html#m4">00187</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m4">dU</a>[MAXV][<a class="code" href="group__Vhal.html#a8">VAPBS_DIM</a>];  
+<a name="l00187"></a><a class="code" href="structsVfetk__LocalVar.html#m4">00187</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m4">dU</a>[MAXV][<a class="code" href="group__Vhal.html#a13">VAPBS_DIM</a>];  
 <a name="l00188"></a><a class="code" href="structsVfetk__LocalVar.html#m5">00188</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m5">W</a>;  
-<a name="l00189"></a><a class="code" href="structsVfetk__LocalVar.html#m6">00189</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m6">dW</a>[<a class="code" href="group__Vhal.html#a8">VAPBS_DIM</a>];  
+<a name="l00189"></a><a class="code" href="structsVfetk__LocalVar.html#m6">00189</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m6">dW</a>[<a class="code" href="group__Vhal.html#a13">VAPBS_DIM</a>];  
 <a name="l00190"></a><a class="code" href="structsVfetk__LocalVar.html#m7">00190</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m7">d2W</a>;  
 <a name="l00191"></a><a class="code" href="structsVfetk__LocalVar.html#m8">00191</a>     <span class="keywordtype">int</span> <a class="code" href="structsVfetk__LocalVar.html#m8">sType</a>;  
 <a name="l00192"></a><a class="code" href="structsVfetk__LocalVar.html#m9">00192</a>     <span class="keywordtype">int</span> <a class="code" href="structsVfetk__LocalVar.html#m9">fType</a>;  
@@ -106,9 +106,9 @@
 <a name="l00204"></a><a class="code" href="structsVfetk__LocalVar.html#m20">00204</a>     SS *<a class="code" href="structsVfetk__LocalVar.html#m20">simp</a>;  
 <a name="l00206"></a><a class="code" href="structsVfetk__LocalVar.html#m21">00206</a>     VV *<a class="code" href="structsVfetk__LocalVar.html#m21">verts</a>[4];  
 <a name="l00207"></a><a class="code" href="structsVfetk__LocalVar.html#m22">00207</a>     <span class="keywordtype">int</span> <a class="code" href="structsVfetk__LocalVar.html#m22">nverts</a>;  
-<a name="l00208"></a><a class="code" href="structsVfetk__LocalVar.html#m23">00208</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m23">ionConc</a>[<a class="code" href="group__Vhal.html#a3">MAXION</a>];  
-<a name="l00209"></a><a class="code" href="structsVfetk__LocalVar.html#m24">00209</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m24">ionQ</a>[<a class="code" href="group__Vhal.html#a3">MAXION</a>];  
-<a name="l00210"></a><a class="code" href="structsVfetk__LocalVar.html#m25">00210</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m25">ionRadii</a>[<a class="code" href="group__Vhal.html#a3">MAXION</a>];  
+<a name="l00208"></a><a class="code" href="structsVfetk__LocalVar.html#m23">00208</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m23">ionConc</a>[<a class="code" href="group__Vhal.html#a8">MAXION</a>];  
+<a name="l00209"></a><a class="code" href="structsVfetk__LocalVar.html#m24">00209</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m24">ionQ</a>[<a class="code" href="group__Vhal.html#a8">MAXION</a>];  
+<a name="l00210"></a><a class="code" href="structsVfetk__LocalVar.html#m25">00210</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m25">ionRadii</a>[<a class="code" href="group__Vhal.html#a8">MAXION</a>];  
 <a name="l00211"></a><a class="code" href="structsVfetk__LocalVar.html#m26">00211</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m26">zkappa2</a>; 
 <a name="l00212"></a><a class="code" href="structsVfetk__LocalVar.html#m27">00212</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m27">zks2</a>; 
 <a name="l00213"></a><a class="code" href="structsVfetk__LocalVar.html#m28">00213</a>     <span class="keywordtype">double</span> <a class="code" href="structsVfetk__LocalVar.html#m28">ionstr</a>; 
@@ -406,7 +406,7 @@
 00956 <span class="comment"></span>
 00957 <span class="comment">#endif /* ifndef _VFETK_H_ */</span>
 00958 
-</pre></div><hr><address style="align: right;"><small>Generated on Wed May 11 12:10:31 2005 for APBS by
+</pre></div><hr><address style="align: right;"><small>Generated on Fri May 13 10:19:59 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

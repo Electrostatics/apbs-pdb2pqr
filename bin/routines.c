@@ -674,7 +674,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
     double sparm, iparm;
     Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
 
-    Vnm_tstart(27, "Setup timer");
+    Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
 
     /* Fix mesh center for "GCENT MOL #" types of declarations. */
     if (mgparm->cmeth == MCM_MOL) {
@@ -823,7 +823,7 @@ fgcent/cgcent!\n",  (imol+1));
 #endif
 
     /* Setup time statistics */
-    Vnm_tstop(27, "Setup timer");
+    Vnm_tstop(APBS_TIMER_SETUP, "Setup timer");
 
     /* Memory statistics */
     bytesTotal = Vmem_bytesTotal();
@@ -862,7 +862,7 @@ VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {
         if (nosh->bogus) return 1;
     }
 
-    Vnm_tstart(28, "Solver timer");
+    Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
 
 
     if (type != MCT_DUM) {
@@ -878,7 +878,7 @@ solution array\n");
         nz = pmg->pmgp->nz;
         for (i=0; i<nx*ny*nz; i++) pmg->u[i] = 0.0;
     }
-    Vnm_tstop(27, "Solver timer");
+    Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
 
     return 1;
 
@@ -930,6 +930,9 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     mgparm = nosh->calc[icalc].mgparm;
     pbeparm = nosh->calc[icalc].pbeparm;
 
+    Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
+    Vnm_tprint( 1,"  Calculating energy (see io.mc* for details)...\n");
+
     extEnergy = 1;
 
     if (pbeparm->calcenergy == PCE_TOTAL) {
@@ -966,6 +969,8 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
         }
     } else *nenergy = 0;
 
+    Vnm_tstop(APBS_TIMER_ENERGY, "Energy timer");
+
     return 1;
 }
 
@@ -974,6 +979,9 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 
     int j, k;
     double qfForce[3], dbForce[3], ibForce[3], npForce[3];
+
+    Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
+    Vnm_tprint( 1,"  Calculating forces...\n");
 
     if (pbeparm->calcforce == PCF_TOTAL) {
         *nforce = 1;
@@ -1081,6 +1089,8 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[2]);
         }
     } else *nforce = 0;
+
+    Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
 
     return 1;
 }

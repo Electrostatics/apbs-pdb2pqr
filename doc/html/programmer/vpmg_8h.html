@@ -46,7 +46,7 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td nowrap align=right valign=top>struct &nbsp;</td><td valign=bottom><a class="el" href="structsVpmg.html">sVpmg</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Contains public data members for Vpmg class/module.</em> <a href="structsVpmg.html#_details">More...</a><em></em></font><br><br></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a18">VPMGMAXPART</a>&nbsp;&nbsp;&nbsp;2000</td></tr>
+<tr><td nowrap align=right valign=top>#define&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a23">VPMGMAXPART</a>&nbsp;&nbsp;&nbsp;2000</td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
 <tr><td nowrap align=right valign=top>typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a0">Vpmg</a></td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Declaration of the Vpmg class as the Vpmg structure.</em> <a href="group__Vpmg.html#a0"></a><em></em></font><br><br></td></tr>
@@ -61,7 +61,7 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td>&nbsp;</td><td><font size=-1><em>Object destructor.</em> <a href="group__Vpmg.html#a4"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_dtor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>FORTRAN stub object destructor.</em> <a href="group__Vpmg.html#a5"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="group__Vhal.html#a25">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="group__Vhal.html#a26">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="group__Vhal.html#a30">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="group__Vhal.html#a31">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Fill the coefficient arrays prior to solving the equation.</em> <a href="group__Vpmg.html#a6"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a7">Vpmg_solve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Solve the PBE using PMG.</em> <a href="group__Vpmg.html#a7"></a><em></em></font><br><br></td></tr>
@@ -79,17 +79,27 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the "apolar" energy.</em> <a href="group__Vpmg.html#a13"></a><em></em></font><br><br></td></tr>
 <tr><td nowrap align=right valign=top>double&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a14">Vpmg_dielGradNorm</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Get the integral of the gradient of the dielectric function.</em> <a href="group__Vpmg.html#a14"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="group__Vhal.html#a25">Vsurf_Meth</a> srfm, <a class="el" href="group__Vhal.html#a26">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="group__Vhal.html#a30">Vsurf_Meth</a> srfm, <a class="el" href="group__Vhal.html#a31">Vchrg_Meth</a> chgm)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Calculate the total force on the specified atom in units of k_B T/AA.</em> <a href="group__Vpmg.html#a15"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="group__Vhal.html#a26">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="group__Vhal.html#a31">Vchrg_Meth</a> chgm)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Calculate the "charge-field" force on the specified atom in units of k_B T/AA.</em> <a href="group__Vpmg.html#a16"></a><em></em></font><br><br></td></tr>
-<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbnpForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, double *npForce, int atomID, <a class="el" href="group__Vhal.html#a25">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbnpForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, double *npForce, int atomID, <a class="el" href="group__Vhal.html#a30">Vsurf_Meth</a> srfm)</td></tr>
 <tr><td>&nbsp;</td><td><font size=-1><em>Calculate the dielectric boundary and apolar forces on the specified atom in units of k_B T/AA.</em> <a href="group__Vpmg.html#a17"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_ibForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="group__Vhal.html#a30">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Calculate the osmotic pressure on the specified atom in units of k_B T/AA.</em> <a href="group__Vpmg.html#a18"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a19">Vpmg_setPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double lowerCorner[3], double upperCorner[3], int bflags[6])</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Set partition information which restricts the calculation of observables to a (rectangular) subset of the problem domain.</em> <a href="group__Vpmg.html#a19"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a20">Vpmg_unsetPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Remove partition restrictions.</em> <a href="group__Vpmg.html#a20"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a21">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="group__Vhal.html#a32">Vdata_Type</a> type, double parm, <a class="el" href="group__Vhal.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Fill the specified array with accessibility values.</em> <a href="group__Vpmg.html#a21"></a><em></em></font><br><br></td></tr>
+<tr><td nowrap align=right valign=top>void&nbsp;</td><td valign=bottom><a class="el" href="group__Vpmg.html#a22">Vpmg_printColComp</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, char path[72], char title[72], char mxtype[3], int flag)</td></tr>
+<tr><td>&nbsp;</td><td><font size=-1><em>Print out a column-compressed sparse matrix in Harwell-Boeing format.</em> <a href="group__Vpmg.html#a22"></a><em></em></font><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Vpmg.
 <p>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vpmg_8h.html">vpmg.h</a>,v 2.56 2004/10/04 18:11:27 apbs Exp </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vpmg_8h.html">vpmg.h</a>,v 2.57 2005/05/11 17:24:23 apbs Exp </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan A. Baker</dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
@@ -126,7 +136,7 @@ Contains declarations for class Vpmg.
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
  *
  * </pre></div></dd></dl>
-<hr><address style="align: right;"><small>Generated on Wed May 11 12:10:38 2005 for APBS by
+<hr><address style="align: right;"><small>Generated on Fri May 13 10:20:06 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

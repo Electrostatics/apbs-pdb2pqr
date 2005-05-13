@@ -3,6 +3,7 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
 #############################################################################
   - NEW FEATURES
     * New version of the 'acc' program available.
+	* Added additional verbosity to APBS output.
     * Added tools/python/vgrid to the autoconf script. The directory compiles
       with the rest of the Python utilities and is used for manipulating
       dx files.
@@ -25,7 +26,7 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       some cases.
 	* Fixed a bug in Vacc_molAcc which generates spurious regions of high
       internal dielectric for molecular surface-based dielectric definitions.
-	  These regions were very small and apparently affect energies by 1-2%.
+	  These regions were very small and apparently affected energies by 1-2%.
 	  The new version of the molecular surface is somewhat more costly to
 	  calculate -- but we all should be using spline-based surfaces, anyway --
 	  right?  (Thanks to John Mongan and Jessica Swanson for finding this

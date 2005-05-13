@@ -10,171 +10,180 @@
 00051 <span class="preprocessor">#ifndef _VAPBSHAL_H_</span>
 00052 <span class="preprocessor"></span><span class="preprocessor">#define _VAPBSHAL_H_</span>
 00053 <span class="preprocessor"></span>
-<a name="l00059"></a><a class="code" href="group__Vhal.html#a19">00059</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVsurf_Meth</a> {
-00060         <a class="code" href="group__Vhal.html#a19a23">VSM_MOL</a>=0, 
-00064     <a class="code" href="group__Vhal.html#a19a24">VSM_MOLSMOOTH</a>=1, 
-00066         <a class="code" href="group__Vhal.html#a19a25">VSM_SPLINE</a>=2     
+<a name="l00059"></a><a class="code" href="group__Vhal.html#a24">00059</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVsurf_Meth</a> {
+00060         <a class="code" href="group__Vhal.html#a24a28">VSM_MOL</a>=0, 
+00064     <a class="code" href="group__Vhal.html#a24a29">VSM_MOLSMOOTH</a>=1, 
+00066         <a class="code" href="group__Vhal.html#a24a30">VSM_SPLINE</a>=2     
 00076 };
 00077 
-<a name="l00082"></a><a class="code" href="group__Vhal.html#a25">00082</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a19">eVsurf_Meth</a> <a class="code" href="group__Vhal.html#a25">Vsurf_Meth</a>;
+<a name="l00082"></a><a class="code" href="group__Vhal.html#a30">00082</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVsurf_Meth</a> <a class="code" href="group__Vhal.html#a30">Vsurf_Meth</a>;
 00083 
-<a name="l00088"></a><a class="code" href="group__Vhal.html#a20">00088</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVhal_PBEType</a> {
-00089     <a class="code" href="group__Vhal.html#a20a26">PBE_LPBE</a>,  
-00090     <a class="code" href="group__Vhal.html#a20a27">PBE_NPBE</a>,  
-00091     <a class="code" href="group__Vhal.html#a20a28">PBE_LRPBE</a>,  
-00092     <a class="code" href="group__Vhal.html#a20a29">PBE_NRPBE</a>  
+<a name="l00088"></a><a class="code" href="group__Vhal.html#a25">00088</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a25">eVhal_PBEType</a> {
+00089     <a class="code" href="group__Vhal.html#a25a31">PBE_LPBE</a>,  
+00090     <a class="code" href="group__Vhal.html#a25a32">PBE_NPBE</a>,  
+00091     <a class="code" href="group__Vhal.html#a25a33">PBE_LRPBE</a>,  
+00092     <a class="code" href="group__Vhal.html#a25a34">PBE_NRPBE</a>  
 00093 };
 00094 
-<a name="l00099"></a><a class="code" href="group__Vhal.html#a0">00099</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a20">eVhal_PBEType</a> <a class="code" href="group__Vhal.html#a0">Vhal_PBEType</a>;
+<a name="l00099"></a><a class="code" href="group__Vhal.html#a0">00099</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a25">eVhal_PBEType</a> <a class="code" href="group__Vhal.html#a0">Vhal_PBEType</a>;
 00100 
 00101 
-<a name="l00107"></a><a class="code" href="group__Vhal.html#a21">00107</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVbcfl</a> {
-00108     <a class="code" href="group__Vhal.html#a21a30">BCFL_ZERO</a>=0,  
-00109     <a class="code" href="group__Vhal.html#a21a31">BCFL_SDH</a>=1,  
-00111     <a class="code" href="group__Vhal.html#a21a32">BCFL_MDH</a>=2,  
-00113     <a class="code" href="group__Vhal.html#a21a33">BCFL_UNUSED</a>=3,  
-00114     <a class="code" href="group__Vhal.html#a21a34">BCFL_FOCUS</a>=4  
+<a name="l00107"></a><a class="code" href="group__Vhal.html#a26">00107</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a26">eVbcfl</a> {
+00108     <a class="code" href="group__Vhal.html#a26a35">BCFL_ZERO</a>=0,  
+00109     <a class="code" href="group__Vhal.html#a26a36">BCFL_SDH</a>=1,  
+00111     <a class="code" href="group__Vhal.html#a26a37">BCFL_MDH</a>=2,  
+00113     <a class="code" href="group__Vhal.html#a26a38">BCFL_UNUSED</a>=3,  
+00114     <a class="code" href="group__Vhal.html#a26a39">BCFL_FOCUS</a>=4  
 00115 };
 00116 
-<a name="l00121"></a><a class="code" href="group__Vhal.html#a1">00121</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a21">eVbcfl</a> <a class="code" href="group__Vhal.html#a1">Vbcfl</a>;
+<a name="l00121"></a><a class="code" href="group__Vhal.html#a1">00121</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a26">eVbcfl</a> <a class="code" href="group__Vhal.html#a1">Vbcfl</a>;
 00122 
-<a name="l00128"></a><a class="code" href="group__Vhal.html#a22">00128</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVchrg_Meth</a> {
-00129         <a class="code" href="group__Vhal.html#a22a35">VCM_TRIL</a>=0,  
-00132     <a class="code" href="group__Vhal.html#a22a36">VCM_BSPL2</a>=1  
+<a name="l00128"></a><a class="code" href="group__Vhal.html#a27">00128</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a27">eVchrg_Meth</a> {
+00129         <a class="code" href="group__Vhal.html#a27a40">VCM_TRIL</a>=0,  
+00132     <a class="code" href="group__Vhal.html#a27a41">VCM_BSPL2</a>=1  
 00135 };
 00136 
-<a name="l00141"></a><a class="code" href="group__Vhal.html#a26">00141</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a22">eVchrg_Meth</a> <a class="code" href="group__Vhal.html#a26">Vchrg_Meth</a>;
+<a name="l00141"></a><a class="code" href="group__Vhal.html#a31">00141</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a27">eVchrg_Meth</a> <a class="code" href="group__Vhal.html#a31">Vchrg_Meth</a>;
 00142 
 00143 
-<a name="l00149"></a><a class="code" href="group__Vhal.html#a23">00149</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a23">eVdata_Type</a> {
-00150     <a class="code" href="group__Vhal.html#a23a37">VDT_CHARGE</a>, 
-00151     <a class="code" href="group__Vhal.html#a23a38">VDT_POT</a>,    
-00152     <a class="code" href="group__Vhal.html#a23a39">VDT_SMOL</a>,   
-00154     <a class="code" href="group__Vhal.html#a23a40">VDT_SSPL</a>,   
-00156     <a class="code" href="group__Vhal.html#a23a41">VDT_VDW</a>,    
-00158     <a class="code" href="group__Vhal.html#a23a42">VDT_IVDW</a>,   
-00160     <a class="code" href="group__Vhal.html#a23a43">VDT_LAP</a>,    
-00161     <a class="code" href="group__Vhal.html#a23a44">VDT_EDENS</a>,  
-00163     <a class="code" href="group__Vhal.html#a23a45">VDT_NDENS</a>,  
-00165     <a class="code" href="group__Vhal.html#a23a46">VDT_QDENS</a>,  
-00167     <a class="code" href="group__Vhal.html#a23a47">VDT_DIELX</a>,  
-00169     <a class="code" href="group__Vhal.html#a23a48">VDT_DIELY</a>,  
-00171     <a class="code" href="group__Vhal.html#a23a49">VDT_DIELZ</a>,  
-00173     <a class="code" href="group__Vhal.html#a23a50">VDT_KAPPA</a>   
+<a name="l00149"></a><a class="code" href="group__Vhal.html#a28">00149</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a28">eVdata_Type</a> {
+00150     <a class="code" href="group__Vhal.html#a28a42">VDT_CHARGE</a>, 
+00151     <a class="code" href="group__Vhal.html#a28a43">VDT_POT</a>,    
+00152     <a class="code" href="group__Vhal.html#a28a44">VDT_SMOL</a>,   
+00154     <a class="code" href="group__Vhal.html#a28a45">VDT_SSPL</a>,   
+00156     <a class="code" href="group__Vhal.html#a28a46">VDT_VDW</a>,    
+00158     <a class="code" href="group__Vhal.html#a28a47">VDT_IVDW</a>,   
+00160     <a class="code" href="group__Vhal.html#a28a48">VDT_LAP</a>,    
+00161     <a class="code" href="group__Vhal.html#a28a49">VDT_EDENS</a>,  
+00163     <a class="code" href="group__Vhal.html#a28a50">VDT_NDENS</a>,  
+00165     <a class="code" href="group__Vhal.html#a28a51">VDT_QDENS</a>,  
+00167     <a class="code" href="group__Vhal.html#a28a52">VDT_DIELX</a>,  
+00169     <a class="code" href="group__Vhal.html#a28a53">VDT_DIELY</a>,  
+00171     <a class="code" href="group__Vhal.html#a28a54">VDT_DIELZ</a>,  
+00173     <a class="code" href="group__Vhal.html#a28a55">VDT_KAPPA</a>   
 00175 };
 00176 
-<a name="l00181"></a><a class="code" href="group__Vhal.html#a27">00181</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a23">eVdata_Type</a> <a class="code" href="group__Vhal.html#a27">Vdata_Type</a>;
+<a name="l00181"></a><a class="code" href="group__Vhal.html#a32">00181</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a28">eVdata_Type</a> <a class="code" href="group__Vhal.html#a32">Vdata_Type</a>;
 00182 
-<a name="l00188"></a><a class="code" href="group__Vhal.html#a24">00188</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVdata_Format</a> {
-00189     <a class="code" href="group__Vhal.html#a24a51">VDF_DX</a>=0,  
-00190     <a class="code" href="group__Vhal.html#a24a52">VDF_UHBD</a>=1, 
-00191     <a class="code" href="group__Vhal.html#a24a53">VDF_AVS</a>=2  
+<a name="l00188"></a><a class="code" href="group__Vhal.html#a29">00188</a> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a29">eVdata_Format</a> {
+00189     <a class="code" href="group__Vhal.html#a29a56">VDF_DX</a>=0,  
+00190     <a class="code" href="group__Vhal.html#a29a57">VDF_UHBD</a>=1, 
+00191     <a class="code" href="group__Vhal.html#a29a58">VDF_AVS</a>=2  
 00192 };
 00193 
-<a name="l00198"></a><a class="code" href="group__Vhal.html#a28">00198</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a24">eVdata_Format</a> <a class="code" href="group__Vhal.html#a28">Vdata_Format</a>;
+<a name="l00198"></a><a class="code" href="group__Vhal.html#a33">00198</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__Vhal.html#a29">eVdata_Format</a> <a class="code" href="group__Vhal.html#a33">Vdata_Format</a>;
 00199 
-00200 
-<a name="l00205"></a><a class="code" href="group__Vhal.html#a2">00205</a> <span class="preprocessor">#define MAXMOL 5</span>
-00206 <span class="preprocessor"></span>
-<a name="l00211"></a><a class="code" href="group__Vhal.html#a3">00211</a> <span class="preprocessor">#define MAXION 10</span>
-00212 <span class="preprocessor"></span>
-<a name="l00216"></a><a class="code" href="group__Vhal.html#a4">00216</a> <span class="preprocessor">#define MAXFOCUS 5</span>
+<a name="l00204"></a><a class="code" href="group__Vhal.html#a2">00204</a> <span class="preprocessor">#define APBS_TIMER_WALL_CLOCK 26</span>
+00205 <span class="preprocessor"></span>
+<a name="l00210"></a><a class="code" href="group__Vhal.html#a3">00210</a> <span class="preprocessor">#define APBS_TIMER_SETUP 27</span>
+00211 <span class="preprocessor"></span>
+<a name="l00216"></a><a class="code" href="group__Vhal.html#a4">00216</a> <span class="preprocessor">#define APBS_TIMER_SOLVER 28</span>
 00217 <span class="preprocessor"></span>
-<a name="l00221"></a><a class="code" href="group__Vhal.html#a5">00221</a> <span class="preprocessor">#define VMGNLEV 4</span>
-00222 <span class="preprocessor"></span>
-<a name="l00226"></a><a class="code" href="group__Vhal.html#a6">00226</a> <span class="preprocessor">#define VREDFRAC 0.25</span>
-00227 <span class="preprocessor"></span>
-<a name="l00231"></a><a class="code" href="group__Vhal.html#a7">00231</a> <span class="preprocessor">#define VAPBS_NVS 4</span>
-00232 <span class="preprocessor"></span>
-<a name="l00236"></a><a class="code" href="group__Vhal.html#a8">00236</a> <span class="preprocessor">#define VAPBS_DIM 3</span>
-00237 <span class="preprocessor"></span>
-<a name="l00242"></a><a class="code" href="group__Vhal.html#a9">00242</a> <span class="preprocessor">#define VAPBS_RIGHT 0</span>
-00243 <span class="preprocessor"></span>
-<a name="l00248"></a><a class="code" href="group__Vhal.html#a10">00248</a> <span class="preprocessor">#define VAPBS_FRONT 1</span>
-00249 <span class="preprocessor"></span>
-<a name="l00254"></a><a class="code" href="group__Vhal.html#a11">00254</a> <span class="preprocessor">#define VAPBS_UP    2</span>
-00255 <span class="preprocessor"></span>
-<a name="l00260"></a><a class="code" href="group__Vhal.html#a12">00260</a> <span class="preprocessor">#define VAPBS_LEFT  3</span>
+<a name="l00222"></a><a class="code" href="group__Vhal.html#a5">00222</a> <span class="preprocessor">#define APBS_TIMER_ENERGY 29</span>
+00223 <span class="preprocessor"></span>
+<a name="l00228"></a><a class="code" href="group__Vhal.html#a6">00228</a> <span class="preprocessor">#define APBS_TIMER_FORCE 29</span>
+00229 <span class="preprocessor"></span>
+<a name="l00234"></a><a class="code" href="group__Vhal.html#a7">00234</a> <span class="preprocessor">#define MAXMOL 5</span>
+00235 <span class="preprocessor"></span>
+<a name="l00240"></a><a class="code" href="group__Vhal.html#a8">00240</a> <span class="preprocessor">#define MAXION 10</span>
+00241 <span class="preprocessor"></span>
+<a name="l00245"></a><a class="code" href="group__Vhal.html#a9">00245</a> <span class="preprocessor">#define MAXFOCUS 5</span>
+00246 <span class="preprocessor"></span>
+<a name="l00250"></a><a class="code" href="group__Vhal.html#a10">00250</a> <span class="preprocessor">#define VMGNLEV 4</span>
+00251 <span class="preprocessor"></span>
+<a name="l00255"></a><a class="code" href="group__Vhal.html#a11">00255</a> <span class="preprocessor">#define VREDFRAC 0.25</span>
+00256 <span class="preprocessor"></span>
+<a name="l00260"></a><a class="code" href="group__Vhal.html#a12">00260</a> <span class="preprocessor">#define VAPBS_NVS 4</span>
 00261 <span class="preprocessor"></span>
-<a name="l00266"></a><a class="code" href="group__Vhal.html#a13">00266</a> <span class="preprocessor">#define VAPBS_BACK  4</span>
-00267 <span class="preprocessor"></span>
-<a name="l00272"></a><a class="code" href="group__Vhal.html#a14">00272</a> <span class="preprocessor">#define VAPBS_DOWN  5</span>
-00273 <span class="preprocessor"></span>
-<a name="l00278"></a><a class="code" href="group__Vhal.html#a15">00278</a> <span class="preprocessor">#define VPMGSMALL 1e-12</span>
-00279 <span class="preprocessor"></span>
-00280 
-00281 <span class="preprocessor">#if defined(VDEBUG)</span>
-00282 <span class="preprocessor"></span><span class="preprocessor">#   if !defined(APBS_NOINLINE)</span>
-00283 <span class="preprocessor"></span><span class="preprocessor">#       define APBS_NOINLINE 1</span>
-00284 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
-00285 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00286 <span class="preprocessor"></span>
-00287 <span class="preprocessor">#if !defined(APBS_NOINLINE)</span>
-00288 <span class="preprocessor"></span>
-00292 <span class="preprocessor">#   define VINLINE_VACC</span>
-00293 <span class="preprocessor"></span>
-00297 <span class="preprocessor">#   define VINLINE_VATOM</span>
-00298 <span class="preprocessor"></span>
-00302 <span class="preprocessor">#   define VINLINE_VCSM</span>
-00303 <span class="preprocessor"></span>
-00307 <span class="preprocessor">#   define VINLINE_VPBE</span>
+<a name="l00265"></a><a class="code" href="group__Vhal.html#a13">00265</a> <span class="preprocessor">#define VAPBS_DIM 3</span>
+00266 <span class="preprocessor"></span>
+<a name="l00271"></a><a class="code" href="group__Vhal.html#a14">00271</a> <span class="preprocessor">#define VAPBS_RIGHT 0</span>
+00272 <span class="preprocessor"></span>
+<a name="l00277"></a><a class="code" href="group__Vhal.html#a15">00277</a> <span class="preprocessor">#define VAPBS_FRONT 1</span>
+00278 <span class="preprocessor"></span>
+<a name="l00283"></a><a class="code" href="group__Vhal.html#a16">00283</a> <span class="preprocessor">#define VAPBS_UP    2</span>
+00284 <span class="preprocessor"></span>
+<a name="l00289"></a><a class="code" href="group__Vhal.html#a17">00289</a> <span class="preprocessor">#define VAPBS_LEFT  3</span>
+00290 <span class="preprocessor"></span>
+<a name="l00295"></a><a class="code" href="group__Vhal.html#a18">00295</a> <span class="preprocessor">#define VAPBS_BACK  4</span>
+00296 <span class="preprocessor"></span>
+<a name="l00301"></a><a class="code" href="group__Vhal.html#a19">00301</a> <span class="preprocessor">#define VAPBS_DOWN  5</span>
+00302 <span class="preprocessor"></span>
+<a name="l00307"></a><a class="code" href="group__Vhal.html#a20">00307</a> <span class="preprocessor">#define VPMGSMALL 1e-12</span>
 00308 <span class="preprocessor"></span>
-00312 <span class="preprocessor">#   define VINLINE_VPEE</span>
-00313 <span class="preprocessor"></span>
-00317 <span class="preprocessor">#   define VINLINE_VGREEN</span>
-00318 <span class="preprocessor"></span>
-00322 <span class="preprocessor">#   define VINLINE_VFETK</span>
-00323 <span class="preprocessor"></span>
-00327 <span class="preprocessor">#   define VINLINE_VPMG </span>
-00328 <span class="preprocessor"></span>
-00333 <span class="preprocessor">#   define MAX_HASH_DIM 75</span>
-00334 <span class="preprocessor"></span>
-00335 <span class="preprocessor">#endif</span>
-00336 <span class="preprocessor"></span>
-00337 <span class="comment">/* Fortran name mangling */</span>
-00338 <span class="preprocessor">#if defined(VF77_UPPERCASE)</span>
-00339 <span class="preprocessor"></span><span class="preprocessor">#   if defined(VF77_NOUNDERSCORE)</span>
-00340 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) NAME</span>
-00341 <span class="preprocessor"></span><span class="preprocessor">#   elif defined(VF77_ONEUNDERSCORE)</span>
-00342 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) NAME ## _</span>
-00343 <span class="preprocessor"></span><span class="preprocessor">#   else</span>
-00344 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
-00345 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
-00346 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00347 <span class="preprocessor"></span><span class="preprocessor">#   if defined(VF77_NOUNDERSCORE)</span>
-00348 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
-00349 <span class="preprocessor"></span><span class="preprocessor">#   elif defined(VF77_ONEUNDERSCORE)</span>
-00350 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name ## _</span>
-00351 <span class="preprocessor"></span><span class="preprocessor">#   else</span>
+00309 
+00310 <span class="preprocessor">#if defined(VDEBUG)</span>
+00311 <span class="preprocessor"></span><span class="preprocessor">#   if !defined(APBS_NOINLINE)</span>
+00312 <span class="preprocessor"></span><span class="preprocessor">#       define APBS_NOINLINE 1</span>
+00313 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
+00314 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00315 <span class="preprocessor"></span>
+00316 <span class="preprocessor">#if !defined(APBS_NOINLINE)</span>
+00317 <span class="preprocessor"></span>
+00321 <span class="preprocessor">#   define VINLINE_VACC</span>
+00322 <span class="preprocessor"></span>
+00326 <span class="preprocessor">#   define VINLINE_VATOM</span>
+00327 <span class="preprocessor"></span>
+00331 <span class="preprocessor">#   define VINLINE_VCSM</span>
+00332 <span class="preprocessor"></span>
+00336 <span class="preprocessor">#   define VINLINE_VPBE</span>
+00337 <span class="preprocessor"></span>
+00341 <span class="preprocessor">#   define VINLINE_VPEE</span>
+00342 <span class="preprocessor"></span>
+00346 <span class="preprocessor">#   define VINLINE_VGREEN</span>
+00347 <span class="preprocessor"></span>
+00351 <span class="preprocessor">#   define VINLINE_VFETK</span>
 00352 <span class="preprocessor"></span>
-<a name="l00355"></a><a class="code" href="group__Vhal.html#a16">00355</a> <span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
-00356 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
-00357 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00358 <span class="preprocessor"></span>
-00359 <span class="comment">/* Floating Point Error */</span>
-00360 <span class="preprocessor">#if defined(MACHINE_EPS)</span>
-00361 <span class="preprocessor"></span><span class="preprocessor">#     define VFLOOR(value) \</span>
-00362 <span class="preprocessor">              ((floor(value) != floor(value + MACHINE_EPS)) ? \</span>
-00363 <span class="preprocessor">              floor(value + MACHINE_EPS) : floor(value))</span>
-00364 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00356 <span class="preprocessor">#   define VINLINE_VPMG </span>
+00357 <span class="preprocessor"></span>
+00362 <span class="preprocessor">#   define MAX_HASH_DIM 75</span>
+00363 <span class="preprocessor"></span>
+00364 <span class="preprocessor">#endif</span>
 00365 <span class="preprocessor"></span>
-<a name="l00370"></a><a class="code" href="group__Vhal.html#a17">00370</a> <span class="preprocessor">#     define VFLOOR(value) floor(value)</span>
-00371 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
-00372 <span class="preprocessor"></span>
-00373 <span class="comment">/* String embedding for ident */</span>
-00374 <span class="preprocessor">#if defined(HAVE_EMBED)</span>
-00375 <span class="preprocessor"></span>
-<a name="l00379"></a><a class="code" href="group__Vhal.html#a18">00379</a> <span class="preprocessor">#    define VEMBED(rctag) \</span>
-00380 <span class="preprocessor">         VPRIVATE const char* rctag; \</span>
-00381 <span class="preprocessor">         static void* use_rcsid=(0 ? &amp;use_rcsid : (void**)&amp;rcsid);</span>
-00382 <span class="preprocessor"></span><span class="preprocessor">#else</span>
-00383 <span class="preprocessor"></span>
-00387 <span class="preprocessor">#    define VEMBED(rctag)</span>
-00388 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if defined(HAVE_EMBED) */</span>
-00389 
-00390 <span class="preprocessor">#endif </span><span class="comment">/* #ifndef _VAPBSHAL_H_ */</span>
-00391 
-</pre></div><hr><address style="align: right;"><small>Generated on Wed May 11 12:10:31 2005 for APBS by
+00366 <span class="comment">/* Fortran name mangling */</span>
+00367 <span class="preprocessor">#if defined(VF77_UPPERCASE)</span>
+00368 <span class="preprocessor"></span><span class="preprocessor">#   if defined(VF77_NOUNDERSCORE)</span>
+00369 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) NAME</span>
+00370 <span class="preprocessor"></span><span class="preprocessor">#   elif defined(VF77_ONEUNDERSCORE)</span>
+00371 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) NAME ## _</span>
+00372 <span class="preprocessor"></span><span class="preprocessor">#   else</span>
+00373 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
+00374 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
+00375 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00376 <span class="preprocessor"></span><span class="preprocessor">#   if defined(VF77_NOUNDERSCORE)</span>
+00377 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
+00378 <span class="preprocessor"></span><span class="preprocessor">#   elif defined(VF77_ONEUNDERSCORE)</span>
+00379 <span class="preprocessor"></span><span class="preprocessor">#       define VF77_MANGLE(name,NAME) name ## _</span>
+00380 <span class="preprocessor"></span><span class="preprocessor">#   else</span>
+00381 <span class="preprocessor"></span>
+<a name="l00384"></a><a class="code" href="group__Vhal.html#a21">00384</a> <span class="preprocessor">#       define VF77_MANGLE(name,NAME) name</span>
+00385 <span class="preprocessor"></span><span class="preprocessor">#   endif</span>
+00386 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00387 <span class="preprocessor"></span>
+00388 <span class="comment">/* Floating Point Error */</span>
+00389 <span class="preprocessor">#if defined(MACHINE_EPS)</span>
+00390 <span class="preprocessor"></span><span class="preprocessor">#     define VFLOOR(value) \</span>
+00391 <span class="preprocessor">              ((floor(value) != floor(value + MACHINE_EPS)) ? \</span>
+00392 <span class="preprocessor">              floor(value + MACHINE_EPS) : floor(value))</span>
+00393 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00394 <span class="preprocessor"></span>
+<a name="l00399"></a><a class="code" href="group__Vhal.html#a22">00399</a> <span class="preprocessor">#     define VFLOOR(value) floor(value)</span>
+00400 <span class="preprocessor"></span><span class="preprocessor">#endif</span>
+00401 <span class="preprocessor"></span>
+00402 <span class="comment">/* String embedding for ident */</span>
+00403 <span class="preprocessor">#if defined(HAVE_EMBED)</span>
+00404 <span class="preprocessor"></span>
+<a name="l00408"></a><a class="code" href="group__Vhal.html#a23">00408</a> <span class="preprocessor">#    define VEMBED(rctag) \</span>
+00409 <span class="preprocessor">         VPRIVATE const char* rctag; \</span>
+00410 <span class="preprocessor">         static void* use_rcsid=(0 ? &amp;use_rcsid : (void**)&amp;rcsid);</span>
+00411 <span class="preprocessor"></span><span class="preprocessor">#else</span>
+00412 <span class="preprocessor"></span>
+00416 <span class="preprocessor">#    define VEMBED(rctag)</span>
+00417 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if defined(HAVE_EMBED) */</span>
+00418 
+00419 <span class="preprocessor">#endif </span><span class="comment">/* #ifndef _VAPBSHAL_H_ */</span>
+00420 
+</pre></div><hr><address style="align: right;"><small>Generated on Fri May 13 10:19:59 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>

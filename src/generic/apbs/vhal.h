@@ -197,6 +197,35 @@ enum eVdata_Format {
  */
 typedef enum eVdata_Format Vdata_Format;
 
+/** 
+ * @brief  APBS total execution timer ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_WALL_CLOCK 26
+
+/** 
+ * @brief  APBS setup timer ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_SETUP 27
+
+/** 
+ * @brief  APBS solver timer ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_SOLVER 28
+
+/** 
+ * @brief  APBS energy timer ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_ENERGY 29
+
+/** 
+ * @brief  APBS force timer ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_FORCE 29
 
 /** @brief The maximum number of molecules that can be involved in a single 
  *         PBE calculation

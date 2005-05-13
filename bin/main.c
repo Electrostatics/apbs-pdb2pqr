@@ -202,7 +202,7 @@ int main(
     }
 
     /* *************** CHECK INVOCATION ******************* */
-    Vnm_tstart(26, "APBS WALL CLOCK");
+    Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
     Vnm_tprint( 1, "%s", header);
     Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
       __TIME__);
@@ -448,7 +448,7 @@ int main(
     Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
     /* This should be last */
-    Vnm_tstop(26, "APBS WALL CLOCK");
+    Vnm_tstop(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
     Vcom_finalize();
 
     return 0;
