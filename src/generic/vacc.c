@@ -837,11 +837,13 @@ VPUBLIC VaccSurf* VaccSurf_refSphere(Vmem *mem, int npts) {
 VPUBLIC VaccSurf* Vacc_atomSASPoints(Vacc *thee, double radius, 
         Vatom *atom) {
 
-    VaccSurf *asurf; 
+    VaccSurf *asurf = VNULL; 
     int id;
 
     if (thee->surf == VNULL) Vacc_SASA(thee, radius);
     id = Vatom_getAtomID(atom);
+
+    asurf = thee->surf[id];
 
     /* See if this surface needs to be rebuilt */
     if (asurf->probe_radius != radius) {
