@@ -27,10 +27,10 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
 	* Fixed a bug in Vacc_molAcc which generates spurious regions of high
       internal dielectric for molecular surface-based dielectric definitions.
 	  These regions were very small and apparently affected energies by 1-2%.
-	  The new version of the molecular surface is somewhat more costly to
-	  calculate -- but we all should be using spline-based surfaces, anyway --
-	  right?  (Thanks to John Mongan and Jessica Swanson for finding this
-	  bug).
+	  The new version of the molecular surface is actually faster (requires
+	  50-70% of the time for most cases) but we should all be using the spline
+	  surface anyway -- right? (Thanks to John Mongan and Jessica Swanson for
+	  finding this bug). 
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04

@@ -30,209 +30,214 @@
 <a name="l00085"></a><a class="code" href="structsVpmg.html#m0">00085</a>   Vmem *<a class="code" href="structsVpmg.html#m0">vmem</a>;  
 <a name="l00086"></a><a class="code" href="structsVpmg.html#m1">00086</a>   <a class="code" href="structsVpmgp.html">Vpmgp</a> *<a class="code" href="structsVpmg.html#m1">pmgp</a>;  
 <a name="l00087"></a><a class="code" href="structsVpmg.html#m2">00087</a>   <a class="code" href="structsVpbe.html">Vpbe</a> *<a class="code" href="structsVpmg.html#m2">pbe</a>;  
-<a name="l00089"></a><a class="code" href="structsVpmg.html#m3">00089</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVpmg.html#m3">iparm</a>;  
-<a name="l00090"></a><a class="code" href="structsVpmg.html#m4">00090</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m4">rparm</a>;  
-<a name="l00091"></a><a class="code" href="structsVpmg.html#m5">00091</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVpmg.html#m5">iwork</a>;  
-<a name="l00092"></a><a class="code" href="structsVpmg.html#m6">00092</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m6">rwork</a>;  
-<a name="l00093"></a><a class="code" href="structsVpmg.html#m7">00093</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m7">a1cf</a>;  
-<a name="l00094"></a><a class="code" href="structsVpmg.html#m8">00094</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m8">a2cf</a>;  
-<a name="l00095"></a><a class="code" href="structsVpmg.html#m9">00095</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m9">a3cf</a>;  
-<a name="l00096"></a><a class="code" href="structsVpmg.html#m10">00096</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m10">ccf</a>;  
-<a name="l00097"></a><a class="code" href="structsVpmg.html#m11">00097</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m11">fcf</a>;  
-<a name="l00098"></a><a class="code" href="structsVpmg.html#m12">00098</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m12">tcf</a>;  
-<a name="l00099"></a><a class="code" href="structsVpmg.html#m13">00099</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m13">u</a>;  
-<a name="l00100"></a><a class="code" href="structsVpmg.html#m14">00100</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m14">xf</a>;  
-<a name="l00101"></a><a class="code" href="structsVpmg.html#m15">00101</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m15">yf</a>;  
-<a name="l00102"></a><a class="code" href="structsVpmg.html#m16">00102</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m16">zf</a>;  
-<a name="l00103"></a><a class="code" href="structsVpmg.html#m17">00103</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m17">gxcf</a>;  
-<a name="l00104"></a><a class="code" href="structsVpmg.html#m18">00104</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m18">gycf</a>;  
-<a name="l00105"></a><a class="code" href="structsVpmg.html#m19">00105</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m19">gzcf</a>;  
-<a name="l00106"></a><a class="code" href="structsVpmg.html#m20">00106</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m20">pvec</a>;  
-<a name="l00107"></a><a class="code" href="structsVpmg.html#m21">00107</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m21">extDiEnergy</a>;  
-<a name="l00109"></a><a class="code" href="structsVpmg.html#m22">00109</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m22">extQmEnergy</a>;  
-<a name="l00111"></a><a class="code" href="structsVpmg.html#m23">00111</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m23">extQfEnergy</a>;  
-<a name="l00113"></a><a class="code" href="structsVpmg.html#m24">00113</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m24">extNpEnergy</a>;  
-<a name="l00115"></a><a class="code" href="structsVpmg.html#m25">00115</a>   <a class="code" href="group__Vhal.html#a30">Vsurf_Meth</a> <a class="code" href="structsVpmg.html#m25">surfMeth</a>;  
-<a name="l00116"></a><a class="code" href="structsVpmg.html#m26">00116</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m26">splineWin</a>;  
-<a name="l00117"></a><a class="code" href="structsVpmg.html#m27">00117</a>   <a class="code" href="group__Vhal.html#a31">Vchrg_Meth</a> <a class="code" href="structsVpmg.html#m27">chargeMeth</a>;  
-<a name="l00118"></a><a class="code" href="structsVpmg.html#m28">00118</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m28">filled</a>;  
-<a name="l00119"></a><a class="code" href="structsVpmg.html#m29">00119</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m29">useDielXMap</a>;  
-<a name="l00121"></a><a class="code" href="structsVpmg.html#m30">00121</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m30">dielXMap</a>;  
-<a name="l00122"></a><a class="code" href="structsVpmg.html#m31">00122</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m31">useDielYMap</a>;  
-<a name="l00124"></a><a class="code" href="structsVpmg.html#m32">00124</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m32">dielYMap</a>;  
-<a name="l00125"></a><a class="code" href="structsVpmg.html#m33">00125</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m33">useDielZMap</a>;  
-<a name="l00127"></a><a class="code" href="structsVpmg.html#m34">00127</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m34">dielZMap</a>;  
-<a name="l00128"></a><a class="code" href="structsVpmg.html#m35">00128</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m35">useKappaMap</a>;  
-<a name="l00130"></a><a class="code" href="structsVpmg.html#m36">00130</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m36">kappaMap</a>;  
-<a name="l00131"></a><a class="code" href="structsVpmg.html#m37">00131</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m37">useChargeMap</a>;  
-<a name="l00133"></a><a class="code" href="structsVpmg.html#m38">00133</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m38">chargeMap</a>;  
-00134 };
-00135 
-<a name="l00140"></a><a class="code" href="group__Vpmg.html#a0">00140</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVpmg.html">sVpmg</a> <a class="code" href="group__Vpmg.html#a0">Vpmg</a>;
-00141 
-00142 <span class="comment">/* </span>
-00143 <span class="comment"></span>
-00144 <span class="comment"></span>
-00145 <span class="comment">#if !defined(VINLINE_VPMG)</span>
-00146 <span class="comment"></span>
-00153 <span class="comment">    unsigned long int Vpmg_memChk(</span>
-00154 <span class="comment">            Vpmg *thee  </span>
-00155 <span class="comment">            );</span>
-00156 <span class="comment"></span>
-00157 <span class="comment">#else /* if defined(VINLINE_VPMG) */</span>
-00158 
-00159 <span class="preprocessor">#   define Vpmg_memChk(thee) (Vmem_bytes((thee)-&gt;vmem))</span>
-00160 <span class="preprocessor"></span>
-00161 <span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VPMG) */</span>
-00162 
-00163 <span class="comment">/* </span>
-00164 <span class="comment"></span>
-00165 <span class="comment"></span>
-00166 <span class="comment"></span>
-00171 <span class="comment">Vpmg* Vpmg_ctor(</span>
-00172 <span class="comment">        Vpmgp *parms,  </span>
-00173 <span class="comment">        Vpbe *pbe,  </span>
-00174 <span class="comment">        int focusFlag,  </span>
-00175 <span class="comment">        Vpmg *pmgOLD,  </span>
-00176 <span class="comment">        MGparm *mgparm,  </span>
-00178 <span class="comment">        PBEparm_calcEnergy energyFlag  </span>
-00180 <span class="comment">        );</span>
-00181 <span class="comment"></span>
-00189 <span class="comment">int Vpmg_ctor2(</span>
-00190 <span class="comment">        Vpmg *thee,  </span>
-00191 <span class="comment">        Vpmgp *parms,  </span>
-00192 <span class="comment">        Vpbe *pbe,  </span>
-00193 <span class="comment">        int focusFlag,  </span>
-00194 <span class="comment">        Vpmg *pmgOLD,  </span>
-00196 <span class="comment">        MGparm *mgparm,  </span>
-00198 <span class="comment">        PBEparm_calcEnergy energyFlag  </span>
-00201 <span class="comment">        );</span>
-00202 <span class="comment"></span>
-00207 <span class="comment">void Vpmg_dtor(</span>
-00208 <span class="comment">        Vpmg **thee  </span>
-00210 <span class="comment">        );</span>
-00211 <span class="comment"></span>
-00216 <span class="comment">void Vpmg_dtor2(</span>
-00217 <span class="comment">        Vpmg *thee  </span>
-00218 <span class="comment">        );</span>
-00219 <span class="comment"></span>
-00224 <span class="comment">void Vpmg_fillco(</span>
-00225 <span class="comment">        Vpmg *thee,  </span>
-00226 <span class="comment">        Vsurf_Meth surfMeth,  </span>
-00227 <span class="comment">        double splineWin,  </span>
-00229 <span class="comment">        Vchrg_Meth chargeMeth,  </span>
-00230 <span class="comment">        int useDielXMap,  </span>
-00231 <span class="comment">        Vgrid *dielXMap,  </span>
-00232 <span class="comment">        int useDielYMap,  </span>
-00233 <span class="comment">        Vgrid *dielYMap,  </span>
-00234 <span class="comment">        int useDielZMap,  </span>
-00235 <span class="comment">        Vgrid *dielZMap,  </span>
-00236 <span class="comment">        int useKappaMap,  </span>
-00237 <span class="comment">        Vgrid *kappaMap,  </span>
-00238 <span class="comment">        int useChargeMap,  </span>
-00239 <span class="comment">        Vgrid *chargeMap  </span>
-00240 <span class="comment">        );</span>
-00241 <span class="comment"></span>
-00246 <span class="comment">void Vpmg_solve(</span>
-00247 <span class="comment">        Vpmg *thee  </span>
-00248 <span class="comment">        );</span>
-00249 <span class="comment"></span>
-00259 <span class="comment">double Vpmg_energy(</span>
-00260 <span class="comment">        Vpmg *thee,  </span>
-00261 <span class="comment">        int extFlag  </span>
-00265 <span class="comment">        );</span>
-00266 <span class="comment"></span>
-00284 <span class="comment">double Vpmg_qfEnergy(</span>
-00285 <span class="comment">        Vpmg *thee,  </span>
-00286 <span class="comment">        int extFlag  </span>
-00290 <span class="comment">        );</span>
-00291 <span class="comment"></span>
-00311 <span class="comment">double Vpmg_qfAtomEnergy(</span>
-00312 <span class="comment">        Vpmg *thee,  </span>
-00313 <span class="comment">        Vatom *atom  </span>
-00314 <span class="comment">        );</span>
-00315 <span class="comment"></span>
-00340 <span class="comment">double Vpmg_qmEnergy(</span>
-00341 <span class="comment">        Vpmg *thee,  </span>
-00342 <span class="comment">        int extFlag  </span>
-00346 <span class="comment">        );</span>
-00347 <span class="comment"></span>
-00348 <span class="comment"></span>
-00367 <span class="comment">double Vpmg_dielEnergy(</span>
-00368 <span class="comment">        Vpmg *thee,  </span>
-00369 <span class="comment">        int extFlag  </span>
-00373 <span class="comment">        );</span>
-00374 <span class="comment"></span>
-00375 <span class="comment"></span>
-00402 <span class="comment">double Vpmg_npEnergy(</span>
-00403 <span class="comment">        Vpmg *thee,  </span>
-00404 <span class="comment">        int extFlag  </span>
-00408 <span class="comment">        );</span>
-00409 <span class="comment"></span>
-00426 <span class="comment">double Vpmg_dielGradNorm(</span>
-00427 <span class="comment">        Vpmg *thee  </span>
-00428 <span class="comment">        );</span>
-00429 <span class="comment"></span>
-00443 <span class="comment">void Vpmg_force(</span>
-00444 <span class="comment">        Vpmg *thee,  </span>
-00445 <span class="comment">        double *force, </span>
-00447 <span class="comment">        int atomID,  </span>
-00448 <span class="comment">        Vsurf_Meth srfm,  </span>
-00449 <span class="comment">        Vchrg_Meth chgm  </span>
-00450 <span class="comment">        );</span>
-00451 <span class="comment"></span>
-00465 <span class="comment">void Vpmg_qfForce(</span>
-00466 <span class="comment">        Vpmg *thee,  </span>
-00467 <span class="comment">        double *force, </span>
-00469 <span class="comment">        int atomID,  </span>
-00470 <span class="comment">        Vchrg_Meth chgm  </span>
-00471 <span class="comment">        );</span>
-00472 <span class="comment"></span>
-00486 <span class="comment">void Vpmg_dbnpForce(</span>
-00487 <span class="comment">        Vpmg *thee,  </span>
-00488 <span class="comment">        double *dbForce, </span>
-00490 <span class="comment">        double *npForce, </span>
-00492 <span class="comment">        int atomID,  </span>
-00493 <span class="comment">        Vsurf_Meth srfm  </span>
-00494 <span class="comment">        );</span>
-00495 <span class="comment"></span>
-00509 <span class="comment">void Vpmg_ibForce(</span>
-00510 <span class="comment">        Vpmg *thee,  </span>
-00511 <span class="comment">        double *force, </span>
-00513 <span class="comment">        int atomID,  </span>
-00514 <span class="comment">        Vsurf_Meth srfm  </span>
-00515 <span class="comment">        );</span>
-00516 <span class="comment"></span>
-00522 <span class="comment">void Vpmg_setPart(</span>
-00523 <span class="comment">        Vpmg *thee,  </span>
-00524 <span class="comment">        double lowerCorner[3],  </span>
-00525 <span class="comment">        double upperCorner[3],  </span>
-00526 <span class="comment">        int bflags[6]  </span>
-00530 <span class="comment">        );</span>
-00531 <span class="comment"></span>
-00536 <span class="comment">void Vpmg_unsetPart(</span>
-00537 <span class="comment">        Vpmg *thee  </span>
-00538 <span class="comment">        );</span>
-00539 <span class="comment"></span>
-00544 <span class="comment">void Vpmg_fillArray(</span>
-00545 <span class="comment">        Vpmg *thee,  </span>
-00546 <span class="comment">        double *vec,  </span>
-00548 <span class="comment">        Vdata_Type type,  </span>
-00549 <span class="comment">        double parm,  </span>
-00550 <span class="comment">        Vhal_PBEType pbetype  </span>
-00551 <span class="comment">        );</span>
-00552 <span class="comment"></span>
-00559 <span class="comment">void Vpmg_printColComp(</span>
-00560 <span class="comment">        Vpmg *thee,  </span>
-00561 <span class="comment">        char path[72],  </span>
-00562 <span class="comment">        char title[72],  </span>
-00563 <span class="comment">        char mxtype[3],   </span>
-00571 <span class="comment">        int flag  </span>
-00575 <span class="comment">        );</span>
-00576 <span class="comment"></span>
-00577 <span class="comment">#endif    /* ifndef _VPMG_H_ */</span>
-00578 
-</pre></div><hr><address style="align: right;"><small>Generated on Fri May 13 10:19:59 2005 for APBS by
+<a name="l00089"></a><a class="code" href="structsVpmg.html#m3">00089</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m3">epsx</a>;  
+<a name="l00090"></a><a class="code" href="structsVpmg.html#m4">00090</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m4">epsy</a>;  
+<a name="l00091"></a><a class="code" href="structsVpmg.html#m5">00091</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m5">epsz</a>;  
+<a name="l00092"></a><a class="code" href="structsVpmg.html#m6">00092</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m6">kappa</a>;  
+<a name="l00093"></a><a class="code" href="structsVpmg.html#m7">00093</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m7">charge</a>;  
+<a name="l00095"></a><a class="code" href="structsVpmg.html#m8">00095</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVpmg.html#m8">iparm</a>;  
+<a name="l00096"></a><a class="code" href="structsVpmg.html#m9">00096</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m9">rparm</a>;  
+<a name="l00097"></a><a class="code" href="structsVpmg.html#m10">00097</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVpmg.html#m10">iwork</a>;  
+<a name="l00098"></a><a class="code" href="structsVpmg.html#m11">00098</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m11">rwork</a>;  
+<a name="l00099"></a><a class="code" href="structsVpmg.html#m12">00099</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m12">a1cf</a>;  
+<a name="l00101"></a><a class="code" href="structsVpmg.html#m13">00101</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m13">a2cf</a>;  
+<a name="l00103"></a><a class="code" href="structsVpmg.html#m14">00103</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m14">a3cf</a>;  
+<a name="l00105"></a><a class="code" href="structsVpmg.html#m15">00105</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m15">ccf</a>;  
+<a name="l00106"></a><a class="code" href="structsVpmg.html#m16">00106</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m16">fcf</a>;  
+<a name="l00107"></a><a class="code" href="structsVpmg.html#m17">00107</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m17">tcf</a>;  
+<a name="l00108"></a><a class="code" href="structsVpmg.html#m18">00108</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m18">u</a>;  
+<a name="l00109"></a><a class="code" href="structsVpmg.html#m19">00109</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m19">xf</a>;  
+<a name="l00110"></a><a class="code" href="structsVpmg.html#m20">00110</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m20">yf</a>;  
+<a name="l00111"></a><a class="code" href="structsVpmg.html#m21">00111</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m21">zf</a>;  
+<a name="l00112"></a><a class="code" href="structsVpmg.html#m22">00112</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m22">gxcf</a>;  
+<a name="l00113"></a><a class="code" href="structsVpmg.html#m23">00113</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m23">gycf</a>;  
+<a name="l00114"></a><a class="code" href="structsVpmg.html#m24">00114</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m24">gzcf</a>;  
+<a name="l00115"></a><a class="code" href="structsVpmg.html#m25">00115</a>   <span class="keywordtype">double</span> *<a class="code" href="structsVpmg.html#m25">pvec</a>;  
+<a name="l00116"></a><a class="code" href="structsVpmg.html#m26">00116</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m26">extDiEnergy</a>;  
+<a name="l00118"></a><a class="code" href="structsVpmg.html#m27">00118</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m27">extQmEnergy</a>;  
+<a name="l00120"></a><a class="code" href="structsVpmg.html#m28">00120</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m28">extQfEnergy</a>;  
+<a name="l00122"></a><a class="code" href="structsVpmg.html#m29">00122</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m29">extNpEnergy</a>;  
+<a name="l00124"></a><a class="code" href="structsVpmg.html#m30">00124</a>   <a class="code" href="group__Vhal.html#a30">Vsurf_Meth</a> <a class="code" href="structsVpmg.html#m30">surfMeth</a>;  
+<a name="l00125"></a><a class="code" href="structsVpmg.html#m31">00125</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpmg.html#m31">splineWin</a>;  
+<a name="l00126"></a><a class="code" href="structsVpmg.html#m32">00126</a>   <a class="code" href="group__Vhal.html#a31">Vchrg_Meth</a> <a class="code" href="structsVpmg.html#m32">chargeMeth</a>;  
+<a name="l00128"></a><a class="code" href="structsVpmg.html#m33">00128</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m33">filled</a>;  
+<a name="l00130"></a><a class="code" href="structsVpmg.html#m34">00130</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m34">useDielXMap</a>;  
+<a name="l00132"></a><a class="code" href="structsVpmg.html#m35">00132</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m35">dielXMap</a>;  
+<a name="l00133"></a><a class="code" href="structsVpmg.html#m36">00133</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m36">useDielYMap</a>;  
+<a name="l00135"></a><a class="code" href="structsVpmg.html#m37">00135</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m37">dielYMap</a>;  
+<a name="l00136"></a><a class="code" href="structsVpmg.html#m38">00136</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m38">useDielZMap</a>;  
+<a name="l00138"></a><a class="code" href="structsVpmg.html#m39">00138</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m39">dielZMap</a>;  
+<a name="l00139"></a><a class="code" href="structsVpmg.html#m40">00139</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m40">useKappaMap</a>;  
+<a name="l00141"></a><a class="code" href="structsVpmg.html#m41">00141</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m41">kappaMap</a>;  
+<a name="l00142"></a><a class="code" href="structsVpmg.html#m42">00142</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpmg.html#m42">useChargeMap</a>;  
+<a name="l00144"></a><a class="code" href="structsVpmg.html#m43">00144</a>   <a class="code" href="structsVgrid.html">Vgrid</a> *<a class="code" href="structsVpmg.html#m43">chargeMap</a>;  
+00145 };
+00146 
+<a name="l00151"></a><a class="code" href="group__Vpmg.html#a0">00151</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVpmg.html">sVpmg</a> <a class="code" href="group__Vpmg.html#a0">Vpmg</a>;
+00152 
+00153 <span class="comment">/* </span>
+00154 <span class="comment"></span>
+00155 <span class="comment"></span>
+00156 <span class="comment">#if !defined(VINLINE_VPMG)</span>
+00157 <span class="comment"></span>
+00164 <span class="comment">    unsigned long int Vpmg_memChk(</span>
+00165 <span class="comment">            Vpmg *thee  </span>
+00166 <span class="comment">            );</span>
+00167 <span class="comment"></span>
+00168 <span class="comment">#else /* if defined(VINLINE_VPMG) */</span>
+00169 
+00170 <span class="preprocessor">#   define Vpmg_memChk(thee) (Vmem_bytes((thee)-&gt;vmem))</span>
+00171 <span class="preprocessor"></span>
+00172 <span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VPMG) */</span>
+00173 
+00174 <span class="comment">/* </span>
+00175 <span class="comment"></span>
+00176 <span class="comment"></span>
+00177 <span class="comment"></span>
+00182 <span class="comment">Vpmg* Vpmg_ctor(</span>
+00183 <span class="comment">        Vpmgp *parms,  </span>
+00184 <span class="comment">        Vpbe *pbe,  </span>
+00185 <span class="comment">        int focusFlag,  </span>
+00186 <span class="comment">        Vpmg *pmgOLD,  </span>
+00187 <span class="comment">        MGparm *mgparm,  </span>
+00189 <span class="comment">        PBEparm_calcEnergy energyFlag  </span>
+00191 <span class="comment">        );</span>
+00192 <span class="comment"></span>
+00200 <span class="comment">int Vpmg_ctor2(</span>
+00201 <span class="comment">        Vpmg *thee,  </span>
+00202 <span class="comment">        Vpmgp *parms,  </span>
+00203 <span class="comment">        Vpbe *pbe,  </span>
+00204 <span class="comment">        int focusFlag,  </span>
+00205 <span class="comment">        Vpmg *pmgOLD,  </span>
+00207 <span class="comment">        MGparm *mgparm,  </span>
+00209 <span class="comment">        PBEparm_calcEnergy energyFlag  </span>
+00212 <span class="comment">        );</span>
+00213 <span class="comment"></span>
+00218 <span class="comment">void Vpmg_dtor(</span>
+00219 <span class="comment">        Vpmg **thee  </span>
+00221 <span class="comment">        );</span>
+00222 <span class="comment"></span>
+00227 <span class="comment">void Vpmg_dtor2(</span>
+00228 <span class="comment">        Vpmg *thee  </span>
+00229 <span class="comment">        );</span>
+00230 <span class="comment"></span>
+00236 <span class="comment">int Vpmg_fillco(</span>
+00237 <span class="comment">        Vpmg *thee,  </span>
+00238 <span class="comment">        Vsurf_Meth surfMeth,  </span>
+00239 <span class="comment">        double splineWin,  </span>
+00241 <span class="comment">        Vchrg_Meth chargeMeth,  </span>
+00242 <span class="comment">        int useDielXMap,  </span>
+00243 <span class="comment">        Vgrid *dielXMap,  </span>
+00244 <span class="comment">        int useDielYMap,  </span>
+00245 <span class="comment">        Vgrid *dielYMap,  </span>
+00246 <span class="comment">        int useDielZMap,  </span>
+00247 <span class="comment">        Vgrid *dielZMap,  </span>
+00248 <span class="comment">        int useKappaMap,  </span>
+00249 <span class="comment">        Vgrid *kappaMap,  </span>
+00250 <span class="comment">        int useChargeMap,  </span>
+00251 <span class="comment">        Vgrid *chargeMap  </span>
+00252 <span class="comment">        );</span>
+00253 <span class="comment"></span>
+00259 <span class="comment">int Vpmg_solve(</span>
+00260 <span class="comment">        Vpmg *thee  </span>
+00261 <span class="comment">        );</span>
+00262 <span class="comment"></span>
+00272 <span class="comment">double Vpmg_energy(</span>
+00273 <span class="comment">        Vpmg *thee,  </span>
+00274 <span class="comment">        int extFlag  </span>
+00278 <span class="comment">        );</span>
+00279 <span class="comment"></span>
+00297 <span class="comment">double Vpmg_qfEnergy(</span>
+00298 <span class="comment">        Vpmg *thee,  </span>
+00299 <span class="comment">        int extFlag  </span>
+00303 <span class="comment">        );</span>
+00304 <span class="comment"></span>
+00324 <span class="comment">double Vpmg_qfAtomEnergy(</span>
+00325 <span class="comment">        Vpmg *thee,  </span>
+00326 <span class="comment">        Vatom *atom  </span>
+00327 <span class="comment">        );</span>
+00328 <span class="comment"></span>
+00353 <span class="comment">double Vpmg_qmEnergy(</span>
+00354 <span class="comment">        Vpmg *thee,  </span>
+00355 <span class="comment">        int extFlag  </span>
+00359 <span class="comment">        );</span>
+00360 <span class="comment"></span>
+00361 <span class="comment"></span>
+00380 <span class="comment">double Vpmg_dielEnergy(</span>
+00381 <span class="comment">        Vpmg *thee,  </span>
+00382 <span class="comment">        int extFlag  </span>
+00386 <span class="comment">        );</span>
+00387 <span class="comment"></span>
+00388 <span class="comment"></span>
+00415 <span class="comment">double Vpmg_npEnergy(</span>
+00416 <span class="comment">        Vpmg *thee,  </span>
+00417 <span class="comment">        int extFlag  </span>
+00421 <span class="comment">        );</span>
+00422 <span class="comment"></span>
+00439 <span class="comment">double Vpmg_dielGradNorm(</span>
+00440 <span class="comment">        Vpmg *thee  </span>
+00441 <span class="comment">        );</span>
+00442 <span class="comment"></span>
+00454 <span class="comment">int Vpmg_force(</span>
+00455 <span class="comment">        Vpmg *thee,  </span>
+00456 <span class="comment">        double *force, </span>
+00458 <span class="comment">        int atomID,  </span>
+00459 <span class="comment">        Vsurf_Meth srfm,  </span>
+00460 <span class="comment">        Vchrg_Meth chgm  </span>
+00461 <span class="comment">        );</span>
+00462 <span class="comment"></span>
+00474 <span class="comment">int Vpmg_qfForce(</span>
+00475 <span class="comment">        Vpmg *thee,  </span>
+00476 <span class="comment">        double *force, </span>
+00478 <span class="comment">        int atomID,  </span>
+00479 <span class="comment">        Vchrg_Meth chgm  </span>
+00480 <span class="comment">        );</span>
+00481 <span class="comment"></span>
+00493 <span class="comment">int Vpmg_dbnpForce(</span>
+00494 <span class="comment">        Vpmg *thee,  </span>
+00495 <span class="comment">        double *dbForce, </span>
+00497 <span class="comment">        double *npForce, </span>
+00499 <span class="comment">        int atomID,  </span>
+00500 <span class="comment">        Vsurf_Meth srfm  </span>
+00501 <span class="comment">        );</span>
+00502 <span class="comment"></span>
+00514 <span class="comment">int Vpmg_ibForce(</span>
+00515 <span class="comment">        Vpmg *thee,  </span>
+00516 <span class="comment">        double *force, </span>
+00518 <span class="comment">        int atomID,  </span>
+00519 <span class="comment">        Vsurf_Meth srfm  </span>
+00520 <span class="comment">        );</span>
+00521 <span class="comment"></span>
+00527 <span class="comment">void Vpmg_setPart(</span>
+00528 <span class="comment">        Vpmg *thee,  </span>
+00529 <span class="comment">        double lowerCorner[3],  </span>
+00530 <span class="comment">        double upperCorner[3],  </span>
+00531 <span class="comment">        int bflags[6]  </span>
+00535 <span class="comment">        );</span>
+00536 <span class="comment"></span>
+00541 <span class="comment">void Vpmg_unsetPart(</span>
+00542 <span class="comment">        Vpmg *thee  </span>
+00543 <span class="comment">        );</span>
+00544 <span class="comment"></span>
+00550 <span class="comment">int Vpmg_fillArray(</span>
+00551 <span class="comment">        Vpmg *thee,  </span>
+00552 <span class="comment">        double *vec,  </span>
+00554 <span class="comment">        Vdata_Type type,  </span>
+00555 <span class="comment">        double parm,  </span>
+00556 <span class="comment">        Vhal_PBEType pbetype  </span>
+00557 <span class="comment">        );</span>
+00558 <span class="comment"></span>
+00565 <span class="comment">void Vpmg_printColComp(</span>
+00566 <span class="comment">        Vpmg *thee,  </span>
+00567 <span class="comment">        char path[72],  </span>
+00568 <span class="comment">        char title[72],  </span>
+00569 <span class="comment">        char mxtype[3],   </span>
+00577 <span class="comment">        int flag  </span>
+00581 <span class="comment">        );</span>
+00582 <span class="comment"></span>
+00583 <span class="comment">#endif    /* ifndef _VPMG_H_ */</span>
+00584 
+</pre></div><hr><address style="align: right;"><small>Generated on Tue May 17 11:56:05 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 
 width=110 height=53></a>1.3-rc3 </small></address>
