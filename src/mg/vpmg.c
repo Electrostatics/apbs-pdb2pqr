@@ -125,14 +125,41 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 }
 
 
-VPUBLIC void Vpmg_solve(Vpmg *thee) {
+VPUBLIC int Vpmg_solve(Vpmg *thee) {
 
-    int i;
+    int i, nx, ny, nz, n;
     double zkappa2;
 
-    thee->filled = 0;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    n = nx*ny*nz;
 
-    /* This is a really disgusting hack, however, it preserves the relative
+    if (!(thee->filled)) {
+        Vnm_print(2, "Vpmg_solve:  Need to call Vpmg_fillco()!\n");
+        return 0;
+    }
+
+    /* Fill the "true solution" array */
+    for (i=0; i<n; i++) {
+        thee->tcf[i] = 0.0;
+    }
+
+    /* Fill the RHS array */
+    for (i=0; i<n; i++) {
+        thee->fcf[i] = thee->charge[i];
+    }
+
+    /* Fill the operator coefficient array. */
+    for (i=0; i<n; i++) {
+        thee->a1cf[i] = thee->epsx[i];
+        thee->a2cf[i] = thee->epsy[i];
+        thee->a3cf[i] = thee->epsz[i];
+    }
+
+    /* Fill the nonlinear coefficient array.
+     *
+     * This is a really disgusting hack, however, it preserves the relative
 	 * clarity of the code elsewhere.  There are two paths the code can follow
 	 * based on whether we're solving the NPBE or LPBE.  
 	 * - For the NPBE, we need to keep track of (possibly asymmetric)
@@ -143,17 +170,17 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
      * - For the LPBE, we don't need to keep track of individual ion
 	 *   contributions.  In this case, ccf should contain a characteristic
 	 *   function _ALREADY SCALED BY THE APPROPRIATE COEFFICIENTS_.
-     * In all cases, the fillco functions in vpmg-setup.c only fill ccf with
-	 * the values of the characteristic function.  This would be fine if all
-	 * paths of execution used the functions in mypde.f.  Unforunately, the
-	 * functions in mypde.f are not called by PMG in the case of the LPBE.
-	 * Rather than modifying PMG (we want to maintain as much compatibility as
-	 * possible), we will scale ccf here and then immediately unscale it at the
-	 * end of this function. */
+     * In all cases, the Vpmg_fillco functions only fill ccf with the values
+     * of the characteristic function.  This would be fine if all paths of
+     * execution used the functions in mypde.f.  Unforunately, the functions
+     * in mypde.f are not called by PMG in the case of the LPBE.  Rather than
+     * modifying PMG (we want to maintain as much compatibility as possible),
+     * we will scale ccf here.
+     */
     zkappa2 = Vpbe_getZkappa2(thee->pbe);
     if (zkappa2 > VPMGSMALL) {
-        for (i=0; i<(thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz); i++) {
-            thee->ccf[i] = zkappa2*thee->ccf[i];
+        for (i=0; i<n; i++) {
+            thee->ccf[i] = zkappa2*thee->kappa[i];
         }
     }
 
@@ -164,7 +191,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* Newton (nonlinear) */
         case 1:
@@ -172,7 +198,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
               thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
               thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* MG (linear/nonlinear) */
         case 2:
@@ -180,7 +205,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* CGHS (linear/nonlinear) */
         case 3: 
@@ -188,7 +212,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* SOR (linear/nonlinear) */
         case 4:
@@ -196,7 +219,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* GSRB (linear/nonlinear) */
         case 5:
@@ -204,7 +226,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf); 
-            thee->filled = 0;
             break;
         /* WJAC (linear/nonlinear) */
         case 6:
@@ -212,7 +233,6 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* RICH (linear/nonlinear) */
         case 7:
@@ -220,21 +240,16 @@ VPUBLIC void Vpmg_solve(Vpmg *thee) {
 	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
               thee->fcf, thee->tcf);
-            thee->filled = 0;
             break;
         /* Error handling */
         default: 
             Vnm_print(2, "Vpgm_solve: invalid solver method key (%d)\n",
               thee->pmgp->key);
+            return 0;
             break;
     }
 
-    /* Un-scale ccf (see long comment above) */
-    if (zkappa2 > VPMGSMALL) {
-        for (i=0; i<(thee->pmgp->nx*thee->pmgp->ny*thee->pmgp->nz); i++) {
-            thee->ccf[i] = thee->ccf[i]/zkappa2;
-        }
-    }
+    return 1;
 
 }
 
@@ -261,6 +276,16 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
       (void **)&(thee->iwork));
     Vmem_free(thee->vmem, thee->pmgp->nrwk, sizeof(double), 
       (void **)&(thee->rwork));
+    Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+      (void **)&(thee->charge));
+    Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+      (void **)&(thee->kappa));
+    Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+      (void **)&(thee->epsx));
+    Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+      (void **)&(thee->epsy));
+    Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+      (void **)&(thee->epsz));
     Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
       (void **)&(thee->a1cf));
     Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double), 
@@ -540,7 +565,7 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
     }
 }
 
-VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
+VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
   double parm, Vhal_PBEType pbetype) {
 
     Vacc *acc = VNULL;
@@ -565,86 +590,36 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
     epss = Vpbe_getSolventDiel(pbe);
     zmagic = Vpbe_getZmagic(pbe);
 
+    if (!(thee->filled)) {
+        Vnm_print(2, "Vpmg_fillArray:  need to call Vpmg_fillco first!\n");
+        return 0;
+    }
+
     switch (type) {
 
         case VDT_CHARGE:
 
-            /* Call the coefficient discretization routine */
-            if (!thee->filled) 
-              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
-                thee->chargeMeth,
-                thee->useDielXMap, thee->dielXMap,
-                thee->useDielYMap, thee->dielYMap,
-                thee->useDielZMap, thee->dielZMap,
-                thee->useKappaMap, thee->kappaMap,
-                thee->useChargeMap, thee->chargeMap);
-                
-            /* Copy the charge array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->fcf[i]/zmagic;
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->charge[i]/zmagic;
             break;
 
         case VDT_DIELX:
 
-            /* Call the coefficient discretization routine */
-            if (!thee->filled)
-              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
-                thee->chargeMeth,
-                thee->useDielXMap, thee->dielXMap,
-                thee->useDielYMap, thee->dielYMap,
-                thee->useDielZMap, thee->dielZMap,
-                thee->useKappaMap, thee->kappaMap,
-                thee->useChargeMap, thee->chargeMap);
-
-            /* Copy the x-shifted dielectric array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a1cf[i];
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->epsx[i];
             break;
 
         case VDT_DIELY:
 
-            /* Call the coefficient discretization routine */
-            if (!thee->filled)
-              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
-                thee->chargeMeth,
-                thee->useDielXMap, thee->dielXMap,
-                thee->useDielYMap, thee->dielYMap,
-                thee->useDielZMap, thee->dielZMap,
-                thee->useKappaMap, thee->kappaMap,
-                thee->useChargeMap, thee->chargeMap);
-
-            /* Copy the y-shifted dielectric array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a2cf[i];
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->epsy[i];
             break;
 
         case VDT_DIELZ:
 
-            /* Call the coefficient discretization routine */
-            if (!thee->filled)
-              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
-                thee->chargeMeth,
-                thee->useDielXMap, thee->dielXMap,
-                thee->useDielYMap, thee->dielYMap,
-                thee->useDielZMap, thee->dielZMap,
-                thee->useKappaMap, thee->kappaMap,
-                thee->useChargeMap, thee->chargeMap);
-
-            /* Copy the z-shifted dielectric array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->a3cf[i];
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->epsz[i];
             break;
 
         case VDT_KAPPA:
 
-            /* Call the coefficient discretization routine */
-            if (!thee->filled)
-              Vpmg_fillco(thee, thee->surfMeth, thee->splineWin,
-                thee->chargeMeth,
-                thee->useDielXMap, thee->dielXMap,
-                thee->useDielYMap, thee->dielYMap,
-                thee->useDielZMap, thee->dielZMap,
-                thee->useKappaMap, thee->kappaMap,
-                thee->useChargeMap, thee->chargeMap);
-
-            /* Copy the kappa array into the argument vector */
-            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->ccf[i];
+            for (i=0; i<nx*ny*nz; i++) vec[i] = thee->kappa[i];
             break;
 
         case VDT_POT:
@@ -828,9 +803,12 @@ VPUBLIC void Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
         default:
 
             Vnm_print(2, "main:  Bogus data type (%d)!\n", type);
+            return 0;
             break;
 
     }
+
+    return 1;
 
 }
 
@@ -843,7 +821,6 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     double npEnergy = 0.0;
 
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
 
     Vnm_print(0, "Vpmg_energy:  calculating apolar energy\n");
     npEnergy = Vpmg_npEnergy(thee, extFlag);
@@ -886,14 +863,10 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
 
     energy = 0.0;
 
-    /* Refill the dieletric coefficient arrays */
-    if (!thee->filled) Vpmg_fillco(thee, 
-      thee->surfMeth, thee->splineWin, thee->chargeMeth,
-      thee->useDielXMap, thee->dielXMap,
-      thee->useDielYMap, thee->dielYMap,
-      thee->useDielZMap, thee->dielZMap,
-      thee->useKappaMap, thee->kappaMap,
-      thee->useChargeMap, thee->chargeMap);
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_dielEnergy:  Need to call Vpmg_fillco!\n");
+        VASSERT(0);
+    }
 
     for (k=0; k<(nz-1); k++) {
         for (j=0; j<(ny-1); j++) {
@@ -901,11 +874,11 @@ VPUBLIC double Vpmg_dielEnergy(Vpmg *thee, int extFlag) {
                 pvecx = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i+1,j,k)]);
                 pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j+1,k)]);
                 pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k+1)]);
-                nrgx = thee->a1cf[IJK(i,j,k)]*pvecx
+                nrgx = thee->epsx[IJK(i,j,k)]*pvecx
                   * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i+1,j,k)])/hx);
-                nrgy = thee->a2cf[IJK(i,j,k)]*pvecy
+                nrgy = thee->epsy[IJK(i,j,k)]*pvecy
                   * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i,j+1,k)])/hy);
-                nrgz = thee->a3cf[IJK(i,j,k)]*pvecz
+                nrgz = thee->epsz[IJK(i,j,k)]*pvecz
                   * VSQR((thee->u[IJK(i,j,k)]-thee->u[IJK(i,j,k+1)])/hzed);
                 energy += (nrgx + nrgy + nrgz);
             }
@@ -937,14 +910,10 @@ VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
 
     energy = 0.0;
 
-    /* Refill the dieletric coefficient arrays */
-    if (!thee->filled) Vpmg_fillco(thee, 
-      thee->surfMeth, thee->splineWin, thee->chargeMeth,
-      thee->useDielXMap, thee->dielXMap,
-      thee->useDielYMap, thee->dielYMap,
-      thee->useDielZMap, thee->dielZMap,
-      thee->useKappaMap, thee->kappaMap,
-      thee->useChargeMap, thee->chargeMap);
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_dielGradNorm:  Need to call Vpmg_fillco!\n");
+        VASSERT(0);
+    }
 
     for (k=1; k<nz; k++) {
         for (j=1; j<ny; j++) {
@@ -953,11 +922,11 @@ VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
                 pvecy = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j-1,k)]);
                 pvecz = 0.5*(thee->pvec[IJK(i,j,k)]+thee->pvec[IJK(i,j,k-1)]);
                 nrgx = pvecx
-                 * VSQR((thee->a1cf[IJK(i,j,k)]-thee->a1cf[IJK(i-1,j,k)])/hx);
+                 * VSQR((thee->epsx[IJK(i,j,k)]-thee->epsx[IJK(i-1,j,k)])/hx);
                 nrgy = pvecy
-                 * VSQR((thee->a2cf[IJK(i,j,k)]-thee->a2cf[IJK(i,j-1,k)])/hy);
+                 * VSQR((thee->epsy[IJK(i,j,k)]-thee->epsy[IJK(i,j-1,k)])/hy);
                 nrgz = pvecz
-                 * VSQR((thee->a3cf[IJK(i,j,k)]-thee->a3cf[IJK(i,j,k-1)])/hzed);
+                 * VSQR((thee->epsz[IJK(i,j,k)]-thee->epsz[IJK(i,j,k-1)])/hzed);
                 energy += VSQRT(nrgx + nrgy + nrgz);
             }
         }
@@ -1020,14 +989,10 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     }
     zks2 = 0.5*zkappa2/ionstr;
 
-    /* Because PMG seems to overwrite some of the coefficient arrays... */
-    if (!thee->filled) Vpmg_fillco(thee, 
-      thee->surfMeth, thee->splineWin, thee->chargeMeth,
-      thee->useDielXMap, thee->dielXMap,
-      thee->useDielYMap, thee->dielYMap,
-      thee->useDielZMap, thee->dielZMap,
-      thee->useKappaMap, thee->kappaMap,
-      thee->useChargeMap, thee->chargeMap);
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_qmEnergy:  Need to call Vpmg_fillco()!\n");
+        VASSERT(0);
+    }
 
     energy = 0.0;
     nchop = 0;
@@ -1035,9 +1000,9 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
     if (thee->pmgp->nonlin) {
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating nonlinear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            if (thee->pvec[i]*thee->ccf[i] > VSMALL) {
+            if (thee->pvec[i]*thee->kappa[i] > VSMALL) {
                 for (j=0; j<nion; j++) {
-                    energy += (thee->pvec[i]*thee->ccf[i]*zks2
+                    energy += (thee->pvec[i]*thee->kappa[i]*zks2
                       * ionConc[j] * VSQR(ionQ[j]) 
                       * (Vcap_exp(-ionQ[j]*thee->u[i], &ichop)-1.0));
                     nchop += ichop;
@@ -1050,8 +1015,8 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
         /* Zkappa2 OK here b/c LPBE approx */
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
         for (i=0; i<(nx*ny*nz); i++) {
-            if (thee->pvec[i]*thee->ccf[i] > VSMALL) 
-              energy += (thee->pvec[i]*zkappa2*thee->ccf[i]*VSQR(thee->u[i]));
+            if (thee->pvec[i]*thee->kappa[i] > VSMALL) 
+              energy += (thee->pvec[i]*zkappa2*thee->kappa[i]*VSQR(thee->u[i]));
         }
         energy = 0.5*energy;
     }
@@ -1248,21 +1213,15 @@ VPRIVATE double Vpmg_qfEnergyVolume(Vpmg *thee, int extFlag) {
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
 
-    /* Because PMG seems to overwrite some of the coefficient arrays... 
-     * NAB:  it would be useful to figure out which particular arrays need to
-     * be recreated. */
-    if (!thee->filled) Vpmg_fillco(thee, 
-      thee->surfMeth, thee->splineWin, thee->chargeMeth,
-      thee->useDielXMap, thee->dielXMap,
-      thee->useDielYMap, thee->dielYMap,
-      thee->useDielZMap, thee->dielZMap,
-      thee->useKappaMap, thee->kappaMap,
-      thee->useChargeMap, thee->chargeMap);
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_qfEnergyVolume:  need to call Vpmg_fillco!\n");
+        VASSERT(0);
+    }
 
     energy = 0.0;
     Vnm_print(0, "Vpmg_qfEnergyVolume:  Calculating energy\n");
     for (i=0; i<(nx*ny*nz); i++) {
-        energy += (thee->pvec[i]*thee->u[i]*thee->fcf[i]);
+        energy += (thee->pvec[i]*thee->u[i]*thee->charge[i]);
     }
     energy = energy*hx*hy*hzed/Vpbe_getZmagic(thee->pbe);
 
@@ -1288,22 +1247,37 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     thee->vmem = Vmem_ctor("APBS:VPMG");
 
     /* Calculate storage requirements */
-    F77MGSZ(&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
-          &(thee->pmgp->mgsolv), &(thee->pmgp->nx), &(thee->pmgp->ny),
-      &(thee->pmgp->nz),
-      &(thee->pmgp->nlev), &(thee->pmgp->nxc), &(thee->pmgp->nyc),
-      &(thee->pmgp->nzc), &(thee->pmgp->nf), &(thee->pmgp->nc),
-      &(thee->pmgp->narr), &(thee->pmgp->narrc), &(thee->pmgp->n_rpc),
-      &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), &(thee->pmgp->nrwk),
-      &(thee->pmgp->niwk));
+    F77MGSZ(
+          &(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+          &(thee->pmgp->mgsolv), 
+          &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
+          &(thee->pmgp->nlev), 
+          &(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
+          &(thee->pmgp->nf), &(thee->pmgp->nc), 
+          &(thee->pmgp->narr), &(thee->pmgp->narrc), 
+          &(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
+          &(thee->pmgp->nrwk), &(thee->pmgp->niwk)
+          );
 
     /* We need some additional storage if: nonlinear & newton OR cgmg */
     if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
         || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
 
-    Vnm_print(0, "Vpmg_ctor2: PMG chose nx = %d, ny = %d, nz = %d, nlev = %d\n",
-       thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz, thee->pmgp->nlev);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
+            thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose nlev = %d\n", 
+            thee->pmgp->nlev);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose nxc = %d, nyc = %d, nzc = %d\n", 
+            thee->pmgp->nxc, thee->pmgp->nyc, thee->pmgp->nzc);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose nf = %d, nc = %d\n", 
+            thee->pmgp->nf, thee->pmgp->nc);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose narr = %d, narrc = %d\n", 
+            thee->pmgp->narr, thee->pmgp->narrc);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose n_rpc = %d, n_iz = %d, n_ipc = %d\n", 
+            thee->pmgp->n_rpc, thee->pmgp->n_iz, thee->pmgp->n_ipc);
+    Vnm_print(0, "Vpmg_ctor2:  PMG chose nrwk = %d, niwk = %d\n", 
+            thee->pmgp->nrwk, thee->pmgp->niwk);
 
     /* Allocate boundary storage */
     thee->gxcf = (double *)Vmem_malloc(thee->vmem,
@@ -1323,6 +1297,16 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     thee->iwork = (int *)Vmem_malloc(thee->vmem, thee->pmgp->niwk,
       sizeof(int));
     thee->rwork = (double *)Vmem_malloc(thee->vmem, thee->pmgp->nrwk,
+      sizeof(double));
+    thee->charge = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+      sizeof(double));
+    thee->kappa = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+      sizeof(double));
+    thee->epsx = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+      sizeof(double));
+    thee->epsy = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+      sizeof(double));
+    thee->epsz = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
       sizeof(double));
     thee->a1cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
       sizeof(double));
@@ -2257,7 +2241,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
                          VASSERT(0);
                      }
                      if (tkappa < VPMGSMALL) tkappa = 0.0;
-                     thee->ccf[IJK(i,j,k)] = (tkappa / kappamax);
+                     thee->kappa[IJK(i,j,k)] = (tkappa / kappamax);
                 }
 
                 position[0] = thee->xf[i] + 0.5*hx;
@@ -2269,7 +2253,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
                       position[0], position[1], position[2]);
                     VASSERT(0);
                  }
-                 thee->a1cf[IJK(i,j,k)] = eps;
+                 thee->epsx[IJK(i,j,k)] = eps;
         
                  position[0] = thee->xf[i];
                  position[1] = thee->yf[j] + 0.5*hy;
@@ -2280,7 +2264,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
                       position[0], position[1], position[2]);
                     VASSERT(0);
                  }
-                 thee->a2cf[IJK(i,j,k)] = eps;
+                 thee->epsy[IJK(i,j,k)] = eps;
             
                  position[0] = thee->xf[i];
                  position[1] = thee->yf[j];
@@ -2291,7 +2275,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
                       position[0], position[1], position[2]);
                     VASSERT(0);
                  }
-                 thee->a3cf[IJK(i,j,k)] = eps;
+                 thee->epsz[IJK(i,j,k)] = eps;
             }
         }
     }
@@ -2363,10 +2347,12 @@ VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
 
-    /* Reset the ccf array, marking everything accessible */
-    for (i=0; i<(nx*ny*nz); i++) thee->ccf[i] = ionmask;
+    /* Reset the kappa array, marking everything accessible */
+    for (i=0; i<(nx*ny*nz); i++) thee->kappa[i] = ionmask;
 
-    /* Loop through the atoms and set ccf = 0.0 (inaccessible) if a point
+    if (ionstr < VPMGSMALL) return;
+
+    /* Loop through the atoms and set kappa = 0.0 (inaccessible) if a point
      * is inside the ion-inflated van der Waals radii */
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
@@ -2374,33 +2360,36 @@ VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
         apos = Vatom_getPosition(atom);
         arad = Vatom_getRadius(atom);
 
-        /* Make sure we're on the grid */
-        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
-            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
-            (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
-                Vnm_print(2, 
-"Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-                  iatom, apos[0], apos[1], apos[2]);
-                Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
-                  xmin, xmax);
-                Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
-                  ymin, ymax);
-                Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
-                  zmin, zmax);
-            }
-            fflush(stderr);
+        if (arad > VSMALL) {
 
-        } else { /* if we're on the mesh */
+            /* Make sure we're on the grid */
+            if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+                (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+                (apos[2]<=zmin) || (apos[2]>=zmax)) {
+                if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                    Vnm_print(2, 
+    "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+                      iatom, apos[0], apos[1], apos[2]);
+                    Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
+                      xmin, xmax);
+                    Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
+                      ymin, ymax);
+                    Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
+                      zmin, zmax);
+                }
+                fflush(stderr);
 
-            /* Mark ions */
-            markSphere((irad+arad), apos, 
-                    nx, ny, nz,
-                    hx, hy, hzed,
-                    xmin, ymin, zmin,
-                    thee->ccf, 0.0);
-
-        } /* endif (on the mesh) */
+            } else { /* if we're on the mesh */
+    
+                /* Mark ions */
+                markSphere((irad+arad), apos, 
+                        nx, ny, nz,
+                        hx, hy, hzed,
+                        xmin, ymin, zmin,
+                        thee->kappa, 0.0);
+    
+            } /* endif (on the mesh) */
+        }
     } /* endfor (over all atoms) */
 
 }
@@ -2463,11 +2452,11 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
     ymax = thee->pmgp->ycent + (ylen/2.0);
     zmax = thee->pmgp->zcent + (zlen/2.0);
 
-    /* Reset the ccf, a1cf, a2cf, and a3cf arrays */
+    /* Reset the arrays */
     for (i=0; i<(nx*ny*nz); i++) {
-        thee->a1cf[i] = 1.0;
-        thee->a2cf[i] = 1.0;
-        thee->a3cf[i] = 1.0;
+        thee->epsx[i] = epsw;
+        thee->epsy[i] = epsw;
+        thee->epsz[i] = epsw;
     }
 
     /* Loop through the atoms and set a{123}cf = 0.0 (inaccessible)
@@ -2503,21 +2492,21 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
                         nx, ny, nz,
                         hx, hy, hzed,
                         (xmin+0.5*hx), ymin, zmin,
-                        thee->a1cf, 0.0);
+                        thee->epsx, epsp);
 
                 /* Mark y-shifted dielectric */
                 markSphere((arad+srad), apos, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, (ymin+0.5*hy), zmin,
-                        thee->a2cf, 0.0);
+                        thee->epsy, epsp);
 
                 /* Mark z-shifted dielectric */
                 markSphere((arad+srad), apos, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin, (zmin+0.5*hzed),
-                        thee->a3cf, 0.0);
+                        thee->epsz, epsp);
             }
 
         } /* endif (on the mesh) */
@@ -2543,33 +2532,25 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
                         nx, ny, nz,
                         hx, hy, hzed,
                         (xmin+0.5*hx), ymin, zmin,
-                        thee->a1cf, 1.0);
+                        thee->epsx, epsw);
     
                 /* Mark y-shifted dielectric */
                 markSphere(srad, position, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, (ymin+0.5*hy), zmin,
-                        thee->a2cf, 1.0);
+                        thee->epsy, epsw);
     
                 /* Mark z-shifted dielectric */
                 markSphere(srad, position, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin, (zmin+0.5*hzed),
-                        thee->a3cf, 1.0);
+                        thee->epsz, epsw);
     
             }
 
         }
-    }
-
-    /* Set the dielectric values from the accessibility */
-    deps = epsw - epsp;
-    for (i=0; i<(nx*ny*nz); i++) {
-        thee->a1cf[i] = deps*(thee->a1cf[i]) + epsp;
-        thee->a2cf[i] = deps*(thee->a2cf[i]) + epsp;
-        thee->a3cf[i] = deps*(thee->a3cf[i]) + epsp;
     }
 
 }
@@ -2616,12 +2597,12 @@ VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
     ymax = thee->pmgp->ycent + (ylen/2.0);
     zmax = thee->pmgp->zcent + (zlen/2.0);
 
-    /* Reset the ccf, a1cf, a2cf, and a3cf arrays */
+    /* Reset the ccf, epsx, epsy, and epsz arrays */
     for (i=0; i<(nx*ny*nz); i++) {
         thee->ccf[i]  = 1.0;
-        thee->a1cf[i] = 1.0;
-        thee->a2cf[i] = 1.0;
-        thee->a3cf[i] = 1.0;
+        thee->epsx[i] = 1.0;
+        thee->epsy[i] = 1.0;
+        thee->epsz[i] = 1.0;
     }
 
     /* Loop through the atoms and set ccf to 0.0 (inaccessible) if a point is
@@ -2664,17 +2645,17 @@ VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin+0.5*hx, ymin, zmin,
-                        thee->a1cf, 0.0);
+                        thee->epsx, 0.0);
                 markSphere((arad+srad), apos, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin+0.5*hy, zmin,
-                        thee->a2cf, 0.0);
+                        thee->epsy, 0.0);
                 markSphere((arad+srad), apos, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin, zmin+0.5*hzed,
-                        thee->a3cf, 0.0);
+                        thee->epsz, 0.0);
             }
 
         } /* endif (on the mesh) */
@@ -2708,17 +2689,17 @@ VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin+0.5*hx, ymin, zmin,
-                        thee->a1cf, 1.0);
+                        thee->epsx, 1.0);
                 markSphere(srad, position, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin+0.5*hy, zmin,
-                        thee->a2cf, 1.0);
+                        thee->epsy, 1.0);
                 markSphere(srad, position, 
                         nx, ny, nz,
                         hx, hy, hzed,
                         xmin, ymin, zmin+0.5*hzed,
-                        thee->a3cf, 1.0);
+                        thee->epsz, 1.0);
             }
         }
     }
@@ -2728,29 +2709,28 @@ VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
         for (j=0; j<ny; j++) {
             for (k=0; k<nz; k++) {
 
-                /* X-shifted */
-                a = thee->a1cf[IJK(i,j,k)];
                 am = thee->ccf[IJK(i,j,k)];
+
+                /* X-shifted */
+                a = thee->epsx[IJK(i,j,k)];
                 if (i < (nx-1)) ap = thee->ccf[IJK(i+1,j,k)];
                 else ap = a;
                 frac = (a + ap + am)/3.0;
-                thee->a1cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                thee->epsx[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
 
                 /* Y-shifted */
-                a = thee->a2cf[IJK(i,j,k)];
-                am = thee->ccf[IJK(i,j,k)];
+                a = thee->epsy[IJK(i,j,k)];
                 if (j < (ny-1)) ap = thee->ccf[IJK(i,j+1,k)];
                 else ap = a;
                 frac = (a + ap + am)/3.0;
-                thee->a2cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                thee->epsy[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
 
-                /* Y-shifted */
-                a = thee->a3cf[IJK(i,j,k)];
-                am = thee->ccf[IJK(i,j,k)];
+                /* Z-shifted */
+                a = thee->epsz[IJK(i,j,k)];
                 if (k < (nz-1)) ap = thee->ccf[IJK(i,j,k+1)];
                 else ap = a;
                 frac = (a + ap + am)/3.0;
-                thee->a3cf[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                thee->epsz[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
 
             }
         }
@@ -2825,12 +2805,12 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
     if (ionstr > VPMGSMALL) ionmask = 1.0;
     else ionmask = 0.0;
 
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
+    /* Reset the kappa, epsx, epsy, and epsz arrays */
     for (i=0; i<(nx*ny*nz); i++) {
-        thee->ccf[i] = 1.0;
-        thee->a1cf[i] = 1.0;
-        thee->a2cf[i] = 1.0;
-        thee->a3cf[i] = 1.0;
+        thee->kappa[i] = 1.0;
+        thee->epsx[i] = 1.0;
+        thee->epsy[i] = 1.0;
+        thee->epsz[i] = 1.0;
     }
 
     /* Loop through the atoms and do assign the dielectric */
@@ -2896,74 +2876,74 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
                         dz2 = VSQR(position[2] - k*hzed);
 
                         /* ASSIGN CCF */
-                        if (thee->ccf[IJK(i,j,k)] > VPMGSMALL) {
+                        if (thee->kappa[IJK(i,j,k)] > VPMGSMALL) {
                             dist2 = dz2 + dy2 + dx2;
                             if (dist2 >= itot2) {
-                                thee->ccf[IJK(i,j,k)] *= 1.0;
+                                thee->kappa[IJK(i,j,k)] *= 1.0;
                             } 
                             if (dist2 <= ictot2) {
-                                thee->ccf[IJK(i,j,k)] = 0.0;
+                                thee->kappa[IJK(i,j,k)] = 0.0;
                             }
                             if ((dist2 < itot2) && (dist2 > ictot2)) {
                                 dist = VSQRT(dist2);
                                 sm = dist - (arad + irad) + splineWin;
                                 sm2 = VSQR(sm);
                                 value = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
-                                thee->ccf[IJK(i,j,k)] *= value;
+                                thee->kappa[IJK(i,j,k)] *= value;
                             }
                         }
 
                         /* ASSIGN A1CF */
-                        if (thee->a1cf[IJK(i,j,k)] > VPMGSMALL) {
+                        if (thee->epsx[IJK(i,j,k)] > VPMGSMALL) {
                             dist2 = dz2+dy2+VSQR(position[0]-(i+0.5)*hx);
                             if (dist2 >= stot2) {
-                                thee->a1cf[IJK(i,j,k)] *= 1.0;
+                                thee->epsx[IJK(i,j,k)] *= 1.0;
                             } 
                             if (dist2 <= sctot2) {
-                                thee->a1cf[IJK(i,j,k)] = 0.0;
+                                thee->epsx[IJK(i,j,k)] = 0.0;
                             } 
                             if ((dist2 > sctot2) && (dist2 < stot2)) {
                                 dist = VSQRT(dist2);
                                 sm = dist - arad + splineWin;
                                 sm2 = VSQR(sm);
                                 value = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
-                                thee->a1cf[IJK(i,j,k)] *= value;
+                                thee->epsx[IJK(i,j,k)] *= value;
                             } 
                         }
 
                         /* ASSIGN A2CF */
-                        if (thee->a2cf[IJK(i,j,k)] > VPMGSMALL) {
+                        if (thee->epsy[IJK(i,j,k)] > VPMGSMALL) {
                             dist2 = dz2+dx2+VSQR(position[1]-(j+0.5)*hy);
                             if (dist2 >= stot2) {
-                                thee->a2cf[IJK(i,j,k)] *= 1.0;
+                                thee->epsy[IJK(i,j,k)] *= 1.0;
                             } 
                             if (dist2 <= sctot2) {
-                                thee->a2cf[IJK(i,j,k)] = 0.0;
+                                thee->epsy[IJK(i,j,k)] = 0.0;
                             }
                             if ((dist2 > sctot2) && (dist2 < stot2)) {
                                 dist = VSQRT(dist2);
                                 sm = dist - arad + splineWin;
                                 sm2 = VSQR(sm);
                                 value = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
-                                thee->a2cf[IJK(i,j,k)] *= value;
+                                thee->epsy[IJK(i,j,k)] *= value;
                             }
                         }
 
                         /* ASSIGN A3CF */
-                        if (thee->a3cf[IJK(i,j,k)] > VPMGSMALL) {
+                        if (thee->epsz[IJK(i,j,k)] > VPMGSMALL) {
                             dist2 = dy2+dx2+VSQR(position[2]-(k+0.5)*hzed);
                             if (dist2 >= stot2) {
-                                thee->a3cf[IJK(i,j,k)] *= 1.0;
+                                thee->epsz[IJK(i,j,k)] *= 1.0;
                             } 
                             if (dist2 <= sctot2) {
-                                thee->a3cf[IJK(i,j,k)] = 0.0;
+                                thee->epsz[IJK(i,j,k)] = 0.0;
                             } 
                             if ((dist2 > sctot2) && (dist2 < stot2)) {
                                 dist = VSQRT(dist2);
                                 sm = dist - arad + splineWin;
                                 sm2 = VSQR(sm);
                                 value = 0.75*sm2*w2i - 0.25*sm*sm2*w3i;
-                                thee->a3cf[IJK(i,j,k)] *= value;
+                                thee->epsz[IJK(i,j,k)] *= value;
                             }
                         }
 
@@ -2980,20 +2960,13 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
         for (j=0; j<ny; j++) {
             for (i=0; i<nx; i++) {
 
-                thee->ccf[IJK(i,j,k)] = ionmask*thee->ccf[IJK(i,j,k)];
-                thee->a1cf[IJK(i,j,k)] = (epsw-epsp)*thee->a1cf[IJK(i,j,k)] 
+                thee->kappa[IJK(i,j,k)] = ionmask*thee->kappa[IJK(i,j,k)];
+                thee->epsx[IJK(i,j,k)] = (epsw-epsp)*thee->epsx[IJK(i,j,k)] 
                   + epsp;
-                thee->a2cf[IJK(i,j,k)] = (epsw-epsp)*thee->a2cf[IJK(i,j,k)] 
+                thee->epsy[IJK(i,j,k)] = (epsw-epsp)*thee->epsy[IJK(i,j,k)] 
                   + epsp;
-                thee->a3cf[IJK(i,j,k)] = (epsw-epsp)*thee->a3cf[IJK(i,j,k)] 
+                thee->epsz[IJK(i,j,k)] = (epsw-epsp)*thee->epsz[IJK(i,j,k)] 
                   + epsp;
-
-#if 0
-                Vnm_print(2, "ccf = %g\n", thee->ccf[IJK(i,j,k)]);
-                Vnm_print(2, "a2cf = %g\n", thee->a2cf[IJK(i,j,k)]);
-                Vnm_print(2, "a1cf = %g\n", thee->a1cf[IJK(i,j,k)]);
-                Vnm_print(2, "a3cf = %g\n", thee->a3cf[IJK(i,j,k)]);
-#endif
 
             } /* i loop */
         } /* j loop */
@@ -3080,8 +3053,8 @@ VPRIVATE void fillcoChargeMap(Vpmg *thee) {
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
    
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
-    for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
+    /* Reset the charge array */
+    for (i=0; i<(nx*ny*nz); i++) thee->charge[i] = 0.0;
 
     /* Fill in the source term (atomic charges) */
     Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
@@ -3094,7 +3067,7 @@ VPRIVATE void fillcoChargeMap(Vpmg *thee) {
                 VASSERT(Vgrid_value(thee->chargeMap, position, &charge));
                 /* Scale the charge to internal units */
                 charge = charge*zmagic;
-                thee->fcf[IJK(i,j,k)] = charge;
+                thee->charge[IJK(i,j,k)] = charge;
             }
         }
     }
@@ -3139,8 +3112,8 @@ VPRIVATE void fillcoChargeSpline1(Vpmg *thee) {
     ymax = thee->pmgp->ycent + (ylen/2.0);
     zmax = thee->pmgp->zcent + (zlen/2.0);
 
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
-    for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
+    /* Reset the charge array */
+    for (i=0; i<(nx*ny*nz); i++) thee->charge[i] = 0.0;
 
     /* Fill in the source term (atomic charges) */
     Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
@@ -3192,14 +3165,14 @@ VPRIVATE void fillcoChargeSpline1(Vpmg *thee) {
             dx = ifloat - (double)(ilo);
             dy = jfloat - (double)(jlo);
             dz = kfloat - (double)(klo);
-            thee->fcf[IJK(ihi,jhi,khi)] += (dx      *     dy *     dz *charge);
-            thee->fcf[IJK(ihi,jlo,khi)] += (dx      *(1.0-dy)*     dz *charge);
-            thee->fcf[IJK(ihi,jhi,klo)] += (dx      *     dy *(1.0-dz)*charge);
-            thee->fcf[IJK(ihi,jlo,klo)] += (dx      *(1.0-dy)*(1.0-dz)*charge);
-            thee->fcf[IJK(ilo,jhi,khi)] += ((1.0-dx)*     dy *     dz *charge);
-            thee->fcf[IJK(ilo,jlo,khi)] += ((1.0-dx)*(1.0-dy)*     dz *charge);
-            thee->fcf[IJK(ilo,jhi,klo)] += ((1.0-dx)*     dy *(1.0-dz)*charge);
-            thee->fcf[IJK(ilo,jlo,klo)] += ((1.0-dx)*(1.0-dy)*(1.0-dz)*charge);
+            thee->charge[IJK(ihi,jhi,khi)] += (dx*dy*dz*charge);
+            thee->charge[IJK(ihi,jlo,khi)] += (dx*(1.0-dy)*dz*charge);
+            thee->charge[IJK(ihi,jhi,klo)] += (dx*dy*(1.0-dz)*charge);
+            thee->charge[IJK(ihi,jlo,klo)] += (dx*(1.0-dy)*(1.0-dz)*charge);
+            thee->charge[IJK(ilo,jhi,khi)] += ((1.0-dx)*dy*dz *charge);
+            thee->charge[IJK(ilo,jlo,khi)] += ((1.0-dx)*(1.0-dy)*dz *charge);
+            thee->charge[IJK(ilo,jhi,klo)] += ((1.0-dx)*dy*(1.0-dz)*charge);
+            thee->charge[IJK(ilo,jlo,klo)] += ((1.0-dx)*(1.0-dy)*(1.0-dz)*charge);
         } /* endif (on the mesh) */
     } /* endfor (each atom) */
 }
@@ -3276,8 +3249,8 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
     ymax = thee->pmgp->ycent + (ylen/2.0);
     zmax = thee->pmgp->zcent + (zlen/2.0);
 
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
-    for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
+    /* Reset the charge array */
+    for (i=0; i<(nx*ny*nz); i++) thee->charge[i] = 0.0;
 
     /* Fill in the source term (atomic charges) */
     Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
@@ -3353,7 +3326,7 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
                     my = bspline2(VFCHI(jj,jfloat));
                     for (kk=km2; kk<=kp2; kk++) {
                         mz = bspline2(VFCHI(kk,kfloat));
-                        thee->fcf[IJK(ii,jj,kk)] += (charge*mx*my*mz);
+                        thee->charge[IJK(ii,jj,kk)] += (charge*mx*my*mz);
                     }
                 }
             }
@@ -3362,7 +3335,7 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
     } /* endfor (each atom) */
 }
 
-VPUBLIC void Vpmg_fillco(Vpmg *thee, 
+VPUBLIC int Vpmg_fillco(Vpmg *thee, 
   Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
   int useDielXMap,   Vgrid *dielXMap, 
   int useDielYMap,   Vgrid *dielYMap, 
@@ -3376,7 +3349,11 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     double epsw, epsp, ionstr;
     int i, nx, ny, nz, islap;
 
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) {
+        Vnm_print(2, "Vpmg_fillco:  got NULL thee!\n");
+        return 0;
+    }
+
     thee->surfMeth = surfMeth;
     thee->splineWin = splineWin;
     thee->chargeMeth = chargeMeth;
@@ -3440,7 +3417,7 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     for (i=0; i<ny; i++) thee->yf[i] = ymin + i*hy;
     for (i=0; i<nz; i++) thee->zf[i] = zmin + i*hzed;
 
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
+    /* Reset the tcf array */
     for (i=0; i<(nx*ny*nz); i++) thee->tcf[i] = 0.0;
 
     /* Fill in the source term (atomic charges) */
@@ -3458,10 +3435,10 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     } else { /* else (!islap) ==> It's a Laplacian operator! */
 
         for (i=0; i<(nx*ny*nz); i++) {
-            thee->ccf[i] = 0.0;
-            thee->a1cf[i] = epsp;
-            thee->a2cf[i] = epsp;
-            thee->a3cf[i] = epsp;
+            thee->kappa[i] = 0.0;
+            thee->epsx[i] = epsp;
+            thee->epsy[i] = epsp;
+            thee->epsz[i] = epsp;
         }
 
     } /* endif (!islap) */
@@ -3474,12 +3451,15 @@ VPUBLIC void Vpmg_fillco(Vpmg *thee,
     }
 
     thee->filled = 1;
+
+    return 1;
 }
 
 
-VPUBLIC void Vpmg_force(Vpmg *thee, double *force, int atomID, 
+VPUBLIC int Vpmg_force(Vpmg *thee, double *force, int atomID, 
   Vsurf_Meth srfm, Vchrg_Meth chgm) {
 
+    int rc = 1;
     double qfF[3];                  /* Charge-field force */  
     double dbF[3];                  /* Dielectric boundary force */
     double ibF[3];                  /* Ion boundary force */
@@ -3487,17 +3467,19 @@ VPUBLIC void Vpmg_force(Vpmg *thee, double *force, int atomID,
 
     VASSERT(thee != VNULL);
  
-    Vpmg_dbnpForce(thee, qfF, npF, atomID, srfm);
-    Vpmg_ibForce(thee, dbF, atomID, srfm); 
-    Vpmg_qfForce(thee, ibF, atomID, chgm); 
+    rc = rc && Vpmg_dbnpForce(thee, qfF, npF, atomID, srfm);
+    rc = rc && Vpmg_ibForce(thee, dbF, atomID, srfm); 
+    rc = rc && Vpmg_qfForce(thee, ibF, atomID, chgm); 
 
     force[0] = qfF[0] + dbF[0] + npF[0] + ibF[0];
     force[1] = qfF[1] + dbF[1] + npF[1] + ibF[1];
     force[2] = qfF[2] + dbF[2] + npF[2] + ibF[2];
 
+    return rc;
+
 }
 
-VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID, 
+VPUBLIC int Vpmg_ibForce(Vpmg *thee, double *force, int atomID, 
   Vsurf_Meth srfm) {
 
     Valist *alist;
@@ -3512,8 +3494,6 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
     int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
    
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
-
    
     acc = thee->pbe->acc;
     atom = Valist_getAtom(thee->pbe->alist, atomID);
@@ -3531,11 +3511,11 @@ VPUBLIC void Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_ibForce:  Skipping ionic boundary force \
 calculation!\n");
-        return;
+        return 0;
     }
 
     /* If we aren't in the current position, then we're done */
-    if (atom->partID == 0) return;
+    if (atom->partID == 0) return 1;
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -3565,7 +3545,7 @@ calculation!\n");
     /* Sanity check: there is no force if there is zero ionic strength */
     if (zkappa2 < VPMGSMALL) {
         Vnm_print(2, "Vpmg_ibForce:  No force for zero ionic strength!\n");
-        return;
+        return 1;
     }
 
     /* Make sure we're on the grid */
@@ -3610,7 +3590,7 @@ calculation!\n");
                 kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
                 for (k=kmin; k<=kmax; k++) {
                     dz2 = VSQR(k*hzed - position[2]);
-                    /* See if grid point is inside ivdw radius and set ccf
+                    /* See if grid point is inside ivdw radius and set kappa
                      * accordingly (do spline assignment here) */
                     if ((dz2 + dy2 + dx2) <= rtot2) {
                         gpos[0] = i*hx + xmin;
@@ -3624,7 +3604,7 @@ calculation!\n");
                             force[0] = 0.0;
                             force[1] = 0.0;
                             force[2] = 0.0;
-                            return;
+                            return 0;
                         } else {
                             /* Use of bulk factor (zkappa2) OK here becuase
                              * LPBE force approximation */
@@ -3641,9 +3621,11 @@ calculation!\n");
     force[0] = force[0] * 0.5 * hx * hy * hzed * izmagic;
     force[1] = force[1] * 0.5 * hx * hy * hzed * izmagic;
     force[2] = force[2] * 0.5 * hx * hy * hzed * izmagic;
+
+    return 1;
 }
 
-VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce, 
+VPUBLIC int Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce, 
   int atomID, Vsurf_Meth srfm) {
 
     Vacc *acc;
@@ -3659,13 +3641,10 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     int i, j, k, l, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
 
     VASSERT(thee != VNULL);
-    if (!thee->filled) Vpmg_fillco(thee,
-      thee->surfMeth, thee->splineWin, thee->chargeMeth,
-      thee->useDielXMap, thee->dielXMap,
-      thee->useDielYMap, thee->dielYMap,
-      thee->useDielZMap, thee->dielZMap,
-      thee->useKappaMap, thee->kappaMap,
-      thee->useChargeMap, thee->chargeMap);
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_dbnpForce:  Need to callVpmg_fillco!\n");
+        return 0;
+    }
 
     acc = thee->pbe->acc;
     atom = Valist_getAtom(thee->pbe->alist, atomID);
@@ -3686,12 +3665,12 @@ VPUBLIC void Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_dbnpForce:  Skipping dielectric/apolar boundary \
 force calculation!\n");
-        return;
+        return 0;
     }
 
 
     /* If we aren't in the current position, then we're done */
-    if (atom->partID == 0) return;
+    if (atom->partID == 0) return 1;
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -3723,7 +3702,7 @@ force calculation!\n");
     /* Sanity check: there is no force if there is zero ionic strength */
     if (VABS(epsp-epsw) < VPMGSMALL) {
        Vnm_print(0, "Vpmg_dbnpForce: No force for uniform dielectric!\n");
-       return;
+       return 1;
     }
     deps = (epsw - epsp);
     depsi = 1.0/deps;
@@ -3757,32 +3736,32 @@ force calculation!\n");
         imin = (int)floor((position[0]-rtot)/hx);
         if (imin < 1) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         imax = (int)ceil((position[0]+rtot)/hx);
         if (imax > (nx-2)) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         jmin = (int)floor((position[1]-rtot)/hy);
         if (jmin < 1) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         jmax = (int)ceil((position[1]+rtot)/hy);
         if (jmax > (ny-2)) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         kmin = (int)floor((position[2]-rtot)/hzed);
         if (kmin < 1) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         kmax = (int)ceil((position[2]+rtot)/hzed);
         if (kmax > (nz-2)) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
-            return;
+            return 0;
         }
         for (i=imin; i<=imax; i++) {
             for (j=jmin; j<=jmax; j++) {
@@ -3791,21 +3770,21 @@ force calculation!\n");
                     gpos[0] = (i+0.5)*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
-                    Hxijk = (thee->a1cf[IJK(i,j,k)] - epsp)*depsi;
+                    Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
                             atom, dHxijk);
                     for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j+0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
-                    Hyijk = (thee->a2cf[IJK(i,j,k)] - epsp)*depsi;
+                    Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
                             atom, dHyijk);
                     for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k+0.5)*hzed + zmin;
-                    Hzijk = (thee->a3cf[IJK(i,j,k)] - epsp)*depsi;
+                    Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
                             atom, dHzijk);
                     for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
@@ -3813,7 +3792,7 @@ force calculation!\n");
                     gpos[0] = (i-0.5)*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
-                    Hxim1jk = (thee->a1cf[IJK(i-1,j,k)] - epsp)*depsi;
+                    Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
                             atom, dHxim1jk);
                     for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
@@ -3821,7 +3800,7 @@ force calculation!\n");
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j-0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
-                    Hyijm1k = (thee->a2cf[IJK(i,j-1,k)] - epsp)*depsi;
+                    Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
                             atom, dHyijm1k);
                     for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
@@ -3829,7 +3808,7 @@ force calculation!\n");
                     gpos[0] = i*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k-0.5)*hzed + zmin;
-                    Hzijkm1 = (thee->a3cf[IJK(i,j,k-1)] - epsp)*depsi;
+                    Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
                     Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
                             atom, dHzijkm1);
                     for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
@@ -3894,9 +3873,11 @@ force calculation!\n");
         npForce[1] = -npForce[1]*hx*hy*hzed*gamma;
         npForce[2] = -npForce[2]*hx*hy*hzed*gamma;
     }
+
+    return 1;
 }
 
-VPUBLIC void Vpmg_qfForce(Vpmg *thee, double *force, int atomID, 
+VPUBLIC int Vpmg_qfForce(Vpmg *thee, double *force, int atomID, 
   Vchrg_Meth chgm) {
 
     double tforce[3];
@@ -3925,7 +3906,7 @@ scheme\n");
             Vnm_print(2, "Vpmg_qfForce:  Undefined charge discretization \
 method (%d)!\n", chgm);
             Vnm_print(2, "Vpmg_qfForce:  Forces not calculated!\n");
-            return;
+            return 0;
     }
 
     /* Assign forces */
@@ -3933,7 +3914,7 @@ method (%d)!\n", chgm);
     force[1] = tforce[1];
     force[2] = tforce[2];
 
-    return;
+    return 1;
 }
 
 
@@ -3948,7 +3929,6 @@ VPRIVATE void qfForceSpline1(Vpmg *thee, double *force, int atomID) {
     int nx, ny, nz, ihi, ilo, jhi, jlo, khi, klo;
 
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
 
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);
@@ -4086,7 +4066,6 @@ VPRIVATE void qfForceSpline2(Vpmg *thee, double *force, int atomID) {
     int kp1, kp2, ii, jj, kk;
 
     VASSERT(thee != VNULL);
-    /* VASSERT(thee->filled); */
 
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);

@@ -86,15 +86,24 @@ struct sVpmg {
   Vpmgp *pmgp;  /**< Parameters */
   Vpbe *pbe;  /**< Information about the PBE system */
 
+  double *epsx;  /**< X-shifted dielectric map */
+  double *epsy;  /**< Y-shifted dielectric map */
+  double *epsz;  /**< Y-shifted dielectric map */
+  double *kappa;  /**< Ion accessibility map (0 <= kappa(x) <= 1) */
+  double *charge;  /**< Charge map */
+
   int *iparm;  /**< Passing int parameters to FORTRAN */
   double *rparm;  /**< Passing real parameters to FORTRAN */
   int *iwork;  /**< Work array */
   double *rwork;  /**< Work array */
-  double *a1cf;  /**< Operator coefficient values (a11) */
-  double *a2cf;  /**< Operator coefficient values (a22) */
-  double *a3cf;  /**< Operator coefficient values (a33) */
-  double *ccf;  /**< Helmholtz term */
-  double *fcf;  /**< Right-hand side */
+  double *a1cf;  /**< Operator coefficient values (a11) -- this array can be
+                  * overwritten */
+  double *a2cf;  /**< Operator coefficient values (a22) -- this array can be
+                   overwritten */
+  double *a3cf;  /**< Operator coefficient values (a33) -- this array can be
+                   overwritten */
+  double *ccf;  /**< Helmholtz term -- this array can be overwritten */
+  double *fcf;  /**< Right-hand side -- this array can be overwritten */
   double *tcf;  /**< True solution */
   double *u;  /**< Solution */
   double *xf;  /**< Mesh point x coordinates */
@@ -115,7 +124,9 @@ struct sVpmg {
   Vsurf_Meth surfMeth;  /**< Surface definition method */
   double splineWin;  /**< Spline window parm for surf defs */
   Vchrg_Meth chargeMeth;  /**< Charge discretization method */
+
   int filled;  /**< Indicates whether Vpmg_fillco has been called */
+
   int useDielXMap;  /**< Indicates whether Vpmg_fillco was called with an
                       external x-shifted dielectric map */
   Vgrid *dielXMap;  /**< External x-shifted dielectric map */
@@ -217,11 +228,12 @@ VEXTERNC void Vpmg_dtor2(
         Vpmg *thee  /** Pointer to object to be destroyed */
         );
 
-/** @brief   Fill the coefficient arrays prior to solving the equation
- *  @ingroup Vpmg
+/** @brief  Fill the coefficient arrays prior to solving the equation
+ *  @ingroup  Vpmg
  *  @author  Nathan Baker
+ *  @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_fillco(
+VEXTERNC int Vpmg_fillco(
         Vpmg *thee,  /** Vpmg object */ 
         Vsurf_Meth surfMeth,  /** Surface discretization method */
         double splineWin,  /** Spline window (in A) for surfMeth = 
@@ -242,8 +254,9 @@ VEXTERNC void Vpmg_fillco(
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg
  *  @author  Nathan Baker
+ *  @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_solve(
+VEXTERNC int Vpmg_solve(
         Vpmg *thee  /** Vpmg object */
         );
 
@@ -436,11 +449,9 @@ VEXTERNC double Vpmg_dielGradNorm(
  *             whole (self-interactions included) force -- reaction field
  *             forces will have to be calculated at higher level.
  *           \li No contributions are made from higher levels of focusing.
- *           \li This is currently implemented in a very inefficient fashion
- *             becuase I'm not sure which of the PMG coefficient arrays can be
- *           re-used and which are overwritten by PMG.
+ * @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_force(
+VEXTERNC int Vpmg_force(
         Vpmg *thee,  /** Vpmg object */
         double *force, /** 3*sizeof(double) space to hold the force in units
                          of k_B T/AA */
@@ -458,11 +469,9 @@ VEXTERNC void Vpmg_force(
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
  *           \li No contributions are made from higher levels of focusing. 
- *           \li This is currently implemented in a very inefficient fashion
- *             becuase I'm not sure which of the PMG coefficient arrays can be
- *           re-used and which are overwritten by PMG.
+ * @returns  1 if sucessful, 0 otherwise
  */
-VEXTERNC void Vpmg_qfForce(
+VEXTERNC int Vpmg_qfForce(
         Vpmg *thee,  /** Vpmg object */
         double *force, /** 3*sizeof(double) space to hold the force in units
                          of k_B T/A */
@@ -479,11 +488,9 @@ VEXTERNC void Vpmg_qfForce(
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
  *           \li No contributions are made from higher levels of focusing. 
- *           \li This is currently implemented in a very inefficient fashion
- *             becuase I'm not sure which of the PMG coefficient arrays can be
- *           re-used and which are overwritten by PMG.
+ * @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_dbnpForce(
+VEXTERNC int Vpmg_dbnpForce(
         Vpmg *thee,  /** Vpmg object */
         double *dbForce, /** 3*sizeof(double) space to hold the dielectric
                            boundary force in units of k_B T/AA */
@@ -502,11 +509,9 @@ VEXTERNC void Vpmg_dbnpForce(
  *             whole (self-interactions included) force -- reaction field 
  *             forces will have to be calculated at higher level.
  *           \li No contributions are made from higher levels of focusing. 
- *           \li This is currently implemented in a very inefficient fashion
- *             becuase I'm not sure which of the PMG coefficient arrays can be
- *           re-used and which are overwritten by PMG.
+ *  @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_ibForce(
+VEXTERNC int Vpmg_ibForce(
         Vpmg *thee,  /** Vpmg object */
         double *force, /** 3*sizeof(double) space to hold the 
                            boundary force in units of k_B T/AA */
@@ -529,19 +534,20 @@ VEXTERNC void Vpmg_setPart(
                          1 otherwise. */
         );
 
-/** @brief   Remove partition restrictions
- *  @ingroup Vpmg
+/** @brief  Remove partition restrictions
+ *  @ingroup  Vpmg
  *  @author  Nathan Baker
  */
 VEXTERNC void Vpmg_unsetPart(
         Vpmg *thee  /** Vpmg object */
         );
 
-/** @brief   Fill the specified array with accessibility values 
- *  @ingroup Vpmg
+/** @brief  Fill the specified array with accessibility values 
+ *  @ingroup  Vpmg
  *  @author  Nathan Baker
+ *  @returns  1 if successful, 0 otherwise
  */
-VEXTERNC void Vpmg_fillArray(
+VEXTERNC int Vpmg_fillArray(
         Vpmg *thee,  /** Vpmg object */
         double *vec,  /** A nx*ny*nz*sizeof(double) array to contain the
                         values to be written */

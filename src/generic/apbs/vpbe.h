@@ -115,6 +115,12 @@ struct sVpbe {
  */
 typedef struct sVpbe Vpbe;
 
+/** 
+ * @ingroup  Vpbe
+ * @brief  Number of grid points per square-angstrom to use in Vacc object 
+ */
+#define VACC_SPHERE_DENSITY 3.0
+
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
