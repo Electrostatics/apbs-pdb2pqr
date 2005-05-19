@@ -147,6 +147,7 @@ VPRIVATE int Vacc_storeParms(Vacc *thee, Valist *alist, Vclist *clist,
     thee->surf_density = surf_density;
 
     /* Loop through the atoms to determine the maximum radius */
+    maxrad = 0.0;
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
         atom = Valist_getAtom(alist, iatom);
         rad = Vatom_getRadius(atom);
