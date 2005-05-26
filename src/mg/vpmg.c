@@ -1342,11 +1342,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
         Vnm_print(0, "Vpmg_ctor2:  Filling boundary with old solution!\n");
         focusFillBound(thee, pmgOLD);
 
-        /* Ignore old maps */
-        if (pmgOLD->useDielXMap || pmgOLD->useDielYMap || pmgOLD->useDielZMap ||
-            pmgOLD->useKappaMap || pmgOLD->useChargeMap)
-           Vnm_print(2, "Vpmg_ctor2:  WARNING!  Ignoring coefficient and charge distribution maps during focusing!\n");
-
         /* Calculate energetic contributions from region outside focusing
          * domain */
         if (energyFlag != PCE_NO) {
