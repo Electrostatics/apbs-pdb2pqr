@@ -2842,9 +2842,9 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
             /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
              * ASSIGNMENT (Steps #1-3) */
             itot = irad + arad + splineWin;
-            itot2 = VSQR(itot2);     
+            itot2 = VSQR(itot);     
             ictot = VMAX2(0, (irad + arad - splineWin));
-            ictot2 = VSQR(ictot2);
+            ictot2 = VSQR(ictot);
             stot = arad + splineWin;
             stot2 = VSQR(stot);
             sctot = VMAX2(0, (arad - splineWin));
@@ -2874,7 +2874,7 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
                         if (thee->kappa[IJK(i,j,k)] > VPMGSMALL) {
                             dist2 = dz2 + dy2 + dx2;
                             if (dist2 >= itot2) {
-                                thee->kappa[IJK(i,j,k)] *= 1.0;
+                                ;
                             } 
                             if (dist2 <= ictot2) {
                                 thee->kappa[IJK(i,j,k)] = 0.0;
