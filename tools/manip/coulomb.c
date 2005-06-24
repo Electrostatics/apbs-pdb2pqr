@@ -39,7 +39,6 @@
  *
  * @endverbatim
  */
-#include <sys/times.h>
 
 #include "apbscfg.h"
 #include "maloc/maloc.h"
