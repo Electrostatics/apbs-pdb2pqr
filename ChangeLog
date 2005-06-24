@@ -3,7 +3,7 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
 #############################################################################
   - NEW FEATURES
     * New version of the 'acc' program available.
-	* Added additional verbosity to APBS output.
+    * Added additional verbosity to APBS output.
     * Added tools/python/vgrid to the autoconf script. The directory compiles
       with the rest of the Python utilities and is used for manipulating
       dx files.
@@ -14,23 +14,24 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Added ability of tools/manip/inputgen.py to split a single mg-para APBS
       input file into multiple asynchronous input files.
     * Added Vclist cell list class to replace internal hash table in Vacc
-	* Modified Vacc class to use Vclist, including changes to the Vacc
-	  interface (and required changes throughout the code)
+    * Modified Vacc class to use Vclist, including changes to the Vacc
+      interface (and required changes throughout the code)
     * Consolidated Vpmg_ctor and Vpmg_ctorFocus into Vpmg_ctor
-	* Consolidated vpmg.c, vpmg-force.c, vpmg-energy.c, vpmg-setup.c
+    * Consolidated vpmg.c, vpmg-force.c, vpmg-energy.c, vpmg-setup.c
+    * Added autoconf support for compilation on the MinGW32 Windows Environment
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
     * Fixed error in tools/mesh/dx2mol.c (Thanks to Fred Damberger)
     * Fixed floating point error which resulted in improper grid spacings for
       some cases.
-	* Fixed a bug in Vacc_molAcc which generates spurious regions of high
+    * Fixed a bug in Vacc_molAcc which generates spurious regions of high
       internal dielectric for molecular surface-based dielectric definitions.
-	  These regions were very small and apparently affected energies by 1-2%.
-	  The new version of the molecular surface is actually faster (requires
-	  50-70% of the time for most cases) but we should all be using the spline
-	  surface anyway -- right? (Thanks to John Mongan and Jessica Swanson for
-	  finding this bug). 
+      These regions were very small and apparently affected energies by 1-2%.
+      The new version of the molecular surface is actually faster (requires
+      50-70% of the time for most cases) but we should all be using the spline
+      surface anyway -- right? (Thanks to John Mongan and Jessica Swanson for
+      finding this bug). 
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04

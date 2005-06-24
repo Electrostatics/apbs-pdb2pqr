@@ -465,7 +465,8 @@ case $host_os in
       PY_LDFLAGS="-lftn -lm";;
    sun|solaris**) 
       PY_SHARED="-G"
-      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
+      PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
+      PY_CFLAGS="";;
    cygwin|mingw32|windows**)
       PY_CFLAGS="";;
    *) 
@@ -847,6 +848,21 @@ else
     fi
 fi
 
+dnl # -----------------------
+dnl # If mingw32, add the wsock32 library
+dnl # -----------------------
+case $host_os in
+   mingw32*)
+      AC_CHECK_LIB(wsock32,main,
+        [wsock_found="yes"],
+        [wsock_found=""])
+      if test -n "${wsock_found}"; then
+           socket_lib="-lwsock32"
+      else
+           AC_MSG_ERROR([Unable to find wsock32 libraries!])
+      fi
+      ;;
+esac
 AC_MSG_RESULT([------------- end processing APBS configure options -----------])
 
 dnl # -----------------------
