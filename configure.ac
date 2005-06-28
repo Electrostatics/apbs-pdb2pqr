@@ -849,7 +849,7 @@ else
 fi
 
 dnl # -----------------------
-dnl # If mingw32, add the wsock32 library
+dnl # CHECK FOR WINDOWS SPECIFIC LIBRARIES
 dnl # -----------------------
 case $host_os in
    mingw32*)
@@ -860,6 +860,14 @@ case $host_os in
            socket_lib="-lwsock32"
       else
            AC_MSG_ERROR([Unable to find wsock32 libraries!])
+      fi
+      ;;
+   cygwin*)
+      AC_CHECK_LIB(rpclib,main,
+        [rpc_found="yes"],
+        [rpc_found=""])
+      if test -n "${rpc_found}"; then
+           socket_lib="-lrpclib"
       fi
       ;;
 esac
