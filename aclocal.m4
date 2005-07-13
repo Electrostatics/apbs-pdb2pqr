@@ -120,6 +120,7 @@ AC_REQUIRE([AC_PROG_CC])
 AC_MSG_CHECKING(if the compiler creates floating point errors)
 
 cat > fperror.c <<EOF
+    #include <stdio.h>
     int main(){
         double test, ofrac; 
         int value;

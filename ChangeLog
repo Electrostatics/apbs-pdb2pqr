@@ -19,6 +19,7 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Consolidated Vpmg_ctor and Vpmg_ctorFocus into Vpmg_ctor
     * Consolidated vpmg.c, vpmg-force.c, vpmg-energy.c, vpmg-setup.c
     * Added autoconf support for compilation on the MinGW32 Windows Environment
+    * Added autoconf support (with Python) for Mac OS 10.4 (Tiger)
   - BUG FIXES
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
