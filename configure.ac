@@ -453,10 +453,12 @@ else
    PY_CFLAGS=""
 fi
 
+PY_LINKFLAGS=${CFLAGS}
+PY_CC=${CC}
+
 dnl # Platform specific linking flags
 PY_LDFLAGS=""
 PY_SHARED=""
-PY_LINKFLAGS=""
 case $host_os in
    linux*) 
       PY_SHARED="-shared";;
@@ -469,6 +471,9 @@ case $host_os in
       PY_CFLAGS="";;
    cygwin|mingw32|windows**)
       PY_CFLAGS="";;
+   darwin**)
+      PY_CC=${F77}
+      PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle";;
    *) 
       PY_CFLAGS="";;
 esac
@@ -477,8 +482,6 @@ dnl # The Python wrappers use different flags
 dnl # On different architectures
 
 IS_STATIC=`echo ${LDFLAGS} | grep static`
-PY_LINKFLAGS=${CFLAGS}
-PY_CC=${CC}
 case $host_cpu in
    x86_64*)
       if test "${F77}" = "pgf77"; then

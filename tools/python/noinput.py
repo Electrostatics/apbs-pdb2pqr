@@ -46,7 +46,7 @@ elec
     pdie 1.0                         
     sdie 78.54                     
     chgm spl2                         
-    srfm smol                          
+    srfm spl2                          
     srad 1.4                        
     swin 0.3                         
     temp 298.15                     
@@ -68,7 +68,7 @@ elec
     pdie 1.0                         
     sdie 1.0                          
     chgm spl2                           
-    srfm smol                          
+    srfm spl2                          
     srad 1.4                          
     swin 0.3                        
     temp 298.15                    
