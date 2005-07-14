@@ -13,12 +13,14 @@
 
   <sect1> <title>Binary installation</title>
     <para>
-      Currently, we only offer RPM-format binaries for RedHat Linux platforms.
-      However, we are actively developing binary support for several other
-      systems, including:  WinXP, MacOSX, AIX, and generic Linux systems.
-      In the meantime, please install from source on your particular platform
-      and/or contact the <link linkend="mailing-lists">APBS users mailing
-        list</link> for more help.
+      We currently offer RPM-format binaries for RedHat Linux platform as well
+      as command line binaries for WinXP and Mac OS X.  Binaries can be 
+      downloaded from the 
+      <ulink url="http://agave.wustl.edu/apbs/download">APBS download
+      page</ulink>.  For all other systems, please install from source on your 
+      particular platform and feel free to contact the 
+      <link linkend="mailing-lists">APBS users mailing list</link> for more 
+      help.
     </para>
   </sect1>
 
@@ -238,7 +240,7 @@
       to provide binary support for some of the more popular platforms, this
       section is meant to supplement our pre-compiled binaries and provide some
       tips on how to get a better APBS binary on your platform.  <emphasis>If
-      you have tips or trickes on improving APBS performance on your machine,
+      you have tips or tricks on improving APBS performance on your machine,
       please 
       <ulink url="mailto:apbs-users@cholla.wustl.edu">let us know!</ulink></emphasis>
       </para>
@@ -249,16 +251,21 @@
         </para>
 
         <sect4> <title>Windows</title>
-          <para>The only compilation I've done of APBS on Windows has been via
-          Cygwin.  Therefore, I had to use the GNU compilers and the
-          performance was pretty mediocre.  Furthermore, the resulting binary
-          requires various Cygwin DLLs.  We're actively working to provide
-          better (native) binary support under Windows.  </para>
+          <para>We are happy to now provide native APBS command line binaries
+          for Windows.  The binary is probably the best option available, but
+          if you would still like to compile your own binaries you will need to
+          use either the Cygwin or MinGW environments.  Binaries compiled under
+          Cygwin tend to require Cygwin DLLs and thus can only be run on 
+          systems with Cygwin.  Performance for the Windows binaries and all
+          compiled systems will be fairly mediocre as they depend on the
+          GNU compilers.</para>
+          <para>If you do choose to use Cygwin and compile your own code, 
+          compilation should be rather straightforward.</para>
         </sect4>
 
         <sect4> <title>Linux</title>
           <para> Compilation under Linux should be <emphasis>very</emphasis>
-          straightforward as this is the platform on which APBA was developed.
+          straightforward as this is the platform on which APBS was developed.
           This section describes various compilation options under Linux.
           </para>
 
@@ -313,6 +320,33 @@
             </para>
           </sect5>
       
+          <sect5> <title>IA64 (Itanium)</title>
+            <para>Since the MALOC-supplied BLAS is not 64-bit clean, a third 
+            party BLAS must be used for installation on an Itanium.  We have 
+            had good success with the Intel MKL libraries.  If no independent 
+            BLAS is available you may want to try either compiling your own 
+            (like ATLAS) or using the ia64 binary instead.
+            </para>
+            <para>If you do use the MKL libraries, you will need to modify a 
+            few command line options.
+            </para>
+            <para>First use the disable-blas flag while compiling MALOC to 
+            prevent MALOC's BLAS from interfering with APBS installation:
+            <screen>
+              <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --disable-blas</userinput>
+              <prompt>$</prompt> <userinput> make; make install </userinput>
+            </screen>
+            </para>
+            <para>Then when compiling APBS, specify that APBS is to use the MKL
+            BLAS and the name of the actual BLAS library:
+            <screen>
+              <prompt>$</prompt> <userinput>export INTEL_BLAS=/path/to/MKL/lib/directory</userinput>
+              <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"</userinput>
+              <prompt>$</prompt> <userinput> make; make install </userinput>
+            </screen>
+            </para>
+            
+          </sect5>
           <sect5> <title>Others</title>
             <para>There are a number of other good compilers (Portland Group,
             Absoft) that we have not tested with APBS.  If you have experience
@@ -324,19 +358,38 @@
       </sect3>
 
       <sect3> <title>Macintosh</title>
-        <para>We are in the process of acquiring a Mac G5 to test the best
-        compilation options, etc.  In the meantime, please visit the 
+        <para>We are happy to now provide a Mac install package for G5 OS 10.4 
+         (Tiger).  But since Mac packages use shared libraries, the same major 
+         versions of the compilers that were used to create the
+         binaries (gcc/gfortran 4.0) are needed to run them.  Unfortunately 
+         this means many users on G4s or OS 10.3 may have to compile binaries 
+         for themselves - you may want to examine the
         <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">apbs-users 
         mailing list</ulink> which has a number of threads which discuss
-        installation on Mac OS platforms.
-          <caution>
-            <para>It has become apparent from the mailing lists that some
+        installation on Mac OS platforms.</para>
+        <para>A few notes about compiling on Macintosh:</para>
+          <orderedlist>
+            <listitem>
+              <para>It has become apparent from the mailing lists that some
             "packages" of the GNU development software available for MacOS
             contain different versions of the C and FORTRAN compilers.  This is
             very bad; APBS will not compile with different versions of the C
-            and FORTRAN compilers.</para>
-          </caution>
-        </para>
+            and FORTRAN compilers.  If you see link errors involving "restFP"
+            or "saveFP" this is most likely the cause.</para>
+            </listitem>
+            <listitem>
+              <para>In gcc 4.0 (included in Xcode 2.0 and higher) the -fast
+              option turns on the -fast-math flag.  This flag optimizes by
+              using rounding, and thus can lead to inaccuate results and should
+              be avoided.</para>
+            </listitem>
+            <listitem>
+              <para>As it stands now the autoconf script does not support using
+              the native vecLib framework as an architecture-tuned BLAS 
+              replacement.  In testing there were only slight timing 
+              improvements over using the MALOC-supplied BLAS as it is.</para>
+            </listitem> 
+          </orderedlist>  
       </sect3>
 
       <sect3> <title>IBM Power3/Power4 AIX</title>
