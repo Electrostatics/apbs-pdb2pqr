@@ -260,6 +260,21 @@ VEXTERNC int Vpmg_solve(
         Vpmg *thee  /** Vpmg object */
         );
 
+/** @brief   Solve Poisson's equation with a homogeneous Laplacian operator
+ *           using the solvent dielectric constant.  This solution is
+ *           performed by a sine wave decomposition.
+ *  @ingroup Vpmg
+ *  @author  Nathan Baker
+ *  @returns  1 if successful, 0 otherwise
+ *  @note    This function is really only for testing purposes as the
+ *           PMG multigrid solver can solve the homogeneous system much more
+ *           quickly.  Perhaps we should implement an FFT version at some
+ *           point...
+ */
+VEXTERNC int Vpmg_solveLaplace(
+        Vpmg *thee  /** Vpmg object */
+        );
+
 /** @brief   Get the total electrostatic energy.
  *  @ingroup Vpmg
  *  @author  Nathan Baker

@@ -307,6 +307,20 @@ VPRIVATE void qfForceSpline2(
         int atomID  /** Valist atom ID */
         );
 
+/**
+ * @brief  Calculate the solution to Poisson's equation with a simple
+ *         Laplacian operator and zero-valued Dirichlet boundary conditions.
+ *         Store the solution in thee->u.
+ * @author  Nathan Baker
+ * @note  Vpmg_fillco must be called first
+ */
+VPRIVATE void zlapSolve(
+        Vpmg *thee,
+        double **solution,  /** Solution term vector */
+        double **source,  /** Source term vector */
+        double **work1  /** Work vector */
+        );
+
 /** 
  * @brief  Mark the grid points inside a sphere with a particular value.  This
  *         marks by resetting the the grid points inside the sphere to the
