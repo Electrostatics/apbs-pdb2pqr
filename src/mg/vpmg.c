@@ -4318,3 +4318,237 @@ VPRIVATE void markSphere(
         } /* j loop */
     } /* i loop */
 }
+
+VPRIVATE void zlapSolve(
+        Vpmg *thee, 
+        double **solution,
+        double **source,
+        double **work1
+        ) {
+
+    /* NOTE:  this is an incredibly inefficient algorithm.  The next
+     * improvement is to focus on only non-zero entries in the source term.
+     * The best improvement is to use a fast sine transform */
+
+    int n, nx, ny, nz, i, j, k, kx, ky, kz;
+    double hx, hy, hzed, wx, wy, wz, xlen, ylen, zlen;
+    double phix, phixp1, phixm1, phiy, phiym1, phiyp1, phiz, phizm1, phizp1;
+    double norm, coef, proj, eigx, eigy, eigz;
+    double ihx2, ihy2, ihzed2;
+    double *u, *f, *phi;
+
+    /* Snarf grid parameters */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    n = nx*ny*nz;
+    hx = thee->pmgp->hx;
+    ihx2 = 1.0/hx/hx;
+    hy = thee->pmgp->hy;
+    ihy2 = 1.0/hy/hy;
+    hzed = thee->pmgp->hzed;
+    ihzed2 = 1.0/hzed/hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Set solution and source array pointers */
+    u = *solution;
+    f = *source;
+    phi = *work1;
+
+    /* Zero out the solution vector */
+    for (i=0; i<n; i++) thee->u[i] = 0.0;
+
+    /* Iterate through the wavenumbers */
+    for (kx=1; kx<(nx-1); kx++) {
+
+        wx = (VPI*(double)kx)/((double)nx - 1.0);
+        eigx = 2.0*ihx2*(1.0 - cos(wx));
+
+        for (ky=1; ky<(ny-1); ky++) {
+
+            wy = (VPI*(double)ky)/((double)ny - 1.0);
+            eigy = 2.0*ihy2*(1.0 - cos(wy));
+
+            for (kz=1; kz<(nz-1); kz++) {
+
+                wz = (VPI*(double)kz)/((double)nz - 1.0);
+                eigz = 2.0*ihzed2*(1.0 - cos(wz));
+
+                /* Calculate the basis function. 
+                 * We could calculate each basis function as
+                 *   phix(i) = sin(wx*i)
+                 *   phiy(j) = sin(wy*j)
+                 *   phiz(k) = sin(wz*k)
+                 * However, this is likely to be very expensive.
+                 * Therefore, we can use the fact that
+                 *   phix(i+1) = (2-hx*hx*eigx)*phix(i) - phix(i-1)
+                 * */
+                for (i=1; i<(nx-1); i++) {
+                    if (i == 1) {
+                        phix = sin(wx*(double)i);
+                        phixm1 = 0.0;
+                    } else {
+                        phixp1 = (2.0-hx*hx*eigx)*phix - phixm1;
+                        phixm1 = phix;
+                        phix = phixp1;
+                    }
+                    /* phix = sin(wx*(double)i); */
+                    for (j=1; j<(ny-1); j++) {
+                        if (j == 1) {
+                            phiy = sin(wy*(double)j);
+                            phiym1 = 0.0;
+                        } else {
+                            phiyp1 = (2.0-hy*hy*eigy)*phiy - phiym1;
+                            phiym1 = phiy;
+                            phiy = phiyp1;
+                        }
+                        /* phiy = sin(wy*(double)j); */
+                        for (k=1; k<(nz-1); k++) {
+                            if (k == 1) {
+                                phiz = sin(wz*(double)k);
+                                phizm1 = 0.0;
+                            } else {
+                                phizp1 = (2.0-hzed*hzed*eigz)*phiz - phizm1;
+                                phizm1 = phiz;
+                                phiz = phizp1;
+                            }
+                            /* phiz = sin(wz*(double)k); */
+
+                            phi[IJK(i,j,k)] = phix*phiy*phiz;
+
+                        }
+                    }
+                }
+
+                /* Calculate the projection of the source function on this
+                 * basis function */
+                proj = 0.0;
+                for (i=1; i<(nx-1); i++) {
+                    for (j=1; j<(ny-1); j++) {
+                        for (k=1; k<(nz-1); k++) {
+
+                            proj += f[IJK(i,j,k)]*phi[IJK(i,j,k)];
+                            
+                        } /* k loop */
+                    } /* j loop */
+                } /* i loop */
+
+                /* Assemble the coefficient to weight the contribution of this
+                 * basis function to the solution */
+                /* The first contribution is the projection */
+                coef = proj;
+                /* The second contribution is the eigenvalue */
+                coef = coef/(eigx + eigy + eigz);
+                /* The third contribution is the normalization factor */
+                coef = (8.0/xlen/ylen/zlen)*coef;
+                /* The fourth contribution is from scaling the diagonal */
+                /* coef = hx*hy*hzed*coef; */
+
+                /* Evaluate the basis function at each grid point */
+                for (i=1; i<(nx-1); i++) {
+                    for (j=1; j<(ny-1); j++) {
+                        for (k=1; k<(nz-1); k++) {
+
+                            u[IJK(i,j,k)] += coef*phi[IJK(i,j,k)];
+                            
+                        } /* k loop */
+                    } /* j loop */
+                } /* i loop */
+
+            } /* kz loop */
+        } /* ky loop */
+    } /* kx loop */
+
+}
+
+VPUBLIC int Vpmg_solveLaplace(Vpmg *thee) {
+
+    int i, j, k, ijk, nx, ny, nz, n, dilo, dihi, djlo, djhi, dklo, dkhi;
+    double hx, hy, hzed, epsw, iepsw, scal, scalx, scaly, scalz;
+
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    n = nx*ny*nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    epsw = Vpbe_getSolventDiel(thee->pbe);
+    iepsw = 1.0/epsw;
+    scal = hx*hy*hzed;
+    scalx = hx*hy/hzed;
+    scaly = hx*hzed/hy;
+    scalz = hx*hy/hzed;
+
+    if (!(thee->filled)) {
+        Vnm_print(2, "Vpmg_solve:  Need to call Vpmg_fillco()!\n");
+        return 0;
+    }
+
+    /* Load boundary conditions into the RHS array */
+    for (i=1; i<(nx-1); i++) {
+
+        if (i == 1) dilo = 1;
+        else dilo = 0;
+        if (i == nx-2) dihi = 1;
+        else dihi = 0;
+
+        for (j=1; j<(ny-1); j++) {
+
+            if (j == 1) djlo = 1;
+            else djlo = 0;
+            if (j == ny-2) djhi = 1;
+            else djhi = 0;
+
+            for (k=1; k<(nz-1); k++) {
+
+                if (k == 1) dklo = 1;
+                else dklo = 0;
+                if (k == nz-2) dkhi = 1;
+                else dkhi = 0;
+
+                thee->fcf[IJK(i,j,k)] = \
+                      iepsw*scal*thee->charge[IJK(i,j,k)] \
+                    + dilo*scalx*thee->gxcf[IJKx(j,k,0)] \
+                    + dihi*scalx*thee->gxcf[IJKx(j,k,1)] \
+                    + djlo*scaly*thee->gycf[IJKy(i,k,0)] \
+                    + djhi*scaly*thee->gycf[IJKy(i,k,1)] \
+                    + dklo*scalz*thee->gzcf[IJKz(i,j,0)] \
+                    + dkhi*scalz*thee->gzcf[IJKz(i,j,1)] ;
+
+            }
+        }
+    }
+
+    /* Solve */ 
+    zlapSolve( thee, &(thee->u), &(thee->fcf), &(thee->tcf) );
+
+    /* Add boundary conditions to solution */
+    /* i faces */
+    for (j=0; j<ny; j++) {
+        for (k=0; k<nz; k++) {
+            thee->u[IJK(0,j,k)] = thee->gxcf[IJKx(j,k,0)];
+            thee->u[IJK(nx-1,j,k)] = thee->gycf[IJKx(j,k,1)];
+        }
+    }
+    /* j faces */
+    for (i=0; i<nx; i++) {
+        for (k=0; k<nz; k++) {
+            thee->u[IJK(i,0,k)] = thee->gycf[IJKy(i,k,0)];
+            thee->u[IJK(i,ny-1,k)] = thee->gycf[IJKy(i,k,1)];
+        }
+    }
+    /* k faces */
+    for (i=0; i<nx; i++) {
+        for (j=0; j<ny; j++) {
+            thee->u[IJK(i,j,0)] = thee->gzcf[IJKz(i,j,0)];
+            thee->u[IJK(i,j,nz-1)] = thee->gzcf[IJKz(i,j,1)];
+        }
+    }
+
+    return 1;
+
+}
+
