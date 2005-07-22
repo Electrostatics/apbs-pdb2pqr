@@ -281,7 +281,7 @@ VPUBLIC double Vacc_ivdwAcc(Vacc *thee, double center[3], double radius) {
 
 }
 
-VPUBLIC void Vacc_splineAccGradAtom(Vacc *thee, double center[VAPBS_DIM], 
+VPUBLIC void Vacc_splineAccGradAtomNorm(Vacc *thee, double center[VAPBS_DIM], 
         double win, double infrad, Vatom *atom, double *grad) {
 
     int i;
@@ -327,6 +327,55 @@ VPUBLIC void Vacc_splineAccGradAtom(Vacc *thee, double center[VAPBS_DIM],
         VASSERT(mychi > 0.0);
         for (i=0; i<VAPBS_DIM; i++) 
             grad[i] = -(mygrad/mychi)*((center[i] - apos[i])/dist);
+    }    
+}
+
+VPUBLIC void Vacc_splineAccGradAtomUnnorm(Vacc *thee, double center[VAPBS_DIM], 
+        double win, double infrad, Vatom *atom, double *grad) {
+
+    int i;
+    double dist, *apos, arad, sm, sm2, w2i, w3i, mygrad;
+    double mychi = 1.0;           /* Char. func. value for given atom */
+
+    VASSERT(thee != NULL);
+
+    /* Inverse squared window parameter */
+    w2i = 1.0/(win*win);
+    w3i = 1.0/(win*win*win);
+
+    /* The grad is zero by default */
+    for (i=0; i<VAPBS_DIM; i++) grad[i] = 0.0;
+
+    /* *** CALCULATE THE CHARACTERISTIC FUNCTION VALUE FOR THIS ATOM AND THE
+     * *** MAGNITUDE OF THE FORCE *** */
+    apos = Vatom_getPosition(atom);
+    /* Zero-radius atoms don't contribute */
+    if (Vatom_getRadius(atom) > 0.0) {
+        arad = Vatom_getRadius(atom) + infrad;
+        dist = VSQRT(VSQR(apos[0]-center[0]) + VSQR(apos[1]-center[1])
+          + VSQR(apos[2]-center[2]));
+        /* If we're inside an atom, the entire characteristic function
+         * will be zero and the grad will be zero, so we can stop */
+        if (dist < (arad - win)) return;
+        /* Likewise, if we're outside the smoothing window, the characteristic
+         * function is unity and the grad will be zero, so we can stop */
+        else if (dist > (arad + win)) return;
+        /* Account for floating point error at the border 
+         * NAB:  COULDN'T THESE TESTS BE COMBINED AS BELOW
+         * (Vacc_splineAccAtom)? */
+        else if ((VABS(dist - (arad - win)) < VSMALL) || 
+                 (VABS(dist - (arad + win)) < VSMALL)) return;
+        /* If we're inside the smoothing window */
+        else {
+            sm = dist - arad + win;
+            sm2 = VSQR(sm);
+            mychi = 0.75*sm2*w2i -0.25*sm*sm2*w3i;
+            mygrad = 1.5*sm*w2i - 0.75*sm2*w3i;
+        }
+        /* Now assemble the grad vector */
+        VASSERT(mychi > 0.0);
+        for (i=0; i<VAPBS_DIM; i++) 
+            grad[i] = -(mygrad)*((center[i] - apos[i])/dist);
     }    
 }
 
@@ -482,7 +531,7 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[VAPBS_DIM],
     if (value < VSMALL) {
         for (i=0; i<VAPBS_DIM; i++) grad[i] = 0.0;
     } else {
-        Vacc_splineAccGradAtom(thee, center, win, infrad, atom, grad);
+        Vacc_splineAccGradAtomUnnorm(thee, center, win, infrad, atom, grad);
         for (i=0; i<VAPBS_DIM; i++) grad[i] *= value;
     }
 }

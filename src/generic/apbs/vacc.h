@@ -382,6 +382,25 @@ VEXTERNC double Vacc_splineAccAtom(
         );
 
 /** @brief   Report gradient of spline-based accessibility with respect to a
+ *           particular atom (see Vpmg_splineAccAtom)
+ *
+ *  Determine accessibility at a given point, given a collection of atomic
+ *  spheres.  Uses Benoit Roux (Im et al, Comp Phys Comm, 111, 59--75, 1998)
+ *  definition suitable for force evalation; basically a cubic spline. 
+ *
+ *  @ingroup Vacc
+ *  @author  Nathan Baker
+ */
+VEXTERNC void Vacc_splineAccGradAtomUnnorm(
+        Vacc *thee, /** Accessibility object */
+        double center[VAPBS_DIM], /** Probe center coordinates */
+        double win, /** Spline window (&Aring;) */ 
+        double infrad, /** Inflation radius (&Aring;) for ion access. */
+        Vatom *atom, /** Atom */ 
+        double *force /** VAPBS_DIM-vector set to gradient of accessibility */
+        );
+
+/** @brief   Report gradient of spline-based accessibility with respect to a
  *           particular atom normalized by the accessibility value due to that
  *           atom at that point (see Vpmg_splineAccAtom)
  *
@@ -392,7 +411,7 @@ VEXTERNC double Vacc_splineAccAtom(
  *  @ingroup Vacc
  *  @author  Nathan Baker
  */
-VEXTERNC void Vacc_splineAccGradAtom(
+VEXTERNC void Vacc_splineAccGradAtomNorm(
         Vacc *thee, /** Accessibility object */
         double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 

@@ -3591,7 +3591,7 @@ calculation!\n");
                         gpos[0] = i*hx + xmin;
                         gpos[1] = j*hy + ymin;
                         gpos[2] = k*hzed + zmin;
-                        Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, irad,
+                        Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, irad,
                           atom, tgrad);
                         if (thee->pmgp->nonlin) {
                             /* Nonlinear forces not done */
@@ -3766,21 +3766,21 @@ force calculation!\n");
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
                             atom, dHxijk);
                     for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j+0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
                             atom, dHyijk);
                     for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k+0.5)*hzed + zmin;
                     Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0., 
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
                             atom, dHzijk);
                     for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
                     /* i-1,j,k */
@@ -3788,7 +3788,7 @@ force calculation!\n");
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
                             atom, dHxim1jk);
                     for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
                     /* i,j-1,k */
@@ -3796,7 +3796,7 @@ force calculation!\n");
                     gpos[1] = (j-0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
                             atom, dHyijm1k);
                     for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
                     /* i,j,k-1 */
@@ -3804,7 +3804,7 @@ force calculation!\n");
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k-0.5)*hzed + zmin;
                     Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
-                    Vacc_splineAccGradAtom(acc, gpos, thee->splineWin, 0.,
+                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
                             atom, dHzijkm1);
                     for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
                     /* *** CALCULATE DIELECTRIC BOUNDARY FORCES *** */
