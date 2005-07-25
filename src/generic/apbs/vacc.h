@@ -358,7 +358,9 @@ VEXTERNC void Vacc_splineAccGrad(
         double center[VAPBS_DIM], /** Probe center coordinates */
         double win, /** Spline window (&Aring;) */ 
         double infrad,  /** Inflation radius (&Aring;) for ion access. */
-        Vatom *atom, /** Atom */ 
+        Vatom *atom, /** Atom of given atom.  If this is VNULL, then this gives
+                       the gradient of the solvent accessibility function for
+                       all atoms.  */ 
         double *grad /** 3-vector set to gradient of accessibility */
         );
 

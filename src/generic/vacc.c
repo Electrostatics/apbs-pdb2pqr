@@ -518,13 +518,15 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[VAPBS_DIM],
     /* First, reset the list of atom flags for all atoms except the one of
      * interest.
      * NAB:  THIS SEEMS VERY INEFFICIENT */
-    atomID = atom->id;
     for (iatom=0; iatom<cell->natoms; iatom++) {
         atom2 = cell->atoms[iatom];
         atom2ID = atom2->id;
         thee->atomFlags[atom2ID] = 0;
     }
-    thee->atomFlags[atomID] = 1;
+    if (atom != VNULL) { 
+        atomID = atom->id; 
+        thee->atomFlags[atomID] = 1;
+    }
 
     value = splineAcc(thee, center, win, infrad, cell);
 
