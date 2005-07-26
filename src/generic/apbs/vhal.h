@@ -225,7 +225,19 @@ typedef enum eVdata_Format Vdata_Format;
  * @brief  APBS force timer ID
  * @ingroup  Vhal
  */
-#define APBS_TIMER_FORCE 29
+#define APBS_TIMER_FORCE 30
+
+/** 
+ * @brief  APBS temp timer #1 ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_TEMP1 31
+
+/** 
+ * @brief  APBS temp timer #2 ID
+ * @ingroup  Vhal
+ */
+#define APBS_TIMER_TEMP2 32
 
 /** @brief The maximum number of molecules that can be involved in a single 
  *         PBE calculation
