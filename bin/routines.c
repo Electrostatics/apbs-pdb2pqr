@@ -2059,7 +2059,6 @@ before you solve!\n");
             Vnm_tprint(1, "  Hit vertex number limit.\n");
             break;
         }
-        Vnm_print(1, "DEBUG -- akeyPRE = %d\n", feparm->akeyPRE);
         marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
           feparm->ekey, feparm->etol);
         if (marked == 0) {
@@ -2177,7 +2176,6 @@ VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
             break;
     }
 
-    Vnm_print(1, "DEBUG -- akeySOLVE = %d\n", feparm->akeySOLVE);
     marked = AM_markRefine(fetk[icalc]->am, feparm->akeySOLVE, -1, 
       feparm->ekey, feparm->etol);
     if (marked == 0) {
