@@ -16,7 +16,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2004.  Washington University in St. Louis.
+ * Copyright (c) 2002-2005.  Washington University in St. Louis.
  * All Rights Reserved.
  * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  
@@ -491,12 +491,13 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[VAPBS_DIM], double win,
 }
 
 VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[VAPBS_DIM], 
-        double win, double infrad, Vatom *atom, double *grad) {
+        double win, double infrad, double *grad) {
 
-    int iatom, i, atom2ID, atomID;
-    double value = 1.0;            
+    int iatom, i, atomID;
+    double acc = 1.0;            
+    double tgrad[VAPBS_DIM];
     VclistCell *cell;
-    Vatom *atom2;
+    Vatom *atom = VNULL;
 
     VASSERT(thee != NULL);
 
@@ -515,27 +516,25 @@ VPUBLIC void Vacc_splineAccGrad(Vacc *thee, double center[VAPBS_DIM],
     cell = Vclist_getCell(thee->clist, center);
     if (cell == VNULL) return;
 
-    /* First, reset the list of atom flags for all atoms except the one of
-     * interest.
-     * NAB:  THIS SEEMS VERY INEFFICIENT */
+    /* Reset the list of atom flags */
     for (iatom=0; iatom<cell->natoms; iatom++) {
-        atom2 = cell->atoms[iatom];
-        atom2ID = atom2->id;
-        thee->atomFlags[atom2ID] = 0;
-    }
-    if (atom != VNULL) { 
-        atomID = atom->id; 
-        thee->atomFlags[atomID] = 1;
+        atom = cell->atoms[iatom];
+        atomID = atom->id;
+        thee->atomFlags[atomID] = 0;
     }
 
-    value = splineAcc(thee, center, win, infrad, cell);
+    /* Get the local accessibility */
+    acc = splineAcc(thee, center, win, infrad, cell);
 
-    if (value < VSMALL) {
-        for (i=0; i<VAPBS_DIM; i++) grad[i] = 0.0;
-    } else {
-        Vacc_splineAccGradAtomUnnorm(thee, center, win, infrad, atom, grad);
-        for (i=0; i<VAPBS_DIM; i++) grad[i] *= value;
+    /* Accumulate the gradient of all local atoms */
+    if (acc > VSMALL) {
+        for (iatom=0; iatom<cell->natoms; iatom++) {
+            atom = cell->atoms[iatom];
+            Vacc_splineAccGradAtomNorm(thee, center, win, infrad, atom, tgrad);
+        }
+        for (i=0; i<VAPBS_DIM; i++) grad[i] += tgrad[i];
     }
+    for (i=0; i<VAPBS_DIM; i++) grad[i] *= -acc;
 }
 
 VPUBLIC double Vacc_molAcc(Vacc *thee, double center[VAPBS_DIM], 
