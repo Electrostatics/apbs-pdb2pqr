@@ -278,10 +278,14 @@ VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
         charge += Vatom_getCharge(Valist_getAtom(thee->alist, iatom));
     }
     thee->soluteRadius = radius;
+    Vnm_print(0, "Vpbe_ctor2:  solute radius = %g\n", radius);
     thee->soluteXlen = xmax - xmin;
     thee->soluteYlen = ymax - ymin;
     thee->soluteZlen = zmax - zmin;
+    Vnm_print(0, "Vpbe_ctor2:  solute dimensions = %g x %g x %g\n", 
+            thee->soluteXlen, thee->soluteYlen, thee->soluteZlen);
     thee->soluteCharge = charge;
+    Vnm_print(0, "Vpbe_ctor2:  solute charge = %g\n", charge);
 
     /* Set parameters */
     thee->numIon = ionNum;
@@ -343,7 +347,13 @@ function\n", thee->maxIonRadius);
         thee->deblen  = 1. / thee->xkappa;
         thee->zkappa2 = thee->solventDiel * VSQR(thee->xkappa);
     }
+    Vnm_print(0, "Vpbe_ctor2:  bulk ionic strength = %g\n", 
+            thee->bulkIonicStrength);
+    Vnm_print(0, "Vpbe_ctor2:  xkappa = %g\n", thee->xkappa);
+    Vnm_print(0, "Vpbe_ctor2:  Debye length = %g\n", thee->deblen);
+    Vnm_print(0, "Vpbe_ctor2:  zkappa2 = %g\n", thee->zkappa2);
     thee->zmagic  = ((4.0 * pi * e_c*e_c) / (k_B * thee->T)) * 1.0e+8;
+    Vnm_print(0, "Vpbe_ctor2:  zmagic = %g\n", thee->zmagic);
 
     /* Compute accessibility objects:
      *   - Allow for extra room in the case of spline windowing 
