@@ -243,7 +243,6 @@ VEXTERNC void Vgrid_writeUHBD(Vgrid *thee, const char *iodev,
  *                 if 1: point in current partition, 
  *                 if 0 point not in current partition
  *                 if > 0 && < 1 point on/near boundary )
- * @bug     This routine does not respect partition information
  */
 VEXTERNC void Vgrid_writeDX(Vgrid *thee, const char *iodev, 
   const char *iofmt,  const char *thost, const char *fname, char *title, 
