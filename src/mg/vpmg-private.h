@@ -69,6 +69,17 @@ VPRIVATE double dbspline2(
         double x  /** Position */
         );
 
+/**
+ * @brief  Determines energy from polarizeable charge and interaction with 
+ *         fixed charges according to Rocchia et al.
+ * @author  Nathan Baker
+ * @return  Energy in kT
+ */           
+VPRIVATE double Vpmg_polarizEnergy(
+         Vpmg *thee, 
+         int extFlag  /** If 1, add external energy contributions to 
+                       result */
+         ); 
 /** 
  * @brief  Calculates charge-potential energy using summation over delta
  *         function positions (i.e. something like an Linf norm)
