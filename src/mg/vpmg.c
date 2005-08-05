@@ -812,6 +812,78 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
 
 }
 
+VPRIVATE double Vpmg_polarizEnergy(Vpmg *thee, int extFlag) {
+
+    int i, j, k, ijk, nx, ny, nz, iatom;
+    double xmin, ymin, zmin, x, y, z, hx, hy, hzed, epsp, lap, pt[3];
+    double T, pre, polq, dist2, dist, energy, q;
+    double *charge, *pos, eps_w;
+    Vgrid *potgrid;
+    Vpbe *pbe;
+    Valist *alist;
+    Vatom *atom;
+
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->ymin;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    pbe = thee->pbe;
+    epsp = Vpbe_getSoluteDiel(pbe);
+    eps_w = Vpbe_getSolventDiel(pbe);
+    alist = pbe->alist;
+    charge = thee->charge;
+   
+    /* Calculate the prefactor for Coulombic calculations */
+    T = Vpbe_getTemperature(pbe); 
+    pre = (Vunit_ec*Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T);
+    pre = pre*(1.0e10);
+
+    /* Set up Vgrid object with solution */
+    potgrid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin, thee->u);
+
+    /* Calculate polarization charge */
+    energy = 0.0;
+    for (i=1; i<(nx-1); i++) {
+        pt[0] = xmin + hx*i;
+        for (j=1; j<(ny-1); j++) {
+            pt[1] = ymin + hy*j;
+            for (k=1; k<(nz-1); k++) {
+                pt[2] = zmin + hzed*k;
+
+                /* Calculate polarization charge */
+                VASSERT(Vgrid_curvature(potgrid, pt, 1, &lap));
+                ijk = IJK(i,j,k);
+                polq = charge[ijk] + epsp*lap*3.0;
+
+                /* Calculate interaction energy with atoms */
+                if (VABS(polq) > VSMALL) {
+                    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                        atom = Valist_getAtom(alist, iatom);
+                        q = Vatom_getCharge(atom);
+                        pos = Vatom_getPosition(atom);
+                        dist2 = VSQR(pos[0]-pt[0]) + VSQR(pos[1]-pt[1]) \
+                                + VSQR(pos[2]-pt[2]);
+                        dist = VSQRT(dist2);
+                     
+                        if (dist < VSMALL) {
+                            Vnm_print(2, "Vpmg_polarizEnergy:  atom on grid point; ignoring!\n");
+                        } else {
+                            energy = energy + polq*q/dist;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return pre*energy;
+}
+
 VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
 
     double totEnergy = 0.0;
