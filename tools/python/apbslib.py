@@ -313,31 +313,33 @@ def get_Vpbe(arg0,arg1):
 
 new_atomforcelist = apbslibc.new_atomforcelist
 
+delete_atomforcelist = apbslibc.delete_atomforcelist
+
+delete_valist = apbslibc.delete_valist
+
+delete_gridlist = apbslibc.delete_gridlist
+
+delete_pmglist = apbslibc.delete_pmglist
+
+delete_pmgplist = apbslibc.delete_pmgplist
+
+delete_pbelist = apbslibc.delete_pbelist
+
+get_AtomForce = apbslibc.get_AtomForce
+
+make_Valist = apbslibc.make_Valist
+
 double_array = apbslibc.double_array
 
 int_array = apbslibc.int_array
 
-Valist_load = apbslibc.Valist_load
+delete_double_array = apbslibc.delete_double_array
 
-def getPotentials(arg0,arg1,arg2,arg3):
-    val = apbslibc.getPotentials(arg0.this,arg1.this,arg2.this,arg3)
-    return val
-
-getqfForces = apbslibc.getqfForces
-
-getibForces = apbslibc.getibForces
-
-getdbForces = apbslibc.getdbForces
-
-getnpForces = apbslibc.getnpForces
-
-get_double_entry = apbslibc.get_double_entry
+delete_int_array = apbslibc.delete_int_array
 
 get_entry = apbslibc.get_entry
 
 set_entry = apbslibc.set_entry
-
-make_Valist = apbslibc.make_Valist
 
 def NOsh_parse(arg0,arg1):
     val = apbslibc.NOsh_parse(arg0.this,arg1)
@@ -401,10 +403,6 @@ def setPartMG(arg0,arg1,arg2):
     val = apbslibc.setPartMG(arg0.this,arg1.this,arg2.this)
     return val
 
-def energyMG(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7):
-    val = apbslibc.energyMG(arg0.this,arg1,arg2.this,arg3,arg4,arg5,arg6,arg7)
-    return val
-
 def npenergyMG(arg0,arg1,arg2,arg3,arg4):
     val = apbslibc.npenergyMG(arg0.this,arg1,arg2.this,arg3,arg4)
     return val
@@ -427,10 +425,6 @@ def writematMG(arg0,arg1,arg2,arg3):
     val = apbslibc.writematMG(arg0,arg1.this,arg2.this,arg3.this)
     return val
 
-def printEnergy(arg0,arg1,arg2,arg3):
-    val = apbslibc.printEnergy(arg0.this,arg1.this,arg2,arg3)
-    return val
-
 def printForce(arg0,arg1,arg2,arg3,arg4):
     val = apbslibc.printForce(arg0.this,arg1.this,arg2,arg3,arg4)
     return val
@@ -440,6 +434,22 @@ startVio = apbslibc.startVio
 Vacc_molAcc = apbslibc.Vacc_molAcc
 
 Vacc_vdwAcc = apbslibc.Vacc_vdwAcc
+
+def energyMG(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7):
+    val = apbslibc.energyMG(arg0.this,arg1,arg2.this,arg3,arg4,arg5,arg6,arg7)
+    return val
+
+def printEnergy(arg0,arg1,arg2,arg3):
+    val = apbslibc.printEnergy(arg0.this,arg1.this,arg2,arg3)
+    return val
+
+Valist_load = apbslibc.Valist_load
+
+def getPotentials(arg0,arg1,arg2,arg3):
+    val = apbslibc.getPotentials(arg0.this,arg1.this,arg2.this,arg3)
+    return val
+
+getForces = apbslibc.getForces
 
 
 

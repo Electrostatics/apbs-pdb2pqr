@@ -11,20 +11,20 @@
     Todd Dolinsky (todd@ccb.wustl.edu)
     Nathan Baker (baker@biochem.wustl.edu)
     Washington University in St. Louis
-"""    
+""" 
+
+from apbslib import *
+import sys, time
+import string
+from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
-__date__ = "22 September 2003"
+__date__ = "10 August 2005"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
 NOSH_MAXMOL = 20
 NOSH_MAXCALC = 20
-
-
-from apbslib import *
-import sys, time
-from sys import stdout, stderr
 
 class APBSError(Exception):
     """ APBSError class
@@ -95,10 +95,9 @@ def getUsage():
     usage = "\n\n\
     ----------------------------------------------------------------------\n\
     This driver program calculates electrostatic potentials, energies,\n\
-    and forces using both multigrid and finite element methods.\n\
+    and forces using both multigrid methods.\n\
     It is invoked as:\n\n\
-      python main.py apbs.in\n\n\
-    where apbs.in is a formatted input file.\n\
+      python noinput.py\n\
     ----------------------------------------------------------------------\n\n"
 
     return usage
@@ -120,14 +119,10 @@ def main():
     pmg = new_pmglist(NOSH_MAXMOL)
     pmgp = new_pmgplist(NOSH_MAXMOL)
     realCenter = double_array(3)
-    totEnergy = double_array(NOSH_MAXCALC)
-    qfEnergy = double_array(NOSH_MAXCALC)
-    qmEnergy = double_array(NOSH_MAXCALC)
-    dielEnergy = double_array(NOSH_MAXCALC)
-    npEnergy = double_array(NOSH_MAXCALC)
-    nenergy = int_array(NOSH_MAXCALC)
+    totEnergy = []
     nforce = int_array(NOSH_MAXCALC)
     atomforce = new_atomforcelist(NOSH_MAXCALC)
+    nfor = ptrcreate("int",0)
     
     # Start the main timer
     main_timer_start = time.clock()
@@ -148,13 +143,16 @@ def main():
         stderr.write("main:  Error while parsing input file.\n")
         raise APBSError, "Error while parsing input file!"
 
+    # Initialize the energy array
+    for i in range(nosh.ncalc): totEnergy.append(0.0)
+
     # Load the molecules using loadMolecules routine
 
     alist = new_valist(NOSH_MAXMOL)
     if loadMolecules(nosh,alist) != 1:
         stderr.write("main:  Error while loading molecules. \n")
         raise APBSError, "Error while loading molecules!"
-    
+
     # Load the dieletric maps
 
     dielXMap = new_gridlist(NOSH_MAXMOL)
@@ -208,12 +206,12 @@ def main():
             stderr.write("Error setting up MG calculation!\n")
             raise APBSError, "Error setting up MG calculation!"
 	
-        # Print problem parameters 
+        # Print problem parameters if desired (comment out if you want
+        # to minimize output to stdout)
 	
         printMGPARM(mgparm, realCenter)
         printPBEPARM(pbeparm)
-        Python_kbT = Python_kb*Python_Na*(pbeparm.temp)/1000.0
-	
+      
         # Solve the problem : Routine solveMG
 	
         thispmg = get_Vpmg(pmg,icalc)
@@ -228,48 +226,25 @@ def main():
             stderr.write("Error setting partition info!\n")
             raise APBSError, "Error setting partition info!"
 	
-        # Write out energies : Routine energyMG, npenergyMG
-        # Create pointers to variables that store energies,
-        # place in appropriate array, and delete pointers
-        # See SWIG documentation for pointer function info
-	
-        totEng = ptrcreate("double",0.0)
-        qfEng = ptrcreate("double",0.0)
-        qmEng = ptrcreate("double",0.0)
-        dielEng = ptrcreate("double",0.0)
-        npEng = ptrcreate("double",0.0)
-        neng = ptrcreate("int",0.0)
+        # Get the energies - the energy for this calculation
+        # (calculation number icalc) will be stored in the totEnergy array
 
-        energyMG(nosh, icalc, thispmg, nenergy,  totEng, qfEng, qmEng, dielEng)
-        #npenergyMG(nosh, icalc, thispmg, nenergy, npEng)
-	
-        ptrset(totEnergy,ptrvalue(totEng),icalc)
-        ptrset(qfEnergy,ptrvalue(qfEng),icalc)
-        ptrset(qmEnergy,ptrvalue(qmEng),icalc)
-        ptrset(dielEnergy,ptrvalue(dielEng),icalc)
-        ptrset(npEnergy,ptrvalue(npEng),icalc)
-        ptrset(nenergy,ptrvalue(neng),icalc)
-        ptrfree(totEng)
-        ptrfree(qfEng)
-        ptrfree(qmEng)
-        ptrfree(dielEng)
-        ptrfree(npEng)
-        ptrfree(neng)
-	
-        # Set partition information
-
-        nfor = ptrcreate("int",0.0)
-        forceMG(mem, nosh, pbeparm, mgparm, thispmg, nfor, atomforce, alist)
+        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0,
+                                         totEnergy[icalc], 0.0, 0.0, 0.0)
+        
+        # Calculate forces
+        
+        aforce = get_AtomForce(atomforce, icalc)
+        forceMG(mem, nosh, pbeparm, mgparm, thispmg, nfor, aforce, alist)
         ptrset(nforce,ptrvalue(nfor), icalc)
-        ptrfree(nfor)
-	
+          
         # Write out data from MG calculations : Routine writedataMG	
         writedataMG(rank, nosh, pbeparm, thispmg)
 	
         # Write out matrix from MG calculations	
         writematMG(rank, nosh, pbeparm, thispmg)
-
-    # Handle print statements
+    
+    # Handle print statements - comment out if limiting output to stdout
 
     if nosh.nprint > 0:
         stdout.write("---------------------------------------------\n")
@@ -282,7 +257,7 @@ def main():
         else:
             stdout.write("Undefined PRINT keyword!\n")
             break
-	
+                
     stdout.write("----------------------------------------\n")
     stdout.write("CLEANING UP AND SHUTTING DOWN...\n")
 
@@ -295,6 +270,23 @@ def main():
     killDielMaps(nosh, dielXMap, dielYMap, dielZMap)
     killMolecules(nosh, alist)
     del nosh
+
+    # Clean up Python structures
+
+    ptrfree(nfor)
+    delete_double_array(realCenter)
+    delete_int_array(nforce)
+    delete_atomforcelist(atomforce)
+    delete_valist(alist)
+    delete_gridlist(dielXMap)
+    delete_gridlist(dielYMap)
+    delete_gridlist(dielZMap)
+    delete_gridlist(kappaMap)
+    delete_gridlist(chargeMap)
+    delete_pmglist(pmg)
+    delete_pmgplist(pmgp)
+    delete_pbelist(pbe)
+    
     
     # Clean up MALOC structures
     del com
@@ -306,5 +298,5 @@ def main():
     main_timer_stop = time.clock()
     stdout.write("Total execution time:  %1.6e sec\n" % (main_timer_stop - main_timer_start))
 
+ 
 if __name__ == "__main__": main()
-    
