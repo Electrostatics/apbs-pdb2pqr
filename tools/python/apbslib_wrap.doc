@@ -172,8 +172,19 @@ NOsh_dtor(thee)
 NOsh_parseFile(thee,filename)
         [ returns int  ]
 
-9.  Pointer Handling Library
-============================
+9.  class AtomForce
+===================
+[ created from struct AtomForce ]
+
+
+AtomForce()
+        [ Constructor: returns AtomForce * ]
+
+del this
+        [ Destructor: returns void  ]
+
+10.  Pointer Handling Library
+=============================
 
 %include pointer.i
 
@@ -339,42 +350,37 @@ get_Vpbe(args,n)
 
 new_atomforcelist(maxargs)
 
+delete_atomforcelist(a)
+
+delete_valist(a)
+
+delete_gridlist(a)
+
+delete_pmglist(a)
+
+delete_pmgplist(a)
+
+delete_pbelist(a)
+
+get_AtomForce(aforce,n)
+
+make_Valist(args,n)
+
 double_array(size)
 
 int_array(size)
 
-Valist_load(thee,size,x,y,z,chg,rad)
+delete_double_array(d)
 
-getPotentials(nosh,pbeparm,pmg,alist)
-
-getqfForces(atomForce,alist)
-
-getibForces(atomForce,alist)
-
-getdbForces(atomForce,alist)
-
-getnpForces(atomForce,alist)
-
-get_double_entry(array,i)
+delete_int_array(i)
 
 get_entry(array,i)
 
 set_entry(array,i,val)
 
-make_Valist(args,n)
-
 NOsh_parse(thee,sock)
 
 Vio_setup(key,iodev,iofmt,iohost,iofile,string)
-
-9.1.  class AtomForce
----------------------
-
-AtomForce()
-
-del this
-
-----------
 
 loadMolecules(nosh,alist)
 
@@ -404,8 +410,6 @@ solveMG(nosh,pmg,type)
 
 setPartMG(nosh,mgparm,pmg)
 
-energyMG(nosh,icalc,pmg,nenergy,totEnergy,qfEnergy,qmEnergy,dielEnergy)
-
 npenergyMG(nosh,icalc,pmg,nenergy,npEnergy)
 
 killEnergy()
@@ -418,8 +422,6 @@ writedataMG(rank,nosh,pbeparm,pmg)
 
 writematMG(rank,nosh,pbeparm,pmg)
 
-printEnergy(com,nosh,totEnergy,i)
-
 printForce(com,nosh,nforce,atomForce,i)
 
 startVio()
@@ -427,4 +429,14 @@ startVio()
 Vacc_molAcc(thee,center,radius)
 
 Vacc_vdwAcc(thee,center)
+
+energyMG(nosh,icalc,pmg,INPUT,BOTH,INPUT,INPUT,INPUT)
+
+printEnergy(com,nosh,totEnergy,i)
+
+Valist_load(thee,size,x,y,z,chg,rad)
+
+getPotentials(nosh,pbeparm,pmg,alist)
+
+getForces(atomForce,alist)
 

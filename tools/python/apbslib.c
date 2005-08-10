@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.10  2005/03/03 17:17:49  apbs
- * TJD:  Added wrappers for some Vacc functions
+ * Revision 1.11  2005/08/10 19:21:36  apbs
+ * TJD: Fixed bug in reading C arrays in Python; (hopefully) addressed potential memory leaks by updating interface directly into Python objects for most objects.
  *
  ************************************************************************/
 
@@ -1116,13 +1116,147 @@ AtomForce **new_atomforcelist(int maxargs) {
    return (AtomForce **) malloc(maxargs*sizeof(AtomForce *));
 }
 
+void delete_atomforcelist(AtomForce **a) {
+    free(a);
+  } 
+void delete_valist(Valist **a) {
+    free(a);
+  } 
+void delete_gridlist(Vgrid **a) {
+    free(a);
+  } 
+void delete_pmglist(Vpmg **a) {
+    free(a);
+  } 
+void delete_pmgplist(Vpmgp **a) {
+    free(a);
+  }
+void delete_pbelist(Vpbe **a) {
+    free(a);
+  }
+
+AtomForce **get_AtomForce(AtomForce **aforce, int n){
+    return &aforce[n];
+}
+
+Valist *make_Valist(Valist **args, int n){
+    args[n] = Valist_ctor();    
+    return args[n];
+}
+
+// Generic array of doubles and ints:
+//   Constructors, Destructors, Gets, and Sets
+
+
 double *double_array(int size) {
      return (double *) malloc(size*sizeof(double));
   }
 
 int *int_array(int size){
      return (int *) malloc(size*sizeof(int));
+  }
+
+void delete_double_array(double *d) {
+    free(d);
+  } 
+
+void delete_int_array(int *i) {
+    free(i);
+  } 
+
+double get_entry(double *array, int i){
+	    return array[i];
+  }
+
+void set_entry(double *array, int i, double val){
+	    array[i] = val;
+  }
+extern int NOsh_parse(NOsh *,Vio *);
+
+Vio * Vio_setup(char *key, const char *iodev, const char *iofmt, const char *iohost, const char *iofile, char * string){
+    Vio *sock = VNULL;
+    char buf[VMAX_BUFSIZE];
+    int bufsize = 0;
+    bufsize = strlen(string);
+    VASSERT( bufsize <= VMAX_BUFSIZE );
+    strncpy(buf, string, VMAX_BUFSIZE);
+    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)));
+    Vio_bufTake(sock, buf, bufsize);
+    return sock;
 }
+extern int loadMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
+extern void killMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
+extern int loadDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
+extern void killDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
+extern int loadKappaMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
+extern void killKappaMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
+extern int loadChargeMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
+extern void killChargeMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
+extern void printPBEPARM(PBEparm *);
+extern void printMGPARM(MGparm *,double [3]);
+extern int initMG(int ,NOsh *,MGparm *,PBEparm *,double [3],Vpbe *[NOSH_MAXCALC],Valist *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vpmgp *[NOSH_MAXCALC],Vpmg *[NOSH_MAXCALC]);
+extern void killMG(NOsh *,Vpbe *[NOSH_MAXCALC],Vpmgp *[NOSH_MAXCALC],Vpmg *[NOSH_MAXCALC]);
+extern int solveMG(NOsh *,Vpmg *,MGparm_CalcType );
+extern int setPartMG(NOsh *,MGparm *,Vpmg *);
+extern int npenergyMG(NOsh *,int ,Vpmg *,int *,double *);
+extern void killEnergy();
+extern int forceMG(Vmem *,NOsh *,PBEparm *,MGparm *,Vpmg *,int *,AtomForce *[NOSH_MAXCALC],Valist *[NOSH_MAXMOL]);
+extern void killForce(Vmem *,NOsh *,int [NOSH_MAXCALC],AtomForce *[NOSH_MAXCALC]);
+extern int writedataMG(int ,NOsh *,PBEparm *,Vpmg *);
+extern int writematMG(int ,NOsh *,PBEparm *,Vpmg *);
+extern int printForce(Vcom *,NOsh *,int [NOSH_MAXCALC],AtomForce *[NOSH_MAXCALC],int );
+extern void startVio();
+extern double Vacc_molAcc(Vacc *,double [3],double );
+extern double Vacc_vdwAcc(Vacc *,double [3]);
+
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    PyObject*   o3;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
+
+static PyObject* t_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    PyObject*   o3;
+
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
+
+        o2 = target;
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
+        Py_DECREF(o3);
+    }
+    return target;
+}
+extern int energyMG(NOsh *,int ,Vpmg *,int *,double *,double *,double *,double *);
+extern int printEnergy(Vcom *,NOsh *,double [NOSH_MAXCALC],int );
 
 void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
     
@@ -1170,7 +1304,6 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
     thee->charge = 0.0;
    
     for (i=0; i<thee->number; i++) {
-
         atom = &(thee->atoms[i]);
         for (j=0; j<3; j++) {
             if (atom->position[j] < thee->mincrd[j]) 
@@ -1187,160 +1320,63 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
     thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
 }
 
-double *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
-    Vgrid *grid;
+PyObject *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
     Vatom *atom; 
-    int i, rc, nx, ny, nz;
-    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
-    double value;
-    double *position, *values;
+    int i;
+    double energy;
+    PyObject *values;
     
-    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(double)));
-    nx = pmg->pmgp->nx;
-    ny = pmg->pmgp->ny;
-    nz = pmg->pmgp->nz;
-    hx = pmg->pmgp->hx;
-    hy = pmg->pmgp->hy;
-    hzed = pmg->pmgp->hzed;
-    xcent = pmg->pmgp->xcent;
-    ycent = pmg->pmgp->ycent;
-    zcent = pmg->pmgp->zcent;
-    xmin = xcent - 0.5*(nx-1)*hx;
-    ymin = ycent - 0.5*(ny-1)*hy;
-    zmin = zcent - 0.5*(nz-1)*hzed;
-   
-    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype);
-    grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
-                  pmg->rwork);
+    values = PyList_New(Valist_getNumberAtoms(alist)); 
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
         atom = Valist_getAtom(alist, i);
-        position = Vatom_getPosition(atom); 
-        Vgrid_value(grid, position, &value);
-        values[i] = value; 
+        energy = Vpmg_qfAtomEnergy(pmg, atom);
+        PyList_SetItem(values, i, PyFloat_FromDouble(energy));
     } 
-    Vgrid_dtor(&grid);    
     return values;
 }
 
-double **getqfForces(AtomForce **atomForce, Valist *alist){
+PyObject *getForces(AtomForce **atomForce, Valist *alist){
     int i, j;
-    double **values;
-    double *holder; 
-  
-    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
-    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
+    PyObject *dict;
+    PyObject *qfvalues, *qf, *qfholder;
+    PyObject *ibvalues, *ib, *ibholder;
+    PyObject *dbvalues, *db, *dbholder;
+    PyObject *npvalues, *np, *npholder;
+    
+    dict = PyDict_New(); 
+    qfvalues = PyList_New(Valist_getNumberAtoms(alist));
+    dbvalues = PyList_New(Valist_getNumberAtoms(alist)); 
+    ibvalues = PyList_New(Valist_getNumberAtoms(alist)); 
+    npvalues = PyList_New(Valist_getNumberAtoms(alist)); 
+    
+    qfholder = PyList_New(3);
+    dbholder = PyList_New(3);
+    ibholder = PyList_New(3);
+    npholder = PyList_New(3);
+    
+    qf = PyString_FromString("qf");
+    db = PyString_FromString("db");
+    ib = PyString_FromString("ib");
+    np = PyString_FromString("np");
+
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
         for (j=0;j<3;j++){
-            holder[j] = (*atomForce)[i].qfForce[j];
+           PyList_SetItem(qfholder, j, PyFloat_FromDouble(atomForce[0][i].qfForce[j]));
+           PyList_SetItem(dbholder, j, PyFloat_FromDouble(atomForce[0][i].dbForce[j]));
+           PyList_SetItem(ibholder, j, PyFloat_FromDouble(atomForce[0][i].ibForce[j]));
+           PyList_SetItem(npholder, j, PyFloat_FromDouble(atomForce[0][i].npForce[j]));
         }
-        values[i] = holder;
-    }   
-    return values;
+        PyList_SetItem(qfvalues, i,  PyList_GetSlice(qfholder, 0, 3));
+        PyList_SetItem(dbvalues, i,  PyList_GetSlice(dbholder, 0, 3));
+        PyList_SetItem(ibvalues, i,  PyList_GetSlice(ibholder, 0, 3));
+        PyList_SetItem(npvalues, i,  PyList_GetSlice(npholder, 0, 3));
+    }
+    PyDict_SetItem(dict, qf, qfvalues);
+    PyDict_SetItem(dict, db, dbvalues);
+    PyDict_SetItem(dict, np, npvalues);
+    PyDict_SetItem(dict, ib, ibvalues);
+    return dict;
 }
-
-double **getibForces(AtomForce **atomForce, Valist *alist){
-    int i, j;
-    double **values;
-    double *holder; 
-  
-    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
-    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
-    for (i=0;i<Valist_getNumberAtoms(alist);i++){
-        for (j=0;j<3;j++){
-            holder[j] = (*atomForce)[i].ibForce[j];
-        }
-        values[i] = holder;
-    }   
-    return values;
-}
-
-double **getdbForces(AtomForce **atomForce, Valist *alist){
-    int i, j;
-    double **values;
-    double *holder; 
-  
-    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
-    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
-    for (i=0;i<Valist_getNumberAtoms(alist);i++){
-        for (j=0;j<3;j++){
-            holder[j] = (*atomForce)[i].dbForce[j];
-        }
-        values[i] = holder;
-    }   
-    return values;
-}
-
-double **getnpForces(AtomForce **atomForce, Valist *alist){
-    int i, j;
-    double **values;
-    double *holder; 
-  
-    holder = Vmem_malloc(alist->vmem, 3, sizeof(double));
-    values = Vmem_malloc(alist->vmem, Valist_getNumberAtoms(alist),(sizeof(holder)));
-    for (i=0;i<Valist_getNumberAtoms(alist);i++){
-        for (j=0;j<3;j++){
-            holder[j] = (*atomForce)[i].npForce[j];
-        }
-        values[i] = holder;
-    }   
-    return values;
-}
-
-double *get_double_entry(double **array, int i){
-	    return array[i];
-  }
-
-double get_entry(double *array, int i){
-	    return array[i];
-  }
-
-void set_entry(double *array, int i, double val){
-	    array[i] = val;
-  }
-
-Valist *make_Valist(Valist **args, int n){
-    args[n] = Valist_ctor();    
-    return args[n];
-}
-extern int NOsh_parse(NOsh *,Vio *);
-
-Vio * Vio_setup(char *key, const char *iodev, const char *iofmt, const char *iohost, const char *iofile, char * string){
-    Vio *sock = VNULL;
-    char buf[VMAX_BUFSIZE];
-    int bufsize = 0;
-    bufsize = strlen(string);
-    VASSERT( bufsize <= VMAX_BUFSIZE );
-    strncpy(buf, string, VMAX_BUFSIZE);
-    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)));
-    Vio_bufTake(sock, buf, bufsize);
-    return sock;
-}
-extern int loadMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
-extern void killMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
-extern int loadDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
-extern void killDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
-extern int loadKappaMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
-extern void killKappaMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
-extern int loadChargeMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
-extern void killChargeMaps(NOsh *,Vgrid *[NOSH_MAXMOL]);
-extern void printPBEPARM(PBEparm *);
-extern void printMGPARM(MGparm *,double [3]);
-extern int initMG(int ,NOsh *,MGparm *,PBEparm *,double [3],Vpbe *[NOSH_MAXCALC],Valist *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vpmgp *[NOSH_MAXCALC],Vpmg *[NOSH_MAXCALC]);
-extern void killMG(NOsh *,Vpbe *[NOSH_MAXCALC],Vpmgp *[NOSH_MAXCALC],Vpmg *[NOSH_MAXCALC]);
-extern int solveMG(NOsh *,Vpmg *,MGparm_CalcType );
-extern int setPartMG(NOsh *,MGparm *,Vpmg *);
-extern int energyMG(NOsh *,int ,Vpmg *,int *,double *,double *,double *,double *);
-extern int npenergyMG(NOsh *,int ,Vpmg *,int *,double *);
-extern void killEnergy();
-extern int forceMG(Vmem *,NOsh *,PBEparm *,MGparm *,Vpmg *,int *,AtomForce **,Valist *[NOSH_MAXMOL]);
-extern void killForce(Vmem *,NOsh *,int [NOSH_MAXCALC],AtomForce *[NOSH_MAXCALC]);
-extern int writedataMG(int ,NOsh *,PBEparm *,Vpmg *);
-extern int writematMG(int ,NOsh *,PBEparm *,Vpmg *);
-extern int printEnergy(Vcom *,NOsh *,double [NOSH_MAXCALC],int );
-extern int printForce(Vcom *,NOsh *,int [NOSH_MAXCALC],AtomForce *[NOSH_MAXCALC],int );
-extern void startVio();
-extern double Vacc_molAcc(Vacc *,double [3],double );
-extern double Vacc_vdwAcc(Vacc *,double [3]);
 static PyObject *_wrap_Vcom_ctor(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     Vcom * _result;
@@ -1878,6 +1914,172 @@ static PyObject *_wrap_new_atomforcelist(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static PyObject *_wrap_delete_atomforcelist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    AtomForce ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_atomforcelist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_atomforcelist. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    delete_atomforcelist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delete_valist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Valist ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_valist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_valist. Expected _Valist_pp.");
+        return NULL;
+        }
+    }
+    delete_valist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delete_gridlist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vgrid ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_gridlist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_gridlist. Expected _Vgrid_pp.");
+        return NULL;
+        }
+    }
+    delete_gridlist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delete_pmglist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpmg ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_pmglist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpmg_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_pmglist. Expected _Vpmg_pp.");
+        return NULL;
+        }
+    }
+    delete_pmglist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delete_pmgplist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpmgp ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_pmgplist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpmgp_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_pmgplist. Expected _Vpmgp_pp.");
+        return NULL;
+        }
+    }
+    delete_pmgplist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_delete_pbelist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vpbe ** _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_pbelist",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vpbe_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_pbelist. Expected _Vpbe_pp.");
+        return NULL;
+        }
+    }
+    delete_pbelist(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_get_AtomForce(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    AtomForce ** _result;
+    AtomForce ** _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:get_AtomForce",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_AtomForce. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    _result = (AtomForce **)get_AtomForce(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_AtomForce_pp");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_make_Valist(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Valist * _result;
+    Valist ** _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:make_Valist",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of make_Valist. Expected _Valist_pp.");
+        return NULL;
+        }
+    }
+    _result = (Valist *)make_Valist(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Valist_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static PyObject *_wrap_double_array(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     double * _result;
@@ -1908,253 +2110,43 @@ static PyObject *_wrap_int_array(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_Valist_load(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_double_array(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    Valist * _arg0;
-    int  _arg1;
-    double * _arg2;
-    double * _arg3;
-    double * _arg4;
-    double * _arg5;
-    double * _arg6;
+    double * _arg0;
     char * _argc0 = 0;
-    char * _argc2 = 0;
-    char * _argc3 = 0;
-    char * _argc4 = 0;
-    char * _argc5 = 0;
-    char * _argc6 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sisssss:Valist_load",&_argc0,&_arg1,&_argc2,&_argc3,&_argc4,&_argc5,&_argc6)) 
+    if(!PyArg_ParseTuple(args,"s:delete_double_array",&_argc0)) 
         return NULL;
     if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Valist_load. Expected _Valist_p.");
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_double_array. Expected _double_p.");
         return NULL;
         }
     }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of Valist_load. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc3) {
-        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of Valist_load. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc4) {
-        if (SWIG_GetPtr(_argc4,(void **) &_arg4,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of Valist_load. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc5) {
-        if (SWIG_GetPtr(_argc5,(void **) &_arg5,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of Valist_load. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc6) {
-        if (SWIG_GetPtr(_argc6,(void **) &_arg6,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of Valist_load. Expected _double_p.");
-        return NULL;
-        }
-    }
-    Valist_load(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+    delete_double_array(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
 }
 
-static PyObject *_wrap_getPotentials(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_int_array(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    double * _result;
-    NOsh * _arg0;
-    PBEparm * _arg1;
-    Vpmg * _arg2;
-    Valist * _arg3;
+    int * _arg0;
     char * _argc0 = 0;
-    char * _argc1 = 0;
-    char * _argc2 = 0;
-    char * _argc3 = 0;
-    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ssss:getPotentials",&_argc0,&_argc1,&_argc2,&_argc3)) 
+    if(!PyArg_ParseTuple(args,"s:delete_int_array",&_argc0)) 
         return NULL;
     if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getPotentials. Expected _NOsh_p.");
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_int_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_int_array. Expected _int_p.");
         return NULL;
         }
     }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_PBEparm_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getPotentials. Expected _PBEparm_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_Vpmg_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of getPotentials. Expected _Vpmg_p.");
-        return NULL;
-        }
-    }
-    if (_argc3) {
-        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of getPotentials. Expected _Valist_p.");
-        return NULL;
-        }
-    }
-    _result = (double *)getPotentials(_arg0,_arg1,_arg2,_arg3);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_getqfForces(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double ** _result;
-    AtomForce ** _arg0;
-    Valist * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:getqfForces",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getqfForces. Expected _AtomForce_pp.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getqfForces. Expected _Valist_p.");
-        return NULL;
-        }
-    }
-    _result = (double **)getqfForces(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_getibForces(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double ** _result;
-    AtomForce ** _arg0;
-    Valist * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:getibForces",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getibForces. Expected _AtomForce_pp.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getibForces. Expected _Valist_p.");
-        return NULL;
-        }
-    }
-    _result = (double **)getibForces(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_getdbForces(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double ** _result;
-    AtomForce ** _arg0;
-    Valist * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:getdbForces",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getdbForces. Expected _AtomForce_pp.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getdbForces. Expected _Valist_p.");
-        return NULL;
-        }
-    }
-    _result = (double **)getdbForces(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_getnpForces(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double ** _result;
-    AtomForce ** _arg0;
-    Valist * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:getnpForces",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getnpForces. Expected _AtomForce_pp.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getnpForces. Expected _Valist_p.");
-        return NULL;
-        }
-    }
-    _result = (double **)getnpForces(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_pp");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_get_double_entry(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double * _result;
-    double ** _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:get_double_entry",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_double_entry. Expected _double_pp.");
-        return NULL;
-        }
-    }
-    _result = (double *)get_double_entry(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
+    delete_int_array(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -2198,29 +2190,6 @@ static PyObject *_wrap_set_entry(PyObject *self, PyObject *args) {
     set_entry(_arg0,_arg1,_arg2);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_make_Valist(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    Valist * _result;
-    Valist ** _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:make_Valist",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_pp")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of make_Valist. Expected _Valist_pp.");
-        return NULL;
-        }
-    }
-    _result = (Valist *)make_Valist(_arg0,_arg1);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_Valist_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -2809,75 +2778,6 @@ static PyObject *_wrap_setPartMG(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_energyMG(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    NOsh * _arg0;
-    int  _arg1;
-    Vpmg * _arg2;
-    int * _arg3;
-    double * _arg4;
-    double * _arg5;
-    double * _arg6;
-    double * _arg7;
-    char * _argc0 = 0;
-    char * _argc2 = 0;
-    char * _argc3 = 0;
-    char * _argc4 = 0;
-    char * _argc5 = 0;
-    char * _argc6 = 0;
-    char * _argc7 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sissssss:energyMG",&_argc0,&_arg1,&_argc2,&_argc3,&_argc4,&_argc5,&_argc6,&_argc7)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of energyMG. Expected _NOsh_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_Vpmg_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of energyMG. Expected _Vpmg_p.");
-        return NULL;
-        }
-    }
-    if (_argc3) {
-        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_int_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of energyMG. Expected _int_p.");
-        return NULL;
-        }
-    }
-    if (_argc4) {
-        if (SWIG_GetPtr(_argc4,(void **) &_arg4,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of energyMG. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc5) {
-        if (SWIG_GetPtr(_argc5,(void **) &_arg5,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 6 of energyMG. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc6) {
-        if (SWIG_GetPtr(_argc6,(void **) &_arg6,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of energyMG. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc7) {
-        if (SWIG_GetPtr(_argc7,(void **) &_arg7,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of energyMG. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (int )energyMG(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyObject *_wrap_npenergyMG(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     int  _result;
@@ -3129,43 +3029,6 @@ static PyObject *_wrap_writematMG(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_printEnergy(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    Vcom * _arg0;
-    NOsh * _arg1;
-    double * _arg2;
-    int  _arg3;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char * _argc2 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sssi:printEnergy",&_argc0,&_argc1,&_argc2,&_arg3)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vcom_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of printEnergy. Expected _Vcom_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_NOsh_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of printEnergy. Expected _NOsh_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of printEnergy. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (int )printEnergy(_arg0,_arg1,_arg2,_arg3);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyObject *_wrap_printForce(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     int  _result;
@@ -3277,6 +3140,345 @@ static PyObject *_wrap_Vacc_vdwAcc(PyObject *self, PyObject *args) {
     }
     _result = (double )Vacc_vdwAcc(_arg0,_arg1);
     _resultobj = Py_BuildValue("d",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_energyMG(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    NOsh * _arg0;
+    int  _arg1;
+    Vpmg * _arg2;
+    int * _arg3;
+    double * _arg4;
+    double * _arg5;
+    double * _arg6;
+    double * _arg7;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    int  temp;
+    PyObject * _obj3 = 0;
+    double  temp0;
+    PyObject * _obj4 = 0;
+    double  temp1;
+    PyObject * _obj5 = 0;
+    double  temp2;
+    PyObject * _obj6 = 0;
+    double  temp3;
+    PyObject * _obj7 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sisOOOOO:energyMG",&_argc0,&_arg1,&_argc2,&_obj3,&_obj4,&_obj5,&_obj6,&_obj7)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of energyMG. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_Vpmg_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of energyMG. Expected _Vpmg_p.");
+        return NULL;
+        }
+    }
+{
+  temp = (int) PyInt_AsLong(_obj3);
+  _arg3 = &temp;
+}
+{
+  temp0 = PyFloat_AsDouble(_obj4);
+  _arg4 = &temp0;
+}
+{
+  temp1 = PyFloat_AsDouble(_obj5);
+  _arg5 = &temp1;
+}
+{
+  temp2 = PyFloat_AsDouble(_obj6);
+  _arg6 = &temp2;
+}
+{
+  temp3 = PyFloat_AsDouble(_obj7);
+  _arg7 = &temp3;
+}
+    _result = (int )energyMG(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7);
+    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg4));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_printEnergy(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    Vcom * _arg0;
+    NOsh * _arg1;
+    double * _arg2;
+    int  _arg3;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    PyObject * _obj2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ssOi:printEnergy",&_argc0,&_argc1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vcom_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of printEnergy. Expected _Vcom_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of printEnergy. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj2)) {
+    int size = PyList_Size(_obj2);
+    int i = 0;
+    _arg2 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj2,i);
+      if (PyFloat_Check(o))
+	    _arg2[i] = PyFloat_AsDouble(PyList_GetItem(_obj2,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg2);
+	    return NULL;
+      }
+    }
+    _arg2[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+    _result = (int )printEnergy(_arg0,_arg1,_arg2,_arg3);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Valist_load(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Valist * _arg0;
+    int  _arg1;
+    double * _arg2;
+    double * _arg3;
+    double * _arg4;
+    double * _arg5;
+    double * _arg6;
+    char * _argc0 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj4 = 0;
+    PyObject * _obj5 = 0;
+    PyObject * _obj6 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"siOOOOO:Valist_load",&_argc0,&_arg1,&_obj2,&_obj3,&_obj4,&_obj5,&_obj6)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Valist_load. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj2)) {
+    int size = PyList_Size(_obj2);
+    int i = 0;
+    _arg2 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj2,i);
+      if (PyFloat_Check(o))
+	    _arg2[i] = PyFloat_AsDouble(PyList_GetItem(_obj2,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg2);
+	    return NULL;
+      }
+    }
+    _arg2[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj3)) {
+    int size = PyList_Size(_obj3);
+    int i = 0;
+    _arg3 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj3,i);
+      if (PyFloat_Check(o))
+	    _arg3[i] = PyFloat_AsDouble(PyList_GetItem(_obj3,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg3);
+	    return NULL;
+      }
+    }
+    _arg3[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj4)) {
+    int size = PyList_Size(_obj4);
+    int i = 0;
+    _arg4 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj4,i);
+      if (PyFloat_Check(o))
+	    _arg4[i] = PyFloat_AsDouble(PyList_GetItem(_obj4,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg4);
+	    return NULL;
+      }
+    }
+    _arg4[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj5)) {
+    int size = PyList_Size(_obj5);
+    int i = 0;
+    _arg5 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj5,i);
+      if (PyFloat_Check(o))
+	    _arg5[i] = PyFloat_AsDouble(PyList_GetItem(_obj5,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg5);
+	    return NULL;
+      }
+    }
+    _arg5[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj6)) {
+    int size = PyList_Size(_obj6);
+    int i = 0;
+    _arg6 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj6,i);
+      if (PyFloat_Check(o))
+	    _arg6[i] = PyFloat_AsDouble(PyList_GetItem(_obj6,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg6);
+	    return NULL;
+      }
+    }
+    _arg6[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+    Valist_load(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_getPotentials(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    NOsh * _arg0;
+    PBEparm * _arg1;
+    Vpmg * _arg2;
+    Valist * _arg3;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ssss:getPotentials",&_argc0,&_argc1,&_argc2,&_argc3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_NOsh_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getPotentials. Expected _NOsh_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_PBEparm_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getPotentials. Expected _PBEparm_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_Vpmg_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of getPotentials. Expected _Vpmg_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of getPotentials. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (PyObject *)getPotentials(_arg0,_arg1,_arg2,_arg3);
+{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_getForces(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    AtomForce ** _arg0;
+    Valist * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:getForces",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_AtomForce_pp")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of getForces. Expected _AtomForce_pp.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_Valist_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of getForces. Expected _Valist_p.");
+        return NULL;
+        }
+    }
+    _result = (PyObject *)getForces(_arg0,_arg1);
+{
+  _resultobj = _result;
+}
     return _resultobj;
 }
 
@@ -4114,18 +4316,21 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "MGparm_type_set", _wrap_MGparm_type_set, 1 },
 	 { "delete_MGparm", _wrap_delete_MGparm, 1 },
 	 { "new_MGparm", _wrap_new_MGparm, 1 },
+	 { "getForces", _wrap_getForces, 1 },
+	 { "getPotentials", _wrap_getPotentials, 1 },
+	 { "Valist_load", _wrap_Valist_load, 1 },
+	 { "printEnergy", _wrap_printEnergy, 1 },
+	 { "energyMG", _wrap_energyMG, 1 },
 	 { "Vacc_vdwAcc", _wrap_Vacc_vdwAcc, 1 },
 	 { "Vacc_molAcc", _wrap_Vacc_molAcc, 1 },
 	 { "startVio", _wrap_startVio, 1 },
 	 { "printForce", _wrap_printForce, 1 },
-	 { "printEnergy", _wrap_printEnergy, 1 },
 	 { "writematMG", _wrap_writematMG, 1 },
 	 { "writedataMG", _wrap_writedataMG, 1 },
 	 { "killForce", _wrap_killForce, 1 },
 	 { "forceMG", _wrap_forceMG, 1 },
 	 { "killEnergy", _wrap_killEnergy, 1 },
 	 { "npenergyMG", _wrap_npenergyMG, 1 },
-	 { "energyMG", _wrap_energyMG, 1 },
 	 { "setPartMG", _wrap_setPartMG, 1 },
 	 { "solveMG", _wrap_solveMG, 1 },
 	 { "killMG", _wrap_killMG, 1 },
@@ -4142,18 +4347,20 @@ static PyMethodDef apbslibcMethods[] = {
 	 { "loadMolecules", _wrap_loadMolecules, 1 },
 	 { "Vio_setup", _wrap_Vio_setup, 1 },
 	 { "NOsh_parse", _wrap_NOsh_parse, 1 },
-	 { "make_Valist", _wrap_make_Valist, 1 },
 	 { "set_entry", _wrap_set_entry, 1 },
 	 { "get_entry", _wrap_get_entry, 1 },
-	 { "get_double_entry", _wrap_get_double_entry, 1 },
-	 { "getnpForces", _wrap_getnpForces, 1 },
-	 { "getdbForces", _wrap_getdbForces, 1 },
-	 { "getibForces", _wrap_getibForces, 1 },
-	 { "getqfForces", _wrap_getqfForces, 1 },
-	 { "getPotentials", _wrap_getPotentials, 1 },
-	 { "Valist_load", _wrap_Valist_load, 1 },
+	 { "delete_int_array", _wrap_delete_int_array, 1 },
+	 { "delete_double_array", _wrap_delete_double_array, 1 },
 	 { "int_array", _wrap_int_array, 1 },
 	 { "double_array", _wrap_double_array, 1 },
+	 { "make_Valist", _wrap_make_Valist, 1 },
+	 { "get_AtomForce", _wrap_get_AtomForce, 1 },
+	 { "delete_pbelist", _wrap_delete_pbelist, 1 },
+	 { "delete_pmgplist", _wrap_delete_pmgplist, 1 },
+	 { "delete_pmglist", _wrap_delete_pmglist, 1 },
+	 { "delete_gridlist", _wrap_delete_gridlist, 1 },
+	 { "delete_valist", _wrap_delete_valist, 1 },
+	 { "delete_atomforcelist", _wrap_delete_atomforcelist, 1 },
 	 { "new_atomforcelist", _wrap_new_atomforcelist, 1 },
 	 { "get_Vpbe", _wrap_get_Vpbe, 1 },
 	 { "new_pbelist", _wrap_new_pbelist, 1 },

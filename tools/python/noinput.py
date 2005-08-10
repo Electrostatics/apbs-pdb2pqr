@@ -5,7 +5,8 @@
     version allows a user to read in data from the Python level without
     using the command line - thus enabling the ability to link seamlessly
     with other Python programs.  Here the 'INPUT and 'PQR' variables are
-    predetermined global strings, but can be dynamically created as desired.
+    predetermined global strings, but can (and *should*) be dynamically created
+    as desired.
 
     The module mimics the main.c driver that is used in the C version of APBS.
     The functions which are called are located in apbslib.py, which is 
@@ -13,7 +14,10 @@
     documentation for more information about each function.
 
     To access energy or force vectors for further use, see the appropriate print
-    section at the bottom of this script.  NOTE:  You ***MUST*** use
+    section at the bottom of this script.  Instead of printing the forces and
+    energies you'll simply want to pass the arrays to other Python functions.
+
+    NOTE:  You ***MUST*** use
 
         calcforce comps
 
@@ -25,75 +29,74 @@
     Washington University in St. Louis
 """    
 
-__author__ = "Todd Dolinsky, Nathan Baker"
-__date__ = "25 January 2005"
-
-INPUT = """read 
-    mol pqr ion.pqr                   
-end
-elec
-    mg-manual                        
-    dime 65 65 65                                                        
-    nlev 4                                                                
-    grid 0.33 0.33 0.33              
-    gcent mol 1                                                    
-    chgm spl2                     
-    mol 1                      
-    lpbe                          
-    bcfl mdh                           
-    ion 1 0.000 2.0                 
-    ion -1 0.000 2.0               
-    pdie 1.0                         
-    sdie 78.54                     
-    chgm spl2                         
-    srfm spl2                          
-    srad 1.4                        
-    swin 0.3                         
-    temp 298.15                     
-    gamma 0.105                     
-    calcenergy total                   
-    calcforce comps                     
-end
-elec
-    mg-manual                       
-    dime 65 65 65                     
-    nlev 4                            
-    grid 0.33 0.33 0.33               
-    gcent mol 1                       
-    mol 1                             
-    lpbe                            
-    bcfl mdh                         
-    ion 1 0.000 2.0                 
-    ion -1 0.000 2.0                  
-    pdie 1.0                         
-    sdie 1.0                          
-    chgm spl2                           
-    srfm spl2                          
-    srad 1.4                          
-    swin 0.3                        
-    temp 298.15                    
-    gamma 0.105                     
-    calcenergy total                     
-    calcforce comps                      
-end
-
-print energy 1 - 2 end
-
-quit
-"""
-
-PQR = "ATOM      1  I   ION     1       0.000   0.000  0.000  1.00  3.00"
-
-Python_kb = 1.3806581e-23
-Python_Na = 6.0221367e+23
-NOSH_MAXMOL = 20
-NOSH_MAXCALC = 20
-
-
 from apbslib import *
 import sys, time
 import string
 from sys import stdout, stderr
+
+__author__ = "Todd Dolinsky, Nathan Baker"
+__date__ = "10 August 2005"
+
+INPUT = """read
+    mol pqr ion.pqr
+end
+elec
+    mg-manual
+    dime 65 65 65
+    nlev 4
+    grid 0.33 0.33 0.33
+    gcent mol 1
+    chgm spl2
+    mol 1
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 78.54
+    chgm spl2
+    srfm spl2
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce comps
+end
+elec
+    mg-manual
+    dime 65 65 65
+    nlev 4
+    grid 0.33 0.33 0.33
+    gcent mol 1
+    mol 1
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm spl2
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce comps
+end
+ 
+print energy 1 - 2 end
+ 
+quit
+"""
+ 
+PQR = "ATOM      1  I   ION     1       0.000   0.000  0.000  1.00  3.00"
+ 
+Python_kb = 1.3806581e-23
+Python_Na = 6.0221367e+23
+NOSH_MAXMOL = 20
+NOSH_MAXCALC = 20
 
 class APBSError(Exception):
     """ APBSError class
@@ -175,14 +178,68 @@ def getUsage():
     usage = "\n\n\
     ----------------------------------------------------------------------\n\
     This driver program calculates electrostatic potentials, energies,\n\
-    and forces using both multigrid and finite element methods.\n\
+    and forces using both multigrid methods.\n\
     It is invoked as:\n\n\
       python noinput.py\n\
     ----------------------------------------------------------------------\n\n"
 
     return usage
 
-def main():
+
+def printResults(potList, forceList):
+    """
+        Print the results stored in the potential and force lists to stdout.
+        The arrays are accessed as follows:
+
+        potList[calc #][atom #]  :  Per-atom energy for a specific calc #
+
+        forceList is a little more difficult, as it is a list of dictionaries
+        of lists:
+
+        forceList[calc #]['force type'][atom #][x=0/y=1/z=2 direction ]
+
+        So to access the qf x-component force from the first APBS elec
+        calculation for the 2nd (atom id 1) atom, you can access
+
+        forceList[0]['qf'][1][0]
+
+        If you plan on using these lists extensively it would be wise to
+        convert them into cleaner objects - this format is the cleanest for
+        getting information back out from C, but not for dealing between
+        Python functions.
+    """
+    # Print the per-atom energies
+    #    Each list corresponds to a calculation, having len(atoms) entries
+
+    factor = getUnitConversion()
+    for i in range(len(potList)):
+        list = potList[i]
+        print "\nPer-atom energies from calculation %i" % i
+        for j in range(len(list)):
+            atom = list[j]
+            print "\t%i\t%.4f kJ/mol" % (j, (float(atom) * factor * 0.5))     
+
+    # Print the per-atom forces
+
+    for i in range(len(forceList)):
+        qflist = forceList[i]["qf"]
+        iblist = forceList[i]["ib"]
+        dblist = forceList[i]["db"]
+        nplist = forceList[i]["np"]
+        
+        print "\nPer-atom forces from calculation %i" % i
+        for j in range(len(qflist)):
+            qf = "%.3E %.3E %.3E" % (qflist[j][0]*factor, qflist[j][1]*factor, qflist[j][2]*factor)
+            ib = "%.3E %.3E %.3E" % (iblist[j][0]*factor, iblist[j][1]*factor, iblist[j][2]*factor)
+            db = "%.3E %.3E %.3E" % (dblist[j][0]*factor, dblist[j][1]*factor, dblist[j][2]*factor)
+            np = "%.3E %.3E %.3E" % (nplist[j][0]*factor, nplist[j][1]*factor, nplist[j][2]*factor)
+            print "\t%i\t%s (qf)" % (j, qf)
+            print "\t%i\t%s (ib)" % (j, ib)
+            print "\t%i\t%s (db)" % (j, db)
+            print "\t%i\t%s (np)" % (j, np)
+
+
+def runAPBS(PQR, INPUT):
     """ Main driver for testing.  Runs APBS on given input file """
     
     # Initialize the MALOC library
@@ -199,24 +256,18 @@ def main():
     pmg = new_pmglist(NOSH_MAXMOL)
     pmgp = new_pmgplist(NOSH_MAXMOL)
     realCenter = double_array(3)
-    totEnergy = double_array(NOSH_MAXCALC)
-    qfEnergy = double_array(NOSH_MAXCALC)
-    qmEnergy = double_array(NOSH_MAXCALC)
-    dielEnergy = double_array(NOSH_MAXCALC)
-    npEnergy = double_array(NOSH_MAXCALC)
-    nenergy = int_array(NOSH_MAXCALC)
+    totEnergy = []
+    x = []
+    y = []
+    z = []
+    chg = []
+    rad = []
     nforce = int_array(NOSH_MAXCALC)
     atomforce = new_atomforcelist(NOSH_MAXCALC)
+    nfor = ptrcreate("int",0)
     
     # Start the main timer
     main_timer_start = time.clock()
-
-    # Check invocation
-    stdout.write(getHeader())
-    if len(sys.argv) != 1:
-        stderr.write("main:  Called with %d arguments!\n" % len(sys.argv))
-        stderr.write(getUsage())
-        raise APBSError, "Incorrect Usage!"
 
     # Parse the input file
     nosh = NOsh()
@@ -231,26 +282,19 @@ def main():
     
     # Load the molecules using Valist_load routine, thereby
     # loading atoms directly into the valist object, removing
-    # the need for an actual PQR file
+    # the need for an actual PQR file from stdin
 
     alist = new_valist(NOSH_MAXMOL)
-
     atoms = string.split(PQR,"\n")
-    x = double_array(len(atoms))
-    y = double_array(len(atoms))
-    z = double_array(len(atoms))
-    chg = double_array(len(atoms))
-    rad = double_array(len(atoms))
-
     for i in range(len(atoms)):
         atom = atoms[i]
         params = string.split(atom)
-        set_entry(x,i,float(params[5]))
-        set_entry(y,i,float(params[6]))
-        set_entry(z,i,float(params[7]))
-        set_entry(chg,i,float(params[8]))
-        set_entry(rad,i,float(params[9]))
-
+        x.append(float(params[5]))
+        y.append(float(params[6]))
+        z.append(float(params[7]))
+        chg.append(float(params[8]))
+        rad.append(float(params[9]))
+    
     # If there are more than one PQR file, make multiple Valist
     # objects
 
@@ -259,15 +303,11 @@ def main():
 
     # Initialize the energy holders
 
+    for i in range(nosh.ncalc): totEnergy.append(0.0)
     potList = []
-    potentials = double_array(len(atoms))
-
+    
     # Initialize the force holders
-
-    qfforceList = []
-    ibforceList = []
-    dbforceList = []
-    npforceList = []
+    forceList = []
 
     # Load the dieletric maps
 
@@ -322,12 +362,12 @@ def main():
             stderr.write("Error setting up MG calculation!\n")
             raise APBSError, "Error setting up MG calculation!"
 	
-        # Print problem parameters 
+        # Print problem parameters if desired (comment out if you want
+        # to minimize output to stdout)
 	
         printMGPARM(mgparm, realCenter)
         printPBEPARM(pbeparm)
-        Python_kbT = Python_kb*Python_Na*(pbeparm.temp)/1000.0
-	
+      
         # Solve the problem : Routine solveMG
 	
         thispmg = get_Vpmg(pmg,icalc)
@@ -342,60 +382,38 @@ def main():
             stderr.write("Error setting partition info!\n")
             raise APBSError, "Error setting partition info!"
 	
-        # Write out energies : Routine energyMG, npenergyMG
-        # Create pointers to variables that store energies,
-        # place in appropriate array, and delete pointers
-        # See SWIG documentation for pointer function info
-	
-        totEng = ptrcreate("double",0.0)
-        qfEng = ptrcreate("double",0.0)
-        qmEng = ptrcreate("double",0.0)
-        dielEng = ptrcreate("double",0.0)
-        npEng = ptrcreate("double",0.0)
-        neng = ptrcreate("int",0.0)
+        # Get the energies - the energy for this calculation
+        # (calculation number icalc) will be stored in the totEnergy array
 
-        energyMG(nosh, icalc, thispmg, nenergy,  totEng, qfEng, qmEng, dielEng)
-        #npenergyMG(nosh, icalc, thispmg, nenergy, npEng)
-	
-        ptrset(totEnergy,ptrvalue(totEng),icalc)
-        ptrset(qfEnergy,ptrvalue(qfEng),icalc)
-        ptrset(qmEnergy,ptrvalue(qmEng),icalc)
-        ptrset(dielEnergy,ptrvalue(dielEng),icalc)
-        ptrset(npEnergy,ptrvalue(npEng),icalc)
-        ptrset(nenergy,ptrvalue(neng),icalc)
-        ptrfree(totEng)
-        ptrfree(qfEng)
-        ptrfree(qmEng)
-        ptrfree(dielEng)
-        ptrfree(npEng)
-        ptrfree(neng)
-	
-        # Set partition information
-
-        nfor = ptrcreate("int",0.0)
-        forceMG(mem, nosh, pbeparm, mgparm, thispmg, nfor, atomforce, alist)
+        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0,  totEnergy[icalc],
+                                         0.0, 0.0, 0.0)
+        
+        # Calculate forces
+        
+        aforce = get_AtomForce(atomforce, icalc)
+        forceMG(mem, nosh, pbeparm, mgparm, thispmg, nfor, aforce, alist)
         ptrset(nforce,ptrvalue(nfor), icalc)
-        ptrfree(nfor)
-	
+          
         # Write out data from MG calculations : Routine writedataMG	
         writedataMG(rank, nosh, pbeparm, thispmg)
 	
         # Write out matrix from MG calculations	
         writematMG(rank, nosh, pbeparm, thispmg)
 
-        # Get the potentials from the calculations
+        # Get the per-atom potentials from this calculation and store
+        # the result in potList.  For information on how to use this
+        # array see printResults().
                
         potentials = getPotentials(nosh, pbeparm, thispmg, myAlist)
         potList.append(potentials)
 
-        # Get the forces
+        # Get the forces from this calculation and store the result in
+        # forceList.  For information on how to use this array see
+        # printResults()
 
-        qfforceList.append(getqfForces(atomforce, myAlist))
-        ibforceList.append(getibForces(atomforce, myAlist))
-        dbforceList.append(getdbForces(atomforce, myAlist))
-        npforceList.append(getnpForces(atomforce, myAlist))
-
-    # Handle print statements
+        forceList.append(getForces(aforce, myAlist))
+    
+    # Handle print statements - comment out if limiting output to stdout
 
     if nosh.nprint > 0:
         stdout.write("---------------------------------------------\n")
@@ -408,104 +426,12 @@ def main():
         else:
             stdout.write("Undefined PRINT keyword!\n")
             break
-
-    # Put the potentials into Python readable arrays
-
-    mypotlist = []
-    for i in range(len(potList)):
-        mypotlist.append([])
-        for j in range(len(atoms)):
-            mypotlist[i].append(get_entry(potList[i], j))
-
-    # Print the per-atom energies
-    #    Each list corresponds to a calculation, having len(atoms) entries
-
-    factor = getUnitConversion()
-    for i in range(len(mypotlist)):
-        list = mypotlist[i]
-        print "\nPer-atom energies from calculation %i" % (i+1)
-        for j in range(len(list)):
-            atom = list[j]
-            print "\t%i\t%.4f" % ((j+1), (float(atom) * factor *0.5))
-
-    # Put the forces in Python readable arrays
-    
-    myqflist = []
-    for i in range(len(qfforceList)):
-        myqflist.append([])
-        for j in range(len(atoms)):
-            coords = get_double_entry(qfforceList[i],j)
-            pycoords = []
-            for k in range(3):
-                val = get_entry(coords,k)
-                if val < 1e-20: val = 0
-                pycoords.append(float(val) * factor)
-            myqflist[i].append(pycoords)
-
-    myiblist = []
-    for i in range(len(ibforceList)):
-        myiblist.append([])
-        for j in range(len(atoms)):
-            coords = get_double_entry(ibforceList[i],j)
-            pycoords = []
-            for k in range(3):
-                val = get_entry(coords,k)
-                if val < 1e-20: val = 0
-                pycoords.append(float(val) * factor)
-            myiblist[i].append(pycoords)
-
-    mydblist = []
-    for i in range(len(dbforceList)):
-        mydblist.append([])
-        for j in range(len(atoms)):
-            coords = get_double_entry(dbforceList[i],j)
-            pycoords = []
-            for k in range(3):
-                val = get_entry(coords,k)
-                if val < 1e-20: val = 0
-                pycoords.append(float(val) * factor)
-            mydblist[i].append(pycoords)
-
-
-    mynplist = []
-    for i in range(len(npforceList)):
-        mynplist.append([])
-        for j in range(len(atoms)):
-            coords = get_double_entry(npforceList[i],j)
-            pycoords = []
-            for k in range(3):
-                val = get_entry(coords,k)
-                if val < 1e-20: val = 0
-                pycoords.append(float(val) * factor)
-            mynplist[i].append(pycoords)
-
-
-    # Print the per-atom forces
-
-    for i in range(len(myqflist)):
-        qflist = myqflist[i]
-        iblist = myiblist[i]
-        dblist = mydblist[i]
-        nplist = mynplist[i]
-        
-        print "\nPer-atom forces from calculation %i" % (i+1)
-        for j in range(len(qflist)):
-            qf = "%.3E %.3E %.3E" % (qflist[j][0], qflist[j][1], qflist[j][2])
-            ib = "%.3E %.3E %.3E" % (iblist[j][0], iblist[j][1], iblist[j][2])
-            db = "%.3E %.3E %.3E" % (dblist[j][0], dblist[j][1], dblist[j][2])
-            np = "%.3E %.3E %.3E" % (nplist[j][0], nplist[j][1], nplist[j][2])
-            print "\t%i\t%s (qf)" % ((j+1), qf)
-            print "\t%i\t%s (ib)" % ((j+1), ib)
-            print "\t%i\t%s (db)" % ((j+1), db)
-            print "\t%i\t%s (np)" % ((j+1), np)
-    
+                
     stdout.write("----------------------------------------\n")
     stdout.write("CLEANING UP AND SHUTTING DOWN...\n")
 
     # Clean up APBS structures
-    #killForce(mem, nosh, nforce, atomforce)
-    del nforce
-    del atomforce
+    killForce(mem, nosh, nforce, atomforce)
     killEnergy()
     killMG(nosh, pbe, pmgp, pmg)
     killChargeMaps(nosh, chargeMap)
@@ -513,6 +439,23 @@ def main():
     killDielMaps(nosh, dielXMap, dielYMap, dielZMap)
     killMolecules(nosh, alist)
     del nosh
+
+    # Clean up Python structures
+
+    ptrfree(nfor)
+    delete_double_array(realCenter)
+    delete_int_array(nforce)
+    delete_atomforcelist(atomforce)
+    delete_valist(alist)
+    delete_gridlist(dielXMap)
+    delete_gridlist(dielYMap)
+    delete_gridlist(dielZMap)
+    delete_gridlist(kappaMap)
+    delete_gridlist(chargeMap)
+    delete_pmglist(pmg)
+    delete_pmgplist(pmgp)
+    delete_pbelist(pbe)
+    
     
     # Clean up MALOC structures
     del com
@@ -524,7 +467,19 @@ def main():
     main_timer_stop = time.clock()
     stdout.write("Total execution time:  %1.6e sec\n" % (main_timer_stop - main_timer_start))
 
-    
+    return potList, forceList
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
     
+    # Check invocation
+    stdout.write(getHeader())
+    if len(sys.argv) != 1:
+        stderr.write("main:  Called with %d arguments!\n" % len(sys.argv))
+        stderr.write(getUsage())
+        raise APBSError, "Incorrect Usage!"
+
+    potList, forceList = runAPBS(PQR, INPUT)
+
+    # As an example, print the resulting information
+
+    printResults(potList, forceList)
