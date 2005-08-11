@@ -33,8 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.2  2004/12/14 19:28:50  apbs
- * TJD:  Added python/vgrid to autoconf script.  Should compile when the rest of the Python wrapper compilation is enabled.
+ * Revision 1.3  2005/08/11 19:48:56  apbs
+ * TJD:  Additional Python wrapper updates for the vgrid directory.
  *
  ************************************************************************/
 
@@ -559,533 +559,11 @@ char *SWIG_GetPtr(char *_c, void **ptr, char *_t)
 #include "routines.h"
 #include "apbs/vgrid.h"
 
-
-#include <ctype.h>
-
-/*------------------------------------------------------------------
-  ptrcast(value,type)
-
-  Constructs a new pointer value.   Value may either be a string
-  or an integer. Type is a string corresponding to either the
-  C datatype or mangled datatype.
-
-  ptrcast(0,"Vector *")
-               or
-  ptrcast(0,"Vector_p")   
-  ------------------------------------------------------------------ */
-
-static PyObject *ptrcast(PyObject *_PTRVALUE, char *type) {
-
-  char *r,*s;
-  void *ptr;
-  PyObject *obj;
-  char *typestr,*c;
-
-  /* Produce a "mangled" version of the type string.  */
-
-  typestr = (char *) malloc(strlen(type)+2);
-  
-  /* Go through and munge the typestring */
-  
-  r = typestr;
-  *(r++) = '_';
-  c = type;
-  while (*c) {
-    if (!isspace(*c)) {
-      if ((*c == '*') || (*c == '&')) {
-	*(r++) = 'p';
-      }
-      else *(r++) = *c;
-    } else {
-        *(r++) = '_';
-    }
-    c++;
-  }
-  *(r++) = 0;
-
-  /* Check to see what kind of object _PTRVALUE is */
-  
-  if (PyInt_Check(_PTRVALUE)) {
-    ptr = (void *) PyInt_AsLong(_PTRVALUE);
-    /* Received a numerical value. Make a pointer out of it */
-    r = (char *) malloc(strlen(typestr)+22);
-    if (ptr) {
-      SWIG_MakePtr(r, ptr, typestr);
-    } else {
-      sprintf(r,"_0%s",typestr);
-    }
-    obj = PyString_FromString(r);
-    free(r);
-  } else if (PyString_Check(_PTRVALUE)) {
-    /* Have a real pointer value now.  Try to strip out the pointer
-       value */
-    s = PyString_AsString(_PTRVALUE);
-    r = (char *) malloc(strlen(type)+22);
-    
-    /* Now extract the pointer value */
-    if (!SWIG_GetPtr(s,&ptr,0)) {
-      if (ptr) {
-	SWIG_MakePtr(r,ptr,typestr);
-      } else {
-	sprintf(r,"_0%s",typestr);
-      }
-      obj = PyString_FromString(r);
-    } else {
-      obj = NULL;
-    }
-    free(r);
-  } else {
-    obj = NULL;
-  }
-  free(typestr);
-  if (!obj) 
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrcast. Argument is not a valid pointer value.");
-  return obj;
-}
-
-/*------------------------------------------------------------------
-  ptrvalue(ptr,type = 0)
-
-  Attempts to dereference a pointer value.  If type is given, it 
-  will try to use that type.  Otherwise, this function will attempt
-  to "guess" the proper datatype by checking against all of the 
-  builtin C datatypes. 
-  ------------------------------------------------------------------ */
-
-static PyObject *ptrvalue(PyObject *_PTRVALUE, int index, char *type) {
-  void     *ptr;
-  char     *s;
-  PyObject *obj;
-
-  if (!PyString_Check(_PTRVALUE)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrvalue. Argument is not a valid pointer value.");
-    return NULL;
-  }
-  s = PyString_AsString(_PTRVALUE);
-  if (SWIG_GetPtr(s,&ptr,0)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrvalue. Argument is not a valid pointer value.");
-    return NULL;
-  }
-
-  /* If no datatype was passed, try a few common datatypes first */
-
-  if (!type) {
-
-    /* No datatype was passed.   Type to figure out if it's a common one */
-
-    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
-      type = "int";
-    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
-      type = "double";
-    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
-      type = "short";
-    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
-      type = "long";
-    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
-      type = "float";
-    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
-      type = "char";
-    } else if (!SWIG_GetPtr(s,&ptr,"_char_pp")) {
-      type = "char *";
-    } else {
-      type = "unknown";
-    }
-  }
-
-  if (!ptr) {
-    PyErr_SetString(PyExc_TypeError,"Unable to dereference NULL pointer.");
-    return NULL;
-  }
-
-  /* Now we have a datatype.  Try to figure out what to do about it */
-  if (strcmp(type,"int") == 0) {
-    obj = PyInt_FromLong((long) *(((int *) ptr) + index));
-  } else if (strcmp(type,"double") == 0) {
-    obj = PyFloat_FromDouble((double) *(((double *) ptr)+index));
-  } else if (strcmp(type,"short") == 0) {
-    obj = PyInt_FromLong((long) *(((short *) ptr)+index));
-  } else if (strcmp(type,"long") == 0) {
-    obj = PyInt_FromLong((long) *(((long *) ptr)+index));
-  } else if (strcmp(type,"float") == 0) {
-    obj = PyFloat_FromDouble((double) *(((float *) ptr)+index));
-  } else if (strcmp(type,"char") == 0) {
-    obj = PyString_FromString(((char *) ptr)+index);
-  } else if (strcmp(type,"char *") == 0) {
-    char *c = *(((char **) ptr)+index);
-    if (c) obj = PyString_FromString(c);
-    else obj = PyString_FromString("NULL");
-  } else {
-    PyErr_SetString(PyExc_TypeError,"Unable to dereference unsupported datatype.");
-    return NULL;
-  }
-  return obj;
-}
-
-/*------------------------------------------------------------------
-  ptrcreate(type,value = 0,numelements = 1)
-
-  Attempts to create a new object of given type.  Type must be
-  a basic C datatype.  Will not create complex objects.
-  ------------------------------------------------------------------ */
-
-static PyObject *ptrcreate(char *type, PyObject *_PYVALUE, int numelements) {
-  void     *ptr;
-  PyObject *obj;
-  int       sz;
-  char     *cast;
-  char      temp[40];
-
-  /* Check the type string against a variety of possibilities */
-
-  if (strcmp(type,"int") == 0) {
-    sz = sizeof(int)*numelements;
-    cast = "_int_p";
-  } else if (strcmp(type,"short") == 0) {
-    sz = sizeof(short)*numelements;
-    cast = "_short_p";
-  } else if (strcmp(type,"long") == 0) {
-    sz = sizeof(long)*numelements;
-    cast = "_long_p";
-  } else if (strcmp(type,"double") == 0) {
-    sz = sizeof(double)*numelements;
-    cast = "_double_p";
-  } else if (strcmp(type,"float") == 0) {
-    sz = sizeof(float)*numelements;
-    cast = "_float_p";
-  } else if (strcmp(type,"char") == 0) {
-    sz = sizeof(char)*numelements;
-    cast = "_char_p";
-  } else if (strcmp(type,"char *") == 0) {
-    sz = sizeof(char *)*(numelements+1);
-    cast = "_char_pp";
-  } else {
-    PyErr_SetString(PyExc_TypeError,"Unable to create unknown datatype."); 
-    return NULL;
-  }
-   
-  /* Create the new object */
-  
-  ptr = (void *) malloc(sz);
-  if (!ptr) {
-    PyErr_SetString(PyExc_MemoryError,"Out of memory in swig_create."); 
-    return NULL;
-  }
-
-  /* Now try to set its default value */
-
-  if (_PYVALUE) {
-    if (strcmp(type,"int") == 0) {
-      int *ip,i,ivalue;
-      ivalue = (int) PyInt_AsLong(_PYVALUE);
-      ip = (int *) ptr;
-      for (i = 0; i < numelements; i++)
-	ip[i] = ivalue;
-    } else if (strcmp(type,"short") == 0) {
-      short *ip,ivalue;
-      int i;
-      ivalue = (short) PyInt_AsLong(_PYVALUE);
-      ip = (short *) ptr;
-      for (i = 0; i < numelements; i++)
-	ip[i] = ivalue;
-    } else if (strcmp(type,"long") == 0) {
-      long *ip,ivalue;
-      int i;
-      ivalue = (long) PyInt_AsLong(_PYVALUE);
-      ip = (long *) ptr;
-      for (i = 0; i < numelements; i++)
-	ip[i] = ivalue;
-    } else if (strcmp(type,"double") == 0) {
-      double *ip,ivalue;
-      int i;
-      ivalue = (double) PyFloat_AsDouble(_PYVALUE);
-      ip = (double *) ptr;
-      for (i = 0; i < numelements; i++)
-	ip[i] = ivalue;
-    } else if (strcmp(type,"float") == 0) {
-      float *ip,ivalue;
-      int i;
-      ivalue = (float) PyFloat_AsDouble(_PYVALUE);
-      ip = (float *) ptr;
-      for (i = 0; i < numelements; i++)
-	ip[i] = ivalue;
-    } else if (strcmp(type,"char") == 0) {
-      char *ip,*ivalue;
-      ivalue = (char *) PyString_AsString(_PYVALUE);
-      ip = (char *) ptr;
-      strncpy(ip,ivalue,numelements-1);
-    } else if (strcmp(type,"char *") == 0) {
-      char **ip, *ivalue;
-      int  i;
-      ivalue = (char *) PyString_AsString(_PYVALUE);
-      ip = (char **) ptr;
-      for (i = 0; i < numelements; i++) {
-	if (ivalue) {
-	  ip[i] = (char *) malloc(strlen(ivalue)+1);
-	  strcpy(ip[i],ivalue);
-	} else {
-	  ip[i] = 0;
-	}
-      }
-      ip[numelements] = 0;
-    }
-  } 
-  /* Create the pointer value */
-  
-  SWIG_MakePtr(temp,ptr,cast);
-  obj = PyString_FromString(temp);
-  return obj;
-}
-
-
-/*------------------------------------------------------------------
-  ptrset(ptr,value,index = 0,type = 0)
-
-  Attempts to set the value of a pointer variable.  If type is
-  given, we will use that type.  Otherwise, we'll guess the datatype.
-  ------------------------------------------------------------------ */
-
-static PyObject *ptrset(PyObject *_PTRVALUE, PyObject *_PYVALUE, int index, char *type) {
-  void     *ptr;
-  char     *s;
-  PyObject *obj;
-
-  if (!PyString_Check(_PTRVALUE)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrset. Argument is not a valid pointer value.");
-    return NULL;
-  }
-  s = PyString_AsString(_PTRVALUE);
-  if (SWIG_GetPtr(s,&ptr,0)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrset. Argument is not a valid pointer value.");
-    return NULL;
-  }
-
-  /* If no datatype was passed, try a few common datatypes first */
-
-  if (!type) {
-
-    /* No datatype was passed.   Type to figure out if it's a common one */
-
-    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
-      type = "int";
-    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
-      type = "double";
-    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
-      type = "short";
-    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
-      type = "long";
-    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
-      type = "float";
-    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
-      type = "char";
-    } else if (!SWIG_GetPtr(s,&ptr,"_char_pp")) {
-      type = "char *";
-    } else {
-      type = "unknown";
-    }
-  }
-
-  if (!ptr) {
-    PyErr_SetString(PyExc_TypeError,"Unable to set NULL pointer.");
-    return NULL;
-  }
-  
-  /* Now we have a datatype.  Try to figure out what to do about it */
-  if (strcmp(type,"int") == 0) {
-    *(((int *) ptr)+index) = (int) PyInt_AsLong(_PYVALUE);
-  } else if (strcmp(type,"double") == 0) {
-    *(((double *) ptr)+index) = (double) PyFloat_AsDouble(_PYVALUE);
-  } else if (strcmp(type,"short") == 0) {
-    *(((short *) ptr)+index) = (short) PyInt_AsLong(_PYVALUE);
-  } else if (strcmp(type,"long") == 0) {
-    *(((long *) ptr)+index) = (long) PyInt_AsLong(_PYVALUE);
-  } else if (strcmp(type,"float") == 0) {
-    *(((float *) ptr)+index) = (float) PyFloat_AsDouble(_PYVALUE);
-  } else if (strcmp(type,"char") == 0) {
-    char *c = PyString_AsString(_PYVALUE);
-    strcpy(((char *) ptr)+index, c);
-  } else if (strcmp(type,"char *") == 0) {
-    char *c = PyString_AsString(_PYVALUE);
-    char **ca = (char **) ptr;
-    if (ca[index]) free(ca[index]);
-    if (strcmp(c,"NULL") == 0) {
-      ca[index] = 0;
-    } else {
-      ca[index] = (char *) malloc(strlen(c)+1);
-      strcpy(ca[index],c);
-    }
-  } else {
-    PyErr_SetString(PyExc_TypeError,"Unable to set unsupported datatype.");
-    return NULL;
-  }
-  Py_INCREF(Py_None);
-  return Py_None;
-}
-
-
-/*------------------------------------------------------------------
-  ptradd(ptr,offset)
-
-  Adds a value to an existing pointer value.  Will do a type-dependent
-  add for basic datatypes.  For other datatypes, will do a byte-add.
-  ------------------------------------------------------------------ */
-
-static PyObject *ptradd(PyObject *_PTRVALUE, int offset) {
-
-  char *r,*s;
-  void *ptr,*junk;
-  PyObject *obj;
-  char *type;
-
-  /* Check to see what kind of object _PTRVALUE is */
-  
-  if (PyString_Check(_PTRVALUE)) {
-    /* Have a potential pointer value now.  Try to strip out the value */
-    s = PyString_AsString(_PTRVALUE);
-
-    /* Try to handle a few common datatypes first */
-
-    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
-      ptr = (void *) (((int *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
-      ptr = (void *) (((double *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
-      ptr = (void *) (((short *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
-      ptr = (void *) (((long *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
-      ptr = (void *) (((float *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
-      ptr = (void *) (((char *) ptr) + offset);
-    } else if (!SWIG_GetPtr(s,&ptr,0)) {
-      ptr = (void *) (((char *) ptr) + offset);
-    } else {
-      PyErr_SetString(PyExc_TypeError,"Type error in ptradd. Argument is not a valid pointer value.");
-      return NULL;
-    }
-    type = SWIG_GetPtr(s,&junk,"INVALID POINTER");
-    r = (char *) malloc(strlen(type)+20);
-    if (ptr) {
-      SWIG_MakePtr(r,ptr,type);
-    } else {
-      sprintf(r,"_0%s",type);
-    }
-    obj = PyString_FromString(r);
-    free(r);
-  }
-  return obj;
-}
-
-/*------------------------------------------------------------------
-  ptrmap(type1,type2)
-
-  Allows a mapping between type1 and type2. (Like a typedef)
-  ------------------------------------------------------------------ */
-
-static void ptrmap(char *type1, char *type2) {
-
-  char *typestr1,*typestr2,*c,*r;
-
-  /* Produce a "mangled" version of the type string.  */
-
-  typestr1 = (char *) malloc(strlen(type1)+2);
-  
-  /* Go through and munge the typestring */
-  
-  r = typestr1;
-  *(r++) = '_';
-  c = type1;
-  while (*c) {
-    if (!isspace(*c)) {
-      if ((*c == '*') || (*c == '&')) {
-	*(r++) = 'p';
-      }
-      else *(r++) = *c;
-    } else {
-      *(r++) = '_';
-    }
-    c++;
-  }
-  *(r++) = 0;
-  
-  typestr2 = (char *) malloc(strlen(type2)+2);
-
-  /* Go through and munge the typestring */
-  
-  r = typestr2;
-  *(r++) = '_';
-  c = type2;
-  while (*c) {
-    if (!isspace(*c)) {
-      if ((*c == '*') || (*c == '&')) {
-	*(r++) = 'p';
-      }
-      else *(r++) = *c;
-    } else {
-      *(r++) = '_';
-    }
-    c++;
-  }
-  *(r++) = 0;
-  SWIG_RegisterMapping(typestr1,typestr2,0);
-  SWIG_RegisterMapping(typestr2,typestr1,0);
-}
-
-/*------------------------------------------------------------------
-  ptrfree(ptr)
-
-  Destroys a pointer value
-  ------------------------------------------------------------------ */
-
-PyObject *ptrfree(PyObject *_PTRVALUE) {
-  void *ptr, *junk;
-  char *s;
-
-  if (!PyString_Check(_PTRVALUE)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrfree. Argument is not a valid pointer value.");
-    return NULL;
-  }
-  s = PyString_AsString(_PTRVALUE);
-  if (SWIG_GetPtr(s,&ptr,0)) {
-    PyErr_SetString(PyExc_TypeError,"Type error in ptrfree. Argument is not a valid pointer value.");
-    return NULL;
-  }
-
-  /* Check to see if this pointer is a char ** */
-  if (!SWIG_GetPtr(s,&junk,"_char_pp")) {
-    char **c = (char **) ptr;
-    if (c) {
-      int i = 0;
-      while (c[i]) {
-	free(c[i]);
-	i++;
-      }
-    }
-  } 
-  if (ptr)
-    free((char *) ptr);
-
-  Py_INCREF(Py_None);
-  return Py_None;
-}
-
-
 double *null_array(){
      return NULL;
 }
 
-double *double_array(int size) {
-     return (double *) malloc(size*sizeof(double));
-  }
-
-double get_entry(double *array, int i){
-	return array[i];
-  }
-
-void set_entry(double *array, int i, double val){
-	array[i] = val;
-  }
-
-void delVgrid(Vgrid *thee){
+void delete_vgrid(Vgrid *thee){
     if (thee != VNULL) {
         Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
           (void **)&(thee->data));
@@ -1093,159 +571,64 @@ void delVgrid(Vgrid *thee){
         thee = VNULL;
     }
 }
-extern Vgrid *Vgrid_ctor(int ,int ,int ,double ,double ,double ,double ,double ,double ,double *);
 extern int Vgrid_ctor2(Vgrid *,int ,int ,int ,double ,double ,double ,double ,double ,double ,double *);
-extern int Vgrid_value(Vgrid *,double [3],double *);
 extern void Vgrid_dtor(Vgrid **);
 extern void Vgrid_dtor2(Vgrid *);
-extern int Vgrid_curvature(Vgrid *,double [3],int ,double *);
-extern int Vgrid_gradient(Vgrid *,double [3],double [3]);
 extern void Vgrid_writeUHBD(Vgrid *,const char *,const char *,const char *,const char *,char *,double *);
 extern void Vgrid_writeDX(Vgrid *,const char *,const char *,const char *,const char *,char *,double *);
 extern int Vgrid_readDX(Vgrid *,const char *,const char *,const char *,const char *);
 extern void startVio();
-static PyObject *_wrap_ptrcast(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    PyObject * _arg0;
-    char * _arg1;
-    PyObject * _obj0 = 0;
 
-    self = self;
-    if(!PyArg_ParseTuple(args,"Os:ptrcast",&_obj0,&_arg1)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-    _result = (PyObject *)ptrcast(_arg0,_arg1);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_ptrvalue(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    PyObject * _arg0;
-    int  _arg1 = 0;
-    char * _arg2 = 0;
-    PyObject * _obj0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O|is:ptrvalue",&_obj0,&_arg1,&_arg2)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-    _result = (PyObject *)ptrvalue(_arg0,_arg1,_arg2);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    PyObject*   o3;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
 }
 
-static PyObject *_wrap_ptrset(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    PyObject * _arg0;
-    PyObject * _arg1;
-    int  _arg2 = 0;
-    char * _arg3 = 0;
-    PyObject * _obj0 = 0;
-    PyObject * _obj1 = 0;
+static PyObject* t_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    PyObject*   o3;
 
-    self = self;
-    if(!PyArg_ParseTuple(args,"OO|is:ptrset",&_obj0,&_obj1,&_arg2,&_arg3)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-{
-  _arg1 = _obj1;
-}
-    _result = (PyObject *)ptrset(_arg0,_arg1,_arg2,_arg3);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyTuple_Check(target)) {
+            o2 = target;
+            target = PyTuple_New(1);
+            PyTuple_SetItem(target, 0, o2);
+        }
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
-static PyObject *_wrap_ptrcreate(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    char * _arg0;
-    PyObject * _arg1 = 0;
-    int  _arg2 = 1;
-    PyObject * _obj1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s|Oi:ptrcreate",&_arg0,&_obj1,&_arg2)) 
-        return NULL;
-    if (_obj1)
-{
-  _arg1 = _obj1;
+        o2 = target;
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
+        Py_DECREF(o3);
+    }
+    return target;
 }
-    _result = (PyObject *)ptrcreate(_arg0,_arg1,_arg2);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_ptrfree(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    PyObject * _arg0;
-    PyObject * _obj0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O:ptrfree",&_obj0)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-    _result = (PyObject *)ptrfree(_arg0);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_ptradd(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    PyObject * _result;
-    PyObject * _arg0;
-    int  _arg1;
-    PyObject * _obj0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"Oi:ptradd",&_obj0,&_arg1)) 
-        return NULL;
-{
-  _arg0 = _obj0;
-}
-    _result = (PyObject *)ptradd(_arg0,_arg1);
-{
-  _resultobj = _result;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_ptrmap(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    char * _arg0;
-    char * _arg1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:ptrmap",&_arg0,&_arg1)) 
-        return NULL;
-    ptrmap(_arg0,_arg1);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
+extern int Vgrid_value(Vgrid *,double [3],double *);
+extern int Vgrid_curvature(Vgrid *,double [3],int ,double *);
+extern int Vgrid_gradient(Vgrid *,double [3],double [3]);
+extern Vgrid *Vgrid_ctor(int ,int ,int ,double ,double ,double ,double ,double ,double ,double *);
 static PyObject *_wrap_null_array(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     double * _result;
@@ -1260,112 +643,23 @@ static PyObject *_wrap_null_array(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_double_array(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double * _result;
-    int  _arg0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"i:double_array",&_arg0)) 
-        return NULL;
-    _result = (double *)double_array(_arg0);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_double_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-static PyObject *_wrap_get_entry(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double  _result;
-    double * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:get_entry",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of get_entry. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (double )get_entry(_arg0,_arg1);
-    _resultobj = Py_BuildValue("d",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_set_entry(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    double * _arg0;
-    int  _arg1;
-    double  _arg2;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sid:set_entry",&_argc0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of set_entry. Expected _double_p.");
-        return NULL;
-        }
-    }
-    set_entry(_arg0,_arg1,_arg2);
-    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_delVgrid(PyObject *self, PyObject *args) {
+static PyObject *_wrap_delete_vgrid(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     Vgrid * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:delVgrid",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:delete_vgrid",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delVgrid. Expected _Vgrid_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_vgrid. Expected _Vgrid_p.");
         return NULL;
         }
     }
-    delVgrid(_arg0);
+    delete_vgrid(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_Vgrid_ctor(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    Vgrid * _result;
-    int  _arg0;
-    int  _arg1;
-    int  _arg2;
-    double  _arg3;
-    double  _arg4;
-    double  _arg5;
-    double  _arg6;
-    double  _arg7;
-    double  _arg8;
-    double * _arg9;
-    char * _argc9 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"iiidddddds:Vgrid_ctor",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_argc9)) 
-        return NULL;
-    if (_argc9) {
-        if (SWIG_GetPtr(_argc9,(void **) &_arg9,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 10 of Vgrid_ctor. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (Vgrid *)Vgrid_ctor(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
-    SWIG_MakePtr(_ptemp, (char *) _result,"_Vgrid_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -1402,42 +696,6 @@ static PyObject *_wrap_Vgrid_ctor2(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )Vgrid_ctor2(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9,_arg10);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_Vgrid_value(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    Vgrid * _arg0;
-    double * _arg1;
-    double * _arg2;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char * _argc2 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sss:Vgrid_value",&_argc0,&_argc1,&_argc2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_value. Expected _Vgrid_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vgrid_value. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of Vgrid_value. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (int )Vgrid_value(_arg0,_arg1,_arg2);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -1479,79 +737,6 @@ static PyObject *_wrap_Vgrid_dtor2(PyObject *self, PyObject *args) {
     Vgrid_dtor2(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_Vgrid_curvature(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    Vgrid * _arg0;
-    double * _arg1;
-    int  _arg2;
-    double * _arg3;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char * _argc3 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ssis:Vgrid_curvature",&_argc0,&_argc1,&_arg2,&_argc3)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_curvature. Expected _Vgrid_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vgrid_curvature. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc3) {
-        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of Vgrid_curvature. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (int )Vgrid_curvature(_arg0,_arg1,_arg2,_arg3);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_Vgrid_gradient(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    Vgrid * _arg0;
-    double * _arg1;
-    double * _arg2;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char * _argc2 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sss:Vgrid_gradient",&_argc0,&_argc1,&_argc2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_gradient. Expected _Vgrid_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of Vgrid_gradient. Expected _double_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_double_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of Vgrid_gradient. Expected _double_p.");
-        return NULL;
-        }
-    }
-    _result = (int )Vgrid_gradient(_arg0,_arg1,_arg2);
-    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -1654,6 +839,246 @@ static PyObject *_wrap_startVio(PyObject *self, PyObject *args) {
     startVio();
     Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vgrid_value(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    Vgrid * _arg0;
+    double * _arg1;
+    double * _arg2;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+    double  temp;
+    PyObject * _obj2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sOO:Vgrid_value",&_argc0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_value. Expected _Vgrid_p.");
+        return NULL;
+        }
+    }
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj1)) {
+    int size = PyList_Size(_obj1);
+    int i = 0;
+    _arg1 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj1,i);
+      if (PyFloat_Check(o))
+	    _arg1[i] = PyFloat_AsDouble(PyList_GetItem(_obj1,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg1);
+	    return NULL;
+      }
+    }
+    _arg1[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  temp = PyFloat_AsDouble(_obj2);
+  _arg2 = &temp;
+}
+    _result = (int )Vgrid_value(_arg0,_arg1,_arg2);
+    _resultobj = Py_BuildValue("i",_result);
+{
+    PyObject *o;
+    o = PyFloat_FromDouble((double) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vgrid_curvature(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    Vgrid * _arg0;
+    double * _arg1;
+    int  _arg2;
+    double * _arg3;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj3 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sOiO:Vgrid_curvature",&_argc0,&_obj1,&_arg2,&_obj3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_curvature. Expected _Vgrid_p.");
+        return NULL;
+        }
+    }
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj1)) {
+    int size = PyList_Size(_obj1);
+    int i = 0;
+    _arg1 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj1,i);
+      if (PyFloat_Check(o))
+	    _arg1[i] = PyFloat_AsDouble(PyList_GetItem(_obj1,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg1);
+	    return NULL;
+      }
+    }
+    _arg1[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj3)) {
+    int size = PyList_Size(_obj3);
+    int i = 0;
+    _arg3 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj3,i);
+      if (PyFloat_Check(o))
+	    _arg3[i] = PyFloat_AsDouble(PyList_GetItem(_obj3,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg3);
+	    return NULL;
+      }
+    }
+    _arg3[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+    _result = (int )Vgrid_curvature(_arg0,_arg1,_arg2,_arg3);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vgrid_gradient(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    Vgrid * _arg0;
+    double * _arg1;
+    double * _arg2;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sOO:Vgrid_gradient",&_argc0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_Vgrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of Vgrid_gradient. Expected _Vgrid_p.");
+        return NULL;
+        }
+    }
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj1)) {
+    int size = PyList_Size(_obj1);
+    int i = 0;
+    _arg1 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj1,i);
+      if (PyFloat_Check(o))
+	    _arg1[i] = PyFloat_AsDouble(PyList_GetItem(_obj1,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg1);
+	    return NULL;
+      }
+    }
+    _arg1[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj2)) {
+    int size = PyList_Size(_obj2);
+    int i = 0;
+    _arg2 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj2,i);
+      if (PyFloat_Check(o))
+	    _arg2[i] = PyFloat_AsDouble(PyList_GetItem(_obj2,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg2);
+	    return NULL;
+      }
+    }
+    _arg2[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+    _result = (int )Vgrid_gradient(_arg0,_arg1,_arg2);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_Vgrid_ctor(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    Vgrid * _result;
+    int  _arg0;
+    int  _arg1;
+    int  _arg2;
+    double  _arg3;
+    double  _arg4;
+    double  _arg5;
+    double  _arg6;
+    double  _arg7;
+    double  _arg8;
+    double * _arg9;
+    PyObject * _obj9 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"iiiddddddO:Vgrid_ctor",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4,&_arg5,&_arg6,&_arg7,&_arg8,&_obj9)) 
+        return NULL;
+{
+  /* Check if is a list */
+  if (PyList_Check(_obj9)) {
+    int size = PyList_Size(_obj9);
+    int i = 0;
+    _arg9 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem(_obj9,i);
+      if (PyFloat_Check(o))
+	    _arg9[i] = PyFloat_AsDouble(PyList_GetItem(_obj9,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free(_arg9);
+	    return NULL;
+      }
+    }
+    _arg9[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+    _result = (Vgrid *)Vgrid_ctor(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5,_arg6,_arg7,_arg8,_arg9);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_Vgrid_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -2157,29 +1582,19 @@ static PyMethodDef vgridcMethods[] = {
 	 { "Vgrid_nx_set", _wrap_Vgrid_nx_set, 1 },
 	 { "delete_Vgrid", _wrap_delete_Vgrid, 1 },
 	 { "new_Vgrid", _wrap_new_Vgrid, 1 },
+	 { "Vgrid_ctor", _wrap_Vgrid_ctor, 1 },
+	 { "Vgrid_gradient", _wrap_Vgrid_gradient, 1 },
+	 { "Vgrid_curvature", _wrap_Vgrid_curvature, 1 },
+	 { "Vgrid_value", _wrap_Vgrid_value, 1 },
 	 { "startVio", _wrap_startVio, 1 },
 	 { "Vgrid_readDX", _wrap_Vgrid_readDX, 1 },
 	 { "Vgrid_writeDX", _wrap_Vgrid_writeDX, 1 },
 	 { "Vgrid_writeUHBD", _wrap_Vgrid_writeUHBD, 1 },
-	 { "Vgrid_gradient", _wrap_Vgrid_gradient, 1 },
-	 { "Vgrid_curvature", _wrap_Vgrid_curvature, 1 },
 	 { "Vgrid_dtor2", _wrap_Vgrid_dtor2, 1 },
 	 { "Vgrid_dtor", _wrap_Vgrid_dtor, 1 },
-	 { "Vgrid_value", _wrap_Vgrid_value, 1 },
 	 { "Vgrid_ctor2", _wrap_Vgrid_ctor2, 1 },
-	 { "Vgrid_ctor", _wrap_Vgrid_ctor, 1 },
-	 { "delVgrid", _wrap_delVgrid, 1 },
-	 { "set_entry", _wrap_set_entry, 1 },
-	 { "get_entry", _wrap_get_entry, 1 },
-	 { "double_array", _wrap_double_array, 1 },
+	 { "delete_vgrid", _wrap_delete_vgrid, 1 },
 	 { "null_array", _wrap_null_array, 1 },
-	 { "ptrmap", _wrap_ptrmap, 1 },
-	 { "ptradd", _wrap_ptradd, 1 },
-	 { "ptrfree", _wrap_ptrfree, 1 },
-	 { "ptrcreate", _wrap_ptrcreate, 1 },
-	 { "ptrset", _wrap_ptrset, 1 },
-	 { "ptrvalue", _wrap_ptrvalue, 1 },
-	 { "ptrcast", _wrap_ptrcast, 1 },
 	 { NULL, NULL }
 };
 static PyObject *SWIG_globals;

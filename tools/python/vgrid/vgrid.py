@@ -75,57 +75,20 @@ class Vgrid(VgridPtr):
 
 #-------------- FUNCTION WRAPPERS ------------------
 
-ptrcast = vgridc.ptrcast
-
-ptrvalue = vgridc.ptrvalue
-
-ptrset = vgridc.ptrset
-
-ptrcreate = vgridc.ptrcreate
-
-ptrfree = vgridc.ptrfree
-
-ptradd = vgridc.ptradd
-
-ptrmap = vgridc.ptrmap
-
 null_array = vgridc.null_array
 
-double_array = vgridc.double_array
-
-get_entry = vgridc.get_entry
-
-set_entry = vgridc.set_entry
-
-def delVgrid(arg0):
-    val = vgridc.delVgrid(arg0.this)
-    return val
-
-def Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9):
-    val = vgridc.Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
-    val = VgridPtr(val)
+def delete_vgrid(arg0):
+    val = vgridc.delete_vgrid(arg0.this)
     return val
 
 def Vgrid_ctor2(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10):
     val = vgridc.Vgrid_ctor2(arg0.this,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10)
     return val
 
-def Vgrid_value(arg0,arg1,arg2):
-    val = vgridc.Vgrid_value(arg0.this,arg1,arg2)
-    return val
-
 Vgrid_dtor = vgridc.Vgrid_dtor
 
 def Vgrid_dtor2(arg0):
     val = vgridc.Vgrid_dtor2(arg0.this)
-    return val
-
-def Vgrid_curvature(arg0,arg1,arg2,arg3):
-    val = vgridc.Vgrid_curvature(arg0.this,arg1,arg2,arg3)
-    return val
-
-def Vgrid_gradient(arg0,arg1,arg2):
-    val = vgridc.Vgrid_gradient(arg0.this,arg1,arg2)
     return val
 
 def Vgrid_writeUHBD(arg0,arg1,arg2,arg3,arg4,arg5,arg6):
@@ -141,6 +104,23 @@ def Vgrid_readDX(arg0,arg1,arg2,arg3,arg4):
     return val
 
 startVio = vgridc.startVio
+
+def Vgrid_value(arg0,arg1,arg2):
+    val = vgridc.Vgrid_value(arg0.this,arg1,arg2)
+    return val
+
+def Vgrid_curvature(arg0,arg1,arg2,arg3):
+    val = vgridc.Vgrid_curvature(arg0.this,arg1,arg2,arg3)
+    return val
+
+def Vgrid_gradient(arg0,arg1,arg2):
+    val = vgridc.Vgrid_gradient(arg0.this,arg1,arg2)
+    return val
+
+def Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9):
+    val = vgridc.Vgrid_ctor(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9)
+    val = VgridPtr(val)
+    return val
 
 
 

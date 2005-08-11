@@ -62,7 +62,7 @@ def main():
     # *************** APBS INITIALIZATION ******************* 
 
     stdout.write(header)
-    data = double_array(3)
+    data = []
 
     stdout.write("main:  Reading data from %s... \n" % inpath)
     grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, data)
@@ -112,18 +112,15 @@ def main():
     kmax = min(kmax, nz-1)
 
     stdout.write("#  \tY POS\t\tAVERAGE\n")
-    pt = double_array(3)
-    val = ptrcreate("double",0.0)
     for j in range(jmin, jmax):
         avg = 0.0
         navg = 0
         for k in range(kmin, kmax):
             for i in range(imin, imax):
-                set_entry(pt, 0, i)
-                set_entry(pt, 1, j)
-                set_entry(pt, 2, k)
-                if Vgrid_value(grid, pt, val):
-                    value = ptrvalue(val)
+                pt = [i,j,k]
+                val = 0.0
+                ret, value = Vgrid_value(grid, pt, val)
+                if ret:
                     avg = avg + value
                     navg = navg + 1
 
