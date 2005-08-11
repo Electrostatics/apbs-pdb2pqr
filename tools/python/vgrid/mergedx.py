@@ -7,7 +7,7 @@
     Washington University in St. Louis
 """
 
-__date__ = "2 April 2004"
+__date__ = "11 August 2005"
 __author__ = "Todd Dolinsky"
 
 VSMALL = 1.0e-9
@@ -132,6 +132,14 @@ def createGrid(inputpath, root):
      
     size = pdime[0] * pdime[1] * pdime[2]
 
+    myxmin = None
+    myymin = None
+    myzmin = None
+    myhx = None
+    myhy = None
+    myhz = None
+    mydata = []
+    
     # Read each dx file
 
     for i in range(size):
@@ -153,7 +161,7 @@ def createGrid(inputpath, root):
             print "Unable to find file %s!" % filename
             sys.exit()
 
-        data = double_array(3)
+        data = []
         grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, data)
 
         print "Reading dx file %s..." % filename
@@ -171,15 +179,15 @@ def createGrid(inputpath, root):
         # If this is the first processor, initialize the merged grid
 
         if i == 0: # Initialize merged grid
-            hx = fglen[0]/(glob[0] - 1)
-            hy = fglen[1]/(glob[1] - 1)
-            hzed = fglen[2]/(glob[2] - 1)
-            mydata = double_array(glob[0]*glob[1]*glob[2])
+            myhx = fglen[0]/(glob[0] - 1)
+            myhy = fglen[1]/(glob[1] - 1)
+            myhzed = fglen[2]/(glob[2] - 1)
+            myxmin = grid.xmin
+            myymin = grid.ymin
+            myzmin = grid.zmin         
             for j in range(glob[0]*glob[1]*glob[2]):
-                ptrset(mydata, 0.0, j)
+                mydata.append(0.0)
                 myaccess.append(0)
-            mygrid = Vgrid_ctor(glob[0], glob[1], glob[2], hx, hy, hzed,
-                                grid.xmin, grid.ymin, grid.zmin, mydata)
 
         # If this processor is the last in a given direction, do a sanity check
 
@@ -210,21 +218,21 @@ def createGrid(inputpath, root):
                 jval = grid.ymin + y*grid.hy
                 for z in range(grid.nz):
                     kval = grid.zmin + z*grid.hzed
-                    val = ptrcreate("double",0.0)
-                    pt = double_array(3)
-                    set_entry(pt, 0, ival)
-                    set_entry(pt, 1, jval)
-                    set_entry(pt, 2, kval)
-                    if Vgrid_value(grid, pt, val):
-                        value = ptrvalue(val)
+                    inval = 0.0
+                    pt = [ival, jval, kval]
+                    ret, value = Vgrid_value(grid, pt, inval)
+                    if ret:
                         location = IJK(glob[0], glob[1], glob[2], (x+mins[0]), (y+mins[1]), (z+mins[2]))
                         myaccess[location] += 1
-                        ptrset(mydata,value,location)
-                        ptrfree(val)
+                        mydata[location] = value
                     else:
                         print ival, jval, kval
                         print "Could not find gridpoint %i %i %i in grid %s!" % (x,y,z, filename)
                         sys.exit()
+
+        # Delete this grid object
+
+        delete_vgrid(grid)
 
     # Make sure all values of the grid were accessed
 
@@ -239,6 +247,12 @@ def createGrid(inputpath, root):
                 elif myaccess[location] > 1: #Pt. on multiple grids: Error!                    
                     print "Error: Multiple grids attempted to access gridpoint %i %i %i in the global grid!" % (i,j,k)
                     sys.exit()
+
+                
+    # Make the grid
+    
+    mygrid = Vgrid_ctor(glob[0], glob[1], glob[2], myhx, myhy, myhzed,
+                        myxmin, myymin, myzmin, mydata)
 
     return mygrid
                 
@@ -276,11 +290,9 @@ def resampleGrid(grid, nx, ny, nz):
     hxnew = (xmax - xmin)/(nx - 1)
     hynew = (ymax - ymin)/(ny - 1)
     hznew = (zmax - zmin)/(nz - 1)
-    mydata = double_array(nx*ny*nz)
-    for i in range(nx*ny*nz): ptrset(mydata, 0.0, i)
-    newgrid = Vgrid_ctor(nx, ny, nz, hxnew, hynew, hznew,
-                         xmin, ymin, zmin, mydata)
-
+    mydata = []
+    for i in range(nx*ny*nz): mydata.append(0.0)
+    
     # Populate the new grid
 
     for x in range(nx):
@@ -289,21 +301,23 @@ def resampleGrid(grid, nx, ny, nz):
             jval = ymin + y*hynew
             for z in range(nz):
                 kval = zmin + z*hznew
-                val = ptrcreate("double",0.0)
-                pt = double_array(3)
-                set_entry(pt, 0, ival)
-                set_entry(pt, 1, jval)
-                set_entry(pt, 2, kval)
-                if Vgrid_value(grid, pt, val):
-                    value = ptrvalue(val)
+                pt = [ival, jval, kval]
+                inval = 0.0
+                ret, value = Vgrid_value(grid, pt, inval)
+                if ret:
                     location = IJK(nx, ny, nz, x,y,z)
                     if (value < VSMALL and value > 0): value = 0.0
-                    ptrset(mydata,value,location)
-                    ptrfree(val)
+                    mydata[location] = value
                 else:
                     print "Could not find gridpoint %i %i %i in grid %s!" % (x,y,z, filename)
                     sys.exit()
 
+    # Delete the old grid
+    delete_vgrid(grid)
+
+    # Make the new grid
+    newgrid = Vgrid_ctor(nx, ny, nz, hxnew, hynew, hznew,
+                         xmin, ymin, zmin, mydata)
     return newgrid
 
 def printGrid(mygrid, outpath):
@@ -316,8 +330,8 @@ def printGrid(mygrid, outpath):
     """
     print "Writing output to %s..." % outpath
     title = "Merged Grid from mergedx.py"
-    Vgrid_writeDX(mygrid, "FILE", "ASC", "", outpath,title,null_array());
-
+    Vgrid_writeDX(mygrid, "FILE", "ASC", "", outpath,title, null_array());
+   
 def usage():
     """
         Print usage information
@@ -359,7 +373,6 @@ def main():
     """
     shortOptlist = "h"
     longOptlist = ["help","out=","nx=","ny=","nz="]
-    
     try: opts, args = getopt.getopt(sys.argv[1:], shortOptlist, longOptlist)
     except getopt.GetoptError, details:
         sys.stderr.write("GetoptError:  %s\n" % details)
@@ -370,7 +383,6 @@ def main():
     ny = None
     nz = None
     resample = 0
-    
     for o,a in opts:
         if o in ("-h","--help"):
             usage()
@@ -383,7 +395,7 @@ def main():
             ny = int(a)
         elif o == "--nz":
             nz = int(a)
-    
+ 
     if (nx != None and ny != None and nz != None):
         resample = 1
     elif (nx == None and ny == None and nz == None):
@@ -411,5 +423,8 @@ def main():
     if resample:
         mygrid = resampleGrid(mygrid,nx,ny,nz)
     printGrid(mygrid, outpath)
+
+    # If we're outputting back to stdout, delete the grid
+    delete_vgrid(mygrid)
     
 if __name__ == "__main__": main()
