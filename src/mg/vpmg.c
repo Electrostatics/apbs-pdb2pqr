@@ -3402,6 +3402,296 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
     } /* endfor (each atom) */
 }
 
+VPRIVATE double bspline4(double x) {
+
+    double m, m2;
+    static double one6 = 1.0/6.0;
+    static double one8 = 1.0/8.0;
+    static double one24 = 1.0/24.0;
+    static double thirteen24 = 13.0/24.0;
+    static double fourtyseven24 = 47.0/24.0;
+    static double seventeen24 = 17.0/24.0;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      m = x*x;
+      return one24*m*m;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -one8 + one6*x + m2*(0.25 + one6*m - one6*m2);
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return -thirteen24 + 0.5*x + m2*(-0.25 - 0.5*m + 0.25*m2);
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return fourtyseven24 - 0.5*x + m2*(-0.25 + 0.5*m - one6*m2);
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return seventeen24 - one6*x + m2*(0.25 - one6*m + one24*m2);
+    } else {
+      return 0.0;
+    }
+}
+
+VPRIVATE double dbspline4(double x) {
+
+    double m, m2;
+    static double one6 = 1.0/6.0;
+    static double one3 = 1.0/3.0;
+    static double two3 = 2.0/3.0;
+    static double thirteen6 = 13.0/6.0;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      m2 = x*x;
+      return one6*x*m2;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -one3 + 0.5*x + m2*(0.5 - two3*m);
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return 1.5 - 0.5*x + m2*(-1.5 + m);
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return 1.0 - 0.5*x + m2*(1.5 - two3*m);
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return -thirteen6 + 0.5*x + m2*(-0.5 + one6*m);
+    } else {
+      return 0.0;
+    }
+}
+
+VPRIVATE double d2bspline4(double x) {
+
+    double m, m2;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      return 0.5*x*x;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -0.5 + x - 2.0*m2;
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return 5.5 - 3.0*x + 3.0*m2;
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return -9.5 + 3.0*x - 2.0*m2;
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return 4.5 - x + 0.5*m2;
+    } else {
+      return 0.0;
+    }
+}
+
+VPRIVATE double d3bspline4(double x) {
+
+    if      ((x > 0.0) && (x <= 1.0)) return x;
+    else if ((x > 1.0) && (x <= 2.0)) return 5.0 - 4.0 * x;
+    else if ((x > 2.0) && (x <= 3.0)) return -15.0 + 6.0 * x;
+    else if ((x > 3.0) && (x <= 4.0)) return 15.0 - 4.0 * x;
+    else if ((x > 4.0) && (x <= 5.0)) return x - 5.0;
+    else                              return 0.0;
+}
+
+VPRIVATE void fillcoChargeSpline4(Vpmg *thee) {
+
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    double xmin, xmax, ymin, ymax, zmin, zmax, zmagic;
+    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat;
+    double charge, hx, hy, hzed, *apos, mx, my, mz;
+    double *uind,*rpole,debye;
+    double c,ux,uix,uy,uiy,uz,uiz,qxx,qyx,qyy,qzx,qzy,qzz,qave;
+    double mc,mux,muy,muz,mqxx,mqyx,mqyy,mqzx,mqzy,mqzz;
+    double dmx,dmy,dmz,d2mx,d2my,d2mz;
+    double f,mi,mj,mk,mir,mjr,mkr,mr2;
+    int i, ii, jj, kk, nx, ny, nz, iatom;
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    VASSERT(thee != VNULL);
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    alist = pbe->alist;
+    zmagic = Vpbe_getZmagic(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
+    for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
+
+    /* Fill in the source term (atomic charges) */
+    Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+
+ #if defined(WITH_TINKER)    
+        rpole = atom->rpole1;
+        uind = atom->uind1;
+ #endif /* if defined(WITH_TINKER) */    
+        f = zmagic/(hx*hy*hzed);
+
+        /* Convert dipoles from (e*A) to charge density
+           Convert quadrupoles from (e*A*A) to charge density */
+        c = rpole[0]*f;
+        ux = (rpole[1] + uind[0])/hx*f;
+        uy = (rpole[2] + uind[1])/hy*f;
+        uz = (rpole[3] + uind[2])/hzed*f;
+        qxx = (1.0/3.0)*rpole[4]/(hx*hx)*f;
+        qyx = (2.0/3.0)*rpole[7]/(hx*hy)*f;
+        qyy = (1.0/3.0)*rpole[8]/(hy*hy)*f;
+        qzx = (2.0/3.0)*rpole[10]/(hzed*hx)*f;
+        qzy = (2.0/3.0)*rpole[11]/(hzed*hy)*f;
+        qzz = (1.0/3.0)*rpole[12]/(hzed*hzed)*f;
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=(xmin-2*hx)) || (apos[0]>=(xmax+2*hx))  || \
+            (apos[1]<=(ymin-2*hy)) || (apos[1]>=(ymax+2*hy))  || \
+            (apos[2]<=(zmin-2*hzed)) || (apos[2]>=(zmax+2*hzed))) {
+            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, \
+%4.3f) is off the mesh (for cubic splines!!) (ignoring this atom):\n",
+                  iatom, apos[0], apos[1], apos[2]);
+                Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n",
+                  xmin, xmax);
+                Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n",
+                  ymin, ymax);
+                Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n",
+                  zmin, zmax);
+            }
+            fflush(stderr);
+        } else {
+
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* Scale the charge to be a delta function */
+            charge = charge*zmagic/(hx*hy*hzed);
+
+            /* Figure out which vertices we're next to */
+            ifloat = position[0]/hx;
+            jfloat = position[1]/hy;
+            kfloat = position[2]/hzed;
+
+            /* Note that we're using 2 here, since we need 5 grid points. */
+            ip1   = (int)ceil(ifloat);
+            ip2   = ip1 + 2;
+            im1   = (int)floor(ifloat);
+            im2   = im1 - 2;
+            jp1   = (int)ceil(jfloat);
+            jp2   = jp1 + 2;
+            jm1   = (int)floor(jfloat);
+            jm2   = jm1 - 2;
+            kp1   = (int)ceil(kfloat);
+            kp2   = kp1 + 2;
+            km1   = (int)floor(kfloat);
+            km2   = km1 - 2;
+
+            /* This step shouldn't be necessary, but it saves nasty debugging
+              later on if something goes wrong */
+            ip2 = VMIN2(ip2,nx-1);
+            ip1 = VMIN2(ip1,nx-1);
+            im1 = VMAX2(im1,0);
+            im2 = VMAX2(im2,0);
+            jp2 = VMIN2(jp2,ny-1);
+            jp1 = VMIN2(jp1,ny-1);
+            jm1 = VMAX2(jm1,0);
+            jm2 = VMAX2(jm2,0);
+            kp2 = VMIN2(kp2,nz-1);
+            kp1 = VMIN2(kp1,nz-1);
+            km1 = VMAX2(km1,0);
+            km2 = VMAX2(km2,0);
+
+            /* Now assign fractions of the multipole to the nearby verts 
+               {mir,mjr,mkr} is a vector from the multipole site to current
+               grid point. This is only needed for the sanity check.  */
+            for (ii=im2; ii<=ip2; ii++) {
+#if defined(WITH_TINKER)    
+                mi = VFCHI4(ii,ifloat);
+#endif /* if defined(WITH_TINKER) */     
+                mir = (mi - 2.5) * hx;
+                mx = bspline4(mi);
+                dmx = dbspline4(mi);
+                d2mx = d2bspline4(mi);
+                for (jj=jm2; jj<=jp2; jj++) {
+#if defined(WITH_TINKER)
+                    mj = VFCHI4(jj,jfloat);
+#endif /* if defined(WITH_TINKER) */  
+                    mjr = (mj - 2.5) * hy;
+                    my = bspline4(mj);
+                    dmy = dbspline4(mj);
+                    d2my = d2bspline4(mj);
+                    for (kk=km2; kk<=kp2; kk++) {
+#if defined(WITH_TINKER)
+                        mk = VFCHI4(kk,kfloat);
+#endif /* if defined(WITH_TINKER) */
+                        mkr = (mk - 2.5) * hzed;
+                        mr2 = mir*mir+mjr*mjr+mkr*mkr;
+                        mz = bspline4(mk);
+                        dmz = dbspline4(mk);
+                        d2mz = d2bspline4(mk);
+                        /*
+                           Assign a fraction of the multipole to the current
+                           grid point.
+                           For a charge
+                               mx*my*mz
+                           For a dipole, like Ux, -D(B-spline-X)
+                               dmx*my*mz
+                           For axial quadrupole, like Qxx, D2(B-Spline-X)
+                               d2mx*my*mz
+                           For an "off-diagonal" quadrupole, like Qxy
+                               D(B-Spline-X)*D(B-Spline-Y)
+                               dmx*dmy*mz
+                         */
+                        charge = mx*my*mz*c -
+                         dmx*my*mz*ux - mx*dmy*mz*uy - mx*my*dmz*uz +
+                         d2mx*my*mz*qxx +
+                         dmx*dmy*mz*qyx + mx*d2my*mz*qyy +
+                         dmx*my*dmz*qzx + mx*dmy*dmz*qzy + mx*my*d2mz*qzz;
+                        thee->fcf[IJK(ii,jj,kk)] += charge;
+                    }
+                }
+            }
+        } /* endif (on the mesh) */
+    } /* endfor (each atom) */
+}
+
 VPUBLIC int Vpmg_fillco(Vpmg *thee, 
   Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
   int useDielXMap,   Vgrid *dielXMap, 

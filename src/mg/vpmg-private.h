@@ -70,6 +70,42 @@ VPRIVATE double dbspline2(
         );
 
 /**
+ * @brief   Evaluate a 5th Order B-Spline (4th order polynomial)
+ * @author: Michael Schnieders
+ * @return  5th Order B-Spline
+ */
+VPRIVATE double bspline4(
+         double x /** Position */
+         );
+
+/**
+ * @brief   Evaluate a 5th Order B-Spline derivative (4th order polynomial)
+ * @author: Michael Schnieders
+ * @return  5th Order B-Spline derivative
+ */
+VPRIVATE double dbspline4(
+         double x /** Position */
+         );
+
+/**
+ * @brief   Evaluate the 2nd derivative of a 5th Order B-Spline 
+ * @author: Michael Schnieders
+ * @return  2nd derivative of a 5th Order B-Spline
+ */
+VPRIVATE double d2bspline4(
+         double x /** Position */
+         );
+
+/**
+ * @brief   Evaluate the 3rd derivative of a 5th Order B-Spline 
+ * @author: Michael Schnieders
+ * @return  3rd derivative of a 5th Order B-Spline
+ */
+VPRIVATE double d3bspline4(
+         double x /** Position */
+         );
+
+/**
  * @brief  Determines energy from polarizeable charge and interaction with 
  *         fixed charges according to Rocchia et al.
  * @author  Nathan Baker
@@ -280,6 +316,14 @@ VPRIVATE void fillcoChargeSpline1(
  * @author  Nathan Baker
  */
 VPRIVATE void fillcoChargeSpline2(
+        Vpmg *thee
+        );
+
+/**
+ * @brief  Fill source term charge array through the use of quadrupoles
+ * @author  Michael Schnieders
+ */
+VPRIVATE void fillcoChargeSpline4(
         Vpmg *thee
         );
 
