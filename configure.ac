@@ -852,6 +852,22 @@ else
 fi
 
 dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO INCLUDE TINKER
+dnl # -----------------------
+AC_MSG_CHECKING([for --with-tinker])
+AC_ARG_WITH(tinker,
+    [AC_HELP_STRING([--with-tinker],[include TINKER support])],
+    [ use_tinker="yes"],
+    [ use_tinker="" ]
+)
+if test -n "${use_tinker}"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE([WITH_TINKER], [], [include TINKER support])
+else
+    AC_MSG_RESULT([no]) 
+fi
+
+dnl # -----------------------
 dnl # CHECK FOR WINDOWS SPECIFIC LIBRARIES
 dnl # -----------------------
 case $host_os in

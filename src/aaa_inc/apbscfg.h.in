@@ -107,3 +107,6 @@
 
 /* F77 uppercase */
 #undef VF77_UPPERCASE
+
+/* include TINKER support */
+#undef WITH_TINKER
