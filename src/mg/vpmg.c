@@ -699,14 +699,13 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                 for (j=0; j<ny; j++) {
                     for (i=0; i<nx; i++) {
 
-                        if ((k==0) || (k==nz) ||
-                            (j==0) || (j==ny) ||
-                            (i==0) || (j==nz)) {
+                        if ((k==0) || (k==(nz-1)) ||
+                            (j==0) || (j==(ny-1)) ||
+                            (i==0) || (i==(nx-1))) {
 
                             vec[IJK(i,j,k)] = 0;
 
                         } else { 
-
                                 position[0] = i*hx + xmin;
                                 position[1] = j*hy + ymin;
                                 position[2] = k*hzed + zmin;
