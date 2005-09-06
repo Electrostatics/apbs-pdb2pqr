@@ -35,6 +35,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       50-70% of the time for most cases) but we should all be using the spline
       surface anyway -- right? (Thanks to John Mongan and Jessica Swanson for
       finding this bug). 
+    * Fixed a bug in vpmg.c that caused an assertion error when writing
+      out laplacian maps (Thanks to Vincent Chu).
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04
