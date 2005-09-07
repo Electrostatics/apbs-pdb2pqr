@@ -377,7 +377,11 @@ int main(
                         Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
                         VJMPERR1(0);
                     }
-                    if (!postRefineFE(i, nosh, feparm, fetk)) break;
+                    /* We're not going to refine if we've hit the max number
+                     * of solves */
+                    if (isolve < (feparm->maxsolve)-1) {
+                        if (!postRefineFE(i, nosh, feparm, fetk)) break;
+                    }
                     bytesTotal = Vmem_bytesTotal();
                     highWater = Vmem_highWaterTotal();
                     Vnm_tprint(1, "      Currently memory use:  %g MB\n", 
