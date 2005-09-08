@@ -65,53 +65,54 @@ extern void startVio();
 
 %include typemaps.i
 
-%typemap(python,in) double[3] {
+%typemap(in) double [3] {
   /* Check if is a list */
-  if (PyList_Check($source)) {
-    int size = PyList_Size($source);
+  if (PyList_Check($input)) {
+    int size = PyList_Size($input);
     int i = 0;
-    $target = (double *) malloc((size+1)*sizeof(double));
+    $1 = (double *) malloc((size+1)*sizeof(double));
     for (i = 0; i < size; i++) {
-      PyObject *o = PyList_GetItem($source,i);
+      PyObject *o = PyList_GetItem($input,i);
       if (PyFloat_Check(o))
-	    $target[i] = PyFloat_AsDouble(PyList_GetItem($source,i));
+	    $1[i] = PyFloat_AsDouble(PyList_GetItem($input,i));
       else {
 	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
-	    free($target);
+	    free($1);
 	    return NULL;
       }
     }
-    $target[i] = 0;
+    $1[i] = 0;
   } else {
         PyErr_SetString(PyExc_TypeError,"not a list");
         return NULL;
   }
 }
 
-%typemap(python,in) double * {
-  /* Check if is a list */
-  if (PyList_Check($source)) {
-    int size = PyList_Size($source);
+extern int Vgrid_value(Vgrid *thee, double x[3], double *INOUT);
+
+%typemap(in) double * {
+  if (PyList_Check($input)) {
+    int size = PyList_Size($input);
     int i = 0;
-    $target = (double *) malloc((size+1)*sizeof(double));
+    $1 = (double *) malloc((size+1)*sizeof(double));
     for (i = 0; i < size; i++) {
-      PyObject *o = PyList_GetItem($source,i);
+      PyObject *o = PyList_GetItem($input,i);
       if (PyFloat_Check(o))
-	    $target[i] = PyFloat_AsDouble(PyList_GetItem($source,i));
+	    $1[i] = PyFloat_AsDouble(PyList_GetItem($input,i));
       else {
 	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
-	    free($target);
+	    free($1);
 	    return NULL;
       }
     }
-    $target[i] = 0;
+    $1[i] = 0;
   } else {
         PyErr_SetString(PyExc_TypeError,"not a list");
         return NULL;
   }
 }
 
-extern int Vgrid_value(Vgrid *thee, double x[3], double *BOTH);
+
 extern int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag, double *curv);
 extern int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]);
 extern Vgrid* Vgrid_ctor(int nx, int ny, int nz, double hx, double hy,
