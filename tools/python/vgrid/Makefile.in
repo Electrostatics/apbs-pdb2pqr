@@ -174,27 +174,27 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .c .C .o .so
 INCLUDES = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 
 CCLD = $(PY_CC)
-CLEANFILES = vgridc.so
+CLEANFILES = _vgrid.so
 
-@PY_PRESENT_TRUE@noinst_PROGRAMS = vgridc.so
-@PY_PRESENT_TRUE@vgridc_so_SOURCES = vgridlib.c
-@PY_PRESENT_TRUE@vgridc_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
-@PY_PRESENT_TRUE@vgridc_so_LDFLAGS = -o $@ $(PY_SHARED)
-@PY_PRESENT_TRUE@vgridc_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+@PY_PRESENT_TRUE@noinst_PROGRAMS = _vgrid.so
+@PY_PRESENT_TRUE@_vgrid_so_SOURCES = vgridlib.c
+@PY_PRESENT_TRUE@_vgrid_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
+@PY_PRESENT_TRUE@_vgrid_so_LDFLAGS = -o $@ $(PY_SHARED)
+@PY_PRESENT_TRUE@_vgrid_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
 subdir = tools/python/vgrid
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-@PY_PRESENT_TRUE@noinst_PROGRAMS = vgridc.so$(EXEEXT)
+@PY_PRESENT_TRUE@noinst_PROGRAMS = _vgrid.so$(EXEEXT)
 @PY_PRESENT_FALSE@noinst_PROGRAMS =
 PROGRAMS = $(noinst_PROGRAMS)
 
-@PY_PRESENT_TRUE@am_vgridc_so_OBJECTS = vgridlib.$(OBJEXT)
-vgridc_so_OBJECTS = $(am_vgridc_so_OBJECTS)
-@PY_PRESENT_TRUE@vgridc_so_DEPENDENCIES = \
+@PY_PRESENT_TRUE@am__vgrid_so_OBJECTS = vgridlib.$(OBJEXT)
+_vgrid_so_OBJECTS = $(am__vgrid_so_OBJECTS)
+@PY_PRESENT_TRUE@_vgrid_so_DEPENDENCIES = \
 @PY_PRESENT_TRUE@	${top_builddir}/bin/.libs/libapbsmainroutines.a \
 @PY_PRESENT_TRUE@	${top_builddir}/src/aaa_lib/.libs/libapbs.a
-@PY_PRESENT_FALSE@vgridc_so_DEPENDENCIES =
+@PY_PRESENT_FALSE@_vgrid_so_DEPENDENCIES =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
 depcomp =
@@ -205,9 +205,9 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(vgridc_so_SOURCES)
+DIST_SOURCES = $(_vgrid_so_SOURCES)
 DIST_COMMON = README Makefile.am Makefile.in
-SOURCES = $(vgridc_so_SOURCES)
+SOURCES = $(_vgrid_so_SOURCES)
 
 all: all-am
 
@@ -225,9 +225,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-vgridc.so$(EXEEXT): $(vgridc_so_OBJECTS) $(vgridc_so_DEPENDENCIES) 
-	@rm -f vgridc.so$(EXEEXT)
-	$(vgridc_so_LINK) $(vgridc_so_LDFLAGS) $(vgridc_so_OBJECTS) $(vgridc_so_LDADD) $(LIBS)
+_vgrid.so$(EXEEXT): $(_vgrid_so_OBJECTS) $(_vgrid_so_DEPENDENCIES) 
+	@rm -f _vgrid.so$(EXEEXT)
+	$(_vgrid_so_LINK) $(_vgrid_so_LDFLAGS) $(_vgrid_so_OBJECTS) $(_vgrid_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core
