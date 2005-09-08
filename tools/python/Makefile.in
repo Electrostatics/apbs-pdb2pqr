@@ -174,28 +174,28 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .c .C .o .so
 INCLUDES = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 
 CCLD = $(PY_CC)
-CLEANFILES = apbslibc.so
+CLEANFILES = _apbslib.so
 SUBDIRS = vgrid
 
-@PY_PRESENT_TRUE@noinst_PROGRAMS = apbslibc.so
-@PY_PRESENT_TRUE@apbslibc_so_SOURCES = apbslib.c
-@PY_PRESENT_TRUE@apbslibc_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
-@PY_PRESENT_TRUE@apbslibc_so_LDFLAGS = -o $@ $(PY_SHARED)
-@PY_PRESENT_TRUE@apbslibc_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+@PY_PRESENT_TRUE@noinst_PROGRAMS = _apbslib.so
+@PY_PRESENT_TRUE@_apbslib_so_SOURCES = apbslib.c
+@PY_PRESENT_TRUE@_apbslib_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
+@PY_PRESENT_TRUE@_apbslib_so_LDFLAGS = -o $@ $(PY_SHARED)
+@PY_PRESENT_TRUE@_apbslib_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
 subdir = tools/python
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-@PY_PRESENT_TRUE@noinst_PROGRAMS = apbslibc.so$(EXEEXT)
+@PY_PRESENT_TRUE@noinst_PROGRAMS = _apbslib.so$(EXEEXT)
 @PY_PRESENT_FALSE@noinst_PROGRAMS =
 PROGRAMS = $(noinst_PROGRAMS)
 
-@PY_PRESENT_TRUE@am_apbslibc_so_OBJECTS = apbslib.$(OBJEXT)
-apbslibc_so_OBJECTS = $(am_apbslibc_so_OBJECTS)
-@PY_PRESENT_TRUE@apbslibc_so_DEPENDENCIES = \
+@PY_PRESENT_TRUE@am__apbslib_so_OBJECTS = apbslib.$(OBJEXT)
+_apbslib_so_OBJECTS = $(am__apbslib_so_OBJECTS)
+@PY_PRESENT_TRUE@_apbslib_so_DEPENDENCIES = \
 @PY_PRESENT_TRUE@	${top_builddir}/bin/.libs/libapbsmainroutines.a \
 @PY_PRESENT_TRUE@	${top_builddir}/src/aaa_lib/.libs/libapbs.a
-@PY_PRESENT_FALSE@apbslibc_so_DEPENDENCIES =
+@PY_PRESENT_FALSE@_apbslib_so_DEPENDENCIES =
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)/src/aaa_inc
 depcomp =
@@ -206,7 +206,7 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(apbslibc_so_SOURCES)
+DIST_SOURCES = $(_apbslib_so_SOURCES)
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	ps-recursive install-info-recursive uninstall-info-recursive \
@@ -215,7 +215,7 @@ RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	check-recursive installcheck-recursive
 DIST_COMMON = README Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
-SOURCES = $(apbslibc_so_SOURCES)
+SOURCES = $(_apbslib_so_SOURCES)
 
 all: all-recursive
 
@@ -233,9 +233,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-apbslibc.so$(EXEEXT): $(apbslibc_so_OBJECTS) $(apbslibc_so_DEPENDENCIES) 
-	@rm -f apbslibc.so$(EXEEXT)
-	$(apbslibc_so_LINK) $(apbslibc_so_LDFLAGS) $(apbslibc_so_OBJECTS) $(apbslibc_so_LDADD) $(LIBS)
+_apbslib.so$(EXEEXT): $(_apbslib_so_OBJECTS) $(_apbslib_so_DEPENDENCIES) 
+	@rm -f _apbslib.so$(EXEEXT)
+	$(_apbslib_so_LINK) $(_apbslib_so_LDFLAGS) $(_apbslib_so_OBJECTS) $(_apbslib_so_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT) core *.core

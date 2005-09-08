@@ -10,13 +10,13 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES         = .c .C .o .so
 INCLUDES         = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 
 CCLD             = $(PY_CC)
-CLEANFILES       = apbslibc.so
+CLEANFILES       = _apbslib.so
 SUBDIRS          = vgrid
 
 if PY_PRESENT
-   noinst_PROGRAMS       = apbslibc.so
-   apbslibc_so_SOURCES   = apbslib.c
-   apbslibc_so_LINK      = $(PY_CC) $(PY_LINKFLAGS)
-   apbslibc_so_LDFLAGS   = -o $@ $(PY_SHARED)
-   apbslibc_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+   noinst_PROGRAMS       = _apbslib.so
+   _apbslib_so_SOURCES   = apbslib.c
+   _apbslib_so_LINK      = $(PY_CC) $(PY_LINKFLAGS)
+   _apbslib_so_LDFLAGS   = -o $@ $(PY_SHARED)
+   _apbslib_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
 endif
