@@ -1,460 +1,414 @@
 # This file was created automatically by SWIG.
-import apbslibc
-class MGparmPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_MGparm(self.this)
-    def __setattr__(self,name,value):
-        if name == "type" :
-            apbslibc.MGparm_type_set(self.this,value)
+# Don't modify this file, modify the SWIG interface instead.
+# This file is compatible with both classic and new-style classes.
+
+import _apbslib
+
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
             return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
         self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "type" : 
-            return apbslibc.MGparm_type_get(self.this)
-        raise AttributeError,name
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+APBS_SWIG = _apbslib.APBS_SWIG
+class MGparm(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, MGparm, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, MGparm, name)
     def __repr__(self):
-        return "<C MGparm instance>"
-class MGparm(MGparmPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_MGparm()
-        self.thisown = 1
+        return "<%s.%s; proxy of C MGparm instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, MGparm, 'this', _apbslib.new_MGparm(*args))
+        _swig_setattr(self, MGparm, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_MGparm):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
+    __swig_setmethods__["type"] = _apbslib.MGparm_type_set
+    __swig_getmethods__["type"] = _apbslib.MGparm_type_get
+    if _newclass:type = property(_apbslib.MGparm_type_get, _apbslib.MGparm_type_set)
 
+class MGparmPtr(MGparm):
+    def __init__(self, this):
+        _swig_setattr(self, MGparm, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, MGparm, 'thisown', 0)
+        _swig_setattr(self, MGparm,self.__class__,MGparm)
+_apbslib.MGparm_swigregister(MGparmPtr)
 
-
-class PBEparmPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_PBEparm(self.this)
-    def __setattr__(self,name,value):
-        if name == "temp" :
-            apbslibc.PBEparm_temp_set(self.this,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "temp" : 
-            return apbslibc.PBEparm_temp_get(self.this)
-        raise AttributeError,name
+class PBEparm(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, PBEparm, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, PBEparm, name)
     def __repr__(self):
-        return "<C PBEparm instance>"
-class PBEparm(PBEparmPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_PBEparm()
-        self.thisown = 1
+        return "<%s.%s; proxy of C PBEparm instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, PBEparm, 'this', _apbslib.new_PBEparm(*args))
+        _swig_setattr(self, PBEparm, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_PBEparm):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
+    __swig_setmethods__["temp"] = _apbslib.PBEparm_temp_set
+    __swig_getmethods__["temp"] = _apbslib.PBEparm_temp_get
+    if _newclass:temp = property(_apbslib.PBEparm_temp_get, _apbslib.PBEparm_temp_set)
 
+class PBEparmPtr(PBEparm):
+    def __init__(self, this):
+        _swig_setattr(self, PBEparm, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, PBEparm, 'thisown', 0)
+        _swig_setattr(self, PBEparm,self.__class__,PBEparm)
+_apbslib.PBEparm_swigregister(PBEparmPtr)
 
-
-class VcomPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_Vcom(self.this)
+class Vcom(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Vcom, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Vcom, name)
     def __repr__(self):
-        return "<C Vcom instance>"
-class Vcom(VcomPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_Vcom()
-        self.thisown = 1
+        return "<%s.%s; proxy of C Vcom instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, Vcom, 'this', _apbslib.new_Vcom(*args))
+        _swig_setattr(self, Vcom, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_Vcom):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class VcomPtr(Vcom):
+    def __init__(self, this):
+        _swig_setattr(self, Vcom, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, Vcom, 'thisown', 0)
+        _swig_setattr(self, Vcom,self.__class__,Vcom)
+_apbslib.Vcom_swigregister(VcomPtr)
 
 
-class VmemPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_Vmem(self.this)
+Vcom_ctor = _apbslib.Vcom_ctor
+
+Vcom_size = _apbslib.Vcom_size
+
+Vcom_rank = _apbslib.Vcom_rank
+class Vmem(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Vmem, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Vmem, name)
     def __repr__(self):
-        return "<C Vmem instance>"
-class Vmem(VmemPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_Vmem()
-        self.thisown = 1
+        return "<%s.%s; proxy of C Vmem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, Vmem, 'this', _apbslib.new_Vmem(*args))
+        _swig_setattr(self, Vmem, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_Vmem):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class VmemPtr(Vmem):
+    def __init__(self, this):
+        _swig_setattr(self, Vmem, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, Vmem, 'thisown', 0)
+        _swig_setattr(self, Vmem,self.__class__,Vmem)
+_apbslib.Vmem_swigregister(VmemPtr)
 
 
-class VpmgPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_Vpmg(self.this)
+Vmem_ctor = _apbslib.Vmem_ctor
+class Vpmg(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Vpmg, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Vpmg, name)
     def __repr__(self):
-        return "<C Vpmg instance>"
-class Vpmg(VpmgPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_Vpmg()
-        self.thisown = 1
+        return "<%s.%s; proxy of C Vpmg instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, Vpmg, 'this', _apbslib.new_Vpmg(*args))
+        _swig_setattr(self, Vpmg, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_Vpmg):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class VpmgPtr(Vpmg):
+    def __init__(self, this):
+        _swig_setattr(self, Vpmg, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, Vpmg, 'thisown', 0)
+        _swig_setattr(self, Vpmg,self.__class__,Vpmg)
+_apbslib.Vpmg_swigregister(VpmgPtr)
 
-
-class VpbePtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_Vpbe(self.this)
-    def __setattr__(self,name,value):
-        if name == "acc" :
-            apbslibc.Vpbe_acc_set(self.this,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "acc" : 
-            return apbslibc.Vpbe_acc_get(self.this)
-        raise AttributeError,name
+class Vpbe(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Vpbe, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Vpbe, name)
     def __repr__(self):
-        return "<C Vpbe instance>"
-class Vpbe(VpbePtr):
-    def __init__(self) :
-        self.this = apbslibc.new_Vpbe()
-        self.thisown = 1
+        return "<%s.%s; proxy of C Vpbe instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, Vpbe, 'this', _apbslib.new_Vpbe(*args))
+        _swig_setattr(self, Vpbe, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_Vpbe):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
+    __swig_setmethods__["acc"] = _apbslib.Vpbe_acc_set
+    __swig_getmethods__["acc"] = _apbslib.Vpbe_acc_get
+    if _newclass:acc = property(_apbslib.Vpbe_acc_get, _apbslib.Vpbe_acc_set)
 
+class VpbePtr(Vpbe):
+    def __init__(self, this):
+        _swig_setattr(self, Vpbe, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, Vpbe, 'thisown', 0)
+        _swig_setattr(self, Vpbe,self.__class__,Vpbe)
+_apbslib.Vpbe_swigregister(VpbePtr)
 
-
-class NOsh_calcPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __setattr__(self,name,value):
-        if name == "mgparm" :
-            apbslibc.NOsh_calc_mgparm_set(self.this,value.this)
-            return
-        if name == "femparm" :
-            apbslibc.NOsh_calc_femparm_set(self.this,value)
-            return
-        if name == "pbeparm" :
-            apbslibc.NOsh_calc_pbeparm_set(self.this,value.this)
-            return
-        if name == "calctype" :
-            apbslibc.NOsh_calc_calctype_set(self.this,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "mgparm" : 
-            return MGparmPtr(apbslibc.NOsh_calc_mgparm_get(self.this))
-        if name == "femparm" : 
-            return apbslibc.NOsh_calc_femparm_get(self.this)
-        if name == "pbeparm" : 
-            return PBEparmPtr(apbslibc.NOsh_calc_pbeparm_get(self.this))
-        if name == "calctype" : 
-            return apbslibc.NOsh_calc_calctype_get(self.this)
-        raise AttributeError,name
+class NOsh_calc(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NOsh_calc, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, NOsh_calc, name)
     def __repr__(self):
-        return "<C NOsh_calc instance>"
-class NOsh_calc(NOsh_calcPtr):
-    def __init__(self,this):
-        self.this = this
+        return "<%s.%s; proxy of C NOsh_calc instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    __swig_setmethods__["mgparm"] = _apbslib.NOsh_calc_mgparm_set
+    __swig_getmethods__["mgparm"] = _apbslib.NOsh_calc_mgparm_get
+    if _newclass:mgparm = property(_apbslib.NOsh_calc_mgparm_get, _apbslib.NOsh_calc_mgparm_set)
+    __swig_setmethods__["femparm"] = _apbslib.NOsh_calc_femparm_set
+    __swig_getmethods__["femparm"] = _apbslib.NOsh_calc_femparm_get
+    if _newclass:femparm = property(_apbslib.NOsh_calc_femparm_get, _apbslib.NOsh_calc_femparm_set)
+    __swig_setmethods__["pbeparm"] = _apbslib.NOsh_calc_pbeparm_set
+    __swig_getmethods__["pbeparm"] = _apbslib.NOsh_calc_pbeparm_get
+    if _newclass:pbeparm = property(_apbslib.NOsh_calc_pbeparm_get, _apbslib.NOsh_calc_pbeparm_set)
+    __swig_setmethods__["calctype"] = _apbslib.NOsh_calc_calctype_set
+    __swig_getmethods__["calctype"] = _apbslib.NOsh_calc_calctype_get
+    if _newclass:calctype = property(_apbslib.NOsh_calc_calctype_get, _apbslib.NOsh_calc_calctype_set)
+    def __init__(self, *args):
+        _swig_setattr(self, NOsh_calc, 'this', _apbslib.new_NOsh_calc(*args))
+        _swig_setattr(self, NOsh_calc, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_NOsh_calc):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class NOsh_calcPtr(NOsh_calc):
+    def __init__(self, this):
+        _swig_setattr(self, NOsh_calc, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, NOsh_calc, 'thisown', 0)
+        _swig_setattr(self, NOsh_calc,self.__class__,NOsh_calc)
+_apbslib.NOsh_calc_swigregister(NOsh_calcPtr)
 
-
-class NOshPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_NOsh(self.this)
-    def __setattr__(self,name,value):
-        if name == "ncalc" :
-            apbslibc.NOsh_ncalc_set(self.this,value)
-            return
-        if name == "nprint" :
-            apbslibc.NOsh_nprint_set(self.this,value)
-            return
-        if name == "nelec" :
-            apbslibc.NOsh_nelec_set(self.this,value)
-            return
-        if name == "printwhat" :
-            apbslibc.NOsh_printwhat_set(self.this,value)
-            return
-        self.__dict__[name] = value
-    def __getattr__(self,name):
-        if name == "ncalc" : 
-            return apbslibc.NOsh_ncalc_get(self.this)
-        if name == "nprint" : 
-            return apbslibc.NOsh_nprint_get(self.this)
-        if name == "nelec" : 
-            return apbslibc.NOsh_nelec_get(self.this)
-        if name == "printwhat" : 
-            return apbslibc.NOsh_printwhat_get(self.this)
-        raise AttributeError,name
+class NOsh(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, NOsh, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, NOsh, name)
     def __repr__(self):
-        return "<C NOsh instance>"
-class NOsh(NOshPtr):
-    def __init__(self) :
-        self.this = apbslibc.new_NOsh()
-        self.thisown = 1
+        return "<%s.%s; proxy of C NOsh instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, NOsh, 'this', _apbslib.new_NOsh(*args))
+        _swig_setattr(self, NOsh, 'thisown', 1)
+    __swig_setmethods__["ncalc"] = _apbslib.NOsh_ncalc_set
+    __swig_getmethods__["ncalc"] = _apbslib.NOsh_ncalc_get
+    if _newclass:ncalc = property(_apbslib.NOsh_ncalc_get, _apbslib.NOsh_ncalc_set)
+    __swig_setmethods__["nprint"] = _apbslib.NOsh_nprint_set
+    __swig_getmethods__["nprint"] = _apbslib.NOsh_nprint_get
+    if _newclass:nprint = property(_apbslib.NOsh_nprint_get, _apbslib.NOsh_nprint_set)
+    __swig_setmethods__["nelec"] = _apbslib.NOsh_nelec_set
+    __swig_getmethods__["nelec"] = _apbslib.NOsh_nelec_get
+    if _newclass:nelec = property(_apbslib.NOsh_nelec_get, _apbslib.NOsh_nelec_set)
+    __swig_setmethods__["printwhat"] = _apbslib.NOsh_printwhat_set
+    __swig_getmethods__["printwhat"] = _apbslib.NOsh_printwhat_get
+    if _newclass:printwhat = property(_apbslib.NOsh_printwhat_get, _apbslib.NOsh_printwhat_set)
+    def __del__(self, destroy=_apbslib.delete_NOsh):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class NOshPtr(NOsh):
+    def __init__(self, this):
+        _swig_setattr(self, NOsh, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, NOsh, 'thisown', 0)
+        _swig_setattr(self, NOsh,self.__class__,NOsh)
+_apbslib.NOsh_swigregister(NOshPtr)
 
+NPT_ENERGY = _apbslib.NPT_ENERGY
+NPT_FORCE = _apbslib.NPT_FORCE
 
-class AtomForcePtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            apbslibc.delete_AtomForce(self.this)
+NOsh_getCalc = _apbslib.NOsh_getCalc
+
+NOsh_elecname = _apbslib.NOsh_elecname
+
+NOsh_elec2calc = _apbslib.NOsh_elec2calc
+
+NOsh_printWhat = _apbslib.NOsh_printWhat
+
+NOsh_ctor2 = _apbslib.NOsh_ctor2
+
+NOsh_parseFile = _apbslib.NOsh_parseFile
+class AtomForce(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, AtomForce, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, AtomForce, name)
     def __repr__(self):
-        return "<C AtomForce instance>"
-class AtomForce(AtomForcePtr):
-    def __init__(self) :
-        self.this = apbslibc.new_AtomForce()
-        self.thisown = 1
+        return "<%s.%s; proxy of C AtomForce instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args):
+        _swig_setattr(self, AtomForce, 'this', _apbslib.new_AtomForce(*args))
+        _swig_setattr(self, AtomForce, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_AtomForce):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
 
 
+class AtomForcePtr(AtomForce):
+    def __init__(self, this):
+        _swig_setattr(self, AtomForce, 'this', this)
+        if not hasattr(self,"thisown"): _swig_setattr(self, AtomForce, 'thisown', 0)
+        _swig_setattr(self, AtomForce,self.__class__,AtomForce)
+_apbslib.AtomForce_swigregister(AtomForcePtr)
 
 
+new_valist = _apbslib.new_valist
 
+new_gridlist = _apbslib.new_gridlist
 
-#-------------- FUNCTION WRAPPERS ------------------
+new_pmglist = _apbslib.new_pmglist
 
-def Vcom_ctor(arg0):
-    val = apbslibc.Vcom_ctor(arg0)
-    val = VcomPtr(val)
-    return val
+get_Vpmg = _apbslib.get_Vpmg
 
-Vcom_dtor = apbslibc.Vcom_dtor
+new_pmgplist = _apbslib.new_pmgplist
 
-def Vcom_size(arg0):
-    val = apbslibc.Vcom_size(arg0.this)
-    return val
+new_pbelist = _apbslib.new_pbelist
 
-def Vcom_rank(arg0):
-    val = apbslibc.Vcom_rank(arg0.this)
-    return val
+get_Vpbe = _apbslib.get_Vpbe
 
-def Vmem_ctor(arg0):
-    val = apbslibc.Vmem_ctor(arg0)
-    val = VmemPtr(val)
-    return val
+new_atomforcelist = _apbslib.new_atomforcelist
 
-Vmem_dtor = apbslibc.Vmem_dtor
+delete_atomforcelist = _apbslib.delete_atomforcelist
 
-def NOsh_getCalc(arg0,arg1):
-    val = apbslibc.NOsh_getCalc(arg0.this,arg1)
-    val = NOsh_calcPtr(val)
-    return val
+delete_valist = _apbslib.delete_valist
 
-def NOsh_elecname(arg0,arg1):
-    val = apbslibc.NOsh_elecname(arg0.this,arg1)
-    return val
+delete_gridlist = _apbslib.delete_gridlist
 
-def NOsh_elec2calc(arg0,arg1):
-    val = apbslibc.NOsh_elec2calc(arg0.this,arg1)
-    return val
+delete_pmglist = _apbslib.delete_pmglist
 
-def NOsh_printWhat(arg0,arg1):
-    val = apbslibc.NOsh_printWhat(arg0.this,arg1)
-    return val
+delete_pmgplist = _apbslib.delete_pmgplist
 
-def NOsh_ctor2(arg0,arg1,arg2):
-    val = apbslibc.NOsh_ctor2(arg0.this,arg1,arg2)
-    return val
+delete_pbelist = _apbslib.delete_pbelist
 
-NOsh_dtor = apbslibc.NOsh_dtor
+delete_Nosh = _apbslib.delete_Nosh
 
-def NOsh_parseFile(arg0,arg1):
-    val = apbslibc.NOsh_parseFile(arg0.this,arg1)
-    return val
+delete_Com = _apbslib.delete_Com
 
-ptrcast = apbslibc.ptrcast
+delete_Mem = _apbslib.delete_Mem
 
-ptrvalue = apbslibc.ptrvalue
+get_AtomForce = _apbslib.get_AtomForce
 
-ptrset = apbslibc.ptrset
+make_Valist = _apbslib.make_Valist
 
-ptrcreate = apbslibc.ptrcreate
+double_array = _apbslib.double_array
 
-ptrfree = apbslibc.ptrfree
+int_array = _apbslib.int_array
 
-ptradd = apbslibc.ptradd
+delete_double_array = _apbslib.delete_double_array
 
-ptrmap = apbslibc.ptrmap
+delete_int_array = _apbslib.delete_int_array
 
-new_valist = apbslibc.new_valist
+get_entry = _apbslib.get_entry
 
-new_gridlist = apbslibc.new_gridlist
+set_entry = _apbslib.set_entry
 
-new_pmglist = apbslibc.new_pmglist
+parseInputFromString = _apbslib.parseInputFromString
 
-def get_Vpmg(arg0,arg1):
-    val = apbslibc.get_Vpmg(arg0,arg1)
-    val = VpmgPtr(val)
-    return val
+Valist_load = _apbslib.Valist_load
 
-new_pmgplist = apbslibc.new_pmgplist
+wrap_forceMG = _apbslib.wrap_forceMG
 
-new_pbelist = apbslibc.new_pbelist
+getPotentials = _apbslib.getPotentials
 
-def get_Vpbe(arg0,arg1):
-    val = apbslibc.get_Vpbe(arg0,arg1)
-    val = VpbePtr(val)
-    return val
+getEnergies = _apbslib.getEnergies
 
-new_atomforcelist = apbslibc.new_atomforcelist
+getForces = _apbslib.getForces
 
-delete_atomforcelist = apbslibc.delete_atomforcelist
+loadMolecules = _apbslib.loadMolecules
 
-delete_valist = apbslibc.delete_valist
+killMolecules = _apbslib.killMolecules
 
-delete_gridlist = apbslibc.delete_gridlist
+loadDielMaps = _apbslib.loadDielMaps
 
-delete_pmglist = apbslibc.delete_pmglist
+killDielMaps = _apbslib.killDielMaps
 
-delete_pmgplist = apbslibc.delete_pmgplist
+loadKappaMaps = _apbslib.loadKappaMaps
 
-delete_pbelist = apbslibc.delete_pbelist
+killKappaMaps = _apbslib.killKappaMaps
 
-get_AtomForce = apbslibc.get_AtomForce
+loadChargeMaps = _apbslib.loadChargeMaps
 
-make_Valist = apbslibc.make_Valist
+killChargeMaps = _apbslib.killChargeMaps
 
-double_array = apbslibc.double_array
+printPBEPARM = _apbslib.printPBEPARM
 
-int_array = apbslibc.int_array
+printMGPARM = _apbslib.printMGPARM
 
-delete_double_array = apbslibc.delete_double_array
+initMG = _apbslib.initMG
 
-delete_int_array = apbslibc.delete_int_array
+killMG = _apbslib.killMG
 
-get_entry = apbslibc.get_entry
+solveMG = _apbslib.solveMG
 
-set_entry = apbslibc.set_entry
+setPartMG = _apbslib.setPartMG
 
-def NOsh_parse(arg0,arg1):
-    val = apbslibc.NOsh_parse(arg0.this,arg1)
-    return val
+npenergyMG = _apbslib.npenergyMG
 
-Vio_setup = apbslibc.Vio_setup
+killEnergy = _apbslib.killEnergy
 
-def loadMolecules(arg0,arg1):
-    val = apbslibc.loadMolecules(arg0.this,arg1)
-    return val
+killForce = _apbslib.killForce
 
-def killMolecules(arg0,arg1):
-    val = apbslibc.killMolecules(arg0.this,arg1)
-    return val
+writedataMG = _apbslib.writedataMG
 
-def loadDielMaps(arg0,arg1,arg2,arg3):
-    val = apbslibc.loadDielMaps(arg0.this,arg1,arg2,arg3)
-    return val
+writematMG = _apbslib.writematMG
 
-def killDielMaps(arg0,arg1,arg2,arg3):
-    val = apbslibc.killDielMaps(arg0.this,arg1,arg2,arg3)
-    return val
+printForce = _apbslib.printForce
 
-def loadKappaMaps(arg0,arg1):
-    val = apbslibc.loadKappaMaps(arg0.this,arg1)
-    return val
+startVio = _apbslib.startVio
 
-def killKappaMaps(arg0,arg1):
-    val = apbslibc.killKappaMaps(arg0.this,arg1)
-    return val
+Vacc_molAcc = _apbslib.Vacc_molAcc
 
-def loadChargeMaps(arg0,arg1):
-    val = apbslibc.loadChargeMaps(arg0.this,arg1)
-    return val
+Vacc_vdwAcc = _apbslib.Vacc_vdwAcc
 
-def killChargeMaps(arg0,arg1):
-    val = apbslibc.killChargeMaps(arg0.this,arg1)
-    return val
+energyMG = _apbslib.energyMG
 
-def printPBEPARM(arg0):
-    val = apbslibc.printPBEPARM(arg0.this)
-    return val
+printEnergy = _apbslib.printEnergy
 
-def printMGPARM(arg0,arg1):
-    val = apbslibc.printMGPARM(arg0.this,arg1)
-    return val
-
-def initMG(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13):
-    val = apbslibc.initMG(arg0,arg1.this,arg2.this,arg3.this,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13)
-    return val
-
-def killMG(arg0,arg1,arg2,arg3):
-    val = apbslibc.killMG(arg0.this,arg1,arg2,arg3)
-    return val
-
-def solveMG(arg0,arg1,arg2):
-    val = apbslibc.solveMG(arg0.this,arg1.this,arg2)
-    return val
-
-def setPartMG(arg0,arg1,arg2):
-    val = apbslibc.setPartMG(arg0.this,arg1.this,arg2.this)
-    return val
-
-def npenergyMG(arg0,arg1,arg2,arg3,arg4):
-    val = apbslibc.npenergyMG(arg0.this,arg1,arg2.this,arg3,arg4)
-    return val
-
-killEnergy = apbslibc.killEnergy
-
-def forceMG(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7):
-    val = apbslibc.forceMG(arg0.this,arg1.this,arg2.this,arg3.this,arg4.this,arg5,arg6,arg7)
-    return val
-
-def killForce(arg0,arg1,arg2,arg3):
-    val = apbslibc.killForce(arg0.this,arg1.this,arg2,arg3)
-    return val
-
-def writedataMG(arg0,arg1,arg2,arg3):
-    val = apbslibc.writedataMG(arg0,arg1.this,arg2.this,arg3.this)
-    return val
-
-def writematMG(arg0,arg1,arg2,arg3):
-    val = apbslibc.writematMG(arg0,arg1.this,arg2.this,arg3.this)
-    return val
-
-def printForce(arg0,arg1,arg2,arg3,arg4):
-    val = apbslibc.printForce(arg0.this,arg1.this,arg2,arg3,arg4)
-    return val
-
-startVio = apbslibc.startVio
-
-Vacc_molAcc = apbslibc.Vacc_molAcc
-
-Vacc_vdwAcc = apbslibc.Vacc_vdwAcc
-
-def energyMG(arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7):
-    val = apbslibc.energyMG(arg0.this,arg1,arg2.this,arg3,arg4,arg5,arg6,arg7)
-    return val
-
-def printEnergy(arg0,arg1,arg2,arg3):
-    val = apbslibc.printEnergy(arg0.this,arg1.this,arg2,arg3)
-    return val
-
-Valist_load = apbslibc.Valist_load
-
-def getPotentials(arg0,arg1,arg2,arg3):
-    val = apbslibc.getPotentials(arg0.this,arg1.this,arg2.this,arg3)
-    return val
-
-getForces = apbslibc.getForces
-
-
-
-#-------------- VARIABLE WRAPPERS ------------------
-
-APBS_SWIG = apbslibc.APBS_SWIG
-NPT_ENERGY = apbslibc.NPT_ENERGY
-NPT_FORCE = apbslibc.NPT_FORCE

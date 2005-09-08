@@ -19,7 +19,7 @@ import string
 from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
-__date__ = "10 August 2005"
+__date__ = "8 September 2005"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
@@ -122,7 +122,6 @@ def main():
     totEnergy = []
     nforce = int_array(NOSH_MAXCALC)
     atomforce = new_atomforcelist(NOSH_MAXCALC)
-    nfor = ptrcreate("int",0)
     
     # Start the main timer
     main_timer_start = time.clock()
@@ -153,7 +152,7 @@ def main():
         stderr.write("main:  Error while loading molecules. \n")
         raise APBSError, "Error while loading molecules!"
 
-    # Load the dieletric maps
+    # Load the necessary maps
 
     dielXMap = new_gridlist(NOSH_MAXMOL)
     dielYMap = new_gridlist(NOSH_MAXMOL)
@@ -162,13 +161,11 @@ def main():
         stderr.write("Error reading dielectric maps!\n")
         raise APBSError, "Error reading dielectric maps!"
     
-    # Load the kappa maps
     kappaMap = new_gridlist(NOSH_MAXMOL)
     if loadKappaMaps(nosh, kappaMap) != 1:
         stderr.write("Error reading kappa maps!\n")
         raise APBSError, "Error reading kappa maps!"
 
-    # Load the charge maps
     chargeMap = new_gridlist(NOSH_MAXMOL)
     if loadChargeMaps(nosh, chargeMap) != 1:
         stderr.write("Error reading charge maps!\n")
@@ -235,8 +232,7 @@ def main():
         # Calculate forces
         
         aforce = get_AtomForce(atomforce, icalc)
-        forceMG(mem, nosh, pbeparm, mgparm, thispmg, nfor, aforce, alist)
-        ptrset(nforce,ptrvalue(nfor), icalc)
+        wrap_forceMG(mem, nosh, pbeparm, mgparm, thispmg, aforce, alist, nforce, icalc)
           
         # Write out data from MG calculations : Routine writedataMG	
         writedataMG(rank, nosh, pbeparm, thispmg)
@@ -269,11 +265,10 @@ def main():
     killKappaMaps(nosh, kappaMap)
     killDielMaps(nosh, dielXMap, dielYMap, dielZMap)
     killMolecules(nosh, alist)
-    del nosh
+    delete_Nosh(nosh)
 
     # Clean up Python structures
 
-    ptrfree(nfor)
     delete_double_array(realCenter)
     delete_int_array(nforce)
     delete_atomforcelist(atomforce)
@@ -289,8 +284,8 @@ def main():
     
     
     # Clean up MALOC structures
-    del com
-    del mem
+    delete_Com(com)
+    delete_Mem(mem)
     stdout.write("\n")
     stdout.write("Thanks for using APBS!\n\n")
 

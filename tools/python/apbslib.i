@@ -43,10 +43,8 @@ typedef struct {
 
 typedef struct {
 	Vcom();
-	~Vcom();
 } Vcom;
 extern Vcom* Vcom_ctor(int commtype);
-extern void Vcom_dtor(Vcom **thee);
 extern int Vcom_size(Vcom *thee);
 extern int Vcom_rank(Vcom *thee);
 
@@ -54,10 +52,8 @@ extern int Vcom_rank(Vcom *thee);
 
 typedef struct {
 	Vmem();
-	~Vmem();
 } Vmem;
 extern Vmem* Vmem_ctor(char *name);
-extern void Vmem_dtor(Vmem **thee);
 
 // Functions and Constructor from vpmg.h:
 
@@ -84,7 +80,6 @@ typedef struct {
 
 typedef struct {
 	NOsh();
-	~NOsh();
 	int ncalc;
 	int nprint;             
     int nelec;
@@ -105,8 +100,7 @@ extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
 extern char* NOsh_elecname(NOsh *thee, int ielec);
 extern int NOsh_elec2calc(NOsh *thee, int icalc);
 extern NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint); 
-extern int NOsh_ctor2(NOsh *thee, int rank, int size);
-extern void NOsh_dtor(NOsh **thee); 
+extern int NOsh_ctor2(NOsh *thee, int rank, int size); 
 extern int NOsh_parseFile(NOsh *thee, char *filename);
 
 // Functions from routines.h:
@@ -121,7 +115,6 @@ typedef struct {
 // Note: Currently does not support NOSH_MAXMOL, NOSH_MAXCALC
 //	 Size specified in python file
 
-%include pointer.i
 
 %inline %{
 Valist **new_valist(int maxargs) {
@@ -175,6 +168,18 @@ void delete_pbelist(Vpbe **a) {
     free(a);
   }
 
+void delete_Nosh(NOsh *nosh) {
+    NOsh_dtor(&nosh);
+}
+
+void delete_Com(Vcom *com) {
+    Vcom_dtor(&com);
+}
+
+void delete_Mem(Vmem *mem) {
+    Vmem_dtor(&mem);
+}
+
 AtomForce **get_AtomForce(AtomForce **aforce, int n){
     return &aforce[n];
 }
@@ -215,130 +220,53 @@ void set_entry(double *array, int i, double val){
 
 // Additional functions for reading input from buffers
 
-extern int NOsh_parse(NOsh *thee, Vio *sock);
-
 %inline %{
-Vio * Vio_setup(char *key, const char *iodev, const char *iofmt, const char *iohost, const char *iofile, char * string){
-    Vio *sock = VNULL;
-    char buf[VMAX_BUFSIZE];
-    int bufsize = 0;
-    bufsize = strlen(string);
+
+int parseInputFromString(NOsh *nosh, PyObject *string){
+
+    int ret, bufsize;
+    Vio *sock;
+    
+    startVio();
+    bufsize = PyString_Size(string);
+
     VASSERT( bufsize <= VMAX_BUFSIZE );
-    strncpy(buf, string, VMAX_BUFSIZE);
-    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)));
-    Vio_bufTake(sock, buf, bufsize);
-    return sock;
-}
-%}
+    sock = Vio_ctor("BUFF","ASC",VNULL,"0","r");
 
-extern int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
-extern void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
-extern int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
-Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
-extern void killDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
-Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
-extern int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
-extern void killKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
-extern int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
-extern void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
-extern void printPBEPARM(PBEparm *pbeparm);
-extern void printMGPARM(MGparm *mgparm, double realCenter[3]);
-extern int initMG(int i, NOsh *nosh, MGparm *mgparm,
-  PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
-  Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
-  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
-  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-extern void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
-extern int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
-extern int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
-extern int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, double *npEnergy);
-extern void killEnergy();
-extern int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
-  Vpmg *pmg, int *nforce, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL]);
-extern void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
-  AtomForce *atomForce[NOSH_MAXCALC]);
-extern int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
-extern int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
-extern int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
-  AtomForce *atomForce[NOSH_MAXCALC], int i);
-extern void startVio();
-extern double Vacc_molAcc(Vacc *thee, double center[3], double radius);
-extern double Vacc_vdwAcc(Vacc *thee, double center[3]);
+    Vio_bufTake(sock, PyString_AsString(string), bufsize);
 
-
-// Typemaps and functions for easy Python Access
-
-%include typemaps.i
-
-extern int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
-   int *INPUT, double *BOTH, double *INPUT, double *INPUT,
-   double *INPUT);
-
-%typemap(python,in) double * {
-  /* Check if is a list */
-  if (PyList_Check($source)) {
-    int size = PyList_Size($source);
-    int i = 0;
-    $target = (double *) malloc((size+1)*sizeof(double));
-    for (i = 0; i < size; i++) {
-      PyObject *o = PyList_GetItem($source,i);
-      if (PyFloat_Check(o))
-	    $target[i] = PyFloat_AsDouble(PyList_GetItem($source,i));
-      else {
-	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
-	    free($target);
-	    return NULL;
-      }
-    }
-    $target[i] = 0;
-  } else {
-        PyErr_SetString(PyExc_TypeError,"not a list");
-        return NULL;
-  }
+    ret = NOsh_parse(nosh, sock); 
+    sock->VIObuffer = VNULL;
+    Vio_dtor(&sock);
+    return ret;
 }
 
-extern int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
-  int i);
-
-%inline %{
-void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double *chg, double *rad){ 
-    
-    Vatom *atoms = VNULL;
-    Vatom *atom;
-    int i;
-    int j;
-
+void Valist_load(Valist *thee, int size, PyObject *x, PyObject *y, PyObject *z, PyObject *chg, PyObject *rad){ 
+   
+    int i,j;
     double pos[3];
-    atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
-    thee->number = 0;
-    for (i=0;i<size;i++){
-        pos[0] = x[i];
-        pos[1] = y[i];
-        pos[2] = z[i];
-        Vatom_setCharge(&(atoms[thee->number]), chg[i]);
-        Vatom_setRadius(&(atoms[thee->number]), rad[i]);
-        Vatom_setPosition(&(atoms[thee->number]), pos);
-        (thee->number)++;
-      
-    }
-  
-    thee->atoms = Vmem_malloc(thee->vmem, thee->number,(sizeof(Vatom)));
-    VASSERT(thee->atoms != VNULL);
-    for (i=0; i<thee->number; i++) {
-        Vatom_copyTo(&(atoms[i]), &(thee->atoms[i]));
-        Vatom_dtor2(&(atoms[i]));
-    }
-    Vmem_free(thee->vmem, size, sizeof(Vatom), (void **)&atoms);
-    
+
+    Vatom *atom;
+   
     VASSERT(thee != VNULL);
 
-    thee->center[0] = 0.;
-    thee->center[1] = 0.;
-    thee->center[2] = 0.;
-    thee->maxrad = 0.;
-    thee->charge = 0.;
+    thee->atoms = Vmem_malloc(thee->vmem, size, sizeof(Vatom));
+    thee->number = size;
+    for (i=0;i<size;i++){
+        pos[0] = PyFloat_AsDouble(PyList_GetItem(x,i));
+        pos[1] = PyFloat_AsDouble(PyList_GetItem(y,i));
+        pos[2] = PyFloat_AsDouble(PyList_GetItem(z,i));
+        Vatom_setCharge(&(thee->atoms[i]), PyFloat_AsDouble(PyList_GetItem(chg,i)));
+        Vatom_setRadius(&(thee->atoms[i]), PyFloat_AsDouble(PyList_GetItem(rad,i)));
+        Vatom_setPosition(&(thee->atoms[i]), pos);
+        Vatom_setAtomID(&(thee->atoms[i]), i);
+    }   
+
+    thee->center[0] = 0.0;
+    thee->center[1] = 0.0;
+    thee->center[2] = 0.0;
+    thee->maxrad = 0.0;
+    thee->charge = 0.0;
 
     /* Reset stat variables */
     atom = &(thee->atoms[0]);
@@ -346,7 +274,6 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
         thee->maxcrd[i] = thee->mincrd[i] = atom->position[i];
     }
     thee->maxrad = atom->radius;
-    thee->charge = 0.0;
    
     for (i=0; i<thee->number; i++) {
         atom = &(thee->atoms[i]);
@@ -363,9 +290,59 @@ void Valist_load(Valist *thee, int size, double *x, double *y, double *z, double
     thee->center[0] = 0.5*(thee->maxcrd[0] + thee->mincrd[0]);
     thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
     thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
+
+}
+
+int wrap_forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
+ Vpmg *pmg, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
+ int forcearray[NOSH_MAXCALC], int calcid)
+{
+    int *nforce;
+    nforce = malloc(sizeof(int));
+    *nforce = 0;
+    forceMG(mem, nosh, pbeparm, mgparm, pmg, nforce, atomForce, alist);
+    forcearray[calcid] = *nforce;
+
+    return *nforce;
 }
 
 PyObject *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
+    Vgrid *grid;
+    Vatom *atom; 
+    int i, rc, nx, ny, nz;
+    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+    double value;
+    double *position;
+    PyObject *values;
+    
+    values = PyList_New(Valist_getNumberAtoms(alist));
+    nx = pmg->pmgp->nx;
+    ny = pmg->pmgp->ny;
+    nz = pmg->pmgp->nz;
+    hx = pmg->pmgp->hx;
+    hy = pmg->pmgp->hy;
+    hzed = pmg->pmgp->hzed;
+    xcent = pmg->pmgp->xcent;
+    ycent = pmg->pmgp->ycent;
+    zcent = pmg->pmgp->zcent;
+    xmin = xcent - 0.5*(nx-1)*hx;
+    ymin = ycent - 0.5*(ny-1)*hy;
+    zmin = zcent - 0.5*(nz-1)*hzed;
+   
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype);
+    grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+                  pmg->rwork);
+    for (i=0;i<Valist_getNumberAtoms(alist);i++){
+        atom = Valist_getAtom(alist, i);
+        position = Vatom_getPosition(atom); 
+        Vgrid_value(grid, position, &value);
+        PyList_SetItem(values, i, PyFloat_FromDouble(value)); 
+    } 
+    Vgrid_dtor(&grid);    
+    return values;
+}
+
+PyObject *getEnergies(Vpmg *pmg, Valist *alist){
     Vatom *atom; 
     int i;
     double energy;
@@ -423,3 +400,75 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
     return dict;
 }
 %}
+
+extern int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
+Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+extern void killDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
+Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+extern int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+extern void killKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+extern int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+extern void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
+extern void printPBEPARM(PBEparm *pbeparm);
+extern void printMGPARM(MGparm *mgparm, double realCenter[3]);
+extern int initMG(int i, NOsh *nosh, MGparm *mgparm,
+  PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
+  Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
+  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
+  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+extern void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+extern int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
+extern int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
+extern int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, double *npEnergy);
+extern void killEnergy();
+//extern int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
+//  Vpmg *pmg, int *nforce, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL]);
+extern void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
+  AtomForce *atomForce[NOSH_MAXCALC]);
+extern int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+extern int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
+extern int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
+  AtomForce *atomForce[NOSH_MAXCALC], int i);
+extern void startVio();
+extern double Vacc_molAcc(Vacc *thee, double center[3], double radius);
+extern double Vacc_vdwAcc(Vacc *thee, double center[3]);
+
+
+// Typemaps and functions for easy Python Access
+
+%include typemaps.i
+
+extern int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
+   int *INPUT, double *INOUT, double *INPUT, double *INPUT,
+   double *INPUT);
+
+%typemap(in) double [ANY] {
+  /* Check if is a list */
+  if (PyList_Check($input)) {
+    int size = PyList_Size($input);
+    int i = 0;
+    $1 = (double *) malloc((size+1)*sizeof(double));
+    for (i = 0; i < size; i++) {
+      PyObject *o = PyList_GetItem($input,i);
+      if (PyFloat_Check(o))
+	    $1[i] = PyFloat_AsDouble(PyList_GetItem($input,i));
+      else {
+	    PyErr_SetString(PyExc_TypeError,"list must contain floats");
+	    free($1);
+	    return NULL;
+      }
+    }
+    $1[i] = 0;
+  } else {
+        PyErr_SetString(PyExc_TypeError,"not a list");
+        return NULL;
+  }
+}
+
+extern int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
+    int i);
+
