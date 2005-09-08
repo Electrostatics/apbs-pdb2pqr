@@ -189,8 +189,8 @@ Valist *make_Valist(Valist **args, int n){
     return args[n];
 }
 
-// Generic array of doubles and ints:
-//   Constructors, Destructors, Gets, and Sets
+/* Generic array of doubles and ints:
+   Constructors, Destructors, Gets, and Sets */
 
 
 double *double_array(int size) {
