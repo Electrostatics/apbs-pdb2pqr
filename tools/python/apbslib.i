@@ -43,6 +43,7 @@ typedef struct {
 
 typedef struct {
 	Vcom();
+    ~Vcom();
 } Vcom;
 extern Vcom* Vcom_ctor(int commtype);
 extern int Vcom_size(Vcom *thee);
@@ -52,6 +53,7 @@ extern int Vcom_rank(Vcom *thee);
 
 typedef struct {
 	Vmem();
+    ~Vmem();
 } Vmem;
 extern Vmem* Vmem_ctor(char *name);
 
@@ -79,7 +81,8 @@ typedef struct {
 } NOsh_calc;
 
 typedef struct {
-	NOsh();
+    NOsh();
+    ~NOsh();
 	int ncalc;
 	int nprint;             
     int nelec;
@@ -100,8 +103,8 @@ extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
 extern char* NOsh_elecname(NOsh *thee, int ielec);
 extern int NOsh_elec2calc(NOsh *thee, int icalc);
 extern NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint); 
-extern int NOsh_ctor2(NOsh *thee, int rank, int size); 
 extern int NOsh_parseFile(NOsh *thee, char *filename);
+extern NOsh* NOsh_ctor(int rank, int size);
 
 // Functions from routines.h:
 

@@ -237,6 +237,11 @@ class NOsh(_object):
     def __init__(self, *args):
         _swig_setattr(self, NOsh, 'this', _apbslib.new_NOsh(*args))
         _swig_setattr(self, NOsh, 'thisown', 1)
+    def __del__(self, destroy=_apbslib.delete_NOsh):
+        try:
+            if self.thisown: destroy(self)
+        except: pass
+
     __swig_setmethods__["ncalc"] = _apbslib.NOsh_ncalc_set
     __swig_getmethods__["ncalc"] = _apbslib.NOsh_ncalc_get
     if _newclass:ncalc = property(_apbslib.NOsh_ncalc_get, _apbslib.NOsh_ncalc_set)
@@ -249,11 +254,6 @@ class NOsh(_object):
     __swig_setmethods__["printwhat"] = _apbslib.NOsh_printwhat_set
     __swig_getmethods__["printwhat"] = _apbslib.NOsh_printwhat_get
     if _newclass:printwhat = property(_apbslib.NOsh_printwhat_get, _apbslib.NOsh_printwhat_set)
-    def __del__(self, destroy=_apbslib.delete_NOsh):
-        try:
-            if self.thisown: destroy(self)
-        except: pass
-
 
 class NOshPtr(NOsh):
     def __init__(self, this):
@@ -273,9 +273,9 @@ NOsh_elec2calc = _apbslib.NOsh_elec2calc
 
 NOsh_printWhat = _apbslib.NOsh_printWhat
 
-NOsh_ctor2 = _apbslib.NOsh_ctor2
-
 NOsh_parseFile = _apbslib.NOsh_parseFile
+
+NOsh_ctor = _apbslib.NOsh_ctor
 class AtomForce(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, AtomForce, name, value)

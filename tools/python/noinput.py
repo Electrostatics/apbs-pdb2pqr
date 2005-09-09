@@ -282,8 +282,7 @@ def runAPBS(PQR, INPUT):
     main_timer_start = time.clock()
 
     # Parse the input file
-    nosh = NOsh()
-    NOsh_ctor2(nosh, rank, size)
+    nosh = NOsh_ctor(rank, size)
 
     # Instead of having an input file, we have a string!
 

@@ -134,8 +134,7 @@ def main():
         raise APBSError, "Incorrect Usage!"
 
     # Parse the input file
-    nosh = NOsh()
-    NOsh_ctor2(nosh, rank, size)
+    nosh = NOsh_ctor(rank, size)
     input_file = sys.argv[1]
     stdout.write("Parsing input file %s...\n" % input_file)
     if NOsh_parseFile(nosh, input_file) != 1:
@@ -265,6 +264,7 @@ def main():
     killKappaMaps(nosh, kappaMap)
     killDielMaps(nosh, dielXMap, dielYMap, dielZMap)
     killMolecules(nosh, alist)
+    
     delete_Nosh(nosh)
 
     # Clean up Python structures

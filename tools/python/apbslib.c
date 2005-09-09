@@ -1638,8 +1638,8 @@ SWIG_FromCharPtr(const char* cptr)
 
 int NOsh_elec2calc(NOsh *,int);
 NOsh_PrintType NOsh_printWhat(NOsh *,int);
-int NOsh_ctor2(NOsh *,int,int);
 int NOsh_parseFile(NOsh *,char *);
+NOsh *NOsh_ctor(int,int);
 
 Valist **new_valist(int maxargs) {
    return (Valist **) malloc(maxargs*sizeof(Valist *));
@@ -1713,8 +1713,8 @@ Valist *make_Valist(Valist **args, int n){
     return args[n];
 }
 
-// Generic array of doubles and ints:
-//   Constructors, Destructors, Gets, and Sets
+/* Generic array of doubles and ints:
+   Constructors, Destructors, Gets, and Sets */
 
 
 double *double_array(int size) {
@@ -2623,6 +2623,23 @@ static PyObject *_wrap_new_NOsh(PyObject *self, PyObject *args) {
 }
 
 
+static PyObject *_wrap_delete_NOsh(PyObject *self, PyObject *args) {
+    PyObject *resultobj = NULL;
+    NOsh *arg1 = (NOsh *) 0 ;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:delete_NOsh",&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_NOsh, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    free((char *) arg1);
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_NOsh_ncalc_set(PyObject *self, PyObject *args) {
     PyObject *resultobj = NULL;
     NOsh *arg1 = (NOsh *) 0 ;
@@ -2799,23 +2816,6 @@ static PyObject *_wrap_NOsh_printwhat_get(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_delete_NOsh(PyObject *self, PyObject *args) {
-    PyObject *resultobj = NULL;
-    NOsh *arg1 = (NOsh *) 0 ;
-    PyObject * obj0 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"O:delete_NOsh",&obj0)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_NOsh, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    free((char *) arg1);
-    
-    Py_INCREF(Py_None); resultobj = Py_None;
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject * NOsh_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -2921,38 +2921,6 @@ static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_NOsh_ctor2(PyObject *self, PyObject *args) {
-    PyObject *resultobj = NULL;
-    NOsh *arg1 = (NOsh *) 0 ;
-    int arg2 ;
-    int arg3 ;
-    int result;
-    PyObject * obj0 = 0 ;
-    PyObject * obj1 = 0 ;
-    PyObject * obj2 = 0 ;
-    
-    if(!PyArg_ParseTuple(args,(char *)"OOO:NOsh_ctor2",&obj0,&obj1,&obj2)) goto fail;
-    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_NOsh, SWIG_POINTER_EXCEPTION | 0);
-    if (SWIG_arg_fail(1)) SWIG_fail;
-    {
-        arg2 = (int)(SWIG_As_int(obj1)); 
-        if (SWIG_arg_fail(2)) SWIG_fail;
-    }
-    {
-        arg3 = (int)(SWIG_As_int(obj2)); 
-        if (SWIG_arg_fail(3)) SWIG_fail;
-    }
-    result = (int)NOsh_ctor2(arg1,arg2,arg3);
-    
-    {
-        resultobj = SWIG_From_int((int)(result)); 
-    }
-    return resultobj;
-    fail:
-    return NULL;
-}
-
-
 static PyObject *_wrap_NOsh_parseFile(PyObject *self, PyObject *args) {
     PyObject *resultobj = NULL;
     NOsh *arg1 = (NOsh *) 0 ;
@@ -2972,6 +2940,32 @@ static PyObject *_wrap_NOsh_parseFile(PyObject *self, PyObject *args) {
     {
         resultobj = SWIG_From_int((int)(result)); 
     }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_NOsh_ctor(PyObject *self, PyObject *args) {
+    PyObject *resultobj = NULL;
+    int arg1 ;
+    int arg2 ;
+    NOsh *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"OO:NOsh_ctor",&obj0,&obj1)) goto fail;
+    {
+        arg1 = (int)(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = (int)(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    result = (NOsh *)NOsh_ctor(arg1,arg2);
+    
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_NOsh, 0);
     return resultobj;
     fail:
     return NULL;
@@ -4544,6 +4538,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_NOsh_calc", _wrap_delete_NOsh_calc, METH_VARARGS, NULL},
 	 { (char *)"NOsh_calc_swigregister", NOsh_calc_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_NOsh", _wrap_new_NOsh, METH_VARARGS, NULL},
+	 { (char *)"delete_NOsh", _wrap_delete_NOsh, METH_VARARGS, NULL},
 	 { (char *)"NOsh_ncalc_set", _wrap_NOsh_ncalc_set, METH_VARARGS, NULL},
 	 { (char *)"NOsh_ncalc_get", _wrap_NOsh_ncalc_get, METH_VARARGS, NULL},
 	 { (char *)"NOsh_nprint_set", _wrap_NOsh_nprint_set, METH_VARARGS, NULL},
@@ -4552,14 +4547,13 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NOsh_nelec_get", _wrap_NOsh_nelec_get, METH_VARARGS, NULL},
 	 { (char *)"NOsh_printwhat_set", _wrap_NOsh_printwhat_set, METH_VARARGS, NULL},
 	 { (char *)"NOsh_printwhat_get", _wrap_NOsh_printwhat_get, METH_VARARGS, NULL},
-	 { (char *)"delete_NOsh", _wrap_delete_NOsh, METH_VARARGS, NULL},
 	 { (char *)"NOsh_swigregister", NOsh_swigregister, METH_VARARGS, NULL},
 	 { (char *)"NOsh_getCalc", _wrap_NOsh_getCalc, METH_VARARGS, NULL},
 	 { (char *)"NOsh_elecname", _wrap_NOsh_elecname, METH_VARARGS, NULL},
 	 { (char *)"NOsh_elec2calc", _wrap_NOsh_elec2calc, METH_VARARGS, NULL},
 	 { (char *)"NOsh_printWhat", _wrap_NOsh_printWhat, METH_VARARGS, NULL},
-	 { (char *)"NOsh_ctor2", _wrap_NOsh_ctor2, METH_VARARGS, NULL},
 	 { (char *)"NOsh_parseFile", _wrap_NOsh_parseFile, METH_VARARGS, NULL},
+	 { (char *)"NOsh_ctor", _wrap_NOsh_ctor, METH_VARARGS, NULL},
 	 { (char *)"new_AtomForce", _wrap_new_AtomForce, METH_VARARGS, NULL},
 	 { (char *)"delete_AtomForce", _wrap_delete_AtomForce, METH_VARARGS, NULL},
 	 { (char *)"AtomForce_swigregister", AtomForce_swigregister, METH_VARARGS, NULL},
