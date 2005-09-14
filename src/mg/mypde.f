@@ -38,7 +38,7 @@ c*
 c* author:  michael holst
 c* *********************************************************************
 
-      subroutine mypdefinit(tnion,tcharge,tkappa)
+      subroutine mypdefinit(tnion,tcharge,tsconc)
 c* *********************************************************************
 c* Purpose:
 c*
@@ -49,9 +49,9 @@ c* Arguments:
 c*
 c*    tnion   = number of ionic species
 c*    tcharge = charge in electrons
-c*    tkappa  = prefactor for counterion Boltzmann distribution terms,
-c*              basically:
-c*                 -(zkappa2/bulkIonicStrength)*ionConc[i]*ionQ[i]
+c*    tsconc  = prefactor for counterion Boltzmann distribution terms,
+c*              basically a scaled concentration:
+c*                 -(ion concentration/bulkIonicStrength)/2
 c*
 c* author: Nathan Baker
 c* *********************************************************************
@@ -59,9 +59,9 @@ c* *********************************************************************
       integer          MAXION
       integer          i
       parameter        (MAXION = 50)
-      double precision charge(MAXION), kappa(MAXION) 
-      double precision tcharge(*), tkappa(*)
-      common /MYPDEF/  charge, kappa
+      double precision charge(MAXION), sconc(MAXION) 
+      double precision tcharge(*), tsconc(*)
+      common /MYPDEF/  charge, sconc
       common /MYPDEF/  nion
 
       nion = tnion
@@ -72,7 +72,7 @@ c* *********************************************************************
       endif
       do 10 i = 1, nion
           charge(i) = tcharge(i)
-          kappa(i) = tkappa(i)
+          sconc(i) = tsconc(i)
 10    continue
 
       return
@@ -90,13 +90,13 @@ c* *********************************************************************
       integer          MAXION
       integer          i
       parameter        (MAXION = 50)
-      double precision charge(MAXION), kappa(MAXION) 
-      common /MYPDEF/  charge, kappa
+      double precision charge(MAXION), sconc(MAXION) 
+      common /MYPDEF/  charge, sconc
       common /MYPDEF/  nion
 
       do 10 i = 1, nion
           charge(i) = 0.
-          kappa(i) = 0.
+          sconc(i) = 0.
 10    continue
       nion = 0
 
@@ -127,9 +127,9 @@ c* Added by NAB to allow different ions with different charges
       integer          MAXION
       parameter        (MAXION = 50)
       double precision charge(MAXION)
-      double precision kappa(MAXION)
+      double precision sconc(MAXION)
       common /MYPDEF/ charge
-      common /MYPDEF/ kappa
+      common /MYPDEF/ sconc
       common /MYPDEF/ nion
 
       call vnmprt(2, 'MYPDEF: C_SCAL NOT SUPPORTED! USE NEWTON SOLVER',
@@ -142,7 +142,7 @@ c*
 c*    Loop over all the ions
 c*      do 39 iion = 1, nion
 c*       Assemble the ion-specific coefficient
-c*         coef2 = -1.0 * coef * kappa(iion)
+c*         coef2 = -1.0 * coef * sconc(iion)
 c*       Assemble the ion-specific potential value
 c*         u2 = -1.0 * u * charge(iion)
 c*
@@ -218,9 +218,9 @@ c* Added by NAB to allow different ions with different charges
       integer          MAXION
       parameter        (MAXION = 50)
       double precision charge(MAXION)
-      double precision kappa(MAXION)
+      double precision sconc(MAXION)
       common /MYPDEF/ charge
-      common /MYPDEF/ kappa
+      common /MYPDEF/ sconc
       common /MYPDEF/ nion
 
       call vnmprt(2, 'MYPDEF: DC_SCAL NOT SUPPORTED! USE NEWTON SOLVER',
@@ -231,7 +231,7 @@ c*      dc_scal2 = 0.0
 c*    print *, 'HELLO FROM DC_SCAL'
 c*
 c*      do 39 iion = 1, nion
-c*        coef2 = coef * kappa(iion) * charge(iion)
+c*        coef2 = coef * sconc(iion) * charge(iion)
 c*        u2 = -1.0 * u * charge(iion)
 c*
 c*      *** check if full exp requested ***
@@ -267,7 +267,7 @@ c*     2      44)
 c*
 c*      *** else return linear approximation ***
 c*        else
-c*           dc_scal2 = dc_scal2 + coef*kappa(iion)*charge(iion)
+c*           dc_scal2 = dc_scal2 + coef*sconc(iion)*charge(iion)
 c* ***** print*,'% DC_SCAL: using linear approximation...'
 c*        endif
 c*
@@ -309,9 +309,9 @@ c* Added by NAB to allow different ions with different charges
       integer          MAXION
       parameter        (MAXION = 50)
       double precision charge(MAXION)
-      double precision kappa(MAXION)
+      double precision sconc(MAXION)
       common /MYPDEF/ charge
-      common /MYPDEF/ kappa
+      common /MYPDEF/ sconc
       common /MYPDEF/ nion
  
 c*    print *, 'HELLO FROM C_VEC'
@@ -328,7 +328,7 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
 
       do 39 iion = 1, nion
 c*      Assemble the ion-specific coefficient
-        zcf2 = -1.0 * kappa(iion) * charge(iion)
+        zcf2 = -1.0 * sconc(iion) * charge(iion)
 c*      Assemble the ion-specific potential value
         zu2 = -1.0 * charge(iion)
 
@@ -468,9 +468,9 @@ c* Added by NAB to allow different ions with different charges
       integer          MAXION
       parameter        (MAXION = 50)
       double precision charge(MAXION)
-      double precision kappa(MAXION)
+      double precision sconc(MAXION)
       common /MYPDEF/ charge
-      common /MYPDEF/ kappa
+      common /MYPDEF/ sconc
       common /MYPDEF/ nion
 
 c*
@@ -486,7 +486,7 @@ c*    print *, 'HELLO FROM DC_VEC'
  38   continue
 
       do 39 iion = 1, nion
-        zcf2 = kappa(iion) * charge(iion) * charge(iion)
+        zcf2 = sconc(iion) * charge(iion) * charge(iion)
         zu2 = -1.0 * charge(iion)
 c*
 c*
@@ -574,7 +574,7 @@ c*           do 50 ii = 1, nproc
 c*              do 51 i = 1+(ipara*(ii-1)), ipara*ii
 c*
 c*               *** make the linear term ***
-c*                 uout(i) = uout(i)+coef(i)*kappa(iion)*charge(iion)
+c*                 uout(i) = uout(i)+coef(i)*sconc(iion)*charge(iion)
 c* 51           continue
 c* 50        continue
 c*
@@ -582,7 +582,7 @@ c*         *** do vector loops ***
 c*           do 60 i = ipara*nproc+1, n
 c*
 c*            *** make the linear term ***
-c*              uout(i) = uout(i) + coef(i)*kappa(iion)*charge(iion)
+c*              uout(i) = uout(i) + coef(i)*sconc(iion)*charge(iion)
 c* 60        continue
 c*
 c*      *** end if ***

@@ -157,26 +157,8 @@ VPUBLIC int Vpmg_solve(Vpmg *thee) {
         thee->a3cf[i] = thee->epsz[i];
     }
 
-    /* Fill the nonlinear coefficient array.
-     *
-     * This is a really disgusting hack, however, it preserves the relative
-	 * clarity of the code elsewhere.  There are two paths the code can follow
-	 * based on whether we're solving the NPBE or LPBE.  
-	 * - For the NPBE, we need to keep track of (possibly asymmetric)
-	 *   contributions from different ion species.  In this case, ccf should
-	 *   only contain a characteristic function which describes ion
-	 *   accessibility.  The appropriate scaling coefficients are included in
-	 *   mypde.f (as set by F77MYPDEFINIT).
-     * - For the LPBE, we don't need to keep track of individual ion
-	 *   contributions.  In this case, ccf should contain a characteristic
-	 *   function _ALREADY SCALED BY THE APPROPRIATE COEFFICIENTS_.
-     * In all cases, the Vpmg_fillco functions only fill ccf with the values
-     * of the characteristic function.  This would be fine if all paths of
-     * execution used the functions in mypde.f.  Unforunately, the functions
-     * in mypde.f are not called by PMG in the case of the LPBE.  Rather than
-     * modifying PMG (we want to maintain as much compatibility as possible),
-     * we will scale ccf here.
-     */
+    /* Fill the nonlinear coefficient array by multiplying the kappa
+     * accessibility array (containing values between 0 and 1) by zkappa2. */
     zkappa2 = Vpbe_getZkappa2(thee->pbe);
     if (zkappa2 > VPMGSMALL) {
         for (i=0; i<n; i++) {
