@@ -37,6 +37,8 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       finding this bug). 
     * Fixed a bug in vpmg.c that caused an assertion error when writing
       out laplacian maps (Thanks to Vincent Chu).
+	* Ensured Vpmg::ccf was always re-initialized (in the case where the Vpmg
+      object is being re-used).
 	* Removed a spurious error estimation in finite element calculations.
 	* Clarified the role of ccf and other variables in mypde.f and vpmg.c by
       expanding/revising the inline comments.
