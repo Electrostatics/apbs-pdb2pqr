@@ -164,6 +164,10 @@ VPUBLIC int Vpmg_solve(Vpmg *thee) {
         for (i=0; i<n; i++) {
             thee->ccf[i] = zkappa2*thee->kappa[i];
         }
+    } else {
+        for (i=0; i<n; i++) {
+            thee->ccf[i] = 0.0;
+        }
     }
 
     switch(thee->pmgp->meth) {
