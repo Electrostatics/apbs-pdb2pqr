@@ -20,9 +20,13 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
     * Consolidated vpmg.c, vpmg-force.c, vpmg-energy.c, vpmg-setup.c
     * Added autoconf support for compilation on the MinGW32 Windows Environment
     * Added autoconf support (with Python) for Mac OS 10.4 (Tiger)
-	* Added the function Vpmg_solveLaplace to solve homogeneous versions of
+    * Added the function Vpmg_solveLaplace to solve homogeneous versions of
       Poisson's equation using Laplacian eigenfunctions.
   - BUG FIXES
+    * Fixed a bug in Vpmg_qmEnergy to remove a spurious coefficient of z_i^2
+      from the energy calculation.  This generated incorrect results for
+      multivalent ions (but then again, the validity of the NPBE is
+      questionable for multivalents...)  (Big thanks to Vincent Chu)
     * Fixed a bug in vacc.c where atoms with radii less than 1A were not
       considered instead of atoms with no radii.
     * Fixed error in tools/mesh/dx2mol.c (Thanks to Fred Damberger)
@@ -37,11 +41,11 @@ BETA PUBLIC RELEASE VERSION 0.3.3       XX-XX-XX
       finding this bug). 
     * Fixed a bug in vpmg.c that caused an assertion error when writing
       out laplacian maps (Thanks to Vincent Chu).
-	* Ensured Vpmg::ccf was always re-initialized (in the case where the Vpmg
-      object is being re-used).
-	* Removed a spurious error estimation in finite element calculations.
-	* Clarified the role of ccf and other variables in mypde.f and vpmg.c by
-      expanding/revising the inline comments.
+    * Ensured Vpmg::ccf was always re-initialized (in the case where the 
+      Vpmg object is being re-used).
+    * Removed a spurious error estimation in finite element calculations. 
+    * Clarified the role of ccf and other variables in mypde.f and vpmg.c 
+      by expanding/revising the inline comments.
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.3.2       11-10-04
