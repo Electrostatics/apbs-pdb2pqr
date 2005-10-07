@@ -1060,7 +1060,7 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
             if (thee->pvec[i]*thee->kappa[i] > VSMALL) {
                 for (j=0; j<nion; j++) {
                     energy += (thee->pvec[i]*thee->kappa[i]*zks2
-                      * ionConc[j] * VSQR(ionQ[j]) 
+                      * ionConc[j] 
                       * (Vcap_exp(-ionQ[j]*thee->u[i], &ichop)-1.0));
                     nchop += ichop;
                 }
