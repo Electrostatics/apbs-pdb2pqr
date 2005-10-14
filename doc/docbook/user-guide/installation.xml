@@ -1,7 +1,7 @@
 <chapter id="installation-sect"> <title>Installation</title>
   <para>The following sections outline the installation of APBS on a generic
     UNIX platform as well as installation instructions for various specific
-    machines.</para>
+    machines.</para> 
 
   <sect1 id="obtaining-sect"> <title>Availability</title>
     <para>The latest version of APBS can always be found at 
