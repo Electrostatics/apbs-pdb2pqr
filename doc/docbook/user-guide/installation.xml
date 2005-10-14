@@ -5,8 +5,8 @@
 
   <sect1 id="obtaining-sect"> <title>Availability</title>
     <para>The latest version of APBS can always be found at 
-      <ulink url="http://agave.wustl.edu/apbs/">
-        http://agave.wustl.edu/apbs</ulink> in source code form.  Additionally,
+      <ulink url="http://apbs.sourceforge.net/">
+        http://apbs.sourceforge.net</ulink> in source code form.  Additionally,
       binary versions of the code are available for a limited number of
       platforms.</para>
   </sect1>
@@ -30,7 +30,7 @@
       in this section.</para>
 
     <sect2 id="prerequisites-sect"> <title>Prerequisites</title>
-      <para>Binary executables for APBS are available from the APBS dowloads site
+      <para>Binary executables for APBS are available from the APBS download site
         (<ulink url="http://agave.wustl.edu/apbs/download/">
           http://agave.wustl.edu/apbs/download</ulink>).  We currently only
         have binary versions for RedHat Linux but are in the processor of
