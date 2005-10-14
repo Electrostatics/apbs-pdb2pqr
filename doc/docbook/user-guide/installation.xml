@@ -242,7 +242,7 @@
       tips on how to get a better APBS binary on your platform.  <emphasis>If
       you have tips or tricks on improving APBS performance on your machine,
       please 
-      <ulink url="mailto:apbs-users@cholla.wustl.edu">let us know!</ulink></emphasis>
+      <ulink url="mailto:apbs-users@lists.sourceforge.net">let us know!</ulink></emphasis>
       </para>
 
       <sect3> <title>Intel IA32/IA64</title>
@@ -351,7 +351,7 @@
             <para>There are a number of other good compilers (Portland Group,
             Absoft) that we have not tested with APBS.  If you have experience
             with these, please 
-            <ulink url="mailto:apbs-users@cholla.wustl.edu">let us know.</ulink>
+            <ulink url="mailto:apbs-users@lists.sourceforge.net">let us know.</ulink>
             </para>
           </sect5>
         </sect4>
@@ -364,7 +364,7 @@
          binaries (gcc/gfortran 4.0) are needed to run them.  Unfortunately 
          this means many users on G4s or OS 10.3 may have to compile binaries 
          for themselves - you may want to examine the
-        <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">apbs-users 
+        <ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">apbs-users 
         mailing list</ulink> which has a number of threads which discuss
         installation on Mac OS platforms.</para>
         <para>A few notes about compiling on Macintosh:</para>

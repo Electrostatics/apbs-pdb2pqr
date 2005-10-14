@@ -17,12 +17,12 @@
               <itemizedlist>
                 <listitem>
                   <para>List information:  
-                    <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-announce">http://cholla.wustl.edu/mailman/listinfo/apbs-announce</ulink>
+                    <ulink url="http://lists.sourceforge.net/lists/listinfo/apbs-announce">http://lists.sourceforge.net/lists/listinfo/apbs-announce</ulink>
                   </para>
                 </listitem>
                 <listitem>
                   <para>List archives:  
-                    <ulink url="http://cholla.wustl.edu/pipermail/apbs-announce/">http://cholla.wustl.edu/pipermail/apbs-announce/</ulink>
+                    <ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-announce">http://sourceforge.net/mailarchive/forum.php?forum=apbs-announce</ulink>
                   </para>
                 </listitem>
               </itemizedlist>
@@ -38,12 +38,12 @@
               <itemizedlist>
                 <listitem>
                   <para>List information:  
-                    <ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</ulink>
+                    <ulink url="http://lists.sourceforge.net/lists/listinfo/apbs-users">http://lists.sourceforge.net/lists/listinfo/apbs-users</ulink>
                   </para>
                 </listitem>
                 <listitem>
                   <para>List archives:  <ulink
-                      url="http://cholla.wustl.edu/pipermail/apbs-users/">http://cholla.wustl.edu/pipermail/apbs-users/</ulink>
+                      url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">http://sourceforge.net/mailarchive/forum.php?forum=apbs-users</ulink>
                   </para>
                 </listitem>
               </itemizedlist>
@@ -57,7 +57,7 @@
     <para> 
       Bugs or potential bugs, problems, etc. should be reported to the
       APBS-USERS 
-      (<ulink url="http://cholla.wustl.edu/mailman/listinfo/apbs-users">http://cholla.wustl.edu/mailman/listinfo/apbs-users</ulink>)
+      (<ulink url="http://lists.sourceforge.net/lists/listinfo/apbs-users">http://lists.sourceforge.net/lists/listinfo/apbs-users</ulink>)
       mailing list (see <link linkend="mailing-lists">User forums</link>).
     </para>
   </sect1>
