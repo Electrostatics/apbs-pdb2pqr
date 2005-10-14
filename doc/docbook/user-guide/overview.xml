@@ -27,43 +27,33 @@
         used by the APBS software.  The PDB2PQR service was orginally developed
         in conjunction with Jens Nielsen and Andy McCammon to address these
         issues.  The service has since evolved and has been completely
-        rewritten by Todd Dolinsky and Nathan Baker.  There are two forms of
-        the service available:
+        rewritten by Todd Dolinsky and Nathan Baker.  PDB2PQR is able to:
         <itemizedlist>
           <listitem>
-            <para>Web-based PDB2PQR 
-              (<ulink url="http://agave.wustl.edu/pdb2pqr/">http://agave.wustl.edu/pdb2pqr/</ulink>)</para>
-            <para>Given a PDB-format structure file, this web-based version of
-              the code will:
-              <orderedlist>
-                <listitem>
-                  <para>Fill in missing atoms in the PDB (within reason)</para>
-                </listitem>
-                <listitem>
-                  <para>Add hydrogens to the structure to optimize the
-                    hydrogen-bonding network.</para>
-                </listitem>
-                <listitem>
-                  <para>Assign charges and radii according to one of the
-                  following force fields:  CHARMM23, AMBER02, or PARSE</para>
-                </listitem>
-                <listitem>
-                  <para>Return the results in <link linkend="pqr-format">PQR
-                  format</link></para>
-                </listitem>
-              </orderedlist>
-            </para>
+            <para>Fill in missing atoms in the PDB (within reason)</para>
           </listitem>
           <listitem>
-            <para>Stand-alone PDB2PQR</para>
-            <para>This Python script
-              (<filename>tools/conversion/pdb2pqr/pdb2pqr.py</filename>) will
-              assign charges and radii to a PDB-format structure based on one
-              of the following force fields:  CHARMM23, AMBER02, or
-              PARSE.</para>
+            <para>Add hydrogens to the structure to optimize the
+                  hydrogen-bonding network.</para>
+          </listitem>
+          <listitem>
+            <para>Calculate side-chain pKas</para>
+          </listitem>
+          <listitem>
+            <para>Assign charges and radii according to one of the
+                  following force fields:  CHARMM23, AMBER02, or PARSE</para>
+            </listitem>
+          <listitem>
+            <para>Return the results in <link linkend="pqr-format">PQR
+                  format</link></para>
           </listitem>
         </itemizedlist>
       </para>
+
+      <para>Please visit the PDB2PQR home page (
+            <ulink url="http://pdb2pqr.sourceforge.net"> 
+            http://pdb2pqr.sourceforge.net</ulink>) for more information, 
+            links to available servers, and download options.</para>
 
       <para> Additionally, APBS provides the ability to read plain PDB-format
         files and assign charges and radii from user-supplied parameter files.
