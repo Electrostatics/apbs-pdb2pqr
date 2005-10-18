@@ -230,11 +230,19 @@ AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
 dnl # ----------------------
 dnl # HANDLE THE MALOC LIBRARY
 dnl # ----------------------
+
 AC_MSG_CHECKING([for FETK_INCLUDE])
 if test -n "${FETK_INCLUDE}"; then
     AC_MSG_RESULT([yes])
+    maloc_inc_path="-I${FETK_INCLUDE} ";
 else
-    AC_MSG_RESULT([no; will use ${HOME}/include])
+    if test "${prefix}" != "NONE"; then
+        AC_MSG_RESULT([no; will use ${prefix}/include])
+        malco_inc_path="-I${prefix}/include ";
+    else
+        AC_MSG_RESULT([no; will use ${HOME}/include])
+        maloc_inc_path="-I${HOME}/include ";
+    fi
 fi
 
 dnl # MALOC library location ENV specification
@@ -243,21 +251,15 @@ if test -n "${FETK_LIBRARY}"; then
     AC_MSG_RESULT([yes])
     maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
 else
-    AC_MSG_RESULT([no; will use ${HOME}/lib])
-    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    if test "${prefix}" != "NONE"; then
+        AC_MSG_RESULT([no; will use ${prefix}/lib])
+        maloc_lib_path="-L${prefix}/lib/${fetk_cpu_vendor_os} ";
+    else
+        AC_MSG_RESULT([no; will use ${HOME}/lib])
+        maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    fi
 fi
 
-dnl # Setup temp LDFLAGS and look for MALOC library/header
-if test -n "${FETK_INCLUDE}"; then
-    maloc_inc_path="-I${FETK_INCLUDE} ";
-else
-    maloc_inc_path="-I${HOME}/include ";
-fi
-if test -n "${FETK_LIBRARY}"; then
-    maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
-else
-    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
-fi
 LDFLAGS_SAVE=${LDFLAGS};
 CPPFLAGS_SAVE=${CPPFLAGS};
 LDFLAGS=${maloc_lib_path};

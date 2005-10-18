@@ -9850,14 +9850,23 @@ fi
 echo "$as_me:$LINENO: result: ---------- begin configuring for MALOC linkage ------------" >&5
 echo "${ECHO_T}---------- begin configuring for MALOC linkage ------------" >&6
 
+
 echo "$as_me:$LINENO: checking for FETK_INCLUDE" >&5
 echo $ECHO_N "checking for FETK_INCLUDE... $ECHO_C" >&6
 if test -n "${FETK_INCLUDE}"; then
     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+    maloc_inc_path="-I${FETK_INCLUDE} ";
 else
-    echo "$as_me:$LINENO: result: no; will use ${HOME}/include" >&5
+    if test "${prefix}" != "NONE"; then
+        echo "$as_me:$LINENO: result: no; will use ${prefix}/include" >&5
+echo "${ECHO_T}no; will use ${prefix}/include" >&6
+        malco_inc_path="-I${prefix}/include ";
+    else
+        echo "$as_me:$LINENO: result: no; will use ${HOME}/include" >&5
 echo "${ECHO_T}no; will use ${HOME}/include" >&6
+        maloc_inc_path="-I${HOME}/include ";
+    fi
 fi
 
 echo "$as_me:$LINENO: checking for FETK_LIBRARY" >&5
@@ -9867,21 +9876,17 @@ if test -n "${FETK_LIBRARY}"; then
 echo "${ECHO_T}yes" >&6
     maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
 else
-    echo "$as_me:$LINENO: result: no; will use ${HOME}/lib" >&5
+    if test "${prefix}" != "NONE"; then
+        echo "$as_me:$LINENO: result: no; will use ${prefix}/lib" >&5
+echo "${ECHO_T}no; will use ${prefix}/lib" >&6
+        maloc_lib_path="-L${prefix}/lib/${fetk_cpu_vendor_os} ";
+    else
+        echo "$as_me:$LINENO: result: no; will use ${HOME}/lib" >&5
 echo "${ECHO_T}no; will use ${HOME}/lib" >&6
-    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+        maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+    fi
 fi
 
-if test -n "${FETK_INCLUDE}"; then
-    maloc_inc_path="-I${FETK_INCLUDE} ";
-else
-    maloc_inc_path="-I${HOME}/include ";
-fi
-if test -n "${FETK_LIBRARY}"; then
-    maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
-else
-    maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
-fi
 LDFLAGS_SAVE=${LDFLAGS};
 CPPFLAGS_SAVE=${CPPFLAGS};
 LDFLAGS=${maloc_lib_path};
