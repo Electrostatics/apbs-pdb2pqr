@@ -233,7 +233,6 @@ VPRIVATE void fillcoCoefMolIon(
 /** 
  * @brief  Fill differential operator coefficient arrays from a molecular
  *         surface calculation
- * @note   This uses thee->ccf as temporary storage
  * @author  Nathan Baker
  */
 VPRIVATE void fillcoCoefMolDiel(
@@ -250,29 +249,17 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(
         );
 
 /** 
- * @brief  Calculate molecular surface smoothing via a harmonic average for
- *         grid midpoints (between i and i+1) per Davis ME, McCammon JA.  J
- *         Comput Chem 12 (7) 909-12 (1991).  
- * @author  Nathan Baker
- */
-VPRIVATE double molSmoothHarm(
-        double epsw,  /** High dielectric */
-        double epsp,  /** Low dielectric */
-        double frac   /** Fraction of grid assigned to the high dielectric */
-        );
-
-/** 
  * @brief  Fill differential operator coefficient arrays from a molecular
- *         surface calculation without smoothing.
+ *         surface calculation with smoothing.
  *
  *         Molecular surface, dielectric smoothing following an implementation
- *         of Davis ME, McCammon JA.  J Comput Chem 12 (7) 909-12 (1991).  
+ *         of Bruccoleri, et al.  J Comput Chem 18 268-276 (1997).
  *
- *         We're not using complete fractional occupancies -- instead, we're
- *         estimating them from left-, mid-, and right-grid points.
+ *         This algorithm uses a 9 point harmonic smoothing technique - the point 
+ *         in question and all grid points 1/sqrt(2) grid spacings away.
  *
- * @note   This uses thee->ccf as temporary storage.
- * @author  Nathan Baker
+ * @note   This uses thee->a1cf, thee->a2cf, thee->a3cf as temporary storage.
+ * @author  Todd Dolinsky
  */
 VPRIVATE void fillcoCoefMolDielSmooth(
         Vpmg *thee
