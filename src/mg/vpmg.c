@@ -2448,17 +2448,12 @@ VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
 
 VPRIVATE void fillcoCoefMolDiel(Vpmg *thee) {
 
-    /* Now figure out what to do with the solvent accessibility */
-    switch (thee->surfMeth) {
-        case VSM_MOL:
-            fillcoCoefMolDielNoSmooth(thee);
-            break;
-        case VSM_MOLSMOOTH:
-            fillcoCoefMolDielSmooth(thee);
-            break;
-        default:
-            Vnm_print(2, "Error in surfMeth!\n");
-            VASSERT(0);
+    /* Always call NoSmooth to fill the epsilon arrays */
+    fillcoCoefMolDielNoSmooth(thee);
+
+    /* Call the smoothing algorithm as needed */
+    if (thee->surfMeth == VSM_MOLSMOOTH) {
+        fillcoCoefMolDielSmooth(thee);
     }
 }
 
@@ -2604,201 +2599,136 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
 
         }
     }
-
 }
 
 VPRIVATE void fillcoCoefMolDielSmooth(Vpmg *thee) {
 
-    Vacc *acc;
-    VaccSurf *asurf;
-    Valist *alist;
-    Vpbe *pbe;
-    Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax;
-    double xlen, ylen, zlen, position[3], frac;
-    double srad, epsw, epsp, ap, am, a;
-    double hx, hy, hzed, *apos, arad;
-    int i, j, k, nx, ny, nz, iatom, ipt;
+  /* This function smoothes using a 9 point method based on
+     Bruccoleri, et al. J Comput Chem 18 268-276 (1997).  The nine points
+     used are the shifted grid point and the 8 points that are 1/sqrt(2)
+     grid spacings away.  The harmonic mean of the 9 points is then used to 
+     find the overall dielectric value for the point in question. The use of 
+     this function assumes that the non-smoothed values were placed in the 
+     dielectric arrays by the fillcoCoefMolDielNoSmooth function.*/
 
-    /* Get PBE info */
-    pbe = thee->pbe;
-    acc = pbe->acc;
-    alist = pbe->alist;
-    srad = Vpbe_getSolventRadius(pbe);
-    epsw = Vpbe_getSolventDiel(pbe);
-    epsp = Vpbe_getSoluteDiel(pbe);
+    Vpbe *pbe;
+    double frac, epsw;
+    int i, j, k, nx, ny, nz, numpts;
 
     /* Mesh info */
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
-    hx = thee->pmgp->hx;
-    hy = thee->pmgp->hy;
-    hzed = thee->pmgp->hzed;
+    
+    pbe = thee->pbe;
+    epsw = Vpbe_getSolventDiel(pbe);
 
-    /* Define the total domain size */
-    xlen = thee->pmgp->xlen;
-    ylen = thee->pmgp->ylen;
-    zlen = thee->pmgp->zlen;
-
-    /* Define the min/max dimensions */
-    xmin = thee->pmgp->xcent - (xlen/2.0);
-    ymin = thee->pmgp->ycent - (ylen/2.0);
-    zmin = thee->pmgp->zcent - (zlen/2.0);
-    xmax = thee->pmgp->xcent + (xlen/2.0);
-    ymax = thee->pmgp->ycent + (ylen/2.0);
-    zmax = thee->pmgp->zcent + (zlen/2.0);
-
-    /* Reset the ccf, epsx, epsy, and epsz arrays */
+    /* Copy the existing diel arrays to work arrays */
     for (i=0; i<(nx*ny*nz); i++) {
-        thee->ccf[i]  = 1.0;
-        thee->epsx[i] = 1.0;
-        thee->epsy[i] = 1.0;
-        thee->epsz[i] = 1.0;
+        thee->a1cf[i] = thee->epsx[i];
+        thee->a2cf[i] = thee->epsy[i];
+        thee->a3cf[i] = thee->epsz[i];
+        thee->epsx[i] = epsw;
+        thee->epsy[i] = epsw;
+        thee->epsz[i] = epsw;
     }
 
-    /* Loop through the atoms and set ccf to 0.0 (inaccessible) if a point is
-     * inside the solvent-inflated van der Waals radii */
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-
-        atom = Valist_getAtom(alist, iatom);
-        apos = Vatom_getPosition(atom);
-        arad = Vatom_getRadius(atom);
-
-        /* Make sure we're on the grid */
-        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
-            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
-            (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
-                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
- %4.3f) is off the mesh (ignoring):\n",
-                  iatom, apos[0], apos[1], apos[2]);
-                Vnm_print(2, "Vpmg_fillco:  xmin = %g, xmax = %g\n", 
-                  xmin, xmax);
-                Vnm_print(2, "Vpmg_fillco:  ymin = %g, ymax = %g\n", 
-                  ymin, ymax);
-                Vnm_print(2, "Vpmg_fillco:  zmin = %g, zmax = %g\n", 
-                  zmin, zmax);
-            }
-            fflush(stderr);
-
-        } else { /* if we're on the mesh */
-
-            if (arad > VSMALL) {
-                /* Mark unshifted dielectric */
-                markSphere((arad+srad), apos, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin, zmin,
-                        thee->ccf, 0.0);
-
-                /* Mark shifted dielectrics */
-                markSphere((arad+srad), apos, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin+0.5*hx, ymin, zmin,
-                        thee->epsx, 0.0);
-                markSphere((arad+srad), apos, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin+0.5*hy, zmin,
-                        thee->epsy, 0.0);
-                markSphere((arad+srad), apos, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin, zmin+0.5*hzed,
-                        thee->epsz, 0.0);
-            }
-
-        } /* endif (on the mesh) */
-
-    } /* endfor (over all atoms) */
-
-    /* We only need to do the next step for non-zero solvent radii */
-    if (srad > VSMALL) {
-        /* Now use the SAS points to reset the dielectric */
-        for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-    
-            atom = Valist_getAtom(alist, iatom);
-            asurf = Vacc_atomSASPoints(acc, srad, atom);
-    
-            /* Use each point on the SAS to reset the solvent
-             * accessibility and set grid length fractions */
-            for (ipt=0; ipt<(asurf->npts); ipt++) {
-                position[0] = asurf->xpts[ipt];
-                position[1] = asurf->ypts[ipt];
-                position[2] = asurf->zpts[ipt];
-    
-                /* Mark unshifted dielectric */
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin, zmin,
-                        thee->ccf, 1.0);
-    
-                /* Mark shifted dielectrics */
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin+0.5*hx, ymin, zmin,
-                        thee->epsx, 1.0);
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin+0.5*hy, zmin,
-                        thee->epsy, 1.0);
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin, zmin+0.5*hzed,
-                        thee->epsz, 1.0);
-            }
-        }
-    }
-
-    /* Convert to dielectric values */
+    /* Smooth the dielectric values */
     for (i=0; i<nx; i++) {
         for (j=0; j<ny; j++) {
             for (k=0; k<nz; k++) {
+                
+                /* Get the 8 points that are 1/sqrt(2) grid spacings away */
 
-                am = thee->ccf[IJK(i,j,k)];
+                /* Points for the X-shifted array */
+                frac = 1.0/thee->a1cf[IJK(i,j,k)];
+                frac += 1.0/thee->a2cf[IJK(i,j,k)];
+                frac += 1.0/thee->a3cf[IJK(i,j,k)];
+                numpts = 3;
 
-                /* X-shifted */
-                a = thee->epsx[IJK(i,j,k)];
-                if (i < (nx-1)) ap = thee->ccf[IJK(i+1,j,k)];
-                else ap = a;
-                frac = (a + ap + am)/3.0;
-                thee->epsx[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                if (j > 0) {
+                    frac += 1.0/thee->a2cf[IJK(i,j-1,k)];
+                    numpts += 1;
+                } 
+                if (k > 0) {
+                    frac += 1.0/thee->a3cf[IJK(i,j,k-1)];
+                    numpts += 1;
+                }
+                if (i < (nx-1)){
+                    frac += 1.0/thee->a2cf[IJK(i+1,j,k)];
+                    frac += 1.0/thee->a3cf[IJK(i+1,j,k)];
+                    numpts += 2;
+                    if (j > 0) {
+                        frac += 1.0/thee->a2cf[IJK(i+1,j-1,k)];
+                        numpts += 1;
+                    }
+                    if (k > 0) {
+                        frac += 1.0/thee->a3cf[IJK(i+1,j,k-1)];
+                        numpts += 1;
+                    }
+                } 
+                thee->epsx[IJK(i,j,k)] = numpts/frac;
+                
+                /* Points for the Y-shifted array */
+                frac = 1.0/thee->a2cf[IJK(i,j,k)];
+                frac += 1.0/thee->a1cf[IJK(i,j,k)];
+                frac += 1.0/thee->a3cf[IJK(i,j,k)];
+                numpts = 3;
 
-                /* Y-shifted */
-                a = thee->epsy[IJK(i,j,k)];
-                if (j < (ny-1)) ap = thee->ccf[IJK(i,j+1,k)];
-                else ap = a;
-                frac = (a + ap + am)/3.0;
-                thee->epsy[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                if (i > 0) {
+                    frac += 1.0/thee->a1cf[IJK(i-1,j,k)];
+                    numpts += 1;
+                } 
+                if (k > 0) {
+                    frac += 1.0/thee->a3cf[IJK(i,j,k-1)];
+                    numpts += 1;
+                }
+                if (j < (ny-1)){
+                    frac += 1.0/thee->a1cf[IJK(i,j+1,k)];
+                    frac += 1.0/thee->a3cf[IJK(i,j+1,k)];
+                    numpts += 2;
+                    if (i > 0) {
+                        frac += 1.0/thee->a1cf[IJK(i-1,j+1,k)];
+                        numpts += 1;
+                    }                
+                    if (k > 0) {
+                        frac += 1.0/thee->a3cf[IJK(i,j+1,k-1)];
+                        numpts += 1;
+                    }
+                } 
+                thee->epsy[IJK(i,j,k)] = numpts/frac;
 
-                /* Z-shifted */
-                a = thee->epsz[IJK(i,j,k)];
-                if (k < (nz-1)) ap = thee->ccf[IJK(i,j,k+1)];
-                else ap = a;
-                frac = (a + ap + am)/3.0;
-                thee->epsz[IJK(i,j,k)] = molSmoothHarm(epsw, epsp, frac);
+                /* Points for the Z-shifted array */
+                frac = 1.0/thee->a3cf[IJK(i,j,k)];
+                frac += 1.0/thee->a1cf[IJK(i,j,k)];
+                frac += 1.0/thee->a2cf[IJK(i,j,k)];
+                numpts = 3;
 
+                if (i > 0) {
+                    frac += 1.0/thee->a1cf[IJK(i-1,j,k)];
+                    numpts += 1;
+                } 
+                if (j > 0) {
+                    frac += 1.0/thee->a2cf[IJK(i,j-1,k)];
+                    numpts += 1;
+                }
+                if (k < (nz-1)){
+                    frac += 1.0/thee->a1cf[IJK(i,j,k+1)];
+                    frac += 1.0/thee->a2cf[IJK(i,j,k+1)];
+                    numpts += 2;
+                    if (i > 0) {
+                        frac += 1.0/thee->a1cf[IJK(i-1,j,k+1)];
+                        numpts += 1;
+                    }      
+                    if (j > 0) {
+                        frac += 1.0/thee->a2cf[IJK(i,j-1,k+1)];
+                        numpts += 1;
+                    }
+                } 
+                thee->epsz[IJK(i,j,k)] = numpts/frac;
             }
         }
     }
-
-}
-
-VPRIVATE double molSmoothHarm(double epsw, double epsp, double frac) {
-
-    double num, den, eps;
-
-    num = epsw*epsp;
-    den = epsp*frac + epsw*(1.0-frac);
-    eps = num/den;
-
-    return eps;
 }
 
 
