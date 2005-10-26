@@ -1,0 +1,90 @@
+##########################################################################
+### ION-PROTEIN BINDING ENERGY
+### $Id$
+###
+### Please see APBS documentation (http://agave.wustl.edu/apbs/doc/) for
+### syntax help.
+##########################################################################
+
+read 
+    mol pqr small491.pqr
+    mol pqr 491.pqr 
+    mol pqr complex.pqr
+end
+
+# ENERGY OF PROTEIN CHUNK
+elec name protein
+    mg-manual
+    dime  129 129 129
+    nlev 6
+    glen  67  67  75
+    gcent mol 3
+    mol 1
+    npbe
+    bcfl mdh
+    ion 1 0.050 2.0
+    ion -1 0.050 2.0
+    pdie 2.0
+    sdie 78.4
+    chgm spl0
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+end
+
+# ENERGY OF ION
+elec name ion
+    mg-manual
+    dime  129 129 129
+    nlev 6
+    glen  67  67  75
+    gcent mol 3
+    mol 2
+    npbe
+    bcfl mdh
+    ion 1 0.050 2.0
+    ion -1 0.050 2.0
+    pdie 2
+    sdie 78.4
+    chgm spl0
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+end
+
+# ENERGY OF COMPLEX
+elec name complex
+    mg-manual
+    dime  129 129 129
+    nlev 6
+    glen  67  67  75
+    gcent mol 3
+    mol 3
+    npbe
+    bcfl mdh
+    ion 1 0.050 2.0
+    ion -1 0.050 2.0
+    pdie 2
+    sdie 78.4
+    chgm spl0
+    srfm mol
+    srad 1.4
+    swin 0.3
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+end
+
+# COMBINE INTO BINDING ENERGY
+print energy complex - protein - ion end
+
+quit
