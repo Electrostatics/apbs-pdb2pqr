@@ -5,692 +5,163 @@
 </head>
 
 <body bgcolor="#ffffff">
-<h1 align="center"> APBS examples/test cases </h1>
+<h1 align="center"> APBS examples and test cases </h1>
 
-<center>
-$Id$
-</center>
-
-<br><br><br>
-
-<h3>Results</h3>
+<br>
+This directory serves as the root directory for the APBS test suite.  In each directory you will find example input files to use with APBS and a README file displaying the results for different versions of APBS.  
 
 <h4>Actin-Dimer</h4>
   <ul>
+  <li><a href="actin-dimer/README.html">README</a>
   <li>Source:  Dave Sept
   <li>Description:  Calculate binding energies for actin dimers.  This is an
       example of a large biomolecule binding energy calculation that often
       requires parallel focusing.
-  </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>Parallel, 8 proc, ~0.9 A spacing, LPBE</td>
-<td>91.67</td>
-<td>91.939</td>
-<td>91.945</td>
-<td>91.9450</td>
-<td>90.2543</td>
-<td>90.2573</td>
-<td>90.2573</td>
-<td>90.2573</td>
-<td>90.2573</td>
-<td>87.1121</td>
-<td>87.1121</td>
-<td>106.7<BR>
-(1.00 A res., NPBE)<BR></td>
-</tr>
-<tr>
-<td>Sequential, 2-level focus to <=0.725 A, NPBE</td>
-<td>90.84</td>
-<td>90.829</td>
-<td>90.829</td>
-<td>90.829</td>
-<td>88.6064</td>
-<td>88.6101</td>
-<td>88.6101</td>
-<td>88.6101</td>
-<td>88.6101</td>
-<td>88.6101</td>
-<td>90.8074</td>
-<td>106.7<BR>
-(1.00 A res., NPBE)<BR></td>
-</tr>
-</table>
+  <li>Input files:
+  <ul>
+  <li><a href="actin-dimer/apbs-mol-auto.in">apbs-mol-auto.in</a> - Sequential, 2-level focusing to <=0.725 A, NPBE, srfm mol
+  <li><a href="actin-dimer/apbs-smol-auto.in">apbs-smol-auto.in</a> - Sequential, 2-level focusing to <=0.725 A, NPBE, srfm smol
+  <li><a href="actin-dimer/apbs-spl2-auto.in">apbs-spl2-auto.in</a> - Sequential, 2-level focusing to <=0.725 A, NPBE, srfm spl2
+  <li><a href="actin-dimer/apbs-mol-parallel.in">apbs-mol-parallel.in</a> - Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol
+  <li><a href="actin-dimer/apbs-smol-parallel.in">apbs-smol-parallel.in</a> - Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol
+  <li><a href="actin-dimer/apbs-spl2-parallel.in">apbs-spl2-parallel.in</a> - Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm spl2
+  </ul></ul>
 
 <P>
 
 <h4>Born Ion</h4>
  <ul>
+  <li><a href="born/README.html">README</a>
   <li>Source:  Nathan Baker
   <li>Description:  Calculate solvation energies for ions of various sizes and
       compare to the analytical results.
+  <li>Input files:
+  <ul>
+  <li><a href="born/apbs-mol-auto.in">apbs-mol-auto.in</a> - Sequential, 3-level focusing to 0.188 A, srfm mol
+  <li><a href="born/apbs-smol-auto.in">apbs-smol-auto.in</a> - Sequential, 3-level focusing to 0.188 A, srfm smol
+  <li><a href="born/apbs-spl2-auto.in">apbs-spl2-auto.in</a> - Sequential, 3-level focusing to 0.188 A, srfm spl2
+  <li><a href="born/apbs-mol-parallel.in">apbs-mol-parallel.in</a> - Parallel with 4 processors, focusing to 0.103 A, srfm mol
+  <li><a href="born/apbs-smol-parallel.in">apbs-smol-parallel.in</a> - Parallel with  4 processors, focusing to 0.103 A, srfm smol
+  <li><a href="born/apbs-spl2-parallel.in">apbs-spl2-parallel.in</a> - Parallel with 4 processors, focusing to 0.103 A, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 0</td>
-<td>-229.72</td>
-<td>-229.72</td>
-<td>-229.72</td>
-<td>-229.725</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-229.7250</td>
-<td>-228.57 kJ/mol<BR>
-(3 A sphere)</td>
-</tr>
-<tr>
-<td>3 A sphere, 3-level focus to 0.188 A, srfm 0, chgm 1</td>
-<td>-227.19</td>
-<td>-227.19</td>
-<td>-227.19</td>
-<td>-227.186</td>
-<td>-227.1859</td>
-<td>-227.1859</td>
-<td>-229.7248</td>
-<td>-229.7248</td>
-<td>-229.7248</td>
-<td>-229.7248</td>
-<td>-229.7248</td>
-<td>-228.57 kJ/mol<BR>
-(3 A sphere)</td>
-</tr>
-<tr>
-<td>3 A sphere, 4-proc 3-level para focus to 0.103 A, srfm 1, chgm 1</td>
-<td>-226.23</td>
-<td>-226.228</td>
-<td>-230.77 (srfm 0)</td>
-<td>-226.2276</td>
-<td>-226.2276</td>
-<td>-226.2276</td>
-<td>-229.5849</td>
-<td>-229.5849</td>
-<td>-229.5849</td>
-<td>-226.3529</td>
-<td>-226.3529</td>
-<td>-228.57 kJ/mol<BR>
-(3 A sphere)</td>
-</tr>
-</table>
-
-<P>
+</ul>
 
 
 <h4>FKBP</h4>
   <ul>
+  <li><a href="FKBP/README.html">README</a>
   <li>Source: Jung-Hsin Lin
   <li>Description:  Binding of various (small) ligands to FKBP.  Analogous to
       HCA binding case (except it works).
+  <li>Input files:
+  <ul>
+    <li><a href="FKBP/1d7h-dmso/apbs-mol.in">1d7h-dmso/apbs-mol.in<a> - 1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm mol
+    <li><a href="FKBP/1d7h-dmso/apbs-smol.in">1d7h-dmso/apbs-smol.in<a> - 1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm smol
+    <li><a href="FKBP/1d7h-dmso/apbs-spl2.in">1d7h-dmso/apbs-spl2.in<a> - 1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm spl2
+    <li><a href="FKBP/1d7i-dss/apbs-mol.in">1d7i-dss/apbs-mol.in<a> - 1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm mol
+    <li><a href="FKBP/1d7i-dss/apbs-smol.in">1d7i-dss/apbs-smol.in<a> - 1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm smol
+    <li><a href="FKBP/1d7i-dss/apbs-spl2.in">1d7i-dss/apbs-spl2.in<a> - 1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind(solv)</td>
-<td>18.591</td>
-<td>14.589</td>
-<td>14.589</td>
-<td>14.5886</td>
-<td>15.0097</td>
-<td>15.0089</td>
-<td>15.0089</td>
-<td>15.0089</td>
-<td>15.0089</td>
-<td>15.0089</td>
-<td>15.0089</td>
-<td>19.097</td>
-</tr>
-<tr>
-<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind(Coul)</td>
-<td>-15.103</td>
-<td>-15.103</td>
-<td>-15.093</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.0930</td>
-<td>-15.103</td>
-</tr>
-<tr>
-<td>1D7H-DMSO - 2-level focusing to 0.225 A, VdW surface, DGbind</td>
-<td>3.448</td>
-<td>-0.514</td>
-<td>-0.504</td>
-<td>-0.5043</td>
-<td>-0.0833</td>
-<td>-0.0841</td>
-<td>-0.0841</td>
-<td>-0.0841</td>
-<td>-0.0841</td>
-<td>-0.0841</td>
-<td>-0.0841</td>
-<td>3.994</td>
-</tr>
-<tr>
-<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind(solv)</td>
-<td>15.210</td>
-<td>14.387</td>
-<td>14.387</td>
-<td>14.3865</td>
-<td>14.4261</td>
-<td>14.4254</td>
-<td>14.4254</td>
-<td>14.4254</td>
-<td>14.4254</td>
-<td>14.4254</td>
-<td>14.4254</td>
-<td>16.231</td>
-</tr>
-<tr>
-<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind(Coul)</td>
-<td>-11.975</td>
-<td>-11.975</td>
-<td>-11.967</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.9670</td>
-<td>-11.975</td>
-</tr>
-<tr>
-<td>1D7I-DSS - 2-level focusing to 0.225 A, VdW surface, DGbind</td>
-<td>3.235</td>
-<td>2.412</td>
-<td>2.420</td>
-<td>2.4195</td>
-<td>2.4591</td>
-<td>2.4585</td>
-<td>2.4585</td>
-<td>2.4585</td>
-<td>2.4585</td>
-<td>2.4585</td>
-<td>2.4585</td>
-<td>4.256</td>
-</tr>
-</table>
+  </ul>
 
 <P>
 
 <h4>hca-bind</h4>
- <ul>
+  <ul>
+  <li><a href="hca-bind/README.html">README</a>
   <li>Source:  UHBD 
   <li>Description:  Calculate the binding of a small molecule (acetazolamide)
       to a medium-sized protein (human carbonic anhydrase).
+  <li>Input files:
+  <ul>
+    <li><a href="hca-bind/apbs-mol.in">apbs-mol.in</a> - 2-level focusing to 0.225 A, VdW surface, srfm mol
+    <li><a href="hca-bind/apbs-smol.in">apbs-smol.in</a> - 2-level focusing to 0.225 A, VdW surface, srfm smol
+    <li><a href="hca-bind/apbs-spl2.in">apbs-spl2.in</a> - 2-level focusing to 0.225 A, VdW surface, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>2-level focus to 0.225 A, srfm 1, VdW surf, Directly-calculated Binding Energy</td>
-<td>-58.51</td>
-<td>-57.711</td>
-<td>-57.112</td>
-<td>-57.1123</td>
-<td>-57.1123</td>
-<td>-57.1192</td>
-<td>-57.1192</td>
-<td>-57.1192</td>
-<td>-57.1192</td>
-<td>-57.1192</td>
-<td>-57.1192</td>
-<td>-70.00</td>
-</tr>
-</table>
+ </ul>
 
 <P>
 
 <h4>ionize</h4>
   <ul>
+  <li><a href="ionize/README.html">README</a>
   <li>Source: UHBD
   <li>Description:  Calculate electrostatic contributions to the ionization
       energy of acetic acid.
+  <li>Input files:
+  <ul>
+  <li><a href="ionize/apbs-mol.in">apbs-mol.in</a> - 3-level focusing to 0.094 A, srfm mol
+  <li><a href="ionize/apbs-smol.in">apbs-smol.in</a> - 3-level focusing to 0.094 A, srfm smol
+  <li><a href="ionize/apbs-spl2.in">apbs-spl2.in</a> - 3-level focusing to 0.094 A, srfm spl2
    </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>3-level focusing to 0.094 A, Acetic acid solv. G</td>
-<td>-22.63</td>
-<td>-22.627</td>
-<td>-22.627</td>
-<td>-22.628</td>
-<td>-22.629</td>
-<td>-22.6787</td>
-<td>-22.6787</td>
-<td>-22.6787</td>
-<td>-22.6787</td>
-<td>-22.6787</td>
-<td>-22.6787</td>
-<td>-22.22</td>
-</tr>
-<tr>
-<td>3-level focusing to 0.094 A, Acetate solv. G</td>
-<td>-195.31</td>
-<td>-195.305</td>
-<td>-195.305</td>
-<td>-195.3051</td>
-<td>-195.3135</td>
-<td>-199.7462</td>
-<td>-199.7462</td>
-<td>-199.7462</td>
-<td>-199.7462</td>
-<td>-199.7462</td>
-<td>-199.7462</td>
-<td>-198.04</td>
-</tr>
-<tr>
-<td>3-level focusing to 0.094 A, Proton solv. G</td>
-<td>290.86</td>
-<td>-290.859</td>
-<td>-290.859</td>
-<td>-290.8591</td>
-<td>-290.8751</td>
-<td>-297.4599</td>
-<td>-297.4599</td>
-<td>-297.4599</td>
-<td>-297.4599</td>
-<td>-297.4599</td>
-<td>-297.4599</td>
-<td>-295.79</td>
-</tr>
-<tr>
-<td>3-level focusing to 0.094 A, Ionization Energy</td>
-<td>-463.54</td>
-<td>-463.537</td>
-<td>-463.537</td>
-<td>-463.5373</td>
-<td>-463.5617</td>
-<td>-474.5273</td>
-<td>-474.5273</td>
-<td>-474.5273</td>
-<td>-474.5273</td>
-<td>-474.5273</td>
-<td>-474.5273</td>
-<td>-471.61</td>
-</tr>
-</table>
+  </ul>
 
 <P>
 
 <h4>ion-protein</h4>
  <ul>
+  <li><a href="ion-protein/README.html">README</a>
   <li>Source:  Dave Sept
   <li>Description:  Calculate energy of placing an ion near a macromolecule
+  <li>Input files:
+  <ul>
+    <li><a href="ion-protein/apbs-mol-pdiel2.in">apbs-mol-pdiel2.in</a> - 0.53 A resolution, pdie 2, srfm mol
+    <li><a href="ion-protein/apbs-smol-pdiel2.in">apbs-smol-pdiel2.in</a> - 0.53 A resolution, pdie 2, srfm smol
+    <li><a href="ion-protein/apbs-spl2-pdiel2.in">apbs-spl2-pdiel2.in</a> - 0.53 A resolution, pdie 2, srfm spl2
+    <li><a href="ion-protein/apbs-mol-pdiel12.in">apbs-mol-pdiel12.in</a> - 0.53 A resolution, pdie 12, srfm mol
+    <li><a href="ion-protein/apbs-smol-pdiel12.in">apbs-smol-pdiel12.in</a> - 0.53 A resolution, pdie 12, srfm smol
+    <li><a href="ion-protein/apbs-spl2-pdiel12.in">apbs-spl2-pdiel12.in</a> - 0.53 A resolution, pdie 12, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>0.53 A resolution, NPBE, prot. diel. of 12</td>
-<td>18.90</td>
-<td>18.895</td>
-<td>18.895</td>
-<td>18.8953</td>
-<td>17.4049</td>
-<td>17.4207</td>
-<td>17.4207</td>
-<td>17.4207</td>
-<td>17.4207</td>
-<td>17.4207</td>
-<td>18.9205</td>
-<td>18.39</td>
-</tr>
-<tr>
-<td>0.53 A resolution, NPBE, prot. diel. of 2</td>
-<td>21.45</td>
-<td>21.453</td>
-<td>21.453</td>
-<td>21.4530</td>
-<td>19.8652</td>
-<td>19.8794</td>
-<td>19.8794</td>
-<td>19.8794</td>
-<td>19.8794</td>
-<td>19.8794</td>
-<td>21.4763</td>
-<td>23.58</td>
-</tr>
-</table>
+  </ul>
 
 <P>
 
 <h4>pka-lig</h4>
   <ul>
+  <li><a href="pka-lig/README.html">README</a>
   <li>Source:  Chung Wong
   <li>Description:  Calculate binding energies of a ligand to protein kinase A.
-  <li>NOTE: dime changed from 65^3 to 97^3 starting with Version 0.3.2 release
+  <li>Input files:
+  <ul>
+    <li><a href="pka-lig/apbs-mol-vdw.in">apbs-mol-vdw.in</a> - 2-level focusing to 0.250 A spacing, VdW surface, srfm mol
+    <li><a href="pka-lig/apbs-smol-vdw.in">apbs-smol-vdw.in</a> - 2-level focusing to 0.250 A spacing, VdW surface, srfm smol
+    <li><a href="pka-lig/apbs-spl2-vdw.in">apbs-spl2-vdw.in</a> - 2-level focusing to 0.250 A spacing, VdW surface, srfm spl2
+    <li><a href="pka-lig/apbs-mol-surf.in">apbs-mol-surf.in</a> - 2-level focusing to 0.250 A spacing, molecular surface, srfm mol
+    <li><a href="pka-lig/apbs-smol-surf.in">apbs-smol-surf.in</a> - 2-level focusing to 0.250 A spacing, molecular surface, srfm smol
+    <li><a href="pka-lig/apbs-spl2-surf.in">apbs-spl2-surf.in</a> - 2-level focusing to 0.250 A spacing, molecular surface, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>2-level focusing to 0.250 A spacing, vdw-based dielectric</td>
-<td>6.65</td>
-<td>6.647</td>
-<td>6.647</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>6.6465</td>
-<td>8.0640</td>
-<td>8.876</td>
-</tr>
-<tr>
-<td>2-level focusing to 0.250 A spacing, mol surf-based dielectric</td>
-<td>97.01</td>
-<td>97.015</td>
-<td>97.015</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>97.0147</td>
-<td>94.8705</td>
-<td>86.50</td>
-</tr>
-</table>
+  </ul>
 
 <P>
 
 <h4>point-pmf</h4>
   <ul>
+  <li><a href="point-pmf/README.html">README</a>
   <li>Source:  Nathan Baker
   <li>Description:  See how well we do reproducing Coulomb's law.
+  <li>Input files:
+  <ul>
+  <li><a href="point-pmf/apbs-mol.in">apbs-mol.in</a> - Focusing to 0.21 A, srfm mol
+  <li><a href="point-pmf/apbs-smol.in">apbs-smol.in</a> - Focusing to 0.21 A, srfm smol
+  <li><a href="point-pmf/apbs-spl2.in">apbs-spl2.in</a> - Focusing to 0.21 A, srfm spl2
+
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>1 A dist</td>
-<td>18.308</td>
-<td>18.31</td>
-<td>18.308</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>18.3082</td>
-<td>17.686</td>
-</tr>
-<tr>
-<td>2 A dist</td>
-<td>8.907</td>
-<td>8.91</td>
-<td>8.907</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.9067</td>
-<td>8.843</td>
-</tr>
-<tr>
-<td>3 A dist</td>
-<td>5.910</td>
-<td>5.91</td>
-<td>5.910</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.9096</td>
-<td>5.89533</td>
-</tr>
-<tr>
-<td>4 A dist</td>
-<td>4.430</td>
-<td>4.43</td>
-<td>4.430</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4301</td>
-<td>4.4215</td>
-</tr>
-</table>
+  </ul>
 
 <P>
 
 <h4>solv</h4>
   <ul>
+  <li><a href="solv/README.html">README</a>
   <li>Source:  UHBD
   <li>Description:  Calculate the solvation energies of methanol and methoxide.
+  <li>Input files:
+  <ul>
+  <li><a href="solv/apbs-mol.in">apbs-mol.in</a> - Focusing to 0.25 A, srfm mol
+  <li><a href="solv/apbs-smol.in">apbs-smol.in</a> - Focusing to 0.25 A, srfm smol
+  <li><a href="solv/apbs-spl2.in">apbs-spl2.in</a> - Focusing to 0.25 A, srfm spl2
   </ul>
-<table align="center" border="1" cellpadding="3" cellspacing="3">
-<tr>
-<th>&nbsp;</th>
-<th colspan="11">APBS Version - Results in kJ/mol<th>
-</tr>
-<tr>
-<th>Example</th>
-<th>0.1.8</th>
-<th>0.2.0</th>
-<th>0.2.1</th>
-<th>0.2.2</th>
-<th>0.2.3</th>
-<th>0.2.4</th>
-<th>0.2.5</th>
-<th>0.2.6</th>
-<th>0.3.0</th>
-<th>0.3.1</th>
-<th>0.3.2</th>
-<th>UHBD/Analytical</th>
-</tr>
-<tr>
-<td>Methanol, 0.250 A spacing, zero probe radius, srfm 1</td>
-<td>-36.222</td>
-<td>-36.222</td>
-<td>-36.222</td>
-<td>-36.2223</td>
-<td>-36.2223</td>
-<td>-36.2486</td>
-<td>-36.6249</td>
-<td>-36.6249</td>
-<td>-36.6249</td>
-<td>-36.6249</td>
-<td>-36.6249</td>
-<td>-35.595</td>
-</tr>
-<tr>
-<td>Methoxide, 0.250 A spacing, zero probe radius, srfm 1 </td>
-<td>-391.800</td>
-<td>-391.800</td>
-<td>-391.800</td>
-<td>-391.7995</td>
-<td>-391.7995</td>
-<td>-390.4119</td>
-<td>-390.4119</td>
-<td>-390.4119</td>
-<td>-390.4119</td>
-<td>-390.4119</td>
-<td>-390.4119</td>
-<td>-390.023</td>
-</tr>
-<td>Difference</td>
-<td>-355.577</td>
-<td>-355.577</td>
-<td>-355.577</td>
-<td>-355.5772</td>
-<td>-355.5771</td>
-<td>-354.1632</td>
-<td>-354.1632</td>
-<td>-354.1632</td>
-<td>-354.1632</td>
-<td>-354.1632</td>
-<td>-354.1632</td>
-<td>-354.424</td>
-</tr>
-</table>
+  </ul>
 
-<P>
 </BODY>
 </HTML>
