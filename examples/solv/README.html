@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<TITLE>README for solv APBS examples</TITLE>
+<HEAD>
+<BODY>
+<h1 align="center">README for solv APBS examples</h1>
+<BR>
+The example input files in this directory calculate the solvation energies of methanol and methoxide.
+<P>
+The source for this example is UHBD.
+<P>
+
+<table align="center" border="1" cellpadding="3" cellspacing="1">
+<tr><th rowspan=2>Input File</th><th rowspan=2>Description</th><th rowspan=2>APBS Version</th><th colspan=3>Results (in kJ/mol)</th><th colspan=3>Analytical/UHBD</th></tr>
+<tr><td><font size=-1>Methanol</font></td><td><font size=-1>Methoxide</font></td><td><font size=-1>Difference</font></td><td><font size=-1>Methanol</font></td><td><font size=-1>Methoxide</font></td><td><font size=-1>Difference</font></td>
+</tr>
+
+<tr>
+<td><a href="apbs-mol.in">apbs-mol.in</a></td>
+<td>Focusing to 0.25 A, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td><td align=center><B></B></td><td align=center><B></B></td>
+<td align=center>-35.595</td>
+<td align=center>-390.023</td>
+<td align=center>-354.424</td>
+</tr>
+
+<tr>
+<td rowspan=12><a href="apbs-smol.in">apbs-smol.in</a></td>
+<td rowspan=12>Focusing to 0.25 A, srfm smol</td>
+<td align=center><B>1.0.0<sup><a href="#1">1</a></sup></B></td><td align=center><B>-37.0741</B></td><td align=center><B>-388.8897</B></td><td align=center><B>-351.8156</B></td>
+<td rowspan=12 align=center>-35.595</td>
+<td rowspan=12 align=center>-390.023</td>
+<td rowspan=12 align=center>-354.424</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>-36.2223</td><td align=center>-391.7995</td><td align=center>-355.5771</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>-36.2223</td><td align=center>-391.7995</td><td align=center>-355.5771</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>-36.222</td><td align=center>-391.800</td><td align=center>-355.577</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>-36.222</td><td align=center>-391.800</td><td align=center>-355.577</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>-36.222</td><td align=center>-391.800</td><td align=center>-355.577</td></tr>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2.in">apbs-spl2.in</a></td>
+<td>Focusing to 0.25 A, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td><td align=center><B></B></td><td align=center><B></B></td>
+<td align=center>-35.595</td>
+<td align=center>-390.023</td>
+<td align=center>-354.424</td>
+</tr>
+</table>
+<P>
+<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<ul>
+<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
+<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+</ul>
+Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.<P>
+
+
+</BODY>
+</HTML>
