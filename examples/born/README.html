@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+<TITLE>README for Born APBS examples</TITLE>
+<HEAD>
+<BODY>
+<h1 align="center">README for Born APBS examples</h1>
+<BR>
+This is the canonical electrostatics test case: Born ion.
+A non-polarizable ion with a single embedded point charge; has an analytical
+solution for the potential.  We examine the solvation free energy as a function
+of ionic radius.<P>
+
+The shell script ./runme will generate ions of several radii and calculate the
+solvation energies (which will appear in OUTPUT-XXX, where XXX is the
+particular radius of interest).  Please see apbs.in for details on the
+particular solvation energy calculations.  Analytical results are given in
+pmf.dat.<P>
+
+Note:  You may need to edit the path to your Bourne-like shell in the ./runme
+script.  You may also substitute any of the other APBS input files for apbs.in in the ./runme script.<P>
+
+This example was contributed by Nathan Baker.<P>
+
+<table align="center" border="1" cellpadding="3" cellspacing="1">
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+
+<tr>
+<td rowspan=12><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
+<td rowspan=12>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>-229.3603<sup><a href="#1">1</a></sup></B></td>
+<td rowspan=12>-228.57 kJ/mol</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>-229.7248</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>-229.7248</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>-229.7248</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>-229.7248</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>-229.7248</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>-227.1859</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>-227.1589</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>-227.186</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>-227.19</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>-227.19</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>-227.19</td>
+</tr>
+
+<tr>
+<td><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
+<td>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>-228.57 kJ/mol</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-auto.in">apbs-spl2-auto.in</a></td>
+<td>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>-228.57 kJ/mol</td>
+</tr>
+
+<tr>
+<td rowspan=2><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
+<td rowspan=2>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td rowspan=2>-228.57 kJ/mol</td>
+<tr><td align=center>0.2.1</td><td align=center>-230.77</td></tr>
+</tr>
+
+<tr>
+<td rowspan=11><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
+<td rowspan=11>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>-228.4261<sup><a href="#1">1</a></sup></B></td>
+<td rowspan=11>-228.57 kJ/mol</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>-226.3529</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>-226.3529</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>-229.5849</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>-229.5849</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>-229.5849</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>-226.2276</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>-226.2276</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>-226.2276</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>-226.228</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>-226.23</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-parallel.in">apbs-spl2-parallel.in</a></td>
+<td>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>-228.57 kJ/mol</td>
+</tr>
+
+</table>
+
+<P>
+<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<ul>
+<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
+<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+</ul>
+Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
+
+</BODY>
+</HTML>

@@ -1,0 +1,92 @@
+<HTML>
+<HEAD>
+<TITLE>README for ion-protein APBS examples</TITLE>
+<HEAD>
+<BODY>
+<h1 align="center">README for pka-lig APBS examples</h1>
+<BR>
+The example input files in this directory calculate the binding energes of a ligand to protein kinase A.
+<P>
+This example was contributed by Chung Wong.
+<P>
+
+<table align="center" border="1" cellpadding="3" cellspacing="1">
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+
+<tr>
+<td><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
+<td>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>8.876</td></tr>
+</tr>
+
+<tr>
+<td rowspan=12><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
+<td rowspan=12>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>11.4363<sup><a href="#2">2</a></sup></B></td>
+<td rowspan=12>23.58</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>8.0640<sup><a href="#1">1</a></sup></td></tr>
+<tr><td align=center>0.3.1</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>6.6465</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>6.647</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>6.647</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>6.65</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-vdw.in">apbs-spl2-vdw.in</a></td>
+<td>2-level focusing to 0.250 A spacing, VdW surface, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>86.50</td></tr>
+</tr>
+
+<tr>
+<td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
+<td>2-level focusing to 0.250 A spacing, molecular surface, srfm surf</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>8.876</td></tr>
+</tr>
+
+<tr>
+<td rowspan=12><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
+<td rowspan=12>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>102.5674<sup><a href="#2">2</a></sup></B></td>
+<td rowspan=12>23.58</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>94.8705<sup><a href="#1">1</a></sup></td></tr>
+<tr><td align=center>0.3.1</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>97.0147</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>97.015</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>97.015</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>97.01</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-surf.in">apbs-spl2-surf.in</a></td>
+<td>2-level focusing to 0.250 A spacing, molecular surface, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>86.50</td></tr>
+</tr>
+
+</table>
+<P>
+<a name=2><sup>2</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<ul>
+<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
+<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+</ul>
+Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.<P>
+
+<a name=1><sup>1</sup> The grid dimensions (dime) changed from 65^3 to 97^3 in the 0.3.2 release to give a finer mesh.
+
+</BODY>
+</HTML>

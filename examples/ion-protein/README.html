@@ -1,0 +1,90 @@
+<HTML>
+<HEAD>
+<TITLE>README for ion-protein APBS examples</TITLE>
+<HEAD>
+<BODY>
+<h1 align="center">README for ion-protein APBS examples</h1>
+<BR>
+The example input files in this directory calculate the energy of placing an ion near a macromolecule.
+<P>
+This example was contributed by Dave Sept.
+<P>
+
+
+<table align="center" border="1" cellpadding="3" cellspacing="1">
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+
+<tr>
+<td><a href="apbs-mol-pdiel2.in">apbs-mol-pdiel2.in</a></td>
+<td>0.53 A resolution, pdie 2, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>23.58</td></tr>
+</tr>
+
+<tr>
+<td rowspan=12><a href="apbs-smol-pdiel2.in">apbs-smol-pdiel2.in</a></td>
+<td rowspan=12>0.53 A resolution, pdie 2, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>22.5981<sup><a href="#1">1</a></sup></B></td>
+<td rowspan=12>23.58</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>21.4763</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>19.8794</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>19.8794</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>19.8794</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>19.8794</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>19.8794</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>19.8652</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>21.4530</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>21.453</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>21.453</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>21.45</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-pdiel2.in">apbs-spl2-pdiel2.in</a></td>
+<td>0.53 A resolution, pdie 2, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>23.58</td></tr>
+</tr>
+
+<tr>
+<td><a href="apbs-mol-pdiel12.in">apbs-mol-pdiel12.in</a></td>
+<td>0.53 A resolution, pdie 12, srfm mol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>23.58</td></tr>
+</tr>
+
+<tr>
+<td rowspan=12><a href="apbs-smol-pdiel12.in">apbs-smol-pdiel12.in</a></td>
+<td rowspan=12>0.53 A resolution, pdie 12, srfm smol</td>
+<td align=center><B>1.0.0</B></td><td align=center><B>19.0811<sup><a href="#1">1</a></sup></B></td>
+<td rowspan=12>23.58</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>21.4763</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>18.9205</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>17.4207</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>17.4207</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>17.4207</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>17.4207</td></tr>
+<tr><td align=center>0.2.3</td><td align=center>17.4049</td></tr>
+<tr><td align=center>0.2.2</td><td align=center>18.8953</td></tr>
+<tr><td align=center>0.2.1</td><td align=center>18.895</td></tr>
+<tr><td align=center>0.2.0</td><td align=center>18.895</td></tr>
+<tr><td align=center>0.1.8</td><td align=center>18.90</td>
+</tr>
+
+<tr>
+<td><a href="apbs-spl2-pdiel12.in">apbs-spl2-pdiel12.in</a></td>
+<td>0.53 A resolution, pdie 12, srfm spl2</td>
+<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td>23.58</td></tr>
+</tr>
+
+</table>
+<P>
+<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<ul>
+<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
+<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+</ul>
+Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
+</BODY>
+</HTML>
