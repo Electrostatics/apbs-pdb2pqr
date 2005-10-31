@@ -60,7 +60,7 @@ elec name reference
     temp 298.15
     gamma 0.105
     calcenergy total
-    calcforce comps
+    calcforce no
 end
 
 # COMBINE TO GIVE SOLVATION ENERGY
