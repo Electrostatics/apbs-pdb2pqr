@@ -11,18 +11,18 @@ The UHBD calculations where performed using a van der Waals surface definition f
 <P>
 
 <table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
 <tr>
 <td><a href="apbs-mol.in">apbs-mol.in</a></td>
 <td>2-level focusing to 0.225 A, VdW surface, srfm mol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>-52.4414</B></td>
 <td>-70.00</td></tr>
 </tr>
 
 <tr>
 <td rowspan=12><a href="apbs-smol.in">apbs-smol.in</a></td>
-<td rowspan=12>2-level focusing to 0.225 A, VdW surfac, srfm smol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B>-61.2989<sup><a href="#1">1</a></sup></B></td>
+<td rowspan=12>2-level focusing to 0.225 A, VdW surface, srfm smol</td>
+<td align=center><B>0.4.0</B></td><td align=center><B>-54.0393</B><sup><a href="#1">1</a></sup></td>
 <td rowspan=12>-70.00</td></tr>
 <tr><td align=center>0.3.2</td><td align=center>-57.1192</td></tr>
 <tr><td align=center>0.3.1</td><td align=center>-57.1192</td></tr>
@@ -40,13 +40,13 @@ The UHBD calculations where performed using a van der Waals surface definition f
 <tr>
 <td><a href="apbs-spl2.in">apbs-spl2.in</a></td>
 <td>2-level focusing to 0.225 A, VdW surface, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>-12.1776</B></td>
 <td>-70.00</td></tr>
 </tr>
 
 </table>
 <P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
