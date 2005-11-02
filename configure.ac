@@ -930,6 +930,7 @@ AC_OUTPUT([
     examples/Makefile
     examples/actin-dimer/Makefile
     examples/born/Makefile
+    examples/FKBP/Makefile
     examples/hca-bind/Makefile
     examples/ion-protein/Makefile
     examples/ionize/Makefile

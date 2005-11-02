@@ -3,19 +3,34 @@
 ##
 ## Purpose: Automatically generate Makefile.in for autoconf using automake.
 ##
-## Notes:   The final makefile produced by autoconf will generate basic
-##			testing results via make test.
+## Notes:   The final makefile produced by autoconf will generate tests
+##			for all APBS example directories.
 ##
 ##
 ## Author:  Todd Dolinsky
 ## ###########################################################################
 
-APBS=${prefix}/bin/${target}/apbs
-IGEN=${top_builddir}/tools/manip/inputgen.py
-CLEANFILES = *-PE* *.out *.log io.mc
+clean:
+	cd actin-dimer; make clean
+	cd born; make clean
+	cd FKBP; make clean
+	cd hca-bind; make clean
+	cd ion-protein; make clean
+	cd ionize; make clean
+	cd pka-lig; make clean
+	cd point-pmf; make clean
+	cd solv; make clean
 
 test:
-	./test.sh ${APBS} ${IGEN}
+	cd actin-dimer; make test
+	cd born; make test
+	cd FKBP; make test
+	cd hca-bind; make test
+	cd ion-protein; make test
+	cd ionize; make test
+	cd pka-lig; make test
+	cd point-pmf; make test
+	cd solv; make test
 
 test.serial: test
 
