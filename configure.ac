@@ -238,7 +238,7 @@ if test -n "${FETK_INCLUDE}"; then
 else
     if test "${prefix}" != "NONE"; then
         AC_MSG_RESULT([no; will use ${prefix}/include])
-        malco_inc_path="-I${prefix}/include ";
+        maloc_inc_path="-I${prefix}/include ";
     else
         AC_MSG_RESULT([no; will use ${HOME}/include])
         maloc_inc_path="-I${HOME}/include ";
@@ -927,7 +927,19 @@ AC_OUTPUT([
     src/aaa_inc/apbs/Makefile
     src/aaa_lib/Makefile
 
+    examples/Makefile
+    examples/actin-dimer/Makefile
+    examples/born/Makefile
+    examples/hca-bind/Makefile
+    examples/ion-protein/Makefile
+    examples/ionize/Makefile
+    examples/pka-lig/Makefile
+    examples/point-pmf/Makefile
+    examples/solv/Makefile
+    
     bin/Makefile
+
+
 ])
 
 AC_MSG_RESULT([])

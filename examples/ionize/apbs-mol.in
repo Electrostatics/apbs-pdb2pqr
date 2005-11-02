@@ -15,19 +15,19 @@ elec name acetic-solv
     cgcent mol 1
     mol 1
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.150 2.0
     ion -1 0.150 2.0
     pdie 2.0
     sdie 78.0
-    chgm 0
+    chgm spl0
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 # Reference acetic acid
 elec name acetic-ref
@@ -40,19 +40,19 @@ elec name acetic-ref
     fgcent mol 1
     mol 1
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.000 2.0
     ion -1 0.000 2.0
     pdie 2.0
     sdie 2.0
-    chgm 0                             # Charge disc method (linear)
+    chgm spl0                             # Charge disc method (linear)
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 # Solvated acetate
 elec name acetate-solv
@@ -65,19 +65,19 @@ elec name acetate-solv
     cgcent mol 1
     mol 2
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.150 2.0
     ion -1 0.150 2.0
     pdie 2.0
     sdie 78.0
-    chgm 0                             # Charge disc method (linear)
+    chgm spl0                             # Charge disc method (linear)
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 
 # Acetate ref
@@ -91,19 +91,19 @@ elec name acetate-ref
     fgcent mol 1
     mol 2
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.000 2.0
     ion -1 0.000 2.0
     pdie 2.0
     sdie 2.0
-    chgm 0                             # Charge disc method (linear)
+    chgm spl0                             # Charge disc method (linear)
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 
 # Solvated proton
@@ -117,19 +117,19 @@ elec name proton-solv
     fgcent mol 1
     mol 3
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.150 2.0
     ion -1 0.150 2.0
     pdie 2.0
     sdie 78.0
-    chgm 0                             # Charge disc method (linear)
+    chgm spl0                             # Charge disc method (linear)
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 
 # Reference proton
@@ -143,19 +143,19 @@ elec name proton-ref
     fgcent mol 1
     mol 3
     lpbe
-    bcfl 2
+    bcfl mdh
     ion  1 0.000 2.0
     ion -1 0.000 2.0
     pdie 2.0
     sdie 2.0
-    chgm 0                             # Charge disc method (linear)
+    chgm spl0                             # Charge disc method (linear)
     srfm mol
     srad 0
     swin 0.3
     temp 293.0
     gamma 0.105
-    calcenergy 1
-    calcforce 0
+    calcenergy total
+    calcforce no
 end
 
 # SOLVATION OF ACETIC ACID
