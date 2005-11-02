@@ -9861,7 +9861,7 @@ else
     if test "${prefix}" != "NONE"; then
         echo "$as_me:$LINENO: result: no; will use ${prefix}/include" >&5
 echo "${ECHO_T}no; will use ${prefix}/include" >&6
-        malco_inc_path="-I${prefix}/include ";
+        maloc_inc_path="-I${prefix}/include ";
     else
         echo "$as_me:$LINENO: result: no; will use ${HOME}/include" >&5
 echo "${ECHO_T}no; will use ${HOME}/include" >&6
@@ -12283,7 +12283,7 @@ inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
 
 
 
-                                                                                                                                                                ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile bin/Makefile"
+                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/born/Makefile examples/hca-bind/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/solv/Makefile bin/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -12868,6 +12868,15 @@ do
   "src/aaa_inc/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/aaa_inc/Makefile" ;;
   "src/aaa_inc/apbs/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/aaa_inc/apbs/Makefile" ;;
   "src/aaa_lib/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/aaa_lib/Makefile" ;;
+  "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
+  "examples/actin-dimer/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/actin-dimer/Makefile" ;;
+  "examples/born/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/born/Makefile" ;;
+  "examples/hca-bind/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/hca-bind/Makefile" ;;
+  "examples/ion-protein/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ion-protein/Makefile" ;;
+  "examples/ionize/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ionize/Makefile" ;;
+  "examples/pka-lig/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/pka-lig/Makefile" ;;
+  "examples/point-pmf/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/point-pmf/Makefile" ;;
+  "examples/solv/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/solv/Makefile" ;;
   "bin/Makefile" ) CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "src/aaa_inc/apbscfg.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/aaa_inc/apbscfg.h" ;;
