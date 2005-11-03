@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 if [[ $1 = "" ]]; then
     echo "Please use \"make test\" to run the tests."
@@ -70,7 +70,7 @@ do
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
-      echo "   Actual result is ${results[i]}"
+      echo "   Expected result is ${results[i]}"
       pass=FAILED
   fi
   

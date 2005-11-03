@@ -70,7 +70,7 @@ do
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
-      echo "   Actual result is ${results[i]}"
+      echo "   Expected result is ${results[i]}"
       pass=FAILED
   fi
   
