@@ -15,7 +15,7 @@ nettime=0
 
 input=( apbs-mol-auto apbs-smol-auto apbs-spl2-auto apbs-mol-parallel apbs-smol-parallel apbs-spl2-parallel )
 
-results=( -2.293602960650E+02 -2.283933541126E+02 -2.491743044730E+02 -2.3014081446159E+02 -2.2896046946734E+02 -2.4922741972368E+02 )
+results=( -2.293602960650E+02 -2.283933541126E+02 -2.491743044730E+02 -2.301408144616E+02 -2.289604694673E+02 -2.492274197237E+02 )
 
 # Initialize the results file
 
@@ -24,7 +24,7 @@ echo "# INPUT NAME |  TEST RESULT | TEST VALUE | TIME" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2 3 4 5
+for i in 0 1 2 3 4 5 
 do
   echo "----------------------------------------"
   echo "Testing input file ${input[i]}.in"
@@ -48,12 +48,12 @@ do
         $1 ${input[i]}-PE$j.in > ${input[i]}-PE$j.out
         a=`grep "Global net" ${input[i]}-PE$j.out | awk '{print $5}'`
         echo "Processor $j result: $a"
-        conv=`printf "%.15f" $a`
-        answer=`echo "scale=15; $answer+$conv" | bc`
+        conv=`printf "%.12f" $a`
+        answer=`echo "scale=12; $answer+$conv" | bc`
         echo ""
         let j=$j+1
       done
-      answer=`printf "%.13E" $answer`
+      answer=`printf "%.12E" $answer`
 
   else
       starttime=`date +%s`
