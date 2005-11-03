@@ -11,7 +11,7 @@ nettime=0
 
 input=( apbs-mol-pdiel2 apbs-smol-pdiel2 apbs-spl2-pdiel2 apbs-mol-pdiel12 apbs-smol-pdiel12 apbs-spl2-pdiel12 )
 
-results=( 0.0 0.0 0.0 0.0 0.0 0.0 )
+results=( 2.165734649777E+01  2.283125507537E+01 1.815826421427E+01 1.872804169880E+01 1.926032297424E+01 1.743122248521E+01 )
 
 # Initialize the results file
 
