@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 if [[ $1 = "" ]]; then
     echo "Please use \"make test\" to run the tests."
@@ -15,7 +15,7 @@ nettime=0
 
 input=( apbs-mol-auto apbs-smol-auto apbs-spl2-auto apbs-mol-parallel apbs-smol-parallel apbs-spl2-parallel )
 
-results=( -2.293602960650E+02 -2.283933541126E+02 -2.491743044730E+02 -2.3014081446159E+02 -2.2896046946734E+02 -2.4922741972368E+02 )
+results=( 1.131989619035E+02 1.129865798917E+02 1.445817673653E+01 9.863148054323E+01 1.173921272889E+02 2.060009725426E+01 )
 
 # Initialize the results file
 
@@ -48,12 +48,12 @@ do
         $1 ${input[i]}-PE$j.in > ${input[i]}-PE$j.out
         a=`grep "Global net" ${input[i]}-PE$j.out | awk '{print $5}'`
         echo "Processor $j result: $a"
-        conv=`printf "%.15f" $a`
-        answer=`echo "scale=15; $answer+$conv" | bc`
+        conv=`printf "%.12f" $a`
+        answer=`echo "scale=12; $answer+$conv" | bc`
         echo ""
         let j=$j+1
       done
-      answer=`printf "%.13E" $answer`
+      answer=`printf "%.12E" $answer`
 
   else
       starttime=`date +%s`
