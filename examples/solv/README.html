@@ -11,14 +11,14 @@ The source for this example is UHBD.
 <P>
 
 <table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th rowspan=2>Input File</th><th rowspan=2>Description</th><th rowspan=2>APBS Version</th><th colspan=3>Results (in kJ/mol)</th><th colspan=3>Analytical/UHBD</th></tr>
+<tr><th rowspan=2>Input File</th><th rowspan=2>Description</th><th rowspan=2>APBS Version</th><th colspan=3>Results (kJ/mol)</th><th colspan=3>UHBD (kJ/mol)</th></tr>
 <tr><td><font size=-1>Methanol</font></td><td><font size=-1>Methoxide</font></td><td><font size=-1>Difference</font></td><td><font size=-1>Methanol</font></td><td><font size=-1>Methoxide</font></td><td><font size=-1>Difference</font></td>
 </tr>
 
 <tr>
 <td><a href="apbs-mol.in">apbs-mol.in</a></td>
 <td>Focusing to 0.25 A, srfm mol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td><td align=center><B></B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>-36.2486</B></td><td align=center><B>-390.4119</B></td><td align=center><B>-354.1632</B></td>
 <td align=center>-35.595</td>
 <td align=center>-390.023</td>
 <td align=center>-354.424</td>
@@ -27,16 +27,16 @@ The source for this example is UHBD.
 <tr>
 <td rowspan=12><a href="apbs-smol.in">apbs-smol.in</a></td>
 <td rowspan=12>Focusing to 0.25 A, srfm smol</td>
-<td align=center><B>1.0.0<sup><a href="#1">1</a></sup></B></td><td align=center><B>-37.0741</B></td><td align=center><B>-388.8897</B></td><td align=center><B>-351.8156</B></td>
+<td align=center><B>0.4.0</B><sup><a href="#1">1</a></sup></td><td align=center><B>-37.5760</B></td><td align=center><B>-391.2387</B></td><td align=center><B>-353.6627</B></td>
 <td rowspan=12 align=center>-35.595</td>
 <td rowspan=12 align=center>-390.023</td>
 <td rowspan=12 align=center>-354.424</td></tr>
-<tr><td align=center>0.3.2</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
-<tr><td align=center>0.3.1</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
-<tr><td align=center>0.3.0</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
-<tr><td align=center>0.2.6</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
-<tr><td align=center>0.2.5</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
-<tr><td align=center>0.2.4</td><td align=center>-36.6249</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.3.2</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.3.1</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.3.0</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.6</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.5</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
+<tr><td align=center>0.2.4</td><td align=center>-36.2486</td><td align=center>-390.4119</td><td align=center>-354.1632</td></tr>
 <tr><td align=center>0.2.3</td><td align=center>-36.2223</td><td align=center>-391.7995</td><td align=center>-355.5771</td></tr>
 <tr><td align=center>0.2.2</td><td align=center>-36.2223</td><td align=center>-391.7995</td><td align=center>-355.5771</td></tr>
 <tr><td align=center>0.2.1</td><td align=center>-36.222</td><td align=center>-391.800</td><td align=center>-355.577</td></tr>
@@ -47,14 +47,14 @@ The source for this example is UHBD.
 <tr>
 <td><a href="apbs-spl2.in">apbs-spl2.in</a></td>
 <td>Focusing to 0.25 A, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td><td align=center><B></B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>-64.3472</B></td><td align=center><B>-415.3175</B></td><td align=center><B>-350.9704</B></td>
 <td align=center>-35.595</td>
 <td align=center>-390.023</td>
 <td align=center>-354.424</td>
 </tr>
 </table>
 <P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  

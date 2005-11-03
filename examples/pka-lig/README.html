@@ -11,20 +11,20 @@ This example was contributed by Chung Wong.
 <P>
 
 <table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
 
 <tr>
 <td><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
 <td>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>8.0640</B></td>
 <td>8.876</td></tr>
 </tr>
 
 <tr>
 <td rowspan=12><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
 <td rowspan=12>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B>11.4363<sup><a href="#2">2</a></sup></B></td>
-<td rowspan=12>23.58</td></tr>
+<td align=center><B>0.4.0</B></td><td align=center><B>20.9542</B><sup><a href="#2">2</a></sup></td>
+<td rowspan=12>8.876</td></tr>
 <tr><td align=center>0.3.2</td><td align=center>8.0640<sup><a href="#1">1</a></sup></td></tr>
 <tr><td align=center>0.3.1</td><td align=center>6.6465</td></tr>
 <tr><td align=center>0.3.0</td><td align=center>6.6465</td></tr>
@@ -41,22 +41,22 @@ This example was contributed by Chung Wong.
 <tr>
 <td><a href="apbs-spl2-vdw.in">apbs-spl2-vdw.in</a></td>
 <td>2-level focusing to 0.250 A spacing, VdW surface, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
-<td>86.50</td></tr>
+<td align=center><B>0.4.0</B></td><td align=center><B>16.6781</B></td>
+<td>8.876</td></tr>
 </tr>
 
 <tr>
 <td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
-<td>2-level focusing to 0.250 A spacing, molecular surface, srfm surf</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
-<td>8.876</td></tr>
+<td>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
+<td align=center><B>0.4.0</B></td><td align=center><B>110.8605</B></td>
+<td>86.50</td></tr>
 </tr>
 
 <tr>
 <td rowspan=12><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
 <td rowspan=12>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B>102.5674<sup><a href="#2">2</a></sup></B></td>
-<td rowspan=12>23.58</td></tr>
+<td align=center><B>0.4.0</B></td><td align=center><B>102.7297</B><sup><a href="#2">2</a></sup></td>
+<td rowspan=12>86.50</td></tr>
 <tr><td align=center>0.3.2</td><td align=center>94.8705<sup><a href="#1">1</a></sup></td></tr>
 <tr><td align=center>0.3.1</td><td align=center>97.0147</td></tr>
 <tr><td align=center>0.3.0</td><td align=center>97.0147</td></tr>
@@ -73,13 +73,13 @@ This example was contributed by Chung Wong.
 <tr>
 <td><a href="apbs-spl2-surf.in">apbs-spl2-surf.in</a></td>
 <td>2-level focusing to 0.250 A spacing, molecular surface, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>166.7812</B></td>
 <td>86.50</td></tr>
 </tr>
 
 </table>
 <P>
-<a name=2><sup>2</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
