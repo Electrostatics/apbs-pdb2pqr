@@ -12,18 +12,18 @@ This example was contributed by Dave Sept.
 
 
 <table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (in kJ/mol)</th><th>UHBD/Analytical</th></tr>
+<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
 <tr>
 <td><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
 <td>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm mol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>113.1990</B></td>
 <td>106.7<br>(1.00 A res., NPBE)</td></tr>
 </tr>
 
 <tr>
 <td rowspan=12><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
 <td rowspan=12>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm smol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B>109.7975<sup><a href="#1">1</a></sup></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>112.9867</B><sup><a href="#1">1</a></sup></td>
 <td rowspan=12>106.7<br>(1.00 A res., NPBE)</td></tr>
 <tr><td align=center>0.3.2</td><td align=center>90.8704</td></tr>
 <tr><td align=center>0.3.1</td><td align=center>88.6101</td></tr>
@@ -41,14 +41,14 @@ This example was contributed by Dave Sept.
 <tr>
 <td><a href="apbs-spl2-auto.in">apbs-spl2-auto.in</a></td>
 <td>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>144.5818</B></td>
 <td>106.7<br>(1.00 A res., NPBE)</td></tr>
 </tr>
 
 <tr>
 <td><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
 <td>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>98.6315</B></td>
 <td>106.7<br>(1.00 A res., NPBE)</td></tr>
 </tr>
 
@@ -56,7 +56,7 @@ This example was contributed by Dave Sept.
 <tr>
 <td rowspan=12><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
 <td rowspan=12>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
-<td align=center><B>1.0.0</B></td><td align=center><B>104.6506<sup><a href="#1">1</a></sup></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>117.3921</B><sup><a href="#1">1</a></sup></td>
 <td rowspan=12>106.7<br>(1.00 A res., NPBE)</td></tr>
 <tr><td align=center>0.3.2</td><td align=center>87.1121</td></tr>
 <tr><td align=center>0.3.1</td><td align=center>87.1121</td></tr>
@@ -74,13 +74,13 @@ This example was contributed by Dave Sept.
 <tr>
 <td><a href="apbs-spl2-parallel.in">apbs-spl2-parallel.in</a></td>
 <td>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm spl2</td>
-<td align=center><B>1.0.0</B></td><td align=center><B></B></td>
+<td align=center><B>0.4.0</B></td><td align=center><B>206.0010</B></td>
 <td>106.7<br>(1.00 A res., NPBE)</td></tr>
 </tr>
 
 </table>
 <P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 1.0.0 and 0.3.2 are most likely due to two factors:
+<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
