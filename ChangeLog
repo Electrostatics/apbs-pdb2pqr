@@ -1,5 +1,5 @@
 #############################################################################
-BETA PUBLIC RELEASE VERSION 1.0.0       XX-XX-XX 
+BETA PUBLIC RELEASE VERSION 0.4.0       XX-XX-XX 
 #############################################################################
   - NEW FEATURES
     * New version of the 'acc' program available.
@@ -13,6 +13,8 @@ BETA PUBLIC RELEASE VERSION 1.0.0       XX-XX-XX
       format (Thanks to Robert Konecny)
     * Added ability of tools/manip/inputgen.py to split a single mg-para APBS
       input file into multiple asynchronous input files.
+    * Modified inputgen.py to be more flexible for developers wishing to
+      directly interface with APBS.
     * Added Vclist cell list class to replace internal hash table in Vacc
     * Modified Vacc class to use Vclist, including changes to the Vacc
       interface (and required changes throughout the code)
@@ -31,6 +33,11 @@ BETA PUBLIC RELEASE VERSION 1.0.0       XX-XX-XX
       need backwards compatibility are encouraged to use the spline based
       smoothing method (srfm spl2) or the molecular surface without
       smoothing (srfm mol).
+    * Made the examples directory documentation much more streamlined.
+    * Added tests for examples directory.  Users can now issue a "make test" in
+      the desired directory to compare local results with expected results.
+      Also includes timing results for tests for comparison between 
+      installations.
   - BUG FIXES
     * Fixed a bug in Vpmg_qmEnergy to remove a spurious coefficient of z_i^2
       from the energy calculation.  This generated incorrect results for
