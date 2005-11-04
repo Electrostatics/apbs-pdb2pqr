@@ -1650,8 +1650,10 @@
                       <para>
                         The dielectric and ion-accessiblity coefficients are
                         defined as for mol (see above).  However, they are then
-                        "smoothed" by a simple harmonic averaging to somewhat
-                        reduce sensitivity to the grid setup.
+                        "smoothed" by a 9-point harmonic averaging to somewhat
+                        reduce sensitivity to the grid setup as described by
+                        Bruccoleri et al. <citetitle>J Comput Chem</citetitle> 
+                        18 268-276, 1997 (<ulink url="http://dx.doi.org/10.1002/(SICI)1096-987X(19970130)18:2<268::AID-JCC11>3.0.CO;2-E">doi: 10.1002/(SICI)1096-987X(19970130)18:2<268::AID-JCC11>3.0.CO;2-E</ulink>).
                       </para>
                     </listitem>
                   </varlistentry>

@@ -6,14 +6,14 @@
   <sect1 id="obtaining-sect"> <title>Availability</title>
     <para>The latest version of APBS can always be found at 
       <ulink url="http://apbs.sourceforge.net/">
-        http://apbs.sourceforge.net</ulink> in source code form.  Additionally,
-      binary versions of the code are available for a limited number of
-      platforms.</para>
+        http://apbs.sourceforge.net</ulink>.  APBS is available in both source 
+        code form and binaries for a variety of architectures.</para>
   </sect1>
 
   <sect1> <title>Binary installation</title>
     <para>
-      We currently offer RPM-format binaries for RedHat Linux platform as well
+      We currently offer RPM-format binaries for the RedHat Linux platform on
+      a variety of architectures as well
       as command line binaries for WinXP and Mac OS X.  Binaries can be 
       downloaded from the 
       <ulink url="http://agave.wustl.edu/apbs/download">APBS download
@@ -21,6 +21,10 @@
       particular platform and feel free to contact the 
       <link linkend="mailing-lists">APBS users mailing list</link> for more 
       help.
+    </para>
+    <para> 
+      In order to use the APBS binaries you will also need MALOC binaries -
+      these can be obtained from <ulink url="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html">http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html</ulink>.
     </para>
   </sect1>
 
@@ -31,8 +35,7 @@
 
     <sect2 id="prerequisites-sect"> <title>Prerequisites</title>
       <para>Binary executables for APBS are available from the APBS download site
-        (<ulink url="http://agave.wustl.edu/apbs/download/">
-          http://agave.wustl.edu/apbs/download</ulink>).  We currently only
+        (<ulink url="http://agave.wustl.edu/apbs/download/">http://agave.wustl.edu/apbs/download</ulink>).  We currently only
         have binary versions for RedHat Linux but are in the processor of
         developing binaries for several other popular platforms.  In the
         meantime, please install APBS from source, as described below.
@@ -359,10 +362,8 @@
 
       <sect3> <title>Macintosh</title>
         <para>We are happy to now provide a Mac install package for G5 OS 10.4 
-         (Tiger).  But since Mac packages use shared libraries, the same major 
-         versions of the compilers that were used to create the
-         binaries (gcc/gfortran 4.0) are needed to run them.  Unfortunately 
-         this means many users on G4s or OS 10.3 may have to compile binaries 
+         (Tiger).  Unfortunately this is the only binary for Mac that we have
+         available, so users on G4s or OS 10.3 may have to compile binaries 
          for themselves - you may want to examine the
         <ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">apbs-users 
         mailing list</ulink> which has a number of threads which discuss
@@ -372,10 +373,12 @@
             <listitem>
               <para>It has become apparent from the mailing lists that some
             "packages" of the GNU development software available for MacOS
-            contain different versions of the C and FORTRAN compilers.  This is
-            very bad; APBS will not compile with different versions of the C
-            and FORTRAN compilers.  If you see link errors involving "restFP"
-            or "saveFP" this is most likely the cause.</para>
+            contain different major versions of the C and FORTRAN compilers.  
+            This is very bad; APBS will not compile with different versions of 
+            the C and FORTRAN compilers. If you use GCC 4.0, for instance,
+            gfortran 4.0 will work while g77 3.3 will not. If you see link 
+            errors involving "restFP" or "saveFP" this is most likely the 
+            cause.</para>
             </listitem>
             <listitem>
               <para>In gcc 4.0 (included in Xcode 2.0 and higher) the -fast
@@ -388,7 +391,12 @@
               the native vecLib framework as an architecture-tuned BLAS 
               replacement.  In testing there were only slight timing 
               improvements over using the MALOC-supplied BLAS as it is.</para>
-            </listitem> 
+            </listitem>
+            <listitem>
+              <para>We have had success using IBM's XLF for Mac in conjunction
+              with GCC 4.0, although the corresponding XLC compilers do not 
+              seem to work under Tiger.</para>
+            </listitem>
           </orderedlist>  
       </sect3>
 

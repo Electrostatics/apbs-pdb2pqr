@@ -282,10 +282,12 @@
 
   <sect1 id="examples-sect">  <title>Examples and tutorial</title>
     <para>The APBS sub-directory <filename>examples</filename> contains
-      several test systems and example scripts which show how to use APBS for
+      several test systems which show how to use APBS for
       binding energy, solvation energy, and force calculations. The file
       <filename>examples/README.html</filename> contains descriptions of the
-      test cases as well as anticipated results.  
+      test cases and links to anticipated results.  Examples can be run
+      and compared to expected results by running <filename>make test</filename>
+      in each example directory.
     </para>
     <para>Additional examples are provided as part of the APBS tutorial
       (<filename>doc/html/tutorial/</filename>), described in more detail in
