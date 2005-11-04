@@ -1,46 +1,46 @@
-#!/usr/bin/env python2
-# You may need to edit the above to point to your version of Python
+""" inputgen class
 
-#
-# inputgen.py 
-# Create an input file for APBS using psize data
-#
-# Written by Todd Dolinsky based on original sed script by Nathan Baker
-#
-# Version:  $Id$
-#
-# APBS -- Adaptive Poisson-Boltzmann Solver
-#
-# Nathan A. Baker (baker@biochem.wustl.edu)
-# Dept. of Biochemistry and Molecular Biophysics
-# Center for Computational Biology
-# Washington University in St. Louis
-#
-# Additional contributing authors listed in the code documentation.
-#
-# Copyright (c) 2002-2004.  Washington University in St. Louis.
-# All Rights Reserved.
-# Portions Copyright (c) 1999-2002.  The Regents of the University of
-# California.
-# Portions Copyright (c) 1995.  Michael Holst.
-#
-# This file is part of APBS.
-#
-# APBS is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# APBS is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with APBS; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
-#
+    Create an APBS input file using psize data
 
+    Written by Todd Dolinsky based on original sed script by Nathan Baker
+
+        ----------------------------
+
+    Version:  $Id$
+   
+    APBS -- Adaptive Poisson-Boltzmann Solver
+   
+    Nathan A. Baker (baker@biochem.wustl.edu)
+    Dept. of Biochemistry and Molecular Biophysics
+    Center for Computational Biology
+    Washington University in St. Louis
+
+    Additional contributing authors listed in the code documentation.
+
+    Copyright (c) 2002-2004.  Washington University in St. Louis.
+    All Rights Reserved.
+    Portions Copyright (c) 1999-2002.  The Regents of the University of
+    California.
+    Portions Copyright (c) 1995.  Michael Holst.
+
+    This file is part of APBS.
+
+    APBS is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+ 
+    APBS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+   
+    You should have received a copy of the GNU General Public License
+    along with PDB2PQR; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+
+    ----------------------------
+"""
 
 # User - Definable Variables: Default values
 
@@ -49,7 +49,7 @@
 # FADD = 20                   # Amount to add to mol dims to get fine
                               # grid dims
 # SPACE = 0.50                # Desired fine mesh resolution
-# GMEMFAC = 160               # Number of bytes per grid point required 
+# GMEMFAC = 200               # Number of bytes per grid point required 
                               # for sequential MG calculation 
 # GMEMCEIL = 400              # Max MB allowed for sequential MG
                               # calculation.  Adjust this to force the
@@ -62,217 +62,221 @@
 import string, sys
 import psize
 
+
 class inputGen:
     """
-        The inputGen class is used for creating input files for APBS
+        DEPRECATED:  Please use the Input class instead!  See the
+                     main() function for usage.
     """
-    
     def __init__(self, pqrpath, size, method, async):
+        size.runPsize(pqrpath)
+        self.input = Input(pqrpath, size, method, async)
+
+    def printInput(self):
+        self.input.printInputFiles()
+
+class Elec:
+    """
+        An object for the ELEC section of an APBS input file
+    """
+    def __init__(self, size, method, asyncflag):
         """
-            Initialize the inputGen class
-            
-            Parameters
-                pqrpath: The full path to the PQR file (string)
-                size:    The psize object with appropriate constant values (Psize)
-                method:  The APBS ELEC method (string)
-                async:   A flag to denote whether to generate
-                         asynchronous input files or not (int)     
+            Initialize the variables that can be set in this object
+            Users can modify any of these variables (that's why
+            they're here!)
         """
+
+        # If this is an async or parallel calc, we want to use
+        # the per-grid dime rather than the global dime.
+        
+        self.dime = size.getFineGridPoints()
+        gmem = 200.0 * self.dime[0] * self.dime[1] * self.dime[2] / 1024.0 / 1024.0
+        if method == "": # method not named - use ceiling
+            if gmem > size.getConstant("GMEMCEIL"): method = "mg-para"
+            else: method = "mg-auto"
+
+        if method == "mg-para":
+            self.dime = size.getSmallest()
+
         self.method = method
-        self.async = async
-        self.size = size
-        self.coarsedim = []
-        self.finedim = []
-        self.procgrid = []
-        self.finegridpoints = []
-        self.id = None
-        self.center = []
-        self.fullpath = pqrpath
-       
+        self.glen = size.getCoarseGridDims()
+        self.cglen = size.getCoarseGridDims()
+        self.fglen = size.getFineGridDims()
+        self.pdime = size.getProcGrid()
+        
+        self.label = ""
+        self.nlev = 4
+        self.ofrac = 0.1
+        self.async = 0
+        self.asyncflag = asyncflag
+        self.cgcent = "mol 1"
+        self.fgcent = "mol 1"
+        self.gcent = "mol 1"
+        self.mol = 1
+        self.lpbe = 1
+        self.npbe = 0
+        self.bcfl = "sdh"
+        self.ion = [] # Multiple ions possible
+        self.pdie = 2.0
+        self.sdie = 78.54
+        self.srfm = "smol"
+        self.chgm = "spl2"
+        self.srad = 1.4
+        self.swin = 0.3
+        self.temp = 298.15
+        self.gamma = 0.105
+        self.calcenergy = "total"
+        self.calcforce = "no"
+        self.write = [] # Multiple write statements possible
+    
+    def __str__(self):
+        """
+            Return the elec statement as a string. Check the method
+            to see which keywords to use.
+        """
+        text = "elec %s\n" % self.label
+        text += "    %s\n" % self.method
+        text += "    dime %i %i %i\n" % (self.dime[0], self.dime[1], self.dime[2])
+        if self.method == "mg-manual":
+            text += "    nlev %i\n" % self.nlev
+            text += "    glen %.3f %.3f %.3f\n" % (self.glen[0], self.glen[1], self.glen[2])
+            text += "    gcent %s\n" % self.gcent
+        elif self.method == "mg-auto":
+            text += "    cglen %.4f %.4f %.4f\n" % (self.cglen[0], self.cglen[1], self.cglen[2])
+            text += "    fglen %.4f %.4f %.4f\n" % (self.fglen[0], self.fglen[1], self.fglen[2])
+            text += "    cgcent %s\n" % self.cgcent
+            text += "    fgcent %s\n" % self.fgcent
+        elif self.method == "mg-para":
+            text += "    pdime %i %i %i\n" % (self.pdime[0], self.pdime[1], self.pdime[2])
+            text += "    ofrac %.1f\n" % self.ofrac
+            text += "    cglen %.4f %.4f %.4f\n" % (self.cglen[0], self.cglen[1], self.cglen[2])
+            text += "    fglen %.4f %.4f %.4f\n" % (self.fglen[0], self.fglen[1], self.fglen[2])
+            text += "    cgcent %s\n" % self.cgcent
+            text += "    fgcent %s\n" % self.fgcent
+            if self.asyncflag == 1:
+                text += "    async %i\n" % self.async
+        text += "    mol %i\n" % self.mol
+        if self.lpbe: text += "    lpbe\n"
+        else: text += "    npbe\n"
+        text += "    bcfl %s\n" % self.bcfl
+        for ion in self.ion:
+            text += "    ion %.2f %.3f %.2f\n" % (ion[0], ion[1], ion[2])               
+        text += "    pdie %.4f\n" % self.pdie                
+        text += "    sdie %.4f\n" % self.sdie                
+        text += "    srfm %s\n" % self.srfm                   
+        text += "    chgm %s\n" % self.chgm
+        text += "    srad %.2f\n" % self.srad          
+        text += "    swin %.2f\n" % self.swin         
+        text += "    temp %.2f\n" % self.temp     
+        text += "    gamma %.3f\n" % self.gamma    
+        text += "    calcenergy %s\n" % self.calcenergy
+        text += "    calcforce %s\n" % self.calcforce
+        for write in self.write:
+            text += "    write %s %s %s\n" % (write[0], write[1], write[2])
+        text += "end\n"
+        return text
+        
+class Input:
+    """
+        The input class.  Each input object is one APBS input file.
+    """
+
+    def __init__(self, pqrpath, size, method, asyncflag):
+        """
+            Initialize the input file class.  Each input file contains
+            a PQR name, a list of elec objects, and a list of strings
+            containing print statements.  For starters assume two
+            ELEC statements are needed, one for the inhomgenous and
+            the other for the homogenous dielectric calculations.
+
+            Users can edit the elec statements and the print statements.
+
+            This assumes you have already run psize, either by
+                 size.runPsize(/path/to/pqr) or
+
+                 size.parseString(string)
+                 size.setAll()
+
+            Parameters
+                pqrpath:   The path to the PQR file (string)
+                size:      The Psize object (psize)
+                method:    The method (para, auto, manual, async) to use
+                asyncflag: 1 if async is desired, 0 otherwise
+        """ 
+
+        self.pqrpath = pqrpath
+        self.asyncflag = asyncflag
+
+        # Initialize variables to default elec values
+
+        elec1 = Elec(size, method, asyncflag)
+        elec2 = Elec(size, method, asyncflag)
+        setattr(elec2, "sdie", 2.0)
+        self.elecs = [elec1, elec2]
+     
         i = string.rfind(pqrpath, "/") + 1
         self.pqrname = pqrpath[i:]
-   
-        self.setup()
 
-    def getCenter(self):
-        """
-            Get the desired center for the APBS input file.
-            Uses an arbitrary center if the input file is intended for a pKa
-            calculation, otherwise centers on the center of the molecule.
+        self.prints = ["print energy 2 - 1 end"]     
 
-            Returns
-                center:  The center for the input file (string)
+    def __str__(self):
         """
-        center = ""
-        if self.center != []:
-            if self.method == "mg-auto" or self.method == "mg-para":
-                center =  "    cgcent %.3f %.3f %.3f\n" % \
-                         (self.center[0], self.center[1], self.center[2])
-                center += "    fgcent %.3f %.3f %.3f\n" % \
-                         (self.center[0], self.center[1], self.center[2])
-            elif self.method == "mg-manual":
-                center =  "    gcent %.3f %.3f %.3f\n" % \
-                         (self.center[0], self.center[1], self.center[2])
-        else:
-            if self.method == "mg-auto" or self.method == "mg-para":
-                center  = "    cgcent mol 1\n"
-                center += "    fgcent mol 1\n"
-            elif self.method == "mg-manual":
-                center  = "    gcent mol 1\n"
-        return center
-    
-    def setCenter(self, center):
+            Return the text of the input file
         """
-            Set the center of the inputGen to a specific point
-
-            Parameters
-                center:  The desired center for the input file (string)
-        """
-        self.center = center
-        
-    def getText(self):
-        """
-            Get the text associated with the inputgen object
-
-            Returns
-                text:  The input file (string)
-        """
-        
         text  = "read\n"
         text += "    mol pqr %s\n" % self.pqrname
         text += "end\n"
-        text += "elec\n"
-        text += "    %s\n" % self.method
-        if self.method == "mg-manual":
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    nlev 4\n"
-            text += "    glen %.3f %.3f %.3f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-        elif self.method == "mg-auto":
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    cglen %.4f %.4f %.4f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-            text += "    fglen %.4f %.4f %.4f\n" % (self.finedim[0], self.finedim[1], self.finedim[2])
-        elif self.method == "mg-para":
-            text += "    pdime %i %i %i\n" % (self.procgrid[0], self.procgrid[1], self.procgrid[2])
-            text += "    ofrac 0.1\n"
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    cglen %.3f %.3f %.3f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-            text += "    fglen %.3f %.3f %.3f\n" % (self.finedim[0], self.finedim[1], self.finedim[2])
-            if self.async == 1:
-                text += "    async %i\n" % self.id
-        text += self.getCenter()
-        text += "    mol 1\n"                            
-        text += "    lpbe\n"                             
-        text += "    bcfl sdh\n"                           
-        text += "    ion 1 0.150 2.0\n"            
-        text += "    ion -1 0.150 2.0\n"           
-        text += "    pdie 2.0\n"                
-        text += "    sdie 78.54\n"                
-        text += "    srfm smol\n"                   
-        text += "    chgm spl2\n"
-        text += "    srad 1.4\n"          
-        text += "    swin 0.3\n"         
-        text += "    temp 298.15\n"     
-        text += "    gamma 0.105\n"    
-        text += "    calcenergy total\n"
-        text += "    calcforce no\n"
-        text += "    write pot dx pot\n"
-        text += "    write smol dx acc\n"
-        text += "end\n"
-        
-        text += "elec\n"
-        text += "    %s\n" % self.method
-        if self.method == "mg-manual":
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    nlev 4\n"
-            text += "    glen %.3f %.3f %.3f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-        elif self.method == "mg-auto":
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    cglen %.4f %.4f %.4f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-            text += "    fglen %.4f %.4f %.4f\n" % (self.finedim[0], self.finedim[1], self.finedim[2])
-        elif self.method == "mg-para":
-            text += "    pdime %i %i %i\n" % (self.procgrid[0], self.procgrid[1], self.procgrid[2])
-            text += "    ofrac 0.1\n"
-            text += "    dime %i %i %i\n" % (self.finegridpoints[0], self.finegridpoints[1], self.finegridpoints[2])
-            text += "    cglen %.3f %.3f %.3f\n" % (self.coarsedim[0], self.coarsedim[1], self.coarsedim[2])
-            text += "    fglen %.3f %.3f %.3f\n" % (self.finedim[0], self.finedim[1], self.finedim[2])
-            if self.async == 1:
-                text += "    async %i\n" % self.id
-        text += self.getCenter()
-        text += "    mol 1\n"                              
-        text += "    lpbe\n"                               
-        text += "    bcfl sdh\n"                            
-        text += "    ion 1 0.150 2.0\n"              
-        text += "    ion -1 0.150 2.0\n"            
-        text += "    pdie 2.0\n"                  
-        text += "    sdie 2.00\n"               
-        text += "    srfm smol\n"                  
-        text += "    chgm spl2\n"
-        text += "    srad 1.4\n"        
-        text += "    swin 0.3\n"        
-        text += "    temp 298.15\n"    
-        text += "    gamma 0.105\n"   
-        text += "    calcenergy total\n"
-        text += "    calcforce no\n"
-        text += "end\n"
-        text += "\nprint energy 2 - 1 end\n"
+        for elec in self.elecs:
+            text += str(elec)            
+        for prints in self.prints:
+            text += prints
         text += "\nquit\n"
         return text
-    
-    def setup(self):
+  
+    def printInputFiles(self):
         """
-            Do some setting up for input generation
+            Make the input file(s) associated with this object
         """
-        size = self.size
-        size.runPsize(self.fullpath)
-        self.coarsedim = size.getCoarseGridDims()
-        self.finedim = size.getFineGridDims()
-        self.procgrid = size.getProcGrid()
-        self.finegridpoints = size.getFineGridPoints()
+        period = string.find(self.pqrpath,".")
+        if self.asyncflag == 1:
+            outname = self.pqrpath[0:period] + "-para.in"
 
-        if self.async == 1:
-            self.finegridpoints = size.getSmallest()
-        else:
-            n = self.finegridpoints
-            gmem = 160.0 * n[0] * n[1] * n[2] / 1024 / 1024
-            if self.method == "": #method not named
-                if gmem > size.getConstant("GMEMCEIL"): self.method = "mg-para"
-                else: self.method = "mg-auto"
-            if self.method == "mg-para": self.finegridpoints = size.getSmallest()
-
-    def printInput(self):
-        """
-            Print the input file(s) to the correct locations
-        """
-        if self.async == 1:
-            self.method = "mg-para"
-            self.async = 0
-            period = string.find(self.fullpath,".")
-            outname = self.fullpath[0:period] + "-para.in"
-
+            # Temporarily disable async flag
+            for elec in self.elecs:
+                elec.asyncflag = 0
             file = open(outname, "w")
-            file.write(self.getText())
+            file.write(str(self))
             file.close()
+
+            # Now make the async files
+            elec = self.elecs[0]
             
-            self.async = 1
-            nproc = self.procgrid[0] * self.procgrid[1] * self.procgrid[2]
-            for i in range(nproc):
-                period = string.find(self.fullpath,".")
-                outname = self.fullpath[0:period] + "-PE%i.in" % i
-                self.id = i
+            nproc = elec.pdime[0] * elec.pdime[1] * elec.pdime[2]
+            for i in range(int(nproc)):
+                outname = self.pqrpath[0:period] + "-PE%i.in" % i
+                for elec in self.elecs:
+                    elec.asyncflag = 1
+                    elec.async = i
                 file = open(outname, "w")
-                file.write(self.getText())
+                file.write(str(self))
                 file.close()
         
-        else:      
-            period = string.find(self.fullpath,".")
-            outname = self.fullpath[0:period] + ".in"
+        else:
+            if period > 0:
+                outname = self.pqrpath[0:period] + ".in"
+            else:
+                outname = self.pqrpath + ".in"
             file = open(outname, "w")
-            file.write(self.getText())
+            file.write(str(self))
             file.close()
 
 def splitInput(filename):
     """
         Split the parallel input file into multiple async file names
+
+        Parameters
+            filename:  The path to the original parallel input
+                       file (string)
     """
     nproc = 0
     file = open(filename)
@@ -401,7 +405,8 @@ def main():
     if split == 1:
         splitInput(filename)
     else:
-        igen = inputGen(filename, size, method, async)
-        igen.printInput()
+        size.runPsize(filename)
+        input = Input(filename, size, method, async)
+        input.printInputFiles()
 
 if __name__ == "__main__": main()
