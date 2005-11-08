@@ -49,7 +49,7 @@ do
   echo "Energy from 1 A distance: $answer"
   if [[ ${answer} == ${results[0]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (1 A dist): PASSED" >> $logfile
+      echo "           ${input[i]}.in (1 A dist): PASSED ($answer)" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
@@ -71,7 +71,7 @@ do
   echo "Energy from 2 A distance: $answer"
   if [[ ${answer} == ${results[1]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (2 A dist): PASSED" >> $logfile
+      echo "           ${input[i]}.in (2 A dist): PASSED ($answer)" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
@@ -92,7 +92,7 @@ do
   echo "Energy from 3 A distance: $answer"
   if [[ ${answer} == ${results[2]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (3 A dist): PASSED" >> $logfile
+      echo "           ${input[i]}.in (3 A dist): PASSED ($answer)" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
@@ -113,7 +113,7 @@ do
   echo "Energy from 4 A distance: $answer"
   if [[ ${answer} == ${results[3]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (4 A dist): PASSED" >> $logfile
+      echo "           ${input[i]}.in (4 A dist): PASSED ($answer)" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned $answer"
