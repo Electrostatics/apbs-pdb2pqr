@@ -17,7 +17,7 @@ results=( 2.165734649777E+01  2.283125507537E+01 1.815826421427E+01 1.8728041698
 
 date=`date`
 echo "Date     : ${date}" >> $logfile
-echo "Directory: pka-lig" >> $logfile
+echo "Directory: ion-protein" >> $logfile
 echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
