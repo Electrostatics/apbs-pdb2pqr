@@ -40,7 +40,7 @@ do
   echo "Methanol Energy : ${answer[0]}"
   if [[ ${answer[0]} == ${methanol[i]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (methanol): PASSED" >> $logfile
+      echo "           ${input[i]}.in (methanol): PASSED (${answer[0]})" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned ${answer[0]}"
@@ -51,7 +51,7 @@ do
   echo "Methoxide Energy: ${answer[1]}"
   if [[ ${answer[1]} == ${methoxide[i]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (methoxide): PASSED" >> $logfile
+      echo "           ${input[i]}.in (methoxide): PASSED (${answer[1]})" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned ${answer[1]}"
@@ -62,7 +62,7 @@ do
   echo "Difference      : ${answer[2]}"
   if [[ ${answer[2]} == ${difference[i]} ]]; then
       echo "*** PASSED ***"
-      echo "           ${input[i]}.in (difference): PASSED" >> $logfile
+      echo "           ${input[i]}.in (difference): PASSED (${answer[2]})" >> $logfile
   else
       echo "*** FAILED ***"
       echo "   APBS returned ${answer[2]}"
