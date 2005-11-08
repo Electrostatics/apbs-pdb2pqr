@@ -52,7 +52,7 @@ do
       echo "           ${input[i]}.in (1 A dist): PASSED" >> $logfile
   else
       echo "*** FAILED ***"
-      echo "   APBS return $answer"
+      echo "   APBS returned $answer"
       echo "   Expected result is ${results[0]}"
       echo "           ${input[i]}.in (1 A dist): FAILED ($answer; expected ${results[0]})" >> $logfile
      
@@ -74,7 +74,7 @@ do
       echo "           ${input[i]}.in (2 A dist): PASSED" >> $logfile
   else
       echo "*** FAILED ***"
-      echo "   APBS return $answer"
+      echo "   APBS returned $answer"
       echo "   Expected result is ${results[1]}"
       echo "           ${input[i]}.in (2 A dist): FAILED ($answer; expected ${results[1]})" >> $logfile
   fi
@@ -95,7 +95,7 @@ do
       echo "           ${input[i]}.in (3 A dist): PASSED" >> $logfile
   else
       echo "*** FAILED ***"
-      echo "   APBS return $answer"
+      echo "   APBS returned $answer"
       echo "   Expected result is ${results[2]}"
       echo "           ${input[i]}.in (3 A dist): FAILED ($answer; expected ${results[2]})" >> $logfile
   fi
@@ -116,7 +116,7 @@ do
       echo "           ${input[i]}.in (4 A dist): PASSED" >> $logfile
   else
       echo "*** FAILED ***"
-      echo "   APBS return $answer"
+      echo "   APBS returned $answer"
       echo "   Expected result is ${results[3]}"
       echo "           ${input[i]}.in (4 A dist): FAILED ($answer; expected ${results[3]})" >> $logfile
   fi
