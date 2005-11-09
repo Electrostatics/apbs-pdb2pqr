@@ -171,7 +171,6 @@ wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
 
 APBS = ${prefix}/bin/${target}/apbs
-IGEN = ${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc
 subdir = examples/solv
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
@@ -320,7 +319,7 @@ uninstall-am: uninstall-info-am
 
 
 test:
-	./test.sh ${APBS} ${IGEN}
+	./test.sh ${APBS} 
 
 test.serial: test
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
