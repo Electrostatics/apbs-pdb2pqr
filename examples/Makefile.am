@@ -22,6 +22,8 @@ clean:
 	cd solv; make clean
 
 test:
+	cat */TESTRESULTS.log >> OLDRESULTS.log
+	rm -f */TESTRESULTS.log
 	cd actin-dimer; make test
 	cd born; make test
 	cd FKBP; make test
@@ -31,6 +33,7 @@ test:
 	cd pka-lig; make test
 	cd point-pmf; make test
 	cd solv; make test
+	cat */TESTRESULTS.log >> TESTRESULTS.log
 
 test.serial: test
 
