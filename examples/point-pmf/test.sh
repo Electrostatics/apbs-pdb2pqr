@@ -8,6 +8,7 @@ fi
 
 logfile=TESTRESULTS.log
 nettime=0
+vsmall=0.000000001000
 
 input=( apbs ) 
 
@@ -45,19 +46,26 @@ do
   answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
   sync
 
+  # See if we're within a VSMALL
+
+  fanswer=`printf "%.12f" $answer`
+  fexpected=`printf "%.12f" ${results[0]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
   echo ""
   echo "Energy from 1 A distance: $answer"
-  if [[ ${answer} == ${results[0]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (1 A dist): PASSED ($answer)" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned $answer"
-      echo "   Expected result is ${results[0]}"
-      echo "           ${input[i]}.in (1 A dist): FAILED ($answer; expected ${results[0]})" >> $logfile
-     
-  fi
-  
+
+  case "$r" in 
+      2) echo "*** PASSED ***"
+         echo "           ${input[i]}.in (1 A dist): PASSED ($answer)" >> $logfile ;;
+      1) echo "*** PASSED (with rounding error - see log) ***"
+         echo "           ${input[i]}.in (1 A dist): PASSED with rounding error ($answer; expected ${results[0]})" >> $logfile ;;
+      *) echo "*** FAILED ***"
+         echo "   APBS returned $answer"
+         echo "   Expected result is ${results[0]}"
+         echo "           ${input[i]}.in (1 A dist): FAILED ($answer; expected ${results[0]})" >> $logfile ;;
+  esac
+      
   # 2 Angstrom Distance
   echo ""
   echo "ATOM      1  I   ION     1      -1.000    0.000   0.000  1.00 0.00"\
@@ -67,17 +75,23 @@ do
   answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
   sync
 
+  fanswer=`printf "%.12f" $answer`
+  fexpected=`printf "%.12f" ${results[1]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
   echo ""
   echo "Energy from 2 A distance: $answer"
-  if [[ ${answer} == ${results[1]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (2 A dist): PASSED ($answer)" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned $answer"
-      echo "   Expected result is ${results[1]}"
-      echo "           ${input[i]}.in (2 A dist): FAILED ($answer; expected ${results[1]})" >> $logfile
-  fi
+
+  case "$r" in 
+      2) echo "*** PASSED ***"
+         echo "           ${input[i]}.in (2 A dist): PASSED ($answer)" >> $logfile ;;
+      1) echo "*** PASSED (with rounding error - see log) ***"
+         echo "           ${input[i]}.in (2 A dist): PASSED with rounding error ($answer; expected ${results[1]})" >> $logfile ;;
+      *) echo "*** FAILED ***"
+         echo "   APBS returned $answer"
+         echo "   Expected result is ${results[1]}"
+         echo "           ${input[i]}.in (2 A dist): FAILED ($answer; expected ${results[1]})" >> $logfile ;;
+  esac
 
   # 3 Angstrom Distance
   echo ""
@@ -88,17 +102,23 @@ do
   answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
   sync
 
+  fanswer=`printf "%.12f" $answer`
+  fexpected=`printf "%.12f" ${results[2]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
   echo ""
   echo "Energy from 3 A distance: $answer"
-  if [[ ${answer} == ${results[2]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (3 A dist): PASSED ($answer)" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned $answer"
-      echo "   Expected result is ${results[2]}"
-      echo "           ${input[i]}.in (3 A dist): FAILED ($answer; expected ${results[2]})" >> $logfile
-  fi
+
+  case "$r" in 
+      2) echo "*** PASSED ***"
+         echo "           ${input[i]}.in (3 A dist): PASSED ($answer)" >> $logfile ;;
+      1) echo "*** PASSED (with rounding error - see log) ***"
+         echo "           ${input[i]}.in (3 A dist): PASSED with rounding error ($answer; expected ${results[2]})" >> $logfile ;;
+      *) echo "*** FAILED ***"
+         echo "   APBS returned $answer"
+         echo "   Expected result is ${results[2]}"
+         echo "           ${input[i]}.in (3 A dist): FAILED ($answer; expected ${results[2]})" >> $logfile ;;
+  esac
 
   # 4 Angstrom Distance
   echo ""
@@ -109,17 +129,23 @@ do
   answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
   sync
 
+  fanswer=`printf "%.12f" $answer`
+  fexpected=`printf "%.12f" ${results[3]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
   echo ""
   echo "Energy from 4 A distance: $answer"
-  if [[ ${answer} == ${results[3]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (4 A dist): PASSED ($answer)" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned $answer"
-      echo "   Expected result is ${results[3]}"
-      echo "           ${input[i]}.in (4 A dist): FAILED ($answer; expected ${results[3]})" >> $logfile
-  fi
+
+  case "$r" in 
+      2) echo "*** PASSED ***"
+         echo "           ${input[i]}.in (4 A dist): PASSED ($answer)" >> $logfile ;;
+      1) echo "*** PASSED (with rounding error - see log) ***"
+         echo "           ${input[i]}.in (4 A dist): PASSED with rounding error ($answer; expected ${results[3]})" >> $logfile ;;
+      *) echo "*** FAILED ***"
+         echo "   APBS returned $answer"
+         echo "   Expected result is ${results[3]}"
+         echo "           ${input[i]}.in (4 A dist): FAILED ($answer; expected ${results[3]})" >> $logfile ;;
+  esac
 
 
   endtime=`date +%s`
