@@ -3826,7 +3826,7 @@ calculation!\n");
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
             Vnm_print(2, "Vpmg_ibForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-                  atom, position[0], position[1], position[2]);
+                  atom, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n",
               xmin, xmax);
             Vnm_print(2, "Vpmg_ibForce:    ymin = %g, ymax = %g\n",
@@ -3880,7 +3880,8 @@ calculation!\n");
                         } else {
                             /* Use of bulk factor (zkappa2) OK here becuase
                              * LPBE force approximation */
-                            fmag = VSQR(thee->u[IJK(i,j,k)]);
+                            /* NAB -- did we forget a kappa factor here??? */
+                            fmag = VSQR(thee->u[IJK(i,j,k)])*(thee->kappa[IJK(i,j,k)]);
                             force[0] += (zkappa2*fmag*tgrad[0]);
                             force[1] += (zkappa2*fmag*tgrad[1]);
                             force[2] += (zkappa2*fmag*tgrad[2]);
@@ -3985,7 +3986,7 @@ force calculation!\n");
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
             Vnm_print(2, "Vpmg_dbnpForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-                  atomID, position[0], position[1], position[2]);
+                  atomID, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_dbnpForce:    xmin = %g, xmax = %g\n",
               xmin, xmax);
             Vnm_print(2, "Vpmg_dbnpForce:    ymin = %g, ymax = %g\n",
@@ -4233,7 +4234,7 @@ VPRIVATE void qfForceSpline1(Vpmg *thee, double *force, int atomID) {
     if ((apos[0]<=xmin) || (apos[0]>=xmax) || (apos[1]<=ymin) || \
         (apos[1]>=ymax) || (apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
-            Vnm_print(2, "Vpmg_qfForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, position[0], position[1], position[2]);
+            Vnm_print(2, "Vpmg_qfForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_qfForce:    xmin = %g, xmax = %g\n", xmin, xmax);
             Vnm_print(2, "Vpmg_qfForce:    ymin = %g, ymax = %g\n", ymin, ymax);
             Vnm_print(2, "Vpmg_qfForce:    zmin = %g, zmax = %g\n", zmin, zmax);
