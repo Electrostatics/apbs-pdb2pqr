@@ -8,6 +8,7 @@ fi
 
 logfile=TESTRESULTS.log
 nettime=0
+vsmall=0.000000001000
 
 input=( apbs-mol-pdiel2 apbs-smol-pdiel2 apbs-spl2-pdiel2 apbs-mol-pdiel12 apbs-smol-pdiel12 apbs-spl2-pdiel12 )
 
@@ -35,15 +36,23 @@ do
 
   echo "Global net energy: $answer"
   sync
-  if [[ $answer = ${results[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in: PASSED ($answer)" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned $answer"
-      echo "   Expected result is ${results[i]}"
-      echo "           ${input[i]}.in: FAILED ($answer; expected ${results[i]})" >> $logfile
-  fi
+
+  fanswer=`printf "%.12f" $answer`
+  fexpected=`printf "%.12f" ${results[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+  
+  case "$r" in
+      2)  echo "*** PASSED ***"
+          echo "           ${input[i]}.in: PASSED ($answer)" >> $logfile ;;
+      1)
+          echo "*** PASSED (with rounding error - see log) ***"
+          echo "           ${input[i]}.in: PASSED with rounding error ($answer; expected ${results[i]})" >> $logfile ;;
+      *)
+          echo "*** FAILED ***"
+          echo "   APBS returned $answer"
+          echo "   Expected result is ${results[i]}"
+          echo "           ${input[i]}.in: FAILED ($answer; expected ${results[i]})" >> $logfile ;;
+  esac
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
