@@ -8,6 +8,7 @@ fi
 
 logfile=TESTRESULTS.log
 nettime=0
+vsmall=0.000000001000
 
 input=( apbs-mol apbs-smol apbs-spl2 ) 
 
@@ -41,54 +42,82 @@ do
   # Acetic Acid
 
   echo "Acetic Acid Energy: ${answer[0]}"
-  if [[ ${answer[0]} == ${acetic[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (Acetic Acid): PASSED (${answer[0]})" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[0]}"
-      echo "   Expected result is ${acetic[i]}"
-      echo "           ${input[i]}.in (Acetic Acid): FAILED (${answer[0]}; expected ${acetic[i]})" >> $logfile
-  fi
+
+  fanswer=`printf "%.12f" ${answer[0]}`
+  fexpected=`printf "%.12f" ${acetic[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+  
+  case "$r" in 
+      2)  echo "*** PASSED ***"
+          echo "           ${input[i]}.in (Acetic Acid): PASSED (${answer[0]})" >> $logfile ;;
+      1)
+          echo "*** PASSED (with rounding error - see log) ***"
+          echo "           ${input[i]}.in (Acetic Acid): PASSED with rounding error (${answer[0]}; expected ${acetic[i]})" >> $logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[0]}"
+          echo "   Expected result is ${acetic[i]}"
+          echo "           ${input[i]}.in (Acetic Acid): FAILED (${answer[0]}; expected ${acetic[i]})" >> $logfile ;;
+  esac
 
   # Acetate
 
   echo "Acetate Energy    : ${answer[1]}"
-  if [[ ${answer[1]} == ${acetate[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (Acetate): PASSED (${answer[1]})" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[1]}"
-      echo "   Expected result is ${acetate[i]}"
-      echo "           ${input[i]}.in (Acetate): FAILED (${answer[1]}; expected ${acetate[i]})" >> $logfile
-  fi
+  
+  fanswer=`printf "%.12f" ${answer[1]}`
+  fexpected=`printf "%.12f" ${acetate[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+  
+  case "$r" in 
+      2)  echo "*** PASSED ***"
+          echo "           ${input[i]}.in (Acetate): PASSED (${answer[1]})" >> $logfile ;;
+      1)
+          echo "*** PASSED (with rounding error - see log) ***"
+          echo "           ${input[i]}.in (Acetate): PASSED with rounding error (${answer[1]}; expected ${acetate[i]})" >> $logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[1]}"
+          echo "   Expected result is ${acetate[i]}"
+          echo "           ${input[i]}.in (Acetate): FAILED (${answer[1]}; expected ${acetate[i]})" >> $logfile ;;
+  esac
 
   # Proton
 
   echo "Proton Energy     : ${answer[2]}"
-  if [[ ${answer[2]} == ${proton[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (Proton): PASSED (${answer[2]})" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[2]}"
-      echo "   Expected result is ${proton[i]}"
-      echo "           ${input[i]}.in (Proton): FAILED (${answer[2]}; expected ${proton[i]})" >> $logfile
-  fi
+
+  fanswer=`printf "%.12f" ${answer[2]}`
+  fexpected=`printf "%.12f" ${proton[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+  
+  case "$r" in 
+      2)  echo "*** PASSED ***"
+          echo "           ${input[i]}.in (Proton): PASSED (${answer[2]})" >> $logfile ;;
+      1)
+          echo "*** PASSED (with rounding error - see log) ***"
+          echo "           ${input[i]}.in (Proton): PASSED with rounding error (${answer[2]}; expected ${proton[i]})" >> $logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[2]}"
+          echo "   Expected result is ${proton[i]}"
+          echo "           ${input[i]}.in (Proton): FAILED (${answer[2]}; expected ${proton[i]})" >> $logfile ;;
+  esac
 
   # Ionization
 
   echo "Ionization Energy : ${answer[3]}"
-  if [[ ${answer[3]} == ${ionization[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           ${input[i]}.in (Ionization): PASSED (${answer[3]})" >> $logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[3]}"
-      echo "   Expected result is ${ionization[i]}"
-      echo "           ${input[i]}.in (Ionization): FAILED (${answer[3]}; expected ${ionization[i]})" >> $logfile
-  fi
+
+  fanswer=`printf "%.12f" ${answer[3]}`
+  fexpected=`printf "%.12f" ${ionization[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+  
+  case "$r" in 
+      2)  echo "*** PASSED ***"
+          echo "           ${input[i]}.in (Ionization): PASSED (${answer[3]})" >> $logfile ;;
+      1)
+          echo "*** PASSED (with rounding error - see log) ***"
+          echo "           ${input[i]}.in (Ionization): PASSED with rounding error (${answer[3]}; expected ${ionization[i]})" >> $logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[3]}"
+          echo "   Expected result is ${ionization[i]}"
+          echo "           ${input[i]}.in (Ionization): FAILED (${answer[3]}; expected ${ionization[i]})" >> $logfile ;;
+  esac
 
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
