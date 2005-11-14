@@ -9,6 +9,7 @@ fi
 
 logfile=TESTRESULTS.log
 nettime=0
+vsmall=0.000000001000
 
 input=( apbs-mol apbs-smol apbs-spl2 )
 
@@ -38,15 +39,21 @@ do
 
   echo "Global net energy: ${answer[3]}"
   sync
-  if [[ ${answer[3]} = ${results[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           1d7h-dmso/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[3]}"
-      echo "   Expected result is ${results[i]}"
-      echo "           1d7h-dmso/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile
-  fi
+
+  fanswer=`printf "%.12f" ${answer[3]}`
+  fexpected=`printf "%.12f" ${results[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
+  case "$r" in
+      2)  echo "*** PASSED ***"
+          echo "           1d7h-dmso/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
+      1)  echo "*** PASSED (with rounding error - see log) ***"
+          echo "           1d7h-dmso/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[3]}"
+          echo "   Expected result is ${results[i]}"
+          echo "           1d7h-dmso/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+  esac
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
@@ -73,15 +80,21 @@ do
 
   echo "Global net energy: ${answer[3]}"
   sync
-  if [[ ${answer[3]} = ${results[i]} ]]; then
-      echo "*** PASSED ***"
-      echo "           1d7i-dss/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile
-  else
-      echo "*** FAILED ***"
-      echo "   APBS returned ${answer[3]}"
-      echo "   Expected result is ${results[i]}"
-      echo "           1d7i-dss/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile
-  fi
+
+  fanswer=`printf "%.12f" ${answer[3]}`
+  fexpected=`printf "%.12f" ${results[i]}`
+  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
+  case "$r" in 
+      2)  echo "*** PASSED ***"
+          echo "           1d7i-dss/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
+      1)  echo "*** PASSED (with rounding error - see log) ***"
+          echo "           1d7i-dss/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+      *)  echo "*** FAILED ***"
+          echo "   APBS returned ${answer[3]}"
+          echo "   Expected result is ${results[i]}"
+          echo "           1d7i-dss/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+  esac
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
