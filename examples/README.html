@@ -8,7 +8,10 @@
 <h1 align="center"> APBS examples and test cases </h1>
 
 <br>
-This directory serves as the root directory for the APBS test suite.  In each directory you will find example input files to use with APBS and a README file displaying the results for different versions of APBS.  
+This directory serves as the root directory for the APBS test suite.  In each directory you will find example input files to use with APBS and a README file displaying the results for different versions of APBS.  <P>
+
+Executing <code>make test</code> in each directory will run the examples for that directory and log the results to <code>TESTRESULTS.log</code>.  Executing <code>make test</code> from the root examples directory will run all the tests listed below.  Tests will either pass, pass with rounding error (within 1E-9 of the expected result), or fail outright.
+
 
 <h4>Actin-Dimer</h4>
   <ul>
