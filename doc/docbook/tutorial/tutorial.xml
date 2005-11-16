@@ -1,7 +1,7 @@
 <?xml version='1.0'?> <!-- -*- xml -*- -->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY apbsver "0.3.2">
+<!ENTITY apbsver "0.4.0">
 <!ENTITY apbsdat "10 NOV 2004">
 <!ENTITY license SYSTEM "license.xml">
 <!ENTITY born-sect SYSTEM "born.xml">
@@ -37,6 +37,7 @@
       <year>2002</year>
       <year>2003</year>
       <year>2004</year>
+      <year>2005</year>
       <holder>Washington University in St. Louis</holder>
     </copyright>
     <legalnotice>
@@ -77,7 +78,7 @@
         <listitem>
           <para>
             The latest version of APBS 
-            (<ulink url="http://agave.wustl.edu">http://agave.wustl.edu</ulink>)
+            (<ulink url="http://apbs.sourceforge.net">http://apbs.sourceforge.net</ulink>)
             to perform the electrostatics calculations.
           </para>
         </listitem>
@@ -98,14 +99,14 @@
         </listitem>
         <listitem>
           <para>
-            Bash (<ulink url="http://www.gnu.org/software/bash/bash.html">http://www.gnu.org/software/bash/bash.html</ulink>; standard on most
-            Linux, MacOS X)
+            Bash (<ulink url="http://www.gnu.org/software/bash/bash.html">http://www.gnu.org/software/bash/bash.html</ulink>) - standard on most
+            Linux, MacOS X.
           </para>
         </listitem>
         <listitem>
           <para>
-            Python (<ulink url="http://www.python.org/">http://www.python.org/</ulink>; standard on most
-            Linux, MacOS X)
+            Python (<ulink url="http://www.python.org/">http://www.python.org/</ulink>)  - standard on most
+            Linux, MacOS X.
           </para>
         </listitem>
       </itemizedlist>
@@ -146,7 +147,7 @@
       there are a number of additional examples distributed with the APBS
       software package 
       (<ulink
-        url="http://agave.wustl.edu/apbs/">http://agave.wustl.edu/apbs/</ulink>)
+        url="http://apbs.sourceforge.net">http://apbs.sourceforge.net</ulink>)
       which include ionization energies, protein-protein interactions, parallel 
       calculations, etc.
     </para>

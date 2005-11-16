@@ -43,7 +43,7 @@ ATOM      1   I  ION     1       0.000   0.000   0.000  1.00 3.00
       of an electrostatics calculation are listed in the following table.  
       <important>
         <para> The detailed format of the input file is discussed in the
-          APBS manual (<ulink url="http://agave.wustl.edu/apbs/doc/html/">http://agave.wustl.edu/apbs/doc/html/</ulink>).
+          APBS manual (<ulink url="http://apbs.sourceforge.net/doc">http://apbs.sourceforge.net/doc</ulink>).
         </para>
       </important>
       <table frame="all"> <title>Basic APBS input parameters</title>
@@ -268,7 +268,7 @@ quit
       <screen>
         <prompt>$</prompt> <userinput>bash runme.sh</userinput>
       </screen>
-      While running, the script will generaet a series of plots generated from
+      While running, the script will generate a series of plots generated from
       the APBS output depicting the change in electrostatic potential as a
       function of distance from the ion center.  Of particular interest is the
       change in potential from the inside to the outside of the ion.  When
