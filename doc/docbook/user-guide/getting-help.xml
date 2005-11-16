@@ -2,9 +2,35 @@
   <para>APBS follows an open source software development model and relies
     heavily on the user community for feedback to enhance the software,
     identify bugs, etc. </para>
-  <sect1 id="mailing-lists"> <title>User forums</title>
+
+  <sect1 id="user-forums"> <title>User Forums</title>
+    <para> The <ulink url="http://sourceforge.net/projects/apbs">SourceForge project page</ulink> offers many user forums for discussion on APBS topics.  Users are encouraged to post bugs and request for support and features via the following forums:
+      <itemizedlist>
+        <listitem>
+	  <para><ulink 
+	  url="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704">
+	  Bugs</ulink> - A forum for listing and displaying progress on APBS 
+	  bugs.</para>
+	</listitem>
+	<listitem>
+	  <para><ulink 
+	  url="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771705">
+	  Support Requests</ulink> - A forum for requesting support for 
+	  installation on various architectures and general APBS usage. </para>
+	</listitem>
+	<listitem>
+	  <para><ulink 
+	  url="http://sourceforge.net/tracker/?group_id=144228&amp;atid=758146">
+	  Feature Requests</ulink> - A forum for feature requests and other 
+	  desired additions to APBS. </para>
+	</listitem>
+     </itemizedlist>
+   </para>
+  </sect1>
+
+  <sect1 id="mailing-lists"> <title>Mailing Lists</title>
     <para> 
-      There are two mailing lists for the APBS software:
+      There are additionally two mailing lists for the APBS software:
       <variablelist>
         <varlistentry>
           <term> Announcements 
@@ -55,10 +81,16 @@
   </sect1>
   <sect1> <title>Bug and other problems</title>
     <para> 
-      Bugs or potential bugs, problems, etc. should be reported to the
+      Bugs or potential bugs, problems, etc. should either be posted to the
+      <ulink 
+      url="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704"> 
+      SourceForge bug tracker forum</ulink> or reported to the
       apbs-users 
       (<ulink url="http://lists.sourceforge.net/lists/listinfo/apbs-users">http://lists.sourceforge.net/lists/listinfo/apbs-users</ulink>)
-      mailing list (see <link linkend="mailing-lists">User forums</link>).
+      mailing list.  Please see the 
+      <link linkend="user-forums">user forums</link> or 
+      <link linkend="mailing-lists">mailing list</link> sections of the 
+      documentation for more information.
     </para>
   </sect1>
 </chapter>

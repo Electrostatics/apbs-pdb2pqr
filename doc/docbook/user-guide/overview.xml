@@ -270,6 +270,14 @@
           <para>Drop-in replacement for main APBS executable. Only permits
             sequential runs.</para>
         </listitem>
+	 <listitem>
+          <para><filename>tools/python/noinput.py</filename></para>
+          <para>Similar to main.py, but adds the ability to read input
+	  files and PQR files as Python strings and return energies and
+	  forces as Python lists.  This makes it a very useful tool for 
+	  working with APBS via Python without dealing with a great deal
+	  of file I/O.</para>
+        </listitem>
         <listitem>
           <para><filename>tools/python/vgrid/</filename></para>
           <para>Python wrappers for Vgrid class to allow OpenDX format file I/O

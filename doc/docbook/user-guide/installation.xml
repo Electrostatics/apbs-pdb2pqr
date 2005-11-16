@@ -33,14 +33,7 @@
       would like to compile APBS yourself, you'll need to read the instructions
       in this section.</para>
 
-    <sect2 id="prerequisites-sect"> <title>Prerequisites</title>
-      <para>Binary executables for APBS are available from the APBS download site
-        (<ulink url="http://agave.wustl.edu/apbs/download/">http://agave.wustl.edu/apbs/download</ulink>).  We currently only
-        have binary versions for RedHat Linux but are in the processor of
-        developing binaries for several other popular platforms.  In the
-        meantime, please install APBS from source, as described below.
-      </para>
-      
+    <sect2 id="prerequisites-sect"> <title>Prerequisites</title>  
       <para>In order to install APBS from the source code, you will need:
         <itemizedlist> 
           <listitem> <para>C and Fortran compilers</para> </listitem>
@@ -367,7 +360,10 @@
          for themselves - you may want to examine the
         <ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">apbs-users 
         mailing list</ulink> which has a number of threads which discuss
-        installation on Mac OS platforms.</para>
+        installation on Mac OS platforms.  Alternatively you can try using
+	Fink for the installation - please see Bill Scott's excellent 
+	guidelines at <ulink url="http://chemistry.ucsc.edu/~wgscott/xtal"> 
+	http://chemistry.ucsc.edu/~wgscott/xtal</ulink>. </para>
         <para>A few notes about compiling on Macintosh:</para>
           <orderedlist>
             <listitem>
