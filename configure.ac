@@ -315,7 +315,7 @@ else
     dnl # MPI library location ENV specification
     AC_MSG_CHECKING([for FETK_MPI_LIBRARY environmental variable])
     if test -n "${FETK_MPI_LIBRARY}"; then
-        mpi_lib_path_env="${FETK_MPI_LIBRARY} ";
+        mpi_lib_path_env="${FETK_MPI_LIBRARY}";
         AC_MSG_RESULT([yes])
     else
         mpi_lib_path_env="";
@@ -335,13 +335,13 @@ else
     AC_ARG_WITH(mpilib,
         [AC_HELP_STRING([--with-mpilib=PATH], 
                         [directory containing <libmpi.a>])],
-        [mpi_lib_path="-L${with_mpilib} "; AC_MSG_RESULT([yes])],
-        [mpi_lib_path="-L${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
+        [mpi_lib_path="${with_mpilib}"; AC_MSG_RESULT([yes])],
+        [mpi_lib_path="${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
     )
     dnl # Setup temp LDFLAGS and look for MPI library/header
     LDFLAGS_SAVE=${LDFLAGS}
     CPPFLAGS_SAVE=${CPPFLAGS}
-    LDFLAGS="${mpi_lib_path} ${nsl_lib} ${socket_lib} ${mpi_lib_path}";
+    LDFLAGS="-L${mpi_lib_path} ${nsl_lib} ${socket_lib} -L${mpi_lib_path}";
     CPPFLAGS="${mpi_inc_path}";
     mpi_use="";
     AC_MSG_RESULT([Looking for MPI header with ${mpi_inc_path}...])
@@ -350,27 +350,31 @@ else
         [mpi_use="";mpi_inc=""])
     if test -n "${mpi_use}"; then
         AC_MSG_RESULT([Looking for MPI library with ${mpi_lib_path}...])
+        
+        AC_CHECK_FILE(${mpi_lib_path}/libmpich.a, 
+           [HAS_MPICH="mpich"], [])
+        AC_CHECK_FILE(${mpi_lib_path}/libmpich.so, 
+           [HAS_MPICH="mpich"], [])   
 
-        HAS_MPICH=`echo ${mpi_lib_path} | grep mpich`
         if test -n "${HAS_MPICH}"; then
-           AC_CHECK_LIB(mpich,main,
-                [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
-                [mpi_use="";mpi_lib=""],${mpi_lib_path})
-           if test -z "${mpi_use}"; then   
-             AC_CHECK_LIB(mpi,main,
-             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
-             [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
-           fi
+          AC_CHECK_LIB(mpich,main,
+          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
+          [mpi_use="";mpi_lib=""],${mpi_lib_path})
+         if test -z "${mpi_use}"; then   
+          AC_CHECK_LIB(mpi,main,
+          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
+          [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+         fi
 
         else
-           AC_CHECK_LIB(mpi,main,
-             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
-             [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
-           if test -z "${mpi_use}"; then
-              AC_CHECK_LIB(mpich,main,
-                [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
-                [mpi_use="";mpi_lib=""],${mpi_lib_path})
-           fi
+          AC_CHECK_LIB(mpi,main,
+          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
+          [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+         if test -z "${mpi_use}"; then
+          AC_CHECK_LIB(mpich,main,
+          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
+          [mpi_use="";mpi_lib=""],${mpi_lib_path})
+         fi
         fi
     fi
     if test -z "${mpi_use}"; then

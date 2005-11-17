@@ -10188,7 +10188,7 @@ echo "${ECHO_T}no" >&6
         echo "$as_me:$LINENO: checking for FETK_MPI_LIBRARY environmental variable" >&5
 echo $ECHO_N "checking for FETK_MPI_LIBRARY environmental variable... $ECHO_C" >&6
     if test -n "${FETK_MPI_LIBRARY}"; then
-        mpi_lib_path_env="${FETK_MPI_LIBRARY} ";
+        mpi_lib_path_env="${FETK_MPI_LIBRARY}";
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
     else
@@ -10217,16 +10217,16 @@ echo $ECHO_N "checking for --with-mpilib option... $ECHO_C" >&6
 # Check whether --with-mpilib or --without-mpilib was given.
 if test "${with_mpilib+set}" = set; then
   withval="$with_mpilib"
-  mpi_lib_path="-L${with_mpilib} "; echo "$as_me:$LINENO: result: yes" >&5
+  mpi_lib_path="${with_mpilib}"; echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-  mpi_lib_path="-L${mpi_lib_path_env}"; echo "$as_me:$LINENO: result: no" >&5
+  mpi_lib_path="${mpi_lib_path_env}"; echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 
 fi;
         LDFLAGS_SAVE=${LDFLAGS}
     CPPFLAGS_SAVE=${CPPFLAGS}
-    LDFLAGS="${mpi_lib_path} ${nsl_lib} ${socket_lib} ${mpi_lib_path}";
+    LDFLAGS="-L${mpi_lib_path} ${nsl_lib} ${socket_lib} -L${mpi_lib_path}";
     CPPFLAGS="${mpi_inc_path}";
     mpi_use="";
     echo "$as_me:$LINENO: result: Looking for MPI header with ${mpi_inc_path}..." >&5
@@ -10371,9 +10371,53 @@ fi
         echo "$as_me:$LINENO: result: Looking for MPI library with ${mpi_lib_path}..." >&5
 echo "${ECHO_T}Looking for MPI library with ${mpi_lib_path}..." >&6
 
-        HAS_MPICH=`echo ${mpi_lib_path} | grep mpich`
+        as_ac_File=`echo "ac_cv_file_${mpi_lib_path}/libmpich.a" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for ${mpi_lib_path}/libmpich.a" >&5
+echo $ECHO_N "checking for ${mpi_lib_path}/libmpich.a... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "${mpi_lib_path}/libmpich.a"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  HAS_MPICH="mpich"
+fi
+
+        as_ac_File=`echo "ac_cv_file_${mpi_lib_path}/libmpich.so" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for ${mpi_lib_path}/libmpich.so" >&5
+echo $ECHO_N "checking for ${mpi_lib_path}/libmpich.so... $ECHO_C" >&6
+if eval "test \"\${$as_ac_File+set}\" = set"; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "${mpi_lib_path}/libmpich.so"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_File'}'`" >&5
+echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
+if test `eval echo '${'$as_ac_File'}'` = yes; then
+  HAS_MPICH="mpich"
+fi
+
+
         if test -n "${HAS_MPICH}"; then
-           echo "$as_me:$LINENO: checking for main in -lmpich" >&5
+          echo "$as_me:$LINENO: checking for main in -lmpich" >&5
 echo $ECHO_N "checking for main in -lmpich... $ECHO_C" >&6
 if test "${ac_cv_lib_mpich_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10422,13 +10466,13 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpich_main" >&5
 echo "${ECHO_T}$ac_cv_lib_mpich_main" >&6
 if test $ac_cv_lib_mpich_main = yes; then
-  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"
+  mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"
 else
   mpi_use="";mpi_lib=""
 fi
 
-           if test -z "${mpi_use}"; then
-             echo "$as_me:$LINENO: checking for main in -lmpi" >&5
+         if test -z "${mpi_use}"; then
+          echo "$as_me:$LINENO: checking for main in -lmpi" >&5
 echo $ECHO_N "checking for main in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10477,15 +10521,15 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpi_main" >&5
 echo "${ECHO_T}$ac_cv_lib_mpi_main" >&6
 if test $ac_cv_lib_mpi_main = yes; then
-  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"
+  mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"
 else
   mpi_use="";mpi_lib="";mpi_bin=""
 fi
 
-           fi
+         fi
 
         else
-           echo "$as_me:$LINENO: checking for main in -lmpi" >&5
+          echo "$as_me:$LINENO: checking for main in -lmpi" >&5
 echo $ECHO_N "checking for main in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10534,13 +10578,13 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpi_main" >&5
 echo "${ECHO_T}$ac_cv_lib_mpi_main" >&6
 if test $ac_cv_lib_mpi_main = yes; then
-  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"
+  mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"
 else
   mpi_use="";mpi_lib="";mpi_bin=""
 fi
 
-           if test -z "${mpi_use}"; then
-              echo "$as_me:$LINENO: checking for main in -lmpich" >&5
+         if test -z "${mpi_use}"; then
+          echo "$as_me:$LINENO: checking for main in -lmpich" >&5
 echo $ECHO_N "checking for main in -lmpich... $ECHO_C" >&6
 if test "${ac_cv_lib_mpich_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -10589,12 +10633,12 @@ fi
 echo "$as_me:$LINENO: result: $ac_cv_lib_mpich_main" >&5
 echo "${ECHO_T}$ac_cv_lib_mpich_main" >&6
 if test $ac_cv_lib_mpich_main = yes; then
-  mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"
+  mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"
 else
   mpi_use="";mpi_lib=""
 fi
 
-           fi
+         fi
         fi
     fi
     if test -z "${mpi_use}"; then
