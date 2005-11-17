@@ -350,13 +350,27 @@ else
         [mpi_use="";mpi_inc=""])
     if test -n "${mpi_use}"; then
         AC_MSG_RESULT([Looking for MPI library with ${mpi_lib_path}...])
-        AC_CHECK_LIB(mpi,main,
-            [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
-            [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
-        if test -z "${mpi_use}"; then
-            AC_CHECK_LIB(mpich,main,
+
+        HAS_MPICH=`echo ${mpi_lib_path} | grep mpich`
+        if test -n "${HAS_MPICH}"; then
+           AC_CHECK_LIB(mpich,main,
                 [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
                 [mpi_use="";mpi_lib=""],${mpi_lib_path})
+           if test -z "${mpi_use}"; then   
+             AC_CHECK_LIB(mpi,main,
+             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
+             [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+           fi
+
+        else
+           AC_CHECK_LIB(mpi,main,
+             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi";mpi_bin="pnoshell"],
+             [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+           if test -z "${mpi_use}"; then
+              AC_CHECK_LIB(mpich,main,
+                [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
+                [mpi_use="";mpi_lib=""],${mpi_lib_path})
+           fi
         fi
     fi
     if test -z "${mpi_use}"; then
