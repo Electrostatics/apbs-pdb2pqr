@@ -24,6 +24,7 @@ elec name acetic-solv
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total
@@ -49,6 +50,7 @@ elec name acetic-ref
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total
@@ -74,6 +76,7 @@ elec name acetate-solv
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total
@@ -100,6 +103,7 @@ elec name acetate-ref
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total
@@ -126,6 +130,7 @@ elec name proton-solv
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total
@@ -152,6 +157,7 @@ elec name proton-ref
     srfm smol
     srad 0
     swin 0.3
+    sdens 10.0
     temp 293.0
     gamma 0.105
     calcenergy total

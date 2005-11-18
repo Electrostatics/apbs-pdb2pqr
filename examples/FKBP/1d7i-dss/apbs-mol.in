@@ -30,6 +30,7 @@ elec name complex-solv-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -52,6 +53,7 @@ elec name complex-solv-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -76,6 +78,7 @@ elec name complex-ref-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -98,6 +101,7 @@ elec name complex-ref-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -122,6 +126,7 @@ elec name dss-solv-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -144,6 +149,7 @@ elec name dss-solv-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -168,6 +174,7 @@ elec name dss-ref-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -190,6 +197,7 @@ elec name dss-ref-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -214,6 +222,7 @@ elec name 1d7i-solv-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -236,6 +245,7 @@ elec name 1d7i-solv-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -260,6 +270,7 @@ elec name 1d7i-ref-coarse
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total
@@ -282,6 +293,7 @@ elec name 1d7i-ref-fine
     chgm spl0
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300
     gamma 0.105
     calcenergy total

@@ -33,6 +33,7 @@ elec name mol1
     chgm spl0
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
@@ -60,6 +61,7 @@ elec name mol2
     chgm spl0
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
@@ -87,6 +89,7 @@ elec name complex
     chgm spl0
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
