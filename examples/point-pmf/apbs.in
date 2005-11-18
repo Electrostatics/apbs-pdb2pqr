@@ -28,6 +28,7 @@ elec name point1
     srfm spl2
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy comps
@@ -50,6 +51,7 @@ elec name point2
     srfm spl2
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy comps
@@ -72,6 +74,7 @@ elec name complex
     srfm spl2
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy comps

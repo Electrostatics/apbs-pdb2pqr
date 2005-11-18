@@ -29,6 +29,7 @@ elec name methanol-solv
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300.00
     gamma 0.105
     calcenergy total
@@ -53,6 +54,7 @@ elec name methanol-ref
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300.00
     gamma 0.105
     calcenergy total
@@ -77,6 +79,7 @@ elec name methoxide-solv
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300.00
     gamma 0.105
     calcenergy total
@@ -101,6 +104,7 @@ elec name methoxide-ref
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 300.00
     gamma 0.105
     calcenergy total

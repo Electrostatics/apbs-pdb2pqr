@@ -31,6 +31,7 @@ elec name acet
     srfm mol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
@@ -56,6 +57,7 @@ elec name hca
     srfm mol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
@@ -81,6 +83,7 @@ elec name complex
     srfm mol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy total
