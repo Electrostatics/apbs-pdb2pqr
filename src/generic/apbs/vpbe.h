@@ -115,12 +115,6 @@ struct sVpbe {
  */
 typedef struct sVpbe Vpbe;
 
-/** 
- * @ingroup  Vpbe
- * @brief  Number of grid points per square-angstrom to use in Vacc object 
- */
-#define VACC_SPHERE_DENSITY 3.0
-
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpbe: Inlineable methods (vpbe.c)
 /////////////////////////////////////////////////////////////////////////// */
@@ -334,13 +328,14 @@ typedef struct sVpbe Vpbe;
  *  @param   solventDiel Solvent dielectric constant
  *  @param   solventRadius Solvent radius
  *  @param   focusFlag 1 if Focusing operation, 0 otherwise
+ *  @param   sdens Vacc sphere density
  *  @return  Pointer to newly allocated Vpbe object
  */
 
 VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
 		    double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,  
-                    double solventRadius, int focusFlag);
+                    double solventRadius, int focusFlag, double sdens);
 
 /** @brief   FORTRAN stub to construct Vpbe objct
  *  @ingroup Vpbe
@@ -372,12 +367,14 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  *  @param   solventRadius Solvent radius
  *  @param   focusFlag 1 if Focusing operation, 0 otherwise
  *  @bug     The focusing flag is currently not used!!
+ *  @param   sdens Vacc sphere density
  *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
 		    double *ionConc, double *ionRadii, double *ionQ, 
                     double T, double gamma, double soluteDiel, 
-                    double solventDiel, double solventRadius, int focusFlag);
+                    double solventDiel, double solventRadius, int focusFlag,
+                    double sdens);
 
 /** @brief   Get information about the counterion species present
  *  @ingroup Vpbe

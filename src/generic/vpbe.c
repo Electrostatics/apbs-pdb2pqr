@@ -193,14 +193,14 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
                     double *ionRadii, double *ionQ, double T, double gamma,
                     double soluteDiel, double solventDiel,
-                    double solventRadius, int focusFlag) {
+                    double solventRadius, int focusFlag, double sdens) {
 
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-      T, gamma, soluteDiel, solventDiel, solventRadius, focusFlag) );
+      T, gamma, soluteDiel, solventDiel, solventRadius, focusFlag, sdens) );
 
     return thee;
 }
@@ -209,7 +209,8 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
                     double *ionConc, double *ionRadii,
                     double *ionQ, double T, double gamma, double soluteDiel,
-                    double solventDiel, double solventRadius, int focusFlag) {
+                    double solventDiel, double solventRadius, int focusFlag,
+                    double sdens) {
 
     int i, iatom, inhash[3];
     double atomRadius;
@@ -379,7 +380,7 @@ function\n", thee->maxIonRadius);
     thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
             CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
     VASSERT(thee->clist != VNULL);
-    thee->acc = Vacc_ctor(thee->alist, thee->clist, VACC_SPHERE_DENSITY);
+    thee->acc = Vacc_ctor(thee->alist, thee->clist, sdens);
 	
     VASSERT(thee->acc != VNULL);
 

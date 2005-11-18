@@ -33,6 +33,9 @@ BETA PUBLIC RELEASE VERSION 0.4.0       XX-XX-XX
       need backwards compatibility are encouraged to use the spline based
       smoothing method (srfm spl2) or the molecular surface without
       smoothing (srfm mol).
+    * Added new 'sdens' input keyword to allow user to control the sphere
+      density used in Vacc.  This became necessary due to the Vacc_molAcc
+      bug fix listed below.  Only applies to srfm mol and srfm smol.
     * Made the examples directory documentation much more streamlined.
     * Added tests for examples directory.  Users can now issue a "make test" in
       the desired directory to compare local results with expected results.

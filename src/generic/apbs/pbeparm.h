@@ -125,6 +125,8 @@ struct sPBEparm {
     int setion[MAXION];  /**< Flag, @see ionq */
     double pdie;  /**< Solute dielectric */
     int setpdie;  /**< Flag, @see pdie */
+    double sdens; /**< Vacc sphere density */
+    int setsdens; /**< Flag, @see sdens */
     double sdie;  /**< Solvent dielectric */
     int setsdie;  /**< Flag, @see sdie */
     Vsurf_Meth srfm;  /**< Surface calculation method */
