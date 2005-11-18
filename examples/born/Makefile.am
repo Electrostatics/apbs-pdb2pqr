@@ -12,7 +12,7 @@
 
 APBS=${prefix}/bin/${target}/apbs
 IGEN=${top_builddir}/tools/manip/inputgen.py
-CLEANFILES = *-PE* *.out *.log io.mc
+CLEANFILES = *-PE* *.out *.log io.mc*
 
 test:
 	./test.sh ${APBS} ${IGEN}
