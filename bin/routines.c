@@ -717,7 +717,8 @@ fgcent/cgcent!\n",  (imol+1));
 	
 	pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
 		  pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-		  pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag);
+		  pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag,
+          pbeparm->sdens);
 
     /* Set up PDE object */
     Vnm_tprint(0, "Setting up PDE object...\n");
@@ -1843,7 +1844,8 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	focusFlag = 0;
     pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
       pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag);
+      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag,
+      pbeparm->sdens);
 
     /* Print a few derived parameters */
     Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));

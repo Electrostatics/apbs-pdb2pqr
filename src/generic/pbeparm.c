@@ -101,9 +101,11 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setgamma = 0;
     thee->setcalcenergy = 0;      
     thee->setcalcforce = 0;       
+    thee->setsdens = 0;
     thee->numwrite = 0; 
     thee->setwritemat = 0; 
     thee->nion = 0;
+    thee->sdens = 0;
     thee->swin = 0;
     thee->srad = 1.4;
     thee->useDielMap = 0;
@@ -157,6 +159,11 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     }
     if (!thee->setpdie) {
         Vnm_print(2, "PBEparm_check: PDIE not set!\n");
+        return 0;
+    }
+    if (((thee->srfm==VSM_MOL) || (thee->srfm==VSM_MOLSMOOTH)) \
+      && (!thee->setsdens) && (thee->srad > VSMALL)) {
+        Vnm_print(2, "PBEparm_check: SDENS not set!\n");
         return 0;
     }
     if (!thee->setsdie) {
@@ -220,6 +227,8 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     };
     thee->pdie = parm->pdie;
     thee->setpdie = parm->setpdie;
+    thee->sdens = parm->sdens;
+    thee->setsdens = parm->setsdens;
     thee->sdie = parm->sdie;
     thee->setsdie = parm->setsdie;
     thee->srfm = parm->srfm;
@@ -409,6 +418,25 @@ keyword!\n", tok);
     }
     thee->pdie = tf;
     thee->setpdie = 1;
+    return 1;
+
+    VERROR1:
+        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+        return -1;
+}
+
+VPRIVATE int PBEparm_parseSDENS(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDENS \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->sdens = tf;
+    thee->setsdens = 1;
     return 1;
 
     VERROR1:
@@ -841,6 +869,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseION(thee, sock);
     } else if (Vstring_strcasecmp(tok, "pdie") == 0) {
         return PBEparm_parsePDIE(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
+        return PBEparm_parseSDENS(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdie") == 0) {
         return PBEparm_parseSDIE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "srfm") == 0) {
