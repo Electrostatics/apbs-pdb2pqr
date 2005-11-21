@@ -122,6 +122,9 @@
           (optional)
       </member>
       <member>
+        <command><link linkend="sdens">sdens</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -222,6 +225,9 @@
           (optional)
       </member>
       <member>
+        <command><link linkend="sdens">sdens</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -306,6 +312,9 @@
       <member>
         <command><link linkend="usemap">usemap</link></command>
           (optional)
+      </member>
+      <member>
+        <command><link linkend="sdens">sdens</link></command>
       </member>
       <member>
         <command><link linkend="srad">srad</link></command>
@@ -428,6 +437,9 @@
           (optional)
       </member>
       <member>
+        <command><link linkend="sdens">sdens</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -509,6 +521,9 @@
       <member>
         <command><link linkend="usemap">usemap</link></command>
           (optional)
+      </member>
+      <member>
+        <command><link linkend="sdens">sdens</link></command>
       </member>
       <member>
         <command><link linkend="srad">srad</link></command>
@@ -1551,6 +1566,30 @@
       </para>
     </listitem>
 
+    <listitem id="sdens">
+      <cmdsynopsis>
+        <command>sdens</command>
+        <arg choice="req"><replaceable>density</replaceable></arg>
+      </cmdsynopsis>
+      <para>Specify the number of grid points per square-angstrom to use 
+            in Vacc object. Ignored when srad is 0.0 (see 
+	    <link linkend="srad"><command>srad</command></link>) or srfm is 
+	    spl2 (see <link linkend="srfm"><command>srfm</command></link>).
+	    There is a direct correlation between the value 
+	    used for the Vacc sphere density, the accuracy of the Vacc object, 
+	    and the APBS calculation time.  APBS default value is 10.0.
+        <variablelist>
+          <varlistentry>
+            <term><replaceable>density</replaceable></term>
+            <listitem>
+             <para>Vacc sphere density (in grid points/&Aring;<superscript>2
+	     </superscript>).</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </para>
+    </listitem>
+
     <listitem id="srad">
       <cmdsynopsis>
         <command>srad</command>
@@ -1562,7 +1601,7 @@
         usually set to 1.4 &Aring; for water.
         <variablelist>
           <varlistentry>
-            <term><replaceable>radius></replaceable></term>
+            <term><replaceable>radius</replaceable></term>
             <listitem>
               <para>Solvent radius (in &Aring;).</para>
             </listitem>
