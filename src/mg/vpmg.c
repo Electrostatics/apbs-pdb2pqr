@@ -120,7 +120,6 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     VASSERT(thee != VNULL);
     VASSERT( Vpmg_ctor2(thee, pmgp, pbe, focusFlag, pmgOLD, mgparm, 
                 energyFlag) );
-
     return thee;
 }
 
@@ -1344,6 +1343,56 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     thee->gzcf = (double *)Vmem_malloc(thee->vmem,
       10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
 
+    if (focusFlag) {
+        /* Overwrite any default or user-specified boundary condition
+         * arguments; we are now committed to a calculation via focusing */
+        if (thee->pmgp->bcfl != BCFL_FOCUS) {
+            Vnm_print(2, 
+            "Vpmg_ctor2: reset boundary condition flag to BCFL_FOCUS!\n");
+            thee->pmgp->bcfl = BCFL_FOCUS;
+        }
+
+        /* Fill boundaries */
+        Vnm_print(0, "Vpmg_ctor2:  Filling boundary with old solution!\n");
+        focusFillBound(thee, pmgOLD);
+
+        /* Calculate energetic contributions from region outside focusing
+         * domain */
+        if (energyFlag != PCE_NO) {
+
+            if (mgparm->type == MCT_PAR) {
+
+                for (j=0; j<3; j++) {
+                    partMin[j] = mgparm->center[j] 
+                        + mgparm->partDisjCenterShift[j]
+                        - 0.5*mgparm->partDisjLength[j];
+                    partMax[j] = mgparm->center[j] 
+                        + mgparm->partDisjCenterShift[j]
+                        + 0.5*mgparm->partDisjLength[j];
+                }
+
+            } else {
+                for (j=0; j<3; j++) {
+                    partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
+                    partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
+                }
+            }
+            extEnergy(thee, pmgOLD, energyFlag, partMin, partMax, 
+                    mgparm->partDisjOwnSide);
+        }
+        /* Destroy old Vpmg object */
+        Vpmg_dtor(&pmgOLD);
+       
+    } else {
+
+        /* Ignore external energy contributions */
+        thee->extQmEnergy = 0;
+        thee->extDiEnergy = 0;
+        thee->extQfEnergy = 0;
+        thee->extNpEnergy = 0;
+    }
+    
+
     /* Allocate partition vector storage */
     thee->pvec = (double *)Vmem_malloc(thee->vmem,
       (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
@@ -1385,55 +1434,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
       sizeof(double));
     thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz),
       sizeof(double));
-
-    if (focusFlag) {
-        /* Overwrite any default or user-specified boundary condition
-         * arguments; we are now committed to a calculation via focusing */
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
-            Vnm_print(2, 
-            "Vpmg_ctor2: reset boundary condition flag to BCFL_FOCUS!\n");
-            thee->pmgp->bcfl = BCFL_FOCUS;
-        }
-
-        /* Fill boundaries */
-        Vnm_print(0, "Vpmg_ctor2:  Filling boundary with old solution!\n");
-        focusFillBound(thee, pmgOLD);
-
-        /* Calculate energetic contributions from region outside focusing
-         * domain */
-        if (energyFlag != PCE_NO) {
-
-            if (mgparm->type == MCT_PAR) {
-
-                for (j=0; j<3; j++) {
-                    partMin[j] = mgparm->center[j] 
-                        + mgparm->partDisjCenterShift[j]
-                        - 0.5*mgparm->partDisjLength[j];
-                    partMax[j] = mgparm->center[j] 
-                        + mgparm->partDisjCenterShift[j]
-                        + 0.5*mgparm->partDisjLength[j];
-                }
-
-            } else {
-                for (j=0; j<3; j++) {
-                    partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
-                    partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
-                }
-            }
-            extEnergy(thee, pmgOLD, energyFlag, partMin, partMax, 
-                    mgparm->partDisjOwnSide);
-        }
-        /* Destroy old Vpmg object */
-        Vpmg_dtor(&pmgOLD);
-
-    } else {
-
-        /* Ignore external energy contributions */
-        thee->extQmEnergy = 0;
-        thee->extDiEnergy = 0;
-        thee->extQfEnergy = 0;
-        thee->extNpEnergy = 0;
-    }
 
     /* Plop some of the parameters into the iparm and rparm arrays */
     F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk),
