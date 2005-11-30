@@ -54,7 +54,7 @@
 # FADD = 20                   # Amount to add to mol dims to get fine
                               # grid dims
 # SPACE = 0.50                # Desired fine mesh resolution
-# GMEMFAC = 160               # Number of bytes per grid point required 
+# GMEMFAC = 200               # Number of bytes per grid point required 
                               # for sequential MG calculation 
 # GMEMCEIL = 400              # Max MB allowed for sequential MG
                               # calculation.  Adjust this to force the
@@ -76,7 +76,7 @@ from math import log
 
 class Psize:
     def __init__(self):
-        self.constants = {"CFAC":1.7, "FADD":20, "SPACE":0.50, "GMEMFAC":160, "GMEMCEIL":400, "OFAC":0.1, "REDFAC":0.25, "TFAC_ALPHA":9e-5, "TFAC_XEON":3e-4, "TFAC_SPARC": 5e-4}
+        self.constants = {"CFAC":1.7, "FADD":20, "SPACE":0.50, "GMEMFAC":200, "GMEMCEIL":400, "OFAC":0.1, "REDFAC":0.25, "TFAC_ALPHA":9e-5, "TFAC_XEON":3e-4, "TFAC_SPARC": 5e-4}
         self.minlen = [360.0, 360.0, 360.0]
         self.maxlen = [0.0, 0.0, 0.0]
         self.q = 0.0
@@ -187,7 +187,7 @@ class Psize:
         for i in range(3):
             nsmall.append(n[i])
         while 1:
-            nsmem = 160.0 * nsmall[0] * nsmall[1] * nsmall[2] / 1024 / 1024
+            nsmem = 200.0 * nsmall[0] * nsmall[1] * nsmall[2] / 1024 / 1024
             if nsmem < self.constants["GMEMCEIL"]: break
             else:
                 i = nsmall.index(max(nsmall))
@@ -288,8 +288,8 @@ class Psize:
 
             # Compute memory requirements
 
-            nsmem = 160.0 * nsmall[0] * nsmall[1] * nsmall[2] / 1024 / 1024
-            gmem = 160.0 * n[0] * n[1] * n[2] / 1024 / 1024
+            nsmem = 200.0 * nsmall[0] * nsmall[1] * nsmall[2] / 1024 / 1024
+            gmem = 200.0 * n[0] * n[1] * n[2] / 1024 / 1024
             
             # Calculate VERY ROUGH wall clock times
 
@@ -338,7 +338,7 @@ clen[1], clen[2])
 
             str = str + "\n"
             str = str + "################# ESTIMATED REQUIREMENTS ####################\n"
-            str = str + "Memory per processor                   = %.3f MB\n" % (160.0*ntot/1024/1024)
+            str = str + "Memory per processor                   = %.3f MB\n" % (200.0*ntot/1024/1024)
             str = str + "Grid storage requirements (ASCII)      = %.3f MB\n" % (8.0*12*np[0]*np[1]*np[2]*ntot/1024/1024)
             str = str + "Grid storage requirements (XDR)        = %.3f MB\n" % (8.0*ntot*np[0]*np[1]*np[2]/1024/1024)
             str = str + "Time to solve on 667 MHz EV67 Alpha    = %.3f sec\n" % tsolve_alpha
