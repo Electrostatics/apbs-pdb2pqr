@@ -41,6 +41,7 @@ elec name comp_solv        # Solvated complex
     srfm mol               # Molecular surface
     srad 1.4               # Solvent probe radius
     swin 0.3               # Surface spline window
+    sdens 10.0             # Sphere density
     temp 298.15            # Temperature
     gamma 0.00072          # Apolar coefficient
     write pot dx pot-solv  # Inhomogeneous dielectric potential
@@ -64,6 +65,7 @@ elec name comp_vac
     srfm mol
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.00072
     calcenergy total
@@ -87,6 +89,7 @@ elec name ion1_solv
     srfm mol
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.00072
     calcenergy total
@@ -109,6 +112,7 @@ elec name ion1_vac
     srfm mol
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.00072
     calcenergy total
@@ -131,6 +135,7 @@ elec name ion2_solv
     srfm mol
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.00072
     calcenergy total
@@ -153,6 +158,7 @@ elec name ion2_vac
     srfm mol
     srad 1.4
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.00072
     calcenergy total
