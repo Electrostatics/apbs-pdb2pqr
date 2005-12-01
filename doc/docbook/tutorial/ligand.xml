@@ -234,6 +234,7 @@ elec name bal                # BALANOL ENERGY CALCULATION
     srfm smol                # Smoothed molecular surface
     srad 0.0                 # Solvent probe radius
     swin 0.3                 # Surface spline window (not used)
+    sdens 10.0               # Sphere density
     temp 298.15              # Temperature
     gamma 0.105              # Surface tension (not used)
     calcenergy total
@@ -258,6 +259,7 @@ elec name pka                # PROTEIN KINASE A CALCULATION
     srfm smol      
     srad 0.0       
     swin 0.3       
+    sdens 10.0 
     temp 298.15    
     gamma 0.105   
     calcenergy total
@@ -281,7 +283,8 @@ elec name complex            # COMPLEX CALCULATION
     chgm spl0      
     srfm smol      
     srad 0.0       
-    swin 0.3       
+    swin 0.3   
+    sdens 10.0    
     temp 298.15    
     gamma 0.105   
     calcenergy total
