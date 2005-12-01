@@ -468,7 +468,7 @@
 </sect3>
 
 <sect3 id="mg-dummy"> <title>Manual non-numerical calculations
-    (<command>mg-manual</command>)</title> 
+    (<command>mg-dummy</command>)</title> 
   <para>This allows users to write out 
     <link linkend="diel">dielectric</link>, 
     <link linkend="kappa">ion-accessibility</link>, and
