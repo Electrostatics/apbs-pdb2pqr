@@ -84,6 +84,7 @@ elec name bal
     srfm smol                          # Smoothed molecular surface
     srad 0.0                           # Solvent radius
     swin 0.3                           # Surface cubic spline window
+    sdens 10.0                         # Sphere density
     temp 298.15                        # Temperature
     gamma 0.105                        # Surface tension (in kJ/mol/A^2)
     calcenergy no
@@ -108,6 +109,7 @@ elec name pka
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy no
@@ -132,6 +134,7 @@ elec name complex
     srfm smol
     srad 0.0
     swin 0.3
+    sdens 10.0
     temp 298.15
     gamma 0.105
     calcenergy no
