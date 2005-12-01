@@ -197,6 +197,7 @@ elec name solv             # Electrostatics calculation on the solvated state
   srfm mol               # Molecular surface definition
   srad 1.4               # Solvent probe radius (for molecular surface)
   swin 0.3               # Solvent surface spline window (not used here)
+  sdens 10.0             # Sphere density of accessibility object
   temp 298.15            # Temperature 
   gamma 0.105            # Apolar energy surface coefficient (not used here)
   calcenergy total       # Calculate energies
@@ -225,6 +226,7 @@ elec name ref              # Calculate potential for reference (vacuum) state
   srfm mol
   srad 1.4
   swin 0.3
+  sdens 10.0
   temp 298.15
   gamma 0.105
   calcenergy total
