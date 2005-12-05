@@ -10,11 +10,11 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol apbs-smol apbs-spl2 ) 
+input=( apbs-mol apbs-smol ) 
 
-methanol=( -3.624861994793E+01 -3.757593177355E+01  -6.434717255302E+01 )
-methoxide=( -3.904118544787E+02  -3.912386769429E+02 -4.153175490634E+02 )
-difference=( -3.541632345308E+02 -3.536627451694E+02 -3.509703765104E+02 )
+methanol=( -3.624861994793E+01 -3.757593177355E+01 )
+methoxide=( -3.904118544787E+02  -3.912386769429E+02 )
+difference=( -3.541632345308E+02 -3.536627451694E+02 )
 
 # Initialize the results file
 
@@ -25,7 +25,7 @@ echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2 
+for i in 0 1 
 do
   echo "----------------------------------------"
   echo "Testing input file ${input[i]}.in"
