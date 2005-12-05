@@ -10,12 +10,12 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol apbs-smol apbs-spl2 ) 
+input=( apbs-mol apbs-smol ) 
 
-acetic=( -2.267873880748E+01 -2.233042654941E+01 -3.579918772262E+01 ) 
-acetate=( -1.997461573276E+02 -1.984881352623E+02 -2.317244846973E+02 ) 
-proton=( -2.974598683157E+02 -2.959669997009E+02 -3.670680616644E+02 )
-ionization=( -4.745272868358E+02 -4.721247084138E+02 -5.629933586391E+02 )
+acetic=( -2.267873880748E+01 -2.233042654941E+01 ) 
+acetate=( -1.997461573276E+02 -1.984881352623E+02 ) 
+proton=( -2.974598683157E+02 -2.959669997009E+02 )
+ionization=( -4.745272868358E+02 -4.721247084138E+02 )
 
 # Initialize the results file
 
@@ -27,7 +27,7 @@ echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2 
+for i in 0 1 
 do
   echo "----------------------------------------"
   echo "Testing input file ${input[i]}.in"
