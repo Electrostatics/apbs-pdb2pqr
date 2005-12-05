@@ -39,13 +39,6 @@ This example was contributed by Chung Wong.
 </tr>
 
 <tr>
-<td><a href="apbs-spl2-vdw.in">apbs-spl2-vdw.in</a></td>
-<td>2-level focusing to 0.250 A spacing, VdW surface, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>16.6781</B></td>
-<td>8.876</td></tr>
-</tr>
-
-<tr>
 <td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
 <td>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
 <td align=center><B>0.4.0</B></td><td align=center><B>119.2347</B></td>
@@ -70,19 +63,14 @@ This example was contributed by Chung Wong.
 <tr><td align=center>0.1.8</td><td align=center>97.01</td>
 </tr>
 
-<tr>
-<td><a href="apbs-spl2-surf.in">apbs-spl2-surf.in</a></td>
-<td>2-level focusing to 0.250 A spacing, molecular surface, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>166.7812</B></td>
-<td>86.50</td></tr>
-</tr>
 
 </table>
 <P>
-<a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
+<a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+<li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
 </ul>
 Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.<P>
 
