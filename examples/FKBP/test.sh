@@ -11,7 +11,7 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol apbs-smol apbs-spl2 )
+input=( apbs-mol apbs-smol )
 
 # Initialize the results file
 
@@ -23,11 +23,11 @@ echo "Results  :" >> $logfile
 # Do 1d7h-dmso first
 
 cd 1d7h-dmso
-results=( 1.500890142385E+01 1.624584726796E+01 1.957023551556E+01 )
+results=( 1.500890142385E+01 1.624584726796E+01 )
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2
+for i in 0 1 
 do
   echo "----------------------------------------"
   echo "Testing input file 1d7h-dmso/${input[i]}.in"
@@ -66,9 +66,9 @@ done
 # Now do 1d7i-dss
 
 cd ../1d7i-dss
-results=( 1.442544510653E+01 1.545171104995E+01 1.927932593693E+01 )
+results=( 1.442544510653E+01 1.545171104995E+01 )
 
-for i in 0 1 2
+for i in 0 1 
 do
   echo "----------------------------------------"
   echo "Testing input file 1d7i-dss/${input[i]}.in"

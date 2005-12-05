@@ -45,13 +45,6 @@ This example was contributed by Jung-Hsin Lin.
 </tr>
 
 <tr>
-<td><a href="1d7h-dmso/apbs-spl2.in">1d7h-dmso/apbs-spl2.in</a></td>
-<td>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>19.5702</B></td>
-<td>19.097</td></tr>
-</tr>
-
-<tr>
 <td><a href="1d7i-dss/apbs-mol.in">1d7i-dss/apbs-mol.in</a></td>
 <td>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
 <td align=center><B>0.4.0</B></td><td align=center><B>14.4254</B></td>
@@ -76,19 +69,14 @@ This example was contributed by Jung-Hsin Lin.
 <tr><td align=center>0.1.8</td><td align=center>15.210</td>
 </tr>
 
-<tr>
-<td><a href="1d7i-dss/apbs-spl2.in">1d7h-dmso/apbs-spl2.in</a></td>
-<td>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>19.2793</B></td>
-<td>16.231</td></tr>
-</tr>
 
 </table>
 <P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
+<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
-<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol 
+<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
 </ul>
 Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
 </BODY>
