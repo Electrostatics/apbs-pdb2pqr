@@ -38,12 +38,6 @@ This example was contributed by Dave Sept.
 <tr><td align=center>0.1.8</td><td align=center>90.84</td>
 </tr>
 
-<tr>
-<td><a href="apbs-spl2-auto.in">apbs-spl2-auto.in</a></td>
-<td>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>144.5818</B></td>
-<td>106.7<br>(1.00 A res., NPBE)</td></tr>
-</tr>
 
 <tr>
 <td><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
@@ -71,19 +65,13 @@ This example was contributed by Dave Sept.
 <tr><td align=center>0.1.8</td><td align=center>91.67</td>
 </tr>
 
-<tr>
-<td><a href="apbs-spl2-parallel.in">apbs-spl2-parallel.in</a></td>
-<td>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm spl2</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>206.0010</B></td>
-<td>106.7<br>(1.00 A res., NPBE)</td></tr>
-</tr>
-
 </table>
 <P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 are most likely due to two factors:
+<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
 <ul>
 <li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 <li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
 </ul>
 Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
 </BODY>
