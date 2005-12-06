@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>APBS 0.4.0 User Guide</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="NEXT"
+TITLE="Introduction"
+HREF="c34.html"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN2"
+></A
+>APBS 0.4.0 User Guide</H1
+><H2
+CLASS="subtitle"
+>Adaptive Poisson-Boltzmann Solver</H2
+><H3
+CLASS="author"
+><A
+NAME="AEN5"
+></A
+>Nathan A Baker</H3
+><DIV
+CLASS="affiliation"
+><SPAN
+CLASS="orgname"
+>Washington University in St. Louis<BR></SPAN
+><SPAN
+CLASS="orgdiv"
+>Department of Biochemistry and Molecular Biophysics<BR></SPAN
+><SPAN
+CLASS="orgdiv"
+>Center for Computational Biology<BR></SPAN
+></DIV
+><P
+CLASS="copyright"
+><A
+HREF="ln27.html"
+>Copyright</A
+> &copy; 2002, 2003, 2004, 2005 by Washington University in St. Louis</P
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="c34.html"
+>Introduction</A
+></DT
+><DT
+><A
+HREF="c132.html"
+>Installation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c132.html#obtaining-sect"
+>Availability</A
+></DT
+><DT
+><A
+HREF="x139.html"
+>Binary installation</A
+></DT
+><DT
+><A
+HREF="x146.html"
+>Source installation</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x146.html#prerequisites-sect"
+>Prerequisites</A
+></DT
+><DT
+><A
+HREF="x146.html#setup-sect"
+>Preparation for installation</A
+></DT
+><DT
+><A
+HREF="x146.html#AEN247"
+>Configuring, compiling, and installing</A
+></DT
+><DT
+><A
+HREF="x146.html#AEN274"
+>Machine-specific notes</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+><A
+HREF="c427.html"
+>Overview</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c427.html#AEN430"
+>Invocation</A
+></DT
+><DT
+><A
+HREF="x452.html"
+>Other tools</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x452.html#parameterization"
+>Parameterization</A
+></DT
+><DT
+><A
+HREF="x452.html#AEN491"
+>Problem setup</A
+></DT
+><DT
+><A
+HREF="x452.html#AEN511"
+>Output data processing</A
+></DT
+><DT
+><A
+HREF="x452.html#viz-tools"
+>Data visualization</A
+></DT
+><DT
+><A
+HREF="x452.html#acc"
+>Solvent accessibility</A
+></DT
+><DT
+><A
+HREF="x452.html#AEN578"
+>Coulomb's Law and Generalized Born calculations</A
+></DT
+><DT
+><A
+HREF="x452.html#AEN594"
+>Eigenvalue analysis</A
+></DT
+><DT
+><A
+HREF="x452.html#AEN600"
+>Python development tools</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x616.html"
+>Examples and tutorial</A
+></DT
+><DT
+><A
+HREF="x625.html"
+>Documentation</A
+></DT
+><DT
+><A
+HREF="x645.html"
+>Source code</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="c650.html"
+>Using APBS</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c650.html#AEN652"
+>Invocation</A
+></DT
+><DT
+><A
+HREF="x674.html"
+>Input files</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x674.html#read"
+>READ statements</A
+></DT
+><DT
+><A
+HREF="x674.html#elec"
+>ELEC statements</A
+></DT
+><DT
+><A
+HREF="x674.html#print"
+>PRINT statements</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2443.html"
+>Using APBS with other programs</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2443.html#gui-sect"
+>Graphical user interfaces</A
+></DT
+><DT
+><A
+HREF="x2443.html#simulation-sect"
+>Simulation software</A
+></DT
+><DT
+><A
+HREF="x2443.html#visualization-sect"
+>Visualization software</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+><A
+HREF="c2511.html"
+>Getting help</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2511.html#user-forums"
+>User Forums</A
+></DT
+><DT
+><A
+HREF="x2528.html"
+>Mailing Lists</A
+></DT
+><DT
+><A
+HREF="x2554.html"
+>Bug and other problems</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="c2561.html"
+>Programming</A
+></DT
+><DT
+><A
+HREF="a2566.html"
+>File formats</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="a2566.html#pqr-format"
+>PQR biomolecular structure format</A
+></DT
+><DT
+><A
+HREF="x2632.html"
+>Parameter file format</A
+></DT
+><DT
+><A
+HREF="x2669.html"
+>Harwell-Boeing column-compressed matrix
+      format</A
+></DT
+><DT
+><A
+HREF="x2674.html"
+>OpenDX scalar data format</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2674.html#AEN2678"
+>Multigrid</A
+></DT
+><DT
+><A
+HREF="x2674.html#AEN2743"
+>Finite element</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+><A
+HREF="a2798.html"
+>License</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c34.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introduction</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -19,6 +19,7 @@ elec
     srfm smol               # Smoothed molecular surface
     srad 1.4                # Solvent probe radius
     swin 0.3                # Spline surface window (not used)
+    sdens 10.0              # Sphere density
     temp 298.15             # Temperature
     gamma 0.105             # Apolar coefficient
     calcenergy no           # No energies

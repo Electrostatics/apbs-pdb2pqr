@@ -18,11 +18,6 @@
 <tr><td class="memItemLeft" nowrap align=right valign=top>struct &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html">sVpbe</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Contains public data members for Vpbe class/module. </em> <a href="structsVpbe.html#_details">More...</a><em><br><br></td></tr>
-<tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="ga27" doxytag="Vpbe::VACC_SPHERE_DENSITY" ></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga27">VACC_SPHERE_DENSITY</a>&nbsp;&nbsp;&nbsp;3.0</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Number of grid points per square-angstrom to use in Vacc object. <br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="ga0" doxytag="Vpbe::Vpbe" ></a>
 typedef <a class="el" href="structsVpbe.html">sVpbe</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga0">Vpbe</a></td></tr>
@@ -86,10 +81,10 @@ typedef <a class="el" href="structsVpbe.html">sVpbe</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga19">Vpbe_getZmagic</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get charge scaling factor.  <a href="#ga19"></a><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVpbe.html">Vpbe</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga20">Vpbe_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVpbe.html">Vpbe</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga20">Vpbe_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct Vpbe object.  <a href="#ga20"></a><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga21">Vpbe_ctor2</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga21">Vpbe_ctor2</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to construct Vpbe objct.  <a href="#ga21"></a><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#ga22">Vpbe_getIons</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, int *nion, double ionConc[MAXION], double ionRadii[MAXION], double ionQ[MAXION])</td></tr>
@@ -181,7 +176,13 @@ Contains objects and parameters used in every PBE calculation, regardless of met
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>focusFlag</em></td>
+          <td class="mdname" nowrap> <em>focusFlag</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>sdens</em></td>
         </tr>
         <tr>
           <td></td>
@@ -224,6 +225,7 @@ Construct Vpbe object.
     <tr><td valign=top><em>solventDiel</em>&nbsp;</td><td>Solvent dielectric constant </td></tr>
     <tr><td valign=top><em>solventRadius</em>&nbsp;</td><td>Solvent radius </td></tr>
     <tr><td valign=top><em>focusFlag</em>&nbsp;</td><td>1 if Focusing operation, 0 otherwise </td></tr>
+    <tr><td valign=top><em>sdens</em>&nbsp;</td><td>Vacc sphere density </td></tr>
   </table>
 </dl>
 <dl compact><dt><b>Returns:</b></dt><dd>Pointer to newly allocated Vpbe object </dd></dl>
@@ -305,7 +307,13 @@ Construct Vpbe object.
           <td></td>
           <td></td>
           <td class="md" nowrap>int&nbsp;</td>
-          <td class="mdname" nowrap> <em>focusFlag</em></td>
+          <td class="mdname" nowrap> <em>focusFlag</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>sdens</em></td>
         </tr>
         <tr>
           <td></td>
@@ -352,6 +360,11 @@ FORTRAN stub to construct Vpbe objct.
   </table>
 </dl>
 <dl compact><dt><b><a class="el" href="bug.html#_bug000007">Bug:</a></b></dt><dd>The focusing flag is currently not used!!</dd></dl>
+<dl compact><dt><b>Parameters:</b></dt><dd>
+  <table border="0" cellspacing="2" cellpadding="0">
+    <tr><td valign=top><em>sdens</em>&nbsp;</td><td>Vacc sphere density </td></tr>
+  </table>
+</dl>
 <dl compact><dt><b>Returns:</b></dt><dd>1 if successful, 0 otherwise </dd></dl>
     </td>
   </tr>
@@ -1298,7 +1311,7 @@ Return the memory used by this structure (and its contents) in bytes.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Nov 16 13:58:06 2005 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Dec 6 10:05:59 2005 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.5 </small></address>
