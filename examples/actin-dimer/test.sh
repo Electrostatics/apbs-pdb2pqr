@@ -14,9 +14,9 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol-auto apbs-smol-auto apbs-spl2-auto apbs-mol-parallel apbs-smol-parallel apbs-spl2-parallel )
+input=( apbs-mol-auto apbs-smol-auto apbs-mol-parallel apbs-smol-parallel )
 
-results=( 1.048894764171E+02 1.096043387843E+02 1.445817673653E+01 9.818343579609E+01 1.155750556911E+02 2.060009725426E+01 )
+results=( 1.048894764171E+02 1.096043387843E+02 9.818343579609E+01 1.155750556911E+02 )
 
 # Initialize the results file
 
@@ -27,7 +27,7 @@ echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2 3 4 5
+for i in 0 1 2 3 
 do
   echo "----------------------------------------"
   echo "Testing input file ${input[i]}.in"
