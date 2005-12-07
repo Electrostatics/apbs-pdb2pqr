@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Binding energy calculation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="HOME"
+TITLE="APBS Tutorial"
+HREF="book1.html"><LINK
+REL="UP"
+TITLE="Protein-ligand binding"
+HREF="c236.html"><LINK
+REL="PREVIOUS"
+TITLE="Visualization of the electrostatic potentials"
+HREF="x267.html"><LINK
+REL="NEXT"
+TITLE="NaCl condensation around DNA"
+HREF="c329.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>APBS Tutorial</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x267.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Protein-ligand binding</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c329.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN307"
+></A
+>Binding energy calculation</H1
+><P
+>&#13;      Calculation of electrostatic binding energies for the PKA-balanol system
+      requires higher-resolution electrostatics calculations than could be
+      easily visualized in the previous section.  We will use focusing to
+      generate the finer data from the coarser calculations performed in the
+      earlier calculations.  This procedure is outlined in the following APBS
+      input file which is available for download 
+      <A
+HREF="examples/ligand/apbs-energy.in"
+TARGET="_top"
+>here</A
+>.
+      <DIV
+CLASS="example"
+><A
+NAME="AEN311"
+></A
+><P
+><B
+>Example 2. Balanol-PKA energy calculation APBS input</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;read 
+    mol pqr bx6_7_lig_apbs.pqr  # Balanol
+    mol pqr bx6_7_apo_apbs.pqr  # Protein kinase A
+    mol pqr bx6_7_bin_apbs.pqr  # Complex
+end
+
+elec name bal                # BALANOL ENERGY CALCULATION
+    mg-auto   
+    dime 65 65 65            # Grid dimensions
+    cglen 70 70 70           # Coarse grid lengths
+    cgcent mol 3             # Coarse grid centered on the complex
+    fglen 16 16 16           # Fine grid lengths
+    fgcent mol 1             # Fine grid centered on the complex
+    mol 1                    
+    lpbe                     # Linearized PB
+    bcfl sdh                 # Monopole boundary condition
+    ion 1 0.000 2.0          # Zero ionic strength
+    ion -1 0.000 2.0         
+    pdie 2.0                 # Solute dielectric
+    sdie 78.00               # Solvent dielectric
+    chgm spl0                # Linear charge discretization
+    srfm smol                # Smoothed molecular surface
+    srad 0.0                 # Solvent probe radius
+    swin 0.3                 # Surface spline window (not used)
+    sdens 10.0               # Sphere density
+    temp 298.15              # Temperature
+    gamma 0.105              # Surface tension (not used)
+    calcenergy total
+    calcforce no
+end
+
+elec name pka                # PROTEIN KINASE A CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3       
+    sdens 10.0 
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+elec name complex            # COMPLEX CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm smol      
+    srad 0.0       
+    swin 0.3   
+    sdens 10.0    
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+print energy complex - pka - bal end
+
+quit
+        </PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+      <DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="./stylesheet-images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;          This APBS input file represents a "non-canonical" method for
+          computing energies.  In any electrostatic energy calculation, care
+          needs to be taken to remove self-interaction terms.  This removal is
+          usually accomplished via a solvation energy calculation (cf. 
+          <A
+HREF="c63.html"
+>the Born example</A
+>).  However, in
+          this example, we remove the self-interaction energies via a series
+          of calculations which use <I
+CLASS="emphasis"
+>exactly</I
+> the same grid
+          spacings, lengths, and centers.  Since all atoms in the complex are
+          present in the <I
+CLASS="foreignphrase"
+>apo</I
+> protein and
+          ligand, the self-interaction terms are effectively removed.
+        </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+      This example can be run by typing (from the system prompt):
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        <TT
+CLASS="prompt"
+>$</TT
+> <TT
+CLASS="userinput"
+><B
+>apbs <TT
+CLASS="replaceable"
+><I
+>apbs-energy.in</I
+></TT
+></B
+></TT
+>
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      (assuming the downloaded input file was name
+      <TT
+CLASS="replaceable"
+><I
+>apbs-energy.in</I
+></TT
+>).  This example takes roughly
+      2 minutes no a 2.2 GHz Intel Pentium 4 and should give a binding energy
+      of 5.8 kJ/mol -- which is in good agreement with the reported results.
+    </P
+><P
+>&#13;      One question that should arise is:  why is the binding unfavorable?  The
+      Coulombic contribution to the binding energy is favorable (you can use
+      the APBS program <TT
+CLASS="filename"
+>coulomb</TT
+> to evaluate this); but
+      there is a substantial polar desolvation penalty for binding of the
+      substrate to the protein.  However, our current calculation has
+      neglected apolar contributions to the energy.  These terms, which usally
+      scale with the surface area, favor the binding.  Using the APBS program
+      <TT
+CLASS="filename"
+>acc</TT
+>, we can determine that over 1000
+      A<SUP
+>2</SUP
+> of solvent-accessible surface area
+      is lost when the complex is formed.  Using even conservative values of
+      the apolar energy surface tension (which usually ranges between 0.105 to
+      210 kJ/A<SUP
+>2</SUP
+>), we can see that this buried
+      surface area provides stabilization to the complex.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x267.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c329.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Visualization of the electrostatic potentials</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c236.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>NaCl condensation around DNA</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>Visualization of the electrostatic potentials</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="HOME"
+TITLE="APBS Tutorial"
+HREF="book1.html"><LINK
+REL="UP"
+TITLE="Protein-ligand binding"
+HREF="c236.html"><LINK
+REL="PREVIOUS"
+TITLE="Protein-ligand binding"
+HREF="c236.html"><LINK
+REL="NEXT"
+TITLE="Binding energy calculation"
+HREF="x307.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>APBS Tutorial</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c236.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Protein-ligand binding</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x307.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN267"
+></A
+>Visualization of the electrostatic potentials</H1
+><P
+>This section of the example illustrates the calculation of
+      lower-resolution electrostatic potentials suitable for interactive
+      display and manipulation.  First, we need to calculate electrostatic
+      potentials for the three molecules.  This is done with the following
+      APBS input file which can be downloaded 
+      <A
+HREF="examples/ligand/apbs-graphics.in"
+TARGET="_top"
+>here</A
+>.
+      <DIV
+CLASS="example"
+><A
+NAME="AEN271"
+></A
+><P
+><B
+>Example 1. PKA/balanol/complex visualization APBS input</B
+></P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;read 
+    mol pqr bx6_7_lig_apbs.pqr  # Read balanol (mol 1)
+    mol pqr bx6_7_apo_apbs.pqr  # Read PKA (mol 2)
+    mol pqr bx6_7_bin_apbs.pqr  # Read complex (mol 3)
+end
+elec name bal
+    mg-auto                          # Use the multigrid method
+    dime 97 97 97                      # Grid dimensions
+    fglen 70 70 70                      # Grid length
+    fgcent mol 3                        # Center on complex
+    cglen 80 80 80                      # Grid length
+    cgcent mol 3                        # Center on complex
+    mol 1                              
+    lpbe                               
+    bcfl sdh                           # Monopole boundary conditions
+    ion 1 0.000 2.0                    # Zero ionic strength
+    ion -1 0.000 2.0                   
+    pdie 2.0                           # Solute dielectric
+    sdie 78.00                         # Solvent dielectric
+    chgm spl0                          # Charge disc method (linear)
+    srfm smol                          # Smoothed molecular surface
+    srad 0.0                           # Solvent radius
+    swin 0.3                           # Surface cubic spline window
+    sdens 10.0                         # Sphere density
+    temp 298.15                        # Temperature
+    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
+    calcenergy no
+    calcforce no
+    write pot dx ligand                # Write potential to ligand.dx
+end
+elec name pka
+    mg-auto                          
+    dime 97 97 97                      
+    fglen 70 70 70 
+    fgcent mol 3  
+    cglen 80 80 80
+    cgcent mol 3 
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+   write pot dx apo
+end
+elec name complex
+    mg-auto
+    dime 97 97 97
+    fglen 70 70 70 
+    fgcent mol 3  
+    cglen 80 80 80
+    cgcent mol 3 
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+    write pot dx complex
+end
+
+quit
+        </PRE
+></TD
+></TR
+></TABLE
+></DIV
+>
+      This APBS run can then be performed by typing:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        <TT
+CLASS="prompt"
+>$</TT
+> <TT
+CLASS="userinput"
+><B
+>apbs <TT
+CLASS="replaceable"
+><I
+>apbs-graphics.in</I
+></TT
+></B
+></TT
+>
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      (assuming the above input file was named
+      <TT
+CLASS="replaceable"
+><I
+>apbs-graphics.in</I
+></TT
+>) and takes roughly 2 minutes
+      on a 2.2 GHz Intel Pentium 4.
+    </P
+><P
+>&#13;      In what follows, we use the Tcl
+      scripts 
+      <A
+HREF="examples/ligand/my_functions"
+TARGET="_top"
+><TT
+CLASS="filename"
+>my_functions</TT
+></A
+>
+      and 
+      <A
+HREF="examples/ligand/all.vmd"
+TARGET="_top"
+><TT
+CLASS="filename"
+>all.vmd</TT
+></A
+> 
+      to visualize the electrostatic potential data using VMD.  The
+      <TT
+CLASS="filename"
+>my_function</TT
+> Tcl script contains functions to load
+      all 3 data sets; the user simply needs to type (at the system prompt):
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        <TT
+CLASS="prompt"
+>$</TT
+> <TT
+CLASS="userinput"
+><B
+>vmd -e all.vmd</B
+></TT
+>
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      to load the ligand electrostatic potential into VMD.  VMD will display
+      the +1 kT/e potential isocontour as a blue transparent surface and the
+      -1 kT/e isocontour as a red surface as illustrated in the following
+      figure.
+      <DIV
+CLASS="figure"
+><A
+NAME="AEN288"
+></A
+><P
+><IMG
+SRC="images/balanol-pot.png"></P
+><P
+><B
+>Figure 2. Balanol electrostatic potential</B
+></P
+></DIV
+>
+    </P
+><P
+>&#13;      The next command loads the apo PKA electrostatic potential and is run
+      <I
+CLASS="emphasis"
+>from within VMD</I
+>:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        <TT
+CLASS="prompt"
+>vmd &#62;</TT
+> <TT
+CLASS="userinput"
+><B
+>load_apo</B
+></TT
+>
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      which should yield an image that looks something like the following:
+      <DIV
+CLASS="figure"
+><A
+NAME="AEN296"
+></A
+><P
+><IMG
+SRC="images/pka-pot.png"></P
+><P
+><B
+>Figure 3. Balanol electrostatic potential</B
+></P
+></DIV
+>
+    </P
+><P
+>&#13;      Finally, the complex can be loaded by typing,
+      <I
+CLASS="emphasis"
+>from within VMD</I
+>:
+      <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="screen"
+>&#13;        <TT
+CLASS="prompt"
+>vmd &#62;</TT
+> <TT
+CLASS="userinput"
+><B
+>load_complex</B
+></TT
+>
+      </PRE
+></TD
+></TR
+></TABLE
+>
+      this renders the electrostatic potential of the ligand in the context of
+      the complex and allows the user to examine charge/potential
+      complementarity in the system.
+      <DIV
+CLASS="figure"
+><A
+NAME="AEN304"
+></A
+><P
+><IMG
+SRC="images/pka-balanol-pot.png"></P
+><P
+><B
+>Figure 4. Balanol electrostatic potential</B
+></P
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c236.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x307.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Protein-ligand binding</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c236.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Binding energy calculation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

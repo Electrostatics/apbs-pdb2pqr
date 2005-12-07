@@ -13,7 +13,6 @@
 <book>
   <bookinfo>
     <title>APBS Tutorial</title>
-    <subtitle>(Actively under development)</subtitle>
     <author>
       <firstname>Nathan</firstname>
       <surname>Baker</surname>
@@ -82,6 +81,13 @@
             to perform the electrostatics calculations.
           </para>
         </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+       You will also need the following software to perform the visualizations 
+       in this tutorial.  These are not required for standard APBS usage, but
+       optionally useful for displaying results:
+       <itemizedlist> 
         <listitem>
           <para>
             VMD 
