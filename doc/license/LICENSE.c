@@ -10,7 +10,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2004.  Washington University in St. Louis.
+ * Copyright (c) 2005.  Washington University in St. Louis.
  * All Rights Reserved.
  * Portions Copyright (c) 1999-2004.  The Regents of the University of
  * California.  
