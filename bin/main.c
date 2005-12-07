@@ -26,7 +26,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2004.  Washington University in St. Louis.
+ * Copyright (c) 2002-2005.  Washington University in St. Louis.
  * All Rights Reserved.
  * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  
@@ -121,7 +121,7 @@ int main(
     \n\
     Additional contributing authors listed in the code documentation.\n\
     \n\
-    Copyright (c) 2002-2004.  Washington University in St. Louis.\n\
+    Copyright (c) 2002-2005.  Washington University in St. Louis.\n\
     All Rights Reserved.\n\
     Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
     California.\n\
