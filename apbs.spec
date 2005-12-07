@@ -92,7 +92,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
     export CXXFLAGS="-O2 -tpp7 -static-libcxa -static -mp" 
     export F77="ifort" 
     export FFLAGS="-O2 -tpp7 -static-libcxa -static -mp" 
-    export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+    export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
     make
   %else
@@ -104,7 +104,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CXXFLAGS="-O2 -tpp6 -static-libcxa -static -mp" 
       export F77="ifort" 
       export FFLAGS="-O2 -tpp6 -static-libcxa -static -mp" 
-      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
     %else
@@ -115,7 +115,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CXXFLAGS="-O2 -static-libcxa -static -mp" 
       export F77="ifort" 
       export FFLAGS="-O2 -static-libcxa -static -mp" 
-      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -static"
+      export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
     %endif
