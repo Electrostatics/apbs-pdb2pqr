@@ -34,6 +34,7 @@ elec
                                        #  1 => As 0 with harmoic average
                                        #       smoothing
                                        #  2 => Cubic spline 
+    sdens 10.0
     srad 1.4                           # Solvent radius
     swin 0.3                           # Surface cubic spline window
     temp 298.15                        # Temperature
@@ -73,6 +74,7 @@ elec
     pdie 1.0                           # Solute dielectric
     sdie 1.0                           # Solvent dielectric
     chgm spl2                             # Charge disc method
+    sdens 10.0
     srfm smol                             # Surface calculation method
                                        #  0 => Mol surface for epsilon;
                                        #       inflated VdW for kappa; no
