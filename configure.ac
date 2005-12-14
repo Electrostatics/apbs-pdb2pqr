@@ -8,7 +8,7 @@ dnl Washington University in St. Louis
 dnl 
 dnl Additional contributing authors listed in the code documentation.
 dnl 
-dnl Copyright (c) 2004.  Washington University in St. Louis.
+dnl Copyright (c) 2005.  Washington University in St. Louis.
 dnl All Rights Reserved.
 dnl Portions Copyright (c) 1999-2002.  The Regents of the University of
 dnl California.  
@@ -42,7 +42,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [0.3.2], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [0.4.0], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -80,7 +80,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 0.3.2)
+AM_INIT_AUTOMAKE(apbs, 0.4.0)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";

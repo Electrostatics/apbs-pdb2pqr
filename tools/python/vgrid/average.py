@@ -11,7 +11,7 @@ from sys import stdout, stderr
 header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.3.2 (November, 2004)\n\
+    Version 0.4.0 (December, 2005)\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\

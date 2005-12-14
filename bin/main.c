@@ -112,7 +112,7 @@ int main(
 {"\n\n\
     ----------------------------------------------------------------------\n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
-    Version 0.3.2\n\
+    Version 0.4.0\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. Biochemistry and Molecular Biophysics\n\
