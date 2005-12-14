@@ -49,10 +49,12 @@ do
           echo "           1d7h-dmso/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
       1)  echo "*** PASSED (with rounding error - see log) ***"
           echo "           1d7h-dmso/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[3]}"
-          echo "   Expected result is ${results[i]}"
-          echo "           1d7h-dmso/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+          echo "   Expected result is ${results[i]} ($ferror% error)"
+          echo "           1d7h-dmso/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]}; $ferror% error)" >> ../$logfile ;;
   esac
   
   endtime=`date +%s`
@@ -90,10 +92,12 @@ do
           echo "           1d7i-dss/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
       1)  echo "*** PASSED (with rounding error - see log) ***"
           echo "           1d7i-dss/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[3]}"
-          echo "   Expected result is ${results[i]}"
-          echo "           1d7i-dss/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
+          echo "   Expected result is ${results[i]} ($ferror% error)"
+          echo "           1d7i-dss/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]}; $ferror% error)" >> ../$logfile ;;
   esac
   
   endtime=`date +%s`
