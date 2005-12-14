@@ -62,6 +62,7 @@ elec
     sdie 78.54
     chgm spl2
     srfm spl2
+    sdens 10.0
     srad 1.4
     swin 0.3
     temp 298.15
@@ -84,6 +85,7 @@ elec
     sdie 1.0
     chgm spl2
     srfm spl2
+    sdens 10.0
     srad 1.4
     swin 0.3
     temp 298.15
