@@ -53,10 +53,12 @@ do
       1)
           echo "*** PASSED (with rounding error - see log) ***"
           echo "           ${input[i]}.in (Acetic Acid): PASSED with rounding error (${answer[0]}; expected ${acetic[i]})" >> $logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[0]}"
-          echo "   Expected result is ${acetic[i]}"
-          echo "           ${input[i]}.in (Acetic Acid): FAILED (${answer[0]}; expected ${acetic[i]})" >> $logfile ;;
+          echo "   Expected result is ${acetic[i]} ($ferror% error)"
+          echo "           ${input[i]}.in (Acetic Acid): FAILED (${answer[0]}; expected ${acetic[i]}; $ferror% error)" >> $logfile ;;
   esac
 
   # Acetate
@@ -73,10 +75,12 @@ do
       1)
           echo "*** PASSED (with rounding error - see log) ***"
           echo "           ${input[i]}.in (Acetate): PASSED with rounding error (${answer[1]}; expected ${acetate[i]})" >> $logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[1]}"
-          echo "   Expected result is ${acetate[i]}"
-          echo "           ${input[i]}.in (Acetate): FAILED (${answer[1]}; expected ${acetate[i]})" >> $logfile ;;
+          echo "   Expected result is ${acetate[i]} ($ferror% error)"
+          echo "           ${input[i]}.in (Acetate): FAILED (${answer[1]}; expected ${acetate[i]}; $ferror% error)" >> $logfile ;;
   esac
 
   # Proton
@@ -93,10 +97,12 @@ do
       1)
           echo "*** PASSED (with rounding error - see log) ***"
           echo "           ${input[i]}.in (Proton): PASSED with rounding error (${answer[2]}; expected ${proton[i]})" >> $logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[2]}"
-          echo "   Expected result is ${proton[i]}"
-          echo "           ${input[i]}.in (Proton): FAILED (${answer[2]}; expected ${proton[i]})" >> $logfile ;;
+          echo "   Expected result is ${proton[i]} ($ferror% error)"
+          echo "           ${input[i]}.in (Proton): FAILED (${answer[2]}; expected ${proton[i]}; $ferror% error)" >> $logfile ;;
   esac
 
   # Ionization
@@ -113,10 +119,12 @@ do
       1)
           echo "*** PASSED (with rounding error - see log) ***"
           echo "           ${input[i]}.in (Ionization): PASSED with rounding error (${answer[3]}; expected ${ionization[i]})" >> $logfile ;;
-      *)  echo "*** FAILED ***"
+      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
+          ferror=`printf "%.2f" $error`
+          echo "*** FAILED ***"
           echo "   APBS returned ${answer[3]}"
-          echo "   Expected result is ${ionization[i]}"
-          echo "           ${input[i]}.in (Ionization): FAILED (${answer[3]}; expected ${ionization[i]})" >> $logfile ;;
+          echo "   Expected result is ${ionization[i]} ($ferror% error)"
+          echo "           ${input[i]}.in (Ionization): FAILED (${answer[3]}; expected ${ionization[i]}; $ferror% error)" >> $logfile ;;
   esac
 
   endtime=`date +%s`
