@@ -10423,7 +10423,7 @@ if test "${ac_cv_lib_mpich_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpich ${mpi_lib_path} $LIBS"
+LIBS="-lmpich  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -10478,7 +10478,7 @@ if test "${ac_cv_lib_mpi_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpi ${mpi_lib_path} $LIBS"
+LIBS="-lmpi  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -10535,7 +10535,7 @@ if test "${ac_cv_lib_mpi_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpi ${mpi_lib_path} $LIBS"
+LIBS="-lmpi  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */
@@ -10590,7 +10590,7 @@ if test "${ac_cv_lib_mpich_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmpich ${mpi_lib_path} $LIBS"
+LIBS="-lmpich  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 #line $LINENO "configure"
 /* confdefs.h.  */

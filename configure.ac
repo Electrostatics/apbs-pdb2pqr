@@ -359,21 +359,21 @@ else
         if test -n "${HAS_MPICH}"; then
           AC_CHECK_LIB(mpich,main,
           [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
-          [mpi_use="";mpi_lib=""],${mpi_lib_path})
+          [mpi_use="";mpi_lib=""])
          if test -z "${mpi_use}"; then   
           AC_CHECK_LIB(mpi,main,
           [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
-          [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+          [mpi_use="";mpi_lib="";mpi_bin=""])
          fi
 
         else
           AC_CHECK_LIB(mpi,main,
           [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
-          [mpi_use="";mpi_lib="";mpi_bin=""],${mpi_lib_path})
+          [mpi_use="";mpi_lib="";mpi_bin=""])
          if test -z "${mpi_use}"; then
           AC_CHECK_LIB(mpich,main,
           [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
-          [mpi_use="";mpi_lib=""],${mpi_lib_path})
+          [mpi_use="";mpi_lib=""])
          fi
         fi
     fi
