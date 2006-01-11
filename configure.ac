@@ -29,6 +29,27 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with APBS; if not, write to the Free Software
 dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+dnl
+dnl Linking APBS statically or dynamically with other modules is making a
+dnl combined work based on APBS. Thus, the terms and conditions of the GNU
+dnl General Public License cover the whole combination.
+dnl 
+dnl SPECIAL GPL EXCEPTION
+dnl In addition, as a special exception, the copyright holders of APBS
+dnl give you permission to combine the APBS program with free software
+dnl programs or libraries that are released under the GNU LGPL and with
+dnl code included in releases of ISIM, PMV, PyMOL, SMOL, VMD.  This
+dnl special exception permission is also extended to any software listed
+dnl in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC
+dnl libraries.
+dnl 
+dnl Note that people who make modified versions of APBS are not obligated
+dnl to grant this special exception for their modified versions; it is
+dnl their choice whether to do so. The GNU General Public License gives
+dnl permission to release a modified version without this exception; this
+dnl exception also makes it possible to release a modified version which
+dnl carries forward this exception.
+dnl
 dnl ##########################################################################
 
 dnl ##########################################################################
