@@ -172,6 +172,26 @@ def getHeader():
     You should have received a copy of the GNU General Public License\n\
     along with this program; if not, write to the Free Software\n\
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA\n\
+    \n\
+    Linking APBS statically or dynamically with other modules is making a\n\
+    combined work based on APBS. Thus, the terms and conditions of the GNU\n\
+    General Public License cover the whole combination.\n\
+    \n\
+    SPECIAL GPL EXCEPTION\n\
+    In addition, as a special exception, the copyright holders of APBS\n\
+    give you permission to combine the APBS program with free software\n\
+    programs or libraries that are released under the GNU LGPL and with\n\
+    code included in releases of ISIM, PMV, PyMOL, SMOL, VMD.  This\n\
+    special exception permission is also extended to any software listed\n\
+    in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC\n\
+    libraries.\n\
+    \n\
+    Note that people who make modified versions of APBS are not obligated\n\
+    to grant this special exception for their modified versions; it is\n\
+    their choice whether to do so. The GNU General Public License gives\n\
+    permission to release a modified version without this exception; this\n\
+    exception also makes it possible to release a modified version which\n\
+    carries forward this exception.\n\
     ----------------------------------------------------------------------\n\
     \n\n"
 
