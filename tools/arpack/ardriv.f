@@ -37,6 +37,25 @@ c* You should have received a copy of the GNU General Public License
 c* along with APBS; if not, write to the Free Software
 c* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
 c* 02111-1307  USA
+c* * Linking APBS statically or dynamically with other modules is making a
+c* combined work based on APBS. Thus, the terms and conditions of the GNU
+c* General Public License cover the whole combination.
+c* 
+c* SPECIAL GPL EXCEPTION
+c* In addition, as a special exception, the copyright holders of APBS
+c* give you permission to combine the APBS program with free software
+c* programs or libraries that are released under the GNU LGPL and with
+c* code included in releases of ISIM, PMV, PyMOL, SMOL, VMD.  This
+c* special exception permission is also extended to any software listed
+c* in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC
+c* libraries.
+c* 
+c* Note that people who make modified versions of APBS are not obligated
+c* to grant this special exception for their modified versions; it is
+c* their choice whether to do so. The GNU General Public License gives
+c* permission to release a modified version without this exception; this
+c* exception also makes it possible to release a modified version which
+c* carries forward this exception.
 c*
 c* @endverbatim
 c**************************************************************************
