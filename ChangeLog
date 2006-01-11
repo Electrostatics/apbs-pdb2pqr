@@ -1,4 +1,14 @@
 #############################################################################
+BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
+#############################################################################
+  - NEW FEATURES
+    * Modified the license to allow exceptions for packaging APBS binaries
+      with several visualization programs.
+  - BUG FIXES
+    * Fixed a minor bug in the configure script that prevented MPI libraries
+      from being found when using certain compilers.
+	
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.4.0       12-14-05 
 #############################################################################
   - NEW FEATURES
