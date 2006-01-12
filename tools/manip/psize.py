@@ -49,9 +49,12 @@
 # SPECIAL GPL EXCEPTION
 # In addition, as a special exception, the copyright holders of APBS
 # give you permission to combine the APBS program with free software
-# programs or libraries that are released under the GNU LGPL and with
-# code included in releases of ISIM, PMV, PyMOL, SMOL, VMD.  This
-# special exception permission is also extended to any software listed
+# programs and libraries that are released under the GNU LGPL or with
+# code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision.
+# Such combined software may be linked with APBS and redistributed together 
+# in original or modified form as mere aggregation without requirement that 
+# the entire work be under the scope of the GNU General Public License.
+# This special exception permission is also extended to any software listed
 # in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC
 # libraries.
 # 

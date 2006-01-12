@@ -89,11 +89,14 @@ def getHeader():
     SPECIAL GPL EXCEPTION\n\
     In addition, as a special exception, the copyright holders of APBS\n\
     give you permission to combine the APBS program with free software\n\
-    programs or libraries that are released under the GNU LGPL and with\n\
-    code included in releases of ISIM, PMV, PyMOL, SMOL, VMD.  This\n\
-    special exception permission is also extended to any software listed\n\
-    in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC\n\
-    libraries.\n\
+    programs and libraries that are released under the GNU LGPL or with\n\
+    code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision.\n\
+    Such combined software may be linked with APBS and redistributed\n\
+    together in original or modified form as mere aggregation without\n\ 
+    requirement that the entire work be under the scope of the GNU General\n\ 
+    Public License.This special exception permission is also extended to\n\ 
+    any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,\n\ 
+    FEtk, MC, or MALOC libraries.\n\
     \n\
     Note that people who make modified versions of APBS are not obligated\n\
     to grant this special exception for their modified versions; it is\n\
