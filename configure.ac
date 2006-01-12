@@ -37,7 +37,7 @@ dnl
 dnl SPECIAL GPL EXCEPTION
 dnl In addition, as a special exception, the copyright holders of APBS
 dnl give you permission to combine the APBS program with free software
-dnl programs or libraries that are released under the GNU LGPL and with
+dnl programs and libraries that are released under the GNU LGPL or with
 dnl code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision. 
 dnl Such combined software may be linked with APBS and redistributed together 
 dnl in original or modified form as mere aggregation without requirement that 
