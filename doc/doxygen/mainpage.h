@@ -31,7 +31,7 @@
  * <br><br>
  * Additional contributing authors listed in the code documentation.
  * <br><br>
- * Copyright (c) 2002-2005.  Washington University in St. Louis.<br>
+ * Copyright (c) 2002-2006.  Washington University in St. Louis.<br>
  * All Rights Reserved.<br>
  * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  <br>
