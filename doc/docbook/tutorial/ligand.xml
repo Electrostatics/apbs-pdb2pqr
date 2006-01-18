@@ -317,7 +317,7 @@ quit
       (assuming the downloaded input file was name
       <replaceable>apbs-energy.in</replaceable>).  This example takes roughly
       2 minutes no a 2.2 GHz Intel Pentium 4 and should give a binding energy
-      of 5.8 kJ/mol -- which is in good agreement with the reported results.
+      of 19.96 kJ/mol.
     </para>
     <para>
       One question that should arise is:  why is the binding unfavorable?  The
