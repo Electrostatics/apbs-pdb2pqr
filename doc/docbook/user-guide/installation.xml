@@ -306,11 +306,10 @@
             </para>
             <para>Finally, you'll want to choose some optimization options.
             Intel has a number of options that are specific to the type of
-            processor you are running; the examples below assume you are
-            running on a Pentium 4:
+            processor you are running; some example flags are shown below:
               <screen>
-                <prompt>$</prompt> <userinput>export FFLAGS='-fast -arch pn4'</userinput>
-                <prompt>$</prompt> <userinput>export CFLAGS='-fast -tpp5'</userinput>
+                <prompt>$</prompt> <userinput>export FFLAGS='-O3'</userinput>
+                <prompt>$</prompt> <userinput>export CFLAGS='-O3'</userinput>
                 <prompt>$</prompt> <userinput>export CXXFLAGS=${CFLAGS}</userinput>
               </screen> 
             </para>
