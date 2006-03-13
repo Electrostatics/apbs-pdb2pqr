@@ -2235,10 +2235,10 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
     vec = am->w0;
   
     for (i=0; i<pbeparm->numwrite; i++) { 
+      
+        writeit = 1;
 
         switch (pbeparm->writetype[i]) {
-
-            writeit = 1;
 
             case VDT_CHARGE:
  
@@ -2325,12 +2325,12 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
                 break;
 
             default:
-
+  
                 Vnm_tprint(2, "Invalid data type for writing!\n");
                 writeit = 0;
                 return 0;
         }
-
+      
         if (!writeit) return 0;
 
 
@@ -2339,7 +2339,7 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 #else
         sprintf(writestem, "%s", pbeparm->writestem[i]);
 #endif
-
+       
         switch (pbeparm->writefmt[i]) {
 
             case VDF_DX:
