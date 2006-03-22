@@ -12,5 +12,5 @@ aclocal
 autoconf
 autoheader
 automake
-# aclocal
+#aclocal
 

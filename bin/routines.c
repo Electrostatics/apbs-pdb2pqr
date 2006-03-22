@@ -1875,7 +1875,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 
     /* Set up FEtk objects */
     Vnm_tprint(0, "Setting up FEtk object...\n");
-    fetk[icalc] = Vfetk_ctor(pbe[icalc], PBE_NRPBE);
+    fetk[icalc] = Vfetk_ctor(pbe[icalc], pbeparm->pbetype);
     Vfetk_setParameters(fetk[icalc], pbeparm, feparm);
 
     /* Build mesh */

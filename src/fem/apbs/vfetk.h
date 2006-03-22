@@ -214,7 +214,7 @@ struct sVfetk_LocalVar {
     int sType;  /**< Simplex type */
     int fType;  /**< Face type */
     double diel;  /**< Dielectric value */
-    double kappa2;  /**< Kappa^2 value */
+    double ionacc;  /**< Ion accessibility value */
     double A;  /**< Second-order differential term */
     double F;  /**< RHS characteristic function value */
     double B;  /**< Entire ionic strength term */

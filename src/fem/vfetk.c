@@ -144,14 +144,14 @@ mcsf_end=1;\n\
 VPRIVATE double diel();
 
 /**
- * @brief  Return the smoothed value of the mobile ion coefficient at the
+ * @brief  Return the smoothed value of the ion accessibility at the
  * current point using a fast, chart-based method
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @returns  Value of mobile ion coefficient
  * @bug  Not thread-safe
  */
-VPRIVATE double kappa2();
+VPRIVATE double ionacc();
 
 /**
  * @brief  Smooths a mesh-based coefficient with a simple harmonic function
@@ -1111,8 +1111,8 @@ VPRIVATE double smooth(int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NV
 
     int i;
     double weight;
-    double num = 0;
-    double den = 0;
+    double num = 0.0;
+    double den = 0.0;
 
     for (i=0; i<nverts; i++) {
         if (dist[i] < VSMALL) return coeff[i];
@@ -1121,8 +1121,14 @@ VPRIVATE double smooth(int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NV
             num += (weight * coeff[i]);
             den += weight; 
         } else if (meth == 1) { 
-            if (coeff[i] < VSMALL) VASSERT(0); 
-            num += weight; den += (weight/coeff[i]); 
+            /* Small coefficients reset the average to 0; we need to break out
+             * of the loop */
+            if (coeff[i] < VSMALL) {
+                num = 0.0;
+                break;
+            } else { 
+                num += weight; den += (weight/coeff[i]); 
+            }
         } else VASSERT(0); 
     } 
     
@@ -1177,10 +1183,10 @@ VPRIVATE double diel() {
     return eps;
 }
 
-VPRIVATE double kappa2() {
+VPRIVATE double ionacc() {
 
     int i, j;
-    double dist[5], coeff[5], irad, swin, *vx, kappa2val;
+    double dist[5], coeff[5], irad, swin, *vx, accval;
     Vsurf_Meth srfm;
     Vacc *acc = VNULL;
     PBEparm *pbeparm = VNULL;
@@ -1192,12 +1198,10 @@ VPRIVATE double kappa2() {
     swin = pbeparm->swin;
     acc = var.fetk->pbe->acc;
 
-    kappa2val = -999999.0;
-
     if (var.zks2 < VSMALL) return 0.0;
     switch (srfm) {
         case VSM_MOL:
-            kappa2val = (var.zks2*Vacc_ivdwAcc(acc, var.xq, irad));
+            accval = Vacc_ivdwAcc(acc, var.xq, irad);
             break;
         case VSM_MOLSMOOTH:
             for (i=0; i<var.nverts; i++) {
@@ -1207,19 +1211,19 @@ VPRIVATE double kappa2() {
                     dist[i] += VSQR(var.xq[j] - vx[j]);
                 }
                 dist[i] = VSQRT(dist[i]);
-                coeff[i] = var.zks2*Vacc_ivdwAcc(acc, var.xq, irad);
+                coeff[i] = Vacc_ivdwAcc(acc, var.xq, irad);
             }
-            kappa2val = smooth(var.nverts, dist, coeff, 1);
+            accval = smooth(var.nverts, dist, coeff, 1);
             break;
         case VSM_SPLINE:
-            kappa2val = (var.zks2*Vacc_splineAcc(acc, var.xq, swin, irad));
+            accval = Vacc_splineAcc(acc, var.xq, swin, irad);
             break;
         default:
             Vnm_print(2, "Undefined surface method (%d)!\n", srfm);
             VASSERT(0);
     }
 
-    return kappa2val;
+    return accval;
 }
 
 VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]) {
@@ -1250,24 +1254,24 @@ VPRIVATE double debye_U(Vpbe *pbe, int d, double x[]) {
         if (xkappa != 0.0) {
             val = val*(exp(-xkappa*(dist-size))/(1+xkappa*size));
         }
-        val = val*Vunit_ec/(Vunit_kb*T);
         pot = pot + val;
     }
-
+    pot = pot*Vunit_ec/(Vunit_kb*T);
 
     return pot;
 }
 
 VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
 
-    double size, *position, charge, xkappa, eps_w, eps_p, dist, T, pot, val;
+    double size, *position, charge, eps_p, dist, T, pot, val;
+    double Ufull;
     int iatom, i;
     Valist *alist;
     Vatom *atom;
 
-    eps_w = Vpbe_getSolventDiel(pbe);
+    Ufull = debye_U(pbe, d, x);
+
     eps_p = Vpbe_getSoluteDiel(pbe);
-    xkappa = (1.0e10)*Vpbe_getXkappa(pbe);
     T = Vpbe_getTemperature(pbe);
     alist = Vpbe_getValist(pbe);
     val = 0;
@@ -1279,15 +1283,16 @@ VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
         charge = Vunit_ec*Vatom_getCharge(atom);
         size = (1e-10)*Vatom_getRadius(atom);
         dist = 0;
-        for (i=0; i<d; i++) dist += VSQR(position[i] - x[i]);
+        for (i=0; i<d; i++) {
+            dist += VSQR(position[i] - x[i]);
+        }
         dist = (1.0e-10)*VSQRT(dist);
-        val = (Vunit_ec*charge)/(4*VPI*Vunit_eps0*Vunit_kb*T*dist);
-        if (xkappa > VSMALL) {
-            val = val*(exp(-xkappa*(dist-size))/(eps_w*(1+xkappa*size)) - \
-              1/(eps_p));
-        } else val = val*(1/(eps_w) - 1/(eps_p));
+        val = (charge)/(4*VPI*Vunit_eps0*eps_p*dist);
         pot = pot + val;
     }
+    pot = pot*Vunit_ec/(Vunit_kb*T);
+
+    pot = Ufull - pot;
 
     return pot;
 }
@@ -1428,16 +1433,16 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
     int i, j, ichop;
     double u2, coef2, eps_p;
-    Vhal_PBEType pdekey;
+    Vhal_PBEType pdetype;
     Vpbe *pbe = VNULL;
 
     eps_p = Vpbe_getSoluteDiel(var.fetk->pbe);
-    pdekey = var.fetk->type;
+    pdetype = var.fetk->type;
     pbe = var.fetk->pbe;
 
     /* the point, the solution value and gradient, and the Coulomb value and *
      * gradient at the point */
-    if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE)) {
+    if ((pdetype == PBE_LRPBE) || (pdetype == PBE_NRPBE)) {
         coulomb(pbe, thee->dim, txq, eps_p, &(var.W), var.dW, &(var.d2W));
     }
     for (i=0; i<thee->vec; i++) {
@@ -1453,28 +1458,29 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
         /* Get the dielectric values */
         var.diel  = diel();
-        var.kappa2  = kappa2();
+        var.ionacc  = ionacc();
         var.A = var.diel;
         var.F = (var.diel - eps_p);
 
-        switch (pdekey) {
+        switch (pdetype) {
 
             case PBE_LPBE:
-                var.B = var.kappa2*2.0*var.ionstr*var.U[0];
-                var.DB = var.kappa2*2.0*var.ionstr;
+                var.B = var.ionacc*var.zkappa2*var.ionstr*var.U[0];
+                var.DB = var.ionacc*var.zkappa2*var.ionstr;
                 break;
 
             case PBE_NPBE:
+
                 var.B  = 0;
                 var.DB  = 0;
-                if (var.kappa2 > VSMALL) {
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     for (i=0; i<var.nion; i++) {
                         /* NONLINEAR TERM */
-                        coef2 = -1.0 * var.kappa2 * var.ionConc[i];
+                        coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
                         u2 = -1.0 * var.U[0] * var.ionQ[i];
                         var.B += (coef2 * Vcap_exp(u2, &ichop));
                         /* LINEARIZED TERM */
-                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
                         u2 = -1.0 * var.U[0] * var.ionQ[i];
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
@@ -1482,22 +1488,23 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 break;
 
             case PBE_LRPBE:
-                var.B  = var.kappa2*2.0*var.ionstr*(var.U[0]+var.W);
-                var.DB  = var.kappa2*2.0*var.ionstr;
+                var.B = var.ionacc*var.zkappa2*var.ionstr*(var.U[0]+var.W);
+                var.DB = var.ionacc*var.zkappa2*var.ionstr;
                 break;
 
             case PBE_NRPBE: 
+
                 var.B  = 0;
                 var.DB  = 0;
-                if (var.kappa2 > VSMALL) {
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     for (i=0; i<var.nion; i++) {
                         /* NONLINEAR TERM */
-                        coef2 = -1.0 * var.kappa2 * var.ionConc[i];
+                        coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
                         u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
                         var.B += (coef2 * Vcap_exp(u2, &ichop));
 
                         /* LINEARIZED TERM */
-                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
                         u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
@@ -1506,7 +1513,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
             default:
                 Vnm_print(2, "Vfetk_PDE_initPoint:  Unknown PBE type (%d)!\n",
-                  pdekey);
+                  pdetype);
                 VASSERT(0);
                 break;
         }
@@ -1636,15 +1643,15 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
     int gotAtom, numSring, isimp, ivert, sid;
     double *position, charge, phi[VAPBS_NVS], phix[VAPBS_NVS][3], value;
     Vatom *atom;
-    Vhal_PBEType pdekey;
+    Vhal_PBEType pdetype;
     SS *sring[VRINGMAX];
     VV *vertex = (VV *)user;
 
-    pdekey = var.fetk->type;
+    pdetype = var.fetk->type;
 
     F[0] = 0.0;
 
-    if ((pdekey == PBE_LPBE) || (pdekey == PBE_NPBE)) {
+    if ((pdetype == PBE_LPBE) || (pdetype == PBE_NPBE)) {
         VASSERT( vertex != VNULL);
         numSring = 0;
         sring[numSring] = VV_firstSS(vertex);
@@ -1708,7 +1715,7 @@ phi = {");
             } /* for iatom */
         } /* for isimp */
 
-    } else if ((pdekey == PBE_LRPBE) || (pdekey == PBE_NRPBE)) {
+    } else if ((pdetype == PBE_LRPBE) || (pdetype == PBE_NRPBE)) {
         F[0] = 0.0;
     } else { VASSERT(0); }
 
@@ -1855,30 +1862,30 @@ VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
 
         switch (type) {
             case PBE_LPBE:
-                if (var.kappa2 > VSMALL) {
-                    qmE = var.kappa2*2.0*var.ionstr*VSQR(var.U[0]);
+                if ((var.ionacc > VSMALL) && (var.zkappa2 > VSMALL)) {
+                    qmE = var.ionacc*var.zkappa2*VSQR(var.U[0]);
                 } else qmE = 0;
                 break;
             case PBE_NPBE:
-                if (var.kappa2 > VSMALL) {
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     qmE = 0.;
                     for (i=0; i<var.nion; i++) {
-                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
                         u2 = -1.0 * (var.U[0]) * var.ionQ[i];
                         qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
                     }
                 } else qmE = 0;
                 break;
             case PBE_LRPBE:
-                if (var.kappa2 > VSMALL) {
-                    qmE = var.kappa2*2.0*var.ionstr*VSQR(var.U[0] + var.W);
+                if ((var.ionacc > VSMALL) && (var.zkappa2 > VSMALL)) {
+                    qmE = var.ionacc*var.zkappa2*VSQR((var.U[0] + var.W));
                 } else qmE = 0;
                 break;
             case PBE_NRPBE:
-                if (var.kappa2 > VSMALL) {
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     qmE = 0.;
                     for (i=0; i<var.nion; i++) {
-                        coef2 = var.kappa2 * var.ionConc[i] * var.ionQ[i];
+                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
                         u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
                         qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
                     }
@@ -2103,7 +2110,7 @@ VPUBLIC void Vfetk_dumpLocalVar() {
     Vnm_print(1, "DEBUG: d2W = %g\n", var.d2W);
     Vnm_print(1, "DEBUG: dW = (%g, %g, %g)\n", var.dW[0], var.dW[1], var.dW[2]);
     Vnm_print(1, "DEBUG: diel = %g\n", var.diel);
-    Vnm_print(1, "DEBUG: kappa2 = %g\n", var.kappa2);
+    Vnm_print(1, "DEBUG: ionacc = %g\n", var.ionacc);
     Vnm_print(1, "DEBUG: A = %g\n", var.A);
     Vnm_print(1, "DEBUG: F = %g\n", var.F);
     Vnm_print(1, "DEBUG: B = %g\n", var.B);
