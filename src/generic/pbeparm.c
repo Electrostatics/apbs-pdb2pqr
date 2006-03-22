@@ -285,12 +285,14 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 }
 
 VPRIVATE int PBEparm_parseLPBE(PBEparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed lpbe\n");
     thee->pbetype = PBE_LPBE;
     thee->setpbetype = 1;
     return 1;
 }
 
 VPRIVATE int PBEparm_parseNPBE(PBEparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed npbe\n");
     thee->pbetype = PBE_NPBE;
     thee->setpbetype = 1;
     return 1;
@@ -316,12 +318,14 @@ keyword!\n", tok);
 }
 
 VPRIVATE int PBEparm_parseLRPBE(PBEparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed lrpbe\n");
     thee->pbetype = PBE_LRPBE;
     thee->setpbetype = 1;
     return 1;
 }
 
 VPRIVATE int PBEparm_parseNRPBE(PBEparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed nrpbe\n");
     thee->pbetype = PBE_NRPBE;
     thee->setpbetype = 1;
     return 1;
