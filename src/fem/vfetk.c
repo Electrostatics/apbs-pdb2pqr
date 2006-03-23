@@ -71,6 +71,10 @@
 
 #include "apbs/vfetk.h"
 
+/* Define the macro DONEUMANN to run with all-Neumann boundary conditions.
+ * Set this macro at your own risk! */
+/* #define DONEUMANN 1 */
+
 /**
  * @brief  Calculuate the contribution to the charge-potential energy from one
  * atom
@@ -101,7 +105,7 @@ VPRIVATE Vfetk_LocalVar var;
  * @ingroup Vfetk
  * @author  Based on mesh by Mike Holst
  */
-VPRIVATE char *cubeString =
+VPRIVATE char *diriCubeString =
 "mcsf_begin=1;\n\
 \n\
 dim=3;\n\
@@ -127,6 +131,43 @@ simp=[\n\
 3 0 0 0 1 0 1 3 5 7 2\n\
 4 0 0 1 1 0 0 2 5 7 6\n\
 5 0 0 1 1 0 0 2 5 6 4\n\
+];\n\
+\n\
+mcsf_end=1;\n\
+\n\
+";
+
+/**
+ * @brief  MCSF-format cube mesh (all Neumann)
+ * @ingroup Vfetk
+ * @author  Based on mesh by Mike Holst
+ */
+VPRIVATE char *neumCubeString =
+"mcsf_begin=1;\n\
+\n\
+dim=3;\n\
+dimii=3;\n\
+vertices=8;\n\
+simplices=6;\n\
+\n\
+vert=[\n\
+0 0 -0.5 -0.5 -0.5\n\
+1 0  0.5 -0.5 -0.5\n\
+2 0 -0.5  0.5 -0.5\n\
+3 0  0.5  0.5 -0.5\n\
+4 0 -0.5 -0.5  0.5\n\
+5 0  0.5 -0.5  0.5\n\
+6 0 -0.5  0.5  0.5\n\
+7 0  0.5  0.5  0.5\n\
+];\n\
+\n\
+simp=[\n\
+0 0 0 0 2 0 2 0 5 1 2\n\
+1 0 0 0 2 2 0 0 5 2 4\n\
+2 0 0 0 2 0 2 1 5 3 2\n\
+3 0 0 0 2 0 2 3 5 7 2\n\
+4 0 0 2 2 0 0 2 5 7 6\n\
+5 0 0 2 2 0 0 2 5 6 4\n\
 ];\n\
 \n\
 mcsf_end=1;\n\
@@ -832,9 +873,16 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
 
     /** @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
-    bufsize = strlen(cubeString);
+#ifdef DONEUMANN
+    bufsize = strlen(neumCubeString);
+    Vnm_print(2, "DEBUG -- USING NEUMANN MESH!\n");
     VASSERT( bufsize <= VMAX_BUFSIZE );
-    strncpy(buf, cubeString, VMAX_BUFSIZE);
+    strncpy(buf, neumCubeString, VMAX_BUFSIZE);
+#else
+    bufsize = strlen(diriCubeString);
+    VASSERT( bufsize <= VMAX_BUFSIZE );
+    strncpy(buf, diriCubeString, VMAX_BUFSIZE); 
+#endif
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
     Vio_bufTake(sock, buf, bufsize);
     AM_read(am, skey, sock);
@@ -1520,7 +1568,14 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
 
     /* boundary form case */
-    } else VASSERT(0);
+    } else {
+#ifdef DONEUMANN
+        ;
+#else
+        Vnm_print(2, "Vfetk:  Whoa!  I just got a boundary point to evaluate (%d)!\n", pointType);
+        Vnm_print(2, "Vfetk:  Did you do that on purpose?\n");
+#endif
+    } 
 
 #if 0 /* THIS IS VERY NOISY! */
     Vfetk_dumpLocalVar();
@@ -1549,36 +1604,26 @@ VPUBLIC double Vfetk_PDE_Fu_v(
 
     type = var.fetk->type;
 
-    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
-        /* interior form case */
-        if (key == 0) {
+    /* interior form case */
+    if (key == 0) {
+        if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
             value = var.B * V[0];
             for (i=0; i<thee->dim; i++)
               value += ( var.A * var.dU[0][i] * dV[0][i] );
-
-        /* boundary form case */
-        } else { /* (key == 1) */
-            Vnm_print(2, "Vfetk_PDE_Fu_v:  Boundary weak form not applicable \
-to PBE!\n");
-            VASSERT(0);
-        }
-    } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
-        /* interior form case */
-        if (key == 0) {
+        } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
             value = var.B * V[0];
             for (i=0; i<thee->dim; i++) {
                 value += (var.A * var.dU[0][i] * dV[0][i]);
                 if (var.F > VSMALL) value += (var.F * var.dW[i] * dV[0][i]);
             }
-        /* boundary form case */
-        } else { /* (key == 1) */
-            Vnm_print(2, "Vfetk_PDE_Fu_v:  Boundary weak form not applicable \
-to PBE!\n");
-            VASSERT(0);
         }
+    /* boundary form case */
     } else {
-        Vnm_print(2, "Vfetk_PDE_Fu_v:  Invalid PBE type (%d)!\n", type);
-        VASSERT(0);
+#ifdef DONEUMANN
+        value = 0.0;
+#else
+        Vnm_print(2, "Vfetk:  Whoa! I was just asked to evaluate a boundary weak form for point type %d!\n", key);
+#endif
     }
 
     var.Fu_v = value;
@@ -1600,30 +1645,24 @@ VPUBLIC double Vfetk_PDE_DFu_wv(
 
     type = var.fetk->type;
 
-    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
-        if (key == 0) { /* interior form case */
+    /* Interior form */
+    if (key == 0) {
+        if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
             value = var.DB * W[0] * V[0];
             for (i=0; i<thee->dim; i++)
               value += ( var.A * dW[0][i] * dV[0][i] );
-        
-        } else { /* boundary form case */
-            Vnm_print(2, "Vfetk_PDE_DFu_wv:  Boundary weak form not \
-applicable to PBE!\n");
-            VASSERT(0);
-        }
-    } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
-        if (key == 0) { /* interior form */
+        } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
             value = var.DB * W[0] * V[0];
             for (i=0; i<thee->dim; i++)
               value += ( var.A * dW[0][i] * dV[0][i] );
-        } else { /* boundary form case */
-            Vnm_print(2, "Vfetk_PDE_DFu_wv:  Boundary weak form not \
-applicable to PBE!\n");
-            VASSERT(0);
         }
+    /* boundary form case */
     } else {
-        Vnm_print(2, "Vfetk_PDE_DFu_wv:  Invalid PBE type (%d)!\n", type);
-        VASSERT(0);
+#ifdef DONEUMANN
+        value = 0.0;
+#else
+        Vnm_print(2, "Vfetk:  Whoa! I was just asked to evaluate a boundary weak form for point type %d!\n", key);
+#endif
     }
 
     var.DFu_wv = value;
