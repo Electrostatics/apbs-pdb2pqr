@@ -1,14 +1,14 @@
 c* ///////////////////////////////////////////////////////////////////////////
-c*                           Welcome to MG/XMG.
+c*                           Welcome to PMG (MG/XMG).
 c* ///////////////////////////////////////////////////////////////////////////
 c*
 c* ======================
 c* The Author Information
 c* ======================
 c*
-c* The computer codes MG/XMG ("the Code"),  including  FORTRAN/C/C++ language 
-c* multilevel  subroutines  called "MG" and the C-language X-Window interface 
-c* called "XMG", were developed by:
+c* The computer codes PMG (MG/XMG, "the Code"), including FORTRAN/C/C++
+c* language multilevel subroutines called "MG" and the C-language X-Window
+c* interface called "XMG", were developed by:
 c*
 c*    Michael Holst                TELE:  (858) 534-4899
 c*    Department of Mathematics    FAX:   (858) 534-5273
@@ -43,7 +43,7 @@ c* code and the original ideas that went into the code.  For GNU to be viable,
 c* we all need to abide by this very minimal requirement.
 c*
 c* I'm typing this on a nearly all-GNU system right now, namely Linux 1.2.8, 
-c* a GNU version of UN*X available under the same conditions as MG/XMG.
+c* a GNU version of UN*X available under the same conditions as PMG.
 c* I.e., you get all of the source code for the entire UN*X operating system.
 c* For more information about Linux, see: http://sunsite.unc.edu/mdw/linux.html
 c*
@@ -194,7 +194,7 @@ c*       number    = "CRPC-94-10",
 c*       year      = 1994 }
 c*
 c* =====================
-c* MG/XMG Bugs and Notes
+c* PMG Bugs and Notes
 c* =====================
 c*
 c* The  timing  routine,  found  in  "secd.c", is machine dependent.  We  have 
@@ -203,7 +203,7 @@ c* generic  routine  for  a  standard  unix  machine with the getrusage system
 c* routine.
 c*
 c* =============================
-c* MG/XMG Last Modification Date
+c* PMG Last Modification Date
 c* =============================
 c*
 c* MG:  10-01-95
