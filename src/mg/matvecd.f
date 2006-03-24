@@ -1,32 +1,60 @@
 c* ///////////////////////////////////////////////////////////////////////////
-c* MG/XMG -- Multilevel nonlinear scalar elliptic PDE solver and X interface
-c* Copyright (C) 1995  Michael Holst
+c* @file    matvecd.f
+c* @author  Michael Holst
+c* @brief   Matrix-vector operations.
+c* @version $Id$
+c* @attention
+c* @verbatim
 c*
-c* This program is free software; you can redistribute it and/or modify
+c* PMG -- Parallel algebraic MultiGrid
+c* Copyright (c) 1994-2006.  Michael Holst.
+c*
+c* Michael Holst <mholst@math.ucsd.edu>
+c* University of California, San Diego
+c* Department of Mathematics, 5739 AP&M
+c* 9500 Gilman Drive, Dept. 0112
+c* La Jolla, CA 92093-0112 USA                                                  
+c* http://math.ucsd.edu/~mholst
+c*
+c* This file is part of PMG.
+c*
+c* PMG is free software; you can redistribute it and/or modify
 c* it under the terms of the GNU General Public License as published by
 c* the Free Software Foundation; either version 2 of the License, or
 c* (at your option) any later version.
 c*
-c* This program is distributed in the hope that it will be useful,
+c* PMG is distributed in the hope that it will be useful,
 c* but WITHOUT ANY WARRANTY; without even the implied warranty of
 c* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 c* GNU General Public License for more details.
 c*
 c* You should have received a copy of the GNU General Public License
-c* along with this program; if not, write to the Free Software
-c* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+c* along with PMG; if not, write to the Free Software
+c* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
 c*
-c* MG/XMG was developed by:
+c* Linking PMG statically or dynamically with other modules is making a
+c* combined work based on PMG. Thus, the terms and conditions of the GNU
+c* General Public License cover the whole combination.
+c* 
+c* SPECIAL GPL EXCEPTION
+c* In addition, as a special exception, the copyright holders of PMG
+c* give you permission to combine the PMG program with free software
+c* programs and libraries that are released under the GNU LGPL or with
+c* code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision.
+c* Such combined software may be linked with PMG and redistributed together 
+c* in original or modified form as mere aggregation without requirement that 
+c* the entire work be under the scope of the GNU General Public License.
+c* This special exception permission is also extended to any software listed
+c* in the SPECIAL GPL EXCEPTION clauses by the FEtk and APBS libraries.
+c* 
+c* Note that people who make modified versions of PMG are not obligated
+c* to grant this special exception for their modified versions; it is
+c* their choice whether to do so. The GNU General Public License gives
+c* permission to release a modified version without this exception; this
+c* exception also makes it possible to release a modified version which
+c* carries forward this exception.
 c*
-c*    Michael Holst                TELE:  (858) 534-4899
-c*    Department of Mathematics    FAX:   (858) 534-5273
-c*    UC San Diego, AP&M 5739      EMAIL: mholst@math.ucsd.edu
-c*    La Jolla, CA 92093 USA       WEB:   http://www.scicomp.ucsd.edu/~mholst
-c*
-c* See the file "maind.f" for more information and pointers to papers.
-c*
-c* IMPORTANT: If you intend to use or modify this code, make sure you 
-c* understand your responsibilities under the GNU license.
+c* @endverbatim
 c* ///////////////////////////////////////////////////////////////////////////
 
       subroutine matvec(nx,ny,nz,ipc,rpc,ac,cc,x,y)
