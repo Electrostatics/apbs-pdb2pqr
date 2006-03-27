@@ -7,6 +7,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
     * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
       boundary conditions (e.g., membranes).
   - BUG FIXES
+    * Updated psize.py to use centers and radii when calculating grid sizes
+      (thanks to John Mongan)
     * Fixed problems with FEM-based LPBE and LRPBE calculations
     * Fixed a minor bug in the configure script that prevented MPI libraries
       from being found when using certain compilers.
