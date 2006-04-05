@@ -38,13 +38,13 @@ dnl SPECIAL GPL EXCEPTION
 dnl In addition, as a special exception, the copyright holders of APBS
 dnl give you permission to combine the APBS program with free software
 dnl programs and libraries that are released under the GNU LGPL or with
-dnl code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision. 
-dnl Such combined software may be linked with APBS and redistributed together 
-dnl in original or modified form as mere aggregation without requirement that 
-dnl the entire work be under the scope of the GNU General Public License. 
-dnl This special exception permission is also extended to any software listed
-dnl in the SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC
-dnl libraries.
+dnl code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
+dnl SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
+dnl redistributed together in original or modified form as mere aggregation
+dnl without requirement that the entire work be under the scope of the GNU 
+dnl General Public License. This special exception permission is also extended
+dnl to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
+dnl FEtk, MC, or MALOC libraries.
 dnl 
 dnl Note that people who make modified versions of APBS are not obligated
 dnl to grant this special exception for their modified versions; it is
