@@ -40,12 +40,13 @@ c* SPECIAL GPL EXCEPTION
 c* In addition, as a special exception, the copyright holders of PMG
 c* give you permission to combine the PMG program with free software
 c* programs and libraries that are released under the GNU LGPL or with
-c* code included in releases of ISIM, PMV, PyMOL, SMOL, VMD, and Vision.
-c* Such combined software may be linked with PMG and redistributed together 
-c* in original or modified form as mere aggregation without requirement that 
-c* the entire work be under the scope of the GNU General Public License.
-c* This special exception permission is also extended to any software listed
-c* in the SPECIAL GPL EXCEPTION clauses by the FEtk and APBS libraries.
+c* code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
+c* SMOL, VMD, and Vision. Such combined software may be linked with PMG and 
+c* redistributed together in original or modified form as mere aggregation
+c* without requirement that the entire work be under the scope of the GNU 
+c* General Public License. This special exception permission is also extended
+c* to any software listed in the SPECIAL GPL EXCEPTION clauses by the FEtk and
+c* APBS libraries.
 c* 
 c* Note that people who make modified versions of PMG are not obligated
 c* to grant this special exception for their modified versions; it is
