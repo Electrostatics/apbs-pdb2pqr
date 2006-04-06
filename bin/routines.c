@@ -958,8 +958,9 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
     pbeparm = nosh->calc[icalc].pbeparm;
 
     Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
+#ifndef VAPBSQUIET
     Vnm_tprint( 1,"  Calculating energy (see io.mc* for details)...\n");
-
+#endif
     extEnergy = 1;
 
     if (pbeparm->calcenergy == PCE_TOTAL) {
