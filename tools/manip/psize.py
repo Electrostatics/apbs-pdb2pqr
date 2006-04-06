@@ -141,7 +141,7 @@ class Psize:
                     center.append(float(word))
                 for i in range(3):
                     self.minlen[i] = min(center[i]-rad, self.minlen[i])
-                    self.maxlen[i] = max(center[i]+rad, self.minlen[i])
+                    self.maxlen[i] = max(center[i]+rad, self.maxlen[i])
             elif string.find(line, "HETATM") == 0:
                 self.gothet = self.gothet + 1
 
