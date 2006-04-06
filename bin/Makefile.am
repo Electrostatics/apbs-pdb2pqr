@@ -23,3 +23,6 @@ libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
 INCLUDES         = @inc_list@
 AM_CFLAGS        = @wall_pedantic@
 AM_LDFLAGS       = @LDFLAGS@ @FFLAGS@
+ 
+includedir = ${prefix}/include/apbs
+include_HEADERS = routines.h

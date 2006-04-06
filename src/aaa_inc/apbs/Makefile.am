@@ -18,6 +18,7 @@ PMG_HEADS   = vpmg.h vpmgp.h vgrid.h vmgrid.h vopot.h
 FETK_HEADS  = vfetk.h vcsm.h vpee.h
 
 APBS_HEADS = apbs.h
+
 OTHER_HEADS = ${BOTH_HEADS} ${PMG_HEADS} ${FETK_HEADS}
 
 includedir = ${prefix}/include/apbs
