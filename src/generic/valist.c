@@ -359,12 +359,12 @@ VPRIVATE int Valist_readPDB_throughXYZ(
     }
 
 #if 0 /* Set to 1 if you want to debug */
-    Vnm_print(1, "Valist_readPDB:  serial = %d\n", serial);
+    Vnm_print(1, "Valist_readPDB:  serial = %d\n", *serial);
     Vnm_print(1, "Valist_readPDB:  atomName = %s\n", atomName);
     Vnm_print(1, "Valist_readPDB:  resName = %s\n", resName);
-    Vnm_print(1, "Valist_readPDB:  resSeq = %d\n", resSeq);
+    Vnm_print(1, "Valist_readPDB:  resSeq = %d\n", *resSeq);
     Vnm_print(1, "Valist_readPDB:  pos = (%g, %g, %g)\n", 
-            pos[0], pos[1], pos[2]);
+              *x, *y, *z);
 #endif
 
     return 1;
@@ -499,7 +499,8 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
             if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
                         resName, &resSeq, &x, &y, &z)) {
-                Vnm_print(2, "Valist_readPDB:  Error parsing ATOM field!\n");
+                Vnm_print(2, "Valist_readPDB:  Error parsing atom %d!\n", 
+                          serial);
                 return 0;
             }
 
@@ -579,13 +580,15 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
             if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
                         resName, &resSeq, &x, &y, &z)) {
-                Vnm_print(2, "Valist_readPQR:  Error parsing ATOM field!\n");
+                Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
+                          serial);
                 return 0;
             }
 
             /* Read Q/R fields */
             if (!Valist_readPDBChargeRadius(thee, sock, &charge, &radius)) {
-                Vnm_print(2, "Valist_readPQR:  Error parsing ATOM field!\n");
+                Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
+                          serial);
                 return 0;
             }
 
