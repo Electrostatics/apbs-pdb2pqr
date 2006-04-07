@@ -182,11 +182,9 @@ def getHeader():
     give you permission to combine the APBS program with free software\n\
     programs and libraries that are released under the GNU LGPL or with\n\
     code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL\n\
-    SMOL, VMD, and Vision. Such combined software may be linked with APBS and\n\ 
-    redistributed together in original or modified form as mere aggregation\n\
+    SMOL, VMD, and Vision. Such combined software may be linked with APBS and\n\    redistributed together in original or modified form as mere aggregation\n\
     without requirement that the entire work be under the scope of the GNU\n\
-    General Public License. This special exception permission is also extended\n\
-    to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,\n\
+    General Public License. This special exception permission is also extended\n\   to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,\n\
     FEtk, MC, or MALOC libraries.\n\
     \n\
     Note that people who make modified versions of APBS are not obligated\n\
