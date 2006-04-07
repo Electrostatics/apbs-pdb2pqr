@@ -118,7 +118,7 @@ def getUsage():
     This driver program calculates electrostatic potentials, energies,\n\
     and forces using both multigrid methods.\n\
     It is invoked as:\n\n\
-      python noinput.py\n\
+      python main.py apbs.in\n\
     ----------------------------------------------------------------------\n\n"
 
     return usage
