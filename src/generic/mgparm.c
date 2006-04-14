@@ -346,6 +346,7 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     thee->setdime = parm->setdime;
     thee->chgm = parm->chgm;
     thee->setchgm = parm->setchgm;
+    thee->chgs = parm->chgs;
 
     /* *** TYPE 0 PARMS *** */
     thee->nlev = parm->nlev;
@@ -446,6 +447,9 @@ VPRIVATE int MGparm_parseCHGM(MGparm *thee, Vio *sock) {
             case VCM_BSPL2:
                 Vnm_print(2, "spl2");
                 break;
+            case VCM_BSPL4:
+                Vnm_print(2, "spl4"); 
+                break;
             default:
                 Vnm_print(2, "UNKNOWN");
                 break;
@@ -458,6 +462,10 @@ VPRIVATE int MGparm_parseCHGM(MGparm *thee, Vio *sock) {
         return 1;
     } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
         thee->chgm = VCM_BSPL2;
+        thee->setchgm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl4") == 0) {
+        thee->chgm = VCM_BSPL4;
         thee->setchgm = 1;
         return 1;
     } else {

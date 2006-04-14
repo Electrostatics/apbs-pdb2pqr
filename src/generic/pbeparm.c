@@ -514,6 +514,9 @@ statement.\n", ti);
             case VSM_SPLINE:
                 Vnm_print(2, "spl2");
                 break;
+            case VSM_SPLINE4:
+                Vnm_print(2, "spl4");
+                break;
             default:
                 Vnm_print(2, "UNKNOWN");
                 break;
@@ -532,6 +535,10 @@ statement.\n", ti);
         return 1;
     } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
         thee->srfm = VSM_SPLINE;
+        thee->setsrfm = 1;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "spl4") == 0) {
+        thee->srfm = VSM_SPLINE4;
         thee->setsrfm = 1;
         return 1;
     } else {
