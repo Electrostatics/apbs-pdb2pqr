@@ -126,6 +126,8 @@ struct sMGparm {
     int setdime;  /**< Flag, @see dime */
     Vchrg_Meth chgm;  /**< Charge discretization method */
     int setchgm;  /**< Flag, @see chgm */
+    Vchrg_Src  chgs; /**< Charge source (Charge, Multipole, Induced Dipole, 
+                      * NL Induced */
 
     /* *** TYPE 0 PARAMETERS (SEQUENTIAL MANUAL) *** */
     int nlev;  /**< Levels in multigrid hierarchy 

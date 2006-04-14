@@ -86,7 +86,7 @@ enum eVsurf_Meth {
                 *    smoothing */
     VSM_MOLSMOOTH=1, /**<  As VSM_MOL but with a simple harmonic average
                       *    smoothing */
-	VSM_SPLINE=2     /**<  Spline-based surface definitions. This is primarily
+	VSM_SPLINE=2,    /**<  Spline-based surface definitions. This is primarily
 					  * for use with force calculations, since it requires
 					  * substantial reparameterization of radii. This is based
 					  * on the work of Im et al, Comp. Phys.  Comm. 111 ,
@@ -96,6 +96,10 @@ enum eVsurf_Meth {
 					  * van der Waals radii with the spline function and the
 					  * dielectric coefficient is defined using the standard
 					  * van der Waals radii with the spline function.  */
+	VSM_SPLINE4=3   /**<  A 7th order polynomial spline is used to create 
+                     *  a smoothly varying characteristic function 
+                     *  (continuity through 3rd derivatives) for surface
+                     *  based paramters. */
 };
 
 /** @typedef Vsurf_Meth
@@ -152,9 +156,10 @@ enum eVchrg_Meth {
 	VCM_TRIL=0,  /**< Trilinear interpolation of charge to 8 nearest grid
                   *   points.  The traditional method; not particularly good to
                   *   use with PBE forces. */
-    VCM_BSPL2=1  /**< Cubic B-spline across nearest- and
+    VCM_BSPL2=1,  /**< Cubic B-spline across nearest- and
 				  *   next-nearest-neighbors.  Mainly for use in grid-sensitive
 				  *   applications (such as force calculations). */
+    VCM_BSPL4=2  /**< 5th order B-spline for AMOEBA permanent multipoles. */
 };
 
 /** @typedef Vchrg_Meth
@@ -163,6 +168,23 @@ enum eVchrg_Meth {
  */
 typedef enum eVchrg_Meth Vchrg_Meth;
 
+/**
+ *  @ingroup Vhal
+ *  @author  Michael Schnieders
+ *  @brief   Charge source
+ */
+enum eVchrg_Src {
+	VCM_CHARGE=0,     /**< Partial Charge source distribution */
+	VCM_PERMANENT=1,  /**< Permanent Multipole source distribution */
+    VCM_INDUCED=2,    /**< Induced Dipole source distribution */
+    VCM_NLINDUCED=3   /**< NL Induced Dipole source distribution */
+};
+
+/** @typedef Vchrg_Src
+ *  @ingroup Vhal
+ *  @brief   Declaration of the Vchrg_Src type as the Vchrg_Meth enum
+ */
+typedef enum eVchrg_Src Vchrg_Src;
 
 /**
  *  @ingroup Vhal
