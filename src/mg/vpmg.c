@@ -1482,6 +1482,10 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     }
     F77MYPDEFINIT(&nion, ionQ, ionConc);
 
+    /* Set the default chargeSrc for 5th order splines */
+    
+    thee->chargeSrc = VCM_PERMANENT;
+
     /* Turn off restriction of observable calculations to a specific
      * partition */
     Vpmg_unsetPart(thee);
@@ -3002,6 +3006,10 @@ VPRIVATE void fillcoCoef(Vpmg *thee) {
             Vnm_print(0, "fillcoCoef:  Calling fillcoCoefSpline...\n");
             fillcoCoefSpline(thee);
             break;
+        case VSM_SPLINE4:
+            Vnm_print(0, "fillcoCoef:  Calling fillcoCoefSpline4...\n");
+            fillcoCoefSpline4(thee);
+            break;
         default:
             Vnm_print(2, "fillcoCoef:  Invalid surfMeth (%d)!\n",
               thee->surfMeth);
@@ -3028,6 +3036,29 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
         case VCM_BSPL2:
             Vnm_print(0, "fillcoCharge:  Calling fillcoChargeSpline2...\n");
             fillcoChargeSpline2(thee);
+            break;
+        case VCM_BSPL4:
+            switch (thee->chargeSrc) {
+                case VCM_PERMANENT:
+                    Vnm_print(0, "fillcoCharge: Calling fillcoPermanentMultipole...\n");
+                    fillcoPermanentMultipole(thee);
+                    break;
+#if defined(WITH_TINKER)
+                case VCM_INDUCED:
+                    Vnm_print(0, "fillcoCharge: Calling fillcoInducedDipole...\n");
+                    fillcoInducedDipole(thee); 
+                    break; 
+                case VCM_NLINDUCED: 
+                     Vnm_print(0, "fillcoCharge: Calling fillcoNLInducedDipole...\n"); 
+                     fillcoNLInducedDipole(thee); 
+                     break;
+#endif /* if defined(WITH_TINKER) */
+                default:
+                    Vnm_print(2, "fillcoCharge:  Invalid chargeSource (%d)!\n",
+                      thee->chargeSrc);
+                    VASSERT(0);
+                    break;
+            }
             break;
         default:
             Vnm_print(2, "fillcoCharge:  Invalid chargeMeth (%d)!\n",
@@ -3336,296 +3367,6 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
                 }
             }
 
-        } /* endif (on the mesh) */
-    } /* endfor (each atom) */
-}
-
-VPRIVATE double bspline4(double x) {
-
-    double m, m2;
-    static double one6 = 1.0/6.0;
-    static double one8 = 1.0/8.0;
-    static double one24 = 1.0/24.0;
-    static double thirteen24 = 13.0/24.0;
-    static double fourtyseven24 = 47.0/24.0;
-    static double seventeen24 = 17.0/24.0;
-
-    if ((x > 0.0) && (x <= 1.0)){
-      m = x*x;
-      return one24*m*m;
-    } else if ((x > 1.0) && (x <= 2.0)){
-      m = x - 1.0;
-      m2 = m*m;
-      return -one8 + one6*x + m2*(0.25 + one6*m - one6*m2);
-    } else if ((x > 2.0) && (x <= 3.0)){
-      m = x - 2.0;
-      m2 = m*m;
-      return -thirteen24 + 0.5*x + m2*(-0.25 - 0.5*m + 0.25*m2);
-    } else if ((x > 3.0) && (x <= 4.0)){
-      m = x - 3.0;
-      m2 = m*m;
-      return fourtyseven24 - 0.5*x + m2*(-0.25 + 0.5*m - one6*m2);
-    } else if ((x > 4.0) && (x <= 5.0)){
-      m = x - 4.0;
-      m2 = m*m;
-      return seventeen24 - one6*x + m2*(0.25 - one6*m + one24*m2);
-    } else {
-      return 0.0;
-    }
-}
-
-VPRIVATE double dbspline4(double x) {
-
-    double m, m2;
-    static double one6 = 1.0/6.0;
-    static double one3 = 1.0/3.0;
-    static double two3 = 2.0/3.0;
-    static double thirteen6 = 13.0/6.0;
-
-    if ((x > 0.0) && (x <= 1.0)){
-      m2 = x*x;
-      return one6*x*m2;
-    } else if ((x > 1.0) && (x <= 2.0)){
-      m = x - 1.0;
-      m2 = m*m;
-      return -one3 + 0.5*x + m2*(0.5 - two3*m);
-    } else if ((x > 2.0) && (x <= 3.0)){
-      m = x - 2.0;
-      m2 = m*m;
-      return 1.5 - 0.5*x + m2*(-1.5 + m);
-    } else if ((x > 3.0) && (x <= 4.0)){
-      m = x - 3.0;
-      m2 = m*m;
-      return 1.0 - 0.5*x + m2*(1.5 - two3*m);
-    } else if ((x > 4.0) && (x <= 5.0)){
-      m = x - 4.0;
-      m2 = m*m;
-      return -thirteen6 + 0.5*x + m2*(-0.5 + one6*m);
-    } else {
-      return 0.0;
-    }
-}
-
-VPRIVATE double d2bspline4(double x) {
-
-    double m, m2;
-
-    if ((x > 0.0) && (x <= 1.0)){
-      return 0.5*x*x;
-    } else if ((x > 1.0) && (x <= 2.0)){
-      m = x - 1.0;
-      m2 = m*m;
-      return -0.5 + x - 2.0*m2;
-    } else if ((x > 2.0) && (x <= 3.0)){
-      m = x - 2.0;
-      m2 = m*m;
-      return 5.5 - 3.0*x + 3.0*m2;
-    } else if ((x > 3.0) && (x <= 4.0)){
-      m = x - 3.0;
-      m2 = m*m;
-      return -9.5 + 3.0*x - 2.0*m2;
-    } else if ((x > 4.0) && (x <= 5.0)){
-      m = x - 4.0;
-      m2 = m*m;
-      return 4.5 - x + 0.5*m2;
-    } else {
-      return 0.0;
-    }
-}
-
-VPRIVATE double d3bspline4(double x) {
-
-    if      ((x > 0.0) && (x <= 1.0)) return x;
-    else if ((x > 1.0) && (x <= 2.0)) return 5.0 - 4.0 * x;
-    else if ((x > 2.0) && (x <= 3.0)) return -15.0 + 6.0 * x;
-    else if ((x > 3.0) && (x <= 4.0)) return 15.0 - 4.0 * x;
-    else if ((x > 4.0) && (x <= 5.0)) return x - 5.0;
-    else                              return 0.0;
-}
-
-VPRIVATE void fillcoChargeSpline4(Vpmg *thee) {
-
-    Valist *alist;
-    Vpbe *pbe;
-    Vatom *atom;
-    double xmin, xmax, ymin, ymax, zmin, zmax, zmagic;
-    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat;
-    double charge, hx, hy, hzed, *apos, mx, my, mz;
-    double *uind,*rpole,debye;
-    double c,ux,uix,uy,uiy,uz,uiz,qxx,qyx,qyy,qzx,qzy,qzz,qave;
-    double mc,mux,muy,muz,mqxx,mqyx,mqyy,mqzx,mqzy,mqzz;
-    double dmx,dmy,dmz,d2mx,d2my,d2mz;
-    double f,mi,mj,mk,mir,mjr,mkr,mr2;
-    int i, ii, jj, kk, nx, ny, nz, iatom;
-    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
-
-    VASSERT(thee != VNULL);
-
-    /* Get PBE info */
-    pbe = thee->pbe;
-    alist = pbe->alist;
-    zmagic = Vpbe_getZmagic(pbe);
-
-    /* Mesh info */
-    nx = thee->pmgp->nx;
-    ny = thee->pmgp->ny;
-    nz = thee->pmgp->nz;
-    hx = thee->pmgp->hx;
-    hy = thee->pmgp->hy;
-    hzed = thee->pmgp->hzed;
-
-    /* Define the total domain size */
-    xlen = thee->pmgp->xlen;
-    ylen = thee->pmgp->ylen;
-    zlen = thee->pmgp->zlen;
-
-    /* Define the min/max dimensions */
-    xmin = thee->pmgp->xcent - (xlen/2.0);
-    ymin = thee->pmgp->ycent - (ylen/2.0);
-    zmin = thee->pmgp->zcent - (zlen/2.0);
-    xmax = thee->pmgp->xcent + (xlen/2.0);
-    ymax = thee->pmgp->ycent + (ylen/2.0);
-    zmax = thee->pmgp->zcent + (zlen/2.0);
-
-    /* Reset the fcf, tcf, ccf, a1cf, a2cf, and a3cf arrays */
-    for (i=0; i<(nx*ny*nz); i++) thee->fcf[i] = 0.0;
-
-    /* Fill in the source term (atomic charges) */
-    Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-
-        atom = Valist_getAtom(alist, iatom);
-        apos = Vatom_getPosition(atom);
-
- #if defined(WITH_TINKER)    
-        rpole = atom->rpole1;
-        uind = atom->uind1;
- #endif /* if defined(WITH_TINKER) */    
-        f = zmagic/(hx*hy*hzed);
-
-        /* Convert dipoles from (e*A) to charge density
-           Convert quadrupoles from (e*A*A) to charge density */
-        c = rpole[0]*f;
-        ux = (rpole[1] + uind[0])/hx*f;
-        uy = (rpole[2] + uind[1])/hy*f;
-        uz = (rpole[3] + uind[2])/hzed*f;
-        qxx = (1.0/3.0)*rpole[4]/(hx*hx)*f;
-        qyx = (2.0/3.0)*rpole[7]/(hx*hy)*f;
-        qyy = (1.0/3.0)*rpole[8]/(hy*hy)*f;
-        qzx = (2.0/3.0)*rpole[10]/(hzed*hx)*f;
-        qzy = (2.0/3.0)*rpole[11]/(hzed*hy)*f;
-        qzz = (1.0/3.0)*rpole[12]/(hzed*hzed)*f;
-
-        /* Make sure we're on the grid */
-        if ((apos[0]<=(xmin-2*hx)) || (apos[0]>=(xmax+2*hx))  || \
-            (apos[1]<=(ymin-2*hy)) || (apos[1]>=(ymax+2*hy))  || \
-            (apos[2]<=(zmin-2*hzed)) || (apos[2]>=(zmax+2*hzed))) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
-                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, \
-%4.3f) is off the mesh (for cubic splines!!) (ignoring this atom):\n",
-                  iatom, apos[0], apos[1], apos[2]);
-                Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n",
-                  xmin, xmax);
-                Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n",
-                  ymin, ymax);
-                Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n",
-                  zmin, zmax);
-            }
-            fflush(stderr);
-        } else {
-
-            /* Convert the atom position to grid reference frame */
-            position[0] = apos[0] - xmin;
-            position[1] = apos[1] - ymin;
-            position[2] = apos[2] - zmin;
-
-            /* Scale the charge to be a delta function */
-            charge = charge*zmagic/(hx*hy*hzed);
-
-            /* Figure out which vertices we're next to */
-            ifloat = position[0]/hx;
-            jfloat = position[1]/hy;
-            kfloat = position[2]/hzed;
-
-            /* Note that we're using 2 here, since we need 5 grid points. */
-            ip1   = (int)ceil(ifloat);
-            ip2   = ip1 + 2;
-            im1   = (int)floor(ifloat);
-            im2   = im1 - 2;
-            jp1   = (int)ceil(jfloat);
-            jp2   = jp1 + 2;
-            jm1   = (int)floor(jfloat);
-            jm2   = jm1 - 2;
-            kp1   = (int)ceil(kfloat);
-            kp2   = kp1 + 2;
-            km1   = (int)floor(kfloat);
-            km2   = km1 - 2;
-
-            /* This step shouldn't be necessary, but it saves nasty debugging
-              later on if something goes wrong */
-            ip2 = VMIN2(ip2,nx-1);
-            ip1 = VMIN2(ip1,nx-1);
-            im1 = VMAX2(im1,0);
-            im2 = VMAX2(im2,0);
-            jp2 = VMIN2(jp2,ny-1);
-            jp1 = VMIN2(jp1,ny-1);
-            jm1 = VMAX2(jm1,0);
-            jm2 = VMAX2(jm2,0);
-            kp2 = VMIN2(kp2,nz-1);
-            kp1 = VMIN2(kp1,nz-1);
-            km1 = VMAX2(km1,0);
-            km2 = VMAX2(km2,0);
-
-            /* Now assign fractions of the multipole to the nearby verts 
-               {mir,mjr,mkr} is a vector from the multipole site to current
-               grid point. This is only needed for the sanity check.  */
-            for (ii=im2; ii<=ip2; ii++) {
-#if defined(WITH_TINKER)    
-                mi = VFCHI4(ii,ifloat);
-#endif /* if defined(WITH_TINKER) */     
-                mir = (mi - 2.5) * hx;
-                mx = bspline4(mi);
-                dmx = dbspline4(mi);
-                d2mx = d2bspline4(mi);
-                for (jj=jm2; jj<=jp2; jj++) {
-#if defined(WITH_TINKER)
-                    mj = VFCHI4(jj,jfloat);
-#endif /* if defined(WITH_TINKER) */  
-                    mjr = (mj - 2.5) * hy;
-                    my = bspline4(mj);
-                    dmy = dbspline4(mj);
-                    d2my = d2bspline4(mj);
-                    for (kk=km2; kk<=kp2; kk++) {
-#if defined(WITH_TINKER)
-                        mk = VFCHI4(kk,kfloat);
-#endif /* if defined(WITH_TINKER) */
-                        mkr = (mk - 2.5) * hzed;
-                        mr2 = mir*mir+mjr*mjr+mkr*mkr;
-                        mz = bspline4(mk);
-                        dmz = dbspline4(mk);
-                        d2mz = d2bspline4(mk);
-                        /*
-                           Assign a fraction of the multipole to the current
-                           grid point.
-                           For a charge
-                               mx*my*mz
-                           For a dipole, like Ux, -D(B-spline-X)
-                               dmx*my*mz
-                           For axial quadrupole, like Qxx, D2(B-Spline-X)
-                               d2mx*my*mz
-                           For an "off-diagonal" quadrupole, like Qxy
-                               D(B-Spline-X)*D(B-Spline-Y)
-                               dmx*dmy*mz
-                         */
-                        charge = mx*my*mz*c -
-                         dmx*my*mz*ux - mx*dmy*mz*uy - mx*my*dmz*uz +
-                         d2mx*my*mz*qxx +
-                         dmx*dmy*mz*qyx + mx*d2my*mz*qyy +
-                         dmx*my*dmz*qzx + mx*dmy*dmz*qzy + mx*my*d2mz*qzz;
-                        thee->fcf[IJK(ii,jj,kk)] += charge;
-                    }
-                }
-            }
         } /* endif (on the mesh) */
     } /* endfor (each atom) */
 }
@@ -4850,6 +4591,3118 @@ VPUBLIC int Vpmg_solveLaplace(Vpmg *thee) {
     }
 
     return 1;
+
+}
+
+VPUBLIC double VFCHI4(int i, double f) {
+  return (2.5+((double)(i)-(f)));
+}
+
+VPUBLIC double bspline4(double x) {
+
+    double m, m2;
+    static double one6 = 1.0/6.0;
+    static double one8 = 1.0/8.0;
+    static double one24 = 1.0/24.0;
+    static double thirteen24 = 13.0/24.0;
+    static double fourtyseven24 = 47.0/24.0;
+    static double seventeen24 = 17.0/24.0;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      m = x*x;
+      return one24*m*m;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -one8 + one6*x + m2*(0.25 + one6*m - one6*m2);
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return -thirteen24 + 0.5*x + m2*(-0.25 - 0.5*m + 0.25*m2);
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return fourtyseven24 - 0.5*x + m2*(-0.25 + 0.5*m - one6*m2);
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return seventeen24 - one6*x + m2*(0.25 - one6*m + one24*m2);
+    } else {
+      return 0.0;
+    }
+}
+
+VPUBLIC double dbspline4(double x) {
+
+    double m, m2;
+    static double one6 = 1.0/6.0;
+    static double one3 = 1.0/3.0;
+    static double two3 = 2.0/3.0;
+    static double thirteen6 = 13.0/6.0;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      m2 = x*x;
+      return one6*x*m2;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -one3 + 0.5*x + m2*(0.5 - two3*m);
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return 1.5 - 0.5*x + m2*(-1.5 + m);
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return 1.0 - 0.5*x + m2*(1.5 - two3*m);
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return -thirteen6 + 0.5*x + m2*(-0.5 + one6*m);
+    } else {
+      return 0.0;
+    }
+}
+
+VPUBLIC double d2bspline4(double x) {
+
+    double m, m2;
+
+    if ((x > 0.0) && (x <= 1.0)){
+      return 0.5*x*x;
+    } else if ((x > 1.0) && (x <= 2.0)){
+      m = x - 1.0;
+      m2 = m*m;
+      return -0.5 + x - 2.0*m2;
+    } else if ((x > 2.0) && (x <= 3.0)){
+      m = x - 2.0;
+      m2 = m*m;
+      return 5.5 - 3.0*x + 3.0*m2;
+    } else if ((x > 3.0) && (x <= 4.0)){
+      m = x - 3.0;
+      m2 = m*m;
+      return -9.5 + 3.0*x - 2.0*m2;
+    } else if ((x > 4.0) && (x <= 5.0)){
+      m = x - 4.0;
+      m2 = m*m;
+      return 4.5 - x + 0.5*m2;
+    } else {
+      return 0.0;
+    }
+}
+
+VPUBLIC double d3bspline4(double x) {
+
+    if      ((x > 0.0) && (x <= 1.0)) return x;
+    else if ((x > 1.0) && (x <= 2.0)) return 5.0 - 4.0 * x;
+    else if ((x > 2.0) && (x <= 3.0)) return -15.0 + 6.0 * x;
+    else if ((x > 3.0) && (x <= 4.0)) return 15.0 - 4.0 * x;
+    else if ((x > 4.0) && (x <= 5.0)) return x - 5.0;
+    else                              return 0.0;
+
+}
+
+VPUBLIC void fillcoPermanentMultipole(Vpmg *thee) {
+
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    /* Coversions */
+    double zmagic, f;
+    /* Grid */
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, position[3], ifloat, jfloat, kfloat;
+    double hx, hy, hzed, *apos;
+    /* Multipole */
+    double charge, *dipole,*quad;
+    double c,ux,uy,uz,qxx,qyx,qyy,qzx,qzy,qzz,qave;
+    /* B-spline weights */
+    double mx,my,mz,dmx,dmy,dmz,d2mx,d2my,d2mz;
+    double mi,mj,mk;
+    /* Loop variables */
+    int i, ii, jj, kk, nx, ny, nz, iatom; 
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    /* sanity check */
+    double mir,mjr,mkr,mr2;
+    double debye,mc,mux,muy,muz,mqxx,mqyx,mqyy,mqzx,mqzy,mqzz;
+
+    VASSERT(thee != VNULL);
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    alist = pbe->alist;
+    zmagic = Vpbe_getZmagic(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Conversion */
+    f = zmagic/(hx*hy*hzed);
+   
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Fill in the source term (permanent atomic multipoles) */
+    Vnm_print(0, "fillcoPermanentMultipole:  filling in source term.\n");
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+
+        c = Vatom_getCharge(atom)*f;
+
+#if defined(WITH_TINKER)
+        dipole = Vatom_getDipole(atom);
+        ux = dipole[0]/hx*f;
+        uy = dipole[1]/hy*f;
+        uz = dipole[2]/hzed*f;
+        quad = Vatom_getQuadrupole(atom);
+        qxx = (1.0/3.0)*quad[0]/(hx*hx)*f;
+        qyx = (2.0/3.0)*quad[3]/(hx*hy)*f;
+        qyy = (1.0/3.0)*quad[4]/(hy*hy)*f;
+        qzx = (2.0/3.0)*quad[6]/(hzed*hx)*f;
+        qzy = (2.0/3.0)*quad[7]/(hzed*hy)*f;
+        qzz = (1.0/3.0)*quad[8]/(hzed*hzed)*f;
+#else
+        ux = 0.0;
+        uy = 0.0;
+        uz = 0.0;
+        qxx = 0.0;
+        qyx = 0.0;
+        qyy = 0.0;
+        qzx = 0.0;
+        qzy = 0.0;
+        qzz = 0.0;
+#endif /* if defined(WITH_TINKER) */
+        
+        /* check 
+        mc = 0.0;
+        mux = 0.0;
+        muy = 0.0;
+        muz = 0.0;
+        mqxx = 0.0;
+        mqyx = 0.0;
+        mqyy = 0.0;
+        mqzx = 0.0;
+        mqzy = 0.0;
+        mqzz = 0.0; */
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=(xmin-2*hx)) || (apos[0]>=(xmax+2*hx))  || \
+            (apos[1]<=(ymin-2*hy)) || (apos[1]>=(ymax+2*hy))  || \
+            (apos[2]<=(zmin-2*hzed)) || (apos[2]>=(zmax+2*hzed))) {
+            Vnm_print(2, "fillcoPermanentMultipole: Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring this atom):\n", iatom, apos[0], apos[1], apos[2]);
+            Vnm_print(2, "fillcoPermanentMultipole: xmin = %g, xmax = %g\n", xmin, xmax);
+            Vnm_print(2, "fillcoPermanentMultipole: ymin = %g, ymax = %g\n", ymin, ymax);
+            Vnm_print(2, "fillcoPermanentMultipole: zmin = %g, zmax = %g\n", zmin, zmax);
+            fflush(stderr);
+        } else {
+
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* Figure out which vertices we're next to */
+            ifloat = position[0]/hx;
+            jfloat = position[1]/hy;
+            kfloat = position[2]/hzed;
+
+            ip1   = (int)ceil(ifloat);
+            ip2   = ip1 + 2;
+            im1   = (int)floor(ifloat);
+            im2   = im1 - 2;
+            jp1   = (int)ceil(jfloat);
+            jp2   = jp1 + 2;
+            jm1   = (int)floor(jfloat);
+            jm2   = jm1 - 2;
+            kp1   = (int)ceil(kfloat);
+            kp2   = kp1 + 2;
+            km1   = (int)floor(kfloat);
+            km2   = km1 - 2;
+
+            /* This step shouldn't be necessary, but it saves nasty debugging
+             * later on if something goes wrong */
+            ip2 = VMIN2(ip2,nx-1);
+            ip1 = VMIN2(ip1,nx-1);
+            im1 = VMAX2(im1,0);
+            im2 = VMAX2(im2,0);
+            jp2 = VMIN2(jp2,ny-1);
+            jp1 = VMIN2(jp1,ny-1);
+            jm1 = VMAX2(jm1,0);
+            jm2 = VMAX2(jm2,0);
+            kp2 = VMIN2(kp2,nz-1);
+            kp1 = VMIN2(kp1,nz-1);
+            km1 = VMAX2(km1,0);
+            km2 = VMAX2(km2,0);
+
+            /* Now assign fractions of the charge to the nearby verts */
+            for (ii=im2; ii<=ip2; ii++) {
+                mi = VFCHI4(ii,ifloat);
+                mx = bspline4(mi);
+                dmx = dbspline4(mi);
+                d2mx = d2bspline4(mi);
+                for (jj=jm2; jj<=jp2; jj++) {
+                    mj = VFCHI4(jj,jfloat);
+                    my = bspline4(mj);
+                    dmy = dbspline4(mj);
+                    d2my = d2bspline4(mj);
+                    for (kk=km2; kk<=kp2; kk++) {
+                        mk = VFCHI4(kk,kfloat);
+                        mz = bspline4(mk);
+                        dmz = dbspline4(mk);
+                        d2mz = d2bspline4(mk);
+                        charge = mx*my*mz*c -
+                         dmx*my*mz*ux - mx*dmy*mz*uy - mx*my*dmz*uz +
+                         d2mx*my*mz*qxx + 
+                         dmx*dmy*mz*qyx + mx*d2my*mz*qyy +
+                         dmx*my*dmz*qzx + mx*dmy*dmz*qzy + mx*my*d2mz*qzz;
+                        thee->charge[IJK(ii,jj,kk)] += charge;
+                         
+                        /* sanity check - recalculate traceless multipoles 
+                           from the grid charge distribution for this
+                           site. 
+
+                        mir = (mi - 2.5) * hx;
+                        mjr = (mj - 2.5) * hy;
+                        mkr = (mk - 2.5) * hzed;
+                        mr2 = mir*mir+mjr*mjr+mkr*mkr;
+                        mc += charge;
+                        mux += mir * charge;
+                        muy += mjr * charge;
+                        muz += mkr * charge;
+                        mqxx += (1.5*mir*mir - 0.5*mr2) * charge;
+                        mqyx += 1.5*mjr*mir * charge;
+                        mqyy += (1.5*mjr*mjr - 0.5*mr2) * charge;
+                        mqzx += 1.5*mkr*mir * charge;
+                        mqzy += 1.5*mkr*mjr * charge;
+                        mqzz += (1.5*mkr*mkr - 0.5*mr2) * charge;
+                         */
+                    }
+                }
+            }
+        } /* endif (on the mesh) */
+
+        /* print out the Grid vs. Ideal Point Multipole. */
+        
+        /*
+        debye = 4.8033324;
+        mc = mc/f;
+        mux = mux/f*debye;
+        muy = muy/f*debye;
+        muz = muz/f*debye;
+        mqxx = mqxx/f*debye;
+        mqyy = mqyy/f*debye;
+        mqzz = mqzz/f*debye;
+        mqyx = mqyx/f*debye;
+        mqzx = mqzx/f*debye;
+        mqzy = mqzy/f*debye;
+
+        printf(" Grid v. Actual Permanent Multipole for Site %i\n",iatom);
+        printf(" G: %10.6f\n",mc);
+        printf(" A: %10.6f\n\n",c/f);
+        printf(" G: %10.6f %10.6f %10.6f\n",mux,muy,muz);
+        printf(" A: %10.6f %10.6f %10.6f\n\n",
+                 (ux * hx / f) * debye,
+                 (uy * hy / f) * debye,
+                 (uz * hzed /f) * debye);
+        printf(" G: %10.6f\n",mqxx);
+        printf(" A: %10.6f\n",quad[0]*debye);
+        printf(" G: %10.6f %10.6f\n",mqyx,mqyy);
+        printf(" A: %10.6f %10.6f\n",quad[3]*debye,quad[4]*debye);
+        printf(" G: %10.6f %10.6f %10.6f\n",mqzx,mqzy,mqzz);
+        printf(" A: %10.6f %10.6f %10.6f\n\n",
+                quad[6]*debye,quad[7]*debye,quad[8]*debye);  */
+
+    } /* endfor (each atom) */
+}
+
+#if defined(WITH_TINKER)
+
+VPUBLIC void fillcoInducedDipole(Vpmg *thee) {
+
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    /* Conversions */
+    double zmagic, f;
+    /* Grid */
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, ifloat, jfloat, kfloat;
+    double hx, hy, hzed, *apos, position[3];
+    /* B-spline weights */
+    double mx, my, mz, dmx, dmy, dmz;
+    /* Dipole */
+    double charge, *dipole, ux,uy,uz;
+    double mi,mj,mk;
+    /* Loop indeces */
+    int i, ii, jj, kk, nx, ny, nz, iatom; 
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    double debye;
+    double mux,muy,muz;
+    double mir,mjr,mkr;
+
+    VASSERT(thee != VNULL);
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    alist = pbe->alist;
+    zmagic = Vpbe_getZmagic(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Conversion */
+    f = zmagic/(hx*hy*hzed);
+   
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Fill in the source term (induced dipoles) */
+    Vnm_print(0, "fillcoInducedDipole:  filling in the source term.\n");
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+
+        dipole = Vatom_getInducedDipole(atom);
+        ux = dipole[0]/hx*f;
+        uy = dipole[1]/hy*f;
+        uz = dipole[2]/hzed*f;
+
+        mux = 0.0;
+        muy = 0.0;
+        muz = 0.0;
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=(xmin-2*hx)) || (apos[0]>=(xmax+2*hx))  || \
+            (apos[1]<=(ymin-2*hy)) || (apos[1]>=(ymax+2*hy))  || \
+            (apos[2]<=(zmin-2*hzed)) || (apos[2]>=(zmax+2*hzed))) {
+            Vnm_print(2, "fillcoInducedDipole: Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring this atom):\n", iatom, apos[0], apos[1], apos[2]);
+            Vnm_print(2, "fillcoInducedDipole: xmin = %g, xmax = %g\n", xmin, xmax);
+            Vnm_print(2, "fillcoInducedDipole: ymin = %g, ymax = %g\n", ymin, ymax);
+            Vnm_print(2, "fillcoInducedDipole: zmin = %g, zmax = %g\n", zmin, zmax);
+            fflush(stderr);
+        } else {
+
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* Figure out which vertices we're next to */
+            ifloat = position[0]/hx;
+            jfloat = position[1]/hy;
+            kfloat = position[2]/hzed;
+
+            ip1   = (int)ceil(ifloat);
+            ip2   = ip1 + 2;
+            im1   = (int)floor(ifloat);
+            im2   = im1 - 2;
+            jp1   = (int)ceil(jfloat);
+            jp2   = jp1 + 2;
+            jm1   = (int)floor(jfloat);
+            jm2   = jm1 - 2;
+            kp1   = (int)ceil(kfloat);
+            kp2   = kp1 + 2;
+            km1   = (int)floor(kfloat);
+            km2   = km1 - 2;
+
+            /* This step shouldn't be necessary, but it saves nasty debugging
+             * later on if something goes wrong */
+            ip2 = VMIN2(ip2,nx-1);
+            ip1 = VMIN2(ip1,nx-1);
+            im1 = VMAX2(im1,0);
+            im2 = VMAX2(im2,0);
+            jp2 = VMIN2(jp2,ny-1);
+            jp1 = VMIN2(jp1,ny-1);
+            jm1 = VMAX2(jm1,0);
+            jm2 = VMAX2(jm2,0);
+            kp2 = VMIN2(kp2,nz-1);
+            kp1 = VMIN2(kp1,nz-1);
+            km1 = VMAX2(km1,0);
+            km2 = VMAX2(km2,0);
+
+            /* Now assign fractions of the dipole to the nearby verts */
+            for (ii=im2; ii<=ip2; ii++) {
+                mi = VFCHI4(ii,ifloat);
+                mx = bspline4(mi);
+                dmx = dbspline4(mi);
+                for (jj=jm2; jj<=jp2; jj++) {
+                    mj = VFCHI4(jj,jfloat);
+                    my = bspline4(mj);
+                    dmy = dbspline4(mj);
+                    for (kk=km2; kk<=kp2; kk++) {
+                        mk = VFCHI4(kk,kfloat);
+                        mz = bspline4(mk);
+                        dmz = dbspline4(mk);
+                        charge = -dmx*my*mz*ux - mx*dmy*mz*uy - mx*my*dmz*uz;
+                        thee->charge[IJK(ii,jj,kk)] += charge;
+
+                        /*
+                        mir = (mi - 2.5) * hx;
+                        mjr = (mj - 2.5) * hy;
+                        mkr = (mk - 2.5) * hzed;
+                        mux += mir * charge;
+                        muy += mjr * charge;
+                        muz += mkr * charge;
+                        */
+                    }
+                }
+            }
+        } /* endif (on the mesh) */
+
+        /* check 
+        debye = 4.8033324;
+        mux = mux/f*debye;
+        muy = muy/f*debye;
+        muz = muz/f*debye;
+
+        printf(" Grid v. Actual Induced Dipole for Site %i\n",iatom);
+        printf(" G: %10.6f %10.6f %10.6f\n",mux,muy,muz);
+        printf(" A: %10.6f %10.6f %10.6f\n\n",
+                 (ux * hx / f) * debye,
+                 (uy * hy / f) * debye,
+                 (uz * hzed /f) * debye);
+         */
+
+    } /* endfor (each atom) */
+}
+
+VPUBLIC void fillcoNLInducedDipole(Vpmg *thee) {
+
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    /* Conversions */
+    double zmagic, f;
+    /* Grid */
+    double xmin, xmax, ymin, ymax, zmin, zmax;
+    double xlen, ylen, zlen, ifloat, jfloat, kfloat;
+    double hx, hy, hzed, *apos, position[3];
+    /* B-spline weights */
+    double mx, my, mz, dmx, dmy, dmz;
+    /* Dipole */
+    double charge, *dipole, ux,uy,uz;
+    double mi,mj,mk;
+    /* Loop indeces */
+    int i, ii, jj, kk, nx, ny, nz, iatom;
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    /* sanity check
+    double debye;
+    double mux,muy,muz;
+    double mir,mjr,mkr;
+     */
+
+    VASSERT(thee != VNULL);
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    alist = pbe->alist;
+    zmagic = Vpbe_getZmagic(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Conversion */
+    f = zmagic/(hx*hy*hzed);
+   
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* Fill in the source term (non-local induced dipoles) */
+    Vnm_print(0, "fillcoNLInducedDipole:  filling in source term.\n");
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+
+        dipole = Vatom_getNLInducedDipole(atom);
+        ux = dipole[0]/hx*f;
+        uy = dipole[1]/hy*f;
+        uz = dipole[2]/hzed*f;
+
+        /*
+        mux = 0.0;
+        muy = 0.0;
+        muz = 0.0;
+         */
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=(xmin-2*hx)) || (apos[0]>=(xmax+2*hx))  || \
+            (apos[1]<=(ymin-2*hy)) || (apos[1]>=(ymax+2*hy))  || \
+            (apos[2]<=(zmin-2*hzed)) || (apos[2]>=(zmax+2*hzed))) {
+            Vnm_print(2, "fillcoNLInducedDipole: Atom #%d at (%4.3f, %4.3f,%4.3f) is off the mesh (ignoring this atom):\n", iatom, apos[0], apos[1], apos[2]);
+            Vnm_print(2, "fillcoNLInducedDipole: xmin = %g, xmax = %g\n", xmin, xmax);
+            Vnm_print(2, "fillcoNLInducedDipole: ymin = %g, ymax = %g\n", ymin, ymax);
+            Vnm_print(2, "fillcoNLInducedDipole: zmin = %g, zmax = %g\n", zmin, zmax);
+            fflush(stderr);
+        } else {
+
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* Figure out which vertices we're next to */
+            ifloat = position[0]/hx;
+            jfloat = position[1]/hy;
+            kfloat = position[2]/hzed;
+
+            ip1   = (int)ceil(ifloat);
+            ip2   = ip1 + 2;
+            im1   = (int)floor(ifloat);
+            im2   = im1 - 2;
+            jp1   = (int)ceil(jfloat);
+            jp2   = jp1 + 2;
+            jm1   = (int)floor(jfloat);
+            jm2   = jm1 - 2;
+            kp1   = (int)ceil(kfloat);
+            kp2   = kp1 + 2;
+            km1   = (int)floor(kfloat);
+            km2   = km1 - 2;
+
+            /* This step shouldn't be necessary, but it saves nasty debugging
+             * later on if something goes wrong */
+            ip2 = VMIN2(ip2,nx-1);
+            ip1 = VMIN2(ip1,nx-1);
+            im1 = VMAX2(im1,0);
+            im2 = VMAX2(im2,0);
+            jp2 = VMIN2(jp2,ny-1);
+            jp1 = VMIN2(jp1,ny-1);
+            jm1 = VMAX2(jm1,0);
+            jm2 = VMAX2(jm2,0);
+            kp2 = VMIN2(kp2,nz-1);
+            kp1 = VMIN2(kp1,nz-1);
+            km1 = VMAX2(km1,0);
+            km2 = VMAX2(km2,0);
+
+            /* Now assign fractions of the non local induced dipole
+               to the nearby verts */
+            for (ii=im2; ii<=ip2; ii++) {
+                mi = VFCHI4(ii,ifloat);
+                mx = bspline4(mi);
+                dmx = dbspline4(mi);
+                for (jj=jm2; jj<=jp2; jj++) {
+                    mj = VFCHI4(jj,jfloat);
+                    my = bspline4(mj);
+                    dmy = dbspline4(mj);
+                    for (kk=km2; kk<=kp2; kk++) {
+                        mk = VFCHI4(kk,kfloat);
+                        mz = bspline4(mk);
+                        dmz = dbspline4(mk);
+                        charge = -dmx*my*mz*ux - mx*dmy*mz*uy - mx*my*dmz*uz;
+                        thee->charge[IJK(ii,jj,kk)] += charge;
+
+                        /*
+                        mir = (mi - 2.5) * hx;
+                        mjr = (mj - 2.5) * hy;
+                        mkr = (mk - 2.5) * hzed;
+                        mux += mir * charge;
+                        muy += mjr * charge;
+                        muz += mkr * charge;
+                         */
+                    }
+                }
+            }
+        } /* endif (on the mesh) */
+
+        /*
+        debye = 4.8033324;
+        mux = mux/f*debye;
+        muy = muy/f*debye;
+        muz = muz/f*debye;
+
+        printf(" Grid v. Actual Non-Local Induced Dipole for Site %i\n",iatom);
+        printf(" G: %10.6f %10.6f %10.6f\n",mux,muy,muz);
+        printf(" A: %10.6f %10.6f %10.6f\n\n",
+                 (ux * hx / f) * debye,
+                 (uy * hy / f) * debye,
+                 (uz * hzed /f) * debye); */
+
+    } /* endfor (each atom) */
+}
+
+VPUBLIC double Vpmg_qfPermanentMultipoleEnergy(Vpmg *thee, int atomID) {
+
+    double *u; 
+    Vatom *atom;
+    /* Grid variables */
+    int nx, ny, nz;
+    double xmax, xmin, ymax, ymin, zmax, zmin; 
+    double hx, hy, hzed, ifloat, jfloat, kfloat; 
+    double mi, mj, mk;
+    double *position; 
+    /* B-spline weights */ 
+    double mx, my, mz, dmx, dmy, dmz, d2mx, d2my, d2mz;
+    /* Loop indeces */
+    int ip1,ip2,im1,im2,jp1,jp2,jm1,jm2,kp1,kp2,km1,km2;
+    int i,j,ii,jj,kk;
+    /* Potential, field, field gradient and multipole components */
+    double pot, rfe[3], rfde[3][3], energy;
+    double f, charge, *dipole, *quad;
+    double qxx, qyx, qyy, qzx, qzy, qzz;
+    
+    
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xmax = thee->xf[nx-1];
+    ymax = thee->yf[ny-1];
+    zmax = thee->zf[nz-1];
+    xmin = thee->xf[0];
+    ymin = thee->yf[0];
+    zmin = thee->zf[0];
+
+    u = thee->u;
+
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+
+    /* Currently all atoms must be in the same partition. */
+
+    VASSERT(atom->partID != 0);   
+
+    /* Convert the atom position to grid coordinates */
+
+    position = Vatom_getPosition(atom);
+    ifloat = (position[0] - xmin)/hx;
+    jfloat = (position[1] - ymin)/hy;
+    kfloat = (position[2] - zmin)/hzed;
+    ip1 = (int)ceil(ifloat);
+    ip2 = ip1 + 2;
+    im1 = (int)floor(ifloat);
+    im2 = im1 - 2;
+    jp1 = (int)ceil(jfloat);
+    jp2 = jp1 + 2;
+    jm1 = (int)floor(jfloat);
+    jm2 = jm1 - 2;
+    kp1 = (int)ceil(kfloat);
+    kp2 = kp1 + 2;
+    km1 = (int)floor(kfloat);
+    km2 = km1 - 2;
+
+    /* This step shouldn't be necessary, but it saves nasty debugging
+     * later on if something goes wrong */
+    ip2 = VMIN2(ip2,nx-1);
+    ip1 = VMIN2(ip1,nx-1);
+    im1 = VMAX2(im1,0);
+    im2 = VMAX2(im2,0);
+    jp2 = VMIN2(jp2,ny-1);
+    jp1 = VMIN2(jp1,ny-1);
+    jm1 = VMAX2(jm1,0);
+    jm2 = VMAX2(jm2,0);
+    kp2 = VMIN2(kp2,nz-1);
+    kp1 = VMIN2(kp1,nz-1);
+    km1 = VMAX2(km1,0);
+    km2 = VMAX2(km2,0);
+
+    /* Initialize observables to zero */
+    energy = 0.0;
+    pot = 0.0;
+    for (i=0;i<3;i++){
+       rfe[i] = 0.0;
+       for (j=0;j<3;j++){
+         rfde[i][j] = 0.0;
+       }
+    }
+
+    for (ii=im2; ii<=ip2; ii++) {
+      mi = VFCHI4(ii,ifloat);
+      mx = bspline4(mi);
+      dmx = dbspline4(mi);
+      d2mx = d2bspline4(mi);
+      for (jj=jm2; jj<=jp2; jj++) {
+        mj = VFCHI4(jj,jfloat);
+        my = bspline4(mj);
+        dmy = dbspline4(mj);
+        d2my = d2bspline4(mj);
+        for (kk=km2; kk<=kp2; kk++) { 
+          mk = VFCHI4(kk,kfloat); 
+          mz = bspline4(mk);
+          dmz = dbspline4(mk);
+          d2mz = d2bspline4(mk);
+          f = u[IJK(ii,jj,kk)];
+          /* potential */
+          pot  += f*mx*my*mz;
+          /* field */ 
+          rfe[0] += f*dmx*my*mz/hx;
+          rfe[1] += f*mx*dmy*mz/hy;
+          rfe[2] += f*mx*my*dmz/hzed;
+          /* field gradient */
+          rfde[0][0] += f*d2mx*my*mz/(hx*hx);
+          rfde[1][0] += f*dmx*dmy*mz/(hy*hx);
+          rfde[1][1] += f*mx*d2my*mz/(hy*hy);
+          rfde[2][0] += f*dmx*my*dmz/(hx*hzed);
+          rfde[2][1] += f*mx*dmy*dmz/(hy*hzed);
+          rfde[2][2] += f*mx*my*d2mz/(hzed*hzed);
+        }
+      }
+    }
+
+    charge = Vatom_getCharge(atom);
+    dipole = Vatom_getDipole(atom);
+    quad = Vatom_getQuadrupole(atom);
+    qxx = quad[0]/3.0;
+    qyx = quad[3]/3.0;
+    qyy = quad[4]/3.0;
+    qzx = quad[6]/3.0;
+    qzy = quad[7]/3.0;
+    qzz = quad[8]/3.0;
+
+    energy =   pot * charge
+             - rfe[0] * dipole[0] 
+             - rfe[1] * dipole[1] 
+             - rfe[2] * dipole[2]
+             +     rfde[0][0]*qxx
+             + 2.0*rfde[1][0]*qyx +     rfde[1][1]*qyy
+             + 2.0*rfde[2][0]*qzx + 2.0*rfde[2][1]*qzy + rfde[2][2]*qzz;
+
+    return energy;
+}
+
+VPUBLIC void Vpmg_fieldSpline4(Vpmg *thee, int atomID, double field[3]) {
+
+    Vatom *atom;
+    double *u, f;
+    /* Grid variables */
+    int nx, ny, nz;
+    double xmax, xmin, ymax, ymin, zmax, zmin; 
+    double hx, hy, hzed, ifloat, jfloat, kfloat;
+    double *apos, position[3];
+    /* B-Spline weights */
+    double mx, my, mz, dmx, dmy, dmz;
+    double mi, mj, mk; 
+    /* Loop indeces */
+    int ip1,ip2,im1,im2,jp1,jp2,jm1,jm2,kp1,kp2,km1,km2;
+    int i,j,ii,jj,kk;
+
+
+    VASSERT (thee != VNULL);
+
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xmax = thee->xf[nx-1];
+    ymax = thee->yf[ny-1];
+    zmax = thee->zf[nz-1];
+    xmin = thee->xf[0];
+    ymin = thee->yf[0];
+    zmin = thee->zf[0];
+
+    u = thee->u;
+
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    
+    /* Currently all atoms must be in the same partition. */
+
+    VASSERT (atom->partID != 0);   
+
+    /* Convert the atom position to grid coordinates */
+
+    apos = Vatom_getPosition(atom);
+    position[0] = apos[0] - xmin;
+    position[1] = apos[1] - ymin;
+    position[2] = apos[2] - zmin;
+    ifloat = position[0]/hx;
+    jfloat = position[1]/hy;
+    kfloat = position[2]/hzed;
+    ip1 = (int)ceil(ifloat);
+    ip2 = ip1 + 2;
+    im1 = (int)floor(ifloat);
+    im2 = im1 - 2;
+    jp1 = (int)ceil(jfloat);
+    jp2 = jp1 + 2;
+    jm1 = (int)floor(jfloat);
+    jm2 = jm1 - 2;
+    kp1 = (int)ceil(kfloat);
+    kp2 = kp1 + 2;
+    km1 = (int)floor(kfloat);
+    km2 = km1 - 2;
+
+    /* This step shouldn't be necessary, but it saves nasty debugging
+     * later on if something goes wrong */
+    ip2 = VMIN2(ip2,nx-1);
+    ip1 = VMIN2(ip1,nx-1);
+    im1 = VMAX2(im1,0);
+    im2 = VMAX2(im2,0);
+    jp2 = VMIN2(jp2,ny-1);
+    jp1 = VMIN2(jp1,ny-1);
+    jm1 = VMAX2(jm1,0);
+    jm2 = VMAX2(jm2,0);
+    kp2 = VMIN2(kp2,nz-1);
+    kp1 = VMIN2(kp1,nz-1);
+    km1 = VMAX2(km1,0);
+    km2 = VMAX2(km2,0);
+
+    for (i=0;i<3;i++){
+       field[i] = 0.0;
+    }
+
+    for (ii=im2; ii<=ip2; ii++) {
+      mi = VFCHI4(ii,ifloat);
+      mx = bspline4(mi);
+      dmx = dbspline4(mi);
+      for (jj=jm2; jj<=jp2; jj++) {
+        mj = VFCHI4(jj,jfloat);
+        my = bspline4(mj);
+        dmy = dbspline4(mj);
+        for (kk=km2; kk<=kp2; kk++) { 
+          mk = VFCHI4(kk,kfloat); 
+          mz = bspline4(mk);
+          dmz = dbspline4(mk);
+          f = u[IJK(ii,jj,kk)];
+
+          field[0] += f*dmx*my*mz/hx;
+          field[1] += f*mx*dmy*mz/hy;
+          field[2] += f*mx*my*dmz/hzed;
+        }
+      }
+    }
+}
+
+VPUBLIC void Vpmg_qfPermanentMultipoleForce(Vpmg *thee, int atomID,
+                                           double force[3], double torque[3]) {
+
+    Vatom *atom;
+    double f, *u, *apos, position[3];
+
+    /* Grid variables */
+    int nx,ny,nz; 
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
+    double hx, hy, hzed, ifloat, jfloat, kfloat;
+
+    /* B-spline weights */
+    double mx, my, mz, dmx, dmy, dmz, d2mx, d2my, d2mz, d3mx, d3my, d3mz;
+    double mi, mj, mk;
+
+    /* Loop indeces */
+    int i, j, k, ii, jj, kk;
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    /* Potential, field, field gradient and 2nd field gradient */
+    double pot, e[3], de[3][3], d2e[3][3][3];
+
+    /* Permanent multipole components */
+    double *dipole, *quad;
+    double c, ux, uy, uz, qxx, qxy, qxz, qyx, qyy, qyz, qzx, qzy, qzz;
+
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+
+    /* Currently all atoms must be in the same partition. */
+
+    VASSERT(atom->partID != 0);   
+
+    apos = Vatom_getPosition(atom);
+
+    c = Vatom_getCharge(atom);
+    dipole = Vatom_getDipole(atom);
+    ux = dipole[0];
+    uy = dipole[1];
+    uz = dipole[2];
+    quad = Vatom_getQuadrupole(atom);
+    qxx = quad[0]/3.0;
+    qxy = quad[1]/3.0;
+    qxz = quad[2]/3.0;
+    qyx = quad[3]/3.0;
+    qyy = quad[4]/3.0;
+    qyz = quad[5]/3.0;
+    qzx = quad[6]/3.0;
+    qzy = quad[7]/3.0;
+    qzz = quad[8]/3.0;
+
+    /* Initialize observables */
+    pot = 0.0;
+    for (i=0;i<3;i++){
+       e[i] = 0.0;
+       for (j=0;j<3;j++){
+          de[i][j] = 0.0;
+          for (k=0;k<3;k++){
+             d2e[i][j][k] = 0.0;
+          }
+       }
+    }
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = thee->u;
+    
+    /* Make sure we're on the grid */
+    if ((apos[0]<=(xmin+2*hx))   || (apos[0]>=(xmax-2*hx)) \
+     || (apos[1]<=(ymin+2*hy))   || (apos[1]>=(ymax-2*hy)) \
+     || (apos[2]<=(zmin+2*hzed)) || (apos[2]>=(zmax-2*hzed))) {
+        Vnm_print(2, "qfPermanentMultipoleForce:  Atom off the mesh (ignoring) %6.3f %6.3f %6.3f\n", apos[0], apos[1], apos[2]);
+        fflush(stderr);
+    } else {
+    
+        /* Convert the atom position to grid coordinates */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+        ifloat = position[0]/hx;
+        jfloat = position[1]/hy;
+        kfloat = position[2]/hzed;
+        ip1 = (int)ceil(ifloat);
+        ip2 = ip1 + 2;
+        im1 = (int)floor(ifloat);
+        im2 = im1 - 2;
+        jp1 = (int)ceil(jfloat);
+        jp2 = jp1 + 2;
+        jm1 = (int)floor(jfloat);
+        jm2 = jm1 - 2;
+        kp1 = (int)ceil(kfloat);
+        kp2 = kp1 + 2;
+        km1 = (int)floor(kfloat);
+        km2 = km1 - 2;
+
+        /* This step shouldn't be necessary, but it saves nasty debugging
+         * later on if something goes wrong */
+        ip2 = VMIN2(ip2,nx-1);
+        ip1 = VMIN2(ip1,nx-1);
+        im1 = VMAX2(im1,0);
+        im2 = VMAX2(im2,0);
+        jp2 = VMIN2(jp2,ny-1);
+        jp1 = VMIN2(jp1,ny-1);
+        jm1 = VMAX2(jm1,0);
+        jm2 = VMAX2(jm2,0);
+        kp2 = VMIN2(kp2,nz-1);
+        kp1 = VMIN2(kp1,nz-1);
+        km1 = VMAX2(km1,0);
+        km2 = VMAX2(km2,0);
+
+        for (ii=im2; ii<=ip2; ii++) {
+            mi = VFCHI4(ii,ifloat);
+            mx = bspline4(mi);
+            dmx = dbspline4(mi);
+            d2mx = d2bspline4(mi);
+            d3mx = d3bspline4(mi);
+            for (jj=jm2; jj<=jp2; jj++) {
+                mj = VFCHI4(jj,jfloat);
+                my = bspline4(mj);
+                dmy = dbspline4(mj);
+                d2my = d2bspline4(mj);
+                d3my = d3bspline4(mj);
+                for (kk=km2; kk<=kp2; kk++) {
+                    mk = VFCHI4(kk,kfloat);
+                    mz = bspline4(mk);
+                    dmz = dbspline4(mk);
+                    d2mz = d2bspline4(mk);
+                    d3mz = d3bspline4(mk);
+                    f = u[IJK(ii,jj,kk)];
+                    /* Potential */
+                    pot  += f*mx*my*mz;
+                    /* Field */
+                    e[0] += f*dmx*my*mz/hx;
+                    e[1] += f*mx*dmy*mz/hy;
+                    e[2] += f*mx*my*dmz/hzed;
+                    /* Field gradient */
+                    de[0][0] += f*d2mx*my*mz/(hx*hx);
+                    de[1][0] += f*dmx*dmy*mz/(hy*hx);
+                    de[1][1] += f*mx*d2my*mz/(hy*hy);
+                    de[2][0] += f*dmx*my*dmz/(hx*hzed);
+                    de[2][1] += f*mx*dmy*dmz/(hy*hzed);
+                    de[2][2] += f*mx*my*d2mz/(hzed*hzed);
+                    /* 2nd Field Gradient
+                       VxVxVa */
+                    d2e[0][0][0] += f*d3mx*my*mz /(hx*hx*hx);
+                    d2e[0][0][1] += f*d2mx*dmy*mz/(hx*hy*hx);
+                    d2e[0][0][2] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    /* VyVxVa */
+                    d2e[1][0][0] += f*d2mx*dmy*mz/(hx*hx*hy);
+                    d2e[1][0][1] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][0][2] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    /* VyVyVa */
+                    d2e[1][1][0] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][1][1] += f*mx*d3my*mz /(hy*hy*hy);
+                    d2e[1][1][2] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    /* VzVxVa */
+                    d2e[2][0][0] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    d2e[2][0][1] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][0][2] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    /* VzVyVa */
+                    d2e[2][1][0] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][1][1] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    d2e[2][1][2] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    /* VzVzVa */
+                    d2e[2][2][0] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    d2e[2][2][1] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    d2e[2][2][2] += f*mx*my*d3mz /(hzed*hzed*hzed);
+                }
+            }
+        }
+    }
+
+    /* Monopole Force */
+    force[0] = e[0]*c;
+    force[1] = e[1]*c;
+    force[2] = e[2]*c;
+
+    /* Dipole Force */
+    force[0] -= de[0][0]*ux+de[1][0]*uy+de[2][0]*uz;   
+    force[1] -= de[1][0]*ux+de[1][1]*uy+de[2][1]*uz;   
+    force[2] -= de[2][0]*ux+de[2][1]*uy+de[2][2]*uz;   
+
+    /* Quadrupole Force */
+    force[0] += d2e[0][0][0]*qxx
+             +  d2e[1][0][0]*qyx*2.0+d2e[1][1][0]*qyy
+             +  d2e[2][0][0]*qzx*2.0+d2e[2][1][0]*qzy*2.0+d2e[2][2][0]*qzz;
+    force[1] += d2e[0][0][1]*qxx
+             +  d2e[1][0][1]*qyx*2.0+d2e[1][1][1]*qyy
+             +  d2e[2][0][1]*qzx*2.0+d2e[2][1][1]*qzy*2.0+d2e[2][2][1]*qzz;
+    force[2] += d2e[0][0][2]*qxx
+             +  d2e[1][0][2]*qyx*2.0+d2e[1][1][2]*qyy
+             +  d2e[2][0][2]*qzx*2.0+d2e[2][1][2]*qzy*2.0+d2e[2][2][2]*qzz;
+
+    /* Dipole Torque */
+    torque[0] = uy * e[2] - uz * e[1];
+    torque[1] = uz * e[0] - ux * e[2];
+    torque[2] = ux * e[1] - uy * e[0];
+    /* Quadrupole Torque */
+    de[0][1] = de[1][0];
+    de[0][2] = de[2][0];
+    de[1][2] = de[2][1];
+    torque[0] -= 2.0*(qyx*de[0][2] + qyy*de[1][2] + qyz*de[2][2]
+                    - qzx*de[0][1] - qzy*de[1][1] - qzz*de[2][1]);
+    torque[1] -= 2.0*(qzx*de[0][0] + qzy*de[1][0] + qzz*de[2][0]
+                    - qxx*de[0][2] - qxy*de[1][2] - qxz*de[2][2]);
+    torque[2] -= 2.0*(qxx*de[0][1] + qxy*de[1][1] + qxz*de[2][1]
+                    - qyx*de[0][0] - qyy*de[1][0] - qyz*de[2][0]);
+    
+
+    /* printf(" qPhi Force %f %f %f\n", force[0], force[1], force[2]);
+       printf(" qPhi Torque %f %f %f\n", torque[0], torque[1], torque[2]); */
+}
+
+VPUBLIC void Vpmg_ibPermanentMultipoleForce(Vpmg *thee, int atomID, 
+                                            double force[3]) {
+
+    Valist *alist;
+    Vacc *acc;
+    Vpbe *pbe;
+    Vatom *atom;
+
+    /* Grid variables */
+    double *apos, position[3], arad, irad, zkappa2, hx, hy, hzed;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2;
+    double rtot, dx, dx2, dy, dy2, dz, dz2, gpos[3], tgrad[3], fmag;
+    double izmagic;
+    int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+   
+    VASSERT(thee != VNULL);
+
+    /* Nonlinear PBE is not implemented for AMOEBA */
+    VASSERT(!thee->pmgp->nonlin); 
+    
+    acc = thee->pbe->acc;
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+
+    /* Currently all atoms must be in the same partition. */
+
+    VASSERT(atom->partID != 0);   
+    apos = Vatom_getPosition(atom);
+    arad = Vatom_getRadius(atom);
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    alist = pbe->alist;
+    irad = Vpbe_getMaxIonRadius(pbe);
+    zkappa2 = Vpbe_getZkappa2(pbe);
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+
+    /* Should be a check for this further up. */
+    VASSERT (zkappa2 > VPMGSMALL); 
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+        Vnm_print(2, "ibPermanentMultipoleForce:  Atom %d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, position[0], position[1], position[2]);
+        Vnm_print(2, "ibPermanentMultipoleForce:  xmin = %g, xmax = %g\n", xmin, xmax);
+        Vnm_print(2, "ibPermanentMultipoleForce:  ymin = %g, ymax = %g\n", ymin, ymax);
+        Vnm_print(2, "ibPermanentMultipoleForce:  zmin = %g, zmax = %g\n", zmin, zmax);
+        fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (irad + arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot + 0.5*hx;
+        imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
+        imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+        for (i=imin; i<=imax; i++) { 
+            dx2 = VSQR(position[0] - hx*i);
+            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+            else dy = 0.5*hy;
+            jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
+            jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
+            for (j=jmin; j<=jmax; j++) { 
+                dy2 = VSQR(position[1] - hy*j);
+                if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
+                else dz = 0.5*hzed;
+                kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
+                kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
+                for (k=kmin; k<=kmax; k++) {
+                    dz2 = VSQR(k*hzed - position[2]);
+                    /* See if grid point is inside ivdw radius and set ccf
+                     * accordingly (do spline assignment here) */
+                    if ((dz2 + dy2 + dx2) <= rtot2) {
+                        gpos[0] = i*hx + xmin;
+                        gpos[1] = j*hy + ymin;
+                        gpos[2] = k*hzed + zmin;
+                        Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, irad, atom, tgrad);
+                        fmag = VSQR(thee->u[IJK(i,j,k)]);
+                        force[0] += (zkappa2*fmag*tgrad[0]);
+                        force[1] += (zkappa2*fmag*tgrad[1]);
+                        force[2] += (zkappa2*fmag*tgrad[2]);
+                    }
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+    } 
+
+    force[0] = force[0] * 0.5 * hx * hy * hzed * izmagic;
+    force[1] = force[1] * 0.5 * hx * hy * hzed * izmagic;
+    force[2] = force[2] * 0.5 * hx * hy * hzed * izmagic;
+
+}
+
+VPUBLIC void Vpmg_dbPermanentMultipoleForce(Vpmg *thee, int atomID, 
+                                            double force[3]) {
+
+    Vacc *acc;
+    Vpbe *pbe;
+    Vatom *atom;
+
+    double *apos, position[3], arad, hx, hy, hzed, izmagic, deps, depsi;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, kT;
+    double *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
+    double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
+    double dHzijkm1[3];
+    int i, j, k, l, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+
+    VASSERT(thee != VNULL);
+    
+    acc = thee->pbe->acc;
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+
+    /* Currently all atoms must be in the same partition. */
+
+    VASSERT(atom->partID != 0);  
+    arad = Vatom_getRadius(atom);
+
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    epsp = Vpbe_getSoluteDiel(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    kT = Vpbe_getTemperature(pbe)*(1e-3)*Vunit_Na*Vunit_kb;
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+
+
+    deps = (epsw - epsp);
+    depsi = 1.0/deps;
+
+    VASSERT(VABS(deps) > VPMGSMALL);
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = thee->u;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+        Vnm_print(2, "dbPermanentMultipoleForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "dbPermanentMultipoleForce:  xmin = %g, xmax = %g\n", xmin, xmax);
+        Vnm_print(2, "dbPermanentMultipoleForce:  ymin = %g, ymax = %g\n", ymin, ymax);
+        Vnm_print(2, "dbPermanentMultipoleForce:  zmin = %g, zmax = %g\n", zmin, zmax);
+        fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot/hx;
+        imin = (int)floor((position[0]-rtot)/hx);
+        if (imin < 1) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        imax = (int)ceil((position[0]+rtot)/hx);
+        if (imax > (nx-2)) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        jmin = (int)floor((position[1]-rtot)/hy);
+        if (jmin < 1) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        jmax = (int)ceil((position[1]+rtot)/hy);
+        if (jmax > (ny-2)) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        kmin = (int)floor((position[2]-rtot)/hzed);
+        if (kmin < 1) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        kmax = (int)ceil((position[2]+rtot)/hzed);
+        if (kmax > (nz-2)) {
+            Vnm_print(2, "dbPermanentMultipoleForce:  Atom off grid!\n"); 
+            return;
+        }
+        for (i=imin; i<=imax; i++) {
+            for (j=jmin; j<=jmax; j++) {
+                for (k=kmin; k<=kmax; k++) {
+                    /* i,j,k */
+                    gpos[0] = (i+0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHxijk);
+                    for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j+0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHyijk);
+                    for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k+0.5)*hzed + zmin;
+                    Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHzijk);
+                    for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
+                    /* i-1,j,k */
+                    gpos[0] = (i-0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHxim1jk);
+                    for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
+                    /* i,j-1,k */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j-0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHyijm1k);
+                    for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
+                    /* i,j,k-1 */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k-0.5)*hzed + zmin;
+                    Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHzijkm1);
+                    for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
+                    dbFmag = u[IJK(i,j,k)];
+                    tgrad[0] = 
+                       (dHxijk[0]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[0]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[0]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[0]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[0]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[0]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[1] = 
+                       (dHxijk[1]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[1]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[1]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[1]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[1]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[1]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[2] = 
+                       (dHxijk[2]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[2]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[2]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[2]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[2]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[2]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                     force[0] += (dbFmag*tgrad[0]);
+                     force[1] += (dbFmag*tgrad[1]);
+                     force[2] += (dbFmag*tgrad[2]);
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+        force[0] = -force[0]*hx*hy*hzed*deps*0.5*izmagic;
+        force[1] = -force[1]*hx*hy*hzed*deps*0.5*izmagic;
+        force[2] = -force[2]*hx*hy*hzed*deps*0.5*izmagic;
+    }
+}
+
+VPUBLIC void Vpmg_qfDirectPolForce(Vpmg *thee, Vgrid* perm, Vgrid *induced,
+                                   int atomID, double force[3], double torque[3]) {
+
+    Vatom *atom;
+    Vpbe *pbe;
+    double f, fp, *u, *up, *apos, position[3];
+
+    /* Grid variables */
+    int nx,ny,nz;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
+    double hx, hy, hzed, ifloat, jfloat, kfloat;
+
+    /* B-spline weights */
+    double mx, my, mz, dmx, dmy, dmz, d2mx, d2my, d2mz, d3mx, d3my, d3mz;
+    double mi, mj, mk;
+
+    /* Loop indeces */
+    int i, j, k, ii, jj, kk;
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+
+    /* Permanent potential, field, field gradient and 2nd field gradient */
+    double pot, e[3], de[3][3], d2e[3][3][3];
+    /* Induced dipole field */
+    double dep[3][3];
+
+    /* Permanent multipole components */
+    double *dipole, *quad;
+    double c, ux, uy, uz, qxx, qxy, qxz, qyx, qyy, qyz, qzx, qzy, qzz;
+    double uix, uiy, uiz;
+
+    VASSERT(thee != VNULL);  
+    VASSERT(induced != VNULL); /* the potential due to permanent multipoles.*/
+    VASSERT(induced != VNULL); /* the potential due to local induced dipoles.*/
+    VASSERT(thee->pbe != VNULL);
+    VASSERT(thee->pbe->alist != VNULL);
+    
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT(atom->partID != 0); /* all atoms must be in the same partition.*/
+    apos = Vatom_getPosition(atom);
+
+    c = Vatom_getCharge(atom);
+    dipole = Vatom_getDipole(atom);
+    ux = dipole[0];
+    uy = dipole[1];
+    uz = dipole[2];
+    quad = Vatom_getQuadrupole(atom);
+    qxx = quad[0]/3.0;
+    qxy = quad[1]/3.0;
+    qxz = quad[2]/3.0;
+    qyx = quad[3]/3.0;
+    qyy = quad[4]/3.0;
+    qyz = quad[5]/3.0;
+    qzx = quad[6]/3.0;
+    qzy = quad[7]/3.0;
+    qzz = quad[8]/3.0;
+
+    dipole = Vatom_getInducedDipole(atom);
+    uix = dipole[0];
+    uiy = dipole[1];
+    uiz = dipole[2];
+
+    /* Reset Field Gradients */
+    pot = 0.0;
+    for (i=0;i<3;i++){
+       e[i] = 0.0;
+       for (j=0;j<3;j++){
+          de[i][j] = 0.0;
+          dep[i][j] = 0.0;
+          for (k=0;k<3;k++){
+             d2e[i][j][k] = 0.0;
+          }
+       }
+    }
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = induced->data;
+    up = perm->data;
+    
+    /* Make sure we're on the grid */
+    if ((apos[0]<=(xmin+2*hx))   || (apos[0]>=(xmax-2*hx)) \
+     || (apos[1]<=(ymin+2*hy))   || (apos[1]>=(ymax-2*hy)) \
+     || (apos[2]<=(zmin+2*hzed)) || (apos[2]>=(zmax-2*hzed))) {
+        Vnm_print(2, "qfDirectPolForce:  Atom off the mesh (ignoring) %6.3f %6.3f %6.3f\n", apos[0], apos[1], apos[2]);
+        fflush(stderr);
+
+    } else {
+    
+        /* Convert the atom position to grid coordinates */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+        ifloat = position[0]/hx;
+        jfloat = position[1]/hy;
+        kfloat = position[2]/hzed;
+        ip1 = (int)ceil(ifloat);
+        ip2 = ip1 + 2;
+        im1 = (int)floor(ifloat);
+        im2 = im1 - 2;
+        jp1 = (int)ceil(jfloat);
+        jp2 = jp1 + 2;
+        jm1 = (int)floor(jfloat);
+        jm2 = jm1 - 2;
+        kp1 = (int)ceil(kfloat);
+        kp2 = kp1 + 2;
+        km1 = (int)floor(kfloat);
+        km2 = km1 - 2;
+
+        /* This step shouldn't be necessary, but it saves nasty debugging
+         * later on if something goes wrong */
+        ip2 = VMIN2(ip2,nx-1);
+        ip1 = VMIN2(ip1,nx-1);
+        im1 = VMAX2(im1,0);
+        im2 = VMAX2(im2,0);
+        jp2 = VMIN2(jp2,ny-1);
+        jp1 = VMIN2(jp1,ny-1);
+        jm1 = VMAX2(jm1,0);
+        jm2 = VMAX2(jm2,0);
+        kp2 = VMIN2(kp2,nz-1);
+        kp1 = VMIN2(kp1,nz-1);
+        km1 = VMAX2(km1,0);
+        km2 = VMAX2(km2,0);
+
+        for (ii=im2; ii<=ip2; ii++) {
+            mi = VFCHI4(ii,ifloat);
+            mx = bspline4(mi);
+            dmx = dbspline4(mi);
+            d2mx = d2bspline4(mi);
+            d3mx = d3bspline4(mi);
+            for (jj=jm2; jj<=jp2; jj++) {
+                mj = VFCHI4(jj,jfloat);
+                my = bspline4(mj);
+                dmy = dbspline4(mj);
+                d2my = d2bspline4(mj);
+                d3my = d3bspline4(mj);
+                for (kk=km2; kk<=kp2; kk++) {
+                    mk = VFCHI4(kk,kfloat);
+                    mz = bspline4(mk);
+                    dmz = dbspline4(mk);
+                    d2mz = d2bspline4(mk);
+                    d3mz = d3bspline4(mk);
+                    f = u[IJK(ii,jj,kk)];
+                    fp = up[IJK(ii,jj,kk)];
+                    /* The potential */
+                    pot  += f*mx*my*mz;
+                    /* The field */
+                    e[0] += f*dmx*my*mz/hx;
+                    e[1] += f*mx*dmy*mz/hy;
+                    e[2] += f*mx*my*dmz/hzed;
+                    /* The gradient of the field */
+                    de[0][0] += f*d2mx*my*mz/(hx*hx);
+                    de[1][0] += f*dmx*dmy*mz/(hy*hx);
+                    de[1][1] += f*mx*d2my*mz/(hy*hy);
+                    de[2][0] += f*dmx*my*dmz/(hx*hzed);
+                    de[2][1] += f*mx*dmy*dmz/(hy*hzed);
+                    de[2][2] += f*mx*my*d2mz/(hzed*hzed);
+                    /* The gradient of the (permanent) field */
+                    dep[0][0] += fp*d2mx*my*mz/(hx*hx);
+                    dep[1][0] += fp*dmx*dmy*mz/(hy*hx);
+                    dep[1][1] += fp*mx*d2my*mz/(hy*hy);
+                    dep[2][0] += fp*dmx*my*dmz/(hx*hzed);
+                    dep[2][1] += fp*mx*dmy*dmz/(hy*hzed);
+                    dep[2][2] += fp*mx*my*d2mz/(hzed*hzed);
+                    /* The 2nd gradient of the field
+                       VxVxVa */
+                    d2e[0][0][0] += f*d3mx*my*mz /(hx*hx*hx);
+                    d2e[0][0][1] += f*d2mx*dmy*mz/(hx*hy*hx);
+                    d2e[0][0][2] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    /* VyVxVa */
+                    d2e[1][0][0] += f*d2mx*dmy*mz/(hx*hx*hy);
+                    d2e[1][0][1] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][0][2] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    /* VyVyVa */
+                    d2e[1][1][0] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][1][1] += f*mx*d3my*mz /(hy*hy*hy);
+                    d2e[1][1][2] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    /* VzVxVa */
+                    d2e[2][0][0] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    d2e[2][0][1] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][0][2] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    /* VzVyVa */
+                    d2e[2][1][0] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][1][1] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    d2e[2][1][2] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    /* VzVzVa */
+                    d2e[2][2][0] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    d2e[2][2][1] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    d2e[2][2][2] += f*mx*my*d3mz /(hzed*hzed*hzed);
+                }
+            }
+        }
+    }
+
+    /* force on permanent multipole due to induced reaction field */
+
+    /* Monopole Force */
+    force[0] = e[0]*c;
+    force[1] = e[1]*c;
+    force[2] = e[2]*c;
+
+    /* Dipole Force */
+    force[0] -= de[0][0]*ux+de[1][0]*uy+de[2][0]*uz;   
+    force[1] -= de[1][0]*ux+de[1][1]*uy+de[2][1]*uz;   
+    force[2] -= de[2][0]*ux+de[2][1]*uy+de[2][2]*uz;   
+
+    /* Quadrupole Force */
+    force[0] += d2e[0][0][0]*qxx
+             +  d2e[1][0][0]*qyx*2.0+d2e[1][1][0]*qyy
+             +  d2e[2][0][0]*qzx*2.0+d2e[2][1][0]*qzy*2.0+d2e[2][2][0]*qzz;
+    force[1] += d2e[0][0][1]*qxx
+             +  d2e[1][0][1]*qyx*2.0+d2e[1][1][1]*qyy
+             +  d2e[2][0][1]*qzx*2.0+d2e[2][1][1]*qzy*2.0+d2e[2][2][1]*qzz;
+    force[2] += d2e[0][0][2]*qxx
+             +  d2e[1][0][2]*qyx*2.0+d2e[1][1][2]*qyy
+             +  d2e[2][0][2]*qzx*2.0+d2e[2][1][2]*qzy*2.0+d2e[2][2][2]*qzz;
+
+    /* torque on permanent mulitpole due to induced reaction field */
+
+    /* Dipole Torque */
+    torque[0] = uy * e[2] - uz * e[1];
+    torque[1] = uz * e[0] - ux * e[2];
+    torque[2] = ux * e[1] - uy * e[0];
+
+    /* Quadrupole Torque */
+    /* Tx = -2.0*(Sum_a (Qya*dEaz) + Sum_b (Qzb*dEby)) 
+       Ty = -2.0*(Sum_a (Qza*dEax) + Sum_b (Qxb*dEbz)) 
+       Tz = -2.0*(Sum_a (Qxa*dEay) + Sum_b (Qyb*dEbx))  */
+    de[0][1] = de[1][0];
+    de[0][2] = de[2][0];
+    de[1][2] = de[2][1];
+    torque[0] -= 2.0*(qyx*de[0][2] + qyy*de[1][2] + qyz*de[2][2]
+                    - qzx*de[0][1] - qzy*de[1][1] - qzz*de[2][1]);
+    torque[1] -= 2.0*(qzx*de[0][0] + qzy*de[1][0] + qzz*de[2][0]
+                    - qxx*de[0][2] - qxy*de[1][2] - qxz*de[2][2]);
+    torque[2] -= 2.0*(qxx*de[0][1] + qxy*de[1][1] + qxz*de[2][1]
+                    - qyx*de[0][0] - qyy*de[1][0] - qyz*de[2][0]);
+
+    /* force on induced dipole due to permanent reaction field */
+
+    force[0] -= dep[0][0]*uix+dep[1][0]*uiy+dep[2][0]*uiz;
+    force[1] -= dep[1][0]*uix+dep[1][1]*uiy+dep[2][1]*uiz;
+    force[2] -= dep[2][0]*uix+dep[2][1]*uiy+dep[2][2]*uiz;
+
+    force[0] = 0.5 * force[0];
+    force[1] = 0.5 * force[1];
+    force[2] = 0.5 * force[2];
+    torque[0] = 0.5 * torque[0];
+    torque[1] = 0.5 * torque[1];
+    torque[2] = 0.5 * torque[2];
+
+    /* printf(" qPhi Force %f %f %f\n", force[0], force[1], force[2]);
+      printf(" qPhi Torque %f %f %f\n", torque[0], torque[1], torque[2]); */
+}
+
+VPUBLIC void Vpmg_qfNLDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *nlInduced,
+                                     int atomID, double force[3], double torque[3]) {
+
+    Vatom *atom;
+    double *apos, *dipole, *quad, position[3], hx, hy, hzed;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
+    double pot, e[3],de[3][3],dep[3][3],d2e[3][3][3];
+    double mx, my, mz, dmx, dmy, dmz, mi, mj, mk;
+    double d2mx, d2my, d2mz, d3mx, d3my, d3mz;
+    double *u, *up, charge, ifloat, jfloat, kfloat;
+    double f, fp, c, ux, uy, uz, qxx, qxy, qxz, qyx, qyy, qyz, qzx, qzy, qzz;
+    double uix, uiy, uiz;
+    int i,j,k,nx, ny, nz, im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1; 
+    int kp1, kp2, ii, jj, kk;
+
+    VASSERT(thee != VNULL);      
+    VASSERT(perm != VNULL);      /* potential due to permanent multipoles. */
+    VASSERT(nlInduced != VNULL); /* potential due to non-local induced dipoles */ 
+    VASSERT(!thee->pmgp->nonlin); /* Nonlinear PBE is not implemented for AMOEBA */
+
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT(atom->partID != 0);   /* Currently all atoms must be in the same partition. */
+    apos = Vatom_getPosition(atom);
+
+    c = Vatom_getCharge(atom);
+    dipole = Vatom_getDipole(atom);
+    ux = dipole[0];
+    uy = dipole[1];
+    uz = dipole[2];
+    quad = Vatom_getQuadrupole(atom);
+    qxx = quad[0]/3.0;
+    qxy = quad[1]/3.0;
+    qxz = quad[2]/3.0;
+    qyx = quad[3]/3.0;
+    qyy = quad[4]/3.0;
+    qyz = quad[5]/3.0;
+    qzx = quad[6]/3.0;
+    qzy = quad[7]/3.0;
+    qzz = quad[8]/3.0;
+
+    dipole = Vatom_getNLInducedDipole(atom);
+    uix = dipole[0];
+    uiy = dipole[1];
+    uiz = dipole[2];
+
+    /* Reset Field Gradients */
+    pot = 0.0;
+    for (i=0;i<3;i++){
+       e[i] = 0.0;
+       for (j=0;j<3;j++){
+          de[i][j] = 0.0;
+          dep[i][j] = 0.0;
+          for (k=0;k<3;k++){
+             d2e[i][j][k] = 0.0;
+          }
+       }
+    }
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = nlInduced->data;
+    up = perm->data;
+
+    
+    /* Make sure we're on the grid */
+    if ((apos[0]<=(xmin+2*hx))   || (apos[0]>=(xmax-2*hx)) \
+     || (apos[1]<=(ymin+2*hy))   || (apos[1]>=(ymax-2*hy)) \
+     || (apos[2]<=(zmin+2*hzed)) || (apos[2]>=(zmax-2*hzed))) {
+        Vnm_print(2, "qfNLDirectMultipoleForce:  Atom off the mesh (ignoring) %6.3f %6.3f %6.3f\n", apos[0], apos[1], apos[2]);
+    } else {
+    
+        /* Convert the atom position to grid coordinates */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+        ifloat = position[0]/hx;
+        jfloat = position[1]/hy;
+        kfloat = position[2]/hzed;
+        ip1 = (int)ceil(ifloat);
+        ip2 = ip1 + 2;
+        im1 = (int)floor(ifloat);
+        im2 = im1 - 2;
+        jp1 = (int)ceil(jfloat);
+        jp2 = jp1 + 2;
+        jm1 = (int)floor(jfloat);
+        jm2 = jm1 - 2;
+        kp1 = (int)ceil(kfloat);
+        kp2 = kp1 + 2;
+        km1 = (int)floor(kfloat);
+        km2 = km1 - 2;
+
+        /* This step shouldn't be necessary, but it saves nasty debugging
+         * later on if something goes wrong */
+        ip2 = VMIN2(ip2,nx-1);
+        ip1 = VMIN2(ip1,nx-1);
+        im1 = VMAX2(im1,0);
+        im2 = VMAX2(im2,0);
+        jp2 = VMIN2(jp2,ny-1);
+        jp1 = VMIN2(jp1,ny-1);
+        jm1 = VMAX2(jm1,0);
+        jm2 = VMAX2(jm2,0);
+        kp2 = VMIN2(kp2,nz-1);
+        kp1 = VMIN2(kp1,nz-1);
+        km1 = VMAX2(km1,0);
+        km2 = VMAX2(km2,0);
+
+        for (ii=im2; ii<=ip2; ii++) {
+            mi = VFCHI4(ii,ifloat);
+            mx = bspline4(mi);
+            dmx = dbspline4(mi);
+            d2mx = d2bspline4(mi);
+            d3mx = d3bspline4(mi);
+            for (jj=jm2; jj<=jp2; jj++) {
+                mj = VFCHI4(jj,jfloat);
+                my = bspline4(mj);
+                dmy = dbspline4(mj);
+                d2my = d2bspline4(mj);
+                d3my = d3bspline4(mj);
+                for (kk=km2; kk<=kp2; kk++) {
+                    mk = VFCHI4(kk,kfloat);
+                    mz = bspline4(mk);
+                    dmz = dbspline4(mk);
+                    d2mz = d2bspline4(mk);
+                    d3mz = d3bspline4(mk);
+                    f = u[IJK(ii,jj,kk)];
+                    fp = up[IJK(ii,jj,kk)];
+                    /* The potential */
+                    pot  += f*mx*my*mz;
+                    /* The field */
+                    e[0] += f*dmx*my*mz/hx;
+                    e[1] += f*mx*dmy*mz/hy;
+                    e[2] += f*mx*my*dmz/hzed;
+                    /* The gradient of the field */
+                    de[0][0] += f*d2mx*my*mz/(hx*hx);
+                    de[1][0] += f*dmx*dmy*mz/(hy*hx);
+                    de[1][1] += f*mx*d2my*mz/(hy*hy);
+                    de[2][0] += f*dmx*my*dmz/(hx*hzed);
+                    de[2][1] += f*mx*dmy*dmz/(hy*hzed);
+                    de[2][2] += f*mx*my*d2mz/(hzed*hzed);
+                    /* The gradient of the (permanent) field */
+                    dep[0][0] += fp*d2mx*my*mz/(hx*hx);
+                    dep[1][0] += fp*dmx*dmy*mz/(hy*hx);
+                    dep[1][1] += fp*mx*d2my*mz/(hy*hy);
+                    dep[2][0] += fp*dmx*my*dmz/(hx*hzed);
+                    dep[2][1] += fp*mx*dmy*dmz/(hy*hzed);
+                    dep[2][2] += f*mx*my*d2mz/(hzed*hzed);
+                    /* The 2nd gradient of the field */
+                    /* VxVxVa */
+                    d2e[0][0][0] += f*d3mx*my*mz /(hx*hx*hx);
+                    d2e[0][0][1] += f*d2mx*dmy*mz/(hx*hy*hx);
+                    d2e[0][0][2] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    /* VyVxVa */
+                    d2e[1][0][0] += f*d2mx*dmy*mz/(hx*hx*hy);
+                    d2e[1][0][1] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][0][2] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    /* VyVyVa */
+                    d2e[1][1][0] += f*dmx*d2my*mz/(hx*hy*hy);
+                    d2e[1][1][1] += f*mx*d3my*mz /(hy*hy*hy);
+                    d2e[1][1][2] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    /* VzVxVa */
+                    d2e[2][0][0] += f*d2mx*my*dmz/(hx*hx*hzed);
+                    d2e[2][0][1] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][0][2] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    /* VzVyVa */
+                    d2e[2][1][0] += f*dmx*dmy*dmz/(hx*hy*hzed);
+                    d2e[2][1][1] += f*mx*d2my*dmz/(hy*hy*hzed);
+                    d2e[2][1][2] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    /* VzVzVa */
+                    d2e[2][2][0] += f*dmx*my*d2mz/(hx*hzed*hzed);
+                    d2e[2][2][1] += f*mx*dmy*d2mz/(hy*hzed*hzed);
+                    d2e[2][2][2] += f*mx*my*d3mz /(hzed*hzed*hzed);
+                }
+            }
+        }
+    }
+
+    /* force on permanent multipole due to non-local induced reaction field */
+
+    /* Monopole Force */
+    force[0] = e[0]*c;
+    force[1] = e[1]*c;
+    force[2] = e[2]*c;
+
+    /* Dipole Force */
+    force[0] -= de[0][0]*ux+de[1][0]*uy+de[2][0]*uz;   
+    force[1] -= de[1][0]*ux+de[1][1]*uy+de[2][1]*uz;   
+    force[2] -= de[2][0]*ux+de[2][1]*uy+de[2][2]*uz;   
+
+    /* Quadrupole Force */
+    force[0] += d2e[0][0][0]*qxx
+             +  d2e[1][0][0]*qyx*2.0+d2e[1][1][0]*qyy
+             +  d2e[2][0][0]*qzx*2.0+d2e[2][1][0]*qzy*2.0+d2e[2][2][0]*qzz;
+    force[1] += d2e[0][0][1]*qxx
+             +  d2e[1][0][1]*qyx*2.0+d2e[1][1][1]*qyy
+             +  d2e[2][0][1]*qzx*2.0+d2e[2][1][1]*qzy*2.0+d2e[2][2][1]*qzz;
+    force[2] += d2e[0][0][2]*qxx
+             +  d2e[1][0][2]*qyx*2.0+d2e[1][1][2]*qyy
+             +  d2e[2][0][2]*qzx*2.0+d2e[2][1][2]*qzy*2.0+d2e[2][2][2]*qzz;
+
+    /* torque on permanent mulitpole due to non-local induced reaction field */
+
+    /* Dipole Torque */
+    torque[0] = uy * e[2] - uz * e[1];
+    torque[1] = uz * e[0] - ux * e[2];
+    torque[2] = ux * e[1] - uy * e[0];
+
+    /* Quadrupole Torque */
+    /* Tx = -2.0*(Sum_a (Qya*dEaz) + Sum_b (Qzb*dEby)) 
+       Ty = -2.0*(Sum_a (Qza*dEax) + Sum_b (Qxb*dEbz)) 
+       Tz = -2.0*(Sum_a (Qxa*dEay) + Sum_b (Qyb*dEbx))  */
+    de[0][1] = de[1][0];
+    de[0][2] = de[2][0];
+    de[1][2] = de[2][1];
+    torque[0] -= 2.0*(qyx*de[0][2] + qyy*de[1][2] + qyz*de[2][2]
+                    - qzx*de[0][1] - qzy*de[1][1] - qzz*de[2][1]);
+    torque[1] -= 2.0*(qzx*de[0][0] + qzy*de[1][0] + qzz*de[2][0]
+                    - qxx*de[0][2] - qxy*de[1][2] - qxz*de[2][2]);
+    torque[2] -= 2.0*(qxx*de[0][1] + qxy*de[1][1] + qxz*de[2][1]
+                    - qyx*de[0][0] - qyy*de[1][0] - qyz*de[2][0]);
+
+    /* force on non-local induced dipole due to permanent reaction field */
+
+    force[0] -= dep[0][0]*uix+dep[1][0]*uiy+dep[2][0]*uiz;
+    force[1] -= dep[1][0]*uix+dep[1][1]*uiy+dep[2][1]*uiz;
+    force[2] -= dep[2][0]*uix+dep[2][1]*uiy+dep[2][2]*uiz;
+
+    force[0] = 0.5 * force[0];
+    force[1] = 0.5 * force[1];
+    force[2] = 0.5 * force[2];
+    torque[0] = 0.5 * torque[0];
+    torque[1] = 0.5 * torque[1];
+    torque[2] = 0.5 * torque[2];
+
+    /* printf(" qPhi Force %f %f %f\n", force[0], force[1], force[2]);
+       printf(" qPhi Torque %f %f %f\n", torque[0], torque[1], torque[2]); */
+}
+
+VPUBLIC void Vpmg_ibDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced, 
+                                   int atomID, double force[3]) {
+
+    Vatom *atom;
+    Valist *alist;
+    Vacc *acc;
+    Vpbe *pbe;
+
+    double *apos, position[3], arad, irad, zkappa2, hx, hy, hzed;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2;
+    double rtot, dx, dx2, dy, dy2, dz, dz2, gpos[3], tgrad[3], fmag;
+    double izmagic;
+    int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+   
+    VASSERT(thee != VNULL);        
+    VASSERT(perm != VNULL);        /* potential due to permanent multipoles.*/
+    VASSERT(induced != VNULL);     /* potential due to induced dipoles. */
+    VASSERT (!thee->pmgp->nonlin); /* Nonlinear PBE is not implemented for AMOEBA */
+
+    acc = thee->pbe->acc;
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT(atom->partID != 0);   /* Currently all atoms must be in the same partition. */
+    apos = Vatom_getPosition(atom);
+    arad = Vatom_getRadius(atom);
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    alist = pbe->alist;
+    irad = Vpbe_getMaxIonRadius(pbe);
+    zkappa2 = Vpbe_getZkappa2(pbe);
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+    
+    VASSERT (zkappa2 > VPMGSMALL); /* It is ok to run AMOEBA with no ions, but this is checked for higher up in the driver. */
+
+    /* Mesh info */
+    nx = induced->nx;
+    ny = induced->ny;
+    nz = induced->nz;
+    hx = induced->hx;
+    hy = induced->hy;
+    hzed = induced->hzed;
+    xmin = induced->xmin;
+    ymin = induced->ymin;
+    zmin = induced->zmin;
+    xmax = induced->xmax;
+    ymax = induced->ymax;
+    zmax = induced->zmax;
+    xlen = xmax-xmin;
+    ylen = ymax-ymin;
+    zlen = zmax-zmin;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+        Vnm_print(2, "Vpmg_ibForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+            position[0], position[1], position[2]);
+        Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n", xmin, xmax);
+        Vnm_print(2, "Vpmg_ibForce:    ymin = %g, ymax = %g\n", ymin, ymax);
+        Vnm_print(2, "Vpmg_ibForce:    zmin = %g, zmax = %g\n", zmin, zmax);
+        fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (irad + arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot + 0.5*hx;
+        imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
+        imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+        for (i=imin; i<=imax; i++) { 
+            dx2 = VSQR(position[0] - hx*i);
+            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+            else dy = 0.5*hy;
+            jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
+            jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
+            for (j=jmin; j<=jmax; j++) { 
+                dy2 = VSQR(position[1] - hy*j);
+                if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
+                else dz = 0.5*hzed;
+                kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
+                kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
+                for (k=kmin; k<=kmax; k++) {
+                    dz2 = VSQR(k*hzed - position[2]);
+                    /* See if grid point is inside ivdw radius and set ccf
+                     * accordingly (do spline assignment here) */
+                    if ((dz2 + dy2 + dx2) <= rtot2) {
+                        gpos[0] = i*hx + xmin;
+                        gpos[1] = j*hy + ymin;
+                        gpos[2] = k*hzed + zmin;
+                        Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, irad,
+                          atom, tgrad);
+                        fmag = induced->data[IJK(i,j,k)];
+                        fmag *= perm->data[IJK(i,j,k)];
+                        force[0] += (zkappa2*fmag*tgrad[0]);
+                        force[1] += (zkappa2*fmag*tgrad[1]);
+                        force[2] += (zkappa2*fmag*tgrad[2]);
+                    }
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+    } 
+
+    force[0] = force[0] * 0.5 * hx * hy * hzed * izmagic;
+    force[1] = force[1] * 0.5 * hx * hy * hzed * izmagic;
+    force[2] = force[2] * 0.5 * hx * hy * hzed * izmagic;
+
+}
+
+VPUBLIC void Vpmg_ibNLDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *nlInduced,
+                                     int atomID, double force[3]) {
+     Vpmg_ibDirectPolForce(thee, perm, nlInduced, atomID, force);
+}
+
+VPUBLIC void Vpmg_dbDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced, 
+                                   int atomID, double force[3]) {
+
+    Vatom *atom;
+    Vacc *acc;
+    Vpbe *pbe;
+
+    double *apos, position[3], arad, hx, hy, hzed, izmagic, deps, depsi;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, kT;
+    double *u, *up, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
+    double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
+    double dHzijkm1[3];
+    int i, j, k, l, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+
+    VASSERT(thee != VNULL);       
+    VASSERT(perm != VNULL);    /* permanent multipole PMG solution. */
+    VASSERT(induced != VNULL); /* potential due to induced dipoles. */
+
+    acc = thee->pbe->acc;
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT (atom->partID != 0);   /* Currently all atoms must be in the same partition. */
+    apos = Vatom_getPosition(atom);
+    arad = Vatom_getRadius(atom);
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    epsp = Vpbe_getSoluteDiel(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    kT = Vpbe_getTemperature(pbe)*(1e-3)*Vunit_Na*Vunit_kb;
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+
+    deps = (epsw - epsp);
+    depsi = 1.0/deps;
+    VASSERT(VABS(deps) > VPMGSMALL);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    /* If the permanent and induced potentials are flipped the 
+       results are exactly the same. */
+    u = induced->data;
+    up = perm->data;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+         Vnm_print(2, "Vpmg_dbForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+         Vnm_print(2, "Vpmg_dbForce:    xmin = %g, xmax = %g\n", xmin, xmax);
+         Vnm_print(2, "Vpmg_dbForce:    ymin = %g, ymax = %g\n", ymin, ymax); 
+         Vnm_print(2, "Vpmg_dbForce:    zmin = %g, zmax = %g\n", zmin, zmax);
+         fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot/hx;
+        imin = (int)floor((position[0]-rtot)/hx);
+        if (imin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        imax = (int)ceil((position[0]+rtot)/hx);
+        if (imax > (nx-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        jmin = (int)floor((position[1]-rtot)/hy);
+        if (jmin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        jmax = (int)ceil((position[1]+rtot)/hy);
+        if (jmax > (ny-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        kmin = (int)floor((position[2]-rtot)/hzed);
+        if (kmin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        kmax = (int)ceil((position[2]+rtot)/hzed);
+        if (kmax > (nz-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        for (i=imin; i<=imax; i++) {
+            for (j=jmin; j<=jmax; j++) {
+                for (k=kmin; k<=kmax; k++) {
+                    /* i,j,k */
+                    gpos[0] = (i+0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHxijk);
+                    for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j+0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHyijk);
+                    for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k+0.5)*hzed + zmin;
+                    Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHzijk);
+                    for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
+                    /* i-1,j,k */
+                    gpos[0] = (i-0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHxim1jk);
+                    for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
+                    /* i,j-1,k */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j-0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHyijm1k);
+                    for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
+                    /* i,j,k-1 */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k-0.5)*hzed + zmin;
+                    Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHzijkm1);
+                    for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
+
+                    dbFmag = up[IJK(i,j,k)];
+                    tgrad[0] = 
+                       (dHxijk[0]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[0]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[0]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[0]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[0]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[0]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[1] = 
+                       (dHxijk[1]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[1]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[1]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[1]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[1]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[1]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[2] = 
+                       (dHxijk[2]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[2]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[2]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[2]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[2]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[2]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                     force[0] += (dbFmag*tgrad[0]);
+                     force[1] += (dbFmag*tgrad[1]);
+                     force[2] += (dbFmag*tgrad[2]);
+
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+        
+        force[0] = -force[0]*hx*hy*hzed*deps*0.5*izmagic;
+        force[1] = -force[1]*hx*hy*hzed*deps*0.5*izmagic;
+        force[2] = -force[2]*hx*hy*hzed*deps*0.5*izmagic;
+        
+    }
+}
+
+VPUBLIC void Vpmg_dbNLDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *nlInduced, 
+                                     int atomID, double force[3]) {
+     Vpmg_dbDirectPolForce(thee, perm, nlInduced, atomID, force);
+}
+
+VPUBLIC void Vpmg_qfMutualPolForce(Vpmg *thee, Vgrid *induced, 
+                              Vgrid *nlinduced, int atomID, double force[3]) {
+
+    Vatom *atom;
+    double *apos, *dipole, position[3], hx, hy, hzed;
+    double *u, *unl;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
+    double de[3][3], denl[3][3];
+    double mx, my, mz, dmx, dmy, dmz, d2mx, d2my, d2mz, mi, mj, mk;
+    double ifloat, jfloat, kfloat;
+    double f, fnl, uix, uiy, uiz, uixnl, uiynl, uiznl;
+    int i,j,k,nx, ny, nz, im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1; 
+    int kp1, kp2, ii, jj, kk;
+
+    VASSERT(thee != VNULL);   /* PMG object with PBE info. */
+    VASSERT(induced != VNULL); /* potential due to induced dipoles. */
+    VASSERT(nlinduced != VNULL); /* potential due to non-local induced dipoles. */
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT(atom->partID != 0);    /* all atoms must be in the same partition. */
+    apos = Vatom_getPosition(atom);
+    dipole = Vatom_getInducedDipole(atom);
+    uix = dipole[0];
+    uiy = dipole[1];
+    uiz = dipole[2];
+    dipole = Vatom_getNLInducedDipole(atom);
+    uixnl = dipole[0];
+    uiynl = dipole[1];
+    uiznl = dipole[2];
+    u = induced->data; 
+    unl = nlinduced->data; 
+
+    for (i=0;i<3;i++){
+       for (j=0;j<3;j++){
+          de[i][j] = 0.0;
+          denl[i][j] = 0.0;
+       }
+    }
+
+    /* Mesh info */
+    nx = induced->nx;
+    ny = induced->ny;
+    nz = induced->nz;
+    hx = induced->hx;
+    hy = induced->hy;
+    hzed = induced->hzed;
+    xmin = induced->xmin;
+    ymin = induced->ymin;
+    zmin = induced->zmin;
+    xmax = induced->xmax;
+    ymax = induced->ymax;
+    zmax = induced->zmax;
+    xlen = xmax-xmin;
+    ylen = ymax-ymin;
+    zlen = zmax-zmin;
+    
+    /* If we aren't in the current position, then we're done */
+    if (atom->partID == 0) return;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=(xmin+2*hx))   || (apos[0]>=(xmax-2*hx)) \
+     || (apos[1]<=(ymin+2*hy))   || (apos[1]>=(ymax-2*hy)) \
+     || (apos[2]<=(zmin+2*hzed)) || (apos[2]>=(zmax-2*hzed))) {
+        Vnm_print(2, "qfMutualPolForce:  Atom off the mesh (ignoring) %6.3f %6.3f %6.3f\n", apos[0], apos[1], apos[2]);
+        fflush(stderr);
+    } else {
+    
+        /* Convert the atom position to grid coordinates */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+        ifloat = position[0]/hx;
+        jfloat = position[1]/hy;
+        kfloat = position[2]/hzed;
+        ip1 = (int)ceil(ifloat);
+        ip2 = ip1 + 2;
+        im1 = (int)floor(ifloat);
+        im2 = im1 - 2;
+        jp1 = (int)ceil(jfloat);
+        jp2 = jp1 + 2;
+        jm1 = (int)floor(jfloat);
+        jm2 = jm1 - 2;
+        kp1 = (int)ceil(kfloat);
+        kp2 = kp1 + 2;
+        km1 = (int)floor(kfloat);
+        km2 = km1 - 2;
+
+        /* This step shouldn't be necessary, but it saves nasty debugging
+         * later on if something goes wrong */
+        ip2 = VMIN2(ip2,nx-1);
+        ip1 = VMIN2(ip1,nx-1);
+        im1 = VMAX2(im1,0);
+        im2 = VMAX2(im2,0);
+        jp2 = VMIN2(jp2,ny-1);
+        jp1 = VMIN2(jp1,ny-1);
+        jm1 = VMAX2(jm1,0);
+        jm2 = VMAX2(jm2,0);
+        kp2 = VMIN2(kp2,nz-1);
+        kp1 = VMIN2(kp1,nz-1);
+        km1 = VMAX2(km1,0);
+        km2 = VMAX2(km2,0);
+
+        for (ii=im2; ii<=ip2; ii++) {
+            mi = VFCHI4(ii,ifloat);
+            mx = bspline4(mi);
+            dmx = dbspline4(mi);
+            d2mx = d2bspline4(mi);
+            for (jj=jm2; jj<=jp2; jj++) {
+                mj = VFCHI4(jj,jfloat);
+                my = bspline4(mj);
+                dmy = dbspline4(mj);
+                d2my = d2bspline4(mj);
+                for (kk=km2; kk<=kp2; kk++) {
+                    mk = VFCHI4(kk,kfloat);
+                    mz = bspline4(mk);
+                    dmz = dbspline4(mk);
+                    d2mz = d2bspline4(mk);
+                    f = u[IJK(ii,jj,kk)];
+                    fnl = unl[IJK(ii,jj,kk)];
+
+                    /* The gradient of the reaction field
+                       due to induced dipoles */
+                    de[0][0] += f*d2mx*my*mz/(hx*hx);
+                    de[1][0] += f*dmx*dmy*mz/(hy*hx);
+                    de[1][1] += f*mx*d2my*mz/(hy*hy);
+                    de[2][0] += f*dmx*my*dmz/(hx*hzed);
+                    de[2][1] += f*mx*dmy*dmz/(hy*hzed);
+                    de[2][2] += f*mx*my*d2mz/(hzed*hzed);
+
+                    /* The gradient of the reaction field
+                       due to non-local induced dipoles */
+                    denl[0][0] += fnl*d2mx*my*mz/(hx*hx);
+                    denl[1][0] += fnl*dmx*dmy*mz/(hy*hx);
+                    denl[1][1] += fnl*mx*d2my*mz/(hy*hy);
+                    denl[2][0] += fnl*dmx*my*dmz/(hx*hzed);
+                    denl[2][1] += fnl*mx*dmy*dmz/(hy*hzed);
+                    denl[2][2] += fnl*mx*my*d2mz/(hzed*hzed);
+                }
+            }
+        }
+    }
+
+    /* mutual polarization force */
+    force[0] = -(de[0][0]*uixnl + de[1][0]*uiynl + de[2][0]*uiznl);   
+    force[1] = -(de[1][0]*uixnl + de[1][1]*uiynl + de[2][1]*uiznl);   
+    force[2] = -(de[2][0]*uixnl + de[2][1]*uiynl + de[2][2]*uiznl);   
+    force[0] -=  denl[0][0]*uix + denl[1][0]*uiy + denl[2][0]*uiz;   
+    force[1] -=  denl[1][0]*uix + denl[1][1]*uiy + denl[2][1]*uiz;   
+    force[2] -=  denl[2][0]*uix + denl[2][1]*uiy + denl[2][2]*uiz;   
+
+    force[0] = 0.5 * force[0];
+    force[1] = 0.5 * force[1];
+    force[2] = 0.5 * force[2];
+
+}
+
+VPUBLIC void Vpmg_ibMutualPolForce(Vpmg *thee, Vgrid *induced, Vgrid *nlinduced,
+                                   int atomID, double force[3]) {
+
+    Vatom *atom;
+    Valist *alist;
+    Vacc *acc;
+    Vpbe *pbe;
+
+    double *apos, position[3], arad, irad, zkappa2, hx, hy, hzed;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2;
+    double rtot, dx, dx2, dy, dy2, dz, dz2, gpos[3], tgrad[3], fmag;
+    double izmagic;
+    int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+   
+    VASSERT(thee != VNULL);        /* We need a PMG object with PBE info. */
+    VASSERT(induced != VNULL);     /* We need the potential due to induced dipoles. */
+    VASSERT(nlinduced != VNULL);   /* We need the potential due to non-local induced dipoles. */
+    VASSERT (atom->partID != 0);   /* Currently all atoms must be in the same partition. */
+    VASSERT (!thee->pmgp->nonlin); /* Nonlinear PBE is not implemented for AMOEBA */
+   
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    acc = thee->pbe->acc;
+    apos = Vatom_getPosition(atom);
+    arad = Vatom_getRadius(atom);
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* If we aren't in the current position, then we're done */
+    if (atom->partID == 0) return;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    alist = pbe->alist;
+    irad = Vpbe_getMaxIonRadius(pbe);
+    zkappa2 = Vpbe_getZkappa2(pbe);
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+
+    VASSERT (zkappa2 > VPMGSMALL); /* Should be a check for this further up.*/
+    
+    /* Mesh info */
+    nx = induced->nx;
+    ny = induced->ny;
+    nz = induced->nz;
+    hx = induced->hx;
+    hy = induced->hy;
+    hzed = induced->hzed;
+    xmin = induced->xmin;
+    ymin = induced->ymin;
+    zmin = induced->zmin;
+    xmax = induced->xmax;
+    ymax = induced->ymax;
+    zmax = induced->zmax;
+    xlen = xmax-xmin;
+    ylen = ymax-ymin;
+    zlen = zmax-zmin;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+        Vnm_print(2, "Vpmg_ibForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n", xmin, xmax);
+        Vnm_print(2, "Vpmg_ibForce:    ymin = %g, ymax = %g\n", ymin, ymax);
+        Vnm_print(2, "Vpmg_ibForce:    zmin = %g, zmax = %g\n", zmin, zmax);
+        fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (irad + arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot + 0.5*hx;
+        imin = VMAX2(0,(int)ceil((position[0] - dx)/hx));
+        imax = VMIN2(nx-1,(int)floor((position[0] + dx)/hx));
+        for (i=imin; i<=imax; i++) { 
+            dx2 = VSQR(position[0] - hx*i);
+            if (rtot2 > dx2) dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+            else dy = 0.5*hy;
+            jmin = VMAX2(0,(int)ceil((position[1] - dy)/hy));
+            jmax = VMIN2(ny-1,(int)floor((position[1] + dy)/hy));
+            for (j=jmin; j<=jmax; j++) { 
+                dy2 = VSQR(position[1] - hy*j);
+                if (rtot2 > (dx2+dy2)) dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed;
+                else dz = 0.5*hzed;
+                kmin = VMAX2(0,(int)ceil((position[2] - dz)/hzed));
+                kmax = VMIN2(nz-1,(int)floor((position[2] + dz)/hzed));
+                for (k=kmin; k<=kmax; k++) {
+                    dz2 = VSQR(k*hzed - position[2]);
+                    /* See if grid point is inside ivdw radius and set ccf
+                     * accordingly (do spline assignment here) */
+                    if ((dz2 + dy2 + dx2) <= rtot2) {
+                        gpos[0] = i*hx + xmin;
+                        gpos[1] = j*hy + ymin;
+                        gpos[2] = k*hzed + zmin;
+                        Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, irad,
+                          atom, tgrad);
+                        fmag = induced->data[IJK(i,j,k)];
+                        fmag *= nlinduced->data[IJK(i,j,k)];
+                        force[0] += (zkappa2*fmag*tgrad[0]);
+                        force[1] += (zkappa2*fmag*tgrad[1]);
+                        force[2] += (zkappa2*fmag*tgrad[2]);
+                    }
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+    } 
+
+    force[0] = force[0] * 0.5 * hx * hy * hzed * izmagic;
+    force[1] = force[1] * 0.5 * hx * hy * hzed * izmagic;
+    force[2] = force[2] * 0.5 * hx * hy * hzed * izmagic;
+}
+
+VPUBLIC void Vpmg_dbMutualPolForce(Vpmg *thee, Vgrid *induced, 
+                                   Vgrid *nlinduced, int atomID, 
+                                   double force[3]) {
+
+    Vatom *atom;
+    Vacc *acc;
+    Vpbe *pbe;
+
+    double *apos, position[3], arad, hx, hy, hzed, izmagic, deps, depsi;
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, kT;
+    double *u, *unl, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
+    double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
+    double dHzijkm1[3];
+    int i, j, k, l, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+
+    VASSERT(thee != VNULL); /* PMG object with PBE info. */
+    VASSERT(induced != VNULL); /* potential due to induced dipoles.*/
+    VASSERT(nlinduced != VNULL); /* potential due to non-local induced dipoles.*/
+    
+    acc = thee->pbe->acc;
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    VASSERT (atom->partID != 0); /* all atoms must be in the same partition.*/
+    apos = Vatom_getPosition(atom);
+    arad = Vatom_getRadius(atom);
+
+    /* Reset force */
+    force[0] = 0.0;
+    force[1] = 0.0;
+    force[2] = 0.0;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    acc = pbe->acc;
+    epsp = Vpbe_getSoluteDiel(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    kT = Vpbe_getTemperature(pbe)*(1e-3)*Vunit_Na*Vunit_kb;
+    izmagic = 1.0/Vpbe_getZmagic(pbe);
+
+    deps = (epsw - epsp);
+    depsi = 1.0/deps;
+    VASSERT(VABS(deps) > VPMGSMALL);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = induced->data;
+    unl = nlinduced->data;
+
+    /* Make sure we're on the grid */
+    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+        Vnm_print(2, "Vpmg_dbForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "Vpmg_dbForce:    xmin = %g, xmax = %g\n", xmin, xmax);
+        Vnm_print(2, "Vpmg_dbForce:    ymin = %g, ymax = %g\n", ymin, ymax); 
+        Vnm_print(2, "Vpmg_dbForce:    zmin = %g, zmax = %g\n", zmin, zmax);
+        fflush(stderr);
+    } else {
+
+        /* Convert the atom position to grid reference frame */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+
+        /* Integrate over points within this atom's (inflated) radius */
+        rtot = (arad + thee->splineWin);
+        rtot2 = VSQR(rtot);
+        dx = rtot/hx;
+        imin = (int)floor((position[0]-rtot)/hx);
+        if (imin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        imax = (int)ceil((position[0]+rtot)/hx);
+        if (imax > (nx-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        jmin = (int)floor((position[1]-rtot)/hy);
+        if (jmin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        jmax = (int)ceil((position[1]+rtot)/hy);
+        if (jmax > (ny-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        kmin = (int)floor((position[2]-rtot)/hzed);
+        if (kmin < 1) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        kmax = (int)ceil((position[2]+rtot)/hzed);
+        if (kmax > (nz-2)) {
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
+            return;
+        }
+        for (i=imin; i<=imax; i++) {
+            for (j=jmin; j<=jmax; j++) {
+                for (k=kmin; k<=kmax; k++) {
+                    /* i,j,k */
+                    gpos[0] = (i+0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHxijk);
+                    for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j+0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHyijk);
+                    for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k+0.5)*hzed + zmin;
+                    Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+                            atom, dHzijk);
+                    for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
+                    /* i-1,j,k */
+                    gpos[0] = (i-0.5)*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHxim1jk);
+                    for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
+                    /* i,j-1,k */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = (j-0.5)*hy + ymin;
+                    gpos[2] = k*hzed + zmin;
+                    Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHyijm1k);
+                    for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
+                    /* i,j,k-1 */
+                    gpos[0] = i*hx + xmin;
+                    gpos[1] = j*hy + ymin;
+                    gpos[2] = (k-0.5)*hzed + zmin;
+                    Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
+                    Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0.,
+                            atom, dHzijkm1);
+                    for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
+                    dbFmag = unl[IJK(i,j,k)];
+                    tgrad[0] = 
+                       (dHxijk[0]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[0]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[0]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[0]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[0]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[0]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[1] = 
+                       (dHxijk[1]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[1]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[1]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[1]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[1]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[1]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                    tgrad[2] = 
+                       (dHxijk[2]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+                     +  dHxim1jk[2]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+                     + (dHyijk[2]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+                     +  dHyijm1k[2]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+                     + (dHzijk[2]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+                     + dHzijkm1[2]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+                     force[0] += (dbFmag*tgrad[0]);
+                     force[1] += (dbFmag*tgrad[1]);
+                     force[2] += (dbFmag*tgrad[2]);
+                } /* k loop */
+            } /* j loop */
+        } /* i loop */
+        
+        force[0] = -force[0]*hx*hy*hzed*deps*0.5*izmagic;
+        force[1] = -force[1]*hx*hy*hzed*deps*0.5*izmagic;
+        force[2] = -force[2]*hx*hy*hzed*deps*0.5*izmagic;
+    }
+}
+
+#endif /* if defined(WITH_TINKER) */
+
+VPRIVATE void fillcoCoefSpline4(Vpmg *thee) {
+
+    Valist *alist;
+    Vpbe *pbe;
+    Vatom *atom;
+    double xmin, xmax, ymin, ymax, zmin, zmax, ionmask, ionstr, dist2;
+    double xlen, ylen, zlen, position[3], itot, stot, ictot, ictot2, sctot;
+    double irad, dx, dy, dz, epsw, epsp, w2i;
+    double hx, hy, hzed, *apos, arad, sctot2;
+    double dx2, dy2, dz2, stot2, itot2, rtot, rtot2, splineWin;
+    double dist, value, denom, sm, sm2, sm3, sm4, sm5, sm6, sm7;
+    double e, e2, e3, e4, e5, e6, e7;
+    double b, b2, b3, b4, b5, b6, b7;
+    double c0, c1, c2, c3, c4, c5, c6, c7;
+    double ic0, ic1, ic2, ic3, ic4, ic5, ic6, ic7;
+    int i, j, k, nx, ny, nz, iatom;
+    int imin, imax, jmin, jmax, kmin, kmax;
+
+    VASSERT(thee != VNULL);
+    splineWin = thee->splineWin;
+
+    /* Get PBE info */
+    pbe = thee->pbe;
+    alist = pbe->alist;
+    irad = Vpbe_getMaxIonRadius(pbe);
+    ionstr = Vpbe_getBulkIonicStrength(pbe);
+    epsw = Vpbe_getSolventDiel(pbe);
+    epsp = Vpbe_getSoluteDiel(pbe);
+
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+
+    /* Define the total domain size */
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+
+    /* Define the min/max dimensions */
+    xmin = thee->pmgp->xcent - (xlen/2.0);
+    ymin = thee->pmgp->ycent - (ylen/2.0);
+    zmin = thee->pmgp->zcent - (zlen/2.0);
+    xmax = thee->pmgp->xcent + (xlen/2.0);
+    ymax = thee->pmgp->ycent + (ylen/2.0);
+    zmax = thee->pmgp->zcent + (zlen/2.0);
+
+    /* This is a floating point parameter related to the non-zero nature of the
+     * bulk ionic strength.  If the ionic strength is greater than zero; this
+     * parameter is set to 1.0 and later scaled by the appropriate pre-factors.
+     * Otherwise, this parameter is set to 0.0 */
+    if (ionstr > VPMGSMALL) ionmask = 1.0;
+    else ionmask = 0.0;
+
+    /* Reset the kappa, epsx, epsy, and epsz arrays */
+    for (i=0; i<(nx*ny*nz); i++) {
+        thee->kappa[i] = 1.0;
+        thee->epsx[i] = 1.0;
+        thee->epsy[i] = 1.0;
+        thee->epsz[i] = 1.0;
+    }
+
+    /* Loop through the atoms and do assign the dielectric */
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+
+        atom = Valist_getAtom(alist, iatom);
+        apos = Vatom_getPosition(atom);
+        arad = Vatom_getRadius(atom);
+
+        b = arad - splineWin; 
+        e = arad + splineWin;
+        e2 = e * e;
+        e3 = e2 * e;
+        e4 = e3 * e;
+        e5 = e4 * e;
+        e6 = e5 * e;
+        e7 = e6 * e;
+        b2 = b * b;
+        b3 = b2 * b;
+        b4 = b3 * b;
+        b5 = b4 * b;
+        b6 = b5 * b;
+        b7 = b6 * b;
+        denom = e7  - 7.0*b*e6 + 21.0*b2*e5 - 35.0*e4*b3 
+              + 35.0*e3*b4 - 21.0*b5*e2  + 7.0*e*b6 - b7;
+        c0 = b4*(35.0*e3 - 21.0*b*e2 + 7*e*b2 - b3)/denom;
+        c1 = -140.0*b3*e3/denom;
+        c2 = 210.0*e2*b2*(e + b)/denom;
+        c3 = -140.0*e*b*(e2 + 3.0*b*e + b2)/denom;
+        c4 =  35.0*(e3 + 9.0*b*e2 + + 9.0*e*b2 + b3)/denom;
+        c5 = -84.0*(e2 + 3.0*b*e + b2)/denom;
+        c6 =  70.0*(e + b)/denom;
+        c7 = -20.0/denom;
+
+        b = irad + arad - splineWin;
+        e = irad + arad + splineWin;
+        e2 = e * e;
+        e3 = e2 * e;
+        e4 = e3 * e;
+        e5 = e4 * e;
+        e6 = e5 * e;
+        e7 = e6 * e;
+        b2 = b * b;
+        b3 = b2 * b;
+        b4 = b3 * b;
+        b5 = b4 * b;
+        b6 = b5 * b;
+        b7 = b6 * b;
+        denom = e7  - 7.0*b*e6 + 21.0*b2*e5 - 35.0*e4*b3
+              + 35.0*e3*b4 - 21.0*b5*e2  + 7.0*e*b6 - b7;
+        ic0 = b4*(35.0*e3 - 21.0*b*e2 + 7*e*b2 - b3)/denom;
+        ic1 = -140.0*b3*e3/denom;
+        ic2 = 210.0*e2*b2*(e + b)/denom;
+        ic3 = -140.0*e*b*(e2 + 3.0*b*e + b2)/denom;
+        ic4 =  35.0*(e3 + 9.0*b*e2 + + 9.0*e*b2 + b3)/denom;
+        ic5 = -84.0*(e2 + 3.0*b*e + b2)/denom;
+        ic6 =  70.0*(e + b)/denom;
+        ic7 = -20.0/denom;
+
+        /* Make sure we're on the grid */
+        if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
+            (apos[1]<=ymin) || (apos[1]>=ymax)  || \
+            (apos[2]<=zmin) || (apos[2]>=zmax)) {
+            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
+ %4.3f) is off the mesh (ignoring):\n",
+                  iatom, apos[0], apos[1], apos[2]);
+                Vnm_print(2, "Vpmg_fillco:    xmin = %g, xmax = %g\n", 
+                  xmin, xmax);
+                Vnm_print(2, "Vpmg_fillco:    ymin = %g, ymax = %g\n", 
+                  ymin, ymax);
+                Vnm_print(2, "Vpmg_fillco:    zmin = %g, zmax = %g\n", 
+                  zmin, zmax);
+            }
+            fflush(stderr);
+
+        } else if (arad > VPMGSMALL ) { /* if we're on the mesh */
+
+            /* Convert the atom position to grid reference frame */
+            position[0] = apos[0] - xmin;
+            position[1] = apos[1] - ymin;
+            position[2] = apos[2] - zmin;
+
+            /* MARK ION ACCESSIBILITY AND DIELECTRIC VALUES FOR LATER
+             * ASSIGNMENT (Steps #1-3) */
+            itot = irad + arad + splineWin;
+            itot2 = VSQR(itot);     
+            ictot = VMAX2(0, (irad + arad - splineWin));
+            ictot2 = VSQR(ictot);
+            stot = arad + splineWin;
+            stot2 = VSQR(stot);
+            sctot = VMAX2(0, (arad - splineWin));
+            sctot2 = VSQR(sctot);
+
+           /* We'll search over grid points which are in the greater of
+             * these two radii */
+            rtot = VMAX2(itot, stot);
+            rtot2 = VMAX2(itot2, stot2);
+            dx = rtot + 0.5*hx;
+            dy = rtot + 0.5*hy;
+            dz = rtot + 0.5*hzed;
+            imin = VMAX2(0,(int)floor((position[0] - dx)/hx));
+            imax = VMIN2(nx-1,(int)ceil((position[0] + dx)/hx));
+            jmin = VMAX2(0,(int)floor((position[1] - dy)/hy));
+            jmax = VMIN2(ny-1,(int)ceil((position[1] + dy)/hy));
+            kmin = VMAX2(0,(int)floor((position[2] - dz)/hzed));
+            kmax = VMIN2(nz-1,(int)ceil((position[2] + dz)/hzed));
+            for (i=imin; i<=imax; i++) {
+                dx2 = VSQR(position[0] - hx*i);
+                for (j=jmin; j<=jmax; j++) {
+                    dy2 = VSQR(position[1] - hy*j);
+                    for (k=kmin; k<=kmax; k++) {
+                        dz2 = VSQR(position[2] - k*hzed);
+
+                        /* ASSIGN CCF */
+                        if (thee->kappa[IJK(i,j,k)] > VPMGSMALL) {
+                            dist2 = dz2 + dy2 + dx2;
+                            if (dist2 >= itot2) {
+                                ;
+                            } 
+                            if (dist2 <= ictot2) {
+                                thee->kappa[IJK(i,j,k)] = 0.0;
+                            }
+                            if ((dist2 < itot2) && (dist2 > ictot2)) {
+                                dist = VSQRT(dist2);
+                                sm = dist;
+                                sm2 = dist2;
+                                sm3 = sm2 * sm;
+                                sm4 = sm3 * sm;
+                                sm5 = sm4 * sm;
+                                sm6 = sm5 * sm;
+                                sm7 = sm6 * sm;
+                                value = ic0 + ic1*sm + ic2*sm2 + ic3*sm3
+                                      + ic4*sm4 + ic5*sm5 + ic6*sm6 + ic7*sm7;
+                                if (value > 1.0) {
+                                   value = 1.0;
+                                } else if (value < 0.0){
+                                   value = 0.0; 
+                                }
+                                thee->kappa[IJK(i,j,k)] *= value;
+                            }
+                        }
+
+                        /* ASSIGN A1CF */
+                        if (thee->epsx[IJK(i,j,k)] > VPMGSMALL) {
+                            dist2 = dz2+dy2+VSQR(position[0]-(i+0.5)*hx);
+                            if (dist2 >= stot2) {
+                                thee->epsx[IJK(i,j,k)] *= 1.0;
+                            } 
+                            if (dist2 <= sctot2) {
+                                thee->epsx[IJK(i,j,k)] = 0.0;
+                            } 
+                            if ((dist2 > sctot2) && (dist2 < stot2)) {
+                                dist = VSQRT(dist2);
+                                sm = dist;
+                                sm2 = VSQR(sm);
+                                sm3 = sm2 * sm;
+                                sm4 = sm3 * sm;
+                                sm5 = sm4 * sm;
+                                sm6 = sm5 * sm;
+                                sm7 = sm6 * sm;
+                                value = c0 + c1*sm + c2*sm2 + c3*sm3
+                                      + c4*sm4 + c5*sm5 + c6*sm6 + c7*sm7;
+                                if (value > 1.0) {
+                                   value = 1.0;
+                                } else if (value < 0.0){
+                                   value = 0.0; 
+                                }
+                                thee->epsx[IJK(i,j,k)] *= value;
+                            } 
+                        }
+
+                        /* ASSIGN A2CF */
+                        if (thee->epsy[IJK(i,j,k)] > VPMGSMALL) {
+                            dist2 = dz2+dx2+VSQR(position[1]-(j+0.5)*hy);
+                            if (dist2 >= stot2) {
+                                thee->epsy[IJK(i,j,k)] *= 1.0;
+                            } 
+                            if (dist2 <= sctot2) {
+                                thee->epsy[IJK(i,j,k)] = 0.0;
+                            }
+                            if ((dist2 > sctot2) && (dist2 < stot2)) {
+                                dist = VSQRT(dist2);
+                                sm = dist;
+                                sm2 = VSQR(sm);
+                                sm3 = sm2 * sm;
+                                sm4 = sm3 * sm;
+                                sm5 = sm4 * sm;
+                                sm6 = sm5 * sm;
+                                sm7 = sm6 * sm;
+                                value = c0 + c1*sm + c2*sm2 + c3*sm3
+                                      + c4*sm4 + c5*sm5 + c6*sm6 + c7*sm7;
+                                if (value > 1.0) {
+                                   value = 1.0;
+                                } else if (value < 0.0){
+                                   value = 0.0; 
+                                }
+                                thee->epsy[IJK(i,j,k)] *= value;
+                            }
+                        }
+
+                        /* ASSIGN A3CF */
+                        if (thee->epsz[IJK(i,j,k)] > VPMGSMALL) {
+                            dist2 = dy2+dx2+VSQR(position[2]-(k+0.5)*hzed);
+                            if (dist2 >= stot2) {
+                                thee->epsz[IJK(i,j,k)] *= 1.0;
+                            } 
+                            if (dist2 <= sctot2) {
+                                thee->epsz[IJK(i,j,k)] = 0.0;
+                            } 
+                            if ((dist2 > sctot2) && (dist2 < stot2)) {
+                                dist = VSQRT(dist2);
+                                sm = dist;
+                                sm2 = dist2;
+                                sm3 = sm2 * sm;
+                                sm4 = sm3 * sm;
+                                sm5 = sm4 * sm;
+                                sm6 = sm5 * sm;
+                                sm7 = sm6 * sm;
+                                value = c0 + c1*sm + c2*sm2 + c3*sm3
+                                      + c4*sm4 + c5*sm5 + c6*sm6 + c7*sm7;
+                                if (value > 1.0) {
+                                   value = 1.0;
+                                } else if (value < 0.0){
+                                   value = 0.0; 
+                                }
+                                thee->epsz[IJK(i,j,k)] *= value;
+                            }
+                        }
+
+
+                    } /* k loop */
+                } /* j loop */
+            } /* i loop */
+        } /* endif (on the mesh) */
+    } /* endfor (over all atoms) */
+
+    Vnm_print(0, "Vpmg_fillco:  filling coefficient arrays\n");
+    /* Interpret markings and fill the coefficient arrays */
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+
+                thee->kappa[IJK(i,j,k)] = ionmask*thee->kappa[IJK(i,j,k)];
+                thee->epsx[IJK(i,j,k)] = (epsw-epsp)*thee->epsx[IJK(i,j,k)] 
+                  + epsp;
+                thee->epsy[IJK(i,j,k)] = (epsw-epsp)*thee->epsy[IJK(i,j,k)] 
+                  + epsp;
+                thee->epsz[IJK(i,j,k)] = (epsw-epsp)*thee->epsz[IJK(i,j,k)] 
+                  + epsp;
+
+            } /* i loop */
+        } /* j loop */
+    } /* k loop */
 
 }
 

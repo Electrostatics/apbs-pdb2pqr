@@ -71,9 +71,6 @@ VEMBED(rcsid="$Id$")
 VPRIVATE char *Valist_whiteChars = " \t\n";
 VPRIVATE char *Valist_commChars  = "#%";
 
-/** Get statistics on a newly read-in atom list  */
-VPRIVATE int Valist_getStatistics(Valist *thee);
-
 #if !defined(VINLINE_VATOM)
 
 VPUBLIC double Valist_getCenterX(Valist *thee) {
@@ -625,7 +622,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
 }
 
 /** Load up Valist with various statistics */
-VPRIVATE int Valist_getStatistics(Valist *thee) {
+VPUBLIC int Valist_getStatistics(Valist *thee) {
 
     Vatom *atom;
     int i, j;
