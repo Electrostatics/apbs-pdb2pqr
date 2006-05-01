@@ -439,6 +439,22 @@ VEXTERNC void Vacc_splineAccGradAtomNorm(
         double *force /** VAPBS_DIM-vector set to gradient of accessibility */
         );
 
+/** @brief   Report gradient of spline-based accessibility with respect to a
+ *           particular atom normalized by a 4th order accessibility value due 
+ *           to that atom at that point (see Vpmg_splineAccAtom)
+ *
+ *  @ingroup Vacc
+ *  @author  Michael Schnieders
+ */
+VEXTERNC void Vacc_splineAccGradAtomNorm4(
+        Vacc *thee, /** Accessibility object */
+        double center[VAPBS_DIM], /** Probe center coordinates */
+        double win, /** Spline window (&Aring;) */ 
+        double infrad, /** Inflation radius (&Aring;) for ion access. */
+        Vatom *atom, /** Atom */ 
+        double *force /** VAPBS_DIM-vector set to gradient of accessibility */
+        );
+
 /** 
  * @brief  Build the solvent accessible surface (SAS) and calculate the
  *         solvent accessible surface area

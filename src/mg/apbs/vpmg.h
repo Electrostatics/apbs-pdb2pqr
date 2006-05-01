@@ -147,7 +147,8 @@ struct sVpmg {
   Vsurf_Meth surfMeth;  /**< Surface definition method */
   double splineWin;  /**< Spline window parm for surf defs */
   Vchrg_Meth chargeMeth;  /**< Charge discretization method */
-
+  Vchrg_Src chargeSrc;  /**< Charge source */
+  
   int filled;  /**< Indicates whether Vpmg_fillco has been called */
 
   int useDielXMap;  /**< Indicates whether Vpmg_fillco was called with an
@@ -593,6 +594,121 @@ VEXTERNC int Vpmg_fillArray(
         double parm,  /** Parameter for data type definition (if needed) */
         Vhal_PBEType pbetype  /** Parameter for PBE type (if needed) */
         );
+
+/** @brief   Computes the field at an atomic center using a stencil based
+ *           on the first derivative of a 5th order B-spline
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */
+VPUBLIC void Vpmg_fieldSpline4(Vpmg *thee, int atomID, double field[3]);
+
+/** @brief   Computes the permanent multipole energy (the polarization
+ *           component of the hydration energy is computed in TINKER)
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ *  @returns The permanent multipole energy
+ */
+VEXTERNC double Vpmg_qfPermanentMultipoleEnergy(Vpmg *thee, int atomID);
+
+/** @brief   Computes the q-Phi Force for permanent multipoles based on
+ *           5th order B-splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */
+VEXTERNC void Vpmg_qfPermanentMultipoleForce(Vpmg *thee, int atomID,
+                                             double force[3], double torque[3]);
+/** @brief   Compute the ionic boundary force for permanent multipoles - this
+ *  is currently just a copy of Vpmg_ibForce
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */
+VEXTERNC void Vpmg_ibPermanentMultipoleForce(Vpmg *thee, int atomID, 
+                                             double force[3]);
+
+/** @brief   Compute the dielectric boundary force for permanent multipoles
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */                                          
+VEXTERNC void Vpmg_dbPermanentMultipoleForce(Vpmg *thee, int atomID,
+                                             double force[3]);
+                                             
+/** @brief   q-Phi direct polarization force between permanent multipoles and
+ *           induced dipoles based on 5th Order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */         
+VEXTERNC void Vpmg_qfDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced, 
+                                    int atomID, double force[3], 
+                                    double torque[3]);
+
+/** @brief   q-Phi direct polarization force between permanent multipoles and
+ *           non-local induced dipoles based on 5th Order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */        
+VEXTERNC void Vpmg_qfNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
+                                      Vgrid *nlInduced, int atomID, 
+                                      double force[3], double torque[3]);
+
+/** @brief   Ionic boundary direct polarization force between permanent
+ *           multipoles and induced dipoles based on 5th order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */  
+VEXTERNC void Vpmg_ibDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
+                                    int atomID, double force[3]);
+
+/** @brief   Ionic boundary direct polarization force between permanent
+ *           multipoles and non-local induced dipoles based on 5th order 
+ *           B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */  
+VEXTERNC void Vpmg_ibNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
+                                      Vgrid *nlInduced, int atomID, 
+                                      double force[3]);
+
+/** @brief   Dielectric boundary direct polarization force between permanent
+ *           multipoles and induced dipoles based on 5th order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */  
+VEXTERNC void Vpmg_dbDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
+                                    int atomID, double force[3]);
+
+/** @brief   Dielectric bounday/nonpolar direct polarization force between
+ *           permanent multipoles and non-local induced dipoles based on 5th
+ *           order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */  
+VEXTERNC void Vpmg_dbNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
+                                      Vgrid *nlInduced, int atomID, 
+                                      double force[3]);
+
+/** @brief   Mutual polarization force for induced dipoles based on 5th
+             order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */  
+VEXTERNC void Vpmg_qfMutualPolForce(Vpmg *thee, Vgrid *uinduced,
+                           Vgrid *nlinduced, int atomID, double force[3]);
+
+/** @brief   Ionic boundary mutual polarization force for induced dipoles 
+ *           based on 5th order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */ 
+VEXTERNC void Vpmg_ibMutualPolForce(Vpmg *thee, Vgrid *uinduced,
+                           Vgrid *nlinduced, int atomID, double force[3]);
+
+/** @brief   Dielectric boundary mutual polarization force for induced dipoles 
+ *           based on 5th order B-Splines
+ *  @ingroup Vpmg
+ *  @author  Michael Schnieders
+ */ 
+VEXTERNC void Vpmg_dbMutualPolForce(Vpmg *thee, Vgrid *uinduced,
+                           Vgrid *nlinduced, int atomID, double force[3]);
 
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  

@@ -297,6 +297,15 @@ VPRIVATE void fillcoCoefSpline(
         Vpmg *thee
         );
 
+/** 
+ * @brief  Fill operator coefficient arrays from a 5th order spline-based 
+ *         surface calculation
+ * @author  Michael Schnieders 
+ */
+VPRIVATE void fillcoCoefSpline4(
+        Vpmg *thee
+        );
+
 /**
  * @brief  Top-level driver to fill source term charge array
  * @author  Nathan Baker
@@ -330,10 +339,27 @@ VPRIVATE void fillcoChargeSpline2(
         );
 
 /**
- * @brief  Fill source term charge array through the use of quadrupoles
+ * @brief  Fill source term charge array for the use of permanent multipoles
  * @author  Michael Schnieders
  */
-VPRIVATE void fillcoChargeSpline4(
+VPRIVATE void fillcoPermanentMultipole(
+        Vpmg *thee
+        );
+        
+/**
+ * @brief  Fill source term charge array for use of induced dipoles 
+ * @author  Michael Schnieders
+ */
+VPRIVATE void fillcoInducedDipole(
+        Vpmg *thee
+        );
+
+/**
+ * @brief  Fill source term charge array for non-local induced
+ * dipoles
+ * @author  Michael Schnieders
+ */
+VPRIVATE void fillcoNLInducedDipole(
         Vpmg *thee
         );
 

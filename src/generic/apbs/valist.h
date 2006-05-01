@@ -244,4 +244,13 @@ VEXTERNC int Valist_readPDB(
         Vio *sock /**< Socket read for reading PDB file */
         );
 
+/** 
+ * @brief   Load up Valist with various statistics
+ * @ingroup Valist
+ * @author  Nathan Baker
+ * @return  1 if successful, 0 otherwise
+ */
+VEXTERNC int Valist_getStatistics(Valist *thee);
+
+
 #endif /* ifndef _VALIST_H_ */
