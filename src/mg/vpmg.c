@@ -5893,7 +5893,7 @@ VPUBLIC void Vpmg_dbPermanentMultipoleForce(Vpmg *thee, int atomID,
 
     VASSERT(atom->partID != 0);  
     arad = Vatom_getRadius(atom);
-
+    apos = Vatom_getPosition(atom);
 
     /* Reset force */
     force[0] = 0.0;
