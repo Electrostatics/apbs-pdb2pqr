@@ -1484,7 +1484,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 
     /* Set the default chargeSrc for 5th order splines */
     
-    thee->chargeSrc = VCM_PERMANENT;
+    thee->chargeSrc = VCM_CHARGE;
 
     /* Turn off restriction of observable calculations to a specific
      * partition */
@@ -2130,6 +2130,9 @@ VPRIVATE void bcCalc(Vpmg *thee) {
 
     int nx, ny, nz;
     double size, *position, charge, xkappa, eps_w, T, pre1;
+    double *dipole, *quadrupole, debye, eps_p; 
+    double xr,yr,zr,qave,*apos;
+    double sdhcharge, sdhdipole[3], traced[9], sdhquadrupole[9];
     int i, j, k, iatom;
     Vpbe *pbe;
     Vatom *atom;
@@ -2184,6 +2187,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
      *    g(x) = pre1 * q/d * \frac{exp(-xkappa*(d - a))}{1+xkappa*a} 
      */
     eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
+    eps_p = Vpbe_getSoluteDiel(pbe);           /* Dimensionless */
     T = Vpbe_getTemperature(pbe);               /* K             */
     pre1 = (Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T);
 
@@ -2203,23 +2207,203 @@ VPRIVATE void bcCalc(Vpmg *thee) {
         case BCFL_SDH:
             size = Vpbe_getSoluteRadius(pbe);
             position = Vpbe_getSoluteCenter(pbe);
-            charge = Vunit_ec*Vpbe_getSoluteCharge(pbe);
-    
-            bcfl1(size, position, charge, xkappa, pre1,
-              thee->gxcf, thee->gycf, thee->gzcf, 
-              thee->xf, thee->yf, thee->zf, nx, ny, nz);
+
+            /* For AMOEBA SDH boundary conditions, we need to find the
+               total monopole, dipole and traceless quadrupole moments 
+               of either the permanent multipoles, induced dipoles or
+               non-local induced dipoles. */ 
+            
+            sdhcharge = 0.0;
+            for (i=0; i<3; i++) sdhdipole[i] = 0.0;
+            for (i=0; i<9; i++) sdhquadrupole[i] = 0.0;
+            for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                atom = Valist_getAtom(alist, iatom);
+                apos = Vatom_getPosition(atom);
+                xr = apos[0] - position[0];
+                yr = apos[1] - position[1];
+                zr = apos[2] - position[2];
+                if (thee->chargeSrc == VCM_PERMANENT) {
+                    charge = Vatom_getCharge(atom);
+#if defined(WITH_TINKER)
+                    dipole = Vatom_getDipole(atom);
+                    quadrupole = Vatom_getQuadrupole(atom);
+                    sdhcharge += charge;
+                    sdhdipole[0] += xr * charge; 
+                    sdhdipole[1] += yr * charge; 
+                    sdhdipole[2] += zr * charge; 
+                    traced[0] = xr*xr*charge;
+                    traced[1] = xr*yr*charge;
+                    traced[2] = xr*zr*charge;
+                    traced[3] = yr*xr*charge;
+                    traced[4] = yr*yr*charge;
+                    traced[5] = yr*zr*charge;
+                    traced[6] = zr*xr*charge;
+                    traced[7] = zr*yr*charge;
+                    traced[8] = zr*zr*charge;
+                    sdhdipole[0] += dipole[0];
+                    sdhdipole[1] += dipole[1];
+                    sdhdipole[2] += dipole[2];
+                    traced[0] += 2.0*xr*dipole[0];
+                    traced[1] += xr*dipole[1] + yr*dipole[0];
+                    traced[2] += xr*dipole[2] + zr*dipole[0];
+                    traced[3] += yr*dipole[0] + xr*dipole[1];
+                    traced[4] += 2.0*yr*dipole[1];
+                    traced[5] += yr*dipole[2] + zr*dipole[1];
+                    traced[6] += zr*dipole[0] + xr*dipole[2];
+                    traced[7] += zr*dipole[1] + yr*dipole[2];
+                    traced[8] += 2.0*zr*dipole[2];
+                    qave = (traced[0] + traced[4] + traced[8]) / 3.0;
+                    sdhquadrupole[0] += 1.5*(traced[0] - qave);
+                    sdhquadrupole[1] += 1.5*(traced[1]); 
+                    sdhquadrupole[2] += 1.5*(traced[2]); 
+                    sdhquadrupole[3] += 1.5*(traced[3]); 
+                    sdhquadrupole[4] += 1.5*(traced[4] - qave); 
+                    sdhquadrupole[5] += 1.5*(traced[5]); 
+                    sdhquadrupole[6] += 1.5*(traced[6]); 
+                    sdhquadrupole[7] += 1.5*(traced[7]); 
+                    sdhquadrupole[8] += 1.5*(traced[8] - qave); 
+                    sdhquadrupole[0] += quadrupole[0];
+                    sdhquadrupole[1] += quadrupole[1];
+                    sdhquadrupole[2] += quadrupole[2];
+                    sdhquadrupole[3] += quadrupole[3];
+                    sdhquadrupole[4] += quadrupole[4];
+                    sdhquadrupole[5] += quadrupole[5];
+                    sdhquadrupole[6] += quadrupole[6];
+                    sdhquadrupole[7] += quadrupole[7];
+                    sdhquadrupole[8] += quadrupole[8];
+#else /* WITH_TINKER !defined */
+                    sdhcharge += charge;
+                    sdhdipole[0] += xr * charge; 
+                    sdhdipole[1] += yr * charge; 
+                    sdhdipole[2] += zr * charge; 
+                    traced[0] = xr*xr*charge;
+                    traced[1] = xr*yr*charge;
+                    traced[2] = xr*zr*charge;
+                    traced[3] = yr*xr*charge;
+                    traced[4] = yr*yr*charge;
+                    traced[5] = yr*zr*charge;
+                    traced[6] = zr*xr*charge;
+                    traced[7] = zr*yr*charge;
+                    traced[8] = zr*zr*charge;
+                    qave = (traced[0] + traced[4] + traced[8]) / 3.0;
+                    sdhquadrupole[0] += 1.5*(traced[0] - qave);
+                    sdhquadrupole[1] += 1.5*(traced[1]); 
+                    sdhquadrupole[2] += 1.5*(traced[2]); 
+                    sdhquadrupole[3] += 1.5*(traced[3]); 
+                    sdhquadrupole[4] += 1.5*(traced[4] - qave); 
+                    sdhquadrupole[5] += 1.5*(traced[5]); 
+                    sdhquadrupole[6] += 1.5*(traced[6]); 
+                    sdhquadrupole[7] += 1.5*(traced[7]); 
+                    sdhquadrupole[8] += 1.5*(traced[8] - qave); 
+#endif /* if defined(WITH_TINKER) */
+                } 
+#if defined(WITH_TINKER)
+                else if (thee->chargeSrc == VCM_INDUCED) {
+                    dipole = Vatom_getInducedDipole(atom);
+                    sdhdipole[0] += dipole[0];
+                    sdhdipole[1] += dipole[1];
+                    sdhdipole[2] += dipole[2];
+                    traced[0] = 2.0*xr*dipole[0];
+                    traced[1] = xr*dipole[1] + yr*dipole[0];
+                    traced[2] = xr*dipole[2] + zr*dipole[0];
+                    traced[3] = yr*dipole[0] + xr*dipole[1];
+                    traced[4] = 2.0*yr*dipole[1];
+                    traced[5] = yr*dipole[2] + zr*dipole[1];
+                    traced[6] = zr*dipole[0] + xr*dipole[2];
+                    traced[7] = zr*dipole[1] + yr*dipole[2];
+                    traced[8] = 2.0*zr*dipole[2];
+                    qave = (traced[0] + traced[4] + traced[8]) / 3.0;
+                    sdhquadrupole[0] += 1.5*(traced[0] - qave);
+                    sdhquadrupole[1] += 1.5*(traced[1]);
+                    sdhquadrupole[2] += 1.5*(traced[2]);
+                    sdhquadrupole[3] += 1.5*(traced[3]);
+                    sdhquadrupole[4] += 1.5*(traced[4] - qave);
+                    sdhquadrupole[5] += 1.5*(traced[5]);
+                    sdhquadrupole[6] += 1.5*(traced[6]);
+                    sdhquadrupole[7] += 1.5*(traced[7]);
+                    sdhquadrupole[8] += 1.5*(traced[8] - qave);
+                } else {
+                    dipole = Vatom_getNLInducedDipole(atom);
+                    sdhdipole[0] += dipole[0];
+                    sdhdipole[1] += dipole[1];
+                    sdhdipole[2] += dipole[2];
+                    traced[0] = 2.0*xr*dipole[0];
+                    traced[1] = xr*dipole[1] + yr*dipole[0];
+                    traced[2] = xr*dipole[2] + zr*dipole[0];
+                    traced[3] = yr*dipole[0] + xr*dipole[1];
+                    traced[4] = 2.0*yr*dipole[1];
+                    traced[5] = yr*dipole[2] + zr*dipole[1];
+                    traced[6] = zr*dipole[0] + xr*dipole[2];
+                    traced[7] = zr*dipole[1] + yr*dipole[2];
+                    traced[8] = 2.0*zr*dipole[2];
+                    qave = (traced[0] + traced[4] + traced[8]) / 3.0;
+                    sdhquadrupole[0] += 1.5*(traced[0] - qave);
+                    sdhquadrupole[1] += 1.5*(traced[1]);
+                    sdhquadrupole[2] += 1.5*(traced[2]);
+                    sdhquadrupole[3] += 1.5*(traced[3]);
+                    sdhquadrupole[4] += 1.5*(traced[4] - qave);
+                    sdhquadrupole[5] += 1.5*(traced[5]);
+                    sdhquadrupole[6] += 1.5*(traced[6]);
+                    sdhquadrupole[7] += 1.5*(traced[7]);
+                    sdhquadrupole[8] += 1.5*(traced[8] - qave);
+                }
+#endif /* if defined(WITH_TINKER) */
+            }
+            /* SDH dipole and traceless quadrupole values
+               were checked against similar routines in TINKER
+               for large proteins.
+                   
+            debye=4.8033324;
+            printf("%6.3f, %6.3f, %6.3f\n", sdhdipole[0]*debye, 
+                     sdhdipole[1]*debye, sdhdipole[2]*debye);
+            printf("%6.3f\n", sdhquadrupole[0]*debye);
+            printf("%6.3f %6.3f\n", sdhquadrupole[3]*debye,
+                     sdhquadrupole[4]*debye);
+            printf("%6.3f %6.3f %6.3f\n", sdhquadrupole[6]*debye,
+                     sdhquadrupole[7]*debye, sdhquadrupole[8]*debye);
+            */
+               
+            bcfl2(size, position, sdhcharge, sdhdipole, sdhquadrupole, 
+                  xkappa, eps_p, eps_w, T, thee->gxcf, thee->gycf, 
+                  thee->gzcf, thee->xf, thee->yf, thee->zf, nx, ny, nz);
             break;
 
         case BCFL_MDH:
-            for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
-                atom = Valist_getAtom(alist, iatom);
-                position = Vatom_getPosition(atom);
-                charge = Vunit_ec*Vatom_getCharge(atom);
-                size = Vatom_getRadius(atom);
-                bcfl1(size, position, charge, xkappa, pre1,
-                  thee->gxcf, thee->gycf, thee->gzcf, 
-                  thee->xf, thee->yf, thee->zf, nx, ny, nz);
+            if (thee->chargeSrc == VCM_CHARGE){
+                for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                    atom = Valist_getAtom(alist, iatom);
+                    position = Vatom_getPosition(atom);
+                    charge = Vunit_ec*Vatom_getCharge(atom);
+                    size = Vatom_getRadius(atom);
+                    bcfl1(size, position, charge, xkappa, pre1,
+                          thee->gxcf, thee->gycf, thee->gzcf, 
+                          thee->xf, thee->yf, thee->zf, nx, ny, nz);
+              } 
             }
+#if defined(WITH_TINKER)
+            else {
+                for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
+                    atom = Valist_getAtom(alist, iatom);
+                    position = Vatom_getPosition(atom);
+                    size = Vatom_getRadius(atom);
+                    charge = 0.0;
+                    dipole = VNULL;
+                    quadrupole = VNULL;
+                    if (thee->chargeSrc == VCM_PERMANENT) {
+                        charge = Vatom_getCharge(atom);
+                        dipole = Vatom_getDipole(atom);
+                        quadrupole = Vatom_getQuadrupole(atom);
+                    } else if (thee->chargeSrc == VCM_INDUCED) {
+                        dipole = Vatom_getInducedDipole(atom);
+                    } else {
+                        dipole = Vatom_getNLInducedDipole(atom);
+                    }
+                    bcfl2(size, position, charge, dipole, quadrupole, 
+                          xkappa, eps_p, eps_w, T, thee->gxcf, thee->gycf, 
+                          thee->gzcf, thee->xf, thee->yf, thee->zf, nx, ny, nz);
+                }
+            }
+#endif /* if defined(WITH_TINKER) */
             break;
 
         case BCFL_UNUSED:
@@ -2236,6 +2420,288 @@ flag (%d)!\n", thee->pmgp->bcfl);
             VASSERT(0);
     }
 }
+
+VPRIVATE void bcfl2(double size, double *apos,
+                    double charge, double *dipole, double *quad, 
+                    double xkappa, double eps_p, double eps_w, double T, 
+                    double *gxcf, double *gycf, double *gzcf, 
+                    double *xf, double *yf, double *zf, 
+                    int nx, int ny, int nz) {
+
+    int i, j, k;
+    double val;
+    double gpos[3],tensor[3];
+    double ux,uy,uz,xr,yr,zr;
+    double qxx,qxy,qxz,qyx,qyy,qyz,qzx,qzy,qzz;
+    double dist, pre;
+
+    VASSERT(dipole != VNULL);
+    ux = dipole[0];
+    uy = dipole[1];
+    uz = dipole[2];
+    if (quad != VNULL) {
+    /* The factor of 1/3 results from using a 
+       traceless quadrupole definition. See, for example,
+       "The Theory of Intermolecular Forces" by A.J. Stone,
+       Chapter 3. */
+       qxx = quad[0] / 3.0;
+       qxy = quad[1] / 3.0;
+       qxz = quad[2] / 3.0;
+       qyx = quad[3] / 3.0;
+       qyy = quad[4] / 3.0;
+       qyz = quad[5] / 3.0;
+       qzx = quad[6] / 3.0;
+       qzy = quad[7] / 3.0;
+       qzz = quad[8] / 3.0;
+    } else {
+       qxx = 0.0;
+       qxy = 0.0;
+       qxz = 0.0;
+       qyx = 0.0;
+       qyy = 0.0;
+       qyz = 0.0;
+       qzx = 0.0;
+       qzy = 0.0;
+       qzz = 0.0;
+    }
+
+    pre = (Vunit_ec*Vunit_ec)/(4*VPI*Vunit_eps0*Vunit_kb*T);
+    pre = pre*(1.0e10);
+
+    /* the "i" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        for (j=0; j<ny; j++) {
+            gpos[1] = yf[j];
+            gpos[0] = xf[0];
+            xr = gpos[0] - apos[0];
+            yr = gpos[1] - apos[1];
+            zr = gpos[2] - apos[2];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gxcf[IJKx(j,k,0)] += val;
+            
+            gpos[0] = xf[nx-1];
+            xr = gpos[0] - apos[0];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gxcf[IJKx(j,k,1)] += val;
+        }
+    }
+
+    /* the "j" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        for (i=0; i<nx; i++) {
+            gpos[0] = xf[i];
+            gpos[1] = yf[0];
+            xr = gpos[0] - apos[0];
+            yr = gpos[1] - apos[1];
+            zr = gpos[2] - apos[2];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gycf[IJKy(i,k,0)] += val;
+
+            gpos[1] = yf[ny-1];
+            yr = gpos[1] - apos[1];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gycf[IJKy(i,k,1)] += val;
+        }
+    }
+
+    /* the "k" boundaries (dirichlet) */
+    for (j=0; j<ny; j++) {
+        gpos[1] = yf[j];
+        for (i=0; i<nx; i++) {
+            gpos[0] = xf[i];
+            gpos[2] = zf[0];
+            xr = gpos[0] - apos[0];
+            yr = gpos[1] - apos[1];
+            zr = gpos[2] - apos[2];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gzcf[IJKz(i,j,0)] += val;
+            
+            gpos[2] = zf[nz-1];
+            zr = gpos[2] - apos[2];
+            dist = VSQRT(VSQR(xr) + VSQR(yr) + VSQR(zr));
+            multipolebc(dist, xkappa, eps_p, eps_w, size, tensor);
+            val = pre*charge*tensor[0];
+            val -= pre*ux*xr*tensor[1];
+            val -= pre*uy*yr*tensor[1];
+            val -= pre*uz*zr*tensor[1];
+            val += pre*qxx*xr*xr*tensor[2]; 
+            val += pre*qyy*yr*yr*tensor[2]; 
+            val += pre*qzz*zr*zr*tensor[2]; 
+            val += pre*2.0*qxy*xr*yr*tensor[2]; 
+            val += pre*2.0*qxz*xr*zr*tensor[2]; 
+            val += pre*2.0*qyz*yr*zr*tensor[2]; 
+            gzcf[IJKz(i,j,1)] += val;
+        }
+    }
+}
+
+VPRIVATE void multipolebc(double r, double kappa, double eps_p, 
+                          double eps_w, double rad, double tsr[3]) {
+    double r2,r3,r5;
+    double eps_r;
+    double ka,ka2,ka3;
+    double kr,kr2,kr3;
+
+    /*
+       Below an attempt is made to explain the potential outside of a
+       multipole located at the center of spherical cavity of dieletric
+       eps_p, with dielectric eps_w outside (and possibly kappa > 0).
+
+
+       First, eps_p = 1.0
+              eps_w = 1.0 
+              kappa = 0.0
+              
+       The general form for the potential of a traceless multipole tensor
+       of rank n in vacuum is:
+
+       V(r) = (-1)^n * u . n . Del^n (1/r)
+
+       where 
+             u                     is a multipole of order n (3^n components)
+             u . n. Del^n (1/r)    is the contraction of u with the nth 
+                                   derivative of 1/r
+
+       for example, if n = 1, the dipole potential is
+       V_vac(r) = (-1)*[ux*x + uy*y + uz*z]/r^3
+
+       This function returns the parts of V(r) for multipoles of
+       order 0, 1 and 2 that are independent of the contraction.  
+
+       For the vacuum example, this would be 1/r, -1/r^3 and 3/r^5
+       respectively. 
+       
+       *** Note that this requires that the quadrupole is
+       traceless. If not, the diagonal quadrupole potential changes
+       from
+       qaa *  3*a^2/r^5 
+       to
+       qaa * (3*a^2/r^5 - 1/r^3a )
+       where we sum over the trace; a = x, y and z.
+       
+       (In other words, the -1/r^3 term cancels for a traceless quadrupole.
+        qxx + qyy + qzz = 0
+        such that
+        -(qxx + qyy + qzz)/r^3 = 0
+        
+        For quadrupole with trace:
+        qxx + qyy + qzz != 0
+        such that
+        -(qxx + qyy + qzz)/r^3 != 0
+       )
+       
+       ======================================================================== 
+       
+       eps_p != 1 or eps_w != 1
+       kappa = 0.0
+      
+       If the multipole is placed at the center of a sphere with
+       dieletric eps_p in a solvent of dielectric eps_w, the potential
+       outside the sphere is the solution to the Laplace equation:
+      
+       V(r) = 1/eps_w * (2*n+1)*eps_r/(n+(n+1)*eps_r) 
+                      * (-1)^n * u . n . Del^n (1/r)
+       where
+             eps_r = eps_w / eps_p 
+             is the ratio of solvent to solute dielectric
+             
+       ========================================================================
+       
+       kappa > 0
+
+       Finally, if the region outside the sphere is treated by the linearized
+       PB equation with Debye-Huckel parameter kappa, the solution is:
+       
+       V(r) = kappa/eps_w * alpha_n(kappa*a) * K_n(kappa*r) * r^(n+1)/a^n 
+                          * (-1)^n * u . n . Del^n (1/r)
+       where 
+             alpha_n(x) is [(2n + 1) / x] / [(n*K_n(x)/eps_r) - x*K_n'(x)]
+             K_n(x) are modified spherical Bessel functions of the third kind. 
+             K_n'(x) is the derivative of K_n(x)
+     */
+
+    eps_r = eps_w/eps_p;
+    r2 = r*r;
+    r3 = r2*r;
+    r5 = r3*r2;
+    tsr[0] = (1.0/eps_w)/r;
+    tsr[1] = (1.0/eps_w)*(-1.0)/r3;
+    tsr[2] = (1.0/eps_w)*(3.0)/r5;
+    if (kappa < VSMALL) {
+        tsr[1] = (3.0*eps_r)/(1.0 + 2.0*eps_r)*tsr[1];
+        tsr[2] = (5.0*eps_r)/(2.0 + 3.0*eps_r)*tsr[2];
+    } else {
+        ka = kappa*rad;
+        ka2 = ka*ka;
+        ka3 = ka2*ka;
+        kr = kappa*r;
+        kr2 = kr*kr;
+        kr3 = kr2*kr;
+        tsr[0] = exp(ka-kr) / (1.0 + ka) * tsr[0];
+        tsr[1] = 3.0*eps_r*exp(ka-kr)*(1.0 + kr) * tsr[1];
+        tsr[1] = tsr[1] / (1.0 + ka + eps_r*(2.0 + 2.0*ka + ka2)); 
+        tsr[2] = 5.0*eps_r*exp(ka-kr)*(3.0 + 3.0*kr + kr2) * tsr[2];
+        tsr[2] = tsr[2]/(6.0+6.0*ka+2.0*ka2+eps_r*(9.0+9.0*ka+4.0*ka2+ka3)); 
+    }
+}
+
 
 VPRIVATE void fillcoCoefMap(Vpmg *thee) {
 
@@ -3039,11 +3505,15 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
             break;
         case VCM_BSPL4:
             switch (thee->chargeSrc) {
-                case VCM_PERMANENT:
+                case VCM_CHARGE:
                     Vnm_print(0, "fillcoCharge: Calling fillcoPermanentMultipole...\n");
                     fillcoPermanentMultipole(thee);
                     break;
 #if defined(WITH_TINKER)
+                case VCM_PERMANENT:
+                    Vnm_print(0, "fillcoCharge: Calling fillcoPermanentMultipole...\n");
+                    fillcoPermanentMultipole(thee);
+                    break;
                 case VCM_INDUCED:
                     Vnm_print(0, "fillcoCharge: Calling fillcoInducedDipole...\n");
                     fillcoInducedDipole(thee); 
