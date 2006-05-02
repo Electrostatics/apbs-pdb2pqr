@@ -194,6 +194,47 @@ VPRIVATE void bcfl1(
         int ny,  /** Number of grid points in y-direction */
         int nz /** Number of grid points in y-direction */
         );
+
+/**
+ * @brief  Comment me!
+ *
+ * @author Michael Schnieders
+ */
+VPRIVATE void bcfl2(
+        double size,  /** Size of the ion */
+        double *apos,  /** Position of the ion */
+        double charge,  /** Charge of the ion */
+        double *dipole, /** Dipole of the ion */
+        double *quad,   /** Quadripole of the ion */
+        double xkappa,  /** Exponential screening factor */
+        double eps_p,   /** Solute dielectric */
+        double eps_w,   /** Solvent dielectric */
+        double T,       /** Temperature */
+        double *gxcf,  /** Set to x-boundary values */
+        double *gycf,  /** Set to y-boundary values */
+        double *gzcf,  /** Set to z-boundary values */
+        double *xf,  /** Boundary point x-coordinates */
+        double *yf,  /** Boundary point y-coordinates */
+        double *zf,  /** Boundary point z-coordinates */
+        int nx,  /** Number of grid points in x-direction */
+        int ny,  /** Number of grid points in y-direction */
+        int nz /** Number of grid points in y-direction */
+        );  
+
+/**
+ * @brief  Comment me!
+ * 
+ * @author Michael Schnieders
+ */
+VPRIVATE void multipolebc(
+        double r,
+        double kappa,
+        double eps_p,  /** Solute dielectric */
+        double eps_w,  /** Solvent dielectric */
+        double rad,
+        double tsr[3]
+        );
+
 /**
  * @brief  Calculate
  *         pre1*(charge/d)*(exp(-xkappa*(d-size))/(1+xkappa*size) due to a
