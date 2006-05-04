@@ -1484,7 +1484,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 
     /* Set the default chargeSrc for 5th order splines */
     
-    thee->chargeSrc = VCM_CHARGE;
+    thee->chargeSrc = mgparm->chgs;
 
     /* Turn off restriction of observable calculations to a specific
      * partition */
@@ -6962,7 +6962,7 @@ VPUBLIC void Vpmg_qfNLDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *nlInduced,
                     dep[1][1] += fp*mx*d2my*mz/(hy*hy);
                     dep[2][0] += fp*dmx*my*dmz/(hx*hzed);
                     dep[2][1] += fp*mx*dmy*dmz/(hy*hzed);
-                    dep[2][2] += f*mx*my*d2mz/(hzed*hzed);
+                    dep[2][2] += fp*mx*my*d2mz/(hzed*hzed);
                     /* The 2nd gradient of the field */
                     /* VxVxVa */
                     d2e[0][0][0] += f*d3mx*my*mz /(hx*hx*hx);

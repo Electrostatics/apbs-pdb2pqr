@@ -782,7 +782,7 @@ fgcent/cgcent!\n",  (imol+1));
                        mgparm, pbeparm->calcenergy);       
     } else {
         if (i>0) Vpmg_dtor(&(pmg[i-1]));
-        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, VNULL, PCE_NO);
+        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, mgparm, PCE_NO);
     }
     if (i>0) {
         Vpmgp_dtor(&(pmgp[i-1]));
