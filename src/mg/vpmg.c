@@ -1496,6 +1496,24 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     return 1;
 }
 
+VPRIVATE void Vpmg_splineSelect(int srfm,Vacc *acc,double *gpos,double win,
+									  double infrad,Vatom *atom,double *force){
+
+	switch (srfm) {
+		case VSM_SPLINE :
+			Vacc_splineAccGradAtomNorm(acc, gpos, win, infrad, atom, force);
+			break;
+		case VSM_SPLINE4 :
+			Vacc_splineAccGradAtomNorm4(acc, gpos, win, infrad, atom, force);
+			break;
+		default:
+			Vnm_print(2, "Vpmg_dbnbForce: Unknown surface method.\n");
+			return;
+	}
+	
+	return;
+}
+
 VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 
     Vpbe *pbe;
@@ -4012,7 +4030,7 @@ VPUBLIC int Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
     force[2] = 0.0;
 
     /* Check surface definition */
-    if (srfm != VSM_SPLINE) {
+    if ((srfm != VSM_SPLINE) || (srfm != VSM_SPLINE4)) {
         Vnm_print(2, "Vpmg_ibForce:  Forces *must* be calculated with \
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_ibForce:  Skipping ionic boundary force \
@@ -4102,8 +4120,11 @@ calculation!\n");
                         gpos[0] = i*hx + xmin;
                         gpos[1] = j*hy + ymin;
                         gpos[2] = k*hzed + zmin;
-                        Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, irad,
-                          atom, tgrad);
+						
+						/* Select the correct function based on the surface definition 
+						 *	(now including the 7th order polynomial) */
+						Vpmg_splineSelect(srfm,acc, gpos,thee->splineWin, irad, atom, tgrad);
+						
                         if (thee->pmgp->nonlin) {
                             /* Nonlinear forces not done */
                             Vnm_print(2, "Vpmg_ibForce:  No NPBE forces yet!\n");
@@ -4167,7 +4188,7 @@ VPUBLIC int Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     npForce[2] = 0.0;
 
     /* Check surface definition */
-    if (srfm != VSM_SPLINE) {
+    if ((srfm != VSM_SPLINE) || (srfm != VSM_SPLINE4)) {
         Vnm_print(2, "Vpmg_dbnpForce:  Forces *must* be calculated with \
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_dbnpForce:  Skipping dielectric/apolar boundary \
@@ -4278,47 +4299,79 @@ force calculation!\n");
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
-                            atom, dHxijk);
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					/*
+					switch (srfm) {
+						case VSM_SPLINE :
+								Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
+														   atom, dHxijk);
+							break;
+						case VSM_SPLINE4 :
+								Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+													   atom, dHxijk);
+							break;
+						default:
+							Vnm_print(2, "Vpmg_dbnbForce: Unknown surface method.\n");
+							return;
+					}
+					*/
                     for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j+0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
-                            atom, dHyijk);
-                    for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+                    
+					for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k+0.5)*hzed + zmin;
                     Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
-                            atom, dHzijk);
-                    for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+                    
+					for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
                     /* i-1,j,k */
                     gpos[0] = (i-0.5)*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
-                            atom, dHxim1jk);
-                    for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+                    
+					for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
                     /* i,j-1,k */
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j-0.5)*hy + ymin;
                     gpos[2] = k*hzed + zmin;
                     Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
-                            atom, dHyijm1k);
-                    for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+                    
+					for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
                     /* i,j,k-1 */
                     gpos[0] = i*hx + xmin;
                     gpos[1] = j*hy + ymin;
                     gpos[2] = (k-0.5)*hzed + zmin;
                     Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
-                    Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0.,
-                            atom, dHzijkm1);
-                    for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
+                    
+					/* Select the correct function based on the surface definition 
+					 *	(now including the 7th order polynomial) */
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+                    
+					for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
                     /* *** CALCULATE DIELECTRIC BOUNDARY FORCES *** */
                     dbFmag = u[IJK(i,j,k)];
                     tgrad[0] = 
@@ -4409,6 +4462,9 @@ scheme\n");
         case VCM_BSPL2:
             qfForceSpline2(thee, tforce, atomID);
             break;
+		case VCM_BSPL4:
+			qfForceSpline4(thee, tforce, atomID);
+			break;
         default:
             Vnm_print(2, "Vpmg_qfForce:  Undefined charge discretization \
 method (%d)!\n", chgm);
@@ -4610,7 +4666,7 @@ VPRIVATE void qfForceSpline2(Vpmg *thee, double *force, int atomID) {
      || (apos[2]<=(zmin+hzed)) || (apos[2]>=(zmax-hzed))) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
             Vnm_print(2, "qfForceSpline2:  Atom #%d off the mesh \
-(ignoring)\n", atomID);
+				(ignoring)\n", atomID);
         }
         fflush(stderr);
 
@@ -4671,6 +4727,129 @@ VPRIVATE void qfForceSpline2(Vpmg *thee, double *force, int atomID) {
         }
 
     }
+}
+
+VPRIVATE void qfForceSpline4(Vpmg *thee, double *force, int atomID) {
+	
+    Vatom *atom;
+    double f, c, *u, *apos, position[3];
+	
+    /* Grid variables */
+    int nx,ny,nz; 
+    double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax;
+    double hx, hy, hzed, ifloat, jfloat, kfloat;
+	
+    /* B-spline weights */
+    double mx, my, mz, dmx, dmy, dmz;
+    double mi, mj, mk;
+	
+    /* Loop indeces */
+    int i, j, k, ii, jj, kk;
+    int im2, im1, ip1, ip2, jm2, jm1, jp1, jp2, km2, km1, kp1, kp2;
+	
+    /* field */
+    double e[3];
+	
+    VASSERT(thee != VNULL);
+    VASSERT(thee->filled);
+	
+    atom = Valist_getAtom(thee->pbe->alist, atomID);
+    apos = Vatom_getPosition(atom);
+    c = Vatom_getCharge(atom);
+	
+    for (i=0;i<3;i++){
+		e[i] = 0.0;
+    }
+    
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    xlen = thee->pmgp->xlen;
+    ylen = thee->pmgp->ylen;
+    zlen = thee->pmgp->zlen;
+    xmin = thee->pmgp->xmin;
+    ymin = thee->pmgp->ymin;
+    zmin = thee->pmgp->zmin;
+    xmax = thee->pmgp->xmax;
+    ymax = thee->pmgp->ymax;
+    zmax = thee->pmgp->zmax;
+    u = thee->u;
+    
+    /* Make sure we're on the grid */
+    if ((apos[0]<=(xmin+2*hx))   || (apos[0]>=(xmax-2*hx)) \
+		|| (apos[1]<=(ymin+2*hy))   || (apos[1]>=(ymax-2*hy)) \
+		|| (apos[2]<=(zmin+2*hzed)) || (apos[2]>=(zmax-2*hzed))) {
+        Vnm_print(2, "qfForceSpline4:  Atom off the mesh \
+			(ignoring) %6.3f %6.3f %6.3f\n", apos[0], apos[1], apos[2]);
+        fflush(stderr);
+    } else {
+		
+        /* Convert the atom position to grid coordinates */
+        position[0] = apos[0] - xmin;
+        position[1] = apos[1] - ymin;
+        position[2] = apos[2] - zmin;
+        ifloat = position[0]/hx;
+        jfloat = position[1]/hy;
+        kfloat = position[2]/hzed;
+        ip1 = (int)ceil(ifloat);
+        ip2 = ip1 + 2;
+        im1 = (int)floor(ifloat);
+        im2 = im1 - 2;
+        jp1 = (int)ceil(jfloat);
+        jp2 = jp1 + 2;
+        jm1 = (int)floor(jfloat);
+        jm2 = jm1 - 2;
+        kp1 = (int)ceil(kfloat);
+        kp2 = kp1 + 2;
+        km1 = (int)floor(kfloat);
+        km2 = km1 - 2;
+		
+        /* This step shouldn't be necessary, but it saves nasty debugging
+			* later on if something goes wrong */
+        ip2 = VMIN2(ip2,nx-1);
+        ip1 = VMIN2(ip1,nx-1);
+        im1 = VMAX2(im1,0);
+        im2 = VMAX2(im2,0);
+        jp2 = VMIN2(jp2,ny-1);
+        jp1 = VMIN2(jp1,ny-1);
+        jm1 = VMAX2(jm1,0);
+        jm2 = VMAX2(jm2,0);
+        kp2 = VMIN2(kp2,nz-1);
+        kp1 = VMIN2(kp1,nz-1);
+        km1 = VMAX2(km1,0);
+        km2 = VMAX2(km2,0);
+		
+        for (ii=im2; ii<=ip2; ii++) {
+            mi = VFCHI4(ii,ifloat);
+            mx = bspline4(mi);
+            dmx = dbspline4(mi);
+            for (jj=jm2; jj<=jp2; jj++) {
+                mj = VFCHI4(jj,jfloat);
+                my = bspline4(mj);
+                dmy = dbspline4(mj);
+                for (kk=km2; kk<=kp2; kk++) {
+                    mk = VFCHI4(kk,kfloat);
+                    mz = bspline4(mk);
+                    dmz = dbspline4(mk);
+                    f = u[IJK(ii,jj,kk)];
+                    /* Field */
+                    e[0] += f*dmx*my*mz/hx;
+                    e[1] += f*mx*dmy*mz/hy;
+                    e[2] += f*mx*my*dmz/hzed;
+                }
+            }
+        }
+    }
+	
+    /* Monopole Force */
+    force[0] = e[0]*c;
+    force[1] = e[1]*c;
+    force[2] = e[2]*c;
+	
 }
 
 VPRIVATE void markFrac(
@@ -5064,11 +5243,11 @@ VPUBLIC int Vpmg_solveLaplace(Vpmg *thee) {
 
 }
 
-VPUBLIC double VFCHI4(int i, double f) {
+VPRIVATE double VFCHI4(int i, double f) {
   return (2.5+((double)(i)-(f)));
 }
 
-VPUBLIC double bspline4(double x) {
+VPRIVATE double bspline4(double x) {
 
     double m, m2;
     static double one6 = 1.0/6.0;

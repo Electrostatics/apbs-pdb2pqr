@@ -139,7 +139,7 @@
         </listitem>
         <listitem>
           <para>Todd Dolinsky</para>
-          <para>Contributor: Python wrappers, PDB2PQR, examples,and other
+          <para>Contributor: Python wrappers, PDB2PQR, examples, and other
           tools</para> 
         </listitem>
         <listitem> 
@@ -175,6 +175,15 @@
         <listitem>
           <para>Jens Nielsen</para>
           <para>Contributor: PDB2PQR</para>
+        </listitem>
+        <listitem>
+          <para>Jay Ponder</para>
+          <para>Contributor:  TINKER Interface</para>
+        </listitem>
+        <listitem>
+          <para>Michael Schnieders</para>
+          <para>Contributor:  Polarizable atomic multipole routines, TINKER 
+                interface</para>
         </listitem>
         <listitem>
           <para>David Sept</para>

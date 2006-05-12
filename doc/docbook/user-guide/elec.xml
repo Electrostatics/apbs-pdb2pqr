@@ -699,13 +699,14 @@
                   <varlistentry>
                     <term>sdh</term>
                     <listitem>
-                      <para>"Single Debye-H&uuml;ckel" boudnary condition.
+                      <para>"Single Debye-H&uuml;ckel" boundary condition.
                         Potential at boundary is set to the values prescribed
                         by a Debye-H&uuml;ckel model for a single sphere with a
-                        point charge.  The sphere radius is set to the radius
-                        of the biomolecule and the sphere charge is set to the
-                        total charge of the protein.  This condition works best
-                        when the boundary is sufficiently far from the
+                        point charge, dipole, and quadrupole.  The sphere 
+                        radius is set to the radius of the biomolecule and the 
+                        sphere charge, dipole, and quadrupole are set to the
+                        total moments of the protein.  This condition works 
+                        best when the boundary is sufficiently far from the
                         biomolecule.</para>
                     </listitem>
                   </varlistentry>
@@ -948,6 +949,17 @@
                         next-nearest-neighbor grid points.  Resulting
                         potentials are somewhat less sensitive (than spl0) to
                         grid spacing, length, and position.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                  <varlistentry>
+                    <term> spl4 </term>
+                    <listitem>
+                      <para>
+                        Quintic B-spline discretization. Similar to spl2, 
+                        except the charge/multipole is additionally mapped to 
+                        include next-next-nearest neighbors (125 grid points 
+                        receive charge density).
                       </para>
                     </listitem>
                   </varlistentry>
@@ -1724,6 +1736,19 @@
                         Additionally, these surfaces can generate unphysical
                         results with non-zero ionic strengths; this is an
                         on-going area of development.
+                      </para>
+                    </listitem>
+                  </varlistentry>
+                  <varlistentry>
+                    <term>spl4</term>
+                    <listitem>
+                      <para>
+                        The dielectric and ion-accessibility coefficients are 
+                        defined by a 7th order polynomial. This surface 
+                        definition has characteristics similar to spl2, but
+                        provides higher order continuity necessary for stable 
+                        force calculations with atomic multipole force fields 
+                        (up to quadrupole).
                       </para>
                     </listitem>
                   </varlistentry>
