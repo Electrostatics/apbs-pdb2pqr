@@ -35,8 +35,15 @@ and thus may not work on all systems.  Current status:
 
 Linux       - Working
 Mac G5      - Working
-Irix/SGI    - Support built in, untested
-Sun/Solaris - Support built in, untested
+Irix/SGI    - Untested
+Sun/Solaris - Untested
+Mingw       - Working, but users will need to copy the resulting 
+             _apbslib.so.exe to _apbslib.dll:
+
+              cd /path/to/apbs/tools/python
+              cp _apbslib.so.exe _apbslib.dll
+              cp vgrid/_vgrid.so.exe vgrid/_vgrid.dll
+
 Cygwin      - No support (by default, the directory is not compiled)
 
 
