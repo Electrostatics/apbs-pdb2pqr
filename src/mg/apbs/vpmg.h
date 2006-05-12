@@ -600,115 +600,193 @@ VEXTERNC int Vpmg_fillArray(
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */
-VPUBLIC void Vpmg_fieldSpline4(Vpmg *thee, int atomID, double field[3]);
+VPUBLIC void Vpmg_fieldSpline4(
+             Vpmg *thee,     /** Vpmg object */
+             int atomID,     /** Atom index */
+             double field[3] /** The (returned) electric field */
+             );
 
-/** @brief   Computes the permanent multipole energy (the polarization
- *           component of the hydration energy is computed in TINKER)
+/** @brief   Computes the permanent multipole electrostatic hydration 
+ *           energy (the polarization component of the hydration energy 
+ *           currently computed in TINKER).
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
- *  @returns The permanent multipole energy
+ *  @returns The permanent multipole electrostatic hydration energy
  */
-VEXTERNC double Vpmg_qfPermanentMultipoleEnergy(Vpmg *thee, int atomID);
+VEXTERNC double Vpmg_qfPermanentMultipoleEnergy(
+             Vpmg *thee,     /** Vpmg object */
+             int atomID      /** Atom index */
+             );
 
 /** @brief   Computes the q-Phi Force for permanent multipoles based on
  *           5th order B-splines
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */
-VEXTERNC void Vpmg_qfPermanentMultipoleForce(Vpmg *thee, int atomID,
-                                             double force[3], double torque[3]);
-/** @brief   Compute the ionic boundary force for permanent multipoles - this
- *  is currently just a copy of Vpmg_ibForce
+VEXTERNC void Vpmg_qfPermanentMultipoleForce(
+             Vpmg *thee,      /** Vpmg object */
+             int atomID,      /** Atom index */
+             double force[3], /** (returned) force */ 
+             double torque[3] /** (returned) torque */
+             );
+
+/** @brief   Compute the ionic boundary force for permanent multipoles.
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */
-VEXTERNC void Vpmg_ibPermanentMultipoleForce(Vpmg *thee, int atomID, 
-                                             double force[3]);
+VEXTERNC void Vpmg_ibPermanentMultipoleForce( 
+             Vpmg *thee,      /** Vpmg object */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
-/** @brief   Compute the dielectric boundary force for permanent multipoles
+/** @brief   Compute the dielectric boundary force for permanent multipoles.
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */                                          
-VEXTERNC void Vpmg_dbPermanentMultipoleForce(Vpmg *thee, int atomID,
-                                             double force[3]);
+VEXTERNC void Vpmg_dbPermanentMultipoleForce(
+             Vpmg *thee,      /** Vpmg object */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
                                              
 /** @brief   q-Phi direct polarization force between permanent multipoles and
- *           induced dipoles based on 5th Order B-Splines
+ *           induced dipoles, which are induced by the sum of the permanent
+ *           intramolecular field and the permanent reaction field. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */         
-VEXTERNC void Vpmg_qfDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced, 
-                                    int atomID, double force[3], 
-                                    double torque[3]);
+VEXTERNC void Vpmg_qfDirectPolForce( 
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *induced,  /** Induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3], /** (returned) force */ 
+             double torque[3] /** (returned) torque */
+             );
 
 /** @brief   q-Phi direct polarization force between permanent multipoles and
- *           non-local induced dipoles based on 5th Order B-Splines
+ *           non-local induced dipoles based on 5th Order B-Splines.
+ *           Keep in mind that the "non-local" induced dipooles are just
+ *           a mathematical quantity that result from differentiation of
+ *           the AMOEBA polarization energy. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */        
-VEXTERNC void Vpmg_qfNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
-                                      Vgrid *nlInduced, int atomID, 
-                                      double force[3], double torque[3]);
+VEXTERNC void Vpmg_qfNLDirectPolForce( 
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *nlInduced,/** Non-local induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3], /** (returned) force */ 
+             double torque[3] /** (returned) torque */
+             );
 
 /** @brief   Ionic boundary direct polarization force between permanent
- *           multipoles and induced dipoles based on 5th order B-Splines
+ *           multipoles and induced dipoles, which are induced by the 
+ *           sum of the permanent intramolecular field and the permanent 
+ *           reaction field. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */  
-VEXTERNC void Vpmg_ibDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
-                                    int atomID, double force[3]);
+VEXTERNC void Vpmg_ibDirectPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *induced,  /** Induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Ionic boundary direct polarization force between permanent
  *           multipoles and non-local induced dipoles based on 5th order 
- *           B-Splines
+ *           Keep in mind that the "non-local" induced dipooles are just
+ *           a mathematical quantity that result from differentiation of
+ *           the AMOEBA polarization energy. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */  
-VEXTERNC void Vpmg_ibNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
-                                      Vgrid *nlInduced, int atomID, 
-                                      double force[3]);
+VEXTERNC void Vpmg_ibNLDirectPolForce( 
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *nlInduced,/** Induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Dielectric boundary direct polarization force between permanent
- *           multipoles and induced dipoles based on 5th order B-Splines
+ *           multipoles and induced dipoles, which are induced by the 
+ *           sum of the permanent intramolecular field and the permanent 
+ *           reaction field. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */  
-VEXTERNC void Vpmg_dbDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
-                                    int atomID, double force[3]);
+VEXTERNC void Vpmg_dbDirectPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *induced,  /** Induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
-/** @brief   Dielectric bounday/nonpolar direct polarization force between
- *           permanent multipoles and non-local induced dipoles based on 5th
- *           order B-Splines
+/** @brief   Dielectric bounday direct polarization force between
+ *           permanent multipoles and non-local induced dipoles.
+ *           Keep in mind that the "non-local" induced dipooles are just
+ *           a mathematical quantity that result from differentiation of
+ *           the AMOEBA polarization energy. 
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */  
-VEXTERNC void Vpmg_dbNLDirectPolForce(Vpmg *thee, Vgrid *perm, 
-                                      Vgrid *nlInduced, int atomID, 
-                                      double force[3]);
+VEXTERNC void Vpmg_dbNLDirectPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *perm,     /** Permanent multipole potential */
+             Vgrid *nlInduced,/** Non-local induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Mutual polarization force for induced dipoles based on 5th
-             order B-Splines
+ *           order B-Splines. This force arises due to self-consistent
+ *           convergence of the solute induced dipoles and reaction field.
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */  
-VEXTERNC void Vpmg_qfMutualPolForce(Vpmg *thee, Vgrid *uinduced,
-                           Vgrid *nlinduced, int atomID, double force[3]);
+VEXTERNC void Vpmg_qfMutualPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *induced,  /** Induced dipole potential */
+             Vgrid *nlInduced,/** Non-local induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Ionic boundary mutual polarization force for induced dipoles 
- *           based on 5th order B-Splines
+ *           based on 5th order B-Splines. This force arises due to 
+ *           self-consistent convergence of the solute induced dipoles 
+ *           and reaction field.
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */ 
-VEXTERNC void Vpmg_ibMutualPolForce(Vpmg *thee, Vgrid *uinduced,
-                           Vgrid *nlinduced, int atomID, double force[3]);
+VEXTERNC void Vpmg_ibMutualPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *induced,  /** Induced dipole potential */
+             Vgrid *nlInduced,/** Non-local induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Dielectric boundary mutual polarization force for induced dipoles 
- *           based on 5th order B-Splines
+ *           based on 5th order B-Splines. This force arises due to 
+ *           self-consistent convergence of the solute induced dipoles 
+ *           and reaction field.
  *  @ingroup Vpmg
  *  @author  Michael Schnieders
  */ 
-VEXTERNC void Vpmg_dbMutualPolForce(Vpmg *thee, Vgrid *uinduced,
-                           Vgrid *nlinduced, int atomID, double force[3]);
+VEXTERNC void Vpmg_dbMutualPolForce(
+             Vpmg *thee,      /** Vpmg object */
+             Vgrid *induced,  /** Induced dipole potential */
+             Vgrid *nlInduced,/** Non-local induced dipole potential */
+             int atomID,      /** Atom index */
+             double force[3]  /** (returned) force */ 
+             );
 
 /** @brief   Print out a column-compressed sparse matrix in Harwell-Boeing
  *           format.  
@@ -735,3 +813,4 @@ VEXTERNC void Vpmg_printColComp(
         );
 
 #endif    /* ifndef _VPMG_H_ */
+

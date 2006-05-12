@@ -93,6 +93,16 @@ VPRIVATE double dbspline2(
         );
 
 /**
+ * @brief   Return 2.5 plus difference of i - f
+ * @author  Michael Schnieders
+ * @return  (2.5+((double)(i)-(f)))
+ */
+VPRIVATE double VFCHI4(
+		int i,
+		double f
+		);
+
+/**
  * @brief   Evaluate a 5th Order B-Spline (4th order polynomial)
  * @author: Michael Schnieders
  * @return  5th Order B-Spline
@@ -163,6 +173,21 @@ VPRIVATE double Vpmg_qfEnergyVolume(
         );
 
 /**
+ * @brief Selects a spline based surface method from either VSM_SPLINE
+ *        or VSM_SPLINE4
+ * @author David Gohara
+ */
+VPRIVATE void Vpmg_splineSelect(
+		int srfm,		/** Surface method, currently VSM_SPLINE or VSM_SPLINE4 */
+		Vacc *acc,		/** Accessibility object */
+		double *gpos,	/** Position array -> array[3] */
+		double win,		/** Spline window */
+		double infrad,	/** Inflation radius */
+		Vatom *atom,	/** Atom object */
+		double *force	/** Force array -> array[3] */
+		);
+
+/**
  * @brief  For focusing, fill in the boundaries of the new mesh based on the
  * potential values in the old mesh
  * @author  Nathan Baker
@@ -196,8 +221,8 @@ VPRIVATE void bcfl1(
         );
 
 /**
- * @brief  Comment me!
- *
+ * @brief  Increment all boundary points to include the Debye-Huckel 
+ *         potential due to a single multipole site. (truncated at quadrupole)
  * @author Michael Schnieders
  */
 VPRIVATE void bcfl2(
@@ -205,7 +230,7 @@ VPRIVATE void bcfl2(
         double *apos,  /** Position of the ion */
         double charge,  /** Charge of the ion */
         double *dipole, /** Dipole of the ion */
-        double *quad,   /** Quadripole of the ion */
+        double *quad,   /** Traceless Quadrupole of the ion */
         double xkappa,  /** Exponential screening factor */
         double eps_p,   /** Solute dielectric */
         double eps_w,   /** Solvent dielectric */
@@ -222,17 +247,20 @@ VPRIVATE void bcfl2(
         );  
 
 /**
- * @brief  Comment me!
+ * @brief  This routine serves bcfl2. It returns (in tsr) the contraction 
+ *         independent portion of the Debye-Huckel potential tensor 
+ *         for a spherical ion with a central charge, dipole and quadrupole.
+ *         See the code for an in depth description. 
  * 
  * @author Michael Schnieders
  */
 VPRIVATE void multipolebc(
-        double r,
-        double kappa,
+        double r,      /** Distance to the boundary */
+        double kappa,  /** Exponential screening factor */ 
         double eps_p,  /** Solute dielectric */
         double eps_w,  /** Solvent dielectric */
-        double rad,
-        double tsr[3]
+        double rad,    /** Radius of the sphere */
+        double tsr[3]  /** Contraction-independent portion of each tensor */
         );
 
 /**
@@ -339,8 +367,8 @@ VPRIVATE void fillcoCoefSpline(
         );
 
 /** 
- * @brief  Fill operator coefficient arrays from a 5th order spline-based 
- *         surface calculation
+ * @brief  Fill operator coefficient arrays from a 7th order polynomial 
+ *         based surface calculation
  * @author  Michael Schnieders 
  */
 VPRIVATE void fillcoCoefSpline4(
@@ -438,6 +466,17 @@ VPRIVATE void qfForceSpline2(
         double *force,  /** Set to force */
         int atomID  /** Valist atom ID */
         );
+
+/** 
+* @brief  Charge-field force due to a quintic spline charge function
+* @author  Michael Schnieders
+*/
+VPRIVATE void qfForceSpline4(
+							 Vpmg *thee, 
+							 double *force,  /** Set to force */
+							 int atomID  /** Valist atom ID */
+							 );
+
 
 /**
  * @brief  Calculate the solution to Poisson's equation with a simple
@@ -569,3 +608,4 @@ VEXTERNC void F77MYPDEFINIT(int *nion, double *ionQ, double *ionConc);
 VEXTERNC void F77MYPDEFCLEAR();
 
 #endif
+

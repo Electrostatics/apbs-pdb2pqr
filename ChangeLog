@@ -6,6 +6,23 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
       with several visualization programs.  PMG license modifed as well.
     * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
       boundary conditions (e.g., membranes).
+    * Added code to allow for an interface with TINKER (thanks to Michael
+      Schnieders).
+    * Added a new "spl4" charge method (chgm) option to support a quintic 
+      B-spline discretization (thanks to Michael Schnieders).
+    * Added a new "spl4" ion-accessibility coefficient model (srfm) option 
+      that uses a 7th order polynomial. This option provides the higher order 
+      continuity necessary for stable force calculations with atomic
+      multipole force fields (thanks to Michael Schnieders).
+    * Modified the "sdh" boundary condition (bcfl) option to include dipoles
+      and quadrupoles.  Well-converged APBS calculations won't change with the 
+      dipole and quadrupole molecular moments included in the boundary 
+      potential estimate, but calculations run with the boundary close to the 
+      solute should give an improved result (thanks to Michael Schnieders). 
+    * Added Vpmg_splineSelect to select the correct Normalization method with
+      either cubic or quintic (7th order polynomial) spline methods.
+    * Modified the selection criteria in Vpmg_qfForce, Vpmg_ibForce and
+      Vpmg_dbnpForce for use with the new spline based (spl4) method.
   - BUG FIXES
     * Updated psize.py to use centers and radii when calculating grid sizes
       (thanks to John Mongan)
@@ -505,4 +522,5 @@ consider subscribing to the APBS announcements mailing list by sending
 the message "subscribe apbs-announce" to majordomo@mccammon.ucsd.edu.
 
 Thank you for your time and interest in the APBS software.
+
 
