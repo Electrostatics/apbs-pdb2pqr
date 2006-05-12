@@ -22,7 +22,11 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
     * Added Vpmg_splineSelect to select the correct Normalization method with
       either cubic or quintic (7th order polynomial) spline methods.
     * Modified the selection criteria in Vpmg_qfForce, Vpmg_ibForce and
-      Vpmg_dbnpForce for use with the new spline based (spl4) method.
+      Vpmg_dbnpForce for use with the new spline based (spl4) method. 
+    * The Python wrappers are now disabled by default.  They can be compiled
+      by passing the --enable-python flag to the configure script.  This will
+      allow users to attempt to compile the wrappers on various systems as
+      desired.
   - BUG FIXES
     * Updated psize.py to use centers and radii when calculating grid sizes
       (thanks to John Mongan)
