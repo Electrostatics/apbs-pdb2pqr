@@ -72,8 +72,6 @@ AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
 AC_PREFIX_DEFAULT(${HOME})
 AC_CANONICAL_SYSTEM
-fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
-AC_SUBST(fetk_cpu_vendor_os)
 
 dnl ##########################################################################
 dnl 1. automake initialization (uncomment only if rebuilding Makefile.in's)
@@ -125,6 +123,7 @@ AM_PROG_CC_STDC
 AC_PROG_CXX
 AC_PROG_F77
 AC_LANG_FORTRAN77
+
 dnl AC_F77_LIBRARY_LDFLAGS 
 dnl # -----------------------
 dnl # HANDLE OSF WEIRDNESS:
@@ -249,6 +248,36 @@ dnl ##########################################################################
 dnl 10. checks for anything else
 dnl ##########################################################################
 
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT STANDARD LIBRARY AND BIN INSTALL
+dnl # -----------------------
+
+AC_MSG_CHECKING([for disable-install-triplet])
+AC_ARG_ENABLE(install-triplet,
+    [AC_HELP_STRING([--disable-install-triplet],[disable OS version specific installation])],
+    [ disable_triplet="yes"],
+    [ disable_triplet="" ]
+)
+
+if test "${disable_triplet}" == yes; then
+
+	AC_MSG_RESULT([yes])
+	fetk_cpu_vendor_os="";
+	
+	echo
+	echo 'Disabling host triplet library and binary specification'
+	echo 'Libraries and Binaries will be installed the top-level directories'
+	echo
+	
+else
+
+	fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
+	AC_MSG_RESULT([no])
+
+fi
+
+AC_SUBST(fetk_cpu_vendor_os)
+
 AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
 
 dnl # ----------------------
@@ -289,9 +318,11 @@ CPPFLAGS_SAVE=${CPPFLAGS};
 LDFLAGS=${maloc_lib_path};
 CPPFLAGS=${maloc_inc_path};
 maloc_found="";
+
 AC_CHECK_HEADER(maloc/maloc.h,
     [maloc_found="yes";maloc_inc="${maloc_inc_path}"],
     [maloc_found="";maloc_inc=""])
+	
 if test -n "${maloc_found}"; then
     AC_CHECK_LIB(maloc,maloc_link,
         [maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc"],
@@ -941,8 +972,40 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-lib_list="${FLIBS} -L${top_srcdir}/lib ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+
+case $host_os in
+
+	darwin8*)
+		extra_list1="-lSystemStubs"
+		;;
+
+	*)
+		extra_list1=""
+		;;
+
+esac
+
+dnl # -------------------------
+dnl # Need to add in a case statement to put in lcc_dynamic for g77
+dnl # This is for OS X only
+dnl # -------------------------
+
+extra_list2=""
+case $host_os in
+
+	darwin*)
+		if test "$F77" == "g77"; then
+			extra_list2="-lcc_dynamic"
+		else
+			extra_list2=""
+		fi
+		;;
+		
+esac
+
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
+lib_list="${base_list} ${extra_list1} ${extra_list2}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
@@ -990,4 +1053,5 @@ AC_MSG_RESULT([APBS to be linked with following libraries:  ${lib_list}])
 AC_MSG_RESULT([APBS to be compiled with following includes:  ${inc_list}])
 AC_MSG_RESULT([])
 AC_MSG_RESULT([Please type "make; make install"])
+
 
