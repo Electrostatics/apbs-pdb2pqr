@@ -4030,7 +4030,7 @@ VPUBLIC int Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
     force[2] = 0.0;
 
     /* Check surface definition */
-    if ((srfm != VSM_SPLINE) || (srfm != VSM_SPLINE4)) {
+    if ((srfm != VSM_SPLINE) && (srfm != VSM_SPLINE4)) {
         Vnm_print(2, "Vpmg_ibForce:  Forces *must* be calculated with \
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_ibForce:  Skipping ionic boundary force \
@@ -4188,7 +4188,7 @@ VPUBLIC int Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce,
     npForce[2] = 0.0;
 
     /* Check surface definition */
-    if ((srfm != VSM_SPLINE) || (srfm != VSM_SPLINE4)) {
+    if ((srfm != VSM_SPLINE) && (srfm != VSM_SPLINE4)) {
         Vnm_print(2, "Vpmg_dbnpForce:  Forces *must* be calculated with \
 spline-based surfaces!\n");
         Vnm_print(2, "Vpmg_dbnpForce:  Skipping dielectric/apolar boundary \
