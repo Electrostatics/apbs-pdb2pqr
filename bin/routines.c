@@ -114,6 +114,16 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
                     return 0;
                 }
                 break;
+            case NPF_XML:
+                 Vnm_tprint( 1, "Reading parameter data from %s.\n",
+                   nosh->parmpath);
+                if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
+                  nosh->parmpath) != 1) {
+                    Vnm_tprint(2, "NOsh:  Error reading parameter\
+ file (%s)!\n", nosh->parmpath);
+                    return 0;
+                }
+                break;
             default:
                 Vnm_tprint(2, "NOsh:  Error! Undefined parameter file \
 type (%d)!\n", nosh->parmfmt);

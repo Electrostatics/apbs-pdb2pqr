@@ -27,6 +27,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
       by passing the --enable-python flag to the configure script.  This will
       allow users to attempt to compile the wrappers on various systems as
       desired.
+    * Added XML support for reading in parameter files when using PDB files
+      as input.  New XML files can be found in tools/conversion/param/vparam.
   - BUG FIXES
     * Updated psize.py to use centers and radii when calculating grid sizes
       (thanks to John Mongan)

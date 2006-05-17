@@ -366,6 +366,18 @@ VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
             thee->gotparm = 1;
             strncpy(thee->parmpath, tok, VMAX_ARGLEN);
         }
+    } else if(Vstring_strcasecmp(tok, "xml") == 0) {
+        parmfmt = NPF_XML;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (thee->gotparm) {
+            Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
+            Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
+        } else {
+            thee->parmfmt = parmfmt;
+            thee->gotparm = 1;
+            strncpy(thee->parmpath, tok, VMAX_ARGLEN);
+        }
+
     } else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined parm format \
 %s!\n", tok);

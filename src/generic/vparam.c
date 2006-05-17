@@ -86,6 +86,12 @@ VPRIVATE char *MCwhiteChars = " =,;\t\n\r";
 VPRIVATE char *MCcommChars  = "#%";
 
 /**
+ * @brief  Whitespace characters for XML socket reads
+ * @ingroup Vparam
+ */
+VPRIVATE char *MCxmlwhiteChars = " =,;\t\n\r<>";
+
+/**
  * @brief  Read a single line of the flat file database
  * @author  Nathan Baker
  * @ingroup  Vparam
@@ -94,6 +100,17 @@ VPRIVATE char *MCcommChars  = "#%";
  * @returns 1 if successful, 0 otherwise
  */
 VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom);
+
+/**
+ * @brief  Read atom information from an XML file
+ * @author  Todd Dolinsky
+ * @ingroup  Vparam
+ * @param  sock  Socket ready for reading
+ * @param  atom  Atom to hold parsed data
+ * @returns 1 if successful, 0 otherwise
+ */
+VPRIVATE int readXMLFileAtom(Vio *sock, Vparam_AtomData *atom);
+
 
 #if !defined(VINLINE_VPARAM)
 
@@ -296,6 +313,146 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
     return atom;
 }
 
+VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
+  const char *iofmt, const char *thost, const char *fname) {
+
+    int i, iatom, jatom, ires, natoms, nalloc, ralloc;
+    Vparam_AtomData *atoms = VNULL;
+    Vparam_AtomData *tatoms = VNULL;
+    Vparam_AtomData *atom = VNULL;
+    Vparam_ResData *res = VNULL;
+    Vparam_ResData *residues = VNULL;
+    Vparam_ResData *tresidues = VNULL;
+    Vio *sock = VNULL;
+    char currResName[VMAX_ARGLEN];
+    char tok[VMAX_ARGLEN];
+    char dtmp[VMAX_ARGLEN];
+    char endtag[VMAX_ARGLEN];
+
+    VASSERT(thee != VNULL);
+
+    /* Setup communication */
+    sock = Vio_ctor(iodev,iofmt,thost,fname,"r");
+    if (sock == VNULL) {
+        Vnm_print(2, "Vparam_readXMLFile: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    if (Vio_accept(sock, 0) < 0) {
+        Vnm_print(2, "Vparam_readXMLFile: Problem accepting virtual socket %s\n",
+          fname);
+        return 0;
+    }
+    Vio_setWhiteChars(sock, MCxmlwhiteChars);
+    Vio_setCommChars(sock, MCcommChars);
+
+    /* Clear existing parameters */
+    if (thee->nResData > 0) {
+        Vnm_print(2, "WARNING -- CLEARING PARAMETER DATABASE!\n");
+        for (i=0; i<thee->nResData; i++) {
+            Vparam_ResData_dtor2(&(thee->resData[i]));
+        }
+        Vmem_free(thee->vmem, thee->nResData, 
+          sizeof(Vparam_ResData), (void **)&(thee->resData));
+    }
+
+    strcpy(endtag,"/");
+
+    /* Set up temporary residue list */
+    
+    ralloc = 50;
+    residues = Vmem_malloc(thee->vmem, ralloc, sizeof(Vparam_ResData));
+
+    /* Read until we run out of entries, allocating space as needed */
+    while (1) {
+      
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+
+        /* The first token should be the start tag */
+      
+        if (Vstring_strcasecmp(endtag, "/") == 0) strcat(endtag, tok);
+        
+        if (Vstring_strcasecmp(tok, "residue") == 0) {
+          if (thee->nResData >= ralloc) {
+                tresidues = Vmem_malloc(thee->vmem, 2*ralloc, sizeof(Vparam_ResData));
+                VASSERT(tresidues != VNULL);
+                for (i=0; i<thee->nResData; i++) {
+                    Vparam_ResData_copyTo(&(residues[i]), &(tresidues[i]));
+                }
+                Vmem_free(thee->vmem, ralloc, sizeof(Vparam_ResData), 
+                          (void **)&(residues));
+                residues = tresidues; 
+                tresidues = VNULL;
+                ralloc = 2*ralloc;
+            }
+
+          /* Initial space for this residue's atoms */
+          nalloc = 20;
+          natoms = 0;
+          atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
+
+        } else if (Vstring_strcasecmp(tok, "name") == 0) {
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);  /* value */
+            strcpy(currResName, tok);
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); /* </name> */
+        } else if (Vstring_strcasecmp(tok, "atom") == 0) {
+            if (natoms >= nalloc) {
+                tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
+                VASSERT(tatoms != VNULL);
+                for (i=0; i<natoms; i++) {
+                    Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
+                }
+                Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), 
+                          (void **)&(atoms));
+                atoms = tatoms; 
+                tatoms = VNULL;
+                nalloc = 2*nalloc;
+            }
+            atom = &(atoms[natoms]);
+            if (!readXMLFileAtom(sock, atom)) break;
+            natoms++;
+
+        } else if (Vstring_strcasecmp(tok, "/residue") == 0) {
+
+          res = &(residues[thee->nResData]);
+          Vparam_ResData_ctor2(res, thee->vmem);
+          res->atomData = Vmem_malloc(thee->vmem, natoms, 
+                                      sizeof(Vparam_AtomData));
+          res->nAtomData = natoms;
+          strcpy(res->name, currResName);
+          for (i=0; i<natoms; i++) {
+              strcpy(atoms[i].resName, currResName);
+              Vparam_AtomData_copyTo(&(atoms[i]), &(res->atomData[i]));
+          }
+          Vmem_free(thee->vmem, nalloc, sizeof(Vparam_AtomData), (void **)&(atoms));
+          (thee->nResData)++;
+
+        } else if (Vstring_strcasecmp(tok, endtag) == 0) break;
+    }
+
+    /* Initialize and copy the residues into the Vparam object */
+      
+    thee->resData = Vmem_malloc(thee->vmem, thee->nResData, 
+                                sizeof(Vparam_ResData));
+    for (ires=0; ires<thee->nResData; ires++) {
+        Vparam_ResData_copyTo(&(residues[ires]), &(thee->resData[ires]));
+    }
+
+    /* Destroy temporary atom space */
+    Vmem_free(thee->vmem, ralloc, sizeof(Vparam_ResData), (void **)&(residues));
+
+    /* Shut down communication */
+    Vio_acceptFree(sock);
+    Vio_dtor(&sock);
+
+    return 1;
+
+VERROR1:
+    Vnm_print(2, "Vparam_readXMLFile: Got unexpected EOF reading parameter file!\n");
+    return 0;
+
+}
+
 VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
   const char *iofmt, const char *thost, const char *fname) {
 
@@ -435,8 +592,111 @@ VEXTERNC void Vparam_AtomData_copyTo(Vparam_AtomData *thee,
 
 }
 
+VEXTERNC void Vparam_ResData_copyTo(Vparam_ResData *thee,
+  Vparam_ResData *dest) {
+
+    int i;
+
+    VASSERT(thee != VNULL);
+    VASSERT(dest != VNULL);
+    
+    strcpy(dest->name, thee->name);
+    dest->vmem = thee->vmem;
+    dest->nAtomData = thee->nAtomData;
+
+    dest->atomData = Vmem_malloc(thee->vmem, dest->nAtomData, 
+                                 sizeof(Vparam_AtomData));
+    
+    for (i=0; i<dest->nAtomData; i++) {
+      Vparam_AtomData_copyTo(&(thee->atomData[i]), &(dest->atomData[i]));
+    }
+    Vmem_free(thee->vmem, thee->nAtomData, sizeof(Vparam_AtomData), 
+              (void **)&(thee->atomData));
+}
+
 VEXTERNC void Vparam_AtomData_copyFrom(Vparam_AtomData *thee,
   Vparam_AtomData *src) {  Vparam_AtomData_copyTo(src, thee); }
+
+VPRIVATE int readXMLFileAtom(Vio *sock, Vparam_AtomData *atom) {
+  
+    double dtmp;
+    char tok[VMAX_BUFSIZE];
+    int chgflag, radflag, nameflag;
+   
+    VASSERT(atom != VNULL);
+
+    if (Vio_scanf(sock, "%s", tok) != 1) return 0;
+
+    chgflag = 0;
+    radflag = 0;
+    nameflag = 0;
+
+    while (1)
+      {
+          if (Vstring_strcasecmp(tok, "name") == 0) {
+              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); 
+              if (strlen(tok) > VMAX_ARGLEN) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom:  string (%s) too long \
+(%d)!\n", tok, strlen(tok));
+                  return 0;
+              }
+              nameflag = 1;
+              strcpy(atom->atomName, tok);
+          } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+              if (sscanf(tok, "%lf", &dtmp) != 1) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom:  Unexpected token (%s) while \
+parsing charge!\n", tok);
+                  return 0;
+              }
+              chgflag = 1;
+              atom->charge = dtmp;
+          }  else if (Vstring_strcasecmp(tok, "radius") == 0) {
+              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+              if (sscanf(tok, "%lf", &dtmp) != 1) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom:  Unexpected token (%s) while \
+parsing radius!\n", tok);
+                  return 0;
+              }
+              radflag = 1;
+              atom->radius = dtmp;
+          }  else if (Vstring_strcasecmp(tok, "epsilon") == 0) {
+              VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+              if (sscanf(tok, "%lf", &dtmp) != 1) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom:  Unexpected token (%s) while \
+parsing epsilon!\n", tok);
+                  return 0;
+              }
+              atom->epsilon = dtmp;
+          } else if ((Vstring_strcasecmp(tok, "/atom") == 0) || 
+                     (Vstring_strcasecmp(tok, "atom") == 0)){
+                if (chgflag && radflag && nameflag) return 1;
+                else if (!chgflag) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom: Reached end of atom without \
+setting the charge!\n");
+                  return 0;
+                } else if (!radflag) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom: Reached end of atom without \
+setting the radius!\n");
+                  return 0;
+                } else if (!nameflag) {
+                  Vnm_print(2, "Vparam_readXMLFileAtom: Reached end of atom without \
+setting the name!\n");
+                  return 0;
+                }
+          } 
+          VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+      }
+ 
+    /* If we get here something wrong has happened */
+
+    VJMPERR1(1);
+
+VERROR1:
+    Vnm_print(2, "Vparam_readXMLFileAtom: Got unexpected EOF reading parameter file!\n");
+    return 0;
+
+}
 
 VPRIVATE int readFlatFileLine(Vio *sock, Vparam_AtomData *atom) {
 
