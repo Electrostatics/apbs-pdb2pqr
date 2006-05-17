@@ -211,6 +211,16 @@ VEXTERNC void Vparam_AtomData_copyTo(Vparam_AtomData *thee,
   Vparam_AtomData *dest); 
 
 /** 
+ * @brief  Copy current residue object to destination
+ * @ingroup  Vparam
+ * @author  Todd Dolinsky
+ * @param  thee  Pointer to source object
+ * @param  dest  Pointer to destination object
+ */
+VEXTERNC void Vparam_ResData_copyTo(Vparam_ResData *thee, 
+  Vparam_ResData *dest); 
+
+/** 
  * @brief  Copy current atom object from another
  * @ingroup  Vparam
  * @author  Nathan Baker
@@ -326,6 +336,20 @@ VEXTERNC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
  *   <dt> tools/conversion/vparam-charmm-par_all27.dat
  *   <dd> CHARMM par_all27_prot_na parameters
  * </dl>
+ * */
+VEXTERNC int Vparam_readFlatFile(Vparam *thee, const char *iodev, 
+  const char *iofmt, const char *thost, const char *fname);
+
+/** @brief  Read an XML format parameter database
+ * @ingroup Vparam
+ * @author  Todd Dolinsky
+ * @param  thee Vparam object
+ * @param   iodev  Input device type (FILE/BUFF/UNIX/INET)
+ * @param   iofmt  Input device format (ASCII/XDR)
+ * @param   thost  Input hostname (for sockets)
+ * @param   fname  Input FILE/BUFF/UNIX/INET name
+ * (see note below for format)
+ * @returns 1 if successful, 0 otherwise
  * */
 VEXTERNC int Vparam_readFlatFile(Vparam *thee, const char *iodev, 
   const char *iofmt, const char *thost, const char *fname);

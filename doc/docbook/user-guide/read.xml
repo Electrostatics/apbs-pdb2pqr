@@ -82,6 +82,10 @@
                     <para>APBS flat-file parameter format (see
                       <link linkend="flat-format">Formats section</link>)</para>
                   </listitem>
+                  <term><type>xml</type></term>
+                  <listitem>
+                    <para>XML parameter format</para>
+                  </listitem>
                 </varlistentry>
               </variablelist>
             </para>

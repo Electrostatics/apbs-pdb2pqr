@@ -132,7 +132,8 @@ typedef enum eNOsh_CalcType NOsh_CalcType;
  * @ingroup NOsh
  */
 enum eNOsh_ParmFormat {
-    NPF_FLAT=0  /**< Flat-file format */
+    NPF_FLAT=0,  /**< Flat-file format */
+    NPF_XML=1    /**< XML format */
 };
 
 /**
