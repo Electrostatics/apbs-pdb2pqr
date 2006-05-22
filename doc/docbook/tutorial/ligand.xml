@@ -231,7 +231,7 @@ elec name bal                # BALANOL ENERGY CALCULATION
     pdie 2.0                 # Solute dielectric
     sdie 78.00               # Solvent dielectric
     chgm spl0                # Linear charge discretization
-    srfm smol                # Smoothed molecular surface
+    srfm mol                # Smoothed molecular surface
     srad 0.0                 # Solvent probe radius
     swin 0.3                 # Surface spline window (not used)
     sdens 10.0               # Sphere density
@@ -256,7 +256,7 @@ elec name pka                # PROTEIN KINASE A CALCULATION
     pdie 2.0       
     sdie 78.00     
     chgm spl0      
-    srfm smol      
+    srfm mol      
     srad 0.0       
     swin 0.3       
     sdens 10.0 
@@ -281,7 +281,7 @@ elec name complex            # COMPLEX CALCULATION
     pdie 2.0       
     sdie 78.00     
     chgm spl0      
-    srfm smol      
+    srfm mol      
     srad 0.0       
     swin 0.3   
     sdens 10.0    
