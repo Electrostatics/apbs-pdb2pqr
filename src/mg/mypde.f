@@ -120,7 +120,7 @@ c* *********************************************************************
       integer          MAXPOLY
       double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
       parameter        (MAXPOLY = 50)
-      parameter        (ZSMALL   = 1.0e-20, ZLARGE = 1.0e20)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
       parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
 c* Added by NAB to allow different ions with different charges
       integer          nion
@@ -211,7 +211,7 @@ c* *********************************************************************
       integer          MAXPOLY
       double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
       parameter        (MAXPOLY = 50)
-      parameter        (ZSMALL   = 1.0e-20, ZLARGE = 1.0e20)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
       parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
 c* Added by NAB to allow different ions with different charges
       integer          nion
@@ -300,7 +300,7 @@ c* *********************************************************************
       integer          MAXPOLY
       double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
       parameter        (MAXPOLY = 50)
-      parameter        (ZSMALL   = 1.0e-20, ZLARGE = 1.0e20)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
       parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
       integer          n,i,ii,nproc,ipara,ivect
       parameter        (nproc=1)
@@ -459,7 +459,7 @@ c* *********************************************************************
       integer          MAXPOLY
       double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
       parameter        (MAXPOLY = 50)
-      parameter        (ZSMALL   = 1.0e-20, ZLARGE = 1.0e20)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
       parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
       integer          n,i,ii,nproc,ipara,ivect
       parameter        (nproc=1)
