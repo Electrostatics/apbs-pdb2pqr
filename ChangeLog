@@ -39,6 +39,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
       automake and compatibility with new MALOC
     * Fixed a bug where reading in a file in PDB format had atom IDs starting 
       at 1 rather than 0, leading to a segmentation fault.
+    * Fixed a bug in mypde.f where double precision values were initialized
+      with single precision number (causing multiplication errors).
 	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.4.0       12-14-05 
