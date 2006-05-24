@@ -245,6 +245,20 @@ VEXTERNC int Valist_readPDB(
         );
 
 /** 
+ * @brief  Fill atom list with information from an XML file
+ * @ingroup Valist
+ * @author  Todd Dolinsky
+ * @return  1 if successful, 0 otherwise
+ * @note  \li The XML file must adhere to some guidelines, notably the 
+ *            presence of an <atom> tag with all other useful information
+ *            (x, y, z, charge, and radius) as nested elements.
+ */
+VEXTERNC int Valist_readXML(
+        Valist *thee, /**< Atom list object */
+        Vio *sock /**< Socket reading for reading PQR file */
+        );
+
+/** 
  * @brief   Load up Valist with various statistics
  * @ingroup Valist
  * @author  Nathan Baker

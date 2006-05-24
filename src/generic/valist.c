@@ -70,6 +70,7 @@ VEMBED(rcsid="$Id$")
 
 VPRIVATE char *Valist_whiteChars = " \t\n";
 VPRIVATE char *Valist_commChars  = "#%";
+VPRIVATE char *Valist_xmlwhiteChars = " \t\n<>";
 
 #if !defined(VINLINE_VATOM)
 
@@ -618,6 +619,137 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
 
     return Valist_getStatistics(thee);
 
+
+}
+
+VPUBLIC int Valist_readXML(Valist *thee, Vio *sock) {
+
+    Vatom *atoms = VNULL;
+    Vatom *nextAtom = VNULL;
+    char tok[VMAX_BUFSIZE];
+    char endtag[VMAX_BUFSIZE];
+    char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
+    int nlist, natoms, serial;
+    int xset, yset, zset, chgset, radset;
+    double x, y, z, charge, radius, dtmp;
+    double pos[3];
+ 
+    VASSERT(thee != VNULL);
+    thee->number = 0;
+
+    Vio_setWhiteChars(sock, Valist_xmlwhiteChars);
+    Vio_setCommChars(sock, Valist_commChars);
+
+    /* Allocate some initial space for the atoms */
+    nlist = 200;
+    atoms = Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
+
+    /* Initialize some variables */
+    natoms = 0;
+    xset = 0;
+    yset = 0;
+    zset = 0;
+    chgset = 0;
+    radset = 0;
+    strcpy(endtag,"/");
+
+    /* Read until we run out of lines */
+    while (Vio_scanf(sock, "%s", tok) == 1) {
+
+        /* The first tag taken is the start tag - save it to detect end */
+        if (Vstring_strcasecmp(endtag, "/") == 0) strcat(endtag, tok);
+
+        if (Vstring_strcasecmp(tok, "x") == 0) {
+            Vio_scanf(sock, "%s", tok);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
+reading x!\n", tok);
+                  return 0;
+              }
+            x = dtmp;
+            xset = 1;
+        } else if (Vstring_strcasecmp(tok, "y") == 0) {
+            Vio_scanf(sock, "%s", tok);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
+reading y!\n", tok);
+                  return 0;
+              }
+            y = dtmp;
+            yset = 1;
+        } else if (Vstring_strcasecmp(tok, "z") == 0) {
+            Vio_scanf(sock, "%s", tok);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
+reading z!\n", tok);
+                  return 0;
+              }
+            z = dtmp;
+            zset = 1;
+        } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+            Vio_scanf(sock, "%s", tok);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
+reading charge!\n", tok);
+                  return 0;
+              }
+            charge = dtmp;
+            chgset = 1;
+        } else if (Vstring_strcasecmp(tok, "radius") == 0) {
+            Vio_scanf(sock, "%s", tok);
+            if (sscanf(tok, "%lf", &dtmp) != 1) {
+                Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
+reading radius!\n", tok);
+                  return 0;
+              }
+            radius = dtmp;
+            radset = 1;
+        } else if (Vstring_strcasecmp(tok, "/atom") == 0) {
+ 
+          /* Get pointer to next available atom position */
+            nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
+            if (nextAtom == VNULL) {
+                Vnm_print(2, "Valist_readXML:  Error in allocating spacing for atoms!\n");
+                return 0;
+            }
+
+            if (xset && yset && zset && chgset && radset){
+              
+                /* Store the information */
+                pos[0] = x; pos[1] = y; pos[2] = z; 
+                Vatom_setPosition(nextAtom, pos);
+                Vatom_setCharge(nextAtom, charge);
+                Vatom_setRadius(nextAtom, radius);
+                Vatom_setAtomID(nextAtom, natoms-1);
+
+                /* Reset the necessary flags */
+                xset = 0;
+                yset = 0;
+                zset = 0;
+                chgset = 0;
+                radset = 0;
+            } else {
+                Vnm_print(2,  "Valist_readXML:  Missing field(s) in atom tag:\n"); 
+                if (!xset) Vnm_print(2,"\tx value not set!\n"); 
+                if (!yset) Vnm_print(2,"\ty value not set!\n"); 
+                if (!zset) Vnm_print(2,"\tz value not set!\n"); 
+                if (!chgset) Vnm_print(2,"\tcharge value not set!\n"); 
+                if (!radset) Vnm_print(2,"\tradius value not set!\n"); 
+                return 0;
+            }
+        } else if (Vstring_strcasecmp(tok, endtag) == 0) break;
+    }
+
+    Vnm_print(0, "Valist_readXML: Counted %d atoms\n", natoms);
+    fflush(stdout);
+
+    /* Store atoms internally */
+    if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
+        Vnm_print(2, "Valist_readXML:  unable to store atoms!\n");
+        return 0;
+    }
+
+    return Valist_getStatistics(thee);
 
 }
 

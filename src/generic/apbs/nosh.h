@@ -103,7 +103,8 @@
  */
 enum eNOsh_MolFormat {
     NMF_PQR=0,  /**< PQR format */
-    NMF_PDB=1  /**< PDB format */
+    NMF_PDB=1,  /**< PDB format */
+    NMF_XML=2   /**< XML format */
 };
 
 /**
