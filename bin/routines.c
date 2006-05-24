@@ -176,6 +176,24 @@ specifying PARM file!\n");
                 Vio_acceptFree(sock);
                 Vio_dtor(&sock);
                 break;
+            case NMF_XML:
+                Vnm_tprint( 1, "Reading XML-format atom data from %s.\n",
+                  nosh->molpath[i]);
+                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+                if (sock == VNULL) {
+                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                if (Vio_accept(sock, 0) < 0) {
+                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
+                            nosh->molpath[i]);
+                    return 0;
+                }
+                rc = Valist_readXML(alist[i], sock);
+                Vio_acceptFree(sock);
+                Vio_dtor(&sock);
+                break;
             default:
                 Vnm_tprint(2, "NOsh:  Error!  Undefined molecule file type \
 (%d)!\n", nosh->molfmt[i]);

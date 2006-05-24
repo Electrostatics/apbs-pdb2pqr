@@ -335,6 +335,14 @@ VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
         thee->molfmt[thee->nmol] = molfmt;
         strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
         (thee->nmol)++;
+    } else if (Vstring_strcasecmp(tok, "xml") == 0) {
+        molfmt = NMF_XML;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
+          thee->nmol, tok);
+        thee->molfmt[thee->nmol] = molfmt;
+        strncpy(thee->molpath[thee->nmol], tok, VMAX_ARGLEN);
+        (thee->nmol)++;
     } else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined mol format \
 %s!\n", tok);
