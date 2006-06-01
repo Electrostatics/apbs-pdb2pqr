@@ -4326,7 +4326,7 @@ force calculation!\n");
                     
 					/* Select the correct function based on the surface definition 
 					 *	(now including the 7th order polynomial) */
-					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHyijk);
                     
 					for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
                     gpos[0] = i*hx + xmin;
@@ -4336,7 +4336,7 @@ force calculation!\n");
                     
 					/* Select the correct function based on the surface definition 
 					 *	(now including the 7th order polynomial) */
-					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHzijk);
                     
 					for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
                     /* i-1,j,k */
@@ -4347,7 +4347,7 @@ force calculation!\n");
                     
 					/* Select the correct function based on the surface definition 
 					 *	(now including the 7th order polynomial) */
-					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxim1jk);
                     
 					for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
                     /* i,j-1,k */
@@ -4358,7 +4358,7 @@ force calculation!\n");
                     
 					/* Select the correct function based on the surface definition 
 					 *	(now including the 7th order polynomial) */
-					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHyijm1k);
                     
 					for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
                     /* i,j,k-1 */
@@ -4369,7 +4369,7 @@ force calculation!\n");
                     
 					/* Select the correct function based on the surface definition 
 					 *	(now including the 7th order polynomial) */
-					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
+					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHzijkm1);
                     
 					for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
                     /* *** CALCULATE DIELECTRIC BOUNDARY FORCES *** */
