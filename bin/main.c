@@ -247,17 +247,48 @@ int main(
         chargeMap[i] = VNULL;
     }
 
-    /* *************** CHECK INVOCATION ******************* */
+    /* ********* CHECK INVOCATION AND OPTIONS ************* */
     Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
+
+    i=0;
+    while (i<argc){
+        if (strncmp(argv[i], "--", 2) == 0) {
+          
+	    /* Long Options */
+	    if (Vstring_strcasecmp("--version", argv[i]) == 0){
+	        Vnm_tprint(2, "%s", PACKAGE_STRING);
+                VJMPERR1(0);
+	    } else if (Vstring_strcasecmp("--help", argv[i]) == 0){
+	        Vnm_tprint(2, "%s\n", usage);
+	        VJMPERR1(0); 
+	    } else {
+	        Vnm_tprint(2, "UNRECOGNIZED COMMAND LINE OPTION %s!\n", \
+                              argv[i]);
+                Vnm_tprint(2, "%s\n", usage);
+	        VJMPERR1(0); 
+	    }  
+	} else {
+
+	    /* Set the path to the input file */
+	    if ((input_path == VNULL) && (i != 0)) input_path = argv[i];
+            else if (i != 0) {
+                Vnm_tprint(2, "ERROR -- CALLED WITH TOO MANY ARGUMENTS!\n", \
+                              argc);
+                Vnm_tprint(2, "%s\n", usage);
+	        VJMPERR1(0);
+	    }
+        }
+        i++; 
+    }
+
     Vnm_tprint( 1, "%s", header);
     Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
       __TIME__);
-    if (argc != 2) {
+    if (argc < 2) {
         Vnm_tprint(2, "ERROR -- CALLED WITH %d ARGUMENTS!\n", argc);
         Vnm_tprint(2, "%s\n", usage);
 	VJMPERR1(0);
     } 
-    input_path = argv[1];
 
     /* *************** PARSE INPUT FILE ******************* */
     nosh = NOsh_ctor(rank, size);
