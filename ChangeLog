@@ -29,7 +29,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
       desired.
     * Added XML support for reading in parameter files when using PDB files
       as input.  New XML files can be found in tools/conversion/param/vparam.
-    * Added XML support for reading "PQR" files in XML format.  
+    * Added XML support for reading "PQR" files in XML format.
+    * Added support for command line --version and --help flags.	
   - BUG FIXES
     * Updated psize.py to use centers and radii when calculating grid sizes
       (thanks to John Mongan)
