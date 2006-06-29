@@ -1003,10 +1003,32 @@ case $host_os in
 		
 esac
 
+dnl # -----------------------
+dnl # ADD ON THE LIBRARIES FOR VERSION 1.40 OF FETK
+dnl # -----------------------
+
+if test -z "${with_fetk}"; then
+	case $host_os in
+	
+	darwin*)
+		extra_list3="-lsuperlu -Wl,-framework -Wl,accelerate"
+		;;
+		
+	*)
+		extra_list3="-lsuperlu -lblas"
+		;;
+	esac
+else
+
+	extra_list3=""
+
+fi
+
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
-lib_list="${base_list} ${extra_list1} ${extra_list2}"
+lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
+
 
 dnl ##########################################################################
 dnl 11. generate the makefiles

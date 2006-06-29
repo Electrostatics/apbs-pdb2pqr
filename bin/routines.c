@@ -1887,6 +1887,13 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
         }
     }
     
+	/* Set the femparm pkey value based on the type of solver being used */
+	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)){
+		feparm->pkey = 0;
+	}else{
+		feparm->pkey = 1;
+	}
+	
     /* Set up PBE object */
     Vnm_tprint(0, "Setting up PBE object...\n");
     if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
@@ -1913,7 +1920,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
     /* Uniformly refine the mesh a bit */
     for (j=0; j<2; j++) {
         AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
-        AM_refine(fetk[icalc]->am, 2, USEHB);
+        AM_refine(fetk[icalc]->am, 2, 0, feparm->pkey);
         Vnm_redirect(0);
         Gem_shapeChk(fetk[icalc]->gm);
         Vnm_redirect(1);
@@ -2121,7 +2128,7 @@ before you solve!\n");
         }
         Vnm_tprint(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
           marked);
-        AM_refine(fetk[icalc]->am, 0, USEHB);
+        AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
     }
     nverts = Gem_numVV(fetk[icalc]->gm);
     Vnm_tprint(1, "  Done refining; have %d verts.\n", nverts);
@@ -2140,6 +2147,10 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
           fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
           fetk[icalc]->pjac);
     } else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
+		/* Note: USEHB is a compile time defined macro the program flow is to 
+				 is to always go take the route using AM_hlSolve when the solver
+				 is linear. D. Gohara 6/29/06
+		*/
         if (USEHB) {
             AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
               fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
@@ -2238,7 +2249,7 @@ VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
     }
     Vnm_tprint(1, "      Have %d verts, marked %d.  Refining...\n", nverts,
       marked);
-    AM_refine(fetk[icalc]->am, 0, USEHB);
+    AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
     nverts = Gem_numVV(fetk[icalc]->gm);
     Vnm_tprint(1, "      Done refining; have %d verts.\n", nverts);
     Vnm_redirect(0);

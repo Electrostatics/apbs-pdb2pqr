@@ -1585,7 +1585,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
 
 VPUBLIC void Vfetk_PDE_Fu(PDE *thee, int key, double F[]) {
 
-    Vnm_print(2, "Vfetk_PDE_Fu:  Setting error to zero!\n");
+    //Vnm_print(2, "Vfetk_PDE_Fu:  Setting error to zero!\n");
 
     F[0] = 0.;
 
