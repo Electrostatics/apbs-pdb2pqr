@@ -43,6 +43,10 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
       at 1 rather than 0, leading to a segmentation fault.
     * Fixed a bug in mypde.f where double precision values were initialized
       with single precision number (causing multiplication errors).
+    * Fixed a bug in the FEM code. Now calls the npbe solver works properly
+      with FEtk 1.40
+    * Modified the FEMParm struct to contain a new variable pkey, which is 
+      required for selecting the correct path in AM_Refine
 	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.4.0       12-14-05 

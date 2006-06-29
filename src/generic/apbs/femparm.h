@@ -173,6 +173,9 @@ struct sFEMparm {
     int maxvert;  /**< Maximum number of vertices in mesh (ignored if less 
                    * than zero) */
     int setmaxvert;  /**< Boolean */
+	int pkey;		/**< Boolean sets the pkey type for going into AM_Refine
+					  * pkey = 0 for non-HB based methods
+					  * pkey = 1 for HB based methods */
 
 };
 
