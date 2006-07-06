@@ -82,6 +82,7 @@
  *  @ingroup Vpmgp
  *  @author  Nathan Baker
  *  @brief   Contains public data members for Vpmgp class/module
+ *  @bug     Value ipcon does not currently allow for preconditioning in PMG
  */
 struct sVpmgp {
 
