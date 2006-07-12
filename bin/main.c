@@ -111,7 +111,8 @@ int main(
     Vgrid *kappaMap[NOSH_MAXMOL];
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
-    int i, rank, size, isolve, k;
+    char *output_path = VNULL;
+    int i, rank, size, isolve, k, outputformat;
     unsigned long int bytesTotal, highWater;
 
     /* These variables require some explaining... The energy double arrays
@@ -251,6 +252,7 @@ int main(
     Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
 
     i=0;
+    outputformat=0;
     while (i<argc){
         if (strncmp(argv[i], "--", 2) == 0) {
           
@@ -261,6 +263,19 @@ int main(
 	    } else if (Vstring_strcasecmp("--help", argv[i]) == 0){
 	        Vnm_tprint(2, "%s\n", usage);
 	        VJMPERR1(0); 
+	    } else if (strncmp(argv[i], "--output-format", 15) == 0) {
+	        if (strstr(argv[i], "xml") != NULL) outputformat = 1;
+                else if (strstr(argv[i], "flat") != NULL) {
+		  Vnm_tprint(2, "Not yet implemented!\n");
+		  VJMPERR1(0);
+		} else {
+		  Vnm_tprint(2, "Invalid output-format type!\n");
+		  VJMPERR1(0);
+		}
+	    } else if (strncmp(argv[i], "--output-file=", 14) == 0){
+	         output_path = strstr(argv[i], "=");
+		 ++output_path;
+		 if (outputformat == 0) outputformat = 1;
 	    } else {
 	        Vnm_tprint(2, "UNRECOGNIZED COMMAND LINE OPTION %s!\n", \
                               argv[i]);
@@ -281,14 +296,21 @@ int main(
         i++; 
     }
 
-    Vnm_tprint( 1, "%s", header);
-    Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
-      __TIME__);
-    if (argc < 2) {
-        Vnm_tprint(2, "ERROR -- CALLED WITH %d ARGUMENTS!\n", argc);
+    if ((outputformat != 0) && (output_path == NULL)) {
+        Vnm_tprint(2, "The --output-path variable must be set when using --output-format!\n");
+        VJMPERR1(0);
+    }
+
+    if (input_path == NULL) {
+        Vnm_tprint(2, "ERROR -- APBS input file not specified!\n", argc);
         Vnm_tprint(2, "%s\n", usage);
 	VJMPERR1(0);
     } 
+
+    Vnm_tprint( 1, "%s", header);
+    Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
+      __TIME__);
+ 
 
     /* *************** PARSE INPUT FILE ******************* */
     nosh = NOsh_ctor(rank, size);
@@ -500,8 +522,19 @@ int main(
             break;
         }
     } 
-    /* *************** GARBAGE COLLECTION ******************* */
     Vnm_tprint( 1, "----------------------------------------\n");
+    
+    /* *************** HANDLE LOGGING *********************** */
+    
+    if (outputformat == 1) {
+        Vnm_tprint(2, "  Writing data to XML file...\n");
+	writedataXML(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
+                     dielEnergy);
+	Vnm_tprint(2,"\n");
+    }
+
+    /* *************** GARBAGE COLLECTION ******************* */
+  
     Vnm_tprint( 1, "CLEANING UP AND SHUTTING DOWN...\n");
     /* Clean up APBS structures */
     killForce(mem, nosh, nforce, atomForce);
