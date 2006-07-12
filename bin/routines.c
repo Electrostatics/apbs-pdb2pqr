@@ -1251,12 +1251,12 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 
     FILE *file;
     time_t now;
-    int ielec, icalc, i;
+    int ielec, icalc, i, j;
     char *timestring = VNULL;
     char *c = VNULL;
     PBEparm *pbeparm = VNULL;
     MGparm *mgparm = VNULL;
-    double conversion;
+    double conversion, ltenergy, scalar;
 
     if (nosh->bogus) return 1;
 
@@ -1412,6 +1412,42 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 	fprintf(file,"    </elec>\n");
     }
      
+    /* Handle print energy statements */
+
+    for (i=0; i<nosh->nprint; i++) {
+
+        if (nosh->printwhat[i] == NPT_ENERGY) {
+	    
+	    fprintf(file,"    <printEnergy>\n");
+	    fprintf(file,"      <equation>%d", nosh->printcalc[i][0]); 
+	
+	    for (j=1; j<nosh->printnarg[i]; j++) {
+	        if (nosh->printop[i][j-1] == 0) fprintf(file," +");
+		else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
+		fprintf(file, " %d", nosh->printcalc[i][j]);
+	    }
+
+	    fprintf(file, "</equation>\n");
+	    icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+	   
+	    ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
+                       nosh->calc[icalc].pbeparm->temp * totEnergy[icalc];
+   
+	    for (j=1; j<nosh->printnarg[i]; j++) {
+	        icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+		/* Add or subtract? */
+		if (nosh->printop[i][j-1] == 0) scalar = 1.0;
+		else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
+		/* Accumulate */
+		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
+	    }
+	    fprintf(file,"      <netEnergy>%1.12E kJ/mol</netEnergy>\n", \
+		    ltenergy);
+	    fprintf(file,"    </printEnergy>\n");
+	}
+    }
+    
     /* Add ending tags and close the file */
     fprintf(file,"</APBS>\n");
     fclose(file);
