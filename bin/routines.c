@@ -1245,6 +1245,180 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
     return 1;
 }
 
+VPUBLIC int writedataXML(NOsh *nosh, const char *fname, 
+    double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
+    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]) {
+
+    FILE *file;
+    time_t now;
+    int ielec, icalc, i;
+    char *timestring = VNULL;
+    char *c = VNULL;
+    PBEparm *pbeparm = VNULL;
+    MGparm *mgparm = VNULL;
+    double conversion;
+
+    if (nosh->bogus) return 1;
+
+    /* Initialize some variables */
+
+    icalc = 0;
+   
+    file = fopen(fname, "w");
+    if (file == VNULL) {
+        Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+
+    fprintf(file,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(file,"<APBS>\n");
+
+    /* Strip the newline character from the date */
+
+    now = time(VNULL);
+    timestring = ctime(&now);
+    for(c = timestring; *c != '\n'; c++);
+    *c = '\0';
+    fprintf(file,"    <date>%s</date>\n", timestring);
+
+    for (ielec=0; ielec<nosh->nelec;ielec++){ /* elec loop */
+
+        /* Initialize per-elec pointers */
+
+        mgparm = nosh->calc[icalc].mgparm;
+	pbeparm = nosh->calc[icalc].pbeparm;
+	
+	/* Convert from kT/e to kJ/mol */
+	conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
+       
+	fprintf(file,"    <elec>\n");
+	if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
+	    fprintf(file,"      <name>%s</name>\n", nosh->elecname[ielec+1]);
+	} 
+
+	switch (mgparm->type) {
+            case MCT_DUM:
+	        fprintf(file,"      <type>mg-dummy</type>\n");
+		break;
+	    case MCT_MAN:
+	        fprintf(file,"      <type>mg-manual</type>\n");
+		break;
+            case MCT_AUT:
+	        fprintf(file,"      <type>mg-auto</type>\n");
+		break;
+	    case MCT_PAR:
+	        fprintf(file,"      <type>mg-para</type>\n");
+		break;
+            default:
+	        break;
+	}
+
+	fprintf(file,"      <molid>%d</molid>\n", pbeparm->molid);
+	fprintf(file,"      <nx>%d</nx>\n", mgparm->dime[0]);
+	fprintf(file,"      <ny>%d</ny>\n", mgparm->dime[1]);
+	fprintf(file,"      <nz>%d</nz>\n", mgparm->dime[2]);
+
+	switch (pbeparm->pbetype) {
+            case PBE_NPBE:
+	        fprintf(file,"      <pbe>npbe</pbe>\n");
+		break;
+	    case PBE_LPBE:
+	        fprintf(file,"      <pbe>lpbe</pbe>\n");
+		break;
+            default:
+	        break;
+	}
+   
+	if (pbeparm->nion > 0) {
+	    for (i=0; i<pbeparm->nion; i++) {
+	        fprintf(file, "      <ion>\n");
+	        fprintf(file,"          <radius>%.4.3f A</radius>\n",
+			pbeparm->ionr[i]);
+		fprintf(file,"          <charge>%.4.3f A</charge>\n",
+			pbeparm->ionq[i]);
+		fprintf(file,"          <concentration>%.4.3f M</concentration>\n", pbeparm->ionc[i]);
+		fprintf(file, "      </ion>\n");
+	           
+	    }
+	}
+
+	fprintf(file,"      <pdie>%4.3f</pdie>\n", pbeparm->pdie);
+	fprintf(file,"      <sdie>%4.3f</sdie>\n", pbeparm->sdie);
+
+	switch (pbeparm->srfm) {
+            case 0:
+	      fprintf(file,"      <srfm>mol</srfm>\n");
+	      fprintf(file,"      <srad>%4.3f</srad>\n");
+	      break;
+	    case 1:
+	      fprintf(file,"      <srfm>smol</srfm>\n");
+	      fprintf(file,"      <srad>%4.3f</srad>\n");
+	      break;
+	    case 2:
+	      fprintf(file,"      <srfm>spl2</srfm>\n");
+	      break;
+	    default:
+	      break;
+	}
+
+	switch (pbeparm->bcfl) {
+	    case BCFL_ZERO:
+	        fprintf(file,"      <bcfl>zero</bcfl>\n");
+		break;
+	    case BCFL_SDH:
+	        fprintf(file,"      <bcfl>sdh</bcfl>\n");
+		break;
+	    case BCFL_MDH:
+	        fprintf(file,"      <bcfl>mdh</bcfl>\n");
+		break;
+	    case BCFL_FOCUS:
+	        fprintf(file,"      <bcfl>focus</bcfl>\n");
+		break;
+	    default:
+	        break;
+	}
+
+	fprintf(file,"      <temp>%4.3f K</temp>\n", pbeparm->temp);
+	fprintf(file,"      <gamma>%4.3f kJ/mol/A^2</gamma>\n",pbeparm->gamma);
+   
+	for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
+	    
+	    /* Reinitialize per-calc pointers */
+	    mgparm = nosh->calc[icalc].mgparm;
+	    pbeparm = nosh->calc[icalc].pbeparm;
+
+	    fprintf(file,"      <calc>\n");
+	    fprintf(file,"          <id>%i</id>\n", (icalc+1));
+	    fprintf(file,"          <hx>%4.3f A</hx>\n", mgparm->grid[0]);
+	    fprintf(file,"          <hy>%4.3f A</hy>\n", mgparm->grid[1]);
+	    fprintf(file,"          <hz>%4.3f A</hz>\n", mgparm->grid[2]);
+	    fprintf(file,"          <xlen>%4.3f A</xlen>\n", mgparm->glen[0]);
+	    fprintf(file,"          <ylen>%4.3f A</ylen>\n", mgparm->glen[1]);
+	    fprintf(file,"          <zlen>%4.3f A</zlen>\n", mgparm->glen[2]);
+	    fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
+                      (totEnergy[icalc]*conversion));
+	    if (pbeparm->calcenergy == PCE_COMPS) {
+	      fprintf(file,"          <qfEnergy>%1.12E kJ/mol</qfEnergy>\n", 
+			(0.5*qfEnergy[icalc]*conversion)); 
+	      fprintf(file,"          <qmEnergy>%1.12E kJ/mol</qmEnergy>\n", 
+			(qmEnergy[icalc]*conversion)); 
+	      fprintf(file,"          <dielEnergy>%1.12E kJ/mol</dielEnergy>\n", 
+                      (dielEnergy[icalc]*conversion));
+	    } 
+            fprintf(file,"      </calc>\n");
+	}
+
+	fprintf(file,"    </elec>\n");
+    }
+     
+    /* Add ending tags and close the file */
+    fprintf(file,"</APBS>\n");
+    fclose(file);
+
+    return 1;
+}   
+
 VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 
     char writestem[VMAX_ARGLEN];
