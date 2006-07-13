@@ -127,6 +127,22 @@ typedef enum eVhal_PBEType Vhal_PBEType;
 
 
 /**
+ * @brief Output file format
+ * @ingroup Vhal
+ */
+enum eVoutput_Format {
+    OUTPUT_NULL,   /**< No output */
+    OUTPUT_FLAT, /**< Output in flat-file format */
+    OUTPUT_XML   /**< Output in XML format */
+};
+
+/**
+ * @brief Declaration of the Voutput_Format type as the VOutput_Format enum
+ * @ingroup Vhal
+ */
+typedef enum eVoutput_Format Voutput_Format;
+
+/**
  * @ingroup  Vhal
  * @author  Nathan Baker
  * @brief  Types of boundary conditions 

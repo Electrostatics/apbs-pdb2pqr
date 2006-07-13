@@ -112,8 +112,9 @@ int main(
     Vgrid *chargeMap[NOSH_MAXMOL];
     char *input_path = VNULL;
     char *output_path = VNULL;
-    int i, rank, size, isolve, k, outputformat;
+    int i, rank, size, isolve, k;
     unsigned long int bytesTotal, highWater;
+    Voutput_Format outputformat;
 
     /* These variables require some explaining... The energy double arrays
      * store energies from the various calculations.  The energy int array
@@ -252,7 +253,7 @@ int main(
     Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
 
     i=0;
-    outputformat=0;
+    outputformat = OUTPUT_NULL;
     while (i<argc){
         if (strncmp(argv[i], "--", 2) == 0) {
           
@@ -264,10 +265,9 @@ int main(
 	        Vnm_tprint(2, "%s\n", usage);
 	        VJMPERR1(0); 
 	    } else if (strncmp(argv[i], "--output-format", 15) == 0) {
-	        if (strstr(argv[i], "xml") != NULL) outputformat = 1;
+	        if (strstr(argv[i], "xml") != NULL) outputformat = OUTPUT_XML;
                 else if (strstr(argv[i], "flat") != NULL) {
-		  Vnm_tprint(2, "Not yet implemented!\n");
-		  VJMPERR1(0);
+		    outputformat = OUTPUT_FLAT;
 		} else {
 		  Vnm_tprint(2, "Invalid output-format type!\n");
 		  VJMPERR1(0);
@@ -275,7 +275,7 @@ int main(
 	    } else if (strncmp(argv[i], "--output-file=", 14) == 0){
 	         output_path = strstr(argv[i], "=");
 		 ++output_path;
-		 if (outputformat == 0) outputformat = 1;
+		 if (outputformat == OUTPUT_NULL) outputformat = OUTPUT_FLAT;
 	    } else {
 	        Vnm_tprint(2, "UNRECOGNIZED COMMAND LINE OPTION %s!\n", \
                               argv[i]);
@@ -526,11 +526,14 @@ int main(
     
     /* *************** HANDLE LOGGING *********************** */
     
-    if (outputformat == 1) {
-        Vnm_tprint(2, "  Writing data to XML file...\n");
+    if (outputformat == OUTPUT_XML) {
+        Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
 	writedataXML(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
                      dielEnergy);
-	Vnm_tprint(2,"\n");
+    } else if (outputformat == OUTPUT_FLAT) {
+        Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
+	writedataFlat(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
+                     dielEnergy);
     }
 
     /* *************** GARBAGE COLLECTION ******************* */
