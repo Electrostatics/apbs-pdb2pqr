@@ -1245,6 +1245,200 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
     return 1;
 }
 
+VPUBLIC int writedataFlat(NOsh *nosh, const char *fname, 
+    double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
+    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]) {
+
+    FILE *file;
+    time_t now;
+    int ielec, icalc, i, j;
+    char *timestring = VNULL;
+    PBEparm *pbeparm = VNULL;
+    MGparm *mgparm = VNULL;
+    double conversion, ltenergy, scalar;
+
+    if (nosh->bogus) return 1;
+
+    /* Initialize some variables */
+
+    icalc = 0;
+   
+    file = fopen(fname, "w");
+    if (file == VNULL) {
+        Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
+          fname);
+        return 0;
+    }
+
+    /* Strip the newline character from the date */
+
+    now = time(VNULL);
+    timestring = ctime(&now);
+    fprintf(file,"%s\n", timestring);
+
+    for (ielec=0; ielec<nosh->nelec;ielec++){ /* elec loop */
+
+        /* Initialize per-elec pointers */
+
+        mgparm = nosh->calc[icalc].mgparm;
+	pbeparm = nosh->calc[icalc].pbeparm;
+	
+	/* Convert from kT/e to kJ/mol */
+	conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
+       
+	fprintf(file,"elec");
+	if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
+	    fprintf(file," name %s\n", nosh->elecname[ielec+1]);
+	} else fprintf(file, "\n");
+
+	switch (mgparm->type) {
+            case MCT_DUM:
+	        fprintf(file,"    mg-dummy\n");
+		break;
+	    case MCT_MAN:
+	        fprintf(file,"    mg-manual\n");
+		break;
+            case MCT_AUT:
+	        fprintf(file,"    mg-auto\n");
+		break;
+	    case MCT_PAR:
+	        fprintf(file,"    mg-para\n");
+		break;
+            default:
+	        break;
+	}
+
+	fprintf(file,"    mol %d\n", pbeparm->molid);
+	fprintf(file,"    dime %d %d %d\n", mgparm->dime[0], mgparm->dime[1],\
+		          mgparm->dime[2]);
+
+	switch (pbeparm->pbetype) {
+            case PBE_NPBE:
+	        fprintf(file,"    npbe\n");
+		break;
+	    case PBE_LPBE:
+	        fprintf(file,"    lpbe\n");
+		break;
+            default:
+	        break;
+	}
+   
+	if (pbeparm->nion > 0) {
+	    for (i=0; i<pbeparm->nion; i++) {
+	        fprintf(file,"    ion %.4.3f %.4.3f %4.3f\n",
+			pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);
+	    }
+	}
+
+	fprintf(file,"    pdie %4.3f\n", pbeparm->pdie);
+	fprintf(file,"    sdie %4.3f\n", pbeparm->sdie);
+
+	switch (pbeparm->srfm) {
+            case 0:
+	      fprintf(file,"    srfm mol\n");
+	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+	      break;
+	    case 1:
+	      fprintf(file,"    srfm smol\n");
+	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+	      break;
+	    case 2:
+	      fprintf(file,"    srfm spl2\n");
+	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+	      break;
+	    default:
+	      break;
+	}
+
+	switch (pbeparm->bcfl) {
+	    case BCFL_ZERO:
+	        fprintf(file,"    bcfl zero\n");
+		break;
+	    case BCFL_SDH:
+	        fprintf(file,"    bcfl sdh\n");
+		break;
+	    case BCFL_MDH:
+	        fprintf(file,"    bcfl mdh\n");
+		break;
+	    case BCFL_FOCUS:
+	        fprintf(file,"    bcfl focus\n");
+		break;
+	    default:
+	        break;
+	}
+
+	fprintf(file,"    temp %4.3f\n", pbeparm->temp);
+	fprintf(file,"    gamma %4.3\n",pbeparm->gamma);
+   
+	for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
+	    
+	    /* Reinitialize per-calc pointers */
+	    mgparm = nosh->calc[icalc].mgparm;
+	    pbeparm = nosh->calc[icalc].pbeparm;
+
+	    fprintf(file,"    calc\n");
+	    fprintf(file,"        id %i\n", (icalc+1));
+            fprintf(file,"        grid %4.3f %4.3f %4.3f\n", 
+		    mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
+	    fprintf(file,"        glen %4.3f %4.3f %4.3f\n", 
+		    mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
+	 
+	    fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
+                      (totEnergy[icalc]*conversion));
+	    if (pbeparm->calcenergy == PCE_COMPS) {
+	      fprintf(file,"        qfEnergy %1.12E kJ/mol\n", 
+			(0.5*qfEnergy[icalc]*conversion)); 
+	      fprintf(file,"        qmEnergy %1.12E kJ/mol\n", 
+			(qmEnergy[icalc]*conversion)); 
+	      fprintf(file,"        dielEnergy %1.12E kJ/mol\n", 
+                      (dielEnergy[icalc]*conversion));
+	    } 
+            fprintf(file,"    end\n");
+	}
+
+	fprintf(file,"end\n");
+    }
+     
+    /* Handle print energy statements */
+
+    for (i=0; i<nosh->nprint; i++) {
+
+        if (nosh->printwhat[i] == NPT_ENERGY) {
+	    
+	    fprintf(file,"print energy");
+	    fprintf(file," %d", nosh->printcalc[i][0]); 
+	
+	    for (j=1; j<nosh->printnarg[i]; j++) {
+	        if (nosh->printop[i][j-1] == 0) fprintf(file," +");
+		else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
+		fprintf(file, " %d", nosh->printcalc[i][j]);
+	    }
+
+	    fprintf(file, "\n");
+	    icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+	   
+	    ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
+                       nosh->calc[icalc].pbeparm->temp * totEnergy[icalc];
+   
+	    for (j=1; j<nosh->printnarg[i]; j++) {
+	        icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+		/* Add or subtract? */
+		if (nosh->printop[i][j-1] == 0) scalar = 1.0;
+		else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
+		/* Accumulate */
+		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
+	    }
+	    fprintf(file,"    %1.12E kJ/mol\nend\n", \
+		    ltenergy);
+	}
+    }
+   
+    fclose(file);
+
+    return 1;
+}
+
 VPUBLIC int writedataXML(NOsh *nosh, const char *fname, 
     double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
     double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]) {
@@ -1349,11 +1543,11 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 	switch (pbeparm->srfm) {
             case 0:
 	      fprintf(file,"      <srfm>mol</srfm>\n");
-	      fprintf(file,"      <srad>%4.3f</srad>\n");
+	      fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
 	      break;
 	    case 1:
 	      fprintf(file,"      <srfm>smol</srfm>\n");
-	      fprintf(file,"      <srad>%4.3f</srad>\n");
+	      fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
 	      break;
 	    case 2:
 	      fprintf(file,"      <srfm>spl2</srfm>\n");

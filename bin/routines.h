@@ -314,6 +314,21 @@ VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC]);
 
 /**
+ * @brief Write out information to a flat file
+ * @ingroup Frontend
+ * @author  Todd Dolinsky
+ * @param nosh  Parameters from input file
+ * @param fname The target XML file name
+ * @param totEnergy An array with per-calc total energies (in kT)
+ * @param qfEnergy  An array with per-calc charge-potential energies (in kT)
+ * @param qmEnergy  An array with per-calc mobile energies (in kT)
+ * @param dielEnergy  An array with per-calc polarization energies (in kT)
+ * @return 1 if successful, 0 otherwise */
+VEXTERNC int writedataFlat(NOsh *nosh, const char *fname, 
+  double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
+  double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]);
+
+/**
  * @brief Write out information to an XML file
  * @ingroup Frontend
  * @author  Todd Dolinsky
