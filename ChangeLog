@@ -2,6 +2,7 @@
 BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
 #############################################################################
   - NEW FEATURES
+    * Added Gemstone example to the tutorial
     * Modified the license to allow exceptions for packaging APBS binaries
       with several visualization programs.  PMG license modifed as well.
     * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
@@ -34,6 +35,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
     * Added support for XML output options via the --output-file and 
       --output-format flags.
   - BUG FIXES
+    * Updated the user manual and tutorial
     * Updated psize.py to use centers and radii when calculating grid sizes
       (thanks to John Mongan)
     * Fixed problems with FEM-based LPBE and LRPBE calculations
