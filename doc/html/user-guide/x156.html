@@ -1,0 +1,1392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Source installation</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="APBS 0.4.0 User Guide"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Installation"
+HREF="c142.html"><LINK
+REL="PREVIOUS"
+TITLE="Binary installation"
+HREF="x149.html"><LINK
+REL="NEXT"
+TITLE="Overview"
+HREF="c437.html"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>APBS 0.4.0 User Guide: Adaptive Poisson-Boltzmann Solver</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x149.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Chapter 2. Installation</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c437.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN156"
+>2.3. Source installation</A
+></H1
+><P
+>If you were unable to find the binary pacakge for your system, or
+      would like to compile APBS yourself, you'll need to read the instructions
+      in this section.</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="prerequisites-sect"
+>2.3.1. Prerequisites</A
+></H2
+><P
+>In order to install APBS from the source code, you will need:
+        <P
+></P
+><UL
+><LI
+><P
+>C and Fortran compilers</P
+></LI
+><LI
+><P
+>The APBS source code (see 
+          <A
+HREF="c142.html#obtaining-sect"
+>above</A
+>)</P
+></LI
+><LI
+><P
+>The MALOC hardware abstraction library (available from
+          <A
+HREF="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html"
+TARGET="_top"
+>http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html</A
+>)</P
+></LI
+></UL
+>
+      It may also be useful to have:
+        <P
+></P
+><UL
+><LI
+><P
+>A version of MPI (try 
+              <A
+HREF="http://www-unix.mcs.anl.gov/mpi/mpich/"
+TARGET="_top"
+>MPICH</A
+>) 
+              for parallel jobs.  
+              <DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;                  MPI isn't strictly necessary if the 
+                  <A
+HREF="x684.html#async"
+><CODE
+CLASS="option"
+>async</CODE
+></A
+> option is
+                  used.
+                </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+            </P
+></LI
+><LI
+><P
+>A compatible visualization program (see the 
+          <A
+HREF="x2466.html#visualization-sect"
+>"Visualization"</A
+> section of
+          this document)</P
+></LI
+></UL
+>
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="setup-sect"
+>2.3.2. Preparation for installation</A
+></H2
+><P
+>In what follows, I'll be assuming you're using 
+      <A
+HREF="http://www.gnu.org/software/bash/bash.html"
+TARGET="_top"
+>bash</A
+>, a
+      fantastic shell available on many platforms (UNIX and non-UNIX).</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN186"
+>2.3.2.1. Compiler variables</A
+></H3
+><P
+>First, please look at the 
+        <A
+HREF="x156.html#AEN284"
+>"Machine-specific notes"</A
+> section of
+        this document for appropriate compiler flags, etc. to be set via
+        pre-configuration environmental variables.  It's not a big deal if you
+        skip this step, but APBS will run more slowly.</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN190"
+>2.3.2.2. Installation directories</A
+></H3
+><P
+>There are two directories you'll need to identify prior to
+        installation.  The first, which we'll call
+        <CODE
+CLASS="parameter"
+>FETK_SRC</CODE
+>, will contain the APBS and MALOC source
+        code.  This directory can be deleted after installation, if you wish.
+        The second directory will be the permanent location for APBS and MALOC;
+        we'll call this <CODE
+CLASS="parameter"
+>FETK_PREFIX</CODE
+>.  If you have root
+        permission, you could pick a global directory such as
+        <TT
+CLASS="filename"
+>/usr/local</TT
+> for this; otherwise, pick a directory
+        for which you have write permission.  The following commands set up the
+        directories and environmental which point to them:
+          <PRE
+CLASS="screen"
+>&#13;            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_SRC=/home/soft/src</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_PREFIX=/home/soft</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_INCLUDE=${FETK_PREFIX}/include</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_LIBRARY=${FETK_PREFIX}/lib</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>mkdir -p ${FETK_SRC} ${FETK_INCLUDE} ${FETK_LIBRARY}</KBD
+>
+          </PRE
+>
+        </P
+><DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;            If you're planning to use MPI, you'll need to set some additional
+            environmental variables.  The variable
+            <CODE
+CLASS="parameter"
+>FETK_MPI_INCLUDE</CODE
+> points to the directory
+            where the MPI header files reside (<TT
+CLASS="filename"
+>mpi.h</TT
+>) and
+            the variable <CODE
+CLASS="parameter"
+>FETK_MPI_LIBRARY</CODE
+> points to the
+            directory where the MPI libraries are located
+            (<TT
+CLASS="filename"
+>libmpi.a</TT
+> or <TT
+CLASS="filename"
+>libmpich.a</TT
+>).
+            For example, on my system, I type:
+            <PRE
+CLASS="screen"
+>&#13;              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_MPI_INCLUDE=/usr/share/mpi/include</KBD
+>
+              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FETK_MPI_LIBRARY=/usr/share/mpi/lib</KBD
+>
+            </PRE
+>
+          </P
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN219"
+>2.3.2.3. Unpacking the source code</A
+></H3
+><P
+>You're now ready to unpack the source code:
+          <PRE
+CLASS="screen"
+>&#13;            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>cd ${FETK_SRC}</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>gzip -dc maloc.tar.gz | tar xvf -</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>gzip -dc apbs-0.4.0.tar.gz | tar xvf -</KBD
+>
+          </PRE
+>
+        </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN229"
+>2.3.2.4. Compiling MALOC</A
+></H3
+><P
+>Now we need to compile the hardware-abstraction library, MALOC.
+        First, go to the MALOC directory:
+          <PRE
+CLASS="screen"
+>&#13;            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>cd ${FETK_SRC}/maloc</KBD
+>
+          </PRE
+>
+          <DIV
+CLASS="caution"
+><P
+></P
+><TABLE
+CLASS="caution"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;              If you are not starting from a freshly-untarred version of
+              MALOC, you need to clean up the previous distribution by:
+              <PRE
+CLASS="screen"
+>&#13;                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>make distclean</KBD
+>
+              </PRE
+>
+              and ignoring any error messages that may result.
+            </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+        MALOC is configured for installation with the autoconf script
+        <TT
+CLASS="literal"
+>configure</TT
+>.  Configure options can be listed with the
+        <CODE
+CLASS="option"
+>--help</CODE
+> option.  However, MALOC is usually configured
+        in one of two ways for use with APBS:
+          <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>Sequential execution only (no MPI):
+                <PRE
+CLASS="screen"
+>&#13;                  <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX}</KBD
+>
+                </PRE
+>
+              </P
+></LI
+><LI
+><P
+>With parallel execution (MPI):
+                <PRE
+CLASS="screen"
+>&#13;                  <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX} --enable-mpi</KBD
+>
+                </PRE
+>
+              </P
+></LI
+></OL
+>
+          <DIV
+CLASS="caution"
+><P
+></P
+><TABLE
+CLASS="caution"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/caution.gif"
+HSPACE="5"
+ALT="Caution"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>&#13;              Be sure to keep an eye out for warning messages during the
+              configuration of MALOC, especially if you are using MPI.
+            </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+          At this point, you are ready to make and install MALOC:
+            <PRE
+CLASS="screen"
+>&#13;              <SAMP
+CLASS="prompt"
+>$</SAMP
+> make; make install
+           </PRE
+>
+          If all went well (you'll see an error message if either the
+          compilation or installation failed), then you're ready to install
+          APBS...
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN257"
+>2.3.3. Configuring, compiling, and installing</A
+></H2
+><P
+> APBS is configured and installed much the same way as MALOC.
+      First, you need to configure with the autoconf
+      <TT
+CLASS="literal"
+>configure</TT
+> script.  As before, you can examine the
+      various configure options with the <CODE
+CLASS="option"
+>--help</CODE
+> option.  For
+      most platforms, no options need to be specified; APBS's autoconf setup
+      automatically detects whether MALOC was compiled with MPI and configures
+      itself appropriately.  Therefore, most users can configure as follows:
+        <PRE
+CLASS="screen"
+>&#13;          <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>cd ${FETK_SRC}/apbs</KBD
+>
+          <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX}</KBD
+>
+        </PRE
+>
+      There's no need to pay too much attention to the autoconf messages here.
+      If the APBS configuration script can't find something it needs, it will
+      simply fail to configure and exit with a hopefully-informative error
+      message.
+        <DIV
+CLASS="note"
+><P
+></P
+><TABLE
+CLASS="note"
+WIDTH="100%"
+BORDER="0"
+><TR
+><TD
+WIDTH="25"
+ALIGN="CENTER"
+VALIGN="TOP"
+><IMG
+SRC="../images/note.gif"
+HSPACE="5"
+ALT="Note"></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+><P
+>If you have a vendor-supplied BLAS math library, you will
+          probably compile a faster version of APBS if you link to it instead
+          of the BLAS version provided with MALOC.  This is done by passing the
+          appropriate linking options to <TT
+CLASS="literal"
+>configure</TT
+> with the
+          <CODE
+CLASS="option"
+>--with-blas</CODE
+> flag.  For example, suppose you had a
+          machine-specific version of the BLAS library at
+          <TT
+CLASS="filename"
+>/usr/local/lib/libblas.a</TT
+>.  You would then
+          configure APBS by:
+            <PRE
+CLASS="screen"
+>&#13;              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>cd ${FETK_SRC}/apbs</KBD
+>
+              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX} --with-blas="-L/usr/local/lib -lblas"</KBD
+>
+            </PRE
+>
+          </P
+></TD
+></TR
+></TABLE
+></DIV
+>
+      Assuming all has gone well with the configuration, you're ready to
+      compile and install APBS:
+        <PRE
+CLASS="screen"
+>&#13;          <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>make all</KBD
+>
+          <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>make install</KBD
+>
+        </PRE
+>
+      This will place a version of the APBS binary at
+      <TT
+CLASS="filename"
+>${FETK_PREFIX}/bin/${host_cpu}-${host_vendor}-${host_os}/apbs</TT
+>,
+      where <CODE
+CLASS="parameter"
+>${host_cpu}-${host_vendor}-${host_os}</CODE
+> is a
+      machine-specific string.  This extra layer of obfuscation lets you keep
+      several APBS binaries around in the same directory.  At this point you
+      are ready to use APBS; either by calling the binary directly or adding
+      the above directory to your path.  There are also several tools provided
+      with APBS that remain in the APBS directory; these are described in later
+      portions of this manual.  You may wish to copy these to a global location
+      (or the same place as your APBS binary) at this time.
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN284"
+>2.3.4. Machine-specific notes</A
+></H2
+><P
+>While the APBS and MALOC autoconf <TT
+CLASS="literal"
+>configure</TT
+>
+      scripts are flexible enough to work on most platforms, the resulting
+      executables don't always offer optimal performance.  We're slowly trying
+      to provide binary support for some of the more popular platforms, this
+      section is meant to supplement our pre-compiled binaries and provide some
+      tips on how to get a better APBS binary on your platform.  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>If
+      you have tips or tricks on improving APBS performance on your machine,
+      please 
+      <A
+HREF="mailto:apbs-users@lists.sourceforge.net"
+TARGET="_top"
+>let us know!</A
+></I
+></SPAN
+>
+      </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN290"
+>2.3.4.1. Intel IA32/IA64</A
+></H3
+><P
+>In what follows, we're denoting Pentium/Xeon 32-bit Intel
+        machines as "IA32" and Itanium* 64-bit Intel machines as "IA64".
+        </P
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN293"
+>2.3.4.1.1. Windows</A
+></H4
+><P
+>We are happy to now provide native APBS command line binaries
+          for Windows.  The binary is probably the best option available, but
+          if you would still like to compile your own binaries you will need to
+          use either the Cygwin or MinGW environments.  Binaries compiled under
+          Cygwin tend to require Cygwin DLLs and thus can only be run on 
+          systems with Cygwin.  Performance for the Windows binaries and all
+          compiled systems will be fairly mediocre as they depend on the
+          GNU compilers.</P
+><P
+>If you do choose to use Cygwin and compile your own code, 
+          compilation should be rather straightforward.</P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="AEN297"
+>2.3.4.1.2. Linux</A
+></H4
+><P
+> Compilation under Linux should be <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>very</I
+></SPAN
+>
+          straightforward as this is the platform on which APBS was developed.
+          This section describes various compilation options under Linux.
+          </P
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="AEN301"
+>2.3.4.1.2.1. GNU</A
+></H5
+><P
+> Nearly every Linux distribution comes with the GNU
+            compilers; autoconf with configure with these by default.
+            Furthermore, autoconf will automatically choose reasonable
+            optimization (<CODE
+CLASS="option"
+>-O2</CODE
+>) and debugging
+            (<CODE
+CLASS="option"
+>-g</CODE
+>) options.  I haven't had very good luck
+            improving the performance beyond what's available with
+            <CODE
+CLASS="option"
+>-O2</CODE
+> and, given the availablity of the free Intel
+            compilers, I'm not sure it's worth trying too hard.
+            </P
+></DIV
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="AEN307"
+>2.3.4.1.2.2. Intel</A
+></H5
+><P
+> We've mainly used the free (for Linux) 
+            <A
+HREF="http://www.intel.com/software/products/compilers/"
+TARGET="_top"
+>Intel
+            compilers</A
+> and have observed very good performance.  There
+            were some incompatibility issues with version 7 of the Intel
+            compilers and newer versions of Linux (particularly those running
+            glibc 2.3, e.g. RedHat 8 and 9).   
+            </P
+><P
+>First, you need to make sure the Intel compilers are set up
+            properly; this usually is done by sourcing one of the input bash or
+            csh scripts provided with the compilers.  
+            </P
+><P
+>You then need to define the environmental variables
+            appropriate to these compilers <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>before</I
+></SPAN
+> you
+            configure either MALOC or APBS.  This is done by:
+              <PRE
+CLASS="screen"
+>&#13;                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CC='icc'</KBD
+>
+                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CXX='icc'</KBD
+>
+                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export F77='ifort'</KBD
+>
+              </PRE
+>
+            If you want to use the compiled code on machines where the Intel
+            compilers are not installed, you also need to set some linker
+            options:
+              <PRE
+CLASS="screen"
+>&#13;                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export LDFLAGS='-static-libcxa'</KBD
+>
+              </PRE
+>
+            </P
+><P
+>Finally, you'll want to choose some optimization options.
+            Intel has a number of options that are specific to the type of
+            processor you are running; some example flags are shown below:
+              <PRE
+CLASS="screen"
+>&#13;                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FFLAGS='-O3'</KBD
+>
+                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CFLAGS='-O3'</KBD
+>
+                <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CXXFLAGS=${CFLAGS}</KBD
+>
+              </PRE
+> 
+            </P
+></DIV
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="AEN332"
+>2.3.4.1.2.3. IA64 (Itanium)</A
+></H5
+><P
+>Since the MALOC-supplied BLAS is not 64-bit clean, a third 
+            party BLAS must be used for installation on an Itanium.  We have 
+            had good success with the Intel MKL libraries.  If no independent 
+            BLAS is available you may want to try either compiling your own 
+            (like ATLAS) or using the ia64 binary instead.
+            </P
+><P
+>If you do use the MKL libraries, you will need to modify a 
+            few command line options.
+            </P
+><P
+>First use the disable-blas flag while compiling MALOC to 
+            prevent MALOC's BLAS from interfering with APBS installation:
+            <PRE
+CLASS="screen"
+>&#13;              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX} --disable-blas</KBD
+>
+              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> make; make install </KBD
+>
+            </PRE
+>
+            </P
+><P
+>Then when compiling APBS, specify that APBS is to use the MKL
+            BLAS and the name of the actual BLAS library:
+            <PRE
+CLASS="screen"
+>&#13;              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export INTEL_BLAS=/path/to/MKL/lib/directory</KBD
+>
+              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"</KBD
+>
+              <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> make; make install </KBD
+>
+            </PRE
+>
+            </P
+></DIV
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="AEN350"
+>2.3.4.1.2.4. Others</A
+></H5
+><P
+>There are a number of other good compilers (Portland Group,
+            Absoft) that we have not tested with APBS.  If you have experience
+            with these, please 
+            <A
+HREF="mailto:apbs-users@lists.sourceforge.net"
+TARGET="_top"
+>let us know.</A
+>
+            </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN354"
+>2.3.4.2. Macintosh</A
+></H3
+><P
+>We are happy to now provide a Mac install package for G5 OS 10.4 
+         (Tiger).  Unfortunately this is the only binary for Mac that we have
+         available, so users on G4s or OS 10.3 may have to compile binaries 
+         for themselves - you may want to examine the
+        <A
+HREF="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users"
+TARGET="_top"
+>apbs-users 
+        mailing list</A
+> which has a number of threads which discuss
+        installation on Mac OS platforms.  Alternatively you can try using
+	Fink for the installation - please see Bill Scott's excellent 
+	guidelines at <A
+HREF="http://chemistry.ucsc.edu/~wgscott/xtal"
+TARGET="_top"
+> 
+	http://chemistry.ucsc.edu/~wgscott/xtal</A
+>. </P
+><P
+>A few notes about compiling on Macintosh:</P
+><P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>It has become apparent from the mailing lists that some
+            "packages" of the GNU development software available for MacOS
+            contain different major versions of the C and FORTRAN compilers.  
+            This is very bad; APBS will not compile with different versions of 
+            the C and FORTRAN compilers. If you use GCC 4.0, for instance,
+            gfortran 4.0 will work while g77 3.3 will not. If you see link 
+            errors involving "restFP" or "saveFP" this is most likely the 
+            cause.</P
+></LI
+><LI
+><P
+>In gcc 4.0 (included in Xcode 2.0 and higher) the -fast
+              option turns on the -fast-math flag.  This flag optimizes by
+              using rounding, and thus can lead to inaccuate results and should
+              be avoided.</P
+></LI
+><LI
+><P
+>As it stands now the autoconf script does not support using
+              the native vecLib framework as an architecture-tuned BLAS 
+              replacement.  In testing there were only slight timing 
+              improvements over using the MALOC-supplied BLAS as it is.</P
+></LI
+><LI
+><P
+>We have had success using IBM's XLF for Mac in conjunction
+              with GCC 4.0, although the corresponding XLC compilers do not 
+              seem to work under Tiger.</P
+></LI
+></OL
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN369"
+>2.3.4.3. IBM Power3/Power4 AIX</A
+></H3
+><P
+>These are various compilation options I experimented with on the
+        NPACI Blue Horizon platform -- we're working on acquiring a Power4
+        machine for additional notes.  However, I expect some of the issues are
+        applicable to other AIX machines.  In what follows, I used the
+        <TT
+CLASS="literal"
+>mpcc</TT
+> and <TT
+CLASS="literal"
+>mpxlf</TT
+> compilers.
+        </P
+><P
+>&#13;        In order to use a reasonable amount of memory during runs, you also
+        need to specify <CODE
+CLASS="option"
+>-bmaxdata:0x80000000</CODE
+> and
+        <CODE
+CLASS="option"
+>-bmaxstack:0x10000000</CODE
+>, or whatever values are
+        appropriate to your system.  You'll also want to link to the IBM
+        <TT
+CLASS="literal"
+>blas</TT
+>, <TT
+CLASS="literal"
+>mass</TT
+>, and
+        <TT
+CLASS="literal"
+>essl</TT
+> libraries (if available) and optimize as much
+        as possible for the specific machine you're running on.  Putting it all
+        together gives:
+          <PRE
+CLASS="screen"
+>&#13;            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CC=mpcc</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CXX=mpcc</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export F77=mpxlf</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export BLASPATH=/usr/lib</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CFLAGS="-bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"</KBD
+>
+            <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FFLAGS="-qfixed=132 -bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"</KBD
+>
+          </PRE
+>
+        </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN393"
+>2.3.4.4. Sun/Solaris</A
+></H3
+><P
+>Compilation tips for this system are short and sweet:  Whatever
+        you do, don't use the GNU compilers; they result in
+        <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>very</I
+></SPAN
+> slow binaries.
+        </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN397"
+>2.3.4.5. DEC/Compaq/HP/Samsung Alpha</A
+></H3
+><P
+>Two tips:  
+          <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+> Don't use the GNU compilers; they result in
+              <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>very</I
+></SPAN
+> slow binaries.  </P
+></LI
+><LI
+><P
+> Use the vendor-supplied BLAS library. </P
+></LI
+></OL
+>
+        </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN406"
+>2.3.4.6. AMD Opteron</A
+></H3
+><P
+> Since the MALOC BLAS is not 64 bit clean, you must used a third
+               party BLAS for installation on the Opteron.  We have had good 
+               success using the Portland group compilers and the associated 
+               PGI BLAS libraries, although a different third party BLAS 
+               (like ATLAS) should work as well.  For the Portland compilers:  
+           <P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+> Set the following flags for use with the Portland 
+                       compilers:
+                   <PRE
+CLASS="screen"
+>&#13;                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CC=pgcc</KBD
+>
+                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export CFLAGS='-O2 -fPIC -fastsse -Bstatic'</KBD
+>
+                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export F77=pgf77</KBD
+>
+                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>export FFLAGS='-O2 -fPIC -fastsse -Bstatic'</KBD
+>
+                   </PRE
+>
+                </P
+></LI
+><LI
+><P
+> When compiling MALOC, disable the building of the BLAS library:
+                   <PRE
+CLASS="screen"
+>&#13;                      <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+>./configure --prefix=${FETK_PREFIX} --disable-blas</KBD
+>
+                      <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> make; make install </KBD
+>
+                   </PRE
+>
+                </P
+></LI
+><LI
+><P
+> Locate the BLAS library in your PGI installation and
+                       configure APBS to use that library, and then finish
+                       the installation:
+                   <PRE
+CLASS="screen"
+>&#13;                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> export BLAS_DIR='/path/to/blas'</KBD
+>
+                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> ./configure --with-blas="-L${BLAS_DIR} -lblas" </KBD
+>
+                     <SAMP
+CLASS="prompt"
+>$</SAMP
+> <KBD
+CLASS="userinput"
+> make; make install </KBD
+>
+                   </PRE
+>
+                </P
+></LI
+></OL
+>
+        </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x149.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c437.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Binary installation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c142.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Overview</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

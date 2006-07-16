@@ -7,6 +7,7 @@
 <!ENTITY born-sect SYSTEM "born.xml">
 <!ENTITY ligand-sect SYSTEM "ligand.xml">
 <!ENTITY condensation-sect SYSTEM "condensation.xml">
+<!ENTITY gemstone-sect SYSTEM "gemstone.xml">
 <!ENTITY ion-pmf-sect SYSTEM "ion-pmf.xml">
 ]>
 
@@ -83,13 +84,6 @@
 
   <chapter id="introduction-sect"> <title>Getting started</title>
 
-    <warning>
-      <para>This is my first attempt at a tutorial and it is actively under
-        development.  Please let me know if you encounter any problems;
-        suggestions about modifications/additions are always welcome.
-      </para>
-    </warning>
-
 
     <para>
       This tutorial is designed to help users get acquainted with
@@ -108,7 +102,7 @@
     <para>
        You will also need the following software to perform the visualizations 
        in this tutorial.  These are not required for standard APBS usage, but
-       optionally useful for displaying results:
+       are useful for displaying results in this tutorial:
        <itemizedlist> 
         <listitem>
           <para>
@@ -141,6 +135,15 @@
       Furthermore, these examples all assume that the above programs are in
       your system path (i.e., can be run simply by typing the program name).
     </para>
+    
+    <important>
+        <para> 
+            Note that many of the examples in this tutorial can also be run
+            through the web-based <ulink
+                url="http://gemstone.mozdev.org/">Gemstone</ulink> service
+            without the need for local installations of the APBS software.  
+        </para>
+    </important>
 
     <para>
       The following examples demonstrate some of the basic electrostatics
@@ -169,6 +172,7 @@
   &ion-pmf-sect;
   &ligand-sect;
   &condensation-sect;
+  &gemstone-sect;
 
   <chapter>  <title>More examples...</title>
     <para>  In addition to the relatively simple applications presented here,

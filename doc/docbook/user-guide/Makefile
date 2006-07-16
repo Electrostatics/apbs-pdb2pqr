@@ -1,5 +1,8 @@
 htmldir=../../html/user-guide
-default: db2html
+default: docbook2html
+docbook2html:
+	docbook2html -o ${htmldir} user-guide.xml
+	cp -rf images/*.gif ${htmldir}/images
 db2html:
 	db2html user-guide.xml
 	cp user-guide/book1.html user-guide/index.html

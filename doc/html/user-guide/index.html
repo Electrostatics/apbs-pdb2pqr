@@ -1,12 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
 >APBS 0.4.0 User Guide</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"><LINK
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="NEXT"
 TITLE="Introduction"
 HREF="c38.html"></HEAD
@@ -28,8 +27,8 @@ CLASS="TITLEPAGE"
 CLASS="title"
 ><A
 NAME="AEN2"
-></A
->APBS 0.4.0 User Guide</H1
+>APBS 0.4.0 User Guide</A
+></H1
 ><H2
 CLASS="subtitle"
 >Adaptive Poisson-Boltzmann Solver</H2
@@ -53,10 +52,55 @@ CLASS="orgdiv"
 ></DIV
 ><P
 CLASS="copyright"
+>Copyright &copy; 2002, 2003, 2004, 2005, 2006 Washington University in St. Louis</P
+><DIV
+CLASS="legalnotice"
+><P
+></P
 ><A
-HREF="ln28.html"
->Copyright</A
-> &copy; 2002, 2003, 2004, 2005, 2006 by Washington University in St. Louis</P
+NAME="AEN28"
+></A
+><P
+>This program is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as published
+      by the Free Software Foundation; either version 2 of the License, or (at
+      your option) any later version.</P
+><P
+>This program is distributed in the hope that it will be useful, but
+      WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+      Public License for more details.</P
+><P
+>You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software Foundation,
+      Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</P
+><P
+>Linking APBS statically or dynamically with other modules is 
+      making a combined work based on APBS. Thus, the terms and conditions of 
+      the GNU General Public License cover the whole combination.</P
+><P
+>SPECIAL GPL EXCEPTION:
+      In addition, as a special exception, the copyright holders of APBS
+      give you permission to combine the APBS program with free software
+      programs and libraries that are released under the GNU LGPL or with
+      code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
+      SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
+      redistributed together in original or modified form as mere aggregation
+      without requirement that the entire work be under the scope of the GNU 
+      General Public License. This special exception permission is also extended
+      to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
+      FEtk, MC, or MALOC libraries.
+      </P
+><P
+>Note that people who make modified versions of APBS are not 
+      obligated to grant this special exception for their modified versions; 
+      it is their choice whether to do so. The GNU General Public License gives
+      permission to release a modified version without this exception; this
+      exception also makes it possible to release a modified version which
+      carries forward this exception.</P
+><P
+></P
+></DIV
 ><HR></DIV
 ><DIV
 CLASS="TOC"
@@ -66,52 +110,52 @@ CLASS="TOC"
 >Table of Contents</B
 ></DT
 ><DT
-><A
+>1. <A
 HREF="c38.html"
 >Introduction</A
 ></DT
 ><DT
-><A
-HREF="c136.html"
+>2. <A
+HREF="c142.html"
 >Installation</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="c136.html#obtaining-sect"
+>2.1. <A
+HREF="c142.html#obtaining-sect"
 >Availability</A
 ></DT
 ><DT
-><A
-HREF="x143.html"
+>2.2. <A
+HREF="x149.html"
 >Binary installation</A
 ></DT
 ><DT
-><A
-HREF="x150.html"
+>2.3. <A
+HREF="x156.html"
 >Source installation</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="x150.html#prerequisites-sect"
+>2.3.1. <A
+HREF="x156.html#prerequisites-sect"
 >Prerequisites</A
 ></DT
 ><DT
-><A
-HREF="x150.html#setup-sect"
+>2.3.2. <A
+HREF="x156.html#setup-sect"
 >Preparation for installation</A
 ></DT
 ><DT
-><A
-HREF="x150.html#AEN251"
+>2.3.3. <A
+HREF="x156.html#AEN257"
 >Configuring, compiling, and installing</A
 ></DT
 ><DT
-><A
-HREF="x150.html#AEN278"
+>2.3.4. <A
+HREF="x156.html#AEN284"
 >Machine-specific notes</A
 ></DT
 ></DL
@@ -119,139 +163,144 @@ HREF="x150.html#AEN278"
 ></DL
 ></DD
 ><DT
-><A
-HREF="c431.html"
+>3. <A
+HREF="c437.html"
 >Overview</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="c431.html#AEN434"
+>3.1. <A
+HREF="c437.html#AEN440"
 >Invocation</A
 ></DT
 ><DT
-><A
-HREF="x456.html"
+>3.2. <A
+HREF="x462.html"
 >Other tools</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="x456.html#parameterization"
+>3.2.1. <A
+HREF="x462.html#parameterization"
 >Parameterization</A
 ></DT
 ><DT
-><A
-HREF="x456.html#AEN495"
+>3.2.2. <A
+HREF="x462.html#AEN501"
 >Problem setup</A
 ></DT
 ><DT
-><A
-HREF="x456.html#AEN515"
+>3.2.3. <A
+HREF="x462.html#AEN521"
 >Output data processing</A
 ></DT
 ><DT
-><A
-HREF="x456.html#viz-tools"
+>3.2.4. <A
+HREF="x462.html#viz-tools"
 >Data visualization</A
 ></DT
 ><DT
-><A
-HREF="x456.html#acc"
+>3.2.5. <A
+HREF="x462.html#acc"
 >Solvent accessibility</A
 ></DT
 ><DT
-><A
-HREF="x456.html#AEN582"
+>3.2.6. <A
+HREF="x462.html#AEN588"
 >Coulomb's Law and Generalized Born calculations</A
 ></DT
 ><DT
-><A
-HREF="x456.html#AEN598"
+>3.2.7. <A
+HREF="x462.html#AEN604"
 >Eigenvalue analysis</A
 ></DT
 ><DT
-><A
-HREF="x456.html#AEN604"
+>3.2.8. <A
+HREF="x462.html#AEN610"
 >Python development tools</A
 ></DT
 ></DL
 ></DD
 ><DT
-><A
-HREF="x620.html"
+>3.3. <A
+HREF="x626.html"
 >Examples and tutorial</A
 ></DT
 ><DT
-><A
-HREF="x629.html"
+>3.4. <A
+HREF="x635.html"
 >Documentation</A
 ></DT
 ><DT
-><A
-HREF="x649.html"
+>3.5. <A
+HREF="x655.html"
 >Source code</A
 ></DT
 ></DL
 ></DD
 ><DT
-><A
-HREF="c654.html"
+>4. <A
+HREF="c660.html"
 >Using APBS</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="c654.html#AEN656"
+>4.1. <A
+HREF="c660.html#AEN662"
 >Invocation</A
 ></DT
 ><DT
-><A
-HREF="x678.html"
+>4.2. <A
+HREF="x684.html"
 >Input files</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="x678.html#read"
+>4.2.1. <A
+HREF="x684.html#read"
 >READ statements</A
 ></DT
 ><DT
-><A
-HREF="x678.html#elec"
+>4.2.2. <A
+HREF="x684.html#elec"
 >ELEC statements</A
 ></DT
 ><DT
-><A
-HREF="x678.html#print"
+>4.2.3. <A
+HREF="x684.html#print"
 >PRINT statements</A
 ></DT
 ></DL
 ></DD
 ><DT
-><A
-HREF="x2447.html"
+>4.3. <A
+HREF="x2466.html"
 >Using APBS with other programs</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="x2447.html#gui-sect"
+>4.3.1. <A
+HREF="x2466.html#web-sect"
+>Web interfaces</A
+></DT
+><DT
+>4.3.2. <A
+HREF="x2466.html#gui-sect"
 >Graphical user interfaces</A
 ></DT
 ><DT
-><A
-HREF="x2447.html#simulation-sect"
+>4.3.3. <A
+HREF="x2466.html#simulation-sect"
 >Simulation software</A
 ></DT
 ><DT
-><A
-HREF="x2447.html#visualization-sect"
+>4.3.4. <A
+HREF="x2466.html#visualization-sect"
 >Visualization software</A
 ></DT
 ></DL
@@ -259,72 +308,72 @@ HREF="x2447.html#visualization-sect"
 ></DL
 ></DD
 ><DT
-><A
-HREF="c2515.html"
+>5. <A
+HREF="c2523.html"
 >Getting help</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="c2515.html#user-forums"
+>5.1. <A
+HREF="c2523.html#user-forums"
 >User Forums</A
 ></DT
 ><DT
-><A
-HREF="x2532.html"
+>5.2. <A
+HREF="x2540.html"
 >Mailing Lists</A
 ></DT
 ><DT
-><A
-HREF="x2558.html"
+>5.3. <A
+HREF="x2566.html"
 >Bug and other problems</A
 ></DT
 ></DL
 ></DD
 ><DT
-><A
-HREF="c2565.html"
+>6. <A
+HREF="c2573.html"
 >Programming</A
 ></DT
 ><DT
-><A
-HREF="a2570.html"
+>A. <A
+HREF="a2578.html"
 >File formats</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="a2570.html#pqr-format"
+>A.1. <A
+HREF="a2578.html#pqr-format"
 >PQR biomolecular structure format</A
 ></DT
 ><DT
-><A
-HREF="x2636.html"
+>A.2. <A
+HREF="x2644.html"
 >Parameter file format</A
 ></DT
 ><DT
-><A
-HREF="x2673.html"
+>A.3. <A
+HREF="x2681.html"
 >Harwell-Boeing column-compressed matrix
       format</A
 ></DT
 ><DT
-><A
-HREF="x2678.html"
+>A.4. <A
+HREF="x2686.html"
 >OpenDX scalar data format</A
 ></DT
 ><DD
 ><DL
 ><DT
-><A
-HREF="x2678.html#AEN2682"
+>A.4.1. <A
+HREF="x2686.html#AEN2690"
 >Multigrid</A
 ></DT
 ><DT
-><A
-HREF="x2678.html#AEN2747"
+>A.4.2. <A
+HREF="x2686.html#AEN2755"
 >Finite element</A
 ></DT
 ></DL
@@ -332,9 +381,48 @@ HREF="x2678.html#AEN2747"
 ></DL
 ></DD
 ><DT
-><A
-HREF="a2802.html"
+>B. <A
+HREF="a2810.html"
 >License</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Tables</B
+></DT
+><DT
+>4-1. <A
+HREF="x684.html#AEN1964"
+>Sensitivity of 2PHK:B solvation energy calculations
+              to <B
+CLASS="command"
+>ofrac</B
+> values.</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="LOT"
+><DL
+CLASS="LOT"
+><DT
+><B
+>List of Examples</B
+></DT
+><DT
+>4-1. <A
+HREF="x684.html#AEN704"
+>Template for APBS input file</A
+></DT
+><DT
+>4-2. <A
+HREF="x684.html#AEN2461"
+>PRINT statement example</A
 ></DT
 ></DL
 ></DIV
@@ -367,7 +455,7 @@ VALIGN="top"
 ><A
 HREF="c38.html"
 ACCESSKEY="N"
->Next &#62;&#62;&#62;</A
+>Next</A
 ></TD
 ></TR
 ><TR

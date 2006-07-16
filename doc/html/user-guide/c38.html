@@ -1,0 +1,480 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Introduction</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="APBS 0.4.0 User Guide"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="APBS 0.4.0 User Guide"
+HREF="index.html"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="c142.html"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>APBS 0.4.0 User Guide: Adaptive Poisson-Boltzmann Solver</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="index.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="c142.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="introduction-sect"
+></A
+>Chapter 1. Introduction</H1
+><P
+>APBS is a software package for the numerical solution of the
+    Poisson-Boltzmann equation (PBE), one of the most popular continuum models
+    for describing electrostatic interactions between molecular solutes in
+    salty, aqueous media. Continuum electrostatics plays an important role in
+    several areas of biomolecular simulation, including:
+    <P
+></P
+><UL
+><LI
+><P
+>simulation of diffusional processes to determine ligand-protein
+          and protein-protein binding kinetics,</P
+></LI
+><LI
+><P
+>implicit solvent molecular dynamics of biomolecules,</P
+></LI
+><LI
+><P
+>solvation and binding energy calculations to determine
+          ligand-protein and protein-protein equilibrium binding constants and
+          aid in rational drug design,</P
+></LI
+><LI
+><P
+>and biomolecular titration studies.</P
+></LI
+></UL
+>
+    APBS was designed to efficiently evaluate electrostatic properties for
+    such simulations for a wide range of length scales to enable the investigation
+    of molecules with tens to millions of atoms.</P
+><P
+>APBS uses <A
+HREF="http://www.fetk.org/"
+TARGET="_top"
+>PMG</A
+> to solve the
+    Poisson-Boltzmann equation numerically.  PMG is developed and maintained
+    by the <A
+HREF="http://www.scicomp.ucsd.edu/~mholst/"
+TARGET="_top"
+>Holst Research
+      Group</A
+> at UC San Diego, and is designed to solve the nonlinear
+    Poisson-Boltzmann equation and similar problems with linear space and time
+    complexity through the use of box methods, inexact Newton methods, and
+    algebraic multilevel methods.  More information about PMG may be found at
+    <A
+HREF="http://www.fetk.org"
+TARGET="_top"
+>http://www.fetk.org</A
+>.
+  </P
+><P
+>APBS also uses <A
+HREF="http://www.fetk.org/"
+TARGET="_top"
+>FEtk</A
+>  to
+    solve the Poisson-Boltzmann equation numerically.  FEtk is developed and
+    maintained by the <A
+HREF="http://www.scicomp.ucsd.edu/~mholst/"
+TARGET="_top"
+>Holst
+    Research Group</A
+> at UC San Diego, and is designed to solve general
+    coupled systems of nonlinear partial differential equations accurately and
+    efficiently using adaptive multilevel finite element methods, inexact
+    Newton methods, algebraic multilevel methods.   More information about
+    FEtk may be found at 
+    <A
+HREF="http://www.fetk.org"
+TARGET="_top"
+>http://www.fetk.org</A
+>.
+  </P
+><DIV
+CLASS="formalpara"
+><P
+><B
+>Financial support. </B
+>The development of APBS has been supported financially by:
+      <P
+></P
+><UL
+><LI
+><P
+><A
+HREF="http://www.nih.gov"
+TARGET="_top"
+>National Institutes of 
+            Health</A
+> (grant GM069702-01)</P
+></LI
+><LI
+><P
+><A
+HREF="http://www.npaci.edu"
+TARGET="_top"
+>National Partnership for Advanced
+            Computational Infrastructure</A
+></P
+></LI
+><LI
+><P
+><A
+HREF="http://nbcr.sdsc.edu"
+TARGET="_top"
+>National Biomedical Computation
+            Resource</A
+></P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><A
+NAME="citing"
+></A
+><B
+>Citing APBS. </B
+>
+      Please acknowledge your use of APBS by citing:
+      <A
+NAME="AEN74"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+> 
+          <A
+HREF="http://www.pnas.org/cgi/content/abstract/98/18/10037"
+TARGET="_top"
+> 
+            Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA.  Electrostatics
+            of nanosystems: application to microtubules and the ribosome.
+            <I
+CLASS="citetitle"
+>Proc Natl Acad Sci USA</I
+> 98, 10037-10041, 2001.
+          </A
+>  
+        </P
+></BLOCKQUOTE
+>
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><A
+NAME="citing2"
+></A
+><B
+>Citing FEtk and PMG. </B
+>
+      Please acknowledge your use of PMG and FEtk by citing:
+      <A
+NAME="AEN81"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+> 
+          M. Holst and F. Saied, Multigrid solution of the Poisson-Boltzmann
+          equation.  <I
+CLASS="citetitle"
+>J. Comput. Chem.</I
+>, 14 (1993), pp.
+          105-113.
+        </P
+><P
+>&#13;          M. Holst and F. Saied, Numerical solution of the nonlinear
+          Poisson-Boltzmann equation: Developing more robust and efficient
+          methods.  <I
+CLASS="citetitle"
+>J. Comput. Chem.</I
+>, 16 (1995), pp.
+          337-364.
+        </P
+><P
+>&#13;          M. Holst, Adaptive numerical treatment of elliptic systems on
+          manifolds. <I
+CLASS="citetitle"
+>Advances in Computational
+            Mathematics</I
+>, 15 (2001), pp. 139-191.
+        </P
+><P
+>&#13;          R. Bank and M. Holst, A New Paradigm for Parallel Adaptive Meshing
+          Algorithms. <I
+CLASS="citetitle"
+>SIAM Review</I
+>, 45 (2003), pp.
+          291-323.
+        </P
+></BLOCKQUOTE
+>
+    </P
+></DIV
+><DIV
+CLASS="formalpara"
+><P
+><A
+NAME="authors"
+></A
+><B
+>Contributing authors. </B
+>APBS was primarily written by Nathan Baker during his graduate work
+      with J. Andrew McCammon and Michael Holst and extensively developed over
+      the subsequent years.  APBS uses several libraries written by Mike Holst
+      and members of the Holst group, including:  
+      <A
+HREF="http://scicomp.ucsd.edu/~mholst/codes/pmg/index.html"
+TARGET="_top"
+>PMG</A
+> 
+      (multigrid solver for Cartesian mesh discretization), 
+      <A
+HREF="http://www.fetk.org"
+TARGET="_top"
+>FEtk</A
+> 
+      (provides finite element framework, error estimators, and solvers), and 
+      <A
+HREF="http://scicomp.ucsd.edu/~mholst/codes/maloc/index.html"
+TARGET="_top"
+>MALOC
+      </A
+> (hardware abstraction library for code portability).
+      Additionally, a number of people have made important contributions to enhance
+      APBS functionality and usability.  The full author list (in alphabetical
+      order) is:
+      <P
+></P
+><UL
+><LI
+><P
+>Nathan A. Baker</P
+><P
+>Primary author</P
+></LI
+><LI
+><P
+>Steve Bond</P
+><P
+>Contributor:  FEtk library compatibility and Vopot functions</P
+></LI
+><LI
+><P
+>Larry Canino</P
+><P
+>Contributor: solvent accessibility function modification</P
+></LI
+><LI
+><P
+>Todd Dolinsky</P
+><P
+>Contributor: Python wrappers, PDB2PQR, examples, and other
+          tools</P
+></LI
+><LI
+><P
+>Adrian Elcock</P
+><P
+>Contributor: parameter files</P
+></LI
+><LI
+><P
+>Michael J. Holst</P
+><P
+>Advisor and author of several routines scattered about APBS,
+            and author of PMG (the multigrid library used by this code), author
+            of MALOC (hardware abstraction library used by this code), author
+            of FEtk (finite element library incorporated in developmental
+            versions of this code)
+          </P
+></LI
+><LI
+><P
+>Robert Konecny</P
+><P
+>Contributor: parameters, CHARMM FORTRAN interface</P
+></LI
+><LI
+><P
+>Jung-Hsin Lin</P
+><P
+>Contributor:  OpenDX to MOLMOL conversion</P
+></LI
+><LI
+><P
+>Chiansan Ma</P
+><P
+>Contributor: format conversion scripts</P
+></LI
+><LI
+><P
+>J. Andrew McCammon</P
+><P
+>Advisor, financial and equipment support, functionality
+          suggestions</P
+></LI
+><LI
+><P
+>Jens Nielsen</P
+><P
+>Contributor: PDB2PQR</P
+></LI
+><LI
+><P
+>Jay Ponder</P
+><P
+>Contributor:  TINKER Interface</P
+></LI
+><LI
+><P
+>Michael Schnieders</P
+><P
+>Contributor:  Polarizable atomic multipole routines, TINKER 
+                interface</P
+></LI
+><LI
+><P
+>David Sept</P
+><P
+> Contributor:  scripts and tools, VMD compatibility, general
+          suggestions about functionality </P
+></LI
+><LI
+><P
+>Tongye Shen</P
+><P
+>Contributor:  finite element mesh generation</P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c142.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>APBS 0.4.0 User Guide</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
