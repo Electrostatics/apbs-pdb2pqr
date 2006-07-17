@@ -1368,7 +1368,7 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 	}
 
 	fprintf(file,"    temp %4.3f\n", pbeparm->temp);
-	fprintf(file,"    gamma %4.3\n",pbeparm->gamma);
+	fprintf(file,"    gamma %4.3f\n",pbeparm->gamma);
    
 	for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
 	    
@@ -1383,9 +1383,10 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 	    fprintf(file,"        glen %4.3f %4.3f %4.3f\n", 
 		    mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
 	 
-	    fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
+	    if (pbeparm->calcenergy == PCE_TOTAL) {
+	      fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
                       (totEnergy[icalc]*conversion));
-	    if (pbeparm->calcenergy == PCE_COMPS) {
+	    } else if (pbeparm->calcenergy == PCE_COMPS) {
 	      fprintf(file,"        qfEnergy %1.12E kJ/mol\n", 
 			(0.5*qfEnergy[icalc]*conversion)); 
 	      fprintf(file,"        qmEnergy %1.12E kJ/mol\n", 
@@ -1590,9 +1591,11 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 	    fprintf(file,"          <xlen>%4.3f A</xlen>\n", mgparm->glen[0]);
 	    fprintf(file,"          <ylen>%4.3f A</ylen>\n", mgparm->glen[1]);
 	    fprintf(file,"          <zlen>%4.3f A</zlen>\n", mgparm->glen[2]);
-	    fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
+	    
+	    if (pbeparm->calcenergy == PCE_TOTAL) {
+	      fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
                       (totEnergy[icalc]*conversion));
-	    if (pbeparm->calcenergy == PCE_COMPS) {
+	    } else if (pbeparm->calcenergy == PCE_COMPS) {
 	      fprintf(file,"          <qfEnergy>%1.12E kJ/mol</qfEnergy>\n", 
 			(0.5*qfEnergy[icalc]*conversion)); 
 	      fprintf(file,"          <qmEnergy>%1.12E kJ/mol</qmEnergy>\n", 
