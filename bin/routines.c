@@ -554,6 +554,9 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
             break;
         case PBE_NRPBE:
             Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
+            Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear regularized PBE implementation. **\n");
+            Vnm_tprint( 2, "  ** Please let us know if you are interested in using it. **\n");
+            VASSERT(0); 
             break;
         case PBE_LRPBE:
             Vnm_tprint( 1, "  Linearized regularized PBE\n");
@@ -1313,13 +1316,13 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 		          mgparm->dime[2]);
 
 	switch (pbeparm->pbetype) {
-            case PBE_NPBE:
+        case PBE_NPBE:
 	        fprintf(file,"    npbe\n");
-		break;
+		    break;
 	    case PBE_LPBE:
 	        fprintf(file,"    lpbe\n");
-		break;
-            default:
+            break;
+        default:
 	        break;
 	}
    

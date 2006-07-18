@@ -1513,8 +1513,8 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
         switch (pdetype) {
 
             case PBE_LPBE:
-                var.B = var.ionacc*var.zkappa2*var.ionstr*var.U[0];
                 var.DB = var.ionacc*var.zkappa2*var.ionstr;
+                var.B = var.DB*var.U[0];
                 break;
 
             case PBE_NPBE:
@@ -1523,21 +1523,21 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 var.DB  = 0;
                 if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     for (i=0; i<var.nion; i++) {
+                        u2 = -1.0 * var.U[0] * var.ionQ[i];
+
                         /* NONLINEAR TERM */
                         coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
-                        u2 = -1.0 * var.U[0] * var.ionQ[i];
                         var.B += (coef2 * Vcap_exp(u2, &ichop));
                         /* LINEARIZED TERM */
-                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
-                        u2 = -1.0 * var.U[0] * var.ionQ[i];
+                        coef2 = -1.0 * var.ionQ[i] * coef2;
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
                 } 
                 break;
 
             case PBE_LRPBE:
-                var.B = var.ionacc*var.zkappa2*var.ionstr*(var.U[0]+var.W);
                 var.DB = var.ionacc*var.zkappa2*var.ionstr;
+                var.B = var.DB*(var.U[0]+var.W);
                 break;
 
             case PBE_NRPBE: 
@@ -1546,14 +1546,14 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 var.DB  = 0;
                 if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     for (i=0; i<var.nion; i++) {
+                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+
                         /* NONLINEAR TERM */
                         coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
-                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
                         var.B += (coef2 * Vcap_exp(u2, &ichop));
 
                         /* LINEARIZED TERM */
-                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
-                        u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+                        coef2 = -1.0 * var.ionQ[i] * coef2;
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
                 }
@@ -1606,17 +1606,16 @@ VPUBLIC double Vfetk_PDE_Fu_v(
 
     /* interior form case */
     if (key == 0) {
-        if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
-            value = var.B * V[0];
-            for (i=0; i<thee->dim; i++)
-              value += ( var.A * var.dU[0][i] * dV[0][i] );
-        } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
-            value = var.B * V[0];
+
+        for (i=0; i<thee->dim; i++) value += ( var.A * var.dU[0][i] * dV[0][i] );
+        value += var.B * V[0];
+
+        if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
             for (i=0; i<thee->dim; i++) {
-                value += (var.A * var.dU[0][i] * dV[0][i]);
                 if (var.F > VSMALL) value += (var.F * var.dW[i] * dV[0][i]);
             }
         }
+
     /* boundary form case */
     } else {
 #ifdef DONEUMANN
@@ -1647,15 +1646,9 @@ VPUBLIC double Vfetk_PDE_DFu_wv(
 
     /* Interior form */
     if (key == 0) {
-        if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
-            value = var.DB * W[0] * V[0];
-            for (i=0; i<thee->dim; i++)
-              value += ( var.A * dW[0][i] * dV[0][i] );
-        } else if ((type == PBE_LRPBE) || (type == PBE_NRPBE)) {
-            value = var.DB * W[0] * V[0];
-            for (i=0; i<thee->dim; i++)
-              value += ( var.A * dW[0][i] * dV[0][i] );
-        }
+            value += var.DB * W[0] * V[0];
+            for (i=0; i<thee->dim; i++) value += ( var.A * dW[0][i] * dV[0][i] );
+
     /* boundary form case */
     } else {
 #ifdef DONEUMANN
