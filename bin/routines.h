@@ -314,6 +314,16 @@ VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC]);
 
 /**
+ * @brief Store energy in arrays for future use
+ * @ingroup Frontend
+ * @author Todd Dolinsky
+ * @param pmg MB object
+ * @param icalc Calculation number
+ * @param atomEnergy Pointer to storage array of doubles
+ * @param nEnergy Stores number of atoms per calc */
+VEXTERNC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, int *nenergy);
+
+/**
  * @brief Write out information to a flat file
  * @ingroup Frontend
  * @author  Todd Dolinsky
@@ -323,10 +333,13 @@ VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
  * @param qfEnergy  An array with per-calc charge-potential energies (in kT)
  * @param qmEnergy  An array with per-calc mobile energies (in kT)
  * @param dielEnergy  An array with per-calc polarization energies (in kT)
+ * @param nenergy  An array containing the number of atoms per-calc
+ * @param atomEnergy An array containing per-atom energies (in KT) per calc
  * @return 1 if successful, 0 otherwise */
 VEXTERNC int writedataFlat(NOsh *nosh, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-  double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]);
+  double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
+  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);
 
 /**
  * @brief Write out information to an XML file
@@ -338,10 +351,13 @@ VEXTERNC int writedataFlat(NOsh *nosh, const char *fname,
  * @param qfEnergy  An array with per-calc charge-potential energies (in kT)
  * @param qmEnergy  An array with per-calc mobile energies (in kT)
  * @param dielEnergy  An array with per-calc polarization energies (in kT)
+ * @param nenergy  An array containing the number of atoms per-calc
+ * @param atomEnergy An array containing per-atom energies (in KT) per calc
  * @return 1 if successful, 0 otherwise */
 VEXTERNC int writedataXML(NOsh *nosh, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-  double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]);
+  double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
+  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);
 
 /**
  * @brief  Write out observables from MG calculation to file

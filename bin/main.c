@@ -128,6 +128,7 @@ int main(
     double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
     double npEnergy[NOSH_MAXCALC];
     AtomForce *atomForce[NOSH_MAXCALC];
+    double *atomEnergy[NOSH_MAXCALC];
     int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
     /* THe real partition centers */
     double realCenter[3];
@@ -414,6 +415,13 @@ int main(
                 /* Write matrix */
                 writematMG(rank, nosh, pbeparm, pmg[i]);
 
+		/* If needed, cache atom energies */
+
+		nenergy[i] = 0;
+		if ((pbeparm->calcenergy == PCE_COMPS) && (outputformat != OUTPUT_NULL)){
+		    storeAtomEnergy(pmg[i], i, &(atomEnergy[i]), &(nenergy[i]));
+		}
+
                 fflush(stdout);
                 fflush(stderr);
 
@@ -529,11 +537,19 @@ int main(
     if (outputformat == OUTPUT_XML) {
         Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
 	writedataXML(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
-                     dielEnergy);
+                     dielEnergy, nenergy, atomEnergy);
+
     } else if (outputformat == OUTPUT_FLAT) {
         Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
 	writedataFlat(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
-                     dielEnergy);
+                     dielEnergy, nenergy, atomEnergy);
+    }
+
+    /* Destroy energy arrays if they still exist */
+
+    for (i=0; i<nosh->ncalc; i++) {
+        if (nenergy[i] > 0) Vmem_free(mem, nenergy[i], sizeof(double),
+          (void **)&(atomEnergy[i]));    
     }
 
     /* *************** GARBAGE COLLECTION ******************* */
