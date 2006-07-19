@@ -1248,9 +1248,27 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
     return 1;
 }
 
+VPUBLIC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, 
+			     int *nenergy){
+ 
+    Vatom *atom;
+    Valist *alist;
+    int i;
+
+    alist = pmg->pbe->alist;
+    *nenergy = Valist_getNumberAtoms(alist);
+    *atomEnergy = (double *)Vmem_malloc(pmg->vmem, *nenergy, sizeof(double));
+
+    for (i=0; i<*nenergy; i++) {
+      atom = Valist_getAtom(alist, i); 
+      (*atomEnergy)[i] = Vpmg_qfAtomEnergy(pmg, atom);
+    }
+}
+
 VPUBLIC int writedataFlat(NOsh *nosh, const char *fname, 
     double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]) {
+    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
+    int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
 
     FILE *file;
     time_t now;
@@ -1396,6 +1414,11 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 			(qmEnergy[icalc]*conversion)); 
 	      fprintf(file,"        dielEnergy %1.12E kJ/mol\n", 
                       (dielEnergy[icalc]*conversion));
+	      for (i=0; i<nenergy[icalc]; i++){
+		  fprintf(file,"        atom %i %1.12E kJ/mol\n", i,
+			  (0.5*atomEnergy[icalc][i]*conversion));
+			  
+	      }
 	    } 
             fprintf(file,"    end\n");
 	}
@@ -1445,7 +1468,8 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 
 VPUBLIC int writedataXML(NOsh *nosh, const char *fname, 
     double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC]) {
+    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
+    int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
 
     FILE *file;
     time_t now;
@@ -1605,6 +1629,12 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 			(qmEnergy[icalc]*conversion)); 
 	      fprintf(file,"          <dielEnergy>%1.12E kJ/mol</dielEnergy>\n", 
                       (dielEnergy[icalc]*conversion));
+	      for (i=0; i<nenergy[icalc]; i++){
+		  fprintf(file,"          <atom>\n");
+		  fprintf(file,"              <id>%i</id>\n", i+1);
+		  fprintf(file,"              <energy>%1.12E kJ/mol</energy>\n", (0.5*atomEnergy[icalc][i]*conversion));
+		  fprintf(file,"          </atom>\n");
+	      }
 	    } 
             fprintf(file,"      </calc>\n");
 	}
