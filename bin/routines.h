@@ -328,6 +328,7 @@ VEXTERNC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, int *ne
  * @ingroup Frontend
  * @author  Todd Dolinsky
  * @param nosh  Parameters from input file
+ * @param com   The communications object
  * @param fname The target XML file name
  * @param totEnergy An array with per-calc total energies (in kT)
  * @param qfEnergy  An array with per-calc charge-potential energies (in kT)
@@ -336,7 +337,7 @@ VEXTERNC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, int *ne
  * @param nenergy  An array containing the number of atoms per-calc
  * @param atomEnergy An array containing per-atom energies (in KT) per calc
  * @return 1 if successful, 0 otherwise */
-VEXTERNC int writedataFlat(NOsh *nosh, const char *fname, 
+VEXTERNC int writedataFlat(NOsh *nosh, Vcom *com, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
   double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
   int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);
@@ -346,6 +347,7 @@ VEXTERNC int writedataFlat(NOsh *nosh, const char *fname,
  * @ingroup Frontend
  * @author  Todd Dolinsky
  * @param nosh  Parameters from input file
+ * @param com   The communications object 
  * @param fname The target XML file name
  * @param totEnergy An array with per-calc total energies (in kT)
  * @param qfEnergy  An array with per-calc charge-potential energies (in kT)
@@ -354,7 +356,7 @@ VEXTERNC int writedataFlat(NOsh *nosh, const char *fname,
  * @param nenergy  An array containing the number of atoms per-calc
  * @param atomEnergy An array containing per-atom energies (in KT) per calc
  * @return 1 if successful, 0 otherwise */
-VEXTERNC int writedataXML(NOsh *nosh, const char *fname, 
+VEXTERNC int writedataXML(NOsh *nosh, Vcom *com, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
   double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
   int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);

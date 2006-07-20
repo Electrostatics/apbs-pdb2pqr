@@ -308,6 +308,10 @@ int main(
 	VJMPERR1(0);
     } 
 
+	/* Append rank info if a parallel run */
+
+	if (size > 1) sprintf(output_path, "%s_%d", output_path, rank);	    
+
     Vnm_tprint( 1, "%s", header);
     Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
       __TIME__);
@@ -536,12 +540,12 @@ int main(
     
     if (outputformat == OUTPUT_XML) {
         Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
-	writedataXML(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
+	writedataXML(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
                      dielEnergy, nenergy, atomEnergy);
 
     } else if (outputformat == OUTPUT_FLAT) {
         Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
-	writedataFlat(nosh, output_path, totEnergy, qfEnergy, qmEnergy,
+	writedataFlat(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
                      dielEnergy, nenergy, atomEnergy);
     }
 
