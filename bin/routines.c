@@ -1265,7 +1265,7 @@ VPUBLIC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy,
     }
 }
 
-VPUBLIC int writedataFlat(NOsh *nosh, const char *fname, 
+VPUBLIC int writedataFlat(NOsh *nosh, Vcom *com, const char *fname, 
     double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
     double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
     int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
@@ -1276,7 +1276,7 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
     char *timestring = VNULL;
     PBEparm *pbeparm = VNULL;
     MGparm *mgparm = VNULL;
-    double conversion, ltenergy, scalar;
+    double conversion, ltenergy, gtenergy, scalar;
 
     if (nosh->bogus) return 1;
 
@@ -1455,9 +1455,15 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
 		/* Accumulate */
 		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
 				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
+	    
+	    Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+		
 	    }
-	    fprintf(file,"    %1.12E kJ/mol\nend\n", \
+	    fprintf(file,"    localEnergy %1.12E kJ/mol\n", \
 		    ltenergy);
+	    fprintf(file,"    globalEnergy %1.12E kJ/mol\nend\n", \
+            gtenergy); 
+
 	}
     }
    
@@ -1466,7 +1472,7 @@ VPUBLIC int writedataFlat(NOsh *nosh, const char *fname,
     return 1;
 }
 
-VPUBLIC int writedataXML(NOsh *nosh, const char *fname, 
+VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname, 
     double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
     double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
     int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
@@ -1478,7 +1484,7 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
     char *c = VNULL;
     PBEparm *pbeparm = VNULL;
     MGparm *mgparm = VNULL;
-    double conversion, ltenergy, scalar;
+    double conversion, ltenergy, gtenergy, scalar;
 
     if (nosh->bogus) return 1;
 
@@ -1672,8 +1678,12 @@ VPUBLIC int writedataXML(NOsh *nosh, const char *fname,
 		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
 				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
 	    }
-	    fprintf(file,"      <netEnergy>%1.12E kJ/mol</netEnergy>\n", \
+        Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+	    fprintf(file,"      <localEnergy>%1.12E kJ/mol</localEnergy>\n", \
 		    ltenergy);
+	    fprintf(file,"      <globalEnergy>%1.12E kJ/mol</globalEnergy>\n", \
+            gtenergy); 
+
 	    fprintf(file,"    </printEnergy>\n");
 	}
     }
