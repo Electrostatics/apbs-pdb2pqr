@@ -1007,7 +1007,7 @@ dnl # -----------------------
 dnl # ADD ON THE LIBRARIES FOR VERSION 1.40 OF FETK
 dnl # -----------------------
 
-if test -z "${with_fetk}"; then
+if test -n "${mc_found}"; then
 	case $host_os in
 	
 	darwin*)
@@ -1058,6 +1058,7 @@ AC_OUTPUT([
     examples/born/Makefile
     examples/FKBP/Makefile
     examples/hca-bind/Makefile
+    examples/ion-pmf/Makefile
     examples/ion-protein/Makefile
     examples/ionize/Makefile
     examples/pka-lig/Makefile
