@@ -106,6 +106,37 @@ VPUBLIC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type) {
     return 1; 
 }
 
+VPUBLIC void FEMparm_copy(
+						  FEMparm *thee,
+						  FEMparm *source
+						  ) {
+	
+	int i;
+	
+	thee->parsed = source->parsed;
+	thee->type = source->type;
+	thee->settype = source->settype;
+	for (i=0; i<3; i++) thee->glen[i] = source->glen[i];
+	thee->setglen = source->setglen;
+	thee->etol = source->etol;
+	thee->setetol = source->setetol;
+	thee->ekey = source->ekey;
+	thee->setekey = source->setekey;
+	thee->akeyPRE = source->akeyPRE;
+	thee->setakeyPRE = source->setakeyPRE;
+	thee->akeySOLVE = source->akeySOLVE;
+	thee->setakeySOLVE = source->setakeySOLVE;
+	thee->targetNum = source->targetNum;
+	thee->settargetNum = source->settargetNum;
+	thee->targetRes = source->targetRes;
+	thee->settargetRes = source->settargetRes;
+	thee->maxsolve = source->maxsolve;
+	thee->setmaxsolve = source->setmaxsolve;
+	thee->maxvert = source->maxvert;
+	thee->setmaxvert = source->setmaxvert;
+	thee->pkey = source->pkey;
+}
+
 VPUBLIC void FEMparm_dtor(FEMparm **thee) {
     if ((*thee) != VNULL) {
         FEMparm_dtor2(*thee);

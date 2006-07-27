@@ -1383,7 +1383,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
          * domain */
         if (energyFlag != PCE_NO) {
 
-            if (mgparm->type == MCT_PAR) {
+            if (mgparm->type == MCT_PARALLEL) {
 
                 for (j=0; j<3; j++) {
                     partMin[j] = mgparm->center[j] 
@@ -1608,8 +1608,16 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
         (xminOLD>xminNEW) || (yminOLD>yminNEW) || (zminOLD>zminNEW)) {
 
-        Vnm_print(2, "VPMG::focusFillBound -- new mesh not contained in old!\n");
-        fflush(stderr);
+        Vnm_print(2, "Vpmg::focusFillBound -- new mesh not contained in old!\n");
+		Vnm_print(2, "Vpmg::focusFillBound -- old mesh min = (%g, %g, %g)\n",
+				  xminOLD, yminOLD, zminOLD);
+        Vnm_print(2, "Vpmg::focusFillBound -- old mesh max = (%g, %g, %g)\n",
+				  xmaxOLD, ymaxOLD, zmaxOLD);
+		Vnm_print(2, "Vpmg::focusFillBound -- new mesh min = (%g, %g, %g)\n",
+				  xminNEW, yminNEW, zminNEW);
+        Vnm_print(2, "Vpmg::focusFillBound -- new mesh max = (%g, %g, %g)\n",
+				  xmaxNEW, ymaxNEW, zmaxNEW);
+		fflush(stderr);
         VASSERT(0);
     }
 
@@ -1653,8 +1661,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+                Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+					should need this.  If someone can convince me otherwise, 
+					I'll remove it. */
+				VASSERT(0);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -1693,8 +1705,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+				should need this.  If someone can convince me otherwise, 
+				I'll remove it. */
+				VASSERT(0);
                 pos[0] = x; pos[1] = y; pos[2] = z;
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
@@ -1747,8 +1763,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+				should need this.  If someone can convince me otherwise, 
+				I'll remove it. */
+				VASSERT(0);
                 pos[0] = x; pos[1] = y; pos[2] = z;
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
@@ -1789,8 +1809,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+					should need this.  If someone can convince me otherwise, 
+					I'll remove it. */
+				VASSERT(0);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -1843,8 +1867,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+					should need this.  If someone can convince me otherwise, 
+					I'll remove it. */
+				VASSERT(0);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -1884,8 +1912,12 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
                 pos[0] = x; pos[1] = y; pos[2] = z;
-                Vnm_print(1, "focusFillBound -- DEBUG:  CALLING BCFL1 for %g, \
+				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
 %g, %g!\n", x, y, z);
+				/* I'm adding a VASSERT(0) here because I really don't think we
+					should need this.  If someone can convince me otherwise, 
+					I'll remove it. */
+				VASSERT(0);
                 uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
