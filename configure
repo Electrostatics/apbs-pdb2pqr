@@ -24936,7 +24936,7 @@ case $host_os in
 esac
 
 
-if test -z "${with_fetk}"; then
+if test -n "${mc_found}"; then
 	case $host_os in
 
 	darwin*)
@@ -24960,7 +24960,7 @@ lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
 
 
 
-                                                                                                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/solv/Makefile bin/Makefile"
+                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/blas/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/solv/Makefile bin/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -25043,9 +25043,10 @@ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
   # 1. Remove the extension, and $U if already installed.
   ac_i=`echo "$ac_i" |
 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
-  # 2. Add them.
-  ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
-  ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
+  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+  #    will be set to the directory where LIBOBJS objects are built.
+  ac_libobjs="$ac_libobjs \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+  ac_ltlibobjs="$ac_ltlibobjs \${LIBOBJDIR}$ac_i"'$U.lo'
 done
 LIBOBJS=$ac_libobjs
 
@@ -25558,6 +25559,7 @@ do
   "examples/born/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/born/Makefile" ;;
   "examples/FKBP/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/FKBP/Makefile" ;;
   "examples/hca-bind/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/hca-bind/Makefile" ;;
+  "examples/ion-pmf/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ion-pmf/Makefile" ;;
   "examples/ion-protein/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ion-protein/Makefile" ;;
   "examples/ionize/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/ionize/Makefile" ;;
   "examples/pka-lig/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/pka-lig/Makefile" ;;
