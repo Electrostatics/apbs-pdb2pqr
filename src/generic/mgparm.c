@@ -208,6 +208,9 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     int rc, i, tdime[3], ti, tnlev[3], nlev;
 
     rc = 1;
+	
+	Vnm_print(0, "MGparm_check:  checking MGparm object of type %d.\n", 
+			  thee->type);
 
     /* Check to see if we were even filled... */
     if (!thee->parsed) {
@@ -227,7 +230,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
 
 
     /* Check sequential manual & dummy settings */
-    if ((thee->type == MCT_MAN) || (thee->type == MCT_DUM)) {
+    if ((thee->type == MCT_MANUAL) || (thee->type == MCT_DUMMY)) {
         if ((!thee->setgrid) && (!thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
             rc = 0;
@@ -243,7 +246,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
  
     /* Check sequential and parallel automatic focusing settings */
-    if ((thee->type == MCT_AUT) || (thee->type == MCT_PAR)) {
+    if ((thee->type == MCT_AUTO) || (thee->type == MCT_PARALLEL)) {
         if (!thee->setcglen) {
             Vnm_print(2, "MGparm_check:  CGLEN not set!\n");
             rc = 0;
@@ -263,7 +266,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     }
 
     /* Check parallel automatic focusing settings */
-    if (thee->type == MCT_PAR) {
+    if (thee->type == MCT_PARALLEL) {
         if (!thee->setpdime) {
             Vnm_print(2, "MGparm_check:  PDIME not set!\n");
             rc = 0;
@@ -581,8 +584,10 @@ VPRIVATE int MGparm_parseGCENT(MGparm *thee, Vio *sock) {
 GCENT MOL keyword!\n", tok);
                 return -1;
             } else {
-                thee->cmeth = MCM_MOL;
-                thee->centmol = ti;
+                thee->cmeth = MCM_MOLECULE;
+				/* Subtract 1 here to convert user numbering (1, 2, 3, ...) into
+				array index */
+                thee->centmol = ti - 1;
             }
         } else {
             Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
@@ -693,9 +698,11 @@ VPRIVATE int MGparm_parseCGCENT(MGparm *thee, Vio *sock) {
 CGCENT MOL keyword!\n", tok);
                 return -1;
             } else {
-                thee->ccmeth = MCM_MOL;
-                thee->ccentmol = ti;
-            }
+				thee->ccmeth = MCM_MOLECULE;
+				/* Subtract 1 here to convert user numbering (1, 2, 3, ...) into 
+				array index */
+                thee->ccentmol = ti - 1;
+			}
         } else {
             Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \
 CGCENT!\n", tok);
@@ -743,8 +750,10 @@ VPRIVATE int MGparm_parseFGCENT(MGparm *thee, Vio *sock) {
 FGCENT MOL keyword!\n", tok);
                  return -1;
             } else {
-                thee->fcmeth = MCM_MOL;
-                thee->fcentmol = ti;
+                thee->fcmeth = MCM_MOLECULE;
+				/* Subtract 1 here to convert user numbering (1, 2, 3, ...) into
+				array index */
+                thee->fcentmol = ti - 1;
             }
         } else {
             Vnm_print(2, "NOsh:  Unexpected keyword (%s) while parsing \

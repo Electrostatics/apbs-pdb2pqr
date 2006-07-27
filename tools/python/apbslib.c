@@ -1638,7 +1638,7 @@ SWIG_FromCharPtr(const char* cptr)
 
 int NOsh_elec2calc(NOsh *,int);
 NOsh_PrintType NOsh_printWhat(NOsh *,int);
-int NOsh_parseFile(NOsh *,char *);
+int NOsh_parseInputFile(NOsh *,char *);
 NOsh *NOsh_ctor(int,int);
 
 Valist **new_valist(int maxargs) {
@@ -1756,7 +1756,7 @@ int parseInputFromString(NOsh *nosh, PyObject *string){
 
     Vio_bufTake(sock, PyString_AsString(string), bufsize);
 
-    ret = NOsh_parse(nosh, sock); 
+    ret = NOsh_parseInput(nosh, sock); 
     sock->VIObuffer = VNULL;
     Vio_dtor(&sock);
     return ret;
@@ -2921,7 +2921,7 @@ static PyObject *_wrap_NOsh_printWhat(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_NOsh_parseFile(PyObject *self, PyObject *args) {
+static PyObject *_wrap_NOsh_parseInputFile(PyObject *self, PyObject *args) {
     PyObject *resultobj = NULL;
     NOsh *arg1 = (NOsh *) 0 ;
     char *arg2 = (char *) 0 ;
@@ -2929,13 +2929,13 @@ static PyObject *_wrap_NOsh_parseFile(PyObject *self, PyObject *args) {
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:NOsh_parseFile",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:NOsh_parseInputFile",&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_NOsh, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     if (!SWIG_AsCharPtr(obj1, (char**)&arg2)) {
         SWIG_arg_fail(2);SWIG_fail;
     }
-    result = (int)NOsh_parseFile(arg1,arg2);
+    result = (int)NOsh_parseInputFile(arg1,arg2);
     
     {
         resultobj = SWIG_From_int((int)(result)); 
@@ -4552,7 +4552,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"NOsh_elecname", _wrap_NOsh_elecname, METH_VARARGS, NULL},
 	 { (char *)"NOsh_elec2calc", _wrap_NOsh_elec2calc, METH_VARARGS, NULL},
 	 { (char *)"NOsh_printWhat", _wrap_NOsh_printWhat, METH_VARARGS, NULL},
-	 { (char *)"NOsh_parseFile", _wrap_NOsh_parseFile, METH_VARARGS, NULL},
+	 { (char *)"NOsh_parseInputFile", _wrap_NOsh_parseInputFile, METH_VARARGS, NULL},
 	 { (char *)"NOsh_ctor", _wrap_NOsh_ctor, METH_VARARGS, NULL},
 	 { (char *)"new_AtomForce", _wrap_new_AtomForce, METH_VARARGS, NULL},
 	 { (char *)"delete_AtomForce", _wrap_delete_AtomForce, METH_VARARGS, NULL},

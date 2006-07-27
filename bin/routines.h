@@ -390,10 +390,14 @@ VEXTERNC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
  * @param  com  Communications object
  * @param  nosh  Parameters from input file
  * @param  totEnergy  Array of energies from different calculations
- * @param  i  Index of energy statement to print
+ * @param  iprint  Index of energy statement to print
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
-  int i);
+VEXTERNC int printEnergy(
+						 Vcom *com,
+						 NOsh *nosh,
+						 double totEnergy[NOSH_MAXCALC], 
+						 int iprint
+						 );
 
 /** 
  * @brief  Combine and pretty-print force data

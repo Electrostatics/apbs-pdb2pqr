@@ -122,7 +122,8 @@ typedef enum eFEMparm_EstType FEMparm_EstType;
  * @ingroup FEMparm
  */
 enum eFEMparm_CalcType {
-    FCT_MAN=0  /**< fe-manual */
+    FCT_MANUAL,  /**< fe-manual */
+	FCT_NONE  /**< unspecified */
 };
 
 /**
@@ -228,6 +229,14 @@ VEXTERNC void FEMparm_dtor2(FEMparm *thee);
  * @returns 1 if OK, 0 otherwise
  */
 VEXTERNC int FEMparm_check(FEMparm *thee);
+
+/**	@brief	Copy target object into thee
+	@ingroup	FEMparm
+	@author	Nathan Baker
+	@param	thee	Destination object
+	@param	source	Source object
+*/
+VEXTERNC void FEMparm_copy(FEMparm *thee, FEMparm *source);
 
 /** 
  * @brief   Parse an MG keyword from an input file

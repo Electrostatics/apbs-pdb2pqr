@@ -82,10 +82,11 @@
  * @ingroup MGparm
  */
 enum eMGparm_CalcType {
-    MCT_MAN=0,  /**< mg-manual */
-    MCT_AUT=1,  /**< mg-auto */
-    MCT_PAR=2,  /**< mg-para */
-    MCT_DUM=3  /**< mg-dummy */
+    MCT_MANUAL=0,  /**< mg-manual */
+    MCT_AUTO=1,  /**< mg-auto */
+    MCT_PARALLEL=2,  /**< mg-para */
+    MCT_DUMMY=3,  /**< mg-dummy */
+	MCT_NONE=4  /**< unspecified */
 };
 
 /**
@@ -99,8 +100,9 @@ typedef enum eMGparm_CalcType MGparm_CalcType;
  * @ingroup MGparm
  */
 enum eMGparm_CentMeth {
-    MCM_PNT=0, /**< Center on a point */ 
-    MCM_MOL=1  /**< Center on a molecule */
+    MCM_POINT=0, /**< Center on a point */ 
+    MCM_MOLECULE=1,  /**< Center on a molecule */
+	MCM_FOCUS=2  /**< Determined by focusing */
 };
 
 /**
@@ -146,8 +148,9 @@ struct sMGparm {
                         * this is the vector that must be added to the
                         * center of the molecule to give the center of
                         * the non-disjoint partition.  */
-    int centmol;  /**< Particular molecule on which we want to center the 
-                   * grid */
+    int centmol;  /**< Particular molecule on which we want to center the grid.  
+		This should be the appropriate index in an array of molecules, not the 
+		positive definite integer specified by the user. */
     int setgcent;  /**< Flag, @see cmeth */
 
     /* ******** TYPE 1 & 2 PARAMETERS (SEQUENTIAL & PARALLEL AUTO-FOCUS) *** */
@@ -157,13 +160,15 @@ struct sMGparm {
     int setfglen;  /**< Flag, @see fglen */
     MGparm_CentMeth ccmeth;  /**< Coarse grid centering method */
     double ccenter[3];  /**< Coarse grid center.  */
-    int ccentmol;  /**< Particular molecule on which we want to center the 
-                    * coarse grid */
+    int ccentmol;  /**< Particular molecule on which we want to center the grid.  
+		This should be the appropriate index in an array of molecules, not the 
+		positive definite integer specified by the user. */
     int setcgcent;  /**< Flag, @see ccmeth */
     MGparm_CentMeth fcmeth;  /**< Fine grid centering method */
     double fcenter[3];  /**< Fine grid center.  */
-    int fcentmol;  /**< Particular molecule on which we want to center the 
-                    * fine grid */
+    int fcentmol; /**< Particular molecule on which we want to center the grid.  
+		This should be the appropriate index in an array of molecules, not the 
+		positive definite integer specified by the user. */
     int setfgcent;  /**< Flag, @see fcmeth */
 
 

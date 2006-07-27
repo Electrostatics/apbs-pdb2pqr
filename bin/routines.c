@@ -1,5 +1,5 @@
 /**
- *  @file    routines.c
+*  @file    routines.c
  *  @author  Nathan Baker
  *  @brief   Supporting routines for APBS front end
  *  @version $Id$
@@ -87,2256 +87,2289 @@ VEMBED(rcsid="$Id$")
 VPUBLIC void startVio() { Vio_start(); }
 
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
-    
-    int i, j, rc;
-    double q; 
-    Vio *sock = VNULL;
-    Vatom *atom = VNULL;
-    Vparam *param = VNULL;
-
-    Vnm_tprint( 1, "Got PQR paths for %d molecules\n", nosh->nmol);
-    if (nosh->nmol <= 0) {
-       Vnm_tprint(2, "You didn't specify any molecules (correctly)!\n");
-       Vnm_tprint(2, "Bailing out!\n");
-       return 0;
-    }
-
-    if (nosh->gotparm) {
-        param = Vparam_ctor();
-        switch (nosh->parmfmt) {
-            case NPF_FLAT:
-                 Vnm_tprint( 1, "Reading parameter data from %s.\n",
-                   nosh->parmpath);
-                if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
-                  nosh->parmpath) != 1) {
-                    Vnm_tprint(2, "NOsh:  Error reading parameter\
- file (%s)!\n", nosh->parmpath);
-                    return 0;
-                }
-                break;
-            case NPF_XML:
-                 Vnm_tprint( 1, "Reading parameter data from %s.\n",
-                   nosh->parmpath);
-                if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
-                  nosh->parmpath) != 1) {
-                    Vnm_tprint(2, "NOsh:  Error reading parameter\
- file (%s)!\n", nosh->parmpath);
-                    return 0;
-                }
-                break;
-            default:
-                Vnm_tprint(2, "NOsh:  Error! Undefined parameter file \
+	
+	int i, j, rc;
+	double q; 
+	Vio *sock = VNULL;
+	Vatom *atom = VNULL;
+	Vparam *param = VNULL;
+	
+	Vnm_tprint( 1, "Got PQR paths for %d molecules\n", nosh->nmol);
+	if (nosh->nmol <= 0) {
+		Vnm_tprint(2, "You didn't specify any molecules (correctly)!\n");
+		Vnm_tprint(2, "Bailing out!\n");
+		return 0;
+	}
+	
+	if (nosh->gotparm) {
+		param = Vparam_ctor();
+		switch (nosh->parmfmt) {
+			case NPF_FLAT:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",
+							nosh->parmpath);
+				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
+										nosh->parmpath) != 1) {
+					Vnm_tprint(2, "NOsh:  Error reading parameter\
+file (%s)!\n", nosh->parmpath);
+					return 0;
+				}
+					break;
+			case NPF_XML:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",
+							nosh->parmpath);
+				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
+									   nosh->parmpath) != 1) {
+					Vnm_tprint(2, "NOsh:  Error reading parameter\
+file (%s)!\n", nosh->parmpath);
+					return 0;
+				}
+					break;
+			default:
+				Vnm_tprint(2, "NOsh:  Error! Undefined parameter file \
 type (%d)!\n", nosh->parmfmt);
-                return 0;
-        } /* switch parmfmt */
-    }
+				return 0;
+		} /* switch parmfmt */
+	}
 
-    for (i=0; i<nosh->nmol; i++) {
-        alist[i] = Valist_ctor();
-        switch (nosh->molfmt[i]) {
-            case NMF_PQR:
-                Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
-                  nosh->molpath[i]);
-                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
-                if (sock == VNULL) {
-                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                if (Vio_accept(sock, 0) < 0) {
-                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                rc = Valist_readPQR(alist[i], sock);
-                Vio_acceptFree(sock);
-                Vio_dtor(&sock);
-                break;
-            case NMF_PDB:
-                /* Load parameters */
-                if (!nosh->gotparm) {
-                    Vnm_tprint(2, "NOsh:  Error!  Can't read PDB without \
+	for (i=0; i<nosh->nmol; i++) {
+		alist[i] = Valist_ctor();
+		switch (nosh->molfmt[i]) {
+			case NMF_PQR:
+				Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
+							nosh->molpath[i]);
+				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+				if (sock == VNULL) {
+					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->molpath[i]);
+					return 0;
+				}
+					if (Vio_accept(sock, 0) < 0) {
+						Vnm_print(2, "Problem accepting virtual socket %s!\n",
+								  nosh->molpath[i]);
+						return 0;
+					}
+					rc = Valist_readPQR(alist[i], sock);
+				Vio_acceptFree(sock);
+				Vio_dtor(&sock);
+				break;
+			case NMF_PDB:
+				/* Load parameters */
+				if (!nosh->gotparm) {
+					Vnm_tprint(2, "NOsh:  Error!  Can't read PDB without \
 specifying PARM file!\n");
-                    return 0;
-                }
-                Vnm_tprint( 1, "Reading PDB-format atom data from %s.\n",
-                  nosh->molpath[i]);
-                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
-                if (sock == VNULL) {
-                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                if (Vio_accept(sock, 0) < 0) {
-                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                rc = Valist_readPDB(alist[i], param, sock);
-                Vio_acceptFree(sock);
-                Vio_dtor(&sock);
-                break;
-            case NMF_XML:
-                Vnm_tprint( 1, "Reading XML-format atom data from %s.\n",
-                  nosh->molpath[i]);
-                sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
-                if (sock == VNULL) {
-                    Vnm_print(2, "Problem opening virtual socket %s!\n", 
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                if (Vio_accept(sock, 0) < 0) {
-                    Vnm_print(2, "Problem accepting virtual socket %s!\n",
-                            nosh->molpath[i]);
-                    return 0;
-                }
-                rc = Valist_readXML(alist[i], sock);
-                Vio_acceptFree(sock);
-                Vio_dtor(&sock);
-                break;
-            default:
-                Vnm_tprint(2, "NOsh:  Error!  Undefined molecule file type \
+					return 0;
+				}
+				Vnm_tprint( 1, "Reading PDB-format atom data from %s.\n",
+							nosh->molpath[i]);
+				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+				if (sock == VNULL) {
+					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->molpath[i]);
+					return 0;
+				}
+					if (Vio_accept(sock, 0) < 0) {
+						Vnm_print(2, "Problem accepting virtual socket %s!\n",
+								  nosh->molpath[i]);
+						return 0;
+					}
+					rc = Valist_readPDB(alist[i], param, sock);
+				Vio_acceptFree(sock);
+				Vio_dtor(&sock);
+				break;
+			case NMF_XML:
+				Vnm_tprint( 1, "Reading XML-format atom data from %s.\n",
+							nosh->molpath[i]);
+				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+				if (sock == VNULL) {
+					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->molpath[i]);
+					return 0;
+				}
+					if (Vio_accept(sock, 0) < 0) {
+						Vnm_print(2, "Problem accepting virtual socket %s!\n",
+								  nosh->molpath[i]);
+						return 0;
+					}
+					rc = Valist_readXML(alist[i], sock);
+				Vio_acceptFree(sock);
+				Vio_dtor(&sock);
+				break;
+			default:
+				Vnm_tprint(2, "NOsh:  Error!  Undefined molecule file type \
 (%d)!\n", nosh->molfmt[i]);
-                return 0;
-        } /* switch molfmt */
+				return 0;
+		} /* switch molfmt */
 
-        if (rc != 1) {
-            Vnm_tprint( 2, "Error while reading molecule from %s\n",
-              nosh->molpath[i]);
-            return 0;
-        }
+		if (rc != 1) {
+			Vnm_tprint( 2, "Error while reading molecule from %s\n",
+						nosh->molpath[i]);
+			return 0;
+		}
 
-        Vnm_tprint( 1, "  %d atoms\n", Valist_getNumberAtoms(alist[i]));
-        Vnm_tprint( 1, "  Centered at (%4.3e, %4.3e, %4.3e)\n",
-          alist[i]->center[0], alist[i]->center[1], alist[i]->center[2]);
-        Vnm_tprint( 1, "  Net charge %3.2e e\n", alist[i]->charge);        
+		Vnm_tprint( 1, "  %d atoms\n", Valist_getNumberAtoms(alist[i]));
+		Vnm_tprint( 1, "  Centered at (%4.3e, %4.3e, %4.3e)\n",
+					alist[i]->center[0], alist[i]->center[1], 
+					alist[i]->center[2]);
+		Vnm_tprint( 1, "  Net charge %3.2e e\n", alist[i]->charge);        
 
-        /* Check for uncharged molecule */
-        q = 0;
-        for (j=0; j<Valist_getNumberAtoms(alist[i]); j++) {
-            atom = Valist_getAtom(alist[i], j);
-            q += VSQR(Vatom_getCharge(atom));
-        }
-        if (q < (1e-6)) {
-            Vnm_tprint(2, "Molecule #%d is uncharged!\n");
-            Vnm_tprint(2, "Sum square charge = %g\n", q);
-            Vnm_tprint(2, "Bailing out!\n");
-        }
-    }
+		/* Check for uncharged molecule */
+		q = 0;
+		for (j=0; j<Valist_getNumberAtoms(alist[i]); j++) {
+			atom = Valist_getAtom(alist[i], j);
+			q += VSQR(Vatom_getCharge(atom));
+		}
+		if (q < (1e-6)) {
+			Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+			Vnm_tprint(2, "Sum square charge = %g\n", q);
+			Vnm_tprint(2, "Bailing out!\n");
+		}
+	}
 
-    if (nosh->gotparm) Vparam_dtor(&param);
+	if (nosh->gotparm) Vparam_dtor(&param);
 
-    return 1;
+	return 1;
 
 }
 
 VPUBLIC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
-    
-    int i;
-
+	
+	int i;
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint( 1, "Destroying %d molecules\n", nosh->nmol);
+	Vnm_tprint( 1, "Destroying %d molecules\n", nosh->nmol);
 #endif
-
-    for (i=0; i<nosh->nmol; i++) Valist_dtor(&(alist[i]));
-
+	
+	for (i=0; i<nosh->nmol; i++) Valist_dtor(&(alist[i]));
+	
 }
 
 VPUBLIC int loadDielMaps(NOsh *nosh, 
-  Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
-  Vgrid *dielZMap[NOSH_MAXMOL]) {
-
-    int i, ii, nx, ny, nz;
-    double sum, hx, hy, hzed, xmin, ymin, zmin;
-
-    if (nosh->ndiel > 0) 
-      Vnm_tprint( 1, "Got paths for %d dielectric map sets\n", 
-        nosh->ndiel);
-    else return 1;
-
-    for (i=0; i<nosh->ndiel; i++) {
-        Vnm_tprint( 1, "Reading x-shifted dielectric map data from \
+						 Vgrid *dielXMap[NOSH_MAXMOL], 
+						 Vgrid *dielYMap[NOSH_MAXMOL],
+						 Vgrid *dielZMap[NOSH_MAXMOL]) {
+	
+	int i, ii, nx, ny, nz;
+	double sum, hx, hy, hzed, xmin, ymin, zmin;
+	
+	if (nosh->ndiel > 0) 
+		Vnm_tprint( 1, "Got paths for %d dielectric map sets\n", 
+					nosh->ndiel);
+	else return 1;
+	
+	for (i=0; i<nosh->ndiel; i++) {
+		Vnm_tprint( 1, "Reading x-shifted dielectric map data from \
 %s:\n", nosh->dielXpath[i]);
-        dielXMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-        switch (nosh->dielfmt[i]) {
-            case VDF_DX:
-                if (Vgrid_readDX(dielXMap[i], "FILE", "ASC", VNULL, 
-                  nosh->dielXpath[i]) != 1) {
-                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
-                      nosh->dielXpath[i]);
-                    return 0;
-                }
-                nx = dielXMap[i]->nx;
-                ny = dielXMap[i]->ny;
-                nz = dielXMap[i]->nz;
-                hx = dielXMap[i]->hx;
-                hy = dielXMap[i]->hy;
-                hzed = dielXMap[i]->hzed;
-                xmin = dielXMap[i]->xmin;
-                ymin = dielXMap[i]->ymin;
-                zmin = dielXMap[i]->zmin;
-                Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
-                Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
-                Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
-                  xmin, ymin, zmin);
-                sum = 0;
-                for (ii=0; ii<(nx*ny*nz); ii++)
-                  sum += (dielXMap[i]->data[ii]);
-                sum = sum*hx*hy*hzed;
-                Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
-                break;
-            case VDF_UHBD:
-                Vnm_tprint( 2, "UHBD input not supported yet!\n");
-                return 0;
-            case VDF_AVS:
-                Vnm_tprint( 2, "AVS input not supported yet!\n");
-                return 0;
-            default:
-                Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-                  nosh->dielfmt[i]);
-                return 0;
-        }
-        Vnm_tprint( 1, "Reading y-shifted dielectric map data from \
+		dielXMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->dielfmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(dielXMap[i], "FILE", "ASC", VNULL, 
+								 nosh->dielXpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								nosh->dielXpath[i]);
+					return 0;
+				}
+				nx = dielXMap[i]->nx;
+				ny = dielXMap[i]->ny;
+				nz = dielXMap[i]->nz;
+				hx = dielXMap[i]->hx;
+				hy = dielXMap[i]->hy;
+				hzed = dielXMap[i]->hzed;
+				xmin = dielXMap[i]->xmin;
+				ymin = dielXMap[i]->ymin;
+				zmin = dielXMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++)
+					sum += (dielXMap[i]->data[ii]);
+					sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+							nosh->dielfmt[i]);
+				return 0;
+		}
+		Vnm_tprint( 1, "Reading y-shifted dielectric map data from \
 %s:\n", nosh->dielYpath[i]);
-        dielYMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-        switch (nosh->dielfmt[i]) {
-            case VDF_DX:
-                if (Vgrid_readDX(dielYMap[i], "FILE", "ASC", VNULL, 
-                  nosh->dielYpath[i]) != 1) {
-                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
-                      nosh->dielYpath[i]);
-                    return 0;
-                }
-                nx = dielYMap[i]->nx;
-                ny = dielYMap[i]->ny;
-                nz = dielYMap[i]->nz;
-                hx = dielYMap[i]->hx;
-                hy = dielYMap[i]->hy;
-                hzed = dielYMap[i]->hzed;
-                xmin = dielYMap[i]->xmin;
-                ymin = dielYMap[i]->ymin;
-                zmin = dielYMap[i]->zmin;
-                Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
-                Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
-                Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
-                  xmin, ymin, zmin);
-                sum = 0;
-                for (ii=0; ii<(nx*ny*nz); ii++)
-                  sum += (dielYMap[i]->data[ii]);
-                sum = sum*hx*hy*hzed;
-                Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
-                break;
-            case VDF_UHBD:
-                Vnm_tprint( 2, "UHBD input not supported yet!\n");
-                return 0;
-            case VDF_AVS:
-                Vnm_tprint( 2, "AVS input not supported yet!\n");
-                return 0;
-            default:
-                Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-                  nosh->dielfmt[i]);
-                return 0;
-        }
-        Vnm_tprint( 1, "Reading z-shifted dielectric map data from \
+		dielYMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->dielfmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(dielYMap[i], "FILE", "ASC", VNULL, 
+								 nosh->dielYpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								nosh->dielYpath[i]);
+					return 0;
+				}
+				nx = dielYMap[i]->nx;
+				ny = dielYMap[i]->ny;
+				nz = dielYMap[i]->nz;
+				hx = dielYMap[i]->hx;
+				hy = dielYMap[i]->hy;
+				hzed = dielYMap[i]->hzed;
+				xmin = dielYMap[i]->xmin;
+				ymin = dielYMap[i]->ymin;
+				zmin = dielYMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++)
+					sum += (dielYMap[i]->data[ii]);
+					sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+							nosh->dielfmt[i]);
+				return 0;
+		}
+		Vnm_tprint( 1, "Reading z-shifted dielectric map data from \
 %s:\n", nosh->dielZpath[i]);
-        dielZMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-        switch (nosh->dielfmt[i]) {
-            case VDF_DX:
-                if (Vgrid_readDX(dielZMap[i], "FILE", "ASC", VNULL, 
-                  nosh->dielZpath[i]) != 1) {
-                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
-                      nosh->dielZpath[i]);
-                    return 0;
-                }
-                nx = dielZMap[i]->nx;
-                ny = dielZMap[i]->ny;
-                nz = dielZMap[i]->nz;
-                hx = dielZMap[i]->hx;
-                hy = dielZMap[i]->hy;
-                hzed = dielZMap[i]->hzed;
-                xmin = dielZMap[i]->xmin;
-                ymin = dielZMap[i]->ymin;
-                zmin = dielZMap[i]->zmin;
-                Vnm_tprint(1, "  %d x %d x %d grid\n",
-                  nx, ny, nz);
-                Vnm_tprint(1, "  (%g, %g, %g) A spacings\n",
-                  hx, hy, hzed);
-                Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
-                  xmin, ymin, zmin);
-                sum = 0;
-                for (ii=0; ii<(nx*ny*nz); ii++) sum += (dielZMap[i]->data[ii]);
-                sum = sum*hx*hy*hzed;
-                Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
-                break;
-            case VDF_UHBD:
-                Vnm_tprint( 2, "UHBD input not supported yet!\n");
-                return 0;
-            case VDF_AVS:
-                Vnm_tprint( 2, "AVS input not supported yet!\n");
-                return 0;
-            default:
-                Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-                  nosh->dielfmt[i]);
-                return 0;
-        }
-    }
-
-    return 1;
-
+		dielZMap[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->dielfmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(dielZMap[i], "FILE", "ASC", VNULL, 
+								 nosh->dielZpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								nosh->dielZpath[i]);
+					return 0;
+				}
+				nx = dielZMap[i]->nx;
+				ny = dielZMap[i]->ny;
+				nz = dielZMap[i]->nz;
+				hx = dielZMap[i]->hx;
+				hy = dielZMap[i]->hy;
+				hzed = dielZMap[i]->hzed;
+				xmin = dielZMap[i]->xmin;
+				ymin = dielZMap[i]->ymin;
+				zmin = dielZMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n",
+						   nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n",
+						   hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++) sum += (dielZMap[i]->data[ii]);
+					sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+							nosh->dielfmt[i]);
+				return 0;
+		}
+	}
+	
+	return 1;
+	
 }
 
 VPUBLIC void killDielMaps(NOsh *nosh, 
-  Vgrid *dielXMap[NOSH_MAXMOL], Vgrid *dielYMap[NOSH_MAXMOL],
-  Vgrid *dielZMap[NOSH_MAXMOL]) {
-
-    int i;
-
-    if (nosh->ndiel > 0) {
+						  Vgrid *dielXMap[NOSH_MAXMOL], 
+						  Vgrid *dielYMap[NOSH_MAXMOL],
+						  Vgrid *dielZMap[NOSH_MAXMOL]) {
+	
+	int i;
+	
+	if (nosh->ndiel > 0) {
 #ifndef VAPBSQUIET
-	Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
-		    nosh->ndiel);
+		Vnm_tprint( 1, "Destroying %d dielectric map sets\n", 
+					nosh->ndiel);
 #endif
-	for (i=0; i<nosh->ndiel; i++) {
-	    Vgrid_dtor(&(dielXMap[i]));
-	    Vgrid_dtor(&(dielYMap[i]));
-	    Vgrid_dtor(&(dielZMap[i]));
+		for (i=0; i<nosh->ndiel; i++) {
+			Vgrid_dtor(&(dielXMap[i]));
+			Vgrid_dtor(&(dielYMap[i]));
+			Vgrid_dtor(&(dielZMap[i]));
+		}
 	}
-    }
-    else return;
-
+	else return;
+	
 }
 
 VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
-
-    int i, ii;
-    double sum;
-
-    if (nosh->nkappa > 0) 
-      Vnm_tprint( 1, "Got paths for %d kappa maps\n", nosh->nkappa);
-    else return 1;
-
-    for (i=0; i<nosh->nkappa; i++) {
-        Vnm_tprint( 1, "Reading kappa map data from %s:\n",
-          nosh->kappapath[i]);
-        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-        switch (nosh->kappafmt[i]) {
-            case VDF_DX:
-                if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
-                  nosh->kappapath[i]) != 1) {
-                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
-                      nosh->kappapath[i]);
-                    return 0;
-                }
-                Vnm_tprint(1, "  %d x %d x %d grid\n", 
-                  map[i]->nx, map[i]->ny, map[i]->nz);
-                Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
-                  map[i]->hx, map[i]->hy, map[i]->hzed);
-                Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
-                  map[i]->xmin, map[i]->ymin, map[i]->zmin);
-                sum = 0;
-                for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
-                  sum += (map[i]->data[ii]);
-                sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-                Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
-                break;
-            case VDF_UHBD:
-                Vnm_tprint( 2, "UHBD input not supported yet!\n");
-                return 0;
-            case VDF_AVS:
-                Vnm_tprint( 2, "AVS input not supported yet!\n");
-                return 0;
-            default:
-                Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-                  nosh->kappafmt[i]);
-                return 0;
-        }
-    }
-
-    return 1;
-
+	
+	int i, ii;
+	double sum;
+	
+	if (nosh->nkappa > 0) 
+		Vnm_tprint( 1, "Got paths for %d kappa maps\n", nosh->nkappa);
+	else return 1;
+	
+	for (i=0; i<nosh->nkappa; i++) {
+		Vnm_tprint( 1, "Reading kappa map data from %s:\n",
+					nosh->kappapath[i]);
+		map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->kappafmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
+								 nosh->kappapath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								nosh->kappapath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
+					sum += (map[i]->data[ii]);
+					sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+							nosh->kappafmt[i]);
+				return 0;
+		}
+	}
+	
+	return 1;
+	
 }
 
 VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
-
-    int i;
-
-    if (nosh->nkappa > 0) {
+	
+	int i;
+	
+	if (nosh->nkappa > 0) {
 #ifndef VAPBSQUIET
-      Vnm_tprint( 1, "Destroying %d kappa maps\n", nosh->nkappa);
+		Vnm_tprint( 1, "Destroying %d kappa maps\n", nosh->nkappa);
 #endif
-      for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
-    }
-    else return;
-
+		for (i=0; i<nosh->nkappa; i++) Vgrid_dtor(&(map[i]));
+	}
+	else return;
+	
 }
 
 VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
-
-    int i, ii;
-    double sum;
-
-    if (nosh->ncharge > 0)
-      Vnm_tprint( 1, "Got paths for %d charge maps\n", nosh->ncharge);
-    else return 1;
-
-    for (i=0; i<nosh->ncharge; i++) {
-        Vnm_tprint( 1, "Reading charge map data from %s:\n",
-          nosh->chargepath[i]);
-        map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-        switch (nosh->chargefmt[i]) {
-            case VDF_DX:
-                if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
-                  nosh->chargepath[i]) != 1) {
-                    Vnm_tprint( 2, "Fatal error while reading from %s\n",
-                      nosh->chargepath[i]);
-                    return 0;
-                }
-                Vnm_tprint(1, "  %d x %d x %d grid\n", 
-                  map[i]->nx, map[i]->ny, map[i]->nz);
-                Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
-                  map[i]->hx, map[i]->hy, map[i]->hzed);
-                Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
-                  map[i]->xmin, map[i]->ymin, map[i]->zmin);
-                sum = 0;
-                for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
-                  sum += (map[i]->data[ii]);
-                sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-                Vnm_tprint(1, "  Charge map integral = %3.2e e\n", sum);
-                break;
-            case VDF_UHBD:
-                Vnm_tprint( 2, "UHBD input not supported yet!\n");
-                return 0;
-            case VDF_AVS:
-                Vnm_tprint( 2, "AVS input not supported yet!\n");
-                return 0;
-            default:
-                Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-                  nosh->kappafmt[i]);
-                return 0;
-        }
-    }
-
-    return 1;
-
+	
+	int i, ii;
+	double sum;
+	
+	if (nosh->ncharge > 0)
+		Vnm_tprint( 1, "Got paths for %d charge maps\n", nosh->ncharge);
+	else return 1;
+	
+	for (i=0; i<nosh->ncharge; i++) {
+		Vnm_tprint( 1, "Reading charge map data from %s:\n",
+					nosh->chargepath[i]);
+		map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->chargefmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
+								 nosh->chargepath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								nosh->chargepath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
+					sum += (map[i]->data[ii]);
+					sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Charge map integral = %3.2e e\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+							nosh->kappafmt[i]);
+				return 0;
+		}
+	}
+	
+	return 1;
+	
 }
 
 VPUBLIC void killChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
-
-    int i;
-
-    if (nosh->ncharge > 0) {
+	
+	int i;
+	
+	if (nosh->ncharge > 0) {
 #ifndef VAPBSQUIET
-      Vnm_tprint( 1, "Destroying %d charge maps\n", nosh->ncharge);
+		Vnm_tprint( 1, "Destroying %d charge maps\n", nosh->ncharge);
 #endif
-
-      for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
-    }
-
-    else return;
-
+		
+		for (i=0; i<nosh->ncharge; i++) Vgrid_dtor(&(map[i]));
+	}
+	
+	else return;
+	
 }
 
 VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
-    
-    int i;
-    double ionstr = 0.0;
-
-    for (i=0; i<pbeparm->nion; i++)
-      ionstr += 0.5*(VSQR(pbeparm->ionq[i])*pbeparm->ionc[i]);
-
-    Vnm_tprint( 1, "  Molecule ID: %d\n", pbeparm->molid);
-    switch (pbeparm->pbetype) {
-        case PBE_NPBE:
-            Vnm_tprint( 1, "  Nonlinear traditional PBE\n");
-            break;
-        case PBE_LPBE:
-            Vnm_tprint( 1, "  Linearized traditional PBE\n");
-            break;
-        case PBE_NRPBE:
-            Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
-            Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear regularized PBE implementation. **\n");
-            Vnm_tprint( 2, "  ** Please let us know if you are interested in using it. **\n");
-            VASSERT(0); 
-            break;
-        case PBE_LRPBE:
-            Vnm_tprint( 1, "  Linearized regularized PBE\n");
-            break;
-        default:
-            Vnm_tprint(2, "  Unknown PBE type (%d)!\n", pbeparm->pbetype);
-            break;
-    }
-    if (pbeparm->bcfl == BCFL_ZERO) {
-        Vnm_tprint( 1, "  Zero boundary conditions\n");
-    } else if (pbeparm->bcfl == BCFL_SDH) {
-        Vnm_tprint( 1, "  Single Debye-Huckel sphere boundary \
+	
+	int i;
+	double ionstr = 0.0;
+	
+	for (i=0; i<pbeparm->nion; i++)
+		ionstr += 0.5*(VSQR(pbeparm->ionq[i])*pbeparm->ionc[i]);
+	
+	Vnm_tprint( 1, "  Molecule ID: %d\n", pbeparm->molid);
+	switch (pbeparm->pbetype) {
+		case PBE_NPBE:
+			Vnm_tprint( 1, "  Nonlinear traditional PBE\n");
+			break;
+		case PBE_LPBE:
+			Vnm_tprint( 1, "  Linearized traditional PBE\n");
+			break;
+		case PBE_NRPBE:
+			Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
+			Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear \
+regularized PBE implementation. **\n");
+			Vnm_tprint( 2, "  ** Please let us know if you are interested in \
+using it. **\n");
+			VASSERT(0); 
+			break;
+		case PBE_LRPBE:
+			Vnm_tprint( 1, "  Linearized regularized PBE\n");
+			break;
+		default:
+			Vnm_tprint(2, "  Unknown PBE type (%d)!\n", pbeparm->pbetype);
+			break;
+	}
+	if (pbeparm->bcfl == BCFL_ZERO) {
+		Vnm_tprint( 1, "  Zero boundary conditions\n");
+	} else if (pbeparm->bcfl == BCFL_SDH) {
+		Vnm_tprint( 1, "  Single Debye-Huckel sphere boundary \
 conditions\n");
-    } else if (pbeparm->bcfl == BCFL_MDH) {
-        Vnm_tprint( 1, "  Multiple Debye-Huckel sphere boundary \
+	} else if (pbeparm->bcfl == BCFL_MDH) {
+		Vnm_tprint( 1, "  Multiple Debye-Huckel sphere boundary \
 conditions\n");
-    } else if (pbeparm->bcfl == BCFL_FOCUS) {
-        Vnm_tprint( 1, "  Boundary conditions from focusing\n");
-    }
-    Vnm_tprint( 1, "  %d ion species (%4.3f M ionic strength):\n",
-      pbeparm->nion, ionstr);
-    for (i=0; i<pbeparm->nion; i++) {
-        Vnm_tprint( 1, "    %4.3f A-radius, %4.3f e-charge, \
+	} else if (pbeparm->bcfl == BCFL_FOCUS) {
+		Vnm_tprint( 1, "  Boundary conditions from focusing\n");
+	}
+	Vnm_tprint( 1, "  %d ion species (%4.3f M ionic strength):\n",
+				pbeparm->nion, ionstr);
+	for (i=0; i<pbeparm->nion; i++) {
+		Vnm_tprint( 1, "    %4.3f A-radius, %4.3f e-charge, \
 %4.3f M concentration\n", 
-          pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);            
-    }
-    Vnm_tprint( 1, "  Solute dielectric: %4.3f\n", pbeparm->pdie);
-    Vnm_tprint( 1, "  Solvent dielectric: %4.3f\n", pbeparm->sdie);
-    switch (pbeparm->srfm) {
-        case 0:
-            Vnm_tprint( 1, "  Using \"molecular\" surface \
+					pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);            
+	}
+	Vnm_tprint( 1, "  Solute dielectric: %4.3f\n", pbeparm->pdie);
+	Vnm_tprint( 1, "  Solvent dielectric: %4.3f\n", pbeparm->sdie);
+	switch (pbeparm->srfm) {
+		case 0:
+			Vnm_tprint( 1, "  Using \"molecular\" surface \
 definition; no smoothing\n");
-            Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
-              pbeparm->srad);
-            break;
-        case 1:
-            Vnm_tprint( 1, "  Using \"molecular\" surface definition;\
- harmonic average smoothing\n");
-            Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
-              pbeparm->srad);
-            break;
-        case 2:
-            Vnm_tprint( 1, "  Using spline-based surface definition;\
- window = %4.3f\n", pbeparm->swin);
-            break;
-        default:
-            break;
-    }
-    Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
-    Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
-      pbeparm->gamma);
-    if (pbeparm->calcenergy != PCE_NO) Vnm_tprint( 1, "  Electrostatic \
+			Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
+						pbeparm->srad);
+			break;
+		case 1:
+			Vnm_tprint( 1, "  Using \"molecular\" surface definition;\
+harmonic average smoothing\n");
+			Vnm_tprint( 1, "  Solvent probe radius: %4.3f A\n",
+						pbeparm->srad);
+			break;
+		case 2:
+			Vnm_tprint( 1, "  Using spline-based surface definition;\
+window = %4.3f\n", pbeparm->swin);
+			break;
+		default:
+			break;
+	}
+	Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
+	Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
+				pbeparm->gamma);
+	if (pbeparm->calcenergy != PCE_NO) Vnm_tprint( 1, "  Electrostatic \
 energies will be calculated\n");
-    if (pbeparm->calcforce == PCF_TOTAL) Vnm_tprint( 1, "  Net solvent \
+	if (pbeparm->calcforce == PCF_TOTAL) Vnm_tprint( 1, "  Net solvent \
 forces will be calculated \n");
-    if (pbeparm->calcforce == PCF_COMPS) Vnm_tprint( 1, "  All-atom \
+	if (pbeparm->calcforce == PCF_COMPS) Vnm_tprint( 1, "  All-atom \
 solvent forces will be calculated\n");
-    for (i=0; i<pbeparm->numwrite; i++) {
-        switch (pbeparm->writetype[i]) {
-            case VDT_CHARGE:
-                Vnm_tprint(1, "  Charge distribution to be written to ");
-                break;
-            case VDT_POT:
-                Vnm_tprint(1, "  Potential to be written to ");
-                break;
-            case VDT_SMOL:
-                Vnm_tprint(1, "  Molecular solvent accessibility \
+	for (i=0; i<pbeparm->numwrite; i++) {
+		switch (pbeparm->writetype[i]) {
+			case VDT_CHARGE:
+				Vnm_tprint(1, "  Charge distribution to be written to ");
+				break;
+			case VDT_POT:
+				Vnm_tprint(1, "  Potential to be written to ");
+				break;
+			case VDT_SMOL:
+				Vnm_tprint(1, "  Molecular solvent accessibility \
 to be written to ");
-                break;
-            case VDT_SSPL:
-                Vnm_tprint(1, "  Spline-based solvent accessibility \
+				break;
+			case VDT_SSPL:
+				Vnm_tprint(1, "  Spline-based solvent accessibility \
 to be written to ");
-                break;
-            case VDT_VDW:
-                Vnm_tprint(1, "  van der Waals solvent accessibility \
+				break;
+			case VDT_VDW:
+				Vnm_tprint(1, "  van der Waals solvent accessibility \
 to be written to ");
-                break;
-            case VDT_IVDW:
-                Vnm_tprint(1, "  Ion accessibility to be written to ");
-                break;
-            case VDT_LAP:
-                Vnm_tprint(1, "  Potential Laplacian to be written to ");
-                break;
-            case VDT_EDENS:
-                Vnm_tprint(1, "  Energy density to be written to ");
-                break;
-            case VDT_NDENS:
-                Vnm_tprint(1, "  Ion number density to be written to ");
-                break;
-            case VDT_QDENS:
-                Vnm_tprint(1, "  Ion charge density to be written to ");
-                break;
-            case VDT_DIELX:
-                Vnm_tprint(1, "  X-shifted dielectric map to be written \
+				break;
+			case VDT_IVDW:
+				Vnm_tprint(1, "  Ion accessibility to be written to ");
+				break;
+			case VDT_LAP:
+				Vnm_tprint(1, "  Potential Laplacian to be written to ");
+				break;
+			case VDT_EDENS:
+				Vnm_tprint(1, "  Energy density to be written to ");
+				break;
+			case VDT_NDENS:
+				Vnm_tprint(1, "  Ion number density to be written to ");
+				break;
+			case VDT_QDENS:
+				Vnm_tprint(1, "  Ion charge density to be written to ");
+				break;
+			case VDT_DIELX:
+				Vnm_tprint(1, "  X-shifted dielectric map to be written \
 to ");
-                break;
-            case VDT_DIELY:
-                Vnm_tprint(1, "  Y-shifted dielectric map to be written \
+				break;
+			case VDT_DIELY:
+				Vnm_tprint(1, "  Y-shifted dielectric map to be written \
 to ");
-                break;
-            case VDT_DIELZ:
-                Vnm_tprint(1, "  Z-shifted dielectric map to be written \
+				break;
+			case VDT_DIELZ:
+				Vnm_tprint(1, "  Z-shifted dielectric map to be written \
 to ");
-                break;
-            case VDT_KAPPA:
-                Vnm_tprint(1, "  Kappa map to be written to ");
-                break;
-            default: 
-                Vnm_tprint(2, "  Invalid data type for writing!\n");
-                break;
-        }
-        switch (pbeparm->writefmt[i]) {
-            case VDF_DX:
-                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "dx");
-                break;
-            case VDF_UHBD:
-                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "grd");
-                break;
-            case VDF_AVS:
-                Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
-                break;
-            default: 
-                Vnm_tprint(2, "  Invalid format for writing!\n");
-                break;
-        }
- 
-    }
-
+				break;
+			case VDT_KAPPA:
+				Vnm_tprint(1, "  Kappa map to be written to ");
+				break;
+			default: 
+				Vnm_tprint(2, "  Invalid data type for writing!\n");
+				break;
+		}
+		switch (pbeparm->writefmt[i]) {
+			case VDF_DX:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "dx");
+				break;
+			case VDF_UHBD:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "grd");
+				break;
+			case VDF_AVS:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
+				break;
+			default: 
+				Vnm_tprint(2, "  Invalid format for writing!\n");
+				break;
+		}
+		
+	}
+	
 }
 
 VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
-
-    switch (mgparm->chgm) {
-        case 0:
-            Vnm_tprint(1, "  Using linear spline charge discretization.\n");
-            break;
-        case 1:
-            Vnm_tprint(1, "  Using cubic spline charge discretization.\n");
-            break;
-        default:
-            break;
-    }
-    if (mgparm->type == 2) {
-        Vnm_tprint( 1, "  Partition overlap fraction = %g\n", 
-          mgparm->ofrac);
-        Vnm_tprint( 1, "  Processor array = %d x %d x %d\n", 
-          mgparm->pdime[0], mgparm->pdime[1], mgparm->pdime[2]);
-    }
-    Vnm_tprint( 1, "  Grid dimensions: %d x %d x %d\n",
-      mgparm->dime[0], mgparm->dime[1], mgparm->dime[2]);
-    Vnm_tprint( 1, "  Grid spacings: %4.3f x %4.3f x %4.3f\n",
-      mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
-    Vnm_tprint( 1, "  Grid lengths: %4.3f x %4.3f x %4.3f\n",
-      mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
-    Vnm_tprint( 1, "  Grid center: (%4.3f, %4.3f, %4.3f)\n",
-      realCenter[0], realCenter[1], realCenter[2]);
-    Vnm_tprint( 1, "  Multigrid levels: %d\n", mgparm->nlev);
-
+	
+	switch (mgparm->chgm) {
+		case 0:
+			Vnm_tprint(1, "  Using linear spline charge discretization.\n");
+			break;
+		case 1:
+			Vnm_tprint(1, "  Using cubic spline charge discretization.\n");
+			break;
+		default:
+			break;
+	}
+	if (mgparm->type == MCT_PARALLEL) {
+		Vnm_tprint( 1, "  Partition overlap fraction = %g\n", 
+					mgparm->ofrac);
+		Vnm_tprint( 1, "  Processor array = %d x %d x %d\n", 
+					mgparm->pdime[0], mgparm->pdime[1], mgparm->pdime[2]);
+	}
+	Vnm_tprint( 1, "  Grid dimensions: %d x %d x %d\n",
+				mgparm->dime[0], mgparm->dime[1], mgparm->dime[2]);
+	Vnm_tprint( 1, "  Grid spacings: %4.3f x %4.3f x %4.3f\n",
+				mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
+	Vnm_tprint( 1, "  Grid lengths: %4.3f x %4.3f x %4.3f\n",
+				mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
+	Vnm_tprint( 1, "  Grid center: (%4.3f, %4.3f, %4.3f)\n",
+				realCenter[0], realCenter[1], realCenter[2]);
+	Vnm_tprint( 1, "  Multigrid levels: %d\n", mgparm->nlev);
+	
 }
 
 VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm, 
-  PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
-  Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
-  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
-  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
-    
-    int j, bytesTotal, highWater, imol, focusFlag;
-    double sparm, iparm;
-    Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
-
-    Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
-
-    /* Fix mesh center for "GCENT MOL #" types of declarations. */
-    if (mgparm->cmeth == MCM_MOL) {
-        Vnm_tprint(0, "Fixing grid center based on molecule...\n");
-        for (j=0; j<3; j++) {
-            imol = mgparm->centmol-1;
-            if (imol < nosh->nmol) {
-                mgparm->center[j] = (alist[imol])->center[j];
-            } else{ 
-                Vnm_tprint(2, "ERROR!  Bogus molecule number (%d) for \
-fgcent/cgcent!\n",  (imol+1));
-                return 0;
-            }
-        }
-    }
-
-    /* If we're a parallel calculation, update the grid center based on
-     * the appropriate shifts */
-    Vnm_tprint(0, "Fixing grid center...\n");
-    if (mgparm->type == 2) {
-        for (j=0; j<3; j++) realCenter[j] = mgparm->center[j]
-          + mgparm->partOlapCenterShift[j];
-    } else {
-        for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
-    }
-
-    /* Set up PBE object */
-    Vnm_tprint(0, "Setting up PBE object...\n");
-    if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
-    else sparm = pbeparm->srad;
-    if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
-    else iparm = 0.0;
+				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
+				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
+				   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
+				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
+				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
+	
+	int j, bytesTotal, highWater, imol, focusFlag;
+	double sparm, iparm;
+	Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
+	
+	Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
+	
+	/* If we're a parallel calculation, update the grid center based on
+		* the appropriate shifts */
+	Vnm_print(0, "initMG (%s, %d):  At some point we should move the parallel \
+focuing grid center fix into NOsh...\n", __FILE__, __LINE__);
+	if (mgparm->type == MCT_PARALLEL) {
+		for (j=0; j<3; j++) realCenter[j] = mgparm->center[j]
+			+ mgparm->partOlapCenterShift[j];
+	} else {
+		for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
+	}
+	
+	/* Set up PBE object */
+	Vnm_tprint(0, "Setting up PBE object...\n");
+	if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
+	else sparm = pbeparm->srad;
+	if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
+	else iparm = 0.0;
 	if (pbeparm->bcfl == BCFL_FOCUS) {
-	  if (i == 0) {
-            Vnm_tprint( 2, "Can't focus first calculation!\n");
-            return 0;
-        }
-	  focusFlag = 1;
+		if (i == 0) {
+			Vnm_tprint( 2, "Can't focus first calculation!\n");
+			return 0;
+		}
+		focusFlag = 1;
 	} else focusFlag = 0;
 	
 	pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
-		  pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-		  pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag,
-          pbeparm->sdens);
-
-    /* Set up PDE object */
-    Vnm_tprint(0, "Setting up PDE object...\n");
-    switch (pbeparm->pbetype) {
-        case PBE_NPBE:
-            pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-              mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
-              mgparm->grid[2], 1);
-            break;
-        case PBE_LPBE:
-            pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-              mgparm->dime[2], mgparm->nlev, mgparm->grid[0], mgparm->grid[1],
-              mgparm->grid[2], 0);
-            break;
-        case PBE_LRPBE:
-            Vnm_tprint(2, "Sorry, LRPBE isn't supported with the MG solver!\n");
-            return 0;
-            break;
-        case PBE_NRPBE:
-            Vnm_tprint(2, "Sorry, NRPBE isn't supported with the MG solver!\n");
-            return 0;
-            break;
-        default:
-            Vnm_tprint(2, "Error!  Unknown PBE type (%d)!\n", pbeparm->pbetype);
-            return 0;
-    }
-    Vnm_tprint(0, "Setting PDE center to local center...\n");
-    pmgp[i]->bcfl = pbeparm->bcfl;
-    pmgp[i]->xcent = realCenter[0];
-    pmgp[i]->ycent = realCenter[1];
-    pmgp[i]->zcent = realCenter[2];
-    if (pbeparm->bcfl == BCFL_FOCUS) {
-        if (i == 0) {
-            Vnm_tprint( 2, "Can't focus first calculation!\n");
-            return 0;
-        }
-        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 1, pmg[i-1],
-                       mgparm, pbeparm->calcenergy);       
-    } else {
-        if (i>0) Vpmg_dtor(&(pmg[i-1]));
-        pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, mgparm, PCE_NO);
-    }
-    if (i>0) {
-        Vpmgp_dtor(&(pmgp[i-1]));
-        Vpbe_dtor(&(pbe[i-1]));
-    }
-    if (pbeparm->useDielMap) {
-        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
-            theDielXMap = dielXMap[pbeparm->dielMapID-1];
-        } else {
-            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n", 
-                    pbeparm->dielMapID);
-            return 0;
-        }
-    } else theDielXMap = VNULL;
-    if (pbeparm->useDielMap) {
-        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
-            theDielYMap = dielYMap[pbeparm->dielMapID-1];
-        } else {
-            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
-                    pbeparm->dielMapID);
-            return 0;
-        }
-    } else theDielYMap = VNULL;
-    if (pbeparm->useDielMap) {
-        if ((pbeparm->dielMapID-1) < nosh->ndiel) {
-            theDielZMap = dielZMap[pbeparm->dielMapID-1];
-        } else {
-            Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
-                    pbeparm->dielMapID);
-            return 0;
-        }
-    } else theDielZMap = VNULL;
-    if (pbeparm->useKappaMap) {
-        if ((pbeparm->kappaMapID-1) < nosh->nkappa) {
-            theKappaMap = kappaMap[pbeparm->kappaMapID-1];
-        } else {
-            Vnm_print(2, "Error!  %d is not a valid kappa map ID!\n",
-                    pbeparm->kappaMapID);
-            return 0;
-        }
-    } else theKappaMap = VNULL;
-    if (pbeparm->useChargeMap) {
-        if ((pbeparm->chargeMapID-1) < nosh->ncharge) {
-            theChargeMap = chargeMap[pbeparm->chargeMapID-1];
-        } else {
-            Vnm_print(2, "Error!  %d is not a valid charge map ID!\n",
-                    pbeparm->chargeMapID);
-            return 0;
-        }
-    } else theChargeMap = VNULL;
-    Vpmg_fillco(pmg[i], 
-      pbeparm->srfm, pbeparm->swin, mgparm->chgm,
-      pbeparm->useDielMap, theDielXMap,
-      pbeparm->useDielMap, theDielYMap,
-      pbeparm->useDielMap, theDielZMap,
-      pbeparm->useKappaMap, theKappaMap,
-      pbeparm->useChargeMap, theChargeMap);
-
-    /* Print a few derived parameters */
+					   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
+					   pbeparm->temp, pbeparm->gamma, pbeparm->pdie, 
+					   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens);
+	
+	/* Set up PDE object */
+	Vnm_tprint(0, "Setting up PDE object...\n");
+	switch (pbeparm->pbetype) {
+		case PBE_NPBE:
+			pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
+								 mgparm->grid[1], mgparm->grid[2], 1);
+			break;
+		case PBE_LPBE:
+			pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
+								 mgparm->grid[1], mgparm->grid[2], 0);
+			break;
+		case PBE_LRPBE:
+			Vnm_tprint(2, "Sorry, LRPBE isn't supported with the MG solver!\n");
+			return 0;
+			break;
+		case PBE_NRPBE:
+			Vnm_tprint(2, "Sorry, NRPBE isn't supported with the MG solver!\n");
+			return 0;
+			break;
+		default:
+			Vnm_tprint(2, "Error!  Unknown PBE type (%d)!\n", pbeparm->pbetype);
+			return 0;
+	}
+	Vnm_tprint(0, "Setting PDE center to local center...\n");
+	pmgp[i]->bcfl = pbeparm->bcfl;
+	pmgp[i]->xcent = realCenter[0];
+	pmgp[i]->ycent = realCenter[1];
+	pmgp[i]->zcent = realCenter[2];
+	if (pbeparm->bcfl == BCFL_FOCUS) {
+		if (i == 0) {
+			Vnm_tprint( 2, "Can't focus first calculation!\n");
+			return 0;
+		}
+		pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 1, pmg[i-1],
+						   mgparm, pbeparm->calcenergy);       
+	} else {
+		if (i>0) Vpmg_dtor(&(pmg[i-1]));
+		pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, mgparm, PCE_NO);
+	}
+	if (i>0) {
+		Vpmgp_dtor(&(pmgp[i-1]));
+		Vpbe_dtor(&(pbe[i-1]));
+	}
+	if (pbeparm->useDielMap) {
+		if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+			theDielXMap = dielXMap[pbeparm->dielMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n", 
+					  pbeparm->dielMapID);
+			return 0;
+		}
+	} else theDielXMap = VNULL;
+	if (pbeparm->useDielMap) {
+		if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+			theDielYMap = dielYMap[pbeparm->dielMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
+					  pbeparm->dielMapID);
+			return 0;
+		}
+	} else theDielYMap = VNULL;
+	if (pbeparm->useDielMap) {
+		if ((pbeparm->dielMapID-1) < nosh->ndiel) {
+			theDielZMap = dielZMap[pbeparm->dielMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid dielectric map ID!\n",
+					  pbeparm->dielMapID);
+			return 0;
+		}
+	} else theDielZMap = VNULL;
+	if (pbeparm->useKappaMap) {
+		if ((pbeparm->kappaMapID-1) < nosh->nkappa) {
+			theKappaMap = kappaMap[pbeparm->kappaMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid kappa map ID!\n",
+					  pbeparm->kappaMapID);
+			return 0;
+		}
+	} else theKappaMap = VNULL;
+	if (pbeparm->useChargeMap) {
+		if ((pbeparm->chargeMapID-1) < nosh->ncharge) {
+			theChargeMap = chargeMap[pbeparm->chargeMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid charge map ID!\n",
+					  pbeparm->chargeMapID);
+			return 0;
+		}
+	} else theChargeMap = VNULL;
+	Vpmg_fillco(pmg[i], 
+				pbeparm->srfm, pbeparm->swin, mgparm->chgm,
+				pbeparm->useDielMap, theDielXMap,
+				pbeparm->useDielMap, theDielYMap,
+				pbeparm->useDielMap, theDielZMap,
+				pbeparm->useKappaMap, theKappaMap,
+				pbeparm->useChargeMap, theChargeMap);
+	
+	/* Print a few derived parameters */
 #ifndef VAPBSQUIET
-    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
 #endif
-
-    /* Setup time statistics */
-    Vnm_tstop(APBS_TIMER_SETUP, "Setup timer");
-
-    /* Memory statistics */
-    bytesTotal = Vmem_bytesTotal();
-    highWater = Vmem_highWaterTotal();
-
+	
+	/* Setup time statistics */
+	Vnm_tstop(APBS_TIMER_SETUP, "Setup timer");
+	
+	/* Memory statistics */
+	bytesTotal = Vmem_bytesTotal();
+	highWater = Vmem_highWaterTotal();
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
+	Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
 %4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
-      (double)(highWater)/(1024.*1024.));
+				(double)(highWater)/(1024.*1024.));
 #endif
-
-
-    return 1;
-
+	
+	
+	return 1;
+	
 }
 
 VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC], 
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
-    
+					Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint(1, "Destroying multigrid structures.\n");
+	Vnm_tprint(1, "Destroying multigrid structures.\n");
 #endif
-
-    Vpbe_dtor(&(pbe[nosh->ncalc-1]));
-    Vpmg_dtor(&(pmg[nosh->ncalc-1]));
-    Vpmgp_dtor(&(pmgp[nosh->ncalc-1]));
-
+	
+	Vpbe_dtor(&(pbe[nosh->ncalc-1]));
+	Vpmg_dtor(&(pmg[nosh->ncalc-1]));
+	Vpmgp_dtor(&(pmgp[nosh->ncalc-1]));
+	
 }
 
 VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {
-
-    int nx, ny, nz, i;
-
-   
-    if (nosh != VNULL) {
-        if (nosh->bogus) return 1;
-    }
-
-    Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
-
-
-    if (type != MCT_DUM) {
+	
+	int nx, ny, nz, i;
+	
+	
+	if (nosh != VNULL) {
+		if (nosh->bogus) return 1;
+	}
+	
+	Vnm_tstart(APBS_TIMER_SOLVER, "Solver timer");
+	
+	
+	if (type != MCT_DUMMY) {
 #ifndef VAPBSQUIET
-        Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
+		Vnm_tprint( 1,"  Solving PDE (see io.mc* for details)...\n");
 #endif
-        if (!Vpmg_solve(pmg)) {
-            Vnm_print(2, "  Error during PDE solution!\n");
-            return 0;
-        }
-    } else {
-        Vnm_tprint( 1,"  Skipping solve for mg-dummy run; zeroing \
+		if (!Vpmg_solve(pmg)) {
+			Vnm_print(2, "  Error during PDE solution!\n");
+			return 0;
+		}
+	} else {
+		Vnm_tprint( 1,"  Skipping solve for mg-dummy run; zeroing \
 solution array\n");
-        nx = pmg->pmgp->nx;
-        ny = pmg->pmgp->ny;
-        nz = pmg->pmgp->nz;
-        for (i=0; i<nx*ny*nz; i++) pmg->u[i] = 0.0;
-    }
-    Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
-
-    return 1;
-
+		nx = pmg->pmgp->nx;
+		ny = pmg->pmgp->ny;
+		nz = pmg->pmgp->nz;
+		for (i=0; i<nx*ny*nz; i++) pmg->u[i] = 0.0;
+	}
+	Vnm_tstop(APBS_TIMER_SOLVER, "Solver timer");
+	
+	return 1;
+	
 }
 
 VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
-
-    int j;
-    double partMin[3], partMax[3];
-
-    if (nosh->bogus) return 1;
-
-    if (mgparm->type == 2) {
-        for (j=0; j<3; j++) {
-            partMin[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
-              - 0.5*mgparm->partDisjLength[j];
-            partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
-              + 0.5*mgparm->partDisjLength[j];
-        }
-        Vnm_tprint(0, "Disj part lower corner = (%g, %g, %g)\n",
-          partMin[0], partMin[1], partMin[2]);
-        Vnm_tprint(0, "Disj part upper corner = (%g, %g, %g)\n",
-          partMax[0], partMax[1], partMax[2]);
-    } else {
-        for (j=0; j<3; j++) {
-            partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
-            partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
-        }
-    }
-    Vpmg_setPart(pmg, partMin, partMax, mgparm->partDisjOwnSide);
-
-
-    return 1;
-
+	
+	int j;
+	double partMin[3], partMax[3];
+	
+	if (nosh->bogus) return 1;
+	
+	if (mgparm->type == 2) {
+		for (j=0; j<3; j++) {
+			partMin[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
+			- 0.5*mgparm->partDisjLength[j];
+			partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
+				+ 0.5*mgparm->partDisjLength[j];
+		}
+		Vnm_tprint(0, "Disj part lower corner = (%g, %g, %g)\n",
+				   partMin[0], partMin[1], partMin[2]);
+		Vnm_tprint(0, "Disj part upper corner = (%g, %g, %g)\n",
+				   partMax[0], partMax[1], partMax[2]);
+	} else {
+		for (j=0; j<3; j++) {
+			partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
+			partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
+		}
+	}
+	Vpmg_setPart(pmg, partMin, partMax, mgparm->partDisjOwnSide);
+	
+	
+	return 1;
+	
 }
 
 VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg, 
-  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
-  double *dielEnergy) {
-
-    Valist *alist;
-    Vatom *atom;
-    int i;
-    double tenergy;
-    MGparm *mgparm;
-    PBEparm *pbeparm;
-    int extEnergy;              
-
-    mgparm = nosh->calc[icalc].mgparm;
-    pbeparm = nosh->calc[icalc].pbeparm;
-
-    Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
+					 int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
+					 double *dielEnergy) {
+	
+	Valist *alist;
+	Vatom *atom;
+	int i;
+	double tenergy;
+	MGparm *mgparm;
+	PBEparm *pbeparm;
+	int extEnergy;              
+	
+	mgparm = nosh->calc[icalc]->mgparm;
+	pbeparm = nosh->calc[icalc]->pbeparm;
+	
+	Vnm_tstart(APBS_TIMER_ENERGY, "Energy timer");
 #ifndef VAPBSQUIET
-    Vnm_tprint( 1,"  Calculating energy (see io.mc* for details)...\n");
+	Vnm_tprint( 1,"  Calculating energy (see io.mc* for details)...\n");
 #endif
-    extEnergy = 1;
-
-    if (pbeparm->calcenergy == PCE_TOTAL) {
-        *nenergy = 1;
-        /* Some processors don't count */
-        if (nosh->bogus == 0) {
-            *totEnergy = Vpmg_energy(pmg, extEnergy);
+	extEnergy = 1;
+	
+	if (pbeparm->calcenergy == PCE_TOTAL) {
+		*nenergy = 1;
+		/* Some processors don't count */
+		if (nosh->bogus == 0) {
+			*totEnergy = Vpmg_energy(pmg, extEnergy);
 #ifndef VAPBSQUIET
-            Vnm_tprint( 1, "  Total electrostatic energy = \
-%1.12E kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
+			Vnm_tprint( 1, "  Total electrostatic energy = %1.12E kJ/mol\n", 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 #endif
-        } else *totEnergy = 0;
-    } else if (pbeparm->calcenergy == PCE_COMPS) {
-        *nenergy = 1;
-        *totEnergy = Vpmg_energy(pmg, extEnergy);
-        *qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
-        *qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
-        *dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
-        Vnm_tprint( 1, "  Total electrostatic energy = %1.12E \
+		} else *totEnergy = 0;
+	} else if (pbeparm->calcenergy == PCE_COMPS) {
+		*nenergy = 1;
+		*totEnergy = Vpmg_energy(pmg, extEnergy);
+		*qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
+		*qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
+		*dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
+		Vnm_tprint( 1, "  Total electrostatic energy = %1.12E \
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
-        Vnm_tprint( 1, "  Fixed charge energy = %g kJ/mol\n",
-           0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
-        Vnm_tprint( 1, "  Mobile charge energy = %g kJ/mol\n",
-           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qmEnergy));
-        Vnm_tprint( 1, "  Dielectric energy = %g kJ/mol\n",
-           Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
-        Vnm_tprint( 1, "  Per-atom energies:\n");
-        alist = pmg->pbe->alist;
-        for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-            atom = Valist_getAtom(alist, i); 
-            tenergy = Vpmg_qfAtomEnergy(pmg, atom);
-            Vnm_tprint( 1, "      Atom %d:  %1.12E kJ/mol\n", i,
-              0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*tenergy);
-        }
-    } else *nenergy = 0;
-
-    Vnm_tstop(APBS_TIMER_ENERGY, "Energy timer");
-
-    return 1;
+		Vnm_tprint( 1, "  Fixed charge energy = %g kJ/mol\n",
+					0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qfEnergy));
+		Vnm_tprint( 1, "  Mobile charge energy = %g kJ/mol\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*qmEnergy));
+		Vnm_tprint( 1, "  Dielectric energy = %g kJ/mol\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
+		Vnm_tprint( 1, "  Per-atom energies:\n");
+		alist = pmg->pbe->alist;
+		for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+			atom = Valist_getAtom(alist, i); 
+			tenergy = Vpmg_qfAtomEnergy(pmg, atom);
+			Vnm_tprint( 1, "      Atom %d:  %1.12E kJ/mol\n", i,
+						0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*tenergy);
+		}
+	} else *nenergy = 0;
+	
+	Vnm_tstop(APBS_TIMER_ENERGY, "Energy timer");
+	
+	return 1;
 }
 
 VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
-   Vpmg *pmg, int *nforce, AtomForce **atomForce, Valist *alist[NOSH_MAXMOL]) {
-
-    int j, k;
-    double qfForce[3], dbForce[3], ibForce[3], npForce[3];
-
-    Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
-    Vnm_tprint( 1,"  Calculating forces...\n");
-
-    if (pbeparm->calcforce == PCF_TOTAL) {
-        *nforce = 1;
-        *atomForce = (AtomForce *)Vmem_malloc(mem, 1, sizeof(AtomForce));
-        /* Clear out force arrays */
-        for (j=0; j<3; j++) {
-            (*atomForce)[0].qfForce[j] = 0;
-            (*atomForce)[0].ibForce[j] = 0;
-            (*atomForce)[0].dbForce[j] = 0;
-            (*atomForce)[0].npForce[j] = 0;
-        }
-        for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) { 
-            if (nosh->bogus == 0) {
-                VASSERT(Vpmg_qfForce(pmg, qfForce, j, mgparm->chgm));
-                VASSERT(Vpmg_ibForce(pmg, ibForce, j, pbeparm->srfm));
-                VASSERT(Vpmg_dbnpForce(pmg, dbForce, npForce, j, 
-                            pbeparm->srfm));
-            } else {
-                for (k=0; k<3; k++) {
-                    qfForce[k] = 0; 
-                    ibForce[k] = 0; 
-                    dbForce[k] = 0; 
-                    npForce[k] = 0; 
-                }
-            }
-            for (k=0; k<3; k++) {
-                (*atomForce)[0].qfForce[k] += qfForce[k];
-                (*atomForce)[0].ibForce[k] += ibForce[k];
-                (*atomForce)[0].dbForce[k] += dbForce[k];
-                (*atomForce)[0].npForce[k] += npForce[k];
-            }
-        }
-        Vnm_tprint( 1, "  Printing net forces for molecule %d (kJ/mol/A)\n",
-          pbeparm->molid);
-        Vnm_tprint( 1, "  Legend:\n");
-        Vnm_tprint( 1, "    qf  -- fixed charge force\n");
-        Vnm_tprint( 1, "    db  -- dielectric boundary force\n");
-        Vnm_tprint( 1, "    ib  -- ionic boundary force\n");
-        Vnm_tprint( 1, "    np  -- nonpolar force\n");
-        Vnm_tprint( 1, "  qf  %4.3e  %4.3e  %4.3e\n",
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[0],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[1],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[2]);
-        Vnm_tprint( 1, "  ib  %4.3e  %4.3e  %4.3e\n",
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[0],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[1],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[2]);
-        Vnm_tprint( 1, "  db  %4.3e  %4.3e  %4.3e\n",
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
-        Vnm_tprint( 1, "  np  %4.3e  %4.3e  %4.3e\n",
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[1],
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[2]);
-    } else if (pbeparm->calcforce == PCF_COMPS) {
-        *nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
-        *atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
-          sizeof(AtomForce));
-        Vnm_tprint( 1, "  Printing per-atom forces for molecule %d (kJ/mol/A)\n",
-          pbeparm->molid);
-        Vnm_tprint( 1, "  Legend:\n");
-        Vnm_tprint( 1, "    tot n -- total force for atom n\n");
-        Vnm_tprint( 1, "    qf  n -- fixed charge force for atom n\n");
-        Vnm_tprint( 1, "    db  n -- dielectric boundary force for atom n\n");
-        Vnm_tprint( 1, "    ib  n -- ionic boundary force for atom n\n");
-        for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
-            if (nosh->bogus == 0) {
-                VASSERT(Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, 
-                            mgparm->chgm));
-                VASSERT(Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j, 
-                            pbeparm->srfm));
-                VASSERT(Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
-                  (*atomForce)[j].npForce, j, pbeparm->srfm));
-            } else {
-                for (k=0; k<3; k++) {
-                    (*atomForce)[j].qfForce[k] = 0;
-                    (*atomForce)[j].ibForce[k] = 0;
-                    (*atomForce)[j].dbForce[k] = 0;
-                    (*atomForce)[j].npForce[k] = 0;
-                }
-            }
-            Vnm_tprint( 1, "  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
-              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
-                (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
-                (*atomForce)[j].dbForce[0]+(*atomForce)[j].npForce[0]),
-              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
-                (*atomForce)[j].qfForce[1]+(*atomForce)[j].ibForce[1]+
-                (*atomForce)[j].dbForce[1]+(*atomForce)[j].npForce[1]),
-              Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(
-                (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
-                (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
-            Vnm_tprint( 1, "  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[0],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[1],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].qfForce[2]);
-            Vnm_tprint( 1, "  ib  %d  %4.3e  %4.3e  %4.3e\n", j, 
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[0],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[1],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].ibForce[2]);
-            Vnm_tprint( 1, "  db  %d  %4.3e  %4.3e  %4.3e\n", j, 
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[0],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[1],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].dbForce[2]);
-            Vnm_tprint( 1, "  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[0],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[1],
-             Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[j].npForce[2]);
-        }
-    } else *nforce = 0;
-
-    Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
-
-    return 1;
+					Vpmg *pmg, int *nforce, AtomForce **atomForce, 
+					Valist *alist[NOSH_MAXMOL]) {
+	
+	int j, k;
+	double qfForce[3], dbForce[3], ibForce[3], npForce[3];
+	
+	Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
+	Vnm_tprint( 1,"  Calculating forces...\n");
+	
+	if (pbeparm->calcforce == PCF_TOTAL) {
+		*nforce = 1;
+		*atomForce = (AtomForce *)Vmem_malloc(mem, 1, sizeof(AtomForce));
+		/* Clear out force arrays */
+		for (j=0; j<3; j++) {
+			(*atomForce)[0].qfForce[j] = 0;
+			(*atomForce)[0].ibForce[j] = 0;
+			(*atomForce)[0].dbForce[j] = 0;
+			(*atomForce)[0].npForce[j] = 0;
+		}
+		for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) { 
+			if (nosh->bogus == 0) {
+				VASSERT(Vpmg_qfForce(pmg, qfForce, j, mgparm->chgm));
+				VASSERT(Vpmg_ibForce(pmg, ibForce, j, pbeparm->srfm));
+				VASSERT(Vpmg_dbnpForce(pmg, dbForce, npForce, j, 
+									   pbeparm->srfm));
+			} else {
+				for (k=0; k<3; k++) {
+					qfForce[k] = 0; 
+					ibForce[k] = 0; 
+					dbForce[k] = 0; 
+					npForce[k] = 0; 
+				}
+			}
+			for (k=0; k<3; k++) {
+				(*atomForce)[0].qfForce[k] += qfForce[k];
+				(*atomForce)[0].ibForce[k] += ibForce[k];
+				(*atomForce)[0].dbForce[k] += dbForce[k];
+				(*atomForce)[0].npForce[k] += npForce[k];
+			}
+		}
+		Vnm_tprint( 1, "  Printing net forces for molecule %d (kJ/mol/A)\n",
+					pbeparm->molid);
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    qf  -- fixed charge force\n");
+		Vnm_tprint( 1, "    db  -- dielectric boundary force\n");
+		Vnm_tprint( 1, "    ib  -- ionic boundary force\n");
+		Vnm_tprint( 1, "    np  -- nonpolar force\n");
+		Vnm_tprint( 1, "  qf  %4.3e  %4.3e  %4.3e\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[0],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[1],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[2]);
+		Vnm_tprint( 1, "  ib  %4.3e  %4.3e  %4.3e\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[0],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[1],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].ibForce[2]);
+		Vnm_tprint( 1, "  db  %4.3e  %4.3e  %4.3e\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
+		Vnm_tprint( 1, "  np  %4.3e  %4.3e  %4.3e\n",
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[1],
+					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[2]);
+	} else if (pbeparm->calcforce == PCF_COMPS) {
+		*nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
+		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+											  sizeof(AtomForce));
+		Vnm_tprint( 1, "  Printing per-atom forces for molecule %d (kJ/mol/A)\n",
+					pbeparm->molid);
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot n -- total force for atom n\n");
+		Vnm_tprint( 1, "    qf  n -- fixed charge force for atom n\n");
+		Vnm_tprint( 1, "    db  n -- dielectric boundary force for atom n\n");
+		Vnm_tprint( 1, "    ib  n -- ionic boundary force for atom n\n");
+		for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
+			if (nosh->bogus == 0) {
+				VASSERT(Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, 
+									 mgparm->chgm));
+				VASSERT(Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j, 
+									 pbeparm->srfm));
+				VASSERT(Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
+									   (*atomForce)[j].npForce, j, pbeparm->srfm));
+			} else {
+				for (k=0; k<3; k++) {
+					(*atomForce)[j].qfForce[k] = 0;
+					(*atomForce)[j].ibForce[k] = 0;
+					(*atomForce)[j].dbForce[k] = 0;
+					(*atomForce)[j].npForce[k] = 0;
+				}
+			}
+			Vnm_tprint( 1, "  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(
+						  (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
+						  (*atomForce)[j].dbForce[0]+(*atomForce)[j].npForce[0]),
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(
+						  (*atomForce)[j].qfForce[1]+(*atomForce)[j].ibForce[1]+
+						  (*atomForce)[j].dbForce[1]+(*atomForce)[j].npForce[1]),
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(
+						  (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
+						  (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
+			Vnm_tprint( 1, "  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].qfForce[0],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].qfForce[1],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].qfForce[2]);
+			Vnm_tprint( 1, "  ib  %d  %4.3e  %4.3e  %4.3e\n", j, 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].ibForce[0],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].ibForce[1],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].ibForce[2]);
+			Vnm_tprint( 1, "  db  %d  %4.3e  %4.3e  %4.3e\n", j, 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].dbForce[0],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].dbForce[1],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].dbForce[2]);
+			Vnm_tprint( 1, "  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].npForce[0],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].npForce[1],
+						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
+						*(*atomForce)[j].npForce[2]);
+		}
+	} else *nforce = 0;
+	
+	Vnm_tstop(APBS_TIMER_FORCE, "Force timer");
+	
+	return 1;
 }
 
 VPUBLIC void killEnergy() { 
-
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint(1, "No energy arrays to destroy.\n"); 
+	Vnm_tprint(1, "No energy arrays to destroy.\n"); 
 #endif
-
+	
 }
 
 VPUBLIC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC], 
-  AtomForce *atomForce[NOSH_MAXCALC]) {
-
-    int i;
-
+					   AtomForce *atomForce[NOSH_MAXCALC]) {
+	
+	int i;
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint(1, "Destroying force arrays.\n");
+	Vnm_tprint(1, "Destroying force arrays.\n");
 #endif
-
-    for (i=0; i<nosh->ncalc; i++) {
-
-        if (nforce[i] > 0) Vmem_free(mem, nforce[i], sizeof(AtomForce),
-          (void **)&(atomForce[i]));
-        
-    }
+	
+	for (i=0; i<nosh->ncalc; i++) {
+		
+		if (nforce[i] > 0) Vmem_free(mem, nforce[i], sizeof(AtomForce),
+									 (void **)&(atomForce[i]));
+		
+	}
 }
 
 VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
-
-    char writematstem[VMAX_ARGLEN];
-    char outpath[VMAX_ARGLEN];
-    char mxtype[3];
-    int strlenmax;
-
-    if (nosh->bogus) return 1;
-
+	
+	char writematstem[VMAX_ARGLEN];
+	char outpath[VMAX_ARGLEN];
+	char mxtype[3];
+	int strlenmax;
+	
+	if (nosh->bogus) return 1;
+	
 #ifdef HAVE_MPI_H
-    strlenmax = VMAX_ARGLEN-14;
-    if (strlen(pbeparm->writematstem) > strlenmax) {
-        Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
-          pbeparm->writematstem, strlenmax);
-        Vnm_tprint(2, "  Not writing matrix!\n");
-        return 0;
-    }
-    sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
+	strlenmax = VMAX_ARGLEN-14;
+	if (strlen(pbeparm->writematstem) > strlenmax) {
+		Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+				   pbeparm->writematstem, strlenmax);
+		Vnm_tprint(2, "  Not writing matrix!\n");
+		return 0;
+	}
+	sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
 #else
-    strlenmax = (int)(VMAX_ARGLEN)-1;
-    if (strlen(pbeparm->writematstem) > strlenmax) {
-        Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
-          pbeparm->writematstem, strlenmax);
-        Vnm_tprint(2, "  Not writing matrix!\n");
-        return 0;
-    }
-    sprintf(writematstem, "%s", pbeparm->writematstem);
+	strlenmax = (int)(VMAX_ARGLEN)-1;
+	if (strlen(pbeparm->writematstem) > strlenmax) {
+		Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+				   pbeparm->writematstem, strlenmax);
+		Vnm_tprint(2, "  Not writing matrix!\n");
+		return 0;
+	}
+	sprintf(writematstem, "%s", pbeparm->writematstem);
 #endif
-    
-    if (pbeparm->writemat == 1) {
-        strlenmax = VMAX_ARGLEN-5;
-        if (strlen(pbeparm->writematstem) > strlenmax) {
-            Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
-              pbeparm->writematstem, strlenmax);
-            Vnm_tprint(2, "  Not writing matrix!\n");
-            return 0;
-        }
-        sprintf(outpath, "%s.%s", writematstem, "mat");
-        mxtype[0] = 'R';
-        mxtype[1] = 'S';
-        mxtype[2] = 'A';
-        /* Poisson operator only */
-        if (pbeparm->writematflag == 0) {
-            Vnm_tprint( 1, "  Writing Poisson operator matrix \
+	
+	if (pbeparm->writemat == 1) {
+		strlenmax = VMAX_ARGLEN-5;
+		if (strlen(pbeparm->writematstem) > strlenmax) {
+			Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
+					   pbeparm->writematstem, strlenmax);
+			Vnm_tprint(2, "  Not writing matrix!\n");
+			return 0;
+		}
+		sprintf(outpath, "%s.%s", writematstem, "mat");
+		mxtype[0] = 'R';
+		mxtype[1] = 'S';
+		mxtype[2] = 'A';
+		/* Poisson operator only */
+		if (pbeparm->writematflag == 0) {
+			Vnm_tprint( 1, "  Writing Poisson operator matrix \
 to %s...\n", outpath);
-
-         /* Linearization of Poisson-Boltzmann operator around solution */
-         } else if (pbeparm->writematflag == 1) {
-            Vnm_tprint( 1, "  Writing linearization of full \
+			
+			/* Linearization of Poisson-Boltzmann operator around solution */
+		} else if (pbeparm->writematflag == 1) {
+			Vnm_tprint( 1, "  Writing linearization of full \
 Poisson-Boltzmann operator matrix to %s...\n", outpath);
-
-         } else {
-             Vnm_tprint( 2, "  Bogus matrix specification\
+			
+		} else {
+			Vnm_tprint( 2, "  Bogus matrix specification\
 (%d)!\n", pbeparm->writematflag);
-             return 0;
-         }
-
-         Vnm_tprint(0, "  Printing operator...\n");
-         Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
-           pbeparm->writematflag);
-
-    }
-
-    return 1;
+			return 0;
+		}
+		
+		Vnm_tprint(0, "  Printing operator...\n");
+		Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
+						  pbeparm->writematflag);
+		
+	}
+	
+	return 1;
 }
 
 VPUBLIC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, 
-			     int *nenergy){
- 
-    Vatom *atom;
-    Valist *alist;
-    int i;
-
-    alist = pmg->pbe->alist;
-    *nenergy = Valist_getNumberAtoms(alist);
-    *atomEnergy = (double *)Vmem_malloc(pmg->vmem, *nenergy, sizeof(double));
-
-    for (i=0; i<*nenergy; i++) {
-      atom = Valist_getAtom(alist, i); 
-      (*atomEnergy)[i] = Vpmg_qfAtomEnergy(pmg, atom);
-    }
+							 int *nenergy){
+	
+	Vatom *atom;
+	Valist *alist;
+	int i;
+	
+	alist = pmg->pbe->alist;
+	*nenergy = Valist_getNumberAtoms(alist);
+	*atomEnergy = (double *)Vmem_malloc(pmg->vmem, *nenergy, sizeof(double));
+	
+	for (i=0; i<*nenergy; i++) {
+		atom = Valist_getAtom(alist, i); 
+		(*atomEnergy)[i] = Vpmg_qfAtomEnergy(pmg, atom);
+	}
 }
 
-VPUBLIC int writedataFlat(NOsh *nosh, Vcom *com, const char *fname, 
-    double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
-    int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
-
-    FILE *file;
-    time_t now;
-    int ielec, icalc, i, j;
-    char *timestring = VNULL;
-    PBEparm *pbeparm = VNULL;
-    MGparm *mgparm = VNULL;
-    double conversion, ltenergy, gtenergy, scalar;
-
-    if (nosh->bogus) return 1;
-
-    /* Initialize some variables */
-
-    icalc = 0;
-   
-    file = fopen(fname, "w");
-    if (file == VNULL) {
-        Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
-          fname);
-        return 0;
-    }
-
-    /* Strip the newline character from the date */
-
-    now = time(VNULL);
-    timestring = ctime(&now);
-    fprintf(file,"%s\n", timestring);
-
-    for (ielec=0; ielec<nosh->nelec;ielec++){ /* elec loop */
-
-        /* Initialize per-elec pointers */
-
-        mgparm = nosh->calc[icalc].mgparm;
-	pbeparm = nosh->calc[icalc].pbeparm;
+VPUBLIC int writedataFlat(
+						  NOsh *nosh, 
+						  Vcom *com, 
+						  const char *fname, 
+						  double totEnergy[NOSH_MAXCALC], 
+						  double qfEnergy[NOSH_MAXCALC], 
+						  double qmEnergy[NOSH_MAXCALC], 
+						  double dielEnergy[NOSH_MAXCALC],
+						  int nenergy[NOSH_MAXCALC], 
+						  double *atomEnergy[NOSH_MAXCALC]
+						  ) {
 	
-	/* Convert from kT/e to kJ/mol */
-	conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
-       
-	fprintf(file,"elec");
-	if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
-	    fprintf(file," name %s\n", nosh->elecname[ielec+1]);
-	} else fprintf(file, "\n");
-
-	switch (mgparm->type) {
-            case MCT_DUM:
-	        fprintf(file,"    mg-dummy\n");
-		break;
-	    case MCT_MAN:
-	        fprintf(file,"    mg-manual\n");
-		break;
-            case MCT_AUT:
-	        fprintf(file,"    mg-auto\n");
-		break;
-	    case MCT_PAR:
-	        fprintf(file,"    mg-para\n");
-		break;
-            default:
-	        break;
-	}
-
-	fprintf(file,"    mol %d\n", pbeparm->molid);
-	fprintf(file,"    dime %d %d %d\n", mgparm->dime[0], mgparm->dime[1],\
-		          mgparm->dime[2]);
-
-	switch (pbeparm->pbetype) {
-        case PBE_NPBE:
-	        fprintf(file,"    npbe\n");
-		    break;
-	    case PBE_LPBE:
-	        fprintf(file,"    lpbe\n");
-            break;
-        default:
-	        break;
-	}
-   
-	if (pbeparm->nion > 0) {
-	    for (i=0; i<pbeparm->nion; i++) {
-	        fprintf(file,"    ion %.4.3f %.4.3f %4.3f\n",
-			pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);
-	    }
-	}
-
-	fprintf(file,"    pdie %4.3f\n", pbeparm->pdie);
-	fprintf(file,"    sdie %4.3f\n", pbeparm->sdie);
-
-	switch (pbeparm->srfm) {
-            case 0:
-	      fprintf(file,"    srfm mol\n");
-	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
-	      break;
-	    case 1:
-	      fprintf(file,"    srfm smol\n");
-	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
-	      break;
-	    case 2:
-	      fprintf(file,"    srfm spl2\n");
-	      fprintf(file,"    srad %4.3f\n", pbeparm->srad);
-	      break;
-	    default:
-	      break;
-	}
-
-	switch (pbeparm->bcfl) {
-	    case BCFL_ZERO:
-	        fprintf(file,"    bcfl zero\n");
-		break;
-	    case BCFL_SDH:
-	        fprintf(file,"    bcfl sdh\n");
-		break;
-	    case BCFL_MDH:
-	        fprintf(file,"    bcfl mdh\n");
-		break;
-	    case BCFL_FOCUS:
-	        fprintf(file,"    bcfl focus\n");
-		break;
-	    default:
-	        break;
-	}
-
-	fprintf(file,"    temp %4.3f\n", pbeparm->temp);
-	fprintf(file,"    gamma %4.3f\n",pbeparm->gamma);
-   
-	for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
-	    
-	    /* Reinitialize per-calc pointers */
-	    mgparm = nosh->calc[icalc].mgparm;
-	    pbeparm = nosh->calc[icalc].pbeparm;
-
-	    fprintf(file,"    calc\n");
-	    fprintf(file,"        id %i\n", (icalc+1));
-            fprintf(file,"        grid %4.3f %4.3f %4.3f\n", 
-		    mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
-	    fprintf(file,"        glen %4.3f %4.3f %4.3f\n", 
-		    mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
-	 
-	    if (pbeparm->calcenergy == PCE_TOTAL) {
-	      fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
-                      (totEnergy[icalc]*conversion));
-	    } else if (pbeparm->calcenergy == PCE_COMPS) {
-	      fprintf(file,"        qfEnergy %1.12E kJ/mol\n", 
-			(0.5*qfEnergy[icalc]*conversion)); 
-	      fprintf(file,"        qmEnergy %1.12E kJ/mol\n", 
-			(qmEnergy[icalc]*conversion)); 
-	      fprintf(file,"        dielEnergy %1.12E kJ/mol\n", 
-                      (dielEnergy[icalc]*conversion));
-	      for (i=0; i<nenergy[icalc]; i++){
-		  fprintf(file,"        atom %i %1.12E kJ/mol\n", i,
-			  (0.5*atomEnergy[icalc][i]*conversion));
-			  
-	      }
-	    } 
-            fprintf(file,"    end\n");
-	}
-
-	fprintf(file,"end\n");
-    }
-     
-    /* Handle print energy statements */
-
-    for (i=0; i<nosh->nprint; i++) {
-
-        if (nosh->printwhat[i] == NPT_ENERGY) {
-	    
-	    fprintf(file,"print energy");
-	    fprintf(file," %d", nosh->printcalc[i][0]); 
+	FILE *file;
+	time_t now;
+	int ielec, icalc, i, j;
+	char *timestring = VNULL;
+	PBEparm *pbeparm = VNULL;
+	MGparm *mgparm = VNULL;
+	double conversion, ltenergy, gtenergy, scalar;
 	
-	    for (j=1; j<nosh->printnarg[i]; j++) {
-	        if (nosh->printop[i][j-1] == 0) fprintf(file," +");
-		else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
-		fprintf(file, " %d", nosh->printcalc[i][j]);
-	    }
-
-	    fprintf(file, "\n");
-	    icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
-	   
-	    ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
-                       nosh->calc[icalc].pbeparm->temp * totEnergy[icalc];
-   
-	    for (j=1; j<nosh->printnarg[i]; j++) {
-	        icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
-		/* Add or subtract? */
-		if (nosh->printop[i][j-1] == 0) scalar = 1.0;
-		else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
-		/* Accumulate */
-		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
-				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
-	    
-	    Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+	if (nosh->bogus) return 1;
+	
+	/* Initialize some variables */
+	
+	icalc = 0;
+	
+	file = fopen(fname, "w");
+	if (file == VNULL) {
+		Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
+				  fname);
+		return 0;
+	}
+	
+	/* Strip the newline character from the date */
+	
+	now = time(VNULL);
+	timestring = ctime(&now);
+	fprintf(file,"%s\n", timestring);
+	
+	for (ielec=0; ielec<nosh->nelec;ielec++) { /* elec loop */
 		
-	    }
-	    fprintf(file,"    localEnergy %1.12E kJ/mol\n", \
-		    ltenergy);
-	    fprintf(file,"    globalEnergy %1.12E kJ/mol\nend\n", \
-            gtenergy); 
+		/* Initialize per-elec pointers */
+		
+		mgparm = nosh->calc[icalc]->mgparm;
+		pbeparm = nosh->calc[icalc]->pbeparm;
+		
+		/* Convert from kT/e to kJ/mol */
+		conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
+		
+		fprintf(file,"elec");
+		if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
+			fprintf(file," name %s\n", nosh->elecname[ielec+1]);
+		} else fprintf(file, "\n");
+		
+		switch (mgparm->type) {
+			case MCT_DUMMY:
+				fprintf(file,"    mg-dummy\n");
+				break;
+			case MCT_MANUAL:
+				fprintf(file,"    mg-manual\n");
+				break;
+			case MCT_AUTO:
+				fprintf(file,"    mg-auto\n");
+				break;
+			case MCT_PARALLEL:
+				fprintf(file,"    mg-para\n");
+				break;
+			default:
+				break;
+		}
+		
+		fprintf(file,"    mol %d\n", pbeparm->molid);
+		fprintf(file,"    dime %d %d %d\n", mgparm->dime[0], mgparm->dime[1],\
+				mgparm->dime[2]);
+		
+		switch (pbeparm->pbetype) {
+			case PBE_NPBE:
+				fprintf(file,"    npbe\n");
+				break;
+			case PBE_LPBE:
+				fprintf(file,"    lpbe\n");
+				break;
+			default:
+				break;
+		}
+		
+		if (pbeparm->nion > 0) {
+			for (i=0; i<pbeparm->nion; i++) {
+				fprintf(file,"    ion %.4.3f %.4.3f %4.3f\n",
+						pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);
+			}
+		}
+		
+		fprintf(file,"    pdie %4.3f\n", pbeparm->pdie);
+		fprintf(file,"    sdie %4.3f\n", pbeparm->sdie);
+		
+		switch (pbeparm->srfm) {
+			case 0:
+				fprintf(file,"    srfm mol\n");
+				fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+				break;
+			case 1:
+				fprintf(file,"    srfm smol\n");
+				fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+				break;
+			case 2:
+				fprintf(file,"    srfm spl2\n");
+				fprintf(file,"    srad %4.3f\n", pbeparm->srad);
+				break;
+			default:
+				break;
+		}
+		
+		switch (pbeparm->bcfl) {
+			case BCFL_ZERO:
+				fprintf(file,"    bcfl zero\n");
+				break;
+			case BCFL_SDH:
+				fprintf(file,"    bcfl sdh\n");
+				break;
+			case BCFL_MDH:
+				fprintf(file,"    bcfl mdh\n");
+				break;
+			case BCFL_FOCUS:
+				fprintf(file,"    bcfl focus\n");
+				break;
+			default:
+				break;
+		}
+		
+		fprintf(file,"    temp %4.3f\n", pbeparm->temp);
+		fprintf(file,"    gamma %4.3f\n",pbeparm->gamma);
+		
+		for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
+			
+			/* Reinitialize per-calc pointers */
+			mgparm = nosh->calc[icalc]->mgparm;
+			pbeparm = nosh->calc[icalc]->pbeparm;
+			
+			fprintf(file,"    calc\n");
+			fprintf(file,"        id %i\n", (icalc+1));
+			fprintf(file,"        grid %4.3f %4.3f %4.3f\n", 
+					mgparm->grid[0], mgparm->grid[1], mgparm->grid[2]);
+			fprintf(file,"        glen %4.3f %4.3f %4.3f\n", 
+					mgparm->glen[0], mgparm->glen[1], mgparm->glen[2]);
+			
+			if (pbeparm->calcenergy == PCE_TOTAL) {
+				fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
+						(totEnergy[icalc]*conversion));
+			} else if (pbeparm->calcenergy == PCE_COMPS) {
+				fprintf(file,"        qfEnergy %1.12E kJ/mol\n", 
+						(0.5*qfEnergy[icalc]*conversion)); 
+				fprintf(file,"        qmEnergy %1.12E kJ/mol\n", 
+						(qmEnergy[icalc]*conversion)); 
+				fprintf(file,"        dielEnergy %1.12E kJ/mol\n", 
+						(dielEnergy[icalc]*conversion));
+				for (i=0; i<nenergy[icalc]; i++){
+					fprintf(file,"        atom %i %1.12E kJ/mol\n", i,
+							(0.5*atomEnergy[icalc][i]*conversion));
+					
+				}
+			} 
+			fprintf(file,"    end\n");
+		}
 
+fprintf(file,"end\n");
 	}
-    }
-   
-    fclose(file);
 
-    return 1;
+/* Handle print energy statements */
+
+for (i=0; i<nosh->nprint; i++) {
+	
+	if (nosh->printwhat[i] == NPT_ENERGY) {
+		
+		fprintf(file,"print energy");
+		fprintf(file," %d", nosh->printcalc[i][0]); 
+		
+		for (j=1; j<nosh->printnarg[i]; j++) {
+			if (nosh->printop[i][j-1] == 0) fprintf(file," +");
+			else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
+			fprintf(file, " %d", nosh->printcalc[i][j]);
+		}
+		
+		fprintf(file, "\n");
+		icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+		
+		ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
+			nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc];
+		
+		for (j=1; j<nosh->printnarg[i]; j++) {
+			icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+			/* Add or subtract? */
+			if (nosh->printop[i][j-1] == 0) scalar = 1.0;
+			else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
+			/* Accumulate */
+			ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+						 nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc]);
+			
+			Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+			
+		}
+		fprintf(file,"    localEnergy %1.12E kJ/mol\n", \
+				ltenergy);
+		fprintf(file,"    globalEnergy %1.12E kJ/mol\nend\n", \
+				gtenergy); 
+		
+	}
+}
+
+fclose(file);
+
+return 1;
 }
 
 VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname, 
-    double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
-    double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
-    int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]) {
-
-    FILE *file;
-    time_t now;
-    int ielec, icalc, i, j;
-    char *timestring = VNULL;
-    char *c = VNULL;
-    PBEparm *pbeparm = VNULL;
-    MGparm *mgparm = VNULL;
-    double conversion, ltenergy, gtenergy, scalar;
-
-    if (nosh->bogus) return 1;
-
-    /* Initialize some variables */
-
-    icalc = 0;
-   
-    file = fopen(fname, "w");
-    if (file == VNULL) {
-        Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
-          fname);
-        return 0;
-    }
-
-    fprintf(file,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(file,"<APBS>\n");
-
-    /* Strip the newline character from the date */
-
-    now = time(VNULL);
-    timestring = ctime(&now);
-    for(c = timestring; *c != '\n'; c++);
-    *c = '\0';
-    fprintf(file,"    <date>%s</date>\n", timestring);
-
-    for (ielec=0; ielec<nosh->nelec;ielec++){ /* elec loop */
-
-        /* Initialize per-elec pointers */
-
-        mgparm = nosh->calc[icalc].mgparm;
-	pbeparm = nosh->calc[icalc].pbeparm;
+						 double totEnergy[NOSH_MAXCALC], 
+						 double qfEnergy[NOSH_MAXCALC], 
+						 double qmEnergy[NOSH_MAXCALC], 
+						 double dielEnergy[NOSH_MAXCALC],
+						 int nenergy[NOSH_MAXCALC], 
+						 double *atomEnergy[NOSH_MAXCALC]) {
 	
-	/* Convert from kT/e to kJ/mol */
-	conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
-       
-	fprintf(file,"    <elec>\n");
-	if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
-	    fprintf(file,"      <name>%s</name>\n", nosh->elecname[ielec+1]);
-	} 
-
-	switch (mgparm->type) {
-            case MCT_DUM:
-	        fprintf(file,"      <type>mg-dummy</type>\n");
-		break;
-	    case MCT_MAN:
-	        fprintf(file,"      <type>mg-manual</type>\n");
-		break;
-            case MCT_AUT:
-	        fprintf(file,"      <type>mg-auto</type>\n");
-		break;
-	    case MCT_PAR:
-	        fprintf(file,"      <type>mg-para</type>\n");
-		break;
-            default:
-	        break;
-	}
-
-	fprintf(file,"      <molid>%d</molid>\n", pbeparm->molid);
-	fprintf(file,"      <nx>%d</nx>\n", mgparm->dime[0]);
-	fprintf(file,"      <ny>%d</ny>\n", mgparm->dime[1]);
-	fprintf(file,"      <nz>%d</nz>\n", mgparm->dime[2]);
-
-	switch (pbeparm->pbetype) {
-            case PBE_NPBE:
-	        fprintf(file,"      <pbe>npbe</pbe>\n");
-		break;
-	    case PBE_LPBE:
-	        fprintf(file,"      <pbe>lpbe</pbe>\n");
-		break;
-            default:
-	        break;
-	}
-   
-	if (pbeparm->nion > 0) {
-	    for (i=0; i<pbeparm->nion; i++) {
-	        fprintf(file, "      <ion>\n");
-	        fprintf(file,"          <radius>%.4.3f A</radius>\n",
-			pbeparm->ionr[i]);
-		fprintf(file,"          <charge>%.4.3f A</charge>\n",
-			pbeparm->ionq[i]);
-		fprintf(file,"          <concentration>%.4.3f M</concentration>\n", pbeparm->ionc[i]);
-		fprintf(file, "      </ion>\n");
-	           
-	    }
-	}
-
-	fprintf(file,"      <pdie>%4.3f</pdie>\n", pbeparm->pdie);
-	fprintf(file,"      <sdie>%4.3f</sdie>\n", pbeparm->sdie);
-
-	switch (pbeparm->srfm) {
-            case 0:
-	      fprintf(file,"      <srfm>mol</srfm>\n");
-	      fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
-	      break;
-	    case 1:
-	      fprintf(file,"      <srfm>smol</srfm>\n");
-	      fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
-	      break;
-	    case 2:
-	      fprintf(file,"      <srfm>spl2</srfm>\n");
-	      break;
-	    default:
-	      break;
-	}
-
-	switch (pbeparm->bcfl) {
-	    case BCFL_ZERO:
-	        fprintf(file,"      <bcfl>zero</bcfl>\n");
-		break;
-	    case BCFL_SDH:
-	        fprintf(file,"      <bcfl>sdh</bcfl>\n");
-		break;
-	    case BCFL_MDH:
-	        fprintf(file,"      <bcfl>mdh</bcfl>\n");
-		break;
-	    case BCFL_FOCUS:
-	        fprintf(file,"      <bcfl>focus</bcfl>\n");
-		break;
-	    default:
-	        break;
-	}
-
-	fprintf(file,"      <temp>%4.3f K</temp>\n", pbeparm->temp);
-	fprintf(file,"      <gamma>%4.3f kJ/mol/A^2</gamma>\n",pbeparm->gamma);
-   
-	for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
-	    
-	    /* Reinitialize per-calc pointers */
-	    mgparm = nosh->calc[icalc].mgparm;
-	    pbeparm = nosh->calc[icalc].pbeparm;
-
-	    fprintf(file,"      <calc>\n");
-	    fprintf(file,"          <id>%i</id>\n", (icalc+1));
-	    fprintf(file,"          <hx>%4.3f A</hx>\n", mgparm->grid[0]);
-	    fprintf(file,"          <hy>%4.3f A</hy>\n", mgparm->grid[1]);
-	    fprintf(file,"          <hz>%4.3f A</hz>\n", mgparm->grid[2]);
-	    fprintf(file,"          <xlen>%4.3f A</xlen>\n", mgparm->glen[0]);
-	    fprintf(file,"          <ylen>%4.3f A</ylen>\n", mgparm->glen[1]);
-	    fprintf(file,"          <zlen>%4.3f A</zlen>\n", mgparm->glen[2]);
-	    
-	    if (pbeparm->calcenergy == PCE_TOTAL) {
-	      fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
-                      (totEnergy[icalc]*conversion));
-	    } else if (pbeparm->calcenergy == PCE_COMPS) {
-	      fprintf(file,"          <qfEnergy>%1.12E kJ/mol</qfEnergy>\n", 
-			(0.5*qfEnergy[icalc]*conversion)); 
-	      fprintf(file,"          <qmEnergy>%1.12E kJ/mol</qmEnergy>\n", 
-			(qmEnergy[icalc]*conversion)); 
-	      fprintf(file,"          <dielEnergy>%1.12E kJ/mol</dielEnergy>\n", 
-                      (dielEnergy[icalc]*conversion));
-	      for (i=0; i<nenergy[icalc]; i++){
-		  fprintf(file,"          <atom>\n");
-		  fprintf(file,"              <id>%i</id>\n", i+1);
-		  fprintf(file,"              <energy>%1.12E kJ/mol</energy>\n", (0.5*atomEnergy[icalc][i]*conversion));
-		  fprintf(file,"          </atom>\n");
-	      }
-	    } 
-            fprintf(file,"      </calc>\n");
-	}
-
-	fprintf(file,"    </elec>\n");
-    }
-     
-    /* Handle print energy statements */
-
-    for (i=0; i<nosh->nprint; i++) {
-
-        if (nosh->printwhat[i] == NPT_ENERGY) {
-	    
-	    fprintf(file,"    <printEnergy>\n");
-	    fprintf(file,"      <equation>%d", nosh->printcalc[i][0]); 
+	FILE *file;
+	time_t now;
+	int ielec, icalc, i, j;
+	char *timestring = VNULL;
+	char *c = VNULL;
+	PBEparm *pbeparm = VNULL;
+	MGparm *mgparm = VNULL;
+	double conversion, ltenergy, gtenergy, scalar;
 	
-	    for (j=1; j<nosh->printnarg[i]; j++) {
-	        if (nosh->printop[i][j-1] == 0) fprintf(file," +");
-		else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
-		fprintf(file, " %d", nosh->printcalc[i][j]);
-	    }
-
-	    fprintf(file, "</equation>\n");
-	    icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
-	   
-	    ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
-                       nosh->calc[icalc].pbeparm->temp * totEnergy[icalc];
-   
-	    for (j=1; j<nosh->printnarg[i]; j++) {
-	        icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
-		/* Add or subtract? */
-		if (nosh->printop[i][j-1] == 0) scalar = 1.0;
-		else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
-		/* Accumulate */
-		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
-				 nosh->calc[icalc].pbeparm->temp * totEnergy[icalc]);
-	    }
-        Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-	    fprintf(file,"      <localEnergy>%1.12E kJ/mol</localEnergy>\n", \
-		    ltenergy);
-	    fprintf(file,"      <globalEnergy>%1.12E kJ/mol</globalEnergy>\n", \
-            gtenergy); 
-
-	    fprintf(file,"    </printEnergy>\n");
+	if (nosh->bogus) return 1;
+	
+	/* Initialize some variables */
+	
+	icalc = 0;
+	
+	file = fopen(fname, "w");
+	if (file == VNULL) {
+		Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
+				  fname);
+		return 0;
 	}
-    }
-    
-    /* Add ending tags and close the file */
-    fprintf(file,"</APBS>\n");
-    fclose(file);
+	
+	fprintf(file,"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+	fprintf(file,"<APBS>\n");
+	
+	/* Strip the newline character from the date */
+	
+	now = time(VNULL);
+	timestring = ctime(&now);
+	for(c = timestring; *c != '\n'; c++);
+	*c = '\0';
+	fprintf(file,"    <date>%s</date>\n", timestring);
+	
+	for (ielec=0; ielec<nosh->nelec;ielec++){ /* elec loop */
+		
+		/* Initialize per-elec pointers */
+		
+		mgparm = nosh->calc[icalc]->mgparm;
+		pbeparm = nosh->calc[icalc]->pbeparm;
+		
+		/* Convert from kT/e to kJ/mol */
+		conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
+		
+		fprintf(file,"    <elec>\n");
+		if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
+			fprintf(file,"      <name>%s</name>\n", nosh->elecname[ielec+1]);
+		} 
+		
+		switch (mgparm->type) {
+			case MCT_DUMMY:
+				fprintf(file,"      <type>mg-dummy</type>\n");
+				break;
+			case MCT_MANUAL:
+				fprintf(file,"      <type>mg-manual</type>\n");
+				break;
+			case MCT_AUTO:
+				fprintf(file,"      <type>mg-auto</type>\n");
+				break;
+			case MCT_PARALLEL:
+				fprintf(file,"      <type>mg-para</type>\n");
+				break;
+			default:
+				break;
+		}
+		
+		fprintf(file,"      <molid>%d</molid>\n", pbeparm->molid);
+		fprintf(file,"      <nx>%d</nx>\n", mgparm->dime[0]);
+		fprintf(file,"      <ny>%d</ny>\n", mgparm->dime[1]);
+		fprintf(file,"      <nz>%d</nz>\n", mgparm->dime[2]);
+		
+		switch (pbeparm->pbetype) {
+			case PBE_NPBE:
+				fprintf(file,"      <pbe>npbe</pbe>\n");
+				break;
+			case PBE_LPBE:
+				fprintf(file,"      <pbe>lpbe</pbe>\n");
+				break;
+			default:
+				break;
+		}
+		
+		if (pbeparm->nion > 0) {
+			for (i=0; i<pbeparm->nion; i++) {
+				fprintf(file, "      <ion>\n");
+				fprintf(file,"          <radius>%.4.3f A</radius>\n",
+						pbeparm->ionr[i]);
+				fprintf(file,"          <charge>%.4.3f A</charge>\n",
+						pbeparm->ionq[i]);
+				fprintf(file,"          <concentration>%.4.3f M</concentration>\n", 
+						pbeparm->ionc[i]);
+				fprintf(file, "      </ion>\n");
+				
+			}
+		}
+		
+		fprintf(file,"      <pdie>%4.3f</pdie>\n", pbeparm->pdie);
+		fprintf(file,"      <sdie>%4.3f</sdie>\n", pbeparm->sdie);
+		
+		switch (pbeparm->srfm) {
+			case 0:
+				fprintf(file,"      <srfm>mol</srfm>\n");
+				fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
+				break;
+			case 1:
+				fprintf(file,"      <srfm>smol</srfm>\n");
+				fprintf(file,"      <srad>%4.3f</srad>\n", pbeparm->srad);
+				break;
+			case 2:
+				fprintf(file,"      <srfm>spl2</srfm>\n");
+				break;
+			default:
+				break;
+		}
+		
+		switch (pbeparm->bcfl) {
+			case BCFL_ZERO:
+				fprintf(file,"      <bcfl>zero</bcfl>\n");
+				break;
+			case BCFL_SDH:
+				fprintf(file,"      <bcfl>sdh</bcfl>\n");
+				break;
+			case BCFL_MDH:
+				fprintf(file,"      <bcfl>mdh</bcfl>\n");
+				break;
+			case BCFL_FOCUS:
+				fprintf(file,"      <bcfl>focus</bcfl>\n");
+				break;
+			default:
+				break;
+		}
+		
+		fprintf(file,"      <temp>%4.3f K</temp>\n", pbeparm->temp);
+		fprintf(file,"      <gamma>%4.3f kJ/mol/A^2</gamma>\n",pbeparm->gamma);
+		
+		for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
+			
+			/* Reinitialize per-calc pointers */
+			mgparm = nosh->calc[icalc]->mgparm;
+			pbeparm = nosh->calc[icalc]->pbeparm;
+			
+			fprintf(file,"      <calc>\n");
+			fprintf(file,"          <id>%i</id>\n", (icalc+1));
+			fprintf(file,"          <hx>%4.3f A</hx>\n", mgparm->grid[0]);
+			fprintf(file,"          <hy>%4.3f A</hy>\n", mgparm->grid[1]);
+			fprintf(file,"          <hz>%4.3f A</hz>\n", mgparm->grid[2]);
+			fprintf(file,"          <xlen>%4.3f A</xlen>\n", mgparm->glen[0]);
+			fprintf(file,"          <ylen>%4.3f A</ylen>\n", mgparm->glen[1]);
+			fprintf(file,"          <zlen>%4.3f A</zlen>\n", mgparm->glen[2]);
+			
+			if (pbeparm->calcenergy == PCE_TOTAL) {
+				fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
+						(totEnergy[icalc]*conversion));
+			} else if (pbeparm->calcenergy == PCE_COMPS) {
+				fprintf(file,"          <qfEnergy>%1.12E kJ/mol</qfEnergy>\n", 
+						(0.5*qfEnergy[icalc]*conversion)); 
+				fprintf(file,"          <qmEnergy>%1.12E kJ/mol</qmEnergy>\n", 
+						(qmEnergy[icalc]*conversion)); 
+				fprintf(file,"          <dielEnergy>%1.12E kJ/mol</dielEnergy>\n", 
+						(dielEnergy[icalc]*conversion));
+				for (i=0; i<nenergy[icalc]; i++){
+					fprintf(file,"          <atom>\n");
+					fprintf(file,"              <id>%i</id>\n", i+1);
+					fprintf(file,"              <energy>%1.12E kJ/mol</energy>\n", 
+							(0.5*atomEnergy[icalc][i]*conversion));
+					fprintf(file,"          </atom>\n");
+				}
+			} 
+			fprintf(file,"      </calc>\n");
+		}
 
-    return 1;
+fprintf(file,"    </elec>\n");
+	}
+
+/* Handle print energy statements */
+
+for (i=0; i<nosh->nprint; i++) {
+	
+	if (nosh->printwhat[i] == NPT_ENERGY) {
+		
+		fprintf(file,"    <printEnergy>\n");
+		fprintf(file,"      <equation>%d", nosh->printcalc[i][0]); 
+		
+		for (j=1; j<nosh->printnarg[i]; j++) {
+			if (nosh->printop[i][j-1] == 0) fprintf(file," +");
+			else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
+			fprintf(file, " %d", nosh->printcalc[i][j]);
+		}
+		
+		fprintf(file, "</equation>\n");
+		icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+		
+		ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
+			nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc];
+		
+		for (j=1; j<nosh->printnarg[i]; j++) {
+			icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+			/* Add or subtract? */
+			if (nosh->printop[i][j-1] == 0) scalar = 1.0;
+			else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
+			/* Accumulate */
+			ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+						 nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc]);
+		}
+		Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+		fprintf(file,"      <localEnergy>%1.12E kJ/mol</localEnergy>\n", \
+				ltenergy);
+		fprintf(file,"      <globalEnergy>%1.12E kJ/mol</globalEnergy>\n", \
+				gtenergy); 
+		
+		fprintf(file,"    </printEnergy>\n");
+	}
+}
+
+/* Add ending tags and close the file */
+fprintf(file,"</APBS>\n");
+fclose(file);
+
+return 1;
 }   
 
 VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
-
-    char writestem[VMAX_ARGLEN];
-    char outpath[VMAX_ARGLEN];
-    char title[72];
-    int i, nx, ny, nz;
-    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
-    Vgrid *grid; 
-   
-    if (nosh->bogus) return 1;
-
-  
-    for (i=0; i<pbeparm->numwrite; i++) { 
-
-        nx = pmg->pmgp->nx;
-        ny = pmg->pmgp->ny;
-        nz = pmg->pmgp->nz;
-        hx = pmg->pmgp->hx;
-        hy = pmg->pmgp->hy;
-        hzed = pmg->pmgp->hzed;
-  
-        switch (pbeparm->writetype[i]) {
-
-            case VDT_CHARGE:
- 
-                Vnm_tprint(1, "  Writing charge distribution to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, "CHARGE DISTRIBUTION (e)");
-                break;
-
-            case VDT_POT:
- 
-                Vnm_tprint(1, "  Writing potential to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, "POTENTIAL (kT/e)");
-                break;
-
-            case VDT_SMOL:
-
-                Vnm_tprint(1, "  Writing molecular accessibility to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, 
-                            pbeparm->srad, pbeparm->pbetype));
-                sprintf(title, 
-                  "SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
-                  pbeparm->srad);
-                break;
-
-            case VDT_SSPL:
-
-                Vnm_tprint(1, "  Writing spline-based accessibility to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL,
-                            pbeparm->swin, pbeparm->pbetype));
-                sprintf(title, 
-                  "SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
-                  pbeparm->swin);
-                break;
-
-            case VDT_VDW:
-
-                Vnm_tprint(1, "  Writing van der Waals accessibility to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
-                break;
-
-            case VDT_IVDW:
-
-                Vnm_tprint(1, "  Writing ion accessibility to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
-                  pmg->pbe->maxIonRadius, pbeparm->pbetype));
-                sprintf(title, 
-                  "ION ACCESSIBILITY -- SPLINE (%4.3f RADIUS)",
-                  pmg->pbe->maxIonRadius);
-                break;
-
-            case VDT_LAP:
-
-                Vnm_tprint(1, "  Writing potential Laplacian to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, 
-                  "POTENTIAL LAPLACIAN (kT/e/A^2)");
-                break;
-
-            case VDT_EDENS:
-
-                Vnm_tprint(1, "  Writing energy density to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, "ENERGY DENSITY (kT/e/A)^2");
-                break;
-
-            case VDT_NDENS:
-
-                Vnm_tprint(1, "  Writing number density to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, 
-                  "ION NUMBER DENSITY (M)");
-                break;
-
-            case VDT_QDENS:
-
-                Vnm_tprint(1, "  Writing charge density to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title, 
-                  "ION CHARGE DENSITY (e_c * M)");
-                break;
-
-            case VDT_DIELX:
-
-                Vnm_tprint(1, "  Writing x-shifted dielectric map to ");
-                xcent = pmg->pmgp->xcent + 0.5*hx;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title,
-                  "X-SHIFTED DIELECTRIC MAP");
-                break;
-
-            case VDT_DIELY:
-
-                Vnm_tprint(1, "  Writing y-shifted dielectric map to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent + 0.5*hy;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title,
-                  "Y-SHIFTED DIELECTRIC MAP");
-                break;
-
-            case VDT_DIELZ:
-
-                Vnm_tprint(1, "  Writing z-shifted dielectric map to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent + 0.5*hzed;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title,
-                  "Z-SHIFTED DIELECTRIC MAP");
-                break;
-
-            case VDT_KAPPA:
-
-                Vnm_tprint(1, "  Writing kappa map to ");
-                xcent = pmg->pmgp->xcent;
-                ycent = pmg->pmgp->ycent;
-                zcent = pmg->pmgp->zcent;
-                xmin = xcent - 0.5*(nx-1)*hx;
-                ymin = ycent - 0.5*(ny-1)*hy;
-                zmin = zcent - 0.5*(nz-1)*hzed;
-                VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
-                  pbeparm->pbetype));
-                sprintf(title,
-                  "KAPPA MAP");
-                break;
-
-            default:
-
-                Vnm_tprint(2, "Invalid data type for writing!\n");
-                return 0;
-        }
-
-
+	
+	char writestem[VMAX_ARGLEN];
+	char outpath[VMAX_ARGLEN];
+	char title[72];
+	int i, nx, ny, nz;
+	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+	Vgrid *grid; 
+	
+	if (nosh->bogus) return 1;
+	
+	
+	for (i=0; i<pbeparm->numwrite; i++) { 
+		
+		nx = pmg->pmgp->nx;
+		ny = pmg->pmgp->ny;
+		nz = pmg->pmgp->nz;
+		hx = pmg->pmgp->hx;
+		hy = pmg->pmgp->hy;
+		hzed = pmg->pmgp->hzed;
+		
+		switch (pbeparm->writetype[i]) {
+			
+			case VDT_CHARGE:
+				
+				Vnm_tprint(1, "  Writing charge distribution to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, "CHARGE DISTRIBUTION (e)");
+				break;
+				
+			case VDT_POT:
+				
+				Vnm_tprint(1, "  Writing potential to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, "POTENTIAL (kT/e)");
+				break;
+				
+			case VDT_SMOL:
+				
+				Vnm_tprint(1, "  Writing molecular accessibility to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, 
+									   pbeparm->srad, pbeparm->pbetype));
+				sprintf(title, 
+						"SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
+						pbeparm->srad);
+				break;
+				
+			case VDT_SSPL:
+				
+				Vnm_tprint(1, "  Writing spline-based accessibility to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL,
+									   pbeparm->swin, pbeparm->pbetype));
+				sprintf(title, 
+						"SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
+						pbeparm->swin);
+				break;
+				
+			case VDT_VDW:
+				
+				Vnm_tprint(1, "  Writing van der Waals accessibility to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
+				break;
+				
+			case VDT_IVDW:
+				
+				Vnm_tprint(1, "  Writing ion accessibility to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
+									   pmg->pbe->maxIonRadius, pbeparm->pbetype));
+				sprintf(title, 
+						"ION ACCESSIBILITY -- SPLINE (%4.3f RADIUS)",
+						pmg->pbe->maxIonRadius);
+				break;
+				
+			case VDT_LAP:
+				
+				Vnm_tprint(1, "  Writing potential Laplacian to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, 
+						"POTENTIAL LAPLACIAN (kT/e/A^2)");
+				break;
+				
+			case VDT_EDENS:
+				
+				Vnm_tprint(1, "  Writing energy density to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, "ENERGY DENSITY (kT/e/A)^2");
+				break;
+				
+			case VDT_NDENS:
+				
+				Vnm_tprint(1, "  Writing number density to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, 
+						"ION NUMBER DENSITY (M)");
+				break;
+				
+			case VDT_QDENS:
+				
+				Vnm_tprint(1, "  Writing charge density to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title, 
+						"ION CHARGE DENSITY (e_c * M)");
+				break;
+				
+			case VDT_DIELX:
+				
+				Vnm_tprint(1, "  Writing x-shifted dielectric map to ");
+				xcent = pmg->pmgp->xcent + 0.5*hx;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title,
+						"X-SHIFTED DIELECTRIC MAP");
+				break;
+				
+			case VDT_DIELY:
+				
+				Vnm_tprint(1, "  Writing y-shifted dielectric map to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent + 0.5*hy;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title,
+						"Y-SHIFTED DIELECTRIC MAP");
+				break;
+				
+			case VDT_DIELZ:
+				
+				Vnm_tprint(1, "  Writing z-shifted dielectric map to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent + 0.5*hzed;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title,
+						"Z-SHIFTED DIELECTRIC MAP");
+				break;
+				
+			case VDT_KAPPA:
+				
+				Vnm_tprint(1, "  Writing kappa map to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title,
+						"KAPPA MAP");
+				break;
+				
+			default:
+				
+				Vnm_tprint(2, "Invalid data type for writing!\n");
+				return 0;
+		}
+		
+		
 #ifdef HAVE_MPI_H
-        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
+		sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
 #else
-        sprintf(writestem, "%s", pbeparm->writestem[i]);
+		sprintf(writestem, "%s", pbeparm->writestem[i]);
 #endif
-
-        switch (pbeparm->writefmt[i]) {
-
-            case VDF_DX:
-                sprintf(outpath, "%s.%s", writestem, "dx");
-                Vnm_tprint(1, "%s\n", outpath);
-                grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
-                  pmg->rwork);
-                Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, title,
-                  pmg->pvec);
-                Vgrid_dtor(&grid);
-                break;
-
-            case VDF_AVS:
-                sprintf(outpath, "%s.%s", writestem, "ucd");
-                Vnm_tprint(1, "%s\n", outpath);
-                Vnm_tprint(2, "Sorry, AVS format isn't supported for \
+		
+		switch (pbeparm->writefmt[i]) {
+			
+			case VDF_DX:
+				sprintf(outpath, "%s.%s", writestem, "dx");
+				Vnm_tprint(1, "%s\n", outpath);
+				grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+								  pmg->rwork);
+				Vgrid_writeDX(grid, "FILE", "ASC", VNULL, outpath, title,
+							  pmg->pvec);
+				Vgrid_dtor(&grid);
+				break;
+				
+			case VDF_AVS:
+				sprintf(outpath, "%s.%s", writestem, "ucd");
+				Vnm_tprint(1, "%s\n", outpath);
+				Vnm_tprint(2, "Sorry, AVS format isn't supported for \
 uniform meshes yet!\n");
-                break;
-
-            case VDF_UHBD:
-                sprintf(outpath, "%s.%s", writestem, "grd");
-                Vnm_tprint(1, "%s\n", outpath);
-                grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
-                  pmg->rwork);
-                Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, title,
-                  pmg->pvec);
-                Vgrid_dtor(&grid);
-                break;
-
-            default:
-                Vnm_tprint(2, "Bogus data format (%d)!\n", 
-                  pbeparm->writefmt[i]);
-                break;
-        }
-                
-    }
-
-    return 1;
+				break;
+				
+			case VDF_UHBD:
+				sprintf(outpath, "%s.%s", writestem, "grd");
+				Vnm_tprint(1, "%s\n", outpath);
+				grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+								  pmg->rwork);
+				Vgrid_writeUHBD(grid, "FILE", "ASC", VNULL, outpath, title,
+								pmg->pvec);
+				Vgrid_dtor(&grid);
+				break;
+				
+			default:
+				Vnm_tprint(2, "Bogus data format (%d)!\n", 
+						   pbeparm->writefmt[i]);
+				break;
+		}
+		
+	}
+	
+	return 1;
 }
 
 VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], 
-  int i) {
-
-    int j, calcid;
-    double ltenergy, gtenergy, scalar;
-    
-    if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[i][0]], "") == 0){
-      Vnm_tprint( 1, "print energy %d ", nosh->printcalc[i][0]);
-    } else {
-      Vnm_tprint( 1, "print energy %d (%s) ", nosh->printcalc[i][0], nosh->elecname[nosh->printcalc[i][0]]);
-    }
-    for (j=1; j<nosh->printnarg[i]; j++) {
-        if (nosh->printop[i][j-1] == 0)
-          Vnm_tprint(1, "+ ");
-        else if (nosh->printop[i][j-1] == 1)
-          Vnm_tprint(1, "- ");
-        else {
-            Vnm_tprint( 2, "Undefined PRINT operation!\n");
-            return 0;
-        }
-        if (Vstring_strcasecmp(nosh->elecname[j+1], "") == 0){
-          Vnm_tprint( 1, "%d ", nosh->printcalc[i][j]);
-        } else {
-          Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[i][j], nosh->elecname[nosh->printcalc[i][j]]);
-        }
-    }
-    Vnm_tprint(1, "end\n");
-    calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
-    if (nosh->calc[calcid].pbeparm->calcenergy != PCE_NO) {
-        ltenergy = Vunit_kb * (1e-3) * Vunit_Na *
-          nosh->calc[calcid].pbeparm->temp * totEnergy[calcid];
-    } else {
-        Vnm_tprint( 2, "  Didn't calculate energy in Calculation \
+						int iprint) {
+	
+	int iarg, calcid;
+	double ltenergy, gtenergy, scalar;
+	
+	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
+		Vnm_tprint( 1, "print energy %d ", nosh->printcalc[iprint][0]+1);
+	} else {
+		Vnm_tprint( 1, "print energy %d (%s) ", nosh->printcalc[iprint][0]+1, 
+					nosh->elecname[nosh->printcalc[iprint][0]]);
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		if (nosh->printop[iprint][iarg-1] == 0)
+			Vnm_tprint(1, "+ ");
+		else if (nosh->printop[iprint][iarg-1] == 1)
+			Vnm_tprint(1, "- ");
+		else {
+			Vnm_tprint( 2, "Undefined PRINT operation!\n");
+			return 0;
+		}
+		if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][iarg]], 
+							   "") == 0) {
+			Vnm_tprint( 1, "%d ", nosh->printcalc[iprint][iarg]+1);
+		} else {
+			Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[iprint][iarg]+1, 
+						nosh->elecname[nosh->printcalc[iprint][iarg]]);
+		}
+	}
+	Vnm_tprint(1, "end\n");
+	calcid = nosh->elec2calc[nosh->printcalc[iprint][0]];
+	if (nosh->calc[calcid]->pbeparm->calcenergy != PCE_NO) {
+		ltenergy = Vunit_kb * (1e-3) * Vunit_Na *
+		nosh->calc[calcid]->pbeparm->temp * totEnergy[calcid];
+	} else {
+		Vnm_tprint( 2, "  Didn't calculate energy in Calculation \
 #%d\n", calcid+1);
-        return 0;
-    }
-    for (j=1; j<nosh->printnarg[i]; j++) {
-        calcid = nosh->elec2calc[nosh->printcalc[i][j]-1];
-        /* Add or subtract? */
-        if (nosh->printop[i][j-1] == 0) scalar = 1.0;
-        else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
-        /* Accumulate */
-        ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
-          nosh->calc[calcid].pbeparm->temp * totEnergy[calcid]);
-    }
-
-    Vnm_tprint( 1, "  Local net energy (PE %d) = %1.12E kJ/mol\n", 
-      Vcom_rank(com), ltenergy);
-    Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
-    Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-    Vnm_tprint( 1, "  Global net energy = %1.12E kJ/mol\n", gtenergy);
-
-    return 1;
-
+		return 0;
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		calcid = nosh->elec2calc[nosh->printcalc[iprint][iarg]];
+		/* Add or subtract? */
+		if (nosh->printop[iprint][iarg-1] == 0) scalar = 1.0;
+		else if (nosh->printop[iprint][iarg-1] == 1) scalar = -1.0;
+		/* Accumulate */
+		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+					 nosh->calc[calcid]->pbeparm->temp * totEnergy[calcid]);
+	}
+	
+	Vnm_tprint( 1, "  Local net energy (PE %d) = %1.12E kJ/mol\n", 
+				Vcom_rank(com), ltenergy);
+	Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
+	Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
+	Vnm_tprint( 1, "  Global net energy = %1.12E kJ/mol\n", gtenergy);
+	
+	return 1;
+	
 }
 
 VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
-  AtomForce *atomForce[NOSH_MAXCALC], int i) {
-
-    int ipr, ifr, ivc, calcid, refnforce, refcalcforce;
-    double temp, scalar;
-    double totforce[3];
-    AtomForce *lforce, *gforce, *aforce;
-
-    if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[i][0]], "") == 0){
-      Vnm_tprint( 1, "print force %d ", nosh->printcalc[i][0]);
-    } else {
-      Vnm_tprint( 1, "print force %d (%s) ", nosh->printcalc[i][0], nosh->elecname[nosh->printcalc[i][0]]);
-    }
-    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
-        if (nosh->printop[i][ipr-1] == 0)
-          Vnm_tprint(1, "+ ");
-        else if (nosh->printop[i][ipr-1] == 1)
-          Vnm_tprint(1, "- ");
-        else {
-            Vnm_tprint( 2, "Undefined PRINT operation!\n");
-            return 0;
-        }
-        if (Vstring_strcasecmp(nosh->elecname[ipr+1], "") == 0){
-          Vnm_tprint( 1, "%d ", nosh->printcalc[i][ipr]);
-        } else {
-          Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[i][ipr], nosh->elecname[nosh->printcalc[i][ipr]]);
-        }
-    }
-    Vnm_tprint(1, "end\n");
-
-    /* First, go through and make sure we did the same type of force
-     * evaluation in each of the requested calculations */
-    calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
-    refnforce = nforce[calcid];
-    refcalcforce = nosh->calc[calcid].pbeparm->calcforce;
-    if (refcalcforce == PCF_NO) {
-        Vnm_tprint( 2, "  Didn't calculate force in calculation \
+					   AtomForce *atomForce[NOSH_MAXCALC], int iprint) {
+	
+	int iarg, ifr, ivc, calcid, refnforce, refcalcforce;
+	double temp, scalar;
+	double totforce[3];
+	AtomForce *lforce, *gforce, *aforce;
+	
+	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
+		Vnm_tprint( 1, "print force %d ", nosh->printcalc[iprint][0]+1);
+	} else {
+		Vnm_tprint( 1, "print force %d (%s) ", nosh->printcalc[iprint][0]+1, 
+					nosh->elecname[nosh->printcalc[iprint][0]]);
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		if (nosh->printop[iprint][iarg-1] == 0)
+			Vnm_tprint(1, "+ ");
+		else if (nosh->printop[iprint][iarg-1] == 1)
+			Vnm_tprint(1, "- ");
+		else {
+			Vnm_tprint( 2, "Undefined PRINT operation!\n");
+			return 0;
+		}
+		if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][iarg]], 
+							   "") == 0) {
+			Vnm_tprint( 1, "%d ", nosh->printcalc[iprint][iarg]+1);
+		} else {
+			Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[iprint][iarg]+1, 
+						nosh->elecname[nosh->printcalc[iprint][iarg]]);
+		}
+	}
+	Vnm_tprint(1, "end\n");
+	
+	/* First, go through and make sure we did the same type of force
+		* evaluation in each of the requested calculations */
+	calcid = nosh->elec2calc[nosh->printcalc[iprint][0]];
+	refnforce = nforce[calcid];
+	refcalcforce = nosh->calc[calcid]->pbeparm->calcforce;
+	if (refcalcforce == PCF_NO) {
+		Vnm_tprint( 2, "  Didn't calculate force in calculation \
 #%d\n", calcid+1);
-        return 0;
-    }
-    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
-        calcid = nosh->elec2calc[nosh->printcalc[i][ipr]-1];
-        if (nosh->calc[calcid].pbeparm->calcforce != refcalcforce) {
-            Vnm_tprint(2, "  Inconsistent calcforce declarations in \
-calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
-calcid+1);
-            return 0;
-        }
-        if (nforce[calcid] != refnforce) {
-            Vnm_tprint(2, "  Inconsistent number of forces evaluated in \
-calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[i][0]-1]+1,
-calcid+1);
-            return 0;
-        }
-    }
-
-    /* Now, allocate space to accumulate the forces */
-    lforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
-    gforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
-
-    /* Now, accumulate the forces */
-    calcid = nosh->elec2calc[nosh->printcalc[i][0]-1];
-    aforce = atomForce[calcid];
-    temp = nosh->calc[calcid].pbeparm->temp;
-
-    /* Load up the first calculation */
-    if (refcalcforce == PCF_TOTAL) {
-        /* Set to total force */
-        for (ivc=0; ivc<3; ivc++) {
-            lforce[0].qfForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc];
-            lforce[0].ibForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc];
-            lforce[0].dbForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc];
-            lforce[0].npForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc];
-        }
-    } else if (refcalcforce == PCF_COMPS) { 
-        for (ifr=0; ifr<refnforce; ifr++) {
-            for (ivc=0; ivc<3; ivc++) {
-                lforce[ifr].qfForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc];
-                lforce[ifr].ibForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc];
-                lforce[ifr].dbForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc];
-                lforce[ifr].npForce[ivc] = 
-              Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc];
-            }
-        }
-    }
-
-    /* Load up the rest of the calculations */
-    for (ipr=1; ipr<nosh->printnarg[i]; ipr++) {
-        calcid = nosh->elec2calc[nosh->printcalc[i][ipr]-1];
-        temp = nosh->calc[calcid].pbeparm->temp;
-        aforce = atomForce[calcid];
-        /* Get operation */
-        if (nosh->printop[i][ipr-1] == 0) scalar = +1.0;
-        else if (nosh->printop[i][ipr-1] == 1) scalar = -1.0;
-        else scalar = 0.0;
-        /* Accumulate */
-        if (refcalcforce == PCF_TOTAL) {
-            /* Set to total force */
-            for (ivc=0; ivc<3; ivc++) {
-                lforce[0].qfForce[ivc] += 
-                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc]);
-                lforce[0].ibForce[ivc] += 
-                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc]);
-                lforce[0].dbForce[ivc] += 
-                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc]);
-                lforce[0].npForce[ivc] +=
-                 (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc]);
-            }
-        } else if (refcalcforce == PCF_COMPS) {
-            for (ifr=0; ifr<refnforce; ifr++) {
-                for (ivc=0; ivc<3; ivc++) {
-                    lforce[ifr].qfForce[ivc] += 
-               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc]);
-                    lforce[ifr].ibForce[ivc] += 
-               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc]);
-                    lforce[ifr].dbForce[ivc] += 
-               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc]);
-                    lforce[ifr].npForce[ivc] += 
-               (scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc]);
-                }
-            }
-        }
-    }
-
-    Vnm_tprint( 0, "printEnergy:  Performing VERY INEFFICIENT global reduction (sum)\n");
-    for (ifr=0; ifr<refnforce; ifr++) {
-        Vcom_reduce(com, lforce[ifr].qfForce, gforce[ifr].qfForce, 3, 2, 0);
-        Vcom_reduce(com, lforce[ifr].ibForce, gforce[ifr].ibForce, 3, 2, 0);
-        Vcom_reduce(com, lforce[ifr].dbForce, gforce[ifr].dbForce, 3, 2, 0);
-        Vcom_reduce(com, lforce[ifr].npForce, gforce[ifr].npForce, 3, 2, 0);
-    }
-   
+		return 0;
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		calcid = nosh->elec2calc[nosh->printcalc[iprint][iarg]-1];
+		if (nosh->calc[calcid]->pbeparm->calcforce != refcalcforce) {
+			Vnm_tprint(2, "  Inconsistent calcforce declarations in \
+calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
+					   calcid+1);
+			return 0;
+		}
+		if (nforce[calcid] != refnforce) {
+			Vnm_tprint(2, "  Inconsistent number of forces evaluated in \
+calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
+					   calcid+1);
+			return 0;
+		}
+	}
+	
+	/* Now, allocate space to accumulate the forces */
+	lforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+	gforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+	
+	/* Now, accumulate the forces */
+	calcid = nosh->elec2calc[nosh->printcalc[iprint][0]];
+	aforce = atomForce[calcid];
+	temp = nosh->calc[calcid]->pbeparm->temp;
+	
+	/* Load up the first calculation */
+	if (refcalcforce == PCF_TOTAL) {
+		/* Set to total force */
+		for (ivc=0; ivc<3; ivc++) {
+			lforce[0].qfForce[ivc] = 
+			Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc];
+			lforce[0].ibForce[ivc] = 
+				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc];
+			lforce[0].dbForce[ivc] = 
+				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc];
+			lforce[0].npForce[ivc] = 
+				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc];
+		}
+	} else if (refcalcforce == PCF_COMPS) { 
+		for (ifr=0; ifr<refnforce; ifr++) {
+			for (ivc=0; ivc<3; ivc++) {
+				lforce[ifr].qfForce[ivc] = 
+				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc];
+				lforce[ifr].ibForce[ivc] = 
+					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc];
+				lforce[ifr].dbForce[ivc] = 
+					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc];
+				lforce[ifr].npForce[ivc] = 
+					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc];
+			}
+		}
+	}
+	
+	/* Load up the rest of the calculations */
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		calcid = nosh->elec2calc[nosh->printcalc[iprint][iarg]];
+		temp = nosh->calc[calcid]->pbeparm->temp;
+		aforce = atomForce[calcid];
+		/* Get operation */
+		if (nosh->printop[iprint][iarg-1] == 0) scalar = +1.0;
+		else if (nosh->printop[iprint][iarg-1] == 1) scalar = -1.0;
+		else scalar = 0.0;
+		/* Accumulate */
+		if (refcalcforce == PCF_TOTAL) {
+			/* Set to total force */
+			for (ivc=0; ivc<3; ivc++) {
+				lforce[0].qfForce[ivc] += 
+				(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].qfForce[ivc]);
+				lforce[0].ibForce[ivc] += 
+					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc]);
+				lforce[0].dbForce[ivc] += 
+					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc]);
+				lforce[0].npForce[ivc] +=
+					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc]);
+			}
+		} else if (refcalcforce == PCF_COMPS) {
+			for (ifr=0; ifr<refnforce; ifr++) {
+				for (ivc=0; ivc<3; ivc++) {
+					lforce[ifr].qfForce[ivc] += 
+					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].qfForce[ivc]);
+					lforce[ifr].ibForce[ivc] += 
+						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc]);
+					lforce[ifr].dbForce[ivc] += 
+						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc]);
+					lforce[ifr].npForce[ivc] += 
+						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc]);
+				}
+			}
+		}
+	}
+	
+	Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
+	for (ifr=0; ifr<refnforce; ifr++) {
+		Vcom_reduce(com, lforce[ifr].qfForce, gforce[ifr].qfForce, 3, 2, 0);
+		Vcom_reduce(com, lforce[ifr].ibForce, gforce[ifr].ibForce, 3, 2, 0);
+		Vcom_reduce(com, lforce[ifr].dbForce, gforce[ifr].dbForce, 3, 2, 0);
+		Vcom_reduce(com, lforce[ifr].npForce, gforce[ifr].npForce, 3, 2, 0);
+	}
+	
 #if 0
-    if (refcalcforce == PCF_TOTAL) {
-        Vnm_tprint( 1, "  Local net fixed charge force = \
+	if (refcalcforce == PCF_TOTAL) {
+		Vnm_tprint( 1, "  Local net fixed charge force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].qfForce[0],
-lforce[0].qfForce[1], lforce[0].qfForce[2]);
-        Vnm_tprint( 1, "  Local net ionic boundary force = \
+					lforce[0].qfForce[1], lforce[0].qfForce[2]);
+		Vnm_tprint( 1, "  Local net ionic boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].ibForce[0],
-lforce[0].ibForce[1], lforce[0].ibForce[2]);
-        Vnm_tprint( 1, "  Local net dielectric boundary force = \
+					lforce[0].ibForce[1], lforce[0].ibForce[2]);
+		Vnm_tprint( 1, "  Local net dielectric boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].dbForce[0],
-lforce[0].dbForce[1], lforce[0].dbForce[2]);
-        Vnm_tprint( 1, "  Local net apolar boundary force = \
+					lforce[0].dbForce[1], lforce[0].dbForce[2]);
+		Vnm_tprint( 1, "  Local net apolar boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].npForce[0],
-lforce[0].npForce[1], lforce[0].npForce[2]);
-    } else if (refcalcforce == PCF_COMPS) {
-        for (ifr=0; ifr<refnforce; ifr++) {
-            Vnm_tprint( 1, "  Local fixed charge force \
+					lforce[0].npForce[1], lforce[0].npForce[2]);
+	} else if (refcalcforce == PCF_COMPS) {
+		for (ifr=0; ifr<refnforce; ifr++) {
+			Vnm_tprint( 1, "  Local fixed charge force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].qfForce[0],
-lforce[ifr].qfForce[1], lforce[ifr].qfForce[2]);
-        Vnm_tprint( 1, "  Local ionic boundary force \
+						lforce[ifr].qfForce[1], lforce[ifr].qfForce[2]);
+			Vnm_tprint( 1, "  Local ionic boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].ibForce[0],
-lforce[ifr].ibForce[1], lforce[ifr].ibForce[2]);
-        Vnm_tprint( 1, "  Local dielectric boundary force \
+						lforce[ifr].ibForce[1], lforce[ifr].ibForce[2]);
+			Vnm_tprint( 1, "  Local dielectric boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].dbForce[0],
-lforce[ifr].dbForce[1], lforce[ifr].dbForce[2]);
-        Vnm_tprint( 1, "  Local apolar boundary force \
+						lforce[ifr].dbForce[1], lforce[ifr].dbForce[2]);
+			Vnm_tprint( 1, "  Local apolar boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].npForce[0],
-lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
-        }
-    }
+						lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
+		}
+	}
 #endif
- 
-    if (refcalcforce == PCF_TOTAL) {
-        Vnm_tprint( 1, "  Printing net forces (kJ/mol/A).\n");
-        Vnm_tprint( 1, "  Legend:\n");
-        Vnm_tprint( 1, "    tot -- Total force\n");
-        Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
-        Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
-        Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
-        Vnm_tprint( 1, "    np  -- Nonpolar boundary force\n");
-
-        for (i=0; i<3; i++) {
-            totforce[i] = 
-                gforce[0].qfForce[i] 
-              + gforce[0].ibForce[i] 
-              + gforce[0].npForce[i]
-              + gforce[0].dbForce[i];
-        }
-
-        Vnm_tprint( 1, "  tot %1.12E  %1.12E  %1.12E\n", totforce[0], 
-totforce[1], totforce[2]);
-        Vnm_tprint( 1, "  qf  %1.12E  %1.12E  %1.12E\n", gforce[0].qfForce[0], 
-gforce[0].qfForce[1], gforce[0].qfForce[2]);
-        Vnm_tprint( 1, "  ib  %1.12E  %1.12E  %1.12E\n", gforce[0].ibForce[0], 
-gforce[0].ibForce[1], gforce[0].ibForce[2]);
-        Vnm_tprint( 1, "  db  %1.12E  %1.12E  %1.12E\n", gforce[0].dbForce[0], 
-gforce[0].dbForce[1], gforce[0].dbForce[2]);
-        Vnm_tprint( 1, "  np  %1.12E  %1.12E  %1.12E\n", gforce[0].npForce[0], 
-gforce[0].npForce[1], gforce[0].npForce[2]);
-
-    } else if (refcalcforce == PCF_COMPS) {
-
-        Vnm_tprint( 1, "  Printing per-atom forces (kJ/mol/A).\n");
-        Vnm_tprint( 1, "  Legend:\n");
-        Vnm_tprint( 1, "    tot n -- Total force for atom n\n");
-        Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
-        Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
-        Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
-        Vnm_tprint( 1, "    np  n -- Nonpolar boundary force for atom n\n");
-        Vnm_tprint( 1, "    tot all -- Total force for system\n");
-
-        totforce[0] = 0.0;
-        totforce[1] = 0.0;
-        totforce[2] = 0.0;
-
-        for (ifr=0; ifr<refnforce; ifr++) {
-            Vnm_tprint( 1, "  qf  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-gforce[ifr].qfForce[0], gforce[ifr].qfForce[1], gforce[ifr].qfForce[2]);
-            Vnm_tprint( 1, "  ib  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-gforce[ifr].ibForce[0], gforce[ifr].ibForce[1], gforce[ifr].ibForce[2]);
-            Vnm_tprint( 1, "  db  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-gforce[ifr].dbForce[0], gforce[ifr].dbForce[1], gforce[ifr].dbForce[2]);
-            Vnm_tprint( 1, "  np  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-gforce[ifr].npForce[0], gforce[ifr].npForce[1], gforce[ifr].npForce[2]);
-            Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-(gforce[ifr].npForce[0] + gforce[ifr].dbForce[0] + gforce[ifr].ibForce[0] +
-gforce[ifr].qfForce[0]),
-(gforce[ifr].npForce[1] + gforce[ifr].dbForce[1] + gforce[ifr].ibForce[1] +
-gforce[ifr].qfForce[1]),
-(gforce[ifr].npForce[2] + gforce[ifr].dbForce[2] + gforce[ifr].ibForce[2] +
-gforce[ifr].qfForce[2]));
-            for (i=0; i<3; i++) {
-                totforce[i] += (gforce[ifr].npForce[i] + gforce[ifr].dbForce[i] + gforce[ifr].ibForce[i] + gforce[ifr].qfForce[i]);
-            }
-        }
-        Vnm_tprint( 1, "  tot all %1.12E  %1.12E  %1.12E\n", totforce[0],
-totforce[1], totforce[2]);
-    }
-
-    Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&lforce));
-    Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&gforce));
-
-    return 1;
-
+	
+	if (refcalcforce == PCF_TOTAL) {
+		Vnm_tprint( 1, "  Printing net forces (kJ/mol/A).\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot -- Total force\n");
+		Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
+		Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
+		Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
+		Vnm_tprint( 1, "    np  -- Nonpolar boundary force\n");
+		
+		for (ivc=0; ivc<3; ivc++) {
+			totforce[ivc] = 
+			gforce[0].qfForce[ivc] + gforce[0].ibForce[ivc] \
+			+ gforce[0].npForce[ivc] + gforce[0].dbForce[ivc];
+		}
+		
+		Vnm_tprint( 1, "  tot %1.12E  %1.12E  %1.12E\n", totforce[0], 
+					totforce[1], totforce[2]);
+		Vnm_tprint( 1, "  qf  %1.12E  %1.12E  %1.12E\n", gforce[0].qfForce[0], 
+					gforce[0].qfForce[1], gforce[0].qfForce[2]);
+		Vnm_tprint( 1, "  ib  %1.12E  %1.12E  %1.12E\n", gforce[0].ibForce[0], 
+					gforce[0].ibForce[1], gforce[0].ibForce[2]);
+		Vnm_tprint( 1, "  db  %1.12E  %1.12E  %1.12E\n", gforce[0].dbForce[0], 
+					gforce[0].dbForce[1], gforce[0].dbForce[2]);
+		Vnm_tprint( 1, "  np  %1.12E  %1.12E  %1.12E\n", gforce[0].npForce[0], 
+					gforce[0].npForce[1], gforce[0].npForce[2]);
+		
+	} else if (refcalcforce == PCF_COMPS) {
+		
+		Vnm_tprint( 1, "  Printing per-atom forces (kJ/mol/A).\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot n -- Total force for atom n\n");
+		Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
+		Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
+		Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
+		Vnm_tprint( 1, "    np  n -- Nonpolar boundary force for atom n\n");
+		Vnm_tprint( 1, "    tot all -- Total force for system\n");
+		
+		totforce[0] = 0.0;
+		totforce[1] = 0.0;
+		totforce[2] = 0.0;
+		
+		for (ifr=0; ifr<refnforce; ifr++) {
+			Vnm_tprint( 1, "  qf  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].qfForce[0], gforce[ifr].qfForce[1], 
+						gforce[ifr].qfForce[2]);
+			Vnm_tprint( 1, "  ib  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].ibForce[0], gforce[ifr].ibForce[1],
+						gforce[ifr].ibForce[2]);
+			Vnm_tprint( 1, "  db  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].dbForce[0], gforce[ifr].dbForce[1], 
+						gforce[ifr].dbForce[2]);
+			Vnm_tprint( 1, "  np  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].npForce[0], gforce[ifr].npForce[1], 
+						gforce[ifr].npForce[2]);
+			Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						(gforce[ifr].npForce[0] + gforce[ifr].dbForce[0] \
+						 + gforce[ifr].ibForce[0] +
+						 gforce[ifr].qfForce[0]),
+						(gforce[ifr].npForce[1] + gforce[ifr].dbForce[1] \
+						 + gforce[ifr].ibForce[1] +
+						 gforce[ifr].qfForce[1]),
+						(gforce[ifr].npForce[2] + gforce[ifr].dbForce[2] \
+						 + gforce[ifr].ibForce[2] +
+						 gforce[ifr].qfForce[2]));
+			for (ivc=0; ivc<3; ivc++) {
+				totforce[ivc] += (gforce[ifr].npForce[ivc] \
+								+ gforce[ifr].dbForce[ivc] \
+								+ gforce[ifr].ibForce[ivc] \
+								  + gforce[ifr].qfForce[ivc]);
+			}
+		}
+		Vnm_tprint( 1, "  tot all %1.12E  %1.12E  %1.12E\n", totforce[0],
+					totforce[1], totforce[2]);
+	}
+	
+	Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&lforce));
+	Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&gforce));
+	
+	return 1;
+	
 }
 
 VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
-  int *nenergy, double *npEnergy) {
-
-    MGparm *mgparm;
-    PBEparm *pbeparm;
-    int extEnergy;              /* When focusing, do we include energy
-                                 * contributions from outside the local
-                                 * partition? */
-
-    mgparm = nosh->calc[icalc].mgparm;
-    pbeparm = nosh->calc[icalc].pbeparm;
-
-    if (mgparm->type == 2) extEnergy = 0;
-    else extEnergy = 1;
-
-    if (pbeparm->calcenergy != PCE_NO) {
-        *nenergy = 1;
-        /* Some processors don't count */
-        if (nosh->bogus == 0) {
-        *npEnergy = Vpmg_npEnergy(pmg, extEnergy);
-        } else *npEnergy = 0;
-
-    } else *nenergy = 0;
-
-    return 1;
+					   int *nenergy, double *npEnergy) {
+	
+	MGparm *mgparm;
+	PBEparm *pbeparm;
+	int extEnergy;              /* When focusing, do we include energy
+		* contributions from outside the local
+		* partition? */
+	
+	mgparm = nosh->calc[icalc]->mgparm;
+	pbeparm = nosh->calc[icalc]->pbeparm;
+	
+	if (mgparm->type == 2) extEnergy = 0;
+	else extEnergy = 1;
+	
+	if (pbeparm->calcenergy != PCE_NO) {
+		*nenergy = 1;
+		/* Some processors don't count */
+		if (nosh->bogus == 0) {
+			*npEnergy = Vpmg_npEnergy(pmg, extEnergy);
+		} else *npEnergy = 0;
+		
+	} else *nenergy = 0;
+	
+	return 1;
 }
 
 #ifdef HAVE_MC_H
 
 VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
-  Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-    
-    int j, bytesTotal, highWater, theMol, focusFlag;
-    double sparm, iparm, center[3];
-
-    Vnm_tstart(27, "Setup timer");
-
-    /* Print some warning messages */
-    if (pbeparm->useDielMap)  Vnm_tprint(2, "FEM ignoring dielectric map!\n");
-    if (pbeparm->useKappaMap)  Vnm_tprint(2, "FEM ignoring kappa map!\n");
-    if (pbeparm->useChargeMap)  Vnm_tprint(2, "FEM ignoring charge map!\n");
-
-    /* Fix mesh center for "GCENT MOL #" types of declarations. */
-    Vnm_tprint(0, "Re-centering mesh...\n");
-    theMol = pbeparm->molid-1;
-    for (j=0; j<3; j++) {
-        if (theMol < nosh->nmol) {
-            center[j] = (alist[theMol])->center[j];
-        } else{ 
-            Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
-              (theMol+1));
-            return 0;
-        }
-    }
-    
+				   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
+				   Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	int j, bytesTotal, highWater, theMol, focusFlag;
+	double sparm, iparm, center[3];
+	
+	Vnm_tstart(27, "Setup timer");
+	
+	/* Print some warning messages */
+	if (pbeparm->useDielMap)  Vnm_tprint(2, "FEM ignoring dielectric map!\n");
+	if (pbeparm->useKappaMap)  Vnm_tprint(2, "FEM ignoring kappa map!\n");
+	if (pbeparm->useChargeMap)  Vnm_tprint(2, "FEM ignoring charge map!\n");
+	
+	/* Fix mesh center for "GCENT MOL #" types of declarations. */
+	Vnm_tprint(0, "Re-centering mesh...\n");
+	theMol = pbeparm->molid-1;
+	for (j=0; j<3; j++) {
+		if (theMol < nosh->nmol) {
+			center[j] = (alist[theMol])->center[j];
+		} else{ 
+			Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
+					   (theMol+1));
+			return 0;
+		}
+	}
+	
 	/* Set the femparm pkey value based on the type of solver being used */
 	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)){
 		feparm->pkey = 0;
@@ -2344,518 +2377,521 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 		feparm->pkey = 1;
 	}
 	
-    /* Set up PBE object */
-    Vnm_tprint(0, "Setting up PBE object...\n");
-    if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
-    else sparm = pbeparm->srad;
-    if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
-    else iparm = 0.0;
+	/* Set up PBE object */
+	Vnm_tprint(0, "Setting up PBE object...\n");
+	if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
+	else sparm = pbeparm->srad;
+	if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
+	else iparm = 0.0;
 	focusFlag = 0;
-    pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
-      pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, pbeparm->temp,
-      pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, sparm, focusFlag,
-      pbeparm->sdens);
-
-    /* Print a few derived parameters */
-    Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
-
-    /* Set up FEtk objects */
-    Vnm_tprint(0, "Setting up FEtk object...\n");
-    fetk[icalc] = Vfetk_ctor(pbe[icalc], pbeparm->pbetype);
-    Vfetk_setParameters(fetk[icalc], pbeparm, feparm);
-
-    /* Build mesh */
-    Vnm_tprint(0, "Setting up mesh...\n");
-    Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
-    /* Uniformly refine the mesh a bit */
-    for (j=0; j<2; j++) {
-        AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
-        AM_refine(fetk[icalc]->am, 2, 0, feparm->pkey);
-        Vnm_redirect(0);
-        Gem_shapeChk(fetk[icalc]->gm);
-        Vnm_redirect(1);
-    }
-
-    /* Setup time statistics */
-    Vnm_tstop(27, "Setup timer");
-
-    /* Memory statistics */
-    bytesTotal = Vmem_bytesTotal();
-    highWater = Vmem_highWaterTotal();
-
+	pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
+						   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
+						   pbeparm->temp,
+						   pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, 
+						   sparm, focusFlag,
+						   pbeparm->sdens);
+	
+	/* Print a few derived parameters */
+	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
+	
+	/* Set up FEtk objects */
+	Vnm_tprint(0, "Setting up FEtk object...\n");
+	fetk[icalc] = Vfetk_ctor(pbe[icalc], pbeparm->pbetype);
+	Vfetk_setParameters(fetk[icalc], pbeparm, feparm);
+	
+	/* Build mesh */
+	Vnm_tprint(0, "Setting up mesh...\n");
+	Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
+	/* Uniformly refine the mesh a bit */
+	for (j=0; j<2; j++) {
+		AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
+		AM_refine(fetk[icalc]->am, 2, 0, feparm->pkey);
+		Vnm_redirect(0);
+		Gem_shapeChk(fetk[icalc]->gm);
+		Vnm_redirect(1);
+	}
+	
+	/* Setup time statistics */
+	Vnm_tstop(27, "Setup timer");
+	
+	/* Memory statistics */
+	bytesTotal = Vmem_bytesTotal();
+	highWater = Vmem_highWaterTotal();
+	
 #ifndef VAPBSQUIET
-    Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
+	Vnm_tprint( 1, "  Current memory usage:  %4.3f MB total, \
 %4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
-      (double)(highWater)/(1024.*1024.));
+				(double)(highWater)/(1024.*1024.));
 #endif
-
-
-    return 1;
+	
+	
+	return 1;
 }
 
 VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm, 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-
-    Vnm_tprint(1, "  Domain size:  %g A x %g A x %g A\n", 
-      feparm->glen[0], feparm->glen[1],
-      feparm->glen[2]);
-    switch(feparm->ekey) {
-        case FET_SIMP:
-            Vnm_tprint(1, "  Per-simplex error tolerance:  %g\n", feparm->etol);
-            break;
-        case FET_GLOB:
-            Vnm_tprint(1, "  Global error tolerance:  %g\n", feparm->etol);
-            break;
-        case FET_FRAC:
-            Vnm_tprint(1, "  Fraction of simps to refine:  %g\n", feparm->etol);
-            break;
-        default:
-            Vnm_tprint(2, "Invalid ekey (%d)!\n", feparm->ekey);
-            VASSERT(0);
-            break;
-    }
-    switch(feparm->akeyPRE) {
-        case FRT_UNIF:
-            Vnm_tprint(1, "  Uniform pre-solve refinement.\n");
-            break;
-        case FRT_GEOM:
-            Vnm_tprint(1, "  Geometry-based pre-solve refinement.\n");
-            break;
-        default:
-            Vnm_tprint(2, "Invalid akeyPRE (%d)!\n", feparm->akeyPRE);
-            VASSERT(0);
-            break;
-    }
-    switch(feparm->akeySOLVE) {
-        case FRT_RESI:
-            Vnm_tprint(1, "  Residual-based a posteriori refinement.\n");
-            break;
-        case FRT_DUAL:
-            Vnm_tprint(1, "  Dual-based a posteriori refinement.\n");
-            break;
-        case FRT_LOCA:
-            Vnm_tprint(1, "  Local-based a posteriori refinement.\n");
-            break;
-        default:
-            Vnm_tprint(2, "Invalid akeySOLVE (%d)!\n", feparm->akeySOLVE);
-            break;
-    }
-    Vnm_tprint(1, "  Refinement of initial mesh to ~%d vertices\n", 
-      feparm->targetNum);
-    Vnm_tprint(1, "  Geometry-based refinment lower bound:  %g A\n",
-      feparm->targetRes);
-    Vnm_tprint(1, "  Maximum number of solve-estimate-refine cycles:  %d\n",
-      feparm->maxsolve);
-    Vnm_tprint(1, "  Maximum number of vertices in mesh:  %d\n",
-      feparm->maxvert);
-
-    /* FOLLOWING IS SOLVER-RELATED; BAIL IF NOT SOLVING */
-    if (nosh->bogus)  return;
-    if (USEHB) {
-        Vnm_tprint(1, "  HB linear solver:  AM_hPcg\n");
-    } else {
-        Vnm_tprint(1, "  Non-HB linear solver:  ");
-        switch (fetk[icalc]->lkey) {
-            case VLT_SLU:
-                Vnm_print(1, "SLU direct\n");
-                break;
-            case VLT_MG:
-                Vnm_print(1, "multigrid\n");
-                break;
-            case VLT_CG:
-                Vnm_print(1, "conjugate gradient\n");
-                break;
-            case VLT_BCG:
-                Vnm_print(1, "BiCGStab\n");
-                break;
-            default:
-                Vnm_print(1, "???\n");
-                break;
-        }
-    }
-    Vnm_tprint(1, "  Linear solver tol.:  %g\n", fetk[icalc]->ltol);
-    Vnm_tprint(1, "  Linear solver max. iters.:  %d\n", fetk[icalc]->lmax);
-    Vnm_tprint(1, "  Linear solver preconditioner:  ");
-    switch (fetk[icalc]->lprec) {
-        case VPT_IDEN:
-            Vnm_print(1, "identity\n");
-            break;
-        case VPT_DIAG:
-            Vnm_print(1, "diagonal\n");
-            break;
-        case VPT_MG:
-            Vnm_print(1, "multigrid\n");
-            break;
-        default:
-            Vnm_print(1, "???\n");
-            break;
-    }
-    Vnm_tprint(1, "  Nonlinear solver:  ");
-    switch (fetk[icalc]->nkey) {
-        case VNT_NEW:
-            Vnm_print(1, "newton\n");
-            break;
-        case VNT_INC:
-            Vnm_print(1, "incremental\n");
-            break;
-        case VNT_ARC:
-            Vnm_print(1, "pseudo-arclength\n");
-            break;
-        default:
-            Vnm_print(1, "??? ");
-            break;
-    }
-    Vnm_tprint(1, "  Nonlinear solver tol.:  %g\n", fetk[icalc]->ntol);
-    Vnm_tprint(1, "  Nonlinear solver max. iters.:  %d\n", fetk[icalc]->nmax);
-    Vnm_tprint(1, "     Initial guess:  ");
-    switch (fetk[icalc]->gues) {
-        case VGT_ZERO:
-            Vnm_tprint(1, "zero\n");
-            break;
-        case VGT_DIRI:
-            Vnm_tprint(1, "boundary function\n");
-            break;
-        case VGT_PREV:
-            Vnm_tprint(1, "interpolated previous solution\n");
-            break;
-        default:
-            Vnm_tprint(1, "???\n");
-            break;
-    }
-
+						 Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	Vnm_tprint(1, "  Domain size:  %g A x %g A x %g A\n", 
+			   feparm->glen[0], feparm->glen[1],
+			   feparm->glen[2]);
+	switch(feparm->ekey) {
+		case FET_SIMP:
+			Vnm_tprint(1, "  Per-simplex error tolerance:  %g\n", feparm->etol);
+			break;
+		case FET_GLOB:
+			Vnm_tprint(1, "  Global error tolerance:  %g\n", feparm->etol);
+			break;
+		case FET_FRAC:
+			Vnm_tprint(1, "  Fraction of simps to refine:  %g\n", feparm->etol);
+			break;
+		default:
+			Vnm_tprint(2, "Invalid ekey (%d)!\n", feparm->ekey);
+			VASSERT(0);
+			break;
+	}
+	switch(feparm->akeyPRE) {
+		case FRT_UNIF:
+			Vnm_tprint(1, "  Uniform pre-solve refinement.\n");
+			break;
+		case FRT_GEOM:
+			Vnm_tprint(1, "  Geometry-based pre-solve refinement.\n");
+			break;
+		default:
+			Vnm_tprint(2, "Invalid akeyPRE (%d)!\n", feparm->akeyPRE);
+			VASSERT(0);
+			break;
+	}
+	switch(feparm->akeySOLVE) {
+		case FRT_RESI:
+			Vnm_tprint(1, "  Residual-based a posteriori refinement.\n");
+			break;
+		case FRT_DUAL:
+			Vnm_tprint(1, "  Dual-based a posteriori refinement.\n");
+			break;
+		case FRT_LOCA:
+			Vnm_tprint(1, "  Local-based a posteriori refinement.\n");
+			break;
+		default:
+			Vnm_tprint(2, "Invalid akeySOLVE (%d)!\n", feparm->akeySOLVE);
+			break;
+	}
+	Vnm_tprint(1, "  Refinement of initial mesh to ~%d vertices\n", 
+			   feparm->targetNum);
+	Vnm_tprint(1, "  Geometry-based refinment lower bound:  %g A\n",
+			   feparm->targetRes);
+	Vnm_tprint(1, "  Maximum number of solve-estimate-refine cycles:  %d\n",
+			   feparm->maxsolve);
+	Vnm_tprint(1, "  Maximum number of vertices in mesh:  %d\n",
+			   feparm->maxvert);
+	
+	/* FOLLOWING IS SOLVER-RELATED; BAIL IF NOT SOLVING */
+	if (nosh->bogus)  return;
+	if (USEHB) {
+		Vnm_tprint(1, "  HB linear solver:  AM_hPcg\n");
+	} else {
+		Vnm_tprint(1, "  Non-HB linear solver:  ");
+		switch (fetk[icalc]->lkey) {
+			case VLT_SLU:
+				Vnm_print(1, "SLU direct\n");
+				break;
+			case VLT_MG:
+				Vnm_print(1, "multigrid\n");
+				break;
+			case VLT_CG:
+				Vnm_print(1, "conjugate gradient\n");
+				break;
+			case VLT_BCG:
+				Vnm_print(1, "BiCGStab\n");
+				break;
+			default:
+				Vnm_print(1, "???\n");
+				break;
+		}
+	}
+	Vnm_tprint(1, "  Linear solver tol.:  %g\n", fetk[icalc]->ltol);
+	Vnm_tprint(1, "  Linear solver max. iters.:  %d\n", fetk[icalc]->lmax);
+	Vnm_tprint(1, "  Linear solver preconditioner:  ");
+	switch (fetk[icalc]->lprec) {
+		case VPT_IDEN:
+			Vnm_print(1, "identity\n");
+			break;
+		case VPT_DIAG:
+			Vnm_print(1, "diagonal\n");
+			break;
+		case VPT_MG:
+			Vnm_print(1, "multigrid\n");
+			break;
+		default:
+			Vnm_print(1, "???\n");
+			break;
+	}
+	Vnm_tprint(1, "  Nonlinear solver:  ");
+	switch (fetk[icalc]->nkey) {
+		case VNT_NEW:
+			Vnm_print(1, "newton\n");
+			break;
+		case VNT_INC:
+			Vnm_print(1, "incremental\n");
+			break;
+		case VNT_ARC:
+			Vnm_print(1, "pseudo-arclength\n");
+			break;
+		default:
+			Vnm_print(1, "??? ");
+			break;
+	}
+	Vnm_tprint(1, "  Nonlinear solver tol.:  %g\n", fetk[icalc]->ntol);
+	Vnm_tprint(1, "  Nonlinear solver max. iters.:  %d\n", fetk[icalc]->nmax);
+	Vnm_tprint(1, "     Initial guess:  ");
+	switch (fetk[icalc]->gues) {
+		case VGT_ZERO:
+			Vnm_tprint(1, "zero\n");
+			break;
+		case VGT_DIRI:
+			Vnm_tprint(1, "boundary function\n");
+			break;
+		case VGT_PREV:
+			Vnm_tprint(1, "interpolated previous solution\n");
+			break;
+		default:
+			Vnm_tprint(1, "???\n");
+			break;
+	}
+	
 }
 
 VPUBLIC int partFE(int icalc, NOsh *nosh, FEMparm *feparm, 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-
-    Vfetk_setAtomColors(fetk[icalc]);
-    return 1;
+				   Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	Vfetk_setAtomColors(fetk[icalc]);
+	return 1;
 }
 
 VPUBLIC int preRefineFE(int icalc, NOsh *nosh, FEMparm *feparm, 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-
-    int nverts, marked;
-
-    switch(feparm->akeyPRE) {
-        case FRT_UNIF:
-            Vnm_tprint(1, "  Commencing uniform refinement to %d verts.\n",
-              feparm->targetNum);
-            break;
-        case FRT_GEOM:
-            Vnm_tprint(1, "  Commencing geometry-based refinement to %d \
+						Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	int nverts, marked;
+	
+	switch(feparm->akeyPRE) {
+		case FRT_UNIF:
+			Vnm_tprint(1, "  Commencing uniform refinement to %d verts.\n",
+					   feparm->targetNum);
+			break;
+		case FRT_GEOM:
+			Vnm_tprint(1, "  Commencing geometry-based refinement to %d \
 verts or %g A resolution.\n", feparm->targetNum, feparm->targetRes);
-            break;
-        case FRT_RESI:
-            VASSERT(0);
-            break;
-        case FRT_DUAL:
-            Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
+			break;
+		case FRT_RESI:
+			VASSERT(0);
+			break;
+		case FRT_DUAL:
+			Vnm_tprint(2, "What?  You can't do a posteriori error estimation \
 before you solve!\n");
-            VASSERT(0);
-            break;
-        case FRT_LOCA:
-            VASSERT(0);
-            break;
-        default:
-            VASSERT(0);
-            break;
-    }
-
-    Vnm_tprint(1, "  Initial mesh has %d vertices\n", 
-      Gem_numVV(fetk[icalc]->gm));
-    while (1) {
-        nverts = Gem_numVV(fetk[icalc]->gm);
-        if (nverts > feparm->targetNum) {
-            Vnm_tprint(1, "  Hit vertex number limit.\n");
-            break;
-        }
-        marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
-          feparm->ekey, feparm->etol);
-        if (marked == 0) {
-            Vnm_tprint(1, "  Marked 0 simps; hit error/size tolerance.\n");
-            break;
-        }
-        Vnm_tprint(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
-          marked);
-        AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
-    }
-    nverts = Gem_numVV(fetk[icalc]->gm);
-    Vnm_tprint(1, "  Done refining; have %d verts.\n", nverts);
-
-    return 1;
+			VASSERT(0);
+			break;
+		case FRT_LOCA:
+			VASSERT(0);
+			break;
+		default:
+			VASSERT(0);
+			break;
+	}
+	
+	Vnm_tprint(1, "  Initial mesh has %d vertices\n", 
+			   Gem_numVV(fetk[icalc]->gm));
+	while (1) {
+		nverts = Gem_numVV(fetk[icalc]->gm);
+		if (nverts > feparm->targetNum) {
+			Vnm_tprint(1, "  Hit vertex number limit.\n");
+			break;
+		}
+		marked = AM_markRefine(fetk[icalc]->am, feparm->akeyPRE, -1, 
+							   feparm->ekey, feparm->etol);
+		if (marked == 0) {
+			Vnm_tprint(1, "  Marked 0 simps; hit error/size tolerance.\n");
+			break;
+		}
+		Vnm_tprint(1, "    Have %d verts, marked %d.  Refining...\n", nverts,
+				   marked);
+		AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
+	}
+	nverts = Gem_numVV(fetk[icalc]->gm);
+	Vnm_tprint(1, "  Done refining; have %d verts.\n", nverts);
+	
+	return 1;
 }
 
 VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm, 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-
-    int lkeyHB = 3;  /**<  AM_hPcg */
-
-    if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)) {
-        AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
-          fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
-          fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
-          fetk[icalc]->pjac);
-    } else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
+					Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	int lkeyHB = 3;  /**<  AM_hPcg */
+	
+	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)) {
+		AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
+				  fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
+				  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
+				  fetk[icalc]->pjac);
+	} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
 		/* Note: USEHB is a compile time defined macro the program flow is to 
-				 is to always go take the route using AM_hlSolve when the solver
-				 is linear. D. Gohara 6/29/06
+		is to always go take the route using AM_hlSolve when the solver
+		is linear. D. Gohara 6/29/06
 		*/
-        if (USEHB) {
-            AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
-              fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
-        } else {
-            AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
-              fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
-              fetk[icalc]->pjac);
-        }
-    }
-
-    return 1;
+		if (USEHB) {
+			AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
+					   fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
+		} else {
+			AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
+					  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
+					  fetk[icalc]->pjac);
+		}
+	}
+	
+	return 1;
 }
 
 VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC], 
-  int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
-  double *dielEnergy) {
-
-    double tenergy;
-    FEMparm *feparm;
-    PBEparm *pbeparm;
-
-    feparm = nosh->calc[icalc].femparm;
-    pbeparm = nosh->calc[icalc].pbeparm;
-
-    *nenergy = 1;
-
-    /* Some processors don't count */
-    if (nosh->bogus == 0) {
-        if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype==PBE_NRPBE)) {
-            *totEnergy = Vfetk_energy(fetk[icalc], -1, 1);
-        } else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
-            *totEnergy = Vfetk_energy(fetk[icalc], -1, 0);
-        } else VASSERT(0);
-
+					 int *nenergy, double *totEnergy, double *qfEnergy, 
+					 double *qmEnergy,
+					 double *dielEnergy) {
+	
+	double tenergy;
+	FEMparm *feparm;
+	PBEparm *pbeparm;
+	
+	feparm = nosh->calc[icalc]->femparm;
+	pbeparm = nosh->calc[icalc]->pbeparm;
+	
+	*nenergy = 1;
+	
+	/* Some processors don't count */
+	if (nosh->bogus == 0) {
+		if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype==PBE_NRPBE)) {
+			*totEnergy = Vfetk_energy(fetk[icalc], -1, 1);
+		} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
+			*totEnergy = Vfetk_energy(fetk[icalc], -1, 0);
+		} else VASSERT(0);
+		
 #ifndef VAPBSQUIET
-        Vnm_tprint(1, "      Total electrostatic energy = %1.12E kJ/mol\n", 
-          Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
-        fflush(stdout);
+		Vnm_tprint(1, "      Total electrostatic energy = %1.12E kJ/mol\n", 
+				   Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
+		fflush(stdout);
 #endif
-    } else *totEnergy = 0;
-
-    if (pbeparm->calcenergy == PCE_COMPS) {
-
-        Vnm_tprint(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
-        Vnm_tprint(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
-        *qfEnergy = 0;
-        *qmEnergy = 0;
-        *dielEnergy = 0;
-
-    } else *nenergy = 0;
-
-    return 1;
+	} else *totEnergy = 0;
+	
+	if (pbeparm->calcenergy == PCE_COMPS) {
+		
+		Vnm_tprint(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
+		Vnm_tprint(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
+		*qfEnergy = 0;
+		*qmEnergy = 0;
+		*dielEnergy = 0;
+		
+	} else *nenergy = 0;
+	
+	return 1;
 }
 
 VPUBLIC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm, 
-  Vfetk *fetk[NOSH_MAXCALC]) {
-
-    int nverts, marked;
-
-    nverts = Gem_numVV(fetk[icalc]->gm);
-    if (nverts > feparm->maxvert) {
-        Vnm_tprint(1, "    Current number of vertices (%d) exceeds max (%d)!\n",
-          nverts, feparm->maxvert);
-        return 0;
-    }
-    Vnm_tprint(1, "      Mesh currently has %d vertices\n", nverts);
-
-    switch(feparm->akeySOLVE) {
-        case FRT_UNIF:
-            Vnm_tprint(1, "      Commencing uniform refinement.\n");
-            break;
-        case FRT_GEOM:
-            Vnm_tprint(1, "      Commencing geometry-based refinement.\n");
-            break;
-        case FRT_RESI:
-            Vnm_tprint(1, "      Commencing residual-based refinement.\n");
-            break;
-        case FRT_DUAL:
-            Vnm_tprint(1, "      Commencing dual problem-based refinement.\n");
-            break;
-        case FRT_LOCA:
-            Vnm_tprint(1, "      Commencing local-based refinement.\n.");
-            break;
-        default:
-            Vnm_tprint(2, "      Error -- unknown refinement type (%d)!\n", 
-              feparm->akeySOLVE);
-            return 0;
-            break;
-    }
-
-    marked = AM_markRefine(fetk[icalc]->am, feparm->akeySOLVE, -1, 
-      feparm->ekey, feparm->etol);
-    if (marked == 0) {
-        Vnm_tprint(1, "      Marked 0 simps; hit error/size tolerance.\n");
-        return 0;
-    }
-    Vnm_tprint(1, "      Have %d verts, marked %d.  Refining...\n", nverts,
-      marked);
-    AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
-    nverts = Gem_numVV(fetk[icalc]->gm);
-    Vnm_tprint(1, "      Done refining; have %d verts.\n", nverts);
-    Vnm_redirect(0);
-    Gem_shapeChk(fetk[icalc]->gm);
-    Vnm_redirect(1);
-
-    return 1;
+						 Vfetk *fetk[NOSH_MAXCALC]) {
+	
+	int nverts, marked;
+	
+	nverts = Gem_numVV(fetk[icalc]->gm);
+	if (nverts > feparm->maxvert) {
+		Vnm_tprint(1, "    Current number of vertices (%d) exceeds max (%d)!\n",
+				   nverts, feparm->maxvert);
+		return 0;
+	}
+	Vnm_tprint(1, "      Mesh currently has %d vertices\n", nverts);
+	
+	switch(feparm->akeySOLVE) {
+		case FRT_UNIF:
+			Vnm_tprint(1, "      Commencing uniform refinement.\n");
+			break;
+		case FRT_GEOM:
+			Vnm_tprint(1, "      Commencing geometry-based refinement.\n");
+			break;
+		case FRT_RESI:
+			Vnm_tprint(1, "      Commencing residual-based refinement.\n");
+			break;
+		case FRT_DUAL:
+			Vnm_tprint(1, "      Commencing dual problem-based refinement.\n");
+			break;
+		case FRT_LOCA:
+			Vnm_tprint(1, "      Commencing local-based refinement.\n.");
+			break;
+		default:
+			Vnm_tprint(2, "      Error -- unknown refinement type (%d)!\n", 
+					   feparm->akeySOLVE);
+			return 0;
+			break;
+	}
+	
+	marked = AM_markRefine(fetk[icalc]->am, feparm->akeySOLVE, -1, 
+						   feparm->ekey, feparm->etol);
+	if (marked == 0) {
+		Vnm_tprint(1, "      Marked 0 simps; hit error/size tolerance.\n");
+		return 0;
+	}
+	Vnm_tprint(1, "      Have %d verts, marked %d.  Refining...\n", nverts,
+			   marked);
+	AM_refine(fetk[icalc]->am, 0, 0, feparm->pkey);
+	nverts = Gem_numVV(fetk[icalc]->gm);
+	Vnm_tprint(1, "      Done refining; have %d verts.\n", nverts);
+	Vnm_redirect(0);
+	Gem_shapeChk(fetk[icalc]->gm);
+	Vnm_redirect(1);
+	
+	return 1;
 }
 
 
 VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
-
-    char writestem[VMAX_ARGLEN];
-    char outpath[VMAX_ARGLEN];
-    int i, nx, ny, nz, writeit;
-    double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
-    AM *am;
-    Bvec *vec;
-
-    if (nosh->bogus) return 1;
-
-    am = fetk->am;
-    vec = am->w0;
-  
-    for (i=0; i<pbeparm->numwrite; i++) { 
-      
-        writeit = 1;
-
-        switch (pbeparm->writetype[i]) {
-
-            case VDT_CHARGE:
- 
-                Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_POT:
- 
-                Vnm_tprint(1, "    Writing potential to ");
-                Vfetk_fillArray(fetk, vec, VDT_POT);
-                break;
-
-            case VDT_SMOL:
-
-                Vnm_tprint(1, "    Writing molecular accessibility to ");
-                Vfetk_fillArray(fetk, vec, VDT_SMOL);
-                break;
-
-            case VDT_SSPL:
-
-                Vnm_tprint(1, "    Writing spline-based accessibility to ");
-                Vfetk_fillArray(fetk, vec, VDT_SSPL);
-                break;
-
-            case VDT_VDW:
-
-                Vnm_tprint(1, "    Writing van der Waals accessibility to ");
-                Vfetk_fillArray(fetk, vec, VDT_VDW);
-                break;
-
-            case VDT_IVDW:
-
-                Vnm_tprint(1, "    Writing ion accessibility to ");
-                Vfetk_fillArray(fetk, vec, VDT_IVDW);
-                break;
-
-            case VDT_LAP:
-
-                Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_EDENS:
-
-                Vnm_tprint(2, "    Sorry; can't write energy density for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_NDENS:
-
-                Vnm_tprint(1, "    Writing number density to ");
-                Vfetk_fillArray(fetk, vec, VDT_NDENS);
-                break;
-
-            case VDT_QDENS:
-
-                Vnm_tprint(1, "    Writing charge density to ");
-                Vfetk_fillArray(fetk, vec, VDT_QDENS);
-                break;
-
-            case VDT_DIELX:
-
-                Vnm_tprint(2, "    Sorry; can't write x-shifted dielectric map for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_DIELY:
-
-                Vnm_tprint(2, "    Sorry; can't write y-shifted dielectric map for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_DIELZ:
-
-                Vnm_tprint(2, "    Sorry; can't write z-shifted dielectric map for FEM!\n");
-                writeit = 0;
-                break;
-
-            case VDT_KAPPA:
-
-                Vnm_tprint(1, "    Sorry; can't write kappa map for FEM!\n");
-                writeit = 0;
-                break;
-
-            default:
-  
-                Vnm_tprint(2, "Invalid data type for writing!\n");
-                writeit = 0;
-                return 0;
-        }
-      
-        if (!writeit) return 0;
-
-
+	
+	char writestem[VMAX_ARGLEN];
+	char outpath[VMAX_ARGLEN];
+	int i, nx, ny, nz, writeit;
+	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+	AM *am;
+	Bvec *vec;
+	
+	if (nosh->bogus) return 1;
+	
+	am = fetk->am;
+	vec = am->w0;
+	
+	for (i=0; i<pbeparm->numwrite; i++) { 
+		
+		writeit = 1;
+		
+		switch (pbeparm->writetype[i]) {
+			
+			case VDT_CHARGE:
+				
+				Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_POT:
+				
+				Vnm_tprint(1, "    Writing potential to ");
+				Vfetk_fillArray(fetk, vec, VDT_POT);
+				break;
+				
+			case VDT_SMOL:
+				
+				Vnm_tprint(1, "    Writing molecular accessibility to ");
+				Vfetk_fillArray(fetk, vec, VDT_SMOL);
+				break;
+				
+			case VDT_SSPL:
+				
+				Vnm_tprint(1, "    Writing spline-based accessibility to ");
+				Vfetk_fillArray(fetk, vec, VDT_SSPL);
+				break;
+				
+			case VDT_VDW:
+				
+				Vnm_tprint(1, "    Writing van der Waals accessibility to ");
+				Vfetk_fillArray(fetk, vec, VDT_VDW);
+				break;
+				
+			case VDT_IVDW:
+				
+				Vnm_tprint(1, "    Writing ion accessibility to ");
+				Vfetk_fillArray(fetk, vec, VDT_IVDW);
+				break;
+				
+			case VDT_LAP:
+				
+				Vnm_tprint(2, "    Sorry; can't write charge distribution for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_EDENS:
+				
+				Vnm_tprint(2, "    Sorry; can't write energy density for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_NDENS:
+				
+				Vnm_tprint(1, "    Writing number density to ");
+				Vfetk_fillArray(fetk, vec, VDT_NDENS);
+				break;
+				
+			case VDT_QDENS:
+				
+				Vnm_tprint(1, "    Writing charge density to ");
+				Vfetk_fillArray(fetk, vec, VDT_QDENS);
+				break;
+				
+			case VDT_DIELX:
+				
+				Vnm_tprint(2, "    Sorry; can't write x-shifted dielectric map for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_DIELY:
+				
+				Vnm_tprint(2, "    Sorry; can't write y-shifted dielectric map for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_DIELZ:
+				
+				Vnm_tprint(2, "    Sorry; can't write z-shifted dielectric map for FEM!\n");
+				writeit = 0;
+				break;
+				
+			case VDT_KAPPA:
+				
+				Vnm_tprint(1, "    Sorry; can't write kappa map for FEM!\n");
+				writeit = 0;
+				break;
+				
+			default:
+				
+				Vnm_tprint(2, "Invalid data type for writing!\n");
+				writeit = 0;
+				return 0;
+		}
+		
+		if (!writeit) return 0;
+		
+		
 #ifdef HAVE_MPI_H
-        sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
+		sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
 #else
-        sprintf(writestem, "%s", pbeparm->writestem[i]);
+		sprintf(writestem, "%s", pbeparm->writestem[i]);
 #endif
-       
-        switch (pbeparm->writefmt[i]) {
-
-            case VDF_DX:
-                sprintf(outpath, "%s.%s", writestem, "dx");
-                Vnm_tprint(1, "%s\n", outpath);
-                Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_DX);
-                break;
-
-            case VDF_AVS:
-                sprintf(outpath, "%s.%s", writestem, "ucd");
-                Vnm_tprint(1, "%s\n", outpath);
-                Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_AVS);
-                break;
-
-            case VDF_UHBD:
-                Vnm_tprint(2, "UHBD format not supported for FEM!\n");
-                break;
-
-            default:
-                Vnm_tprint(2, "Bogus data format (%d)!\n", 
-                  pbeparm->writefmt[i]);
-                break;
-        }
-                
-    }
-
-    return 1;
+		
+		switch (pbeparm->writefmt[i]) {
+			
+			case VDF_DX:
+				sprintf(outpath, "%s.%s", writestem, "dx");
+				Vnm_tprint(1, "%s\n", outpath);
+				Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_DX);
+				break;
+				
+			case VDF_AVS:
+				sprintf(outpath, "%s.%s", writestem, "ucd");
+				Vnm_tprint(1, "%s\n", outpath);
+				Vfetk_write(fetk, "FILE", "ASC", VNULL, outpath, vec, VDF_AVS);
+				break;
+				
+			case VDF_UHBD:
+				Vnm_tprint(2, "UHBD format not supported for FEM!\n");
+				break;
+				
+			default:
+				Vnm_tprint(2, "Bogus data format (%d)!\n", 
+						   pbeparm->writefmt[i]);
+				break;
+		}
+		
+	}
+	
+	return 1;
 }
 #endif /* ifdef HAVE_MCX_H */
