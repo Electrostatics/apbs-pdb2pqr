@@ -1471,8 +1471,8 @@ after fix = %g %g %g.\n", __FILE__, __LINE__,
 			partitioning */
 		if (ifocus != (nfocus-1)) calcf->pbeparm->numwrite = 0;
 		
-		/* Reset boundary flags for parallel focusing */ 
-        if (calcf->mgparm->type != 2)  {
+		/* Reset boundary flags for everything except parallel focusing */ 
+        if (calcf->mgparm->type != MCT_PARALLEL)  {
 			Vnm_print(0, "NOsh_setupMGAUTO:  Resetting boundary flags\n");
 			for (j=0; j<6; j++) calcf->mgparm->partDisjOwnSide[j] = 0;
 			for (j=0; j<3; j++) {
@@ -1757,9 +1757,9 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
 	mgparm->fglen[0] = xlenOlap;
 	mgparm->fglen[1] = ylenOlap;
 	mgparm->fglen[2] = zlenOlap;
-	mgparm->fcenter[0] += xcentOlap;
-	mgparm->fcenter[1] += ycentOlap;
-	mgparm->fcenter[2] += zcentOlap;
+	mgparm->fcenter[0] = xcentOlap;
+	mgparm->fcenter[1] = ycentOlap;
+	mgparm->fcenter[2] = zcentOlap;
 	
 	/* Setup the automatic focusing calculations associated with this processor */
 	return NOsh_setupCalcMGAUTO(thee, elec);
