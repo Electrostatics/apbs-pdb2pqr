@@ -93,7 +93,10 @@ int main(int argc, char **argv) {
     int inorm;
     char *path;
     double pt[3], val, grad[3];
-
+	
+	double x[81];
+	double y[5][81];
+	
     /* *************** CHECK INVOCATION ******************* */
     Vio_start();
     Vnm_redirect(1);
@@ -108,37 +111,33 @@ int main(int argc, char **argv) {
     path = argv[4];
 
     /* *************** READ DATA ******************* */
-    Vnm_print(1, "Reading data from %s...\n", path);
-    grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
-    if (!Vgrid_readDX(grid, "FILE", "ASC", VNULL, path)) {
-        Vnm_print(2, "main:  Problem reading OpenDX-format grid from %s\n",
-          path);
-        return 2;
-    }
+	int i,k,s;
+	double j,m;
+	char *files[] = {"f1f94_para0.dx","f1f94_para1.dx","f1f94_para2.dx","f1f94_para3.dx"};
+	for(s=0;s<4;s++){
+		grid = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		if (!Vgrid_readDX(grid, "FILE", "ASC", VNULL, files[s])) {
+			Vnm_print(2, "main:  Problem reading OpenDX-format grid from %s\n",
+					  path);
+			return 2;
+		}
+		double offset[] = {-30.45781,-15.01276,0.4322926,15.87734};
+		for(k=0,m=0;k<5;k++,m+=0.17385){
+			for(i=0,j=0.0;i<81;i++,j+=0.19029){
+				pt[0] = offset[s] + j;
+				pt[1] = -17.33536 + m;
+				pt[2] = -22.732;
+				Vgrid_value(grid, pt, &val);
+				x[i] = pt[0];
+				y[k][i] = val;
+			}
+		}
+		for(i=0;i<81;i++){
+			printf("%f %f %f %f %f %f\n",x[i],y[0][i],y[1][i],y[2][i],y[3][i],y[4][i]);
+		}
+	}
+	
 
-    /* *************** READ DATA ******************* */
-    Vnm_print(1, "\nData at (%g, %g, %g):\n", pt[0], pt[1], pt[2]);
-    if (Vgrid_value(grid, pt, &val)) {
-        Vnm_print(1, "Value = %1.12E kT/e\n", val);
-    } else  Vnm_print(1, "Unable to get value.\n");
-    if (Vgrid_gradient(grid, pt, grad)) {
-        Vnm_print(1, "Gradient = (%1.12E, %1.12E, %1.12E) kT/e/A\n", 
-          grad[0], grad[1], grad[2]);
-    } else  Vnm_print(1, "Unable to get gradient.\n");
-    if (Vgrid_curvature(grid, pt, 0, &val)) {
-        Vnm_print(1, "Reduced maximal curvature = %1.12E kT/e/A/A\n", val);
-    } else Vnm_print(1, "Unable to get curvature.\n");
-    if (Vgrid_curvature(grid, pt, 1, &val)) {
-        Vnm_print(1, "Mean curvature (Laplace) = %1.12E kT/e/A/A\n", val);
-    } else Vnm_print(1, "Unable to get curvature.\n");
-    if (Vgrid_curvature(grid, pt, 2, &val)) {
-        Vnm_print(1, "Gauss curvature = %1.12E kT/e/A/A\n", val);
-    } else Vnm_print(1, "Unable to get curvature.\n");
-    if (Vgrid_curvature(grid, pt, 3, &val)) {
-        Vnm_print(1, "True maximal curvature = %1.12E kT/e/A/A\n", val);
-    } else Vnm_print(1, "Unable to get curvature.\n");
-
-    Vnm_print(1, "\n");
     return 0;
 
 }

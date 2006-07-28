@@ -218,7 +218,7 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
 	if (VABS(pt[0] - xmax) < Vcompare) ihi = nx-1;
 	if (VABS(pt[1] - ymax) < Vcompare) jhi = ny-1;
 	if (VABS(pt[2] - zmax) < Vcompare) khi = nz-1;
-
+	
     /* See if we're on the mesh */
     if ((ihi<nx) && (jhi<ny) && (khi<nz) &&
         (ilo>=0) && (jlo>=0) && (klo>=0)) {
@@ -236,6 +236,7 @@ VPUBLIC int Vgrid_value(Vgrid *thee, double pt[3], double *value) {
           + (1.0-dx)*(1.0-dy)*(1.0-dz)*(thee->data[IJK(ilo,jlo,klo)]);
 
         *value = u;
+
         if (isnan(u)) {
             Vnm_print(2, "Vgrid_value:  Got NaN!\n");
             Vnm_print(2, "Vgrid_value:  (x, y, z) = (%4.3f, %4.3f, %4.3f)\n", 

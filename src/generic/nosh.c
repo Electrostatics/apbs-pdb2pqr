@@ -1372,10 +1372,10 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 			for (j=0; j<3; j++) {
 				/* Check if we've fallen off of the lower end of the mesh */
 				dofix = 0;
-				minf[j] = calcf->mgparm->center[j] \
-					- FUDGE_FRACTION*(calcf->mgparm->grid[j]);
-				minc[j] = calcc->mgparm->center[j] \
-					- FUDGE_FRACTION*(calcc->mgparm->grid[j]);
+				minf[j] = calcf->mgparm->center[j] 
+					- 0.5*(calcf->mgparm->glen[j]);
+				minc[j] = calcc->mgparm->center[j] 
+					- 0.5*(calcc->mgparm->glen[j]);
 				d[j] = minf[j] - minc[j];
 				if (d[j] <= 0.0) {
 					if (ifocus == (nfocus-1)) {
@@ -1393,9 +1393,9 @@ fixing mesh min violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus,
 				}
 				/* Check if we've fallen off of the upper end of the mesh */
 				maxf[j] = calcf->mgparm->center[j] \
-					+ FUDGE_FRACTION*(calcf->mgparm->grid[j]);
+					+ 0.5*(calcf->mgparm->glen[j]);
 				maxc[j] = calcc->mgparm->center[j] \
-					+ FUDGE_FRACTION*(calcc->mgparm->grid[j]);
+					+ 0.5*(calcc->mgparm->glen[j]);
 				d[j] = maxf[j] - maxc[j];
 				if (d[j] >= 0.0) {
 					if (ifocus == (nfocus-1)) {
