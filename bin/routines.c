@@ -735,8 +735,10 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	
 	Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
 	
-	/* If we're a parallel calculation, update the grid center based on
-		* the appropriate shifts */
+	/* Update the grid center */
+	for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
+#if 0
+	/* This is all obsolete */
 	Vnm_print(0, "initMG (%s, %d):  At some point we should move the parallel \
 focuing grid center fix into NOsh...\n", __FILE__, __LINE__);
 	if (mgparm->type == MCT_PARALLEL) {
@@ -745,6 +747,7 @@ focuing grid center fix into NOsh...\n", __FILE__, __LINE__);
 	} else {
 		for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
 	}
+#endif
 	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");

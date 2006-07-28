@@ -41,6 +41,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
 - BUG FIXES
 	* Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
 		making the serial focusing procedure more robust
+	* Removed MGparm partOlap* data members; the parallel focusing centering
+		is now done entirely within NOsh
 	* Updated the user manual and tutorial
 	* Updated psize.py to use centers and radii when calculating grid sizes
 		(thanks to John Mongan)

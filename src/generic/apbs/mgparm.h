@@ -180,11 +180,6 @@ struct sMGparm {
                                 * partitions */
     int partDisjOwnSide[6];  /**< Tells whether the boundary points are ours 
                               * (1) or not (0) */
-    double partOlapCenterShift[3];  /**< When added to the actual (local)
-                                     * mesh center, this gives the center
-                                     * of the overlapping partitions */
-    double partOlapLength[3];  /**< This gives the lengths of the
-                                * overlapping partitions */
 
     int pdime[3];  /**< Grid of processors to be used in calculation */
     int setpdime;  /**< Flag, @see pdime */
@@ -299,30 +294,6 @@ VEXTERNC double MGparm_getCenterY(MGparm *thee);
  *  @returns  z-coordinate
  */
 VEXTERNC double MGparm_getCenterZ(MGparm *thee);
-
-/** @brief   Get x-coordinate shift of partition center in parallel calculation
- *  @ingroup MGparm
- *  @author  Nathan Baker
- *  @param   thee  MGparm object
- *  @returns  x-coordinate shift of partition center in parallel calculation
- */
-VEXTERNC double MGparm_getPartOlapCenterShiftX(MGparm *thee);
-
-/** @brief   Get y-coordinate shift of partition center in parallel calculation
- *  @ingroup MGparm
- *  @author  Nathan Baker
- *  @param   thee  MGparm object
- *  @returns  y-coordinate
- */
-VEXTERNC double MGparm_getPartOlapCenterShiftY(MGparm *thee);
-
-/** @brief   Get z-coordinate shift of partition center in parallel calculation
- *  @ingroup MGparm
- *  @author  Nathan Baker
- *  @param   thee  MGparm object
- *  @returns  z-coordinate shift of partition center in parallel calculation
- */
-VEXTERNC double MGparm_getPartOlapCenterShiftZ(MGparm *thee);
 
 /** @brief   Construct MGparm object
  *  @ingroup MGparm

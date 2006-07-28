@@ -1325,7 +1325,6 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 		/* Set up the grid lengths and spacings */
 		if (ifocus == 0) {
 			for (j=0; j<3; j++) {
-				calcf->mgparm->partOlapCenterShift[j] = 0.0;
 				calcf->mgparm->grid[j] = cgrid[j];
 				calcf->mgparm->glen[j] = elec->mgparm->cglen[j];
 			}
@@ -1717,12 +1716,9 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
 	mgparm->fglen[0] = xlenOlap;
 	mgparm->fglen[1] = ylenOlap;
 	mgparm->fglen[2] = zlenOlap;
-	mgparm->partOlapLength[0] = xlenOlap;
-	mgparm->partOlapLength[1] = ylenOlap;
-	mgparm->partOlapLength[2] = zlenOlap;
-	mgparm->partOlapCenterShift[0] = xcentOlap;
-	mgparm->partOlapCenterShift[1] = ycentOlap;
-	mgparm->partOlapCenterShift[2] = zcentOlap;
+	mgparm->fcenter[0] = xcentOlap;
+	mgparm->fcenter[1] = ycentOlap;
+	mgparm->fcenter[2] = zcentOlap;
 	
 	/* Setup the automatic focusing calculations associated with this processor */
 	return NOsh_setupCalcMGAUTO(thee, elec);
