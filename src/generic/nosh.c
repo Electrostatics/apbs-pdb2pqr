@@ -1481,6 +1481,13 @@ VPUBLIC int NOsh_setupCalcMGPARA(
 	mgparm = elec->mgparm;
 	VASSERT(mgparm != VNULL);
 	
+	/* Grab some useful variables */
+    ofrac = mgparm->ofrac;  
+    npx = mgparm->pdime[0]; 
+    npy = mgparm->pdime[1]; 
+    npz = mgparm->pdime[2]; 
+    nproc = npx*npy*npz;
+	
 	/* If this is not an asynchronous calculation, then we need to make sure we
 		have all the necessary MPI information */
     if (mgparm->setasync == 0) {
@@ -1538,12 +1545,7 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
         }
     }
 	
-    /* Grab some useful variables */
-    ofrac = mgparm->ofrac;  
-    npx = mgparm->pdime[0]; 
-    npy = mgparm->pdime[1]; 
-    npz = mgparm->pdime[2]; 
-    nproc = npx*npy*npz;
+
 	
     /* Calculate the processor's coordinates in the processor grid */
 	kp = (int)floor(rank/(npx*npy));
