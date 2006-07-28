@@ -943,16 +943,23 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 	
 	if (nosh->bogus) return 1;
 	
-	if (mgparm->type == 2) {
+	if (mgparm->type == MCT_PARALLEL) {
 		for (j=0; j<3; j++) {
 			partMin[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
 			- 0.5*mgparm->partDisjLength[j];
 			partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
 				+ 0.5*mgparm->partDisjLength[j];
 		}
-		Vnm_tprint(0, "Disj part lower corner = (%g, %g, %g)\n",
-				   partMin[0], partMin[1], partMin[2]);
-		Vnm_tprint(0, "Disj part upper corner = (%g, %g, %g)\n",
+		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part center = (%g, %g, %g)\n",
+				   __FILE__, __LINE__,
+				   mgparm->center[0] + mgparm->partDisjCenterShift[0],
+				   mgparm->center[1] + mgparm->partDisjCenterShift[1],
+				   mgparm->center[2] + mgparm->partDisjCenterShift[2]
+				   );
+		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part lower corner = (%g, %g, %g)\n",
+				   __FILE__, __LINE__, partMin[0], partMin[1], partMin[2]);
+		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part upper corner = (%g, %g, %g)\n",
+				   __FILE__, __LINE__,
 				   partMax[0], partMax[1], partMax[2]);
 	} else {
 		for (j=0; j<3; j++) {
@@ -960,6 +967,10 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 			partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
 		}
 	}
+	Vnm_print(1, "DEBUG (%s, %d):  setPartMG calling setPart with upper corner \
+%g %g %g and lower corner %g %g %g\n", __FILE__,  __LINE__,
+			  partMin[0], partMin[1], partMin[2],
+			  partMax[0], partMax[1], partMax[2]);
 	Vpmg_setPart(pmg, partMin, partMax, mgparm->partDisjOwnSide);
 	
 	

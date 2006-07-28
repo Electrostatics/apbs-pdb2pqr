@@ -357,9 +357,9 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
       lowerCorner[0], lowerCorner[1], lowerCorner[2]);
     Vnm_print(0, "Vpmg_setPart:  upper corner = (%g, %g, %g)\n",
       upperCorner[0], upperCorner[1], upperCorner[2]);
-    Vnm_print(0, "Vpmg_setPart:  actual minimums = (%g, %g, %g)\n",
+    Vnm_print(0, "Vpmg_setPart:  actual minima = (%g, %g, %g)\n",
       xmin, ymin, zmin);
-    Vnm_print(0, "Vpmg_setPart:  actual maximums = (%g, %g, %g)\n",
+    Vnm_print(0, "Vpmg_setPart:  actual maxima = (%g, %g, %g)\n",
       xmin+hx*(nx-1), ymin+hy*(ny-1), zmin+hzed*(nz-1));
     Vnm_print(0, "Vpmg_setPart:  bflag[FRONT] = %d\n", 
       bflags[VAPBS_FRONT]);
@@ -381,6 +381,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
 
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
+ 
         if ((atom->position[0] < upperCorner[0]) &&
             (atom->position[0] > lowerCorner[0])) xok = 1;
         else {
@@ -422,7 +423,22 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
         }
 
         atom->partID = xok*yok*zok;     
-    }
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[0] - upperCorner[0] = %g\n",
+				  __FILE__, __LINE__, atom->position[0] - upperCorner[0]); 
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[0] - lowerCorner[0] = %g\n",
+				  __FILE__, __LINE__, atom->position[0] - lowerCorner[0]); 
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[1] - upperCorner[1] = %g\n",
+				  __FILE__, __LINE__, atom->position[1] - upperCorner[1]); 
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[1] - lowerCorner[1] = %g\n",
+				  __FILE__, __LINE__, atom->position[1] - lowerCorner[1]); 
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[2] - upperCorner[2] = %g\n",
+				  __FILE__, __LINE__, atom->position[2] - upperCorner[2]); 
+		Vnm_print(1, "DEBUG (%s, %d):  atom->position[2] - lowerCorner[0] = %g\n",
+				  __FILE__, __LINE__, atom->position[2] - lowerCorner[2]); 
+		Vnm_print(1, "DEBUG (%s, %d):  xok = %g, yok = %g, zok = %g\n", 
+				  __FILE__, __LINE__, xok, yok, zok);
+
+	}
 
     /* Load up pvec -
        For all points within h{axis}/2 of a border - use a gradient
@@ -1660,22 +1676,21 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                pos[0] = x; pos[1] = y; pos[2] = z;
-                Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-					should need this.  If someone can convince me otherwise, 
-					I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,0)] = uval;
 
             /* High X face */
             x = xmaxNEW;
-            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
-                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+            if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
+                (x <= (xmaxOLD+VSMALL)) && (y <= (ymaxOLD+VSMALL)) && (z <= (zmaxOLD+VSMALL))) {
                 ifloat = (x - xminOLD)/hxOLD;
                 jfloat = (y - yminOLD)/hyOLD;
                 kfloat = (z - zminOLD)/hzOLD;
@@ -1705,14 +1720,13 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-				should need this.  If someone can convince me otherwise, 
-				I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                pos[0] = x; pos[1] = y; pos[2] = z;
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,1)] = uval;
@@ -1732,8 +1746,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xminNEW + i*hxNEW;
             y = yminNEW;
             z = zminNEW + k*hzNEW;
-            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
-                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+            if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
+                (x <= (xmaxOLD+VSMALL)) && (y <= (ymaxOLD+VSMALL)) && (z <= (zmaxOLD+VSMALL))) {
                 ifloat = (x - xminOLD)/hxOLD;
                 jfloat = (y - yminOLD)/hyOLD;
                 kfloat = (z - zminOLD)/hzOLD;
@@ -1763,22 +1777,21 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-				should need this.  If someone can convince me otherwise, 
-				I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                pos[0] = x; pos[1] = y; pos[2] = z;
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,0)] = uval;
 
             /* High Y face */
             y = ymaxNEW;
-            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
-                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+            if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
+                (x <= (xmaxOLD+VSMALL)) && (y <= (ymaxOLD+VSMALL)) && (z <= (zmaxOLD+VSMALL))) {
                 ifloat = (x - xminOLD)/hxOLD;
                 jfloat = (y - yminOLD)/hyOLD;
                 kfloat = (z - zminOLD)/hzOLD;
@@ -1808,14 +1821,13 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                pos[0] = x; pos[1] = y; pos[2] = z;
-				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-					should need this.  If someone can convince me otherwise, 
-					I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,1)] = uval;
@@ -1835,8 +1847,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             x = xminNEW + i*hxNEW;
             y = yminNEW + j*hyNEW;
             z = zminNEW;
-            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
-                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+            if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
+                (x <= (xmaxOLD+VSMALL)) && (y <= (ymaxOLD+VSMALL)) && (z <= (zmaxOLD+VSMALL))) {
                 ifloat = (x - xminOLD)/hxOLD;
                 jfloat = (y - yminOLD)/hyOLD;
                 kfloat = (z - zminOLD)/hzOLD;
@@ -1866,22 +1878,21 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                pos[0] = x; pos[1] = y; pos[2] = z;
-				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-					should need this.  If someone can convince me otherwise, 
-					I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,0)] = uval;
 
             /* High Z face */
             z = zmaxNEW;
-            if ((x >= xminOLD) && (y >= yminOLD) && (z >= zminOLD) &&
-                (x <= xmaxOLD) && (y <= ymaxOLD) && (z <= zmaxOLD)) {
+            if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
+                (x <= (xmaxOLD+VSMALL)) && (y <= (ymaxOLD+VSMALL)) && (z <= (zmaxOLD+VSMALL))) {
                 ifloat = (x - xminOLD)/hxOLD;
                 jfloat = (y - yminOLD)/hyOLD;
                 kfloat = (z - zminOLD)/hzOLD;
@@ -1911,14 +1922,13 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                   + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
-                pos[0] = x; pos[1] = y; pos[2] = z;
-				Vnm_print(2, "focusFillBound -- WARNING!!  CALLING BCFL1 for %g, \
-%g, %g!\n", x, y, z);
-				/* I'm adding a VASSERT(0) here because I really don't think we
-					should need this.  If someone can convince me otherwise, 
-					I'll remove it. */
+				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
+%g!\n", __FILE__, __LINE__, x, y, z);
+				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
+%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+                Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
+%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
-                uval = bcfl1sp(size, apos, charge, xkappa, pre1, pos);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,1)] = uval;
@@ -1977,7 +1987,8 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag,
     nzOLD = pmgOLD->pmgp->nz;
 
     /* Create a partition based on the new problem dimensions */
-   
+    Vnm_print(1, "DEBUG (%s, %d):  extEnergy calling Vpmg_setPart for old PMG.\n",
+			  __FILE__, __LINE__);
     Vpmg_setPart(pmgOLD, lowerCorner, upperCorner, bflags);
 
     
