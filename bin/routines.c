@@ -1322,8 +1322,8 @@ VPUBLIC int writedataFlat(
 		conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
 		
 		fprintf(file,"elec");
-		if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
-			fprintf(file," name %s\n", nosh->elecname[ielec+1]);
+		if (Vstring_strcasecmp(nosh->elecname[ielec], "") != 0) {
+			fprintf(file," name %s\n", nosh->elecname[ielec]);
 		} else fprintf(file, "\n");
 		
 		switch (mgparm->type) {
@@ -1421,7 +1421,9 @@ VPUBLIC int writedataFlat(
 			if (pbeparm->calcenergy == PCE_TOTAL) {
 				fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
 						(totEnergy[icalc]*conversion));
-			} else if (pbeparm->calcenergy == PCE_COMPS) {
+			} if (pbeparm->calcenergy == PCE_COMPS) {
+			        fprintf(file,"        totEnergy %1.12E kJ/mol\n", 
+						(totEnergy[icalc]*conversion));
 				fprintf(file,"        qfEnergy %1.12E kJ/mol\n", 
 						(0.5*qfEnergy[icalc]*conversion)); 
 				fprintf(file,"        qmEnergy %1.12E kJ/mol\n", 
@@ -1447,22 +1449,22 @@ for (i=0; i<nosh->nprint; i++) {
 	if (nosh->printwhat[i] == NPT_ENERGY) {
 		
 		fprintf(file,"print energy");
-		fprintf(file," %d", nosh->printcalc[i][0]); 
+		fprintf(file," %d", nosh->printcalc[i][0]+1); 
 		
 		for (j=1; j<nosh->printnarg[i]; j++) {
 			if (nosh->printop[i][j-1] == 0) fprintf(file," +");
 			else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
-			fprintf(file, " %d", nosh->printcalc[i][j]);
+			fprintf(file, " %d", nosh->printcalc[i][j]+1);
 		}
 		
 		fprintf(file, "\n");
-		icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+		icalc = nosh->elec2calc[nosh->printcalc[i][0]];
 		
 		ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
 			nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc];
 		
 		for (j=1; j<nosh->printnarg[i]; j++) {
-			icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+			icalc = nosh->elec2calc[nosh->printcalc[i][j]];
 			/* Add or subtract? */
 			if (nosh->printop[i][j-1] == 0) scalar = 1.0;
 			else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
@@ -1538,8 +1540,8 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 		conversion =  Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na;
 		
 		fprintf(file,"    <elec>\n");
-		if (Vstring_strcasecmp(nosh->elecname[ielec+1], "") != 0) {
-			fprintf(file,"      <name>%s</name>\n", nosh->elecname[ielec+1]);
+		if (Vstring_strcasecmp(nosh->elecname[ielec], "") != 0) {
+			fprintf(file,"      <name>%s</name>\n", nosh->elecname[ielec]);
 		} 
 		
 		switch (mgparm->type) {
@@ -1647,6 +1649,8 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 				fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
 						(totEnergy[icalc]*conversion));
 			} else if (pbeparm->calcenergy == PCE_COMPS) {
+	                        fprintf(file,"          <totEnergy>%1.12E kJ/mol</totEnergy>\n", 
+						(totEnergy[icalc]*conversion));
 				fprintf(file,"          <qfEnergy>%1.12E kJ/mol</qfEnergy>\n", 
 						(0.5*qfEnergy[icalc]*conversion)); 
 				fprintf(file,"          <qmEnergy>%1.12E kJ/mol</qmEnergy>\n", 
@@ -1664,7 +1668,7 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 			fprintf(file,"      </calc>\n");
 		}
 
-fprintf(file,"    </elec>\n");
+		fprintf(file,"    </elec>\n");
 	}
 
 /* Handle print energy statements */
@@ -1674,22 +1678,22 @@ for (i=0; i<nosh->nprint; i++) {
 	if (nosh->printwhat[i] == NPT_ENERGY) {
 		
 		fprintf(file,"    <printEnergy>\n");
-		fprintf(file,"      <equation>%d", nosh->printcalc[i][0]); 
+		fprintf(file,"        <equation>%d", nosh->printcalc[i][0]+1); 
 		
 		for (j=1; j<nosh->printnarg[i]; j++) {
 			if (nosh->printop[i][j-1] == 0) fprintf(file," +");
 			else if (nosh->printop[i][j-1] == 1) fprintf(file, " -");
-			fprintf(file, " %d", nosh->printcalc[i][j]);
+			fprintf(file, " %d", nosh->printcalc[i][j] +1);
 		}
 		
 		fprintf(file, "</equation>\n");
-		icalc = nosh->elec2calc[nosh->printcalc[i][0]-1];
+		icalc = nosh->elec2calc[nosh->printcalc[i][0]];
 		
 		ltenergy = Vunit_kb * (1e-3) * Vunit_Na * \
 			nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc];
 		
 		for (j=1; j<nosh->printnarg[i]; j++) {
-			icalc = nosh->elec2calc[nosh->printcalc[i][j]-1];
+			icalc = nosh->elec2calc[nosh->printcalc[i][j]];
 			/* Add or subtract? */
 			if (nosh->printop[i][j-1] == 0) scalar = 1.0;
 			else if (nosh->printop[i][j-1] == 1) scalar = -1.0;
@@ -1698,9 +1702,9 @@ for (i=0; i<nosh->nprint; i++) {
 						 nosh->calc[icalc]->pbeparm->temp * totEnergy[icalc]);
 		}
 		Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-		fprintf(file,"      <localEnergy>%1.12E kJ/mol</localEnergy>\n", \
+		fprintf(file,"        <localEnergy>%1.12E kJ/mol</localEnergy>\n", \
 				ltenergy);
-		fprintf(file,"      <globalEnergy>%1.12E kJ/mol</globalEnergy>\n", \
+		fprintf(file,"        <globalEnergy>%1.12E kJ/mol</globalEnergy>\n", \
 				gtenergy); 
 		
 		fprintf(file,"    </printEnergy>\n");
