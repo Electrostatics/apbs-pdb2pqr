@@ -376,8 +376,6 @@ It is invoked as:\n\n\
 				}
 				/* Useful local variables */
 				mgparm = nosh->calc[i]->mgparm;
-				Vnm_print(0, "DEBUG (main.c, %d):  mgparm = %p\n", __LINE__,
-						  mgparm);
 				pbeparm = nosh->calc[i]->pbeparm;
 				
 				/* Set up problem */

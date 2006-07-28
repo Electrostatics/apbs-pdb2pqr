@@ -917,8 +917,10 @@ VPUBLIC int NOsh_setupCalc(
 						   NOsh *thee, 
 						   Valist *alist[NOSH_MAXMOL]
 						   ) {
-	int ielec, imol;
+	int ielec, imol, i;
 	NOsh_calc *elec = VNULL;
+	MGparm *mgparm = VNULL;
+	Valist *mymol = VNULL;
 	
 	VASSERT(thee != VNULL);
 	for (imol=0; imol<thee->nmol; imol++) {
@@ -930,10 +932,23 @@ VPUBLIC int NOsh_setupCalc(
 		/* Unload the calculation object containing the ELEC information */
 		elec = thee->elec[ielec];
 		
-		
-		/* Check the calculation type */
+		/* Setup the calculation */
 		switch (elec->calctype) {
 			case NCT_MG:
+				/* Center on the molecules, if requested */
+				mgparm = elec->mgparm;
+				VASSERT(mgparm != VNULL);
+				if (elec->mgparm->cmeth == MCM_MOLECULE) {
+					VASSERT(mgparm->centmol >= 0);
+					VASSERT(mgparm->centmol < thee->nmol);
+					mymol = thee->alist[mgparm->centmol];
+					VASSERT(mymol != VNULL);
+					for (i=0; i<3; i++) {
+						mgparm->center[i] = mymol->center[i];
+						mgparm->fcenter[i] = mymol->center[i];
+						mgparm->ccenter[i] = mymol->center[i];
+					}
+				}
 				NOsh_setupCalcMG(thee, elec);
 				break;
 			case NCT_FEM:
@@ -1119,7 +1134,6 @@ VPRIVATE int NOsh_setupCalcMGMANUAL(
 	MGparm *mgparm = VNULL;
 	PBEparm *pbeparm = VNULL;
 	NOsh_calc *calc = VNULL;
-	Valist *alist = VNULL;
 	int i;
 	
 	if (thee == VNULL) {
@@ -1172,16 +1186,7 @@ set up?\n");
 	calc = thee->calc[thee->ncalc];
 	(thee->ncalc)++;
 	
-	/* Set up grid center on molecule if needed */
-	if (mgparm->cmeth == MCM_MOLECULE) {
-		VASSERT(mgparm->centmol >= 0);
-		VASSERT(mgparm->centmol < thee->nmol);
-		alist = thee->alist[mgparm->centmol];
-		VASSERT(alist != VNULL);
-		for (i=0; i<3; i++) {
-			mgparm->center[i] = alist->center[i];
-		}
-	}
+
 	
 	/* Copy over contents of ELEC */
 	NOsh_calc_copy(calc, elec);
@@ -1197,7 +1202,6 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 	
 	NOsh_calc *calcf = VNULL;
 	NOsh_calc *calcc = VNULL;
-	Valist *alist = VNULL;
 	double fgrid[3], cgrid[3];
 	double d[3], minf[3], maxf[3], minc[3], maxc[3];
 	double redfrac, redrat[3], td, fshift, dshift;
@@ -1231,42 +1235,6 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 		return 0;
 	}
 	
-	/* Set elec coarse/fine centers to molecule, if requested */
-	if (elec->mgparm->cmeth == MCM_MOLECULE) {
-		molid = elec->mgparm->centmol;
-		VASSERT(molid >= 0);
-		VASSERT(molid < thee->nmol);
-		alist = thee->alist[molid];
-		VASSERT(alist != VNULL);
-		for (j=0; j<3; j++) {
-			elec->mgparm->center[j] = alist->center[j];
-		}
-	}
-	if (elec->mgparm->fcmeth == MCM_MOLECULE) {
-		molid = elec->mgparm->fcentmol;
-		VASSERT(molid >= 0);
-		VASSERT(molid < thee->nmol);
-		alist = thee->alist[molid];
-		VASSERT(alist != VNULL);
-		for (j=0; j<3; j++) {
-			if (elec->mgparm->type = MCT_PARALLEL) {
-				elec->mgparm->fcenter[j] += alist->center[j];
-			} else {
-				elec->mgparm->fcenter[j] = alist->center[j];
-			}
-		}
-	}
-	if (elec->mgparm->ccmeth == MCM_MOLECULE) {
-		molid = elec->mgparm->ccentmol;
-		VASSERT(molid >= 0);
-		VASSERT(molid < thee->nmol);
-		alist = thee->alist[molid];
-		VASSERT(alist != VNULL);
-		for (j=0; j<3; j++) {
-			elec->mgparm->ccenter[j] = alist->center[j];
-		}
-	}
-	
 	Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  coarse grid center = %g %g %g\n",
 			  __FILE__, __LINE__, 
 			  elec->mgparm->ccenter[0],
@@ -1284,12 +1252,12 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 		fgrid[j] = (elec->mgparm->fglen[j])/((double)(elec->mgparm->dime[j]-1));
 		d[j] = elec->mgparm->fcenter[j] - elec->mgparm->ccenter[j];
 	}
-	Vnm_print(0, "NOsh:  Coarse grid spacing = %g, %g, %g\n", 
-			  cgrid[0], cgrid[1], cgrid[2]);
-	Vnm_print(0, "NOsh:  Fine grid spacing = %g, %g, %g\n",
-			  fgrid[0], fgrid[1], fgrid[2]);
-	Vnm_print(0, "NOsh:  Displacement between fine and coarse grids = %g, %g, %g\n",
-			  d[0], d[1], d[2]);
+	Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  Coarse grid spacing = %g, %g, %g\n", 
+			  __FILE__, __LINE__, cgrid[0], cgrid[1], cgrid[2]);
+	Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  Fine grid spacing = %g, %g, %g\n",
+			  __FILE__, __LINE__, fgrid[0], fgrid[1], fgrid[2]);
+	Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  Displacement between fine and \
+coarse grids = %g, %g, %g\n", __FILE__, __LINE__, d[0], d[1], d[2]);
 	
 	/* Now calculate the number of focusing levels, never reducing the grid 
 		spacing by more than redfrac at each level */
@@ -1381,8 +1349,34 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 			to the fine grid center put portions of the current mesh off the 
 			previous (coarser) mesh.  Fix this by displacing the current mesh 
 			back onto the previous coarser mesh.  */
-#define FUDGE_FRACTION 0.0
 		if (ifocus != 0) {
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  starting mesh \
+repositioning.\n", __FILE__, __LINE__);
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  coarse mesh center = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcc->mgparm->center[0], 
+  					  calcc->mgparm->center[1],
+  					  calcc->mgparm->center[2]);
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  coarse mesh upper corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcc->mgparm->center[0]+0.5*(calcc->mgparm->glen[0]), 
+  					  calcc->mgparm->center[1]+0.5*(calcc->mgparm->glen[1]),
+  					  calcc->mgparm->center[2]+0.5*(calcc->mgparm->glen[2]));
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  coarse mesh lower corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcc->mgparm->center[0]-0.5*(calcc->mgparm->glen[0]), 
+  					  calcc->mgparm->center[1]-0.5*(calcc->mgparm->glen[1]),
+  					  calcc->mgparm->center[2]-0.5*(calcc->mgparm->glen[2]));
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  initial fine mesh upper corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcf->mgparm->center[0]+0.5*(calcf->mgparm->glen[0]), 
+  					  calcf->mgparm->center[1]+0.5*(calcf->mgparm->glen[1]),
+  					  calcf->mgparm->center[2]+0.5*(calcf->mgparm->glen[2]));
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  initial fine mesh lower corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcf->mgparm->center[0]-0.5*(calcf->mgparm->glen[0]), 
+  					  calcf->mgparm->center[1]-0.5*(calcf->mgparm->glen[1]),
+  					  calcf->mgparm->center[2]-0.5*(calcf->mgparm->glen[2]));
 			for (j=0; j<3; j++) {
 				/* Check if we've fallen off of the lower end of the mesh */
 				dofix = 0;
@@ -1393,29 +1387,20 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 				d[j] = minc[j] - minf[j];
 				if (d[j] >= VSMALL) {
 					if (ifocus == (nfocus-1)) {
-						Vnm_tprint(2, "NOsh_setupCalcMGAUTO:  Error!  Finest \
+						Vnm_print(2, "NOsh_setupCalcMGAUTO:  Error!  Finest \
 mesh has fallen off the coarser meshes!\n");
-						Vnm_print(2, "NOsh_setupCalcMGAUTO:  difference in %d-\
+						Vnm_print(2, "NOsh_setupCalcMGAUTO:  difference in min %d-\
 direction = %g\n", j, d[j]);
+						Vnm_print(2, "NOsh_setupCalcMGAUTO:  min fine = %g %g %g\n",
+								  minf[0], minf[1], minf[2]);
+						Vnm_print(2, "NOsh_setupCalcMGAUTO:  min coarse = %g %g %g\n",
+								  minc[0], minc[1], minc[2]);
 						VASSERT(0);
 					} else {
-						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  ifocus = %d, \
+						Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  ifocus = %d, \
 fixing mesh min violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus, 
 								  d[j], j);
-						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
-before fix = %g %g %g.\n", __FILE__, __LINE__, 
-								  calcf->mgparm->center[0],
-								  calcf->mgparm->center[1],
-								  calcf->mgparm->center[2]
-								  );
-						calcf->mgparm->center[j] += \
-						(d[j] + FUDGE_FRACTION * calcf->mgparm->grid[j]);
-						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
-after fix = %g %g %g.\n", __FILE__, __LINE__, 
-								  calcf->mgparm->center[0],
-								  calcf->mgparm->center[1],
-								  calcf->mgparm->center[2]
-								  );
+						calcf->mgparm->center[j] += d[j];
 						dofix = 1;
 					}
 				}
@@ -1443,26 +1428,22 @@ ends of the finer mesh do not fit in the bigger mesh!\n");
 						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  ifocus = %d, \
 fixing mesh max violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus, 
 								  d[j], j);
-						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
-before fix = %g %g %g.\n", __FILE__, __LINE__, 
-								  calcf->mgparm->center[0],
-								  calcf->mgparm->center[1],
-								  calcf->mgparm->center[2]
-								  );
-						calcf->mgparm->center[j] -= \
-						(d[j] + FUDGE_FRACTION * calcf->mgparm->grid[j]);
-						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
-after fix = %g %g %g.\n", __FILE__, __LINE__, 
-								  calcf->mgparm->center[0],
-								  calcf->mgparm->center[1],
-								  calcf->mgparm->center[2]
-								  );
+						calcf->mgparm->center[j] -= d[j];
 						dofix = 1;
 					}
 				}
 			}
-		}	
-#undef FUDGE_FRACTION
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  final fine mesh upper corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcf->mgparm->center[0]+0.5*(calcf->mgparm->glen[0]), 
+  					  calcf->mgparm->center[1]+0.5*(calcf->mgparm->glen[1]),
+  					  calcf->mgparm->center[2]+0.5*(calcf->mgparm->glen[2]));
+			Vnm_print(0, "NOsh_setupCalcMGAUTO (%s, %d):  final fine mesh lower corner = \
+%g %g %g\n", __FILE__, __LINE__, 
+					  calcf->mgparm->center[0]-0.5*(calcf->mgparm->glen[0]), 
+  					  calcf->mgparm->center[1]-0.5*(calcf->mgparm->glen[1]),
+  					  calcf->mgparm->center[2]-0.5*(calcf->mgparm->glen[2]));
+		}
 		
 		/* Finer levels have focusing boundary conditions */
 		if (ifocus != 0) calcf->pbeparm->bcfl = BCFL_FOCUS;
@@ -1476,7 +1457,7 @@ after fix = %g %g %g.\n", __FILE__, __LINE__,
 			Vnm_print(0, "NOsh_setupMGAUTO:  Resetting boundary flags\n");
 			for (j=0; j<6; j++) calcf->mgparm->partDisjOwnSide[j] = 0;
 			for (j=0; j<3; j++) {
-				calcf->mgparm->partDisjCenterShift[j] = 0;
+				calcf->mgparm->partDisjCenter[j] = 0;
 				calcf->mgparm->partDisjLength[j] = calcf->mgparm->glen[j];
 			}
         }
@@ -1745,21 +1726,43 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
 			  mgparm->partDisjOwnSide[VAPBS_DOWN]);
 	
 	
-	/* Set the disjoint partition information */
-	mgparm->partDisjCenterShift[0] = xcentDisj;
-	mgparm->partDisjCenterShift[1] = ycentDisj;
-	mgparm->partDisjCenterShift[2] = zcentDisj;
-	mgparm->partDisjLength[0] = xlenDisj;
-	mgparm->partDisjLength[1] = ylenDisj;
-	mgparm->partDisjLength[2] = zlenDisj;
+
+
 	
-	/* Set the fine mesh parameters to the non-disjoint partition */ 
+	/* Set the mesh parameters */ 
 	mgparm->fglen[0] = xlenOlap;
 	mgparm->fglen[1] = ylenOlap;
 	mgparm->fglen[2] = zlenOlap;
-	mgparm->fcenter[0] = xcentOlap;
-	mgparm->fcenter[1] = ycentOlap;
-	mgparm->fcenter[2] = zcentOlap;
+	mgparm->partDisjLength[0] = xlenDisj;
+	mgparm->partDisjLength[1] = ylenDisj;
+	mgparm->partDisjLength[2] = zlenDisj;
+	mgparm->partDisjCenter[0] = mgparm->fcenter[0] + xcentDisj;
+	mgparm->partDisjCenter[1] = mgparm->fcenter[1] + ycentDisj;
+	mgparm->partDisjCenter[2] = mgparm->fcenter[2] + zcentDisj;
+	mgparm->fcenter[0] += xcentOlap;
+	mgparm->fcenter[1] += ycentOlap;
+	mgparm->fcenter[2] += zcentOlap;
+	
+	Vnm_print(0, "NOsh_setupCalcMGPARA (%s, %d):  Set up *relative* partition \
+centers...\n", __FILE__, __LINE__);
+	Vnm_print(0, "NOsh_setupCalcMGPARA (%s, %d):  Absolute centers will be set \
+in  NOsh_setupMGAUTO\n", __FILE__, __LINE__);
+	Vnm_print(0, "NOsh_setupCalcMGPARA (%s, %d):  partDisjCenter = %g %g %g\n",
+			  __FILE__, __LINE__,
+			  mgparm->partDisjCenter[0],
+			  mgparm->partDisjCenter[1],
+			  mgparm->partDisjCenter[2]);
+	Vnm_print(0, "NOsh_setupCalcMGPARA (%s, %d):  ccenter = %g %g %g\n",
+			  __FILE__, __LINE__,
+			  mgparm->ccenter[0],
+			  mgparm->ccenter[1],
+			  mgparm->ccenter[2]);
+	Vnm_print(0, "NOsh_setupCalcMGPARA (%s, %d):  fcenter = %g %g %g\n",
+			  __FILE__, __LINE__,
+			  mgparm->fcenter[0],
+			  mgparm->fcenter[1],
+			  mgparm->fcenter[2]);
+			  
 	
 	/* Setup the automatic focusing calculations associated with this processor */
 	return NOsh_setupCalcMGAUTO(thee, elec);
@@ -1859,7 +1862,6 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
 	FEMparm *feparm = VNULL;
 	PBEparm *pbeparm = VNULL;
 	NOsh_calc *calc = VNULL;
-	Valist *alist = VNULL;
 	int i;
 	
 	VASSERT(thee != VNULL);

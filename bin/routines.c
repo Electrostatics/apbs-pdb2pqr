@@ -737,17 +737,6 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	
 	/* Update the grid center */
 	for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
-#if 0
-	/* This is all obsolete */
-	Vnm_print(0, "initMG (%s, %d):  At some point we should move the parallel \
-focuing grid center fix into NOsh...\n", __FILE__, __LINE__);
-	if (mgparm->type == MCT_PARALLEL) {
-		for (j=0; j<3; j++) realCenter[j] = mgparm->center[j]
-			+ mgparm->partOlapCenterShift[j];
-	} else {
-		for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
-	}
-#endif
 	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");
@@ -945,16 +934,14 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 	
 	if (mgparm->type == MCT_PARALLEL) {
 		for (j=0; j<3; j++) {
-			partMin[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
-			- 0.5*mgparm->partDisjLength[j];
-			partMax[j] = mgparm->center[j] + mgparm->partDisjCenterShift[j]
-				+ 0.5*mgparm->partDisjLength[j];
+			partMin[j] = mgparm->partDisjCenter[j] - 0.5*mgparm->partDisjLength[j];
+			partMax[j] = mgparm->partDisjCenter[j] + 0.5*mgparm->partDisjLength[j];
 		}
 		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part center = (%g, %g, %g)\n",
 				   __FILE__, __LINE__,
-				   mgparm->center[0] + mgparm->partDisjCenterShift[0],
-				   mgparm->center[1] + mgparm->partDisjCenterShift[1],
-				   mgparm->center[2] + mgparm->partDisjCenterShift[2]
+				   mgparm->partDisjCenter[0],
+				   mgparm->partDisjCenter[1],
+				   mgparm->partDisjCenter[2]
 				   );
 		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part lower corner = (%g, %g, %g)\n",
 				   __FILE__, __LINE__, partMin[0], partMin[1], partMin[2]);
@@ -967,10 +954,10 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 			partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
 		}
 	}
-	Vnm_print(1, "DEBUG (%s, %d):  setPartMG calling setPart with upper corner \
+	/* Vnm_print(1, "DEBUG (%s, %d):  setPartMG calling setPart with upper corner \
 %g %g %g and lower corner %g %g %g\n", __FILE__,  __LINE__,
 			  partMin[0], partMin[1], partMin[2],
-			  partMax[0], partMax[1], partMax[2]);
+			  partMax[0], partMax[1], partMax[2]); */
 	Vpmg_setPart(pmg, partMin, partMax, mgparm->partDisjOwnSide);
 	
 	
