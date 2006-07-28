@@ -1249,7 +1249,11 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 		alist = thee->alist[molid];
 		VASSERT(alist != VNULL);
 		for (j=0; j<3; j++) {
-			elec->mgparm->fcenter[j] = alist->center[j];
+			if (elec->mgparm->type = MCT_PARALLEL) {
+				elec->mgparm->fcenter[j] += alist->center[j];
+			} else {
+				elec->mgparm->fcenter[j] = alist->center[j];
+			}
 		}
 	}
 	if (elec->mgparm->ccmeth == MCM_MOLECULE) {
@@ -1262,6 +1266,17 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 			elec->mgparm->ccenter[j] = alist->center[j];
 		}
 	}
+	
+	Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  coarse grid center = %g %g %g\n",
+			  __FILE__, __LINE__, 
+			  elec->mgparm->ccenter[0],
+			  elec->mgparm->ccenter[1],
+			  elec->mgparm->ccenter[2]);
+	Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  fine grid center = %g %g %g\n",
+			  __FILE__, __LINE__, 
+			  elec->mgparm->fcenter[0],
+			  elec->mgparm->fcenter[1],
+			  elec->mgparm->fcenter[2]);
 	
 	/* Calculate the grid spacing on the coarse and fine levels */
 	for (j=0; j<3; j++) {
@@ -1352,21 +1367,21 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 			}
 		} else {
 			calcf->mgparm->cmeth = MCM_FOCUS;
-		}
-		
-		/* TEMPORARILY move the current grid center 
+			/* TEMPORARILY move the current grid center 
 			to the fine grid center.  In general, this will move portions of 
 			the current mesh off the immediately-coarser mesh.  We'll fix that
 			in the next step. */
-		for (j=0; j<3; j++) {
-			calcf->mgparm->center[j] = elec->mgparm->fcenter[j];
+			for (j=0; j<3; j++) {
+				calcf->mgparm->center[j] = elec->mgparm->fcenter[j];
+			}
 		}
+
 		
 		/* As mentioned above, it is highly likely that the previous "jump" 
 			to the fine grid center put portions of the current mesh off the 
 			previous (coarser) mesh.  Fix this by displacing the current mesh 
 			back onto the previous coarser mesh.  */
-#define FUDGE_FRACTION 0.5
+#define FUDGE_FRACTION 0.0
 		if (ifocus != 0) {
 			for (j=0; j<3; j++) {
 				/* Check if we've fallen off of the lower end of the mesh */
@@ -1375,18 +1390,32 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 					- 0.5*(calcf->mgparm->glen[j]);
 				minc[j] = calcc->mgparm->center[j] 
 					- 0.5*(calcc->mgparm->glen[j]);
-				d[j] = minf[j] - minc[j];
-				if (d[j] <= 0.0) {
+				d[j] = minc[j] - minf[j];
+				if (d[j] >= VSMALL) {
 					if (ifocus == (nfocus-1)) {
 						Vnm_tprint(2, "NOsh_setupCalcMGAUTO:  Error!  Finest \
 mesh has fallen off the coarser meshes!\n");
+						Vnm_print(2, "NOsh_setupCalcMGAUTO:  difference in %d-\
+direction = %g\n", j, d[j]);
 						VASSERT(0);
 					} else {
 						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  ifocus = %d, \
 fixing mesh min violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus, 
 								  d[j], j);
+						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
+before fix = %g %g %g.\n", __FILE__, __LINE__, 
+								  calcf->mgparm->center[0],
+								  calcf->mgparm->center[1],
+								  calcf->mgparm->center[2]
+								  );
 						calcf->mgparm->center[j] += \
 						(d[j] + FUDGE_FRACTION * calcf->mgparm->grid[j]);
+						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
+after fix = %g %g %g.\n", __FILE__, __LINE__, 
+								  calcf->mgparm->center[0],
+								  calcf->mgparm->center[1],
+								  calcf->mgparm->center[2]
+								  );
 						dofix = 1;
 					}
 				}
@@ -1396,7 +1425,7 @@ fixing mesh min violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus,
 				maxc[j] = calcc->mgparm->center[j] \
 					+ 0.5*(calcc->mgparm->glen[j]);
 				d[j] = maxf[j] - maxc[j];
-				if (d[j] >= 0.0) {
+				if (d[j] >= VSMALL) {
 					if (ifocus == (nfocus-1)) {
 						Vnm_print(2, "NOsh_setupCalcMGAUTO:  Error!  Finest \
 mesh has fallen off the coarser meshes!\n");
@@ -1414,8 +1443,20 @@ ends of the finer mesh do not fit in the bigger mesh!\n");
 						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  ifocus = %d, \
 fixing mesh max violation (%g in %d-direction).\n", __FILE__, __LINE__, ifocus, 
 								  d[j], j);
+						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
+before fix = %g %g %g.\n", __FILE__, __LINE__, 
+								  calcf->mgparm->center[0],
+								  calcf->mgparm->center[1],
+								  calcf->mgparm->center[2]
+								  );
 						calcf->mgparm->center[j] -= \
 						(d[j] + FUDGE_FRACTION * calcf->mgparm->grid[j]);
+						Vnm_print(0, "NOsh_setupCalcMGAUTO(%s, %d):  mesh center \
+after fix = %g %g %g.\n", __FILE__, __LINE__, 
+								  calcf->mgparm->center[0],
+								  calcf->mgparm->center[1],
+								  calcf->mgparm->center[2]
+								  );
 						dofix = 1;
 					}
 				}
@@ -1716,9 +1757,9 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
 	mgparm->fglen[0] = xlenOlap;
 	mgparm->fglen[1] = ylenOlap;
 	mgparm->fglen[2] = zlenOlap;
-	mgparm->fcenter[0] = xcentOlap;
-	mgparm->fcenter[1] = ycentOlap;
-	mgparm->fcenter[2] = zcentOlap;
+	mgparm->fcenter[0] += xcentOlap;
+	mgparm->fcenter[1] += ycentOlap;
+	mgparm->fcenter[2] += zcentOlap;
 	
 	/* Setup the automatic focusing calculations associated with this processor */
 	return NOsh_setupCalcMGAUTO(thee, elec);
