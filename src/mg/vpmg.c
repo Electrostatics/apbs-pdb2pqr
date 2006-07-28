@@ -422,7 +422,8 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
             else zok = 0;
         }
 
-        atom->partID = xok*yok*zok;     
+        atom->partID = xok*yok*zok; 
+		/*
 		Vnm_print(1, "DEBUG (%s, %d):  atom->position[0] - upperCorner[0] = %g\n",
 				  __FILE__, __LINE__, atom->position[0] - upperCorner[0]); 
 		Vnm_print(1, "DEBUG (%s, %d):  atom->position[0] - lowerCorner[0] = %g\n",
@@ -437,6 +438,7 @@ VPUBLIC void Vpmg_setPart(Vpmg *thee, double lowerCorner[3],
 				  __FILE__, __LINE__, atom->position[2] - lowerCorner[2]); 
 		Vnm_print(1, "DEBUG (%s, %d):  xok = %g, yok = %g, zok = %g\n", 
 				  __FILE__, __LINE__, xok, yok, zok);
+		 */
 
 	}
 
@@ -1402,11 +1404,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
             if (mgparm->type == MCT_PARALLEL) {
 
                 for (j=0; j<3; j++) {
-                    partMin[j] = mgparm->center[j] 
-                        + mgparm->partDisjCenterShift[j]
+                    partMin[j] = mgparm->partDisjCenter[j]
                         - 0.5*mgparm->partDisjLength[j];
-                    partMax[j] = mgparm->center[j] 
-                        + mgparm->partDisjCenterShift[j]
+                    partMax[j] = mgparm->partDisjCenter[j]
                         + 0.5*mgparm->partDisjLength[j];
                 }
 
@@ -1987,8 +1987,8 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag,
     nzOLD = pmgOLD->pmgp->nz;
 
     /* Create a partition based on the new problem dimensions */
-    Vnm_print(1, "DEBUG (%s, %d):  extEnergy calling Vpmg_setPart for old PMG.\n",
-			  __FILE__, __LINE__);
+    /* Vnm_print(1, "DEBUG (%s, %d):  extEnergy calling Vpmg_setPart for old PMG.\n",
+			  __FILE__, __LINE__); */
     Vpmg_setPart(pmgOLD, lowerCorner, upperCorner, bflags);
 
     
