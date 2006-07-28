@@ -17,8 +17,8 @@ elec name solvated
     dime 65 65 65
     cglen 50 50 50
     fglen 12 12 12
-    fgcent mol 1
-    cgcent mol 1
+    fgcent -12.0 -12.0 -12.0
+    cgcent 0.0 0.0 0.0
     mol 1
     lpbe
     bcfl mdh
@@ -43,8 +43,8 @@ elec name reference
     dime 65 65 65
     cglen 50 50 50
     fglen 12 12 12
-    fgcent mol 1
-    cgcent mol 1
+    fgcent -12.0 -12.0 -12.0
+    cgcent 0.0 0.0 0.0
     mol 1
     lpbe
     bcfl mdh
