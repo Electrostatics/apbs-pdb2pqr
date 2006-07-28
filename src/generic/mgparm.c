@@ -100,18 +100,6 @@ VPUBLIC double MGparm_getCenterZ(MGparm *thee) {
     VASSERT(thee != VNULL);
     return thee->center[2];
 }
-VPUBLIC double MGparm_getPartOlapCenterShiftX(MGparm *thee) {
-    VASSERT(thee != VNULL);
-    return thee->partOlapCenterShift[0];
-}
-VPUBLIC double MGparm_getPartOlapCenterShiftY(MGparm *thee) {
-    VASSERT(thee != VNULL);
-    return thee->partOlapCenterShift[1];
-}
-VPUBLIC double MGparm_getPartOlapCenterShiftZ(MGparm *thee) {
-    VASSERT(thee != VNULL);
-    return thee->partOlapCenterShift[2];
-}
 VPUBLIC int MGparm_getNx(MGparm *thee) {
     VASSERT(thee != VNULL);
     return thee->dime[0];
@@ -387,10 +375,6 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
       thee->partDisjLength[i] = parm->partDisjLength[i];
     for (i=0; i<6; i++) 
       thee->partDisjOwnSide[i] = parm->partDisjOwnSide[i];
-    for (i=0; i<3; i++) 
-      thee->partOlapCenterShift[i] = parm->partOlapCenterShift[i];
-    for (i=0; i<3; i++) 
-      thee->partOlapLength[i] = parm->partOlapLength[i];
     for (i=0; i<3; i++) thee->pdime[i] = parm->pdime[i];
     thee->setpdime = parm->setpdime;
     thee->proc_rank = parm->proc_rank;
