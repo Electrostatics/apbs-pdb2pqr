@@ -2,6 +2,7 @@
 BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
 #############################################################################
  - NEW FEATURES
+   * New example demonstrating salt dependence of protein-RNA interactions.
    * Added Gemstone example to the tutorial
    * Updated runme script in ion-pmf example to use environmental variable
      for APBS path
