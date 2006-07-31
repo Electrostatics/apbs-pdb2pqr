@@ -20,6 +20,7 @@ clean:
 	cd ionize; make clean
 	cd pka-lig; make clean
 	cd point-pmf; make clean
+	cd protein-rna; make clean
 	cd solv; make clean
 
 test:
@@ -34,6 +35,7 @@ test:
 	cd ionize; make test
 	cd pka-lig; make test
 	cd point-pmf; make test
+	cd protein-rna; make test
 	cd solv; make test
 	cat */TESTRESULTS.log >> TESTRESULTS.log
 
