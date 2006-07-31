@@ -1063,6 +1063,7 @@ AC_OUTPUT([
     examples/ionize/Makefile
     examples/pka-lig/Makefile
     examples/point-pmf/Makefile
+    examples/protein-rna/Makefile
     examples/solv/Makefile
     
     bin/Makefile
