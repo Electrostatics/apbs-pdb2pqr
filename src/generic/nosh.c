@@ -945,7 +945,23 @@ VPUBLIC int NOsh_setupCalc(
 					VASSERT(mymol != VNULL);
 					for (i=0; i<3; i++) {
 						mgparm->center[i] = mymol->center[i];
+					}
+				}
+				if (elec->mgparm->fcmeth == MCM_MOLECULE) {
+					VASSERT(mgparm->fcentmol >= 0);
+					VASSERT(mgparm->fcentmol < thee->nmol);
+					mymol = thee->alist[mgparm->fcentmol];
+					VASSERT(mymol != VNULL);
+					for (i=0; i<3; i++) {
 						mgparm->fcenter[i] = mymol->center[i];
+					}
+				}
+				if (elec->mgparm->ccmeth == MCM_MOLECULE) {
+					VASSERT(mgparm->ccentmol >= 0);
+					VASSERT(mgparm->ccentmol < thee->nmol);
+					mymol = thee->alist[mgparm->ccentmol];
+					VASSERT(mymol != VNULL);
+					for (i=0; i<3; i++) {
 						mgparm->ccenter[i] = mymol->center[i];
 					}
 				}

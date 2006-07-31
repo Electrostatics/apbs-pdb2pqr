@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/env python
 # You may need to edit the above to point to your version of Python 2.0
 
 # psize.py 
