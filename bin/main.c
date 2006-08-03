@@ -117,13 +117,14 @@ int main(
 	Voutput_Format outputformat;
 	
 	/* These variables require some explaining... The energy double arrays
-		* store energies from the various calculations.  The energy int array
-		* stores a flag (0, 1, 2) that indicates whether no, total, or all
-		* energies were evaluated for a particular calculation.  Likewise, the
-		* force double arrays store forces from the various calcualtions.  The
-		* force int array stores an integer which either says no calculation was
-		* performed (0) or gives the number of entries in the force array for each
-		* calculation */
+	 * store energies from the various calculations.  The energy int array
+	 * stores either a flag (0,1) displaying whether energies were calculated
+         * or if PCE_COMPS is used, the number of atom energies stored
+         * for the given calculation.  Likewise, the
+	 * force double arrays store forces from the various calcualtions.  The
+	 * force int array stores an integer which either says no calculation was
+	 * performed (0) or gives the number of entries in the force array for each
+	 * calculation */
 	double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
 	double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
 	double npEnergy[NOSH_MAXCALC];
@@ -547,12 +548,12 @@ It is invoked as:\n\n\
 	if (outputformat == OUTPUT_XML) {
 		Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
 		writedataXML(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
-					 dielEnergy, nenergy, atomEnergy);
+			      dielEnergy, nenergy, atomEnergy, nforce, atomForce);
 		
 	} else if (outputformat == OUTPUT_FLAT) {
 		Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
 		writedataFlat(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
-					  dielEnergy, nenergy, atomEnergy);
+			      dielEnergy, nenergy, atomEnergy, nforce, atomForce);
 	}
 
 	/* Destroy energy arrays if they still exist */

@@ -1282,8 +1282,9 @@ VPUBLIC int writedataFlat(
 						  double qmEnergy[NOSH_MAXCALC], 
 						  double dielEnergy[NOSH_MAXCALC],
 						  int nenergy[NOSH_MAXCALC], 
-						  double *atomEnergy[NOSH_MAXCALC]
-						  ) {
+						  double *atomEnergy[NOSH_MAXCALC],
+						  int nforce[NOSH_MAXCALC], 
+						  AtomForce *atomForce[NOSH_MAXCALC]) {
 	
 	FILE *file;
 	time_t now;
@@ -1292,7 +1293,7 @@ VPUBLIC int writedataFlat(
 	PBEparm *pbeparm = VNULL;
 	MGparm *mgparm = VNULL;
 	double conversion, ltenergy, gtenergy, scalar;
-	
+
 	if (nosh->bogus) return 1;
 	
 	/* Initialize some variables */
@@ -1301,7 +1302,7 @@ VPUBLIC int writedataFlat(
 	
 	file = fopen(fname, "w");
 	if (file == VNULL) {
-		Vnm_print(2, "writedataXML: Problem opening virtual socket %s\n",
+		Vnm_print(2, "writedataFlat: Problem opening virtual socket %s\n",
 				  fname);
 		return 0;
 	}
@@ -1437,10 +1438,30 @@ VPUBLIC int writedataFlat(
 					
 				}
 			} 
+
+			if (pbeparm->calcforce == PCF_TOTAL) { 
+				fprintf(file,"        qfForce %1.12E %1.12E %1.12E kJ/mol/A\n", 
+						(atomForce[icalc][0].qfForce[0]*conversion), 
+					        (atomForce[icalc][0].qfForce[1]*conversion),
+					        (atomForce[icalc][0].qfForce[2]*conversion));
+				fprintf(file,"        ibForce %1.12E %1.12E %1.12E kJ/mol/A\n", 
+						(atomForce[icalc][0].ibForce[0]*conversion), 
+					        (atomForce[icalc][0].ibForce[1]*conversion),
+					        (atomForce[icalc][0].ibForce[2]*conversion));
+				fprintf(file,"        dbForce %1.12E %1.12E %1.12E kJ/mol/A\n", 
+						(atomForce[icalc][0].dbForce[0]*conversion), 
+					        (atomForce[icalc][0].dbForce[1]*conversion),
+					        (atomForce[icalc][0].dbForce[2]*conversion));
+				fprintf(file,"        npForce %1.12E %1.12E %1.12E kJ/mol/A\n", 
+						(atomForce[icalc][0].npForce[0]*conversion), 
+					        (atomForce[icalc][0].npForce[1]*conversion),
+					        (atomForce[icalc][0].npForce[2]*conversion));
+
+			}
 			fprintf(file,"    end\n");
 		}
 
-fprintf(file,"end\n");
+		fprintf(file,"end\n");
 	}
 
 /* Handle print energy statements */
@@ -1480,8 +1501,7 @@ for (i=0; i<nosh->nprint; i++) {
 				ltenergy);
 		fprintf(file,"    globalEnergy %1.12E kJ/mol\nend\n", \
 				gtenergy); 
-		
-	}
+	} 
 }
 
 fclose(file);
@@ -1495,7 +1515,9 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 						 double qmEnergy[NOSH_MAXCALC], 
 						 double dielEnergy[NOSH_MAXCALC],
 						 int nenergy[NOSH_MAXCALC], 
-						 double *atomEnergy[NOSH_MAXCALC]) {
+						 double *atomEnergy[NOSH_MAXCALC],
+			                         int nforce[NOSH_MAXCALC], 
+						 AtomForce *atomForce[NOSH_MAXCALC]) {
 	
 	FILE *file;
 	time_t now;
@@ -1666,6 +1688,35 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 					fprintf(file,"          </atom>\n");
 				}
 			} 
+
+
+			if (pbeparm->calcforce == PCF_TOTAL) { 
+			        fprintf(file,"          <qfforce_x>%1.12E</qfforce_x>\n", 
+					atomForce[icalc][0].qfForce[0]*conversion); 
+				fprintf(file,"          <qfforce_y>%1.12E</qfforce_y>\n", 
+					atomForce[icalc][0].qfForce[1]*conversion); 
+				fprintf(file,"          <qfforce_z>%1.12E</qfforce_z>\n", 
+					atomForce[icalc][0].qfForce[2]*conversion); 
+				fprintf(file,"          <ibforce_x>%1.12E</ibforce_x>\n", 
+					atomForce[icalc][0].ibForce[0]*conversion); 
+				fprintf(file,"          <ibforce_y>%1.12E</ibforce_y>\n", 
+					atomForce[icalc][0].ibForce[1]*conversion); 
+				fprintf(file,"          <ibforce_z>%1.12E</ibforce_z>\n", 
+					atomForce[icalc][0].ibForce[2]*conversion); 
+				fprintf(file,"          <dbforce_x>%1.12E</dbforce_x>\n", 
+					atomForce[icalc][0].dbForce[0]*conversion); 
+				fprintf(file,"          <dbforce_y>%1.12E</dbforce_y>\n", 
+					atomForce[icalc][0].dbForce[1]*conversion); 
+				fprintf(file,"          <dbforce_z>%1.12E</dbforce_z>\n", 
+					atomForce[icalc][0].dbForce[2]*conversion); 
+				fprintf(file,"          <npforce_x>%1.12E</npforce_x>\n", 
+					atomForce[icalc][0].npForce[0]*conversion); 
+				fprintf(file,"          <npforce_y>%1.12E</npforce_y>\n", 
+					atomForce[icalc][0].npForce[1]*conversion); 
+				fprintf(file,"          <npforce_z>%1.12E</npforce_z>\n", 
+					atomForce[icalc][0].npForce[2]*conversion); 
+			}
+
 			fprintf(file,"      </calc>\n");
 		}
 
