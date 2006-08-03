@@ -336,11 +336,14 @@ VEXTERNC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, int *ne
  * @param dielEnergy  An array with per-calc polarization energies (in kT)
  * @param nenergy  An array containing the number of atoms per-calc
  * @param atomEnergy An array containing per-atom energies (in KT) per calc
+ * @param nforce  An array containing the number of forces calculated per-calc
+ * @param atomForce An array containing per-atom forces per calc
  * @return 1 if successful, 0 otherwise */
 VEXTERNC int writedataFlat(NOsh *nosh, Vcom *com, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
   double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
-  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);
+  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC],
+  int nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
 
 /**
  * @brief Write out information to an XML file
@@ -355,11 +358,14 @@ VEXTERNC int writedataFlat(NOsh *nosh, Vcom *com, const char *fname,
  * @param dielEnergy  An array with per-calc polarization energies (in kT)
  * @param nenergy  An array containing the number of atoms per-calc
  * @param atomEnergy An array containing per-atom energies (in KT) per calc
+ * @param nforce  An array containing the number of forces calculated per-calc
+ * @param atomForce An array containing per-atom forces per calc
  * @return 1 if successful, 0 otherwise */
 VEXTERNC int writedataXML(NOsh *nosh, Vcom *com, const char *fname, 
   double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], 
   double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC],
-  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC]);
+  int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC],
+  int nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
 
 /**
  * @brief  Write out observables from MG calculation to file
