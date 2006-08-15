@@ -65,11 +65,17 @@
     </sect2>
 
     <sect2 id="simulation-sect"> <title>Simulation software</title>
-      <para>
-        <important>
-          <para>Under construction!</para>
-        </important>
-      </para>
+		<para> 
+			Robert Konecny (<ulink url="http://mccammon.ucsd.edu">McCammon
+				Group</ulink>) has developed <ulink
+				url="http://mccammon.ucsd.edu/iapbs/">iAPBS</ulink> (<ulink
+				url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/</ulink>),
+			an interface between APBS and the simulation packages AMBER,
+			CHARMM, and NAMD.  More information is available from the iAPBS
+			homepage:  <ulink
+				url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/
+			</ulink>.
+		</para>
     </sect2>
 
     <sect2 id="visualization-sect"> <title>Visualization software</title>
