@@ -6,6 +6,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Added Gemstone example to the tutorial
    * Updated runme script in ion-pmf example to use environmental variable
      for APBS path
+   * Updated documentation to reflect new iAPBS features (NAMD support)
    * Modified the license to allow exceptions for packaging APBS binaries
      with several visualization programs.  PMG license modifed as well.
    * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
