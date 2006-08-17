@@ -39,28 +39,29 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Added support for XML output options via the --output-file and 
      --output-format flags.
    * Added ion-pmf to the make test suite.
+   * Updated splash screen to include new PMG acknowledgment
 	
 - BUG FIXES
-	* Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
-		making the serial focusing procedure more robust
-	* Removed MGparm partOlap* data members; the parallel focusing centering
-		is now done entirely within NOsh
-	* Updated the user manual and tutorial
-	* Updated psize.py to use centers and radii when calculating grid sizes
-		(thanks to John Mongan)
-	* Fixed problems with FEM-based NPBE, LPBE, and LRPBE calculations
-	* Fixed a minor bug in the configure script that prevented MPI libraries
-		from being found when using certain compilers.
-	* Updated acinclude.m4, aclocal.m4, config/* for new version (1.9) of
-		automake and compatibility with new MALOC
-	* Fixed a bug where reading in a file in PDB format had atom IDs starting 
-		at 1 rather than 0, leading to a segmentation fault.
-	* Fixed a bug in mypde.f where double precision values were initialized
-		with single precision number (causing multiplication errors).
-	* Fixed a bug in the FEM code. Now calls the npbe solver works properly
-		with FEtk 1.40
-	* Modified the FEMParm struct to contain a new variable pkey, which is 
-		required for selecting the correct path in AM_Refine
+   * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
+     making the serial focusing procedure more robust
+   * Removed MGparm partOlap* data members; the parallel focusing centering
+     is now done entirely within NOsh
+   * Updated the user manual and tutorial
+   * Updated psize.py to use centers and radii when calculating grid sizes
+     (thanks to John Mongan)
+   * Fixed problems with FEM-based NPBE, LPBE, and LRPBE calculations
+   * Fixed a minor bug in the configure script that prevented MPI libraries
+     from being found when using certain compilers.
+   * Updated acinclude.m4, aclocal.m4, config/* for new version (1.9) of
+     automake and compatibility with new MALOC
+   * Fixed a bug where reading in a file in PDB format had atom IDs starting 
+     at 1 rather than 0, leading to a segmentation fault.
+   * Fixed a bug in mypde.f where double precision values were initialized
+     with single precision number (causing multiplication errors).
+   * Fixed a bug in the FEM code. Now calls the npbe solver works properly
+     with FEtk 1.40
+   * Modified the FEMParm struct to contain a new variable pkey, which is 
+     required for selecting the correct path in AM_Refine
 	
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.4.0       12-14-05 
