@@ -42,6 +42,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Updated splash screen to include new PMG acknowledgment
 	
 - BUG FIXES
+   * Cleanup of documentation, new Gemstone example
    * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
      making the serial focusing procedure more robust
    * Removed MGparm partOlap* data members; the parallel focusing centering
