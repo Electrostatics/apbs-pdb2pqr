@@ -1,6 +1,0 @@
-digraph inheritance
-{
-  Node59 [shape="box",label="sVmgrid",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node60 -> Node59 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="grids",fontname="Helvetica"];
-  Node60 [shape="box",label="sVgrid",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVgrid.html"];
-}

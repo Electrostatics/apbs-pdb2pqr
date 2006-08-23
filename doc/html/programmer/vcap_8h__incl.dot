@@ -1,6 +1,0 @@
-digraph inheritance
-{
-  Node138 [shape="box",label="vcap.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node139 -> Node138 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node139 [shape="box",label="maloc/maloc.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="grey75"];
-}

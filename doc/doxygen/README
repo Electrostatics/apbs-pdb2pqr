@@ -1,5 +1,0 @@
-This is the configuration directory for Doxygen.  Simply run:
-
-  doxygen Doxyfile
-
-to generate the API documentation.

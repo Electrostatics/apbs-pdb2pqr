@@ -1,0 +1,967 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>APBS Tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"><link rel="start" href="#id836433" title="APBS Tutorial"><link rel="next" href="#introduction-sect" title="Chapter 1. Getting started"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id836433"></a>APBS Tutorial</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Nathan</span> <span class="surname">Baker</span></h3><div class="affiliation"><span class="orgname">Washington University in St. Louis<br></span><span class="orgdiv">Department of Biochemistry and Molecular Biophysics<br></span><span class="orgdiv">Center for Computational Biology<br></span></div></div></div><div><p class="copyright">Copyright © 2002, 2003, 2004, 2005, 2006 Washington University in St. Louis</p></div><div><div class="legalnotice"><a name="id930508"></a><p>This file is part of APBS.</p><p>This program is free software; you can redistribute it and/or
+      modify it under the terms of the GNU General Public License as published
+      by the Free Software Foundation; either version 2 of the License, or (at
+      your option) any later version.</p><p>This program is distributed in the hope that it will be useful, but
+      WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+      Public License for more details.</p><p>You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software Foundation,
+      Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</p><p>Linking APBS statically or dynamically with other modules is 
+      making a combined work based on APBS. Thus, the terms and conditions of 
+      the GNU General Public License cover the whole combination.</p><p>SPECIAL GPL EXCEPTION:
+      In addition, as a special exception, the copyright holders of APBS
+      give you permission to combine the APBS program with free software
+      programs and libraries that are released under the GNU LGPL or with
+      code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
+      SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
+      redistributed together in original or modified form as mere aggregation
+      without requirement that the entire work be under the scope of the GNU 
+      General Public License. This special exception permission is also extended
+      to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
+      FEtk, MC, or MALOC libraries.</p><p>Note that people who make modified versions of APBS are not 
+      obligated to grant this special exception for their modified versions; 
+      it is their choice whether to do so. The GNU General Public License gives
+      permission to release a modified version without this exception; this
+      exception also makes it possible to release a modified version which
+      carries forward this exception.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Getting started</a></span></dt><dt><span class="chapter"><a href="#born-sect">2. The Born ion</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id930775">PQR file</a></span></dt><dt><span class="sect1"><a href="#id930844">Calculation input</a></span></dt><dt><span class="sect1"><a href="#id931183">Born solvation energies:  effect of radius</a></span></dt></dl></dd><dt><span class="chapter"><a href="#ion-pmf-scet">3. Ion-ion desolvation</a></span></dt><dt><span class="chapter"><a href="#ligand-sect">4. Protein-ligand binding</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id932440">PQR files</a></span></dt><dt><span class="sect1"><a href="#id932555">Visualization of the electrostatic potentials</a></span></dt><dt><span class="sect1"><a href="#id932764">Binding energy calculation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#condensation-sect">5. NaCl condensation around DNA</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933418">PQR file</a></span></dt><dt><span class="sect1"><a href="#id933450">Calculating the potential and charge density</a></span></dt><dt><span class="sect1"><a href="#id933513">Visualization</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id933538"> Electrostatic potential </a></span></dt><dt><span class="sect2"><a href="#id933605">Charge density</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#gemstone-sect">6. Using APBS with Gemstone</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id934363">Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id934389">Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id934502">Perform an electrostatics calculation with APBS</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id934534">Calculation</a></span></dt><dt><span class="sect2"><a href="#id934579">Grid</a></span></dt><dt><span class="sect2"><a href="#id934627">Physics</a></span></dt><dt><span class="sect2"><a href="#id934662">File I/O </a></span></dt><dt><span class="sect2"><a href="#id934696">Running the calculation</a></span></dt><dt><span class="sect2"><a href="#id934727">Other calculations</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id935151">7. More examples...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id932204">Reaction fields for ion-ion PMF</a></dt><dt>4.1. <a href="#id932539">PKA-balanol complex</a></dt><dt>4.2. <a href="#id932666">Balanol electrostatic potential</a></dt><dt>4.3. <a href="#id932707">Balanol electrostatic potential</a></dt><dt>4.4. <a href="#id932748">Balanol electrostatic potential</a></dt><dt>5.1. <a href="#id933435">B-DNA dodecamer</a></dt><dt>5.2. <a href="#id933572">DNA electrostatic potential</a></dt><dt>5.3. <a href="#id933840">NaCl charge density around DNA</a></dt><dt>6.1. <a href="#id934472">Gemstone PDB2PQR calculation</a></dt><dt>6.2. <a href="#id934562">Gemstone APBS/Calculation screen</a></dt><dt>6.3. <a href="#id934611">Gemstone APBS/Grid screen</a></dt><dt>6.4. <a href="#id934646">Gemstone APBS/Physics screen</a></dt><dt>6.5. <a href="#id934680">Gemstone APBS/File I/O screen</a></dt><dt>6.6. <a href="#id934708">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>2.1. <a href="#id930870">Basic APBS input parameters</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>2.1. <a href="#id930797">Example PQR file</a></dt><dt>2.2. <a href="#id931168">Born ion APBS input file</a></dt><dt>3.1. <a href="#id932105">APBS input for ion-ion PMF</a></dt><dt>4.1. <a href="#id932575">PKA/balanol/complex visualization APBS input</a></dt><dt>4.2. <a href="#id932785">Balanol-PKA energy calculation APBS input</a></dt><dt>5.1. <a href="#id933470">APBS DNA condensation input file</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Getting started</h2></div></div></div><p>
+      This tutorial is designed to help users get acquainted with
+      computational electrostatics calculations using APBS.  In order to
+      perform the provided examples, you will need:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            The latest version of APBS 
+            (<a href="http://apbs.sourceforge.net" target="_top">http://apbs.sourceforge.net</a>)
+            to perform the electrostatics calculations.
+          </p></li></ul></div><p>
+    </p><p>
+       You will also need the following software to perform the visualizations 
+       in this tutorial.  These are not required for standard APBS usage, but
+       are useful for displaying results in this tutorial:
+       </p><div class="itemizedlist"><ul type="disc"><li><p>
+            VMD 
+            (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
+            to visualize the molecular structures and electrostatic
+            potentials.
+          </p></li><li><p>
+            Gnuplot
+            (<a href="http://www.gnuplot.info/" target="_top">http://www.gnuplot.info/</a>)
+            to plot energies, etc.
+          </p></li><li><p>
+            Bash (<a href="http://www.gnu.org/software/bash/bash.html" target="_top">http://www.gnu.org/software/bash/bash.html</a>) - standard on most
+            Linux, MacOS X.
+          </p></li><li><p>
+            Python (<a href="http://www.python.org/" target="_top">http://www.python.org/</a>)  - standard on most
+            Linux, MacOS X.
+          </p></li></ul></div><p>
+      Furthermore, these examples all assume that the above programs are in
+      your system path (i.e., can be run simply by typing the program name).
+    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> 
+            Note that many of the examples in this tutorial can also be run
+            through the web-based <a href="http://gemstone.mozdev.org/" target="_top">Gemstone</a> service
+            without the need for local installations of the APBS software.  
+        </p></td></tr></table></div><p>
+      The following examples demonstrate some of the basic electrostatics
+      which require modest computational resources; i.e., can be performed
+      using in 0-5 min on a modern PC.  
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> These examples build on one another and are designed to be
+          carried out in order.  Please read through each section completely
+          before trying the example.  
+        </p></td></tr></table></div><p>
+      </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p> This tutorial requires several files (linked to from the
+          individual examples) be downloaded.  It is recommended that you
+          create a separate subdirectory (e.g., 
+          <strong class="userinput"><code>mkdir foo; cd foo</code></strong>) for each example.  Also
+          many browsers will display, rather than save the example files.
+          Right-clicking on the link (or the displayed file) should present
+          you with the option to save the file.
+        </p></td></tr></table></div><p>
+    </p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="born-sect"></a>Chapter 2. The Born ion</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id930775">PQR file</a></span></dt><dt><span class="sect1"><a href="#id930844">Calculation input</a></span></dt><dt><span class="sect1"><a href="#id931183">Born solvation energies:  effect of radius</a></span></dt></dl></div><p>
+    The Born ion is the canonical electrostatics example; a non-polarizable
+    sphere embedded in a higher-dielectric medium.  Due to the spherical
+    symmetry of this example, analytical solutions exist for a number of
+    observables.  In this example, we're going to examine the change in
+    polar solvation energy and electrostatic potential for Born ions of
+    various radii.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id930775"></a>PQR file</h2></div></div></div><p>
+      First, we'll look at an example PQR file which provides the molecular
+      information (coordinates, charges, and radii) to the electrostatics
+      software.  Everything an implicit solvent electrostatics software
+      package needs to know about the molecule is specified here.  The PQR
+      file is simply a modified version of the standard 
+      <a href="http://www.rcsb.org/pdb/docs/format/pdbguide2.2/guide2.2_frame.html" target="_top">PDB
+      format</a>.  This means that PQR files can be read into most
+      molecular visualization programs.
+      </p><div class="example"><a name="id930797"></a><p class="title"><b>Example 2.1. Example PQR file</b></p><div class="example-contents"><pre class="programlisting">
+REMARK  This is an ion with a 3 A radius and a +1 e charge
+ATOM      1   I  ION     1       0.000   0.000   0.000  1.00 3.00
+        </pre><p>
+          This example PQR file gives an ion located at (0, 0, 0) with a +1
+          e charge and a 3 A radius.  It can be downloaded 
+          <a href="examples/born/example-ion.pqr" target="_top">here</a> and loaded
+          into VMD with the command:
+          </p><pre class="screen">
+            <code class="prompt">$</code> <strong class="userinput"><code>vmd -pdb ion.pqr</code></strong>
+          </pre><p>
+        </p></div></div><p><br class="example-break">
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id930844"></a>Calculation input</h2></div></div></div><p>
+      The APBS input file provides the parameters used in Poisson or
+      Poisson-Boltzmann electrostatics calculations.  The basic ingredients
+      of an electrostatics calculation are listed in the following table.  
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> The detailed format of the input file is discussed in the
+          APBS manual (<a href="http://apbs.sourceforge.net/doc" target="_top">http://apbs.sourceforge.net/doc</a>).
+        </p></td></tr></table></div><p>
+      </p><div class="table"><a name="id930870"></a><p class="title"><b>Table 2.1. Basic APBS input parameters</b></p><div class="table-contents"><table summary="Basic APBS input parameters" border="1"><colgroup><col><col><col></colgroup><thead><tr><th>Parameter description</th><th>APBS variable names</th><th>Common values</th></tr></thead><tbody><tr><td>Grid dimensions</td><td><code class="varname">dime</code></td><td>65, 97, 127, 161</td></tr><tr><td>Grid spacing or length</td><td>
+                <code class="varname">grid</code> or
+                [ <code class="varname">fglen</code> | <code class="varname">cglen</code> | 
+                <code class="varname">glen</code> ]
+              </td><td>Grid spacings should be 0.5 A or smaller for
+                quantitative calculations; grid lengths should be large
+                enough for the boundary conditions to hold.
+              </td></tr><tr><td>Grid position</td><td>
+                [ <code class="varname">gcent</code> | <code class="varname">fgcent</code> |
+                <code class="varname">cgcent</code> ] 
+              </td><td>The position of the grid center should coincide with
+                the region of interest of the system; 
+                <span class="foreignphrase"><em class="foreignphrase">e.g.</em></span>, a binding site, etc.
+              </td></tr><tr><td>Boundary condition definition</td><td><code class="varname">bcfl</code></td><td>The most common setting is <code class="varname">sdh</code> which
+                considers only the monopole moment of the system when
+                assigning boundary conditions.  The much slower
+                <code class="varname">mdh</code> option considers all multipole
+                moments of the protein but assumes non-interacting spheres
+                (thereby only approximately describing the solvation
+                behavior).
+              </td></tr><tr><td>Dielectric constants</td><td>
+                <code class="varname">sdie</code> for the solvent and
+                <code class="varname">pdie</code> for the biomolecule.
+              </td><td>The common dielectric value for water at 300 K is 78.54
+                (~80).  Biomolecular dielectric constants range from 2
+                (electronic polarization only) to 20 (implicit side chain
+                relaxation) with the specific value dependent on the
+                application.
+              </td></tr><tr><td>Temperature</td><td><code class="varname">temp</code></td><td>The temperature of the calculation; should be chosen
+                consistently with the dielectric coefficients.
+              </td></tr><tr><td>Ion species and concentrations</td><td><code class="varname">ion</code></td><td>Specify the concentrations, charges, and radii of the
+                mobile ion species to be included in the Poisson-Boltzmann
+                calculation.
+              </td></tr><tr><td>Coefficient (surface) definitions</td><td>
+                <code class="varname">srfm</code>, <code class="varname">srad</code>,
+                <code class="varname">swin</code>
+              </td><td>These parameters determine the surfaces used to define
+                the dielectric and ion accessiblity coefficients.  As
+                described in numerous articles, the results of PBE
+                calculations can be very sensitive to the surface
+                definition.  These should be chosen consistently for each
+                calculation -- and the results should be examined for their
+                dependence on the particular surface definition used.
+              </td></tr></tbody></table></div></div><p><br class="table-break">
+    </p><p>
+      For the Born ion, we will be running a series of calculations on
+      ions of different radii.  However, in order to make a meaningful
+      comparison of the results, <span class="emphasis"><em>these calculations will all be
+        performed with the same parameters!</em></span>  Specifically, we
+      will be using a common input file which is given below and available
+      <a href="examples/born/example-input.in" target="_top">here</a>.
+    </p><p>
+      The major elements of this calculation are:
+      </p><div class="orderedlist"><ol type="1"><li><p>Read in the molecular data.</p></li><li><p>Calculate the electrostatic potential and energy in the
+            solvated state.</p></li><li><p>Calculate the electrostatic potential and energy in the
+            reference (vacuum) state to remove self-energies, etc.</p></li><li><p>Compute the energy change.</p></li></ol></div><p>
+      </p><div class="example"><a name="id931168"></a><p class="title"><b>Example 2.2. Born ion APBS input file</b></p><div class="example-contents"><pre class="programlisting">          
+          
+# READ IN MOLECULES
+read 
+  mol pqr ion-RADIUS.pqr 
+end
+
+
+elec name solv             # Electrostatics calculation on the solvated state
+
+  mg-manual              # Specify the mode for APBS to run
+  dime 97 97 97          # The grid dimensions
+  nlev 4                 # Multigrid level parameter
+  grid 0.33 0.33 0.33    # Grid spacing
+  gcent mol 1            # Center the grid on molecule 1
+  mol 1                  # Perform the calculation on molecule 1
+  lpbe                   # Solve the linearized Poisson-Boltzmann 
+                         # equation
+  bcfl mdh               # Use all multipole moments when calculating the
+                         # potential
+  pdie 1.0               # Solute dielectric
+  sdie 78.54             # Solvent dielectric
+  chgm spl2              # Spline-based discretization of the delta
+                         # functions
+  srfm mol               # Molecular surface definition
+  srad 1.4               # Solvent probe radius (for molecular surface)
+  swin 0.3               # Solvent surface spline window (not used here)
+  sdens 10.0             # Sphere density of accessibility object
+  temp 298.15            # Temperature 
+  gamma 0.105            # Apolar energy surface coefficient (not used here)
+  calcenergy total       # Calculate energies
+  calcforce no           # Do not calculate forces
+  write pot dx potential-RADIUS
+                         # Write out the potential
+
+end
+
+
+elec name ref              # Calculate potential for reference (vacuum) state
+
+  mg-manual
+  dime 97 97 97
+  nlev 4
+  grid 0.33 0.33 0.33
+  gcent mol 1
+  mol 1
+  lpbe
+  bcfl mdh
+  pdie 1.0               # The solvent and solute dielectric constants are
+                         # equal
+  sdie 1.0               # The solvent and solute dielectric constants are
+                         # equal
+  chgm spl2
+  srfm mol
+  srad 1.4
+  swin 0.3
+  sdens 10.0
+  temp 298.15
+  gamma 0.105
+  calcenergy total
+  calcforce no
+
+end
+
+# Calculate solvation energy
+print energy solv - ref end
+
+quit
+
+        </pre></div></div><p><br class="example-break">
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id931183"></a>Born solvation energies:  effect of radius</h2></div></div></div><p>
+      This section presents the series of calculations that will be carried
+      out to examine the effect of ion radius on electrostatic potential and 
+      solvation energy.   Specifically, this generates a set of ions with
+      different radii and uses APBS, together with the above input file, to
+      solve Poisson's equation.
+    </p><p>
+      This example uses a Bash shell script to run a series of APBS
+      calculations and generate a series of Gnuplot graphs.  First, you will
+      need to download the archive containing the Bash script and the template
+      input files <a href="examples/born/born.tar.gz" target="_top">here</a>.
+    </p><p>
+      Once the input files are downloaded, they need to be extracted from the
+      archive:
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>gzip -dc born.tar.gz | tar xvf -</code></strong>
+      </pre><p>
+    </p><p>
+      This script can then be executed by typing:
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>bash runme.sh</code></strong>
+      </pre><p>
+      While running, the script will generate a series of plots generated from
+      the APBS output depicting the change in electrostatic potential as a
+      function of distance from the ion center.  Of particular interest is the
+      change in potential from the inside to the outside of the ion.  When
+      finished, the run will generate a summary plot of solvation energy as a
+      function of distance.  The total run time for this script was roughly
+      6 minutes on a 2.2 GHz Intel Pentium 4.
+    </p><p>
+      In addition to the graphical output, users should also examine the
+      various files generated by the script, including:
+      </p><div class="variablelist"><dl><dt><span class="term"> <code class="filename">apbs-##.in</code> </span></dt><dd><p> APBS input files for each radius (##) </p></dd><dt><span class="term"> <code class="filename">ion-##.pqr</code> </span></dt><dd><p> Ion PQR files for each radius (##) </p></dd><dt><span class="term"> <code class="filename">apbs-##.out</code> </span></dt><dd><p> APBS output files for each radius (##) </p></dd><dt><span class="term"> <code class="filename">potential-##.dx</code> </span></dt><dd><p> Raw OpenDX-format potential data for each radius (##)
+            </p></dd><dt><span class="term"> <code class="filename">potential-##-xaxis.dx</code> </span></dt><dd><p> Potential data along x-axis for each radius (##)
+            </p></dd><dt><span class="term"> <code class="filename">energy.dat</code> </span></dt><dd><p> Solvation energies for each energy calculated
+            </p></dd></dl></div><p>
+    </p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ion-pmf-scet"></a>Chapter 3. Ion-ion desolvation</h2></div></div></div><p>
+    This example demonstrates the effects of "desolvation" as modeled by
+    reaction field terms in an implicit solvent setting.  It illustrates that,
+    while like charges do attract, the elimination of high dielectric material
+    to form the charge-charge interface can introduce a substantial energetic
+    barrier to association.
+  </p><p>
+    The scripts required to run this example are bundled in the tarball
+    available for download 
+    <a href="examples/ion-pmf/ion-pmf.tar.gz" target="_top">here</a>.
+    This tarball should be uncompressed via:
+    </p><pre class="screen">
+      <code class="prompt">$</code> <strong class="userinput"><code>gzip -dc ion-pmf.tar.gz | tar xvf -</code></strong>
+    </pre><p>
+    The main program is the file <code class="filename">runme.sh</code> which runs APBS
+    repeatedly on the following input file:
+    </p><div class="example"><a name="id932105"></a><p class="title"><b>Example 3.1. APBS input for ion-ion PMF</b></p><div class="example-contents"><pre class="programlisting">
+read 
+    mol pqr complex.pqr    # Two-ion complex
+    mol pqr mol1.pqr       # Ion 1
+    mol pqr mol2.pqr       # Ion 2
+end
+elec name comp_solv        # Solvated complex
+    mg-manual
+    dime 97 33 33          # Grid dimensions
+    nlev 4                 # Multigrid levels
+    glen 24 12 12          # Grid lengths
+    gcent 6 0 0            # Grid center on (6.0, 0.0, 0.0)
+    mol 1 
+    lpbe                   # Linearized PB
+    bcfl mdh               # Full multipole boundary condition
+    ion 1 0.000 2.0        # Zero ionic strength
+    ion -1 0.000 2.0       # Zero ionic strength
+    pdie 1.0               # Solute dielectric
+    sdie 78.54             # Solvent dielectric
+    chgm spl2              # Cubic spline charge discretization
+    srfm mol               # Molecular surface
+    srad 1.4               # Solvent probe radius
+    swin 0.3               # Surface spline window
+    sdens 10.0             # Sphere density
+    temp 298.15            # Temperature
+    gamma 0.00072          # Apolar coefficient
+    write pot dx pot-solv  # Inhomogeneous dielectric potential
+    calcenergy total       # Total energy
+    calcforce no           # No forces
+end
+elec name comp_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 1
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+    write pot dx pot-vac
+end
+elec name ion1_solv
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 2
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 78.54
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion1_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 2
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion2_solv
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 3
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 78.54
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+elec name ion2_vac
+    mg-manual
+    dime 97 33 33
+    nlev 4 
+    glen 24 12 12 
+    gcent 6 0 0 
+    mol 3
+    lpbe
+    bcfl mdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 1.0
+    sdie 1.0
+    chgm spl2
+    srfm mol
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.00072
+    calcenergy total
+    calcforce no
+end
+
+print energy comp_solv - comp_vac - ion1_solv + ion1_vac - ion2_solv + ion2_vac end
+
+quit
+      </pre></div></div><p><br class="example-break">
+    This rather complicated input script calculates the solvation energy for
+    each of the components (the ion-ion complex and each of the isolated ions)
+    and then computes the change in solvation energy upon binding.
+  </p><p>
+    The series of APBS calculations can be started by typing:
+    </p><pre class="screen">
+      <code class="prompt">$</code> <strong class="userinput"><code>bash runme.sh</code></strong>
+    </pre><p>
+    The script will then perform the APBS calculations and plot the energies
+    of interaction as a function of distance.  Gnuplot should plot 
+    </p><div class="itemizedlist"><ul type="disc"><li><p>the energy of interaction,</p></li><li><p>the Coulomb energy for the homogeneous system (solvent
+          dielectric),</p></li><li><p>
+          and the relative positions of the ions with respect to a
+          solvent-sized probe.  
+        </p></li></ul></div><p>
+    Note that the energy increases with respect to the homogeneous system when
+    the two ions are within a solvent-probe diameter of each other.  This is a
+    desolvation penalty that models the <span class="emphasis"><em>polar</em></span> energy of
+    removing water from the solute-solute interface.
+  </p><p>
+    This script also calculates the reaction field potential (the potential
+    for the fully-solvated system minus the potential for the vacuum system)
+    along the x-axis.  These potentials can be visualized via Gnuplot by
+    typing:
+    </p><pre class="screen">
+      <code class="prompt">$</code> <strong class="userinput"><code>gnuplot -persist rxnfield.gnuplot</code></strong>
+    </pre><p>
+    and are shown below:
+    </p><div class="figure"><a name="id932204"></a><p class="title"><b>Figure 3.1. Reaction fields for ion-ion PMF</b></p><div class="figure-contents"><div><img src="images/rxnfld.png" alt="Reaction fields for ion-ion PMF"></div></div></div><p><br class="figure-break">
+    Notice that the reaction field is positive to the right of the positive
+    moving charge and is negative to the left of the fixed negative charge.
+    This demonstrates a change in screening behavior in the inhomogeneous
+    dielectric medium with respect to the vacuum.   In particular, for the
+    solvated system, the electrostatic potential is more positive next to the
+    positive ion and more negative next to the negative ion, than for the
+    vacuum system.
+  </p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="ligand-sect"></a>Chapter 4. Protein-ligand binding</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id932440">PQR files</a></span></dt><dt><span class="sect1"><a href="#id932555">Visualization of the electrostatic potentials</a></span></dt><dt><span class="sect1"><a href="#id932764">Binding energy calculation</a></span></dt></dl></div><p>
+    This section outlines the calculation of the electrostatic binding energy
+    for the protein kinase A complex with the inhibitor balanol.  This example
+    was provided by Chung Wong <code class="email">&lt;<a href="mailto:c4wong@ucsd.edu">c4wong@ucsd.edu</a>&gt;</code> and is related
+    to the work described in 
+    <a href="http://dx.doi.org/10.1021/jm000443d" target="_top">Wong CF, et al. J Med
+      Chem, 44 (10) 1530-1539 (2001).</a>
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id932440"></a>PQR files</h2></div></div></div><p>The PQR files were prepared by Chung Wong from an energy-refined
+      version of PDB file <a href="http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=1BX6" target="_top">1BX6</a>
+      with CHARMM22 charges and radii.  The individual PQR files can be
+      dowloaded:
+      </p><div class="itemizedlist"><ul type="disc"><li><p> 
+            <a href="examples/ligand/bx6_7_apo_apbs.pqr" target="_top"><span class="foreignphrase"><em class="foreignphrase">apo</em></span>
+              protein kinase A</a>
+          </p></li><li><p> 
+            <a href="examples/ligand/bx6_7_lig_apbs.pqr" target="_top">balanol</a>
+          </p></li><li><p> 
+            <a href="examples/ligand/bx6_7_bin_apbs.pqr" target="_top">protein kinase
+              A/balanol complex</a>
+          </p></li></ul></div><p>
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>You may have to right-click the links to save, rather than
+          display, the PQR files.
+        </p></td></tr></table></div><p>
+    </p><p>
+      These PQR files can be visualized via VMD:
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>vmd -pdb</code></strong> <em class="replaceable"><code>file.pqr</code></em>
+      </pre><p>
+      where <em class="replaceable"><code>file.pqr</code></em> is the name of the downloaded
+      PQR file.
+      An example of the complex structure is shown in the following figure.
+      </p><div class="figure"><a name="id932539"></a><p class="title"><b>Figure 4.1. PKA-balanol complex</b></p><div class="figure-contents"><div><img src="images/pka-balanol.png" alt="PKA-balanol complex"></div></div></div><p><br class="figure-break">
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id932555"></a>Visualization of the electrostatic potentials</h2></div></div></div><p>This section of the example illustrates the calculation of
+      lower-resolution electrostatic potentials suitable for interactive
+      display and manipulation.  First, we need to calculate electrostatic
+      potentials for the three molecules.  This is done with the following
+      APBS input file which can be downloaded 
+      <a href="examples/ligand/apbs-graphics.in" target="_top">here</a>.
+      </p><div class="example"><a name="id932575"></a><p class="title"><b>Example 4.1. PKA/balanol/complex visualization APBS input</b></p><div class="example-contents"><pre class="programlisting">
+read 
+    mol pqr bx6_7_lig_apbs.pqr  # Read balanol (mol 1)
+    mol pqr bx6_7_apo_apbs.pqr  # Read PKA (mol 2)
+    mol pqr bx6_7_bin_apbs.pqr  # Read complex (mol 3)
+end
+elec name bal
+    mg-auto                          # Use the multigrid method
+    dime 97 97 97                      # Grid dimensions
+    fglen 70 70 70                      # Grid length
+    fgcent mol 3                        # Center on complex
+    cglen 80 80 80                      # Grid length
+    cgcent mol 3                        # Center on complex
+    mol 1                              
+    lpbe                               
+    bcfl sdh                           # Monopole boundary conditions
+    ion 1 0.000 2.0                    # Zero ionic strength
+    ion -1 0.000 2.0                   
+    pdie 2.0                           # Solute dielectric
+    sdie 78.00                         # Solvent dielectric
+    chgm spl0                          # Charge disc method (linear)
+    srfm smol                          # Smoothed molecular surface
+    srad 0.0                           # Solvent radius
+    swin 0.3                           # Surface cubic spline window
+    sdens 10.0                         # Sphere density
+    temp 298.15                        # Temperature
+    gamma 0.105                        # Surface tension (in kJ/mol/A^2)
+    calcenergy no
+    calcforce no
+    write pot dx ligand                # Write potential to ligand.dx
+end
+elec name pka
+    mg-auto                          
+    dime 97 97 97                      
+    fglen 70 70 70 
+    fgcent mol 3  
+    cglen 80 80 80
+    cgcent mol 3 
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+   write pot dx apo
+end
+elec name complex
+    mg-auto
+    dime 97 97 97
+    fglen 70 70 70 
+    fgcent mol 3  
+    cglen 80 80 80
+    cgcent mol 3 
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0
+    pdie 2.0
+    sdie 78.00
+    chgm spl0
+    srfm smol
+    srad 0.0
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy no
+    calcforce no
+    write pot dx complex
+end
+
+quit
+        </pre></div></div><p><br class="example-break">
+      This APBS run can then be performed by typing:
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>apbs <em class="replaceable"><code>apbs-graphics.in</code></em></code></strong>
+      </pre><p>
+      (assuming the above input file was named
+      <em class="replaceable"><code>apbs-graphics.in</code></em>) and takes roughly 2 minutes
+      on a 2.2 GHz Intel Pentium 4.
+    </p><p>
+      In what follows, we use the Tcl
+      scripts 
+      <a href="examples/ligand/my_functions" target="_top"><code class="filename">my_functions</code></a>
+      and 
+      <a href="examples/ligand/all.vmd" target="_top"><code class="filename">all.vmd</code></a> 
+      to visualize the electrostatic potential data using VMD.  The
+      <code class="filename">my_function</code> Tcl script contains functions to load
+      all 3 data sets; the user simply needs to type (at the system prompt):
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>vmd -e all.vmd</code></strong>
+      </pre><p>
+      to load the ligand electrostatic potential into VMD.  VMD will display
+      the +1 kT/e potential isocontour as a blue transparent surface and the
+      -1 kT/e isocontour as a red surface as illustrated in the following
+      figure.
+      </p><div class="figure"><a name="id932666"></a><p class="title"><b>Figure 4.2. Balanol electrostatic potential</b></p><div class="figure-contents"><div><img src="images/balanol-pot.png" alt="Balanol electrostatic potential"></div></div></div><p><br class="figure-break">
+    </p><p>
+      The next command loads the apo PKA electrostatic potential and is run
+      <span class="emphasis"><em>from within VMD</em></span>:
+      </p><pre class="screen">
+        <code class="prompt">vmd &gt;</code> <strong class="userinput"><code>load_apo</code></strong>
+      </pre><p>
+      which should yield an image that looks something like the following:
+      </p><div class="figure"><a name="id932707"></a><p class="title"><b>Figure 4.3. Balanol electrostatic potential</b></p><div class="figure-contents"><div><img src="images/pka-pot.png" alt="Balanol electrostatic potential"></div></div></div><p><br class="figure-break">
+    </p><p>
+      Finally, the complex can be loaded by typing,
+      <span class="emphasis"><em>from within VMD</em></span>:
+      </p><pre class="screen">
+        <code class="prompt">vmd &gt;</code> <strong class="userinput"><code>load_complex</code></strong>
+      </pre><p>
+      this renders the electrostatic potential of the ligand in the context of
+      the complex and allows the user to examine charge/potential
+      complementarity in the system.
+      </p><div class="figure"><a name="id932748"></a><p class="title"><b>Figure 4.4. Balanol electrostatic potential</b></p><div class="figure-contents"><div><img src="images/pka-balanol-pot.png" alt="Balanol electrostatic potential"></div></div></div><p><br class="figure-break">
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id932764"></a>Binding energy calculation</h2></div></div></div><p>
+      Calculation of electrostatic binding energies for the PKA-balanol system
+      requires higher-resolution electrostatics calculations than could be
+      easily visualized in the previous section.  We will use focusing to
+      generate the finer data from the coarser calculations performed in the
+      earlier calculations.  This procedure is outlined in the following APBS
+      input file which is available for download 
+      <a href="examples/ligand/apbs-energy.in" target="_top">here</a>.
+      </p><div class="example"><a name="id932785"></a><p class="title"><b>Example 4.2. Balanol-PKA energy calculation APBS input</b></p><div class="example-contents"><pre class="programlisting">
+read 
+    mol pqr bx6_7_lig_apbs.pqr  # Balanol
+    mol pqr bx6_7_apo_apbs.pqr  # Protein kinase A
+    mol pqr bx6_7_bin_apbs.pqr  # Complex
+end
+
+elec name bal                # BALANOL ENERGY CALCULATION
+    mg-auto   
+    dime 65 65 65            # Grid dimensions
+    cglen 70 70 70           # Coarse grid lengths
+    cgcent mol 3             # Coarse grid centered on the complex
+    fglen 16 16 16           # Fine grid lengths
+    fgcent mol 1             # Fine grid centered on the complex
+    mol 1                    
+    lpbe                     # Linearized PB
+    bcfl sdh                 # Monopole boundary condition
+    ion 1 0.000 2.0          # Zero ionic strength
+    ion -1 0.000 2.0         
+    pdie 2.0                 # Solute dielectric
+    sdie 78.00               # Solvent dielectric
+    chgm spl0                # Linear charge discretization
+    srfm mol                # Smoothed molecular surface
+    srad 0.0                 # Solvent probe radius
+    swin 0.3                 # Surface spline window (not used)
+    sdens 10.0               # Sphere density
+    temp 298.15              # Temperature
+    gamma 0.105              # Surface tension (not used)
+    calcenergy total
+    calcforce no
+end
+
+elec name pka                # PROTEIN KINASE A CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 2
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm mol      
+    srad 0.0       
+    swin 0.3       
+    sdens 10.0 
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+elec name complex            # COMPLEX CALCULATION
+    mg-auto   
+    dime 65 65 65
+    cglen 70 70 70
+    cgcent mol 3
+    fglen 16 16 16
+    fgcent mol 1
+    mol 3
+    lpbe
+    bcfl sdh
+    ion 1 0.000 2.0
+    ion -1 0.000 2.0         
+    pdie 2.0       
+    sdie 78.00     
+    chgm spl0      
+    srfm mol      
+    srad 0.0       
+    swin 0.3   
+    sdens 10.0    
+    temp 298.15    
+    gamma 0.105   
+    calcenergy total
+    calcforce no
+end
+
+print energy complex - pka - bal end
+
+quit
+        </pre></div></div><p><br class="example-break">
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>
+          This APBS input file represents a "non-canonical" method for
+          computing energies.  In any electrostatic energy calculation, care
+          needs to be taken to remove self-interaction terms.  This removal is
+          usually accomplished via a solvation energy calculation (cf. 
+          <a href="#born-sect" title="Chapter 2. The Born ion">the Born example</a>).  However, in
+          this example, we remove the self-interaction energies via a series
+          of calculations which use <span class="emphasis"><em>exactly</em></span> the same grid
+          spacings, lengths, and centers.  Since all atoms in the complex are
+          present in the <span class="foreignphrase"><em class="foreignphrase">apo</em></span> protein and
+          ligand, the self-interaction terms are effectively removed.
+        </p></td></tr></table></div><p>
+      This example can be run by typing (from the system prompt):
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>apbs <em class="replaceable"><code>apbs-energy.in</code></em></code></strong>
+      </pre><p>
+      (assuming the downloaded input file was name
+      <em class="replaceable"><code>apbs-energy.in</code></em>).  This example takes roughly
+      2 minutes no a 2.2 GHz Intel Pentium 4 and should give a binding energy
+      of 19.96 kJ/mol.
+    </p><p>
+      One question that should arise is:  why is the binding unfavorable?  The
+      Coulombic contribution to the binding energy is favorable (you can use
+      the APBS program <code class="filename">coulomb</code> to evaluate this); but
+      there is a substantial polar desolvation penalty for binding of the
+      substrate to the protein.  However, our current calculation has
+      neglected apolar contributions to the energy.  These terms, which usally
+      scale with the surface area, favor the binding.  Using the APBS program
+      <code class="filename">acc</code>, we can determine that over 1000
+      A<sup>2</sup> of solvent-accessible surface area
+      is lost when the complex is formed.  Using even conservative values of
+      the apolar energy surface tension (which usually ranges between 0.105 to
+      210 kJ/A<sup>2</sup>), we can see that this buried
+      surface area provides stabilization to the complex.
+    </p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="condensation-sect"></a>Chapter 5. NaCl condensation around DNA</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id933418">PQR file</a></span></dt><dt><span class="sect1"><a href="#id933450">Calculating the potential and charge density</a></span></dt><dt><span class="sect1"><a href="#id933513">Visualization</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id933538"> Electrostatic potential </a></span></dt><dt><span class="sect2"><a href="#id933605">Charge density</a></span></dt></dl></dd></dl></div><p>
+    Ion condensation to DNA is an excellent example of non-specific
+    interactions of cations with polyelectrolytes.  In this example we
+    demonstrate NaCl condensation to a B-DNA dodecamer.
+  </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id933418"></a>PQR file</h2></div></div></div><p>
+      The starting structure was a 35 base-pair DNA molecule
+        with a net charge of -70 e.  The PQR file for this system
+      is available for download 
+      <a href="examples/condensation/dna.pqr" target="_top">here</a> and shown in the
+      following figure:
+      </p><div class="figure"><a name="id933435"></a><p class="title"><b>Figure 5.1. B-DNA dodecamer</b></p><div class="figure-contents"><div><img src="images/dna.png" alt="B-DNA dodecamer"></div></div></div><p><br class="figure-break">
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id933450"></a>Calculating the potential and charge density</h2></div></div></div><p>  The goal of the following APBS calculation is to generate
+      visualization-quality solutions to the nonlinear PBE equation and to
+      write out the electrostatic potential and charge density for subsequent
+      analysis.  This procedure is carried out in the following APBS input
+      file, available for download 
+      <a href="examples/condensation/apbs.in" target="_top">here</a>.
+      </p><div class="example"><a name="id933470"></a><p class="title"><b>Example 5.1. APBS DNA condensation input file</b></p><div class="example-contents"><pre class="programlisting">
+read 
+    mol pqr dna.pqr         # Read in DNA
+end
+elec
+    mg-auto
+    dime 97 97 161          # Rectangular grid dimensions
+    cglen 160 160 230       # Rectangular box
+    fglen 130 130 200       # Rectangular box
+    cgcent mol 1            # Center on the molecule
+    fgcent mol 1            # Center on the molecule
+    mol 1                   
+    npbe                    # Nonlinear DNA
+    bcfl mdh                # Full multipole approximation
+    ion 1 0.100 2.0         # 100 mM Na+
+    ion -1 0.100 2.0        # 100 mM Cl-
+    pdie 1.0                # Solute dielectric
+    sdie 78.54              # Solvent dielectric
+    chgm spl0               # Linear charge discretization
+    srfm smol               # Smoothed molecular surface
+    srad 1.4                # Solvent probe radius
+    swin 0.3                # Spline surface window (not used)
+    sdens 10.0              # Sphere density
+    temp 298.15             # Temperature
+    gamma 0.105             # Apolar coefficient
+    calcenergy no           # No energies
+    calcforce no            # No forces
+    write qdens dx qdens    # Write out charge density
+    write pot dx pot        # Write out potential
+end
+
+quit
+        </pre></div></div><p><br class="example-break">
+      In this example, the full multipole boundary condition was used to
+      better represent the enlongated charge distribution of the DNA.
+      As usual, this file can then be used with APBS via the command:
+      </p><pre class="screen">
+        <code class="prompt">$</code> <strong class="userinput"><code>apbs <em class="replaceable"><code>apbs.in</code></em></code></strong>
+      </pre><p>
+      where <em class="replaceable"><code>apbs.in</code></em> is the name of the downloaded
+      input file.  This example took roughly 4 minutes on a 2.2 GHz Intel
+      Pentium 4.
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id933513"></a>Visualization</h2></div></div></div><p>
+      </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> 
+          The following requires the VMD functions provided in the 
+          <a href="examples/condensation/my_functions" target="_top">my_functions</a>
+          Tcl script.  Please download this before proceeding.
+        </p></td></tr></table></div><p>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id933538"></a> Electrostatic potential </h3></div></div></div><p> The electrostatic potential can be visualized via VMD by running
+        the <a href="examples/condensation/pot.vmd" target="_top">pot.vmd</a> script
+        in VMD:
+        </p><pre class="screen">
+          <code class="prompt">$</code> <strong class="userinput"><code>vmd -e pot.vmd</code></strong>
+        </pre><p>
+        The result should be the rather uninteresting potential isosurface:
+        </p><div class="figure"><a name="id933572"></a><p class="title"><b>Figure 5.2. DNA electrostatic potential</b></p><div class="figure-contents"><div><img src="images/dna-pot.png" alt="DNA electrostatic potential"></div></div></div><p><br class="figure-break">
+        which can be adjusted via the 
+        <span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Representations</span>
+        menu item.
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id933605"></a>Charge density</h3></div></div></div><p> The charge density for the DNA is much more interesting than the
+        electrostatic potential.  The first step in our analysis will be to
+        plot the average radial density around the DNA using the Python script
+        <a href="examples/condensation/density" target="_top">density</a>.
+        This script can then be used to process the volume-based density file
+        <code class="filename">qdens.dx</code> produced by our earlier APBS run:
+        </p><pre class="screen">
+          <code class="prompt">$</code> <strong class="userinput"><code>python density qdens.dx | tee qdens.dat</code></strong>
+        </pre><p>
+        The result of this command will be 3 columns of data (on the screen
+        and written to <code class="filename">qdens.dat</code>):  the radius (in
+        A), the charge density at the given radius averaged over all
+        angles and displacements along the center of the cylinder (+/- 10
+        A)
+        (in e<sub>c</sub> A<sup>-3</sup>), 
+        and the cumulative charge density per unit distance along the DNA
+        molecule
+        (in e<sub>c</sub> A<sup>-2</sup>).
+        This averaging is performed over the center of the DNA cylinder to
+        avoid well-known "end effects".
+      </p><p>
+        The overall charge density profile can be visualized by starting 
+        Gnuplot:
+        </p><pre class="screen">
+          <code class="prompt">$</code> <strong class="userinput"><code>gnuplot</code></strong>
+        </pre><p>
+        and typing the following commands within Gnuplot:
+        </p><pre class="screen">
+          <code class="prompt">gnuplot&gt;</code> <strong class="userinput"><code>set xlabel "Radius (A)"</code></strong>
+          <code class="prompt">gnuplot&gt;</code> <strong class="userinput"><code>set ylabel "Charge density (e/A^3)"</code></strong>
+          <code class="prompt">gnuplot&gt;</code> <strong class="userinput"><code>plot 'qdens.dat' using 1:2 title 'Charge density' with linespoints</code></strong>
+        </pre><p>
+        The resulting plot shows the distribution of ions around the DNA
+        molecule.  The cumulative charge density can also be plotted by:
+        </p><pre class="screen">
+          <code class="prompt">gnuplot&gt;</code> <strong class="userinput"><code>set ylabel "Cumulative charge density per length (e/A^2)"</code></strong>
+          <code class="prompt">gnuplot&gt;</code> <strong class="userinput"><code>plot 'qdens.dat' using 1:3 title 'Charge density' with linespoints</code></strong>
+        </pre><p>
+        When you are done with Gnuplot, simply exit by typing
+        <strong class="userinput"><code>quit</code></strong> at the prompt.
+        The results of these calculations are very sensitive to grid spacing
+        and boundary conditions; this is mainly why the PB solution appears to
+        be over-screening the DNA molecule.
+      </p><p>
+        The charge distribution can also be visualized with VMD by downloading
+        <a href="examples/condensation/qdens.vmd" target="_top">qdens.vmd</a> and
+        running:
+        </p><pre class="screen">
+          <code class="prompt">$</code> <strong class="userinput"><code>vmd -e qdens.vmd</code></strong>
+        </pre><p>
+      </p><p>
+        You can translate the DNA molecule towards you by clicking in the VMD
+        OpenGL window and typing 't' and holding down the middle mouse button
+        while dragging.  By doing this, you can cut through the charge density
+        isosurfaces and get a better look at how the salt is arranged around the
+        DNA.  Additionally, you can modify the isocontour values 
+        (<span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Representations</span> menu item)
+        to examine regions of different salt concetration.  The result of all
+        this manipulation should look something like the following image:
+        </p><div class="figure"><a name="id933840"></a><p class="title"><b>Figure 5.3. NaCl charge density around DNA</b></p><div class="figure-contents"><div><img src="images/dna-qdens.png" alt="NaCl charge density around DNA"></div></div></div><p><br class="figure-break">
+      </p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="gemstone-sect"></a>Chapter 6. Using APBS with Gemstone</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id934363">Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id934389">Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id934502">Perform an electrostatics calculation with APBS</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id934534">Calculation</a></span></dt><dt><span class="sect2"><a href="#id934579">Grid</a></span></dt><dt><span class="sect2"><a href="#id934627">Physics</a></span></dt><dt><span class="sect2"><a href="#id934662">File I/O </a></span></dt><dt><span class="sect2"><a href="#id934696">Running the calculation</a></span></dt><dt><span class="sect2"><a href="#id934727">Other calculations</a></span></dt></dl></dd></dl></div><p> This section demonstrates how <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a> can be used to
+        perform most APBS calculations commonly done through the command-line
+        interface.  Better yet, it allows you to use <a href="http://nbcr.net" target="_top">NBCR's</a> resources instead of your own!
+    </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id934363"></a>Getting Gemstone</h2></div></div></div><p> As mentioned earlier, you need to download and install the Gemstone
+            extension for the <a href="http://www.mozilla.com/firefox/" target="_top">Firefox</a> web
+            browser from <a href="http://gemstone.mozdev.org" target="_top">http://gemstone.mozdev.org</a>
+            before starting this tutorial.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id934389"></a>Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.  First, you need
+            to download a PDB file from the <a href="http://www.pdb.org" target="_top">Protein Data Bank</a>.  For the
+            purposes of this example, we'll use <a href="http://www.pdb.org/pdb/navbarsearch.do?newSearch=yes&amp;inputQuickSearch=1fas" target="_top">1FAS</a>
+            in PDB format (download directly <a href="http://www.pdb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId=1FAS" target="_top">here</a>).
+        </p><p>
+            Open the Gemstone interface through the Firefox menu 
+            <span class="guimenu">Tools</span> &#8594; <span class="guimenuitem">Gemstone</span>.  
+            Select the PDB2PQR application through the Gemstone menu
+            <span class="guimenu">Utils</span> &#8594; <span class="guimenuitem">PDB2PQR</span>
+            on the righthand side of the Gemstone screen.  Select the PDB file
+            you just downloaded and any other options for PDB2PQR of interest.
+            Your screen should look something like: 
+            </p><div class="figure"><a name="id934472"></a><p class="title"><b>Figure 6.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation"></div></div></div><p><br class="figure-break">
+            Go ahead and "Run" the Gemstone calculation, check the
+            <code class="filename">stdOut</code> and <code class="filename">stdErr</code> for any
+            warning messages, and download the resulting PQR file.
+        </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id934502"></a>Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS calculation of the 1FAS
+            electrostatic potential through Gemstone.  Open the 
+            <span class="guimenu">Chemistry</span> &#8594; <span class="guimenuitem">Apbs</span>
+            menu on the righthand side of the Gemstone screen.  We'll step
+            through each of the input tabs in the middle pane in the following
+            sections.
+        </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934534"></a>Calculation</h3></div></div></div><p>Move to the Calculation tab in the middle pane.</p><p>Most of the "Mathematics" settings can be left as-is;
+                however, feel free to play with the discretization and surface
+                definitions to see how it affects your results.</p><p>Under "Molecules", load the 1FAS PQR file you just prepared
+                in the previous section.</p><p>Don't select anything under "Energy and Force" for this
+                calculation.</p><p>At this point, your screen should look something like this:
+                </p><div class="figure"><a name="id934562"></a><p class="title"><b>Figure 6.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen"></div></div></div><p><br class="figure-break"> 
+            </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934579"></a>Grid</h3></div></div></div><p>Next, move to the Grid tab in the middle pane.</p><p>Under "General", enter 97 for X, Y, and Z "Grid points".</p><p>Under "Coarse Grid", choose 100 for all X, Y, and Z
+                "Lengths".  Center the mesh on the molecule.</p><p>Under "Fine Grid", choose 80 for all X, Y, and Z
+                "Lengths".  Center the mesh on the molecule.</p><p>Leave the "Parallel Execution" alone for this
+                calculation.</p><p>At this point, your screen should look something like this:
+                </p><div class="figure"><a name="id934611"></a><p class="title"><b>Figure 6.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen"></div></div></div><p><br class="figure-break"> 
+            </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934627"></a>Physics</h3></div></div></div><p>Next, move to the Physics tab in the middle pane.</p><p>Choose any values you like here; the defaults should be fine
+                for most visualization calculations.</p><p>At this point, your screen should look something like this:
+                </p><div class="figure"><a name="id934646"></a><p class="title"><b>Figure 6.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen"></div></div></div><p><br class="figure-break"> 
+            </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934662"></a>File I/O </h3></div></div></div><p>Next, move to the File I/O tab in the middle pane.</p><p>Unless you have other properties you wan to visualize, you
+                can leave these settings as-is.</p><p>At this point, your screen should look something like this:
+                </p><div class="figure"><a name="id934680"></a><p class="title"><b>Figure 6.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen"></div></div></div><p><br class="figure-break"> 
+            </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934696"></a>Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab and select "Run APBS".
+                After a while, the results will appear under the Output tab in
+                the middle pane.  When the run is complete, you should see
+                something like this:
+                </p><div class="figure"><a name="id934708"></a><p class="title"><b>Figure 6.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)"></div></div></div><p><br class="figure-break"> 
+                In particular, you should have the option to save the potential
+                file calculated in this APBS run.  
+            </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934727"></a>Other calculations</h3></div></div></div><p>Nearly all of the examples in this tutorial can also be
+                performed with Gemstone.  Furthermore, input files can be
+                uploaded to use Gemstone as a "portal" to web services at other
+                institutions.
+            </p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id935151"></a>Chapter 7. More examples...</h2></div></div></div><p>  In addition to the relatively simple applications presented here,
+      there are a number of additional examples distributed with the APBS
+      software package 
+      (<a href="http://apbs.sourceforge.net" target="_top">http://apbs.sourceforge.net</a>)
+      which include ionization energies, protein-protein interactions, parallel 
+      calculations, etc.
+    </p></div></div></body></html>

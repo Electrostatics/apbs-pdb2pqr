@@ -1,9 +1,0 @@
-digraph inheritance
-{
-  Node302 [shape="box",label="vpmgp.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node303 -> Node302 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node303 [shape="box",label="vpmg.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$vpmg_8h.html"];
-  Node304 -> Node303 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node304 [shape="box",label="apbs.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$apbs_8h.html"];
-  Node304 -> Node302 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-}

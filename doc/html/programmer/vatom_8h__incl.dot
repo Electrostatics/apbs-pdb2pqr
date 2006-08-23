@@ -1,8 +1,0 @@
-digraph inheritance
-{
-  Node124 [shape="box",label="vatom.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node125 -> Node124 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node125 [shape="box",label="maloc/maloc.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="grey75"];
-  Node126 -> Node124 [dir=back,color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node126 [shape="box",label="apbs/vhal.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$vhal_8h.html"];
-}

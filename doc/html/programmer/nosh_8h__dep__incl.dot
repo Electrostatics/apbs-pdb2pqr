@@ -1,9 +1,0 @@
-digraph inheritance
-{
-  Node52 [shape="box",label="nosh.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node53 -> Node52 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node53 [shape="box",label="apbs.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$apbs_8h.html"];
-  Node54 -> Node53 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-  Node54 [shape="box",label="routines.h",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$routines_8h.html"];
-  Node54 -> Node52 [color="midnightblue",fontsize=10,style="solid",fontname="Helvetica"];
-}

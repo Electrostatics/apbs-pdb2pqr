@@ -316,12 +316,13 @@ VEXTERNC void killForce(Vmem *mem, NOsh *nosh, int nforce[NOSH_MAXCALC],
 /**
  * @brief Store energy in arrays for future use
  * @ingroup Frontend
- * @author Todd Dolinsky
- * @param pmg MB object
- * @param icalc Calculation number
- * @param atomEnergy Pointer to storage array of doubles
- * @param nEnergy Stores number of atoms per calc */
-VEXTERNC void storeAtomEnergy(Vpmg *pmg, int icalc, double **atomEnergy, int *nenergy);
+ * @author Todd Dolinsky */
+VEXTERNC void storeAtomEnergy(
+		Vpmg *pmg, /**< MG object */
+		int icalc, /**< Calculation number */
+		double **atomEnergy, /**< Pointer to storage array of doubles */
+		int *nenergy /**< Stores number of atoms per calc */
+		);
 
 /**
  * @brief Write out information to a flat file

@@ -1,9 +1,0 @@
-digraph inheritance
-{
-  Node72 [shape="box",label="sVpbe",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",style="filled" fontcolor="white"];
-  Node73 -> Node72 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="acc",fontname="Helvetica"];
-  Node73 [shape="box",label="sVacc",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsVacc.html"];
-  Node74 -> Node73 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="alist",fontname="Helvetica"];
-  Node74 [shape="box",label="sValist",fontsize=10,height=0.2,width=0.4,fontname="Helvetica",color="black",URL="$structsValist.html"];
-  Node74 -> Node72 [dir=back,color="darkorchid3",fontsize=10,style="dashed",label="alist",fontname="Helvetica"];
-}
