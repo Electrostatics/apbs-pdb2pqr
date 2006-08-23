@@ -154,7 +154,7 @@
 
         </sect2>
 
-        <sect1> <title>Other calculations</title>
+        <sect2> <title>Other calculations</title>
 
             <para>Nearly all of the examples in this tutorial can also be
                 performed with Gemstone.  Furthermore, input files can be

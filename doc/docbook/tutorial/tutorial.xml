@@ -156,7 +156,7 @@
         </para>
       </important>
       <warning>
-        <para> This tutorial require several files (linked to from the
+        <para> This tutorial requires several files (linked to from the
           individual examples) be downloaded.  It is recommended that you
           create a separate subdirectory (e.g., 
           <userinput>mkdir foo; cd foo</userinput>) for each example.  Also
