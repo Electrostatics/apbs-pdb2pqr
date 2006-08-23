@@ -12,7 +12,7 @@ proc add_contour {molNum value color} {
 }
 
 proc load_lig {} {
-    mol load pdb bx6_7_lig_apbs.pqr
+    mol new bx6_7_lig_apbs.pqr type pdb
     mol modstyle 0 0 cpk
     rock x by 2
     display update
@@ -27,7 +27,7 @@ proc load_apo {} {
 
     mol delete 0 
 
-    mol new bx6_7_apo_apbs.pqr
+    mol new bx6_7_apo_apbs.pqr type pdb
     mol modstyle 0 1 Tube
     mol modmaterial 0 1 Opaque
     rock x by 2
@@ -43,7 +43,7 @@ proc load_complex {} {
     rock off
     display update
 
-    mol load pdb bx6_7_bin_apbs.pqr
+    mol new bx6_7_bin_apbs.pqr type pdb
     mol modstyle 0 2 Tube
     mol modmaterial 0 2 Opaque
     display update
