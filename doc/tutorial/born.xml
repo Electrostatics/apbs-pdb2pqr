@@ -29,7 +29,7 @@ ATOM      1   I  ION     1       0.000   0.000   0.000  1.00 3.00
           <ulink url="examples/born/example-ion.pqr">here</ulink> and loaded
           into VMD with the command:
           <screen>
-            <prompt>$</prompt> <userinput>vmd -pdb ion.pqr</userinput>
+            <prompt>$</prompt> <userinput>vmd ion.pqr</userinput>
           </screen>
         </para>
       </example>
