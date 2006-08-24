@@ -41,7 +41,7 @@
     <para>
       These PQR files can be visualized via VMD:
       <screen>
-        <prompt>$</prompt> <userinput>vmd -pdb</userinput> <replaceable>file.pqr</replaceable>
+        <prompt>$</prompt> <userinput>vmd</userinput> <replaceable>file.pqr</replaceable>
       </screen>
       where <replaceable>file.pqr</replaceable> is the name of the downloaded
       PQR file.
