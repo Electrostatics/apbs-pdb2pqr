@@ -227,6 +227,7 @@ VPRIVATE int Valist_readPDBResidueNumber(
         Valist *thee, Vio *sock, int *resSeq) {
 
     char tok[VMAX_BUFSIZE];
+	char *resstring;
     int ti = 0;
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
@@ -234,9 +235,42 @@ VPRIVATE int Valist_readPDBResidueNumber(
         return 0;
     } 
     if (sscanf(tok, "%d", &ti) != 1) {
-        Vnm_print(2, "Valist_readPDB:  Unable to parse resSeq token (%s) as int!\n",
+
+	    /* One of three things can happen here:
+			1)  There is a chainID in the line:    THR A   1
+			2)  The chainID is merged with resSeq: THR A1001
+			3)  An actual error:                   THR foo
+
+		*/
+
+		if (strlen(tok) == 1) {
+			/* Case 1: Chain ID Present 
+                       Read the next field and hope its a float */
+
+			if (Vio_scanf(sock, "%s", tok) != 1) {
+        		Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing resSeq!\n");
+        		return 0;
+    		}   
+    		if (sscanf(tok, "%d", &ti) != 1) {
+				Vnm_print(2, "Valist_readPDB:  Unable to parse resSeq token (%s) as int!\n",
                 tok);
-        return 0;
+        		return 0;
+			}
+				
+		} else {
+			/* Case 2: Chain ID, merged string.
+					   Move pointer forward past the chainID and check
+    	    */
+			strcpy(resstring, tok); 
+			resstring++;
+
+			if (sscanf(resstring, "%d", &ti) != 1) {
+				/* Case 3:  More than one non-numeral char is present. Error.*/
+                Vnm_print(2, "Valist_readPDB:  Unable to parse resSeq token (%s) as int!\n",
+                resstring);
+            	return 0;
+			}
+		} 
     } 
     *resSeq = ti;
 
