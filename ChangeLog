@@ -40,7 +40,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
      --output-format flags.
    * Added ion-pmf to the make test suite.
    * Updated splash screen to include new PMG acknowledgment
-	
+   * Added support for standard one-character chain IDs in PQR files.	
 - BUG FIXES
    * Cleanup of documentation, new Gemstone example
    * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
