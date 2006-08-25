@@ -1,8 +1,12 @@
 XSLDIR=/sw/share/xml/xsl/docbook-xsl/html
 XSLPATH=$(XSLDIR)/onechunk.xsl
-XSLTPROCOPT=-stringparam admon.graphics 1
+XSLPATH=$(XSLDIR)/docbook.xsl
+XSLTPROCOPT=-stringparam admon.graphics 1 \
+	    -stringparam section.autolabel 1 \
+	    -stringparam toc.section.depth 0 \
+	    -stringparam section.label.includes.component.label 1
 default: xsltproc
 docbook2html:
 	docbook2html --nochunks tutorial.xml
 xsltproc:
-	xsltproc $(XSLTPROCOPT) $(XSLPATH) tutorial.xml
+	xsltproc $(XSLTPROCOPT) $(XSLPATH) tutorial.xml > index.html

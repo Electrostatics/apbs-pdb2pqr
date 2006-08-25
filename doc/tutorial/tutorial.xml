@@ -1,189 +1,385 @@
-<?xml version='1.0'?> <!-- -*- xml -*- -->
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY apbsver "0.4.0">
-<!ENTITY apbsdat "10 NOV 2004">
-<!ENTITY license SYSTEM "license.xml">
-<!ENTITY born-sect SYSTEM "born.xml">
-<!ENTITY ligand-sect SYSTEM "ligand.xml">
-<!ENTITY condensation-sect SYSTEM "condensation.xml">
-<!ENTITY gemstone-sect SYSTEM "gemstone.xml">
-<!ENTITY ion-pmf-sect SYSTEM "ion-pmf.xml">
+<!ENTITY apbsver "0.4.1">
+<!ENTITY apbsurl "http://apbs.sf.net">
+<!ENTITY apbsdat "Not yet released">
 ]>
 
 <book>
-  <bookinfo>
-    <title>APBS Tutorial</title>
-    <author>
-      <firstname>Nathan</firstname>
-      <surname>Baker</surname>
-      <affiliation>
-        <orgname>Washington University in St. Louis</orgname>
-        <orgdiv>Department of Biochemistry and Molecular Biophysics</orgdiv>
-        <orgdiv>Center for Computational Biology</orgdiv>
-      </affiliation>
-      <address>
-        <street>700 S. Euclid Ave.</street>
-        <street>Campus Box 8036</street>
-        <city>St. Louis</city>
-        <state>MO</state>
-        <postcode>63110</postcode>
-        <country>USA</country>
-        <email>baker@biochem.wustl.edu</email>
-      </address>
-    </author>
-    <date>19 MAR 2004</date>
-    <copyright>
-      <year>2002</year>
-      <year>2003</year>
-      <year>2004</year>
-      <year>2005</year>
-      <year>2006</year>
-      <holder>Washington University in St. Louis</holder>
-    </copyright>
-    <legalnotice>
-      <para>This file is part of APBS.</para>
-      <para>This program is free software; you can redistribute it and/or
-      modify it under the terms of the GNU General Public License as published
-      by the Free Software Foundation; either version 2 of the License, or (at
-      your option) any later version.</para>
-      <para>This program is distributed in the hope that it will be useful, but
-      WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
-      Public License for more details.</para>
-      <para>You should have received a copy of the GNU General Public License
-      along with this program; if not, write to the Free Software Foundation,
-      Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</para>
-      <para>Linking APBS statically or dynamically with other modules is 
-      making a combined work based on APBS. Thus, the terms and conditions of 
-      the GNU General Public License cover the whole combination.</para>
-      <para>SPECIAL GPL EXCEPTION:
-      In addition, as a special exception, the copyright holders of APBS
-      give you permission to combine the APBS program with free software
-      programs and libraries that are released under the GNU LGPL or with
-      code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
-      SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
-      redistributed together in original or modified form as mere aggregation
-      without requirement that the entire work be under the scope of the GNU 
-      General Public License. This special exception permission is also extended
-      to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
-      FEtk, MC, or MALOC libraries.</para>
-      
-      <para>Note that people who make modified versions of APBS are not 
-      obligated to grant this special exception for their modified versions; 
-      it is their choice whether to do so. The GNU General Public License gives
-      permission to release a modified version without this exception; this
-      exception also makes it possible to release a modified version which
-      carries forward this exception.</para>
-    </legalnotice>
-    <date>&apbsdat;</date>
-    <edition>APBS version &apbsver;</edition>
-  </bookinfo>
+	<bookinfo>
+		<title>APBS tutorial</title>
+		<author>
+			<firstname>Nathan</firstname>
+			<surname>Baker</surname>
+			<affiliation> 
+				<orgname>Washington University in St.  Louis</orgname> 
+				<orgdiv>Department of Biochemistry and
+					Molecular Biophysics</orgdiv>
+				<orgdiv>Center for Computational Biology</orgdiv>
+			</affiliation>
+			<address> 
+				<street>700 S.  Euclid Ave.</street>
+			       	<street>Campus Box 8036</street>
+			       	<city>St.  Louis</city>
+			       	<state>MO</state>
+			       	<postcode>63110</postcode>
+			       	<country>USA</country>
+				<email>baker@ccb.wustl.edu</email> 
+			</address> 
+		</author>
+		<copyright>
+			<year>2002</year> <year>2003</year> <year>2004</year> <year>2005</year> <year>2006</year>
+			<holder>Washington University in St.  Louis</holder>
+		</copyright>
+		<legalnotice>
+			<para>This file is part of APBS.</para>
+			<para>This program is free software; you can
+				redistribute it and/or modify it under the
+				terms of the GNU General Public License as
+				published by the Free Software Foundation;
+				either version 2 of the License, or (at your
+				option) any later version.</para>
+			<para>This
+				program is distributed in the hope that it will
+				be useful, but WITHOUT ANY WARRANTY; without
+				even the implied warranty of MERCHANTABILITY or
+				FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+				General Public License for more details.</para>
+			<para>You should have received a copy of the GNU
+				General Public License along with this program;
+				if not, write to the Free Software Foundation,
+				Inc., 59 Temple Place, Suite 330, Boston, MA
+				02111-1307 USA</para>
+			<para>Linking APBS statically or dynamically with other
+				modules is making a combined work based on
+				APBS.  Thus, the terms and conditions of the
+				GNU General Public License cover the whole
+				combination.</para>
+			<para>SPECIAL GPL EXCEPTION: In addition, as a special
+				exception, the copyright holders of APBS give
+				you permission to combine the APBS program with
+				free software programs and libraries that are
+				released under the GNU LGPL or with code
+				included in releases of ISIM, Ion Simulator
+				Interface, PMV, PyMOL SMOL, VMD, and Vision.
+				Such combined software may be linked with APBS
+				and redistributed together in original or
+				modified form as mere aggregation without
+				requirement that the entire work be under the
+				scope of the GNU General Public License.  This
+				special exception permission is also extended
+				to any software listed in the SPECIAL GPL
+				EXCEPTION clauses by the PMG, FEtk, MC, or
+				MALOC libraries.</para>
+			<para>Note that people who make modified versions of
+				APBS are not obligated to grant this special
+				exception for their modified versions; it is
+				their choice whether to do so.  The GNU General
+				Public License gives permission to release a
+				modified version without this exception; this
+				exception also makes it possible to release a
+				modified version which carries forward this
+				exception.</para>
+		</legalnotice>
+		<date>&apbsdat;</date>
+		<edition>APBS version &apbsver;</edition>
+	</bookinfo>
 
-  <toc></toc>
+	<toc></toc>
 
-  <chapter id="introduction-sect"> <title>Getting started</title>
+	<chapter id="introduction-sect"> <title>How to read this tutorial</title>
 
+		<para>This tutorial is designed as a "how to" document to get
+			users acquainted with computational electrostatics
+			calculations using APBS.  In order to perform the
+			provided examples, you will need the latest version of
+			APBS (<ulink url="&apbsurl;">&apbsurl;</ulink>).  Other
+			requirements are listed in the individual
+			sections.</para>
 
-    <para>
-      This tutorial is designed to help users get acquainted with
-      computational electrostatics calculations using APBS.  In order to
-      perform the provided examples, you will need:
-      <itemizedlist>
-        <listitem>
-          <para>
-            The latest version of APBS 
-            (<ulink url="http://apbs.sourceforge.net">http://apbs.sourceforge.net</ulink>)
-            to perform the electrostatics calculations.
-          </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-    <para>
-       You will also need the following software to perform the visualizations 
-       in this tutorial.  These are not required for standard APBS usage, but
-       are useful for displaying results in this tutorial:
-       <itemizedlist> 
-        <listitem>
-          <para>
-            VMD 
-            (<ulink url="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</ulink>)
-            to visualize the molecular structures and electrostatic
-            potentials.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Gnuplot
-            (<ulink url="http://www.gnuplot.info/">http://www.gnuplot.info/</ulink>)
-            to plot energies, etc.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Bash (<ulink url="http://www.gnu.org/software/bash/bash.html">http://www.gnu.org/software/bash/bash.html</ulink>) - standard on most
-            Linux, MacOS X.
-          </para>
-        </listitem>
-        <listitem>
-          <para>
-            Python (<ulink url="http://www.python.org/">http://www.python.org/</ulink>)  - standard on most
-            Linux, MacOS X.
-          </para>
-        </listitem>
-      </itemizedlist>
-      Furthermore, these examples all assume that the above programs are in
-      your system path (i.e., can be run simply by typing the program name).
-    </para>
-    
-    <important>
-        <para> 
-            Note that many of the examples in this tutorial can also be run
-            through the web-based <ulink
-                url="http://gemstone.mozdev.org/">Gemstone</ulink> service
-            without the need for local installations of the APBS software.  
-        </para>
-    </important>
+		<important>
+			<para>Note that many of the examples in this tutorial
+				can also be run through the web-based <ulink
+					url="http://gemstone.mozdev.org/">Gemstone</ulink>
+				service without the need for local
+				installations of the APBS software.  More
+				information is available in <xref
+					linkend="gemstone-sect"/>.
+			</para>
+		</important>
 
-    <para>
-      The following examples demonstrate some of the basic electrostatics
-      which require modest computational resources; i.e., can be performed
-      using in 0-5 min on a modern PC.  
-      <important>
-        <para> These examples build on one another and are designed to be
-          carried out in order.  Please read through each section completely
-          before trying the example.  
-        </para>
-      </important>
-      <warning>
-        <para> This tutorial requires several files (linked to from the
-          individual examples) be downloaded.  It is recommended that you
-          create a separate subdirectory (e.g., 
-          <userinput>mkdir foo; cd foo</userinput>) for each example.  Also
-          many browsers will display, rather than save the example files.
-          Right-clicking on the link (or the displayed file) should present
-          you with the option to save the file.
-        </para>
-      </warning>
-    </para>
-  </chapter>
+	</chapter>
 
-  &born-sect;
-  &ion-pmf-sect;
-  &ligand-sect;
-  &condensation-sect;
-  &gemstone-sect;
+	<chapter id="pdb2pqr-sect"> <title>How do I get my structure ready for
+			electrostatics calculations?</title>
 
-  <chapter>  <title>More examples...</title>
-    <para>  In addition to the relatively simple applications presented here,
-      there are a number of additional examples distributed with the APBS
-      software package 
-      (<ulink
-        url="http://apbs.sourceforge.net">http://apbs.sourceforge.net</ulink>)
-      which include ionization energies, protein-protein interactions, parallel 
-      calculations, etc.
-    </para>
-  </chapter>
+		<warning><para>Under construction</para></warning>
+
+	</chapter>
+
+	<chapter id="viz-sect"> <title>How do I visualize the electrostatic
+potential around my biomolecule?</title>
+
+		<warning><para>Under construction</para></warning>
+
+	</chapter>
+
+	<chapter id="solvation-sect"> <title>How do I calculate a solvation
+energy?</title>
+
+		<warning><para>Under construction</para></warning>
+
+		<sect1> <title>Polar solvation</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1> <title>Apolar solvation</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+	</chapter>
+
+	<chapter id="binding-sect"> <title>How do I calculate a binding
+energy?</title>
+
+		<warning><para>Under construction</para></warning>
+
+		<sect1> <title>Hey! You don't have any parameters for my
+ligand!</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1> <title>Polar contributions</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1> <title>Apolar contributions</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+	</chapter>
+
+	<chapter id="forces-sect"> <title>How do I calculate solvation
+forces?</title>
+
+		<warning><para>Under construction</para></warning>
+
+		<sect1> <title>Polar solvation</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1> <title>Apolar solvation</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+	</chapter>
+
+	<chapter id="pka-sect"> <title>How do I calculate a pK<subscript>a</subscript>?</title>
+		<warning><para>Under construction</para></warning>
+	</chapter>
+
+	<chapter id="parallel-sect"> <title>My calculation requires too much memory!</title>
+		<warning><para>Under construction</para></warning>
+	</chapter>
+
+	<chapter id="simulation-sect"> <title>How do I use APBS with my
+molecular dynamics program (for MM/PBSA, etc.)?</title>
+		<warning><para>Under construction</para></warning>
+	</chapter>
+
+	<chapter id="gemstone-sect"> <title>Can I run APBS via the web?  (Gemstone) </title>
+
+		<para>Yes, you can run APBS via the web, thanks to the <ulink
+				url="http://gemstone.mozdev.org">Gemstone</ulink>
+			service.  This section demonstrates how <ulink
+				url="http://gemstone.mozdev.org">Gemstone</ulink>
+			can be used to perform most APBS calculations commonly
+			done through the command-line interface.  Better yet,
+			it allows you to use <ulink
+				url="http://nbcr.net">NBCR's</ulink> resources
+			instead of your own!  
+		</para>
+
+		<sect1> <title>Getting Gemstone</title>
+			<para> You need to download and install the Gemstone
+				extension for the <ulink
+					url="http://www.mozilla.com/firefox/">Firefox</ulink>
+				web browser from <ulink
+					url="http://gemstone.mozdev.org">http://gemstone.mozdev.org</ulink>
+				before starting this tutorial.</para>
+		</sect1>
+
+		<sect1> <title>Preparing a structure with PDB2PQR</title>
+			<para> We'll start by preparing a structure with <ulink
+					url="http://pdb2pqr.sf.net">PDB2PQR</ulink>.
+				First, you need to download a PDB file from the
+				<ulink url="http://www.pdb.org">Protein Data
+					Bank</ulink>.  For the purposes of this
+				example, we'll use <ulink
+					url="http://www.pdb.org/pdb/navbarsearch.do?newSearch=yes&amp;inputQuickSearch=1fas">1FAS</ulink>
+				in PDB format (download directly <ulink
+					url="http://www.pdb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId=1FAS">here</ulink>).  </para>
+			
+			<para> Open the Gemstone interface through the Firefox
+				menu <menuchoice> <guimenu>Tools</guimenu>
+					<guimenuitem>Gemstone</guimenuitem>
+					</menuchoice>.  Select the PDB2PQR
+					application through the Gemstone menu
+					<menuchoice> <guimenu>Utils</guimenu>
+						<guimenuitem>PDB2PQR</guimenuitem>
+					</menuchoice> on the righthand side of
+					the Gemstone screen.  Select the PDB
+					file you just downloaded and any other
+					options for PDB2PQR of interest.  Your
+					screen should look something like:
+					<figure> <title>Gemstone PDB2PQR calculation</title>
+						<graphic fileref="images/gemstone-pdb2pqr.png"></graphic>
+					</figure>
+					Go ahead and "Run" the Gemstone
+					calculation, check the
+					<filename>stdOut</filename> and
+					<filename>stdErr</filename> for any
+					warning messages, and download the
+					resulting PQR file.  </para>
+
+			</sect1>
+
+			<sect1> <title>Perform an electrostatics calculation with APBS</title>
+				
+				<para>We're now ready to perform an APBS
+					calculation of the 1FAS electrostatic
+					potential through Gemstone.  Open the
+					<menuchoice> 
+						<guimenu>Chemistry</guimenu> 
+						<guimenuitem>Apbs</guimenuitem> 
+					</menuchoice>
+					menu on the righthand side of the
+					Gemstone screen.  We'll step through
+					each of the input tabs in the middle
+					pane in the following sections.
+				</para>
+
+				<sect2> <title>Calculation</title>
+					<para>Move to the Calculation tab in
+						the middle pane.</para>
+					<para>Most of the "Mathematics"
+						settings can be left as-is;
+						however, feel free to play with
+						the discretization and surface
+						definitions to see how it
+						affects your results.</para>
+					<para>Under "Molecules", load the 1FAS
+						PQR file you just prepared in
+						the previous section.</para>
+					<para>Don't select anything under
+						"Energy and Force" for this
+						calculation.</para> <para>At
+						this point, your screen should
+						look something like this:
+						<figure> <title>Gemstone APBS/Calculation screen</title>
+							<graphic fileref="images/gemstone-apbs-calculation.png"/>
+						</figure>
+					</para>
+				</sect2>
+
+				<sect2> <title>Grid</title>
+					<para>Next, move to the Grid tab in the
+						middle pane.</para>
+					<para>Under "General", enter 97 for X,
+						Y, and Z "Grid points".</para>
+					<para>Under "Coarse Grid", choose 100
+						for all X, Y, and Z "Lengths".
+						Center the mesh on the
+						molecule.</para>
+					<para>Under "Fine Grid", choose 80 for
+						all X, Y, and Z "Lengths".
+						Center the mesh on the
+						molecule.</para>
+					<para>Leave the "Parallel Execution"
+						alone for this
+						calculation.</para>
+					<para>At this point, your screen should
+						look something like this:
+						<figure> <title>Gemstone APBS/Grid screen</title>
+							<graphic fileref="images/gemstone-apbs-grid.png"/>
+						</figure>
+					</para>
+				</sect2>
+
+				<sect2> <title>Physics</title>
+					<para>Next, move to the Physics tab in
+						the middle pane.</para>
+					<para>Choose any values you like here;
+						the defaults should be fine for
+						most visualization
+						calculations.</para>
+					<para>At this point, your screen should
+						look something like this:
+						<figure> <title>Gemstone APBS/Physics screen</title>
+							<graphic fileref="images/gemstone-apbs-physics.png"/>
+						</figure>
+					</para>
+				</sect2>
+
+				<sect2> <title>File I/O </title>
+					<para>Next, move to the File I/O tab in
+						the middle pane.</para>
+					<para>Unless you have other properties
+						you wan to visualize, you can
+						leave these settings
+						as-is.</para>
+					<para>At this point, your screen should
+						look something like this:
+						<figure> <title>Gemstone APBS/File I/O screen</title>
+							<graphic fileref="images/gemstone-apbs-file.png"/>
+						</figure>
+						</para>
+				</sect2>
+							
+			<sect2> <title>Running the calculation</title>
+				<para>Finally, return to the Calculation tab
+					and select "Run APBS".  After a while,
+					the results will appear under the
+					Output tab in the middle pane.  When
+					the run is complete, you should see
+					something like this:
+					<figure> <title>Gemstone APBS/Calculation screen (run complete)</title>
+						<graphic fileref="images/gemstone-apbs-finished.png"/>
+					</figure>
+					In particular, you should have the
+					option to save the potential file
+					calculated in this APBS run.  </para>
+			</sect2>
+			<sect2> <title>Other calculations</title>
+				<para>Nearly all of the examples in this
+					tutorial can also be performed with
+					Gemstone.  Furthermore, input files can
+					be uploaded to use Gemstone as a
+					"portal" to web services at other
+					institutions. </para>
+			</sect2>
+		</sect1>
+	</chapter> 
+
+	<chapter id="more-sect"> <title>More examples...</title>
+		<para> In addition to the relatively simple applications
+			presented here, there are a number of additional
+			examples distributed with the APBS software package
+			(<ulink url="&apbsurl;">&apbsurl;</ulink>) which
+			include ionization energies, protein-protein
+			interactions, parallel calculations, etc.  </para>
+	</chapter>
+
+	<chapter id="help-sect"> <title>None of this answered my question...</title>
+		<para>Please visit the <ulink
+				url="http://lists.sourceforge.net/mailman/listinfo/apbs-users">APBS-users
+				mailing list</ulink>.  After you've looked for
+			the answer to your question in the <ulink
+				url="http://sourceforge.net/mailarchive/forum.php?forum_id=46597">archive</ulink>,
+			please post it to the mailing list. </para>
+	</chapter>
+
 
 </book>
-      
+
