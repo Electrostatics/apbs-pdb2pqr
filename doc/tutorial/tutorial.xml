@@ -1,9 +1,12 @@
 <?xml version='1.0'?>
 <!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY apbsver "0.4.1">
+<!ENTITY apbsversion "0.4.1">
+<!ENTITY apbsdate "Not yet released">
 <!ENTITY apbsurl "http://apbs.sf.net">
-<!ENTITY apbsdat "Not yet released">
+<!ENTITY ugurl "../user-guide/index.html">
+<!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
+<!ENTITY vmdurl "http://www.ks.uiuc.edu/Research/vmd/">
 ]>
 
 <book>
@@ -82,8 +85,8 @@
 				modified version which carries forward this
 				exception.</para>
 		</legalnotice>
-		<date>&apbsdat;</date>
-		<edition>APBS version &apbsver;</edition>
+		<date>&apbsdate;</date>
+		<edition>APBS version &apbsversion;</edition>
 	</bookinfo>
 
 	<toc></toc>
@@ -114,14 +117,549 @@
 	<chapter id="pdb2pqr-sect"> <title>How do I get my structure ready for
 			electrostatics calculations?</title>
 
-		<warning><para>Under construction</para></warning>
+		<para>
+			In order to perform electrostatics calculations on your
+			biomolecular structure of interest, you need to provide
+			atomic charge and radius information to APBS.  Charges
+			are used to form the biomolecular charge distribution
+			for the Poisson-Boltzmann (PB) equation while the radii
+			are used to construct the dielectric and ionic
+			accessibility functions.  This charge and radius
+			information can be provided to APBS in a few different
+			formats which are described in more detail below.
+		</para>
+
+		<sect1 id="pqr-format-sect"> <title>PQR format</title>
+			<para>
+				The <ulink url="&ugurl;#pqr-format">PQR
+					format</ulink> provides a very simple
+				way to include parameter information by 
+				by replacing the occupancy and temperature
+				columns of a PDB-format structure file with 
+				charge ("Q") and radius ("R") information.
+				Unfortunately, the simplicity of this format
+				also limits its extensibility:  it can be very
+				difficult to add new atom types and parameters
+				in a generic format without the use of external
+				software such as <ulink
+					url="&pdb2pqrurl;">PDB2PQR</ulink>.
+				The XML parameter format described <link
+					linkend="xml-format-sect">below</link>
+				is much easier to modify.
+			</para>
+		</sect1>
+
+		<sect1 id="xml-format-sect"> <title>XML format</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1 id="pdb2pqr-subsect"> <title>Generating PQR files from PDB
+				files (PDB2PQR)</title>
+
+			<para>
+				The <ulink url="&pdb2pqrurl;">PDB2PQR</ulink>
+				web service and software will convert
+				most PDB files into PQR format with
+				some caveats:
+				<itemizedlist>
+					<listitem>
+						<para>
+							Limited ligand support.
+							Given the ambiguities
+							associated with
+							implicit solvent force
+							field parameter
+							development, atom types
+							not included in
+							standard force fields
+							are currently not
+							supported by PDB2PQR.
+							We're in the process of
+							including such support.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							Inability to "repair"
+							large regions of
+							missing coordinates.
+							Although PDB2PQR can
+							fix some missing heavy
+							atoms in sidechains, it
+							does not currently have
+							the (nontrivial)
+							capability to model in
+							large regions of
+							missing backbone and
+							sidechain coordinates.
+						</para>
+					</listitem>
+				</itemizedlist>
+				<ulink url="&pdb2pqrurl;">PDB2PQR</ulink> will
+				also perform hydrogen bond optimization,
+				sidechain rotamer search, limited titration
+				state assignment, and APBS input file
+				preparation.  Please see 
+				<ulink url="&pdb2pqrurl;">&pdb2pqrurl;</ulink>
+				for more details.
+			</para>
+
+			<para>
+				Please note that PDB2PQR is used extensively
+				throughout the remainder of this document;
+				therefore, an in-depth discussion of its
+				features is not included here.
+			</para>
+
+		</sect1> 
 
 	</chapter>
 
 	<chapter id="viz-sect"> <title>How do I visualize the electrostatic
 potential around my biomolecule?</title>
 
-		<warning><para>Under construction</para></warning>
+		<para> There are a number of excellent molecular graphics
+			programs which can be used to visualize electrostatic
+			properties in the context of the biomolecule.  Since
+			there are far too many to review in any depth, we will
+			focus on the 3 packages with which we are most
+			familiar. </para>
+
+		<sect1 id="vmd-sect"> <title>VMD</title>
+
+			<para>
+				The <ulink url="&vmdurl;">VMD</ulink> molecular
+				graphics software package provides support for
+				both the execution of APBS and the
+				visualization of the resulting electrostatic
+				potentials.  Documentation on the APBS
+				interface has been provided by the VMD
+				developers at <ulink
+					url="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/">http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/</ulink>.
+				We will supplement this with a basic
+				demonstration of how go from a PDB entry to a
+				plot of structure &amp; potential in VMD using
+				APBS.
+			</para>
+
+			<note>
+				<para>This tutorial was written using VMD
+					1.8.5.</para>
+			</note>
+
+			<sect2> <title>Generating the PQR</title>
+
+				<para> 
+					We'll perform this example with arc
+					repressor
+					(PDB ID <ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1MYK">1MYK</ulink>),
+					a DNA binding protein.  The first step
+					in the visualization process is
+					generating a PQR file for use with VMD
+					and APBS.  We will generate this input
+					file via <ulink
+						url="&pdb2pqrurl;">PDB2PQR</ulink>
+					(described in more detail in <xref
+						linkend="pdb2pqr-sect"/>).
+				</para>
+
+				<para>
+					Choose a server from <ulink
+						url="&pdb2pqrurl;#availability">&pdb2pqrurl;#availability</ulink>
+					and go to the web page for that server.
+					Under "<guilabel>Please enter
+						either:</guilabel>", select
+					the "<guibutton>a PDB ID:</guibutton>"
+					button and enter
+					<userinput>1MYK</userinput> in the
+					form.  Configure the rest of the
+					PDB2PQR job to your liking<footnote>
+						<para>I recommend the PARSE
+							force field for these
+							calculations;  you
+							can leave the rest of
+							defaults in
+							place</para>
+					</footnote>
+					and press the
+					"<guibutton>Submit</guibutton>" button.
+					Depending on the server, the current
+					load, etc. the job will take between
+					30-120 sec.  Upon completion, you
+					should see a link for your
+					newly-created PQR file.  Download the
+					file (and check the resulting file
+					extension -- some browsers append
+					".txt" to the filename).
+				</para>
+
+				<tip>
+					<para>
+						Dependending on your personal
+						preference, you may want to
+						remove the explicit water
+						molecules from the PQR file
+						before proceeding to the next
+						step.
+					</para>
+				</tip>
+
+				<para>
+					Load the PQR file you just created into
+					VMD (<menuchoice>
+						<guimenu>File</guimenu> 
+						<guimenuitem>New molecule...</guimenuitem>
+					</menuchoice> in the VMD Main window).
+					Adjust the molecule to the desired
+					view.
+					<footnote>
+						<para> At this point you may
+							notice (to many users'
+							chagrin) that PDB2PQR
+							removed the chain IDs
+							from the structure.
+							Sorry about this; we're
+							trying to fix it in
+							future releases of APBS
+							and PDB2PQR.</para>
+					</footnote>
+					Depending on the force field you used
+					in PDB2PQR, you may notice that VMD is
+					displaying some strange bonds.  When a
+					PQR file is loaded into VMD, bond
+					distances are inferred from the PQR
+					radii.  These radii were chosen for
+					continuum electrostatics calculations,
+					not visualization.  Don't worry if some
+					of the bonds appear a bit strange (hide
+					the hydrogens if it really bothers
+					you).
+				</para>
+
+				<para>
+					You're now ready for electrostatics
+					calculations.  
+					<orderedlist>
+						<listitem>
+							<para>Choose
+								<menuchoice>
+									<guimenu>Extensions</guimenu>
+									<guisubmenu>Analysis</guisubmenu>
+									<guimenuitem>APBS
+										electrostatics</guimenuitem>
+								</menuchoice>
+								in the VMD Main
+								window.  A new
+								APBS Tool
+								window should
+								appear.
+							</para>
+						</listitem>
+						<listitem>
+							<para>Choose 
+								<menuchoice>
+									<guimenu>Edit</guimenu> 
+									<guimenuitem>Settings...</guimenuitem> 
+								</menuchoice> 
+								in the APBS
+								Tool window and
+								set the path to
+								your local copy
+								of the APBS
+								executable.
+								Hit
+								<guibutton>OK</guibutton>
+								to close this
+								window.
+							</para>
+						</listitem>
+						<listitem>
+							<para>Select the "0"
+								calculation
+								from the
+								"<guilabel>Individual
+									PB
+									calculations
+									(ELEC):</guilabel>"
+								window.  Hit 
+								the
+								<guibutton>Edit</guibutton>
+								button.  Adjust
+								the APBS
+								settings here
+								as you desire.
+								The defaults
+								are usually
+								fine, although
+								it may be
+								useful to edit
+								the ions to
+								adjust the
+								ionic strength
+								used in the
+								calculation.
+								Hit
+								<guibutton>OK</guibutton>
+								when you're
+								done.
+							</para>
+						</listitem>
+						<listitem>
+							<para>You're now ready
+								to run the
+								calculation.
+								Hit
+								<guibutton>Run
+									APBS</guibutton>
+								in the APBS
+								Tool window.
+								Check the VMD
+								Console window
+								for information
+								about the job
+								while it's
+								running.  When
+								the job is
+								finished, a
+								"APBSRun: Load
+								APBS Maps"
+								window should
+								appear.  Hit
+								<guibutton>OK</guibutton>.
+							</para>
+						</listitem>
+					</orderedlist>
+				</para>
+
+				<formalpara>  <title>Isocontour visualization</title>
+					The default isocontours are probably
+					not what you're looking for.  To adjust
+					these, choose
+						<menuchoice>
+							<guimenu>Graphics</guimenu>
+							<guimenuitem>Representations...</guimenuitem>
+						</menuchoice>
+					from the VMD Main window.  Note that
+					the current isovalue is 0.5; change
+					this to 1 (or 5 or 10 or whatever)
+					depending on your personal preferences.
+					To continue the lonstanding tradition
+					of electrostatic potential coloring,
+					choose "ColorID 0" for the
+					<guilabel>Coloring Method</guilabel>.
+					For the negative isocontour, hit
+					"<guibutton>Create Rep</guibutton>" and
+					select the newly created
+					representation.  Change the isocontour
+					value to -1 (or 5 or 10...) and the
+					ColorID to 1.
+					At this point, you probably have an
+					image that looks something like this:
+					<figure> <title>Arc repressor isocontours in VMD</title>
+						<graphic
+							fileref="images/arc-iso-vmd.png"></graphic>
+					</figure>
+				</formalpara>
+
+				<formalpara> <title>Visualizing surface potentials</title>
+					For some reason, the current APBSRun in
+					VMD loads the potential data into a
+					"new" molecule.  Before proceeding, you
+					need to delete that new molecule
+					(select the pot.dx molecule in the VMD
+					Main window and then choose
+					<menuchoice>
+						<guimenu>Molecule</guimenu>
+						<guimenuitem>Delete
+							Molecule</guimenuitem>
+					</menuchoice>).
+					<orderedlist>
+						<listitem>
+							<para> You'll need to
+								hunt down the
+								<filename>pot.dx</filename>
+								that was
+								produced by the
+								APBS
+								calculation.
+								This is located
+								in an
+								<filename>apbs.####</filename>
+								(where #### is
+								a random
+								number)
+								subdirectory of
+								the working
+								directory you
+								specified in
+								<menuchoice>
+									<guimenu>Edit</guimenu>
+									<guimenuitem>Settings...</guimenuitem>
+								</menuchoice>
+								of the APBS
+								Tool window.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Select your PQR
+								molecule in the
+								VMD Main
+								window.  In the
+								same window,
+								choose
+								<menuchoice>
+									<guimenu>File</guimenu>
+									<guimenuitem>Load
+									Data
+									Into
+									Molecule...</guimenuitem>
+								</menuchoice>
+								and
+								<guibutton>Browse...</guibutton>
+								to the DX data
+								you located in
+								the previous
+								step.  Hit
+								<guibutton>Load</guibutton>.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Go back to the
+								"Draw style"
+								tab of the
+								Graphical
+								Representations
+								window
+								(<menuchoice>
+									<guimenu>Graphics</guimenu>
+									<guimenuitem>Representations...</guimenuitem>
+								</menuchoice>
+								from the VMD
+								Main window)
+								and change
+								<guilabel>Drawing
+									Method</guilabel>
+								to
+								"Surf"<footnote>
+									<para>FYI,
+										this
+										appears
+										to
+										generate
+										a
+										molecular
+										or
+										Connolly
+										type
+										of
+										surface
+										rather
+										than
+										the
+										solvent-accessible
+										or
+										Lee-Richards
+										surface
+										I
+										personally
+										prefer
+										for
+										this
+										type
+										of
+										visualization...</para>
+								</footnote>
+									and
+								<guilabel>Coloring
+									Method</guilabel>
+								to "Volume".  
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Go to the
+								"Trajectory
+								tab" of the
+								Graphical
+								Representations
+								window
+								(<menuchoice>
+									<guimenu>Graphics</guimenu>
+									<guimenuitem>Representations...</guimenuitem>
+								</menuchoice>
+								from the VMD
+								Main window)
+								and change the
+								"<guilabel>Color
+									Scale
+									Data
+									Range:</guilabel>"
+								to -10 to 10
+								(or whatever
+								your favorite
+								values are).
+								By now, your
+								molecule
+								probably looks
+								like a
+								green-red-blue
+								blob.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Based on your
+								version of VMD
+								and your
+								personal
+								preferences,
+								you might want
+								to change the
+								color scale for
+								this image.  Go
+								to
+								<menuchoice>
+									<guimenu>Graphics</guimenu>
+									<guimenuitem>Colors...</guimenuitem>
+								</menuchoice>
+								in the VMD Main
+								window and
+								select the
+								"Color Scale"
+								tab from the
+								new "Color
+								Controls"
+								window.  The
+								traditional
+								coloring scheme
+								for
+								electrostatics
+								is "RWB" (in
+								the
+								<guilabel>Method</guilabel>
+								menu).
+							</para>
+						</listitem>
+					</orderedlist>
+					<figure> <title>Arc repressor surface potential in VMD</title>
+						<graphic fileref="images/arc-surf-vmd.png"></graphic>
+					</figure>
+				</formalpara>
+
+			</sect2>
+
+		</sect1>
+
+		<sect1 id="pymol-sect"> <title>PyMOL</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
+
+		<sect1 id="pmv-sect"> <title>PMV</title>
+			<warning><para>Under construction</para></warning>
+		</sect1>
 
 	</chapter>
 

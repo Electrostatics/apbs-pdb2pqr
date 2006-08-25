@@ -1,5 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>APBS tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id825257"></a>APBS tutorial</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Nathan</span> <span class="surname">Baker</span></h3><div class="affiliation"><span class="orgname">Washington University in St.  Louis<br></span><span class="orgdiv">Department of Biochemistry and
-					Molecular Biophysics<br></span><span class="orgdiv">Center for Computational Biology<br></span></div></div></div><div><p class="copyright">Copyright © 2002, 2003, 2004, 2005, 2006 Washington University in St.  Louis</p></div><div><div class="legalnotice"><a name="id901869"></a><p>This file is part of APBS.</p><p>This program is free software; you can
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>APBS tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.70.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id825262"></a>APBS tutorial</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Nathan</span> <span class="surname">Baker</span></h3><div class="affiliation"><span class="orgname">Washington University in St.  Louis<br></span><span class="orgdiv">Department of Biochemistry and
+					Molecular Biophysics<br></span><span class="orgdiv">Center for Computational Biology<br></span></div></div></div><div><p class="copyright">Copyright © 2002, 2003, 2004, 2005, 2006 Washington University in St.  Louis</p></div><div><div class="legalnotice"><a name="id901881"></a><p>This file is part of APBS.</p><p>This program is free software; you can
 				redistribute it and/or modify it under the
 				terms of the GNU General Public License as
 				published by the Free Software Foundation;
@@ -46,7 +46,7 @@ potential around my biomolecule?</a></span></dt><dt><span class="chapter"><a hre
 energy?</a></span></dt><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding
 energy?</a></span></dt><dt><span class="chapter"><a href="#forces-sect">6. How do I calculate solvation
 forces?</a></span></dt><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>10.1. <a href="#id902331">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id902420">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id902469">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id902504">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id902538">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id902566">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. How to read this tutorial</h2></div></div></div><p>This tutorial is designed as a "how to" document to get
+molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id902508">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id902767">Arc repressor surface potential in VMD</a></dt><dt>10.1. <a href="#id903132">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id903221">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id903270">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id903304">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id903338">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id903366">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. How to read this tutorial</h2></div></div></div><p>This tutorial is designed as a "how to" document to get
 			users acquainted with computational electrostatics
 			calculations using APBS.  In order to perform the
 			provided examples, you will need the latest version of
@@ -58,23 +58,419 @@ molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="
 				installations of the APBS software.  More
 				information is available in <a href="#gemstone-sect" title="Chapter 10. Can I run APBS via the web?  (Gemstone) ">Chapter 10, <i>Can I run APBS via the web?  (Gemstone) </i></a>.
 			</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="pdb2pqr-sect"></a>Chapter 2. How do I get my structure ready for
-			electrostatics calculations?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="viz-sect"></a>Chapter 3. How do I visualize the electrostatic
-potential around my biomolecule?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="solvation-sect"></a>Chapter 4. How do I calculate a solvation
-energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902028">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902039">4.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902028"></a>4.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902039"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="binding-sect"></a>Chapter 5. How do I calculate a binding
-energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902066">5.1. Hey! You don't have any parameters for my
-ligand!</a></span></dt><dt><span class="sect1"><a href="#id902078">5.2. Polar contributions</a></span></dt><dt><span class="sect1"><a href="#id902090">5.3. Apolar contributions</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902066"></a>5.1. Hey! You don't have any parameters for my
-ligand!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902078"></a>5.2. Polar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902090"></a>5.3. Apolar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="forces-sect"></a>Chapter 6. How do I calculate solvation
-forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902117">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902128">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902117"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902128"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="simulation-sect"></a>Chapter 9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902225">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id902249">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id902361">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
+			electrostatics calculations?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format-sect">2.1. PQR format</a></span></dt><dt><span class="sect1"><a href="#xml-format-sect">2.2. XML format</a></span></dt><dt><span class="sect1"><a href="#pdb2pqr-subsect">2.3. Generating PQR files from PDB
+				files (PDB2PQR)</a></span></dt></dl></div><p>
+			In order to perform electrostatics calculations on your
+			biomolecular structure of interest, you need to provide
+			atomic charge and radius information to APBS.  Charges
+			are used to form the biomolecular charge distribution
+			for the Poisson-Boltzmann (PB) equation while the radii
+			are used to construct the dielectric and ionic
+			accessibility functions.  This charge and radius
+			information can be provided to APBS in a few different
+			formats which are described in more detail below.
+		</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pqr-format-sect"></a>2.1. PQR format</h2></div></div></div><p>
+				The <a href="../user-guide/index.html#pqr-format" target="_top">PQR
+					format</a> provides a very simple
+				way to include parameter information by 
+				by replacing the occupancy and temperature
+				columns of a PDB-format structure file with 
+				charge ("Q") and radius ("R") information.
+				Unfortunately, the simplicity of this format
+				also limits its extensibility:  it can be very
+				difficult to add new atom types and parameters
+				in a generic format without the use of external
+				software such as <a href="http://pdb2pqr.sf.net/" target="_top">PDB2PQR</a>.
+				The XML parameter format described <a href="#xml-format-sect" title="2.2. XML format">below</a>
+				is much easier to modify.
+			</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xml-format-sect"></a>2.2. XML format</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pdb2pqr-subsect"></a>2.3. Generating PQR files from PDB
+				files (PDB2PQR)</h2></div></div></div><p>
+				The <a href="http://pdb2pqr.sf.net/" target="_top">PDB2PQR</a>
+				web service and software will convert
+				most PDB files into PQR format with
+				some caveats:
+				</p><div class="itemizedlist"><ul type="disc"><li><p>
+							Limited ligand support.
+							Given the ambiguities
+							associated with
+							implicit solvent force
+							field parameter
+							development, atom types
+							not included in
+							standard force fields
+							are currently not
+							supported by PDB2PQR.
+							We're in the process of
+							including such support.
+						</p></li><li><p>
+							Inability to "repair"
+							large regions of
+							missing coordinates.
+							Although PDB2PQR can
+							fix some missing heavy
+							atoms in sidechains, it
+							does not currently have
+							the (nontrivial)
+							capability to model in
+							large regions of
+							missing backbone and
+							sidechain coordinates.
+						</p></li></ul></div><p>
+				<a href="http://pdb2pqr.sf.net/" target="_top">PDB2PQR</a> will
+				also perform hydrogen bond optimization,
+				sidechain rotamer search, limited titration
+				state assignment, and APBS input file
+				preparation.  Please see 
+				<a href="http://pdb2pqr.sf.net/" target="_top">http://pdb2pqr.sf.net/</a>
+				for more details.
+			</p><p>
+				Please note that PDB2PQR is used extensively
+				throughout the remainder of this document;
+				therefore, an in-depth discussion of its
+				features is not included here.
+			</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="viz-sect"></a>Chapter 3. How do I visualize the electrostatic
+potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#vmd-sect">3.1. VMD</a></span></dt><dt><span class="sect1"><a href="#pymol-sect">3.2. PyMOL</a></span></dt><dt><span class="sect1"><a href="#pmv-sect">3.3. PMV</a></span></dt></dl></div><p> There are a number of excellent molecular graphics
+			programs which can be used to visualize electrostatic
+			properties in the context of the biomolecule.  Since
+			there are far too many to review in any depth, we will
+			focus on the 3 packages with which we are most
+			familiar. </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="vmd-sect"></a>3.1. VMD</h2></div></div></div><p>
+				The <a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">VMD</a> molecular
+				graphics software package provides support for
+				both the execution of APBS and the
+				visualization of the resulting electrostatic
+				potentials.  Documentation on the APBS
+				interface has been provided by the VMD
+				developers at <a href="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/" target="_top">http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/</a>.
+				We will supplement this with a basic
+				demonstration of how go from a PDB entry to a
+				plot of structure &amp; potential in VMD using
+				APBS.
+			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This tutorial was written using VMD
+					1.8.5.</p></td></tr></table></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902198"></a>3.1.1. Generating the PQR</h3></div></div></div><p> 
+					We'll perform this example with arc
+					repressor
+					(PDB ID <a href="http://www.pdb.org/pdb/explore.do?structureId=1MYK" target="_top">1MYK</a>),
+					a DNA binding protein.  The first step
+					in the visualization process is
+					generating a PQR file for use with VMD
+					and APBS.  We will generate this input
+					file via <a href="http://pdb2pqr.sf.net/" target="_top">PDB2PQR</a>
+					(described in more detail in <a href="#pdb2pqr-sect" title="Chapter 2. How do I get my structure ready for
+			electrostatics calculations?">Chapter 2, <i>How do I get my structure ready for
+			electrostatics calculations?</i></a>).
+				</p><p>
+					Choose a server from <a href="http://pdb2pqr.sf.net/#availability" target="_top">http://pdb2pqr.sf.net/#availability</a>
+					and go to the web page for that server.
+					Under "<span class="guilabel">Please enter
+						either:</span>", select
+					the "<span class="guibutton">a PDB ID:</span>"
+					button and enter
+					<strong class="userinput"><code>1MYK</code></strong> in the
+					form.  Configure the rest of the
+					PDB2PQR job to your liking<sup>[<a name="id902258" href="#ftn.id902258">1</a>]</sup>
+					and press the
+					"<span class="guibutton">Submit</span>" button.
+					Depending on the server, the current
+					load, etc. the job will take between
+					30-120 sec.  Upon completion, you
+					should see a link for your
+					newly-created PQR file.  Download the
+					file (and check the resulting file
+					extension -- some browsers append
+					".txt" to the filename).
+				</p><div class="tip" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Tip"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="images/tip.png"></td><th align="left">Tip</th></tr><tr><td align="left" valign="top"><p>
+						Dependending on your personal
+						preference, you may want to
+						remove the explicit water
+						molecules from the PQR file
+						before proceeding to the next
+						step.
+					</p></td></tr></table></div><p>
+					Load the PQR file you just created into
+					VMD (<span class="guimenu">File</span> &#8594; <span class="guimenuitem">New molecule...</span> in the VMD Main window).
+					Adjust the molecule to the desired
+					view.
+					<sup>[<a name="id902311" href="#ftn.id902311">2</a>]</sup>
+					Depending on the force field you used
+					in PDB2PQR, you may notice that VMD is
+					displaying some strange bonds.  When a
+					PQR file is loaded into VMD, bond
+					distances are inferred from the PQR
+					radii.  These radii were chosen for
+					continuum electrostatics calculations,
+					not visualization.  Don't worry if some
+					of the bonds appear a bit strange (hide
+					the hydrogens if it really bothers
+					you).
+				</p><p>
+					You're now ready for electrostatics
+					calculations.  
+					</p><div class="orderedlist"><ol type="1"><li><p>Choose
+								<span class="guimenu">Extensions</span> &#8594; <span class="guisubmenu">Analysis</span> &#8594; <span class="guimenuitem">APBS
+										electrostatics</span>
+								in the VMD Main
+								window.  A new
+								APBS Tool
+								window should
+								appear.
+							</p></li><li><p>Choose 
+								<span class="guimenu">Edit</span> &#8594; <span class="guimenuitem">Settings...</span> 
+								in the APBS
+								Tool window and
+								set the path to
+								your local copy
+								of the APBS
+								executable.
+								Hit
+								<span class="guibutton">OK</span>
+								to close this
+								window.
+							</p></li><li><p>Select the "0"
+								calculation
+								from the
+								"<span class="guilabel">Individual
+									PB
+									calculations
+									(ELEC):</span>"
+								window.  Hit 
+								the
+								<span class="guibutton">Edit</span>
+								button.  Adjust
+								the APBS
+								settings here
+								as you desire.
+								The defaults
+								are usually
+								fine, although
+								it may be
+								useful to edit
+								the ions to
+								adjust the
+								ionic strength
+								used in the
+								calculation.
+								Hit
+								<span class="guibutton">OK</span>
+								when you're
+								done.
+							</p></li><li><p>You're now ready
+								to run the
+								calculation.
+								Hit
+								<span class="guibutton">Run
+									APBS</span>
+								in the APBS
+								Tool window.
+								Check the VMD
+								Console window
+								for information
+								about the job
+								while it's
+								running.  When
+								the job is
+								finished, a
+								"APBSRun: Load
+								APBS Maps"
+								window should
+								appear.  Hit
+								<span class="guibutton">OK</span>.
+							</p></li></ol></div><p>
+				</p><p><b>Isocontour visualization. </b>
+					The default isocontours are probably
+					not what you're looking for.  To adjust
+					these, choose
+						<span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Representations...</span>
+					from the VMD Main window.  Note that
+					the current isovalue is 0.5; change
+					this to 1 (or 5 or 10 or whatever)
+					depending on your personal preferences.
+					To continue the lonstanding tradition
+					of electrostatic potential coloring,
+					choose "ColorID 0" for the
+					<span class="guilabel">Coloring Method</span>.
+					For the negative isocontour, hit
+					"<span class="guibutton">Create Rep</span>" and
+					select the newly created
+					representation.  Change the isocontour
+					value to -1 (or 5 or 10...) and the
+					ColorID to 1.
+					At this point, you probably have an
+					image that looks something like this:
+					</p><div class="figure"><a name="id902508"></a><p class="title"><b>Figure 3.1. Arc repressor isocontours in VMD</b></p><div class="figure-contents"><div><img src="images/arc-iso-vmd.png" alt="Arc repressor isocontours in VMD"></div></div></div><p><br class="figure-break"></p><p><b>Visualizing surface potentials. </b>
+					For some reason, the current APBSRun in
+					VMD loads the potential data into a
+					"new" molecule.  Before proceeding, you
+					need to delete that new molecule
+					(select the pot.dx molecule in the VMD
+					Main window and then choose
+					<span class="guimenu">Molecule</span> &#8594; <span class="guimenuitem">Delete
+							Molecule</span>).
+					</p><div class="orderedlist"><ol type="1"><li><p> You'll need to
+								hunt down the
+								<code class="filename">pot.dx</code>
+								that was
+								produced by the
+								APBS
+								calculation.
+								This is located
+								in an
+								<code class="filename">apbs.####</code>
+								(where #### is
+								a random
+								number)
+								subdirectory of
+								the working
+								directory you
+								specified in
+								<span class="guimenu">Edit</span> &#8594; <span class="guimenuitem">Settings...</span>
+								of the APBS
+								Tool window.
+							</p></li><li><p>
+								Select your PQR
+								molecule in the
+								VMD Main
+								window.  In the
+								same window,
+								choose
+								<span class="guimenu">File</span> &#8594; <span class="guimenuitem">Load
+									Data
+									Into
+									Molecule...</span>
+								and
+								<span class="guibutton">Browse...</span>
+								to the DX data
+								you located in
+								the previous
+								step.  Hit
+								<span class="guibutton">Load</span>.
+							</p></li><li><p>
+								Go back to the
+								"Draw style"
+								tab of the
+								Graphical
+								Representations
+								window
+								(<span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Representations...</span>
+								from the VMD
+								Main window)
+								and change
+								<span class="guilabel">Drawing
+									Method</span>
+								to
+								"Surf"<sup>[<a name="id902669" href="#ftn.id902669">3</a>]</sup>
+									and
+								<span class="guilabel">Coloring
+									Method</span>
+								to "Volume".  
+							</p></li><li><p>
+								Go to the
+								"Trajectory
+								tab" of the
+								Graphical
+								Representations
+								window
+								(<span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Representations...</span>
+								from the VMD
+								Main window)
+								and change the
+								"<span class="guilabel">Color
+									Scale
+									Data
+									Range:</span>"
+								to -10 to 10
+								(or whatever
+								your favorite
+								values are).
+								By now, your
+								molecule
+								probably looks
+								like a
+								green-red-blue
+								blob.
+							</p></li><li><p>
+								Based on your
+								version of VMD
+								and your
+								personal
+								preferences,
+								you might want
+								to change the
+								color scale for
+								this image.  Go
+								to
+								<span class="guimenu">Graphics</span> &#8594; <span class="guimenuitem">Colors...</span>
+								in the VMD Main
+								window and
+								select the
+								"Color Scale"
+								tab from the
+								new "Color
+								Controls"
+								window.  The
+								traditional
+								coloring scheme
+								for
+								electrostatics
+								is "RWB" (in
+								the
+								<span class="guilabel">Method</span>
+								menu).
+							</p></li></ol></div><div class="figure"><a name="id902767"></a><p class="title"><b>Figure 3.2. Arc repressor surface potential in VMD</b></p><div class="figure-contents"><div><img src="images/arc-surf-vmd.png" alt="Arc repressor surface potential in VMD"></div></div></div><p><br class="figure-break"></p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pymol-sect"></a>3.2. PyMOL</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pmv-sect"></a>3.3. PMV</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id902258" href="#id902258">1</a>] </sup>I recommend the PARSE
+							force field for these
+							calculations;  you
+							can leave the rest of
+							defaults in
+							place</p></div><div class="footnote"><p><sup>[<a name="ftn.id902311" href="#id902311">2</a>] </sup> At this point you may
+							notice (to many users'
+							chagrin) that PDB2PQR
+							removed the chain IDs
+							from the structure.
+							Sorry about this; we're
+							trying to fix it in
+							future releases of APBS
+							and PDB2PQR.</p></div><div class="footnote"><p><sup>[<a name="ftn.id902669" href="#id902669">3</a>] </sup>FYI,
+										this
+										appears
+										to
+										generate
+										a
+										molecular
+										or
+										Connolly
+										type
+										of
+										surface
+										rather
+										than
+										the
+										solvent-accessible
+										or
+										Lee-Richards
+										surface
+										I
+										personally
+										prefer
+										for
+										this
+										type
+										of
+										visualization...</p></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="solvation-sect"></a>Chapter 4. How do I calculate a solvation
+energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902828">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902840">4.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902828"></a>4.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902840"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="binding-sect"></a>Chapter 5. How do I calculate a binding
+energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902867">5.1. Hey! You don't have any parameters for my
+ligand!</a></span></dt><dt><span class="sect1"><a href="#id902879">5.2. Polar contributions</a></span></dt><dt><span class="sect1"><a href="#id902891">5.3. Apolar contributions</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902867"></a>5.1. Hey! You don't have any parameters for my
+ligand!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902879"></a>5.2. Polar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902891"></a>5.3. Apolar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="forces-sect"></a>Chapter 6. How do I calculate solvation
+forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902918">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902929">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902918"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902929"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="simulation-sect"></a>Chapter 9. How do I use APBS with my
+molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id903025">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903050">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903162">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			service.  This section demonstrates how <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			can be used to perform most APBS calculations commonly
 			done through the command-line interface.  Better yet,
 			it allows you to use <a href="http://nbcr.net" target="_top">NBCR's</a> resources
 			instead of your own!  
-		</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902225"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
+		</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id903025"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
 				extension for the <a href="http://www.mozilla.com/firefox/" target="_top">Firefox</a>
 				web browser from <a href="http://gemstone.mozdev.org" target="_top">http://gemstone.mozdev.org</a>
-				before starting this tutorial.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902249"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
+				before starting this tutorial.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id903050"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
 				First, you need to download a PDB file from the
 				<a href="http://www.pdb.org" target="_top">Protein Data
 					Bank</a>.  For the purposes of this
@@ -87,13 +483,13 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					file you just downloaded and any other
 					options for PDB2PQR of interest.  Your
 					screen should look something like:
-					</p><div class="figure"><a name="id902331"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation"></div></div></div><p><br class="figure-break">
+					</p><div class="figure"><a name="id903132"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation"></div></div></div><p><br class="figure-break">
 					Go ahead and "Run" the Gemstone
 					calculation, check the
 					<code class="filename">stdOut</code> and
 					<code class="filename">stdErr</code> for any
 					warning messages, and download the
-					resulting PQR file.  </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id902361"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
+					resulting PQR file.  </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id903162"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
 					calculation of the 1FAS electrostatic
 					potential through Gemstone.  Open the
 					<span class="guimenu">Chemistry</span> &#8594; <span class="guimenuitem">Apbs</span>
@@ -101,7 +497,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					Gemstone screen.  We'll step through
 					each of the input tabs in the middle
 					pane in the following sections.
-				</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902392"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
+				</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903193"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
 						the middle pane.</p><p>Most of the "Mathematics"
 						settings can be left as-is;
 						however, feel free to play with
@@ -114,8 +510,8 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						calculation.</p><p>At
 						this point, your screen should
 						look something like this:
-						</p><div class="figure"><a name="id902420"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen"></div></div></div><p><br class="figure-break">
-					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902437"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
+						</p><div class="figure"><a name="id903221"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen"></div></div></div><p><br class="figure-break">
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903237"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
 						middle pane.</p><p>Under "General", enter 97 for X,
 						Y, and Z "Grid points".</p><p>Under "Coarse Grid", choose 100
 						for all X, Y, and Z "Lengths".
@@ -127,31 +523,31 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						alone for this
 						calculation.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a name="id902469"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen"></div></div></div><p><br class="figure-break">
-					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902485"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
+						</p><div class="figure"><a name="id903270"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen"></div></div></div><p><br class="figure-break">
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903285"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
 						the middle pane.</p><p>Choose any values you like here;
 						the defaults should be fine for
 						most visualization
 						calculations.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a name="id902504"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen"></div></div></div><p><br class="figure-break">
-					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902520"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
+						</p><div class="figure"><a name="id903304"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen"></div></div></div><p><br class="figure-break">
+					</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903320"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
 						the middle pane.</p><p>Unless you have other properties
 						you wan to visualize, you can
 						leave these settings
 						as-is.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a name="id902538"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen"></div></div></div><p><br class="figure-break">
-						</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902554"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
+						</p><div class="figure"><a name="id903338"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen"></div></div></div><p><br class="figure-break">
+						</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903354"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
 					and select "Run APBS".  After a while,
 					the results will appear under the
 					Output tab in the middle pane.  When
 					the run is complete, you should see
 					something like this:
-					</p><div class="figure"><a name="id902566"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)"></div></div></div><p><br class="figure-break">
+					</p><div class="figure"><a name="id903366"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)"></div></div></div><p><br class="figure-break">
 					In particular, you should have the
 					option to save the potential file
-					calculated in this APBS run.  </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id902584"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
+					calculated in this APBS run.  </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id903385"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
 					tutorial can also be performed with
 					Gemstone.  Furthermore, input files can
 					be uploaded to use Gemstone as a
