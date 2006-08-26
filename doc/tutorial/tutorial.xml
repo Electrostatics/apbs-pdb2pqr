@@ -32,7 +32,8 @@
 			</address> 
 		</author>
 		<copyright>
-			<year>2002</year> <year>2003</year> <year>2004</year> <year>2005</year> <year>2006</year>
+			<year>2002</year> <year>2003</year> <year>2004</year> 
+			<year>2005</year> <year>2006</year>
 			<holder>Washington University in St.  Louis</holder>
 		</copyright>
 		<legalnotice>
@@ -425,111 +426,139 @@ potential around my biomolecule?</title>
 								"APBSRun: Load
 								APBS Maps"
 								window should
-								appear.  Hit
+								appear.  Select
+								"<guibutton>Load
+									files
+									into
+									top
+									molecule</guibutton>"
+								and hit
 								<guibutton>OK</guibutton>.
 							</para>
 						</listitem>
 					</orderedlist>
 				</para>
 
-				<formalpara>  <title>Isocontour visualization</title>
-					The default isocontours are probably
-					not what you're looking for.  To adjust
-					these, choose
-						<menuchoice>
-							<guimenu>Graphics</guimenu>
-							<guimenuitem>Representations...</guimenuitem>
-						</menuchoice>
-					from the VMD Main window.  Note that
-					the current isovalue is 0.5; change
-					this to 1 (or 5 or 10 or whatever)
-					depending on your personal preferences.
-					To continue the lonstanding tradition
-					of electrostatic potential coloring,
-					choose "ColorID 0" for the
-					<guilabel>Coloring Method</guilabel>.
-					For the negative isocontour, hit
-					"<guibutton>Create Rep</guibutton>" and
-					select the newly created
-					representation.  Change the isocontour
-					value to -1 (or 5 or 10...) and the
-					ColorID to 1.
-					At this point, you probably have an
-					image that looks something like this:
-					<figure> <title>Arc repressor isocontours in VMD</title>
-						<graphic
-							fileref="images/arc-iso-vmd.png"></graphic>
-					</figure>
-				</formalpara>
-
-				<formalpara> <title>Visualizing surface potentials</title>
-					For some reason, the current APBSRun in
-					VMD loads the potential data into a
-					"new" molecule.  Before proceeding, you
-					need to delete that new molecule
-					(select the pot.dx molecule in the VMD
-					Main window and then choose
-					<menuchoice>
-						<guimenu>Molecule</guimenu>
-						<guimenuitem>Delete
-							Molecule</guimenuitem>
-					</menuchoice>).
+				<sect3>  <title>Isocontour visualization</title>
+					<para>
+						One of the most popular
+						visualization methods is the
+						isocontour.
+					</para>
 					<orderedlist>
 						<listitem>
-							<para> You'll need to
-								hunt down the
-								<filename>pot.dx</filename>
-								that was
-								produced by the
-								APBS
-								calculation.
-								This is located
-								in an
-								<filename>apbs.####</filename>
-								(where #### is
-								a random
-								number)
-								subdirectory of
-								the working
-								directory you
-								specified in
-								<menuchoice>
-									<guimenu>Edit</guimenu>
-									<guimenuitem>Settings...</guimenuitem>
+							<para>First, choose <menuchoice> 
+									<guimenu>Graphics</guimenu> 
+									<guimenuitem>Representations...</guimenuitem>
 								</menuchoice>
-								of the APBS
-								Tool window.
+								from the VMD
+								Main window.
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								Select your PQR
-								molecule in the
-								VMD Main
-								window.  In the
-								same window,
-								choose
-								<menuchoice>
-									<guimenu>File</guimenu>
-									<guimenuitem>Load
-									Data
-									Into
-									Molecule...</guimenuitem>
-								</menuchoice>
-								and
-								<guibutton>Browse...</guibutton>
-								to the DX data
-								you located in
-								the previous
-								step.  Hit
-								<guibutton>Load</guibutton>.
+								Hit the
+								<guibutton>Create
+									Rep</guibutton>
+								button and
+								change
+								<guilabel>Drawing
+									Method</guilabel>
+								to
+								"Isosurface".
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								Go back to the
-								"Draw style"
-								tab of the
+								Change
+								<guilabel>Draw</guilabel>
+								from "Points"
+								to "Solid
+								Surface" and
+								<guilabel>Material</guilabel>
+								to
+								"Transparent". 
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Note that the
+								current
+								isovalue is 0;
+								change this to
+								1 (or 5 or 10
+								or whatever)
+								depending on
+								your personal
+								preferences.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								To continue the
+								lonstanding
+								tradition of
+								electrostatic
+								potential
+								coloring,
+								choose "ColorID
+								0" for the
+								<guilabel>Coloring
+									Method</guilabel>.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								For the
+								negative
+								isocontour, hit
+								"<guibutton>Create
+									Rep</guibutton>"
+								and select the
+								newly created
+								representation.
+								Change the
+								isocontour
+								value to -1 (or
+								5 or 10...) and
+								the ColorID to
+								1.
+							</para>
+						</listitem>
+					</orderedlist>
+					<para>
+						At this point, you probably
+						have an image that looks
+						something like this (note that
+						I changed the surface to points
+						to make the figure a bit
+						cleaner):
+						<figure> <title>Arc repressor isocontours in VMD</title>
+							<graphic
+								fileref="images/arc-iso-vmd.png"></graphic>
+						</figure>
+					</para>
+				</sect3>
+
+				<sect3> <title>Visualizing surface potentials</title>
+					<para>
+						Another popular method of
+						electrostatic potential
+						visualization maps the
+						electrostatic potential to the
+						biomolecular surface.  Before
+						proceeding, you may want to
+						delete the two isocontours you
+						just created using the
+						<guibutton>Delete
+							Rep</guibutton> in the
+						Graphical Representations
+						window.
+					</para>
+					<orderedlist>
+						<listitem>
+							<para>
+								Go to the
 								Graphical
 								Representations
 								window
@@ -539,7 +568,23 @@ potential around my biomolecule?</title>
 								</menuchoice>
 								from the VMD
 								Main window)
-								and change
+								and create a
+								new
+								representation
+								of the molecule
+								with the 
+								<guibutton>Create
+									Rep</guibutton>
+								button.
+							</para>
+						</listitem>
+						<listitem>
+							<para> Go to the "Draw
+								style" tab of
+								the Graphical
+								Representations
+								window and
+								change
 								<guilabel>Drawing
 									Method</guilabel>
 								to
@@ -572,10 +617,10 @@ potential around my biomolecule?</title>
 										of
 										visualization...</para>
 								</footnote>
-									and
+								and
 								<guilabel>Coloring
 									Method</guilabel>
-								to "Volume".  
+								to "Volume".
 							</para>
 						</listitem>
 						<listitem>
@@ -586,12 +631,6 @@ potential around my biomolecule?</title>
 								Graphical
 								Representations
 								window
-								(<menuchoice>
-									<guimenu>Graphics</guimenu>
-									<guimenuitem>Representations...</guimenuitem>
-								</menuchoice>
-								from the VMD
-								Main window)
 								and change the
 								"<guilabel>Color
 									Scale
@@ -601,12 +640,6 @@ potential around my biomolecule?</title>
 								(or whatever
 								your favorite
 								values are).
-								By now, your
-								molecule
-								probably looks
-								like a
-								green-red-blue
-								blob.
 							</para>
 						</listitem>
 						<listitem>
@@ -620,8 +653,7 @@ potential around my biomolecule?</title>
 								to change the
 								color scale for
 								this image.  Go
-								to
-								<menuchoice>
+								to <menuchoice>
 									<guimenu>Graphics</guimenu>
 									<guimenuitem>Colors...</guimenuitem>
 								</menuchoice>
@@ -644,10 +676,14 @@ potential around my biomolecule?</title>
 							</para>
 						</listitem>
 					</orderedlist>
-					<figure> <title>Arc repressor surface potential in VMD</title>
-						<graphic fileref="images/arc-surf-vmd.png"></graphic>
-					</figure>
-				</formalpara>
+					<para>
+						Your molecule now probably
+						looks like this:
+						<figure> <title>Arc repressor surface potential in VMD</title>
+							<graphic fileref="images/arc-surf-vmd.png"></graphic>
+						</figure>
+					</para>
+				</sect3>
 
 			</sect2>
 

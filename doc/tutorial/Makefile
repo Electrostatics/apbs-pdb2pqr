@@ -1,7 +1,7 @@
-XSLDIR=/sw/share/xml/xsl/docbook-xsl/html
+XSLDIR=/sw/share/xml/xsl/docbook-xsl/xhtml
 XSLPATH=$(XSLDIR)/onechunk.xsl
 XSLPATH=$(XSLDIR)/docbook.xsl
-XSLTPROCOPT=-stringparam admon.graphics 1 \
+XSLTPROCOPT= -stringparam admon.graphics 1 \
 	    -stringparam section.autolabel 1 \
 	    -stringparam toc.section.depth 0 \
 	    -stringparam section.label.includes.component.label 1
