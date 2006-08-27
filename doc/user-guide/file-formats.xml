@@ -19,13 +19,6 @@
       APBS reads very loosely-formatted PQR files:  all fields are
       whitespace-delimited, thereby allowing coordinates which are larger/smaller
       than &plusmn; 999 &Aring;.  
-      <important>
-        <para>
-          The "cost" of this looser formatting is the inability of APBS to parse
-          PQR files with chain IDs.  These fields need to be removed from PQR
-          files before they are used with APBS.
-        </para>
-      </important>
     </para>
     <para>
       APBS reads data on a per-line basis from PQR files using the following
@@ -110,10 +103,13 @@
 
   </sect1>
 
-  <sect1 id="flat-format"> <title>Parameter file format</title>
-    <para>APBS uses a very simple format for parameter files to be used with
-      the <command><link linkend="parm">READ parm</link></command>
-      command.  The parameter file is a series of lines of the format:
+  <sect1 id="param-format"> <title>Parameter file format</title>
+	<para>APBS uses parameter files with the <command><link linkend="parm">READ parm</link></command>
+      command. 
+    </para>
+		
+	<sect2 id="flat-format"> <title>Flat-file format</title>
+    <para>The parameter file is a series of lines of the format:
       <literallayout>
         <replaceable>Residue_name</replaceable> <replaceable>Atom_name</replaceable> <replaceable>Charge</replaceable> <replaceable>Radius</replaceable> <replaceable>Epsilon</replaceable>
       </literallayout>
@@ -154,7 +150,74 @@
           </listitem>
         </varlistentry>
       </variablelist>
-    </para>
+     </para>
+    </sect2>
+
+	<sect2> <title>XML Parameter Format </title>
+      <para> This data format has the following form:
+      	<programlisting>
+          # <replaceable>Comments</replaceable>	
+		  <replaceable>&lt;ffname&gt;</replaceable>
+		  <literal>&nbsp;&nbsp;&lt;residue&gt;</literal>
+		  <literal>&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>resname</replaceable><literal>&lt;/name&gt;</literal>
+	      <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>atomname</replaceable><literal>&lt;/name&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>atomcharge</replaceable><literal>&lt;/charge&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>atomradius</replaceable><literal>&lt;/radius&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;epsilon&gt;</literal><replaceable>atomepsilon</replaceable><literal>&lt;/epsilon&gt;</literal>
+          <literal>&nbsp;&nbsp;&lt;/atom&gt;</literal>
+          ...
+          <literal>&nbsp;&nbsp;&lt;/residue&gt;</literal>
+          ...
+          <replaceable>&lt;/ffname&gt;</replaceable>
+       </programlisting>
+       The variables in this example are:
+       <variablelist>
+          <varlistentry>
+            <term> <replaceable>Comments</replaceable> </term>
+            <listitem>              
+				<para>Any number of comment lines, each line starting with the "#" symbol</para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>            
+			<term> <replaceable>ffname</replaceable> </term>            
+			<listitem>              
+				<para>The name of the forcefield.  This is the root element of the XML file.</para> 
+	        </listitem>          
+          </varlistentry>
+          <varlistentry>                        
+			<term> <replaceable>resname</replaceable> </term>               	
+		      <listitem>
+                <para>A string giving the residue name, as provided in the PDB file to be parameterized.</para>
+              </listitem>          
+          </varlistentry>
+		  <varlistentry>
+	        <term> <replaceable>atomname</replaceable> </term>
+              <listitem>               
+                 <para>A string giving the atom name, as provided in the PDB file to be parameterized.</para>     
+              </listitem>          
+          </varlistentry>
+	      <varlistentry>
+            <term> <replaceable>atomcharge</replaceable> </term>
+               <listitem>
+                 <para>A float giving the atomic charge (in electrons).</para>
+               </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term> <replaceable>atomradius</replaceable> </term>
+               <listitem>
+                 <para>A float giving the atomic Radius (in &Aring;).</para>
+               </listitem>
+          </varlistentry>
+		  <varlistentry>
+            <term> <replaceable>atomepsilon</replaceable> </term>
+               <listitem>
+                 <para>A float giving the Lennard-Jones well depth (in kcal/mol); this parameter is read but not currently used by APBS.</para>
+               </listitem>
+          </varlistentry>
+       </variablelist>
+	  </para>
+    </sect2>
   </sect1>
 
   <sect1 id="hb-format"> <title>Harwell-Boeing column-compressed matrix
