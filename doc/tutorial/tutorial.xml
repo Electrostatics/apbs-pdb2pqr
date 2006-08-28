@@ -7,6 +7,7 @@
 <!ENTITY ugurl "../user-guide/index.html">
 <!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
 <!ENTITY vmdurl "http://www.ks.uiuc.edu/Research/vmd/">
+<!ENTITY pymolurl "http://pymol.sf.net">
 ]>
 
 <book>
@@ -157,6 +158,11 @@
 		<sect1 id="pdb2pqr-subsect"> <title>Generating PQR files from PDB
 				files (PDB2PQR)</title>
 
+			<note>
+				<para>This tutorial was prepared using PDB2PQR
+					1.1.2</para>
+			</note>
+
 			<para>
 				The <ulink url="&pdb2pqrurl;">PDB2PQR</ulink>
 				web service and software will convert
@@ -206,11 +212,241 @@
 			</para>
 
 			<para>
-				Please note that PDB2PQR is used extensively
-				throughout the remainder of this document;
-				therefore, an in-depth discussion of its
-				features is not included here.
+				As mentioned above, PDB2PQR is discussed in
+				more detailed on the 
+				<ulink url="&pdb2pqrurl;">PDB2PQR
+					homepage</ulink> .  Therefore, we will
+				review the minimal steps required to produce a
+				PQR file from a PDB file here.  To begin,
+				choose a server from <ulink
+					url="&pdb2pqrurl;#availability">&pdb2pqrurl;#availability</ulink>.
 			</para>
+
+			<sect2> <title>Choose the PDB file to convert</title>
+				<para>
+					Either enter the 4-character <ulink
+						url="http://www.pdb.org/">PDB</ulink>
+					ID or accession number (e.g., <ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1FAS">1FAS</ulink>,
+					<ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1MAH">1MAH</ulink>,
+					<ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1LYS">1LYS</ulink>,
+					etc.) or upload your own PDB file.
+					<note>
+						<para> Note that, if you choose
+							to enter a 4-character
+							PDB file, PDB2PQR will
+							process 
+							<emphasis>all
+								recognizable 
+								chains</emphasis> 
+							of PDB file
+							<emphasis>as it was
+								deposited</emphasis>
+							in the PDB (e.g., not 
+							the biological unit,
+							any related
+							transformations, etc.).
+						</para>
+					</note>
+				</para>
+			</sect2>
+
+			<sect2 id="pdb2pqr-ff-sect"> <title>Pick a forcefield</title>
+				<para>
+					<emphasis>For most applications, the choice is
+						easy:  PARSE.</emphasis>  This
+					forcefield has been optimized for
+					implicit solvent calculation and is
+					probably the best choice for
+					visualization of protein electrostatics
+					and many common types of energetic
+					calculations for proteins.  However,
+					AMBER and CHARMM may be more
+					appropriate if you are attempting to
+					compare directly to simulations
+					performed with those force fields,
+					require nucleic acid support, are
+					simulating ligands parameterized with
+					those force fields, etc.
+				</para>
+				<para>
+					It is also possible to upload a
+					user-defined forcefield (e.g., to
+					define radii and charges for ligands or
+					unusual residues).  Please see the
+					<ulink
+						url="&pdb2pqrurl;">PDB2PQR</ulink>
+					documentation for more information.
+				</para>
+			</sect2>
+
+			<sect2> <title>Output naming scheme</title>
+
+				<para>This is largely irrelevant to
+					electrostatics calculations but may be
+					important for visualization.  When in
+					doubt, choose the "Internal naming
+					scheme" which attempts to conform to
+					IUPAC standards.</para>
+			</sect2>
+
+			<sect2> <title>Other options</title>
+
+				<para>These options fall into two categories:
+					how to build missing atoms (including
+					hydrogens) onto the structure and
+					additional output configuration.</para>
+
+				<variablelist> <title>Missing atom build
+						options</title>
+					<varlistentry> 
+						<term> Ensure that new atoms
+							are not rebuilt too
+							close to existing atoms
+						</term>
+						<listitem>
+							<para>
+								"Debump" any
+								rebuilt atoms
+								to remove
+								steric clashes.
+								<emphasis>This
+									is
+generally a good option to include</emphasis>.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term> Optimize the hydrogen
+							bonding network </term>
+						<listitem>
+							<para>
+								This rotates
+								hydrogen
+								torsion angles
+								and flips
+								ambiguous
+								sidechain
+								placements in
+								an attempt to
+								optimize the
+								overall
+								hydrogen
+								bonding
+								network.
+								<emphasis>This
+									is
+generally a good option to include</emphasis>.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term> Use 
+							<ulink url="http://propka.chem.uiowa.edu/">PROPKA</ulink> 
+							to assign protonation
+							states at pH...</term>
+						<listitem>
+							<para> Assign titration
+								states (for
+								proteins) with
+								<ulink
+									url="http://propka.chem.uiowa.edu/">PROPKA</ulink>.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist> 
+
+				<variablelist>  <title>Output options</title>
+					<varlistentry>
+						<term>Create an APBS input
+							file</term>
+						<listitem>
+							<para> Useful if you're
+								planing to run
+								APBS on your
+								own.  At the
+								very least,
+								this generates
+								a nice
+								template for
+								customization.
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term>Add/keep chain IDs in the
+							PQR file</term>
+						<listitem>
+							<para> Unfortunately,
+								chain IDs still
+								baffle
+								APBS<footnote><para>Sorry,
+										we're
+										still
+										working
+										on
+										introducing
+										this
+										while
+										maintaining
+										flexibility
+										for
+										parsing
+										strange
+										PDB
+										formats...</para></footnote>
+								but they can be
+								useful for
+								visualization.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist> 
+
+			</sect2>
+
+			<sect2> <title>Running the calculation and downloading
+					the results</title>
+				<para>Hit <guibutton>Submit</guibutton> to run
+					the calculation.  Note that some
+					options (particularly hydrogen bond
+					network optimization and PROPKA
+					assignment) can increase the runtime.
+					You should get intermittent updates on
+					the progress of your calculation from
+					the web server.</para>
+
+				<para>When you download the result from the web
+					page,<footnote><para>One can usually
+							download, rather than
+							display the file, by
+							right-clicking or
+							Ctrl-clicking the
+							link.</para></footnote>
+					many browsers will attach a ".txt"
+					extension to the file.  This generally
+					needs to be removed before it can be
+					used with visualization software.
+				</para>
+
+				<para>Finally, for many types of electrostatic
+					calculations, 
+					<emphasis>it will be useful to remove
+						any explicit water and
+						unparameterized ligands from the 
+						PQR structure</emphasis> before
+					proceeding.  This can be done with your
+					favorite <ulink
+						url="http://en.wikipedia.org/wiki/Text_editor">text
+						editor</ulink>.
+				</para>
+			</sect2>
+
+			<warning>
+				<para>STILL UNDER CONSTRUCTION</para> 
+			</warning>
 
 		</sect1> 
 
@@ -258,53 +494,13 @@ potential around my biomolecule?</title>
 					a DNA binding protein.  The first step
 					in the visualization process is
 					generating a PQR file for use with VMD
-					and APBS.  We will generate this input
-					file via <ulink
-						url="&pdb2pqrurl;">PDB2PQR</ulink>
-					(described in more detail in <xref
-						linkend="pdb2pqr-sect"/>).
+					and APBS.  Please follow the directions
+					in <xref linkend="pdb2pqr-subsect"/> to
+					generate a PQR file for this structure.
 				</para>
+			</sect2>
 
-				<para>
-					Choose a server from <ulink
-						url="&pdb2pqrurl;#availability">&pdb2pqrurl;#availability</ulink>
-					and go to the web page for that server.
-					Under "<guilabel>Please enter
-						either:</guilabel>", select
-					the "<guibutton>a PDB ID:</guibutton>"
-					button and enter
-					<userinput>1MYK</userinput> in the
-					form.  Configure the rest of the
-					PDB2PQR job to your liking<footnote>
-						<para>I recommend the PARSE
-							force field for these
-							calculations;  you
-							can leave the rest of
-							defaults in
-							place</para>
-					</footnote>
-					and press the
-					"<guibutton>Submit</guibutton>" button.
-					Depending on the server, the current
-					load, etc. the job will take between
-					30-120 sec.  Upon completion, you
-					should see a link for your
-					newly-created PQR file.  Download the
-					file (and check the resulting file
-					extension -- some browsers append
-					".txt" to the filename).
-				</para>
-
-				<tip>
-					<para>
-						Dependending on your personal
-						preference, you may want to
-						remove the explicit water
-						molecules from the PQR file
-						before proceeding to the next
-						step.
-					</para>
-				</tip>
+			<sect2> <title>Loading the PQR</title>
 
 				<para>
 					Load the PQR file you just created into
@@ -325,18 +521,25 @@ potential around my biomolecule?</title>
 							future releases of APBS
 							and PDB2PQR.</para>
 					</footnote>
-					Depending on the force field you used
-					in PDB2PQR, you may notice that VMD is
-					displaying some strange bonds.  When a
-					PQR file is loaded into VMD, bond
-					distances are inferred from the PQR
-					radii.  These radii were chosen for
-					continuum electrostatics calculations,
-					not visualization.  Don't worry if some
-					of the bonds appear a bit strange (hide
-					the hydrogens if it really bothers
-					you).
+					Depending on the force
+					field<footnote><para>Visualization
+							seems to work best with
+							PARSE</para></footnote>
+					you used in PDB2PQR, you may notice
+					that VMD is displaying some strange
+					bonds.  When a PQR file is loaded into
+					VMD, bond distances are inferred from
+					the PQR radii.  These radii were chosen
+					for continuum electrostatics
+					calculations, not visualization.  Don't
+					worry if some of the bonds appear a bit
+					strange (hide the hydrogens if it
+					really bothers you).
 				</para>
+
+			</sect2>
+
+			<sect2> <title>Running the electrostatics calculation</title>
 
 				<para>
 					You're now ready for electrostatics
@@ -438,6 +641,10 @@ potential around my biomolecule?</title>
 						</listitem>
 					</orderedlist>
 				</para>
+
+			</sect2>
+
+			<sect2> <title>Electrostatics visualization</title>
 
 				<sect3>  <title>Isocontour visualization</title>
 					<para>
@@ -690,7 +897,331 @@ potential around my biomolecule?</title>
 		</sect1>
 
 		<sect1 id="pymol-sect"> <title>PyMOL</title>
-			<warning><para>Under construction</para></warning>
+			<para>
+				The <ulink url="&pymolurl;">PyMOL</ulink> molecular
+				graphics software package provides support for
+				both the execution of APBS and the
+				visualization of the resulting electrostatic
+				potentials.  We will provide a basic
+				demonstration of how go from a PDB entry to a
+				plot of structure &amp; potential in PyMOL using
+				APBS.
+			</para>
+
+			<note>
+				<para>This tutorial was written using
+					PyMOLX11Hybrid 0.99 on a Mac.</para>
+			</note>
+
+			<sect2> <title>Generating the PQR</title>
+				<para>We'll perform this example with
+					fasciculin-2 (PDB ID <ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1FAS">1FAS</ulink>),
+					a snake neurotoxin which binds the
+					negatively-charged
+					acetylcholinesterase.  Please generate
+					the PQR file using the steps outlined
+					in <xref linkend="pdb2pqr-subsect"/>.
+				</para>
+
+				<para>Load the PQR file you created into PyMOL
+					(<menuchoice> <guimenu>File</guimenu>
+						<guimenuitem>Open...</guimenuitem>
+					</menuchoice>) and choose your favorite
+					graphical representation.</para>
+
+			</sect2>
+
+			<sect2> <title>Performing the electrostatics calcuation
+					</title>
+
+				<para>
+					Go to the 
+					<menuchoice>
+						<guimenu>Plugin</guimenu>
+						<guimenuitem>APBS
+							Tools...</guimenuitem>
+					</menuchoice>
+					to open the APBS calculation plugin.
+					<orderedlist>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>Main</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								select
+								<guibutton>Use
+									another
+									PQR</guibutton>
+								and either
+								browse to (via
+								the
+								<guibutton>Choose
+									Externally
+									Generated
+									PQR:</guibutton>
+								button) or input the
+								path to your
+								PQR file.  This
+								step is
+								necessary to
+								ensure you use
+								the radii and
+								charges
+								assigned by
+								PDB2PQR.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>APBS
+									Location</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								either browse
+								to (via the
+								<guibutton>APBS
+									binary
+									location:
+									:</guibutton>
+								button) or input the
+								path to your
+								local APBS
+								binary.  It is
+								not necessary
+								to provide a
+								path to the
+								APBS psize.py
+								binary for most
+								biomolecules.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>Temporary
+									File
+									Locations</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								customize the
+								locations of
+								the various
+								temporary files
+								created during
+								the run.  This
+								can be useful
+								if you want to
+								save the
+								generated files
+								for later use.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>Configuration</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								hit the
+								<guibutton>Set
+									grid</guibutton>
+								to set the grid
+								spacings.
+								The default
+								values are
+								usually
+								sufficient for
+								all but the
+								most highly
+								charged
+								biomolecules.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>Configuration</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								customize the
+								remaining
+								parameters; the
+								defaults are
+								usually
+								OK<footnote><para>Although
+										I
+										usually
+										prefer
+										0.150
+										concentrations
+										for
+										the
+										+1
+										and
+										-1
+										ion
+										species
+										so
+										electrostatic
+										properties
+										aren't
+										overly
+										exaggerated.</para></footnote>.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Under the
+								"<guilabel>Configuration</guilabel>"
+								tab of the
+								PyMOL APBS
+								Tools window,
+								hit the
+								<guibutton>Run
+									APBS</guibutton>
+								button to start
+								the APBS
+								calculation.
+								Depending on
+								the speed of
+								your computer,
+								this could take
+								a few minutes.
+								The
+								<guibutton>Run
+									APBS</guibutton>
+								button will
+								become
+								unselected when
+								the calcaultion
+								is finished.
+							</para>
+						</listitem>
+					</orderedlist>
+				</para>
+
+			</sect2>
+
+			<sect2> <title>Visualize the electrostatic potential</title>
+
+				<para> Before proceeding with the remaining
+					steps, you must load the electrostatic
+					potential data into PyMOL.  Under the
+					"<guilabel>Visualization</guilabel>"
+					tab of the PyMOL APBS Tools window, hit
+					the <guibutton>Update</guibutton>
+					button.  </para>
+
+				<sect3> <title>Electrostatic isocontours</title>
+
+					<para>PyMOL makes this step very easy:
+						adjust the positive and
+						negative
+						"<guilabel>Contour</guilabel>"
+						fields to the desired values
+						(usually +/-1, +/-5, or +/-10
+						kT/e<footnote><para>Note that
+								PyMOL has a
+								slight units
+								error on the
+								contour
+								values.</para></footnote>)
+						and hit the 
+						<guilabel>Positive Isosurface</guilabel>
+						and <guilabel>Negative Isosurface</guilabel>
+						and <guibutton>Show</guibutton>
+						buttons.
+					</para>
+
+					<para>
+						At this point, you probably
+						have a figure that looks
+						something like:
+						<figure> <title>+/- 1 kT/e
+							electrostatic potential
+							isocontours of FAS2 in PyMOL</title>
+							<graphic
+								fileref="images/fas2-iso-pymol.png"></graphic>
+						</figure>
+					</para>
+				</sect3>
+
+				<sect3> <title>Surface potentials</title>
+
+					<para>If you haven't already, hide the
+						isocontours by hitting
+						<guilabel>Positive Isosurface</guilabel>
+						and <guilabel>Negative Isosurface</guilabel>
+						and <guibutton>Hide</guibutton>
+						buttons.
+					</para>
+
+					<para>The surface potential is also
+						straightforward to visualize.
+						Set the 
+						"<guilabel>Low</guilabel>"
+						and
+						"<guilabel>High</guilabel>"
+						values to the desired values 
+						(usually +/-1, +/-5, or +/-10
+						kT/e) at which the surface
+						colors are clamped at red (-)
+						or blue (+).  Check the
+						"<guibutton>Solvent accessible
+							surface</guibutton>"
+						and "<guibutton>Color by
+							potential on sol. acc.
+							surf.</guibutton>"
+						buttons to plot the potential
+						on the solvent-accessible
+						(probe-inflated or
+						Lee-Richards)
+						surface<footnote>
+							<para>In my opinion,
+								the
+								solvent-accessible
+								surface tends
+								to reveal more
+								global features
+								of the surface
+								potential.
+								Tighter
+								surfaces (e.g.,
+								van der Waals
+								and molecular
+								or Connolly
+								surfaces) tend
+								to simply map
+								atomic surface
+								onto the
+								biomolecular
+								surface.</para>
+						</footnote>.
+						Hit the "<guilabel>Molecular
+							Surface</guilabel>"
+						<guibutton>Show</guibutton>
+						button to load the surface
+						potential.
+						<figure> <title>+/- 5 kT/e
+							electrostatic surface potential
+							of FAS2 in PyMOL</title>
+							<graphic
+								fileref="images/fas2-surf-pymol.png"></graphic>
+						</figure>
+					</para>
+
+				</sect3>
+
+			</sect2>
+
 		</sect1>
 
 		<sect1 id="pmv-sect"> <title>PMV</title>
