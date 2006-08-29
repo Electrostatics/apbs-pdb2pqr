@@ -1,0 +1,364 @@
+#! /bin/sh
+##############################################################################
+# File:     ${HOME}/.bashrc
+# Purpose:  Adaptive personal rc for either the bourne shell or bash.
+# Notes:    Assumes the following environment variables are defined
+#           (via the shell or explicitly):
+#               HOME, SHELL, OSTYPE, USER, HOSTNAME
+##############################################################################
+
+##############################################################################
+# HOME, SHELL, OSTYPE, USER, HOSTNAME
+#
+# The following environment variables MUST be defined here, either by
+# the shell (bash defines several of them) or explicitly by the user:
+#
+#              HOME=/home/root (or e.g. /home/jsmith, etc)
+#             SHELL=/bin/bash  (or e.g. /bin/sh, etc)
+#            OSTYPE=Linux      (or e.g. IRIX, IRIX64, SunOS, NeXT, etc)
+#              USER=root       (or e.g. jsmith, etc)
+#          HOSTNAME=box        (or e.g. shibumi, etc)
+#
+##############################################################################
+
+### Define the five core environment variables
+SHELL="/bin/bash"
+if [ -f "/etc/profile" ]; then
+    . /etc/profile
+fi
+if [ "${SHELL}" = "/bin/bash" ]; then
+    if [ -f "/etc/bashrc" ]; then
+        . /etc/bashrc
+    fi
+fi
+# HOME=`pwd`
+# OSTYPE=`uname -s`
+USER=`whoami`
+HOSTNAME=`hostname`
+export HOME SHELL OSTYPE USER HOSTNAME
+
+##############################################################################
+# PLATFORM-INDEPENDENT ENVIRONMENT AND ALIASES
+##############################################################################
+
+### Deal with [sh|bash] differences
+if [ "${SHELL}" = "/bin/bash" ]; then
+    if [ "${USER}" = "root" ]; then
+        PS1="\u@\h<${OSTYPE}+${SHELL}>:\w# "
+    else
+        PS1="\u@\h<${OSTYPE}+${SHELL}>:\w% "
+    fi
+else
+    if [ "${USER}" = "root" ]; then
+        PS1="${USER}@${HOSTNAME}<${OSTYPE}+${SHELL}>:?# "
+    else
+        PS1="${USER}@${HOSTNAME}<${OSTYPE}+${SHELL}>:?% "
+    fi
+fi
+export PS1
+
+### Set the terminal type and control if an interactive terminal session
+if [ -z "${ENVONLY}" ]; then
+    if [ -t 0 ]; then
+        stty intr '^C'
+        eval `tset -s -Q`
+    fi
+fi
+
+### Set the default X server.
+if [ -z "${DISPLAY}" ]; then
+    if [ -n "${REMOTEHOST}" ]; then
+        DISPLAY="${REMOTEHOST}:0"
+    else
+        DISPLAY=":0"
+    fi
+    export DISPLAY
+fi
+
+### Basic environment
+umask 077
+LOGNAME="${USER}"
+USERNAME="${USER}"
+ENV="${HOME}/.bashrc"
+EDITOR="vi"
+CVSEDITOR="vi"
+COLORTERM="Eterm"
+EXINIT="set ignorecase hardtabs=1000 ts=4 sw=4"
+TMPDIR="/tmp"
+HISTSIZE=1000
+HISTFILESIZE=1000
+LESSCHARSET="latin1"
+WWW_HOME="http://www.scicomp.ucsd.edu/~${USER}"
+PAGER="less"
+MANPAGER="less"
+MANPATH="${HOME}/catman:${HOME}/man:${MANPATH}"
+PATH="${HOME}/sbin:${HOME}/bin:${PATH}"
+LD_LIBRARY_PATH="/usr/local/lib:${LD_LIBRARY_PATH}"
+RASMOLPATH="/usr/local/rasmol"
+RASMOLPDBPATH="/usr/local/rasmol"
+### LM_LICENSE_FILE="/usr/local/flexlm/licenses/license.dat"
+export LOGNAME USERNAME ENV EDITOR CVSEDITOR COLORTERM EXINIT TMPDIR
+export HISTSIZE HISTFILESIZE LESSCHARSET WWW_HOME
+export PAGER MANPAGER MANPATH PATH LD_LIBRARY_PATH
+export RASMOLPATH RASMOLPDBPATH
+### export LM_LICENSE_FILE
+
+### Electric Fence environment.
+# EF_ALLOW_MALLOC_0=1
+# EF_ALIGNMENT=8
+# EF_PROTECT_BELOW=1
+# EF_PROTECT_FREE=1
+# export EF_ALLOW_MALLOC_0 EF_ALIGNMENT EF_PROTECT_BELOW EF_PROTECT_FREE
+
+### MESA OpenGL environment.
+# MESA_RGB_VISUAL="TrueColor 8"
+# MESA_CI_VISUAL="TrueColor 8"
+# MESA_BACK_BUFFER=Pixmap
+# # MESA_BACK_BUFFER=XImage
+# MESA_PRIVATE_CMAP=1
+# export MESA_RGB_VISUAL MESA_CI_VISUAL MESA_BACK_BUFFER MESA_PRIVATE_CMAP
+
+### Basic aliases
+alias which="type -path"
+alias h='history $1'
+alias la='ls -aF'
+alias l='ls -F'
+alias c='clear'
+alias f='finger'
+alias u='users'
+alias m='less'
+alias j='jobs -l'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+##############################################################################
+# PLATFORM-DEPENDENT ENVIRONMENT AND ALIASES
+##############################################################################
+
+### LINUX-specific
+if [ "${OSTYPE}" = "Linux" ] || [ "${OSTYPE}" = "linux-gnu" ]; then
+    alias psa='ps -ef'
+    alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL=""
+    PARAMAKE="-j 10"
+    MAIL="/var/spool/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/local/lib/netscape/Netscape.ad"
+    XFMAD="/usr/lib/X11/app-defaults/Xfm"
+    PRINTER="lj"
+    ENSCRIPT="-dlj"
+    TEXINPUTS=".:/usr/share/texmf/tex//"
+    BIBINPUTS=".:/usr/share/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/share/texmf/bibtex/bst:/usr/share/texmf/bibtex/bst/amslatex:/usr/share/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/LINUX/ch_p4"
+    MC_RL_INCLUDE="/usr/include"
+    MC_RL_LIBRARY="/usr/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/lib"
+    SG_GL_INCLUDE="/usr/X11R6/include"
+    SG_GL_LIBRARY="/usr/X11R6/lib"
+    SG_GLW_INCLUDE="/usr/local/include"
+    SG_GLW_LIBRARY="/usr/local/lib"
+    SG_MOTIF_INCLUDE="/usr/X11R6/include"
+    SG_MOTIF_LIBRARY="/usr/X11R6/lib"
+
+### FreeBSD-specific
+elif [ "${OSTYPE}" = "FreeBSD" ] || [ "${OSTYPE}" = "freebsd4.0" ]; then
+    alias psa='ps -ef'
+    # alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL=""
+    PARAMAKE="-j 10"
+    MAIL="/var/spool/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/local/lib/netscape/Netscape.ad"
+    XFMAD="/usr/lib/X11/app-defaults/Xfm"
+    PRINTER="lj"
+    ENSCRIPT="-dlj"
+    TEXINPUTS=".:/usr/share/texmf/tex//"
+    BIBINPUTS=".:/usr/share/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/share/texmf/bibtex/bst:/usr/share/texmf/bibtex/bst/amslatex:/usr/share/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/LINUX/ch_p4"
+    MC_RL_INCLUDE="/usr/include"
+    MC_RL_LIBRARY="/usr/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/lib"
+    SG_GL_INCLUDE="/usr/X11R6/include"
+    SG_GL_LIBRARY="/usr/X11R6/lib"
+    SG_GLW_INCLUDE="/usr/local/include"
+    SG_GLW_LIBRARY="/usr/local/lib"
+    SG_MOTIF_INCLUDE="/usr/X11R6/include"
+    SG_MOTIF_LIBRARY="/usr/X11R6/lib"
+
+### IRIX-specific
+elif [ "${OSTYPE}" = "IRIX" ] || [ "${OSTYPE}" = "irix" ]; then
+    alias psa='ps -ef'
+    # alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL="10"
+    PARAMAKE="-P"
+    MAIL="/var/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/lib/X11/app-defaults/Netscape"
+    XFMAD="/usr/local/lib/X11/app-defaults/Xfm.ad"
+    PRINTER="chagall"
+    ENSCRIPT="-dchagall"
+    TEXINPUTS=".:/usr/local/teTeX/texmf/tex//"
+    BIBINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst:/usr/local/teTeX/texmf/bibtex/bst/ams:/usr/local/teTeX/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/IRIX32/ch_p4"
+    MC_RL_INCLUDE="/usr/freeware/include"
+    MC_RL_LIBRARY="/usr/freeware/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/o2/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/o2/lib"
+    SG_GL_INCLUDE="/usr/include"
+    SG_GL_LIBRARY="/usr/lib32"
+    SG_GLW_INCLUDE="/usr/include"
+    SG_GLW_LIBRARY="/usr/lib32"
+    SG_MOTIF_INCLUDE="/usr/include"
+    SG_MOTIF_LIBRARY="/usr/lib32"
+
+### IRIX64-specific
+elif [ "${OSTYPE}" = "IRIX64" ] || [ "${OSTYPE}" = "irix6.4" ]; then
+    alias psa='ps -ef'
+    # alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL="10"
+    PARAMAKE="-P"
+    MAIL="/var/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/lib/X11/app-defaults/Netscape"
+    XFMAD="/usr/local/lib/X11/app-defaults/Xfm.ad"
+    PRINTER="chagall"
+    ENSCRIPT="-dchagall"
+    TEXINPUTS=".:/usr/local/teTeX/texmf/tex//"
+    BIBINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst:/usr/local/teTeX/texmf/bibtex/bst/ams:/usr/local/teTeX/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/IRIX32/ch_p4"
+    MC_RL_INCLUDE="/usr/freeware/include"
+    MC_RL_LIBRARY="/usr/freeware/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/octane/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/octane/lib"
+    SG_GL_INCLUDE="/usr/include"
+    SG_GL_LIBRARY="/usr/lib64"
+    SG_GLW_INCLUDE="/usr/include"
+    SG_GLW_LIBRARY="/usr/lib64"
+    SG_MOTIF_INCLUDE="/usr/include"
+    SG_MOTIF_LIBRARY="/usr/lib64"
+
+### SunOS-specific
+elif [ "${OSTYPE}" = "SunOS" ] || [ "${OSTYPE}" = "Solaris" ]; then
+    alias psa='ps -ef'
+    # alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL=""
+    PARAMAKE="-j 10"
+    MAIL="/var/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/lib/X11/app-defaults/Netscape"
+    XFMAD="/usr/local/lib/X11/app-defaults/Xfm.ad"
+    PRINTER="chagall"
+    ENSCRIPT="-dchagall"
+    TEXINPUTS=".:/usr/local/teTeX/texmf/tex//"
+    BIBINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst:/usr/local/teTeX/texmf/bibtex/bst/ams:/usr/local/teTeX/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/SUNOS/ch_p4"
+    MC_RL_INCLUDE="/usr/include"
+    MC_RL_LIBRARY="/usr/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/lib"
+    SG_GL_INCLUDE="/usr/X11R6/include"
+    SG_GL_LIBRARY="/usr/X11R6/lib"
+    SG_GLW_INCLUDE="/usr/local/include"
+    SG_GLW_LIBRARY="/usr/local/lib"
+    SG_MOTIF_INCLUDE="/usr/X11R6/include"
+    SG_MOTIF_LIBRARY="/usr/X11R6/lib"
+
+### NeXT-specific
+elif [ "${OSTYPE}" = "NeXTstep" ] || [ "${OSTYPE}" = "OpenStep" ]; then
+    alias psa='ps aux'
+    # alias ls='ls --color'
+    # PSRESOURCEPATH="/usr/local/Acrobat3/Fonts"
+    PARALLEL=""
+    PARAMAKE=""
+    MAIL="/var/spool/mail/${USER}"
+    NNTPSERVER="${HOSTNAME}"
+    NETSCAPEAD="/usr/local/lib/netscape/Netscape.ad"
+    XFMAD="/usr/lib/X11/app-defaults/Xfm"
+    PRINTER="chagall"
+    ENSCRIPT="-dchagall"
+    TEXINPUTS=".:/usr/local/teTeX/texmf/tex//"
+    BIBINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst"
+    BSTINPUTS=".:/usr/local/teTeX/texmf/bibtex/bst:/usr/local/teTeX/texmf/bibtex/bst/ams:/usr/local/teTeX/texmf/bibtex/bst/base"
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/mpich/lib/NEXTSTEP/ch_p4"
+    MC_RL_INCLUDE="/usr/include"
+    MC_RL_LIBRARY="/usr/lib"
+    MC_MPI_INCLUDE="/usr/local/mpich/include"
+    MC_MPI_LIBRARY="/usr/local/mpich/lib"
+    SG_GL_INCLUDE="/usr/X11R6/include"
+    SG_GL_LIBRARY="/usr/X11R6/lib"
+    SG_GLW_INCLUDE="/usr/local/include"
+    SG_GLW_LIBRARY="/usr/local/lib"
+    SG_MOTIF_INCLUDE="/usr/X11R6/include"
+    SG_MOTIF_LIBRARY="/usr/X11R6/lib"
+    PATH="${PATH}:/LocalApps/Geomview.app:/LocalApps/OmniWeb.app:/LocalApps/Xnext.app"
+fi
+
+# export PSRESOURCEPATH
+export PARALLEL PARAMAKE MAIL NNTPSERVER 
+export NETSCAPEAD XFMAD PRINTER ENSCRIPT
+export TEXINPUTS BSTINPUTS BIBINPUTS LD_LIBRARY_PATH
+export MC_RL_INCLUDE MC_RL_LIBRARY
+export MC_MPI_INCLUDE MC_MPI_LIBRARY
+export SG_GL_INCLUDE SG_GL_LIBRARY
+export SG_GLW_INCLUDE SG_GLW_LIBRARY
+export SG_MOTIF_INCLUDE SG_MOTIF_LIBRARY
+
+##############################################################################
+# Customization by the individual user after this point
+##############################################################################
+
+CLASSPATH=".:${HOME}/.java"
+TEXINPUTS=".:${HOME}/m/TeX/inputs:${TEXINPUTS}"
+BSTINPUTS=".:${HOME}/m/TeX/inputs:${BSTINPUTS}"
+BIBINPUTS=".:${HOME}/m/TeX/bibstuff:${BIBINPUTS}"
+export CLASSPATH TEXINPUTS BSTINPUTS BIBINPUTS
+
+### CVSROOT="fetk@sobolev:/usr/people/fetk/cvsroot"
+CVSROOT="/usr/people/mholst/cvsroot"
+CVS_RSH="/usr/local/bin/ssh"
+CVSUMASK="077"
+export CVSROOT CVS_RSH CVSUMASK
+
+# MCSH_HOME="${HOME}/fetk/mc/work/bin"
+# MC_INCLUDE="${HOME}/include"
+# MC_LIBRARY="${HOME}/lib"
+# export MCSH_HOME MC_INCLUDE MC_LIBRARY
+
+PS1="\u@\h<${OSTYPE}+${SHELL}>:\w% "
+export PS1
+
+alias mbib='pushd ${HOME}/m/TeX/bibstuff'
+alias minputs='pushd ${HOME}/m/TeX/inputs'
+alias mtalk='pushd ${HOME}/m/research/talks'
+alias mpaper='pushd ${HOME}/m/research/pub'
+alias mcv='pushd ${HOME}/m/research/cv'
+alias mgrant='pushd ${HOME}/m/research/grants'
+alias mclass='pushd ${HOME}/m/teaching/ucsd'
+alias mprog='pushd ${HOME}/fetk'
+alias mprog2='pushd ${HOME}/ztmp/mgz'
+
+alias ma='Mail'
+alias mail='Mail'
+alias inc="echo 'DO NOT USE MH!'"
+alias scan="echo 'DO NOT USE MH!'"
+alias show="echo 'DO NOT USE MH!'"
+alias rmm="echo 'DO NOT USE MH!'"
+alias refile="echo 'DO NOT USE MH!'"
+alias folder="echo 'DO NOT USE MH!'"
+# alias rp='repl -editor vi -filter filt $@'
+# alias fp='folder -pack'
+# alias ip='inc -file /var/mail/mholst -truncate'
+

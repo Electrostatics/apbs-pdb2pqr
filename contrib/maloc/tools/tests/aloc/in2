@@ -1,0 +1,67 @@
+#!/bin/sh
+#
+# script:   ppp [ start | stop ]
+#
+# purpose:  ppp starts up the ppp connection.
+#
+# author:   michael holst
+# date:     7 february 2000
+#
+##############################################################################
+
+HOST=`hostname`
+OS=`uname -s`
+
+### Set MAC address and main route
+if [ "${HOST}" = "besov" ]; then
+  HWADDR="00:A0:CC:51:1E:C0"   ### besov MAC Address
+  ROUTE="sobolev.ucsd.edu"     ### work gateway machine
+else
+  echo "This script does not work on HOST=<${HOST}>."
+fi
+echo "Setting HWADDR=<${HWADDR}> on HOST=<${HOST}>."
+
+case $1 in
+
+  gw)
+    case $2 in
+      none)
+        /sbin/route del default ;;
+      besov)
+        /sbin/route del default
+        /sbin/route add -net default gw 132.239.145.225 metric 1 dev eth0 ;;
+      ucsd)
+        /sbin/route del default
+        /sbin/route add -net default gw 132.239.145.1 metric 2 dev ppp0 ;;
+      *) echo "usage: ppp gw [ none | besov | ucsd ]" ;;
+    esac
+    /bin/netstat -r -n ;;
+
+  gws)
+    /sbin/route del default
+    /sbin/route add -net default gw $2 metric 1 dev ppp0 ;;
+
+  start) 
+    # allow-ip 132.239.145.36 \
+    echo "UCSD Sobolev Dialin."
+    /sbin/route del default
+    /usr/sbin/pppd /dev/modem 115200 crtscts lock noauth \
+      132.239.145.225:132.239.145.36 \
+      netmask 255.255.255.0 defaultroute kdebug 1 \
+      connect '/usr/sbin/chat -f /usr/local/etc/ucsd.ppp'
+    ;;
+
+  stop) 
+    ### kill `cat /var/run/ppp0.pid` ;;
+    /usr/bin/killall pppd
+    /usr/bin/killall chat ;;
+
+  *)
+    echo " "
+    echo "usage:  ppp [ start | stop ]"
+    echo " "
+    exit
+    ;;
+
+esac
+
