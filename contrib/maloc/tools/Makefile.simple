@@ -1,0 +1,56 @@
+### ##########################################################################
+### MALOC = < Minimal Abstraction Layer for Object-oriented C >
+### Copyright (C) 1994--2006  Michael Holst
+###
+### This program is free software; you can redistribute it and/or modify it
+### under the terms of the GNU General Public License as published by the
+### Free Software Foundation; either version 2 of the License, or (at your
+### option) any later version.
+###
+### This program is distributed in the hope that it will be useful,
+### but WITHOUT ANY WARRANTY; without even the implied warranty of
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+### See the GNU General Public License for more details.
+###
+### You should have received a copy of the GNU General Public License along
+### with this program; if not, write to the Free Software Foundation, Inc.,
+### 675 Mass Ave, Cambridge, MA 02139, USA.
+###
+### rcsid="$Id: Makefile.simple,v 1.4 2006/07/14 05:36:39 mholst Exp $"
+### ##########################################################################
+
+## ###########################################################################
+## File:    Makefile.simple
+##
+## Purpose: Simple makefile for building FEtk tools without using autoconf.
+##
+## Notes:   Edit as needed and then invoke via "make -f Makefile.simple"
+##
+## Author:  Michael Holst
+## ###########################################################################
+
+ARCH     = powerpc-apple-darwin8.7.0
+#ARCH    = x86_64-unknown-linux-gnu
+DMAL     =
+#DMAL    = -ldmalloc
+SYSLIB   = -L/usr/X11R6/lib -L/sw/lib -lreadline -lncurses -lm ${DMAL}
+#SYSLIB  = -L/usr/lib64 -lreadline -lncurses -lm ${DMAL}
+
+HOME     = /usr/people/mholst
+FETK_INC = -I${HOME}/include
+FETK_LIB = -L${HOME}/lib/${ARCH} -lmaloc
+
+default : malocbridge
+
+main.o : main.c
+	gcc -c -g -O2 -I. ${FETK_INC} main.c
+
+malocbridge : main.o
+	gcc -g -O2 -o malocbridge main.o ${FETK_LIB} ${SYSLIB}
+
+setdmal :
+	dmalloc -l logfile -i 100 high
+
+clean :
+	-rm -f *.o go io.mc hist.mcsh logfile .gdb_history malocbridge
+
