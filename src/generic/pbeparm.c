@@ -206,6 +206,14 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: SWIN not set!\n");
         return 0;
     }
+    if ((thee->srfm==VSM_SPLINE3) && (!thee->setswin)) {
+        Vnm_print(2, "PBEparm_check: SWIN not set!\n");
+        return 0;
+    }
+    if ((thee->srfm==VSM_SPLINE4) && (!thee->setswin)) {
+        Vnm_print(2, "PBEparm_check: SWIN not set!\n");
+        return 0;
+    }	
     if (!thee->settemp) {
         Vnm_print(2, "PBEparm_check: TEMP not set!\n");
         return 0;
@@ -514,6 +522,9 @@ statement.\n", ti);
             case VSM_SPLINE:
                 Vnm_print(2, "spl2");
                 break;
+            case VSM_SPLINE3:
+                Vnm_print(2, "spl3");
+                break;				
             case VSM_SPLINE4:
                 Vnm_print(2, "spl4");
                 break;
@@ -537,7 +548,11 @@ statement.\n", ti);
         thee->srfm = VSM_SPLINE;
         thee->setsrfm = 1;
         return 1;
-    } else if (Vstring_strcasecmp(tok, "spl4") == 0) {
+    } else if (Vstring_strcasecmp(tok, "spl3") == 0) {
+        thee->srfm = VSM_SPLINE3;
+        thee->setsrfm = 1;
+        return 1;		
+	} else if (Vstring_strcasecmp(tok, "spl4") == 0) {
         thee->srfm = VSM_SPLINE4;
         thee->setsrfm = 1;
         return 1;

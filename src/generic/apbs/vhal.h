@@ -96,10 +96,14 @@ enum eVsurf_Meth {
 					  * van der Waals radii with the spline function and the
 					  * dielectric coefficient is defined using the standard
 					  * van der Waals radii with the spline function.  */
-	VSM_SPLINE4=3   /**<  A 7th order polynomial spline is used to create 
-                     *  a smoothly varying characteristic function 
-                     *  (continuity through 3rd derivatives) for surface
-                     *  based paramters. */
+	VSM_SPLINE3=3,  /**<  A 5th order polynomial spline is used to create 
+					  *  a smoothly varying characteristic function 
+					  *  (continuity through 2nd derivatives) for surface
+					  *  based paramters. */
+	VSM_SPLINE4=4   /**<  A 7th order polynomial spline is used to create 
+					  *  a smoothly varying characteristic function 
+					  *  (continuity through 3rd derivatives) for surface
+					  *  based paramters. */
 };
 
 /** @typedef Vsurf_Meth

@@ -173,12 +173,13 @@ VPRIVATE double Vpmg_qfEnergyVolume(
         );
 
 /**
- * @brief Selects a spline based surface method from either VSM_SPLINE
- *        or VSM_SPLINE4
+* @brief Selects a spline based surface method from either VSM_SPLINE,
+ *        VSM_SPLINE5 or VSM_SPLINE7
  * @author David Gohara
  */
 VPRIVATE void Vpmg_splineSelect(
-		int srfm,		/** Surface method, currently VSM_SPLINE or VSM_SPLINE4 */
+		int srfm,		/** Surface method, currently VSM_SPLINE, 
+		VSM_SPLINE5, or VSM_SPLINE7 */
 		Vacc *acc,		/** Accessibility object */
 		double *gpos,	/** Position array -> array[3] */
 		double win,		/** Spline window */
@@ -365,6 +366,15 @@ VPRIVATE void fillcoCoefMolDielSmooth(
 VPRIVATE void fillcoCoefSpline(
         Vpmg *thee
         );
+
+/** 
+* @brief  Fill operator coefficient arrays from a 5th order polynomial 
+*         based surface calculation
+* @author  Michael Schnieders 
+*/
+VPRIVATE void fillcoCoefSpline3(
+		Vpmg *thee
+		);
 
 /** 
  * @brief  Fill operator coefficient arrays from a 7th order polynomial 
