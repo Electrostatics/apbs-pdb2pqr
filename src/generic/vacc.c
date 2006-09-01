@@ -1025,3 +1025,114 @@ VPUBLIC void Vacc_splineAccGradAtomNorm4(Vacc *thee, double center[VAPBS_DIM],
             grad[i] = -(mygrad/mychi)*((center[i] - apos[i])/dist);
     }    
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+   // Routine:  Vacc_atomdSAS
+   //
+   // Purpose:  Calculates the derivative of surface area with respect to atomic
+   //           displacement using finite difference methods.
+   //
+   // Args:     radius  The radius of the solvent probe in Angstroms
+   //           iatom   Index of the atom in thee->alist
+   //
+   // Author:   Jason Wagoner
+   //           Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
+   /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vacc_atomdSAS(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
+	
+    int ipt, iatom;
+    double area = 0.0;
+    double *temp_Pos, tRad, vec[3];
+    double tPos[3],axb,axt,ayb,ayt,azb,azt;
+    VaccSurf *ref;
+    
+	
+    /* Get the atom information */
+    
+    ref = thee->refSphere;
+    temp_Pos = Vatom_getPosition(atom);
+    tRad = Vatom_getRadius(atom);
+    iatom = Vatom_getAtomID(atom);
+    
+    dSA[0] = 0.0;
+    dSA[1] = 0.0;
+    dSA[2] = 0.0;
+    
+    
+    tPos[0] = temp_Pos[0]-0.05;
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2];
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    axb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    area = 0.0;
+    tPos[0] = temp_Pos[0]+0.05;
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2];
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    axt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    area = 0.0;
+    tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1]-0.05;
+    tPos[2] = temp_Pos[2];
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    ayb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    area = 0.0;
+    tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1]+0.05;
+    tPos[2] = temp_Pos[2];
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    ayt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    area = 0.0;
+    tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2]-0.05;
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    azb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    area = 0.0;
+    tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2]+0.05;
+    for (ipt=0; ipt<ref->npts; ipt++) {
+        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
+        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
+        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
+        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
+    }
+    azt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	
+    dSA[0] = -(axt-axb)/0.1;
+    dSA[1] = -(ayt-ayb)/0.1;
+    dSA[2] = -(azt-azb)/0.1;
+	
+	
+}
