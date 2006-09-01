@@ -309,5 +309,28 @@ int main(int argc, char **argv) {
                 Vacc_totalSASA(acc, probe_radius));
     } /* if fVerbose */
 
+	/*	NOTE: The code below is currently if'd out until we determine how
+			  best to implement its usage. D. Gohara 9/1/06
+	 */
+
+#if 0
+    /* CALLING Vacc_atomdSAS and Vacc_atomdSAV */
+    double dSA[3], dSV[3], danorm, dvnorm;
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+		Vacc_atomdSAS(acc, probe_radius, atom, dSA);
+		danorm = VSQRT(dSA[0]*dSA[0]+dSA[1]*dSA[1]+dSA[2]*dSA[2]);
+		Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
+				  i, dSA[0],dSA[1],dSA[2],danorm);
+    }
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+		Vacc_atomdSAV(acc, probe_radius, atom, dSV);
+		dvnorm = VSQRT(dSV[0]*dSV[0]+dSV[1]*dSV[1]+dSV[2]*dSV[2]);
+		Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
+				  i, dSV[0],dSV[1],dSV[2],dvnorm);
+    }
+#endif
+
     return EXIT_SUCCESS;
 }
