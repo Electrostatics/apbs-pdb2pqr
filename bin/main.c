@@ -208,9 +208,16 @@ int main(
 ----------------------------------------------------------------------\n\
 	This driver program calculates electrostatic potentials, energies,\n\
 	and forces using both multigrid and finite element methods.\n\
-It is invoked as:\n\n\
-	apbs apbs.in\n\n\
-	where apbs.in is a formatted input file.\n\
+        It is invoked as:\n\n\
+	apbs [options] apbs.in\n\n\
+	where apbs.in is a formatted input file and [options] are:\n\n\
+         --output-file=<name>     Enables output logging to the path\n\
+                                  listed in <name>.  Uses flat-file\n\
+                                  format is --output-format is not used.\n\
+         --output-format=<type>   Specifies format for logging.  Options\n\
+                                  for type are either \"xml\" or \"flat\".\n\
+         --help                   Display this help information.\n\
+         --version                Display the current APBS version.\n\
 ----------------------------------------------------------------------\n\n"};
 
 
@@ -257,7 +264,7 @@ It is invoked as:\n\n\
 			
 			/* Long Options */
 			if (Vstring_strcasecmp("--version", argv[i]) == 0){
-				Vnm_tprint(2, "%s", PACKAGE_STRING);
+				Vnm_tprint(2, "%s\n", PACKAGE_STRING);
 				VJMPERR1(0);
 			} else if (Vstring_strcasecmp("--help", argv[i]) == 0){
 				Vnm_tprint(2, "%s\n", usage);

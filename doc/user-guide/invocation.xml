@@ -8,12 +8,65 @@
     you can move the binary to any directory you choose.  APBS is invoked with a
     very simple syntax:
     <cmdsynopsis>
-      <command>apbs</command> <arg choice="plain">input-file</arg>
+      <command>apbs</command> <arg choice="opt">options</arg> <arg choice="plain">input-file</arg>
     </cmdsynopsis>
-    where <parameter>input-file</parameter> is an input file with a specific
+ 
+    Command line options include:
+    <variablelist>
+        <varlistentry>
+           <term><literal>--outputfile=</literal><replaceable>name</replaceable></term>
+              <listitem>
+                  <para>Sets the output logging path (as described in the 
+                        output logging section of 
+                        the manual) to <replaceable>name</replaceable>, or
+                        <replaceable>name_N</replaceable> for parallel runs, where 
+                        <literal>N</literal> is the processor ID.
+                        If <literal>--outputformat</literal> is not specified, flat-file
+                        format will be used as the default.
+                 </para>
+              </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><literal>--outputformat=</literal><replaceable>type</replaceable></term>
+               <listitem>
+                  <para>Sets the output logging format.  Accepted values are:
+                  <variablelist>
+                      <varlistentry>
+                          <term><replaceable>flat</replaceable></term>
+                          <listitem>
+                              <para>Flat-file format (default).</para>
+                          </listitem>
+                      </varlistentry>
+                      <varlistentry>
+                          <term><replaceable>xml</replaceable></term>
+                          <listitem>
+                              <para>XML format</para>
+                          </listitem>
+                      </varlistentry>
+                  </variablelist>
+                  </para>
+               </listitem>
+        </varlistentry>
+        <varlistentry>
+            <term><literal>--help</literal></term>
+                <listitem>                   
+                   <para>Displays command line usage</para>
+               </listitem>
+        </varlistentry>
+        <varlistentry> 
+            <term><literal>--version</literal></term>
+                <listitem>
+                   <para>Displays the current APBS version</para>
+                </listitem>
+        </varlistentry>
+    </variablelist>
+
+    <parameter>input-file</parameter> is an input file with a specific
     syntax described in the <link linkend="apbs-input">APBS Input File</link>
     section of this manual.  Besides the output files specified in
-    <literal>input-file</literal>, APBS writes data to three additional places:
+    <literal>input-file</literal> and optional logs as specified by use of 
+    the <literal>--output-file</literal> command line option, 
+    APBS writes data to three additional places:
     <itemizedlist>
       <listitem>
         <para>Standard output.  This will appear on your screen (if you don't
