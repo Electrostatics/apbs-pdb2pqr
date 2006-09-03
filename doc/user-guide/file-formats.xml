@@ -6,7 +6,12 @@
   <sect1 id="pqr-format"> <title>PQR biomolecular structure format</title>
     <para>
       The PQR format is the primary input format for biomolecular structure in
-      APBS package.  This format is a modification of the 
+      APBS package.
+    </para>
+
+  <sect2 id="pqr-flat-format"> <title> PQR flat-file format</title>
+    <para>
+      This format is a modification of the 
       <ulink url="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">PDB format</ulink>
       which allows users to add charge and radius parameters to existing PDB data
       while keeping it in a format amenable to visualization with standard
@@ -98,8 +103,96 @@
       coordinate values are used.  However, in order to maintain compatibility
       with most molecular graphics programs, the PDB2PQR utilities provided with
       apbs (see the <link linkend="parameterization">Parameterization
-        section</link>) attemp to preserve the PDB format as much as possible.
+        section</link>) attempt to preserve the PDB format as much as possible.
     </para>
+
+  </sect2>
+
+  <sect2 id="pqr-xml-format"> <title>PQR XML Format </title> 
+      <para> 
+        The PQR XML format was designed to remediate some of the shortcomings
+        of the flat-file format.  By use of XML, issues related to extra
+        fields in the file or columns merging together can easily be remedied.
+        Additionally, APBS will only parse the necessary information from the
+        XML file and will ignore all other information, so users wishing to
+        store extra data related to a residue or atom can do so inline without
+        affecting APBS.
+      </para>  
+           
+      <para> This data format has the following form:
+        <programlisting>
+          # <replaceable>Comments</replaceable>	
+		<replaceable>&lt;roottag&gt;</replaceable>
+		<replaceable>&nbsp;&nbsp;&lt;residue&gt;</replaceable>
+            ...
+	      <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
+            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;x&gt;</literal><replaceable>x</replaceable><literal>&lt;/x&gt;</literal>
+            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;y&gt;</literal><replaceable>y</replaceable><literal>&lt;/y&gt;</literal>
+            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;z&gt;</literal><replaceable>z</replaceable><literal>&lt;/z&gt;</literal>
+            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>charge</replaceable><literal>&lt;/charge&gt;</literal>
+            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>radius</replaceable><literal>&lt;/radius&gt;</literal>
+            <literal>&nbsp;&nbsp;&lt;/atom&gt;</literal>
+            ...
+            <replaceable>&nbsp;&nbsp;&lt;/residue&gt;</replaceable>
+            ...
+            <replaceable>&lt;/roottag&gt;</replaceable>
+       </programlisting>
+
+	 <para> 
+         Note that the <literal>residue</literal> tag and its elements are
+         completely optional - APBS only reads in atom data.  Fields such
+         as residue name, Chain ID, and other residue-specific data will
+         be ignored.
+       </para>
+
+       The variables in this example are:
+       <variablelist>
+          <varlistentry>
+            <term> <replaceable>Comments</replaceable> </term>
+            <listitem>              
+				<para>Any number of comment lines, each line starting with the "#" symbol</para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>            
+			<term> <replaceable>roottag</replaceable> </term>            
+			<listitem>              
+				<para>This is the root element of the XML file.  The value is not important to
+                              APBS - APBS simply checks that it is closed at the end of the file.</para> 
+	            </listitem>          
+          </varlistentry>
+          <varlistentry>
+	        <term> <replaceable>x</replaceable> </term>
+              <listitem>               
+                 <para>A float giving the x-coordinate of the atom.</para>     
+              </listitem>          
+          </varlistentry>
+          <varlistentry>
+	        <term> <replaceable>y</replaceable> </term>
+              <listitem>               
+                 <para>A float giving the y-coordinate of the atom.</para>     
+              </listitem>          
+          </varlistentry>
+          <varlistentry>
+	        <term> <replaceable>z</replaceable> </term>
+              <listitem>               
+                 <para>A float giving the z-coordinate of the atom.</para>     
+              </listitem>          
+          </varlistentry>
+	    <varlistentry>
+            <term> <replaceable>charge</replaceable> </term>
+               <listitem>
+                 <para>A float giving the atomic charge (in electrons).</para>
+               </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term> <replaceable>atomradius</replaceable> </term>
+               <listitem>
+                 <para>A float giving the atomic Radius (in &Aring;).</para>
+               </listitem>
+          </varlistentry>
+       </variablelist>
+	 </para>
+    </sect2>
 
   </sect1>
 
@@ -157,10 +250,10 @@
       <para> This data format has the following form:
       	<programlisting>
           # <replaceable>Comments</replaceable>	
-		  <replaceable>&lt;ffname&gt;</replaceable>
-		  <literal>&nbsp;&nbsp;&lt;residue&gt;</literal>
-		  <literal>&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>resname</replaceable><literal>&lt;/name&gt;</literal>
-	      <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
+          <replaceable>&lt;ffname&gt;</replaceable>
+	    <literal>&nbsp;&nbsp;&lt;residue&gt;</literal>
+	    <literal>&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>resname</replaceable><literal>&lt;/name&gt;</literal>
+	    <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>atomname</replaceable><literal>&lt;/name&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>atomcharge</replaceable><literal>&lt;/charge&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>atomradius</replaceable><literal>&lt;/radius&gt;</literal>
