@@ -41,9 +41,7 @@
                           general whitespace-, tab-, or newline-delimited
                           format, thereby permitting the manipulation of
                           molecules with coordinates outside the &plusmn;999
-                          range.  However, as a consequence of this
-                          flexibility, we <emphasis>cannot handle chain IDs in
-                            the PDB file!</emphasis></para>
+                          range.  </para>
                       </warning>
                     </para>
                   </listitem>

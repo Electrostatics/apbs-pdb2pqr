@@ -122,29 +122,29 @@
       <para> This data format has the following form:
         <programlisting>
           # <replaceable>Comments</replaceable>	
-		<replaceable>&lt;roottag&gt;</replaceable>
-		<replaceable>&nbsp;&nbsp;&lt;residue&gt;</replaceable>
-            ...
-	      <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
-            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;x&gt;</literal><replaceable>x</replaceable><literal>&lt;/x&gt;</literal>
-            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;y&gt;</literal><replaceable>y</replaceable><literal>&lt;/y&gt;</literal>
-            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;z&gt;</literal><replaceable>z</replaceable><literal>&lt;/z&gt;</literal>
-            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>charge</replaceable><literal>&lt;/charge&gt;</literal>
-            <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>radius</replaceable><literal>&lt;/radius&gt;</literal>
-            <literal>&nbsp;&nbsp;&lt;/atom&gt;</literal>
-            ...
-            <replaceable>&nbsp;&nbsp;&lt;/residue&gt;</replaceable>
-            ...
-            <replaceable>&lt;/roottag&gt;</replaceable>
+          <replaceable>&lt;roottag&gt;</replaceable>
+          <replaceable>&nbsp;&nbsp;&lt;residue&gt;</replaceable>
+          ...
+          <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;x&gt;</literal><replaceable>x</replaceable><literal>&lt;/x&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;y&gt;</literal><replaceable>y</replaceable><literal>&lt;/y&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;z&gt;</literal><replaceable>z</replaceable><literal>&lt;/z&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>charge</replaceable><literal>&lt;/charge&gt;</literal>
+          <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>radius</replaceable><literal>&lt;/radius&gt;</literal>
+          <literal>&nbsp;&nbsp;&lt;/atom&gt;</literal>
+          ...
+          <replaceable>&nbsp;&nbsp;&lt;/residue&gt;</replaceable>
+          ...
+          <replaceable>&lt;/roottag&gt;</replaceable>
        </programlisting>
-
-	 <para> 
+       </para>
+       <para>
          Note that the <literal>residue</literal> tag and its elements are
          completely optional - APBS only reads in atom data.  Fields such
-         as residue name, Chain ID, and other residue-specific data will
+         as residue name, chain ID, and other residue-specific data will
          be ignored.
-       </para>
-
+	   </para>
+	   <para>
        The variables in this example are:
        <variablelist>
           <varlistentry>
@@ -251,9 +251,9 @@
       	<programlisting>
           # <replaceable>Comments</replaceable>	
           <replaceable>&lt;ffname&gt;</replaceable>
-	    <literal>&nbsp;&nbsp;&lt;residue&gt;</literal>
-	    <literal>&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>resname</replaceable><literal>&lt;/name&gt;</literal>
-	    <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
+          <literal>&nbsp;&nbsp;&lt;residue&gt;</literal>
+          <literal>&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>resname</replaceable><literal>&lt;/name&gt;</literal>
+          <literal>&nbsp;&nbsp;&lt;atom&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;</literal><replaceable>atomname</replaceable><literal>&lt;/name&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;charge&gt;</literal><replaceable>atomcharge</replaceable><literal>&lt;/charge&gt;</literal>
           <literal>&nbsp;&nbsp;&nbsp;&nbsp;&lt;radius&gt;</literal><replaceable>atomradius</replaceable><literal>&lt;/radius&gt;</literal>
