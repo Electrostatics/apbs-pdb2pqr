@@ -2,17 +2,7 @@
 BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
 #############################################################################
  - NEW FEATURES
-   * New example demonstrating salt dependence of protein-RNA interactions.
-   * Added Gemstone example to the tutorial
-   * Updated runme script in ion-pmf example to use environmental variable
-     for APBS path
-   * Updated documentation to reflect new iAPBS features (NAMD support)
-   * Modified the license to allow exceptions for packaging APBS binaries
-     with several visualization programs.  PMG license modifed as well.
-   * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
-     boundary conditions (e.g., membranes).
-   * Added code to allow for an interface with TINKER (thanks to Michael
-     Schnieders).
+   * Added support for standard one-character chain IDs in PQR files.	
    * Added a new "spl4" charge method (chgm) option to support a quintic 
      B-spline discretization (thanks to Michael Schnieders).
    * Added a new "spl4" ion-accessibility coefficient model (srfm) option 
@@ -24,10 +14,11 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
      dipole and quadrupole molecular moments included in the boundary 
      potential estimate, but calculations run with the boundary close to the 
      solute should give an improved result (thanks to Michael Schnieders). 
-   * Added Vpmg_splineSelect to select the correct Normalization method with
-     either cubic or quintic (7th order polynomial) spline methods.
-   * Modified the selection criteria in Vpmg_qfForce, Vpmg_ibForce and
-     Vpmg_dbnpForce for use with the new spline based (spl4) method. 
+   * Updated documentation to reflect new iAPBS features (NAMD support)
+   * Added Gemstone example to the tutorial
+   * New example demonstrating salt dependence of protein-RNA interactions.
+   * Added code to allow for an interface with TINKER (thanks to Michael
+     Schnieders).
    * The Python wrappers are now disabled by default.  They can be compiled
      by passing the --enable-python flag to the configure script.  This
      will allow users to attempt to compile the wrappers on various systems
@@ -38,9 +29,18 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Added support for command line --version and --help flags.	
    * Added support for XML output options via the --output-file and 
      --output-format flags.
+   * Updated runme script in ion-pmf example to use environmental variable
+     for APBS path
+   * Modified the license to allow exceptions for packaging APBS binaries
+     with several visualization programs.  PMG license modifed as well.
+   * Added a DONEUMANN macro to vfetk.c to test FEM problems with all Neumann
+     boundary conditions (e.g., membranes).
+   * Added Vpmg_splineSelect to select the correct Normalization method with
+     either cubic or quintic (7th order polynomial) spline methods.
+   * Modified the selection criteria in Vpmg_qfForce, Vpmg_ibForce and
+     Vpmg_dbnpForce for use with the new spline based (spl4) method. 
    * Added ion-pmf to the make test suite.
    * Updated splash screen to include new PMG acknowledgment
-   * Added support for standard one-character chain IDs in PQR files.	
 - BUG FIXES
    * Cleanup of documentation, new Gemstone example
    * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
