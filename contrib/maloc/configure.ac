@@ -390,7 +390,7 @@ if test -n "${mpi_from_apbs}"; then
 	AC_DEFINE([HAVE_MPI_H], [], [])
 	mpi_inc=${APBS_MPI_INC}
 	mpi_lib=${APBS_MPI_LIB}
-
+	
 else
 
 	AC_MSG_CHECKING([whether you want MPI])
