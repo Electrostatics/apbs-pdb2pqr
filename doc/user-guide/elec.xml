@@ -125,6 +125,9 @@
         <command><link linkend="sdens">sdens</link></command>
       </member>
       <member>
+        <command><link linkend="srfm">srfm</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -228,6 +231,9 @@
         <command><link linkend="sdens">sdens</link></command>
       </member>
       <member>
+        <command><link linkend="srfm">srfm</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -315,6 +321,9 @@
       </member>
       <member>
         <command><link linkend="sdens">sdens</link></command>
+      </member>
+      <member>
+        <command><link linkend="srfm">srfm</link></command>
       </member>
       <member>
         <command><link linkend="srad">srad</link></command>
@@ -440,6 +449,9 @@
         <command><link linkend="sdens">sdens</link></command>
       </member>
       <member>
+        <command><link linkend="srfm">srfm</link></command>
+      </member>
+      <member>
         <command><link linkend="srad">srad</link></command>
       </member>
       <member>
@@ -524,6 +536,9 @@
       </member>
       <member>
         <command><link linkend="sdens">sdens</link></command>
+      </member>
+      <member>
+        <command><link linkend="srfm">srfm</link></command>
       </member>
       <member>
         <command><link linkend="srad">srad</link></command>
