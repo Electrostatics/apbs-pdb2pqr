@@ -134,26 +134,6 @@ dnl We need a separate FETK_VERSION macro for use by libtool
 FETK_VERSION="1:0:0"
 AC_SUBST(FETK_VERSION)
 
-dnl Autoconf (or rather Automake) is not very smart about making sure that
-dnl even if the various autotools exist that they actually WORK.  A common
-dnl problem is that someone has installed autoconf and automake, but they
-dnl forgot to replace the native (broken) version of M4 with GNU M4.  This
-dnl makes everything break.  Moreover, automake always places targets in
-dnl the Makefile.in files that will try to run autoconf/automake/etc if
-dnl various dependencies seem to require it, as long as autoconf/automake
-dnl seem to exist (even with broken M4).  Therefore, we override
-dnl AM_INIT_AUTOMAKE and set the autotools to no-ops with the following
-dnl macro definitions.  (This just means that if you change a Makefile.am,
-dnl then you have to remember to re-run automake yourself.  This can be
-dnl done by running the config/bootstrap shell script.)
-dnl ACLOCAL=":";
-dnl AUTOCONF=":";
-dnl AUTOMAKE=":";
-dnl AUTOHEADER=":";
-dnl AC_SUBST(ACLOCAL)
-dnl AC_SUBST(AUTOCONF)
-dnl AC_SUBST(AUTOMAKE)
-dnl AC_SUBST(AUTOHEADER)
 AM_MAINTAINER_MODE
 
 dnl ##########################################################################
@@ -170,11 +150,6 @@ AC_PROG_YACC
 dnl # Libtool stuff
 AC_DISABLE_SHARED
 AM_PROG_LIBTOOL
-dnl AM_PROG_LIBTOOL makes AC_PROG_RANLIB unnecessary
-dnl striplib="";
-dnl old_striplib="";
-dnl AC_SUBST(striplib)
-dnl AC_SUBST(old_striplib)
 
 dnl ##########################################################################
 dnl 3. checks for libraries
@@ -306,21 +281,25 @@ dnl ##########################################################################
 dnl # ------------------------------------------------
 dnl # CHECK WHETHER TO DISABLE CPU-VENDOR-HOST TRIPLET
 dnl # ------------------------------------------------
+
 fetk_cpu_vendor_os="";
-AC_MSG_CHECKING([whether you want to disable the CPU-VENDOR-OS install triplet])
-AC_ARG_ENABLE(triplet,
-    [  --disable-triplet       disable CPU-VENDOR-OS install triplet [[default=no]]],
-    [ triplet_kill="yes"],
-    [ triplet_kill="" ]
-)
-if test "${triplet_kill}" == yes; then
-    AC_MSG_RESULT([yes])
-    fetk_cpu_vendor_os="";
-else
-    AC_MSG_RESULT([no])
-    fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
-fi
 AC_SUBST(fetk_cpu_vendor_os)
+
+dnl fetk_cpu_vendor_os="";
+dnl AC_MSG_CHECKING([whether you want to disable the CPU-VENDOR-OS install triplet])
+dnl AC_ARG_ENABLE(triplet,
+dnl     [  --disable-triplet       disable CPU-VENDOR-OS install triplet [[default=no]]],
+dnl     [ triplet_kill="yes"],
+dnl     [ triplet_kill="" ]
+dnl )
+dnl if test "${triplet_kill}" == yes; then
+dnl     AC_MSG_RESULT([yes])
+dnl     fetk_cpu_vendor_os="";
+dnl else
+dnl     AC_MSG_RESULT([no])
+dnl     fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
+dnl fi
+dnl AC_SUBST(fetk_cpu_vendor_os)
 
 dnl # ---------------------------------------------------
 dnl # HANDLE VARIOUS ARCHITECTURE-SPECIFIC CONFIGURATIONS
@@ -399,66 +378,83 @@ AC_SUBST(rl_inc)
 dnl # ----------------------
 dnl # HANDLE THE MPI LIBRARY
 dnl # ----------------------
-AC_MSG_CHECKING([whether you want MPI])
-AC_ARG_ENABLE(mpi,
-    [  --enable-mpi            enable MPI layer [[default=no]]],
-    [ mpi_use="yes" ],
-    [ mpi_use=""    ]
+AC_ARG_WITH(mpi,
+    [AC_HELP_STRING([--with-mpi], [Use MPI pre-configured from APBS])],
+    [mpi_from_apbs="yes"],
+    [mpi_from_apbs=""]
 )
-mpi_lib="";
-mpi_inc="";
-if test -z "${mpi_use}"; then
-    AC_MSG_RESULT([no])
+
+if test -n "${mpi_from_apbs}"; then
+
+	echo "Using MPI enabled settings from APBS"
+	AC_DEFINE([HAVE_MPI_H], [], [])
+	mpi_inc=${APBS_MPI_INC}
+	mpi_lib=${APBS_MPI_LIB}
+
 else
-    AC_MSG_RESULT([yes ...poking around])
 
-    dnl # MPI header location ENV specification
-    AC_MSG_CHECKING([whether your environment defines FETK_MPI_INCLUDE])
-    if test -n "${FETK_MPI_INCLUDE}"; then
-        AC_MSG_RESULT([yes])
-        mpi_inc_path="-I${FETK_MPI_INCLUDE} ";
-    else
-        AC_MSG_RESULT([no])
-        mpi_inc_path="";
-    fi
+	AC_MSG_CHECKING([whether you want MPI])
+	AC_ARG_ENABLE(mpi,
+		[  --enable-mpi            enable MPI layer [[default=no]]],
+		[ mpi_use="yes" ],
+		[ mpi_use=""    ]
+	)
+	mpi_lib="";
+	mpi_inc="";
+	if test -z "${mpi_use}"; then
+		AC_MSG_RESULT([no])
+	else
+		AC_MSG_RESULT([yes ...poking around])
 
-    dnl # MPI library location ENV specification
-    AC_MSG_CHECKING([whether your environment defines FETK_MPI_LIBRARY])
-    if test -n "${FETK_MPI_LIBRARY}"; then
-        AC_MSG_RESULT([yes])
-        mpi_lib_path="-L${FETK_MPI_LIBRARY} ";
-    else
-        AC_MSG_RESULT([no])
-        mpi_lib_path="";
-    fi
+		dnl # MPI header location ENV specification
+		AC_MSG_CHECKING([whether your environment defines FETK_MPI_INCLUDE])
+		if test -n "${FETK_MPI_INCLUDE}"; then
+			AC_MSG_RESULT([yes])
+			mpi_inc_path="-I${FETK_MPI_INCLUDE} ";
+		else
+			AC_MSG_RESULT([no])
+			mpi_inc_path="";
+		fi
 
-    dnl # Setup temp LDFLAGS and CPPFLAGS and look for MPI library/header
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mpi_lib_path};
-    CPPFLAGS=${mpi_inc_path};
-    mpi_use="";
-    AC_CHECK_HEADER(mpi.h,
-        [mpi_use="yes";mpi_inc="${mpi_inc_path}"],
-        [mpi_use="";mpi_inc=""])
-    if test -n "${mpi_use}"; then
-        AC_CHECK_LIB(mpi,main,
+		dnl # MPI library location ENV specification
+		AC_MSG_CHECKING([whether your environment defines FETK_MPI_LIBRARY])
+		if test -n "${FETK_MPI_LIBRARY}"; then
+			AC_MSG_RESULT([yes])
+			mpi_lib_path="-L${FETK_MPI_LIBRARY} ";
+		else
+			AC_MSG_RESULT([no])
+			mpi_lib_path="";
+		fi
+
+		dnl # Setup temp LDFLAGS and CPPFLAGS and look for MPI library/header
+		LDFLAGS_SAVE=${LDFLAGS};
+		CPPFLAGS_SAVE=${CPPFLAGS};
+		LDFLAGS=${mpi_lib_path};
+		CPPFLAGS=${mpi_inc_path};
+		mpi_use="";
+		AC_CHECK_HEADER(mpi.h,
+			[mpi_use="yes";mpi_inc="${mpi_inc_path}"],
+			[mpi_use="";mpi_inc=""])
+		if test -n "${mpi_use}"; then
+			AC_CHECK_LIB(mpi,main,
             [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpi"],
             [mpi_use="";mpi_lib=""],${mpi_lib_path})
-        if test -z "${mpi_use}"; then
-            AC_CHECK_LIB(mpich,main,
+			if test -z "${mpi_use}"; then
+				AC_CHECK_LIB(mpich,main,
                 [mpi_use="yes";mpi_lib="${mpi_lib_path}-lmpich"],
                 [mpi_use="";mpi_lib=""],${mpi_lib_path})
-        fi
-        if test -n "${mpi_use}"; then
-            AC_DEFINE([HAVE_MPI_H], [], [We have and want to use MPI])
-        fi
-    fi
+			fi
+			if test -n "${mpi_use}"; then
+				AC_DEFINE([HAVE_MPI_H], [], [We have and want to use MPI])
+			fi
+		fi
 
-    dnl # Return LDFLAGS and CPPFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
+		dnl # Return LDFLAGS and CPPFLAGS to normal
+		LDFLAGS=${LDFLAGS_SAVE};
+		CPPFLAGS=${CPPFLAGS_SAVE};
+	fi
 fi
+
 AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
 
