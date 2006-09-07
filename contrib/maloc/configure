@@ -1040,7 +1040,6 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --disable-triplet       disable CPU-VENDOR-OS install triplet [default=no]
   --enable-mpi            enable MPI layer [default=no]
   --enable-vdebug         enable debug compilation [default=no]
   --enable-pansi          enable pedantic ANSI compilation [default=no]
@@ -1055,6 +1054,7 @@ Optional Packages:
                           both]
   --with-tags[=TAGS]
                           include additional configurations [automatic]
+  --with-mpi              Use MPI pre-configured from APBS
 
 Some influential environment variables:
   CC          C compiler command
@@ -20343,26 +20343,9 @@ echo "${ECHO_T}unclear" >&6
 
 
 
-fetk_cpu_vendor_os="";
-echo "$as_me:$LINENO: checking whether you want to disable the CPU-VENDOR-OS install triplet" >&5
-echo $ECHO_N "checking whether you want to disable the CPU-VENDOR-OS install triplet... $ECHO_C" >&6
-# Check whether --enable-triplet or --disable-triplet was given.
-if test "${enable_triplet+set}" = set; then
-  enableval="$enable_triplet"
-   triplet_kill="yes"
-else
-   triplet_kill=""
 
-fi;
-if test "${triplet_kill}" == yes; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    fetk_cpu_vendor_os="";
-else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-    fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
-fi
+fetk_cpu_vendor_os="";
+
 
 
 if test "${host_os}" = "cygwin"; then
@@ -20924,9 +20907,31 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 
 
 
-echo "$as_me:$LINENO: checking whether you want MPI" >&5
+
+# Check whether --with-mpi or --without-mpi was given.
+if test "${with_mpi+set}" = set; then
+  withval="$with_mpi"
+  mpi_from_apbs="yes"
+else
+  mpi_from_apbs=""
+
+fi;
+
+if test -n "${mpi_from_apbs}"; then
+
+	echo "Using MPI enabled settings from APBS"
+	cat >>confdefs.h <<\_ACEOF
+#define HAVE_MPI_H
+_ACEOF
+
+	mpi_inc=${APBS_MPI_INC}
+	mpi_lib=${APBS_MPI_LIB}
+
+else
+
+	echo "$as_me:$LINENO: checking whether you want MPI" >&5
 echo $ECHO_N "checking whether you want MPI... $ECHO_C" >&6
-# Check whether --enable-mpi or --disable-mpi was given.
+	# Check whether --enable-mpi or --disable-mpi was given.
 if test "${enable_mpi+set}" = set; then
   enableval="$enable_mpi"
    mpi_use="yes"
@@ -20934,45 +20939,45 @@ else
    mpi_use=""
 
 fi;
-mpi_lib="";
-mpi_inc="";
-if test -z "${mpi_use}"; then
-    echo "$as_me:$LINENO: result: no" >&5
+	mpi_lib="";
+	mpi_inc="";
+	if test -z "${mpi_use}"; then
+		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-else
-    echo "$as_me:$LINENO: result: yes ...poking around" >&5
+	else
+		echo "$as_me:$LINENO: result: yes ...poking around" >&5
 echo "${ECHO_T}yes ...poking around" >&6
 
-        echo "$as_me:$LINENO: checking whether your environment defines FETK_MPI_INCLUDE" >&5
+				echo "$as_me:$LINENO: checking whether your environment defines FETK_MPI_INCLUDE" >&5
 echo $ECHO_N "checking whether your environment defines FETK_MPI_INCLUDE... $ECHO_C" >&6
-    if test -n "${FETK_MPI_INCLUDE}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
+		if test -n "${FETK_MPI_INCLUDE}"; then
+			echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-        mpi_inc_path="-I${FETK_MPI_INCLUDE} ";
-    else
-        echo "$as_me:$LINENO: result: no" >&5
+			mpi_inc_path="-I${FETK_MPI_INCLUDE} ";
+		else
+			echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-        mpi_inc_path="";
-    fi
+			mpi_inc_path="";
+		fi
 
-        echo "$as_me:$LINENO: checking whether your environment defines FETK_MPI_LIBRARY" >&5
+				echo "$as_me:$LINENO: checking whether your environment defines FETK_MPI_LIBRARY" >&5
 echo $ECHO_N "checking whether your environment defines FETK_MPI_LIBRARY... $ECHO_C" >&6
-    if test -n "${FETK_MPI_LIBRARY}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
+		if test -n "${FETK_MPI_LIBRARY}"; then
+			echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-        mpi_lib_path="-L${FETK_MPI_LIBRARY} ";
-    else
-        echo "$as_me:$LINENO: result: no" >&5
+			mpi_lib_path="-L${FETK_MPI_LIBRARY} ";
+		else
+			echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-        mpi_lib_path="";
-    fi
+			mpi_lib_path="";
+		fi
 
-        LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mpi_lib_path};
-    CPPFLAGS=${mpi_inc_path};
-    mpi_use="";
-    if test "${ac_cv_header_mpi_h+set}" = set; then
+				LDFLAGS_SAVE=${LDFLAGS};
+		CPPFLAGS_SAVE=${CPPFLAGS};
+		LDFLAGS=${mpi_lib_path};
+		CPPFLAGS=${mpi_inc_path};
+		mpi_use="";
+		if test "${ac_cv_header_mpi_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mpi.h" >&5
 echo $ECHO_N "checking for mpi.h... $ECHO_C" >&6
 if test "${ac_cv_header_mpi_h+set}" = set; then
@@ -21116,8 +21121,8 @@ else
 fi
 
 
-    if test -n "${mpi_use}"; then
-        echo "$as_me:$LINENO: checking for main in -lmpi" >&5
+		if test -n "${mpi_use}"; then
+			echo "$as_me:$LINENO: checking for main in -lmpi" >&5
 echo $ECHO_N "checking for main in -lmpi... $ECHO_C" >&6
 if test "${ac_cv_lib_mpi_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21181,8 +21186,8 @@ else
   mpi_use="";mpi_lib=""
 fi
 
-        if test -z "${mpi_use}"; then
-            echo "$as_me:$LINENO: checking for main in -lmpich" >&5
+			if test -z "${mpi_use}"; then
+				echo "$as_me:$LINENO: checking for main in -lmpich" >&5
 echo $ECHO_N "checking for main in -lmpich... $ECHO_C" >&6
 if test "${ac_cv_lib_mpich_main+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21246,19 +21251,21 @@ else
   mpi_use="";mpi_lib=""
 fi
 
-        fi
-        if test -n "${mpi_use}"; then
+			fi
+			if test -n "${mpi_use}"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MPI_H
 _ACEOF
 
-        fi
-    fi
+			fi
+		fi
 
-        LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
+				LDFLAGS=${LDFLAGS_SAVE};
+		CPPFLAGS=${CPPFLAGS_SAVE};
+	fi
 fi
+
 
 
 
