@@ -183,16 +183,16 @@ always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = apbsblas
 
-noinst_LTLIBRARIES = libapbsblas.la
+lib_LTLIBRARIES = libapbsblas.la
 libapbsblas_la_SOURCES = mblasd.f
 INCLUDES = @inc_list@
 AM_CFLAGS = @wall_pedantic_ansi@ @CFLAGS@
-subdir = src/blas
+subdir = contrib/blas
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-LTLIBRARIES = $(noinst_LTLIBRARIES)
+LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libapbsblas_la_LDFLAGS =
 libapbsblas_la_LIBADD =
@@ -224,13 +224,13 @@ all: all-recursive
 .SUFFIXES: .y .l .H .h .m .C .cc .c .f .java .o .lo .obj
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/blas/Makefile
+	  $(AUTOMAKE) --gnu  contrib/blas/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
-clean-noinstLTLIBRARIES:
-	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
-	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" = "$$p" && dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
@@ -464,7 +464,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+clean-am: clean-generic clean-libtool clean-libLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-recursive
@@ -483,6 +483,10 @@ info-am:
 install-data-am:
 
 install-exec-am:
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
+	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
+	ranlib -s $(DESTDIR)$(libdir)/libapbsblas.a;
 
 install-info: install-info-recursive
 
@@ -512,7 +516,7 @@ uninstall-am: uninstall-info-am
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am clean \
-	clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	clean-generic clean-libtool clean-libLTLIBRARIES \
 	clean-recursive ctags ctags-recursive distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-recursive distclean-tags distdir dvi dvi-am \
