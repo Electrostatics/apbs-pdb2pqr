@@ -8,6 +8,7 @@
 <!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
 <!ENTITY vmdurl "http://www.ks.uiuc.edu/Research/vmd/">
 <!ENTITY pymolurl "http://pymol.sf.net">
+<!ENTITY pmvurl "http://www.scripps.edu/~sanner/python/">
 ]>
 
 <book>
@@ -1225,7 +1226,143 @@ potential around my biomolecule?</title>
 		</sect1>
 
 		<sect1 id="pmv-sect"> <title>PMV</title>
-			<warning><para>Under construction</para></warning>
+			<para>
+				The <ulink url="&pmvurl;">PMV</ulink> molecular
+				graphics software package provides support for
+				both the execution of APBS and the
+				visualization of the resulting electrostatic
+				potentials.  Documentation on the APBS
+				interface has been provided by the PMV
+				developers at <ulink
+					url="http://msltools.scripps.edu/documentation/tutorial/molecular-electrostatics">http://msltools.scripps.edu/documentation/tutorial/molecular-electrostatics</ulink>
+				We will supplement this with a basic
+				demonstration of how go from a PDB entry to a
+				plot of structure &amp; potential in PMV using
+				APBS.
+			</para>
+
+			<note>
+				<para>This tutorial was written using PMV
+					1.4.3.</para>
+			</note>
+
+			<sect2> <title>Generating the PQR</title>
+
+				<para> 
+					We'll perform this example with
+					calmodulin
+					(PDB ID <ulink
+						url="http://www.pdb.org/pdb/explore.do?structureId=1CFD">1CFD</ulink>),
+					a <ulink
+						url="http://www.pdb.org/pdb/static.do?p=education_discussion/molecule_of_the_month/pdb44_1.html">calcium
+						binding protein</ulink>.  The first step
+					in the visualization process is
+					generating a PQR file for use with PMV
+					and APBS.  Please follow the directions
+					in <xref linkend="pdb2pqr-subsect"/> to
+					generate a PQR file for this structure.
+				</para>
+
+				<note>PMV has built-in PDB2PQR support; you can
+					also generate PQRs on-the-fly from
+					within PMV via the 
+					<menuchoice>
+						<guimenu>Compute</guimenu>
+						<guisubmenu>Electrostatics</guisubmenu>
+					</menuchoice> sub-menu. </note>
+
+				<para> Load the PQR you created into PMV
+					(<menuchoice> <guimenu>File</guimenu>
+						<guimenuitem>Read Molecule</guimenuitem>
+					</menuchoice>) and choose your favorite
+					representation (<menuchoice>
+						<guimenu>Display</guimenu>
+				</menuchoice>). </para>
+			</sect2>
+
+			<sect2> <title>Performing the electrostatics calculation</title>
+
+				<para>Go to the 
+					<menuchoice> <guimenu>Compute</guimenu>
+						<guisubmenu>Electrostatics</guisubmenu>
+						<guimenuitem>Compute Potential
+							Using
+							APBS</guimenuitem>
+					</menuchoice> menu.  APBS is bundled
+					with PMV; this calculation should work
+					without any addition
+					configuration.</para>
+
+				<para>Additional settings for custom
+					electrostatics calculations are
+					available under the 
+					<menuchoice> <guimenu>Compute</guimenu>
+						<guisubmenu>Electrostatics</guisubmenu>
+					</menuchoice> sub-menu.  In particular,
+					<menuchoice> <guimenu>Compute</guimenu>
+						<guisubmenu>Electrostatics</guisubmenu>
+						<guimenuitem>Preferences</guimenuitem>
+					</menuchoice> 
+					allows users to configure settings for
+					custom APBS and PDB2PQR paths and
+					behaviors (force fields, etc.).
+					Additionally,
+					<menuchoice> <guimenu>Compute</guimenu>
+						<guisubmenu>Electrostatics</guisubmenu>
+						<guimenuitem>Setup</guimenuitem>
+					</menuchoice> 
+					allows users to customize the
+					invocation of APBS by setting ion
+					concentrations, grid spacings, etc.
+					Many of these options are
+					self-explanatory and/or described in
+					more detail in the <ulink
+						url="user-guide/index.html">APBS
+						User Manual</ulink>.  For most
+					visualization applications, the default
+					settings should be appropriate.</para>
+
+			</sect2>
+
+			<sect2> <title>Visualizing the electrostatic potential</title>
+
+				<sect3> <title>Surface potentials</title>
+					<para>The surface potential can be
+						displayed from the 
+						<menuchoice> 
+							<guimenu>Compute</guimenu>
+							<guisubmenu>Electrostatics</guisubmenu>
+							<guimenuitem>Map Potential to Surface </guimenuitem>
+						</menuchoice>
+						menu item.  PMV uses a very
+						interesting method for plotting
+						the potential.  In particular,
+						it maps the potential at some
+						distance away from the surface
+						to the molecular surface.  This
+						has the advantages of the
+						"global" electrostatic
+						properties from the solvent
+						accessible surface potential
+						maps while preserving the shape
+						information provided by the
+						molecular surface.  The
+						distance from the surface can
+						be controlled by the
+						<guilabel>"Distance from
+							surface"</guilabel>
+						dial in the PMV <guilabel>Map
+							Potential to
+							Surface</guilabel>
+						window.</para>
+				</sect3>
+
+			</sect2>
+
+
+			<warning><para>Under construction -- surfaces are
+					currently broken.</para></warning>
+
 		</sect1>
 
 	</chapter>
