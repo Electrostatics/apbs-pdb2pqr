@@ -1226,6 +1226,8 @@ potential around my biomolecule?</title>
 		</sect1>
 
 		<sect1 id="pmv-sect"> <title>PMV</title>
+
+			<!--
 			<para>
 				The <ulink url="&pmvurl;">PMV</ulink> molecular
 				graphics software package provides support for
@@ -1358,10 +1360,13 @@ potential around my biomolecule?</title>
 				</sect3>
 
 			</sect2>
+			-->
 
 
 			<warning><para>Under construction -- surfaces are
-					currently broken.</para></warning>
+					currently broken with some PQR
+					structure/force field
+					combinations.</para></warning>
 
 		</sect1>
 
