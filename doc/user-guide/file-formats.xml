@@ -29,13 +29,13 @@
       APBS reads data on a per-line basis from PQR files using the following
       format:
       <literallayout>
-        <replaceable>Field_name</replaceable> <replaceable>Atom_number</replaceable> <replaceable>Atom_name</replaceable> <replaceable>Residue_name</replaceable> <replaceable>Residue_number</replaceable> <replaceable>X</replaceable> <replaceable>Y</replaceable> <replaceable>Z</replaceable> <replaceable>Charge</replaceable> <replaceable>Radius</replaceable>
+        <literal>Field_name</literal> <literal>Atom_number</literal> <literal>Atom_name</literal> <literal>Residue_name</literal> <replaceable>Chain_ID</replaceable> <literal>Residue_number</literal> <literal>X</literal> <literal>Y</literal> <literal>Z</literal> <literal>Charge</literal> <literal>Radius</literal>
       </literallayout>
       where the whitespace is the most important feature of this format.  The
       fields are:
       <variablelist>
         <varlistentry>
-          <term> <replaceable>Field_name</replaceable> </term>
+          <term> <literal>Field_name</literal> </term>
           <listitem>
             <para>A string which specifies the type of PQR entry and should
               either be <literal>ATOM</literal> or <literal>HETATM</literal> in
@@ -43,7 +43,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Atom_number</replaceable> </term>
+          <term> <literal>Atom_number</literal> </term>
           <listitem>
             <para>
               An integer which provides the atom index.
@@ -51,7 +51,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Atom_name</replaceable> </term>
+          <term> <literal>Atom_name</literal> </term>
           <listitem>
             <para>
               A string which provides the atom name.
@@ -59,7 +59,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Residue_name</replaceable> </term>
+          <term> <literal>Residue_name</literal> </term>
           <listitem>
             <para>
               A string which provides the residue name.
@@ -67,7 +67,18 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Residue_number</replaceable> </term>
+          <term> <replaceable>Chain_ID</replaceable> </term>
+          <listitem>
+            <para>
+              An optional string which provides the chain ID of the atom.
+              <note>
+                <para>NOTE:  Chain ID support is a new feature of APBS 0.4.1.</para>
+              </note>
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term> <literal>Residue_number</literal> </term>
           <listitem>
             <para>
               An integer which provides the residue index.
@@ -75,7 +86,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>X Y Z</replaceable> </term>
+          <term> <literal>X Y Z</literal> </term>
           <listitem>
             <para>
               3 floats which provide the atomic coordiantes.
@@ -83,7 +94,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Charge</replaceable> </term>
+          <term> <literal>Charge</literal> </term>
           <listitem>
             <para>
               A float which provides the atomic charge (in electrons).
@@ -91,7 +102,7 @@
           </listitem>
         </varlistentry>
         <varlistentry>
-          <term> <replaceable>Radius</replaceable> </term>
+          <term> <literal>Radius</literal> </term>
           <listitem>
             <para>
               A float which provides the atomic radius (in &Aring;).
