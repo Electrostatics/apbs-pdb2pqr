@@ -410,14 +410,14 @@ VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
             maxError = VMAX2( VSQRT(VABS(errEst)), maxError );
 
             /* store the estimate */
-            Bvec_set( aprx->wev, 0, smid, errEst );
+            Bvec_set( aprx->wev, smid, errEst );
 
             /* accumlate into global error (errEst is SQUAREd already) */
             aprx->gerror += errEst;
 
         /* otherwise store a zero for the estimate */
         } else {
-            Bvec_set( aprx->wev, 0, smid, 0. );
+            Bvec_set( aprx->wev, smid, 0. );
         }
 
         smid++;
