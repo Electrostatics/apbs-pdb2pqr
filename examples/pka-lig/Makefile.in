@@ -177,7 +177,7 @@ wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
 
-APBS = ${prefix}/bin/${target}/apbs
+APBS = ${prefix}/bin/${fetk_cpu_vendor_os}/apbs
 CLEANFILES = *-PE* *.out *.log io.mc
 subdir = examples/pka-lig
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
