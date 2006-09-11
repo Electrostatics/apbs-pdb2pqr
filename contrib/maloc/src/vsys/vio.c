@@ -2208,7 +2208,7 @@ VPRIVATE char* asc_getToken(ASC *thee, char *tok, int toksize)
     return tok;
 
   VERROR1:
-    fprintf(stderr,"asc_getToken: Error occurred (bailing out).\n");
+    //fprintf(stderr,"asc_getToken: Error occurred (bailing out).\n");
     return VNULL;
 }
 

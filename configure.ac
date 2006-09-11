@@ -114,6 +114,8 @@ AC_SUBST(AUTOCONF)
 AC_SUBST(AUTOMAKE)
 AC_SUBST(AUTOHEADER)
 
+if test -z "${booyah}"; then
+
 dnl ##########################################################################
 dnl 2. checks for programs
 dnl ##########################################################################
@@ -121,8 +123,28 @@ AC_LANG_C
 AC_PROG_CC
 AM_PROG_CC_STDC
 AC_PROG_CXX
-AC_PROG_F77
-AC_LANG_FORTRAN77
+AC_PROG_F77(gfortran g95 g77)
+
+dnl # -------------------------------------------------------------------------
+dnl # Test to see if the compiler combination is valid for gcc/g77 or
+dnl # gcc/gfortran/g95. Since code compiled with gcc 4.0 is only link
+dnl # compatible with gfortran/g95. If they are using g77 then they need to
+dnl # use gcc < 4.0 - D. Gohara 8/30/2006
+dnl # -------------------------------------------------------------------------
+if test ["$CC" = "gcc"]; then
+	gcc_version=`gcc --version`
+	gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}'`
+	gcc_major_version=`echo ${gcc_complete_version} | awk '{printf("%i",$1)}'`
+
+	if test ["$F77" = "g77"]; then
+		if test ["${gcc_major_version}" -ge 4]; then
+			echo "Error, your GCC version is: ${gcc_complete_version} which is not compatible"
+			echo "with g77. You need to either use gcc < 4.0 as your C/CC/CXX compiler "
+			echo "or gfortran/g95 as your Fortran compiler ... exiting."
+			AC_MSG_ERROR()
+		fi
+	fi
+fi
 
 dnl AC_F77_LIBRARY_LDFLAGS 
 dnl # -----------------------
@@ -236,6 +258,8 @@ dnl # ------------------------------------
 
 AC_FPERROR
 
+fi
+
 dnl ##########################################################################
 dnl 8. checks for library functions
 dnl ##########################################################################
@@ -248,207 +272,195 @@ dnl ##########################################################################
 dnl 10. checks for anything else
 dnl ##########################################################################
 
-dnl # -----------------------
-dnl # CHECK WHETHER YOU WANT STANDARD LIBRARY AND BIN INSTALL
-dnl # -----------------------
-
-AC_MSG_CHECKING([for disable-install-triplet])
-AC_ARG_ENABLE(install-triplet,
-    [AC_HELP_STRING([--disable-install-triplet],[disable OS version specific installation])],
-    [ disable_triplet="yes"],
-    [ disable_triplet="" ]
-)
-
-if test "${disable_triplet}" == yes; then
-
-	AC_MSG_RESULT([yes])
-	fetk_cpu_vendor_os="";
-	
-	echo
-	echo 'Disabling host triplet library and binary specification'
-	echo 'Libraries and Binaries will be installed the top-level directories'
-	echo
-	
-else
-
-	fetk_cpu_vendor_os="${host_cpu}-${host_vendor}-${host_os}";
-	AC_MSG_RESULT([no])
-
-fi
-
+fetk_cpu_vendor_os="";
 AC_SUBST(fetk_cpu_vendor_os)
 
+AC_MSG_RESULT([-----------------------------------------------------------])
 AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
+AC_MSG_RESULT([-----------------------------------------------------------])
 
 dnl # ----------------------
 dnl # HANDLE THE MALOC LIBRARY
 dnl # ----------------------
 
-AC_MSG_CHECKING([for FETK_INCLUDE])
+contrib_path=`pwd`/contrib
+
+dnl First check to see if they are using FETK_INCLUDE or FETK_LIBRARY
+dnl if they are abort. We no longer support this...
 if test -n "${FETK_INCLUDE}"; then
-    AC_MSG_RESULT([yes])
-    maloc_inc_path="-I${FETK_INCLUDE} ";
-else
-    if test "${prefix}" != "NONE"; then
-        AC_MSG_RESULT([no; will use ${prefix}/include])
-        maloc_inc_path="-I${prefix}/include ";
-    else
-        AC_MSG_RESULT([no; will use ${HOME}/include])
-        maloc_inc_path="-I${HOME}/include ";
-    fi
+		echo
+		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
+		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
+		echo "Exiting..."
+		exit 0
 fi
 
-dnl # MALOC library location ENV specification
-AC_MSG_CHECKING([for FETK_LIBRARY])
 if test -n "${FETK_LIBRARY}"; then
-    AC_MSG_RESULT([yes])
-    maloc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
+		echo
+		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
+		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
+		echo "Exiting..."
+		exit 0
+fi
+
+dnl Next see if the user specified fetk-include or fetk-lib if they did
+dnl process those and use those values instead of our own MALOC
+AC_MSG_CHECKING([for --with-fetk-include option])
+AC_ARG_WITH(fetk-include,
+    [AC_HELP_STRING([--with-fetk-include=PATH], [full path to the FETk INCLUDE directory])],
+    [fetk_include_path="${with_fetk_include}"; AC_MSG_RESULT([yes]); USE_FETK_INCLUDE="yes"],
+    [fetk_include_path=""; AC_MSG_RESULT([no]) ]
+)
+
+AC_MSG_CHECKING([for --with-fetk-library option])
+AC_ARG_WITH(fetk-library,
+    [AC_HELP_STRING([--with-fetk-library=PATH], [full path to the FETk LIBRARY directory])],
+    [fetk_library_path="${with_fetk_library}"; AC_MSG_RESULT([yes]); USE_FETK_LIBRARY="yes"],
+    [fetk_library_path=""; AC_MSG_RESULT([no]) ]
+)
+
+USE_FETK=
+if test -n "${USE_FETK_INCLUDE}"; then
+	maloc_inc_path="${fetk_include_path}"
+	AC_CHECK_FILE(${maloc_inc_path}/maloc/maloc.h,[maloc_inc="yes"],[maloc_inc=""])	
+ 	if test -z "${maloc_inc}"; then
+ 		echo "Error... Couldn't find FETK include files in the location you specified"
+ 		exit 0
+ 	fi
 else
-    if test "${prefix}" != "NONE"; then
-        AC_MSG_RESULT([no; will use ${prefix}/lib])
-        maloc_lib_path="-L${prefix}/lib/${fetk_cpu_vendor_os} ";
-    else
-        AC_MSG_RESULT([no; will use ${HOME}/lib])
-        maloc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
-    fi
+	AC_MSG_RESULT([no; will use ${contrib_path}/include])
+	maloc_inc_path="${contrib_path}/include";
 fi
 
-LDFLAGS_SAVE=${LDFLAGS};
-CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${maloc_lib_path};
-CPPFLAGS=${maloc_inc_path};
-maloc_found="";
+if test -n "${USE_FETK_LIBRARY}"; then
+	maloc_lib_path="${fetk_library_path}"
+	AC_CHECK_FILE(${maloc_lib_path}/libmaloc.a,[maloc_lib="yes"],[maloc_lib=""])
+	if test -z "${maloc_lib}"; then
+ 		echo "Error... Couldn't find FETK library files in the location you specified"
+ 		exit 0
+ 	fi
+	USE_FETK="yes"
+else
+	AC_MSG_RESULT([no; will use ${contrib_path}/lib])
+	maloc_lib_path="${contrib_path}/lib";
+fi
 
-AC_CHECK_HEADER(maloc/maloc.h,
-    [maloc_found="yes";maloc_inc="${maloc_inc_path}"],
-    [maloc_found="";maloc_inc=""])
-	
-if test -n "${maloc_found}"; then
-    AC_CHECK_LIB(maloc,maloc_link,
-        [maloc_found="yes";maloc_lib="${maloc_lib_path} -lmaloc"],
-        [maloc_found="";maloc_lib=""],
-        [${maloc_lib_path}-lmaloc -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-fi
-if test -z "${maloc_found}"; then
-    AC_MSG_ERROR([MALOC libraries or headers missing:  exiting on error!])
-fi
+maloc_inc="-I${maloc_inc_path}"
+maloc_lib="-L${maloc_lib_path} -lmaloc"
+
 dnl # Return LDFLAGS and CPPFLAGS to normal
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(maloc_lib)
 AC_SUBST(maloc_inc)
 
-dnl # ----------------------
+dnl # ---------------------------
 dnl # HANDLE THE MPI LIBRARY
-dnl # ----------------------
-LDFLAGS_SAVE=${LDFLAGS};
-CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${maloc_lib_path};
-CPPFLAGS=${maloc_inc_path};
-mpi_lib="";
-AC_CHECK_LIB(maloc,maloc_needs_mpi,
-    [mpi_use="yes"],
-    [mpi_use=""],
-    [${maloc_lib_path}-lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
-mpi_inc="";
-if test -z "${mpi_use}"; then
-    AC_MSG_RESULT([MALOC not compiled with MPI:  MPI disabled])
-else
+dnl # ---------------------------
 
-    dnl # MPI header location ENV specification
-    AC_MSG_CHECKING([for FETK_MPI_INCLUDE environmental variable])
-    if test -n "${FETK_MPI_INCLUDE}"; then
-        mpi_inc_path_env="${FETK_MPI_INCLUDE} ";
-        AC_MSG_RESULT([yes])
-    else
-        mpi_inc_path_env="";
-        AC_MSG_RESULT([no])
-    fi
+dnl # MPI header location ARG specification (override environment)
+AC_MSG_CHECKING([for --with-mpich option])
+AC_ARG_WITH(mpich,
+    [AC_HELP_STRING([--with-mpich=PATH], [toplevel MPICH directory])],
+    [mpi_path="${with_mpich}"; AC_MSG_RESULT([yes]); USE_MPICH="yes"],
+    [mpi_path=""; AC_MSG_RESULT([no]) ]
+)
 
-    dnl # MPI library location ENV specification
-    AC_MSG_CHECKING([for FETK_MPI_LIBRARY environmental variable])
-    if test -n "${FETK_MPI_LIBRARY}"; then
-        mpi_lib_path_env="${FETK_MPI_LIBRARY}";
-        AC_MSG_RESULT([yes])
-    else
-        mpi_lib_path_env="";
-        AC_MSG_RESULT([no])
-    fi
-
-    dnl # MPI header location ARG specification (override environment)
-    AC_MSG_CHECKING([for --with-mpiinc option])
-    AC_ARG_WITH(mpiinc,
-        [AC_HELP_STRING([--with-mpiinc=PATH], [directory containing <mpi.h>])],
-        [mpi_inc_path="-I${with_mpiinc} "; AC_MSG_RESULT([yes])],
-        [mpi_inc_path="-I${mpi_inc_path_env}"; AC_MSG_RESULT([no])]
-    )
-
-    dnl # MPI library location ARG specification (override environment)
-    AC_MSG_CHECKING([for --with-mpilib option])
-    AC_ARG_WITH(mpilib,
-        [AC_HELP_STRING([--with-mpilib=PATH], 
-                        [directory containing <libmpi.a>])],
-        [mpi_lib_path="${with_mpilib}"; AC_MSG_RESULT([yes])],
-        [mpi_lib_path="${mpi_lib_path_env}"; AC_MSG_RESULT([no])]
-    )
-    dnl # Setup temp LDFLAGS and look for MPI library/header
-    LDFLAGS_SAVE=${LDFLAGS}
-    CPPFLAGS_SAVE=${CPPFLAGS}
-    LDFLAGS="-L${mpi_lib_path} ${nsl_lib} ${socket_lib} -L${mpi_lib_path}";
-    CPPFLAGS="${mpi_inc_path}";
-    mpi_use="";
-    AC_MSG_RESULT([Looking for MPI header with ${mpi_inc_path}...])
-    AC_CHECK_HEADER(mpi.h,
-        [mpi_use="yes";mpi_inc="${mpi_inc_path}"],
-        [mpi_use="";mpi_inc=""])
-    if test -n "${mpi_use}"; then
-        AC_MSG_RESULT([Looking for MPI library with ${mpi_lib_path}...])
-        
-        AC_CHECK_FILE(${mpi_lib_path}/libmpich.a, 
-           [HAS_MPICH="mpich"], [])
-        AC_CHECK_FILE(${mpi_lib_path}/libmpich.so, 
-           [HAS_MPICH="mpich"], [])   
-
-        if test -n "${HAS_MPICH}"; then
-          AC_CHECK_LIB(mpich,main,
-          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
-          [mpi_use="";mpi_lib=""])
-         if test -z "${mpi_use}"; then   
-          AC_CHECK_LIB(mpi,main,
-          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
-          [mpi_use="";mpi_lib="";mpi_bin=""])
-         fi
-
-        else
-          AC_CHECK_LIB(mpi,main,
-          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpi";mpi_bin="pnoshell"],
-          [mpi_use="";mpi_lib="";mpi_bin=""])
-         if test -z "${mpi_use}"; then
-          AC_CHECK_LIB(mpich,main,
-          [mpi_use="yes";mpi_lib="-L${mpi_lib_path} -lmpich"],
-          [mpi_use="";mpi_lib=""])
-         fi
-        fi
-    fi
-    if test -z "${mpi_use}"; then
-        AC_MSG_RESULT([MALOC was compiled with MPI enabled])
-        AC_MSG_RESULT([MALOC needs to link against the MPI library])
-        AC_MSG_RESULT([Try defining FETK_MPI_INCLUDE and FETK_MPI_LIBRARY])
-        AC_ERROR([MPI library or header is missing!!])
-
-    else
-        AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
-    fi
-
-    dnl # Return LDFLAGS and CPPFLAGS to normal
+if test -z ${mpi_path}; then
+	AC_MSG_CHECKING([for --with-lam option])
+	AC_ARG_WITH(lam,
+		[AC_HELP_STRING([--with-lam=PATH], [toplevel LAM-MPI directory])],
+		[mpi_path="${with_lam}"; AC_MSG_RESULT([yes]); USE_LAM="yes"],
+		[mpi_path=""; AC_MSG_RESULT([no]) ]
+	)
 fi
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
+
+dnl # MPI library location ARG specification (override environment)
+USE_MPI=
+if test -n "${mpi_path}"; then
+	AC_CHECK_FILE(${mpi_path}/include/mpi.h,[HAS_MPI_INC="yes"], [])
+	if test -n "${HAS_MPI_INC}"; then
+		mpi_inc="-I${mpi_path}/include"
+		AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
+	else
+		echo "Error... mpi.h missing in ${mpi_path}/include"
+		exit 0
+	fi
+	
+	if test -n "${USE_MPICH}"; then
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.a, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.so, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.dylib, [HAS_MPI_LIB="yes"], [])
+		
+		if test -n "${HAS_MPI_LIB}"; then
+			mpi_lib="-L${mpi_path}/lib -lmpich -lpmpich"
+			mpi_bin="pnoshell"
+		else
+			echo "Error...Could not find MPICH library in ${mpi_path}/lib"
+			exit 0
+		fi
+	fi
+
+	if test -n "${USE_LAM}"; then
+		AC_CHECK_FILE(${mpi_path}/lib/liblam.a, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/liblam.so, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/liblam.dylib, [HAS_MPI_LIB="yes"], [])
+		if test -n "${HAS_MPI_LIB}"; then
+			mpi_lib="-L${mpi_path}/lib -lmpi -llam"
+		else
+			echo "Error...Could not find LAM-MPI libraries in ${mpi_path}/lib"
+			exit 0
+		fi
+	fi
+	
+	USE_MPI="yes"
+fi
+
 AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
-AC_SUBST(mpi_bin)
+dnl AC_SUBST(mpi_bin)
+
+dnl # ---------------------------
+dnl # BUILD MALOC IF NECESSARY
+dnl # ---------------------------
+if test -z ${USE_FETK};  then
+
+	AC_MSG_CHECKING([for --disable-maloc-rebuild])
+	AC_ARG_ENABLE(maloc-rebuild,
+		[AC_HELP_STRING([--disable-maloc-rebuild],[disable rebuilding maloc])],
+		[ with_maloc="no"; AC_MSG_RESULT([yes]) ],
+		[ with_maloc=""; AC_MSG_RESULT([no])  ]
+	)
+
+	if test -n "${with_maloc}"; then
+		echo "Will not rebuild MALOC...skipping"
+	else
+		AC_MSG_RESULT([-----------------------------------------------------------])
+		AC_MSG_RESULT([-------------------- building MALOC -----------------------])
+		AC_MSG_RESULT([-----------------------------------------------------------])
+	
+		export CC=${CC}
+		export CFLAGS=${CFLAGS}
+		export LDFLAGS=${LDFLAGS}
+		cd ${contrib_path}/maloc
+	
+		make clean
+	
+		if test -n "${USE_MPI}";then
+			export APBS_MPI_INC=${mpi_inc}
+			export APBS_MPI_LIB=${mpi_lib}
+			
+			./configure --prefix=${contrib_path} --with-mpi --enable-vdebug
+		else
+			./configure --prefix=${contrib_path} --enable-vdebug
+		fi
+		
+		make; make install;
+		cd ../../
+	fi
+	
+	AC_MSG_RESULT([-----------------------------------------------------------])
+	AC_MSG_RESULT([----- MALOC installation finished continuing with APBS ----])
+	AC_MSG_RESULT([-----------------------------------------------------------])
+fi
 
 dnl # ---------------------------
 dnl # HANDLE THE READLINE LIBRARY
@@ -462,7 +474,7 @@ rl_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_rl,
     [rl_use="yes"],
     [rl_use=""],
-    [${maloc_lib_path}-lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    [${maloc_lib_path} -lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 if test -n "${rl_use}"; then
 
     dnl # READLINE library location ENV specification
@@ -483,12 +495,12 @@ if test -n "${rl_use}"; then
         [ncurses_lib=""],
         [${math_lib}])
     AC_CHECK_LIB(readline,readline,
-        [rl_use="yes";rl_lib="${rl_lib_path}-lreadline ${ncurses_lib}"],
+        [rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
         [rl_use="";rl_lib=""],
         [${rl_lib_path} ${ncurses_lib} ${math_lib}])
     if test -n "${rl_use}"; then
         AC_CHECK_LIB(readline,add_history,
-            [rl_use="yes";rl_lib="${rl_lib_path}-lreadline ${ncurses_lib}"],
+            [rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
             [rl_use="";rl_lib=""],
             [${rl_lib_path} ${ncurses_lib} ${math_lib}])
     fi
@@ -507,9 +519,10 @@ LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(rl_lib)
 
-AC_MSG_RESULT([---------- end configuring for MALOC linkage --------------])
-
+AC_MSG_RESULT([---------------------------------------------------------------])
 AC_MSG_RESULT([---------- begin configuring for Python wrappers --------------])
+AC_MSG_RESULT([---------------------------------------------------------------])
+
 AC_MSG_CHECKING([for --enable-python])
 AC_ARG_ENABLE(python,
     [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
@@ -620,7 +633,6 @@ AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
 AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
 AC_SUBST(PY_CC,[$PY_CC])
 AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_ENABLE}"])
-AC_MSG_RESULT([---------- end configuring for Python wrappers --------------])
 
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
@@ -632,7 +644,11 @@ dnl # which depend on FEtk.  Compilation can also be disabled by the
 dnl # '--disable-fetk' flag.
 dnl # -----------------------
 dnl # MC header location ENV specification
+
+AC_MSG_RESULT([------------------------------------------------------------])
 AC_MSG_RESULT([---------- begin configuring for FEtk linkage --------------])
+AC_MSG_RESULT([------------------------------------------------------------])
+
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 use_fetk=""
 mc_lib=""
@@ -646,24 +662,21 @@ AC_ARG_ENABLE(fetk,
     [ with_fetk="no" ],
     [ with_fetk=""    ]
 )
+
 if test -z "${with_fetk}"; then
     AC_MSG_RESULT([no])
-    AC_MSG_CHECKING([for FETK_INCLUDE])
-    if test -n "${FETK_INCLUDE}"; then
-        mc_inc_path="-I${FETK_INCLUDE} ";
+    AC_MSG_CHECKING([for fetk include components])
+    if test -n "${fetk_include_path}"; then
+        mc_inc_path="-I${fetk_include_path} ";
         AC_MSG_RESULT([yes])
-    else
-        AC_MSG_RESULT([no])
-        mc_inc_path="-I${HOME}/include ";
     fi
-    AC_MSG_CHECKING([for FETK_LIBRARY])
-    if test -n "${FETK_LIBRARY}"; then
+	
+    AC_MSG_CHECKING([for fetk library components])
+    if test -n "${fetk_library_path}"; then
         AC_MSG_RESULT([yes])
-        mc_lib_path="-L${FETK_LIBRARY}/${fetk_cpu_vendor_os} ";
-    else
-        AC_MSG_RESULT([no])
-        mc_lib_path="-L${HOME}/lib/${fetk_cpu_vendor_os} ";
+        mc_lib_path="-L${fetk_library_path}";
     fi
+	
     dnl # Setup temp LDFLAGS and look for MC library/header
     LDFLAGS_SAVE=${LDFLAGS};
     CPPFLAGS_SAVE=${CPPFLAGS};
@@ -674,9 +687,9 @@ if test -z "${with_fetk}"; then
         [mc_found="yes";mc_inc="${mc_inc_path}"],
         [mc_found="";mc_inc=""])
     AC_CHECK_LIB(mc,mc_link,
-        [mc_found="yes";mc_lib="${mc_lib_path}-lmc"],
+        [mc_found="yes";mc_lib="${mc_lib_path} -lmc"],
         [mc_found="";mc_lib=""],
-        [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     dnl # Setup temp LDFLAGS and look for MCX library/header
     LDFLAGS=${mc_lib_path};
     CPPFLAGS=${mc_inc_path};
@@ -685,9 +698,9 @@ if test -z "${with_fetk}"; then
         [mcx_found="yes";mcx_inc="${mc_inc_path}"],
         [mcx_found="";mc_inc=""])
     AC_CHECK_LIB(mcx,mcx_link,
-        [mcx_found="yes";mcx_lib="${mc_lib_path}-lmcx"],
+        [mcx_found="yes";mcx_lib="${mc_lib_path} -lmcx"],
         [mcx_found="";mcx_lib=""],
-        [${mc_lib_path}-lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     
 
     dnl # Return LDFLAGS and CPPFLAGS to normal
@@ -721,7 +734,7 @@ dnl # Check for various optional MCX functions
 AC_CHECK_LIB(mcx_vor,Vor_delaunay,
         [vor_found="yes"],
         [vor_found=""],
-        [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 if test -n "${vor_found}"; then
     vor_lib="${mcx_lib_path} -lmcx_vor"
     AC_DEFINE([HAVE_VOR], [], [have the Vor library])
@@ -729,15 +742,15 @@ fi
 AC_CHECK_LIB(mcx_vmetis,Vmetis_ctor,
         [vmetis_found="yes"],
         [vmetis_found=""],
-        [${mcx_lib_path}-lmcx ${mc_lib_path}-lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        [${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 if test -n "${vmetis_found}"; then
     vmetis_lib="${mcx_lib_path} -lmcx_vmetis"
     AC_DEFINE([HAVE_VMETIS], [], [have the Vmetis library])
 fi
 
-AC_MSG_RESULT([---------- end configuring for FEtk linkage --------------])
-
+AC_MSG_RESULT([---------------------------------------------------------------])
 AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
+AC_MSG_RESULT([---------------------------------------------------------------])
 
 dnl # -----------------------
 dnl # HANDLE SYMBOL EMBEDDING
@@ -845,11 +858,16 @@ if test -n "${blas_lib}"; then
         AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
     fi
     AC_LANG_C
-
 else
-    AC_MSG_RESULT([no])
-    blas_lib_path="${maloc_lib_path}"
-    blas_lib="${blas_lib_path} -lblas ${blas_lib_path} -lvf2c"
+	AC_MSG_RESULT([no])
+	case $host_os in
+		darwin**)
+			blas_lib="-Wl,-framework -Wl,Accelerate"
+			;;
+		*)
+			blas_lib="-L${prefix}/lib -lapbsblas"
+			;;
+	esac
 fi
 AC_SUBST(blas_lib)
 
@@ -865,7 +883,6 @@ case $F77 in
       UHBD_PORTLAND="Y";;
 esac
 AM_CONDITIONAL(UHBD_COMPILE, [test -n "${UHBD_PORTLAND}"])
-
 
 dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
@@ -964,7 +981,6 @@ case $host_os in
       fi
       ;;
 esac
-AC_MSG_RESULT([------------- end processing APBS configure options -----------])
 
 dnl # -----------------------
 dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
@@ -989,7 +1005,6 @@ dnl # -------------------------
 dnl # Need to add in a case statement to put in lcc_dynamic for g77
 dnl # This is for OS X only
 dnl # -------------------------
-
 extra_list2=""
 case $host_os in
 
@@ -1006,7 +1021,6 @@ esac
 dnl # -----------------------
 dnl # ADD ON THE LIBRARIES FOR VERSION 1.40 OF FETK
 dnl # -----------------------
-
 if test -n "${mc_found}"; then
 	case $host_os in
 	
@@ -1037,6 +1051,8 @@ dnl ##########################################################################
 AC_OUTPUT([
     Makefile
 
+	contrib/blas/Makefile
+
     tools/Makefile
     tools/mesh/Makefile
     tools/manip/Makefile
@@ -1048,7 +1064,6 @@ AC_OUTPUT([
     src/generic/Makefile
     src/mg/Makefile
     src/fem/Makefile
-    src/blas/Makefile
     src/aaa_inc/Makefile
     src/aaa_inc/apbs/Makefile
     src/aaa_lib/Makefile
@@ -1067,7 +1082,6 @@ AC_OUTPUT([
     examples/solv/Makefile
     
     bin/Makefile
-
 
 ])
 

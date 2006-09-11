@@ -14,7 +14,7 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = src bin @apbs_do_tools@
+SUBDIRS = contrib/blas src bin @apbs_do_tools@
 
 distclean-local: clean-local
 
