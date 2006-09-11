@@ -661,7 +661,7 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
    /* Add the Dirichlet conditions */
    Bvec_axpy(am->w0, am->ud, 1.);
    /* Get the data from the Bvec */
-   solution = Bvec_addr(am->w0, 0);
+   solution = Bvec_addr(am->w0);
    /* Get the length of the data from the Bvec */
    *length = Bvec_numRT(am->w0);
    /* Make sure that we got scalar data (only one block) for the solution
@@ -2182,9 +2182,9 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
     acc = pbe->acc;
 
     /* Make sure vec has enough rows to accomodate the vertex data */
-    if (Bvec_numR(vec, 0) != Gem_numVV(gm)) {
+    if (Bvec_numRB(vec, 0) != Gem_numVV(gm)) {
         Vnm_print(2, "Vfetk_fillArray:  insufficient space in Bvec!\n");
-        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numR(vec, 0),
+        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numRB(vec, 0),
           Gem_numVV(gm));
         return 0;
     }
@@ -2210,7 +2210,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 vert = Gem_VV(gm, i);
                 for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
                 chi = Vacc_molAcc(acc, coord, pbe->solventRadius);
-                Bvec_set(vec, 0, i, chi);
+                Bvec_set(vec, i, chi);
             }
             break;
 
@@ -2219,7 +2219,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 vert = Gem_VV(gm, i);
                 for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
                 chi = Vacc_splineAcc(acc, coord, pbeparm->swin, 0.0);
-                Bvec_set(vec, 0, i, chi);
+                Bvec_set(vec, i, chi);
             }
             break;
 
@@ -2228,7 +2228,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 vert = Gem_VV(gm, i);
                 for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
                 chi = Vacc_vdwAcc(acc, coord);
-                Bvec_set(vec, 0, i, chi);
+                Bvec_set(vec, i, chi);
             }
             break;
 
@@ -2237,7 +2237,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 vert = Gem_VV(gm, i);
                 for (j=0; j<3; j++) coord[j] = VV_coord(vert, j);
                 chi = Vacc_ivdwAcc(acc, coord, pbe->maxIonRadius);
-                Bvec_set(vec, 0, i, chi);
+                Bvec_set(vec, i, chi);
             }
             break;
 
@@ -2266,12 +2266,12 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
                     if (thee->type == PBE_NPBE) {
-                        val += (conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
+                        val += (conc*Vcap_exp(-q*Bvec_val(vec, i), &ichop));
                     } else if (thee->type == PBE_LPBE) {
-                        val += (conc * ( 1 - q*Bvec_val(vec, 0, i)));
+                        val += (conc * ( 1 - q*Bvec_val(vec, i)));
                     }
                 }
-                Bvec_set(vec, 0, i, val);
+                Bvec_set(vec, i, val);
             }
             break;
 
@@ -2290,12 +2290,12 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
                     if (thee->type == PBE_NPBE) {
-                        val += (q*conc*Vcap_exp(-q*Bvec_val(vec, 0, i), &ichop));
+                        val += (q*conc*Vcap_exp(-q*Bvec_val(vec, i), &ichop));
                     } else if (thee->type == PBE_LPBE) {
-                        val += (q*conc*(1 - q*Bvec_val(vec, 0, i)));
+                        val += (q*conc*(1 - q*Bvec_val(vec, i)));
                     }
                 }
-                Bvec_set(vec, 0, i, val);
+                Bvec_set(vec, i, val);
             }
             break;
 
@@ -2353,9 +2353,9 @@ VPUBLIC int Vfetk_write(Vfetk *thee,  const char *iodev, const char *iofmt,
     }
 
     /* Make sure vec has enough rows to accomodate the vertex data */
-    if (Bvec_numR(vec, 0) != Gem_numVV(gm)) {
+    if (Bvec_numRB(vec, 0) != Gem_numVV(gm)) {
         Vnm_print(2, "Vfetk_fillArray:  insufficient space in Bvec!\n");
-        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numR(vec, 0),
+        Vnm_print(2, "Vfetk_fillArray:  Have %d, need %d!\n", Bvec_numRB(vec, 0),
           Gem_numVV(gm));
         return 0;
     }
