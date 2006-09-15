@@ -43,10 +43,15 @@
                           molecules with coordinates outside the &plusmn;999
                           range.  </para>
                       </warning>
+
                     </para>
                   </listitem>
                 </varlistentry>
               </variablelist>
+              <note>
+                 <para>Beginning with APBS 0.4.1, the optional use of the
+                       chain ID field is now supported in both PDB and PQR formats.</para>
+              </note>
             </para>
           </listitem>
         </varlistentry>
