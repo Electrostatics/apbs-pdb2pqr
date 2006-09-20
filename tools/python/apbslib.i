@@ -103,7 +103,7 @@ extern NOsh_calc* NOsh_getCalc(NOsh *thee, int icalc);
 extern char* NOsh_elecname(NOsh *thee, int ielec);
 extern int NOsh_elec2calc(NOsh *thee, int icalc);
 extern NOsh_PrintType NOsh_printWhat(NOsh *thee, int iprint); 
-extern int NOsh_parseFile(NOsh *thee, char *filename);
+extern int NOsh_parseInputFile(NOsh *thee, char *filename);
 extern NOsh* NOsh_ctor(int rank, int size);
 
 // Functions from routines.h:
@@ -238,7 +238,7 @@ int parseInputFromString(NOsh *nosh, PyObject *string){
 
     Vio_bufTake(sock, PyString_AsString(string), bufsize);
 
-    ret = NOsh_parse(nosh, sock); 
+    ret = NOsh_parseInput(nosh, sock); 
     sock->VIObuffer = VNULL;
     Vio_dtor(&sock);
     return ret;
@@ -405,6 +405,7 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
 %}
 
 extern int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern int NOsh_setupCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 extern void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 extern int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);

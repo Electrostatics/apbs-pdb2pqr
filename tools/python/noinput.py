@@ -46,7 +46,7 @@ __date__ = "12 December 2005"
 INPUT = """read
     mol pqr ion.pqr
 end
-elec
+elec name solvated
     mg-manual
     dime 65 65 65
     nlev 4
@@ -70,7 +70,7 @@ elec
     calcenergy total
     calcforce comps
 end
-elec
+elec name reference
     mg-manual
     dime 65 65 65
     nlev 4
@@ -312,7 +312,7 @@ def runAPBS(PQR, INPUT):
     if not parseInputFromString(nosh, INPUT):
         stderr.write("main:  Error while parsing input file.\n")
         raise APBSError, "Error occurred!"
-    
+   
     # Load the molecules using Valist_load routine, thereby
     # loading atoms directly into the valist object, removing
     # the need for an actual PQR file from stdin
@@ -333,6 +333,11 @@ def runAPBS(PQR, INPUT):
 
     myAlist = make_Valist(alist,0)
     Valist_load(myAlist, len(atoms), x,y,z,chg,rad)  
+
+    if not NOsh_setupCalc(nosh, alist):
+        stderr.write("main: Error setting up calculation.\n")
+        raise APBSError, "Error setting up calculations!"
+
 
     for i in range(nosh.ncalc): totEnergy.append(0.0)
 
@@ -378,7 +383,7 @@ def runAPBS(PQR, INPUT):
             if NOsh_elec2calc(nosh,k) >= icalc:
                 break
 
-        name = NOsh_elecname(nosh, k+1)
+        name = NOsh_elecname(nosh, k)
         if name == "":
             stdout.write("CALCULATION #%d:  MULTIGRID\n" % (icalc+1))
         else:
@@ -415,8 +420,7 @@ def runAPBS(PQR, INPUT):
 	
         # Get the energies - the energy for this calculation
         # (calculation number icalc) will be stored in the totEnergy array
-        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0, 0.0,
-                                         0.0, 0.0, 0.0)
+        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0, 0.0, 0.0, 0.0, 0.0)
 
         # Calculate forces - doforce will be > 0 if anything other than
         # "calcforce no" is specified

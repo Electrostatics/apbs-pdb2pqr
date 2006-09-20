@@ -273,7 +273,7 @@ NOsh_elec2calc = _apbslib.NOsh_elec2calc
 
 NOsh_printWhat = _apbslib.NOsh_printWhat
 
-NOsh_parseFile = _apbslib.NOsh_parseFile
+NOsh_parseInputFile = _apbslib.NOsh_parseInputFile
 
 NOsh_ctor = _apbslib.NOsh_ctor
 class AtomForce(_object):
@@ -363,6 +363,8 @@ getEnergies = _apbslib.getEnergies
 getForces = _apbslib.getForces
 
 loadMolecules = _apbslib.loadMolecules
+
+NOsh_setupCalc = _apbslib.NOsh_setupCalc
 
 killMolecules = _apbslib.killMolecules
 

@@ -158,12 +158,9 @@ def main():
     nosh = NOsh_ctor(rank, size)
     input_file = sys.argv[1]
     stdout.write("Parsing input file %s...\n" % input_file)
-    if NOsh_parseFile(nosh, input_file) != 1:
+    if NOsh_parseInputFile(nosh, input_file) != 1:
         stderr.write("main:  Error while parsing input file.\n")
         raise APBSError, "Error while parsing input file!"
-
-    # Initialize the energy array
-    for i in range(nosh.ncalc): totEnergy.append(0.0)
 
     # Load the molecules using loadMolecules routine
 
@@ -171,6 +168,12 @@ def main():
     if loadMolecules(nosh,alist) != 1:
         stderr.write("main:  Error while loading molecules. \n")
         raise APBSError, "Error while loading molecules!"
+
+    # Setup the calculations
+    
+    if NOsh_setupCalc(nosh, alist) != 1:
+        stderr.write("main: Error while setting up calculations. \n")
+        raise APBSError, "Error while setting up calculations!"
 
     # Load the necessary maps
 
@@ -195,6 +198,8 @@ def main():
 
     stdout.write("Preparing to run %d PBE calculations. \n" % nosh.ncalc)
 
+    for icalc in xrange(nosh.ncalc): totEnergy.append(0.0)
+
     for icalc in xrange(nosh.ncalc):
         stdout.write("---------------------------------------------\n")
         calc = NOsh_getCalc(nosh, icalc)
@@ -208,7 +213,7 @@ def main():
             if NOsh_elec2calc(nosh,k) >= icalc:
                 break
 
-        name = NOsh_elecname(nosh, k+1)
+        name = NOsh_elecname(nosh, k)
         if name == "":
             stdout.write("CALCULATION #%d:  MULTIGRID\n" % (icalc+1))
         else:
@@ -246,7 +251,7 @@ def main():
         # Get the energies - the energy for this calculation
         # (calculation number icalc) will be stored in the totEnergy array
 
-        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0,
+        ret, totEnergy[icalc] = energyMG(nosh, icalc, thispmg, 0, \
                                          totEnergy[icalc], 0.0, 0.0, 0.0)
         
         # Calculate forces
