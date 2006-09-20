@@ -1,7 +1,7 @@
 read 
     mol pqr ion.pqr                      # Read molecule 1
 end
-elec
+elec name solvated
     mg-manual                          # Use the multigrid method
     dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
@@ -49,7 +49,7 @@ elec
                                        #  1 => write out net forces on molecule
                                        #  2 => write out atom-level forces
 end
-elec
+elec name reference
     mg-manual                          # Use the multigrid method
     dime 65 65 65                      # Grid dimensions (c 2^(l+1) +1)
                                        #   (in x, y, z)
