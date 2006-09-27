@@ -20857,38 +20857,41 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking if the compiler creates floating point errors" >&5
-echo $ECHO_N "checking if the compiler creates floating point errors... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking the machine epsilon for VFLOOR" >&5
+echo $ECHO_N "checking the machine epsilon for VFLOOR... $ECHO_C" >&6
 
 cat > fperror.c <<EOF
-    #include <stdio.h>
-    int main(){
-        double test, ofrac;
-        int value;
-        value = 28;
-        ofrac = 0.1;
-        test = (33/(1 + 2*ofrac) + 0.5);
-        if ((int)test != value){
-            printf("%.2E", 2*(value - test));
+#include <stdio.h>
+
+int main( int argc, char **argv )
+{
+        float machEps = 1.0f;
+
+        while(1)
+        {
+                machEps /= 2.0;
+                // If next epsilon yields 1, then break, because current
+                // epsilon is the machine epsilon.
+                if( (float)(1.0 + (machEps/2.0)) == 1.0 )
+                        break;
         }
+
+        printf( "%G\n", machEps );
         return 0;
-    }
+}
 EOF
-actry='$CC -c $CFLAGS fperror.c 1>&5'
+actry='$CC -c fperror.c 1>&5'
 if { (eval echo "$as_me:$LINENO: \"$actry\"") >&5
   (eval $actry) 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-    $CC -o fperror.test $CFLAGS fperror.c
+    $CC fperror.c -o fperror.test -lm
     FPRESULTS=`./fperror.test`
     if test -n "$FPRESULTS"; then
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-        echo "*** Warning: Compiler can cause floating point errors! ***"
-        if test "${CC}" = "icc"; then
-           echo "*** For icc add -mp flag if desired (see icc manual) ***"
-        fi
+        echo "The machine epsilon for this system is: $FPRESULTS"
 
 cat >>confdefs.h <<\_ACEOF
 #define FLOAT_ERRORS 1

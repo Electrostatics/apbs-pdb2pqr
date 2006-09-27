@@ -486,7 +486,7 @@ install-exec-am:
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
-	ranlib -s $(DESTDIR)$(libdir)/libapbsblas.a;
+	ranlib $(DESTDIR)$(libdir)/libapbsblas.a;
 
 install-info: install-info-recursive
 
