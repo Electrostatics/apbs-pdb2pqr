@@ -131,11 +131,18 @@ int main( int argc, char **argv )
 EOF 
 actry='$CC -c fperror.c 1>&AC_FD_CC'
 if AC_TRY_EVAL(actry); then
-    $CC fperror.c -o fperror.test -lm
+    if test "${CC}" = "icc"; then
+        $CC -mp fperror.c -o fperror.test -lm
+    else
+        $CC fperror.c -o fperror.test -lm
+    fi
     FPRESULTS=`./fperror.test`  
     if test -n "$FPRESULTS"; then
         AC_MSG_RESULT([yes])
         echo "The machine epsilon for this system is: $FPRESULTS"
+         if test "${CC}" = "icc"; then	 
+            echo "*** For icc add -mp flag if desired (see icc manual) ***"	 
+         fi
         AC_DEFINE([FLOAT_ERRORS], 1, [have floating point errors])
         AC_DEFINE_UNQUOTED([MACHINE_EPS], $FPRESULTS, [machine error])
     else
