@@ -20886,12 +20886,19 @@ if { (eval echo "$as_me:$LINENO: \"$actry\"") >&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-    $CC fperror.c -o fperror.test -lm
+    if test "${CC}" = "icc"; then
+        $CC -mp fperror.c -o fperror.test -lm
+    else
+        $CC fperror.c -o fperror.test -lm
+    fi
     FPRESULTS=`./fperror.test`
     if test -n "$FPRESULTS"; then
         echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
         echo "The machine epsilon for this system is: $FPRESULTS"
+         if test "${CC}" = "icc"; then
+            echo "*** For icc add -mp flag if desired (see icc manual) ***"
+         fi
 
 cat >>confdefs.h <<\_ACEOF
 #define FLOAT_ERRORS 1
