@@ -142,11 +142,6 @@ DIST_COMMON = Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
-	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  examples/ion-protein/Makefile
-Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -267,6 +262,10 @@ test:
 	./test.sh ${APBS}
 
 test.serial: test
+
+$(srcdir)/Makefile.in:
+
+Makefile:
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

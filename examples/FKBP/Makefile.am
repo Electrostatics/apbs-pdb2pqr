@@ -21,3 +21,8 @@ test:
 
 test.serial: test
 
+
+$(srcdir)/Makefile.in:
+
+Makefile:
+
