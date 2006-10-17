@@ -15,7 +15,7 @@ Summary: Adaptive Poisson Boltzmann Solver
 Name: apbs
 Version: 0.4.0
 Release: 1
-Copyright: GPL
+License: GPL
 Group: Applications/Science
 Vendor: Baker Research Group, Washington University in St. Louis
 Prefix: /usr/local
@@ -68,15 +68,6 @@ This package contains tools for APBS
 %setup -n apbs-%{version}
 
 %build
-
-# export FETK_INCLUDE=%{prefix}/lib
-# export FETK_LIBRARY=%{prefix}/include
-export FETK_PREFIX=`rpm -q maloc --queryformat "%{INSTALLPREFIX}"`
-export FETK_INCLUDE=${FETK_PREFIX}/include
-export FETK_LIBRARY=${FETK_PREFIX}/lib
-echo "FETK_INCLUDE = " $FETK_INCLUDE
-echo "FETK_LIBRARY = " $FETK_LIBRARY
-
 # We're assuming Intel compilers for Intel platforms.  These are the specific
 # Intel platforms we'll support:
 arch=%_arch
@@ -204,12 +195,12 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 mkdir -p ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}
 make install
 
-mv examples ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/examples
-mv tools  ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/tools
+cp -R examples ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/examples
+cp -R tools  ${RPM_BUILD_ROOT}/%{prefix}/apbs-%{version}/tools
 
 # Link the binary to the bin dir instead of the platform-specific dir
 pushd ${RPM_BUILD_ROOT}/%{prefix}/bin
-ln -s */apbs apbs
+#ln -s */apbs apbs
 popd
 
 %clean
@@ -224,6 +215,8 @@ rm -rf ${RPM_BUILD_ROOT}
 %{prefix}/bin
 %{prefix}/lib
 %{prefix}/include
+%{prefix}/examples
+%{prefix}/tools
 %dir %{prefix}/apbs-%{version}
 %doc AUTHORS COPYING INSTALL NEWS ChangeLog doc
 %files examples
@@ -232,3 +225,4 @@ rm -rf ${RPM_BUILD_ROOT}
 %files tools
 %defattr(-,root,root)
 %{prefix}/apbs-%{version}/tools
+
