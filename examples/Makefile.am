@@ -10,6 +10,10 @@
 ## Author:  Todd Dolinsky
 ## ###########################################################################
 
+$(srcdir)/Makefile.in:
+
+Makefile:
+
 clean:
 	cd actin-dimer; make clean
 	cd born; make clean
@@ -24,20 +28,19 @@ clean:
 	cd solv; make clean
 
 test:
-	cat */TESTRESULTS.log >> OLDRESULTS.log
-	rm -f */TESTRESULTS.log
-	cd actin-dimer; make test
-	cd born; make test
-	cd FKBP; make test
-	cd hca-bind; make test
-	cd ion-pmf; make test
-	cd ion-protein; make test
-	cd ionize; make test
-	cd pka-lig; make test
-	cd point-pmf; make test
-	cd protein-rna; make test
-	cd solv; make test
-	cat */TESTRESULTS.log >> TESTRESULTS.log
+	rm -f TESTRESULTS.log
+	touch TESTRESULTS.log
+	cd actin-dimer; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd born; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd FKBP; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd hca-bind; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ion-pmf; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ion-protein; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ionize; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd pka-lig; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd point-pmf; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd protein-rna; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd solv; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 
 test.serial: test
 

@@ -35,3 +35,8 @@ test: apbs-0.050.in
 	./test.sh ${APBSBIN} 
 
 test.serial: test
+
+$(srcdir)/Makefile.in:
+
+Makefile:
+

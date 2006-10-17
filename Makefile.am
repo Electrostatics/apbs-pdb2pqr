@@ -31,5 +31,5 @@ install-exec-local:
 	-rm -f ./bin/apbs
 
 install-exec-am:
-	cp -R tools ${prefix}
-	cp -R examples ${prefix}
+	cp -Rf tools ${prefix}
+	cp -Rf examples ${prefix}
