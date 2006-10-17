@@ -114,8 +114,6 @@ AC_SUBST(AUTOCONF)
 AC_SUBST(AUTOMAKE)
 AC_SUBST(AUTOHEADER)
 
-if test -z "${booyah}"; then
-
 dnl ##########################################################################
 dnl 2. checks for programs
 dnl ##########################################################################
@@ -257,8 +255,6 @@ dnl # HANDLE COMPILER FLOATING POINT ERROR
 dnl # ------------------------------------
 
 AC_FPERROR
-
-fi
 
 dnl ##########################################################################
 dnl 8. checks for library functions
@@ -1051,7 +1047,8 @@ dnl ##########################################################################
 AC_OUTPUT([
     Makefile
 
-	contrib/blas/Makefile
+    contrib/Makefile
+    contrib/blas/Makefile
 
     tools/Makefile
     tools/mesh/Makefile
