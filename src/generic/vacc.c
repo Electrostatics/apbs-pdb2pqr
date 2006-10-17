@@ -1129,9 +1129,8 @@ VPUBLIC void Vacc_splineAccGradAtomNorm3(Vacc *thee, double center[VAPBS_DIM],
 VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
 	
     int ipt, iatom;
-    double area = 0.0;
     double *tPos, tRad, vec[3];
-    double dx,dy,dz,dn;
+    double dx,dy,dz;
     VaccSurf *ref;
     dx = 0.0;
     dy = 0.0;
@@ -1144,39 +1143,28 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
     dSA[0] = 0.0;
     dSA[1] = 0.0;
     dSA[2] = 0.0;
+	
+	
     
     tPos = Vatom_getPosition(atom);
     tRad = Vatom_getRadius(atom);
+    double area = 4.0*VPI*(tRad+srad)*(tRad+srad)/((double)(ref->npts));
     for (ipt=0; ipt<ref->npts; ipt++) {
         vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
         vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
         vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
         if (ivdwAccExclus(thee, vec, srad, iatom)) {
-			area += 1.0;
 			dx = dx+vec[0]-tPos[0];
 			dy = dy+vec[1]-tPos[1];
 			dz = dz+vec[2]-tPos[2];	    
 	    }
     }
-	
-    /* We will return UHBD's asas2: probe-centered solvent-accessible surface
-		* area */
-    area = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
-    dn = VSQRT(dx*dx+dy*dy+dz*dz);
-	
-    if (dn == 0.0) {
-        dSA[0] = 0.0;
-		dSA[1] = 0.0;
-		dSA[2] = 0.0;
-	}
-    else {
-		
-		
-		
-        dSA[0] = -dx*area/dn;
-        dSA[1] = -dy*area/dn;
-        dSA[2] = -dz*area/dn;
-	}
+    
+    if ((tRad+srad) != 0){
+		dSA[0] = -dx*area/(tRad+srad);
+		dSA[1] = -dy*area/(tRad+srad);
+		dSA[2] = -dz*area/(tRad+srad);
+    }	
 	
 }
 
