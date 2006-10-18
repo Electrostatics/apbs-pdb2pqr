@@ -80,6 +80,7 @@
 #include "apbs/pbeparm.h"
 #include "apbs/mgparm.h"
 #include "apbs/femparm.h"
+#include "apbs/apolparm.h"
 #include "apbs/valist.h"
 
 /** @brief Maximum number of molecules in a run 
@@ -120,7 +121,8 @@ typedef enum eNOsh_MolFormat NOsh_MolFormat;
  */
 enum eNOsh_CalcType {
     NCT_MG=0,  /**< Multigrid */
-    NCT_FEM=1  /**< Finite element */
+    NCT_FEM=1, /**< Finite element */
+	NCT_APOL=2 /**< non-polar */
 };
 
 /**
@@ -168,6 +170,7 @@ struct sNOsh_calc {
 	MGparm *mgparm;         /**< Multigrid parameters */
 	FEMparm *femparm;       /**< Finite element parameters */
 	PBEparm *pbeparm;       /**< Generic PBE parameters */
+	APOLparm *apolparm;		/**< Non-polar parameters */
 	NOsh_CalcType calctype; /**< Calculation type */
 };
 
@@ -188,12 +191,18 @@ struct sNOsh {
 		corresponding to actual calculations performed by the code.  Compare to 
 		sNOsh::elec */
     int ncalc;  /**< The number of calculations in the calc array */
+	
 	NOsh_calc *elec[NOSH_MAXCALC];  /**< The array of calculation objects
 		corresponding to ELEC statements read in the input file.  Compare to 
 		sNOsh::calc */
-
     int nelec;  /**< The number of elec statements in the input file and in the 
 		elec array */
+	
+	NOsh_calc *apol[NOSH_MAXCALC];  /**< The array of calculation objects
+		corresponding to APOLAR statements read in the input file.  Compare to 
+		sNOsh::calc */
+    int napol;  /**< The number of apolar statements in the input file and in the 
+		apolar array */
 	
     int ispara;  /**< 1 => is a parallel calculation, 0 => is not */
     int proc_rank;  /**< Processor rank in parallel calculation */
@@ -242,7 +251,8 @@ struct sNOsh {
     int parsed;  /**< Have we parsed an input file yet? */
     char elecname[NOSH_MAXCALC][VMAX_ARGLEN]; /**< Optional user-specified name 
 		for ELEC statement */
-	
+	char apolname[NOSH_MAXCALC][VMAX_ARGLEN]; /**< Optional user-specified name 
+		for APOLAR statement */
 };
 
 /** 

@@ -87,6 +87,11 @@ VPRIVATE int NOsh_parseELEC(
 							Vio *sock
 							);
 
+VPRIVATE int NOsh_parseAPOLAR(
+							NOsh *thee, 
+							Vio *sock
+							);
+
 VEXTERNC int NOsh_parseFEM(
 						   NOsh *thee, 
 						   Vio *sock, 
@@ -295,10 +300,17 @@ VPUBLIC NOsh_calc* NOsh_calc_ctor(
 		case NCT_MG:
 			thee->mgparm = MGparm_ctor(MCT_NONE);
 			thee->femparm = VNULL;
+			thee->apolparm = VNULL;
 			break;
 		case NCT_FEM:
 			thee->mgparm = VNULL;
 			thee->femparm = FEMparm_ctor(FCT_NONE);
+			thee->apolparm = VNULL;
+			break;
+		case NCT_APOL:
+			thee->mgparm = VNULL;
+			thee->femparm = VNULL;
+			thee->apolparm = APOLparm_ctor();
 			break;
 		default:
 			Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
@@ -414,6 +426,7 @@ like:
 		read => Read in a molecule file
 		elec => Do an electrostatics calculation
 		print => Print some results
+		apolar => do a non-polar calculation
 		quit => Quit
 		
 		These cause the code to go to a lower-level parser routine which
@@ -436,6 +449,11 @@ like:
 			Vnm_print(0, "NOsh: Parsing ELEC section\n");
 			if (!NOsh_parseELEC(thee, sock)) return 0;
 			Vnm_print(0, "NOsh: Done parsing ELEC section (nelec = %d)\n",
+					  thee->nelec);
+		} else if (Vstring_strcasecmp(tok, "apolar") == 0) {
+			Vnm_print(0, "NOsh: Parsing APOLAR section\n");
+			if (!NOsh_parseAPOLAR(thee, sock)) return 0;
+			Vnm_print(0, "NOsh: Done parsing APOLAR section (nelec = %d)\n",
 					  thee->nelec);
 		} else if (Vstring_strcasecmp(tok, "quit") == 0) {
 			Vnm_print(0, "NOsh: Done parsing file (got QUIT)\n");
@@ -858,8 +876,6 @@ run!\n");
         return 1;
     }
 	
-	
-	
     /* The next token HAS to be the method OR "name" */
 	if (Vio_scanf(sock, "%s", tok) == 1) {
 	    if (Vstring_strcasecmp(tok, "name") == 0) {
@@ -910,6 +926,62 @@ ELEC section!\n");
 	
     Vnm_print(2, "NOsh_parseELEC:  Ran out of tokens while reading ELEC section!\n");
     return 0;
+	
+}
+
+VPRIVATE int NOsh_parseAPOLAR(NOsh *thee, Vio *sock) {
+	
+	NOsh_calc *calc = VNULL;
+    int i;
+	
+    char tok[VMAX_BUFSIZE];
+	
+    if (thee == VNULL) {
+        Vnm_print(2, "NOsh_parseAPOLAR:  Got NULL thee!\n");
+        return 0;
+    }
+	
+    if (sock == VNULL) {
+        Vnm_print(2, "NOsh_parseAPOLAR:  Got pointer to NULL socket!\n");
+        return 0;
+    } 
+	
+    if (thee->parsed) {
+        Vnm_print(2, "NOsh_parseAPOLAR:  Already parsed an input file!\n");
+        return 0;
+    }
+	
+	/* Get a pointer to the latest ELEC calc object and update the ELEC 
+		statement number */
+    if (thee->napol >= NOSH_MAXCALC) {
+        Vnm_print(2, "NOsh:  Too many non-polar calculations in this \
+run!\n");
+        Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n", 
+				  NOSH_MAXCALC);
+        return 1;
+    }
+	
+	/* The next token HAS to be the method OR "name" */
+	if (Vio_scanf(sock, "%s", tok) == 1) {
+	    if (Vstring_strcasecmp(tok, "name") == 0) {
+		    Vio_scanf(sock, "%s", tok);
+            strncpy(thee->apolname[thee->napol], tok, VMAX_ARGLEN);
+			
+			/* Parse the non-polar parameters */
+			thee->apol[thee->napol] = NOsh_calc_ctor(NCT_APOL);
+			calc = thee->apol[thee->napol];
+			(thee->napol)++;
+			return NOsh_parseAPOL(thee, sock, calc);
+			
+			if (Vio_scanf(sock, "%s", tok) != 1) {
+				Vnm_print(2, "NOsh_parseAPOLAR:  Ran out of tokens while reading \
+APOLAR section!\n");
+				return 0;
+			}
+		}
+	}	
+			
+	return 1;
 	
 }
 
@@ -1741,10 +1813,6 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
 	Vnm_print(0, "NOsh_setupMGPARA:  partDisjOwnSide[DOWN] = %d\n", 
 			  mgparm->partDisjOwnSide[VAPBS_DOWN]);
 	
-	
-
-
-	
 	/* Set the mesh parameters */ 
 	mgparm->fglen[0] = xlenOlap;
 	mgparm->fglen[1] = ylenOlap;
@@ -1906,4 +1974,78 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
 	
 	
 	return 1;
+}
+
+VPUBLIC int NOsh_parseAPOL(
+						  NOsh *thee, 
+						  Vio *sock, 
+						  NOsh_calc *elec
+						  ) {
+	
+	char tok[VMAX_BUFSIZE];
+	APOLparm *apolparm = VNULL;   
+	int rc;
+	
+	/* Check the arguments */
+	if (thee == VNULL) {
+		Vnm_print(2, "NOsh_parseAPOL:  Got NULL thee!\n");
+		return 0;
+	}
+	if (sock == VNULL) {
+		Vnm_print(2, "NOsh_parseAPOL:  Got pointer to NULL socket!\n");
+		return 0;
+	}
+	if (elec == VNULL) {
+		Vnm_print(2, "NOsh_parseAPOL:  Got pointer to NULL elec object!\n");
+		return 0;
+	}
+	apolparm = elec->apolparm;
+	if (apolparm == VNULL) {
+		Vnm_print(2, "NOsh_parseAPOL:  Got pointer to NULL feparm object!\n");
+		return 0;
+	}
+	
+	Vnm_print(0, "NOsh_parseAPOL: Parsing parameters for APOL calculation\n");
+	
+	/* Start snarfing tokens from the input stream */
+	rc = 1;
+	while (Vio_scanf(sock, "%s", tok) == 1) { 
+		
+		Vnm_print(0, "NOsh_parseAPOL:  Parsing %s...\n", tok);
+		printf("Parsing %s\n",tok);
+		/* See if it's an END token */
+		if (Vstring_strcasecmp(tok, "end") == 0) {
+			apolparm->parsed = 1;
+			rc = 1;
+			break;
+		}
+		
+		/* Pass the token through a series of parsers */
+		/* Pass the token to the generic non-polar parser */
+		printf("%s\n",tok);
+		rc = APOLparm_parseToken(apolparm, tok, sock);
+		if (rc == -1) { 
+			Vnm_print(0, "NOsh_parseFEM:  parseMG error!\n");
+			break;
+		} else if (rc == 0) {
+			/* We ran out of parsers! */
+			//Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
+			//break;
+		}
+		
+	}
+	
+	/* Handle various errors arising in the token-snarfing loop -- these all
+		* just result in simple returns right now */
+	if (rc == -1) return 0;
+	if (rc == 0) return 0;
+	
+	/* Check the status of the parameter objects */
+	if (!APOLparm_check(apolparm)) {
+		Vnm_print(2, "NOsh:  APOL parameters not set correctly!\n");
+		return 0;
+	}
+	
+	return 1;
+	
 }

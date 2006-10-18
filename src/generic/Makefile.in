@@ -138,7 +138,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = generic
 
 noinst_LTLIBRARIES = libapbsgen.la
-libapbsgen_la_SOURCES = nosh.c mgparm.c femparm.c pbeparm.c \
+libapbsgen_la_SOURCES = nosh.c mgparm.c femparm.c pbeparm.c apolparm.c \
                          vacc.c valist.c vatom.c vgreen.c vpbe.c vcap.c \
                          vclist.c vstring.c vparam.c 
 
@@ -153,8 +153,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libapbsgen_la_LDFLAGS =
 libapbsgen_la_LIBADD =
 am_libapbsgen_la_OBJECTS = nosh.lo mgparm.lo femparm.lo pbeparm.lo \
-	vacc.lo valist.lo vatom.lo vgreen.lo vpbe.lo vcap.lo vclist.lo \
-	vstring.lo vparam.lo
+	apolparm.lo vacc.lo valist.lo vatom.lo vgreen.lo vpbe.lo \
+	vcap.lo vclist.lo vstring.lo vparam.lo
 libapbsgen_la_OBJECTS = $(am_libapbsgen_la_OBJECTS)
 
 DEFS = @DEFS@
