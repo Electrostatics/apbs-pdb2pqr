@@ -7794,10 +7794,11 @@ VPUBLIC void Vpmg_ibMutualPolForce(Vpmg *thee, Vgrid *induced, Vgrid *nlinduced,
     VASSERT(thee != VNULL);        /* We need a PMG object with PBE info. */
     VASSERT(induced != VNULL);     /* We need the potential due to induced dipoles. */
     VASSERT(nlinduced != VNULL);   /* We need the potential due to non-local induced dipoles. */
-    VASSERT (atom->partID != 0);   /* Currently all atoms must be in the same partition. */
     VASSERT (!thee->pmgp->nonlin); /* Nonlinear PBE is not implemented for AMOEBA */
    
     atom = Valist_getAtom(thee->pbe->alist, atomID);
+	VASSERT (atom->partID != 0);   /* Currently all atoms must be in the same partition. */
+	
     acc = thee->pbe->acc;
     srfm = thee->surfMeth;
     apos = Vatom_getPosition(atom);

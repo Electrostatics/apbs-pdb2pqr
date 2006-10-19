@@ -152,7 +152,6 @@ keyword!\n", tok);
         return -1;
     } else thee->dime[2] = ti;
     thee->setdime = 1;
-	printf("%i %i %i\n",thee->dime[0],thee->dime[1],thee->dime[2]);
     return 1;
 	
 VERROR1:
