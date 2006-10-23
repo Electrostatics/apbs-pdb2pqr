@@ -1022,7 +1022,7 @@ will have significant overlap.\n");
 VPUBLIC double Vgrid_integrate(Vgrid *thee) {
 
     int i, j, k, nx, ny, nz;
-    double sum;
+    double sum, w;
 
     if (thee == VNULL) {
         Vnm_print(2, "Vgrid_integrate:  Got VNULL thee!\n");
@@ -1034,10 +1034,14 @@ VPUBLIC double Vgrid_integrate(Vgrid *thee) {
     nz = thee->nz;
 
     sum = 0.0;
+	w = 1.0;
     for (k=0; k<nz; k++) {
+		if ((k==0) || (k==(nz-1)) w = w * 0.5;
         for (j=0; j<ny; j++) {
+			if ((j==0) || (j==(ny-1)) w = w * 0.5;
             for (i=0; i<nx; i++) {
-                sum = sum + thee->data[IJK(i,j,k)];
+				if ((i==0) || (i==(nx-1)) w = w * 0.5;
+                sum = sum + w*(thee->data[IJK(i,j,k)]);
             }
         }
     }
