@@ -521,7 +521,7 @@ VEXTERNC int   NOsh_parseInput(NOsh *thee, Vio *sock);
 */
 VEXTERNC int   NOsh_parseInputFile(NOsh *thee, char *filename);
 
-/**	@brief	Setup the series of calculations
+/**	@brief	Setup the series of electrostatics calculations
 *	@note	Should be called after NOsh_parseInput*
 *	@ingroup	NOsh
 *	@author	Nathan Baker and Todd Dolinsky
@@ -530,10 +530,24 @@ VEXTERNC int   NOsh_parseInputFile(NOsh *thee, char *filename);
 														 mesh);
 *	@return	1 if successful, 0 otherwise
 */
-VEXTERNC int NOsh_setupCalc(
+VEXTERNC int NOsh_setupElecCalc(
 							NOsh *thee,
 							Valist *alist[NOSH_MAXMOL]
 							);
+
+/**	@brief	Setup the series of non-polar calculations
+*	@note	Should be called after NOsh_parseInput*
+*	@ingroup	NOsh
+*	@author	Nathan Baker and Todd Dolinsky
+*	@param	thee	Pointer to NOsh object
+*	@param	alist	Array of pointers to Valist objects (molecules used to center
+														 mesh);
+*	@return	1 if successful, 0 otherwise
+*/
+VEXTERNC int NOsh_setupApolCalc(
+								NOsh *thee,
+								Valist *alist[NOSH_MAXMOL]
+								);
 
 #endif 
 

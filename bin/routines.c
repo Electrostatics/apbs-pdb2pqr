@@ -2688,7 +2688,7 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 				  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
 				  fetk[icalc]->pjac);
 	} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
-		/* Note: USEHB is a compile time defined macro the program flow is to 
+		/* Note: USEHB is a compile time defined macro the program flow
 		is to always go take the route using AM_hlSolve when the solver
 		is linear. D. Gohara 6/29/06
 		*/
@@ -2951,3 +2951,119 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 	return 1;
 }
 #endif /* ifdef HAVE_MCX_H */
+
+VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
+
+	int i;
+	
+	Vclist *clist = VNULL;
+	Vacc *acc = VNULL;
+	Vatom *atom = VNULL;
+	
+	int nhash[3] = {60, 60, 60};
+	
+	Vnm_print(1, "APOL: Setting up hash table and accessibility object...\n");
+	clist = Vclist_ctor(alist, apolparm->srad, nhash, CLIST_AUTO_DOMAIN, 
+									VNULL, VNULL);
+	acc = Vacc_ctor(alist, clist, apolparm->bdens);
+	
+	/* Get the SAV and SAS */
+	int npts[3];
+	double sasa, atom_sasa;
+	double sav, center[3];
+	
+    double spacs[3], vec[3];
+    double w, wx, wy, wz, len, fn, x, y, z, vol;
+	double vol_density, probe_radius;
+    double *lower_corner, *upper_corner;
+	
+	sasa = 0.0;
+	sav = 0.0;
+	
+	vol = 1.0;
+	vol_density = 2.0;
+	probe_radius = apolparm->srad;
+	
+	/* Solvent accessible sureface area */
+	sasa = Vacc_totalSASA(acc, probe_radius);
+	printf("Total SASA:\t%1.12E A^2\n", sasa);
+	
+	/* Inflated van der Waals accessibility */
+	lower_corner = clist->lower_corner;
+	upper_corner = clist->upper_corner;
+	
+	for (i=0; i<3; i++) {
+		len = upper_corner[i] - lower_corner[i];
+		vol *= len;
+		fn = len*vol_density + 1;
+		npts[i] = (int)ceil(fn);
+		spacs[i] = len/((double)(npts[i])-1.0);
+	}
+	
+	for (x=lower_corner[0]; x<=upper_corner[0]; x=x+spacs[0]) {
+		if ( VABS(x - lower_corner[0]) < VSMALL) {
+			wx = 0.5;
+		} else if ( VABS(x - upper_corner[0]) < VSMALL) {
+			wx = 0.5;
+		} else {
+			wx = 1.0;
+		}
+		vec[0] = x;
+		for (y=lower_corner[1]; y<=upper_corner[1]; y=y+spacs[1]) {
+			if ( VABS(y - lower_corner[1]) < VSMALL) {
+				wy = 0.5;
+			} else if ( VABS(y - upper_corner[1]) < VSMALL) {
+				wy = 0.5;
+			} else {
+				wy = 1.0;
+			}
+			vec[1] = y;
+			for (z=lower_corner[2]; z<=upper_corner[2]; z=z+spacs[2]) {
+				if ( VABS(z - lower_corner[2]) < VSMALL) {
+					wz = 0.5;
+				} else if ( VABS(z - upper_corner[2]) < VSMALL) {
+					wz = 0.5;
+				} else {
+					wz = 1.0;
+				}
+				vec[2] = z;
+				
+				w = wx*wy*wz;
+				
+				sav += (w*(1.0-Vacc_ivdwAcc(acc, vec, probe_radius)));
+				
+			} /* z loop */
+		} /* y loop */
+	} /* x loop */
+
+	w  = spacs[0]*spacs[1]*spacs[2];
+	sav *= w;
+
+	printf("Total Volume:\t%g A^3\n",sav);
+
+#if 0	
+	/* CALLING Vacc_atomdSAS and Vacc_atomdSAV */
+    double dSA[3], dSV[3], danorm, dvnorm;
+	
+	for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+		Vacc_atomdSAS(acc, apolparm->srad, atom, dSA);
+		danorm = VSQRT(dSA[0]*dSA[0]+dSA[1]*dSA[1]+dSA[2]*dSA[2]);
+		//Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
+		//	  i, dSA[0],dSA[1],dSA[2],danorm);
+	}
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+		Vacc_atomdSAV(acc, apolparm->srad, atom, dSV);
+		dvnorm = VSQRT(dSV[0]*dSV[0]+dSV[1]*dSV[1]+dSV[2]*dSV[2]);
+		//Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
+		//		  i, dSV[0],dSV[1],dSV[2],dvnorm);
+    }
+#endif
+}
+
+
+
+
+
+

@@ -134,6 +134,11 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
 							   NOsh_calc *elec
 							   );
 
+VPRIVATE int NOsh_setupCalcAPOL(
+								NOsh *thee, 
+								NOsh_calc *elec
+								);
+
 #if !defined(VINLINE_NOSH)
 
 VPUBLIC char* NOsh_getMolpath(NOsh *thee, int imol) {
@@ -261,12 +266,14 @@ VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
     for (i=0; i<NOSH_MAXCALC; i++) {
 		thee->calc[i] = VNULL;
 		thee->elec[i] = VNULL;
+		thee->apol[i] = VNULL;
 	}
 	for (i=0; i<NOSH_MAXMOL; i++) {
 		thee->alist[i] = VNULL;
 	}
 	thee->ncalc = 0;
 	thee->nelec = 0;
+	thee->napol = 0;
 	
     return 1; 
 }
@@ -337,6 +344,9 @@ VPUBLIC void NOsh_calc_dtor(
 		case NCT_FEM:
 			FEMparm_dtor(&(calc->femparm));
 			break;
+		case NCT_APOL:
+			APOLparm_dtor(&(calc->apolparm));
+			break;
 		default:
 			Vnm_print(2, "NOsh_calc_ctor:  unknown calculation type (%d)!\n",
 					  calc->calctype);
@@ -363,6 +373,8 @@ VPUBLIC int NOsh_calc_copy(
 		FEMparm_copy(thee->femparm, source->femparm);
 	if (source->pbeparm != VNULL)
 		PBEparm_copy(thee->pbeparm, source->pbeparm);
+	if (source->apolparm != VNULL)
+		APOLparm_copy(thee->apolparm, source->apolparm);
 	
 	return 1;
 	
@@ -985,7 +997,7 @@ APOLAR section!\n");
 	
 }
 
-VPUBLIC int NOsh_setupCalc(
+VPUBLIC int NOsh_setupElecCalc(
 						   NOsh *thee, 
 						   Valist *alist[NOSH_MAXMOL]
 						   ) {
@@ -1060,7 +1072,40 @@ calculation %d (%d)\n", ielec, ielec+1, thee->elec2calc[ielec],
 	return 1;
 }
 
+VPUBLIC int NOsh_setupApolCalc(
+							   NOsh *thee, 
+							   Valist *alist[NOSH_MAXMOL]
+							   ) {
+	int iapol, imol, i;
+	NOsh_calc *apol = VNULL;
+	MGparm *mgparm = VNULL;
+	Valist *mymol = VNULL;
+	
+	VASSERT(thee != VNULL);
+	for (imol=0; imol<thee->nmol; imol++) {
+		thee->alist[imol] = alist[imol];
+	}
+	
+	
+	for (iapol=0; iapol<(thee->napol); iapol++) {
+		/* Unload the calculation object containing the APOL information */
+		apol = thee->apol[iapol];
+		
+		/* Setup the calculation */
+		switch (apol->calctype) {
+			case NCT_APOL:
+				NOsh_setupCalcAPOL(thee, apol);
+				break;
+			default:
+				Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n",
+						  apol->calctype);
+				return 0;
+		}
 
+	}
+	
+	return 1;
+}
 
 VPUBLIC int NOsh_parseMG(
 						 NOsh *thee, 
@@ -1956,9 +2001,9 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
 	VASSERT(pbeparm);
 	
 	/* Check to see if he have any room left for this type of
-	* calculation, if so: set the calculation type, update the number
-	* of calculations of this type, and parse the rest of the section
-	*/
+	 * calculation, if so: set the calculation type, update the number
+	 * of calculations of this type, and parse the rest of the section
+	 */
 	if (thee->ncalc >= NOSH_MAXCALC) {
 		Vnm_print(2, "NOsh:  Too many calculations in this run!\n");
 		Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
@@ -2012,7 +2057,6 @@ VPUBLIC int NOsh_parseAPOL(
 	while (Vio_scanf(sock, "%s", tok) == 1) { 
 		
 		Vnm_print(0, "NOsh_parseAPOL:  Parsing %s...\n", tok);
-		printf("Parsing %s\n",tok);
 		/* See if it's an END token */
 		if (Vstring_strcasecmp(tok, "end") == 0) {
 			apolparm->parsed = 1;
@@ -2022,15 +2066,14 @@ VPUBLIC int NOsh_parseAPOL(
 		
 		/* Pass the token through a series of parsers */
 		/* Pass the token to the generic non-polar parser */
-		printf("%s\n",tok);
 		rc = APOLparm_parseToken(apolparm, tok, sock);
 		if (rc == -1) { 
 			Vnm_print(0, "NOsh_parseFEM:  parseMG error!\n");
 			break;
 		} else if (rc == 0) {
 			/* We ran out of parsers! */
-			//Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
-			//break;
+			Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
+			break;
 		}
 		
 	}
@@ -2048,4 +2091,39 @@ VPUBLIC int NOsh_parseAPOL(
 	
 	return 1;
 	
+}
+
+VPRIVATE int NOsh_setupCalcAPOL(
+								NOsh *thee, 
+								NOsh_calc *apol
+								) {
+	
+	APOLparm *apolparm = VNULL;
+	NOsh_calc *calc = VNULL;
+	
+	int i;
+	
+	VASSERT(thee != VNULL);
+	VASSERT(apol != VNULL);
+	apolparm = apol->apolparm;
+	VASSERT(apolparm != VNULL);
+	
+	/* Check to see if he have any room left for this type of
+		* calculation, if so: set the calculation type, update the number
+		* of calculations of this type, and parse the rest of the section
+		*/
+	if (thee->ncalc >= NOSH_MAXCALC) {
+		Vnm_print(2, "NOsh:  Too many calculations in this run!\n");
+		Vnm_print(2, "NOsh:  Current max is %d; ignoring this calculation\n",
+				  NOSH_MAXCALC);
+		return 0;
+	}
+	thee->calc[thee->ncalc] = NOsh_calc_ctor(NCT_APOL);
+	calc = thee->calc[thee->ncalc];
+	(thee->ncalc)++;
+	
+	/* Copy over contents of ELEC */
+	NOsh_calc_copy(calc, apol);	
+	
+	return 1;
 }

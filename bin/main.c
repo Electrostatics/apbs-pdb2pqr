@@ -92,9 +92,12 @@ int main(
 {
 	
 	NOsh *nosh = VNULL;
+	
 	MGparm *mgparm = VNULL;
 	FEMparm *feparm = VNULL;
 	PBEparm *pbeparm = VNULL;
+	APOLparm *apolparm = VNULL;
+	
 	Vmem *mem = VNULL;
 	Vcom *com = VNULL;
 	Vio *sock = VNULL;
@@ -337,12 +340,14 @@ int main(
 	}
 
 	/* *************** SETUP CALCULATIONS *************** */
-	if (NOsh_setupCalc(nosh, alist) != 1) {
+	if (NOsh_setupElecCalc(nosh, alist) != 1) {
 		Vnm_tprint(2, "Error setting up calculations\n");
 		VJMPERR1(0);
 	}
-
-
+	if (NOsh_setupApolCalc(nosh, alist) != 1) {
+		Vnm_tprint(2, "Error setting up calculations\n");
+		VJMPERR1(0);
+	}
 
 	/* *************** LOAD MAPS ******************* */
 	if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
@@ -470,8 +475,8 @@ int main(
 					VJMPERR1(0);
 				}
 					
-					/* Print problem parameters */
-					printFEPARM(i, nosh, feparm, fetk);
+				/* Print problem parameters */
+				printFEPARM(i, nosh, feparm, fetk);
 				printPBEPARM(pbeparm);
 				
 				/* Refine mesh */
@@ -520,6 +525,11 @@ int main(
 					Vnm_print(2, "Error!  APBS not compiled with FEtk!\n");
 				exit(2);
 #endif /* ifdef HAVE_MC_H */
+				break;
+			case NCT_APOL:
+				printf("Apolar calculation\n");
+				apolparm = nosh->calc[i]->apolparm;
+				solveAPOL(nosh, apolparm, alist[i]);
 				break;
 			default:
 				Vnm_tprint(2, "  Unknown calculation type (%d)!\n", 

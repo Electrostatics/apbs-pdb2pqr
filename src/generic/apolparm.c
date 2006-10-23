@@ -102,7 +102,39 @@ VPUBLIC void APOLparm_copy(
 	int i;
 	
 	thee->parsed = source->parsed;
-
+	for (i=0; i<3; i++) thee->dime[i] = source->dime[i];
+	thee->setdime = source->setdime;
+	for (i=0; i<3; i++) thee->glen[i] = source->glen[i];
+	thee->setglen = source->setglen;
+	thee->molid = source->molid;
+	thee->setmolid = source->setmolid;
+	
+	thee->bdens = source->bdens ;
+	thee->setbdens= source->setbdens ;
+	
+	thee->press = source->press ;
+	thee->setpress = source->setpress ;
+	
+	thee->srfm = source->srfm ;
+	thee->setsrfm = source->setsrfm ;
+	
+	thee->srad = source->srad ;
+	thee->setsrad = source->setsrad ;
+	
+	thee->swin = source->swin ;
+	thee->setswin = source->setswin ;
+	
+	thee->temp = source->temp ;
+	thee->settemp = source->settemp ;
+	
+	thee->gamma = source->gamma ;
+	thee->setgamma = source->setgamma ;
+	
+	thee->calcenergy = source->calcenergy ;
+	thee->setcalcenergy = source->setcalcenergy ;
+	
+	thee->calcforce = source->calcforce ;
+	thee->setcalcforce = source->setcalcforce ;
 }
 
 VPUBLIC void APOLparm_dtor(APOLparm **thee) {

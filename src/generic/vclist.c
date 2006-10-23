@@ -126,13 +126,14 @@ VPRIVATE void Vclist_getMolDims(
     /* Check each atom */
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
-        for (j=0; j<VAPBS_DIM; j++) {
+		for (j=0; j<VAPBS_DIM; j++) {
             pos = (Vatom_getPosition(atom))[j];
             if ( pos < lower_corner[j] ) lower_corner[j] = pos;
             if ( pos > upper_corner[j] ) upper_corner[j] = pos;
         }
         if (Vatom_getRadius(atom) > *r_max) *r_max = Vatom_getRadius(atom);
     }
+
 }
 
 /** Setup lookup grid */
@@ -399,6 +400,9 @@ VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         Vnm_print(2, "Vclist_ctor2:  atom assignment failed!\n");
         return 0;
     }
+	
+
+	
 
 
     return 1;
