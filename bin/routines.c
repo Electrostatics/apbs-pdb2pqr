@@ -1116,7 +1116,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 					(*atomForce)[j].npForce[k] = 0;
 				}
 			}
-			Vnm_tprint( 1, "  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
+			Vnm_tprint( 1, "mgF  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(
 						  (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
@@ -1129,28 +1129,28 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 						*(
 						  (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
 						  (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
-			Vnm_tprint( 1, "  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
+			Vnm_tprint( 1, "mgF  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].qfForce[0],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].qfForce[1],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].qfForce[2]);
-			Vnm_tprint( 1, "  ib  %d  %4.3e  %4.3e  %4.3e\n", j, 
+			Vnm_tprint( 1, "mgF  ib  %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].ibForce[0],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].ibForce[1],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].ibForce[2]);
-			Vnm_tprint( 1, "  db  %d  %4.3e  %4.3e  %4.3e\n", j, 
+			Vnm_tprint( 1, "mgF  db  %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].dbForce[0],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].dbForce[1],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].dbForce[2]);
-			Vnm_tprint( 1, "  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
+			Vnm_tprint( 1, "mgF  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].npForce[0],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
@@ -2962,108 +2962,98 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
 	
 	int nhash[3] = {60, 60, 60};
 	
-	Vnm_print(1, "APOL: Setting up hash table and accessibility object...\n");
+	Vnm_print(2, "APOL: Setting up hash table and accessibility object...\n");
 	clist = Vclist_ctor(alist, apolparm->srad, nhash, CLIST_AUTO_DOMAIN, 
 									VNULL, VNULL);
-	acc = Vacc_ctor(alist, clist, apolparm->bdens);
+	acc = Vacc_ctor(alist, clist, apolparm->sdens);
 	
 	/* Get the SAV and SAS */
-	int npts[3];
-	double sasa, atom_sasa;
+	double sasa, atom_sasa, radius;
 	double sav, center[3];
-	
-    double spacs[3], vec[3];
-    double w, wx, wy, wz, len, fn, x, y, z, vol;
-	double vol_density, probe_radius;
-    double *lower_corner, *upper_corner;
 	
 	sasa = 0.0;
 	sav = 0.0;
 	
-	vol = 1.0;
-	vol_density = 2.0;
-	probe_radius = apolparm->srad;
+	radius = apolparm->srad;
 	
 	/* Solvent accessible sureface area */
-	sasa = Vacc_totalSASA(acc, probe_radius);
-	printf("Total SASA:\t%1.12E A^2\n", sasa);
+	sasa = Vacc_totalSASA(acc, radius);
 	
 	/* Inflated van der Waals accessibility */
-	lower_corner = clist->lower_corner;
-	upper_corner = clist->upper_corner;
+	sav = Vacc_totalSAV(acc,clist,radius);
 	
-	for (i=0; i<3; i++) {
-		len = upper_corner[i] - lower_corner[i];
-		vol *= len;
-		fn = len*vol_density + 1;
-		npts[i] = (int)ceil(fn);
-		spacs[i] = len/((double)(npts[i])-1.0);
+	/* Calculate Energy and Forces */
+	if(apolparm->calcforce) forceAPOL(acc, apolparm, alist);
+	if(apolparm->calcenergy) energyAPOL(apolparm, sasa, sav);
+
+	return 1;
+}
+
+VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
+
+	double energy = 0.0;
+	
+	printf("\nTotal solvent accessible surface area: %g A^2\n",sasa);
+	printf("Total solvent accessible volume: %g A^3\n", sav);
+	
+	switch(apolparm->calcenergy){
+		case ACE_NO:
+			break;
+		case ACE_COMPS:
+			Vnm_print(1,"energyAPOL: Cannot calculate component energy, skipping.\n");
+			break;
+		case ACE_TOTAL:
+			energy = (apolparm->gamma*sasa) + (apolparm->press*sav);
+			Vnm_print(1,"Total non-polar energy = %1.12E\n",energy);
+			break;
+		default:
+			Vnm_print(2,"energyAPOL: Error in energyAPOL. Unknown option.\n");
+			break;
 	}
 	
-	for (x=lower_corner[0]; x<=upper_corner[0]; x=x+spacs[0]) {
-		if ( VABS(x - lower_corner[0]) < VSMALL) {
-			wx = 0.5;
-		} else if ( VABS(x - upper_corner[0]) < VSMALL) {
-			wx = 0.5;
-		} else {
-			wx = 1.0;
-		}
-		vec[0] = x;
-		for (y=lower_corner[1]; y<=upper_corner[1]; y=y+spacs[1]) {
-			if ( VABS(y - lower_corner[1]) < VSMALL) {
-				wy = 0.5;
-			} else if ( VABS(y - upper_corner[1]) < VSMALL) {
-				wy = 0.5;
-			} else {
-				wy = 1.0;
-			}
-			vec[1] = y;
-			for (z=lower_corner[2]; z<=upper_corner[2]; z=z+spacs[2]) {
-				if ( VABS(z - lower_corner[2]) < VSMALL) {
-					wz = 0.5;
-				} else if ( VABS(z - upper_corner[2]) < VSMALL) {
-					wz = 0.5;
-				} else {
-					wz = 1.0;
-				}
-				vec[2] = z;
-				
-				w = wx*wy*wz;
-				
-				sav += (w*(1.0-Vacc_ivdwAcc(acc, vec, probe_radius)));
-				
-			} /* z loop */
-		} /* y loop */
-	} /* x loop */
+	return 1;
+}
 
-	w  = spacs[0]*spacs[1]*spacs[2];
-	sav *= w;
-
-	printf("Total Volume:\t%g A^3\n",sav);
-
-#if 0	
-	/* CALLING Vacc_atomdSAS and Vacc_atomdSAV */
-    double dSA[3], dSV[3], danorm, dvnorm;
+VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist){
+	
+	int i;
+	double radius; /* Probe radius */
+	double xF, yF, zF;	/* Individual forces */
+	double totalXF, totalYF, totalZF; /* Total forces on each component */
+	double press, gamma;
+	double dSASA[3], dSAV[3];
+	
+	Vatom *atom = VNULL;
+	
+	totalXF = 0.0;
+	totalYF = 0.0;
+	totalZF = 0.0;
+	
+	radius = apolparm->srad;
+	press = apolparm->press;
+	gamma = apolparm->gamma;
 	
 	for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
-		Vacc_atomdSAS(acc, apolparm->srad, atom, dSA);
-		danorm = VSQRT(dSA[0]*dSA[0]+dSA[1]*dSA[1]+dSA[2]*dSA[2]);
-		//Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
-		//	  i, dSA[0],dSA[1],dSA[2],danorm);
-	}
-    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        atom = Valist_getAtom(alist, i);
-		Vacc_atomdSAV(acc, apolparm->srad, atom, dSV);
-		dvnorm = VSQRT(dSV[0]*dSV[0]+dSV[1]*dSV[1]+dSV[2]*dSV[2]);
-		//Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
-		//		  i, dSV[0],dSV[1],dSV[2],dvnorm);
+		Vacc_atomdSASA(acc, radius, atom, dSASA);
+		Vacc_atomdSAV(acc, radius, atom, dSAV);
+		
+		xF = -((gamma*dSASA[0]) + (press*dSAV[0]));
+		yF = -((gamma*dSASA[1]) + (press*dSAV[1]));
+		zF = -((gamma*dSASA[2]) + (press*dSAV[2]));
+		
+		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
+				  i,xF,yF,zF);
+		
+		totalXF += xF;
+		totalYF += yF;
+		totalZF += zF;
     }
-#endif
+	
+	Vnm_print(1,"\nTotal Forces:\t%1.12E\t%1.12E\t%1.12E\n",
+			  totalXF,totalYF,totalZF);
+	
+	return 1;
 }
-
-
-
-
 
 

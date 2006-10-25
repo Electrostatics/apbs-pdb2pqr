@@ -1036,11 +1036,11 @@ VPUBLIC double Vgrid_integrate(Vgrid *thee) {
     sum = 0.0;
 	w = 1.0;
     for (k=0; k<nz; k++) {
-		if ((k==0) || (k==(nz-1)) w = w * 0.5;
+		if ((k==0) || (k==(nz-1))) w = w * 0.5;
         for (j=0; j<ny; j++) {
-			if ((j==0) || (j==(ny-1)) w = w * 0.5;
+			if ((j==0) || (j==(ny-1))) w = w * 0.5;
             for (i=0; i<nx; i++) {
-				if ((i==0) || (i==(nx-1)) w = w * 0.5;
+				if ((i==0) || (i==(nx-1))) w = w * 0.5;
                 sum = sum + w*(thee->data[IJK(i,j,k)]);
             }
         }

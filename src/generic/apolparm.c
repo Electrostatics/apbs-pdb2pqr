@@ -1,9 +1,9 @@
 /**
  *  @file    apolparm.c
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @brief   Class APOLparm methods
- *  @version $Id: apolparm.c 907 2006-07-27 20:36:20Z sobolevnrm $
+ *  @version $Id: apolparm.c 907 2006-07-27 20:36:20Z sdg0919 $
  *  @attention
  *  @verbatim
  *
@@ -102,15 +102,21 @@ VPUBLIC void APOLparm_copy(
 	int i;
 	
 	thee->parsed = source->parsed;
+	
 	for (i=0; i<3; i++) thee->dime[i] = source->dime[i];
 	thee->setdime = source->setdime;
+	
 	for (i=0; i<3; i++) thee->glen[i] = source->glen[i];
 	thee->setglen = source->setglen;
+	
 	thee->molid = source->molid;
 	thee->setmolid = source->setmolid;
 	
 	thee->bdens = source->bdens ;
 	thee->setbdens= source->setbdens ;
+	
+	thee->sdens = source->sdens ;
+	thee->setsdens= source->setsdens ;
 	
 	thee->press = source->press ;
 	thee->setpress = source->setpress ;
@@ -247,61 +253,13 @@ VPRIVATE int APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	
-    /* Parse old-style int arg */ 
-    if (sscanf(tok, "%d", &ti) == 1) {
-        thee->srfm = ti;
-        thee->setsrfm = 1;
-		
-        Vnm_print(2, "parseAPOL:  Warning -- parsed deprecated \"srfm %d\" \
-statement.\n", ti);
-        Vnm_print(2, "parseAPOL:  Please use \"srfm ");
-        switch (thee->srfm) {
-            case VSM_MOL:
-                Vnm_print(2, "mol");
-                break;
-            case VSM_MOLSMOOTH:
-                Vnm_print(2, "smol");
-                break;
-            case VSM_SPLINE:
-                Vnm_print(2, "spl2");
-                break;
-            case VSM_SPLINE3:
-                Vnm_print(2, "spl3");
-                break;				
-            case VSM_SPLINE4:
-                Vnm_print(2, "spl4");
-                break;
-            default:
-                Vnm_print(2, "UNKNOWN");
-                break;
-        }
-        Vnm_print(2, "\" instead.\n");
-        return 1;
-		
-		/* Parse newer text-based args */
-    } else if (Vstring_strcasecmp(tok, "mol") == 0) {
+    if (Vstring_strcasecmp(tok, "sacc") == 0) {
         thee->srfm = VSM_MOL;
         thee->setsrfm = 1;
         return 1;
-    } else if (Vstring_strcasecmp(tok, "smol") == 0) {
-        thee->srfm = VSM_MOLSMOOTH;
-        thee->setsrfm = 1;
-        return 1;
-    } else if (Vstring_strcasecmp(tok, "spl2") == 0) {
-        thee->srfm = VSM_SPLINE;
-        thee->setsrfm = 1;
-        return 1;
-    } else if (Vstring_strcasecmp(tok, "spl3") == 0) {
-        thee->srfm = VSM_SPLINE3;
-        thee->setsrfm = 1;
-        return 1;		
-	} else if (Vstring_strcasecmp(tok, "spl4") == 0) {
-        thee->srfm = VSM_SPLINE4;
-        thee->setsrfm = 1;
-        return 1;
     } else {
-        Vnm_print(2, "NOsh:  Unrecongnized keyword (%s) when parsing \
-srfm!\n", tok);
+        printf("parseAPOL: Unrecongnized keyword (%s) when parsing srfm!\n", tok);
+		printf("parseAPOL: Accepted values for srfm = sacc\n");
         return -1;
     }
 	
@@ -513,6 +471,26 @@ VERROR1:
 	return -1;
 }
 
+VPRIVATE int APOLparm_parseSDENS(APOLparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDENS \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->sdens = tf;
+    thee->setsdens = 1;
+    return 1;
+	
+VERROR1:
+        Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
+	return -1;
+}
+
+
 VPRIVATE int APOLparm_parsePRESS(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
@@ -556,6 +534,8 @@ VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
         return APOLparm_parseGLEN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "bdens") == 0) {
         return APOLparm_parseBDENS(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
+        return APOLparm_parseSDENS(thee, sock);
     }  else if (Vstring_strcasecmp(tok, "srfm") == 0) {
         return APOLparm_parseSRFM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "srad") == 0) {
