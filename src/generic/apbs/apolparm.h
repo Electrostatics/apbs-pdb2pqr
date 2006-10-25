@@ -112,7 +112,7 @@ typedef enum eAPOLparm_calcForce APOLparm_calcForce;
 
 /**
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @brief   Parameter structure for APOL-specific variables from input files
  */
 struct sAPOLparm {
@@ -131,6 +131,9 @@ struct sAPOLparm {
 	
 	double bdens; /**< Vacc sphere density */
     int setbdens; /**< Flag, @see bdens */
+	
+	double sdens; /**< Vacc sphere density */
+    int setsdens; /**< Flag, @see sdens */
 	
 	double press; /**< Solvent pressure */
 	int setpress; /**< Flag, @see press */
@@ -171,7 +174,7 @@ typedef struct sAPOLparm APOLparm;
 
 /** @brief   Construct APOLparm
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @param  type  APOL calculation type
  *  @returns Newly allocated and initialized Vpmgp object
  */
@@ -179,7 +182,7 @@ VEXTERNC APOLparm* APOLparm_ctor();
 
 /** @brief   FORTRAN stub to construct APOLparm
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @param   thee Pointer to allocated APOLparm object
  *  @param  type  APOL calculation type
  *  @returns 1 if successful, 0 otherwise
@@ -188,14 +191,14 @@ VEXTERNC int APOLparm_ctor2(APOLparm *thee);
 
 /** @brief   Object destructor
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @param   thee  Pointer to memory location of APOLparm object
  */
 VEXTERNC void APOLparm_dtor(APOLparm **thee);
 
 /** @brief   FORTRAN stub for object destructor
  *  @ingroup APOLparm
- *  @author  Nathan Baker
+ *  @author  David Gohara
  *  @param   thee  Pointer to APOLparm object
  */
 VEXTERNC void APOLparm_dtor2(APOLparm *thee);
@@ -203,7 +206,7 @@ VEXTERNC void APOLparm_dtor2(APOLparm *thee);
 /** 
  * @brief   Consistency check for parameter values stored in object
  * @ingroup APOLparm
- * @author  Nathan Baker
+ * @author  David Gohara
  * @param   thee   APOLparm object
  * @returns 1 if OK, 0 otherwise
  */
@@ -220,7 +223,7 @@ VEXTERNC void APOLparm_copy(APOLparm *thee, APOLparm *source);
 /** 
  * @brief   Parse an MG keyword from an input file
  * @ingroup MGparm
- * @author  Nathan Baker
+ * @author  David Gohara
  * @param   thee   MGparm object 
  * @param   tok    Token to parse
  * @param   sock   Stream for more tokens

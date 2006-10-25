@@ -527,7 +527,6 @@ VEXTERNC VaccSurf* Vacc_atomSASPoints(
 * @brief  Get the derivatve of solvent accessible volume
  * @ingroup  Vacc
  * @author  Jason Wagoner, Nathan Baker
- * @return  Pointer to VaccSurf object for this atom
  */	
 VEXTERNC void Vacc_atomdSAV(
 							Vacc *thee, /** Acessibility object */
@@ -539,14 +538,27 @@ VEXTERNC void Vacc_atomdSAV(
 /**
 * @brief  Get the derivatve of solvent accessible area
  * @ingroup  Vacc
- * @author  Jason Wagoner, Nathan Baker
- * @return  Pointer to VaccSurf object for this atom
+ * @author  Jason Wagoner, David Gohara, Nathan Baker
  */	
-VEXTERNC void Vacc_atomdSAS(
+VEXTERNC void Vacc_atomdSASA(
 							Vacc *thee, /** Acessibility object */
 							double radius, /** Probe radius (&Aring;) */
 							Vatom *atom, /** Atom of interest */
 							double *dSA
 							);
+
+/**
+* @brief  Return the total solvent accessible volume (SAV)
+ * @ingroup  Vacc
+ * @note  Alias for Vacc_SAV
+ * @author  David Gohara
+ * @return  Total solvent accessible volume (A^3)
+ */
+VEXTERNC double Vacc_totalSAV(
+							   Vacc *thee,  /** Accessibility object */
+							   Vclist *clist, /** Clist for acc object */
+							   double radius  /** Probe molecule radius (&Aring;) */
+							   );
+
 
 #endif    /* ifndef _VACC_H_ */

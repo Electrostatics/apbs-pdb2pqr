@@ -1168,8 +1168,26 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
 	
 }
 
+VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom) {
+	
+    VaccSurf *asurf;
+    int id;
+	
+    if (thee->surf == VNULL) Vacc_SASA(thee, radius);
+	
+    id = Vatom_getAtomID(atom);
+    asurf = thee->surf[id];
+	
+	VaccSurf_dtor2(asurf);
+	thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+	asurf = thee->surf[id];
+	
+    return asurf->area;
+	
+}
+
 /* ///////////////////////////////////////////////////////////////////////////
-   // Routine:  Vacc_atomdSAS
+   // Routine:  Vacc_atomdSASA
    //
    // Purpose:  Calculates the derivative of surface area with respect to atomic
    //           displacement using finite difference methods.
@@ -1178,19 +1196,18 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
    //           iatom   Index of the atom in thee->alist
    //
    // Author:   Jason Wagoner
+   //			David Gohara
    //           Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
    /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vacc_atomdSAS(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
+VPUBLIC void Vacc_atomdSASA(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
 	
-    int ipt, iatom;
-    double area = 0.0;
+    int i,iatom;
     double *temp_Pos, tRad, vec[3];
+	double dpos = 0.05;
     double tPos[3],axb,axt,ayb,ayt,azb,azt;
     VaccSurf *ref;
-    
 	
     /* Get the atom information */
-    
     ref = thee->refSphere;
     temp_Pos = Vatom_getPosition(atom);
     tRad = Vatom_getRadius(atom);
@@ -1200,81 +1217,106 @@ VPUBLIC void Vacc_atomdSAS(Vacc *thee, double srad, Vatom *atom, double *dSA) {
     dSA[1] = 0.0;
     dSA[2] = 0.0;
     
+	tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2];
+	
+	/* Shift by pos -/+ on x */
+	temp_Pos[0] -= dpos; 
+    axb = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[0] = tPos[0];
+	
+    temp_Pos[0] += dpos; 
+    axt = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[0] = tPos[0];
+	
+	/* Shift by pos -/+ on y */
+    temp_Pos[1] -= dpos; 
+    ayb = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[1] = tPos[1];
     
-    tPos[0] = temp_Pos[0]-0.05;
-    tPos[1] = temp_Pos[1];
-    tPos[2] = temp_Pos[2];
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    axb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+    temp_Pos[1] += dpos; 
+    ayt = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[1] = tPos[1];
 	
-    area = 0.0;
-    tPos[0] = temp_Pos[0]+0.05;
-    tPos[1] = temp_Pos[1];
-    tPos[2] = temp_Pos[2];
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    axt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	/* Shift by pos -/+ on z */
+    temp_Pos[2] -= dpos; 
+    azb = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[2] = tPos[2];
+    
+    temp_Pos[2] += dpos; 
+    azt = Vacc_atomSASAPos(thee, srad, atom);
+	temp_Pos[2] = tPos[2];
+    
+	/* Calculate the final value */
+    dSA[0] = -(axt-axb)/(2.0 * dpos);
+    dSA[1] = -(ayt-ayb)/(2.0 * dpos);
+    dSA[2] = -(azt-azb)/(2.0 * dpos);
+}
+
+VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 	
-    area = 0.0;
-    tPos[0] = temp_Pos[0];
-    tPos[1] = temp_Pos[1]-0.05;
-    tPos[2] = temp_Pos[2];
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    ayb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	int i;
+	int npts[3];
 	
-    area = 0.0;
-    tPos[0] = temp_Pos[0];
-    tPos[1] = temp_Pos[1]+0.05;
-    tPos[2] = temp_Pos[2];
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    ayt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	double spacs[3], vec[3];
+    double w, wx, wy, wz, len, fn, x, y, z, vol;
+	double vol_density,sav;
+    double *lower_corner, *upper_corner;
 	
-    area = 0.0;
-    tPos[0] = temp_Pos[0];
-    tPos[1] = temp_Pos[1];
-    tPos[2] = temp_Pos[2]-0.05;
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    azb = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	sav = 0.0;
+	vol = 1.0;
+	vol_density = 2.0;
 	
-    area = 0.0;
-    tPos[0] = temp_Pos[0];
-    tPos[1] = temp_Pos[1];
-    tPos[2] = temp_Pos[2]+0.05;
-    for (ipt=0; ipt<ref->npts; ipt++) {
-        vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
-        vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
-        vec[2] = (tRad+srad)*ref->zpts[ipt] + tPos[2];
-        if (ivdwAccExclus(thee, vec, srad, iatom)) area += 1.0;
-    }
-    azt = area/((double)(ref->npts))*4.0*VPI*(tRad+srad)*(tRad+srad);
+	lower_corner = clist->lower_corner;
+	upper_corner = clist->upper_corner;
 	
-    dSA[0] = -(axt-axb)/0.1;
-    dSA[1] = -(ayt-ayb)/0.1;
-    dSA[2] = -(azt-azb)/0.1;
+	for (i=0; i<3; i++) {
+		len = upper_corner[i] - lower_corner[i];
+		vol *= len;
+		fn = len*vol_density + 1;
+		npts[i] = (int)ceil(fn);
+		spacs[i] = len/((double)(npts[i])-1.0);
+	}
 	
-	
+	for (x=lower_corner[0]; x<=upper_corner[0]; x=x+spacs[0]) {
+		if ( VABS(x - lower_corner[0]) < VSMALL) {
+			wx = 0.5;
+		} else if ( VABS(x - upper_corner[0]) < VSMALL) {
+			wx = 0.5;
+		} else {
+			wx = 1.0;
+		}
+		vec[0] = x;
+		for (y=lower_corner[1]; y<=upper_corner[1]; y=y+spacs[1]) {
+			if ( VABS(y - lower_corner[1]) < VSMALL) {
+				wy = 0.5;
+			} else if ( VABS(y - upper_corner[1]) < VSMALL) {
+				wy = 0.5;
+			} else {
+				wy = 1.0;
+			}
+			vec[1] = y;
+			for (z=lower_corner[2]; z<=upper_corner[2]; z=z+spacs[2]) {
+				if ( VABS(z - lower_corner[2]) < VSMALL) {
+					wz = 0.5;
+				} else if ( VABS(z - upper_corner[2]) < VSMALL) {
+					wz = 0.5;
+				} else {
+					wz = 1.0;
+				}
+				vec[2] = z;
+				
+				w = wx*wy*wz;
+				
+				sav += (w*(1.0-Vacc_ivdwAcc(thee, vec, radius)));
+				
+			} /* z loop */
+		} /* y loop */
+	} /* x loop */
+
+	w  = spacs[0]*spacs[1]*spacs[2];
+	sav *= w;
+
+	return sav;
 }
