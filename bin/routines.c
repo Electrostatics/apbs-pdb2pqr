@@ -2960,30 +2960,84 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
 	Vacc *acc = VNULL;
 	Vatom *atom = VNULL;
 	
-	int nhash[3] = {60, 60, 60};
+	int inhash[3];
+	double nhash[3];
+	double sradPad, x, y, z;
+	double atomRadius;
 	
+	double dist, charge, xmin, xmax, ymin, ymax, zmin, zmax;
+	double disp[3], center[3];
+	double soluteXlen, soluteYlen, soluteZlen;
+	
+	/* Determine solute length and charge*/
+    atom = Valist_getAtom(alist, 0);
+    xmin = Vatom_getPosition(atom)[0];
+    xmax = Vatom_getPosition(atom)[0];
+    ymin = Vatom_getPosition(atom)[1];
+    ymax = Vatom_getPosition(atom)[1];
+    zmin = Vatom_getPosition(atom)[2];
+    zmax = Vatom_getPosition(atom)[2];
+    charge = 0;
+    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+        atom = Valist_getAtom(alist, i);
+        atomRadius = Vatom_getRadius(atom);
+        x = Vatom_getPosition(atom)[0];
+        y = Vatom_getPosition(atom)[1];
+        z = Vatom_getPosition(atom)[2];
+        if ((x+atomRadius) > xmax) xmax = x + atomRadius;
+        if ((x-atomRadius) < xmin) xmin = x - atomRadius;
+        if ((y+atomRadius) > ymax) ymax = y + atomRadius;
+        if ((y-atomRadius) < ymin) ymin = y - atomRadius;
+        if ((z+atomRadius) > zmax) zmax = z + atomRadius;
+        if ((z-atomRadius) < zmin) zmin = z - atomRadius;
+        disp[0] = (x - center[0]);
+        disp[1] = (y - center[1]);
+        disp[2] = (z - center[2]);
+        dist = (disp[0]*disp[0]) + (disp[1]*disp[1]) + (disp[2]*disp[2]); 
+        dist = VSQRT(dist) + atomRadius;
+        charge += Vatom_getCharge(Valist_getAtom(alist, i));
+    }
+    soluteXlen = xmax - xmin;
+    soluteYlen = ymax - ymin;
+    soluteZlen = zmax - zmin;
+	
+	printf("Solute Length (x,y,z): %lf %lf %lf\n",soluteXlen,soluteYlen,soluteZlen);
+	
+	/* Set up the hash table for the cell list */
 	Vnm_print(2, "APOL: Setting up hash table and accessibility object...\n");
-	clist = Vclist_ctor(alist, apolparm->srad, nhash, CLIST_AUTO_DOMAIN, 
+	nhash[0] = soluteXlen/0.5;
+	nhash[1] = soluteYlen/0.5;
+	nhash[2] = soluteZlen/0.5;
+    for (i=0; i<3; i++) inhash[i] = (int)(nhash[i]);
+	
+	for (i=0;i<3;i++){ 
+        if (inhash[i] < 3) inhash[i] = 3; 
+        if (inhash[i] > MAX_HASH_DIM) inhash[i] = MAX_HASH_DIM;
+	}
+	
+	/* Pad the radius by 2x the maximum displacement value */
+	sradPad = apolparm->srad + (2*apolparm->dpos);
+	clist = Vclist_ctor(alist, sradPad , inhash, CLIST_AUTO_DOMAIN, 
 									VNULL, VNULL);
 	acc = Vacc_ctor(alist, clist, apolparm->sdens);
 	
 	/* Get the SAV and SAS */
 	double sasa, atom_sasa, radius;
-	double sav, center[3];
+	double sav;
 	
 	sasa = 0.0;
 	sav = 0.0;
 	
 	radius = apolparm->srad;
 	
-	/* Solvent accessible sureface area */
+	/* Solvent accessible surface area */
 	sasa = Vacc_totalSASA(acc, radius);
 	
 	/* Inflated van der Waals accessibility */
 	sav = Vacc_totalSAV(acc,clist,radius);
 	
 	/* Calculate Energy and Forces */
-	if(apolparm->calcforce) forceAPOL(acc, apolparm, alist);
+	if(apolparm->calcforce) forceAPOL(acc, apolparm, alist, clist);
 	if(apolparm->calcenergy) energyAPOL(apolparm, sasa, sav);
 
 	return 1;
@@ -3014,13 +3068,16 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 	return 1;
 }
 
-VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist){
+VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *clist){
 	
 	int i;
 	double radius; /* Probe radius */
 	double xF, yF, zF;	/* Individual forces */
 	double totalXF, totalYF, totalZF; /* Total forces on each component */
-	double press, gamma;
+	
+	double ttotalXF, ttotalYF, ttotalZF;
+	
+	double press, gamma, offset;
 	double dSASA[3], dSAV[3];
 	
 	Vatom *atom = VNULL;
@@ -3029,13 +3086,18 @@ VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist){
 	totalYF = 0.0;
 	totalZF = 0.0;
 	
+	ttotalXF = 0.0;
+	ttotalYF = 0.0;
+	ttotalZF = 0.0;
+	
 	radius = apolparm->srad;
 	press = apolparm->press;
 	gamma = apolparm->gamma;
-	
+	offset = apolparm->dpos;
+
 	for (i=0; i<Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
-		Vacc_atomdSASA(acc, radius, atom, dSASA);
+		Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
 		Vacc_atomdSAV(acc, radius, atom, dSAV);
 		
 		xF = -((gamma*dSASA[0]) + (press*dSAV[0]));
@@ -3048,10 +3110,38 @@ VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist){
 		totalXF += xF;
 		totalYF += yF;
 		totalZF += zF;
+		
+#if 0
+		Vacc_totalAtomdSASA(acc,offset,radius,atom,dSASA);
+		double txF = -((gamma*dSASA[0]) + (press*dSAV[0]));
+		double tyF = -((gamma*dSASA[1]) + (press*dSAV[1]));
+		double tzF = -((gamma*dSASA[2]) + (press*dSAV[2]));
+		
+		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
+				  i,txF,tyF,tzF);
+#endif
+		
+#if 1
+		Vacc_totalAtomdSAV(acc,offset,radius,atom,dSAV,clist);
+		double txF = -((gamma*dSASA[0]) + (press*dSAV[0]));
+		double tyF = -((gamma*dSASA[1]) + (press*dSAV[1]));
+		double tzF = -((gamma*dSASA[2]) + (press*dSAV[2]));
+		
+		ttotalXF += txF;
+		ttotalYF += tyF;
+		ttotalZF += tzF;
+		
+		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
+				  i,txF,tyF,tzF);
+#endif
     }
 	
 	Vnm_print(1,"\nTotal Forces:\t%1.12E\t%1.12E\t%1.12E\n",
 			  totalXF,totalYF,totalZF);
+#if 0	
+	Vnm_print(1,"\nTotal Forces:\t%1.12E\t%1.12E\t%1.12E\n",
+			  ttotalXF,ttotalYF,ttotalZF);
+#endif
 	
 	return 1;
 }

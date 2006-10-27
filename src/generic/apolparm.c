@@ -118,6 +118,9 @@ VPUBLIC void APOLparm_copy(
 	thee->sdens = source->sdens ;
 	thee->setsdens= source->setsdens ;
 	
+	thee->dpos = source->dpos ;
+	thee->setdpos= source->setdpos ;
+	
 	thee->press = source->press ;
 	thee->setpress = source->setpress ;
 	
@@ -490,6 +493,34 @@ VERROR1:
 	return -1;
 }
 
+VPRIVATE int APOLparm_parseDPOS(APOLparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDENS \
+keyword!\n", tok);
+        return -1;
+    }
+    thee->dpos = tf;
+    thee->setdpos = 1;
+	
+	if(thee->dpos < 0.001){
+		Vnm_print(1,"\nWARNING WARNING WARNING WARNING WARNING\n");
+		Vnm_print(1,"NOsh: dpos is set to a very small value.\n");
+		Vnm_print(1,"NOsh: If you are not using a PQR file, you can \
+safely ignore this message.\n");
+		Vnm_print(1,"NOsh: Otherwise please choose a value greater than \
+or equal to 0.001.\n\n");
+	}
+	
+    return 1;
+	
+VERROR1:
+        Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
+	return -1;
+}
 
 VPRIVATE int APOLparm_parsePRESS(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
@@ -536,6 +567,8 @@ VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
         return APOLparm_parseBDENS(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
         return APOLparm_parseSDENS(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "dpos") == 0) {
+        return APOLparm_parseDPOS(thee, sock);
     }  else if (Vstring_strcasecmp(tok, "srfm") == 0) {
         return APOLparm_parseSRFM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "srad") == 0) {

@@ -129,7 +129,10 @@ VPRIVATE int ivdwAccExclus(
             apos = Vatom_getPosition(atom);
             dist2 = VSQR(center[0]-apos[0]) + VSQR(center[1]-apos[1]) 
                 + VSQR(center[2]-apos[2]); 
-            if (dist2 < VSQR(Vatom_getRadius(atom)+radius)) return 0.0;
+            if (dist2 < VSQR(Vatom_getRadius(atom)+radius)){
+				//printf("Dist2: %f %f\n",dist2,VSQR(Vatom_getRadius(atom)+radius));
+				return 0.0;
+			}
         }
     }
 
@@ -1139,15 +1142,15 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
     ref = thee->refSphere;
     iatom = Vatom_getAtomID(atom);
 	
-    
     dSA[0] = 0.0;
     dSA[1] = 0.0;
     dSA[2] = 0.0;
-	
-	
     
     tPos = Vatom_getPosition(atom);
     tRad = Vatom_getRadius(atom);
+	
+	if(tRad == 0.0) return;
+	
     double area = 4.0*VPI*(tRad+srad)*(tRad+srad)/((double)(ref->npts));
     for (ipt=0; ipt<ref->npts; ipt++) {
         vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
@@ -1168,12 +1171,48 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
 	
 }
 
-VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom) {
+/* Note: This is purely test code to make certain that the dSASA code is
+		 behaving properly. This function should NEVER be called by anyone
+		 other than an APBS developer at Wash U.
+*/
+VPRIVATE double Vacc_SASAPos(Vacc *thee, double radius) { 
+	
+    int i, natom;
+    double area, *apos;
+    Vatom *atom;
+    VaccSurf *asurf;
+	
+    natom = Valist_getNumberAtoms(thee->alist);
+	
+    /* Calculate the area */
+    area = 0.0;
+    for (i=0; i<natom; i++) {
+        atom = Valist_getAtom(thee->alist, i);
+        asurf = thee->surf[i];
+        
+		VaccSurf_dtor2(asurf);
+		thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+		asurf = thee->surf[i];
+        area += (asurf->area);
+    }
+	
+    return area;
+	
+}
+
+VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode) {
 	
     VaccSurf *asurf;
     int id;
+	static int warned = 0;
 	
-    if (thee->surf == VNULL) Vacc_SASA(thee, radius);
+    if ((thee->surf == VNULL) || (mode == 1)){
+		if(!warned){
+			printf("WARNING: Recalculating entire surface!!!!\n");
+			warned = 1;
+		}
+		Vacc_SASAPos(thee, radius);
+	}
 	
     id = Vatom_getAtomID(atom);
     asurf = thee->surf[id];
@@ -1199,12 +1238,12 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom) {
    //			David Gohara
    //           Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
    /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vacc_atomdSASA(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
+VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA) { 
 	
     int i,iatom;
     double *temp_Pos, tRad, vec[3];
-	double dpos = 0.05;
-    double tPos[3],axb,axt,ayb,ayt,azb,azt;
+    double tPos[3];
+	double axb1,axt1,ayb1,ayt1,azb1,azt1;
     VaccSurf *ref;
 	
     /* Get the atom information */
@@ -1223,35 +1262,153 @@ VPUBLIC void Vacc_atomdSASA(Vacc *thee, double srad, Vatom *atom, double *dSA) {
 	
 	/* Shift by pos -/+ on x */
 	temp_Pos[0] -= dpos; 
-    axb = Vacc_atomSASAPos(thee, srad, atom);
+    axb1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[0] = tPos[0];
 	
     temp_Pos[0] += dpos; 
-    axt = Vacc_atomSASAPos(thee, srad, atom);
+    axt1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[0] = tPos[0];
 	
 	/* Shift by pos -/+ on y */
     temp_Pos[1] -= dpos; 
-    ayb = Vacc_atomSASAPos(thee, srad, atom);
+    ayb1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[1] = tPos[1];
     
     temp_Pos[1] += dpos; 
-    ayt = Vacc_atomSASAPos(thee, srad, atom);
+    ayt1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[1] = tPos[1];
 	
 	/* Shift by pos -/+ on z */
     temp_Pos[2] -= dpos; 
-    azb = Vacc_atomSASAPos(thee, srad, atom);
+    azb1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[2] = tPos[2];
     
     temp_Pos[2] += dpos; 
-    azt = Vacc_atomSASAPos(thee, srad, atom);
+    azt1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[2] = tPos[2];
     
 	/* Calculate the final value */
-    dSA[0] = -(axt-axb)/(2.0 * dpos);
-    dSA[1] = -(ayt-ayb)/(2.0 * dpos);
-    dSA[2] = -(azt-azb)/(2.0 * dpos);
+    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
+    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
+}
+
+/* Note: This is purely test code to make certain that the dSASA code is
+		 behaving properly. This function should NEVER be called by anyone
+		 other than an APBS developer at Wash U.
+*/
+VPUBLIC void Vacc_totalAtomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA) { 
+	
+    int i,iatom;
+    double *temp_Pos, tRad, vec[3];
+    double tPos[3];
+	double axb1,axt1,ayb1,ayt1,azb1,azt1;
+    VaccSurf *ref;
+	
+    /* Get the atom information */
+    ref = thee->refSphere;
+    temp_Pos = Vatom_getPosition(atom);
+    tRad = Vatom_getRadius(atom);
+    iatom = Vatom_getAtomID(atom);
+    
+    dSA[0] = 0.0;
+    dSA[1] = 0.0;
+    dSA[2] = 0.0;
+    
+	tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2];
+	
+	/* Shift by pos -/+ on x */
+	temp_Pos[0] -= dpos; 
+    axb1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[0] = tPos[0];
+	
+    temp_Pos[0] += dpos; 
+    axt1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[0] = tPos[0];
+	
+	/* Shift by pos -/+ on y */
+    temp_Pos[1] -= dpos; 
+    ayb1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[1] = tPos[1];
+    
+    temp_Pos[1] += dpos; 
+    ayt1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[1] = tPos[1];
+	
+	/* Shift by pos -/+ on z */
+    temp_Pos[2] -= dpos; 
+    azb1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[2] = tPos[2];
+    
+    temp_Pos[2] += dpos; 
+    azt1 = Vacc_atomSASAPos(thee, srad, atom, 1);
+	temp_Pos[2] = tPos[2];
+    
+	/* Calculate the final value */
+    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
+    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
+}
+
+/* Note: This is purely test code to make certain that the dSASA code is
+		 behaving properly. This function should NEVER be called by anyone
+		 other than an APBS developer at Wash U.
+*/
+VPUBLIC void Vacc_totalAtomdSAV(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA, Vclist *clist) { 
+	
+    int i,iatom;
+    double *temp_Pos, tRad, vec[3];
+    double tPos[3];
+	double axb1,axt1,ayb1,ayt1,azb1,azt1;
+    VaccSurf *ref;
+	
+    /* Get the atom information */
+    ref = thee->refSphere;
+    temp_Pos = Vatom_getPosition(atom);
+    tRad = Vatom_getRadius(atom);
+    iatom = Vatom_getAtomID(atom);
+    
+    dSA[0] = 0.0;
+    dSA[1] = 0.0;
+    dSA[2] = 0.0;
+    
+	tPos[0] = temp_Pos[0];
+    tPos[1] = temp_Pos[1];
+    tPos[2] = temp_Pos[2];
+	
+	/* Shift by pos -/+ on x */
+	temp_Pos[0] -= dpos; 
+    axb1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[0] = tPos[0];
+	
+    temp_Pos[0] += dpos; 
+    axt1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[0] = tPos[0];
+	
+	/* Shift by pos -/+ on y */
+    temp_Pos[1] -= dpos; 
+    ayb1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[1] = tPos[1];
+    
+    temp_Pos[1] += dpos; 
+    ayt1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[1] = tPos[1];
+	
+	/* Shift by pos -/+ on z */
+    temp_Pos[2] -= dpos; 
+    azb1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[2] = tPos[2];
+    
+    temp_Pos[2] += dpos; 
+    azt1 = Vacc_totalSAV(thee,clist,srad);
+	temp_Pos[2] = tPos[2];
+    
+	/* Calculate the final value */
+    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
+    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
 }
 
 VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
