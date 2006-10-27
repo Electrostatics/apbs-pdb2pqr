@@ -542,10 +542,24 @@ VEXTERNC void Vacc_atomdSAV(
  */	
 VEXTERNC void Vacc_atomdSASA(
 							Vacc *thee, /** Acessibility object */
+							double dpos, /** Atom position offset */
 							double radius, /** Probe radius (&Aring;) */
 							Vatom *atom, /** Atom of interest */
 							double *dSA
 							);
+
+/**
+* @brief  Testing purposes only
+ * @ingroup  Vacc
+ * @author  David Gohara, Nathan Baker
+ */	
+VEXTERNC void Vacc_totalAtomdSASA(
+							 Vacc *thee, /** Acessibility object */
+							 double dpos, /** Atom position offset */
+							 double radius, /** Probe radius (&Aring;) */
+							 Vatom *atom, /** Atom of interest */
+							 double *dSA
+							 );
 
 /**
 * @brief  Return the total solvent accessible volume (SAV)

@@ -135,6 +135,9 @@ struct sAPOLparm {
 	double sdens; /**< Vacc sphere density */
     int setsdens; /**< Flag, @see sdens */
 	
+	double dpos; /**< Atom position offset */
+    int setdpos; /**< Flag, @see dpos */
+	
 	double press; /**< Solvent pressure */
 	int setpress; /**< Flag, @see press */
 	
