@@ -390,8 +390,19 @@ VEXTERNC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 
+/**
+* @brief  Access net local energy
+ * @ingroup  Frontend
+ * @author  Justin Xiang
+ * @param  com  Communications object
+ * @param  nosh  Parameters from input file
+ * @param  totEnergy  Array of energies from different calculations
+ * @param  iprint  Index of energy statement to print
+ * @return  Net local energy */
+VEXTERNC double returnEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], int iprint);
+
 /** 
- * @brief  Combine and pretty-print energy data
+* @brief  Combine and pretty-print energy data
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  com  Communications object

@@ -2055,6 +2055,32 @@ uniform meshes yet!\n");
 	return 1;
 }
 
+VPUBLIC double returnEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], int iprint){
+	
+	int iarg, calcid;
+	double ltenergy, scalar;
+	
+	calcid = nosh->elec2calc[nosh->printcalc[iprint][0]];
+	if (nosh->calc[calcid]->pbeparm->calcenergy != PCE_NO) {
+		ltenergy = Vunit_kb * (1e-3) * Vunit_Na * 
+		nosh->calc[calcid]->pbeparm->temp * totEnergy[calcid];
+	} else {
+		Vnm_tprint( 2, " No energy available in Calculation %d\n", calcid+1);
+		return 0.0;
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++){
+		calcid = nosh->elec2calc[nosh->printcalc[iprint][iarg]];
+		/* Add or substract */
+		if (nosh->printop[iprint][iarg-1] == 0) scalar = 1.0;
+		else if (nosh->printop[iprint][iarg-1] == 1) scalar = -1.0;
+		/* Accumulate */
+		ltenergy += (scalar * Vunit_kb * (1e-3) * Vunit_Na *
+					 nosh->calc[calcid]->pbeparm->temp * totEnergy[calcid]);
+	}
+	
+	return ltenergy;
+}
+
 VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], 
 						int iprint) {
 	
