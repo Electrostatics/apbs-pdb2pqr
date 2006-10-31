@@ -171,7 +171,7 @@ def main():
 
     # Setup the calculations
     
-    if NOsh_setupCalc(nosh, alist) != 1:
+    if NOsh_setupElecCalc(nosh, alist) != 1:
         stderr.write("main: Error while setting up calculations. \n")
         raise APBSError, "Error while setting up calculations!"
 

@@ -334,7 +334,7 @@ def runAPBS(PQR, INPUT):
     myAlist = make_Valist(alist,0)
     Valist_load(myAlist, len(atoms), x,y,z,chg,rad)  
 
-    if not NOsh_setupCalc(nosh, alist):
+    if not NOsh_setupElecCalc(nosh, alist):
         stderr.write("main: Error setting up calculation.\n")
         raise APBSError, "Error setting up calculations!"
 
