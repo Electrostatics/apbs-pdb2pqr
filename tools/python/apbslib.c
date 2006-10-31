@@ -1880,7 +1880,7 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
 }
 
 int loadMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
-int NOsh_setupCalc(NOsh *,Valist *[NOSH_MAXMOL]);
+int NOsh_setupElecCalc(NOsh *,Valist *[NOSH_MAXMOL]);
 void killMolecules(NOsh *,Valist *[NOSH_MAXMOL]);
 int loadDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
 void killDielMaps(NOsh *,Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL],Vgrid *[NOSH_MAXMOL]);
@@ -3679,7 +3679,7 @@ static PyObject *_wrap_loadMolecules(PyObject *self, PyObject *args) {
 }
 
 
-static PyObject *_wrap_NOsh_setupCalc(PyObject *self, PyObject *args) {
+static PyObject *_wrap_NOsh_setupElecCalc(PyObject *self, PyObject *args) {
     PyObject *resultobj;
     NOsh *arg1 = (NOsh *) 0 ;
     Valist **arg2 ;
@@ -3687,12 +3687,12 @@ static PyObject *_wrap_NOsh_setupCalc(PyObject *self, PyObject *args) {
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     
-    if(!PyArg_ParseTuple(args,(char *)"OO:NOsh_setupCalc",&obj0,&obj1)) goto fail;
+    if(!PyArg_ParseTuple(args,(char *)"OO:NOsh_setupElecCalc",&obj0,&obj1)) goto fail;
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_NOsh, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     SWIG_Python_ConvertPtr(obj1, (void **)&arg2, SWIGTYPE_p_p_Valist, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(2)) SWIG_fail;
-    result = (int)NOsh_setupCalc(arg1,arg2);
+    result = (int)NOsh_setupElecCalc(arg1,arg2);
     
     {
         resultobj = SWIG_From_int((int)(result)); 
@@ -4571,7 +4571,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"getEnergies", _wrap_getEnergies, METH_VARARGS, NULL},
 	 { (char *)"getForces", _wrap_getForces, METH_VARARGS, NULL},
 	 { (char *)"loadMolecules", _wrap_loadMolecules, METH_VARARGS, NULL},
-	 { (char *)"NOsh_setupCalc", _wrap_NOsh_setupCalc, METH_VARARGS, NULL},
+	 { (char *)"NOsh_setupElecCalc", _wrap_NOsh_setupElecCalc, METH_VARARGS, NULL},
 	 { (char *)"killMolecules", _wrap_killMolecules, METH_VARARGS, NULL},
 	 { (char *)"loadDielMaps", _wrap_loadDielMaps, METH_VARARGS, NULL},
 	 { (char *)"killDielMaps", _wrap_killDielMaps, METH_VARARGS, NULL},
