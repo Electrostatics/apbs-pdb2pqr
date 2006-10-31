@@ -114,6 +114,13 @@ AC_SUBST(AUTOCONF)
 AC_SUBST(AUTOMAKE)
 AC_SUBST(AUTOHEADER)
 
+dnl # -------------------------------------------------------------------------
+dnl # Set the prefix value explicitly if it isn't set
+dnl # -------------------------------------------------------------------------
+if test [ "${prefix}" = "NONE" ] ; then
+	prefix=$HOME
+fi
+
 dnl ##########################################################################
 dnl 2. checks for programs
 dnl ##########################################################################
