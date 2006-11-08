@@ -41,6 +41,8 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
      Vpmg_dbnpForce for use with the new spline based (spl4) method. 
    * Added ion-pmf to the make test suite.
    * Updated splash screen to include new PMG acknowledgment
+   * Added runGB.py and readGB.py to the Python utilities, which calculate
+     solvation energy based on APBS parameterized Generalized Born model.
 - BUG FIXES
    * Cleanup of documentation, new Gemstone example
    * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
