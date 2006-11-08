@@ -13,15 +13,38 @@ Header files:
 #include "maloc/maloc.h"
 #include "apbscfg.h" 
 #include "routines.h"
+#include "apbs/valist.h"
+#include "apbs/vatom.h"
 %} 
 
 /* 
 Structures and functions to be wrapped:
 --------------------------------------
 */
-   
-#define APBS_SWIG 1
+
 #define VEXTERNC extern  
+
+// Functions and Constructors from valist.h:
+
+typedef struct {
+	Valist();
+	~Valist();
+	int number;
+} Valist;
+extern Vatom* Valist_getAtomList(Valist *thee);
+extern Vatom* Valist_getAtom(Valist *thee, int position);
+
+// Functions and constructors from vatom.h:
+
+typedef struct {
+	Vatom();
+	~Vatom();
+	int id;
+} Vatom;
+extern double* Vatom_getPosition(Vatom *thee);
+extern void Vatom_setCharge(Vatom *thee, double charge);
+extern double Vatom_getCharge(Vatom *thee);
+extern double Vatom_getRadius(Vatom *thee);
 
 // Functions and Constructors from mgparm.h:
   
@@ -30,6 +53,9 @@ typedef struct {
 	~MGparm();
 	MGparm_CalcType type;                                           
 } MGparm; 
+extern void MGparm_setCenterX(MGparm *thee, double x);
+extern void MGparm_setCenterY(MGparm *thee, double y);
+extern void MGparm_setCenterZ(MGparm *thee, double z);
       
 // Functions and Constructors from pbeparm.h:
   
@@ -37,6 +63,9 @@ typedef struct {
 	PBEparm();
 	~PBEparm();
 	double temp;
+	double pdie;
+	double sdie;
+	int molid;
 } PBEparm;
 
 // Functions and Constructor from vcom.h:
@@ -74,6 +103,8 @@ typedef struct {
 // Functions and Constructors from nosh.h:
 
 typedef struct { 
+	NOsh_calc();
+	~NOsh_calc();
 	MGparm *mgparm;         
 	FEMparm *femparm;       
 	PBEparm *pbeparm;       
@@ -85,9 +116,13 @@ typedef struct {
     ~NOsh();
 	int ncalc;
 	int nprint;             
-    int nelec;
+    	int nelec;
+	int nmol;
     NOsh_PrintType printwhat[NOSH_MAXPRINT];
 } NOsh;
+
+enum MGparm_CalcType {
+};
 
 enum NOsh_PrintType {
     NPT_ENERGY=0, NPT_FORCE=1
@@ -124,6 +159,10 @@ Valist **new_valist(int maxargs) {
    return (Valist **) malloc(maxargs*sizeof(Valist *));
 }
 
+Valist *get_Valist(Valist **args, int n){
+   return (Valist *)args[n];
+}
+
 Vgrid **new_gridlist(int maxargs) {
    return (Vgrid **) malloc(maxargs*sizeof(Vgrid *));
 }
@@ -145,7 +184,7 @@ Vpbe **new_pbelist(int maxargs) {
 }
 
 Vpbe *get_Vpbe(Vpbe **args, int n) { 
-    return (Vpbe *)args[n];
+   return (Vpbe *)args[n];
 }
 
 AtomForce **new_atomforcelist(int maxargs) {
@@ -296,6 +335,8 @@ void Valist_load(Valist *thee, int size, PyObject *x, PyObject *y, PyObject *z, 
 
 }
 
+extern int NOsh_setupElecCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+
 int wrap_forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
  Vpmg *pmg, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
  int forcearray[NOSH_MAXCALC], int calcid)
@@ -307,6 +348,20 @@ int wrap_forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
     forcearray[calcid] = *nforce;
 
     return *nforce;
+}
+
+PyObject *getAtomPosition(Vatom *atom){
+    double *position;
+    int i;
+    PyObject *values;
+    
+    values = PyList_New(3);
+    for (i=0; i<3; i++){
+	position = Vatom_getPosition(atom);
+	PyList_SetItem(values, i, PyFloat_FromDouble(position[i]));
+    }
+    
+    return values;
 }
 
 PyObject *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
@@ -405,7 +460,6 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
 %}
 
 extern int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
-extern int NOsh_setupElecCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 extern void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 extern int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
@@ -441,7 +495,6 @@ extern void startVio();
 extern double Vacc_molAcc(Vacc *thee, double center[3], double radius);
 extern double Vacc_vdwAcc(Vacc *thee, double center[3]);
 
-
 // Typemaps and functions for easy Python Access
 
 %include typemaps.i
@@ -475,4 +528,4 @@ extern int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
 
 extern int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     int i);
-
+extern double returnEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], int i);
