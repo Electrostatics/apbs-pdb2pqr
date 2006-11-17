@@ -590,6 +590,7 @@ if test -n "${with_python}"; then
        x86_64*)
           PY_CC=${F77};;
        i*86)
+          PY_CC=${F77}
           if test "${CC}" = "icc"; then
              AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
              if test -n "${ifcore_lib}"; then
