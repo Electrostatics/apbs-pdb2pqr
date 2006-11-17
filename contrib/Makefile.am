@@ -9,6 +9,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = blas
+always_built_SUBDIRS = blas maloc
 
 SUBDIRS = $(always_built_SUBDIRS) .
