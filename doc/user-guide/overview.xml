@@ -1,336 +1,370 @@
 <chapter id="contents-sect"> <title>Overview</title> 
-  <para>
-  This chapter gives an overview of the binaries, tools, etc. distributed as
-  part of the APBS software package.  It is organized by directory; later
-  chapters provide a more in-depth description on tools specific to particular
-  applications
-  </para>
+	<para>
+		This chapter gives an overview of the binaries, tools, etc. distributed as
+		part of the APBS software package.  It is organized by directory; later
+		chapters provide a more in-depth description on tools specific to particular
+		applications
+	</para>
 
-  &invocation;  
+	&invocation;  
 
-  <sect1> <title>Other tools</title>
-    <para>
-    APBS contains a number of tools to facilitate the preparation of APBS runs
-    and analysis of the results.  
-    <note>
-      <para>NOTE:  In addition to the tools provided with APBS, there are a
-      number of other programs which interoperate with our code.  Please see
-      the <link linkend="other-programs">Other Programs</link> section of this
-      manual for more information.  </para>
-    </note>
-    </para>
-    
-    <sect2 id="parameterization"> <title>Parameterization</title>
-      <para> Unfortunately, the majority of problems encountered during
-        electrostatics calculations arise in  process of taking a structure
-        from the Protein Data Bank and transforming into a file that can be
-        used by the APBS software.  The PDB2PQR service was orginally developed
-        in conjunction with Jens Nielsen and Andy McCammon to address these
-        issues.  The service has since evolved and has been completely
-        rewritten by Todd Dolinsky and Nathan Baker.  PDB2PQR is able to:
-        <itemizedlist>
-          <listitem>
-            <para>Fill in missing atoms in the PDB (within reason)</para>
-          </listitem>
-          <listitem>
-            <para>Add hydrogens to the structure to optimize the
-                  hydrogen-bonding network.</para>
-          </listitem>
-          <listitem>
-            <para>Calculate side-chain pKas</para>
-          </listitem>
-          <listitem>
-            <para>Assign charges and radii according to one of the
-                  following force fields:  CHARMM23, AMBER02, or PARSE</para>
-            </listitem>
-          <listitem>
-            <para>Return the results in <link linkend="pqr-format">PQR
-                  format</link></para>
-          </listitem>
-        </itemizedlist>
-      </para>
+	<sect1> <title>Other tools</title>
+		<para>
+			APBS contains a number of tools to facilitate the preparation of APBS runs
+			and analysis of the results.  
+			<note>
+				<para>NOTE:  In addition to the tools provided with APBS, there are a
+					number of other programs which interoperate with our code.  Please see
+					the <link linkend="other-programs">Other Programs</link> section of this
+					manual for more information.  </para>
+			</note>
+		</para>
 
-      <para>Please visit the PDB2PQR home page (
-            <ulink url="http://pdb2pqr.sourceforge.net"> 
-            http://pdb2pqr.sourceforge.net</ulink>) for more information, 
-            links to available servers, and download options.</para>
+		<sect2 id="parameterization"> <title>Parameterization</title>
+			<para> Unfortunately, the majority of problems encountered during
+				electrostatics calculations arise in  process of taking a structure
+				from the Protein Data Bank and transforming into a file that can be
+				used by the APBS software.  The PDB2PQR service was orginally developed
+				in conjunction with Jens Nielsen and Andy McCammon to address these
+				issues.  The service has since evolved and has been completely
+				rewritten by Todd Dolinsky and Nathan Baker.  PDB2PQR is able to:
+				<itemizedlist>
+					<listitem>
+						<para>Fill in missing atoms in the PDB (within reason)</para>
+					</listitem>
+					<listitem>
+						<para>Add hydrogens to the structure to optimize the
+							hydrogen-bonding network.</para>
+					</listitem>
+					<listitem>
+						<para>Calculate side-chain pKas</para>
+					</listitem>
+					<listitem>
+						<para>Assign charges and radii according to one of the
+							following force fields:  CHARMM23, AMBER02, or PARSE</para>
+					</listitem>
+					<listitem>
+						<para>Return the results in <link linkend="pqr-format">PQR
+								format</link></para>
+					</listitem>
+				</itemizedlist>
+			</para>
 
-      <para> Additionally, APBS provides the ability to read plain PDB-format
-        files and assign charges and radii from user-supplied parameter files.
-        These features are described in the <link linkend="parm">READ
-          PARAM</link> command description.</para>
+			<para>Please visit the PDB2PQR home page (
+				<ulink url="http://pdb2pqr.sourceforge.net"> 
+					http://pdb2pqr.sourceforge.net</ulink>) for more information, 
+				links to available servers, and download options.</para>
 
-      <para>Finally, APBS provides a few other miscellaneous tools for
-        converting and parameterizing structures:
-        <itemizedlist>
-          <listitem>
-            <para><filename>tools/conversion/qcd2pqr.awk</filename></para>
-            <para>Convert a QCD file (UHBD format for a molecule) to PQR
-             format.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/conversion/amber2charmm.sh</filename></para>
-            <para>A script which converts a PDB file with AMBER atom names to a
-            PDB file with CHARMM atom names. Useful for preprocessing files
-            before converting with pdb2pqr.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/conversion/WHATIF2AMBER.sed</filename></para>
-            <para>A sed script for converting a PDB file with WHATIF atom names
-            to a PDB file with AMBER atom names. Useful for preprocessing
-            files before converting with pdb2pqr. Contributed by Chiansan
-            Ma.</para>
-          </listitem>
-        </itemizedlist>
-      </para>
-    </sect2>
+			<para> Additionally, APBS provides the ability to read plain PDB-format
+				files and assign charges and radii from user-supplied parameter files.
+				These features are described in the <link linkend="parm">READ
+					PARAM</link> command description.</para>
 
-    <sect2> <title>Problem setup</title>
-      <para>In addition to parameterization of the molecule, there are several
-        common operations which are performed to setup the calculation. This
-        section reviews some of the tools available for these
-        operations.</para>
-      <para>The following scripts help generate or transform APBS input files:
-        <itemizedlist>
-          <listitem>
-            <para><filename>tools/manip/psize.py</filename></para>
-            <para>Get the dimensions and center of a molecule in 
-              <link linkend="pqr-format">PQR format</link>.
-              Very useful for setting up input files (i.e., grid dimensions,
-              lengths, spacings, etc.) for APBS calculations. Written by Todd
-              Dolinsky and Nathan Baker.</para>
-          </listitem>
-          <listitem>
-            <para><filename>apbs/tools/manip/inputgen.py</filename></para>
-            <para>Generate an APBS input file from 
-              <link linkend="pqr-format">PQR format</link> 
-              data using "suggested" parameters. Also can decouple a parallel
-              calculation into a series of sequential (asynchronous)
-              calculations to be performed on a single processor.
-              Written by Todd Dolinsky and
-              Nathan Baker.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/mesh/mgmesh</filename></para>
-            <para>List acceptable grid dimensions/multigrid levels combinations
-              for 
-              <link linkend="mg-manual">mg-manual</link>
-              calculations. Written by Nathan Baker</para>
-          </listitem>
-        </itemizedlist>
-      </para>
-    </sect2>
+			<para>Finally, APBS provides a few other miscellaneous tools for
+				converting and parameterizing structures:
+				<itemizedlist>
+					<listitem>
+						<para><filename>tools/conversion/qcd2pqr.awk</filename></para>
+						<para>Convert a QCD file (UHBD format for a molecule) to PQR
+							format.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/conversion/amber2charmm.sh</filename></para>
+						<para>A script which converts a PDB file with AMBER atom names to a
+							PDB file with CHARMM atom names. Useful for preprocessing files
+							before converting with pdb2pqr.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/conversion/WHATIF2AMBER.sed</filename></para>
+						<para>A sed script for converting a PDB file with WHATIF atom names
+							to a PDB file with AMBER atom names. Useful for preprocessing
+							files before converting with pdb2pqr. Contributed by Chiansan
+							Ma.</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</sect2>
 
-    <sect2> <title>Output data processing</title>
-      <para>The following tools perform typical analyses of the output data,
-        usually in 
-        <link linkend="opendx-format">OpenDX format</link>. 
-        These scripts are not meant to be comprehensive; instead, they provide
-        templates for users to generate their own tools.
-      </para>
+		<sect2> <title>Problem setup</title>
+			<para>In addition to parameterization of the molecule, there are several
+				common operations which are performed to setup the calculation. This
+				section reviews some of the tools available for these
+				operations.</para>
+			<para>The following scripts help generate or transform APBS input files:
+				<itemizedlist>
+					<listitem>
+						<para><filename>tools/manip/psize.py</filename></para>
+						<para>Get the dimensions and center of a molecule in 
+							<link linkend="pqr-format">PQR format</link>.
+							Very useful for setting up input files (i.e., grid dimensions,
+							lengths, spacings, etc.) for APBS calculations. Written by Todd
+							Dolinsky and Nathan Baker.</para>
+					</listitem>
+					<listitem>
+						<para><filename>apbs/tools/manip/inputgen.py</filename></para>
+						<para>Generate an APBS input file from 
+							<link linkend="pqr-format">PQR format</link> 
+							data using "suggested" parameters. Also can decouple a parallel
+							calculation into a series of sequential (asynchronous)
+							calculations to be performed on a single processor.
+							Written by Todd Dolinsky and
+							Nathan Baker.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/mesh/mgmesh</filename></para>
+						<para>List acceptable grid dimensions/multigrid levels combinations
+							for 
+							<link linkend="mg-manual">mg-manual</link>
+							calculations. Written by Nathan Baker</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</sect2>
 
-      <sect3 id="conversion-sect"> <title>Conversion</title>
-        <itemizedlist>
-          <listitem>
-            <para><filename>tools/mesh/uhbd_asc2bin</filename></para>
-            <para>Converts UHBD-format grid files from ASCII to binary.
-              Contributed by Dave Sept.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/mesh/dx2mol</filename></para>
-            <para>Converts 
-              <link linkend="opendx-format">OpenDX format</link>
-              data to <ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">MOLMOL format</ulink>. 
-              Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/mesh/dx2uhbd</filename></para>
-            <para>Converts 
-              <link linkend="opendx-format">OpenDX format</link>
-              data to UHBD format. 
-              Contributed by Robert Konecny.</para>
-          </listitem>
+		<sect2> <title>Output data processing</title>
+			<para>The following tools perform typical analyses of the output data,
+				usually in 
+				<link linkend="opendx-format">OpenDX format</link>. 
+				These scripts are not meant to be comprehensive; instead, they provide
+				templates for users to generate their own tools.
+			</para>
 
-        </itemizedlist>
-      </sect3>
+			<sect3 id="conversion-sect"> <title>Conversion</title>
+				<itemizedlist>
+					<listitem>
+						<para><filename>tools/mesh/uhbd_asc2bin</filename></para>
+						<para>Converts UHBD-format grid files from ASCII to binary.
+							Contributed by Dave Sept.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/mesh/dx2mol</filename></para>
+						<para>Converts 
+							<link linkend="opendx-format">OpenDX format</link>
+							data to <ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">MOLMOL format</ulink>. 
+							Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/mesh/dx2uhbd</filename></para>
+						<para>Converts 
+							<link linkend="opendx-format">OpenDX format</link>
+							data to UHBD format. 
+							Contributed by Robert Konecny.</para>
+					</listitem>
 
-      <sect3> <title>Manipulation</title>
-        <itemizedlist>
-          <listitem>
-            <para><filename>tools/mesh/mergedx</filename></para>
-            <para>Merge 
-              <link linkend="opendx-format">OpenDX format</link>
-              data from several domains (e.g., from a 
-              <link linkend="mg-para">mg-para</link>
-              calculation into a single file.  Contributed by Steve
-              Bond.</para>
-          </listitem>
-          <listitem>
-            <para><filename>tools/mesh/smooth</filename></para>
-            <para>Apply a very inefficient Gaussian filter to 
-              <link linkend="opendx-format">OpenDX format</link>
-              data from APBS. Written by Nathan Baker.</para>
-          </listitem>
-        </itemizedlist>
-      </sect3>
-    </sect2>
+				</itemizedlist>
+			</sect3>
 
-    <sect2 id="viz-tools"> <title>Data visualization</title>
-      <para>This section describes the data visualization tools provided with
-        APBS. A more complete discussion of the various ways to visualize APBS
-        output is presented in the 
-        <link linkend="visualization-sect">Visualization section</link>
-        of this manual.</para>
-      <itemizedlist>
-        <listitem>
-          <para><filename>tools/visualization/vmd</filename></para>
-          <para>This directory contains scripts which facilitate the
-            visualization of APBS data with 
-            <ulink url="http://www.ks.uiuc.edu/Research/vmd/">VMD</ulink>.
-            <note>
-              <para>NOTE:  As described in the 
-                <link linkend="visualization-sect">Visualization
-                  section</link>,
-                a much more elegant interface has been developed for APBS and
-                is available from the 
-                <ulink url="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/">VMD plugins page</ulink>.  
-              </para>
-            </note>
-            The version distributed with APBS was written by Nathan Baker and
-            Dave Sept based on example Tcl scripts by John Stone. The file
-            <filename>loadstuff.vmd</filename> is the command file to be
-            modified to the users' tastes and loaded into VMD. The file
-            <filename>read_dx</filename> contains the Tcl
-            functions needed to read the APBS output.</para>
-        </listitem>
-        <listitem>
-          <para><filename>tools/visualization/opendx</filename></para>
-          <para>This directory contains the 
-            <ulink url="http://www.opendx.org">OpenDX</ulink>
-            program files (<filename>*.net</filename>) required to visualize
-            APBS data with OpenDX. In particular, one can visualize single-file
-            potential isocontours (<filename>pot.*</filename>), single-file
-            potential data mapped onto molecular surfaces
-            (<filename>potacc.*</filename>), or multiple-file potential data
-            (<filename>multipot.*</filename>).</para>
-        </listitem>
-      </itemizedlist>
-    </sect2>
+			<sect3> <title>Manipulation</title>
+				<itemizedlist>
+					<listitem>
+						<para><filename>tools/mesh/mergedx</filename></para>
+						<para>Merge 
+							<link linkend="opendx-format">OpenDX format</link>
+							data from several domains (e.g., from a 
+							<link linkend="mg-para">mg-para</link>
+							calculation into a single file.  Contributed by Steve
+							Bond.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/mesh/smooth</filename></para>
+						<para>Apply a very inefficient Gaussian filter to 
+							<link linkend="opendx-format">OpenDX format</link>
+							data from APBS. Written by Nathan Baker.</para>
+					</listitem>
+				</itemizedlist>
+			</sect3>
+		</sect2>
 
-    <sect2 id="acc"> <title>Solvent accessibility</title>
-      <para>We provide a simple program (<filename>tools/manip/acc</filename>)
-        which calculates molecular volumes, surface areas, and other
-        surface-based properties from 
-        <link linkend="pqr-format">PQR-format</link>
-        structural data.  Such calculations are often used to determine apolar
-        solvation contributions to binding events, etc.  This program has a
-        number of options which can be viewed by running
-        <filename>acc</filename> with no arguments.</para>
-    </sect2>
+		<sect2 id="viz-tools"> <title>Data visualization</title>
+			<para>This section describes the data visualization tools provided with
+				APBS. A more complete discussion of the various ways to visualize APBS
+				output is presented in the 
+				<link linkend="visualization-sect">Visualization section</link>
+				of this manual.</para>
+			<itemizedlist>
+				<listitem>
+					<para><filename>tools/visualization/vmd</filename></para>
+					<para>This directory contains scripts which facilitate the
+						visualization of APBS data with 
+						<ulink url="http://www.ks.uiuc.edu/Research/vmd/">VMD</ulink>.
+						<note>
+							<para>NOTE:  As described in the 
+								<link linkend="visualization-sect">Visualization
+									section</link>,
+								a much more elegant interface has been developed for APBS and
+								is available from the 
+								<ulink url="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/">VMD plugins page</ulink>.  
+							</para>
+						</note>
+						The version distributed with APBS was written by Nathan Baker and
+						Dave Sept based on example Tcl scripts by John Stone. The file
+						<filename>loadstuff.vmd</filename> is the command file to be
+						modified to the users' tastes and loaded into VMD. The file
+						<filename>read_dx</filename> contains the Tcl
+						functions needed to read the APBS output.</para>
+				</listitem>
+				<listitem>
+					<para><filename>tools/visualization/opendx</filename></para>
+					<para>This directory contains the 
+						<ulink url="http://www.opendx.org">OpenDX</ulink>
+						program files (<filename>*.net</filename>) required to visualize
+						APBS data with OpenDX. In particular, one can visualize single-file
+						potential isocontours (<filename>pot.*</filename>), single-file
+						potential data mapped onto molecular surfaces
+						(<filename>potacc.*</filename>), or multiple-file potential data
+						(<filename>multipot.*</filename>).</para>
+				</listitem>
+			</itemizedlist>
+		</sect2>
 
-    <sect2> <title>Coulomb's Law and Generalized Born calculations</title>
-      <para>These utilities are provided for occasional use and are
-      <emphasis>definitely not</emphasis> optimized for speed.
-      </para>
-      <note>
-        <para>NOTE:  Many of these tools will be incorporated into the main
-        APBS executable during upcoming releases!</para>
-      </note>
-      <sect3> <title>Coulomb's Law calculations</title>
-        <para>The program <filename>tools/manip/coulomb</filename> calculates
-        <emphasis>vacuum</emphasis> Coulomb law energies from a PQR file.  It
-        has a number of options which can be viewed by running the 
-        <filename>coulomb</filename> program with no arguments.</para>
-      </sect3>
-      <sect3> <title>Generalized Born calculations</title>
-        <para>The program <filename>tools/manip/born</filename> is a crude,
-        non-optimal, buggy program (are you still reading?!?) for calculating
-        Generalized Born electrostatic energies.  This is only intended for
-        hacking and general comparison with Poisson-Boltzmann results.</para>
-      </sect3>
-    </sect2>
+		<sect2 id="acc"> <title>Solvent accessibility</title>
+			<para>We provide a simple program (<filename>tools/manip/acc</filename>)
+				which calculates molecular volumes, surface areas, and other
+				surface-based properties from 
+				<link linkend="pqr-format">PQR-format</link>
+				structural data.  Such calculations are often used to determine apolar
+				solvation contributions to binding events, etc.  This program has a
+				number of options which can be viewed by running
+				<filename>acc</filename> with no arguments.</para>
+		</sect2>
 
-    <sect2> <title>Eigenvalue analysis</title>
-      <para><filename>tools/arpack/driver</filename></para>
-      <para>If APBS is linked with ARPACK (see <literal>configure
-          --help</literal>), this routine will perform eigenvalue analyses of
-        matrices produced by APBS.</para>
-    </sect2>
+		<sect2> <title>Coulomb's Law and Generalized Born calculations</title>
+			<para>These utilities are provided for occasional use and are
+				<emphasis>definitely not</emphasis> optimized for speed.
+			</para>
+			<note>
+				<para>NOTE:  Many of these tools will be incorporated into the main
+					APBS executable during upcoming releases!</para>
+			</note>
+			<sect3> <title>Coulomb's Law calculations</title>
+				<para>The program <filename>tools/manip/coulomb</filename> calculates
+					<emphasis>vacuum</emphasis> Coulomb law energies from a PQR file.  It
+					has a number of options which can be viewed by running the 
+					<filename>coulomb</filename> program with no arguments.</para>
+			</sect3>
+			<sect3> <title>Generalized Born calculations</title>
+				<para>The program <filename>tools/manip/born</filename> is a crude,
+					non-optimal, buggy program (are you still reading?!?) for calculating
+					Generalized Born electrostatic energies.  This is only intended for
+					hacking and general comparison with Poisson-Boltzmann results.</para>
+				<para>The Python-based program <filename>tools/python/runGB.py</filename>
+					is a test program designed to
+					calculate generalized Born radii from
+					APBS Poisson-Boltzmann calculations
+					following the general methods of
+					Onufriev A, Case DA, Bashford D.
+					Effective Born radii in the generalized
+					Born approximation: The importance of
+					being perfect.  J Comput Chem.  23
+					(14), 1297-304, 2002.  <ulink
+						url="http://dx.doi.org/10.1002/jcc.10126">http://dx.doi.org/10.1002/jcc.10126</ulink>.
+					More information on this program can be
+					obtained by running it from the command
+					line with the <literal>--help</literal>
+					option.
+				</para>
+				<para>
+					The Python-based program
+					<filename>tools/python/readGB.py</filename>
+					is a test program designed to use radii
+					calculated from
+					<filename>runGB.py</filename> (see
+					above) and print out solvation
+					energies.  More information on this
+					program can be obtained by running it
+					from the command line with the
+					<literal>--help</literal> option.
+				</para>
+				<para>
+					Both of these Python-based programs
+					were written by Justin Xiang.
+				</para>
 
-    <sect2> <title>Python development tools</title>
-      <para>There are a number of example Python tools and wrappers provided in
-        the tools/python directory. These tools all make use of the APBS SWIG
-        wrappers developed by Todd Dolinsky, Nathan Baker, Alex Gillet, and
-        Michel Sanner. The SWIG wrappers are compiled by default during normal
-        installation. The Python scripts which link to the wrappers (and
-        thereby illustrate their use) include:</para>
-      <itemizedlist>
-        <listitem>
-          <para><filename>tools/python/main.py</filename></para>
-          <para>Drop-in replacement for main APBS executable. Only permits
-            sequential runs.</para>
-        </listitem>
-	 <listitem>
-          <para><filename>tools/python/noinput.py</filename></para>
-          <para>Similar to main.py, but adds the ability to read input
-	  files and PQR files as Python strings and return energies and
-	  forces as Python lists.  This makes it a very useful tool for 
-	  working with APBS via Python without dealing with a great deal
-	  of file I/O.</para>
-        </listitem>
-        <listitem>
-          <para><filename>tools/python/vgrid/</filename></para>
-          <para>Python wrappers for Vgrid class to allow OpenDX format file I/O
-            in Python scripts</para>
-        </listitem>
-      </itemizedlist>
-    </sect2>
 
-  </sect1>
+			</sect3>
+		</sect2>
 
-  <sect1 id="examples-sect">  <title>Examples and tutorial</title>
-    <para>The APBS sub-directory <filename>examples</filename> contains
-      several test systems which show how to use APBS for
-      binding energy, solvation energy, and force calculations. The file
-      <filename>examples/README.html</filename> contains descriptions of the
-      test cases and links to anticipated results.  Examples can be run
-      and compared to expected results by running <filename>make test</filename>
-      in each example directory.
-    </para>
-    <para>Additional examples are provided as part of the APBS tutorial
-      (<filename>doc/html/tutorial/</filename>), described in more detail in
-      the <link linkend="documentation-sect">Documentation section</link>.
-    </para>
-  </sect1>
+		<sect2> <title>Eigenvalue analysis</title>
+			<para><filename>tools/arpack/driver</filename></para>
+			<para>If APBS is linked with ARPACK (see <literal>configure
+					--help</literal>), this routine will perform eigenvalue analyses of
+				matrices produced by APBS.</para>
+		</sect2>
 
-  <sect1 id="documentation-sect">  <title>Documentation</title>
-    <para>The APBS sub-directory <filename>doc</filename> contains guides for
-      using APBS and developing code based on APBS libraries.  The
-      subdirectories include:
-      <itemizedlist>
-        <listitem>
-          <para><ulink url="../user-guide/index.html"><filename>doc/html/user-guide/index.html</filename></ulink></para>
-          <para>HTML-format User Guide </para>
-        </listitem>
-        <listitem>
-          <para><ulink url="../programmer/index.html"><filename>doc/html/programmer/index.html</filename></ulink></para>
-          <para>HTML-format Programmer Guide </para>
-        </listitem>
-        <listitem>
-          <para><ulink url="../tutorial/index.html"><filename>doc/html/tutorial/index.html</filename></ulink></para>
-          <para>HTML-format APBS tutorial </para>
-        </listitem>
-      </itemizedlist>
-    </para>
-  </sect1>
+		<sect2> <title>Python development tools</title>
+			<para>There are a number of example Python tools and wrappers provided in
+				the tools/python directory. These tools all make use of the APBS SWIG
+				wrappers developed by Todd Dolinsky, Nathan Baker, Alex Gillet, and
+				Michel Sanner. The SWIG wrappers are compiled by default during normal
+				installation. The Python scripts which link to the wrappers (and
+				thereby illustrate their use) include:</para>
+			<itemizedlist>
+				<listitem>
+					<para><filename>tools/python/main.py</filename></para>
+					<para>Drop-in replacement for main APBS executable. Only permits
+						sequential runs.</para>
+				</listitem>
+				<listitem>
+					<para><filename>tools/python/noinput.py</filename></para>
+					<para>Similar to main.py, but adds the ability to read input
+						files and PQR files as Python strings and return energies and
+						forces as Python lists.  This makes it a very useful tool for 
+						working with APBS via Python without dealing with a great deal
+						of file I/O.</para>
+				</listitem>
+				<listitem>
+					<para><filename>tools/python/vgrid/</filename></para>
+					<para>Python wrappers for Vgrid class to allow OpenDX format file I/O
+						in Python scripts</para>
+				</listitem>
+			</itemizedlist>
+		</sect2>
 
-  <sect1>  <title>Source code</title>
-    <para>The APBS sub-directory <filename>src</filename> contains the source
-      code for the APBS libraries and main executable.  These files are
-      described in more detailed in the 
-      <link linkend="programming-sect">Programming section</link>.
-    </para>
-  </sect1>
+	</sect1>
+
+	<sect1 id="examples-sect">  <title>Examples and tutorial</title>
+		<para>The APBS sub-directory <filename>examples</filename> contains
+			several test systems which show how to use APBS for
+			binding energy, solvation energy, and force calculations. The file
+			<filename>examples/README.html</filename> contains descriptions of the
+			test cases and links to anticipated results.  Examples can be run
+			and compared to expected results by running <filename>make test</filename>
+			in each example directory.
+		</para>
+		<para>Additional examples are provided as part of the APBS tutorial
+			(<filename>doc/html/tutorial/</filename>), described in more detail in
+			the <link linkend="documentation-sect">Documentation section</link>.
+		</para>
+	</sect1>
+
+	<sect1 id="documentation-sect">  <title>Documentation</title>
+		<para>The APBS sub-directory <filename>doc</filename> contains guides for
+			using APBS and developing code based on APBS libraries.  The
+			subdirectories include:
+			<itemizedlist>
+				<listitem>
+					<para><ulink url="../user-guide/index.html"><filename>doc/html/user-guide/index.html</filename></ulink></para>
+					<para>HTML-format User Guide </para>
+				</listitem>
+				<listitem>
+					<para><ulink url="../programmer/index.html"><filename>doc/html/programmer/index.html</filename></ulink></para>
+					<para>HTML-format Programmer Guide </para>
+				</listitem>
+				<listitem>
+					<para><ulink url="../tutorial/index.html"><filename>doc/html/tutorial/index.html</filename></ulink></para>
+					<para>HTML-format APBS tutorial </para>
+				</listitem>
+			</itemizedlist>
+		</para>
+	</sect1>
+
+	<sect1>  <title>Source code</title>
+		<para>The APBS sub-directory <filename>src</filename> contains the source
+			code for the APBS libraries and main executable.  These files are
+			described in more detailed in the 
+			<link linkend="programming-sect">Programming section</link>.
+		</para>
+	</sect1>
 
 
 </chapter>
