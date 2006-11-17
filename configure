@@ -21313,6 +21313,7 @@ fi
        x86_64*)
           PY_CC=${F77};;
        i*86)
+          PY_CC=${F77}
           if test "${CC}" = "icc"; then
              echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
 echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
