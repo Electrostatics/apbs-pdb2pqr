@@ -47,6 +47,12 @@
 						<para>Return the results in <link linkend="pqr-format">PQR
 								format</link></para>
 					</listitem>
+					<listitem>
+						<para>Generate <link
+								linkend="apbs-input">APBS
+								input
+								files.</link></para>
+					</listitem>
 				</itemizedlist>
 			</para>
 
@@ -85,11 +91,13 @@
 			</para>
 		</sect2>
 
-		<sect2> <title>Problem setup</title>
+		<sect2 id="problem-setup"> <title>Problem setup</title>
 			<para>In addition to parameterization of the molecule, there are several
 				common operations which are performed to setup the calculation. This
 				section reviews some of the tools available for these
-				operations.</para>
+				operations.  Please note that PDB2PQR (see
+				<xref linkend="parameterization"/> above) also
+				prepares APBS input files.</para>
 			<para>The following scripts help generate or transform APBS input files:
 				<itemizedlist>
 					<listitem>

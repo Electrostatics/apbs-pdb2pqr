@@ -46,6 +46,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Updated authorship and tool documentation
 - BUG FIXES
    * Cleanup of documentation, new Gemstone example
+   * Clarified usage of dime in mg-para ELEC statements
    * Massive cleanup of NOsh, standardizing molecule and calculation IDs and 
      making the serial focusing procedure more robust
    * Removed MGparm partOlap* data members; the parallel focusing centering
