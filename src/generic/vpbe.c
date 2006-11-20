@@ -115,14 +115,6 @@ VPUBLIC double Vpbe_getSoluteDiel(Vpbe *thee) {
 
 }
 
-VPUBLIC double Vpbe_getGamma(Vpbe *thee) {
-
-   VASSERT(thee != VNULL);
-   VASSERT(thee->paramFlag);
-   return thee->gamma;
-
-}
-
 VPUBLIC double* Vpbe_getSoluteCenter(Vpbe *thee) { 
 
    VASSERT(thee != VNULL);
@@ -214,7 +206,7 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
-                    double *ionRadii, double *ionQ, double T, double gamma,
+                    double *ionRadii, double *ionQ, double T, 
                     double soluteDiel, double solventDiel,
                     double solventRadius, int focusFlag, double sdens) {
 
@@ -223,7 +215,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-      T, gamma, soluteDiel, solventDiel, solventRadius, focusFlag, sdens) );
+      T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens) );
 
     return thee;
 }
@@ -231,7 +223,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
                     double *ionConc, double *ionRadii,
-                    double *ionQ, double T, double gamma, double soluteDiel,
+                    double *ionQ, double T, double soluteDiel,
                     double solventDiel, double solventRadius, int focusFlag,
                     double sdens) {
 
@@ -339,7 +331,6 @@ function\n", thee->maxIonRadius);
         return 0;
     }
     thee->T = T;
-    thee->gamma = gamma;
     thee->soluteDiel = soluteDiel;
     thee->solventDiel = solventDiel;
     thee->solventRadius = solventRadius;

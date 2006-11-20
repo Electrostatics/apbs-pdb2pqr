@@ -915,14 +915,10 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     double dielEnergy = 0.0;
     double qmEnergy = 0.0;
     double qfEnergy = 0.0;
-    double npEnergy = 0.0;
 
     VASSERT(thee != VNULL);
 
-    Vnm_print(0, "Vpmg_energy:  calculating apolar energy\n");
-    npEnergy = Vpmg_npEnergy(thee, extFlag);
-    Vnm_print(0, "Vpmg_energy:  npEnergy = %1.12E kT\n", npEnergy);
-
+	
     if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
         Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");
         qmEnergy = Vpmg_qmEnergy(thee, extFlag);
@@ -1032,29 +1028,6 @@ VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
     energy = energy*hx*hy*hzed;
 
     return energy;
-}
-
-VPUBLIC double Vpmg_npEnergy(Vpmg *thee, int extFlag) {
-
-    double area, energy, epsp, epss, gamma, temp;
-
-    epsp = Vpbe_getSoluteDiel(thee->pbe);
-    epss = Vpbe_getSolventDiel(thee->pbe);
-    gamma = Vpbe_getGamma(thee->pbe);
-    temp = Vpbe_getTemperature(thee->pbe);
-    gamma = gamma/(1e-3*Vunit_Na*Vunit_kb*temp);
-
-    if ((VABS(epsp-epss) < VSMALL) || (gamma < VSMALL)) {
-        return 0.0;
-    } 
-
-    area = Vpmg_dielGradNorm(thee);
-    energy = gamma*area/(epss-epsp);
-   
-    if (extFlag == 1) energy += (thee->extNpEnergy); 
-
-    return energy;
-
 }
     
 VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
@@ -1428,7 +1401,6 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
         thee->extQmEnergy = 0;
         thee->extDiEnergy = 0;
         thee->extQfEnergy = 0;
-        thee->extNpEnergy = 0;
     }
     
 
@@ -1966,7 +1938,6 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag,
     thee->extQmEnergy = 0;
     thee->extQfEnergy = 0;
     thee->extDiEnergy = 0;
-    thee->extNpEnergy = 0;
 
     /* New problem dimensions */
     hxNEW = thee->pmgp->hx;
@@ -2072,8 +2043,6 @@ VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag,
     Vnm_print(0, "VPMG::extEnergy: extQmEnergy = %g kT\n", thee->extQmEnergy);
     thee->extQfEnergy = Vpmg_qfEnergy(pmgOLD, 1);
     Vnm_print(0, "VPMG::extEnergy: extQfEnergy = %g kT\n", thee->extQfEnergy);
-    thee->extNpEnergy = Vpmg_npEnergy(pmgOLD, 1);
-    Vnm_print(0, "VPMG::extEnergy: extNpEnergy = %g kT\n", thee->extNpEnergy);
     thee->extDiEnergy = Vpmg_dielEnergy(pmgOLD, 1);
     Vnm_print(0, "VPMG::extEnergy: extDiEnergy = %g kT\n", thee->extDiEnergy);
     Vpmg_unsetPart(pmgOLD);
@@ -4041,13 +4010,13 @@ VPUBLIC int Vpmg_force(Vpmg *thee, double *force, int atomID,
 
     VASSERT(thee != VNULL);
  
-    rc = rc && Vpmg_dbnpForce(thee, qfF, npF, atomID, srfm);
+    rc = rc && Vpmg_dbForce(thee, qfF, atomID, srfm);
     rc = rc && Vpmg_ibForce(thee, dbF, atomID, srfm); 
     rc = rc && Vpmg_qfForce(thee, ibF, atomID, chgm); 
 
-    force[0] = qfF[0] + dbF[0] + npF[0] + ibF[0];
-    force[1] = qfF[1] + dbF[1] + npF[1] + ibF[1];
-    force[2] = qfF[2] + dbF[2] + npF[2] + ibF[2];
+    force[0] = qfF[0] + dbF[0] + ibF[0];
+    force[1] = qfF[1] + dbF[1] + ibF[1];
+    force[2] = qfF[2] + dbF[2] + ibF[2];
 
     return rc;
 
@@ -4203,62 +4172,58 @@ calculation!\n");
     return 1;
 }
 
-VPUBLIC int Vpmg_dbnpForce(Vpmg *thee, double *dbForce, double *npForce, 
-  int atomID, Vsurf_Meth srfm) {
-
+VPUBLIC int Vpmg_dbForce(Vpmg *thee, double *dbForce, int atomID, 
+						 Vsurf_Meth srfm) {
+	
     Vacc *acc;
     Vpbe *pbe;
     Vatom *atom;
-
+	
     double *apos, position[3], arad, hx, hy, hzed, izmagic, deps, depsi;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
-    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, gamma, kT;
-    double npFmag, *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
+    double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, kT;
+    double *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
     double dHxijk[3], dHyijk[3], dHzijk[3], dHxim1jk[3], dHyijm1k[3]; 
     double dHzijkm1[3];
     int i, j, k, l, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
-
+	
     VASSERT(thee != VNULL);
     if (!thee->filled) {
-        Vnm_print(2, "Vpmg_dbnpForce:  Need to callVpmg_fillco!\n");
+        Vnm_print(2, "Vpmg_dbForce:  Need to callVpmg_fillco!\n");
         return 0;
     }
-
+	
     acc = thee->pbe->acc;
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);
     arad = Vatom_getRadius(atom);
-
+	
     /* Reset force */
     dbForce[0] = 0.0;
     dbForce[1] = 0.0;
     dbForce[2] = 0.0;
-    npForce[0] = 0.0;
-    npForce[1] = 0.0;
-    npForce[2] = 0.0;
-
+	
     /* Check surface definition */
     if ((srfm != VSM_SPLINE) && (srfm!=VSM_SPLINE3) && (srfm!=VSM_SPLINE4)) {
-        Vnm_print(2, "Vpmg_dbnpForce:  Forces *must* be calculated with \
+        Vnm_print(2, "Vpmg_dbForce:  Forces *must* be calculated with \
 spline-based surfaces!\n");
-        Vnm_print(2, "Vpmg_dbnpForce:  Skipping dielectric/apolar boundary \
+        Vnm_print(2, "Vpmg_dbForce:  Skipping dielectric/apolar boundary \
 force calculation!\n");
         return 0;
     }
-
-
+	
+	
     /* If we aren't in the current position, then we're done */
     if (atom->partID == 0) return 1;
-
+	
     /* Get PBE info */
     pbe = thee->pbe;
     acc = pbe->acc;
     epsp = Vpbe_getSoluteDiel(pbe);
     epsw = Vpbe_getSolventDiel(pbe);
     kT = Vpbe_getTemperature(pbe)*(1e-3)*Vunit_Na*Vunit_kb;
-    gamma = Vpbe_getGamma(pbe)/kT;
     izmagic = 1.0/Vpbe_getZmagic(pbe);
-
+	
     /* Mesh info */
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
@@ -4276,69 +4241,69 @@ force calculation!\n");
     ymax = thee->pmgp->ymax;
     zmax = thee->pmgp->zmax;
     u = thee->u;
-
+	
     /* Sanity check: there is no force if there is zero ionic strength */
     if (VABS(epsp-epsw) < VPMGSMALL) {
-       Vnm_print(0, "Vpmg_dbnpForce: No force for uniform dielectric!\n");
-       return 1;
+		Vnm_print(0, "Vpmg_dbForce: No force for uniform dielectric!\n");
+		return 1;
     }
     deps = (epsw - epsp);
     depsi = 1.0/deps;
-
+	
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
-      (apos[1]<=ymin) || (apos[1]>=ymax)  || \
-      (apos[2]<=zmin) || (apos[2]>=zmax)) {
+		(apos[1]<=ymin) || (apos[1]>=ymax)  || \
+		(apos[2]<=zmin) || (apos[2]>=zmax)) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-                  atomID, apos[0], apos[1], apos[2]);
-            Vnm_print(2, "Vpmg_dbnpForce:    xmin = %g, xmax = %g\n",
-              xmin, xmax);
-            Vnm_print(2, "Vpmg_dbnpForce:    ymin = %g, ymax = %g\n",
-              ymin, ymax);
-            Vnm_print(2, "Vpmg_dbnpForce:    zmin = %g, zmax = %g\n",
-              zmin, zmax);
+            Vnm_print(2, "Vpmg_dbForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
+					  atomID, apos[0], apos[1], apos[2]);
+            Vnm_print(2, "Vpmg_dbForce:    xmin = %g, xmax = %g\n",
+					  xmin, xmax);
+            Vnm_print(2, "Vpmg_dbForce:    ymin = %g, ymax = %g\n",
+					  ymin, ymax);
+            Vnm_print(2, "Vpmg_dbForce:    zmin = %g, zmax = %g\n",
+					  zmin, zmax);
         }
         fflush(stderr);
     } else {
-
+		
         /* Convert the atom position to grid reference frame */
         position[0] = apos[0] - xmin;
         position[1] = apos[1] - ymin;
         position[2] = apos[2] - zmin;
-
+		
         /* Integrate over points within this atom's (inflated) radius */
         rtot = (arad + thee->splineWin);
         rtot2 = VSQR(rtot);
         dx = rtot/hx;
         imin = (int)floor((position[0]-rtot)/hx);
         if (imin < 1) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         imax = (int)ceil((position[0]+rtot)/hx);
         if (imax > (nx-2)) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         jmin = (int)floor((position[1]-rtot)/hy);
         if (jmin < 1) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         jmax = (int)ceil((position[1]+rtot)/hy);
         if (jmax > (ny-2)) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         kmin = (int)floor((position[2]-rtot)/hzed);
         if (kmin < 1) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         kmax = (int)ceil((position[2]+rtot)/hzed);
         if (kmax > (nz-2)) {
-            Vnm_print(2, "Vpmg_dbnpForce:  Atom %d off grid!\n", atomID); 
+            Vnm_print(2, "Vpmg_dbForce:  Atom %d off grid!\n", atomID); 
             return 0;
         }
         for (i=imin; i<=imax; i++) {
@@ -4351,23 +4316,23 @@ force calculation!\n");
                     Hxijk = (thee->epsx[IJK(i,j,k)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxijk);
 					/*
-					switch (srfm) {
-						case VSM_SPLINE :
-								Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
-														   atom, dHxijk);
-							break;
-						case VSM_SPLINE4 :
-								Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
-													   atom, dHxijk);
-							break;
-						default:
-							Vnm_print(2, "Vpmg_dbnbForce: Unknown surface method.\n");
-							return;
-					}
-					*/
+					 switch (srfm) {
+						 case VSM_SPLINE :
+							 Vacc_splineAccGradAtomNorm(acc, gpos, thee->splineWin, 0., 
+														atom, dHxijk);
+							 break;
+						 case VSM_SPLINE4 :
+							 Vacc_splineAccGradAtomNorm4(acc, gpos, thee->splineWin, 0., 
+														 atom, dHxijk);
+							 break;
+						 default:
+							 Vnm_print(2, "Vpmg_dbnbForce: Unknown surface method.\n");
+							 return;
+					 }
+					 */
                     for (l=0; l<3; l++) dHxijk[l] *= Hxijk;
                     gpos[0] = i*hx + xmin;
                     gpos[1] = (j+0.5)*hy + ymin;
@@ -4375,7 +4340,7 @@ force calculation!\n");
                     Hyijk = (thee->epsy[IJK(i,j,k)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHyijk);
                     
 					for (l=0; l<3; l++) dHyijk[l] *= Hyijk;
@@ -4385,7 +4350,7 @@ force calculation!\n");
                     Hzijk = (thee->epsz[IJK(i,j,k)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHzijk);
                     
 					for (l=0; l<3; l++) dHzijk[l] *= Hzijk;
@@ -4396,7 +4361,7 @@ force calculation!\n");
                     Hxim1jk = (thee->epsx[IJK(i-1,j,k)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHxim1jk);
                     
 					for (l=0; l<3; l++) dHxim1jk[l] *= Hxim1jk;
@@ -4407,7 +4372,7 @@ force calculation!\n");
                     Hyijm1k = (thee->epsy[IJK(i,j-1,k)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHyijm1k);
                     
 					for (l=0; l<3; l++) dHyijm1k[l] *= Hyijm1k;
@@ -4418,73 +4383,47 @@ force calculation!\n");
                     Hzijkm1 = (thee->epsz[IJK(i,j,k-1)] - epsp)*depsi;
                     
 					/* Select the correct function based on the surface definition 
-					 *	(now including the 7th order polynomial) */
+						*	(now including the 7th order polynomial) */
 					Vpmg_splineSelect(srfm,acc, gpos, thee->splineWin, 0.,atom, dHzijkm1);
                     
 					for (l=0; l<3; l++) dHzijkm1[l] *= Hzijkm1;
                     /* *** CALCULATE DIELECTRIC BOUNDARY FORCES *** */
                     dbFmag = u[IJK(i,j,k)];
                     tgrad[0] = 
-                       (dHxijk[0]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
-                     +  dHxim1jk[0]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
-                     + (dHyijk[0]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
-                     +  dHyijm1k[0]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
-                     + (dHzijk[0]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
-                     + dHzijkm1[0]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+						(dHxijk[0]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+						 +  dHxim1jk[0]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+						+ (dHyijk[0]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+						   +  dHyijm1k[0]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+						+ (dHzijk[0]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+						   + dHzijkm1[0]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
                     tgrad[1] = 
-                       (dHxijk[1]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
-                     +  dHxim1jk[1]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
-                     + (dHyijk[1]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
-                     +  dHyijm1k[1]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
-                     + (dHzijk[1]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
-                     + dHzijkm1[1]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+						(dHxijk[1]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+						 +  dHxim1jk[1]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+						+ (dHyijk[1]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+						   +  dHyijm1k[1]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+						+ (dHzijk[1]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+						   + dHzijkm1[1]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
                     tgrad[2] = 
-                       (dHxijk[2]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
-                     +  dHxim1jk[2]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
-                     + (dHyijk[2]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
-                     +  dHyijm1k[2]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
-                     + (dHzijk[2]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
-                     + dHzijkm1[2]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
-                     dbForce[0] += (dbFmag*tgrad[0]);
-                     dbForce[1] += (dbFmag*tgrad[1]);
-                     dbForce[2] += (dbFmag*tgrad[2]);
-                    /* *** CALCULATE NONPOLAR FORCES *** */
-                    /* First we calculate the local H1-seminorm of the
-                     * characteristic function */
-                    npFmag =  VSQR((Hxijk - Hxim1jk)/hx)
-                            + VSQR((Hyijk - Hyijm1k)/hy)
-                            + VSQR((Hzijk - Hzijkm1)/hzed);
-                    npFmag = VSQRT(npFmag);
-                    if (npFmag > VPMGSMALL) {
-                        tgrad[0] = 
-                          (Hxijk-Hxim1jk)*(dHxijk[0]-dHxim1jk[0])/VSQR(hx)
-                        + (Hyijk-Hyijm1k)*(dHyijk[0]-dHyijm1k[0])/VSQR(hy)
-                        + (Hzijk-Hzijkm1)*(dHzijk[0]-dHzijkm1[0])/VSQR(hzed);
-                        tgrad[1] = 
-                          (Hxijk-Hxim1jk)*(dHxijk[1]-dHxim1jk[1])/VSQR(hx)
-                        + (Hyijk-Hyijm1k)*(dHyijk[1]-dHyijm1k[1])/VSQR(hy)
-                        + (Hzijk-Hzijkm1)*(dHzijk[1]-dHzijkm1[1])/VSQR(hzed);
-                        tgrad[2] = 
-                          (Hxijk-Hxim1jk)*(dHxijk[2]-dHxim1jk[2])/VSQR(hx)
-                        + (Hyijk-Hyijm1k)*(dHyijk[2]-dHyijm1k[2])/VSQR(hy)
-                        + (Hzijk-Hzijkm1)*(dHzijk[2]-dHzijkm1[2])/VSQR(hzed);
-                        npForce[0] += (tgrad[0]/npFmag);
-                        npForce[1] += (tgrad[1]/npFmag);
-                        npForce[2] += (tgrad[2]/npFmag);
-                    } 
-                } /* k loop */
-            } /* j loop */
-        } /* i loop */
+						(dHxijk[2]  *(u[IJK(i+1,j,k)]-u[IJK(i,j,k)])
+						 +  dHxim1jk[2]*(u[IJK(i-1,j,k)]-u[IJK(i,j,k)]))/VSQR(hx)
+						+ (dHyijk[2]  *(u[IJK(i,j+1,k)]-u[IJK(i,j,k)])
+						   +  dHyijm1k[2]*(u[IJK(i,j-1,k)]-u[IJK(i,j,k)]))/VSQR(hy)
+						+ (dHzijk[2]  *(u[IJK(i,j,k+1)]-u[IJK(i,j,k)])
+						   + dHzijkm1[2]*(u[IJK(i,j,k-1)]-u[IJK(i,j,k)]))/VSQR(hzed);
+					dbForce[0] += (dbFmag*tgrad[0]);
+					dbForce[1] += (dbFmag*tgrad[1]);
+					dbForce[2] += (dbFmag*tgrad[2]);
+					
+				} /* k loop */
+			} /* j loop */
+		} /* i loop */
         
         dbForce[0] = -dbForce[0]*hx*hy*hzed*deps*0.5*izmagic;
         dbForce[1] = -dbForce[1]*hx*hy*hzed*deps*0.5*izmagic;
         dbForce[2] = -dbForce[2]*hx*hy*hzed*deps*0.5*izmagic;
-        npForce[0] = -npForce[0]*hx*hy*hzed*gamma;
-        npForce[1] = -npForce[1]*hx*hy*hzed*gamma;
-        npForce[2] = -npForce[2]*hx*hy*hzed*gamma;
-    }
+	}
 
-    return 1;
+	return 1;
 }
 
 VPUBLIC int Vpmg_qfForce(Vpmg *thee, double *force, int atomID, 

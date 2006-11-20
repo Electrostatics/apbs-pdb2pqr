@@ -120,17 +120,16 @@ int main(
 	Voutput_Format outputformat;
 	
 	/* These variables require some explaining... The energy double arrays
-	 * store energies from the various calculations.  The energy int array
-	 * stores either a flag (0,1) displaying whether energies were calculated
-         * or if PCE_COMPS is used, the number of atom energies stored
-         * for the given calculation.  Likewise, the
-	 * force double arrays store forces from the various calcualtions.  The
-	 * force int array stores an integer which either says no calculation was
-	 * performed (0) or gives the number of entries in the force array for each
-	 * calculation */
+		* store energies from the various calculations.  The energy int array
+		* stores either a flag (0,1) displaying whether energies were calculated
+		* or if PCE_COMPS is used, the number of atom energies stored
+		* for the given calculation.  Likewise, the
+		* force double arrays store forces from the various calcualtions.  The
+		* force int array stores an integer which either says no calculation was
+		* performed (0) or gives the number of entries in the force array for each
+		* calculation */
 	double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
 	double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
-	double npEnergy[NOSH_MAXCALC];
 	AtomForce *atomForce[NOSH_MAXCALC];
 	double *atomEnergy[NOSH_MAXCALC];
 	int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
@@ -140,72 +139,72 @@ int main(
 	/* Instructions: */
 	char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
-  APBS -- Adaptive Poisson-Boltzmann Solver\n\
-  Version 0.4.0\n\
-  \n\
-  Nathan A. Baker (baker@biochem.wustl.edu)\n\
-  Dept. Biochemistry and Molecular Biophysics\n\
-  Center for Computational Biology\n\
-  Washington University in St. Louis\n\
-  \n\
-  Additional contributing authors listed in the code documentation.\n\
-  \n\
-  Copyright (c) 2002-2006.  Washington University in St. Louis.\n\
-  All Rights Reserved.\n\
-  Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
-  California.\n\
-  Portions Copyright (c) 1995.  Michael Holst.\n\
-  \n\
-  This program is free software; you can redistribute it and/or modify\n\
-  it under the terms of the GNU General Public License as published by\n\
-  the Free Software Foundation; either version 2 of the License, or\n\
-  (at your option) any later version.\n\
-  \n\
-  This program is distributed in the hope that it will be useful,\n\
-  but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-  GNU General Public License for more details.\n\
-  \n\
-  You should have received a copy of the GNU General Public License\n\
-  along with this program; if not, write to the Free Software\n\
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA\n\
-  \n\
-  Linking APBS statically or dynamically with other modules is making a\n\
-  combined work based on APBS. Thus, the terms and conditions of the GNU\n\
-  General Public License cover the whole combination.\n\
-  \n\
-  SPECIAL GPL EXCEPTION\n\
-  In addition, as a special exception, the copyright holders of APBS\n\
-  give you permission to combine the APBS program with free software\n\
-  programs and libraries that are released under the GNU LGPL or with\n\
-  code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL\n\
-  SMOL, VMD, and Vision. Such combined software may be linked with APBS and\n\
-  redistributed together in original or modified form as mere aggregation\n\
-  without requirement that the entire work be under the scope of the GNU\n\
-  General Public License. This special exception permission is also extended\n\
-  to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,\n\
-  FEtk, MC, or MALOC libraries.\n\
-  \n\
-  Note that people who make modified versions of APBS are not obligated\n\
-  to grant this special exception for their modified versions; it is\n\
-  their choice whether to do so. The GNU General Public License gives\n\
-  permission to release a modified version without this exception; this\n\
-  exception also makes it possible to release a modified version which\n\
-  carries forward this exception.\n\
+	APBS -- Adaptive Poisson-Boltzmann Solver\n\
+	Version 0.4.0\n\
+	\n\
+	Nathan A. Baker (baker@biochem.wustl.edu)\n\
+	Dept. Biochemistry and Molecular Biophysics\n\
+	Center for Computational Biology\n\
+	Washington University in St. Louis\n\
+	\n\
+	Additional contributing authors listed in the code documentation.\n\
+	\n\
+	Copyright (c) 2002-2006.  Washington University in St. Louis.\n\
+	All Rights Reserved.\n\
+	Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
+	California.\n\
+	Portions Copyright (c) 1995.  Michael Holst.\n\
+	\n\
+	This program is free software; you can redistribute it and/or modify\n\
+	it under the terms of the GNU General Public License as published by\n\
+	the Free Software Foundation; either version 2 of the License, or\n\
+	(at your option) any later version.\n\
+	\n\
+	This program is distributed in the hope that it will be useful,\n\
+	but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+	GNU General Public License for more details.\n\
+	\n\
+	You should have received a copy of the GNU General Public License\n\
+	along with this program; if not, write to the Free Software\n\
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA\n\
+	\n\
+	Linking APBS statically or dynamically with other modules is making a\n\
+	combined work based on APBS. Thus, the terms and conditions of the GNU\n\
+	General Public License cover the whole combination.\n\
+	\n\
+	SPECIAL GPL EXCEPTION\n\
+	In addition, as a special exception, the copyright holders of APBS\n\
+	give you permission to combine the APBS program with free software\n\
+	programs and libraries that are released under the GNU LGPL or with\n\
+	code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL\n\
+	SMOL, VMD, and Vision. Such combined software may be linked with APBS and\n\
+	redistributed together in original or modified form as mere aggregation\n\
+	without requirement that the entire work be under the scope of the GNU\n\
+	General Public License. This special exception permission is also extended\n\
+	to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,\n\
+	FEtk, MC, or MALOC libraries.\n\
+	\n\
+	Note that people who make modified versions of APBS are not obligated\n\
+	to grant this special exception for their modified versions; it is\n\
+	their choice whether to do so. The GNU General Public License gives\n\
+	permission to release a modified version without this exception; this\n\
+	exception also makes it possible to release a modified version which\n\
+	carries forward this exception.\n\
 ----------------------------------------------------------------------\n\
-  APBS uses FETK (the Finite Element ToolKit) to solve the\n\
-  Poisson-Boltzmann equation numerically.  FETK is a portable collection\n\
-  of finite element modeling class libraries written in an object-oriented\n\
-  version of C.  It is designed to solve general coupled systems of nonlinear\n\
-  partial differential equations using adaptive finite element methods,\n\
-  inexact Newton methods, and algebraic multilevel methods.  More information\n\
+	APBS uses FETK (the Finite Element ToolKit) to solve the\n\
+	Poisson-Boltzmann equation numerically.  FETK is a portable collection\n\
+	of finite element modeling class libraries written in an object-oriented\n\
+	version of C.  It is designed to solve general coupled systems of nonlinear\n\
+	partial differential equations using adaptive finite element methods,\n\
+	inexact Newton methods, and algebraic multilevel methods.  More information\n\
   about FEtk may be found at <http://www.FEtk.ORG>.\n\
 ----------------------------------------------------------------------\n\
   Please cite your use of APBS as:\n\n\
     Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
-    nanosystems: application to microtubules and the ribosome. Proc.\n\
+					  nanosystems: application to microtubules and the ribosome. Proc.\n\
     Natl. Acad. Sci. USA 98, 10037-10041 2001.\n\
-\n\n"};
+	\n\n"};
 	char *usage = 
 {"\n\n\
 ----------------------------------------------------------------------\n\
@@ -214,13 +213,13 @@ int main(
         It is invoked as:\n\n\
 	apbs [options] apbs.in\n\n\
 	where apbs.in is a formatted input file and [options] are:\n\n\
-         --output-file=<name>     Enables output logging to the path\n\
-                                  listed in <name>.  Uses flat-file\n\
-                                  format is --output-format is not used.\n\
-         --output-format=<type>   Specifies format for logging.  Options\n\
-                                  for type are either \"xml\" or \"flat\".\n\
-         --help                   Display this help information.\n\
-         --version                Display the current APBS version.\n\
+--output-file=<name>     Enables output logging to the path\n\
+	listed in <name>.  Uses flat-file\n\
+	format is --output-format is not used.\n\
+--output-format=<type>   Specifies format for logging.  Options\n\
+	for type are either \"xml\" or \"flat\".\n\
+--help                   Display this help information.\n\
+--version                Display the current APBS version.\n\
 ----------------------------------------------------------------------\n\n"};
 
 
@@ -397,8 +396,8 @@ int main(
 					VJMPERR1(0);
 				}
 					
-					/* Print problem parameters */
-					printMGPARM(mgparm, realCenter);
+				/* Print problem parameters */
+				printMGPARM(mgparm, realCenter);
 				printPBEPARM(pbeparm);
 				
 				/* Solve PDE */
@@ -407,23 +406,16 @@ int main(
 					VJMPERR1(0);
 				}
 					
-					/* Set partition information for observables and I/O */
-					if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
-						Vnm_tprint(2, "Error setting partition info!\n");
-						VJMPERR1(0);
-					}
+				/* Set partition information for observables and I/O */
+				if (setPartMG(nosh, mgparm, pmg[i]) != 1) {
+					Vnm_tprint(2, "Error setting partition info!\n");
+					VJMPERR1(0);
+				}
 					
-					/* Write out energies */
-					energyMG(nosh, i, pmg[i], 
-							 &(nenergy[i]), &(totEnergy[i]), &(qfEnergy[i]), 
-							 &(qmEnergy[i]), &(dielEnergy[i]));
-				
-				/* Get apolar energy */
-				npenergyMG(nosh, i, pmg[i], &(nenergy[i]), 
-						   &(npEnergy[i]));
-				npEnergy[i] = Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(npEnergy[i]);
-				Vnm_tprint(0, "Apolar energy: %f kJ/mol\n", npEnergy[i]);
-				
+				/* Write out energies */
+				energyMG(nosh, i, pmg[i], 
+						&(nenergy[i]), &(totEnergy[i]), &(qfEnergy[i]), 
+						&(qmEnergy[i]), &(dielEnergy[i]));
 				
 				/* Write out forces */
 				forceMG(mem, nosh, pbeparm, mgparm, pmg[i], &(nforce[i]), 
@@ -435,8 +427,7 @@ int main(
 				/* Write matrix */
 				writematMG(rank, nosh, pbeparm, pmg[i]);
 				
-				/* If needed, cache atom energies */
-				
+				/* If needed, cache atom energies */				
 				nenergy[i] = 0;
 				if ((pbeparm->calcenergy == PCE_COMPS) && (outputformat != OUTPUT_NULL)){
 					storeAtomEnergy(pmg[i], i, &(atomEnergy[i]), &(nenergy[i]));
@@ -475,8 +466,8 @@ int main(
 					VJMPERR1(0);
 				}
 					
-				/* Print problem parameters */
-				printFEPARM(i, nosh, feparm, fetk);
+					/* Print problem parameters */
+					printFEPARM(i, nosh, feparm, fetk);
 				printPBEPARM(pbeparm);
 				
 				/* Refine mesh */
@@ -562,12 +553,12 @@ int main(
 	if (outputformat == OUTPUT_XML) {
 		Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
 		writedataXML(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
-			      dielEnergy, nenergy, atomEnergy, nforce, atomForce);
+					 dielEnergy, nenergy, atomEnergy, nforce, atomForce);
 		
 	} else if (outputformat == OUTPUT_FLAT) {
 		Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
 		writedataFlat(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
-			      dielEnergy, nenergy, atomEnergy, nforce, atomForce);
+					  dielEnergy, nenergy, atomEnergy, nforce, atomForce);
 	}
 
 	/* Destroy energy arrays if they still exist */

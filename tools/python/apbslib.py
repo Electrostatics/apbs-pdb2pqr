@@ -327,7 +327,6 @@ initMG = _apbslib.initMG
 killMG = _apbslib.killMG
 solveMG = _apbslib.solveMG
 setPartMG = _apbslib.setPartMG
-npenergyMG = _apbslib.npenergyMG
 killEnergy = _apbslib.killEnergy
 killForce = _apbslib.killForce
 writedataMG = _apbslib.writedataMG

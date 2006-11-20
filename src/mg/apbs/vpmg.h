@@ -425,45 +425,11 @@ VEXTERNC double Vpmg_dielEnergy(
         );
 
 
-/** @brief Get the "apolar" energy
- *
- *           Using the dielectric map at the finest mesh level, calculate the
- *           surface area in a manner consistent with the force evaluation
- *           routines of Im et al (see Vpmg_dbnpForce and Vpmg_dielGradNorm):
- *              \f[ A = \frac{1}{\epsilon_s-\epsilon_p} \int \| \nabla
- *              \epsilon \| dx \f]
- *           where epsilon is the dielectric parameter, epsilon_s
- *           is the dielectric constant for the solvent and epsilon_p is
- *           the dielectric constant for the protein.  The apolar energy is
- *           then,
- *              \f[G_{np} = \gamma S \f]
- *           where gamma is the apolar coefficient set in Vpbe (see
- *           Vpbe_ctor).  The energy is returned in units of k_b T.
- *  @ingroup Vpmg
- *  @author  Nathan Baker
- *  @note    I personally feel that this routine should not find its way into
- *           the main APBS driver.  In this case, the apolar energy is
- *           calculated in a manner consistent with the force evaluation, but
- *           it is not the only possible apolar energy definition...
- *           The value of this observable may be modified by setting
- *           restrictions on the subdomain over which it is calculated.  Such
- *           limits can be set via Vpmg_setPart and are generally useful for
- *           parallel runs.
- *  @returns The apolar energy in units of k_B T.
- */
-VEXTERNC double Vpmg_npEnergy(
-        Vpmg *thee,  /** Vpmg object */
-        int extFlag  /** If this was a focused calculation, include (1 -- for
-                      * serial calculations) or ignore (0 -- for parallel
-                      * calculations) energy contributions from outside the
-                      * focusing domain */
-        );
-
 /** @brief Get the integral of the gradient of the dielectric function
  *
  *           Using the dielectric map at the finest mesh level, calculate the
  *           integral of the norm of the dielectric function gradient
- *           routines of Im et al (see Vpmg_dbnpForce for reference):
+ *           routines of Im et al (see Vpmg_dbForce for reference):
  *              \f[ \int \| \nabla \epsilon \| dx \f]
  *           where epsilon is the dielectric parameter.
  *           The integral is returned in units of A^2.
@@ -518,7 +484,7 @@ VEXTERNC int Vpmg_qfForce(
         Vchrg_Meth chgm  /** Charge discretization method */
         );
 
-/** @brief   Calculate the dielectric boundary and apolar forces on the
+/** @brief   Calculate the dielectric boundary forces on the
  *           specified atom in units of k_B T/AA
  *  @ingroup Vpmg
  *  @author  Nathan Baker
@@ -529,11 +495,9 @@ VEXTERNC int Vpmg_qfForce(
  *           \li No contributions are made from higher levels of focusing. 
  * @returns  1 if successful, 0 otherwise
  */
-VEXTERNC int Vpmg_dbnpForce(
+VEXTERNC int Vpmg_dbForce(
         Vpmg *thee,  /** Vpmg object */
         double *dbForce, /** 3*sizeof(double) space to hold the dielectric
-                           boundary force in units of k_B T/AA */
-        double *npForce, /** 3*sizeof(double) space to hold the apolar
                            boundary force in units of k_B T/AA */
         int atomID,  /** Valist ID of desired atom */
         Vsurf_Meth srfm  /** Surface discretization method */ 

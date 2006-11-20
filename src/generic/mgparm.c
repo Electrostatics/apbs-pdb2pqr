@@ -551,6 +551,21 @@ keyword!\n", tok);
         return -1;
 }
 
+VPRIVATE int MGparm_parseGAMMA(MGparm *thee, Vio *sock) {
+	
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	Vnm_print(2, "parseMG:  GAMMA keyword deprecated!\n");
+	Vnm_print(2, "parseMG:  Please see new APOLAR documentation.\n");
+	return 1;
+	
+VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+	return -1;
+}
+
 VPRIVATE int MGparm_parseGCENT(MGparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
@@ -885,6 +900,8 @@ VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
         return MGparm_parseOFRAC(thee, sock);
     } else if (Vstring_strcasecmp(tok, "async") == 0) {
         return MGparm_parseASYNC(thee, sock);
+	} else if (Vstring_strcasecmp(tok, "gamma") == 0) {
+        return MGparm_parseGAMMA(thee, sock);
     } else {
         Vnm_print(2, "parseMG:  Unrecognized keyword (%s)!\n", tok);
         return -1;

@@ -444,7 +444,6 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
            PyList_SetItem(qfholder, j, PyFloat_FromDouble(atomForce[0][i].qfForce[j]));
            PyList_SetItem(dbholder, j, PyFloat_FromDouble(atomForce[0][i].dbForce[j]));
            PyList_SetItem(ibholder, j, PyFloat_FromDouble(atomForce[0][i].ibForce[j]));
-           PyList_SetItem(npholder, j, PyFloat_FromDouble(atomForce[0][i].npForce[j]));
         }
         PyList_SetItem(qfvalues, i,  PyList_GetSlice(qfholder, 0, 3));
         PyList_SetItem(dbvalues, i,  PyList_GetSlice(dbholder, 0, 3));
@@ -481,7 +480,6 @@ extern void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 extern int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
 extern int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
-extern int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, double *npEnergy);
 extern void killEnergy();
 //extern int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 //  Vpmg *pmg, int *nforce, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL]);

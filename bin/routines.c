@@ -611,8 +611,6 @@ window = %4.3f\n", pbeparm->swin);
 			break;
 	}
 	Vnm_tprint( 1, "  Temperature:  %4.3f K\n", pbeparm->temp);
-	Vnm_tprint( 1, "  Surface tension:  %4.3f kJ/mol/A^2\n",
-				pbeparm->gamma);
 	if (pbeparm->calcenergy != PCE_NO) Vnm_tprint( 1, "  Electrostatic \
 energies will be calculated\n");
 	if (pbeparm->calcforce == PCF_TOTAL) Vnm_tprint( 1, "  Net solvent \
@@ -754,7 +752,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	
 	pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
 					   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
-					   pbeparm->temp, pbeparm->gamma, pbeparm->pdie, 
+					   pbeparm->temp, pbeparm->pdie, 
 					   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens);
 	
 	/* Set up PDE object */
@@ -1030,7 +1028,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 					Valist *alist[NOSH_MAXMOL]) {
 	
 	int j, k;
-	double qfForce[3], dbForce[3], ibForce[3], npForce[3];
+	double qfForce[3], dbForce[3], ibForce[3];
 	
 	Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
 	Vnm_tprint( 1,"  Calculating forces...\n");
@@ -1043,27 +1041,23 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 			(*atomForce)[0].qfForce[j] = 0;
 			(*atomForce)[0].ibForce[j] = 0;
 			(*atomForce)[0].dbForce[j] = 0;
-			(*atomForce)[0].npForce[j] = 0;
 		}
 		for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) { 
 			if (nosh->bogus == 0) {
 				VASSERT(Vpmg_qfForce(pmg, qfForce, j, mgparm->chgm));
 				VASSERT(Vpmg_ibForce(pmg, ibForce, j, pbeparm->srfm));
-				VASSERT(Vpmg_dbnpForce(pmg, dbForce, npForce, j, 
-									   pbeparm->srfm));
+				VASSERT(Vpmg_dbForce(pmg, dbForce, j, pbeparm->srfm));
 			} else {
 				for (k=0; k<3; k++) {
 					qfForce[k] = 0; 
 					ibForce[k] = 0; 
 					dbForce[k] = 0; 
-					npForce[k] = 0; 
 				}
 			}
 			for (k=0; k<3; k++) {
 				(*atomForce)[0].qfForce[k] += qfForce[k];
 				(*atomForce)[0].ibForce[k] += ibForce[k];
 				(*atomForce)[0].dbForce[k] += dbForce[k];
-				(*atomForce)[0].npForce[k] += npForce[k];
 			}
 		}
 		Vnm_tprint( 1, "  Printing net forces for molecule %d (kJ/mol/A)\n",
@@ -1072,7 +1066,6 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 		Vnm_tprint( 1, "    qf  -- fixed charge force\n");
 		Vnm_tprint( 1, "    db  -- dielectric boundary force\n");
 		Vnm_tprint( 1, "    ib  -- ionic boundary force\n");
-		Vnm_tprint( 1, "    np  -- nonpolar force\n");
 		Vnm_tprint( 1, "  qf  %4.3e  %4.3e  %4.3e\n",
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[0],
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].qfForce[1],
@@ -1085,10 +1078,6 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
-		Vnm_tprint( 1, "  np  %4.3e  %4.3e  %4.3e\n",
-					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[0],
-					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[1],
-					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].npForce[2]);
 	} else if (pbeparm->calcforce == PCF_COMPS) {
 		*nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
 		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
@@ -1106,29 +1095,25 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 									 mgparm->chgm));
 				VASSERT(Vpmg_ibForce(pmg, (*atomForce)[j].ibForce, j, 
 									 pbeparm->srfm));
-				VASSERT(Vpmg_dbnpForce(pmg, (*atomForce)[j].dbForce,
-									   (*atomForce)[j].npForce, j, pbeparm->srfm));
+				VASSERT(Vpmg_dbForce(pmg, (*atomForce)[j].dbForce, j, 
+									 pbeparm->srfm));
 			} else {
 				for (k=0; k<3; k++) {
 					(*atomForce)[j].qfForce[k] = 0;
 					(*atomForce)[j].ibForce[k] = 0;
 					(*atomForce)[j].dbForce[k] = 0;
-					(*atomForce)[j].npForce[k] = 0;
 				}
 			}
 			Vnm_tprint( 1, "mgF  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(
-						  (*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
-						  (*atomForce)[j].dbForce[0]+(*atomForce)[j].npForce[0]),
+						*((*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
+						  (*atomForce)[j].dbForce[0]),
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(
-						  (*atomForce)[j].qfForce[1]+(*atomForce)[j].ibForce[1]+
-						  (*atomForce)[j].dbForce[1]+(*atomForce)[j].npForce[1]),
+						*((*atomForce)[j].qfForce[1]+(*atomForce)[j].ibForce[1]+
+						  (*atomForce)[j].dbForce[1]),
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(
-						  (*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
-						  (*atomForce)[j].dbForce[2]+(*atomForce)[j].npForce[2]));
+						*((*atomForce)[j].qfForce[2]+(*atomForce)[j].ibForce[2]+
+						  (*atomForce)[j].dbForce[2]));
 			Vnm_tprint( 1, "mgF  qf  %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].qfForce[0],
@@ -1150,13 +1135,6 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 						*(*atomForce)[j].dbForce[1],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].dbForce[2]);
-			Vnm_tprint( 1, "mgF  np  %d  %4.3e  %4.3e  %4.3e\n", j, 
-						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(*atomForce)[j].npForce[0],
-						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(*atomForce)[j].npForce[1],
-						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
-						*(*atomForce)[j].npForce[2]);
 		}
 	} else *nforce = 0;
 	
@@ -1405,7 +1383,6 @@ VPUBLIC int writedataFlat(
 		}
 		
 		fprintf(file,"    temp %4.3f\n", pbeparm->temp);
-		fprintf(file,"    gamma %4.3f\n",pbeparm->gamma);
 		
 		for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
 			
@@ -1452,11 +1429,6 @@ VPUBLIC int writedataFlat(
 						(atomForce[icalc][0].dbForce[0]*conversion), 
 					        (atomForce[icalc][0].dbForce[1]*conversion),
 					        (atomForce[icalc][0].dbForce[2]*conversion));
-				fprintf(file,"        npForce %1.12E %1.12E %1.12E kJ/mol/A\n", 
-						(atomForce[icalc][0].npForce[0]*conversion), 
-					        (atomForce[icalc][0].npForce[1]*conversion),
-					        (atomForce[icalc][0].npForce[2]*conversion));
-
 			}
 			fprintf(file,"    end\n");
 		}
@@ -1651,7 +1623,6 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 		}
 		
 		fprintf(file,"      <temp>%4.3f K</temp>\n", pbeparm->temp);
-		fprintf(file,"      <gamma>%4.3f kJ/mol/A^2</gamma>\n",pbeparm->gamma);
 		
 		for (;icalc<=nosh->elec2calc[ielec];icalc++){ /* calc loop */
 			
@@ -1709,12 +1680,6 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 					atomForce[icalc][0].dbForce[1]*conversion); 
 				fprintf(file,"          <dbforce_z>%1.12E</dbforce_z>\n", 
 					atomForce[icalc][0].dbForce[2]*conversion); 
-				fprintf(file,"          <npforce_x>%1.12E</npforce_x>\n", 
-					atomForce[icalc][0].npForce[0]*conversion); 
-				fprintf(file,"          <npforce_y>%1.12E</npforce_y>\n", 
-					atomForce[icalc][0].npForce[1]*conversion); 
-				fprintf(file,"          <npforce_z>%1.12E</npforce_z>\n", 
-					atomForce[icalc][0].npForce[2]*conversion); 
 			}
 
 			fprintf(file,"      </calc>\n");
@@ -2218,8 +2183,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc];
 			lforce[0].dbForce[ivc] = 
 				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc];
-			lforce[0].npForce[ivc] = 
-				Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc];
 		}
 	} else if (refcalcforce == PCF_COMPS) { 
 		for (ifr=0; ifr<refnforce; ifr++) {
@@ -2230,8 +2193,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc];
 				lforce[ifr].dbForce[ivc] = 
 					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc];
-				lforce[ifr].npForce[ivc] = 
-					Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc];
 			}
 		}
 	}
@@ -2255,8 +2216,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].ibForce[ivc]);
 				lforce[0].dbForce[ivc] += 
 					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].dbForce[ivc]);
-				lforce[0].npForce[ivc] +=
-					(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[0].npForce[ivc]);
 			}
 		} else if (refcalcforce == PCF_COMPS) {
 			for (ifr=0; ifr<refnforce; ifr++) {
@@ -2267,8 +2226,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].ibForce[ivc]);
 					lforce[ifr].dbForce[ivc] += 
 						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].dbForce[ivc]);
-					lforce[ifr].npForce[ivc] += 
-						(scalar*Vunit_kb*(1e-3)*Vunit_Na*temp*aforce[ifr].npForce[ivc]);
 				}
 			}
 		}
@@ -2279,7 +2236,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vcom_reduce(com, lforce[ifr].qfForce, gforce[ifr].qfForce, 3, 2, 0);
 		Vcom_reduce(com, lforce[ifr].ibForce, gforce[ifr].ibForce, 3, 2, 0);
 		Vcom_reduce(com, lforce[ifr].dbForce, gforce[ifr].dbForce, 3, 2, 0);
-		Vcom_reduce(com, lforce[ifr].npForce, gforce[ifr].npForce, 3, 2, 0);
 	}
 	
 #if 0
@@ -2293,9 +2249,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "  Local net dielectric boundary force = \
 (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].dbForce[0],
 					lforce[0].dbForce[1], lforce[0].dbForce[2]);
-		Vnm_tprint( 1, "  Local net apolar boundary force = \
-(%1.12E, %1.12E, %1.12E) kJ/mol/A\n", lforce[0].npForce[0],
-					lforce[0].npForce[1], lforce[0].npForce[2]);
 	} else if (refcalcforce == PCF_COMPS) {
 		for (ifr=0; ifr<refnforce; ifr++) {
 			Vnm_tprint( 1, "  Local fixed charge force \
@@ -2307,9 +2260,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 			Vnm_tprint( 1, "  Local dielectric boundary force \
 (atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].dbForce[0],
 						lforce[ifr].dbForce[1], lforce[ifr].dbForce[2]);
-			Vnm_tprint( 1, "  Local apolar boundary force \
-(atom %d) = (%1.12E, %1.12E, %1.12E) kJ/mol/A\n", ifr, lforce[ifr].npForce[0],
-						lforce[ifr].npForce[1], lforce[ifr].npForce[2]);
 		}
 	}
 #endif
@@ -2321,12 +2271,11 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
 		Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
 		Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
-		Vnm_tprint( 1, "    np  -- Nonpolar boundary force\n");
 		
 		for (ivc=0; ivc<3; ivc++) {
 			totforce[ivc] = 
 			gforce[0].qfForce[ivc] + gforce[0].ibForce[ivc] \
-			+ gforce[0].npForce[ivc] + gforce[0].dbForce[ivc];
+			+ gforce[0].dbForce[ivc];
 		}
 		
 		Vnm_tprint( 1, "  tot %1.12E  %1.12E  %1.12E\n", totforce[0], 
@@ -2337,8 +2286,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 					gforce[0].ibForce[1], gforce[0].ibForce[2]);
 		Vnm_tprint( 1, "  db  %1.12E  %1.12E  %1.12E\n", gforce[0].dbForce[0], 
 					gforce[0].dbForce[1], gforce[0].dbForce[2]);
-		Vnm_tprint( 1, "  np  %1.12E  %1.12E  %1.12E\n", gforce[0].npForce[0], 
-					gforce[0].npForce[1], gforce[0].npForce[2]);
 		
 	} else if (refcalcforce == PCF_COMPS) {
 		
@@ -2348,7 +2295,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
 		Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
 		Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
-		Vnm_tprint( 1, "    np  n -- Nonpolar boundary force for atom n\n");
 		Vnm_tprint( 1, "    tot all -- Total force for system\n");
 		
 		totforce[0] = 0.0;
@@ -2365,22 +2311,18 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 			Vnm_tprint( 1, "  db  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 						gforce[ifr].dbForce[0], gforce[ifr].dbForce[1], 
 						gforce[ifr].dbForce[2]);
-			Vnm_tprint( 1, "  np  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-						gforce[ifr].npForce[0], gforce[ifr].npForce[1], 
-						gforce[ifr].npForce[2]);
 			Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
-						(gforce[ifr].npForce[0] + gforce[ifr].dbForce[0] \
+						(gforce[ifr].dbForce[0] \
 						 + gforce[ifr].ibForce[0] +
 						 gforce[ifr].qfForce[0]),
-						(gforce[ifr].npForce[1] + gforce[ifr].dbForce[1] \
+						(gforce[ifr].dbForce[1] \
 						 + gforce[ifr].ibForce[1] +
 						 gforce[ifr].qfForce[1]),
-						(gforce[ifr].npForce[2] + gforce[ifr].dbForce[2] \
+						(gforce[ifr].dbForce[2] \
 						 + gforce[ifr].ibForce[2] +
 						 gforce[ifr].qfForce[2]));
 			for (ivc=0; ivc<3; ivc++) {
-				totforce[ivc] += (gforce[ifr].npForce[ivc] \
-								+ gforce[ifr].dbForce[ivc] \
+				totforce[ivc] += (gforce[ifr].dbForce[ivc] \
 								+ gforce[ifr].ibForce[ivc] \
 								  + gforce[ifr].qfForce[ivc]);
 			}
@@ -2394,33 +2336,6 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 	
 	return 1;
 	
-}
-
-VPUBLIC int npenergyMG(NOsh *nosh, int icalc, Vpmg *pmg,
-					   int *nenergy, double *npEnergy) {
-	
-	MGparm *mgparm;
-	PBEparm *pbeparm;
-	int extEnergy;              /* When focusing, do we include energy
-		* contributions from outside the local
-		* partition? */
-	
-	mgparm = nosh->calc[icalc]->mgparm;
-	pbeparm = nosh->calc[icalc]->pbeparm;
-	
-	if (mgparm->type == 2) extEnergy = 0;
-	else extEnergy = 1;
-	
-	if (pbeparm->calcenergy != PCE_NO) {
-		*nenergy = 1;
-		/* Some processors don't count */
-		if (nosh->bogus == 0) {
-			*npEnergy = Vpmg_npEnergy(pmg, extEnergy);
-		} else *npEnergy = 0;
-		
-	} else *nenergy = 0;
-	
-	return 1;
 }
 
 #ifdef HAVE_MC_H
@@ -2468,8 +2383,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	focusFlag = 0;
 	pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
 						   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
-						   pbeparm->temp,
-						   pbeparm->gamma, pbeparm->pdie, pbeparm->sdie, 
+						   pbeparm->temp, pbeparm->pdie, pbeparm->sdie, 
 						   sparm, focusFlag,
 						   pbeparm->sdens);
 	

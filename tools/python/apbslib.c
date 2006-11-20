@@ -3038,7 +3038,6 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
            PyList_SetItem(qfholder, j, PyFloat_FromDouble(atomForce[0][i].qfForce[j]));
            PyList_SetItem(dbholder, j, PyFloat_FromDouble(atomForce[0][i].dbForce[j]));
            PyList_SetItem(ibholder, j, PyFloat_FromDouble(atomForce[0][i].ibForce[j]));
-           PyList_SetItem(npholder, j, PyFloat_FromDouble(atomForce[0][i].npForce[j]));
         }
         PyList_SetItem(qfvalues, i,  PyList_GetSlice(qfholder, 0, 3));
         PyList_SetItem(dbvalues, i,  PyList_GetSlice(dbholder, 0, 3));
@@ -6501,64 +6500,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_npenergyMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  NOsh *arg1 = (NOsh *) 0 ;
-  int arg2 ;
-  Vpmg *arg3 = (Vpmg *) 0 ;
-  int *arg4 = (int *) 0 ;
-  double *arg5 = (double *) 0 ;
-  int result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:npenergyMG",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "npenergyMG" "', argument " "1"" of type '" "NOsh *""'"); 
-  }
-  arg1 = (NOsh *)(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "npenergyMG" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = (int)(val2);
-  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_Vpmg, 0 |  0 );
-  if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "npenergyMG" "', argument " "3"" of type '" "Vpmg *""'"); 
-  }
-  arg3 = (Vpmg *)(argp3);
-  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_int, 0 |  0 );
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "npenergyMG" "', argument " "4"" of type '" "int *""'"); 
-  }
-  arg4 = (int *)(argp4);
-  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_double, 0 |  0 );
-  if (!SWIG_IsOK(res5)) {
-    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "npenergyMG" "', argument " "5"" of type '" "double *""'"); 
-  }
-  arg5 = (double *)(argp5);
-  result = (int)npenergyMG(arg1,arg2,arg3,arg4,arg5);
-  resultobj = SWIG_From_int((int)(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_killEnergy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   
@@ -7245,7 +7186,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"killMG", _wrap_killMG, METH_VARARGS, NULL},
 	 { (char *)"solveMG", _wrap_solveMG, METH_VARARGS, NULL},
 	 { (char *)"setPartMG", _wrap_setPartMG, METH_VARARGS, NULL},
-	 { (char *)"npenergyMG", _wrap_npenergyMG, METH_VARARGS, NULL},
 	 { (char *)"killEnergy", _wrap_killEnergy, METH_VARARGS, NULL},
 	 { (char *)"killForce", _wrap_killForce, METH_VARARGS, NULL},
 	 { (char *)"writedataMG", _wrap_writedataMG, METH_VARARGS, NULL},

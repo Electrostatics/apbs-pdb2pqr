@@ -160,9 +160,6 @@ struct sPBEparm {
     int setswin;  /**< Flag, @see swin */
     double temp;  /**< Temperature (in K) */
     int settemp;  /**< Flag, @see temp */
-    double gamma;  /**< Surface tension for apolar energies/forces
-                    * (in kJ/mol/A^2) */
-    int setgamma;  /**< Flag, @see gamma */
     PBEparm_calcEnergy calcenergy;  /**< Energy calculation flag */
     int setcalcenergy;  /**< Flag, @see calcenergy */
     PBEparm_calcForce calcforce;  /**< Atomic forces calculation */

@@ -121,7 +121,6 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setsrad = 0;
     thee->setswin = 0; 
     thee->settemp = 0;
-    thee->setgamma = 0;
     thee->setcalcenergy = 0;      
     thee->setcalcforce = 0;       
     thee->setsdens = 0;
@@ -218,10 +217,6 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         Vnm_print(2, "PBEparm_check: TEMP not set!\n");
         return 0;
     }
-    if (!thee->setgamma) {
-        Vnm_print(2, "PBEparm_check: GAMMA not set!\n");
-        return 0;
-    }
     if (!thee->setcalcenergy) thee->calcenergy = PCE_NO;
     if (!thee->setcalcforce) thee->calcforce = PCF_NO;
     if (!thee->setwritemat) thee->writemat = 0;
@@ -270,8 +265,6 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setswin = parm->setswin;
     thee->temp = parm->temp;
     thee->settemp = parm->settemp;
-    thee->gamma = parm->gamma;
-    thee->setgamma = parm->setgamma;
     thee->calcenergy = parm->calcenergy;
     thee->setcalcenergy = parm->setcalcenergy;
     thee->calcforce = parm->calcforce;
@@ -626,25 +619,6 @@ keyword!\n", tok);
         return -1;
 }
 
-VPRIVATE int PBEparm_parseGAMMA(PBEparm *thee, Vio *sock) {
-    char tok[VMAX_BUFSIZE];
-    double tf;
-
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%lf", &tf) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GAMMA \
-keyword!\n", tok);
-        return -1;
-    }
-    thee->gamma = tf;
-    thee->setgamma = 1;
-    return 1;
-
-    VERROR1:
-        Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-        return -1;
-}
-
 VPRIVATE int PBEparm_parseUSEMAP(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     int ti;
@@ -930,8 +904,6 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseSWIN(thee, sock);
     } else if (Vstring_strcasecmp(tok, "temp") == 0) {
         return PBEparm_parseTEMP(thee, sock);
-    } else if (Vstring_strcasecmp(tok, "gamma") == 0) {
-        return PBEparm_parseGAMMA(thee, sock);
     } else if (Vstring_strcasecmp(tok, "usemap") == 0) {
         return PBEparm_parseUSEMAP(thee, sock);
     } else if (Vstring_strcasecmp(tok, "calcenergy") == 0) {
