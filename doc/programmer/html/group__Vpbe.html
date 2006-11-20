@@ -86,10 +86,10 @@ typedef <a class="el" href="structsVpbe.html">sVpbe</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a19">Vpbe_getZmagic</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get charge scaling factor. </em> <a href="#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVpbe.html">Vpbe</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a20">Vpbe_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVpbe.html">Vpbe</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a20">Vpbe_ctor</a> (<a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct Vpbe object. </em> <a href="#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a21">Vpbe_ctor2</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double gamma, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a21">Vpbe_ctor2</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, <a class="el" href="structsValist.html">Valist</a> *alist, int ionNum, double *ionConc, double *ionRadii, double *ionQ, double T, double soluteDiel, double solventDiel, double solventRadius, int focusFlag, double sdens)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to construct Vpbe objct. </em> <a href="#a21"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpbe.html#a22">Vpbe_getIons</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *thee, int *nion, double ionConc[MAXION], double ionRadii[MAXION], double ionQ[MAXION])</td></tr>
@@ -157,12 +157,6 @@ Contains objects and parameters used in every PBE calculation, regardless of met
           <td></td>
           <td></td>
           <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap> <em>gamma</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>double&nbsp;</td>
           <td class="mdname" nowrap> <em>soluteDiel</em>, </td>
         </tr>
         <tr>
@@ -225,7 +219,6 @@ Construct Vpbe object.
     <tr><td valign=top><em>ionRadii</em>&nbsp;</td><td>Array containing counterion species' radii (A) </td></tr>
     <tr><td valign=top><em>ionQ</em>&nbsp;</td><td>Array containing counterion species' charges (e) </td></tr>
     <tr><td valign=top><em>T</em>&nbsp;</td><td>temperature (K) </td></tr>
-    <tr><td valign=top><em>gamma</em>&nbsp;</td><td>Apolar coefficient (kJ/mol/A^2) </td></tr>
     <tr><td valign=top><em>soluteDiel</em>&nbsp;</td><td>Solute dielectric constant </td></tr>
     <tr><td valign=top><em>solventDiel</em>&nbsp;</td><td>Solvent dielectric constant </td></tr>
     <tr><td valign=top><em>solventRadius</em>&nbsp;</td><td>Solvent radius </td></tr>
@@ -283,12 +276,6 @@ Construct Vpbe object.
           <td></td>
           <td class="md" nowrap>double&nbsp;</td>
           <td class="mdname" nowrap> <em>T</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap> <em>gamma</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -357,7 +344,6 @@ FORTRAN stub to construct Vpbe objct.
     <tr><td valign=top><em>ionRadii</em>&nbsp;</td><td>Array containing counterion species' radii (A) </td></tr>
     <tr><td valign=top><em>ionQ</em>&nbsp;</td><td>Array containing counterion species' charges (e) </td></tr>
     <tr><td valign=top><em>T</em>&nbsp;</td><td>temperature (K) </td></tr>
-    <tr><td valign=top><em>gamma</em>&nbsp;</td><td>Apolar coefficient (kJ/mol/A^2) </td></tr>
     <tr><td valign=top><em>soluteDiel</em>&nbsp;</td><td>Solute dielectric constant </td></tr>
     <tr><td valign=top><em>solventDiel</em>&nbsp;</td><td>Solvent dielectric constant </td></tr>
     <tr><td valign=top><em>solventRadius</em>&nbsp;</td><td>Solvent radius </td></tr>
@@ -376,8 +362,8 @@ FORTRAN stub to construct Vpbe objct.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpbe_a21_cgraph.png" border="0" usemap="#group__Vpbe_a21_cgraph_map" alt=""></center>
-<map name="group__Vpbe_a21_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpbe_a20_cgraph.png" border="0" usemap="#group__Vpbe_a20_cgraph_map" alt=""></center>
+<map name="group__Vpbe_a20_cgraph_map">
 <area href="group__Vacc.html#a2" shape="rect" coords="173,170,256,197" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="841,119,1006,146" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="868,373,980,399" alt="">
@@ -438,9 +424,9 @@ Object destructor.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpbe_a22_cgraph.png" border="0" usemap="#group__Vpbe_a22_cgraph_map" alt=""></center>
-<map name="group__Vpbe_a22_cgraph_map">
-<area href="group__Vpbe.html#a23" shape="rect" coords="142,84,233,110" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpbe_a21_cgraph.png" border="0" usemap="#group__Vpbe_a21_cgraph_map" alt=""></center>
+<map name="group__Vpbe_a21_cgraph_map">
+<area href="group__Vpbe.html#a22" shape="rect" coords="142,84,233,110" alt="">
 <area href="group__Vacc.html#a6" shape="rect" coords="285,58,367,85" alt="">
 <area href="group__Vclist.html#a11" shape="rect" coords="283,109,369,136" alt="">
 <area href="group__Vacc.html#a7" shape="rect" coords="421,58,511,85" alt="">
@@ -489,8 +475,8 @@ FORTRAN stub object destructor.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpbe_a23_cgraph.png" border="0" usemap="#group__Vpbe_a23_cgraph_map" alt=""></center>
-<map name="group__Vpbe_a23_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpbe_a22_cgraph.png" border="0" usemap="#group__Vpbe_a22_cgraph_map" alt=""></center>
+<map name="group__Vpbe_a22_cgraph_map">
 <area href="group__Vacc.html#a6" shape="rect" coords="152,58,234,85" alt="">
 <area href="group__Vclist.html#a11" shape="rect" coords="150,109,236,136" alt="">
 <area href="group__Vacc.html#a7" shape="rect" coords="288,58,378,85" alt="">
@@ -579,8 +565,8 @@ Perform an inefficient double sum to calculate the Coulombic energy of a set of 
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpbe_a24_cgraph.png" border="0" usemap="#group__Vpbe_a24_cgraph_map" alt=""></center>
-<map name="group__Vpbe_a24_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpbe_a23_cgraph.png" border="0" usemap="#group__Vpbe_a23_cgraph_map" alt=""></center>
+<map name="group__Vpbe_a23_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="268,8,380,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="241,58,406,85" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="258,109,389,136" alt="">
@@ -1382,11 +1368,11 @@ Return the memory used by this structure (and its contents) in bytes.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpbe_a25_cgraph.png" border="0" usemap="#group__Vpbe_a25_cgraph_map" alt=""></center>
-<map name="group__Vpbe_a25_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpbe_a24_cgraph.png" border="0" usemap="#group__Vpbe_a24_cgraph_map" alt=""></center>
+<map name="group__Vpbe_a24_cgraph_map">
 <area href="group__Vacc.html#a0" shape="rect" coords="171,8,283,34" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:20:10 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:51 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

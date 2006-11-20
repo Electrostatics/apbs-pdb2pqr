@@ -130,23 +130,38 @@ typedef <a class="el" href="structsVacc.html">sVacc</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a22">Vacc_splineAccGradAtomNorm4</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[VAPBS_DIM], double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Report gradient of spline-based accessibility with respect to a particular atom normalized by a 4th order accessibility value due to that atom at that point (see Vpmg_splineAccAtom). </em> <a href="group__Vacc.html#a22"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a23">Vacc_SASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a23">Vacc_splineAccGradAtomNorm3</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[VAPBS_DIM], double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area. </em> <a href="group__Vacc.html#a23"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a24">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Report gradient of spline-based accessibility with respect to a particular atom normalized by a 3rd order accessibility value due to that atom at that point (see Vpmg_splineAccAtom). </em> <a href="group__Vacc.html#a23"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a24">Vacc_SASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible surface area (SASA). </em> <a href="group__Vacc.html#a24"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a25">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area. </em> <a href="group__Vacc.html#a24"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a25">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the atomic solvent accessible surface area (SASA). </em> <a href="group__Vacc.html#a25"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a26">Vacc_atomSASPoints</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible surface area (SASA). </em> <a href="group__Vacc.html#a25"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a26">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the set of points for this atom's solvent-accessible surface. </em> <a href="group__Vacc.html#a26"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the atomic solvent accessible surface area (SASA). </em> <a href="group__Vacc.html#a26"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a27">Vacc_atomSASPoints</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the set of points for this atom's solvent-accessible surface. </em> <a href="group__Vacc.html#a27"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a28">Vacc_atomdSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the derivatve of solvent accessible volume. </em> <a href="group__Vacc.html#a28"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a29">Vacc_atomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the derivatve of solvent accessible area. </em> <a href="group__Vacc.html#a29"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a30">Vacc_totalAtomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Testing purposes only. </em> <a href="group__Vacc.html#a30"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible volume (SAV). </em> <a href="group__Vacc.html#a31"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Vacc. 
 <p>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a> 877 2006-05-01 18:57:54Z todd_dolinsky </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a> 977 2006-10-27 21:28:20Z sdg0919 </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan A. Baker</dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
@@ -206,7 +221,7 @@ Contains declarations for class Vacc.
  * carries forward this exception.
  *
  * </pre></div></dd></dl>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:29 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:10 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

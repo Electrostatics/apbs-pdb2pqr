@@ -67,78 +67,76 @@
 <a name="l00160"></a><a class="code" href="structsPBEparm.html#o29">00160</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o29">setswin</a>;  
 <a name="l00161"></a><a class="code" href="structsPBEparm.html#o30">00161</a>     <span class="keywordtype">double</span> <a class="code" href="structsPBEparm.html#o30">temp</a>;  
 <a name="l00162"></a><a class="code" href="structsPBEparm.html#o31">00162</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o31">settemp</a>;  
-<a name="l00163"></a><a class="code" href="structsPBEparm.html#o32">00163</a>     <span class="keywordtype">double</span> <a class="code" href="structsPBEparm.html#o32">gamma</a>;  
-<a name="l00165"></a><a class="code" href="structsPBEparm.html#o33">00165</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o33">setgamma</a>;  
-<a name="l00166"></a><a class="code" href="structsPBEparm.html#o34">00166</a>     <a class="code" href="group__PBEparm.html#a0">PBEparm_calcEnergy</a> <a class="code" href="structsPBEparm.html#o34">calcenergy</a>;  
-<a name="l00167"></a><a class="code" href="structsPBEparm.html#o35">00167</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o35">setcalcenergy</a>;  
-<a name="l00168"></a><a class="code" href="structsPBEparm.html#o36">00168</a>     <a class="code" href="group__PBEparm.html#a1">PBEparm_calcForce</a> <a class="code" href="structsPBEparm.html#o36">calcforce</a>;  
-<a name="l00169"></a><a class="code" href="structsPBEparm.html#o37">00169</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o37">setcalcforce</a>;  
-<a name="l00170"></a><a class="code" href="structsPBEparm.html#o38">00170</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o38">numwrite</a>;  
-<a name="l00171"></a><a class="code" href="structsPBEparm.html#o39">00171</a>     <span class="keywordtype">char</span> <a class="code" href="structsPBEparm.html#o39">writestem</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>][VMAX_ARGLEN]; 
-<a name="l00173"></a><a class="code" href="structsPBEparm.html#o40">00173</a>     <a class="code" href="group__Vhal.html#a38">Vdata_Type</a> <a class="code" href="structsPBEparm.html#o40">writetype</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>];  
-<a name="l00174"></a><a class="code" href="structsPBEparm.html#o41">00174</a>     <a class="code" href="group__Vhal.html#a39">Vdata_Format</a> <a class="code" href="structsPBEparm.html#o41">writefmt</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>];  
-<a name="l00176"></a><a class="code" href="structsPBEparm.html#o42">00176</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o42">writemat</a>;  
-<a name="l00179"></a><a class="code" href="structsPBEparm.html#o43">00179</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o43">setwritemat</a>;  
-<a name="l00180"></a><a class="code" href="structsPBEparm.html#o44">00180</a>     <span class="keywordtype">char</span> <a class="code" href="structsPBEparm.html#o44">writematstem</a>[VMAX_ARGLEN];  
-<a name="l00181"></a><a class="code" href="structsPBEparm.html#o45">00181</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o45">writematflag</a>;  
-<a name="l00186"></a><a class="code" href="structsPBEparm.html#o46">00186</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o46">parsed</a>;  
-00188 };
-00189 
-<a name="l00194"></a><a class="code" href="group__PBEparm.html#a2">00194</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsPBEparm.html">sPBEparm</a> <a class="code" href="group__PBEparm.html#a2">PBEparm</a>;
-00195 
-00196 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
-00197 <span class="comment">// Class NOsh: Non-inlineable methods (mcsh.c)</span>
-00199 <span class="comment"></span>
-00205 <span class="comment">double PBEparm_getIonCharge(</span>
-00206 <span class="comment">        PBEparm *thee, </span>
-00207 <span class="comment">        int iion  </span>
-00208 <span class="comment">        );</span>
-00209 <span class="comment"></span>
-00215 <span class="comment">double PBEparm_getIonConc(</span>
-00216 <span class="comment">        PBEparm *thee, </span>
-00217 <span class="comment">        int iion </span>
-00218 <span class="comment">        );</span>
-00219 <span class="comment"></span>
-00225 <span class="comment">double PBEparm_getIonRadius(</span>
-00226 <span class="comment">        PBEparm *thee, </span>
-00227 <span class="comment">        int iion </span>
-00228 <span class="comment">        );</span>
-00229 <span class="comment"></span>
-00230 <span class="comment"></span>
-00236 <span class="comment">PBEparm* PBEparm_ctor();</span>
-00237 <span class="comment"></span>
-00243 <span class="comment">int PBEparm_ctor2(</span>
-00244 <span class="comment">        PBEparm *thee </span>
-00245 <span class="comment">        );</span>
-00246 <span class="comment"></span>
-00251 <span class="comment">void PBEparm_dtor(</span>
-00252 <span class="comment">        PBEparm **thee </span>
-00253 <span class="comment">        );</span>
-00254 <span class="comment"></span>
-00259 <span class="comment">void PBEparm_dtor2(</span>
-00260 <span class="comment">        PBEparm *thee </span>
-00261 <span class="comment">        );</span>
-00262 <span class="comment"></span>
-00268 <span class="comment">int PBEparm_check(</span>
-00269 <span class="comment">        PBEparm *thee </span>
-00270 <span class="comment">        );</span>
-00271 <span class="comment"></span>
-00276 <span class="comment">void PBEparm_copy(</span>
-00277 <span class="comment">        PBEparm *thee, </span>
-00278 <span class="comment">        PBEparm *parm </span>
-00279 <span class="comment">        );</span>
-00280 <span class="comment"></span>
-00287 <span class="comment">int PBEparm_parseToken(</span>
-00288 <span class="comment">        PBEparm *thee, </span>
-00289 <span class="comment">        char tok[VMAX_BUFSIZE], </span>
-00290 <span class="comment">        Vio *sock </span>
-00291 <span class="comment">        );</span>
+<a name="l00163"></a><a class="code" href="structsPBEparm.html#o32">00163</a>     <a class="code" href="group__PBEparm.html#a0">PBEparm_calcEnergy</a> <a class="code" href="structsPBEparm.html#o32">calcenergy</a>;  
+<a name="l00164"></a><a class="code" href="structsPBEparm.html#o33">00164</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o33">setcalcenergy</a>;  
+<a name="l00165"></a><a class="code" href="structsPBEparm.html#o34">00165</a>     <a class="code" href="group__PBEparm.html#a1">PBEparm_calcForce</a> <a class="code" href="structsPBEparm.html#o34">calcforce</a>;  
+<a name="l00166"></a><a class="code" href="structsPBEparm.html#o35">00166</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o35">setcalcforce</a>;  
+<a name="l00167"></a><a class="code" href="structsPBEparm.html#o36">00167</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o36">numwrite</a>;  
+<a name="l00168"></a><a class="code" href="structsPBEparm.html#o37">00168</a>     <span class="keywordtype">char</span> <a class="code" href="structsPBEparm.html#o37">writestem</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>][VMAX_ARGLEN]; 
+<a name="l00170"></a><a class="code" href="structsPBEparm.html#o38">00170</a>     <a class="code" href="group__Vhal.html#a38">Vdata_Type</a> <a class="code" href="structsPBEparm.html#o38">writetype</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>];  
+<a name="l00171"></a><a class="code" href="structsPBEparm.html#o39">00171</a>     <a class="code" href="group__Vhal.html#a39">Vdata_Format</a> <a class="code" href="structsPBEparm.html#o39">writefmt</a>[<a class="code" href="group__PBEparm.html#a13">PBEPARM_MAXWRITE</a>];  
+<a name="l00173"></a><a class="code" href="structsPBEparm.html#o40">00173</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o40">writemat</a>;  
+<a name="l00176"></a><a class="code" href="structsPBEparm.html#o41">00176</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o41">setwritemat</a>;  
+<a name="l00177"></a><a class="code" href="structsPBEparm.html#o42">00177</a>     <span class="keywordtype">char</span> <a class="code" href="structsPBEparm.html#o42">writematstem</a>[VMAX_ARGLEN];  
+<a name="l00178"></a><a class="code" href="structsPBEparm.html#o43">00178</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o43">writematflag</a>;  
+<a name="l00183"></a><a class="code" href="structsPBEparm.html#o44">00183</a>     <span class="keywordtype">int</span> <a class="code" href="structsPBEparm.html#o44">parsed</a>;  
+00185 };
+00186 
+<a name="l00191"></a><a class="code" href="group__PBEparm.html#a2">00191</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsPBEparm.html">sPBEparm</a> <a class="code" href="group__PBEparm.html#a2">PBEparm</a>;
+00192 
+00193 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
+00194 <span class="comment">// Class NOsh: Non-inlineable methods (mcsh.c)</span>
+00196 <span class="comment"></span>
+00202 <span class="comment">double PBEparm_getIonCharge(</span>
+00203 <span class="comment">        PBEparm *thee, </span>
+00204 <span class="comment">        int iion  </span>
+00205 <span class="comment">        );</span>
+00206 <span class="comment"></span>
+00212 <span class="comment">double PBEparm_getIonConc(</span>
+00213 <span class="comment">        PBEparm *thee, </span>
+00214 <span class="comment">        int iion </span>
+00215 <span class="comment">        );</span>
+00216 <span class="comment"></span>
+00222 <span class="comment">double PBEparm_getIonRadius(</span>
+00223 <span class="comment">        PBEparm *thee, </span>
+00224 <span class="comment">        int iion </span>
+00225 <span class="comment">        );</span>
+00226 <span class="comment"></span>
+00227 <span class="comment"></span>
+00233 <span class="comment">PBEparm* PBEparm_ctor();</span>
+00234 <span class="comment"></span>
+00240 <span class="comment">int PBEparm_ctor2(</span>
+00241 <span class="comment">        PBEparm *thee </span>
+00242 <span class="comment">        );</span>
+00243 <span class="comment"></span>
+00248 <span class="comment">void PBEparm_dtor(</span>
+00249 <span class="comment">        PBEparm **thee </span>
+00250 <span class="comment">        );</span>
+00251 <span class="comment"></span>
+00256 <span class="comment">void PBEparm_dtor2(</span>
+00257 <span class="comment">        PBEparm *thee </span>
+00258 <span class="comment">        );</span>
+00259 <span class="comment"></span>
+00265 <span class="comment">int PBEparm_check(</span>
+00266 <span class="comment">        PBEparm *thee </span>
+00267 <span class="comment">        );</span>
+00268 <span class="comment"></span>
+00273 <span class="comment">void PBEparm_copy(</span>
+00274 <span class="comment">        PBEparm *thee, </span>
+00275 <span class="comment">        PBEparm *parm </span>
+00276 <span class="comment">        );</span>
+00277 <span class="comment"></span>
+00284 <span class="comment">int PBEparm_parseToken(</span>
+00285 <span class="comment">        PBEparm *thee, </span>
+00286 <span class="comment">        char tok[VMAX_BUFSIZE], </span>
+00287 <span class="comment">        Vio *sock </span>
+00288 <span class="comment">        );</span>
+00289 <span class="comment"></span>
+00290 <span class="comment"></span>
+00291 <span class="comment">#endif </span>
 00292 <span class="comment"></span>
 00293 <span class="comment"></span>
-00294 <span class="comment">#endif </span>
-00295 <span class="comment"></span>
-00296 <span class="comment"></span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:19 2006 for APBS by
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:22:59 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

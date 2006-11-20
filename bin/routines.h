@@ -96,7 +96,6 @@ struct AtomForce {
    double ibForce[3];  /**< Ion-boundary force */
    double qfForce[3];  /**< Charge-field force */
    double dbForce[3];  /**< Dielectric boundary force */
-   double npForce[3];  /**< Apolar force */
 };
 
 /**
@@ -266,19 +265,6 @@ VEXTERNC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg);
 VEXTERNC int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
   int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy,
   double *dielEnergy);
-
-/**
- * @brief  Calculate apolar energies from MG solution
- * @ingroup  Frontend
- * @author  Nathan Baker
- * @param nosh  Object with parsed input file parameters
- * @param icalc  Index of calculation 
- * @param pmg  MG object 
- * @param nenergy  Set to number of entries in energy arrays
- * @param npEnergy  Set to apolar energy (in kT)
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int npenergyMG(NOsh* nosh, int icalc, Vpmg *pmg, int *nenergy, 
-  double *npEnergy);
 
 /** 
  * @brief  Kill arrays allocated for energies

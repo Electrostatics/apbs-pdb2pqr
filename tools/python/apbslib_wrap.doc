@@ -410,8 +410,6 @@ solveMG(nosh,pmg,type)
 
 setPartMG(nosh,mgparm,pmg)
 
-npenergyMG(nosh,icalc,pmg,nenergy,npEnergy)
-
 killEnergy()
 
 forceMG(mem,nosh,pbeparm,mgparm,pmg,nforce,atomForce,alist)

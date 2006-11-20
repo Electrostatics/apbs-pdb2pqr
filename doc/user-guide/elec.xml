@@ -140,9 +140,6 @@
 				<command><link linkend="temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="gamma">gamma</link></command>
-			</member>
-			<member>
 				<command><link linkend="calcenergy">calcenergy</link></command>
 			</member>
 			<member>
@@ -256,9 +253,6 @@
 				<command><link linkend="temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="gamma">gamma</link></command>
-			</member>
-			<member>
 				<command><link linkend="calcenergy">calcenergy</link></command>
 			</member>
 			<member>
@@ -347,9 +341,6 @@
 			</member>
 			<member>
 				<command><link linkend="temp">temp</link></command>
-			</member>
-			<member>
-				<command><link linkend="gamma">gamma</link></command>
 			</member>
 			<member>
 				<command><link linkend="calcenergy">calcenergy</link></command>
@@ -475,9 +466,6 @@
 				<command><link linkend="temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="gamma">gamma</link></command>
-			</member>
-			<member>
 				<command><link linkend="calcenergy">calcenergy</link></command>
 			</member>
 			<member>
@@ -562,9 +550,6 @@
 			</member>
 			<member>
 				<command><link linkend="temp">temp</link></command>
-			</member>
-			<member>
-				<command><link linkend="gamma">gamma</link></command>
 			</member>
 			<member>
 				<command><link linkend="calcenergy">calcenergy</link></command>
@@ -1155,7 +1140,7 @@
 			</para>
 		</listitem>
 
-
+		<!--
 		<listitem id="gamma">
 			<cmdsynopsis>
 				<command>gamma</command>
@@ -1176,6 +1161,7 @@
 				</variablelist>
 			</para>
 		</listitem>
+		-->
 
 		<listitem id="gcent">
 			<cmdsynopsis>

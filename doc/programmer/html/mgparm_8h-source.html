@@ -12,23 +12,23 @@
 00077 <span class="preprocessor">#include "maloc/maloc.h"</span>
 00078 <span class="preprocessor">#include "<a class="code" href="vhal_8h.html">apbs/vhal.h</a>"</span>
 00079 
-<a name="l00084"></a><a class="code" href="group__MGparm.html#a22">00084</a> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a22">eMGparm_CalcType</a> {
-00085     <a class="code" href="group__MGparm.html#a22a3">MCT_MANUAL</a>=0,  
-00086     <a class="code" href="group__MGparm.html#a22a4">MCT_AUTO</a>=1,  
-00087     <a class="code" href="group__MGparm.html#a22a5">MCT_PARALLEL</a>=2,  
-00088     <a class="code" href="group__MGparm.html#a22a6">MCT_DUMMY</a>=3,  
-00089         <a class="code" href="group__MGparm.html#a22a7">MCT_NONE</a>=4  
+<a name="l00084"></a><a class="code" href="group__MGparm.html#a23">00084</a> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a23">eMGparm_CalcType</a> {
+00085     <a class="code" href="group__MGparm.html#a23a3">MCT_MANUAL</a>=0,  
+00086     <a class="code" href="group__MGparm.html#a23a4">MCT_AUTO</a>=1,  
+00087     <a class="code" href="group__MGparm.html#a23a5">MCT_PARALLEL</a>=2,  
+00088     <a class="code" href="group__MGparm.html#a23a6">MCT_DUMMY</a>=3,  
+00089         <a class="code" href="group__MGparm.html#a23a7">MCT_NONE</a>=4  
 00090 };
 00091 
-<a name="l00096"></a><a class="code" href="group__MGparm.html#a0">00096</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a22">eMGparm_CalcType</a> <a class="code" href="group__MGparm.html#a0">MGparm_CalcType</a>;
+<a name="l00096"></a><a class="code" href="group__MGparm.html#a0">00096</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a23">eMGparm_CalcType</a> <a class="code" href="group__MGparm.html#a0">MGparm_CalcType</a>;
 00097 
-<a name="l00102"></a><a class="code" href="group__MGparm.html#a23">00102</a> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a23">eMGparm_CentMeth</a> {
-00103     <a class="code" href="group__MGparm.html#a23a8">MCM_POINT</a>=0, 
-00104     <a class="code" href="group__MGparm.html#a23a9">MCM_MOLECULE</a>=1,  
-00105         <a class="code" href="group__MGparm.html#a23a10">MCM_FOCUS</a>=2  
+<a name="l00102"></a><a class="code" href="group__MGparm.html#a24">00102</a> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a24">eMGparm_CentMeth</a> {
+00103     <a class="code" href="group__MGparm.html#a24a8">MCM_POINT</a>=0, 
+00104     <a class="code" href="group__MGparm.html#a24a9">MCM_MOLECULE</a>=1,  
+00105         <a class="code" href="group__MGparm.html#a24a10">MCM_FOCUS</a>=2  
 00106 };
 00107 
-<a name="l00112"></a><a class="code" href="group__MGparm.html#a1">00112</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a23">eMGparm_CentMeth</a> <a class="code" href="group__MGparm.html#a1">MGparm_CentMeth</a>;
+<a name="l00112"></a><a class="code" href="group__MGparm.html#a1">00112</a> <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="group__MGparm.html#a24">eMGparm_CentMeth</a> <a class="code" href="group__MGparm.html#a1">MGparm_CentMeth</a>;
 <a name="l00121"></a><a class="code" href="structsMGparm.html">00121</a> <span class="keyword">struct </span><a class="code" href="structsMGparm.html">sMGparm</a> {
 00122 
 <a name="l00123"></a><a class="code" href="structsMGparm.html#o0">00123</a>     <a class="code" href="group__MGparm.html#a0">MGparm_CalcType</a> <a class="code" href="structsMGparm.html#o0">type</a>;  
@@ -79,7 +79,7 @@
 <a name="l00192"></a><a class="code" href="structsMGparm.html#o41">00192</a>     <span class="keywordtype">int</span> <a class="code" href="structsMGparm.html#o41">setasync</a>; 
 00193 };
 00194 
-<a name="l00199"></a><a class="code" href="group__MGparm.html#a24">00199</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsMGparm.html">sMGparm</a> <a class="code" href="group__MGparm.html#a24">MGparm</a>;
+<a name="l00199"></a><a class="code" href="group__MGparm.html#a25">00199</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsMGparm.html">sMGparm</a> <a class="code" href="group__MGparm.html#a25">MGparm</a>;
 00200 
 00207 <span class="keywordtype">int</span> <a class="code" href="group__MGparm.html#a6">MGparm_getNx</a>(MGparm *thee);
 00208 
@@ -105,7 +105,7 @@
 00288 
 00295 <span class="keywordtype">double</span> <a class="code" href="group__MGparm.html#a5">MGparm_getCenterZ</a>(MGparm *thee);
 00296 
-00303 <a class="code" href="group__MGparm.html#a24">MGparm</a>*  <a class="code" href="group__MGparm.html#a12">MGparm_ctor</a>(MGparm_CalcType type);
+00303 <a class="code" href="group__MGparm.html#a25">MGparm</a>*  <a class="code" href="group__MGparm.html#a12">MGparm_ctor</a>(MGparm_CalcType type);
 00304 
 00312 <span class="keywordtype">int</span>      <a class="code" href="group__MGparm.html#a13">MGparm_ctor2</a>(MGparm *thee, MGparm_CalcType type);
 00313 
@@ -117,13 +117,13 @@
 00335 
 00342 <span class="keywordtype">void</span>     <a class="code" href="group__MGparm.html#a17">MGparm_copy</a>(MGparm *thee, MGparm *parm);
 00343 
-00353 <span class="keywordtype">int</span>      <a class="code" href="group__MGparm.html#a31">MGparm_parseToken</a>(MGparm *thee, <span class="keywordtype">char</span> tok[VMAX_BUFSIZE], 
+00353 <span class="keywordtype">int</span>      <a class="code" href="group__MGparm.html#a32">MGparm_parseToken</a>(MGparm *thee, <span class="keywordtype">char</span> tok[VMAX_BUFSIZE], 
 00354                     Vio *sock);
 00355 
 00356 <span class="preprocessor">#endif </span>
 00357 <span class="preprocessor"></span>
 00358 
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:19 2006 for APBS by
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:22:59 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

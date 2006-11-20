@@ -24,9 +24,9 @@
       it is their choice whether to do so. The GNU General Public License gives
       permission to release a modified version without this exception; this
       exception also makes it possible to release a modified version which
-      carries forward this exception.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">Availability</a></span></dt><dt><span class="sect1"><a href="#id929915">Binary installation</a></span></dt><dt><span class="sect1"><a href="#id929959">Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">Prerequisites</a></span></dt><dt><span class="sect2"><a href="#setup-sect">Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id930495">Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#id930656">Machine-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933176">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933733">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934017">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934352">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934486">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934511">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934714">Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933183">Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">ELEC statements</a></span></dt><dt><span class="sect2"><a href="#print">PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id1004794">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1005009">Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1006139">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
-      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1006437">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1006706">Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id943106">Sensitivity of 2PHK:B solvation energy calculations
-								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id936517">Template for APBS input file</a></dt><dt>4.2. <a href="#id969648">PRINT statement example</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Introduction</h2></div></div></div><p>APBS is a software package for the numerical solution of the
+      carries forward this exception.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">Availability</a></span></dt><dt><span class="sect1"><a href="#id929915">Binary installation</a></span></dt><dt><span class="sect1"><a href="#id929959">Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">Prerequisites</a></span></dt><dt><span class="sect2"><a href="#setup-sect">Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id930495">Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#id930656">Machine-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933176">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933733">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934029">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934365">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934498">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934524">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934727">Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933183">Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">ELEC statements</a></span></dt><dt><span class="sect2"><a href="#print">PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id1004297">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1004511">Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1005642">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
+      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1005940">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1006209">Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id943002">Sensitivity of 2PHK:B solvation energy calculations
+								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id936542">Template for APBS input file</a></dt><dt>4.2. <a href="#id969412">PRINT statement example</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Introduction</h2></div></div></div><p>APBS is a software package for the numerical solution of the
 		Poisson-Boltzmann equation (PBE), one of the most popular continuum models
 		for describing electrostatic interactions between molecular solutes in
 		salty, aqueous media. Continuum electrostatics plays an important role in
@@ -437,7 +437,7 @@
                      <code class="prompt">$</code> <strong class="userinput"><code> make; make install </code></strong>
                    </pre><p>
                 </p></li></ol></div><p>
-        </p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="contents-sect"></a>Chapter 3. Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id933176">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933733">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934017">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934352">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934486">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934511">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934714">Source code</a></span></dt></dl></div><p>
+        </p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="contents-sect"></a>Chapter 3. Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id933176">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933733">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934029">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934365">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934498">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934524">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934727">Source code</a></span></dt></dl></div><p>
 		This chapter gives an overview of the binaries, tools, etc. distributed as
 		part of the APBS software package.  It is organized by directory; later
 		chapters provide a more in-depth description on tools specific to particular
@@ -495,7 +495,9 @@
 				</p><div class="itemizedlist"><ul type="disc"><li><p>Fill in missing atoms in the PDB (within reason)</p></li><li><p>Add hydrogens to the structure to optimize the
 							hydrogen-bonding network.</p></li><li><p>Calculate side-chain pKas</p></li><li><p>Assign charges and radii according to one of the
 							following force fields:  CHARMM23, AMBER02, or PARSE</p></li><li><p>Return the results in <a href="#pqr-format" title="PQR biomolecular structure format">PQR
-								format</a></p></li></ul></div><p>
+								format</a></p></li><li><p>Generate <a href="#apbs-input" title="Input files">APBS
+								input
+								files.</a></p></li></ul></div><p>
 			</p><p>Please visit the PDB2PQR home page (
 				<a href="http://pdb2pqr.sourceforge.net" target="_top"> 
 					http://pdb2pqr.sourceforge.net</a>) for more information, 
@@ -531,7 +533,7 @@
 							for 
 							<a href="#mg-manual" title="Manual multigrid calculation (mg-manual)">mg-manual</a>
 							calculations. Written by Nathan Baker</p></li></ul></div><p>
-			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934017"></a>Output data processing</h3></div></div></div><p>The following tools perform typical analyses of the output data,
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934029"></a>Output data processing</h3></div></div></div><p>The following tools perform typical analyses of the output data,
 				usually in 
 				<a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>. 
 				These scripts are not meant to be comprehensive; instead, they provide
@@ -543,7 +545,7 @@
 							Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</p></li><li><p><code class="filename">tools/mesh/dx2uhbd</code></p><p>Converts 
 							<a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
 							data to UHBD format. 
-							Contributed by Robert Konecny.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934116"></a>Manipulation</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">tools/mesh/mergedx</code></p><p>Merge 
+							Contributed by Robert Konecny.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934129"></a>Manipulation</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">tools/mesh/mergedx</code></p><p>Merge 
 							<a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
 							data from several domains (e.g., from a 
 							<a href="#mg-para" title="Automatic parallel focusing multigrid calculation (mg-para)">mg-para</a>
@@ -583,13 +585,13 @@
 				structural data.  Such calculations are often used to determine apolar
 				solvation contributions to binding events, etc.  This program has a
 				number of options which can be viewed by running
-				<code class="filename">acc</code> with no arguments.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934352"></a>Coulomb's Law and Generalized Born calculations</h3></div></div></div><p>These utilities are provided for occasional use and are
+				<code class="filename">acc</code> with no arguments.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934365"></a>Coulomb's Law and Generalized Born calculations</h3></div></div></div><p>These utilities are provided for occasional use and are
 				<span class="emphasis"><em>definitely not</em></span> optimized for speed.
 			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  Many of these tools will be incorporated into the main
-					APBS executable during upcoming releases!</p></td></tr></table></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934375"></a>Coulomb's Law calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/coulomb</code> calculates
+					APBS executable during upcoming releases!</p></td></tr></table></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934388"></a>Coulomb's Law calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/coulomb</code> calculates
 					<span class="emphasis"><em>vacuum</em></span> Coulomb law energies from a PQR file.  It
 					has a number of options which can be viewed by running the 
-					<code class="filename">coulomb</code> program with no arguments.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934404"></a>Generalized Born calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/born</code> is a crude,
+					<code class="filename">coulomb</code> program with no arguments.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id934416"></a>Generalized Born calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/born</code> is a crude,
 					non-optimal, buggy program (are you still reading?!?) for calculating
 					Generalized Born electrostatic energies.  This is only intended for
 					hacking and general comparison with Poisson-Boltzmann results.</p><p>The Python-based program <code class="filename">tools/python/runGB.py</code>
@@ -620,9 +622,9 @@
 				</p><p>
 					Both of these Python-based programs
 					were written by Justin Xiang.
-				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934486"></a>Eigenvalue analysis</h3></div></div></div><p><code class="filename">tools/arpack/driver</code></p><p>If APBS is linked with ARPACK (see <code class="literal">configure
+				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934498"></a>Eigenvalue analysis</h3></div></div></div><p><code class="filename">tools/arpack/driver</code></p><p>If APBS is linked with ARPACK (see <code class="literal">configure
 					--help</code>), this routine will perform eigenvalue analyses of
-				matrices produced by APBS.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934511"></a>Python development tools</h3></div></div></div><p>There are a number of example Python tools and wrappers provided in
+				matrices produced by APBS.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id934524"></a>Python development tools</h3></div></div></div><p>There are a number of example Python tools and wrappers provided in
 				the tools/python directory. These tools all make use of the APBS SWIG
 				wrappers developed by Todd Dolinsky, Nathan Baker, Alex Gillet, and
 				Michel Sanner. The SWIG wrappers are compiled by default during normal
@@ -647,7 +649,7 @@
 			using APBS and developing code based on APBS libraries.  The
 			subdirectories include:
 			</p><div class="itemizedlist"><ul type="disc"><li><p><a href="../user-guide/index.html" target="_top"><code class="filename">doc/html/user-guide/index.html</code></a></p><p>HTML-format User Guide </p></li><li><p><a href="../programmer/index.html" target="_top"><code class="filename">doc/html/programmer/index.html</code></a></p><p>HTML-format Programmer Guide </p></li><li><p><a href="../tutorial/index.html" target="_top"><code class="filename">doc/html/tutorial/index.html</code></a></p><p>HTML-format APBS tutorial </p></li></ul></div><p>
-		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id934714"></a>Source code</h2></div></div></div><p>The APBS sub-directory <code class="filename">src</code> contains the source
+		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id934727"></a>Source code</h2></div></div></div><p>The APBS sub-directory <code class="filename">src</code> contains the source
 			code for the APBS libraries and main executable.  These files are
 			described in more detailed in the 
 			<a href="#programming-sect" title="Chapter 6. Programming">Programming section</a>.
@@ -707,7 +709,7 @@
 					section for specifying summary output.</p></li></ul></div><p>
 		The APBS input file is constructed from these sections in the following
 		format:
-		</p><div class="example"><a name="id936517"></a><p class="title"><b>Example 4.1. Template for APBS input file</b></p><div class="example-contents"><pre class="programlisting">
+		</p><div class="example"><a name="id936542"></a><p class="title"><b>Example 4.1. Template for APBS input file</b></p><div class="example-contents"><pre class="programlisting">
 				READ
 				...
 				END
@@ -879,8 +881,6 @@
 			, 
 				<span><strong class="command"><a href="#temp">temp</a></strong></span>
 			, 
-				<span><strong class="command"><a href="#gamma">gamma</a></strong></span>
-			, 
 				<span><strong class="command"><a href="#calcenergy">calcenergy</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#calcforce">calcforce</a></strong></span>
@@ -961,8 +961,6 @@
 			, 
 				<span><strong class="command"><a href="#temp">temp</a></strong></span>
 			, 
-				<span><strong class="command"><a href="#gamma">gamma</a></strong></span>
-			, 
 				<span><strong class="command"><a href="#calcenergy">calcenergy</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#calcforce">calcforce</a></strong></span>
@@ -1024,8 +1022,6 @@
 				<span><strong class="command"><a href="#swin">swin</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#temp">temp</a></strong></span>
-			, 
-				<span><strong class="command"><a href="#gamma">gamma</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#calcenergy">calcenergy</a></strong></span>
 			, 
@@ -1110,8 +1106,6 @@
 			, 
 				<span><strong class="command"><a href="#temp">temp</a></strong></span>
 			, 
-				<span><strong class="command"><a href="#gamma">gamma</a></strong></span>
-			, 
 				<span><strong class="command"><a href="#calcenergy">calcenergy</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#calcforce">calcforce</a></strong></span>
@@ -1170,8 +1164,6 @@
 				<span><strong class="command"><a href="#swin">swin</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#temp">temp</a></strong></span>
-			, 
-				<span><strong class="command"><a href="#gamma">gamma</a></strong></span>
 			, 
 				<span><strong class="command"><a href="#calcenergy">calcenergy</a></strong></span>
 			, 
@@ -1391,12 +1383,6 @@
 				this may be different in each direction.  This should enclose the
 				region of interest in the molecule.
 				</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>xlen ylen zlen</code></em></span></dt><dd><p>Grid lengths in the x-, y-, and z-directions in Å.</p></dd></dl></div><p>
-			</p></li><li><a name="gamma"></a><div class="cmdsynopsis"><p><code class="command">gamma</code>  { <em class="replaceable"><code>value</code></em> }</p></div><p>
-				The coefficient (surface tension) for solvent-accesisble surface area
-				(SASA) models of apolar forces.  This term <span class="emphasis"><em>only</em></span>
-				enters into force calculations; SASA-based energies must be computed
-				separately (see <a href="#acc" title="Solvent accessibility"><code class="filename">acc</code></a>).
-				</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>value</code></em></span></dt><dd><p>SASA-based apolar coefficient (in kJ/mol/Å).</p></dd></dl></div><p>
 			</p></li><li><a name="gcent"></a><div class="cmdsynopsis"><p><code class="command">gcent</code>  { mol <em class="replaceable"><code>id</code></em>  |   <em class="replaceable"><code>xcent ycent zcent</code></em> }</p></div><p>Specify the center of the grid based on a molecule's center or
 				absolute coordinates. The arguments for this keyword are:
 				</p><div class="variablelist"><dl><dt><span class="term">mol <em class="replaceable"><code>id</code></em></span></dt><dd><p>Center the grid on molecule with ID
@@ -1516,7 +1502,7 @@
 						the change in energies and visual artifacts in isocontours as a
 						function of <span><strong class="command">ofrac</strong></span> values for a small peptide 
 						(<a href="http://www.rcsb.org/pdb/cgi/explore.cgi?job=chains&amp;pdbId=2PHK" target="_top">2PHK</a>:B).
-						</p><div class="table"><a name="id943106"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
+						</p><div class="table"><a name="id943002"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
 								to <span>ofrac</span> values.</b></p><div class="table-contents"><table summary="Sensitivity of 2PHK:B solvation energy calculations
 								to ofrac values." border="1"><colgroup><col><col><col></colgroup><thead><tr><th><span><strong class="command">ofrac</strong></span> value</th><th>Energy (kJ/mol)</th><th>Visual artifact in ± 1 kT/e iscontour?</th></tr></thead><tbody><tr><td>0.05</td><td>342.79</td><td>No</td></tr><tr><td>0.06</td><td>342.00</td><td>No</td></tr><tr><td>0.07</td><td>341.12</td><td>Yes</td></tr><tr><td>0.08</td><td>341.14</td><td>Yes</td></tr><tr><td>0.09</td><td>342.02</td><td>Yes</td></tr><tr><td>0.10</td><td>340.84</td><td>Yes</td></tr><tr><td>0.11</td><td>339.67</td><td>No</td></tr><tr><td>0.12</td><td>341.10</td><td>No</td></tr><tr><td>0.13</td><td>341.10</td><td>No</td></tr><tr><td>0.14</td><td>341.32</td><td>No</td></tr><tr><td>0.15</td><td>341.54</td><td>No</td></tr></tbody></table></div></div><p><br class="table-break">
 					</p></td></tr></table></div><p>
@@ -1810,7 +1796,7 @@
          quantities:
          </p><div class="variablelist"><dl><dt><span class="term"> + </span></dt><dd><p>Addition</p></dd><dt><span class="term"> - </span></dt><dd><p>Subtraction</p></dd></dl></div><p>
        </p></dd></dl></div><p>
-</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id969648"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
+</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id969412"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
     # Energy change due to binding
     print energy complex - ligand - protein end
     # Energy change due to solvation
@@ -1829,22 +1815,22 @@
       inadvertantly omitted from this list.  If you know of software that uses
       APBS and is not listed here, please contact Nathan Baker 
       <code class="email">&lt;<a href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>&gt;</code>.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978154"></a>Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id977788"></a>Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
                 for the Firefox web browser provides a very easy-to-use
                 interface to APBS with all of the functionality of the
                 command-line interface.  This extension currently uses web
                 services provided by <a href="http://nbcr.net" target="_top">NBCR</a>).
-            </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978191"></a>PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
+            </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id977825"></a>PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
                 is a molecular visualization and animation package which
                 provides an interface to APBS.  The APBS plugin to PyMOL
                 (developed by Michael George Lerner)  permits isocontour and
                 surface map visualization of APBS results.
-            </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978212"></a>VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
+            </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id977846"></a>VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
           is a molecular visualization and animation package which provides an
           interface to APBS.  It permits isocontour-based visualization of APBS
           results and provides a Tcl plugin to setup APBS calculations for
           visualization.
-        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978233"></a>PMV</h4></div></div></div><p>PMV 
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id977867"></a>PMV</h4></div></div></div><p>PMV 
           (<a href="http://www.scripps.edu/~sanner/python" target="_top">http://www.scripps.edu/~sanner/python</a>)
           is a Python-based molecular visualization package which provides an
           interface to APBS.  It not only permits visualization of APBS results
@@ -1871,19 +1857,19 @@
         biological systems.  This section describes molecular graphics software
         which can display potentials and other data output from APBS.  Note
         that this set of programs also includes the <a href="#gui-sect" title="Graphical user interfaces">graphical users interfaces</a> listed above.
-      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978355"></a>Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
+      </p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id977988"></a>Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
           is a molecular graphics program which can read UHBD-format
           electrostatic data.  APBS can write multigrid results in UHBD format
           (see the <a href="#write"><span><strong class="command">write</strong></span></a>
           <span><strong class="command">ELEC</strong></span> command) and therefore can be used with
           Dino3D.
-        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978390"></a>MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978024"></a>MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
           is a molecular graphics package with an emphasis on NMR-generated
           structural data.  A program is provided with APBS (see
           <code class="filename">tools/mesh</code> and the
           <a href="#conversion-sect" title="Conversion">Data conversion tools</a> in this
           manual) which converts OpenDX data to MOLMOL format.
-        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978426"></a>OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
+        </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id978060"></a>OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
           is a general data visualization package which can read APBS output
           using the scripts provided in
           <code class="filename">tools/visualization/opendx</code> (see the discussion
@@ -1891,7 +1877,7 @@
           manual).  However, as there is no straightforward way to
           visualizate the potential in the context of the atomic structure,
           OpenDX should not a first choice for APBS visualization.
-        </p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1004794"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1005009">Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
+        </p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1004297"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1004511">Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
     heavily on the user community for feedback to enhance the software,
     identify bugs, etc. </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-forums"></a>User Forums</h2></div></div></div><p> The <a href="http://sourceforge.net/projects/apbs" target="_top">SourceForge project page</a> offers many user forums for discussion on APBS topics.  Users are encouraged to post bugs and request for support and features via the following forums:
       </p><div class="itemizedlist"><ul type="disc"><li><p><a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top">
@@ -1921,7 +1907,7 @@
                   </p></li><li><p>List archives:  <a href="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users" target="_top">http://sourceforge.net/mailarchive/forum.php?forum=apbs-users</a>
                   </p></li></ul></div><p>
             </p></dd></dl></div><p>
-    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1005009"></a>Bug and other problems</h2></div></div></div><p> 
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1004511"></a>Bug and other problems</h2></div></div></div><p> 
       Bugs or potential bugs, problems, etc. should either be posted to the
       <a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top"> 
       SourceForge bug tracker forum</a> or reported to the
@@ -1936,8 +1922,8 @@
     <code class="filename">
       <a href="../programmer/index.html" target="_top">doc/html/programmer/index.html</a>
     </code>.
-  </p></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="format-sect"></a>Appendix A. File formats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1006139">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
-      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1006437">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1006706">Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
+  </p></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="format-sect"></a>Appendix A. File formats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1005642">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
+      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1005940">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1006209">Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
     are used by APBS.</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pqr-format"></a>PQR biomolecular structure format</h2></div></div></div><p>
       The PQR format is the primary input format for biomolecular structure in
       APBS package.
@@ -2034,7 +2020,7 @@
               to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Atom_name</code></em> </span></dt><dd><p>A string giving the atom name, as provided in the PDB file to
               be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Charge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>Radius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd><dt><span class="term"> <em class="replaceable"><code>Epsilon</code></em> </span></dt><dd><p>A float giving the Lennard-Jones well depth (in kcal/mol);
               this parameter is read but not currently used by APBS.</p></dd></dl></div><p>
-     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1006139"></a>XML Parameter Format </h3></div></div></div><p> This data format has the following form:
+     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1005642"></a>XML Parameter Format </h3></div></div></div><p> This data format has the following form:
       	</p><pre class="programlisting">
           # <em class="replaceable"><code>Comments</code></em>	
           <em class="replaceable"><code>&lt;ffname&gt;</code></em>
@@ -2067,7 +2053,7 @@
       OpenDX data format is very flexible; the following sections describe the
       application of this format for APBS multigrid and finite element
       datasets.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1006437"></a>Multigrid</h3></div></div></div><p>
+    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1005940"></a>Multigrid</h3></div></div></div><p>
         This data format has the following form:
         </p><pre class="programlisting">
           # <em class="replaceable"><code>Comments</code></em>
@@ -2112,7 +2098,7 @@
                 The data values, ordered with the z-index increasing most
                 quickly, followed by the y-index, and then the x-index.
               </p></dd></dl></div><p>
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1006706"></a>Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
+      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1006209"></a>Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
         form:
         </p><pre class="programlisting">
           <code class="literal">object 1 class array type float rank 1 shape 3 items</code> <em class="replaceable"><code>N</code></em>

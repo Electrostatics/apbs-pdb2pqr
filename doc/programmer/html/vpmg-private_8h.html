@@ -67,7 +67,7 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates charge-potential energy as integral over a volume. </em> <a href="#a35"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a36">Vpmg_splineSelect</a> (int srfm, <a class="el" href="structsVacc.html">Vacc</a> *acc, double *gpos, double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Selects a spline based surface method from either VSM_SPLINE or VSM_SPLINE4. </em> <a href="#a36"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7. </em> <a href="#a36"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a37">focusFillBound</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For focusing, fill in the boundaries of the new mesh based on the potential values in the old mesh. </em> <a href="#a37"></a><em><br><br></td></tr>
@@ -110,54 +110,57 @@ This graph shows which files directly or indirectly include this file:<p><center
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a50">fillcoCoefSpline</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill operator coefficient arrays from a spline-based surface calculation. </em> <a href="#a50"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a51">fillcoCoefSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a51">fillcoCoefSpline3</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill operator coefficient arrays from a 7th order polynomial based surface calculation. </em> <a href="#a51"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a52">fillcoCharge</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill operator coefficient arrays from a 5th order polynomial based surface calculation. </em> <a href="#a51"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a52">fillcoCoefSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Top-level driver to fill source term charge array. </em> <a href="#a52"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a53">fillcoChargeMap</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill operator coefficient arrays from a 7th order polynomial based surface calculation. </em> <a href="#a52"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a53">fillcoCharge</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from a pre-calculated map. </em> <a href="#a53"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a54">fillcoChargeSpline1</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Top-level driver to fill source term charge array. </em> <a href="#a53"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a54">fillcoChargeMap</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from linear interpolation. </em> <a href="#a54"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a55">fillcoChargeSpline2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from a pre-calculated map. </em> <a href="#a54"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a55">fillcoChargeSpline1</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from cubic spline interpolation. </em> <a href="#a55"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a56">fillcoPermanentMultipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from linear interpolation. </em> <a href="#a55"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a56">fillcoChargeSpline2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for the use of permanent multipoles. </em> <a href="#a56"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a57">fillcoInducedDipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array from cubic spline interpolation. </em> <a href="#a56"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a57">fillcoPermanentMultipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for use of induced dipoles. </em> <a href="#a57"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a58">fillcoNLInducedDipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for the use of permanent multipoles. </em> <a href="#a57"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a58">fillcoInducedDipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for non-local induced dipoles. </em> <a href="#a58"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a59">extEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVpmg.html">Vpmg</a> *pmgOLD, <a class="el" href="pbeparm_8h.html#a0">PBEparm_calcEnergy</a> extFlag, double partMin[3], double partMax[3], int bflags[6])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for use of induced dipoles. </em> <a href="#a58"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a59">fillcoNLInducedDipole</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For focusing, set external energy data members in new Vpmg object based on energy calculations on old Vpmg object from regions outside the indicated partition. </em> <a href="#a59"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a60">qfForceSpline1</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill source term charge array for non-local induced dipoles. </em> <a href="#a59"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a60">extEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVpmg.html">Vpmg</a> *pmgOLD, <a class="el" href="pbeparm_8h.html#a0">PBEparm_calcEnergy</a> extFlag, double partMin[3], double partMax[3], int bflags[6])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a linear spline charge function. </em> <a href="#a60"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a61">qfForceSpline2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">For focusing, set external energy data members in new Vpmg object based on energy calculations on old Vpmg object from regions outside the indicated partition. </em> <a href="#a60"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a61">qfForceSpline1</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a cubic spline charge function. </em> <a href="#a61"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a62">qfForceSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a linear spline charge function. </em> <a href="#a61"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a62">qfForceSpline2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a quintic spline charge function. </em> <a href="#a62"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a63">zlapSolve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double **solution, double **source, double **work1)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a cubic spline charge function. </em> <a href="#a62"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a63">qfForceSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the solution to Poisson's equation with a simple Laplacian operator and zero-valued Dirichlet boundary conditions. Store the solution in thee-&gt;u. </em> <a href="#a63"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a64">markSphere</a> (double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hzed, double xmin, double ymin, double zmin, double *array, double markVal)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Charge-field force due to a quintic spline charge function. </em> <a href="#a63"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a64">zlapSolve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double **solution, double **source, double **work1)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mark the grid points inside a sphere with a particular value. This marks by resetting the the grid points inside the sphere to the specified value. </em> <a href="#a64"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the solution to Poisson's equation with a simple Laplacian operator and zero-valued Dirichlet boundary conditions. Store the solution in thee-&gt;u. </em> <a href="#a64"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg-private_8h.html#a65">markSphere</a> (double rtot, double *tpos, int nx, int ny, int nz, double hx, double hy, double hzed, double xmin, double ymin, double zmin, double *array, double markVal)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Mark the grid points inside a sphere with a particular value. This marks by resetting the the grid points inside the sphere to the specified value. </em> <a href="#a65"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Class Vpmg private method declaration. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd>vpmg-private.h 881 2006-05-12 20:36:38Z todd_dolinsky </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd>vpmg-private.h 945 2006-09-01 21:28:37Z sdg0919 </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
  *
@@ -253,20 +256,20 @@ Fill boundary condition arrays.
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a42_cgraph.png" border="0" usemap="#vpmg-private_8h_a42_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a42_cgraph_map">
-<area href="vpmg_8c.html#a24" shape="rect" coords="178,8,229,34" alt="">
-<area href="vpmg_8c.html#a26" shape="rect" coords="178,58,229,85" alt="">
+<area href="vpmg_8c.html#a23" shape="rect" coords="178,8,229,34" alt="">
+<area href="vpmg_8c.html#a25" shape="rect" coords="178,58,229,85" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="148,109,260,136" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="121,160,286,186" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="138,210,269,237" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="137,261,270,288" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="140,312,268,338" alt="">
-<area href="group__Vpbe.html#a7" shape="rect" coords="125,362,282,389" alt="">
+<area href="group__Vpbe.html#a6" shape="rect" coords="125,362,282,389" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="134,413,273,440" alt="">
-<area href="group__Vpbe.html#a15" shape="rect" coords="124,464,284,490" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="130,514,277,541" alt="">
+<area href="group__Vpbe.html#a14" shape="rect" coords="124,464,284,490" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="130,514,277,541" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="126,565,281,592" alt="">
-<area href="group__Vpbe.html#a11" shape="rect" coords="142,616,265,642" alt="">
-<area href="vpmg_8c.html#a27" shape="rect" coords="336,58,426,85" alt="">
+<area href="group__Vpbe.html#a10" shape="rect" coords="142,616,265,642" alt="">
+<area href="vpmg_8c.html#a26" shape="rect" coords="336,58,426,85" alt="">
 </map>
 <a class="anchor" name="a38" doxytag="vpmg-private.h::bcfl1" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -667,7 +670,7 @@ Number of grid points in y-direction Number of grid points in y-direction </td><
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a39_cgraph.png" border="0" usemap="#vpmg-private_8h_a39_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a39_cgraph_map">
-<area href="vpmg_8c.html#a27" shape="rect" coords="106,8,197,34" alt="">
+<area href="vpmg_8c.html#a26" shape="rect" coords="106,8,197,34" alt="">
 </map>
 <a class="anchor" name="a26" doxytag="vpmg-private.h::bspline2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -897,7 +900,7 @@ Position </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a59" doxytag="vpmg-private.h::extEnergy" ></a><p>
+<a class="anchor" name="a60" doxytag="vpmg-private.h::extEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -977,32 +980,26 @@ Partition upper corner Which boundaries to include the calculation </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a59_cgraph.png" border="0" usemap="#vpmg-private_8h_a59_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a59_cgraph_map">
-<area href="group__Valist.html#a8" shape="rect" coords="580,65,692,91" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="553,141,718,167" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a60_cgraph.png" border="0" usemap="#vpmg-private_8h_a60_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a60_cgraph_map">
+<area href="group__Valist.html#a8" shape="rect" coords="580,65,692,92" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="553,128,718,154" alt="">
 <area href="group__Vpmg.html#a11" shape="rect" coords="140,286,268,313" alt="">
-<area href="group__Vpmg.html#a13" shape="rect" coords="142,691,265,718" alt="">
-<area href="group__Vpmg.html#a15" shape="rect" coords="145,210,262,237" alt="">
-<area href="group__Vpmg.html#a14" shape="rect" coords="141,438,266,465" alt="">
-<area href="group__Vpmg.html#a6" shape="rect" coords="357,109,464,135" alt="">
-<area href="group__Vpmg.html#a7" shape="rect" coords="349,58,472,85" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="574,311,697,338" alt="">
-<area href="group__Vpbe.html#a6" shape="rect" coords="348,666,473,693" alt="">
-<area href="group__Vpbe.html#a5" shape="rect" coords="341,717,480,743" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="337,767,484,794" alt="">
-<area href="group__Vpbe.html#a4" shape="rect" coords="333,818,488,845" alt="">
-<area href="group__Vpmg.html#a12" shape="rect" coords="336,615,485,642" alt="">
-<area href="vpmg_8c.html#a16" shape="rect" coords="336,210,485,237" alt="">
-<area href="vpmg_8c.html#a18" shape="rect" coords="329,261,492,287" alt="">
+<area href="group__Vpmg.html#a14" shape="rect" coords="145,210,262,237" alt="">
+<area href="group__Vpmg.html#a13" shape="rect" coords="141,438,266,465" alt="">
+<area href="group__Vpmg.html#a6" shape="rect" coords="357,58,464,85" alt="">
+<area href="group__Vpmg.html#a7" shape="rect" coords="349,109,472,136" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="574,312,697,338" alt="">
+<area href="vpmg_8c.html#a15" shape="rect" coords="336,210,485,237" alt="">
+<area href="vpmg_8c.html#a17" shape="rect" coords="329,261,492,288" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="570,254,701,281" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="569,203,702,230" alt="">
-<area href="group__Vcap.html#a0" shape="rect" coords="370,514,450,541" alt="">
-<area href="group__Vpbe.html#a3" shape="rect" coords="318,565,502,591" alt="">
-<area href="group__Vpbe.html#a26" shape="rect" coords="358,413,462,439" alt="">
-<area href="group__Vpbe.html#a13" shape="rect" coords="345,463,476,490" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="569,204,702,230" alt="">
+<area href="group__Vcap.html#a0" shape="rect" coords="370,464,450,490" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="318,514,502,541" alt="">
+<area href="group__Vpbe.html#a25" shape="rect" coords="358,362,462,389" alt="">
+<area href="group__Vpbe.html#a12" shape="rect" coords="345,413,476,440" alt="">
 </map>
-<a class="anchor" name="a52" doxytag="vpmg-private.h::fillcoCharge" ></a><p>
+<a class="anchor" name="a53" doxytag="vpmg-private.h::fillcoCharge" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1036,27 +1033,27 @@ Top-level driver to fill source term charge array.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a52_cgraph.png" border="0" usemap="#vpmg-private_8h_a52_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a52_cgraph_map">
-<area href="vpmg_8c.html#a37" shape="rect" coords="177,109,297,135" alt="">
-<area href="vpmg_8c.html#a38" shape="rect" coords="168,210,306,237" alt="">
-<area href="vpmg_8c.html#a41" shape="rect" coords="168,159,306,186" alt="">
-<area href="vpmg-private_8h.html#a57" shape="rect" coords="169,311,305,338" alt="">
-<area href="vpmg-private_8h.html#a58" shape="rect" coords="161,362,313,389" alt="">
-<area href="vpmg_8c.html#a59" shape="rect" coords="152,261,322,287" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a53_cgraph.png" border="0" usemap="#vpmg-private_8h_a53_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a53_cgraph_map">
+<area href="vpmg_8c.html#a36" shape="rect" coords="177,109,297,135" alt="">
+<area href="vpmg_8c.html#a37" shape="rect" coords="168,210,306,237" alt="">
+<area href="vpmg_8c.html#a40" shape="rect" coords="168,159,306,186" alt="">
+<area href="vpmg-private_8h.html#a58" shape="rect" coords="169,311,305,338" alt="">
+<area href="vpmg-private_8h.html#a59" shape="rect" coords="161,362,313,389" alt="">
+<area href="vpmg_8c.html#a58" shape="rect" coords="152,261,322,287" alt="">
 <area href="group__Vgrid.html#a10" shape="rect" coords="408,7,501,34" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="393,109,516,135" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="393,109,516,135" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="398,159,510,186" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="372,210,537,237" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="389,261,520,287" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="388,311,521,338" alt="">
-<area href="vpmg_8c.html#a39" shape="rect" coords="418,58,490,85" alt="">
-<area href="vpmg_8c.html#a55" shape="rect" coords="418,413,490,439" alt="">
-<area href="vpmg_8c.html#a57" shape="rect" coords="412,463,497,490" alt="">
-<area href="vpmg_8c.html#a56" shape="rect" coords="414,514,494,541" alt="">
-<area href="vpmg_8c.html#a54" shape="rect" coords="420,362,489,389" alt="">
+<area href="vpmg_8c.html#a38" shape="rect" coords="418,58,490,85" alt="">
+<area href="vpmg_8c.html#a54" shape="rect" coords="418,413,490,439" alt="">
+<area href="vpmg_8c.html#a56" shape="rect" coords="412,463,497,490" alt="">
+<area href="vpmg_8c.html#a55" shape="rect" coords="414,514,494,541" alt="">
+<area href="vpmg_8c.html#a53" shape="rect" coords="420,362,489,389" alt="">
 </map>
-<a class="anchor" name="a53" doxytag="vpmg-private.h::fillcoChargeMap" ></a><p>
+<a class="anchor" name="a54" doxytag="vpmg-private.h::fillcoChargeMap" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1090,12 +1087,12 @@ Fill source term charge array from a pre-calculated map.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a53_cgraph.png" border="0" usemap="#vpmg-private_8h_a53_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a53_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a54_cgraph.png" border="0" usemap="#vpmg-private_8h_a54_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a54_cgraph_map">
 <area href="group__Vgrid.html#a10" shape="rect" coords="191,7,285,34" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="177,58,299,85" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="177,58,299,85" alt="">
 </map>
-<a class="anchor" name="a54" doxytag="vpmg-private.h::fillcoChargeSpline1" ></a><p>
+<a class="anchor" name="a55" doxytag="vpmg-private.h::fillcoChargeSpline1" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1129,15 +1126,15 @@ Fill source term charge array from linear interpolation.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a54_cgraph.png" border="0" usemap="#vpmg-private_8h_a54_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a54_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a55_cgraph.png" border="0" usemap="#vpmg-private_8h_a55_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a55_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="222,7,334,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="196,58,361,85" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="213,109,344,135" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="212,159,345,186" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="217,210,340,237" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="217,210,340,237" alt="">
 </map>
-<a class="anchor" name="a55" doxytag="vpmg-private.h::fillcoChargeSpline2" ></a><p>
+<a class="anchor" name="a56" doxytag="vpmg-private.h::fillcoChargeSpline2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1171,14 +1168,14 @@ Fill source term charge array from cubic spline interpolation.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a55_cgraph.png" border="0" usemap="#vpmg-private_8h_a55_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a55_cgraph_map">
-<area href="vpmg_8c.html#a39" shape="rect" coords="242,8,314,34" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a56_cgraph.png" border="0" usemap="#vpmg-private_8h_a56_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a56_cgraph_map">
+<area href="vpmg_8c.html#a38" shape="rect" coords="242,8,314,34" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="222,58,334,85" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="196,109,361,136" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="213,160,344,186" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="212,210,345,237" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="217,261,340,288" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="217,261,340,288" alt="">
 </map>
 <a class="anchor" name="a43" doxytag="vpmg-private.h::fillcoCoef" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1216,26 +1213,27 @@ Top-level driver to fill all operator coefficient arrays.
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a43_cgraph.png" border="0" usemap="#vpmg-private_8h_a43_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a43_cgraph_map">
-<area href="vpmg_8c.html#a28" shape="rect" coords="294,159,398,186" alt="">
-<area href="vpmg_8c.html#a29" shape="rect" coords="137,235,235,262" alt="">
-<area href="vpmg_8c.html#a34" shape="rect" coords="491,311,606,338" alt="">
-<area href="vpmg_8c.html#a60" shape="rect" coords="487,362,610,389" alt="">
-<area href="group__Vgrid.html#a10" shape="rect" coords="502,109,595,135" alt="">
-<area href="group__Vpbe.html#a3" shape="rect" coords="691,58,875,85" alt="">
-<area href="vpmg_8c.html#a31" shape="rect" coords="285,261,407,287" alt="">
-<area href="vpmg_8c.html#a30" shape="rect" coords="490,210,607,237" alt="">
-<area href="vpmg_8c.html#a32" shape="rect" coords="457,261,641,287" alt="">
-<area href="vpmg_8c.html#a33" shape="rect" coords="465,463,633,490" alt="">
-<area href="vpmg_8c.html#a51" shape="rect" coords="737,7,830,34" alt="">
-<area href="group__Vacc.html#a28" shape="rect" coords="707,109,859,135" alt="">
-<area href="group__Valist.html#a8" shape="rect" coords="727,210,839,237" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="701,261,866,287" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="717,311,850,338" alt="">
-<area href="group__Vatom.html#a6" shape="rect" coords="719,362,847,389" alt="">
-<area href="group__Vpbe.html#a5" shape="rect" coords="714,463,853,490" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="710,514,857,541" alt="">
-<area href="group__Vpbe.html#a9" shape="rect" coords="701,159,866,186" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="701,413,866,439" alt="">
+<area href="vpmg_8c.html#a27" shape="rect" coords="294,58,398,85" alt="">
+<area href="vpmg_8c.html#a28" shape="rect" coords="137,109,235,135" alt="">
+<area href="vpmg_8c.html#a33" shape="rect" coords="491,261,606,287" alt="">
+<area href="vpmg_8c.html#a61" shape="rect" coords="487,159,610,186" alt="">
+<area href="vpmg_8c.html#a59" shape="rect" coords="487,210,610,237" alt="">
+<area href="group__Vgrid.html#a10" shape="rect" coords="502,58,595,85" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="691,7,875,34" alt="">
+<area href="vpmg_8c.html#a30" shape="rect" coords="285,311,407,338" alt="">
+<area href="vpmg_8c.html#a29" shape="rect" coords="490,109,607,135" alt="">
+<area href="vpmg_8c.html#a31" shape="rect" coords="457,311,641,338" alt="">
+<area href="vpmg_8c.html#a32" shape="rect" coords="465,387,633,414" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="737,311,830,338" alt="">
+<area href="group__Vacc.html#a28" shape="rect" coords="707,514,859,541" alt="">
+<area href="group__Valist.html#a8" shape="rect" coords="727,261,839,287" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="701,210,866,237" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="717,109,850,135" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="719,159,847,186" alt="">
+<area href="group__Vpbe.html#a5" shape="rect" coords="714,362,853,389" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="710,413,857,439" alt="">
+<area href="group__Vpbe.html#a8" shape="rect" coords="701,463,866,490" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="701,58,866,85" alt="">
 </map>
 <a class="anchor" name="a44" doxytag="vpmg-private.h::fillcoCoefMap" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1312,23 +1310,23 @@ Fill operator coefficient arrays from a molecular surface calculation.
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a45_cgraph.png" border="0" usemap="#vpmg-private_8h_a45_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a45_cgraph_map">
-<area href="vpmg_8c.html#a28" shape="rect" coords="369,58,473,85" alt="">
-<area href="vpmg_8c.html#a31" shape="rect" coords="157,362,279,389" alt="">
-<area href="vpmg_8c.html#a30" shape="rect" coords="362,210,479,237" alt="">
+<area href="vpmg_8c.html#a27" shape="rect" coords="369,58,473,85" alt="">
+<area href="vpmg_8c.html#a30" shape="rect" coords="157,362,279,389" alt="">
+<area href="vpmg_8c.html#a29" shape="rect" coords="362,210,479,237" alt="">
 <area href="group__Vgrid.html#a10" shape="rect" coords="609,8,702,34" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="563,58,747,85" alt="">
-<area href="vpmg_8c.html#a32" shape="rect" coords="329,362,513,389" alt="">
-<area href="vpmg_8c.html#a33" shape="rect" coords="337,489,505,516" alt="">
-<area href="vpmg_8c.html#a51" shape="rect" coords="609,261,702,288" alt="">
+<area href="vpmg_8c.html#a31" shape="rect" coords="329,362,513,389" alt="">
+<area href="vpmg_8c.html#a32" shape="rect" coords="337,489,505,516" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="609,261,702,288" alt="">
 <area href="group__Vacc.html#a28" shape="rect" coords="579,413,731,440" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="599,312,711,338" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="573,362,738,389" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="589,160,722,186" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="591,210,719,237" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="586,464,725,490" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="582,565,729,592" alt="">
-<area href="group__Vpbe.html#a9" shape="rect" coords="573,514,738,541" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="573,109,738,136" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="582,565,729,592" alt="">
+<area href="group__Vpbe.html#a8" shape="rect" coords="573,514,738,541" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="573,109,738,136" alt="">
 </map>
 <a class="anchor" name="a47" doxytag="vpmg-private.h::fillcoCoefMolDiel" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1366,17 +1364,17 @@ Fill differential operator coefficient arrays from a molecular surface calculati
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a47_cgraph.png" border="0" usemap="#vpmg-private_8h_a47_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a47_cgraph_map">
-<area href="vpmg_8c.html#a32" shape="rect" coords="179,236,363,262" alt="">
-<area href="vpmg_8c.html#a33" shape="rect" coords="187,337,355,364" alt="">
-<area href="vpmg_8c.html#a51" shape="rect" coords="450,8,543,34" alt="">
+<area href="vpmg_8c.html#a31" shape="rect" coords="179,236,363,262" alt="">
+<area href="vpmg_8c.html#a32" shape="rect" coords="187,337,355,364" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="450,8,543,34" alt="">
 <area href="group__Vacc.html#a28" shape="rect" coords="421,58,573,85" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="441,109,553,136" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="414,160,579,186" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="430,210,563,237" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="433,261,561,288" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="427,312,566,338" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="423,413,570,440" alt="">
-<area href="group__Vpbe.html#a9" shape="rect" coords="414,362,579,389" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="423,413,570,440" alt="">
+<area href="group__Vpbe.html#a8" shape="rect" coords="414,362,579,389" alt="">
 </map>
 <a class="anchor" name="a48" doxytag="vpmg-private.h::fillcoCoefMolDielNoSmooth" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1414,15 +1412,15 @@ Fill differential operator coefficient arrays from a molecular surface calculati
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a48_cgraph.png" border="0" usemap="#vpmg-private_8h_a48_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a48_cgraph_map">
-<area href="vpmg_8c.html#a51" shape="rect" coords="280,7,373,34" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="280,7,373,34" alt="">
 <area href="group__Vacc.html#a28" shape="rect" coords="250,185,402,211" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="820,159,953,186" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="822,286,950,313" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="630,261,742,287" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="604,311,769,338" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="257,413,396,439" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="253,463,400,490" alt="">
-<area href="group__Vpbe.html#a9" shape="rect" coords="244,514,409,541" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="253,463,400,490" alt="">
+<area href="group__Vpbe.html#a8" shape="rect" coords="244,514,409,541" alt="">
 <area href="group__Vacc.html#a26" shape="rect" coords="630,210,742,237" alt="">
 <area href="group__Vacc.html#a19" shape="rect" coords="460,159,553,186" alt="">
 <area href="group__Vacc.html#a25" shape="rect" coords="629,109,744,135" alt="">
@@ -1466,7 +1464,7 @@ This algorithm uses a 9 point harmonic smoothing technique - the point in questi
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a49_cgraph.png" border="0" usemap="#vpmg-private_8h_a49_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a49_cgraph_map">
-<area href="group__Vpbe.html#a8" shape="rect" coords="224,8,370,34" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="224,8,370,34" alt="">
 </map>
 <a class="anchor" name="a46" doxytag="vpmg-private.h::fillcoCoefMolIon" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1504,13 +1502,13 @@ Fill ion (nonlinear) operator coefficient array from a molecular surface calcula
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a46_cgraph.png" border="0" usemap="#vpmg-private_8h_a46_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a46_cgraph_map">
-<area href="vpmg_8c.html#a51" shape="rect" coords="222,8,316,34" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="222,8,316,34" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="213,58,325,85" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="186,109,352,136" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="202,160,336,186" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="205,210,333,237" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="177,261,361,288" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="186,312,352,338" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="186,312,352,338" alt="">
 </map>
 <a class="anchor" name="a50" doxytag="vpmg-private.h::fillcoCoefSpline" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1553,11 +1551,56 @@ Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a5
 <area href="group__Vatom.html#a0" shape="rect" coords="197,109,330,135" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="199,159,327,186" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="171,210,355,237" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="181,261,346,287" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="181,261,346,287" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="194,311,333,338" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="190,362,337,389" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="190,362,337,389" alt="">
 </map>
-<a class="anchor" name="a51" doxytag="vpmg-private.h::fillcoCoefSpline4" ></a><p>
+<a class="anchor" name="a51" doxytag="vpmg-private.h::fillcoCoefSpline3" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> VPRIVATE void fillcoCoefSpline3 </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVpmg.html">Vpmg</a> *&nbsp;</td>
+          <td class="mdname1" valign="top" nowrap> <em>thee</em>          </td>
+          <td class="md" valign="top">&nbsp;)&nbsp;</td>
+          <td class="md" nowrap></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Fill operator coefficient arrays from a 5th order polynomial based surface calculation. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Michael Schnieders </dd></dl>
+    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a51_cgraph.png" border="0" usemap="#vpmg-private_8h_a51_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a51_cgraph_map">
+<area href="group__Valist.html#a8" shape="rect" coords="215,7,327,34" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="189,58,354,85" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="205,109,338,135" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="207,159,335,186" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="179,210,363,237" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="189,261,354,287" alt="">
+<area href="group__Vpbe.html#a5" shape="rect" coords="202,311,341,338" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="198,362,345,389" alt="">
+</map>
+<a class="anchor" name="a52" doxytag="vpmg-private.h::fillcoCoefSpline4" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1591,18 +1634,18 @@ Fill operator coefficient arrays from a 7th order polynomial based surface calcu
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a51_cgraph.png" border="0" usemap="#vpmg-private_8h_a51_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a51_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a52_cgraph.png" border="0" usemap="#vpmg-private_8h_a52_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a52_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="215,7,327,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="189,58,354,85" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="205,109,338,135" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="207,159,335,186" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="179,210,363,237" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="189,261,354,287" alt="">
+<area href="group__Vpbe.html#a9" shape="rect" coords="189,261,354,287" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="202,311,341,338" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="198,362,345,389" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="198,362,345,389" alt="">
 </map>
-<a class="anchor" name="a57" doxytag="vpmg-private.h::fillcoInducedDipole" ></a><p>
+<a class="anchor" name="a58" doxytag="vpmg-private.h::fillcoInducedDipole" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1634,7 +1677,7 @@ Fill source term charge array for use of induced dipoles.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a58" doxytag="vpmg-private.h::fillcoNLInducedDipole" ></a><p>
+<a class="anchor" name="a59" doxytag="vpmg-private.h::fillcoNLInducedDipole" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1666,7 +1709,7 @@ Fill source term charge array for non-local induced dipoles.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a56" doxytag="vpmg-private.h::fillcoPermanentMultipole" ></a><p>
+<a class="anchor" name="a57" doxytag="vpmg-private.h::fillcoPermanentMultipole" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1700,17 +1743,17 @@ Fill source term charge array for the use of permanent multipoles.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a56_cgraph.png" border="0" usemap="#vpmg-private_8h_a56_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a56_cgraph_map">
-<area href="vpmg_8c.html#a55" shape="rect" coords="274,8,346,34" alt="">
-<area href="vpmg_8c.html#a57" shape="rect" coords="268,58,353,85" alt="">
-<area href="vpmg_8c.html#a56" shape="rect" coords="270,109,350,136" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a57_cgraph.png" border="0" usemap="#vpmg-private_8h_a57_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a57_cgraph_map">
+<area href="vpmg_8c.html#a54" shape="rect" coords="274,8,346,34" alt="">
+<area href="vpmg_8c.html#a56" shape="rect" coords="268,58,353,85" alt="">
+<area href="vpmg_8c.html#a55" shape="rect" coords="270,109,350,136" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="254,160,366,186" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="228,210,393,237" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="245,261,376,288" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="244,312,377,338" alt="">
-<area href="vpmg_8c.html#a54" shape="rect" coords="276,362,345,389" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="249,413,372,440" alt="">
+<area href="vpmg_8c.html#a53" shape="rect" coords="276,362,345,389" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="249,413,372,440" alt="">
 </map>
 <a class="anchor" name="a37" doxytag="vpmg-private.h::focusFillBound" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1762,14 +1805,14 @@ New PMG object (the one just created) Old PMG object </td></tr>
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a37_cgraph.png" border="0" usemap="#vpmg-private_8h_a37_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a37_cgraph_map">
-<area href="group__Vpbe.html#a7" shape="rect" coords="170,8,328,34" alt="">
-<area href="group__Vpbe.html#a19" shape="rect" coords="169,58,329,85" alt="">
-<area href="group__Vpbe.html#a15" shape="rect" coords="169,109,329,136" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="176,160,322,186" alt="">
+<area href="group__Vpbe.html#a6" shape="rect" coords="170,8,328,34" alt="">
+<area href="group__Vpbe.html#a18" shape="rect" coords="169,58,329,85" alt="">
+<area href="group__Vpbe.html#a14" shape="rect" coords="169,109,329,136" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="176,160,322,186" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="172,210,326,237" alt="">
-<area href="group__Vpbe.html#a11" shape="rect" coords="188,261,310,288" alt="">
+<area href="group__Vpbe.html#a10" shape="rect" coords="188,261,310,288" alt="">
 </map>
-<a class="anchor" name="a64" doxytag="vpmg-private.h::markSphere" ></a><p>
+<a class="anchor" name="a65" doxytag="vpmg-private.h::markSphere" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1981,7 +2024,7 @@ Radius of the sphere Contraction-independent portion of each tensor </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a60" doxytag="vpmg-private.h::qfForceSpline1" ></a><p>
+<a class="anchor" name="a61" doxytag="vpmg-private.h::qfForceSpline1" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2035,13 +2078,13 @@ Set to force Valist atom ID </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a60_cgraph.png" border="0" usemap="#vpmg-private_8h_a60_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a60_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a61_cgraph.png" border="0" usemap="#vpmg-private_8h_a61_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a61_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="180,8,292,34" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="170,58,301,85" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="169,109,302,136" alt="">
 </map>
-<a class="anchor" name="a61" doxytag="vpmg-private.h::qfForceSpline2" ></a><p>
+<a class="anchor" name="a62" doxytag="vpmg-private.h::qfForceSpline2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2095,15 +2138,15 @@ Set to force Valist atom ID </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a61_cgraph.png" border="0" usemap="#vpmg-private_8h_a61_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a61_cgraph_map">
-<area href="vpmg_8c.html#a39" shape="rect" coords="200,7,272,34" alt="">
-<area href="vpmg_8c.html#a40" shape="rect" coords="196,58,276,85" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a62_cgraph.png" border="0" usemap="#vpmg-private_8h_a62_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a62_cgraph_map">
+<area href="vpmg_8c.html#a38" shape="rect" coords="200,7,272,34" alt="">
+<area href="vpmg_8c.html#a39" shape="rect" coords="196,58,276,85" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="180,109,292,135" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="170,159,301,186" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="169,210,302,237" alt="">
 </map>
-<a class="anchor" name="a62" doxytag="vpmg-private.h::qfForceSpline4" ></a><p>
+<a class="anchor" name="a63" doxytag="vpmg-private.h::qfForceSpline4" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2157,14 +2200,14 @@ Set to force Valist atom ID </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a62_cgraph.png" border="0" usemap="#vpmg-private_8h_a62_cgraph_map" alt=""></center>
-<map name="vpmg-private_8h_a62_cgraph_map">
-<area href="vpmg_8c.html#a55" shape="rect" coords="200,8,272,34" alt="">
-<area href="vpmg_8c.html#a56" shape="rect" coords="196,58,276,85" alt="">
+Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a63_cgraph.png" border="0" usemap="#vpmg-private_8h_a63_cgraph_map" alt=""></center>
+<map name="vpmg-private_8h_a63_cgraph_map">
+<area href="vpmg_8c.html#a54" shape="rect" coords="200,8,272,34" alt="">
+<area href="vpmg_8c.html#a55" shape="rect" coords="196,58,276,85" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="180,109,292,136" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="170,160,301,186" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="169,210,302,237" alt="">
-<area href="vpmg_8c.html#a54" shape="rect" coords="201,261,270,288" alt="">
+<area href="vpmg_8c.html#a53" shape="rect" coords="201,261,270,288" alt="">
 </map>
 <a class="anchor" name="a28" doxytag="vpmg-private.h::VFCHI4" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -2266,7 +2309,7 @@ Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a3
 <area href="group__Vgrid.html#a6" shape="rect" coords="246,210,331,237" alt="">
 <area href="group__Vgrid.html#a11" shape="rect" coords="230,261,347,288" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="219,312,358,338" alt="">
-<area href="group__Vpbe.html#a8" shape="rect" coords="215,362,362,389" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="215,362,362,389" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="211,413,366,440" alt="">
 </map>
 <a class="anchor" name="a34" doxytag="vpmg-private.h::Vpmg_qfEnergyPoint" ></a><p>
@@ -2376,7 +2419,7 @@ If 1, add external energy contributions to result </td></tr>
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a35_cgraph.png" border="0" usemap="#vpmg-private_8h_a35_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a35_cgraph_map">
-<area href="group__Vpbe.html#a14" shape="rect" coords="220,8,342,34" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="220,8,342,34" alt="">
 </map>
 <a class="anchor" name="a36" doxytag="vpmg-private.h::Vpmg_splineSelect" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -2443,13 +2486,13 @@ Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a3
     <td>
 
 <p>
-Selects a spline based surface method from either VSM_SPLINE or VSM_SPLINE4. 
+Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>David Gohara </dd></dl>
 <dl compact><dt><b>Parameters: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>acc</em>&nbsp;</td><td>
-Surface method, currently VSM_SPLINE or VSM_SPLINE4 </td></tr>
+Surface method, currently VSM_SPLINE, VSM_SPLINE5, or VSM_SPLINE7 </td></tr>
 <tr><td valign=top><em>gpos</em>&nbsp;</td><td>
 Accessibility object </td></tr>
 <tr><td valign=top><em>win</em>&nbsp;</td><td>
@@ -2468,12 +2511,13 @@ Atom object Force array -&gt; array[3] </td></tr>
 <p>
 Here is the call graph for this function:<p><center><img src="vpmg-private_8h_a36_cgraph.png" border="0" usemap="#vpmg-private_8h_a36_cgraph_map" alt=""></center>
 <map name="vpmg-private_8h_a36_cgraph_map">
-<area href="group__Vacc.html#a10" shape="rect" coords="198,7,409,34" alt="">
-<area href="group__Vacc.html#a29" shape="rect" coords="195,58,411,85" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="462,7,595,34" alt="">
-<area href="group__Vatom.html#a6" shape="rect" coords="465,58,593,85" alt="">
+<area href="group__Vacc.html#a10" shape="rect" coords="198,8,409,34" alt="">
+<area href="group__Vacc.html#a30" shape="rect" coords="195,58,411,85" alt="">
+<area href="group__Vacc.html#a29" shape="rect" coords="195,109,411,136" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="462,33,595,60" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="465,84,593,110" alt="">
 </map>
-<a class="anchor" name="a63" doxytag="vpmg-private.h::zlapSolve" ></a><p>
+<a class="anchor" name="a64" doxytag="vpmg-private.h::zlapSolve" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2534,7 +2578,7 @@ Source term vector Work vector </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:44 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:24 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

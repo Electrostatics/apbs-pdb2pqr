@@ -99,24 +99,171 @@ typedef <a class="el" href="structsVacc.html">sVacc</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a22">Vacc_splineAccGradAtomNorm4</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[VAPBS_DIM], double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Report gradient of spline-based accessibility with respect to a particular atom normalized by a 4th order accessibility value due to that atom at that point (see Vpmg_splineAccAtom). </em> <a href="#a22"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a23">Vacc_SASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a23">Vacc_splineAccGradAtomNorm3</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double center[VAPBS_DIM], double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area. </em> <a href="#a23"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a24">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Report gradient of spline-based accessibility with respect to a particular atom normalized by a 3rd order accessibility value due to that atom at that point (see Vpmg_splineAccAtom). </em> <a href="#a23"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a24">Vacc_SASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible surface area (SASA). </em> <a href="#a24"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a25">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area. </em> <a href="#a24"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a25">Vacc_totalSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the atomic solvent accessible surface area (SASA). </em> <a href="#a25"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a26">Vacc_atomSASPoints</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible surface area (SASA). </em> <a href="#a25"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a26">Vacc_atomSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the set of points for this atom's solvent-accessible surface. </em> <a href="#a26"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the atomic solvent accessible surface area (SASA). </em> <a href="#a26"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsVaccSurf.html">VaccSurf</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a27">Vacc_atomSASPoints</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the set of points for this atom's solvent-accessible surface. </em> <a href="#a27"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a28">Vacc_atomdSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the derivatve of solvent accessible volume. </em> <a href="#a28"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a29">Vacc_atomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the derivatve of solvent accessible area. </em> <a href="#a29"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a30">Vacc_totalAtomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Testing purposes only. </em> <a href="#a30"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible volume (SAV). </em> <a href="#a31"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Solvent- and ion-accessibility oracle. 
 <p>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="a25" doxytag="vacc.h::Vacc_atomSASA" ></a><p>
+<a class="anchor" name="a29" doxytag="vacc.h::Vacc_atomdSASA" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void Vacc_atomdSASA </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>dpos</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>atom</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double *&nbsp;</td>
+          <td class="mdname" nowrap> <em>dSA</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the derivatve of solvent accessible area. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Jason Wagoner, David Gohara, Nathan Baker </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>dpos</em>&nbsp;</td><td>
+Acessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Atom position offset </td></tr>
+<tr><td valign=top><em>atom</em>&nbsp;</td><td>
+Probe radius (&Aring;) </td></tr>
+<tr><td valign=top><em>dSA</em>&nbsp;</td><td>
+Atom of interest </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+<a class="anchor" name="a28" doxytag="vacc.h::Vacc_atomdSAV" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void Vacc_atomdSAV </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>atom</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double *&nbsp;</td>
+          <td class="mdname" nowrap> <em>dSA</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Get the derivatve of solvent accessible volume. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Jason Wagoner, Nathan Baker </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Acessibility object </td></tr>
+<tr><td valign=top><em>atom</em>&nbsp;</td><td>
+Probe radius (&Aring;) </td></tr>
+<tr><td valign=top><em>dSA</em>&nbsp;</td><td>
+Atom of interest </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+<a class="anchor" name="a26" doxytag="vacc.h::Vacc_atomSASA" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -190,7 +337,7 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a21_cg
 <area href="group__Valist.html#a8" shape="rect" coords="353,160,465,186" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="326,210,491,237" alt="">
 </map>
-<a class="anchor" name="a26" doxytag="vacc.h::Vacc_atomSASPoints" ></a><p>
+<a class="anchor" name="a27" doxytag="vacc.h::Vacc_atomSASPoints" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -826,7 +973,7 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a16_cg
 <area href="group__Vclist.html#a2" shape="rect" coords="855,362,986,389" alt="">
 <area href="group__Vacc.html#a23" shape="rect" coords="863,210,978,237" alt="">
 </map>
-<a class="anchor" name="a23" doxytag="vacc.h::Vacc_SASA" ></a><p>
+<a class="anchor" name="a24" doxytag="vacc.h::Vacc_SASA" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1215,6 +1362,91 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a10_cg
 <area href="group__Vatom.html#a0" shape="rect" coords="268,7,401,34" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="270,58,398,85" alt="">
 </map>
+<a class="anchor" name="a23" doxytag="vacc.h::Vacc_splineAccGradAtomNorm3" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void Vacc_splineAccGradAtomNorm3 </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>center</em>[VAPBS_DIM], </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>win</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>infrad</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>atom</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double *&nbsp;</td>
+          <td class="mdname" nowrap> <em>force</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Report gradient of spline-based accessibility with respect to a particular atom normalized by a 3rd order accessibility value due to that atom at that point (see Vpmg_splineAccAtom). 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Michael Schnieders </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>center</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>win</em>&nbsp;</td><td>
+Probe center coordinates </td></tr>
+<tr><td valign=top><em>infrad</em>&nbsp;</td><td>
+Spline window (&Aring;) </td></tr>
+<tr><td valign=top><em>atom</em>&nbsp;</td><td>
+Inflation radius (&Aring;) for ion access. </td></tr>
+<tr><td valign=top><em>force</em>&nbsp;</td><td>
+Atom VAPBS_DIM-vector set to gradient of accessibility </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="group__Vacc_a30_cgraph.png" border="0" usemap="#group__Vacc_a30_cgraph_map" alt=""></center>
+<map name="group__Vacc_a30_cgraph_map">
+<area href="group__Vatom.html#a0" shape="rect" coords="276,7,409,34" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="278,58,406,85" alt="">
+</map>
 <a class="anchor" name="a22" doxytag="vacc.h::Vacc_splineAccGradAtomNorm4" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -1386,7 +1618,84 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a11_cg
 <area href="group__Vatom.html#a0" shape="rect" coords="284,7,417,34" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="286,58,414,85" alt="">
 </map>
-<a class="anchor" name="a24" doxytag="vacc.h::Vacc_totalSASA" ></a><p>
+<a class="anchor" name="a30" doxytag="vacc.h::Vacc_totalAtomdSASA" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void Vacc_totalAtomdSASA </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>dpos</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>atom</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double *&nbsp;</td>
+          <td class="mdname" nowrap> <em>dSA</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Testing purposes only. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>David Gohara, Nathan Baker </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>dpos</em>&nbsp;</td><td>
+Acessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Atom position offset </td></tr>
+<tr><td valign=top><em>atom</em>&nbsp;</td><td>
+Probe radius (&Aring;) </td></tr>
+<tr><td valign=top><em>dSA</em>&nbsp;</td><td>
+Atom of interest </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="group__Vacc_a35_cgraph.png" border="0" usemap="#group__Vacc_a35_cgraph_map" alt=""></center>
+<map name="group__Vacc_a35_cgraph_map">
+<area href="group__Vatom.html#a0" shape="rect" coords="217,7,350,34" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="220,58,348,85" alt="">
+</map>
+<a class="anchor" name="a25" doxytag="vacc.h::Vacc_totalSASA" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1451,6 +1760,68 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a20_cg
 <area href="group__Vclist.html#a2" shape="rect" coords="698,109,829,136" alt="">
 <area href="vclist_8c.html#a8" shape="rect" coords="881,58,1006,85" alt="">
 <area href="group__Vacc.html#a23" shape="rect" coords="706,210,821,237" alt="">
+</map>
+<a class="anchor" name="a31" doxytag="vacc.h::Vacc_totalSAV" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double Vacc_totalSAV </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVclist.html">Vclist</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>clist</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>radius</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Return the total solvent accessible volume (SAV). 
+<p>
+<dl compact><dt><b>Note:</b></dt><dd>Alias for Vacc_SAV </dd></dl>
+<dl compact><dt><b>Author:</b></dt><dd>David Gohara </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Total solvent accessible volume (A^3) </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>clist</em>&nbsp;</td><td>
+Accessibility object </td></tr>
+<tr><td valign=top><em>radius</em>&nbsp;</td><td>
+Clist for acc object Probe molecule radius (&Aring;) </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="group__Vacc_a37_cgraph.png" border="0" usemap="#group__Vacc_a37_cgraph_map" alt=""></center>
+<map name="group__Vacc_a37_cgraph_map">
+<area href="group__Vacc.html#a14" shape="rect" coords="169,8,275,34" alt="">
 </map>
 <a class="anchor" name="a13" doxytag="vacc.h::Vacc_vdwAcc" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1760,7 +2131,7 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a27_cg
 <area href="group__Vacc.html#a22" shape="rect" coords="197,8,304,34" alt="">
 <area href="group__Vacc.html#a23" shape="rect" coords="352,8,466,34" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:20:05 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:46 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

@@ -84,39 +84,39 @@ Include dependency graph for routines.c:<p><center><img src="routines_8c__incl.p
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a15">energyMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate electrostatic energies from MG solution. </em> <a href="group__Frontend.html#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a18">forceMG</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a17">forceMG</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate forces from MG solution. </em> <a href="group__Frontend.html#a18"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a17">killEnergy</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate forces from MG solution. </em> <a href="group__Frontend.html#a17"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a16">killEnergy</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill arrays allocated for energies. </em> <a href="group__Frontend.html#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a19">killForce</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill arrays allocated for energies. </em> <a href="group__Frontend.html#a16"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a18">killForce</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free memory from MG force calculation. </em> <a href="group__Frontend.html#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a24">writematMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free memory from MG force calculation. </em> <a href="group__Frontend.html#a18"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a23">writematMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out operator matrix from MG calculation to file. </em> <a href="group__Frontend.html#a24"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a20">storeAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int icalc, double **atomEnergy, int *nenergy)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out operator matrix from MG calculation to file. </em> <a href="group__Frontend.html#a23"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a19">storeAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int icalc, double **atomEnergy, int *nenergy)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Store energy in arrays for future use. </em> <a href="group__Frontend.html#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a21">writedataFlat</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Store energy in arrays for future use. </em> <a href="group__Frontend.html#a19"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a20">writedataFlat</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to a flat file. </em> <a href="group__Frontend.html#a21"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a22">writedataXML</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to a flat file. </em> <a href="group__Frontend.html#a20"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a21">writedataXML</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to an XML file. </em> <a href="group__Frontend.html#a22"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a23">writedataMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to an XML file. </em> <a href="group__Frontend.html#a21"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a22">writedataMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out observables from MG calculation to file. </em> <a href="group__Frontend.html#a23"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out observables from MG calculation to file. </em> <a href="group__Frontend.html#a22"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a24">returnEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Access net local energy. </em> <a href="group__Frontend.html#a24"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a25">printEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data. </em> <a href="group__Frontend.html#a25"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a26">printForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data. </em> <a href="group__Frontend.html#a26"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a16">npenergyMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nenergy, double *npEnergy)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate apolar energies from MG solution. </em> <a href="group__Frontend.html#a16"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a30">initFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize FE solver objects. </em> <a href="group__Frontend.html#a30"></a><em><br><br></td></tr>
@@ -146,7 +146,7 @@ Include dependency graph for routines.c:<p><center><img src="routines_8c__incl.p
 Supporting routines for APBS front end. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="routines_8c.html">routines.c</a> 919 2006-08-03 16:33:23Z todd_dolinsky </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="routines_8c.html">routines.c</a> 978 2006-10-30 22:44:17Z sdg0919 </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
  *
@@ -205,7 +205,7 @@ Supporting routines for APBS front end.
  * carries forward this exception.
  *
  * </pre></div></dd></dl>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:27 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:08 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

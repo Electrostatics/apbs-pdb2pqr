@@ -20,130 +20,128 @@
 00087 <span class="preprocessor">#include "<a class="code" href="vclist_8h.html">apbs/vclist.h</a>"</span>
 00088 
 <a name="l00094"></a><a class="code" href="structsVpbe.html">00094</a> <span class="keyword">struct </span><a class="code" href="structsVpbe.html">sVpbe</a> { 
-00095 
-<a name="l00096"></a><a class="code" href="structsVpbe.html#o0">00096</a>   Vmem *<a class="code" href="structsVpbe.html#o0">vmem</a>;         
-<a name="l00098"></a><a class="code" href="structsVpbe.html#o1">00098</a>   <a class="code" href="structsValist.html">Valist</a> *<a class="code" href="structsVpbe.html#o1">alist</a>;      
-<a name="l00099"></a><a class="code" href="structsVpbe.html#o2">00099</a>   <a class="code" href="structsVclist.html">Vclist</a> *<a class="code" href="structsVpbe.html#o2">clist</a>;      
-<a name="l00100"></a><a class="code" href="structsVpbe.html#o3">00100</a>   <a class="code" href="structsVacc.html">Vacc</a> *<a class="code" href="structsVpbe.html#o3">acc</a>;          
-<a name="l00102"></a><a class="code" href="structsVpbe.html#o4">00102</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o4">T</a>;           
-<a name="l00103"></a><a class="code" href="structsVpbe.html#o5">00103</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o5">gamma</a>;       
-<a name="l00104"></a><a class="code" href="structsVpbe.html#o6">00104</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o6">soluteDiel</a>;  
-<a name="l00105"></a><a class="code" href="structsVpbe.html#o7">00105</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o7">solventDiel</a>; 
-00106   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o8">solventRadius</a>;
-<a name="l00110"></a><a class="code" href="structsVpbe.html#o9">00110</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o9">bulkIonicStrength</a>; 
-<a name="l00111"></a><a class="code" href="structsVpbe.html#o10">00111</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o10">maxIonRadius</a>;      
-<a name="l00114"></a><a class="code" href="structsVpbe.html#o11">00114</a>   <span class="keywordtype">int</span>    <a class="code" href="structsVpbe.html#o11">numIon</a>;            
-<a name="l00115"></a><a class="code" href="structsVpbe.html#o12">00115</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o12">ionConc</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];   
-<a name="l00116"></a><a class="code" href="structsVpbe.html#o13">00116</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o13">ionRadii</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];  
-<a name="l00117"></a><a class="code" href="structsVpbe.html#o14">00117</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o14">ionQ</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];      
-<a name="l00119"></a><a class="code" href="structsVpbe.html#o15">00119</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o15">xkappa</a>;      
-<a name="l00120"></a><a class="code" href="structsVpbe.html#o16">00120</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o16">deblen</a>;      
-<a name="l00121"></a><a class="code" href="structsVpbe.html#o17">00121</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o17">zkappa2</a>;     
-<a name="l00122"></a><a class="code" href="structsVpbe.html#o18">00122</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o18">zmagic</a>;      
-<a name="l00124"></a><a class="code" href="structsVpbe.html#o19">00124</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o19">soluteCenter</a>[3]; 
-<a name="l00125"></a><a class="code" href="structsVpbe.html#o20">00125</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o20">soluteRadius</a>; 
-<a name="l00126"></a><a class="code" href="structsVpbe.html#o21">00126</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o21">soluteXlen</a>;  
-<a name="l00127"></a><a class="code" href="structsVpbe.html#o22">00127</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o22">soluteYlen</a>;  
-<a name="l00128"></a><a class="code" href="structsVpbe.html#o23">00128</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o23">soluteZlen</a>;  
-<a name="l00129"></a><a class="code" href="structsVpbe.html#o24">00129</a>   <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o24">soluteCharge</a>; 
-<a name="l00131"></a><a class="code" href="structsVpbe.html#o25">00131</a>   <span class="keywordtype">int</span> <a class="code" href="structsVpbe.html#o25">paramFlag</a>;      
-00133 };
-00134 
-<a name="l00139"></a><a class="code" href="group__Vpbe.html#a0">00139</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVpbe.html">sVpbe</a> <a class="code" href="group__Vpbe.html#a0">Vpbe</a>;
-00140 
-00141 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
-00142 <span class="comment">// Class Vpbe: Inlineable methods (vpbe.c)</span>
-00144 <span class="comment"></span>
-00145 <span class="comment">#if !defined(VINLINE_VPBE)</span>
-00146 <span class="comment"></span>
-00153 <span class="comment">    Valist* Vpbe_getValist(Vpbe *thee);</span>
-00154 <span class="comment"></span>
-00161 <span class="comment">    Vacc*   Vpbe_getVacc(Vpbe *thee);</span>
-00162 <span class="comment"></span>
-00169 <span class="comment">    double  Vpbe_getBulkIonicStrength(Vpbe *thee);</span>
-00170 <span class="comment"></span>
-00177 <span class="comment">    double  Vpbe_getMaxIonRadius(Vpbe *thee);</span>
-00178 <span class="comment"></span>
-00185 <span class="comment">    double  Vpbe_getTemperature(Vpbe *thee);           </span>
-00186 <span class="comment"></span>
-00193 <span class="comment">    double  Vpbe_getSoluteDiel(Vpbe *thee); </span>
-00194 <span class="comment"></span>
-00201 <span class="comment">    double  Vpbe_getGamma(Vpbe *thee);</span>
-00202 <span class="comment"></span>
-00209 <span class="comment">    double  Vpbe_getSoluteRadius(Vpbe *thee);</span>
-00210 <span class="comment"></span>
-00217 <span class="comment">    double  Vpbe_getSoluteXlen(Vpbe *thee);</span>
-00218 <span class="comment"></span>
-00225 <span class="comment">    double  Vpbe_getSoluteYlen(Vpbe *thee);</span>
-00226 <span class="comment"></span>
-00233 <span class="comment">    double  Vpbe_getSoluteZlen(Vpbe *thee);</span>
-00234 <span class="comment"></span>
-00241 <span class="comment">    double* Vpbe_getSoluteCenter(Vpbe *thee);</span>
-00242 <span class="comment"></span>
-00249 <span class="comment">    double  Vpbe_getSoluteCharge(Vpbe *thee);</span>
-00250 <span class="comment"></span>
-00257 <span class="comment">    double  Vpbe_getSolventDiel(Vpbe *thee);</span>
-00258 <span class="comment"></span>
-00265 <span class="comment">    double  Vpbe_getSolventRadius(Vpbe *thee);</span>
-00266 <span class="comment"></span>
-00273 <span class="comment">    double  Vpbe_getXkappa(Vpbe *thee);</span>
-00274 <span class="comment"></span>
-00281 <span class="comment">    double  Vpbe_getDeblen(Vpbe *thee);</span>
-00282 <span class="comment"></span>
-00289 <span class="comment">    double  Vpbe_getZkappa2(Vpbe *thee);</span>
-00290 <span class="comment"></span>
-00297 <span class="comment">    double  Vpbe_getZmagic(Vpbe *thee);</span>
-00298 <span class="comment"></span>
-00299 <span class="comment">#else /* if defined(VINLINE_VPBE) */</span>
-00300 <span class="preprocessor">#   define Vpbe_getValist(thee) ((thee)-&gt;alist)</span>
-00301 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getVacc(thee) ((thee)-&gt;acc)</span>
-00302 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getBulkIonicStrength(thee) ((thee)-&gt;bulkIonicStrength)</span>
-00303 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getTemperature(thee) ((thee)-&gt;T)           </span>
-00304 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteDiel(thee) ((thee)-&gt;soluteDiel) </span>
-00305 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getGamma(thee) ((thee)-&gt;gamma) </span>
-00306 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteCenter(thee) ((thee)-&gt;soluteCenter)</span>
-00307 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteRadius(thee) ((thee)-&gt;soluteRadius)</span>
-00308 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteXlen(thee) ((thee)-&gt;soluteXlen)</span>
-00309 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteYlen(thee) ((thee)-&gt;soluteYlen)</span>
-00310 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteZlen(thee) ((thee)-&gt;soluteZlen)</span>
-00311 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteCharge(thee) ((thee)-&gt;soluteCharge)</span>
-00312 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSolventDiel(thee) ((thee)-&gt;solventDiel)</span>
-00313 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSolventRadius(thee) ((thee)-&gt;solventRadius)</span>
-00314 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getMaxIonRadius(thee) ((thee)-&gt;maxIonRadius)</span>
-00315 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getXkappa(thee) ((thee)-&gt;xkappa)</span>
-00316 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getDeblen(thee) ((thee)-&gt;deblen)</span>
-00317 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getZkappa2(thee) ((thee)-&gt;zkappa2)</span>
-00318 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getZmagic(thee) ((thee)-&gt;zmagic)</span>
-00319 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VPBE) */</span>
-00320 
-00321 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
-00322 <span class="comment">// Class Vpbe: Non-Inlineable methods (vpbe.c)</span>
-00324 <span class="comment"></span>
-00358 <span class="comment">Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, </span>
-00359 <span class="comment">                    double *ionRadii, double *ionQ, double T, double gamma,</span>
-00360 <span class="comment">                    double soluteDiel, double solventDiel,  </span>
-00361 <span class="comment">                    double solventRadius, int focusFlag, double sdens);</span>
-00362 <span class="comment"></span>
-00396 <span class="comment">int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, </span>
-00397 <span class="comment">                    double *ionConc, double *ionRadii, double *ionQ, </span>
-00398 <span class="comment">                    double T, double gamma, double soluteDiel, </span>
-00399 <span class="comment">                    double solventDiel, double solventRadius, int focusFlag,</span>
-00400 <span class="comment">                    double sdens);</span>
-00401 <span class="comment"></span>
-00412 <span class="comment">int     Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],</span>
-00413 <span class="comment">                    double ionRadii[MAXION], double ionQ[MAXION]);</span>
-00414 <span class="comment"></span>
-00420 <span class="comment">void    Vpbe_dtor(Vpbe **thee);</span>
-00421 <span class="comment"></span>
-00427 <span class="comment">void    Vpbe_dtor2(Vpbe *thee);</span>
-00428 <span class="comment"></span>
-00443 <span class="comment">double  Vpbe_getCoulombEnergy1(Vpbe *thee);</span>
-00444 <span class="comment"></span>
-00452 <span class="comment">unsigned long int Vpbe_memChk(Vpbe *thee);</span>
-00453 <span class="comment"></span>
-00454 <span class="comment">#endif /* ifndef _VPBE_H_ */</span>
-00455 
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Wed Aug 23 14:19:20 2006 for APBS by
+00095         
+<a name="l00096"></a><a class="code" href="structsVpbe.html#o0">00096</a>         Vmem *<a class="code" href="structsVpbe.html#o0">vmem</a>;         
+<a name="l00098"></a><a class="code" href="structsVpbe.html#o1">00098</a>         <a class="code" href="structsValist.html">Valist</a> *<a class="code" href="structsVpbe.html#o1">alist</a>;      
+<a name="l00099"></a><a class="code" href="structsVpbe.html#o2">00099</a>         <a class="code" href="structsVclist.html">Vclist</a> *<a class="code" href="structsVpbe.html#o2">clist</a>;      
+<a name="l00100"></a><a class="code" href="structsVpbe.html#o3">00100</a>         <a class="code" href="structsVacc.html">Vacc</a> *<a class="code" href="structsVpbe.html#o3">acc</a>;          
+<a name="l00102"></a><a class="code" href="structsVpbe.html#o4">00102</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o4">T</a>;           
+<a name="l00103"></a><a class="code" href="structsVpbe.html#o5">00103</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o5">soluteDiel</a>;  
+<a name="l00104"></a><a class="code" href="structsVpbe.html#o6">00104</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o6">solventDiel</a>; 
+00105         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o7">solventRadius</a>;
+<a name="l00109"></a><a class="code" href="structsVpbe.html#o8">00109</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o8">bulkIonicStrength</a>; 
+<a name="l00110"></a><a class="code" href="structsVpbe.html#o9">00110</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o9">maxIonRadius</a>;      
+<a name="l00113"></a><a class="code" href="structsVpbe.html#o10">00113</a>         <span class="keywordtype">int</span>    <a class="code" href="structsVpbe.html#o10">numIon</a>;            
+<a name="l00114"></a><a class="code" href="structsVpbe.html#o11">00114</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o11">ionConc</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];   
+<a name="l00115"></a><a class="code" href="structsVpbe.html#o12">00115</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o12">ionRadii</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];  
+<a name="l00116"></a><a class="code" href="structsVpbe.html#o13">00116</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o13">ionQ</a>[<a class="code" href="group__Vhal.html#a11">MAXION</a>];      
+<a name="l00118"></a><a class="code" href="structsVpbe.html#o14">00118</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o14">xkappa</a>;      
+<a name="l00119"></a><a class="code" href="structsVpbe.html#o15">00119</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o15">deblen</a>;      
+<a name="l00120"></a><a class="code" href="structsVpbe.html#o16">00120</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o16">zkappa2</a>;     
+<a name="l00121"></a><a class="code" href="structsVpbe.html#o17">00121</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o17">zmagic</a>;      
+<a name="l00123"></a><a class="code" href="structsVpbe.html#o18">00123</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o18">soluteCenter</a>[3]; 
+<a name="l00124"></a><a class="code" href="structsVpbe.html#o19">00124</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o19">soluteRadius</a>; 
+<a name="l00125"></a><a class="code" href="structsVpbe.html#o20">00125</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o20">soluteXlen</a>;  
+<a name="l00126"></a><a class="code" href="structsVpbe.html#o21">00126</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o21">soluteYlen</a>;  
+<a name="l00127"></a><a class="code" href="structsVpbe.html#o22">00127</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o22">soluteZlen</a>;  
+<a name="l00128"></a><a class="code" href="structsVpbe.html#o23">00128</a>         <span class="keywordtype">double</span> <a class="code" href="structsVpbe.html#o23">soluteCharge</a>; 
+<a name="l00130"></a><a class="code" href="structsVpbe.html#o24">00130</a>         <span class="keywordtype">int</span> <a class="code" href="structsVpbe.html#o24">paramFlag</a>;      
+00132 };
+00133 
+<a name="l00138"></a><a class="code" href="group__Vpbe.html#a0">00138</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVpbe.html">sVpbe</a> <a class="code" href="group__Vpbe.html#a0">Vpbe</a>;
+00139 
+00140 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
+00141 <span class="comment">   // Class Vpbe: Inlineable methods (vpbe.c)</span>
+00143 <span class="comment"></span>
+00144 <span class="comment">#if !defined(VINLINE_VPBE)</span>
+00145 <span class="comment"></span>
+00152 <span class="comment">Valist* Vpbe_getValist(Vpbe *thee);</span>
+00153 <span class="comment"></span>
+00160 <span class="comment">Vacc*   Vpbe_getVacc(Vpbe *thee);</span>
+00161 <span class="comment"></span>
+00168 <span class="comment">double  Vpbe_getBulkIonicStrength(Vpbe *thee);</span>
+00169 <span class="comment"></span>
+00176 <span class="comment">double  Vpbe_getMaxIonRadius(Vpbe *thee);</span>
+00177 <span class="comment"></span>
+00184 <span class="comment">double  Vpbe_getTemperature(Vpbe *thee);           </span>
+00185 <span class="comment"></span>
+00192 <span class="comment">double  Vpbe_getSoluteDiel(Vpbe *thee); </span>
+00193 <span class="comment"></span>
+00200 <span class="comment">double  Vpbe_getGamma(Vpbe *thee);</span>
+00201 <span class="comment"></span>
+00208 <span class="comment">double  Vpbe_getSoluteRadius(Vpbe *thee);</span>
+00209 <span class="comment"></span>
+00216 <span class="comment">double  Vpbe_getSoluteXlen(Vpbe *thee);</span>
+00217 <span class="comment"></span>
+00224 <span class="comment">double  Vpbe_getSoluteYlen(Vpbe *thee);</span>
+00225 <span class="comment"></span>
+00232 <span class="comment">double  Vpbe_getSoluteZlen(Vpbe *thee);</span>
+00233 <span class="comment"></span>
+00240 <span class="comment">double* Vpbe_getSoluteCenter(Vpbe *thee);</span>
+00241 <span class="comment"></span>
+00248 <span class="comment">double  Vpbe_getSoluteCharge(Vpbe *thee);</span>
+00249 <span class="comment"></span>
+00256 <span class="comment">double  Vpbe_getSolventDiel(Vpbe *thee);</span>
+00257 <span class="comment"></span>
+00264 <span class="comment">double  Vpbe_getSolventRadius(Vpbe *thee);</span>
+00265 <span class="comment"></span>
+00272 <span class="comment">double  Vpbe_getXkappa(Vpbe *thee);</span>
+00273 <span class="comment"></span>
+00280 <span class="comment">double  Vpbe_getDeblen(Vpbe *thee);</span>
+00281 <span class="comment"></span>
+00288 <span class="comment">double  Vpbe_getZkappa2(Vpbe *thee);</span>
+00289 <span class="comment"></span>
+00296 <span class="comment">double  Vpbe_getZmagic(Vpbe *thee);</span>
+00297 <span class="comment"></span>
+00298 <span class="comment">#else /* if defined(VINLINE_VPBE) */</span>
+00299 <span class="preprocessor">#   define Vpbe_getValist(thee) ((thee)-&gt;alist)</span>
+00300 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getVacc(thee) ((thee)-&gt;acc)</span>
+00301 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getBulkIonicStrength(thee) ((thee)-&gt;bulkIonicStrength)</span>
+00302 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getTemperature(thee) ((thee)-&gt;T)           </span>
+00303 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteDiel(thee) ((thee)-&gt;soluteDiel) </span>
+00304 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteCenter(thee) ((thee)-&gt;soluteCenter)</span>
+00305 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteRadius(thee) ((thee)-&gt;soluteRadius)</span>
+00306 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteXlen(thee) ((thee)-&gt;soluteXlen)</span>
+00307 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteYlen(thee) ((thee)-&gt;soluteYlen)</span>
+00308 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteZlen(thee) ((thee)-&gt;soluteZlen)</span>
+00309 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSoluteCharge(thee) ((thee)-&gt;soluteCharge)</span>
+00310 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSolventDiel(thee) ((thee)-&gt;solventDiel)</span>
+00311 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getSolventRadius(thee) ((thee)-&gt;solventRadius)</span>
+00312 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getMaxIonRadius(thee) ((thee)-&gt;maxIonRadius)</span>
+00313 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getXkappa(thee) ((thee)-&gt;xkappa)</span>
+00314 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getDeblen(thee) ((thee)-&gt;deblen)</span>
+00315 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getZkappa2(thee) ((thee)-&gt;zkappa2)</span>
+00316 <span class="preprocessor"></span><span class="preprocessor">#   define Vpbe_getZmagic(thee) ((thee)-&gt;zmagic)</span>
+00317 <span class="preprocessor"></span><span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VPBE) */</span>
+00318 
+00319 <span class="comment">/* ///////////////////////////////////////////////////////////////////////////</span>
+00320 <span class="comment">   // Class Vpbe: Non-Inlineable methods (vpbe.c)</span>
+00322 <span class="comment"></span>
+00355 <span class="comment">Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, </span>
+00356 <span class="comment">                                                   double *ionRadii, double *ionQ, double T, </span>
+00357 <span class="comment">                                                   double soluteDiel, double solventDiel,  </span>
+00358 <span class="comment">                                                   double solventRadius, int focusFlag, double sdens);</span>
+00359 <span class="comment"></span>
+00392 <span class="comment">int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, </span>
+00393 <span class="comment">                                                   double *ionConc, double *ionRadii, double *ionQ, </span>
+00394 <span class="comment">                                                   double T, double soluteDiel, </span>
+00395 <span class="comment">                                                   double solventDiel, double solventRadius, int focusFlag,</span>
+00396 <span class="comment">                                                   double sdens);</span>
+00397 <span class="comment"></span>
+00408 <span class="comment">int     Vpbe_getIons(Vpbe *thee, int *nion, double ionConc[MAXION],</span>
+00409 <span class="comment">                                                          double ionRadii[MAXION], double ionQ[MAXION]);</span>
+00410 <span class="comment"></span>
+00416 <span class="comment">void    Vpbe_dtor(Vpbe **thee);</span>
+00417 <span class="comment"></span>
+00423 <span class="comment">void    Vpbe_dtor2(Vpbe *thee);</span>
+00424 <span class="comment"></span>
+00439 <span class="comment">double  Vpbe_getCoulombEnergy1(Vpbe *thee);</span>
+00440 <span class="comment"></span>
+00448 <span class="comment">unsigned long int Vpbe_memChk(Vpbe *thee);</span>
+00449 <span class="comment"></span>
+00450 <span class="comment">#endif /* ifndef _VPBE_H_ */</span>
+00451 
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:01 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>
