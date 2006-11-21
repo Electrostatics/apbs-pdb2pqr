@@ -1,266 +1,270 @@
 <cmdsynopsis>
-  <command>READ</command>
-  <arg choice="opt" rep="repeat"><replaceable>keywords</replaceable></arg>
-  <command>END</command>
+	<command>READ</command>
+	<arg choice="opt" rep="repeat"><replaceable>keywords</replaceable></arg>
+	<command>END</command>
 </cmdsynopsis>
 <para>One of these sections must be present for every molecule involved in the
-  APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for
-  each molecule/map read, based on order and starting at 1.  This section has
-  the following keywords:</para>
+	APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for
+	each molecule/map read, based on order and starting at 1.  This section has
+	the following keywords:</para>
 <itemizedlist>
-  <listitem>
-    <cmdsynopsis id="read-mol">
-      <command>mol</command>
-      <arg choice="req"><replaceable>format</replaceable></arg>
-      <arg choice="req"><replaceable>path</replaceable></arg>
-    </cmdsynopsis>
-    <para>This command specifies the molecular data to be read into APBS.  The
-      arguments are: 
-      <variablelist>
-        <varlistentry> <term><replaceable>format</replaceable></term>
-          <listitem>
-            <para>The format of the input data.  Acceptable flags include:
-              <variablelist>
-                <varlistentry>
-                  <term><type>pqr</type></term>
-                  <listitem>
-                    <para>Molecular data is in 
-                      <link linkend="pqr-format">PQR format</link> 
-                      (see <link linkend="pqr-format">Formats section</link>)
-                    </para> 
-                  </listitem>
-                </varlistentry>
-                <varlistentry>
-                  <term><type>pdb</type></term>
-                  <listitem>
-                    <para>Molecular data is in 
-                      <ulink url="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">PDB format</ulink>.
-                      <warning>
-                        <para>We do not completely follow the PDB format, as
-                          specified in the above link.  Specifically, we allow
-                          general whitespace-, tab-, or newline-delimited
-                          format, thereby permitting the manipulation of
-                          molecules with coordinates outside the &plusmn;999
-                          range.  </para>
-                      </warning>
+	<listitem>
+		<cmdsynopsis id="read-mol">
+			<command>mol</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command specifies the molecular data to be read into APBS.  The
+			arguments are: 
+			<variablelist>
+				<varlistentry> <term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the input data.  Acceptable flags include:
+							<variablelist>
+								<varlistentry>
+									<term><type>pqr</type></term>
+									<listitem>
+										<para>Molecular data is in <link linkend="pqr-format">PQR format</link> 
+										</para> 
+									</listitem>
+								</varlistentry>
+								<varlistentry>
+									<term><type>pdb</type></term>
+									<listitem>
+										<para>Molecular data is in <ulink url="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards">PDB format</ulink>.
+											<warning>
+												<para>We do not completely follow the PDB format, as
+													specified in the above link.  Specifically, we allow
+													general whitespace-, tab-, or newline-delimited
+													format, thereby permitting the manipulation of
+													molecules with coordinates outside the &plusmn;999
+													range.  </para>
+											</warning>
 
-                    </para>
-                  </listitem>
-                </varlistentry>
-              </variablelist>
-              <note>
-                 <para>Beginning with APBS 0.4.1, the optional use of the
-                       chain ID field is now supported in both PDB and PQR formats.</para>
-              </note>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path</replaceable></term>
-          <listitem>
-            <para>The location of the molecular data file.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </listitem>
+										</para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+							<note>
+								<para>Beginning with APBS 0.4.1, the optional use of the
+									chain ID field is now supported in both PDB and PQR formats.</para>
+							</note>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path</replaceable></term>
+					<listitem>
+						<para>The location of the molecular data file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
 
-  <listitem>
-    <cmdsynopsis id="parm">
-      <command>parm</command>
-      <arg choice="req"><replaceable>format</replaceable></arg>
-      <arg choice="req"><replaceable>path</replaceable></arg>
-    </cmdsynopsis>
-    <para>This command specifies the charge and radius data to be used with
-      PDB-format molecule files.  The arguments are: 
-      <variablelist>
-        <varlistentry>
-          <term><replaceable>format</replaceable></term>
-          <listitem>
-            <para>The format of the parameter file.  Acceptable flags include:
-              <variablelist>
-                <varlistentry>
-                  <term><type>flat</type></term>
-                  <listitem>
-                    <para>APBS flat-file parameter format (see
-                      <link linkend="flat-format">Formats section</link>)</para>
-                  </listitem>
-              </varlistentry>
-              <varlistentry>
-                  <term><type>xml</type></term>
-                  <listitem>
-                    <para>XML parameter format</para>
-                  </listitem>
-                </varlistentry>
-              </variablelist>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path</replaceable></term>
-          <listitem>
-            <para>The location of the parameter data file.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </listitem>
+	<listitem>
+		<cmdsynopsis id="parm">
+			<command>parm</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command specifies the charge and radius data to be used with
+			PDB-format molecule files.  The arguments are: 
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the parameter file.  Acceptable flags include:
+							<variablelist>
+								<varlistentry>
+									<term><type>flat</type></term>
+									<listitem>
+										<para>APBS
+											<link
+												linkend="parm-flat-format">flat-file
+												parameter
+												format</link></para>
+									</listitem>
+								</varlistentry>
+								<varlistentry>
+									<term><type>xml</type></term>
+									<listitem>
+										<para>APBS
+											<link
+												linkend="parm-xml-format">XML
+												parameter
+												format</link></para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path</replaceable></term>
+					<listitem>
+						<para>The location of the parameter data file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
 
-  <listitem>
-    <cmdsynopsis id="diel">
-      <command>diel</command>
-      <arg choice="req"><replaceable>format</replaceable></arg>
-      <arg choice="req"><replaceable>path-x</replaceable></arg>
-      <arg choice="req"><replaceable>path-y</replaceable></arg>
-      <arg choice="req"><replaceable>path-z</replaceable></arg>
-    </cmdsynopsis>
-    <para>This command allows APBS to read the dielectric function 
-      <inlineequation>
-        <alt>\epsilon(x)</alt>
-        <graphic fileref="images/epsilon_of_x.gif" valign="bottom"/>
-      </inlineequation>
-      mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z
-      directions.  The result are maps of dielectric variables between the
-      solvent and biomolecular dieletric constants; these values are unitless.
-      In general, this command will read dielectric maps written by 
-      <link linkend="elec-write"><command>write</command></link>
-      commands in earlier APBS calculations.  
-      <note>
-        <para>NOTE:  if you choose this option and have a non-zero ionic
-          strength, you must also include a 
-          <link linkend="kappa"><command>read kappa</command></link>
-          statement</para>
-      </note>
-      Arguments for this command are:
-      <variablelist>
-        <varlistentry>
-          <term><replaceable>format</replaceable></term>
-          <listitem>
-            <para>The format of the dielectric map.  Acceptable values include:
-              <variablelist>
-                <varlistentry>
-                  <term><type>dx</type></term>
-                  <listitem>
-                    <para> <link linkend="opendx-format">OpenDX format</link>
-                      (see <link linkend="opendx-format">Formats
-                        section</link>)</para>
-                  </listitem>
-                </varlistentry>
-              </variablelist>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path-x</replaceable></term>
-          <listitem>
-            <para>The location of the x-shifted dielectric map file.</para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path-y</replaceable></term>
-          <listitem>
-            <para>The location of the y-shifted dielectric map file.</para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path-z</replaceable></term>
-          <listitem>
-            <para>The location of the z-shifted dielectric map file.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </listitem>
+	<listitem>
+		<cmdsynopsis id="diel">
+			<command>diel</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path-x</replaceable></arg>
+			<arg choice="req"><replaceable>path-y</replaceable></arg>
+			<arg choice="req"><replaceable>path-z</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command allows APBS to read the dielectric function 
+			<inlineequation>
+				<alt>\epsilon(x)</alt>
+				<graphic fileref="images/epsilon_of_x.gif" valign="bottom"/>
+			</inlineequation>
+			mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z
+			directions.  The result are maps of dielectric variables between the
+			solvent and biomolecular dieletric constants; these values are unitless.
+			In general, this command will read dielectric maps written by 
+			<link linkend="elec-write"><command>write</command></link>
+			commands in earlier APBS calculations.  
+			<note>
+				<para>NOTE:  if you choose this option and have a non-zero ionic
+					strength, you must also include a 
+					<link linkend="kappa"><command>read kappa</command></link>
+					statement</para>
+			</note>
+			Arguments for this command are:
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the dielectric map.  Acceptable values include:
+							<variablelist>
+								<varlistentry>
+									<term><type>dx</type></term>
+									<listitem>
+										<para> <link linkend="opendx-format">OpenDX format</link>
+											(see <link linkend="opendx-format">Formats
+												section</link>)</para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path-x</replaceable></term>
+					<listitem>
+						<para>The location of the x-shifted dielectric map file.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path-y</replaceable></term>
+					<listitem>
+						<para>The location of the y-shifted dielectric map file.</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path-z</replaceable></term>
+					<listitem>
+						<para>The location of the z-shifted dielectric map file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
 
-  <listitem>
-    <cmdsynopsis id="kappa">
-      <command>kappa</command>
-      <arg choice="req"><replaceable>format</replaceable></arg>
-      <arg choice="req"><replaceable>path</replaceable></arg>
-    </cmdsynopsis>
-    <para>This command allows APBS to read the ion-accessibility function 
-      <inlineequation>
-        <alt>\overline{\kappa}^2(x)</alt>
-        <graphic fileref="images/overline_kappa_2_of_x.gif" valign="bottom"/>
-      </inlineequation>
-      mapped to a mesh.  The result are maps of ion accessibility values which
-      range between 0 and the build Debye-H&uuml;ckel screening parameter;
-      these values have units of &Aring;<superscript>-2</superscript>.  In
-      general, this command will read kappa-maps written by 
-      <link linkend="elec-write"><command>write</command></link>
-      commands in earlier APBS calculations.  
-      <note>
-        <para>NOTE:  if you choose this option, you must also include a 
-          <link linkend="diel"><command>read diel</command></link>
-          statement</para>
-      </note>
-      Arguments for this command are:
-      <variablelist>
-        <varlistentry>
-          <term><replaceable>format</replaceable></term>
-          <listitem>
-            <para>The format of the kappa map.  Acceptable values include:
-              <variablelist>
-                <varlistentry>
-                  <term><type>dx</type></term>
-                  <listitem>
-                    <para><link linkend="opendx-format">OpenDX format</link>
-                      (see <link linkend="opendx-format">Formats section</link>)
-                    </para>
-                  </listitem>
-                </varlistentry>
-              </variablelist>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path</replaceable></term>
-          <listitem>
-            <para>The location of the kappa map file.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </listitem>
+	<listitem>
+		<cmdsynopsis id="kappa">
+			<command>kappa</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command allows APBS to read the ion-accessibility function 
+			<inlineequation>
+				<alt>\overline{\kappa}^2(x)</alt>
+				<graphic fileref="images/overline_kappa_2_of_x.gif" valign="bottom"/>
+			</inlineequation>
+			mapped to a mesh.  The result are maps of ion accessibility values which
+			range between 0 and the build Debye-H&uuml;ckel screening parameter;
+			these values have units of &Aring;<superscript>-2</superscript>.  In
+			general, this command will read kappa-maps written by 
+			<link linkend="elec-write"><command>write</command></link>
+			commands in earlier APBS calculations.  
+			<note>
+				<para>NOTE:  if you choose this option, you must also include a 
+					<link linkend="diel"><command>read diel</command></link>
+					statement</para>
+			</note>
+			Arguments for this command are:
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the kappa map.  Acceptable values include:
+							<variablelist>
+								<varlistentry>
+									<term><type>dx</type></term>
+									<listitem>
+										<para><link linkend="opendx-format">OpenDX format</link>
+											(see <link linkend="opendx-format">Formats section</link>)
+										</para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path</replaceable></term>
+					<listitem>
+						<para>The location of the kappa map file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
 
-  <listitem>
-    <cmdsynopsis id="charge">
-      <command>charge</command>
-      <arg choice="req"><replaceable>format</replaceable></arg>
-      <arg choice="req"><replaceable>path</replaceable></arg>
-    </cmdsynopsis>
-    <para>This command allows APBS to read the fixed (molecular) charge density
-      function mapped to a mesh.  The result are maps of charge densities; 
-      these values have units of e<subscript>c</subscript> (electron charge).
-      In general, this command will read charge-maps written by 
-      <link linkend="elec-write"><command>write</command></link>
-      commands in earlier APBS calculations.  Arguments for this command are:
-      <variablelist>
-        <varlistentry>
-          <term><replaceable>format</replaceable></term>
-          <listitem>
-            <para>The format of the charge map.  Acceptable values include:
-              <variablelist>
-                <varlistentry>
-                  <term><type>dx</type></term>
-                  <listitem>
-                    <para> <link linkend="opendx-format">OpenDX format</link>
-                      (see <link linkend="opendx-format">Formats section</link>)
-                    </para>
-                  </listitem>
-                </varlistentry>
-              </variablelist>
-            </para>
-          </listitem>
-        </varlistentry>
-        <varlistentry>
-          <term><replaceable>path</replaceable></term>
-          <listitem>
-            <para>The location of the charge map file.</para>
-          </listitem>
-        </varlistentry>
-      </variablelist>
-    </para>
-  </listitem>
+	<listitem>
+		<cmdsynopsis id="charge">
+			<command>charge</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command allows APBS to read the fixed (molecular) charge density
+			function mapped to a mesh.  The result are maps of charge densities; 
+			these values have units of e<subscript>c</subscript> (electron charge).
+			In general, this command will read charge-maps written by 
+			<link linkend="elec-write"><command>write</command></link>
+			commands in earlier APBS calculations.  Arguments for this command are:
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the charge map.  Acceptable values include:
+							<variablelist>
+								<varlistentry>
+									<term><type>dx</type></term>
+									<listitem>
+										<para> <link linkend="opendx-format">OpenDX format</link>
+											(see <link linkend="opendx-format">Formats section</link>)
+										</para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path</replaceable></term>
+					<listitem>
+						<para>The location of the charge map file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
 
 </itemizedlist>

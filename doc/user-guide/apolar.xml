@@ -36,7 +36,62 @@
 
 <sect3 id="apolar-basic"> <title>Basic apolar solvation calculations</title>
 
-	<para>FINISH:  formula, centering (add option?)</para>
+	<para>
+		APBS apolar calculations follow the very generic framework
+		described in:
+	</para>
+	<para>
+		Wagoner JA, Baker NA. Assessing implicit models for nonpolar
+		mean solvation forces: the importance of dispersion and volume
+		terms. Proc Natl Acad Sci USA, 103, 8331-8336, 2006.
+		(<ulink url="http://dx.doi.org/10.1073/pnas.0600118103">http://dx.doi.org/10.1073/pnas.0600118103</ulink>)
+	</para>
+	<para>In particular, nonpolar solvation potentials of mean force
+		(energies) are calculated according to <xref
+			linkend="eqn-nonpolar-energy"/>.
+		<equation id="eqn-nonpolar-energy"> <title>Nonpolar solvation potentials of mean
+				force</title>
+			<alt>gamma A + p V + integral</alt>
+			<graphic fileref="images/nonpolar-energy.png"/>
+		</equation>
+		Mean nonpolar solvation forces are calculated according to
+		<xref linkend="eqn-nonpolar-force"/>.
+		<equation id="eqn-nonpolar-force"> <title>Nonpolar solvation
+				mean forces</title>
+			<alt>gamma dA + p dV + dintegral</alt>
+			<graphic fileref="images/nonpolar-force.png"/>
+		</equation>
+		In these equations, 
+		gamma (see <link linkend="apolar-gamma">gamma</link> below) 
+		is the repulsive (hard sphere) solvent surface tension, 
+		A is the conformation-dependent solute surface area
+		(see <link linkend="apolar-srad">srad</link> 
+		and <link linkend="apolar-srfm">srfm</link> below),
+		p (see <link linkend="apolar-press">press</link> below) 
+		is the repulsive (hard sphere) solvent pressure, 
+		V is the conformation-dependent solute volume
+		(see <link linkend="apolar-srad">srad</link> 
+		and <link linkend="apolar-srfm">srfm</link> below),
+		rho (see <link linkend="apolar-bconc">bconc</link> below) 
+		is the bulk solvent density, 
+		and the integral involves the
+		attractive portion (defined in a Weeks-Chandler-Andersen sense)
+		of the Lennard-Jones interactions between the solute and the
+		solvent integrated over the region of the problem domain
+		<emphasis>outside</emphasis> the solute volume V
+		(see <link linkend="apolar-srad">srad</link> 
+		and <link linkend="apolar-srfm">srfm</link> below).
+		Lennard-Jones parameters are taken from APBS parameter files
+		(see <xref linkend="parm-xml-format"/>) as read in through an
+		APBS input file <link linkend="read">READ</link> statement.
+	</para>
+
+	<para>
+		Note that the above expressions can easily be reduced to
+		simpler apolar solvation formalisms by setting one or more of
+		the coefficients (gamma, rho, and p) to zero through the
+		keywords below.
+	</para>
 
 </sect3>
 

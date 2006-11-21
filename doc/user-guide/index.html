@@ -24,9 +24,11 @@
       it is their choice whether to do so. The GNU General Public License gives
       permission to release a modified version without this exception; this
       exception also makes it possible to release a modified version which
-      carries forward this exception.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">Availability</a></span></dt><dt><span class="sect1"><a href="#id929919">Binary installation</a></span></dt><dt><span class="sect1"><a href="#id929962">Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">Prerequisites</a></span></dt><dt><span class="sect2"><a href="#setup-sect">Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id930498">Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#id930660">Machine-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933180">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933727">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934024">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934360">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934493">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934518">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934721">Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933186">Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id1009956">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1010170">Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1011302">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
-      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1011600">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1011869">Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id943020">Sensitivity of 2PHK:B solvation energy calculations
-								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id936540">Template for APBS input file</a></dt><dt>4.2. <a href="#id972045">PRINT statement example</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Introduction</h2></div></div></div><p>APBS is a software package for the numerical solution of the
+      carries forward this exception.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">Availability</a></span></dt><dt><span class="sect1"><a href="#id929919">Binary installation</a></span></dt><dt><span class="sect1"><a href="#id929962">Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">Prerequisites</a></span></dt><dt><span class="sect2"><a href="#setup-sect">Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id930498">Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#id930660">Machine-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933180">Invocation</a></span></dt><dt><span class="sect1"><a href="#id933727">Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">Problem setup</a></span></dt><dt><span class="sect2"><a href="#id934024">Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id934360">Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id934493">Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id934518">Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">Documentation</a></span></dt><dt><span class="sect1"><a href="#id934721">Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id933186">Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id1010523">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1010737">Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parm-flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#parm-xml-format">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
+			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1012160">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1012425">Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id942994">Sensitivity of 2PHK:B solvation energy calculations
+								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id936540">Template for APBS input file</a></dt><dt>4.2. <a href="#id972344">PRINT statement example</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#eqn-nonpolar-energy">Nonpolar solvation potentials of mean
+				force</a></dt><dt>4.2. <a href="#eqn-nonpolar-force">Nonpolar solvation
+				mean forces</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Introduction</h2></div></div></div><p>APBS is a software package for the numerical solution of the
 		Poisson-Boltzmann equation (PBE), one of the most popular continuum models
 		for describing electrostatic interactions between molecular solutes in
 		salty, aqueous media. Continuum electrostatics plays an important role in
@@ -743,80 +745,82 @@
 		used to load molecules and multiple <span><strong class="command">ELEC</strong></span> or
 		<span><strong class="command">APOLAR</strong></span> sections would specify various
 		electrostatics calculations on one or more molecules.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="read"></a>READ statements</h3></div></div></div><div class="cmdsynopsis"><p><code class="command">READ</code>  [<em class="replaceable"><code>keywords</code></em>...]<br><code class="command">END</code> </p></div><p>One of these sections must be present for every molecule involved in the
-  APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for
-  each molecule/map read, based on order and starting at 1.  This section has
-  the following keywords:</p><div class="itemizedlist"><ul type="disc"><li><div class="cmdsynopsis"><p><a name="read-mol"></a><code class="command">mol</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command specifies the molecular data to be read into APBS.  The
-      arguments are: 
-      </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the input data.  Acceptable flags include:
-              </p><div class="variablelist"><dl><dt><span class="term"><span class="type">pqr</span></span></dt><dd><p>Molecular data is in 
-                      <a href="#pqr-format" title="PQR biomolecular structure format">PQR format</a> 
-                      (see <a href="#pqr-format" title="PQR biomolecular structure format">Formats section</a>)
-                    </p></dd><dt><span class="term"><span class="type">pdb</span></span></dt><dd><p>Molecular data is in 
-                      <a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards" target="_top">PDB format</a>.
-                      </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>We do not completely follow the PDB format, as
-                          specified in the above link.  Specifically, we allow
-                          general whitespace-, tab-, or newline-delimited
-                          format, thereby permitting the manipulation of
-                          molecules with coordinates outside the ±999
-                          range.  </p></td></tr></table></div><p>
+	APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for
+	each molecule/map read, based on order and starting at 1.  This section has
+	the following keywords:</p><div class="itemizedlist"><ul type="disc"><li><div class="cmdsynopsis"><p><a name="read-mol"></a><code class="command">mol</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command specifies the molecular data to be read into APBS.  The
+			arguments are: 
+			</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the input data.  Acceptable flags include:
+							</p><div class="variablelist"><dl><dt><span class="term"><span class="type">pqr</span></span></dt><dd><p>Molecular data is in <a href="#pqr-format" title="PQR biomolecular structure format">PQR format</a> 
+										</p></dd><dt><span class="term"><span class="type">pdb</span></span></dt><dd><p>Molecular data is in <a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards" target="_top">PDB format</a>.
+											</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png"></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>We do not completely follow the PDB format, as
+													specified in the above link.  Specifically, we allow
+													general whitespace-, tab-, or newline-delimited
+													format, thereby permitting the manipulation of
+													molecules with coordinates outside the ±999
+													range.  </p></td></tr></table></div><p>
 
-                    </p></dd></dl></div><p>
-              </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Beginning with APBS 0.4.1, the optional use of the
-                       chain ID field is now supported in both PDB and PQR formats.</p></td></tr></table></div><p>
-            </p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the molecular data file.</p></dd></dl></div><p>
-    </p></li><li><div class="cmdsynopsis"><p><a name="parm"></a><code class="command">parm</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command specifies the charge and radius data to be used with
-      PDB-format molecule files.  The arguments are: 
-      </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the parameter file.  Acceptable flags include:
-              </p><div class="variablelist"><dl><dt><span class="term"><span class="type">flat</span></span></dt><dd><p>APBS flat-file parameter format (see
-                      <a href="#flat-format" title="Flat-file format">Formats section</a>)</p></dd><dt><span class="term"><span class="type">xml</span></span></dt><dd><p>XML parameter format</p></dd></dl></div><p>
-            </p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the parameter data file.</p></dd></dl></div><p>
-    </p></li><li><div class="cmdsynopsis"><p><a name="diel"></a><code class="command">diel</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path-x</code></em>} {<em class="replaceable"><code>path-y</code></em>} {<em class="replaceable"><code>path-z</code></em>}</p></div><p>This command allows APBS to read the dielectric function 
-      <img src="images/epsilon_of_x.gif">
-      mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z
-      directions.  The result are maps of dielectric variables between the
-      solvent and biomolecular dieletric constants; these values are unitless.
-      In general, this command will read dielectric maps written by 
-      <a href="#elec-write"><span><strong class="command">write</strong></span></a>
-      commands in earlier APBS calculations.  
-      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  if you choose this option and have a non-zero ionic
-          strength, you must also include a 
-          <a href="#kappa"><span><strong class="command">read kappa</strong></span></a>
-          statement</p></td></tr></table></div><p>
-      Arguments for this command are:
-      </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the dielectric map.  Acceptable values include:
-              </p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p> <a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
-                      (see <a href="#opendx-format" title="OpenDX scalar data format">Formats
-                        section</a>)</p></dd></dl></div><p>
-            </p></dd><dt><span class="term"><em class="replaceable"><code>path-x</code></em></span></dt><dd><p>The location of the x-shifted dielectric map file.</p></dd><dt><span class="term"><em class="replaceable"><code>path-y</code></em></span></dt><dd><p>The location of the y-shifted dielectric map file.</p></dd><dt><span class="term"><em class="replaceable"><code>path-z</code></em></span></dt><dd><p>The location of the z-shifted dielectric map file.</p></dd></dl></div><p>
-    </p></li><li><div class="cmdsynopsis"><p><a name="kappa"></a><code class="command">kappa</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command allows APBS to read the ion-accessibility function 
-      <img src="images/overline_kappa_2_of_x.gif">
-      mapped to a mesh.  The result are maps of ion accessibility values which
-      range between 0 and the build Debye-Hückel screening parameter;
-      these values have units of Å<sup>-2</sup>.  In
-      general, this command will read kappa-maps written by 
-      <a href="#elec-write"><span><strong class="command">write</strong></span></a>
-      commands in earlier APBS calculations.  
-      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  if you choose this option, you must also include a 
-          <a href="#diel"><span><strong class="command">read diel</strong></span></a>
-          statement</p></td></tr></table></div><p>
-      Arguments for this command are:
-      </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the kappa map.  Acceptable values include:
-              </p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p><a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
-                      (see <a href="#opendx-format" title="OpenDX scalar data format">Formats section</a>)
-                    </p></dd></dl></div><p>
-            </p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the kappa map file.</p></dd></dl></div><p>
-    </p></li><li><div class="cmdsynopsis"><p><a name="charge"></a><code class="command">charge</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command allows APBS to read the fixed (molecular) charge density
-      function mapped to a mesh.  The result are maps of charge densities; 
-      these values have units of e<sub>c</sub> (electron charge).
-      In general, this command will read charge-maps written by 
-      <a href="#elec-write"><span><strong class="command">write</strong></span></a>
-      commands in earlier APBS calculations.  Arguments for this command are:
-      </p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the charge map.  Acceptable values include:
-              </p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p> <a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
-                      (see <a href="#opendx-format" title="OpenDX scalar data format">Formats section</a>)
-                    </p></dd></dl></div><p>
-            </p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the charge map file.</p></dd></dl></div><p>
-    </p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="elec"></a>ELEC statements</h3></div></div></div><div class="cmdsynopsis"><p><code class="command">ELEC</code>  [name <em class="replaceable"><code>id</code></em>] {<em class="replaceable"><code>type</code></em>} [<em class="replaceable"><code>keywords</code></em>...]<br><code class="command">END</code> </p></div><p>This section is the main component for polar solvation calculations in
+										</p></dd></dl></div><p>
+							</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>Beginning with APBS 0.4.1, the optional use of the
+									chain ID field is now supported in both PDB and PQR formats.</p></td></tr></table></div><p>
+						</p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the molecular data file.</p></dd></dl></div><p>
+		</p></li><li><div class="cmdsynopsis"><p><a name="parm"></a><code class="command">parm</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command specifies the charge and radius data to be used with
+			PDB-format molecule files.  The arguments are: 
+			</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the parameter file.  Acceptable flags include:
+							</p><div class="variablelist"><dl><dt><span class="term"><span class="type">flat</span></span></dt><dd><p>APBS
+											<a href="#parm-flat-format" title="Flat-file format">flat-file
+												parameter
+												format</a></p></dd><dt><span class="term"><span class="type">xml</span></span></dt><dd><p>APBS
+											<a href="#parm-xml-format" title="XML Parameter Format">XML
+												parameter
+												format</a></p></dd></dl></div><p>
+						</p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the parameter data file.</p></dd></dl></div><p>
+		</p></li><li><div class="cmdsynopsis"><p><a name="diel"></a><code class="command">diel</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path-x</code></em>} {<em class="replaceable"><code>path-y</code></em>} {<em class="replaceable"><code>path-z</code></em>}</p></div><p>This command allows APBS to read the dielectric function 
+			<img src="images/epsilon_of_x.gif">
+			mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z
+			directions.  The result are maps of dielectric variables between the
+			solvent and biomolecular dieletric constants; these values are unitless.
+			In general, this command will read dielectric maps written by 
+			<a href="#elec-write"><span><strong class="command">write</strong></span></a>
+			commands in earlier APBS calculations.  
+			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  if you choose this option and have a non-zero ionic
+					strength, you must also include a 
+					<a href="#kappa"><span><strong class="command">read kappa</strong></span></a>
+					statement</p></td></tr></table></div><p>
+			Arguments for this command are:
+			</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the dielectric map.  Acceptable values include:
+							</p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p> <a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
+											(see <a href="#opendx-format" title="OpenDX scalar data format">Formats
+												section</a>)</p></dd></dl></div><p>
+						</p></dd><dt><span class="term"><em class="replaceable"><code>path-x</code></em></span></dt><dd><p>The location of the x-shifted dielectric map file.</p></dd><dt><span class="term"><em class="replaceable"><code>path-y</code></em></span></dt><dd><p>The location of the y-shifted dielectric map file.</p></dd><dt><span class="term"><em class="replaceable"><code>path-z</code></em></span></dt><dd><p>The location of the z-shifted dielectric map file.</p></dd></dl></div><p>
+		</p></li><li><div class="cmdsynopsis"><p><a name="kappa"></a><code class="command">kappa</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command allows APBS to read the ion-accessibility function 
+			<img src="images/overline_kappa_2_of_x.gif">
+			mapped to a mesh.  The result are maps of ion accessibility values which
+			range between 0 and the build Debye-Hückel screening parameter;
+			these values have units of Å<sup>-2</sup>.  In
+			general, this command will read kappa-maps written by 
+			<a href="#elec-write"><span><strong class="command">write</strong></span></a>
+			commands in earlier APBS calculations.  
+			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  if you choose this option, you must also include a 
+					<a href="#diel"><span><strong class="command">read diel</strong></span></a>
+					statement</p></td></tr></table></div><p>
+			Arguments for this command are:
+			</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the kappa map.  Acceptable values include:
+							</p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p><a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
+											(see <a href="#opendx-format" title="OpenDX scalar data format">Formats section</a>)
+										</p></dd></dl></div><p>
+						</p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the kappa map file.</p></dd></dl></div><p>
+		</p></li><li><div class="cmdsynopsis"><p><a name="charge"></a><code class="command">charge</code>  {<em class="replaceable"><code>format</code></em>} {<em class="replaceable"><code>path</code></em>}</p></div><p>This command allows APBS to read the fixed (molecular) charge density
+			function mapped to a mesh.  The result are maps of charge densities; 
+			these values have units of e<sub>c</sub> (electron charge).
+			In general, this command will read charge-maps written by 
+			<a href="#elec-write"><span><strong class="command">write</strong></span></a>
+			commands in earlier APBS calculations.  Arguments for this command are:
+			</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>format</code></em></span></dt><dd><p>The format of the charge map.  Acceptable values include:
+							</p><div class="variablelist"><dl><dt><span class="term"><span class="type">dx</span></span></dt><dd><p> <a href="#opendx-format" title="OpenDX scalar data format">OpenDX format</a>
+											(see <a href="#opendx-format" title="OpenDX scalar data format">Formats section</a>)
+										</p></dd></dl></div><p>
+						</p></dd><dt><span class="term"><em class="replaceable"><code>path</code></em></span></dt><dd><p>The location of the charge map file.</p></dd></dl></div><p>
+		</p></li></ul></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="elec"></a>ELEC statements</h3></div></div></div><div class="cmdsynopsis"><p><code class="command">ELEC</code>  [name <em class="replaceable"><code>id</code></em>] {<em class="replaceable"><code>type</code></em>} [<em class="replaceable"><code>keywords</code></em>...]<br><code class="command">END</code> </p></div><p>This section is the main component for polar solvation calculations in
 	APBS runs. There may be several <span><strong class="command">ELEC</strong></span> sections,
 	operating on different molecules or using different parameters for
 	multiple runs on the same molecule. The order of the
@@ -1515,7 +1519,7 @@
 						the change in energies and visual artifacts in isocontours as a
 						function of <span><strong class="command">ofrac</strong></span> values for a small peptide 
 						(<a href="http://www.rcsb.org/pdb/cgi/explore.cgi?job=chains&amp;pdbId=2PHK" target="_top">2PHK</a>:B).
-						</p><div class="table"><a name="id943020"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
+						</p><div class="table"><a name="id942994"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
 								to <span>ofrac</span> values.</b></p><div class="table-contents"><table summary="Sensitivity of 2PHK:B solvation energy calculations
 								to ofrac values." border="1"><colgroup><col><col><col></colgroup><thead><tr><th><span><strong class="command">ofrac</strong></span> value</th><th>Energy (kJ/mol)</th><th>Visual artifact in ± 1 kT/e iscontour?</th></tr></thead><tbody><tr><td>0.05</td><td>342.79</td><td>No</td></tr><tr><td>0.06</td><td>342.00</td><td>No</td></tr><tr><td>0.07</td><td>341.12</td><td>Yes</td></tr><tr><td>0.08</td><td>341.14</td><td>Yes</td></tr><tr><td>0.09</td><td>342.02</td><td>Yes</td></tr><tr><td>0.10</td><td>340.84</td><td>Yes</td></tr><tr><td>0.11</td><td>339.67</td><td>No</td></tr><tr><td>0.12</td><td>341.10</td><td>No</td></tr><tr><td>0.13</td><td>341.10</td><td>No</td></tr><tr><td>0.14</td><td>341.32</td><td>No</td></tr><tr><td>0.15</td><td>341.54</td><td>No</td></tr></tbody></table></div></div><p><br class="table-break">
 					</p></td></tr></table></div><p>
@@ -1804,7 +1808,55 @@
 					calcualtion.  These are described in
 					<a href="#apolar-keywords-sect" title="Keyword descriptions">the section called &#8220;Keyword descriptions&#8221;</a>.
 				</p></dd></dl></div><p>
-</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="apolar-basic"></a>Basic apolar solvation calculations</h4></div></div></div><p>FINISH:  formula, centering (add option?)</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="apolar-keywords-sect"></a>Keyword descriptions</h4></div></div></div><p>
+</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="apolar-basic"></a>Basic apolar solvation calculations</h4></div></div></div><p>
+		APBS apolar calculations follow the very generic framework
+		described in:
+	</p><p>
+		Wagoner JA, Baker NA. Assessing implicit models for nonpolar
+		mean solvation forces: the importance of dispersion and volume
+		terms. Proc Natl Acad Sci USA, 103, 8331-8336, 2006.
+		(<a href="http://dx.doi.org/10.1073/pnas.0600118103" target="_top">http://dx.doi.org/10.1073/pnas.0600118103</a>)
+	</p><p>In particular, nonpolar solvation potentials of mean force
+		(energies) are calculated according to <a href="#eqn-nonpolar-energy" title="Equation 4.1. Nonpolar solvation potentials of mean
+				force">Equation 4.1, &#8220;Nonpolar solvation potentials of mean
+				force&#8221;</a>.
+		</p><div class="equation"><a name="eqn-nonpolar-energy"></a><p class="title"><b>Equation 4.1. Nonpolar solvation potentials of mean
+				force</b></p><div class="equation-contents"><div><img src="images/nonpolar-energy.png"></div></div></div><p><br class="equation-break">
+		Mean nonpolar solvation forces are calculated according to
+		<a href="#eqn-nonpolar-force" title="Equation 4.2. Nonpolar solvation
+				mean forces">Equation 4.2, &#8220;Nonpolar solvation
+				mean forces&#8221;</a>.
+		</p><div class="equation"><a name="eqn-nonpolar-force"></a><p class="title"><b>Equation 4.2. Nonpolar solvation
+				mean forces</b></p><div class="equation-contents"><div><img src="images/nonpolar-force.png"></div></div></div><p><br class="equation-break">
+		In these equations, 
+		gamma (see <a href="#apolar-gamma">gamma</a> below) 
+		is the repulsive (hard sphere) solvent surface tension, 
+		A is the conformation-dependent solute surface area
+		(see <a href="#apolar-srad">srad</a> 
+		and <a href="#apolar-srfm">srfm</a> below),
+		p (see <a href="#apolar-press">press</a> below) 
+		is the repulsive (hard sphere) solvent pressure, 
+		V is the conformation-dependent solute volume
+		(see <a href="#apolar-srad">srad</a> 
+		and <a href="#apolar-srfm">srfm</a> below),
+		rho (see <a href="#apolar-bconc">bconc</a> below) 
+		is the bulk solvent density, 
+		and the integral involves the
+		attractive portion (defined in a Weeks-Chandler-Andersen sense)
+		of the Lennard-Jones interactions between the solute and the
+		solvent integrated over the region of the problem domain
+		<span class="emphasis"><em>outside</em></span> the solute volume V
+		(see <a href="#apolar-srad">srad</a> 
+		and <a href="#apolar-srfm">srfm</a> below).
+		Lennard-Jones parameters are taken from APBS parameter files
+		(see <a href="#parm-xml-format" title="XML Parameter Format ">the section called &#8220;XML Parameter Format &#8221;</a>) as read in through an
+		APBS input file <a href="#read" title="READ statements">READ</a> statement.
+	</p><p>
+		Note that the above expressions can easily be reduced to
+		simpler apolar solvation formalisms by setting one or more of
+		the coefficients (gamma, rho, and p) to zero through the
+		keywords below.
+	</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="apolar-keywords-sect"></a>Keyword descriptions</h4></div></div></div><p>
 		This is a list of keywords used in the <span><strong class="command">APOLAR</strong></span> statements of APBS.  
 	</p><div class="itemizedlist"><ul type="disc"><li><a name="apolar-bconc"></a><div class="cmdsynopsis"><p><code class="command">bconc</code>  {<em class="replaceable"><code>bulk solvent
 						density</code></em>}</p></div><p>Specify the bulk solvent density in
@@ -1986,7 +2038,7 @@
 					quantities:
 					</p><div class="variablelist"><dl><dt><span class="term"> + </span></dt><dd><p>Addition</p></dd><dt><span class="term"> - </span></dt><dd><p>Subtraction</p></dd></dl></div><p>
 				</p></dd></dl></div><p>
-</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id972045"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
+</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id972344"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
 		# Energy change due to binding
 		print energy complex - ligand - protein end
 		# Energy change due to solvation
@@ -2005,22 +2057,22 @@
 			inadvertantly omitted from this list.  If you know of software that uses
 			APBS and is not listed here, please contact Nathan Baker 
 			<code class="email">&lt;<a href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>&gt;</code>.
-		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999499"></a>Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999932"></a>Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
 					for the Firefox web browser provides a very easy-to-use
 					interface to APBS with all of the functionality of the
 					command-line interface.  This extension currently uses web
 					services provided by <a href="http://nbcr.net" target="_top">NBCR</a>).
-				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999536"></a>PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
+				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999968"></a>PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
 					is a molecular visualization and animation package which
 					provides an interface to APBS.  The APBS plugin to PyMOL
 					(developed by Michael George Lerner)  permits isocontour and
 					surface map visualization of APBS results.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999556"></a>VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999988"></a>VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
 					is a molecular visualization and animation package which provides an
 					interface to APBS.  It permits isocontour-based visualization of APBS
 					results and provides a Tcl plugin to setup APBS calculations for
 					visualization.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999577"></a>PMV</h4></div></div></div><p>PMV 
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1000009"></a>PMV</h4></div></div></div><p>PMV 
 					(<a href="http://www.scripps.edu/~sanner/python" target="_top">http://www.scripps.edu/~sanner/python</a>)
 					is a Python-based molecular visualization package which provides an
 					interface to APBS.  It not only permits visualization of APBS results
@@ -2047,19 +2099,19 @@
 				biological systems.  This section describes molecular graphics software
 				which can display potentials and other data output from APBS.  Note
 				that this set of programs also includes the <a href="#gui-sect" title="Graphical user interfaces">graphical users interfaces</a> listed above.
-			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999691"></a>Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
+			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1000124"></a>Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
 					is a molecular graphics program which can read UHBD-format
 					electrostatic data.  APBS can write multigrid results in UHBD format
 					(see the <a href="#elec-write"><span><strong class="command">write</strong></span></a>
 					<span><strong class="command">ELEC</strong></span> command) and therefore can be used with
 					Dino3D.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999726"></a>MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1000159"></a>MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
 					is a molecular graphics package with an emphasis on NMR-generated
 					structural data.  A program is provided with APBS (see
 					<code class="filename">tools/mesh</code> and the
 					<a href="#conversion-sect" title="Conversion">Data conversion tools</a> in this
 					manual) which converts OpenDX data to MOLMOL format.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id999762"></a>OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id1000194"></a>OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
 					is a general data visualization package which can read APBS output
 					using the scripts provided in
 					<code class="filename">tools/visualization/opendx</code> (see the discussion
@@ -2067,7 +2119,7 @@
 					manual).  However, as there is no straightforward way to
 					visualizate the potential in the context of the atomic structure,
 					OpenDX should not a first choice for APBS visualization.
-				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1009956"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1010170">Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
+				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id1010523"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id1010737">Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
     heavily on the user community for feedback to enhance the software,
     identify bugs, etc. </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-forums"></a>User Forums</h2></div></div></div><p> The <a href="http://sourceforge.net/projects/apbs" target="_top">SourceForge project page</a> offers many user forums for discussion on APBS topics.  Users are encouraged to post bugs and request for support and features via the following forums:
       </p><div class="itemizedlist"><ul type="disc"><li><p><a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top">
@@ -2097,7 +2149,7 @@
                   </p></li><li><p>List archives:  <a href="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users" target="_top">http://sourceforge.net/mailarchive/forum.php?forum=apbs-users</a>
                   </p></li></ul></div><p>
             </p></dd></dl></div><p>
-    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1010170"></a>Bug and other problems</h2></div></div></div><p> 
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id1010737"></a>Bug and other problems</h2></div></div></div><p> 
       Bugs or potential bugs, problems, etc. should either be posted to the
       <a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top"> 
       SourceForge bug tracker forum</a> or reported to the
@@ -2112,215 +2164,215 @@
     <code class="filename">
       <a href="../programmer/index.html" target="_top">doc/html/programmer/index.html</a>
     </code>.
-  </p></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="format-sect"></a>Appendix A. File formats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#id1011302">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
-      format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1011600">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1011869">Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
-    are used by APBS.</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pqr-format"></a>PQR biomolecular structure format</h2></div></div></div><p>
-      The PQR format is the primary input format for biomolecular structure in
-      APBS package.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pqr-flat-format"></a> PQR flat-file format</h3></div></div></div><p>
-      This format is a modification of the 
-      <a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards" target="_top">PDB format</a>
-      which allows users to add charge and radius parameters to existing PDB data
-      while keeping it in a format amenable to visualization with standard
-      molecular graphics programs.  The origins of the PQR format are somewhat
-      uncretain, but has been used by several computational biology software
-      programs, including MEAD and AutoDock.  UHBD uses a very similar format
-      called QCD.
-    </p><p>
-      APBS reads very loosely-formatted PQR files:  all fields are
-      whitespace-delimited, thereby allowing coordinates which are larger/smaller
-      than ± 999 Å.  
-    </p><p>
-      APBS reads data on a per-line basis from PQR files using the following
-      format:
-      </p><div class="literallayout"><p><br>
-        <code class="literal">Field_name</code> <code class="literal">Atom_number</code> <code class="literal">Atom_name</code> <code class="literal">Residue_name</code> <em class="replaceable"><code>Chain_ID</code></em> <code class="literal">Residue_number</code> <code class="literal">X</code> <code class="literal">Y</code> <code class="literal">Z</code> <code class="literal">Charge</code> <code class="literal">Radius</code><br>
-      </p></div><p>
-      where the whitespace is the most important feature of this format.  The
-      fields are:
-      </p><div class="variablelist"><dl><dt><span class="term"> <code class="literal">Field_name</code> </span></dt><dd><p>A string which specifies the type of PQR entry and should
-              either be <code class="literal">ATOM</code> or <code class="literal">HETATM</code> in
-              order to be parsed by APBS.</p></dd><dt><span class="term"> <code class="literal">Atom_number</code> </span></dt><dd><p>
-              An integer which provides the atom index.
-            </p></dd><dt><span class="term"> <code class="literal">Atom_name</code> </span></dt><dd><p>
-              A string which provides the atom name.
-            </p></dd><dt><span class="term"> <code class="literal">Residue_name</code> </span></dt><dd><p>
-              A string which provides the residue name.
-            </p></dd><dt><span class="term"> <em class="replaceable"><code>Chain_ID</code></em> </span></dt><dd><p>
-              An optional string which provides the chain ID of the atom.
-              </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  Chain ID support is a new feature of APBS 0.4.1.</p></td></tr></table></div><p>
-            </p></dd><dt><span class="term"> <code class="literal">Residue_number</code> </span></dt><dd><p>
-              An integer which provides the residue index.
-            </p></dd><dt><span class="term"> <code class="literal">X Y Z</code> </span></dt><dd><p>
-              3 floats which provide the atomic coordiantes.
-            </p></dd><dt><span class="term"> <code class="literal">Charge</code> </span></dt><dd><p>
-              A float which provides the atomic charge (in electrons).
-            </p></dd><dt><span class="term"> <code class="literal">Radius</code> </span></dt><dd><p>
-              A float which provides the atomic radius (in Å).
-            </p></dd></dl></div><p>
-      Clearly, this format can deviate wildly from PDB, particularly when large
-      coordinate values are used.  However, in order to maintain compatibility
-      with most molecular graphics programs, the PDB2PQR utilities provided with
-      apbs (see the <a href="#parameterization" title="Parameterization">Parameterization
-        section</a>) attempt to preserve the PDB format as much as possible.
-    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pqr-xml-format"></a>PQR XML Format </h3></div></div></div><p> 
-        The PQR XML format was designed to remediate some of the shortcomings
-        of the flat-file format.  By use of XML, issues related to extra
-        fields in the file or columns merging together can easily be remedied.
-        Additionally, APBS will only parse the necessary information from the
-        XML file and will ignore all other information, so users wishing to
-        store extra data related to a residue or atom can do so inline without
-        affecting APBS.
-      </p><p> This data format has the following form:
-        </p><pre class="programlisting">
-          # <em class="replaceable"><code>Comments</code></em>	
-          <em class="replaceable"><code>&lt;roottag&gt;</code></em>
-          <em class="replaceable"><code>  &lt;residue&gt;</code></em>
-          ...
-          <code class="literal">  &lt;atom&gt;</code>
-          <code class="literal">    &lt;x&gt;</code><em class="replaceable"><code>x</code></em><code class="literal">&lt;/x&gt;</code>
-          <code class="literal">    &lt;y&gt;</code><em class="replaceable"><code>y</code></em><code class="literal">&lt;/y&gt;</code>
-          <code class="literal">    &lt;z&gt;</code><em class="replaceable"><code>z</code></em><code class="literal">&lt;/z&gt;</code>
-          <code class="literal">    &lt;charge&gt;</code><em class="replaceable"><code>charge</code></em><code class="literal">&lt;/charge&gt;</code>
-          <code class="literal">    &lt;radius&gt;</code><em class="replaceable"><code>radius</code></em><code class="literal">&lt;/radius&gt;</code>
-          <code class="literal">  &lt;/atom&gt;</code>
-          ...
-          <em class="replaceable"><code>  &lt;/residue&gt;</code></em>
-          ...
-          <em class="replaceable"><code>&lt;/roottag&gt;</code></em>
-       </pre><p>
-       </p><p>
-         Note that the <code class="literal">residue</code> tag and its elements are
-         completely optional - APBS only reads in atom data.  Fields such
-         as residue name, chain ID, and other residue-specific data will
-         be ignored.
-	   </p><p>
-       The variables in this example are:
-       </p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the "#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>roottag</code></em> </span></dt><dd><p>This is the root element of the XML file.  The value is not important to
-                              APBS - APBS simply checks that it is closed at the end of the file.</p></dd><dt><span class="term"> <em class="replaceable"><code>x</code></em> </span></dt><dd><p>A float giving the x-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>y</code></em> </span></dt><dd><p>A float giving the y-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>z</code></em> </span></dt><dd><p>A float giving the z-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>charge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomradius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd></dl></div><p>
-	 </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="param-format"></a>Parameter file format</h2></div></div></div><p>APBS uses parameter files with the <span><strong class="command"><a href="#parm">READ parm</a></strong></span>
-      command. 
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="flat-format"></a>Flat-file format</h3></div></div></div><p>The parameter file is a series of lines of the format:
-      </p><div class="literallayout"><p><br>
-        <em class="replaceable"><code>Residue_name</code></em> <em class="replaceable"><code>Atom_name</code></em> <em class="replaceable"><code>Charge</code></em> <em class="replaceable"><code>Radius</code></em> <em class="replaceable"><code>Epsilon</code></em><br>
-      </p></div><p>
-      where the whitespaces are important and denote separation between the
-      fields.  The fields here are:
-      </p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Residue_name</code></em> </span></dt><dd><p>A string giving the residue name, as provided in the PDB file
-              to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Atom_name</code></em> </span></dt><dd><p>A string giving the atom name, as provided in the PDB file to
-              be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Charge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>Radius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd><dt><span class="term"> <em class="replaceable"><code>Epsilon</code></em> </span></dt><dd><p>A float giving the Lennard-Jones well depth (in kcal/mol);
-              this parameter is read but not currently used by APBS.</p></dd></dl></div><p>
-     </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1011302"></a>XML Parameter Format </h3></div></div></div><p> This data format has the following form:
-      	</p><pre class="programlisting">
-          # <em class="replaceable"><code>Comments</code></em>	
-          <em class="replaceable"><code>&lt;ffname&gt;</code></em>
-          <code class="literal">  &lt;residue&gt;</code>
-          <code class="literal">  &lt;name&gt;</code><em class="replaceable"><code>resname</code></em><code class="literal">&lt;/name&gt;</code>
-          <code class="literal">  &lt;atom&gt;</code>
-          <code class="literal">    &lt;name&gt;</code><em class="replaceable"><code>atomname</code></em><code class="literal">&lt;/name&gt;</code>
-          <code class="literal">    &lt;charge&gt;</code><em class="replaceable"><code>atomcharge</code></em><code class="literal">&lt;/charge&gt;</code>
-          <code class="literal">    &lt;radius&gt;</code><em class="replaceable"><code>atomradius</code></em><code class="literal">&lt;/radius&gt;</code>
-          <code class="literal">    &lt;epsilon&gt;</code><em class="replaceable"><code>atomepsilon</code></em><code class="literal">&lt;/epsilon&gt;</code>
-          <code class="literal">  &lt;/atom&gt;</code>
-          ...
-          <code class="literal">  &lt;/residue&gt;</code>
-          ...
-          <em class="replaceable"><code>&lt;/ffname&gt;</code></em>
-       </pre><p>
-       The variables in this example are:
-       </p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the "#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>ffname</code></em> </span></dt><dd><p>The name of the forcefield.  This is the root element of the XML file.</p></dd><dt><span class="term"> <em class="replaceable"><code>resname</code></em> </span></dt><dd><p>A string giving the residue name, as provided in the PDB file to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>atomname</code></em> </span></dt><dd><p>A string giving the atom name, as provided in the PDB file to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>atomcharge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomradius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomepsilon</code></em> </span></dt><dd><p>A float giving the Lennard-Jones well depth (in kcal/mol); this parameter is read but not currently used by APBS.</p></dd></dl></div><p>
-	  </p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hb-format"></a>Harwell-Boeing column-compressed matrix
-      format</h2></div></div></div><p>This is the sparse matrix output format used by APBS for analyses of
-      the matrix operators which are constructed during PB solution.  This
-      format was implemented so matrix operators could by decomposed with
-      SuperLU and ARPACK.
-    </p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Details of the format are complicated; this section is under
-        construction.  
-      </p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="opendx-format"></a>OpenDX scalar data format</h2></div></div></div><p>We output most discretized scalar data (e.g., potential,
-      accessibility, etc.) from APBS in the data format used by the OpenDX
-      software package
-      (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>).  The
-      OpenDX data format is very flexible; the following sections describe the
-      application of this format for APBS multigrid and finite element
-      datasets.
-    </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1011600"></a>Multigrid</h3></div></div></div><p>
-        This data format has the following form:
-        </p><pre class="programlisting">
-          # <em class="replaceable"><code>Comments</code></em>
-          <code class="literal">object 1 class gridpositions counts</code> <em class="replaceable"><code>nx ny nz</code></em>
-          <code class="literal">origin</code> <em class="replaceable"><code>xmin ymin zmin</code></em>
-          <code class="literal">delta</code> <em class="replaceable"><code>hx</code></em> 0.0 0.0
-          <code class="literal">delta</code> 0.0 <em class="replaceable"><code>hy</code></em> 0.0 
-          <code class="literal">delta</code> 0.0 0.0 <em class="replaceable"><code>hz</code></em>
-          <code class="literal">object 2 class gridconnections counts</code> <em class="replaceable"><code>nx ny nz</code></em>
-          <code class="literal">object 3 class array type double rank 0 times</code> <em class="replaceable"><code>n data follows</code></em>
-          <em class="replaceable"><code>u(0,0,0) u(0,0,1) u(0,0,2)</code></em>
-          ...
-          <em class="replaceable"><code>u(0,0,nz-3) u(0,0,nz-2) u(0,0,nz-1)</code></em>
-          <em class="replaceable"><code>u(0,1,0) u(0,1,1) u(0,1,2)</code></em>
-          ...
-          <em class="replaceable"><code>u(0,1,nz-3) u(0,1,nz-2) u(0,1,nz-1)</code></em>
-          ...
-          <em class="replaceable"><code>u(0,ny-1,nz-3) u(0,ny-1,nz-2) u(0,ny-1,nz-1)</code></em>
-          <em class="replaceable"><code>u(1,0,0) u(1,0,1) u(1,0,2)</code></em>
-          ...
-          <code class="literal">attribute "dep" string "positions"</code>
-          <code class="literal">object "regular positions regular connections" class field</code>
-          <code class="literal">component "positions" value 1</code>
-          <code class="literal">component "connections" value 2</code>
-          <code class="literal">component "data" value 3</code>
-        </pre><p>
-        The variables in this example are:
-        </p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the
-                "#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>nx ny nz</code></em> </span></dt><dd><p>
-                The number of grid points in the x-, y-, and z-directions.
-              </p></dd><dt><span class="term"> <em class="replaceable"><code>xmin ymin zmin</code></em> </span></dt><dd><p>
-                The coordinates of the grid lower corner.
-              </p></dd><dt><span class="term"> <em class="replaceable"><code>hx hy hz</code></em> </span></dt><dd><p>
-                The grid spacings in the x-, y-, and z-directions.
-              </p></dd><dt><span class="term"> <em class="replaceable"><code>n</code></em> </span></dt><dd><p>
-                The total number of grid points; 
-                <em class="replaceable"><code>n</code></em> =
-                <em class="replaceable"><code>nx</code></em> *
-                <em class="replaceable"><code>ny</code></em> *
-                <em class="replaceable"><code>nz</code></em> 
-              </p></dd><dt><span class="term"> <em class="replaceable"><code>u(*,*,*)</code></em> </span></dt><dd><p>
-                The data values, ordered with the z-index increasing most
-                quickly, followed by the y-index, and then the x-index.
-              </p></dd></dl></div><p>
-      </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1011869"></a>Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
-        form:
-        </p><pre class="programlisting">
-          <code class="literal">object 1 class array type float rank 1 shape 3 items</code> <em class="replaceable"><code>N</code></em>
-          <em class="replaceable"><code>v1x v1y v1z</code></em>
-          <em class="replaceable"><code>v2x v2y v2z</code></em>
-          ...
-          <em class="replaceable"><code>vNx vNy vNz</code></em>
-          <code class="literal">object 2 class array type int rank 1 shape 4 items</code> <em class="replaceable"><code>M</code></em>
-          <em class="replaceable"><code>s1a s1b s1c s1d</code></em>
-          <em class="replaceable"><code>s2a s2b s2c s2d</code></em>
-          ...
-          <em class="replaceable"><code>sMa sMb sMc sMd</code></em>
-          <code class="literal">attribute "element type" string "tetrahedra"</code>
-          <code class="literal">object 3 class array type float rank 0 items</code> <em class="replaceable"><code>N</code></em>
-          <em class="replaceable"><code>u1</code></em>
-          <em class="replaceable"><code>u2</code></em>
-          ...
-          <em class="replaceable"><code>uN</code></em>
-          <code class="literal">attribute "dep" string "positions"</code>
-          <code class="literal">object "irregular positions irregular connections" class field</code>
-          <code class="literal">component "positions" value 1</code>
-          <code class="literal">component "connections" value 2</code>
-          <code class="literal">component "data" value 3</code>
-          <code class="literal">end</code>
-        </pre><p>
-        where the variables are:
-        </p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>N</code></em></span></dt><dd><p>Number of vertices</p></dd><dt><span class="term"> <em class="replaceable"><code>vix viy viz</code></em></span></dt><dd><p>Coordinates of vertex <em class="replaceable"><code>i</code></em></p></dd><dt><span class="term"> <em class="replaceable"><code>M</code></em></span></dt><dd><p>Number of simplices</p></dd><dt><span class="term"> <em class="replaceable"><code>sia sib sic sid</code></em></span></dt><dd><p>
-                IDs of vertices in simplex <em class="replaceable"><code>i</code></em>
-              </p></dd><dt><span class="term"> <em class="replaceable"><code>ui</code></em></span></dt><dd><p>
-                Data value associated with vertex <em class="replaceable"><code>i</code></em>
-              </p></dd></dl></div><p>
-      </p></div></div></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="license-sect"></a>Appendix B. License</h2></div></div></div><p>APBS is covered under the <a href="http://www.gnu.org/licenses/gpl.txt" target="_top">GNU Public license (GPL)</a>,
+  </p></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="format-sect"></a>Appendix A. File formats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format">PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format"> PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parm-flat-format">Flat-file format</a></span></dt><dt><span class="sect2"><a href="#parm-xml-format">XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">Harwell-Boeing column-compressed matrix
+			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id1012160">Multigrid</a></span></dt><dt><span class="sect2"><a href="#id1012425">Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
+		are used by APBS.</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pqr-format"></a>PQR biomolecular structure format</h2></div></div></div><p>
+			The PQR format is the primary input format for biomolecular structure in
+			APBS package.
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pqr-flat-format"></a> PQR flat-file format</h3></div></div></div><p>
+				This format is a modification of the 
+				<a href="http://www.rcsb.org/pdb/info.html#File_Formats_and_Standards" target="_top">PDB format</a>
+				which allows users to add charge and radius parameters to existing PDB data
+				while keeping it in a format amenable to visualization with standard
+				molecular graphics programs.  The origins of the PQR format are somewhat
+				uncretain, but has been used by several computational biology software
+				programs, including MEAD and AutoDock.  UHBD uses a very similar format
+				called QCD.
+			</p><p>
+				APBS reads very loosely-formatted PQR files:  all fields are
+				whitespace-delimited, thereby allowing coordinates which are larger/smaller
+				than ± 999 Å.  
+			</p><p>
+				APBS reads data on a per-line basis from PQR files using the following
+				format:
+				</p><div class="literallayout"><p><br>
+					<code class="literal">Field_name</code> <code class="literal">Atom_number</code> <code class="literal">Atom_name</code> <code class="literal">Residue_name</code> <em class="replaceable"><code>Chain_ID</code></em> <code class="literal">Residue_number</code> <code class="literal">X</code> <code class="literal">Y</code> <code class="literal">Z</code> <code class="literal">Charge</code> <code class="literal">Radius</code><br>
+				</p></div><p>
+				where the whitespace is the most important feature of this format.  The
+				fields are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <code class="literal">Field_name</code> </span></dt><dd><p>A string which specifies the type of PQR entry and should
+								either be <code class="literal">ATOM</code> or <code class="literal">HETATM</code> in
+								order to be parsed by APBS.</p></dd><dt><span class="term"> <code class="literal">Atom_number</code> </span></dt><dd><p>
+								An integer which provides the atom index.
+							</p></dd><dt><span class="term"> <code class="literal">Atom_name</code> </span></dt><dd><p>
+								A string which provides the atom name.
+							</p></dd><dt><span class="term"> <code class="literal">Residue_name</code> </span></dt><dd><p>
+								A string which provides the residue name.
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>Chain_ID</code></em> </span></dt><dd><p>
+								An optional string which provides the chain ID of the atom.
+								</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  Chain ID support is a new feature of APBS 0.4.1.</p></td></tr></table></div><p>
+							</p></dd><dt><span class="term"> <code class="literal">Residue_number</code> </span></dt><dd><p>
+								An integer which provides the residue index.
+							</p></dd><dt><span class="term"> <code class="literal">X Y Z</code> </span></dt><dd><p>
+								3 floats which provide the atomic coordiantes.
+							</p></dd><dt><span class="term"> <code class="literal">Charge</code> </span></dt><dd><p>
+								A float which provides the atomic charge (in electrons).
+							</p></dd><dt><span class="term"> <code class="literal">Radius</code> </span></dt><dd><p>
+								A float which provides the atomic radius (in Å).
+							</p></dd></dl></div><p>
+				Clearly, this format can deviate wildly from PDB, particularly when large
+				coordinate values are used.  However, in order to maintain compatibility
+				with most molecular graphics programs, the PDB2PQR utilities provided with
+				apbs (see the <a href="#parameterization" title="Parameterization">Parameterization
+					section</a>) attempt to preserve the PDB format as much as possible.
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="pqr-xml-format"></a>PQR XML Format </h3></div></div></div><p> 
+				The PQR XML format was designed to remediate some of the shortcomings
+				of the flat-file format.  By use of XML, issues related to extra
+				fields in the file or columns merging together can easily be remedied.
+				Additionally, APBS will only parse the necessary information from the
+				XML file and will ignore all other information, so users wishing to
+				store extra data related to a residue or atom can do so inline without
+				affecting APBS.
+			</p><p> This data format has the following form:
+				</p><pre class="programlisting">
+					# <em class="replaceable"><code>Comments</code></em>	
+					<em class="replaceable"><code>&lt;roottag&gt;</code></em>
+					<em class="replaceable"><code>  &lt;residue&gt;</code></em>
+					...
+					<code class="literal">  &lt;atom&gt;</code>
+					<code class="literal">    &lt;x&gt;</code><em class="replaceable"><code>x</code></em><code class="literal">&lt;/x&gt;</code>
+					<code class="literal">    &lt;y&gt;</code><em class="replaceable"><code>y</code></em><code class="literal">&lt;/y&gt;</code>
+					<code class="literal">    &lt;z&gt;</code><em class="replaceable"><code>z</code></em><code class="literal">&lt;/z&gt;</code>
+					<code class="literal">    &lt;charge&gt;</code><em class="replaceable"><code>charge</code></em><code class="literal">&lt;/charge&gt;</code>
+					<code class="literal">    &lt;radius&gt;</code><em class="replaceable"><code>radius</code></em><code class="literal">&lt;/radius&gt;</code>
+					<code class="literal">  &lt;/atom&gt;</code>
+					...
+					<em class="replaceable"><code>  &lt;/residue&gt;</code></em>
+					...
+					<em class="replaceable"><code>&lt;/roottag&gt;</code></em>
+				</pre><p>
+			</p><p>
+				Note that the <code class="literal">residue</code> tag and its elements are
+				completely optional - APBS only reads in atom data.  Fields such
+				as residue name, chain ID, and other residue-specific data will
+				be ignored.
+			</p><p>
+				The variables in this example are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the "#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>roottag</code></em> </span></dt><dd><p>This is the root element of the XML file.  The value is not important to
+								APBS - APBS simply checks that it is closed at the end of the file.</p></dd><dt><span class="term"> <em class="replaceable"><code>x</code></em> </span></dt><dd><p>A float giving the x-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>y</code></em> </span></dt><dd><p>A float giving the y-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>z</code></em> </span></dt><dd><p>A float giving the z-coordinate of the atom.</p></dd><dt><span class="term"> <em class="replaceable"><code>charge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomradius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd></dl></div><p>
+			</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="param-format"></a>Parameter file format</h2></div></div></div><p>APBS uses parameter files with the <span><strong class="command"><a href="#parm">READ parm</a></strong></span>
+			command. 
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parm-flat-format"></a>Flat-file format</h3></div></div></div><p>The parameter file is a series of lines of the format:
+				</p><div class="literallayout"><p><br>
+					<em class="replaceable"><code>Residue_name</code></em> <em class="replaceable"><code>Atom_name</code></em> <em class="replaceable"><code>Charge</code></em> <em class="replaceable"><code>Radius</code></em> <em class="replaceable"><code>Epsilon</code></em><br>
+				</p></div><p>
+				where the whitespaces are important and denote separation between the
+				fields.  The fields here are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Residue_name</code></em> </span></dt><dd><p>A string giving the residue name, as provided in the PDB file
+								to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Atom_name</code></em> </span></dt><dd><p>A string giving the atom name, as provided in the PDB file to
+								be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>Charge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>Radius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd><dt><span class="term"> <em class="replaceable"><code>Epsilon</code></em> </span></dt><dd><p>A float giving the Lennard-Jones well depth (in kcal/mol);
+								this parameter is read but not currently used by APBS.</p></dd></dl></div><p>
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parm-xml-format"></a>XML Parameter Format </h3></div></div></div><p> This data format has the following form:
+				</p><pre class="programlisting">
+					# <em class="replaceable"><code>Comments</code></em>	
+					<em class="replaceable"><code>&lt;ffname&gt;</code></em>
+					<code class="literal">  &lt;residue&gt;</code>
+					<code class="literal">  &lt;name&gt;</code><em class="replaceable"><code>resname</code></em><code class="literal">&lt;/name&gt;</code>
+					<code class="literal">  &lt;atom&gt;</code>
+					<code class="literal">    &lt;name&gt;</code><em class="replaceable"><code>atomname</code></em><code class="literal">&lt;/name&gt;</code>
+					<code class="literal">    &lt;charge&gt;</code><em class="replaceable"><code>atomcharge</code></em><code class="literal">&lt;/charge&gt;</code>
+					<code class="literal">    &lt;radius&gt;</code><em class="replaceable"><code>atomradius</code></em><code class="literal">&lt;/radius&gt;</code>
+					<code class="literal">    &lt;epsilon&gt;</code><em class="replaceable"><code>atomepsilon</code></em><code class="literal">&lt;/epsilon&gt;</code>
+					<code class="literal">  &lt;/atom&gt;</code>
+					...
+					<code class="literal">  &lt;/residue&gt;</code>
+					...
+					<em class="replaceable"><code>&lt;/ffname&gt;</code></em>
+				</pre><p>
+				The variables in this example are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the "#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>ffname</code></em> </span></dt><dd><p>The name of the forcefield.  This is the root element of the XML file.</p></dd><dt><span class="term"> <em class="replaceable"><code>resname</code></em> </span></dt><dd><p>A string giving the residue name, as provided in the PDB file to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>atomname</code></em> </span></dt><dd><p>A string giving the atom name, as provided in the PDB file to be parameterized.</p></dd><dt><span class="term"> <em class="replaceable"><code>atomcharge</code></em> </span></dt><dd><p>A float giving the atomic charge (in electrons).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomradius</code></em> </span></dt><dd><p>A float giving the atomic Radius (in Å).</p></dd><dt><span class="term"> <em class="replaceable"><code>atomepsilon</code></em> </span></dt><dd><p>A float giving the Lennard-Jones well depth (in kcal/mol); this parameter is read but not currently used by APBS.</p></dd></dl></div><p>
+			</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="hb-format"></a>Harwell-Boeing column-compressed matrix
+			format</h2></div></div></div><p>This is the sparse matrix output format used by APBS for analyses of
+			the matrix operators which are constructed during PB solution.  This
+			format was implemented so matrix operators could by decomposed with
+			SuperLU and ARPACK.
+		</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p>Details of the format are complicated; this section is under
+				construction.  
+			</p></td></tr></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="opendx-format"></a>OpenDX scalar data format</h2></div></div></div><p>We output most discretized scalar data (e.g., potential,
+			accessibility, etc.) from APBS in the data format used by the OpenDX
+			software package
+			(<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>).  The
+			OpenDX data format is very flexible; the following sections describe the
+			application of this format for APBS multigrid and finite element
+			datasets.
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1012160"></a>Multigrid</h3></div></div></div><p>
+				This data format has the following form:
+				</p><pre class="programlisting">
+					# <em class="replaceable"><code>Comments</code></em>
+					<code class="literal">object 1 class gridpositions counts</code> <em class="replaceable"><code>nx ny nz</code></em>
+					<code class="literal">origin</code> <em class="replaceable"><code>xmin ymin zmin</code></em>
+					<code class="literal">delta</code> <em class="replaceable"><code>hx</code></em> 0.0 0.0
+					<code class="literal">delta</code> 0.0 <em class="replaceable"><code>hy</code></em> 0.0 
+					<code class="literal">delta</code> 0.0 0.0 <em class="replaceable"><code>hz</code></em>
+					<code class="literal">object 2 class gridconnections counts</code> <em class="replaceable"><code>nx ny nz</code></em>
+					<code class="literal">object 3 class array type double rank 0 times</code> <em class="replaceable"><code>n data follows</code></em>
+					<em class="replaceable"><code>u(0,0,0) u(0,0,1) u(0,0,2)</code></em>
+					...
+					<em class="replaceable"><code>u(0,0,nz-3) u(0,0,nz-2) u(0,0,nz-1)</code></em>
+					<em class="replaceable"><code>u(0,1,0) u(0,1,1) u(0,1,2)</code></em>
+					...
+					<em class="replaceable"><code>u(0,1,nz-3) u(0,1,nz-2) u(0,1,nz-1)</code></em>
+					...
+					<em class="replaceable"><code>u(0,ny-1,nz-3) u(0,ny-1,nz-2) u(0,ny-1,nz-1)</code></em>
+					<em class="replaceable"><code>u(1,0,0) u(1,0,1) u(1,0,2)</code></em>
+					...
+					<code class="literal">attribute "dep" string "positions"</code>
+					<code class="literal">object "regular positions regular connections" class field</code>
+					<code class="literal">component "positions" value 1</code>
+					<code class="literal">component "connections" value 2</code>
+					<code class="literal">component "data" value 3</code>
+				</pre><p>
+				The variables in this example are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>Comments</code></em> </span></dt><dd><p>Any number of comment lines, each line starting with the
+								"#" symbol</p></dd><dt><span class="term"> <em class="replaceable"><code>nx ny nz</code></em> </span></dt><dd><p>
+								The number of grid points in the x-, y-, and z-directions.
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>xmin ymin zmin</code></em> </span></dt><dd><p>
+								The coordinates of the grid lower corner.
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>hx hy hz</code></em> </span></dt><dd><p>
+								The grid spacings in the x-, y-, and z-directions.
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>n</code></em> </span></dt><dd><p>
+								The total number of grid points; 
+								<em class="replaceable"><code>n</code></em> =
+								<em class="replaceable"><code>nx</code></em> *
+								<em class="replaceable"><code>ny</code></em> *
+								<em class="replaceable"><code>nz</code></em> 
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>u(*,*,*)</code></em> </span></dt><dd><p>
+								The data values, ordered with the z-index increasing most
+								quickly, followed by the y-index, and then the x-index.
+							</p></dd></dl></div><p>
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id1012425"></a>Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
+				form:
+				</p><pre class="programlisting">
+					<code class="literal">object 1 class array type float rank 1 shape 3 items</code> <em class="replaceable"><code>N</code></em>
+					<em class="replaceable"><code>v1x v1y v1z</code></em>
+					<em class="replaceable"><code>v2x v2y v2z</code></em>
+					...
+					<em class="replaceable"><code>vNx vNy vNz</code></em>
+					<code class="literal">object 2 class array type int rank 1 shape 4 items</code> <em class="replaceable"><code>M</code></em>
+					<em class="replaceable"><code>s1a s1b s1c s1d</code></em>
+					<em class="replaceable"><code>s2a s2b s2c s2d</code></em>
+					...
+					<em class="replaceable"><code>sMa sMb sMc sMd</code></em>
+					<code class="literal">attribute "element type" string "tetrahedra"</code>
+					<code class="literal">object 3 class array type float rank 0 items</code> <em class="replaceable"><code>N</code></em>
+					<em class="replaceable"><code>u1</code></em>
+					<em class="replaceable"><code>u2</code></em>
+					...
+					<em class="replaceable"><code>uN</code></em>
+					<code class="literal">attribute "dep" string "positions"</code>
+					<code class="literal">object "irregular positions irregular connections" class field</code>
+					<code class="literal">component "positions" value 1</code>
+					<code class="literal">component "connections" value 2</code>
+					<code class="literal">component "data" value 3</code>
+					<code class="literal">end</code>
+				</pre><p>
+				where the variables are:
+				</p><div class="variablelist"><dl><dt><span class="term"> <em class="replaceable"><code>N</code></em></span></dt><dd><p>Number of vertices</p></dd><dt><span class="term"> <em class="replaceable"><code>vix viy viz</code></em></span></dt><dd><p>Coordinates of vertex <em class="replaceable"><code>i</code></em></p></dd><dt><span class="term"> <em class="replaceable"><code>M</code></em></span></dt><dd><p>Number of simplices</p></dd><dt><span class="term"> <em class="replaceable"><code>sia sib sic sid</code></em></span></dt><dd><p>
+								IDs of vertices in simplex <em class="replaceable"><code>i</code></em>
+							</p></dd><dt><span class="term"> <em class="replaceable"><code>ui</code></em></span></dt><dd><p>
+								Data value associated with vertex <em class="replaceable"><code>i</code></em>
+							</p></dd></dl></div><p>
+			</p></div></div></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="license-sect"></a>Appendix B. License</h2></div></div></div><p>APBS is covered under the <a href="http://www.gnu.org/licenses/gpl.txt" target="_top">GNU Public license (GPL)</a>,
 which basically means you can copy it, change it, use subsets of it,
 redistribute it, etc.; <span class="emphasis"><em>however</em></span>, you need to give credit to
 the original source <span class="emphasis"><em>and</em></span> the original portion of the code
