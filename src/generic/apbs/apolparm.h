@@ -129,8 +129,8 @@ struct sAPOLparm {
 	int molid;  /**< Molecule ID to perform calculation on */
     int setmolid;  /**< Flag, @see molid */
 	
-	double bdens; /**< Vacc sphere density */
-    int setbdens; /**< Flag, @see bdens */
+	double bconc; /**< Vacc sphere density */
+    int setbconc; /**< Flag, @see bconc */
 	
 	double sdens; /**< Vacc sphere density */
     int setsdens; /**< Flag, @see sdens */
