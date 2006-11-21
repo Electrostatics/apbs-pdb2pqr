@@ -1,0 +1,494 @@
+<cmdsynopsis>
+	<command>APOLAR</command>
+	<arg choice="opt" id="elec-name">name <replaceable>id</replaceable></arg>
+	<arg choice="opt" rep="repeat"><replaceable>keywords</replaceable></arg>
+	<command>END</command>
+</cmdsynopsis>
+<para>This section is the main component for apolar solvation calculations in
+	APBS runs. There may be several <command>APOLAR</command> sections,
+	operating on different molecules or using different parameters for
+	multiple runs on the same molecule. The order of the
+	<command>APOLAR</command> statement matters (see above); the arguments
+	are:
+	<variablelist>
+		<varlistentry>
+			<term> name <replaceable>id</replaceable> </term>
+			<listitem>
+				<para>This optional command allows users to
+					assign an alphanumeric string to the
+					calculation to facilitate later
+					operations (particularly in the 
+					<link linkend="print"><command>PRINT</command></link> statements).
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term> <replaceable>keywords</replaceable> </term>
+			<listitem>
+				<para>Keywords describing the parameters of the electrostatic
+					calcualtion.  These are described in
+					<xref linkend="apolar-keywords-sect"/>.
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>
+</para>
+
+<sect3 id="apolar-basic"> <title>Basic apolar solvation calculations</title>
+
+	<para>FINISH:  formula, centering (add option?)</para>
+
+</sect3>
+
+<sect3 id="apolar-keywords-sect"> <title>Keyword descriptions</title>
+	<para>
+		This is a list of keywords used in the <command>APOLAR</command> statements of APBS.  
+	</para>
+	<itemizedlist>
+
+		<listitem id="apolar-bconc">
+			<cmdsynopsis>
+				<command>bconc</command>
+				<arg choice="req"><replaceable>bulk solvent
+						density</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the bulk solvent density in
+				&Aring;<superscript>-3</superscript>. This
+				coefficient multiplies the integral term of the
+				apolar model discussed above and can be set to
+				zero to eliminate integral contributions to the
+				apolar solvation calculation.</para>
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>bulk solvent
+							density</replaceable></term>
+					<listitem><para>Bulk solvent density
+							(in
+							&Aring;<superscript>-3</superscript>)</para></listitem>
+				</varlistentry>
+			</variablelist>
+		</listitem>
+
+
+		<listitem id="apolar-calcenergy">
+			<cmdsynopsis>
+				<command>calcenergy</command>
+				<arg choice="req"> <replaceable>flag</replaceable> </arg>
+			</cmdsynopsis>
+			<para>
+				This optional keyword controls electrostatic
+				energy output from an apolar solvation calculation.
+				<note>
+					<para> Note that this option must be used consistently for all
+						calculations that will appear in subsequent 
+						<link linkend="print"><command>PRINT</command></link> statements.
+						For example, if the statement <literal>print energy 1 - 2
+							end</literal> appears in the input file, then both calculations 1
+						and 2 must have <command>calcenergy</command> keywords present with
+						the same values for <replaceable>flag</replaceable>.
+					</para>
+				</note>
+				<variablelist>
+					<varlistentry>
+						<term> <replaceable>flag</replaceable> </term>
+						<listitem>
+							<para>Specify the types of energy values to be returned:
+								<variablelist>
+									<varlistentry>
+										<term>no</term>
+										<listitem>
+											<para>(Deprecated) don't calculate any energies.</para>
+										</listitem>
+									</varlistentry>
+									<varlistentry>
+										<term>total</term>
+										<listitem>
+											<para>Calculate
+												and
+												return
+												total
+												apolar energy for
+												the entire molecule.</para>
+										</listitem>
+									</varlistentry>
+									<varlistentry>
+										<term>comps</term>
+										<listitem>
+											<para>Calculate
+												and
+												return
+												total
+												apolar energy for
+												the entire molecule as well as electrostatic energy
+												components for each atom.</para>
+										</listitem>
+									</varlistentry>
+								</variablelist>
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-calcforce">
+			<cmdsynopsis>
+				<command>calcforce</command>
+				<arg choice="req"> <replaceable>flag</replaceable> </arg>
+			</cmdsynopsis>
+			<para>
+				This optional keyword controls apolar force output.
+				<note>
+					<para> Note that this option must be used consistently for all
+						calculations that will appear in subsequent 
+						<link linkend="print"><command>PRINT</command></link> statements.
+						For example, if the statement <literal>print force 1 - 2
+							end</literal> appears in the input file, then both calculations 1
+						and 2 must have <command>calcforce</command> keywords present with
+						the same values for <replaceable>flag</replaceable>.
+					</para>
+				</note>
+				<variablelist>
+					<varlistentry>
+						<term> <replaceable>flag</replaceable> </term>
+						<listitem>
+							<para>Specify the types of force values to be returned:
+								<variablelist>
+									<varlistentry>
+										<term>no</term>
+										<listitem>
+											<para>(Deprecated) don't calculate any forces.</para>
+										</listitem>
+									</varlistentry>
+									<varlistentry>
+										<term>total</term>
+										<listitem>
+											<para>Calculate and return total apolar forces for the entire molecule.</para>
+										</listitem>
+									</varlistentry>
+									<varlistentry>
+										<term>comps</term>
+										<listitem>
+											<para>Calculate and return total apolar forces for the entire molecule as well as force components for each atom.</para>
+										</listitem>
+									</varlistentry>
+								</variablelist>
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-dime">
+			<cmdsynopsis>
+				<command>dime</command>
+				<arg choice="req"><replaceable>nx ny nz</replaceable></arg>
+			</cmdsynopsis>
+			<para>Number of grid points <emphasis>per
+					processor</emphasis> for grid-based
+				discretization and volume quadrature.  This,
+				together with <link
+					id="apolar-glen">glen</link> set the spacing of quadrature points; e.g., the spacing is given by <literal>glen/(dime - 1)</literal> in each direction.
+				The arguments for this keyword are:
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>nx ny nz</replaceable></term>
+						<listitem>
+							<para>Number of grid points in the x-, y-, and z-directions.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-dpos">
+			<cmdsynopsis>
+				<command>dpos</command>
+				<arg
+					choice="req"><replaceable>displacement</replaceable></arg>
+			</cmdsynopsis>
+			<para>This is the displacement used for
+				finite-difference-based calculations of surface
+				area derivatives.  I know:  this is a terrible
+				way to calculate surface area derivatives --
+				we're working on replacing it with an analytic
+				version.  In the meantime, please use this
+				parameter with caution.  
+			</para>	
+			<important>
+				<para>This parameter is very dependent on <link linkend="apolar-sdens">sdens</link>; e.g., smaller values of <literal>dpos</literal> require larger values of <link linkend="apolar-sdens">sdens</link>.</para> 
+			</important>
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>dispalcement</replaceable></term>
+					<listitem>
+						<para>Finite difference
+							displacement for force
+							(surface area
+							derivative) 
+							calculations in units
+							of &Aring;.  </para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</listitem>
+
+		<listitem id="apolar-gamma">
+			<cmdsynopsis>
+				<command>gamma</command>
+				<arg choice="req"> <replaceable>value</replaceable> </arg>
+			</cmdsynopsis>
+			<para>
+				The coefficient (surface tension) for solvent-accesisble surface area
+				(SASA) models of apolar solvation.    This term
+				can be set to zero to eliminate SASA
+				contributions to the apolar solvation
+				calculations.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>value</replaceable></term>
+						<listitem>
+							<para>SASA-based apolar coefficient (in kJ/mol/&Aring;).</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<!--
+		FINISH:  this term should be added back, I think.
+		<listitem id="gcent">
+			<cmdsynopsis>
+				<command>gcent</command>
+				<group choice="req">
+					<arg choice="plain">mol <replaceable>id</replaceable></arg>
+					<arg choice="plain"><replaceable>xcent ycent zcent</replaceable></arg>
+				</group>
+			</cmdsynopsis>
+			<para>Specify the center of the grid based on a molecule's center or
+				absolute coordinates. The arguments for this keyword are:
+				<variablelist>
+					<varlistentry>
+						<term>mol <replaceable>id</replaceable></term>
+						<listitem>
+							<para>Center the grid on molecule with ID
+								<replaceable>id</replaceable>; as assigned in the 
+								<link linkend="read"><command>READ</command></link> section.
+								Molecule IDs are assigned in the order they're read, starting
+								at 1. 
+							</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><replaceable>xcent ycent zcent</replaceable></term>
+						<listitem>
+							<para>The coordinates (in &Aring;) at which the grid is
+								centered.  Based on the PDB coordinate frame.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+		-->
+
+		<listitem id="apolar-glen">
+			<cmdsynopsis>
+				<command>glen</command>
+				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the mesh domain lengths; this may be different in each
+				direction.   Used together with <link id="apolar-dime">dime</link> to determin the quadrature grid spacing.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>xlen ylen zlen</replaceable></term>
+						<listitem>
+							<para>Grid lengths in the x-, y-, and z-directions in &Aring;.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-mol">
+			<cmdsynopsis>
+				<command>mol</command>
+				<arg choice="req"><replaceable>id</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the molecule for which the apolar
+				calculation is to be performed.  IDs are based
+				on the order in which molecules are read by 
+				<link linkend="read-mol"><command>read mol</command></link> statements,
+				starting from 1.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>id</replaceable></term>
+						<listitem>
+							<para>The ID of the
+								molecule for
+								which the
+								apolar
+								calculation is
+								to be
+								performed.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-press">
+			<cmdsynopsis>
+				<command>press</command>
+				<arg choice="req"><replaceable>solvent pressure</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the solvent pressure in
+				&Aring;<superscript>-3</superscript>. This
+				coefficient multiplies the volume term of the
+				apolar model discussed above and can be set to
+				zero to eliminate volume contributions to the
+				apolar solvation calculation.</para>
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>solvent pressure</replaceable></term>
+					<listitem><para>Solvent pressure
+							(in kJ
+							mol<superscript>-1</superscript>
+							&Aring;<superscript>-3</superscript>)</para></listitem>
+				</varlistentry>
+			</variablelist>
+		</listitem>
+
+		<listitem id="apolar-sdens">
+			<cmdsynopsis>
+				<command>sdens</command>
+				<arg choice="req"><replaceable>surface
+						discretization density</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the number of grid points per square-angstrom to use 
+				in surface calculations (e.g., molecular
+				surface, solvent accesible surface). Ignored when srad is 0.0 (see 
+				<link linkend="apolar-srad"><command>srad</command></link>) or srfm is 
+				spl2 (see <link linkend="apolar-srfm"><command>srfm</command></link>).
+				Users beware:  there is a direct correlation
+				between the value used for the sphere density,
+				the accuracy of the results, and the APBS
+				calculation time.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>surface
+								discretization density</replaceable></term>
+						<listitem>
+							<para>Surface sphere density (in grid points/&Aring;<superscript>2
+							</superscript>).</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-srad">
+			<cmdsynopsis>
+				<command>srad</command>
+				<arg choice="req"><replaceable>radius</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the radius of the solvent molecules; this parameter is used
+				to define various solvent-related surfaces and
+				volumes (see <link
+					linkend="apolar-srfm"><command>srfm</command></link>).
+				This value is usually set to 1.4 &Aring; for
+				water.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>radius</replaceable></term>
+						<listitem>
+							<para>Solvent radius (in &Aring;).</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-swin">
+			<cmdsynopsis>
+				<command>swin</command>
+				<arg choice="req"><replaceable>win</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the size of the support (i.e., the rate of change) for
+				spline-based surface definitions 
+				(see <link linkend="apolar-srfm"><command>srfm</command></link>).  
+				Usually 0.3 &Aring;.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>win</replaceable></term>
+						<listitem>
+							<para>Spline window (in &Aring;).</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-srfm">
+			<cmdsynopsis>
+				<command>srfm</command>
+				<arg choice="req"><replaceable>flag</replaceable></arg>
+			</cmdsynopsis>
+			<para>
+				Specify the model used to construct the
+				solvent-related surface and volume
+				<note> <para>Under construction:  we're in the
+						process of adding additional
+						surface definitions.</para>
+				</note>
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>flag</replaceable></term>
+						<listitem>
+							<para>
+								The
+								surface/volume model:
+								<variablelist>
+									<varlistentry>
+										<term>sacc</term>
+										<listitem>
+											<para>Solvent-accessible
+												(also
+												called
+												"probe-inflated")
+												surface
+												and
+												volume.
+											</para>
+										</listitem>
+									</varlistentry>
+								</variablelist>
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+		<listitem id="apolar-temp">
+			<cmdsynopsis>
+				<command>temp</command>
+				<arg choice="req"> <replaceable>T</replaceable> </arg>
+			</cmdsynopsis>
+			<para>Temperature for calculation.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>T</replaceable></term>
+						<listitem>
+							<para>Temperature (in K)</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+
+	</itemizedlist>
+
+
+</sect3>

@@ -123,7 +123,7 @@
       directions.  The result are maps of dielectric variables between the
       solvent and biomolecular dieletric constants; these values are unitless.
       In general, this command will read dielectric maps written by 
-      <link linkend="write"><command>write</command></link>
+      <link linkend="elec-write"><command>write</command></link>
       commands in earlier APBS calculations.  
       <note>
         <para>NOTE:  if you choose this option and have a non-zero ionic
@@ -187,7 +187,7 @@
       range between 0 and the build Debye-H&uuml;ckel screening parameter;
       these values have units of &Aring;<superscript>-2</superscript>.  In
       general, this command will read kappa-maps written by 
-      <link linkend="write"><command>write</command></link>
+      <link linkend="elec-write"><command>write</command></link>
       commands in earlier APBS calculations.  
       <note>
         <para>NOTE:  if you choose this option, you must also include a 
@@ -233,7 +233,7 @@
       function mapped to a mesh.  The result are maps of charge densities; 
       these values have units of e<subscript>c</subscript> (electron charge).
       In general, this command will read charge-maps written by 
-      <link linkend="write"><command>write</command></link>
+      <link linkend="elec-write"><command>write</command></link>
       commands in earlier APBS calculations.  Arguments for this command are:
       <variablelist>
         <varlistentry>

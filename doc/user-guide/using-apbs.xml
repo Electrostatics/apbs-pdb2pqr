@@ -1,123 +1,123 @@
 <chapter id="executable-sect"> <title>Using APBS</title>
-  &invocation;
+	&invocation;
 
-  &apbs-input;
+	&apbs-input;
 
-  <sect1 id="other-programs"> <title>Using APBS with other programs</title>
-    <para>APBS was designed to facilitate use with other programs.  This
-      section outlines some of the programs with which APBS is known to
-      work.  However, it is likely that applications which use APBS have been
-      inadvertantly omitted from this list.  If you know of software that uses
-      APBS and is not listed here, please contact Nathan Baker 
-      <email>baker@biochem.wustl.edu</email>.
-    </para>
-
-    <sect2 id="web-sect"> <title>Web interfaces</title>
-        <sect3> <title>Gemstone</title>
-            <para>The Gemstone extension (<ulink
-                    url="http://gemstone.mozdev.org/">http://gemstone.mozdev.org/</ulink>)
-                for the Firefox web browser provides a very easy-to-use
-                interface to APBS with all of the functionality of the
-                command-line interface.  This extension currently uses web
-                services provided by <ulink
-                    url="http://nbcr.net">NBCR</ulink>).
-            </para>
-        </sect3>
-    </sect2>
-
-    <sect2 id="gui-sect"> <title>Graphical user interfaces</title>
-        <sect3> <title>PyMOL</title>
-            <para>PyMOL (<ulink
-                    url="http://pymol.sourceforge.net/">http://pymol.sourceforge.net/</ulink>)
-                is a molecular visualization and animation package which
-                provides an interface to APBS.  The APBS plugin to PyMOL
-                (developed by Michael George Lerner)  permits isocontour and
-                surface map visualization of APBS results.
-            </para>
-        </sect3>
-      <sect3> <title>VMD</title>
-        <para>VMD (<ulink url="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</ulink>)
-          is a molecular visualization and animation package which provides an
-          interface to APBS.  It permits isocontour-based visualization of APBS
-          results and provides a Tcl plugin to setup APBS calculations for
-          visualization.
-        </para>
-      </sect3>
-      <sect3> <title>PMV</title>
-        <para>PMV 
-          (<ulink url="http://www.scripps.edu/~sanner/python">http://www.scripps.edu/~sanner/python</ulink>)
-          is a Python-based molecular visualization package which provides an
-          interface to APBS.  It not only permits visualization of APBS results
-          but it also integrates setup and executation of APBS calculations.
-          The PMV/APBS interface 
-          (<ulink url="http://mccammon.ucsd.edu/pmv_apbs/">http://mccammon.ucsd.edu/pmv_apbs/</ulink>)
-          is under active development and future versions will offer even more
-          setup, visualization, and analysis
-          functionality.
-        </para>
-        <para>The APBS interface is distributed with recent beta versions of
-          PMV, avalaible from 
-          <ulink url="http://www.scripps.edu/~sanner/python">http://www.scripps.edu/~sanner/python</ulink>.
-          Additional documention for using APBS with PMV is provided at 
-          <ulink url="http://mccammon.ucsd.edu/~jswanson/apbsDoc/command_doc2.html">http://mccammon.ucsd.edu/~jswanson/apbsDoc/command_doc2.html</ulink>.
-        </para>
-      </sect3>
-    </sect2>
-
-    <sect2 id="simulation-sect"> <title>Simulation software</title>
-		<para> 
-			Robert Konecny (<ulink url="http://mccammon.ucsd.edu">McCammon
-				Group</ulink>) has developed <ulink
-				url="http://mccammon.ucsd.edu/iapbs/">iAPBS</ulink> (<ulink
-				url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/</ulink>),
-			an interface between APBS and the simulation packages AMBER,
-			CHARMM, and NAMD.  More information is available from the iAPBS
-			homepage:  <ulink
-				url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/
-			</ulink>.
+	<sect1 id="other-programs"> <title>Using APBS with other programs</title>
+		<para>APBS was designed to facilitate use with other programs.  This
+			section outlines some of the programs with which APBS is known to
+			work.  However, it is likely that applications which use APBS have been
+			inadvertantly omitted from this list.  If you know of software that uses
+			APBS and is not listed here, please contact Nathan Baker 
+			<email>baker@biochem.wustl.edu</email>.
 		</para>
-    </sect2>
 
-    <sect2 id="visualization-sect"> <title>Visualization software</title>
-      <para>Electrostatic potentials are commonly visualized in the context of
-        biomolecular structure to better understand functional aspects of
-        biological systems.  This section describes molecular graphics software
-        which can display potentials and other data output from APBS.  Note
-        that this set of programs also includes the <link
-            linkend="gui-sect">graphical users interfaces</link> listed above.
-      </para>
+		<sect2 id="web-sect"> <title>Web interfaces</title>
+			<sect3> <title>Gemstone</title>
+				<para>The Gemstone extension (<ulink
+						url="http://gemstone.mozdev.org/">http://gemstone.mozdev.org/</ulink>)
+					for the Firefox web browser provides a very easy-to-use
+					interface to APBS with all of the functionality of the
+					command-line interface.  This extension currently uses web
+					services provided by <ulink
+						url="http://nbcr.net">NBCR</ulink>).
+				</para>
+			</sect3>
+		</sect2>
 
-      <sect3> <title>Dino3D</title>
-        <para>Dino3D (<ulink url="http://www.dino3d.org/">http://www.dino3d.org/</ulink>
-          is a molecular graphics program which can read UHBD-format
-          electrostatic data.  APBS can write multigrid results in UHBD format
-          (see the <link linkend="write"><command>write</command></link>
-          <command>ELEC</command> command) and therefore can be used with
-          Dino3D.
-        </para>
-      </sect3>
-      <sect3> <title>MOLMOL</title>
-        <para>MOLMOL (<ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</ulink>)
-          is a molecular graphics package with an emphasis on NMR-generated
-          structural data.  A program is provided with APBS (see
-          <filename>tools/mesh</filename> and the
-          <link linkend="conversion-sect">Data conversion tools</link> in this
-          manual) which converts OpenDX data to MOLMOL format.
-        </para>
-      </sect3>
-      <sect3> <title>OpenDX</title>
-        <para>OpenDX (<ulink url="http://www.opendx.org">http://www.opendx.org</ulink>)
-          is a general data visualization package which can read APBS output
-          using the scripts provided in
-          <filename>tools/visualization/opendx</filename> (see the discussion
-          of <link linkend="viz-tools">Data visualization tools</link> in this
-          manual).  However, as there is no straightforward way to
-          visualizate the potential in the context of the atomic structure,
-          OpenDX should not a first choice for APBS visualization.
-        </para>
-      </sect3>
-    </sect2>
-  
-  </sect1>
+		<sect2 id="gui-sect"> <title>Graphical user interfaces</title>
+			<sect3> <title>PyMOL</title>
+				<para>PyMOL (<ulink
+						url="http://pymol.sourceforge.net/">http://pymol.sourceforge.net/</ulink>)
+					is a molecular visualization and animation package which
+					provides an interface to APBS.  The APBS plugin to PyMOL
+					(developed by Michael George Lerner)  permits isocontour and
+					surface map visualization of APBS results.
+				</para>
+			</sect3>
+			<sect3> <title>VMD</title>
+				<para>VMD (<ulink url="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</ulink>)
+					is a molecular visualization and animation package which provides an
+					interface to APBS.  It permits isocontour-based visualization of APBS
+					results and provides a Tcl plugin to setup APBS calculations for
+					visualization.
+				</para>
+			</sect3>
+			<sect3> <title>PMV</title>
+				<para>PMV 
+					(<ulink url="http://www.scripps.edu/~sanner/python">http://www.scripps.edu/~sanner/python</ulink>)
+					is a Python-based molecular visualization package which provides an
+					interface to APBS.  It not only permits visualization of APBS results
+					but it also integrates setup and executation of APBS calculations.
+					The PMV/APBS interface 
+					(<ulink url="http://mccammon.ucsd.edu/pmv_apbs/">http://mccammon.ucsd.edu/pmv_apbs/</ulink>)
+					is under active development and future versions will offer even more
+					setup, visualization, and analysis
+					functionality.
+				</para>
+				<para>The APBS interface is distributed with recent beta versions of
+					PMV, avalaible from 
+					<ulink url="http://www.scripps.edu/~sanner/python">http://www.scripps.edu/~sanner/python</ulink>.
+					Additional documention for using APBS with PMV is provided at 
+					<ulink url="http://mccammon.ucsd.edu/~jswanson/apbsDoc/command_doc2.html">http://mccammon.ucsd.edu/~jswanson/apbsDoc/command_doc2.html</ulink>.
+				</para>
+			</sect3>
+		</sect2>
+
+		<sect2 id="simulation-sect"> <title>Simulation software</title>
+			<para> 
+				Robert Konecny (<ulink url="http://mccammon.ucsd.edu">McCammon
+					Group</ulink>) has developed <ulink
+					url="http://mccammon.ucsd.edu/iapbs/">iAPBS</ulink> (<ulink
+					url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/</ulink>),
+				an interface between APBS and the simulation packages AMBER,
+				CHARMM, and NAMD.  More information is available from the iAPBS
+				homepage:  <ulink
+					url="http://mccammon.ucsd.edu/iapbs/">http://mccammon.ucsd.edu/iapbs/
+				</ulink>.
+			</para>
+		</sect2>
+
+		<sect2 id="visualization-sect"> <title>Visualization software</title>
+			<para>Electrostatic potentials are commonly visualized in the context of
+				biomolecular structure to better understand functional aspects of
+				biological systems.  This section describes molecular graphics software
+				which can display potentials and other data output from APBS.  Note
+				that this set of programs also includes the <link
+					linkend="gui-sect">graphical users interfaces</link> listed above.
+			</para>
+
+			<sect3> <title>Dino3D</title>
+				<para>Dino3D (<ulink url="http://www.dino3d.org/">http://www.dino3d.org/</ulink>
+					is a molecular graphics program which can read UHBD-format
+					electrostatic data.  APBS can write multigrid results in UHBD format
+					(see the <link linkend="elec-write"><command>write</command></link>
+					<command>ELEC</command> command) and therefore can be used with
+					Dino3D.
+				</para>
+			</sect3>
+			<sect3> <title>MOLMOL</title>
+				<para>MOLMOL (<ulink url="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</ulink>)
+					is a molecular graphics package with an emphasis on NMR-generated
+					structural data.  A program is provided with APBS (see
+					<filename>tools/mesh</filename> and the
+					<link linkend="conversion-sect">Data conversion tools</link> in this
+					manual) which converts OpenDX data to MOLMOL format.
+				</para>
+			</sect3>
+			<sect3> <title>OpenDX</title>
+				<para>OpenDX (<ulink url="http://www.opendx.org">http://www.opendx.org</ulink>)
+					is a general data visualization package which can read APBS output
+					using the scripts provided in
+					<filename>tools/visualization/opendx</filename> (see the discussion
+					of <link linkend="viz-tools">Data visualization tools</link> in this
+					manual).  However, as there is no straightforward way to
+					visualizate the potential in the context of the atomic structure,
+					OpenDX should not a first choice for APBS visualization.
+				</para>
+			</sect3>
+		</sect2>
+
+	</sect1>
 
 </chapter>

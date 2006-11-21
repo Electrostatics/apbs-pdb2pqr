@@ -5,11 +5,12 @@
 	<arg choice="opt" rep="repeat"><replaceable>keywords</replaceable></arg>
 	<command>END</command>
 </cmdsynopsis>
-<para>This section is the main component of all APBS runs. There may be several
-	<command>ELEC</command> sections, operating on different molecules or
-	using different parameters for multiple runs on the same molecule. The
-	order of the <command>ELEC</command> statement matters (see above); the
-	arguments are:
+<para>This section is the main component for polar solvation calculations in
+	APBS runs. There may be several <command>ELEC</command> sections,
+	operating on different molecules or using different parameters for
+	multiple runs on the same molecule. The order of the
+	<command>ELEC</command> statement matters (see above); the arguments
+	are:
 	<variablelist>
 		<varlistentry>
 			<term> name <replaceable>id</replaceable> </term>
@@ -82,74 +83,74 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="dime">dime</link></command>
+				<command><link linkend="elec-dime">dime</link></command>
 			</member>
 			<member>
-				<command><link linkend="cglen">cglen</link></command>
+				<command><link linkend="elec-cglen">cglen</link></command>
 			</member>
 			<member>
-				<command><link linkend="fglen">fglen</link></command>
+				<command><link linkend="elec-fglen">fglen</link></command>
 			</member>
 			<member>
-				<command><link linkend="cgcent">cgcent</link></command>
+				<command><link linkend="elec-cgcent">cgcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="fgcent">fgcent</link></command>
+				<command><link linkend="elec-fgcent">fgcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="mol">mol</link></command>
+				<command><link linkend="elec-mol">mol</link></command>
 			</member>
 			<member>
-				<command><link linkend="lpbe">lpbe</link></command>
+				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
-				<command><link linkend="npbe">npbe</link></command>
+				<command><link linkend="elec-npbe">npbe</link></command>
 			</member>
 			<member>
-				<command><link linkend="bcfl">bcfl</link></command>
+				<command><link linkend="elec-bcfl">bcfl</link></command>
 			</member>
 			<member>
-				<command><link linkend="ion">ion</link></command>
+				<command><link linkend="elec-ion">ion</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="pdie">pdie</link></command>
+				<command><link linkend="elec-pdie">pdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="sdie">sdie</link></command>
+				<command><link linkend="elec-sdie">sdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="chgm">chgm</link></command>
+				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="usemap">usemap</link></command>
+				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="sdens">sdens</link></command>
+				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
-				<command><link linkend="srfm">srfm</link></command>
+				<command><link linkend="elec-srfm">srfm</link></command>
 			</member>
 			<member>
-				<command><link linkend="srad">srad</link></command>
+				<command><link linkend="elec-srad">srad</link></command>
 			</member>
 			<member>
-				<command><link linkend="swin">swin</link></command>
+				<command><link linkend="elec-swin">swin</link></command>
 			</member>
 			<member>
-				<command><link linkend="temp">temp</link></command>
+				<command><link linkend="elec-temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcenergy">calcenergy</link></command>
+				<command><link linkend="elec-calcenergy">calcenergy</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcforce">calcforce</link></command>
+				<command><link linkend="elec-calcforce">calcforce</link></command>
 			</member>
 			<member>
-				<command><link linkend="write">write</link></command>
+				<command><link linkend="elec-write">write</link></command>
 			</member>
 			<member>
-				<command><link linkend="writemat">writemat</link></command>
+				<command><link linkend="elec-writemat">writemat</link></command>
 			</member>
 		</simplelist>
 	</para>
@@ -172,7 +173,7 @@
 		<important>
 			<para> Please note that some of the parameters change
 				in meaning a bit for this type of calculation.
-				In particular, <link linkend="dime">dime</link>
+				In particular, <link linkend="elec-dime">dime</link>
 				should be interpreted as the number of grid
 				points <emphasis>per processor</emphasis>.
 				This interpretation helps manage the amount of
@@ -186,83 +187,83 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="dime">dime</link></command>
+				<command><link linkend="elec-dime">dime</link></command>
 			</member>
 			<member>
-				<command><link linkend="ofrac">ofrac</link></command>
+				<command><link linkend="elec-ofrac">ofrac</link></command>
 			</member>
 			<member>
-				<command><link linkend="pdime">pdime</link></command>
+				<command><link linkend="elec-pdime">pdime</link></command>
 			</member>
 			<member>
-				<command><link linkend="async">async</link></command>
+				<command><link linkend="elec-async">async</link></command>
 			</member>
 			<member>
-				<command><link linkend="cglen">cglen</link></command>
+				<command><link linkend="elec-cglen">cglen</link></command>
 			</member>
 			<member>
-				<command><link linkend="fglen">fglen</link></command>
+				<command><link linkend="elec-fglen">fglen</link></command>
 			</member>
 			<member>
-				<command><link linkend="cgcent">cgcent</link></command>
+				<command><link linkend="elec-cgcent">cgcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="fgcent">fgcent</link></command>
+				<command><link linkend="elec-fgcent">fgcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="mol">mol</link></command>
+				<command><link linkend="elec-mol">mol</link></command>
 			</member>
 			<member>
-				<command><link linkend="lpbe">lpbe</link></command>
+				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
-				<command><link linkend="npbe">npbe</link></command>
+				<command><link linkend="elec-npbe">npbe</link></command>
 			</member>
 			<member>
-				<command><link linkend="bcfl">bcfl</link></command>
+				<command><link linkend="elec-bcfl">bcfl</link></command>
 			</member>
 			<member>
-				<command><link linkend="ion">ion</link></command>
+				<command><link linkend="elec-ion">ion</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="pdie">pdie</link></command>
+				<command><link linkend="elec-pdie">pdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="sdie">sdie</link></command>
+				<command><link linkend="elec-sdie">sdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="chgm">chgm</link></command>
+				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="usemap">usemap</link></command>
+				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="sdens">sdens</link></command>
+				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
-				<command><link linkend="srfm">srfm</link></command>
+				<command><link linkend="elec-srfm">srfm</link></command>
 			</member>
 			<member>
-				<command><link linkend="srad">srad</link></command>
+				<command><link linkend="elec-srad">srad</link></command>
 			</member>
 			<member>
-				<command><link linkend="swin">swin</link></command>
+				<command><link linkend="elec-swin">swin</link></command>
 			</member>
 			<member>
-				<command><link linkend="temp">temp</link></command>
+				<command><link linkend="elec-temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcenergy">calcenergy</link></command>
+				<command><link linkend="elec-calcenergy">calcenergy</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcforce">calcforce</link></command>
+				<command><link linkend="elec-calcforce">calcforce</link></command>
 			</member>
 			<member>
-				<command><link linkend="write">write</link></command>
+				<command><link linkend="elec-write">write</link></command>
 			</member>
 			<member>
-				<command><link linkend="writemat">writemat</link></command>
+				<command><link linkend="elec-writemat">writemat</link></command>
 			</member>
 		</simplelist>
 	</para>
@@ -275,7 +276,7 @@
 		offers the most control of parameters to the user. Several of
 		these calculations can be strung together to perform focusing
 		calculations by judicious choice of the <link
-			linkend="bcfl"><command>bcfl</command></link> flag,
+			linkend="elec-bcfl"><command>bcfl</command></link> flag,
 		however, the setup of the focusing is not automated as it is in
 		<link linkend="mg-auto"><command>mg-auto</command></link> and
 		<link linkend="mg-para"><command>mg-para</command></link>
@@ -287,72 +288,72 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="dime">dime</link></command>
+				<command><link linkend="elec-dime">dime</link></command>
 			</member>
 			<member>
-				<command><link linkend="nlev">nlev</link></command>
+				<command><link linkend="elec-nlev">nlev</link></command>
 			</member>
 			<member>
-				<command><link linkend="glen">glen</link></command> or
-				<command><link linkend="grid">grid</link></command> 
+				<command><link linkend="elec-glen">glen</link></command> or
+				<command><link linkend="elec-grid">grid</link></command> 
 			</member>
 			<member>
-				<command><link linkend="gcent">gcent</link></command>
+				<command><link linkend="elec-gcent">gcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="mol">mol</link></command>
+				<command><link linkend="elec-mol">mol</link></command>
 			</member>
 			<member>
-				<command><link linkend="lpbe">lpbe</link></command>
+				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
-				<command><link linkend="npbe">npbe</link></command>
+				<command><link linkend="elec-npbe">npbe</link></command>
 			</member>
 			<member>
-				<command><link linkend="bcfl">bcfl</link></command>
+				<command><link linkend="elec-bcfl">bcfl</link></command>
 			</member>
 			<member>
-				<command><link linkend="ion">ion</link></command>
+				<command><link linkend="elec-ion">ion</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="pdie">pdie</link></command>
+				<command><link linkend="elec-pdie">pdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="sdie">sdie</link></command>
+				<command><link linkend="elec-sdie">sdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="chgm">chgm</link></command>
+				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="usemap">usemap</link></command>
+				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="sdens">sdens</link></command>
+				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
-				<command><link linkend="srfm">srfm</link></command>
+				<command><link linkend="elec-srfm">srfm</link></command>
 			</member>
 			<member>
-				<command><link linkend="srad">srad</link></command>
+				<command><link linkend="elec-srad">srad</link></command>
 			</member>
 			<member>
-				<command><link linkend="swin">swin</link></command>
+				<command><link linkend="elec-swin">swin</link></command>
 			</member>
 			<member>
-				<command><link linkend="temp">temp</link></command>
+				<command><link linkend="elec-temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcenergy">calcenergy</link></command>
+				<command><link linkend="elec-calcenergy">calcenergy</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcforce">calcforce</link></command>
+				<command><link linkend="elec-calcforce">calcforce</link></command>
 			</member>
 			<member>
-				<command><link linkend="write">write</link></command>
+				<command><link linkend="elec-write">write</link></command>
 			</member>
 			<member>
-				<command><link linkend="writemat">writemat</link></command>
+				<command><link linkend="elec-writemat">writemat</link></command>
 			</member>
 		</simplelist>
 	</para>
@@ -392,90 +393,90 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="glen">glen</link></command>
+				<command><link linkend="elec-glen">glen</link></command>
 			</member>
 			<member>
-				<command><link linkend="etol">etol</link></command>
+				<command><link linkend="elec-etol">etol</link></command>
 			</member>
 			<member>
-				<command><link linkend="ekey">ekey</link></command>
+				<command><link linkend="elec-ekey">ekey</link></command>
 			</member>
 			<member>
-				<command><link linkend="akeyPRE">akeyPRE</link></command>
+				<command><link linkend="elec-akeyPRE">akeyPRE</link></command>
 			</member>
 			<member>
-				<command><link linkend="akeySOLVE">akeySOLVE</link></command>
+				<command><link linkend="elec-akeySOLVE">akeySOLVE</link></command>
 			</member>
 			<member>
-				<command><link linkend="targetNum">targetNum</link></command>
+				<command><link linkend="elec-targetNum">targetNum</link></command>
 			</member>
 			<member>
-				<command><link linkend="targetRes">targetRes</link></command>
+				<command><link linkend="elec-targetRes">targetRes</link></command>
 			</member>
 			<member>
-				<command><link linkend="maxsolve">maxsolve</link></command>
+				<command><link linkend="elec-maxsolve">maxsolve</link></command>
 			</member>
 			<member>
-				<command><link linkend="maxvert">maxvert</link></command>
+				<command><link linkend="elec-maxvert">maxvert</link></command>
 			</member>
 			<member>
-				<command><link linkend="mol">mol</link></command>
+				<command><link linkend="elec-mol">mol</link></command>
 			</member>
 			<member>
-				<command><link linkend="lpbe">lpbe</link></command>
+				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
-				<command><link linkend="npbe">npbe</link></command>
+				<command><link linkend="elec-npbe">npbe</link></command>
 				or
-				<command><link linkend="lrpbe">lrpbe</link></command>
+				<command><link linkend="elec-lrpbe">lrpbe</link></command>
 				or
-				<command><link linkend="nrpbe">nrpbe</link></command>
+				<command><link linkend="elec-nrpbe">nrpbe</link></command>
 			</member>
 			<member>
-				<command><link linkend="bcfl">bcfl</link></command>
+				<command><link linkend="elec-bcfl">bcfl</link></command>
 			</member>
 			<member>
-				<command><link linkend="ion">ion</link></command>
+				<command><link linkend="elec-ion">ion</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="pdie">pdie</link></command>
+				<command><link linkend="elec-pdie">pdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="sdie">sdie</link></command>
+				<command><link linkend="elec-sdie">sdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="chgm">chgm</link></command>
+				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="usemap">usemap</link></command>
+				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="sdens">sdens</link></command>
+				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
-				<command><link linkend="srfm">srfm</link></command>
+				<command><link linkend="elec-srfm">srfm</link></command>
 			</member>
 			<member>
-				<command><link linkend="srad">srad</link></command>
+				<command><link linkend="elec-srad">srad</link></command>
 			</member>
 			<member>
-				<command><link linkend="swin">swin</link></command>
+				<command><link linkend="elec-swin">swin</link></command>
 			</member>
 			<member>
-				<command><link linkend="temp">temp</link></command>
+				<command><link linkend="elec-temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcenergy">calcenergy</link></command>
+				<command><link linkend="elec-calcenergy">calcenergy</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcforce">calcforce</link></command>
+				<command><link linkend="elec-calcforce">calcforce</link></command>
 			</member>
 			<member>
-				<command><link linkend="write">write</link></command>
+				<command><link linkend="elec-write">write</link></command>
 			</member>
 			<member>
-				<command><link linkend="writemat">writemat</link></command>
+				<command><link linkend="elec-writemat">writemat</link></command>
 			</member>
 		</simplelist>
 	</para>
@@ -496,72 +497,72 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="dime">dime</link></command>
+				<command><link linkend="elec-dime">dime</link></command>
 			</member>
 			<member>
-				<command><link linkend="nlev">nlev</link></command>
+				<command><link linkend="elec-nlev">nlev</link></command>
 			</member>
 			<member>
-				<command><link linkend="glen">cglen</link></command> or
-				<command><link linkend="grid">grid</link></command> 
+				<command><link linkend="elec-glen">cglen</link></command> or
+				<command><link linkend="elec-grid">grid</link></command> 
 			</member>
 			<member>
-				<command><link linkend="gcent">gcent</link></command>
+				<command><link linkend="elec-gcent">gcent</link></command>
 			</member>
 			<member>
-				<command><link linkend="mol">mol</link></command>
+				<command><link linkend="elec-mol">mol</link></command>
 			</member>
 			<member>
-				<command><link linkend="lpbe">lpbe</link></command>
+				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
-				<command><link linkend="npbe">npbe</link></command>
+				<command><link linkend="elec-npbe">npbe</link></command>
 			</member>
 			<member>
-				<command><link linkend="bcfl">bcfl</link></command>
+				<command><link linkend="elec-bcfl">bcfl</link></command>
 			</member>
 			<member>
-				<command><link linkend="ion">ion</link></command>
+				<command><link linkend="elec-ion">ion</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="pdie">pdie</link></command>
+				<command><link linkend="elec-pdie">pdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="sdie">sdie</link></command>
+				<command><link linkend="elec-sdie">sdie</link></command>
 			</member>
 			<member>
-				<command><link linkend="chgm">chgm</link></command>
+				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="usemap">usemap</link></command>
+				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
 			</member>
 			<member>
-				<command><link linkend="sdens">sdens</link></command>
+				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
-				<command><link linkend="srfm">srfm</link></command>
+				<command><link linkend="elec-srfm">srfm</link></command>
 			</member>
 			<member>
-				<command><link linkend="srad">srad</link></command>
+				<command><link linkend="elec-srad">srad</link></command>
 			</member>
 			<member>
-				<command><link linkend="swin">swin</link></command>
+				<command><link linkend="elec-swin">swin</link></command>
 			</member>
 			<member>
-				<command><link linkend="temp">temp</link></command>
+				<command><link linkend="elec-temp">temp</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcenergy">calcenergy</link></command>
+				<command><link linkend="elec-calcenergy">calcenergy</link></command>
 			</member>
 			<member>
-				<command><link linkend="calcforce">calcforce</link></command>
+				<command><link linkend="elec-calcforce">calcforce</link></command>
 			</member>
 			<member>
-				<command><link linkend="write">write</link></command>
+				<command><link linkend="elec-write">write</link></command>
 			</member>
 			<member>
-				<command><link linkend="writemat">writemat</link></command>
+				<command><link linkend="elec-writemat">writemat</link></command>
 			</member>
 		</simplelist>
 	</para>
@@ -575,7 +576,7 @@
 	</para>
 	<itemizedlist>
 
-		<listitem id="akeyPRE">
+		<listitem id="elec-akeyPRE">
 			<cmdsynopsis>
 				<command>akeyPRE</command>
 				<arg choice="req"><replaceable>key</replaceable></arg>
@@ -609,7 +610,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="akeySOLVE">
+		<listitem id="elec-akeySOLVE">
 			<cmdsynopsis>
 				<command>akeySOLVE</command>
 				<arg choice="req"><replaceable>key</replaceable></arg>
@@ -639,7 +640,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="async">
+		<listitem id="elec-async">
 			<cmdsynopsis>
 				<command>async</command>
 				<arg choice="req"> <replaceable>rank</replaceable> </arg>
@@ -663,7 +664,8 @@
 								Processor IDs range from 0 to <replaceable>N</replaceable>-1,
 								where <replaceable>N</replaceable> is the total number of
 								processors in the run (see 
-								<link linkend="pdime"><command>pdime</command></link>).
+								<link
+									linkend="elec-pdime"><command>pdime</command></link>).
 								Processor ranks are related to their position in the overall
 								grid by
 								<informalequation>
@@ -688,7 +690,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="bcfl">
+		<listitem id="elec-bcfl">
 			<cmdsynopsis>
 				<command>bcfl</command>
 				<arg choice="req"><replaceable>flag</replaceable></arg>
@@ -763,7 +765,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="calcenergy">
+		<listitem id="elec-calcenergy">
 			<cmdsynopsis>
 				<command>calcenergy</command>
 				<arg choice="req"> <replaceable>flag</replaceable> </arg>
@@ -816,7 +818,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="calcforce">
+		<listitem id="elec-calcforce">
 			<cmdsynopsis>
 				<command>calcforce</command>
 				<arg choice="req"> <replaceable>flag</replaceable> </arg>
@@ -869,7 +871,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="cgcent">
+		<listitem id="elec-cgcent">
 			<cmdsynopsis>
 				<command>cgcent</command>
 				<group choice="req">
@@ -903,7 +905,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="cglen">
+		<listitem id="elec-cglen">
 			<cmdsynopsis>
 				<command>cglen</command>
 				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
@@ -912,7 +914,7 @@
 				this may be different in each direction.  This is the starting mesh, so
 				it should be large enough to complete enclose the biomolecule
 				<emphasis>and</emphasis> ensure that the chosen boundary condition (see
-				<link linkend="bcfl"><command>bcfl</command></link>) is appropriate.
+				<link linkend="elec-bcfl"><command>bcfl</command></link>) is appropriate.
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>xlen ylen zlen</replaceable></term>
@@ -925,7 +927,7 @@
 		</listitem>
 
 
-		<listitem id="chgm">
+		<listitem id="elec-chgm">
 			<cmdsynopsis>
 				<command>chgm</command>
 				<arg choice="req"><replaceable>flag</replaceable></arg>
@@ -985,7 +987,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="dime">
+		<listitem id="elec-dime">
 			<cmdsynopsis>
 				<command>dime</command>
 				<arg choice="req"><replaceable>nx ny nz</replaceable></arg>
@@ -994,7 +996,7 @@
 					processor</emphasis> for grid-based discretization.  For 
 				<link linkend="mg-manual"><command>mg-manual</command></link>, the
 				arguments are dependent on the choice of 
-				<link linkend="nlev"><command>nlev</command></link> by the formula
+				<link linkend="elec-nlev"><command>nlev</command></link> by the formula
 				<informalequation>
 					<alt>n = c 2^{l+1} + 1</alt>
 					<graphic fileref="images/nlev_dime.gif"/>
@@ -1020,7 +1022,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="ekey">
+		<listitem id="elec-ekey">
 			<cmdsynopsis>
 				<command>ekey</command>
 				<arg choice="req"> <replaceable>flag</replaceable> </arg>
@@ -1066,14 +1068,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="etol">
+		<listitem id="elec-etol">
 			<cmdsynopsis>
 				<command>etol</command>
 				<arg choice="req"> <replaceable>tol</replaceable> </arg>
 			</cmdsynopsis>
 			<para>Specify the tolerance for error-based adaptive refinement during
 				the solve-estimate-refine iterations of the finite element solver.  See
-				also:  <link linkend="ekey"><command>ekey</command></link>.
+				also:  <link linkend="elec-ekey"><command>ekey</command></link>.
 			</para>
 			<variablelist>
 				<varlistentry>
@@ -1087,7 +1089,7 @@
 			</variablelist>
 		</listitem>
 
-		<listitem id="fgcent">
+		<listitem id="elec-fgcent">
 			<cmdsynopsis>
 				<command>fgcent</command>
 				<group choice="req">
@@ -1121,7 +1123,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="fglen">
+		<listitem id="elec-fglen">
 			<cmdsynopsis>
 				<command>fglen</command>
 				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
@@ -1163,7 +1165,7 @@
 		</listitem>
 		-->
 
-		<listitem id="gcent">
+		<listitem id="elec-gcent">
 			<cmdsynopsis>
 				<command>gcent</command>
 				<group choice="req">
@@ -1196,14 +1198,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="glen">
+		<listitem id="elec-glen">
 			<cmdsynopsis>
 				<command>glen</command>
 				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the mesh domain lengths; this may be different in each
 				direction.  For some invocations of APBS, either this key or 
-				<link linkend="grid"><command>grid</command></link> must be specified.
+				<link linkend="elec-grid"><command>grid</command></link> must be specified.
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>xlen ylen zlen</replaceable></term>
@@ -1215,14 +1217,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="grid">
+		<listitem id="elec-grid">
 			<cmdsynopsis>
 				<command>grid</command>
 				<arg choice="req"><replaceable>hx hy hz</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the mesh grid spacings; this may be different in each
 				direction.  For some invocations of APBS, either this key or 
-				<link linkend="glen"><command>glen</command></link> must be specified.
+				<link linkend="elec-glen"><command>glen</command></link> must be specified.
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>hx hy hz</replaceable></term>
@@ -1235,7 +1237,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="ion">
+		<listitem id="elec-ion">
 			<cmdsynopsis>
 				<command>ion</command>
 				<arg choice="req"><replaceable>charge</replaceable></arg>
@@ -1270,19 +1272,19 @@
 			</para>
 		</listitem>
 
-		<listitem id="lpbe">
+		<listitem id="elec-lpbe">
 			<cmdsynopsis>
 				<command>lpbe</command>
 			</cmdsynopsis>
 			<para>Specifies that the linearized PBE should be solved. Either this
 				keyword or 
-				<link linkend="npbe"><command>npbe</command></link>, 
-				<link linkend="nrpbe"><command>nrpbe</command></link>, or
-				<link linkend="lrpbe"><command>lrpbe</command></link>, 
+				<link linkend="elec-npbe"><command>npbe</command></link>, 
+				<link linkend="elec-nrpbe"><command>nrpbe</command></link>, or
+				<link linkend="elec-lrpbe"><command>lrpbe</command></link>, 
 				must be present (based on the calculation type).</para>
 		</listitem>
 
-		<listitem id="lrpbe">
+		<listitem id="elec-lrpbe">
 			<cmdsynopsis>
 				<command>lrpbe</command>
 			</cmdsynopsis>
@@ -1294,9 +1296,9 @@
 				adding the approrriate Coulombic terms to the solution. Likewise, this
 				equation immediately yields the solvation energy without the need for
 				reference calculations. Either this keyword or 
-				<link linkend="lpbe"><command>lpbe</command></link>, 
-				<link linkend="npbe"><command>npbe</command></link>, or
-				<link linkend="nrpbe"><command>nrpbe</command></link>,
+				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
+				<link linkend="elec-npbe"><command>npbe</command></link>, or
+				<link linkend="elec-nrpbe"><command>nrpbe</command></link>,
 				must be present (based on the calculation type).
 				<note>
 					<para>This function is only available for FEM-based solvers.</para>
@@ -1304,7 +1306,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="maxsolve">
+		<listitem id="elec-maxsolve">
 			<cmdsynopsis>
 				<command>maxsolve</command>
 				<arg choice="req"> <replaceable>num</replaceable> </arg>
@@ -1312,8 +1314,8 @@
 			<para>Specify the number of times to perform the solve-estimate-refine
 				iteration of the finite element solver.  
 				See also:  
-				<link linkend="maxvert"><command>maxvert</command></link>,
-				<link linkend="targetRes"><command>targetRes</command></link>,
+				<link linkend="elec-maxvert"><command>maxvert</command></link>,
+				<link linkend="elec-targetRes"><command>targetRes</command></link>,
 				<variablelist>
 					<varlistentry>
 						<term> <replaceable>num</replaceable> </term>
@@ -1325,7 +1327,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="maxvert">
+		<listitem id="elec-maxvert">
 			<cmdsynopsis>
 				<command>maxvert</command>
 				<arg choice="req"> <replaceable> num </replaceable> </arg>
@@ -1335,8 +1337,8 @@
 				solve-estimate-refine cycle of finite element solver.  This places a
 				limit on the memory that can be used by the solver.
 				See also:  
-				<link linkend="targetRes"><command>targetRes</command></link>,
-				<link linkend="maxsolve"><command>maxsolve</command></link>.
+				<link linkend="elec-targetRes"><command>targetRes</command></link>,
+				<link linkend="elec-maxsolve"><command>maxsolve</command></link>.
 				<variablelist>
 					<varlistentry>
 						<term> <replaceable>num</replaceable> </term>
@@ -1348,7 +1350,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="mol">
+		<listitem id="elec-mol">
 			<cmdsynopsis>
 				<command>mol</command>
 				<arg choice="req"><replaceable>id</replaceable></arg>
@@ -1369,13 +1371,13 @@
 			</para>
 		</listitem>
 
-		<listitem id="nlev">
+		<listitem id="elec-nlev">
 			<cmdsynopsis>
 				<command>nlev</command>
 				<arg choice="req"><replaceable>lev</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the depth of the multilevel hierarchy used in the multigrid
-				solver.  See <link linkend="dime"><command>dime</command></link> for a
+				solver.  See <link linkend="elec-dime"><command>dime</command></link> for a
 				discussion of how <command>nlev</command> relates to grid
 				dimensions.
 				<variablelist>
@@ -1389,19 +1391,19 @@
 			</para>
 		</listitem>
 
-		<listitem id="npbe">
+		<listitem id="elec-npbe">
 			<cmdsynopsis>
 				<command>npbe</command>
 			</cmdsynopsis>
 			<para>Specifies that the nonlinear (full) PBE should be solved. Either
 				this keyword or 
-				<link linkend="lpbe"><command>lpbe</command></link>, 
-				<link linkend="nrpbe"><command>nrpbe</command></link>, or
-				<link linkend="lrpbe"><command>lrpbe</command></link>, 
+				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
+				<link linkend="elec-nrpbe"><command>nrpbe</command></link>, or
+				<link linkend="elec-lrpbe"><command>lrpbe</command></link>, 
 				must be present (based on the calculation type).</para>
 		</listitem>
 
-		<listitem id="nrpbe">
+		<listitem id="elec-nrpbe">
 			<cmdsynopsis>
 				<command>nrpbe</command>
 			</cmdsynopsis>
@@ -1413,9 +1415,9 @@
 				adding the approrriate Coulombic terms to the solution. Likewise, this
 				equation immediately yields the solvation energy without the need for
 				reference calculations. Either this keyword or 
-				<link linkend="lpbe"><command>lpbe</command></link>, 
-				<link linkend="npbe"><command>npbe</command></link>, or
-				<link linkend="nrpbe"><command>nrpbe</command></link>
+				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
+				<link linkend="elec-npbe"><command>npbe</command></link>, or
+				<link linkend="elec-nrpbe"><command>nrpbe</command></link>
 				must be present (based on the calculation type).
 				<note>
 					<para>This function is only available for FEM-based solvers.</para>
@@ -1423,7 +1425,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="pdie">
+		<listitem id="elec-pdie">
 			<cmdsynopsis>
 				<command>pdie</command>
 				<arg choice="req"><replaceable>diel</replaceable></arg>
@@ -1443,7 +1445,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="pdime">
+		<listitem id="elec-pdime">
 			<cmdsynopsis>
 				<command>pdime</command>
 				<arg choice="req"><replaceable>npx npy npz</replaceable></arg>
@@ -1458,7 +1460,7 @@
 				invocation than actually used during the run, the extra processors are
 				not used in the calculation.  The processors are tiled across the
 				domain in a Cartesian fashion with a specified amount of overlap (see
-				<link linkend="ofrac"><command>ofrac</command></link>) between each
+				<link linkend="elec-ofrac"><command>ofrac</command></link>) between each
 				processor to ensure continuity of the solution.
 				<variablelist>
 					<varlistentry>
@@ -1473,14 +1475,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="ofrac">
+		<listitem id="elec-ofrac">
 			<cmdsynopsis>
 				<command>ofrac</command>
 				<arg choice="req"><replaceable>frac</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the amount of overlap to include between the individual
 				processors meshes in a parallel focusing calculation (see 
-				<link linkend="ofrac"><command>ofrac</command></link>).  This should be
+				<link linkend="elec-ofrac"><command>ofrac</command></link>).  This should be
 				a value between 0 and 1.
 				<variablelist>
 					<varlistentry>
@@ -1575,7 +1577,7 @@
 		</listitem>
 
 
-		<listitem id="sdie">
+		<listitem id="elec-sdie">
 			<cmdsynopsis>
 				<command>sdie</command>
 				<arg choice="req"><replaceable>diel</replaceable></arg>
@@ -1594,23 +1596,26 @@
 			</para>
 		</listitem>
 
-		<listitem id="sdens">
+		<listitem id="elec-sdens">
 			<cmdsynopsis>
 				<command>sdens</command>
 				<arg choice="req"><replaceable>density</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the number of grid points per square-angstrom to use 
-				in Vacc object. Ignored when srad is 0.0 (see 
-				<link linkend="srad"><command>srad</command></link>) or srfm is 
-				spl2 (see <link linkend="srfm"><command>srfm</command></link>).
-				There is a direct correlation between the value 
-				used for the Vacc sphere density, the accuracy of the Vacc object, 
-				and the APBS calculation time.  APBS default value is 10.0.
+				in surface constructions (e.g., molecular
+				surface, solvent-accessible surface, etc.). Ignored when srad is 0.0 (see 
+				<link linkend="elec-srad"><command>srad</command></link>) or srfm is 
+				spl2 (see <link linkend="elec-srfm"><command>srfm</command></link>).
+				There is a direct correlation between this value 
+				used for the surface sphere density, the
+				accuracy of the surface calculations,, 
+				and the APBS calculation time.  APBS
+				"suggested" value is 10.0.
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>density</replaceable></term>
 						<listitem>
-							<para>Vacc sphere density (in grid points/&Aring;<superscript>2
+							<para>Surface sphere density (in grid points/&Aring;<superscript>2
 							</superscript>).</para>
 						</listitem>
 					</varlistentry>
@@ -1618,14 +1623,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="srad">
+		<listitem id="elec-srad">
 			<cmdsynopsis>
 				<command>srad</command>
 				<arg choice="req"><replaceable>radius</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the radius of the solvent molecules; this parameter is used
 				to define the dielectric function (see 
-				<link linkend="srfm"><command>srfm</command></link>).  This value is
+				<link linkend="elec-srfm"><command>srfm</command></link>).  This value is
 				usually set to 1.4 &Aring; for water.
 				<variablelist>
 					<varlistentry>
@@ -1638,14 +1643,14 @@
 			</para>
 		</listitem>
 
-		<listitem id="swin">
+		<listitem id="elec-swin">
 			<cmdsynopsis>
 				<command>swin</command>
 				<arg choice="req"><replaceable>win</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the size of the support (i.e., the rate of change) for
 				spline-based surface definitions 
-				(see <link linkend="srfm"><command>srfm</command></link>).  
+				(see <link linkend="elec-srfm"><command>srfm</command></link>).  
 				Usually 0.3 &Aring;.
 				<variablelist>
 					<varlistentry>
@@ -1658,7 +1663,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="srfm">
+		<listitem id="elec-srfm">
 			<cmdsynopsis>
 				<command>srfm</command>
 				<arg choice="req"><replaceable>flag</replaceable></arg>
@@ -1685,7 +1690,8 @@
 												a molecular surface definition.  The problem domain is
 												divided into two spaces.  The "free volume" space is
 												defined by the union of solvent-sized spheres (see 
-												<link linkend="srad"><command>srad</command></link>)
+												<link
+													linkend="elec-srad"><command>srad</command></link>)
 												which do not overlap with biomolecular atoms.  This
 												free volume is assigned bulk solvent dielectric values.
 												The complement of this space is assigned biomolecular
@@ -1777,7 +1783,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="targetRes">
+		<listitem id="elec-targetRes">
 			<cmdsynopsis>
 				<command>targetRes</command>
 				<arg choice="req"> <replaceable>res</replaceable> </arg>
@@ -1786,9 +1792,9 @@
 				Specify the target resolution of the simplices in the mesh; refinement
 				will continue until the longest edge of every simplex is below this
 				value.  See also:
-				<link linkend="maxvert"><command>maxvert</command></link>,
-				<link linkend="maxsolve"><command>maxsolve</command></link>,
-				<link linkend="targetNum"><command>targetNum</command></link>
+				<link linkend="elec-maxvert"><command>maxvert</command></link>,
+				<link linkend="elec-maxsolve"><command>maxsolve</command></link>,
+				<link linkend="elec-targetNum"><command>targetNum</command></link>
 				<variablelist>
 					<varlistentry>
 						<term> <replaceable>res</replaceable> </term>
@@ -1803,7 +1809,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="targetNum">
+		<listitem id="elec-targetNum">
 			<cmdsynopsis>
 				<command>targetNum</command>
 				<arg choice="req"> <replaceable>num</replaceable> </arg>
@@ -1813,9 +1819,9 @@
 				<emphasis>initial</emphasis> mesh; intiial refinement
 				will continue until this number is reached or the the longest edge of
 				every simplex is below 
-				<link linkend="targetNum"><command>targetNum</command>.</link>
+				<link linkend="elec-targetNum"><command>targetNum</command>.</link>
 				See also:
-				<link linkend="targetRes"><command>targetRes</command></link>
+				<link linkend="elec-targetRes"><command>targetRes</command></link>
 				<variablelist>
 					<varlistentry>
 						<term> <replaceable>num</replaceable> </term>
@@ -1830,7 +1836,7 @@
 		</listitem>
 
 
-		<listitem id="temp">
+		<listitem id="elec-temp">
 			<cmdsynopsis>
 				<command>temp</command>
 				<arg choice="req"> <replaceable>T</replaceable> </arg>
@@ -1847,7 +1853,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="usemap">
+		<listitem id="elec-usemap">
 			<cmdsynopsis>
 				<command>usemap</command>
 				<arg choice="req"><replaceable>type</replaceable></arg>
@@ -1869,11 +1875,16 @@
 											<para>Dielectric function map (as read by <command>read
 													map</command> <replaceable>dielx diely
 													dielx</replaceable>); this causes the
-												<link linkend="pdie"><command>pdie</command></link>,
-												<link linkend="sdie"><command>sdie</command></link>,
-												<link linkend="srad"><command>srad</command></link>, 
-												<link linkend="swin"><command>swin</command></link>, and
-												<link linkend="srfm"><command>srfm</command></link>
+												<link
+													linkend="elec-pdie"><command>pdie</command></link>,
+												<link
+													linkend="elec-sdie"><command>sdie</command></link>,
+												<link
+													linkend="elec-srad"><command>srad</command></link>, 
+												<link
+													linkend="elec-swin"><command>swin</command></link>, and
+												<link
+													linkend="elec-srfm"><command>srfm</command></link>
 												parameters and the radii of the biomolecular atoms to be
 												ignored when computing dielectric values for the PBE.
 											</para>
@@ -1885,12 +1896,15 @@
 											<para>Mobile ion-accessibility function map (as read by
 												<command>read map</command>
 												<replaceable>kappa</replaceable>); this causes the
-												<link linkend="swin"><command>swin</command></link> and 
-												<link linkend="srfm"><command>srfm</command></link>
+												<link
+													linkend="elec-swin"><command>swin</command></link> and 
+												<link
+													linkend="elec-srfm"><command>srfm</command></link>
 												parameters and the radii of the biomolecular atoms to be
 												ignored when computing mobile ion values for the PBE.
 												The 
-												<link linkend="ion"><command>ion</command></link>
+												<link
+													linkend="elec-ion"><command>ion</command></link>
 												parameter is not ignored and will still be used.
 											</para>
 										</listitem>
@@ -1901,7 +1915,8 @@
 											<para>Charge distribution map (as read by 
 												<command>read map</command>
 												<replaceable>charge</replaceable>); this causes the
-												<link linkend="chgm"><command>chgm</command></link>
+												<link
+													linkend="elec-chgm"><command>chgm</command></link>
 												parameter and the charges of the biomolecular atoms to
 												be ignored when assembling the fixed charge
 												distribution for the PBE.
@@ -1926,7 +1941,7 @@
 			</para>
 		</listitem>
 
-		<listitem id="write">
+		<listitem id="elec-write">
 			<cmdsynopsis>
 				<command>write</command>
 				<arg choice="req">type</arg>
@@ -1970,7 +1985,8 @@
 											<para>
 												Write out the solvent accessibility defined by the
 												molecular surface definition (see 
-												<link linkend="srfm"><command>srfm</command> 
+												<link
+													linkend="elec-srfm"><command>srfm</command> 
 													smol</link>).
 												Values are unitless and range from 0 (inaccessible) to 1
 												(accessible).  (multigrid and finite element)
@@ -1982,7 +1998,9 @@
 										<listitem>
 											<para>
 												Write out the spline-based solvent accessibility
-												(see <link linkend="srfm"><command>srfm</command> 
+												(see
+												<link
+													linkend="elec-srfm"><command>srfm</command> 
 													spl2</link>).
 												Values are unitless and range from 0 (inaccessible) to
 												1 (accessible).  (multigrid and finite element)
@@ -1995,9 +2013,12 @@
 											<para>
 												Write out the van der Waals-based solvent
 												accessibility (see 
-												<link linkend="srfm"><command>srfm</command> 
+												<link
+													linkend="elec-srfm"><command>srfm</command> 
 													smol</link>
-												with <link linkend="srad"><command>srad</command>
+												with
+												<link
+													linkend="elec-srad"><command>srad</command>
 													smol</link>).  Values are unitless and range from 0
 												(inaccessible) to 1 (accessible).  (multigrid and
 												finite element)
@@ -2010,7 +2031,8 @@
 											<para>
 												Write out the inflated van der Waals-based ion
 												accessibility (see 
-												<link linkend="srfm"><command>srfm</command> 
+												<link
+													linkend="elec-srfm"><command>srfm</command> 
 													smol</link>).
 												Values are unitless and range from 0 (inaccessible) to 1
 												(accessible).  (multigrid and finite element)
@@ -2173,9 +2195,9 @@
 			</para>
 		</listitem>
 
-		<listitem id="writemat">
+		<listitem id="elec-writemat">
 			<cmdsynopsis>
-				<command>write</command>
+				<command>writemat</command>
 				<arg choice="req">type</arg>
 				<arg choice="req">stem</arg>
 			</cmdsynopsis>

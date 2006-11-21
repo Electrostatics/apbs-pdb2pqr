@@ -52,7 +52,7 @@
               <note>
                 <para>
                   MPI isn't strictly necessary if the 
-                  <link linkend="async"><option>async</option></link> option is
+                  <link linkend="elec-async"><option>async</option></link> option is
                   used.
                 </para>
               </note>

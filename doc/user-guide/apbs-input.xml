@@ -24,7 +24,15 @@
 			<listitem>
 				<para>
 					<link linkend="elec"><command>ELEC</command></link>:  
-					section for specifying calculation parameters.</para>
+					section for specifying polar solvation
+					(electrostatics) calculation parameters.</para>
+			</listitem>
+			<listitem>
+				<para>
+					<link linkend="apolar"><command>APOLAR</command></link>:
+					section for specifying apolar solvation
+					calculation parameters.</para>
+
 			</listitem>
 			<listitem>
 				<para>
@@ -42,7 +50,13 @@
 				ELEC
 				...
 				END
+				APOLAR
+				...
+				END
 				ELEC
+				...
+				END
+				APOLAR
 				...
 				END
 				PRINT
@@ -54,10 +68,12 @@
 	</para>
 	<para>These sections can occur in any order, however, they are clearly
 		interdependent. For example, <command>PRINT</command> requires
-		<command>ELEC</command> and <command>ELEC</command> requires one or more
-		<command>READ</command> sections. Sections can also be repeated; several 
-		<command>READ</command> statements may be used to load molecules and
-		multiple <command>ELEC</command> sections would specify various
+		<command>ELEC</command> and/or <command>APOLAR</command> while
+		<command>ELEC</command> requires one or more
+		<command>READ</command> sections. Sections can also be
+		repeated; several <command>READ</command> statements may be
+		used to load molecules and multiple <command>ELEC</command> or
+		<command>APOLAR</command> sections would specify various
 		electrostatics calculations on one or more molecules.</para>
 
 
@@ -67,6 +83,10 @@
 
 	<sect2 id="elec"> <title>ELEC statements</title>
 		&elec-sect;
+	</sect2>
+
+	<sect2 id="apolar"> <title>APOLAR statements</title>
+		&apolar-sect;
 	</sect2>
 
 	<sect2 id="print"> <title>PRINT statements</title>

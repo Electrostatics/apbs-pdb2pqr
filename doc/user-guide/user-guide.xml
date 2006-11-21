@@ -10,6 +10,7 @@
 <!ENTITY using-apbs SYSTEM "using-apbs.xml">
 <!ENTITY read-sect SYSTEM "read.xml">
 <!ENTITY elec-sect SYSTEM "elec.xml">
+<!ENTITY apolar-sect SYSTEM "apolar.xml">
 <!ENTITY print-sect SYSTEM "print.xml">
 <!ENTITY apbs-input SYSTEM "apbs-input.xml">
 <!ENTITY programming SYSTEM "programming.xml">
