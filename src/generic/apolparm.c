@@ -112,8 +112,8 @@ VPUBLIC void APOLparm_copy(
 	thee->molid = source->molid;
 	thee->setmolid = source->setmolid;
 	
-	thee->bdens = source->bdens ;
-	thee->setbdens= source->setbdens ;
+	thee->bconc = source->bconc ;
+	thee->setbconc= source->setbconc ;
 	
 	thee->sdens = source->sdens ;
 	thee->setsdens= source->setsdens ;
@@ -455,18 +455,18 @@ VERROR1:
 	return -1;
 }
 
-VPRIVATE int APOLparm_parseBDENS(APOLparm *thee, Vio *sock) {
+VPRIVATE int APOLparm_parseBCONC(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%lf", &tf) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing BDENS \
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing BCONC \
 keyword!\n", tok);
         return -1;
     }
-    thee->bdens = tf;
-    thee->setbdens = 1;
+    thee->bconc = tf;
+    thee->setbconc = 1;
     return 1;
 	
 VERROR1:
@@ -563,8 +563,8 @@ VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
         return APOLparm_parseMOL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "glen") == 0) {
         return APOLparm_parseGLEN(thee, sock);
-    } else if (Vstring_strcasecmp(tok, "bdens") == 0) {
-        return APOLparm_parseBDENS(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "bconc") == 0) {
+        return APOLparm_parseBCONC(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
         return APOLparm_parseSDENS(thee, sock);
     } else if (Vstring_strcasecmp(tok, "dpos") == 0) {
