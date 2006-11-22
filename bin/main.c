@@ -520,7 +520,7 @@ int main(
 			case NCT_APOL:
 				printf("Apolar calculation\n");
 				apolparm = nosh->calc[i]->apolparm;
-				solveAPOL(nosh, apolparm, alist[i]);
+				solveAPOL(nosh, apolparm, alist[(apolparm->molid)-1]);
 				break;
 			default:
 				Vnm_tprint(2, "  Unknown calculation type (%d)!\n", 

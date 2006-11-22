@@ -90,7 +90,20 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
     if (thee == VNULL) return 0;
 
     thee->parsed = 0;
-
+	
+    thee->setglen = 0;
+    thee->setmolid = 0;
+    thee->setbconc = 0;
+    thee->setsdens = 0;
+    thee->setdpos = 0;
+    thee->setpress = 0;
+    thee->setsrfm = 0;
+    thee->setsrad = 0;
+    thee->setswin = 0;
+	
+	thee->settemp = 0;
+    thee->setgamma = 0;
+	
     return 1; 
 }
 
