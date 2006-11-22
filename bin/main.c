@@ -518,7 +518,22 @@ int main(
 #endif /* ifdef HAVE_MC_H */
 				break;
 			case NCT_APOL:
-				printf("Apolar calculation\n");
+				/* Copied from NCT_MG. See the note above (top of loop) for
+					information about this loop.
+				*/
+				for (k=0; k<nosh->napol; k++) {
+					if (nosh->apol2calc[k] >= i) {
+						break;
+					}
+				}
+				
+				if (Vstring_strcasecmp(nosh->apolname[k], "") == 0) {
+					Vnm_tprint( 1, "CALCULATION #%d: APOLAR\n", i+1);
+				} else {
+					Vnm_tprint( 1, "CALCULATION #%d (%s): APOLAR\n", 
+								i+1, nosh->apolname[k]);
+				}
+
 				apolparm = nosh->calc[i]->apolparm;
 				solveAPOL(nosh, apolparm, alist[(apolparm->molid)-1]);
 				break;
