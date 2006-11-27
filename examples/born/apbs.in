@@ -13,7 +13,7 @@ end
 
 # CALCULATE POTENTIAL FOR SOLVATED STATE
 elec name solvated
-    mg-manual
+   mg-manual
     dime 65 65 65
     nlev 4 
     grid 0.33 0.33 0.33
@@ -34,7 +34,7 @@ elec name solvated
     calcforce no
 end
 
-APOLAR name asdf
+APOLAR name solvated
 	dime 65 65 65
 	glen 7 7 7
 	mol 1
@@ -44,7 +44,7 @@ APOLAR name asdf
 	press 1 
 	gamma 0 
 	bconc 1.0
-	sdens 100.0
+	sdens 10.0
 	dpos 0.2
 	temp 298.15
 	calcenergy total
@@ -93,6 +93,8 @@ end
 
 # COMBINE TO FORM SOLVATION ENERGY
 print energy solvated - reference end
+#print apolForce solvated - asdf2 end
+#print apolEnergy solvated + asdf2 end
 
 # SO LONG
 quit

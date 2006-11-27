@@ -562,6 +562,20 @@ VEXTERNC void Vacc_totalAtomdSASA(
 							 );
 
 /**
+* @brief  Total solvent accessible volume
+ * @ingroup  Vacc
+ * @author  David Gohara, Nathan Baker
+ */	
+VEXTERNC void Vacc_totalAtomdSAV(
+								 Vacc *thee, 
+								 double dpos,
+								 double srad,
+								 Vatom *atom,
+								 double *dSA,
+								 Vclist *clist
+								 );
+
+/**
 * @brief  Return the total solvent accessible volume (SAV)
  * @ingroup  Vacc
  * @note  Alias for Vacc_SAV

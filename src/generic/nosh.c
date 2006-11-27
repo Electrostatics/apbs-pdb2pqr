@@ -104,6 +104,12 @@ VEXTERNC int NOsh_parseMG(
 						  NOsh_calc *elec
 						  );
 
+VEXTERNC int NOsh_parseAPOL(
+						   NOsh *thee, 
+						   Vio *sock, 
+						   NOsh_calc *elec
+						   );
+
 VPRIVATE int NOsh_setupCalcMG(
 							  NOsh *thee,
 							  NOsh_calc *elec
@@ -211,6 +217,12 @@ VPUBLIC int NOsh_elec2calc(NOsh *thee, int icalc) {
 	VASSERT(thee != VNULL);
 	VASSERT(icalc < thee->ncalc);
 	return thee->elec2calc[icalc];
+}
+
+VPUBLIC int NOsh_apol2calc(NOsh *thee, int icalc) {
+	VASSERT(thee != VNULL);
+	VASSERT(icalc < thee->ncalc);
+	return thee->apol2calc[icalc];
 }
 
 VPUBLIC char* NOsh_elecname(NOsh *thee, int ielec) {
@@ -711,7 +723,7 @@ VPRIVATE int NOsh_parsePRINT(NOsh *thee, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE];
 	char name[VMAX_BUFSIZE];
-    int ti, idx, expect, ielec;
+    int ti, idx, expect, ielec, iapol;
 	
     if (thee == VNULL) {
         Vnm_print(2, "NOsh_parsePRINT:  Got NULL thee!\n");
@@ -745,10 +757,21 @@ sections\n",
     } else if (Vstring_strcasecmp(tok, "force") == 0) {
         thee->printwhat[idx] = NPT_FORCE;
         thee->printnarg[idx] = 0;
+	} else if (Vstring_strcasecmp(tok, "elecEnergy") == 0) {
+        thee->printwhat[idx] = NPT_ELECENERGY;
+        thee->printnarg[idx] = 0;
+	} else if (Vstring_strcasecmp(tok, "elecForce") == 0) {
+        thee->printwhat[idx] = NPT_ELECFORCE;
+        thee->printnarg[idx] = 0;
+    } else if (Vstring_strcasecmp(tok, "apolEnergy") == 0) {
+        thee->printwhat[idx] = NPT_APOLENERGY;
+        thee->printnarg[idx] = 0;
+	} else if (Vstring_strcasecmp(tok, "apolForce") == 0) {
+        thee->printwhat[idx] = NPT_APOLFORCE;
+        thee->printnarg[idx] = 0;
     } else {
         Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while parsing \
-PRINT section!\n",
-				  tok);
+PRINT section!\n", tok);
         return 0;
     }
 	
@@ -825,8 +848,15 @@ section while reading %s!\n", tok);
 							break;
 					    }
 				    }
+					for (iapol=0; iapol<thee->napol; iapol++) {
+					    if (Vstring_strcasecmp(thee->apolname[iapol], name) == 0) {
+							thee->printcalc[idx][thee->printnarg[idx]] = iapol;
+							expect = 1;
+							break;
+					    }
+				    }
 					if (expect == 0) {
-						Vnm_print(2, "No ELEC statement has been named %s!\n", 
+						Vnm_print(2, "No ELEC or APOL statement has been named %s!\n", 
 								  name);
 						return 0;
 					}
@@ -838,8 +868,7 @@ section while reading %s!\n", tok);
 				/* Got bad operation */
             } else {
                 Vnm_print(2, "NOsh_parsePRINT:  Undefined keyword %s while \
-parsing PRINT section!\n",
-						  tok);
+parsing PRINT section!\n", tok);
                 return 0;
             } 
         } /* end parse token */
@@ -1101,7 +1130,13 @@ VPUBLIC int NOsh_setupApolCalc(
 						  apol->calctype);
 				return 0;
 		}
-
+		/* At this point, the most recently-created NOsh_calc object should be the
+			one we use for results for this APOL statement.  Assign it. */
+		/* Associate APOL statement with the calculation */
+		thee->apol2calc[iapol] = thee->ncalc-1;
+		Vnm_print(0, "NOsh_setupCalc:  Mapping APOL statement %d (%d) to \
+calculation %d (%d)\n", iapol, iapol+1, thee->apol2calc[iapol], 
+				  thee->apol2calc[iapol]+1);
 	}
 	
 	return 1;

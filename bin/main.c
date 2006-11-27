@@ -556,6 +556,14 @@ int main(
 			/* Print force */
 		} else if (nosh->printwhat[i] == NPT_FORCE) {
 			printForce(com, nosh, nforce, atomForce, i);
+		} else if (nosh->printwhat[i] == NPT_ELECENERGY) {
+			printElecEnergy(com, nosh, totEnergy, i);
+		} else if (nosh->printwhat[i] == NPT_ELECFORCE) {
+			printElecForce(com, nosh, nforce, atomForce, i);
+		} else if (nosh->printwhat[i] == NPT_APOLENERGY) {
+			printApolEnergy(nosh, i);
+		} else if (nosh->printwhat[i] == NPT_APOLFORCE) {
+			printApolForce(nosh, i);
 		} else {
 			Vnm_tprint( 2, "Undefined PRINT keyword!\n");
 			break;

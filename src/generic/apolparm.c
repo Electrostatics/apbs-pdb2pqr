@@ -89,6 +89,7 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 
     if (thee == VNULL) return 0;
 
+	int i;
     thee->parsed = 0;
 	
     thee->setglen = 0;
@@ -103,6 +104,11 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	
 	thee->settemp = 0;
     thee->setgamma = 0;
+	
+	thee->sav = 0.0;
+	thee->sasa = 0.0;
+	
+	for(i=0;i<3;i++) thee->totForce[i] = 0.0;
 	
     return 1; 
 }
