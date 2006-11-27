@@ -151,8 +151,12 @@ typedef enum eNOsh_ParmFormat NOsh_ParmFormat;
  * @ingroup  NOsh
  */
 enum eNOsh_PrintType {
-    NPT_ENERGY=0, /**< Energy */
-    NPT_FORCE=1 /**< Force */
+    NPT_ENERGY=0, /**< Energy (deprecated) */
+    NPT_FORCE=1, /**< Force (deprecated) */
+	NPT_ELECENERGY, /**< Elec Energy */
+    NPT_ELECFORCE, /**< Elec Force */
+	NPT_APOLENERGY, /**< Apol Energy */
+    NPT_APOLFORCE /**< Apol Force */
 };
 
 /**
@@ -219,6 +223,8 @@ struct sNOsh {
 		road (like PRINT).  Therefore this array is the initial point of entry 
 		for any calculation-specific operation.  It points to a specific entry 
 		in the calc array. */
+	int apol2calc[NOSH_MAXCALC];  /**< (see elec2calc) */
+	
     int nmol;  /**< Number of molecules */
     char molpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mol files */
     NOsh_MolFormat molfmt[NOSH_MAXMOL];  /**< Mol files formats */
@@ -403,6 +409,15 @@ VEXTERNC char* NOsh_elecname(NOsh *thee, int ielec);
 *  @returns The name (if present) of an ELEC statement
 */
 VEXTERNC int NOsh_elec2calc(NOsh *thee, int icalc);
+
+/** @brief   Return the name of an apol statement        
+*  @ingroup NOsh
+*  @author  David Gohara
+*  @param   thee NOsh object to use
+*  @param   icalc ID of CALC statement
+*  @returns The name (if present) of an APOL statement
+*/
+VEXTERNC int NOsh_apol2calc(NOsh *thee, int icalc);
 
 /** @brief   Return number of arguments to PRINT statement (@see printnarg)
 *  @ingroup NOsh
