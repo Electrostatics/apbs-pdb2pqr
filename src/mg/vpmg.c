@@ -6454,7 +6454,7 @@ VPUBLIC void Vpmg_ibPermanentMultipoleForce(Vpmg *thee, int atomID,
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        Vnm_print(2, "ibPermanentMultipoleForce:  Atom %d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, position[0], position[1], position[2]);
+        Vnm_print(2, "ibPermanentMultipoleForce:  Atom %d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, apos[0], apos[1], apos[2]);
         Vnm_print(2, "ibPermanentMultipoleForce:  xmin = %g, xmax = %g\n", xmin, xmax);
         Vnm_print(2, "ibPermanentMultipoleForce:  ymin = %g, ymax = %g\n", ymin, ymax);
         Vnm_print(2, "ibPermanentMultipoleForce:  zmin = %g, zmax = %g\n", zmin, zmax);
@@ -6578,7 +6578,7 @@ VPUBLIC void Vpmg_dbPermanentMultipoleForce(Vpmg *thee, int atomID,
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        Vnm_print(2, "dbPermanentMultipoleForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "dbPermanentMultipoleForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", apos[0], apos[1], apos[2]);
         Vnm_print(2, "dbPermanentMultipoleForce:  xmin = %g, xmax = %g\n", xmin, xmax);
         Vnm_print(2, "dbPermanentMultipoleForce:  ymin = %g, ymax = %g\n", ymin, ymax);
         Vnm_print(2, "dbPermanentMultipoleForce:  zmin = %g, zmax = %g\n", zmin, zmax);
@@ -7290,7 +7290,7 @@ VPUBLIC void Vpmg_ibDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
         Vnm_print(2, "Vpmg_ibForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
-            position[0], position[1], position[2]);
+            apos[0], apos[1], apos[2]);
         Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n", xmin, xmax);
         Vnm_print(2, "Vpmg_ibForce:    ymin = %g, ymax = %g\n", ymin, ymax);
         Vnm_print(2, "Vpmg_ibForce:    zmin = %g, zmax = %g\n", zmin, zmax);
@@ -7422,7 +7422,7 @@ VPUBLIC void Vpmg_dbDirectPolForce(Vpmg *thee, Vgrid *perm, Vgrid *induced,
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-         Vnm_print(2, "Vpmg_dbDirectPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+         Vnm_print(2, "Vpmg_dbDirectPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", apos[0], apos[1], apos[2]);
          Vnm_print(2, "Vpmg_dbDirectPolForce:    xmin = %g, xmax = %g\n", xmin, xmax);
          Vnm_print(2, "Vpmg_dbDirectPolForce:    ymin = %g, ymax = %g\n", ymin, ymax); 
          Vnm_print(2, "Vpmg_dbDirectPolForce:    zmin = %g, zmax = %g\n", zmin, zmax);
@@ -7782,7 +7782,7 @@ VPUBLIC void Vpmg_ibMutualPolForce(Vpmg *thee, Vgrid *induced, Vgrid *nlinduced,
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        Vnm_print(2, "Vpmg_ibMutalPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "Vpmg_ibMutalPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", apos[0], apos[1], apos[2]);
         Vnm_print(2, "Vpmg_ibMutalPolForce:    xmin = %g, xmax = %g\n", xmin, xmax);
         Vnm_print(2, "Vpmg_ibMutalPolForce:    ymin = %g, ymax = %g\n", ymin, ymax);
         Vnm_print(2, "Vpmg_ibMutalPolForce:    zmin = %g, zmax = %g\n", zmin, zmax);
@@ -7907,7 +7907,7 @@ VPUBLIC void Vpmg_dbMutualPolForce(Vpmg *thee, Vgrid *induced,
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        Vnm_print(2, "Vpmg_dbMutualPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", position[0], position[1], position[2]);
+        Vnm_print(2, "Vpmg_dbMutualPolForce:  Atom at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", apos[0], apos[1], apos[2]);
         Vnm_print(2, "Vpmg_dbMutualPolForce:    xmin = %g, xmax = %g\n", xmin, xmax);
         Vnm_print(2, "Vpmg_dbMutualPolForce:    ymin = %g, ymax = %g\n", ymin, ymax); 
         Vnm_print(2, "Vpmg_dbMutualPolForce:    zmin = %g, zmax = %g\n", zmin, zmax);
