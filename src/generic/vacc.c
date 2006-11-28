@@ -1164,9 +1164,9 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
     }
     
     if ((tRad+srad) != 0){
-		dSA[0] = -dx*area/(tRad+srad);
-		dSA[1] = -dy*area/(tRad+srad);
-		dSA[2] = -dz*area/(tRad+srad);
+		dSA[0] = dx*area/(tRad+srad);
+		dSA[1] = dy*area/(tRad+srad);
+		dSA[2] = dz*area/(tRad+srad);
     }	
 	
 }
@@ -1288,9 +1288,9 @@ VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, d
 	temp_Pos[2] = tPos[2];
     
 	/* Calculate the final value */
-    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
-    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
-    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
+    dSA[0] = (axt1-axb1)/(2.0 * dpos);
+    dSA[1] = (ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = (azt1-azb1)/(2.0 * dpos);
 }
 
 /* Note: This is purely test code to make certain that the dSASA code is
@@ -1347,9 +1347,9 @@ VPUBLIC void Vacc_totalAtomdSASA(Vacc *thee, double dpos, double srad, Vatom *at
 	temp_Pos[2] = tPos[2];
     
 	/* Calculate the final value */
-    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
-    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
-    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
+    dSA[0] = (axt1-axb1)/(2.0 * dpos);
+    dSA[1] = (ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = (azt1-azb1)/(2.0 * dpos);
 }
 
 /* Note: This is purely test code to make certain that the dSASA code is
@@ -1406,9 +1406,9 @@ VPUBLIC void Vacc_totalAtomdSAV(Vacc *thee, double dpos, double srad, Vatom *ato
 	temp_Pos[2] = tPos[2];
     
 	/* Calculate the final value */
-    dSA[0] = -(axt1-axb1)/(2.0 * dpos);
-    dSA[1] = -(ayt1-ayb1)/(2.0 * dpos);
-    dSA[2] = -(azt1-azb1)/(2.0 * dpos);
+    dSA[0] = (axt1-axb1)/(2.0 * dpos);
+    dSA[1] = (ayt1-ayb1)/(2.0 * dpos);
+    dSA[2] = (azt1-azb1)/(2.0 * dpos);
 }
 
 VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
