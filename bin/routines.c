@@ -89,7 +89,6 @@ VPUBLIC void startVio() { Vio_start(); }
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 	
 	int i, j, rc;
-	double q; 
 	Vio *sock = VNULL;
 	Vatom *atom = VNULL;
 	Vparam *param = VNULL;
@@ -212,17 +211,6 @@ specifying PARM file!\n");
 					alist[i]->center[2]);
 		Vnm_tprint( 1, "  Net charge %3.2e e\n", alist[i]->charge);        
 
-		/* Check for uncharged molecule */
-		q = 0;
-		for (j=0; j<Valist_getNumberAtoms(alist[i]); j++) {
-			atom = Valist_getAtom(alist[i], j);
-			q += VSQR(Vatom_getCharge(atom));
-		}
-		if (q < (1e-6)) {
-			Vnm_tprint(2, "Molecule #%d is uncharged!\n");
-			Vnm_tprint(2, "Sum square charge = %g\n", q);
-			Vnm_tprint(2, "Bailing out!\n");
-		}
 	}
 
 	if (nosh->gotparm) Vparam_dtor(&param);
@@ -720,21 +708,37 @@ VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 	
 }
 
-VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm, 
+VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm, 
 				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
 				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
 				   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
 				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
 				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
 	
-	int j, bytesTotal, highWater, imol, focusFlag;
-	double sparm, iparm;
+	int j, bytesTotal, highWater, imol, focusFlag, iatom;
+	double sparm, iparm, q;
+	Vatom *atom = VNULL;
 	Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
+	Valist *myalist = VNULL;
 	
 	Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
 	
 	/* Update the grid center */
 	for (j=0; j<3; j++) realCenter[j] = mgparm->center[j];
+	
+	/* Check for completely-neutral molecule */
+	q = 0;
+	myalist = alist[pbeparm->molid-1];
+	for (iatom=0; iatom<Valist_getNumberAtoms(myalist); iatom++) {
+		atom = Valist_getAtom(myalist, iatom);
+		q += VSQR(Vatom_getCharge(atom));
+	}
+	if (q < (1e-6)) {
+		Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+		Vnm_tprint(2, "Sum square charge = %g!\n", q);
+		return 0;
+	}
+	
 	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");
@@ -743,14 +747,14 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
 	else iparm = 0.0;
 	if (pbeparm->bcfl == BCFL_FOCUS) {
-		if (i == 0) {
+		if (icalc == 0) {
 			Vnm_tprint( 2, "Can't focus first calculation!\n");
 			return 0;
 		}
 		focusFlag = 1;
 	} else focusFlag = 0;
 	
-	pbe[i] = Vpbe_ctor(alist[pbeparm->molid-1], pbeparm->nion,
+	pbe[icalc] = Vpbe_ctor(myalist, pbeparm->nion,
 					   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
 					   pbeparm->temp, pbeparm->pdie, 
 					   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens);
@@ -759,12 +763,12 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	Vnm_tprint(0, "Setting up PDE object...\n");
 	switch (pbeparm->pbetype) {
 		case PBE_NPBE:
-			pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
 								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
 								 mgparm->grid[1], mgparm->grid[2], 1);
 			break;
 		case PBE_LPBE:
-			pmgp[i] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
 								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
 								 mgparm->grid[1], mgparm->grid[2], 0);
 			break;
@@ -781,24 +785,24 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 			return 0;
 	}
 	Vnm_tprint(0, "Setting PDE center to local center...\n");
-	pmgp[i]->bcfl = pbeparm->bcfl;
-	pmgp[i]->xcent = realCenter[0];
-	pmgp[i]->ycent = realCenter[1];
-	pmgp[i]->zcent = realCenter[2];
+	pmgp[icalc]->bcfl = pbeparm->bcfl;
+	pmgp[icalc]->xcent = realCenter[0];
+	pmgp[icalc]->ycent = realCenter[1];
+	pmgp[icalc]->zcent = realCenter[2];
 	if (pbeparm->bcfl == BCFL_FOCUS) {
-		if (i == 0) {
+		if (icalc == 0) {
 			Vnm_tprint( 2, "Can't focus first calculation!\n");
 			return 0;
 		}
-		pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 1, pmg[i-1],
+		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 1, pmg[icalc-1],
 						   mgparm, pbeparm->calcenergy);       
 	} else {
-		if (i>0) Vpmg_dtor(&(pmg[i-1]));
-		pmg[i] = Vpmg_ctor(pmgp[i], pbe[i], 0, VNULL, mgparm, PCE_NO);
+		if (icalc>0) Vpmg_dtor(&(pmg[icalc-1]));
+		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 0, VNULL, mgparm, PCE_NO);
 	}
-	if (i>0) {
-		Vpmgp_dtor(&(pmgp[i-1]));
-		Vpbe_dtor(&(pbe[i-1]));
+	if (icalc>0) {
+		Vpmgp_dtor(&(pmgp[icalc-1]));
+		Vpbe_dtor(&(pbe[icalc-1]));
 	}
 	if (pbeparm->useDielMap) {
 		if ((pbeparm->dielMapID-1) < nosh->ndiel) {
@@ -845,7 +849,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 			return 0;
 		}
 	} else theChargeMap = VNULL;
-	Vpmg_fillco(pmg[i], 
+	Vpmg_fillco(pmg[icalc], 
 				pbeparm->srfm, pbeparm->swin, mgparm->chgm,
 				pbeparm->useDielMap, theDielXMap,
 				pbeparm->useDielMap, theDielYMap,
@@ -855,7 +859,7 @@ VPUBLIC int initMG(int i, NOsh *nosh, MGparm *mgparm,
 	
 	/* Print a few derived parameters */
 #ifndef VAPBSQUIET
-	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[i]));
+	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
 #endif
 	
 	/* Setup time statistics */
@@ -2760,8 +2764,9 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 				   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
 				   Vfetk *fetk[NOSH_MAXCALC]) {
 	
-	int j, bytesTotal, highWater, theMol, focusFlag;
-	double sparm, iparm, center[3];
+	int iatom, j, bytesTotal, highWater, theMol, focusFlag;
+	double sparm, q, iparm, center[3];
+	Valist *myalist;
 	
 	Vnm_tstart(27, "Setup timer");
 	
@@ -2773,15 +2778,29 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	/* Fix mesh center for "GCENT MOL #" types of declarations. */
 	Vnm_tprint(0, "Re-centering mesh...\n");
 	theMol = pbeparm->molid-1;
+	myalist = alist[theMol];
 	for (j=0; j<3; j++) {
 		if (theMol < nosh->nmol) {
-			center[j] = (alist[theMol])->center[j];
+			center[j] = (myalist)->center[j];
 		} else{ 
 			Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
 					   (theMol+1));
 			return 0;
 		}
 	}
+	
+	/* Check for completely-neutral molecule */
+	q = 0;
+	for (iatom=0; iatom<Valist_getNumberAtoms(myalist); iatom++) {
+		atom = Valist_getAtom(myalist, iatom);
+		q += VSQR(Vatom_getCharge(atom));
+	}
+	if (q < (1e-6)) {
+		Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+		Vnm_tprint(2, "Sum square charge = %g!\n", q);
+		return 0;
+	}
+	
 	
 	/* Set the femparm pkey value based on the type of solver being used */
 	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)){
@@ -2797,7 +2816,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	if (pbeparm->nion > 0) iparm = pbeparm->ionr[0];
 	else iparm = 0.0;
 	focusFlag = 0;
-	pbe[icalc] = Vpbe_ctor(alist[theMol], pbeparm->nion,
+	pbe[icalc] = Vpbe_ctor(myalist, pbeparm->nion,
 						   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
 						   pbeparm->temp, pbeparm->pdie, pbeparm->sdie, 
 						   sparm, focusFlag,
