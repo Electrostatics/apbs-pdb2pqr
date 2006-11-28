@@ -1,6 +1,6 @@
 #############################################################################
 ### BORN ION SOLVATION ENERGY
-### $Id$
+### $Id: apbs.in 996 2006-11-27 19:21:40Z sdg0919 $
 ###
 ### Please see APBS documentation (http://apbs.sourceforge.net/doc/) for 
 ### input file sytax.
@@ -33,6 +33,40 @@ elec name solvated
     calcenergy total
     calcforce no
 end
+
+APOLAR name solvated
+	dime 65 65 65
+	glen 7 7 7
+	mol 1
+	srfm sacc
+	swin 0.3
+	srad 0.0
+	press 1 
+	gamma 0 
+	bconc 1.0
+	sdens 10.0
+	dpos 0.2
+	temp 298.15
+	calcenergy total
+	calcforce comps
+END
+
+APOLAR name asdf2
+	dime 65 65 65
+	glen 20 20 20
+	mol 1
+	srfm sacc
+	swin 0.3
+	srad 0.0
+	press 1 
+	gamma 0 
+	bconc 1.0
+	sdens 100.0
+	dpos 0.2
+	temp 298.15
+	calcenergy total
+	calcforce comps
+END
 
 # CALCULATE POTENTIAL FOR REFERENCE STATE
 elec name reference
