@@ -3360,7 +3360,7 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
 	printf("Solute Length (x,y,z): %lf %lf %lf\n",soluteXlen,soluteYlen,soluteZlen);
 	
 	/* Set up the hash table for the cell list */
-	Vnm_print(2, "APOL: Setting up hash table and accessibility object...\n");
+	Vnm_print(0, "APOL: Setting up hash table and accessibility object...\n");
 	nhash[0] = soluteXlen/0.5;
 	nhash[1] = soluteYlen/0.5;
 	nhash[2] = soluteZlen/0.5;
