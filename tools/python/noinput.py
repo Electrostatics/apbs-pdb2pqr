@@ -264,18 +264,15 @@ def printResults(energyList, potList, forceList):
         qflist = forceList[i]["qf"]
         iblist = forceList[i]["ib"]
         dblist = forceList[i]["db"]
-        nplist = forceList[i]["np"]
         
         print "\nPer-atom forces from calculation %i" % i
         for j in range(len(qflist)):
             qf = "%.3E %.3E %.3E" % (qflist[j][0]*factor, qflist[j][1]*factor, qflist[j][2]*factor)
             ib = "%.3E %.3E %.3E" % (iblist[j][0]*factor, iblist[j][1]*factor, iblist[j][2]*factor)
             db = "%.3E %.3E %.3E" % (dblist[j][0]*factor, dblist[j][1]*factor, dblist[j][2]*factor)
-            np = "%.3E %.3E %.3E" % (nplist[j][0]*factor, nplist[j][1]*factor, nplist[j][2]*factor)
             print "\t%i\t%s (qf)" % (j, qf)
             print "\t%i\t%s (ib)" % (j, ib)
             print "\t%i\t%s (db)" % (j, db)
-            print "\t%i\t%s (np)" % (j, np)
 
 
 def runAPBS(PQR, INPUT):
@@ -427,7 +424,7 @@ def runAPBS(PQR, INPUT):
         
         aforce = get_AtomForce(atomforce, icalc)
         doforce = wrap_forceMG(mem, nosh, pbeparm, mgparm, thispmg, aforce, alist, nforce, icalc)
-       
+      
         # Write out data from MG calculations : Routine writedataMG	
         writedataMG(rank, nosh, pbeparm, thispmg)
 	
