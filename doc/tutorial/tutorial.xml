@@ -1427,7 +1427,253 @@ forces?</title>
 	</chapter>
 
 	<chapter id="parallel-sect"> <title>My calculation requires too much memory!</title>
-		<warning><para>Under construction</para></warning>
+		<para> APBS requires approximately 200 B memory per grid point.
+			Memory usage can be predicted before performing the
+			calculations using the <filename>tools/manip/psize.py</filename>
+			Python script provided with APBS. </para>
+		<para>  If it appears your calculation is going to require more
+			memory than is currently available on your system, you
+			have a few options:
+		</para>
+		<itemizedlist>
+			<listitem>
+				<para>APBS calculations can be performed in
+					parallel across multiple processors
+					(hopefully, sharing distributed
+					memory!).  This functionality is
+					provided by the
+					<literal>mg-para</literal> keyword
+					which is described in more detail in
+					the APBS user manual and <link
+						linkend="parallel">below</link>.  
+				</para>
+			</listitem>
+			<listitem>
+				<para>APBS calculations can be broken into a
+					series of smaller, asynchronous runs
+					which (individually) require less
+					memory.  This functionality is provided
+					by the <literal>mg-para</literal>
+					<literal>async</literal> keyword
+					which is described in more detail in
+					the APBS user manual and <link
+						linkend="async">below</link>.  
+				</para>
+			</listitem>
+			<listitem>
+				<para>
+					Submit your calculations through <link
+						linkend="gemstone-sect">Gemstone</link>
+					to external computational resources.
+				</para>
+			</listitem>
+		</itemizedlist>
+
+		<sect1 id="parallel"> <title>Parallel calculations:  an example</title>
+			<para>
+				The actin dimer example provided with the APBS
+				source code
+				(<filename>examples/actin-dimer/complex.pqr</filename>)
+				is a fairly large system and a good example for
+				parallel focusing calculations.  This example
+				will use the actin dimer complex PQR file
+				<filename><ulink
+						url="examples/parallel/complex.pqr">complex.pqr</ulink></filename>.
+			</para>
+			<para>  We're going to use an 8-processor parallel
+				calculation to write out the electrostatic
+				potential map for this complex.  Each processor
+				will solve a portion of the overall problem
+				using the parallel focusing method (see <ulink
+					url="http://dx.doi.org/10.1073/pnas.181342398">Baker
+					et al, PNAS, 2001</ulink>) on a
+				97<superscript>3</superscript> mesh with 20%
+				overlap between meshes for neighboring
+				processors.  An example input file for this
+				calculation might look like (download <ulink
+					url="examples/parallel/apbs.in">here</ulink>):
+				<programlisting id="mg-para.in">
+read 
+    mol pqr complex.pqr
+end
+
+elec name complex
+    mg-para
+    ofrac 0.1
+    pdime 2 2 2
+    dime  97  97  97
+    fglen 150 115 160
+    cglen 156 121 162
+    cgcent mol 1
+    fgcent mol 1
+    mol 1
+    npbe
+    bcfl sdh
+    ion 1 0.150 2.0
+    ion -1 0.150 2.0 
+    pdie 2.0
+    sdie 78.54
+    srfm mol
+    chgm spl0
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+    write pot dx pot
+end
+
+quit
+				</programlisting>
+				where the <literal>pdime 2 2 2</literal>
+				specifies the 8-processor array dimensions, the
+				<literal>ofrac 0.1</literal> specifies the 20%
+				overlap between processor calculations, and the
+				<literal>dime 97 97 97</literal> specifies the
+				size of <emphasis>each processor's</emphasis>
+				calculation.  The <literal>write pot dx
+					pot</literal> instructs APBS to write
+				out <ulink
+					url="&ugurl;#opendx-format">OpenDX-format</ulink>
+				maps of the potential to 8 files
+				<filename>pot-#.dx</filename>, where
+				<literal>#</literal> is the number of the
+				particular processor.
+			</para>
+			<para>
+				Running this input file with an MPI-compiled version
+				of APBS generates the following output:
+				<NEEDINPUT/>
+				Note that 8 separate OpenDX files were written
+				by the 8 processors used to perform the
+				calculation.  Writing separate OpenDX files
+				allows us to avoid communication in the
+				parallel run and keeps individual file sizes
+				(relatively) small.  Additionally, if a user is
+				interested in a specific portion of the problem
+				domain, only a few files are needed to get
+				local potential information.
+			</para>
+			<para>
+				However, most users are interested in global
+				potentials.  For some programs (<ulink
+					url="http://opendx.org">OpenDX</ulink>,
+				<ulink
+					url="http://www.visualdatatools.com/">DataTank</ulink>),
+				the individual potential files can simply be
+				read into the program separately and the
+				program will reconstruct the global map.
+				Most other programs will require the user to
+				reassemble the global map first; APBS provides
+				the <filename><ulink
+						url="&ugurl;">mergedx</ulink></filename>
+				program for this purpose.
+				<filename>mergedx</filename> is a simple
+				program that allows users to combine several
+				OpenDX files from a parallel focusing
+				calculation into a single map.  This map can be
+				downsampled from the original resolution to
+				provide coarser datasets for fast
+				visualization, etc.
+				<NEEDMORE/>
+			</para>
+		</sect1>
+
+		<sect1 id="async"> <title>Asynchronous sequential calculations</title>
+			<para>
+				The steps described in the <link
+					linkend="parallel">previous
+					section</link> can also be performed
+				for systems or binaries which are not equipped
+				for parallel calculations via MPI.  In
+				particular, you can add 
+				<screen>
+<userinput>async</userinput> <parameter>n</parameter>
+				</screen>
+				to the <literal>ELEC</literal>
+				<literal>mg-para</literal> APBS input file to
+				make the single-processor calculation
+				masquerade as processor
+				<parameter>n</parameter> of a parallel
+				calculation.  
+			</para>
+			<para>
+				Scalar maps from asynchronous APBS calculations
+				can be combined using the
+				<filename>mergedx</filename> program as
+				described above.  Currently, energies and
+				forces from asynchronous APBS calculations need
+				to merged manually (e.g., summed) from the
+				individual asynchronous calculation output.
+				This can be accomplished by simple shell
+				scripts.
+			</para>
+			<para>
+				As a specific example, we can modify the <link
+					linkend="mg-para.in">input file
+					above</link> to include a
+				<literal>async 0</literal> command in the ELEC
+				statement and thus cause APBS to perform the
+				operations of the first processor in the
+				parallel focusing calculation.  The modified
+				input file (available for download <ulink
+					url="examples/parallel/apbs-async.in">here</ulink>)
+				should look like:
+				<programlisting id="mg-para.in">
+read 
+    mol pqr complex.pqr
+end
+
+elec name complex
+    mg-para
+    ofrac 0.1
+    pdime 2 2 2
+    async 0
+    dime  97  97  97
+    fglen 150 115 160
+    cglen 156 121 162
+    cgcent mol 1
+    fgcent mol 1
+    mol 1
+    npbe
+    bcfl sdh
+    ion 1 0.150 2.0
+    ion -1 0.150 2.0 
+    pdie 2.0
+    sdie 78.54
+    srfm mol
+    chgm spl0
+    srad 1.4
+    swin 0.3
+    sdens 10.0
+    temp 298.15
+    gamma 0.105
+    calcenergy total
+    calcforce no
+    write pot dx pot
+end
+
+quit
+				</programlisting>
+				This should create an OpenDX-format potential
+				map called <filename>pot.dx</filename>,
+				corresponding to the output from processor 0 in
+				a parallel focusing calculation.  Performing
+				additional APBS calculations with
+				<literal>async 1</literal>,
+				<literal>async 2</literal>,
+				...,
+				<literal>async 7</literal>
+				will generate the corresponding OpenDX maps for
+				the remaining processors of the parallel
+				focusing calculations.  These can then be
+				reassembled with <filename>mergedx</filename>
+				as described above.
+			</para>
+		</sect1>
+
 	</chapter>
 
 	<chapter id="simulation-sect"> <title>How do I use APBS with my
