@@ -427,17 +427,14 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
     qfvalues = PyList_New(Valist_getNumberAtoms(alist));
     dbvalues = PyList_New(Valist_getNumberAtoms(alist)); 
     ibvalues = PyList_New(Valist_getNumberAtoms(alist)); 
-    npvalues = PyList_New(Valist_getNumberAtoms(alist)); 
     
     qfholder = PyList_New(3);
     dbholder = PyList_New(3);
     ibholder = PyList_New(3);
-    npholder = PyList_New(3);
     
     qf = PyString_FromString("qf");
     db = PyString_FromString("db");
     ib = PyString_FromString("ib");
-    np = PyString_FromString("np");
 
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
         for (j=0;j<3;j++){
@@ -448,11 +445,9 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
         PyList_SetItem(qfvalues, i,  PyList_GetSlice(qfholder, 0, 3));
         PyList_SetItem(dbvalues, i,  PyList_GetSlice(dbholder, 0, 3));
         PyList_SetItem(ibvalues, i,  PyList_GetSlice(ibholder, 0, 3));
-        PyList_SetItem(npvalues, i,  PyList_GetSlice(npholder, 0, 3));
     }
     PyDict_SetItem(dict, qf, qfvalues);
     PyDict_SetItem(dict, db, dbvalues);
-    PyDict_SetItem(dict, np, npvalues);
     PyDict_SetItem(dict, ib, ibvalues);
     return dict;
 }
