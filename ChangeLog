@@ -2,7 +2,8 @@
 BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
 #############################################################################
  - NEW FEATURES
-   * Added new APOLAR section to input file and updated documentation
+   * Added new APOLAR section to input file and updated documentation -- this
+     function renders tools/manip/acc obsolete.
    * Added support for standard one-character chain IDs in PQR files.	
    * Added a new "spl4" charge method (chgm) option to support a quintic 
      B-spline discretization (thanks to Michael Schnieders).

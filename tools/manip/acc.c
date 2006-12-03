@@ -98,6 +98,25 @@ int usage(
 }
 
 /**
+ * @brief  Print deprecation warning
+ */
+int depwarn() {
+	
+	Vnm_print(2, "\n");
+	Vnm_print(2, "**************** README ******* README *******************\n");
+	Vnm_print(2, "WARNING -- THIS PROGRAM IS DEPRECATED AND WILL BE REMOVED\n");
+	Vnm_print(2, "IN A FUTURE APBS RELEASE!!\n\n");
+	
+	Vnm_print(2, "THIS PROGRAM'S FUNCTIONALITY HAS BEEN REPLACED BY THE NEW\n");
+	Vnm_print(2, "'APOLAR' KEYWORD IN THE MAIN APBS PROGRAM.  PLEASE\n");
+	Vnm_print(2, "MIGRATE YOUR acc-DEPENDENT APPLICATIONS TO APBS.\n");
+	Vnm_print(2, "**************** README ******* README *******************\n");
+	Vnm_print(2, "\n");
+	
+	return 0;
+}
+
+/**
  * @brief Main code
  */
 int main(int argc, char **argv) {
@@ -135,8 +154,11 @@ int main(int argc, char **argv) {
     int fAreaOnly = 0;
 
     Vio_start();
-
-    /* Check usage */
+	
+	/* Warn about deprecation */
+	depwarn();
+	
+	    /* Check usage */
     if (argc == 1) {
         Vnm_print(2, "\nError:  didn't get any arguments!\n");
         return usage(EXIT_FAILURE);
@@ -325,6 +347,11 @@ int main(int argc, char **argv) {
 		Vnm_print(1, "\tAtom %d:  %1.12E  %1.12E  %1.12E  %1.12E  A^2\n",
 				  i, dSV[0],dSV[1],dSV[2],dvnorm);
     } 
+
+
+	/* Warn about deprecation */
+	depwarn();
+
 
     return EXIT_SUCCESS;
 }
