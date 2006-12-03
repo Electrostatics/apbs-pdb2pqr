@@ -647,7 +647,7 @@ potential around my biomolecule?</title>
 
 			<sect2> <title>Electrostatics visualization</title>
 
-				<sect3>  <title>Isocontour visualization</title>
+				<sect3 id="vmd-isocontour">  <title>Isocontour visualization</title>
 					<para>
 						One of the most popular
 						visualization methods is the
@@ -1544,9 +1544,11 @@ quit
 			</para>
 			<para>
 				Running this input file with an MPI-compiled version
-				of APBS generates the following output:
-				<NEEDINPUT/>
-				Note that 8 separate OpenDX files were written
+				of APBS runs 8 parallel focusing calculations,
+				with each calculation generating fine-scale
+				solutions on a different region of the
+				(<literal>fglen</literal>) problem domain.
+				Note that 8 separate OpenDX files are written
 				by the 8 processors used to perform the
 				calculation.  Writing separate OpenDX files
 				allows us to avoid communication in the
@@ -1577,7 +1579,26 @@ quit
 				downsampled from the original resolution to
 				provide coarser datasets for fast
 				visualization, etc.
-				<NEEDMORE/>
+				For example, the command
+				<screen>
+<prompt>$</prompt> mergedx 65 65 65 pot-0.dx pot-1.dx pot-2.dx pot-3.dx pot-4.dx pot-5.dx pot-6.dx pot-7.dx
+				</screen>
+				will generate a file
+				<filename>gridmerged.dx</filename>
+				which has downsampled the much larger dataset
+				contained in the 8 OpenDX files into a
+				65<superscript>3</superscript> file which
+				would be suitable for rough visualization.  An
+				example of the <filename>mergedx</filename>
+				output (see <xref linkend="vmd-isocontour"/>
+				for methods) is shown in 
+				<figure> <title>Actin dimer isocontours from
+parallel focusing</title>
+					<graphic fileref="images/actin_dimer-iso_trans.jpg"></graphic>
+				</figure>
+				Note that downsampling isn't necessary -- and
+				often isn't desirable for high quality
+				visualization or quantitative analysis.
 			</para>
 		</sect1>
 
@@ -1621,7 +1642,7 @@ quit
 				input file (available for download <ulink
 					url="examples/parallel/apbs-async.in">here</ulink>)
 				should look like:
-				<programlisting id="mg-para.in">
+				<programlisting id="mg-para-async.in">
 read 
     mol pqr complex.pqr
 end
