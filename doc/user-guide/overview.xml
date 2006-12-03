@@ -100,7 +100,7 @@
 				prepares APBS input files.</para>
 			<para>The following scripts help generate or transform APBS input files:
 				<itemizedlist>
-					<listitem>
+					<listitem id="psize">
 						<para><filename>tools/manip/psize.py</filename></para>
 						<para>Get the dimensions and center of a molecule in 
 							<link linkend="pqr-format">PQR format</link>.
