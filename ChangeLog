@@ -6,6 +6,7 @@ BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX
    * Added support for standard one-character chain IDs in PQR files.	
    * Added a new "spl4" charge method (chgm) option to support a quintic 
      B-spline discretization (thanks to Michael Schnieders).
+   * Updated psize.py
    * Added a new "spl4" ion-accessibility coefficient model (srfm) option 
      that uses a 7th order polynomial. This option provides the higher
      order continuity necessary for stable force calculations with atomic
