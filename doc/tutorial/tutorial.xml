@@ -1538,7 +1538,7 @@ quit
 				out <ulink
 					url="&ugurl;#opendx-format">OpenDX-format</ulink>
 				maps of the potential to 8 files
-				<filename>pot-#.dx</filename>, where
+				<filename>pot#.dx</filename>, where
 				<literal>#</literal> is the number of the
 				particular processor.
 			</para>
@@ -1581,7 +1581,7 @@ quit
 				visualization, etc.
 				For example, the command
 				<screen>
-<prompt>$</prompt> mergedx 65 65 65 pot-0.dx pot-1.dx pot-2.dx pot-3.dx pot-4.dx pot-5.dx pot-6.dx pot-7.dx
+<prompt>$</prompt> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
 				</screen>
 				will generate a file
 				<filename>gridmerged.dx</filename>
