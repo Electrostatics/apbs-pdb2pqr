@@ -1723,8 +1723,11 @@ satisfy requirements (%d)\n", size, nproc);
 		
     } else { /* Setting up for an asynchronous calculation. */
 		
-        rank = mgparm->async;
+		rank = mgparm->async;
 		
+		thee->ispara = 1;
+		thee->proc_rank = rank;
+
         /* Check to see if the async id is greater than the number of
 		* processors.  If so, this is a fatal error. */
         if (rank > (nproc-1)) {
@@ -1733,8 +1736,6 @@ is not within the range of processors available (0-%d)\n", rank, (nproc-1));
             return 0;
         }
     }
-	
-
 	
     /* Calculate the processor's coordinates in the processor grid */
 	kp = (int)floor(rank/(npx*npy));

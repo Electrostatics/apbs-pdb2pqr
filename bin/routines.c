@@ -939,6 +939,7 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 			partMin[j] = mgparm->partDisjCenter[j] - 0.5*mgparm->partDisjLength[j];
 			partMax[j] = mgparm->partDisjCenter[j] + 0.5*mgparm->partDisjLength[j];
 		}
+#if 0
 		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part center = (%g, %g, %g)\n",
 				   __FILE__, __LINE__,
 				   mgparm->partDisjCenter[0],
@@ -950,6 +951,7 @@ VPUBLIC int setPartMG(NOsh *nosh, MGparm *mgparm, Vpmg *pmg) {
 		Vnm_tprint(1, "setPartMG (%s, %d):  Disj part upper corner = (%g, %g, %g)\n",
 				   __FILE__, __LINE__,
 				   partMax[0], partMax[1], partMax[2]);
+#endif
 	} else {
 		for (j=0; j<3; j++) {
 			partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
@@ -1198,7 +1200,11 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 		Vnm_tprint(2, "  Not writing matrix!\n");
 		return 0;
 	}
-	sprintf(writematstem, "%s", pbeparm->writematstem);
+	if(nosh->ispara == 1){
+		sprintf(writematstem, "%s-PE%d", pbeparm->writematstem,nosh->proc_rank);
+	}else{
+		sprintf(writematstem, "%s", pbeparm->writematstem);
+	}
 #endif
 	
 	if (pbeparm->writemat == 1) {
@@ -1981,7 +1987,11 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 #ifdef HAVE_MPI_H
 		sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
 #else
-		sprintf(writestem, "%s", pbeparm->writestem[i]);
+		if(nosh->ispara){
+			sprintf(writestem, "%s-PE%d", pbeparm->writestem[i],nosh->proc_rank);
+		}else{
+			sprintf(writestem, "%s", pbeparm->writestem[i]);
+		}
 #endif
 		
 		switch (pbeparm->writefmt[i]) {
@@ -3294,7 +3304,11 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 #ifdef HAVE_MPI_H
 		sprintf(writestem, "%s-PE%d", pbeparm->writestem[i], rank);
 #else
-		sprintf(writestem, "%s", pbeparm->writestem[i]);
+		if(nosh->ispara){
+			sprintf(writestem, "%s-PE%d", pbeparm->writestem[i],nosh->proc_rank);
+		}else{
+			sprintf(writestem, "%s", pbeparm->writestem[i]);
+		}
 #endif
 		
 		switch (pbeparm->writefmt[i]) {
