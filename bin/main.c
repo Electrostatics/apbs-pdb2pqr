@@ -433,7 +433,7 @@ int main(
 					storeAtomEnergy(pmg[i], i, &(atomEnergy[i]), &(nenergy[i]));
 				}
 					
-					fflush(stdout);
+				fflush(stdout);
 				fflush(stderr);
 				
 				break;
