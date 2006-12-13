@@ -66,6 +66,7 @@
 
 #include "apbscfg.h"
 #include "apbs/vacc.h"
+#include "apbs/apolparm.h"
 
 #if defined(HAVE_MC_H)
 #include "mc/mc.h"
@@ -1477,3 +1478,290 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 
 	return sav;
 }
+
+VPUBLIC double Vacc_lgEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
+								 double radius,double rho,int iatom){
+	
+	int i;
+	int npts[3];
+	int pad = 14;
+
+	double spacs[3], vec[3];
+    double w, wx, wy, wz, len, fn, x, y, z, vol;
+	double x2,y2,z2,r;
+	double vol_density,energy;
+	double psig, epsilon, sigma, eni, chi;
+	
+	double *pos;
+    double *lower_corner, *upper_corner;
+	
+	char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN];
+	
+	Vatom *atom = VNULL;
+	
+	energy = 0.0;
+	vol = 1.0;
+	vol_density = 2.0;
+	
+	lower_corner = clist->lower_corner;
+	upper_corner = clist->upper_corner;
+	
+	atom = Valist_getAtom(alist, iatom);
+	pos = Vatom_getPosition(atom);
+    
+    /* Calculation parameters */
+    //Vacc_prm(atom->resName, atom->atomName, &psig, &epsilon);
+	
+	/* Note: This is temporary until we get the parameterization in place*/
+	psig = 1.4090;
+	epsilon = 0.0150;
+	
+	sigma = psig+1.7683;
+    epsilon = VSQRT((epsilon*.152));
+	
+	/* parameters */
+    double sigma6 = VPOW(sigma,6);
+    double sigma12 = VPOW(sigma,12);
+    double sigmar = sigma*VPOW(2, (1.0/6.0));
+	
+	//for(i=0;i<3;i++) lower_corner[i] -= pad;
+	//for(i=0;i<3;i++) upper_corner[i] += pad;
+	
+	int xmin = pos[0] - pad;
+	int xmax = pos[0] + pad;
+	int ymin = pos[1] - pad;
+	int ymax = pos[1] + pad;
+	int zmin = pos[2] - pad;
+	int zmax = pos[2] + pad;
+	
+	for (i=0; i<3; i++) {
+		len = (upper_corner[i] + pad) - (lower_corner[i] - pad);
+		vol *= len;
+		fn = len*vol_density + 1;
+		npts[i] = (int)ceil(fn);
+		spacs[i] = 0.5;
+	}
+	
+	for (x=xmin; x<=xmax; x=x+spacs[0]) {
+		if ( VABS(x - xmin) < VSMALL) {
+			wx = 0.5;
+		} else if ( VABS(x - xmax) < VSMALL) {
+			wx = 0.5;
+		} else {
+			wx = 1.0;
+		}
+		vec[0] = x;
+		for (y=ymin; y<=ymax; y=y+spacs[1]) {
+			if ( VABS(y - ymin) < VSMALL) {
+				wy = 0.5;
+			} else if ( VABS(y - ymax) < VSMALL) {
+				wy = 0.5;
+			} else {
+				wy = 1.0;
+			}
+			vec[1] = y;
+			for (z=zmin; z<=zmax; z=z+spacs[2]) {
+				if ( VABS(z - zmin) < VSMALL) {
+					wz = 0.5;
+				} else if ( VABS(z - zmax) < VSMALL) {
+					wz = 0.5;
+				} else {
+					wz = 1.0;
+				}
+				vec[2] = z;
+				
+				w = wx*wy*wz;
+				
+				chi = Vacc_ivdwAcc(thee, vec, radius);
+				
+				if (VABS(chi) > VSMALL) {
+					
+					x2 = VSQR(vec[0]-pos[0]);          	
+					y2 = VSQR(vec[1]-pos[1]);
+					z2 = VSQR(vec[2]-pos[2]);
+					r = VSQRT(x2+y2+z2);  
+					
+					if (r <= 14 && r >= sigma) {
+						eni = chi*rho*epsilon*(-2.0*sigma6/VPOW(r,6)+sigma12/VPOW(r,12));
+					}else if (r <= 14){
+						eni = -1.0*epsilon*chi*rho; 
+					}else{ 
+						eni = 0.0;
+					}
+				}else{ 
+					eni = 0.0;
+				}
+				
+				energy += eni*w;
+				
+			} /* z loop */
+		} /* y loop */
+	} /* x loop */
+
+	w  = spacs[0]*spacs[1]*spacs[2];
+	energy *= w;
+
+	return energy;
+}
+
+VPUBLIC double Vacc_lgEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
+							 Vclist *clist,double radius){
+	
+	int iatom;
+    double energy = 0.0;
+	
+	double rho = apolparm->bconc;
+	
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
+        energy += Vacc_lgEnergyAtom(acc,alist,clist, radius, rho, iatom);
+		Vnm_print(1,"The lgEnergy is: %1.12E\n",energy/(double)(iatom + 1));
+    }
+
+	apolparm->lgEnergy = energy;
+	
+    return energy; 
+	
+}
+
+VPUBLIC void Vacc_lgForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
+							  double radius,double rho,int iatom,double *force){
+	
+	int i,si;
+	int npts[3];
+	int pad = 14;
+	
+	double spacs[3], vec[3], fpt[3];
+    double w, wx, wy, wz, len, fn, x, y, z, vol;
+	double x2,y2,z2,r;
+	double vol_density, fo;
+	double psig, epsilon, sigma, chi;
+	
+	double *pos;
+    double *lower_corner, *upper_corner;
+	
+	char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN];
+	
+	Vatom *atom = VNULL;
+	
+	vol = 1.0;
+	vol_density = 2.0;
+	
+	lower_corner = clist->lower_corner;
+	upper_corner = clist->upper_corner;
+	
+	atom = Valist_getAtom(alist, iatom);
+	pos = Vatom_getPosition(atom);
+    
+    /* Calculation parameters */
+    //Vacc_prm(atom->resName, atom->atomName, &psig, &epsilon);
+	
+	/* Note: This is temporary until we get the parameterization in place*/
+	psig = 1.4090;
+	epsilon = 0.0150;
+	
+	sigma = psig+1.7683;
+    epsilon = VSQRT((epsilon*.152));
+	
+	/* parameters */
+    double sigma6 = VPOW(sigma,6);
+    double sigma12 = VPOW(sigma,12);
+    double sigmar = sigma*VPOW(2, (1.0/6.0));
+	
+	for (i=0; i<3; i++) {
+		len = (upper_corner[i] + pad) - (lower_corner[i] - pad);
+		vol *= len;
+		fn = len*vol_density + 1;
+		npts[i] = (int)ceil(fn);
+		spacs[i] = 0.5;
+		force[i] = 0.0;
+	}
+	
+	int xmin = pos[0] - pad;
+	int xmax = pos[0] + pad;
+	int ymin = pos[1] - pad;
+	int ymax = pos[1] + pad;
+	int zmin = pos[2] - pad;
+	int zmax = pos[2] + pad;
+	
+	for (x=xmin; x<=xmax; x=x+spacs[0]) {
+		if ( VABS(x - xmin) < VSMALL) {
+			wx = 0.5;
+		} else if ( VABS(x - xmax) < VSMALL) {
+			wx = 0.5;
+		} else {
+			wx = 1.0;
+		}
+		vec[0] = x;
+		for (y=ymin; y<=ymax; y=y+spacs[1]) {
+			if ( VABS(y - ymin) < VSMALL) {
+				wy = 0.5;
+			} else if ( VABS(y - ymax) < VSMALL) {
+				wy = 0.5;
+			} else {
+				wy = 1.0;
+			}
+			vec[1] = y;
+			for (z=zmin; z<=zmax; z=z+spacs[2]) {
+				if ( VABS(z - zmin) < VSMALL) {
+					wz = 0.5;
+				} else if ( VABS(z - zmax) < VSMALL) {
+					wz = 0.5;
+				} else {
+					wz = 1.0;
+				}
+				vec[2] = z;				
+				
+				w = wx*wy*wz;
+				
+				chi = Vacc_ivdwAcc(thee, vec, radius);
+				
+				if (chi != 0.0) {
+					
+					x2 = VSQR(vec[0]-pos[0]);          	
+					y2 = VSQR(vec[1]-pos[1]);
+					z2 = VSQR(vec[2]-pos[2]);
+					r = VSQRT(x2+y2+z2);  
+					
+					if (r <= 14 && r >= sigma){  
+						
+						fo = 12.0*chi*rho*epsilon*(sigma6/VPOW(r,7)-sigma12/VPOW(r,13));
+						
+						fpt[0] = -1.0*(pos[0]-vec[0])*fo/r;
+						fpt[1] = -1.0*(pos[1]-vec[1])*fo/r;
+						fpt[2] = -1.0*(pos[2]-vec[2])*fo/r;
+						
+					}else { 
+						for (si=0; si < 3; si++) fpt[si] = 0.0;
+					} 
+				}else { 
+					for (si=0; si < 3; si++) fpt[si] = 0.0;
+				}
+				
+				for(i=0;i<3;i++){
+					force[i] += (w*fpt[i]);
+				}
+				
+			} /* z loop */
+		} /* y loop */
+	} /* x loop */
+
+	w  = spacs[0]*spacs[1]*spacs[2];
+	for(i=0;i<3;i++){
+		force[i] *= w;
+	}
+	printf("Force: %1.12E %1.12E %1.12E\n",force[0],force[1],force[2]);
+}
+
+VPUBLIC void Vacc_lgForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
+						  Vclist *clist,double radius) {
+    int iatom;
+	
+	double rho = apolparm->bconc;
+	double force[3];
+	
+    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
+        Vacc_lgForceAtom(acc,alist,clist,radius,rho,iatom,force);
+    }
+}
+
+

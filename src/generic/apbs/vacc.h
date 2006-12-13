@@ -81,6 +81,7 @@
 #include "apbs/vclist.h"
 #include "apbs/vatom.h"
 #include "apbs/vunit.h"
+#include "apbs/apolparm.h"
 
 /** 
  * @ingroup  Vacc
@@ -588,5 +589,12 @@ VEXTERNC double Vacc_totalSAV(
 							   double radius  /** Probe molecule radius (&Aring;) */
 							   );
 
+VPUBLIC double Vacc_lgEnergy(
+							 Vacc *acc,  /** Accessibility object */
+							 APOLparm *apolparm,
+							 Valist *alist, /** Alist for acc object */
+							 Vclist *clist, /** Clist for acc object */
+							 double radius
+							 );
 
 #endif    /* ifndef _VACC_H_ */

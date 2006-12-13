@@ -107,6 +107,7 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	
 	thee->sav = 0.0;
 	thee->sasa = 0.0;
+	thee->lgEnergy = 0.0;
 	
 	for(i=0;i<3;i++) thee->totForce[i] = 0.0;
 	

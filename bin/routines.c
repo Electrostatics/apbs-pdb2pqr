@@ -3390,7 +3390,7 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
     soluteYlen = ymax - ymin;
     soluteZlen = zmax - zmin;
 	
-	printf("Solute Length (x,y,z): %lf %lf %lf\n",soluteXlen,soluteYlen,soluteZlen);
+	//printf("Solute Length (x,y,z): %lf %lf %lf\n",soluteXlen,soluteYlen,soluteZlen);
 	
 	/* Set up the hash table for the cell list */
 	Vnm_print(0, "APOL: Setting up hash table and accessibility object...\n");
@@ -3425,6 +3425,12 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
 	/* Inflated van der Waals accessibility */
 	apolparm->sav = Vacc_totalSAV(acc,clist,radius);
 	
+	/* lgEnergy integral code */
+	Vacc_lgEnergy(acc, apolparm, alist, clist, radius);
+	
+	/* wcaForce */
+	Vacc_lgForce(acc, apolparm, alist, clist, radius);
+	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) forceAPOL(acc, apolparm, alist, clist);
 	if(apolparm->calcenergy) energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
@@ -3446,8 +3452,9 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 			Vnm_print(1,"energyAPOL: Cannot calculate component energy, skipping.\n");
 			break;
 		case ACE_TOTAL:
-			energy = (apolparm->gamma*sasa) + (apolparm->press*sav);
-			Vnm_print(1,"Total non-polar energy = %1.12E\n",energy);
+			energy = (apolparm->gamma*sasa) + (apolparm->press*sav) 
+						+ (apolparm->bconc*apolparm->lgEnergy);
+			Vnm_print(1,"Total non-polar energy = %1.12E kJ/mol\n",energy);
 			break;
 		default:
 			Vnm_print(2,"energyAPOL: Error in energyAPOL. Unknown option.\n");
@@ -3509,9 +3516,7 @@ VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *clis
 		
 		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
 				  i,txF,tyF,tzF);
-#endif
-		
-#if defined(DEBUG_FORCE)
+
 		Vacc_totalAtomdSAV(acc,offset,radius,atom,dSAV,clist);
 		double txF = -((gamma*dSASA[0]) + (press*dSAV[0]));
 		double tyF = -((gamma*dSASA[1]) + (press*dSAV[1]));

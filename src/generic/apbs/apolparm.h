@@ -154,7 +154,7 @@ struct sAPOLparm {
     int settemp;  /**< Flag, @see temp */
 	
     double gamma;  /**< Surface tension for apolar energies/forces
-		* (in kJ/mol/A^2) */
+					* (in kJ/mol/A^2) */
     int setgamma;  /**< Flag, @see gamma */
 	
 	APOLparm_calcEnergy calcenergy;  /**< Energy calculation flag */
@@ -165,6 +165,7 @@ struct sAPOLparm {
 	
 	double sasa; /**< Solvent accessible surface area for this calculation */
 	double sav;   /**< Solvent accessible volume for this calculation */
+	double lgEnergy; /** lgEnergy */
 	
 	double totForce[3]; /**< Total forces on x, y, z */
 };
