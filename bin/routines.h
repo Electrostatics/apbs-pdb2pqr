@@ -96,6 +96,9 @@ struct AtomForce {
    double ibForce[3];  /**< Ion-boundary force */
    double qfForce[3];  /**< Charge-field force */
    double dbForce[3];  /**< Dielectric boundary force */
+   double sasaForce[3];  /**< SASA force (coupled to gamma) */
+   double savForce[3];  /**< SAV force (coupled to press) */
+   double wcaForce[3];  /**< WCA integral force (coupled to bconc) */
 };
 
 /**
