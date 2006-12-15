@@ -165,7 +165,7 @@ struct sAPOLparm {
 	
 	double sasa; /**< Solvent accessible surface area for this calculation */
 	double sav;   /**< Solvent accessible volume for this calculation */
-	double lgEnergy; /** lgEnergy */
+	double wcaEnergy; /** lgEnergy */
 	
 	double totForce[3]; /**< Total forces on x, y, z */
 };

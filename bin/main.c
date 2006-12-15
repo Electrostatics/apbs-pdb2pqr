@@ -535,7 +535,8 @@ int main(
 				}
 
 				apolparm = nosh->calc[i]->apolparm;
-				solveAPOL(nosh, apolparm, alist[(apolparm->molid)-1]);
+				initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
+						 alist[(apolparm->molid)-1]);
 				break;
 			default:
 				Vnm_tprint(2, "  Unknown calculation type (%d)!\n", 
@@ -563,7 +564,11 @@ int main(
 		} else if (nosh->printwhat[i] == NPT_APOLENERGY) {
 			printApolEnergy(nosh, i);
 		} else if (nosh->printwhat[i] == NPT_APOLFORCE) {
+#if 0
 			printApolForce(nosh, i);
+#else
+			printApolForce(com, nosh, nforce, atomForce, i);
+#endif
 		} else {
 			Vnm_tprint( 2, "Undefined PRINT keyword!\n");
 			break;

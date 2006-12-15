@@ -2704,7 +2704,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 	return 1;
 	
 }
-
+#if 0
 VPUBLIC int printApolForce( NOsh *nosh, int iprint) {
 	
 	int i;
@@ -2767,6 +2767,204 @@ VPUBLIC int printApolForce( NOsh *nosh, int iprint) {
 	return 1;
 	
 }
+#else
+VPUBLIC int printApolForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
+						   AtomForce *atomForce[NOSH_MAXCALC], int iprint) {
+	
+	int iarg, ifr, ivc, calcid, refnforce, refcalcforce;
+	double temp, scalar;
+	double totforce[3];
+	AtomForce *lforce, *gforce, *aforce;
+	
+	if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][0]], "") == 0){
+		Vnm_tprint( 1, "print APOL force %d ", nosh->printcalc[iprint][0]+1);
+	} else {
+		Vnm_tprint( 1, "print APOL force %d (%s) ", nosh->printcalc[iprint][0]+1, 
+					nosh->apolname[nosh->printcalc[iprint][0]]);
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		if (nosh->printop[iprint][iarg-1] == 0)
+			Vnm_tprint(1, "+ ");
+		else if (nosh->printop[iprint][iarg-1] == 1)
+			Vnm_tprint(1, "- ");
+		else {
+			Vnm_tprint( 2, "Undefined PRINT operation!\n");
+			return 0;
+		}
+		if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][iarg]], 
+							   "") == 0) {
+			Vnm_tprint( 1, "%d ", nosh->printcalc[iprint][iarg]+1);
+		} else {
+			Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[iprint][iarg]+1, 
+						nosh->apolname[nosh->printcalc[iprint][iarg]]);
+		}
+	}
+	Vnm_tprint(1, "end\n");
+	
+	/* First, go through and make sure we did the same type of force
+		* evaluation in each of the requested calculations */
+	calcid = nosh->apol2calc[nosh->printcalc[iprint][0]];
+	refnforce = nforce[calcid];
+	refcalcforce = nosh->calc[calcid]->apolparm->calcforce;
+	if (refcalcforce == ACF_NO) {
+		Vnm_tprint( 2, "  Didn't calculate force in calculation \
+#%d\n", calcid+1);
+		return 0;
+	}
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		calcid = nosh->apol2calc[nosh->printcalc[iprint][iarg]-1];
+		if (nosh->calc[calcid]->apolparm->calcforce != refcalcforce) {
+			Vnm_tprint(2, "  Inconsistent calcforce declarations in \
+calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
+					   calcid+1);
+			return 0;
+		}
+		if (nforce[calcid] != refnforce) {
+			Vnm_tprint(2, "  Inconsistent number of forces evaluated in \
+calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
+					   calcid+1);
+			return 0;
+		}
+	}
+	
+	/* Now, allocate space to accumulate the forces */
+	lforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+	gforce = (AtomForce *)Vmem_malloc(VNULL, refnforce, sizeof(AtomForce));
+	
+	/* Now, accumulate the forces */
+	calcid = nosh->apol2calc[nosh->printcalc[iprint][0]];
+	aforce = atomForce[calcid];
+	temp = nosh->calc[calcid]->apolparm->temp;
+	
+	/* Load up the first calculation */
+	if (refcalcforce == ACF_TOTAL) {
+		/* Set to total force */
+		for (ivc=0; ivc<3; ivc++) {
+			lforce[0].sasaForce[ivc] = aforce[0].sasaForce[ivc];
+			lforce[0].savForce[ivc] = aforce[0].savForce[ivc];
+			lforce[0].wcaForce[ivc] = aforce[0].wcaForce[ivc];
+		}
+	} else if (refcalcforce == ACF_COMPS) { 
+		for (ifr=0; ifr<refnforce; ifr++) {
+			for (ivc=0; ivc<3; ivc++) {
+				lforce[ifr].sasaForce[ivc] = aforce[ifr].sasaForce[ivc];
+				lforce[ifr].savForce[ivc] = aforce[ifr].savForce[ivc];
+				lforce[ifr].wcaForce[ivc] = aforce[ifr].wcaForce[ivc];
+			}
+		}
+	}
+	
+	/* Load up the rest of the calculations */
+	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
+		calcid = nosh->apol2calc[nosh->printcalc[iprint][iarg]];
+		temp = nosh->calc[calcid]->apolparm->temp;
+		aforce = atomForce[calcid];
+		/* Get operation */
+		if (nosh->printop[iprint][iarg-1] == 0) scalar = +1.0;
+		else if (nosh->printop[iprint][iarg-1] == 1) scalar = -1.0;
+		else scalar = 0.0;
+		/* Accumulate */
+		if (refcalcforce == ACF_TOTAL) {
+			/* Set to total force */
+			for (ivc=0; ivc<3; ivc++) {
+				lforce[0].sasaForce[ivc] += aforce[0].sasaForce[ivc];
+				lforce[0].savForce[ivc] += aforce[0].savForce[ivc];
+				lforce[0].wcaForce[ivc] += aforce[0].wcaForce[ivc];
+			}
+		} else if (refcalcforce == ACF_COMPS) {
+			for (ifr=0; ifr<refnforce; ifr++) {
+				for (ivc=0; ivc<3; ivc++) {
+					lforce[ifr].sasaForce[ivc] += aforce[ifr].sasaForce[ivc];
+					lforce[ifr].savForce[ivc] += aforce[ifr].savForce[ivc];
+					lforce[ifr].wcaForce[ivc] += aforce[ifr].wcaForce[ivc];
+				}
+			}
+		}
+	}
+	
+	Vnm_tprint( 0, "printForce:  Performing global reduction (sum)\n");
+	for (ifr=0; ifr<refnforce; ifr++) {
+		Vcom_reduce(com, lforce[ifr].sasaForce, gforce[ifr].sasaForce, 3, 2, 0);
+		Vcom_reduce(com, lforce[ifr].savForce, gforce[ifr].savForce, 3, 2, 0);
+		Vcom_reduce(com, lforce[ifr].wcaForce, gforce[ifr].wcaForce, 3, 2, 0);
+	}
+	
+	if (refcalcforce == ACF_TOTAL) {
+		Vnm_tprint( 1, "  Printing net forces (kJ/mol/A)\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot   -- Total force\n");
+		Vnm_tprint( 1, "    sasa  -- SASA force\n");
+		Vnm_tprint( 1, "    sav   -- SAV force\n");
+		Vnm_tprint( 1, "    wca   -- WCA force\n\n");
+		
+		for (ivc=0; ivc<3; ivc++) {
+			totforce[ivc] = 
+			gforce[0].sasaForce[ivc] + gforce[0].savForce[ivc] \
+			+ gforce[0].wcaForce[ivc];
+		}
+		
+		Vnm_tprint( 1, "  tot %1.12E  %1.12E  %1.12E\n", totforce[0], 
+					totforce[1], totforce[2]);
+		Vnm_tprint( 1, "  sasa  %1.12E  %1.12E  %1.12E\n", gforce[0].sasaForce[0], 
+					gforce[0].sasaForce[1], gforce[0].sasaForce[2]);
+		Vnm_tprint( 1, "  sav  %1.12E  %1.12E  %1.12E\n", gforce[0].savForce[0], 
+					gforce[0].savForce[1], gforce[0].savForce[2]);
+		Vnm_tprint( 1, "  wca  %1.12E  %1.12E  %1.12E\n", gforce[0].wcaForce[0], 
+					gforce[0].wcaForce[1], gforce[0].wcaForce[2]);
+		
+	} else if (refcalcforce == ACF_COMPS) {
+		
+		Vnm_tprint( 1, "  Printing per atom forces (kJ/mol/A)\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot   n -- Total force for atom n\n");
+		Vnm_tprint( 1, "    sasa  n -- SASA force for atom n\n");
+		Vnm_tprint( 1, "    sav   n -- SAV force for atom n\n");
+		Vnm_tprint( 1, "    wca   n -- WCA force for atom n\n\n");
+		Vnm_tprint( 1, "    tot all -- Total force for system\n\n");
+		
+		//Vnm_tprint( 1, "    gamma, pressure, bconc are: %f %f %f\n\n",
+		//			gamma,press,bconc);
+		
+		totforce[0] = 0.0;
+		totforce[1] = 0.0;
+		totforce[2] = 0.0;
+		
+		for (ifr=0; ifr<refnforce; ifr++) {
+			Vnm_tprint( 1, "  sasa  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].sasaForce[0], gforce[ifr].sasaForce[1], 
+						gforce[ifr].sasaForce[2]);
+			Vnm_tprint( 1, "  sav  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].savForce[0], gforce[ifr].savForce[1],
+						gforce[ifr].savForce[2]);
+			Vnm_tprint( 1, "  wca  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						gforce[ifr].wcaForce[0], gforce[ifr].wcaForce[1], 
+						gforce[ifr].wcaForce[2]);
+			Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+						(gforce[ifr].wcaForce[0] \
+						 + gforce[ifr].savForce[0] +
+						 gforce[ifr].sasaForce[0]),
+						(gforce[ifr].wcaForce[1] \
+						 + gforce[ifr].savForce[1] +
+						 gforce[ifr].sasaForce[1]),
+						(gforce[ifr].wcaForce[2] \
+						 + gforce[ifr].savForce[2] +
+						 gforce[ifr].sasaForce[2]));
+			for (ivc=0; ivc<3; ivc++) {
+				totforce[ivc] += (gforce[ifr].wcaForce[ivc] \
+								+ gforce[ifr].savForce[ivc] \
+								  + gforce[ifr].sasaForce[ivc]);
+			}
+		}
+		Vnm_tprint( 1, "  tot all %1.12E  %1.12E  %1.12E\n", totforce[0],
+					totforce[1], totforce[2]);
+	}
+	
+	Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&lforce));
+	Vmem_free(VNULL, refnforce, sizeof(AtomForce), (void **)(&gforce));
+
+	return 1;
+}
+#endif
 
 #ifdef HAVE_MC_H
 
@@ -3341,7 +3539,8 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 }
 #endif /* ifdef HAVE_MCX_H */
 
-VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
+VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce, 
+					 AtomForce **atomForce, Valist *alist) {
 
 	int i;
 	
@@ -3390,8 +3589,6 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
     soluteYlen = ymax - ymin;
     soluteZlen = zmax - zmin;
 	
-	//printf("Solute Length (x,y,z): %lf %lf %lf\n",soluteXlen,soluteYlen,soluteZlen);
-	
 	/* Set up the hash table for the cell list */
 	Vnm_print(0, "APOL: Setting up hash table and accessibility object...\n");
 	nhash[0] = soluteXlen/0.5;
@@ -3418,22 +3615,23 @@ VPUBLIC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist) {
 	sav = 0.0;
 	
 	radius = apolparm->srad;
-	
-	/* Solvent accessible surface area */
-	apolparm->sasa = Vacc_totalSASA(acc, radius);
-	
-	/* Inflated van der Waals accessibility */
-	apolparm->sav = Vacc_totalSAV(acc,clist,radius);
-	
-	/* lgEnergy integral code */
-	Vacc_lgEnergy(acc, apolparm, alist, clist, radius);
-	
-	/* wcaForce */
-	Vacc_lgForce(acc, apolparm, alist, clist, radius);
-	
+		
 	/* Calculate Energy and Forces */
-	if(apolparm->calcforce) forceAPOL(acc, apolparm, alist, clist);
-	if(apolparm->calcenergy) energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
+	if(apolparm->calcforce) {
+		forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
+	}
+	
+	if(apolparm->calcenergy){
+		/* Solvent accessible surface area */
+		apolparm->sasa = Vacc_totalSASA(acc, radius);
+		
+		/* Inflated van der Waals accessibility */
+		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
+		
+		/* wcaEnergy integral code */
+		Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
+	}
 	
 	return 1;
 }
@@ -3453,7 +3651,7 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 			break;
 		case ACE_TOTAL:
 			energy = (apolparm->gamma*sasa) + (apolparm->press*sav) 
-						+ (apolparm->bconc*apolparm->lgEnergy);
+						+ (apolparm->bconc*apolparm->wcaEnergy);
 			Vnm_print(1,"Total non-polar energy = %1.12E kJ/mol\n",energy);
 			break;
 		default:
@@ -3464,85 +3662,163 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 	return 1;
 }
 
-VPUBLIC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *clist){
+VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm, 
+					  int *nforce, AtomForce **atomForce, Valist *alist,
+					  Vclist *clist){
 	
-	int i;
+	int i,j,natom;
 	double radius; /* Probe radius */
 	double xF, yF, zF;	/* Individual forces */
-	double totalXF, totalYF, totalZF; /* Total forces on each component */
 	
-	double press, gamma, offset;
-	double dSASA[3], dSAV[3];
+	double press, gamma, offset, bconc;
+	double dSASA[3], dSAV[3], force[3];
+	
+	double *apos;
 	
 	Vatom *atom = VNULL;
-	
-	totalXF = 0.0;
-	totalYF = 0.0;
-	totalZF = 0.0;
 	
 	radius = apolparm->srad;
 	press = apolparm->press;
 	gamma = apolparm->gamma;
 	offset = apolparm->dpos;
-
-#if defined(DEBUG_FORCE)	
-	double ttotalXF, ttotalYF, ttotalZF;
-	ttotalXF = 0.0;
-	ttotalYF = 0.0;
-	ttotalZF = 0.0;
-#endif
+	bconc = apolparm->bconc;
+		
+	natom = Valist_getNumberAtoms(alist);
 	
-	for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        atom = Valist_getAtom(alist, i);
-		Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
-		Vacc_atomdSAV(acc, radius, atom, dSAV);
-		
-		xF = -((gamma*dSASA[0]) + (press*dSAV[0]));
-		yF = -((gamma*dSASA[1]) + (press*dSAV[1]));
-		zF = -((gamma*dSASA[2]) + (press*dSAV[2]));
-		
-		Vnm_print(1,"apolF\t%04i\t%1.12E\t%1.12E\t%1.12E\n",
-				  i,xF,yF,zF);
-		
-		totalXF += xF;
-		totalYF += yF;
-		totalZF += zF;
-		
-#if defined(DEBUG_FORCE)
-		Vacc_totalAtomdSASA(acc,offset,radius,atom,dSASA);
-		double txF = -((gamma*dSASA[0]) + (press*dSAV[0]));
-		double tyF = -((gamma*dSASA[1]) + (press*dSAV[1]));
-		double tzF = -((gamma*dSASA[2]) + (press*dSAV[2]));
-		
-		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
-				  i,txF,tyF,tzF);
-
-		Vacc_totalAtomdSAV(acc,offset,radius,atom,dSAV,clist);
-		double txF = -((gamma*dSASA[0]) + (press*dSAV[0]));
-		double tyF = -((gamma*dSASA[1]) + (press*dSAV[1]));
-		double tzF = -((gamma*dSASA[2]) + (press*dSAV[2]));
-		
-		ttotalXF += txF;
-		ttotalYF += tyF;
-		ttotalZF += tzF;
-		
-		Vnm_print(1,"apolF %04i\t%1.12E\t%1.12E\t%1.12E\n",
-				  i,txF,tyF,tzF);
-#endif
+	/* Check to see if we need to build the surface */
+    if (acc->surf == VNULL) {
+        acc->surf = Vmem_malloc(acc->mem, natom, sizeof(VaccSurf *));
+        for (i=0; i<natom; i++) {
+            atom = Valist_getAtom(acc->alist, i);
+            apos = Vatom_getPosition(atom);
+            /* NOTE:  RIGHT NOW WE DO THIS FOR THE ENTIRE MOLECULE WHICH IS
+				* INCREDIBLY INEFFICIENT, PARTICULARLY DURING FOCUSING!!! */
+            acc->surf[i] = Vacc_atomSurf(acc, atom, acc->refSphere, 
+										  radius);
+        }
     }
 	
-	Vnm_print(1,"\nTotal Forces:\t%1.12E\t%1.12E\t%1.12E\n",
-			  totalXF,totalYF,totalZF);
+	if(apolparm->calcforce == ACF_TOTAL){
+		*nforce = 1;
+		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+											  sizeof(AtomForce));
+		
+		/* Clear out force arrays */
+		for (j=0; j<3; j++) {
+			(*atomForce)[0].sasaForce[j] = 0.0;
+			(*atomForce)[0].savForce[j] = 0.0;
+			(*atomForce)[0].wcaForce[j] = 0.0;
+		}
+		
+		for (i=0; i<natom; i++) {
+			atom = Valist_getAtom(alist, i);
+			
+			for(j=0;j<3;j++){
+				dSASA[j] = 0.0;
+				dSAV[j] = 0.0;
+				force[j] = 0.0;
+			}
+			
+			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
+			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
+			if(bconc > VSMALL) Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			
+			for(j=0;j<3;j++){
+				(*atomForce)[0].sasaForce[j] += dSASA[j];
+				(*atomForce)[0].savForce[j] += dSAV[j];
+				(*atomForce)[0].wcaForce[j] += force[j];
+			}
+		}
+		
+		Vnm_tprint( 1, "  Printing net forces (kJ/mol/A)\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    sasa  -- SASA force\n");
+		Vnm_tprint( 1, "    sav   -- SAV force\n");
+		Vnm_tprint( 1, "    wca   -- WCA force\n\n");
+				
+		Vnm_tprint( 1, "  sasa  %4.3e  %4.3e  %4.3e\n",
+					(*atomForce)[0].sasaForce[0],
+					(*atomForce)[0].sasaForce[1],
+					(*atomForce)[0].sasaForce[2]);
+		Vnm_tprint( 1, "  sav   %4.3e  %4.3e  %4.3e\n",
+					(*atomForce)[0].savForce[0],
+					(*atomForce)[0].savForce[1],
+					(*atomForce)[0].savForce[2]);
+		Vnm_tprint( 1, "  wca   %4.3e  %4.3e  %4.3e\n",
+					(*atomForce)[0].wcaForce[0],
+					(*atomForce)[0].wcaForce[1],
+					(*atomForce)[0].wcaForce[2]);
+		
+	}else if (apolparm->calcforce == ACF_COMPS){
+		*nforce = 1;
+		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+											  sizeof(AtomForce));
+		
+		Vnm_tprint( 1, "  Printing per atom forces (kJ/mol/A)\n");
+		Vnm_tprint( 1, "  Legend:\n");
+		Vnm_tprint( 1, "    tot  n -- Total force for atom n\n");
+		Vnm_tprint( 1, "    sasa n -- SASA force for atom n\n");
+		Vnm_tprint( 1, "    sav  n -- SAV force for atom n\n");
+		Vnm_tprint( 1, "    wca  n -- WCA force for atom n\n\n");
+		
+		Vnm_tprint( 1, "    gamma, pressure, bconc are: %f %f %f\n\n",
+					gamma,press,bconc);
+		
+		for (i=0; i<natom; i++) {
+			atom = Valist_getAtom(alist, i);
+			
+			for(j=0;j<3;j++){
+				dSASA[j] = 0.0;
+				dSAV[j] = 0.0;
+				force[j] = 0.0;
+			}
+			
+			/* Clear out force arrays */
+			for (j=0; j<3; j++) {
+				(*atomForce)[i].sasaForce[j] = 0.0;
+				(*atomForce)[i].savForce[j] = 0.0;
+				(*atomForce)[i].wcaForce[j] = 0.0;
+			}
+			
+			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
+			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
+			if(bconc > VSMALL) Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			
+			xF = -((gamma*dSASA[0]) + (press*dSAV[0]) + (bconc*force[0]));
+			yF = -((gamma*dSASA[1]) + (press*dSAV[1]) + (bconc*force[1]));
+			zF = -((gamma*dSASA[2]) + (press*dSAV[2]) + (bconc*force[2]));
+			
+			for(j=0;j<3;j++){
+				(*atomForce)[i].sasaForce[j] += dSASA[j];
+				(*atomForce)[i].savForce[j] += dSAV[j];
+				(*atomForce)[i].wcaForce[j] += force[j];
+			}
+			
+			Vnm_tprint( 1, "  tot  %i  %4.3e  %4.3e  %4.3e\n",
+						i,
+						xF,
+						yF,
+						zF);
+			Vnm_tprint( 1, "  sasa %i %4.3e  %4.3e  %4.3e\n",
+						i,
+						(*atomForce)[i].sasaForce[0],
+						(*atomForce)[i].sasaForce[1],
+						(*atomForce)[i].sasaForce[2]);
+			Vnm_tprint( 1, "  sav  %i  %4.3e  %4.3e  %4.3e\n",
+						i,
+						(*atomForce)[i].savForce[0],
+						(*atomForce)[i].savForce[1],
+						(*atomForce)[i].savForce[2]);
+			Vnm_tprint( 1, "  wca  %i %4.3e  %4.3e  %4.3e\n",
+						i,
+						(*atomForce)[i].wcaForce[0],
+						(*atomForce)[i].wcaForce[1],
+						(*atomForce)[i].wcaForce[2]);
+			
+		}
+	} else *nforce = 0;
 	
-	/* Store the values for this calculation in the apolparm object */
-	apolparm->totForce[0] = totalXF;
-	apolparm->totForce[1] = totalYF;
-	apolparm->totForce[2] = totalZF;
-	
-#if defined(DEBUG_FORCE)
-	Vnm_print(1,"\nTotal Forces:\t%1.12E\t%1.12E\t%1.12E\n",
-			  ttotalXF,ttotalYF,ttotalZF);
-#endif
+	Vnm_print(1,"\n");
 	
 	return 1;
 }

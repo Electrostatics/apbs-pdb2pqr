@@ -1479,7 +1479,7 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 	return sav;
 }
 
-VPUBLIC double Vacc_lgEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
+VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
 								 double radius,double rho,int iatom){
 	
 	int i;
@@ -1604,7 +1604,7 @@ VPUBLIC double Vacc_lgEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	return energy;
 }
 
-VPUBLIC double Vacc_lgEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
+VPUBLIC double Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 							 Vclist *clist,double radius){
 	
 	int iatom;
@@ -1613,17 +1613,17 @@ VPUBLIC double Vacc_lgEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	double rho = apolparm->bconc;
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
-        energy += Vacc_lgEnergyAtom(acc,alist,clist, radius, rho, iatom);
-		Vnm_print(1,"The lgEnergy is: %1.12E\n",energy/(double)(iatom + 1));
+        energy += Vacc_wcaEnergyAtom(acc,alist,clist, radius, rho, iatom);
+		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy/(double)(iatom + 1));
     }
 
-	apolparm->lgEnergy = energy;
+	apolparm->wcaEnergy = energy;
 	
     return energy; 
 	
 }
 
-VPUBLIC void Vacc_lgForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
+VPUBLIC void Vacc_wcaForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
 							  double radius,double rho,int iatom,double *force){
 	
 	int i,si;
@@ -1746,22 +1746,24 @@ VPUBLIC void Vacc_lgForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	} /* x loop */
 
 	w  = spacs[0]*spacs[1]*spacs[2];
-	for(i=0;i<3;i++){
-		force[i] *= w;
-	}
-	printf("Force: %1.12E %1.12E %1.12E\n",force[0],force[1],force[2]);
+	for(i=0;i<3;i++) force[i] *= w;
+
+	return;
 }
 
-VPUBLIC void Vacc_lgForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
-						  Vclist *clist,double radius) {
-    int iatom;
+VPUBLIC void Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
+						  Vclist *clist,double radius, double *force) {
+    int i, iatom;
 	
 	double rho = apolparm->bconc;
-	double force[3];
+	
+	for(i=0;i<3;i++) force[i] = 0.0;
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
-        Vacc_lgForceAtom(acc,alist,clist,radius,rho,iatom,force);
+        Vacc_wcaForceAtom(acc,alist,clist,radius,rho,iatom,force);
     }
+	
+	return;
 }
 
 
