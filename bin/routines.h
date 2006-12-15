@@ -615,7 +615,7 @@ VEXTERNC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *cli
  * @param  apolparm  APOLparm object
  * @param  alist atom list
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist);
+VEXTERNC int initAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist);
 
 #endif
 
