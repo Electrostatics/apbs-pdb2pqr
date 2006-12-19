@@ -89,7 +89,9 @@ struct sVatom {
     double charge;  /**< Atomic charge   */
     double partID;  /**< Partition value for assigning atoms to particular
                      * processors and/or partitions   */
-    int id;  /**< Atomic ID; this should be a unique non-negative integer
+    double epsilon; /**< Epsilon value for WCA calculations */
+	
+	int id;  /**< Atomic ID; this should be a unique non-negative integer
               * assigned based on the index of the atom in a Valist atom 
               * array */
 	
@@ -187,6 +189,22 @@ typedef struct sVatom Vatom;
      *  @return  Atom partial charge (in e)
      */
     VEXTERNC double  Vatom_getCharge(Vatom *thee);
+	
+	/** @brief   Set atomic epsilon
+	*  @ingroup Vatom
+	*  @author  David Gohara
+	*  @param   thee    Vatom object
+	*  @param   epsilon  Atomic epsilon (in &Aring;)
+	*/
+	VEXTERNC void    Vatom_setEpsilon(Vatom *thee, double epsilon);
+
+	/** @brief   Get atomic epsilon
+	*  @ingroup Vatom
+	*  @author  David Gohara
+	*  @param   thee  Vatom object
+	*  @returns Atomic epsilon (in &Aring;)
+	*/
+	VEXTERNC double  Vatom_getEpsilon(Vatom *thee);
 
     /** @brief   Return the memory used by this structure (and its contents)
      *           in bytes
@@ -207,6 +225,8 @@ typedef struct sVatom Vatom;
 #   define Vatom_getAtomID(thee) ((thee)->id)
 #   define Vatom_setCharge(thee, tCharge) ((thee)->charge = (tCharge))
 #   define Vatom_getCharge(thee) ((thee)->charge)
+#   define Vatom_setEpsilon(thee, tEpsilon) ((thee)->epsilon = (tEpsilon))
+#   define Vatom_getEpsilon(thee) ((thee)->epsilon)
 #   define Vatom_memChk(thee) (sizeof(Vatom))
 #endif /* if !defined(VINLINE_VATOM) */
 

@@ -1115,34 +1115,9 @@ VPUBLIC int NOsh_setupApolCalc(
 		thee->alist[imol] = alist[imol];
 	}
 	
-	if(thee->gotparm){
-		param = Vparam_ctor();
-		switch (thee->parmfmt) {
-			case NPF_FLAT:
-				Vnm_tprint( 1, "Reading parameter data from %s.\n",thee->parmpath);
-				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, thee->parmpath) != 1) {
-					Vnm_tprint(2, "thee:  Error reading parameter file (%s)!\n", thee->parmpath);
-					return 0;
-				}
-					break;
-			case NPF_XML:
-				Vnm_tprint( 1, "Reading parameter data from %s.\n",
-							thee->parmpath);
-				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL,thee->parmpath) != 1) {
-					Vnm_tprint(2, "thee:  Error reading parameter file (%s)!\n", thee->parmpath);
-					return 0;
-				}
-					break;
-			default:
-				Vnm_tprint(2, "thee:  Error! Undefined parameter file type (%d)!\n", thee->parmfmt);
-				return 0;
-		} /* switch parmfmt */
-	}
-	
 	for (iapol=0; iapol<(thee->napol); iapol++) {
 		/* Unload the calculation object containing the APOL information */
 		calc = thee->apol[iapol];
-		calc->apolparm->param = param;
 		
 		/* Setup the calculation */
 		switch (calc->calctype) {

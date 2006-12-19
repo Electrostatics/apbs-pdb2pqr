@@ -1496,10 +1496,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	double *pos;
     double *lower_corner, *upper_corner;
 	
-	char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN];
-	
 	Vatom *atom = VNULL;
-	Vparam_AtomData *atomData = VNULL;
 	
 	energy = 0.0;
 	vol = 1.0;
@@ -1510,24 +1507,13 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	
 	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
-    
-    /* Calculation parameters */
-    Vatom_getAtomName(atom,atomName);
-	Vatom_getResName(atom,resName);
-	
-	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
-	if(atomData == VNULL){
-		Vnm_print(1,"\nwcaEnergy: Couldn't find value for atom: %s in residue: %s\n",
-				  atomName,resName);
-		return 0;
-	}
 	
 	/* Note: This is temporary until we get the parameterization in place*/
-	psig = atomData->radius;
-	epsilon = atomData->epsilon;
+	psig = atom->radius;
+	epsilon = atom->epsilon;
 	
-	sigma = psig+1.7683;
-    epsilon = VSQRT((epsilon*.152));
+	sigma = psig + 1.7683;
+    epsilon = VSQRT((epsilon * 0.152));
 	
 	/* parameters */
     double sigma6 = VPOW(sigma,6);
@@ -1626,13 +1612,7 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
         rc = Vacc_wcaEnergyAtom(acc,apolparm,alist,clist, radius, rho, iatom, &energy);
-		if(rc == 0){
-			Vnm_print(1,"\nwcaEnergy: Error in atom/residue name read from parameter file.\n");
-			Vnm_print(1,"wcaEnergy: The atom/residue names in the corresponding PDB/PQR file(s)\n");
-			Vnm_print(1,"wcaEnergy: Are not listed in the input parameter file for this calculation\n");
-			Vnm_print(1,"wcaEnergy: Aborting calculations\n\n");
-			return 0;
-		}
+		if(rc == 0) return 0;
 		
 		tenergy += energy;
 		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy);
@@ -1660,10 +1640,7 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	double *pos;
     double *lower_corner, *upper_corner;
 	
-	char atomName[VMAX_RECLEN], resName[VMAX_RECLEN];
-	
 	Vatom *atom = VNULL;
-	Vparam_AtomData *atomData = VNULL;
 	
 	vol = 1.0;
 	vol_density = 2.0;
@@ -1673,21 +1650,10 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	
 	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
-    
-    /* Calculation parameters */
-	Vatom_getAtomName(atom,atomName);
-	Vatom_getResName(atom,resName);
-	
-	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
-	if(atomData == VNULL){
-		Vnm_print(1,"\nwcaForce: Couldn't find value for atom: %s in residue: %s\n",
-				  atomName,resName);
-		return 0;
-	}
-		
+
 	/* Note: This is temporary until we get the parameterization in place*/
-	psig = atomData->radius;
-	epsilon = atomData->epsilon;
+	psig = atom->radius;
+	epsilon = atom->epsilon;
 	
 	sigma = psig+1.7683;
     epsilon = VSQRT((epsilon*.152));
@@ -1792,13 +1758,7 @@ VPUBLIC int Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
         rc = Vacc_wcaForceAtom(acc,apolparm,alist,clist,radius,rho,iatom,force);
-		if(rc == 0){
-			Vnm_print(1,"\nwcaForce: Error in atom/residue names read from parameter file.\n");
-			Vnm_print(1,"wcaForce: The atom/residue names in the corresponding PDB/PQR file(s)\n");
-			Vnm_print(1,"wcaForce: Are not listed in the input parameter file for this calculation\n");
-			Vnm_print(1,"wcaForce: Aborting calculations\n\n");
-			return 0;
-		}
+		if(rc == 0)	return 0;
     }
 	
 	return 1;
