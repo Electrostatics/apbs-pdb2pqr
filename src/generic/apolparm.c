@@ -105,6 +105,9 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	thee->settemp = 0;
     thee->setgamma = 0;
 	
+	thee->param = VNULL;
+	thee->setparam = 0;
+	
 	thee->sav = 0.0;
 	thee->sasa = 0.0;
 	thee->wcaEnergy = 0.0;
@@ -164,6 +167,17 @@ VPUBLIC void APOLparm_copy(
 	
 	thee->calcforce = source->calcforce ;
 	thee->setcalcforce = source->setcalcforce ;
+	
+	thee->param = source->param;
+	thee->setparam = source->setparam;
+	
+	thee->sav = source->sav;
+	thee->sasa = source->sasa;
+	thee->wcaEnergy = source->wcaEnergy;
+	
+	for(i=0;i<3;i++) thee->totForce[i] = source->totForce[i];
+	
+	return;
 }
 
 VPUBLIC void APOLparm_dtor(APOLparm **thee) {
@@ -172,6 +186,8 @@ VPUBLIC void APOLparm_dtor(APOLparm **thee) {
         Vmem_free(VNULL, 1, sizeof(APOLparm), (void **)thee);
         (*thee) = VNULL;
     }
+	
+	return;
 }
 
 VPUBLIC void APOLparm_dtor2(APOLparm *thee) { ; }

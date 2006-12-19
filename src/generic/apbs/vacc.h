@@ -589,12 +589,21 @@ VEXTERNC double Vacc_totalSAV(
 							   double radius  /** Probe molecule radius (&Aring;) */
 							   );
 
-VPUBLIC double Vacc_lgEnergy(
+VPUBLIC double Vacc_wcaEnergy(
 							 Vacc *acc,  /** Accessibility object */
 							 APOLparm *apolparm,
 							 Valist *alist, /** Alist for acc object */
 							 Vclist *clist, /** Clist for acc object */
 							 double radius
 							 );
+
+VPUBLIC void Vacc_wcaForce(
+						   Vacc *acc, 
+						   APOLparm *apolparm, 
+						   Valist *alist,
+						   Vclist *clist,
+						   double radius,
+						   double *force
+						   );
 
 #endif    /* ifndef _VACC_H_ */

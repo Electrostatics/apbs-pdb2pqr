@@ -77,6 +77,7 @@
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
 #include "apbs/vstring.h"
+#include "apbs/vparam.h"
 
 /**
 * @ingroup APOLparm
@@ -162,6 +163,9 @@ struct sAPOLparm {
 	
     APOLparm_calcForce calcforce;  /**< Atomic forces calculation */
     int setcalcforce;  /**< Flag, @see calcforce */
+	
+	Vparam *param; /**< Vparam object for integral calculations */
+	int setparam; /**< Flag to see if the param object is set */
 	
 	double sasa; /**< Solvent accessible surface area for this calculation */
 	double sav;   /**< Solvent accessible volume for this calculation */

@@ -559,6 +559,8 @@ atom = %s, residue = %s\n", atomName, resName);
             Vatom_setCharge(nextAtom, charge);
             Vatom_setRadius(nextAtom, radius);
             Vatom_setAtomID(nextAtom, natoms-1);
+			Vatom_setResName(nextAtom, resName);
+            Vatom_setAtomName(nextAtom, atomName);
 
         } /* if ATOM or HETATM */
     } /* while we haven't run out of tokens */
@@ -638,6 +640,8 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
             Vatom_setCharge(nextAtom, charge);
             Vatom_setRadius(nextAtom, radius);
             Vatom_setAtomID(nextAtom, natoms-1);
+			Vatom_setResName(nextAtom, resName);
+            Vatom_setAtomName(nextAtom, atomName);
 
         } /* if ATOM or HETATM */
     } /* while we haven't run out of tokens */

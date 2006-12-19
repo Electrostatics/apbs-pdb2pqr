@@ -2066,7 +2066,8 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 	int iarg, calcid;
 	double ltenergy, gtenergy, scalar;
 	
-	Vnm_tprint( 1, "Warning: The 'energy' print keyword is deprecated. Use elecEnergy.\n");
+	Vnm_tprint( 1, "Warning: The 'energy' print keyword is deprecated.\n" \
+				   "         Use elecEnergy for electrostatics energy calcs.\n\n");
 	
 	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
 		Vnm_tprint( 1, "print energy %d ", nosh->printcalc[iprint][0]+1);
@@ -2128,9 +2129,9 @@ VPUBLIC int printElecEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC
 	double ltenergy, gtenergy, scalar;
 	
 	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
-		Vnm_tprint( 1, "print energy %d ", nosh->printcalc[iprint][0]+1);
+		Vnm_tprint( 1, "\nprint energy %d ", nosh->printcalc[iprint][0]+1);
 	} else {
-		Vnm_tprint( 1, "print energy %d (%s) ", nosh->printcalc[iprint][0]+1, 
+		Vnm_tprint( 1, "\nprint energy %d (%s) ", nosh->printcalc[iprint][0]+1, 
 					nosh->elecname[nosh->printcalc[iprint][0]]);
 	}
 	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
@@ -2188,9 +2189,9 @@ VPUBLIC int printApolEnergy(NOsh *nosh, int iprint) {
 	APOLparm *apolparm = VNULL;
 	
 	if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][0]], "") == 0){
-		Vnm_tprint( 1, "print APOL energy %d ", nosh->printcalc[iprint][0]+1);
+		Vnm_tprint( 1, "\nprint APOL energy %d ", nosh->printcalc[iprint][0]+1);
 	} else {
-		Vnm_tprint( 1, "print APOL energy %d (%s) ", nosh->printcalc[iprint][0]+1, 
+		Vnm_tprint( 1, "\nprint APOL energy %d (%s) ", nosh->printcalc[iprint][0]+1, 
 					nosh->apolname[nosh->printcalc[iprint][0]]);
 	}
 	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
@@ -2245,7 +2246,8 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
 	double totforce[3];
 	AtomForce *lforce, *gforce, *aforce;
 	
-	Vnm_tprint( 1, "Warning: The 'force' print keyword is deprecated. Use elecForce.\n");
+	Vnm_tprint( 1, "Warning: The 'force' print keyword is deprecated.\n" \
+				   "         Use elecForce for electrostatics force calcs.\n\n");
 	
 	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
 		Vnm_tprint( 1, "print force %d ", nosh->printcalc[iprint][0]+1);
@@ -2704,70 +2706,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 	return 1;
 	
 }
-#if 0
-VPUBLIC int printApolForce( NOsh *nosh, int iprint) {
-	
-	int i;
-	int iarg, ifr, ivc, calcid, refnforce, refcalcforce;
-	double temp, scalar;
-	double totforce[3];
-	
-	APOLparm *apolparm = VNULL;
-	
-	if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][0]], "") == 0){
-		Vnm_tprint( 1, "print APOL force %d ", nosh->printcalc[iprint][0]+1);
-	} else {
-		Vnm_tprint( 1, "print APOL force %d (%s) ", nosh->printcalc[iprint][0]+1, 
-					nosh->apolname[nosh->printcalc[iprint][0]]);
-	}
-	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
-		if (nosh->printop[iprint][iarg-1] == 0)
-			Vnm_tprint(1, "+ ");
-		else if (nosh->printop[iprint][iarg-1] == 1)
-			Vnm_tprint(1, "- ");
-		else {
-			Vnm_tprint( 2, "Undefined PRINT operation!\n");
-			return 0;
-		}
-		if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][iarg]], 
-							   "") == 0) {
-			Vnm_tprint( 1, "%d ", nosh->printcalc[iprint][iarg]+1);
-		} else {
-			Vnm_tprint( 1, "%d (%s) ", nosh->printcalc[iprint][iarg]+1, 
-						nosh->apolname[nosh->printcalc[iprint][iarg]]);
-		}
-	}
-	Vnm_tprint(1, "end\n");
-	
-	calcid = nosh->apol2calc[nosh->printcalc[iprint][0]];
-	apolparm = nosh->calc[calcid]->apolparm;
-	
-	if ((apolparm->calcenergy == ACF_TOTAL) || (apolparm->calcenergy == ACF_COMPS)) {
-		for(i=0;i<3;i++) totforce[i] = apolparm->totForce[i];
-	} else {
-		Vnm_tprint( 2, "  Didn't calculate forces in Calculation #%d\n", calcid+1);
-		return 0;
-	}
-	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
-		calcid = nosh->apol2calc[nosh->printcalc[iprint][iarg]];
-		apolparm = nosh->calc[calcid]->apolparm;
-		
-		/* Add or subtract? */
-		if (nosh->printop[iprint][iarg-1] == 0){ scalar = 1.0; }
-		else if (nosh->printop[iprint][iarg-1] == 1){ scalar = -1.0; }
-		else{ scalar = 1.0; }
-		
-		/* Accumulate */
-		for(i=0;i<3;i++) totforce[i] += (scalar*apolparm->totForce[i]);
-	}
-	
-	Vnm_tprint( 1, "  Total APOL forces (x,y,z) = %1.12E %1.12E %1.12E\n", 
-				totforce[0],totforce[1],totforce[2]);
-	
-	return 1;
-	
-}
-#else
+
 VPUBLIC int printApolForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
 						   AtomForce *atomForce[NOSH_MAXCALC], int iprint) {
 	
@@ -2777,9 +2716,9 @@ VPUBLIC int printApolForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
 	AtomForce *lforce, *gforce, *aforce;
 	
 	if (Vstring_strcasecmp(nosh->apolname[nosh->printcalc[iprint][0]], "") == 0){
-		Vnm_tprint( 1, "print APOL force %d ", nosh->printcalc[iprint][0]+1);
+		Vnm_tprint( 1, "\nprint APOL force %d ", nosh->printcalc[iprint][0]+1);
 	} else {
-		Vnm_tprint( 1, "print APOL force %d (%s) ", nosh->printcalc[iprint][0]+1, 
+		Vnm_tprint( 1, "\nprint APOL force %d (%s) ", nosh->printcalc[iprint][0]+1, 
 					nosh->apolname[nosh->printcalc[iprint][0]]);
 	}
 	for (iarg=1; iarg<nosh->printnarg[iprint]; iarg++) {
@@ -2964,7 +2903,6 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 
 	return 1;
 }
-#endif
 
 #ifdef HAVE_MC_H
 
@@ -3549,6 +3487,11 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	Vatom *atom = VNULL;
 	
 	int inhash[3];
+	int doIntegral = 1;
+	
+	double radius;
+	double sasa, sav;
+	
 	double nhash[3];
 	double sradPad, x, y, z;
 	double atomRadius;
@@ -3607,19 +3550,29 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 									VNULL, VNULL);
 	acc = Vacc_ctor(alist, clist, apolparm->sdens);
 	
-	/* Get the SAV and SAS */
-	double sasa, atom_sasa, radius;
-	double sav;
-	
-	sasa = 0.0;
-	sav = 0.0;
-	
 	radius = apolparm->srad;
-		
+	
+	/* Check to see if the user supplied a parameter file.
+	 * If not: set bconc to zero to skip those portions of the calc
+	 */
+	if(nosh->gotparm == 0){
+		Vnm_print(1,"\ninitAPOL: Warning Warning Warning Warning Warning Warning Warning\n" \
+					"initAPOL: You have not supplied an input parameter file\n" \
+				    "initAPOL: Skipping the integral code portion of the calculation\n" \
+				    "initAPOL: Warning Warning Warning Warning Warning Warning Warning\n\n");
+		apolparm->bconc = 0.0;
+		apolparm->wcaEnergy = 0.0;
+		doIntegral = 0;
+	}
+	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
 		forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
 	}
+	
+	/* Get the SAV and SAS */
+	sasa = 0.0;
+	sav = 0.0;
 	
 	if(apolparm->calcenergy){
 		/* Solvent accessible surface area */
@@ -3629,7 +3582,7 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
 		
 		/* wcaEnergy integral code */
-		Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+		if(doIntegral) Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 	}
 	
@@ -3640,8 +3593,8 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 
 	double energy = 0.0;
 	
-	printf("\nTotal solvent accessible surface area: %g A^2\n",sasa);
-	printf("Total solvent accessible volume: %g A^3\n", sav);
+	Vnm_print(1,"\nTotal solvent accessible surface area: %g A^2\n",sasa);
+	Vnm_print(1,"Total solvent accessible volume: %g A^3\n", sav);
 	
 	switch(apolparm->calcenergy){
 		case ACE_NO:
@@ -3761,8 +3714,10 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 		Vnm_tprint( 1, "    sav  n -- SAV force for atom n\n");
 		Vnm_tprint( 1, "    wca  n -- WCA force for atom n\n\n");
 		
-		Vnm_tprint( 1, "    gamma, pressure, bconc are: %f %f %f\n\n",
-					gamma,press,bconc);
+		Vnm_tprint( 1, "    gamma    %f\n" \
+					   "    pressure %f\n" \
+					   "    bconc    %f \n\n",
+							gamma,press,bconc);
 		
 		for (i=0; i<natom; i++) {
 			atom = Valist_getAtom(alist, i);

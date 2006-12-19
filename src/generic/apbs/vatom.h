@@ -77,7 +77,7 @@
 
 /** 
  *  @ingroup Vatom
- *  @author  Nathan Baker
+ *  @author  Nathan Baker, David Gohara, Mike Schneiders
  *  @brief   Contains public data members for Vatom class/module
  */
 struct sVatom {
@@ -90,7 +90,10 @@ struct sVatom {
     int id;  /**< Atomic ID; this should be a unique non-negative integer
               * assigned based on the index of the atom in a Valist atom 
               * array */
-
+	
+	char resName[VMAX_RECLEN]; /**< Residue name from PDB/PQR file */
+    char atomName[VMAX_RECLEN]; /**< Atom name from PDB/PDR file */
+	
 #if defined(WITH_TINKER)
 
     double dipole[3];          /**< Permanent dipole */
@@ -208,6 +211,38 @@ typedef struct sVatom Vatom;
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vatom: Non-Inlineable methods (vatom.c)
 /////////////////////////////////////////////////////////////////////////// */
+
+/** @brief   Set residue name
+*  @ingroup Vatom
+*  @author  Jason Wagoner
+*  @param   thee    Vatom object
+*  @param   resName Residue Name
+*/
+VEXTERNC void    Vatom_setResName(Vatom *thee, char resName[VMAX_RECLEN]);
+
+/** @brief   Set atom name
+*  @ingroup Vatom
+*  @author  Jason Wagoner
+*  @param   thee    Vatom object
+*  @param   resName Atom Name
+*/
+VEXTERNC void    Vatom_setAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);
+
+/** @brief   Retrieve residue name
+*  @ingroup Vatom
+*  @author  Jason Wagoner
+*  @param   thee    Vatom object
+*  @param   resName Residue Name
+*/
+VEXTERNC void    Vatom_getResName(Vatom *thee, char resName[VMAX_RECLEN]);
+
+/** @brief   Retrieve residue name
+*  @ingroup Vatom
+*  @author  Jason Wagoner
+*  @param   thee    Vatom object
+*  @param   resName Atom Name
+*/
+VEXTERNC void   Vatom_getAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);
 
 /** @brief   Constructor for the Vatom class 
  *  @author  Nathan Baker

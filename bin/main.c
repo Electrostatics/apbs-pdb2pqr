@@ -340,11 +340,11 @@ int main(
 
 	/* *************** SETUP CALCULATIONS *************** */
 	if (NOsh_setupElecCalc(nosh, alist) != 1) {
-		Vnm_tprint(2, "Error setting up calculations\n");
+		Vnm_tprint(2, "Error setting up ELEC calculations\n");
 		VJMPERR1(0);
 	}
 	if (NOsh_setupApolCalc(nosh, alist) != 1) {
-		Vnm_tprint(2, "Error setting up calculations\n");
+		Vnm_tprint(2, "Error setting up APOL calculations\n");
 		VJMPERR1(0);
 	}
 
@@ -564,11 +564,7 @@ int main(
 		} else if (nosh->printwhat[i] == NPT_APOLENERGY) {
 			printApolEnergy(nosh, i);
 		} else if (nosh->printwhat[i] == NPT_APOLFORCE) {
-#if 0
-			printApolForce(nosh, i);
-#else
 			printApolForce(com, nosh, nforce, atomForce, i);
-#endif
 		} else {
 			Vnm_tprint( 2, "Undefined PRINT keyword!\n");
 			break;
