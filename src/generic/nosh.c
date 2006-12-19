@@ -1106,37 +1106,58 @@ VPUBLIC int NOsh_setupApolCalc(
 							   Valist *alist[NOSH_MAXMOL]
 							   ) {
 	int iapol, imol, i;
-	NOsh_calc *apol = VNULL;
-	MGparm *mgparm = VNULL;
+	NOsh_calc *calc = VNULL;
 	Valist *mymol = VNULL;
+	Vparam *param = VNULL;
 	
 	VASSERT(thee != VNULL);
 	for (imol=0; imol<thee->nmol; imol++) {
 		thee->alist[imol] = alist[imol];
 	}
 	
+	if(thee->gotparm){
+		param = Vparam_ctor();
+		switch (thee->parmfmt) {
+			case NPF_FLAT:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",thee->parmpath);
+				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, thee->parmpath) != 1) {
+					Vnm_tprint(2, "thee:  Error reading parameter file (%s)!\n", thee->parmpath);
+					return 0;
+				}
+					break;
+			case NPF_XML:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",
+							thee->parmpath);
+				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL,thee->parmpath) != 1) {
+					Vnm_tprint(2, "thee:  Error reading parameter file (%s)!\n", thee->parmpath);
+					return 0;
+				}
+					break;
+			default:
+				Vnm_tprint(2, "thee:  Error! Undefined parameter file type (%d)!\n", thee->parmfmt);
+				return 0;
+		} /* switch parmfmt */
+	}
 	
 	for (iapol=0; iapol<(thee->napol); iapol++) {
 		/* Unload the calculation object containing the APOL information */
-		apol = thee->apol[iapol];
+		calc = thee->apol[iapol];
+		calc->apolparm->param = param;
 		
 		/* Setup the calculation */
-		switch (apol->calctype) {
+		switch (calc->calctype) {
 			case NCT_APOL:
-				NOsh_setupCalcAPOL(thee, apol);
+				NOsh_setupCalcAPOL(thee, calc);
 				break;
 			default:
-				Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n",
-						  apol->calctype);
+				Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n", calc->calctype);
 				return 0;
 		}
 		/* At this point, the most recently-created NOsh_calc object should be the
 			one we use for results for this APOL statement.  Assign it. */
 		/* Associate APOL statement with the calculation */
 		thee->apol2calc[iapol] = thee->ncalc-1;
-		Vnm_print(0, "NOsh_setupCalc:  Mapping APOL statement %d (%d) to \
-calculation %d (%d)\n", iapol, iapol+1, thee->apol2calc[iapol], 
-				  thee->apol2calc[iapol]+1);
+		Vnm_print(0, "NOsh_setupCalc:  Mapping APOL statement %d (%d) to calculation %d (%d)\n", iapol, iapol+1, thee->apol2calc[iapol], thee->apol2calc[iapol]+1);
 	}
 	
 	return 1;
@@ -2134,15 +2155,12 @@ VPRIVATE int NOsh_setupCalcAPOL(
 								NOsh_calc *apol
 								) {
 	
-	APOLparm *apolparm = VNULL;
 	NOsh_calc *calc = VNULL;
 	
 	int i;
 	
 	VASSERT(thee != VNULL);
 	VASSERT(apol != VNULL);
-	apolparm = apol->apolparm;
-	VASSERT(apolparm != VNULL);
 	
 	/* Check to see if he have any room left for this type of
 		* calculation, if so: set the calculation type, update the number
@@ -2158,7 +2176,7 @@ VPRIVATE int NOsh_setupCalcAPOL(
 	calc = thee->calc[thee->ncalc];
 	(thee->ncalc)++;
 	
-	/* Copy over contents of ELEC */
+	/* Copy over contents of APOL */
 	NOsh_calc_copy(calc, apol);	
 	
 	return 1;

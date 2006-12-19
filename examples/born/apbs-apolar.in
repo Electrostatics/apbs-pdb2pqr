@@ -51,7 +51,7 @@ APOLAR name solvated
 	calcforce comps
 END
 
-APOLAR name asdf2
+APOLAR name reference
 	dime 65 65 65
 	glen 20 20 20
 	mol 1
@@ -93,8 +93,8 @@ end
 
 # COMBINE TO FORM SOLVATION ENERGY
 print energy solvated - reference end
-#print apolForce solvated - asdf2 end
-#print apolEnergy solvated + asdf2 end
+print apolForce solvated - reference end
+print apolEnergy solvated - reference end
 
 # SO LONG
 quit

@@ -1479,8 +1479,8 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 	return sav;
 }
 
-VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
-								 double radius,double rho,int iatom){
+VPRIVATE double Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
+								 Vclist *clist, double radius, double rho, int iatom){
 	
 	int i;
 	int npts[3];
@@ -1498,6 +1498,7 @@ VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN];
 	
 	Vatom *atom = VNULL;
+	Vparam_AtomData *atomData = VNULL;
 	
 	energy = 0.0;
 	vol = 1.0;
@@ -1510,11 +1511,20 @@ VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	pos = Vatom_getPosition(atom);
     
     /* Calculation parameters */
-    //Vacc_prm(atom->resName, atom->atomName, &psig, &epsilon);
+    Vatom_getAtomName(atom,atomName);
+	Vatom_getResName(atom,resName);
+	
+	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
+	if(atomData == VNULL){
+		Vnm_print(1,"wcaEnergy: Couldn't find value for atom: %s in residue: %s\n",
+				  atomName,resName);
+		Vnm_print(1,"wcaEnergy: Skipping calculation!!!!\n");
+		return 0.0;
+	}
 	
 	/* Note: This is temporary until we get the parameterization in place*/
-	psig = 1.4090;
-	epsilon = 0.0150;
+	psig = atomData->radius;
+	epsilon = atomData->epsilon;
 	
 	sigma = psig+1.7683;
     epsilon = VSQRT((epsilon*.152));
@@ -1523,9 +1533,6 @@ VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
     double sigma6 = VPOW(sigma,6);
     double sigma12 = VPOW(sigma,12);
     double sigmar = sigma*VPOW(2, (1.0/6.0));
-	
-	//for(i=0;i<3;i++) lower_corner[i] -= pad;
-	//for(i=0;i<3;i++) upper_corner[i] += pad;
 	
 	int xmin = pos[0] - pad;
 	int xmax = pos[0] + pad;
@@ -1605,7 +1612,7 @@ VPUBLIC double Vacc_wcaEnergyAtom(Vacc *thee,Valist *alist,Vclist *clist,
 }
 
 VPUBLIC double Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
-							 Vclist *clist,double radius){
+							 Vclist *clist, double radius){
 	
 	int iatom;
     double energy = 0.0;
@@ -1613,7 +1620,7 @@ VPUBLIC double Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	double rho = apolparm->bconc;
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
-        energy += Vacc_wcaEnergyAtom(acc,alist,clist, radius, rho, iatom);
+        energy += Vacc_wcaEnergyAtom(acc,apolparm,alist,clist, radius, rho, iatom);
 		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy/(double)(iatom + 1));
     }
 
@@ -1623,9 +1630,9 @@ VPUBLIC double Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
 }
 
-VPUBLIC void Vacc_wcaForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
-							  double radius,double rho,int iatom,double *force){
-	
+VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
+							  Vclist *clist, double radius, double rho, int iatom,
+								double *force){
 	int i,si;
 	int npts[3];
 	int pad = 14;
@@ -1639,9 +1646,10 @@ VPUBLIC void Vacc_wcaForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	double *pos;
     double *lower_corner, *upper_corner;
 	
-	char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN];
+	char atomName[VMAX_RECLEN], resName[VMAX_RECLEN];
 	
 	Vatom *atom = VNULL;
+	Vparam_AtomData *atomData = VNULL;
 	
 	vol = 1.0;
 	vol_density = 2.0;
@@ -1653,11 +1661,20 @@ VPUBLIC void Vacc_wcaForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	pos = Vatom_getPosition(atom);
     
     /* Calculation parameters */
-    //Vacc_prm(atom->resName, atom->atomName, &psig, &epsilon);
+	Vatom_getAtomName(atom,atomName);
+	Vatom_getResName(atom,resName);
 	
+	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
+	if(atomData == VNULL){
+		Vnm_print(1,"wcaForce: Couldn't find value for atom: %s in residue: %s\n",
+				  atomName,resName);
+		Vnm_print(1,"wcaForce: Skipping calculation!!!!\n");
+		return 0;
+	}
+		
 	/* Note: This is temporary until we get the parameterization in place*/
-	psig = 1.4090;
-	epsilon = 0.0150;
+	psig = atomData->radius;
+	epsilon = atomData->epsilon;
 	
 	sigma = psig+1.7683;
     epsilon = VSQRT((epsilon*.152));
@@ -1748,19 +1765,26 @@ VPUBLIC void Vacc_wcaForceAtom(Vacc *thee,Valist *alist,Vclist *clist,
 	w  = spacs[0]*spacs[1]*spacs[2];
 	for(i=0;i<3;i++) force[i] *= w;
 
-	return;
+	return 1;
 }
 
 VPUBLIC void Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 						  Vclist *clist,double radius, double *force) {
     int i, iatom;
+	int rc = 0;
 	
 	double rho = apolparm->bconc;
 	
 	for(i=0;i<3;i++) force[i] = 0.0;
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
-        Vacc_wcaForceAtom(acc,alist,clist,radius,rho,iatom,force);
+        rc = Vacc_wcaForceAtom(acc,apolparm,alist,clist,radius,rho,iatom,force);
+		if(!rc){
+			Vnm_print(1,"wcaForce: Error in atom/residue names read from parameter file.\n");
+			Vnm_print(1,"wcaForce: Couldn't find the specified atom/residue combination.\n");
+			Vnm_print(1,"wcaForce: Aborting wcaForce calculation.\n");
+			return;
+		}
     }
 	
 	return;
