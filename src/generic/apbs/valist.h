@@ -226,6 +226,7 @@ VEXTERNC void Valist_dtor2(
  */
 VEXTERNC int Valist_readPQR(
         Valist *thee, /**< Atom list object */
+		Vparam *param, /**< A pre-initialized parameter object */
         Vio *sock /**< Socket reading for reading PQR file */
         );
 

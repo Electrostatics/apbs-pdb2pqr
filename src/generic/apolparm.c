@@ -105,9 +105,6 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	thee->settemp = 0;
     thee->setgamma = 0;
 	
-	thee->param = VNULL;
-	thee->setparam = 0;
-	
 	thee->sav = 0.0;
 	thee->sasa = 0.0;
 	thee->wcaEnergy = 0.0;
@@ -167,9 +164,6 @@ VPUBLIC void APOLparm_copy(
 	
 	thee->calcforce = source->calcforce ;
 	thee->setcalcforce = source->setcalcforce ;
-	
-	thee->param = source->param;
-	thee->setparam = source->setparam;
 	
 	thee->sav = source->sav;
 	thee->sasa = source->sasa;

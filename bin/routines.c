@@ -89,6 +89,8 @@ VPUBLIC void startVio() { Vio_start(); }
 VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 	
 	int i, j, rc;
+	int use_params = 0;
+	
 	Vio *sock = VNULL;
 	Vatom *atom = VNULL;
 	Vparam *param = VNULL;
@@ -102,14 +104,14 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 	
 	if (nosh->gotparm) {
 		param = Vparam_ctor();
+		use_params = 1;
 		switch (nosh->parmfmt) {
 			case NPF_FLAT:
 				Vnm_tprint( 1, "Reading parameter data from %s.\n",
 							nosh->parmpath);
 				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
 										nosh->parmpath) != 1) {
-					Vnm_tprint(2, "NOsh:  Error reading parameter\
-file (%s)!\n", nosh->parmpath);
+					Vnm_tprint(2, "NOsh:  Error reading parameter file (%s)!\n", nosh->parmpath);
 					return 0;
 				}
 					break;
@@ -118,67 +120,79 @@ file (%s)!\n", nosh->parmpath);
 							nosh->parmpath);
 				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
 									   nosh->parmpath) != 1) {
-					Vnm_tprint(2, "NOsh:  Error reading parameter\
-file (%s)!\n", nosh->parmpath);
+					Vnm_tprint(2, "NOsh:  Error reading parameter file (%s)!\n", nosh->parmpath);
 					return 0;
 				}
 					break;
 			default:
-				Vnm_tprint(2, "NOsh:  Error! Undefined parameter file \
-type (%d)!\n", nosh->parmfmt);
+				Vnm_tprint(2, "NOsh:  Error! Undefined parameter file type (%d)!\n", nosh->parmfmt);
 				return 0;
 		} /* switch parmfmt */
+	}
+	
+	/* Print out a warning to the user letting them know that we are overriding PQR
+		values for charge, radius and epsilon */
+	if(use_params){
+		Vnm_print(1,"\nloadMolecules: Warning Warning Warning Warning Warning Warning\n");
+		Vnm_print(1,"loadMolecules: You have specified an input paramter file to read in.\n");
+		Vnm_print(1,"loadMolecules: Values for charge, radius and epsilon will be taken from\n");
+		Vnm_print(1,"loadMolecules: the parameter file. PQR derived values will be ignored.\n");
+		Vnm_print(1,"loadMolecules: Warning Warning Warning Warning Warning Warning\n\n");
 	}
 
 	for (i=0; i<nosh->nmol; i++) {
 		alist[i] = Valist_ctor();
 		switch (nosh->molfmt[i]) {
 			case NMF_PQR:
-				Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
+					Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
 							nosh->molpath[i]);
-				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
-				if (sock == VNULL) {
-					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+					sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+					if (sock == VNULL) {
+						Vnm_print(2, "Problem opening virtual socket %s!\n", 
 							  nosh->molpath[i]);
-					return 0;
-				}
+						return 0;
+					}
 					if (Vio_accept(sock, 0) < 0) {
 						Vnm_print(2, "Problem accepting virtual socket %s!\n",
 								  nosh->molpath[i]);
 						return 0;
 					}
-					rc = Valist_readPQR(alist[i], sock);
-				Vio_acceptFree(sock);
-				Vio_dtor(&sock);
-				break;
-			case NMF_PDB:
-				/* Load parameters */
-				if (!nosh->gotparm) {
-					Vnm_tprint(2, "NOsh:  Error!  Can't read PDB without \
-specifying PARM file!\n");
-					return 0;
-				}
-				Vnm_tprint( 1, "Reading PDB-format atom data from %s.\n",
-							nosh->molpath[i]);
-				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
-				if (sock == VNULL) {
-					Vnm_print(2, "Problem opening virtual socket %s!\n", 
-							  nosh->molpath[i]);
-					return 0;
-				}
-				if (Vio_accept(sock, 0) < 0) {
-					Vnm_print(2, "Problem accepting virtual socket %s!\n",
-							  nosh->molpath[i]);
-					return 0;
-				}
-				rc = Valist_readPDB(alist[i], param, sock);
-				/* If we are looking for an atom/residue that does not exist
-				 * then abort and return 0 */
-				if(rc == 0) return 0;
+					if(use_params){
+						rc = Valist_readPQR(alist[i], param, sock);
+					}else{
+						rc = Valist_readPQR(alist[i], VNULL, sock);
+					}
+					if(rc == 0) return 0;
 					
-				Vio_acceptFree(sock);
-				Vio_dtor(&sock);
-				break;
+					Vio_acceptFree(sock);
+					Vio_dtor(&sock);
+					break;
+			case NMF_PDB:
+					/* Load parameters */
+					if (!nosh->gotparm) {
+						Vnm_tprint(2, "NOsh:  Error!  Can't read PDB without specifying PARM file!\n");
+						return 0;
+					}
+					Vnm_tprint( 1, "Reading PDB-format atom data from %s.\n",
+							nosh->molpath[i]);
+					sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
+					if (sock == VNULL) {
+						Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->molpath[i]);
+						return 0;
+					}
+					if (Vio_accept(sock, 0) < 0) {
+						Vnm_print(2, "Problem accepting virtual socket %s!\n", nosh->molpath[i]);
+						return 0;
+					}
+					rc = Valist_readPDB(alist[i], param, sock);
+					/* If we are looking for an atom/residue that does not exist
+					 * then abort and return 0 */
+					if(rc == 0) return 0;
+					
+					Vio_acceptFree(sock);
+					Vio_dtor(&sock);
+					break;
 			case NMF_XML:
 				Vnm_tprint( 1, "Reading XML-format atom data from %s.\n",
 							nosh->molpath[i]);

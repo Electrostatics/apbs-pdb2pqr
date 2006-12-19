@@ -503,10 +503,13 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
     Vatom *atoms = VNULL;
     Vatom *nextAtom = VNULL;
     Vparam_AtomData *atomData = VNULL;
+	
     char tok[VMAX_BUFSIZE];
     char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
-    int nlist, natoms, serial, resSeq;
-    double x, y, z, charge, radius;
+    
+	int nlist, natoms, serial, resSeq;
+    
+	double x, y, z, charge, radius, epsilon;
     double pos[3];
  
     VASSERT(thee != VNULL);
@@ -544,6 +547,7 @@ atom = %s, residue = %s\n", atomName, resName);
             }
             charge = atomData->charge;
             radius = atomData->radius;
+			epsilon = atomData->epsilon;
 
             /* Get pointer to next available atom position */
             nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
@@ -557,6 +561,7 @@ atom = %s, residue = %s\n", atomName, resName);
             Vatom_setPosition(nextAtom, pos);
             Vatom_setCharge(nextAtom, charge);
             Vatom_setRadius(nextAtom, radius);
+			Vatom_setEpsilon(nextAtom, epsilon);
             Vatom_setAtomID(nextAtom, natoms-1);
 			Vatom_setResName(nextAtom, resName);
             Vatom_setAtomName(nextAtom, atomName);
@@ -578,7 +583,7 @@ atom = %s, residue = %s\n", atomName, resName);
 
 }
 
-VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
+VPUBLIC int Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
 
     /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
      * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
@@ -586,10 +591,15 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
 
     Vatom *atoms = VNULL;
     Vatom *nextAtom = VNULL;
+	Vparam_AtomData *atomData = VNULL;
+	
     char tok[VMAX_BUFSIZE];
     char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
-    int nlist, natoms, serial, resSeq;
-    double x, y, z, charge, radius;
+    
+	int use_params = 0;
+	int nlist, natoms, serial, resSeq;
+	
+    double x, y, z, charge, radius, epsilon;
     double pos[3];
  
     VASSERT(thee != VNULL);
@@ -601,7 +611,10 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
     /* Allocate some initial space for the atoms */
     nlist = 200;
     atoms = Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
-
+	
+	/* Check if we are using a parameter file or not */
+	if(params != VNULL) use_params = 1;
+	
     natoms = 0;
     /* Read until we run out of lines */
     while (Vio_scanf(sock, "%s", tok) == 1) {
@@ -613,8 +626,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
             if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
                         resName, &resSeq, &x, &y, &z)) {
-                Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
-                          serial);
+                Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n",serial);
                 return 0;
             }
 
@@ -625,7 +637,19 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
                 return 0;
             }
 
-
+			if(use_params){
+				/* Try to find the parameters. */
+				atomData = Vparam_getAtomData(params, resName, atomName);
+				if (atomData == VNULL) {
+					Vnm_print(2, "Valist_readPDB:  Couldn't find parameters for \
+atom = %s, residue = %s\n", atomName, resName);
+					return 0;
+				}
+				charge = atomData->charge;
+				radius = atomData->radius;
+				epsilon = atomData->epsilon;
+			}
+			
             /* Get pointer to next available atom position */
             nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
             if (nextAtom == VNULL) {
@@ -638,6 +662,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vio *sock) {
             Vatom_setPosition(nextAtom, pos);
             Vatom_setCharge(nextAtom, charge);
             Vatom_setRadius(nextAtom, radius);
+			Vatom_setEpsilon(nextAtom, epsilon);
             Vatom_setAtomID(nextAtom, natoms-1);
 			Vatom_setResName(nextAtom, resName);
             Vatom_setAtomName(nextAtom, atomName);
