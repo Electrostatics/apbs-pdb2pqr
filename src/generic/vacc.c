@@ -1479,8 +1479,9 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 	return sav;
 }
 
-VPRIVATE double Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
-								 Vclist *clist, double radius, double rho, int iatom){
+VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
+								 Vclist *clist, double radius, double rho, int iatom,
+								   double *value){
 	
 	int i;
 	int npts[3];
@@ -1516,10 +1517,9 @@ VPRIVATE double Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist
 	
 	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
 	if(atomData == VNULL){
-		Vnm_print(1,"wcaEnergy: Couldn't find value for atom: %s in residue: %s\n",
+		Vnm_print(1,"\nwcaEnergy: Couldn't find value for atom: %s in residue: %s\n",
 				  atomName,resName);
-		Vnm_print(1,"wcaEnergy: Skipping calculation!!!!\n");
-		return 0.0;
+		return 0;
 	}
 	
 	/* Note: This is temporary until we get the parameterization in place*/
@@ -1607,26 +1607,40 @@ VPRIVATE double Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist
 
 	w  = spacs[0]*spacs[1]*spacs[2];
 	energy *= w;
+	
+	*value = energy;
 
-	return energy;
+	return 1;
 }
 
-VPUBLIC double Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
+VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 							 Vclist *clist, double radius){
 	
 	int iatom;
+	int rc = 0;
+	
     double energy = 0.0;
+	double tenergy = 0.0;
 	
 	double rho = apolparm->bconc;
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
-        energy += Vacc_wcaEnergyAtom(acc,apolparm,alist,clist, radius, rho, iatom);
-		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy/(double)(iatom + 1));
+        rc = Vacc_wcaEnergyAtom(acc,apolparm,alist,clist, radius, rho, iatom, &energy);
+		if(rc == 0){
+			Vnm_print(1,"\nwcaEnergy: Error in atom/residue name read from parameter file.\n");
+			Vnm_print(1,"wcaEnergy: The atom/residue names in the corresponding PDB/PQR file(s)\n");
+			Vnm_print(1,"wcaEnergy: Are not listed in the input parameter file for this calculation\n");
+			Vnm_print(1,"wcaEnergy: Aborting calculations\n\n");
+			return 0;
+		}
+		
+		tenergy += energy;
+		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy);
     }
 
-	apolparm->wcaEnergy = energy;
+	apolparm->wcaEnergy = tenergy;
 	
-    return energy; 
+    return 1; 
 	
 }
 
@@ -1666,9 +1680,8 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	
 	atomData = Vparam_getAtomData(apolparm->param,resName,atomName);
 	if(atomData == VNULL){
-		Vnm_print(1,"wcaForce: Couldn't find value for atom: %s in residue: %s\n",
+		Vnm_print(1,"\nwcaForce: Couldn't find value for atom: %s in residue: %s\n",
 				  atomName,resName);
-		Vnm_print(1,"wcaForce: Skipping calculation!!!!\n");
 		return 0;
 	}
 		
@@ -1768,7 +1781,7 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	return 1;
 }
 
-VPUBLIC void Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
+VPUBLIC int Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 						  Vclist *clist,double radius, double *force) {
     int i, iatom;
 	int rc = 0;
@@ -1779,15 +1792,16 @@ VPUBLIC void Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
         rc = Vacc_wcaForceAtom(acc,apolparm,alist,clist,radius,rho,iatom,force);
-		if(!rc){
-			Vnm_print(1,"wcaForce: Error in atom/residue names read from parameter file.\n");
-			Vnm_print(1,"wcaForce: Couldn't find the specified atom/residue combination.\n");
-			Vnm_print(1,"wcaForce: Aborting wcaForce calculation.\n");
-			return;
+		if(rc == 0){
+			Vnm_print(1,"\nwcaForce: Error in atom/residue names read from parameter file.\n");
+			Vnm_print(1,"wcaForce: The atom/residue names in the corresponding PDB/PQR file(s)\n");
+			Vnm_print(1,"wcaForce: Are not listed in the input parameter file for this calculation\n");
+			Vnm_print(1,"wcaForce: Aborting calculations\n\n");
+			return 0;
 		}
     }
 	
-	return;
+	return 1;
 }
 
 

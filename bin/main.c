@@ -535,8 +535,12 @@ int main(
 				}
 
 				apolparm = nosh->calc[i]->apolparm;
-				initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
+				int rc = initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
+				if(rc == 0) {
+					Vnm_tprint(2, "Error solving APOL!\n");
+					VJMPERR1(0);
+				}
 				break;
 			default:
 				Vnm_tprint(2, "  Unknown calculation type (%d)!\n", 

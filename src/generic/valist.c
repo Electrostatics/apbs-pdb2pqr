@@ -500,7 +500,6 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
     /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
      * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
 
-
     Vatom *atoms = VNULL;
     Vatom *nextAtom = VNULL;
     Vparam_AtomData *atomData = VNULL;

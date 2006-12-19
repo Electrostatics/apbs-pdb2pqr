@@ -166,12 +166,16 @@ specifying PARM file!\n");
 							  nosh->molpath[i]);
 					return 0;
 				}
-					if (Vio_accept(sock, 0) < 0) {
-						Vnm_print(2, "Problem accepting virtual socket %s!\n",
-								  nosh->molpath[i]);
-						return 0;
-					}
-					rc = Valist_readPDB(alist[i], param, sock);
+				if (Vio_accept(sock, 0) < 0) {
+					Vnm_print(2, "Problem accepting virtual socket %s!\n",
+							  nosh->molpath[i]);
+					return 0;
+				}
+				rc = Valist_readPDB(alist[i], param, sock);
+				/* If we are looking for an atom/residue that does not exist
+				 * then abort and return 0 */
+				if(rc == 0) return 0;
+					
 				Vio_acceptFree(sock);
 				Vio_dtor(&sock);
 				break;
@@ -3488,6 +3492,7 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	
 	int inhash[3];
 	int doIntegral = 1;
+	int rc = 0;
 	
 	double radius;
 	double sasa, sav;
@@ -3567,7 +3572,8 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
-		forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
+		rc = forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
+		if(rc == 0) return 0;
 	}
 	
 	/* Get the SAV and SAS */
@@ -3582,7 +3588,9 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
 		
 		/* wcaEnergy integral code */
-		if(doIntegral) Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+		if(doIntegral) rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+		if(rc == 0) return 0;
+		
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 	}
 	
@@ -3620,6 +3628,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 					  Vclist *clist){
 	
 	int i,j,natom;
+	int rc = 0;
+	
 	double radius; /* Probe radius */
 	double xF, yF, zF;	/* Individual forces */
 	
@@ -3674,7 +3684,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 			
 			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
 			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(bconc > VSMALL) Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			if(bconc > VSMALL) rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			if(rc == 0) return 0;
 			
 			for(j=0;j<3;j++){
 				(*atomForce)[0].sasaForce[j] += dSASA[j];
@@ -3737,7 +3748,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 			
 			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
 			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(bconc > VSMALL) Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			if(bconc > VSMALL) rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			if(rc == 0) return 0;
 			
 			xF = -((gamma*dSASA[0]) + (press*dSAV[0]) + (bconc*force[0]));
 			yF = -((gamma*dSASA[1]) + (press*dSAV[1]) + (bconc*force[1]));
