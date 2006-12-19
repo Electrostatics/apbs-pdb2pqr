@@ -207,7 +207,13 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 								  nosh->molpath[i]);
 						return 0;
 					}
-					rc = Valist_readXML(alist[i], sock);
+					if(use_params){
+						rc = Valist_readXML(alist[i], param, sock);
+					}else{
+						rc = Valist_readXML(alist[i], VNULL, sock);
+					}
+					if(rc == 0) return 0;
+					
 				Vio_acceptFree(sock);
 				Vio_dtor(&sock);
 				break;
@@ -2890,13 +2896,13 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 			Vnm_tprint( 1, "  sasa  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 						gforce[ifr].sasaForce[0], gforce[ifr].sasaForce[1], 
 						gforce[ifr].sasaForce[2]);
-			Vnm_tprint( 1, "  sav  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+			Vnm_tprint( 1, "  sav   %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 						gforce[ifr].savForce[0], gforce[ifr].savForce[1],
 						gforce[ifr].savForce[2]);
-			Vnm_tprint( 1, "  wca  %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+			Vnm_tprint( 1, "  wca   %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 						gforce[ifr].wcaForce[0], gforce[ifr].wcaForce[1], 
 						gforce[ifr].wcaForce[2]);
-			Vnm_tprint( 1, "  tot %d  %1.12E  %1.12E  %1.12E\n", ifr, 
+			Vnm_tprint( 1, "  tot   %d  %1.12E  %1.12E  %1.12E\n", ifr, 
 						(gforce[ifr].wcaForce[0] \
 						 + gforce[ifr].savForce[0] +
 						 gforce[ifr].sasaForce[0]),
@@ -2912,7 +2918,7 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 								  + gforce[ifr].sasaForce[ivc]);
 			}
 		}
-		Vnm_tprint( 1, "  tot all %1.12E  %1.12E  %1.12E\n", totforce[0],
+		Vnm_tprint( 1, "  tot all  %1.12E  %1.12E  %1.12E\n", totforce[0],
 					totforce[1], totforce[2]);
 	}
 	
@@ -3505,7 +3511,6 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	Vatom *atom = VNULL;
 	
 	int inhash[3];
-	int doIntegral = 1;
 	int rc = 0;
 	
 	double radius;
@@ -3571,19 +3576,6 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	
 	radius = apolparm->srad;
 	
-	/* Check to see if the user supplied a parameter file.
-	 * If not: set bconc to zero to skip those portions of the calc
-	 */
-	if(nosh->gotparm == 0){
-		Vnm_print(1,"\ninitAPOL: Warning Warning Warning Warning Warning Warning Warning\n" \
-					"initAPOL: You have not supplied an input parameter file\n" \
-				    "initAPOL: Skipping the integral code portion of the calculation\n" \
-				    "initAPOL: Warning Warning Warning Warning Warning Warning Warning\n\n");
-		apolparm->bconc = 0.0;
-		apolparm->wcaEnergy = 0.0;
-		doIntegral = 0;
-	}
-	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
 		rc = forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
@@ -3602,7 +3594,7 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
 		
 		/* wcaEnergy integral code */
-		if(doIntegral) rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+		rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
 		if(rc == 0) return 0;
 		
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
@@ -3714,15 +3706,15 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 		Vnm_tprint( 1, "    sav   -- SAV force\n");
 		Vnm_tprint( 1, "    wca   -- WCA force\n\n");
 				
-		Vnm_tprint( 1, "  sasa  %4.3e  %4.3e  %4.3e\n",
+		Vnm_tprint( 1, "  sasa  %4.3e %4.3e %4.3e\n",
 					(*atomForce)[0].sasaForce[0],
 					(*atomForce)[0].sasaForce[1],
 					(*atomForce)[0].sasaForce[2]);
-		Vnm_tprint( 1, "  sav   %4.3e  %4.3e  %4.3e\n",
+		Vnm_tprint( 1, "  sav   %4.3e %4.3e %4.3e\n",
 					(*atomForce)[0].savForce[0],
 					(*atomForce)[0].savForce[1],
 					(*atomForce)[0].savForce[2]);
-		Vnm_tprint( 1, "  wca   %4.3e  %4.3e  %4.3e\n",
+		Vnm_tprint( 1, "  wca   %4.3e %4.3e %4.3e\n",
 					(*atomForce)[0].wcaForce[0],
 					(*atomForce)[0].wcaForce[1],
 					(*atomForce)[0].wcaForce[2]);
@@ -3775,22 +3767,22 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				(*atomForce)[i].wcaForce[j] += force[j];
 			}
 			
-			Vnm_tprint( 1, "  tot  %i  %4.3e  %4.3e  %4.3e\n",
+			Vnm_print( 1, "  tot  %i %4.3e %4.3e %4.3e\n",
 						i,
 						xF,
 						yF,
 						zF);
-			Vnm_tprint( 1, "  sasa %i %4.3e  %4.3e  %4.3e\n",
+			Vnm_print( 1, "  sasa %i %4.3e %4.3e %4.3e\n",
 						i,
 						(*atomForce)[i].sasaForce[0],
 						(*atomForce)[i].sasaForce[1],
 						(*atomForce)[i].sasaForce[2]);
-			Vnm_tprint( 1, "  sav  %i  %4.3e  %4.3e  %4.3e\n",
+			Vnm_print( 1, "  sav  %i %4.3e %4.3e %4.3e\n",
 						i,
 						(*atomForce)[i].savForce[0],
 						(*atomForce)[i].savForce[1],
 						(*atomForce)[i].savForce[2]);
-			Vnm_tprint( 1, "  wca  %i %4.3e  %4.3e  %4.3e\n",
+			Vnm_print( 1, "  wca  %i %4.3e %4.3e %4.3e\n",
 						i,
 						(*atomForce)[i].wcaForce[0],
 						(*atomForce)[i].wcaForce[1],

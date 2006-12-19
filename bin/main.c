@@ -119,6 +119,8 @@ int main(
 	unsigned long int bytesTotal, highWater;
 	Voutput_Format outputformat;
 	
+	int rc = 0;
+	
 	/* These variables require some explaining... The energy double arrays
 		* store energies from the various calculations.  The energy int array
 		* stores either a flag (0,1) displaying whether energies were calculated
@@ -343,8 +345,16 @@ int main(
 		Vnm_tprint(2, "Error setting up ELEC calculations\n");
 		VJMPERR1(0);
 	}
-	if (NOsh_setupApolCalc(nosh, alist) != 1) {
+	
+	if ((rc = NOsh_setupApolCalc(nosh, alist)) != 1) {
 		Vnm_tprint(2, "Error setting up APOL calculations\n");
+		VJMPERR1(0);
+	}
+	
+	/* ******************* CHECK APOL********************** */
+	if((nosh->gotparm == 0) && (rc == 1)){
+		Vnm_print(1,"\nError you must provide a parameter file if you\n" \
+					"     are performing an APOLAR calculation\n");
 		VJMPERR1(0);
 	}
 
@@ -535,7 +545,7 @@ int main(
 				}
 
 				apolparm = nosh->calc[i]->apolparm;
-				int rc = initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
+				rc = initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
 				if(rc == 0) {
 					Vnm_tprint(2, "Error solving APOL!\n");

@@ -684,16 +684,19 @@ atom = %s, residue = %s\n", atomName, resName);
 
 }
 
-VPUBLIC int Valist_readXML(Valist *thee, Vio *sock) {
+VPUBLIC int Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
 
     Vatom *atoms = VNULL;
     Vatom *nextAtom = VNULL;
+	
     char tok[VMAX_BUFSIZE];
     char endtag[VMAX_BUFSIZE];
     char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
-    int nlist, natoms, serial;
+    
+	int nlist, natoms, serial;
     int xset, yset, zset, chgset, radset;
-    double x, y, z, charge, radius, dtmp;
+    
+	double x, y, z, charge, radius, dtmp;
     double pos[3];
  
     VASSERT(thee != VNULL);
@@ -714,7 +717,14 @@ VPUBLIC int Valist_readXML(Valist *thee, Vio *sock) {
     chgset = 0;
     radset = 0;
     strcpy(endtag,"/");
-
+	
+	if(params == VNULL){
+		Vnm_print(1,"\nValist_readXML: Warning Warning Warning Warning Warning\n");
+		Vnm_print(1,"Valist_readXML: The use of XML input files with parameter\n");
+		Vnm_print(1,"Valist_readXML: files is currently not supported.\n");
+		Vnm_print(1,"Valist_readXML: Warning Warning Warning Warning Warning\n\n");
+	}
+	
     /* Read until we run out of lines */
     while (Vio_scanf(sock, "%s", tok) == 1) {
 
