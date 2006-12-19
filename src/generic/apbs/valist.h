@@ -256,6 +256,7 @@ VEXTERNC int Valist_readPDB(
  */
 VEXTERNC int Valist_readXML(
         Valist *thee, /**< Atom list object */
+		Vparam *param, /**< A pre-initialized parameter object */
         Vio *sock /**< Socket reading for reading PQR file */
         );
 
