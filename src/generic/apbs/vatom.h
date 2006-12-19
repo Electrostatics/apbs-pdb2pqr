@@ -75,6 +75,8 @@
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
 
+#define VMAX_RECLEN		   64
+
 /** 
  *  @ingroup Vatom
  *  @author  Nathan Baker, David Gohara, Mike Schneiders
