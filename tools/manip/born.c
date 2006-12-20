@@ -180,7 +180,7 @@ Usage: born [-v] [-f] <epsilon> <molecule.pqr>\n\n\
                   path);
         return 0;
     }
-    Valist_readPQR(alist,sock);
+    Valist_readPQR(alist,VNULL,sock);
     printf("Read %d atoms\n", Valist_getNumberAtoms(alist));
 
     /* Energy scaling factor */

@@ -142,7 +142,7 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
                   path);
         return 0;
     }
-    Valist_readPQR(alist,sock);
+    Valist_readPQR(alist,VNULL,sock);
     Vnm_print(1, "Read %d atoms\n", Valist_getNumberAtoms(alist));
 
     Vnm_print(1, "Setting up Green's function object.\n");
