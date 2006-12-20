@@ -232,7 +232,7 @@ int main(int argc, char **argv) {
                   path);
         return 0;
     }
-    Valist_readPQR(alist,sock);
+    Valist_readPQR(alist,VNULL,sock);
 
     /* Set up Vacc and Vclist */
     Vnm_print(1, "Setting up hash table and accessibility object...\n");
