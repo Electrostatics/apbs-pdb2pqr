@@ -112,6 +112,23 @@ enum eAPOLparm_calcForce {
 typedef enum eAPOLparm_calcForce APOLparm_calcForce;
 
 /**
+* @ingroup APOLparm
+ * @brief  Define force calculation enumeration
+ */
+enum eAPOLparm_doCalc {
+    ACD_NO=0, /**< Do not perform calculation */
+    ACD_YES=1, /**< Perform calculations */
+	ACD_ERROR=2 /**< Error setting up calculation */
+};
+
+/**
+* @ingroup APOLparm
+ * @brief  Define eAPOLparm_calcForce enumeration as APOLparm_calcForce
+ */
+typedef enum eAPOLparm_doCalc APOLparm_doCalc;
+
+
+/**
  *  @ingroup APOLparm
  *  @author  David Gohara
  *  @brief   Parameter structure for APOL-specific variables from input files
