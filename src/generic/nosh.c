@@ -1106,6 +1106,7 @@ VPUBLIC int NOsh_setupApolCalc(
 							   Valist *alist[NOSH_MAXMOL]
 							   ) {
 	int iapol, imol, i;
+	int doCalc = ACD_NO;
 	NOsh_calc *calc = VNULL;
 	Valist *mymol = VNULL;
 	Vparam *param = VNULL;
@@ -1123,10 +1124,11 @@ VPUBLIC int NOsh_setupApolCalc(
 		switch (calc->calctype) {
 			case NCT_APOL:
 				NOsh_setupCalcAPOL(thee, calc);
+				doCalc = ACD_YES;
 				break;
 			default:
 				Vnm_print(2, "NOsh_setupCalc:  Invalid calculation type (%d)!\n", calc->calctype);
-				return 0;
+				return ACD_ERROR;
 		}
 		/* At this point, the most recently-created NOsh_calc object should be the
 			one we use for results for this APOL statement.  Assign it. */
@@ -1135,7 +1137,11 @@ VPUBLIC int NOsh_setupApolCalc(
 		Vnm_print(0, "NOsh_setupCalc:  Mapping APOL statement %d (%d) to calculation %d (%d)\n", iapol, iapol+1, thee->apol2calc[iapol], thee->apol2calc[iapol]+1);
 	}
 	
-	return 1;
+	if(doCalc == ACD_YES){
+		return ACD_YES;
+	}else{
+		return ACD_NO;
+	}
 }
 
 VPUBLIC int NOsh_parseMG(

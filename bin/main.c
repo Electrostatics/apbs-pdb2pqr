@@ -346,13 +346,13 @@ int main(
 		VJMPERR1(0);
 	}
 	
-	if ((rc = NOsh_setupApolCalc(nosh, alist)) != 1) {
+	if ((rc = NOsh_setupApolCalc(nosh, alist)) == ACD_ERROR) {
 		Vnm_tprint(2, "Error setting up APOL calculations\n");
 		VJMPERR1(0);
 	}
 	
 	/* ******************* CHECK APOL********************** */
-	if((nosh->gotparm == 0) && (rc == 1)){
+	if((nosh->gotparm == 0) && (rc == ACD_YES)){
 		Vnm_print(1,"\nError you must provide a parameter file if you\n" \
 					"     are performing an APOLAR calculation\n");
 		VJMPERR1(0);
