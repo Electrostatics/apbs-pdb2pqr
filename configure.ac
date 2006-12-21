@@ -66,7 +66,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [0.4.0], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [0.5.0], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -368,6 +368,15 @@ AC_ARG_WITH(mpich,
 )
 
 if test -z ${mpi_path}; then
+	AC_MSG_CHECKING([for --with-mpich2 option])
+	AC_ARG_WITH(mpich2,
+		[AC_HELP_STRING([--with-mpich2=PATH], [toplevel MPICH2 directory])],
+		[mpi_path="${with_mpich2}"; AC_MSG_RESULT([yes]); USE_MPICH2="yes"],
+		[mpi_path=""; AC_MSG_RESULT([no]) ]
+	)
+fi
+
+if test -z ${mpi_path}; then
 	AC_MSG_CHECKING([for --with-lam option])
 	AC_ARG_WITH(lam,
 		[AC_HELP_STRING([--with-lam=PATH], [toplevel LAM-MPI directory])],
@@ -401,7 +410,20 @@ if test -n "${mpi_path}"; then
 			exit 0
 		fi
 	fi
-
+	
+	if test -n "${USE_MPICH2}"; then
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.a, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.so, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpich.dylib, [HAS_MPI_LIB="yes"], [])
+		
+		if test -n "${HAS_MPI_LIB}"; then
+			mpi_lib="-L${mpi_path}/lib -lmpich"
+		else
+			echo "Error...Could not find MPICH library in ${mpi_path}/lib"
+			exit 0
+		fi
+	fi
+	
 	if test -n "${USE_LAM}"; then
 		AC_CHECK_FILE(${mpi_path}/lib/liblam.a, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/liblam.so, [HAS_MPI_LIB="yes"], [])
@@ -421,6 +443,125 @@ AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
 dnl AC_SUBST(mpi_bin)
 
+AC_MSG_RESULT([---------------------------------------------------------------])
+AC_MSG_RESULT([---------- begin configuring for Python wrappers --------------])
+AC_MSG_RESULT([---------------------------------------------------------------])
+
+AC_MSG_CHECKING([for --enable-python])
+AC_ARG_ENABLE(python,
+    [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
+    [ with_python="yes" ],
+    [ with_python=""    ]
+)
+
+PY_ENABLE=""
+if test -n "${with_python}"; then
+    AC_MSG_RESULT([yes])
+    AC_PATH_PROG(py_path, python)
+    PY_ENABLE="yes"    
+
+    if test -n "${py_path}"; then
+       changequote(<<, >>)dnl
+       PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
+       changequote([, ])dnl
+       PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+       PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
+       if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+          PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
+       fi
+    fi
+
+    PY_LINKFLAGS=${CFLAGS}
+    PY_CC=${CC}
+
+    dnl # Platform specific linking flags
+    
+    PY_LDFLAGS=""
+    PY_SHARED=""
+    case $host_os in
+       linux*) 
+           PY_SHARED="-shared"
+		   CC="${CC} -fPIC"
+		   F77="${F77} -fPIC"
+		   ;;
+       irix*) 
+           PY_SHARED="-shared"
+           PY_LDFLAGS="-lftn -lm";;
+       sun|solaris**) 
+           PY_SHARED="-G"
+           PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
+       darwin**)
+           PY_CC=${F77}
+           PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle";;
+       mingw*)
+           PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+           PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+           changequote(<<, >>)dnl
+           PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
+           changequote([, ])dnl
+           PY_CC=${F77}
+           PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
+           PY_SHARED="-shared"
+           if test -f $PY_PREFIX/include/Python.h; then
+               PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
+           fi;;
+    esac
+
+    dnl # The Python wrappers use different flags on different arches
+
+    IS_STATIC=`echo ${LDFLAGS} | grep static`
+    case $host_cpu in
+       x86_64*)
+          PY_CC="${F77}";;
+       i*86)
+          PY_CC="${F77}"
+          if test "${CC}" = "icc"; then
+             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+             if test -n "${ifcore_lib}"; then
+	            PY_LDFLAGS=${ifcore_lib}
+	         else
+                AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
+	         fi
+	         if test -n "${IS_STATIC}"; then
+	            PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+             fi
+          fi;; 
+       ia64*)
+          if test "${CC}" = "icc"; then
+             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+	         if test -n "${ifcore_lib}"; then
+	            PY_LDFLAGS=${ifcore_lib}
+	         else
+	           	AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
+	         fi
+	         if test -n "${IS_STATIC}"; then
+	             if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+	                PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+	             else
+                    AC_MSG_RESULT("WARNING:  Could not find libc.so or libm.so in /usr/lib")
+	             fi 
+             fi
+         fi;; 
+   esac
+
+else
+    AC_MSG_RESULT([no])
+fi
+
+
+if test -n "${PY_ENABLE}"; then
+   AC_MSG_RESULT(Python wrappers enabled)
+else
+   AC_MSG_RESULT(Python wrappers disabled)
+fi
+
+AC_SUBST(PY_SHARED,[$PY_SHARED])
+AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
+AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
+AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
+AC_SUBST(PY_CC,[$PY_CC])
+AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_ENABLE}"])
+
 dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
@@ -432,14 +573,16 @@ if test -z ${USE_FETK};  then
 		[ with_maloc="no"; AC_MSG_RESULT([yes]) ],
 		[ with_maloc=""; AC_MSG_RESULT([no])  ]
 	)
-
+	
 	if test -n "${with_maloc}"; then
 		echo "Will not rebuild MALOC...skipping"
+		apbs_do_contrib=""
 	else
 		AC_MSG_RESULT([-----------------------------------------------------------])
 		AC_MSG_RESULT([-------------------- building MALOC -----------------------])
 		AC_MSG_RESULT([-----------------------------------------------------------])
-	
+		apbs_do_contrib="contrib"
+		
 		export CC=${CC}
 		export CFLAGS=${CFLAGS}
 		export LDFLAGS=${LDFLAGS}
@@ -464,6 +607,7 @@ if test -z ${USE_FETK};  then
 	AC_MSG_RESULT([----- MALOC installation finished continuing with APBS ----])
 	AC_MSG_RESULT([-----------------------------------------------------------])
 fi
+AC_SUBST(apbs_do_contrib)
 
 dnl # ---------------------------
 dnl # HANDLE THE READLINE LIBRARY
@@ -521,122 +665,6 @@ fi
 LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
 AC_SUBST(rl_lib)
-
-AC_MSG_RESULT([---------------------------------------------------------------])
-AC_MSG_RESULT([---------- begin configuring for Python wrappers --------------])
-AC_MSG_RESULT([---------------------------------------------------------------])
-
-AC_MSG_CHECKING([for --enable-python])
-AC_ARG_ENABLE(python,
-    [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
-    [ with_python="yes" ],
-    [ with_python=""    ]
-)
-
-PY_ENABLE=""
-if test -n "${with_python}"; then
-    AC_MSG_RESULT([yes])
-    AC_PATH_PROG(py_path, python)
-    PY_ENABLE="yes"    
-
-    if test -n "${py_path}"; then
-       changequote(<<, >>)dnl
-       PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
-       changequote([, ])dnl
-       PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
-       PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
-       if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-          PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
-       fi
-    fi
-
-    PY_LINKFLAGS=${CFLAGS}
-    PY_CC=${CC}
-
-    dnl # Platform specific linking flags
-    
-    PY_LDFLAGS=""
-    PY_SHARED=""
-    case $host_os in
-       linux*) 
-           PY_SHARED="-shared";;
-       irix*) 
-           PY_SHARED="-shared"
-           PY_LDFLAGS="-lftn -lm";;
-       sun|solaris**) 
-           PY_SHARED="-G"
-           PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
-       darwin**)
-           PY_CC=${F77}
-           PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle";;
-       mingw*)
-           PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-           PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-           changequote(<<, >>)dnl
-           PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
-           changequote([, ])dnl
-           PY_CC=${F77}
-           PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
-           PY_SHARED="-shared"
-           if test -f $PY_PREFIX/include/Python.h; then
-               PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
-           fi;;
-    esac
-
-    dnl # The Python wrappers use different flags on different arches
-
-    IS_STATIC=`echo ${LDFLAGS} | grep static`
-    case $host_cpu in
-       x86_64*)
-          PY_CC=${F77};;
-       i*86)
-          PY_CC=${F77}
-          if test "${CC}" = "icc"; then
-             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-             if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-                AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	            PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
-             fi
-          fi;; 
-       ia64*)
-          if test "${CC}" = "icc"; then
-             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-	         if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-	           	AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	             if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	                PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
-	             else
-                    AC_MSG_RESULT("WARNING:  Could not find libc.so or libm.so in /usr/lib")
-	             fi 
-             fi
-         fi;; 
-   esac
-
-else
-    AC_MSG_RESULT([no])
-fi
-
-
-if test -n "${PY_ENABLE}"; then
-   AC_MSG_RESULT(Python wrappers enabled)
-else
-   AC_MSG_RESULT(Python wrappers disabled)
-fi
-
-AC_SUBST(PY_SHARED,[$PY_SHARED])
-AC_SUBST(PY_LDFLAGS,[$PY_LDFLAGS])
-AC_SUBST(PY_CFLAGS,[$PY_CFLAGS])
-AC_SUBST(PY_LINKFLAGS,[$PY_LINKFLAGS])
-AC_SUBST(PY_CC,[$PY_CC])
-AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_ENABLE}"])
 
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
@@ -998,7 +1026,6 @@ case $host_os in
 	darwin8*)
 		extra_list1="-lSystemStubs"
 		;;
-
 	*)
 		extra_list1=""
 		;;
@@ -1029,7 +1056,7 @@ if test -n "${mc_found}"; then
 	case $host_os in
 	
 	darwin*)
-		extra_list3="-lsuperlu -Wl,-framework -Wl,accelerate"
+		extra_list3="-lsuperlu"
 		;;
 		
 	*)
@@ -1091,7 +1118,9 @@ AC_OUTPUT([
 ])
 
 AC_MSG_RESULT([])
-AC_MSG_RESULT([APBS to be linked with following libraries:  ${lib_list}])
+AC_MSG_RESULT([APBS to be compiled with following settings:  ${CC} ${CFLAGS}])
+AC_MSG_RESULT([APBS to be compiled with following settings:  ${F77} ${FFLAGS}])
+AC_MSG_RESULT([APBS to be linked with following libraries :  ${lib_list}])
 AC_MSG_RESULT([APBS to be compiled with following includes:  ${inc_list}])
 AC_MSG_RESULT([])
 AC_MSG_RESULT([Please type "make; make install"])
