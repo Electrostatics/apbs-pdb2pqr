@@ -605,7 +605,9 @@ VEXTERNC int energyAPOL(APOLparm *apolparm, double sasa, double sav);
  * @param  alist atom list
  * @param  clist charge list
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *clist);
+VEXTERNC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm, 
+					   int *nforce, AtomForce **atomForce, Valist *alist,
+					   Vclist *clist);
 
 /**
  * @brief  Upperlevel routine to the non-polar energy and force routines
@@ -615,7 +617,8 @@ VEXTERNC int forceAPOL(Vacc *acc, APOLparm *apolparm, Valist *alist, Vclist *cli
  * @param  apolparm  APOLparm object
  * @param  alist atom list
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int initAPOL(NOsh *nosh,APOLparm *apolparm,Valist *alist);
+VEXTERNC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce, 
+					  AtomForce **atomForce, Valist *alist);
 
 #endif
 

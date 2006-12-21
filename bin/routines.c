@@ -2937,6 +2937,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	int iatom, j, bytesTotal, highWater, theMol, focusFlag;
 	double sparm, q, iparm, center[3];
 	Valist *myalist;
+	Vatom *atom = VNULL;
 	
 	Vnm_tstart(27, "Setup timer");
 	
