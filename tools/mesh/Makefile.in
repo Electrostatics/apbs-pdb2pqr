@@ -144,7 +144,7 @@ AM_LDFLAGS = @LDFLAGS@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_LDFLAGS = @LDFLAGS@ @FFLAGS@
 @UHBD_COMPILE_TRUE@uhbd_asc2bin_CCLD = $(F77)
-noinst_PROGRAMS = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis
+noinst_PROGRAMS = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis multivalue
 mgmesh_SOURCES = mgmesh.c 
 mgmesh_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -165,6 +165,10 @@ value_SOURCES = value.c
 value_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 value_LDFLAGS = @LDFLAGS@ @FFLAGS@
 value_CCLD = $(F77)
+multivalue_SOURCES = multivalue.c 
+multivalue_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+multivalue_LDFLAGS = @LDFLAGS@ @FFLAGS@
+multivalue_CCLD = $(F77)
 benchmark_SOURCES = benchmark.c 
 benchmark_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 similarity_SOURCES = similarity.c 
@@ -184,12 +188,13 @@ CONFIG_CLEAN_FILES =
 @UHBD_COMPILE_TRUE@	smooth$(EXEEXT) value$(EXEEXT) \
 @UHBD_COMPILE_TRUE@	dx2mol$(EXEEXT) dx2uhbd$(EXEEXT) \
 @UHBD_COMPILE_TRUE@	benchmark$(EXEEXT) similarity$(EXEEXT) \
-@UHBD_COMPILE_TRUE@	analysis$(EXEEXT)
+@UHBD_COMPILE_TRUE@	analysis$(EXEEXT) multivalue$(EXEEXT)
 @UHBD_COMPILE_FALSE@noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) \
 @UHBD_COMPILE_FALSE@	mergedx$(EXEEXT) smooth$(EXEEXT) \
 @UHBD_COMPILE_FALSE@	value$(EXEEXT) dx2mol$(EXEEXT) \
 @UHBD_COMPILE_FALSE@	dx2uhbd$(EXEEXT) benchmark$(EXEEXT) \
-@UHBD_COMPILE_FALSE@	similarity$(EXEEXT) analysis$(EXEEXT)
+@UHBD_COMPILE_FALSE@	similarity$(EXEEXT) analysis$(EXEEXT) \
+@UHBD_COMPILE_FALSE@	multivalue$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
 am_analysis_OBJECTS = analysis.$(OBJEXT)
@@ -217,6 +222,9 @@ mergedx_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_mgmesh_OBJECTS = mgmesh.$(OBJEXT)
 mgmesh_OBJECTS = $(am_mgmesh_OBJECTS)
 mgmesh_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
+am_multivalue_OBJECTS = multivalue.$(OBJEXT)
+multivalue_OBJECTS = $(am_multivalue_OBJECTS)
+multivalue_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am_similarity_OBJECTS = similarity.$(OBJEXT)
 similarity_OBJECTS = $(am_similarity_OBJECTS)
 similarity_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
@@ -255,10 +263,11 @@ F77LINK = $(LIBTOOL) --mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) \
 	$(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) \
-	$(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) \
-	$(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
+	$(mergedx_SOURCES) $(mgmesh_SOURCES) $(multivalue_SOURCES) \
+	$(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) \
+	$(value_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) $(mgmesh_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
+SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) $(mergedx_SOURCES) $(mgmesh_SOURCES) $(multivalue_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 
 all: all-am
 
@@ -297,6 +306,9 @@ mergedx$(EXEEXT): $(mergedx_OBJECTS) $(mergedx_DEPENDENCIES)
 mgmesh$(EXEEXT): $(mgmesh_OBJECTS) $(mgmesh_DEPENDENCIES) 
 	@rm -f mgmesh$(EXEEXT)
 	$(LINK) $(mgmesh_LDFLAGS) $(mgmesh_OBJECTS) $(mgmesh_LDADD) $(LIBS)
+multivalue$(EXEEXT): $(multivalue_OBJECTS) $(multivalue_DEPENDENCIES) 
+	@rm -f multivalue$(EXEEXT)
+	$(LINK) $(multivalue_LDFLAGS) $(multivalue_OBJECTS) $(multivalue_LDADD) $(LIBS)
 similarity$(EXEEXT): $(similarity_OBJECTS) $(similarity_DEPENDENCIES) 
 	@rm -f similarity$(EXEEXT)
 	$(LINK) $(similarity_LDFLAGS) $(similarity_OBJECTS) $(similarity_LDADD) $(LIBS)
