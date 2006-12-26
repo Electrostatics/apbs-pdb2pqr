@@ -21,7 +21,7 @@ uhbd_asc2bin_CCLD        = $(F77)
 else
 UHBD =
 endif
-noinst_PROGRAMS          = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis
+noinst_PROGRAMS          = mgmesh dxmath mergedx $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis multivalue
 mgmesh_SOURCES           = mgmesh.c 
 mgmesh_LDADD             = ../../src/aaa_lib/libapbs.la @lib_list@
 mgmesh_LDFLAGS           = ../../src/aaa_lib/libapbs.la @lib_list@
@@ -42,6 +42,10 @@ value_SOURCES            = value.c
 value_LDADD              = ../../src/aaa_lib/libapbs.la @lib_list@
 value_LDFLAGS            = @LDFLAGS@ @FFLAGS@
 value_CCLD               = $(F77)
+multivalue_SOURCES       = multivalue.c 
+multivalue_LDADD         = ../../src/aaa_lib/libapbs.la @lib_list@
+multivalue_LDFLAGS       = @LDFLAGS@ @FFLAGS@
+multivalue_CCLD          = $(F77)
 benchmark_SOURCES = benchmark.c 
 benchmark_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 similarity_SOURCES = similarity.c 
