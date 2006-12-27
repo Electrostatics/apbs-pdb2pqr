@@ -1375,10 +1375,192 @@ potential around my biomolecule?</title>
 	<chapter id="solvation-sect"> <title>How do I calculate a solvation
 energy?</title>
 
-		<warning><para>Under construction</para></warning>
+		<para>
+			Solvation energies are usually decomposed into a free
+			energy cycle as shown in <xref
+				linkend="solvation-cycle-full"/>.  Note that
+			such solvation energies often performed on fixed
+			conformations; as such, they are more correctly called
+			"potentials of mean force".  More details on using APBS
+			for the polar and nonpolar portions of such a cycle are
+			given in the following sections.
+			<figure id="solvation-cycle-full"> <titleabbrev>Full
+					solvation energy cycle</titleabbrev>
+				<title>Full solvation energy cycle.  This cycle
+incorporates several processes into the solvation energy (step 1).  Step 2
+indicates charging of the solute in solution (e.g., inhomogeneous dielectric,
+ions present).  Step 3 indicates the introduction of attractive solute-solvent
+dispersive interaction interactions (e.g., an integral of
+Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step
+4 indicates the introduction of repulsive solute-solvent interaction (e.g.,
+cavity formation).  Steps 5 and 6 are basically null steps although they could
+be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,
+Step 6 represents the charging of the solute in a vacuum or homogeneous
+dielectric environment in the absence of mobile ions.</title>
+				<graphic
+					fileref="images/solvation-cycle-full.png"></graphic>
+			</figure>
+		</para>
 
 		<sect1> <title>Polar solvation</title>
-			<warning><para>Under construction</para></warning>
+			<para> The full free energy cycle in <xref
+					linkend="solvation-cycle-full"/> is
+				usually decomposed into polar and nonpolar
+				parts.  The polar portion is usually
+				represented by the charging energies in Steps 2
+				and 6:
+				<informalequation>
+					<graphic
+						fileref="images/polar-solvation-equation.png"/>
+				</informalequation>
+				Energies returned from APBS electrostatics
+				calculations are charging free energies.
+				Therefore, to calculate the polar contribution
+				to the solvation free energy, we simply need to
+				setup two calculations corresponding to Steps 2
+				and 6 in <xref
+					linkend="solvation-cycle-full"/>.
+				However, the electrostatic charging free
+				energies returned by APBS include
+				self-interaction terms.  These are the energies
+				of a charge distribution interacting with
+				itself.  Such self-interaction energies are
+				typically very large and extremely sensitive to
+				the problem discretization (grid spacing,
+				location, etc.).  Therefore, it is very
+				important that the two calculations are
+				performed with identical grid spacings,
+				lengths, and centers, in order to ensure
+				appropriate matching (or "cancellation") of
+				self-energy terms.
+			</para>
+			<para> One of the canonical examples for polar
+				solvation is the Born ion:  a nonpolarizable
+				sphere with a single charge at its center
+				surrounded by an aqueous medium.  In the
+				absence of external ions, the polar solvation
+				energy for this sytem is given by <xref
+					linkend="born-solvation-energy-equation"/>.
+				<equation id="born-solvation-energy-equation">
+					<title>Born ion polar solvation energy.
+					q is the ion charge, a is the ion
+radius, and the two epsilons denote the internal and external (solution)
+dielectric constants.  This model assumes zero ionic strength.</title>
+					<titleabbrev>Born ion polar solvation energy</titleabbrev>
+					<graphic fileref="images/born-solvation-energy-equation.png"/>
+				</equation>
+				We can setup a PQR file for the Born ion for
+				use with APBS as shown in <xref
+					linkend="born-pqr"/> and downloaded
+				<ulink url="examples/born/born.pqr">here</ulink>.
+				<example id="born-pqr"> <title>Born ion PQR</title>
+					<programlisting>
+REMARK  This is an ion with a 3 A radius and a +1 e charge
+ATOM      1   I  ION     1 0.000   0.000   0.000  1.00 3.00
+					</programlisting>
+				</example>
+				We're interested in performing two APBS
+				calculations for the charging free energies in
+				homogeneous and heterogeneous dielectric
+				coefficients.  We'll assume the internal
+				dielectric coefficient is 1 (e.g., a vacuum)
+				and the external dielectric coefficient is
+				78.54 (e.g., water).
+				for these settings, the polar solvation energy
+				expression has the form
+				<informalequation>
+					<graphic fileref="images/born-solvation-energy-equation2.png"/>
+				</informalequation>
+				where R is the ion radius
+				in Angstroms.  One possible APBS input file for
+				this calculation is shown in <xref
+					linkend="born-input"/> and can be
+				downloaded <ulink
+					url="examples/born/born.in">here</ulink>.
+				<example id="born-input">
+					<title>Example born input file</title>
+					<programlisting>
+# READ IN MOLECULES
+read
+  mol pqr born.pqr
+end
+
+
+elec name solv # Electrostatics calculation on the solvated state
+	mg-manual # Specify the mode for APBS to run
+	dime 97 97 97 # The grid dimensions
+	nlev 4 # Multigrid level parameter
+	grid 0.33 0.33 0.33 # Grid spacing
+	gcent mol 1 # Center the grid on molecule 1
+	mol 1 # Perform the calculation on molecule 1
+	lpbe # Solve the linearized Poisson-Boltzmann equation
+	bcfl mdh # Use all multipole moments when calculating the potential
+	pdie 1.0 # Solute dielectric
+	sdie 78.54 # Solvent dielectric
+	chgm spl2 # Spline-based discretization of the delta functions
+	srfm mol # Molecular surface definition
+	srad 1.4 # Solvent probe radius (for molecular surface)
+	swin 0.3 # Solvent surface spline window (not used here)
+	sdens 10.0 # Sphere density for accessibility object
+	temp 298.15 # Temperature
+	calcenergy total # Calculate energies
+	calcforce no # Do not calculate forces
+end
+
+elec name ref # Calculate potential for reference (vacuum) state
+	mg-manual
+	dime 97 97 97
+	nlev 4
+	grid 0.33 0.33 0.33
+	gcent mol 1
+	mol 1
+	lpbe
+	bcfl mdh
+	pdie 1.0
+	sdie 1.0
+	chgm spl2
+	srfm mol
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce no
+end
+
+# Calculate solvation energy
+print energy solv - ref end
+
+quit
+					</programlisting>
+				</example>
+				Running this example with a recent version of
+				APBS should give an answer of -229.59 kJ/mol
+				which is in good agreement with the -230.62
+				kJ/mol predicted by the analytic formula above.
+			</para>
+			<para> 
+				Note that the Born example above can be easily
+				generalized to other polar solvation energy
+				calculations.  For example, ions could be added
+				to the <literal>solv</literal>
+				<varname>ELEC</varname> section, dielectric
+				constants could be modified, surface
+				definitions could be changed (in both
+				<varname>ELEC</varname> sections!), or more
+				complicated molecules could be examined.  Many
+				of the examples included with APBS (e.g.,
+				<filename>solv</filename> and
+				<filename>ionize</filename>) also demonstrate
+				solvation energy calculations.  
+			</para>
+			<note>
+				<para>Note that, as molecules get larger, it is
+					important to examine the sensitivity of
+					the calculated solvation energies with
+					respect to grid spacings and
+					dimensions.</para>
+			</note>
 		</sect1>
 
 		<sect1> <title>Apolar solvation</title>
