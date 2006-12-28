@@ -1569,22 +1569,178 @@ quit
 
 	</chapter>
 
-	<chapter id="binding-sect"> <title>How do I calculate a binding
-energy?</title>
+	<chapter id="binding-sect">
+		<title>How do I calculate a binding energy?</title>
 
-		<warning><para>Under construction</para></warning>
+		<para> In general, implicit solvent models are used to
+			calculation the contribution of
+			<emphasis>solvation</emphasis> to binding free
+			energies.  Additional binding free energy contributions
+			(molecular mechanics energies, entropic changes, etc.)
+			must be calculated separately and are not discussed in
+			this tutorial.  One exception is the inclusion of
+			intermolecular Coulombic interations; we'll discuss how
+			these can be calculated in APBS <link
+				linkend="binding-coulomb">below</link>. </para>
 
-		<sect1> <title>Hey! You don't have any parameters for my
-ligand!</title>
-			<warning><para>Under construction</para></warning>
+		<para> Our framework for calculating solvation contributions to
+			binding free energies is shown in <xref
+				linkend="binding-cycle"/>.
+			<figure id="binding-cycle">
+				<title> Binding free energy cycle illustrating
+				binding in terms of transfer free energies from
+				a homogeneous dielectric environment (where
+				interactions are described by Coulomb's law) to 
+				an inhomogeneous dielectric environment with
+				differing internal (green) and external (cyan)
+				dielectric constants.  The binding
+				(dissociation) free energy is depicted in Step
+				3.</title>
+				<titleabbrev> Binding free energy cycle
+				</titleabbrev>
+				<graphic fileref="images/binding-cycle.png"/>
+			</figure>
+			The binding free energy is given by <xref
+				linkend="binding-cycle-eqn"/>.
+			<equation id="binding-cycle-eqn"> 
+				<title> Binding free energy formula based on
+					<xref linkend="binding-cycle"/>. </title>
+				<titleabbrev> Binding free energy formula
+				</titleabbrev>
+				<graphic
+					fileref="images/binding-cycle-eqn.png"/>
+			</equation>
+			The following sections provide more detail on
+			calculating individual terms of this equation.
+		</para>
+
+		<sect1 id="binding-solvation">
+			<title> Solvation energy contributions to binding
+			</title>
+			<para> If we're just interested in calculating the solvation
+				contributions to binding (steps 4 and 2 in <xref
+					linkend="binding-cycle"/>), then we simply need
+				to follow the instructions from <xref
+					linkend="solvation-sect"/> for the complex and
+				isolated components.  The solvation energy contribution
+				to the binding is then given by <xref
+					linkend="binding-solvation-eq"/>.  
+				<equation id="binding-solvation-eq">
+					<title> Solvation contributions to the binding
+						free energy for a two-component complex
+						of molecules "mol 1" and "mol 2".
+						Refer to <xref
+						linkend="binding-cycle"/> for numbering.</title>
+					<titleabbrev> Solvation contributions to the binding
+						free energy </titleabbrev>
+					<graphic
+						fileref="images/binding-solvation.png"/>
+				</equation>
+				This solvation energy contribution can be decomposed
+				into polar and nonpolar parts as outlined in <xref
+					linkend="solvation-sect"/>.
+			</para>
+
+		</sect1>
+	
+		<sect1 id="binding-coulombic"> 
+
+			<title>Including Coulombic contributions</title>
+
+			<para id="binding-coulomb"> To complete the binding
+				free energy cycle (see <xref
+					linkend="binding-cycle"/>), we need to add
+				intermolecular Coulombic contributions to the
+				solvation energy change upon binding to get the
+				total electrostatic/solvent contribution to the
+				binding free energy.  In particular, we're
+				interested in the change in Coulombic
+				electrostatic energy upon binding, as given by
+				<xref linkend="binding-coulomb-eq"/>.
+				<equation id="binding-coulomb-eq">
+					<title> Coulombic contributions to the binding
+						free energy for a two-component complex
+						of molecules "mol 1" and "mol
+						2".  See <xref
+						linkend="binding-cycle-eqn"/>
+						for numbering.</title>
+					<titleabbrev> Coulombic contributions to the binding
+						free energy </titleabbrev>
+					<graphic
+						fileref="images/binding-coulomb.png"/>
+				</equation>
+				Each of the &#916;G<subscript>coul</subscript>
+				quantities in <xref
+					linkend="binding-coulomb-eq"/> is the
+				sum of pairwise Coulombic interactions between
+				all atoms in the molecule (or complex)
+				<emphasis>for a particular uniform
+					dielectric</emphasis>.  In order to
+				combine these Coulombic binding energies with
+				the solvation energies described <link
+					linkend="binding-solvation">above</link>,
+				we need to make sure consistent dielectric
+				constants are used.  In particular, Coulombic
+				interactions should be calculated using the
+				same uniform dielectric constant as the
+				reference state of the solvation energy above.
+				For example, if solvation energies are
+				calculated for transfering a protein from a
+				medium with uniform dielectric of
+				&#949;<subscript>in</subscript>
+				to a medium with internal dielectric
+				&#949;<subscript>in</subscript>
+				and external dielectric 
+				&#949;<subscript>out</subscript>, 
+				then Coulombic energies should
+				be calculated using a dielectric of
+				&#949;<subscript>in</subscript>.
+				The APBS accessory program
+				<filename>tools/manip/coulomb</filename> was
+				created to help with the calculation of these
+				individual per-molecule Coulombic energies.
+				Given a PQR file as input, the
+				<filename>tools/manip/coulomb</filename>
+				program calculates Coulombic energies for a
+				vacuum dielectric (e.g., a uniform dielectric
+				of 1).  If the reference dielectric is
+				&#949;<subscript>in</subscript>, then all
+				energies returned by 
+				<filename>tools/manip/coulomb</filename>
+				need to be divided by 
+				&#949;<subscript>in</subscript>.
+			</para>
+			<para>
+				With the appropriate dielectric constant of
+				&#949;<subscript>in</subscript> used
+				for the Coulombic binding energy, a total
+				electrostatic/solvation free energy can be
+				calculated from <xref
+					linkend="binding-cycle-eqn-2"/>.
+				<xref linkend="binding-cycle-eqn"/>, 
+				<xref linkend="binding-solvation-eq"/>, and
+				<xref linkend="binding-coulomb-eq"/> as
+				<equation id="binding-cycle-eqn-2">
+					<title> Binding free energy </title>
+					<graphic
+						fileref="images/binding-cycle-eqn-2.png"/>
+				</equation>
+			</para>
+
 		</sect1>
 
-		<sect1> <title>Polar contributions</title>
+		<sect1 id="binding-ligand">
+			<title>Hey! You don't have any parameters for my ligand!</title>
+
 			<warning><para>Under construction</para></warning>
+
 		</sect1>
 
-		<sect1> <title>Apolar contributions</title>
+		<sect1 id="binding-example">
+			<title>A ligand binding example</title>
+
 			<warning><para>Under construction</para></warning>
+
 		</sect1>
 
 	</chapter>

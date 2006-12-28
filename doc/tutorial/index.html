@@ -46,17 +46,20 @@
 			electrostatics calculations?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format-sect">2.1. PQR format</a></span></dt><dt><span class="sect1"><a href="#xml-format-sect">2.2. XML format</a></span></dt><dt><span class="sect1"><a href="#pdb2pqr-subsect">2.3. Generating PQR files from PDB
 				files (PDB2PQR)</a></span></dt></dl></dd><dt><span class="chapter"><a href="#viz-sect">3. How do I visualize the electrostatic
 potential around my biomolecule?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#vmd-sect">3.1. VMD</a></span></dt><dt><span class="sect1"><a href="#pymol-sect">3.2. PyMOL</a></span></dt><dt><span class="sect1"><a href="#pmv-sect">3.3. PMV</a></span></dt></dl></dd><dt><span class="chapter"><a href="#solvation-sect">4. How do I calculate a solvation
-energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id901948">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902146">4.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding
-energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902173">5.1. Hey! You don't have any parameters for my
-ligand!</a></span></dt><dt><span class="sect1"><a href="#id902185">5.2. Polar contributions</a></span></dt><dt><span class="sect1"><a href="#id902197">5.3. Apolar contributions</a></span></dt></dl></dd><dt><span class="chapter"><a href="#forces-sect">6. How do I calculate solvation
-forces?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902224">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902235">6.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dd><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></dd><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902813">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id902838">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id902950">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901232">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901404">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901758">+/- 1 kT/e
+energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id901948">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902146">4.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
+			</a></span></dt><dt><span class="sect1"><a href="#binding-coulombic">5.2. Including Coulombic contributions</a></span></dt><dt><span class="sect1"><a href="#binding-ligand">5.3. Hey! You don't have any parameters for my ligand!</a></span></dt><dt><span class="sect1"><a href="#binding-example">5.4. A ligand binding example</a></span></dt></dl></dd><dt><span class="chapter"><a href="#forces-sect">6. How do I calculate solvation
+forces?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902574">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902585">6.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dd><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></dd><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
+molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id903163">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903188">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903300">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901232">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901404">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901758">+/- 1 kT/e
 							electrostatic potential
 							isocontours of FAS2 in PyMOL</a></dt><dt>3.4. <a href="#id901863">+/- 5 kT/e
 							electrostatic surface potential
 							of FAS2 in PyMOL</a></dt><dt>4.1. <a href="#solvation-cycle-full">Full
-					solvation energy cycle</a></dt><dt>8.1. <a href="#id902588">Actin dimer isocontours from
-parallel focusing</a></dt><dt>10.1. <a href="#id902920">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id903009">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id903057">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id903092">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id903126">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id903154">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#born-pqr">Born ion PQR</a></dt><dt>4.2. <a href="#born-input">Example born input file</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#born-solvation-energy-equation">Born ion polar solvation energy</a></dt></dl></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="introduction-sect"></a>Chapter 1. How to read this tutorial</h2></div></div></div><p>This tutorial is designed as a "how to" document to get
+					solvation energy cycle</a></dt><dt>5.1. <a href="#binding-cycle"> Binding free energy cycle
+				</a></dt><dt>8.1. <a href="#id902938">Actin dimer isocontours from
+parallel focusing</a></dt><dt>10.1. <a href="#id903270">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id903358">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id903407">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id903442">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id903476">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id903504">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#born-pqr">Born ion PQR</a></dt><dt>4.2. <a href="#born-input">Example born input file</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#born-solvation-energy-equation">Born ion polar solvation energy</a></dt><dt>5.1. <a href="#binding-cycle-eqn"> Binding free energy formula
+				</a></dt><dt>5.2. <a href="#binding-solvation-eq"> Solvation contributions to the binding
+						free energy </a></dt><dt>5.3. <a href="#binding-coulomb-eq"> Coulombic contributions to the binding
+						free energy </a></dt><dt>5.4. <a href="#binding-cycle-eqn-2"> Binding free energy </a></dt></dl></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="introduction-sect"></a>Chapter 1. How to read this tutorial</h2></div></div></div><p>This tutorial is designed as a "how to" document to get
 			users acquainted with computational electrostatics
 			calculations using APBS.  In order to perform the
 			provided examples, you will need the latest version of
@@ -1025,11 +1028,122 @@ quit
 					important to examine the sensitivity of
 					the calculated solvation energies with
 					respect to grid spacings and
-					dimensions.</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902146"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="binding-sect"></a>Chapter 5. How do I calculate a binding
-energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902173">5.1. Hey! You don't have any parameters for my
-ligand!</a></span></dt><dt><span class="sect1"><a href="#id902185">5.2. Polar contributions</a></span></dt><dt><span class="sect1"><a href="#id902197">5.3. Apolar contributions</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902173"></a>5.1. Hey! You don't have any parameters for my
-ligand!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902185"></a>5.2. Polar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902197"></a>5.3. Apolar contributions</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="forces-sect"></a>Chapter 6. How do I calculate solvation
-forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902224">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902235">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902224"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902235"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></div><p> APBS requires approximately 200 B memory per grid point.
+					dimensions.</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902146"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="binding-sect"></a>Chapter 5. How do I calculate a binding energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
+			</a></span></dt><dt><span class="sect1"><a href="#binding-coulombic">5.2. Including Coulombic contributions</a></span></dt><dt><span class="sect1"><a href="#binding-ligand">5.3. Hey! You don't have any parameters for my ligand!</a></span></dt><dt><span class="sect1"><a href="#binding-example">5.4. A ligand binding example</a></span></dt></dl></div><p> In general, implicit solvent models are used to
+			calculation the contribution of
+			<span class="emphasis"><em>solvation</em></span> to binding free
+			energies.  Additional binding free energy contributions
+			(molecular mechanics energies, entropic changes, etc.)
+			must be calculated separately and are not discussed in
+			this tutorial.  One exception is the inclusion of
+			intermolecular Coulombic interations; we'll discuss how
+			these can be calculated in APBS <a href="#binding-coulomb">below</a>. </p><p> Our framework for calculating solvation contributions to
+			binding free energies is shown in <a href="#binding-cycle" title="Figure 5.1.  Binding free energy cycle illustrating&#10;&#9;&#9;&#9;&#9;binding in terms of transfer free energies from&#10;&#9;&#9;&#9;&#9;a homogeneous dielectric environment (where&#10;&#9;&#9;&#9;&#9;interactions are described by Coulomb's law) to &#10;&#9;&#9;&#9;&#9;an inhomogeneous dielectric environment with&#10;&#9;&#9;&#9;&#9;differing internal (green) and external (cyan)&#10;&#9;&#9;&#9;&#9;dielectric constants.  The binding&#10;&#9;&#9;&#9;&#9;(dissociation) free energy is depicted in Step&#10;&#9;&#9;&#9;&#9;3.">Figure 5.1, “ Binding free energy cycle
+				”</a>.
+			</p><div class="figure"><a id="binding-cycle"></a><p class="title"><b>Figure 5.1.  Binding free energy cycle illustrating
+				binding in terms of transfer free energies from
+				a homogeneous dielectric environment (where
+				interactions are described by Coulomb's law) to 
+				an inhomogeneous dielectric environment with
+				differing internal (green) and external (cyan)
+				dielectric constants.  The binding
+				(dissociation) free energy is depicted in Step
+				3.</b></p><div class="figure-contents"><div><img src="images/binding-cycle.png" alt="Binding free energy cycle illustrating binding in terms of transfer free energies from a homogeneous dielectric environment (where interactions are described by Coulomb's law) to an inhomogeneous dielectric environment with differing internal (green) and external (cyan) dielectric constants. The binding (dissociation) free energy is depicted in Step 3." /></div></div></div><p><br class="figure-break" />
+			The binding free energy is given by <a href="#binding-cycle-eqn" title="Equation 5.1.  Binding free energy formula based on&#10;&#9;&#9;&#9;&#9;&#9;Figure 5.1, “ Binding free energy cycle&#10;&#9;&#9;&#9;&#9;”. ">Equation 5.1, “ Binding free energy formula
+				”</a>.
+			</p><div class="equation"><a id="binding-cycle-eqn"></a><p class="title"><b>Equation 5.1.  Binding free energy formula based on
+					<a href="#binding-cycle" title="Figure 5.1.  Binding free energy cycle illustrating&#10;&#9;&#9;&#9;&#9;binding in terms of transfer free energies from&#10;&#9;&#9;&#9;&#9;a homogeneous dielectric environment (where&#10;&#9;&#9;&#9;&#9;interactions are described by Coulomb's law) to &#10;&#9;&#9;&#9;&#9;an inhomogeneous dielectric environment with&#10;&#9;&#9;&#9;&#9;differing internal (green) and external (cyan)&#10;&#9;&#9;&#9;&#9;dielectric constants.  The binding&#10;&#9;&#9;&#9;&#9;(dissociation) free energy is depicted in Step&#10;&#9;&#9;&#9;&#9;3.">Figure 5.1, “ Binding free energy cycle
+				”</a>. </b></p><div class="equation-contents"><div><img src="images/binding-cycle-eqn.png" /></div></div></div><p><br class="equation-break" />
+			The following sections provide more detail on
+			calculating individual terms of this equation.
+		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-solvation"></a>5.1.  Solvation energy contributions to binding
+			</h2></div></div></div><p> If we're just interested in calculating the solvation
+				contributions to binding (steps 4 and 2 in <a href="#binding-cycle" title="Figure 5.1.  Binding free energy cycle illustrating&#10;&#9;&#9;&#9;&#9;binding in terms of transfer free energies from&#10;&#9;&#9;&#9;&#9;a homogeneous dielectric environment (where&#10;&#9;&#9;&#9;&#9;interactions are described by Coulomb's law) to &#10;&#9;&#9;&#9;&#9;an inhomogeneous dielectric environment with&#10;&#9;&#9;&#9;&#9;differing internal (green) and external (cyan)&#10;&#9;&#9;&#9;&#9;dielectric constants.  The binding&#10;&#9;&#9;&#9;&#9;(dissociation) free energy is depicted in Step&#10;&#9;&#9;&#9;&#9;3.">Figure 5.1, “ Binding free energy cycle
+				”</a>), then we simply need
+				to follow the instructions from <a href="#solvation-sect" title="Chapter 4. How do I calculate a solvation&#10;energy?">Chapter 4, <i>How do I calculate a solvation
+energy?</i></a> for the complex and
+				isolated components.  The solvation energy contribution
+				to the binding is then given by <a href="#binding-solvation-eq" title="Equation 5.2.  Solvation contributions to the binding&#10;&#9;&#9;&#9;&#9;&#9;&#9;free energy for a two-component complex&#10;&#9;&#9;&#9;&#9;&#9;&#9;of molecules &quot;mol 1&quot; and &quot;mol 2&quot;.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Refer to Figure 5.1, “ Binding free energy cycle&#10;&#9;&#9;&#9;&#9;” for numbering.">Equation 5.2, “ Solvation contributions to the binding
+						free energy ”</a>.  
+				</p><div class="equation"><a id="binding-solvation-eq"></a><p class="title"><b>Equation 5.2.  Solvation contributions to the binding
+						free energy for a two-component complex
+						of molecules "mol 1" and "mol 2".
+						Refer to <a href="#binding-cycle" title="Figure 5.1.  Binding free energy cycle illustrating&#10;&#9;&#9;&#9;&#9;binding in terms of transfer free energies from&#10;&#9;&#9;&#9;&#9;a homogeneous dielectric environment (where&#10;&#9;&#9;&#9;&#9;interactions are described by Coulomb's law) to &#10;&#9;&#9;&#9;&#9;an inhomogeneous dielectric environment with&#10;&#9;&#9;&#9;&#9;differing internal (green) and external (cyan)&#10;&#9;&#9;&#9;&#9;dielectric constants.  The binding&#10;&#9;&#9;&#9;&#9;(dissociation) free energy is depicted in Step&#10;&#9;&#9;&#9;&#9;3.">Figure 5.1, “ Binding free energy cycle
+				”</a> for numbering.</b></p><div class="equation-contents"><div><img src="images/binding-solvation.png" /></div></div></div><p><br class="equation-break" />
+				This solvation energy contribution can be decomposed
+				into polar and nonpolar parts as outlined in <a href="#solvation-sect" title="Chapter 4. How do I calculate a solvation&#10;energy?">Chapter 4, <i>How do I calculate a solvation
+energy?</i></a>.
+			</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-coulombic"></a>5.2. Including Coulombic contributions</h2></div></div></div><p><a id="binding-coulomb"></a> To complete the binding
+				free energy cycle (see <a href="#binding-cycle" title="Figure 5.1.  Binding free energy cycle illustrating&#10;&#9;&#9;&#9;&#9;binding in terms of transfer free energies from&#10;&#9;&#9;&#9;&#9;a homogeneous dielectric environment (where&#10;&#9;&#9;&#9;&#9;interactions are described by Coulomb's law) to &#10;&#9;&#9;&#9;&#9;an inhomogeneous dielectric environment with&#10;&#9;&#9;&#9;&#9;differing internal (green) and external (cyan)&#10;&#9;&#9;&#9;&#9;dielectric constants.  The binding&#10;&#9;&#9;&#9;&#9;(dissociation) free energy is depicted in Step&#10;&#9;&#9;&#9;&#9;3.">Figure 5.1, “ Binding free energy cycle
+				”</a>), we need to add
+				intermolecular Coulombic contributions to the
+				solvation energy change upon binding to get the
+				total electrostatic/solvent contribution to the
+				binding free energy.  In particular, we're
+				interested in the change in Coulombic
+				electrostatic energy upon binding, as given by
+				<a href="#binding-coulomb-eq" title="Equation 5.3.  Coulombic contributions to the binding&#10;&#9;&#9;&#9;&#9;&#9;&#9;free energy for a two-component complex&#10;&#9;&#9;&#9;&#9;&#9;&#9;of molecules &quot;mol 1&quot; and &quot;mol&#10;&#9;&#9;&#9;&#9;&#9;&#9;2&quot;.  See Equation 5.1, “ Binding free energy formula&#10;&#9;&#9;&#9;&#9;”&#10;&#9;&#9;&#9;&#9;&#9;&#9;for numbering.">Equation 5.3, “ Coulombic contributions to the binding
+						free energy ”</a>.
+				</p><div class="equation"><a id="binding-coulomb-eq"></a><p class="title"><b>Equation 5.3.  Coulombic contributions to the binding
+						free energy for a two-component complex
+						of molecules "mol 1" and "mol
+						2".  See <a href="#binding-cycle-eqn" title="Equation 5.1.  Binding free energy formula based on&#10;&#9;&#9;&#9;&#9;&#9;Figure 5.1, “ Binding free energy cycle&#10;&#9;&#9;&#9;&#9;”. ">Equation 5.1, “ Binding free energy formula
+				”</a>
+						for numbering.</b></p><div class="equation-contents"><div><img src="images/binding-coulomb.png" /></div></div></div><p><br class="equation-break" />
+				Each of the ΔG<sub>coul</sub>
+				quantities in <a href="#binding-coulomb-eq" title="Equation 5.3.  Coulombic contributions to the binding&#10;&#9;&#9;&#9;&#9;&#9;&#9;free energy for a two-component complex&#10;&#9;&#9;&#9;&#9;&#9;&#9;of molecules &quot;mol 1&quot; and &quot;mol&#10;&#9;&#9;&#9;&#9;&#9;&#9;2&quot;.  See Equation 5.1, “ Binding free energy formula&#10;&#9;&#9;&#9;&#9;”&#10;&#9;&#9;&#9;&#9;&#9;&#9;for numbering.">Equation 5.3, “ Coulombic contributions to the binding
+						free energy ”</a> is the
+				sum of pairwise Coulombic interactions between
+				all atoms in the molecule (or complex)
+				<span class="emphasis"><em>for a particular uniform
+					dielectric</em></span>.  In order to
+				combine these Coulombic binding energies with
+				the solvation energies described <a href="#binding-solvation" title="5.1.  Solvation energy contributions to binding">above</a>,
+				we need to make sure consistent dielectric
+				constants are used.  In particular, Coulombic
+				interactions should be calculated using the
+				same uniform dielectric constant as the
+				reference state of the solvation energy above.
+				For example, if solvation energies are
+				calculated for transfering a protein from a
+				medium with uniform dielectric of
+				ε<sub>in</sub>
+				to a medium with internal dielectric
+				ε<sub>in</sub>
+				and external dielectric 
+				ε<sub>out</sub>, 
+				then Coulombic energies should
+				be calculated using a dielectric of
+				ε<sub>in</sub>.
+				The APBS accessory program
+				<code class="filename">tools/manip/coulomb</code> was
+				created to help with the calculation of these
+				individual per-molecule Coulombic energies.
+				Given a PQR file as input, the
+				<code class="filename">tools/manip/coulomb</code>
+				program calculates Coulombic energies for a
+				vacuum dielectric (e.g., a uniform dielectric
+				of 1).  If the reference dielectric is
+				ε<sub>in</sub>, then all
+				energies returned by 
+				<code class="filename">tools/manip/coulomb</code>
+				need to be divided by 
+				ε<sub>in</sub>.
+			</p><p>
+				With the appropriate dielectric constant of
+				ε<sub>in</sub> used
+				for the Coulombic binding energy, a total
+				electrostatic/solvation free energy can be
+				calculated from <a href="#binding-cycle-eqn-2" title="Equation 5.4.  Binding free energy ">Equation 5.4, “ Binding free energy ”</a>.
+				<a href="#binding-cycle-eqn" title="Equation 5.1.  Binding free energy formula based on&#10;&#9;&#9;&#9;&#9;&#9;Figure 5.1, “ Binding free energy cycle&#10;&#9;&#9;&#9;&#9;”. ">Equation 5.1, “ Binding free energy formula
+				”</a>, 
+				<a href="#binding-solvation-eq" title="Equation 5.2.  Solvation contributions to the binding&#10;&#9;&#9;&#9;&#9;&#9;&#9;free energy for a two-component complex&#10;&#9;&#9;&#9;&#9;&#9;&#9;of molecules &quot;mol 1&quot; and &quot;mol 2&quot;.&#10;&#9;&#9;&#9;&#9;&#9;&#9;Refer to Figure 5.1, “ Binding free energy cycle&#10;&#9;&#9;&#9;&#9;” for numbering.">Equation 5.2, “ Solvation contributions to the binding
+						free energy ”</a>, and
+				<a href="#binding-coulomb-eq" title="Equation 5.3.  Coulombic contributions to the binding&#10;&#9;&#9;&#9;&#9;&#9;&#9;free energy for a two-component complex&#10;&#9;&#9;&#9;&#9;&#9;&#9;of molecules &quot;mol 1&quot; and &quot;mol&#10;&#9;&#9;&#9;&#9;&#9;&#9;2&quot;.  See Equation 5.1, “ Binding free energy formula&#10;&#9;&#9;&#9;&#9;”&#10;&#9;&#9;&#9;&#9;&#9;&#9;for numbering.">Equation 5.3, “ Coulombic contributions to the binding
+						free energy ”</a> as
+				</p><div class="equation"><a id="binding-cycle-eqn-2"></a><p class="title"><b>Equation 5.4.  Binding free energy </b></p><div class="equation-contents"><div><img src="images/binding-cycle-eqn-2.png" /></div></div></div><p><br class="equation-break" />
+			</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-ligand"></a>5.3. Hey! You don't have any parameters for my ligand!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-example"></a>5.4. A ligand binding example</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="forces-sect"></a>Chapter 6. How do I calculate solvation
+forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902574">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902585">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902574"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902585"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></div><p> APBS requires approximately 200 B memory per grid point.
 			Memory usage can be predicted before performing the
 			calculations using the <code class="filename">tools/manip/psize.py</code>
 			Python script provided with APBS. </p><p>  If it appears your calculation is going to require more
@@ -1166,7 +1280,7 @@ quit
 				example of the <code class="filename">mergedx</code>
 				output (see <a href="#vmd-isocontour" title="3.1.4.1. Isocontour visualization">Section 3.1.4.1, “Isocontour visualization”</a>
 				for methods) is shown in 
-				</p><div class="figure"><a id="id902588"></a><p class="title"><b>Figure 8.1. Actin dimer isocontours from
+				</p><div class="figure"><a id="id902938"></a><p class="title"><b>Figure 8.1. Actin dimer isocontours from
 parallel focusing</b></p><div class="figure-contents"><div><img src="images/actin_dimer-iso_trans.jpg" alt="Actin dimer isocontours from parallel focusing" /></div></div></div><p><br class="figure-break" />
 				Note that downsampling isn't necessary -- and
 				often isn't desirable for high quality
@@ -1256,16 +1370,16 @@ quit
 				reassembled with <code class="filename">mergedx</code>
 				as described above.
 			</p></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="simulation-sect"></a>Chapter 9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902813">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id902838">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id902950">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
+molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id903163">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903188">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903300">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			service.  This section demonstrates how <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			can be used to perform most APBS calculations commonly
 			done through the command-line interface.  Better yet,
 			it allows you to use <a href="http://nbcr.net" target="_top">NBCR's</a> resources
 			instead of your own!  
-		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902813"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
+		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903163"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
 				extension for the <a href="http://www.mozilla.com/firefox/" target="_top">Firefox</a>
 				web browser from <a href="http://gemstone.mozdev.org" target="_top">http://gemstone.mozdev.org</a>
-				before starting this tutorial.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902838"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
+				before starting this tutorial.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903188"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
 				First, you need to download a PDB file from the
 				<a href="http://www.pdb.org" target="_top">Protein Data
 					Bank</a>.  For the purposes of this
@@ -1278,13 +1392,13 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					file you just downloaded and any other
 					options for PDB2PQR of interest.  Your
 					screen should look something like:
-					</p><div class="figure"><a id="id902920"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id903270"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation" /></div></div></div><p><br class="figure-break" />
 					Go ahead and "Run" the Gemstone
 					calculation, check the
 					<code class="filename">stdOut</code> and
 					<code class="filename">stdErr</code> for any
 					warning messages, and download the
-					resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902950"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
+					resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903300"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
 					calculation of the 1FAS electrostatic
 					potential through Gemstone.  Open the
 					<span class="guimenu">Chemistry</span> → <span class="guimenuitem">Apbs</span>
@@ -1292,7 +1406,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					Gemstone screen.  We'll step through
 					each of the input tabs in the middle
 					pane in the following sections.
-				</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id902981"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
+				</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903330"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
 						the middle pane.</p><p>Most of the "Mathematics"
 						settings can be left as-is;
 						however, feel free to play with
@@ -1305,8 +1419,8 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						calculation.</p><p>At
 						this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903009"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903025"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
+						</p><div class="figure"><a id="id903358"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903375"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
 						middle pane.</p><p>Under "General", enter 97 for X,
 						Y, and Z "Grid points".</p><p>Under "Coarse Grid", choose 100
 						for all X, Y, and Z "Lengths".
@@ -1318,31 +1432,31 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						alone for this
 						calculation.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903057"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903073"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
+						</p><div class="figure"><a id="id903407"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903423"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
 						the middle pane.</p><p>Choose any values you like here;
 						the defaults should be fine for
 						most visualization
 						calculations.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903092"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903108"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
+						</p><div class="figure"><a id="id903442"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903458"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
 						the middle pane.</p><p>Unless you have other properties
 						you wan to visualize, you can
 						leave these settings
 						as-is.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903126"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
-						</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903142"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
+						</p><div class="figure"><a id="id903476"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
+						</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903492"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
 					and select "Run APBS".  After a while,
 					the results will appear under the
 					Output tab in the middle pane.  When
 					the run is complete, you should see
 					something like this:
-					</p><div class="figure"><a id="id903154"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id903504"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)" /></div></div></div><p><br class="figure-break" />
 					In particular, you should have the
 					option to save the potential file
-					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903172"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
+					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903522"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
 					tutorial can also be performed with
 					Gemstone.  Furthermore, input files can
 					be uploaded to use Gemstone as a
