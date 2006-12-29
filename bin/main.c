@@ -1,5 +1,5 @@
 /**
-*  @file    main.c
+ *  @file    main.c
  *  @author  Nathan Baker
  *  @brief   APBS "front end" program using formatted input files.
  * 
@@ -11,7 +11,7 @@
  *               apbs apbs.in
  *
  *           where apbs.in is a formatted input file (see documentation and
-													  *           examples).
+ *           examples).
  * 
  *  @version $Id$
  *  @attention
@@ -26,7 +26,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2006.  Washington University in St. Louis.
+ * Copyright (c) 2002-2007.  Washington University in St. Louis.
  * All Rights Reserved.
  * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  
@@ -141,7 +141,7 @@ int main(
 	/* Instructions: */
 	char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
-	APBS -- Adaptive Poisson-Boltzmann Solver\n\
+A	PBS -- Adaptive Poisson-Boltzmann Solver\n\
 	Version 0.4.0\n\
 	\n\
 	Nathan A. Baker (baker@biochem.wustl.edu)\n\
@@ -151,7 +151,7 @@ int main(
 	\n\
 	Additional contributing authors listed in the code documentation.\n\
 	\n\
-	Copyright (c) 2002-2006.  Washington University in St. Louis.\n\
+	Copyright (c) 2002-2007.  Washington University in St. Louis.\n\
 	All Rights Reserved.\n\
 	Portions Copyright (c) 1999-2002.  The Regents of the University of \n\
 	California.\n\
@@ -200,12 +200,12 @@ int main(
 	version of C.  It is designed to solve general coupled systems of nonlinear\n\
 	partial differential equations using adaptive finite element methods,\n\
 	inexact Newton methods, and algebraic multilevel methods.  More information\n\
-  about FEtk may be found at <http://www.FEtk.ORG>.\n\
+	about FEtk may be found at <http://www.FEtk.ORG>.\n\
 ----------------------------------------------------------------------\n\
-  Please cite your use of APBS as:\n\n\
-    Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
-					  nanosystems: application to microtubules and the ribosome. Proc.\n\
-    Natl. Acad. Sci. USA 98, 10037-10041 2001.\n\
+Please cite your use of APBS as:\n\n\
+	Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
+	nanosystems: application to microtubules and the ribosome. Proc.\n\
+	Natl. Acad. Sci. USA 98, 10037-10041 2001.\n\
 	\n\n"};
 	char *usage = 
 {"\n\n\
