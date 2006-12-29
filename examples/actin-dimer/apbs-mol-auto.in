@@ -33,7 +33,6 @@ elec name mol1
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -59,7 +58,6 @@ elec name mol2
     swin 0.3
     sdens 10.0
     temp 298.15 
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -85,7 +83,6 @@ elec name complex
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end

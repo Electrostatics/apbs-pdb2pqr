@@ -26,7 +26,6 @@ elec name acetic-solv
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -52,7 +51,6 @@ elec name acetic-ref
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -78,7 +76,6 @@ elec name acetate-solv
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -105,7 +102,6 @@ elec name acetate-ref
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -132,7 +128,6 @@ elec name proton-solv
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -159,7 +154,6 @@ elec name proton-ref
     swin 0.3
     sdens 10.0
     temp 293.0
-    gamma 0.105
     calcenergy total
     calcforce no
 end

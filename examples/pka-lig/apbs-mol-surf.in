@@ -32,7 +32,6 @@ elec name lig-coarse
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -55,7 +54,6 @@ elec name lig-fine
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -80,7 +78,6 @@ elec name pka-coarse
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -103,7 +100,6 @@ elec name pka-fine
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -128,7 +124,6 @@ elec name complex-coarse
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -151,7 +146,6 @@ elec name complex-fine
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
