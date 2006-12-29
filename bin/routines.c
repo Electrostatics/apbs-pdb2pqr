@@ -2881,8 +2881,8 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "    tot   n -- Total force for atom n\n");
 		Vnm_tprint( 1, "    sasa  n -- SASA force for atom n\n");
 		Vnm_tprint( 1, "    sav   n -- SAV force for atom n\n");
-		Vnm_tprint( 1, "    wca   n -- WCA force for atom n\n\n");
-		Vnm_tprint( 1, "    tot all -- Total force for system\n\n");
+		Vnm_tprint( 1, "    wca   n -- WCA force for atom n\n");
+		Vnm_tprint( 1, "    tot all -- Total force for system\n");
 		
 		//Vnm_tprint( 1, "    gamma, pressure, bconc are: %f %f %f\n\n",
 		//			gamma,press,bconc);
@@ -3579,7 +3579,10 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
 		rc = forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
-		if(rc == 0) return 0;
+		if(rc == 0) {
+			Vnm_print(2, "Error in apolar force calculation!\n");
+			return 0;
+		}
 	}
 	
 	/* Get the SAV and SAS */
@@ -3594,10 +3597,16 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
 		
 		/* wcaEnergy integral code */
-		rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
-		if(rc == 0) return 0;
-		
-		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
+		if (VABS(apolparm->bconc) > VSMALL) {
+			rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+			if (rc == 0) {
+				Vnm_print(2, "Error in apolar energy calculation!\n");
+				return 0;
+			}		
+			energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
+		} else {
+			apolparm->wcaEnergy = 0.0;
+		}
 	}
 	
 	return 1;
@@ -3691,9 +3700,9 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				force[j] = 0.0;
 			}
 			
-			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
-			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(bconc > VSMALL) rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+			if(VABS(gamma) > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
+			if(VABS(press) > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
+			if(VABS(bconc) > VSMALL) rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
 			if(rc == 0) return 0;
 			
 			for(j=0;j<3;j++){
@@ -3722,7 +3731,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 					(*atomForce)[0].wcaForce[1],
 					(*atomForce)[0].wcaForce[2]);
 		
-	}else if (apolparm->calcforce == ACF_COMPS){
+	} else if (apolparm->calcforce == ACF_COMPS ){
 		*nforce = 1;
 		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 											  sizeof(AtomForce));
@@ -3757,9 +3766,14 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 			
 			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
 			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(bconc > VSMALL) rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
-			if(rc == 0) return 0;
-			
+			if(bconc > VSMALL) {
+				rc = Vacc_wcaForce(acc, apolparm, alist, clist, radius, force);
+				if(rc == 0) {
+					Vnm_print(2, "Error calculating WCA forces for atom %d!\n", i);
+					return 0;
+				}
+			}
+				
 			xF = -((gamma*dSASA[0]) + (press*dSAV[0]) + (bconc*force[0]));
 			yF = -((gamma*dSASA[1]) + (press*dSAV[1]) + (bconc*force[1]));
 			zF = -((gamma*dSASA[2]) + (press*dSAV[2]) + (bconc*force[2]));
