@@ -577,7 +577,7 @@ VEXTERNC void Vacc_totalAtomdSAV(
 								 );
 
 /**
-* @brief  Return the total solvent accessible volume (SAV)
+ * @brief  Return the total solvent accessible volume (SAV)
  * @ingroup  Vacc
  * @note  Alias for Vacc_SAV
  * @author  David Gohara
@@ -589,6 +589,12 @@ VEXTERNC double Vacc_totalSAV(
 							   double radius  /** Probe molecule radius (&Aring;) */
 							   );
 
+/**
+ * @brief  Return the WCA integral energy
+ * @ingroup  Vacc
+ * @author  David Gohara
+ * @return WCA energy (kJ/mol)
+ */
 VPUBLIC int Vacc_wcaEnergy(
 							 Vacc *acc,  /** Accessibility object */
 							 APOLparm *apolparm,
@@ -596,7 +602,12 @@ VPUBLIC int Vacc_wcaEnergy(
 							 Vclist *clist, /** Clist for acc object */
 							 double radius
 							 );
-
+/**
+ * @brief  Return the WCA integral force
+ * @ingroup  Vacc
+ * @author  David Gohara
+ * @return WCA energy (kJ/mol/A)
+ */
 VPUBLIC int Vacc_wcaForce(
 						   Vacc *acc, 
 						   APOLparm *apolparm, 
