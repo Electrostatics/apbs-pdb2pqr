@@ -4,6 +4,7 @@
 # charge is the atomic charge in e 
 # radius is the van der Waals radius in A
 # epsilon is the van der Waals well depth in kcal/mol.
+# WARNING!!! EPSILON NEEDS TO BE CONVERTED TO KJ/MOL
 <amber>
   <residue>
     <name>ACE</name>
