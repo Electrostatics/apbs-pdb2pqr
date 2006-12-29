@@ -1,6 +1,11 @@
+#!/bin/bash
+
+# Generate the input file
+cat > apbs-pmf.in << EOF
+
 #############################################################################
 ### BORN ION SOLVATION ENERGY
-### $Id$
+### $Id: apbs.in 998 2006-11-28 21:24:40Z sobolevnrm $
 ###
 ### Please see APBS documentation (http://apbs.sourceforge.net/doc/) for 
 ### input file sytax.
@@ -64,3 +69,21 @@ print energy solvated - reference end
 
 # SO LONG
 quit
+EOF
+
+apbspath=`which apbs`
+if test -z "${apbspath}"; then
+	echo ""
+	echo "Please add the apbs binary to your path..."
+	echo ""
+	exit
+fi
+
+radii='1.00 2.00 3.00 4.00 5.00 6.00'
+
+for i in $radii; do
+  echo "Generating ion with $i radius..."
+  echo "ATOM      1  I   ION     1       0.000   0.000  0.000  1.00  $i" \
+    > ion.pqr
+  apbs apbs-pmf.in > OUTPUT-${i} 2>&1 
+done
