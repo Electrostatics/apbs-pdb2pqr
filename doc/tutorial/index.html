@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>APBS tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.71.1" /></head><body><div class="book" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id823555"></a>APBS tutorial</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Nathan</span> <span class="surname">Baker</span></h3><div class="affiliation"><span class="orgname">Washington University in St.  Louis<br /></span> <span class="orgdiv">Department of Biochemistry and
-					Molecular Biophysics<br /></span><span class="orgdiv">Center for Computational Biology<br /></span></div></div></div><div><p class="copyright">Copyright © 2002, 2003, 2004, 2005, 2006 Washington University in St.  Louis</p></div><div><div class="legalnotice"><a id="id900229"></a><p>This file is part of APBS.</p><p>This program is free software; you can
+					Molecular Biophysics<br /></span><span class="orgdiv">Center for Computational Biology<br /></span></div></div></div><div><p class="copyright">Copyright © 2002, 2003, 2004, 2005, 2006, 2007 Washington University in St.  Louis</p></div><div><div class="legalnotice"><a id="id900233"></a><p>This file is part of APBS.</p><p>This program is free software; you can
 				redistribute it and/or modify it under the
 				terms of the GNU General Public License as
 				published by the Free Software Foundation;
@@ -46,17 +46,17 @@
 			electrostatics calculations?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format-sect">2.1. PQR format</a></span></dt><dt><span class="sect1"><a href="#xml-format-sect">2.2. XML format</a></span></dt><dt><span class="sect1"><a href="#pdb2pqr-subsect">2.3. Generating PQR files from PDB
 				files (PDB2PQR)</a></span></dt></dl></dd><dt><span class="chapter"><a href="#viz-sect">3. How do I visualize the electrostatic
 potential around my biomolecule?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#vmd-sect">3.1. VMD</a></span></dt><dt><span class="sect1"><a href="#pymol-sect">3.2. PyMOL</a></span></dt><dt><span class="sect1"><a href="#pmv-sect">3.3. PMV</a></span></dt></dl></dd><dt><span class="chapter"><a href="#solvation-sect">4. How do I calculate a solvation
-energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id901948">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902146">4.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
+energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id901953">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902152">4.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
 			</a></span></dt><dt><span class="sect1"><a href="#binding-coulombic">5.2. Including Coulombic contributions</a></span></dt><dt><span class="sect1"><a href="#binding-ligand">5.3. Hey! You don't have any parameters for my ligand!</a></span></dt><dt><span class="sect1"><a href="#binding-example">5.4. A ligand binding example</a></span></dt></dl></dd><dt><span class="chapter"><a href="#forces-sect">6. How do I calculate solvation
-forces?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902574">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902585">6.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dd><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></dd><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id903163">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903188">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903300">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901232">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901404">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901758">+/- 1 kT/e
+forces?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902580">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902591">6.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dd><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></dd><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
+molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id903169">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903194">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903305">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901245">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901416">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901770">+/- 1 kT/e
 							electrostatic potential
-							isocontours of FAS2 in PyMOL</a></dt><dt>3.4. <a href="#id901863">+/- 5 kT/e
+							isocontours of FAS2 in PyMOL</a></dt><dt>3.4. <a href="#id901869">+/- 5 kT/e
 							electrostatic surface potential
 							of FAS2 in PyMOL</a></dt><dt>4.1. <a href="#solvation-cycle-full">Full
 					solvation energy cycle</a></dt><dt>5.1. <a href="#binding-cycle"> Binding free energy cycle
-				</a></dt><dt>8.1. <a href="#id902938">Actin dimer isocontours from
-parallel focusing</a></dt><dt>10.1. <a href="#id903270">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id903358">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id903407">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id903442">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id903476">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id903504">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#born-pqr">Born ion PQR</a></dt><dt>4.2. <a href="#born-input">Example born input file</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#born-solvation-energy-equation">Born ion polar solvation energy</a></dt><dt>5.1. <a href="#binding-cycle-eqn"> Binding free energy formula
+				</a></dt><dt>8.1. <a href="#id902944">Actin dimer isocontours from
+parallel focusing</a></dt><dt>10.1. <a href="#id903276">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id903364">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id903413">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id903448">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id903482">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id903510">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#born-pqr">Born ion PQR</a></dt><dt>4.2. <a href="#born-input">Example born input file</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#born-solvation-energy-equation">Born ion polar solvation energy</a></dt><dt>5.1. <a href="#binding-cycle-eqn"> Binding free energy formula
 				</a></dt><dt>5.2. <a href="#binding-solvation-eq"> Solvation contributions to the binding
 						free energy </a></dt><dt>5.3. <a href="#binding-coulomb-eq"> Coulombic contributions to the binding
 						free energy </a></dt><dt>5.4. <a href="#binding-cycle-eqn-2"> Binding free energy </a></dt></dl></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="introduction-sect"></a>Chapter 1. How to read this tutorial</h2></div></div></div><p>This tutorial is designed as a "how to" document to get
@@ -70,6 +70,12 @@ parallel focusing</a></dt><dt>10.1. <a href="#id903270">Gemstone PDB2PQR calcula
 				service without the need for local
 				installations of the APBS software.  More
 				information is available in <a href="#gemstone-sect" title="Chapter 10. Can I run APBS via the web?  (Gemstone) ">Chapter 10, <i>Can I run APBS via the web?  (Gemstone) </i></a>.
+			</p></td></tr></table></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p> This document is still under construction and
+				should be completed before the next
+				(post-0.5.0) APBS release.  Many of the
+				topics covered in the incomplete sections are
+				demonstrated in the APBS
+				<code class="filename">examples</code> directory.
 			</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pdb2pqr-sect"></a>Chapter 2. How do I get my structure ready for
 			electrostatics calculations?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format-sect">2.1. PQR format</a></span></dt><dt><span class="sect1"><a href="#xml-format-sect">2.2. XML format</a></span></dt><dt><span class="sect1"><a href="#pdb2pqr-subsect">2.3. Generating PQR files from PDB
 				files (PDB2PQR)</a></span></dt></dl></div><p>
@@ -145,7 +151,7 @@ parallel focusing</a></dt><dt>10.1. <a href="#id903270">Gemstone PDB2PQR calcula
 				review the minimal steps required to produce a
 				PQR file from a PDB file here.  To begin,
 				choose a server from <a href="http://pdb2pqr.sf.net/#availability" target="_top">http://pdb2pqr.sf.net/#availability</a>.
-			</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900506"></a>2.3.1. Choose the PDB file to convert</h3></div></div></div><p>
+			</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900525"></a>2.3.1. Choose the PDB file to convert</h3></div></div></div><p>
 					Either enter the 4-character <a href="http://www.pdb.org/" target="_top">PDB</a>
 					ID or accession number (e.g., <a href="http://www.pdb.org/pdb/explore.do?structureId=1FAS" target="_top">1FAS</a>,
 					<a href="http://www.pdb.org/pdb/explore.do?structureId=1MAH" target="_top">1MAH</a>,
@@ -189,12 +195,12 @@ parallel focusing</a></dt><dt>10.1. <a href="#id903270">Gemstone PDB2PQR calcula
 					unusual residues).  Please see the
 					<a href="http://pdb2pqr.sf.net/" target="_top">PDB2PQR</a>
 					documentation for more information.
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900594"></a>2.3.3. Output naming scheme</h3></div></div></div><p>This is largely irrelevant to
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900613"></a>2.3.3. Output naming scheme</h3></div></div></div><p>This is largely irrelevant to
 					electrostatics calculations but may be
 					important for visualization.  When in
 					doubt, choose the "Internal naming
 					scheme" which attempts to conform to
-					IUPAC standards.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900607"></a>2.3.4. Other options</h3></div></div></div><p>These options fall into two categories:
+					IUPAC standards.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900627"></a>2.3.4. Other options</h3></div></div></div><p>These options fall into two categories:
 					how to build missing atoms (including
 					hydrogens) onto the structure and
 					additional output configuration.</p><div class="variablelist"><p class="title"><b>Missing atom build
@@ -248,11 +254,11 @@ generally a good option to include</em></span>.
 							PQR file</span></dt><dd><p> Unfortunately,
 								chain IDs still
 								baffle
-								APBS<sup>[<a id="id900731" href="#ftn.id900731">1</a>]</sup>
+								APBS<sup>[<a id="id900751" href="#ftn.id900751">1</a>]</sup>
 								but they can be
 								useful for
 								visualization.
-							</p></dd></dl></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900747"></a>2.3.5. Running the calculation and downloading
+							</p></dd></dl></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900766"></a>2.3.5. Running the calculation and downloading
 					the results</h3></div></div></div><p>Hit <span class="guibutton">Submit</span> to run
 					the calculation.  Note that some
 					options (particularly hydrogen bond
@@ -261,7 +267,7 @@ generally a good option to include</em></span>.
 					You should get intermittent updates on
 					the progress of your calculation from
 					the web server.</p><p>When you download the result from the web
-					page,<sup>[<a id="id900769" href="#ftn.id900769">2</a>]</sup>
+					page,<sup>[<a id="id900788" href="#ftn.id900788">2</a>]</sup>
 					many browsers will attach a ".txt"
 					extension to the file.  This generally
 					needs to be removed before it can be
@@ -275,7 +281,7 @@ generally a good option to include</em></span>.
 					proceeding.  This can be done with your
 					favorite <a href="http://en.wikipedia.org/wiki/Text_editor" target="_top">text
 						editor</a>.
-				</p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>STILL UNDER CONSTRUCTION</p></td></tr></table></div></div><div class="footnotes"><br /><hr width="100" align="left" /><div class="footnote"><p><sup>[<a id="ftn.id900731" href="#id900731">1</a>] </sup>Sorry,
+				</p></div></div><div class="footnotes"><br /><hr width="100" align="left" /><div class="footnote"><p><sup>[<a id="ftn.id900751" href="#id900751">1</a>] </sup>Sorry,
 										we're
 										still
 										working
@@ -289,7 +295,7 @@ generally a good option to include</em></span>.
 										parsing
 										strange
 										PDB
-										formats...</p></div><div class="footnote"><p><sup>[<a id="ftn.id900769" href="#id900769">2</a>] </sup>One can usually
+										formats...</p></div><div class="footnote"><p><sup>[<a id="ftn.id900788" href="#id900788">2</a>] </sup>One can usually
 							download, rather than
 							display the file, by
 							right-clicking or
@@ -313,7 +319,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 				plot of structure &amp; potential in VMD using
 				APBS.
 			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This tutorial was written using VMD
-					1.8.5.</p></td></tr></table></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900868"></a>3.1.1. Generating the PQR</h3></div></div></div><p> 
+					1.8.5.</p></td></tr></table></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900881"></a>3.1.1. Generating the PQR</h3></div></div></div><p> 
 					We'll perform this example with arc
 					repressor
 					(PDB ID <a href="http://www.pdb.org/pdb/explore.do?structureId=1MYK" target="_top">1MYK</a>),
@@ -324,14 +330,14 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 					in <a href="#pdb2pqr-subsect" title="2.3. Generating PQR files from PDB&#10;&#9;&#9;&#9;&#9;files (PDB2PQR)">Section 2.3, “Generating PQR files from PDB
 				files (PDB2PQR)”</a> to
 					generate a PQR file for this structure.
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900894"></a>3.1.2. Loading the PQR</h3></div></div></div><p>
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900906"></a>3.1.2. Loading the PQR</h3></div></div></div><p>
 					Load the PQR file you just created into
 					VMD (<span class="guimenu">File</span> → <span class="guimenuitem">New molecule...</span> in the VMD Main window).
 					Adjust the molecule to the desired
 					view.
-					<sup>[<a id="id900921" href="#ftn.id900921">3</a>]</sup>
+					<sup>[<a id="id900933" href="#ftn.id900933">3</a>]</sup>
 					Depending on the force
-					field<sup>[<a id="id900932" href="#ftn.id900932">4</a>]</sup>
+					field<sup>[<a id="id900945" href="#ftn.id900945">4</a>]</sup>
 					you used in PDB2PQR, you may notice
 					that VMD is displaying some strange
 					bonds.  When a PQR file is loaded into
@@ -342,7 +348,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 					worry if some of the bonds appear a bit
 					strange (hide the hydrogens if it
 					really bothers you).
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900946"></a>3.1.3. Running the electrostatics calculation</h3></div></div></div><p>
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id900959"></a>3.1.3. Running the electrostatics calculation</h3></div></div></div><p>
 					You're now ready for electrostatics
 					calculations.  
 					</p><div class="orderedlist"><ol type="1"><li><p>Choose
@@ -421,7 +427,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 								and hit
 								<span class="guibutton">OK</span>.
 							</p></li></ol></div><p>
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901092"></a>3.1.4. Electrostatics visualization</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="vmd-isocontour"></a>3.1.4.1. Isocontour visualization</h4></div></div></div><p>
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901105"></a>3.1.4. Electrostatics visualization</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="vmd-isocontour"></a>3.1.4.1. Isocontour visualization</h4></div></div></div><p>
 						One of the most popular
 						visualization methods is the
 						isocontour.
@@ -490,8 +496,8 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 						I changed the surface to points
 						to make the figure a bit
 						cleaner):
-						</p><div class="figure"><a id="id901232"></a><p class="title"><b>Figure 3.1. Arc repressor isocontours in VMD</b></p><div class="figure-contents"><div><img src="images/arc-iso-vmd.png" alt="Arc repressor isocontours in VMD" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901248"></a>3.1.4.2. Visualizing surface potentials</h4></div></div></div><p>
+						</p><div class="figure"><a id="id901245"></a><p class="title"><b>Figure 3.1. Arc repressor isocontours in VMD</b></p><div class="figure-contents"><div><img src="images/arc-iso-vmd.png" alt="Arc repressor isocontours in VMD" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901261"></a>3.1.4.2. Visualizing surface potentials</h4></div></div></div><p>
 						Another popular method of
 						electrostatic potential
 						visualization maps the
@@ -529,7 +535,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 								<span class="guilabel">Drawing
 									Method</span>
 								to
-								"Surf"<sup>[<a id="id901322" href="#ftn.id901322">5</a>]</sup>
+								"Surf"<sup>[<a id="id901334" href="#ftn.id901334">5</a>]</sup>
 								and
 								<span class="guilabel">Coloring
 									Method</span>
@@ -580,7 +586,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 							</p></li></ol></div><p>
 						Your molecule now probably
 						looks like this:
-						</p><div class="figure"><a id="id901404"></a><p class="title"><b>Figure 3.2. Arc repressor surface potential in VMD</b></p><div class="figure-contents"><div><img src="images/arc-surf-vmd.png" alt="Arc repressor surface potential in VMD" /></div></div></div><p><br class="figure-break" />
+						</p><div class="figure"><a id="id901416"></a><p class="title"><b>Figure 3.2. Arc repressor surface potential in VMD</b></p><div class="figure-contents"><div><img src="images/arc-surf-vmd.png" alt="Arc repressor surface potential in VMD" /></div></div></div><p><br class="figure-break" />
 					</p></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="pymol-sect"></a>3.2. PyMOL</h2></div></div></div><p>
 				The <a href="http://pymol.sf.net" target="_top">PyMOL</a> molecular
 				graphics software package provides support for
@@ -591,7 +597,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 				plot of structure &amp; potential in PyMOL using
 				APBS.
 			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png" /></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>This tutorial was written using
-					PyMOLX11Hybrid 0.99 on a Mac.</p></td></tr></table></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901450"></a>3.2.1. Generating the PQR</h3></div></div></div><p>We'll perform this example with
+					PyMOLX11Hybrid 0.99 on a Mac.</p></td></tr></table></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901462"></a>3.2.1. Generating the PQR</h3></div></div></div><p>We'll perform this example with
 					fasciculin-2 (PDB ID <a href="http://www.pdb.org/pdb/explore.do?structureId=1FAS" target="_top">1FAS</a>),
 					a snake neurotoxin which binds the
 					negatively-charged
@@ -601,7 +607,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 				files (PDB2PQR)”</a>.
 				</p><p>Load the PQR file you created into PyMOL
 					(<span class="guimenu">File</span> → <span class="guimenuitem">Open...</span>) and choose your favorite
-					graphical representation.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901495"></a>3.2.2. Performing the electrostatics calcuation
+					graphical representation.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901508"></a>3.2.2. Performing the electrostatics calcuation
 					</h3></div></div></div><p>
 					Go to the 
 					<span class="guimenu">Plugin</span> → <span class="guimenuitem">APBS
@@ -706,7 +712,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 								parameters; the
 								defaults are
 								usually
-								OK<sup>[<a id="id901640" href="#ftn.id901640">6</a>]</sup>.
+								OK<sup>[<a id="id901653" href="#ftn.id901653">6</a>]</sup>.
 							</p></li><li><p>
 								Under the
 								"<span class="guilabel">Configuration</span>"
@@ -733,19 +739,19 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 								the calcaultion
 								is finished.
 							</p></li></ol></div><p>
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901687"></a>3.2.3. Visualize the electrostatic potential</h3></div></div></div><p> Before proceeding with the remaining
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id901700"></a>3.2.3. Visualize the electrostatic potential</h3></div></div></div><p> Before proceeding with the remaining
 					steps, you must load the electrostatic
 					potential data into PyMOL.  Under the
 					"<span class="guilabel">Visualization</span>"
 					tab of the PyMOL APBS Tools window, hit
 					the <span class="guibutton">Update</span>
-					button.  </p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901711"></a>3.2.3.1. Electrostatic isocontours</h4></div></div></div><p>PyMOL makes this step very easy:
+					button.  </p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901724"></a>3.2.3.1. Electrostatic isocontours</h4></div></div></div><p>PyMOL makes this step very easy:
 						adjust the positive and
 						negative
 						"<span class="guilabel">Contour</span>"
 						fields to the desired values
 						(usually +/-1, +/-5, or +/-10
-						kT/e<sup>[<a id="id901728" href="#ftn.id901728">7</a>]</sup>)
+						kT/e<sup>[<a id="id901741" href="#ftn.id901741">7</a>]</sup>)
 						and hit the 
 						<span class="guilabel">Positive Isosurface</span>
 						and <span class="guilabel">Negative Isosurface</span>
@@ -755,10 +761,10 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 						At this point, you probably
 						have a figure that looks
 						something like:
-						</p><div class="figure"><a id="id901758"></a><p class="title"><b>Figure 3.3. +/- 1 kT/e
+						</p><div class="figure"><a id="id901770"></a><p class="title"><b>Figure 3.3. +/- 1 kT/e
 							electrostatic potential
 							isocontours of FAS2 in PyMOL</b></p><div class="figure-contents"><div><img src="images/fas2-iso-pymol.png" alt="+/- 1 kT/e electrostatic potential isocontours of FAS2 in PyMOL" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901774"></a>3.2.3.2. Surface potentials</h4></div></div></div><p>If you haven't already, hide the
+					</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id901787"></a>3.2.3.2. Surface potentials</h4></div></div></div><p>If you haven't already, hide the
 						isocontours by hitting
 						<span class="guilabel">Positive Isosurface</span>
 						and <span class="guilabel">Negative Isosurface</span>
@@ -784,19 +790,19 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 						on the solvent-accessible
 						(probe-inflated or
 						Lee-Richards)
-						surface<sup>[<a id="id901837" href="#ftn.id901837">8</a>]</sup>.
+						surface<sup>[<a id="id901849" href="#ftn.id901849">8</a>]</sup>.
 						Hit the "<span class="guilabel">Molecular
 							Surface</span>"
 						<span class="guibutton">Show</span>
 						button to load the surface
 						potential.
-						</p><div class="figure"><a id="id901863"></a><p class="title"><b>Figure 3.4. +/- 5 kT/e
+						</p><div class="figure"><a id="id901869"></a><p class="title"><b>Figure 3.4. +/- 5 kT/e
 							electrostatic surface potential
 							of FAS2 in PyMOL</b></p><div class="figure-contents"><div><img src="images/fas2-surf-pymol.png" alt="+/- 5 kT/e electrostatic surface potential of FAS2 in PyMOL" /></div></div></div><p><br class="figure-break" />
 					</p></div></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="pmv-sect"></a>3.3. PMV</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction -- surfaces are
 					currently broken with some PQR
 					structure/force field
-					combinations.</p></td></tr></table></div></div><div class="footnotes"><br /><hr width="100" align="left" /><div class="footnote"><p><sup>[<a id="ftn.id900921" href="#id900921">3</a>] </sup> At this point you may
+					combinations.</p></td></tr></table></div></div><div class="footnotes"><br /><hr width="100" align="left" /><div class="footnote"><p><sup>[<a id="ftn.id900933" href="#id900933">3</a>] </sup> At this point you may
 							notice (to many users'
 							chagrin) that PDB2PQR
 							removed the chain IDs
@@ -804,9 +810,9 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 							Sorry about this; we're
 							trying to fix it in
 							future releases of APBS
-							and PDB2PQR.</p></div><div class="footnote"><p><sup>[<a id="ftn.id900932" href="#id900932">4</a>] </sup>Visualization
+							and PDB2PQR.</p></div><div class="footnote"><p><sup>[<a id="ftn.id900945" href="#id900945">4</a>] </sup>Visualization
 							seems to work best with
-							PARSE</p></div><div class="footnote"><p><sup>[<a id="ftn.id901322" href="#id901322">5</a>] </sup>FYI,
+							PARSE</p></div><div class="footnote"><p><sup>[<a id="ftn.id901334" href="#id901334">5</a>] </sup>FYI,
 										this
 										appears
 										to
@@ -832,7 +838,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 										this
 										type
 										of
-										visualization...</p></div><div class="footnote"><p><sup>[<a id="ftn.id901640" href="#id901640">6</a>] </sup>Although
+										visualization...</p></div><div class="footnote"><p><sup>[<a id="ftn.id901653" href="#id901653">6</a>] </sup>Although
 										I
 										usually
 										prefer
@@ -850,12 +856,12 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 										properties
 										aren't
 										overly
-										exaggerated.</p></div><div class="footnote"><p><sup>[<a id="ftn.id901728" href="#id901728">7</a>] </sup>Note that
+										exaggerated.</p></div><div class="footnote"><p><sup>[<a id="ftn.id901741" href="#id901741">7</a>] </sup>Note that
 								PyMOL has a
 								slight units
 								error on the
 								contour
-								values.</p></div><div class="footnote"><p><sup>[<a id="ftn.id901837" href="#id901837">8</a>] </sup>In my opinion,
+								values.</p></div><div class="footnote"><p><sup>[<a id="ftn.id901849" href="#id901849">8</a>] </sup>In my opinion,
 								the
 								solvent-accessible
 								surface tends
@@ -874,7 +880,7 @@ potential around my biomolecule?</h2></div></div></div><div class="toc"><p><b>Ta
 								onto the
 								biomolecular
 								surface.</p></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="solvation-sect"></a>Chapter 4. How do I calculate a solvation
-energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id901948">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902146">4.2. Apolar solvation</a></span></dt></dl></div><p>
+energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id901953">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902152">4.2. Apolar solvation</a></span></dt></dl></div><p>
 			Solvation energies are usually decomposed into a free
 			energy cycle as shown in <a href="#solvation-cycle-full" title="Figure 4.1. Full solvation energy cycle.  This cycle&#10;incorporates several processes into the solvation energy (step 1).  Step 2&#10;indicates charging of the solute in solution (e.g., inhomogeneous dielectric,&#10;ions present).  Step 3 indicates the introduction of attractive solute-solvent&#10;dispersive interaction interactions (e.g., an integral of&#10;Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step&#10;4 indicates the introduction of repulsive solute-solvent interaction (e.g.,&#10;cavity formation).  Steps 5 and 6 are basically null steps although they could&#10;be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,&#10;Step 6 represents the charging of the solute in a vacuum or homogeneous&#10;dielectric environment in the absence of mobile ions.">Figure 4.1, “Full
 					solvation energy cycle”</a>.  Note that
@@ -894,7 +900,7 @@ cavity formation).  Steps 5 and 6 are basically null steps although they could
 be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,
 Step 6 represents the charging of the solute in a vacuum or homogeneous
 dielectric environment in the absence of mobile ions.</b></p><div class="figure-contents"><div><img src="images/solvation-cycle-full.png" alt="Full solvation energy cycle. This cycle incorporates several processes into the solvation energy (step 1). Step 2 indicates charging of the solute in solution (e.g., inhomogeneous dielectric, ions present). Step 3 indicates the introduction of attractive solute-solvent dispersive interaction interactions (e.g., an integral of Weeks-Chandler-Andersen interactions over the solvent-accessible volume). Step 4 indicates the introduction of repulsive solute-solvent interaction (e.g., cavity formation). Steps 5 and 6 are basically null steps although they could be used to offset unwanted energies added in Steps 3 and 4 above. Finally, Step 6 represents the charging of the solute in a vacuum or homogeneous dielectric environment in the absence of mobile ions." /></div></div></div><p><br class="figure-break" />
-		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id901948"></a>4.1. Polar solvation</h2></div></div></div><p> The full free energy cycle in <a href="#solvation-cycle-full" title="Figure 4.1. Full solvation energy cycle.  This cycle&#10;incorporates several processes into the solvation energy (step 1).  Step 2&#10;indicates charging of the solute in solution (e.g., inhomogeneous dielectric,&#10;ions present).  Step 3 indicates the introduction of attractive solute-solvent&#10;dispersive interaction interactions (e.g., an integral of&#10;Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step&#10;4 indicates the introduction of repulsive solute-solvent interaction (e.g.,&#10;cavity formation).  Steps 5 and 6 are basically null steps although they could&#10;be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,&#10;Step 6 represents the charging of the solute in a vacuum or homogeneous&#10;dielectric environment in the absence of mobile ions.">Figure 4.1, “Full
+		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id901953"></a>4.1. Polar solvation</h2></div></div></div><p> The full free energy cycle in <a href="#solvation-cycle-full" title="Figure 4.1. Full solvation energy cycle.  This cycle&#10;incorporates several processes into the solvation energy (step 1).  Step 2&#10;indicates charging of the solute in solution (e.g., inhomogeneous dielectric,&#10;ions present).  Step 3 indicates the introduction of attractive solute-solvent&#10;dispersive interaction interactions (e.g., an integral of&#10;Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step&#10;4 indicates the introduction of repulsive solute-solvent interaction (e.g.,&#10;cavity formation).  Steps 5 and 6 are basically null steps although they could&#10;be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,&#10;Step 6 represents the charging of the solute in a vacuum or homogeneous&#10;dielectric environment in the absence of mobile ions.">Figure 4.1, “Full
 					solvation energy cycle”</a> is
 				usually decomposed into polar and nonpolar
 				parts.  The polar portion is usually
@@ -1028,7 +1034,7 @@ quit
 					important to examine the sensitivity of
 					the calculated solvation energies with
 					respect to grid spacings and
-					dimensions.</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902146"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="binding-sect"></a>Chapter 5. How do I calculate a binding energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
+					dimensions.</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902152"></a>4.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="binding-sect"></a>Chapter 5. How do I calculate a binding energy?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
 			</a></span></dt><dt><span class="sect1"><a href="#binding-coulombic">5.2. Including Coulombic contributions</a></span></dt><dt><span class="sect1"><a href="#binding-ligand">5.3. Hey! You don't have any parameters for my ligand!</a></span></dt><dt><span class="sect1"><a href="#binding-example">5.4. A ligand binding example</a></span></dt></dl></div><p> In general, implicit solvent models are used to
 			calculation the contribution of
 			<span class="emphasis"><em>solvation</em></span> to binding free
@@ -1143,7 +1149,7 @@ energy?</i></a>.
 						free energy ”</a> as
 				</p><div class="equation"><a id="binding-cycle-eqn-2"></a><p class="title"><b>Equation 5.4.  Binding free energy </b></p><div class="equation-contents"><div><img src="images/binding-cycle-eqn-2.png" /></div></div></div><p><br class="equation-break" />
 			</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-ligand"></a>5.3. Hey! You don't have any parameters for my ligand!</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="binding-example"></a>5.4. A ligand binding example</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="forces-sect"></a>Chapter 6. How do I calculate solvation
-forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902574">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902585">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902574"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902585"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></div><p> APBS requires approximately 200 B memory per grid point.
+forces?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id902580">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902591">6.2. Apolar solvation</a></span></dt></dl></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902580"></a>6.1. Polar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id902591"></a>6.2. Apolar solvation</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="pka-sect"></a>Chapter 7. How do I calculate a pK<sub>a</sub>?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="parallel-sect"></a>Chapter 8. My calculation requires too much memory!</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></div><p> APBS requires approximately 200 B memory per grid point.
 			Memory usage can be predicted before performing the
 			calculations using the <code class="filename">tools/manip/psize.py</code>
 			Python script provided with APBS. </p><p>  If it appears your calculation is going to require more
@@ -1280,7 +1286,7 @@ quit
 				example of the <code class="filename">mergedx</code>
 				output (see <a href="#vmd-isocontour" title="3.1.4.1. Isocontour visualization">Section 3.1.4.1, “Isocontour visualization”</a>
 				for methods) is shown in 
-				</p><div class="figure"><a id="id902938"></a><p class="title"><b>Figure 8.1. Actin dimer isocontours from
+				</p><div class="figure"><a id="id902944"></a><p class="title"><b>Figure 8.1. Actin dimer isocontours from
 parallel focusing</b></p><div class="figure-contents"><div><img src="images/actin_dimer-iso_trans.jpg" alt="Actin dimer isocontours from parallel focusing" /></div></div></div><p><br class="figure-break" />
 				Note that downsampling isn't necessary -- and
 				often isn't desirable for high quality
@@ -1370,16 +1376,16 @@ quit
 				reassembled with <code class="filename">mergedx</code>
 				as described above.
 			</p></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="simulation-sect"></a>Chapter 9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id903163">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903188">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903300">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
+molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id903169">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id903194">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id903305">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			service.  This section demonstrates how <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			can be used to perform most APBS calculations commonly
 			done through the command-line interface.  Better yet,
 			it allows you to use <a href="http://nbcr.net" target="_top">NBCR's</a> resources
 			instead of your own!  
-		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903163"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
+		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903169"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
 				extension for the <a href="http://www.mozilla.com/firefox/" target="_top">Firefox</a>
 				web browser from <a href="http://gemstone.mozdev.org" target="_top">http://gemstone.mozdev.org</a>
-				before starting this tutorial.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903188"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
+				before starting this tutorial.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903194"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
 				First, you need to download a PDB file from the
 				<a href="http://www.pdb.org" target="_top">Protein Data
 					Bank</a>.  For the purposes of this
@@ -1392,13 +1398,13 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					file you just downloaded and any other
 					options for PDB2PQR of interest.  Your
 					screen should look something like:
-					</p><div class="figure"><a id="id903270"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id903276"></a><p class="title"><b>Figure 10.1. Gemstone PDB2PQR calculation</b></p><div class="figure-contents"><div><img src="images/gemstone-pdb2pqr.png" alt="Gemstone PDB2PQR calculation" /></div></div></div><p><br class="figure-break" />
 					Go ahead and "Run" the Gemstone
 					calculation, check the
 					<code class="filename">stdOut</code> and
 					<code class="filename">stdErr</code> for any
 					warning messages, and download the
-					resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903300"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
+					resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id903305"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
 					calculation of the 1FAS electrostatic
 					potential through Gemstone.  Open the
 					<span class="guimenu">Chemistry</span> → <span class="guimenuitem">Apbs</span>
@@ -1406,7 +1412,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					Gemstone screen.  We'll step through
 					each of the input tabs in the middle
 					pane in the following sections.
-				</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903330"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
+				</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903336"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
 						the middle pane.</p><p>Most of the "Mathematics"
 						settings can be left as-is;
 						however, feel free to play with
@@ -1419,8 +1425,8 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						calculation.</p><p>At
 						this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903358"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903375"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
+						</p><div class="figure"><a id="id903364"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903381"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
 						middle pane.</p><p>Under "General", enter 97 for X,
 						Y, and Z "Grid points".</p><p>Under "Coarse Grid", choose 100
 						for all X, Y, and Z "Lengths".
@@ -1432,31 +1438,31 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 						alone for this
 						calculation.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903407"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903423"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
+						</p><div class="figure"><a id="id903413"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903429"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
 						the middle pane.</p><p>Choose any values you like here;
 						the defaults should be fine for
 						most visualization
 						calculations.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903442"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
-					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903458"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
+						</p><div class="figure"><a id="id903448"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
+					</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903464"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
 						the middle pane.</p><p>Unless you have other properties
 						you wan to visualize, you can
 						leave these settings
 						as-is.</p><p>At this point, your screen should
 						look something like this:
-						</p><div class="figure"><a id="id903476"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
-						</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903492"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
+						</p><div class="figure"><a id="id903482"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
+						</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903498"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
 					and select "Run APBS".  After a while,
 					the results will appear under the
 					Output tab in the middle pane.  When
 					the run is complete, you should see
 					something like this:
-					</p><div class="figure"><a id="id903504"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id903510"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)" /></div></div></div><p><br class="figure-break" />
 					In particular, you should have the
 					option to save the potential file
-					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903522"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
+					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903528"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
 					tutorial can also be performed with
 					Gemstone.  Furthermore, input files can
 					be uploaded to use Gemstone as a

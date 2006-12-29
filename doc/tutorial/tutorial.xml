@@ -35,7 +35,7 @@
 		</author>
 		<copyright>
 			<year>2002</year> <year>2003</year> <year>2004</year> 
-			<year>2005</year> <year>2006</year>
+			<year>2005</year> <year>2006</year> <year>2007</year>
 			<holder>Washington University in St.  Louis</holder>
 		</copyright>
 		<legalnotice>
@@ -114,6 +114,16 @@
 					linkend="gemstone-sect"/>.
 			</para>
 		</important>
+
+		<warning>
+			<para> This document is still under construction and
+				should be completed before the next
+				(post-0.5.0) APBS release.  Many of the
+				topics covered in the incomplete sections are
+				demonstrated in the APBS
+				<filename>examples</filename> directory.
+			</para>
+		</warning>
 
 	</chapter>
 
@@ -444,10 +454,6 @@ generally a good option to include</emphasis>.
 						editor</ulink>.
 				</para>
 			</sect2>
-
-			<warning>
-				<para>STILL UNDER CONSTRUCTION</para> 
-			</warning>
 
 		</sect1> 
 
