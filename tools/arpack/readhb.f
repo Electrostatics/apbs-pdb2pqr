@@ -15,7 +15,7 @@ c*   Washington University in St. Louis
 c* 
 c*   Additional contributing authors listed in the code documentation.
 c* 
-c* Copyright (c) 2002-2006.  Washington University in St. Louis.
+c* Copyright (c) 2002-2007.  Washington University in St. Louis.
 c* All Rights Reserved.
 c* Portions Copyright (c) 1999-2002.  The Regents of the University 
 c*   of California.  

@@ -65,7 +65,7 @@ def getHeader():
     Center for Computational Biology\n\
     Washington University in St. Louis\n\
     Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 2002-2006. Washington University in St. Louis\n\
+    Copyright (c) 2002-2007. Washington University in St. Louis\n\
     All Rights Reserved.\n\n\
     Portions copyright (c) 1999-2002.  University of California.\n\
     Portions copyright (c) 1995.  Michael Holst.\n\n\
