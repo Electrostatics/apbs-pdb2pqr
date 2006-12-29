@@ -15,7 +15,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2006.  Washington University in St. Louis.
+ * Copyright (c) 2002-2007.  Washington University in St. Louis.
  * All Rights Reserved.
  * Portions Copyright (c) 1999-2002.  The Regents of the University of
  * California.  
@@ -95,7 +95,7 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 	Vatom *atom = VNULL;
 	Vparam *param = VNULL;
 	
-	Vnm_tprint( 1, "Got PQR paths for %d molecules\n", nosh->nmol);
+	Vnm_tprint( 1, "Got paths for %d molecules\n", nosh->nmol);
 	if (nosh->nmol <= 0) {
 		Vnm_tprint(2, "You didn't specify any molecules (correctly)!\n");
 		Vnm_tprint(2, "Bailing out!\n");
@@ -130,20 +130,17 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 		} /* switch parmfmt */
 	}
 	
-	/* Print out a warning to the user letting them know that we are overriding PQR
-		values for charge, radius and epsilon */
-	if(use_params){
-		Vnm_print(1,"\nloadMolecules: Warning Warning Warning Warning Warning Warning\n");
-		Vnm_print(1,"loadMolecules: You have specified an input paramter file to read in.\n");
-		Vnm_print(1,"loadMolecules: Values for charge, radius and epsilon will be taken from\n");
-		Vnm_print(1,"loadMolecules: the parameter file. PQR derived values will be ignored.\n");
-		Vnm_print(1,"loadMolecules: Warning Warning Warning Warning Warning Warning\n\n");
-	}
 
 	for (i=0; i<nosh->nmol; i++) {
 		alist[i] = Valist_ctor();
 		switch (nosh->molfmt[i]) {
 			case NMF_PQR:
+					/* Print out a warning to the user letting them know that we are overriding PQR
+					values for charge, radius and epsilon */
+					if (use_params) {
+						Vnm_print(2, "\nWARNING!!  Radius/charge information from PQR file %s\n", nosh->molpath[i]);
+						Vnm_print(2, "will be replaced with data from parameter file (%s)!\n", nosh->parmpath);
+					}
 					Vnm_tprint( 1, "Reading PQR-format atom data from %s.\n",
 							nosh->molpath[i]);
 					sock = Vio_ctor("FILE", "ASC", VNULL, nosh->molpath[i], "r");
@@ -2140,7 +2137,7 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 				Vcom_rank(com), ltenergy);
 	Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
 	Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-	Vnm_tprint( 1, "  Global net energy = %1.12E kJ/mol\n", gtenergy);
+	Vnm_tprint( 1, "  Global net ELEC energy = %1.12E kJ/mol\n", gtenergy);
 	
 	return 1;
 	
@@ -2199,7 +2196,7 @@ VPUBLIC int printElecEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC
 				Vcom_rank(com), ltenergy);
 	Vnm_tprint( 0, "printEnergy:  Performing global reduction (sum)\n");
 	Vcom_reduce(com, &ltenergy, &gtenergy, 1, 2, 0);
-	Vnm_tprint( 1, "  Global net energy = %1.12E kJ/mol\n", gtenergy);
+	Vnm_tprint( 1, "  Global net ELEC energy = %1.12E kJ/mol\n", gtenergy);
 	
 	return 1;
 	
@@ -2241,7 +2238,7 @@ VPUBLIC int printApolEnergy(NOsh *nosh, int iprint) {
 	apolparm = nosh->calc[calcid]->apolparm;
 	
 	if (apolparm->calcenergy == ACE_TOTAL) {
-		gtenergy = ((apolparm->gamma*apolparm->sasa) + (apolparm->press*apolparm->sav));
+		gtenergy = ((apolparm->gamma*apolparm->sasa) + (apolparm->press*apolparm->sav) + (apolparm->wcaEnergy));
 	} else {
 		Vnm_tprint( 2, "  Didn't calculate energy in Calculation #%d\n", calcid+1);
 		return 0;
@@ -2255,7 +2252,9 @@ VPUBLIC int printApolEnergy(NOsh *nosh, int iprint) {
 		else if (nosh->printop[iprint][iarg-1] == 1) scalar = -1.0;
 		/* Accumulate */
 		gtenergy += (scalar * ((apolparm->gamma*apolparm->sasa) +
-							   (apolparm->press*apolparm->sav)));
+							   (apolparm->press*apolparm->sav) + 
+							   (apolparm->wcaEnergy)));
+
 	}
 	
 	Vnm_tprint( 1, "  Global net APOL energy = %1.12E kJ/mol\n", gtenergy);
@@ -3619,7 +3618,10 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 			break;
 		case ACE_TOTAL:
 			energy = (apolparm->gamma*sasa) + (apolparm->press*sav) 
-						+ (apolparm->bconc*apolparm->wcaEnergy);
+						+ (apolparm->wcaEnergy);
+			Vnm_print(1,"\nTotal surface tension energy: %g kJ/mol\n", apolparm->gamma*sasa);
+			Vnm_print(1,"Total pressure energy: %g kJ/mol\n", apolparm->press*sav);
+			Vnm_print(1,"Total WCA energy: %g kJ/mol\n", (apolparm->wcaEnergy));
 			Vnm_print(1,"Total non-polar energy = %1.12E kJ/mol\n",energy);
 			break;
 		default:
