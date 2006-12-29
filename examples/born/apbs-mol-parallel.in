@@ -32,7 +32,6 @@ elec name solvated
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
     # write pot dx potential
@@ -60,7 +59,6 @@ elec name reference
     swin 0.3
     sdens 10.0
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
