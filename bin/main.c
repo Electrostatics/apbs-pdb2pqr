@@ -548,7 +548,7 @@ Please cite your use of APBS as:\n\n\
 				rc = initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
 				if(rc == 0) {
-					Vnm_tprint(2, "Error solving APOL!\n");
+					Vnm_tprint(2, "Error calculating apolar solvation quantities!\n");
 					VJMPERR1(0);
 				}
 				break;
