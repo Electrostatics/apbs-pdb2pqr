@@ -8,29 +8,8 @@
 
 # READ IN MOLECULES
 read 
-    mol pqr ion.pqr       # Read molecule 1
-end
-
-# CALCULATE POTENTIAL FOR SOLVATED STATE
-elec name solvated
-   mg-manual
-    dime 65 65 65
-    nlev 4 
-    grid 0.33 0.33 0.33
-    gcent mol 1
-    mol 1 
-    lpbe
-    bcfl mdh
-    pdie 1.0
-    sdie 78.54
-    chgm spl2
-    srfm mol
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    calcenergy total
-    calcforce no
+    mol pqr ion2.pqr       # Read molecule 1
+    parm flat parm.dat
 end
 
 APOLAR name solvated
@@ -41,7 +20,7 @@ APOLAR name solvated
 	swin 0.3
 	srad 0.0
 	press 1 
-	gamma 0 
+	gamma 0.5 
 	bconc 1.0
 	sdens 10.0
 	dpos 0.2
@@ -58,7 +37,7 @@ APOLAR name reference
 	swin 0.3
 	srad 0.0
 	press 1 
-	gamma 0 
+	gamma 0.5 
 	bconc 1.0
 	sdens 100.0
 	dpos 0.2
@@ -67,30 +46,6 @@ APOLAR name reference
 	calcforce comps
 END
 
-# CALCULATE POTENTIAL FOR REFERENCE STATE
-elec name reference
-    mg-manual
-    dime 65 65 65
-    nlev 4
-    grid 0.33 0.33 0.33
-    gcent mol 1
-    mol 1
-    lpbe
-    bcfl mdh
-    pdie 1.0
-    sdie 1.0
-    chgm spl2
-    srfm mol
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    calcenergy total
-    calcforce no
-end
-
-# COMBINE TO FORM SOLVATION ENERGY
-print energy solvated - reference end
 print apolForce solvated - reference end
 print apolEnergy solvated - reference end
 
