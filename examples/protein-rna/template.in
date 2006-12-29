@@ -23,7 +23,6 @@ elec
     srad 1.40
     swin 0.30
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -47,7 +46,6 @@ elec
     srad 1.40
     swin 0.30
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -71,7 +69,6 @@ elec
     srad 1.40
     swin 0.30
     temp 298.15
-    gamma 0.105
     calcenergy total
     calcforce no
 end

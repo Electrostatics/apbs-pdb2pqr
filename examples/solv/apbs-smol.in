@@ -31,7 +31,6 @@ elec name methanol-solv
     swin 0.3
     sdens 10.0
     temp 300.00
-    gamma 0.105
     calcenergy total
     calcforce no            
 end
@@ -56,7 +55,6 @@ elec name methanol-ref
     swin 0.3
     sdens 10.0
     temp 300.00
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -81,7 +79,6 @@ elec name methoxide-solv
     swin 0.3
     sdens 10.0
     temp 300.00
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -106,7 +103,6 @@ elec name methoxide-ref
     swin 0.3
     sdens 10.0
     temp 300.00
-    gamma 0.105
     calcenergy total
     calcforce no
 end
