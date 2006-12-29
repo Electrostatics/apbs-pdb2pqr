@@ -1,80 +1,92 @@
-<HTML>
-<HEAD>
-<TITLE>README for ion-protein APBS examples</TITLE>
-<HEAD>
-<BODY>
-<h1 align="center">README for pka-lig APBS examples</h1>
-<BR>
-The example input files in this directory calculate the binding energes of a ligand to protein kinase A.
-<P>
-This example was contributed by Chung Wong.
-<P>
+<html>
+	<head>
+		<title>README for ion-protein APBS examples</title>
+	</head>
+	<body>
+		<h1 align="center">README for pka-lig APBS examples</h1>
+		<i> $Id$</i>
 
-<table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
+		<p> The example input files in this directory calculate the binding energes of a ligand to protein
+		kinase A.  </p> 
+		
+		<p>This example was contributed by Chung Wong. </p>
 
-<tr>
-<td><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
-<td>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>8.0640</B></td>
-<td>8.876</td></tr>
-</tr>
+		<table align="center" border="1" cellpadding="3" cellspacing="1">
+			<tr>
+				<th>Input File</th>
+				<th>Description</th>
+				<th>APBS Version</th>
+				<th>Results (kJ/mol)</th>
+				<th>UHBD (kJ/mol)</th>
+			</tr>
 
-<tr>
-<td rowspan=12><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
-<td rowspan=12>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>20.9542</B><sup><a href="#2">2</a></sup></td>
-<td rowspan=12>8.876</td></tr>
-<tr><td align=center>0.3.2</td><td align=center>8.0640<sup><a href="#1">1</a></sup></td></tr>
-<tr><td align=center>0.3.1</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.3.0</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.6</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.5</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.4</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.3</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.2</td><td align=center>6.6465</td></tr>
-<tr><td align=center>0.2.1</td><td align=center>6.647</td></tr>
-<tr><td align=center>0.2.0</td><td align=center>6.647</td></tr>
-<tr><td align=center>0.1.8</td><td align=center>6.65</td>
-</tr>
+			<tr>
+				<td><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
+				<td>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>8.0640</B></td>
+				<td>8.876</td>
+			</tr>
 
-<tr>
-<td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
-<td>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>119.2347</B></td>
-<td>86.50</td></tr>
-</tr>
+			<tr>
+				<td rowspan=12><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
+				<td rowspan=12>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>20.9542</B><sup><a href="#2">2</a></sup></td>
+				<td rowspan=12>8.876</td>
+			</tr>
 
-<tr>
-<td rowspan=12><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
-<td rowspan=12>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>108.8540</B><sup><a href="#2">2</a></sup></td>
-<td rowspan=12>86.50</td></tr>
-<tr><td align=center>0.3.2</td><td align=center>94.8705<sup><a href="#1">1</a></sup></td></tr>
-<tr><td align=center>0.3.1</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.3.0</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.6</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.5</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.4</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.3</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.2</td><td align=center>97.0147</td></tr>
-<tr><td align=center>0.2.1</td><td align=center>97.015</td></tr>
-<tr><td align=center>0.2.0</td><td align=center>97.015</td></tr>
-<tr><td align=center>0.1.8</td><td align=center>97.01</td>
-</tr>
+			<tr><td align=center>0.3.2</td><td align=center>8.0640<sup><a href="#1">1</a></sup></td></tr>
+			<tr><td align=center>0.3.1</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.3.0</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.6</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.5</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.4</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.3</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.2</td><td align=center>6.6465</td></tr>
+			<tr><td align=center>0.2.1</td><td align=center>6.647</td></tr>
+			<tr><td align=center>0.2.0</td><td align=center>6.647</td></tr>
+			<tr><td align=center>0.1.8</td><td align=center>6.65</td> </tr>
+
+			<tr>
+				<td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
+				<td>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>119.2347</B></td>
+				<td>86.50</td>
+			</tr>
+
+			<tr>
+				<td rowspan=12><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
+				<td rowspan=12>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>108.8540</B><sup><a href="#2">2</a></sup></td>
+				<td rowspan=12>86.50</td>
+			</tr>
+
+			<tr><td align=center>0.3.2</td><td align=center>94.8705<sup><a href="#1">1</a></sup></td></tr>
+			<tr><td align=center>0.3.1</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.3.0</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.6</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.5</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.4</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.3</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.2</td><td align=center>97.0147</td></tr>
+			<tr><td align=center>0.2.1</td><td align=center>97.015</td></tr>
+			<tr><td align=center>0.2.0</td><td align=center>97.015</td></tr>
+			<tr><td align=center>0.1.8</td><td align=center>97.01</td> </tr>
 
 
-</table>
-<P>
-<a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
-<ul>
-<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
-<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
-<li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
-</ul>
-Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.<P>
+		</table>
 
-<a name=1><sup>1</sup> The grid dimensions (dime) changed from 65^3 to 97^3 in the 0.3.2 release to give a finer mesh.
+		<p> <a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
+			<ul>
+				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
+				<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+				<li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
+			</ul>
+		Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
+		more information.</P>
 
-</BODY>
-</HTML>
+
+		<p> <a name=1><sup>1</sup> The grid dimensions (dime) changed from 65^3 to 97^3 in the 0.3.2 release to
+			give a finer mesh. </p>
+
+	</body>
+</html>

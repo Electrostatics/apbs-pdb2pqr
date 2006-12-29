@@ -1,78 +1,86 @@
-<HTML>
-<HEAD>
-<TITLE>README for Actin-Dimer APBS examples</TITLE>
-<HEAD>
-<BODY>
-<h1 align="center">README for Actin-Dimer APBS examples</h1>
-<BR>
-The example input files in this directory calculate binding energies for actin dimers. This is an example of a large biomolecule binding energy calculation that often requires parallel focusing.
-<P>
-This example was contributed by Dave Sept.
-<P>
+<html> 
+	<head> <title>README for Actin Dimer APBS examples</title> </head>
 
+	<body>
+		<h1 align="center">README for Actin-Dimer APBS examples</h1>
+		<i> $Id$</i>
+		
+		<p>The example input files in this directory calculate binding
+		energies for actin dimers. This is an example of a large
+		biomolecule binding energy calculation that often requires
+		parallel focusing. </p> 
+		
+		<p>This example was contributed by Dave Sept. </p>
 
-<table align="center" border="1" cellpadding="3" cellspacing="1">
-<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
-<tr>
-<td><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
-<td>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm mol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>104.8895</B></td>
-<td>106.7<br>(1.00 A res., NPBE)</td></tr>
-</tr>
+		<table align="center" border="1" cellpadding="3" cellspacing="1">
+			<tr>
+				<th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th>
+			</tr>
+			<tr> 
+				<td><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td> 
+				<td>Sequential, 2-level focusing to &le; 0.725 A, NPBE, srfm mol</td> 
+				<td align=center><B>0.4.0</B></td>
+				<td align=center><B>104.8895</B></td> 
+				<td>106.7<br>(1.00 A res., NPBE)</td>
+			</tr> 
+			<tr>
+				<td rowspan=12><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
+				<td rowspan=12>Sequential, 2-level focusing to
+					&le; 0.725 A, NPBE, srfm smol</td>
+				<td align=center><B>0.4.0</B></td>
+				<td align=center><B>109.6043</B><sup><a href="#1">1</a></sup></td>
+				<td rowspan=12>106.7<br>(1.00 A res., NPBE)</td>
+			</tr>
+			<tr> <td align=center>0.3.2</td> <td align=center>90.8704</td> </tr>
+			<tr> <td align=center>0.3.1</td> <td align=center>88.6101</td> </tr>
+			<tr> <td align=center>0.3.0</td> <td align=center>88.6101</td> </tr>
+			<tr> <td align=center>0.2.6</td> <td align=center>88.6101</td> </tr>
+			<tr> <td align=center>0.2.5</td> <td align=center>88.6101</td> </tr>
+			<tr> <td align=center>0.2.4</td> <td align=center>88.6101</td> </tr>
+			<tr> <td align=center>0.2.3</td> <td align=center>88.6064</td> </tr>
+			<tr> <td align=center>0.2.2</td> <td align=center>90.829</td> </tr>
+			<tr> <td align=center>0.2.1</td> <td align=center>90.829</td> </tr>
+			<tr> <td align=center>0.2.0</td> <td align=center>90.829</td> </tr>
+			<tr> <td align=center>0.1.8</td> <td align=center>90.84</td> </tr>
 
-<tr>
-<td rowspan=12><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
-<td rowspan=12>Sequential, 2-level focusing to <=0.725 A, NPBE, srfm smol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>109.6043</B><sup><a href="#1">1</a></sup></td>
-<td rowspan=12>106.7<br>(1.00 A res., NPBE)</td></tr>
-<tr><td align=center>0.3.2</td><td align=center>90.8704</td></tr>
-<tr><td align=center>0.3.1</td><td align=center>88.6101</td></tr>
-<tr><td align=center>0.3.0</td><td align=center>88.6101</td></tr>
-<tr><td align=center>0.2.6</td><td align=center>88.6101</td></tr>
-<tr><td align=center>0.2.5</td><td align=center>88.6101</td></tr>
-<tr><td align=center>0.2.4</td><td align=center>88.6101</td></tr>
-<tr><td align=center>0.2.3</td><td align=center>88.6064</td></tr>
-<tr><td align=center>0.2.2</td><td align=center>90.829</td></tr>
-<tr><td align=center>0.2.1</td><td align=center>90.829</td></tr>
-<tr><td align=center>0.2.0</td><td align=center>90.829</td></tr>
-<tr><td align=center>0.1.8</td><td align=center>90.84</td>
-</tr>
-
-
-<tr>
-<td><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
-<td>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>98.1834</B></td>
-<td>106.7<br>(1.00 A res., NPBE)</td></tr>
-</tr>
-
-
-<tr>
-<td rowspan=12><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
-<td rowspan=12>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
-<td align=center><B>0.4.0</B></td><td align=center><B>115.5751</B><sup><a href="#1">1</a></sup></td>
-<td rowspan=12>106.7<br>(1.00 A res., NPBE)</td></tr>
-<tr><td align=center>0.3.2</td><td align=center>87.1121</td></tr>
-<tr><td align=center>0.3.1</td><td align=center>87.1121</td></tr>
-<tr><td align=center>0.3.0</td><td align=center>90.2573</td></tr>
-<tr><td align=center>0.2.6</td><td align=center>90.2573</td></tr>
-<tr><td align=center>0.2.5</td><td align=center>90.2573</td></tr>
-<tr><td align=center>0.2.4</td><td align=center>90.2573</td></tr>
-<tr><td align=center>0.2.3</td><td align=center>90.2543</td></tr>
-<tr><td align=center>0.2.2</td><td align=center>91.9450</td></tr>
-<tr><td align=center>0.2.1</td><td align=center>91.945</td></tr>
-<tr><td align=center>0.2.0</td><td align=center>91.939</td></tr>
-<tr><td align=center>0.1.8</td><td align=center>91.67</td>
-</tr>
-
-</table>
-<P>
-<a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
-<ul>
-<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
-<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
-<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
-</ul>
-Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
-</BODY>
-</HTML>
+			<tr> 
+				<td><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
+				<td>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>98.1834</B></td>
+				<td>106.7<br>(1.00 A res., NPBE)</td>
+			</tr>
+			<tr> 
+				<td rowspan=12><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
+				<td rowspan=12>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
+				<td align=center><B>0.4.0</B></td><td align=center><B>115.5751</B><sup><a href="#1">1</a></sup></td>
+				<td rowspan=12>106.7<br>(1.00 A res., NPBE)</td>
+			</tr>
+			<tr><td align=center>0.3.2</td><td align=center>87.1121</td></tr>
+			<tr><td align=center>0.3.1</td><td align=center>87.1121</td></tr>
+			<tr><td align=center>0.3.0</td><td align=center>90.2573</td></tr>
+			<tr><td align=center>0.2.6</td><td align=center>90.2573</td></tr>
+			<tr><td align=center>0.2.5</td><td align=center>90.2573</td></tr>
+			<tr><td align=center>0.2.4</td><td align=center>90.2573</td></tr>
+			<tr><td align=center>0.2.3</td><td align=center>90.2543</td></tr>
+			<tr><td align=center>0.2.2</td><td align=center>91.9450</td></tr>
+			<tr><td align=center>0.2.1</td><td align=center>91.945</td></tr>
+			<tr><td align=center>0.2.0</td><td align=center>91.939</td></tr>
+			<tr><td align=center>0.1.8</td><td align=center>91.67</td></tr>
+		
+		</table>
+		
+		<p> <a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
+			<ul>
+				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric
+				values </li>
+				<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.
+				</li>
+				<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change
+				in the default sdens value from 3.0 to 10.0 </li>
+			</ul>
+		</p>
+		
+		<p> Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
+		more information. </p>
+	</body>
+</html>

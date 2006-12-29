@@ -1,304 +1,319 @@
-<html>
+<html> 
+	<head>
+		<title>APBS ion pmf test case</title>
+	</head>
 
-<head>
-<title>APBS ion pmf test case</title>
-</head>
+	<body>
+		<h1 align="center"> APBS ion pmf test case </h1>
+		<i> $Id$</i>
 
-<body bgcolor="#ffffff">
-<h1 align="center"> APBS ion pmf test case </h1>
+		<p> This is the two-ion test case for force evaluation from the Im et al. <i>Comput.  Phys. Commun.</i>
+		<b>111</b>, 59--75 (1998) paper.  The output of these run(s) are solvation energies for ion pairs
+		(convert to total energy by adding Coulombic forces) and solvation force components.  Molecule 0 is
+		fixed (at x=-3) and molecule 1 was moved. </p>
 
-<center>
-$Id$
-</center>
+		<p> To run this test case, simply type <code>./runme.sh</code>, making sure that the apbs binary is in
+		your path. </p>
 
-<br><br><br>
-<p>
-This is the two-ion test case for force evaluation from the Im et al. <i>Comput.
-Phys. Commun.</i> <b>111</b>, 59--75 (1998) paper.  The output of these run(s)
-are solvation energies for ion pairs (convert to total energy by adding
-Coulombic forces) and solvation force components.  Molecule 0 is fixed (at
-x=-3) and molecule 1 was moved.
+		<p>
+		Here's the output you can look for (all forces in
+		kJ/mol/&Aring;):
+		<dl>
+			<dt> sasa </dt>
+			<dd> Solvent-accessible surface area force (scaled by
+			the surface tension, gamma).  <b>NOTE THAT THIS FORCE
+				HAS CHANGED!</b>  We're now using SASA forces
+			instead of the spline-surface square gradient forces
+			used in previous examples (and by Im et al).  </dd>
+			<dt> qf </dt>
+			<dd> Reaction field force </dd>
+			<dt> db </dt>
+			<dd> Dielectric boundary force</dd>
+			<dt> ib </dt>
+			<dd> Ionic boundary force (osmotic pressure) </dd>
+		</dl>
 
-<p>
-To run this test case, simply edit the <code>runme</code> to provide the
-correct value for the variable <code>bindir</code> (where your APBS binary is
-located) and type <code>./runme</code>.
+		<p>
+		Here are the force results visually estimated from the Im et al paper
+		(see above) with forces in kJ/mol/&Aring; with one ion fixed at x =
+		-3.0 &Aring;.  
+		<table border="1">
+			<tr>
+				<th>Mol 1 location</th>
+				<th colspan="2">QF</th>
+				<th colspan="2">DB</th>
+				<th colspan="2">IB</th>
+			</tr>
+			<tr>
+				<th></th>
+				<th>Mol 0</th><th>Mol 1</th>
+				<th>Mol 0</th><th>Mol 1</th>
+				<th>Mol 0</th><th>Mol 1</th>
+			</tr>
+			<tr>
+				<td>-3.00</td>
+				<td>0.0E+00</td><td>0.0E+00</td>
+				<td>0.0E+00</td><td>0.0E+00</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>-2.50</td>
+				<td>8.4E+00</td><td>-1.3E+01</td>
+				<td>1.1E+02</td><td>-1.1E+02</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>-2.00</td>
+				<td>3.8E+01</td><td>-3.4E+01</td>
+				<td>8.2E+01</td><td>-8.2E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>-1.50</td>
+				<td>6.3E+01</td><td>-5.5E+01</td>
+				<td>4.2E+01</td><td>-4.0E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>-1.00</td>
+				<td>8.8E+01</td><td>-8.8E+01</td>
+				<td>4.2E+00</td><td>-4.2E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>-0.50</td>
+				<td>1.0E+02</td><td>-1.0E+02</td>
+				<td>-1.2E+01</td><td>1.6E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td> 0.00</td>
+				<td>1.1E+02</td><td><font color="red">0</font></td>
+				<td>-2.1E+01</td><td>2.1E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>0.50</td>
+				<td>9.6E+01</td><td>-9.8E+01</td>
+				<td>-1.1E+01</td><td>4.2E+00</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>1.00</td>
+				<td>8.4E+01</td><td>-8.8E+01</td>
+				<td>4.2E+00</td><td>0.0E+00</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>1.50</td>
+				<td>6.7E+01</td><td>-6.5E+01</td>
+				<td>6.3E+00</td><td>4.2E+00</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>2.00</td>
+				<td>5.3E+01</td><td>-5.3E+01</td>
+				<td>6.3E+01</td><td>6.3E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>2.50</td>
+				<td>4.6E+01</td><td>-4.8E+01</td>
+				<td>6.3E+01</td><td>-2.1E+01</td>
+				<td>0</td><td>0</td>
+			</tr>
+			<tr>
+				<td>3.00</td>
+				<td>3.8E+01</td><td>-3.8E+01</td>
+				<td>6.3E+00</td><td>-6.3E+00</td>
+				<td>0</td><td>0</td>
+			</tr>
+		</table>
 
-<p>
-Here's the output you can look for in the individual output files
-<dl>
-  <dt> "Total force on atom ..."
-  <dd> For the first calculation, this is the force (kJ/mol/A) on the given
-       atom in solvent with no self energies/forces removed.  For the second
-	   calculation, this is the force (kJ/mol/A) on the given atom in vacuum
-	   with no self energies/forces removed.  In other words, these number are
-       basically useless by themselves; their difference gives the total
-       solvation force on the specified atom.
-  <dt> "Fixed charge force on atom ..."
-  <dd> For the first calculation, this is the charge-field force (kJ/mol/A) on
-	   the given atom in solvent with no self energies/forces removed.  For the
-	   second calculation, this is the charge-field force (kJ/mol/A) on the
-	   given atom in vacuum with no self energies/forces removed.  In other
-	   words, these number are basically useless by themselves; their
-	   difference gives the reaction field solvation force on the specified
-       atom.
-  <dt> "Ionic boundary force on atom..."
-  <dd> For the first calculation, this would be the ionic boundary force
-       (kJ/mol/A) on the given atom in the solvent if the ionic strength
-       weren't set to zero.  For the second calculation, this is identically
-       zero (or very small).
-  <dt> "Dielectric boundary force on atom ..."
-  <dd> For the first calculation, this is the dielectric boundary force
-	   (kJ/mol/A) on the given atom in solvent.  For the second calculation,
-       this is identically zero (or very small).
-  <dt> "Apolar boundary force on atom ..."
-  <dd> For the first calculation, this is the apolar (surface area dependent)
-	   boundary force (kJ/mol/A) on the given atom in solvent.  For the second
-       calculation, this is identically zero (or very small).
-  <dt> "Global fixed charge force on atom ..."
-  <dd> This is the reaction field force (kJ/mol/A) on the specified atom.
-  <dt> "Global ionic boundary force on atom ..."
-  <dd> This would be the ionic boundary force (kJ/mol/A) on the specified atom
-       if the ionic strength weren't set to zero.
-  <dt> "Global dielectric boundary force on atom ..."
-  <dd> This is the dielectric boundary force (kJ/mol/A) on the specified atom.
-  <dt> "Global apolar boundary force on atom ..."
-  <dd> This is the apolar boundary force (kJ/mol/A) on the specified atom.
-</dl>
+		<p> Here are the results from APBS 0.5.0:
+		<pre>
+x = -3.000
+  sasa 0 2.014e-01 0.000e+00 0.000e+00
+  sasa 1 2.014e-01 0.000e+00 0.000e+00
+  sasa  0  2.014243542734E-01  0.000000000000E+00  0.000000000000E+00
+  qf  0  2.402694548782E-01  1.193684463475E-04  9.707135192876E-05
+  qf  1  2.402694548782E-01  1.193684463475E-04  9.707135192876E-05
+  db  0  -1.040061396733E+00  5.059871689052E-05  1.004179762749E-04
+  db  1  -1.040061396733E+00  5.059871689052E-05  1.004179762749E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.494109084160E+03 kJ/mol
+  Global net APOL energy = 1.073537020853E-01 kJ/mol
+x = -2.500
+  sasa 0 -1.047e+01 0.000e+00 0.000e+00
+  sasa 1 1.088e+01 0.000e+00 0.000e+00
+  sasa  0  -1.047406642222E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  9.670776686682E+00  3.067299706303E-05  8.525779585775E-06
+  qf  1  -9.776393142038E+00  1.160701475502E-04  9.737743502613E-05
+  db  0  1.128766544950E+02  4.216378707828E-05  1.156092840465E-04
+  db  1  -1.018562119621E+02  1.332582044569E-04  2.007546725043E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.453172513724E+03 kJ/mol
+  Global net APOL energy = 1.127544530116E-01 kJ/mol
+x = -2.000
+  sasa 0 -1.088e+01 0.000e+00 0.000e+00
+  sasa 1 1.092e+01 0.000e+00 0.000e+00
+  sasa  0  -1.087691513076E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  3.600129707630E+01  1.673257382577E-05  -3.172493445854E-06
+  qf  1  -3.698431978276E+01  1.362593318370E-04  1.348136933229E-04
+  db  0  7.641808295612E+01  8.426812747154E-05  1.501550525155E-04
+  db  1  -7.630995607470E+01  1.930747292853E-04  2.577078768374E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.395864905308E+03 kJ/mol
+  Global net APOL energy = 1.202783777713E-01 kJ/mol
+x = -1.50
+  sasa 0 -1.055e+01 0.000e+00 0.000e+00
+  sasa 1 1.064e+01 0.000e+00 0.000e+00
+  sasa  0  -1.055463616393E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  6.263390243427E+01  -1.039272251661E-05  -3.653632695350E-05
+  qf  1  -6.274351718559E+01  6.171199346571E-05  3.641783990404E-05
+  db  0  4.141531409141E+01  8.939020846417E-05  1.464873997274E-04
+  db  1  -3.980350645690E+01  1.618242786613E-04  2.096874862673E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.343413508063E+03 kJ/mol
+  Global net APOL energy = 1.278197055953E-01 kJ/mol
+x = -1.00
+  sasa 0 -1.104e+01 0.000e+00 0.000e+00
+  sasa 1 1.080e+01 0.000e+00 0.000e+00
+  sasa  0  -1.103805461418E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  8.602515079485E+01  1.679958402518E-05  -1.286070388760E-06
+  qf  1  -8.589474499290E+01  4.904393981795E-05  2.948346215562E-05
+  db  0  5.146620466700E+00  1.263326043428E-04  1.972642536915E-04
+  db  1  -2.462461594184E+00  1.419028113702E-04  2.025478366045E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.297718358292E+03 kJ/mol
+  Global net APOL energy = 1.354538497618E-01 kJ/mol
+x = -0.500
+  sasa 0 -1.088e+01 0.000e+00 0.000e+00
+  sasa 1 1.080e+01 0.000e+00 0.000e+00
+  sasa  0  -1.087691513076E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  1.011157426881E+02  3.495539842345E-05  2.650020071179E-05
+  qf  1  -1.018411965567E+02  2.379958570171E-05  7.021000073448E-06
+  db  0  -1.147809320720E+01  1.908780322530E-04  2.832722451268E-04
+  db  1  2.221256509495E+01  1.621554833141E-04  2.462408961005E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.253921668205E+03 kJ/mol
+  Global net APOL energy = 1.431402031209E-01 kJ/mol
+x = 0.000
+  sasa 0 -1.047e+01 0.000e+00 0.000e+00
+  sasa 1 1.055e+01 0.000e+00 0.000e+00
+  sasa  0  -1.047406642222E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  1.076485044405E+02  4.150254188932E-05  2.584327997210E-05
+  qf  1  -1.076452387179E+02  1.116736665075E-05  -1.918731685710E-05
+  db  0  -2.164756414609E+01  1.200915665417E-04  1.684440777983E-04
+  db  1  2.928788039760E+01  1.264642983339E-04  1.736212475138E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.211966318316E+03 kJ/mol
+  Global net APOL energy = 1.508265564799E-01 kJ/mol
+x = 0.500
+  sasa 0 -1.072e+01 0.000e+00 0.000e+00
+  sasa 1 1.059e+01 0.000e+00 0.000e+00
+  sasa  0  -1.071577564735E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  1.027354991386E+02  2.555484206199E-05  1.063932308940E-05
+  qf  1  -1.027864740990E+02  4.081203889223E-05  2.562624208050E-05
+  db  0  -1.024263914547E+01  6.237801032056E-05  9.677805192977E-05
+  db  1  4.694564975253E+00  7.269351372102E-05  1.062464666717E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.169410509835E+03 kJ/mol
+  Global net APOL energy = 1.585419149460E-01 kJ/mol
+x = 1.000
+  sasa 0 -1.100e+01 0.000e+00 0.000e+00
+  sasa 1 1.112e+01 0.000e+00 0.000e+00
+  sasa  0  -1.099776974333E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  8.398636786523E+01  3.277928825388E-05  2.248755650954E-05
+  qf  1  -8.466453877447E+01  1.260694492290E-05  -2.688056972615E-05
+  db  0  6.148315264050E+00  6.212090033654E-05  9.765261477356E-05
+  db  1  2.882714236549E+00  9.382342501820E-05  1.225207938255E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.125192402906E+03 kJ/mol
+  Global net APOL energy = 1.661992631981E-01 kJ/mol
+x = 1.500
+  sasa 0 -1.068e+01 0.000e+00 0.000e+00
+  sasa 1 1.072e+01 0.000e+00 0.000e+00
+  sasa  0  -1.067549077649E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  6.661368503641E+01  3.283120005903E-05  2.336264942404E-05
+  qf  1  -6.687857770544E+01  3.794378201242E-07  -4.537653753875E-05
+  db  0  7.100467586189E+00  6.377840082367E-05  1.004771191938E-04
+  db  1  3.082008432733E+00  1.019851332113E-04  1.318438583362E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.087409226682E+03 kJ/mol
+  Global net APOL energy = 1.739378257498E-01 kJ/mol
+x = 2.000
+  sasa 0 -1.092e+01 0.000e+00 0.000e+00
+  sasa 1 1.096e+01 0.000e+00 0.000e+00
+  sasa  0  -1.091720000162E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  5.395122212118E+01  3.402365136823E-05  2.463252404579E-05
+  qf  1  -5.435238595073E+01  2.345850272885E-05  5.498720638168E-06
+  db  0  7.099496363901E+00  6.338076881104E-05  9.960971260094E-05
+  db  1  1.822551374452E+00  7.422787937764E-05  1.097869885768E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.056724540553E+03 kJ/mol
+  Global net APOL energy = 1.814733525524E-01 kJ/mol
+x = 2.500
+  sasa 0 -1.072e+01 0.000e+00 0.000e+00
+  sasa 1 1.068e+01 0.000e+00 0.000e+00
+  sasa  0  -1.071577564735E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  4.454222472665E+01  3.558462567387E-05  2.660491501258E-05
+  qf  1  -4.504040092314E+01  -1.044092908553E-05  -3.622045970037E-05
+  db  0  7.053724444849E+00  6.155505900578E-05  9.694085460358E-05
+  db  1  -2.309382970894E+00  6.271891825021E-05  9.531078126617E-05
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.032072744366E+03 kJ/mol
+  Global net APOL energy = 1.893047314465E-01 kJ/mol
+x = 3.000
+  sasa 0 -1.092e+01 0.000e+00 0.000e+00
+  sasa 1 1.051e+01 0.000e+00 0.000e+00
+  sasa  0  -1.091720000162E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  3.737527031761E+01  3.343902445084E-05  2.403559379423E-05
+  qf  1  -3.737539015853E+01  4.414820479892E-05  3.441749305654E-05
+  db  0  7.008341960925E+00  6.385969683875E-05  1.003016820956E-04
+  db  1  -7.008312180867E+00  7.315905619890E-05  1.101572582696E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -1.011312542835E+03 kJ/mol
+  Global net APOL energy = 1.969446766344E-01 kJ/mol
+x = 3.500
+  sasa 0 -1.064e+01 0.000e+00 0.000e+00
+  sasa 1 1.068e+01 0.000e+00 0.000e+00
+  sasa  0  -1.063520590564E+01  0.000000000000E+00  0.000000000000E+00
+  qf  0  3.179181222228E+01  3.472564738899E-05  2.566914250463E-05
+  qf  1  -3.259379322155E+01  1.216664204331E-05  -2.497181119826E-05
+  db  0  6.969782295514E+00  6.257908926389E-05  9.840967875397E-05
+  db  1  7.904107869827E+00  8.728726024045E-05  1.158752820808E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -9.936580311110E+02 kJ/mol
+  Global net APOL energy = 2.046252289721E-01 kJ/mol
+x = 4.000
+  sasa 0 0.000e+00 0.000e+00 0.000e+00
+  sasa 1 0.000e+00 0.000e+00 0.000e+00
+  sasa  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  qf  0  2.736006693935E+01  3.271235623929E-05  2.341325695619E-05
+  qf  1  -2.776033811952E+01  8.396915386866E-06  -3.668786316582E-05
+  db  0  6.937279812724E+00  6.412225118915E-05  1.008451446546E-04
+  db  1  1.489454481196E+00  1.060308624524E-04  1.379944549983E-04
+  ib  0  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  ib  1  0.000000000000E+00  0.000000000000E+00  0.000000000000E+00
+  Global net ELEC energy = -9.786249660218E+02 kJ/mol
+  Global net APOL energy = 2.091848317949E-01 kJ/mol
+</pre>
+		</p>
 
-<p>
-And here's the notation we'll use for the results you should observe (all
-values in kJ/mol/A):
-<dl>
-  <dt> Solv (runme)
-  <dd> Solvation energy (kJ/mol) from this calculation
-  <dt> Solv (Roux)
-  <dd> Solvation energy from the Roux paper (see above); this was
-       <i>visually approximated</i> from a graph and therefore probably not
-very close to what they actually obtained
-  <dt> RF (runme)
-  <dd> Reaction field force from this calculation
-  <dt> RF (Roux)
-  <dd> Reaction field force from the Roux paper (see above); this was
-       <i>visually approximated</i> from a graph and therefore probably not
-very close to what they actually obtained
-  <dt> DB (runme)
-  <dd> Dielectric boundary force from this calculation
-  <dt> DB (Roux)
-  <dd> Dielectric boundary force from the Roux paper (see above); this was
-       <i>visually approximated</i> from a graph and therefore probably not
-very close to what they actually obtained
-  <dt> IB (runme)
-  <dd> Ionic boundary force from this calculation
-  <dt> IB (Roux)
-  <dd> Ionic boundary force from the Roux paper (see above); this was
-       <i>visually approximated</i> from a graph and therefore probably not
-very close to what they actually obtained
-  <dt> NP (runme)
-  <dd> Apolar boundary force from this calculation
-  <dt> NP (Roux)
-  <dd> Apolar boundary force from the Roux paper (see above); this was
-       <i>visually approximated</i> from a graph and therefore probably not
-very close to what they actually obtained
-</dl>
-
-<table border="1">
-<tr>
-<th>Mol 1 location</th>
-<th>Solv (runme)</th>
-<th>Solv (Roux)</th>
-<th colspan="2">RF (runme)</th>
-<th colspan="2">RF (Roux)</th>
-<th colspan="2">DB (runme)</th>
-<th colspan="2">DB (Roux)</th>
-<th colspan="2">IB (runme)</th>
-<th colspan="2">IB (Roux)</th>
-<th colspan="2">NP (runme)</th>
-<th colspan="2">NP (Roux)</th>
-</tr>
-<tr>
-<th></th>
-<th>Complex</th>
-<th>Complex</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-<th>Mol 0</th><th>Mol 1</th>
-</tr>
-<tr>
-  <td>-3.00</td>
-  <td>-1.4941E+03</td>
-  <td></td>
-  <td>2.0671E-01</td><td>2.0671E-01</td>
-  <td>0.0E+00</td><td>0.0E+00</td>
-  <td>-9.7575E-01</td><td>-9.7575E-01</td>
-  <td>0.0E+00</td><td>0.0E+00</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>-1.6567E-05</td><td>-1.6567E-05</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>-2.50</td>
-  <td>-1.4529E+03</td>
-  <td></td>
-  <td>1.0947E+01</td><td>-1.2476E+01</td>
-  <td>8.4E+00</td><td>-1.3E+01</td>
-  <td>1.1390E+02</td><td>-1.0268E+02</td>
-  <td>1.1E+02</td><td>-1.1E+02</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>7.4737E-03</td><td>-7.4737E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>-2.00</td>
-  <td>-1.3952E+03</td>
-  <td></td>
-  <td>3.7894E+01</td><td>-3.6310E+01</td>
-  <td>3.8E+01</td><td>-3.4E+01</td>
-  <td>7.7637E+01</td><td>-7.7547E+01</td>
-  <td>8.2E+01</td><td>-8.2E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>8.4697E-03</td><td>-8.4820E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>-1.50</td>
-  <td>-1.3430E+03</td>
-  <td></td>
-  <td>6.4344E+01</td><td>-5.7731E+01</td>
-  <td>6.3E+01</td><td>-5.5E+01</td>
-  <td>4.2190E+01</td><td>-4.0318E+01</td>
-  <td>4.2E+01</td><td>-4.0E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>8.6427E-03</td><td>-8.6407E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>-1.00</td>
-  <td>-1.2974E+03</td>
-  <td></td>
-  <td>8.6638E+01</td><td>-8.6808E+01</td>
-  <td>8.8E+01</td><td>-8.8E+01</td>
-  <td>5.6696E+00</td><td>-2.8578E+00</td>
-  <td>4.2E+00</td><td>-4.2E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>8.6513E-03</td><td>-8.6730E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>-0.50</td>
-  <td>-1.2539E+03</td>
-  <td></td>
-  <td>1.0053E+02</td><td>-1.0125E+02</td>
-  <td>1.0E+02</td><td>-1.0E+02</td>
-  <td>-1.1362E+01</td><td>2.2136E+01</td>
-  <td>-1.2E+01</td><td>1.6E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>8.7176E-03</td><td>-8.5418E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td> 0.00</td>
-  <td>-1.2121E+03</td>
-  <td></td>
-  <td>1.0591E+02</td><td><font color="red">0.0000E+00</font></td>
-  <td>1.1E+02</td><td><font color="red">0</font></td>
-  <td>-2.1509E+01</td><td>2.9697E+01</td>
-  <td>-2.1E+01</td><td>2.1E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>8.8014E-03</td><td>-8.3047E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>0.50</td>
-  <td>-1.1699E+03</td>
-  <td></td>
-  <td>1.0066E+02</td><td>-1.0172E+02</td>
-  <td>9.6E+01</td><td>-9.8E+01</td>
-  <td>-1.0538E+01</td><td>4.8631E+00</td>
-  <td>-1.1E+01</td><td>4.2E+00</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>7.9753E-03</td><td>-8.6683E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>1.00</td>
-  <td>-1.1255E+03</td>
-  <td></td>
-  <td>8.2252E+01</td><td>-8.7276E+01</td>
-  <td>8.4E+01</td><td>-8.8E+01</td>
-  <Td>6.2949E+00</td><td>2.9928E+00</td>
-  <td>4.2E+00</td><td>0.0E+00</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>4.7313E-03</td><td>-7.9707E-03</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>1.50</td>
-  <td>-1.0876E+03</td>
-  <td></td>
-  <td>6.5317E+01</td><td>-6.4707E+01</td>
-  <td>6.7E+01</td><td>-6.5E+01</td>
-  <td>7.2732E+00</td><td>3.1037E+00</td>
-  <td>6.3E+00</td><td>4.2E+00</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>1.8437E-04</td><td>-6.6104E-04</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>2.00</td>
-  <td>-1.0570E+03</td>
-  <td></td>
-  <td>5.3014E+01</td><td>-5.4596E+01</td>
-  <td>5.3E+01</td><td>-5.3E+01</td>
-  <td>7.2734E+00</td><td>1.8664E+00</td>
-  <td>6.3E+01</td><td>6.3E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>-1.1215E-05</td><td>3.8423E-06</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>2.50</td>
-  <td>-1.0322E+03</td>
-  <td>-1.0333E+03</td>
-  <td>4.3782E+01</td><td>-4.6578E+01</td>
-  <td>4.6E+01</td><td>-4.8E+01</td>
-  <td>7.2276E+00</td><td>-2.3296E+00</td>
-  <td>6.3E+01</td><td>-2.1E+01</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>-1.1215E-05</td><td>-1.0599E-05</td>
-  <td></td><td></td>
-</tr>
-<tr>
-  <td>3.00</td>
-  <td>-1.0114E+03</td>
-  <td>-1.0128E+03</td>
-  <td>3.6786E+01</td><td>-3.6786E+01</td>
-  <td>3.8E+01</td><td>-3.8E+01</td>
-  <td>7.1825E+00</td><td>-7.1824E+00</td>
-  <td>6.3E+00</td><td>-6.3E+00</td>
-  <td>0</td><td>0</td>
-  <td>0</td><td>0</td>
-  <td>-1.1215E-05</td><td>1.12145E-05</td>
-  <td></td><td></td>
-</tr>
-</table>
-
-</body>
+	</body>
 </html>
