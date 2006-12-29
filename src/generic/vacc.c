@@ -1490,8 +1490,8 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	double spacs[3], vec[3];
     double w, wx, wy, wz, len, fn, x, y, z, vol;
 	double x2,y2,z2,r;
-	double vol_density,energy;
-	double psig, epsilon, sigma, eni, chi;
+	double vol_density, energy;
+	double psig, epsilon, watepsilon, sigma, watsigma, eni, chi;
 	
 	double *pos;
     double *lower_corner, *upper_corner;
@@ -1508,12 +1508,16 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
 	
-	/* Note: This is temporary until we get the parameterization in place*/
+	/* Note:  these are temporary water parameters... they need to be replaced by
+		entries in a parameter file */
+	watsigma = 1.7683;  /* Water LJ radius in A */
+	watepsilon =  0.152;  /* Water LJ epsilon in kcal/mol */
+	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
+	
 	psig = atom->radius;
 	epsilon = atom->epsilon;
-	
-	sigma = psig + 1.7683;
-    epsilon = VSQRT((epsilon * 0.152));
+	sigma = psig + watsigma;
+    epsilon = VSQRT((epsilon * watepsilon));
 	
 	/* parameters */
     double sigma6 = VPOW(sigma,6);
@@ -1635,7 +1639,7 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
     double w, wx, wy, wz, len, fn, x, y, z, vol;
 	double x2,y2,z2,r;
 	double vol_density, fo;
-	double psig, epsilon, sigma, chi;
+	double psig, epsilon, watepsilon, sigma, watsigma, chi;
 	
 	double *pos;
     double *lower_corner, *upper_corner;
@@ -1651,13 +1655,17 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
 
-	/* Note: This is temporary until we get the parameterization in place*/
+	/* Note:  these are temporary water parameters... they need to be replaced by
+		entries in a parameter file */
+	watsigma = 1.7683;  /* Water LJ radius in A */
+	watepsilon =  0.152;  /* Water LJ epsilon in kcal/mol */
+	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
+	
 	psig = atom->radius;
 	epsilon = atom->epsilon;
-	
-	sigma = psig+1.7683;
-    epsilon = VSQRT((epsilon*.152));
-	
+	sigma = psig + watsigma;
+    epsilon = VSQRT((epsilon * watepsilon));
+		
 	/* parameters */
     double sigma6 = VPOW(sigma,6);
     double sigma12 = VPOW(sigma,12);

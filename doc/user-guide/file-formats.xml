@@ -249,8 +249,13 @@
 					<varlistentry>
 						<term> <replaceable>Epsilon</replaceable> </term>
 						<listitem>
-							<para>A float giving the Lennard-Jones well depth (in kcal/mol);
-								this parameter is read but not currently used by APBS.</para>
+							<para>A float giving the Lennard-Jones well depth (in kJ/mol).  This is used for the calculation of
+								WCA energies in apolar solvation energies and forces.  We assume that the Lennard-Jones potential
+								is defined in the "AMBER style":
+								<informalequation>
+									<graphic fileref="images/lennard-jones.png"/>
+								</informalequation>
+							</para>
 						</listitem>
 					</varlistentry>
 				</variablelist>
@@ -316,7 +321,11 @@
 					<varlistentry>
 						<term> <replaceable>atomepsilon</replaceable> </term>
 						<listitem>
-							<para>A float giving the Lennard-Jones well depth (in kcal/mol); this parameter is read but not currently used by APBS.</para>
+							<para>A float giving the Lennard-Jones well depth (in kJ/mol).  This is used for the
+								calculation of WCA energies in apolar solvation energies and forces.  We assume that the
+								Lennard-Jones potential is defined in the "AMBER style": 
+								<informalequation> <graphic fileref="images/lennard-jones.png"/> </informalequation>
+							</para> 
 						</listitem>
 					</varlistentry>
 				</variablelist>
