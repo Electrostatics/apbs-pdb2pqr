@@ -57,13 +57,13 @@ typedef <a class="el" href="structsValist.html">sValist</a>&nbsp;</td><td class=
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a11">Valist_dtor2</a> (<a class="el" href="structsValist.html">Valist</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to destroy atom list object. </em> <a href="#a11"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (<a class="el" href="structsValist.html">Valist</a> *thee, Vio *sock)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a12">Valist_readPQR</a> (<a class="el" href="structsValist.html">Valist</a> *thee, <a class="el" href="structVparam.html">Vparam</a> *param, Vio *sock)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill atom list with information from a PQR file. </em> <a href="#a12"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a13">Valist_readPDB</a> (<a class="el" href="structsValist.html">Valist</a> *thee, <a class="el" href="structVparam.html">Vparam</a> *param, Vio *sock)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill atom list with information from a PDB file. </em> <a href="#a13"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a14">Valist_readXML</a> (<a class="el" href="structsValist.html">Valist</a> *thee, Vio *sock)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a14">Valist_readXML</a> (<a class="el" href="structsValist.html">Valist</a> *thee, <a class="el" href="structVparam.html">Vparam</a> *param, Vio *sock)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill atom list with information from an XML file. </em> <a href="#a14"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Valist.html#a15">Valist_getStatistics</a> (<a class="el" href="structsValist.html">Valist</a> *thee)</td></tr>
@@ -600,24 +600,27 @@ Socket read for reading PDB file </td></tr>
 <p>
 Here is the call graph for this function:<p><center><img src="group__Valist_a23_cgraph.png" border="0" usemap="#group__Valist_a23_cgraph_map" alt=""></center>
 <map name="group__Valist_a23_cgraph_map">
-<area href="valist_8c.html#a21" shape="rect" coords="193,7,350,34" alt="">
-<area href="group__Valist.html#a26" shape="rect" coords="203,109,339,135" alt="">
-<area href="valist_8c.html#a20" shape="rect" coords="174,159,369,186" alt="">
-<area href="valist_8c.html#a22" shape="rect" coords="199,58,343,85" alt="">
+<area href="valist_8c.html#a21" shape="rect" coords="193,58,350,85" alt="">
+<area href="group__Valist.html#a26" shape="rect" coords="203,109,339,136" alt="">
+<area href="valist_8c.html#a20" shape="rect" coords="174,160,369,186" alt="">
+<area href="valist_8c.html#a22" shape="rect" coords="199,8,343,34" alt="">
 <area href="group__Vatom.html#a4" shape="rect" coords="206,210,337,237" alt="">
-<area href="group__Vatom.html#a7" shape="rect" coords="207,261,335,287" alt="">
-<area href="group__Vatom.html#a14" shape="rect" coords="205,311,338,338" alt="">
-<area href="group__Vatom.html#a5" shape="rect" coords="207,362,335,389" alt="">
-<area href="group__Vparam.html#a19" shape="rect" coords="194,463,349,490" alt="">
-<area href="group__Vstring.html#a0" shape="rect" coords="679,463,821,490" alt="">
-<area href="group__Vatom.html#a15" shape="rect" coords="470,7,579,34" alt="">
+<area href="group__Vatom.html#a19" shape="rect" coords="195,261,347,288" alt="">
+<area href="group__Vatom.html#a7" shape="rect" coords="207,312,335,338" alt="">
+<area href="group__Vatom.html#a9" shape="rect" coords="206,362,337,389" alt="">
+<area href="group__Vatom.html#a14" shape="rect" coords="205,413,338,440" alt="">
+<area href="group__Vatom.html#a5" shape="rect" coords="207,464,335,490" alt="">
+<area href="group__Vatom.html#a17" shape="rect" coords="199,514,343,541" alt="">
+<area href="group__Vparam.html#a19" shape="rect" coords="194,565,349,592" alt="">
+<area href="group__Vstring.html#a0" shape="rect" coords="679,565,821,592" alt="">
+<area href="group__Vatom.html#a15" shape="rect" coords="470,8,579,34" alt="">
 <area href="group__Vatom.html#a13" shape="rect" coords="475,58,574,85" alt="">
-<area href="valist_8c.html#a18" shape="rect" coords="433,109,617,135" alt="">
-<area href="valist_8c.html#a15" shape="rect" coords="434,159,615,186" alt="">
+<area href="valist_8c.html#a18" shape="rect" coords="433,109,617,136" alt="">
+<area href="valist_8c.html#a15" shape="rect" coords="434,160,615,186" alt="">
 <area href="valist_8c.html#a16" shape="rect" coords="425,210,625,237" alt="">
-<area href="valist_8c.html#a17" shape="rect" coords="419,261,630,287" alt="">
-<area href="valist_8c.html#a14" shape="rect" coords="450,311,599,338" alt="">
-<area href="group__Vparam.html#a18" shape="rect" coords="451,463,598,490" alt="">
+<area href="valist_8c.html#a17" shape="rect" coords="419,261,630,288" alt="">
+<area href="valist_8c.html#a14" shape="rect" coords="450,312,599,338" alt="">
+<area href="group__Vparam.html#a18" shape="rect" coords="451,565,598,592" alt="">
 </map>
 <a class="anchor" name="a12" doxytag="valist.h::Valist_readPQR" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -629,6 +632,12 @@ Here is the call graph for this function:<p><center><img src="group__Valist_a23_
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsValist.html">Valist</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structVparam.html">Vparam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>param</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -667,6 +676,8 @@ Fill atom list with information from a PQR file.
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>thee</em>&nbsp;</td><td>
 Atom list object </td></tr>
+<tr><td valign=top><em>param</em>&nbsp;</td><td>
+A pre-initialized parameter object </td></tr>
 <tr><td valign=top><em>sock</em>&nbsp;</td><td>
 Socket reading for reading PQR file </td></tr>
 </table>
@@ -677,23 +688,28 @@ Socket reading for reading PQR file </td></tr>
 <p>
 Here is the call graph for this function:<p><center><img src="group__Valist_a24_cgraph.png" border="0" usemap="#group__Valist_a24_cgraph_map" alt=""></center>
 <map name="group__Valist_a24_cgraph_map">
-<area href="valist_8c.html#a21" shape="rect" coords="198,8,356,34" alt="">
+<area href="valist_8c.html#a21" shape="rect" coords="198,8,355,34" alt="">
 <area href="group__Valist.html#a26" shape="rect" coords="209,109,345,136" alt="">
-<area href="valist_8c.html#a20" shape="rect" coords="180,160,374,186" alt="">
+<area href="valist_8c.html#a20" shape="rect" coords="179,160,374,186" alt="">
 <area href="valist_8c.html#a19" shape="rect" coords="177,210,377,237" alt="">
 <area href="valist_8c.html#a22" shape="rect" coords="205,58,349,85" alt="">
-<area href="group__Vatom.html#a4" shape="rect" coords="212,261,342,288" alt="">
-<area href="group__Vatom.html#a7" shape="rect" coords="213,312,341,338" alt="">
-<area href="group__Vatom.html#a14" shape="rect" coords="210,362,344,389" alt="">
-<area href="group__Vatom.html#a5" shape="rect" coords="213,413,341,440" alt="">
-<area href="group__Vstring.html#a0" shape="rect" coords="206,464,348,490" alt="">
-<area href="group__Vatom.html#a15" shape="rect" coords="478,58,588,85" alt="">
-<area href="group__Vatom.html#a13" shape="rect" coords="484,8,582,34" alt="">
-<area href="valist_8c.html#a18" shape="rect" coords="441,160,625,186" alt="">
-<area href="valist_8c.html#a15" shape="rect" coords="442,210,624,237" alt="">
-<area href="valist_8c.html#a16" shape="rect" coords="433,261,633,288" alt="">
-<area href="valist_8c.html#a17" shape="rect" coords="428,312,638,338" alt="">
-<area href="valist_8c.html#a14" shape="rect" coords="458,109,608,136" alt="">
+<area href="group__Vatom.html#a4" shape="rect" coords="211,261,342,288" alt="">
+<area href="group__Vatom.html#a19" shape="rect" coords="201,312,353,338" alt="">
+<area href="group__Vatom.html#a7" shape="rect" coords="213,362,341,389" alt="">
+<area href="group__Vatom.html#a9" shape="rect" coords="211,413,342,440" alt="">
+<area href="group__Vatom.html#a14" shape="rect" coords="210,464,343,490" alt="">
+<area href="group__Vatom.html#a5" shape="rect" coords="213,514,341,541" alt="">
+<area href="group__Vatom.html#a17" shape="rect" coords="205,565,349,592" alt="">
+<area href="group__Vparam.html#a19" shape="rect" coords="199,666,354,693" alt="">
+<area href="group__Vstring.html#a0" shape="rect" coords="687,666,829,693" alt="">
+<area href="group__Vatom.html#a15" shape="rect" coords="478,8,587,34" alt="">
+<area href="group__Vatom.html#a13" shape="rect" coords="483,58,582,85" alt="">
+<area href="valist_8c.html#a18" shape="rect" coords="441,109,625,136" alt="">
+<area href="valist_8c.html#a15" shape="rect" coords="442,160,623,186" alt="">
+<area href="valist_8c.html#a16" shape="rect" coords="433,210,633,237" alt="">
+<area href="valist_8c.html#a17" shape="rect" coords="427,261,638,288" alt="">
+<area href="valist_8c.html#a14" shape="rect" coords="458,312,607,338" alt="">
+<area href="group__Vparam.html#a18" shape="rect" coords="459,666,606,693" alt="">
 </map>
 <a class="anchor" name="a14" doxytag="valist.h::Valist_readXML" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -705,6 +721,12 @@ Here is the call graph for this function:<p><center><img src="group__Valist_a24_
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsValist.html">Valist</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structVparam.html">Vparam</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>param</em>, </td>
         </tr>
         <tr>
           <td></td>
@@ -742,6 +764,8 @@ Fill atom list with information from an XML file.
 <table border=0 cellspacing=2 cellpadding=0>
 <tr><td valign=top><em>thee</em>&nbsp;</td><td>
 Atom list object </td></tr>
+<tr><td valign=top><em>param</em>&nbsp;</td><td>
+A pre-initialized parameter object </td></tr>
 <tr><td valign=top><em>sock</em>&nbsp;</td><td>
 Socket reading for reading PQR file </td></tr>
 </table>
@@ -763,7 +787,7 @@ Here is the call graph for this function:<p><center><img src="group__Valist_a25_
 <area href="group__Vatom.html#a15" shape="rect" coords="382,7,491,34" alt="">
 <area href="group__Vatom.html#a13" shape="rect" coords="387,58,486,85" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:47 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:57 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

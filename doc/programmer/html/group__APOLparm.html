@@ -25,69 +25,83 @@
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parameter structure for APOL-specific variables from input files. </em> <a href="structsAPOLparm.html#_details">More...</a><em><br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a0" doxytag="APOLparm::APOLparm_calcEnergy" ></a>
-typedef enum <a class="el" href="group__APOLparm.html#a8">eAPOLparm_calcEnergy</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a0">APOLparm_calcEnergy</a></td></tr>
+typedef enum <a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcEnergy</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a0">APOLparm_calcEnergy</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define eAPOLparm_calcEnergy enumeration as APOLparm_calcEnergy. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a1" doxytag="APOLparm::APOLparm_calcForce" ></a>
-typedef enum <a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcForce</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a1">APOLparm_calcForce</a></td></tr>
+typedef enum <a class="el" href="group__APOLparm.html#a10">eAPOLparm_calcForce</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a1">APOLparm_calcForce</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define eAPOLparm_calcForce enumeration as APOLparm_calcForce. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a10" doxytag="APOLparm::APOLparm" ></a>
-typedef <a class="el" href="structsAPOLparm.html">sAPOLparm</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a10">APOLparm</a></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a2" doxytag="APOLparm::APOLparm_doCalc" ></a>
+typedef enum <a class="el" href="group__APOLparm.html#a11">eAPOLparm_doCalc</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a2">APOLparm_doCalc</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define eAPOLparm_calcForce enumeration as APOLparm_calcForce. <br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a12" doxytag="APOLparm::APOLparm" ></a>
+typedef <a class="el" href="structsAPOLparm.html">sAPOLparm</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a12">APOLparm</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Declaration of the APOLparm class as the APOLparm structure. <br><br></td></tr>
 <tr><td colspan=2><br><h2>Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a8">eAPOLparm_calcEnergy</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a8a3">ACE_NO</a> = 0, 
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcEnergy</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a4">ACE_NO</a> = 0, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a8a4">ACE_TOTAL</a> = 1, 
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a5">ACE_TOTAL</a> = 1, 
 <br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a8a5">ACE_COMPS</a> = 2
-<br>
- }</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define energy calculation enumeration. </em> <a href="#a8">More...</a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcForce</a> { <br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a6">ACF_NO</a> = 0, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a7">ACF_TOTAL</a> = 1, 
-<br>
-&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a8">ACF_COMPS</a> = 2
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a9a6">ACE_COMPS</a> = 2
 <br>
  }</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define force calculation enumeration. </em> <a href="#a9">More...</a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define energy calculation enumeration. </em> <a href="#a9">More...</a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a10">eAPOLparm_calcForce</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a10a7">ACF_NO</a> = 0, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a10a8">ACF_TOTAL</a> = 1, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a10a9">ACF_COMPS</a> = 2
+<br>
+ }</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define force calculation enumeration. </em> <a href="#a10">More...</a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>enum &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a11">eAPOLparm_doCalc</a> { <br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a11a10">ACD_NO</a> = 0, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a11a11">ACD_YES</a> = 1, 
+<br>
+&nbsp;&nbsp;<a class="el" href="group__APOLparm.html#a11a12">ACD_ERROR</a> = 2
+<br>
+ }</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define force calculation enumeration. </em> <a href="#a11">More...</a><em><br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsAPOLparm.html">APOLparm</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a2">APOLparm_ctor</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsAPOLparm.html">APOLparm</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a3">APOLparm_ctor</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct APOLparm. </em> <a href="#a2"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a3">APOLparm_ctor2</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct APOLparm. </em> <a href="#a3"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a4">APOLparm_ctor2</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to construct APOLparm. </em> <a href="#a3"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a4">APOLparm_dtor</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> **thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to construct APOLparm. </em> <a href="#a4"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a5">APOLparm_dtor</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> **thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object destructor. </em> <a href="#a4"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a5">APOLparm_dtor2</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object destructor. </em> <a href="#a5"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a6">APOLparm_dtor2</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub for object destructor. </em> <a href="#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a6">APOLparm_check</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub for object destructor. </em> <a href="#a6"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a7">APOLparm_check</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Consistency check for parameter values stored in object. </em> <a href="#a6"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a7">APOLparm_copy</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee, <a class="el" href="structsAPOLparm.html">APOLparm</a> *source)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Consistency check for parameter values stored in object. </em> <a href="#a7"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__APOLparm.html#a8">APOLparm_copy</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *thee, <a class="el" href="structsAPOLparm.html">APOLparm</a> *source)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Copy target object into thee. </em> <a href="#a7"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Copy target object into thee. </em> <a href="#a8"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Parameter structure for APOL-specific variables from input files. 
 <p>
 <hr><h2>Enumeration Type Documentation</h2>
-<a class="anchor" name="a8" doxytag="apolparm.h::eAPOLparm_calcEnergy" ></a><p>
+<a class="anchor" name="a9" doxytag="apolparm.h::eAPOLparm_calcEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> enum <a class="el" href="group__APOLparm.html#a8">eAPOLparm_calcEnergy</a>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcEnergy</a>
       </table>
     </td>
   </tr>
@@ -104,24 +118,24 @@ Define energy calculation enumeration.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a class="anchor" name="a8a3" doxytag="ACE_NO" ></a>ACE_NO</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a9a4" doxytag="ACE_NO" ></a>ACE_NO</em>&nbsp;</td><td>
 Do not perform energy calculation </td></tr>
-<tr><td valign=top><em><a class="anchor" name="a8a4" doxytag="ACE_TOTAL" ></a>ACE_TOTAL</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a9a5" doxytag="ACE_TOTAL" ></a>ACE_TOTAL</em>&nbsp;</td><td>
 Calculate total energy only </td></tr>
-<tr><td valign=top><em><a class="anchor" name="a8a5" doxytag="ACE_COMPS" ></a>ACE_COMPS</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a9a6" doxytag="ACE_COMPS" ></a>ACE_COMPS</em>&nbsp;</td><td>
 Calculate per-atom energy components </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
-<a class="anchor" name="a9" doxytag="apolparm.h::eAPOLparm_calcForce" ></a><p>
+<a class="anchor" name="a10" doxytag="apolparm.h::eAPOLparm_calcForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> enum <a class="el" href="group__APOLparm.html#a9">eAPOLparm_calcForce</a>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="group__APOLparm.html#a10">eAPOLparm_calcForce</a>
       </table>
     </td>
   </tr>
@@ -138,19 +152,53 @@ Define force calculation enumeration.
 <p>
 <dl compact><dt><b>Enumeration values: </b></dt><dd>
 <table border=0 cellspacing=2 cellpadding=0>
-<tr><td valign=top><em><a class="anchor" name="a9a6" doxytag="ACF_NO" ></a>ACF_NO</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a10a7" doxytag="ACF_NO" ></a>ACF_NO</em>&nbsp;</td><td>
 Do not perform force calculation </td></tr>
-<tr><td valign=top><em><a class="anchor" name="a9a7" doxytag="ACF_TOTAL" ></a>ACF_TOTAL</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a10a8" doxytag="ACF_TOTAL" ></a>ACF_TOTAL</em>&nbsp;</td><td>
 Calculate total force only </td></tr>
-<tr><td valign=top><em><a class="anchor" name="a9a8" doxytag="ACF_COMPS" ></a>ACF_COMPS</em>&nbsp;</td><td>
+<tr><td valign=top><em><a class="anchor" name="a10a9" doxytag="ACF_COMPS" ></a>ACF_COMPS</em>&nbsp;</td><td>
 Calculate per-atom force components </td></tr>
 </table>
 </dl>
     </td>
   </tr>
 </table>
+<a class="anchor" name="a11" doxytag="apolparm.h::eAPOLparm_doCalc" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> enum <a class="el" href="group__APOLparm.html#a11">eAPOLparm_doCalc</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Define force calculation enumeration. 
+<p>
+<dl compact><dt><b>Enumeration values: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em><a class="anchor" name="a11a10" doxytag="ACD_NO" ></a>ACD_NO</em>&nbsp;</td><td>
+Do not perform calculation </td></tr>
+<tr><td valign=top><em><a class="anchor" name="a11a11" doxytag="ACD_YES" ></a>ACD_YES</em>&nbsp;</td><td>
+Perform calculations </td></tr>
+<tr><td valign=top><em><a class="anchor" name="a11a12" doxytag="ACD_ERROR" ></a>ACD_ERROR</em>&nbsp;</td><td>
+Error setting up calculation </td></tr>
+</table>
+</dl>
+    </td>
+  </tr>
+</table>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="a6" doxytag="apolparm.h::APOLparm_check" ></a><p>
+<a class="anchor" name="a7" doxytag="apolparm.h::APOLparm_check" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -188,7 +236,7 @@ Consistency check for parameter values stored in object.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a7" doxytag="apolparm.h::APOLparm_copy" ></a><p>
+<a class="anchor" name="a8" doxytag="apolparm.h::APOLparm_copy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -235,7 +283,7 @@ Copy target object into thee.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a2" doxytag="apolparm.h::APOLparm_ctor" ></a><p>
+<a class="anchor" name="a3" doxytag="apolparm.h::APOLparm_ctor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -278,7 +326,7 @@ Here is the call graph for this function:<p><center><img src="group__APOLparm_a0
 <map name="group__APOLparm_a0_cgraph_map">
 <area href="group__APOLparm.html#a1" shape="rect" coords="177,8,302,34" alt="">
 </map>
-<a class="anchor" name="a3" doxytag="apolparm.h::APOLparm_ctor2" ></a><p>
+<a class="anchor" name="a4" doxytag="apolparm.h::APOLparm_ctor2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -317,7 +365,7 @@ FORTRAN stub to construct APOLparm.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a4" doxytag="apolparm.h::APOLparm_dtor" ></a><p>
+<a class="anchor" name="a5" doxytag="apolparm.h::APOLparm_dtor" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -360,7 +408,7 @@ Here is the call graph for this function:<p><center><img src="group__APOLparm_a3
 <map name="group__APOLparm_a3_cgraph_map">
 <area href="group__APOLparm.html#a4" shape="rect" coords="176,8,304,34" alt="">
 </map>
-<a class="anchor" name="a5" doxytag="apolparm.h::APOLparm_dtor2" ></a><p>
+<a class="anchor" name="a6" doxytag="apolparm.h::APOLparm_dtor2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -397,7 +445,7 @@ FORTRAN stub for object destructor.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:40 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:51 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

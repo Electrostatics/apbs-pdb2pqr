@@ -30,9 +30,9 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o6">setmolid</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o7">bdens</a></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o7">bconc</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o8">setbdens</a></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o8">setbconc</a></td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o9">sdens</a></td></tr>
 
@@ -74,6 +74,12 @@
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o28">setcalcforce</a></td></tr>
 
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o29">sasa</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o30">sav</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsAPOLparm.html#o32">totForce</a> [3]</td></tr>
+
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Parameter structure for APOL-specific variables from input files. 
@@ -82,13 +88,13 @@ Parameter structure for APOL-specific variables from input files.
 
 <p>
 <hr><h2>Field Documentation</h2>
-<a class="anchor" name="o7" doxytag="sAPOLparm::bdens" ></a><p>
+<a class="anchor" name="o7" doxytag="sAPOLparm::bconc" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> double <a class="el" href="structsAPOLparm.html#o7">sAPOLparm::bdens</a>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsAPOLparm.html#o7">sAPOLparm::bconc</a>
       </table>
     </td>
   </tr>
@@ -302,6 +308,50 @@ Flag: Has this structure been filled with anything other than * the default valu
 Solvent pressure     </td>
   </tr>
 </table>
+<a class="anchor" name="o29" doxytag="sAPOLparm::sasa" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsAPOLparm.html#o29">sAPOLparm::sasa</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Solvent accessible surface area for this calculation     </td>
+  </tr>
+</table>
+<a class="anchor" name="o30" doxytag="sAPOLparm::sav" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsAPOLparm.html#o30">sAPOLparm::sav</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Solvent accessible volume for this calculation     </td>
+  </tr>
+</table>
 <a class="anchor" name="o9" doxytag="sAPOLparm::sdens" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -324,13 +374,13 @@ Solvent pressure     </td>
 Vacc sphere density     </td>
   </tr>
 </table>
-<a class="anchor" name="o8" doxytag="sAPOLparm::setbdens" ></a><p>
+<a class="anchor" name="o8" doxytag="sAPOLparm::setbconc" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int <a class="el" href="structsAPOLparm.html#o8">sAPOLparm::setbdens</a>
+          <td class="md" nowrap valign="top"> int <a class="el" href="structsAPOLparm.html#o8">sAPOLparm::setbconc</a>
       </table>
     </td>
   </tr>
@@ -343,7 +393,7 @@ Vacc sphere density     </td>
     <td>
 
 <p>
-Flag, <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="structsAPOLparm.html#o7">bdens</a> </dd></dl>
+Flag, <dl compact><dt><b>See also:</b></dt><dd><a class="el" href="structsAPOLparm.html#o7">bconc</a> </dd></dl>
     </td>
   </tr>
 </table>
@@ -734,9 +784,31 @@ Cubic spline window     </td>
 Temperature (in K)     </td>
   </tr>
 </table>
+<a class="anchor" name="o32" doxytag="sAPOLparm::totForce" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsAPOLparm.html#o32">sAPOLparm::totForce</a>[3]
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Total forces on x, y, z     </td>
+  </tr>
+</table>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="apolparm_8h-source.html">apolparm.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:31 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:43 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

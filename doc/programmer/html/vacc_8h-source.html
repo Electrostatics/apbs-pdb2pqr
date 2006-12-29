@@ -18,239 +18,265 @@
 00081 <span class="preprocessor">#include "<a class="code" href="vclist_8h.html">apbs/vclist.h</a>"</span>
 00082 <span class="preprocessor">#include "<a class="code" href="vatom_8h.html">apbs/vatom.h</a>"</span>
 00083 <span class="preprocessor">#include "<a class="code" href="vunit_8h.html">apbs/vunit.h</a>"</span>
-00084 
-<a name="l00090"></a><a class="code" href="structsVaccSurf.html">00090</a> <span class="keyword">struct </span><a class="code" href="structsVaccSurf.html">sVaccSurf</a> {
-<a name="l00091"></a><a class="code" href="structsVaccSurf.html#o0">00091</a>     Vmem *<a class="code" href="structsVaccSurf.html#o0">mem</a>;  
-<a name="l00092"></a><a class="code" href="structsVaccSurf.html#o1">00092</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o1">xpts</a>;  
-<a name="l00093"></a><a class="code" href="structsVaccSurf.html#o2">00093</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o2">ypts</a>;  
-<a name="l00094"></a><a class="code" href="structsVaccSurf.html#o3">00094</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o3">zpts</a>;  
-<a name="l00095"></a><a class="code" href="structsVaccSurf.html#o4">00095</a>     <span class="keywordtype">int</span> *<a class="code" href="structsVaccSurf.html#o4">bpts</a>;  
-<a name="l00097"></a><a class="code" href="structsVaccSurf.html#o5">00097</a>     <span class="keywordtype">double</span> <a class="code" href="structsVaccSurf.html#o5">area</a>;  
-<a name="l00098"></a><a class="code" href="structsVaccSurf.html#o6">00098</a>     <span class="keywordtype">int</span> <a class="code" href="structsVaccSurf.html#o6">npts</a>;  
-<a name="l00099"></a><a class="code" href="structsVaccSurf.html#o7">00099</a>     <span class="keywordtype">double</span> <a class="code" href="structsVaccSurf.html#o7">probe_radius</a>;  
-00101 };
-00102 
-<a name="l00107"></a><a class="code" href="group__Vacc.html#a0">00107</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVaccSurf.html">sVaccSurf</a> <a class="code" href="group__Vacc.html#a0">VaccSurf</a>;
-00108 
-<a name="l00114"></a><a class="code" href="structsVacc.html">00114</a> <span class="keyword">struct </span><a class="code" href="structsVacc.html">sVacc</a> {
-00115 
-<a name="l00116"></a><a class="code" href="structsVacc.html#o0">00116</a>   Vmem *<a class="code" href="structsVacc.html#o0">mem</a>;  
-<a name="l00117"></a><a class="code" href="structsVacc.html#o1">00117</a>   <a class="code" href="structsValist.html">Valist</a> *<a class="code" href="structsVacc.html#o1">alist</a>;  
-<a name="l00118"></a><a class="code" href="structsVacc.html#o2">00118</a>   <a class="code" href="structsVclist.html">Vclist</a> *<a class="code" href="structsVacc.html#o2">clist</a>;  
-<a name="l00119"></a><a class="code" href="structsVacc.html#o3">00119</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVacc.html#o3">atomFlags</a>;  
-<a name="l00122"></a><a class="code" href="structsVacc.html#o4">00122</a>   <a class="code" href="group__Vacc.html#a0">VaccSurf</a> *<a class="code" href="structsVacc.html#o4">refSphere</a>;  
-<a name="l00123"></a><a class="code" href="structsVacc.html#o5">00123</a>   <a class="code" href="group__Vacc.html#a0">VaccSurf</a> **<a class="code" href="structsVacc.html#o5">surf</a>;  
-<a name="l00126"></a><a class="code" href="structsVacc.html#o6">00126</a>   Vset <a class="code" href="structsVacc.html#o6">acc</a>;  
-<a name="l00128"></a><a class="code" href="structsVacc.html#o7">00128</a>   <span class="keywordtype">double</span> <a class="code" href="structsVacc.html#o7">surf_density</a>;  
-00131 };
-00132 
-<a name="l00137"></a><a class="code" href="group__Vacc.html#a1">00137</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVacc.html">sVacc</a> <a class="code" href="group__Vacc.html#a1">Vacc</a>;
-00138 
-00139 <span class="preprocessor">#if !defined(VINLINE_VACC)</span>
-00140 <span class="preprocessor"></span>
-00146     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a0">Vacc_memChk</a>(
-00147             Vacc *thee 
-00148             );
-00149 
-00150 <span class="preprocessor">#else </span><span class="comment">/* if defined(VINLINE_VACC) */</span>
-00151 
-00152 <span class="preprocessor">#   define Vacc_memChk(thee) (Vmem_bytes((thee)-&gt;mem))</span>
-00153 <span class="preprocessor"></span>
-00154 <span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VACC) */</span>
-00155 
-00163 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a22">VaccSurf_ctor</a>(
-00164         Vmem *mem,  
-00165         <span class="keywordtype">double</span> probe_radius,  
-00166         <span class="keywordtype">int</span> nsphere  
-00167         );
-00168 
-00176 <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a23">VaccSurf_ctor2</a>(
-00177         VaccSurf *thee,  
-00178         Vmem *mem,  
-00179         <span class="keywordtype">double</span> probe_radius,  
-00180         <span class="keywordtype">int</span> nsphere  
-00181         );
-00182 
-00188 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a24">VaccSurf_dtor</a>(
-00189         VaccSurf **thee  
-00190         );
-00191 
-00197 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a25">VaccSurf_dtor2</a>(
-00198         VaccSurf *thee  
-00199         );
-00200 
-00215 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a27">VaccSurf_refSphere</a>(
-00216         Vmem *mem,  
-00217         <span class="keywordtype">int</span> npts 
-00218         );
-00219 
-00227 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a26">Vacc_atomSurf</a>(
-00228         Vacc *thee,  
-00229         <a class="code" href="structsVatom.html">Vatom</a> *atom,  
-00230         VaccSurf *ref,  
-00232         <span class="keywordtype">double</span> probe_radius  
-00233         );
-00234 
+00084 <span class="preprocessor">#include "apbs/apolparm.h"</span>
+00085 
+<a name="l00091"></a><a class="code" href="structsVaccSurf.html">00091</a> <span class="keyword">struct </span><a class="code" href="structsVaccSurf.html">sVaccSurf</a> {
+<a name="l00092"></a><a class="code" href="structsVaccSurf.html#o0">00092</a>     Vmem *<a class="code" href="structsVaccSurf.html#o0">mem</a>;  
+<a name="l00093"></a><a class="code" href="structsVaccSurf.html#o1">00093</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o1">xpts</a>;  
+<a name="l00094"></a><a class="code" href="structsVaccSurf.html#o2">00094</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o2">ypts</a>;  
+<a name="l00095"></a><a class="code" href="structsVaccSurf.html#o3">00095</a>     <span class="keywordtype">double</span> *<a class="code" href="structsVaccSurf.html#o3">zpts</a>;  
+<a name="l00096"></a><a class="code" href="structsVaccSurf.html#o4">00096</a>     <span class="keywordtype">int</span> *<a class="code" href="structsVaccSurf.html#o4">bpts</a>;  
+<a name="l00098"></a><a class="code" href="structsVaccSurf.html#o5">00098</a>     <span class="keywordtype">double</span> <a class="code" href="structsVaccSurf.html#o5">area</a>;  
+<a name="l00099"></a><a class="code" href="structsVaccSurf.html#o6">00099</a>     <span class="keywordtype">int</span> <a class="code" href="structsVaccSurf.html#o6">npts</a>;  
+<a name="l00100"></a><a class="code" href="structsVaccSurf.html#o7">00100</a>     <span class="keywordtype">double</span> <a class="code" href="structsVaccSurf.html#o7">probe_radius</a>;  
+00102 };
+00103 
+<a name="l00108"></a><a class="code" href="group__Vacc.html#a0">00108</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVaccSurf.html">sVaccSurf</a> <a class="code" href="group__Vacc.html#a0">VaccSurf</a>;
+00109 
+<a name="l00115"></a><a class="code" href="structsVacc.html">00115</a> <span class="keyword">struct </span><a class="code" href="structsVacc.html">sVacc</a> {
+00116 
+<a name="l00117"></a><a class="code" href="structsVacc.html#o0">00117</a>   Vmem *<a class="code" href="structsVacc.html#o0">mem</a>;  
+<a name="l00118"></a><a class="code" href="structsVacc.html#o1">00118</a>   <a class="code" href="structsValist.html">Valist</a> *<a class="code" href="structsVacc.html#o1">alist</a>;  
+<a name="l00119"></a><a class="code" href="structsVacc.html#o2">00119</a>   <a class="code" href="structsVclist.html">Vclist</a> *<a class="code" href="structsVacc.html#o2">clist</a>;  
+<a name="l00120"></a><a class="code" href="structsVacc.html#o3">00120</a>   <span class="keywordtype">int</span> *<a class="code" href="structsVacc.html#o3">atomFlags</a>;  
+<a name="l00123"></a><a class="code" href="structsVacc.html#o4">00123</a>   <a class="code" href="group__Vacc.html#a0">VaccSurf</a> *<a class="code" href="structsVacc.html#o4">refSphere</a>;  
+<a name="l00124"></a><a class="code" href="structsVacc.html#o5">00124</a>   <a class="code" href="group__Vacc.html#a0">VaccSurf</a> **<a class="code" href="structsVacc.html#o5">surf</a>;  
+<a name="l00127"></a><a class="code" href="structsVacc.html#o6">00127</a>   Vset <a class="code" href="structsVacc.html#o6">acc</a>;  
+<a name="l00129"></a><a class="code" href="structsVacc.html#o7">00129</a>   <span class="keywordtype">double</span> <a class="code" href="structsVacc.html#o7">surf_density</a>;  
+00132 };
+00133 
+<a name="l00138"></a><a class="code" href="group__Vacc.html#a1">00138</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structsVacc.html">sVacc</a> <a class="code" href="group__Vacc.html#a1">Vacc</a>;
+00139 
+00140 <span class="preprocessor">#if !defined(VINLINE_VACC)</span>
+00141 <span class="preprocessor"></span>
+00147     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a0">Vacc_memChk</a>(
+00148             Vacc *thee 
+00149             );
+00150 
+00151 <span class="preprocessor">#else </span><span class="comment">/* if defined(VINLINE_VACC) */</span>
+00152 
+00153 <span class="preprocessor">#   define Vacc_memChk(thee) (Vmem_bytes((thee)-&gt;mem))</span>
+00154 <span class="preprocessor"></span>
+00155 <span class="preprocessor">#endif </span><span class="comment">/* if !defined(VINLINE_VACC) */</span>
+00156 
+00164 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a22">VaccSurf_ctor</a>(
+00165         Vmem *mem,  
+00166         <span class="keywordtype">double</span> probe_radius,  
+00167         <span class="keywordtype">int</span> nsphere  
+00168         );
+00169 
+00177 <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a23">VaccSurf_ctor2</a>(
+00178         VaccSurf *thee,  
+00179         Vmem *mem,  
+00180         <span class="keywordtype">double</span> probe_radius,  
+00181         <span class="keywordtype">int</span> nsphere  
+00182         );
+00183 
+00189 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a24">VaccSurf_dtor</a>(
+00190         VaccSurf **thee  
+00191         );
+00192 
+00198 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a25">VaccSurf_dtor2</a>(
+00199         VaccSurf *thee  
+00200         );
+00201 
+00216 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a27">VaccSurf_refSphere</a>(
+00217         Vmem *mem,  
+00218         <span class="keywordtype">int</span> npts 
+00219         );
+00220 
+00228 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a26">Vacc_atomSurf</a>(
+00229         Vacc *thee,  
+00230         <a class="code" href="structsVatom.html">Vatom</a> *atom,  
+00231         VaccSurf *ref,  
+00233         <span class="keywordtype">double</span> probe_radius  
+00234         );
 00235 
-00240 <a class="code" href="group__Vacc.html#a1">Vacc</a>* <a class="code" href="group__Vacc.html#a2">Vacc_ctor</a>(
-00241         <a class="code" href="structsValist.html">Valist</a> *alist,  
-00242         <a class="code" href="structsVclist.html">Vclist</a> *clist,  
-00244         <span class="keywordtype">double</span> surf_density  
-00246         );
-00247 
-00252 <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a5">Vacc_ctor2</a>(
-00253         Vacc *thee, 
-00254         <a class="code" href="structsValist.html">Valist</a> *alist, 
-00255         <a class="code" href="structsVclist.html">Vclist</a> *clist, 
-00257         <span class="keywordtype">double</span> surf_density  
-00259         );
-00260 
-00265 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a6">Vacc_dtor</a>(
-00266         Vacc **thee 
-00267         );
-00268 
-00273 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a7">Vacc_dtor2</a>(
-00274         Vacc *thee 
-00275         );
-00276 
-00287 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a13">Vacc_vdwAcc</a>(
-00288         Vacc *thee,  
-00289         <span class="keywordtype">double</span> center[VAPBS_DIM] 
-00290         );
-00291 
-00303 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a14">Vacc_ivdwAcc</a>(
-00304         Vacc *thee, 
-00305         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00306         <span class="keywordtype">double</span> radius 
-00307         );
-00308 
-00323 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a16">Vacc_molAcc</a>(
-00324         Vacc *thee, 
-00325         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00326         <span class="keywordtype">double</span> radius 
-00327         );
-00328 
-00347 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a17">Vacc_fastMolAcc</a>(
-00348         Vacc *thee,  
-00349         <span class="keywordtype">double</span> center[VAPBS_DIM],  
-00350         <span class="keywordtype">double</span> radius 
-00351         );
-00352 
-00364 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a14">Vacc_splineAcc</a>(
-00365         Vacc *thee, 
-00366         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00367         <span class="keywordtype">double</span> win, 
-00368         <span class="keywordtype">double</span> infrad  
-00369         );
-00370 
-00376 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a15">Vacc_splineAccGrad</a>(
-00377         Vacc *thee, 
-00378         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00379         <span class="keywordtype">double</span> win, 
-00380         <span class="keywordtype">double</span> infrad,  
-00381         <span class="keywordtype">double</span> *grad 
-00382         );
-00383 
-00395 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a12">Vacc_splineAccAtom</a>(
-00396         Vacc *thee, 
-00397         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00398         <span class="keywordtype">double</span> win, 
-00399         <span class="keywordtype">double</span> infrad, 
-00400         <a class="code" href="structsVatom.html">Vatom</a> *atom 
-00401         );
-00402 
-00413 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a11">Vacc_splineAccGradAtomUnnorm</a>(
-00414         Vacc *thee, 
-00415         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00416         <span class="keywordtype">double</span> win, 
-00417         <span class="keywordtype">double</span> infrad, 
-00418         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00419         <span class="keywordtype">double</span> *force 
-00420         );
-00421 
-00433 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a10">Vacc_splineAccGradAtomNorm</a>(
-00434         Vacc *thee, 
-00435         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00436         <span class="keywordtype">double</span> win, 
-00437         <span class="keywordtype">double</span> infrad, 
-00438         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00439         <span class="keywordtype">double</span> *force 
-00440         );
-00441 
-00449 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a29">Vacc_splineAccGradAtomNorm4</a>(
-00450         Vacc *thee, 
-00451         <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00452         <span class="keywordtype">double</span> win, 
-00453         <span class="keywordtype">double</span> infrad, 
-00454         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00455         <span class="keywordtype">double</span> *force 
-00456         );
-00457 
-00465 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a30">Vacc_splineAccGradAtomNorm3</a>(
-00466                 Vacc *thee, 
-00467                 <span class="keywordtype">double</span> center[VAPBS_DIM], 
-00468                 <span class="keywordtype">double</span> win, 
-00469                 <span class="keywordtype">double</span> infrad, 
-00470                 <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00471                 <span class="keywordtype">double</span> *force 
-00472                 );
-00473 
+00236 
+00241 <a class="code" href="group__Vacc.html#a1">Vacc</a>* <a class="code" href="group__Vacc.html#a2">Vacc_ctor</a>(
+00242         <a class="code" href="structsValist.html">Valist</a> *alist,  
+00243         <a class="code" href="structsVclist.html">Vclist</a> *clist,  
+00245         <span class="keywordtype">double</span> surf_density  
+00247         );
+00248 
+00253 <span class="keywordtype">int</span> <a class="code" href="group__Vacc.html#a5">Vacc_ctor2</a>(
+00254         Vacc *thee, 
+00255         <a class="code" href="structsValist.html">Valist</a> *alist, 
+00256         <a class="code" href="structsVclist.html">Vclist</a> *clist, 
+00258         <span class="keywordtype">double</span> surf_density  
+00260         );
+00261 
+00266 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a6">Vacc_dtor</a>(
+00267         Vacc **thee 
+00268         );
+00269 
+00274 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a7">Vacc_dtor2</a>(
+00275         Vacc *thee 
+00276         );
+00277 
+00288 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a13">Vacc_vdwAcc</a>(
+00289         Vacc *thee,  
+00290         <span class="keywordtype">double</span> center[VAPBS_DIM] 
+00291         );
+00292 
+00304 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a14">Vacc_ivdwAcc</a>(
+00305         Vacc *thee, 
+00306         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00307         <span class="keywordtype">double</span> radius 
+00308         );
+00309 
+00324 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a16">Vacc_molAcc</a>(
+00325         Vacc *thee, 
+00326         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00327         <span class="keywordtype">double</span> radius 
+00328         );
+00329 
+00348 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a17">Vacc_fastMolAcc</a>(
+00349         Vacc *thee,  
+00350         <span class="keywordtype">double</span> center[VAPBS_DIM],  
+00351         <span class="keywordtype">double</span> radius 
+00352         );
+00353 
+00365 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a14">Vacc_splineAcc</a>(
+00366         Vacc *thee, 
+00367         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00368         <span class="keywordtype">double</span> win, 
+00369         <span class="keywordtype">double</span> infrad  
+00370         );
+00371 
+00377 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a15">Vacc_splineAccGrad</a>(
+00378         Vacc *thee, 
+00379         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00380         <span class="keywordtype">double</span> win, 
+00381         <span class="keywordtype">double</span> infrad,  
+00382         <span class="keywordtype">double</span> *grad 
+00383         );
+00384 
+00396 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a12">Vacc_splineAccAtom</a>(
+00397         Vacc *thee, 
+00398         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00399         <span class="keywordtype">double</span> win, 
+00400         <span class="keywordtype">double</span> infrad, 
+00401         <a class="code" href="structsVatom.html">Vatom</a> *atom 
+00402         );
+00403 
+00414 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a11">Vacc_splineAccGradAtomUnnorm</a>(
+00415         Vacc *thee, 
+00416         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00417         <span class="keywordtype">double</span> win, 
+00418         <span class="keywordtype">double</span> infrad, 
+00419         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00420         <span class="keywordtype">double</span> *force 
+00421         );
+00422 
+00434 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a10">Vacc_splineAccGradAtomNorm</a>(
+00435         Vacc *thee, 
+00436         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00437         <span class="keywordtype">double</span> win, 
+00438         <span class="keywordtype">double</span> infrad, 
+00439         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00440         <span class="keywordtype">double</span> *force 
+00441         );
+00442 
+00450 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a29">Vacc_splineAccGradAtomNorm4</a>(
+00451         Vacc *thee, 
+00452         <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00453         <span class="keywordtype">double</span> win, 
+00454         <span class="keywordtype">double</span> infrad, 
+00455         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00456         <span class="keywordtype">double</span> *force 
+00457         );
+00458 
+00466 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a30">Vacc_splineAccGradAtomNorm3</a>(
+00467                 Vacc *thee, 
+00468                 <span class="keywordtype">double</span> center[VAPBS_DIM], 
+00469                 <span class="keywordtype">double</span> win, 
+00470                 <span class="keywordtype">double</span> infrad, 
+00471                 <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00472                 <span class="keywordtype">double</span> *force 
+00473                 );
 00474 
-00484 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a19">Vacc_SASA</a>(
-00485         Vacc *thee,  
-00486         <span class="keywordtype">double</span> radius  
-00487         );
-00488 
-00496 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a20">Vacc_totalSASA</a>(
-00497         Vacc *thee,  
-00498         <span class="keywordtype">double</span> radius  
-00499         );
-00500 
-00508 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a21">Vacc_atomSASA</a>(
-00509         Vacc *thee,  
-00510         <span class="keywordtype">double</span> radius,  
-00511         <a class="code" href="structsVatom.html">Vatom</a> *atom  
-00512         );
-00513 
-00520 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a28">Vacc_atomSASPoints</a>(
-00521         Vacc *thee,  
-00522         <span class="keywordtype">double</span> radius,  
-00523         <a class="code" href="structsVatom.html">Vatom</a> *atom  
-00524         );
-00525 
-00531 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a31">Vacc_atomdSAV</a>(
-00532                                                         Vacc *thee, 
-00533                                                         <span class="keywordtype">double</span> radius, 
-00534                                                         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00535                                                         <span class="keywordtype">double</span> *dSA
-00536                                                         );
-00537 
-00543 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a34">Vacc_atomdSASA</a>(
-00544                                                         Vacc *thee, 
-00545                                                         <span class="keywordtype">double</span> dpos, 
-00546                                                         <span class="keywordtype">double</span> radius, 
-00547                                                         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00548                                                         <span class="keywordtype">double</span> *dSA
-00549                                                         );
-00550 
-00556 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a35">Vacc_totalAtomdSASA</a>(
-00557                                                          Vacc *thee, 
-00558                                                          <span class="keywordtype">double</span> dpos, 
-00559                                                          <span class="keywordtype">double</span> radius, 
-00560                                                          <a class="code" href="structsVatom.html">Vatom</a> *atom, 
-00561                                                          <span class="keywordtype">double</span> *dSA
-00562                                                          );
-00563 
-00571 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a37">Vacc_totalSAV</a>(
-00572                                                            Vacc *thee,  
-00573                                                            <a class="code" href="structsVclist.html">Vclist</a> *clist, 
-00574                                                            <span class="keywordtype">double</span> radius  
-00575                                                            );
-00576 
-00577 
-00578 <span class="preprocessor">#endif    </span><span class="comment">/* ifndef _VACC_H_ */</span>
-00579 
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:00 2006 for APBS by
+00475 
+00485 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a19">Vacc_SASA</a>(
+00486         Vacc *thee,  
+00487         <span class="keywordtype">double</span> radius  
+00488         );
+00489 
+00497 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a20">Vacc_totalSASA</a>(
+00498         Vacc *thee,  
+00499         <span class="keywordtype">double</span> radius  
+00500         );
+00501 
+00509 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a21">Vacc_atomSASA</a>(
+00510         Vacc *thee,  
+00511         <span class="keywordtype">double</span> radius,  
+00512         <a class="code" href="structsVatom.html">Vatom</a> *atom  
+00513         );
+00514 
+00521 <a class="code" href="group__Vacc.html#a0">VaccSurf</a>* <a class="code" href="group__Vacc.html#a28">Vacc_atomSASPoints</a>(
+00522         Vacc *thee,  
+00523         <span class="keywordtype">double</span> radius,  
+00524         <a class="code" href="structsVatom.html">Vatom</a> *atom  
+00525         );
+00526 
+00532 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a31">Vacc_atomdSAV</a>(
+00533                                                         Vacc *thee, 
+00534                                                         <span class="keywordtype">double</span> radius, 
+00535                                                         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00536                                                         <span class="keywordtype">double</span> *dSA
+00537                                                         );
+00538 
+00544 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a34">Vacc_atomdSASA</a>(
+00545                                                         Vacc *thee, 
+00546                                                         <span class="keywordtype">double</span> dpos, 
+00547                                                         <span class="keywordtype">double</span> radius, 
+00548                                                         <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00549                                                         <span class="keywordtype">double</span> *dSA
+00550                                                         );
+00551 
+00557 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a35">Vacc_totalAtomdSASA</a>(
+00558                                                          Vacc *thee, 
+00559                                                          <span class="keywordtype">double</span> dpos, 
+00560                                                          <span class="keywordtype">double</span> radius, 
+00561                                                          <a class="code" href="structsVatom.html">Vatom</a> *atom, 
+00562                                                          <span class="keywordtype">double</span> *dSA
+00563                                                          );
+00564 
+00570 <span class="keywordtype">void</span> <a class="code" href="group__Vacc.html#a36">Vacc_totalAtomdSAV</a>(
+00571                                                                  Vacc *thee, 
+00572                                                                  <span class="keywordtype">double</span> dpos,
+00573                                                                  <span class="keywordtype">double</span> srad,
+00574                                                                  <a class="code" href="structsVatom.html">Vatom</a> *atom,
+00575                                                                  <span class="keywordtype">double</span> *dSA,
+00576                                                                  <a class="code" href="structsVclist.html">Vclist</a> *clist
+00577                                                                  );
+00578 
+00586 <span class="keywordtype">double</span> <a class="code" href="group__Vacc.html#a37">Vacc_totalSAV</a>(
+00587                                                            Vacc *thee,  
+00588                                                            <a class="code" href="structsVclist.html">Vclist</a> *clist, 
+00589                                                            <span class="keywordtype">double</span> radius  
+00590                                                            );
+00591 
+00592 VPUBLIC <span class="keywordtype">int</span> <a class="code" href="vacc_8c.html#a39">Vacc_wcaEnergy</a>(
+00593                                                          Vacc *acc,  
+00594                                                          <a class="code" href="structsAPOLparm.html">APOLparm</a> *apolparm,
+00595                                                          <a class="code" href="structsValist.html">Valist</a> *alist, 
+00596                                                          <a class="code" href="structsVclist.html">Vclist</a> *clist, 
+00597                                                          <span class="keywordtype">double</span> radius
+00598                                                          );
+00599 
+00600 VPUBLIC <span class="keywordtype">int</span> Vacc_wcaForce(
+00601                                                    Vacc *acc, 
+00602                                                    <a class="code" href="structsAPOLparm.html">APOLparm</a> *apolparm, 
+00603                                                    <a class="code" href="structsValist.html">Valist</a> *alist,
+00604                                                    <a class="code" href="structsVclist.html">Vclist</a> *clist,
+00605                                                    <span class="keywordtype">double</span> radius,
+00606                                                    <span class="keywordtype">double</span> *force
+00607                                                    );
+00608 
+00609 <span class="preprocessor">#endif    </span><span class="comment">/* ifndef _VACC_H_ */</span>
+00610 
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:14 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

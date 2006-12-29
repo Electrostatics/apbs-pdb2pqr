@@ -16,134 +16,166 @@
 00078 <span class="preprocessor">#include "<a class="code" href="pbeparm_8h.html">apbs/pbeparm.h</a>"</span>  
 00079 <span class="preprocessor">#include "<a class="code" href="femparm_8h.html">apbs/femparm.h</a>"</span>  
 00080 
-<a name="l00084"></a><a class="code" href="group__Frontend.html#a36">00084</a> <span class="preprocessor">#define APBSRC 13</span>
+<a name="l00084"></a><a class="code" href="group__Frontend.html#a42">00084</a> <span class="preprocessor">#define APBSRC 13</span>
 00085 <span class="preprocessor"></span>
-<a name="l00089"></a><a class="code" href="group__Frontend.html#a37">00089</a> <span class="preprocessor">#define USEHB 1</span>
+<a name="l00089"></a><a class="code" href="group__Frontend.html#a43">00089</a> <span class="preprocessor">#define USEHB 1</span>
 00090 <span class="preprocessor"></span>
 <a name="l00095"></a><a class="code" href="structAtomForce.html">00095</a> <span class="keyword">struct </span><a class="code" href="structAtomForce.html">AtomForce</a> {
 <a name="l00096"></a><a class="code" href="structAtomForce.html#o0">00096</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o0">ibForce</a>[3];  
 <a name="l00097"></a><a class="code" href="structAtomForce.html#o1">00097</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o1">qfForce</a>[3];  
 <a name="l00098"></a><a class="code" href="structAtomForce.html#o2">00098</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o2">dbForce</a>[3];  
-00099 };
-00100 
-<a name="l00104"></a><a class="code" href="group__Frontend.html#a0">00104</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structAtomForce.html">AtomForce</a> <a class="code" href="group__Frontend.html#a0">AtomForce</a>;
-00105 
-00113 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a1">loadMolecules</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
-00114 
-00121 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a2">killMolecules</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
-00122 
-00132 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a3">loadDielMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL],
-00133   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL]);
-00134 
-00143 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a4">killDielMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL],
-00144   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL]);
-00145 
-00153 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a5">loadKappaMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *kappa[NOSH_MAXMOL]);
-00154 
-00161 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a6">killKappaMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *kappa[NOSH_MAXMOL]);
-00162 
-00170 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a7">loadChargeMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *charge[NOSH_MAXMOL]);
-00171 
-00178 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a8">killChargeMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *charge[NOSH_MAXMOL]);
-00179 
-00185 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a9">printPBEPARM</a>(<a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm);
-00186 
-00193 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a10">printMGPARM</a>(<a class="code" href="structsMGparm.html">MGparm</a> *mgparm, <span class="keywordtype">double</span> realCenter[3]);
-00194 
-00214 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a11">initMG</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsMGparm.html">MGparm</a> *mgparm,
-00215   <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <span class="keywordtype">double</span> realCenter[3], <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC],
-00216   <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], 
-00217   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL], 
-00218   <a class="code" href="structsVgrid.html">Vgrid</a> *kappaMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *chargeMap[NOSH_MAXMOL], 
-00219   <a class="code" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="code" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC]);
-00220 
-00229 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a12">killMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC],
-00230   <a class="code" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="code" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC]);
-00231 
-00240 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a13">solveMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, <a class="code" href="group__MGparm.html#a0">MGparm_CalcType</a> type);
-00241 
-00250 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a14">setPartMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsMGparm.html">MGparm</a> *mgparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
-00251 
-00265 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a15">energyMG</a>(<a class="code" href="structsNOsh.html">NOsh</a>* nosh, <span class="keywordtype">int</span> icalc, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg,
-00266   <span class="keywordtype">int</span> *nenergy, <span class="keywordtype">double</span> *totEnergy, <span class="keywordtype">double</span> *qfEnergy, <span class="keywordtype">double</span> *qmEnergy,
-00267   <span class="keywordtype">double</span> *dielEnergy);
-00268 
-00273 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a16">killEnergy</a>();
-00274 
-00288 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a17">forceMG</a>(Vmem *mem, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm,  <a class="code" href="structsMGparm.html">MGparm</a> *mgparm,
-00289   <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, <span class="keywordtype">int</span> *nforce, AtomForce **atomForce, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
-00290 
-00299 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a18">killForce</a>(Vmem *mem, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> nforce[NOSH_MAXCALC],
-00300   AtomForce *atomForce[NOSH_MAXCALC]);
-00301 
-00306 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a19">storeAtomEnergy</a>(
-00307                 <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, 
-00308                 <span class="keywordtype">int</span> icalc, 
-00309                 <span class="keywordtype">double</span> **atomEnergy, 
-00310                 <span class="keywordtype">int</span> *nenergy 
-00311                 );
-00312 
-00329 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a20">writedataFlat</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, <span class="keyword">const</span> <span class="keywordtype">char</span> *fname, 
-00330   <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> qfEnergy[NOSH_MAXCALC], 
-00331   <span class="keywordtype">double</span> qmEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> dielEnergy[NOSH_MAXCALC],
-00332   <span class="keywordtype">int</span> nenergy[NOSH_MAXCALC], <span class="keywordtype">double</span> *atomEnergy[NOSH_MAXCALC],
-00333   <span class="keywordtype">int</span> nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
-00334 
-00351 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a21">writedataXML</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, <span class="keyword">const</span> <span class="keywordtype">char</span> *fname, 
-00352   <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> qfEnergy[NOSH_MAXCALC], 
-00353   <span class="keywordtype">double</span> qmEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> dielEnergy[NOSH_MAXCALC],
-00354   <span class="keywordtype">int</span> nenergy[NOSH_MAXCALC], <span class="keywordtype">double</span> *atomEnergy[NOSH_MAXCALC],
-00355   <span class="keywordtype">int</span> nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
-00356 
-00366 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a22">writedataMG</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
-00367 
-00377 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a23">writematMG</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
-00378 
-00388 <span class="keywordtype">double</span> <a class="code" href="group__Frontend.html#a24">returnEnergy</a>(Vcom *com, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">int</span> iprint);
-00389 
-00399 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a25">printEnergy</a>(
-00400                                                  Vcom *com,
-00401                                                  <a class="code" href="structsNOsh.html">NOsh</a> *nosh,
-00402                                                  <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], 
-00403                                                  <span class="keywordtype">int</span> iprint
-00404                                                  );
-00405 
-00416 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a26">printForce</a>(Vcom *com, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> nforce[NOSH_MAXCALC],
-00417   AtomForce *atomForce[NOSH_MAXCALC], <span class="keywordtype">int</span> i);
-00418 
-00423 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a27">startVio</a>();
+<a name="l00099"></a><a class="code" href="structAtomForce.html#o3">00099</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o3">sasaForce</a>[3];  
+<a name="l00100"></a><a class="code" href="structAtomForce.html#o4">00100</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o4">savForce</a>[3];  
+<a name="l00101"></a><a class="code" href="structAtomForce.html#o5">00101</a>    <span class="keywordtype">double</span> <a class="code" href="structAtomForce.html#o5">wcaForce</a>[3];  
+00102 };
+00103 
+<a name="l00107"></a><a class="code" href="group__Frontend.html#a0">00107</a> <span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structAtomForce.html">AtomForce</a> <a class="code" href="group__Frontend.html#a0">AtomForce</a>;
+00108 
+00116 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a1">loadMolecules</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
+00117 
+00124 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a2">killMolecules</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
+00125 
+00135 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a3">loadDielMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL],
+00136   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL]);
+00137 
+00146 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a4">killDielMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL],
+00147   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL]);
+00148 
+00156 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a5">loadKappaMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *kappa[NOSH_MAXMOL]);
+00157 
+00164 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a6">killKappaMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *kappa[NOSH_MAXMOL]);
+00165 
+00173 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a7">loadChargeMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *charge[NOSH_MAXMOL]);
+00174 
+00181 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a8">killChargeMaps</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVgrid.html">Vgrid</a> *charge[NOSH_MAXMOL]);
+00182 
+00188 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a9">printPBEPARM</a>(<a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm);
+00189 
+00196 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a10">printMGPARM</a>(<a class="code" href="structsMGparm.html">MGparm</a> *mgparm, <span class="keywordtype">double</span> realCenter[3]);
+00197 
+00217 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a11">initMG</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsMGparm.html">MGparm</a> *mgparm,
+00218   <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <span class="keywordtype">double</span> realCenter[3], <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC],
+00219   <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], 
+00220   <a class="code" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL], 
+00221   <a class="code" href="structsVgrid.html">Vgrid</a> *kappaMap[NOSH_MAXMOL], <a class="code" href="structsVgrid.html">Vgrid</a> *chargeMap[NOSH_MAXMOL], 
+00222   <a class="code" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="code" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC]);
+00223 
+00232 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a12">killMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC],
+00233   <a class="code" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="code" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC]);
+00234 
+00243 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a13">solveMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, <a class="code" href="group__MGparm.html#a0">MGparm_CalcType</a> type);
+00244 
+00253 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a14">setPartMG</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsMGparm.html">MGparm</a> *mgparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
+00254 
+00268 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a15">energyMG</a>(<a class="code" href="structsNOsh.html">NOsh</a>* nosh, <span class="keywordtype">int</span> icalc, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg,
+00269   <span class="keywordtype">int</span> *nenergy, <span class="keywordtype">double</span> *totEnergy, <span class="keywordtype">double</span> *qfEnergy, <span class="keywordtype">double</span> *qmEnergy,
+00270   <span class="keywordtype">double</span> *dielEnergy);
+00271 
+00276 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a16">killEnergy</a>();
+00277 
+00291 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a17">forceMG</a>(Vmem *mem, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm,  <a class="code" href="structsMGparm.html">MGparm</a> *mgparm,
+00292   <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, <span class="keywordtype">int</span> *nforce, AtomForce **atomForce, <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL]);
+00293 
+00302 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a18">killForce</a>(Vmem *mem, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> nforce[NOSH_MAXCALC],
+00303   AtomForce *atomForce[NOSH_MAXCALC]);
+00304 
+00309 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a19">storeAtomEnergy</a>(
+00310                 <a class="code" href="structsVpmg.html">Vpmg</a> *pmg, 
+00311                 <span class="keywordtype">int</span> icalc, 
+00312                 <span class="keywordtype">double</span> **atomEnergy, 
+00313                 <span class="keywordtype">int</span> *nenergy 
+00314                 );
+00315 
+00332 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a20">writedataFlat</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, <span class="keyword">const</span> <span class="keywordtype">char</span> *fname, 
+00333   <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> qfEnergy[NOSH_MAXCALC], 
+00334   <span class="keywordtype">double</span> qmEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> dielEnergy[NOSH_MAXCALC],
+00335   <span class="keywordtype">int</span> nenergy[NOSH_MAXCALC], <span class="keywordtype">double</span> *atomEnergy[NOSH_MAXCALC],
+00336   <span class="keywordtype">int</span> nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
+00337 
+00354 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a21">writedataXML</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, <span class="keyword">const</span> <span class="keywordtype">char</span> *fname, 
+00355   <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> qfEnergy[NOSH_MAXCALC], 
+00356   <span class="keywordtype">double</span> qmEnergy[NOSH_MAXCALC], <span class="keywordtype">double</span> dielEnergy[NOSH_MAXCALC],
+00357   <span class="keywordtype">int</span> nenergy[NOSH_MAXCALC], <span class="keywordtype">double</span> *atomEnergy[NOSH_MAXCALC],
+00358   <span class="keywordtype">int</span> nforce[NOSH_MAXCALC], AtomForce *atomForce[NOSH_MAXCALC]);
+00359 
+00369 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a22">writedataMG</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
+00370 
+00380 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a23">writematMG</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVpmg.html">Vpmg</a> *pmg);
+00381 
+00391 <span class="keywordtype">double</span> <a class="code" href="group__Frontend.html#a24">returnEnergy</a>(Vcom *com, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], <span class="keywordtype">int</span> iprint);
+00392 
+00402 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a25">printEnergy</a>(
+00403                                                  Vcom *com,
+00404                                                  <a class="code" href="structsNOsh.html">NOsh</a> *nosh,
+00405                                                  <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], 
+00406                                                  <span class="keywordtype">int</span> iprint
+00407                                                  );
+00408 
+00418 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a26">printElecEnergy</a>(
+00419                                                  Vcom *com,
+00420                                                  <a class="code" href="structsNOsh.html">NOsh</a> *nosh,
+00421                                                  <span class="keywordtype">double</span> totEnergy[NOSH_MAXCALC], 
+00422                                                  <span class="keywordtype">int</span> iprint
+00423                                                  );
 00424 
-00425 <span class="preprocessor">#ifdef HAVE_MC_H</span>
-00426 <span class="preprocessor"></span>
-00434 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a28">printFEPARM</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
-00435   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00432 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a27">printApolEnergy</a>(
+00433                                                  <a class="code" href="structsNOsh.html">NOsh</a> *nosh,
+00434                                                  <span class="keywordtype">int</span> iprint
+00435                                                  );
 00436 
-00451 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a29">energyFE</a>(<a class="code" href="structsNOsh.html">NOsh</a>* nosh, <span class="keywordtype">int</span> icalc, <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC],
-00452   <span class="keywordtype">int</span> *nenergy, <span class="keywordtype">double</span> *totEnergy, <span class="keywordtype">double</span> *qfEnergy, <span class="keywordtype">double</span> *qmEnergy,
-00453   <span class="keywordtype">double</span> *dielEnergy);
-00454 
-00469 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a30">initFE</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm,
-00470   <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], 
-00471   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
-00472 
-00482 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a31">preRefineFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
-00483   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
-00484 
-00494 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a32">partFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
-00495   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
-00496 
-00507 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a33">solveFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
-00508   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
-00509 
-00522 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a34">postRefineFE</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
-00523   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
-00524 
-00534 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a35">writedataFE</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVfetk.html">Vfetk</a> *fetk);
-00535 <span class="preprocessor">#endif</span>
-00536 <span class="preprocessor"></span>
-00537 <span class="preprocessor">#endif</span>
-00538 <span class="preprocessor"></span>
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:00 2006 for APBS by
+00447 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a28">printForce</a>(Vcom *com, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> nforce[NOSH_MAXCALC],
+00448   AtomForce *atomForce[NOSH_MAXCALC], <span class="keywordtype">int</span> i);
+00449 
+00460 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a29">printElecForce</a>(Vcom *com, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> nforce[NOSH_MAXCALC],
+00461                                                 AtomForce *atomForce[NOSH_MAXCALC], <span class="keywordtype">int</span> i);
+00462 <span class="preprocessor">#if 0</span>
+00463 <span class="preprocessor"></span>
+00470 <span class="keywordtype">int</span> printApolForce(<a class="code" href="structsNOsh.html">NOsh</a> *nosh, <span class="keywordtype">int</span> i);
+00471 <span class="preprocessor">#endif</span>
+00472 <span class="preprocessor"></span>
+00476 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a30">startVio</a>();
+00477 
+00478 <span class="preprocessor">#ifdef HAVE_MC_H</span>
+00479 <span class="preprocessor"></span>
+00487 <span class="keywordtype">void</span> <a class="code" href="group__Frontend.html#a31">printFEPARM</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
+00488   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00489 
+00504 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a32">energyFE</a>(<a class="code" href="structsNOsh.html">NOsh</a>* nosh, <span class="keywordtype">int</span> icalc, <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC],
+00505   <span class="keywordtype">int</span> *nenergy, <span class="keywordtype">double</span> *totEnergy, <span class="keywordtype">double</span> *qfEnergy, <span class="keywordtype">double</span> *qmEnergy,
+00506   <span class="keywordtype">double</span> *dielEnergy);
+00507 
+00522 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a33">initFE</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm,
+00523   <a class="code" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="code" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], 
+00524   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00525 
+00535 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a34">preRefineFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
+00536   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00537 
+00547 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a35">partFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
+00548   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00549 
+00560 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a36">solveFE</a>(<span class="keywordtype">int</span> i, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
+00561   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00562 
+00575 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a37">postRefineFE</a>(<span class="keywordtype">int</span> icalc, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsFEMparm.html">FEMparm</a> *feparm,
+00576   <a class="code" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC]);
+00577 
+00587 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a38">writedataFE</a>(<span class="keywordtype">int</span> rank, <a class="code" href="structsNOsh.html">NOsh</a> *nosh, <a class="code" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="code" href="structsVfetk.html">Vfetk</a> *fetk);
+00588 
+00597 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a39">energyAPOL</a>(<a class="code" href="structsAPOLparm.html">APOLparm</a> *apolparm, <span class="keywordtype">double</span> sasa, <span class="keywordtype">double</span> sav);
+00598 
+00608 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a40">forceAPOL</a>(<a class="code" href="structsVacc.html">Vacc</a> *acc, Vmem *mem, <a class="code" href="structsAPOLparm.html">APOLparm</a> *apolparm, 
+00609                                            <span class="keywordtype">int</span> *nforce, AtomForce **atomForce, <a class="code" href="structsValist.html">Valist</a> *alist,
+00610                                            <a class="code" href="structsVclist.html">Vclist</a> *clist);
+00611 
+00620 <span class="keywordtype">int</span> <a class="code" href="group__Frontend.html#a41">initAPOL</a>(<a class="code" href="structsNOsh.html">NOsh</a> *nosh,Vmem *mem, <a class="code" href="structsAPOLparm.html">APOLparm</a> *apolparm,<span class="keywordtype">int</span> *nforce, 
+00621                                           AtomForce **atomForce, <a class="code" href="structsValist.html">Valist</a> *alist);
+00622 
+00623 <span class="preprocessor">#endif</span>
+00624 <span class="preprocessor"></span>
+00625 <span class="preprocessor">#endif</span>
+00626 <span class="preprocessor"></span>
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:14 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

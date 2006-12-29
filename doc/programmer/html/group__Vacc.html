@@ -123,9 +123,12 @@ typedef <a class="el" href="structsVacc.html">sVacc</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a30">Vacc_totalAtomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Testing purposes only. </em> <a href="#a30"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalAtomdSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double srad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible volume (SAV). </em> <a href="#a31"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Total solvent accessible volume. </em> <a href="#a31"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a32">Vacc_totalSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible volume (SAV). </em> <a href="#a32"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Solvent- and ion-accessibility oracle. 
@@ -1695,6 +1698,80 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a35_cg
 <area href="group__Vatom.html#a0" shape="rect" coords="217,7,350,34" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="220,58,348,85" alt="">
 </map>
+<a class="anchor" name="a31" doxytag="vacc.h::Vacc_totalAtomdSAV" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> void Vacc_totalAtomdSAV </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="structsVacc.html">Vacc</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>thee</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>dpos</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double&nbsp;</td>
+          <td class="mdname" nowrap> <em>srad</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVatom.html">Vatom</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>atom</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>double *&nbsp;</td>
+          <td class="mdname" nowrap> <em>dSA</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap><a class="el" href="structsVclist.html">Vclist</a> *&nbsp;</td>
+          <td class="mdname" nowrap> <em>clist</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Total solvent accessible volume. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>David Gohara, Nathan Baker </dd></dl>
+    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="group__Vacc_a36_cgraph.png" border="0" usemap="#group__Vacc_a36_cgraph_map" alt=""></center>
+<map name="group__Vacc_a36_cgraph_map">
+<area href="group__Vacc.html#a37" shape="rect" coords="218,8,328,34" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="206,58,340,85" alt="">
+<area href="group__Vatom.html#a6" shape="rect" coords="209,109,337,136" alt="">
+<area href="group__Vacc.html#a14" shape="rect" coords="390,8,497,34" alt="">
+</map>
 <a class="anchor" name="a25" doxytag="vacc.h::Vacc_totalSASA" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -1761,7 +1838,7 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a20_cg
 <area href="vclist_8c.html#a8" shape="rect" coords="881,58,1006,85" alt="">
 <area href="group__Vacc.html#a23" shape="rect" coords="706,210,821,237" alt="">
 </map>
-<a class="anchor" name="a31" doxytag="vacc.h::Vacc_totalSAV" ></a><p>
+<a class="anchor" name="a32" doxytag="vacc.h::Vacc_totalSAV" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2131,7 +2208,7 @@ Here is the call graph for this function:<p><center><img src="group__Vacc_a27_cg
 <area href="group__Vacc.html#a22" shape="rect" coords="197,8,304,34" alt="">
 <area href="group__Vacc.html#a23" shape="rect" coords="352,8,466,34" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Nov 20 13:23:46 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Dec 28 20:21:57 2006 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>
