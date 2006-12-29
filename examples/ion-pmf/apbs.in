@@ -6,65 +6,76 @@
 ### syntax help.
 ##########################################################################
 
-
 read 
-    mol pqr complex.pqr 
+	mol pdb complex.pdb 
+	parm flat parm.dat
 end
 
-# SOLVATED STATE FORCE CALCULATION
 elec name solv
-    mg-manual
-    dime 65 65 65
-    nlev 4
-    grid 0.21 0.21 0.21
-    gcent 0.0 0.0 0.0
-    mol 1
-    lpbe
-    bcfl mdh
-    pdie 1.0
-    sdie 78.54
-    chgm spl2
-    srfm spl2
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    gamma 0.00072
-    calcenergy total
-    calcforce comps
+	mg-manual
+	dime 65 65 65
+	nlev 4
+	grid 0.21 0.21 0.21
+	gcent 0.0 0.0 0.0
+	mol 1
+	lpbe
+	bcfl mdh
+	pdie 1.0
+	sdie 78.54
+	chgm spl2
+	srfm spl2
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce comps
 end
-
-# REFERENCE STATE FORCE CALCULATION
 elec name ref
-    mg-manual
-    dime 65 65 65
-    nlev 4
-    grid 0.21 0.21 0.21
-    gcent 0.0 0.0 0.0
-    mol 1
-    lpbe
-    bcfl mdh
-    pdie 1.0
-    sdie 1.0
-    chgm spl2
-    srfm spl2
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    gamma 0.000
-    calcenergy total
-    calcforce comps
+	mg-manual
+	dime 65 65 65
+	nlev 4
+	grid 0.21 0.21 0.21
+	gcent 0.0 0.0 0.0
+	mol 1
+	lpbe
+	bcfl mdh
+	pdie 1.0
+	sdie 1.0
+	chgm spl2
+	srfm spl2
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce comps
 end
 
-# THIS GIVES THE SOLVATION ENERGY OF THE COMPLEX
-print energy solv - ref end
+apolar name asolv
+	dime 200 200 200
+        glen 15 15 15
+        mol 1
+        srfm sacc
+        swin 0.3
+        srad 1.4
+        press 0.00
+	gamma 0.00072
+        bconc 0.00
+        sdens 100.0
+        dpos 0.2
+        temp 298.15
+        calcenergy total
+        calcforce comps
+end
 
-# THIS GIVES THE SOLVATION FORCES ON THE COMPLEX
-#   Global fixed charge force = total reaction field force
-#   Global dielectric boundary force = total dielectric boundary force
-#   Global ionic boundary force = total ionic boundary force
-#   Global apolar boundary force = total apolar boundary force
-print force solv - ref end
+# THIS GIVES THE POLAR SOLVATION ENERGY OF THE COMPLEX
+print elecEnergy solv - ref end
+# THIS GIVES THE POLAR SOLVATION FORCES ON THE COMPLEX
+print elecForce solv - ref end
+# THIS GIVES THE APOLAR SOLVATION ENERGY OF THE COMPLEX
+print apolEnergy asolv end
+# THIS GIVES THE APOLAR SOLVATION FORCES ON THE COMPLEX
+print apolForce asolv end
 
 quit
