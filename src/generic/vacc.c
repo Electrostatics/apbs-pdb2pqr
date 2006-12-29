@@ -1511,7 +1511,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	/* Note:  these are temporary water parameters... they need to be replaced by
 		entries in a parameter file */
 	watsigma = 1.7683;  /* Water LJ radius in A */
-	watepsilon =  0.152;  /* Water LJ epsilon in kcal/mol */
+	watepsilon =  0.1521;  /* Water LJ epsilon in kcal/mol */
 	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
 	
 	psig = atom->radius;
@@ -1662,7 +1662,7 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	/* Note:  these are temporary water parameters... they need to be replaced by
 		entries in a parameter file */
 	watsigma = 1.7683;  /* Water LJ radius in A */
-	watepsilon =  0.152;  /* Water LJ epsilon in kcal/mol */
+	watepsilon =  0.1521;  /* Water LJ epsilon in kcal/mol */
 	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
 	
 	psig = atom->radius;
