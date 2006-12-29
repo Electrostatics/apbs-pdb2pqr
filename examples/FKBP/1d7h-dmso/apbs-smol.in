@@ -32,7 +32,6 @@ elec name complex-solv-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -55,7 +54,6 @@ elec name complex-solv-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -80,7 +78,6 @@ elec name complex-ref-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -103,7 +100,6 @@ elec name complex-ref-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -128,7 +124,6 @@ elec name dmso-solv-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -151,7 +146,6 @@ elec name dmso-solv-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -176,7 +170,6 @@ elec name dmso-ref-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -199,7 +192,6 @@ elec name dmso-ref-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -224,7 +216,6 @@ elec name 1d7h-solv-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -247,7 +238,6 @@ elec name 1d7h-solv-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -272,7 +262,6 @@ elec name 1d7h-ref-coarse
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
@@ -295,7 +284,6 @@ elec name 1d7h-ref-fine
     swin 0.3
     sdens 10.0
     temp 300
-    gamma 0.105
     calcenergy total
     calcforce no
 end
