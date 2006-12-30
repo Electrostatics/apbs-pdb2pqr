@@ -97,6 +97,7 @@ int main(
 	FEMparm *feparm = VNULL;
 	PBEparm *pbeparm = VNULL;
 	APOLparm *apolparm = VNULL;
+	Vparam *param = VNULL;
 	
 	Vmem *mem = VNULL;
 	Vcom *com = VNULL;
@@ -334,8 +335,9 @@ Please cite your use of APBS as:\n\n\
 	} else Vnm_tprint( 1, "Parsed input file.\n");
 	Vio_dtor(&sock);
 
-	/* *************** LOAD MOLECULES ******************* */
-	if (loadMolecules(nosh, alist) != 1) {
+	/* *************** LOAD PARAMETERS AND MOLECULES ******************* */
+	param = loadParameter(nosh);
+	if (loadMolecules(nosh, param, alist) != 1) {
 		Vnm_tprint(2, "Error reading molecules!\n");
 		VJMPERR1(0);
 	}
@@ -486,8 +488,8 @@ Please cite your use of APBS as:\n\n\
 					VJMPERR1(0);
 				}
 					
-					/* Solve-estimate-refine */
-					Vnm_tprint(2, "\n\nWARNING!  DO NOT EXPECT PERFORMANCE OUT OF THE APBS/FEtk\n");
+				/* Solve-estimate-refine */
+				Vnm_tprint(2, "\n\nWARNING!  DO NOT EXPECT PERFORMANCE OUT OF THE APBS/FEtk\n");
 				Vnm_tprint(2, "INTERFACE AT THIS TIME.  THE FINITE ELEMENT SOLVER IS\n");
 				Vnm_tprint(2, "CURRENTLY NOT OPTIMIZED FOR THE PB EQUATION.  IF YOU WANT\n");
 				Vnm_tprint(2, "PERFORMANCE, PLEASE USE THE MULTIGRID-BASED METHODS, E.G.\n");
@@ -527,6 +529,8 @@ Please cite your use of APBS as:\n\n\
 				exit(2);
 #endif /* ifdef HAVE_MC_H */
 				break;
+				
+			/* Do an apolar calculation */
 			case NCT_APOL:
 				/* Copied from NCT_MG. See the note above (top of loop) for
 					information about this loop.
@@ -545,7 +549,7 @@ Please cite your use of APBS as:\n\n\
 				}
 
 				apolparm = nosh->calc[i]->apolparm;
-				rc = initAPOL(nosh, mem, apolparm, &(nforce[i]), &(atomForce[i]), 
+				rc = initAPOL(nosh, mem, param, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
 				if(rc == 0) {
 					Vnm_tprint(2, "Error calculating apolar solvation quantities!\n");

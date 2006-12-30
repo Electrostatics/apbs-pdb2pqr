@@ -61,7 +61,7 @@ apolar name asolv
         srad 1.4
         press 0.00
 	gamma 0.00072
-        bconc 0.00
+        bconc 0.033
         sdens 100.0
         dpos 0.2
         temp 298.15

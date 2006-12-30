@@ -101,12 +101,12 @@ VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius,
     return thee;
 }
 
-/** Get the dimensions of the molecule stored in thee->alist */
+/* Get the dimensions of the molecule stored in thee->alist */
 VPRIVATE void Vclist_getMolDims(
         Vclist *thee, 
         double lower_corner[VAPBS_DIM], /* Set to lower corner of molecule */
         double upper_corner[VAPBS_DIM], /* Set to lower corner of molecule */
-        double *r_max /** Set to max atom radius */
+        double *r_max /* Set to max atom radius */
         ) {
 
     int i, j;
@@ -136,7 +136,7 @@ VPRIVATE void Vclist_getMolDims(
 
 }
 
-/** Setup lookup grid */
+/* Setup lookup grid */
 VPRIVATE int Vclist_setupGrid(Vclist *thee) {
 
     /* Inflation factor ~ sqrt(2)*/
@@ -185,7 +185,7 @@ VPRIVATE int Vclist_setupGrid(Vclist *thee) {
     #undef VCLIST_INFLATE
 }
 
-/** Check and store parameters passed to constructor */
+/* Check and store parameters passed to constructor */
 VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
         double max_radius, int npts[VAPBS_DIM], Vclist_DomainMode mode,
         double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM] ) {
@@ -242,11 +242,11 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
     return 1;
 }
 
-/** Calculate the gridpoints an atom spans */
+/* Calculate the gridpoints an atom spans */
 VPRIVATE void Vclist_gridSpan(Vclist *thee, 
-        Vatom *atom, /** Atom */
-        int imin[VAPBS_DIM], /** Set to min grid indices */
-        int imax[VAPBS_DIM]  /** Set to max grid indices */
+        Vatom *atom, /* Atom */
+        int imin[VAPBS_DIM], /* Set to min grid indices */
+        int imax[VAPBS_DIM]  /* Set to max grid indices */
         ) {
 
     int i;
@@ -272,7 +272,7 @@ VPRIVATE void Vclist_gridSpan(Vclist *thee,
 
 }
 
-/** Get the array index for a particular cell based on its i,j,k 
+/* Get the array index for a particular cell based on its i,j,k 
  * coordinates */
 VPRIVATE int Vclist_arrayIndex(Vclist *thee, int i, int j, int k) {
 
@@ -281,7 +281,7 @@ VPRIVATE int Vclist_arrayIndex(Vclist *thee, int i, int j, int k) {
 }
 
 
-/** Assign atoms to cells */
+/* Assign atoms to cells */
 VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
 
     int iatom, i, j, k, ui, inext;
@@ -354,7 +354,7 @@ VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
     return 1;
 }
 
-/** Main (FORTRAN stub) constructor */
+/* Main (FORTRAN stub) constructor */
 VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         int npts[VAPBS_DIM], Vclist_DomainMode mode, 
         double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM]) {
@@ -408,7 +408,7 @@ VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     return 1;
 }
 
-/** Destructor */
+/* Destructor */
 VPUBLIC void Vclist_dtor(Vclist **thee) {
     
     if ((*thee) != VNULL) {
@@ -419,7 +419,7 @@ VPUBLIC void Vclist_dtor(Vclist **thee) {
 
 }
 
-/** Main (stub) destructor */
+/* Main (stub) destructor */
 VPUBLIC void Vclist_dtor2(Vclist *thee) {
 
     VclistCell *cell;
@@ -505,7 +505,7 @@ VPUBLIC void VclistCell_dtor(VclistCell **thee) {
 
 }
 
-/** Main (stub) destructor */
+/* Main (stub) destructor */
 VPUBLIC void VclistCell_dtor2(VclistCell *thee) {
 
     if (thee->natoms > 0) {

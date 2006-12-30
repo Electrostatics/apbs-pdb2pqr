@@ -77,6 +77,8 @@
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
+#include "apbs/vparam.h"  
+
 
 /**
  * @brief  Return code for APBS during failure
@@ -107,13 +109,27 @@ struct AtomForce {
 typedef struct AtomForce AtomForce;
 
 /**
+ * @brief  Loads and returns parameter object
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @returns  Pointer to parameter object or NULL */
+VEXTERNC Vparam* loadParameter(
+							   NOsh *nosh  /**< Pointer to NOsh object with input
+							   file information */
+							   );
+
+/**
  * @brief  Load the molecules given in NOsh into atom lists
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param  nosh  NOsh object with input file information
- * @param  alist  List of atom list objects
  * @returns  1 if successful, 0 otherwise */
-VEXTERNC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+VEXTERNC int loadMolecules(
+						   NOsh *nosh, /**< NOsh object with input file information */
+						   Vparam *param,  /**< NULL (if PQR files only) or pointer
+						   to parameter object */
+						   Valist *alist[NOSH_MAXMOL]  /**< List of atom list objects
+						   (to be populated) */
+						   );
 
 /**
  * @brief  Destroy the loaded molecules
@@ -199,27 +215,23 @@ VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
  * @brief  Initialize an MG calculation
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param icalc  Index of calculation in pmg/pmpg arrays
- * @param nosh  Object with parsed input file parameters
- * @param mgparm  Object with MG-specific parameters
- * @param pbeparm  Object with generic PBE parameters 
- * @param realCenter  The actual center of the current mesh
- * @param pbe  Array of Vpbe objects (one for each calc)
- * @param alist  Array of atom lists
- * @param dielXMap  Array of x-shifted dielectric maps 
- * @param dielYMap  Array of y-shifted dielectric maps 
- * @param dielZMap  Array of z-shifted dielectric maps 
- * @param kappaMap  Array of kappa maps 
- * @param chargeMap  Array of charge maps 
- * @param pmgp  Array of MG parameter objects (one for each calc)
- * @param pmg  Array of MG objects (one for each calc)
  * @return  1 if succesful, 0 otherwise */
-VEXTERNC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
-  PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC],
-  Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
-  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
-  Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+VEXTERNC int initMG(
+					int icalc,  /**< Index of calculation in pmg/pmpg arrays */
+					NOsh *nosh,  /**< Object with parsed input file parameters */
+					MGparm *mgparm,  /**< Object with MG-specific parameters */
+					PBEparm *pbeparm,  /**< Object with generic PBE parameters  */
+					double realCenter[3],  /**< The actual center of the current mesh */
+					Vpbe *pbe[NOSH_MAXCALC],  /**< Array of Vpbe objects (one for each calc) */
+					Valist *alist[NOSH_MAXMOL],  /**< Array of atom lists */
+					Vgrid *dielXMap[NOSH_MAXMOL],  /**< Array of x-shifted dielectric maps */
+					Vgrid *dielYMap[NOSH_MAXMOL],  /**< Array of y-shifted dielectric maps */
+					Vgrid *dielZMap[NOSH_MAXMOL],  /**< Array of z-shifted dielectric maps */
+					Vgrid *kappaMap[NOSH_MAXMOL],  /**< Array of kappa maps  */
+					Vgrid *chargeMap[NOSH_MAXMOL],  /**< Array of charge maps */
+					Vpmgp *pmgp[NOSH_MAXCALC],  /**< Array of MG parameter objects (one for each calc) */
+					Vpmg *pmg[NOSH_MAXCALC]  /**< Array of MG objects (one for each calc) */
+					);
 
 /**
  * @brief  Kill structures initialized during an MG calculation
@@ -426,12 +438,10 @@ VEXTERNC int printElecEnergy(
 * @brief  Combine and pretty-print energy data 
 * @ingroup  Frontend
 * @author  David Gohara
-* @param  nosh  Parameters from input file
-* @param  iprint  Index of energy statement to print
 * @return  1 if successful, 0 otherwise */
 VEXTERNC int printApolEnergy(
-						 NOsh *nosh,
-						 int iprint
+						 NOsh *nosh,  /**< Parameters from input file */
+						 int iprint  /**< Index of energy statement to print */
 						 );
 
 /** 
@@ -600,25 +610,34 @@ VEXTERNC int energyAPOL(APOLparm *apolparm, double sasa, double sav);
  * @brief  Calculate non-polar forces
  * @ingroup  Frontend
  * @author  David Gohara
- * @param  acc Accessibility object
- * @param  apolparm  APOLparm object
- * @param  alist atom list
- * @param  clist charge list
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm, 
-					   int *nforce, AtomForce **atomForce, Valist *alist,
-					   Vclist *clist);
+VEXTERNC int forceAPOL(
+					   Vacc *acc,  /**< Accessiblity object */
+					   Vmem *mem,  /**< Memory manager */
+					   APOLparm *apolparm,  /**< Apolar calculation parameter
+					   object */
+					   int *nforce,  /**< Number of force calculations (I think? 
+					   Dave?) */
+					   AtomForce **atomForce,  /**< Object for storing atom
+					   forces */
+					   Valist *alist,  /**< Atom list */
+					   Vclist *clist  /**< Cell list for accessibility object */
+					   );
 
 /**
  * @brief  Upperlevel routine to the non-polar energy and force routines
  * @ingroup  Frontend
  * @author  David Gohara
- * @param  nosh NOsh object
- * @param  apolparm  APOLparm object
- * @param  alist atom list
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce, 
-					  AtomForce **atomForce, Valist *alist);
+VEXTERNC int initAPOL(
+					  NOsh *nosh,  /**< Input parameter object */
+					  Vmem *mem,  /**< Memory manager */
+					  Vparam *param,  /**< Atom parameters */
+					  APOLparm *apolparm,  /**< Apolar calculation parameters */
+					  int *nforce,  /**< Number of force calculations */
+					  AtomForce **atomForce,  /**< Atom force storage object */
+					  Valist *alist  /**< Atom list */
+					  );
 
 #endif
 

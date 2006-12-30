@@ -86,14 +86,49 @@ VEMBED(rcsid="$Id$")
 
 VPUBLIC void startVio() { Vio_start(); }
 
-VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
+VPUBLIC Vparam* loadParameter(NOsh *nosh) {
+	
+	Vparam *param = VNULL;
+	Vio *sock = VNULL;
+	
+	if (nosh->gotparm) {
+		param = Vparam_ctor();
+		switch (nosh->parmfmt) {
+			case NPF_FLAT:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",
+							nosh->parmpath);
+				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
+										nosh->parmpath) != 1) {
+					Vnm_tprint(2, "Error reading parameter file (%s)!\n", nosh->parmpath);
+					return VNULL;
+				}
+					break;
+			case NPF_XML:
+				Vnm_tprint( 1, "Reading parameter data from %s.\n",
+							nosh->parmpath);
+				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
+									   nosh->parmpath) != 1) {
+					Vnm_tprint(2, "Error reading parameter file (%s)!\n", nosh->parmpath);
+					return VNULL;
+				}
+					break;
+			default:
+				Vnm_tprint(2, "Error! Undefined parameter file type (%d)!\n", nosh->parmfmt);
+				return VNULL;
+		} /* switch parmfmt */
+	}
+
+	return param;
+}
+
+
+VPUBLIC int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]) {
 	
 	int i, j, rc;
 	int use_params = 0;
 	
 	Vio *sock = VNULL;
 	Vatom *atom = VNULL;
-	Vparam *param = VNULL;
 	
 	Vnm_tprint( 1, "Got paths for %d molecules\n", nosh->nmol);
 	if (nosh->nmol <= 0) {
@@ -103,33 +138,12 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 	}
 	
 	if (nosh->gotparm) {
-		param = Vparam_ctor();
+		if (param == VNULL) {
+			Vnm_tprint(2, "Error!  You don't have a valid parameter object!\n");
+			return 0;
+		}
 		use_params = 1;
-		switch (nosh->parmfmt) {
-			case NPF_FLAT:
-				Vnm_tprint( 1, "Reading parameter data from %s.\n",
-							nosh->parmpath);
-				if (Vparam_readFlatFile(param, "FILE", "ASC", VNULL, 
-										nosh->parmpath) != 1) {
-					Vnm_tprint(2, "NOsh:  Error reading parameter file (%s)!\n", nosh->parmpath);
-					return 0;
-				}
-					break;
-			case NPF_XML:
-				Vnm_tprint( 1, "Reading parameter data from %s.\n",
-							nosh->parmpath);
-				if (Vparam_readXMLFile(param, "FILE", "ASC", VNULL, 
-									   nosh->parmpath) != 1) {
-					Vnm_tprint(2, "NOsh:  Error reading parameter file (%s)!\n", nosh->parmpath);
-					return 0;
-				}
-					break;
-			default:
-				Vnm_tprint(2, "NOsh:  Error! Undefined parameter file type (%d)!\n", nosh->parmfmt);
-				return 0;
-		} /* switch parmfmt */
 	}
-	
 
 	for (i=0; i<nosh->nmol; i++) {
 		alist[i] = Valist_ctor();
@@ -233,8 +247,6 @@ VPUBLIC int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]) {
 		Vnm_tprint( 1, "  Net charge %3.2e e\n", alist[i]->charge);        
 
 	}
-
-	if (nosh->gotparm) Vparam_dtor(&param);
 
 	return 1;
 
@@ -3501,24 +3513,24 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 }
 #endif /* ifdef HAVE_MCX_H */
 
-VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce, 
-					 AtomForce **atomForce, Valist *alist) {
+VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
+					 int *nforce, AtomForce **atomForce, Valist *alist) {
 
 	int i;
 	
 	Vclist *clist = VNULL;
 	Vacc *acc = VNULL;
 	Vatom *atom = VNULL;
+	Vparam_AtomData *atomData = VNULL;
 	
 	int inhash[3];
 	int rc = 0;
 	
-	double radius;
 	double sasa, sav;
 	
 	double nhash[3];
 	double sradPad, x, y, z;
-	double atomRadius;
+	double atomRadius, srad;
 	
 	double dist, charge, xmin, xmax, ymin, ymax, zmin, zmax;
 	double disp[3], center[3];
@@ -3569,12 +3581,28 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	}
 	
 	/* Pad the radius by 2x the maximum displacement value */
-	sradPad = apolparm->srad + (2*apolparm->dpos);
+	srad = apolparm->srad;
+	sradPad = srad + (2*apolparm->dpos);
 	clist = Vclist_ctor(alist, sradPad , inhash, CLIST_AUTO_DOMAIN, 
 									VNULL, VNULL);
 	acc = Vacc_ctor(alist, clist, apolparm->sdens);
 	
-	radius = apolparm->srad;
+	/* Get WAT (water) LJ parameters from Vparam object */
+	if (param == VNULL) {
+		Vnm_tprint(2, "initAPOL:  Got NULL Vparam object!\n");
+		return 0;
+	}
+	atomData = Vparam_getAtomData(param, "WAT", "OW");
+	if (atomData == VNULL) atomData = Vparam_getAtomData(param, "WAT", "O");
+	if (atomData == VNULL) {
+		Vnm_tprint(2, "initAPOL:  Couldn't find parameters for WAT OW or WAT O!\n");
+		Vnm_tprint(2, "initAPOL:  These parameters must be present in your file\n");
+		Vnm_tprint(2, "initAPOL:  for apolar calculations.\n");
+		return 0;
+	}
+	apolparm->watepsilon = atomData->epsilon;
+	apolparm->watsigma = atomData->radius;
+	Vparam_AtomData_dtor(&atomData);
 	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
@@ -3589,16 +3617,16 @@ VPUBLIC int initAPOL(NOsh *nosh,Vmem *mem, APOLparm *apolparm,int *nforce,
 	sasa = 0.0;
 	sav = 0.0;
 	
-	if(apolparm->calcenergy){
+	if(apolparm->calcenergy) {
 		/* Solvent accessible surface area */
-		apolparm->sasa = Vacc_totalSASA(acc, radius);
+		apolparm->sasa = Vacc_totalSASA(acc, srad);
 		
 		/* Inflated van der Waals accessibility */
-		apolparm->sav = Vacc_totalSAV(acc,clist,radius);
+		apolparm->sav = Vacc_totalSAV(acc,clist,srad);
 		
 		/* wcaEnergy integral code */
 		if (VABS(apolparm->bconc) > VSMALL) {
-			rc = Vacc_wcaEnergy(acc, apolparm, alist, clist, radius);
+			rc = Vacc_wcaEnergy(acc, apolparm, alist, clist);
 			if (rc == 0) {
 				Vnm_print(2, "Error in apolar energy calculation!\n");
 				return 0;
@@ -3648,7 +3676,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 	int i,j,natom;
 	int rc = 0;
 	
-	double radius; /* Probe radius */
+	double srad; /* Probe radius */
 	double xF, yF, zF;	/* Individual forces */
 	
 	double press, gamma, offset, bconc;
@@ -3658,7 +3686,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 	
 	Vatom *atom = VNULL;
 	
-	radius = apolparm->srad;
+	srad = apolparm->srad;
 	press = apolparm->press;
 	gamma = apolparm->gamma;
 	offset = apolparm->dpos;
@@ -3673,9 +3701,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
             atom = Valist_getAtom(acc->alist, i);
             apos = Vatom_getPosition(atom);
             /* NOTE:  RIGHT NOW WE DO THIS FOR THE ENTIRE MOLECULE WHICH IS
-				* INCREDIBLY INEFFICIENT, PARTICULARLY DURING FOCUSING!!! */
-            acc->surf[i] = Vacc_atomSurf(acc, atom, acc->refSphere, 
-										  radius);
+			 * INCREDIBLY INEFFICIENT, PARTICULARLY DURING FOCUSING!!! */
+            acc->surf[i] = Vacc_atomSurf(acc, atom, acc->refSphere, srad);
         }
     }
 	
@@ -3700,9 +3727,9 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				force[j] = 0.0;
 			}
 			
-			if(VABS(gamma) > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
-			if(VABS(press) > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(VABS(bconc) > VSMALL) Vacc_wcaForceAtom(acc,clist,atom,radius,bconc,force);
+			if(VABS(gamma) > VSMALL) Vacc_atomdSASA(acc, offset, srad, atom, dSASA);
+			if(VABS(press) > VSMALL) Vacc_atomdSAV(acc, srad, atom, dSAV);
+			if(VABS(bconc) > VSMALL) Vacc_wcaForceAtom(acc, apolparm, clist, atom, force);
 			
 			for(j=0;j<3;j++){
 				(*atomForce)[0].sasaForce[j] += dSASA[j];
@@ -3763,9 +3790,9 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				(*atomForce)[i].wcaForce[j] = 0.0;
 			}
 			
-			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, radius, atom, dSASA);
-			if(press > VSMALL) Vacc_atomdSAV(acc, radius, atom, dSAV);
-			if(VABS(bconc) > VSMALL) Vacc_wcaForceAtom(acc,clist,atom,radius,bconc,force);
+			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, srad, atom, dSASA);
+			if(press > VSMALL) Vacc_atomdSAV(acc, srad, atom, dSAV);
+			if(VABS(bconc) > VSMALL) Vacc_wcaForceAtom(acc,apolparm,clist,atom,force);
 				
 			xF = -((gamma*dSASA[0]) + (press*dSAV[0]) + (bconc*force[0]));
 			yF = -((gamma*dSASA[1]) + (press*dSAV[1]) + (bconc*force[1]));
