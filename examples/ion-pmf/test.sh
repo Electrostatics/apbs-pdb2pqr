@@ -41,7 +41,7 @@ do
 
   starttime=`date +%s`
   $1 apbs.in > OUTPUT_$i.out 
-  answer=`grep "Global net" OUTPUT_$i.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" OUTPUT_$i.out | awk '{print $6}'`
 
   echo "Global net energy: $answer"
   sync
@@ -53,8 +53,7 @@ do
   case "$r" in
       2)  echo "*** PASSED ***"
           echo "           $i: PASSED ($answer)" >> $logfile ;;
-      1)
-          echo "*** PASSED (with rounding error - see log) ***"
+      1)  echo "*** PASSED (with rounding error - see log) ***"
           echo "           $i.in: PASSED with rounding error ($answer; expected ${results[j]})" >> $logfile ;;
       *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
           ferror=`printf "%.2f" $error`
