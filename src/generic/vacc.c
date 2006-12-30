@@ -1632,9 +1632,8 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
 }
 
-VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
-							  Vclist *clist, double radius, double rho, int iatom,
-								double *force){
+VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, Vclist *clist, Vatom *atom,
+							  double radius, double rho, double *force){
 	int i,si;
 	int npts[3];
 	int pad = 14;
@@ -1648,15 +1647,12 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	double *pos;
     double *lower_corner, *upper_corner;
 	
-	Vatom *atom = VNULL;
-	
 	vol = 1.0;
 	vol_density = 2.0;
 	
 	lower_corner = clist->lower_corner;
 	upper_corner = clist->upper_corner;
 	
-	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
 
 	/* Note:  these are temporary water parameters... they need to be replaced by
@@ -1758,7 +1754,7 @@ VPRIVATE int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 
 	return 1;
 }
-
+/*
 VPUBLIC int Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 						  Vclist *clist,double radius, double *force) {
     int i, iatom;
@@ -1780,5 +1776,5 @@ VPUBLIC int Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
 	return 1;
 }
-
+*/
 

@@ -596,7 +596,7 @@ VEXTERNC double Vacc_totalSAV(
  * @return WCA energy (kJ/mol)
  */
 VPUBLIC int Vacc_wcaEnergy(
-							 Vacc *acc,  /** Accessibility object */
+							 Vacc *thee,  /** Accessibility object */
 							 APOLparm *apolparm,
 							 Valist *alist, /** Alist for acc object */
 							 Vclist *clist, /** Clist for acc object */
@@ -608,13 +608,13 @@ VPUBLIC int Vacc_wcaEnergy(
  * @author  David Gohara
  * @return WCA energy (kJ/mol/A)
  */
-VPUBLIC int Vacc_wcaForce(
-						   Vacc *acc, 
-						   APOLparm *apolparm, 
-						   Valist *alist,
-						   Vclist *clist,
-						   double radius,
-						   double *force
+VPUBLIC int Vacc_wcaForceAtom(
+							  Vacc *thee, /** Accessibility object */
+							  Vclist *clist, /** Clist for acc object */
+							  Vatom *atom, /** Current atom */
+							  double radius, /** Probe radius */
+							  double bconc, /** Rho */
+							  double *force /** Force for atom */
 						   );
 
 #endif    /* ifndef _VACC_H_ */
