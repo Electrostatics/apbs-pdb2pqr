@@ -1480,8 +1480,7 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 }
 
 VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
-								 Vclist *clist, double radius, double rho, int iatom,
-								   double *value){
+								 Vclist *clist, int iatom, double *value) {
 	
 	int i;
 	int npts[3];
@@ -1490,7 +1489,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	double spacs[3], vec[3];
     double w, wx, wy, wz, len, fn, x, y, z, vol;
 	double x2,y2,z2,r;
-	double vol_density, energy;
+	double vol_density, energy, rho, srad;
 	double psig, epsilon, watepsilon, sigma, watsigma, eni, chi;
 	
 	double *pos;
@@ -1508,12 +1507,17 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	atom = Valist_getAtom(alist, iatom);
 	pos = Vatom_getPosition(atom);
 	
-	/* Note:  these are temporary water parameters... they need to be replaced by
-		entries in a parameter file */
-	watsigma = 1.7683;  /* Water LJ radius in A */
-	watepsilon =  0.1521;  /* Water LJ epsilon in kcal/mol */
-	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
+	/* Note:  these are the original temporary water parameters... they have been
+		replaced by entries in a parameter file:
+	watsigma = 1.7683; 
+	watepsilon =  0.1521;
+	watepsilon = watepsilon*4.184;
+	*/
 	
+	srad = apolparm->srad;
+	rho = apolparm->bconc;
+	watsigma = apolparm->watsigma;
+	watepsilon = apolparm->watepsilon;
 	psig = atom->radius;
 	epsilon = atom->epsilon;
 	sigma = psig + watsigma;
@@ -1569,7 +1573,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 				
 				w = wx*wy*wz;
 				
-				chi = Vacc_ivdwAcc(thee, vec, radius);
+				chi = Vacc_ivdwAcc(thee, vec, srad);
 				
 				if (VABS(chi) > VSMALL) {
 					
@@ -1604,22 +1608,22 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 }
 
 VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
-							 Vclist *clist, double radius){
+							 Vclist *clist){
 	
 	int iatom;
 	int rc = 0;
 	
     double energy = 0.0;
 	double tenergy = 0.0;
-	
 	double rho = apolparm->bconc;
+	
 	if (VABS(rho) < VSMALL) {
 		apolparm->wcaEnergy = tenergy;
 		return 1; 		
 	}
 	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++){
-        rc = Vacc_wcaEnergyAtom(acc,apolparm,alist,clist, radius, rho, iatom, &energy);
+        rc = Vacc_wcaEnergyAtom(acc, apolparm, alist, clist, iatom, &energy);
 		if(rc == 0) return 0;
 		
 		tenergy += energy;
@@ -1632,8 +1636,8 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
 }
 
-VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, Vclist *clist, Vatom *atom,
-							  double radius, double rho, double *force){
+VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist, 
+							  Vatom *atom, double *force){
 	int i,si;
 	int npts[3];
 	int pad = 14;
@@ -1642,7 +1646,8 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, Vclist *clist, Vatom *atom,
     double w, wx, wy, wz, len, fn, x, y, z, vol;
 	double x2,y2,z2,r;
 	double vol_density, fo;
-	double psig, epsilon, watepsilon, sigma, watsigma, chi;
+	double rho;
+	double srad, psig, epsilon, watepsilon, sigma, watsigma, chi;
 	
 	double *pos;
     double *lower_corner, *upper_corner;
@@ -1655,11 +1660,16 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, Vclist *clist, Vatom *atom,
 	
 	pos = Vatom_getPosition(atom);
 
-	/* Note:  these are temporary water parameters... they need to be replaced by
-		entries in a parameter file */
-	watsigma = 1.7683;  /* Water LJ radius in A */
-	watepsilon =  0.1521;  /* Water LJ epsilon in kcal/mol */
-	watepsilon = watepsilon*4.184;  /* Water LJ epsilon in kJ/mol */
+	/* Note:  these are the temporary water parameters we used to use in this
+		routine... they have been replaced by entries in a parameter file 
+	watsigma = 1.7683; 
+	watepsilon =  0.1521; 
+	watepsilon = watepsilon*4.184;  
+	*/
+	srad = apolparm->srad;
+	rho = apolparm->bconc;
+	watsigma = apolparm->watsigma;
+	watepsilon = apolparm->watepsilon;
 	
 	psig = atom->radius;
 	epsilon = atom->epsilon;
@@ -1717,7 +1727,7 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, Vclist *clist, Vatom *atom,
 				
 				w = wx*wy*wz;
 				
-				chi = Vacc_ivdwAcc(thee, vec, radius);
+				chi = Vacc_ivdwAcc(thee, vec, srad);
 				
 				if (chi != 0.0) {
 					
