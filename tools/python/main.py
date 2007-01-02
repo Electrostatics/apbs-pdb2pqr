@@ -163,9 +163,9 @@ def main():
         raise APBSError, "Error while parsing input file!"
 
     # Load the molecules using loadMolecules routine
-
+    # loadMolecule passing NULL as second arg instead of Vparam
     alist = new_valist(NOSH_MAXMOL)
-    if loadMolecules(nosh,alist) != 1:
+    if loadMolecules(nosh,None,alist) != 1:
         stderr.write("main:  Error while loading molecules. \n")
         raise APBSError, "Error while loading molecules!"
 

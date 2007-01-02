@@ -185,7 +185,7 @@ struct sAPOLparm {
 	double watepsilon;  /**< Water oxygen Lennard-Jones well depth (kJ/mol) */
 	double sasa; /**< Solvent accessible surface area for this calculation */
 	double sav;   /**< Solvent accessible volume for this calculation */
-	double wcaEnergy; /** lgEnergy */	
+	double wcaEnergy; /** wcaEnergy */	
 	double totForce[3]; /**< Total forces on x, y, z */
 };
 

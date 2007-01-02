@@ -533,7 +533,7 @@ VEXTERNC void Vacc_atomdSAV(
 							Vacc *thee, /** Acessibility object */
 							double radius, /** Probe radius (&Aring;) */
 							Vatom *atom, /** Atom of interest */
-							double *dSA
+							double *dSA /** Array holding answers of calc */
 							);
 
 /**
@@ -546,7 +546,7 @@ VEXTERNC void Vacc_atomdSASA(
 							double dpos, /** Atom position offset */
 							double radius, /** Probe radius (&Aring;) */
 							Vatom *atom, /** Atom of interest */
-							double *dSA
+							double *dSA /** Array holding answers of calc */
 							);
 
 /**
@@ -559,7 +559,7 @@ VEXTERNC void Vacc_totalAtomdSASA(
 							 double dpos, /** Atom position offset */
 							 double radius, /** Probe radius (&Aring;) */
 							 Vatom *atom, /** Atom of interest */
-							 double *dSA
+							 double *dSA /** Array holding answers of calc */
 							 );
 
 /**
@@ -568,12 +568,12 @@ VEXTERNC void Vacc_totalAtomdSASA(
  * @author  David Gohara, Nathan Baker
  */	
 VEXTERNC void Vacc_totalAtomdSAV(
-								 Vacc *thee, 
-								 double dpos,
-								 double srad,
-								 Vatom *atom,
-								 double *dSA,
-								 Vclist *clist
+								 Vacc *thee, /** Acessibility object */
+								 double dpos, /** Atom position offset */
+								 double radius, /** Probe radius (&Aring;) */
+								 Vatom *atom, /** Atom of interest */								 
+								 double *dSA, /** Array holding answers of calc */
+								 Vclist *clist /** clist for this calculation */
 								 );
 
 /**
