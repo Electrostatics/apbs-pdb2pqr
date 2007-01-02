@@ -20,6 +20,6 @@ APOLAR name solvated
 	calcforce comps
 END
 
-print apolEnergy solvated end
+print apolForce solvated end
 
 quit
