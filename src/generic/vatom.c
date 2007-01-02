@@ -175,8 +175,6 @@ VPUBLIC void Vatom_setPosition(Vatom *thee, double position[3]) {
 
 VPUBLIC void Vatom_copyTo(Vatom *thee, Vatom *dest) {
 
-    int i;
-
     VASSERT(thee != VNULL);
     VASSERT(dest != VNULL);
 

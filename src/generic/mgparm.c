@@ -554,7 +554,6 @@ keyword!\n", tok);
 VPRIVATE int MGparm_parseGAMMA(MGparm *thee, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE];
-    double tf;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	Vnm_print(2, "parseMG:  GAMMA keyword deprecated!\n");

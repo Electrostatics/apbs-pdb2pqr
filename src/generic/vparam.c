@@ -321,7 +321,7 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
 VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
   const char *iofmt, const char *thost, const char *fname) {
 
-    int i, iatom, jatom, ires, natoms, nalloc, ralloc;
+    int i, ires, natoms, nalloc, ralloc;
     Vparam_AtomData *atoms = VNULL;
     Vparam_AtomData *tatoms = VNULL;
     Vparam_AtomData *atom = VNULL;
@@ -331,7 +331,6 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
     Vio *sock = VNULL;
     char currResName[VMAX_ARGLEN];
     char tok[VMAX_ARGLEN];
-    char dtmp[VMAX_ARGLEN];
     char endtag[VMAX_ARGLEN];
 
     VASSERT(thee != VNULL);

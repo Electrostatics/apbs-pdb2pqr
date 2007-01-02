@@ -251,7 +251,7 @@ VEXTERNC int Valist_readPDB(
  * @author  Todd Dolinsky
  * @return  1 if successful, 0 otherwise
  * @note  \li The XML file must adhere to some guidelines, notably the 
- *            presence of an <atom> tag with all other useful information
+ *            presence of an &lt;atom&gt; tag with all other useful information
  *            (x, y, z, charge, and radius) as nested elements.
  */
 VEXTERNC int Valist_readXML(

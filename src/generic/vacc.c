@@ -489,7 +489,6 @@ VPUBLIC double Vacc_splineAcc(Vacc *thee, double center[VAPBS_DIM], double win,
     VclistCell *cell;
     Vatom *atom;
     int iatom, atomID;      
-    double value = 1.0;            
 
 
     VASSERT(thee != NULL);
@@ -600,7 +599,7 @@ VPUBLIC double Vacc_fastMolAcc(Vacc *thee, double center[VAPBS_DIM],
     VaccSurf *surf;
     VclistCell *cell;
     int ipt, iatom, atomID;
-    double *apos, dist2, rad2;
+    double dist2, rad2;
 
     rad2 = radius*radius;
 
@@ -1179,7 +1178,7 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
 VPRIVATE double Vacc_SASAPos(Vacc *thee, double radius) { 
 	
     int i, natom;
-    double area, *apos;
+    double area;
     Vatom *atom;
     VaccSurf *asurf;
 	
@@ -1241,8 +1240,8 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode
    /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA) { 
 	
-    int i,iatom;
-    double *temp_Pos, tRad, vec[3];
+    int iatom;
+    double *temp_Pos, tRad;
     double tPos[3];
 	double axb1,axt1,ayb1,ayt1,azb1,azt1;
     VaccSurf *ref;
@@ -1300,8 +1299,8 @@ VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, d
 */
 VPUBLIC void Vacc_totalAtomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA) { 
 	
-    int i,iatom;
-    double *temp_Pos, tRad, vec[3];
+    int iatom;
+    double *temp_Pos, tRad;
     double tPos[3];
 	double axb1,axt1,ayb1,ayt1,azb1,azt1;
     VaccSurf *ref;
@@ -1359,8 +1358,8 @@ VPUBLIC void Vacc_totalAtomdSASA(Vacc *thee, double dpos, double srad, Vatom *at
 */
 VPUBLIC void Vacc_totalAtomdSAV(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA, Vclist *clist) { 
 	
-    int i,iatom;
-    double *temp_Pos, tRad, vec[3];
+    int iatom;
+    double *temp_Pos, tRad;
     double tPos[3];
 	double axb1,axt1,ayb1,ayt1,azb1,azt1;
     VaccSurf *ref;
@@ -1526,7 +1525,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	/* parameters */
     double sigma6 = VPOW(sigma,6);
     double sigma12 = VPOW(sigma,12);
-    double sigmar = sigma*VPOW(2, (1.0/6.0));
+    /* OPLS-style radius:  double sigmar = sigma*VPOW(2, (1.0/6.0)); */
 	
 	int xmin = pos[0] - pad;
 	int xmax = pos[0] + pad;
@@ -1679,7 +1678,7 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 	/* parameters */
     double sigma6 = VPOW(sigma,6);
     double sigma12 = VPOW(sigma,12);
-    double sigmar = sigma*VPOW(2, (1.0/6.0));
+    /* OPLS-style radius:  double sigmar = sigma*VPOW(2, (1.0/6.0));  */
 	
 	for (i=0; i<3; i++) {
 		len = (upper_corner[i] + pad) - (lower_corner[i] - pad);

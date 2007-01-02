@@ -282,7 +282,6 @@ VERROR1:
 
 VPRIVATE int APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
-    int ti;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	
@@ -573,9 +572,6 @@ VERROR1:
 
 VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
-
-    int i, ti;
-    double tf;
 
     if (thee == VNULL) {
         Vnm_print(2, "parseAPOL:  got NULL thee!\n");

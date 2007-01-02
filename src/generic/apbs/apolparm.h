@@ -202,7 +202,6 @@ typedef struct sAPOLparm APOLparm;
 /** @brief   Construct APOLparm
  *  @ingroup APOLparm
  *  @author  David Gohara
- *  @param  type  APOL calculation type
  *  @returns Newly allocated and initialized Vpmgp object
  */
 VEXTERNC APOLparm* APOLparm_ctor();
@@ -211,7 +210,6 @@ VEXTERNC APOLparm* APOLparm_ctor();
  *  @ingroup APOLparm
  *  @author  David Gohara
  *  @param   thee Pointer to allocated APOLparm object
- *  @param  type  APOL calculation type
  *  @returns 1 if successful, 0 otherwise
  */
 VEXTERNC int APOLparm_ctor2(APOLparm *thee);

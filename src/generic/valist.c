@@ -166,7 +166,7 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
     Vmem_dtor(&(thee->vmem));
 } 
 
-/** Read serial number from PDB ATOM/HETATM field */
+/* Read serial number from PDB ATOM/HETATM field */
 VPRIVATE int Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
 
     char tok[VMAX_BUFSIZE];
@@ -186,7 +186,7 @@ VPRIVATE int Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
     return 1;
 }
 
-/** Read atom name from PDB ATOM/HETATM field */
+/* Read atom name from PDB ATOM/HETATM field */
 VPRIVATE int Valist_readPDBAtomName(Valist *thee, Vio *sock, 
         char atomName[VMAX_ARGLEN]) {
 
@@ -204,7 +204,7 @@ VPRIVATE int Valist_readPDBAtomName(Valist *thee, Vio *sock,
     return 1;
 }
 
-/** Read residue name from PDB ATOM/HETATM field */
+/* Read residue name from PDB ATOM/HETATM field */
 VPRIVATE int Valist_readPDBResidueName(Valist *thee, Vio *sock, 
         char resName[VMAX_ARGLEN]) {
 
@@ -222,7 +222,7 @@ VPRIVATE int Valist_readPDBResidueName(Valist *thee, Vio *sock,
     return 1;
 }
 
-/** Read residue number from PDB ATOM/HETATM field */
+/* Read residue number from PDB ATOM/HETATM field */
 VPRIVATE int Valist_readPDBResidueNumber(
         Valist *thee, Vio *sock, int *resSeq) {
 
@@ -277,7 +277,7 @@ VPRIVATE int Valist_readPDBResidueNumber(
     return 1;
 }
 
-/** Read atom coordinate from PDB ATOM/HETATM field */
+/* Read atom coordinate from PDB ATOM/HETATM field */
 VPRIVATE int Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
 
     char tok[VMAX_BUFSIZE];
@@ -295,7 +295,7 @@ VPRIVATE int Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
     return 1;
 }
 
-/** Read charge and radius from PQR ATOM/HETATM field */
+/* Read charge and radius from PQR ATOM/HETATM field */
 VPRIVATE int Valist_readPDBChargeRadius(Valist *thee, Vio *sock, 
         double *charge, double *radius) {
 
@@ -323,17 +323,17 @@ VPRIVATE int Valist_readPDBChargeRadius(Valist *thee, Vio *sock,
     return 1;
 }
 
-/** Read ATOM/HETATM field of PDB through the X/Y/Z fields */
+/* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
 VPRIVATE int Valist_readPDB_throughXYZ(
         Valist *thee, 
-        Vio *sock, /** Socket ready for reading */
-        int *serial, /** Set to atom number */
-        char atomName[VMAX_ARGLEN], /** Set to atom name */
-        char resName[VMAX_ARGLEN], /** Set to residue name */
-        int *resSeq, /** Set to residue number */
-        double *x, /** Set to x-coordinate */
-        double *y, /** Set to y-coordinate */
-        double *z  /** Set to z-coordinate */
+        Vio *sock, /* Socket ready for reading */
+        int *serial, /* Set to atom number */
+        char atomName[VMAX_ARGLEN], /* Set to atom name */
+        char resName[VMAX_ARGLEN], /* Set to residue name */
+        int *resSeq, /* Set to residue number */
+        double *x, /* Set to x-coordinate */
+        double *y, /* Set to y-coordinate */
+        double *z  /* Set to z-coordinate */
         ) {
 
 
@@ -402,13 +402,13 @@ VPRIVATE int Valist_readPDB_throughXYZ(
     return 1;
 }
 
-/** Get a the next available atom storage location, increasing the storage
+/* Get a the next available atom storage location, increasing the storage
  * space if necessary.  Return VNULL if something goes wrong. */
 VPRIVATE Vatom* Valist_getAtomStorage(
         Valist *thee,
-        Vatom **plist, /** Pointer to existing list of atoms */
-        int *pnlist, /** Size of existing list, may be changed */
-        int *pnatoms /** Existing number of atoms in list; incremented 
+        Vatom **plist, /* Pointer to existing list of atoms */
+        int *pnlist, /* Size of existing list, may be changed */
+        int *pnatoms /* Existing number of atoms in list; incremented 
                        before exit */
         ) {
 
@@ -461,9 +461,9 @@ VPRIVATE Vatom* Valist_getAtomStorage(
 }
 
 VPRIVATE int Valist_setAtomArray(Valist *thee, 
-        Vatom **plist, /** Pointer to list of atoms to store */
-        int nlist, /** Length of list */
-        int natoms /** Number of real atom entries in list */
+        Vatom **plist, /* Pointer to list of atoms to store */
+        int nlist, /* Length of list */
+        int natoms /* Number of real atom entries in list */
         ) {
 
     Vatom *list, *newAtom, *oldAtom;
@@ -691,9 +691,8 @@ VPUBLIC int Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE];
     char endtag[VMAX_BUFSIZE];
-    char atomName[VMAX_ARGLEN], resName[VMAX_ARGLEN]; 
     
-	int nlist, natoms, serial;
+	int nlist, natoms;
     int xset, yset, zset, chgset, radset;
     
 	double x, y, z, charge, radius, dtmp;
@@ -825,7 +824,7 @@ reading radius!\n", tok);
 
 }
 
-/** Load up Valist with various statistics */
+/* Load up Valist with various statistics */
 VPUBLIC int Valist_getStatistics(Valist *thee) {
 
     Vatom *atom;

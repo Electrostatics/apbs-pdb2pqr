@@ -326,7 +326,7 @@ VEXTERNC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
  * where RESIDUE is the residue name string, ATOM is the atom name string,
  * CHARGE is the charge in e, RADIUS is the van der Waals radius
  * (\f$\sigma_i\f$) in &Aring;, and EPSILON is the van der Waals well-depth 
- * (\f$\epsilon_i\f$) in kcal/mol.  See the Vparam structure documentation for
+ * (\f$\epsilon_i\f$) in kJ/mol.  See the Vparam structure documentation for
  * the precise definitions of \f$\sigma_i\f$ and \f$\epsilon_i\f$. 
  *
  * ASCII-format flat files are provided with the APBS source code:
@@ -348,10 +348,9 @@ VEXTERNC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
  * @param   iofmt  Input device format (ASCII/XDR)
  * @param   thost  Input hostname (for sockets)
  * @param   fname  Input FILE/BUFF/UNIX/INET name
- * (see note below for format)
  * @returns 1 if successful, 0 otherwise
  * */
-VEXTERNC int Vparam_readFlatFile(Vparam *thee, const char *iodev, 
+VEXTERNC int Vparam_readXMLFile(Vparam *thee, const char *iodev, 
   const char *iofmt, const char *thost, const char *fname);
 
 #endif    /* ifndef _VPARAM_H_ */

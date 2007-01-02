@@ -312,8 +312,8 @@ VPUBLIC int Vopot_curvature(Vopot *thee, double pt[3], int cflag,
 VPUBLIC int Vopot_gradient(Vopot *thee, double pt[3], double grad[3]) {
 
     Vatom *atom;
-    int i, iatom;
-    double u, T, charge, eps_w, xkappa, size, val, *position;
+    int iatom;
+    double T, charge, eps_w, xkappa, size, val, *position;
     double dx, dy, dz, dist;
     Valist *alist;
 
