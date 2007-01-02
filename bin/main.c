@@ -142,7 +142,7 @@ int main(
 	/* Instructions: */
 	char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
-A	PBS -- Adaptive Poisson-Boltzmann Solver\n\
+	APBS -- Adaptive Poisson-Boltzmann Solver\n\
 	Version 0.4.0\n\
 	\n\
 	Nathan A. Baker (baker@biochem.wustl.edu)\n\

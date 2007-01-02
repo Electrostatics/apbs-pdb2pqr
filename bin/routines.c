@@ -3602,7 +3602,6 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	}
 	apolparm->watepsilon = atomData->epsilon;
 	apolparm->watsigma = atomData->radius;
-	Vparam_AtomData_dtor(&atomData);
 	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {

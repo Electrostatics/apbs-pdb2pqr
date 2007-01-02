@@ -5,6 +5,15 @@
 # radius is the van der Waals radius in A
 # epsilon is the van der Waals well depth in kJ/mol.
 <amber>
+	<residue>
+		<name>WAT</name>
+		<atom>
+			<name>OW</name>
+			<charge>0.0</charge>
+			<radius>1.7682</radius>
+			<epsilon>0.6363864</epsilon>
+		</atom>
+	</residue>
   <residue>
     <name>ACE</name>
     <atom>

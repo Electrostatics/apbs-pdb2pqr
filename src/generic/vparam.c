@@ -297,10 +297,15 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
     res = Vparam_getResData(thee, resName);
     if (res == VNULL) {
         atom = VNULL;
+		Vnm_print(2, "Vparam_getAtomData:  Unable to find residue %s!\n", resName);
         return atom;
     }
     for (i=0; i<res->nAtomData; i++) {
         atom = &(res->atomData[i]);
+		if (atom == VNULL) {
+			Vnm_print(2, "Vparam_getAtomData:  got NULL atom!\n");
+			return VNULL;
+		}
         if (Vstring_strcasecmp(atomName, atom->atomName) == 0) {
             return atom;
         }
@@ -308,7 +313,7 @@ VPUBLIC Vparam_AtomData* Vparam_getAtomData(Vparam *thee,
 
     /* Didn't find a matching atom/residue */
     atom = VNULL;
-    Vnm_print(2, "Vparam_getAtomData:  unable to find atom=%s, res=%s\n",
+    Vnm_print(2, "Vparam_getAtomData:  unable to find atom '%s', res '%s'\n",
       atomName, resName);
     return atom;
 }
@@ -552,7 +557,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     /* Allocate per-residue space for atoms */
     for (ires=0; ires<thee->nResData; ires++) {
         res = &(thee->resData[ires]);
-        res->atomData = Vmem_malloc(thee->vmem, res->nAtomData, 
+		res->atomData = Vmem_malloc(thee->vmem, res->nAtomData, 
           sizeof(Vparam_AtomData));
     }
 
@@ -566,6 +571,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
             iatom++;
         }
     }
+	
 
     /* Shut down communication */
     Vio_acceptFree(sock);
