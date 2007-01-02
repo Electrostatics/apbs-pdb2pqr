@@ -19,48 +19,15 @@ Include dependency graph for vfetk.c:<p><center><img src="vfetk_8c__incl.png" bo
 <table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a68" doxytag="vfetk.c::VRINGMAX" ></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a68">VRINGMAX</a>&nbsp;&nbsp;&nbsp;1000</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a49" doxytag="vfetk.c::VRINGMAX" ></a>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a49">VRINGMAX</a>&nbsp;&nbsp;&nbsp;1000</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Maximum number of simplices in a simplex ring. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a69" doxytag="vfetk.c::VATOMMAX" ></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a69">VATOMMAX</a>&nbsp;&nbsp;&nbsp;1000000</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a50" doxytag="vfetk.c::VATOMMAX" ></a>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a50">VATOMMAX</a>&nbsp;&nbsp;&nbsp;1000000</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Maximum number of atoms associated with a vertex. <br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a57">Vfetk_qfEnergyAtom</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, int iatom, int color, double *sol)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculuate the contribution to the charge-potential energy from one atom. </em> <a href="group__Vfetk.html#a57"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a58">diel</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the smoothed value of the dielectric coefficient at the current point using a fast, chart-based method. </em> <a href="group__Vfetk.html#a58"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a59">ionacc</a> ()</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the smoothed value of the ion accessibility at the current point using a fast, chart-based method. </em> <a href="group__Vfetk.html#a59"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a60">smooth</a> (int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NVS], int meth)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Smooths a mesh-based coefficient with a simple harmonic function. </em> <a href="group__Vfetk.html#a60"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a61">debye_U</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int d, double x[])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the analytical multi-sphere Debye-Huckel approximation (in kT/e) at the specified point. </em> <a href="group__Vfetk.html#a61"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a62">debye_Udiff</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int d, double x[])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the difference between the analytical multi-sphere Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified point. </em> <a href="group__Vfetk.html#a62"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a63">coulomb</a> (<a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int d, double x[], double eps, double *U, double dU[], double *d2U)</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the Coulomb's Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified point. </em> <a href="group__Vfetk.html#a63"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a64">init_2DP1</a> (int dimIS[], int *ndof, int dof[], double c[][VMAXP], double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">2D linear master simplex information generator </em> <a href="group__Vfetk.html#a64"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a65">init_3DP1</a> (int dimIS[], int *ndof, int dof[], double c[][VMAXP], double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">3D linear master simplex information generator </em> <a href="group__Vfetk.html#a65"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a66">setCoef</a> (int <a class="el" href="group__Vfetk.html#a12">numP</a>, double c[][VMAXP], double cx[][VMAXP], double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP], int icy[][VMAXP], int icz[][VMAXP])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Setup coefficients of polynomials from integer table data. </em> <a href="group__Vfetk.html#a66"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a67">polyEval</a> (int <a class="el" href="group__Vfetk.html#a12">numP</a>, double p[], double c[][VMAXP], double xv[])</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Evaluate a collection of at most cubic polynomials at a specified point in at most R^3. </em> <a href="group__Vfetk.html#a67"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC Gem *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a33">Vfetk_getGem</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get a pointer to the Gem (grid manager) object. </em> <a href="group__Vfetk.html#a33"></a><em><br><br></td></tr>
@@ -109,8 +76,6 @@ Include dependency graph for vfetk.c:<p><center><img src="vfetk_8c__incl.png" bo
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC unsigned long int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a48">Vfetk_memChk</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the memory used by this structure (and its contents) in bytes. </em> <a href="group__Vfetk.html#a48"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vfetk_8c.html#a49">Vfetk_genCube</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, double center[3], double length[3])</td></tr>
-
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a50">Vfetk_readMesh</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, int skey, Vio *sock)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Read in mesh and initialize associated internal structures. </em> <a href="group__Vfetk.html#a50"></a><em><br><br></td></tr>
@@ -183,31 +148,6 @@ Include dependency graph for vfetk.c:<p><center><img src="vfetk_8c__incl.png" bo
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a76">Vfetk_write</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, const  char *iodev, const  char *iofmt, const  char *thost, const  char *fname, Bvec *vec, <a class="el" href="vhal_8h.html#a39">Vdata_Format</a> format)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out data. </em> <a href="group__Vfetk.html#a76"></a><em><br><br></td></tr>
-<tr><td colspan=2><br><h2>Variables</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE <a class="el" href="structsVfetk__LocalVar.html">Vfetk_LocalVar</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a5">var</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Container for local variables. </em> <a href="group__Vfetk.html#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE char *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a6">diriCubeString</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">MCSF-format cube mesh (all Dirichlet). </em> <a href="group__Vfetk.html#a6"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE char *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a7">neumCubeString</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">MCSF-format cube mesh (all Neumann). </em> <a href="group__Vfetk.html#a7"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a8">dim_2DP1</a> = 3</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">I have no clue what this variable does, but we need it to initialize the simplices. </em> <a href="group__Vfetk.html#a8"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a9">lgr_2DP1</a> [3][VMAXP]</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">I have no clue what these variable do, but we need it to initialize the simplices. </em> <a href="group__Vfetk.html#a9"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a10">dim_3DP1</a> = VAPBS_NVS</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">I have no clue what these variable do, but we need it to initialize the simplices. </em> <a href="group__Vfetk.html#a10"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE const  int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a11">P_DEG</a> = 1</td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Another Holst variable. </em> <a href="group__Vfetk.html#a11"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a12">numP</a></td></tr>
-
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Another Holst variable. </em> <a href="group__Vfetk.html#a12"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Class Vfetk methods. 
@@ -272,71 +212,7 @@ Class Vfetk methods.
  * carries forward this exception.
  *
  * </pre></div></dd></dl>
-<hr><h2>Function Documentation</h2>
-<a class="anchor" name="a49" doxytag="vfetk.c::Vfetk_genCube" ></a><p>
-<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
-  <tr>
-    <td class="mdRow">
-      <table cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td class="md" nowrap valign="top"> VPUBLIC int Vfetk_genCube </td>
-          <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="structsVfetk.html">Vfetk</a> *&nbsp;</td>
-          <td class="mdname" nowrap> <em>thee</em>, </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap> <em>center</em>[3], </td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td class="md" nowrap>double&nbsp;</td>
-          <td class="mdname" nowrap> <em>length</em>[3]</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td class="md">)&nbsp;</td>
-          <td class="md" colspan="2"></td>
-        </tr>
-
-      </table>
-    </td>
-  </tr>
-</table>
-<table cellspacing=5 cellpadding=0 border=0>
-  <tr>
-    <td>
-      &nbsp;
-    </td>
-    <td>
-
-<p>
-&lt; Simplex format<p>
-&lt; Read<p>
-&lt; Buffer<p>
-&lt; ASCII<p>
-&lt; localhost (dummy)<p>
-&lt; socket 0 (dummy)<p>
-<dl compact><dt><b>Note:</b></dt><dd>This code is based on Gem_makeCube by Mike Holst </dd></dl>
-    </td>
-  </tr>
-</table>
-
-<p>
-Here is the call graph for this function:<p><center><img src="vfetk_8c_a49_cgraph.png" border="0" usemap="#vfetk_8c_a49_cgraph_map" alt=""></center>
-<map name="vfetk_8c_a49_cgraph_map">
-<area href="group__Vcsm.html#a8" shape="rect" coords="184,21,269,48" alt="">
-<area href="group__Vcsm.html#a10" shape="rect" coords="185,84,268,110" alt="">
-<area href="group__Vpbe.html#a1" shape="rect" coords="170,134,282,161" alt="">
-<area href="group__Vcsm.html#a9" shape="rect" coords="368,8,461,34" alt="">
-<area href="group__Valist.html#a8" shape="rect" coords="358,58,470,85" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="332,109,497,136" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="348,160,481,186" alt="">
-</map>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Dec 29 16:19:51 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:22 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

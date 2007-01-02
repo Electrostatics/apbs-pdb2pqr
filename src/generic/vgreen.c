@@ -118,7 +118,7 @@
 #endif  /* ifdef HAVE_TREE */
 
 
-/**
+/*
  * @brief  Setup treecode internal structures 
  * @ingroup  Vgreen
  * @author  Nathan Baker
@@ -127,7 +127,7 @@
  */
 VPRIVATE int treesetup(Vgreen *thee);
 
-/**
+/*
  * @brief  Clean up treecode internal structures 
  * @ingroup  Vgreen
  * @author  Nathan Baker
@@ -136,7 +136,7 @@ VPRIVATE int treesetup(Vgreen *thee);
  */
 VPRIVATE int treecleanup(Vgreen *thee);
 
-/**
+/*
  * @brief  Calculate forces or potential
  * @ingroup  Vgreen
  * @author  Nathan Baker

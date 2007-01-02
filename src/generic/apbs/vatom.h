@@ -172,7 +172,7 @@ typedef struct sVatom Vatom;
      *  @param   thee    Vatom object
      *  @return  Unique non-negative number
      */
-    VEXTERNC double Vatom_getPartID(Vatom *thee);
+    VEXTERNC double Vatom_getAtomID(Vatom *thee);
 
     /** @brief   Set atomic charge
      *  @ingroup Vatom
@@ -245,10 +245,11 @@ VEXTERNC void    Vatom_setResName(Vatom *thee, char resName[VMAX_RECLEN]);
 /** @brief   Set atom name
 *  @ingroup Vatom
 *  @author  Jason Wagoner
-*  @param   thee    Vatom object
-*  @param   resName Atom Name
 */
-VEXTERNC void    Vatom_setAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);
+VEXTERNC void    Vatom_setAtomName(
+		Vatom *thee,  /** Vatom object */
+		char atomName[VMAX_RECLEN]  /** Atom name */
+		);
 
 /** @brief   Retrieve residue name
 *  @ingroup Vatom
@@ -258,13 +259,14 @@ VEXTERNC void    Vatom_setAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);
 */
 VEXTERNC void    Vatom_getResName(Vatom *thee, char resName[VMAX_RECLEN]);
 
-/** @brief   Retrieve residue name
+/** @brief   Retrieve atom name
 *  @ingroup Vatom
 *  @author  Jason Wagoner
-*  @param   thee    Vatom object
-*  @param   resName Atom Name
 */
-VEXTERNC void   Vatom_getAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);
+VEXTERNC void   Vatom_getAtomName(
+		Vatom *thee, /** Vatom object */
+		char atomName[VMAX_RECLEN] /** Atom name */
+		);
 
 /** @brief   Constructor for the Vatom class 
  *  @author  Nathan Baker

@@ -75,7 +75,7 @@
  * Set this macro at your own risk! */
 /* #define DONEUMANN 1 */
 
-/**
+/*
  * @brief  Calculuate the contribution to the charge-potential energy from one
  * atom
  * @ingroup Vfetk
@@ -93,14 +93,14 @@ VPRIVATE double Vfetk_qfEnergyAtom(
         double *sol
         );
 
-/**
+/*
  * @brief  Container for local variables
  * @ingroup  Vfetk
  * @bug  Not thread-safe
  */
 VPRIVATE Vfetk_LocalVar var;
 
-/**
+/*
  * @brief  MCSF-format cube mesh (all Dirichlet)
  * @ingroup Vfetk
  * @author  Based on mesh by Mike Holst
@@ -137,7 +137,7 @@ mcsf_end=1;\n\
 \n\
 ";
 
-/**
+/*
  * @brief  MCSF-format cube mesh (all Neumann)
  * @ingroup Vfetk
  * @author  Based on mesh by Mike Holst
@@ -174,7 +174,7 @@ mcsf_end=1;\n\
 \n\
 ";
 
-/**
+/*
  * @brief  Return the smoothed value of the dielectric coefficient at the
  * current point using a fast, chart-based method
  * @ingroup  Vfetk
@@ -184,7 +184,7 @@ mcsf_end=1;\n\
  */
 VPRIVATE double diel();
 
-/**
+/*
  * @brief  Return the smoothed value of the ion accessibility at the
  * current point using a fast, chart-based method
  * @ingroup  Vfetk
@@ -194,7 +194,7 @@ VPRIVATE double diel();
  */
 VPRIVATE double ionacc();
 
-/**
+/*
  * @brief  Smooths a mesh-based coefficient with a simple harmonic function
  * @ingroup  Vfetk
  * @author  Nathan Baker
@@ -204,7 +204,7 @@ VPRIVATE double ionacc();
  * @param  nverts  Number of vertices 
  * @param  dist  distance from point to each vertex
  * @param  coeff  coefficient value at each vertex
- * @notes  Thread-safe
+ * @note  Thread-safe
  * @return smoothed value of coefficieent at point of interest */
 VPRIVATE double smooth(
         int nverts, 
@@ -214,7 +214,7 @@ VPRIVATE double smooth(
         );
 
 
-/**
+/*
  * @brief  Return the analytical multi-sphere Debye-Huckel approximation (in
  * kT/e) at the specified point
  * @ingroup  Vfetk
@@ -222,7 +222,7 @@ VPRIVATE double smooth(
  * @param  pbe  Vpbe object
  * @param  d  Dimension of x
  * @param  x  Coordinates of point of interest (in &Aring;)
- * @notes  Thread-safe
+ * @note  Thread-safe
  * @returns  Multi-sphere Debye-Huckel potential in kT/e
  */
 VPRIVATE double debye_U(
@@ -231,7 +231,7 @@ VPRIVATE double debye_U(
         double x[]
         );
 
-/**
+/*
  * @brief  Return the difference between the analytical multi-sphere
  * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
  * point 
@@ -240,7 +240,7 @@ VPRIVATE double debye_U(
  * @param  pbe  Vpbe object
  * @param  d  Dimension of x
  * @param  x  Coordinates of point of interest (in &Aring;)
- * @notes  Thread-safe
+ * @note  Thread-safe
  * @returns  Multi-sphere Debye-Huckel potential in kT/e */
 VPRIVATE double debye_Udiff(
         Vpbe *pbe, 
@@ -248,7 +248,7 @@ VPRIVATE double debye_Udiff(
         double x[]
         );
 
-/**
+/*
  * @brief  Calculate the Coulomb's
  * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
  * point 
@@ -272,7 +272,7 @@ VPRIVATE void coulomb(
         double *d2U
         );
 
-/**
+/*
  * @brief  2D linear master simplex information generator
  * @ingroup  Vfetk
  * @author  Mike Holst
@@ -281,7 +281,7 @@ VPRIVATE void coulomb(
  * @param dof  dunno
  * @param c  dunno
  * @param cx  dunno 
- * @notes  Trust in Mike */
+ * @note  Trust in Mike */
 VPRIVATE void init_2DP1(
         int dimIS[], 
         int *ndof, 
@@ -292,7 +292,7 @@ VPRIVATE void init_2DP1(
         double cz[][VMAXP]
         );
 
-/**
+/*
  * @brief  3D linear master simplex information generator
  * @ingroup  Vfetk
  * @author  Mike Holst
@@ -303,7 +303,7 @@ VPRIVATE void init_2DP1(
  * @param cx dunno
  * @param cy dunno
  * @param cz dunno 
- * @notes  Trust in Mike */
+ * @note  Trust in Mike */
 VPRIVATE void init_3DP1(
         int dimIS[], 
         int *ndof, 
@@ -314,7 +314,7 @@ VPRIVATE void init_3DP1(
         double cz[][VMAXP]
         );
 
-/**
+/*
  * @brief  Setup coefficients of polynomials from integer table data
  * @ingroup  Vfetk
  * @author  Mike Holst
@@ -327,7 +327,7 @@ VPRIVATE void init_3DP1(
  * @param icx  dunno
  * @param icy  dunno
  * @param icz  dunno
- * @notes  Trust in Mike */
+ * @note  Trust in Mike */
 VPRIVATE void setCoef(
         int numP, 
         double c[][VMAXP], 
@@ -340,7 +340,7 @@ VPRIVATE void setCoef(
         int icz[][VMAXP]
         );
 
-/**
+/*
  * @brief  Evaluate a collection of at most cubic polynomials at a
  * specified point in at most R^3.
  * @ingroup  Vfetk
@@ -349,7 +349,7 @@ VPRIVATE void setCoef(
  * @param p  the results of the evaluation
  * @param c   the coefficients of each polynomial
  * @param xv  the point (x,y,z) to evaluate the polynomials.
- * @notes  Mike says:
+ * @note  Mike says:
  * <pre>
  *  Note that "VMAXP" must be >= 19 for cubic polynomials.
  *  The polynomials are build from the coefficients c[][] as
@@ -373,19 +373,19 @@ VPRIVATE void polyEval(
         double xv[]
         );
 
-/**
+/*
  * @brief  I have no clue what this variable does, but we need it to initialize
  * the simplices
  * @ingroup  Vfetk
  * @author  Mike Holst */
 VPRIVATE int dim_2DP1 = 3;
 
-/**
+/*
  * @brief  I have no clue what these variable do, but we need it to initialize
  * the simplices
  * @ingroup  Vfetk
  * @author  Mike Holst 
- * @notes  Mike says:
+ * @note  Mike says:
  * <pre>
  *  2D-P1 Basis:
  *  
@@ -430,12 +430,12 @@ VPRIVATE int lgr_2DP1z[3][VMAXP] = {
 };
 
 
-/**
+/*
  * @brief  I have no clue what these variable do, but we need it to initialize
  * the simplices
  * @ingroup  Vfetk
  * @author  Mike Holst 
- * @notes  Mike says:
+ * @note  Mike says:
  * <pre>
  * 3D-P1 Basis:
  * 
@@ -483,14 +483,14 @@ VPRIVATE int lgr_3DP1z[VAPBS_NVS][VMAXP] = {
 {  2,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 },
 };
 
-/**
+/*
  * @brief  Another Holst variable
  * @ingroup  Vfetk
  * @author  Mike Holst
- * @notes  Mike says: 1 = linear, 2 = quadratic */
+ * @note  Mike says: 1 = linear, 2 = quadratic */
 VPRIVATE const int P_DEG=1;
     
-/**
+/*
  * @brief  Another Holst variable
  * @ingroup  Vfetk
  * @author  Mike Holst */
@@ -852,12 +852,12 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     AM *am = VNULL;
     Gem *gm = VNULL;
 
-    int skey = 0;  /**< Simplex format */
-    char *key = "r";  /**< Read */
-    char *iodev = "BUFF";  /**< Buffer */
-    char *iofmt = "ASC";  /**< ASCII */
-    char *iohost = "localhost";  /**< localhost (dummy) */
-    char *iofile = "0";  /**< socket 0 (dummy) */
+    int skey = 0;  /* Simplex format */
+    char *key = "r";  /* Read */
+    char *iodev = "BUFF";  /* Buffer */
+    char *iofmt = "ASC";  /* ASCII */
+    char *iohost = "localhost";  /* localhost (dummy) */
+    char *iofile = "0";  /< socket 0 (dummy) */
     Vio *sock = VNULL;
     char buf[VMAX_BUFSIZE];
     int bufsize = 0;
@@ -871,7 +871,7 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     gm = thee->gm;
     VASSERT(gm != VNULL);
 
-    /** @note This code is based on Gem_makeCube by Mike Holst */
+    /* @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
 #ifdef DONEUMANN
     bufsize = strlen(neumCubeString);

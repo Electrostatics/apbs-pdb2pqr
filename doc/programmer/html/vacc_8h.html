@@ -156,23 +156,23 @@ typedef <a class="el" href="structsVacc.html">sVacc</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a30">Vacc_totalAtomdSASA</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Testing purposes only. </em> <a href="group__Vacc.html#a30"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalAtomdSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double srad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a31">Vacc_totalAtomdSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, double dpos, double radius, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *dSA, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Total solvent accessible volume. </em> <a href="group__Vacc.html#a31"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a32">Vacc_totalSAV</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the total solvent accessible volume (SAV). </em> <a href="group__Vacc.html#a32"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a33">Vacc_wcaEnergy</a> (<a class="el" href="structsVacc.html">Vacc</a> *acc, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, <a class="el" href="structsValist.html">Valist</a> *alist, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a33">Vacc_wcaEnergy</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, <a class="el" href="structsValist.html">Valist</a> *alist, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the WCA integral energy. </em> <a href="group__Vacc.html#a33"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a34">Vacc_wcaForce</a> (<a class="el" href="structsVacc.html">Vacc</a> *acc, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, <a class="el" href="structsValist.html">Valist</a> *alist, <a class="el" href="structsVclist.html">Vclist</a> *clist, double radius, double *force)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vacc.html#a34">Vacc_wcaForceAtom</a> (<a class="el" href="structsVacc.html">Vacc</a> *thee, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, <a class="el" href="structsVclist.html">Vclist</a> *clist, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return the WCA integral force. </em> <a href="group__Vacc.html#a34"></a><em><br><br></td></tr>
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
 Contains declarations for class Vacc. 
 <p>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a> 1034 2006-12-29 17:20:16Z sobolevnrm </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vacc_8h.html">vacc.h</a> 1045 2007-01-02 16:16:42Z sdg0919 </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan A. Baker</dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
@@ -232,7 +232,7 @@ Contains declarations for class Vacc.
  * carries forward this exception.
  *
  * </pre></div></dd></dl>
-<hr size="1"><address style="align: right;"><small>Generated on Fri Dec 29 16:19:48 2006 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:19 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

@@ -888,7 +888,6 @@ section!\n");
 VPRIVATE int NOsh_parseELEC(NOsh *thee, Vio *sock) {
 	
 	NOsh_calc *calc = VNULL;
-    int i;
 	
     char tok[VMAX_BUFSIZE];
 	
@@ -973,7 +972,6 @@ ELEC section!\n");
 VPRIVATE int NOsh_parseAPOLAR(NOsh *thee, Vio *sock) {
 	
 	NOsh_calc *calc = VNULL;
-    int i;
 	
     char tok[VMAX_BUFSIZE];
 	
@@ -1105,11 +1103,9 @@ VPUBLIC int NOsh_setupApolCalc(
 							   NOsh *thee, 
 							   Valist *alist[NOSH_MAXMOL]
 							   ) {
-	int iapol, imol, i;
+	int iapol, imol;
 	int doCalc = ACD_NO;
 	NOsh_calc *calc = VNULL;
-	Valist *mymol = VNULL;
-	Vparam *param = VNULL;
 	
 	VASSERT(thee != VNULL);
 	for (imol=0; imol<thee->nmol; imol++) {
@@ -1304,7 +1300,6 @@ VPRIVATE int NOsh_setupCalcMGMANUAL(
 	MGparm *mgparm = VNULL;
 	PBEparm *pbeparm = VNULL;
 	NOsh_calc *calc = VNULL;
-	int i;
 	
 	if (thee == VNULL) {
 		Vnm_print(2, "NOsh_setupCalcMGMANUAL:  Got NULL thee!\n");
@@ -1374,12 +1369,11 @@ VPUBLIC int NOsh_setupCalcMGAUTO(
 	NOsh_calc *calcc = VNULL;
 	double fgrid[3], cgrid[3];
 	double d[3], minf[3], maxf[3], minc[3], maxc[3];
-	double redfrac, redrat[3], td, fshift, dshift;
+	double redfrac, redrat[3], td;
 	int ifocus, nfocus, tnfocus[3];
 	int j;
 	int icalc;
 	int dofix;
-	int molid;
 	
 	/* A comment about the coding style in this function.  I use lots and lots
 		and lots of pointer deferencing.  I could (and probably should) save 
@@ -2029,7 +2023,6 @@ VPRIVATE int NOsh_setupCalcFEMANUAL(
 	FEMparm *feparm = VNULL;
 	PBEparm *pbeparm = VNULL;
 	NOsh_calc *calc = VNULL;
-	int i;
 	
 	VASSERT(thee != VNULL);
 	VASSERT(elec != VNULL);
@@ -2137,9 +2130,7 @@ VPRIVATE int NOsh_setupCalcAPOL(
 								) {
 	
 	NOsh_calc *calc = VNULL;
-	
-	int i;
-	
+		
 	VASSERT(thee != VNULL);
 	VASSERT(apol != VNULL);
 	

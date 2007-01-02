@@ -49,15 +49,15 @@
 00160 
 00167     <span class="keywordtype">void</span> <a class="code" href="group__Vatom.html#a4">Vatom_setAtomID</a>(Vatom *thee, <span class="keywordtype">int</span> id);
 00168 
-00175     <span class="keywordtype">double</span> <a class="code" href="group__Vatom.html#a1">Vatom_getPartID</a>(Vatom *thee);
+00175     <span class="keywordtype">double</span> <a class="code" href="group__Vatom.html#a3">Vatom_getAtomID</a>(Vatom *thee);
 00176 
 00183     <span class="keywordtype">void</span>    <a class="code" href="group__Vatom.html#a7">Vatom_setCharge</a>(Vatom *thee, <span class="keywordtype">double</span> charge);
 00184 
 00191     <span class="keywordtype">double</span>  <a class="code" href="group__Vatom.html#a8">Vatom_getCharge</a>(Vatom *thee);
 00192         
-00199         <span class="keywordtype">void</span>    <a class="code" href="group__Vatom.html#a9">Vatom_setEpsilon</a>(Vatom *thee, <span class="keywordtype">double</span> epsilon);
+00199         <span class="keywordtype">void</span>    <a class="code" href="group__Vatom.html#a10">Vatom_setEpsilon</a>(Vatom *thee, <span class="keywordtype">double</span> epsilon);
 00200 
-00207         <span class="keywordtype">double</span>  <a class="code" href="group__Vatom.html#a10">Vatom_getEpsilon</a>(Vatom *thee);
+00207         <span class="keywordtype">double</span>  <a class="code" href="group__Vatom.html#a11">Vatom_getEpsilon</a>(Vatom *thee);
 00208 
 00216     <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> <a class="code" href="group__Vatom.html#a9">Vatom_memChk</a>(Vatom *thee);
 00217 
@@ -81,50 +81,56 @@
 00236 <span class="comment"></span>
 00243 <span class="comment">void    Vatom_setResName(Vatom *thee, char resName[VMAX_RECLEN]);</span>
 00244 <span class="comment"></span>
-00251 <span class="comment">void    Vatom_setAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);</span>
-00252 <span class="comment"></span>
-00259 <span class="comment">void    Vatom_getResName(Vatom *thee, char resName[VMAX_RECLEN]);</span>
-00260 <span class="comment"></span>
-00267 <span class="comment">void   Vatom_getAtomName(Vatom *thee, char atomName[VMAX_RECLEN]);</span>
-00268 <span class="comment"></span>
-00274 <span class="comment">Vatom* Vatom_ctor();</span>
-00275 <span class="comment"></span>
-00282 <span class="comment">int     Vatom_ctor2(Vatom *thee);</span>
-00283 <span class="comment"></span>
-00289 <span class="comment">void    Vatom_dtor(Vatom **thee);</span>
-00290 <span class="comment"></span>
-00296 <span class="comment">void    Vatom_dtor2(Vatom *thee);</span>
-00297 <span class="comment"></span>
-00304 <span class="comment">void   Vatom_setPosition(Vatom *thee, double position[3]);</span>
-00305 <span class="comment"></span>
-00313 <span class="comment">void Vatom_copyTo(Vatom *thee, Vatom *dest);</span>
-00314 <span class="comment"></span>
-00322 <span class="comment">void Vatom_copyFrom(Vatom *thee, Vatom *src);</span>
-00323 <span class="comment"></span>
-00324 <span class="comment">#if defined(WITH_TINKER)</span>
+00249 <span class="comment">void    Vatom_setAtomName(</span>
+00250 <span class="comment">                Vatom *thee,  </span>
+00251 <span class="comment">                char atomName[VMAX_RECLEN]  </span>
+00252 <span class="comment">                );</span>
+00253 <span class="comment"></span>
+00260 <span class="comment">void    Vatom_getResName(Vatom *thee, char resName[VMAX_RECLEN]);</span>
+00261 <span class="comment"></span>
+00266 <span class="comment">void   Vatom_getAtomName(</span>
+00267 <span class="comment">                Vatom *thee, </span>
+00268 <span class="comment">                char atomName[VMAX_RECLEN] </span>
+00269 <span class="comment">                );</span>
+00270 <span class="comment"></span>
+00276 <span class="comment">Vatom* Vatom_ctor();</span>
+00277 <span class="comment"></span>
+00284 <span class="comment">int     Vatom_ctor2(Vatom *thee);</span>
+00285 <span class="comment"></span>
+00291 <span class="comment">void    Vatom_dtor(Vatom **thee);</span>
+00292 <span class="comment"></span>
+00298 <span class="comment">void    Vatom_dtor2(Vatom *thee);</span>
+00299 <span class="comment"></span>
+00306 <span class="comment">void   Vatom_setPosition(Vatom *thee, double position[3]);</span>
+00307 <span class="comment"></span>
+00315 <span class="comment">void Vatom_copyTo(Vatom *thee, Vatom *dest);</span>
+00316 <span class="comment"></span>
+00324 <span class="comment">void Vatom_copyFrom(Vatom *thee, Vatom *src);</span>
 00325 <span class="comment"></span>
-00332 <span class="comment">void   Vatom_setInducedDipole(Vatom *thee, </span>
-00333 <span class="comment">                                       double inducedDipole[3]);</span>
-00334 <span class="comment"></span>
-00341 <span class="comment">void   Vatom_setNLInducedDipole(Vatom *thee, </span>
-00342 <span class="comment">                                       double nlInducedDipole[3]);</span>
-00343 <span class="comment"></span>
-00350 <span class="comment">void   Vatom_setDipole(Vatom *thee, double dipole[3]);</span>
-00351 <span class="comment"></span>
-00358 <span class="comment">void   Vatom_setQuadrupole(Vatom *thee, double quadrupole[9]);</span>
-00359 <span class="comment"></span>
-00365 <span class="comment">double*  Vatom_getDipole(Vatom *thee);</span>
-00366 <span class="comment"></span>
-00372 <span class="comment">double*  Vatom_getQuadrupole(Vatom *thee);</span>
-00373 <span class="comment"></span>
-00379 <span class="comment">double*  Vatom_getInducedDipole(Vatom *thee);</span>
-00380 <span class="comment"></span>
-00386 <span class="comment">double*  Vatom_getNLInducedDipole(Vatom *thee);</span>
-00387 <span class="comment">#endif /* if defined(WITH_TINKER) */</span>
-00388 
-00389 <span class="preprocessor">#endif </span><span class="comment">/* ifndef _VATOM_H_ */</span>
+00326 <span class="comment">#if defined(WITH_TINKER)</span>
+00327 <span class="comment"></span>
+00334 <span class="comment">void   Vatom_setInducedDipole(Vatom *thee, </span>
+00335 <span class="comment">                                       double inducedDipole[3]);</span>
+00336 <span class="comment"></span>
+00343 <span class="comment">void   Vatom_setNLInducedDipole(Vatom *thee, </span>
+00344 <span class="comment">                                       double nlInducedDipole[3]);</span>
+00345 <span class="comment"></span>
+00352 <span class="comment">void   Vatom_setDipole(Vatom *thee, double dipole[3]);</span>
+00353 <span class="comment"></span>
+00360 <span class="comment">void   Vatom_setQuadrupole(Vatom *thee, double quadrupole[9]);</span>
+00361 <span class="comment"></span>
+00367 <span class="comment">double*  Vatom_getDipole(Vatom *thee);</span>
+00368 <span class="comment"></span>
+00374 <span class="comment">double*  Vatom_getQuadrupole(Vatom *thee);</span>
+00375 <span class="comment"></span>
+00381 <span class="comment">double*  Vatom_getInducedDipole(Vatom *thee);</span>
+00382 <span class="comment"></span>
+00388 <span class="comment">double*  Vatom_getNLInducedDipole(Vatom *thee);</span>
+00389 <span class="comment">#endif /* if defined(WITH_TINKER) */</span>
 00390 
-</pre></div><hr size="1"><address style="align: right;"><small>Generated on Fri Dec 29 16:19:38 2006 for APBS by
+00391 <span class="preprocessor">#endif </span><span class="comment">/* ifndef _VATOM_H_ */</span>
+00392 
+</pre></div><hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:10 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

@@ -89,7 +89,6 @@ VPUBLIC void startVio() { Vio_start(); }
 VPUBLIC Vparam* loadParameter(NOsh *nosh) {
 	
 	Vparam *param = VNULL;
-	Vio *sock = VNULL;
 	
 	if (nosh->gotparm) {
 		param = Vparam_ctor();
@@ -124,11 +123,10 @@ VPUBLIC Vparam* loadParameter(NOsh *nosh) {
 
 VPUBLIC int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]) {
 	
-	int i, j, rc;
+	int i, rc;
 	int use_params = 0;
 	
 	Vio *sock = VNULL;
-	Vatom *atom = VNULL;
 	
 	Vnm_tprint( 1, "Got paths for %d molecules\n", nosh->nmol);
 	if (nosh->nmol <= 0) {
@@ -748,7 +746,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
 				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
 	
-	int j, bytesTotal, highWater, imol, focusFlag, iatom;
+	int j, bytesTotal, highWater, focusFlag, iatom;
 	double sparm, iparm, q;
 	Vatom *atom = VNULL;
 	Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
@@ -3673,7 +3671,6 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 					  Vclist *clist){
 	
 	int i,j,natom;
-	int rc = 0;
 	
 	double srad; /* Probe radius */
 	double xF, yF, zF;	/* Individual forces */
