@@ -66,6 +66,46 @@ for pdb in $alkanes; do
   i=$i+1
 done
 
+forces="pentane.pdb"
+for force in $forces; do
+
+  echo "----------------------------------------"
+  echo "Testing forces in ${force}"
+  echo ""
+
+  alkane=${force%.pdb}
+
+  starttime=`date +%s`
+  apbs apbs-forces.in > ${alkane}-force.out 
+  
+  start=`grep -n 'print APOL force 1 (solvated) end' ${alkane}-force.out | awk '{printf("%3d",$1)}'`
+  stop=`grep -n 'tot   16' ${alkane}-force.out | awk '{printf("%3d",$1)}'`
+  range=$(($stop-$start+1))
+
+  grep -A ${range} 'print APOL force 1 (solvated) end' ${alkane}-force.out > answer
+
+  difference=`diff -q answer force.result`
+  
+  echo 'The difference between the previous force answers and the current:'
+  if [ -z $difference ] ; then
+	echo "*** PASSED ***"
+	echo "           apbs-force.in: PASSED" >> $logfile
+  else
+	echo "*** FAILED ***"
+  	echo $difference
+	echo "           apbs-force.in: FAILED $difference" >> $logfile
+  fi
+
+  rm -f answer
+  
+  endtime=`date +%s`
+  let elapsed=$endtime-$starttime
+  let nettime=$nettime+$elapsed
+  echo "Total elapsed time: $elapsed seconds"
+  echo "----------------------------------------"
+
+done
+
 echo "Test results have been logged to ${logfile}."
 echo "Total time for this directory: ${nettime} seconds."
 
