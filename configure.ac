@@ -1102,6 +1102,7 @@ AC_OUTPUT([
 
     examples/Makefile
     examples/actin-dimer/Makefile
+    examples/alkanes/Makefile
     examples/born/Makefile
     examples/FKBP/Makefile
     examples/hca-bind/Makefile

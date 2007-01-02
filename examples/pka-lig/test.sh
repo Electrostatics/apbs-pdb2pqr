@@ -32,7 +32,7 @@ do
 
   starttime=`date +%s`
   $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
 
   echo "Global net energy: $answer"
   sync

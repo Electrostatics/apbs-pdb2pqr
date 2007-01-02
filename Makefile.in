@@ -135,7 +135,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = @apbs_do_contrib@ src bin @apbs_do_tools@
+SUBDIRS = @apbs_do_contrib@ src bin @apbs_do_tools@ 
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs

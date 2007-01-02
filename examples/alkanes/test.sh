@@ -5,52 +5,56 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
-
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol apbs-smol ) 
+alkanes="2-methylbutane.pdb butane.pdb cyclohexane.pdb cyclopentane.pdb ethane.pdb hexane.pdb isobutane.pdb methane.pdb neopentane.pdb pentane.pdb propane.pdb"
 
-results=( -5.244143066515E+01 -5.403934162196E+01 )
+results=( 1.428599279904E+01 1.220695963103E+01 1.334804666369E+01 9.557847153428E+00 9.420063118852E+00 1.622375791893E+01 1.322791252720E+01 7.793798970755E+00 1.445928389194E+01 1.445894866319E+01 1.171302556434E+01 )
 
 # Initialize the results file
 
 date=`date`
 echo "Date     : ${date}" >> $logfile
-echo "Directory: hca-bind" >> $logfile
+echo "Directory: born" >> $logfile
 echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 
-do
+i=0
+for pdb in $alkanes; do
+
   echo "----------------------------------------"
-  echo "Testing input file ${input[i]}.in"
+  echo "Testing input PDB file ${pdb}"
   echo ""
 
- 
+  alkane=${pdb%.pdb}
+  cp ${pdb} mol.pdb
+  echo "Calculating for ${alkane}..."
+  
   starttime=`date +%s`
-  $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
- 
+  $1 apbs-apolar.in > ${alkane}.out 
+  answer=`grep "Global net APOL" ${alkane}.out | awk '{print $6}'`
+
   echo "Global net energy: $answer"
   sync
 
   fanswer=`printf "%.12f" $answer`
   fexpected=`printf "%.12f" ${results[i]}`
   r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
+
   case "$r" in
       2)  echo "*** PASSED ***"
-          echo "           ${input[i]}.in: PASSED ($answer)" >> $logfile ;;
+          echo "           ${alkane}.in: PASSED ($answer)" >> $logfile ;;
       1)  echo "*** PASSED (with rounding error - see log) ***"
-          echo "           ${input[i]}.in: PASSED with rounding error ($answer; expected ${results[i]})" >> $logfile ;;
+          echo "           ${alkane}.in: PASSED with rounding error ($answer; expected ${results[i]})" >> $logfile ;;
       *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
           ferror=`printf "%.2f" $error`
           echo "*** FAILED ***"
           echo "   APBS returned $answer"
           echo "   Expected result is ${results[i]} ($ferror% error)"
-          echo "           ${input[i]}.in: FAILED ($answer; expected ${results[i]}; $ferror% error)" >> $logfile ;;
+          echo "           ${alkane}.in: FAILED ($answer; expected ${results[i]}; $ferror% error)" >> $logfile ;;
   esac
   
   endtime=`date +%s`
@@ -59,6 +63,7 @@ do
   echo "Total elapsed time: $elapsed seconds"
   echo "----------------------------------------"
 
+  i=$i+1
 done
 
 echo "Test results have been logged to ${logfile}."

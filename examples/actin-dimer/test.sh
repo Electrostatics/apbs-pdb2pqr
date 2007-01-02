@@ -49,7 +49,7 @@ do
       while [ $j -lt $procs ]
       do
         $1 ${input[i]}-PE$j.in > ${input[i]}-PE$j.out
-        a=`grep "Global net" ${input[i]}-PE$j.out | awk '{print $5}'`
+        a=`grep "Global net ELEC" ${input[i]}-PE$j.out | awk '{print $6}'`
         echo "Processor $j result: $a"
         conv=`printf "%.12f" $a`
         answer=`echo "scale=12; $answer+$conv" | bc`
@@ -61,7 +61,7 @@ do
   else
       starttime=`date +%s`
       $1 ${input[i]}.in > ${input[i]}.out 
-      answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+      answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
   fi
 
 
