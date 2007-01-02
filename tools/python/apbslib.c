@@ -2465,8 +2465,9 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_p_Vpbe swig_types[20]
 #define SWIGTYPE_p_p_Vpmg swig_types[21]
 #define SWIGTYPE_p_p_Vpmgp swig_types[22]
-static swig_type_info *swig_types[24];
-static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
+#define SWIGTYPE_p_Vparam swig_types[23]
+static swig_type_info *swig_types[25];
+static swig_module_info swig_module = {swig_types, 24, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -5899,28 +5900,47 @@ fail:
 
 SWIGINTERN PyObject *_wrap_loadMolecules(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  NOsh *arg1 = (NOsh *) 0 ;
-  Valist **arg2 ;
+  NOsh *arg1 = (NOsh *) 0;
+  Vparam *arg2;
+  Valist **arg3 ;
+  
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  
   void *argp2 = 0 ;
   int res2 = 0 ;
+  
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:loadMolecules",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:loadMolecules",&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "loadMolecules" "', argument " "1"" of type '" "NOsh *""'"); 
   }
   arg1 = (NOsh *)(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_Valist, 0 |  0 );
+  
+  
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_Vparam, 0 |  0 );
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "loadMolecules" "', argument " "2"" of type '" "Valist *[NOSH_MAXMOL]""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "loadMolecules" "', argument " "2"" of type '" "Vparam *""'"); 
   } 
-  arg2 = (Valist **)(argp2);
-  result = (int)loadMolecules(arg1,arg2);
+  arg2 = (Vparam *)(argp2);
+  
+  
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_p_Valist, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+	  SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "loadMolecules" "', argument " "3"" of type '" "Valist *[NOSH_MAXMOL]""'"); 
+  } 
+  arg3 = (Valist **)(argp3);
+  
+  
+  result = (int)loadMolecules(arg1,arg2,arg3);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
