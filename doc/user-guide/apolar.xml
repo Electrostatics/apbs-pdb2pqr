@@ -25,8 +25,9 @@
 		<varlistentry>
 			<term> <replaceable>keywords</replaceable> </term>
 			<listitem>
-				<para>Keywords describing the parameters of the electrostatic
-					calcualtion.  These are described in
+				<para>Keywords describing the parameters of the
+					apolar calculation.  These are
+					described in
 					<xref linkend="apolar-keywords-sect"/>.
 				</para>
 			</listitem>
@@ -85,6 +86,16 @@
 		(see <xref linkend="parm-xml-format"/>) as read in through an
 		APBS input file <link linkend="read">READ</link> statement.
 	</para>
+
+	<important>
+		<para>All apolar calculations require a <link
+				linkend="param-format">parameter file</link>
+			which contains Lennard-Jones radius and well-depth
+			parameters for all the atoms in the solute PDB.  This
+			parameter file must also contain radius and well-depth
+			parameters for water (specifically:  residue "WAT" and
+			atom "OW").</para>
+	</important>
 
 	<para>
 		Note that the above expressions can easily be reduced to

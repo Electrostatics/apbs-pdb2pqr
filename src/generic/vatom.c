@@ -202,7 +202,6 @@ VPUBLIC void Vatom_getResName(Vatom *thee, char resName[VMAX_RECLEN]) {
 	
 	VASSERT(thee != VNULL);
 	strcpy(resName,thee->resName);
-	return 1; 
 	
 }
 
@@ -217,7 +216,6 @@ VPUBLIC void Vatom_getAtomName(Vatom *thee, char atomName[VMAX_RECLEN]) {
 	
 	VASSERT(thee != VNULL);
 	strcpy(atomName,thee->atomName);
-	return 1; 
 	
 }
 
