@@ -453,7 +453,7 @@ PyObject *getForces(AtomForce **atomForce, Valist *alist){
 }
 %}
 
-extern int loadMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]);
 extern void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 extern int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
