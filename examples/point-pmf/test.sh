@@ -43,7 +43,7 @@ do
      > mol2.pqr
   cat mol1.pqr mol2.pqr > complex.pqr
   $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
   sync
 
   # See if we're within a VSMALL
@@ -74,7 +74,7 @@ do
      > mol2.pqr
   cat mol1.pqr mol2.pqr > complex.pqr
   $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
   sync
 
   fanswer=`printf "%.12f" $answer`
@@ -103,7 +103,7 @@ do
      > mol2.pqr
   cat mol1.pqr mol2.pqr > complex.pqr
   $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
   sync
 
   fanswer=`printf "%.12f" $answer`
@@ -132,7 +132,7 @@ do
      > mol2.pqr
   cat mol1.pqr mol2.pqr > complex.pqr
   $1 ${input[i]}.in > ${input[i]}.out 
-  answer=`grep "Global net" ${input[i]}.out | awk '{print $5}'`
+  answer=`grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'`
   sync
 
   fanswer=`printf "%.12f" $answer`
