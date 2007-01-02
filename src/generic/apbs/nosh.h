@@ -546,8 +546,8 @@ VEXTERNC int   NOsh_parseInputFile(NOsh *thee, char *filename);
 *	@return	1 if successful, 0 otherwise
 */
 VEXTERNC int NOsh_setupElecCalc(
-							NOsh *thee,
-							Valist *alist[NOSH_MAXMOL]
+							NOsh *thee, /**< NOsh object */
+							Valist *alist[NOSH_MAXMOL] /**< Atom list for calculation */
 							);
 
 /**	@brief	Setup the series of non-polar calculations
@@ -560,8 +560,8 @@ VEXTERNC int NOsh_setupElecCalc(
 *	@return	1 if successful, 0 otherwise
 */
 VEXTERNC int NOsh_setupApolCalc(
-								NOsh *thee,
-								Valist *alist[NOSH_MAXMOL]
+								NOsh *thee, /**< NOsh object */
+								Valist *alist[NOSH_MAXMOL] /**< Atom list for calculation */
 								);
 
 #endif 

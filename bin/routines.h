@@ -406,32 +406,26 @@ VEXTERNC double returnEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCAL
 * @brief  Combine and pretty-print energy data (deprecated...see printElecEnergy)
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param  com  Communications object
- * @param  nosh  Parameters from input file
- * @param  totEnergy  Array of energies from different calculations
- * @param  iprint  Index of energy statement to print
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int printEnergy(
-						 Vcom *com,
-						 NOsh *nosh,
-						 double totEnergy[NOSH_MAXCALC], 
-						 int iprint
+						 Vcom *com, /** Communications object */
+						 NOsh *nosh, /** Parameters from input file */
+						 double totEnergy[NOSH_MAXCALC], /** Array of energies 
+						 from different calculations */
+						 int iprint /** Index of energy statement to print */
 						 );
 
 /** 
 * @brief  Combine and pretty-print energy data
 * @ingroup  Frontend
 * @author  David Gohara
-* @param  com  Communications object
-* @param  nosh  Parameters from input file
-* @param  totEnergy  Array of energies from different calculations
-* @param  iprint  Index of energy statement to print
 * @return  1 if successful, 0 otherwise */
 VEXTERNC int printElecEnergy(
-						 Vcom *com,
-						 NOsh *nosh,
-						 double totEnergy[NOSH_MAXCALC], 
-						 int iprint
+						 Vcom *com, /** Communications object */
+						 NOsh *nosh, /** Parameters from input file */
+						 double totEnergy[NOSH_MAXCALC], /** Array of energies 
+							 from different calculations */
+						 int iprint /** Index of energy statement to print */
 						 );
 
 /** 
@@ -448,37 +442,41 @@ VEXTERNC int printApolEnergy(
  * @brief  Combine and pretty-print force data (deprecated...see printElecForce)
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param  com  Communications object
- * @param  nosh  Parameters from input file
- * @param  nforce  Number of forces calculated
- * @param  atomForce  Array of force structures
- * @param  i  Index of force statement to print
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
-  AtomForce *atomForce[NOSH_MAXCALC], int i);
+VEXTERNC int printForce(
+						Vcom *com, /** Communications object */
+						NOsh *nosh, /** Parameters from input file */
+						int nforce[NOSH_MAXCALC], /** Number of forces calculated */
+						AtomForce *atomForce[NOSH_MAXCALC], /** Array of force structures */
+						int i /** Index of force statement to print */
+						);
 
 /** 
 * @brief  Combine and pretty-print force data
 * @ingroup  Frontend
 * @author  David Gohara
-* @param  com  Communications object
-* @param  nosh  Parameters from input file
-* @param  nforce  Number of forces calculated
-* @param  atomForce  Array of force structures
-* @param  i  Index of force statement to print
 * @return  1 if successful, 0 otherwise */
-VEXTERNC int printElecForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
-						AtomForce *atomForce[NOSH_MAXCALC], int i);
-#if 0
+VEXTERNC int printElecForce(
+							Vcom *com, /** Communications object */
+							NOsh *nosh, /** Parameters from input file */
+							int nforce[NOSH_MAXCALC], /** Number of forces calculated */
+							AtomForce *atomForce[NOSH_MAXCALC], /** Array of force structures */
+							int i /** Index of force statement to print */
+							);
+
 /** 
 * @brief  Combine and pretty-print force data
 * @ingroup  Frontend
 * @author  David Gohara
-* @param  nosh  Parameters from input file
-* @param  i  Index of force statement to print
 * @return  1 if successful, 0 otherwise */
-VEXTERNC int printApolForce(NOsh *nosh, int i);
-#endif
+VEXTERNC int printApolForce(
+							Vcom *com, /** Communications object */
+							NOsh *nosh, /** Parameters from input file */
+							int nforce[NOSH_MAXCALC], /** Number of forces calculated */
+							AtomForce *atomForce[NOSH_MAXCALC], /** Array of force structures */
+							int i /** Index of force statement to print */
+							);
+
 /**
  * @brief  Wrapper to start MALOC Vio layer
  * @ingroup  Frontend
@@ -600,11 +598,12 @@ VEXTERNC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk);
  * @brief  Calculate non-polar energies
  * @ingroup  Frontend
  * @author  David Gohara
- * @param  apolparm  APOLparm object
- * @param  sasa Solvent accessible surface area
- * @param  sav Solvent accessible volume
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int energyAPOL(APOLparm *apolparm, double sasa, double sav);
+VEXTERNC int energyAPOL(
+						APOLparm *apolparm, /** APOLparm object */
+						double sasa, /** Solvent accessible surface area */
+						double sav /** Solvent accessible volume */
+						);
 
 /**
  * @brief  Calculate non-polar forces
@@ -616,8 +615,8 @@ VEXTERNC int forceAPOL(
 					   Vmem *mem,  /**< Memory manager */
 					   APOLparm *apolparm,  /**< Apolar calculation parameter
 					   object */
-					   int *nforce,  /**< Number of force calculations (I think? 
-					   Dave?) */
+					   int *nforce,  /**< Number of atomic forces to calculate 
+					   statements for */
 					   AtomForce **atomForce,  /**< Object for storing atom
 					   forces */
 					   Valist *alist,  /**< Atom list */

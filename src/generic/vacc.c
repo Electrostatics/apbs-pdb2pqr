@@ -1764,27 +1764,4 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 
 	return 1;
 }
-/*
-VPUBLIC int Vacc_wcaForce(Vacc *acc, APOLparm *apolparm, Valist *alist,
-						  Vclist *clist,double radius, double *force) {
-    int i, iatom;
-	int rc = 0;
-	
-	double rho = apolparm->bconc;
-	
-	for(i=0;i<3;i++) force[i] = 0.0;
-	
-	if (VABS(rho) < VSMALL) return 1;
-		
-    for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {          
-        rc = Vacc_wcaForceAtom(acc,apolparm,alist,clist,radius,rho,iatom,force);
-		if (rc == 0) {
-			Vnm_print(2, "Vacc_wcaForce:  error computing force on atom %d!\n", iatom);
-			return 0;
-		}
-    }
-	
-	return 1;
-}
-*/
 
