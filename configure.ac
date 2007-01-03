@@ -125,10 +125,10 @@ dnl ##########################################################################
 dnl 2. checks for programs
 dnl ##########################################################################
 AC_LANG_C
-AC_PROG_CC
+AC_PROG_CC(icc gcc)
 AM_PROG_CC_STDC
 AC_PROG_CXX
-AC_PROG_F77(gfortran g95 g77)
+AC_PROG_F77(ifort gfortran g95 g77)
 
 dnl # -------------------------------------------------------------------------
 dnl # Test to see if the compiler combination is valid for gcc/g77 or
