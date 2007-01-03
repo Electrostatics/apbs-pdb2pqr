@@ -1,7 +1,11 @@
 #############################################################################
-BETA PUBLIC RELEASE VERSION 0.4.1       XX-XX-XX 
+BETA PUBLIC RELEASE VERSION 0.5.0       XX-XX-XX 
 #############################################################################
  - NEW FEATURES
+   * Significantly streamlined the configure/build/install procedure:
+     - Most common compiler/library options now detected by default
+     - MALOC is now included as a "plugin" to simplify installation and
+       compatibility issues
    * Added new APOLAR section to input file and updated documentation -- this
      function renders tools/manip/acc obsolete.
    * Added support for standard one-character chain IDs in PQR files.	

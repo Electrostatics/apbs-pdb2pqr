@@ -1,490 +1,443 @@
 <chapter id="installation-sect"> <title>Installation</title> 
-  <para>The following sections outline the installation of APBS on a generic
-    UNIX platform as well as installation instructions for various specific
-    machines.</para> 
+	<para>The following sections outline the installation of APBS on a generic
+		UNIX platform as well as installation instructions for various specific
+		machines.</para> 
 
-  <sect1 id="obtaining-sect"> <title>Availability</title>
-    <para>The latest version of APBS can always be found at 
-      <ulink url="http://apbs.sourceforge.net/">
-        http://apbs.sourceforge.net</ulink>.  APBS is available in both source 
-        code form and binaries for a variety of architectures.</para>
-  </sect1>
+	<sect1 id="obtaining-sect"> <title>Availability</title>
+		<para>The latest version of APBS can always be found at <ulink url="http://apbs.sourceforge.net/">
+				http://apbs.sourceforge.net</ulink>.  APBS is available in both source code form and
+			binaries for a variety of architectures.</para>
+	</sect1>
 
-  <sect1> <title>Binary installation</title>
-    <para>
-      We currently offer RPM-format binaries for the RedHat Linux platform on
-      a variety of architectures as well
-      as command line binaries for WinXP and Mac OS X.  Binaries can be 
-      downloaded from the 
-      <ulink url="http://agave.wustl.edu/apbs/download">APBS download
-      page</ulink>.  For all other systems, please install from source on your 
-      particular platform and feel free to contact the 
-      <link linkend="mailing-lists">APBS users mailing list</link> for more 
-      help.
-    </para>
-    <para> 
-      In order to use the APBS binaries you will also need MALOC binaries -
-      these can be obtained from <ulink url="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html">http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html</ulink>.
-    </para>
-  </sect1>
+	<sect1> <title>Binary installation</title>
 
-  <sect1> <title>Source installation</title>
-    <para>If you were unable to find the binary pacakge for your system, or
-      would like to compile APBS yourself, you'll need to read the instructions
-      in this section.</para>
+		<para>
+			We currently offer binaries for the RedHat Linux platform on a variety of architectures as well
+			as command line binaries for WinXP and Mac OS X.  Binaries can be downloaded from the <ulink
+				url="http://agave.wustl.edu/apbs/download">APBS download page</ulink>.  For all other
+			systems, please install from source on your particular platform and feel free to contact the
+			<link linkend="mailing-lists">APBS users mailing list</link> for more help and/or to request a
+			binary for that system.
+		</para>
 
-    <sect2 id="prerequisites-sect"> <title>Prerequisites</title>  
-      <para>In order to install APBS from the source code, you will need:
-        <itemizedlist> 
-          <listitem> <para>C and Fortran compilers</para> </listitem>
-          <listitem> <para>The APBS source code (see 
-          <link linkend="obtaining-sect">above</link>)</para> </listitem>
-          <listitem> <para>The MALOC hardware abstraction library (available from
-          <ulink url="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html">http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html</ulink>)</para>
-          </listitem>
-        </itemizedlist>
-      It may also be useful to have:
-        <itemizedlist>
-          <listitem> 
-            <para>A version of MPI (try 
-              <ulink url="http://www-unix.mcs.anl.gov/mpi/mpich/">MPICH</ulink>) 
-              for parallel jobs.  
-              <note>
-                <para>
-                  MPI isn't strictly necessary if the 
-                  <link linkend="elec-async"><option>async</option></link> option is
-                  used.
-                </para>
-              </note>
-            </para>
-          </listitem>
-          <listitem> <para>A compatible visualization program (see the 
-          <link linkend="visualization-sect">"Visualization"</link> section of
-          this document)</para>
-          </listitem>
-        </itemizedlist>
-      </para>
-    </sect2>
-      
-    <sect2 id="setup-sect"> <title>Preparation for installation</title>
-      <para>In what follows, I'll be assuming you're using 
-      <ulink url="http://www.gnu.org/software/bash/bash.html">bash</ulink>, a
-      fantastic shell available on many platforms (UNIX and non-UNIX).</para>
-  
-      <sect3> <title>Compiler variables</title>
-        <para>First, please look at the 
-        <link linkend="machine-sect">"Machine-specific notes"</link> section of
-        this document for appropriate compiler flags, etc. to be set via
-        pre-configuration environmental variables.  It's not a big deal if you
-        skip this step, but APBS will run more slowly.</para>
-      </sect3>
+	</sect1>
 
-      <sect3> <title>Installation directories</title>
-        <para>There are two directories you'll need to identify prior to
-        installation.  The first, which we'll call
-        <parameter>FETK_SRC</parameter>, will contain the APBS and MALOC source
-        code.  This directory can be deleted after installation, if you wish.
-        The second directory will be the permanent location for APBS and MALOC;
-        we'll call this <parameter>FETK_PREFIX</parameter>.  If you have root
-        permission, you could pick a global directory such as
-        <filename>/usr/local</filename> for this; otherwise, pick a directory
-        for which you have write permission.  The following commands set up the
-        directories and environmental which point to them:
-          <screen>
-            <prompt>$</prompt> <userinput>export FETK_SRC=/home/soft/src</userinput>
-            <prompt>$</prompt> <userinput>export FETK_PREFIX=/home/soft</userinput>
-            <prompt>$</prompt> <userinput>export FETK_INCLUDE=${FETK_PREFIX}/include</userinput>
-            <prompt>$</prompt> <userinput>export FETK_LIBRARY=${FETK_PREFIX}/lib</userinput>
-            <prompt>$</prompt> <userinput>mkdir -p ${FETK_SRC} ${FETK_INCLUDE} ${FETK_LIBRARY}</userinput>
-          </screen>
-        </para>
-        <note>
-          <para>
-            If you're planning to use MPI, you'll need to set some additional
-            environmental variables.  The variable
-            <parameter>FETK_MPI_INCLUDE</parameter> points to the directory
-            where the MPI header files reside (<filename>mpi.h</filename>) and
-            the variable <parameter>FETK_MPI_LIBRARY</parameter> points to the
-            directory where the MPI libraries are located
-            (<filename>libmpi.a</filename> or <filename>libmpich.a</filename>).
-            For example, on my system, I type:
-            <screen>
-              <prompt>$</prompt> <userinput>export FETK_MPI_INCLUDE=/usr/share/mpi/include</userinput>
-              <prompt>$</prompt> <userinput>export FETK_MPI_LIBRARY=/usr/share/mpi/lib</userinput>
-            </screen>
-          </para>
-        </note>
-      </sect3>
+	<sect1> <title>Source installation</title>
 
-      <sect3> <title>Unpacking the source code</title>
-        <para>You're now ready to unpack the source code:
-          <screen>
-            <prompt>$</prompt> <userinput>cd ${FETK_SRC}</userinput>
-            <prompt>$</prompt> <userinput>gzip -dc maloc.tar.gz | tar xvf -</userinput>
-            <prompt>$</prompt> <userinput>gzip -dc apbs-&apbsver;.tar.gz | tar xvf -</userinput>
-          </screen>
-        </para>
-      </sect3>
+		<para>If you were unable to find the binary pacakge for your system, or would like to compile APBS
+			yourself, you'll need to read the instructions in this section.</para>
 
-      <sect3> <title>Compiling MALOC</title>
-        <para>Now we need to compile the hardware-abstraction library, MALOC.
-        First, go to the MALOC directory:
-          <screen>
-            <prompt>$</prompt> <userinput>cd ${FETK_SRC}/maloc</userinput>
-          </screen>
-          <caution>
-            <para>
-              If you are not starting from a freshly-untarred version of
-              MALOC, you need to clean up the previous distribution by:
-              <screen>
-                <prompt>$</prompt> <userinput>make distclean</userinput>
-              </screen>
-              and ignoring any error messages that may result.
-            </para>
-          </caution>
-        MALOC is configured for installation with the autoconf script
-        <literal>configure</literal>.  Configure options can be listed with the
-        <option>--help</option> option.  However, MALOC is usually configured
-        in one of two ways for use with APBS:
-          <orderedlist>
-            <listitem>
-              <para>Sequential execution only (no MPI):
-                <screen>
-                  <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX}</userinput>
-                </screen>
-              </para>
-            </listitem>
-            <listitem>
-              <para>With parallel execution (MPI):
-                <screen>
-                  <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --enable-mpi</userinput>
-                </screen>
-              </para>
-            </listitem>
-          </orderedlist>
-          <caution>
-            <para>
-              Be sure to keep an eye out for warning messages during the
-              configuration of MALOC, especially if you are using MPI.
-            </para>
-          </caution>
-          At this point, you are ready to make and install MALOC:
-            <screen>
-              <prompt>$</prompt> make; make install
-           </screen>
-          If all went well (you'll see an error message if either the
-          compilation or installation failed), then you're ready to install
-          APBS...
-        </para>
-      </sect3>
-    </sect2>
+		<sect2 id="prerequisites-sect"> <title>Prerequisites</title>  
+			<para>In order to install APBS from the source code, you will need:
+				<itemizedlist> 
+					<listitem> <para>C and Fortran compilers</para> </listitem>
+					<listitem> <para>The APBS source code (see 
+							<link linkend="obtaining-sect">above</link>)</para> </listitem>
+				</itemizedlist>
+				<note>
+					<para> Note that the <ulink url="http://www.scicomp.ucsd.edu/~mholst">Holst
+							group</ulink> <ulink
+							url="http://www.scicomp.ucsd.edu/~mholst/codes/maloc/index.html">MALOC</ulink>
+						source code is now provided with APBS to facilitate installation.</para>
+				</note>
+				It may also be useful to have:
+				<itemizedlist>
+					<listitem> 
+						<para>A version of MPI (try <ulink
+								url="http://www-unix.mcs.anl.gov/mpi/mpich/">MPICH</ulink>)
+							for parallel jobs.  
+							<note>
+								<para>
+									MPI isn't strictly necessary if the <link
+										linkend="elec-async"><option>async</option></link>
+									option is used.
+								</para>
+							</note>
+						</para>
+					</listitem>
+					<listitem>
+						<para>A vendor-supplied version of BLAS for optimal performance.  APBS
+							will attempt to locate common BLAS libraries during the
+							configuration process.</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+		</sect2>
 
-    <sect2> <title>Configuring, compiling, and installing</title>
-      <para> APBS is configured and installed much the same way as MALOC.
-      First, you need to configure with the autoconf
-      <literal>configure</literal> script.  As before, you can examine the
-      various configure options with the <option>--help</option> option.  For
-      most platforms, no options need to be specified; APBS's autoconf setup
-      automatically detects whether MALOC was compiled with MPI and configures
-      itself appropriately.  Therefore, most users can configure as follows:
-        <screen>
-          <prompt>$</prompt> <userinput>cd ${FETK_SRC}/apbs</userinput>
-          <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX}</userinput>
-        </screen>
-      There's no need to pay too much attention to the autoconf messages here.
-      If the APBS configuration script can't find something it needs, it will
-      simply fail to configure and exit with a hopefully-informative error
-      message.
-        <note>
-          <para>If you have a vendor-supplied BLAS math library, you will
-          probably compile a faster version of APBS if you link to it instead
-          of the BLAS version provided with MALOC.  This is done by passing the
-          appropriate linking options to <literal>configure</literal> with the
-          <option>--with-blas</option> flag.  For example, suppose you had a
-          machine-specific version of the BLAS library at
-          <filename>/usr/local/lib/libblas.a</filename>.  You would then
-          configure APBS by:
-            <screen>
-              <prompt>$</prompt> <userinput>cd ${FETK_SRC}/apbs</userinput>
-              <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --with-blas="-L/usr/local/lib -lblas"</userinput>
-            </screen>
-          </para>
-        </note>
-      Assuming all has gone well with the configuration, you're ready to
-      compile and install APBS:
-        <screen>
-          <prompt>$</prompt> <userinput>make all</userinput>
-          <prompt>$</prompt> <userinput>make install</userinput>
-        </screen>
-      This will place a version of the APBS binary at
-      <filename>${FETK_PREFIX}/bin/${host_cpu}-${host_vendor}-${host_os}/apbs</filename>,
-      where <parameter>${host_cpu}-${host_vendor}-${host_os}</parameter> is a
-      machine-specific string.  This extra layer of obfuscation lets you keep
-      several APBS binaries around in the same directory.  At this point you
-      are ready to use APBS; either by calling the binary directly or adding
-      the above directory to your path.  There are also several tools provided
-      with APBS that remain in the APBS directory; these are described in later
-      portions of this manual.  You may wish to copy these to a global location
-      (or the same place as your APBS binary) at this time.
-      </para>
-    </sect2>
+		<sect2 id="tested-systems"> <title>Tested systems</title>
+			<para> Source-code-based installation has been tested on the following systems
+				<itemizedlist>
+					<listitem> AMD 64 (Opteron) running Fedora Core 6 Linux </listitem>
+					<listitem> IBM Power4 running RedHat Enterprise Linux 3 </listitem>
+					<listitem> SGI Itanium2 (Altix) running IRIX/Linux </listitem>
+					<listitem> Apple PowerPC running Mac OS X </listitem>
+					<listitem> Apple x86_64 running Mac OS X </listitem>
+				</itemizedlist>
+				However, the installation procedure is rather generic and generally works on most
+				UNIX-based systems.  System-specific installation notes and caveats are provided in
+				<xref linkend="machine-sect"/>.
+			</para>
+		</sect2>
 
-    <sect2> <title id="machine-sect">Machine-specific notes</title>
-      <para>While the APBS and MALOC autoconf <literal>configure</literal>
-      scripts are flexible enough to work on most platforms, the resulting
-      executables don't always offer optimal performance.  We're slowly trying
-      to provide binary support for some of the more popular platforms, this
-      section is meant to supplement our pre-compiled binaries and provide some
-      tips on how to get a better APBS binary on your platform.  <emphasis>If
-      you have tips or tricks on improving APBS performance on your machine,
-      please 
-      <ulink url="mailto:apbs-users@lists.sourceforge.net">let us know!</ulink></emphasis>
-      </para>
+		<sect2 id="setup-sect"> <title>Preparation for installation</title>
 
-      <sect3> <title>Intel IA32/IA64</title>
-        <para>In what follows, we're denoting Pentium/Xeon 32-bit Intel
-        machines as "IA32" and Itanium* 64-bit Intel machines as "IA64".
-        </para>
+			<para>In what follows, I'll be assuming you're using 
+				<ulink url="http://www.gnu.org/software/bash/bash.html">bash</ulink>, a shell available
+				on most platforms (UNIX and non-UNIX).</para>
 
-        <sect4> <title>Windows</title>
-          <para>We are happy to now provide native APBS command line binaries
-          for Windows.  The binary is probably the best option available, but
-          if you would still like to compile your own binaries you will need to
-          use either the Cygwin or MinGW environments.  Binaries compiled under
-          Cygwin tend to require Cygwin DLLs and thus can only be run on 
-          systems with Cygwin.  Performance for the Windows binaries and all
-          compiled systems will be fairly mediocre as they depend on the
-          GNU compilers.</para>
-          <para>If you do choose to use Cygwin and compile your own code, 
-          compilation should be rather straightforward.</para>
-        </sect4>
+			<sect3> <title>Compiler variables</title>
+				<para>First, please look at <xref linkend="machine-sect"/> section of this document for
+					appropriate compiler flags, etc. to be set via pre-configuration environmental
+					variables.  This section outlines generic installation procedures with default
+					compilers and options.</para>
+			</sect3>
 
-        <sect4> <title>Linux</title>
-          <para> Compilation under Linux should be <emphasis>very</emphasis>
-          straightforward as this is the platform on which APBS was developed.
-          This section describes various compilation options under Linux.
-          </para>
+			<sect3> <title>Installation directories</title>
+				<para>There are a few directories you'll need to identify prior to installation.  The
+					first, which we'll call <parameter>APBS_SRC</parameter>, will contain the APBS
+					and MALOC source code.  This directory can be deleted after installation, if you
+					wish.  The second directory will be the permanent location for APBS and MALOC;
+					we'll call this <parameter>APBS_PREFIX</parameter>.  If you have root
+					permission, you could pick a global directory such as
+					<filename>/usr/local</filename> for this; otherwise, pick a directory for which
+					you have write permission.  The following commands set up the directories and
+					environmental which point to them:
+					<screen>
+<prompt>$</prompt> <userinput>export APBS_SRC=/home/soft/src</userinput>
+<prompt>$</prompt> <userinput>export APBS_PREFIX=/home/soft</userinput>
+<prompt>$</prompt> <userinput>mkdir -p ${APBS_SRC} ${APBS_PREFX}</userinput>
+					</screen>
+				</para>
+			</sect3>
 
-          <sect5> <title>GNU</title>
-            <para> Nearly every Linux distribution comes with the GNU
-            compilers; autoconf with configure with these by default.
-            Furthermore, autoconf will automatically choose reasonable
-            optimization (<option>-O2</option>) and debugging
-            (<option>-g</option>) options.  I haven't had very good luck
-            improving the performance beyond what's available with
-            <option>-O2</option> and, given the availablity of the free Intel
-            compilers, I'm not sure it's worth trying too hard.
-            </para>
-          </sect5>
+			<sect3> <title>Unpacking the source code</title>
+				<para>You're now ready to unpack the source code:
+					<screen>
+<prompt>$</prompt> <userinput>cd ${APBS_SRC}</userinput>
+<prompt>$</prompt> <userinput>gzip -dc apbs-&apbsver;.tar.gz | tar xvf -</userinput>
+					</screen>
+				</para>
+			</sect3>
 
-          <sect5> <title>Intel</title>
-            <para> We've mainly used the free (for Linux) 
-            <ulink url="http://www.intel.com/software/products/compilers/">Intel
-            compilers</ulink> and have observed very good performance.  There
-            were some incompatibility issues with version 7 of the Intel
-            compilers and newer versions of Linux (particularly those running
-            glibc 2.3, e.g. RedHat 8 and 9).   
-            </para>
-            <para>First, you need to make sure the Intel compilers are set up
-            properly; this usually is done by sourcing one of the input bash or
-            csh scripts provided with the compilers.  
-            </para>
-            <para>You then need to define the environmental variables
-            appropriate to these compilers <emphasis>before</emphasis> you
-            configure either MALOC or APBS.  This is done by:
-              <screen>
-                <prompt>$</prompt> <userinput>export CC='icc'</userinput>
-                <prompt>$</prompt> <userinput>export CXX='icc'</userinput>
-                <prompt>$</prompt> <userinput>export F77='ifort'</userinput>
-              </screen>
-            If you want to use the compiled code on machines where the Intel
-            compilers are not installed, you also need to set some linker
-            options:
-              <screen>
-                <prompt>$</prompt> <userinput>export LDFLAGS='-static-libcxa'</userinput>
-              </screen>
-            </para>
-            <para>Finally, you'll want to choose some optimization options.
-            Intel has a number of options that are specific to the type of
-            processor you are running; some example flags are shown below:
-              <screen>
-                <prompt>$</prompt> <userinput>export FFLAGS='-O3'</userinput>
-                <prompt>$</prompt> <userinput>export CFLAGS='-O3'</userinput>
-                <prompt>$</prompt> <userinput>export CXXFLAGS=${CFLAGS}</userinput>
-              </screen> 
-            </para>
-          </sect5>
-      
-          <sect5> <title>IA64 (Itanium)</title>
-            <para>Since the MALOC-supplied BLAS is not 64-bit clean, a third 
-            party BLAS must be used for installation on an Itanium.  We have 
-            had good success with the Intel MKL libraries.  If no independent 
-            BLAS is available you may want to try either compiling your own 
-            (like ATLAS) or using the ia64 binary instead.
-            </para>
-            <para>If you do use the MKL libraries, you will need to modify a 
-            few command line options.
-            </para>
-            <para>First use the disable-blas flag while compiling MALOC to 
-            prevent MALOC's BLAS from interfering with APBS installation:
-            <screen>
-              <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --disable-blas</userinput>
-              <prompt>$</prompt> <userinput> make; make install </userinput>
-            </screen>
-            </para>
-            <para>Then when compiling APBS, specify that APBS is to use the MKL
-            BLAS and the name of the actual BLAS library:
-            <screen>
-              <prompt>$</prompt> <userinput>export INTEL_BLAS=/path/to/MKL/lib/directory</userinput>
-              <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"</userinput>
-              <prompt>$</prompt> <userinput> make; make install </userinput>
-            </screen>
-            </para>
-            
-          </sect5>
-          <sect5> <title>Others</title>
-            <para>There are a number of other good compilers (Portland Group,
-            Absoft) that we have not tested with APBS.  If you have experience
-            with these, please 
-            <ulink url="mailto:apbs-users@lists.sourceforge.net">let us know.</ulink>
-            </para>
-          </sect5>
-        </sect4>
-      </sect3>
+		</sect2>
 
-      <sect3> <title>Macintosh</title>
-        <para>We are happy to now provide a Mac install package for G5 OS 10.4 
-         (Tiger).  Unfortunately this is the only binary for Mac that we have
-         available, so users on G4s or OS 10.3 may have to compile binaries 
-         for themselves - you may want to examine the
-        <ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">apbs-users 
-        mailing list</ulink> which has a number of threads which discuss
-        installation on Mac OS platforms.  Alternatively you can try using
-	Fink for the installation - please see Bill Scott's excellent 
-	guidelines at <ulink url="http://chemistry.ucsc.edu/~wgscott/xtal"> 
-	http://chemistry.ucsc.edu/~wgscott/xtal</ulink>. </para>
-        <para>A few notes about compiling on Macintosh:</para>
-          <orderedlist>
-            <listitem>
-              <para>It has become apparent from the mailing lists that some
-            "packages" of the GNU development software available for MacOS
-            contain different major versions of the C and FORTRAN compilers.  
-            This is very bad; APBS will not compile with different versions of 
-            the C and FORTRAN compilers. If you use GCC 4.0, for instance,
-            gfortran 4.0 will work while g77 3.3 will not. If you see link 
-            errors involving "restFP" or "saveFP" this is most likely the 
-            cause.</para>
-            </listitem>
-            <listitem>
-              <para>In gcc 4.0 (included in Xcode 2.0 and higher) the -fast
-              option turns on the -fast-math flag.  This flag optimizes by
-              using rounding, and thus can lead to inaccuate results and should
-              be avoided.</para>
-            </listitem>
-            <listitem>
-              <para>As it stands now the autoconf script does not support using
-              the native vecLib framework as an architecture-tuned BLAS 
-              replacement.  In testing there were only slight timing 
-              improvements over using the MALOC-supplied BLAS as it is.</para>
-            </listitem>
-            <listitem>
-              <para>We have had success using IBM's XLF for Mac in conjunction
-              with GCC 4.0, although the corresponding XLC compilers do not 
-              seem to work under Tiger.</para>
-            </listitem>
-          </orderedlist>  
-      </sect3>
+		<sect2> <title>Configuring, compiling, and installing</title>
+			<para> Before compiling/installing APBS, you need to configure with the autoconf
+				<literal>configure</literal> script.  You can examine the various configure options with
+				the <option>--help</option> option.  For many platforms, no options need to be
+				specified.  Therefore, most users <emphasis>who want single-CPU (not parallel)
+					binaries</emphasis> can configure as follows:
+				<screen>
+<prompt>$</prompt> <userinput>cd ${APBS_SRC}/apbs</userinput>
+<prompt>$</prompt> <userinput>./configure --prefix=${APBS_PREFIX}</userinput>
+				</screen>
+				Other configuration options, including the compilation of parallel binaries and the use
+				of machine-specific compilers and Python usage, are discussed in <xref
+					linkend="machine-sect"/>.
+			</para>
+			<para>
+				Assuming all has gone well with the configuration (you'll generally get an error message
+				if configuration fails), you're ready to compile 
+				<screen>
+<prompt>$</prompt> <userinput>make all</userinput>
+				</screen>
+				and install APBS:
+				<screen>
+<prompt>$</prompt> <userinput>make install</userinput>
+				</screen>
+				The installation will create several directories under
+				<parameter>${APBS_PREFIX}</parameter>:
+				<itemizedlist>
+					<listitem> 
+						<para> <filename>bin</filename>, where the main
+							<filename>apbs</filename> binary resides</para>
+					</listitem>
+					<listitem> 
+						<para> <filename>examples</filename>, which contains a number of
+							examples and test cases for APBS </para>
+					</listitem>
+					<listitem> 
+						<para> <filename>include</filename>, which contains header files for
+							using APBS libraries with other applications </para>
+					</listitem>
+					<listitem> 
+						<para> <filename>lib</filename>, which contains library files for
+							using APBS libraries with other applications </para>
+					</listitem>
+					<listitem> 
+						<para> <filename>tools</filename>, which contains a number of "helper"
+							applications for use with APBS. </para>
+					</listitem>
+				</itemizedlist>
+				At this point you are ready to use APBS; either by calling the binary directly or adding
+				the above directory to your path.  As mentioned above, there are also several tools
+				provided with APBS that remain in the APBS directory; these are described in later
+				portions of this manual.  You may wish to copy these to a global location (or the same
+				place as your APBS binary) at this time.
+			</para>
+		</sect2>
 
-      <sect3> <title>IBM Power3/Power4 AIX</title>
-        <para>These are various compilation options I experimented with on the
-        NPACI Blue Horizon platform -- we're working on acquiring a Power4
-        machine for additional notes.  However, I expect some of the issues are
-        applicable to other AIX machines.  In what follows, I used the
-        <literal>mpcc</literal> and <literal>mpxlf</literal> compilers.
-        </para>
-        <para>
-        In order to use a reasonable amount of memory during runs, you also
-        need to specify <option>-bmaxdata:0x80000000</option> and
-        <option>-bmaxstack:0x10000000</option>, or whatever values are
-        appropriate to your system.  You'll also want to link to the IBM
-        <literal>blas</literal>, <literal>mass</literal>, and
-        <literal>essl</literal> libraries (if available) and optimize as much
-        as possible for the specific machine you're running on.  Putting it all
-        together gives:
-          <screen>
-            <prompt>$</prompt> <userinput>export CC=mpcc</userinput>
-            <prompt>$</prompt> <userinput>export CXX=mpcc</userinput>
-            <prompt>$</prompt> <userinput>export F77=mpxlf</userinput>
-            <prompt>$</prompt> <userinput>export BLASPATH=/usr/lib</userinput>
-            <prompt>$</prompt> <userinput>export CFLAGS="-bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"</userinput>
-            <prompt>$</prompt> <userinput>export FFLAGS="-qfixed=132 -bmaxdata:0x80000000 -bmaxstack:0x10000000 -L/usr/local/apps/mass -lmass -lessl -O3 -qstrict -qarch=pwr3 -qtune=pwr3 -qmaxmem=-1 -qcache=auto"</userinput>
-          </screen>
-        </para>
-      </sect3>
+		<sect2> <title id="machine-sect">System-specific notes</title>
+			<important>
+				<para> If you have tips or tricks on improving APBS performance and/or installation on
+					your machine, please <link linkend="mailing-lists">let us know!</link> </para>
+			</important>
+			<para>This section provides tips on compiling APBS on specific platforms and outlines some of
+				the basic options available for parallel execution, Python linkage, etc.  Note that many
+				aspects of this section have changed from previous releases.  In particular, APBS now
+				tries to detect the optimal compilers and BLAS libraries on most systems without user
+				intervention.
+			</para>
+			<para>
+				As described above, the default configure-make-install procedure is
+				<screen>
+<prompt>$</prompt> <userinput>./configure --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+				</screen>
+				The configure script includes a number of generic options to manually set default
+				compilers, link behaviors, preprocessors, etc.  These can be reviewed by running
+				<screen>
+<prompt>$</prompt> <userinput>./configure --help</userinput>
+				</screen>
+			</para>
 
-      <sect3> <title>Sun/Solaris</title>
-        <para>Compilation tips for this system are short and sweet:  Whatever
-        you do, don't use the GNU compilers; they result in
-        <emphasis>very</emphasis> slow binaries.
-        </para>
-      </sect3>
+			<sect3> <title>Python support</title> 
+				<para>Python libraries and related tools can be enabled at configure-time.  Currently,
+					Python libraries compile on most Linux and Mac systems.  Other systems are
+					untested.  The configure-make-install procedure is:
+					<screen>
+<prompt>$</prompt> <userinput>./configure --enable-python --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+					</screen>
+				</para>
+			</sect3>
 
-      <sect3> <title>DEC/Compaq/HP/Samsung Alpha</title>
-        <para>Two tips:  
-          <orderedlist>
-            <listitem>
-              <para> Don't use the GNU compilers; they result in
-              <emphasis>very</emphasis> slow binaries.  </para>
-            </listitem>
-            <listitem>
-              <para> Use the vendor-supplied BLAS library. </para>
-            </listitem>
-          </orderedlist>
-        </para>
-      </sect3>
+			<sect3> <title>Parallel (MPI) support</title>
+				<para> APBS uses MPI for parallel execution.  In general, MPI support requires informing
+					the APBS configure script about:
+					<itemizedlist>
+						<listitem>
+							<para> MPI compiler options.  For most MPI implementations, you
+								simply need to set the <parameter>CC</parameter> and
+								<parameter>F77</parameter> variables to point to the
+								MPI-savvy C and FORTRAN compilers.  However, it is
+								occasionally necessary to manually specify compiler
+								options by setting 
+								<parameter>CFLAGS</parameter>,
+								<parameter>CPPFLAGS</parameter>,
+								<parameter>FFLAGS</parameter>, and
+								<parameter>LDFLAGS</parameter> before configuration.
+							</para>
+						</listitem>
+						<listitem>
+							<para> MPI library/header file locations.  As outlined below,
+								paths to the library and header files for <ulink
+									url="http://www.lam-mpi.org/">LAM</ulink> and
+								<ulink
+									url="http://www-unix.mcs.anl.gov/mpi/">MPICH</ulink>
+								implementations of MPI can be specified with the
+								<option>--with-lam</option>,
+								<option>--with-mpich</option>, or
+								<option>--with-mpich2</option> configure options.  Other
+								MPI implementations will require the 
+								<parameter>CFLAGS</parameter>,
+								<parameter>CPPFLAGS</parameter>,
+								<parameter>FFLAGS</parameter>, and
+								<parameter>LDFLAGS</parameter> variables to be set
+								correctly before configuration to locate the required
+								headers and libraries. </para>
+						</listitem>
+					</itemizedlist>
+				</para>
 
-      <sect3> <title>AMD Opteron</title>
-        <para> Since the MALOC BLAS is not 64 bit clean, you must used a third
-               party BLAS for installation on the Opteron.  We have had good 
-               success using the Portland group compilers and the associated 
-               PGI BLAS libraries, although a different third party BLAS 
-               (like ATLAS) should work as well.  For the Portland compilers:  
-           <orderedlist>
-             <listitem>
-                <para> Set the following flags for use with the Portland 
-                       compilers:
-                   <screen>
-                     <prompt>$</prompt> <userinput>export CC=pgcc</userinput>
-                     <prompt>$</prompt> <userinput>export CFLAGS='-O2 -fPIC -fastsse -Bstatic'</userinput>
-                     <prompt>$</prompt> <userinput>export F77=pgf77</userinput>
-                     <prompt>$</prompt> <userinput>export FFLAGS='-O2 -fPIC -fastsse -Bstatic'</userinput>
-                   </screen>
-                </para>
-             </listitem>
-             <listitem>
-                <para> When compiling MALOC, disable the building of the BLAS library:
-                   <screen>
-                      <prompt>$</prompt> <userinput>./configure --prefix=${FETK_PREFIX} --disable-blas</userinput>
-                      <prompt>$</prompt> <userinput> make; make install </userinput>
-                   </screen>
-                </para>
-             </listitem>
-             <listitem>
-                <para> Locate the BLAS library in your PGI installation and
-                       configure APBS to use that library, and then finish
-                       the installation:
-                   <screen>
-                     <prompt>$</prompt> <userinput> export BLAS_DIR='/path/to/blas'</userinput>
-                     <prompt>$</prompt> <userinput> ./configure --with-blas="-L${BLAS_DIR} -lblas" </userinput>
-                     <prompt>$</prompt> <userinput> make; make install </userinput>
-                   </screen>
-                </para>
-             </listitem>
-          </orderedlist>
-        </para>
-      </sect3>
+				<sect4> <title>LAM MPI</title>
+					<para> It is important that you enable FORTRAN support and use the same
+						compilers you will use to compile APBS when installing/compiling 
+						<ulink url="http://www.lam-mpi.org/">LAM MPI</ulink>.  For example, if
+						your C compiler is set in the environmental variable
+						<parameter>${CC}</parameter> and your FORTRAN compiler is set in the
+						environmental variable <parameter>${F77}</parameter>, then you should
+						configure <emphasis>LAM</emphasis> with the command
+						<screen>
+<prompt>$</prompt> <userinput>./configure --prefix=${MPI_PREFIX} --with-fc=${F77}</userinput>
+						</screen>
+					</para>
+					<para> Let <parameter>${MPI_PREFIX}</parameter> be an environmental variable
+						pointing to the directory where <ulink
+							url="http://www.lam-mpi.org/">LAM MPI</ulink> is installed.  
+						In
+						other words, <filename>${MPI_PREFIX}/lib</filename> should contain the
+						LAM MPI libraries and <filename>${MPI_PREFIX}/include</filename> should
+						contain the LAM MPI header files.  The configure-make-install procedure
+						is then
+						<screen>
+<prompt>$</prompt> <userinput>export CC=${MPI_PREFIX}/bin/mpicc</userinput>
+<prompt>$</prompt> <userinput>export F77=${MPI_PREFIX}/bin/mpif77</userinput>
+<prompt>$</prompt> <userinput>./configure --with-lam=${MPI_PREFIX} --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+						</screen>
+						This procedure was tested with LAM MPI 7.2.1.
+					</para>
+				</sect4>
+
+				<sect4> <title>MPICH1</title>
+					<para> It is important that you enable FORTRAN support and use the same
+						compilers you will use to compile APBS when installing/compiling 
+						<ulink url="http://www-unix.mcs.anl.gov/mpi/mpich1/">MPICH1</ulink>.
+						For example, if your C compiler is set in the environmental variable
+						<parameter>${CC}</parameter> and your FORTRAN compiler is set in the
+						environmental variable <parameter>${F77}</parameter>, then you should
+						configure <emphasis>MPICH1</emphasis> with the command
+						<screen>
+<prompt>$</prompt> <userinput>./configure --prefix=${MPI_PREFIX} ... --enable-f77</userinput>
+						</screen>
+						where <option>...</option> denotes other machine-specific options such as 
+						<option>--with-device=ch_p4</option> or
+						<option>--with-arch=LINUX</option>.
+					</para>
+					<para> Let <parameter>${MPI_PREFIX}</parameter> be an environmental variable
+						pointing to the directory where 
+						<ulink url="http://www-unix.mcs.anl.gov/mpi/mpich1/">MPICH1</ulink> 
+						is installed.  In other words, <filename>${MPI_PREFIX}/lib</filename>
+						should contain the
+						MPICH1 
+						libraries and <filename>${MPI_PREFIX}/include</filename> should contain
+						the 
+						MPICH1 
+						header files.  The configure-make-install procedure
+						is then
+						<screen>
+<prompt>$</prompt> <userinput>export CC=${MPI_PREFIX}/bin/mpicc</userinput>
+<prompt>$</prompt> <userinput>export F77=${MPI_PREFIX}/bin/mpif77</userinput>
+<prompt>$</prompt> <userinput>./configure --with-mpich=${MPI_PREFIX} --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+						</screen>
+						This procedure was tested with MPICH1 1.2.7p1.
+					</para>
+				</sect4>
+
+				<sect4> <title>MPICH2</title>
+					<para> It is important that you enable FORTRAN support and use the same
+						compilers you will use to compile APBS when installing/compiling 
+						<ulink url="http://www-unix.mcs.anl.gov/mpi/mpich1/">MPICH2</ulink>.
+					</para>
+					<para> Let <parameter>${MPI_PREFIX}</parameter> be an environmental variable
+						pointing to the directory where 
+						<ulink url="http://www-unix.mcs.anl.gov/mpi/mpich2/">MPICH2</ulink> 
+						is installed.  In other words, <filename>${MPI_PREFIX}/lib</filename>
+						should contain the
+						MPICH2 
+						libraries and <filename>${MPI_PREFIX}/include</filename> should contain
+						the 
+						MPICH2 
+						header files.  The configure-make-install procedure
+						is then
+						<screen>
+<prompt>$</prompt> <userinput>export CC=${MPI_PREFIX}/bin/mpicc</userinput>
+<prompt>$</prompt> <userinput>export F77=${MPI_PREFIX}/bin/mpif77</userinput>
+<prompt>$</prompt> <userinput>./configure --with-mpich2=${MPI_PREFIX} --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+						</screen>
+						This procedure was tested with MPICH1 1.2.7p1.
+					</para>
+				</sect4>
 
 
-    </sect2>
-  </sect1>
+			</sect3>
+
+			<sect3> <title>FEtk support</title>
+				<para> 
+					In order to enable support for the finite element features in APBS, you must
+					compile it against the <ulink url="http://www.fetk.org">FEtk</ulink> libraries.
+					<emphasis>Please use the same compilers for both APBS and FEtk.</emphasis>
+					Let <parameter>${FETK_PREFIX}</parameter> be an environmental variable pointing
+					to the directory where FEtk was installed.  In other words,
+					<filename>${FETK_PREFIX}/lib</filename> should contain the FEtk machine-specific
+					library directories and <filename>${FETK_PREFIX}/include</filename> should
+					contain the FEtk header files.  You'll first need to identify the appropriate
+					library directory for your system in <filename>${FETK_PREFIX}/lib</filename>.
+					For the purposes of this example, let's suppose this directory is
+					<filename>${FETK_PREFIX}/lib/x86_64-unknown-linux-gnu</filename>.
+					The configure-make-install procedure for APBS is then
+					<screen>
+<prompt>$</prompt> <userinput>./configure --with-fetk-include=${FETK_PREFIX}/include --with-fetk-library=${FETK_PREFIX}/lib/x86_64-unknown-linux-gnu --prefix=${APBS_PREFIX}</userinput>
+<prompt>$</prompt> <userinput>make </userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+					</screen>
+				</para>
+			</sect3>
+
+			<sect3> <title>Windows</title>
+				<para>We are happy to now provide native APBS command line binaries for Windows.  The
+					binary is probably the best option available, but if you would still like to
+					compile your own binaries you will need to use either the Cygwin or MinGW
+					environments.  Binaries compiled under Cygwin tend to require Cygwin DLLs and
+					thus can only be run on systems with Cygwin.  Performance for the Windows
+					binaries and all compiled systems will be fairly mediocre as they depend on the
+					GNU compilers.</para>
+				<para>If you do choose to use Cygwin and compile your own code, compilation should be
+					rather straightforward.</para>
+			</sect3>
+
+			<sect3> <title>Macintosh</title>
+				<para>We are happy to now provide a Mac install package for Mac OS 10.4 
+					(Tiger).  Unfortunately this is the only binary for Mac that we have
+					available, so users on OS 10.3 may have to compile binaries for themselves - you
+					may want to examine the
+					<ulink url="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users">apbs-users 
+						mailing list</ulink> which has a number of threads which discuss
+					installation on Mac OS platforms.  Alternatively you can try using
+					Fink for the installation - please see Bill Scott's excellent 
+					guidelines at <ulink url="http://chemistry.ucsc.edu/~wgscott/xtal"> 
+						http://chemistry.ucsc.edu/~wgscott/xtal</ulink>. </para>
+				<para>A few notes about compiling on Macintosh:
+					<orderedlist>
+						<listitem>
+							<para>It has become apparent from the mailing lists that some
+								"packages" of the GNU development software available for MacOS
+								contain different major versions of the C and FORTRAN compilers.  
+								This is very bad; APBS will not compile with different versions of 
+								the C and FORTRAN compilers. If you use GCC 4.0, for instance,
+								gfortran 4.0 will work while g77 3.3 will not. If you see link 
+								errors involving "restFP" or "saveFP" this is most likely the 
+								cause.</para>
+						</listitem>
+						<listitem>
+							<para>In gcc 4.0 (included in <ulink
+									url="http://www.apple.com/macosx/features/xcode/">Xcode</ulink>
+								2.0 and higher) the -fast option turns on the -fast-math flag.
+								This flag optimizes by using rounding, and thus can lead to
+								inaccuate results and should be avoided.</para>
+						</listitem>
+						<listitem>
+							<para>As it stands now the autoconf script does not support using
+								the native vecLib framework as an architecture-tuned BLAS 
+								replacement.  In testing there were only slight timing 
+								improvements over using the MALOC-supplied BLAS as it is.</para>
+						</listitem>
+						<listitem>
+							<para>We have had success using IBM's XLF for Mac in conjunction
+								with GCC 4.0, although the corresponding XLC compilers do not 
+								seem to work under Tiger.</para>
+						</listitem>
+					</orderedlist>  
+				</para>
+				<para> Finally, Dave Gohara has prepared 
+					<ulink
+						url="http://www.macresearch.org/tutorial_building_configure_make_projects_in_xcode">a
+						nice tutorial</ulink>
+					on building APBS from within <ulink
+						url="http://www.apple.com/macosx/features/xcode/">Xcode</ulink> to take
+					advantage of its development and debugging features.
+				</para>
+			</sect3>
+
+
+		</sect2>
+	</sect1>
 </chapter>
