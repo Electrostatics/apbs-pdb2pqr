@@ -76,7 +76,7 @@ for force in $forces; do
   alkane=${force%.pdb}
 
   starttime=`date +%s`
-  apbs apbs-forces.in > ${alkane}-force.out 
+  $1 apbs-forces.in > ${alkane}-force.out 
   
   start=`grep -n 'print APOL force 1 (solvated) end' ${alkane}-force.out | awk '{printf("%3d",$1)}'`
   stop=`grep -n 'tot   16' ${alkane}-force.out | awk '{printf("%3d",$1)}'`
@@ -87,15 +87,17 @@ for force in $forces; do
   difference=`diff -q answer force.result`
   
   echo 'The difference between the previous force answers and the current:'
-  if [ -z $difference ] ; then
+  if [ -z "$difference" ] ; then
 	echo "*** PASSED ***"
 	echo "           apbs-force.in: PASSED" >> $logfile
   else
 	echo "*** FAILED ***"
   	echo $difference
 	echo "           apbs-force.in: FAILED $difference" >> $logfile
+	echo "			 compare force.test to the standard force.result" >> $logfile
   fi
-
+  
+  cp answer force.test
   rm -f answer
   
   endtime=`date +%s`

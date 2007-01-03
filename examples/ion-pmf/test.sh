@@ -21,7 +21,7 @@ results=( -1.494109084160E+03 -1.479876455612E+03 -1.453172513724E+03 -1.4242456
 
 date=`date`
 echo "Date     : ${date}" >> $logfile
-echo "Directory: ion-protein" >> $logfile
+echo "Directory: ion-pmf" >> $logfile
 echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
@@ -34,14 +34,12 @@ do
   echo ""
 
   # TO TRANSLATE IN THE X DIRECTION:
-  echo "ATOM      1  I   ION     1      -3.000   0.000   0.000  1.00  2.00" > mol1.pqr
-  echo "ATOM      1  I   ION     1      $i    0.000   0.000  1.00 2.00" > mol2.pqr
-  cat mol1.pqr mol2.pqr > complex.pqr
-
-
+  echo "ATOM      1  ION   ION     1      -3.000   0.000   0.000  1.00 2.00" > complex.pdb
+  echo "ATOM      1  ION   ION     1      $i    0.000   0.000  1.00 2.00" >> complex.pdb
+  
   starttime=`date +%s`
-  $1 apbs.in > OUTPUT_$i.out 
-  answer=`grep "Global net ELEC" OUTPUT_$i.out | awk '{print $6}'`
+  $1 apbs.in > OUTPUT_${i}.out 
+  answer=`grep "Global net ELEC" OUTPUT_${i}.out | awk '{print $6}'`
 
   echo "Global net energy: $answer"
   sync

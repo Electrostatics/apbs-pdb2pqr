@@ -21,19 +21,20 @@
 			</tr>
 
 			<tr>
-				<td><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
-				<td>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
-				<td align=center><B>0.4.0</B></td><td align=center><B>8.0640</B></td>
-				<td>8.876</td>
+				<td rowspan=2><a href="apbs-mol-vdw.in">apbs-mol-vdw.in</a></td>
+				<td rowspan=2>2-level focusing to 0.250 A spacing, VdW surface, srfm mol</td>
+				<td align=center><B>0.5.0</B></td><td align=center><B>8.0640</B></td>
+				<td rowspan=2>8.876</td>
 			</tr>
-
+            <tr> <td align=center>0.4.0</td><td align=center>8.0640</td> </tr>
+            
 			<tr>
-				<td rowspan=12><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
-				<td rowspan=12>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
-				<td align=center><B>0.4.0</B></td><td align=center><B>20.9542</B><sup><a href="#2">2</a></sup></td>
-				<td rowspan=12>8.876</td>
+				<td rowspan=13><a href="apbs-smol-vdw.in">apbs-smol-vdw.in</a></td>
+				<td rowspan=13>2-level focusing to 0.250 A spacing, VdW surface, srfm smol</td>
+				<td align=center><B>0.5.0</B></td><td align=center><B>20.9542</B></td>
+				<td rowspan=13>8.876</td>
 			</tr>
-
+			<tr> <td align=center>0.4.0</td><td align=center>20.9542<sup><a href="#2">2</a></sup></td> </tr>
 			<tr><td align=center>0.3.2</td><td align=center>8.0640<sup><a href="#1">1</a></sup></td></tr>
 			<tr><td align=center>0.3.1</td><td align=center>6.6465</td></tr>
 			<tr><td align=center>0.3.0</td><td align=center>6.6465</td></tr>
@@ -47,19 +48,20 @@
 			<tr><td align=center>0.1.8</td><td align=center>6.65</td> </tr>
 
 			<tr>
-				<td><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
-				<td>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
-				<td align=center><B>0.4.0</B></td><td align=center><B>119.2347</B></td>
-				<td>86.50</td>
+				<td rowspan=2><a href="apbs-mol-surf.in">apbs-mol-surf.in</a></td>
+				<td rowspan=2>2-level focusing to 0.250 A spacing, molecular surface, srfm mol</td>
+				<td align=center><B>0.5.0</B></td><td align=center><B>119.2347</B></td>
+				<td rowspan=2>86.50</td>
 			</tr>
-
+            <tr> <td align=center>0.4.0</td><td align=center>119.2347</td> </tr>
+            
 			<tr>
-				<td rowspan=12><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
-				<td rowspan=12>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
-				<td align=center><B>0.4.0</B></td><td align=center><B>108.8540</B><sup><a href="#2">2</a></sup></td>
-				<td rowspan=12>86.50</td>
+				<td rowspan=13><a href="apbs-smol-surf.in">apbs-smol-mol.in</a></td>
+				<td rowspan=13>2-level focusing to 0.250 A spacing, molecular surface, srfm smol</td>
+				<td align=center><B>0.5.0</B></td><td align=center><B>108.8540</B></td>
+				<td rowspan=13>86.50</td>
 			</tr>
-
+            <tr> <td align=center>0.4.0</td><td align=center>108.8540<sup><a href="#2">2</a></sup></td> </tr>
 			<tr><td align=center>0.3.2</td><td align=center>94.8705<sup><a href="#1">1</a></sup></td></tr>
 			<tr><td align=center>0.3.1</td><td align=center>97.0147</td></tr>
 			<tr><td align=center>0.3.0</td><td align=center>97.0147</td></tr>
@@ -75,7 +77,11 @@
 
 		</table>
 
-		<p> <a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
+		<p> <a name=1><sup>1</sup> The grid dimensions (dime) changed from 65^3 to 97^3 in the 0.3.2 release to
+			give a finer mesh. 
+        </p>
+
+        <p> <a name=2><sup>2</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
 			<ul>
 				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
 				<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
@@ -83,10 +89,8 @@
 			</ul>
 		Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
 		more information.</P>
-
-
-		<p> <a name=1><sup>1</sup> The grid dimensions (dime) changed from 65^3 to 97^3 in the 0.3.2 release to
-			give a finer mesh. </p>
+		
+        
 
 	</body>
 </html>
