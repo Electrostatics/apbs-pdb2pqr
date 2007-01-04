@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY apbsversion "0.4.1">
+<!ENTITY apbsversion "0.5.0">
 <!ENTITY apbsdate "Not yet released">
 <!ENTITY apbsurl "http://apbs.sf.net">
 <!ENTITY ugurl "../user-guide/index.html">

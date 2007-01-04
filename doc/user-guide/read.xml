@@ -46,7 +46,7 @@
 								</varlistentry>
 							</variablelist>
 							<note>
-								<para>Beginning with APBS 0.4.1, the optional use of the
+								<para>Beginning with APBS 0.5.0, the optional use of the
 									chain ID field is now supported in both PDB and PQR formats.</para>
 							</note>
 						</para>

@@ -17,7 +17,7 @@ from sys import stdout, stderr
 from math import sqrt, pow, exp, pi
 
 __author__ = "Todd Dolinsky, Nathan Baker"
-__date__ = "12 December 2005"
+__date__ = "January 2007"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
@@ -57,7 +57,7 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.4.0\n\
+    Version 0.5.0\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
