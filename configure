@@ -2032,8 +2032,8 @@ echo "${ECHO_T}\"WARNING:  Python linkage requires GNU compilers\"" >&6
     cclist="gcc"
     f77list="gfortran g95 g77"
 else
-    cclist="icc gcc"
-    f77list="ifort gfortran g95 g77"
+    cclist="icc pgcc gcc"
+    f77list="ifort pgf77 gfortran g95 g77"
 fi
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'

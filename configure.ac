@@ -135,8 +135,8 @@ if test -n "${with_python}"; then
     cclist="gcc"
     f77list="gfortran g95 g77"
 else
-    cclist="icc gcc"
-    f77list="ifort gfortran g95 g77"
+    cclist="icc pgcc gcc"
+    f77list="ifort pgf77 gfortran g95 g77"
 fi
 AC_LANG_C
 AC_PROG_CC(${cclist})
