@@ -7,7 +7,7 @@
     Washington University in St. Louis
 """
 
-__date__ = "14 December 2005"
+__date__ = "January 2005"
 __author__ = "Todd Dolinsky"
 
 VSMALL = 1.0e-9
@@ -15,7 +15,7 @@ OUT = "mergedgrid.dx"
 HEADER = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 0.4.0 (December, 2005)\n\
+    Version 0.5.0 (January 2007)\n\
     \n\
     Nathan A. Baker (baker@biochem.wustl.edu)\n\
     Dept. of Biochemistry and Molecular Biophysics\n\
