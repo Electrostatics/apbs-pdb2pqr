@@ -132,18 +132,17 @@ AC_ARG_ENABLE(python,
 )
 if test -n "${with_python}"; then
     AC_MSG_RESULT("WARNING:  Python linkage requires GNU compilers")
-    AC_LANG_C
-    AC_PROG_CC(gcc)
-    AM_PROG_CC_STDC
-    AC_PROG_CXX
-    AC_PROG_F77(gfortran g95 g77)
+    cclist="gcc"
+    f77list="gfortran g95 g77"
 else
-    AC_LANG_C
-    AC_PROG_CC(icc gcc)
-    AM_PROG_CC_STDC
-    AC_PROG_CXX
-    AC_PROG_F77(ifort gfortran g95 g77)
+    cclist="icc gcc"
+    f77list="ifort gfortran g95 g77"
 fi
+AC_LANG_C
+AC_PROG_CC(${cclist})
+AM_PROG_CC_STDC
+AC_PROG_CXX
+AC_PROG_F77(${f77list})
 
 dnl # -------------------------------------------------------------------------
 dnl # Test to see if the compiler combination is valid for gcc/g77 or
