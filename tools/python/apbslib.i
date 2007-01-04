@@ -1,6 +1,8 @@
 /* Input file for creating Python wrappers for APBS via swig
    Author: Todd Dolinsky
    Email: todd@ccb.wustl.edu
+   To generate a new apbslib wrapper file:
+        swig -python -module apbslib -o apbslib.c apbslib.i
 */
 
 /* 
