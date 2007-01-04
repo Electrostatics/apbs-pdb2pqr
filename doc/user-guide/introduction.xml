@@ -162,6 +162,10 @@
 					</para>
 				</listitem>
 				<listitem>
+					<para>Adrian Kaats</para>
+					<para>Contributor:  multivalue.c</para>
+				</listitem>
+				<listitem>
 					<para>Robert Konecny</para>
 					<para>Contributor: parameters, CHARMM FORTRAN interface</para>
 				</listitem>
