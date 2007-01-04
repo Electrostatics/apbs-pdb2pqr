@@ -124,11 +124,26 @@ fi
 dnl ##########################################################################
 dnl 2. checks for programs
 dnl ##########################################################################
-AC_LANG_C
-AC_PROG_CC(icc gcc)
-AM_PROG_CC_STDC
-AC_PROG_CXX
-AC_PROG_F77(ifort gfortran g95 g77)
+AC_MSG_CHECKING([for --enable-python])
+AC_ARG_ENABLE(python,
+    [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
+    [ with_python="yes" ],
+    [ with_python=""    ]
+)
+if test -n "${with_python}"; then
+    AC_MSG_RESULT("WARNING:  Python linkage requires GNU compilers")
+    AC_LANG_C
+    AC_PROG_CC(gcc)
+    AM_PROG_CC_STDC
+    AC_PROG_CXX
+    AC_PROG_F77(gfortran g95 g77)
+else
+    AC_LANG_C
+    AC_PROG_CC(icc gcc)
+    AM_PROG_CC_STDC
+    AC_PROG_CXX
+    AC_PROG_F77(ifort gfortran g95 g77)
+fi
 
 dnl # -------------------------------------------------------------------------
 dnl # Test to see if the compiler combination is valid for gcc/g77 or
