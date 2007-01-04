@@ -135,7 +135,7 @@ wall_pedantic_ansi = @wall_pedantic_ansi@
 APBS = ${prefix}/bin/${target}/apbs
 IGEN = ${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc*
-subdir = examples/born
+subdir = examples/alkanes
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
@@ -261,7 +261,7 @@ uninstall-am: uninstall-info-am
 
 
 test:
-	./test.sh ${APBS} ${IGEN}
+	./test.sh ${APBS} 
 
 test.serial: test
 
