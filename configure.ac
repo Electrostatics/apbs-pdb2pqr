@@ -102,7 +102,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 0.4.0)
+AM_INIT_AUTOMAKE(apbs, 0.5.0)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";
