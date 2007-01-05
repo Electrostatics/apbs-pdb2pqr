@@ -33,3 +33,4 @@ install-exec-local:
 install-exec-am:
 	cp -Rf tools ${prefix}
 	cp -Rf examples ${prefix}
+	cp -Rf doc ${prefix}
