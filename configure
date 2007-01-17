@@ -20424,7 +20424,7 @@ echo "${ECHO_T}no" >&6
 
 fi;
 
-if test -z ${mpi_path}; then
+if test -z "${mpi_path}"; then
 	echo "$as_me:$LINENO: checking for --with-mpich2 option" >&5
 echo $ECHO_N "checking for --with-mpich2 option... $ECHO_C" >&6
 
@@ -20440,7 +20440,7 @@ echo "${ECHO_T}no" >&6
 fi;
 fi
 
-if test -z ${mpi_path}; then
+if test -z "${mpi_path}"; then
 	echo "$as_me:$LINENO: checking for --with-lam option" >&5
 echo $ECHO_N "checking for --with-lam option... $ECHO_C" >&6
 
@@ -21043,7 +21043,7 @@ else
 fi
 
 
-if test -z ${USE_FETK};  then
+if test -z "${USE_FETK}";  then
 
 	echo "$as_me:$LINENO: checking for --disable-maloc-rebuild" >&5
 echo $ECHO_N "checking for --disable-maloc-rebuild... $ECHO_C" >&6
