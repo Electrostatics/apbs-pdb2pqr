@@ -381,7 +381,7 @@ AC_ARG_WITH(mpich,
     [mpi_path=""; AC_MSG_RESULT([no]) ]
 )
 
-if test -z ${mpi_path}; then
+if test -z "${mpi_path}"; then
 	AC_MSG_CHECKING([for --with-mpich2 option])
 	AC_ARG_WITH(mpich2,
 		[AC_HELP_STRING([--with-mpich2=PATH], [toplevel MPICH2 directory])],
@@ -390,7 +390,7 @@ if test -z ${mpi_path}; then
 	)
 fi
 
-if test -z ${mpi_path}; then
+if test -z "${mpi_path}"; then
 	AC_MSG_CHECKING([for --with-lam option])
 	AC_ARG_WITH(lam,
 		[AC_HELP_STRING([--with-lam=PATH], [toplevel LAM-MPI directory])],
@@ -579,7 +579,7 @@ AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_ENABLE}"])
 dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
-if test -z ${USE_FETK};  then
+if test -z "${USE_FETK}";  then
 
 	AC_MSG_CHECKING([for --disable-maloc-rebuild])
 	AC_ARG_ENABLE(maloc-rebuild,
