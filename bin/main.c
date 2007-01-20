@@ -317,8 +317,8 @@ Please cite your use of APBS as:\n\n\
 	} 
 
 	/* Append rank info if a parallel run */
-
-	if (size > 1) sprintf(output_path, "%s_%d", output_path, rank);	    
+        if ((size > 1) && (output_path != NULL))
+                sprintf(output_path, "%s_%d", output_path, rank);
 
 	Vnm_tprint( 1, "%s", header);
 	Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
