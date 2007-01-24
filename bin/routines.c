@@ -2097,7 +2097,7 @@ VPUBLIC int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
 	int iarg, calcid;
 	double ltenergy, gtenergy, scalar;
 	
-	Vnm_tprint( 1, "Warning: The 'energy' print keyword is deprecated.\n" \
+	Vnm_tprint( 2, "Warning: The 'energy' print keyword is deprecated.\n" \
 				   "         Use elecEnergy for electrostatics energy calcs.\n\n");
 	
 	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
@@ -2279,7 +2279,7 @@ VPUBLIC int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
 	double totforce[3];
 	AtomForce *lforce, *gforce, *aforce;
 	
-	Vnm_tprint( 1, "Warning: The 'force' print keyword is deprecated.\n" \
+	Vnm_tprint( 2, "Warning: The 'force' print keyword is deprecated.\n" \
 				   "         Use elecForce for electrostatics force calcs.\n\n");
 	
 	if (Vstring_strcasecmp(nosh->elecname[nosh->printcalc[iprint][0]], "") == 0){
