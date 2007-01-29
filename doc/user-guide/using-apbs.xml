@@ -38,9 +38,10 @@
 			<sect3> <title>VMD</title>
 				<para>VMD (<ulink url="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</ulink>)
 					is a molecular visualization and animation package which provides an
-					interface to APBS.  It permits isocontour-based visualization of APBS
-					results and provides a Tcl plugin to setup APBS calculations for
-					visualization.
+					interface to APBS.  It permits visualization of APBS results as isocontours, electric field lines, or on 
+					biomolecular surfaces.  VMD also a graphical plugin to setup APBS calculations and execute them either
+					locally or remotely via BioCoRE.  More information is available at 
+					<ulink url="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/">http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/</ulink>.
 				</para>
 			</sect3>
 			<sect3> <title>PMV</title>
