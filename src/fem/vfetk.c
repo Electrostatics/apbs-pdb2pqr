@@ -857,7 +857,7 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     char *iodev = "BUFF";  /* Buffer */
     char *iofmt = "ASC";  /* ASCII */
     char *iohost = "localhost";  /* localhost (dummy) */
-    char *iofile = "0";  /< socket 0 (dummy) */
+    char *iofile = "0";  /*< socket 0 (dummy) */
     Vio *sock = VNULL;
     char buf[VMAX_BUFSIZE];
     int bufsize = 0;
