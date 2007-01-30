@@ -590,12 +590,12 @@ if test -z "${USE_FETK}";  then
 	
 	if test -n "${with_maloc}"; then
 		echo "Will not rebuild MALOC...skipping"
-		apbs_do_contrib=""
+		apbs_do_maloc=""
 	else
 		AC_MSG_RESULT([-----------------------------------------------------------])
 		AC_MSG_RESULT([-------------------- building MALOC -----------------------])
 		AC_MSG_RESULT([-----------------------------------------------------------])
-		apbs_do_contrib="contrib"
+		apbs_do_maloc="maloc"
 		
 		export CC=${CC}
 		export CFLAGS=${CFLAGS}
@@ -621,7 +621,7 @@ if test -z "${USE_FETK}";  then
 	AC_MSG_RESULT([----- MALOC installation finished continuing with APBS ----])
 	AC_MSG_RESULT([-----------------------------------------------------------])
 fi
-AC_SUBST(apbs_do_contrib)
+AC_SUBST(apbs_do_maloc)
 
 dnl # ---------------------------
 dnl # HANDLE THE READLINE LIBRARY
@@ -903,9 +903,11 @@ if test -n "${blas_lib}"; then
     if test -z "${blas_found}"; then
         AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
     fi
+	apbs_do_blas=""
     AC_LANG_C
 else
 	AC_MSG_RESULT([no])
+	apbs_do_blas="blas"
 	case $host_os in
 		darwin**)
 			blas_lib="-Wl,-framework -Wl,Accelerate"
@@ -916,6 +918,7 @@ else
 	esac
 fi
 AC_SUBST(blas_lib)
+AC_SUBST(apbs_do_blas)
 
 dnl # -----------------------
 dnl # If using Portland compilers, do not compile
