@@ -408,7 +408,8 @@
 				<command>press</command>
 				<arg choice="req"><replaceable>solvent pressure</replaceable></arg>
 			</cmdsynopsis>
-			<para>Specify the solvent pressure in
+			<para>Specify the solvent pressure in kJ
+				mol<superscript>-1</superscript>
 				&Aring;<superscript>-3</superscript>. This
 				coefficient multiplies the volume term of the
 				apolar model discussed above and can be set to
