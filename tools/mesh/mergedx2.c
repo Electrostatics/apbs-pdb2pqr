@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 	res = 1.0;
 	xmin = ymin = zmin = 0.0;
 	xmax = ymax = zmax = 0.0;
-	Vnm_print(1,outname,"gridmerged.dx");
+	sprintf(outname,"gridmerged.dx");
 	
 	/* Begin processing command line options */
 	int ch, ind;
