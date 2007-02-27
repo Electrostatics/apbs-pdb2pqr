@@ -84,13 +84,13 @@ VPRIVATE char *MCcommChars  = "#%";
 void usage(){
 	
 	Vnm_print(1,"mergedx2 [FLAGS] file1.dx [file2.dx ...]\n"
-				"-o		Output file					(default: gridmerged.dx)\n"
-				"-r		Resolution of gridpoints	(default: 1.0 Angstroms)\n"
-				"-b		Bounds of output map as: xmin ymin zmin xmax ymax zmax\n"
+				"	-o		Output file					(default: gridmerged.dx)\n"
+				"	-r		Resolution of gridpoints			(default: 1.0 Angstroms)\n"
+				"	-b		Bounds of output map as: xmin ymin zmin xmax ymax zmax\n"
 				"									(default: calculates full map)\n"
-				"-s		Print bounds of merged input dx files. Doesn't generate a merged map.\n"
+				"	-s		Print bounds of merged input dx files. Doesn't generate a merged map.\n"
 				"									(-s is exclusive of the other FLAGS)\n"
-				"-h		Print this message\n"
+				"	-h		Print this message\n"
 		   );
 	
 }
@@ -109,8 +109,7 @@ int main(int argc, char **argv) {
 	double xminb, yminb, zminb;
 	double xmaxb, ymaxb, zmaxb;
 	
-	/* We will cache the file names by address. So it needs to be 64-bit clean */
-    intptr_t fnams[1024];
+    char fnams[80][1024];
 	short *carray = VNULL;
 	
     char *snam = "# main:  ";
@@ -169,7 +168,7 @@ int main(int argc, char **argv) {
 	numfnams = 0;
 	if (optind < argc) {
 		while (optind < argc){
-			fnams[numfnams] = *(&argv[optind++]);
+			strcpy(fnams[numfnams],argv[optind++]);
 			numfnams += 1;
 		}
 	}
