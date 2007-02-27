@@ -1,4 +1,13 @@
 #############################################################################
+                                 VERSION 0.5.1       
+#############################################################################
+- NEW FEATURES
+   * Deprecated mergedx. Added mergedx2
+     - mergedx2 takes the bounding box that a user wishes to calculate a map
+       for, as well as a resolution of the output map. An output map meeting
+       those specifications is calculated and store.
+
+#############################################################################
 BETA PUBLIC RELEASE VERSION 0.5.0       Jan-2007
 #############################################################################
  - NEW FEATURES
