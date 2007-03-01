@@ -170,8 +170,24 @@
 							<link linkend="opendx-format">OpenDX format</link>
 							data from several domains (e.g., from a 
 							<link linkend="mg-para">mg-para</link>
-							calculation into a single file.  Contributed by Steve
-							Bond.</para>
+							calculation into a single file.  This
+							program is deprecated (replaced by
+							<filename>mergedx2</filename> and will be
+							removed in an upcoming release.  Contributed
+							by Steve Bond.</para>
+					</listitem>
+					<listitem>
+						<para><filename>tools/mesh/mergedx2</filename></para>
+						<para>Merge <link linkend="opendx-format">OpenDX
+								format</link>
+							data from several domains (e.g., from a 
+							<link linkend="mg-para">mg-para</link>
+							calculation into a single file while
+							allowing resampling of the data to
+							increase/decrease resolution.  This function
+							will eventually replace
+							<filename>mergedx</filename>.  Contributed
+							by Dave Gohara.</para>
 					</listitem>
 					<listitem>
 						<para><filename>tools/mesh/smooth</filename></para>
