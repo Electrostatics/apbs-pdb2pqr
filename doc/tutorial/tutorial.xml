@@ -2,13 +2,17 @@
 <!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY apbsversion "0.5.0">
-<!ENTITY apbsdate "Not yet released">
+<!ENTITY apbsdate "Jan-2007">
 <!ENTITY apbsurl "http://apbs.sf.net">
 <!ENTITY ugurl "../user-guide/index.html">
 <!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
 <!ENTITY vmdurl "http://www.ks.uiuc.edu/Research/vmd/">
 <!ENTITY pymolurl "http://pymol.sf.net">
 <!ENTITY pmvurl "http://www.scripps.edu/~sanner/python/">
+<!ENTITY pKa "pK<subscript>a</subscript>">
+<!ENTITY Ka "K<subscript>a</subscript>">
+<!ENTITY epsp "&#949;<subscript>p</subscript>">
+<!ENTITY epss "&#949;<subscript>s</subscript>">
 ]>
 
 <book>
@@ -1766,177 +1770,893 @@ forces?</title>
 
 	</chapter>
 
-	<chapter id="pka-sect"> <title>How do I calculate a pK<subscript>a</subscript>?</title>
-		<warning><para>Under construction</para></warning>
-	</chapter>
+	<chapter id="pka-sect"> <title>How do I calculate a &pKa;?</title>
 
-	<chapter id="parallel-sect"> <title>My calculation requires too much memory!</title>
-		<para> APBS requires approximately 200 B memory per grid point.
-			Memory usage can be predicted before performing the
-			calculations using the <filename>tools/manip/psize.py</filename>
-			Python script provided with APBS. </para>
-		<para>  If it appears your calculation is going to require more
-			memory than is currently available on your system, you
-			have a few options:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>APBS calculations can be performed in
-					parallel across multiple processors
-					(hopefully, sharing distributed
-					memory!).  This functionality is
-					provided by the
-					<literal>mg-para</literal> keyword
-					which is described in more detail in
-					the APBS user manual and <link
-						linkend="parallel">below</link>.  
-				</para>
-			</listitem>
-			<listitem>
-				<para>APBS calculations can be broken into a
-					series of smaller, asynchronous runs
-					which (individually) require less
-					memory.  This functionality is provided
-					by the <literal>mg-para</literal>
-					<literal>async</literal> keyword
-					which is described in more detail in
-					the APBS user manual and <link
-						linkend="async">below</link>.  
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Submit your calculations through <link
-						linkend="gemstone-sect">Gemstone</link>
-					to external computational resources.
-				</para>
-			</listitem>
-		</itemizedlist>
+		<important>
+			<para>This tutorial was prepared with Dave Sept as part of a lab for a
+				biomolecular simulation class.</para>
+		</important>
 
-		<sect1 id="parallel"> <title>Parallel calculations:  an example</title>
-			<para>
-				The actin dimer example provided with the APBS
-				source code
-				(<filename>examples/actin-dimer/complex.pqr</filename>)
-				is a fairly large system and a good example for
-				parallel focusing calculations.  This example
-				will use the actin dimer complex PQR file
-				<filename><ulink
-						url="examples/parallel/complex.pqr">complex.pqr</ulink></filename>.
+		<note>
+			<para>This tutorial covers <emphasis>Poisson-Boltzmann</emphasis> methods
+				for determining biomolecule &pKa; values.  Other methods for &pKa;
+				and titration state determination are given in the <ulink
+					url="http://pdb2pqr.sourceforge.net">PDB2PQR</ulink> <ulink
+					url="http://pdb2pqr.sourceforge.net/examples/">examples</ulink>.</para>
+		</note>
+
+		<sect1> <title>Introduction</title>
+
+			<para>This is a very brief introduction to the concepts behind biomolecular
+				&pKa;s and titration states.  More information
+				can be obtained from most biochemistry or biophysics textbooks as
+				well as some of the original articles on &pKa;
+				evaluation<footnote id="pKa-refs">
+					<para>The following references provide a good introduction
+						to biomolecular &pKa; calculations:
+						<itemizedlist>
+							<listitem>
+								<para>Bashford D, Karplus M.  &pKa;'s
+									of ionizable groups in
+									proteins: Atomic detail from
+									a continuum electrostatic
+									model.  Biochemistry.  29
+									(44), 10219-25, 1990.
+									<ulink
+										url="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Citation&amp;list_uids=2271649">http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=PubMed&amp;dopt=Citation&amp;list_uids=2271649</ulink>
+								</para>
+							</listitem>
+							<listitem>
+								<para>Antosiewicz J, McCammon JA,
+									Gilson MK.  The determinants
+									of &pKa;s in proteins.
+									Biochemistry.  35 (24),
+									7819-33, 1996.
+									<ulink url="http://pubs.acs.org/cgi-bin/pagelookup?bichaw/35/7819">http://pubs.acs.org/cgi-bin/pagelookup?bichaw/35/7819</ulink></para>
+
+							</listitem>
+							<listitem>
+								<para>Nielsen JE, Vriend G.
+									Optimizing the hydrogen-bond
+									network in Poisson-Boltzmann
+									equation-based &pKa;
+									calculations.
+									Proteins-Structure Function
+									and Genetics.  43 (4),
+									403-12, 2001.
+									<ulink
+										url="http://www3.interscience.wiley.com/cgi-bin/abstract/78505732/ABSTRACT">http://www3.interscience.wiley.com/cgi-bin/abstract/78505732/ABSTRACT</ulink> 
+								</para>
+							</listitem>
+						</itemizedlist>
+					</para>
+				</footnote>.
 			</para>
-			<para>  We're going to use an 8-processor parallel
-				calculation to write out the electrostatic
-				potential map for this complex.  Each processor
-				will solve a portion of the overall problem
-				using the parallel focusing method (see <ulink
-					url="http://dx.doi.org/10.1073/pnas.181342398">Baker
-					et al, PNAS, 2001</ulink>) on a
-				97<superscript>3</superscript> mesh with 20%
-				overlap between meshes for neighboring
-				processors.  An example input file for this
-				calculation might look like (download <ulink
-					url="examples/parallel/apbs.in">here</ulink>):
-				<programlisting id="mg-para.in">
+
+			<para>Recall that the acid dissociation constant &Ka; describes the
+				dissocation of an acid into its components:
+				<informalequation> <mediaobject> <imageobject> <imagedata
+								fileref="images/Ka_chem_eqn.png"
+								align="center"/> </imageobject>
+				</mediaobject> </informalequation>
+				by way of the activities
+				<informalequation> <mediaobject> <imageobject> <imagedata
+								fileref="images/Ka_act_eqn.png" align="center"/> </imageobject> </mediaobject> </informalequation>
+				Under <quote>conditions of ideality,</quote><footnote>
+					<para>Such conditions might happen at extremely low ion and
+						coion concentrations in the absence of other
+						interacting species, etc.  In other words, for real
+						biological systems, these conditions are rarely
+						encountered.</para></footnote>
+				activities can be replaced with concentrations to give
+				<informalequation> <mediaobject> <imageobject> <imagedata
+								fileref="images/Ka_conc_eqn.png" align="center"/> </imageobject> </mediaobject> </informalequation>
+				You should also recall that chemical equilibrium constants can be
+				related to free energies by
+				<informalequation> <mediaobject> <imageobject> <imagedata
+								fileref="images/DaG_def.png" align="center"/> </imageobject> </mediaobject> </informalequation>
+				However, chemists found it easier to use base-10 logarithms than
+				natural logarithms for measuring pH, therefore the &pKa; is defined
+				as
+				<informalequation> <mediaobject> <imageobject> <imagedata
+								fileref="images/pKa_def.png" align="center"/> </imageobject> </mediaobject> </informalequation>
+			</para>
+
+			<sect2> <title>Amino acid model &pKa; values </title>
+				<para> In many calculations, &pKa; values are assigned based on model values
+					for amino acid side chains to mimic
+					<informalequation> <mediaobject> <imageobject> <imagedata
+									fileref="images/Ka_model_chem_eqn.png"
+									align="center"/> </imageobject>
+					</mediaobject> </informalequation>
+					for an <emphasis>isolated</emphasis> amino acid in solution.
+					Some model &pKa; values are given in <xref
+						linkend="tab:model_pka"/>.
+					<table id="tab:model_pka">
+						<title>Model amino acid &pKa; values for common titratable
+groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) </title>
+					<tgroup cols="2" colsep="1" rowsep="1">
+						<thead>
+							<row>
+								<entry>Amino acid</entry>
+								<entry>Model &pKa;</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row> 
+								<entry>Arginine</entry> <entry>13.0</entry>
+							</row>
+							<row> 
+								<entry>Aspartic acid</entry> <entry>4.0</entry>
+							</row>
+							<row> 
+								<entry>Cysteine</entry> <entry>8.7</entry> 
+							</row> 
+							<row> 
+								<entry>C-terminus</entry> <entry>3.8</entry> 
+							</row> 
+							<row> 
+								<entry>Glutamic acid</entry> <entry>4.4</entry> 
+							</row> 
+							<row> 
+								<entry>Histidine</entry> <entry>6.3</entry> 
+							</row> 
+							<row> 
+								<entry>Lysine</entry> <entry>10.4</entry> 
+							</row> 
+							<row> 
+								<entry>N-terminus</entry> <entry>8.0</entry> 
+							</row> 
+							<row> 
+								<entry>Tyrosine</entry> <entry>9.6</entry> 
+							</row> 
+						</tbody> 
+					</tgroup>
+				</table>
+
+			</para>
+			<para>
+				As we'll see in the next section, these model values provide the
+				basis for calculating &pKa; values in proteins.
+			</para>
+		</sect2>
+
+		<sect2> <title> &pKa; values in proteins </title>
+			<para> The role of the model &pKa; values introduced in the previous
+				sections is to move all the chemical (bond making and breaking)
+				complexity of protonation into the model values.  In particular,
+				&pKa; values in proteins are calculated as pertubations of the model
+				compounds according to the free energy cycles shown below.  </para>
+			<para> The &pKa; for the amino acid in the context of the protein is given
+				by the free energy cycle:
+				<informalfigure id="fig:pKa_cycle"> <mediaobject> <imageobject>
+							<imagedata
+								fileref="images/Ka_protein_chem_eqn.png" align="center"/> </imageobject> </mediaobject> </informalfigure>
+				We are interested in determining the unknown 
+				&Delta;<subscript>a</subscript>G<subscript>HA</subscript> 
+				from the known model 
+				&Delta;<subscript>a</subscript>G<subscript>HA,model</subscript> 
+				and the unknown 
+				&Delta;<subscript>xfer</subscript>G<subscript>HA</subscript> 
+				and 
+				&Delta;<subscript>xfer</subscript>G<subscript>A-</subscript> 
+				according to:
+				<equation id="eqn:DaG"> <title>Acid dissociation free energy</title>
+					<mediaobject> <imageobject> <imagedata
+								fileref="images/DaG_from_cycle.png" align="center"/> </imageobject> </mediaobject>
+				</equation>
+			</para>
+			<para> In general, the quantities
+				&Delta;<subscript>xfer</subscript>G<subscript>HA</subscript> and
+				&Delta;<subscript>xfer</subscript>G<subscript>A-</subscript> are
+				obainted from a computational approach.  Nearly any free energy
+				calculation method could be used to obtain these energies according
+				to a scheme where the (de)solvation energies of the charged and
+				uncharged amino acids are calculated according to:
+				<figure id="fig:pKa_cycle_protein">
+					<title>&pKa; perturbation free energy cycle schematic</title>
+					<mediaobject> <imageobject> <imagedata fileref="images/pKa_protein_cycle.png" align="center"/> </imageobject> </mediaobject>
+				</figure>
+				Note that these energies have all assumed the same background state
+				of the protein for the calculations; in other words, the same states
+				are used for other titratable groups in the protein for charged and
+				uncharged amino acid states.  We'll discuss the implications of this
+				assumption a bit later in this tutorial.
+			</para>
+
+		</sect2>
+
+		<sect2> <title>Continuum electrostatics methods for &pKa; calculations in proteins</title>
+
+			<para> Although nearly any free energy method could be used to evaluate the
+				energies of transferring the protonated and unprotonated amino acids
+				from solution into the protein environment, continuum electrostatics
+				offer a (usually) satisfying compromise between accuracy and
+				computational efficiency.  </para>
+
+			<para> The transfer free energies to be calculated,
+				&Delta;<subscript>xfer</subscript>G<subscript>HA</subscript> and
+				&Delta;<subscript>xfer</subscript>G<subscript>A-</subscript>, can be
+				determined from Poisson-Boltzmann (PB) energies.  In particular,
+				these energies can be calculated as effective <quote>binding energy
+					calculations</quote> similar to those covered in the APBS
+				examples and tutorial:
+				<equation id="eqn:dG_xfer"> 
+					<title>Transfer free energy</title>
+					<mediaobject> <imageobject> <imagedata
+								fileref="images/dG_xfer_eqn.png"
+								align="center"/> </imageobject>
+					</mediaobject>
+				</equation>
+				where
+				<itemizedlist>
+					<listitem>
+						<para> G<subscript>protein with charged
+								X</subscript> is the electrostatic
+							energy of the protein with group X bound and
+							all charges on X set to their normal
+							values.</para>
+					</listitem>
+					<listitem>
+						<para> G<subscript>protein with uncharged
+								X</subscript> is the electrostatic
+							energy of the protein with group X bound and
+							all charges on X set to zero.</para>
+					</listitem>
+					<listitem>
+						<para> G<subscript>charged X in solution</subscript>
+							is the electrostatic energy of group X in
+							solution with all charges set to their
+							normal values.</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para> Note that, as with binding energies, <xref linkend="eqn:dG_xfer"/>
+				can be evaluated two ways: 
+				<itemizedlist id="list:methods"> 
+					<title>Ways to evaluate transfer free energies</title>
+					<listitem>
+						<para> Directly in a PB equation by computing the
+							difference of
+							<emphasis>total electrostatic
+								energies</emphasis> (including self
+							energies) from PB calculations for each of
+							the states.  In order for this to work, all
+							conformations/grid positions/charge states
+							must be the same in each PB calculation.
+						</para>
+					</listitem>
+					<listitem>
+						<para> Indirectly through PB calculations of
+							solvation free energies and Coulomb's law
+							calculations (in a dielectric &epsp;) of
+							electrostatic interaction energies.  This
+							method is much more stable.
+						</para>
+					</listitem>
+				</itemizedlist>
+				Both of these methods can be combined, via free energy cycles, to
+				give the desired
+				&Delta;<subscript>xfer</subscript>G<subscript>X</subscript>.
+				However, when care is taken to use the same grids and conformations
+				for all calculations, the direct method using total electrostatic
+				energies is usually the most stable.
+			</para>
+
+			<para> Note that none of the methods discussed above have explicitly allowed
+				for changes in titration state of other groups in the protein during
+				protonation/deprotonation of the acid group of interest.
+				Additionally, none of these methods explicitly provide for
+				conformational changes in the protein coupled to
+				protonation/deprotonoation.  As such, we cannot claim to be
+				computing true &pKa; values with this method.  Instead, we are
+				calculating so-called <wordasword>intrinsic</wordasword> &pKa;
+				values.  </para>
+
+		</sect2>
+
+	</sect1>
+
+	<sect1> <title>Application to lysozyme</title>
+
+		<sect2> <title>Background</title>
+
+			<para>Hen egg white lysozyme (HEWL) is a very popular system for &pKa;
+				calculations as it has a number of interesting values for its
+				titratable residues.  Early &pKa; work on this enzyme is presented
+				in <ulink
+					url="http://pubs.acs.org/cgi-bin/searchRedirect.cgi/bichaw/1972/11/i11/pdf/bi00761a029.pdf">Tanford
+					C, Roxby R.  Interpretation of protein titration curves.
+					Application to lysozyme.  Biochemistry.  11 (11), 2192-8,
+					1972</ulink> which also contains the &pKa; values used in
+				this lab.  More recent &pKa; calculations and a review of some of
+				the methodology can be found in <ulink
+					url="http://www3.interscience.wiley.com/cgi-bin/abstract/78505732/ABSTRACT">Nielsen
+					JE, Vriend G.  Optimizing the hydrogen-bond network in
+					Poisson-Boltzmann equation-based pk(a) calculations.
+					Proteins-Structure Function and Genetics.  43 (4), 403-12,
+					2001</ulink>.  Finally, the biological relevance of lysozyme
+				is briefly reviewed at the <ulink
+					url="http://www.rcsb.org/pdb/molecules/pdb9_1.html">PDB
+					Molecule of the Month</ulink> site.
+			</para>
+
+			<para>HEWL has two active site residues GLU 35 and ASP 52 whose titration
+				states determine the catalytic competency of the enzyme:
+				<figure> <title>Active site of HEWL </title>
+					<mediaobject> <imageobject> <imagedata
+								fileref="images/lysozyme_mech.png"
+								align="center"/> </imageobject>
+					</mediaobject>
+				</figure>
+				In particular, the enzyme is only active when ASP 52 is ionized
+				(&pKa; &#8776; 1.2) and GLU 35 is neutral (&pKa; = 6.3).
+			</para>
+			<para>Additionally, lysozyme has ASP 66 with a &pKa; of 6.6 and HIS 15 with
+				a &pKa; of 5.7.</para>
+		</sect2>
+
+		<sect2> <title>Preparing the PDB file</title>
+			<para>Download the PDB entry <ulink
+					url="http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=2LZT">2LZT</ulink>
+				from the PDB; save it as <filename>2LZT-GLU35.pdb</filename>.  If
+				you have time, you should also visit the <ulink
+					url="http://www.ebi.ac.uk/thornton-srv/databases/cgi-bin/pdbsum/GetPage.pl?pdbcode=2lzt">PDBSum</ulink>
+				analysis page as well for additional information about the structure.
+			</para>
+
+			<warning id="warn:water"> <title>Problems with explicit water!</title>
+				<para> It is <emphasis>very</emphasis> important that you remove all
+					explicit water from the PDB file before proceeding. (Why?) </para>
+			</warning>
+
+			<para>We're going to need to generate a protonated form of GLU 35 to perform
+				our &pKa; calculations.  We will do this with the <ulink
+					url="http://pdb2pqr.sourceforge.net/">PDB2PQR web
+					service</ulink>.  PDB2PQR <quote>cleans up</quote> PDB files
+				for electrostatics calculations by performing a number of operations
+				described on the <ulink
+					url="http://pdb2pqr.sourceforge.net/">PDB2PQR
+					homepage</ulink>.
+			</para>
+
+			<para>
+				Unless otherwise directed, PDB2PQR adds hydrogens to residues based
+				on model &pKa; values.  Therefore, we will need to specify the
+				titration state of GLU 35 for our &pKa; calculation by changing the
+				residue name from <varname>GLU</varname> to <varname>GLH</varname>
+				using <ulink url="http://www.vim.org/">your favorite text
+					editor</ulink>.  Save the result as
+				<filename>2LZT-GLH35.pdb</filename>
+			</para>
+
+			<para>
+				We're now ready to run PDB2PQR to generate protonated versions of
+				our PDB files.  Use the command line version of PDB2PQR or one of
+				the web servers listed on the <ulink
+					url="http://pdb2pqr.sourceforge.net/">PDB2PQR
+					homepage</ulink> to generate protonoated PQR files for for
+				<filename>2LZT-GLU35.pdb</filename> and
+				<filename>2LZT-GLH35.pdb</filename>.  Name your results
+				<filename>2LZT-GLU35.pqr</filename> and
+				<filename>2LZT-GLH35.pqr</filename>, respectively.  Although it is
+				always important to test sensitivity to various force fields, I'd
+				recommend starting with PARSE.
+			</para>
+
+			<note>
+				<para> You can use PDB2PQR to assign titration states with PROPKA
+					but don't do it for the above steps since we need to set the
+					titration states explicit for our calculations. </para>
+			</note>
+
+			<para>
+				Recall that we're also going to need the isolated residue for our
+				electrostatics calculations of intrinsic &pKa;.  Use your favorite
+				text editor to extract the entire GLU 35 or GLH 35 residue from
+				<filename>2LZT-GLU35.pqr</filename> and
+				<filename>2LZT-GLH35.pqr</filename>.  Save the results as
+				<filename>GLU35.pqr</filename> and <filename>GLH35.pqr</filename>,
+				respectively.  </para>
+
+			<para> Finally, we'll also need to perform electrostatics calculations on
+				HEWL with the uncharged sidechains.  Use your favorite text editor
+				to zero out the charges in <filename>2LZT-GLU35.pqr</filename> and
+				<filename>2LZT-GLH35.pqr</filename> to create
+				<filename>2LZT-noGLU35.pqr</filename> and
+				<filename>2LZT-noGLH35.pqr</filename>.  This can be done by setting
+				the second-to-last column in the PQR file to zero; e.g.
+				<programlisting>
+					ATOM    534  N   GLU    35       6.456  16.408  22.487 -0.5163 1.8240
+					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0397 1.9080
+					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.5366 1.9080
+					ATOM    537  O   GLU    35       7.705  13.192  23.277 -0.5819 1.6612
+					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0560 1.9080
+					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0136 1.9080
+					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.8054 1.9080
+					ATOM    541  OE1 GLU    35       5.844  14.786  26.570 -0.8188 1.6612
+					ATOM    542  OE2 GLU    35       5.038  16.682  27.056 -0.8188 1.6612
+					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.2936 0.6000
+					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.1105 1.3870
+					ATOM    545  HB2 GLU    35       4.318  15.158  23.042 -0.0173 1.4870
+					ATOM    546  HB3 GLU    35       4.832  14.066  24.142 -0.0173 1.4870
+					ATOM    547  HG2 GLU    35       4.654  16.857  24.629 -0.0425 1.4870
+					ATOM    548  HG3 GLU    35       3.500  15.796  25.084 -0.0425 1.4870
+				</programlisting>
+				might become
+				<programlisting>
+					ATOM    534  N   GLU    35       6.456  16.408  22.487  0.0000 1.8240
+					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0000 1.9080
+					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.0000 1.9080
+					ATOM    537  O   GLU    35       7.705  13.192  23.277  0.0000 1.6612
+					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0000 1.9080
+					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0000 1.9080
+					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.0000 1.9080
+					ATOM    541  OE1 GLU    35       5.844  14.786  26.570  0.0000 1.6612
+					ATOM    542  OE2 GLU    35       5.038  16.682  27.056  0.0000 1.6612
+					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.0000 0.6000
+					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.0000 1.3870
+					ATOM    545  HB2 GLU    35       4.318  15.158  23.042  0.0000 1.4870
+					ATOM    546  HB3 GLU    35       4.832  14.066  24.142  0.0000 1.4870
+					ATOM    547  HG2 GLU    35       4.654  16.857  24.629  0.0000 1.4870
+					ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
+				</programlisting>
+			</para>
+
+		</sect2>
+
+
+		<sect2>
+			<title>Setting up the total electrostatic energy
+				calculations</title>
+			<para>We will be using focusing calculations to calculate the
+				electrostatic potential and free energies for the systems of
+				interest.</para>
+
+			<warning>
+				<para>
+					In what follows, we are evaluating <emphasis>total</emphasis>
+					electrostatic free energies -- e.g., energies which contain
+					charge self-interaction terms.  We will cancel these
+					self-interaction terms in subsequent steps when we calculate
+					solvation or transfer free energies.  Therefore, it is
+					<emphasis>very important</emphasis> that you use the same grid
+					parameters (grid centers, dimensions, spacings, etc.) for every
+					calculation.  </para>
+			</warning>
+
+			<para>Here is a template input that we will use for each of the solvation
+				energy calculations (download it <ulink
+					url="exmaples/pKa/apbs-template.in">here</ulink>):
+				<programlisting>
+					read
+					mol pqr compound.pqr # This is the compound for which we will calculate
+					# solvation energies
+					mol pqr ref.pqr      # This is a compound used as a reference for grid
+					# centering
+					end
+
+					elec name inhom          
+					mg-auto              # Focusing calculations
+					dime 129 129 129     # This is a good grid spacing for this system
+					cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for
+					# this system (PDB2PQR-recommended)
+					fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this
+					# system (PDB2PQR-recommended)
+					cgcent mol 2         # Center the grid on the reference molecule
+					fgcent mol 2         # Center the grid on the reference molecule
+					mol 1
+					lpbe
+					bcfl sdh
+					pdie 20.00
+					sdie 78.54
+					srfm smol
+					sdens 20.0
+					chgm spl2
+					srad 1.40
+					swin 0.30
+					temp 298.15
+					calcenergy total
+					calcforce no
+					end
+
+					# Print the final energy 
+					print energy inhom end
+
+					quit
+				</programlisting>
+				There are a number of aspects to this input file which are worth
+				noting:
+				<itemizedlist>
+					<listitem>
+						<para>
+							In general, <varname>compound.pqr</varname>
+							will change for each calculation but
+							<varname>ref.pqr</varname> will not.  Choose
+							one molecule to be
+							<varname>ref.pqr</varname>
+							(<filename>2LZT-GLU35.pqr</filename> is a
+							good choice) and use it in every
+							calculation.
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							We are using a solute dielectric constant
+							(&epsp;) of 20 (see
+							<parameter>pdie</parameter>).  This is a
+							common choice for &pKa;
+							since<footnote><para>Start vigorous waving
+									of
+									hands...</para></footnote>
+							it is thought to implicitly represent
+							internal relaxation and rearrangement of the
+							solute<footnote><para>Stop vigorous waving
+									of
+									hands...</para></footnote>.
+						</para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+			<para> You now have enough information to calculate total electrostatic
+				energies for all of the relevant molecules so far:
+				<filename>2LZT-GLU35.pqr</filename>,
+				<filename>2LZT-GLH35.pqr</filename>,
+				<filename>2LZT-noGLU35.pqr</filename>,
+				<filename>2LZT-noGLH35.pqr</filename>,
+				<filename>GLU35.pqr</filename>, and <filename>GLH35.pqr</filename>.
+				You should be able to construct APBS input files for each of these
+				systems by modifying the template above.  Once these input files are
+				constructed, you can run the PB calculation by
+				<screen>
+					<prompt>$</prompt> <userinput>apbs</userinput> <varname>foo.in</varname> | tee <varname>foo.out</varname>
+				</screen>
+				where <varname>foo.in</varname> is the input file of interest and
+				the output is saved in <varname>foo.out</varname>.  </para>
+
+		</sect2>
+
+		<sect2> <title>Setting up the transfer free energy calculations</title>
+
+			<para>Recall from our <link linkend="list:methods">earlier discussion</link>
+				that the transfer free energies can be evaluated in two ways.  It is
+				up to you to decide which method to use; both should give comparable
+				results for a sufficiently fine grid.  As mentioned above, the
+				direct subtraction of total electrostatic energies is usually the
+				most stable route, assuming identical grids and solute conformations
+				are used for all calculations.  </para>
+			<para>  Any differences in results between these two transfer free energy
+				methods are typically due to a lack of convergence in the
+				calculations and can be resolved by decreasing the grid spacing
+				(e.g., increasing the number of grid points).</para>
+
+			<para> If you choose to decompose the transfer free energies into
+				solvation and Coulombic energy changes, then you will need to
+				perform two additional electrostatics calculations beyond the APBS
+				calculations outlined in the previous section:
+				<itemizedlist>
+					<listitem>
+						<para> First, you will need to re-run all of your
+							APBS calculations with a homogeneous
+							dielectric &epss; = &epsp; to calculate
+							solvation energies.  This can be
+							accomplished by appropriate modification of
+							the input files from the previous section.
+						</para>
+					</listitem>
+					<listitem>
+						<para> Second, you will need to calculate Coulombic
+							interaction energies.  The APBS program
+							<command>coulomb</command> will evaluate the
+							Coulomb's law electrostatic energy of a set
+							of charges in a vacuum.  The program's usage
+							is
+							<screen>
+								<prompt>$</prompt> <userinput>coulomb foo.pqr</userinput>
+							</screen>
+							where <varname>foo.pqr</varname>
+							is the particular PQR file you are
+							interested in.  Note that this program can
+							also be run with no arguments to obtain an
+							expanded list of options.  <emphasis>Don't forget
+								to scale by &epsp;!</emphasis> </para>
+					</listitem>
+				</itemizedlist>
+			</para>
+
+		</sect2>
+
+		<sect2> <title>Putting it all together</title>
+			<para>At this point, you should have everything you need to calculate the
+				intrinsic &pKa; of interest.  However, if you get stuck, I've
+				included some example files here that might be helpful:
+				<variablelist> 
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/GLU35.pqr">GLU35.pqr</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/GLH35.pqr">GLH35.pqr</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLH35.pqr">2LZT-GLH35.pqr</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLU35.pqr">2LZT-GLU35.pqr</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLH35.pqr">2LZT-noGLH35.pqr</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLU35.pqr">2LZT-noGLU35.pqr</ulink></filename></term>
+						<listitem> <para>PQR files described above</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLH35.in">2LZT-noGLH35.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLH35.in">2LZT-GLH35.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/GLH35.in">GLH35.in</ulink></filename></term>
+						<listitem> <para>APBS input files needed to
+								calculate the transfer free energy
+								for GLH directly using total
+								electrostatic energies.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLH35-vac.in">2LZT-noGLH35-vac.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLH35-vac.in">2LZT-GLH35-vac.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/GLH35-vac.in">GLH35-vac.in</ulink></filename></term>
+						<listitem> <para>Additional APBS input files needed
+								to calculate the transfer free
+								energy for GLH using polar solvation
+								energies.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLU35.in">2LZT-noGLU35.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLU35.in">2LZT-GLU35.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/GLU35.in">GLU35.in</ulink></filename></term>
+						<listitem> <para>APBS input files needed to
+								calculate the transfer free energy
+								for GLU directly using total
+								electrostatic energies.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-noGLU35-vac.in">2LZT-noGLU35-vac.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/2LZT-GLU35-vac.in">2LZT-GLU35-vac.in</ulink></filename></term>
+						<term><filename><ulink
+									url="examples/pKa/GLU35-vac.in">GLU35-vac.in</ulink></filename></term>
+						<listitem> <para>Additional APBS input files needed
+								to calculate the transfer free
+								energy for GLU using polar solvation
+								energies.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/run-apbs.sh">run-apbs.sh</ulink></filename></term>
+						<listitem> <para><ulink
+									url="http://www.gnu.org/software/bash/">Bash</ulink>
+								script to run all the APBS input
+								files listed above.  Assumes the
+								<filename>apbs</filename> binary is
+								in your
+								<varname>PATH</varname>.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/run-coul.sh">run-coul.sh</ulink></filename></term>
+						<listitem> <para><ulink
+									url="http://www.gnu.org/software/bash/">Bash</ulink>
+								script to run supporting Coulombic
+								energy calculations for solvation
+								energy-based evaluation of the
+								transfer free energies.  Assumes the
+								APBS <filename>coulomb</filename>
+								binary (usually found in
+								<filename>apbs/tools/manip</filename>)
+								is in your
+								<varname>PATH</varname>.</para>
+						</listitem>
+					</varlistentry>
+					<varlistentry>
+						<term><filename><ulink
+									url="examples/pKa/process.sh">process.sh</ulink></filename></term>
+						<listitem> <para><ulink
+									url="http://www.gnu.org/software/bash/">Bash</ulink>
+								script to process APBS output and
+								calculate &pKa; shifts directly
+								using total electrostatic energies.
+								Assumes results were obtained by
+								running
+								<filename>run-apbs.sh</filename>,
+								linked above.</para>
+						</listitem>
+					</varlistentry>
+
+				</variablelist>
+			</para>
+		</sect2>
+
+	</sect1>
+
+</chapter>
+
+<chapter id="parallel-sect"> <title>My calculation requires too much memory!</title>
+	<para> APBS requires approximately 200 B memory per grid point.
+		Memory usage can be predicted before performing the
+		calculations using the <filename>tools/manip/psize.py</filename>
+		Python script provided with APBS. </para>
+	<para>  If it appears your calculation is going to require more
+		memory than is currently available on your system, you
+		have a few options:
+	</para>
+	<itemizedlist>
+		<listitem>
+			<para>APBS calculations can be performed in
+				parallel across multiple processors
+				(hopefully, sharing distributed
+				memory!).  This functionality is
+				provided by the
+				<literal>mg-para</literal> keyword
+				which is described in more detail in
+				the APBS user manual and <link
+					linkend="parallel">below</link>.  
+			</para>
+		</listitem>
+		<listitem>
+			<para>APBS calculations can be broken into a
+				series of smaller, asynchronous runs
+				which (individually) require less
+				memory.  This functionality is provided
+				by the <literal>mg-para</literal>
+				<literal>async</literal> keyword
+				which is described in more detail in
+				the APBS user manual and <link
+					linkend="async">below</link>.  
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Submit your calculations through <link
+					linkend="gemstone-sect">Gemstone</link>
+				to external computational resources.
+			</para>
+		</listitem>
+	</itemizedlist>
+
+	<sect1 id="parallel"> <title>Parallel calculations:  an example</title>
+		<para>
+			The actin dimer example provided with the APBS
+			source code
+			(<filename>examples/actin-dimer/complex.pqr</filename>)
+			is a fairly large system and a good example for
+			parallel focusing calculations.  This example
+			will use the actin dimer complex PQR file
+			<filename><ulink
+					url="examples/parallel/complex.pqr">complex.pqr</ulink></filename>.
+		</para>
+		<para>  We're going to use an 8-processor parallel
+			calculation to write out the electrostatic
+			potential map for this complex.  Each processor
+			will solve a portion of the overall problem
+			using the parallel focusing method (see <ulink
+				url="http://dx.doi.org/10.1073/pnas.181342398">Baker
+				et al, PNAS, 2001</ulink>) on a
+			97<superscript>3</superscript> mesh with 20%
+			overlap between meshes for neighboring
+			processors.  An example input file for this
+			calculation might look like (download <ulink
+				url="examples/parallel/apbs.in">here</ulink>):
+			<programlisting id="mg-para.in">
 read 
-    mol pqr complex.pqr
+mol pqr complex.pqr
 end
 
 elec name complex
-    mg-para
-    ofrac 0.1
-    pdime 2 2 2
-    dime  97  97  97
-    fglen 150 115 160
-    cglen 156 121 162
-    cgcent mol 1
-    fgcent mol 1
-    mol 1
-    npbe
-    bcfl sdh
-    ion 1 0.150 2.0
-    ion -1 0.150 2.0 
-    pdie 2.0
-    sdie 78.54
-    srfm mol
-    chgm spl0
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    gamma 0.105
-    calcenergy total
-    calcforce no
-    write pot dx pot
+mg-para
+ofrac 0.1
+pdime 2 2 2
+dime  97  97  97
+fglen 150 115 160
+cglen 156 121 162
+cgcent mol 1
+fgcent mol 1
+mol 1
+npbe
+bcfl sdh
+ion 1 0.150 2.0
+ion -1 0.150 2.0 
+pdie 2.0
+sdie 78.54
+srfm mol
+chgm spl0
+srad 1.4
+swin 0.3
+sdens 10.0
+temp 298.15
+calcenergy total
+calcforce no
+write pot dx pot
 end
-
 quit
-				</programlisting>
-				where the <literal>pdime 2 2 2</literal>
-				specifies the 8-processor array dimensions, the
-				<literal>ofrac 0.1</literal> specifies the 20%
-				overlap between processor calculations, and the
-				<literal>dime 97 97 97</literal> specifies the
-				size of <emphasis>each processor's</emphasis>
-				calculation.  The <literal>write pot dx
-					pot</literal> instructs APBS to write
-				out <ulink
-					url="&ugurl;#opendx-format">OpenDX-format</ulink>
-				maps of the potential to 8 files
-				<filename>pot#.dx</filename>, where
-				<literal>#</literal> is the number of the
-				particular processor.
-			</para>
-			<para>
-				Running this input file with an MPI-compiled version
-				of APBS runs 8 parallel focusing calculations,
-				with each calculation generating fine-scale
-				solutions on a different region of the
-				(<literal>fglen</literal>) problem domain.
-				Note that 8 separate OpenDX files are written
-				by the 8 processors used to perform the
-				calculation.  Writing separate OpenDX files
-				allows us to avoid communication in the
-				parallel run and keeps individual file sizes
-				(relatively) small.  Additionally, if a user is
-				interested in a specific portion of the problem
-				domain, only a few files are needed to get
-				local potential information.
-			</para>
-			<para>
-				However, most users are interested in global
-				potentials.  For some programs (<ulink
-					url="http://opendx.org">OpenDX</ulink>,
-				<ulink
-					url="http://www.visualdatatools.com/">DataTank</ulink>),
-				the individual potential files can simply be
-				read into the program separately and the
-				program will reconstruct the global map.
-				Most other programs will require the user to
-				reassemble the global map first; APBS provides
-				the <filename><ulink
-						url="&ugurl;">mergedx</ulink></filename>
-				program for this purpose.
-				<filename>mergedx</filename> is a simple
-				program that allows users to combine several
-				OpenDX files from a parallel focusing
-				calculation into a single map.  This map can be
-				downsampled from the original resolution to
-				provide coarser datasets for fast
-				visualization, etc.
-				For example, the command
-				<screen>
-<prompt>$</prompt> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
-				</screen>
-				will generate a file
-				<filename>gridmerged.dx</filename>
-				which has downsampled the much larger dataset
-				contained in the 8 OpenDX files into a
-				65<superscript>3</superscript> file which
-				would be suitable for rough visualization.  An
-				example of the <filename>mergedx</filename>
-				output (see <xref linkend="vmd-isocontour"/>
-				for methods) is shown in 
-				<figure> <title>Actin dimer isocontours from
+			</programlisting>
+			where the <literal>pdime 2 2 2</literal>
+			specifies the 8-processor array dimensions, the
+			<literal>ofrac 0.1</literal> specifies the 20%
+			overlap between processor calculations, and the
+			<literal>dime 97 97 97</literal> specifies the
+			size of <emphasis>each processor's</emphasis>
+			calculation.  The <literal>write pot dx
+				pot</literal> instructs APBS to write
+			out <ulink
+				url="&ugurl;#opendx-format">OpenDX-format</ulink>
+			maps of the potential to 8 files
+			<filename>pot#.dx</filename>, where
+			<literal>#</literal> is the number of the
+			particular processor.
+		</para>
+		<para>
+			Running this input file with an MPI-compiled version
+			of APBS runs 8 parallel focusing calculations,
+			with each calculation generating fine-scale
+			solutions on a different region of the
+			(<literal>fglen</literal>) problem domain.
+			Note that 8 separate OpenDX files are written
+			by the 8 processors used to perform the
+			calculation.  Writing separate OpenDX files
+			allows us to avoid communication in the
+			parallel run and keeps individual file sizes
+			(relatively) small.  Additionally, if a user is
+			interested in a specific portion of the problem
+			domain, only a few files are needed to get
+			local potential information.
+		</para>
+		<para>
+			However, most users are interested in global
+			potentials.  For some programs (<ulink
+				url="http://opendx.org">OpenDX</ulink>,
+			<ulink
+				url="http://www.visualdatatools.com/">DataTank</ulink>),
+			the individual potential files can simply be
+			read into the program separately and the
+			program will reconstruct the global map.
+			Most other programs will require the user to
+			reassemble the global map first; APBS provides
+			the <filename><ulink
+					url="&ugurl;">mergedx</ulink></filename>
+			program for this purpose.
+			<filename>mergedx</filename> is a simple
+			program that allows users to combine several
+			OpenDX files from a parallel focusing
+			calculation into a single map.  This map can be
+			downsampled from the original resolution to
+			provide coarser datasets for fast
+			visualization, etc.
+			For example, the command
+			<screen>
+				<prompt>$</prompt> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
+			</screen>
+			will generate a file
+			<filename>gridmerged.dx</filename>
+			which has downsampled the much larger dataset
+			contained in the 8 OpenDX files into a
+			65<superscript>3</superscript> file which
+			would be suitable for rough visualization.  An
+			example of the <filename>mergedx</filename>
+			output (see <xref linkend="vmd-isocontour"/>
+			for methods) is shown in 
+			<figure> <title>Actin dimer isocontours from
 parallel focusing</title>
 					<graphic fileref="images/actin_dimer-iso_trans.jpg"></graphic>
 				</figure>
@@ -1955,7 +2675,7 @@ parallel focusing</title>
 				for parallel calculations via MPI.  In
 				particular, you can add 
 				<screen>
-<userinput>async</userinput> <parameter>n</parameter>
+					<userinput>async</userinput> <parameter>n</parameter>
 				</screen>
 				to the <literal>ELEC</literal>
 				<literal>mg-para</literal> APBS input file to
@@ -1988,36 +2708,35 @@ parallel focusing</title>
 				should look like:
 				<programlisting id="mg-para-async.in">
 read 
-    mol pqr complex.pqr
+mol pqr complex.pqr
 end
 
 elec name complex
-    mg-para
-    ofrac 0.1
-    pdime 2 2 2
-    async 0
-    dime  97  97  97
-    fglen 150 115 160
-    cglen 156 121 162
-    cgcent mol 1
-    fgcent mol 1
-    mol 1
-    npbe
-    bcfl sdh
-    ion 1 0.150 2.0
-    ion -1 0.150 2.0 
-    pdie 2.0
-    sdie 78.54
-    srfm mol
-    chgm spl0
-    srad 1.4
-    swin 0.3
-    sdens 10.0
-    temp 298.15
-    gamma 0.105
-    calcenergy total
-    calcforce no
-    write pot dx pot
+mg-para
+ofrac 0.1
+pdime 2 2 2
+async 0
+dime  97  97  97
+fglen 150 115 160
+cglen 156 121 162
+cgcent mol 1
+fgcent mol 1
+mol 1
+npbe
+bcfl sdh
+ion 1 0.150 2.0
+ion -1 0.150 2.0 
+pdie 2.0
+sdie 78.54
+srfm mol
+chgm spl0
+srad 1.4
+swin 0.3
+sdens 10.0
+temp 298.15
+calcenergy total
+calcforce no
+write pot dx pot
 end
 
 quit
@@ -2078,123 +2797,123 @@ molecular dynamics program (for MM/PBSA, etc.)?</title>
 					url="http://www.pdb.org/pdb/navbarsearch.do?newSearch=yes&amp;inputQuickSearch=1fas">1FAS</ulink>
 				in PDB format (download directly <ulink
 					url="http://www.pdb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId=1FAS">here</ulink>).  </para>
-			
+
 			<para> Open the Gemstone interface through the Firefox
 				menu <menuchoice> <guimenu>Tools</guimenu>
 					<guimenuitem>Gemstone</guimenuitem>
-					</menuchoice>.  Select the PDB2PQR
-					application through the Gemstone menu
-					<menuchoice> <guimenu>Utils</guimenu>
-						<guimenuitem>PDB2PQR</guimenuitem>
-					</menuchoice> on the righthand side of
-					the Gemstone screen.  Select the PDB
-					file you just downloaded and any other
-					options for PDB2PQR of interest.  Your
-					screen should look something like:
-					<figure> <title>Gemstone PDB2PQR calculation</title>
-						<graphic fileref="images/gemstone-pdb2pqr.png"></graphic>
+				</menuchoice>.  Select the PDB2PQR
+				application through the Gemstone menu
+				<menuchoice> <guimenu>Utils</guimenu>
+					<guimenuitem>PDB2PQR</guimenuitem>
+				</menuchoice> on the righthand side of
+				the Gemstone screen.  Select the PDB
+				file you just downloaded and any other
+				options for PDB2PQR of interest.  Your
+				screen should look something like:
+				<figure> <title>Gemstone PDB2PQR calculation</title>
+					<graphic fileref="images/gemstone-pdb2pqr.png"></graphic>
+				</figure>
+				Go ahead and "Run" the Gemstone
+				calculation, check the
+				<filename>stdOut</filename> and
+				<filename>stdErr</filename> for any
+				warning messages, and download the
+				resulting PQR file.  </para>
+
+		</sect1>
+
+		<sect1> <title>Perform an electrostatics calculation with APBS</title>
+
+			<para>We're now ready to perform an APBS
+				calculation of the 1FAS electrostatic
+				potential through Gemstone.  Open the
+				<menuchoice> 
+					<guimenu>Chemistry</guimenu> 
+					<guimenuitem>Apbs</guimenuitem> 
+				</menuchoice>
+				menu on the righthand side of the
+				Gemstone screen.  We'll step through
+				each of the input tabs in the middle
+				pane in the following sections.
+			</para>
+
+			<sect2> <title>Calculation</title>
+				<para>Move to the Calculation tab in
+					the middle pane.</para>
+				<para>Most of the "Mathematics"
+					settings can be left as-is;
+					however, feel free to play with
+					the discretization and surface
+					definitions to see how it
+					affects your results.</para>
+				<para>Under "Molecules", load the 1FAS
+					PQR file you just prepared in
+					the previous section.</para>
+				<para>Don't select anything under
+					"Energy and Force" for this
+					calculation.</para> <para>At
+					this point, your screen should
+					look something like this:
+					<figure> <title>Gemstone APBS/Calculation screen</title>
+						<graphic fileref="images/gemstone-apbs-calculation.png"/>
 					</figure>
-					Go ahead and "Run" the Gemstone
-					calculation, check the
-					<filename>stdOut</filename> and
-					<filename>stdErr</filename> for any
-					warning messages, and download the
-					resulting PQR file.  </para>
-
-			</sect1>
-
-			<sect1> <title>Perform an electrostatics calculation with APBS</title>
-				
-				<para>We're now ready to perform an APBS
-					calculation of the 1FAS electrostatic
-					potential through Gemstone.  Open the
-					<menuchoice> 
-						<guimenu>Chemistry</guimenu> 
-						<guimenuitem>Apbs</guimenuitem> 
-					</menuchoice>
-					menu on the righthand side of the
-					Gemstone screen.  We'll step through
-					each of the input tabs in the middle
-					pane in the following sections.
 				</para>
+			</sect2>
 
-				<sect2> <title>Calculation</title>
-					<para>Move to the Calculation tab in
-						the middle pane.</para>
-					<para>Most of the "Mathematics"
-						settings can be left as-is;
-						however, feel free to play with
-						the discretization and surface
-						definitions to see how it
-						affects your results.</para>
-					<para>Under "Molecules", load the 1FAS
-						PQR file you just prepared in
-						the previous section.</para>
-					<para>Don't select anything under
-						"Energy and Force" for this
-						calculation.</para> <para>At
-						this point, your screen should
-						look something like this:
-						<figure> <title>Gemstone APBS/Calculation screen</title>
-							<graphic fileref="images/gemstone-apbs-calculation.png"/>
-						</figure>
-					</para>
-				</sect2>
+			<sect2> <title>Grid</title>
+				<para>Next, move to the Grid tab in the
+					middle pane.</para>
+				<para>Under "General", enter 97 for X,
+					Y, and Z "Grid points".</para>
+				<para>Under "Coarse Grid", choose 100
+					for all X, Y, and Z "Lengths".
+					Center the mesh on the
+					molecule.</para>
+				<para>Under "Fine Grid", choose 80 for
+					all X, Y, and Z "Lengths".
+					Center the mesh on the
+					molecule.</para>
+				<para>Leave the "Parallel Execution"
+					alone for this
+					calculation.</para>
+				<para>At this point, your screen should
+					look something like this:
+					<figure> <title>Gemstone APBS/Grid screen</title>
+						<graphic fileref="images/gemstone-apbs-grid.png"/>
+					</figure>
+				</para>
+			</sect2>
 
-				<sect2> <title>Grid</title>
-					<para>Next, move to the Grid tab in the
-						middle pane.</para>
-					<para>Under "General", enter 97 for X,
-						Y, and Z "Grid points".</para>
-					<para>Under "Coarse Grid", choose 100
-						for all X, Y, and Z "Lengths".
-						Center the mesh on the
-						molecule.</para>
-					<para>Under "Fine Grid", choose 80 for
-						all X, Y, and Z "Lengths".
-						Center the mesh on the
-						molecule.</para>
-					<para>Leave the "Parallel Execution"
-						alone for this
-						calculation.</para>
-					<para>At this point, your screen should
-						look something like this:
-						<figure> <title>Gemstone APBS/Grid screen</title>
-							<graphic fileref="images/gemstone-apbs-grid.png"/>
-						</figure>
-					</para>
-				</sect2>
+			<sect2> <title>Physics</title>
+				<para>Next, move to the Physics tab in
+					the middle pane.</para>
+				<para>Choose any values you like here;
+					the defaults should be fine for
+					most visualization
+					calculations.</para>
+				<para>At this point, your screen should
+					look something like this:
+					<figure> <title>Gemstone APBS/Physics screen</title>
+						<graphic fileref="images/gemstone-apbs-physics.png"/>
+					</figure>
+				</para>
+			</sect2>
 
-				<sect2> <title>Physics</title>
-					<para>Next, move to the Physics tab in
-						the middle pane.</para>
-					<para>Choose any values you like here;
-						the defaults should be fine for
-						most visualization
-						calculations.</para>
-					<para>At this point, your screen should
-						look something like this:
-						<figure> <title>Gemstone APBS/Physics screen</title>
-							<graphic fileref="images/gemstone-apbs-physics.png"/>
-						</figure>
-					</para>
-				</sect2>
+			<sect2> <title>File I/O </title>
+				<para>Next, move to the File I/O tab in
+					the middle pane.</para>
+				<para>Unless you have other properties
+					you wan to visualize, you can
+					leave these settings
+					as-is.</para>
+				<para>At this point, your screen should
+					look something like this:
+					<figure> <title>Gemstone APBS/File I/O screen</title>
+						<graphic fileref="images/gemstone-apbs-file.png"/>
+					</figure>
+				</para>
+			</sect2>
 
-				<sect2> <title>File I/O </title>
-					<para>Next, move to the File I/O tab in
-						the middle pane.</para>
-					<para>Unless you have other properties
-						you wan to visualize, you can
-						leave these settings
-						as-is.</para>
-					<para>At this point, your screen should
-						look something like this:
-						<figure> <title>Gemstone APBS/File I/O screen</title>
-							<graphic fileref="images/gemstone-apbs-file.png"/>
-						</figure>
-						</para>
-				</sect2>
-							
 			<sect2> <title>Running the calculation</title>
 				<para>Finally, return to the Calculation tab
 					and select "Run APBS".  After a while,

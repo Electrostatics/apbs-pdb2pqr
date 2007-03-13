@@ -1,0 +1,35 @@
+read
+    mol pqr 2LZT-GLU35.pqr # This is the compound for which we will calculate
+                         # solvation energies
+    mol pqr 2LZT-GLU35.pqr      # This is a compound used as a reference for grid
+                         # centering
+end
+
+elec name inhom          
+    mg-auto              # Focusing calculations
+    dime 129 129 129     # This is a good grid spacing for this system
+    cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for
+                         # this system (PDB2PQR-recommended)
+    fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this
+                         # system (PDB2PQR-recommended)
+    cgcent mol 2         # Center the grid on the reference molecule
+    fgcent mol 2         # Center the grid on the reference molecule
+    mol 1
+    lpbe
+    bcfl sdh
+    pdie 20.00
+    sdie 78.54
+    srfm smol
+    sdens 20.0
+    chgm spl2
+    srad 1.40
+    swin 0.30
+    temp 298.15
+    calcenergy total
+    calcforce no
+end
+
+# Print the final energy 
+print energy inhom end
+
+quit
