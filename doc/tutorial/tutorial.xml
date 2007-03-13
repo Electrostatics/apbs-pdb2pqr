@@ -2168,39 +2168,39 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 				<filename>2LZT-noGLH35.pqr</filename>.  This can be done by setting
 				the second-to-last column in the PQR file to zero; e.g.
 				<programlisting>
-					ATOM    534  N   GLU    35       6.456  16.408  22.487 -0.5163 1.8240
-					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0397 1.9080
-					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.5366 1.9080
-					ATOM    537  O   GLU    35       7.705  13.192  23.277 -0.5819 1.6612
-					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0560 1.9080
-					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0136 1.9080
-					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.8054 1.9080
-					ATOM    541  OE1 GLU    35       5.844  14.786  26.570 -0.8188 1.6612
-					ATOM    542  OE2 GLU    35       5.038  16.682  27.056 -0.8188 1.6612
-					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.2936 0.6000
-					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.1105 1.3870
-					ATOM    545  HB2 GLU    35       4.318  15.158  23.042 -0.0173 1.4870
-					ATOM    546  HB3 GLU    35       4.832  14.066  24.142 -0.0173 1.4870
-					ATOM    547  HG2 GLU    35       4.654  16.857  24.629 -0.0425 1.4870
-					ATOM    548  HG3 GLU    35       3.500  15.796  25.084 -0.0425 1.4870
+ATOM    534  N   GLU    35       6.456  16.408  22.487 -0.5163 1.8240
+ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0397 1.9080
+ATOM    536  C   GLU    35       6.889  13.941  22.695  0.5366 1.9080
+ATOM    537  O   GLU    35       7.705  13.192  23.277 -0.5819 1.6612
+ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0560 1.9080
+ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0136 1.9080
+ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.8054 1.9080
+ATOM    541  OE1 GLU    35       5.844  14.786  26.570 -0.8188 1.6612
+ATOM    542  OE2 GLU    35       5.038  16.682  27.056 -0.8188 1.6612
+ATOM    543  H   GLU    35       5.671  16.799  22.056  0.2936 0.6000
+ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.1105 1.3870
+ATOM    545  HB2 GLU    35       4.318  15.158  23.042 -0.0173 1.4870
+ATOM    546  HB3 GLU    35       4.832  14.066  24.142 -0.0173 1.4870
+ATOM    547  HG2 GLU    35       4.654  16.857  24.629 -0.0425 1.4870
+ATOM    548  HG3 GLU    35       3.500  15.796  25.084 -0.0425 1.4870
 				</programlisting>
 				might become
 				<programlisting>
-					ATOM    534  N   GLU    35       6.456  16.408  22.487  0.0000 1.8240
-					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0000 1.9080
-					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.0000 1.9080
-					ATOM    537  O   GLU    35       7.705  13.192  23.277  0.0000 1.6612
-					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0000 1.9080
-					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0000 1.9080
-					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.0000 1.9080
-					ATOM    541  OE1 GLU    35       5.844  14.786  26.570  0.0000 1.6612
-					ATOM    542  OE2 GLU    35       5.038  16.682  27.056  0.0000 1.6612
-					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.0000 0.6000
-					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.0000 1.3870
-					ATOM    545  HB2 GLU    35       4.318  15.158  23.042  0.0000 1.4870
-					ATOM    546  HB3 GLU    35       4.832  14.066  24.142  0.0000 1.4870
-					ATOM    547  HG2 GLU    35       4.654  16.857  24.629  0.0000 1.4870
-					ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
+ATOM    534  N   GLU    35       6.456  16.408  22.487  0.0000 1.8240
+ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0000 1.9080
+ATOM    536  C   GLU    35       6.889  13.941  22.695  0.0000 1.9080
+ATOM    537  O   GLU    35       7.705  13.192  23.277  0.0000 1.6612
+ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0000 1.9080
+ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0000 1.9080
+ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.0000 1.9080
+ATOM    541  OE1 GLU    35       5.844  14.786  26.570  0.0000 1.6612
+ATOM    542  OE2 GLU    35       5.038  16.682  27.056  0.0000 1.6612
+ATOM    543  H   GLU    35       5.671  16.799  22.056  0.0000 0.6000
+ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.0000 1.3870
+ATOM    545  HB2 GLU    35       4.318  15.158  23.042  0.0000 1.4870
+ATOM    546  HB3 GLU    35       4.832  14.066  24.142  0.0000 1.4870
+ATOM    547  HG2 GLU    35       4.654  16.857  24.629  0.0000 1.4870
+ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
 				</programlisting>
 			</para>
 
@@ -2230,41 +2230,37 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 				energy calculations (download it <ulink
 					url="exmaples/pKa/apbs-template.in">here</ulink>):
 				<programlisting>
-					read
-					mol pqr compound.pqr # This is the compound for which we will calculate
-					# solvation energies
-					mol pqr ref.pqr      # This is a compound used as a reference for grid
-					# centering
-					end
+read
+	mol pqr compound.pqr # This is the compound for which we will calculate solvation energies
+	mol pqr ref.pqr      # This is a compound used as a reference for grid centering
+end
 
-					elec name inhom          
-					mg-auto              # Focusing calculations
-					dime 129 129 129     # This is a good grid spacing for this system
-					cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for
-					# this system (PDB2PQR-recommended)
-					fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this
-					# system (PDB2PQR-recommended)
-					cgcent mol 2         # Center the grid on the reference molecule
-					fgcent mol 2         # Center the grid on the reference molecule
-					mol 1
-					lpbe
-					bcfl sdh
-					pdie 20.00
-					sdie 78.54
-					srfm smol
-					sdens 20.0
-					chgm spl2
-					srad 1.40
-					swin 0.30
-					temp 298.15
-					calcenergy total
-					calcforce no
-					end
+elec name inhom          
+	mg-auto              # Focusing calculations
+	dime 129 129 129     # This is a good grid spacing for this system
+	cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for this system (PDB2PQR-recommended)
+	fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this system (PDB2PQR-recommended)
+	cgcent mol 2         # Center the grid on the reference molecule
+	fgcent mol 2         # Center the grid on the reference molecule
+	mol 1
+	lpbe
+	bcfl sdh
+	pdie 20.00
+	sdie 78.54
+	srfm smol
+	sdens 20.0
+	chgm spl2
+	srad 1.40
+	swin 0.30
+	temp 298.15
+	calcenergy total
+	calcforce no
+end
 
-					# Print the final energy 
-					print energy inhom end
+# Print the final energy 
+print energy inhom end
 
-					quit
+quit
 				</programlisting>
 				There are a number of aspects to this input file which are worth
 				noting:
@@ -2311,7 +2307,7 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 				systems by modifying the template above.  Once these input files are
 				constructed, you can run the PB calculation by
 				<screen>
-					<prompt>$</prompt> <userinput>apbs</userinput> <varname>foo.in</varname> | tee <varname>foo.out</varname>
+<prompt>$</prompt> <userinput>apbs</userinput> <varname>foo.in</varname> | tee <varname>foo.out</varname>
 				</screen>
 				where <varname>foo.in</varname> is the input file of interest and
 				the output is saved in <varname>foo.out</varname>.  </para>
@@ -2354,7 +2350,7 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 							of charges in a vacuum.  The program's usage
 							is
 							<screen>
-								<prompt>$</prompt> <userinput>coulomb foo.pqr</userinput>
+<prompt>$</prompt> <userinput>coulomb foo.pqr</userinput>
 							</screen>
 							where <varname>foo.pqr</varname>
 							is the particular PQR file you are
@@ -2560,35 +2556,36 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 				url="examples/parallel/apbs.in">here</ulink>):
 			<programlisting id="mg-para.in">
 read 
-mol pqr complex.pqr
+	mol pqr complex.pqr
 end
 
 elec name complex
-mg-para
-ofrac 0.1
-pdime 2 2 2
-dime  97  97  97
-fglen 150 115 160
-cglen 156 121 162
-cgcent mol 1
-fgcent mol 1
-mol 1
-npbe
-bcfl sdh
-ion 1 0.150 2.0
-ion -1 0.150 2.0 
-pdie 2.0
-sdie 78.54
-srfm mol
-chgm spl0
-srad 1.4
-swin 0.3
-sdens 10.0
-temp 298.15
-calcenergy total
-calcforce no
-write pot dx pot
+	mg-para
+	ofrac 0.1
+	pdime 2 2 2
+	dime  97  97  97
+	fglen 150 115 160
+	cglen 156 121 162
+	cgcent mol 1
+	fgcent mol 1
+	mol 1
+	npbe
+	bcfl sdh
+	ion 1 0.150 2.0
+	ion -1 0.150 2.0 
+	pdie 2.0
+	sdie 78.54
+	srfm mol
+	chgm spl0
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce no
+	write pot dx pot
 end
+
 quit
 			</programlisting>
 			where the <literal>pdime 2 2 2</literal>
@@ -2645,7 +2642,7 @@ quit
 			visualization, etc.
 			For example, the command
 			<screen>
-				<prompt>$</prompt> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
+<prompt>$</prompt> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
 			</screen>
 			will generate a file
 			<filename>gridmerged.dx</filename>
@@ -2675,7 +2672,7 @@ parallel focusing</title>
 				for parallel calculations via MPI.  In
 				particular, you can add 
 				<screen>
-					<userinput>async</userinput> <parameter>n</parameter>
+<userinput>async</userinput> <parameter>n</parameter>
 				</screen>
 				to the <literal>ELEC</literal>
 				<literal>mg-para</literal> APBS input file to
@@ -2708,35 +2705,35 @@ parallel focusing</title>
 				should look like:
 				<programlisting id="mg-para-async.in">
 read 
-mol pqr complex.pqr
+	mol pqr complex.pqr
 end
 
 elec name complex
-mg-para
-ofrac 0.1
-pdime 2 2 2
-async 0
-dime  97  97  97
-fglen 150 115 160
-cglen 156 121 162
-cgcent mol 1
-fgcent mol 1
-mol 1
-npbe
-bcfl sdh
-ion 1 0.150 2.0
-ion -1 0.150 2.0 
-pdie 2.0
-sdie 78.54
-srfm mol
-chgm spl0
-srad 1.4
-swin 0.3
-sdens 10.0
-temp 298.15
-calcenergy total
-calcforce no
-write pot dx pot
+	mg-para
+	ofrac 0.1
+	pdime 2 2 2
+	async 0
+	dime  97  97  97
+	fglen 150 115 160
+	cglen 156 121 162
+	cgcent mol 1
+	fgcent mol 1
+	mol 1
+	npbe
+	bcfl sdh
+	ion 1 0.150 2.0
+	ion -1 0.150 2.0 
+	pdie 2.0
+	sdie 78.54
+	srfm mol
+	chgm spl0
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce no
+	write pot dx pot
 end
 
 quit

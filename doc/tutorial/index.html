@@ -49,14 +49,14 @@ potential around my biomolecule?</a></span></dt><dd><dl><dt><span class="sect1">
 energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id901975">4.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902173">4.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#binding-sect">5. How do I calculate a binding energy?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#binding-solvation">5.1.  Solvation energy contributions to binding
 			</a></span></dt><dt><span class="sect1"><a href="#binding-coulombic">5.2. Including Coulombic contributions</a></span></dt><dt><span class="sect1"><a href="#binding-ligand">5.3. Hey! You don't have any parameters for my ligand!</a></span></dt><dt><span class="sect1"><a href="#binding-example">5.4. A ligand binding example</a></span></dt></dl></dd><dt><span class="chapter"><a href="#forces-sect">6. How do I calculate solvation
 forces?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902601">6.1. Polar solvation</a></span></dt><dt><span class="sect1"><a href="#id902612">6.2. Apolar solvation</a></span></dt></dl></dd><dt><span class="chapter"><a href="#pka-sect">7. How do I calculate a pK<sub>a</sub>?</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id902684">7.1. Introduction</a></span></dt><dt><span class="sect1"><a href="#id903487">7.2. Application to lysozyme</a></span></dt></dl></dd><dt><span class="chapter"><a href="#parallel-sect">8. My calculation requires too much memory!</a></span></dt><dd><dl><dt><span class="sect1"><a href="#parallel">8.1. Parallel calculations:  an example</a></span></dt><dt><span class="sect1"><a href="#async">8.2. Asynchronous sequential calculations</a></span></dt></dl></dd><dt><span class="chapter"><a href="#simulation-sect">9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id905089">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id905114">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id905225">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901260">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901431">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901785">+/- 1 kT/e
+molecular dynamics program (for MM/PBSA, etc.)?</a></span></dt><dt><span class="chapter"><a href="#gemstone-sect">10. Can I run APBS via the web?  (Gemstone) </a></span></dt><dd><dl><dt><span class="sect1"><a href="#id905090">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id905114">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id905226">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></dd><dt><span class="chapter"><a href="#more-sect">11. More examples...</a></span></dt><dt><span class="chapter"><a href="#help-sect">12. None of this answered my question...</a></span></dt></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>3.1. <a href="#id901260">Arc repressor isocontours in VMD</a></dt><dt>3.2. <a href="#id901431">Arc repressor surface potential in VMD</a></dt><dt>3.3. <a href="#id901785">+/- 1 kT/e
 							electrostatic potential
 							isocontours of FAS2 in PyMOL</a></dt><dt>3.4. <a href="#id901891">+/- 5 kT/e
 							electrostatic surface potential
 							of FAS2 in PyMOL</a></dt><dt>4.1. <a href="#solvation-cycle-full">Full
 					solvation energy cycle</a></dt><dt>5.1. <a href="#binding-cycle"> Binding free energy cycle
 				</a></dt><dt>7.1. <a href="#fig:pKa_cycle_protein">pK<sub>a</sub> perturbation free energy cycle schematic</a></dt><dt>7.2. <a href="#id903559">Active site of HEWL </a></dt><dt>8.1. <a href="#id904866">Actin dimer isocontours from
-parallel focusing</a></dt><dt>10.1. <a href="#id905196">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id905285">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id905332">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id905366">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id905401">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id905429">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>7.1. <a href="#tab:model_pka">Model amino acid pK<sub>a</sub> values for common titratable
+parallel focusing</a></dt><dt>10.1. <a href="#id905196">Gemstone PDB2PQR calculation</a></dt><dt>10.2. <a href="#id905286">Gemstone APBS/Calculation screen</a></dt><dt>10.3. <a href="#id905333">Gemstone APBS/Grid screen</a></dt><dt>10.4. <a href="#id905367">Gemstone APBS/Physics screen</a></dt><dt>10.5. <a href="#id905402">Gemstone APBS/File I/O screen</a></dt><dt>10.6. <a href="#id905429">Gemstone APBS/Calculation screen (run complete)</a></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>7.1. <a href="#tab:model_pka">Model amino acid pK<sub>a</sub> values for common titratable
 groups; data from Nielsen et al (see footnote) </a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#born-pqr">Born ion PQR</a></dt><dt>4.2. <a href="#born-input">Example born input file</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#born-solvation-energy-equation">Born ion polar solvation energy</a></dt><dt>5.1. <a href="#binding-cycle-eqn"> Binding free energy formula
 				</a></dt><dt>5.2. <a href="#binding-solvation-eq"> Solvation contributions to the binding
 						free energy </a></dt><dt>5.3. <a href="#binding-coulomb-eq"> Coulombic contributions to the binding
@@ -1337,39 +1337,39 @@ groups; data from Nielsen et al (see <a href="#pKa-refs">footnote</a>) </b></p><
 				<code class="filename">2LZT-noGLH35.pqr</code>.  This can be done by setting
 				the second-to-last column in the PQR file to zero; e.g.
 				</p><pre class="programlisting">
-					ATOM    534  N   GLU    35       6.456  16.408  22.487 -0.5163 1.8240
-					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0397 1.9080
-					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.5366 1.9080
-					ATOM    537  O   GLU    35       7.705  13.192  23.277 -0.5819 1.6612
-					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0560 1.9080
-					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0136 1.9080
-					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.8054 1.9080
-					ATOM    541  OE1 GLU    35       5.844  14.786  26.570 -0.8188 1.6612
-					ATOM    542  OE2 GLU    35       5.038  16.682  27.056 -0.8188 1.6612
-					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.2936 0.6000
-					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.1105 1.3870
-					ATOM    545  HB2 GLU    35       4.318  15.158  23.042 -0.0173 1.4870
-					ATOM    546  HB3 GLU    35       4.832  14.066  24.142 -0.0173 1.4870
-					ATOM    547  HG2 GLU    35       4.654  16.857  24.629 -0.0425 1.4870
-					ATOM    548  HG3 GLU    35       3.500  15.796  25.084 -0.0425 1.4870
+ATOM    534  N   GLU    35       6.456  16.408  22.487 -0.5163 1.8240
+ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0397 1.9080
+ATOM    536  C   GLU    35       6.889  13.941  22.695  0.5366 1.9080
+ATOM    537  O   GLU    35       7.705  13.192  23.277 -0.5819 1.6612
+ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0560 1.9080
+ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0136 1.9080
+ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.8054 1.9080
+ATOM    541  OE1 GLU    35       5.844  14.786  26.570 -0.8188 1.6612
+ATOM    542  OE2 GLU    35       5.038  16.682  27.056 -0.8188 1.6612
+ATOM    543  H   GLU    35       5.671  16.799  22.056  0.2936 0.6000
+ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.1105 1.3870
+ATOM    545  HB2 GLU    35       4.318  15.158  23.042 -0.0173 1.4870
+ATOM    546  HB3 GLU    35       4.832  14.066  24.142 -0.0173 1.4870
+ATOM    547  HG2 GLU    35       4.654  16.857  24.629 -0.0425 1.4870
+ATOM    548  HG3 GLU    35       3.500  15.796  25.084 -0.0425 1.4870
 				</pre><p>
 				might become
 				</p><pre class="programlisting">
-					ATOM    534  N   GLU    35       6.456  16.408  22.487  0.0000 1.8240
-					ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0000 1.9080
-					ATOM    536  C   GLU    35       6.889  13.941  22.695  0.0000 1.9080
-					ATOM    537  O   GLU    35       7.705  13.192  23.277  0.0000 1.6612
-					ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0000 1.9080
-					ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0000 1.9080
-					ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.0000 1.9080
-					ATOM    541  OE1 GLU    35       5.844  14.786  26.570  0.0000 1.6612
-					ATOM    542  OE2 GLU    35       5.038  16.682  27.056  0.0000 1.6612
-					ATOM    543  H   GLU    35       5.671  16.799  22.056  0.0000 0.6000
-					ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.0000 1.3870
-					ATOM    545  HB2 GLU    35       4.318  15.158  23.042  0.0000 1.4870
-					ATOM    546  HB3 GLU    35       4.832  14.066  24.142  0.0000 1.4870
-					ATOM    547  HG2 GLU    35       4.654  16.857  24.629  0.0000 1.4870
-					ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
+ATOM    534  N   GLU    35       6.456  16.408  22.487  0.0000 1.8240
+ATOM    535  CA  GLU    35       6.354  15.205  23.349  0.0000 1.9080
+ATOM    536  C   GLU    35       6.889  13.941  22.695  0.0000 1.9080
+ATOM    537  O   GLU    35       7.705  13.192  23.277  0.0000 1.6612
+ATOM    538  CB  GLU    35       4.906  14.973  23.796  0.0000 1.9080
+ATOM    539  CG  GLU    35       4.476  15.932  24.948  0.0000 1.9080
+ATOM    540  CD  GLU    35       5.171  15.736  26.255  0.0000 1.9080
+ATOM    541  OE1 GLU    35       5.844  14.786  26.570  0.0000 1.6612
+ATOM    542  OE2 GLU    35       5.038  16.682  27.056  0.0000 1.6612
+ATOM    543  H   GLU    35       5.671  16.799  22.056  0.0000 0.6000
+ATOM    544  HA  GLU    35       6.856  15.382  24.215  0.0000 1.3870
+ATOM    545  HB2 GLU    35       4.318  15.158  23.042  0.0000 1.4870
+ATOM    546  HB3 GLU    35       4.832  14.066  24.142  0.0000 1.4870
+ATOM    547  HG2 GLU    35       4.654  16.857  24.629  0.0000 1.4870
+ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
 				</pre><p>
 			</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id903853"></a>7.2.3. Setting up the total electrostatic energy
 				calculations</h3></div></div></div><p>We will be using focusing calculations to calculate the
@@ -1385,41 +1385,37 @@ groups; data from Nielsen et al (see <a href="#pKa-refs">footnote</a>) </b></p><
 					calculation.  </p></td></tr></table></div><p>Here is a template input that we will use for each of the solvation
 				energy calculations (download it <a href="exmaples/pKa/apbs-template.in" target="_top">here</a>):
 				</p><pre class="programlisting">
-					read
-					mol pqr compound.pqr # This is the compound for which we will calculate
-					# solvation energies
-					mol pqr ref.pqr      # This is a compound used as a reference for grid
-					# centering
-					end
+read
+	mol pqr compound.pqr # This is the compound for which we will calculate solvation energies
+	mol pqr ref.pqr      # This is a compound used as a reference for grid centering
+end
 
-					elec name inhom          
-					mg-auto              # Focusing calculations
-					dime 129 129 129     # This is a good grid spacing for this system
-					cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for
-					# this system (PDB2PQR-recommended)
-					fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this
-					# system (PDB2PQR-recommended)
-					cgcent mol 2         # Center the grid on the reference molecule
-					fgcent mol 2         # Center the grid on the reference molecule
-					mol 1
-					lpbe
-					bcfl sdh
-					pdie 20.00
-					sdie 78.54
-					srfm smol
-					sdens 20.0
-					chgm spl2
-					srad 1.40
-					swin 0.30
-					temp 298.15
-					calcenergy total
-					calcforce no
-					end
+elec name inhom          
+	mg-auto              # Focusing calculations
+	dime 129 129 129     # This is a good grid spacing for this system
+	cglen 52.0 66.0 79.0 # These are reasonable coarse grid settings for this system (PDB2PQR-recommended)
+	fglen 51.0 59.0 67.0 # These are reasonable fine grid settings for this system (PDB2PQR-recommended)
+	cgcent mol 2         # Center the grid on the reference molecule
+	fgcent mol 2         # Center the grid on the reference molecule
+	mol 1
+	lpbe
+	bcfl sdh
+	pdie 20.00
+	sdie 78.54
+	srfm smol
+	sdens 20.0
+	chgm spl2
+	srad 1.40
+	swin 0.30
+	temp 298.15
+	calcenergy total
+	calcforce no
+end
 
-					# Print the final energy 
-					print energy inhom end
+# Print the final energy 
+print energy inhom end
 
-					quit
+quit
 				</pre><p>
 				There are a number of aspects to this input file which are worth
 				noting:
@@ -1453,7 +1449,7 @@ groups; data from Nielsen et al (see <a href="#pKa-refs">footnote</a>) </b></p><
 				systems by modifying the template above.  Once these input files are
 				constructed, you can run the PB calculation by
 				</p><pre class="screen">
-					<code class="prompt">$</code> <strong class="userinput"><code>apbs</code></strong> <code class="varname">foo.in</code> | tee <code class="varname">foo.out</code>
+<code class="prompt">$</code> <strong class="userinput"><code>apbs</code></strong> <code class="varname">foo.in</code> | tee <code class="varname">foo.out</code>
 				</pre><p>
 				where <code class="varname">foo.in</code> is the input file of interest and
 				the output is saved in <code class="varname">foo.out</code>.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id904048"></a>7.2.4. Setting up the transfer free energy calculations</h3></div></div></div><p>Recall from our <a href="#list:methods">earlier discussion</a>
@@ -1482,7 +1478,7 @@ groups; data from Nielsen et al (see <a href="#pKa-refs">footnote</a>) </b></p><
 							of charges in a vacuum.  The program's usage
 							is
 							</p><pre class="screen">
-								<code class="prompt">$</code> <strong class="userinput"><code>coulomb foo.pqr</code></strong>
+<code class="prompt">$</code> <strong class="userinput"><code>coulomb foo.pqr</code></strong>
 							</pre><p>
 							where <code class="varname">foo.pqr</code>
 							is the particular PQR file you are
@@ -1604,35 +1600,36 @@ groups; data from Nielsen et al (see <a href="#pKa-refs">footnote</a>) </b></p><
 			calculation might look like (download <a href="examples/parallel/apbs.in" target="_top">here</a>):
 			<a id="mg-para.in"></a></p><pre class="programlisting">
 read 
-mol pqr complex.pqr
+	mol pqr complex.pqr
 end
 
 elec name complex
-mg-para
-ofrac 0.1
-pdime 2 2 2
-dime  97  97  97
-fglen 150 115 160
-cglen 156 121 162
-cgcent mol 1
-fgcent mol 1
-mol 1
-npbe
-bcfl sdh
-ion 1 0.150 2.0
-ion -1 0.150 2.0 
-pdie 2.0
-sdie 78.54
-srfm mol
-chgm spl0
-srad 1.4
-swin 0.3
-sdens 10.0
-temp 298.15
-calcenergy total
-calcforce no
-write pot dx pot
+	mg-para
+	ofrac 0.1
+	pdime 2 2 2
+	dime  97  97  97
+	fglen 150 115 160
+	cglen 156 121 162
+	cgcent mol 1
+	fgcent mol 1
+	mol 1
+	npbe
+	bcfl sdh
+	ion 1 0.150 2.0
+	ion -1 0.150 2.0 
+	pdie 2.0
+	sdie 78.54
+	srfm mol
+	chgm spl0
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce no
+	write pot dx pot
 end
+
 quit
 			</pre><p>
 			where the <code class="literal">pdime 2 2 2</code>
@@ -1683,7 +1680,7 @@ quit
 			visualization, etc.
 			For example, the command
 			</p><pre class="screen">
-				<code class="prompt">$</code> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
+<code class="prompt">$</code> mergedx 65 65 65 pot0.dx pot1.dx pot2.dx pot3.dx pot4.dx pot5.dx pot6.dx pot7.dx
 			</pre><p>
 			will generate a file
 			<code class="filename">gridmerged.dx</code>
@@ -1706,7 +1703,7 @@ parallel focusing</b></p><div class="figure-contents"><div><img src="images/acti
 				for parallel calculations via MPI.  In
 				particular, you can add 
 				</p><pre class="screen">
-					<strong class="userinput"><code>async</code></strong> <em class="parameter"><code>n</code></em>
+<strong class="userinput"><code>async</code></strong> <em class="parameter"><code>n</code></em>
 				</pre><p>
 				to the <code class="literal">ELEC</code>
 				<code class="literal">mg-para</code> APBS input file to
@@ -1735,35 +1732,35 @@ parallel focusing</b></p><div class="figure-contents"><div><img src="images/acti
 				should look like:
 				<a id="mg-para-async.in"></a></p><pre class="programlisting">
 read 
-mol pqr complex.pqr
+	mol pqr complex.pqr
 end
 
 elec name complex
-mg-para
-ofrac 0.1
-pdime 2 2 2
-async 0
-dime  97  97  97
-fglen 150 115 160
-cglen 156 121 162
-cgcent mol 1
-fgcent mol 1
-mol 1
-npbe
-bcfl sdh
-ion 1 0.150 2.0
-ion -1 0.150 2.0 
-pdie 2.0
-sdie 78.54
-srfm mol
-chgm spl0
-srad 1.4
-swin 0.3
-sdens 10.0
-temp 298.15
-calcenergy total
-calcforce no
-write pot dx pot
+	mg-para
+	ofrac 0.1
+	pdime 2 2 2
+	async 0
+	dime  97  97  97
+	fglen 150 115 160
+	cglen 156 121 162
+	cgcent mol 1
+	fgcent mol 1
+	mol 1
+	npbe
+	bcfl sdh
+	ion 1 0.150 2.0
+	ion -1 0.150 2.0 
+	pdie 2.0
+	sdie 78.54
+	srfm mol
+	chgm spl0
+	srad 1.4
+	swin 0.3
+	sdens 10.0
+	temp 298.15
+	calcenergy total
+	calcforce no
+	write pot dx pot
 end
 
 quit
@@ -1783,13 +1780,13 @@ quit
 				reassembled with <code class="filename">mergedx</code>
 				as described above.
 			</p></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="simulation-sect"></a>Chapter 9. How do I use APBS with my
-molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id905089">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id905114">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id905225">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
+molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="images/warning.png" /></td><th align="left">Warning</th></tr><tr><td align="left" valign="top"><p>Under construction</p></td></tr></table></div></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="gemstone-sect"></a>Chapter 10. Can I run APBS via the web?  (Gemstone) </h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id905090">10.1. Getting Gemstone</a></span></dt><dt><span class="sect1"><a href="#id905114">10.2. Preparing a structure with PDB2PQR</a></span></dt><dt><span class="sect1"><a href="#id905226">10.3. Perform an electrostatics calculation with APBS</a></span></dt></dl></div><p>Yes, you can run APBS via the web, thanks to the <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			service.  This section demonstrates how <a href="http://gemstone.mozdev.org" target="_top">Gemstone</a>
 			can be used to perform most APBS calculations commonly
 			done through the command-line interface.  Better yet,
 			it allows you to use <a href="http://nbcr.net" target="_top">NBCR's</a> resources
 			instead of your own!  
-		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id905089"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
+		</p><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id905090"></a>10.1. Getting Gemstone</h2></div></div></div><p> You need to download and install the Gemstone
 				extension for the <a href="http://www.mozilla.com/firefox/" target="_top">Firefox</a>
 				web browser from <a href="http://gemstone.mozdev.org" target="_top">http://gemstone.mozdev.org</a>
 				before starting this tutorial.</p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id905114"></a>10.2. Preparing a structure with PDB2PQR</h2></div></div></div><p> We'll start by preparing a structure with <a href="http://pdb2pqr.sf.net" target="_top">PDB2PQR</a>.
@@ -1811,7 +1808,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 				<code class="filename">stdOut</code> and
 				<code class="filename">stdErr</code> for any
 				warning messages, and download the
-				resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id905225"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
+				resulting PQR file.  </p></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id905226"></a>10.3. Perform an electrostatics calculation with APBS</h2></div></div></div><p>We're now ready to perform an APBS
 				calculation of the 1FAS electrostatic
 				potential through Gemstone.  Open the
 				<span class="guimenu">Chemistry</span> → <span class="guimenuitem">Apbs</span>
@@ -1819,7 +1816,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 				Gemstone screen.  We'll step through
 				each of the input tabs in the middle
 				pane in the following sections.
-			</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905256"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
+			</p><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905257"></a>10.3.1. Calculation</h3></div></div></div><p>Move to the Calculation tab in
 					the middle pane.</p><p>Most of the "Mathematics"
 					settings can be left as-is;
 					however, feel free to play with
@@ -1832,7 +1829,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					calculation.</p><p>At
 					this point, your screen should
 					look something like this:
-					</p><div class="figure"><a id="id905285"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id905286"></a><p class="title"><b>Figure 10.2. Gemstone APBS/Calculation screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-calculation.png" alt="Gemstone APBS/Calculation screen" /></div></div></div><p><br class="figure-break" />
 				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905302"></a>10.3.2. Grid</h3></div></div></div><p>Next, move to the Grid tab in the
 					middle pane.</p><p>Under "General", enter 97 for X,
 					Y, and Z "Grid points".</p><p>Under "Coarse Grid", choose 100
@@ -1845,21 +1842,21 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					alone for this
 					calculation.</p><p>At this point, your screen should
 					look something like this:
-					</p><div class="figure"><a id="id905332"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905348"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
+					</p><div class="figure"><a id="id905333"></a><p class="title"><b>Figure 10.3. Gemstone APBS/Grid screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-grid.png" alt="Gemstone APBS/Grid screen" /></div></div></div><p><br class="figure-break" />
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905349"></a>10.3.3. Physics</h3></div></div></div><p>Next, move to the Physics tab in
 					the middle pane.</p><p>Choose any values you like here;
 					the defaults should be fine for
 					most visualization
 					calculations.</p><p>At this point, your screen should
 					look something like this:
-					</p><div class="figure"><a id="id905366"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
-				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905382"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
+					</p><div class="figure"><a id="id905367"></a><p class="title"><b>Figure 10.4. Gemstone APBS/Physics screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-physics.png" alt="Gemstone APBS/Physics screen" /></div></div></div><p><br class="figure-break" />
+				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905383"></a>10.3.4. File I/O </h3></div></div></div><p>Next, move to the File I/O tab in
 					the middle pane.</p><p>Unless you have other properties
 					you wan to visualize, you can
 					leave these settings
 					as-is.</p><p>At this point, your screen should
 					look something like this:
-					</p><div class="figure"><a id="id905401"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
+					</p><div class="figure"><a id="id905402"></a><p class="title"><b>Figure 10.5. Gemstone APBS/File I/O screen</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-file.png" alt="Gemstone APBS/File I/O screen" /></div></div></div><p><br class="figure-break" />
 				</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905417"></a>10.3.5. Running the calculation</h3></div></div></div><p>Finally, return to the Calculation tab
 					and select "Run APBS".  After a while,
 					the results will appear under the
@@ -1869,7 +1866,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</h2></div></div></div><div class
 					</p><div class="figure"><a id="id905429"></a><p class="title"><b>Figure 10.6. Gemstone APBS/Calculation screen (run complete)</b></p><div class="figure-contents"><div><img src="images/gemstone-apbs-finished.png" alt="Gemstone APBS/Calculation screen (run complete)" /></div></div></div><p><br class="figure-break" />
 					In particular, you should have the
 					option to save the potential file
-					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905447"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
+					calculated in this APBS run.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id905448"></a>10.3.6. Other calculations</h3></div></div></div><p>Nearly all of the examples in this
 					tutorial can also be performed with
 					Gemstone.  Furthermore, input files can
 					be uploaded to use Gemstone as a
