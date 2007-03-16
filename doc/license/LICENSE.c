@@ -37,23 +37,21 @@
  * General Public License cover the whole combination.
  * 
  * SPECIAL GPL EXCEPTION
- * In addition, as a special exception, the copyright holders of APBS
- * give you permission to combine the APBS program with free software
- * programs and libraries that are released under the GNU LGPL or with
- * code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
- * SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
- * redistributed together in original or modified form as mere aggregation
- * without requirement that the entire work be under the scope of the GNU 
- * General Public License. This special exception permission is also extended
- * to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
- * FEtk, MC, or MALOC libraries.
+ * In addition, as a special exception, the copyright holders of APBS give you
+ * permission to combine the APBS program with free software programs and
+ * libraries that are released under the GNU LGPL or with code included in
+ * releases of ISIM, Ion Simulator Interface, PMV, SMOL, VMD, and Vision. Such
+ * combined software may be linked with APBS and redistributed together in
+ * original or modified form as mere aggregation without requirement that the
+ * entire work be under the scope of the GNU General Public License. This
+ * special exception permission is also extended to any software listed in the
+ * SPECIAL GPL EXCEPTION clauses by the PMG, FEtk, MC, or MALOC libraries.
  * 
- * Note that people who make modified versions of APBS are not obligated
- * to grant this special exception for their modified versions; it is
- * their choice whether to do so. The GNU General Public License gives
- * permission to release a modified version without this exception; this
- * exception also makes it possible to release a modified version which
- * carries forward this exception.
+ * Note that people who make modified versions of APBS are not obligated to
+ * grant this special exception for their modified versions; it is their choice
+ * whether to do so. The GNU General Public License gives permission to release
+ * a modified version without this exception; this exception also makes it
+ * possible to release a modified version which carries forward this exception.
  *
  * @endverbatim
  */

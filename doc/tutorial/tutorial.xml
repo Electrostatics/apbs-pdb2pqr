@@ -2228,7 +2228,7 @@ ATOM    548  HG3 GLU    35       3.500  15.796  25.084  0.0000 1.4870
 
 			<para>Here is a template input that we will use for each of the solvation
 				energy calculations (download it <ulink
-					url="exmaples/pKa/apbs-template.in">here</ulink>):
+					url="examples/pKa/apbs-template.in">here</ulink>):
 				<programlisting>
 read
 	mol pqr compound.pqr # This is the compound for which we will calculate solvation energies
