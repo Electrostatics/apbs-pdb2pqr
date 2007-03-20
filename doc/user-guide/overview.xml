@@ -242,14 +242,14 @@
 		</sect2>
 
 		<sect2 id="acc"> <title>Solvent accessibility</title>
-			<para>We provide a simple program (<filename>tools/manip/acc</filename>)
-				which calculates molecular volumes, surface areas, and other
-				surface-based properties from 
-				<link linkend="pqr-format">PQR-format</link>
-				structural data.  Such calculations are often used to determine apolar
-				solvation contributions to binding events, etc.  This program has a
-				number of options which can be viewed by running
-				<filename>acc</filename> with no arguments.</para>
+			<para>The main APBS executable calculates molecular volumes, surface areas,
+				and other surface-based properties from <link
+					linkend="pqr-format">PQR-format</link> structural data.
+				Such calculations are often used to determine apolar solvation
+				contributions to binding events, etc. See the new <link
+					linkend="apolar">APOLAR</link> keyword for more
+				documentation on this APBS feature.
+			</para>
 		</sect2>
 
 		<sect2> <title>Coulomb's Law and Generalized Born calculations</title>
