@@ -2763,7 +2763,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
         VASSERT(0);
 
     }
-    
+
     /* Scale the kappa map to values between 0 and 1 
        Thus get the maximum value in the map - this 
        is theoretically unnecessary, but a good check.*/
@@ -3483,9 +3483,9 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
 }
 
 VPRIVATE void fillcoCoef(Vpmg *thee) {
-
+	
     VASSERT(thee != VNULL);
-
+	
     if (thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
       thee->useKappaMap) {
         fillcoCoefMap(thee);
@@ -3951,9 +3951,16 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
     thee->rparm[7] = zmax;
 
     /* This is a flag that gets set if the operator is a simple Laplacian;
-     * i.e., in the case of a homogenous dielectric and zero ionic strength */
-    if ((ionstr < VPMGSMALL) && (VABS(epsp-epsw) < VPMGSMALL)) islap = 1;
-    else islap = 0;
+     * i.e., in the case of a homogenous dielectric and zero ionic strength
+	 * The operator cannot be a simple Laplacian if maps are read in. */
+	if(thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
+	   thee->useKappaMap){
+		islap = 0;
+	}else if ( (ionstr < VPMGSMALL) && (VABS(epsp-epsw) < VPMGSMALL) ){
+		islap = 1;
+	}else{
+		islap = 0;
+	}
 
     /* Fill the mesh point coordinate arrays */
     for (i=0; i<nx; i++) thee->xf[i] = xmin + i*hx;
@@ -3966,11 +3973,10 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
     /* Fill in the source term (atomic charges) */
     Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
     fillcoCharge(thee);
-
+	
     /* THE FOLLOWING NEEDS TO BE DONE IF WE'RE NOT USING A SIMPLE LAPLACIAN
      * OPERATOR */
     if (!islap) {
-
         Vnm_print(0, "Vpmg_fillco:  marking ion and solvent accessibility.\n");
         fillcoCoef(thee);
         Vnm_print(0, "Vpmg_fillco:  done filling coefficient arrays\n");
