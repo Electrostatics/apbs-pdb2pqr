@@ -1225,7 +1225,7 @@ VPUBLIC int NOsh_parseMG(
 	if (rc == 0) return 0;
 	
 	/* Check the status of the parameter objects */
-	if ((!MGparm_check(mgparm)) || (!PBEparm_check(pbeparm))) {
+	if ((MGparm_check(mgparm) == VRC_FAILURE) || (!PBEparm_check(pbeparm))) {
 		Vnm_print(2, "NOsh:  MG parameters not set correctly!\n");
 		return 0;
 	}

@@ -195,7 +195,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
 
     int rc, i, tdime[3], ti, tnlev[3], nlev;
 
-    rc = 1;
+    rc = VRC_SUCCESS;
 	
 	Vnm_print(0, "MGparm_check:  checking MGparm object of type %d.\n", 
 			  thee->type);
@@ -203,17 +203,17 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     /* Check to see if we were even filled... */
     if (!thee->parsed) {
         Vnm_print(2, "MGparm_check:  not filled!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     /* Check generic settings */
     if (!thee->setdime) {
         Vnm_print(2, "MGparm_check:  DIME not set!\n");
-        rc = 0;
+        rc = VRC_FAILURE;
     }
     if (!thee->setchgm) {
         Vnm_print(2, "MGparm_check: CHGM not set!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
 
@@ -221,15 +221,15 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     if ((thee->type == MCT_MANUAL) || (thee->type == MCT_DUMMY)) {
         if ((!thee->setgrid) && (!thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Neither GRID nor GLEN set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if ((thee->setgrid) && (thee->setglen)) {
             Vnm_print(2, "MGparm_check:  Both GRID and GLEN set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setgcent) {
             Vnm_print(2, "MGparm_check:  GCENT not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
     }
  
@@ -237,19 +237,19 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     if ((thee->type == MCT_AUTO) || (thee->type == MCT_PARALLEL)) {
         if (!thee->setcglen) {
             Vnm_print(2, "MGparm_check:  CGLEN not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setfglen) {
             Vnm_print(2, "MGparm_check:  FGLEN not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setcgcent) {
             Vnm_print(2, "MGparm_check:  CGCENT not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setfgcent) {
             Vnm_print(2, "MGparm_check:  FGCENT not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
     }
 
@@ -257,19 +257,19 @@ VPUBLIC int MGparm_check(MGparm *thee) {
     if (thee->type == MCT_PARALLEL) {
         if (!thee->setpdime) {
             Vnm_print(2, "MGparm_check:  PDIME not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setrank) {
             Vnm_print(2, "MGparm_check:  PROC_RANK not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setsize) {
             Vnm_print(2, "MGparm_check:  PROC_SIZE not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
         if (!thee->setofrac) {
             Vnm_print(2, "MGparm_check:  OFRAC not set!\n");
-            rc = 0;
+            rc = VRC_FAILURE;
         }
     }
  
@@ -305,8 +305,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
                     if (ti < 1) ti = 1;
                     tdime[i] = ti*(int)(VPOW(2.,(VMGNLEV+1))) + 1;
                     tnlev[i] = 4;
-                    Vnm_print(2, "NOsh:  Reset dime[%d] to %d and \
-(nlev = %d).\n", i, tdime[i], VMGNLEV);
+                    Vnm_print(2, "NOsh:  Reset dime[%d] to %d and (nlev = %d).\n", i, tdime[i], VMGNLEV);
                 }
             }
         }
@@ -320,7 +319,7 @@ VPUBLIC int MGparm_check(MGparm *thee) {
         thee->nlev = nlev;
 		if (thee->nlev <= 0) {
 			Vnm_print(2, "MGparm_check:  illegal nlev (%d); check your grid dimensions!\n", thee->nlev);
-			rc = 0;
+			rc = VRC_FAILURE;
 		}
 		if (thee->nlev < 2) {
 			Vnm_print(2, "MGparm_check:  you're using a very small nlev (%d) and therefore\n", thee->nlev);

@@ -75,6 +75,21 @@
 #define _VAPBSHAL_H_
 
 /**
+ *	@ingroup Vhal
+ *	@author	 David Gohara
+ *	@brief	 Return code enumerations
+ */
+enum eVrc_Codes {
+	
+	VRC_WARNING=-1, /**< Note that the enumerated values are opposite the standrd
+					 *   for FAILURE and SUCCESS  */
+	VRC_FAILURE=0,
+	VRC_SUCCESS=1    
+
+};
+typedef enum eVrc_Codes Vrc_Codes;
+
+/**
  *  @ingroup Vhal
  *  @author  Nathan Baker
  *  @brief   Types of molecular surface definitions
