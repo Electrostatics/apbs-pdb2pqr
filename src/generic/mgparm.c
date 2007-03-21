@@ -318,6 +318,15 @@ VPUBLIC int MGparm_check(MGparm *thee) {
         Vnm_print(0, "NOsh:  nlev = %d, dime = (%d, %d, %d)\n", nlev, tdime[0],
           tdime[1], tdime[2]);
         thee->nlev = nlev;
+		if (thee->nlev <= 0) {
+			Vnm_print(2, "MGparm_check:  illegal nlev (%d); check your grid dimensions!\n", thee->nlev);
+			rc = 0;
+		}
+		if (thee->nlev < 2) {
+			Vnm_print(2, "MGparm_check:  you're using a very small nlev (%d) and therefore\n", thee->nlev);
+			Vnm_print(2, "MGparm_check:  will not get the optimal performance of the multigrid\n");
+			Vnm_print(2, "MGparm_check:  algorithm.  Please check your grid dimensions.\n");
+		}
         for (i=0; i<3; i++) thee->dime[i] = tdime[i];
     }
 

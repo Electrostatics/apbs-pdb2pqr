@@ -865,5 +865,12 @@ VPUBLIC int Valist_getStatistics(Valist *thee) {
     thee->center[1] = 0.5*(thee->maxcrd[1] + thee->mincrd[1]);
     thee->center[2] = 0.5*(thee->maxcrd[2] + thee->mincrd[2]);
 
+	Vnm_print(0, "Valist_getStatistics:  Max atom coordinate:  (%g, %g, %g)\n",
+			  thee->maxcrd[0], thee->maxcrd[1], thee->maxcrd[2]);
+	Vnm_print(0, "Valist_getStatistics:  Min atom coordinate:  (%g, %g, %g)\n",
+			  thee->mincrd[0], thee->mincrd[1], thee->mincrd[2]);
+	Vnm_print(0, "Valist_getStatistics:  Molecule center:  (%g, %g, %g)\n",
+			  thee->center[0], thee->center[1], thee->center[2]);
+	
     return 1;
 }
