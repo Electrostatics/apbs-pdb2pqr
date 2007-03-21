@@ -8,6 +8,8 @@
        those specifications is calculated and store.
    * Added pKa tutorial
    * Added warning about strange grid settings (MGparm)
+   * Fixed a bug in vpmg.c that occured when a user supplied a dielectric map
+      with the ionic strength set to zero, causing the map to not be used.
 
 #############################################################################
 BETA PUBLIC RELEASE VERSION 0.5.0       Jan-2007
