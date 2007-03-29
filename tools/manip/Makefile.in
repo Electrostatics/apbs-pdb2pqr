@@ -137,9 +137,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 CCLD = $(F77)
 
-noinst_PROGRAMS = acc coulomb born
-acc_SOURCES = acc.c 
-acc_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
+noinst_PROGRAMS = coulomb born
 coulomb_SOURCES = coulomb.c 
 coulomb_LDADD = ../../src/aaa_lib/libapbs.la @lib_list@
 born_SOURCES = born.c 
@@ -151,13 +149,9 @@ subdir = tools/manip
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-noinst_PROGRAMS = acc$(EXEEXT) coulomb$(EXEEXT) born$(EXEEXT)
+noinst_PROGRAMS = coulomb$(EXEEXT) born$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_acc_OBJECTS = acc.$(OBJEXT)
-acc_OBJECTS = $(am_acc_OBJECTS)
-acc_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
-acc_LDFLAGS =
 am_born_OBJECTS = born.$(OBJEXT)
 born_OBJECTS = $(am_born_OBJECTS)
 born_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
@@ -181,9 +175,9 @@ LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
-DIST_SOURCES = $(acc_SOURCES) $(born_SOURCES) $(coulomb_SOURCES)
+DIST_SOURCES = $(born_SOURCES) $(coulomb_SOURCES)
 DIST_COMMON = Makefile.am Makefile.in
-SOURCES = $(acc_SOURCES) $(born_SOURCES) $(coulomb_SOURCES)
+SOURCES = $(born_SOURCES) $(coulomb_SOURCES)
 
 all: all-am
 
@@ -201,9 +195,6 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-acc$(EXEEXT): $(acc_OBJECTS) $(acc_DEPENDENCIES) 
-	@rm -f acc$(EXEEXT)
-	$(LINK) $(acc_LDFLAGS) $(acc_OBJECTS) $(acc_LDADD) $(LIBS)
 born$(EXEEXT): $(born_OBJECTS) $(born_DEPENDENCIES) 
 	@rm -f born$(EXEEXT)
 	$(LINK) $(born_LDFLAGS) $(born_OBJECTS) $(born_LDADD) $(LIBS)
