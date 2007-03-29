@@ -10,9 +10,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 CCLD = $(F77)
 
-noinst_PROGRAMS  = acc coulomb born
-acc_SOURCES      = acc.c 
-acc_LDADD        = ../../src/aaa_lib/libapbs.la @lib_list@
+noinst_PROGRAMS  = coulomb born
 coulomb_SOURCES  = coulomb.c 
 coulomb_LDADD    = ../../src/aaa_lib/libapbs.la @lib_list@
 born_SOURCES     = born.c 
