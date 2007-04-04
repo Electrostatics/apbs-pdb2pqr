@@ -1964,8 +1964,9 @@
 										<listitem>
 											<para>
 												Write out the biomolecular charge distribution in
-												units of e<subscript>c</subscript> (multigrid
-												only)
+												units of e<subscript>c</subscript> (electron charge)
+												per Angstrom<superscript>3</superscript> (multigrid
+												only).
 											</para>
 										</listitem>
 									</varlistentry>

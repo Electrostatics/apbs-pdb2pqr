@@ -124,7 +124,7 @@
 				<graphic fileref="images/epsilon_of_x.gif" valign="bottom"/>
 			</inlineequation>
 			mapped to 3 meshes shifted by one-half grid spacing in the x, y, and z
-			directions.  The result are maps of dielectric variables between the
+			directions.  The inputs are maps of dielectric variables between the
 			solvent and biomolecular dieletric constants; these values are unitless.
 			In general, this command will read dielectric maps written by 
 			<link linkend="elec-write"><command>write</command></link>
@@ -187,7 +187,7 @@
 				<alt>\overline{\kappa}^2(x)</alt>
 				<graphic fileref="images/overline_kappa_2_of_x.gif" valign="bottom"/>
 			</inlineequation>
-			mapped to a mesh.  The result are maps of ion accessibility values which
+			mapped to a mesh.  The inputs are maps of ion accessibility values which
 			range between 0 and the build Debye-H&uuml;ckel screening parameter;
 			these values have units of &Aring;<superscript>-2</superscript>.  In
 			general, this command will read kappa-maps written by 
@@ -234,8 +234,9 @@
 			<arg choice="req"><replaceable>path</replaceable></arg>
 		</cmdsynopsis>
 		<para>This command allows APBS to read the fixed (molecular) charge density
-			function mapped to a mesh.  The result are maps of charge densities; 
-			these values have units of e<subscript>c</subscript> (electron charge).
+			function mapped to a mesh.  The inputs are maps of charge densities; 
+			these values have units of e<subscript>c</subscript> (electron charge) per
+			Angstrom<superscript>3</superscript>.
 			In general, this command will read charge-maps written by 
 			<link linkend="elec-write"><command>write</command></link>
 			commands in earlier APBS calculations.  Arguments for this command are:
