@@ -3522,13 +3522,14 @@ VPRIVATE void fillcoCoef(Vpmg *thee) {
 }
 
 
-VPRIVATE void fillcoCharge(Vpmg *thee) {
+VPRIVATE Vrc_Codes fillcoCharge(Vpmg *thee) {
+	
+	Vrc_Codes rc;
 
     VASSERT(thee != VNULL);
 
     if (thee->useChargeMap) {
-        fillcoChargeMap(thee);
-        return;
+        return fillcoChargeMap(thee);
     }
 
     switch(thee->chargeMeth) {
@@ -3563,23 +3564,25 @@ VPRIVATE void fillcoCharge(Vpmg *thee) {
                 default:
                     Vnm_print(2, "fillcoCharge:  Invalid chargeSource (%d)!\n",
                       thee->chargeSrc);
-                    VASSERT(0);
+                    return VRC_FAILURE;
                     break;
             }
             break;
         default:
             Vnm_print(2, "fillcoCharge:  Invalid chargeMeth (%d)!\n",
               thee->chargeMeth);
-            VASSERT(0);
+            return VRC_FAILURE;
             break;
     }
+	
+	return VRC_SUCCESS;
 }
 
-VPRIVATE void fillcoChargeMap(Vpmg *thee) {
+VPRIVATE Vrc_Codes fillcoChargeMap(Vpmg *thee) {
 
     Vpbe *pbe;
     double position[3], charge, zmagic, hx, hy, hzed;
-    int i, j, k, nx, ny, nz;
+    int i, j, k, nx, ny, nz, rc;
 
 
     VASSERT(thee != VNULL);
@@ -3607,13 +3610,20 @@ VPRIVATE void fillcoChargeMap(Vpmg *thee) {
                 position[0] = thee->xf[i];
                 position[1] = thee->yf[j];
                 position[2] = thee->zf[k];
-                VASSERT(Vgrid_value(thee->chargeMap, position, &charge));
-                /* Scale the charge to internal units */
+				rc = Vgrid_value(thee->chargeMap, position, &charge);
+				if (!rc) {
+					Vnm_print(2, "fillcoChargeMap:  Error -- fell off of charge map at (%g, %g, %g)!\n",
+						  position[0], position[1], position[2]);
+					return VRC_FAILURE;
+				}
+				/* Scale the charge to internal units */
                 charge = charge*zmagic;
                 thee->charge[IJK(i,j,k)] = charge;
             }
         }
     }
+	
+	return VRC_SUCCESS;
 }
 
 VPRIVATE void fillcoChargeSpline1(Vpmg *thee) {
@@ -3891,6 +3901,7 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
     double xlen, ylen, zlen, hx, hy, hzed;
     double epsw, epsp, ionstr;
     int i, nx, ny, nz, islap;
+	Vrc_Codes rc;
 
     if (thee == VNULL) {
         Vnm_print(2, "Vpmg_fillco:  got NULL thee!\n");
@@ -3972,7 +3983,18 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
 
     /* Fill in the source term (atomic charges) */
     Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
-    fillcoCharge(thee);
+    rc = fillcoCharge(thee);
+	switch(rc) {
+		case VRC_SUCCESS:
+			break;
+		case VRC_WARNING:
+			Vnm_print(2, "Vpmg_fillco:  non-fatal errors while filling charge map!\n");
+			break;
+		case VRC_FAILURE:
+			Vnm_print(2, "Vpmg_fillco:  fatal errors while filling charge map!\n");
+			return 0;
+			break;
+	}
 	
     /* THE FOLLOWING NEEDS TO BE DONE IF WE'RE NOT USING A SIMPLE LAPLACIAN
      * OPERATOR */

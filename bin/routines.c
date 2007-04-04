@@ -880,13 +880,16 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 			return 0;
 		}
 	} else theChargeMap = VNULL;
-	Vpmg_fillco(pmg[icalc], 
-				pbeparm->srfm, pbeparm->swin, mgparm->chgm,
-				pbeparm->useDielMap, theDielXMap,
-				pbeparm->useDielMap, theDielYMap,
-				pbeparm->useDielMap, theDielZMap,
-				pbeparm->useKappaMap, theKappaMap,
-				pbeparm->useChargeMap, theChargeMap);
+	if (!Vpmg_fillco(pmg[icalc], 
+					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
+					 pbeparm->useDielMap, theDielXMap,
+					 pbeparm->useDielMap, theDielYMap,
+					 pbeparm->useDielMap, theDielZMap,
+					 pbeparm->useKappaMap, theKappaMap,
+					 pbeparm->useChargeMap, theChargeMap)) {
+		Vnm_print(2, "initMG:  problems setting up coefficients (fillco)!\n");
+		return 0;
+	}
 	
 	/* Print a few derived parameters */
 #ifndef VAPBSQUIET

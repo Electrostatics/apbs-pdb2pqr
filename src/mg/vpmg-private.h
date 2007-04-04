@@ -387,17 +387,19 @@ VPRIVATE void fillcoCoefSpline4(
 
 /**
  * @brief  Top-level driver to fill source term charge array
+ * @returns  Success/failure status
  * @author  Nathan Baker
  */
-VPRIVATE void fillcoCharge(
+VPRIVATE Vrc_Codes fillcoCharge(
         Vpmg *thee
         );
 
 /**
  * @brief  Fill source term charge array from a pre-calculated map
+ * @returns  Success/failure status
  * @author  Nathan Baker
  */
-VPRIVATE void fillcoChargeMap(
+VPRIVATE Vrc_Codes fillcoChargeMap(
         Vpmg *thee
         );
 
