@@ -1,22 +1,15 @@
 <chapter id="contents-sect"> <title>Overview</title> 
 	<para>
-		This chapter gives an overview of the binaries, tools, etc. distributed as
-		part of the APBS software package.  It is organized by directory; later
-		chapters provide a more in-depth description on tools specific to particular
-		applications
+		This chapter gives an overview of the binaries, tools, etc. distributed as part of the APBS software package.  It is organized by directory; later chapters provide a more in-depth description on tools specific to particular applications.
 	</para>
 
 	&invocation;  
 
 	<sect1> <title>Other tools</title>
 		<para>
-			APBS contains a number of tools to facilitate the preparation of APBS runs
-			and analysis of the results.  
+			APBS contains a number of tools to facilitate the preparation of APBS runs and analysis of the results.  
 			<note>
-				<para>NOTE:  In addition to the tools provided with APBS, there are a
-					number of other programs which interoperate with our code.  Please see
-					the <link linkend="other-programs">Other Programs</link> section of this
-					manual for more information.  </para>
+				<para>NOTE:  In addition to the tools provided with APBS, there are a number of other programs which interoperate with our code.  Please see the <link linkend="other-programs">Other Programs</link> section of this manual for more information.  </para>
 			</note>
 		</para>
 
