@@ -180,7 +180,7 @@ int main(
 	In addition, as a special exception, the copyright holders of APBS\n\
 	give you permission to combine the APBS program with free software\n\
 	programs and libraries that are released under the GNU LGPL or with\n\
-	code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL\n\
+	code included in releases of ISIM, Ion Simulator Interface, PMV,\n\
 	SMOL, VMD, and Vision. Such combined software may be linked with APBS and\n\
 	redistributed together in original or modified form as mere aggregation\n\
 	without requirement that the entire work be under the scope of the GNU\n\
