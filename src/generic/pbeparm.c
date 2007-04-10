@@ -79,17 +79,18 @@ VPUBLIC double PBEparm_getIonCharge(PBEparm *thee, int i) {
 	VASSERT(i < thee->nion);
     return thee->ionq[i];
 }
+
 VPUBLIC double PBEparm_getIonConc(PBEparm *thee, int i) {
     VASSERT(thee != VNULL);
     VASSERT(i < thee->nion);
     return thee->ionc[i];
 }
+
 VPUBLIC double PBEparm_getIonRadius(PBEparm *thee, int i) {
     VASSERT(thee != VNULL);
     VASSERT(i < thee->nion);
     return thee->ionr[i];
 }
-
 
 VPUBLIC PBEparm* PBEparm_ctor() {
 
@@ -133,7 +134,13 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->useDielMap = 0;
     thee->useKappaMap = 0;
     thee->useChargeMap = 0;
-
+	
+	thee->smsize = 0.0;
+	thee->smvolume = 0.0;
+	
+	thee->setsmsize = 0;
+	thee->setsmvolume = 0;
+	
     return 1; 
 }
 
@@ -162,7 +169,7 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
         return 0;
     }
     if (!thee->setpbetype) {
-        Vnm_print(2, "PBEparm_check:  LPBE/NPBE/LRPBE/NRPBE not set!\n");
+        Vnm_print(2, "PBEparm_check:  LPBE/NPBE/LRPBE/NRPBE/SMPBE not set!\n");
         return 0;
     }
     if (!thee->setbcfl) {
@@ -281,6 +288,12 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     for (i=0; i<VMAX_ARGLEN; i++) thee->writematstem[i] = parm->writematstem[i];
     thee->writematflag = parm->writematflag;
    
+	thee->smsize = parm->smsize;
+	thee->smvolume = parm->smvolume;
+	
+	thee->setsmsize = parm->setsmsize;
+	thee->setsmvolume = parm->setsmvolume;
+	
     thee->parsed = parm->parsed;
 
 }
@@ -330,6 +343,41 @@ VPRIVATE int PBEparm_parseNRPBE(PBEparm *thee, Vio *sock) {
     thee->pbetype = PBE_NRPBE;
     thee->setpbetype = 1;
     return 1;
+}
+
+VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
+	char sizeTok[VMAX_BUFSIZE];
+	char volTok[VMAX_BUFSIZE];
+    double size, volume;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", sizeTok) == 1);
+    if (sscanf(sizeTok, "%lf", &size) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", sizeTok);
+        return -1;
+    }
+	
+	VJMPERR1(Vio_scanf(sock, "%s", volTok) == 1);
+    if (sscanf(volTok, "%lf", &volume) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", volTok);
+        return -1;
+    }
+	
+	Vnm_print(0, "NOsh: parsed smpbe\n");
+    thee->pbetype = PBE_SMPBE;
+    thee->setpbetype = 1;
+	
+	thee->smsize = size;
+	thee->setsmsize = 1;
+	
+	thee->smvolume = volume;
+	thee->setsmvolume = 1;
+	
+    return 1;
+	
+VERROR1:
+    Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return -1;
+	
 }
 
 VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
@@ -886,6 +934,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseLRPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "nrpbe") == 0) {
         return PBEparm_parseNRPBE(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "smpbe") == 0) {
+        return PBEparm_parseSMPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
         return PBEparm_parseBCFL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "ion") == 0) {

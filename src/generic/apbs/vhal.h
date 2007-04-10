@@ -135,7 +135,8 @@ enum eVhal_PBEType {
     PBE_LPBE,  /**<  Traditional Poisson-Boltzmann equation, linearized */
     PBE_NPBE,  /**<  Traditional Poisson-Boltzmann equation, full */
     PBE_LRPBE,  /**<  Regularized Poisson-Boltzmann equation, linearized */
-    PBE_NRPBE  /** <  Regularized Poisson-Boltzmann equation, full */
+    PBE_NRPBE,  /** <  Regularized Poisson-Boltzmann equation, full */
+	PBE_SMPBE	/**< SM PBE */
 };
 
 /** 
