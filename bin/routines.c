@@ -3246,8 +3246,8 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 				  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
 				  fetk[icalc]->pjac);
 	} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
-		/* Note: USEHB is a compile time defined macro the program flow
-		is to always go take the route using AM_hlSolve when the solver
+		/* Note: USEHB is a compile time defined macro. The program flow
+		is to always take the route using AM_hlSolve when the solver
 		is linear. D. Gohara 6/29/06
 		*/
 		if (USEHB) {

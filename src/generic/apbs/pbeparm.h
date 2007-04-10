@@ -160,6 +160,13 @@ struct sPBEparm {
     int setswin;  /**< Flag, @see swin */
     double temp;  /**< Temperature (in K) */
     int settemp;  /**< Flag, @see temp */
+	
+	double smsize; /**< SMPBE size */
+	int setsmsize; /**< Flag, @see temp */
+	
+	double smvolume; /**< SMPBE size */
+	int setsmvolume; /**< Flag, @see temp */
+	
     PBEparm_calcEnergy calcenergy;  /**< Energy calculation flag */
     int setcalcenergy;  /**< Flag, @see calcenergy */
     PBEparm_calcForce calcforce;  /**< Atomic forces calculation */
