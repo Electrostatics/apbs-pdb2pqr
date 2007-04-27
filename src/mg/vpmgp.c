@@ -117,8 +117,10 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->zlen = ((double)(nz-1))*hzed;
     thee->nlev = nlev; 
     thee->nonlin = nonlin;
-    if (nonlin == 0) thee->ipkey = -1;
-    else thee->ipkey = 0;
+	
+    if (nonlin == NONLIN_LPBE) thee->ipkey = IPKEY_LPBE; /* LPBE case */
+	else if(nonlin == NONLIN_SMPBE) thee->ipkey = IPKEY_SMPBE; /* SMPBE case */
+    else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
 
 
     /* Default parameters */
@@ -134,7 +136,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->bcfl = BCFL_SDH;
     thee->key = 0;
     thee->iperf = 0;
-    if (thee->nonlin == 1) { 
+    if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { /* SMPBE Added - SMPBE needs to mimic NPBE */ 
         Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgcoar = 2, mgsolv = 0\n");
         thee->meth = 1;
         thee->mgcoar = 2;
@@ -151,6 +153,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
         thee->mgsolv = 1;
 #endif
     }
+	
     thee->mgkey = 0;
     thee->nu1 = 2;
     thee->nu2 = 2;

@@ -127,6 +127,10 @@ struct sVpbe {
 	double soluteZlen;  /**< Solute length in z-direction */
 	double soluteCharge; /**< Charge of solute molecule (e) */
 	
+	double smvolume;	/**< Size-Modified PBE relative volume */
+	double smsize;		/**< Size-Modified PBE size */
+	int ipkey;			/**< PBE calculation type */
+	
 	int paramFlag;      /**< Check to see if the parameters have been set */
 	
 };

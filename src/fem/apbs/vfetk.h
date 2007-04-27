@@ -408,7 +408,7 @@ VEXTERNC double  Vfetk_energy(
                      specified partition (indexed by simplex and atom colors
                      */
         int nonlin /** If 1, the NPBE energy functional is used; otherwise,
-                     the LPBE energy functional is used. */
+                     the LPBE energy functional is used. If -2, SMPBE is used. */
         );
 
 /** 

@@ -114,6 +114,7 @@ struct sVpmgp {
     int niwk;  /**< Integer work storage */
     int narr;  /**< Array work storage */
     int ipkey;  /**< Toggles nonlinearity (set by nonlin)
+			     * \li  -2: Size-Modified PBE
                  * \li  -1: Linearized PBE
                  * \li   0: Nonlinear PBE with capped sinh 
                  *          term [default]

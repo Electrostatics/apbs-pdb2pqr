@@ -398,8 +398,13 @@ function\n", thee->maxIonRadius);
 	
     VASSERT(thee->acc != VNULL);
 
+	/* SMPBE Added */
+	thee->smsize = 0.0;
+	thee->smvolume = 0.0;
+	thee->ipkey = 0;
+	
     thee->paramFlag = 1;
-
+	
     return 1; 
 }
 

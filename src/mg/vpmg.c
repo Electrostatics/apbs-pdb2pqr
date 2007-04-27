@@ -780,7 +780,7 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         if ( VABS(Vacc_ivdwAcc(acc, 
                                position, pbe->maxIonRadius) - 1.0) < VSMALL) {
                             for (l=0; l<pbe->numIon; l++) {
-                                if (pbetype == PBE_NPBE) {
+                                if (pbetype == PBE_NPBE || pbetype == PBE_SMPBE /*  SMPBE Added */) {
                                     vec[IJK(i,j,k)] += (pbe->ionConc[l]
                                         * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)], 
                                         &ichop));
@@ -808,7 +808,7 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
                         if ( VABS(Vacc_ivdwAcc(acc, 
                                position, pbe->maxIonRadius) - 1.0) < VSMALL) {
                             for (l=0; l<pbe->numIon; l++) {
-                                if (pbetype == PBE_NPBE) {
+                                if (pbetype == PBE_NPBE || pbetype == PBE_SMPBE /*  SMPBE Added */) {
                                     vec[IJK(i,j,k)] += (pbe->ionConc[l] 
                                         * pbe->ionQ[l]
                                         * Vcap_exp(-pbe->ionQ[l]*thee->u[IJK(i,j,k)],
@@ -1029,8 +1029,21 @@ VPUBLIC double Vpmg_dielGradNorm(Vpmg *thee) {
 
     return energy;
 }
-    
+
 VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
+
+	double energy;
+	
+	if(thee->pbe->ipkey == IPKEY_SMPBE){
+		energy = Vpmg_qmEnergySMPBE(thee,extFlag);
+	}else{
+		energy = Vpmg_qmEnergyNONLIN(thee,extFlag);
+	}
+	
+	return energy;
+}
+
+VPRIVATE double Vpmg_qmEnergyNONLIN(Vpmg *thee, int extFlag) {
 
     double hx, hy, hzed, energy, ionConc[MAXION], ionRadii[MAXION];
     double ionQ[MAXION], zkappa2, ionstr, zks2;
@@ -1097,7 +1110,161 @@ VPUBLIC double Vpmg_qmEnergy(Vpmg *thee, int extFlag) {
 
     return energy;
 }
-    
+
+VPUBLIC double Vpmg_qmEnergySMPBE(Vpmg *thee, int extFlag) {
+	
+    double hx, hy, hzed, energy, ionConc[MAXION], ionRadii[MAXION];
+    double ionQ[MAXION], zkappa2, ionstr, zks2;
+    int i, j, nx, ny, nz, nion, ichop, nchop;
+	
+    /* SMPB Modification (vchu, 09/21/06)*/
+    /* variable declarations for SMPB energy terms */
+    double a, k, z1, z2, z3, cb1, cb2, cb3;
+    double a1, a2, a3, c1, c2, c3, currEnergy;
+    double fracOccA, fracOccB, fracOccC, phi, gpark, denom, Na;
+    int ichop1, ichop2, ichop3;
+	
+    VASSERT(thee != VNULL);
+	
+    /* Get the mesh information */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+    zkappa2 = Vpbe_getZkappa2(thee->pbe);
+    ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
+	
+    /* Bail if we're at zero ionic strength */
+    if (zkappa2 < VSMALL) {
+		
+#ifndef VAPBSQUIET
+        Vnm_print(0, "Vpmg_qmEnergySMPBE:  Zero energy for zero ionic strength!\n");
+#endif
+		
+        return 0.0;
+    }
+    zks2 = 0.5*zkappa2/ionstr;
+	
+    if (!thee->filled) {
+        Vnm_print(2, "Vpmg_qmEnergySMPBE:  Need to call Vpmg_fillco()!\n");
+        VASSERT(0);
+    }
+	
+    energy = 0.0;
+    nchop = 0;
+    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+	
+    /* SMPB Modification (vchu, 09/21/06) */
+    /* Extensive modification to the first part of the if statement
+		where that handles the thee->pmgp->nonlin part. Basically, I've 
+		deleted all of the original code and written my own code that computes
+		the electrostatic free energy in the SMPB framework. Definitely really hacky
+		at this stage of the game, but gets the job done. The second part of the 
+		if statement (the part that handles linear poisson-boltzmann) has been deleted
+		because there will be no linearized SMPB energy.. */
+	
+    z1 = ionQ[0];
+    z2 = ionQ[1];
+    z3 = ionQ[2];
+    cb1 = ionConc[0];
+    cb2 = ionConc[1];
+    cb3 = ionConc[2];
+    a  = thee->pbe->smvolume;
+    k  = thee->pbe->smsize;
+    Na = 6.022045000e-04; // Converts from Molar to N/A^3
+	
+    fracOccA = Na*cb1*VCUB(a);
+    fracOccB = Na*cb2*VCUB(a);
+    fracOccC = Na*cb3*VCUB(a);
+	
+    phi = (fracOccA/k) + fracOccB + fracOccC;
+	
+    if (thee->pmgp->nonlin) {
+        Vnm_print(0, "Vpmg_qmEnergySMPBE:  Calculating nonlinear energy using SMPB functional!\n");
+        for (i=0; i<(nx*ny*nz); i++) {
+			if (((k-1) > VSMALL) && (thee->pvec[i]*thee->kappa[i] > VSMALL)) {
+				
+				a1 = Vcap_exp(-1.0*z1*thee->u[i], &ichop1);
+				a2 = Vcap_exp(-1.0*z2*thee->u[i], &ichop2);
+				a3 = Vcap_exp(-1.0*z3*thee->u[i], &ichop3);
+				
+				nchop += ichop1 + ichop2 + ichop3; 
+				
+				gpark = (1 - phi + (fracOccA/k)*a1);
+				denom = VPOW(gpark, k) + VPOW(1-fracOccB-fracOccC, k-1)*(fracOccB*a2+fracOccC*a3);
+				
+				if (cb1 > VSMALL) {
+					
+					c1 = Na*cb1*VPOW(gpark, k-1)*a1/denom;
+				} else c1 = 0;
+				
+				if (cb2 > VSMALL) {
+					c2 = Na*cb2*VPOW(1-fracOccB-fracOccC,k-1)*a2/denom;
+				} else c2 = 0;
+				
+				if (cb3 > VSMALL) {
+					c3 = Na*cb3*VPOW(1-fracOccB-fracOccC,k-1)*a3/denom;
+				} else c3 = 0;
+				
+				currEnergy = k*VLOG((1-(c1*VCUB(a)/k)-c2*VCUB(a)-c3*VCUB(a))/(1-phi))
+					-(k-1)*VLOG((1-c2*VCUB(a)-c3*VCUB(a))/(1-phi+(fracOccA/k)));
+    	    	      
+				energy += thee->pvec[i]*thee->kappa[i]*currEnergy;
+				
+				
+			} else if (thee->pvec[i]*thee->kappa[i] > VSMALL){
+				
+				a1 = Vcap_exp(-1.0*z1*thee->u[i], &ichop1);
+				a2 = Vcap_exp(-1.0*z2*thee->u[i], &ichop2);
+				a3 = Vcap_exp(-1.0*z3*thee->u[i], &ichop3);
+				
+				nchop += ichop1 + ichop2 + ichop3;
+				
+				gpark = (1 - phi + (fracOccA)*a1);
+				denom = gpark + (fracOccB*a2+fracOccC*a3);
+				
+				
+				if (cb1 > VSMALL) {
+					
+					c1 = Na*cb1*a1/denom;
+				} else c1 = 0;
+				
+				if (cb2 > VSMALL) {
+					c2 = Na*cb2*a2/denom;
+				} else c2 = 0;
+				
+				if (cb3 > VSMALL) {
+					c3 = Na*cb3*a3/denom;
+				} else c3 = 0;
+				
+				
+				currEnergy = VLOG((1-c1*VCUB(a)-c2*VCUB(a)-c3*VCUB(a))/(1-fracOccA-fracOccB-fracOccC));
+				
+				energy += thee->pvec[i]*thee->kappa[i]*currEnergy;
+			}
+        }
+		
+		energy = -energy/VCUB(a);
+		
+        if (nchop > 0) Vnm_print(2, "Vpmg_qmEnergySMPBE:  Chopped EXP %d times!\n",
+								 nchop);
+		
+    } else {
+        /* Zkappa2 OK here b/c LPBE approx */
+        Vnm_print(0, "Vpmg_qmEnergySMPBE:  ERROR: NO LINEAR ENERGY!! Returning 0!\n");
+		
+		energy = 0.0;
+		
+    }
+    energy = energy*hx*hy*hzed;
+	
+    if (extFlag == 1) energy += thee->extQmEnergy;
+	
+    return energy;
+}
+
 VPUBLIC double Vpmg_qfEnergy(Vpmg *thee, int extFlag) {
 
     double energy = 0.0;
@@ -1330,8 +1497,9 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
           );
 
     /* We need some additional storage if: nonlinear & newton OR cgmg */
-    if (((thee->pmgp->nonlin == 1) && (thee->pmgp->meth == 1))
-        || (thee->pmgp->meth == 0)) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
+    if ( ( ((thee->pmgp->nonlin == 1) || (thee->pmgp->nonlin == 2)) /* SMPBE Added - nonlin = 2 added since it mimics NPBE */
+			&& (thee->pmgp->meth == 1) )
+        || (thee->pmgp->meth == 0) ) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
 
     Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
@@ -1447,8 +1615,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
       sizeof(double));
 
     /* Plop some of the parameters into the iparm and rparm arrays */
-    F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk),
-&(thee->pmgp->niwk),
+    F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
       &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
       &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
       &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
@@ -1468,7 +1635,8 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     for (i=0; i<nion; i++) {
         ionConc[i] = zks2 * ionConc[i];
     }
-    F77MYPDEFINIT(&nion, ionQ, ionConc);
+	
+    F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
 
     /* Set the default chargeSrc for 5th order splines */
     

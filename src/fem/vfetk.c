@@ -1558,7 +1558,24 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                     }
                 }
                 break;
-
+				
+			case PBE_SMPBE: /* SMPBE Temp */
+				
+                var.B  = 0;
+                var.DB  = 0;
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
+                    for (i=0; i<var.nion; i++) {
+                        u2 = -1.0 * var.U[0] * var.ionQ[i];
+						
+                        /* NONLINEAR TERM */
+                        coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
+                        var.B += (coef2 * Vcap_exp(u2, &ichop));
+                        /* LINEARIZED TERM */
+                        coef2 = -1.0 * var.ionQ[i] * coef2;
+                        var.DB += (coef2 * Vcap_exp(u2, &ichop));
+                    }
+                } 
+					break;
             default:
                 Vnm_print(2, "Vfetk_PDE_initPoint:  Unknown PBE type (%d)!\n",
                   pdetype);
@@ -1683,7 +1700,7 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
 
     F[0] = 0.0;
 
-    if ((pdetype == PBE_LPBE) || (pdetype == PBE_NPBE)) {
+    if ((pdetype == PBE_LPBE) || (pdetype == PBE_NPBE) || (pdetype == PBE_SMPBE) /* SMPBE Added */) {
         VASSERT( vertex != VNULL);
         numSring = 0;
         sring[numSring] = VV_firstSS(vertex);
@@ -1758,7 +1775,7 @@ phi = {");
 VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
   double F[]) {
 
-    if ((var.fetk->type == PBE_LPBE) || (var.fetk->type == PBE_NPBE)) {
+    if ((var.fetk->type == PBE_LPBE) || (var.fetk->type == PBE_NPBE)) || (var.fetk->type == PBE_SMPBE) /* SMPBE Added */) {
         F[0] = debye_U(var.fetk->pbe, thee->dim, txq);
     } else if ((var.fetk->type == PBE_LRPBE) || (var.fetk->type == PBE_NRPBE)) {
         F[0] = debye_Udiff(var.fetk->pbe, thee->dim, txq);
@@ -1826,7 +1843,7 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     if (edgeLength < targetRes) return 0;
 
     /* For non-regularized PBE, check charge-simplex map */
-    if ((type == PBE_LPBE) || (type == PBE_NPBE)) {
+    if ((type == PBE_LPBE) || (type == PBE_NPBE) || (type == PBE_SMPBE)  /* SMPBE Added */) {
         natoms = Vcsm_getNumberAtoms(csm, SS_id(simp));
         if (natoms > 0) {
             return 1;
@@ -1919,6 +1936,16 @@ VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
                     for (i=0; i<var.nion; i++) {
                         coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
                         u2 = -1.0 * (var.U[0] + var.W) * var.ionQ[i];
+                        qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
+                    }
+                } else qmE = 0;
+                break;
+			case PBE_SMPBE: /* SMPBE Temp */
+                if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
+                    qmE = 0.;
+                    for (i=0; i<var.nion; i++) {
+                        coef2 = var.ionacc * var.zks2 * var.ionConc[i] * var.ionQ[i];
+                        u2 = -1.0 * (var.U[0]) * var.ionQ[i];
                         qmE += (coef2 * (Vcap_exp(u2, &ichop) - 1.0));
                     }
                 } else qmE = 0;
@@ -2265,7 +2292,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 for (j=0; j<pbe->numIon; j++) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
-                    if (thee->type == PBE_NPBE) {
+                    if (thee->type == PBE_NPBE || thee->type == PBE_SMPBE /* SMPBE Added */) {
                         val += (conc*Vcap_exp(-q*Bvec_val(vec, i), &ichop));
                     } else if (thee->type == PBE_LPBE) {
                         val += (conc * ( 1 - q*Bvec_val(vec, i)));
@@ -2289,7 +2316,7 @@ VPUBLIC int Vfetk_fillArray(Vfetk *thee, Bvec *vec, Vdata_Type type) {
                 for (j=0; j<pbe->numIon; j++) {
                     q = pbe->ionQ[j];
                     conc = pbe->ionConc[j];
-                    if (thee->type == PBE_NPBE) {
+                    if (thee->type == PBE_NPBE || thee->type == PBE_SMPBE /* SMPBE Added */) {
                         val += (q*conc*Vcap_exp(-q*Bvec_val(vec, i), &ichop));
                     } else if (thee->type == PBE_LPBE) {
                         val += (q*conc*(1 - q*Bvec_val(vec, i)));

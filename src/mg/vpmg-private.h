@@ -526,6 +526,17 @@ VPRIVATE void markSphere(
         double markVal  /** Value to mark with */
         );
 
+/**
+ * @brief Vpmg_qmEnergy for SMPBE
+ * @author Vincent Chu
+ */
+VPRIVATE double Vpmg_qmEnergySMPBE(Vpmg *thee, int extFlag);
+VPRIVATE double Vpmg_qmEnergyNONLIN(Vpmg *thee, int extFlag);
+
+/* Added by Vincent Chu 9/13/06 for SMPB */
+#define VCUB(x)            ((x)*(x)*(x))
+#define VLOG(x)            (log(x))
+
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define IJKx(j,k,i) (((i)*(ny)*(nz))+((k)*(ny))+(j))
 #define IJKy(i,k,j) (((j)*(nx)*(nz))+((k)*(nx))+(i))
@@ -614,10 +625,8 @@ VEXTERNC void F77NRICHDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
 #define F77ANORMDRIV  VF77_MANGLE(anormdriv, ANORMDRIV)
 
 #define F77MYPDEFINIT VF77_MANGLE(mypdefinit, MYPDEFINIT)
-VEXTERNC void F77MYPDEFINIT(int *nion, double *ionQ, double *ionConc);
-
-#define F77MYPDESMFINIT VF77_MANGLE(mypdesmfinit, MYPDESMFINIT)
-VEXTERNC void F77MYPDESMFINIT(int *nion, double *ionQ, double *ionConc, double *smSize, double *smVol);
+VEXTERNC void F77MYPDEFINIT(int *nion, double *ionQ, double *ionConc,
+							int *pbeType,double *smvolume,double *smsize);
 
 #define F77MYPDEFCLEAR VF77_MANGLE(mypdefclear, MYPDEFCLEAR)
 VEXTERNC void F77MYPDEFCLEAR();
