@@ -576,14 +576,15 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
 			break;
 		case PBE_NRPBE:
 			Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
-			Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear \
-regularized PBE implementation. **\n");
-			Vnm_tprint( 2, "  ** Please let us know if you are interested in \
-using it. **\n");
+			Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear regularized PBE implementation. **\n");
+			Vnm_tprint( 2, "  ** Please let us know if you are interested in using it. **\n");
 			VASSERT(0); 
 			break;
 		case PBE_LRPBE:
 			Vnm_tprint( 1, "  Linearized regularized PBE\n");
+			break;
+		case PBE_SMPBE: /* SMPBE Added */
+			Vnm_tprint( 1, "  Nonlinear Size-Modified PBE\n");
 			break;
 		default:
 			Vnm_tprint(2, "  Unknown PBE type (%d)!\n", pbeparm->pbetype);
@@ -607,6 +608,12 @@ conditions\n");
 %4.3f M concentration\n", 
 					pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);            
 	}
+	
+	if(pbeparm->pbetype == PBE_SMPBE){ /* SMPBE Added */
+		Vnm_tprint( 1, "  Lattice spacing: %4.3f A (SMPBE) \n", pbeparm->smvolume);
+		Vnm_tprint( 1, "  Relative size parameter: %4.3f  (SMPBE) \n", pbeparm->smsize);
+	}
+	
 	Vnm_tprint( 1, "  Solute dielectric: %4.3f\n", pbeparm->pdie);
 	Vnm_tprint( 1, "  Solvent dielectric: %4.3f\n", pbeparm->sdie);
 	switch (pbeparm->srfm) {
@@ -796,12 +803,12 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		case PBE_NPBE:
 			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
 								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
-								 mgparm->grid[1], mgparm->grid[2], 1);
+								 mgparm->grid[1], mgparm->grid[2], NONLIN_NPBE);
 			break;
 		case PBE_LPBE:
 			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
 								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
-								 mgparm->grid[1], mgparm->grid[2], 0);
+								 mgparm->grid[1], mgparm->grid[2], NONLIN_LPBE);
 			break;
 		case PBE_LRPBE:
 			Vnm_tprint(2, "Sorry, LRPBE isn't supported with the MG solver!\n");
@@ -810,6 +817,17 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		case PBE_NRPBE:
 			Vnm_tprint(2, "Sorry, NRPBE isn't supported with the MG solver!\n");
 			return 0;
+			break;
+		case PBE_SMPBE: /* SMPBE Added */
+			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
+									 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
+									 mgparm->grid[1], mgparm->grid[2], NONLIN_SMPBE); 
+			
+			/* Copy Code */
+			pbe[icalc]->smsize = pbeparm->smsize;
+			pbe[icalc]->smvolume = pbeparm->smvolume;
+			pbe[icalc]->ipkey = pmgp[icalc]->ipkey;
+			
 			break;
 		default:
 			Vnm_tprint(2, "Error!  Unknown PBE type (%d)!\n", pbeparm->pbetype);
@@ -908,7 +926,6 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 %4.3f MB high water\n", (double)(bytesTotal)/(1024.*1024.),
 				(double)(highWater)/(1024.*1024.));
 #endif
-	
 	
 	return 1;
 	
@@ -2986,7 +3003,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	
 	
 	/* Set the femparm pkey value based on the type of solver being used */
-	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)){
+	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)||(pbeparm->pbetype == PBE_SMPBE) /* SMPBE Added */){
 		feparm->pkey = 0;
 	}else{
 		feparm->pkey = 1;
@@ -3240,7 +3257,7 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 	
 	int lkeyHB = 3;  /**<  AM_hPcg */
 	
-	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)) {
+	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)||(pbeparm->pbetype == PBE_SMPBE) /* SMPBE Added */) {
 		AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
 				  fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
 				  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
@@ -3279,7 +3296,7 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 	
 	/* Some processors don't count */
 	if (nosh->bogus == 0) {
-		if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype==PBE_NRPBE)) {
+		if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype==PBE_NRPBE)||(pbeparm->pbetype == PBE_SMPBE) /* SMPBE Added */) {
 			*totEnergy = Vfetk_energy(fetk[icalc], -1, 1);
 		} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
 			*totEnergy = Vfetk_energy(fetk[icalc], -1, 0);

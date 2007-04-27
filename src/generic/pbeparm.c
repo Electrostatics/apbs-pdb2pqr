@@ -115,7 +115,12 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->setpbetype = 0;
     thee->setbcfl = 0;
     thee->setnion = 0;
-    for (i=0; i<MAXION; i++) thee->setion[i] = 0;
+    for (i=0; i<MAXION; i++){
+		thee->setion[i] = 0;
+		thee->ionq[i] = 0.0;
+		thee->ionc[i] = 0.0;
+		thee->ionr[i] = 0.0;
+	}
     thee->setpdie = 0;
     thee->setsdie = 0;
     thee->setsrfm = 0;
@@ -350,15 +355,15 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 	char volTok[VMAX_BUFSIZE];
     double size, volume;
 	
-    VJMPERR1(Vio_scanf(sock, "%s", sizeTok) == 1);
-    if (sscanf(sizeTok, "%lf", &size) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", sizeTok);
-        return -1;
-    }
-	
 	VJMPERR1(Vio_scanf(sock, "%s", volTok) == 1);
     if (sscanf(volTok, "%lf", &volume) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", volTok);
+        return -1;
+    }
+	
+    VJMPERR1(Vio_scanf(sock, "%s", sizeTok) == 1);
+    if (sscanf(sizeTok, "%lf", &size) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", sizeTok);
         return -1;
     }
 	

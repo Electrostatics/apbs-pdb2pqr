@@ -145,6 +145,37 @@ enum eVhal_PBEType {
  */
 typedef enum eVhal_PBEType Vhal_PBEType;
 
+/**
+* @brief  Type of ipkey to use for MG methods
+ * @ingroup  Vhal
+ */
+enum eVhal_IPKEYType {
+    IPKEY_SMPBE = -2, /**<  SMPBE ipkey */
+	IPKEY_LPBE,  /**<  LPBE ipkey */
+    IPKEY_NPBE /**<  NPBE ipkey */
+};
+
+/** 
+*  @brief   Declaration of the Vhal_IPKEYType type as the Vhal_IPKEYType enum
+*  @ingroup Vhal
+*/
+typedef enum eVhal_IPKEYType Vhal_IPKEYType;
+
+/**
+* @brief  Type of nonlinear to use for MG methods
+ * @ingroup  Vhal
+ */
+enum eVhal_NONLINType {
+    NONLIN_LPBE = 0,
+	NONLIN_NPBE,  
+    NONLIN_SMPBE
+};
+
+/** 
+*  @brief   Declaration of the Vhal_NONLINType type as the Vhal_NONLINType enum
+*  @ingroup Vhal
+*/
+typedef enum eVhal_NONLINType Vhal_NONLINType;
 
 /**
  * @brief Output file format
