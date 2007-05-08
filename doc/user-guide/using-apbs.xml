@@ -22,6 +22,9 @@
 					services provided by <ulink
 						url="http://nbcr.net">NBCR</ulink>).
 				</para>
+				<para>
+					The NBCR Opal Web Services client for APBS (<ulink url="http://nbcr.net/services/#Software">http://nbcr.net/services/#Software</ulink>) provides a more basic interface which allows users to execute APBS jobs remotely via Python or build such functionality into their own software.
+				</para>
 			</sect3>
 		</sect2>
 
