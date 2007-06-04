@@ -1775,7 +1775,7 @@ phi = {");
 VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
   double F[]) {
 
-    if ((var.fetk->type == PBE_LPBE) || (var.fetk->type == PBE_NPBE)) || (var.fetk->type == PBE_SMPBE) /* SMPBE Added */) {
+    if ((var.fetk->type == PBE_LPBE) || (var.fetk->type == PBE_NPBE) || (var.fetk->type == PBE_SMPBE) /* SMPBE Added */) {
         F[0] = debye_U(var.fetk->pbe, thee->dim, txq);
     } else if ((var.fetk->type == PBE_LRPBE) || (var.fetk->type == PBE_NRPBE)) {
         F[0] = debye_Udiff(var.fetk->pbe, thee->dim, txq);
