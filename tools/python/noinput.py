@@ -38,6 +38,7 @@
 from apbslib import *
 import sys, time
 import string
+import re
 from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
@@ -318,18 +319,27 @@ def runAPBS(PQR, INPUT):
     atoms = string.split(PQR,"\n")
     for i in range(len(atoms)):
         atom = atoms[i]
+        if not (atom.startswith("ATOM") or atom.startswith("HETATM")): continue
+        if atom == "": continue
+
+        # Try matching to see if a chain ID is present
+        haschain = 0
+        if re.compile("( [A-Z]{3} [A-Z]{1} *\d+)").findall(atom) != []:
+            haschain = 1
+
         params = string.split(atom)
-        x.append(float(params[5]))
-        y.append(float(params[6]))
-        z.append(float(params[7]))
-        chg.append(float(params[8]))
-        rad.append(float(params[9]))
+        x.append(float(params[5+haschain]))
+        y.append(float(params[6+haschain]))
+        z.append(float(params[7+haschain]))
+        chg.append(float(params[8+haschain]))
+        rad.append(float(params[9+haschain]))
     
     # If there are more than one PQR file, make multiple Valist
-    # objects
+    # objects.  Make sure to get the actual length of the
+    # coordinate since atoms may contain non ATOM lines.
 
     myAlist = make_Valist(alist,0)
-    Valist_load(myAlist, len(atoms), x,y,z,chg,rad)  
+    Valist_load(myAlist, len(x), x,y,z,chg,rad)  
 
     if not NOsh_setupElecCalc(nosh, alist):
         stderr.write("main: Error setting up calculation.\n")
