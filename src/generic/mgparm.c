@@ -880,6 +880,9 @@ VPUBLIC int MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
         Vnm_print(2, "parseMG:  got NULL socket!\n"); 
         return -1;
     }
+	
+	Vnm_print(0, "MGparm_parseToken:  trying %s...\n", tok);
+
 
     if (Vstring_strcasecmp(tok, "dime") == 0) {
         return MGparm_parseDIME(thee, sock);

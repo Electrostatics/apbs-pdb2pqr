@@ -57,17 +57,8 @@
 /* have the time() function */
 #undef HAVE_TIME_FUNC
 
-/* have the FMM library */
-#undef HAVE_TREE
-
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* have the Vmetis library */
-#undef HAVE_VMETIS
-
-/* have the Vor library */
-#undef HAVE_VOR
 
 /* machine error */
 #undef MACHINE_EPS
@@ -92,6 +83,9 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* use hierarchical basis method */
+#undef USE_HB
 
 /* Version number of package */
 #undef VERSION

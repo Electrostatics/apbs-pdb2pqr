@@ -85,11 +85,6 @@
  * @ingroup  Frontend */
 #define APBSRC 13
 
-/** 
- * @brief  Set this macro to 1 for hierarchical basis, 0 for normal solver
- * @ingroup  Frontend */
-#define USEHB 1
-
 /**
  * @brief  Structure to hold atomic forces
  * @ingroup  Frontend

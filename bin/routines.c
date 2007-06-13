@@ -2458,7 +2458,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "  Legend:\n");
 		Vnm_tprint( 1, "    tot -- Total force\n");
 		Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
-		Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
+		Vnm_tprint( 1, "    db  -- Dielectric boundary force\n");
 		Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
 		
 		for (ivc=0; ivc<3; ivc++) {
@@ -2482,7 +2482,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "  Legend:\n");
 		Vnm_tprint( 1, "    tot n -- Total force for atom n\n");
 		Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
-		Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
+		Vnm_tprint( 1, "    db  n -- Dielectric boundary force for atom n\n");
 		Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
 		Vnm_tprint( 1, "    tot all -- Total force for system\n");
 		
@@ -2691,7 +2691,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "  Legend:\n");
 		Vnm_tprint( 1, "    tot -- Total force\n");
 		Vnm_tprint( 1, "    qf  -- Fixed charge force\n");
-		Vnm_tprint( 1, "    db  -- Dielctric boundary force\n");
+		Vnm_tprint( 1, "    db  -- Dielectric boundary force\n");
 		Vnm_tprint( 1, "    ib  -- Ionic boundary force\n");
 		
 		for (ivc=0; ivc<3; ivc++) {
@@ -2715,7 +2715,7 @@ calculations %d and %d\n", nosh->elec2calc[nosh->printcalc[iprint][0]]+1,
 		Vnm_tprint( 1, "  Legend:\n");
 		Vnm_tprint( 1, "    tot n -- Total force for atom n\n");
 		Vnm_tprint( 1, "    qf  n -- Fixed charge force for atom n\n");
-		Vnm_tprint( 1, "    db  n -- Dielctric boundary force for atom n\n");
+		Vnm_tprint( 1, "    db  n -- Dielectric boundary force for atom n\n");
 		Vnm_tprint( 1, "    ib  n -- Ionic boundary force for atom n\n");
 		Vnm_tprint( 1, "    tot all -- Total force for system\n");
 		
@@ -3117,11 +3117,11 @@ VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
 	
 	/* FOLLOWING IS SOLVER-RELATED; BAIL IF NOT SOLVING */
 	if (nosh->bogus)  return;
-	if (USEHB) {
-		Vnm_tprint(1, "  HB linear solver:  AM_hPcg\n");
-	} else {
-		Vnm_tprint(1, "  Non-HB linear solver:  ");
-		switch (fetk[icalc]->lkey) {
+#ifdef USE_HB
+	Vnm_tprint(1, "  HB linear solver:  AM_hPcg\n");
+#else
+	Vnm_tprint(1, "  Non-HB linear solver:  ");
+	switch (fetk[icalc]->lkey) {
 			case VLT_SLU:
 				Vnm_print(1, "SLU direct\n");
 				break;
@@ -3137,8 +3137,9 @@ VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm,
 			default:
 				Vnm_print(1, "???\n");
 				break;
-		}
 	}
+#endif
+
 	Vnm_tprint(1, "  Linear solver tol.:  %g\n", fetk[icalc]->ltol);
 	Vnm_tprint(1, "  Linear solver max. iters.:  %d\n", fetk[icalc]->lmax);
 	Vnm_tprint(1, "  Linear solver preconditioner:  ");
@@ -3267,14 +3268,14 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 		is to always take the route using AM_hlSolve when the solver
 		is linear. D. Gohara 6/29/06
 		*/
-		if (USEHB) {
-			AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
-					   fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
-		} else {
-			AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
-					  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
-					  fetk[icalc]->pjac);
-		}
+#ifdef USE_HB
+		AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
+			fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
+#else
+		AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
+			fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
+			fetk[icalc]->pjac);
+#endif
 	}
 	
 	return 1;
