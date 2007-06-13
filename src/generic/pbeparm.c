@@ -927,7 +927,7 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 
-    Vnm_print(0, "parsePBE:  trying %s...\n", tok);
+    Vnm_print(0, "PBEparm_parseToken:  trying %s...\n", tok);
 
     if (Vstring_strcasecmp(tok, "mol") == 0) {
         return PBEparm_parseMOL(thee, sock);

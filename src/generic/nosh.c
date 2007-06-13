@@ -444,8 +444,7 @@ VPUBLIC int NOsh_parseInput(
 	/* We parse the file until we run out of tokens */
 	Vnm_print(0, "NOsh_parseInput:  Starting file parsing...\n");
 	while (Vio_scanf(sock, "%s", tok) == 1) {
-		/* At the highest level, we look for keywords that indicate functions 
-like:
+		/* At the highest level, we look for keywords that indicate functions like:
 		
 		read => Read in a molecule file
 		elec => Do an electrostatics calculation

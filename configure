@@ -465,7 +465,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE F77 FFLAGS ac_ct_F77 CPP EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CXXCPP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib fetk_cpu_vendor_os maloc_lib maloc_inc mpi_lib mpi_inc py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_CC PY_PRESENT_TRUE PY_PRESENT_FALSE apbs_do_maloc rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib apbs_do_blas UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools tree_lib lib_list inc_list LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM AWK SET_MAKE APBS_VERSION CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE F77 FFLAGS ac_ct_F77 CPP EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CXXCPP LIBTOOL math_lib liberty_lib nsl_lib socket_lib thread_lib fetk_cpu_vendor_os maloc_lib maloc_inc mpi_lib mpi_inc py_path PY_SHARED PY_LDFLAGS PY_CFLAGS PY_LINKFLAGS PY_CC PY_PRESENT_TRUE PY_PRESENT_FALSE apbs_do_maloc rl_lib mcx_lib mcx_inc mc_lib mc_inc wall wall_pedantic wall_pedantic_ansi pedantic_ansi apbs_do_tools blas_lib apbs_do_blas UHBD_COMPILE_TRUE UHBD_COMPILE_FALSE arpack_lib arpack_do_tools lib_list inc_list LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2027,13 +2027,13 @@ else
 
 fi;
 if test -n "${with_python}"; then
-    echo "$as_me:$LINENO: result: \"WARNING:  Python linkage requires GNU compilers\"" >&5
+	echo "$as_me:$LINENO: result: \"WARNING:  Python linkage requires GNU compilers\"" >&5
 echo "${ECHO_T}\"WARNING:  Python linkage requires GNU compilers\"" >&6
-    cclist="gcc"
-    f77list="gfortran g95 g77"
+	cclist="gcc"
+	f77list="gfortran g95 g77"
 else
-    cclist="icc pgcc gcc"
-    f77list="ifort pgf77 gfortran g95 g77"
+	cclist="icc pgcc gcc"
+	f77list="ifort pgf77 gfortran g95 g77"
 fi
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3688,31 +3688,31 @@ fi
 
 short_os=`echo ${host_os} | sed 's/osf.*/osf/g'`;
 if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
-  echo "$as_me:$LINENO: result: Disabling debugger compiler flags to avert OSF weirdness" >&5
+	echo "$as_me:$LINENO: result: Disabling debugger compiler flags to avert OSF weirdness" >&5
 echo "${ECHO_T}Disabling debugger compiler flags to avert OSF weirdness" >&6
-  if test -z ${FFLAGS-''}; then
-      FFLAGS="";
-  else
-     FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
-     if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
-         FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
-     fi
-  fi
-  if test -z ${CFLAGS-''}; then
-      CFLAGS="";
-  else
-     CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
-  fi
-  if test -z ${CPPFLAGS-''}; then
-      CPPFLAGS="";
-  else
-     CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
-  fi
-  if test -z ${CXXFLAGS-''}; then
-      CXXFLAGS="";
-  else
-     CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
-  fi
+	if test -z ${FFLAGS-''}; then
+		FFLAGS="";
+	else
+		FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
+		if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
+			FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
+		fi
+	fi
+	if test -z ${CFLAGS-''}; then
+		CFLAGS="";
+	else
+		CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
+	fi
+	if test -z ${CPPFLAGS-''}; then
+		CPPFLAGS="";
+	else
+		CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
+	fi
+	if test -z ${CXXFLAGS-''}; then
+		CXXFLAGS="";
+	else
+		CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
+	fi
 fi
 
 
@@ -19448,7 +19448,7 @@ else
 fi
 
 if test -n "${try_nsl}"; then
-    echo "$as_me:$LINENO: checking for gethostbyname in -lnsl" >&5
+	echo "$as_me:$LINENO: checking for gethostbyname in -lnsl" >&5
 echo $ECHO_N "checking for gethostbyname in -lnsl... $ECHO_C" >&6
 if test "${ac_cv_lib_nsl_gethostbyname+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -19624,7 +19624,7 @@ else
 fi
 
 if test -n "${try_socket}"; then
-    echo "$as_me:$LINENO: checking for connect in -lsocket" >&5
+	echo "$as_me:$LINENO: checking for connect in -lsocket" >&5
 echo $ECHO_N "checking for connect in -lsocket... $ECHO_C" >&6
 if test "${ac_cv_lib_socket_connect+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -19800,7 +19800,7 @@ else
 fi
 
 if test -n "${try_thread}"; then
-    echo "$as_me:$LINENO: checking for thr_create in -lthread" >&5
+	echo "$as_me:$LINENO: checking for thr_create in -lthread" >&5
 echo $ECHO_N "checking for thr_create in -lthread... $ECHO_C" >&6
 if test "${ac_cv_lib_thread_thr_create+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -20286,19 +20286,21 @@ echo "${ECHO_T}-----------------------------------------------------------" >&6
 contrib_path=`pwd`/contrib
 
 if test -n "${FETK_INCLUDE}"; then
-		echo
-		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
-		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
-		echo "Exiting..."
-		exit 0
+	{ echo "$as_me:$LINENO: WARNING: Error... FETK_INCLUDE is no longer supported." >&5
+echo "$as_me: WARNING: Error... FETK_INCLUDE is no longer supported." >&2;}
+	{ echo "$as_me:$LINENO: WARNING: Use --with-fetk-include=PATH instead." >&5
+echo "$as_me: WARNING: Use --with-fetk-include=PATH instead." >&2;}
+	{ echo "$as_me:$LINENO: WARNING: Ignoring these variables..." >&5
+echo "$as_me: WARNING: Ignoring these variables..." >&2;}
 fi
 
 if test -n "${FETK_LIBRARY}"; then
-		echo
-		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
-		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
-		echo "Exiting..."
-		exit 0
+	{ echo "$as_me:$LINENO: WARNING: Error... FETK_LIBRARY is no longer supported." >&5
+echo "$as_me: WARNING: Error... FETK_LIBRARY is no longer supported." >&2;}
+	{ echo "$as_me:$LINENO: WARNING: Use --with-fetk-library=PATH instead." >&5
+echo "$as_me: WARNING: Use --with-fetk-library=PATH instead." >&2;}
+	{ echo "$as_me:$LINENO: WARNING: Ignoring these variables..." >&5
+echo "$as_me: WARNING: Ignoring these variables..." >&2;}
 fi
 
 echo "$as_me:$LINENO: checking for --with-fetk-include option" >&5
@@ -20356,15 +20358,16 @@ else
   maloc_inc=""
 fi
 
- 	if test -z "${maloc_inc}"; then
- 		echo "Error... Couldn't find FETK include files in the location you specified"
- 		exit 0
- 	fi
+	if test -z "${maloc_inc}"; then
+		{ { echo "$as_me:$LINENO: error: Error... Couldn't find FETK include files in the location you specified" >&5
+echo "$as_me: error: Error... Couldn't find FETK include files in the location you specified" >&2;}
+   { (exit 1); exit 1; }; }
+	fi
 else
-	echo "$as_me:$LINENO: result: no; will use ${contrib_path}/include" >&5
-echo "${ECHO_T}no; will use ${contrib_path}/include" >&6
 	maloc_inc_path="${contrib_path}/include";
 fi
+echo "$as_me:$LINENO: result: Using MALOC headers in ${maloc_inc_path}" >&5
+echo "${ECHO_T}Using MALOC headers in ${maloc_inc_path}" >&6
 
 if test -n "${USE_FETK_LIBRARY}"; then
 	maloc_lib_path="${fetk_library_path}"
@@ -20393,15 +20396,16 @@ else
 fi
 
 	if test -z "${maloc_lib}"; then
- 		echo "Error... Couldn't find FETK library files in the location you specified"
- 		exit 0
- 	fi
+		{ { echo "$as_me:$LINENO: error: Error... Couldn't find FETK library files in the location you specified" >&5
+echo "$as_me: error: Error... Couldn't find FETK library files in the location you specified" >&2;}
+   { (exit 1); exit 1; }; }
+	fi
 	USE_FETK="yes"
 else
-	echo "$as_me:$LINENO: result: no; will use ${contrib_path}/lib" >&5
-echo "${ECHO_T}no; will use ${contrib_path}/lib" >&6
 	maloc_lib_path="${contrib_path}/lib";
 fi
+echo "$as_me:$LINENO: result: Using MALOC libraries in ${maloc_lib_path}" >&5
+echo "${ECHO_T}Using MALOC libraries in ${maloc_lib_path}" >&6
 
 maloc_inc="-I${maloc_inc_path}"
 maloc_lib="-L${maloc_lib_path} -lmaloc"
@@ -20746,9 +20750,9 @@ fi;
 
 PY_ENABLE=""
 if test -n "${with_python}"; then
-    echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-    # Extract the first word of "python", so it can be a program name with args.
+	# Extract the first word of "python", so it can be a program name with args.
 set dummy python; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
@@ -20787,59 +20791,63 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
-    PY_ENABLE="yes"
+	PY_ENABLE="yes"
 
-    if test -n "${py_path}"; then
-              PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
-              PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
-       PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
-       if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-          PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
-       fi
-    fi
+	if test -n "${py_path}"; then
+				PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
+				PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+		PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
+		if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+			PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
+		fi
+	fi
 
-    PY_LINKFLAGS=${CFLAGS}
-    PY_CC=${CC}
-
-
-    PY_LDFLAGS=""
-    PY_SHARED=""
-    case $host_os in
-       linux*)
-           PY_SHARED="-shared"
-		   CC="${CC} -fPIC"
-		   F77="${F77} -fPIC"
-		   ;;
-       irix*)
-           PY_SHARED="-shared"
-           PY_LDFLAGS="-lftn -lm";;
-       sun|solaris**)
-           PY_SHARED="-G"
-           PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
-       darwin**)
-           PY_CC=${F77}
-           PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle";;
-       mingw*)
-           PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-           PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-                      PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
-                      PY_CC=${F77}
-           PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
-           PY_SHARED="-shared"
-           if test -f $PY_PREFIX/include/Python.h; then
-               PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
-           fi;;
-    esac
+	PY_LINKFLAGS=${CFLAGS}
+	PY_CC=${CC}
 
 
-    IS_STATIC=`echo ${LDFLAGS} | grep static`
-    case $host_cpu in
-       x86_64*)
-          PY_CC="${F77}";;
-       i*86)
-          PY_CC="${F77}"
-          if test "${CC}" = "icc"; then
-             echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
+	PY_LDFLAGS=""
+	PY_SHARED=""
+	case $host_os in
+		linux*)
+			PY_SHARED="-shared"
+			CC="${CC} -fPIC"
+			F77="${F77} -fPIC"
+			;;
+		irix*)
+			PY_SHARED="-shared"
+			PY_LDFLAGS="-lftn -lm"
+			;;
+		sun|solaris**)
+			PY_SHARED="-G"
+			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
+			;;
+		darwin**)
+			PY_CC=${F77}
+			PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle"
+			;;
+		mingw*)
+			PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+			PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+						PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
+						PY_CC=${F77}
+			PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
+			PY_SHARED="-shared"
+			if test -f $PY_PREFIX/include/Python.h; then
+				PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
+			fi
+			;;
+	esac
+
+
+	IS_STATIC=`echo ${LDFLAGS} | grep static`
+	case $host_cpu in
+		x86_64*)
+			PY_CC="${F77}";;
+		i*86)
+			PY_CC="${F77}"
+			if test "${CC}" = "icc"; then
+				echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
 echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
 if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -20909,19 +20917,19 @@ else
   ifcore_lib=""
 fi
 
-             if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-                echo "$as_me:$LINENO: result: \"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&5
+				if test -n "${ifcore_lib}"; then
+					PY_LDFLAGS=${ifcore_lib}
+				else
+					echo "$as_me:$LINENO: result: \"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&5
 echo "${ECHO_T}\"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&6
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	            PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
-             fi
-          fi;;
-       ia64*)
-          if test "${CC}" = "icc"; then
-             echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
+				fi
+				if test -n "${IS_STATIC}"; then
+					PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+				fi
+			fi;;
+		ia64*)
+			if test "${CC}" = "icc"; then
+				echo "$as_me:$LINENO: checking for d_int_val in -lifcore_pic" >&5
 echo $ECHO_N "checking for d_int_val in -lifcore_pic... $ECHO_C" >&6
 if test "${ac_cv_lib_ifcore_pic_d_int_val+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -20991,34 +20999,34 @@ else
   ifcore_lib=""
 fi
 
-	         if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-	           	echo "$as_me:$LINENO: result: \"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&5
+				if test -n "${ifcore_lib}"; then
+					PY_LDFLAGS=${ifcore_lib}
+				else
+					echo "$as_me:$LINENO: result: \"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&5
 echo "${ECHO_T}\"WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.\"" >&6
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	             if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	                PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
-	             else
-                    echo "$as_me:$LINENO: result: \"WARNING:  Could not find libc.so or libm.so in /usr/lib\"" >&5
+				fi
+				if test -n "${IS_STATIC}"; then
+					if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+						PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+					else
+						echo "$as_me:$LINENO: result: \"WARNING:  Could not find libc.so or libm.so in /usr/lib\"" >&5
 echo "${ECHO_T}\"WARNING:  Could not find libc.so or libm.so in /usr/lib\"" >&6
-	             fi
-             fi
-         fi;;
-   esac
+					fi
+				fi
+			fi;;
+	esac
 
 else
-    echo "$as_me:$LINENO: result: no" >&5
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
 
 
 if test -n "${PY_ENABLE}"; then
-   echo "$as_me:$LINENO: result: Python wrappers enabled" >&5
+	echo "$as_me:$LINENO: result: Python wrappers enabled" >&5
 echo "${ECHO_T}Python wrappers enabled" >&6
 else
-   echo "$as_me:$LINENO: result: Python wrappers disabled" >&5
+	echo "$as_me:$LINENO: result: Python wrappers disabled" >&5
 echo "${ECHO_T}Python wrappers disabled" >&6
 fi
 
@@ -21044,7 +21052,6 @@ fi
 
 
 if test -z "${USE_FETK}";  then
-
 	echo "$as_me:$LINENO: checking for --disable-maloc-rebuild" >&5
 echo $ECHO_N "checking for --disable-maloc-rebuild... $ECHO_C" >&6
 	# Check whether --enable-maloc-rebuild or --disable-maloc-rebuild was given.
@@ -21177,21 +21184,21 @@ fi
 
 if test -n "${rl_use}"; then
 
-        echo "$as_me:$LINENO: checking whether your environment defines FETK_RL_LIBRARY" >&5
+		echo "$as_me:$LINENO: checking whether your environment defines FETK_RL_LIBRARY" >&5
 echo $ECHO_N "checking whether your environment defines FETK_RL_LIBRARY... $ECHO_C" >&6
-    if test -n "${FETK_RL_LIBRARY}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
+	if test -n "${FETK_RL_LIBRARY}"; then
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-        rl_lib_path="-L${FETK_RL_LIBRARY} ";
-    else
-        echo "$as_me:$LINENO: result: no" >&5
+		rl_lib_path="-L${FETK_RL_LIBRARY} ";
+	else
+		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-        rl_lib_path="";
-    fi
+		rl_lib_path="";
+	fi
 
 
-    LDFLAGS=${rl_lib_path};
-    echo "$as_me:$LINENO: checking for tgetnum in -lncurses" >&5
+	LDFLAGS=${rl_lib_path};
+	echo "$as_me:$LINENO: checking for tgetnum in -lncurses" >&5
 echo $ECHO_N "checking for tgetnum in -lncurses... $ECHO_C" >&6
 if test "${ac_cv_lib_ncurses_tgetnum+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21261,7 +21268,7 @@ else
   ncurses_lib=""
 fi
 
-    echo "$as_me:$LINENO: checking for readline in -lreadline" >&5
+	echo "$as_me:$LINENO: checking for readline in -lreadline" >&5
 echo $ECHO_N "checking for readline in -lreadline... $ECHO_C" >&6
 if test "${ac_cv_lib_readline_readline+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21331,8 +21338,8 @@ else
   rl_use="";rl_lib=""
 fi
 
-    if test -n "${rl_use}"; then
-        echo "$as_me:$LINENO: checking for add_history in -lreadline" >&5
+	if test -n "${rl_use}"; then
+		echo "$as_me:$LINENO: checking for add_history in -lreadline" >&5
 echo $ECHO_N "checking for add_history in -lreadline... $ECHO_C" >&6
 if test "${ac_cv_lib_readline_add_history+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21402,19 +21409,19 @@ else
   rl_use="";rl_lib=""
 fi
 
-    fi
+	fi
 
-        LDFLAGS=${LDFLAGS2_SAVE};
+		LDFLAGS=${LDFLAGS2_SAVE};
 
-        if test -z "${rl_use}"; then
-        echo "$as_me:$LINENO: result: MALOC was compiled with READLINE enabled" >&5
+		if test -z "${rl_use}"; then
+		echo "$as_me:$LINENO: result: MALOC was compiled with READLINE enabled" >&5
 echo "${ECHO_T}MALOC was compiled with READLINE enabled" >&6
-        echo "$as_me:$LINENO: result: MALOC needs to link against the READLINE library" >&5
+		echo "$as_me:$LINENO: result: MALOC needs to link against the READLINE library" >&5
 echo "${ECHO_T}MALOC needs to link against the READLINE library" >&6
-        { { echo "$as_me:$LINENO: error: READLINE cannot be found!" >&5
+		{ { echo "$as_me:$LINENO: error: READLINE cannot be found!" >&5
 echo "$as_me: error: READLINE cannot be found!" >&2;}
    { (exit 1); exit 1; }; }
-    fi
+	fi
 fi
 LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
@@ -21446,30 +21453,36 @@ else
 fi;
 
 if test -z "${with_fetk}"; then
-    echo "$as_me:$LINENO: result: no" >&5
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    echo "$as_me:$LINENO: checking for fetk include components" >&5
-echo $ECHO_N "checking for fetk include components... $ECHO_C" >&6
-    if test -n "${fetk_include_path}"; then
-        mc_inc_path="-I${fetk_include_path} ";
-        echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: checking for user-specified FEtk include path" >&5
+echo $ECHO_N "checking for user-specified FEtk include path... $ECHO_C" >&6
+	if test -n "${fetk_include_path}"; then
+		mc_inc_path="-I${fetk_include_path} ";
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-    fi
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+	fi
 
-    echo "$as_me:$LINENO: checking for fetk library components" >&5
-echo $ECHO_N "checking for fetk library components... $ECHO_C" >&6
-    if test -n "${fetk_library_path}"; then
-        echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: checking for user-specified FEtk library path" >&5
+echo $ECHO_N "checking for user-specified FEtk library path... $ECHO_C" >&6
+	if test -n "${fetk_library_path}"; then
+		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-        mc_lib_path="-L${fetk_library_path}";
-    fi
+		mc_lib_path="-L${fetk_library_path}";
+	else
+		echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+	fi
 
-        LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mc_lib_path};
-    CPPFLAGS=${mc_inc_path};
-    mc_found="";
-    if test "${ac_cv_header_mc_mc_h+set}" = set; then
+		LDFLAGS_SAVE=${LDFLAGS};
+	CPPFLAGS_SAVE=${CPPFLAGS};
+	LDFLAGS=${mc_lib_path};
+	CPPFLAGS=${mc_inc_path};
+	mc_found="";
+	if test "${ac_cv_header_mc_mc_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mc/mc.h" >&5
 echo $ECHO_N "checking for mc/mc.h... $ECHO_C" >&6
 if test "${ac_cv_header_mc_mc_h+set}" = set; then
@@ -21613,7 +21626,7 @@ else
 fi
 
 
-    echo "$as_me:$LINENO: checking for mc_link in -lmc" >&5
+	echo "$as_me:$LINENO: checking for mc_link in -lmc" >&5
 echo $ECHO_N "checking for mc_link in -lmc... $ECHO_C" >&6
 if test "${ac_cv_lib_mc_mc_link+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21683,10 +21696,10 @@ else
   mc_found="";mc_lib=""
 fi
 
-        LDFLAGS=${mc_lib_path};
-    CPPFLAGS=${mc_inc_path};
-    mcx_found="";
-    if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
+		LDFLAGS=${mc_lib_path};
+	CPPFLAGS=${mc_inc_path};
+	mcx_found="";
+	if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
   echo "$as_me:$LINENO: checking for mcx/mcx.h" >&5
 echo $ECHO_N "checking for mcx/mcx.h... $ECHO_C" >&6
 if test "${ac_cv_header_mcx_mcx_h+set}" = set; then
@@ -21830,7 +21843,7 @@ else
 fi
 
 
-    echo "$as_me:$LINENO: checking for mcx_link in -lmcx" >&5
+	echo "$as_me:$LINENO: checking for mcx_link in -lmcx" >&5
 echo $ECHO_N "checking for mcx_link in -lmcx... $ECHO_C" >&6
 if test "${ac_cv_lib_mcx_mcx_link+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -21902,202 +21915,48 @@ fi
 
 
 
-        LDFLAGS=${LDFLAGS_SAVE}
-    CPPFLAGS=${CPPFLAGS_SAVE}
+		LDFLAGS=${LDFLAGS_SAVE}
+	CPPFLAGS=${CPPFLAGS_SAVE}
 
-    if test -n "${mc_found}"; then
-        echo "$as_me:$LINENO: result: FEtk component MC found:  enabled." >&5
+	if test -n "${mc_found}"; then
+		echo "$as_me:$LINENO: result: FEtk component MC found:  enabled." >&5
 echo "${ECHO_T}FEtk component MC found:  enabled." >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MC_H
 _ACEOF
 
-    else
-        echo "$as_me:$LINENO: result: FEtk component MC not found:  disabled." >&5
-echo "${ECHO_T}FEtk component MC not found:  disabled." >&6
-    fi
-    if test -n "${mcx_found}"; then
-        echo "$as_me:$LINENO: result: FEtk component MCX found:  enabled." >&5
+	else
+		echo "$as_me:$LINENO: result: FEtk component MC not found:  finite element solver disabled." >&5
+echo "${ECHO_T}FEtk component MC not found:  finite element solver disabled." >&6
+	fi
+	if test -n "${mcx_found}"; then
+		echo "$as_me:$LINENO: result: FEtk component MCX found:  enabled." >&5
 echo "${ECHO_T}FEtk component MCX found:  enabled." >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_MCX_H
 _ACEOF
+\
 
-    else
-        echo "$as_me:$LINENO: result: FEtk component MCX not found:  disabled." >&5
-echo "${ECHO_T}FEtk component MCX not found:  disabled." >&6
-    fi
+cat >>confdefs.h <<\_ACEOF
+#define USE_HB
+_ACEOF
 
-
+	else
+		echo "$as_me:$LINENO: result: FEtk component MCX not found:  hierarchical basis methods disabled." >&5
+echo "${ECHO_T}FEtk component MCX not found:  hierarchical basis methods disabled." >&6
+	fi
 else
-    echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-    echo "$as_me:$LINENO: result: FEtk disabled at user request." >&5
+	echo "$as_me:$LINENO: result: FEtk disabled at user request." >&5
 echo "${ECHO_T}FEtk disabled at user request." >&6
 fi
 
 
 
 
-
-echo "$as_me:$LINENO: checking for Vor_delaunay in -lmcx_vor" >&5
-echo $ECHO_N "checking for Vor_delaunay in -lmcx_vor... $ECHO_C" >&6
-if test "${ac_cv_lib_mcx_vor_Vor_delaunay+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmcx_vor ${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char Vor_delaunay ();
-int
-main ()
-{
-Vor_delaunay ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mcx_vor_Vor_delaunay=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mcx_vor_Vor_delaunay=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mcx_vor_Vor_delaunay" >&5
-echo "${ECHO_T}$ac_cv_lib_mcx_vor_Vor_delaunay" >&6
-if test $ac_cv_lib_mcx_vor_Vor_delaunay = yes; then
-  vor_found="yes"
-else
-  vor_found=""
-fi
-
-if test -n "${vor_found}"; then
-    vor_lib="${mcx_lib_path} -lmcx_vor"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_VOR
-_ACEOF
-
-fi
-echo "$as_me:$LINENO: checking for Vmetis_ctor in -lmcx_vmetis" >&5
-echo $ECHO_N "checking for Vmetis_ctor in -lmcx_vmetis... $ECHO_C" >&6
-if test "${ac_cv_lib_mcx_vmetis_Vmetis_ctor+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lmcx_vmetis ${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char Vmetis_ctor ();
-int
-main ()
-{
-Vmetis_ctor ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_mcx_vmetis_Vmetis_ctor=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_mcx_vmetis_Vmetis_ctor=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_mcx_vmetis_Vmetis_ctor" >&5
-echo "${ECHO_T}$ac_cv_lib_mcx_vmetis_Vmetis_ctor" >&6
-if test $ac_cv_lib_mcx_vmetis_Vmetis_ctor = yes; then
-  vmetis_found="yes"
-else
-  vmetis_found=""
-fi
-
-if test -n "${vmetis_found}"; then
-    vmetis_lib="${mcx_lib_path} -lmcx_vmetis"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_VMETIS
-_ACEOF
-
-fi
 
 echo "$as_me:$LINENO: result: ---------------------------------------------------------------" >&5
 echo "${ECHO_T}---------------------------------------------------------------" >&6
@@ -22119,9 +21978,9 @@ int
 main ()
 {
 #define EMBED(rctag) \
-     static const char* rctag; \
-     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
-     EMBED(rcsid)
+	static const char* rctag; \
+	static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+	EMBED(rcsid)
   ;
   return 0;
 }
@@ -22175,14 +22034,14 @@ else
 
 fi;
 if test -z "${pansi_use}"; then
-    echo "$as_me:$LINENO: result: no" >&5
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-    wall=""
-    wall_pedantic=""
-    wall_pedantic_ansi=""
-    pedantic_ansi=""
-                    try_strcasecmp="";
-    echo "$as_me:$LINENO: checking for strcasecmp" >&5
+	wall=""
+	wall_pedantic=""
+	wall_pedantic_ansi=""
+	pedantic_ansi=""
+					try_strcasecmp="";
+	echo "$as_me:$LINENO: checking for strcasecmp" >&5
 echo $ECHO_N "checking for strcasecmp... $ECHO_C" >&6
 if test "${ac_cv_func_strcasecmp+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -22278,20 +22137,20 @@ else
   try_strcasecmp="yes"
 fi
 
-    if test -n "${try_strcasecmp}"; then
+	if test -n "${try_strcasecmp}"; then
 
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_STRCASECMP
 _ACEOF
 
-    fi
+	fi
 else
-    echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-    wall="-Wall"
-    wall_pedantic="-Wall -pedantic"
-    wall_pedantic_ansi="-Wall -pedantic -ansi"
-    pedantic_ansi="-pedantic -ansi"
+	wall="-Wall"
+	wall_pedantic="-Wall -pedantic"
+	wall_pedantic_ansi="-Wall -pedantic -ansi"
+	pedantic_ansi="-pedantic -ansi"
 fi
 
 
@@ -22310,12 +22169,12 @@ else
 fi;
 apbs_do_tools=""
 if test -z "${with_tools}"; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    apbs_do_tools="tools"
+	echo "$as_me:$LINENO: result: no; tools will be compiled" >&5
+echo "${ECHO_T}no; tools will be compiled" >&6
+	apbs_do_tools="tools"
 else
-    echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+	echo "$as_me:$LINENO: result: yes; tools will not be compiled" >&5
+echo "${ECHO_T}yes; tools will not be compiled" >&6
 fi
 
 
@@ -22333,9 +22192,8 @@ fi;
 echo "$as_me:$LINENO: checking for --with-blas" >&5
 echo $ECHO_N "checking for --with-blas... $ECHO_C" >&6
 if test -n "${blas_lib}"; then
-    echo "$as_me:$LINENO: result: yes" >&5
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-
 
 # Check whether --with-blas_name or --without-blas_name was given.
 if test "${with_blas_name+set}" = set; then
@@ -22345,17 +22203,17 @@ else
    blas_name=blas
 
 fi;
-    echo "$as_me:$LINENO: result: Looking for BLAS using ${blas_lib}" >&5
+	echo "$as_me:$LINENO: result: Looking for BLAS using ${blas_lib}" >&5
 echo "${ECHO_T}Looking for BLAS using ${blas_lib}" >&6
-    ac_ext=f
+	ac_ext=f
 ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
 ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_f77_compiler_gnu
 
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
-    as_ac_Lib=`echo "ac_cv_lib_${blas_name}''_dscal" | $as_tr_sh`
+	LDFLAGS_SAVE=${LDFLAGS};
+	CPPFLAGS_SAVE=${CPPFLAGS};
+	LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
+	as_ac_Lib=`echo "ac_cv_lib_${blas_name}''_dscal" | $as_tr_sh`
 echo "$as_me:$LINENO: checking for dscal in -l${blas_name}" >&5
 echo $ECHO_N "checking for dscal in -l${blas_name}... $ECHO_C" >&6
 if eval "test \"\${$as_ac_Lib+set}\" = set"; then
@@ -22409,15 +22267,15 @@ else
   blas_found=""
 fi
 
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-    if test -z "${blas_found}"; then
-        { { echo "$as_me:$LINENO: error: BLAS libraries or headers missing:  exiting on error!" >&5
+	LDFLAGS=${LDFLAGS_SAVE};
+	CPPFLAGS=${CPPFLAGS_SAVE};
+	if test -z "${blas_found}"; then
+		{ { echo "$as_me:$LINENO: error: BLAS libraries or headers missing:  exiting on error!" >&5
 echo "$as_me: error: BLAS libraries or headers missing:  exiting on error!" >&2;}
    { (exit 1); exit 1; }; }
-    fi
+	fi
 	apbs_do_blas=""
-    ac_ext=c
+	ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -22440,11 +22298,11 @@ fi
 
 
 case $F77 in
-   pgf77*)
-      UHBD_PORTLAND=""
-      FFLAGS="${FFLAGS} -Mnomain";;
-   *)
-      UHBD_PORTLAND="Y";;
+	pgf77*)
+		UHBD_PORTLAND=""
+		FFLAGS="${FFLAGS} -Mnomain";;
+	*)
+		UHBD_PORTLAND="Y";;
 esac
 
 
@@ -22469,91 +22327,14 @@ else
 
 fi;
 if test -n "${arpack_lib}"; then
-    arpack_do_tools="arpack"
-    echo "$as_me:$LINENO: result: yes" >&5
+	arpack_do_tools="arpack"
+	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-    arpack_do_tools=""
-    echo "$as_me:$LINENO: result: no" >&5
+	arpack_do_tools=""
+	echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
-
-
-
-ac_ext=f
-ac_compile='$F77 -c $FFLAGS conftest.$ac_ext >&5'
-ac_link='$F77 -o conftest$ac_exeext $FFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_f77_compiler_gnu
-
-LDFLAGS_SAVE=${LDFLAGS};
-echo "$as_me:$LINENO: checking for treepeforce in -ltree" >&5
-echo $ECHO_N "checking for treepeforce in -ltree... $ECHO_C" >&6
-if test "${ac_cv_lib_tree_treepeforce+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ltree ${mcx_lib_path} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib} $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-      program main
-      call treepeforce
-      end
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_f77_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_tree_treepeforce=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_tree_treepeforce=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_tree_treepeforce" >&5
-echo "${ECHO_T}$ac_cv_lib_tree_treepeforce" >&6
-if test $ac_cv_lib_tree_treepeforce = yes; then
-  tree_found="yes"
-else
-  tree_found=""
-fi
-
-if test -n "${tree_found}"; then
-    tree_lib="${mc_lib_path} -ltree"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_TREE
-_ACEOF
-
-else
-    tree_lib=""
-fi
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
@@ -22562,27 +22343,22 @@ echo $ECHO_N "checking for --disable-inline... $ECHO_C" >&6
 # Check whether --enable-inline or --disable-inline was given.
 if test "${enable_inline+set}" = set; then
   enableval="$enable_inline"
-   use_inline="${enableval}"
+   use_inline="no"
 else
    use_inline=""
 
 fi;
 if test -z "${use_inline}"; then
-    echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
+	echo "$as_me:$LINENO: result: no; inline functions will be used" >&5
+echo "${ECHO_T}no; inline functions will be used" >&6
 else
-    if test "${use_inline}" == no; then
-        echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
+	echo "$as_me:$LINENO: result: no; inline functions will not be used" >&5
+echo "${ECHO_T}no; inline functions will not be used" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define APBS_NOINLINE 1
 _ACEOF
 
-    else
-        echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-    fi
 fi
 
 echo "$as_me:$LINENO: checking for --with-tinker" >&5
@@ -23576,7 +23352,6 @@ s,@UHBD_COMPILE_TRUE@,$UHBD_COMPILE_TRUE,;t t
 s,@UHBD_COMPILE_FALSE@,$UHBD_COMPILE_FALSE,;t t
 s,@arpack_lib@,$arpack_lib,;t t
 s,@arpack_do_tools@,$arpack_do_tools,;t t
-s,@tree_lib@,$tree_lib,;t t
 s,@lib_list@,$lib_list,;t t
 s,@inc_list@,$inc_list,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t

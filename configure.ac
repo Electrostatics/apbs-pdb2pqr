@@ -126,17 +126,17 @@ dnl 2. checks for programs
 dnl ##########################################################################
 AC_MSG_CHECKING([for --enable-python])
 AC_ARG_ENABLE(python,
-    [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
-    [ with_python="yes" ],
-    [ with_python=""    ]
+	[AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
+	[ with_python="yes" ],
+	[ with_python=""    ]
 )
 if test -n "${with_python}"; then
-    AC_MSG_RESULT("WARNING:  Python linkage requires GNU compilers")
-    cclist="gcc"
-    f77list="gfortran g95 g77"
+	AC_MSG_RESULT("WARNING:  Python linkage requires GNU compilers")
+	cclist="gcc"
+	f77list="gfortran g95 g77"
 else
-    cclist="icc pgcc gcc"
-    f77list="ifort pgf77 gfortran g95 g77"
+	cclist="icc pgcc gcc"
+	f77list="ifort pgf77 gfortran g95 g77"
 fi
 AC_LANG_C
 AC_PROG_CC(${cclist})
@@ -174,30 +174,30 @@ dnl #   -O2 flag set.
 dnl # -----------------------
 short_os=`echo ${host_os} | sed 's/osf.*/osf/g'`;
 if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
-  AC_MSG_RESULT([Disabling debugger compiler flags to avert OSF weirdness])
-  if test -z ${FFLAGS-''}; then
-      FFLAGS="";
-  else
-     FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
-     if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
-         FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
-     fi
-  fi
-  if test -z ${CFLAGS-''}; then
-      CFLAGS="";
-  else
-     CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
-  fi
-  if test -z ${CPPFLAGS-''}; then
-      CPPFLAGS="";
-  else
-     CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
-  fi
-  if test -z ${CXXFLAGS-''}; then
-      CXXFLAGS="";
-  else
-     CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
-  fi
+	AC_MSG_RESULT([Disabling debugger compiler flags to avert OSF weirdness])
+	if test -z ${FFLAGS-''}; then
+		FFLAGS="";
+	else
+		FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
+		if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
+			FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
+		fi
+	fi
+	if test -z ${CFLAGS-''}; then
+		CFLAGS="";
+	else
+		CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
+	fi
+	if test -z ${CPPFLAGS-''}; then
+		CPPFLAGS="";
+	else
+		CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
+	fi
+	if test -z ${CXXFLAGS-''}; then
+		CXXFLAGS="";
+	else
+		CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
+	fi
 fi
 AC_F77_NOFORMAIN
 FFLAGS="${FLIBS} ${FFLAGS}"
@@ -223,7 +223,7 @@ nsl_lib="";
 AC_LANG_C
 AC_CHECK_FUNC(gethostbyname,[try_nsl=""],[try_nsl="yes"])
 if test -n "${try_nsl}"; then
-    AC_CHECK_LIB(nsl,gethostbyname,[nsl_lib="-lnsl"],[nsl_lib=""])
+	AC_CHECK_LIB(nsl,gethostbyname,[nsl_lib="-lnsl"],[nsl_lib=""])
 fi
 AC_SUBST(nsl_lib)
 dnl # Check for "connect" and socket library
@@ -231,7 +231,7 @@ socket_lib="";
 AC_LANG_C
 AC_CHECK_FUNC(connect,[try_socket=""],[try_socket="yes"])
 if test -n "${try_socket}"; then
-    AC_CHECK_LIB(socket,connect,[socket_lib="-lsocket"],[socket_lib=""])
+	AC_CHECK_LIB(socket,connect,[socket_lib="-lsocket"],[socket_lib=""])
 fi
 AC_SUBST(socket_lib)
 dnl # Check for "thr_create()" and thread library
@@ -239,7 +239,7 @@ thread_lib="";
 AC_LANG_C
 AC_CHECK_FUNC(thr_create,[try_thread=""],[try_thread="yes"])
 if test -n "${try_thread}"; then
-    AC_CHECK_LIB(thread,thr_create,[thread_lib="-lthread"],[thread_lib=""])
+	AC_CHECK_LIB(thread,thr_create,[thread_lib="-lthread"],[thread_lib=""])
 fi
 AC_SUBST(thread_lib)
 dnl # CHECK FOR TIME
@@ -297,7 +297,7 @@ AC_MSG_RESULT([---------- begin configuring for MALOC linkage ------------])
 AC_MSG_RESULT([-----------------------------------------------------------])
 
 dnl # ----------------------
-dnl # HANDLE THE MALOC LIBRARY
+dnl # HANDLE THE MALOC AND FETK LIBRARIES
 dnl # ----------------------
 
 contrib_path=`pwd`/contrib
@@ -305,62 +305,56 @@ contrib_path=`pwd`/contrib
 dnl First check to see if they are using FETK_INCLUDE or FETK_LIBRARY
 dnl if they are abort. We no longer support this...
 if test -n "${FETK_INCLUDE}"; then
-		echo
-		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
-		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
-		echo "Exiting..."
-		exit 0
+	AC_MSG_WARN([[Error... FETK_INCLUDE is no longer supported.]])
+	AC_MSG_WARN([[Use --with-fetk-include=PATH instead.]])
+	AC_MSG_WARN([[Ignoring these variables...]])
 fi
 
 if test -n "${FETK_LIBRARY}"; then
-		echo
-		echo "Error... FETK_INCLUDE/FETK_LIBRARY are no longer supported."
-		echo "Use --with-fetk-include=PATH and --with-fetk-library=PATH instead."
-		echo "Exiting..."
-		exit 0
+	AC_MSG_WARN([[Error... FETK_LIBRARY is no longer supported.]])
+	AC_MSG_WARN([[Use --with-fetk-library=PATH instead.]])
+	AC_MSG_WARN([[Ignoring these variables...]])
 fi
 
 dnl Next see if the user specified fetk-include or fetk-lib if they did
 dnl process those and use those values instead of our own MALOC
 AC_MSG_CHECKING([for --with-fetk-include option])
 AC_ARG_WITH(fetk-include,
-    [AC_HELP_STRING([--with-fetk-include=PATH], [full path to the FETk INCLUDE directory])],
-    [fetk_include_path="${with_fetk_include}"; AC_MSG_RESULT([yes]); USE_FETK_INCLUDE="yes"],
-    [fetk_include_path=""; AC_MSG_RESULT([no]) ]
+	[AC_HELP_STRING([--with-fetk-include=PATH], [full path to the FETk INCLUDE directory])],
+	[fetk_include_path="${with_fetk_include}"; AC_MSG_RESULT([yes]); USE_FETK_INCLUDE="yes"],
+	[fetk_include_path=""; AC_MSG_RESULT([no]) ]
 )
 
 AC_MSG_CHECKING([for --with-fetk-library option])
 AC_ARG_WITH(fetk-library,
-    [AC_HELP_STRING([--with-fetk-library=PATH], [full path to the FETk LIBRARY directory])],
-    [fetk_library_path="${with_fetk_library}"; AC_MSG_RESULT([yes]); USE_FETK_LIBRARY="yes"],
-    [fetk_library_path=""; AC_MSG_RESULT([no]) ]
+	[AC_HELP_STRING([--with-fetk-library=PATH], [full path to the FETk LIBRARY directory])],
+	[fetk_library_path="${with_fetk_library}"; AC_MSG_RESULT([yes]); USE_FETK_LIBRARY="yes"],
+	[fetk_library_path=""; AC_MSG_RESULT([no]) ]
 )
 
 USE_FETK=
 if test -n "${USE_FETK_INCLUDE}"; then
 	maloc_inc_path="${fetk_include_path}"
 	AC_CHECK_FILE(${maloc_inc_path}/maloc/maloc.h,[maloc_inc="yes"],[maloc_inc=""])	
- 	if test -z "${maloc_inc}"; then
- 		echo "Error... Couldn't find FETK include files in the location you specified"
- 		exit 0
- 	fi
+	if test -z "${maloc_inc}"; then
+		AC_MSG_ERROR([[Error... Couldn't find FETK include files in the location you specified]])
+	fi
 else
-	AC_MSG_RESULT([no; will use ${contrib_path}/include])
 	maloc_inc_path="${contrib_path}/include";
 fi
+AC_MSG_RESULT([Using MALOC headers in ${maloc_inc_path}])
 
 if test -n "${USE_FETK_LIBRARY}"; then
 	maloc_lib_path="${fetk_library_path}"
 	AC_CHECK_FILE(${maloc_lib_path}/libmaloc.a,[maloc_lib="yes"],[maloc_lib=""])
 	if test -z "${maloc_lib}"; then
- 		echo "Error... Couldn't find FETK library files in the location you specified"
- 		exit 0
- 	fi
+		AC_MSG_ERROR([[Error... Couldn't find FETK library files in the location you specified]])
+	fi
 	USE_FETK="yes"
 else
-	AC_MSG_RESULT([no; will use ${contrib_path}/lib])
 	maloc_lib_path="${contrib_path}/lib";
 fi
+AC_MSG_RESULT([Using MALOC libraries in ${maloc_lib_path}])
 
 maloc_inc="-I${maloc_inc_path}"
 maloc_lib="-L${maloc_lib_path} -lmaloc"
@@ -376,9 +370,9 @@ dnl # ---------------------------
 dnl # MPI header location ARG specification (override environment)
 AC_MSG_CHECKING([for --with-mpich option])
 AC_ARG_WITH(mpich,
-    [AC_HELP_STRING([--with-mpich=PATH], [toplevel MPICH directory])],
-    [mpi_path="${with_mpich}"; AC_MSG_RESULT([yes]); USE_MPICH="yes"],
-    [mpi_path=""; AC_MSG_RESULT([no]) ]
+	[AC_HELP_STRING([--with-mpich=PATH], [toplevel MPICH directory])],
+	[mpi_path="${with_mpich}"; AC_MSG_RESULT([yes]); USE_MPICH="yes"],
+	[mpi_path=""; AC_MSG_RESULT([no]) ]
 )
 
 if test -z "${mpi_path}"; then
@@ -463,110 +457,114 @@ AC_MSG_RESULT([---------------------------------------------------------------])
 
 AC_MSG_CHECKING([for --enable-python])
 AC_ARG_ENABLE(python,
-    [AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
-    [ with_python="yes" ],
-    [ with_python=""    ]
+	[AC_HELP_STRING([--enable-python],[enables Python wrapper compilation])],
+	[ with_python="yes" ],
+	[ with_python=""    ]
 )
 
 PY_ENABLE=""
 if test -n "${with_python}"; then
-    AC_MSG_RESULT([yes])
-    AC_PATH_PROG(py_path, python)
-    PY_ENABLE="yes"    
+	AC_MSG_RESULT([yes])
+	AC_PATH_PROG(py_path, python)
+	PY_ENABLE="yes"    
 
-    if test -n "${py_path}"; then
-       changequote(<<, >>)dnl
-       PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
-       changequote([, ])dnl
-       PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
-       PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
-       if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
-          PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
-       fi
-    fi
+	if test -n "${py_path}"; then
+		changequote(<<, >>)dnl
+		PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
+		changequote([, ])dnl
+		PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
+		PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
+		if test -f $PY_PREFIX/include/python$PY_VERSION/Python.h; then
+			PY_CFLAGS="-I$PY_PREFIX/include/python$PY_VERSION -I$PY_EXEC_PREFIX/include/python$PY_VERSION"
+		fi
+	fi
 
-    PY_LINKFLAGS=${CFLAGS}
-    PY_CC=${CC}
+	PY_LINKFLAGS=${CFLAGS}
+	PY_CC=${CC}
 
-    dnl # Platform specific linking flags
-    
-    PY_LDFLAGS=""
-    PY_SHARED=""
-    case $host_os in
-       linux*) 
-           PY_SHARED="-shared"
-		   CC="${CC} -fPIC"
-		   F77="${F77} -fPIC"
-		   ;;
-       irix*) 
-           PY_SHARED="-shared"
-           PY_LDFLAGS="-lftn -lm";;
-       sun|solaris**) 
-           PY_SHARED="-G"
-           PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath";;
-       darwin**)
-           PY_CC=${F77}
-           PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle";;
-       mingw*)
-           PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-           PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
-           changequote(<<, >>)dnl
-           PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
-           changequote([, ])dnl
-           PY_CC=${F77}
-           PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
-           PY_SHARED="-shared"
-           if test -f $PY_PREFIX/include/Python.h; then
-               PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
-           fi;;
-    esac
+	dnl # Platform specific linking flags
 
-    dnl # The Python wrappers use different flags on different arches
+	PY_LDFLAGS=""
+	PY_SHARED=""
+	case $host_os in
+		linux*) 
+			PY_SHARED="-shared"
+			CC="${CC} -fPIC"
+			F77="${F77} -fPIC"
+			;;
+		irix*) 
+			PY_SHARED="-shared"
+			PY_LDFLAGS="-lftn -lm"
+			;;
+		sun|solaris**) 
+			PY_SHARED="-G"
+			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
+			;;
+		darwin**)
+			PY_CC=${F77}
+			PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle"
+			;;
+		mingw*)
+			PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+			PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
+			changequote(<<, >>)dnl
+			PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
+			changequote([, ])dnl
+			PY_CC=${F77}
+			PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
+			PY_SHARED="-shared"
+			if test -f $PY_PREFIX/include/Python.h; then
+				PY_CFLAGS="-I$PY_PREFIX/include -I$PY_EXEC_PREFIX/include"
+			fi
+			;;
+	esac
 
-    IS_STATIC=`echo ${LDFLAGS} | grep static`
-    case $host_cpu in
-       x86_64*)
-          PY_CC="${F77}";;
-       i*86)
-          PY_CC="${F77}"
-          if test "${CC}" = "icc"; then
-             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-             if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-                AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	            PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
-             fi
-          fi;; 
-       ia64*)
-          if test "${CC}" = "icc"; then
-             AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
-	         if test -n "${ifcore_lib}"; then
-	            PY_LDFLAGS=${ifcore_lib}
-	         else
-	           	AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
-	         fi
-	         if test -n "${IS_STATIC}"; then
-	             if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
-	                PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
-	             else
-                    AC_MSG_RESULT("WARNING:  Could not find libc.so or libm.so in /usr/lib")
-	             fi 
-             fi
-         fi;; 
-   esac
+	dnl # The Python wrappers use different flags on different arches
+
+	IS_STATIC=`echo ${LDFLAGS} | grep static`
+	case $host_cpu in
+		x86_64*)
+			PY_CC="${F77}";;
+		i*86)
+			PY_CC="${F77}"
+			if test "${CC}" = "icc"; then
+				AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+				if test -n "${ifcore_lib}"; then
+					PY_LDFLAGS=${ifcore_lib}
+				else
+					AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
+				fi
+				if test -n "${IS_STATIC}"; then
+					PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
+				fi
+			fi;; 
+		ia64*)
+			if test "${CC}" = "icc"; then
+				AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
+				if test -n "${ifcore_lib}"; then
+					PY_LDFLAGS=${ifcore_lib}
+				else
+					AC_MSG_RESULT("WARNING: Unable to find Intel's ifcore_pic library - Python wrappers may fail looking for d_int_val.")
+				fi
+				if test -n "${IS_STATIC}"; then
+					if (test -f /usr/lib/libc.so) && (test -f /usr/lib/libm.so); then
+						PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
+					else
+						AC_MSG_RESULT("WARNING:  Could not find libc.so or libm.so in /usr/lib")
+					fi 
+				fi
+			fi;; 
+	esac
 
 else
-    AC_MSG_RESULT([no])
+	AC_MSG_RESULT([no])
 fi
 
 
 if test -n "${PY_ENABLE}"; then
-   AC_MSG_RESULT(Python wrappers enabled)
+	AC_MSG_RESULT(Python wrappers enabled)
 else
-   AC_MSG_RESULT(Python wrappers disabled)
+	AC_MSG_RESULT(Python wrappers disabled)
 fi
 
 AC_SUBST(PY_SHARED,[$PY_SHARED])
@@ -580,7 +578,6 @@ dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
 if test -z "${USE_FETK}";  then
-
 	AC_MSG_CHECKING([for --disable-maloc-rebuild])
 	AC_ARG_ENABLE(maloc-rebuild,
 		[AC_HELP_STRING([--disable-maloc-rebuild],[disable rebuilding maloc])],
@@ -633,48 +630,48 @@ LDFLAGS=${maloc_lib_path};
 CPPFLAGS=${maloc_inc_path};
 rl_lib="";
 AC_CHECK_LIB(maloc,maloc_needs_rl,
-    [rl_use="yes"],
-    [rl_use=""],
-    [${maloc_lib_path} -lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+	[rl_use="yes"],
+	[rl_use=""],
+	[${maloc_lib_path} -lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
 if test -n "${rl_use}"; then
 
-    dnl # READLINE library location ENV specification
-    AC_MSG_CHECKING([whether your environment defines FETK_RL_LIBRARY])
-    if test -n "${FETK_RL_LIBRARY}"; then
-        AC_MSG_RESULT([yes])
-        rl_lib_path="-L${FETK_RL_LIBRARY} ";
-    else
-        AC_MSG_RESULT([no])
-        rl_lib_path="";
-    fi
+	dnl # READLINE library location ENV specification
+	AC_MSG_CHECKING([whether your environment defines FETK_RL_LIBRARY])
+	if test -n "${FETK_RL_LIBRARY}"; then
+		AC_MSG_RESULT([yes])
+		rl_lib_path="-L${FETK_RL_LIBRARY} ";
+	else
+		AC_MSG_RESULT([no])
+		rl_lib_path="";
+	fi
 
-    dnl # Setup temp LDFLAGS and look for READLINE library
+	dnl # Setup temp LDFLAGS and look for READLINE library
   
-    LDFLAGS=${rl_lib_path};
-    AC_CHECK_LIB(ncurses,tgetnum,
-        [ncurses_lib="-lncurses"],
-        [ncurses_lib=""],
-        [${math_lib}])
-    AC_CHECK_LIB(readline,readline,
-        [rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
-        [rl_use="";rl_lib=""],
-        [${rl_lib_path} ${ncurses_lib} ${math_lib}])
-    if test -n "${rl_use}"; then
-        AC_CHECK_LIB(readline,add_history,
-            [rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
-            [rl_use="";rl_lib=""],
-            [${rl_lib_path} ${ncurses_lib} ${math_lib}])
-    fi
+	LDFLAGS=${rl_lib_path};
+	AC_CHECK_LIB(ncurses,tgetnum,
+		[ncurses_lib="-lncurses"],
+		[ncurses_lib=""],
+		[${math_lib}])
+	AC_CHECK_LIB(readline,readline,
+		[rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
+		[rl_use="";rl_lib=""],
+		[${rl_lib_path} ${ncurses_lib} ${math_lib}])
+	if test -n "${rl_use}"; then
+		AC_CHECK_LIB(readline,add_history,
+			[rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
+			[rl_use="";rl_lib=""],
+			[${rl_lib_path} ${ncurses_lib} ${math_lib}])
+	fi
 
-    dnl # Return LDFLAGS to normal
-    LDFLAGS=${LDFLAGS2_SAVE};
+	dnl # Return LDFLAGS to normal
+	LDFLAGS=${LDFLAGS2_SAVE};
 
-    dnl # Final decision
-    if test -z "${rl_use}"; then
-        AC_MSG_RESULT([MALOC was compiled with READLINE enabled])
-        AC_MSG_RESULT([MALOC needs to link against the READLINE library])
-        AC_MSG_ERROR([READLINE cannot be found!])
-    fi
+	dnl # Final decision
+	if test -z "${rl_use}"; then
+		AC_MSG_RESULT([MALOC was compiled with READLINE enabled])
+		AC_MSG_RESULT([MALOC needs to link against the READLINE library])
+		AC_MSG_ERROR([READLINE cannot be found!])
+	fi
 fi
 LDFLAGS=${LDFLAGS_SAVE};
 CPPFLAGS=${CPPFLAGS_SAVE};
@@ -704,95 +701,80 @@ mc_do_lib=""
 mc_do_test=""
 AC_MSG_CHECKING([for --disable-fetk])
 AC_ARG_ENABLE(fetk,
-    [AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
-    [ with_fetk="no" ],
-    [ with_fetk=""    ]
+	[AC_HELP_STRING([--disable-fetk],[disable FEtk features])],
+	[ with_fetk="no" ],
+	[ with_fetk=""    ]
 )
 
 if test -z "${with_fetk}"; then
-    AC_MSG_RESULT([no])
-    AC_MSG_CHECKING([for fetk include components])
-    if test -n "${fetk_include_path}"; then
-        mc_inc_path="-I${fetk_include_path} ";
-        AC_MSG_RESULT([yes])
-    fi
+	AC_MSG_RESULT([no])
+	AC_MSG_CHECKING([for user-specified FEtk include path])
+	if test -n "${fetk_include_path}"; then
+		mc_inc_path="-I${fetk_include_path} ";
+		AC_MSG_RESULT([yes])
+	else
+		AC_MSG_RESULT([no])
+	fi
 	
-    AC_MSG_CHECKING([for fetk library components])
-    if test -n "${fetk_library_path}"; then
-        AC_MSG_RESULT([yes])
-        mc_lib_path="-L${fetk_library_path}";
-    fi
+	AC_MSG_CHECKING([for user-specified FEtk library path])
+	if test -n "${fetk_library_path}"; then
+		AC_MSG_RESULT([yes])
+		mc_lib_path="-L${fetk_library_path}";
+	else
+		AC_MSG_RESULT([no])
+	fi
 	
-    dnl # Setup temp LDFLAGS and look for MC library/header
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS=${mc_lib_path};
-    CPPFLAGS=${mc_inc_path};
-    mc_found="";
-    AC_CHECK_HEADER(mc/mc.h,
-        [mc_found="yes";mc_inc="${mc_inc_path}"],
-        [mc_found="";mc_inc=""])
-    AC_CHECK_LIB(mc,mc_link,
-        [mc_found="yes";mc_lib="${mc_lib_path} -lmc"],
-        [mc_found="";mc_lib=""],
-        [${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-    dnl # Setup temp LDFLAGS and look for MCX library/header
-    LDFLAGS=${mc_lib_path};
-    CPPFLAGS=${mc_inc_path};
-    mcx_found="";
-    AC_CHECK_HEADER(mcx/mcx.h,
-        [mcx_found="yes";mcx_inc="${mc_inc_path}"],
-        [mcx_found="";mc_inc=""])
-    AC_CHECK_LIB(mcx,mcx_link,
-        [mcx_found="yes";mcx_lib="${mc_lib_path} -lmcx"],
-        [mcx_found="";mcx_lib=""],
-        [${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+	dnl # Setup temp LDFLAGS and look for MC library/header
+	LDFLAGS_SAVE=${LDFLAGS};
+	CPPFLAGS_SAVE=${CPPFLAGS};
+	LDFLAGS=${mc_lib_path};
+	CPPFLAGS=${mc_inc_path};
+	mc_found="";
+	AC_CHECK_HEADER(mc/mc.h,
+		[mc_found="yes";mc_inc="${mc_inc_path}"],
+		[mc_found="";mc_inc=""])
+	AC_CHECK_LIB(mc,mc_link,
+		[mc_found="yes";mc_lib="${mc_lib_path} -lmc"],
+		[mc_found="";mc_lib=""],
+		[${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+	dnl # Setup temp LDFLAGS and look for MCX library/header
+	LDFLAGS=${mc_lib_path};
+	CPPFLAGS=${mc_inc_path};
+	mcx_found="";
+	AC_CHECK_HEADER(mcx/mcx.h,
+		[mcx_found="yes";mcx_inc="${mc_inc_path}"],
+		[mcx_found="";mc_inc=""])
+	AC_CHECK_LIB(mcx,mcx_link,
+		[mcx_found="yes";mcx_lib="${mc_lib_path} -lmcx"],
+		[mcx_found="";mcx_lib=""],
+		[${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
     
 
-    dnl # Return LDFLAGS and CPPFLAGS to normal
-    LDFLAGS=${LDFLAGS_SAVE}
-    CPPFLAGS=${CPPFLAGS_SAVE}
+	dnl # Return LDFLAGS and CPPFLAGS to normal
+	LDFLAGS=${LDFLAGS_SAVE}
+	CPPFLAGS=${CPPFLAGS_SAVE}
 
-    if test -n "${mc_found}"; then
-        AC_MSG_RESULT([FEtk component MC found:  enabled.])
-        AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
-    else
-        AC_MSG_RESULT([FEtk component MC not found:  disabled.])
-    fi
-    if test -n "${mcx_found}"; then
-        AC_MSG_RESULT([FEtk component MCX found:  enabled.])
-        AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
-    else
-        AC_MSG_RESULT([FEtk component MCX not found:  disabled.])
-    fi
-        
-
+	if test -n "${mc_found}"; then
+		AC_MSG_RESULT([FEtk component MC found:  enabled.])
+		AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
+	else
+		AC_MSG_RESULT([FEtk component MC not found:  finite element solver disabled.])
+	fi
+	if test -n "${mcx_found}"; then
+		AC_MSG_RESULT([FEtk component MCX found:  enabled.])
+		AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])\
+		AC_DEFINE([USE_HB], [], [use hierarchical basis method])
+	else
+		AC_MSG_RESULT([FEtk component MCX not found:  hierarchical basis methods disabled.])
+	fi
 else
-    AC_MSG_RESULT([yes])
-    AC_MSG_RESULT([FEtk disabled at user request.])
+	AC_MSG_RESULT([yes])
+	AC_MSG_RESULT([FEtk disabled at user request.])
 fi
 AC_SUBST(mcx_lib)
 AC_SUBST(mcx_inc)
 AC_SUBST(mc_lib)
 AC_SUBST(mc_inc)
-
-dnl # Check for various optional MCX functions 
-AC_CHECK_LIB(mcx_vor,Vor_delaunay,
-        [vor_found="yes"],
-        [vor_found=""],
-        [${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-if test -n "${vor_found}"; then
-    vor_lib="${mcx_lib_path} -lmcx_vor"
-    AC_DEFINE([HAVE_VOR], [], [have the Vor library])
-fi
-AC_CHECK_LIB(mcx_vmetis,Vmetis_ctor,
-        [vmetis_found="yes"],
-        [vmetis_found=""],
-        [${mcx_lib_path} -lmcx ${mc_lib_path} -lmc ${maloc_lib} ${maloc_lib_path} -lblas -lvf2c ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-if test -n "${vmetis_found}"; then
-    vmetis_lib="${mcx_lib_path} -lmcx_vmetis"
-    AC_DEFINE([HAVE_VMETIS], [], [have the Vmetis library])
-fi
 
 AC_MSG_RESULT([---------------------------------------------------------------])
 AC_MSG_RESULT([------------ begin processing APBS configure options ----------])
@@ -803,12 +785,12 @@ dnl # HANDLE SYMBOL EMBEDDING
 dnl # -----------------------
 AC_MSG_CHECKING([for EMBED macro can be used])
 AC_TRY_COMPILE(,
-    [#define EMBED(rctag) \
-     static const char* rctag; \
-     static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
-     EMBED(rcsid)],
-    [embed_ok=yes; AC_DEFINE([HAVE_EMBED], [], [EMBED macro can be used])],
-    [embed_ok=no])
+	[#define EMBED(rctag) \
+	static const char* rctag; \
+	static void* use_rcsid=(0 ? &use_rcsid : (void**)&rcsid);
+	EMBED(rcsid)],
+	[embed_ok=yes; AC_DEFINE([HAVE_EMBED], [], [EMBED macro can be used])],
+	[embed_ok=no])
 AC_MSG_RESULT(${embed_ok})
 
 
@@ -817,31 +799,31 @@ dnl # HANDLE ANSI/PEDANTIC COMPILATION
 dnl # --------------------------------
 AC_MSG_CHECKING([--enable-pansi])
 AC_ARG_ENABLE(pansi,
-    [AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
-    [pansi_use="yes"],
-    [pansi_use=""   ]
+	[AC_HELP_STRING([--enable-pansi], [enable pedantic ANSI compilation])],
+	[pansi_use="yes"],
+	[pansi_use=""   ]
 )
 if test -z "${pansi_use}"; then
-    AC_MSG_RESULT([no])
-    wall=""
-    wall_pedantic=""
-    wall_pedantic_ansi=""
-    pedantic_ansi=""
-    dnl # --------------------------
-    dnl # We only look for the non-ANSI strcasecmp if configure wasn't invoked
-    dnl # with --enable-pansi
-    dnl # --------------------------
-    try_strcasecmp="";
-    AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
-    if test -n "${try_strcasecmp}"; then
-        AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
-    fi
+	AC_MSG_RESULT([no])
+	wall=""
+	wall_pedantic=""
+	wall_pedantic_ansi=""
+	pedantic_ansi=""
+	dnl # --------------------------
+	dnl # We only look for the non-ANSI strcasecmp if configure wasn't invoked
+	dnl # with --enable-pansi
+	dnl # --------------------------
+	try_strcasecmp="";
+	AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
+	if test -n "${try_strcasecmp}"; then
+		AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
+	fi
 else
-    AC_MSG_RESULT([yes])
-    wall="-Wall"
-    wall_pedantic="-Wall -pedantic"
-    wall_pedantic_ansi="-Wall -pedantic -ansi"
-    pedantic_ansi="-pedantic -ansi"
+	AC_MSG_RESULT([yes])
+	wall="-Wall"
+	wall_pedantic="-Wall -pedantic"
+	wall_pedantic_ansi="-Wall -pedantic -ansi"
+	pedantic_ansi="-pedantic -ansi"
 fi
 AC_SUBST(wall)
 AC_SUBST(wall_pedantic)
@@ -855,16 +837,16 @@ dnl # '--disable-tools' flag (for Alpha).
 dnl # -----------------------
 AC_MSG_CHECKING([for --disable-tools])
 AC_ARG_ENABLE(tools,
-    [AC_HELP_STRING([--disable-tools],[disable tool compilation])],
-    [ with_tools="no" ],
-    [ with_tools=""    ]
+	[AC_HELP_STRING([--disable-tools],[disable tool compilation])],
+	[ with_tools="no" ],
+	[ with_tools=""    ]
 )
 apbs_do_tools=""
 if test -z "${with_tools}"; then
-    AC_MSG_RESULT([yes])
-    apbs_do_tools="tools"
+	AC_MSG_RESULT([no; tools will be compiled])
+	apbs_do_tools="tools"
 else
-    AC_MSG_RESULT([no])
+	AC_MSG_RESULT([yes; tools will not be compiled])
 fi
 AC_SUBST(apbs_do_tools)
 
@@ -874,37 +856,34 @@ dnl # HANDLE THE BLAS LIBRARIES
 dnl # -----------------------
 blas_lib=""
 AC_ARG_WITH(blas,
-    [AC_HELP_STRING([--with-blas=LDFLAGS],
-                  [link to user-specified BLAS (specify flags to pass to ld)])],
-    [ blas_lib="${withval}"],
-    [ blas_lib="" ]
+	[AC_HELP_STRING([--with-blas=LDFLAGS], [link to user-specified BLAS (specify flags to pass to ld)])],
+	[ blas_lib="${withval}"],
+	[ blas_lib="" ]
 )
 AC_MSG_CHECKING([for --with-blas])
 if test -n "${blas_lib}"; then
-    AC_MSG_RESULT([yes])
-
-    AC_ARG_WITH(blas_name,
-        [AC_HELP_STRING([--with-blas-name=NAME],
-                  [name of BLAS library, defaults to blas])],
-        [ blas_name="${withval}"],
-        [ blas_name=blas]
-    )
-    AC_MSG_RESULT([Looking for BLAS using ${blas_lib}])
-    AC_LANG_FORTRAN77
-    LDFLAGS_SAVE=${LDFLAGS};
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
-    AC_CHECK_LIB(${blas_name},dscal,
-        [blas_found="yes"],
-        [blas_found=""],
-        [${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-    LDFLAGS=${LDFLAGS_SAVE};
-    CPPFLAGS=${CPPFLAGS_SAVE};
-    if test -z "${blas_found}"; then
-        AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
-    fi
+	AC_MSG_RESULT([yes])
+	AC_ARG_WITH(blas_name,
+		[AC_HELP_STRING([--with-blas-name=NAME], [name of BLAS library, defaults to blas])],
+		[ blas_name="${withval}"],
+		[ blas_name=blas]
+	)
+	AC_MSG_RESULT([Looking for BLAS using ${blas_lib}])
+	AC_LANG_FORTRAN77
+	LDFLAGS_SAVE=${LDFLAGS};
+	CPPFLAGS_SAVE=${CPPFLAGS};
+	LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
+	AC_CHECK_LIB(${blas_name},dscal,
+		[blas_found="yes"],
+		[blas_found=""],
+		[${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+	LDFLAGS=${LDFLAGS_SAVE};
+	CPPFLAGS=${CPPFLAGS_SAVE};
+	if test -z "${blas_found}"; then
+		AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
+	fi
 	apbs_do_blas=""
-    AC_LANG_C
+	AC_LANG_C
 else
 	AC_MSG_RESULT([no])
 	apbs_do_blas="blas"
@@ -925,11 +904,11 @@ dnl # If using Portland compilers, do not compile
 dnl # tools/mesh/uhbd_asc2bin.f
 dnl # -----------------------
 case $F77 in
-   pgf77*)
-      UHBD_PORTLAND=""
-      FFLAGS="${FFLAGS} -Mnomain";;
-   *)
-      UHBD_PORTLAND="Y";;
+	pgf77*)
+		UHBD_PORTLAND=""
+		FFLAGS="${FFLAGS} -Mnomain";;
+	*)
+		UHBD_PORTLAND="Y";;
 esac
 AM_CONDITIONAL(UHBD_COMPILE, [test -n "${UHBD_PORTLAND}"])
 
@@ -938,57 +917,34 @@ dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --with-arpack])
 AC_ARG_WITH(arpack,
-    [AC_HELP_STRING([--with-arpack=PATH],
-                    [enable ARPACK functions (specify path to lib)])],
-    [ arpack_lib="-larpack -L${withval}"],
-    [ arpack_lib="" ]
+	[AC_HELP_STRING([--with-arpack=PATH], [enable ARPACK functions (specify path to lib)])],
+	[ arpack_lib="-larpack -L${withval}"],
+	[ arpack_lib="" ]
 )
 if test -n "${arpack_lib}"; then
-    arpack_do_tools="arpack"
-    AC_MSG_RESULT([yes])
+	arpack_do_tools="arpack"
+	AC_MSG_RESULT([yes])
 else
-    arpack_do_tools=""
-    AC_MSG_RESULT([no])
+	arpack_do_tools=""
+	AC_MSG_RESULT([no])
 fi
 AC_SUBST(arpack_lib)
 AC_SUBST(arpack_do_tools)
-
-dnl # -----------------------
-dnl # CHECK FOR FMM LIBRARY
-dnl # -----------------------
-AC_LANG_FORTRAN77
-LDFLAGS_SAVE=${LDFLAGS};
-AC_CHECK_LIB(tree,treepeforce,
-        [tree_found="yes"],
-        [tree_found=""],
-        [${mcx_lib_path} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-if test -n "${tree_found}"; then
-    tree_lib="${mc_lib_path} -ltree"
-    AC_DEFINE([HAVE_TREE], [], [have the FMM library])
-else
-    tree_lib=""
-fi
-AC_LANG_C
-AC_SUBST(tree_lib)
 
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT INLINE FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --disable-inline])
 AC_ARG_ENABLE(inline,
-    [AC_HELP_STRING([--disable-inline],[disable inline functions (macros)])],
-    [ use_inline="${enableval}"],
-    [ use_inline="" ]
+	[AC_HELP_STRING([--disable-inline],[disable inline functions (macros)])],
+	[ use_inline="no"],
+	[ use_inline="" ]
 )
 if test -z "${use_inline}"; then
-    AC_MSG_RESULT([yes])
+	AC_MSG_RESULT([no; inline functions will be used])
 else
-    if test "${use_inline}" == no; then
-        AC_MSG_RESULT([no])
-        AC_DEFINE([APBS_NOINLINE], [1], [do not inline functions])
-    else
-        AC_MSG_RESULT([yes])
-    fi
+	AC_MSG_RESULT([no; inline functions will not be used])
+	AC_DEFINE([APBS_NOINLINE], [1], [do not inline functions])
 fi
 
 dnl # -----------------------

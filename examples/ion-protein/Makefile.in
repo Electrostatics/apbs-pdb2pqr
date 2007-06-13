@@ -128,7 +128,6 @@ py_path = @py_path@
 rl_lib = @rl_lib@
 socket_lib = @socket_lib@
 thread_lib = @thread_lib@
-tree_lib = @tree_lib@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
