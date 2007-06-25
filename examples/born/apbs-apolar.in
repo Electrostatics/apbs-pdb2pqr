@@ -3,25 +3,24 @@
 ### $Id: apbs.in 996 2006-11-27 19:21:40Z sdg0919 $
 ###
 ### Please see APBS documentation (http://apbs.sourceforge.net/doc/) for 
-### input file sytax.
+### input file syntax.
 #############################################################################
 
 # READ IN MOLECULES
 read 
-    mol pqr ion2.pqr       # Read molecule 1
+    mol pqr ion.pqr       # Read molecule 1
     parm flat parm.dat
 end
 
-APOLAR name solvated
-	dime 65 65 65
-	glen 7 7 7
+APOLAR name area
+	grid 0.1 0.1 0.1
 	mol 1
 	srfm sacc
 	swin 0.3
 	srad 0.0
-	press 1 
-	gamma 0.5 
-	bconc 1.0
+	press 0.0
+	gamma 1.0
+	bconc 0.0
 	sdens 10.0
 	dpos 0.2
 	temp 298.15
@@ -29,16 +28,15 @@ APOLAR name solvated
 	calcforce comps
 END
 
-APOLAR name reference
-	dime 65 65 65
-	glen 20 20 20
+APOLAR name volume
+	grid 0.1 0.1 0.1
 	mol 1
 	srfm sacc
 	swin 0.3
 	srad 0.0
-	press 1 
-	gamma 0.5 
-	bconc 1.0
+	press 1.0
+	gamma 0.0
+	bconc 0.0
 	sdens 100.0
 	dpos 0.2
 	temp 298.15
@@ -46,8 +44,9 @@ APOLAR name reference
 	calcforce comps
 END
 
-print apolForce solvated - reference end
-print apolEnergy solvated - reference end
+print apolEnergy area end
+print apolEnergy volume end
+
 
 # SO LONG
 quit

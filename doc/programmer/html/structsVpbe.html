@@ -70,7 +70,13 @@ Collaboration diagram for sVpbe:<p><center><img src="structsVpbe__coll__graph.pn
 
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o23">soluteCharge</a></td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o24">paramFlag</a></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o24">smvolume</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o25">smsize</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o26">ipkey</a></td></tr>
+
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="structsVpbe.html#o27">paramFlag</a></td></tr>
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
@@ -256,6 +262,28 @@ Charge (e) of each species     </td>
 Ionic radius (A) of each species     </td>
   </tr>
 </table>
+<a class="anchor" name="o26" doxytag="sVpbe::ipkey" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> int <a class="el" href="structsVpbe.html#o26">sVpbe::ipkey</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+PBE calculation type     </td>
+  </tr>
+</table>
 <a class="anchor" name="o9" doxytag="sVpbe::maxIonRadius" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
@@ -300,13 +328,13 @@ Max ion radius (A; used for calculating accessiblity and defining volumes for io
 Total number of ion species     </td>
   </tr>
 </table>
-<a class="anchor" name="o24" doxytag="sVpbe::paramFlag" ></a><p>
+<a class="anchor" name="o27" doxytag="sVpbe::paramFlag" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int <a class="el" href="structsVpbe.html#o24">sVpbe::paramFlag</a>
+          <td class="md" nowrap valign="top"> int <a class="el" href="structsVpbe.html#o27">sVpbe::paramFlag</a>
       </table>
     </td>
   </tr>
@@ -320,6 +348,50 @@ Total number of ion species     </td>
 
 <p>
 Check to see if the parameters have been set     </td>
+  </tr>
+</table>
+<a class="anchor" name="o25" doxytag="sVpbe::smsize" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsVpbe.html#o25">sVpbe::smsize</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Size-Modified PBE size     </td>
+  </tr>
+</table>
+<a class="anchor" name="o24" doxytag="sVpbe::smvolume" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> double <a class="el" href="structsVpbe.html#o24">sVpbe::smvolume</a>
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+Size-Modified PBE relative volume     </td>
   </tr>
 </table>
 <a class="anchor" name="o18" doxytag="sVpbe::soluteCenter" ></a><p>
@@ -632,7 +704,7 @@ Delta function scaling parameter     </td>
 </table>
 <hr>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="vpbe_8h-source.html">vpbe.h</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:42 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jun 25 11:58:51 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

@@ -584,10 +584,12 @@ VEXTERNC void Vacc_totalAtomdSAV(
  * @return  Total solvent accessible volume (A^3)
  */
 VEXTERNC double Vacc_totalSAV(
-							   Vacc *thee,  /** Accessibility object */
-							   Vclist *clist, /** Clist for acc object */
-							   double radius  /** Probe molecule radius (&Aring;) */
-							   );
+	Vacc *thee,  /** Accessibility object */
+	Vclist *clist, /** Clist for acc object */
+	APOLparm *apolparm,  /** Apolar parameters -- could be VNULL if none required for this calculation.
+		* If VNULL, then default settings are used */
+	double radius  /** Probe molecule radius (&Aring;) */
+	);
 
 /**
  * @brief  Return the WCA integral energy

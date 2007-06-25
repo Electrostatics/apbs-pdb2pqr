@@ -246,28 +246,6 @@
 			</para>
 		</listitem>
 
-		<listitem id="apolar-dime">
-			<cmdsynopsis>
-				<command>dime</command>
-				<arg choice="req"><replaceable>nx ny nz</replaceable></arg>
-			</cmdsynopsis>
-			<para>Number of grid points <emphasis>per
-					processor</emphasis> for grid-based
-				discretization and volume quadrature.  This,
-				together with <link
-					id="apolar-glen">glen</link> set the spacing of quadrature points; e.g., the spacing is given by <literal>glen/(dime - 1)</literal> in each direction.
-				The arguments for this keyword are:
-				<variablelist>
-					<varlistentry>
-						<term><replaceable>nx ny nz</replaceable></term>
-						<listitem>
-							<para>Number of grid points in the x-, y-, and z-directions.</para>
-						</listitem>
-					</varlistentry>
-				</variablelist>
-			</para>
-		</listitem>
-
 		<listitem id="apolar-dpos">
 			<cmdsynopsis>
 				<command>dpos</command>
@@ -358,18 +336,17 @@
 		</listitem>
 		-->
 
-		<listitem id="apolar-glen">
+		<listitem id="apolar-grid">
 			<cmdsynopsis>
-				<command>glen</command>
-				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
+				<command>grid</command>
+				<arg choice="req"><replaceable>hx hy hz</replaceable></arg>
 			</cmdsynopsis>
-			<para>Specify the mesh domain lengths; this may be different in each
-				direction.   Used together with <link id="apolar-dime">dime</link> to determin the quadrature grid spacing.
+			<para>Specify the quadrature grid spacing for volume integral calculations.
 				<variablelist>
 					<varlistentry>
-						<term><replaceable>xlen ylen zlen</replaceable></term>
+						<term><replaceable>hx hy hz</replaceable></term>
 						<listitem>
-							<para>Grid lengths in the x-, y-, and z-directions in &Aring;.</para>
+							<para>Quadrature spacing in the x-, y-, and z-directions in &Aring;.</para>
 						</listitem>
 					</varlistentry>
 				</variablelist>

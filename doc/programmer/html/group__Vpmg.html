@@ -52,7 +52,7 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_dtor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub object destructor. </em> <a href="#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the coefficient arrays prior to solving the equation. </em> <a href="#a6"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a7">Vpmg_solve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
@@ -79,16 +79,16 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a14">Vpmg_dielGradNorm</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the integral of the gradient of the dielectric function. </em> <a href="#a14"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chgm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the total force on the specified atom in units of k_B T/AA. </em> <a href="#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chgm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the "charge-field" force on the specified atom in units of k_B T/AA. </em> <a href="#a16"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA. </em> <a href="#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_ibForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_ibForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the osmotic pressure on the specified atom in units of k_B T/AA. </em> <a href="#a18"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a19">Vpmg_setPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double lowerCorner[3], double upperCorner[3], int bflags[6])</td></tr>
@@ -97,7 +97,7 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a20">Vpmg_unsetPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove partition restrictions. </em> <a href="#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a21">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a38">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a21">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a43">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the specified array with accessibility values. </em> <a href="#a21"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a22">Vpmg_fieldSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int atomID, double field[3])</td></tr>
@@ -257,27 +257,27 @@ MGparm parameter object for boundary conditions What types of energies to calcul
 <p>
 Here is the call graph for this function:<p><center><img src="group__Vpmg_a2_cgraph.png" border="0" usemap="#group__Vpmg_a2_cgraph_map" alt=""></center>
 <map name="group__Vpmg_a2_cgraph_map">
-<area href="group__Vpmg.html#a18" shape="rect" coords="143,413,239,439" alt="">
-<area href="vpmg_8c.html#a21" shape="rect" coords="303,185,383,211" alt="">
-<area href="group__Vpbe.html#a3" shape="rect" coords="659,325,843,351" alt="">
-<area href="group__Vpbe.html#a25" shape="rect" coords="699,401,803,427" alt="">
-<area href="group__Vpbe.html#a12" shape="rect" coords="686,463,817,490" alt="">
-<area href="group__Vpmg.html#a7" shape="rect" coords="467,7,590,34" alt="">
-<area href="vpmg_8c.html#a20" shape="rect" coords="287,615,399,642" alt="">
-<area href="group__Vpmg.html#a4" shape="rect" coords="299,742,387,769" alt="">
-<area href="group__Valist.html#a8" shape="rect" coords="695,210,807,237" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="669,159,834,186" alt="">
-<area href="group__Vpmg.html#a11" shape="rect" coords="465,58,593,85" alt="">
-<area href="group__Vpmg.html#a14" shape="rect" coords="470,109,587,135" alt="">
-<area href="group__Vpmg.html#a13" shape="rect" coords="466,362,591,389" alt="">
-<area href="group__Vpmg.html#a6" shape="rect" coords="475,210,582,237" alt="">
-<area href="group__Vpbe.html#a6" shape="rect" coords="450,666,607,693" alt="">
-<area href="group__Vpbe.html#a18" shape="rect" coords="449,717,609,743" alt="">
-<area href="group__Vpbe.html#a14" shape="rect" coords="449,767,609,794" alt="">
-<area href="group__Vpbe.html#a7" shape="rect" coords="455,514,602,541" alt="">
-<area href="group__Vpbe.html#a4" shape="rect" coords="451,565,606,591" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="467,615,590,642" alt="">
-<area href="group__Vpmg.html#a5" shape="rect" coords="481,818,577,845" alt="">
+<area href="group__Vpmg.html#a20" shape="rect" coords="143,514,239,541" alt="">
+<area href="vpmg_8c.html#a23" shape="rect" coords="341,185,421,211" alt="">
+<area href="group__Vpmg.html#a7" shape="rect" coords="542,311,665,338" alt="">
+<area href="vpmg_8c.html#a22" shape="rect" coords="325,463,437,490" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="289,514,473,541" alt="">
+<area href="group__Vpbe.html#a25" shape="rect" coords="329,565,433,591" alt="">
+<area href="group__Vpbe.html#a12" shape="rect" coords="315,615,446,642" alt="">
+<area href="group__Vpmg.html#a4" shape="rect" coords="337,666,425,693" alt="">
+<area href="group__Valist.html#a8" shape="rect" coords="761,261,873,287" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="734,159,899,186" alt="">
+<area href="group__Vpmg.html#a11" shape="rect" coords="539,109,667,135" alt="">
+<area href="group__Vpmg.html#a16" shape="rect" coords="545,210,662,237" alt="">
+<area href="group__Vpmg.html#a13" shape="rect" coords="541,7,666,34" alt="">
+<area href="group__Vpmg.html#a6" shape="rect" coords="550,159,657,186" alt="">
+<area href="group__Vpbe.html#a6" shape="rect" coords="525,362,682,389" alt="">
+<area href="group__Vpbe.html#a18" shape="rect" coords="523,413,683,439" alt="">
+<area href="group__Vpbe.html#a14" shape="rect" coords="523,463,683,490" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="530,514,677,541" alt="">
+<area href="group__Vpbe.html#a4" shape="rect" coords="526,565,681,591" alt="">
+<area href="group__Vpbe.html#a10" shape="rect" coords="542,615,665,642" alt="">
+<area href="group__Vpmg.html#a5" shape="rect" coords="555,666,651,693" alt="">
 </map>
 <a class="anchor" name="a3" doxytag="vpmg.h::Vpmg_ctor2" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -368,33 +368,34 @@ MGparm parameter object for boundary conditions (can be VNULL if focusFlag = 0) 
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a18_cgraph.png" border="0" usemap="#group__Vpmg_a18_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a18_cgraph_map">
-<area href="vpmg_8c.html#a21" shape="rect" coords="167,236,247,262" alt="">
-<area href="group__Vpbe.html#a3" shape="rect" coords="523,464,707,490" alt="">
-<area href="group__Vpbe.html#a25" shape="rect" coords="563,514,667,541" alt="">
-<area href="group__Vpbe.html#a12" shape="rect" coords="550,565,681,592" alt="">
-<area href="group__Vpmg.html#a7" shape="rect" coords="554,109,677,136" alt="">
-<area href="vpmg_8c.html#a20" shape="rect" coords="151,717,263,744" alt="">
-<area href="group__Vpmg.html#a4" shape="rect" coords="163,844,251,870" alt="">
-<area href="group__Valist.html#a8" shape="rect" coords="785,178,897,205" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="758,116,923,142" alt="">
-<area href="group__Vpmg.html#a11" shape="rect" coords="551,616,679,642" alt="">
-<area href="group__Vpmg.html#a14" shape="rect" coords="334,261,451,288" alt="">
-<area href="group__Vpmg.html#a13" shape="rect" coords="330,362,455,389" alt="">
-<area href="group__Vpmg.html#a6" shape="rect" coords="562,160,669,186" alt="">
-<area href="group__Vpbe.html#a13" shape="rect" coords="779,362,902,389" alt="">
-<area href="vpmg_8c.html#a15" shape="rect" coords="541,261,690,288" alt="">
-<area href="vpmg_8c.html#a17" shape="rect" coords="534,312,697,338" alt="">
-<area href="group__Vatom.html#a8" shape="rect" coords="775,305,906,332" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="774,254,907,281" alt="">
-<area href="group__Vcap.html#a0" shape="rect" coords="575,413,655,440" alt="">
-<area href="group__Vpbe.html#a6" shape="rect" coords="314,616,471,642" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a20_cgraph.png" border="0" usemap="#group__Vpmg_a20_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a20_cgraph_map">
+<area href="vpmg_8c.html#a23" shape="rect" coords="168,236,248,262" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="745,413,929,440" alt="">
+<area href="group__Vpbe.html#a25" shape="rect" coords="785,514,889,541" alt="">
+<area href="group__Vpbe.html#a12" shape="rect" coords="772,565,902,592" alt="">
+<area href="group__Vpmg.html#a7" shape="rect" coords="548,109,670,136" alt="">
+<area href="vpmg_8c.html#a22" shape="rect" coords="152,717,264,744" alt="">
+<area href="group__Vpmg.html#a4" shape="rect" coords="164,844,252,870" alt="">
+<area href="group__Valist.html#a8" shape="rect" coords="781,170,893,197" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="754,113,920,140" alt="">
+<area href="group__Vpmg.html#a11" shape="rect" coords="545,362,673,389" alt="">
+<area href="group__Vpmg.html#a16" shape="rect" coords="334,261,452,288" alt="">
+<area href="group__Vpmg.html#a13" shape="rect" coords="330,362,456,389" alt="">
+<area href="group__Vpmg.html#a6" shape="rect" coords="556,160,662,186" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="776,360,898,386" alt="">
+<area href="vpmg_8c.html#a17" shape="rect" coords="534,261,684,288" alt="">
+<area href="vpmg_8c.html#a19" shape="rect" coords="528,312,690,338" alt="">
+<area href="group__Vatom.html#a8" shape="rect" coords="772,284,902,310" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="770,233,904,260" alt="">
+<area href="vpmg_8c.html#a15" shape="rect" coords="524,464,694,490" alt="">
+<area href="group__Vcap.html#a0" shape="rect" coords="797,464,877,490" alt="">
+<area href="group__Vpbe.html#a6" shape="rect" coords="314,616,472,642" alt="">
 <area href="group__Vpbe.html#a18" shape="rect" coords="313,666,473,693" alt="">
 <area href="group__Vpbe.html#a14" shape="rect" coords="313,717,473,744" alt="">
-<area href="group__Vpbe.html#a7" shape="rect" coords="319,768,466,794" alt="">
-<area href="group__Vpbe.html#a4" shape="rect" coords="315,818,470,845" alt="">
-<area href="group__Vpbe.html#a10" shape="rect" coords="331,869,454,896" alt="">
+<area href="group__Vpbe.html#a7" shape="rect" coords="320,768,466,794" alt="">
+<area href="group__Vpbe.html#a4" shape="rect" coords="316,818,470,845" alt="">
+<area href="group__Vpbe.html#a10" shape="rect" coords="332,869,454,896" alt="">
 <area href="group__Vpmg.html#a5" shape="rect" coords="345,920,441,946" alt="">
 </map>
 <a class="anchor" name="a31" doxytag="vpmg.h::Vpmg_dbDirectPolForce" ></a><p>
@@ -493,7 +494,7 @@ Atom index (returned) force </td></tr>
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>srfm</em></td>
         </tr>
         <tr>
@@ -537,8 +538,8 @@ Valist ID of desired atom Surface discretization method </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a44_cgraph.png" border="0" usemap="#group__Vpmg_a44_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a44_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a46_cgraph.png" border="0" usemap="#group__Vpmg_a46_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a46_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="192,8,304,34" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="641,134,774,161" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="644,185,772,212" alt="">
@@ -546,7 +547,7 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a44_cg
 <area href="group__Vpbe.html#a7" shape="rect" coords="174,362,321,389" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="170,413,325,440" alt="">
 <area href="group__Vpbe.html#a13" shape="rect" coords="186,464,309,490" alt="">
-<area href="vpmg_8c.html#a19" shape="rect" coords="180,185,316,212" alt="">
+<area href="vpmg_8c.html#a21" shape="rect" coords="180,185,316,212" alt="">
 <area href="group__Vacc.html#a10" shape="rect" coords="377,109,588,136" alt="">
 <area href="group__Vacc.html#a30" shape="rect" coords="374,160,590,186" alt="">
 <area href="group__Vacc.html#a29" shape="rect" coords="374,210,590,237" alt="">
@@ -977,20 +978,21 @@ Vpmg object If this was a focused calculation, include (1 -- for serial calculat
 <p>
 Here is the call graph for this function:<p><center><img src="group__Vpmg_a10_cgraph.png" border="0" usemap="#group__Vpmg_a10_cgraph_map" alt=""></center>
 <map name="group__Vpmg_a10_cgraph_map">
-<area href="group__Vpbe.html#a3" shape="rect" coords="342,8,526,34" alt="">
-<area href="group__Vpmg.html#a11" shape="rect" coords="164,224,292,250" alt="">
-<area href="group__Vpmg.html#a14" shape="rect" coords="169,312,286,338" alt="">
-<area href="group__Vpmg.html#a13" shape="rect" coords="165,134,290,161" alt="">
-<area href="group__Vpbe.html#a13" shape="rect" coords="598,261,721,288" alt="">
-<area href="vpmg_8c.html#a15" shape="rect" coords="360,362,509,389" alt="">
-<area href="vpmg_8c.html#a17" shape="rect" coords="353,312,516,338" alt="">
-<area href="group__Valist.html#a8" shape="rect" coords="604,362,716,389" alt="">
-<area href="group__Valist.html#a7" shape="rect" coords="577,413,742,440" alt="">
-<area href="group__Vatom.html#a8" shape="rect" coords="594,464,725,490" alt="">
-<area href="group__Vatom.html#a0" shape="rect" coords="593,312,726,338" alt="">
-<area href="group__Vcap.html#a0" shape="rect" coords="394,109,474,136" alt="">
-<area href="group__Vpbe.html#a25" shape="rect" coords="382,160,486,186" alt="">
-<area href="group__Vpbe.html#a12" shape="rect" coords="369,210,500,237" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="563,261,747,288" alt="">
+<area href="group__Vpmg.html#a11" shape="rect" coords="163,210,291,237" alt="">
+<area href="group__Vpmg.html#a16" shape="rect" coords="169,160,286,186" alt="">
+<area href="group__Vpmg.html#a13" shape="rect" coords="165,312,290,338" alt="">
+<area href="group__Vpbe.html#a13" shape="rect" coords="594,210,717,237" alt="">
+<area href="vpmg_8c.html#a17" shape="rect" coords="353,109,502,136" alt="">
+<area href="vpmg_8c.html#a19" shape="rect" coords="346,160,509,186" alt="">
+<area href="group__Valist.html#a8" shape="rect" coords="599,160,711,186" alt="">
+<area href="group__Valist.html#a7" shape="rect" coords="573,8,738,34" alt="">
+<area href="group__Vatom.html#a8" shape="rect" coords="590,58,721,85" alt="">
+<area href="group__Vatom.html#a0" shape="rect" coords="589,109,722,136" alt="">
+<area href="vpmg_8c.html#a15" shape="rect" coords="342,312,513,338" alt="">
+<area href="group__Vcap.html#a0" shape="rect" coords="615,312,695,338" alt="">
+<area href="group__Vpbe.html#a25" shape="rect" coords="603,362,707,389" alt="">
+<area href="group__Vpbe.html#a12" shape="rect" coords="590,413,721,440" alt="">
 </map>
 <a class="anchor" name="a22" doxytag="vpmg.h::Vpmg_fieldSpline4" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1066,7 +1068,7 @@ Atom index The (returned) electric field </td></tr>
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a38">Vdata_Type</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a43">Vdata_Type</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>type</em>, </td>
         </tr>
         <tr>
@@ -1152,7 +1154,7 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a8_cgr
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>surfMeth</em>, </td>
         </tr>
         <tr>
@@ -1164,7 +1166,7 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a8_cgr
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>chargeMeth</em>, </td>
         </tr>
         <tr>
@@ -1283,16 +1285,16 @@ Boolean to use charge map argument External charge map </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a41_cgraph.png" border="0" usemap="#group__Vpmg_a41_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a41_cgraph_map">
-<area href="vpmg_8c.html#a24" shape="rect" coords="348,160,409,186" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a43_cgraph.png" border="0" usemap="#group__Vpmg_a43_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a43_cgraph_map">
+<area href="vpmg_8c.html#a26" shape="rect" coords="348,160,409,186" alt="">
 <area href="group__Vpbe.html#a5" shape="rect" coords="526,616,665,642" alt="">
 <area href="group__Vpbe.html#a7" shape="rect" coords="522,717,669,744" alt="">
-<area href="vpmg_8c.html#a35" shape="rect" coords="150,362,244,389" alt="">
-<area href="vpmg_8c.html#a34" shape="rect" coords="158,641,236,668" alt="">
+<area href="vpmg_8c.html#a37" shape="rect" coords="150,362,244,389" alt="">
+<area href="vpmg_8c.html#a36" shape="rect" coords="158,641,236,668" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="729,768,913,794" alt="">
-<area href="vpmg_8c.html#a23" shape="rect" coords="570,8,621,34" alt="">
-<area href="vpmg_8c.html#a25" shape="rect" coords="570,58,621,85" alt="">
+<area href="vpmg_8c.html#a25" shape="rect" coords="570,8,621,34" alt="">
+<area href="vpmg_8c.html#a27" shape="rect" coords="570,58,621,85" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="540,362,652,389" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="513,413,678,440" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="530,312,661,338" alt="">
@@ -1302,17 +1304,17 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a41_cg
 <area href="group__Vpbe.html#a14" shape="rect" coords="516,160,676,186" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="518,210,673,237" alt="">
 <area href="group__Vpbe.html#a10" shape="rect" coords="534,261,657,288" alt="">
-<area href="vpmg_8c.html#a36" shape="rect" coords="318,210,438,237" alt="">
-<area href="vpmg_8c.html#a37" shape="rect" coords="309,362,448,389" alt="">
-<area href="vpmg_8c.html#a40" shape="rect" coords="309,413,448,440" alt="">
-<area href="vpmg-private_8h.html#a58" shape="rect" coords="310,261,446,288" alt="">
-<area href="vpmg-private_8h.html#a59" shape="rect" coords="302,464,454,490" alt="">
-<area href="vpmg_8c.html#a58" shape="rect" coords="293,312,464,338" alt="">
-<area href="vpmg_8c.html#a27" shape="rect" coords="544,818,648,845" alt="">
-<area href="vpmg_8c.html#a28" shape="rect" coords="329,666,428,693" alt="">
-<area href="vpmg_8c.html#a33" shape="rect" coords="321,514,436,541" alt="">
-<area href="vpmg_8c.html#a61" shape="rect" coords="317,565,440,592" alt="">
-<area href="vpmg_8c.html#a59" shape="rect" coords="317,616,440,642" alt="">
+<area href="vpmg_8c.html#a38" shape="rect" coords="318,210,438,237" alt="">
+<area href="vpmg_8c.html#a39" shape="rect" coords="309,362,448,389" alt="">
+<area href="vpmg_8c.html#a42" shape="rect" coords="309,413,448,440" alt="">
+<area href="vpmg-private_8h.html#a60" shape="rect" coords="310,261,446,288" alt="">
+<area href="vpmg-private_8h.html#a61" shape="rect" coords="302,464,454,490" alt="">
+<area href="vpmg_8c.html#a60" shape="rect" coords="293,312,464,338" alt="">
+<area href="vpmg_8c.html#a29" shape="rect" coords="544,818,648,845" alt="">
+<area href="vpmg_8c.html#a30" shape="rect" coords="329,666,428,693" alt="">
+<area href="vpmg_8c.html#a35" shape="rect" coords="321,514,436,541" alt="">
+<area href="vpmg_8c.html#a63" shape="rect" coords="317,565,440,592" alt="">
+<area href="vpmg_8c.html#a61" shape="rect" coords="317,616,440,642" alt="">
 </map>
 <a class="anchor" name="a15" doxytag="vpmg.h::Vpmg_force" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1340,13 +1342,13 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a41_cg
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>srfm</em>, </td>
         </tr>
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>chgm</em></td>
         </tr>
         <tr>
@@ -1392,11 +1394,11 @@ Surface discretization method Charge discretization method </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a42_cgraph.png" border="0" usemap="#group__Vpmg_a42_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a42_cgraph_map">
-<area href="group__Vpmg.html#a44" shape="rect" coords="153,261,265,287" alt="">
-<area href="group__Vpmg.html#a43" shape="rect" coords="154,463,264,490" alt="">
-<area href="group__Vpmg.html#a45" shape="rect" coords="154,717,264,743" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a44_cgraph.png" border="0" usemap="#group__Vpmg_a44_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a44_cgraph_map">
+<area href="group__Vpmg.html#a46" shape="rect" coords="153,261,265,287" alt="">
+<area href="group__Vpmg.html#a45" shape="rect" coords="154,463,264,490" alt="">
+<area href="group__Vpmg.html#a47" shape="rect" coords="154,717,264,743" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="581,717,693,743" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="796,438,929,465" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="798,261,926,287" alt="">
@@ -1404,21 +1406,21 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a42_cg
 <area href="group__Vpbe.html#a7" shape="rect" coords="324,58,470,85" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="320,109,474,135" alt="">
 <area href="group__Vpbe.html#a13" shape="rect" coords="336,413,458,439" alt="">
-<area href="vpmg_8c.html#a19" shape="rect" coords="329,261,465,287" alt="">
+<area href="vpmg_8c.html#a21" shape="rect" coords="329,261,465,287" alt="">
 <area href="group__Vacc.html#a10" shape="rect" coords="532,261,742,287" alt="">
 <area href="group__Vacc.html#a30" shape="rect" coords="529,311,745,338" alt="">
 <area href="group__Vacc.html#a29" shape="rect" coords="529,362,745,389" alt="">
 <area href="group__Vpbe.html#a9" shape="rect" coords="314,565,480,591" alt="">
 <area href="group__Vpbe.html#a12" shape="rect" coords="332,514,462,541" alt="">
-<area href="vpmg_8c.html#a46" shape="rect" coords="341,767,453,794" alt="">
-<area href="vpmg_8c.html#a47" shape="rect" coords="341,843,453,870" alt="">
-<area href="vpmg_8c.html#a48" shape="rect" coords="341,666,453,693" alt="">
+<area href="vpmg_8c.html#a48" shape="rect" coords="341,767,453,794" alt="">
+<area href="vpmg_8c.html#a49" shape="rect" coords="341,843,453,870" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="341,666,453,693" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="572,767,702,794" alt="">
-<area href="vpmg_8c.html#a38" shape="rect" coords="601,970,673,997" alt="">
-<area href="vpmg_8c.html#a39" shape="rect" coords="597,869,677,895" alt="">
-<area href="vpmg_8c.html#a54" shape="rect" coords="601,666,673,693" alt="">
-<area href="vpmg_8c.html#a55" shape="rect" coords="597,565,677,591" alt="">
-<area href="vpmg_8c.html#a53" shape="rect" coords="602,615,672,642" alt="">
+<area href="vpmg_8c.html#a40" shape="rect" coords="601,970,673,997" alt="">
+<area href="vpmg_8c.html#a41" shape="rect" coords="597,869,677,895" alt="">
+<area href="vpmg_8c.html#a56" shape="rect" coords="601,666,673,693" alt="">
+<area href="vpmg_8c.html#a57" shape="rect" coords="597,565,677,591" alt="">
+<area href="vpmg_8c.html#a55" shape="rect" coords="602,615,672,642" alt="">
 </map>
 <a class="anchor" name="a29" doxytag="vpmg.h::Vpmg_ibDirectPolForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -1516,7 +1518,7 @@ Atom index (returned) force </td></tr>
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>srfm</em></td>
         </tr>
         <tr>
@@ -1560,15 +1562,15 @@ Valist ID of desired atom Surface discretization method </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a43_cgraph.png" border="0" usemap="#group__Vpmg_a43_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a43_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a45_cgraph.png" border="0" usemap="#group__Vpmg_a45_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a45_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="191,8,303,34" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="646,134,779,161" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="649,185,777,212" alt="">
 <area href="group__Vpbe.html#a9" shape="rect" coords="165,312,330,338" alt="">
 <area href="group__Vpbe.html#a12" shape="rect" coords="182,362,313,389" alt="">
 <area href="group__Vpbe.html#a13" shape="rect" coords="186,413,309,440" alt="">
-<area href="vpmg_8c.html#a19" shape="rect" coords="179,185,315,212" alt="">
+<area href="vpmg_8c.html#a21" shape="rect" coords="179,185,315,212" alt="">
 <area href="group__Vacc.html#a10" shape="rect" coords="382,109,593,136" alt="">
 <area href="group__Vacc.html#a30" shape="rect" coords="379,160,595,186" alt="">
 <area href="group__Vacc.html#a29" shape="rect" coords="379,210,595,237" alt="">
@@ -1939,8 +1941,8 @@ The Vpmg object The atom for energy calculations </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a16_cgraph.png" border="0" usemap="#group__Vpmg_a16_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a16_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a18_cgraph.png" border="0" usemap="#group__Vpmg_a18_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a18_cgraph_map">
 <area href="group__Vatom.html#a8" shape="rect" coords="207,7,338,34" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="206,58,339,85" alt="">
 </map>
@@ -2076,10 +2078,10 @@ Vpmg object If this was a focused calculation, include (1 -- for serial calculat
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a14_cgraph.png" border="0" usemap="#group__Vpmg_a14_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a14_cgraph_map">
-<area href="vpmg_8c.html#a15" shape="rect" coords="182,109,332,135" alt="">
-<area href="vpmg_8c.html#a17" shape="rect" coords="176,185,338,211" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a16_cgraph.png" border="0" usemap="#group__Vpmg_a16_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a16_cgraph_map">
+<area href="vpmg_8c.html#a17" shape="rect" coords="182,109,332,135" alt="">
+<area href="vpmg_8c.html#a19" shape="rect" coords="176,185,338,211" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="414,7,526,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="388,58,553,85" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="405,109,536,135" alt="">
@@ -2112,7 +2114,7 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a14_cg
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>chgm</em></td>
         </tr>
         <tr>
@@ -2156,19 +2158,19 @@ Valist ID of desired atom Charge discretization method </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a45_cgraph.png" border="0" usemap="#group__Vpmg_a45_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a45_cgraph_map">
-<area href="vpmg_8c.html#a46" shape="rect" coords="168,210,280,237" alt="">
-<area href="vpmg_8c.html#a47" shape="rect" coords="168,261,280,287" alt="">
-<area href="vpmg_8c.html#a48" shape="rect" coords="168,159,280,186" alt="">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a47_cgraph.png" border="0" usemap="#group__Vpmg_a47_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a47_cgraph_map">
+<area href="vpmg_8c.html#a48" shape="rect" coords="168,210,280,237" alt="">
+<area href="vpmg_8c.html#a49" shape="rect" coords="168,261,280,287" alt="">
+<area href="vpmg_8c.html#a50" shape="rect" coords="168,159,280,186" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="340,210,452,237" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="330,261,461,287" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="329,159,462,186" alt="">
-<area href="vpmg_8c.html#a38" shape="rect" coords="360,311,432,338" alt="">
-<area href="vpmg_8c.html#a39" shape="rect" coords="356,362,436,389" alt="">
-<area href="vpmg_8c.html#a54" shape="rect" coords="360,7,432,34" alt="">
-<area href="vpmg_8c.html#a55" shape="rect" coords="356,58,436,85" alt="">
-<area href="vpmg_8c.html#a53" shape="rect" coords="361,109,430,135" alt="">
+<area href="vpmg_8c.html#a40" shape="rect" coords="360,311,432,338" alt="">
+<area href="vpmg_8c.html#a41" shape="rect" coords="356,362,436,389" alt="">
+<area href="vpmg_8c.html#a56" shape="rect" coords="360,7,432,34" alt="">
+<area href="vpmg_8c.html#a57" shape="rect" coords="356,58,436,85" alt="">
+<area href="vpmg_8c.html#a55" shape="rect" coords="361,109,430,135" alt="">
 </map>
 <a class="anchor" name="a33" doxytag="vpmg.h::Vpmg_qfMutualPolForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -2486,11 +2488,11 @@ Vpmg object If this was a focused calculation, include (1 -- for serial calculat
 <p>
 Here is the call graph for this function:<p><center><img src="group__Vpmg_a13_cgraph.png" border="0" usemap="#group__Vpmg_a13_cgraph_map" alt=""></center>
 <map name="group__Vpmg_a13_cgraph_map">
-<area href="group__Vcap.html#a0" shape="rect" coords="237,7,317,34" alt="">
-<area href="group__Vpbe.html#a3" shape="rect" coords="185,58,369,85" alt="">
-<area href="group__Vpbe.html#a25" shape="rect" coords="225,109,329,135" alt="">
-<area href="group__Vpbe.html#a12" shape="rect" coords="212,159,342,186" alt="">
-<area href="group__Vpbe.html#a13" shape="rect" coords="216,210,338,237" alt="">
+<area href="vpmg_8c.html#a15" shape="rect" coords="185,84,356,110" alt="">
+<area href="group__Vcap.html#a0" shape="rect" coords="458,8,538,34" alt="">
+<area href="group__Vpbe.html#a3" shape="rect" coords="406,58,590,85" alt="">
+<area href="group__Vpbe.html#a25" shape="rect" coords="446,109,550,136" alt="">
+<area href="group__Vpbe.html#a12" shape="rect" coords="433,160,564,186" alt="">
 </map>
 <a class="anchor" name="a19" doxytag="vpmg.h::Vpmg_setPart" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -2646,10 +2648,10 @@ Vpmg object </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Vpmg_a52_cgraph.png" border="0" usemap="#group__Vpmg_a52_cgraph_map" alt=""></center>
-<map name="group__Vpmg_a52_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Vpmg_a54_cgraph.png" border="0" usemap="#group__Vpmg_a54_cgraph_map" alt=""></center>
+<map name="group__Vpmg_a54_cgraph_map">
 <area href="group__Vpbe.html#a7" shape="rect" coords="200,7,346,34" alt="">
-<area href="vpmg_8c.html#a51" shape="rect" coords="233,58,313,85" alt="">
+<area href="vpmg_8c.html#a53" shape="rect" coords="233,58,313,85" alt="">
 </map>
 <a class="anchor" name="a20" doxytag="vpmg.h::Vpmg_unsetPart" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
@@ -2695,7 +2697,7 @@ Here is the call graph for this function:<p><center><img src="group__Vpmg_a7_cgr
 <area href="group__Valist.html#a8" shape="rect" coords="206,7,318,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="180,58,345,85" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:46 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jun 25 11:58:56 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

@@ -245,10 +245,10 @@ typedef <a class="el" href="structsVfetk.html">sVfetk</a>&nbsp;</td><td class="m
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a46">Vfetk_dumpLocalVar</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Debugging routine to print out local variables used by PDE object. </em> <a href="#a46"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a47">Vfetk_fillArray</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, Bvec *vec, <a class="el" href="vhal_8h.html#a38">Vdata_Type</a> type)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a47">Vfetk_fillArray</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, Bvec *vec, <a class="el" href="vhal_8h.html#a43">Vdata_Type</a> type)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill an array with the specified data. </em> <a href="#a47"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a48">Vfetk_write</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, const  char *iodev, const  char *iofmt, const  char *thost, const  char *fname, Bvec *vec, <a class="el" href="vhal_8h.html#a39">Vdata_Format</a> format)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vfetk.html#a48">Vfetk_write</a> (<a class="el" href="structsVfetk.html">Vfetk</a> *thee, const  char *iodev, const  char *iofmt, const  char *thost, const  char *fname, Bvec *vec, <a class="el" href="vhal_8h.html#a44">Vdata_Format</a> format)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out data. </em> <a href="#a48"></a><em><br><br></td></tr>
 </table>
@@ -816,7 +816,7 @@ Using the solution at the finest mesh level, get the electrostatic energy using 
 <tr><td valign=top><em>color</em>&nbsp;</td><td>
 THe Vfetk object </td></tr>
 <tr><td valign=top><em>nonlin</em>&nbsp;</td><td>
-Partition restriction for energy calculation; if non-negative, energy calculation is restricted to the specified partition (indexed by simplex and atom colors If 1, the NPBE energy functional is used; otherwise, the LPBE energy functional is used. </td></tr>
+Partition restriction for energy calculation; if non-negative, energy calculation is restricted to the specified partition (indexed by simplex and atom colors If 1, the NPBE energy functional is used; otherwise, the LPBE energy functional is used. If -2, SMPBE is used. </td></tr>
 </table>
 </dl>    </td>
   </tr>
@@ -903,7 +903,7 @@ Here is the call graph for this function:<p><center><img src="group__Vfetk_a71_c
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a38">Vdata_Type</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a43">Vdata_Type</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>type</em></td>
         </tr>
         <tr>
@@ -3130,7 +3130,7 @@ Parameters for solution of the PBE FEM-speecific solution parameters </td></tr>
         <tr>
           <td></td>
           <td></td>
-          <td class="md" nowrap><a class="el" href="vhal_8h.html#a39">Vdata_Format</a>&nbsp;</td>
+          <td class="md" nowrap><a class="el" href="vhal_8h.html#a44">Vdata_Format</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>format</em></td>
         </tr>
         <tr>
@@ -3186,7 +3186,7 @@ Data vector Data format </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:59 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jun 25 11:59:12 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

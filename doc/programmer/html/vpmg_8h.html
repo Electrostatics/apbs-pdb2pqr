@@ -74,7 +74,7 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_dtor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub object destructor. </em> <a href="group__Vpmg.html#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_fillco</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> surfMeth, double splineWin, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chargeMeth, int useDielXMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap, int useDielYMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap, int useDielZMap, <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap, int useKappaMap, <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap, int useChargeMap, <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the coefficient arrays prior to solving the equation. </em> <a href="group__Vpmg.html#a6"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a7">Vpmg_solve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
@@ -101,16 +101,16 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a14">Vpmg_dielGradNorm</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the integral of the gradient of the dielectric function. </em> <a href="group__Vpmg.html#a14"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a15">Vpmg_force</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chgm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the total force on the specified atom in units of k_B T/AA. </em> <a href="group__Vpmg.html#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a36">Vchrg_Meth</a> chgm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a41">Vchrg_Meth</a> chgm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the "charge-field" force on the specified atom in units of k_B T/AA. </em> <a href="group__Vpmg.html#a16"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_dbForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *dbForce, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA. </em> <a href="group__Vpmg.html#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_ibForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a35">Vsurf_Meth</a> srfm)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_ibForce</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *force, int atomID, <a class="el" href="vhal_8h.html#a40">Vsurf_Meth</a> srfm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate the osmotic pressure on the specified atom in units of k_B T/AA. </em> <a href="group__Vpmg.html#a18"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a19">Vpmg_setPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double lowerCorner[3], double upperCorner[3], int bflags[6])</td></tr>
@@ -119,7 +119,7 @@ typedef <a class="el" href="structsVpmg.html">sVpmg</a>&nbsp;</td><td class="mem
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a20">Vpmg_unsetPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove partition restrictions. </em> <a href="group__Vpmg.html#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a21">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a38">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a21">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a43">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the specified array with accessibility values. </em> <a href="group__Vpmg.html#a21"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a22">Vpmg_fieldSpline4</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int atomID, double field[3])</td></tr>
@@ -231,7 +231,7 @@ Contains declarations for class Vpmg.
  * carries forward this exception.
  *
  * </pre></div></dd></dl>
-<hr size="1"><address style="align: right;"><small>Generated on Tue Jan 2 10:42:37 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Mon Jun 25 11:58:46 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

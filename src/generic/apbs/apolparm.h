@@ -135,14 +135,10 @@ typedef enum eAPOLparm_doCalc APOLparm_doCalc;
  */
 struct sAPOLparm {
    
-    int parsed;  /**< Flag:  Has this structure been filled with
-                  * anything other than * the default values? (0 = no,
-                  * 1 = yes) */
-    int dime[3];  /**< Grid dimensions */
-	int setdime;  /**< Flag, @see dime */
+	int parsed;  /**< Flag:  Has this structure been filled with anything other than the default values? (0 = no, 1 = yes) */
 	
-	double glen[3];  /**< Grid side lengths. */
-	int setglen;  /**< Flag, @see fglen */
+	double grid[3];  /**< Grid spacing */
+	int setgrid;  /**< Flag, @see grid */
 	
 	int molid;  /**< Molecule ID to perform calculation on */
     int setmolid;  /**< Flag, @see molid */

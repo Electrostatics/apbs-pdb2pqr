@@ -1380,29 +1380,29 @@ VPUBLIC void Vacc_totalAtomdSAV(Vacc *thee, double dpos, double srad, Vatom *ato
 	
 	/* Shift by pos -/+ on x */
 	temp_Pos[0] -= dpos; 
-    axb1 = Vacc_totalSAV(thee,clist,srad);
+    axb1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[0] = tPos[0];
 	
     temp_Pos[0] += dpos; 
-    axt1 = Vacc_totalSAV(thee,clist,srad);
+    axt1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[0] = tPos[0];
 	
 	/* Shift by pos -/+ on y */
     temp_Pos[1] -= dpos; 
-    ayb1 = Vacc_totalSAV(thee,clist,srad);
+    ayb1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[1] = tPos[1];
     
     temp_Pos[1] += dpos; 
-    ayt1 = Vacc_totalSAV(thee,clist,srad);
+    ayt1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[1] = tPos[1];
 	
 	/* Shift by pos -/+ on z */
     temp_Pos[2] -= dpos; 
-    azb1 = Vacc_totalSAV(thee,clist,srad);
+    azb1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[2] = tPos[2];
     
     temp_Pos[2] += dpos; 
-    azt1 = Vacc_totalSAV(thee,clist,srad);
+    azt1 = Vacc_totalSAV(thee,clist, VNULL, srad);
 	temp_Pos[2] = tPos[2];
     
 	/* Calculate the final value */
@@ -1411,7 +1411,7 @@ VPUBLIC void Vacc_totalAtomdSAV(Vacc *thee, double dpos, double srad, Vatom *ato
     dSA[2] = (azt1-azb1)/(2.0 * dpos);
 }
 
-VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
+VPUBLIC double Vacc_totalSAV(Vacc *thee, Vclist *clist, APOLparm *apolparm, double radius) {
 	
 	int i;
 	int npts[3];
@@ -1434,6 +1434,16 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 		fn = len*vol_density + 1;
 		npts[i] = (int)ceil(fn);
 		spacs[i] = len/((double)(npts[i])-1.0);
+		if (apolparm != VNULL) {
+			if (apolparm->setgrid) {
+				if (apolparm->grid[i] > spacs[i]) {
+					Vnm_print(2, "Vacc_totalSAV:  Warning, your GRID value (%g) is larger than the recommended value (%g)!\n",
+						apolparm->grid[i], spacs[i]);
+				}
+				spacs[i] = apolparm->grid[i];
+				
+			}
+		}
 	}
 	
 	for (x=lower_corner[0]; x<=upper_corner[0]; x=x+spacs[0]) {
@@ -1478,7 +1488,7 @@ VPUBLIC double Vacc_totalSAV(Vacc *thee,Vclist *clist,double radius){
 	return sav;
 }
 
-VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
+int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 								 Vclist *clist, int iatom, double *value) {
 	
 	int i;
@@ -1495,6 +1505,7 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
     double *lower_corner, *upper_corner;
 	
 	Vatom *atom = VNULL;
+	VASSERT(apolparm != VNULL);
 	
 	energy = 0.0;
 	vol = 1.0;
@@ -1540,6 +1551,13 @@ VPRIVATE int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 		fn = len*vol_density + 1;
 		npts[i] = (int)ceil(fn);
 		spacs[i] = 0.5;
+		if (apolparm->setgrid) {
+			if (apolparm->grid[i] > spacs[i]) {
+				Vnm_print(2, "Vacc_totalSAV:  Warning, your GRID value (%g) is larger than the recommended value (%g)!\n",
+					apolparm->grid[i], spacs[i]);
+			}
+			spacs[i] = apolparm->grid[i];
+		}
 	}
 	
 	for (x=xmin; x<=xmax; x=x+spacs[0]) {
@@ -1650,6 +1668,8 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 	
 	double *pos;
     double *lower_corner, *upper_corner;
+
+	VASSERT(apolparm != VNULL);
 	
 	vol = 1.0;
 	vol_density = 2.0;
@@ -1687,6 +1707,13 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 		npts[i] = (int)ceil(fn);
 		spacs[i] = 0.5;
 		force[i] = 0.0;
+		if (apolparm->setgrid) {
+			if (apolparm->grid[i] > spacs[i]) {
+				Vnm_print(2, "Vacc_totalSAV:  Warning, your GRID value (%g) is larger than the recommended value (%g)!\n",
+					apolparm->grid[i], spacs[i]);
+			}
+			spacs[i] = apolparm->grid[i];
+		}
 	}
 	
 	int xmin = pos[0] - pad;

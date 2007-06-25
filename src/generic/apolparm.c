@@ -92,7 +92,7 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	int i;
     thee->parsed = 0;
 	
-    thee->setglen = 0;
+    thee->setgrid = 0;
     thee->setmolid = 0;
     thee->setbconc = 0;
     thee->setsdens = 0;
@@ -123,11 +123,8 @@ VPUBLIC void APOLparm_copy(
 	
 	thee->parsed = source->parsed;
 	
-	for (i=0; i<3; i++) thee->dime[i] = source->dime[i];
-	thee->setdime = source->setdime;
-	
-	for (i=0; i<3; i++) thee->glen[i] = source->glen[i];
-	thee->setglen = source->setglen;
+	for (i=0; i<3; i++) thee->grid[i] = source->grid[i];
+	thee->setgrid = source->setgrid;
 	
 	thee->molid = source->molid;
 	thee->setmolid = source->setmolid;
@@ -199,61 +196,30 @@ VPUBLIC int APOLparm_check(APOLparm *thee) {
     return rc;
 }
 
-VPRIVATE int APOLparm_parseDIME(APOLparm *thee, Vio *sock) {
+VPRIVATE int APOLparm_parseGRID(APOLparm *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
-    int ti;
+	char tok[VMAX_BUFSIZE];
+	double tf;
 	
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%d", &ti) == 0){
-        Vnm_print(2, "parseAPOL:  Read non-integer (%s) while parsing DIME \
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (sscanf(tok, "%lf", &tf) == 0) {
+		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-        return -1;
-    } else thee->dime[0] = ti;
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%d", &ti) == 0) {
-        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+		return -1;
+	} else thee->grid[0] = tf;
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (sscanf(tok, "%lf", &tf) == 0) {
+		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-        return -1;
-    } else thee->dime[1] = ti;
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%d", &ti) == 0) {
-        Vnm_print(2, "NOsh:  Read non-integer (%s) while parsing DIME \
+		return -1;
+	} else thee->grid[1] = tf;
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (sscanf(tok, "%lf", &tf) == 0) {
+		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-        return -1;
-    } else thee->dime[2] = ti;
-    thee->setdime = 1;
-    return 1;
-	
-VERROR1:
-        Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
-}
-
-VPRIVATE int APOLparm_parseGLEN(APOLparm *thee, Vio *sock) {
-	
-    char tok[VMAX_BUFSIZE];
-    double tf;
-	
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%lf", &tf) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-        return -1;
-    } else thee->glen[0] = tf;
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%lf", &tf) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-        return -1;
-    } else thee->glen[1] = tf;
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%lf", &tf) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GLEN \
-keyword!\n", tok);
-        return -1;
-    } else thee->glen[2] = tf;
-    thee->setglen = 1;
+		return -1;
+	} else thee->grid[2] = tf;
+    thee->setgrid = 1;
     return 1;
 	
 VERROR1:
@@ -570,7 +536,7 @@ VERROR1:
 	return -1;
 }
 
-VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
+VPUBLIC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
 
     if (thee == VNULL) {
@@ -583,14 +549,20 @@ VPUBLIC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
         return -1;
     }
 	
-	if (Vstring_strcasecmp(tok, "dime") == 0) {
-        return APOLparm_parseDIME(thee, sock);
-    } else if (Vstring_strcasecmp(tok, "mol") == 0) {
-        return APOLparm_parseMOL(thee, sock);
-    } else if (Vstring_strcasecmp(tok, "glen") == 0) {
-        return APOLparm_parseGLEN(thee, sock);
-    } else if (Vstring_strcasecmp(tok, "bconc") == 0) {
-        return APOLparm_parseBCONC(thee, sock);
+	if (Vstring_strcasecmp(tok, "mol") == 0) {
+		return APOLparm_parseMOL(thee, sock);
+	} else if (Vstring_strcasecmp(tok, "grid") == 0) {
+		return APOLparm_parseGRID(thee, sock);
+	} else if (Vstring_strcasecmp(tok, "dime") == 0) {
+		Vnm_print(2, "APOLparm_parseToken:  The DIME and GLEN keywords for APOLAR have been replaced with GRID.\n");
+		Vnm_print(2, "APOLparm_parseToken:  Please see the APBS User Guide for more information.\n");
+		return -1;
+	} else if (Vstring_strcasecmp(tok, "glen") == 0) {
+		Vnm_print(2, "APOLparm_parseToken:  The DIME and GLEN keywords for APOLAR have been replaced with GRID.\n");
+		Vnm_print(2, "APOLparm_parseToken:  Please see the APBS User Guide for more information.\n");
+		return -1;
+	} else if (Vstring_strcasecmp(tok, "bconc") == 0) {
+		return APOLparm_parseBCONC(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
         return APOLparm_parseSDENS(thee, sock);
     } else if (Vstring_strcasecmp(tok, "dpos") == 0) {
