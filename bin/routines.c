@@ -3635,12 +3635,12 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	sasa = 0.0;
 	sav = 0.0;
 	
-	if(apolparm->calcenergy) {
+	if (apolparm->calcenergy) {
 		/* Solvent accessible surface area */
 		apolparm->sasa = Vacc_totalSASA(acc, srad);
 		
 		/* Inflated van der Waals accessibility */
-		apolparm->sav = Vacc_totalSAV(acc,clist,srad);
+		apolparm->sav = Vacc_totalSAV(acc, clist, apolparm, srad);
 		
 		/* wcaEnergy integral code */
 		if (VABS(apolparm->bconc) > VSMALL) {
@@ -3649,10 +3649,11 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 				Vnm_print(2, "Error in apolar energy calculation!\n");
 				return 0;
 			}		
-			energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 		} else {
 			apolparm->wcaEnergy = 0.0;
 		}
+		
+		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 	}
 	
 	return 1;

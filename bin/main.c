@@ -261,6 +261,8 @@ Please cite your use of APBS as:\n\n\
 
 	/* ********* CHECK INVOCATION AND OPTIONS ************* */
 	Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
+	Vnm_tprint( 1, "%s", header);
+	Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, __TIME__);
 
 	i=0;
 	outputformat = OUTPUT_NULL;
@@ -317,13 +319,8 @@ Please cite your use of APBS as:\n\n\
 	} 
 
 	/* Append rank info if a parallel run */
-        if ((size > 1) && (output_path != NULL))
-                sprintf(output_path, "%s_%d", output_path, rank);
-
-	Vnm_tprint( 1, "%s", header);
-	Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, 
-				__TIME__);
-
+	if ((size > 1) && (output_path != NULL))
+		printf(output_path, "%s_%d", output_path, rank);
 
 	/* *************** PARSE INPUT FILE ******************* */
 	nosh = NOsh_ctor(rank, size);

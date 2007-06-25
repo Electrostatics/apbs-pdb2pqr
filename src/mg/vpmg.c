@@ -2597,6 +2597,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
 					  thee->gxcf, thee->gycf, thee->gzcf, 
 					  thee->xf, thee->yf, thee->zf, nx, ny, nz);
 			}
+			break;
 			
         case BCFL_UNUSED:
             Vnm_print(2, "bcCalc:  Invalid bcfl (%d)!\n", thee->pmgp->bcfl);
