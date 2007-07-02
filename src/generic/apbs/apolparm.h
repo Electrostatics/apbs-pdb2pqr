@@ -251,7 +251,7 @@ VEXTERNC void APOLparm_copy(APOLparm *thee, APOLparm *source);
  * @return   1 if matched and assigned; -1 if matched, but there's
  * some sort of error (i.e., too few args); 0 if not matched
  */
-VEXTERNC int APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE], 
+VEXTERNC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock);
 
 #endif 
