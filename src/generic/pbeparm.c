@@ -878,10 +878,15 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         return -1;
     }
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
-    thee->writetype[thee->numwrite] = writetype;
-    thee->writefmt[thee->numwrite] = writefmt;
-    (thee->numwrite)++;
+	if (thee->numwrite < (PBEPARM_MAXWRITE-1)) {
+		strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
+		thee->writetype[thee->numwrite] = writetype;
+		thee->writefmt[thee->numwrite] = writefmt;
+		(thee->numwrite)++;
+	} else {
+		Vnm_print(2, "PBEparm_parse:  You have exceeded the maximum number of write statements!\n");
+		Vnm_print(2, "PBEparm_parse:  Ignoring additional write statements!\n");
+	}
     return 1;
 
     VERROR1:

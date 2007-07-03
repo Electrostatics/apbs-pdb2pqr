@@ -12,6 +12,7 @@
 	* Added enumerations for return codes, new PBE solver (SMPBE) and linear/ nonlinear types
 	* Added in code for Size-Modified PBE (SMPBE)
 - BUG FIXES
+	* Fixed buffer over-run problem
 	* Fixed case inconsistency with inputgen.py and psize.py scripts which caused problems with some versions of Python
 	* Fixed bug wherein 'bcfl sdh' behaved essentially like 'bcfl zero'.  Now we have the correct behavior:  'bcfl sdh' behaves like 'bcfl mdh' thanks to the multipole code added by Mike Schnieders.  Interestingly, this bug didn't have a major on the large-molecule test cases/examples provided by APBS but did affect the small molecule solvation energies.  Thanks to Bradley Scott Perrin for reporting this bug.
    * Added support for chain IDs in noinput.py
