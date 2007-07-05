@@ -129,7 +129,8 @@ struct sVpbe {
 	
 	double smvolume;	/**< Size-Modified PBE relative volume */
 	double smsize;		/**< Size-Modified PBE size */
-	int ipkey;			/**< PBE calculation type */
+	int ipkey;			/**< PBE calculation type (this is a cached copy
+						  * it should not be used directly in code) */
 	
 	int paramFlag;      /**< Check to see if the parameters have been set */
 	
