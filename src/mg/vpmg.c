@@ -1632,10 +1632,20 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     if (ionstr > 0.0) zks2 = 0.5/ionstr;
     else zks2 = 0.0;
     Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
-    for (i=0; i<nion; i++) {
-        ionConc[i] = zks2 * ionConc[i];
-    }
-	
+
+	/* Currently for SMPBE type calculations we do not want to apply a scale
+	   factor to the ionConc */
+	switch(pmgp->ipkey){
+		case IPKEY_SMPBE:
+			//Do Nothing
+			break;
+		default:
+			//Else adjust the inoConc by scaling factor zks2
+			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
+			break;
+	}
+    
+
     F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
 
     /* Set the default chargeSrc for 5th order splines */
