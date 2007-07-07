@@ -637,6 +637,8 @@ Please cite your use of APBS as:\n\n\
 
 	/* This should be last */
 	Vnm_tstop(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
+	Vnm_flush(1);
+	Vnm_flush(2);
 	Vcom_finalize();
 
 	return 0;
