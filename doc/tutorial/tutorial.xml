@@ -1582,7 +1582,7 @@ quit
 		<sect1 id="binding-ligand">
 			<title>Hey! You don't have any parameters for my ligand!</title>
 
-			<warning><para>Under construction</para></warning>
+			<para><ulink url="&pdb2pqrurl;">PDB2PQR</ulink> can now (as of version 1.2.0) parameterize ligands, thanks to new features developed in collaboration with the Jens Nielsen group.  Please visit the PDB2PQR <ulink url="&pdb2pqrurl;">homepage</ulink> for more details.</para>
 
 		</sect1>
 
@@ -1598,15 +1598,11 @@ quit
 	<chapter id="forces-sect"> <title>How do I calculate solvation
 forces?</title>
 
-		<warning><para>Under construction</para></warning>
-
-		<sect1> <title>Polar solvation</title>
-			<warning><para>Under construction</para></warning>
-		</sect1>
-
-		<sect1> <title>Apolar solvation</title>
-			<warning><para>Under construction</para></warning>
-		</sect1>
+		<para>
+			APBS provides force calculations for both polar and nonpolar solvation following the same procedures used in <xref linkend="solvation-sect"/>.
+			In general, forces can be obtained by modifying input files used for solvation energy calculations to include <literal>calcforce total</literal> (for total forces on the entire solute) or <literal>calcforce comps</literal> to obtain detailed force information for each atom.
+			It is important to note that, like solvation energy calculations, "self-interaction" terms must be removed (cf. the <xref linkend="born-input"/> example).
+		</para>
 
 	</chapter>
 
@@ -2599,7 +2595,15 @@ quit
 
 	<chapter id="simulation-sect"> <title>How do I use APBS with my
 molecular dynamics program (for MM/PBSA, etc.)?</title>
-		<warning><para>Under construction</para></warning>
+
+		<para>
+			Robert Konecny (<ulink url="http://mccammon.ucsd.edu">McCammon group</ulink>) has developed the <ulink url="http://mccammon.ucsd.edu/iapbs/">iAPBS</ulink> package which provides a C/C++/FORTRAN interface to APBS for use with AMBER, NAMD, and CHARMM.  More information is available from the iAPBS <ulink url="http://mccammon.ucsd.edu/iapbs/">homepage</ulink>.
+		</para>
+		
+		<para>
+			APBS also links against developmental versions of the <ulink url="http://dasher.wustl.edu/tinker/">TINKER</ulink> software package.  Public versions of TINKER with APBS support should be available in Fall 2007.
+		</para>
+		
 	</chapter>
 
 	<chapter id="gemstone-sect"> <title>Can I run APBS via the web?  (Gemstone) </title>
