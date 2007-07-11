@@ -640,6 +640,8 @@ Please cite your use of APBS as:\n\n\
 	Vnm_flush(1);
 	Vnm_flush(2);
 	Vcom_finalize();
+	
+	fflush(NULL);
 
 	return 0;
 
