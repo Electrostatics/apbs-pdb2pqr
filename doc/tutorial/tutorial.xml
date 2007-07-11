@@ -13,6 +13,7 @@
 <!ENTITY Ka "K<subscript>a</subscript>">
 <!ENTITY epsp "&#949;<subscript>p</subscript>">
 <!ENTITY epss "&#949;<subscript>s</subscript>">
+<!ENTITY theta "&#952;">
 ]>
 
 <book>
@@ -1380,7 +1381,40 @@ quit
 		</sect1>
 
 		<sect1> <title>Apolar solvation</title>
-			<warning><para>Under construction</para></warning>
+		
+			<para>Referring back to the full free energy cycle in <xref linkend="solvation-cycle-full"/>, the nonpolar solvation free energy is usually represented by the energy changes in Steps 3 through 5:
+				<informalequation>
+					<graphic fileref="images/nonpolar-solvation-equation.png"/>
+				</informalequation>
+				where Step 4 represents the energy of creating a cavity in solution and Steps 3-5 is the energy associated with dispersive interactions between the solute and solvent.
+				There are many possible choices for modeling this nonpolar solvation process.  APBS implements a relatively general model described by <ulink url="http://dx.doi.org/10.1073/pnas.0600118103">Wagoner and Baker (PNAS 2006)</ulink> and references therein.  
+				The implementation and invocation of this model is described in more detail in <ulink url="&ugurl;#apolar">the APBS user guide</ulink>.
+			</para>
+			<para>
+				Our basic model for the cavity creation term (Step 4) is motivated by scaled particle theory and has the form
+				<informalequation>
+					<graphic fileref="images/nonpolar-solvation-cavity-equation.png"/>
+				</informalequation>
+				where p is the solvent pressure (<literal>press</literal> keyword in APBS), &Delta; V is the solvent-accessible volume of the solute, &gamma; is the solvent surface tension (<literal>gamma</literal> keyword in APBS), and &Delta; A is the solvent-accessible surface area of the solute.
+			</para>
+			<para>
+				Our basic model for the dispersion terms (Steps 3 and 5) follow a Weeks-Chandler-Anderson framework as proposed by Levy, Zhang, and Gallicchio (<ulink url="http://dx.doi.org/10.1002/jcc.10045">J Comput Chem, 2002</ulink>):
+				<informalequation>
+					<graphic fileref="images/nonpolar-solvation-dispersion-equation.png"/>
+				</informalequation>
+				where &rho; is the bulk solvent density (<literal>bconc</literal> keyword in APBS), &Omega; is the problem domain, u<superscript>(att)</superscript>(y) is the attractive dispersion interaction between the solute and the solvent at point y with dispersive Lennard-Jones parameters specified in APBS parameter files, and &theta;(y) describes the solvent accessibility of point y.
+			</para>
+			
+			<note>
+				<para>
+					The ability to independently adjust <literal>press</literal>, <literal>gamma</literal>, and <literal>bconc</literal> means that the general nonpolar solvation model presented above can be easily adapted to other popular nonpolar solvation models.
+					For example, setting <literal>press</literal> and <literal>bconc</literal> to zero yields a typical solvent-accessible surface area model.
+				</para>
+			</note>
+			
+			<para>
+				Unlike the Born ion, there are no good simple examples for demonstrating these types of nonpolar calculations.  APBS includes several examples of calculations using the apolar model above.  Interested readers should examine the <filename>alkanes</filename> apolar example provided with APBS.
+			</para>
 		</sect1>
 
 	</chapter>
