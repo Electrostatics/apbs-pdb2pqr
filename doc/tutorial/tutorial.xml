@@ -44,13 +44,8 @@
 		</copyright>
 		<legalnotice>
 			<para>This file is part of APBS.</para>
-			<para>This program is free software; you can
-				redistribute it and/or modify it under the
-				terms of the GNU General Public License as
-				published by the Free Software Foundation;
-				either version 2 of the License, or (at your
-				option) any later version.</para>
-			<para>This
+			<para>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.</para>
+			<para>This 
 				program is distributed in the hope that it will
 				be useful, but WITHOUT ANY WARRANTY; without
 				even the implied warranty of MERCHANTABILITY or
@@ -167,63 +162,26 @@
 		</sect1>
 
 		<sect1 id="xml-format-sect"> <title>XML format</title>
-			<warning><para>Under construction</para></warning>
+			
+			<para>The <ulink url="&ugurl;#pqr-xml-format">XML format</ulink> provides a somewhat more complicated format for including parameter information with increased flexibility in formatting, extension, and other modifications.  As in the PQR format, atom coordinates are supplemented with charge and radius information.  Please see <ulink url="&ugurl;#pqr-xml-format">the APBS user guide</ulink> for complete format specifications.</para>
+			
 		</sect1>
 
 		<sect1 id="pdb2pqr-subsect"> <title>Generating PQR files from PDB
 				files (PDB2PQR)</title>
 
 			<note>
-				<para>This tutorial was prepared using PDB2PQR
-					1.1.2</para>
+				<para>This tutorial was prepared using PDB2PQR 1.2.1</para>
 			</note>
 
 			<para>
-				The <ulink url="&pdb2pqrurl;">PDB2PQR</ulink>
-				web service and software will convert
-				most PDB files into PQR format with
-				some caveats:
-				<itemizedlist>
-					<listitem>
-						<para>
-							Limited ligand support.
-							Given the ambiguities
-							associated with
-							implicit solvent force
-							field parameter
-							development, atom types
-							not included in
-							standard force fields
-							are currently not
-							supported by PDB2PQR.
-							We're in the process of
-							including such support.
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Inability to "repair"
-							large regions of
-							missing coordinates.
-							Although PDB2PQR can
-							fix some missing heavy
-							atoms in sidechains, it
-							does not currently have
-							the (nontrivial)
-							capability to model in
-							large regions of
-							missing backbone and
-							sidechain coordinates.
-						</para>
-					</listitem>
-				</itemizedlist>
-				<ulink url="&pdb2pqrurl;">PDB2PQR</ulink> will
-				also perform hydrogen bond optimization,
-				sidechain rotamer search, limited titration
-				state assignment, and APBS input file
-				preparation.  Please see 
-				<ulink url="&pdb2pqrurl;">&pdb2pqrurl;</ulink>
-				for more details.
+				The <ulink url="&pdb2pqrurl;">PDB2PQR</ulink> web service and software will convert
+				most PDB files into PQR format with some caveats, in particular the inability to "repair" large regions of missing coordinates.
+				Although PDB2PQR can fix some missing heavy atoms in sidechains, it does not currently have the (nontrivial) capability to model in large regions of missing backbone and sidechain coordinates.
+			</para>
+			<para>
+				<ulink url="&pdb2pqrurl;">PDB2PQR</ulink> will also perform hydrogen bond optimization,  sidechain rotamer search, limited titration state assignment, ligand parameterization, and APBS input file preparation.
+				Please see <ulink url="&pdb2pqrurl;">&pdb2pqrurl;</ulink> for more details.
 			</para>
 
 			<para>
@@ -312,150 +270,8 @@
 				<para>These options fall into two categories:
 					how to build missing atoms (including
 					hydrogens) onto the structure and
-					additional output configuration.</para>
-
-				<variablelist> <title>Missing atom build
-						options</title>
-					<varlistentry> 
-						<term> Ensure that new atoms
-							are not rebuilt too
-							close to existing atoms
-						</term>
-						<listitem>
-							<para>
-								"Debump" any
-								rebuilt atoms
-								to remove
-								steric clashes.
-								<emphasis>This
-									is
-generally a good option to include</emphasis>.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term> Optimize the hydrogen
-							bonding network </term>
-						<listitem>
-							<para>
-								This rotates
-								hydrogen
-								torsion angles
-								and flips
-								ambiguous
-								sidechain
-								placements in
-								an attempt to
-								optimize the
-								overall
-								hydrogen
-								bonding
-								network.
-								<emphasis>This
-									is
-generally a good option to include</emphasis>.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term> Use 
-							<ulink url="http://propka.chem.uiowa.edu/">PROPKA</ulink> 
-							to assign protonation
-							states at pH...</term>
-						<listitem>
-							<para> Assign titration
-								states (for
-								proteins) with
-								<ulink
-									url="http://propka.chem.uiowa.edu/">PROPKA</ulink>.
-							</para>
-						</listitem>
-					</varlistentry>
-				</variablelist> 
-
-				<variablelist>  <title>Output options</title>
-					<varlistentry>
-						<term>Create an APBS input
-							file</term>
-						<listitem>
-							<para> Useful if you're
-								planing to run
-								APBS on your
-								own.  At the
-								very least,
-								this generates
-								a nice
-								template for
-								customization.
-							</para>
-						</listitem>
-					</varlistentry>
-					<varlistentry>
-						<term>Add/keep chain IDs in the
-							PQR file</term>
-						<listitem>
-							<para> Unfortunately,
-								chain IDs still
-								baffle
-								APBS<footnote><para>Sorry,
-										we're
-										still
-										working
-										on
-										introducing
-										this
-										while
-										maintaining
-										flexibility
-										for
-										parsing
-										strange
-										PDB
-										formats...</para></footnote>
-								but they can be
-								useful for
-								visualization.
-							</para>
-						</listitem>
-					</varlistentry>
-				</variablelist> 
-
-			</sect2>
-
-			<sect2> <title>Running the calculation and downloading
-					the results</title>
-				<para>Hit <guibutton>Submit</guibutton> to run
-					the calculation.  Note that some
-					options (particularly hydrogen bond
-					network optimization and PROPKA
-					assignment) can increase the runtime.
-					You should get intermittent updates on
-					the progress of your calculation from
-					the web server.</para>
-
-				<para>When you download the result from the web
-					page,<footnote><para>One can usually
-							download, rather than
-							display the file, by
-							right-clicking or
-							Ctrl-clicking the
-							link.</para></footnote>
-					many browsers will attach a ".txt"
-					extension to the file.  This generally
-					needs to be removed before it can be
-					used with visualization software.
-				</para>
-
-				<para>Finally, for many types of electrostatic
-					calculations, 
-					<emphasis>it will be useful to remove
-						any explicit water and
-						unparameterized ligands from the 
-						PQR structure</emphasis> before
-					proceeding.  This can be done with your
-					favorite <ulink
-						url="http://en.wikipedia.org/wiki/Text_editor">text
-						editor</ulink>.
+					additional output configuration. 
+					Please see <ulink url="&pdb2pqrurl;">&pdb2pqrurl;</ulink> for more details.
 				</para>
 			</sect2>
 
@@ -1396,17 +1212,7 @@ energy?</title>
 			given in the following sections.
 			<figure id="solvation-cycle-full"> <titleabbrev>Full
 					solvation energy cycle</titleabbrev>
-				<title>Full solvation energy cycle.  This cycle
-incorporates several processes into the solvation energy (step 1).  Step 2
-indicates charging of the solute in solution (e.g., inhomogeneous dielectric,
-ions present).  Step 3 indicates the introduction of attractive solute-solvent
-dispersive interaction interactions (e.g., an integral of
-Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step
-4 indicates the introduction of repulsive solute-solvent interaction (e.g.,
-cavity formation).  Steps 5 and 6 are basically null steps although they could
-be used to offset unwanted energies added in Steps 3 and 4 above.  Finally,
-Step 6 represents the charging of the solute in a vacuum or homogeneous
-dielectric environment in the absence of mobile ions.</title>
+				<title>Full solvation energy cycle.  This cycle incorporates several processes into the solvation energy (step 1).  Step 2  indicates charging of the solute in solution (e.g., inhomogeneous dielectric,  ions present).  Step 3 indicates the introduction of attractive solute-solvent dispersive interaction interactions (e.g., an integral of Weeks-Chandler-Andersen interactions over the solvent-accessible volume).  Step 4 indicates the introduction of repulsive solute-solvent interaction (e.g., cavity formation).  Steps 5 and 6 are basically null steps although they could be used to offset unwanted energies added in Steps 3 and 4 above.  Finally, Step 6 represents the charging of the solute in a vacuum or homogeneous dielectric environment in the absence of mobile ions.</title>
 				<graphic
 					fileref="images/solvation-cycle-full.png"></graphic>
 			</figure>
