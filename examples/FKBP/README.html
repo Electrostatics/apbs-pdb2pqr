@@ -14,11 +14,11 @@
 		<p> In order to calculate solvation energy upon binding you will need to take the results from these
 		input files and subtract from them the results obtained from the <code>coulomb</code> utility found at
 		<code>apbs/tools/manip/coulomb</code>.  The values returned from this utility are:
-		<ul>
+		</p><ul>
 			<li> 1d7h-dmso: -15.0930 kJ/mol (analytical value -15.103 kJ/mol)
-			<li> 1d7i-dss:  -11.9670 kJ/mol (analytical value -11.975 kJ/mol)
-		</ul>
-		</p>
+			</li><li> 1d7i-dss:  -11.9670 kJ/mol (analytical value -11.975 kJ/mol)
+		</li></ul>
+		<p></p>
 
 		<p> This example was contributed by Jung-Hsin Lin.  </p>
 
@@ -26,18 +26,27 @@
 			<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>UHBD (kJ/mol)</th></tr>
 
 			<tr>
-				<td rowspan=2><a href="1d7h-dmso/apbs-mol.in">1d7h-dmso/apbs-mol.in</a></td>
-				<td rowspan=2>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>15.0089</B></td>
-				<td rowspan=2>19.097</td>
+			  <td rowspan=3><a href="1d7h-dmso/apbs-mol.in">1d7h-dmso/apbs-mol.in</a></td>
+			  <td rowspan=3>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><B>15.0089</B></td>
+			  <td rowspan=3>19.097</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>15.0089</td>
 			</tr> 
 			<tr> <td align=center>0.4.0</td><td align=center>15.0089</td> </tr>
 			
 			<tr>
-				<td rowspan=13><a href="1d7h-dmso/apbs-smol.in">1d7h-dmso/apbs-smol.in</a></td>
-				<td rowspan=13>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm smol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>16.2458</B>
-				<td rowspan=13>19.097</td>
+			  <td rowspan=14><a href="1d7h-dmso/apbs-smol.in">1d7h-dmso/apbs-smol.in</a></td>
+			  <td rowspan=14>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm smol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><B>16.2458</B> </td>
+			  <td rowspan=14>19.097</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>16.2458
+				</td>
 			</tr>
 			<tr> <td align=center>0.4.0</td><td align=center>16.2458<sup><a href="#1">1</a></sup></td> </tr>
 			<tr><td align=center>0.3.2</td><td align=center>15.0089</td></tr>
@@ -53,18 +62,28 @@
 			<tr><td align=center>0.1.8</td><td align=center>14.591</td> </tr>
 
 			<tr>
-				<td rowspan=2><a href="1d7i-dss/apbs-mol.in">1d7i-dss/apbs-mol.in</a></td>
-				<td rowspan=2>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>14.4254</B></td>
-				<td rowspan=2>16.231</td>
+			  <td rowspan=3><a href="1d7i-dss/apbs-mol.in">1d7i-dss/apbs-mol.in</a></td>
+			  <td rowspan=3>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><B>14.4254</B></td>
+			  <td rowspan=3>16.231</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td>
+				<td align=center>14.4254</td>
 			</tr>
             <tr> <td align=center>0.4.0</td><td align=center>14.4254</td> </tr>
             
 			<tr>
-				<td rowspan=13><a href="1d7i-dss/apbs-smol.in">1d7i-dss/apbs-smol.in</a></td>
-				<td rowspan=13>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm smol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>15.4517</B>
-				<td rowspan=13>16.231</td>
+			  <td rowspan=14><a href="1d7i-dss/apbs-smol.in">1d7i-dss/apbs-smol.in</a></td>
+			  <td rowspan=14>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm smol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><B>15.4517</B> </td>
+			  <td rowspan=14>16.231</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>15.4517
+				</td>
 			</tr>
 			<tr> <td align=center>0.4.0</td><td align=center>15.4517<sup><a href="#1">1</a></sup></td> </tr>
 			<tr><td align=center>0.3.2</td><td align=center>14.4254</td></tr>
@@ -78,18 +97,16 @@
 			<tr><td align=center>0.2.1</td><td align=center>14.387</td></tr>
 			<tr><td align=center>0.2.0</td><td align=center>14.387</td></tr>
 			<tr><td align=center>0.1.8</td><td align=center>15.210</td> </tr>
-
-
 		</table>
 
-		<p> <a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
+		<p> </p><a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
 			due to three factors:
 			<ul>
 				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
-				<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol 
-				<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
-			</ul>
+				</li><li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol 
+				</li><li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
+			</li></ul>
 			Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
-			</p>
+			<p></p>
 	</body>
 </html>

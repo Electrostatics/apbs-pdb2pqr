@@ -143,7 +143,7 @@ int main(
 	char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
 	APBS -- Adaptive Poisson-Boltzmann Solver\n\
-	Version 0.5.0\n\
+	Version 0.5.1\n\
 	\n\
 	Nathan A. Baker (baker@biochem.wustl.edu)\n\
 	Dept. Biochemistry and Molecular Biophysics\n\

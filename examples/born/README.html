@@ -1,6 +1,6 @@
 <html> 
 	<head> 
-		<title>README for Born APBS examples</title> 
+		<title>README for Born APBS examples</title>
 	</head>
 
 	<body>
@@ -26,12 +26,18 @@
 			<tr><th>Input File</th><th>Description</th><th>APBS Version</th><th>Results (kJ/mol)</th><th>Analytical (kJ/mol)</th></tr>
 
 			<tr>
-				<td rowspan=13><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
-				<td rowspan=13>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm mol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>-229.7735</B>
-				<td rowspan=13>-228.57</td>
+			  <td rowspan=14><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
+			  <td rowspan=14>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm mol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><B>-229.7735</B> </td>
+			  <td rowspan=14>-228.57</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>-229.7735
+				</td>
 			</tr>
-			<tr> <td align=center>0.4.0</td><td align=center><B>-229.7735<sup><a href="#1">1</a></sup></td> </tr>
+			<tr> <td align=center>0.4.0</td><td align=center>-229.7735<sup><a href="#1">1</a></sup></td> 
+			</tr>
 			<tr><td align=center>0.3.2</td><td align=center>-229.7248</td></tr>
 			<tr><td align=center>0.3.1</td><td align=center>-229.7248</td></tr>
 			<tr><td align=center>0.3.0</td><td align=center>-229.7248</td></tr>
@@ -45,27 +51,42 @@
 			<tr><td align=center>0.1.8</td><td align=center>-227.19</td> </tr>
 
 			<tr>
-				<td rowspan=2><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
-				<td rowspan=2>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm smol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>-229.0123</B>
-				<td rowspan=2>-228.57</td>
+			  <td rowspan=3><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
+			  <td rowspan=3>Sequential, 3 A sphere, 3-level focusing to 0.188 A, srfm smol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><strong>-229.0123 </strong></td>
+			  <td rowspan=3>-228.57</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>-229.0123
+				</td>
 			</tr>
             <tr> <td align=center>0.4.0</td><td align=center>-229.0123</td> </tr>
             
 			<tr>
-				<td rowspan=3><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
-				<td rowspan=3>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm mol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>-230.4916</B>
-				<td rowspan=3>-228.57</td>
+			  <td rowspan=4><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
+			  <td rowspan=4>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm mol</td>
+			  <td align=center><B>0.5.1</B></td>
+			  <td align=center><strong>-230.4916 </strong></td>
+			  <td rowspan=4>-228.57</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>-230.4916
+				</td>
 			</tr>
 			<tr> <td align=center>0.4.0</td><td align=center>-230.4916</td> </tr>
 			<tr><td align=center>0.2.1</td><td align=center>-230.77</td></tr>
 
 			<tr>
-				<td rowspan=12><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
-				<td rowspan=12>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm smol</td>
-				<td align=center><B>0.5.0</B></td><td align=center><B>-229.3872</B>
-				<td rowspan=12>-228.57</td>
+			  <td rowspan=13><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
+			  <td rowspan=13>Parallel with 4 processors, 3 A sphere, focusing to 0.103 A, srfm smol</td>
+			  <td align=center><strong>0.5.1</strong></td>
+			  <td align=center><strong>-229.3872 </strong></td>
+			  <td rowspan=13>-228.57</td>
+		  </tr>
+			<tr>
+				<td align=center>0.5.0</td><td align=center>-229.3872
+				</td>
 			</tr>
 			<tr> <td align=center>0.4.0</td><td align=center>-229.3872<sup><a href="#1">1</a></sup></td> </tr>
 			<tr><td align=center>0.3.2</td><td align=center>-226.3529</td></tr>
@@ -78,19 +99,18 @@
 			<tr><td align=center>0.2.2</td><td align=center>-226.2276</td></tr>
 			<tr><td align=center>0.2.0</td><td align=center>-226.228</td></tr>
 			<tr><td align=center>0.1.8</td><td align=center>-226.23</td> </tr>
-
 		</table>
 
-		<p> <a name=1><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
+		<p> </p><a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
 			due to three factors: 
 			<ul> 
 				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric
 				values
-				<li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
-				<li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
-			</ul>
+				</li><li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol.  
+				</li><li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
+			</li></ul>
 			Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.  
-		</p>
+		<p></p>
                 
 	</body>
 </html>

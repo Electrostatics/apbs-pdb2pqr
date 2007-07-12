@@ -13,7 +13,7 @@ vsmall=0.000000001000
 
 input=( apbs-mol-vdw apbs-smol-vdw apbs-mol-surf apbs-smol-surf )
 
-results=( 8.064431804058E+00  2.095465357200E+01 1.192344626017E+02 1.088543615539E+02 )
+results=( 8.085852882880E+00 2.096282333130E+01 1.192607452867E+02 1.088773066724E+02 )
 
 # Initialize the results file
 
