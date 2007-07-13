@@ -73,7 +73,7 @@
 								An optional string which provides the chain ID of the atom.
 								<note>
 									<para>NOTE:  Chain ID support is a new feature
-										of APBS 0.5.0.</para>
+										of APBS 0.5.0 and later versions.</para>
 								</note>
 							</para>
 						</listitem>

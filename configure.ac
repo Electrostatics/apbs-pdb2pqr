@@ -66,7 +66,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [0.5.0], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [0.5.1], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -102,7 +102,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 0.5.0)
+AM_INIT_AUTOMAKE(apbs, 0.5.1)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";

@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
-<!ENTITY apbsversion "0.5.0">
-<!ENTITY apbsdate "Jan-2007">
+<!ENTITY apbsversion "0.5.1">
+<!ENTITY apbsdate "Jul-2007">
 <!ENTITY apbsurl "http://apbs.sf.net">
 <!ENTITY ugurl "../user-guide/index.html">
 <!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
@@ -116,12 +116,7 @@
 		</important>
 
 		<warning>
-			<para> This document is still under construction and
-				should be completed before the next
-				(post-0.5.0) APBS release.  Many of the
-				topics covered in the incomplete sections are
-				demonstrated in the APBS
-				<filename>examples</filename> directory.
+			<para> This document is still under construction and should be completed before the next APBS release.  Many of the topics covered in the incomplete sections are demonstrated in the APBS <filename>examples</filename> directory.
 			</para>
 		</warning>
 

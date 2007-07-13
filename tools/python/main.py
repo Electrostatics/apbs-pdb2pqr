@@ -19,7 +19,7 @@ import string
 from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
-__date__ = "January 2007"
+__date__ = "July 2007"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
