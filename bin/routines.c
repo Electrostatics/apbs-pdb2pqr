@@ -3607,27 +3607,31 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	acc = Vacc_ctor(alist, clist, apolparm->sdens);
 	
 	/* Get WAT (water) LJ parameters from Vparam object */
-	if (param == VNULL) {
+	if (param == VNULL && (apolparm->bconc != 0.0)) {
 		Vnm_tprint(2, "initAPOL:  Got NULL Vparam object!\n");
-		return 0;
+		return VRC_FAILURE;
 	}
-	atomData = Vparam_getAtomData(param, "WAT", "OW");
-	if (atomData == VNULL) atomData = Vparam_getAtomData(param, "WAT", "O");
-	if (atomData == VNULL) {
-		Vnm_tprint(2, "initAPOL:  Couldn't find parameters for WAT OW or WAT O!\n");
-		Vnm_tprint(2, "initAPOL:  These parameters must be present in your file\n");
-		Vnm_tprint(2, "initAPOL:  for apolar calculations.\n");
-		return 0;
+	
+	if (apolparm->bconc != 0.0){
+		atomData = Vparam_getAtomData(param, "WAT", "OW");
+		if (atomData == VNULL) atomData = Vparam_getAtomData(param, "WAT", "O");
+		if (atomData == VNULL) {
+			Vnm_tprint(2, "initAPOL:  Couldn't find parameters for WAT OW or WAT O!\n");
+			Vnm_tprint(2, "initAPOL:  These parameters must be present in your file\n");
+			Vnm_tprint(2, "initAPOL:  for apolar calculations.\n");
+			return VRC_FAILURE;
+		}
+		apolparm->watepsilon = atomData->epsilon;
+		apolparm->watsigma = atomData->radius;
+		apolparm->setwat = 1;
 	}
-	apolparm->watepsilon = atomData->epsilon;
-	apolparm->watsigma = atomData->radius;
 	
 	/* Calculate Energy and Forces */
 	if(apolparm->calcforce) {
 		rc = forceAPOL(acc, mem, apolparm, nforce, atomForce, alist, clist);
-		if(rc == 0) {
+		if(rc == VRC_FAILURE) {
 			Vnm_print(2, "Error in apolar force calculation!\n");
-			return 0;
+			return VRC_FAILURE;
 		}
 	}
 	
@@ -3656,7 +3660,7 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 	}
 	
-	return 1;
+	return VRC_SUCCESS;
 }
 
 VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
@@ -3685,7 +3689,7 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 			break;
 	}
 	
-	return 1;
+	return VRC_SUCCESS;
 }
 
 VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm, 
@@ -3848,7 +3852,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 	
 	Vnm_print(1,"\n");
 	
-	return 1;
+	return VRC_SUCCESS;
 }
 
 

@@ -1621,7 +1621,7 @@ int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	
 	*value = energy;
 
-	return 1;
+	return VRC_SUCCESS;
 }
 
 VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
@@ -1633,6 +1633,13 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
     double energy = 0.0;
 	double tenergy = 0.0;
 	double rho = apolparm->bconc;
+	
+	// Do a sanity check to make sure that watepsilon and watsigma are set
+	// If not, return with an error.
+	if(apolparm->setwat == 0){
+		Vnm_print(2,"Vacc_wcaEnergy: Error. No value was set for watsigma and watepsilon.\n");
+		return VRC_FAILURE;
+	}
 	
 	if (VABS(rho) < VSMALL) {
 		apolparm->wcaEnergy = tenergy;
@@ -1649,7 +1656,7 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 
 	apolparm->wcaEnergy = tenergy;
 	
-    return 1; 
+    return VRC_SUCCESS; 
 	
 }
 
@@ -1670,6 +1677,13 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
     double *lower_corner, *upper_corner;
 
 	VASSERT(apolparm != VNULL);
+	
+	// Do a sanity check to make sure that watepsilon and watsigma are set
+	// If not, return with an error.
+	if(apolparm->setwat == 0){
+		Vnm_print(2,"Vacc_wcaEnergy: Error. No value was set for watsigma and watepsilon.\n");
+		return VRC_FAILURE;
+	}
 	
 	vol = 1.0;
 	vol_density = 2.0;
@@ -1788,6 +1802,6 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 	w  = spacs[0]*spacs[1]*spacs[2];
 	for(i=0;i<3;i++) force[i] *= w;
 
-	return 1;
+	return VRC_SUCCESS;
 }
 

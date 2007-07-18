@@ -183,6 +183,9 @@ struct sAPOLparm {
 	double sav;   /**< Solvent accessible volume for this calculation */
 	double wcaEnergy; /** wcaEnergy */	
 	double totForce[3]; /**< Total forces on x, y, z */
+	
+	int setwat /**< Boolean for determining if a water parameter
+		         *  is supplied. Yes = 1, No = 0 */
 };
 
 /** @typedef APOLparm
