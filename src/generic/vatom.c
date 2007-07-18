@@ -280,35 +280,4 @@ VPUBLIC double *Vatom_getNLInducedDipole(Vatom *thee) {
 
 }
 
-VPUBLIC void Vatom_setResName(Vatom *thee, char resName[VMAX_ARGLEN]) { 
-	
-	VASSERT(thee != VNULL);
-	strcpy(thee->resName, resName);
-	
-}
-
-VPUBLIC void Vatom_getResName(Vatom *thee, char resName[VMAX_ARGLEN]) { 
-	
-	
-	VASSERT(thee != VNULL);
-	strcpy(resName,thee->resName);
-	return 1; 
-	
-}
-
-VPUBLIC void Vatom_setAtomName(Vatom *thee, char atomName[VMAX_ARGLEN]) { 
-	
-	VASSERT(thee != VNULL);
-	strcpy(thee->atomName, atomName);
-	
-}
-
-VPUBLIC void Vatom_getAtomName(Vatom *thee, char atomName[VMAX_ARGLEN]) { 
-	
-	VASSERT(thee != VNULL);
-	strcpy(atomName,thee->atomName);
-	return 1; 
-	
-}
-
 #endif /* if defined(WITH_TINKER) */
