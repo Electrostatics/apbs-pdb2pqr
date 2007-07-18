@@ -333,17 +333,6 @@ potential around my biomolecule?</title>
 					</menuchoice> in the VMD Main window).
 					Adjust the molecule to the desired
 					view.
-					<footnote>
-						<para> At this point you may
-							notice (to many users'
-							chagrin) that PDB2PQR
-							removed the chain IDs
-							from the structure.
-							Sorry about this; we're
-							trying to fix it in
-							future releases of APBS
-							and PDB2PQR.</para>
-					</footnote>
 					Depending on the force
 					field<footnote><para>Visualization
 							seems to work best with
@@ -924,7 +913,7 @@ potential around my biomolecule?</title>
 								button will
 								become
 								unselected when
-								the calcaultion
+								the calculation
 								is finished.
 							</para>
 						</listitem>
@@ -1023,7 +1012,7 @@ potential around my biomolecule?</title>
 								or Connolly
 								surfaces) tend
 								to simply map
-								atomic surface
+								atomic surface charges
 								onto the
 								biomolecular
 								surface.</para>
@@ -1859,12 +1848,7 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 						</para>
 					</listitem>
 					<listitem>
-						<para> Indirectly through PB calculations of
-							solvation free energies and Coulomb's law
-							calculations (in a dielectric &epsp;) of
-							electrostatic interaction energies.  This
-							method is much more stable.
-						</para>
+						<para> Indirectly through PB calculations of solvation free energies and Coulomb's law calculations (in a dielectric &epsp;) of electrostatic interaction energies.  <emphasis>For a sufficiently fine grid</emphasis>, this method is much more stable.  </para>
 					</listitem>
 				</itemizedlist>
 				Both of these methods can be combined, via free energy cycles, to
@@ -1872,7 +1856,7 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 				&Delta;<subscript>xfer</subscript>G<subscript>X</subscript>.
 				However, when care is taken to use the same grids and conformations
 				for all calculations, the direct method using total electrostatic
-				energies is usually the most stable.
+				energies is usually the most efficient.
 			</para>
 
 			<para> Note that none of the methods discussed above have explicitly allowed
@@ -1907,10 +1891,8 @@ groups; data from Nielsen et al (see <link linkend="pKa-refs">footnote</link>) <
 					JE, Vriend G.  Optimizing the hydrogen-bond network in
 					Poisson-Boltzmann equation-based pk(a) calculations.
 					Proteins-Structure Function and Genetics.  43 (4), 403-12,
-					2001</ulink>.  Finally, the biological relevance of lysozyme
-				is briefly reviewed at the <ulink
-					url="http://www.rcsb.org/pdb/molecules/pdb9_1.html">PDB
-					Molecule of the Month</ulink> site.
+					2001</ulink>.
+				Finally, the biological relevance of lysozyme is briefly reviewed at <ulink url="http://en.wikipedia.org/wiki/Lysozyme">Wikipedia</ulink>.
 			</para>
 
 			<para>HEWL has two active site residues GLU 35 and ASP 52 whose titration
