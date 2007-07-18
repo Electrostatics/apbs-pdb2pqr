@@ -351,11 +351,11 @@ Please cite your use of APBS as:\n\n\
 	}
 	
 	/* ******************* CHECK APOL********************** */
-	if((nosh->gotparm == 0) && (rc == ACD_YES)){
-		Vnm_print(1,"\nError you must provide a parameter file if you\n" \
-					"     are performing an APOLAR calculation\n");
-		VJMPERR1(0);
-	}
+	//if((nosh->gotparm == 0) && (rc == ACD_YES)){
+	//	Vnm_print(1,"\nError you must provide a parameter file if you\n" \
+	//				"     are performing an APOLAR calculation\n");
+	//	VJMPERR1(0);
+	//}
 
 	/* *************** LOAD MAPS ******************* */
 	if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
