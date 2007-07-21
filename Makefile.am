@@ -28,7 +28,7 @@ install-exec-local:
 	-rm -f ./bin/apbs
 
 install-data-local:
-	mkdir -p ${prefix}/share
+	mkdir -p ${prefix}
 	tar cf - `find tools | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
 	tar cf - `find examples | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
 	tar cf - `find doc | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
