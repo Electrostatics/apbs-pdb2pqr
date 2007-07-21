@@ -24,13 +24,11 @@ clean-ac:
 	-rm -f dummy*.o mangle-func* noformain* work.pc*
 	-rm -rf autom4te.cache
 
-install-data-local:
-	-rm -f ./bin/apbs
-
 install-exec-local:
 	-rm -f ./bin/apbs
 
-install-exec-am:
-	cp -Rf tools ${prefix}
-	cp -Rf examples ${prefix}
-	cp -Rf doc ${prefix}
+install-data-local:
+	mkdir -p ${prefix}/share
+	tar cf - `find tools | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
+	tar cf - `find examples | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
+	tar cf - `find doc | grep -v .svn` | (cd ${MC_PREFIX}/share ; tar xf -)
