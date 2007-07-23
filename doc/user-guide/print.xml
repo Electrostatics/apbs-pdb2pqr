@@ -22,7 +22,7 @@
 									<link linkend="elec-calcenergy"><command>calcenergy</command></link>
 									<link linkend="elec"><command>ELEC</command></link> command.
 								</para>
-								<warning> <para>This usage is deprecated and will be replaced in the next release.  Please use "elec_energy" or "apolar_energy" as appropriate.  For now, this will return the old results of "eelec_energy".</para> </warning>
+								<warning> <para>This usage is deprecated and will be replaced in the next release.  Please use "elecEnergy" or "apolEnergy" as appropriate.  For now, this will return the old results of "elecEnergy".</para> </warning>
 							</listitem>
 						</varlistentry>
 						<varlistentry>
@@ -33,11 +33,11 @@
 									<link linkend="elec-calcforce"><command>calcforce</command></link>
 									<command>ELEC</command> command.
 								</para>
-								<warning> <para>This usage is deprecated and will be replaced in the next release.  Please use "elec_force" or "apolar_force" as appropriate.  For now, this will return the old results of "eelec_energy".</para> </warning>
+								<warning> <para>This usage is deprecated and will be replaced in the next release.  Please use "elecForce" or "apolForce" as appropriate.  For now, this will return the old results of "elecEnergy".</para> </warning>
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term> elec_energy </term>
+							<term> elecEnergy </term>
 							<listitem>
 								<para>
 									Print energies as calculated with an earlier
@@ -47,7 +47,7 @@
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term> elec_force </term>
+							<term> elecForce </term>
 							<listitem>
 								<para>
 									Print forces as calculated with an earlier
@@ -57,7 +57,7 @@
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term> apolar_energy </term>
+							<term> apolEnergy </term>
 							<listitem>
 								<para>
 									Print energies as calculated with an earlier
@@ -67,7 +67,7 @@
 							</listitem>
 						</varlistentry>
 						<varlistentry>
-							<term> apolar_force </term>
+							<term> apolForce </term>
 							<listitem>
 								<para>
 									Print forces as calculated with an earlier
