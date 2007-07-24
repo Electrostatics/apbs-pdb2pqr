@@ -189,15 +189,60 @@ VPUBLIC void APOLparm_dtor2(APOLparm *thee) { ; }
 
 VPUBLIC int APOLparm_check(APOLparm *thee) { 
 
+    
     int rc;
-    rc = 1;
-
+    rc = VRC_SUCCESS;
+	
     if (!thee->parsed) {
         Vnm_print(2, "APOLparm_check:  not filled!\n");
         return 0;
     }
-    
+    if (!thee->setgrid) {
+        Vnm_print(2, "APOLparm_check:  grid not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setmolid) {
+        Vnm_print(2, "APOLparm_check:  molid not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setbconc) {
+        Vnm_print(2, "APOLparm_check:  bconc not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setsdens) {
+        Vnm_print(2, "APOLparm_check:  sdens not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setdpos) {
+        Vnm_print(2, "APOLparm_check:  dpos not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setpress) {
+        Vnm_print(2, "APOLparm_check:  press not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setsrfm) {
+        Vnm_print(2, "APOLparm_check:  srfm not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setsrad) {
+        Vnm_print(2, "APOLparm_check:  srad not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->setswin) {
+        Vnm_print(2, "APOLparm_check:  swin not set!\n");
+        rc = VRC_FAILURE;
+    }
+    if (!thee->settemp) {
+        Vnm_print(2, "APOLparm_check:  temp not set!\n");
+        rc = VRC_FAILURE;
+    }
+	if (!thee->setgamma) {
+        Vnm_print(2, "APOLparm_check:  gamma not set!\n");
+        rc = VRC_FAILURE;
+    }
     return rc;
+	
 }
 
 VPRIVATE int APOLparm_parseGRID(APOLparm *thee, Vio *sock) {
