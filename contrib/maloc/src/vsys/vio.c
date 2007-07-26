@@ -536,7 +536,14 @@ VPUBLIC int Vio_ctor2(Vio *thee, const char *socktype, const char *datafrmt,
     } else if (thee->type==VIO_FILE) {
 
         /* filename is the i/o file name */
-        strncpy(thee->file, filename, 80);
+#define THEMAXPATHLENGTH 80
+	    if (strlen(filename) >= THEMAXPATHLENGTH) {
+		    fprintf(stderr, "Vio_ctor2:  Error!  Filename path length (%d) exceeds maximum (%d)!\n", 
+				    strlen(filename), THEMAXPATHLENGTH);
+		    VJMPERR2(0);
+	    }
+        strncpy(thee->file, filename, THEMAXPATHLENGTH);
+#undef THEMAXPATHLENGTH
         if (thee->rwkey==VIO_R) {
             thee->fp = fopen(thee->file, "r");
         } else { /* (thee->rwkey==VIO_W) */
@@ -638,7 +645,14 @@ VPUBLIC int Vio_ctor2(Vio *thee, const char *socktype, const char *datafrmt,
     } else if (thee->type==VIO_INET) {
 
         /* filename is the port number for the socket */
-        strncpy(thee->file, filename, 80);
+#define THEMAXPATHLENGTH 80
+	    if (strlen(filename) >= THEMAXPATHLENGTH) {
+		    fprintf(stderr, "Vio_ctor2:  Error!  Filename path length (%d) exceeds maximum (%d)!\n", 
+				    strlen(filename), THEMAXPATHLENGTH);
+		    VJMPERR2(0);
+	    }
+        strncpy(thee->file, filename, THEMAXPATHLENGTH);
+#undef THEMAXPATHLENGTH
 
         /* create the socket address structure */
         thee->name = (struct sockaddr_in *)
