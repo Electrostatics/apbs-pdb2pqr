@@ -324,8 +324,12 @@ Please cite your use of APBS as:\n\n\
 
 	/* *************** PARSE INPUT FILE ******************* */
 	nosh = NOsh_ctor(rank, size);
-	sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
 	Vnm_tprint( 1, "Parsing input file %s...\n", input_path);
+	sock = Vio_ctor("FILE", "ASC", VNULL, input_path, "r");
+	if (sock == VNULL) {
+		Vnm_tprint(2, "Error while opening input file %s!\n", input_path);
+		VJMPERR1(0);
+	}
 	if (!NOsh_parseInput(nosh, sock)) {
 		Vnm_tprint( 2, "Error while parsing input file.\n");
 		VJMPERR1(0);
