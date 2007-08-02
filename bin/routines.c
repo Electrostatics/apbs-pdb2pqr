@@ -578,7 +578,7 @@ VPUBLIC void printPBEPARM(PBEparm *pbeparm) {
 			Vnm_tprint( 1, "  Nonlinear regularized PBE\n");
 			Vnm_tprint( 2, "  ** Sorry, but Nathan broke the nonlinear regularized PBE implementation. **\n");
 			Vnm_tprint( 2, "  ** Please let us know if you are interested in using it. **\n");
-			VASSERT(0); 
+			VASSERT(0);
 			break;
 		case PBE_LRPBE:
 			Vnm_tprint( 1, "  Linearized regularized PBE\n");
@@ -3002,12 +3002,12 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	}
 	
 	
-	/* Set the femparm pkey value based on the type of solver being used */
-	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)||(pbeparm->pbetype == PBE_SMPBE) /* SMPBE Added */){
-		feparm->pkey = 0;
-	}else{
-		feparm->pkey = 1;
-	}
+	/* Set the femparm pkey value based on the presence of an HB solver */
+#ifdef USE_HB
+	feparm->pkey = 1;
+#else
+	feparm->pkey = 0;
+#endif
 	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");
@@ -3035,7 +3035,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
 	/* Uniformly refine the mesh a bit */
 	for (j=0; j<2; j++) {
-		AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0);
+		AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0.0);
 		AM_refine(fetk[icalc]->am, 2, 0, feparm->pkey);
 		Vnm_redirect(0);
 		Gem_shapeChk(fetk[icalc]->gm);
@@ -3257,24 +3257,46 @@ VPUBLIC int solveFE(int icalc, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
 					Vfetk *fetk[NOSH_MAXCALC]) {
 	
 	int lkeyHB = 3;  /**<  AM_hPcg */
+	int meth = 2;  /**< Coarse-grid solver; 0 = SLU, 1 = MG, 2 = CG, 3 = BCG, 4 = PCG, 5 = PBCG */
+	int prob = 0;  /**< Primal problem */
+	int prec = 0;  /** < Preconditioner; 0 = identity. */
 	
 	if ((pbeparm->pbetype==PBE_NPBE)||(pbeparm->pbetype == PBE_NRPBE)||(pbeparm->pbetype == PBE_SMPBE) /* SMPBE Added */) {
-		AM_nSolve(fetk[icalc]->am, fetk[icalc]->nkey, fetk[icalc]->nmax, 
-				  fetk[icalc]->ntol, fetk[icalc]->lkey, fetk[icalc]->lmax, 
-				  fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
-				  fetk[icalc]->pjac);
+
+		AM_nSolve(
+				  fetk[icalc]->am,
+				  fetk[icalc]->nkey,
+				  fetk[icalc]->nmax, 
+				  fetk[icalc]->ntol,
+				  meth,
+				  fetk[icalc]->lmax, 
+				  fetk[icalc]->ltol,
+				  prec,
+				  fetk[icalc]->gues, 
+				  fetk[icalc]->pjac
+				  );
 	} else if ((pbeparm->pbetype==PBE_LPBE)||(pbeparm->pbetype==PBE_LRPBE)) {
 		/* Note: USEHB is a compile time defined macro. The program flow
 		is to always take the route using AM_hlSolve when the solver
 		is linear. D. Gohara 6/29/06
 		*/
 #ifdef USE_HB
-		AM_hlSolve(fetk[icalc]->am, 0, lkeyHB, fetk[icalc]->lmax, 
+		Vnm_print(2, "SORRY!  DON'T USE HB!!!\n");
+		VASSERT(0);
+		AM_hlSolve(fetk[icalc]->am, meth, lkeyHB, fetk[icalc]->lmax, 
 			fetk[icalc]->ltol, fetk[icalc]->gues, fetk[icalc]->pjac);
 #else
-		AM_lSolve(fetk[icalc]->am, 0, fetk[icalc]->lkey, fetk[icalc]->lmax, 
-			fetk[icalc]->ltol, fetk[icalc]->lprec, fetk[icalc]->gues, 
-			fetk[icalc]->pjac);
+		
+		AM_lSolve(
+				  fetk[icalc]->am,
+				  prob,
+				  meth, 
+				  fetk[icalc]->lmax, 
+				  fetk[icalc]->ltol,
+				  prec,
+				  fetk[icalc]->gues,
+				  fetk[icalc]->pjac
+				  );
 #endif
 	}
 	
