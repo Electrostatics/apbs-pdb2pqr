@@ -225,7 +225,6 @@ Please cite your use of APBS as:\n\n\
 --version                Display the current APBS version.\n\
 ----------------------------------------------------------------------\n\n"};
 
-
 	/* ************** CHECK PARALLEL STATUS *************** */
 	VASSERT(Vcom_init(&argc, &argv));
 	com = Vcom_ctor(1);
@@ -262,6 +261,14 @@ Please cite your use of APBS as:\n\n\
 	/* ********* CHECK INVOCATION AND OPTIONS ************* */
 	Vnm_tstart(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
 	Vnm_tprint( 1, "%s", header);
+
+#ifdef APBS_FAST
+	printf("WARNING: APBS was compiled with the --enable-fast option.\n"
+		   "WARNING: This mode is experimental and subject to change in future releases.\n"
+		   "WARNING: The fast mode enables: Gauess-Seidel Smoothing and \n"
+		   "WARNING:   Conjugate Gradient Multigrid methods.\n\n");
+#endif
+
 	Vnm_tprint( 1, "This executable compiled on %s at %s\n\n", __DATE__, __TIME__);
 
 	i=0;

@@ -103,8 +103,8 @@ VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx,
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
-  double hx, double hy, double hzed, int nonlin) {
-
+						double hx, double hy, double hzed, int nonlin) {
+	
     /* Specified parameters */
     thee->nx = nx;
     thee->ny = ny;
@@ -121,54 +121,67 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     if (nonlin == NONLIN_LPBE) thee->ipkey = IPKEY_LPBE; /* LPBE case */
 	else if(nonlin == NONLIN_SMPBE) thee->ipkey = IPKEY_SMPBE; /* SMPBE case */
     else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
-
-
+	
     /* Default parameters */
     thee->errtol = 1.0e-6;   /* Here are a few comments.  Mike had this set to
-                              * 1e-9; convential wisdom sets this at 1e-6 for
-                              * the PBE; Ray Luo sets this at 1e-3 for his
-                              * accelerated PBE (for dynamics, etc.) */
+		* 1e-9; convential wisdom sets this at 1e-6 for
+		* the PBE; Ray Luo sets this at 1e-3 for his
+		* accelerated PBE (for dynamics, etc.) */
     thee->itmax = 200;
     thee->istop = 1;
     thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
-                              * 2 (for debugging NPBE), higher values give 
-                              * too much output */
+		* 2 (for debugging NPBE), higher values give 
+		* too much output */
     thee->bcfl = BCFL_SDH;
     thee->key = 0;
     thee->iperf = 0;
-    if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { /* SMPBE Added - SMPBE needs to mimic NPBE */ 
-        Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgcoar = 2, mgsolv = 0\n");
+    if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { 
+		/* SMPBE Added - SMPBE needs to mimic NPBE */
+        
+#ifdef APBS_FAST
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgsolv = 0, APBS fast mode\n");
+		thee->meth = 0;
+#else
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgsolv = 0\n");
         thee->meth = 1;
-        thee->mgcoar = 2;
+#endif
         thee->mgsolv = 0;
     } else {                 
-        Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgcoar = 2, mgsolv = 0\n");
-#if 0                               /* Fastest convergence, but lots of mem */
+        
+#ifdef APBS_FAST                    /* Fastest convergence, but lots of mem */
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgsolv = 1, APBS fast mode\n");
         thee->meth = 0;
-        thee->mgcoar = 2;
-        thee->mgsolv = 0;
-#else                               /* Most rigorous (good for testing) */
+#else								/* Most rigorous (good for testing) */
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 2, mgsolv = 1\n");
         thee->meth = 2;
-        thee->mgcoar = 2;
-        thee->mgsolv = 1;
 #endif
+        thee->mgsolv = 1;
     }
-	
-    thee->mgkey = 0;
-    thee->nu1 = 2;
-    thee->nu2 = 2;
-    thee->mgsmoo = 1;
-    thee->mgprol = 0;
-    thee->mgdisc = 0;
-    thee->omegal = 8.0e-1;
-    thee->omegan = 9.0e-1;
-    thee->ipcon = 3;
-    thee->irite = 8;
-    thee->xcent = 0.0;
-    thee->ycent = 0.0;
-    thee->zcent = 0.0;
 
-    return 1;
+	thee->mgcoar = 2;
+	thee->mgkey = 0;
+	thee->nu1 = 2;
+	thee->nu2 = 2;
+	thee->mgprol = 0;
+	thee->mgdisc = 0;
+	thee->omegal = 8.0e-1;
+	thee->omegan = 9.0e-1;
+	thee->ipcon = 3;
+	thee->irite = 8;
+	thee->xcent = 0.0;
+	thee->ycent = 0.0;
+	thee->zcent = 0.0;
+
+#ifdef APBS_FAST	
+	/* NOTE: This wass put in, in case the default mgsmoo ever changes to a value other than 1 
+			 on the opposite side of the else statement. */
+	thee->mgsmoo = 1;
+#else
+	/* Default value for all APBS runs */
+	thee->mgsmoo = 1;
+#endif
+	
+	return 1;
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

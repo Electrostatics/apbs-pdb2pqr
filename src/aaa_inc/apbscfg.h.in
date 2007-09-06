@@ -1,5 +1,8 @@
 /* src/aaa_inc/apbscfg.h.in.  Generated from configure.ac by autoheader.  */
 
+/* using the fast APBS parameters */
+#undef APBS_FAST
+
 /* do not inline functions */
 #undef APBS_NOINLINE
 
