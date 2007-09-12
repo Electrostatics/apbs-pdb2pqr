@@ -29,6 +29,6 @@ install-exec-local:
 
 install-data-local:
 	mkdir -p ${prefix}
-	cp -r tools ${MC_PREFIX}/share 
-	cp -r examples ${MC_PREFIX}/share 
-	cp -r doc ${MC_PREFIX}/share 
+	cp -r tools ${prefix}/share 
+	cp -r examples ${prefix}/share 
+	cp -r doc ${prefix}/share 
