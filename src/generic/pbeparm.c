@@ -351,21 +351,45 @@ VPRIVATE int PBEparm_parseNRPBE(PBEparm *thee, Vio *sock) {
 }
 
 VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
-	char sizeTok[VMAX_BUFSIZE];
-	char volTok[VMAX_BUFSIZE];
+
+	int i;
+	
+	char type[VMAX_BUFSIZE]; // vol or size (keywords)
+	char value[VMAX_BUFSIZE]; // floating point value
+	
+	char setVol = 1;
+	char setSize = 1;
+	char keyValuePairs = 2;
+	
     double size, volume;
 	
-	VJMPERR1(Vio_scanf(sock, "%s", volTok) == 1);
-    if (sscanf(volTok, "%lf", &volume) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", volTok);
-        return -1;
-    }
+	for(i=0;i<keyValuePairs;i++){
+		
+		// The line two tokens at a time
+		VJMPERR1(Vio_scanf(sock, "%s", type) == 1);
+		VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
+		
+		if(!strcmp(type,"vol")){
+			if (setVol = sscanf(value, "%lf", &volume) == 0){
+				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+				return VRC_FAILURE;
+			}
+		}else if(!strcmp(type,"size")){
+			if (setSize = sscanf(value, "%lf", &size) == 0){
+				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+				return VRC_FAILURE;
+			}
+		}else{
+			Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
+			return VRC_FAILURE;
+		}
+	}
 	
-    VJMPERR1(Vio_scanf(sock, "%s", sizeTok) == 1);
-    if (sscanf(sizeTok, "%lf", &size) == 0) {
-        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", sizeTok);
-        return -1;
-    }
+	// If either the volume or size isn't set, throw and error
+	if(setVol || setSize){
+		Vnm_print(2,"NOsh:  Error while parsing smpbe keywords! Only size or vol was specified.\n");
+		return VRC_FAILURE;
+	}
 	
 	Vnm_print(0, "NOsh: parsed smpbe\n");
     thee->pbetype = PBE_SMPBE;
@@ -377,11 +401,11 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 	thee->smvolume = volume;
 	thee->setsmvolume = 1;
 	
-    return 1;
+	return VRC_SUCCESS;
 	
 VERROR1:
     Vnm_print(2, "parsePBE:  ran out of tokens!\n");
-	return -1;
+	return VRC_FAILURE;
 	
 }
 
