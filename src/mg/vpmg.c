@@ -4284,7 +4284,9 @@ calculation!\n");
 
     /* Sanity check: there is no force if there is zero ionic strength */
     if (zkappa2 < VPMGSMALL) {
+#ifndef VAPBSQUIET
         Vnm_print(2, "Vpmg_ibForce:  No force for zero ionic strength!\n");
+#endif
         return 1;
     }
 
