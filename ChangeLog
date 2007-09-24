@@ -5,6 +5,7 @@
 - NEW FEATURES
 - BUG FIXES
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
+	* Fixed small typo in user guide in installation instructions
 
 #############################################################################
                                  VERSION 0.5.1 
