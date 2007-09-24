@@ -105,7 +105,7 @@
 					<screen>
 <prompt>$</prompt> <userinput>export APBS_SRC=/home/soft/src</userinput>
 <prompt>$</prompt> <userinput>export APBS_PREFIX=/home/soft</userinput>
-<prompt>$</prompt> <userinput>mkdir -p ${APBS_SRC} ${APBS_PREFX}</userinput>
+<prompt>$</prompt> <userinput>mkdir -p ${APBS_SRC} ${APBS_PREFIX}</userinput>
 					</screen>
 				</para>
 			</sect3>
