@@ -118,7 +118,7 @@ VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
 VPUBLIC unsigned long int Valist_memChk(Valist *thee) {
 
-    if (thee == NULL) return 0;
+    if (thee == NULL) return VRC_FAILURE;
     return Vmem_bytes(thee->vmem);
 
 }
@@ -144,7 +144,7 @@ VPUBLIC int Valist_ctor2(Valist *thee) {
     /* Initialize the memory management object */
     thee->vmem = Vmem_ctor("APBS:VALIST");
 
-    return 1;    
+    return VRC_SUCCESS;    
 
 }
 
@@ -174,16 +174,16 @@ VPRIVATE int Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing serial!\n");
-        return 0;
+        return VRC_FAILURE;
     } 
     if (sscanf(tok, "%d", &ti) != 1) {
         Vnm_print(2, "Valist_readPDB:  Unable to parse serial token (%s) as int!\n",
                 tok);
-        return 0;
+        return VRC_FAILURE;
     } 
     *serial = ti;
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read atom name from PDB ATOM/HETATM field */
@@ -194,14 +194,14 @@ VPRIVATE int Valist_readPDBAtomName(Valist *thee, Vio *sock,
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing atom name!\n");
-        return 0;
+        return VRC_FAILURE;
     }
     if (strlen(tok) < VMAX_ARGLEN) strcpy(atomName, tok);
     else {
         Vnm_print(2, "Valist_readPDB:  Atom name (%s) too long!\n", tok);
-        return 0;
+        return VRC_FAILURE;
     }
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read residue name from PDB ATOM/HETATM field */
@@ -212,14 +212,14 @@ VPRIVATE int Valist_readPDBResidueName(Valist *thee, Vio *sock,
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing residue name!\n");
-        return 0;
+        return VRC_FAILURE;
     }
     if (strlen(tok) < VMAX_ARGLEN) strcpy(resName, tok);
     else {
         Vnm_print(2, "Valist_readPDB:  Residue name (%s) too long!\n", tok);
-        return 0;
+        return VRC_FAILURE;
     }
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read residue number from PDB ATOM/HETATM field */
@@ -232,7 +232,7 @@ VPRIVATE int Valist_readPDBResidueNumber(
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing resSeq!\n");
-        return 0;
+        return VRC_FAILURE;
     } 
     if (sscanf(tok, "%d", &ti) != 1) {
 
@@ -249,12 +249,12 @@ VPRIVATE int Valist_readPDBResidueNumber(
 
 			if (Vio_scanf(sock, "%s", tok) != 1) {
         		Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing resSeq!\n");
-        		return 0;
+        		return VRC_FAILURE;
     		}   
     		if (sscanf(tok, "%d", &ti) != 1) {
 				Vnm_print(2, "Valist_readPDB:  Unable to parse resSeq token (%s) as int!\n",
                 tok);
-        		return 0;
+        		return VRC_FAILURE;
 			}
 				
 		} else {
@@ -268,13 +268,13 @@ VPRIVATE int Valist_readPDBResidueNumber(
 				/* Case 3:  More than one non-numeral char is present. Error.*/
                 Vnm_print(2, "Valist_readPDB:  Unable to parse resSeq token (%s) as int!\n",
                 resstring);
-            	return 0;
+            	return VRC_FAILURE;
 			}
 		} 
     } 
     *resSeq = ti;
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read atom coordinate from PDB ATOM/HETATM field */
@@ -285,14 +285,14 @@ VPRIVATE int Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPDB:  Ran out of tokens while parsing atom coordinate!\n");
-        return 0;
+        return VRC_FAILURE;
     } 
     if (sscanf(tok, "%lf", &tf) != 1) {
-        return 0;
+        return VRC_FAILURE;
     } 
     *coord = tf;
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read charge and radius from PQR ATOM/HETATM field */
@@ -304,23 +304,23 @@ VPRIVATE int Valist_readPDBChargeRadius(Valist *thee, Vio *sock,
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPQR:  Ran out of tokens while parsing charge!\n");
-        return 0;
+        return VRC_FAILURE;
     } 
     if (sscanf(tok, "%lf", &tf) != 1) {
-        return 0;
+        return VRC_FAILURE;
     } 
     *charge = tf;
 
     if (Vio_scanf(sock, "%s", tok) != 1) {
         Vnm_print(2, "Valist_readPQR:  Ran out of tokens while parsing radius!\n");
-        return 0;
+        return VRC_FAILURE;
     } 
     if (sscanf(tok, "%lf", &tf) != 1) {
-        return 0;
+        return VRC_FAILURE;
     } 
     *radius = tf;
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
@@ -347,20 +347,20 @@ VPRIVATE int Valist_readPDB_throughXYZ(
     /* Grab atom name */
     if (!Valist_readPDBAtomName(thee, sock, atomName)) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing atom name!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     /* Grab residue name */
     if (!Valist_readPDBResidueName(thee, sock, resName)) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing residue name!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
 
     /* Grab residue number */
     if (!Valist_readPDBResidueNumber(thee, sock, resSeq)) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing residue name!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
 
@@ -377,17 +377,17 @@ VPRIVATE int Valist_readPDB_throughXYZ(
     }
     if (!gotit) {
         Vnm_print(2, "Valist_readPDB:  Can't find x!\n");
-        return 0;
+        return VRC_FAILURE;
     }
     /* Read y-coordinate */
     if (!Valist_readPDBAtomCoord(thee, sock, y)) {
         Vnm_print(2, "Valist_readPDB:  Can't find y!\n");
-        return 0;
+        return VRC_FAILURE;
     }
     /* Read z-coordinate */
     if (!Valist_readPDBAtomCoord(thee, sock, z)) {
         Vnm_print(2, "Valist_readPDB:  Can't find z!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
 #if 0 /* Set to 1 if you want to debug */
@@ -399,7 +399,7 @@ VPRIVATE int Valist_readPDB_throughXYZ(
               *x, *y, *z);
 #endif
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Get a the next available atom storage location, increasing the storage
@@ -477,7 +477,7 @@ VPRIVATE int Valist_setAtomArray(Valist *thee,
     if (thee->atoms == VNULL) {
         Vnm_print(2, "Valist_readPDB:  Unable to allocate space for %d (Vatom)s!\n", 
                 natoms);
-        return 0;
+        return VRC_FAILURE;
     }
     thee->number = natoms;
 
@@ -492,7 +492,7 @@ VPRIVATE int Valist_setAtomArray(Valist *thee,
     /* Free old array */
     Vmem_free(thee->vmem, nlist, sizeof(Vatom), (void **)plist);
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
@@ -535,7 +535,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
                         resName, &resSeq, &x, &y, &z)) {
                 Vnm_print(2, "Valist_readPDB:  Error parsing atom %d!\n", 
                           serial);
-                return 0;
+                return VRC_FAILURE;
             }
 
             /* Try to find the parameters. */
@@ -543,7 +543,7 @@ VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
             if (atomData == VNULL) {
                 Vnm_print(2, "Valist_readPDB:  Couldn't find parameters for \
 atom = %s, residue = %s\n", atomName, resName);
-                return 0;
+                return VRC_FAILURE;
             }
             charge = atomData->charge;
             radius = atomData->radius;
@@ -553,7 +553,7 @@ atom = %s, residue = %s\n", atomName, resName);
             nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
             if (nextAtom == VNULL) {
                 Vnm_print(2, "Valist_readPDB:  Error in allocating spacing for atoms!\n");
-                return 0;
+                return VRC_FAILURE;
             }
 
             /* Store the information */
@@ -575,7 +575,7 @@ atom = %s, residue = %s\n", atomName, resName);
     /* Store atoms internally */
     if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
         Vnm_print(2, "Valist_readPDB:  unable to store atoms!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     return Valist_getStatistics(thee);
@@ -627,14 +627,14 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
             if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
                         resName, &resSeq, &x, &y, &z)) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n",serial);
-                return 0;
+                return VRC_FAILURE;
             }
 
             /* Read Q/R fields */
             if (!Valist_readPDBChargeRadius(thee, sock, &charge, &radius)) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
                           serial);
-                return 0;
+                return VRC_FAILURE;
             }
 
 			if(use_params){
@@ -643,7 +643,7 @@ VPUBLIC int Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
 				if (atomData == VNULL) {
 					Vnm_print(2, "Valist_readPDB:  Couldn't find parameters for \
 atom = %s, residue = %s\n", atomName, resName);
-					return 0;
+					return VRC_FAILURE;
 				}
 				charge = atomData->charge;
 				radius = atomData->radius;
@@ -654,7 +654,7 @@ atom = %s, residue = %s\n", atomName, resName);
             nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
             if (nextAtom == VNULL) {
                 Vnm_print(2, "Valist_readPQR:  Error in allocating spacing for atoms!\n");
-                return 0;
+                return VRC_FAILURE;
             }
 
             /* Store the information */
@@ -676,7 +676,7 @@ atom = %s, residue = %s\n", atomName, resName);
     /* Store atoms internally */
     if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
         Vnm_print(2, "Valist_readPDB:  unable to store atoms!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     return Valist_getStatistics(thee);
@@ -735,7 +735,7 @@ VPUBLIC int Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
             if (sscanf(tok, "%lf", &dtmp) != 1) {
                 Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
 reading x!\n", tok);
-                  return 0;
+                  return VRC_FAILURE;
               }
             x = dtmp;
             xset = 1;
@@ -744,7 +744,7 @@ reading x!\n", tok);
             if (sscanf(tok, "%lf", &dtmp) != 1) {
                 Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
 reading y!\n", tok);
-                  return 0;
+                  return VRC_FAILURE;
               }
             y = dtmp;
             yset = 1;
@@ -753,7 +753,7 @@ reading y!\n", tok);
             if (sscanf(tok, "%lf", &dtmp) != 1) {
                 Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
 reading z!\n", tok);
-                  return 0;
+                  return VRC_FAILURE;
               }
             z = dtmp;
             zset = 1;
@@ -762,7 +762,7 @@ reading z!\n", tok);
             if (sscanf(tok, "%lf", &dtmp) != 1) {
                 Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
 reading charge!\n", tok);
-                  return 0;
+                  return VRC_FAILURE;
               }
             charge = dtmp;
             chgset = 1;
@@ -771,7 +771,7 @@ reading charge!\n", tok);
             if (sscanf(tok, "%lf", &dtmp) != 1) {
                 Vnm_print(2, "Valist_readXML:  Unexpected token (%s) while \
 reading radius!\n", tok);
-                  return 0;
+                  return VRC_FAILURE;
               }
             radius = dtmp;
             radset = 1;
@@ -781,7 +781,7 @@ reading radius!\n", tok);
             nextAtom = Valist_getAtomStorage(thee, &atoms, &nlist, &natoms);
             if (nextAtom == VNULL) {
                 Vnm_print(2, "Valist_readXML:  Error in allocating spacing for atoms!\n");
-                return 0;
+                return VRC_FAILURE;
             }
 
             if (xset && yset && zset && chgset && radset){
@@ -806,7 +806,7 @@ reading radius!\n", tok);
                 if (!zset) Vnm_print(2,"\tz value not set!\n"); 
                 if (!chgset) Vnm_print(2,"\tcharge value not set!\n"); 
                 if (!radset) Vnm_print(2,"\tradius value not set!\n"); 
-                return 0;
+                return VRC_FAILURE;
             }
         } else if (Vstring_strcasecmp(tok, endtag) == 0) break;
     }
@@ -817,7 +817,7 @@ reading radius!\n", tok);
     /* Store atoms internally */
     if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
         Vnm_print(2, "Valist_readXML:  unable to store atoms!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     return Valist_getStatistics(thee);
@@ -838,7 +838,7 @@ VPUBLIC int Valist_getStatistics(Valist *thee) {
     thee->maxrad = 0.;
     thee->charge = 0.;
 
-    if (thee->number == 0) return 0;
+    if (thee->number == 0) return VRC_FAILURE;
 
     /* Reset stat variables */
     atom = &(thee->atoms[0]);
@@ -872,5 +872,5 @@ VPUBLIC int Valist_getStatistics(Valist *thee) {
 	Vnm_print(0, "Valist_getStatistics:  Molecule center:  (%g, %g, %g)\n",
 			  thee->center[0], thee->center[1], thee->center[2]);
 	
-    return 1;
+    return VRC_SUCCESS;
 }

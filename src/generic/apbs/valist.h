@@ -148,7 +148,7 @@ VEXTERNC double Valist_getCenterZ(
  *  @author  Nathan Baker
  *  @return  Number of atoms in list 
  */
-VEXTERNC int Valist_getNumberAtoms(
+VEXTERNC Vrc_Codes Valist_getNumberAtoms(
         Valist *thee /**< Atom list object */
         );
 
@@ -190,10 +190,10 @@ VEXTERNC Valist* Valist_ctor();
 
 /** @brief   FORTRAN stub to construct the atom list object
  *  @ingroup Valist
- *  @author  Nathan Baker
- *  @returns 1 if successful, 0 otherwise
+ *  @author  Nathan Baker, Yong Huang
+ *  @returns Success enumeration
  */
-VEXTERNC int Valist_ctor2(
+VEXTERNC Vrc_Codes Valist_ctor2(
         Valist *thee /**< Storage for new atom list */
         );
 
@@ -216,15 +216,15 @@ VEXTERNC void Valist_dtor2(
 /** 
  * @brief  Fill atom list with information from a PQR file
  * @ingroup Valist
- * @author  Nathan Baker
- * @return  1 if successful, 0 otherwise
+ * @author  Nathan Baker, Yong Huang
+ * @returns	Success enumeration
  * @note  \li A PQR file has PDB structure with charge and radius in the last
  *            two columns instead of weight and occupancy
  *        \li We don't actually respect PDB format; instead recognize
  *            whitespace- or tab-delimited fields which allows us to deal with
  *            structures with coordinates > 999 or < -999.
  */
-VEXTERNC int Valist_readPQR(
+VEXTERNC Vrc_Codes Valist_readPQR(
         Valist *thee, /**< Atom list object */
 		Vparam *param, /**< A pre-initialized parameter object */
         Vio *sock /**< Socket reading for reading PQR file */
@@ -233,13 +233,13 @@ VEXTERNC int Valist_readPQR(
 /** 
  * @brief  Fill atom list with information from a PDB file
  * @ingroup Valist
- * @author  Nathan Baker, Todd Dolinsky
- * @return  1 if successful, 0 otherwise
+ * @author  Nathan Baker, Todd Dolinsky, Yong Huang
+ * @returns	Success enumeration
  * @note  We don't actually respect PDB format; instead recognize whitespace-
  * or tab-delimited fields which allows us to deal with structures with
  * coordinates > 999 or < -999.
  */
-VEXTERNC int Valist_readPDB(
+VEXTERNC Vrc_Codes Valist_readPDB(
         Valist *thee, /**< Atom list object */
         Vparam *param, /**< A pre-initialized parameter object */
         Vio *sock /**< Socket read for reading PDB file */
@@ -248,13 +248,13 @@ VEXTERNC int Valist_readPDB(
 /** 
  * @brief  Fill atom list with information from an XML file
  * @ingroup Valist
- * @author  Todd Dolinsky
- * @return  1 if successful, 0 otherwise
+ * @author  Todd Dolinsky, Yong Huang
+ * @returns Success enumeration
  * @note  \li The XML file must adhere to some guidelines, notably the 
  *            presence of an &lt;atom&gt; tag with all other useful information
  *            (x, y, z, charge, and radius) as nested elements.
  */
-VEXTERNC int Valist_readXML(
+VEXTERNC Vrc_Codes Valist_readXML(
         Valist *thee, /**< Atom list object */
 		Vparam *param, /**< A pre-initialized parameter object */
         Vio *sock /**< Socket reading for reading PQR file */
@@ -263,10 +263,10 @@ VEXTERNC int Valist_readXML(
 /** 
  * @brief   Load up Valist with various statistics
  * @ingroup Valist
- * @author  Nathan Baker
- * @return  1 if successful, 0 otherwise
+ * @author  Nathan Baker, Yong Huang
+ * @returns	Success enumeration
  */
-VEXTERNC int Valist_getStatistics(Valist *thee);
+VEXTERNC Vrc_Codes Valist_getStatistics(Valist *thee);
 
 
 #endif /* ifndef _VALIST_H_ */
