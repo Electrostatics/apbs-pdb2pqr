@@ -148,7 +148,7 @@ VEXTERNC double Valist_getCenterZ(
  *  @author  Nathan Baker
  *  @return  Number of atoms in list 
  */
-VEXTERNC Vrc_Codes Valist_getNumberAtoms(
+VEXTERNC int Valist_getNumberAtoms(
         Valist *thee /**< Atom list object */
         );
 
