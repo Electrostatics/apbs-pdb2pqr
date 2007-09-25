@@ -136,7 +136,7 @@ VPUBLIC Valist* Valist_ctor() {
     return thee;
 }
 
-VPUBLIC int Valist_ctor2(Valist *thee) {
+VPUBLIC Vrc_Codes Valist_ctor2(Valist *thee) {
   
     thee->atoms = VNULL;
     thee->number = 0;
@@ -167,7 +167,7 @@ VPUBLIC void Valist_dtor2(Valist *thee) {
 } 
 
 /* Read serial number from PDB ATOM/HETATM field */
-VPRIVATE int Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
+VPRIVATE Vrc_Codes Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
 
     char tok[VMAX_BUFSIZE];
     int ti = 0;
@@ -187,7 +187,7 @@ VPRIVATE int Valist_readPDBSerial(Valist *thee, Vio *sock, int *serial) {
 }
 
 /* Read atom name from PDB ATOM/HETATM field */
-VPRIVATE int Valist_readPDBAtomName(Valist *thee, Vio *sock, 
+VPRIVATE Vrc_Codes Valist_readPDBAtomName(Valist *thee, Vio *sock, 
         char atomName[VMAX_ARGLEN]) {
 
     char tok[VMAX_BUFSIZE];
@@ -205,7 +205,7 @@ VPRIVATE int Valist_readPDBAtomName(Valist *thee, Vio *sock,
 }
 
 /* Read residue name from PDB ATOM/HETATM field */
-VPRIVATE int Valist_readPDBResidueName(Valist *thee, Vio *sock, 
+VPRIVATE Vrc_Codes Valist_readPDBResidueName(Valist *thee, Vio *sock, 
         char resName[VMAX_ARGLEN]) {
 
     char tok[VMAX_BUFSIZE];
@@ -223,7 +223,7 @@ VPRIVATE int Valist_readPDBResidueName(Valist *thee, Vio *sock,
 }
 
 /* Read residue number from PDB ATOM/HETATM field */
-VPRIVATE int Valist_readPDBResidueNumber(
+VPRIVATE Vrc_Codes Valist_readPDBResidueNumber(
         Valist *thee, Vio *sock, int *resSeq) {
 
     char tok[VMAX_BUFSIZE];
@@ -278,7 +278,7 @@ VPRIVATE int Valist_readPDBResidueNumber(
 }
 
 /* Read atom coordinate from PDB ATOM/HETATM field */
-VPRIVATE int Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
+VPRIVATE Vrc_Codes Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
 
     char tok[VMAX_BUFSIZE];
     double tf = 0;
@@ -296,7 +296,7 @@ VPRIVATE int Valist_readPDBAtomCoord(Valist *thee, Vio *sock, double *coord) {
 }
 
 /* Read charge and radius from PQR ATOM/HETATM field */
-VPRIVATE int Valist_readPDBChargeRadius(Valist *thee, Vio *sock, 
+VPRIVATE Vrc_Codes Valist_readPDBChargeRadius(Valist *thee, Vio *sock, 
         double *charge, double *radius) {
 
     char tok[VMAX_BUFSIZE];
@@ -324,7 +324,7 @@ VPRIVATE int Valist_readPDBChargeRadius(Valist *thee, Vio *sock,
 }
 
 /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
-VPRIVATE int Valist_readPDB_throughXYZ(
+VPRIVATE Vrc_Codes Valist_readPDB_throughXYZ(
         Valist *thee, 
         Vio *sock, /* Socket ready for reading */
         int *serial, /* Set to atom number */
@@ -460,7 +460,7 @@ VPRIVATE Vatom* Valist_getAtomStorage(
     return newAtom;
 }
 
-VPRIVATE int Valist_setAtomArray(Valist *thee, 
+VPRIVATE Vrc_Codes Valist_setAtomArray(Valist *thee, 
         Vatom **plist, /* Pointer to list of atoms to store */
         int nlist, /* Length of list */
         int natoms /* Number of real atom entries in list */
@@ -495,7 +495,7 @@ VPRIVATE int Valist_setAtomArray(Valist *thee,
     return VRC_SUCCESS;
 }
 
-VPUBLIC int Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
+VPUBLIC Vrc_Codes Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
 
     /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
      * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
@@ -583,7 +583,7 @@ atom = %s, residue = %s\n", atomName, resName);
 
 }
 
-VPUBLIC int Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
+VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
 
     /* WE DO NOT DIRECTLY CONFORM TO PDB STANDARDS -- TO ALLOW LARGER FILES, WE
      * REQUIRE ALL FIELDS TO BE WHITESPACE DELIMITED */
@@ -684,7 +684,7 @@ atom = %s, residue = %s\n", atomName, resName);
 
 }
 
-VPUBLIC int Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
+VPUBLIC Vrc_Codes Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
 
     Vatom *atoms = VNULL;
     Vatom *nextAtom = VNULL;
@@ -825,7 +825,7 @@ reading radius!\n", tok);
 }
 
 /* Load up Valist with various statistics */
-VPUBLIC int Valist_getStatistics(Valist *thee) {
+VPUBLIC Vrc_Codes Valist_getStatistics(Valist *thee) {
 
     Vatom *atom;
     int i, j;
