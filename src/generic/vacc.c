@@ -1217,7 +1217,7 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode
     id = Vatom_getAtomID(atom);
     asurf = thee->surf[id];
 	
-	VaccSurf_dtor2(asurf);
+	VaccSurf_dtor(&asurf);
 	thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
 	asurf = thee->surf[id];
 	

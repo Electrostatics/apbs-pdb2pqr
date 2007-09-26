@@ -3695,6 +3695,9 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
 	}
 	
+	Vclist_dtor(&clist);
+	Vacc_dtor(&acc);
+	
 	return VRC_SUCCESS;
 }
 
