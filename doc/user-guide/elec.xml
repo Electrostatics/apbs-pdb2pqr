@@ -26,9 +26,7 @@
 		<varlistentry>
 			<term> <replaceable>type</replaceable> </term>
 			<listitem>
-				<para>Specify the type of electrostatics
-					calcultion to perform (these are
-					described in greater detail below):
+				<para>Specify the type of electrostatics calculation to perform (these are described in greater detail below):
 					<itemizedlist>
 						<listitem>
 							<para><command><link linkend="mg-auto">mg-auto</link></command>
@@ -62,7 +60,7 @@
 			<term> <replaceable>keywords</replaceable> </term>
 			<listitem>
 				<para>Keywords describing the parameters of the electrostatic
-					calcualtion.  These are described in the 
+					calculation.  These are described in the 
 					<link linkend="elec-keywords-sect">Keywords section</link> below.
 				</para>
 			</listitem>
@@ -1240,8 +1238,11 @@
 		<listitem id="elec-ion">
 			<cmdsynopsis>
 				<command>ion</command>
+				<command>charge</command>
 				<arg choice="req"><replaceable>charge</replaceable></arg>
+				<command>charge</command>
 				<arg choice="req"><replaceable>conc</replaceable></arg>
+				<command>radius</command>
 				<arg choice="req"><replaceable>radius</replaceable></arg>
 			</cmdsynopsis>
 			<para>Specify the mobile ion species present in the system.  This command
@@ -1270,6 +1271,15 @@
 					</varlistentry>
 				</variablelist>
 			</para>
+			<warning>
+				<para>Note that the old command syntax of
+					<command>ion</command>
+					<arg choice="req"><replaceable>charge</replaceable></arg>
+					<arg choice="req"><replaceable>conc</replaceable></arg>
+					<arg choice="req"><replaceable>radius</replaceable></arg>
+					is deprecated and will go away "soon".
+				</para>
+			</warning>
 		</listitem>
 
 		<listitem id="elec-lpbe">
