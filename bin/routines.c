@@ -1057,6 +1057,7 @@ VPUBLIC int energyMG(NOsh *nosh, int icalc, Vpmg *pmg,
 		*qfEnergy = Vpmg_qfEnergy(pmg, extEnergy);
 		*qmEnergy = Vpmg_qmEnergy(pmg, extEnergy);
 		*dielEnergy = Vpmg_dielEnergy(pmg, extEnergy);
+#ifndef VAPBSQUIET
 		Vnm_tprint( 1, "  Total electrostatic energy = %1.12E \
 kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 		Vnm_tprint( 1, "  Fixed charge energy = %g kJ/mol\n",
@@ -1066,12 +1067,15 @@ kJ/mol\n", Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*totEnergy));
 		Vnm_tprint( 1, "  Dielectric energy = %g kJ/mol\n",
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*dielEnergy));
 		Vnm_tprint( 1, "  Per-atom energies:\n");
+#endif
 		alist = pmg->pbe->alist;
 		for (i=0; i<Valist_getNumberAtoms(alist); i++) {
 			atom = Valist_getAtom(alist, i); 
 			tenergy = Vpmg_qfAtomEnergy(pmg, atom);
+#ifndef VAPBSQUIET
 			Vnm_tprint( 1, "      Atom %d:  %1.12E kJ/mol\n", i,
 						0.5*Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*tenergy);
+#endif
 		}
 	} else *nenergy = 0;
 	
@@ -1088,8 +1092,11 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 	double qfForce[3], dbForce[3], ibForce[3];
 	
 	Vnm_tstart(APBS_TIMER_FORCE, "Force timer");
+
+#ifndef VAPBSQUIET
 	Vnm_tprint( 1,"  Calculating forces...\n");
-	
+#endif
+
 	if (pbeparm->calcforce == PCF_TOTAL) {
 		*nforce = 1;
 		*atomForce = (AtomForce *)Vmem_malloc(mem, 1, sizeof(AtomForce));
@@ -1117,6 +1124,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 				(*atomForce)[0].dbForce[k] += dbForce[k];
 			}
 		}
+#ifndef VAPBSQUIET
 		Vnm_tprint( 1, "  Printing net forces for molecule %d (kJ/mol/A)\n",
 					pbeparm->molid);
 		Vnm_tprint( 1, "  Legend:\n");
@@ -1135,10 +1143,12 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[0],
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[1],
 					Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na*(*atomForce)[0].dbForce[2]);
+#endif
 	} else if (pbeparm->calcforce == PCF_COMPS) {
 		*nforce = Valist_getNumberAtoms(alist[pbeparm->molid-1]);
 		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 											  sizeof(AtomForce));
+#ifndef VAPBSQUIET
 		Vnm_tprint( 1, "  Printing per-atom forces for molecule %d (kJ/mol/A)\n",
 					pbeparm->molid);
 		Vnm_tprint( 1, "  Legend:\n");
@@ -1146,6 +1156,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 		Vnm_tprint( 1, "    qf  n -- fixed charge force for atom n\n");
 		Vnm_tprint( 1, "    db  n -- dielectric boundary force for atom n\n");
 		Vnm_tprint( 1, "    ib  n -- ionic boundary force for atom n\n");
+#endif
 		for (j=0;j<Valist_getNumberAtoms(alist[pbeparm->molid-1]);j++) {
 			if (nosh->bogus == 0) {
 				VASSERT(Vpmg_qfForce(pmg, (*atomForce)[j].qfForce, j, 
@@ -1161,6 +1172,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 					(*atomForce)[j].dbForce[k] = 0;
 				}
 			}
+#ifndef VAPBSQUIET
 			Vnm_tprint( 1, "mgF  tot %d  %4.3e  %4.3e  %4.3e\n", j, 
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*((*atomForce)[j].qfForce[0]+(*atomForce)[j].ibForce[0]+
@@ -1192,6 +1204,7 @@ VPUBLIC int forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
 						*(*atomForce)[j].dbForce[1],
 						Vunit_kb*pbeparm->temp*(1e-3)*Vunit_Na \
 						*(*atomForce)[j].dbForce[2]);
+#endif
 		}
 	} else *nforce = 0;
 	
@@ -3688,10 +3701,12 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 
 	double energy = 0.0;
-	
+
+#ifndef VAPBSQUIET
 	Vnm_print(1,"\nTotal solvent accessible surface area: %g A^2\n",sasa);
 	Vnm_print(1,"Total solvent accessible volume: %g A^3\n", sav);
-	
+#endif
+
 	switch(apolparm->calcenergy){
 		case ACE_NO:
 			break;
@@ -3701,10 +3716,12 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 		case ACE_TOTAL:
 			energy = (apolparm->gamma*sasa) + (apolparm->press*sav) 
 						+ (apolparm->wcaEnergy);
+#ifndef VAPBSQUIET
 			Vnm_print(1,"\nTotal surface tension energy: %g kJ/mol\n", apolparm->gamma*sasa);
 			Vnm_print(1,"Total pressure energy: %g kJ/mol\n", apolparm->press*sav);
 			Vnm_print(1,"Total WCA energy: %g kJ/mol\n", (apolparm->wcaEnergy));
 			Vnm_print(1,"Total non-polar energy = %1.12E kJ/mol\n",energy);
+#endif
 			break;
 		default:
 			Vnm_print(2,"energyAPOL: Error in energyAPOL. Unknown option.\n");
@@ -3805,7 +3822,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 		*nforce = Valist_getNumberAtoms(alist);
 		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 											  sizeof(AtomForce));
-		
+
+#ifndef VAPBSQUIET
 		Vnm_tprint( 1, "  Printing per atom forces (kJ/mol/A)\n");
 		Vnm_tprint( 1, "  Legend:\n");
 		Vnm_tprint( 1, "    tot  n -- Total force for atom n\n");
@@ -3817,6 +3835,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 					   "    pressure %f\n" \
 					   "    bconc    %f \n\n",
 							gamma,press,bconc);
+#endif
 		
 		for (i=0; i<natom; i++) {
 			atom = Valist_getAtom(alist, i);
@@ -3848,6 +3867,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				(*atomForce)[i].wcaForce[j] += force[j];
 			}
 			
+#ifndef VAPBSQUIET
 			Vnm_print( 1, "  tot  %i %4.3e %4.3e %4.3e\n",
 						i,
 						xF,
@@ -3868,11 +3888,14 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 						(*atomForce)[i].wcaForce[0],
 						(*atomForce)[i].wcaForce[1],
 						(*atomForce)[i].wcaForce[2]);
+#endif
 			
 		}
 	} else *nforce = 0;
 	
+#ifndef VAPBSQUIET
 	Vnm_print(1,"\n");
+#endif
 	
 	return VRC_SUCCESS;
 }
