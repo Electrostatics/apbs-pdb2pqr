@@ -195,9 +195,9 @@ VEXTERNC Vclist* Vclist_ctor(
 
 /** @brief   FORTRAN stub to construct the cell list object
  *  @ingroup Vclist
- *  @author  Nathan Baker
- *  @returns 1 if successful, 0 otherwise */
-VEXTERNC int Vclist_ctor2(
+ *  @author  Nathan Baker, Yong Huang
+ *  @returns Success enumeration */
+VEXTERNC Vrc_Codes Vclist_ctor2(
         Vclist *thee, /** Memory for Vclist objet */
         Valist *alist, /** Molecule for cell list queries */
         double max_radius, /** Max probe radius (&Aring;) to be queried */ 
@@ -253,10 +253,10 @@ VEXTERNC VclistCell* VclistCell_ctor(
 /**
  * @brief  Construct a cell list object
  * @ingroup  Vclist
- * @author  Nathan Baker
- * @returns 1 if successful, 0 otherwise
+ * @author  Nathan Baker, Yong Huang
+ * @returns Success enumeration
  */
-VEXTERNC int VclistCell_ctor2(
+VEXTERNC Vrc_Codes VclistCell_ctor2(
         VclistCell *thee,  /** Memory location for object */
         int natoms  /** Number of atoms associated with this cell */
         );
