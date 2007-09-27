@@ -307,9 +307,9 @@ VEXTERNC MGparm*  MGparm_ctor(MGparm_CalcType type);
  *  @author  Nathan Baker and Todd Dolinsky
  *  @param   thee Space for MGparm object
  *  @param   type Type of MG calculation
- *  @returns 1 if succesful, 0 otherwise
+ *  @returns Success enumeration
  */
-VEXTERNC int      MGparm_ctor2(MGparm *thee, MGparm_CalcType type);
+VEXTERNC Vrc_Codes      MGparm_ctor2(MGparm *thee, MGparm_CalcType type);
 
 /** @brief   Object destructor
  *  @ingroup MGparm
@@ -329,9 +329,9 @@ VEXTERNC void     MGparm_dtor2(MGparm *thee);
  *  @ingroup MGparm
  *  @author  Nathan Baker
  *  @param   thee   MGparm object
- *  @returns 1 if OK, 0 otherwise
+ *  @returns Success enumeration
  */
-VEXTERNC int      MGparm_check(MGparm *thee);
+VEXTERNC Vrc_Codes      MGparm_check(MGparm *thee);
 
 /** @brief   Copy MGparm object into thee
  *  @ingroup MGparm
@@ -347,10 +347,10 @@ VEXTERNC void     MGparm_copy(MGparm *thee, MGparm *parm);
  *  @param   thee   MGparm object 
  *  @param   tok    Token to parse
  *  @param   sock   Stream for more tokens
- *  @return   1 if matched and assigned; -1 if matched, but there's some sort
- *            of error (i.e., too few args); 0 if not matched
+ *  @returns Success enumeration (1 if matched and assigned; -1 if matched, but there's some sort
+ *            of error (i.e., too few args); 0 if not matched)
  */
-VEXTERNC int      MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
+VEXTERNC Vrc_Codes      MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
                     Vio *sock);
 
 #endif 
