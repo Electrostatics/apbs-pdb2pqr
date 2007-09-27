@@ -137,7 +137,7 @@ VPRIVATE void Vclist_getMolDims(
 }
 
 /* Setup lookup grid */
-VPRIVATE int Vclist_setupGrid(Vclist *thee) {
+VPRIVATE Vrc_Codes Vclist_setupGrid(Vclist *thee) {
 
     /* Inflation factor ~ sqrt(2)*/
     #define VCLIST_INFLATE 1.42
@@ -165,7 +165,7 @@ VPRIVATE int Vclist_setupGrid(Vclist *thee) {
         default:
             Vnm_print(2, "Vclist_setupGrid:  invalid setup mode (%d)!\n",
                     thee->mode);
-            return 0;
+            return VRC_FAILURE;
     }
    
     /* Set up the grid lengths and spacings */
@@ -180,13 +180,13 @@ VPRIVATE int Vclist_setupGrid(Vclist *thee) {
       (thee->lower_corner)[0], (thee->lower_corner)[1],
       (thee->lower_corner)[2]);
 
-    return 1;
+    return VRC_SUCCESS;
 
     #undef VCLIST_INFLATE
 }
 
 /* Check and store parameters passed to constructor */
-VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
+VPRIVATE Vrc_Codes Vclist_storeParms(Vclist *thee, Valist *alist,
         double max_radius, int npts[VAPBS_DIM], Vclist_DomainMode mode,
         double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM] ) {
 
@@ -194,7 +194,7 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
 
     if (alist == VNULL) {
         Vnm_print(2, "Vclist_ctor2:  Got NULL Valist!\n");
-        return 0;
+        return VRC_FAILURE;
     } else thee->alist = alist;
 
     thee->n = 1;
@@ -203,7 +203,7 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
             Vnm_print(2, 
                     "Vclist_ctor2:  n[%d] (%d) must be greater than 2!\n", 
                     i, npts[i]);
-            return 0; 
+            return VRC_FAILURE; 
         } 
         thee->npts[i] = npts[i];
         thee->n *= npts[i];
@@ -233,13 +233,13 @@ VPRIVATE int Vclist_storeParms(Vclist *thee, Valist *alist,
             break;
         default:
             Vnm_print(2, "Vclist_ctor2:  invalid setup mode (%d)!\n", mode);
-            return 0;
+            return VRC_FAILURE;
     }
 
     thee->max_radius = max_radius;
     Vnm_print(0, "Vclist_ctor2:  Using %g max radius\n", max_radius);
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Calculate the gridpoints an atom spans */
@@ -282,7 +282,7 @@ VPRIVATE int Vclist_arrayIndex(Vclist *thee, int i, int j, int k) {
 
 
 /* Assign atoms to cells */
-VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
+VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
 
     int iatom, i, j, k, ui, inext;
     int imax[VAPBS_DIM], imin[VAPBS_DIM];
@@ -321,7 +321,7 @@ VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
         cell = &(thee->cells[ui]);
         if ( !VclistCell_ctor2(cell, cell->natoms) ) {
             Vnm_print(2, "Vclist_assignAtoms:  cell error!\n");
-            return 0;
+            return VRC_FAILURE;
         }
         /* Clear the counter for later use */
         cell->natoms = 0;
@@ -351,11 +351,11 @@ VPRIVATE int Vclist_assignAtoms(Vclist *thee) {
         }
     } 
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Main (FORTRAN stub) constructor */
-VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
+VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         int npts[VAPBS_DIM], Vclist_DomainMode mode, 
         double lower_corner[VAPBS_DIM], double upper_corner[VAPBS_DIM]) {
 
@@ -366,14 +366,14 @@ VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     if ( !Vclist_storeParms(thee, alist, max_radius, npts, mode, lower_corner,
                 upper_corner) ) {
         Vnm_print(2, "Vclist_ctor2:  parameter check failed!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     /* Set up memory */
     thee->vmem = Vmem_ctor("APBS::VCLIST");
     if (thee->vmem == VNULL) {
         Vnm_print(2, "Vclist_ctor2:  memory object setup failed!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     /* Set up cells */
@@ -382,7 +382,7 @@ VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
         Vnm_print(2, 
                 "Vclist_ctor2:  Failed allocating %d VclistCell objects!\n",
                 thee->n);
-        return 0;
+        return VRC_FAILURE;
     }
     for (i=0; i<thee->n; i++) {
         cell = &(thee->cells[i]);
@@ -392,20 +392,20 @@ VPUBLIC int Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     /* Set up the grid */
     if (!Vclist_setupGrid(thee)) {
         Vnm_print(2, "Vclist_ctor2:  grid setup failed!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     /* Assign atoms to grid cells */
     if (!Vclist_assignAtoms(thee)) {
         Vnm_print(2, "Vclist_ctor2:  atom assignment failed!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 	
 
 	
 
 
-    return 1;
+    return VRC_SUCCESS;
 }
 
 /* Destructor */
@@ -473,11 +473,11 @@ VPUBLIC VclistCell* VclistCell_ctor(int natoms) {
     return thee;
 }
 
-VPUBLIC int VclistCell_ctor2(VclistCell *thee, int natoms) {
+VPUBLIC Vrc_Codes VclistCell_ctor2(VclistCell *thee, int natoms) {
 
     if (thee == VNULL) {
         Vnm_print(2, "VclistCell_ctor2:  NULL thee!\n");
-        return 0;
+        return VRC_FAILURE;
     }
 
     thee->natoms = natoms;
@@ -487,11 +487,11 @@ VPUBLIC int VclistCell_ctor2(VclistCell *thee, int natoms) {
             Vnm_print(2, 
           "VclistCell_ctor2:  unable to allocate space for %d atom pointers!\n",
               natoms);
-            return 0;
+            return VRC_FAILURE;
         }
     }
 
-    return 1;
+    return VRC_SUCCESS;
 
 }
 
