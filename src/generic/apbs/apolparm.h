@@ -207,11 +207,11 @@ VEXTERNC APOLparm* APOLparm_ctor();
 
 /** @brief   FORTRAN stub to construct APOLparm
  *  @ingroup APOLparm
- *  @author  David Gohara
+ *  @author  David Gohara, Yong Huang
  *  @param   thee Pointer to allocated APOLparm object
- *  @returns 1 if successful, 0 otherwise
+ *  @returns Success enumeration
  */
-VEXTERNC int APOLparm_ctor2(APOLparm *thee);
+VEXTERNC Vrc_Codes APOLparm_ctor2(APOLparm *thee);
 
 /** @brief   Object destructor
  *  @ingroup APOLparm
@@ -230,11 +230,11 @@ VEXTERNC void APOLparm_dtor2(APOLparm *thee);
 /** 
  * @brief   Consistency check for parameter values stored in object
  * @ingroup APOLparm
- * @author  David Gohara
+ * @author  David Gohara, Yong Huang
  * @param   thee   APOLparm object
- * @returns 1 if OK, 0 otherwise
+ * @returns Success enumeration
  */
-VEXTERNC int APOLparm_check(APOLparm *thee);
+VEXTERNC Vrc_Codes APOLparm_check(APOLparm *thee);
 
 /**	@brief	Copy target object into thee
 	@ingroup	APOLparm
@@ -251,8 +251,8 @@ VEXTERNC void APOLparm_copy(APOLparm *thee, APOLparm *source);
  * @param   thee   MGparm object 
  * @param   tok    Token to parse
  * @param   sock   Stream for more tokens
- * @return   1 if matched and assigned; -1 if matched, but there's
- * some sort of error (i.e., too few args); 0 if not matched
+ * @returns Success enumeration (1 if matched and assigned; -1 if matched, but there's
+ * some sort of error (i.e., too few args); 0 if not matched)
  */
 VEXTERNC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock);

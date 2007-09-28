@@ -85,9 +85,9 @@ VPUBLIC APOLparm* APOLparm_ctor() {
     return thee;
 }
 
-VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
+VPUBLIC Vrc_Codes APOLparm_ctor2(APOLparm *thee) {
 
-    if (thee == VNULL) return 0;
+    if (thee == VNULL) return VRC_FAILURE;
 
 	int i;
     thee->parsed = 0;
@@ -113,7 +113,7 @@ VPUBLIC int APOLparm_ctor2(APOLparm *thee) {
 	
 	for(i=0;i<3;i++) thee->totForce[i] = 0.0;
 	
-    return 1; 
+    return VRC_SUCCESS; 
 }
 
 VPUBLIC void APOLparm_copy(
@@ -187,7 +187,7 @@ VPUBLIC void APOLparm_dtor(APOLparm **thee) {
 
 VPUBLIC void APOLparm_dtor2(APOLparm *thee) { ; }
 
-VPUBLIC int APOLparm_check(APOLparm *thee) { 
+VPUBLIC Vrc_Codes APOLparm_check(APOLparm *thee) { 
 
     
     int rc;
@@ -195,7 +195,7 @@ VPUBLIC int APOLparm_check(APOLparm *thee) {
 	
     if (!thee->parsed) {
         Vnm_print(2, "APOLparm_check:  not filled!\n");
-        return 0;
+        return VRC_FAILURE;
     }
     if (!thee->setgrid) {
         Vnm_print(2, "APOLparm_check:  grid not set!\n");
@@ -245,7 +245,7 @@ VPUBLIC int APOLparm_check(APOLparm *thee) {
 	
 }
 
-VPRIVATE int APOLparm_parseGRID(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseGRID(APOLparm *thee, Vio *sock) {
 	
 	char tok[VMAX_BUFSIZE];
 	double tf;
@@ -254,29 +254,29 @@ VPRIVATE int APOLparm_parseGRID(APOLparm *thee, Vio *sock) {
 	if (sscanf(tok, "%lf", &tf) == 0) {
 		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-		return -1;
+		return VRC_WARNING;
 	} else thee->grid[0] = tf;
 	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	if (sscanf(tok, "%lf", &tf) == 0) {
 		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-		return -1;
+		return VRC_WARNING;
 	} else thee->grid[1] = tf;
 	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	if (sscanf(tok, "%lf", &tf) == 0) {
 		Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GRID \
 keyword!\n", tok);
-		return -1;
+		return VRC_WARNING;
 	} else thee->grid[2] = tf;
     thee->setgrid = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseMOL(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseMOL(APOLparm *thee, Vio *sock) {
     int ti;
     char tok[VMAX_BUFSIZE];
 	
@@ -284,18 +284,18 @@ VPRIVATE int APOLparm_parseMOL(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%d", &ti) == 0) {
         Vnm_print(2, "NOsh:  Read non-int (%s) while parsing MOL \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     } 
     thee->molid = ti;
     thee->setmolid = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -303,21 +303,21 @@ VPRIVATE int APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
     if (Vstring_strcasecmp(tok, "sacc") == 0) {
         thee->srfm = VSM_MOL;
         thee->setsrfm = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else {
         printf("parseAPOL: Unrecongnized keyword (%s) when parsing srfm!\n", tok);
 		printf("parseAPOL: Accepted values for srfm = sacc\n");
-        return -1;
+        return VRC_WARNING;
     }
 	
-    return 0;
+    return VRC_FAILURE;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseSRAD(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseSRAD(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -325,18 +325,18 @@ VPRIVATE int APOLparm_parseSRAD(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SRAD \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->srad = tf;
     thee->setsrad = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseSWIN(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseSWIN(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -344,18 +344,18 @@ VPRIVATE int APOLparm_parseSWIN(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SWIN \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->swin = tf;
     thee->setswin = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseTEMP(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseTEMP(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -363,18 +363,18 @@ VPRIVATE int APOLparm_parseTEMP(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing TEMP \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->temp = tf;
     thee->settemp = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseGAMMA(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseGAMMA(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -382,18 +382,18 @@ VPRIVATE int APOLparm_parseGAMMA(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing GAMMA \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->gamma = tf;
     thee->setgamma = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseCALCENERGY(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseCALCENERGY(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     int ti;
 	
@@ -421,32 +421,32 @@ VPRIVATE int APOLparm_parseCALCENERGY(APOLparm *thee, Vio *sock) {
                 break;
         }
         Vnm_print(2, "\" instead.\n");
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "no") == 0) {
         thee->calcenergy = ACE_NO;
         thee->setcalcenergy = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "total") == 0) {
         thee->calcenergy = ACE_TOTAL;
         thee->setcalcenergy = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "comps") == 0) {
         thee->calcenergy = ACE_COMPS;
         thee->setcalcenergy = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else {
         Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
 calcenergy!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
-    return 0;
+    return VRC_FAILURE;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseCALCFORCE(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseCALCFORCE(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     int ti;
 	
@@ -474,32 +474,32 @@ VPRIVATE int APOLparm_parseCALCFORCE(APOLparm *thee, Vio *sock) {
                 break;
         }
         Vnm_print(2, "\" instead.\n");
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "no") == 0) {
         thee->calcforce = ACF_NO;
         thee->setcalcforce = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "total") == 0) {
         thee->calcforce = ACF_TOTAL;
         thee->setcalcforce = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "comps") == 0) {
         thee->calcforce = ACF_COMPS;
         thee->setcalcforce = 1;
-        return 1;
+        return VRC_SUCCESS;
     } else {
         Vnm_print(2, "NOsh:  Unrecognized parameter (%s) while parsing \
 calcforce!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
-    return 0;
+    return VRC_FAILURE;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseBCONC(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseBCONC(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -507,18 +507,18 @@ VPRIVATE int APOLparm_parseBCONC(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing BCONC \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->bconc = tf;
     thee->setbconc = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseSDENS(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseSDENS(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -526,18 +526,18 @@ VPRIVATE int APOLparm_parseSDENS(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDENS \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->sdens = tf;
     thee->setsdens = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parseDPOS(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parseDPOS(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -545,7 +545,7 @@ VPRIVATE int APOLparm_parseDPOS(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing SDENS \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->dpos = tf;
     thee->setdpos = 1;
@@ -559,14 +559,14 @@ safely ignore this message.\n");
 or equal to 0.001.\n\n");
 	}
 	
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
-VPRIVATE int APOLparm_parsePRESS(APOLparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes APOLparm_parsePRESS(APOLparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE];
     double tf;
 	
@@ -574,15 +574,15 @@ VPRIVATE int APOLparm_parsePRESS(APOLparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing PRESS \
 keyword!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
     thee->press = tf;
     thee->setpress = 1;
-    return 1;
+    return VRC_SUCCESS;
 	
 VERROR1:
         Vnm_print(2, "parseAPOL:  ran out of tokens!\n");
-	return -1;
+	return VRC_WARNING;
 }
 
 VPUBLIC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
@@ -590,12 +590,12 @@ VPUBLIC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
 
     if (thee == VNULL) {
         Vnm_print(2, "parseAPOL:  got NULL thee!\n");
-        return -1;
+        return VRC_WARNING;
     }
 
     if (sock == VNULL) {
         Vnm_print(2, "parseAPOL:  got NULL socket!\n");
-        return -1;
+        return VRC_WARNING;
     }
 	
 	if (Vstring_strcasecmp(tok, "mol") == 0) {
@@ -605,11 +605,11 @@ VPUBLIC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
 	} else if (Vstring_strcasecmp(tok, "dime") == 0) {
 		Vnm_print(2, "APOLparm_parseToken:  The DIME and GLEN keywords for APOLAR have been replaced with GRID.\n");
 		Vnm_print(2, "APOLparm_parseToken:  Please see the APBS User Guide for more information.\n");
-		return -1;
+		return VRC_WARNING;
 	} else if (Vstring_strcasecmp(tok, "glen") == 0) {
 		Vnm_print(2, "APOLparm_parseToken:  The DIME and GLEN keywords for APOLAR have been replaced with GRID.\n");
 		Vnm_print(2, "APOLparm_parseToken:  Please see the APBS User Guide for more information.\n");
-		return -1;
+		return VRC_WARNING;
 	} else if (Vstring_strcasecmp(tok, "bconc") == 0) {
 		return APOLparm_parseBCONC(thee, sock);
     } else if (Vstring_strcasecmp(tok, "sdens") == 0) {
@@ -634,10 +634,10 @@ VPUBLIC Vrc_Codes APOLparm_parseToken(APOLparm *thee, char tok[VMAX_BUFSIZE],
         return APOLparm_parseCALCFORCE(thee, sock);
     } else {
         Vnm_print(2, "parseAPOL:  Unrecognized keyword (%s)!\n", tok);
-        return -1;
+        return VRC_WARNING;
     }
 	
     
-	return 0;
+	return VRC_FAILURE;
 
 }
