@@ -123,8 +123,9 @@ VPUBLIC Vparam* loadParameter(NOsh *nosh) {
 
 VPUBLIC int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL]) {
 	
-	int i, rc;
+	int i;
 	int use_params = 0;
+	Vrc_Codes rc;
 	
 	Vio *sock = VNULL;
 	

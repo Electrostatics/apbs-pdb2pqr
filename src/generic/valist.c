@@ -131,7 +131,7 @@ VPUBLIC Valist* Valist_ctor() {
     Valist *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Valist));
     VASSERT( thee != VNULL);
-    VASSERT( Valist_ctor2(thee));
+    VASSERT( Valist_ctor2(thee) == VRC_SUCCESS);
  
     return thee;
 }
@@ -340,25 +340,25 @@ VPRIVATE Vrc_Codes Valist_readPDB_throughXYZ(
     int i, njunk, gotit;
 
     /* Grab serial */
-    if (!Valist_readPDBSerial(thee, sock, serial)) {
+    if (Valist_readPDBSerial(thee, sock, serial) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing serial!\n");
     }
 
     /* Grab atom name */
-    if (!Valist_readPDBAtomName(thee, sock, atomName)) {
+    if (Valist_readPDBAtomName(thee, sock, atomName) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing atom name!\n");
         return VRC_FAILURE;
     }
 
     /* Grab residue name */
-    if (!Valist_readPDBResidueName(thee, sock, resName)) {
+    if (Valist_readPDBResidueName(thee, sock, resName) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing residue name!\n");
         return VRC_FAILURE;
     }
 
 
     /* Grab residue number */
-    if (!Valist_readPDBResidueNumber(thee, sock, resSeq)) {
+    if (Valist_readPDBResidueNumber(thee, sock, resSeq) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Error while parsing residue name!\n");
         return VRC_FAILURE;
     }
@@ -370,7 +370,7 @@ VPRIVATE Vrc_Codes Valist_readPDB_throughXYZ(
     njunk = 1;
     gotit = 0;
     for (i=0; i<(njunk+1); i++) {
-        if (Valist_readPDBAtomCoord(thee, sock, x)) {
+        if (Valist_readPDBAtomCoord(thee, sock, x) == VRC_SUCCESS) {
             gotit = 1;
             break;
         }
@@ -380,12 +380,12 @@ VPRIVATE Vrc_Codes Valist_readPDB_throughXYZ(
         return VRC_FAILURE;
     }
     /* Read y-coordinate */
-    if (!Valist_readPDBAtomCoord(thee, sock, y)) {
+    if (Valist_readPDBAtomCoord(thee, sock, y) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Can't find y!\n");
         return VRC_FAILURE;
     }
     /* Read z-coordinate */
-    if (!Valist_readPDBAtomCoord(thee, sock, z)) {
+    if (Valist_readPDBAtomCoord(thee, sock, z) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  Can't find z!\n");
         return VRC_FAILURE;
     }
@@ -531,8 +531,8 @@ VPUBLIC Vrc_Codes Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
             (Vstring_strcasecmp(tok, "HETATM") == 0)) {
 
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
-            if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
-                        resName, &resSeq, &x, &y, &z)) {
+            if (Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
+                        resName, &resSeq, &x, &y, &z) == VRC_FAILURE) {
                 Vnm_print(2, "Valist_readPDB:  Error parsing atom %d!\n", 
                           serial);
                 return VRC_FAILURE;
@@ -573,7 +573,7 @@ atom = %s, residue = %s\n", atomName, resName);
     fflush(stdout);
 
     /* Store atoms internally */
-    if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
+    if (Valist_setAtomArray(thee, &atoms, nlist, natoms) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  unable to store atoms!\n");
         return VRC_FAILURE;
     }
@@ -624,14 +624,14 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
             (Vstring_strcasecmp(tok, "HETATM") == 0)) {
 
             /* Read ATOM/HETATM field of PDB through the X/Y/Z fields */
-            if (!Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
-                        resName, &resSeq, &x, &y, &z)) {
+            if (Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
+                        resName, &resSeq, &x, &y, &z) == VRC_FAILURE) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n",serial);
                 return VRC_FAILURE;
             }
 
             /* Read Q/R fields */
-            if (!Valist_readPDBChargeRadius(thee, sock, &charge, &radius)) {
+            if (Valist_readPDBChargeRadius(thee, sock, &charge, &radius) == VRC_FAILURE) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
                           serial);
                 return VRC_FAILURE;
@@ -674,7 +674,7 @@ atom = %s, residue = %s\n", atomName, resName);
     fflush(stdout);
 
     /* Store atoms internally */
-    if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
+    if (Valist_setAtomArray(thee, &atoms, nlist, natoms) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readPDB:  unable to store atoms!\n");
         return VRC_FAILURE;
     }
@@ -815,7 +815,7 @@ reading radius!\n", tok);
     fflush(stdout);
 
     /* Store atoms internally */
-    if (!Valist_setAtomArray(thee, &atoms, nlist, natoms)) {
+    if (Valist_setAtomArray(thee, &atoms, nlist, natoms) == VRC_FAILURE) {
         Vnm_print(2, "Valist_readXML:  unable to store atoms!\n");
         return VRC_FAILURE;
     }
