@@ -349,6 +349,7 @@ Please cite your use of APBS as:\n\n\
 		Vnm_tprint(2, "Error reading molecules!\n");
 		VJMPERR1(0);
 	}
+	if(param != VNULL) Vparam_dtor(&param);
 
 	/* *************** SETUP CALCULATIONS *************** */
 	if (NOsh_setupElecCalc(nosh, alist) != 1) {
