@@ -131,7 +131,7 @@ VPUBLIC MGparm* MGparm_ctor(MGparm_CalcType type) {
     MGparm *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(MGparm));
     VASSERT( thee != VNULL);
-    VASSERT( MGparm_ctor2(thee, type) );
+    VASSERT( MGparm_ctor2(thee, type) == VRC_SUCCESS );
 
     return thee;
 }

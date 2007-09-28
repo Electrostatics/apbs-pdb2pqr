@@ -399,7 +399,7 @@ VPUBLIC int NOsh_parseInputFile(
 								) {
 	
 	Vio *sock;
-	int rc;
+	Vrc_Codes rc;
 	
 	sock = Vio_ctor("FILE", "ASC", VNULL, filename, "r");
 	rc = NOsh_parseInput(thee, sock);

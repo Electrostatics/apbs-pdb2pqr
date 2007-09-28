@@ -97,7 +97,7 @@ VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius,
     thee = Vmem_malloc(VNULL, 1, sizeof(Vclist) );
     VASSERT( thee != VNULL);
     VASSERT( Vclist_ctor2(thee, alist, max_radius, npts, mode, lower_corner,
-                upper_corner) );
+                upper_corner) == VRC_SUCCESS );
     return thee;
 }
 
@@ -319,7 +319,7 @@ VPRIVATE Vrc_Codes Vclist_assignAtoms(Vclist *thee) {
     /* Allocate the space to store the pointers to the atoms */
     for (ui=0; ui<thee->n; ui++) {
         cell = &(thee->cells[ui]);
-        if ( !VclistCell_ctor2(cell, cell->natoms) ) {
+        if ( VclistCell_ctor2(cell, cell->natoms) == VRC_FAILURE ) {
             Vnm_print(2, "Vclist_assignAtoms:  cell error!\n");
             return VRC_FAILURE;
         }
@@ -363,8 +363,8 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     VclistCell *cell;
 
     /* Check and store parameters */
-    if ( !Vclist_storeParms(thee, alist, max_radius, npts, mode, lower_corner,
-                upper_corner) ) {
+    if ( Vclist_storeParms(thee, alist, max_radius, npts, mode, lower_corner,
+                upper_corner) == VRC_FAILURE ) {
         Vnm_print(2, "Vclist_ctor2:  parameter check failed!\n");
         return VRC_FAILURE;
     }
@@ -390,13 +390,13 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     }
 
     /* Set up the grid */
-    if (!Vclist_setupGrid(thee)) {
+    if ( Vclist_setupGrid(thee) == VRC_FAILURE ) {
         Vnm_print(2, "Vclist_ctor2:  grid setup failed!\n");
         return VRC_FAILURE;
     }
 
     /* Assign atoms to grid cells */
-    if (!Vclist_assignAtoms(thee)) {
+    if (Vclist_assignAtoms(thee) == VRC_FAILURE) {
         Vnm_print(2, "Vclist_ctor2:  atom assignment failed!\n");
         return VRC_FAILURE;
     }
@@ -468,7 +468,7 @@ VPUBLIC VclistCell* VclistCell_ctor(int natoms) {
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(VclistCell));
     VASSERT( thee != VNULL);
-    VASSERT( VclistCell_ctor2(thee, natoms) );
+    VASSERT( VclistCell_ctor2(thee, natoms) == VRC_SUCCESS );
 
     return thee;
 }
