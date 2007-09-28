@@ -484,9 +484,9 @@ install-exec-local:
 
 install-data-local:
 	mkdir -p ${prefix}
-	cp -r tools ${prefix}/share 
-	cp -r examples ${prefix}/share 
-	cp -r doc ${prefix}/share 
+	cp -rf tools ${prefix}/share 
+	cp -rf examples ${prefix}/share 
+	cp -rf doc ${prefix}/share 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
