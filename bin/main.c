@@ -342,14 +342,13 @@ Please cite your use of APBS as:\n\n\
 		VJMPERR1(0);
 	} else Vnm_tprint( 1, "Parsed input file.\n");
 	Vio_dtor(&sock);
-
-	/* *************** LOAD PARAMETERS AND MOLECULES ******************* */
+	
+	/* *************** LOAD PARAMETERS AND MOLECULES ******************* */	
 	param = loadParameter(nosh);
 	if (loadMolecules(nosh, param, alist) != 1) {
 		Vnm_tprint(2, "Error reading molecules!\n");
 		VJMPERR1(0);
 	}
-	if(param != VNULL) Vparam_dtor(&param);
 
 	/* *************** SETUP CALCULATIONS *************** */
 	if (NOsh_setupElecCalc(nosh, alist) != 1) {
@@ -571,7 +570,10 @@ Please cite your use of APBS as:\n\n\
 				exit(2);
 		}
 	}
-
+	
+	//Clear out the parameter file memory
+	if(param != VNULL) Vparam_dtor(&param);
+	
 	/* *************** HANDLE PRINT STATEMENTS ******************* */
 	if (nosh->nprint > 0) {
 		Vnm_tprint( 1, "----------------------------------------\n");
@@ -598,7 +600,7 @@ Please cite your use of APBS as:\n\n\
 		}
 	} 
 	Vnm_tprint( 1, "----------------------------------------\n");
-
+	
 	/* *************** HANDLE LOGGING *********************** */
 
 	if (outputformat == OUTPUT_XML) {
@@ -652,9 +654,9 @@ Please cite your use of APBS as:\n\n\
 	Vnm_flush(1);
 	Vnm_flush(2);
 	Vcom_finalize();
-	
-	fflush(NULL);
 
+	fflush(NULL);
+	
 	return 0;
 
 	VERROR1:

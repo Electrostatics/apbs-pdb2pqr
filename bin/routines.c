@@ -145,7 +145,13 @@ VPUBLIC int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL])
 	}
 
 	for (i=0; i<nosh->nmol; i++) {
-		alist[i] = Valist_ctor();
+		if(alist[i] == VNULL){
+			alist[i] = Valist_ctor();
+		}else{
+			Valist_dtor(&(alist[i]));
+			alist[i] = Valist_ctor();
+		}
+		
 		switch (nosh->molfmt[i]) {
 			case NMF_PQR:
 					/* Print out a warning to the user letting them know that we are overriding PQR
@@ -3773,8 +3779,14 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 	
 	if(apolparm->calcforce == ACF_TOTAL){
 		*nforce = 1;
-		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+		if(*atomForce == VNULL){
+			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 											  sizeof(AtomForce));
+		}else{
+			Vmem_free(mem,*nforce,sizeof(AtomForce),atomForce);
+			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+												  sizeof(AtomForce));
+		}
 		
 		/* Clear out force arrays */
 		for (j=0; j<3; j++) {
@@ -3824,8 +3836,14 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 		
 	} else if (apolparm->calcforce == ACF_COMPS ){
 		*nforce = Valist_getNumberAtoms(alist);
-		*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
-											  sizeof(AtomForce));
+		if(*atomForce == VNULL){
+			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+												  sizeof(AtomForce));
+		}else{
+			Vmem_free(mem,*nforce,sizeof(AtomForce),atomForce);
+			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
+												  sizeof(AtomForce));
+		}
 
 #ifndef VAPBSQUIET
 		Vnm_tprint( 1, "  Printing per atom forces (kJ/mol/A)\n");
