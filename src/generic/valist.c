@@ -76,42 +76,63 @@ VPRIVATE char *Valist_xmlwhiteChars = " \t\n<>";
 
 VPUBLIC double Valist_getCenterX(Valist *thee) {
  
-    VASSERT(thee != NULL);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getCenterX:  Found null pointer when getting the center of X coordinate!\n");
+		VASSERT(0);
+	}
     return thee->center[0];
 
 }
 
 VPUBLIC double Valist_getCenterY(Valist *thee) {
 
-    VASSERT(thee != NULL);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getCenterY:  Found null pointer when getting the center of Y coordinate!\n");
+		VASSERT(0);
+	}
     return thee->center[1];
 
 }
 VPUBLIC double Valist_getCenterZ(Valist *thee) {
 
-    VASSERT(thee != NULL);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getCenterZ:  Found null pointer when getting the center of Z coordinate!\n");
+		VASSERT(0);
+	}
     return thee->center[2];
 
 }
 
 VPUBLIC Vatom* Valist_getAtomList(Valist *thee) {
 
-    VASSERT(thee != NULL);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getAtomList:  Found null pointer when getting the atom list!\n");
+		VASSERT(0);
+	}
     return thee->atoms;
 
 }
 
 VPUBLIC int Valist_getNumberAtoms(Valist *thee) {
 
-    VASSERT(thee != NULL);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getNumberAtoms:  Found null pointer when getting the number of atoms!\n");
+		VASSERT(0);
+	}
     return thee->number;
 
 }
 
 VPUBLIC Vatom* Valist_getAtom(Valist *thee, int i) {
 
-    VASSERT(thee != NULL);
-    VASSERT(i < thee->number);
+    if (thee == NULL) {
+		Vnm_print(2, "Valist_getAtom:  Found null pointer when getting atoms!\n");
+		VASSERT(0);
+	}
+    if (i >= thee->number) {
+		Vnm_print(2, "Valist_getAtom:  Requested atom number (%d) outside of atom list range (%d)!\n", i, thee->number);
+		VASSERT(0);
+	}
     return &(thee->atoms[i]);
 
 }
@@ -130,8 +151,14 @@ VPUBLIC Valist* Valist_ctor() {
     /* Set up the structure */
     Valist *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Valist));
-    VASSERT( thee != VNULL);
-    VASSERT( Valist_ctor2(thee) == VRC_SUCCESS);
+    if ( thee == VNULL) {
+		Vnm_print(2, "Valist_ctor:  Got NULL pointer when constructing the atom list object!\n");
+		VASSERT(0);
+	}
+    if ( Valist_ctor2(thee) != VRC_SUCCESS) {
+		Vnm_print(2, "Valist_ctor:   Error in constructing the atom list object!\n");
+		VASSERT(0);
+	}
  
     return thee;
 }
@@ -512,7 +539,10 @@ VPUBLIC Vrc_Codes Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
 	double x, y, z, charge, radius, epsilon;
     double pos[3];
  
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) {
+		Vnm_print(2, "Valist_readPDB:  Got NULL pointer when reading PDB file!\n");
+		VASSERT(0);
+	}
     thee->number = 0;
 
     Vio_setWhiteChars(sock, Valist_whiteChars);
@@ -602,7 +632,10 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
     double x, y, z, charge, radius, epsilon;
     double pos[3];
  
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) {
+		Vnm_print(2, "Valist_readPQR:  Got NULL pointer when reading PQR file!\n");
+		VASSERT(0);
+	}
     thee->number = 0;
 
     Vio_setWhiteChars(sock, Valist_whiteChars);
@@ -698,7 +731,10 @@ VPUBLIC Vrc_Codes Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
 	double x, y, z, charge, radius, dtmp;
     double pos[3];
  
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) {
+		Vnm_print(2, "Valist_readXML:  Got NULL pointer when reading XML file!\n");
+		VASSERT(0);
+	}
     thee->number = 0;
 
     Vio_setWhiteChars(sock, Valist_xmlwhiteChars);
@@ -830,7 +866,10 @@ VPUBLIC Vrc_Codes Valist_getStatistics(Valist *thee) {
     Vatom *atom;
     int i, j;
 
-    VASSERT(thee != VNULL);
+    if (thee == VNULL) {
+		Vnm_print(2, "Valist_getStatistics:  Got NULL pointer when loading up Valist with various statistics!\n");
+		VASSERT(0);
+	}
 
     thee->center[0] = 0.;
     thee->center[1] = 0.;
