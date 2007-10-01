@@ -305,6 +305,7 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 	if (thee != VNULL) {
 		for (i=0; i<(thee->ncalc); i++) NOsh_calc_dtor(&(thee->calc[i]));
 		for (i=0; i<(thee->nelec); i++) NOsh_calc_dtor(&(thee->elec[i]));
+		for (i=0; i<(thee->napol); i++) NOsh_calc_dtor(&(thee->apol[i]));
     }
 	
 }
