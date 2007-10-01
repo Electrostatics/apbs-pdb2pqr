@@ -80,7 +80,7 @@ VPUBLIC APOLparm* APOLparm_ctor() {
     APOLparm *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(APOLparm));
     VASSERT( thee != VNULL);
-    VASSERT( APOLparm_ctor2(thee) );
+    VASSERT( APOLparm_ctor2(thee) == VRC_SUCCESS );
 
     return thee;
 }
@@ -190,7 +190,7 @@ VPUBLIC void APOLparm_dtor2(APOLparm *thee) { ; }
 VPUBLIC Vrc_Codes APOLparm_check(APOLparm *thee) { 
 
     
-    int rc;
+    Vrc_Codes rc;
     rc = VRC_SUCCESS;
 	
     if (!thee->parsed) {

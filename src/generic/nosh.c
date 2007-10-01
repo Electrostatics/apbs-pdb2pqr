@@ -305,7 +305,6 @@ VPUBLIC void NOsh_dtor2(NOsh *thee) {
 	if (thee != VNULL) {
 		for (i=0; i<(thee->ncalc); i++) NOsh_calc_dtor(&(thee->calc[i]));
 		for (i=0; i<(thee->nelec); i++) NOsh_calc_dtor(&(thee->elec[i]));
-		for (i=0; i<(thee->napol); i++) NOsh_calc_dtor(&(thee->apol[i]));
     }
 	
 }
@@ -399,7 +398,7 @@ VPUBLIC int NOsh_parseInputFile(
 								) {
 	
 	Vio *sock;
-	Vrc_Codes rc;
+	int rc;
 	
 	sock = Vio_ctor("FILE", "ASC", VNULL, filename, "r");
 	rc = NOsh_parseInput(thee, sock);
