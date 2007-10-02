@@ -4232,6 +4232,10 @@ VPUBLIC int Vpmg_ibForce(Vpmg *thee, double *force, int atomID,
     double rtot, dx, dx2, dy, dy2, dz, dz2, gpos[3], tgrad[3], fmag;
     double izmagic;
     int i, j, k, nx, ny, nz, imin, imax, jmin, jmax, kmin, kmax;
+	
+	/* For nonlinear forces */
+	int ichop, nchop, nion, m;
+    double ionConc[MAXION], ionRadii[MAXION], ionQ[MAXION], ionstr;
    
     VASSERT(thee != VNULL);
    
@@ -4264,7 +4268,10 @@ calculation!\n");
     irad = Vpbe_getMaxIonRadius(pbe);
     zkappa2 = Vpbe_getZkappa2(pbe);
     izmagic = 1.0/Vpbe_getZmagic(pbe);
-
+	
+	ionstr = Vpbe_getBulkIonicStrength(pbe);
+    Vpbe_getIons(pbe, &nion, ionConc, ionRadii, ionQ);
+	
     /* Mesh info */
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
@@ -4344,12 +4351,17 @@ calculation!\n");
 						Vpmg_splineSelect(srfm,acc, gpos,thee->splineWin, irad, atom, tgrad);
 						
                         if (thee->pmgp->nonlin) {
-                            /* Nonlinear forces not done */
-                            Vnm_print(2, "Vpmg_ibForce:  No NPBE forces yet!\n");
-                            force[0] = 0.0;
-                            force[1] = 0.0;
-                            force[2] = 0.0;
-                            return 0;
+                            /* Nonlinear forces */
+                            fmag = 0.0;
+                            nchop = 0;
+                            for (m=0; m<nion; m++) {
+                                fmag += (thee->kappa[IJK(i,j,k)])*ionConc[m]*(Vcap_exp(-ionQ[m]*thee->u[IJK(i,j,k)], &ichop)-1.0)/ionstr;
+                                nchop += ichop;
+                            }
+							/*          if (nchop > 0) Vnm_print(2, "Vpmg_ibForece:  Chopped EXP %d times!\n", nchop);*/
+                            force[0] += (zkappa2*fmag*tgrad[0]);
+                            force[1] += (zkappa2*fmag*tgrad[1]);
+                            force[2] += (zkappa2*fmag*tgrad[2]);
                         } else {
                             /* Use of bulk factor (zkappa2) OK here becuase
                              * LPBE force approximation */
