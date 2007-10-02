@@ -3,9 +3,12 @@
                                    XXX 200X
 #############################################################################
 - NEW FEATURES
+	* simplified parameter input for ION and SMPBE keywords (key-value pairs)
+	* added in "fast" compile-time option that uses optimized parameters for multigrid calculations
 - BUG FIXES
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
 	* Fixed small typo in user guide in installation instructions
+	* Fixed memory leaks in the APOLAR code 
 
 #############################################################################
                                  VERSION 0.5.1 
