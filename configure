@@ -22604,7 +22604,7 @@ lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
 
 
 
-                                                                                                                                                                                                                                                                                                                      ac_config_files="$ac_config_files Makefile contrib/Makefile contrib/blas/Makefile contrib/pmgZ/Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/alkanes/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/protein-rna/Makefile examples/solv/Makefile bin/Makefile"
+                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile contrib/Makefile contrib/blas/Makefile contrib/pmgZ/Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/alkanes/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/protein-rna/Makefile examples/smpbe/Makefile examples/solv/Makefile bin/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -23190,6 +23190,7 @@ do
   "examples/pka-lig/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/pka-lig/Makefile" ;;
   "examples/point-pmf/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/point-pmf/Makefile" ;;
   "examples/protein-rna/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/protein-rna/Makefile" ;;
+  "examples/smpbe/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/smpbe/Makefile" ;;
   "examples/solv/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/solv/Makefile" ;;
   "bin/Makefile" ) CONFIG_FILES="$CONFIG_FILES bin/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

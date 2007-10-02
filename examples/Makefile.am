@@ -14,7 +14,7 @@ $(srcdir)/Makefile.in:
 
 Makefile:
 
-#SUBDIRS = actin-dimer alkanes born FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf protein-rna solv 
+#SUBDIRS = actin-dimer alkanes born FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf protein-rna smpbe solv 
 
 clean:
 	cd actin-dimer; make clean
@@ -28,6 +28,7 @@ clean:
 	cd pka-lig; make clean
 	cd point-pmf; make clean
 	cd protein-rna; make clean
+	cd smbe; make clean
 	cd solv; make clean
 
 test:
@@ -44,6 +45,7 @@ test:
 	cd pka-lig; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 	cd point-pmf; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 	cd protein-rna; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd smpbe; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 	cd solv; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 
 test.serial: test

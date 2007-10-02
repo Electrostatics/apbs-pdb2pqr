@@ -1101,6 +1101,7 @@ AC_OUTPUT([
     examples/pka-lig/Makefile
     examples/point-pmf/Makefile
     examples/protein-rna/Makefile
+    examples/smpbe/Makefile
     examples/solv/Makefile
     
     bin/Makefile
