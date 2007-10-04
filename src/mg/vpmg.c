@@ -146,6 +146,199 @@ VPUBLIC Vpmg* Vpmg_ctor(Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     return thee;
 }
 
+VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
+					   Vpmg *pmgOLD, MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
+	
+    int i, j, nion;
+    double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION], zkappa2, zks2;
+    double ionstr, partMin[3], partMax[3];
+	
+    /* Get the parameters */
+    VASSERT(pmgp != VNULL);
+    VASSERT(pbe != VNULL);
+    thee->pmgp = pmgp;
+    thee->pbe = pbe;
+	
+    /* Set up the memory */
+    thee->vmem = Vmem_ctor("APBS:VPMG");
+	
+    /* Calculate storage requirements */
+    F77MGSZ(
+			&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+			&(thee->pmgp->mgsolv), 
+			&(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
+			&(thee->pmgp->nlev), 
+			&(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
+			&(thee->pmgp->nf), &(thee->pmgp->nc), 
+			&(thee->pmgp->narr), &(thee->pmgp->narrc), 
+			&(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
+			&(thee->pmgp->nrwk), &(thee->pmgp->niwk)
+			);
+	
+    /* We need some additional storage if: nonlinear & newton OR cgmg */
+	/* SMPBE Added - nonlin = 2 added since it mimics NPBE */
+    if ( ( ((thee->pmgp->nonlin == 1) || (thee->pmgp->nonlin == 2)) 
+		   && (thee->pmgp->meth == 1) )
+		 || (thee->pmgp->meth == 0) ) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
+    }
+	
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
+			  thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose nlev = %d\n", 
+			  thee->pmgp->nlev);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose nxc = %d, nyc = %d, nzc = %d\n", 
+			  thee->pmgp->nxc, thee->pmgp->nyc, thee->pmgp->nzc);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose nf = %d, nc = %d\n", 
+			  thee->pmgp->nf, thee->pmgp->nc);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose narr = %d, narrc = %d\n", 
+			  thee->pmgp->narr, thee->pmgp->narrc);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose n_rpc = %d, n_iz = %d, n_ipc = %d\n", 
+			  thee->pmgp->n_rpc, thee->pmgp->n_iz, thee->pmgp->n_ipc);
+	Vnm_print(0, "Vpmg_ctor2:  PMG chose nrwk = %d, niwk = %d\n", 
+			  thee->pmgp->nrwk, thee->pmgp->niwk);
+	
+	/* Allocate boundary storage */
+	thee->gxcf = (double *)Vmem_malloc(thee->vmem,
+									   10*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
+	thee->gycf = (double *)Vmem_malloc(thee->vmem,
+									   10*(thee->pmgp->nx)*(thee->pmgp->nz), sizeof(double));
+	thee->gzcf = (double *)Vmem_malloc(thee->vmem,
+									   10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
+	
+	if (focusFlag) {
+		/* Overwrite any default or user-specified boundary condition
+		* arguments; we are now committed to a calculation via focusing */
+		if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			Vnm_print(2, 
+					  "Vpmg_ctor2: reset boundary condition flag to BCFL_FOCUS!\n");
+			thee->pmgp->bcfl = BCFL_FOCUS;
+		}
+		
+		/* Fill boundaries */
+		Vnm_print(0, "Vpmg_ctor2:  Filling boundary with old solution!\n");
+		focusFillBound(thee, pmgOLD);
+		
+		/* Calculate energetic contributions from region outside focusing
+			* domain */
+		if (energyFlag != PCE_NO) {
+			
+			if (mgparm->type == MCT_PARALLEL) {
+				
+				for (j=0; j<3; j++) {
+					partMin[j] = mgparm->partDisjCenter[j]
+					- 0.5*mgparm->partDisjLength[j];
+					partMax[j] = mgparm->partDisjCenter[j]
+						+ 0.5*mgparm->partDisjLength[j];
+				}
+				
+			} else {
+				for (j=0; j<3; j++) {
+					partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
+					partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
+				}
+			}
+			extEnergy(thee, pmgOLD, energyFlag, partMin, partMax, 
+					  mgparm->partDisjOwnSide);
+		}
+		
+	} else {
+		
+		/* Ignore external energy contributions */
+		thee->extQmEnergy = 0;
+		thee->extDiEnergy = 0;
+		thee->extQfEnergy = 0;
+	}
+	
+	
+	/* Allocate partition vector storage */
+	thee->pvec = (double *)Vmem_malloc(thee->vmem,
+									   (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
+	
+	/* Allocate remaining storage */
+	thee->iparm = (int *)Vmem_malloc(thee->vmem, 100, sizeof(int));
+	thee->rparm = (double *)Vmem_malloc(thee->vmem, 100, sizeof(double));
+	thee->iwork = (int *)Vmem_malloc(thee->vmem, thee->pmgp->niwk,
+									 sizeof(int));
+	thee->rwork = (double *)Vmem_malloc(thee->vmem, thee->pmgp->nrwk,
+										sizeof(double));
+	thee->charge = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+										 sizeof(double));
+	thee->kappa = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+										sizeof(double));
+	thee->epsx = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->epsy = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->epsz = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->a1cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->a2cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->a3cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									   sizeof(double));
+	thee->ccf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									  sizeof(double));
+	thee->fcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									  sizeof(double));
+	thee->tcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									  sizeof(double));
+	thee->u = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+									sizeof(double));
+	thee->xf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nx),
+									 sizeof(double));
+	thee->yf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->ny),
+									 sizeof(double));
+	thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz),
+									 sizeof(double));
+	
+	/* Plop some of the parameters into the iparm and rparm arrays */
+	F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
+			  &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
+			  &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
+			  &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
+			  &(thee->pmgp->ipcon), &(thee->pmgp->nonlin), &(thee->pmgp->mgsmoo),
+			  &(thee->pmgp->mgprol), &(thee->pmgp->mgcoar), &(thee->pmgp->mgsolv),
+			  &(thee->pmgp->mgdisc), &(thee->pmgp->iinfo), &(thee->pmgp->errtol),
+			  &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
+			  &(thee->pmgp->irite), &(thee->pmgp->iperf));
+	
+	
+	/* Initialize ion concentrations and valencies in PMG routines */
+	zkappa2 = Vpbe_getZkappa2(thee->pbe);
+	ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
+	if (ionstr > 0.0) zks2 = 0.5/ionstr;
+	else zks2 = 0.0;
+	Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
+	
+	/* Currently for SMPBE type calculations we do not want to apply a scale
+		factor to the ionConc */
+	switch(pmgp->ipkey){
+		case IPKEY_SMPBE:
+			//Do Nothing
+			break;
+		default:
+			//Else adjust the inoConc by scaling factor zks2
+			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
+			break;
+	}
+
+
+F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
+
+/* Set the default chargeSrc for 5th order splines */
+
+thee->chargeSrc = mgparm->chgs;
+
+/* Turn off restriction of observable calculations to a specific
+* partition */
+Vpmg_unsetPart(thee);
+
+/* The coefficient arrays have not been filled */
+thee->filled = 0;
+
+return 1;
+}
 
 VPUBLIC int Vpmg_solve(Vpmg *thee) {
 
@@ -1465,201 +1658,6 @@ VPRIVATE double Vpmg_qfEnergyVolume(Vpmg *thee, int extFlag) {
     if (extFlag == 1) energy += thee->extQfEnergy;
 
     return energy;
-}
-
-VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
-        Vpmg *pmgOLD, MGparm *mgparm, PBEparm_calcEnergy energyFlag) {
-
-    int i, j, nion;
-    double ionConc[MAXION], ionQ[MAXION], ionRadii[MAXION], zkappa2, zks2;
-    double ionstr, partMin[3], partMax[3];
-
-    /* Get the parameters */
-    VASSERT(pmgp != VNULL);
-    VASSERT(pbe != VNULL);
-    thee->pmgp = pmgp;
-    thee->pbe = pbe;
-
-    /* Set up the memory */
-    thee->vmem = Vmem_ctor("APBS:VPMG");
-
-    /* Calculate storage requirements */
-    F77MGSZ(
-          &(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
-          &(thee->pmgp->mgsolv), 
-          &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
-          &(thee->pmgp->nlev), 
-          &(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
-          &(thee->pmgp->nf), &(thee->pmgp->nc), 
-          &(thee->pmgp->narr), &(thee->pmgp->narrc), 
-          &(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
-          &(thee->pmgp->nrwk), &(thee->pmgp->niwk)
-          );
-
-    /* We need some additional storage if: nonlinear & newton OR cgmg */
-    if ( ( ((thee->pmgp->nonlin == 1) || (thee->pmgp->nonlin == 2)) /* SMPBE Added - nonlin = 2 added since it mimics NPBE */
-			&& (thee->pmgp->meth == 1) )
-        || (thee->pmgp->meth == 0) ) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
-    }
-
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
-            thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose nlev = %d\n", 
-            thee->pmgp->nlev);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose nxc = %d, nyc = %d, nzc = %d\n", 
-            thee->pmgp->nxc, thee->pmgp->nyc, thee->pmgp->nzc);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose nf = %d, nc = %d\n", 
-            thee->pmgp->nf, thee->pmgp->nc);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose narr = %d, narrc = %d\n", 
-            thee->pmgp->narr, thee->pmgp->narrc);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose n_rpc = %d, n_iz = %d, n_ipc = %d\n", 
-            thee->pmgp->n_rpc, thee->pmgp->n_iz, thee->pmgp->n_ipc);
-    Vnm_print(0, "Vpmg_ctor2:  PMG chose nrwk = %d, niwk = %d\n", 
-            thee->pmgp->nrwk, thee->pmgp->niwk);
-
-    /* Allocate boundary storage */
-    thee->gxcf = (double *)Vmem_malloc(thee->vmem,
-      10*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
-    thee->gycf = (double *)Vmem_malloc(thee->vmem,
-      10*(thee->pmgp->nx)*(thee->pmgp->nz), sizeof(double));
-    thee->gzcf = (double *)Vmem_malloc(thee->vmem,
-      10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
-
-    if (focusFlag) {
-        /* Overwrite any default or user-specified boundary condition
-         * arguments; we are now committed to a calculation via focusing */
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
-            Vnm_print(2, 
-            "Vpmg_ctor2: reset boundary condition flag to BCFL_FOCUS!\n");
-            thee->pmgp->bcfl = BCFL_FOCUS;
-        }
-
-        /* Fill boundaries */
-        Vnm_print(0, "Vpmg_ctor2:  Filling boundary with old solution!\n");
-        focusFillBound(thee, pmgOLD);
-
-        /* Calculate energetic contributions from region outside focusing
-         * domain */
-        if (energyFlag != PCE_NO) {
-
-            if (mgparm->type == MCT_PARALLEL) {
-
-                for (j=0; j<3; j++) {
-                    partMin[j] = mgparm->partDisjCenter[j]
-                        - 0.5*mgparm->partDisjLength[j];
-                    partMax[j] = mgparm->partDisjCenter[j]
-                        + 0.5*mgparm->partDisjLength[j];
-                }
-
-            } else {
-                for (j=0; j<3; j++) {
-                    partMin[j] = mgparm->center[j] - 0.5*mgparm->glen[j];
-                    partMax[j] = mgparm->center[j] + 0.5*mgparm->glen[j];
-                }
-            }
-            extEnergy(thee, pmgOLD, energyFlag, partMin, partMax, 
-                    mgparm->partDisjOwnSide);
-        }
-        /* Destroy old Vpmg object */
-        Vpmg_dtor(&pmgOLD);
-       
-    } else {
-
-        /* Ignore external energy contributions */
-        thee->extQmEnergy = 0;
-        thee->extDiEnergy = 0;
-        thee->extQfEnergy = 0;
-    }
-    
-
-    /* Allocate partition vector storage */
-    thee->pvec = (double *)Vmem_malloc(thee->vmem,
-      (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
-
-    /* Allocate remaining storage */
-    thee->iparm = (int *)Vmem_malloc(thee->vmem, 100, sizeof(int));
-    thee->rparm = (double *)Vmem_malloc(thee->vmem, 100, sizeof(double));
-    thee->iwork = (int *)Vmem_malloc(thee->vmem, thee->pmgp->niwk,
-      sizeof(int));
-    thee->rwork = (double *)Vmem_malloc(thee->vmem, thee->pmgp->nrwk,
-      sizeof(double));
-    thee->charge = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->kappa = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->epsx = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->epsy = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->epsz = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->a1cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->a2cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->a3cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->ccf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->fcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->tcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->u = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-      sizeof(double));
-    thee->xf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nx),
-      sizeof(double));
-    thee->yf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->ny),
-      sizeof(double));
-    thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz),
-      sizeof(double));
-
-    /* Plop some of the parameters into the iparm and rparm arrays */
-    F77PACKMG(thee->iparm, thee->rparm, &(thee->pmgp->nrwk), &(thee->pmgp->niwk),
-      &(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz),
-      &(thee->pmgp->nlev), &(thee->pmgp->nu1), &(thee->pmgp->nu2),
-      &(thee->pmgp->mgkey), &(thee->pmgp->itmax), &(thee->pmgp->istop),
-      &(thee->pmgp->ipcon), &(thee->pmgp->nonlin), &(thee->pmgp->mgsmoo),
-      &(thee->pmgp->mgprol), &(thee->pmgp->mgcoar), &(thee->pmgp->mgsolv),
-      &(thee->pmgp->mgdisc), &(thee->pmgp->iinfo), &(thee->pmgp->errtol),
-      &(thee->pmgp->ipkey), &(thee->pmgp->omegal), &(thee->pmgp->omegan),
-      &(thee->pmgp->irite), &(thee->pmgp->iperf));
-
-
-    /* Initialize ion concentrations and valencies in PMG routines */
-    zkappa2 = Vpbe_getZkappa2(thee->pbe);
-    ionstr = Vpbe_getBulkIonicStrength(thee->pbe);
-    if (ionstr > 0.0) zks2 = 0.5/ionstr;
-    else zks2 = 0.0;
-    Vpbe_getIons(thee->pbe, &nion, ionConc, ionRadii, ionQ);
-
-	/* Currently for SMPBE type calculations we do not want to apply a scale
-	   factor to the ionConc */
-	switch(pmgp->ipkey){
-		case IPKEY_SMPBE:
-			//Do Nothing
-			break;
-		default:
-			//Else adjust the inoConc by scaling factor zks2
-			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
-			break;
-	}
-    
-
-    F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
-
-    /* Set the default chargeSrc for 5th order splines */
-    
-    thee->chargeSrc = mgparm->chgs;
-
-    /* Turn off restriction of observable calculations to a specific
-     * partition */
-    Vpmg_unsetPart(thee);
-
-    /* The coefficient arrays have not been filled */
-    thee->filled = 0;
-
-    return 1;
 }
 
 VPRIVATE void Vpmg_splineSelect(int srfm,Vacc *acc,double *gpos,double win,

@@ -846,12 +846,17 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 	pmgp[icalc]->ycent = realCenter[1];
 	pmgp[icalc]->zcent = realCenter[2];
 	if (pbeparm->bcfl == BCFL_FOCUS) {
-		if (icalc == 0) {
-			Vnm_tprint( 2, "Can't focus first calculation!\n");
-			return 0;
-		}
-		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 1, pmg[icalc-1],
-						   mgparm, pbeparm->calcenergy);       
+        if (icalc == 0) {
+            Vnm_tprint( 2, "Can't focus first calculation!\n");
+            return 0;
+        }
+        /* Focusing requires the previous calculation in order to setup the 
+        current run... */
+        pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 1, pmg[icalc-1],
+							   mgparm, pbeparm->calcenergy);   
+        /* ...however, it should be done with the previous calculation now, so 
+        we should be able to destroy it here. */
+        Vpmg_dtor(&(pmg[icalc-1]));   
 	} else {
 		if (icalc>0) Vpmg_dtor(&(pmg[icalc-1]));
 		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 0, VNULL, mgparm, PCE_NO);
@@ -944,11 +949,13 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 #ifndef VAPBSQUIET
 	Vnm_tprint(1, "Destroying multigrid structures.\n");
 #endif
+	int i;
 	
-	Vpbe_dtor(&(pbe[nosh->ncalc-1]));
-	Vpmg_dtor(&(pmg[nosh->ncalc-1]));
-	Vpmgp_dtor(&(pmgp[nosh->ncalc-1]));
-	
+	for(i=0;i<nosh->ncalc;i++){
+		Vpbe_dtor(&(pbe[i]));
+		Vpmg_dtor(&(pmg[i]));
+		Vpmgp_dtor(&(pmgp[i]));
+	}
 }
 
 VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {
