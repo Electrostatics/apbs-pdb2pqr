@@ -121,7 +121,7 @@
 
 #include "vsh_p.h"
 
-VEMBED(rcsid="$Id: vyacc.c,v 1.10 2003/07/05 20:44:12 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 VPUBLIC void yyerror(const char *errmsg)
 {

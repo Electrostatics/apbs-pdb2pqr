@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: maloc.h,v 1.16 2006/06/03 07:22:28 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 

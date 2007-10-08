@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vmp.c,v 1.9 2006/06/03 07:22:29 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -37,7 +37,7 @@
 
 #include "vmp_p.h"
 
-VEMBED(rcsid="$Id: vmp.c,v 1.9 2006/06/03 07:22:29 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 #define USE_VCOM_NOT 1
 

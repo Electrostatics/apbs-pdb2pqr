@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vmp_p.h,v 1.4 2006/06/03 07:22:29 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 

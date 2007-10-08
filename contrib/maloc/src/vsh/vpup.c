@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vpup.c,v 1.8 2002/10/01 21:29:45 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -48,7 +48,7 @@
 #include "vsh_p.h"
 #include "vpup.h"
 
-VEMBED(rcsid="$Id: vpup.c,v 1.8 2002/10/01 21:29:45 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 /* define VPUP_SHELL 1 */
 

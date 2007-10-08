@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vmem.c,v 1.12 2006/07/28 02:11:50 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -33,7 +33,7 @@
 
 #include "vmem_p.h"
 
-VEMBED(rcsid="$Id: vmem.c,v 1.12 2006/07/28 02:11:50 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 /* total and misc (default) malloc/free tracking */
 VPRIVATE Vmem vmemTotal, vmemMisc;

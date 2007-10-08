@@ -3,7 +3,7 @@
  *  @ingroup APOLparm
  *  @author  David Gohara
  *  @brief   Class APOLparm methods
- *  @version $Id: apolparm.c 907 2006-07-27 20:36:20Z sdg0919 $
+ *  @version $Id$
  *  @attention
  *  @verbatim
  *
@@ -68,7 +68,7 @@
 #include "apbscfg.h"
 #include "apbs/apolparm.h"
 
-VEMBED(rcsid="$Id: apolparm.c 907 2006-07-27 20:36:20Z sdg0919 $")
+VEMBED(rcsid="$Id$")
 
 #if !defined(VINLINE_MGPARM)
 
