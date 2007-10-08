@@ -102,6 +102,8 @@
 				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
 				<command><link linkend="elec-npbe">npbe</link></command>
+				or
+				<command><link linkend="elec-smpbe">smpbe</link></command>
 			</member>
 			<member>
 				<command><link linkend="elec-bcfl">bcfl</link></command>
@@ -215,6 +217,8 @@
 				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
 				<command><link linkend="elec-npbe">npbe</link></command>
+				or
+				<command><link linkend="elec-smpbe">smpbe</link></command>
 			</member>
 			<member>
 				<command><link linkend="elec-bcfl">bcfl</link></command>
@@ -305,6 +309,8 @@
 				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
 				<command><link linkend="elec-npbe">npbe</link></command>
+				or
+				<command><link linkend="elec-smpbe">smpbe</link></command>
 			</member>
 			<member>
 				<command><link linkend="elec-bcfl">bcfl</link></command>
@@ -514,6 +520,8 @@
 				<command><link linkend="elec-lpbe">lpbe</link></command>
 				or
 				<command><link linkend="elec-npbe">npbe</link></command>
+				or
+				<command><link linkend="elec-smpbe">smpbe</link></command>
 			</member>
 			<member>
 				<command><link linkend="elec-bcfl">bcfl</link></command>
@@ -707,7 +715,7 @@
 											<para>"Zero" boundary condition.  Potential at boundary
 												is set to zero.  This condition is not commonly used
 												and can result in large errors if used
-												inapprpriately.</para>
+												inappropriately.</para>
 										</listitem>
 									</varlistentry>
 									<varlistentry>
@@ -1287,10 +1295,13 @@
 				<command>lpbe</command>
 			</cmdsynopsis>
 			<para>Specifies that the linearized PBE should be solved. Either this
-				keyword or 
-				<link linkend="elec-npbe"><command>npbe</command></link>, 
-				<link linkend="elec-nrpbe"><command>nrpbe</command></link>, or
-				<link linkend="elec-lrpbe"><command>lrpbe</command></link>, 
+				keyword or
+				<itemizedlist>
+					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
+					<listitem> <link linkend="elec-nrpbe"><command>nrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-lrpbe"><command>lrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-smpbe"><command>smpbe</command></link> </listitem>
+				</itemizedlist>
 				must be present (based on the calculation type).</para>
 		</listitem>
 
@@ -1303,12 +1314,15 @@
 				distribution with the corresponding Green's function. As a result of
 				this replacement, the solution corresponds to the reaction field
 				instead of the total potential; the total potential can be recovered by
-				adding the approrriate Coulombic terms to the solution. Likewise, this
+				adding the appropriate Coulombic terms to the solution. Likewise, this
 				equation immediately yields the solvation energy without the need for
 				reference calculations. Either this keyword or 
-				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
-				<link linkend="elec-npbe"><command>npbe</command></link>, or
-				<link linkend="elec-nrpbe"><command>nrpbe</command></link>,
+				<itemizedlist>
+					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
+					<listitem> <link linkend="elec-nrpbe"><command>nrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-lrpbe"><command>lrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-smpbe"><command>smpbe</command></link> </listitem>
+				</itemizedlist>
 				must be present (based on the calculation type).
 				<note>
 					<para>This function is only available for FEM-based solvers.</para>
@@ -1407,9 +1421,12 @@
 			</cmdsynopsis>
 			<para>Specifies that the nonlinear (full) PBE should be solved. Either
 				this keyword or 
-				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
-				<link linkend="elec-nrpbe"><command>nrpbe</command></link>, or
-				<link linkend="elec-lrpbe"><command>lrpbe</command></link>, 
+				<itemizedlist>
+					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
+					<listitem> <link linkend="elec-nrpbe"><command>nrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-lrpbe"><command>lrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-smpbe"><command>smpbe</command></link> </listitem>
+				</itemizedlist>
 				must be present (based on the calculation type).</para>
 		</listitem>
 
@@ -1422,12 +1439,15 @@
 				distribution with the corresponding Green's function. As a result of
 				this replacement, the solution corresponds to the reaction field
 				instead of the total potential; the total potential can be recovered by
-				adding the approrriate Coulombic terms to the solution. Likewise, this
+				adding the appropriate Coulombic terms to the solution. Likewise, this
 				equation immediately yields the solvation energy without the need for
 				reference calculations. Either this keyword or 
-				<link linkend="elec-lpbe"><command>lpbe</command></link>, 
-				<link linkend="elec-npbe"><command>npbe</command></link>, or
-				<link linkend="elec-nrpbe"><command>nrpbe</command></link>
+				<itemizedlist>
+					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
+					<listitem> <link linkend="elec-nrpbe"><command>nrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-lrpbe"><command>lrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-smpbe"><command>smpbe</command></link> </listitem>
+				</itemizedlist>
 				must be present (based on the calculation type).
 				<note>
 					<para>This function is only available for FEM-based solvers.</para>
@@ -1632,6 +1652,28 @@
 				</variablelist>
 			</para>
 		</listitem>
+		
+		<listitem id="elec-smpbe">
+			<cmdsynopsis>
+				<command>smpbe</command>
+				<command>vol</command>
+				<arg choice="req"> <replaceable>volume</replaceable> </arg>
+				<command>size</command>
+				<arg choice="req"> <replaceable>number</replaceable> </arg>
+			</cmdsynopsis>
+			<para>
+				Specifies that the size-modified PBE should be solved as described by Chu V, et al <citetitle>Biophys J</citetitle>, in press (<ulink url="http://dx.doi.org/10.1529/biophysj.106.099168">doi:10.1529/biophysj.106.099168</ulink>).
+				The parameter <replaceable>radius</replaceable> controls the lattice size (in Angstroms) used in the SMPBE formalism; each lattice site has a volume equal to <replaceable>radius</replaceable><superscript>3</superscript>.  The parameter <replaceable>size</replaceable> controls the relative size of the ions (in Angstroms) such that each lattice site can contain a single ion of volume <replaceable>radius</replaceable><superscript>3</superscript> or <replaceable>size</replaceable> ions of volume <replaceable>radius</replaceable><superscript>3</superscript>/<replaceable>size</replaceable>.
+				Either this keyword or
+				<itemizedlist>
+					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
+					<listitem> <link linkend="elec-nrpbe"><command>nrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-lrpbe"><command>lrpbe</command></link> </listitem>
+					<listitem> <link linkend="elec-smpbe"><command>smpbe</command></link> </listitem>
+				</itemizedlist>
+				must be present (based on the calculation type).</para>
+		</listitem>
+		
 
 		<listitem id="elec-srad">
 			<cmdsynopsis>
@@ -1719,7 +1761,7 @@
 												is defined by an "inflated" van der Waals model.
 												Specifically, the radius of each biomolecular atom is
 												increased by the radius of the ion species.  The
-												problem domain is then divded into two spaces.  The
+												problem domain is then divided into two spaces.  The
 												space inside the union of these inflated atomic spheres
 												is assigned an ion-accessibility value of 0; the
 												complement space is assigned bulk ion accessibility
@@ -1731,7 +1773,7 @@
 										<term>smol</term>
 										<listitem>
 											<para>
-												The dielectric and ion-accessiblity coefficients are
+												The dielectric and ion-accessibility coefficients are
 												defined as for mol (see above).  However, they are then
 												"smoothed" by a 9-point harmonic averaging to somewhat
 												reduce sensitivity to the grid setup as described by
