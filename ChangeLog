@@ -4,7 +4,8 @@
 #############################################################################
 - NEW FEATURES
 	* Simplified parameter input for ION and SMPBE keywords (key-value pairs) 
-	* Examples for SMPBE code
+	* Examples and documentation for size-modified PBE code (Vincent Chu
+et al)
 	* Added in "fast" compile-time option that uses optimized parameters for multigrid calculations
 - BUG FIXES
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
