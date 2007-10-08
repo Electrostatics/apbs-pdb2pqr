@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vnm.c,v 1.16 2004/10/28 05:11:43 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -45,7 +45,7 @@
 
 #include "vnm_p.h"
 
-VEMBED(rcsid="$Id: vnm.c,v 1.16 2004/10/28 05:11:43 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 #if defined(HAVE_UNISTD_H)
 #   include <unistd.h> 

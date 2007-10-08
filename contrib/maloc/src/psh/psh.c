@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: psh.c,v 1.38 2006/06/03 07:22:29 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -33,7 +33,7 @@
 
 #include "psh_p.h"
 
-VEMBED(rcsid="$Id: psh.c,v 1.38 2006/06/03 07:22:29 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 /* parallel shell commands */
 typedef enum PSH_command {

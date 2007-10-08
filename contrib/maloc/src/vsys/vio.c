@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vio.c,v 1.28 2004/02/18 01:10:56 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -33,7 +33,7 @@
 
 #include "vio_p.h"
 
-VEMBED(rcsid="$Id: vio.c,v 1.28 2004/02/18 01:10:56 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 #if defined(HAVE_UNISTD_H)
 #   include <unistd.h>

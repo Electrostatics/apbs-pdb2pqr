@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vio.h,v 1.18 2004/02/18 01:10:56 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 

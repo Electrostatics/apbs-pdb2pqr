@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: main.c,v 1.11 2003/07/05 21:11:29 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -38,7 +38,7 @@
 
 #define VEMBED(rctag) VPRIVATE const char* rctag; \
     static void* use_rcsid=(0 ? &use_rcsid : (void*)&rcsid);
-VEMBED(rcsid="$Id: main.c,v 1.11 2003/07/05 21:11:29 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 /* int MAIN__(void) {}; */
 

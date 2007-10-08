@@ -469,7 +469,7 @@ char *yytext;
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vlex.l,v 1.5 2002/10/01 21:29:45 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 /*
@@ -484,7 +484,7 @@ char *yytext;
 
 #include "vsh_p.h"
 
-VEMBED(rcsid="$Id: vlex.l,v 1.5 2002/10/01 21:29:45 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 #define YY_NO_UNPUT 1
 #undef YY_INPUT

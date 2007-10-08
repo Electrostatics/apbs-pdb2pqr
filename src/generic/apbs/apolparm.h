@@ -6,7 +6,7 @@
  *  @file     femparm.h
  *  @ingroup  APOLparm
  *  @brief    Contains declarations for class APOLparm
- *  @version  $Id: femparm.h 907 2006-07-27 20:36:20Z sobolevnrm $
+ *  @version  $Id$
  *  @author   Nathan A. Baker
  *
  *  @attention

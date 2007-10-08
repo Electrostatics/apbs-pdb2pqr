@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: vsh.c,v 1.23 2002/10/01 21:29:45 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -34,7 +34,7 @@
 #include "vsh_p.h"
 #include "vpup.h"
 
-VEMBED(rcsid="$Id: vsh.c,v 1.23 2002/10/01 21:29:45 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 /* use lex/yacc or not */
 #define VSH_LEX_YACC_NOT 1

@@ -17,7 +17,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: viofb.c,v 1.15 2002/10/01 21:29:45 mholst Exp $"
+ * rcsid="$Id$"
  * ***************************************************************************
  */
 
@@ -42,7 +42,7 @@
 
 #include "vio_p.h"
 
-VEMBED(rcsid="$Id: viofb.c,v 1.15 2002/10/01 21:29:45 mholst Exp $")
+VEMBED(rcsid="$Id$")
 
 #define MAXVIO 10
 VPRIVATE Vio theVio[MAXVIO];

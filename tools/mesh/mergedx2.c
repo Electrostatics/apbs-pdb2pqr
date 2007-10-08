@@ -2,7 +2,7 @@
 *  @file     mergedx2.c
  *  @author  David Gohara, Stephen Bond and Nathan Baker
  *  @brief   Program that merges OpenDX files
- *  @version $Id: mergedx.c 1033 2007-02-25 17:08:22Z sdg0919 $
+ *  @version $Id$
  *
  *  @attention
  *  @verbatim
@@ -72,7 +72,7 @@
 #define IJK(i,j,k)  (((k)*(nx)*(ny))+((j)*(nx))+(i))
 #define INTERVAL(x,a,b) (((x) >= (a)) && ((x) <= (b)))
 
-VEMBED(rcsid="$Id: mergedx.c 1033 2006-12-29 17:08:22Z sdg0919 $")
+VEMBED(rcsid="$Id$")
 
 VPRIVATE int Vgrid_readDXhead(Vgrid *thee,
   const char *iodev, const char *iofmt, const char *thost, const char *fname);
