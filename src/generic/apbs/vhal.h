@@ -78,13 +78,13 @@
  *	@ingroup Vhal
  *	@author	 David Gohara
  *	@brief	 Return code enumerations
+ *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
  */
 enum eVrc_Codes {
 	
-	VRC_WARNING=-1, /**< Note that the enumerated values are opposite the standrd
-					 *   for FAILURE and SUCCESS  */
-	VRC_FAILURE=0,
-	VRC_SUCCESS=1    
+	VRC_WARNING=-1, /** A non-fatal error  */
+	VRC_FAILURE=0,  /** A fatal error */
+	VRC_SUCCESS=1   /** A successful execution */
 
 };
 typedef enum eVrc_Codes Vrc_Codes;
