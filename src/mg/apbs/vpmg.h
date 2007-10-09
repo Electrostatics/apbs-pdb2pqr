@@ -208,10 +208,8 @@ VEXTERNC Vpmg* Vpmg_ctor(
         Vpbe *pbe,  /** PBE-specific variables */
         int focusFlag,  /** 1 for focusing, 0 otherwise */
         Vpmg *pmgOLD,  /** Old Vpmg object to use for boundary conditions */
-        MGparm *mgparm,  /** MGparm parameter object for boundary 
-                          * conditions */
-        PBEparm_calcEnergy energyFlag  /** What types of energies to 
-                                        * calculate */
+        MGparm *mgparm,  /** MGparm parameter object for boundary conditions */
+        PBEparm_calcEnergy energyFlag  /** What types of energies to calculate */
         );
 
 /** 

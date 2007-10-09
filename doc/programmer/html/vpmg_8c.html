@@ -39,57 +39,57 @@ Include dependency graph for vpmg.c:<p><center><img src="vpmg_8c__incl.png" bord
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC <a class="el" href="structsVpmg.html">Vpmg</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a2">Vpmg_ctor</a> (<a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int focusFlag, <a class="el" href="structsVpmg.html">Vpmg</a> *pmgOLD, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="pbeparm_8h.html#a0">PBEparm_calcEnergy</a> energyFlag)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Constructor for the Vpmg class (allocates new memory). </em> <a href="group__Vpmg.html#a2"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a3">Vpmg_solve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a3">Vpmg_ctor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int focusFlag, <a class="el" href="structsVpmg.html">Vpmg</a> *pmgOLD, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="pbeparm_8h.html#a0">PBEparm_calcEnergy</a> energyFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve the PBE using PMG. </em> <a href="group__Vpmg.html#a3"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a4">Vpmg_dtor</a> (<a class="el" href="structsVpmg.html">Vpmg</a> **thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub constructor for the Vpmg class (uses previously-allocated memory). </em> <a href="group__Vpmg.html#a3"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a4">Vpmg_solve</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object destructor. </em> <a href="group__Vpmg.html#a4"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_dtor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve the PBE using PMG. </em> <a href="group__Vpmg.html#a4"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a5">Vpmg_dtor</a> (<a class="el" href="structsVpmg.html">Vpmg</a> **thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub object destructor. </em> <a href="group__Vpmg.html#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_setPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double lowerCorner[3], double upperCorner[3], int bflags[6])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Object destructor. </em> <a href="group__Vpmg.html#a5"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a6">Vpmg_dtor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set partition information which restricts the calculation of observables to a (rectangular) subset of the problem domain. </em> <a href="group__Vpmg.html#a6"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a7">Vpmg_unsetPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub object destructor. </em> <a href="group__Vpmg.html#a6"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a7">Vpmg_setPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double lowerCorner[3], double upperCorner[3], int bflags[6])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove partition restrictions. </em> <a href="group__Vpmg.html#a7"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a8">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a43">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set partition information which restricts the calculation of observables to a (rectangular) subset of the problem domain. </em> <a href="group__Vpmg.html#a7"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a8">Vpmg_unsetPart</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the specified array with accessibility values. </em> <a href="group__Vpmg.html#a8"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a9">Vpmg_polarizEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Remove partition restrictions. </em> <a href="group__Vpmg.html#a8"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a9">Vpmg_fillArray</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, double *vec, <a class="el" href="vhal_8h.html#a43">Vdata_Type</a> type, double parm, <a class="el" href="vhal_8h.html#a0">Vhal_PBEType</a> pbetype)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Determines energy from polarizeable charge and interaction with fixed charges according to Rocchia et al. </em> <a href="#a9"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a10">Vpmg_energy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Fill the specified array with accessibility values. </em> <a href="group__Vpmg.html#a9"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a10">Vpmg_polarizEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the total electrostatic energy. </em> <a href="group__Vpmg.html#a10"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a11">Vpmg_dielEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Determines energy from polarizeable charge and interaction with fixed charges according to Rocchia et al. </em> <a href="#a10"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a11">Vpmg_energy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "polarization" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a11"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a12">Vpmg_dielGradNorm</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the total electrostatic energy. </em> <a href="group__Vpmg.html#a11"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a12">Vpmg_dielEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the integral of the gradient of the dielectric function. </em> <a href="group__Vpmg.html#a12"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a13">Vpmg_qmEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "polarization" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a12"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a13">Vpmg_dielGradNorm</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "mobile charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a13"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a15">Vpmg_qmEnergySMPBE</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the integral of the gradient of the dielectric function. </em> <a href="group__Vpmg.html#a13"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a14">Vpmg_qmEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Vpmg_qmEnergy for SMPBE. </em> <a href="#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a16">Vpmg_qfEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "mobile charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a14"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a16">Vpmg_qmEnergySMPBE</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "fixed charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a16"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a17">Vpmg_qfEnergyPoint</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Vpmg_qmEnergy for SMPBE. </em> <a href="#a16"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a17">Vpmg_qfEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates charge-potential energy using summation over delta function positions (i.e. something like an Linf norm). </em> <a href="#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a18">Vpmg_qfAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the "fixed charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a17"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a18">Vpmg_qfEnergyPoint</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the per-atom "fixed charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a18"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a19">Vpmg_qfEnergyVolume</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates charge-potential energy using summation over delta function positions (i.e. something like an Linf norm). </em> <a href="#a18"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a19">Vpmg_qfAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVatom.html">Vatom</a> *atom)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates charge-potential energy as integral over a volume. </em> <a href="#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Vpmg.html#a20">Vpmg_ctor2</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe, int focusFlag, <a class="el" href="structsVpmg.html">Vpmg</a> *pmgOLD, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="pbeparm_8h.html#a0">PBEparm_calcEnergy</a> energyFlag)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get the per-atom "fixed charge" contribution to the electrostatic energy. </em> <a href="group__Vpmg.html#a19"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a20">Vpmg_qfEnergyVolume</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *thee, int extFlag)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub constructor for the Vpmg class (uses previously-allocated memory). </em> <a href="group__Vpmg.html#a20"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates charge-potential energy as integral over a volume. </em> <a href="#a20"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>VPRIVATE void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="vpmg_8c.html#a21">Vpmg_splineSelect</a> (int srfm, <a class="el" href="structsVacc.html">Vacc</a> *acc, double *gpos, double win, double infrad, <a class="el" href="structsVatom.html">Vatom</a> *atom, double *force)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7. </em> <a href="#a21"></a><em><br><br></td></tr>
@@ -218,7 +218,7 @@ Include dependency graph for vpmg.c:<p><center><img src="vpmg_8c__incl.png" bord
 Class Vpmg methods. 
 <p>
 <dl compact><dt><b>Author:</b></dt><dd>Nathan Baker </dd></dl>
-<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vpmg_8c.html">vpmg.c</a> 1103 2007-07-05 21:06:44Z sdg0919 </dd></dl>
+<dl compact><dt><b>Version:</b></dt><dd><dl compact><dt><b>Id</b></dt><dd><a class="el" href="vpmg_8c.html">vpmg.c</a> 1154 2007-10-08 20:20:27Z sobolevnrm </dd></dl>
 </dd></dl>
 <dl compact><dt><b>Attention:</b></dt><dd><div class="fragment"><pre>
  *
@@ -1042,17 +1042,17 @@ Here is the call graph for this function:<p><center><img src="vpmg_8c_a23_cgraph
 <map name="vpmg_8c_a23_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="575,58,687,85" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="549,109,714,136" alt="">
-<area href="group__Vpmg.html#a11" shape="rect" coords="139,286,267,313" alt="">
-<area href="group__Vpmg.html#a16" shape="rect" coords="145,210,262,237" alt="">
-<area href="group__Vpmg.html#a13" shape="rect" coords="141,349,266,376" alt="">
-<area href="group__Vpmg.html#a6" shape="rect" coords="350,58,457,85" alt="">
-<area href="group__Vpmg.html#a7" shape="rect" coords="342,109,465,136" alt="">
+<area href="group__Vpmg.html#a12" shape="rect" coords="139,286,267,313" alt="">
+<area href="group__Vpmg.html#a17" shape="rect" coords="145,210,262,237" alt="">
+<area href="group__Vpmg.html#a14" shape="rect" coords="141,349,266,376" alt="">
+<area href="group__Vpmg.html#a7" shape="rect" coords="350,58,457,85" alt="">
+<area href="group__Vpmg.html#a8" shape="rect" coords="342,109,465,136" alt="">
 <area href="group__Vpbe.html#a13" shape="rect" coords="570,261,693,288" alt="">
-<area href="vpmg_8c.html#a17" shape="rect" coords="329,210,478,237" alt="">
-<area href="vpmg_8c.html#a19" shape="rect" coords="322,261,485,288" alt="">
+<area href="vpmg_8c.html#a18" shape="rect" coords="329,210,478,237" alt="">
+<area href="vpmg_8c.html#a20" shape="rect" coords="322,261,485,288" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="566,210,697,237" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="565,160,698,186" alt="">
-<area href="vpmg_8c.html#a15" shape="rect" coords="318,362,489,389" alt="">
+<area href="vpmg_8c.html#a16" shape="rect" coords="318,362,489,389" alt="">
 <area href="group__Vcap.html#a0" shape="rect" coords="591,464,671,490" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="539,312,723,338" alt="">
 <area href="group__Vpbe.html#a25" shape="rect" coords="579,362,683,389" alt="">
@@ -2249,7 +2249,7 @@ Return 2.5 plus difference of i - f.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a9" doxytag="vpmg.c::Vpmg_polarizEnergy" ></a><p>
+<a class="anchor" name="a10" doxytag="vpmg.c::Vpmg_polarizEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2298,8 +2298,8 @@ If 1, add external energy contributions to result </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg_8c_a9_cgraph.png" border="0" usemap="#vpmg_8c_a9_cgraph_map" alt=""></center>
-<map name="vpmg_8c_a9_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg_8c_a10_cgraph.png" border="0" usemap="#vpmg_8c_a10_cgraph_map" alt=""></center>
+<map name="vpmg_8c_a10_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="233,8,345,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="206,58,371,85" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="223,109,354,136" alt="">
@@ -2310,7 +2310,7 @@ Here is the call graph for this function:<p><center><img src="vpmg_8c_a9_cgraph.
 <area href="group__Vpbe.html#a7" shape="rect" coords="215,362,362,389" alt="">
 <area href="group__Vpbe.html#a4" shape="rect" coords="211,413,366,440" alt="">
 </map>
-<a class="anchor" name="a17" doxytag="vpmg.c::Vpmg_qfEnergyPoint" ></a><p>
+<a class="anchor" name="a18" doxytag="vpmg.c::Vpmg_qfEnergyPoint" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2359,14 +2359,14 @@ If 1, add external energy contributions to result </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg_8c_a17_cgraph.png" border="0" usemap="#vpmg_8c_a17_cgraph_map" alt=""></center>
-<map name="vpmg_8c_a17_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg_8c_a18_cgraph.png" border="0" usemap="#vpmg_8c_a18_cgraph_map" alt=""></center>
+<map name="vpmg_8c_a18_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="233,8,345,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="206,58,371,85" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="223,109,354,136" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="222,160,355,186" alt="">
 </map>
-<a class="anchor" name="a19" doxytag="vpmg.c::Vpmg_qfEnergyVolume" ></a><p>
+<a class="anchor" name="a20" doxytag="vpmg.c::Vpmg_qfEnergyVolume" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2415,11 +2415,11 @@ If 1, add external energy contributions to result </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg_8c_a19_cgraph.png" border="0" usemap="#vpmg_8c_a19_cgraph_map" alt=""></center>
-<map name="vpmg_8c_a19_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg_8c_a20_cgraph.png" border="0" usemap="#vpmg_8c_a20_cgraph_map" alt=""></center>
+<map name="vpmg_8c_a20_cgraph_map">
 <area href="group__Vpbe.html#a13" shape="rect" coords="220,8,342,34" alt="">
 </map>
-<a class="anchor" name="a15" doxytag="vpmg.c::Vpmg_qmEnergySMPBE" ></a><p>
+<a class="anchor" name="a16" doxytag="vpmg.c::Vpmg_qmEnergySMPBE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2462,8 +2462,8 @@ Vpmg_qmEnergy for SMPBE.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="vpmg_8c_a15_cgraph.png" border="0" usemap="#vpmg_8c_a15_cgraph_map" alt=""></center>
-<map name="vpmg_8c_a15_cgraph_map">
+Here is the call graph for this function:<p><center><img src="vpmg_8c_a16_cgraph.png" border="0" usemap="#vpmg_8c_a16_cgraph_map" alt=""></center>
+<map name="vpmg_8c_a16_cgraph_map">
 <area href="group__Vcap.html#a0" shape="rect" coords="282,8,362,34" alt="">
 <area href="group__Vpbe.html#a3" shape="rect" coords="230,58,414,85" alt="">
 <area href="group__Vpbe.html#a25" shape="rect" coords="270,109,374,136" alt="">
@@ -2626,7 +2626,7 @@ Source term vector Work vector </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Jul 12 11:50:15 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Oct 9 07:37:05 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>

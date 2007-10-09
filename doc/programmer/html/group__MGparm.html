@@ -107,7 +107,7 @@ typedef <a class="el" href="structsMGparm.html">sMGparm</a>&nbsp;</td><td class=
 <tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a16">MGparm_ctor</a> (<a class="el" href="mgparm_8h.html#a0">MGparm_CalcType</a> type)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Construct MGparm object. </em> <a href="#a16"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a17">MGparm_ctor2</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee, <a class="el" href="mgparm_8h.html#a0">MGparm_CalcType</a> type)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a17">MGparm_ctor2</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee, <a class="el" href="mgparm_8h.html#a0">MGparm_CalcType</a> type)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub to construct MGparm object. </em> <a href="#a17"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a18">MGparm_dtor</a> (<a class="el" href="structsMGparm.html">MGparm</a> **thee)</td></tr>
@@ -116,13 +116,13 @@ typedef <a class="el" href="structsMGparm.html">sMGparm</a>&nbsp;</td><td class=
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a19">MGparm_dtor2</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">FORTRAN stub for object destructor. </em> <a href="#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a20">MGparm_check</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a20">MGparm_check</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Consistency check for parameter values stored in object. </em> <a href="#a20"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a21">MGparm_copy</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee, <a class="el" href="structsMGparm.html">MGparm</a> *parm)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Copy MGparm object into thee. </em> <a href="#a21"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a22">MGparm_parseToken</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee, char tok[VMAX_BUFSIZE], Vio *sock)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__MGparm.html#a22">MGparm_parseToken</a> (<a class="el" href="structsMGparm.html">MGparm</a> *thee, char tok[VMAX_BUFSIZE], Vio *sock)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Parse an MG keyword from an input file. </em> <a href="#a22"></a><em><br><br></td></tr>
 </table>
@@ -254,7 +254,7 @@ Parse an MG keyword from an input file.
     <tr><td valign=top><em>sock</em>&nbsp;</td><td>Stream for more tokens </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>1 if matched and assigned; -1 if matched, but there's some sort of error (i.e., too few args); 0 if not matched </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Success enumeration (1 if matched and assigned; -1 if matched, but there's some sort of error (i.e., too few args); 0 if not matched) </dd></dl>
     </td>
   </tr>
 </table>
@@ -331,7 +331,7 @@ Here is the call graph for this function:<p><center><img src="group__MGparm_a15_
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int MGparm_check </td>
+          <td class="md" nowrap valign="top"> Vrc_Codes MGparm_check </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td>
           <td class="mdname1" valign="top" nowrap> <em>thee</em>          </td>
@@ -359,7 +359,7 @@ Consistency check for parameter values stored in object.
     <tr><td valign=top><em>thee</em>&nbsp;</td><td>MGparm object </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>1 if OK, 0 otherwise </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Success enumeration </dd></dl>
     </td>
   </tr>
 </table>
@@ -460,7 +460,7 @@ Here is the call graph for this function:<p><center><img src="group__MGparm_a12_
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int MGparm_ctor2 </td>
+          <td class="md" nowrap valign="top"> Vrc_Codes MGparm_ctor2 </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>thee</em>, </td>
@@ -498,7 +498,7 @@ FORTRAN stub to construct MGparm object.
     <tr><td valign=top><em>type</em>&nbsp;</td><td>Type of MG calculation </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>1 if succesful, 0 otherwise </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Success enumeration </dd></dl>
     </td>
   </tr>
 </table>
@@ -930,7 +930,7 @@ Get number of grid points in z direction.
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> int MGparm_parseToken </td>
+          <td class="md" nowrap valign="top"> Vrc_Codes MGparm_parseToken </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top"><a class="el" href="structsMGparm.html">MGparm</a> *&nbsp;</td>
           <td class="mdname" nowrap> <em>thee</em>, </td>
@@ -975,7 +975,7 @@ Parse an MG keyword from an input file.
     <tr><td valign=top><em>sock</em>&nbsp;</td><td>Stream for more tokens </td></tr>
   </table>
 </dl>
-<dl compact><dt><b>Returns:</b></dt><dd>1 if matched and assigned; -1 if matched, but there's some sort of error (i.e., too few args); 0 if not matched </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Success enumeration (1 if matched and assigned; -1 if matched, but there's some sort of error (i.e., too few args); 0 if not matched) </dd></dl>
     </td>
   </tr>
 </table>
@@ -1126,7 +1126,7 @@ Set center z-coordinate.
     </td>
   </tr>
 </table>
-<hr size="1"><address style="align: right;"><small>Generated on Thu Jul 12 11:50:25 2007 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Oct 9 07:37:16 2007 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>
