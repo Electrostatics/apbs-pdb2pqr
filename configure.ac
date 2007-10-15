@@ -122,7 +122,7 @@ AC_MSG_CHECKING([for --enable-fast option])
 AC_ARG_ENABLE(fast,
 	[AC_HELP_STRING([--enable-fast],[enables fast computation])],
 	[ with_fast="yes"; AC_MSG_RESULT([yes]) ],
-	[ with_fast=""; AC_MSG_RESULT([yes])    ]
+	[ with_fast=""; AC_MSG_RESULT([no])    ]
 )
 
 if test -n "${with_fast}"; then

@@ -139,18 +139,22 @@ c* *********************************************************************
       common /MYPDEF/  charge, sconc
       common /MYPDEF/  nion
 
-      do i = 1, nion
-          charge(i) = 0.
-          sconc(i) = 0.
-	  end do
-      nion = 0
+	  ! THIS FUNCTION CALL IS DEPRECATED DUE TO A BUG IN THE COMMON BLOCK
+	  ! USAGE. IT WILL BE MYPDEFINIT WILL BE REPLACED WITH EXPLICIT CALLS
+	  ! FOR EACH TYPE OF PDE INITIALIZATION
+
+      !do i = 1, nion
+      !    charge(i) = 0.
+      !    sconc(i) = 0.
+	  !end do
+      !nion = 0
 	  
-	  v1 = 0.0
-	  v2 = 0.0
-	  v3 = 0.0
-	  conc1 = 0.0
-	  conc2 = 0.0
-	  conc3 = 0.0
+	  !v1 = 0.0
+	  !v2 = 0.0
+	  !v3 = 0.0
+	  !conc1 = 0.0
+	  !conc2 = 0.0
+	  !conc3 = 0.0
 	  !vol = 0.0
 	  !relSize = 0.0
 	  

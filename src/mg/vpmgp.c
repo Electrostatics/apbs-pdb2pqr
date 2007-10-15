@@ -138,13 +138,9 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { 
 		/* SMPBE Added - SMPBE needs to mimic NPBE */
         
-#ifdef APBS_FAST
-		Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgsolv = 0, APBS fast mode\n");
-		thee->meth = 0;
-#else
 		Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgsolv = 0\n");
         thee->meth = 1;
-#endif
+		
         thee->mgsolv = 0;
     } else {                 
         

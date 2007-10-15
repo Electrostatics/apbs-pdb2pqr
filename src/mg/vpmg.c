@@ -323,21 +323,20 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 			break;
 	}
 
+	F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
 
-F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
+	/* Set the default chargeSrc for 5th order splines */
 
-/* Set the default chargeSrc for 5th order splines */
+	thee->chargeSrc = mgparm->chgs;
 
-thee->chargeSrc = mgparm->chgs;
+	/* Turn off restriction of observable calculations to a specific
+	* partition */
+	Vpmg_unsetPart(thee);
 
-/* Turn off restriction of observable calculations to a specific
-* partition */
-Vpmg_unsetPart(thee);
+	/* The coefficient arrays have not been filled */
+	thee->filled = 0;
 
-/* The coefficient arrays have not been filled */
-thee->filled = 0;
-
-return 1;
+	return 1;
 }
 
 VPUBLIC int Vpmg_solve(Vpmg *thee) {
