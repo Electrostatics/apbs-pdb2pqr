@@ -2022,8 +2022,8 @@ if test "${enable_fast+set}" = set; then
    with_fast="yes"; echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
 else
-   with_fast=""; echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
+   with_fast=""; echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 
 fi;
 
