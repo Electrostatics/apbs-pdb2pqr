@@ -210,18 +210,18 @@ c* *********************************************************************
 	  !double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
       !common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
 	  
-      !common /MYPDEF/  charge, sconc
-      !common /MYPDEF/  nion
+      common /MYPDEF/  charge, sconc
+      common /MYPDEF/  nion
 
 	  ! THIS FUNCTION CALL IS DEPRECATED DUE TO A BUG IN THE COMMON BLOCK
 	  ! USAGE. IT WILL BE MYPDEFINIT WILL BE REPLACED WITH EXPLICIT CALLS
 	  ! FOR EACH TYPE OF PDE INITIALIZATION
 
-      !do i = 1, nion
-      !    charge(i) = 0.
-      !    sconc(i) = 0.
-	  !end do
-      !nion = 0
+      do i = 1, nion
+          charge(i) = 0.
+          sconc(i) = 0.
+	  end do
+      nion = 0
 	  
 	  !v1 = 0.0
 	  !v2 = 0.0

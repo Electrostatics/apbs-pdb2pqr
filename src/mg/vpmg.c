@@ -318,14 +318,14 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 			F77MYPDEFINITSMPBE(&nion, ionQ, ionConc, &pbe->smvolume,&pbe->smsize);
 			break;
 		case IPKEY_NPBE:
-			F77MYPDEFINITNPBE(&nion, ionQ, ionConc);
 			//Else adjust the inoConc by scaling factor zks2
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
+			F77MYPDEFINITNPBE(&nion, ionQ, ionConc);
 			break;
 		case IPKEY_LPBE:
-			F77MYPDEFINITLPBE(&nion, ionQ, ionConc);
 			//Else adjust the inoConc by scaling factor zks2
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
+			F77MYPDEFINITLPBE(&nion, ionQ, ionConc);
 			break;
 		default:
 			//Else adjust the inoConc by scaling factor zks2
