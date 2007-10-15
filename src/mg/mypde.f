@@ -38,7 +38,99 @@ c*
 c* author:  michael holst
 c* *********************************************************************
 
-      subroutine mypdefinit(tnion,tcharge,tsconc,ipkey,smvolume,smsize)
+      subroutine mypdefinitlpbe(tnion,tcharge,tsconc)
+c* *********************************************************************
+c* Purpose:
+c*
+c*    Set up the ionic species to be used in later calculations.  This 
+c*    must be called before any other of the routines in this file.
+c*  
+c* Arguments:
+c*
+c*    tnion   = number of ionic species
+c*    tcharge = charge in electrons
+c*    tsconc  = prefactor for counterion Boltzmann distribution terms,
+c*              basically a scaled concentration:
+c*                 -(ion concentration/bulkIonicStrength)/2
+c*
+c* author: Nathan Baker
+c* *********************************************************************
+      integer          nion, tnion
+      integer          MAXION
+      integer          i
+      parameter        (MAXION = 50)
+      double precision charge(MAXION), sconc(MAXION) 
+      double precision tcharge(*), tsconc(*)
+
+	  double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
+      common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
+
+      common /MYPDEF/  charge, sconc
+      common /MYPDEF/  nion
+	  
+	  nion = tnion
+	  if (nion.gt.MAXION) then
+		  call vnmprt(2, 'mypdef_init: Error: too many ion 
+     .						species', 43)
+		  call vnmprt(2, 'mypdef_init:  Ignoring the extra 
+     .						ones', 38)
+		  nion = MAXION
+	  endif
+	  do i = 1, nion
+		  charge(i) = tcharge(i)
+		  sconc(i) = tsconc(i)
+	  end do
+	  
+      return
+      end
+
+      subroutine mypdefinitnpbe(tnion,tcharge,tsconc)
+c* *********************************************************************
+c* Purpose:
+c*
+c*    Set up the ionic species to be used in later calculations.  This 
+c*    must be called before any other of the routines in this file.
+c*  
+c* Arguments:
+c*
+c*    tnion   = number of ionic species
+c*    tcharge = charge in electrons
+c*    tsconc  = prefactor for counterion Boltzmann distribution terms,
+c*              basically a scaled concentration:
+c*                 -(ion concentration/bulkIonicStrength)/2
+c*
+c* author: Nathan Baker
+c* *********************************************************************
+      integer          nion, tnion
+      integer          MAXION
+      integer          i
+      parameter        (MAXION = 50)
+      double precision charge(MAXION), sconc(MAXION) 
+      double precision tcharge(*), tsconc(*)
+	  
+	  double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
+      common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
+	  
+      common /MYPDEF/  charge, sconc
+      common /MYPDEF/  nion
+		  
+	  nion = tnion
+	  if (nion.gt.MAXION) then
+		  call vnmprt(2, 'mypdef_init: Error: too many ion 
+     .						species', 43)
+		  call vnmprt(2, 'mypdef_init:  Ignoring the extra 
+     .						ones', 38)
+		  nion = MAXION
+	  endif
+	  do i = 1, nion
+		  charge(i) = tcharge(i)
+		  sconc(i) = tsconc(i)
+	  end do
+
+      return
+      end
+
+      subroutine mypdefinitsmpbe(tnion,tcharge,tsconc,smvolume,smsize)
 c* *********************************************************************
 c* Purpose:
 c*
@@ -64,57 +156,39 @@ c* *********************************************************************
 	  
 	  integer		   ipkey
 	  double precision smvolume, smsize
+
 	  double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
       common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
 
       common /MYPDEF/  charge, sconc
       common /MYPDEF/  nion
-	
-	  if(ipkey .eq. -2) then
 		  
-		  !nion = tnion
-		  if (tnion.gt.3) then
-			 call vnmprt(2, 'SMPBE: modified theory handles only', 36)
-			 call vnmprt(2, 'SMPBE: three ion species. Ignoring ', 36)
-			 call vnmprt(2, 'SMPBE: the rest of the ions!       ', 36)
-			 call vnmprt(2, 'SMPBE: (mypde.f::mypdefinit)       ', 36)
-		  endif
+	  !nion = tnion
+	  if (tnion.gt.3) then
+		 call vnmprt(2, 'SMPBE: modified theory handles only', 36)
+		 call vnmprt(2, 'SMPBE: three ion species. Ignoring ', 36)
+		 call vnmprt(2, 'SMPBE: the rest of the ions!       ', 36)
+		 call vnmprt(2, 'SMPBE: (mypde.f::mypdefinit)       ', 36)
+	  endif
 
-		  v1 = tcharge(1)
-		  v2 = tcharge(2)
-		  v3 = tcharge(3)
-		  conc1 = tsconc(1)
-		  conc2 = tsconc(2)
-		  conc3 = tsconc(3)
-		  
-		  vol = smvolume
-		  relSize = smsize
+	  v1 = tcharge(1)
+	  v2 = tcharge(2)
+	  v3 = tcharge(3)
+	  conc1 = tsconc(1)
+	  conc2 = tsconc(2)
+	  conc3 = tsconc(3)
+	  
+	  vol = smvolume
+	  relSize = smsize
 
-		  call vnmprd(2, '!! v1        = ', 15, v1)
-		  call vnmprd(2, '!! v2        = ', 15, v2)
-		  call vnmprd(2, '!! v3        = ', 15, v3)
-		  call vnmprd(2, '!! conc1     = ', 15, conc1)
-		  call vnmprd(2, '!! conc2     = ', 15, conc2)
-		  call vnmprd(2, '!! conc3     = ', 15, conc3)
-		  call vnmprd(2, '!! SMPBE Vol = ', 15, smvolume)
-		  call vnmprd(2, '!! SMPBE Size= ', 15, smsize)
-		  
-	  else
-		  
-		  nion = tnion
-		  if (nion.gt.MAXION) then
-		      call vnmprt(2, 'mypdef_init: Error: too many ion 
-     .						species', 43)
-			  call vnmprt(2, 'mypdef_init:  Ignoring the extra 
-     .						ones', 38)
-			  nion = MAXION
-		  endif
-		  do i = 1, nion
-			  charge(i) = tcharge(i)
-			  sconc(i) = tsconc(i)
-		  end do
-		  
-	  end if
+	  call vnmprd(2, '!! v1        = ', 15, v1)
+	  call vnmprd(2, '!! v2        = ', 15, v2)
+	  call vnmprd(2, '!! v3        = ', 15, v3)
+	  call vnmprd(2, '!! conc1     = ', 15, conc1)
+	  call vnmprd(2, '!! conc2     = ', 15, conc2)
+	  call vnmprd(2, '!! conc3     = ', 15, conc3)
+	  call vnmprd(2, '!! SMPBE Vol = ', 15, smvolume)
+	  call vnmprd(2, '!! SMPBE Size= ', 15, smsize)
 	  
       return
       end
@@ -133,11 +207,11 @@ c* *********************************************************************
       parameter        (MAXION = 50)
       double precision charge(MAXION), sconc(MAXION) 
 	  
-	  double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
-      common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
+	  !double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
+      !common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
 	  
-      common /MYPDEF/  charge, sconc
-      common /MYPDEF/  nion
+      !common /MYPDEF/  charge, sconc
+      !common /MYPDEF/  nion
 
 	  ! THIS FUNCTION CALL IS DEPRECATED DUE TO A BUG IN THE COMMON BLOCK
 	  ! USAGE. IT WILL BE MYPDEFINIT WILL BE REPLACED WITH EXPLICIT CALLS

@@ -624,9 +624,15 @@ VEXTERNC void F77NRICHDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
 #define F77EIGDRIV    VF77_MANGLE(eigdriv, EIGDRIV)
 #define F77ANORMDRIV  VF77_MANGLE(anormdriv, ANORMDRIV)
 
-#define F77MYPDEFINIT VF77_MANGLE(mypdefinit, MYPDEFINIT)
-VEXTERNC void F77MYPDEFINIT(int *nion, double *ionQ, double *ionConc,
-							int *pbeType,double *smvolume,double *smsize);
+#define F77MYPDEFINITLPBE VF77_MANGLE(mypdefinitlpbe, MYPDEFINITLPBE)
+VEXTERNC void F77MYPDEFINITLPBE(int *nion, double *ionQ, double *ionConc);
+
+#define F77MYPDEFINITNPBE VF77_MANGLE(mypdefinitnpbe, MYPDEFINITNPBE)
+VEXTERNC void F77MYPDEFINITNPBE(int *nion, double *ionQ, double *ionConc);
+
+#define F77MYPDEFINITSMPBE VF77_MANGLE(mypdefinitsmpbe, MYPDEFINITSMPBE)
+VEXTERNC void F77MYPDEFINITSMPBE(int *nion, double *ionQ, double *ionConc,
+									double *smvolume,double *smsize);
 
 #define F77MYPDEFCLEAR VF77_MANGLE(mypdefclear, MYPDEFCLEAR)
 VEXTERNC void F77MYPDEFCLEAR();

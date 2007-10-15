@@ -315,18 +315,25 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 		factor to the ionConc */
 	switch(pmgp->ipkey){
 		case IPKEY_SMPBE:
-			//Do Nothing
+			F77MYPDEFINITSMPBE(&nion, ionQ, ionConc, &pbe->smvolume,&pbe->smsize);
+			break;
+		case IPKEY_NPBE:
+			F77MYPDEFINITNPBE(&nion, ionQ, ionConc);
+			//Else adjust the inoConc by scaling factor zks2
+			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
+			break;
+		case IPKEY_LPBE:
+			F77MYPDEFINITLPBE(&nion, ionQ, ionConc);
+			//Else adjust the inoConc by scaling factor zks2
+			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
 			break;
 		default:
 			//Else adjust the inoConc by scaling factor zks2
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
 			break;
 	}
-
-	F77MYPDEFINIT(&nion, ionQ, ionConc,&pbe->ipkey,&pbe->smvolume,&pbe->smsize);
-
+	
 	/* Set the default chargeSrc for 5th order splines */
-
 	thee->chargeSrc = mgparm->chgs;
 
 	/* Turn off restriction of observable calculations to a specific
