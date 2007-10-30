@@ -8,6 +8,7 @@
 et al)
 	* Added in "fast" compile-time option that uses optimized parameters for multigrid calculations
 - BUG FIXES
+	* Clarified ELEC/DIME and ELEC/PDIME documentation
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
 	* Fixed small typo in user guide in installation instructions
 	* Fixed memory leaks throughout the APBS code

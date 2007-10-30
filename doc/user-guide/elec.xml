@@ -1026,6 +1026,9 @@
 					</varlistentry>
 				</variablelist>
 			</para>
+			<important>
+				<para> Please note that some of the parameters change in meaning a bit for this <link linkend="mg-para">mg-para</link> calculations.  In particular, <link linkend="elec-dime">dime</link> should be interpreted as the number of grid points <emphasis>per processor</emphasis>.  This interpretation helps manage the amount of memory per-processor -- generally the limiting resource for most calculations. </para>
+			</important>
 		</listitem>
 
 		<listitem id="elec-ekey">
@@ -1491,7 +1494,7 @@
 				not used in the calculation.  The processors are tiled across the
 				domain in a Cartesian fashion with a specified amount of overlap (see
 				<link linkend="elec-ofrac"><command>ofrac</command></link>) between each
-				processor to ensure continuity of the solution.
+				processor to ensure continuity of the solution.  Each processor's subdomain will contain the number of grid points specified by the <link linkend="elec-dime">dime</link> keyword.
 				<variablelist>
 					<varlistentry>
 						<term> <replaceable>npx npy npz</replaceable> </term>
