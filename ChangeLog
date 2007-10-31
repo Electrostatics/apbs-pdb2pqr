@@ -4,8 +4,7 @@
 #############################################################################
 - NEW FEATURES
 	* Simplified parameter input for ION and SMPBE keywords (key-value pairs) 
-	* Examples and documentation for size-modified PBE code (Vincent Chu
-et al)
+	* Examples and documentation for size-modified PBE code (Vincent Chu et al)
 	* Added in "fast" compile-time option that uses optimized parameters for multigrid calculations
 - BUG FIXES
 	* Clarified ELEC/DIME and ELEC/PDIME documentation
