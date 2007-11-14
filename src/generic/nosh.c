@@ -413,7 +413,7 @@ VPUBLIC int NOsh_parseInput(
 							Vio *sock
 							) {
 	
-	char *MCwhiteChars = " =,;\t\n";
+	char *MCwhiteChars = " =,;\t\r\n";
 	char *MCcommChars  = "#%";
 	char tok[VMAX_BUFSIZE];
 	
