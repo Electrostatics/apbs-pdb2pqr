@@ -316,7 +316,7 @@
 <prompt>$</prompt> <userinput>make </userinput>
 <prompt>$</prompt> <userinput>make install</userinput>
 						</screen>
-						This procedure was tested with MPICH1 1.2.7p1.
+						This procedure was tested with MPICH2 1.0.6p1.
 					</para>
 				</sect4>
 
