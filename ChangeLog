@@ -6,6 +6,7 @@
 	* Simplified parameter input for ION and SMPBE keywords (key-value pairs) 
 	* Examples and documentation for size-modified PBE code (Vincent Chu et al)
 	* Added in "fast" compile-time option that uses optimized parameters for multigrid calculations
+	* mg-dummy calculations can be run with any number (n>3) of grid points
 - BUG FIXES
 	* Clarified ELEC/DIME and ELEC/PDIME documentation
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit

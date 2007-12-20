@@ -278,7 +278,8 @@ VPUBLIC Vrc_Codes MGparm_check(MGparm *thee) {
 	/* Calculate the actual number of grid points and nlev to satisfy the
 	 * formula:  n = c * 2^(l+1) + 1, where n is the number of grid points,
 	 * c is an integer, and l is the number of levels */
-        for (i=0; i<3; i++) {
+	if (thee->type != MCT_DUMMY) {
+		for (i=0; i<3; i++) {
             /* See if the user picked a reasonable value, if not then fix it */
             ti = thee->dime[i] - 1;
             if (ti == VPOW(2, (thee->nlev+1))) {
@@ -309,6 +310,15 @@ VPUBLIC Vrc_Codes MGparm_check(MGparm *thee) {
                 }
             }
         }
+	} else { /* We are a dummy calculation, but we still need positive numbers of points */
+		for (i=0; i<3; i++) {
+			if (thee->dime[i] <= 0) {
+				Vnm_print(2, "NOsh:  Resetting dime[%d] from %d to 3.\n", i, thee->dime[i]);
+				thee->dime[i] = 3;
+			}
+		}
+	}
+	
 	/* The actual number of levels we'll be using is the smallest number of
          * possible levels in any dimensions */
         nlev = VMIN2(tnlev[0], tnlev[1]);
