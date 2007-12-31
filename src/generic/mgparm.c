@@ -312,9 +312,11 @@ VPUBLIC Vrc_Codes MGparm_check(MGparm *thee) {
         }
 	} else { /* We are a dummy calculation, but we still need positive numbers of points */
 		for (i=0; i<3; i++) {
-			if (thee->dime[i] <= 0) {
-				Vnm_print(2, "NOsh:  Resetting dime[%d] from %d to 3.\n", i, thee->dime[i]);
-				thee->dime[i] = 3;
+		    tnlev[i] = thee->nlev;
+			tdime[i] = thee->dime[i];
+				if (thee->dime[i] <= 0) {
+					Vnm_print(2, "NOsh:  Resetting dime[%d] from %d to 3.\n", i, thee->dime[i]);
+					thee->dime[i] = 3;
 			}
 		}
 	}
