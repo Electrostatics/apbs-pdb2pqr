@@ -134,9 +134,11 @@ c*    *** find the coarser grid size ***
 c*
 c*    *** check a few things ***
       if (((nnew-1)*2).ne.(nold-1)) then
-        call vnmprt(2, 'CORSR:  ERROR!  The grid dimensions are not',
-     2     43)
-        call vnmprt(2, 'CORSR:  consistent with nlev!', 29)
+        call vnmprt(2, 'CORSR:  WARNING!  The grid dimensions are not', 
+     2     45)
+        call vnmprt(2, 'CORSR:  consistent with nlev!  Your', 35)
+        call vnmprt(2, 'CORSR:  calculation will only work if you ', 42)
+        call vnmprt(2, 'CORSR:  are performing a mg-dummy run.', 38)
       endif
       if (nnew .lt. 1) then
         call vnmprt(2, 'CORSR:  ERROR!  The grid dimensions are not',
