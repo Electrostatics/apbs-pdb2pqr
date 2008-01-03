@@ -20,7 +20,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: maloccf.h.in,v 1.57 2006/07/14 06:23:15 mholst Exp $"
+ * rcsid="$Id: configure.ac,v 1.94 2006/07/14 06:23:15 mholst Exp $"
  * ***************************************************************************
  */
 
@@ -194,7 +194,7 @@
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t
 
-/* Define to `unsigned' if <sys/types.h> does not define. */
+/* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
 
 
