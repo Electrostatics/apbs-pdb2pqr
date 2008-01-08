@@ -74,7 +74,8 @@
 #undef HAVE_ARPA_INET_H
 
 /* Am I running in a Cygwin/Win32 environment? */
-#undef HAVE_CYGWIN
+#undef WIN32
+#undef MSDOS
 
 /* Do I compile as a debug version? */
 #undef HAVE_DEBUG
