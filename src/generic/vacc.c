@@ -1132,6 +1132,8 @@ VPUBLIC void Vacc_splineAccGradAtomNorm3(Vacc *thee, double center[VAPBS_DIM],
 VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
 	
     int ipt, iatom;
+
+    double area;
     double *tPos, tRad, vec[3];
     double dx,dy,dz;
     VaccSurf *ref;
@@ -1151,7 +1153,7 @@ VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) {
 	
 	if(tRad == 0.0) return;
 	
-    double area = 4.0*VPI*(tRad+srad)*(tRad+srad)/((double)(ref->npts));
+    area = 4.0*VPI*(tRad+srad)*(tRad+srad)/((double)(ref->npts));
     for (ipt=0; ipt<ref->npts; ipt++) {
         vec[0] = (tRad+srad)*ref->xpts[ipt] + tPos[0];
         vec[1] = (tRad+srad)*ref->ypts[ipt] + tPos[1];
@@ -1495,6 +1497,11 @@ int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
 	int npts[3];
 	int pad = 14;
 
+        int xmin, ymin, zmin;
+        int xmax, ymax, zmax;
+
+        double sigma6, sigma12;
+
 	double spacs[3], vec[3];
     double w, wx, wy, wz, len, fn, x, y, z, vol;
 	double x2,y2,z2,r;
@@ -1534,16 +1541,16 @@ int Vacc_wcaEnergyAtom(Vacc *thee, APOLparm *apolparm, Valist *alist,
     epsilon = VSQRT((epsilon * watepsilon));
 	
 	/* parameters */
-    double sigma6 = VPOW(sigma,6);
-    double sigma12 = VPOW(sigma,12);
+    sigma6 = VPOW(sigma,6);
+    sigma12 = VPOW(sigma,12);
     /* OPLS-style radius:  double sigmar = sigma*VPOW(2, (1.0/6.0)); */
 	
-	int xmin = pos[0] - pad;
-	int xmax = pos[0] + pad;
-	int ymin = pos[1] - pad;
-	int ymax = pos[1] + pad;
-	int zmin = pos[2] - pad;
-	int zmax = pos[2] + pad;
+	xmin = pos[0] - pad;
+	xmax = pos[0] + pad;
+	ymin = pos[1] - pad;
+	ymax = pos[1] + pad;
+	zmin = pos[2] - pad;
+	zmax = pos[2] + pad;
 	
 	for (i=0; i<3; i++) {
 		len = (upper_corner[i] + pad) - (lower_corner[i] - pad);
@@ -1665,6 +1672,11 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 	int i,si;
 	int npts[3];
 	int pad = 14;
+
+        int xmin, ymin, zmin;
+        int xmax, ymax, zmax;
+
+        double sigma6, sigma12;
 	
 	double spacs[3], vec[3], fpt[3];
     double w, wx, wy, wz, len, fn, x, y, z, vol;
@@ -1710,8 +1722,8 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
     epsilon = VSQRT((epsilon * watepsilon));
 		
 	/* parameters */
-    double sigma6 = VPOW(sigma,6);
-    double sigma12 = VPOW(sigma,12);
+    sigma6 = VPOW(sigma,6);
+    sigma12 = VPOW(sigma,12);
     /* OPLS-style radius:  double sigmar = sigma*VPOW(2, (1.0/6.0));  */
 	
 	for (i=0; i<3; i++) {
@@ -1729,13 +1741,13 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 			spacs[i] = apolparm->grid[i];
 		}
 	}
-	
-	int xmin = pos[0] - pad;
-	int xmax = pos[0] + pad;
-	int ymin = pos[1] - pad;
-	int ymax = pos[1] + pad;
-	int zmin = pos[2] - pad;
-	int zmax = pos[2] + pad;
+
+	xmin = pos[0] - pad;
+	xmax = pos[0] + pad;
+	ymin = pos[1] - pad;
+	ymax = pos[1] + pad;
+	zmin = pos[2] - pad;
+	zmax = pos[2] + pad;
 	
 	for (x=xmin; x<=xmax; x=x+spacs[0]) {
 		if ( VABS(x - xmin) < VSMALL) {
