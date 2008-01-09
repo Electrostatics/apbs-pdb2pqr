@@ -87,9 +87,10 @@ VPUBLIC APOLparm* APOLparm_ctor() {
 
 VPUBLIC Vrc_Codes APOLparm_ctor2(APOLparm *thee) {
 
+    int i;
+
     if (thee == VNULL) return VRC_FAILURE;
 
-	int i;
     thee->parsed = 0;
 	
     thee->setgrid = 0;
