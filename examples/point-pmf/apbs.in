@@ -79,7 +79,7 @@ elec name complex
 end
 
 # BINDING ENERGY
-print energy complex - point1 - point2 end
+print elecEnergy complex - point1 - point2 end
 
 
 quit
