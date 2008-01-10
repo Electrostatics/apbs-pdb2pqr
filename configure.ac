@@ -216,7 +216,9 @@ if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
 fi
 AC_F77_NOFORMAIN
 FFLAGS="${FLIBS} ${FFLAGS}"
-AC_F77_FCN_MANGLE()
+if test "${CC}" = "icl"; then
+  AC_F77_FCN_MANGLE()
+fi
 AC_LANG_C
 AC_PROG_CPP
 AC_DISABLE_SHARED
