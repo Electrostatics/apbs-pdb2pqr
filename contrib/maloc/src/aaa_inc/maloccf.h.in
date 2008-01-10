@@ -20,7 +20,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 675 Mass Ave, Cambridge, MA 02139, USA.
  * 
- * rcsid="$Id: configure.ac,v 1.94 2006/07/14 06:23:15 mholst Exp $"
+ * rcsid="$Id: maloccf.h.in,v 1.57 2006/07/14 06:23:15 mholst Exp $"
  * ***************************************************************************
  */
 
@@ -74,8 +74,7 @@
 #undef HAVE_ARPA_INET_H
 
 /* Am I running in a Cygwin/Win32 environment? */
-#undef WIN32
-#undef MSDOS
+#undef HAVE_CYGWIN
 
 /* Do I compile as a debug version? */
 #undef HAVE_DEBUG
@@ -195,7 +194,7 @@
 /* Define to `int' if <sys/types.h> does not define. */
 #undef pid_t
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define to `unsigned' if <sys/types.h> does not define. */
 #undef size_t
 
 
