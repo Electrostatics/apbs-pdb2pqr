@@ -129,7 +129,7 @@ int main( int argc, char **argv )
         return 0;
 }
 EOF 
-actry='$CC -c fperror.c 1>&AC_FD_CC'
+actry='$CC $CFLAGS -c fperror.c 1>&AC_FD_CC'
 if AC_TRY_EVAL(actry); then
     if test "${CC}" = "icc"; then
         $CC -mp fperror.c -o fperror.test -lm

@@ -211,20 +211,6 @@ dnl AC_CHECK_HEADER(time.h,,   AC_MSG_ERROR([STDC <time.h> not found.]))
 
 dnl # Check for some additional UNIX-like headers that we need.
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS( \
-    unistd.h \
-    sys/types.h \
-    sys/time.h \
-    sys/times.h \
-    sys/stat.h \
-    fcntl.h \
-    sys/socket.h \
-    sys/un.h \
-    netinet/in.h \
-    arpa/inet.h \
-    netdb.h \
-    rpc/rpc.h \
-)
 
 dnl ##########################################################################
 dnl 5. checks for typedefs
@@ -304,9 +290,41 @@ dnl AC_SUBST(fetk_cpu_vendor_os)
 dnl # ---------------------------------------------------
 dnl # HANDLE VARIOUS ARCHITECTURE-SPECIFIC CONFIGURATIONS
 dnl # ---------------------------------------------------
-if test "${host_os}" = "cygwin"; then
-    AC_DEFINE(HAVE_CYGWIN)
-fi
+if [[ "${host_os}" = "cygwin" ] && [ "${CC}" != "icl" ]]; then
+    AC_DEFINE(MSDOS)
+    AC_DEFINE(WIN32)
+elif [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
+   AC_DEFINE(MSDOS)
+   AC_DEFINE(WIN32)
+   AC_CHECK_HEADERS(\
+    unistd.h \
+    sys/types.h \
+    sys/time.h \
+    sys/times.h \
+    sys/stat.h \
+    fcntl.h \
+    rpc/rpc.h \
+    sys/socket.h \
+    sys/un.h \
+    netinet/in.h \
+    arpa/inet.h \
+    netdb.h \
+   )
+else
+   AC_CHECK_HEADERS(\
+    unistd.h \
+    sys/types.h \
+    sys/time.h \
+    sys/times.h \
+    sys/stat.h \
+    fcntl.h \
+    rpc/rpc.h \
+    sys/socket.h \
+    sys/un.h \
+    netinet/in.h \
+    arpa/inet.h \
+    netdb.h \ 
+   )
 
 dnl # ---------------------------
 dnl # HANDLE THE READLINE LIBRARY
@@ -374,6 +392,8 @@ CPPFLAGS=${CPPFLAGS_SAVE};
 
 AC_SUBST(rl_lib)
 AC_SUBST(rl_inc)
+
+fi
 
 dnl # ----------------------
 dnl # HANDLE THE MPI LIBRARY
