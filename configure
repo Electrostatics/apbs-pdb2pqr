@@ -23611,7 +23611,7 @@ apbs_build_libraries=""
 if [ "${host_os}" == "cygwin" ] && [ "${CC}" == "icl" ]; then
   apbs_build_libraries="../bin/libapbsmainroutines.la \
                         ../src/aaa_lib/libapbs.la \
-                        ../blas/libapbsblas.la \
+                        ../contrib/blas/libapbsblas.la \
 			../contrib/lib/libmaloc.la"
 else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
