@@ -115,6 +115,14 @@ AC_SUBST(AUTOMAKE)
 AC_SUBST(AUTOHEADER)
 
 dnl # ---------------------------
+dnl # SET CONVENIENCE PATHS
+dnl # ---------------------------
+top_apbsdir=`pwd`
+contrib_path=`pwd`/contrib
+AC_SUBST(top_apbsdir)
+AC_SUBST(contrib_path)
+
+dnl # ---------------------------
 dnl # HANDLE THE FAST OPTION
 dnl # ---------------------------
 
@@ -904,16 +912,7 @@ if test -n "${blas_lib}"; then
 else
 	AC_MSG_RESULT([no])
 	apbs_do_blas="blas"
-	case $host_os in
-		darwin**)
-			blas_lib="-Wl,-framework -Wl,Accelerate"
-			;;
-		*)
-			blas_lib="-L${prefix}/lib -lapbsblas"
-			;;
-	esac
 fi
-AC_SUBST(blas_lib)
 AC_SUBST(apbs_do_blas)
 
 dnl # -----------------------
@@ -1009,7 +1008,8 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${maloc_lib} ${blas_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} \ 
+	   ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
 
 case $host_os in
 
@@ -1064,6 +1064,19 @@ lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
+apbs_build_libraries=""
+if [[ "${host_os}" == "cygwin" ] && [ "${CC}" == "icl" ]]; then
+  apbs_build_libraries="../bin/libapbsmainroutines.la \
+                        ../src/aaa_lib/libapbs.la \
+                        ../blas/libapbsblas.la \
+			../contrib/lib/libmaloc.la"
+else
+  apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
+			${top_apbsdir}/src/aaa_lib/libapbs.la \
+			${contrib_path}/blas/libapbsblas.la \
+			${lib_list}"
+fi
+AC_SUBST(apbs_build_libraries)
 
 dnl ##########################################################################
 dnl 11. generate the makefiles
