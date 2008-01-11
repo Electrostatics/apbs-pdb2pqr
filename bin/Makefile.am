@@ -10,15 +10,16 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 CCLD = $(F77)
 
+build_libraries = @apbs_build_libraries@
+
 bindir = ${prefix}/bin/${fetk_cpu_vendor_os}
 bin_PROGRAMS     = apbs
 apbs_SOURCES     = main.c 
-apbs_LDADD       = ${top_builddir}/bin/libapbsmainroutines.la @lib_list@
+apbs_LDADD       = ${build_libraries}
 
 libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c
-libapbsmainroutines_la_LIBADD = ${top_builddir}/src/aaa_lib/libapbs.la 
 libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
 
 INCLUDES = @inc_list@
