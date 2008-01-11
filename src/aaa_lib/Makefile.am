@@ -17,7 +17,7 @@ MG_LIBS  = ${top_builddir}/src/mg/libapbsmg.la
 PMGZ_LIBS = ${top_builddir}/contrib/pmgZ/libapbspmgz.la
 BLAS_LIBS = @blas_lib@
 
-libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
+libdir = ${prefix}/lib
 lib_LTLIBRARIES = libapbs.la
 
 libapbs_la_SOURCES = apbs_link.c
