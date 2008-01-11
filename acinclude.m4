@@ -26,7 +26,7 @@ dnl
 dnl   This was adapted by Nathan Baker from an e-mail by Steven G. Johnson on
 dnl   the Autoconf mailing list.  
 dnl
-AC_DEFUN(AC_F77_FCN_MANGLE,
+AC_DEFUN([AC_F77_FCN_MANGLE],
 [
 AC_REQUIRE([AC_PROG_CC])
 AC_REQUIRE([AC_PROG_F77])
@@ -105,7 +105,7 @@ dnl   NOTE: The update just calculates the machine epsilon and uses
 dnl		for all systems when calling VFLOOR (only done in nosh)
 dnl
 
-AC_DEFUN(AC_FPERROR, [
+AC_DEFUN([AC_FPERROR], [
 AC_REQUIRE([AC_PROG_CC])
 AC_MSG_CHECKING(the machine epsilon for VFLOOR)
 
@@ -163,7 +163,7 @@ dnl Test for the use of the -nofor_main option used by Alpha FORTRAN
 dnl
 dnl   by Nathan Baker 
 dnl
-AC_DEFUN(AC_F77_NOFORMAIN, [
+AC_DEFUN([AC_F77_NOFORMAIN], [
 AC_REQUIRE([AC_PROG_CC])
 AC_REQUIRE([AC_PROG_F77])
 dnl AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
