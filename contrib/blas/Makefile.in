@@ -496,7 +496,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES) all-local
+all-am: Makefile $(LTLIBRARIES)
 installdirs: installdirs-recursive
 installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)"; do \
@@ -587,7 +587,7 @@ uninstall-am: uninstall-libLTLIBRARIES
 	install-strip
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am all-local check check-am clean clean-generic \
+	all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool ctags ctags-recursive \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
@@ -603,10 +603,10 @@ uninstall-am: uninstall-libLTLIBRARIES
 	uninstall-libLTLIBRARIES
 
 
-all-local:
-	mkdir -p $(DESTDIR)$(libdir)
-	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
-	ranlib $(DESTDIR)$(libdir)/libapbsblas.a;
+#all-local:
+#	mkdir -p $(DESTDIR)$(libdir)
+#	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
+#	ranlib $(DESTDIR)$(libdir)/libapbsblas.a;
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

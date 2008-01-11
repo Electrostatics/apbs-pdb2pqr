@@ -17,8 +17,8 @@ lib_LTLIBRARIES = libapbsblas.la
 libapbsblas_la_SOURCES = mblasd.f
 libapbsblas_la_LDFLAGS = -version-info ${APBS_VERSION}
 
-all-local:
-	mkdir -p $(DESTDIR)$(libdir)
-	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
-	ranlib $(DESTDIR)$(libdir)/libapbsblas.a;
+#all-local:
+#	mkdir -p $(DESTDIR)$(libdir)
+#	cp .libs/libapbsblas.a $(DESTDIR)$(libdir)/libapbsblas.a; \
+#	ranlib $(DESTDIR)$(libdir)/libapbsblas.a;
 
