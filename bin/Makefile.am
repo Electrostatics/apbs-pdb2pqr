@@ -12,12 +12,12 @@ CCLD = $(F77)
 
 build_libraries = @apbs_build_libraries@
 
-bindir = ${prefix}/bin/${fetk_cpu_vendor_os}
+bindir = ${prefix}/bin
 bin_PROGRAMS     = apbs
 apbs_SOURCES     = main.c 
 apbs_LDADD       = ${build_libraries}
 
-libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
+libdir = ${prefix}/lib
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c
 libapbsmainroutines_la_LDFLAGS = -version-info ${APBS_VERSION}
