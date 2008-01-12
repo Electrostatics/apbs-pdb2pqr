@@ -1009,7 +1009,7 @@ dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
 base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} \ 
-	   ${maloc_lib} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
 
 case $host_os in
 
@@ -1074,7 +1074,7 @@ else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
 			${top_apbsdir}/src/aaa_lib/libapbs.la \
 			${contrib_path}/blas/libapbsblas.la \
-			${lib_list}"
+			${maloc_lib} ${lib_list}"
 fi
 AC_SUBST(apbs_build_libraries)
 
