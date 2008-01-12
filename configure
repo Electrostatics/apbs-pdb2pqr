@@ -23608,11 +23608,13 @@ lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
 
 
 apbs_build_libraries=""
-if [ "${host_os}" == "cygwin" ] && [ "${CC}" == "icl" ]; then
+if [ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]; then
+  maloc_lib=""
+
   apbs_build_libraries="../bin/libapbsmainroutines.la \
                         ../src/aaa_lib/libapbs.la \
                         ../contrib/blas/libapbsblas.la \
-			../contrib/lib/libmaloc.la"
+			../contrib/maloc/src/aaa_lib/libmaloc.la"
 else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
 			${top_apbsdir}/src/aaa_lib/libapbs.la \
@@ -23620,6 +23622,7 @@ else
 			${maloc_lib} ${lib_list}"
 fi
 
+echo ${apbs_build_libraries}
 
 
 ac_config_files="$ac_config_files Makefile contrib/Makefile contrib/blas/Makefile contrib/pmgZ/Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/alkanes/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/protein-rna/Makefile examples/smpbe/Makefile examples/solv/Makefile bin/Makefile"

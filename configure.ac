@@ -1065,11 +1065,13 @@ AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
 apbs_build_libraries=""
-if [[ "${host_os}" == "cygwin" ] && [ "${CC}" == "icl" ]]; then
+if [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
+  maloc_lib=""
+  AC_SUBST(maloc_lib)
   apbs_build_libraries="../bin/libapbsmainroutines.la \
                         ../src/aaa_lib/libapbs.la \
                         ../contrib/blas/libapbsblas.la \
-			../contrib/lib/libmaloc.la"
+			../contrib/maloc/src/aaa_lib/libmaloc.la"
 else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
 			${top_apbsdir}/src/aaa_lib/libapbs.la \
