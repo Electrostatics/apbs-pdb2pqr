@@ -49,7 +49,7 @@ else
 LIBEFENCE =
 endif
 
-libdir = ${prefix}/lib/${fetk_cpu_vendor_os}
+libdir = ${prefix}/lib
 lib_LTLIBRARIES = libmaloc.la ${LIBEFENCE}
 
 libmaloc_la_SOURCES =
