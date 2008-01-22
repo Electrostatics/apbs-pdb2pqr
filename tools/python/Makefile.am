@@ -18,5 +18,5 @@ if PY_PRESENT
    _apbslib_so_SOURCES   = apbslib.c
    _apbslib_so_LINK      = $(PY_CC) $(PY_LINKFLAGS)
    _apbslib_so_LDFLAGS   = -o $@ $(PY_SHARED)
-   _apbslib_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+   _apbslib_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@
 endif

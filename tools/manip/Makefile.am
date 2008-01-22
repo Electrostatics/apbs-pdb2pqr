@@ -12,9 +12,9 @@ CCLD = $(F77)
 
 noinst_PROGRAMS  = coulomb born
 coulomb_SOURCES  = coulomb.c 
-coulomb_LDADD    = ../../src/aaa_lib/libapbs.la @lib_list@
+coulomb_LDADD    = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 born_SOURCES     = born.c 
-born_LDADD       = ../../src/aaa_lib/libapbs.la @lib_list@
+born_LDADD       = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 INCLUDES         = @inc_list@
 AM_CFLAGS        = @CFLAGS@
 AM_LDFLAGS       = @LDFLAGS@ @FFLAGS@

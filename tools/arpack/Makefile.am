@@ -12,7 +12,7 @@ CCLD = $(F77)
 
 noinst_PROGRAMS  = driver
 driver_SOURCES   = driver.c readhb.f ardriv.f
-driver_LDADD     = ../../src/aaa_lib/libapbs.la @arpack_lib@ @lib_list@
+driver_LDADD     = ../../src/aaa_lib/libapbs.la @arpack_lib@ @apbs_build_libraries@
 INCLUDES         = @inc_list@
 AM_CFLAGS           = @CFLAGS@
 AM_LDFLAGS           = @LDFLAGS@ @FFLAGS@

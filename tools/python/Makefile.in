@@ -232,7 +232,7 @@ SUBDIRS = vgrid
 @PY_PRESENT_TRUE@_apbslib_so_SOURCES = apbslib.c
 @PY_PRESENT_TRUE@_apbslib_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
 @PY_PRESENT_TRUE@_apbslib_so_LDFLAGS = -o $@ $(PY_SHARED)
-@PY_PRESENT_TRUE@_apbslib_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+@PY_PRESENT_TRUE@_apbslib_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@
 all: all-recursive
 
 .SUFFIXES:
