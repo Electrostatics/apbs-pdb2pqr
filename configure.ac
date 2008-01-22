@@ -841,7 +841,9 @@ if test -z "${pansi_use}"; then
 	try_strcasecmp="";
 	AC_CHECK_FUNC(strcasecmp, [try_strcasecmp=""], [try_strcasecmp="yes"])
 	if test -n "${try_strcasecmp}"; then
-		AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
+		if test "${CC}" != "icl"; then
+		  AC_DEFINE([HAVE_STRCASECMP], [], [have machine-supplied strcasecmp])
+		fi
 	fi
 else
 	AC_MSG_RESULT([yes])
@@ -1071,7 +1073,8 @@ if [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
   apbs_build_libraries="../bin/libapbsmainroutines.la \
                         ../src/aaa_lib/libapbs.la \
                         ../contrib/blas/libapbsblas.la \
-			../contrib/maloc/src/aaa_lib/libmaloc.la"
+			../contrib/maloc/src/aaa_lib/libmaloc.la \
+			../../Program\ Files/Microsoft\ Visual\ Studio\ 8/VC/PlatformSDK/Lib/WSock32.Lib"
 else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
 			${top_apbsdir}/src/aaa_lib/libapbs.la \
