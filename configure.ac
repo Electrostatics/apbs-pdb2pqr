@@ -418,6 +418,15 @@ if test -z "${mpi_path}"; then
 	)
 fi
 
+if test -z "${mpi_path}"; then
+	AC_MSG_CHECKING([for --with-openmpi option])
+	AC_ARG_WITH(openmpi,
+		[AC_HELP_STRING([--with-openmpi], [enable OpenMPI compilation])],
+		[mpi_path=""; AC_MSG_RESULT([yes]); USE_OPMI="yes"],
+		[mpi_path=""; AC_MSG_RESULT([no]) ]
+	)
+fi
+
 dnl # MPI library location ARG specification (override environment)
 USE_MPI=
 if test -n "${mpi_path}"; then
@@ -471,6 +480,15 @@ if test -n "${mpi_path}"; then
 	
 	USE_MPI="yes"
 fi
+
+if test -n "${USE_OPMI}"; then
+   	HAS_MPI_LIB="yes"
+	HAS_MPI_INC="yes"
+	mpi_inc=""
+	mpi_lib=""
+	AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
+	USE_MPI="yes"
+fi	
 
 AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
