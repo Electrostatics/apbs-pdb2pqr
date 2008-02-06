@@ -296,20 +296,20 @@ if [[ "${host_os}" = "cygwin" ] && [ "${CC}" != "icl" ]]; then
 elif [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
    AC_DEFINE(MSDOS)
    AC_DEFINE(WIN32)
-   AC_CHECK_HEADERS(\
-    unistd.h \
-    sys/types.h \
-    sys/time.h \
-    sys/times.h \
-    sys/stat.h \
-    fcntl.h \
-    rpc/rpc.h \
-    sys/socket.h \
-    sys/un.h \
-    netinet/in.h \
-    arpa/inet.h \
-    netdb.h \
-   )
+#   AC_CHECK_HEADERS(\
+#    unistd.h \
+#    sys/types.h \
+#    sys/time.h \
+#    sys/times.h \
+#    sys/stat.h \
+#    fcntl.h \
+#    rpc/rpc.h \
+#    sys/socket.h \
+#    sys/un.h \
+#    netinet/in.h \
+#    arpa/inet.h \
+#    netdb.h \
+#   )
 else
    AC_CHECK_HEADERS(\
     unistd.h \
