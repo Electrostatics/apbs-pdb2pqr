@@ -52,10 +52,10 @@ typedef struct Vmem {
 
     char name[80];      /* name of class we are managing malloc areas for   */
 
-    int mallocBytes;    /* total size of all current malloc areas of class  */
-    int freeBytes;      /* total size of all freed malloc areas of class    */
-    int highWater;      /* high-water malloc bytemark for this class        */
-    int mallocAreas;    /* total number of individual malloc areas          */
+    size_t mallocBytes;    /* total size of all current malloc areas of class  */
+    size_t freeBytes;      /* total size of all freed malloc areas of class    */
+    size_t highWater;      /* high-water malloc bytemark for this class        */
+    size_t mallocAreas;    /* total number of individual malloc areas          */
 
 } Vmem;
 
@@ -75,27 +75,27 @@ typedef struct Vmem {
  * ***************************************************************************
  */
 
-VEXTERNC int Vmem_bytesTotal(void);
-VEXTERNC int Vmem_mallocBytesTotal(void);
-VEXTERNC int Vmem_freeBytesTotal(void);
-VEXTERNC int Vmem_highWaterTotal(void);
-VEXTERNC int Vmem_mallocAreasTotal(void);
-VEXTERNC void Vmem_printTotal(void);
+VEXTERNC size_t Vmem_bytesTotal(void);
+VEXTERNC size_t Vmem_mallocBytesTotal(void);
+VEXTERNC size_t Vmem_freeBytesTotal(void);
+VEXTERNC size_t  Vmem_highWaterTotal(void);
+VEXTERNC size_t Vmem_mallocAreasTotal(void);
+VEXTERNC void Vmem_prsize_tTotal(void);
 
 VEXTERNC Vmem* Vmem_ctor(char *name);
 VEXTERNC void Vmem_dtor(Vmem **thee);
 
-VEXTERNC void *Vmem_malloc(Vmem *thee, int num, int size);
-VEXTERNC void Vmem_free(Vmem *thee, int num, int size, void **ram);
-VEXTERNC void *Vmem_realloc(Vmem *thee, int num, int size, void **ram,
-    int newNum);
+VEXTERNC void *Vmem_malloc(Vmem *thee, size_t num, size_t size);
+VEXTERNC void Vmem_free(Vmem *thee, size_t num, size_t size, void **ram);
+VEXTERNC void *Vmem_realloc(Vmem *thee, size_t num, size_t size, void **ram,
+    size_t newNum);
 
-VEXTERNC int Vmem_bytes(Vmem *thee);
-VEXTERNC int Vmem_mallocBytes(Vmem *thee);
-VEXTERNC int Vmem_freeBytes(Vmem *thee);
-VEXTERNC int Vmem_highWater(Vmem *thee);
-VEXTERNC int Vmem_mallocAreas(Vmem *thee);
-VEXTERNC void Vmem_print(Vmem *thee);
+VEXTERNC size_t Vmem_bytes(Vmem *thee);
+VEXTERNC size_t Vmem_mallocBytes(Vmem *thee);
+VEXTERNC size_t Vmem_freeBytes(Vmem *thee);
+VEXTERNC size_t Vmem_highWater(Vmem *thee);
+VEXTERNC size_t Vmem_mallocAreas(Vmem *thee);
+VEXTERNC void Vmem_prsize_t(Vmem *thee);
 
 #endif /* _VMEM_H_ */
 

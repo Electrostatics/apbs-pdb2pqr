@@ -37,7 +37,7 @@ VEMBED(rcsid="$Id$")
 
 /* total and misc (default) malloc/free tracking */
 VPRIVATE Vmem vmemTotal, vmemMisc;
-VPRIVATE int vmemInit=0;
+VPRIVATE size_t vmemInit=0;
 
 /*
  * ***************************************************************************
@@ -92,7 +92,7 @@ VPRIVATE void Vmem_init(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_bytesTotal(void)
+VPUBLIC size_t Vmem_bytesTotal(void)
 {
     Vmem_init();
     return (vmemTotal.mallocBytes - vmemTotal.freeBytes);
@@ -108,7 +108,7 @@ VPUBLIC int Vmem_bytesTotal(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_mallocBytesTotal(void)
+VPUBLIC size_t Vmem_mallocBytesTotal(void)
 {
     Vmem_init();
     return vmemTotal.mallocBytes;
@@ -124,7 +124,7 @@ VPUBLIC int Vmem_mallocBytesTotal(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_freeBytesTotal(void)
+VPUBLIC size_t Vmem_freeBytesTotal(void)
 {
     Vmem_init();
     return vmemTotal.freeBytes;
@@ -141,7 +141,7 @@ VPUBLIC int Vmem_freeBytesTotal(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_highWaterTotal(void)
+VPUBLIC size_t Vmem_highWaterTotal(void)
 {
     Vmem_init();
     return vmemTotal.highWater;
@@ -156,7 +156,7 @@ VPUBLIC int Vmem_highWaterTotal(void)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_mallocAreasTotal(void)
+VPUBLIC size_t Vmem_mallocAreasTotal(void)
 {
     Vmem_init();
     return vmemTotal.mallocAreas;
@@ -230,9 +230,9 @@ VPUBLIC void Vmem_dtor(Vmem **thee)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC void *Vmem_malloc(Vmem *thee, int num, int size)
+VPUBLIC void *Vmem_malloc(Vmem *thee, size_t num, size_t size)
 {
-    int btmp;
+    size_t btmp;
     void *ram = VNULL;
 
     Vmem_init();
@@ -241,7 +241,7 @@ VPUBLIC void *Vmem_malloc(Vmem *thee, int num, int size)
     VASSERT( (num > 0) && (size > 0) );
     if ( (num > 0) && (size > 0) ) {
 
-        ram = (void*)calloc((unsigned int)num, (unsigned int)size);
+        ram = (void*)calloc((size_t)num, (size_t)size);
         VASSERT( ram != VNULL );
 
         vmemTotal.mallocBytes += (num * size);
@@ -275,7 +275,7 @@ VPUBLIC void *Vmem_malloc(Vmem *thee, int num, int size)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC void Vmem_free(Vmem *thee, int num, int size, void **ram)
+VPUBLIC void Vmem_free(Vmem *thee, size_t num, size_t size, void **ram)
 {
     Vmem_init();
 
@@ -308,8 +308,8 @@ VPUBLIC void Vmem_free(Vmem *thee, int num, int size, void **ram)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC void *Vmem_realloc(Vmem *thee, int num, int size, void **ram,
-    int newNum)
+VPUBLIC void *Vmem_realloc(Vmem *thee, size_t num, size_t size, void **ram,
+    size_t newNum)
 {
     void *tee = Vmem_malloc(thee, newNum, size);
     memcpy(tee, (*ram), size*VMIN2(num,newNum));
@@ -327,7 +327,7 @@ VPUBLIC void *Vmem_realloc(Vmem *thee, int num, int size, void **ram,
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_bytes(Vmem *thee)
+VPUBLIC size_t Vmem_bytes(Vmem *thee)
 {
     Vmem_init();
 
@@ -348,7 +348,7 @@ VPUBLIC int Vmem_bytes(Vmem *thee)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_mallocBytes(Vmem *thee)
+VPUBLIC size_t Vmem_mallocBytes(Vmem *thee)
 {
     Vmem_init();
 
@@ -369,7 +369,7 @@ VPUBLIC int Vmem_mallocBytes(Vmem *thee)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_freeBytes(Vmem *thee)
+VPUBLIC size_t Vmem_freeBytes(Vmem *thee)
 {
     Vmem_init();
 
@@ -390,7 +390,7 @@ VPUBLIC int Vmem_freeBytes(Vmem *thee)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_highWater(Vmem *thee)
+VPUBLIC size_t Vmem_highWater(Vmem *thee)
 {
     Vmem_init();
 
@@ -411,7 +411,7 @@ VPUBLIC int Vmem_highWater(Vmem *thee)
  * Author:   Michael Holst
  * ***************************************************************************
  */
-VPUBLIC int Vmem_mallocAreas(Vmem *thee)
+VPUBLIC size_t Vmem_mallocAreas(Vmem *thee)
 {
     Vmem_init();
 
