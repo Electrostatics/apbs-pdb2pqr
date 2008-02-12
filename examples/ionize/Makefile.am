@@ -10,7 +10,7 @@
 ## Author:  Todd Dolinsky
 ## ###########################################################################
 
-APBS=${prefix}/bin/${target}/apbs
+APBS=${prefix}/bin/${fetk_cpu_vendor_os}/apbs
 CLEANFILES = *.out *.log io.mc
 
 test:

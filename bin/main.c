@@ -117,7 +117,7 @@ int main(
 	char *input_path = VNULL;
 	char *output_path = VNULL;
 	int i, rank, size, isolve, k;
-	unsigned long int bytesTotal, highWater;
+	size_t bytesTotal, highWater;
 	Voutput_Format outputformat;
 	
 	int rc = 0;

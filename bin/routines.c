@@ -760,7 +760,8 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
 				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
 	
-	int j, bytesTotal, highWater, focusFlag, iatom;
+	int j,  focusFlag, iatom;
+	size_t bytesTotal, highWater;
 	double sparm, iparm, q;
 	Vatom *atom = VNULL;
 	Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
@@ -2991,7 +2992,9 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 				   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
 				   Vfetk *fetk[NOSH_MAXCALC]) {
 	
-	int iatom, j, bytesTotal, highWater, theMol, focusFlag;
+	int iatom, j, theMol, focusFlag;
+	size_t bytesTotal, highWater;
+	
 	double sparm, q, iparm, center[3];
 	Valist *myalist;
 	Vatom *atom = VNULL;
