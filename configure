@@ -1541,6 +1541,7 @@ Optional Packages:
   --with-mpich=PATH       toplevel MPICH directory
   --with-mpich2=PATH      toplevel MPICH2 directory
   --with-lam=PATH         toplevel LAM-MPI directory
+  --with-openmpi          enable OpenMPI compilation
   --with-blas=LDFLAGS     link to user-specified BLAS (specify flags to pass
                           to ld)
   --with-blas-name=NAME   name of BLAS library, defaults to blas
@@ -6449,7 +6450,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6452 "configure"' > conftest.$ac_ext
+  echo '#line 6453 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8218,11 +8219,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8221: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8222: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8225: \$? = $ac_status" >&5
+   echo "$as_me:8226: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8486,11 +8487,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8489: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8490: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8493: \$? = $ac_status" >&5
+   echo "$as_me:8494: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8590,11 +8591,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8593: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8594: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8597: \$? = $ac_status" >&5
+   echo "$as_me:8598: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10898,7 +10899,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10901 "configure"
+#line 10902 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10998,7 +10999,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11001 "configure"
+#line 11002 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13334,11 +13335,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13337: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13338: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13341: \$? = $ac_status" >&5
+   echo "$as_me:13342: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13438,11 +13439,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13441: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13442: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13445: \$? = $ac_status" >&5
+   echo "$as_me:13446: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15008,11 +15009,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15011: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15012: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15015: \$? = $ac_status" >&5
+   echo "$as_me:15016: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15112,11 +15113,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15115: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15116: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15119: \$? = $ac_status" >&5
+   echo "$as_me:15120: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17310,11 +17311,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17313: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17314: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17317: \$? = $ac_status" >&5
+   echo "$as_me:17318: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17578,11 +17579,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17581: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17582: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17585: \$? = $ac_status" >&5
+   echo "$as_me:17586: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17682,11 +17683,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17685: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17686: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17689: \$? = $ac_status" >&5
+   echo "$as_me:17690: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21548,6 +21549,22 @@ fi
 
 fi
 
+if test -z "${mpi_path}"; then
+	{ echo "$as_me:$LINENO: checking for --with-openmpi option" >&5
+echo $ECHO_N "checking for --with-openmpi option... $ECHO_C" >&6; }
+
+# Check whether --with-openmpi was given.
+if test "${with_openmpi+set}" = set; then
+  withval=$with_openmpi; mpi_path=""; { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }; USE_OPMI="yes"
+else
+  mpi_path=""; { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+
+fi
+
+fi
+
 USE_MPI=
 if test -n "${mpi_path}"; then
 	as_ac_File=`echo "ac_cv_file_${mpi_path}/include/mpi.h" | $as_tr_sh`
@@ -21821,6 +21838,19 @@ fi
 			exit 0
 		fi
 	fi
+
+	USE_MPI="yes"
+fi
+
+if test -n "${USE_OPMI}"; then
+   	HAS_MPI_LIB="yes"
+	HAS_MPI_INC="yes"
+	mpi_inc=""
+	mpi_lib=""
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MPI_H
+_ACEOF
 
 	USE_MPI="yes"
 fi
