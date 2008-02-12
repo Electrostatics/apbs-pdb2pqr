@@ -703,6 +703,7 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
             thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
             asurf = thee->surf[i];
         }
+        Vnm_print(1,"SASA for atom %i: %1.12E\n", i, asurf->area);
         area += (asurf->area);
     }
 
