@@ -5165,6 +5165,11 @@ VPRIVATE void markFrac(
     } /* i loop */
 }
 
+/*
+ 
+ NOTE: This is the original version of the markSphere function. It's in here
+		for reference and in case a reversion to the original code is needed.
+ 
 VPRIVATE void markSphere(
         double rtot, double *tpos,
         int nx, int ny, int nz,
@@ -5176,7 +5181,7 @@ VPRIVATE void markSphere(
     double dx, dx2, dy, dy2, dz, dz2;
     double rtot2, pos[3];
 
-    /* Convert to grid reference frame */
+    // Convert to grid reference frame
     pos[0] = tpos[0] - xmin;
     pos[1] = tpos[1] - ymin;
     pos[2] = tpos[2] - zmin;
@@ -5209,9 +5214,57 @@ VPRIVATE void markSphere(
                 if ((dz2 + dy2 + dx2) <= rtot2) {
                     array[IJK(i,j,k)] = markVal;
                 }
-            } /* k loop */
-        } /* j loop */
-    } /* i loop */
+            } // k loop
+        } // j loop
+    } // i loop
+}
+*/
+
+VPRIVATE void markSphere(double rtot, double *tpos,
+						 int nx, int ny, int nz,
+						 double hx, double hy, double hzed,
+						 double xmin, double ymin, double zmin,
+						 double *array, double markVal) {
+	
+    int i, j, k;
+	int imin, imax;
+	int jmin, jmax;
+	int kmin, kmax;
+    double dx2, dy2, dz2;
+	double xrange, yrange, zrange;
+    double rtot2, pos[3];
+	
+    // Convert to grid reference frame
+    pos[0] = tpos[0] - xmin;
+    pos[1] = tpos[1] - ymin;
+    pos[2] = tpos[2] - zmin;
+	
+    rtot2 = VSQR(rtot);
+	
+	xrange = rtot + 0.5 * hx;
+	yrange = rtot + 0.5 * hy;
+	zrange = rtot + 0.5 * hzed;
+	
+	imin = VMAX2(0, (int)ceil((pos[0] - xrange)/hx));
+	jmin = VMAX2(0, (int)ceil((pos[1] - yrange)/hy));
+	kmin = VMAX2(0, (int)ceil((pos[2] - zrange)/hzed));
+	
+	imax = VMIN2(nx-1, (int)floor((pos[0] + xrange)/hx));
+	jmax = VMIN2(ny-1, (int)floor((pos[1] + yrange)/hy));
+	kmax = VMIN2(nz-1, (int)floor((pos[2] + zrange)/hzed));
+	
+	for (i=imin; i<=imax; i++) {
+		dx2 = VSQR(pos[0] - hx*i);
+		for (j=jmin; j<=jmax; j++) {
+			dy2 = VSQR(pos[1] - hy*j);
+			for (k=kmin; k<=kmax; k++) {
+				dz2 = VSQR(pos[2] - hzed*k);
+				if ((dz2 + dy2 + dx2) <= rtot2) {
+                    array[IJK(i,j,k)] = markVal;
+                }
+			}
+		}
+	}
 }
 
 VPRIVATE void zlapSolve(
