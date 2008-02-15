@@ -703,7 +703,6 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
             thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
             asurf = thee->surf[i];
         }
-        Vnm_print(1,"SASA for atom %i: %1.12E\n", i, asurf->area);
         area += (asurf->area);
     }
 
@@ -1659,7 +1658,6 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 		if(rc == 0) return 0;
 		
 		tenergy += energy;
-		Vnm_print(1,"wcaEnergy for atom %i: %1.12E\n",iatom,energy);
     }
 
 	apolparm->wcaEnergy = tenergy;
