@@ -9,6 +9,7 @@
 	* mg-dummy calculations can be run with any number (n>3) of grid points
 	* Updated PMG license to LGPL
 	* Added per-atom SASA information output from APOLAR calculations
+	* Added per-atom verbosity to APOLAR calculation outputs
 - BUG FIXES
 	* Clarified ELEC/DIME and ELEC/PDIME documentation
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit

@@ -3603,6 +3603,9 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	double nhash[3];
 	double sradPad, x, y, z;
 	double atomRadius, srad;
+	double atomsasa[Valist_getNumberAtoms(alist)];
+	double atomwcaEnergy[Valist_getNumberAtoms(alist)];
+	double energy = 0.0;        //WCA energy per atom
 	
 	double dist, charge, xmin, xmax, ymin, ymax, zmin, zmax;
 	double disp[3], center[3];
@@ -3617,7 +3620,7 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
     zmin = Vatom_getPosition(atom)[2];
     zmax = Vatom_getPosition(atom)[2];
     charge = 0;
-    for (i=0; i<Valist_getNumberAtoms(alist); i++) {
+    for (i=0; i < Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
         atomRadius = Vatom_getRadius(atom);
         x = Vatom_getPosition(atom)[0];
@@ -3693,14 +3696,29 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	sav = 0.0;
 	
 	if (apolparm->calcenergy) {
-		/* Solvent accessible surface area */
+		/* Total Solvent Accessible Surface Area (SASA) */
 		apolparm->sasa = Vacc_totalSASA(acc, srad);
+	    /* SASA for each atom */
+		for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
+			atom = Valist_getAtom(alist, i);
+			atomsasa[i] = Vacc_atomSASA(acc, srad, atom);
+		}
 		
 		/* Inflated van der Waals accessibility */
 		apolparm->sav = Vacc_totalSAV(acc, clist, apolparm, srad);
 		
 		/* wcaEnergy integral code */
 		if (VABS(apolparm->bconc) > VSMALL) {
+			/* wcaEnergy for each atom */
+			for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
+				rc = Vacc_wcaEnergyAtom(acc, apolparm, alist, clist, i, &energy);
+				if (rc == 0)  {
+					Vnm_print(2, "Error in apolar energy calculation!\n");
+					return 0;
+				}
+				atomwcaEnergy[i] = energy;		
+			}
+			/* Total WCA Energy */
 			rc = Vacc_wcaEnergy(acc, apolparm, alist, clist);
 			if (rc == 0) {
 				Vnm_print(2, "Error in apolar energy calculation!\n");
@@ -3710,7 +3728,7 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 			apolparm->wcaEnergy = 0.0;
 		}
 		
-		energyAPOL(apolparm, apolparm->sasa, apolparm->sav);
+		energyAPOL(apolparm, apolparm->sasa, apolparm->sav, atomsasa, atomwcaEnergy, Valist_getNumberAtoms(alist));
 	}
 	
 	Vclist_dtor(&clist);
@@ -3719,13 +3737,18 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	return VRC_SUCCESS;
 }
 
-VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
+VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav, double atomsasa[], double atomwcaEnergy[], int numatoms){
 
 	double energy = 0.0;
+	int i = 0;
 
 #ifndef VAPBSQUIET
+	Vnm_print(1,"\nSolvent Accessible Surface Area (SASA) for each atom:\n");
+	for (i = 0; i < numatoms; i++) {
+		Vnm_print(1,"  SASA for atom %i: %1.12E\n", i, atomsasa[i]);
+	}
+	
 	Vnm_print(1,"\nTotal solvent accessible surface area: %g A^2\n",sasa);
-	Vnm_print(1,"Total solvent accessible volume: %g A^3\n", sav);
 #endif
 
 	switch(apolparm->calcenergy){
@@ -3738,10 +3761,21 @@ VPUBLIC int energyAPOL(APOLparm *apolparm, double sasa, double sav){
 			energy = (apolparm->gamma*sasa) + (apolparm->press*sav) 
 						+ (apolparm->wcaEnergy);
 #ifndef VAPBSQUIET
+			Vnm_print(1,"\nSurface tension*area energies (gamma * SASA) for each atom:\n");
+			for (i = 0; i < numatoms; i++) {
+				Vnm_print(1,"  Surface tension*area energy for atom %i: %1.12E\n", i, apolparm->gamma*atomsasa[i]);
+			}
+
 			Vnm_print(1,"\nTotal surface tension energy: %g kJ/mol\n", apolparm->gamma*sasa);
-			Vnm_print(1,"Total pressure energy: %g kJ/mol\n", apolparm->press*sav);
-			Vnm_print(1,"Total WCA energy: %g kJ/mol\n", (apolparm->wcaEnergy));
-			Vnm_print(1,"Total non-polar energy = %1.12E kJ/mol\n",energy);
+			Vnm_print(1,"\nTotal solvent accessible volume: %g A^3\n", sav);
+			Vnm_print(1,"\nTotal pressure*volume energy: %g kJ/mol\n", apolparm->press*sav);
+			Vnm_print(1,"\nWCA dispersion Energies for each atom:\n");
+			for (i = 0; i < numatoms; i++) {
+				Vnm_print(1,"  WCA energy for atom %i: %1.12E\n", i, atomwcaEnergy[i]);
+			}
+			
+			Vnm_print(1,"\nTotal WCA energy: %g kJ/mol\n", (apolparm->wcaEnergy));
+			Vnm_print(1,"\nTotal non-polar energy = %1.12E kJ/mol\n", energy);
 #endif
 			break;
 		default:

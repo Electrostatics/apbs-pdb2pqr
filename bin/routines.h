@@ -597,7 +597,10 @@ VEXTERNC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk);
 VEXTERNC int energyAPOL(
 						APOLparm *apolparm, /** APOLparm object */
 						double sasa, /** Solvent accessible surface area */
-						double sav /** Solvent accessible volume */
+						double sav, /** Solvent accessible volume */
+						double atomsasa[], /** Array for SASA per atom **/
+						double atomwcaEnergy[], /** Array for WCA energy per atom **/
+						int numatoms /** Number of atoms (or size of the above arrays) **/
 						);
 
 /**
