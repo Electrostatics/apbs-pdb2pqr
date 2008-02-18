@@ -1686,7 +1686,7 @@
 			<para>Specify the radius of the solvent molecules; this parameter is used
 				to define the dielectric function (see 
 				<link linkend="elec-srfm"><command>srfm</command></link>).  This value is
-				usually set to 1.4 &Aring; for water.
+				usually set to 1.4 &Aring; for water.  This keyword is ignored when any of the spline-based surfaces are used (e.g., spl2, see <link linkend="elec-srfm"><command>srfm</command></link>).
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>radius</replaceable></term>

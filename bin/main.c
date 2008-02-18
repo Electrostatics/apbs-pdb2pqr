@@ -104,8 +104,10 @@ int main(
 	Vio *sock = VNULL;
 #ifdef HAVE_MC_H
 	Vfetk *fetk[NOSH_MAXCALC];
+	Gem *gm[NOSH_MAXMOL];
 #else
 	void *fetk[NOSH_MAXCALC];
+	void *gm[NOSH_MAXMOL];
 #endif
 	Vpmg *pmg[NOSH_MAXCALC];
 	Vpmgp *pmgp[NOSH_MAXCALC];
@@ -381,6 +383,13 @@ Please cite your use of APBS as:\n\n\
 		Vnm_tprint(2, "Error reading charge maps!\n");
 		VJMPERR1(0);
 	}
+#ifdef HAVE_MC_H
+	/* This routine is not yet defined -- hopefully NAB doesn't check this in without defining it... */
+	if (loadMeshes(nosh, gm) != 1) {
+		Vnm_tprint(2, "Error reading meshes!\n");
+		VJMPERR1(0);
+	}
+#endif
 
 	/* *************** DO THE CALCULATIONS ******************* */
 	Vnm_tprint( 1, "Preparing to run %d PBE calculations.\n",
