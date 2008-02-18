@@ -295,12 +295,13 @@ typedef enum eVdata_Type Vdata_Type;
 /**
  *  @ingroup Vhal
  *  @author  Nathan Baker
- *  @brief   Format of data that can be written out of APBS
+ *  @brief   Format of data for APBS I/O
  */
 enum eVdata_Format {
     VDF_DX=0,  /**< OpenDX (Data Explorer) format */
     VDF_UHBD=1, /**< UHBD format */
-    VDF_AVS=2  /**< AVS UCD format */
+    VDF_AVS=2,  /**< AVS UCD format */
+	VDF_MCSF=3  /**< FEtk MC Simplex Format (MCSF) */
 };
 
 /** @typedef Vdata_Format

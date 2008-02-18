@@ -154,7 +154,7 @@ AC_ARG_ENABLE(python,
 	[ with_python=""    ]
 )
 if test -n "${with_python}"; then
-	AC_MSG_RESULT("WARNING:  Python linkage requires GNU compilers")
+	AC_MSG_RESULT([WARNING:  Python linkage requires GNU compilers])
 	cclist="gcc"
 	f77list="gfortran g95 g77"
 else

@@ -5178,7 +5178,7 @@ VPRIVATE void markSphere(
         double *array, double markVal) {
 
     int i, j, k, imin, imax, jmin, jmax, kmin, kmax;
-    double dx, dx2, dy, dy2, dz, dz2;
+    double xrange, dx2, yrange, dy2, zrange, dz2;
     double rtot2, pos[3];
 
     // Convert to grid reference frame
@@ -5188,27 +5188,33 @@ VPRIVATE void markSphere(
 
     rtot2 = VSQR(rtot);
 
-    dx = rtot + 0.5*hx;
-    imin = VMAX2(0,(int)ceil((pos[0] - dx)/hx));
-    imax = VMIN2(nx-1,(int)floor((pos[0] + dx)/hx));
+#if 0
+	/* Increase search distance over x grid direction by half a grid space 
+	 -- basically to allow for some slop in searching, rounding, and comparison */
+    xrange = rtot + 0.5*hx;
+	/* Find the largest and smallest index in the x-direction over which we have 
+	 to search.  This is basically a conversion from relative position (with 
+	 respect to lower grid corner xmin) to grid index units */
+    imin = VMAX2(0,(int)ceil((pos[0] - xrange)/hx));
+    imax = VMIN2(nx-1,(int)floor((pos[0] + xrange)/hx));
     for (i=imin; i<=imax; i++) {
         dx2 = VSQR(pos[0] - hx*i);
         if (rtot2 > dx2) {
-            dy = VSQRT(rtot2 - dx2) + 0.5*hy;
+            yrange = VSQRT(rtot2 - dx2) + 0.5*hy;
         } else {
-            dy = 0.5*hy;
+            yrange = 0.5*hy;
         }
-        jmin = VMAX2(0,(int)ceil((pos[1] - dy)/hy));
-        jmax = VMIN2(ny-1,(int)floor((pos[1] + dy)/hy));
+        jmin = VMAX2(0,(int)ceil((pos[1] - yrange)/hy));
+        jmax = VMIN2(ny-1,(int)floor((pos[1] + yrange)/hy));
         for (j=jmin; j<=jmax; j++) {
             dy2 = VSQR(pos[1] - hy*j);
             if (rtot2 > (dx2+dy2)) { 
-                dz = VSQRT(rtot2-dx2-dy2)+0.5*hzed; 
+                zrange = VSQRT(rtot2-dx2-dy2)+0.5*hzed; 
             } else {
-                dz = 0.5*hzed;
+                zrange = 0.5*hzed;
             }
-            kmin = VMAX2(0,(int)ceil((pos[2] - dz)/hzed));
-            kmax = VMIN2(nz-1,(int)floor((pos[2] + dz)/hzed));
+            kmin = VMAX2(0,(int)ceil((pos[2] - zrange)/hzed));
+            kmax = VMIN2(nz-1,(int)floor((pos[2] + zrange)/hzed));
             for (k=kmin; k<=kmax; k++) {
                 dz2 = VSQR(k*hzed - pos[2]);
                 if ((dz2 + dy2 + dx2) <= rtot2) {
@@ -5217,6 +5223,30 @@ VPRIVATE void markSphere(
             } // k loop
         } // j loop
     } // i loop
+#else
+	xrange = rtot + 0.5 * hx;  /* This extra factor of h/2 may not be necessary with this new algorithm */
+	yrange = rtot + 0.5 * hy;
+	zrange = rtot + 0.5 * hzed;
+	imin = VMAX2(0, (int)ceil((pos[0] - xrange)/hx));
+	jmin = VMAX2(0, (int)ceil((pos[1] - yrange)/hy));
+	kmin = VMAX2(0, (int)ceil((pos[2] - zrange)/hzed));
+	imax = VMIN2(nx-1, (int)floor((pos[0] + xrange)/hx));
+	jmax = VMIN2(ny-1, (int)floor((pos[1] + yrange)/hy));
+	kmax = VMIN2(nz-1, (int)floor((pos[2] + zrange)/hzed));
+	for (i=imin; i<=imax; i++) {
+		dx2 = VSQR(pos[0] - hx*i);
+		for (j=jmin; j<=jmax; j++) {
+			dy2 = VSQR(pos[1] - hy*j);
+			for (k=kmin; k<=kmax; k++) {
+				dz2 = VSQR(pos[2] - hzed*k);
+				if ((dz2 + dy2 + dx2) <= rtot2) {
+                    array[IJK(i,j,k)] = markVal;
+                }
+			}
+		}
+	}
+				
+#endif
 }
 */
 

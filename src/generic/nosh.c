@@ -670,6 +670,35 @@ section!\n");
 	
 }
 
+VPRIVATE int NOsh_parseREAD_MESH(NOsh *thee, Vio *sock) {
+	
+    char tok[VMAX_BUFSIZE];
+    Vdata_Format meshfmt;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "mcsf") == 0) {
+        meshfmt = VDF_MCSF;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        Vnm_print(0, "NOsh: Storing mesh %d path %s\n",
+				  thee->nmesh, tok);
+        thee->meshfmt[thee->nmesh] = meshfmt;
+        strncpy(thee->meshpath[thee->nmesh], tok, VMAX_ARGLEN);
+        (thee->nmesh)++;
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined mesh format \
+				  %s!\n", tok);
+    }
+	
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+			  section!\n");
+	return 0;
+	
+}
+
+
 VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE];
@@ -705,6 +734,8 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
             NOsh_parseREAD_KAPPA(thee,sock);
         } else if (Vstring_strcasecmp(tok, "charge") == 0) {
             NOsh_parseREAD_CHARGE(thee,sock);
+		} else if (Vstring_strcasecmp(tok, "mesh") == 0) {
+			NOsh_parseREAD_MESH(thee,sock);
         } else {
             Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined keyword %s!\n", 
 					  tok);

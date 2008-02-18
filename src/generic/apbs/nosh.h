@@ -247,6 +247,9 @@ struct sNOsh {
     int ncharge;  /**< Number of charge maps */
     char chargepath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to charge map files */
     Vdata_Format chargefmt[NOSH_MAXMOL];  /**< Charge maps fileformats */
+	int nmesh;  /**< Number of meshes */
+	char meshpath[NOSH_MAXMOL][VMAX_ARGLEN];   /**< Paths to mesh files */
+    Vdata_Format meshfmt[NOSH_MAXMOL];  /**< Mesh fileformats */
     int nprint;  /**< How many print sections? */
     NOsh_PrintType printwhat[NOSH_MAXPRINT];  /**< What do we print:  \li 0 = 
 		energy, \li 1 = force */
