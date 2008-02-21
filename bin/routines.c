@@ -319,6 +319,9 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
 				return 0;
+			case VDF_MCSF:
+				Vnm_tprint( 2, "MCSF input not supported yet!\n");
+				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
 							nosh->dielfmt[i]);
@@ -359,6 +362,9 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 				return 0;
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			case VDF_MCSF:
+				Vnm_tprint( 2, "MCSF input not supported yet!\n");
 				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
@@ -401,6 +407,9 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 				return 0;
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			case VDF_MCSF:
+				Vnm_tprint( 2, "MCSF input not supported yet!\n");
 				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
@@ -471,6 +480,9 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 			case VDF_UHBD:
 				Vnm_tprint( 2, "UHBD input not supported yet!\n");
 				return 0;
+			case VDF_MCSF:
+				Vnm_tprint( 2, "MCSF input not supported yet!\n");
+				return 0;
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
 				return 0;
@@ -537,6 +549,9 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 				return 0;
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			case VDF_MCSF:
+				Vnm_tprint(2, "MCSF input not supported yet!\n");
 				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
@@ -714,6 +729,9 @@ to ");
 			case VDF_AVS:
 				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "ucd");
 				break;
+			case VDF_MCSF:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "mcsf");
+				break;				
 			default: 
 				Vnm_tprint(2, "  Invalid format for writing!\n");
 				break;
@@ -2092,6 +2110,13 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				Vnm_tprint(2, "Sorry, AVS format isn't supported for \
 uniform meshes yet!\n");
 				break;
+
+			case VDF_MCSF:
+				sprintf(outpath, "%s.%s", writestem, "mcsf");
+				Vnm_tprint(1, "%s\n", outpath);
+				Vnm_tprint(2, "Sorry, MCSF format isn't supported for \
+						   uniform meshes yet!\n");
+				break;
 				
 			case VDF_UHBD:
 				sprintf(outpath, "%s.%s", writestem, "grd");
@@ -2988,6 +3013,74 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 
 #ifdef HAVE_MC_H
 
+VPUBLIC Vrc_Codes loadMeshes(NOsh *nosh, Gem *gm[NOSH_MAXMOL]) {
+	
+	int imesh;
+	int use_params = 0;
+	int gemkey = 0; /* Read MCSF-format meshes in simplex mode */
+	Vrc_Codes rc;
+	
+	Vio *sock = VNULL;
+	
+	Vnm_tprint( 1, "Got paths for %d meshes\n", nosh->nmesh);
+	
+	for (imesh=0; imesh<nosh->nmesh; imesh++) {
+		if (gm[imesh] == VNULL){
+			gm[imesh] = Gem_ctor(VNULL, VNULL);
+		} else {
+			Gem_dtor(&(gm[imesh]));
+			gm[imesh] = Gem_ctor(VNULL, VNULL);
+		}
+		
+		switch (nosh->meshfmt[imesh]) {
+			
+			case VDF_DX:
+				Vnm_tprint(2, "DX finite element mesh input not supported yet!\n");
+				return VRC_FAILURE;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD finite element mesh input not supported!\n");
+				return VRC_FAILURE;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS finite element mesh input not supported!\n");
+				return VRC_FAILURE;
+			case VDF_MCSF:
+				Vnm_tprint(1, "Reading MCSF-format input finite element mesh from %s.\n",
+						   nosh->meshpath[imesh]);
+				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->meshpath[imesh], "r");
+				if (sock == VNULL) {
+					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->meshpath[imesh]);
+					return VRC_FAILURE;
+				}
+				if (Vio_accept(sock, 0) < 0) {
+					Vnm_print(2, "Problem accepting virtual socket %s!\n",
+							  nosh->meshpath[imesh]);
+					return VRC_FAILURE;
+				}
+				
+				/* Now we need to read the mesh */
+				if ( !Gem_read(gm[imesh], gemkey, sock) ) {
+					Vnm_print(2, "Error while loading mesh into Gem object!\n");
+					return VRC_FAILURE;
+				}
+				
+				break;
+				
+				
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+						   nosh->meshfmt[imesh]);
+				return VRC_FAILURE;
+		}
+		
+	}
+		
+	return VRC_SUCCESS;
+	
+}
+
+
+
 VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
 				   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
 				   Vfetk *fetk[NOSH_MAXCALC]) {
@@ -3063,6 +3156,11 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	
 	/* Build mesh */
 	Vnm_tprint(0, "Setting up mesh...\n");
+	
+	/* NAB 21-FEB-2008:  HERES WHERE WE NEED TO MAKE A DECISION ABOUT GENERATING
+	 A CUBE VS USING THE READ-IN MESH */
+	Vnm_tprint(2, "WARNING -- NATHAN HASN'T FINISHED THE CUSTOM MESH CODE YET.\n");
+	Vnm_tprint(2, "USING DEFAULT CUBIC MESH.\n");
 	Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
 	/* Uniformly refine the mesh a bit */
 	for (j=0; j<2; j++) {
@@ -3573,6 +3671,10 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 				Vnm_tprint(2, "UHBD format not supported for FEM!\n");
 				break;
 				
+			case VDF_MCSF:
+				Vnm_tprint(2, "MCSF format not supported yet!\n");
+				break;
+				
 			default:
 				Vnm_tprint(2, "Bogus data format (%d)!\n", 
 						   pbeparm->writefmt[i]);
@@ -3828,7 +3930,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 											  sizeof(AtomForce));
 		}else{
-			Vmem_free(mem,*nforce,sizeof(AtomForce),atomForce);
+			Vmem_free(mem,*nforce,sizeof(AtomForce), (void **)atomForce);
 			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 												  sizeof(AtomForce));
 		}
@@ -3885,7 +3987,7 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 												  sizeof(AtomForce));
 		}else{
-			Vmem_free(mem,*nforce,sizeof(AtomForce),atomForce);
+			Vmem_free(mem,*nforce,sizeof(AtomForce), (void **)atomForce);
 			*atomForce = (AtomForce *)Vmem_malloc(mem, *nforce,
 												  sizeof(AtomForce));
 		}
