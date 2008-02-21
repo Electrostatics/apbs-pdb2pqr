@@ -2391,15 +2391,15 @@ VPRIVATE void bcCalc(Vpmg *thee) {
     }
 	
     /* For each "atom" (only one for bcfl=1), we use the following formula to
-		* calculate the boundary conditions: 
-		*    g(x) = \frac{q e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+	* calculate the boundary conditions: 
+	*    g(x) = \frac{q e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
 	*          * \frac{exp(-xkappa*(d - a))}{1+xkappa*a}
 	*          * 1/d
-		* where d = ||x - x_0|| (in m) and a is the size of the atom (in m).
-		* We only need to evaluate some of these prefactors once:
-		*    pre1 = \frac{e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
+	* where d = ||x - x_0|| (in m) and a is the size of the atom (in m).
+	* We only need to evaluate some of these prefactors once:
+	*    pre1 = \frac{e_c}{4*\pi*\eps_0*\eps_w*k_b*T}
 	* which gives the potential as
-		*    g(x) = pre1 * q/d * \frac{exp(-xkappa*(d - a))}{1+xkappa*a} 
+	*    g(x) = pre1 * q/d * \frac{exp(-xkappa*(d - a))}{1+xkappa*a} 
 	*/
     eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
     eps_p = Vpbe_getSoluteDiel(pbe);           /* Dimensionless */
