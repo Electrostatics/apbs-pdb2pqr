@@ -636,6 +636,25 @@ VEXTERNC int initAPOL(
 					  Valist *alist  /**< Atom list */
 					  );
 
+/**
+ * @brief  Load the meshes given in NOsh into geometry objects
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ * @returns  Error code on success/failure */
+VEXTERNC Vrc_Codes loadMeshes(
+							NOsh *nosh, /**< NOsh object with input file information */
+							Gem *gm[NOSH_MAXMOL]  /**< List of geometry objects
+							(to be populated) */
+						   );
+						
+/**
+ * @brief  Destroy the loaded meshes
+ * @ingroup  Frontend
+ * @author  Nathan Baker */
+VEXTERNC void killMeshes(
+							NOsh *nosh, /**< NOsh object with input file information */
+							Gem *alist[NOSH_MAXMOL]  /**< Populated list of geometry objects to be destroyed */
+							);
 #endif
 
 #endif

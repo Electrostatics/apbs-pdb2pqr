@@ -885,6 +885,7 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
 #endif
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
     Vio_bufTake(sock, buf, bufsize);
+	/* Need to separate the steps here and move Gem_read functionality elsewhere */
     AM_read(am, skey, sock);
 #if 0
     Vio_socketClose(&sock);
@@ -926,6 +927,7 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     return 1;
 }
 
+#if 0  /* NAB 2008-02-21:  I don't think this function is used so I'm eliminating it */
 VPUBLIC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock) {
 
     VASSERT(thee != VNULL);
@@ -939,6 +941,7 @@ VPUBLIC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock) {
     Vcsm_init(thee->csm);
 
 }
+#endif
 
 VPUBLIC void Bmat_printHB( Bmat *thee, char *fname ) {
 
@@ -1839,7 +1842,8 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     type = var.fetk->type;
 
     /* Check to see if this simplex is smaller than the target size */
-    Gem_longestEdge(var.fetk->gm, simp, &edgeLength);
+    /* NAB WARNING:  I am providing face=-1 here to conform to the new MC API; however, I'm not sure if this is the correct behavior. */
+    Gem_longestEdge(var.fetk->gm, simp, -1, &edgeLength);
     if (edgeLength < targetRes) return 0;
 
     /* For non-regularized PBE, check charge-simplex map */
