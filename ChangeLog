@@ -18,6 +18,7 @@
 	* Fixed NOsh_parseREAD errors for input files with \r line feeds.
 	* Fixed a variable setting error in the test examples
 	* Fixed a bug where memory usage is reported incorrectly for large allocations on 64-bit systems
+	* Added DTRSV to APBS-supplied BLAS to satisfy FEtk SuperLU dependency
 
 #############################################################################
                                  VERSION 0.5.1 
