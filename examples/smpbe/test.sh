@@ -14,7 +14,7 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-smpbe-24dup apbs-smbpe-ion )
+input=( apbs-smpbe-24dup apbs-smpbe-ion )
 
 results=( 9.249089575570E+03 8.141540670479E+02 )
 
