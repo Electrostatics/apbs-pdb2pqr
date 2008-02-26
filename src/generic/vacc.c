@@ -93,55 +93,51 @@ VPUBLIC unsigned long int Vacc_memChk(Vacc *thee) {
  * @author  Nathan Baker
  */
 VPRIVATE int ivdwAccExclus(
-        Vacc *thee,  /** Accessibility object */
-        double center[3],  /** Position to test */
-        double radius,  /** Radius of probe */ 
-        int atomID  /** ID of atom to ignore */
-        ) {
-
+						   Vacc *thee,  /** Accessibility object */
+						   double center[3],  /** Position to test */
+						   double radius,  /** Radius of probe */ 
+						   int atomID  /** ID of atom to ignore */
+						   ) {
+	
     int iatom;
     double dist2, *apos;
     Vatom *atom;
     VclistCell *cell;
-
+	
     VASSERT(thee != VNULL);
-
+	
     /* We can only test probes with radii less than the max specified */
     if (radius > Vclist_maxRadius(thee->clist)) {
         Vnm_print(2, 
-            "Vacc_ivdwAcc: got radius (%g) bigger than max radius (%g)\n", 
-            radius, Vclist_maxRadius(thee->clist));
-         VASSERT(0);
+				  "Vacc_ivdwAcc: got radius (%g) bigger than max radius (%g)\n", 
+				  radius, Vclist_maxRadius(thee->clist));
+		VASSERT(0);
     }
-
+	
     /* Get the relevant cell from the cell list */
     cell = Vclist_getCell(thee->clist, center);
-
+	
     /* If we have no cell, then no atoms are nearby and we're definitely
      * accessible */
     if (cell == VNULL) {
-        return 1.0;
+        return 1;
     }
-
+	
     /* Otherwise, check for overlap with the atoms in the cell */
     for (iatom=0; iatom<cell->natoms; iatom++) {
         atom = cell->atoms[iatom];
-        if (atom->id != atomID) {
-            apos = Vatom_getPosition(atom);
-            dist2 = VSQR(center[0]-apos[0]) + VSQR(center[1]-apos[1]) 
-                + VSQR(center[2]-apos[2]); 
-            if (dist2 < VSQR(Vatom_getRadius(atom)+radius)){
-				//printf("Dist2: %f %f\n",dist2,VSQR(Vatom_getRadius(atom)+radius));
-				return 0.0;
-			}
-        }
-    }
-
+		apos = atom->position;
+		dist2 = VSQR(center[0]-apos[0]) + VSQR(center[1]-apos[1]) 
+						+ VSQR(center[2]-apos[2]); 
+		if (dist2 < VSQR(atom->radius+radius)){
+			if (atom->id != atomID) return 0;			
+		}
+	}
+	
     /* If we're still here, then the point is accessible */
-    return 1.0;
-
+    return 1;
+	
 }
-
 
 VPUBLIC Vacc* Vacc_ctor(Valist *alist, Vclist *clist, double surf_density) {
 
