@@ -79,6 +79,7 @@
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
+#include "apbs/vfetk.h"
 
 #include "routines.h"
 
@@ -966,7 +967,7 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 					Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
 	
         int i;
-
+	
 #ifndef VAPBSQUIET
 	Vnm_tprint(1, "Destroying multigrid structures.\n");
 #endif
@@ -3013,82 +3014,37 @@ calculations %d and %d\n", nosh->apol2calc[nosh->printcalc[iprint][0]]+1,
 
 #ifdef HAVE_MC_H
 
-VPUBLIC Vrc_Codes loadMeshes(NOsh *nosh, Gem *gm[NOSH_MAXMOL]) {
+
+VPUBLIC void killFE(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC], 
+					Vfetk *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXMOL]) {
 	
-	int imesh;
-	int use_params = 0;
-	int gemkey = 0; /* Read MCSF-format meshes in simplex mode */
-	Vrc_Codes rc;
+	int i;
 	
-	Vio *sock = VNULL;
+#ifndef VAPBSQUIET
+	Vnm_tprint(1, "Destroying finite element structures.\n");
+#endif
 	
-	Vnm_tprint( 1, "Got paths for %d meshes\n", nosh->nmesh);
-	
-	for (imesh=0; imesh<nosh->nmesh; imesh++) {
-		if (gm[imesh] == VNULL){
-			gm[imesh] = Gem_ctor(VNULL, VNULL);
-		} else {
-			Gem_dtor(&(gm[imesh]));
-			gm[imesh] = Gem_ctor(VNULL, VNULL);
-		}
-		
-		switch (nosh->meshfmt[imesh]) {
-			
-			case VDF_DX:
-				Vnm_tprint(2, "DX finite element mesh input not supported yet!\n");
-				return VRC_FAILURE;
-			case VDF_UHBD:
-				Vnm_tprint( 2, "UHBD finite element mesh input not supported!\n");
-				return VRC_FAILURE;
-			case VDF_AVS:
-				Vnm_tprint( 2, "AVS finite element mesh input not supported!\n");
-				return VRC_FAILURE;
-			case VDF_MCSF:
-				Vnm_tprint(1, "Reading MCSF-format input finite element mesh from %s.\n",
-						   nosh->meshpath[imesh]);
-				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->meshpath[imesh], "r");
-				if (sock == VNULL) {
-					Vnm_print(2, "Problem opening virtual socket %s!\n", 
-							  nosh->meshpath[imesh]);
-					return VRC_FAILURE;
-				}
-				if (Vio_accept(sock, 0) < 0) {
-					Vnm_print(2, "Problem accepting virtual socket %s!\n",
-							  nosh->meshpath[imesh]);
-					return VRC_FAILURE;
-				}
-				
-				/* Now we need to read the mesh */
-				if ( !Gem_read(gm[imesh], gemkey, sock) ) {
-					Vnm_print(2, "Error while loading mesh into Gem object!\n");
-					return VRC_FAILURE;
-				}
-				
-				break;
-				
-				
-			default:
-				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
-						   nosh->meshfmt[imesh]);
-				return VRC_FAILURE;
-		}
-		
+	for(i=0;i<nosh->ncalc;i++){
+		Vpbe_dtor(&(pbe[i]));
+		Vfetk_dtor(&(fetk[i]));
 	}
-		
-	return VRC_SUCCESS;
-	
+	for (i=0; i<nosh->nmesh; i++) Gem_dtor(&(gm[i]));
 }
 
 
-
-VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
+VPUBLIC Vrc_Codes initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm, 
 				   Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
-				   Vfetk *fetk[NOSH_MAXCALC]) {
+				   Vfetk *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXMOL]) {
 	
-	int iatom, j, theMol, focusFlag;
+	Gem *tempGm = VNULL;
+	int iatom, imesh, i, j, theMol, focusFlag;
+	Vio *sock = VNULL;
 	size_t bytesTotal, highWater;
+	Vfetk_MeshLoad meshType;
+	double length[3], center[3];
+	Vrc_Codes vrc;
 	
-	double sparm, q, iparm, center[3];
+	double sparm, q, iparm;
 	Valist *myalist;
 	Vatom *atom = VNULL;
 	
@@ -3109,7 +3065,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 		} else{ 
 			Vnm_tprint(2, "ERROR!  Bogus molecule number (%d)!\n", 
 					   (theMol+1));
-			return 0;
+			return VRC_FAILURE;
 		}
 	}
 	
@@ -3122,7 +3078,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	if (q < (1e-6)) {
 		Vnm_tprint(2, "Molecule #%d is uncharged!\n");
 		Vnm_tprint(2, "Sum square charge = %g!\n", q);
-		return 0;
+		return VRC_FAILURE;
 	}
 	
 	
@@ -3156,12 +3112,64 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 	
 	/* Build mesh */
 	Vnm_tprint(0, "Setting up mesh...\n");
+	sock = VNULL;
+	if (feparm->useMesh) {
+		imesh = feparm->meshID-1;
+		meshType = VML_EXTERNAL;
+		for (i=0; i<3; i++) {
+			center[i] = 0.0;
+			length[i] = 0.0;
+		}
+		Vnm_print(0, "Using mesh %d (%s) in calculation.\n", imesh+1,
+				  nosh->meshpath[imesh]);
+		switch (nosh->meshfmt[imesh]) {				
+			case VDF_DX:
+				Vnm_tprint(2, "DX finite element mesh input not supported yet!\n");
+				return VRC_FAILURE;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD finite element mesh input not supported!\n");
+				return VRC_FAILURE;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS finite element mesh input not supported!\n");
+				return VRC_FAILURE;
+			case VDF_MCSF:
+				Vnm_tprint(1, "Reading MCSF-format input finite element mesh from %s.\n",
+						   nosh->meshpath[imesh]);
+				sock = Vio_ctor("FILE", "ASC", VNULL, nosh->meshpath[imesh], "r");
+				if (sock == VNULL) {
+					Vnm_print(2, "Problem opening virtual socket %s!\n", 
+							  nosh->meshpath[imesh]);
+					return VRC_FAILURE;
+				}
+				if (Vio_accept(sock, 0) < 0) {
+					Vnm_print(2, "Problem accepting virtual socket %s!\n",
+							  nosh->meshpath[imesh]);
+					return VRC_FAILURE;
+				}
+				break;
+				
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+						   nosh->meshfmt[imesh]);
+				return VRC_FAILURE;
+		}
+	} else { /* if (feparm->useMesh) */
+		meshType = VML_DIRICUBE;
+		for (i=0; i<3; i++) {
+			center[i] = alist[theMol]->center[i];
+			length[i] = feparm->glen[i];
+		}
+	}
 	
-	/* NAB 21-FEB-2008:  HERES WHERE WE NEED TO MAKE A DECISION ABOUT GENERATING
-	 A CUBE VS USING THE READ-IN MESH */
-	Vnm_tprint(2, "WARNING -- NATHAN HASN'T FINISHED THE CUSTOM MESH CODE YET.\n");
-	Vnm_tprint(2, "USING DEFAULT CUBIC MESH.\n");
-	Vfetk_genCube(fetk[icalc], alist[theMol]->center, feparm->glen);
+	vrc = Vfetk_loadMesh(fetk[icalc], center, length, meshType, sock);
+	if (vrc == VRC_FAILURE) {
+		Vnm_print(2, "Error constructing finite element mesh!\n");
+		return VRC_FAILURE;
+	}
+	Vnm_redirect(0);
+	Gem_shapeChk(fetk[icalc]->gm);
+	Vnm_redirect(1);	
+		
 	/* Uniformly refine the mesh a bit */
 	for (j=0; j<2; j++) {
 		AM_markRefine(fetk[icalc]->am, 0, -1, 0, 0.0);
@@ -3185,7 +3193,7 @@ VPUBLIC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
 #endif
 	
 	
-	return 1;
+	return VRC_SUCCESS;
 }
 
 VPUBLIC void printFEPARM(int icalc, NOsh *nosh, FEMparm *feparm, 
