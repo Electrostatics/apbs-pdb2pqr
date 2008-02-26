@@ -102,6 +102,7 @@ VPUBLIC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type) {
     thee->settargetRes = 0;
     thee->setmaxsolve = 0;
     thee->setmaxvert = 0;
+	thee->useMesh = 0;
 
     return 1; 
 }
@@ -135,6 +136,8 @@ VPUBLIC void FEMparm_copy(
 	thee->maxvert = source->maxvert;
 	thee->setmaxvert = source->setmaxvert;
 	thee->pkey = source->pkey;
+	thee->useMesh = source->useMesh;
+	thee->meshID = source->meshID;
 }
 
 VPUBLIC void FEMparm_dtor(FEMparm **thee) {
@@ -200,7 +203,7 @@ VPUBLIC int FEMparm_check(FEMparm *thee) {
     return rc;
 }
 
-VPRIVATE int FEMparm_parseDOMAINLENGTH(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseDOMAINLENGTH(FEMparm *thee, Vio *sock) {
 
     int i;
     double tf;
@@ -211,19 +214,19 @@ VPRIVATE int FEMparm_parseDOMAINLENGTH(FEMparm *thee, Vio *sock) {
         if (sscanf(tok, "%lf", &tf) == 0) {
             Vnm_print(2, "parseFE:  Read non-double (%s) while parsing \
 DOMAINLENGTH keyword!\n", tok);
-            return -1;
+            return VRC_FAILURE;
         } 
         thee->glen[i] = tf;
     }
     thee->setglen = 1;
-    return 1;
+    return VRC_SUCCESS;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseETOL(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseETOL(FEMparm *thee, Vio *sock) {
 
     double tf;
     char tok[VMAX_BUFSIZE];
@@ -232,106 +235,106 @@ VPRIVATE int FEMparm_parseETOL(FEMparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "parseFE:  Read non-double (%s) while parsing \
 ETOL keyword!\n", tok);
-        return -1;
+        return VRC_FAILURE;
     }
     thee->etol = tf;
     thee->setetol = 1;
-    return 1;
+    return VRC_SUCCESS;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 
 }
 
-VPRIVATE int FEMparm_parseEKEY(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseEKEY(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
+    Vrc_Codes vrc = VRC_FAILURE;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "simp") == 0) {
         thee->ekey = FET_SIMP;
         thee->setekey = 1;
-        rc = 1;
+        vrc = VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "glob") == 0) {
         thee->ekey = FET_GLOB;
         thee->setekey = 1;
-        rc = 1;
+        vrc = VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "frac") == 0) {
         thee->ekey = FET_FRAC;
         thee->setekey = 1;
-        rc = 1;
+        vrc = VRC_SUCCESS;
     } else {
         Vnm_print(2, "parseFE:  undefined value (%s) for ekey!\n", tok);
-        rc = -1;
+        vrc = VRC_FAILURE;
     }
 
-    return rc;
+    return vrc;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseAKEYPRE(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseAKEYPRE(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
+    Vrc_Codes vrc = VRC_FAILURE;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "unif") == 0) {
         thee->akeyPRE = FRT_UNIF;
         thee->setakeyPRE = 1;
-        rc =  1;
+        vrc =  VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "geom") == 0) {
         thee->akeyPRE = FRT_GEOM;
         thee->setakeyPRE = 1;
-        rc =  1;
+        vrc =  VRC_SUCCESS;
     } else {
         Vnm_print(2, "parseFE:  undefined value (%s) for akeyPRE!\n", tok);
-        rc =  -1;
+        vrc =  VRC_FAILURE;
     }
 
-    return rc;
+    return vrc;
 
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseAKEYSOLVE(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseAKEYSOLVE(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
+    int vrc = VRC_FAILURE;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "resi") == 0) {
         thee->akeySOLVE = FRT_RESI;
         thee->setakeySOLVE = 1;
-        rc =  1;
+        vrc =  VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "dual") == 0) {
         thee->akeySOLVE = FRT_DUAL;
         thee->setakeySOLVE = 1;
-        rc =  1;
+        vrc =  VRC_SUCCESS;
     } else if (Vstring_strcasecmp(tok, "loca") == 0) {
         thee->akeySOLVE = FRT_LOCA;
         thee->setakeySOLVE = 1;
-        rc =  1;
+        vrc =  VRC_SUCCESS;
     } else {
         Vnm_print(2, "parseFE:  undefined value (%s) for akeyPRE!\n", tok);
-        rc =  -1;
+        vrc =  VRC_FAILURE;
     }
 
-    return rc;
+    return vrc;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_SUCCESS;
 
 }
 
-VPRIVATE int FEMparm_parseTARGETNUM(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseTARGETNUM(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
     int ti;
@@ -339,18 +342,18 @@ VPRIVATE int FEMparm_parseTARGETNUM(FEMparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%d", &ti) == 0) {
         Vnm_print(2, "parseFE:  read non-int (%s) for targetNum!\n", tok);
-        return -1;
+        return VRC_FAILURE;
     }
     thee->targetNum = ti;
     thee->settargetNum = 1;
-    return 1;
+    return VRC_SUCCESS;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseTARGETRES(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseTARGETRES(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
     double tf;
@@ -359,58 +362,77 @@ VPRIVATE int FEMparm_parseTARGETRES(FEMparm *thee, Vio *sock) {
     if (sscanf(tok, "%lf", &tf) == 0) {
         Vnm_print(2, "parseFE:  read non-double (%s) for targetNum!\n", 
           tok);
-        return -1;
+        return VRC_FAILURE;
     }
     thee->targetRes = tf;
     thee->settargetRes = 1;
-    return 1;
+    return VRC_SUCCESS;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseMAXSOLVE(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseMAXSOLVE(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
     int ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%d", &ti) == 0) {
         Vnm_print(2, "parseFE:  read non-int (%s) for maxsolve!\n", tok);
-        return -1;
+        return VRC_FAILURE;
     }
     thee->maxsolve = ti;
     thee->setmaxsolve = 1;
-    return 1;
+    return VRC_SUCCESS;
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPRIVATE int FEMparm_parseMAXVERT(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseMAXVERT(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int rc = -1;
     int ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%d", &ti) == 0) {
         Vnm_print(2, "parseFE:  read non-int (%s) for maxvert!\n", tok);
-        return -1;
+        return VRC_FAILURE;
     }
     thee->maxvert = ti;
     thee->setmaxvert = 1;
-    return 1;
+    return VRC_SUCCESS;
+	
 VERROR1:
     Vnm_print(2, "parseFE:  ran out of tokens!\n");
-    return -1;
+    return VRC_FAILURE;
 
 }
 
-VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
+VPRIVATE Vrc_Codes FEMparm_parseUSEMESH(FEMparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    int ti;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (sscanf(tok, "%d", &ti) == 0) {
+        Vnm_print(2, "parseFE:  read non-int (%s) for usemesh!\n", tok);
+        return VRC_FAILURE;
+    }	
+	thee->useMesh = 1;
+	thee->meshID = ti;
+	
+	return VRC_SUCCESS;
+	
+VERROR1:
+	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return VRC_FAILURE;
+}
+
+
+VPUBLIC Vrc_Codes FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
 
     int i, ti;
@@ -418,12 +440,12 @@ VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
 
     if (thee == VNULL) {
         Vnm_print(2, "parseFE:  got NULL thee!\n");
-        return -1;
+        return VRC_FAILURE;
     }
 
     if (sock == VNULL) {
         Vnm_print(2, "parseFE:  got NULL socket!\n");
-        return -1;
+        return VRC_FAILURE;
     }
 
     if (Vstring_strcasecmp(tok, "domainLength") == 0) {
@@ -444,8 +466,10 @@ VPUBLIC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
         return FEMparm_parseMAXSOLVE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "maxvert") == 0) {
         return FEMparm_parseMAXVERT(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "usemesh") == 0) {
+        return FEMparm_parseUSEMESH(thee, sock);
     }
 
-    return 0;
+    return VRC_WARNING;
 
 }

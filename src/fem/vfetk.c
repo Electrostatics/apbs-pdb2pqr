@@ -552,7 +552,7 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vhal_PBEType type) {
 
     return thee;
 }
-
+	 
 VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
 
     int i;
@@ -571,7 +571,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
     thee->vmem = Vmem_ctor("APBS::VFETK");
 
     /* Set up FEtk objects */
-    Vnm_print(0, "Vfetk_ctor2:  Constructing PDE...\n");
+	Vnm_print(0, "Vfetk_ctor2:  Constructing PDE...\n");
     thee->pde = Vfetk_PDE_ctor(thee);
     Vnm_print(0, "Vfetk_ctor2:  Constructing Gem...\n");
     thee->gm = Gem_ctor(thee->vmem, thee->pde);
@@ -579,7 +579,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
     thee->aprx = Aprx_ctor(thee->vmem, thee->gm, thee->pde);
     Vnm_print(0, "Vfetk_ctor2:  Constructing Aprx...\n");
     thee->am = AM_ctor(thee->vmem, thee->aprx);
-
+	
     /* Reset refinement level */
     thee->level = 0;
 
@@ -598,7 +598,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
     var.fetk = thee;
     var.initGreen = 0;
 
-    /* Set up the external Gem subdivision hook */
+	/* Set up the external Gem subdivision hook */
     Gem_setExternalUpdateFunction(thee->gm, Vfetk_externalUpdateFunction);
 
     /* Set up ion-related variables */
@@ -640,7 +640,6 @@ VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
     Vcsm_dtor(&(thee->csm));
     AM_dtor(&(thee->am));
     Aprx_dtor(&(thee->aprx));
-    Gem_dtor(&(thee->gm));
     Vfetk_PDE_dtor(&(thee->pde));
     Vmem_dtor(&(thee->vmem));
 }
@@ -846,12 +845,14 @@ VPUBLIC unsigned long int Vfetk_memChk(Vfetk *thee) {
     return memUse;
 }
 
-
-VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
-
+VPUBLIC Vrc_Codes Vfetk_genCube(
+								Vfetk *thee,  
+								double center[3],
+								double length[3],
+								Vfetk_MeshLoad meshType) {
     AM *am = VNULL;
     Gem *gm = VNULL;
-
+	
     int skey = 0;  /* Simplex format */
     char *key = "r";  /* Read */
     char *iodev = "BUFF";  /* Buffer */
@@ -864,34 +865,43 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
     VV *vx = VNULL;
     int i, j;
     double x;
-
+	
     VASSERT(thee != VNULL);
     am = thee->am;
     VASSERT(am != VNULL);
     gm = thee->gm;
     VASSERT(gm != VNULL);
-
+	
     /* @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
-#ifdef DONEUMANN
-    bufsize = strlen(neumCubeString);
-    Vnm_print(2, "DEBUG -- USING NEUMANN MESH!\n");
-    VASSERT( bufsize <= VMAX_BUFSIZE );
-    strncpy(buf, neumCubeString, VMAX_BUFSIZE);
-#else
-    bufsize = strlen(diriCubeString);
-    VASSERT( bufsize <= VMAX_BUFSIZE );
-    strncpy(buf, diriCubeString, VMAX_BUFSIZE); 
-#endif
+	switch (meshType) {
+		case VML_DIRICUBE:
+			bufsize = strlen(diriCubeString);
+			VASSERT( bufsize <= VMAX_BUFSIZE );
+			strncpy(buf, diriCubeString, VMAX_BUFSIZE); 
+			break;
+		case VML_NEUMCUBE:
+			bufsize = strlen(neumCubeString);
+			Vnm_print(2, "Vfetk_genCube:  WARNING!  USING EXPERIMENTAL NEUMANN BOUNDARY CONDITIONS!\n");
+			VASSERT( bufsize <= VMAX_BUFSIZE );
+			strncpy(buf, neumCubeString, VMAX_BUFSIZE);
+			break;
+		case VML_EXTERNAL:
+			Vnm_print(2, "Vfetk_genCube:  Got request for external mesh!\n");
+			Vnm_print(2, "Vfetk_genCube:  How did we get here?\n");
+			return VRC_FAILURE;
+			break;
+		default:
+			Vnm_print(2, "Vfetk_genCube:  Unknown mesh type (%d)\n", meshType);
+			return VRC_FAILURE;
+	}
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
     Vio_bufTake(sock, buf, bufsize);
-	/* Need to separate the steps here and move Gem_read functionality elsewhere */
     AM_read(am, skey, sock);
-#if 0
-    Vio_socketClose(&sock);
+	Vio_connectFree(sock);
+    Vio_bufGive(sock);
     Vio_dtor(&sock);
-#endif
-
+	
     /* Scale (unit) cube */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
@@ -901,7 +911,7 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
             VV_setCoord(vx, j, x);
         }
     }
-
+	
     /* Add new center */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
@@ -911,37 +921,57 @@ VPUBLIC int Vfetk_genCube(Vfetk *thee, double center[3], double length[3]) {
             VV_setCoord(vx, j, x);
         }
     }
+	
+	
+    return VRC_SUCCESS;
+}
 
-    /* Setup charge-simplex map */
+VPUBLIC Vrc_Codes Vfetk_loadMesh(
+								 Vfetk *thee,
+								 double center[3],
+								 double length[3],
+								 Vfetk_MeshLoad meshType,
+								 Vio *sock) {
+	
+	Vrc_Codes vrc;
+	int skey = 0;  /* Simplex format */
+
+	
+	switch (meshType) {
+		case VML_EXTERNAL:
+			if (sock == VNULL) {
+				Vnm_print(2, "Vfetk_loadMesh:  Got NULL socket!\n");
+				return VRC_FAILURE;
+			}
+			AM_read(thee->am, skey, sock);
+			Vio_connectFree(sock);
+			Vio_bufGive(sock);
+			Vio_dtor(&sock);
+			break;
+		case VML_DIRICUBE:
+			vrc = Vfetk_genCube(thee, center, length, meshType);
+			if (vrc == VRC_FAILURE) return VRC_FAILURE;
+			break;
+		case VML_NEUMCUBE:
+			vrc = Vfetk_genCube(thee, center, length, meshType);
+			if (vrc == VRC_FAILURE) return VRC_FAILURE;
+			break;
+		default:
+			Vnm_print(2, "Vfetk_loadMesh:  unrecognized mesh type (%d)!\n", 
+					  meshType);
+			return VRC_FAILURE;
+	};
+		
+	/* Setup charge-simplex map */
     Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
     thee->csm = VNULL;
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
-
-    /* Destroy socket */
-    Vio_connectFree(sock);
-    Vio_bufGive(sock);
-    Vio_dtor(&sock);
-
-    return 1;
+	
+	return VRC_SUCCESS;
 }
 
-#if 0  /* NAB 2008-02-21:  I don't think this function is used so I'm eliminating it */
-VPUBLIC void Vfetk_readMesh(Vfetk *thee, int skey, Vio *sock) {
-
-    VASSERT(thee != VNULL);
-    AM_read(thee->am, skey, sock);
-
-    /* Setup charge-simplex map */
-    Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
-    thee->csm = VNULL;
-    thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
-    VASSERT(thee->csm != VNULL);
-    Vcsm_init(thee->csm);
-
-}
-#endif
 
 VPUBLIC void Bmat_printHB( Bmat *thee, char *fname ) {
 

@@ -268,4 +268,39 @@
 		</para>
 	</listitem>
 
+	<listitem>
+		<cmdsynopsis id="mesh">
+			<command>mesh</command>
+			<arg choice="req"><replaceable>format</replaceable></arg>
+			<arg choice="req"><replaceable>path</replaceable></arg>
+		</cmdsynopsis>
+		<para>This command allows APBS to read a finite element mesh to use as a starting point for <link linkend="fe-manual">finite element</link> calculations.  The input is simply the mesh geometry; e.g., as produced by a finite element mesh generation program such as <ulink url="http://ccvweb.csres.utexas.edu/ccv/projects/project.php?proID=10">LBIE-Mesher</ulink> or <ulink url="http://fetk.org/codes/gamer/index.html">GAMer</ulink>.
+			Arguments for this command are:
+			<variablelist>
+				<varlistentry>
+					<term><replaceable>format</replaceable></term>
+					<listitem>
+						<para>The format of the input mesh.  Acceptable values include:
+							<variablelist>
+								<varlistentry>
+									<term><type>mcsf</type></term>
+									<listitem>
+										<para> MCSF format (description coming soon!) </para>
+									</listitem>
+								</varlistentry>
+							</variablelist>
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><replaceable>path</replaceable></term>
+					<listitem>
+						<para>The location of the meshes file.</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+		</para>
+	</listitem>
+
+
 </itemizedlist>

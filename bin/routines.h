@@ -78,6 +78,7 @@
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
 #include "apbs/vparam.h"  
+#include "apbs/vfetk.h"
 
 
 /**
@@ -232,12 +233,13 @@ VEXTERNC int initMG(
  * @brief  Kill structures initialized during an MG calculation
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param nosh  Object with parsed input file parameters
- * @param pbe  Array of Vpbe objects (one for each calc)
- * @param pmgp  Array of MG parameter objects (one for each calc)
- * @param pmg  Array of MG objects (one for each calc) */
-VEXTERNC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+ */
+VEXTERNC void killMG(
+					 NOsh *nosh,  /** Object with parsed input file parameters */
+					 Vpbe *pbe[NOSH_MAXCALC],  /** Array of Vpbe objects for each calc */
+					 Vpmgp *pmgp[NOSH_MAXCALC],  /** Array of MG parameter objects for each calc */
+					 Vpmg *pmg[NOSH_MAXCALC]  /** Array of MG objects for each calc */
+);
 
 /**
  * @brief  Solve the PBE with MG
@@ -512,19 +514,32 @@ VEXTERNC int energyFE(NOsh* nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
  * @brief  Initialize FE solver objects
  * @ingroup  Frontend
  * @author  Nathan Baker
- * @param  icalc  Index in pbe, fetk to initialize -- calculation index
- * @param nosh  Master parameter object
- * @param feparm  FE-specific parameters 
- * @param pbeparm  Generic PBE parameters
- * @param pbe  Array of PBE objects 
- * @param alist Array of atom lists 
- * @param fetk  Array of FE solver objects 
  * @bug  THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE
  * @todo  THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbeparm,
-  Vpbe *pbe[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
-  Vfetk *fetk[NOSH_MAXCALC]);
+ */
+VEXTERNC Vrc_Codes initFE(
+					int icalc, /** Index in pb, fetk to initialize (calculation 
+ index) */
+					NOsh *nosh,  /** Master parmaeter object */
+					FEMparm *feparm,  /** FE-specific parameters */
+					PBEparm *pbeparm,  /** Generic PBE parameters */
+					Vpbe *pbe[NOSH_MAXCALC],  /** Array of PBE objects */
+					Valist *alist[NOSH_MAXMOL],  /** Array of atom lists */
+					Vfetk *fetk[NOSH_MAXCALC],  /** Array of finite element objects */
+					Gem *gm[NOSH_MAXCALC]  /** Array of geometry objects */
+);
+
+/**
+ * @brief  Kill structures initialized during an FE calculation
+ * @ingroup  Frontend
+ * @author  Nathan Baker
+ */
+VEXTERNC void killFE(
+					 NOsh *nosh,  /** Object with parsed input file parameters */
+					 Vpbe *pbe[NOSH_MAXCALC],  /** Array of Vpbe objects for each calc */
+					 Vfetk *fetk[NOSH_MAXCALC],  /** Array of FEtk objects for each calc */
+					 Gem *gem[NOSH_MAXMOL]  /** Array of geometry manager objects for each calc */
+);
 
 /**
  * @brief  Pre-refine mesh before solve

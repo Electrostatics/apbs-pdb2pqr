@@ -383,14 +383,7 @@ Please cite your use of APBS as:\n\n\
 		Vnm_tprint(2, "Error reading charge maps!\n");
 		VJMPERR1(0);
 	}
-#ifdef HAVE_MC_H
-	/* This routine is not yet defined -- hopefully NAB doesn't check this in without defining it... */
-	if (loadMeshes(nosh, gm) != 1) {
-		Vnm_tprint(2, "Error reading meshes!\n");
-		VJMPERR1(0);
-	}
-#endif
-
+	
 	/* *************** DO THE CALCULATIONS ******************* */
 	Vnm_tprint( 1, "Preparing to run %d PBE calculations.\n",
 				nosh->ncalc);
@@ -490,7 +483,7 @@ Please cite your use of APBS as:\n\n\
 				
 				/* Set up problem */
 				Vnm_tprint( 1, "  Setting up problem...\n");
-				if (!initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk)) {
+				if (initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk, gm) != VRC_SUCCESS) {
 					Vnm_tprint( 2, "Error setting up FE calculation!\n");
 					VJMPERR1(0);
 				}
@@ -637,6 +630,9 @@ Please cite your use of APBS as:\n\n\
 	killForce(mem, nosh, nforce, atomForce);
 	killEnergy();
 	killMG(nosh, pbe, pmgp, pmg);
+#ifdef HAVE_MC_H
+	killFE(nosh, pbe, fetk, gm);
+#endif
 	killChargeMaps(nosh, chargeMap);
 	killKappaMaps(nosh, kappaMap);
 	killDielMaps(nosh, dielXMap, dielYMap, dielZMap);

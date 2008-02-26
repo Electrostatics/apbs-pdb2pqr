@@ -397,7 +397,10 @@
 		noted:
 		<simplelist type="inline">  
 			<member>
-				<command><link linkend="elec-glen">glen</link></command>
+				<command><link linkend="elec-domainLength">domainLength</link></command>
+			</member>
+			<member>
+				<command><link linkend="elec-usemesh">usemesh</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-etol">etol</link></command>
@@ -1030,6 +1033,25 @@
 				<para> Please note that some of the parameters change in meaning a bit for this <link linkend="mg-para">mg-para</link> calculations.  In particular, <link linkend="elec-dime">dime</link> should be interpreted as the number of grid points <emphasis>per processor</emphasis>.  This interpretation helps manage the amount of memory per-processor -- generally the limiting resource for most calculations. </para>
 			</important>
 		</listitem>
+
+		<listitem id="elec-domainLength">
+			<cmdsynopsis>
+				<command>domainLength</command>
+				<arg choice="req"><replaceable>xlen ylen zlen</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the rectangular finite element mesh domain lengths; this may be different in each
+				direction.  If the <link linkend="elec-usemesh"><command>usemesh</command></link> keyword is included, then this command is ignored.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>xlen ylen zlen</replaceable></term>
+						<listitem>
+							<para>Mesh lengths in the x-, y-, and z-directions in &Aring;.</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
 
 		<listitem id="elec-ekey">
 			<cmdsynopsis>
@@ -1989,6 +2011,28 @@
 								This ID specifies the particular map read in with <command>read
 									map</command>.  These IDs are assigned sequentially, starting
 								from 1, for each map type read by APBS.
+							</para>
+						</listitem>
+					</varlistentry>
+				</variablelist>
+			</para>
+		</listitem>
+
+
+		<listitem id="elec-usemesh">
+			<cmdsynopsis>
+				<command>usemesh</command>
+				<arg choice="req"><replaceable>id</replaceable></arg>
+			</cmdsynopsis>
+			<para>Specify the external finite element mesh to be used in the <link linkend="fe-manual">finite element</link> PB calculation.  These must have been input via an earlier <link linkend="read"><command>read mesh</command></link> statement.
+				<variablelist>
+					<varlistentry>
+						<term><replaceable>id</replaceable></term>
+						<listitem>
+							<para>
+								This ID specifies the particular map read in with <command>read
+									mesh</command>.  These IDs are assigned sequentially, starting
+								from 1, for each mesh read by APBS.
 							</para>
 						</listitem>
 					</varlistentry>

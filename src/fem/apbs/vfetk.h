@@ -103,6 +103,23 @@ enum eVfetk_LsolvType {
  */
 typedef enum eVfetk_LsolvType Vfetk_LsolvType;
 
+
+/**
+ * @brief	Mesh loading operation
+ * @ingroup	Vfetk
+ */
+enum eVfetk_MeshLoad {
+    VML_DIRICUBE,  /**< Dirichlet cube */
+    VML_NEUMCUBE,  /**< Neumann cube */
+    VML_EXTERNAL  /**< External mesh (from socket) */
+};
+
+/**
+ * @brief  Declare FEMparm_GuessType type
+ * @ingroup  Vfetk
+ */
+typedef enum eVfetk_MeshLoad Vfetk_MeshLoad;
+
 /**
  * @brief  Non-linear solver type 
  * @ingroup Vfetk
@@ -514,17 +531,30 @@ VEXTERNC void Bmat_printHB(
         char *fname /** Filename for output */
         );
 
-/** 
- * @brief   Generates a simple cubic tetrahedral mesh
+/**
+ * @brief	Construct a rectangular mesh (in the current Vfetk object)
  * @ingroup Vfetk
- * @author  Nathan Baker (based on Mike Holst's Gem_makeCube code)
- * @return  1 if successful, 0 otherwise
+ * @author	Nathan Baker
  */
-VEXTERNC int Vfetk_genCube(
-        Vfetk *thee, /** The Vfetk object */
-        double center[VAPBS_DIM], /** Desired mesh center (in &Aring;) */
-        double length[VAPBS_DIM] /** Desired mesh length (in &Aring;) */
-        );
+VEXTERNC Vrc_Codes Vfetk_genCube(
+								 Vfetk *thee,  /** Vfetk object */
+								 double center[3],  /** Center for mesh */
+								 double length[3],  /** Mesh lengths */
+								 Vfetk_MeshLoad meshType  /** Mesh boundary conditions */
+								 );
+ 
+/**
+ * @brief	Loads a mesh into the Vfetk (and associated) object(s).
+ * @ingroup	Vfetk
+ * @author	Nathan Baker
+ */
+VEXTERNC Vrc_Codes Vfetk_loadMesh(
+								  Vfetk *thee, /** Vfetk object to load into */
+								  double center[3],  /** Center for mesh (if constructed) */
+								  double length[3],  /** Mesh lengths (if constructed) */
+								  Vfetk_MeshLoad meshType,  /** Type of mesh to load */
+								  Vio *sock  /** Socket for external mesh data (NULL otherwise) */
+								  );
 
 /**
  * @brief  Constructs the FEtk PDE object 
@@ -975,6 +1005,16 @@ VEXTERNC int Vfetk_write(
         Bvec *vec, /** Data vector */
         Vdata_Format format /** Data format */
         );
+
+/**
+ * @brief  Load a Gem geometry manager object into Vfetk
+ * @ingroup Vfetk
+ * @author  Nathan Baker
+ */
+VEXTERNC Vrc_Codes Vfetk_loadGem(
+								 Vfetk *thee, /**< Destination */
+								 Gem *gm /**< Geometry manager source */
+								 );
 
 
 #endif /* ifndef _VFETK_H_ */

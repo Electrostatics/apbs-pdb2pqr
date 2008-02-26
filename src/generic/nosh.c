@@ -1971,6 +1971,7 @@ VPUBLIC int NOsh_parseFEM(
 	FEMparm *feparm = VNULL;    
 	PBEparm *pbeparm = VNULL;    
 	int rc;
+	Vrc_Codes vrc;
 	
 	/* Check the arguments */
 	if (thee == VNULL) {
@@ -2019,11 +2020,11 @@ VPUBLIC int NOsh_parseFEM(
 			break;
 		} else if (rc == 0) {
 			/* Pass the token to the generic MG parser */
-			rc = FEMparm_parseToken(feparm, tok, sock);
-			if (rc == -1) { 
+			vrc = FEMparm_parseToken(feparm, tok, sock);
+			if (vrc == VRC_FAILURE) { 
 				Vnm_print(0, "NOsh_parseFEM:  parseMG error!\n");
 				break;
-			} else if (rc == 0) {
+			} else if (vrc == VRC_WARNING) {
 				/* We ran out of parsers! */
 				Vnm_print(2, "NOsh:  Unrecognized keyword: %s\n", tok);
 				break;

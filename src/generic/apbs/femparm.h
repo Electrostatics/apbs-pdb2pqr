@@ -177,6 +177,8 @@ struct sFEMparm {
 	int pkey;		/**< Boolean sets the pkey type for going into AM_Refine
 					  * pkey = 0 for non-HB based methods
 					  * pkey = 1 for HB based methods */
+	int useMesh;  /**< Indicates whether we use external finite element mesh */
+	int meshID;  /**< External finite element mesh ID (if used) */
 
 };
 
@@ -245,10 +247,10 @@ VEXTERNC void FEMparm_copy(FEMparm *thee, FEMparm *source);
  * @param   thee   MGparm object 
  * @param   tok    Token to parse
  * @param   sock   Stream for more tokens
- * @return   1 if matched and assigned; -1 if matched, but there's
- * some sort of error (i.e., too few args); 0 if not matched
+ * @return   VRC_SUCCESS if matched and assigned; VRC_FAILURE if matched, but there's
+ * some sort of error (i.e., too few args); VRC_WARNING if not matched
  */
-VEXTERNC int FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE], 
+VEXTERNC Vrc_Codes FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock);
 
 #endif 

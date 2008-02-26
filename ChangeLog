@@ -10,6 +10,8 @@
 	* Updated PMG license to LGPL
 	* Added per-atom SASA information output from APOLAR calculations
 	* Added per-atom verbosity to APOLAR calculation outputs
+	* Ability to read-in MCSF-format finite element meshes (e.g., as
+	produced by Holst group GAMER software)
 - BUG FIXES
 	* Clarified ELEC/DIME and ELEC/PDIME documentation
 	* Added more transparent warnings/error messages about path lengths which exceed the 80-character limit
