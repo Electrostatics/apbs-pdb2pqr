@@ -660,6 +660,8 @@ if test -z "${USE_FETK}";  then
 	AC_MSG_RESULT([-----------------------------------------------------------])
 	AC_MSG_RESULT([----- MALOC installation finished continuing with APBS ----])
 	AC_MSG_RESULT([-----------------------------------------------------------])
+else
+	AC_MSG_RESULT([Skipping MALOC installation; will use MALOC provided with FEtk])
 fi
 AC_SUBST(apbs_do_maloc)
 
