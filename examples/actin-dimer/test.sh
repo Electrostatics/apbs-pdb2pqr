@@ -12,7 +12,7 @@ fi
 
 logfile=TESTRESULTS.log
 nettime=0
-vsmall=0.000000001000
+vsmall=0.000000100000
 
 input=( apbs-mol-auto apbs-smol-auto apbs-mol-parallel apbs-smol-parallel )
 
