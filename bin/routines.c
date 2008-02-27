@@ -805,7 +805,6 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		return 0;
 	}
 	
-	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");
 	if (pbeparm->srfm == VSM_SPLINE) sparm = pbeparm->swin;
@@ -829,14 +828,16 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 	Vnm_tprint(0, "Setting up PDE object...\n");
 	switch (pbeparm->pbetype) {
 		case PBE_NPBE:
-			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
-								 mgparm->grid[1], mgparm->grid[2], NONLIN_NPBE);
+			/* TEMPORARY USEAQUA */
+			mgparm->nonlintype = NONLIN_NPBE;
+			mgparm->method = (pbeparm->useAqua == 1) ? VSOL_NewtonAqua : VSOL_Newton;
+			pmgp[icalc] = Vpmgp_ctor(mgparm);
 			break;
 		case PBE_LPBE:
-			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-								 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
-								 mgparm->grid[1], mgparm->grid[2], NONLIN_LPBE);
+			/* TEMPORARY USEAQUA */
+			mgparm->nonlintype = NONLIN_LPBE;
+			mgparm->method = (pbeparm->useAqua == 1) ? VSOL_CGMGAqua : VSOL_MG;
+			pmgp[icalc] = Vpmgp_ctor(mgparm);
 			break;
 		case PBE_LRPBE:
 			Vnm_tprint(2, "Sorry, LRPBE isn't supported with the MG solver!\n");
@@ -847,9 +848,8 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 			return 0;
 			break;
 		case PBE_SMPBE: /* SMPBE Added */
-			pmgp[icalc] = Vpmgp_ctor(mgparm->dime[0], mgparm->dime[1],
-									 mgparm->dime[2], mgparm->nlev, mgparm->grid[0], 
-									 mgparm->grid[1], mgparm->grid[2], NONLIN_SMPBE); 
+			mgparm->nonlintype = NONLIN_SMPBE;
+			pmgp[icalc] = Vpmgp_ctor(mgparm);
 			
 			/* Copy Code */
 			pbe[icalc]->smsize = pbeparm->smsize;
@@ -866,6 +866,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 	pmgp[icalc]->xcent = realCenter[0];
 	pmgp[icalc]->ycent = realCenter[1];
 	pmgp[icalc]->zcent = realCenter[2];
+	
 	if (pbeparm->bcfl == BCFL_FOCUS) {
         if (icalc == 0) {
             Vnm_tprint( 2, "Can't focus first calculation!\n");

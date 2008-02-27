@@ -161,6 +161,9 @@ struct sPBEparm {
     double temp;  /**< Temperature (in K) */
     int settemp;  /**< Flag, @see temp */
 	
+	int useAqua;  /**< Enable use of lpbe/aqua */
+	int setUseAqua; /**< Flag, @see tryAqua */
+	
 	double smsize; /**< SMPBE size */
 	int setsmsize; /**< Flag, @see temp */
 	

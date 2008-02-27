@@ -1113,6 +1113,7 @@ AC_OUTPUT([
     contrib/Makefile
     contrib/blas/Makefile
     contrib/pmgZ/Makefile
+	contrib/aqua/Makefile
 
     tools/Makefile
     tools/mesh/Makefile

@@ -417,7 +417,7 @@ Please cite your use of APBS as:\n\n\
 					Vnm_tprint( 2, "Error setting up MG calculation!\n");
 					VJMPERR1(0);
 				}
-					
+				
 				/* Print problem parameters */
 				printMGPARM(mgparm, realCenter);
 				printPBEPARM(pbeparm);

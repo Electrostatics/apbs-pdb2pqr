@@ -405,7 +405,12 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     thee->setofrac = parm->setofrac;
 	thee->setasync = parm->setasync;
 	thee->async = parm->async;
-
+	
+	thee->nonlintype = parm->nonlintype;
+	thee->setnonlintype = parm->setnonlintype;
+	
+	thee->method = parm->method;
+	thee->method = parm->method;
 }
 
 VPRIVATE Vrc_Codes MGparm_parseDIME(MGparm *thee, Vio *sock) {
