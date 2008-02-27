@@ -66,7 +66,8 @@
 #include "apbscfg.h"
 #include "maloc/maloc.h"  
 #ifdef HAVE_MC_H
-#  include "mc/mc.h"  
+#include "mc/mc.h"  
+#include "apbs/vfetk.h"
 #endif
 #ifdef HAVE_MCX_H
 #  include "mcx/mcx.h"  
@@ -79,7 +80,7 @@
 #include "apbs/mgparm.h"  
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
-#include "apbs/vfetk.h"
+
 
 #include "routines.h"
 

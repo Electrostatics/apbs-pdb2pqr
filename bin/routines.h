@@ -78,7 +78,6 @@
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
 #include "apbs/vparam.h"  
-#include "apbs/vfetk.h"
 
 
 /**
@@ -481,6 +480,8 @@ VEXTERNC int printApolForce(
 VEXTERNC void startVio();
 
 #ifdef HAVE_MC_H
+#include "apbs/vfetk.h"
+
 /**
  * @brief  Print out FE-specific params loaded from input
  * @ingroup  Frontend
