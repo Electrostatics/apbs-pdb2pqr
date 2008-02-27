@@ -77,6 +77,7 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+#include "apbs/mgparm.h"
 
 /**
  *  @ingroup Vpmgp
@@ -156,7 +157,9 @@ struct sVpmgp {
                 * \li   4: sucessive overrelaxation
                 * \li   5: red-black gauss-seidel
                 * \li   6: weighted jacobi
-                * \li   7: richardson */
+                * \li   7: richardson 
+				* \li   8: conjugate gradient multigrid aqua 
+				* \li   9: newton aqua */
     int mgkey;  /**< Multigrid method [default = 0]
                  * \li   0: variable v-cycle
                  * \li   1: nested iteration */
@@ -223,40 +226,20 @@ typedef struct sVpmgp Vpmgp;
 /** @brief   Construct PMG parameter object and initialize to default values
  *  @ingroup Vpmgp
  *  @author  Nathan Baker
- *  @param   nx    Number of x grid points
- *  @param   ny    Number of y grid points
- *  @param   nz    Number of z grid points
- *  @param   nlev  Number of levels in multigrid hierarchy
- *  @param   hx    Grid spacing in x direction
- *  @param   hy    Grid spacing in y direction
- *  @param   hzed  Grid spacing in z direction
- *  @param   nonlin  Nonlinearity flag
- *                   \li 0: Linearized PBE
- *                   \li 1: Nonlinear PBE
+ *  @param   mgparm	  MGParm object containing parameters to be used in setup
  *  @returns Newly allocated and initialized Vpmgp object
  */
-VEXTERNC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, 
-  double hx, double hy, double hzed, int nonlin);
+VEXTERNC Vpmgp* Vpmgp_ctor(MGparm *mgparm);
 
 /** @brief   FORTRAN stub to construct PMG parameter object and initialize to
  *           default values 
  *  @ingroup Vpmgp
  *  @author  Nathan Baker
  *  @param   thee  Newly allocated PMG object
- *  @param   nx    Number of x grid points
- *  @param   ny    Number of y grid points
- *  @param   nz    Number of z grid points
- *  @param   nlev  Number of levels in multigrid hierarchy
- *  @param   hx    Grid spacing in x direction
- *  @param   hy    Grid spacing in y direction
- *  @param   hzed  Grid spacing in z direction
- *  @param   nonlin  Nonlinearity flag
- *                   \li 0: Linearized PBE
- *                   \li 1: Nonlinear PBE
+ *  @param   mgparm	  MGParm object containing parameters to be used in setup
  *  @returns 1 if successful, 0 otherwise
  */
-VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev, 
-  double hx, double hy, double hzed, int nonlin);
+VEXTERNC int Vpmgp_ctor2(Vpmgp *thee, MGparm *mgparm);
 
 /** @brief   Object destructor
  *  @ingroup Vpmgp

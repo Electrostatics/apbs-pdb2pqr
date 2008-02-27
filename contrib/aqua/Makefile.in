@@ -33,7 +33,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-subdir = src/aaa_lib
+subdir = contrib/aqua
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
@@ -43,37 +43,24 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
-am__DEPENDENCIES_1 =
-libapbs_la_DEPENDENCIES = $(GEN_LIBS) $(FEM_LIBS) $(MG_LIBS) \
-	$(PMGZ_LIBS) $(AQUA_LIBS) $(am__DEPENDENCIES_1)
-am_libapbs_la_OBJECTS = apbs_link.lo
-libapbs_la_OBJECTS = $(am_libapbs_la_OBJECTS)
-libapbs_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libapbs_la_LDFLAGS) $(LDFLAGS) -o $@
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libapbsaqua_la_LIBADD =
+am_libapbsaqua_la_OBJECTS = BlasWrapper.lo Cartesian_grid.lo \
+	CGMG_Solver.lo Galerkin.lo LinMG.lo Matvect.lo \
+	Newton_Solver_pbe.lo Smoothing.lo packmg.lo PrintInfo.lo
+libapbsaqua_la_OBJECTS = $(am_libapbsaqua_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/src/aaa_inc@am__isrc@
 depcomp =
 am__depfiles_maybe =
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libapbs_la_SOURCES)
-DIST_SOURCES = $(libapbs_la_SOURCES)
+SOURCES = $(libapbsaqua_la_SOURCES)
+DIST_SOURCES = $(libapbsaqua_la_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -190,7 +177,7 @@ includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
 lib_list = @lib_list@
-libdir = ${prefix}/lib
+libdir = @libdir@
 liberty_lib = @liberty_lib@
 libexecdir = @libexecdir@
 localedir = @localedir@
@@ -236,18 +223,14 @@ AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
 always_built_SUBDIRS = 
 SUBDIRS = $(always_built_SUBDIRS) .
-GEN_LIBS = ${top_builddir}/src/generic/libapbsgen.la
-FEM_LIBS = ${top_builddir}/src/fem/libapbsfem.la 
-MG_LIBS = ${top_builddir}/src/mg/libapbsmg.la
-PMGZ_LIBS = ${top_builddir}/contrib/pmgZ/libapbspmgz.la
-AQUA_LIBS = ${top_builddir}/contrib/aqua/libapbsaqua.la
-BLAS_LIBS = @blas_lib@
-lib_LTLIBRARIES = libapbs.la
-libapbs_la_SOURCES = apbs_link.c
-libapbs_la_LIBADD = ${GEN_LIBS} ${FEM_LIBS} ${MG_LIBS} ${PMGZ_LIBS} ${AQUA_LIBS} ${BLAS_LIBS}
-libapbs_la_LDFLAGS = -version-info ${APBS_VERSION}
-INCLUDES = -I${top_srcdir}/src/generic -I${top_srcdir}/src/mg -I${top_srcdir}/src/fem @inc_list@
-AM_CFLAGS = @wall_pedantic@
+THISLIB = aqua
+noinst_LTLIBRARIES = libapbsaqua.la
+libapbsaqua_la_SOURCES = BlasWrapper.f Cartesian_grid.f \
+  CGMG_Solver.f Galerkin.f LinMG.f Matvect.f Newton_Solver_pbe.f \
+  Smoothing.f packmg.f PrintInfo.f
+
+INCLUDES = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
+AM_CFLAGS = @wall_pedantic_ansi@ @CFLAGS@
 all: all-recursive
 
 .SUFFIXES:
@@ -261,9 +244,9 @@ $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/aaa_lib/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  contrib/aqua/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  src/aaa_lib/Makefile
+	  $(AUTOMAKE) --gnu  contrib/aqua/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -281,35 +264,17 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
-	  else :; fi; \
-	done
 
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
-	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
 	  test "$$dir" != "$$p" || dir=.; \
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libapbs.la: $(libapbs_la_OBJECTS) $(libapbs_la_DEPENDENCIES) 
-	$(libapbs_la_LINK) -rpath $(libdir) $(libapbs_la_OBJECTS) $(libapbs_la_LIBADD) $(LIBS)
+libapbsaqua.la: $(libapbsaqua_la_OBJECTS) $(libapbsaqua_la_DEPENDENCIES) 
+	$(F77LINK)  $(libapbsaqua_la_OBJECTS) $(libapbsaqua_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -317,14 +282,14 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-.c.o:
-	$(COMPILE) -c $<
+.f.o:
+	$(F77COMPILE) -c -o $@ $<
 
-.c.obj:
-	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+.f.obj:
+	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
-.c.lo:
-	$(LTCOMPILE) -c -o $@ $<
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -508,12 +473,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES)
+all-am: Makefile $(LTLIBRARIES) all-local
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libdir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -540,7 +502,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-recursive
@@ -562,7 +524,7 @@ install-data-am:
 
 install-dvi: install-dvi-recursive
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am:
 
 install-html: install-html-recursive
 
@@ -593,27 +555,29 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES
+uninstall-am:
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
 	install-strip
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
-	all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags ctags-recursive \
+	all all-am all-local check check-am clean clean-generic \
+	clean-libtool clean-noinstLTLIBRARIES ctags ctags-recursive \
 	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
-	install-info-am install-libLTLIBRARIES install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
-	uninstall-libLTLIBRARIES
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am
 
+
+all-local:
+	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -66,6 +66,7 @@
 
 #include "apbscfg.h"
 #include "apbs/vpmgp.h"
+#include "apbs/mgparm.h"
 
 VEMBED(rcsid="$Id$")
 
@@ -84,15 +85,14 @@ VEMBED(rcsid="$Id$")
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx, 
-  double hy, double hzed, int nonlin) {
+VPUBLIC Vpmgp* Vpmgp_ctor(MGparm *mgparm) {
 
     Vpmgp *thee = VNULL;
 
     /* Set up the structure */
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpmgp) );
     VASSERT( thee != VNULL);
-    VASSERT(Vpmgp_ctor2(thee, nx, ny, nz, nlev, hx, hy, hzed, nonlin));
+    VASSERT(Vpmgp_ctor2(thee,mgparm));
 
     return thee;
 }
@@ -102,24 +102,25 @@ VPUBLIC Vpmgp* Vpmgp_ctor(int nx, int ny, int nz, int nlev, double hx,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
-						double hx, double hy, double hzed, int nonlin) {
+VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
 	
-    /* Specified parameters */
-    thee->nx = nx;
-    thee->ny = ny;
-    thee->nz = nz;
-    thee->hx = hx;
-    thee->hy = hy;
-    thee->hzed = hzed;
-    thee->xlen = ((double)(nx-1))*hx;
-    thee->ylen = ((double)(ny-1))*hy;
-    thee->zlen = ((double)(nz-1))*hzed;
-    thee->nlev = nlev; 
-    thee->nonlin = nonlin;
+	/* Specified parameters */
+    thee->nx = mgparm->dime[0];
+    thee->ny = mgparm->dime[1];
+    thee->nz = mgparm->dime[2];
+    thee->hx = mgparm->grid[0];
+    thee->hy = mgparm->grid[1];
+    thee->hzed = mgparm->grid[2];
+    thee->xlen = ((double)(mgparm->dime[0]-1))*mgparm->grid[0];
+    thee->ylen = ((double)(mgparm->dime[1]-1))*mgparm->grid[1];
+    thee->zlen = ((double)(mgparm->dime[2]-1))*mgparm->grid[2];
+    thee->nlev = mgparm->nlev;
 	
-    if (nonlin == NONLIN_LPBE) thee->ipkey = IPKEY_LPBE; /* LPBE case */
-	else if(nonlin == NONLIN_SMPBE) thee->ipkey = IPKEY_SMPBE; /* SMPBE case */
+    thee->nonlin = mgparm->nonlintype;
+	thee->meth = mgparm->method;
+	
+    if (thee->nonlin == NONLIN_LPBE) thee->ipkey = IPKEY_LPBE; /* LPBE case */
+	else if(thee->nonlin == NONLIN_SMPBE) thee->ipkey = IPKEY_SMPBE; /* SMPBE case */
     else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
 	
     /* Default parameters */
@@ -132,28 +133,10 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
     thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
 		* 2 (for debugging NPBE), higher values give 
 		* too much output */
+	
     thee->bcfl = BCFL_SDH;
     thee->key = 0;
     thee->iperf = 0;
-    if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { 
-		/* SMPBE Added - SMPBE needs to mimic NPBE */
-        
-		Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgsolv = 0\n");
-        thee->meth = 1;
-		
-        thee->mgsolv = 0;
-    } else {                 
-        
-#ifdef APBS_FAST                    /* Fastest convergence, but lots of mem */
-		Vnm_print(0, "Vpmp_ctor2:  Using meth = 0, mgsolv = 1, APBS fast mode\n");
-        thee->meth = 0;
-#else								/* Most rigorous (good for testing) */
-		Vnm_print(0, "Vpmp_ctor2:  Using meth = 2, mgsolv = 1\n");
-        thee->meth = 2;
-#endif
-        thee->mgsolv = 1;
-    }
-
 	thee->mgcoar = 2;
 	thee->mgkey = 0;
 	thee->nu1 = 2;
@@ -167,15 +150,25 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee, int nx, int ny, int nz, int nlev,
 	thee->xcent = 0.0;
 	thee->ycent = 0.0;
 	thee->zcent = 0.0;
-
-#ifdef APBS_FAST	
-	/* NOTE: This wass put in, in case the default mgsmoo ever changes to a value other than 1 
-			 on the opposite side of the else statement. */
-	thee->mgsmoo = 1;
-#else
+	
 	/* Default value for all APBS runs */
 	thee->mgsmoo = 1;
-#endif
+    if (thee->nonlin == NONLIN_NPBE || thee->nonlin == NONLIN_SMPBE) { 
+		/* SMPBE Added - SMPBE needs to mimic NPBE */
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgsolv = 0\n");
+        thee->mgsolv = 0;
+	}else{        
+		/* Most rigorous (good for testing) */
+		Vnm_print(0, "Vpmp_ctor2:  Using meth = 2, mgsolv = 1\n");
+        thee->mgsolv = 1;
+    }
+
+	/* TEMPORARY USEAQUA */
+	/* If we are using aqua, our solution method is either VSOL_CGMGAqua or VSOL_NewtonAqua
+	 * so we need to temporarily override the mgsolve value and set it to 0
+	 */
+	if((thee->meth == VSOL_CGMGAqua) || (thee->meth == VSOL_NewtonAqua))
+		thee->mgsolv = 0;
 	
 	return 1;
 }

@@ -101,7 +101,7 @@ VPUBLIC PBEparm* PBEparm_ctor() {
     VASSERT( PBEparm_ctor2(thee) );
 
     return thee;
-}
+} 
 
 VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
 
@@ -139,6 +139,9 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->useDielMap = 0;
     thee->useKappaMap = 0;
     thee->useChargeMap = 0;
+	
+	thee->useAqua = 0; 
+	thee->setUseAqua = 0;
 	
 	thee->smsize = 0.0;
 	thee->smvolume = 0.0;
@@ -232,7 +235,8 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if (!thee->setcalcenergy) thee->calcenergy = PCE_NO;
     if (!thee->setcalcforce) thee->calcforce = PCF_NO;
     if (!thee->setwritemat) thee->writemat = 0;
-
+	if (!thee->setUseAqua) thee->useAqua = 0;
+	
     return 1;
 }
 
@@ -298,6 +302,9 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
 	
 	thee->setsmsize = parm->setsmsize;
 	thee->setsmvolume = parm->setsmvolume;
+	
+	thee->useAqua = parm->useAqua;
+	thee->setUseAqua = parm->setUseAqua;
 	
     thee->parsed = parm->parsed;
 
@@ -407,6 +414,13 @@ VERROR1:
     Vnm_print(2, "parsePBE:  ran out of tokens!\n");
 	return VRC_FAILURE;
 	
+}
+
+VPRIVATE int PBEparm_parseUSEAQUA(PBEparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed useaqua\n");
+    thee->useAqua = 1;
+    thee->setUseAqua = 1;
+    return 1;
 }
 
 VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
@@ -1031,6 +1045,8 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseNRPBE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "smpbe") == 0) {
         return PBEparm_parseSMPBE(thee, sock);
+	} else if (Vstring_strcasecmp(tok, "useaqua") == 0) {
+        return PBEparm_parseUSEAQUA(thee, sock);
     } else if (Vstring_strcasecmp(tok, "bcfl") == 0) {
         return PBEparm_parseBCFL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "ion") == 0) {

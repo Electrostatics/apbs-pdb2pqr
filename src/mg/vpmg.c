@@ -177,10 +177,15 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 	
     /* We need some additional storage if: nonlinear & newton OR cgmg */
 	/* SMPBE Added - nonlin = 2 added since it mimics NPBE */
-    if ( ( ((thee->pmgp->nonlin == 1) || (thee->pmgp->nonlin == 2)) 
-		   && (thee->pmgp->meth == 1) )
-		 || (thee->pmgp->meth == 0) ) { thee->pmgp->nrwk += (2*(thee->pmgp->nf));
+    if ( ( ((thee->pmgp->nonlin == NONLIN_NPBE) || (thee->pmgp->nonlin == NONLIN_SMPBE)) 
+		   && (thee->pmgp->meth == VSOL_Newton) ) || (thee->pmgp->meth == VSOL_CGMG) ) 
+	{ 
+		printf("\n\nBOOOYAH\n\n");
+		thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
+	
+	/* TEMP TEMP TEMP TEMP TEMP TEMP */
+	if (thee->pmgp->meth == 8)  thee->pmgp->nrwk += (2*(thee->pmgp->nf));
 	
 	Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
 			  thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz);
@@ -393,64 +398,78 @@ VPUBLIC int Vpmg_solve(Vpmg *thee) {
 
     switch(thee->pmgp->meth) {
         /* CGMG (linear) */
-        case 0:
+        case VSOL_CGMG:
             F77CGMGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-              thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-              thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+						thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						thee->fcf, thee->tcf);
             break;
-        /* Newton (nonlinear) */
-        case 1:
+			/* Newton (nonlinear) */
+        case VSOL_Newton:
             F77NEWDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
-              thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-              thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
-              thee->fcf, thee->tcf);
+					   thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+					   thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
+					   thee->fcf, thee->tcf);
             break;
-        /* MG (linear/nonlinear) */
-        case 2:
-	    F77MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+			/* MG (linear/nonlinear) */
+        case VSOL_MG:
+			F77MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+					  thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+					  thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+					  thee->fcf, thee->tcf);
             break;
-        /* CGHS (linear/nonlinear) */
-        case 3: 
-	    F77NCGHSDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+			/* CGHS (linear/nonlinear) */
+        case VSOL_CG: 
+			F77NCGHSDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						 thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						 thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						 thee->fcf, thee->tcf);
             break;
-        /* SOR (linear/nonlinear) */
-        case 4:
-	    F77NSORDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+			/* SOR (linear/nonlinear) */
+        case VSOL_SOR:
+			F77NSORDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						thee->fcf, thee->tcf);
             break;
-        /* GSRB (linear/nonlinear) */
-        case 5:
-	    F77NGSRBDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf); 
+			/* GSRB (linear/nonlinear) */
+        case VSOL_RBGS:
+			F77NGSRBDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						 thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						 thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						 thee->fcf, thee->tcf); 
             break;
-        /* WJAC (linear/nonlinear) */
-        case 6:
-	    F77NWJACDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+			/* WJAC (linear/nonlinear) */
+        case VSOL_WJ:
+			F77NWJACDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						 thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						 thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						 thee->fcf, thee->tcf);
             break;
-        /* RICH (linear/nonlinear) */
-        case 7:
-	    F77NRICHDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
-	      thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
-	      thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
-              thee->fcf, thee->tcf);
+			/* RICH (linear/nonlinear) */
+        case VSOL_Richardson:
+			F77NRICHDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						 thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						 thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						 thee->fcf, thee->tcf);
             break;
+			/* CGMG (linear) TEMPORARY USEAQUA */
+        case VSOL_CGMGAqua:
+            F77CGMGDRIVAQUA(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+						thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+						thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+						thee->fcf);
+            break;
+			/* Newton (nonlinear) TEMPORARY USEAQUA */
+        case VSOL_NewtonAqua:
+            F77NEWDRIVAQUA(thee->iparm, thee->rparm, thee->iwork, thee->rwork, 
+					   thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+					   thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf, 
+					   thee->fcf);
+            break;			
         /* Error handling */
         default: 
-            Vnm_print(2, "Vpgm_solve: invalid solver method key (%d)\n",
+            Vnm_print(2, "Vpmg_solve: invalid solver method key (%d)\n",
               thee->pmgp->key);
             return 0;
             break;
@@ -1116,7 +1135,6 @@ VPUBLIC double Vpmg_energy(Vpmg *thee, int extFlag) {
     double qfEnergy = 0.0;
 
     VASSERT(thee != VNULL);
-
 	
     if ((thee->pmgp->nonlin) && (Vpbe_getBulkIonicStrength(thee->pbe) > 0.)) {
         Vnm_print(0, "Vpmg_energy:  calculating full PBE energy\n");

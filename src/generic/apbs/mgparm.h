@@ -190,6 +190,12 @@ struct sMGparm {
     int setofrac;  /**< Flag, @see ofrac */
     int async; /**< Processor ID for asynchronous calculation */
     int setasync; /**< Flag, @see asynch */
+	
+	int nonlintype; /**< Linearity Type Method to be used */
+	int setnonlintype; /**< Flag, @see nonlintype */
+	
+	int method;		/**< Solver Method */
+	int setmethod; /**< Flag, @see method */
 };
 
 /** @typedef MGparm

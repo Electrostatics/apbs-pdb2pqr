@@ -2661,8 +2661,8 @@ else
 fi
 
 if test -n "${with_python}"; then
-	{ echo "$as_me:$LINENO: result: \"WARNING:  Python linkage requires GNU compilers\"" >&5
-echo "${ECHO_T}\"WARNING:  Python linkage requires GNU compilers\"" >&6; }
+	{ echo "$as_me:$LINENO: result: WARNING:  Python linkage requires GNU compilers" >&5
+echo "${ECHO_T}WARNING:  Python linkage requires GNU compilers" >&6; }
 	cclist="gcc"
 	f77list="gfortran g95 g77"
 else
@@ -22224,6 +22224,9 @@ echo "${ECHO_T}-----------------------------------------------------------" >&6;
 echo "${ECHO_T}----- MALOC installation finished continuing with APBS ----" >&6; }
 	{ echo "$as_me:$LINENO: result: -----------------------------------------------------------" >&5
 echo "${ECHO_T}-----------------------------------------------------------" >&6; }
+else
+	{ echo "$as_me:$LINENO: result: Skipping MALOC installation; will use MALOC provided with FEtk" >&5
+echo "${ECHO_T}Skipping MALOC installation; will use MALOC provided with FEtk" >&6; }
 fi
 
 
@@ -23657,7 +23660,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile contrib/Makefile contrib/blas/Makefile contrib/pmgZ/Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/alkanes/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/protein-rna/Makefile examples/smpbe/Makefile examples/solv/Makefile bin/Makefile"
+ac_config_files="$ac_config_files Makefile contrib/Makefile contrib/blas/Makefile contrib/pmgZ/Makefile contrib/aqua/Makefile tools/Makefile tools/mesh/Makefile tools/manip/Makefile tools/python/Makefile tools/arpack/Makefile tools/python/vgrid/Makefile src/Makefile src/generic/Makefile src/mg/Makefile src/fem/Makefile src/aaa_inc/Makefile src/aaa_inc/apbs/Makefile src/aaa_lib/Makefile examples/Makefile examples/actin-dimer/Makefile examples/alkanes/Makefile examples/born/Makefile examples/FKBP/Makefile examples/hca-bind/Makefile examples/ion-pmf/Makefile examples/ion-protein/Makefile examples/ionize/Makefile examples/pka-lig/Makefile examples/point-pmf/Makefile examples/protein-rna/Makefile examples/smpbe/Makefile examples/solv/Makefile bin/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -24270,6 +24273,7 @@ do
     "contrib/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
     "contrib/blas/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/blas/Makefile" ;;
     "contrib/pmgZ/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/pmgZ/Makefile" ;;
+    "contrib/aqua/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/aqua/Makefile" ;;
     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
     "tools/mesh/Makefile") CONFIG_FILES="$CONFIG_FILES tools/mesh/Makefile" ;;
     "tools/manip/Makefile") CONFIG_FILES="$CONFIG_FILES tools/manip/Makefile" ;;

@@ -90,6 +90,28 @@ enum eVrc_Codes {
 typedef enum eVrc_Codes Vrc_Codes;
 
 /**
+ *	@ingroup Vhal
+ *	@author	 David Gohara
+ *	@brief	 Solution Method enumerations
+ *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
+ */
+enum eVsol_Meth {
+	
+	VSOL_CGMG,		/* 0: conjugate gradient multigrid */
+	VSOL_Newton,	/* 1: newton */
+	VSOL_MG,		/* 2: multigrid */
+	VSOL_CG,		/* 3: conjugate gradient */
+	VSOL_SOR,		/* 4: sucessive overrelaxation */
+	VSOL_RBGS,		/* 5: red-black gauss-seidel */
+	VSOL_WJ,		/* 6: weighted jacobi */
+	VSOL_Richardson,/* 7: richardson  */
+	VSOL_CGMGAqua,	/* 8: conjugate gradient multigrid aqua */ 
+	VSOL_NewtonAqua	/* 9: newton aqua */
+	
+};
+typedef enum eVsol_Meth Vsol_Meth;
+
+/**
  *  @ingroup Vhal
  *  @author  Nathan Baker
  *  @brief   Types of molecular surface definitions
@@ -168,7 +190,9 @@ typedef enum eVhal_IPKEYType Vhal_IPKEYType;
 enum eVhal_NONLINType {
     NONLIN_LPBE = 0,
 	NONLIN_NPBE,  
-    NONLIN_SMPBE
+    NONLIN_SMPBE,
+	NONLIN_LPBEAQUA,
+	NONLIN_NPBEAQUA
 };
 
 /** 

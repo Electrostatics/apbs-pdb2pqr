@@ -616,6 +616,20 @@ VEXTERNC void F77NRICHDRIV(int *iparm, double *rparm, int *iwork, double *rwork,
   double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
   double *fcf, double *tcf);
 
+/* TEMPORARY USEAQUA */
+#define F77CGMGDRIVAQUA VF77_MANGLE(cgmgdrivaqua, CGMGDRIVAQUA)
+VEXTERNC void F77CGMGDRIVAQUA(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf);
+
+/* TEMPORARY USEAQUA */
+#define F77NEWDRIVAQUA    VF77_MANGLE(newdrivaqua, NEWDRIVAQUA)
+VEXTERNC void F77NEWDRIVAQUA(int *iparm, double *rparm, int *iwork, double *rwork,
+  double *u, double *xf, double *yf, double *zf, double *gxcf, double *gycf,
+  double *gzcf, double *a1cf, double *a2cf, double *a3cf, double *ccf,
+  double *fcf);
+
 #define F77TSECND     VF77_MANGLE(tsecnd, TSECND)
 #define F77VPMGANORM  VF77_MANGLE(vpmganorm, VPMGANORM)
 #define F77VPMGABAND  VF77_MANGLE(vpmgaband, VPMGABAND)
