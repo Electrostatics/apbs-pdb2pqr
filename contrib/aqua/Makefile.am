@@ -13,7 +13,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = aqua
 
 noinst_LTLIBRARIES = libapbsaqua.la
-libapbsaqua_la_SOURCES = BlasWrapper.f Cartesian_grid.f \
+libapbsaqua_la_SOURCES = Blaswrapper.f Cartesian_grid.f \
   CGMG_Solver.f Galerkin.f LinMG.f Matvect.f Newton_Solver_pbe.f \
   Smoothing.f packmg.f PrintInfo.f
 INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
