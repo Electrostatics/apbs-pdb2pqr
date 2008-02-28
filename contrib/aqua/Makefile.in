@@ -47,7 +47,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libapbsaqua_la_LIBADD =
 am_libapbsaqua_la_OBJECTS = Blaswrapper.lo Cartesian_grid.lo \
 	CGMG_Solver.lo Galerkin.lo LinMG.lo MatVect.lo \
-	Newton_Solver_pbe.lo Smoothing.lo packmg.lo Printinfo.lo
+	Newton_Solver_pbe.lo Smoothing.lo packmg.lo PrintInfo.lo
 libapbsaqua_la_OBJECTS = $(am_libapbsaqua_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/src/aaa_inc@am__isrc@
 depcomp =
@@ -227,7 +227,7 @@ THISLIB = aqua
 noinst_LTLIBRARIES = libapbsaqua.la
 libapbsaqua_la_SOURCES = Blaswrapper.f Cartesian_grid.f \
   CGMG_Solver.f Galerkin.f LinMG.f MatVect.f Newton_Solver_pbe.f \
-  Smoothing.f packmg.f Printinfo.f
+  Smoothing.f packmg.f PrintInfo.f
 
 INCLUDES = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS = @wall_pedantic_ansi@ @CFLAGS@

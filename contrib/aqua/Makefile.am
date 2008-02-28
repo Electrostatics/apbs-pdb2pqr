@@ -15,7 +15,7 @@ THISLIB = aqua
 noinst_LTLIBRARIES = libapbsaqua.la
 libapbsaqua_la_SOURCES = Blaswrapper.f Cartesian_grid.f \
   CGMG_Solver.f Galerkin.f LinMG.f MatVect.f Newton_Solver_pbe.f \
-  Smoothing.f packmg.f Printinfo.f
+  Smoothing.f packmg.f PrintInfo.f
 INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
 AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
 
