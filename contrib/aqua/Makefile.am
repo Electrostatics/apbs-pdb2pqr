@@ -21,5 +21,5 @@ AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
 
 
 all-local:
-	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
+#	-cp -p ${top_srcdir}/src/${THISLIB}/apbs/*.h ${top_srcdir}/src/aaa_inc/apbs/.
 
