@@ -196,6 +196,9 @@ struct sMGparm {
 	
 	int method;		/**< Solver Method */
 	int setmethod; /**< Flag, @see method */
+
+	int useAqua;  /**< Enable use of lpbe/aqua */
+	int setUseAqua; /**< Flag, @see useAqua */	
 };
 
 /** @typedef MGparm

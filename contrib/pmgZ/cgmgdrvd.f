@@ -91,7 +91,7 @@ c*    *** basic grid sizes, etc. ***
       mgcoar = iparm(18)
       mgdisc = iparm(19)
       mgsolv = iparm(21)
-      call mgsz(mgcoar,mgdisc,mgsolv,nx,ny,nz,nlev,nxc,nyc,nzc,
+      call mgszaqua(mgcoar,mgdisc,mgsolv,nx,ny,nz,nlev,nxc,nyc,nzc,
      2   nf,nc,narr,narrc,n_rpc,n_iz,n_ipc,iretot,iintot)
 c*
 c*    *** allocate space for two additional work vectors ***

@@ -830,13 +830,13 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		case PBE_NPBE:
 			/* TEMPORARY USEAQUA */
 			mgparm->nonlintype = NONLIN_NPBE;
-			mgparm->method = (pbeparm->useAqua == 1) ? VSOL_NewtonAqua : VSOL_Newton;
+			mgparm->method = (mgparm->useAqua == 1) ? VSOL_NewtonAqua : VSOL_Newton;
 			pmgp[icalc] = Vpmgp_ctor(mgparm);
 			break;
 		case PBE_LPBE:
 			/* TEMPORARY USEAQUA */
 			mgparm->nonlintype = NONLIN_LPBE;
-			mgparm->method = (pbeparm->useAqua == 1) ? VSOL_CGMGAqua : VSOL_MG;
+			mgparm->method = (mgparm->useAqua == 1) ? VSOL_CGMGAqua : VSOL_MG;
 			pmgp[icalc] = Vpmgp_ctor(mgparm);
 			break;
 		case PBE_LRPBE:
@@ -878,7 +878,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 							   mgparm, pbeparm->calcenergy);   
         /* ...however, it should be done with the previous calculation now, so 
         we should be able to destroy it here. */
-        Vpmg_dtor(&(pmg[icalc-1]));   
+        //Vpmg_dtor(&(pmg[icalc-1]));   
 	} else {
 		if (icalc>0) Vpmg_dtor(&(pmg[icalc-1]));
 		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 0, VNULL, mgparm, PCE_NO);
@@ -976,9 +976,10 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 	
 	for(i=0;i<nosh->ncalc;i++){
 		Vpbe_dtor(&(pbe[i]));
-		Vpmg_dtor(&(pmg[i]));
 		Vpmgp_dtor(&(pmgp[i]));
 	}
+	
+	Vpmg_dtor(&(pmg[nosh->ncalc-1]));
 }
 
 VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {

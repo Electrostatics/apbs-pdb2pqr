@@ -133,7 +133,7 @@ c	Get grid size info for all grid levels: this will be used to partition the arr
 c	iwork and rwork so that they can store the whole hierarchy of grids
 c ==========================================================================================
 c
-	call mgsz(mgcoar,mgdisc,mgsolv,nx,ny,nz,nlevel,
+	call mgszaqua(mgcoar,mgdisc,mgsolv,nx,ny,nz,nlevel,
      1		nxc,nyc,nzc,nf,nc,narr,narrc,n_rpc,n_iz,n_ipc,
      2		ireal_tot,iint_tot)
 c

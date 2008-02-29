@@ -162,30 +162,41 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
     /* Set up the memory */
     thee->vmem = Vmem_ctor("APBS:VPMG");
 	
+	/* TEMPORARY USEAQUA */
     /* Calculate storage requirements */
-    F77MGSZ(
-			&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
-			&(thee->pmgp->mgsolv), 
-			&(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
-			&(thee->pmgp->nlev), 
-			&(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
-			&(thee->pmgp->nf), &(thee->pmgp->nc), 
-			&(thee->pmgp->narr), &(thee->pmgp->narrc), 
-			&(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
-			&(thee->pmgp->nrwk), &(thee->pmgp->niwk)
-			);
+	if(mgparm->useAqua == 0){
+		F77MGSZ(
+				&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+				&(thee->pmgp->mgsolv), 
+				&(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
+				&(thee->pmgp->nlev), 
+				&(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
+				&(thee->pmgp->nf), &(thee->pmgp->nc), 
+				&(thee->pmgp->narr), &(thee->pmgp->narrc), 
+				&(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
+				&(thee->pmgp->nrwk), &(thee->pmgp->niwk)
+				);
+	}else{
+		F77MGSZAQUA(
+				&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
+				&(thee->pmgp->mgsolv), 
+				&(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
+				&(thee->pmgp->nlev), 
+				&(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
+				&(thee->pmgp->nf), &(thee->pmgp->nc), 
+				&(thee->pmgp->narr), &(thee->pmgp->narrc), 
+				&(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
+				&(thee->pmgp->nrwk), &(thee->pmgp->niwk)
+				);
+	}
 	
     /* We need some additional storage if: nonlinear & newton OR cgmg */
 	/* SMPBE Added - nonlin = 2 added since it mimics NPBE */
     if ( ( ((thee->pmgp->nonlin == NONLIN_NPBE) || (thee->pmgp->nonlin == NONLIN_SMPBE)) 
 		   && (thee->pmgp->meth == VSOL_Newton) ) || (thee->pmgp->meth == VSOL_CGMG) ) 
 	{ 
-		printf("\n\nBOOOYAH\n\n");
 		thee->pmgp->nrwk += (2*(thee->pmgp->nf));
     }
-	
-	/* TEMP TEMP TEMP TEMP TEMP TEMP */
-	if (thee->pmgp->meth == 8)  thee->pmgp->nrwk += (2*(thee->pmgp->nf));
 	
 	Vnm_print(0, "Vpmg_ctor2:  PMG chose nx = %d, ny = %d, nz = %d\n", 
 			  thee->pmgp->nx, thee->pmgp->ny, thee->pmgp->nz);
@@ -253,7 +264,14 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 		thee->extDiEnergy = 0;
 		thee->extQfEnergy = 0;
 	}
-	
+
+	/*
+	 * TODO: Move the dtor out of here. The current ctor is done in routines.c,
+	 *       This was originally moved out to kill a memory leak. The dtor has
+	 *       has been removed from initMG and placed back here to keep memory 
+	 *       usage low. killMG has been modified accordingly.
+	 */
+	Vpmg_dtor(&pmgOLD);   
 	
 	/* Allocate partition vector storage */
 	thee->pvec = (double *)Vmem_malloc(thee->vmem,

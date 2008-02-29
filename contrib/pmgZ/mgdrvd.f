@@ -512,7 +512,7 @@ c*    *** misc variables ***
       integer          num_nf_oper,num_narrc_oper
 c*
 c*    *** go down grids: compute max/min eigenvalues of all operators ***
-      nf   = nx * ny * nz
+	  nf   = nx * ny * nz
       narr = nf 
       nxf  = nx
       nyf  = ny

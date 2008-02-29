@@ -561,6 +561,12 @@ VEXTERNC void F77MGSZ(int *mgcoar, int *mgdisc, int *mgsolv, int *nx, int *ny,
   int *narr, int *narrc, int *n_rpc, int *n_iz, int *n_ipc, int *nrwk, 
   int *niwk);
 
+#define F77MGSZAQUA VF77_MANGLE(mgszaqua, MGSZAQUA)
+VEXTERNC void F77MGSZAQUA(int *mgcoar, int *mgdisc, int *mgsolv, int *nx, int *ny,
+					  int *nz, int *nlev, int *nxc, int *nyc, int *nyz, int *nf, int *nc, 
+					  int *narr, int *narrc, int *n_rpc, int *n_iz, int *n_ipc, int *nrwk, 
+					  int *niwk);
+
 #define F77PACKMG VF77_MANGLE(packmg, PACKMG)
 VEXTERNC void F77PACKMG(int *iparm, double *rparm, int *nrwk, int *niwk,
   int *nx, int *ny, int *nz, int *nlev, int *nu1, int *nu2, int *mgkey, 
