@@ -177,7 +177,10 @@ VPUBLIC Vrc_Codes MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
 
     /* *** Default parameters for TINKER *** */
     thee->chgs = VCM_CHARGE;
-
+	
+	thee->useAqua = 0; 
+	thee->setUseAqua = 0;
+	
     return VRC_SUCCESS; 
 }
 
@@ -340,7 +343,9 @@ VPUBLIC Vrc_Codes MGparm_check(MGparm *thee) {
 		}
         for (i=0; i<3; i++) thee->dime[i] = tdime[i];
     }
-
+	
+	if (!thee->setUseAqua) thee->useAqua = 0;
+	
     return rc;
 }
 
@@ -411,6 +416,9 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
 	
 	thee->method = parm->method;
 	thee->method = parm->method;
+	
+	thee->useAqua = parm->useAqua;
+	thee->setUseAqua = parm->setUseAqua;
 }
 
 VPRIVATE Vrc_Codes MGparm_parseDIME(MGparm *thee, Vio *sock) {
@@ -886,6 +894,13 @@ keyword!\n", tok);
         return VRC_WARNING;
 }
 
+VPRIVATE int MGparm_parseUSEAQUA(MGparm *thee, Vio *sock) {
+    Vnm_print(0, "NOsh: parsed useaqua\n");
+    thee->useAqua = 1;
+    thee->setUseAqua = 1;
+    return 1;
+}
+
 VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock) {
 
@@ -929,6 +944,8 @@ VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
         return MGparm_parseASYNC(thee, sock);
 	} else if (Vstring_strcasecmp(tok, "gamma") == 0) {
         return MGparm_parseGAMMA(thee, sock);
+	} else if (Vstring_strcasecmp(tok, "useaqua") == 0) {
+        return MGparm_parseUSEAQUA(thee, sock);
     } else {
         Vnm_print(2, "parseMG:  Unrecognized keyword (%s)!\n", tok);
         return VRC_WARNING;

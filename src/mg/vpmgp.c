@@ -167,8 +167,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
 	/* If we are using aqua, our solution method is either VSOL_CGMGAqua or VSOL_NewtonAqua
 	 * so we need to temporarily override the mgsolve value and set it to 0
 	 */
-	if((thee->meth == VSOL_CGMGAqua) || (thee->meth == VSOL_NewtonAqua))
-		thee->mgsolv = 0;
+	if(mgparm->useAqua == 1) thee->mgsolv = 0;
 	
 	return 1;
 }
