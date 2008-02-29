@@ -199,13 +199,20 @@ int main(
 ----------------------------------------------------------------------\n\
 	APBS uses FETK (the Finite Element ToolKit) to solve the\n\
 	Poisson-Boltzmann equation numerically.  FETK is a portable collection\n\
-	of finite element modeling class libraries written in an object-oriented\n\
-	version of C.  It is designed to solve general coupled systems of nonlinear\n\
-	partial differential equations using adaptive finite element methods,\n\
-	inexact Newton methods, and algebraic multilevel methods.  More information\n\
-	about FEtk may be found at <http://www.FEtk.ORG>.\n\
+	of finite element modeling class libraries developed by the Michael Holst\n\
+	research group and written in an object-oriented form of C.  FEtk is\n\
+	designed to solve general coupled systems of nonlinear partial differential\n\
+	equations using adaptive finite element methods, inexact Newton methods,\n\
+	and algebraic multilevel methods.  More information about FEtk may be found\n\
+	at <http://www.FEtk.ORG>.\n\
 ----------------------------------------------------------------------\n\
-Please cite your use of APBS as:\n\n\
+	APBS also uses Aqua to solve the Poisson-Boltzmann equation numerically.  \n\
+	Aqua is a modified form of the Holst group PMG library <http://www.FEtk.ORG>\n\
+	which has been modified by Patrice Koehl <http://nook.cs.ucdavis.edu/~koehl/>\n\
+	for improved efficiency and memory usage when solving the Poisson-Boltzmann\n\
+	equation.\n\
+----------------------------------------------------------------------\n\
+	Please cite your use of APBS as:\n\n\
 	Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
 	nanosystems: application to microtubules and the ribosome. Proc.\n\
 	Natl. Acad. Sci. USA 98, 10037-10041 2001.\n\

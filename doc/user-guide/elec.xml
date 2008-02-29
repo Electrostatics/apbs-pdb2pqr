@@ -122,8 +122,10 @@
 				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="elec-usemap">usemap</link></command>
-				(optional)
+				<command><link linkend="elec-usemap">usemap</link></command> (optional)
+			</member>
+			<member>
+				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-sdens">sdens</link></command>
@@ -237,8 +239,10 @@
 				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="elec-usemap">usemap</link></command>
-				(optional)
+				<command><link linkend="elec-usemap">usemap</link></command> (optional)
+			</member>
+			<member>
+				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-sdens">sdens</link></command>
@@ -331,6 +335,9 @@
 			<member>
 				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
+			</member>
+			<member>
+				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-sdens">sdens</link></command>
@@ -459,6 +466,9 @@
 				(optional)
 			</member>
 			<member>
+				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
+			</member>
+			<member>
 				<command><link linkend="elec-sdens">sdens</link></command>
 			</member>
 			<member>
@@ -545,6 +555,9 @@
 			<member>
 				<command><link linkend="elec-usemap">usemap</link></command>
 				(optional)
+			</member>
+			<member>
+				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-sdens">sdens</link></command>
@@ -1927,6 +1940,15 @@
 						</listitem>
 					</varlistentry>
 				</variablelist>
+			</para>
+		</listitem>
+
+
+		<listitem id="elec-useaqua">
+			<cmdsynopsis>
+				<command>useaqua</command>
+			</cmdsynopsis>
+			<para>This enables <emphasis>experimental</emphasis> support for Aqua, a verison of the Holst group <ulink url="http://www.fetk.org/">FEtk PMG</ulink> multigrid library optimized by <ulink url="http://nook.cs.ucdavis.edu/~koehl/">Patrice Koehl</ulink> for improved memory usage and speed when solving the Poisson-Boltzmann equation.  <emphasis>This keyword is temporary and will eventually disappear as Aqua becomes the default multigrid solver for APBS.</emphasis>
 			</para>
 		</listitem>
 
