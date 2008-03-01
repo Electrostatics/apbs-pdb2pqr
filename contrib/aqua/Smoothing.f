@@ -1,20 +1,50 @@
-c       Copyright (C) 2007 Patrice Koehl
+c ==========================================================================================
+c Aqua 
+c Copyright (C) 2007 Patrice Koehl
 c
-c       This library is free software; you can redistribute it and/or
-c       modify it under the terms of the GNU Lesser General Public
-c       License as published by the Free Software Foundation; either
-c       version 2.1 of the License, or (at your option) any later version.
+c This library is free software; you can redistribute it and/or
+c modify it under the terms of the GNU Lesser General Public
+c License as published by the Free Software Foundation; either
+c version 2.1 of the License, or (at your option) any later version.
 c
-c       This library is distributed in the hope that it will be useful,
-c       but WITHOUT ANY WARRANTY; without even the implied warranty of
-c       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-c       Lesser General Public License for more details.
+c This library is distributed in the hope that it will be useful,
+c but WITHOUT ANY WARRANTY; without even the implied warranty of
+c MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+c Lesser General Public License for more details.
 c
-c       You should have received a copy of the GNU Lesser General Public
-c       License along with this library; if not, write to the Free Software
-c       Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+c You should have received a copy of the GNU Lesser General Public
+c License along with this library; if not, write to the Free Software
+c Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 c
 c ==========================================================================================
+c Works in this file have been derived or copied from PMG. The original copyright,
+c license and warranty are provided below.
+c
+c PMG -- Parallel algebraic MultiGrid
+c Copyright (c) 1994-2008.  Michael Holst.
+c 
+c Michael Holst <mholst@math.ucsd.edu>
+c University of California, San Diego
+c Department of Mathematics, 5739 AP&M
+c 9500 Gilman Drive, Dept. 0112
+c La Jolla, CA 92093-0112 USA                                                 
+c http://math.ucsd.edu/~mholst
+c 
+c This library is free software; you can redistribute it and/or
+c modify it under the terms of the GNU Lesser General Public
+c License as published by the Free Software Foundation; either
+c version 2.1 of the License, or (at your option) any later version.
+c 
+c This library is distributed in the hope that it will be useful,
+c but WITHOUT ANY WARRANTY; without even the implied warranty of
+c MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+c Lesser General Public License for more details.
+c
+c You should have received a copy of the GNU Lesser General Public
+c License along with this library; if not, write to the Free Software
+c Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+c ==========================================================================================
+
 c ==========================================================================================
 c	Smoothing.f
 c
