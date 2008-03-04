@@ -332,6 +332,264 @@ c* author:  michael holst
 c* *********************************************************************
       implicit         none
       integer          nx,ny,nz,ipkey,ideg
+      double precision uin(*),uout(*),coef(*)
+	  
+	  !SMPBE Added
+	  if(ipkey .eq. -2) then
+		  call c_vecsmpbe(coef,uin,uout,nx,ny,nz,ipkey)
+	  else
+		  call c_vecpmg(coef,uin,uout,nx,ny,nz,ipkey)
+	  end if
+	  
+      return
+      end
+
+      subroutine c_vecpmg(coef,uin,uout,nx,ny,nz,ipkey)
+c* *********************************************************************
+c* purpose:
+c*
+c*    define the nonlinearity (vector version)
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+      integer          nx,ny,nz,ipkey,ideg
+      double precision uin(*),uout(*),coef(*),zcf2,zu2
+      double precision am_zero,am_neg,am_pos,argument,poly,fact
+      integer          ichopped,ichopped_neg,ichopped_pos,iion
+      integer          MAXPOLY
+      double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
+      parameter        (MAXPOLY = 50)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
+      parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
+      integer          n,i
+
+c* Added by NAB to allow different ions with different charges
+      integer          nion
+      integer          MAXION
+      parameter        (MAXION = 50)
+      double precision charge(MAXION)
+      double precision sconc(MAXION)
+	  
+	  double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
+      common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
+	  
+      common /MYPDEF/ charge
+      common /MYPDEF/ sconc
+      common /MYPDEF/ nion
+
+      !*** find parallel loops (ipara), remainder (ivect) !***
+      n     = nx * ny * nz
+
+      do i = 1, n
+        uout(i) = 0
+	  end do
+	  
+	  do iion = 1, nion
+		!Assemble the ion-specific coefficient
+		zcf2 = -1.0 * sconc(iion) * charge(iion)
+		!Assemble the ion-specific potential value
+		zu2 = -1.0 * charge(iion)
+
+		!*** check if full exp requested !***
+		if (ipkey .eq. 0) then
+  
+		   !*** initialize chopped counter !***
+		   ichopped = 0
+		   
+!$OMP  PARALLEL DO 
+!$OMP& DEFAULT(shared) 
+!$OMP& PRIVATE(i,ichopped_neg,ichopped_pos,am_zero,am_neg,
+!$OMP&          am_pos,argument)
+!$OMP& REDUCTION (+:ichopped)  
+		   !*** do parallel loops !***
+		   do i = 1, n
+  
+			 !*** am_zero is 0 if coef zero, and 1 if coef nonzero**
+			 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i)))*ZLARGE
+
+			 !*** am_neg is chopped u if u negative, 0 if u positive**
+			 am_neg = dmax1( dmin1(zu2*uin(i),0.0d0) , SINH_MIN)
+
+			 !*** am_neg is chopped u if u positive, 0 if u negative !***
+			 am_pos = dmin1( dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
+
+			 !*** finally determine the function value !***
+			 argument = am_zero * ( am_neg + am_pos )
+			 uout(i) = uout(i) + zcf2 * coef(i) * exp(argument)
+
+			 !*** count chopped values !***
+			 ichopped_neg = idnint(aint(am_neg / SINH_MIN))
+			 ichopped_pos = idnint(aint(am_pos / SINH_MAX))
+			 ichopped = ichopped + idnint(am_zero) *
+     2                        (ichopped_neg + ichopped_pos)
+		   end do
+!$OMP END PARALLEL DO
+		   
+		   !*** info !***
+		   if (ichopped .gt. 0) then
+		   call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
+     2						41, ichopped)
+		   endif
+  
+		!*** else if polynomial requested !***
+		elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
+     2          (ipkey .le. MAXPOLY)) then
+		  call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION
+     2                UNAVAILABLE',44)
+		  stop
+  
+		!*** else return linear approximation !***
+		else
+		   call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION
+     2                UNAVAILABLE',40)
+		   stop
+		endif
+	  end do
+
+      !*** end it !***
+      return
+      end
+
+      subroutine dc_vec(coef,uin,uout,nx,ny,nz,ipkey)
+c* *********************************************************************
+c* purpose:
+c*
+c*    define the derivative of the nonlinearity (vector version)
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+      integer          nx,ny,nz,ipkey,ideg
+      double precision uin(*),uout(*),coef(*)
+	  
+	  ! SMPBE Added
+ 	  if(ipkey .eq. -2) then 
+		  call dc_vecsmpbe(coef,uin,uout,nx,ny,nz,ipkey)
+ 	  else
+ 		  call dc_vecpmg(coef,uin,uout,nx,ny,nz,ipkey)
+ 	  end if
+	  
+      return
+      end
+
+      subroutine dc_vecpmg(coef,uin,uout,nx,ny,nz,ipkey)
+c* *********************************************************************
+c* purpose:
+c*
+c*    define the derivative of the nonlinearity (vector version)
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+      integer          nx,ny,nz,ipkey,ideg,iion
+      double precision uin(*),uout(*),coef(*),zcf2,zu2
+      double precision am_zero,am_neg,am_pos,argument,poly,fact
+      integer          ichopped,ichopped_neg,ichopped_pos
+      integer          MAXPOLY
+      double precision ZSMALL,ZLARGE,SINH_MIN,SINH_MAX
+      parameter        (MAXPOLY = 50)
+      parameter        (ZSMALL   = 1.0d-20, ZLARGE = 1.0d20)
+      parameter        (SINH_MIN = -85.0, SINH_MAX = 85.0)
+      integer          n,i
+c* Added by NAB to allow different ions with different charges
+      integer          nion
+      integer          MAXION
+      parameter        (MAXION = 50)
+      double precision charge(MAXION)
+      double precision sconc(MAXION)
+
+      double precision v1, v2, v3, conc1, conc2, conc3, vol, relSize
+      common /MYPDEF/  v1, v2, v3, conc1, conc2, conc3, vol, relSize
+	  
+      common /MYPDEF/ charge
+      common /MYPDEF/ sconc
+      common /MYPDEF/ nion
+
+c*
+c*    *** find parallel loops (ipara), remainder (ivect) ***
+      n     = nx * ny * nz
+
+      do i = 1, n
+        uout(i) = 0.0
+	  end do
+	   
+	  do iion = 1, nion
+		zcf2 = sconc(iion) * charge(iion) * charge(iion)
+		zu2 = -1.0 * charge(iion)
+  
+		!*** check if full exp requested !***
+		if (ipkey .eq. 0) then
+
+		   !*** initialize chopped counter !***
+		   ichopped = 0
+  
+!$OMP  PARALLEL DO 
+!$OMP& DEFAULT(shared) 
+!$OMP& PRIVATE(i,ichopped_neg,ichopped_pos,am_zero,am_neg,
+!$OMP&          am_pos,argument)
+!$OMP& REDUCTION (+:ichopped) 
+		   !*** do parallel loops !***
+		   do i = 1, n
+
+			 !*** am_zero is 0 if coef zero, and 1 if coef nonzero !***
+			 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i)))*ZLARGE
+
+			 !*** am_neg is chopped u if u negative, 0 if u positive !***
+			 am_neg = dmax1(dmin1(zu2*uin(i),0.0d0),SINH_MIN)
+
+			 !*** am_neg is chopped u if u positive, 0 if u negative !***
+			 am_pos = dmin1(dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
+
+			 !*** finally determine the function value !***
+			 argument = am_zero * ( am_neg + am_pos )
+			 uout(i) = uout(i) + zcf2*coef(i)*exp( argument )
+
+			 !*** count chopped values !***
+			 ichopped_neg = idnint(aint(am_neg / SINH_MIN))
+			 ichopped_pos = idnint(aint(am_pos / SINH_MAX))
+			 ichopped = ichopped + idnint(am_zero) * 
+     2								(ichopped_neg + ichopped_pos)
+		   end do
+!$OMP END PARALLEL DO
+  
+		   !*** info !***
+		   if (ichopped .gt. 0) then
+		   call vnmpri(2,'% DC_VEC: trapped exp overflows:   ',
+     2					41, ichopped)
+		   endif
+  
+		!*** else if polynomial requested !***
+		elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
+     2          (ipkey .le. MAXPOLY)) then
+
+		  call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION
+     2				UNAVAILABLE',44)
+		  stop
+		  
+		!*** else return linear approximation !***
+		else
+		   call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION
+     2				UNAVAILABLE',40)
+		   stop
+
+		endif
+	  end do
+
+	  
+      return
+      end
+
+      subroutine c_vecsmpbe(coef,uin,uout,nx,ny,nz,ipkey)
+c* *********************************************************************
+c* purpose:
+c*
+c*    define the nonlinearity (vector version)
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+      integer          nx,ny,nz,ipkey,ideg
       double precision uin(*),uout(*),coef(*),zcf2,zu2
       double precision am_zero,am_neg,am_pos,argument,poly,fact
       integer          ichopped,ichopped_neg,ichopped_pos,iion
@@ -375,168 +633,84 @@ c* Added by DG SMPBE variables and common blocks
 	  
 	  !*** initialize the chopped counter !***
 	  ichopped = 0
+
 	  
-	  !SMPBE Added
-	  if(ipkey .eq. -2) then
-	  
-		  z1 = v1
-		  z2 = v2
-		  z3 = v3
-		  ca = conc1
-		  cb = conc2
-		  cc = conc3
-		  a = vol
-		  k = relSize
+	  z1 = v1
+	  z2 = v2
+	  z3 = v3
+	  ca = conc1
+	  cb = conc2
+	  cc = conc3
+	  a = vol
+	  k = relSize
 
-		  if ((k-1).lt. ZSMALL) then
-		  call vnmprt(2, '!!  C_VEC: k=1, using special routine', 37) 
-		  endif
+	  if ((k-1).lt. ZSMALL) then
+	  call vnmprt(2, '!!  C_VEC: k=1, using special routine', 37) 
+	  endif
 
-		  !derived quantities
-		  fracOccA = Na*ca*a**3
-		  fracOccB = Na*cb*a**3
-		  fracOccC = Na*cc*a**3
-		  phi = (fracOccA/k) + fracOccB + fracOccC
-		  alpha = (fracOccA/k)/(1-phi)
-		  ionStr = 0.5*(ca*z1**2 + cb*z2**2 + cc*z3**2)
+	  !derived quantities
+	  fracOccA = Na*ca*a**3
+	  fracOccB = Na*cb*a**3
+	  fracOccC = Na*cc*a**3
+	  phi = (fracOccA/k) + fracOccB + fracOccC
+	  alpha = (fracOccA/k)/(1-phi)
+	  ionStr = 0.5*(ca*z1**2 + cb*z2**2 + cc*z3**2)
 
-		  do i = 1, n
+	  do i = 1, n
 
-			 am_zero = dmin1(ZSMALL,dabs(coef(i)))*ZLARGE
+		 am_zero = dmin1(ZSMALL,dabs(coef(i)))*ZLARGE
 
-			 !compute the arguments for exp(-z*u) term
-			 a1_neg = dmax1( dmin1(-1.0*z1*uin(i),0.0d0) , SINH_MIN)
-			 a1_pos = dmin1( dmax1(-1.0*z1*uin(i),0.0d0) , SINH_MAX)
+		 !compute the arguments for exp(-z*u) term
+		 a1_neg = dmax1( dmin1(-1.0*z1*uin(i),0.0d0) , SINH_MIN)
+		 a1_pos = dmin1( dmax1(-1.0*z1*uin(i),0.0d0) , SINH_MAX)
 
-			 !compute the arguments for exp(-u) term
-			 a2_neg = dmax1( dmin1(-1.0*z2*uin(i),0.0d0) , SINH_MIN)
-			 a2_pos = dmin1( dmax1(-1.0*z2*uin(i),0.0d0) , SINH_MAX)
+		 !compute the arguments for exp(-u) term
+		 a2_neg = dmax1( dmin1(-1.0*z2*uin(i),0.0d0) , SINH_MIN)
+		 a2_pos = dmin1( dmax1(-1.0*z2*uin(i),0.0d0) , SINH_MAX)
 
-			 !compute the arguments for exp(u) term
-			 a3_neg = dmax1( dmin1(-1.0*z3*uin(i),0.0d0) , SINH_MIN)
-			 a3_pos = dmin1( dmax1(-1.0*z3*uin(i),0.0d0) , SINH_MAX)
+		 !compute the arguments for exp(u) term
+		 a3_neg = dmax1( dmin1(-1.0*z3*uin(i),0.0d0) , SINH_MIN)
+		 a3_pos = dmin1( dmax1(-1.0*z3*uin(i),0.0d0) , SINH_MAX)
 
-			 a1 = am_zero * (a1_neg + a1_pos)
-			 a2 = am_zero * (a2_neg + a2_pos)
-			 a3 = am_zero * (a3_neg + a3_pos)
+		 a1 = am_zero * (a1_neg + a1_pos)
+		 a2 = am_zero * (a2_neg + a2_pos)
+		 a3 = am_zero * (a3_neg + a3_pos)
 
-			 gpark = ((1+alpha*exp(a1))/(1+alpha))
+		 gpark = ((1+alpha*exp(a1))/(1+alpha))
 
-			 if ((k-1).lt. ZSMALL) then
-			 f = z1*ca*exp(a1) + z2*cb*exp(a2) + z3*cc*exp(a3)
-			 g = 1-phi+fracOccA*exp(a1) + fracOccB*exp(a2)
+		 if ((k-1).lt. ZSMALL) then
+		 f = z1*ca*exp(a1) + z2*cb*exp(a2) + z3*cc*exp(a3)
+		 g = 1-phi+fracOccA*exp(a1) + fracOccB*exp(a2)
      2        + fracOccC*exp(a3)
-			 else
-			 f = z1*ca*exp(a1)*gpark**(k-1)+z2*cb*exp(a2)+z3*cc*exp(a3)
-			 g = (1-phi+(fracOccA/k))*gpark**k 
+		 else
+		 f = z1*ca*exp(a1)*gpark**(k-1)+z2*cb*exp(a2)+z3*cc*exp(a3)
+		 g = (1-phi+(fracOccA/k))*gpark**k 
      2        + fracOccB*exp(a2)+fracOccC*exp(a3)
-			 endif
+		 endif
 
-			 uout(i) = -1.0*coef(i)*(0.5/ionStr)*(f/g)
+		 uout(i) = -1.0*coef(i)*(0.5/ionStr)*(f/g)
 
-			 !*** count chopped values !***
-			 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) /
+		 !*** count chopped values !***
+		 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) /
      2							SINH_MIN))
-			 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) /
+		 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) /
      2							SINH_MAX))
-			 ichopped = ichopped
+		 ichopped = ichopped
      2        + idnint(am_zero) * (ichopped_neg + ichopped_pos)
 
-		  end do 
+	  end do 
 
-		  !*** info !***
-		  if (ichopped .gt. 0) then
-		  call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
+	  !*** info !***
+	  if (ichopped .gt. 0) then
+	  call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
      2        41, ichopped)
-		  endif
-	  
-	  else
-		  do iion = 1, nion
-			!Assemble the ion-specific coefficient
-			zcf2 = -1.0 * sconc(iion) * charge(iion)
-			!Assemble the ion-specific potential value
-			zu2 = -1.0 * charge(iion)
-
-			!*** check if full exp requested !***
-			if (ipkey .eq. 0) then
-	  
-			   !*** initialize chopped counter !***
-			   ichopped = 0
-	  
-			   !*** do parallel loops !***
- 			   do ii = 1, nproc
- 				  do i = 1+(ipara*(ii-1)), ipara*ii
- 	  
- 					 !*** am_zero is 0 if coef zero, and 1 if coef nonzero**
- 					 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i)))*ZLARGE
- 	  
- 					 !*** am_neg is chopped u if u negative, 0 if u positive**
- 					 am_neg = dmax1( dmin1(zu2*uin(i),0.0d0) , SINH_MIN)
- 	  
- 					 !*** am_neg is chopped u if u positive, 0 if u negative !***
- 					 am_pos = dmin1( dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
- 	  
- 					 !*** finally determine the function value !***
- 					 argument = am_zero * ( am_neg + am_pos )
- 					 uout(i) = uout(i) + zcf2 * coef(i) * exp(argument)
- 	  
- 					 !*** count chopped values !***
- 					 ichopped_neg = idnint(aint(am_neg / SINH_MIN))
- 					 ichopped_pos = idnint(aint(am_pos / SINH_MAX))
- 					 ichopped = ichopped + idnint(am_zero) *
-     2                        (ichopped_neg + ichopped_pos)
- 				  end do
- 			   end do
- 	  
- 			   !*** do vector loops !***
- 			   do i = ipara*nproc+1, n
- 				  !*** am_zero is 0 if coef zero, and 1 if coef nonzero !***
- 				  am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i))) * ZLARGE
- 	  
- 				  !*** am_neg is chopped u if u negative, 0 if u positive !***
- 				  am_neg = dmax1( dmin1(zu2*uin(i),0.0d0) , SINH_MIN)
- 	  
- 				  !*** am_neg is chopped u if u positive, 0 if u negative !***
- 				  am_pos = dmin1( dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
- 	  
- 				  !*** finally determine the function value !***
- 				  argument = am_zero * ( am_neg + am_pos )
- 				  uout(i) = uout(i) + zcf2*coef(i)*exp(argument)
- 	  
- 				  !*** count chopped values !***
- 				  ichopped_neg = idnint(aint(am_neg / SINH_MIN))
- 				  ichopped_pos = idnint(aint(am_pos / SINH_MAX))
- 				  ichopped = ichopped + idnint(am_zero) *
-     2                   (ichopped_neg + ichopped_pos)
- 			   end do
- 	  
- 			   !*** info !***
- 			   if (ichopped .gt. 0) then
- 			   call vnmpri(2,'% C_VEC: trapped exp overflows:          ',
-     2						41, ichopped)
- 			   endif
- 	  
- 			!*** else if polynomial requested !***
- 			elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
-     2          (ipkey .le. MAXPOLY)) then
- 			  call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION
-     2                UNAVAILABLE',44)
- 			  stop
- 	  
- 			!*** else return linear approximation !***
- 			else
- 			   call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION
-     2                UNAVAILABLE',40)
- 			   stop
- 			endif
- 		  end do
-       end if
+	  endif
 	  
       !*** end it !***
       return
       end
 	  
-      subroutine dc_vec(coef,uin,uout,nx,ny,nz,ipkey)
+      subroutine dc_vecsmpbe(coef,uin,uout,nx,ny,nz,ipkey)
 c* *********************************************************************
 c* purpose:
 c*
@@ -591,174 +765,88 @@ c*    *** find parallel loops (ipara), remainder (ivect) ***
 c*    *** initialize the chopped counter ***
 	  ichopped = 0
 	  
-	  ! SMPBE Added
- 	  if(ipkey .eq. -2) then
-	  
-		  z1 = v1
-		  z2 = v2
-		  z3 = v3
-		  ca = conc1
-		  cb = conc2
-		  cc = conc3
-		  a = vol
-		  k = relSize
+	  z1 = v1
+	  z2 = v2
+	  z3 = v3
+	  ca = conc1
+	  cb = conc2
+	  cc = conc3
+	  a = vol
+	  k = relSize
 
-		  if ((k-1).lt. ZSMALL) then
-		  call vnmprt(2, '!! DC_VEC: k=1, using special routine', 37) 
-		  endif
+	  if ((k-1).lt. ZSMALL) then
+	  call vnmprt(2, '!! DC_VEC: k=1, using special routine', 37) 
+	  endif
 
 c* derived quantities
-		  fracOccA = Na*ca*a**3
-		  fracOccB = Na*cb*a**3
-		  fracOccC = Na*cc*a**3
-		  phi = (fracOccA/k) + fracOccB + fracOccC
-		  alpha = (fracOccA/k)/(1-phi)
-		  ionStr = 0.5*(ca*z1**2 + cb*z2**2 + cc*z3**2)
+	  fracOccA = Na*ca*a**3
+	  fracOccB = Na*cb*a**3
+	  fracOccC = Na*cc*a**3
+	  phi = (fracOccA/k) + fracOccB + fracOccC
+	  alpha = (fracOccA/k)/(1-phi)
+	  ionStr = 0.5*(ca*z1**2 + cb*z2**2 + cc*z3**2)
 
-		  do i = 1, n
+	  do i = 1, n
 
-			 am_zero = dmin1(ZSMALL,dabs(coef(i)))*ZLARGE
+		 am_zero = dmin1(ZSMALL,dabs(coef(i)))*ZLARGE
 
 c*       compute the arguments for exp(-z*u) term
-			 a1_neg = dmax1( dmin1(-1.0*z1*uin(i),0.0d0) , SINH_MIN)
-			 a1_pos = dmin1( dmax1(-1.0*z1*uin(i),0.0d0) , SINH_MAX)
+		 a1_neg = dmax1( dmin1(-1.0*z1*uin(i),0.0d0) , SINH_MIN)
+		 a1_pos = dmin1( dmax1(-1.0*z1*uin(i),0.0d0) , SINH_MAX)
 
 c*       compute the arguments for exp(-u) term
-			 a2_neg = dmax1( dmin1(-1.0*z2*uin(i),0.0d0) , SINH_MIN)
-			 a2_pos = dmin1( dmax1(-1.0*z2*uin(i),0.0d0) , SINH_MAX)
+		 a2_neg = dmax1( dmin1(-1.0*z2*uin(i),0.0d0) , SINH_MIN)
+		 a2_pos = dmin1( dmax1(-1.0*z2*uin(i),0.0d0) , SINH_MAX)
 
 c*       compute the arguments for exp(u) term
-			 a3_neg = dmax1( dmin1(-1.0*z3*uin(i),0.0d0) , SINH_MIN)
-			 a3_pos = dmin1( dmax1(-1.0*z3*uin(i),0.0d0) , SINH_MAX)
+		 a3_neg = dmax1( dmin1(-1.0*z3*uin(i),0.0d0) , SINH_MIN)
+		 a3_pos = dmin1( dmax1(-1.0*z3*uin(i),0.0d0) , SINH_MAX)
 
-			 a1 = am_zero * (a1_neg + a1_pos)
-			 a2 = am_zero * (a2_neg + a2_pos)
-			 a3 = am_zero * (a3_neg + a3_pos)
+		 a1 = am_zero * (a1_neg + a1_pos)
+		 a2 = am_zero * (a2_neg + a2_pos)
+		 a3 = am_zero * (a3_neg + a3_pos)
 
-			 gpark = ((1+alpha*exp(a1))/(1+alpha))
+		 gpark = ((1+alpha*exp(a1))/(1+alpha))
 
-			 if ((k-1).lt. ZSMALL) then
-			 f = z1*ca*exp(a1) + z2*cb*exp(a2) + z3*cc*exp(a3)
-			 g = 1-phi+fracOccA*exp(a1) + fracOccB*exp(a2)
+		 if ((k-1).lt. ZSMALL) then
+		 f = z1*ca*exp(a1) + z2*cb*exp(a2) + z3*cc*exp(a3)
+		 g = 1-phi+fracOccA*exp(a1) + fracOccB*exp(a2)
      2        + fracOccC*exp(a3)
-			 fprime = -z1**2*ca*exp(a1) - z2**2*cb*exp(a2)
+		 fprime = -z1**2*ca*exp(a1) - z2**2*cb*exp(a2)
      2        - z3**2*cc*exp(a3)
-			 gprime = -z1*fracOccA*exp(a1) - z2*fracOccB*exp(a2)
+		 gprime = -z1*fracOccA*exp(a1) - z2*fracOccB*exp(a2)
      2        - z3*fracOccC*exp(a3)
-			 else
-			 f = z1*ca*exp(a1)*gpark**(k-1)+z2*cb*exp(a2)+z3*cc*exp(a3)
-			 g = (1-phi+(fracOccA/k))*gpark**k 
+		 else
+		 f = z1*ca*exp(a1)*gpark**(k-1)+z2*cb*exp(a2)+z3*cc*exp(a3)
+		 g = (1-phi+(fracOccA/k))*gpark**k 
      2        + fracOccB*exp(a2)+fracOccC*exp(a3)
-			 fprime = -z1**2*ca*exp(a1)*gpark**(k-2)*(gpark 
+		 fprime = -z1**2*ca*exp(a1)*gpark**(k-2)*(gpark 
      2        + (k-1)*(alpha/(1+alpha))*exp(a1)) - z2**2*cb*exp(a2)
      3        - z3**2*cc*exp(a3)
-			 gprime = -k*z1*(alpha/(1+alpha))*exp(a1)
+		 gprime = -k*z1*(alpha/(1+alpha))*exp(a1)
      2        *(1-phi+(fracOccA/k))*gpark**(k-1)-z2*fracOccB*exp(a2)
      3		  -z3*fracOccC*exp(a3)
 
-			 endif
+		 endif
 
-             uout(i) = -1.0*coef(i)*(0.5/ionStr)*
+		 uout(i) = -1.0*coef(i)*(0.5/ionStr)*
      2				(fprime*g - gprime*f)/g**2
 
 c*       *** count chopped values ***
-			 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) 
+		 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) 
      2									/ SINH_MIN))
-			 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) 
+		 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) 
      2									/ SINH_MAX))
-			 ichopped = ichopped
+		 ichopped = ichopped
      2        + idnint(am_zero) * (ichopped_neg + ichopped_pos)
 
-		  end do
+	  end do
 
 c*    *** info ***
-		  if (ichopped .gt. 0) then
-		  call vnmpri(2,'% DC_VEC: trapped exp overflows:          ',
+	  if (ichopped .gt. 0) then
+	  call vnmpri(2,'% DC_VEC: trapped exp overflows:          ',
      2        42, ichopped)
-		  endif
-	  
- 	  else
- 	  
- 		  do iion = 1, nion
- 			zcf2 = sconc(iion) * charge(iion) * charge(iion)
- 			zu2 = -1.0 * charge(iion)
- 	  
- 			!*** check if full exp requested !***
- 			if (ipkey .eq. 0) then
-
- 			   !*** initialize chopped counter !***
- 			   ichopped = 0
- 	  
- 			   !*** do parallel loops !***
- 			   do ii = 1, nproc
- 				  do i = 1+(ipara*(ii-1)), ipara*ii
- 	  
- 					 !*** am_zero is 0 if coef zero, and 1 if coef nonzero !***
- 					 am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i)))*ZLARGE
- 	  
- 					 !*** am_neg is chopped u if u negative, 0 if u positive !***
- 					 am_neg = dmax1(dmin1(zu2*uin(i),0.0d0),SINH_MIN)
- 	  
- 					 !*** am_neg is chopped u if u positive, 0 if u negative !***
- 					 am_pos = dmin1(dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
- 	  
- 					 !*** finally determine the function value !***
- 					 argument = am_zero * ( am_neg + am_pos )
- 					 uout(i) = uout(i) + zcf2*coef(i)*exp( argument )
- 	  
- 					 !*** count chopped values !***
- 					 ichopped_neg = idnint(aint(am_neg / SINH_MIN))
- 					 ichopped_pos = idnint(aint(am_pos / SINH_MAX))
- 					 ichopped = ichopped + idnint(am_zero) * 
-     2								(ichopped_neg + ichopped_pos)
- 				 end do
- 			   end do
- 	  
- 			   !*** do vector loops !***
- 			   do i = ipara*nproc+1, n
- 				  !*** am_zero is 0 if coef zero, and 1 if coef nonzero !***
- 				  am_zero = dmin1(ZSMALL,dabs(zcf2*coef(i))) * ZLARGE
- 	  
- 				  !*** am_neg is chopped u if u negative, 0 if u positive !***
- 				  am_neg = dmax1( dmin1(zu2*uin(i),0.0d0) , SINH_MIN)
- 	  
- 				  !*** am_neg is chopped u if u positive, 0 if u negative !***
- 				  am_pos = dmin1( dmax1(zu2*uin(i),0.0d0) , SINH_MAX)
- 	  
- 				  !*** finally determine the function value !***
- 				  argument = am_zero * ( am_neg + am_pos )
- 				  uout(i) = uout(i) + zcf2*coef(i) * exp( argument )
- 	  
- 				  !*** count chopped values !***
- 				  ichopped_neg = idnint(aint(am_neg / SINH_MIN))
- 				  ichopped_pos = idnint(aint(am_pos / SINH_MAX))
- 				  ichopped = ichopped + idnint(am_zero) * 
-     2					(ichopped_neg + ichopped_pos)
- 			   end  do
- 	  
- 			   !*** info !***
- 			   if (ichopped .gt. 0) then
- 			   call vnmpri(2,'% DC_VEC: trapped exp overflows:   ',
-     2					41, ichopped)
- 			   endif
- 	  
- 			!*** else if polynomial requested !***
- 			elseif ((ipkey .gt. 1) .and. (mod(ipkey,2) .eq. 1) .and.
-     2          (ipkey .le. MAXPOLY)) then
-
- 			  call vnmprt(2, 'MYPDEF: POLYNOMIAL APPROXIMATION
-     2				UNAVAILABLE',44)
- 			  stop
- 			  
- 			!*** else return linear approximation !***
- 			else
- 			   call vnmprt(2, 'MYPDEF: LINEAR APPROXIMATION
-     2				UNAVAILABLE',40)
- 			   stop
-
- 			endif
- 		  end do
- 	  end if
+	  endif
 	  
       return
       end
