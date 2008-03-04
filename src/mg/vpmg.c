@@ -1431,23 +1431,24 @@ VPUBLIC double Vpmg_qmEnergySMPBE(Vpmg *thee, int extFlag) {
 				denom = VPOW(gpark, k) + VPOW(1-fracOccB-fracOccC, k-1)*(fracOccB*a2+fracOccC*a3);
 				
 				if (cb1 > VSMALL) {
-					
 					c1 = Na*cb1*VPOW(gpark, k-1)*a1/denom;
-				} else c1 = 0;
+					if(c1 != c1) c1 = 0.;
+				} else c1 = 0.;
 				
 				if (cb2 > VSMALL) {
 					c2 = Na*cb2*VPOW(1-fracOccB-fracOccC,k-1)*a2/denom;
-				} else c2 = 0;
+					if(c2 != c2) c2 = 0.;
+				} else c2 = 0.;
 				
 				if (cb3 > VSMALL) {
 					c3 = Na*cb3*VPOW(1-fracOccB-fracOccC,k-1)*a3/denom;
-				} else c3 = 0;
+					if(c3 != c3) c3 = 0.;
+				} else c3 = 0.;
 				
 				currEnergy = k*VLOG((1-(c1*VCUB(a)/k)-c2*VCUB(a)-c3*VCUB(a))/(1-phi))
 					-(k-1)*VLOG((1-c2*VCUB(a)-c3*VCUB(a))/(1-phi+(fracOccA/k)));
-    	    	      
-				energy += thee->pvec[i]*thee->kappa[i]*currEnergy;
 				
+				energy += thee->pvec[i]*thee->kappa[i]*currEnergy;
 				
 			} else if (thee->pvec[i]*thee->kappa[i] > VSMALL){
 				
@@ -1460,20 +1461,20 @@ VPUBLIC double Vpmg_qmEnergySMPBE(Vpmg *thee, int extFlag) {
 				gpark = (1 - phi + (fracOccA)*a1);
 				denom = gpark + (fracOccB*a2+fracOccC*a3);
 				
-				
 				if (cb1 > VSMALL) {
-					
 					c1 = Na*cb1*a1/denom;
-				} else c1 = 0;
+					if(c1 != c1) c1 = 0.;
+				} else c1 = 0.;
 				
 				if (cb2 > VSMALL) {
 					c2 = Na*cb2*a2/denom;
-				} else c2 = 0;
+					if(c2 != c2) c2 = 0.;
+				} else c2 = 0.;
 				
 				if (cb3 > VSMALL) {
 					c3 = Na*cb3*a3/denom;
-				} else c3 = 0;
-				
+					if(c3 != c3) c3 = 0.;
+				} else c3 = 0.;
 				
 				currEnergy = VLOG((1-c1*VCUB(a)-c2*VCUB(a)-c3*VCUB(a))/(1-fracOccA-fracOccB-fracOccC));
 				
@@ -3203,7 +3204,7 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
     double xlen, ylen, zlen, position[3];
     double srad, epsw, epsp, deps;
     double hx, hy, hzed, *apos, arad;
-    int i, nx, ny, nz, iatom, ipt;
+    int i, nx, ny, nz, ntot, iatom, ipt;
 
     /* Get PBE info */
     pbe = thee->pbe;
@@ -3235,7 +3236,8 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
     zmax = thee->pmgp->zcent + (zlen/2.0);
 
     /* Reset the arrays */
-    for (i=0; i<(nx*ny*nz); i++) {
+	ntot = nx*ny*nz;
+    for (i=0; i<ntot; i++) {
         thee->epsx[i] = epsw;
         thee->epsy[i] = epsw;
         thee->epsz[i] = epsw;
