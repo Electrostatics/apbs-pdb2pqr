@@ -55,7 +55,7 @@
 				<varlistentry>
 					<term><replaceable>path</replaceable></term>
 					<listitem>
-						<para>The location of the molecular data file.</para>
+						<para>The location of the molecular data file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
@@ -103,7 +103,7 @@
 				<varlistentry>
 					<term><replaceable>path</replaceable></term>
 					<listitem>
-						<para>The location of the parameter data file.</para>
+						<para>The location of the parameter data file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
@@ -157,19 +157,19 @@
 				<varlistentry>
 					<term><replaceable>path-x</replaceable></term>
 					<listitem>
-						<para>The location of the x-shifted dielectric map file.</para>
+						<para>The location of the x-shifted dielectric map file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
 					<term><replaceable>path-y</replaceable></term>
 					<listitem>
-						<para>The location of the y-shifted dielectric map file.</para>
+						<para>The location of the y-shifted dielectric map file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 				<varlistentry>
 					<term><replaceable>path-z</replaceable></term>
 					<listitem>
-						<para>The location of the z-shifted dielectric map file.</para>
+						<para>The location of the z-shifted dielectric map file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
@@ -220,7 +220,7 @@
 				<varlistentry>
 					<term><replaceable>path</replaceable></term>
 					<listitem>
-						<para>The location of the kappa map file.</para>
+						<para>The location of the kappa map file. This pathname should not include spaces.</para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
@@ -261,7 +261,7 @@
 				<varlistentry>
 					<term><replaceable>path</replaceable></term>
 					<listitem>
-						<para>The location of the charge map file.</para>
+						<para>The location of the charge map file.  This pathname should not include spaces. </para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
@@ -295,7 +295,7 @@
 				<varlistentry>
 					<term><replaceable>path</replaceable></term>
 					<listitem>
-						<para>The location of the meshes file.</para>
+						<para>The location of the meshes file.  This path should not include spaces.</para>
 					</listitem>
 				</varlistentry>
 			</variablelist>
