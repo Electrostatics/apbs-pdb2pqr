@@ -36,7 +36,7 @@
 		<ulink url="http://www.fetk.org">http://www.fetk.org</ulink>.
 	</para>
 
-	<para>Additionally, APBS uses the "Aqua" library, a version of Holst group <ulink url="http://www.fetk.org/">PMG</ulink> that has been specially optimized by <ulink url="http://nook.cs.ucdavis.edu/~koehl/">Patrice Koehl</ulink> for improved memory usage and speed when solving the Poisson-Boltzmann equation.</para>
+	<para>Additionally, APBS uses the "Aqua" library, a version of Holst group <ulink url="http://www.fetk.org/">PMG</ulink> that has been specially optimized by <ulink url="http://koehllab.genomecenter.ucdavis.edu/">Patrice Koehl</ulink> for improved memory usage and speed when solving the Poisson-Boltzmann equation.</para>
 
 	<para>APBS also uses <ulink url="http://www.fetk.org/">FEtk</ulink>  to
 		solve the Poisson-Boltzmann equation numerically.  FEtk is developed and

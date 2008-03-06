@@ -47,7 +47,7 @@
 		complexity through the use of box methods, inexact Newton methods, and
 		algebraic multilevel methods.  More information about PMG may be found at
 		<a href="http://www.fetk.org" target="_top">http://www.fetk.org</a>.
-	</p><p>Additionally, APBS uses the "Aqua" library, a version of Holst group <a href="http://www.fetk.org/" target="_top">PMG</a> that has been specially optimized by <a href="http://nook.cs.ucdavis.edu/~koehl/" target="_top">Patrice Koehl</a> for improved memory usage and speed when solving the Poisson-Boltzmann equation.</p><p>APBS also uses <a href="http://www.fetk.org/" target="_top">FEtk</a>  to
+	</p><p>Additionally, APBS uses the "Aqua" library, a version of Holst group <a href="http://www.fetk.org/" target="_top">PMG</a> that has been specially optimized by <a href="http://koehllab.genomecenter.ucdavis.edu/" target="_top">Patrice Koehl</a> for improved memory usage and speed when solving the Poisson-Boltzmann equation.</p><p>APBS also uses <a href="http://www.fetk.org/" target="_top">FEtk</a>  to
 		solve the Poisson-Boltzmann equation numerically.  FEtk is developed and
 		maintained by the <a href="http://www.scicomp.ucsd.edu/~mholst/" target="_top">Holst
 			Research Group</a> at UC San Diego, and is designed to solve general
@@ -1623,7 +1623,7 @@
 							</p></dd></dl></div><p>
 			</p></li><li><a name="elec-temp"></a><div class="cmdsynopsis"><p><code class="command">temp</code>  { <em class="replaceable"><code>T</code></em> }</p></div><p>Temperature for PBE calculation.
 				</p><div class="variablelist"><dl><dt><span class="term"><em class="replaceable"><code>T</code></em></span></dt><dd><p>Temperature (in K)</p></dd></dl></div><p>
-			</p></li><li><a name="elec-useaqua"></a><div class="cmdsynopsis"><p><code class="command">useaqua</code> </p></div><p>This enables <span class="emphasis"><em>experimental</em></span> support for Aqua, a verison of the Holst group <a href="http://www.fetk.org/" target="_top">FEtk PMG</a> multigrid library optimized by <a href="http://nook.cs.ucdavis.edu/~koehl/" target="_top">Patrice Koehl</a> for improved memory usage and speed when solving the Poisson-Boltzmann equation.  <span class="emphasis"><em>This keyword is temporary and will eventually disappear as Aqua becomes the default multigrid solver for APBS.</em></span>
+			</p></li><li><a name="elec-useaqua"></a><div class="cmdsynopsis"><p><code class="command">useaqua</code> </p></div><p>This enables <span class="emphasis"><em>experimental</em></span> support for Aqua, a verison of the Holst group <a href="http://www.fetk.org/" target="_top">FEtk PMG</a> multigrid library optimized by <a href="http://koehllab.genomecenter.ucdavis.edu/" target="_top">Patrice Koehl</a> for improved memory usage and speed when solving the Poisson-Boltzmann equation.  <span class="emphasis"><em>This keyword is temporary and will eventually disappear as Aqua becomes the default multigrid solver for APBS.</em></span>
 			</p></li><li><a name="elec-usemap"></a><div class="cmdsynopsis"><p><code class="command">usemap</code>  {<em class="replaceable"><code>type</code></em>} {<em class="replaceable"><code>id</code></em>}</p></div><p>Specify pre-calculated coefficient maps to be used in the PB
 				calculation.  These must have been input via an earlier 
 				<a href="#read" title="4.2.1. READ statements"><span><strong class="command">read map</strong></span></a> statement.

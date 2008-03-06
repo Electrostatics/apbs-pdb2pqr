@@ -1948,7 +1948,7 @@
 			<cmdsynopsis>
 				<command>useaqua</command>
 			</cmdsynopsis>
-			<para>This enables <emphasis>experimental</emphasis> support for Aqua, a verison of the Holst group <ulink url="http://www.fetk.org/">FEtk PMG</ulink> multigrid library optimized by <ulink url="http://nook.cs.ucdavis.edu/~koehl/">Patrice Koehl</ulink> for improved memory usage and speed when solving the Poisson-Boltzmann equation.  <emphasis>This keyword is temporary and will eventually disappear as Aqua becomes the default multigrid solver for APBS.</emphasis>
+			<para>This enables <emphasis>experimental</emphasis> support for Aqua, a verison of the Holst group <ulink url="http://www.fetk.org/">FEtk PMG</ulink> multigrid library optimized by <ulink url="http://koehllab.genomecenter.ucdavis.edu/">Patrice Koehl</ulink> for improved memory usage and speed when solving the Poisson-Boltzmann equation.  <emphasis>This keyword is temporary and will eventually disappear as Aqua becomes the default multigrid solver for APBS.</emphasis>
 			</para>
 		</listitem>
 

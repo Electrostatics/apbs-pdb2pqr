@@ -208,9 +208,9 @@ int main(
 ----------------------------------------------------------------------\n\
 	APBS also uses Aqua to solve the Poisson-Boltzmann equation numerically.  \n\
 	Aqua is a modified form of the Holst group PMG library <http://www.FEtk.ORG>\n\
-	which has been modified by Patrice Koehl <http://nook.cs.ucdavis.edu/~koehl/>\n\
-	for improved efficiency and memory usage when solving the Poisson-Boltzmann\n\
-	equation.\n\
+	which has been modified by Patrice Koehl\n\
+	<http://koehllab.genomecenter.ucdavis.edu/> for improved efficiency and\n\
+	memory usage when solving the Poisson-Boltzmann equation.\n\
 ----------------------------------------------------------------------\n\
 	Please cite your use of APBS as:\n\n\
 	Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of\n\
