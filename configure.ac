@@ -934,6 +934,7 @@ if test -n "${blas_lib}"; then
 else
 	AC_MSG_RESULT([no])
 	apbs_do_blas="blas"
+	blas_lib=${contrib_path}/blas/libapbsblas.la
 fi
 AC_SUBST(apbs_do_blas)
 
@@ -1031,7 +1032,7 @@ dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
 base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} \ 
-	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib}"
+	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${blas_lib}"
 
 case $host_os in
 
@@ -1098,7 +1099,6 @@ if [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
 else
   apbs_build_libraries="${top_apbsdir}/bin/libapbsmainroutines.la \
 			${top_apbsdir}/src/aaa_lib/libapbs.la \
-			${contrib_path}/blas/libapbsblas.la \
 			${maloc_lib} ${lib_list}"
 fi
 AC_SUBST(apbs_build_libraries)
