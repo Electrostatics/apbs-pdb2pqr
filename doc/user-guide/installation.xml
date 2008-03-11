@@ -202,6 +202,17 @@
 				</screen>
 			</para>
 
+			<sect3> <title>Using an external BLAS library</title> 
+				<para>If an optimized (vendor) BLAS library is available, it should be used with APBS since it will generally provide better performance.  This can be enabled by the <code>--with-blas=...</code> option.  The configure-make-install procedure is:
+					<screen>
+<prompt>$</prompt> <userinput>./configure --with-blas='-L/path/to/blas -lblas'</userinput>
+<prompt>$</prompt> <userinput>make</userinput>
+<prompt>$</prompt> <userinput>make install</userinput>
+					</screen>
+					where <userinput>/path/to/blas</userinput> is the location of a library named <userinput>libblas.a</userinput>.
+				</para>
+			</sect3>
+
 			<sect3> <title>Python support</title> 
 				<para>Python libraries and related tools can be enabled at configure-time.  Currently,
 					Python libraries compile on most Linux and Mac systems.  Other systems are
