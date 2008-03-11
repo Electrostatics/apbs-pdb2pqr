@@ -354,8 +354,8 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 
 	int i;
 	
-	char type[VMAX_BUFSIZE]; // vol or size (keywords)
-	char value[VMAX_BUFSIZE]; // floating point value
+	char type[VMAX_BUFSIZE]; /* vol or size (keywords) */
+	char value[VMAX_BUFSIZE]; /* floating point value */
 	
 	char setVol = 1;
 	char setSize = 1;
@@ -365,17 +365,17 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 	
 	for(i=0;i<keyValuePairs;i++){
 		
-		// The line two tokens at a time
+		/* The line two tokens at a time */
 		VJMPERR1(Vio_scanf(sock, "%s", type) == 1);
 		VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
 		
 		if(!strcmp(type,"vol")){
-			if (setVol = sscanf(value, "%lf", &volume) == 0){
+			if ((setVol = sscanf(value, "%lf", &volume)) == 0){
 				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
 				return VRC_FAILURE;
 			}
 		}else if(!strcmp(type,"size")){
-			if (setSize = sscanf(value, "%lf", &size) == 0){
+			if ((setSize = sscanf(value, "%lf", &size)) == 0){
 				Vnm_print(2,"NOsh:  Read non-float (%s) while parsing smpbe keyword!\n", value);
 				return VRC_FAILURE;
 			}
@@ -385,7 +385,7 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 		}
 	}
 	
-	// If either the volume or size isn't set, throw and error
+	/* If either the volume or size isn't set, throw and error */
 	if(setVol || setSize){
 		Vnm_print(2,"NOsh:  Error while parsing smpbe keywords! Only size or vol was specified.\n");
 		return VRC_FAILURE;
@@ -492,13 +492,13 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 	int setRadius = 1;
 	int keyValuePairs = 3;
 	
-	// Get the initial token for the ION statement
+	/* Get the initial token for the ION statement */
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 	
-	// Scan the token once to determine the type (old style or new keyValue pair)
+	/* Scan the token once to determine the type (old style or new keyValue pair) */
 	meth = sscanf(tok, "%lf", &tf);
 	
-	// If tok is a non-zero float value, we are using the old method
+	/* If tok is a non-zero float value, we are using the old method */
 	if(meth != 0){
 		
 		Vnm_print(2, "NOsh:  Deprecated use of ION keyword! Use key-value pairs\n", tok);
@@ -523,27 +523,27 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 		
 	}else{
 		
-		// Three key-value pairs (charge, radius and conc)
+		/* Three key-value pairs (charge, radius and conc) */
 		for(i=0;i<keyValuePairs;i++){
 			
-			// Now scan for the value (float) to be used with the key token parsed 
-			// above the if-else statement
+			/* Now scan for the value (float) to be used with the key token parsed 
+			 * above the if-else statement */
 			VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
 			
 			if(!strcmp(tok,"charge")){
-				if (setCharge = sscanf(value, "%lf", &charge) == 0){
+				if ((setCharge = sscanf(value, "%lf", &charge)) == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
 				thee->ionq[thee->nion] = charge;
 			}else if(!strcmp(tok,"radius")){
-				if (setRadius = sscanf(value, "%lf", &radius) == 0){
+				if ((setRadius = sscanf(value, "%lf", &radius)) == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
 				thee->ionr[thee->nion] = radius;
 			}else if(!strcmp(tok,"conc")){
-				if (setConc = sscanf(value, "%lf", &conc) == 0){
+				if ((setConc = sscanf(value, "%lf", &conc)) == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
@@ -553,15 +553,15 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 				return VRC_FAILURE;
 			}
 			
-			// If all three values haven't be set (setValue = 0) then read the next token
+			/* If all three values haven't be set (setValue = 0) then read the next token */
 			if(setCharge || setConc || setRadius){
 				VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 			}
 			
-		} // end for
-	} //end if
+		} /* end for */
+	} /* end if */
 	
-	// Finally set the setion, nion and setnion flags and return success
+	/* Finally set the setion, nion and setnion flags and return success */
 	thee->setion[thee->nion] = 1;
 	(thee->nion)++;
 	thee->setnion = 1;

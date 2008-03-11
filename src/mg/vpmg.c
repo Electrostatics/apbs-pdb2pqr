@@ -341,17 +341,17 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 			F77MYPDEFINITSMPBE(&nion, ionQ, ionConc, &pbe->smvolume,&pbe->smsize);
 			break;
 		case IPKEY_NPBE:
-			//Else adjust the inoConc by scaling factor zks2
+			/* Else adjust the inoConc by scaling factor zks2 */
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
 			F77MYPDEFINITNPBE(&nion, ionQ, ionConc);
 			break;
 		case IPKEY_LPBE:
-			//Else adjust the inoConc by scaling factor zks2
+			/* Else adjust the inoConc by scaling factor zks2 */
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
 			F77MYPDEFINITLPBE(&nion, ionQ, ionConc);
 			break;
 		default:
-			//Else adjust the inoConc by scaling factor zks2
+			/* Else adjust the inoConc by scaling factor zks2 */
 			for (i=0; i<nion; i++) ionConc[i] = zks2 * ionConc[i];
 			break;
 	}
@@ -1408,7 +1408,7 @@ VPUBLIC double Vpmg_qmEnergySMPBE(Vpmg *thee, int extFlag) {
     cb3 = ionConc[2];
     a  = thee->pbe->smvolume;
     k  = thee->pbe->smsize;
-    Na = 6.022045000e-04; // Converts from Molar to N/A^3
+    Na = 6.022045000e-04; /* Converts from Molar to N/A^3 */
 	
     fracOccA = Na*cb1*VCUB(a);
     fracOccB = Na*cb2*VCUB(a);
