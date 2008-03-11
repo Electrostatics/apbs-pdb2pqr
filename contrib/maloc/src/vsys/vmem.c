@@ -242,6 +242,10 @@ VPUBLIC void *Vmem_malloc(Vmem *thee, size_t num, size_t size)
     if ( (num > 0) && (size > 0) ) {
 
         ram = (void*)calloc((size_t)num, (size_t)size);
+		if (ram == VNULL) {
+			fprintf(stderr, "Unable to allocate memory!\n");
+			fprintf(stderr, "(This often means you don't have enough memory available for this calculation.)\n");
+		}
         VASSERT( ram != VNULL );
 
         vmemTotal.mallocBytes += (num * size);

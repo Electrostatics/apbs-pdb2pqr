@@ -196,7 +196,8 @@ VPUBLIC void MGparm_dtor2(MGparm *thee) { ; }
 
 VPUBLIC Vrc_Codes MGparm_check(MGparm *thee) { 
 
-    int rc, i, tdime[3], ti, tnlev[3], nlev;
+    Vrc_Codes rc;
+	int i, tdime[3], ti, tnlev[3], nlev;
 
     rc = VRC_SUCCESS;
 	

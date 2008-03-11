@@ -307,7 +307,7 @@ VERROR1:
 VPRIVATE Vrc_Codes FEMparm_parseAKEYSOLVE(FEMparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int vrc = VRC_FAILURE;
+    Vrc_Codes vrc = VRC_FAILURE;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "resi") == 0) {
