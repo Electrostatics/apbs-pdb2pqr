@@ -1637,8 +1637,8 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	double tenergy = 0.0;
 	double rho = apolparm->bconc;
 	
-	// Do a sanity check to make sure that watepsilon and watsigma are set
-	// If not, return with an error.
+	/* Do a sanity check to make sure that watepsilon and watsigma are set
+	 * If not, return with an error. */
 	if(apolparm->setwat == 0){
 		Vnm_print(2,"Vacc_wcaEnergy: Error. No value was set for watsigma and watepsilon.\n");
 		return VRC_FAILURE;
@@ -1685,8 +1685,8 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 
 	VASSERT(apolparm != VNULL);
 	
-	// Do a sanity check to make sure that watepsilon and watsigma are set
-	// If not, return with an error.
+	/* Do a sanity check to make sure that watepsilon and watsigma are set
+	 * If not, return with an error. */
 	if(apolparm->setwat == 0){
 		Vnm_print(2,"Vacc_wcaEnergy: Error. No value was set for watsigma and watepsilon.\n");
 		return VRC_FAILURE;
