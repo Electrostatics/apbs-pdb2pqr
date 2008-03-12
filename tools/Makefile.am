@@ -9,4 +9,4 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 
-SUBDIRS = mesh manip python @arpack_do_tools@
+SUBDIRS = mesh manip @apbs_do_python@  @arpack_do_tools@

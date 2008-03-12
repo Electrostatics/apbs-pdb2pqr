@@ -144,6 +144,7 @@ am__untar = @am__untar@
 apbs_build_libraries = @apbs_build_libraries@
 apbs_do_blas = @apbs_do_blas@
 apbs_do_maloc = @apbs_do_maloc@
+apbs_do_python = @apbs_do_python@
 apbs_do_tools = @apbs_do_tools@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@

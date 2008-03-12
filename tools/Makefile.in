@@ -134,6 +134,7 @@ am__untar = @am__untar@
 apbs_build_libraries = @apbs_build_libraries@
 apbs_do_blas = @apbs_do_blas@
 apbs_do_maloc = @apbs_do_maloc@
+apbs_do_python = @apbs_do_python@
 apbs_do_tools = @apbs_do_tools@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
@@ -206,7 +207,7 @@ wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
-SUBDIRS = mesh manip python @arpack_do_tools@
+SUBDIRS = mesh manip @apbs_do_python@  @arpack_do_tools@
 all: all-recursive
 
 .SUFFIXES:
