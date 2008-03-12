@@ -23438,6 +23438,13 @@ else
 fi
 
 
+case $F77 in
+	ifort)
+		FFLAGS="${FFLAGS} -nofor_main";;
+	*)
+		;;
+esac
+
 { echo "$as_me:$LINENO: checking for --with-arpack" >&5
 echo $ECHO_N "checking for --with-arpack... $ECHO_C" >&6; }
 
