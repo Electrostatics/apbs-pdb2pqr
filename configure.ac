@@ -589,7 +589,7 @@ if test x"$enable_python" != "xno"; then
 			;;
 		darwin**)
 			PY_CC=${F77}
-			PY_LINKFLAGS="-Wl,-framework -Wl,Python -bundle"
+			PY_LINKFLAGS="-Wl,-framework -Wl,Python -shared"
 			;;
 		mingw*)
 			PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`

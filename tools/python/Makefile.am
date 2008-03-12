@@ -11,12 +11,9 @@ SUFFIXES         = .c .C .o .so
 INCLUDES         = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 
 CCLD             = $(PY_CC)
 CLEANFILES       = _apbslib.so
-SUBDIRS          = vgrid
+SUBDIRS          = vgrid 
 
-if PY_PRESENT
-   noinst_PROGRAMS       = _apbslib.so
-   _apbslib_so_SOURCES   = apbslib.c
-   _apbslib_so_LINK      = $(PY_CC) $(PY_LINKFLAGS)
-   _apbslib_so_LDFLAGS   = -o $@ $(PY_SHARED)
-   _apbslib_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@
-endif
+noinst_PROGRAMS       = _apbslib.so
+_apbslib_so_SOURCES   = apbslib.c
+_apbslib_so_LINK      = $(PY_CC) $(PY_LINKFLAGS) -o $@ $(PY_SHARED)
+_apbslib_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@

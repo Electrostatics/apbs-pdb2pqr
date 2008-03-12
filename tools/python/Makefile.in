@@ -33,7 +33,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 target_triplet = @target@
-@PY_PRESENT_TRUE@noinst_PROGRAMS = _apbslib.so$(EXEEXT)
+noinst_PROGRAMS = _apbslib.so$(EXEEXT)
 subdir = tools/python
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -45,13 +45,13 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am___apbslib_so_SOURCES_DIST = apbslib.c
-@PY_PRESENT_TRUE@am__apbslib_so_OBJECTS = apbslib.$(OBJEXT)
+am__apbslib_so_OBJECTS = apbslib.$(OBJEXT)
 _apbslib_so_OBJECTS = $(am__apbslib_so_OBJECTS)
 am__DEPENDENCIES_1 =
-@PY_PRESENT_TRUE@_apbslib_so_DEPENDENCIES = ${top_builddir}/bin/.libs/libapbsmainroutines.a \
-@PY_PRESENT_TRUE@	${top_builddir}/src/aaa_lib/.libs/libapbs.a \
-@PY_PRESENT_TRUE@	$(am__DEPENDENCIES_1)
+_apbslib_so_DEPENDENCIES =  \
+	${top_builddir}/bin/.libs/libapbsmainroutines.a \
+	${top_builddir}/src/aaa_lib/.libs/libapbs.a \
+	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/src/aaa_inc@am__isrc@
 depcomp =
 am__depfiles_maybe =
@@ -64,7 +64,7 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(_apbslib_so_SOURCES)
-DIST_SOURCES = $(am___apbslib_so_SOURCES_DIST)
+DIST_SOURCES = $(_apbslib_so_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -228,11 +228,10 @@ SUFFIXES = .c .C .o .so
 INCLUDES = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 
 CCLD = $(PY_CC)
 CLEANFILES = _apbslib.so
-SUBDIRS = vgrid
-@PY_PRESENT_TRUE@_apbslib_so_SOURCES = apbslib.c
-@PY_PRESENT_TRUE@_apbslib_so_LINK = $(PY_CC) $(PY_LINKFLAGS)
-@PY_PRESENT_TRUE@_apbslib_so_LDFLAGS = -o $@ $(PY_SHARED)
-@PY_PRESENT_TRUE@_apbslib_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@
+SUBDIRS = vgrid 
+_apbslib_so_SOURCES = apbslib.c
+_apbslib_so_LINK = $(PY_CC) $(PY_LINKFLAGS) -o $@ $(PY_SHARED)
+_apbslib_so_LDADD = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @apbs_build_libraries@
 all: all-recursive
 
 .SUFFIXES:
