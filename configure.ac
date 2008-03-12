@@ -161,11 +161,15 @@ if test x"$enable_python" != "xno"; then
 	AC_MSG_NOTICE([Python linkage requires GNU compilers])
 	cclist="gcc"
 	f77list="gfortran g95 g77"
+	apbs_do_python="python"
 else
 	AC_MSG_RESULT([no])
 	cclist="icc pgcc gcc"
 	f77list="ifort pgf77 gfortran g95 g77"
+	apbs_do_python=""
 fi
+AC_SUBST(apbs_do_python)
+
 AC_LANG_C
 AC_PROG_CC(${cclist})
 AM_PROG_CC_STDC
