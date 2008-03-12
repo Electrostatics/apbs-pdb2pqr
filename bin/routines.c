@@ -878,7 +878,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 							   mgparm, pbeparm->calcenergy);   
         /* ...however, it should be done with the previous calculation now, so 
         we should be able to destroy it here. */
-        //Vpmg_dtor(&(pmg[icalc-1]));   
+        /* Vpmg_dtor(&(pmg[icalc-1])); */
 	} else {
 		if (icalc>0) Vpmg_dtor(&(pmg[icalc-1]));
 		pmg[icalc] = Vpmg_ctor(pmgp[icalc], pbe[icalc], 0, VNULL, mgparm, PCE_NO);
@@ -1452,7 +1452,7 @@ VPUBLIC int writedataFlat(
 		
 		if (pbeparm->nion > 0) {
 			for (i=0; i<pbeparm->nion; i++) {
-				fprintf(file,"    ion %.4.3f %.4.3f %4.3f\n",
+				fprintf(file,"    ion %4.3f %4.3f %4.3f\n",
 						pbeparm->ionr[i], pbeparm->ionq[i], pbeparm->ionc[i]);
 			}
 		}
@@ -1687,11 +1687,11 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 		if (pbeparm->nion > 0) {
 			for (i=0; i<pbeparm->nion; i++) {
 				fprintf(file, "      <ion>\n");
-				fprintf(file,"          <radius>%.4.3f A</radius>\n",
+				fprintf(file,"          <radius>%4.3f A</radius>\n",
 						pbeparm->ionr[i]);
-				fprintf(file,"          <charge>%.4.3f A</charge>\n",
+				fprintf(file,"          <charge>%4.3f A</charge>\n",
 						pbeparm->ionq[i]);
-				fprintf(file,"          <concentration>%.4.3f M</concentration>\n", 
+				fprintf(file,"          <concentration>%4.3f M</concentration>\n", 
 						pbeparm->ionc[i]);
 				fprintf(file, "      </ion>\n");
 				
