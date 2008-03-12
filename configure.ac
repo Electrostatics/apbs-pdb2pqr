@@ -986,7 +986,7 @@ if test x"$with_blas" != "xno" -a -n "$with_blas"; then
 else
 	AC_MSG_RESULT([no])
 	apbs_do_blas="blas"
-	blas_lib=${contrib_path}/blas/libapbsblas.la
+	blas_lib=${contrib_path}/blas/.libs/libapbsblas.a
 fi
 AC_SUBST(apbs_do_blas)
 
