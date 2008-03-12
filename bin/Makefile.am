@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
-CCLD = $(F77)
+CCLD = $(F77) $(FFLAGS)
 
 build_libraries = @apbs_build_libraries@
 

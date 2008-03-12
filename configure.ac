@@ -1004,6 +1004,16 @@ esac
 AM_CONDITIONAL(UHBD_COMPILE, [test -n "${UHBD_PORTLAND}"])
 
 dnl # -----------------------
+dnl # If using Intel compilers add in -nofor_main
+dnl # -----------------------
+case $F77 in
+	ifort)
+		FFLAGS="${FFLAGS} -nofor_main";;
+	*)
+		;;
+esac
+
+dnl # -----------------------
 dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
 dnl # -----------------------
 AC_MSG_CHECKING([for --with-arpack])

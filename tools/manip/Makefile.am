@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
-CCLD = $(F77)
+CCLD = $(CC)
 
 noinst_PROGRAMS  = coulomb born
 coulomb_SOURCES  = coulomb.c 
