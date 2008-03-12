@@ -17,5 +17,5 @@ if PY_PRESENT
    _vgrid_so_SOURCES   = vgridlib.c
    _vgrid_so_LINK      = $(PY_CC) $(PY_LINKFLAGS)
    _vgrid_so_LDFLAGS   = -o $@ $(PY_SHARED)
-   _vgrid_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) @lib_list@
+   _vgrid_so_LDADD     = ${top_builddir}/bin/.libs/libapbsmainroutines.a ${top_builddir}/src/aaa_lib/.libs/libapbs.a $(PY_LDFLAGS) ${top_builddir}/contrib/lib/libmaloc.a @lib_list@
 endif
