@@ -5274,7 +5274,7 @@ VPRIVATE void markSphere(double rtot, double *tpos,
 	double xrange, yrange, zrange;
     double rtot2, posx, posy, posz;
 	
-    // Convert to grid reference frame
+    /* Convert to grid reference frame */
     posx = tpos[0] - xmin;
     posy = tpos[1] - ymin;
     posz = tpos[2] - zmin;
