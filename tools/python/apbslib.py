@@ -314,6 +314,7 @@ set_entry = _apbslib.set_entry
 parseInputFromString = _apbslib.parseInputFromString
 Valist_load = _apbslib.Valist_load
 NOsh_setupElecCalc = _apbslib.NOsh_setupElecCalc
+NOsh_setupApolCalc = _apbslib.NOsh_setupApolCalc
 wrap_forceMG = _apbslib.wrap_forceMG
 getAtomPosition = _apbslib.getAtomPosition
 getPotentials = _apbslib.getPotentials

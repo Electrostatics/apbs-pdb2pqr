@@ -2938,6 +2938,7 @@ void Valist_load(Valist *thee, int size, PyObject *x, PyObject *y, PyObject *z, 
 }
 
 extern int NOsh_setupElecCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern int NOsh_setupApolCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 
 int wrap_forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
  Vpmg *pmg, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
@@ -5677,6 +5678,36 @@ fail:
   return NULL;
 }
 
+SWIGINTERN PyObject *_wrap_NOsh_setupApolCalc(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NOsh *arg1 = (NOsh *) 0 ;
+  Valist **arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:NOsh_setupApolCalc",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "NOsh_setupApolCalc" "', argument " "1"" of type '" "NOsh *""'"); 
+  }
+  arg1 = (NOsh *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_Valist, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "NOsh_setupApolCalc" "', argument " "2"" of type '" "Valist *[NOSH_MAXMOL]""'"); 
+  } 
+  arg2 = (Valist **)(argp2);
+  result = (int)NOsh_setupApolCalc(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
 
 SWIGINTERN PyObject *_wrap_wrap_forceMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -7179,6 +7210,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"parseInputFromString", _wrap_parseInputFromString, METH_VARARGS, NULL},
 	 { (char *)"Valist_load", _wrap_Valist_load, METH_VARARGS, NULL},
 	 { (char *)"NOsh_setupElecCalc", _wrap_NOsh_setupElecCalc, METH_VARARGS, NULL},
+	 { (char *)"NOsh_setupApolCalc", _wrap_NOsh_setupApolCalc, METH_VARARGS, NULL},
 	 { (char *)"wrap_forceMG", _wrap_wrap_forceMG, METH_VARARGS, NULL},
 	 { (char *)"getAtomPosition", _wrap_getAtomPosition, METH_VARARGS, NULL},
 	 { (char *)"getPotentials", _wrap_getPotentials, METH_VARARGS, NULL},
