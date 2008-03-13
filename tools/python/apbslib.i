@@ -338,6 +338,7 @@ void Valist_load(Valist *thee, int size, PyObject *x, PyObject *y, PyObject *z, 
 }
 
 extern int NOsh_setupElecCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
+extern int NOsh_setupApolCalc(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
 
 int wrap_forceMG(Vmem *mem, NOsh *nosh, PBEparm *pbeparm, MGparm *mgparm,
  Vpmg *pmg, AtomForce *atomForce[NOSH_MAXCALC], Valist *alist[NOSH_MAXMOL], 
