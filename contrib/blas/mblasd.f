@@ -1,32 +1,29 @@
 c* ///////////////////////////////////////////////////////////////////////////
-c* MG/XMG -- Multilevel nonlinear scalar elliptic PDE solver and X interface
-c* Copyright (C) 1995  Michael Holst
+c* PMG -- Parallel algebraic MultiGrid
+c* Copyright (c) 1994-2008.  Michael Holst.
 c*
-c* This program is free software; you can redistribute it and/or modify
-c* it under the terms of the GNU General Public License as published by
-c* the Free Software Foundation; either version 2 of the License, or
-c* (at your option) any later version.
+c* Michael Holst <mholst@math.ucsd.edu>
+c* University of California, San Diego
+c* Department of Mathematics, 5739 AP&M
+c* 9500 Gilman Drive, Dept. 0112
+c* La Jolla, CA 92093-0112 USA                                                 
+c* http://math.ucsd.edu/~mholst
 c*
-c* This program is distributed in the hope that it will be useful,
+c* This file is part of PMG.
+c*
+c* This library is free software; you can redistribute it and/or
+c* modify it under the terms of the GNU Lesser General Public
+c* License as published by the Free Software Foundation; either
+c* version 2.1 of the License, or (at your option) any later version.
+c*
+c* This library is distributed in the hope that it will be useful,
 c* but WITHOUT ANY WARRANTY; without even the implied warranty of
-c* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-c* GNU General Public License for more details.
-c*
-c* You should have received a copy of the GNU General Public License
-c* along with this program; if not, write to the Free Software
-c* Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-c*
-c* MG/XMG was developed by:
-c*
-c*    Michael Holst                TELE:  (858) 534-4899
-c*    Department of Mathematics    FAX:   (858) 534-5273
-c*    UC San Diego, AP&M 5739      EMAIL: mholst@math.ucsd.edu
-c*    La Jolla, CA 92093 USA       WEB:   http://www.scicomp.ucsd.edu/~mholst
-c*
-c* See the file "maind.f" for more information and pointers to papers.
-c*
-c* IMPORTANT: If you intend to use or modify this code, make sure you 
-c* understand your responsibilities under the GNU license.
+c* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+c* Lesser General Public License for more details.
+
+c* You should have received a copy of the GNU Lesser General Public
+c* License along with this library; if not, write to the Free Software
+c* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 c* ///////////////////////////////////////////////////////////////////////////
 
       subroutine daxpy(n,alpha,x,istep,y,jstep)

@@ -3,6 +3,7 @@
                                    XXX 200X
 #############################################################################
 - NEW FEATURES
+	* Changed license to New BSD style open source license (see http://www.opensource.org/licenses/bsd-license.php) for more information
 	* Added in a feature limited version of PMG (Aqua) that reduces the memory footprint of an APBS run by 2-fold
 	* Modified several routines to boost the speed of APBS calculations by approximately 10% when combined with the low memory version of APBS
 	* Simplified parameter input for ION and SMPBE keywords (key-value pairs) 
