@@ -2,11 +2,10 @@
 
 <title>License</title>
 <para>APBS is covered under the <ulink
-url="http://www.gnu.org/licenses/gpl.txt">GNU Public license (GPL)</ulink>,
+		url="http://www.opensource.org/licenses/bsd-license.php">New BSD open source license</ulink>,
 which basically means you can copy it, change it, use subsets of it,
 redistribute it, etc.; <emphasis>however</emphasis>, you need to give credit to
-the original source <emphasis>and</emphasis> the original portion of the code
-must remain under the GPL.
+the original source.
 </para>
 <para>Here is the specific licensing information:</para>
 <blockquote> 
