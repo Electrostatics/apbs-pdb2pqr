@@ -1,0 +1,15 @@
+base referer
+rect $apolparm_8h-source.html 265,480 353,506
+rect $apbs_8h.html 539,176 601,202
+rect $routines_8h.html 650,378 733,405
+rect $valist_8h.html 143,277 207,304
+rect $vparam_8c.html 137,581 214,608
+rect $nosh_8h.html 415,378 477,405
+rect $vacc_8h.html 415,328 477,354
+rect $vacc_8c.html 539,454 601,481
+rect $apolparm_8c.html 402,429 490,456
+rect $vopot_8h.html 413,74 479,101
+rect $vclist_8h.html 277,328 341,354
+rect $vgreen_8h.html 409,125 483,152
+rect $valist_8c.html 277,226 341,253
+rect $vcsm_8h.html 275,277 342,304

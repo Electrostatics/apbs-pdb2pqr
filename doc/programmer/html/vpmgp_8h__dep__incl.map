@@ -1,0 +1,10 @@
+base referer
+rect $vpmg_8h.html 134,58 201,85
+rect $apbs_8h.html 278,109 340,135
+rect $vpmgp_8c.html 132,159 204,186
+rect $vpmg-private_8h.html 253,7 365,34
+rect $vpmg_8c.html 421,7 488,34
+rect $mgparm_8c.html 414,58 494,85
+rect $main_8c.html 554,122 616,149
+rect $routines_8h.html 413,159 496,186
+rect $routines_8c.html 545,198 625,225

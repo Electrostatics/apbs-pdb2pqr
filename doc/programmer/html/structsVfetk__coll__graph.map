@@ -1,0 +1,5 @@
+base referer
+rect $structsVcsm.html 8,312 85,552
+rect $structsVpbe.html 109,176 248,688
+rect $structsFEMparm.html 272,208 394,656
+rect $structsPBEparm.html 418,8 544,856

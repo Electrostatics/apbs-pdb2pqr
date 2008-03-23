@@ -1,0 +1,9 @@
+base referer
+rect $vopot_8h.html 134,33 201,60
+rect $apbs_8h.html 255,84 317,110
+rect $vmgrid_8c.html 130,134 205,161
+rect $vopot_8c.html 253,33 319,60
+rect $mgparm_8c.html 369,8 449,34
+rect $main_8c.html 509,72 570,98
+rect $routines_8h.html 367,109 450,136
+rect $routines_8c.html 499,148 579,174

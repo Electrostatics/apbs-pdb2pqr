@@ -1,0 +1,10 @@
+base referer
+rect $vpmg_8h.html 168,210 266,237
+rect $vhal_8h.html 646,362 737,389
+rect $vpmgp_8h.html 314,159 421,186
+rect $mgparm_8h.html 472,109 586,135
+rect $vacc_8h.html 482,413 576,439
+rect $vcap_8h.html 321,7 414,34
+rect $vpbe_8h.html 321,337 414,363
+rect $vgrid_8h.html 482,210 576,237
+rect $pbeparm_8h.html 470,362 588,389

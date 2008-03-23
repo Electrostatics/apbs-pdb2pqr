@@ -1,0 +1,11 @@
+base referer
+rect $vpmg-private_8h.html 122,332 234,358
+rect $vpmg_8h.html 282,332 381,358
+rect $vhal_8h.html 761,388 851,414
+rect $vpmgp_8h.html 429,249 535,276
+rect $mgparm_8h.html 586,109 701,136
+rect $vacc_8h.html 597,312 690,338
+rect $vcap_8h.html 435,84 529,110
+rect $vpbe_8h.html 435,306 529,333
+rect $vgrid_8h.html 597,464 690,490
+rect $pbeparm_8h.html 585,413 702,440

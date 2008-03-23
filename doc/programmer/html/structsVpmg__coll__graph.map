@@ -1,0 +1,4 @@
+base referer
+rect $structsVpbe.html 8,208 146,720
+rect $structsVgrid.html 170,304 256,624
+rect $structsVpmgp.html 286,8 372,920

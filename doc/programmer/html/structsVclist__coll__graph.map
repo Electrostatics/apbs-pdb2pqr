@@ -1,0 +1,4 @@
+base referer
+rect $structsValist.html 7,264 87,456
+rect $structsVatom.html 54,8 153,200
+rect $structsVclistCell.html 111,312 197,408

@@ -1,0 +1,5 @@
+base referer
+rect $structsAPOLparm.html 8,128 125,736
+rect $structsMGparm.html 149,16 282,848
+rect $structsFEMparm.html 306,208 429,656
+rect $structsPBEparm.html 453,8 578,856
