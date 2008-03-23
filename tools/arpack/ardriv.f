@@ -15,50 +15,38 @@ c* Washington University in St. Louis
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 2002-2007.  Washington University in St. Louis.
-c* All Rights Reserved.
-c* Portions Copyright (c) 1999-2002.  The Regents of the University 
-c* of California.  
-c* Portions Copyright (c) 1995.  Michael Holst.
+c* Copyright (c) 2002-2007, Washington University in St. Louis.
+c* Portions Copyright (c) 2002-2007.  Nathan A. Baker
+c* Portions Copyright (c) 1999-2002.  The Regents of the University of California.
+c* Portions Copyright (c) 1995.  Michael Holst
 c*
-c* This file is part of APBS.
-c*
-c* APBS is free software; you can redistribute it and/or modify
-c* it under the terms of the GNU General Public License as published
-c* by c* the Free Software Foundation; either version 2 of the 
-c* License, or (at your option) any later version.
-c*
-c* APBS is distributed in the hope that it will be useful,
-c* but WITHOUT ANY WARRANTY; without even the implied warranty of
-c* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-c* GNU General Public License for more details.
-c*
-c* You should have received a copy of the GNU General Public License
-c* along with APBS; if not, write to the Free Software
-c* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
-c* 02111-1307  USA
-c* * Linking APBS statically or dynamically with other modules is making a
-c* combined work based on APBS. Thus, the terms and conditions of the GNU
-c* General Public License cover the whole combination.
+c* All rights reserved.
 c* 
-c* SPECIAL GPL EXCEPTION
-c* In addition, as a special exception, the copyright holders of APBS
-c* give you permission to combine the APBS program with free software
-c* programs and libraries that are released under the GNU LGPL or with
-c* code included in releases of ISIM, Ion Simulator Interface, PMV, PyMOL
-c* SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
-c* redistributed together in original or modified form as mere aggregation
-c* without requirement that the entire work be under the scope of the GNU 
-c* General Public License. This special exception permission is also extended
-c* to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
-c* FEtk, MC, or MALOC libraries.
+c* Redistribution and use in source and binary forms, with or without
+c* modification, are permitted provided that the following conditions are met: 
+c*
+c* -  Redistributions of source code must retain the above copyright notice, this
+c* list of conditions and the following disclaimer.  
 c* 
-c* Note that people who make modified versions of APBS are not obligated
-c* to grant this special exception for their modified versions; it is
-c* their choice whether to do so. The GNU General Public License gives
-c* permission to release a modified version without this exception; this
-c* exception also makes it possible to release a modified version which
-c* carries forward this exception.
+c* - Redistributions in binary form must reproduce the above copyright notice,
+c* this list of conditions and the following disclaimer in the documentation
+c* and/or other materials provided with the distribution.
+c* 
+c* - Neither the name of Washington University in St. Louis nor the names of its
+c* contributors may be used to endorse or promote products derived from this
+c* software without specific prior written permission.
+c* 
+c* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+c* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+c* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+c* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+c* CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+c* EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+c* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+c* PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+c* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+c* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+c* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 c*
 c* @endverbatim
 c**************************************************************************
