@@ -1,7 +1,7 @@
 read
-    mol pqr compound.pqr # This is the compound for which we will calculate
+    mol pqr HIS15.pqr # This is the compound for which we will calculate
                          # solvation energies
-    mol pqr ref.pqr      # This is a compound used as a reference for grid
+    mol pqr 2LZT-HIS15.pqr      # This is a compound used as a reference for grid
                          # centering
 end
 
@@ -17,12 +17,12 @@ elec name inhom
     mol 1
     lpbe
     bcfl sdh
-    pdie 20.00
-    sdie 20.00
+    pdie 8.00
+    sdie 78.54
     srfm smol
-    sdens 20.0
     chgm spl2
     srad 1.40
+    sdens 40.0
     swin 0.30
     temp 298.15
     calcenergy total

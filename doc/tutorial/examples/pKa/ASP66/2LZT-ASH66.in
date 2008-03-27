@@ -1,7 +1,7 @@
 read
-    mol pqr 2LZT-noGLU35.pqr # This is the compound for which we will calculate
+    mol pqr 2LZT-ASH66.pqr # This is the compound for which we will calculate
                          # solvation energies
-    mol pqr 2LZT-GLU35.pqr      # This is a compound used as a reference for grid
+    mol pqr 2LZT-ASP66.pqr      # This is a compound used as a reference for grid
                          # centering
 end
 
@@ -20,7 +20,7 @@ elec name inhom
     pdie 20.00
     sdie 78.54
     srfm smol
-    sdens 20.0
+    sdens 40.0
     chgm spl2
     srad 1.40
     swin 0.30
