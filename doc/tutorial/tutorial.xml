@@ -40,14 +40,14 @@
 		</author>
 		<copyright>
 			<year>2002</year> <year>2003</year> <year>2004</year> 
-			<year>2005</year> <year>2006</year> <year>2007</year>
+			<year>2005</year> <year>2006</year> <year>2007</year> <year>2008</year>
 			<holder>Washington University in St.  Louis</holder>
 		</copyright>
 		<legalnotice>
 			<para>This file is part of APBS.</para>
 			<para>
-				<literallayout>Copyright (c) 2002-2007, Washington University in St. Louis.
-Portions Copyright (c) 2002-2007.  Nathan A. Baker
+				<literallayout>Copyright (c) 2002-2008, Washington University in St. Louis.
+Portions Copyright (c) 2002-2008.  Nathan A. Baker
 Portions Copyright (c) 1999-2002.  The Regents of the University of California.
 Portions Copyright (c) 1995.  Michael Holst.</literallayout></para>
 			<para> All rights reserved. </para>
