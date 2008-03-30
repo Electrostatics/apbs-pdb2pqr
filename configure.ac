@@ -8,7 +8,7 @@ dnl Washington University in St. Louis
 dnl 
 dnl Additional contributing authors listed in the code documentation.
 dnl 
-dnl Copyright (c) 2002-2007.  Washington University in St. Louis.
+dnl Copyright (c) 2002-2008.  Washington University in St. Louis.
 dnl All Rights Reserved.
 dnl Portions Copyright (c) 1999-2002.  The Regents of the University of
 dnl California.  

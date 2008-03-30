@@ -14,8 +14,8 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2007, Washington University in St. Louis.
- * Portions Copyright (c) 2002-2007.  Nathan A. Baker
+ * Copyright (c) 2002-2008, Washington University in St. Louis.
+ * Portions Copyright (c) 2002-2008.  Nathan A. Baker
  * Portions Copyright (c) 1999-2002.  The Regents of the University of California.
  * Portions Copyright (c) 1995.  Michael Holst
  *
