@@ -373,8 +373,8 @@ VPRIVATE int PBEparm_parseSMPBE(PBEparm *thee, Vio *sock) {
 		}
 	}
 	
-	/* If either the volume or size isn't set, throw and error */
-	if(setVol || setSize){
+	/* If either the volume or size isn't set, throw an error */
+	if((setVol == 0) || (setSize == 0)){
 		Vnm_print(2,"NOsh:  Error while parsing smpbe keywords! Only size or vol was specified.\n");
 		return VRC_FAILURE;
 	}
@@ -475,9 +475,9 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 	double tf;
 	double charge, conc, radius;
 	
-	int setCharge = 1;
-	int setConc = 1;
-	int setRadius = 1;
+	int setCharge = 0;
+	int setConc = 0;
+	int setRadius = 0;
 	int keyValuePairs = 3;
 	
 	/* Get the initial token for the ION statement */
@@ -485,7 +485,6 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 	
 	/* Scan the token once to determine the type (old style or new keyValue pair) */
 	meth = sscanf(tok, "%lf", &tf);
-	
 	/* If tok is a non-zero float value, we are using the old method */
 	if(meth != 0){
 		
@@ -517,21 +516,23 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 			/* Now scan for the value (float) to be used with the key token parsed 
 			 * above the if-else statement */
 			VJMPERR1(Vio_scanf(sock, "%s", value) == 1);
-			
 			if(!strcmp(tok,"charge")){
-				if ((setCharge = sscanf(value, "%lf", &charge)) == 0){
+				setCharge = sscanf(value, "%lf", &charge);
+				if (setCharge == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
 				thee->ionq[thee->nion] = charge;
 			}else if(!strcmp(tok,"radius")){
-				if ((setRadius = sscanf(value, "%lf", &radius)) == 0){
+				setRadius = sscanf(value, "%lf", &radius);
+				if (setRadius == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
 				thee->ionr[thee->nion] = radius;
 			}else if(!strcmp(tok,"conc")){
-				if ((setConc = sscanf(value, "%lf", &conc)) == 0){
+				setConc = sscanf(value, "%lf", &conc);
+				if (setConc == 0){
 					Vnm_print(2,"NOsh:  Read non-float (%s) while parsing ION %s keyword!\n", value, tok);
 					return VRC_FAILURE;
 				}
@@ -542,7 +543,7 @@ VPRIVATE int PBEparm_parseION(PBEparm *thee, Vio *sock) {
 			}
 			
 			/* If all three values haven't be set (setValue = 0) then read the next token */
-			if(setCharge || setConc || setRadius){
+			if((setCharge != 1) || (setConc != 1) || (setRadius != 1)){
 				VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
 			}
 			
