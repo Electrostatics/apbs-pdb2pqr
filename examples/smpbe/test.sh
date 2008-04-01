@@ -22,7 +22,7 @@ results=( 8.404388689936E+03 8.141539948536E+02 )
 
 date=`date`
 echo "Date     : ${date}" >> $logfile
-echo "Directory: born" >> $logfile
+echo "Directory: smpbe" >> $logfile
 echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
