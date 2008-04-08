@@ -1471,7 +1471,7 @@ VPUBLIC int Vio_scanf(Vio *thee, char *parms, ... )
 
   VERROR1:
     va_end(ap);
-    fprintf(stderr,"Vio_scanf: Format problem with input.\n");
+    /* fprintf(stderr,"Vio_scanf: Format problem with input.\n"); */
   VERROR2:
     thee->error = 1;
     return 0;
@@ -2218,7 +2218,7 @@ VPRIVATE char* asc_getToken(ASC *thee, char *tok, int toksize)
     return tok;
 
   VERROR1:
-    fprintf(stderr,"asc_getToken: Error occurred (bailing out).\n");
+    /* fprintf(stderr,"asc_getToken: Error occurred (bailing out).\n"); */
     return VNULL;
 }
 
