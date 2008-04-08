@@ -16,7 +16,7 @@ vsmall=0.000000001000
 
 input=( apbs-smpbe-24dup apbs-smpbe-ion )
 
-results=( 8.404388689936E+03 8.141539948536E+02 )
+results=( 8.404388689937E+03 8.141539948536E+02 )
 
 # Initialize the results file
 

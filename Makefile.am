@@ -28,7 +28,7 @@ install-exec-local:
 	-rm -f ./bin/apbs
 
 install-data-local:
-	mkdir -p ${prefix}
-	cp -rf tools ${prefix}/share 
-	cp -rf examples ${prefix}/share 
-	cp -rf doc ${prefix}/share 
+	mkdir -p ${prefix}/share
+	-cp -rf examples ${prefix}/share 
+	-cp -rf doc ${prefix}/share 
+	-cp -rf tools ${prefix}/share
