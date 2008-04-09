@@ -960,12 +960,21 @@ VPUBLIC void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
 	Vnm_tprint(1, "Destroying multigrid structures.\n");
 #endif
 	
+	/* 
+	   There appears to be a relationship (or this is a bug in Linux, can't tell
+	   at the moment, since Linux is the only OS that seems to be affected) 
+	   between one of the three object types: Vpbe, Vpmg or Vpmgp that requires 
+	   deallocations to be performed in a specific order. This results in a  
+	   bug some of the time when freeing Vpmg objects below. Therefore it 
+	   appears to be important to release the Vpmg structs BEFORE the Vpmgp structs .
+	*/
+	Vpmg_dtor(&(pmg[nosh->ncalc-1]));
+	
 	for(i=0;i<nosh->ncalc;i++){
 		Vpbe_dtor(&(pbe[i]));
 		Vpmgp_dtor(&(pmgp[i]));
 	}
 	
-	Vpmg_dtor(&(pmg[nosh->ncalc-1]));
 }
 
 VPUBLIC int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type) {
