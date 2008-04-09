@@ -276,7 +276,8 @@ VPRIVATE Vrc_Codes Valist_readPDBResidueNumber(
 			/* Case 2: Chain ID, merged string.
 					   Move pointer forward past the chainID and check
     	    */
-			strcpy(resstring, tok); 
+		    //strcpy(resstring, tok);
+			resstring = tok;
 			resstring++;
 
 			if (sscanf(resstring, "%d", &ti) != 1) {
