@@ -16,8 +16,8 @@ elec name acetic-solv
     mol 1
     lpbe
     bcfl mdh
-    ion  1 0.150 2.0
-    ion -1 0.150 2.0
+    ion charge 1 conc 0.150 radius 2.0
+    ion charge -1 conc 0.150 radius 2.0
     pdie 2.0
     sdie 78.0
     chgm spl0
@@ -41,8 +41,8 @@ elec name acetic-ref
     mol 1
     lpbe
     bcfl mdh
-    ion  1 0.000 2.0
-    ion -1 0.000 2.0
+    ion charge 1 conc 0.000 radius 2.0
+    ion charge -1 conc 0.000 radius 2.0
     pdie 2.0
     sdie 2.0
     chgm spl0                             # Charge disc method (linear)
@@ -66,8 +66,8 @@ elec name acetate-solv
     mol 2
     lpbe
     bcfl mdh
-    ion  1 0.150 2.0
-    ion -1 0.150 2.0
+    ion charge 1 conc 0.150 radius 2.0
+    ion charge -1 conc 0.150 radius 2.0
     pdie 2.0
     sdie 78.0
     chgm spl0                             # Charge disc method (linear)
@@ -92,8 +92,8 @@ elec name acetate-ref
     mol 2
     lpbe
     bcfl mdh
-    ion  1 0.000 2.0
-    ion -1 0.000 2.0
+    ion charge 1 conc 0.000 radius 2.0
+    ion charge -1 conc 0.000 radius 2.0
     pdie 2.0
     sdie 2.0
     chgm spl0                             # Charge disc method (linear)
@@ -118,8 +118,8 @@ elec name proton-solv
     mol 3
     lpbe
     bcfl mdh
-    ion  1 0.150 2.0
-    ion -1 0.150 2.0
+    ion charge 1 conc 0.150 radius 2.0
+    ion charge -1 conc 0.150 radius 2.0
     pdie 2.0
     sdie 78.0
     chgm spl0                             # Charge disc method (linear)
@@ -144,8 +144,8 @@ elec name proton-ref
     mol 3
     lpbe
     bcfl mdh
-    ion  1 0.000 2.0
-    ion -1 0.000 2.0
+    ion charge 1 conc 0.000 radius 2.0
+    ion charge -1 conc 0.000 radius 2.0
     pdie 2.0
     sdie 2.0
     chgm spl0                             # Charge disc method (linear)

@@ -23,8 +23,8 @@ elec name mol1
     mol 1
     npbe
     bcfl sdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 2.0
     sdie 78.4
     srfm mol
@@ -48,8 +48,8 @@ elec name mol2
     mol 2
     npbe
     bcfl sdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 2.0
     sdie 78.4
     srfm mol
@@ -73,8 +73,8 @@ elec name complex
     mol 3
     npbe
     bcfl sdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 2.0
     sdie 78.4
     srfm mol

@@ -68,22 +68,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  fanswer=`printf "%.12f" $answer`
-  fexpected=`printf "%.12f" ${results[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-  
-  case "$r" in
-      2)  echo "*** PASSED ***"
-          echo "           ${input[i]}.in: PASSED ($answer)" >> $logfile ;;
-      1)  echo "*** PASSED  (with rounding error - see log) ***"
-          echo "           ${input[i]}.in: PASSED with rounding error ($answer; expected ${results[i]})" >> $logfile ;;
-      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-          ferror=`printf "%.2f" $error`
-          echo "*** FAILED ***"
-          echo "   APBS returned $answer"
-          echo "   Expected result is ${results[i]} ($ferror% error)"
-          echo "           ${input[i]}.in: FAILED ($answer; expected ${results[i]}; $ferror% error)" >> $logfile ;;
-  esac
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

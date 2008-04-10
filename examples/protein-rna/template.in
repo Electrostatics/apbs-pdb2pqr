@@ -14,8 +14,8 @@ elec
     npbe
     bcfl sdh
     pdie 4.0
-    ion 1 IONSTR 2.0
-    ion -1 IONSTR 2.0
+    ion charge 1 conc IONSTR radius 2.0
+    ion charge -1 conc IONSTR radius 2.0
     sdie 80.0
     srfm mol
     chgm spl2
@@ -38,8 +38,8 @@ elec
     bcfl sdh
     pdie 4.0
     sdie 80.0
-    ion 1 IONSTR 2.0
-    ion -1 IONSTR 2.0
+    ion charge 1 conc IONSTR radius 2.0
+    ion charge -1 conc IONSTR radius 2.0
     srfm mol
     chgm spl2
     sdens 10.00
@@ -61,8 +61,8 @@ elec
     bcfl sdh
     pdie 4.0
     sdie 80.0
-    ion 1 IONSTR 2.0
-    ion -1 IONSTR 2.0
+    ion charge 1 conc IONSTR radius 2.0
+    ion charge -1 conc IONSTR radius 2.0
     srfm mol
     chgm spl2
     sdens 10.00

@@ -181,14 +181,14 @@ c* *********************************************************************
 	  vol = smvolume
 	  relSize = smsize
 
-	  call vnmprd(2, '!! v1        = ', 15, v1)
-	  call vnmprd(2, '!! v2        = ', 15, v2)
-	  call vnmprd(2, '!! v3        = ', 15, v3)
-	  call vnmprd(2, '!! conc1     = ', 15, conc1)
-	  call vnmprd(2, '!! conc2     = ', 15, conc2)
-	  call vnmprd(2, '!! conc3     = ', 15, conc3)
-	  call vnmprd(2, '!! SMPBE Vol = ', 15, smvolume)
-	  call vnmprd(2, '!! SMPBE Size= ', 15, smsize)
+	  !call vnmprd(2, '!! v1        = ', 15, v1)
+	  !call vnmprd(2, '!! v2        = ', 15, v2)
+	  !call vnmprd(2, '!! v3        = ', 15, v3)
+	  !call vnmprd(2, '!! conc1     = ', 15, conc1)
+	  !call vnmprd(2, '!! conc2     = ', 15, conc2)
+	  !call vnmprd(2, '!! conc3     = ', 15, conc3)
+	  !call vnmprd(2, '!! SMPBE Vol = ', 15, smvolume)
+	  !call vnmprd(2, '!! SMPBE Size= ', 15, smsize)
 	  
       return
       end

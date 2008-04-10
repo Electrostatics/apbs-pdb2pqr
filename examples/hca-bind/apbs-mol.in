@@ -23,8 +23,8 @@ elec name acet
     mol 1
     lpbe
     bcfl sdh
-    ion 1 0.000 2.0                    
-    ion -1 0.000 2.0                
+    ion charge 1 conc 0.000 radius 2.0                    
+    ion charge -1 conc 0.000 radius 2.0                
     pdie 2.0
     sdie 78.54
     chgm spl0
@@ -48,8 +48,8 @@ elec name hca
     mol 2
     lpbe
     bcfl sdh
-    ion 1 0.000 2.0               
-    ion -1 0.000 2.0               
+    ion charge 1 conc 0.000 radius 2.0               
+    ion charge -1 conc 0.000 radius 2.0               
     pdie 2.0
     sdie 78.54
     chgm spl0
@@ -73,8 +73,8 @@ elec name complex
     mol 3
     lpbe
     bcfl sdh
-    ion 1 0.000 2.0               
-    ion -1 0.000 2.0      
+    ion charge 1 conc 0.000 radius 2.0               
+    ion charge -1 conc 0.000 radius 2.0      
     pdie 2.0
     sdie 78.54
     chgm spl0
