@@ -40,62 +40,16 @@ do
 
   # Methanol
 
-  fanswer=`printf "%.12f" ${answer[0]}`
-  fexpected=`printf "%.12f" ${methanol[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-  echo "Methanol Energy : ${answer[0]}"
-  case "$r" in
-      2) echo "*** PASSED ***"
-         echo "           ${input[i]}.in (methanol): PASSED (${answer[0]})" >> $logfile ;;
-      1)
-         echo "*** PASSED (with rounding error - see log) ***"
-         echo "           ${input[i]}.in (methanol): PASSED with rounding error (${answer[0]}; expected ${methanol[i]})" >> $logfile ;;
-      *) error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-         ferror=`printf "%.2f" $error`        
-         echo "*** FAILED ***"
-         echo "   APBS returned ${answer[0]}"
-         echo "   Expected result is ${methanol[i]} ($ferror% error)"
-         echo "           ${input[i]}.in (methanol): FAILED (${answer[0]}; expected ${methanol[i]}; $ferror% error)" >> $logfile ;;
-  esac
+  ../scripts/checkresults.sh ${answer[0]} ${methanol[i]} ${input[i]}.in $logfile
 
   # Methoxide
-
-  fanswer=`printf "%.12f" ${answer[1]}`
-  fexpected=`printf "%.12f" ${methoxide[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-  echo "Methoxide Energy: ${answer[1]}"
-  case "$r" in
-      2) echo "*** PASSED ***"
-         echo "           ${input[i]}.in (methoxide): PASSED (${answer[1]})" >> $logfile ;;
-      1) echo "*** PASSED (with rounding error - see log) ***"
-         echo "           ${input[i]}.in (methoxide): PASSED with rounding error (${answer[1]}; expected ${methoxide[i]})" >> $logfile ;;
-      *) error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-         ferror=`printf "%.2f" $error`
-         echo "*** FAILED ***"
-         echo "   APBS returned ${answer[1]}"
-         echo "   Expected result is ${methoxide[i]} ($ferror% error)"
-         echo "           ${input[i]}.in (methoxide): FAILED (${answer[1]}; expected ${methoxide[i]}; $ferror% error)" >> $logfile ;;
-  esac
-
+  
+  ../scripts/checkresults.sh ${answer[1]} ${methoxide[i]} ${input[i]}.in $logfile
+  
   # Difference
-
-  fanswer=`printf "%.12f" ${answer[2]}`
-  fexpected=`printf "%.12f" ${difference[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-  echo "Difference      : ${answer[2]}"
-  case "$r" in
-      2) echo "*** PASSED ***"
-         echo "           ${input[i]}.in (difference): PASSED (${answer[2]})" >> $logfile ;;
-      1) echo "*** PASSED (with rounding error - see log) ***"
-         echo "           ${input[i]}.in (difference): PASSED with rounding error (${answer[2]}; expected ${difference[i]})" >> $logfile ;;
-      *) error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-         ferror=`printf "%.2f" $error`
-         echo "*** FAILED ***"
-         echo "   APBS returned ${answer[2]}"
-         echo "   Expected result is ${difference[i]} ($ferror% error)"
-         echo "           ${input[i]}.in (difference): FAILED (${answer[2]}; expected ${difference[i]}; $ferror% error)" >> $logfile ;;
-  esac
- 
+  
+  ../scripts/checkresults.sh ${answer[2]} ${difference[i]} ${input[i]}.in $logfile
+   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
   let nettime=$nettime+$elapsed

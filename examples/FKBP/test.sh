@@ -40,22 +40,7 @@ do
   echo "Global net energy: ${answer[3]}"
   sync
 
-  fanswer=`printf "%.12f" ${answer[3]}`
-  fexpected=`printf "%.12f" ${results[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-
-  case "$r" in
-      2)  echo "*** PASSED ***"
-          echo "           1d7h-dmso/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
-      1)  echo "*** PASSED (with rounding error - see log) ***"
-          echo "           1d7h-dmso/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
-      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-          ferror=`printf "%.2f" $error`
-          echo "*** FAILED ***"
-          echo "   APBS returned ${answer[3]}"
-          echo "   Expected result is ${results[i]} ($ferror% error)"
-          echo "           1d7h-dmso/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]}; $ferror% error)" >> ../$logfile ;;
-  esac
+  ../../scripts/checkresults.sh ${answer[3]} ${results[i]} 1d7h-dmso/${input[i]}.in $logfile
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
@@ -82,23 +67,8 @@ do
 
   echo "Global net energy: ${answer[3]}"
   sync
-
-  fanswer=`printf "%.12f" ${answer[3]}`
-  fexpected=`printf "%.12f" ${results[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-
-  case "$r" in 
-      2)  echo "*** PASSED ***"
-          echo "           1d7i-dss/${input[i]}.in: PASSED (${answer[3]})" >> ../$logfile ;;
-      1)  echo "*** PASSED (with rounding error - see log) ***"
-          echo "           1d7i-dss/${input[i]}.in: PASSED with rounding error (${answer[3]}; expected ${results[i]})" >> ../$logfile ;;
-      *)  error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-          ferror=`printf "%.2f" $error`
-          echo "*** FAILED ***"
-          echo "   APBS returned ${answer[3]}"
-          echo "   Expected result is ${results[i]} ($ferror% error)"
-          echo "           1d7i-dss/${input[i]}.in: FAILED (${answer[3]}; expected ${results[i]}; $ferror% error)" >> ../$logfile ;;
-  esac
+  
+  ../../scripts/checkresults.sh ${answer[3]} ${results[i]} 1d7i-dss/${input[i]}.in $logfile
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

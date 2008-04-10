@@ -21,8 +21,8 @@ elec name methanol-solv
     mol 1
     lpbe
     bcfl mdh
-    ion 1 0.000 2.0                
-    ion -1 0.000 2.0      
+    ion charge 1 conc 0.000 radius 2.0                
+    ion charge -1 conc 0.000 radius 2.0      
     pdie 2.0
     sdie 78.00
     chgm spl0
@@ -45,8 +45,8 @@ elec name methanol-ref
     mol 1
     lpbe
     bcfl mdh
-    ion 1 0.000 2.0                
-    ion -1 0.000 2.0 
+    ion charge 1 conc 0.000 radius 2.0                
+    ion charge -1 conc 0.000 radius 2.0 
     pdie 2.0
     sdie 1.00
     chgm spl0
@@ -69,8 +69,8 @@ elec name methoxide-solv
     mol 2
     lpbe
     bcfl mdh
-    ion 1 0.000 2.0                
-    ion -1 0.000 2.0 
+    ion charge 1 conc 0.000 radius 2.0                
+    ion charge -1 conc 0.000 radius 2.0 
     pdie 2.0
     sdie 78.00
     chgm spl0
@@ -93,8 +93,8 @@ elec name methoxide-ref
     mol 2
     lpbe
     bcfl mdh
-    ion 1 0.000 2.0                
-    ion -1 0.000 2.0 
+    ion charge 1 conc 0.000 radius 2.0                
+    ion charge -1 conc 0.000 radius 2.0 
     pdie 2.0
     sdie 1.0
     chgm spl0

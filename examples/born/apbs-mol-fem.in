@@ -21,8 +21,8 @@ elec name born
     maxvert 1000000
     mol 1
     lpbe
-    ion 1 0.0 2.0
-    ion -1 0.0 2.0
+    ion charge 1 conc 0.0 radius 2.0
+    ion charge -1 conc 0.0 radius 2.0
     bcfl mdh
     pdie 1.0
     sdie 78.54

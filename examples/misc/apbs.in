@@ -20,8 +20,8 @@ elec name viz
     mol 1
     lpbe
     bcfl sdh
-    ion 1 0.150 2.0
-    ion -1 0.150 2.0
+    ion chrage 1 conc 0.150 radius 2.0
+    ion charge -1 conc 0.150 radius 2.0
     pdie 1.0
     sdie 78.54
     chgm spl0

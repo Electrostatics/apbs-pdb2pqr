@@ -22,8 +22,8 @@ elec name protein
     mol 1
     npbe
     bcfl mdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 12.0
     sdie 78.4
     chgm spl0
@@ -46,8 +46,8 @@ elec name ion
     mol 2
     npbe
     bcfl mdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 12
     sdie 78.4
     chgm spl0
@@ -70,8 +70,8 @@ elec name complex
     mol 3
     npbe
     bcfl mdh
-    ion 1 0.050 2.0
-    ion -1 0.050 2.0
+    ion charge 1 conc 0.050 radius 2.0
+    ion charge -1 conc 0.050 radius 2.0
     pdie 12
     sdie 78.4
     chgm spl0

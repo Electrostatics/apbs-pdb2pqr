@@ -36,24 +36,8 @@ do
  
   sync
 
-  fanswer=`printf "%.12f" ${answer[0]}`
-  fexpected=`printf "%.12f" ${results[i]}`
-  r=`echo "scale=12;if($fanswer>($fexpected-$vsmall) && $fanswer<($fexpected+$vsmall))r=1;if($fanswer == $fexpected)r=2;r" | bc`
-  echo "Energy : ${answer[0]}"
-  case "$r" in
-      2) echo "*** PASSED ***"
-         echo "           ${input[i]}.in (results): PASSED (${answer[0]})" >> $logfile ;;
-      1)
-         echo "*** PASSED (with rounding error - see log) ***"
-         echo "           ${input[i]}.in (results): PASSED with rounding error (${answer[0]}; expected ${results[i]})" >> $logfile ;;
-      *) error=`echo "scale=12;e=($fanswer - $fexpected)*100.0/$fexpected;;if(e<0)e=e*-1;e" | bc`
-         ferror=`printf "%.2f" $error`        
-         echo "*** FAILED ***"
-         echo "   APBS returned ${answer[0]}"
-         echo "   Expected result is ${results[i]} ($ferror% error)"
-         echo "           ${input[i]}.in (results): FAILED (${answer[0]}; expected ${results[i]}; $ferror% error)" >> $logfile ;;
-  esac
- 
+  ../scripts/checkresults.sh ${answer[0]} ${results[i]} ${input[i]}.in $logfile
+
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
   let nettime=$nettime+$elapsed
