@@ -12,12 +12,16 @@
 	<sect1> <title>Binary installation</title>
 
 		<para>
-			We currently offer binaries for the RedHat Linux platform on a variety of architectures as well
-			as command line binaries for WinXP and Mac OS X.  Binaries can be downloaded from the <ulink
-				url="http://agave.wustl.edu/apbs/download">APBS download page</ulink>.  For all other
-			systems, please install from source on your particular platform and feel free to contact the
-			<link linkend="mailing-lists">APBS users mailing list</link> for more help and/or to request a
-			binary for that system.
+			We currently offer binaries for the RedHat Linux platform on a variety of architectures as well as command line binaries for WinXP and Mac OS X.  Binaries can be downloaded from the <ulink url="http://agave.wustl.edu/apbs/download">APBS download page</ulink>.  For all other systems, please install from source on your particular platform and feel free to contact the <link linkend="mailing-lists">APBS users mailing list</link> for more help and/or to request a binary for that system.
+		</para>
+
+		<para>
+			APBS binaries are provided in compressed tar format (*.tgz).  On most systems, the binaries can be unarchived by simply double-clicking or opening the archive.  This can also be accomplished on the comamnd line by
+			<screen>
+<prompt>$</prompt> <userinput>gzip -dc apbs-&apbsver;-XYZ.tgz | tar xvf -</userinput>
+			</screen>
+			where <userinput>XYZ</userinput> is the particular architecture of the binary you downloaded.
+			Note that this will expand into a directory called <filename>apbs-&apbsver;-XYZ</filename>.  The contents of this directory can be placed anywhere on your system that you prefer (and have access to).  The APBS binaries do not contain dependencies on special data files, etc. and can be moved out of this directory structure without causing any problems for APBS execution.
 		</para>
 
 	</sect1>
