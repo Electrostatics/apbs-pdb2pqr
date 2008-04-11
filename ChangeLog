@@ -14,6 +14,7 @@
 	* Added per-atom SASA information output from APOLAR calculations
 	* Added per-atom verbosity to APOLAR calculation outputs
 	* Ability to read-in MCSF-format finite element meshes (e.g., as produced by Holst group GAMER software)
+	* Updated installation instructions in user guide
 - BUG FIXES
 	* Updated tools/python/apbslib* for new NOsh functionality
 	* Clarified ELEC/DIME and ELEC/PDIME documentation
