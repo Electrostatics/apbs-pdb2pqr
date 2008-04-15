@@ -23,7 +23,7 @@
 						url="http://nbcr.net">NBCR</ulink>).
 				</para>
 				<para>
-					The NBCR Web Services portal (<ulink url="http://ws.nbcr.net:8080/opal/GetServicesList.do">http://ws.nbcr.net:8080/opal/GetServicesList.do</ulink>) provides an off-site alternative for running computationally-expensive APBS calculations that won't fit on local resources.  This portal is currently running APBS 0.5.1.
+					The NBCR Web Services portal (<ulink url="http://ws.nbcr.net:8080/opal/GetServicesList.do">http://ws.nbcr.net:8080/opal/GetServicesList.do</ulink>) provides an off-site alternative for running computationally-expensive APBS calculations that won't fit on local resources.  This portal is currently running APBS 1.0.0.
 				</para>
 				<para>
 					The NBCR Opal Web Services client for APBS (<ulink url="http://nbcr.net/services/#Software">http://nbcr.net/services/#Software</ulink>) provides a more basic interface which allows users to execute APBS jobs remotely via Python or build such functionality into their own software.
