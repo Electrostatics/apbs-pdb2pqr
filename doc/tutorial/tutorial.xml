@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS/DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
 <!ENTITY apbsversion "1.0.0">
-<!ENTITY apbsdate "Jul-2007">
+<!ENTITY apbsdate "April-2008">
 <!ENTITY apbsurl "http://apbs.sf.net">
 <!ENTITY ugurl "../user-guide/index.html">
 <!ENTITY pdb2pqrurl "http://pdb2pqr.sf.net/">
