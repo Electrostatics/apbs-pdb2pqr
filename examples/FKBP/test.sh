@@ -50,6 +50,8 @@ do
 
 done
 
+cat $logfile >> ../$logfile
+
 # Now do 1d7i-dss
 
 cd ../1d7i-dss
@@ -78,6 +80,7 @@ do
 
 done
 
+cat $logfile >> ../$logfile
 cd ..
 
 echo "Test results have been logged to ${logfile}."
