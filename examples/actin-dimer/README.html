@@ -62,7 +62,7 @@
 			  <td rowspan=4><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
 			  <td rowspan=4>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
 			  <td align=center><strong>1.0.0</strong></td>
-			  <td align=center><strong>98.1643</strong></td>
+			  <td align=center><strong>98.1643</strong><sup><a href="#4">4</a></sup> </td>
 			  <td rowspan=4>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -77,7 +77,7 @@
 			  <td rowspan=15><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
 			  <td rowspan=15>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
 			  <td align=center><strong>1.0.0</strong></td>
-			  <td align=center><strong>115.5573</strong></td>
+			  <td align=center><strong>115.5573</strong><sup><a href="#4">4</a></sup> </td>
 			  <td rowspan=15>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -100,7 +100,7 @@
 			<tr><td align=center>0.1.8</td><td align=center>91.67</td></tr>
 		</table>
 		
-		<p> </p><a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
+		<p> <a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely due to three factors:
 			<ul>
 				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric
 				values </li>
@@ -109,19 +109,21 @@
 				<li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change
 				in the default sdens value from 3.0 to 10.0 </li>
 			</ul>
-		<p></p>
+			</p>
 		
-		<a name=1></a><sup>2</sup>  The discrepancy in values between versions 0.5.0 and 0.4.0 is most likely due to the following factor(s):
+			<p> <a name=2></a><sup>2</sup>  The discrepancy in values between versions 0.5.0 and 0.4.0 is most likely due to the following factor(s):
 			<ul>
 				<li> A change in the autofocusing routine for APBS</li>
 			</ul>
-		<p></p>
+		</p>
 		
-		<a name=1></a><sup>3</sup>  The discrepancy in values between versions 0.5.1 and 0.5.0 is most likely due to the following factor(s):
+		<p> <a name=3></a><sup>3</sup>  The discrepancy in values between versions 0.5.1 and 0.5.0 is most likely due to the following factor(s):
 			<ul>
 				<li> Bug fix regarding multipole behavior for neutral proteins </li>
 			</ul>
-		<p></p>
+			</p>
+
+			<P> <a name=4></a><sup>4</sup> The discrepancy in values between versions 0.5.1 and 1.0.0 was due to the execution of the previous APBS tests on a PowerPC platform with the XLC/XLF compilers.  Running with binaries compiled with gcc/gfortran or the Intel compilers gives identical results between versions 0.5.1 and 1.0.0. </p>
 		
 		<p> Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
 		more information. </p>
