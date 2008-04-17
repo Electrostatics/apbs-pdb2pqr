@@ -21,7 +21,7 @@
 <prompt>$</prompt> <userinput>gzip -dc apbs-&apbsver;-XYZ.tgz | tar xvf -</userinput>
 			</screen>
 			where <userinput>XYZ</userinput> is the particular architecture of the binary you downloaded.
-			Note that this will expand into a directory called <filename>apbs-&apbsver;-XYZ</filename>.  The contents of this directory can be placed anywhere on your system that you prefer (and have access to).  The APBS binaries do not contain dependencies on special data files, etc. and can be moved out of this directory structure without causing any problems for APBS execution.
+			Note that this will expand into a directory called <filename>apbs-&apbsver;-XYZ</filename>.  The contents of this directory can be placed anywhere on your system that you prefer (and have access to).  The specific sub-directory of this archive is described in <xref linkend="install-dirs"/>, which contains information about the location of documentation, examples, libraries, header files, and binaries.  The APBS binaries do not contain dependencies on special data files, etc. and can be moved out of this directory structure without causing any problems for APBS execution.
 		</para>
 
 	</sect1>
@@ -149,7 +149,12 @@
 				<screen>
 <prompt>$</prompt> <userinput>make install</userinput>
 				</screen>
-				The installation will create several directories under
+			</para>
+		</sect2>
+
+		<sect2 id="install-dirs"> <title>APBS directory structure</title>
+			<para>
+				The APBS installation process (whether compiled from source or installed as pre-compiled binaries) will create several directories under
 				<parameter>${APBS_PREFIX}</parameter>:
 				<itemizedlist>
 					<listitem> 
@@ -157,7 +162,7 @@
 							<filename>apbs</filename> binary resides</para>
 					</listitem>
 					<listitem> 
-						<para> <filename>examples</filename>, which contains a number of
+						<para> <filename>share</filename>, which contains the documentation (user guide, tutorial, programmer's guide) as well as a number of
 							examples and test cases for APBS </para>
 					</listitem>
 					<listitem> 
