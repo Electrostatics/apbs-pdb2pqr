@@ -2888,7 +2888,7 @@ c	Call Galerkin routine
 c ==========================================================================================
 c
 	numdia_local = ipcF(11)
-	call build_G(nxf,nyf,nzf,nxc,nyc,nzc,numdia_local,pcF,acF,ac)
+	call build_G(nxf,nyf,nzf,nxc,nyc,nzc,numdia_local,acF,ac)
 c
 	return
 	end
