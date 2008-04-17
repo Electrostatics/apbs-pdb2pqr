@@ -2219,7 +2219,7 @@ molecular dynamics program (for MM/PBSA, etc.)?</title>
 		</para>
 		
 		<para>
-			APBS also links against developmental versions of the <ulink url="http://dasher.wustl.edu/tinker/">TINKER</ulink> software package.  Public versions of TINKER with APBS support should be available in Fall 2007.
+			APBS also links against developmental versions of the <ulink url="http://dasher.wustl.edu/tinker/">TINKER</ulink> software package.  Public versions of TINKER with APBS support should be available soon from <ulink url="http://dasher.wustl.edu/tinker/">http://dasher.wustl.edu/tinker/</ulink>.
 		</para>
 		
 	</chapter>
