@@ -168,6 +168,10 @@
 					<para>Contributor:  multivalue.c</para>
 				</listitem>
 				<listitem>
+					<para>Patrice Koehl</para>
+					<para>Contributor:  Aqua, a streamlined version of the Holst group PMG multigrid library</para>
+				</listitem>
+				<listitem>
 					<para>Robert Konecny</para>
 					<para>Contributor: parameters, CHARMM FORTRAN interface</para>
 				</listitem>
