@@ -73,19 +73,7 @@
 
 import string, sys
 import psize
-
-
-class inputGen:
-    """
-        DEPRECATED:  Please use the Input class instead!  See the
-                     main() function for usage.
-    """
-    def __init__(self, pqrpath, size, method, async):
-        size.runPsize(pqrpath)
-        self.input = Input(pqrpath, size, method, async)
-
-    def printInput(self):
-        self.input.printInputFiles()
+import pickle
 
 class Elec:
     """
@@ -140,7 +128,7 @@ class Elec:
         self.gamma = 0.105
         self.calcenergy = "total"
         self.calcforce = "no"
-        self.write = [] # Multiple write statements possible
+        self.write = [["pot", "dx", "pot"]] # Multiple write statements possible
     
     def __str__(self):
         """
@@ -182,7 +170,6 @@ class Elec:
         text += "    srad %.2f\n" % self.srad          
         text += "    swin %.2f\n" % self.swin         
         text += "    temp %.2f\n" % self.temp     
-        text += "    gamma %.3f\n" % self.gamma    
         text += "    calcenergy %s\n" % self.calcenergy
         text += "    calcforce %s\n" % self.calcforce
         for write in self.write:
@@ -226,12 +213,13 @@ class Input:
         elec1 = Elec(size, method, asyncflag)
         elec2 = Elec(size, method, asyncflag)
         setattr(elec2, "sdie", 2.0)
+        setattr(elec2, "write", [])
         self.elecs = [elec1, elec2]
      
         i = string.rfind(pqrpath, "/") + 1
         self.pqrname = pqrpath[i:]
 
-        self.prints = ["print energy 2 - 1 end"]     
+        self.prints = ["print elecEnergy 2 - 1 end"]     
 
     def __str__(self):
         """
@@ -284,6 +272,19 @@ class Input:
             file.write(str(self))
             file.close()
 
+    def dumpPickle(self):
+        """
+            Make a Python pickle associated with the APBS input parameters
+        """
+        period = string.find(self.pqrpath,".")
+        if period > 0:
+            outname = self.pqrpath[0:period] + "-input.p"
+        else:
+            outname = self.pqrpath + "-input.p"
+        pfile = open(outname, "w")
+        pickle.dump(self, pfile)
+        pfile.close()
+
 def splitInput(filename):
     """
         Split the parallel input file into multiple async file names
@@ -293,7 +294,7 @@ def splitInput(filename):
                        file (string)
     """
     nproc = 0
-    file = open(filename)
+    file = open(filename, 'rU')
     text = ""
     while 1:
         line = file.readline()
