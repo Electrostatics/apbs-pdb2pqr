@@ -986,9 +986,7 @@ if test x"$with_blas" != "xno" -a -n "$with_blas"; then
 	if test -z "${blas_found}"; then
 		AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
 	fi
-	blas_lib="${blas_lib} -l${blas_name}"
 	apbs_do_blas=""
-        AC_SUBST(blas_lib)
 	AC_LANG_C
 else
 	AC_MSG_RESULT([no])

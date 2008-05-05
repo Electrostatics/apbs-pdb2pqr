@@ -151,7 +151,6 @@ apbs_do_tools = @apbs_do_tools@
 arpack_do_tools = @arpack_do_tools@
 arpack_lib = @arpack_lib@
 bindir = @bindir@
-blas_lib = @blas_lib@
 build = @build@
 build_alias = @build_alias@
 build_cpu = @build_cpu@
