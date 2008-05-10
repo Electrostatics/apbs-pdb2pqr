@@ -3804,17 +3804,33 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	sav = 0.0;
 	
 	if (apolparm->calcenergy) {
-		/* Total Solvent Accessible Surface Area (SASA) */
+	    if (VABS(apolparm->gamma) > VSMALL){
+        	/* Total Solvent Accessible Surface Area (SASA) */
 		apolparm->sasa = Vacc_totalSASA(acc, srad);
-	    /* SASA for each atom */
+		/* SASA for each atom */
 		for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
 			atom = Valist_getAtom(alist, i);
 			atomsasa[i] = Vacc_atomSASA(acc, srad, atom);
 		}
-		
+	    }		
+	    else {
+		 /* Total Solvent Accessible Surface Area (SASA) set to zero */
+                apolparm->sasa = 0.0;
+                /* SASA for each atom set to zero*/
+                for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
+                        atom = Valist_getAtom(alist, i);
+                        atomsasa[i] = 0.0;
+                }
+ 	    }
+
 		/* Inflated van der Waals accessibility */
-		apolparm->sav = Vacc_totalSAV(acc, clist, apolparm, srad);
-		
+		if (VABS(apolparm->press) > VSMALL){
+		    apolparm->sav = Vacc_totalSAV(acc, clist, apolparm, srad);
+		}
+		else {
+		      apolparm->sav = 0.0; 
+		}
+
 		/* wcaEnergy integral code */
 		if (VABS(apolparm->bconc) > VSMALL) {
 			/* wcaEnergy for each atom */
