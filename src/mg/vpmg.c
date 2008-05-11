@@ -3293,6 +3293,9 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
             asurf = Vacc_atomSASPoints(acc, srad, atom);
     
             /* Use each point on the SAS to reset the solvent accessibility */
+			/* TODO:  This part of the code is a serious waste of time.  Many of these atoms are completely buried and there's
+			no reason to test their surface points.  The first step should be to (a) check if the SASA for this atom is greater
+			than VSMALL and then (b) only test potentially solvent-accessible points */
             for (ipt=0; ipt<(asurf->npts); ipt++) {
     
                 position[0] = asurf->xpts[ipt];

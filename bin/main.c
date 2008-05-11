@@ -1,5 +1,6 @@
 /**
  *  @file    main.c
+ *  @ingroup Frontend
  *  @author  Nathan Baker
  *  @brief   APBS "front end" program using formatted input files.
  * 
@@ -74,9 +75,15 @@
 
 VEMBED(rcsid="$Id$")
 
+/** 
+ * @brief The main APBS function
+ * @ingroup  Frontend
+ * @author  Nathan Baker, Dave Gohara, Todd Dolinsky
+ * @returns Status code (0 for success)
+ */
 int main(
-		 int argc, 
-		 char **argv
+		 int argc,  /**< Number of arguments */
+		 char **argv  /**< Argument strings */
 		 ) 
 {
 	
