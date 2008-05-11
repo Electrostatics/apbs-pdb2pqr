@@ -3804,31 +3804,29 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	sav = 0.0;
 	
 	if (apolparm->calcenergy) {
-	    if (VABS(apolparm->gamma) > VSMALL){
-        	/* Total Solvent Accessible Surface Area (SASA) */
-		apolparm->sasa = Vacc_totalSASA(acc, srad);
-		/* SASA for each atom */
-		for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
-			atom = Valist_getAtom(alist, i);
-			atomsasa[i] = Vacc_atomSASA(acc, srad, atom);
-		}
-	    }		
-	    else {
-		 /* Total Solvent Accessible Surface Area (SASA) set to zero */
-                apolparm->sasa = 0.0;
-                /* SASA for each atom set to zero*/
-                for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
-                        atom = Valist_getAtom(alist, i);
-                        atomsasa[i] = 0.0;
-                }
+		if (VABS(apolparm->gamma) > VSMALL) {
+			/* Total Solvent Accessible Surface Area (SASA) */
+			apolparm->sasa = Vacc_totalSASA(acc, srad);
+			/* SASA for each atom */
+			for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
+				atom = Valist_getAtom(alist, i);
+				atomsasa[i] = Vacc_atomSASA(acc, srad, atom);
+			}
+	    } else {
+			/* Total Solvent Accessible Surface Area (SASA) set to zero */
+			apolparm->sasa = 0.0;
+			/* SASA for each atom set to zero*/
+			for (i = 0; i < Valist_getNumberAtoms(alist); i++) {
+				atom = Valist_getAtom(alist, i);
+				atomsasa[i] = 0.0;
+			}
  	    }
 
 		/* Inflated van der Waals accessibility */
 		if (VABS(apolparm->press) > VSMALL){
 		    apolparm->sav = Vacc_totalSAV(acc, clist, apolparm, srad);
-		}
-		else {
-		      apolparm->sav = 0.0; 
+		} else {
+			apolparm->sav = 0.0; 
 		}
 
 		/* wcaEnergy integral code */
@@ -3851,7 +3849,6 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 		} else {
 			apolparm->wcaEnergy = 0.0;
 		}
-		
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav, atomsasa, atomwcaEnergy, Valist_getNumberAtoms(alist));
 	}
 	
@@ -4044,8 +4041,8 @@ VPUBLIC int forceAPOL(Vacc *acc, Vmem *mem, APOLparm *apolparm,
 				(*atomForce)[i].wcaForce[j] = 0.0;
 			}
 			
-			if(gamma > VSMALL) Vacc_atomdSASA(acc, offset, srad, atom, dSASA);
-			if(press > VSMALL) Vacc_atomdSAV(acc, srad, atom, dSAV);
+			if(VABS(gamma) > VSMALL) Vacc_atomdSASA(acc, offset, srad, atom, dSASA);
+			if(VABS(press) > VSMALL) Vacc_atomdSAV(acc, srad, atom, dSAV);
 			if(VABS(bconc) > VSMALL) Vacc_wcaForceAtom(acc,apolparm,clist,atom,force);
 				
 			xF = -((gamma*dSASA[0]) + (press*dSAV[0]) + (bconc*force[0]));

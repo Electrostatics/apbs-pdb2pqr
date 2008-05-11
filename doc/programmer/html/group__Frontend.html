@@ -8,6 +8,11 @@
 <h1>High-level front-end routines</h1><table border=0 cellpadding=0 cellspacing=0>
 <tr><td></td></tr>
 <tr><td colspan=2><br><h2>Files</h2></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>file &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="main_8c.html">main.c</a></td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">APBS "front end" program using formatted input files. <br><br></td></tr>
+
+<p>
 <tr><td class="memItemLeft" nowrap align=right valign=top>file &nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="routines_8h.html">routines.h</a></td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Header file for front end auxiliary routines. <br><br></td></tr>
@@ -18,8 +23,8 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Structure to hold atomic forces. </em> <a href="structAtomForce.html#_details">More...</a><em><br><br></td></tr>
 <tr><td colspan=2><br><h2>Defines</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a47" doxytag="Frontend::APBSRC" ></a>
-#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a47">APBSRC</a>&nbsp;&nbsp;&nbsp;13</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="anchor" name="a48" doxytag="Frontend::APBSRC" ></a>
+#define&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a48">APBSRC</a>&nbsp;&nbsp;&nbsp;13</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Return code for APBS during failure. <br><br></td></tr>
 <tr><td colspan=2><br><h2>Typedefs</h2></td></tr>
@@ -28,147 +33,150 @@ typedef <a class="el" href="structAtomForce.html">AtomForce</a>&nbsp;</td><td cl
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Define <a class="el" href="structAtomForce.html">AtomForce</a> type. <br><br></td></tr>
 <tr><td colspan=2><br><h2>Functions</h2></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC <a class="el" href="structVparam.html">Vparam</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a1">loadParameter</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a1">main</a> (int argc, char **argv)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Loads and returns parameter object. </em> <a href="#a1"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a2">loadMolecules</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structVparam.html">Vparam</a> *param, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">The main APBS function. </em> <a href="#a1"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC <a class="el" href="structVparam.html">Vparam</a> *&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a2">loadParameter</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the molecules given in NOsh into atom lists. </em> <a href="#a2"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a3">killMolecules</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Loads and returns parameter object. </em> <a href="#a2"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a3">loadMolecules</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structVparam.html">Vparam</a> *param, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded molecules. </em> <a href="#a3"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a4">loadDielMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the molecules given in NOsh into atom lists. </em> <a href="#a3"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a4">killMolecules</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the dielectric maps given in NOsh into grid objects. </em> <a href="#a4"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a5">killDielMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded molecules. </em> <a href="#a4"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a5">loadDielMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded dielectric. </em> <a href="#a5"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a6">loadKappaMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the dielectric maps given in NOsh into grid objects. </em> <a href="#a5"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a6">killDielMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the kappa maps given in NOsh into grid objects. </em> <a href="#a6"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a7">killKappaMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded dielectric. </em> <a href="#a6"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a7">loadKappaMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded kappa maps. </em> <a href="#a7"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a8">loadChargeMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the kappa maps given in NOsh into grid objects. </em> <a href="#a7"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a8">killKappaMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the charge maps given in NOsh into grid objects. </em> <a href="#a8"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a9">killChargeMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded kappa maps. </em> <a href="#a8"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a9">loadChargeMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded charge maps. </em> <a href="#a9"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a10">printPBEPARM</a> (<a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the charge maps given in NOsh into grid objects. </em> <a href="#a9"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a10">killChargeMaps</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVgrid.html">Vgrid</a> *map[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out generic PBE params loaded from input. </em> <a href="#a10"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a11">printMGPARM</a> (<a class="el" href="structsMGparm.html">MGparm</a> *mgparm, double realCenter[3])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded charge maps. </em> <a href="#a10"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a11">printPBEPARM</a> (<a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out MG-specific params loaded from input. </em> <a href="#a11"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a12">initMG</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, double realCenter[3], <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap[NOSH_MAXMOL], <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="el" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out generic PBE params loaded from input. </em> <a href="#a11"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a12">printMGPARM</a> (<a class="el" href="structsMGparm.html">MGparm</a> *mgparm, double realCenter[3])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize an MG calculation. </em> <a href="#a12"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a13">killMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="el" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out MG-specific params loaded from input. </em> <a href="#a12"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a13">initMG</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, double realCenter[3], <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielXMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielYMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *dielZMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *kappaMap[NOSH_MAXMOL], <a class="el" href="structsVgrid.html">Vgrid</a> *chargeMap[NOSH_MAXMOL], <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="el" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill structures initialized during an MG calculation. </em> <a href="#a13"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a14">solveMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, <a class="el" href="mgparm_8h.html#a0">MGparm_CalcType</a> type)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize an MG calculation. </em> <a href="#a13"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a14">killMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsVpmgp.html">Vpmgp</a> *pmgp[NOSH_MAXCALC], <a class="el" href="structsVpmg.html">Vpmg</a> *pmg[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve the PBE with MG. </em> <a href="#a14"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a15">setPartMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill structures initialized during an MG calculation. </em> <a href="#a14"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a15">solveMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, <a class="el" href="mgparm_8h.html#a0">MGparm_CalcType</a> type)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set MG partitions for calculating observables and performing I/O. </em> <a href="#a15"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a16">energyMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve the PBE with MG. </em> <a href="#a15"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a16">setPartMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate electrostatic energies from MG solution. </em> <a href="#a16"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a17">killEnergy</a> ()</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Set MG partitions for calculating observables and performing I/O. </em> <a href="#a16"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a17">energyMG</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill arrays allocated for energies. </em> <a href="#a17"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a18">forceMG</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate electrostatic energies from MG solution. </em> <a href="#a17"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a18">killEnergy</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate forces from MG solution. </em> <a href="#a18"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a19">killForce</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill arrays allocated for energies. </em> <a href="#a18"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a19">forceMG</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsMGparm.html">MGparm</a> *mgparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free memory from MG force calculation. </em> <a href="#a19"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a20">storeAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int icalc, double **atomEnergy, int *nenergy)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate forces from MG solution. </em> <a href="#a19"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a20">killForce</a> (Vmem *mem, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Store energy in arrays for future use. </em> <a href="#a20"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a21">writedataFlat</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Free memory from MG force calculation. </em> <a href="#a20"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a21">storeAtomEnergy</a> (<a class="el" href="structsVpmg.html">Vpmg</a> *pmg, int icalc, double **atomEnergy, int *nenergy)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to a flat file. </em> <a href="#a21"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a22">writedataXML</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Store energy in arrays for future use. </em> <a href="#a21"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a22">writedataFlat</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to an XML file. </em> <a href="#a22"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a23">writedataMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to a flat file. </em> <a href="#a22"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a23">writedataXML</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vcom *com, const  char *fname, double totEnergy[NOSH_MAXCALC], double qfEnergy[NOSH_MAXCALC], double qmEnergy[NOSH_MAXCALC], double dielEnergy[NOSH_MAXCALC], int nenergy[NOSH_MAXCALC], double *atomEnergy[NOSH_MAXCALC], int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out observables from MG calculation to file. </em> <a href="#a23"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a24">writematMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out information to an XML file. </em> <a href="#a23"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a24">writedataMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out operator matrix from MG calculation to file. </em> <a href="#a24"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a25">returnEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out observables from MG calculation to file. </em> <a href="#a24"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a25">writematMG</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpmg.html">Vpmg</a> *pmg)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Access net local energy. </em> <a href="#a25"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a26">printEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write out operator matrix from MG calculation to file. </em> <a href="#a25"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a26">returnEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data (deprecated...see printElecEnergy). </em> <a href="#a26"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a27">printElecEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Access net local energy. </em> <a href="#a26"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a27">printEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data. </em> <a href="#a27"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a28">printApolEnergy</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data (deprecated...see printElecEnergy). </em> <a href="#a27"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a28">printElecEnergy</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, double totEnergy[NOSH_MAXCALC], int iprint)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data. </em> <a href="#a28"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a29">printForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a29">printApolEnergy</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int iprint)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data (deprecated...see printElecForce). </em> <a href="#a29"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a30">printElecForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print energy data. </em> <a href="#a29"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a30">printForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data. </em> <a href="#a30"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a31">printApolForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data (deprecated...see printElecForce). </em> <a href="#a30"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a31">printElecForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data. </em> <a href="#a31"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a32">startVio</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a32">printApolForce</a> (Vcom *com, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, int nforce[NOSH_MAXCALC], <a class="el" href="structAtomForce.html">AtomForce</a> *atomForce[NOSH_MAXCALC], int iprint)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper to start MALOC Vio layer. </em> <a href="#a32"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a33">printFEPARM</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Combine and pretty-print force data. </em> <a href="#a32"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a33">startVio</a> ()</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out FE-specific params loaded from input. </em> <a href="#a33"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a34">energyFE</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Wrapper to start MALOC Vio layer. </em> <a href="#a33"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a34">printFEPARM</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate electrostatic energies from FE solution. </em> <a href="#a34"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a35">initFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print out FE-specific params loaded from input. </em> <a href="#a34"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a35">energyFE</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, int icalc, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], int *nenergy, double *totEnergy, double *qfEnergy, double *qmEnergy, double *dielEnergy)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize FE solver objects. </em> <a href="#a35"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a36">killFE</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate electrostatic energies from FE solution. </em> <a href="#a35"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a36">initFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsValist.html">Valist</a> *alist[NOSH_MAXMOL], <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill structures initialized during an FE calculation. </em> <a href="#a36"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a37">preRefineFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Initialize FE solver objects. </em> <a href="#a36"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a37">killFE</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsVpbe.html">Vpbe</a> *pbe[NOSH_MAXCALC], <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC], Gem *gm[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Pre-refine mesh before solve. </em> <a href="#a37"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a38">partFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Kill structures initialized during an FE calculation. </em> <a href="#a37"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a38">preRefineFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Partition mesh (if applicable). </em> <a href="#a38"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a39">solveFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Pre-refine mesh before solve. </em> <a href="#a38"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a39">partFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve-estimate-refine. </em> <a href="#a39"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a40">postRefineFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Partition mesh (if applicable). </em> <a href="#a39"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a40">solveFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Estimate error, mark mesh, and refine mesh after solve. </em> <a href="#a40"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a41">writedataFE</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Solve-estimate-refine. </em> <a href="#a40"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a41">postRefineFE</a> (int icalc, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsFEMparm.html">FEMparm</a> *feparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk[NOSH_MAXCALC])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write FEM data to files. </em> <a href="#a41"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a42">energyAPOL</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, double sasa, double sav, double atomsasa[], double atomwcaEnergy[], int numatoms)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Estimate error, mark mesh, and refine mesh after solve. </em> <a href="#a41"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a42">writedataFE</a> (int rank, <a class="el" href="structsNOsh.html">NOsh</a> *nosh, <a class="el" href="structsPBEparm.html">PBEparm</a> *pbeparm, <a class="el" href="structsVfetk.html">Vfetk</a> *fetk)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate non-polar energies. </em> <a href="#a42"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a43">forceAPOL</a> (<a class="el" href="structsVacc.html">Vacc</a> *acc, Vmem *mem, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Write FEM data to files. </em> <a href="#a42"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a43">energyAPOL</a> (<a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, double sasa, double sav, double atomsasa[], double atomwcaEnergy[], int numatoms)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate non-polar forces. </em> <a href="#a43"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a44">initAPOL</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vmem *mem, <a class="el" href="structVparam.html">Vparam</a> *param, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist)</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate non-polar energies. </em> <a href="#a43"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a44">forceAPOL</a> (<a class="el" href="structsVacc.html">Vacc</a> *acc, Vmem *mem, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist, <a class="el" href="structsVclist.html">Vclist</a> *clist)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Upperlevel routine to the non-polar energy and force routines. </em> <a href="#a44"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a45">loadMeshes</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Gem *gm[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculate non-polar forces. </em> <a href="#a44"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>VPUBLIC int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a45">initAPOL</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Vmem *mem, <a class="el" href="structVparam.html">Vparam</a> *param, <a class="el" href="structsAPOLparm.html">APOLparm</a> *apolparm, int *nforce, <a class="el" href="structAtomForce.html">AtomForce</a> **atomForce, <a class="el" href="structsValist.html">Valist</a> *alist)</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the meshes given in NOsh into geometry objects. </em> <a href="#a45"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a46">killMeshes</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Gem *alist[NOSH_MAXMOL])</td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Upperlevel routine to the non-polar energy and force routines. </em> <a href="#a45"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Vrc_Codes&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a46">loadMeshes</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Gem *gm[NOSH_MAXMOL])</td></tr>
 
-<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded meshes. </em> <a href="#a46"></a><em><br><br></td></tr>
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Load the meshes given in NOsh into geometry objects. </em> <a href="#a46"></a><em><br><br></td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="group__Frontend.html#a47">killMeshes</a> (<a class="el" href="structsNOsh.html">NOsh</a> *nosh, Gem *alist[NOSH_MAXMOL])</td></tr>
+
+<tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Destroy the loaded meshes. </em> <a href="#a47"></a><em><br><br></td></tr>
 </table>
 <hr><h2>Function Documentation</h2>
-<a class="anchor" name="a42" doxytag="routines.c::energyAPOL" ></a><p>
+<a class="anchor" name="a43" doxytag="routines.c::energyAPOL" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -247,7 +255,7 @@ Array for WCA energy per atom * Number of atoms (or size of the above arrays) * 
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a34" doxytag="routines.c::energyFE" ></a><p>
+<a class="anchor" name="a35" doxytag="routines.c::energyFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -340,12 +348,12 @@ Calculate electrostatic energies from FE solution.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a34_cgraph.png" border="0" usemap="#group__Frontend_a34_cgraph_map" alt=""></center>
-<map name="group__Frontend_a34_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a35_cgraph.png" border="0" usemap="#group__Frontend_a35_cgraph_map" alt=""></center>
+<map name="group__Frontend_a35_cgraph_map">
 <area href="group__Vfetk.html#a44" shape="rect" coords="138,8,242,34" alt="">
 <area href="group__Vfetk.html#a46" shape="rect" coords="290,8,421,34" alt="">
 </map>
-<a class="anchor" name="a16" doxytag="routines.c::energyMG" ></a><p>
+<a class="anchor" name="a17" doxytag="routines.c::energyMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -437,8 +445,8 @@ Calculate electrostatic energies from MG solution.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a16_cgraph.png" border="0" usemap="#group__Frontend_a16_cgraph_map" alt=""></center>
-<map name="group__Frontend_a16_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a17_cgraph.png" border="0" usemap="#group__Frontend_a17_cgraph_map" alt=""></center>
+<map name="group__Frontend_a17_cgraph_map">
 <area href="vpmg-private_8h.html#a67" shape="rect" coords="154,261,237,287" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="740,159,852,186" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="712,210,880,237" alt="">
@@ -460,7 +468,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a1
 <area href="group__Vpbe.html#a25" shape="rect" coords="742,666,849,693" alt="">
 <area href="group__Vpbe.html#a12" shape="rect" coords="729,565,862,591" alt="">
 </map>
-<a class="anchor" name="a43" doxytag="routines.c::forceAPOL" ></a><p>
+<a class="anchor" name="a44" doxytag="routines.c::forceAPOL" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -551,8 +559,8 @@ Cell list for accessibility object </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a43_cgraph.png" border="0" usemap="#group__Frontend_a43_cgraph_map" alt=""></center>
-<map name="group__Frontend_a43_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a44_cgraph.png" border="0" usemap="#group__Frontend_a44_cgraph_map" alt=""></center>
+<map name="group__Frontend_a44_cgraph_map">
 <area href="group__Vacc.html#a34" shape="rect" coords="161,84,294,110" alt="">
 <area href="group__Vacc.html#a31" shape="rect" coords="166,134,289,161" alt="">
 <area href="group__Vacc.html#a26" shape="rect" coords="170,185,285,212" alt="">
@@ -569,7 +577,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a4
 <area href="group__Vacc.html#a23" shape="rect" coords="552,109,666,136" alt="">
 <area href="group__Vacc.html#a14" shape="rect" coords="373,312,482,338" alt="">
 </map>
-<a class="anchor" name="a18" doxytag="routines.c::forceMG" ></a><p>
+<a class="anchor" name="a19" doxytag="routines.c::forceMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -661,8 +669,8 @@ Calculate forces from MG solution.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a18_cgraph.png" border="0" usemap="#group__Frontend_a18_cgraph_map" alt=""></center>
-<map name="group__Frontend_a18_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a19_cgraph.png" border="0" usemap="#group__Frontend_a19_cgraph_map" alt=""></center>
+<map name="group__Frontend_a19_cgraph_map">
 <area href="group__Valist.html#a7" shape="rect" coords="130,58,298,85" alt="">
 <area href="group__Vpmg.html#a46" shape="rect" coords="346,160,461,186" alt="">
 <area href="group__Vpmg.html#a45" shape="rect" coords="349,362,458,389" alt="">
@@ -684,7 +692,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a1
 <area href="vpmg_8c.html#a49" shape="rect" coords="348,58,460,85" alt="">
 <area href="vpmg_8c.html#a50" shape="rect" coords="348,109,460,136" alt="">
 </map>
-<a class="anchor" name="a44" doxytag="routines.c::initAPOL" ></a><p>
+<a class="anchor" name="a45" doxytag="routines.c::initAPOL" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -775,10 +783,10 @@ Atom list </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a44_cgraph.png" border="0" usemap="#group__Frontend_a44_cgraph_map" alt=""></center>
-<map name="group__Frontend_a44_cgraph_map">
-<area href="group__Frontend.html#a42" shape="rect" coords="162,7,261,34" alt="">
-<area href="group__Frontend.html#a43" shape="rect" coords="369,413,457,439" alt="">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a45_cgraph.png" border="0" usemap="#group__Frontend_a45_cgraph_map" alt=""></center>
+<map name="group__Frontend_a45_cgraph_map">
+<area href="group__Frontend.html#a43" shape="rect" coords="162,7,261,34" alt="">
+<area href="group__Frontend.html#a44" shape="rect" coords="369,413,457,439" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="752,261,888,287" alt="">
 <area href="group__Vatom.html#a6" shape="rect" coords="756,438,884,465" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="564,311,676,338" alt="">
@@ -808,7 +816,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a4
 <area href="group__Vparam.html#a18" shape="rect" coords="338,970,488,997" alt="">
 <area href="group__Vstring.html#a0" shape="rect" coords="549,945,690,971" alt="">
 </map>
-<a class="anchor" name="a35" doxytag="routines.h::initFE" ></a><p>
+<a class="anchor" name="a36" doxytag="routines.h::initFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -905,7 +913,7 @@ Array of finite element objects Array of geometry objects </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a12" doxytag="routines.c::initMG" ></a><p>
+<a class="anchor" name="a13" doxytag="routines.c::initMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1052,8 +1060,8 @@ Array of MG objects (one for each calc) </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a12_cgraph.png" border="0" usemap="#group__Frontend_a12_cgraph_map" alt=""></center>
-<map name="group__Frontend_a12_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a13_cgraph.png" border="0" usemap="#group__Frontend_a13_cgraph_map" alt=""></center>
+<map name="group__Frontend_a13_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="473,12,585,38" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="445,69,613,96" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="464,132,594,158" alt="">
@@ -1074,7 +1082,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a1
 <area href="vpmg_8c.html#a37" shape="rect" coords="292,362,385,389" alt="">
 <area href="vpmg_8c.html#a36" shape="rect" coords="300,413,377,440" alt="">
 </map>
-<a class="anchor" name="a9" doxytag="routines.c::killChargeMaps" ></a><p>
+<a class="anchor" name="a10" doxytag="routines.c::killChargeMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1123,11 +1131,11 @@ Destroy the loaded charge maps.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a9_cgraph.png" border="0" usemap="#group__Frontend_a9_cgraph_map" alt=""></center>
-<map name="group__Frontend_a9_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a10_cgraph.png" border="0" usemap="#group__Frontend_a10_cgraph_map" alt=""></center>
+<map name="group__Frontend_a10_cgraph_map">
 <area href="group__Vgrid.html#a8" shape="rect" coords="173,8,258,34" alt="">
 </map>
-<a class="anchor" name="a5" doxytag="routines.c::killDielMaps" ></a><p>
+<a class="anchor" name="a6" doxytag="routines.c::killDielMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1190,11 +1198,11 @@ Destroy the loaded dielectric.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a5_cgraph.png" border="0" usemap="#group__Frontend_a5_cgraph_map" alt=""></center>
-<map name="group__Frontend_a5_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a6_cgraph.png" border="0" usemap="#group__Frontend_a6_cgraph_map" alt=""></center>
+<map name="group__Frontend_a6_cgraph_map">
 <area href="group__Vgrid.html#a8" shape="rect" coords="151,8,237,34" alt="">
 </map>
-<a class="anchor" name="a17" doxytag="routines.c::killEnergy" ></a><p>
+<a class="anchor" name="a18" doxytag="routines.c::killEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1225,7 +1233,7 @@ Kill arrays allocated for energies.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a36" doxytag="routines.c::killFE" ></a><p>
+<a class="anchor" name="a37" doxytag="routines.c::killFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1289,8 +1297,8 @@ Array of FEtk objects for each calc Array of geometry manager objects for each c
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a36_cgraph.png" border="0" usemap="#group__Frontend_a36_cgraph_map" alt=""></center>
-<map name="group__Frontend_a36_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a37_cgraph.png" border="0" usemap="#group__Frontend_a37_cgraph_map" alt=""></center>
+<map name="group__Frontend_a37_cgraph_map">
 <area href="group__Vfetk.html#a41" shape="rect" coords="112,58,197,85" alt="">
 <area href="group__Vpbe.html#a21" shape="rect" coords="112,109,197,136" alt="">
 <area href="group__Vfetk.html#a42" shape="rect" coords="245,58,338,85" alt="">
@@ -1307,7 +1315,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a3
 <area href="group__Vclist.html#a12" shape="rect" coords="572,160,665,186" alt="">
 <area href="group__Vclist.html#a17" shape="rect" coords="756,160,873,186" alt="">
 </map>
-<a class="anchor" name="a19" doxytag="routines.c::killForce" ></a><p>
+<a class="anchor" name="a20" doxytag="routines.c::killForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1368,7 +1376,7 @@ Free memory from MG force calculation.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a7" doxytag="routines.c::killKappaMaps" ></a><p>
+<a class="anchor" name="a8" doxytag="routines.c::killKappaMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1417,11 +1425,11 @@ Destroy the loaded kappa maps.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a7_cgraph.png" border="0" usemap="#group__Frontend_a7_cgraph_map" alt=""></center>
-<map name="group__Frontend_a7_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a8_cgraph.png" border="0" usemap="#group__Frontend_a8_cgraph_map" alt=""></center>
+<map name="group__Frontend_a8_cgraph_map">
 <area href="group__Vgrid.html#a8" shape="rect" coords="165,8,250,34" alt="">
 </map>
-<a class="anchor" name="a46" doxytag="routines.h::killMeshes" ></a><p>
+<a class="anchor" name="a47" doxytag="routines.h::killMeshes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1469,7 +1477,7 @@ Populated list of geometry objects to be destroyed </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a13" doxytag="routines.c::killMG" ></a><p>
+<a class="anchor" name="a14" doxytag="routines.c::killMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1533,8 +1541,8 @@ Array of MG parameter objects for each calc Array of MG objects for each calc </
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a13_cgraph.png" border="0" usemap="#group__Frontend_a13_cgraph_map" alt=""></center>
-<map name="group__Frontend_a13_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a14_cgraph.png" border="0" usemap="#group__Frontend_a14_cgraph_map" alt=""></center>
+<map name="group__Frontend_a14_cgraph_map">
 <area href="group__Vpbe.html#a21" shape="rect" coords="122,84,208,110" alt="">
 <area href="group__Vpmg.html#a5" shape="rect" coords="121,134,209,161" alt="">
 <area href="group__Vpmgp.html#a2" shape="rect" coords="117,185,213,212" alt="">
@@ -1549,7 +1557,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a1
 <area href="group__Vclist.html#a17" shape="rect" coords="710,109,828,136" alt="">
 <area href="group__Vpmg.html#a6" shape="rect" coords="261,134,357,161" alt="">
 </map>
-<a class="anchor" name="a3" doxytag="routines.c::killMolecules" ></a><p>
+<a class="anchor" name="a4" doxytag="routines.c::killMolecules" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1598,12 +1606,12 @@ Destroy the loaded molecules.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a3_cgraph.png" border="0" usemap="#group__Frontend_a3_cgraph_map" alt=""></center>
-<map name="group__Frontend_a3_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a4_cgraph.png" border="0" usemap="#group__Frontend_a4_cgraph_map" alt=""></center>
+<map name="group__Frontend_a4_cgraph_map">
 <area href="group__Valist.html#a12" shape="rect" coords="158,8,244,34" alt="">
 <area href="group__Valist.html#a13" shape="rect" coords="293,8,386,34" alt="">
 </map>
-<a class="anchor" name="a8" doxytag="routines.c::loadChargeMaps" ></a><p>
+<a class="anchor" name="a9" doxytag="routines.c::loadChargeMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1653,12 +1661,12 @@ Load the charge maps given in NOsh into grid objects.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a8_cgraph.png" border="0" usemap="#group__Frontend_a8_cgraph_map" alt=""></center>
-<map name="group__Frontend_a8_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a9_cgraph.png" border="0" usemap="#group__Frontend_a9_cgraph_map" alt=""></center>
+<map name="group__Frontend_a9_cgraph_map">
 <area href="group__Vgrid.html#a6" shape="rect" coords="193,7,278,34" alt="">
 <area href="group__Vgrid.html#a13" shape="rect" coords="182,58,289,85" alt="">
 </map>
-<a class="anchor" name="a4" doxytag="routines.c::loadDielMaps" ></a><p>
+<a class="anchor" name="a5" doxytag="routines.c::loadDielMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1722,12 +1730,12 @@ Load the dielectric maps given in NOsh into grid objects.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a4_cgraph.png" border="0" usemap="#group__Frontend_a4_cgraph_map" alt=""></center>
-<map name="group__Frontend_a4_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a5_cgraph.png" border="0" usemap="#group__Frontend_a5_cgraph_map" alt=""></center>
+<map name="group__Frontend_a5_cgraph_map">
 <area href="group__Vgrid.html#a6" shape="rect" coords="171,7,257,34" alt="">
 <area href="group__Vgrid.html#a13" shape="rect" coords="161,58,267,85" alt="">
 </map>
-<a class="anchor" name="a6" doxytag="routines.c::loadKappaMaps" ></a><p>
+<a class="anchor" name="a7" doxytag="routines.c::loadKappaMaps" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1777,12 +1785,12 @@ Load the kappa maps given in NOsh into grid objects.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a6_cgraph.png" border="0" usemap="#group__Frontend_a6_cgraph_map" alt=""></center>
-<map name="group__Frontend_a6_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a7_cgraph.png" border="0" usemap="#group__Frontend_a7_cgraph_map" alt=""></center>
+<map name="group__Frontend_a7_cgraph_map">
 <area href="group__Vgrid.html#a6" shape="rect" coords="187,7,273,34" alt="">
 <area href="group__Vgrid.html#a13" shape="rect" coords="177,58,283,85" alt="">
 </map>
-<a class="anchor" name="a45" doxytag="routines.h::loadMeshes" ></a><p>
+<a class="anchor" name="a46" doxytag="routines.h::loadMeshes" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1831,7 +1839,7 @@ List of geometry objects (to be populated) </td></tr>
 </dl>    </td>
   </tr>
 </table>
-<a class="anchor" name="a2" doxytag="routines.c::loadMolecules" ></a><p>
+<a class="anchor" name="a3" doxytag="routines.c::loadMolecules" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1890,8 +1898,8 @@ List of atom list objects (to be populated) </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a2_cgraph.png" border="0" usemap="#group__Frontend_a2_cgraph_map" alt=""></center>
-<map name="group__Frontend_a2_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a3_cgraph.png" border="0" usemap="#group__Frontend_a3_cgraph_map" alt=""></center>
+<map name="group__Frontend_a3_cgraph_map">
 <area href="group__Valist.html#a10" shape="rect" coords="206,21,292,48" alt="">
 <area href="group__Valist.html#a12" shape="rect" coords="206,97,292,124" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="165,198,333,225" alt="">
@@ -1912,7 +1920,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a2
 <area href="group__Vstring.html#a0" shape="rect" coords="785,565,926,592" alt="">
 <area href="group__Vparam.html#a18" shape="rect" coords="586,616,736,642" alt="">
 </map>
-<a class="anchor" name="a1" doxytag="routines.c::loadParameter" ></a><p>
+<a class="anchor" name="a2" doxytag="routines.c::loadParameter" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -1952,8 +1960,8 @@ Pointer to NOsh object with input file information </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a1_cgraph.png" border="0" usemap="#group__Frontend_a1_cgraph_map" alt=""></center>
-<map name="group__Frontend_a1_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a2_cgraph.png" border="0" usemap="#group__Frontend_a2_cgraph_map" alt=""></center>
+<map name="group__Frontend_a2_cgraph_map">
 <area href="group__Vparam.html#a14" shape="rect" coords="196,58,294,85" alt="">
 <area href="group__Vparam.html#a21" shape="rect" coords="170,160,320,186" alt="">
 <area href="group__Vparam.html#a20" shape="rect" coords="168,312,322,338" alt="">
@@ -1966,7 +1974,108 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a1
 <area href="group__Vparam.html#a25" shape="rect" coords="396,464,526,490" alt="">
 <area href="group__Vparam.html#a23" shape="rect" coords="372,312,550,338" alt="">
 </map>
-<a class="anchor" name="a38" doxytag="routines.c::partFE" ></a><p>
+<a class="anchor" name="a1" doxytag="main.c::main" ></a><p>
+<table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
+  <tr>
+    <td class="mdRow">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td class="md" nowrap valign="top"> int main </td>
+          <td class="md" valign="top">(&nbsp;</td>
+          <td class="md" nowrap valign="top">int&nbsp;</td>
+          <td class="mdname" nowrap> <em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="md" nowrap>char **&nbsp;</td>
+          <td class="mdname" nowrap> <em>argv</em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="md">)&nbsp;</td>
+          <td class="md" colspan="2"></td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+<table cellspacing=5 cellpadding=0 border=0>
+  <tr>
+    <td>
+      &nbsp;
+    </td>
+    <td>
+
+<p>
+The main APBS function. 
+<p>
+<dl compact><dt><b>Author:</b></dt><dd>Nathan Baker, Dave Gohara, Todd Dolinsky </dd></dl>
+<dl compact><dt><b>Returns:</b></dt><dd>Status code (0 for success) </dd></dl>
+<dl compact><dt><b>Parameters: </b></dt><dd>
+<table border=0 cellspacing=2 cellpadding=0>
+<tr><td valign=top><em>argc</em>&nbsp;</td><td>
+Number of arguments </td></tr>
+<tr><td valign=top><em>argv</em>&nbsp;</td><td>
+Argument strings </td></tr>
+</table>
+</dl>    </td>
+  </tr>
+</table>
+
+<p>
+Here is the call graph for this function:<p><center><img src="group__Frontend_a1_cgraph.png" border="0" usemap="#group__Frontend_a1_cgraph_map" alt=""></center>
+<map name="group__Frontend_a1_cgraph_map">
+<area href="group__Frontend.html#a35" shape="rect" coords="174,7,254,34" alt="">
+<area href="group__Frontend.html#a17" shape="rect" coords="172,58,257,85" alt="">
+<area href="group__Frontend.html#a19" shape="rect" coords="177,109,252,135" alt="">
+<area href="group__Frontend.html#a45" shape="rect" coords="177,159,252,186" alt="">
+<area href="group__Frontend.html#a36" shape="rect" coords="186,210,242,237" alt="">
+<area href="group__Frontend.html#a13" shape="rect" coords="184,261,245,287" alt="">
+<area href="group__Frontend.html#a10" shape="rect" coords="157,311,272,338" alt="">
+<area href="group__Frontend.html#a6" shape="rect" coords="168,362,261,389" alt="">
+<area href="group__Frontend.html#a18" shape="rect" coords="174,413,254,439" alt="">
+<area href="group__Frontend.html#a37" shape="rect" coords="186,463,242,490" alt="">
+<area href="group__Frontend.html#a20" shape="rect" coords="178,514,250,541" alt="">
+<area href="group__Frontend.html#a8" shape="rect" coords="160,565,269,591" alt="">
+<area href="group__Frontend.html#a14" shape="rect" coords="185,615,244,642" alt="">
+<area href="group__Frontend.html#a4" shape="rect" coords="165,666,264,693" alt="">
+<area href="group__Frontend.html#a9" shape="rect" coords="153,717,276,743" alt="">
+<area href="group__Frontend.html#a5" shape="rect" coords="162,767,266,794" alt="">
+<area href="group__Frontend.html#a7" shape="rect" coords="156,818,273,845" alt="">
+<area href="group__Frontend.html#a3" shape="rect" coords="160,869,269,895" alt="">
+<area href="group__Frontend.html#a2" shape="rect" coords="160,919,269,946" alt="">
+<area href="group__NOsh.html#a31" shape="rect" coords="172,970,257,997" alt="">
+<area href="group__NOsh.html#a33" shape="rect" coords="172,1021,257,1047" alt="">
+<area href="group__NOsh.html#a39" shape="rect" coords="150,1071,278,1098" alt="">
+<area href="group__Vstring.html#a0" shape="rect" coords="340,1502,481,1529" alt="">
+<area href="group__NOsh.html#a47" shape="rect" coords="140,1173,289,1199" alt="">
+<area href="group__NOsh.html#a46" shape="rect" coords="140,1223,289,1250" alt="">
+<area href="group__Frontend.html#a41" shape="rect" coords="162,1274,266,1301" alt="">
+<area href="group__Frontend.html#a38" shape="rect" coords="165,1325,264,1351" alt="">
+<area href="group__Frontend.html#a29" shape="rect" coords="156,1375,273,1402" alt="">
+<area href="group__Frontend.html#a32" shape="rect" coords="160,1426,269,1453" alt="">
+<area href="group__Frontend.html#a28" shape="rect" coords="156,1477,273,1503" alt="">
+<area href="group__Frontend.html#a31" shape="rect" coords="160,1527,269,1554" alt="">
+<area href="group__Frontend.html#a27" shape="rect" coords="169,1578,260,1605" alt="">
+<area href="group__Frontend.html#a34" shape="rect" coords="162,1629,266,1655" alt="">
+<area href="group__Frontend.html#a30" shape="rect" coords="173,1679,256,1706" alt="">
+<area href="group__Frontend.html#a12" shape="rect" coords="161,1730,268,1757" alt="">
+<area href="group__Frontend.html#a11" shape="rect" coords="158,1781,270,1807" alt="">
+<area href="group__Frontend.html#a16" shape="rect" coords="172,1831,257,1858" alt="">
+<area href="group__Frontend.html#a40" shape="rect" coords="180,1882,249,1909" alt="">
+<area href="group__Frontend.html#a15" shape="rect" coords="177,1933,252,1959" alt="">
+<area href="group__Frontend.html#a33" shape="rect" coords="181,1983,248,2010" alt="">
+<area href="group__Frontend.html#a21" shape="rect" coords="152,2034,277,2061" alt="">
+<area href="group__Vparam.html#a16" shape="rect" coords="164,2085,265,2111" alt="">
+<area href="group__Frontend.html#a42" shape="rect" coords="166,2135,262,2162" alt="">
+<area href="group__Frontend.html#a22" shape="rect" coords="164,2186,265,2213" alt="">
+<area href="group__Frontend.html#a24" shape="rect" coords="165,2237,264,2263" alt="">
+<area href="group__Frontend.html#a23" shape="rect" coords="162,2287,266,2314" alt="">
+<area href="group__Frontend.html#a25" shape="rect" coords="166,2338,262,2365" alt="">
+</map>
+<a class="anchor" name="a39" doxytag="routines.c::partFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2030,15 +2139,15 @@ Partition mesh (if applicable).
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a38_cgraph.png" border="0" usemap="#group__Frontend_a38_cgraph_map" alt=""></center>
-<map name="group__Frontend_a38_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a39_cgraph.png" border="0" usemap="#group__Frontend_a39_cgraph_map" alt=""></center>
+<map name="group__Frontend_a39_cgraph_map">
 <area href="group__Vfetk.html#a47" shape="rect" coords="121,84,270,110" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="348,8,460,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="320,58,488,85" alt="">
 <area href="group__Vatom.html#a2" shape="rect" coords="341,109,466,136" alt="">
 <area href="group__Vcsm.html#a5" shape="rect" coords="338,160,469,186" alt="">
 </map>
-<a class="anchor" name="a40" doxytag="routines.c::postRefineFE" ></a><p>
+<a class="anchor" name="a41" doxytag="routines.c::postRefineFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2100,7 +2209,7 @@ Estimate error, mark mesh, and refine mesh after solve.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a37" doxytag="routines.c::preRefineFE" ></a><p>
+<a class="anchor" name="a38" doxytag="routines.c::preRefineFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2162,7 +2271,7 @@ Pre-refine mesh before solve.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a28" doxytag="routines.c::printApolEnergy" ></a><p>
+<a class="anchor" name="a29" doxytag="routines.c::printApolEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2213,11 +2322,11 @@ Index of energy statement to print </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a28_cgraph.png" border="0" usemap="#group__Frontend_a28_cgraph_map" alt=""></center>
-<map name="group__Frontend_a28_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a29_cgraph.png" border="0" usemap="#group__Frontend_a29_cgraph_map" alt=""></center>
+<map name="group__Frontend_a29_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="177,8,318,34" alt="">
 </map>
-<a class="anchor" name="a31" doxytag="routines.c::printApolForce" ></a><p>
+<a class="anchor" name="a32" doxytag="routines.c::printApolForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2290,11 +2399,11 @@ Array of force structures Index of force statement to print </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a31_cgraph.png" border="0" usemap="#group__Frontend_a31_cgraph_map" alt=""></center>
-<map name="group__Frontend_a31_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a32_cgraph.png" border="0" usemap="#group__Frontend_a32_cgraph_map" alt=""></center>
+<map name="group__Frontend_a32_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="169,8,310,34" alt="">
 </map>
-<a class="anchor" name="a27" doxytag="routines.c::printElecEnergy" ></a><p>
+<a class="anchor" name="a28" doxytag="routines.c::printElecEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2359,11 +2468,11 @@ Array of energies from different calculations Index of energy statement to print
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a27_cgraph.png" border="0" usemap="#group__Frontend_a27_cgraph_map" alt=""></center>
-<map name="group__Frontend_a27_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a28_cgraph.png" border="0" usemap="#group__Frontend_a28_cgraph_map" alt=""></center>
+<map name="group__Frontend_a28_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="177,8,318,34" alt="">
 </map>
-<a class="anchor" name="a30" doxytag="routines.c::printElecForce" ></a><p>
+<a class="anchor" name="a31" doxytag="routines.c::printElecForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2436,11 +2545,11 @@ Array of force structures Index of force statement to print </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a30_cgraph.png" border="0" usemap="#group__Frontend_a30_cgraph_map" alt=""></center>
-<map name="group__Frontend_a30_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a31_cgraph.png" border="0" usemap="#group__Frontend_a31_cgraph_map" alt=""></center>
+<map name="group__Frontend_a31_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="166,8,307,34" alt="">
 </map>
-<a class="anchor" name="a26" doxytag="routines.c::printEnergy" ></a><p>
+<a class="anchor" name="a27" doxytag="routines.c::printEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2505,11 +2614,11 @@ Array of energies from different calculations Index of energy statement to print
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a26_cgraph.png" border="0" usemap="#group__Frontend_a26_cgraph_map" alt=""></center>
-<map name="group__Frontend_a26_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a27_cgraph.png" border="0" usemap="#group__Frontend_a27_cgraph_map" alt=""></center>
+<map name="group__Frontend_a27_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="150,8,291,34" alt="">
 </map>
-<a class="anchor" name="a33" doxytag="routines.c::printFEPARM" ></a><p>
+<a class="anchor" name="a34" doxytag="routines.c::printFEPARM" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2570,7 +2679,7 @@ Print out FE-specific params loaded from input.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a29" doxytag="routines.c::printForce" ></a><p>
+<a class="anchor" name="a30" doxytag="routines.c::printForce" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2643,11 +2752,11 @@ Array of force structures Index of force statement to print </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a29_cgraph.png" border="0" usemap="#group__Frontend_a29_cgraph_map" alt=""></center>
-<map name="group__Frontend_a29_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a30_cgraph.png" border="0" usemap="#group__Frontend_a30_cgraph_map" alt=""></center>
+<map name="group__Frontend_a30_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="140,8,281,34" alt="">
 </map>
-<a class="anchor" name="a11" doxytag="routines.c::printMGPARM" ></a><p>
+<a class="anchor" name="a12" doxytag="routines.c::printMGPARM" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2694,7 +2803,7 @@ Print out MG-specific params loaded from input.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a10" doxytag="routines.c::printPBEPARM" ></a><p>
+<a class="anchor" name="a11" doxytag="routines.c::printPBEPARM" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2731,7 +2840,7 @@ Print out generic PBE params loaded from input.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a25" doxytag="routines.c::returnEnergy" ></a><p>
+<a class="anchor" name="a26" doxytag="routines.c::returnEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2793,7 +2902,7 @@ Access net local energy.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a15" doxytag="routines.c::setPartMG" ></a><p>
+<a class="anchor" name="a16" doxytag="routines.c::setPartMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2850,13 +2959,13 @@ Set MG partitions for calculating observables and performing I/O.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a15_cgraph.png" border="0" usemap="#group__Frontend_a15_cgraph_map" alt=""></center>
-<map name="group__Frontend_a15_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a16_cgraph.png" border="0" usemap="#group__Frontend_a16_cgraph_map" alt=""></center>
+<map name="group__Frontend_a16_cgraph_map">
 <area href="group__Vpmg.html#a7" shape="rect" coords="143,33,253,59" alt="">
 <area href="group__Valist.html#a8" shape="rect" coords="329,7,441,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="301,58,469,85" alt="">
 </map>
-<a class="anchor" name="a39" doxytag="routines.c::solveFE" ></a><p>
+<a class="anchor" name="a40" doxytag="routines.c::solveFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2917,7 +3026,7 @@ Solve-estimate-refine.
 &lt; Preconditioner; 0 = identity.     </td>
   </tr>
 </table>
-<a class="anchor" name="a14" doxytag="routines.c::solveMG" ></a><p>
+<a class="anchor" name="a15" doxytag="routines.c::solveMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -2974,12 +3083,12 @@ Solve the PBE with MG.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a14_cgraph.png" border="0" usemap="#group__Frontend_a14_cgraph_map" alt=""></center>
-<map name="group__Frontend_a14_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a15_cgraph.png" border="0" usemap="#group__Frontend_a15_cgraph_map" alt=""></center>
+<map name="group__Frontend_a15_cgraph_map">
 <area href="group__Vpmg.html#a4" shape="rect" coords="134,8,230,34" alt="">
 <area href="group__Vpbe.html#a12" shape="rect" coords="279,8,413,34" alt="">
 </map>
-<a class="anchor" name="a32" doxytag="routines.c::startVio" ></a><p>
+<a class="anchor" name="a33" doxytag="routines.c::startVio" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3010,7 +3119,7 @@ Wrapper to start MALOC Vio layer.
     </td>
   </tr>
 </table>
-<a class="anchor" name="a20" doxytag="routines.c::storeAtomEnergy" ></a><p>
+<a class="anchor" name="a21" doxytag="routines.c::storeAtomEnergy" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3076,15 +3185,15 @@ Stores number of atoms per calc </td></tr>
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a20_cgraph.png" border="0" usemap="#group__Frontend_a20_cgraph_map" alt=""></center>
-<map name="group__Frontend_a20_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a21_cgraph.png" border="0" usemap="#group__Frontend_a21_cgraph_map" alt=""></center>
+<map name="group__Frontend_a21_cgraph_map">
 <area href="group__Valist.html#a8" shape="rect" coords="212,7,324,34" alt="">
 <area href="group__Valist.html#a7" shape="rect" coords="184,58,352,85" alt="">
 <area href="group__Vpmg.html#a19" shape="rect" coords="192,109,344,135" alt="">
 <area href="group__Vatom.html#a8" shape="rect" coords="402,83,533,110" alt="">
 <area href="group__Vatom.html#a0" shape="rect" coords="400,134,536,161" alt="">
 </map>
-<a class="anchor" name="a41" doxytag="routines.c::writedataFE" ></a><p>
+<a class="anchor" name="a42" doxytag="routines.c::writedataFE" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3148,8 +3257,8 @@ Write FEM data to files.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a41_cgraph.png" border="0" usemap="#group__Frontend_a41_cgraph_map" alt=""></center>
-<map name="group__Frontend_a41_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a42_cgraph.png" border="0" usemap="#group__Frontend_a42_cgraph_map" alt=""></center>
+<map name="group__Frontend_a42_cgraph_map">
 <area href="group__Vfetk.html#a75" shape="rect" coords="153,82,260,109" alt="">
 <area href="group__Vfetk.html#a76" shape="rect" coords="161,133,252,160" alt="">
 <area href="group__Vacc.html#a14" shape="rect" coords="470,20,580,46" alt="">
@@ -3161,7 +3270,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a4
 <area href="group__Vatom.html#a3" shape="rect" coords="638,82,769,109" alt="">
 <area href="group__Vclist.html#a13" shape="rect" coords="650,133,757,160" alt="">
 </map>
-<a class="anchor" name="a21" doxytag="routines.c::writedataFlat" ></a><p>
+<a class="anchor" name="a22" doxytag="routines.c::writedataFlat" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3274,11 +3383,11 @@ Write out information to a flat file.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a21_cgraph.png" border="0" usemap="#group__Frontend_a21_cgraph_map" alt=""></center>
-<map name="group__Frontend_a21_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a22_cgraph.png" border="0" usemap="#group__Frontend_a22_cgraph_map" alt=""></center>
+<map name="group__Frontend_a22_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="158,8,299,34" alt="">
 </map>
-<a class="anchor" name="a23" doxytag="routines.c::writedataMG" ></a><p>
+<a class="anchor" name="a24" doxytag="routines.c::writedataMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3342,8 +3451,8 @@ Write out observables from MG calculation to file.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a23_cgraph.png" border="0" usemap="#group__Frontend_a23_cgraph_map" alt=""></center>
-<map name="group__Frontend_a23_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a24_cgraph.png" border="0" usemap="#group__Frontend_a24_cgraph_map" alt=""></center>
+<map name="group__Frontend_a24_cgraph_map">
 <area href="group__Vgrid.html#a6" shape="rect" coords="366,8,452,34" alt="">
 <area href="group__Vgrid.html#a8" shape="rect" coords="366,58,452,85" alt="">
 <area href="group__Vgrid.html#a14" shape="rect" coords="166,312,276,338" alt="">
@@ -3364,7 +3473,7 @@ Here is the call graph for this function:<p><center><img src="group__Frontend_a2
 <area href="group__Vatom.html#a3" shape="rect" coords="710,488,841,514" alt="">
 <area href="group__Vclist.html#a13" shape="rect" coords="722,538,829,565" alt="">
 </map>
-<a class="anchor" name="a22" doxytag="routines.c::writedataXML" ></a><p>
+<a class="anchor" name="a23" doxytag="routines.c::writedataXML" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3477,11 +3586,11 @@ Write out information to an XML file.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a22_cgraph.png" border="0" usemap="#group__Frontend_a22_cgraph_map" alt=""></center>
-<map name="group__Frontend_a22_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a23_cgraph.png" border="0" usemap="#group__Frontend_a23_cgraph_map" alt=""></center>
+<map name="group__Frontend_a23_cgraph_map">
 <area href="group__Vstring.html#a0" shape="rect" coords="164,8,305,34" alt="">
 </map>
-<a class="anchor" name="a24" doxytag="routines.c::writematMG" ></a><p>
+<a class="anchor" name="a25" doxytag="routines.c::writematMG" ></a><p>
 <table class="mdTable" width="100%" cellpadding="2" cellspacing="0">
   <tr>
     <td class="mdRow">
@@ -3545,11 +3654,11 @@ Write out operator matrix from MG calculation to file.
 </table>
 
 <p>
-Here is the call graph for this function:<p><center><img src="group__Frontend_a24_cgraph.png" border="0" usemap="#group__Frontend_a24_cgraph_map" alt=""></center>
-<map name="group__Frontend_a24_cgraph_map">
+Here is the call graph for this function:<p><center><img src="group__Frontend_a25_cgraph.png" border="0" usemap="#group__Frontend_a25_cgraph_map" alt=""></center>
+<map name="group__Frontend_a25_cgraph_map">
 <area href="group__Vpmg.html#a1" shape="rect" coords="153,8,299,34" alt="">
 </map>
-<hr size="1"><address style="align: right;"><small>Generated on Tue Apr 15 13:54:12 2008 for APBS by
+<hr size="1"><address style="align: right;"><small>Generated on Tue Apr 22 08:04:57 2008 for APBS by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.4 </small></address>
