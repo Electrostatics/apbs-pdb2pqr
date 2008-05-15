@@ -6,7 +6,7 @@
 #  <RESIDUE> <ATOM> <CHARGE> <RADIUS> <EPSILON>
 # where <RESIDUE> is the residue name, <ATOM> is the atom name, <CHARGE>
 # is the atomic charge in e, <RADIUS> is the van der Waals radius in 
-# A, and <EPSILON> is the van der Waals well depth in kcal/mol.
+# A, and <EPSILON> is the van der Waals well depth in kJ/mol.
 ##########################################################################
 ACE	C	0.597200000	1.908000000	0.359824000
 ACE	CH3	-0.366200000	1.908000000	0.457729600
