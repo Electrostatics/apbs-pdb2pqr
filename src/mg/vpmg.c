@@ -3190,7 +3190,7 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
     Vatom *atom;
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, position[3];
-    double srad, epsw, epsp, deps;
+    double srad, epsw, epsp, deps, area;
     double hx, hy, hzed, *apos, arad;
     int i, nx, ny, nz, ntot, iatom, ipt;
 
@@ -3286,45 +3286,45 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
 
     /* We only need to do the next step for non-zero solvent radii */
     if (srad > VSMALL) {
-
+		
         /* Now loop over the solvent accessible surface points */
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
             atom = Valist_getAtom(alist, iatom);
-            asurf = Vacc_atomSASPoints(acc, srad, atom);
-    
-            /* Use each point on the SAS to reset the solvent accessibility */
-			/* TODO:  This part of the code is a serious waste of time.  Many of these atoms are completely buried and there's
-			no reason to test their surface points.  The first step should be to (a) check if the SASA for this atom is greater
-			than VSMALL and then (b) only test potentially solvent-accessible points */
-            for (ipt=0; ipt<(asurf->npts); ipt++) {
-    
-                position[0] = asurf->xpts[ipt];
-                position[1] = asurf->ypts[ipt];
-                position[2] = asurf->zpts[ipt];
-    
-                /* Mark x-shifted dielectric */
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        (xmin+0.5*hx), ymin, zmin,
-                        thee->epsx, epsw);
-    
-                /* Mark y-shifted dielectric */
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, (ymin+0.5*hy), zmin,
-                        thee->epsy, epsw);
-    
-                /* Mark z-shifted dielectric */
-                markSphere(srad, position, 
-                        nx, ny, nz,
-                        hx, hy, hzed,
-                        xmin, ymin, (zmin+0.5*hzed),
-                        thee->epsz, epsw);
-    
-            }
-
+			area = Vacc_atomSASA(acc, srad, atom);
+			if (area > 0.0 ) {
+				asurf = Vacc_atomSASPoints(acc, srad, atom);
+				
+				/* Use each point on the SAS to reset the solvent accessibility */
+				/* TODO:  Make sure we're not still wasting time here. */
+				for (ipt=0; ipt<(asurf->npts); ipt++) {
+					
+					position[0] = asurf->xpts[ipt];
+					position[1] = asurf->ypts[ipt];
+					position[2] = asurf->zpts[ipt];
+					
+					/* Mark x-shifted dielectric */
+					markSphere(srad, position, 
+							   nx, ny, nz,
+							   hx, hy, hzed,
+							   (xmin+0.5*hx), ymin, zmin,
+							   thee->epsx, epsw);
+					
+					/* Mark y-shifted dielectric */
+					markSphere(srad, position, 
+							   nx, ny, nz,
+							   hx, hy, hzed,
+							   xmin, (ymin+0.5*hy), zmin,
+							   thee->epsy, epsw);
+					
+					/* Mark z-shifted dielectric */
+					markSphere(srad, position, 
+							   nx, ny, nz,
+							   hx, hy, hzed,
+							   xmin, ymin, (zmin+0.5*hzed),
+							   thee->epsz, epsw);
+					
+				}
+			}
         }
     }
 }
