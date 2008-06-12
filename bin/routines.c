@@ -786,7 +786,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		q += VSQR(Vatom_getCharge(atom));
 	}
 	if (q < (1e-6)) {
-		Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+		Vnm_tprint(2, "Molecule #%d is uncharged!\n", pbeparm->molid);
 		Vnm_tprint(2, "Sum square charge = %g!\n", q);
 		return 0;
 	}
@@ -3074,7 +3074,7 @@ VPUBLIC Vrc_Codes initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbepar
 		q += VSQR(Vatom_getCharge(atom));
 	}
 	if (q < (1e-6)) {
-		Vnm_tprint(2, "Molecule #%d is uncharged!\n");
+		Vnm_tprint(2, "Molecule #%d is uncharged!\n", pbeparm->molid);
 		Vnm_tprint(2, "Sum square charge = %g!\n", q);
 		return VRC_FAILURE;
 	}
