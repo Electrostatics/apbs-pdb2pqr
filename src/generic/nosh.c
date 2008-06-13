@@ -1062,6 +1062,12 @@ VPUBLIC int NOsh_setupElecCalc(
 		/* Unload the calculation object containing the ELEC information */
 		elec = thee->elec[ielec];
 		
+		if (((thee->ndiel != 0) || (thee->nkappa != 0) || (thee->ncharge != 0)) && (elec->pbeparm->calcforce != PCF_NO)) {
+			Vnm_print(2, "NOsh_setupElecCalc:  Calculation of forces disabled because surface \
+map is used!\n");
+			elec->pbeparm->calcforce = PCF_NO;
+		}
+
 		/* Setup the calculation */
 		switch (elec->calctype) {
 			case NCT_MG:
