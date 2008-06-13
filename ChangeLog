@@ -27,6 +27,7 @@
 	* Fixed a bug where memory usage is reported incorrectly for large allocations on 64-bit systems
 	* Added DTRSV to APBS-supplied BLAS to satisfy FEtk SuperLU dependency
 	* Fixed a small bug in routines.c to print out uncharged molecule id
+	* Limited calculation of forces when surface maps are read in 
 
 #############################################################################
                                  VERSION 0.5.1 
