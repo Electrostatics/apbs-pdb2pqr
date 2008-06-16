@@ -1,0 +1,13 @@
+Python Opal Web Service Client
+------------------------------
+
+Thanks for your interest in the Python Opal Web service client. You will
+find documentation inside the docs/ directory. This distribution demonstrates
+how a remote Web service can be invoked using the stubs generated from the
+WSDL description of the service. 
+
+Please use the Sourceforge Opal Toolkit Tracker
+(http://sourceforge.net/tracker/?group_id=211778) to report bugs and
+feature requests, and the NBCR Web Services User Forum
+(https://nbcr.net/forum/viewforum.php?f=13") for general comments and
+feedback.
