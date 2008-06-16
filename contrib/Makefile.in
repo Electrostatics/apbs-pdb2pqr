@@ -117,6 +117,7 @@ PY_SHARED = @PY_SHARED@
 RANLIB = @RANLIB@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SITEPKGS = @SITEPKGS@
 STRIP = @STRIP@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
@@ -207,7 +208,7 @@ wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
-always_built_SUBDIRS = @apbs_do_blas@ @apbs_do_maloc@ pmgZ aqua
+always_built_SUBDIRS = @apbs_do_blas@ @apbs_do_maloc@ pmgZ aqua opal
 SUBDIRS = $(always_built_SUBDIRS) .
 all: all-recursive
 

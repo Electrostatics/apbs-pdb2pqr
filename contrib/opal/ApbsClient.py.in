@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import sys
 import time
 import httplib
@@ -5,7 +7,8 @@ import string
 import os
 import subprocess
 
-sys.path.append('/home/samir/dev/wustl/ZSI-2.1-a1')
+sys.path.append("@SITEPKGS@")
+sys.path.append("@SITEPKGS@/ZSI")
 
 from AppService_client import \
      AppServiceLocator, getAppMetadataRequest, launchJobRequest, \
@@ -17,7 +20,7 @@ from ZSI.TC import String
 def localInit():
     # Help output
     if(len(sys.argv)==1 or sys.argv[1]=="-h" or sys.argv[1]=="--help"):
-        print open("/home/samir/dev/wustl/apbs_opal_client/ApbsClientHelp").read()
+        print open("@SITEPKGS@/ApbsClientHelp").read()
         if(len(sys.argv)==2):
             os._exit(99)
 

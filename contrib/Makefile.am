@@ -9,6 +9,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = @apbs_do_blas@ @apbs_do_maloc@ pmgZ aqua
+always_built_SUBDIRS = @apbs_do_blas@ @apbs_do_maloc@ pmgZ aqua opal
 
 SUBDIRS = $(always_built_SUBDIRS) .
