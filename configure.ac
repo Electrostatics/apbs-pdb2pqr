@@ -667,6 +667,33 @@ AC_SUBST(PY_CC,[$PY_CC])
 AM_CONDITIONAL(PY_PRESENT, [test -n "${PY_ENABLE}"])
 
 dnl # ---------------------------
+dnl # BUILD PYTHON OPAL FILES
+dnl # ---------------------------
+
+AC_ARG_WITH(python,
+  [  --with-python=PYTHONPATH           Specify python location.],
+  [PYTHONPATH=$withval],
+  [PYTHONPATH=""])
+
+if test "$PYTHONPATH" = "" ; then
+  AC_PATH_PROG(py_path, python)
+  if test -z "${py_path}"; then
+	 AC_MSG_RESULT([no])
+     AC_MSG_ERROR([Unable to find python!  Python location can be specified with --with-python])
+  fi
+else
+  py_path=$PYTHONPATH
+fi
+
+changequote(<<, >>)dnl
+PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
+changequote([, ])dnl
+SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
+sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
+
+AC_SUBST(SITEPKGS,[$SITEPKGS])
+
+dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
 if test -z "${USE_FETK}";  then
@@ -1184,7 +1211,9 @@ AC_CONFIG_FILES([
     contrib/blas/Makefile
     contrib/pmgZ/Makefile
     contrib/aqua/Makefile
-
+	contrib/opal/Makefile
+	contrib/opal/ZSI/Makefile
+	
     tools/Makefile
     tools/mesh/Makefile
     tools/manip/Makefile
