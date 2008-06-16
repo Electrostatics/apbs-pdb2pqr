@@ -1,0 +1,5 @@
+Version 1.9.3
+* Now uses ZSI version 2.1_a1. This eliminates the dependency on PyXML.
+
+Version 1.9.2
+* Python clients compatible with opal-care version 1.9.2

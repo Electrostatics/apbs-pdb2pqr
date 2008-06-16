@@ -1,0 +1,161 @@
+<html>
+<head>
+<title>Python Opal Web Service Client</title>
+<link href="./rocks.css" rel="stylesheet" type="text/css"/>
+</head>
+<!-- <body text="black" link="darkblue" vlink="black" link="black" -->
+<!-- bgcolor="white"> -->
+<body>
+<h1>Python Opal Web Service Client: Version 1.9.3</h1>
+
+<hr/>
+
+<h2>1. Overview</h2>
+
+<p>This distribution contains the WSDL for the Opal Web service toolkit,
+and a sample Python client that invokes a <a
+href="http://pdb2pqr.sourceforge.net/">PDB2PQR</a> service that has been
+deployed via Opal on our production cluster (ws.nbcr.net). Alternatively,
+you could follow the documentation for the server-side installation of Opal
+<a href="http://nbcr.net/software/opal/documentation.html">here</a>, and
+deploy a PDB2PQR service yourself.
+
+<h2>2. Prerequisites</h2>
+
+<p>The Python client should work on both Unix and Windows platforms as long
+as you have the following packages installed.
+
+<ol TYPE="1">
+   <li><p>Python 2.3 or higher: Download and install Python from <a
+   href="http://www.python.org/">http://www.python.org/</a>, if you don't
+   have a Python installation on your local machine. Add the Python bin
+   directory to your environment variable PATH.</li>
+   
+   <li><p>ZSI 2.1_a1: ZSI is a SOAP and Web services toolkit for
+   Python. Download ZSI from <a
+   href="http://sourceforge.net/project/showfiles.php?group_id=26590&package_id=30660">SourceForge</a>.
+   If you are installing on a Unix platform, you would need to use a sudo
+   or root shell. Change to the ZSI-2.1-a1/ directory that is extracted from
+   the tarball, and execute the following command:
+   <TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%">
+   <TR><TD><FONT COLOR="#000000"
+   <pre class="SCREEN">
+       python setup.py install</pre>
+   </FONT></TD></TR>
+   </TABLE>
+
+   <p>Note the location where the ZSI package is installed. In particular,
+   note the location of the <i>wsdl2py</i> script that we need to use in
+   the future. Typically, the packages are installed inside the Python
+   installation. On Windows, wsdl2py typically resides inside
+   $PYTHON_HOME/scripts, where PYTHON_HOME represents the location of the
+   Python installation. On Unix, it is usually inside $PYTHON_HOME/bin.
+   Henceforth, we will refer to this location as <i>WSDL2PY_HOME</i>.
+
+   <p><i>Opal will not work with any other version of ZSI. Please ensure
+   that you are using ZSI version 2.1-a1.</i>.
+</ol>
+
+<h2>3. Installation</h2>
+
+<ol TYPE="1">
+<li><p>Download the Python source distribution for installation from <a
+href="https://sourceforge.net/project/showfiles.php?group_id=211778">here</a>,
+if you don't have the appropriate version already.
+
+<p>Expand the tarball that you have downloaded using the GNU tar utility,
+as follows:
+   <TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%">
+   <TR><TD><FONT COLOR="#000000"
+   <pre class="SCREEN">
+    tar zxvf opal-py-$VERSION.tar.gz</pre>
+   </FONT></TD></TR>
+   </TABLE>
+
+<p>This should create a new directory called opal-py-$VERSION/ where all
+the sources are expanded. Henceforth, we will call this directory
+<i>OPAL_PY_HOME</i>.
+</li>
+
+<li><p>Generate the stubs from the WSDL file with the following command inside
+the $OPAL_PY_HOME directory:
+   <TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%">
+   <TR><TD><FONT COLOR="#000000"
+   <pre class="SCREEN">
+    $WSDL2PY_HOME/wsdl2py wsdl/opal.wsdl</pre>
+   </FONT></TD></TR>
+   </TABLE>
+
+<p>This generates two useful files - AppService_client.py and
+AppService_types.py. The former contains the stubs required to
+communicate with the remote Web service, while the latter contains the
+types defined in the WSDL for the service.
+</li>
+</ol>
+
+<h2>4. Running the Client</h2>
+
+<p>A sample Opal client is shown in $OPAL_PY_HOME/Pdb2pqrClient.py. It shows how to
+retrieve a reference to a remote Web service port, set parameters, and
+invoke remote operations. To launch the remote PDB2PQR service, the argument
+string (<tt>--ff=amber sample.pdb sample.pqr</tt>) and the list of
+input files (<tt>etc/sample.pdb</tt>) are sent over. The service returns a
+<tt>jobID</tt> that is used later to query for status and retrieve
+locations of the output files. Alternatively, the service can also be
+invoked in a <em>blocking</em> fashion, where the client blocks until the
+remote execution is complete, and the outputs are returned as a response to
+the same invocation.
+
+<p>To run the client, you can run the following command from inside the
+$OPAL_PY_HOME directory.
+   <TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%">
+   <TR><TD><FONT COLOR="#000000"
+   <pre class="SCREEN">
+    python Pdb2pqrClient.py</pre>
+   </FONT></TD></TR>
+   </TABLE>
+
+<p>By default, the client uses the Web service running on
+http://ws.nbcr.net:8080. To change this location, modify the URL inside
+Pdb2pqrClient.py.
+
+<h2>5. Security</h2>
+
+<p>The Opal Web service can be optionally set up to accept connections
+using GSI-based HTTPS documentation for instructions). The following
+snippet of code from Pdb2pqrClient.py shows how to access a secure Opal
+service from Python.
+
+   <TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%">
+   <TR><TD><FONT COLOR="#000000"
+   <pre class="SCREEN">
+    # set the locations for the X509 certificate and key
+    cert = "/Users/sriramkrishnan/certs/apbs_service.cert.pem"
+    key = "/Users/sriramkrishnan/certs/apbs_service.privkey"
+    ...
+	# example of ssl invocation
+	appServicePort = appLocator.getAppServicePortType(
+	    baseURL + "opal/services/Pdb2pqrServicePort",
+	    ssl=1,
+     	    transdict=dict(cert_file=cert, key_file=key),
+	    transport=httplib.HTTPSConnection)
+    ...</pre>
+  </FONT></TD></TR>
+  </TABLE>
+
+<p>Note that if you are using proxy certificates, they have to be RFC 3820
+compliant. This can be done by creating a Grid proxy using
+<tt>grid-proxy-init -rfc</tt> (only works for Globus Toolkit 4.0.x). This
+has only been tested with OpenSSL version 0.9.7g, and may not work with
+older versions.
+
+<h2>6. Feedback</h2>
+
+<p>Please use the Opal Toolkit <a
+href="http://sourceforge.net/tracker/?group_id=211778">Tracker</a> on
+Sourceforge to report bugs and feature requests, and the NBCR Web Services
+User Forum (<a href="https://nbcr.net/forum/viewforum.php?f=13">WSUF</a>)
+for general comments and feedback.
+<hr/>
+</body>
+</html>
