@@ -29,8 +29,6 @@ def localInit():
             for arg2 in sys.argv:
                 if(arg2[:14]=="--output-file=" or arg2[:3]=="-o=" or arg2[:16]=="--output-format=" or arg2[:3]=="-f="):
                     args.append(arg2)
-                #if(arg2.find("--output-format")!=-1):
-                    #args.append(arg2)
             args.append(sys.argv[-1])
             subprocess.call(args)
             os._exit(99)
@@ -57,23 +55,16 @@ def localInit():
         baseURL = proto + "://ws.nbcr.net:8080/" # must be returned
         # removed port because that's how it is in PDB2PQR
         baseURL = proto + "://ws.nbcr.net/" # must be returned
-    return [args,baseURL]
+    return [baseURL]
 
 def main(argv=None,localVars=None):
     if argv is None: # i.e. if it is a local run
         argv = sys.argv
         webRun = False
-        args=localVars[0]
-        baseURL=localVars[1]
+        baseURL=localVars[0]
     else:
         webRun = True
         baseURL="http://ws.nbcr.net/" # HARDCODED
-
-
-    #if path=="local":
-    #    webRun = False
-    #else:
-    #    webRun = True
 
     # Retrieve a reference to the AppServicePort
     appLocator = AppServiceLocator()
@@ -85,11 +76,6 @@ def main(argv=None,localVars=None):
     
     #*argument parser
     # command-line arguments
-    #if webRun:
-    #    inFile = path
-    #else:
-    #    #inFile = sys.argv[-1]
-    #    inFile = argv[-1]
     inFile = argv[-1]
         
     # adds any other command line arguments to be passed in req._argList and non-blocking
@@ -128,21 +114,14 @@ def main(argv=None,localVars=None):
     else:
         req._argList = req._argList + " " + inFile
     
-    #print "argList: \"" + req._argList + "\""
-    
     # append all input files in this manner - in this case we have two of them
     
     inputFiles = []
     #*this is where apbs.in is read in
     inputFiles.append(ns0.InputFileType_Def('inputFile'))
     #*this must be the same as req._argList is defined to be
-    #inputFile0._name = 'apbs.in' 
-    #print "directory: ", directory
-    #print "inFile: ", inFile
     inputFiles[-1]._name = inFile
     tempFile = open(directory+inFile, 'r') 
-    #tempFileString = tempFile.read()
-    #inputFiles[-1]._contents = tempFileString
     inputFiles[-1]._contents = tempFile.read()
     tempFile.close()
 
@@ -175,18 +154,11 @@ def main(argv=None,localVars=None):
     
     tempFile.close()
 
-    
-    #for file in inputFiles:
-        #print "fileName: " + file._name
-        #if(file._name.find(".in")!=-1):
-            #print "contents: " + file._contents
-    
-    
-    #print "inputFiles: ", inputFiles
     # req's inputFile variable is the array of input files created in the lines directly above
     req._inputFile = inputFiles
     
     if webRun:
+        appServicePort.launchJob(req)
         return [appServicePort, appServicePort.launchJob(req)]
     
     # Launch job, and retrieve job ID
