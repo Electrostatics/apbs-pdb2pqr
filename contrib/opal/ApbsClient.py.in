@@ -21,7 +21,7 @@ def localInit():
     # Help output
     if(len(sys.argv)==1 or sys.argv[1]=="-h" or sys.argv[1]=="--help"):
         print open("@SITEPKGS@/ApbsClientHelp").read()
-        if(len(sys.argv)==2):
+        if(len(sys.argv)<3):
             os._exit(99)
 
     # Local run
