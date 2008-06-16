@@ -20,3 +20,5 @@ install-data-local:
 	-cp -p ${top_apbsdir}/contrib/opal/ApbsClient.py ${prefix}/bin
 	-chmod 755 ${prefix}/bin/ApbsClient.py
 	-rm -f ${prefix}/bin/wsdl2py 
+	
+	
