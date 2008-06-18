@@ -2,7 +2,7 @@
 
 import sys
 import time
-import httplib
+import httplib, urllib
 import string
 import os
 import subprocess
@@ -17,120 +17,165 @@ from AppService_client import \
 from AppService_types import ns0
 from ZSI.TC import String
 
-def localInit():
-    # Help output
-    if(len(sys.argv)==1 or sys.argv[1]=="-h" or sys.argv[1]=="--help"):
-        print open("@SITEPKGS@/ApbsClientHelp").read()
-        if(len(sys.argv)<3):
-            os._exit(99)
+serviceURL = 'http://ws.nbcr.net/opal/services/ApbsOpalService' # hardcoded?
 
-    # Local run
+def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
+    if outputDirectory != None:
+        try:
+            os.makedirs(outputDirectory)
+        except OSError:
+            pass
+        os.chdir(outputDirectory)
+
+    for file in outputFiles:
+        fileName = file._name
+        if (fileName!="Standard Output" and fileName!="Standard Error") or fetchAll:
+            urllib.urlretrieve(file._url, fileName)
+            print fileName+" downloaded."
+
+def pollStatus(jobID,outputDirectory):
+    appLocator = AppServiceLocator()
+    global serviceURL
+    appServicePort = appLocator.getAppServicePort(serviceURL)
+    status = appServicePort.queryStatus(queryStatusRequest(jobID))
+
+    if status._code == 4:
+        print "The calculation failed."
+        print "Message:", status._message
+        os._exit(99)
+    elif status._code != 8:
+        print "The calculation hasn't been completed yet. Please wait a short while and attempt to fetch the files again."
+        os._exit(99)
+    else:
+        resp = appServicePort.getOutputs(getOutputsRequest(jobID))
+        fetchResults(jobID, outputDirectory, resp._outputFile,status._code==4)
+
+def initLocalVars():
+    """ Initializes variables for local usage """
+    vars = {'typeOfRun':'local'}
+
+    # non blocking parser
+    vars['fetchFiles']= not ("--no-fetch" in sys.argv)
+
+    vars['blocking']=True
     for arg in sys.argv:
-        if(arg=="--local"):
-            args=[] # must be returned
-            args.append('apbs')
-            for arg2 in sys.argv:
-                if(arg2[:14]=="--output-file=" or arg2[:3]=="-o=" or arg2[:16]=="--output-format=" or arg2[:3]=="-f="):
-                    args.append(arg2)
-            args.append(sys.argv[-1])
-            subprocess.call(args)
-            os._exit(99)
+        if(arg[:14]=="--non-blocking"):
+            vars['blocking']=False
+            if(len(arg)>14):
+                vars['fetchFileDescriptionLocation']=os.path.abspath(arg[15:])
+            else:
+                vars['fetchFileDescriptionLocation']=None
+            break
+
+    # parses location to save to after a blocking run
+    vars['outputDirectory']=None
+    if vars['blocking']:
+        for arg in sys.argv:
+            if(arg[:8]=='--fetch='):
+                vars['outputDirectory']=arg[8:]
+                break
 
     # parses custom service location
-    default=True
     for arg in sys.argv:
-        if(arg[:19]=="--service-location"): # change to check beginning of string
-            default=False
-            if(arg[19:].find("://")!=-1):
-                baseURL=arg[19:]
-            else:
-                baseURL="http://"+arg[19:]
-            if(baseURL[-1]!="/"):
-                baseURL=baseURL+"/"
+        if(arg[:19]=="--service-location="):
+            vars['serviceURL'] = arg[19:]
+            if(arg[19:].find("://")==-1):
+                vars['serviceURL']="http://"+vars['serviceURL']
             break
-        
-    if(default):
-        # Set the protocol to http or https
-        proto = "http"
-        
-        # Host and port for remote services
-        #*this string comes from the path to the service
-        baseURL = proto + "://ws.nbcr.net:8080/" # must be returned
-        # removed port because that's how it is in PDB2PQR
-        baseURL = proto + "://ws.nbcr.net/" # must be returned
-    return [baseURL]
 
-def main(argv=None,localVars=None):
+    # parses filename to write to
+    vars['outFile'] = False
+    for arg in sys.argv:
+        if(arg[:14]=="--output-file=" or arg[:3]=="-o="):
+            vars['argList'] = arg
+            vars['outFile']=True
+        if((arg[:16]=="--output-format" or arg[:3]=="-f=") and vars['outFile']):
+            vars['argList'] = vars['argList'] + " " + arg
+        
+    return vars
+
+def initRemoteVars(argv):
+    """ Initializes variables for remote usage """
+    vars = {'typeOfRun':'remote'}
+
+    # data will always be written to a file, and have the same main file name as the .in file, since that can't be specified through the web interface
+    vars['outFileName'] = os.path.basename(argv[-1])
+    for i in (1, len(vars['outFileName'])):
+        if(vars['outFileName'][-i]=="."):
+            vars['outFileName']=vars['outFileName'][:-i]+".out"
+            break
+    return vars
+    
+def displayResults(jobID):
+    appLocator = AppServiceLocator()
+    global serviceURL
+    appServicePort = appLocator.getAppServicePort(serviceURL)
+    resp = appServicePort.getOutputs(getOutputsRequest(jobID))
+
+    # Retrieve a listing of all output files
+    print "\tStandard Output:", resp._stdOut, "\n", \
+        "\tStandard Error:", resp._stdErr
+    if (resp._outputFile != None):
+        for i in range(0, resp._outputFile.__len__()):
+            print "\t" + resp._outputFile[i]._name, ":", resp._outputFile[i]._url
+        "\tStandard Error:", resp._stdErr
+    
+
+def execApbs(vars=None, argv=None):
     if argv is None: # i.e. if it is a local run
         argv = sys.argv
         webRun = False
-        baseURL=localVars[0]
     else:
-        webRun = True
-        baseURL="http://ws.nbcr.net/" # HARDCODED
+       webRun = True
+       vars = initRemoteVars(argv)
+
+    if not vars.has_key('serviceURL'):
+        global serviceURL
+        vars['serviceURL']= serviceURL
 
     # Retrieve a reference to the AppServicePort
     appLocator = AppServiceLocator()
     #*this is also from the path to the service
-    appServicePort = appLocator.getAppServicePort(baseURL + "opal/services/ApbsOpalService") 
+    appServicePort = appLocator.getAppServicePort(vars['serviceURL'])
         
     # Set up remote job launch
     req = launchJobRequest()
     
     #*argument parser
     # command-line arguments
-    inFile = argv[-1]
+    vars['inFile'] = argv[-1]
         
-    # adds any other command line arguments to be passed in req._argList and non-blocking
-    if webRun:
-        outFileName = os.path.basename(argv[-1])
-        for i in (1, len(outFileName)):
-            if(outFileName[-i]=="."):
-                outFileName=outFileName[:-i]+".out"
-                break
-    else:
-        outFile = False
-        blocking = True
-        for arg in argv:
-            if(arg[:14]=="--output-file=" or arg[:3]=="-o="):
-                req._argList = arg
-                outFile=True
-            if((arg[:16]=="--output-format" or arg[:3]=="-f=") and outFile):
-                req._argList = req._argList + " " + arg
-            if(arg=="--non-blocking"):
-                blocking = False
-    
-
     # parses input file
-    if(inFile.find("/")==-1):
+    if(vars['inFile'].find("/")==-1):
         directory=""
     else:
         count=-1
-        while inFile[count]!='/':
+        while vars['inFile'][count]!='/':
             count = count-1
-        directory = inFile[:count+1]
-        inFile = inFile[count+1:]
+        directory = vars['inFile'][:count+1]
+        vars['inFile'] = vars['inFile'][count+1:]
 
 
-    if(len(argv)==2 or webRun): # if no other arguments, so it hasn't been created  yet
-        req._argList=inFile
+    if(vars.has_key('argList')):
+        vars['argList'] = vars['argList'] + " " + vars['inFile']
     else:
-        req._argList = req._argList + " " + inFile
+        vars['argList']=vars['inFile']
     
+    req._argList = vars['argList']
     # append all input files in this manner - in this case we have two of them
     
     inputFiles = []
     #*this is where apbs.in is read in
     inputFiles.append(ns0.InputFileType_Def('inputFile'))
     #*this must be the same as req._argList is defined to be
-    inputFiles[-1]._name = inFile
-    tempFile = open(directory+inFile, 'r') 
+    inputFiles[-1]._name = vars['inFile']
+    tempFile = open(directory+vars['inFile'], 'r') 
     inputFiles[-1]._contents = tempFile.read()
     tempFile.close()
 
     # this is where the rest of the files to read in are determined
     start = False
-    tempFile = open(directory+inFile, 'r')
+    tempFile = open(directory+vars['inFile'], 'r')
     for line in tempFile:
         # remove whitespace
         line=line.strip()
@@ -160,7 +205,7 @@ def main(argv=None,localVars=None):
     # req's inputFile variable is the array of input files created in the lines directly above
     req._inputFile = inputFiles
     
-    if webRun:
+    if vars['typeOfRun']=='remote':
         appServicePort.launchJob(req)
         return [appServicePort, appServicePort.launchJob(req)]
     
@@ -173,7 +218,7 @@ def main(argv=None,localVars=None):
     
     status = resp._status
     
-    if(blocking):
+    if(vars['blocking']):
         # Poll for job status
         print "Polling job status"
         while 1:
@@ -183,7 +228,7 @@ def main(argv=None,localVars=None):
             print "\tMessage:", status._message
             print "\tOutput Base URL:", status._baseURL
     
-            if (status._code == 8) or (status._code == 4) or (not blocking): # STATUS_DONE || STATUS_FAILED
+            if (status._code == 8) or (status._code == 4) or (not vars['blocking']): # STATUS_DONE || STATUS_FAILED
                 break
     
             # Sleep for 30 seconds
@@ -193,25 +238,51 @@ def main(argv=None,localVars=None):
             # Query job status
             status = appServicePort.queryStatus(queryStatusRequest(jobID))
     
-        # Retrieve job outputs, if execution is successful
-        if (status._code==4) or (status._code == 8): # 8 = GramJob.STATUS_DONE
-            if(status._code==8):
-                print "Retrieving APBS output metadata: "
-            else:
-                print "The job failed: "
-            resp = appServicePort.getOutputs(getOutputsRequest(jobID))
-    
-            # Retrieve a listing of all output files
-            print "\tStandard Output:", resp._stdOut, "\n", \
-                "\tStandard Error:", resp._stdErr
-            if (resp._outputFile != None):
-                for i in range(0, resp._outputFile.__len__()):
-                    print "\t" + resp._outputFile[i]._name, ":", resp._outputFile[i]._url
-                "\tStandard Error:", resp._stdErr
+        # Output
+        if vars['fetchFiles']:
+            pollStatus(jobID, vars['outputDirectory'])
+        else:
+            displayResults(jobID)
+
     
     else:
         print "When the job is complete, the results can be retrieved at: "
         print "\t", status._baseURL
+        print "If you want to use the APBS Opal client to download the results for you, the job ID is:"
+        print "\t", jobID
+
+def main():
+    # __main__ output
+    # Help output
+    if(len(sys.argv)==1 or sys.argv[1]=="-h" or sys.argv[1]=="--help"):
+        print open("@SITEPKGS@/ApbsClientHelp").read()
+        if(len(sys.argv)<3):
+            os._exit(99)
+
+    # Local run
+    if("--local" in sys.argv):
+        args=[] # must be returned
+        args.append('apbs')
+        for arg2 in sys.argv:
+            if(arg2[:14]=="--output-file=" or arg2[:3]=="-o=" or arg2[:16]=="--output-format=" or arg2[:3]=="-f="):
+                args.append(arg2)
+        args.append(sys.argv[-1])
+        subprocess.call(args)
+        os._exit(99)
+
+    # determines if this is a run to just fetch the files after a non-blocking calculation
+    for arg in sys.argv:
+        if(arg[:9]=="--job-id="):
+            jobID = arg[9:]
+            outputDirectory = None
+            for arg2 in sys.argv:
+                if(arg2[:8]=='--fetch='):
+                    outputDirectory=arg2[8:]
+                    break
+            pollStatus(jobID,outputDirectory)
+            os._exit(99)
+
 if __name__=="__main__":
-    main(localVars=localInit())
+    main()
+    execApbs(vars=initLocalVars())
     
