@@ -1286,7 +1286,7 @@
 				<command>ion</command>
 				<command>charge</command>
 				<arg choice="req"><replaceable>charge</replaceable></arg>
-				<command>charge</command>
+				<command>conc</command>
 				<arg choice="req"><replaceable>conc</replaceable></arg>
 				<command>radius</command>
 				<arg choice="req"><replaceable>radius</replaceable></arg>
