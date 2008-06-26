@@ -1695,13 +1695,13 @@
 			<cmdsynopsis>
 				<command>smpbe</command>
 				<command>vol</command>
-				<arg choice="req"> <replaceable>volume</replaceable> </arg>
+				<arg choice="req"> <replaceable>lattice spacing</replaceable> </arg>
 				<command>size</command>
 				<arg choice="req"> <replaceable>number</replaceable> </arg>
 			</cmdsynopsis>
 			<para>
 				Specifies that the size-modified PBE should be solved as described by Chu V, et al <citetitle>Biophys J</citetitle>, in press (<ulink url="http://dx.doi.org/10.1529/biophysj.106.099168">doi:10.1529/biophysj.106.099168</ulink>).
-				The parameter <replaceable>radius</replaceable> controls the lattice size (in Angstroms) used in the SMPBE formalism; each lattice site has a volume equal to <replaceable>radius</replaceable><superscript>3</superscript>.  The parameter <replaceable>size</replaceable> controls the relative size of the ions (in Angstroms) such that each lattice site can contain a single ion of volume <replaceable>radius</replaceable><superscript>3</superscript> or <replaceable>size</replaceable> ions of volume <replaceable>radius</replaceable><superscript>3</superscript>/<replaceable>size</replaceable>.
+				The parameter <replaceable>vol</replaceable> controls the lattice size (in Angstroms) used in the SMPBE formalism; this parameter specifies the <emphasis>lattice spacing</emphasis> such that each lattice site has a volume equal to <replaceable>vol</replaceable><superscript>3</superscript>.  The parameter <replaceable>size</replaceable> controls the relative size of the ions (in Angstroms) such that each lattice site can contain a single ion of volume <replaceable>vol</replaceable><superscript>3</superscript> or <replaceable>size</replaceable> ions of volume <replaceable>vol</replaceable><superscript>3</superscript>/<replaceable>size</replaceable>.
 				Either this keyword or
 				<itemizedlist>
 					<listitem> <link linkend="elec-npbe"><command>npbe</command></link> </listitem>
