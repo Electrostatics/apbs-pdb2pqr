@@ -5,7 +5,8 @@
 - NEW FEATURES
 	* Added in command line support for Opal job submissions (Code by Samir Unni)
 - BUG FIXES
-	* Fixed typos in User Guide (ion keyword)
+	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword
+	usage
 
 #############################################################################
                                  VERSION 1.0.0
