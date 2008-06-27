@@ -521,28 +521,19 @@ if test -n "${mpi_path}"; then
 		fi
 	fi
 	
-#	if test -n "${USE_OPMI}"; then
-#		AC_CHECK_FILE(${mpi_path}/lib/libmpi.a, [HAS_MPI_LIB="yes"], [])
-#		AC_CHECK_FILE(${mpi_path}/lib/libmpi.so, [HAS_MPI_LIB="yes"], [])
-#		AC_CHECK_FILE(${mpi_path}/lib/liblam.dylib, [HAS_MPI_LIB="yes"], [])
-#		if test -n "${HAS_MPI_LIB}"; then
-#			mpi_lib="-L${mpi_path}/lib -lmpi"
-#		else
-#			AC_MSG_ERROR([Error...Could not find LAM-MPI libraries in ${mpi_path}/lib], 0)
-#		fi
-#	fi
+	if test -n "${USE_OPMI}"; then
+		AC_CHECK_FILE(${mpi_path}/lib/libmpi.a, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpi.so, [HAS_MPI_LIB="yes"], [])
+		AC_CHECK_FILE(${mpi_path}/lib/libmpi.dylib, [HAS_MPI_LIB="yes"], [])
+		if test -n "${HAS_MPI_LIB}"; then
+			mpi_lib="-L${mpi_path}/lib -lmpi"
+		else
+			AC_MSG_ERROR([Error...Could not find OpenMPI libraries in ${mpi_path}/lib], 0)
+		fi
+	fi
 
 	USE_MPI="yes"
 fi
-
-if test -n "${USE_OPMI}"; then
-  	HAS_MPI_LIB="yes"
-	HAS_MPI_INC="yes"
-	mpi_inc=""
-	mpi_lib=""
-	AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
-	USE_MPI="yes"
-fi	
 
 AC_SUBST(mpi_lib)
 AC_SUBST(mpi_inc)
