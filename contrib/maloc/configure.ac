@@ -422,7 +422,7 @@ else
 	if test -z "${mpi_use}"; then
 		AC_MSG_RESULT([no])
 	else
-		AC_MSG_RESULT([yes ...poking around])
+		AC_MSG_RESULT([yes ... poking around])
 
 		dnl # MPI header location ENV specification
 		AC_MSG_CHECKING([whether your environment defines FETK_MPI_INCLUDE])
