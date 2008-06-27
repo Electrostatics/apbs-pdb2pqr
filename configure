@@ -21544,10 +21544,10 @@ if test x"$mpi_path" != "xno" -a -n "$mpi_path"; then
 	{ echo "$as_me:$LINENO: result: ${mpi_path}" >&5
 echo "${ECHO_T}${mpi_path}" >&6; }
 	USE_MPICH="yes"
-	mpi_path=
 else
 	{ echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
+	mpi_path=
 fi
 
 if test -z "${mpi_path}"; then

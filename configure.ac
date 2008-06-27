@@ -422,9 +422,9 @@ AC_ARG_WITH(
 if test x"$mpi_path" != "xno" -a -n "$mpi_path"; then
 	AC_MSG_RESULT([${mpi_path}])
 	USE_MPICH="yes"
-	mpi_path=
 else
 	AC_MSG_RESULT([no])
+	mpi_path=
 fi
 
 if test -z "${mpi_path}"; then
