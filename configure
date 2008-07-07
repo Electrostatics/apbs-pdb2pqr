@@ -21314,8 +21314,10 @@ int main( int argc, char **argv )
         while(1)
         {
                 machEps /= 2.0;
-                // If next epsilon yields 1, then break, because current
-                // epsilon is the machine epsilon.
+		/*
+                 If next epsilon yields 1, then break, because current
+                 epsilon is the machine epsilon.
+		*/
                 if( (float)(1.0 + (machEps/2.0)) == 1.0 )
                         break;
         }
@@ -21962,8 +21964,8 @@ fi
 		if test -n "${HAS_MPI_LIB}"; then
 			mpi_lib="-L${mpi_path}/lib -lmpi"
 		else
-			{ { echo "$as_me:$LINENO: error: Error...Could not find LAM-MPI libraries in ${mpi_path}/lib" >&5
-echo "$as_me: error: Error...Could not find LAM-MPI libraries in ${mpi_path}/lib" >&2;}
+			{ { echo "$as_me:$LINENO: error: Error...Could not find OpenMPI libraries in ${mpi_path}/lib" >&5
+echo "$as_me: error: Error...Could not find OpenMPI libraries in ${mpi_path}/lib" >&2;}
    { (exit 0); exit 0; }; }
 		fi
 	fi

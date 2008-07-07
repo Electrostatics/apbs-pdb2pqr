@@ -119,8 +119,10 @@ int main( int argc, char **argv )
         while(1)
         {
                 machEps /= 2.0;
-                // If next epsilon yields 1, then break, because current
-                // epsilon is the machine epsilon.
+		/*
+                 If next epsilon yields 1, then break, because current
+                 epsilon is the machine epsilon.
+		*/
                 if( (float)(1.0 + (machEps/2.0)) == 1.0 )
                         break;  
         }
