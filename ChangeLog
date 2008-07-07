@@ -3,6 +3,7 @@
                                    
 #############################################################################
 - NEW FEATURES
+	* Added in support for OpenMPI for parallel calculations
 	* Added in command line support for Opal job submissions (Code by Samir Unni)
 - BUG FIXES
 	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword
