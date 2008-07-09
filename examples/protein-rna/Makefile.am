@@ -10,7 +10,7 @@
 ## Author:  Todd Dolinsky
 ## ###########################################################################
 
-APBSBIN=${prefix}/bin/${fetk_cpu_vendor_os}/apbs
+APBSBIN=${top_builddir}/bin/${fetk_cpu_vendor_os}/apbs
 SHELL=/bin/bash
 TEMPLATE_IN=template.in
 PQRS=model_outBoxB19.pqr model_outNB.pqr model_outNpep.pqr 
