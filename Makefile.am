@@ -32,3 +32,6 @@ install-data-local:
 	-cp -rf examples ${prefix}/share 
 	-cp -rf doc ${prefix}/share 
 	-cp -rf tools ${prefix}/share
+
+test:
+	cd examples; make test
