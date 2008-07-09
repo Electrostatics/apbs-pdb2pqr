@@ -192,7 +192,7 @@ top_srcdir = @top_srcdir@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
-APBS = ${prefix}/bin/${fetk_cpu_vendor_os}/apbs
+APBS = ${top_builddir}/bin/${fetk_cpu_vendor_os}/apbs
 all: all-am
 
 .SUFFIXES:

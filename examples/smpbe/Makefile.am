@@ -10,7 +10,7 @@
 ## Author:  David Gohara
 ## ###########################################################################
 
-APBS=${prefix}/bin/${fetk_cpu_vendor_os}/apbs
+APBS=${top_builddir}/bin/${fetk_cpu_vendor_os}/apbs
 IGEN=${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc*
 
