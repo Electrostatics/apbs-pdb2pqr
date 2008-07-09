@@ -669,6 +669,9 @@ install-data-local:
 	-cp -rf examples ${prefix}/share 
 	-cp -rf doc ${prefix}/share 
 	-cp -rf tools ${prefix}/share
+
+test:
+	cd examples; make test
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
