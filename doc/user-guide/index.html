@@ -4,9 +4,9 @@
 		Portions Copyright (c) 1999-2002.  The Regents of the University of California.<br>
 		Portions Copyright (c) 1995.  Michael Holst.</p></div><p> All rights reserved. </p><p> Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 						</p><div class="itemizedlist"><ul type="disc"><li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li><li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li><li> Neither the name of Washington University in St. Louis nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.</li></ul></div><p>
-					</p><p> THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">2.1. Availability</a></span></dt><dt><span class="sect1"><a href="#id418205">2.2. Binary installation</a></span></dt><dt><span class="sect1"><a href="#id418287">2.3. Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">2.3.1. Prerequisites</a></span></dt><dt><span class="sect2"><a href="#tested-systems">2.3.2. Tested systems</a></span></dt><dt><span class="sect2"><a href="#setup-sect">2.3.3. Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id418609">2.3.4. Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#install-dirs">2.3.5. APBS directory structure</a></span></dt><dt><span class="sect2"><a href="#id418817">2.3.6. System-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id421816">3.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#id422348">3.2. Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">3.2.1. Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">3.2.2. Problem setup</a></span></dt><dt><span class="sect2"><a href="#id422649">3.2.3. Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">3.2.4. Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">3.2.5. Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id423028">3.2.6. Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id423161">3.2.7. Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id423186">3.2.8. Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">3.3. Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">3.4. Documentation</a></span></dt><dt><span class="sect1"><a href="#id423390">3.5. Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id421805">4.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">4.2. Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">4.2.1. READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">4.2.2. ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">4.2.3. APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">4.2.4. PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">4.3. Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">4.3.1. Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">4.3.2. Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">4.3.3. Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">4.3.4. Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id467965">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">5.1. User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">5.2. Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id468164">5.3. Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">A.1. PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format">A.1.1.  PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">A.1.2. PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">A.2. Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parm-flat-format">A.2.1. Flat-file format</a></span></dt><dt><span class="sect2"><a href="#parm-xml-format">A.2.2. XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">A.3. Harwell-Boeing column-compressed matrix
-			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">A.4. OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id469609">A.4.1. Multigrid</a></span></dt><dt><span class="sect2"><a href="#id469874">A.4.2. Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id432347">Sensitivity of 2PHK:B solvation energy calculations
-								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id425249">Template for APBS input file</a></dt><dt>4.2. <a href="#id445376">PRINT statement example</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#eqn-nonpolar-energy">Nonpolar solvation potentials of mean
+					</p><p> THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#introduction-sect">1. Introduction</a></span></dt><dt><span class="chapter"><a href="#installation-sect">2. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="#obtaining-sect">2.1. Availability</a></span></dt><dt><span class="sect1"><a href="#id418249">2.2. Binary installation</a></span></dt><dt><span class="sect1"><a href="#id418331">2.3. Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">2.3.1. Prerequisites</a></span></dt><dt><span class="sect2"><a href="#tested-systems">2.3.2. Tested systems</a></span></dt><dt><span class="sect2"><a href="#setup-sect">2.3.3. Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id418654">2.3.4. Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#install-dirs">2.3.5. APBS directory structure</a></span></dt><dt><span class="sect2"><a href="#id418861">2.3.6. System-specific notes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#contents-sect">3. Overview</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id421860">3.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#id422393">3.2. Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">3.2.1. Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">3.2.2. Problem setup</a></span></dt><dt><span class="sect2"><a href="#id422693">3.2.3. Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">3.2.4. Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">3.2.5. Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id423072">3.2.6. Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id423205">3.2.7. Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id423230">3.2.8. Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">3.3. Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">3.4. Documentation</a></span></dt><dt><span class="sect1"><a href="#id423434">3.5. Source code</a></span></dt></dl></dd><dt><span class="chapter"><a href="#executable-sect">4. Using APBS</a></span></dt><dd><dl><dt><span class="sect1"><a href="#id421850">4.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">4.2. Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">4.2.1. READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">4.2.2. ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">4.2.3. APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">4.2.4. PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">4.3. Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">4.3.1. Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">4.3.2. Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">4.3.3. Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">4.3.4. Visualization software</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#id468009">5. Getting help</a></span></dt><dd><dl><dt><span class="sect1"><a href="#user-forums">5.1. User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">5.2. Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id468208">5.3. Bug and other problems</a></span></dt></dl></dd><dt><span class="chapter"><a href="#programming-sect">6. Programming</a></span></dt><dt><span class="appendix"><a href="#format-sect">A. File formats</a></span></dt><dd><dl><dt><span class="sect1"><a href="#pqr-format">A.1. PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format">A.1.1.  PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">A.1.2. PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">A.2. Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parm-flat-format">A.2.1. Flat-file format</a></span></dt><dt><span class="sect2"><a href="#parm-xml-format">A.2.2. XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">A.3. Harwell-Boeing column-compressed matrix
+			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">A.4. OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id469654">A.4.1. Multigrid</a></span></dt><dt><span class="sect2"><a href="#id469918">A.4.2. Finite element</a></span></dt></dl></dd></dl></dd><dt><span class="appendix"><a href="#license-sect">B. License</a></span></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id432391">Sensitivity of 2PHK:B solvation energy calculations
+								to <span>ofrac</span> values.</a></dt></dl></div><div class="list-of-examples"><p><b>List of Examples</b></p><dl><dt>4.1. <a href="#id425293">Template for APBS input file</a></dt><dt>4.2. <a href="#id445420">PRINT statement example</a></dt></dl></div><div class="list-of-equations"><p><b>List of Equations</b></p><dl><dt>4.1. <a href="#eqn-nonpolar-energy">Nonpolar solvation potentials of mean
 				force</a></dt><dt>4.2. <a href="#eqn-nonpolar-force">Nonpolar solvation
 				mean forces</a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="introduction-sect"></a>Chapter 1. Introduction</h2></div></div></div><p>APBS is a software package for the numerical solution of the
 		Poisson-Boltzmann equation (PBE), one of the most popular continuum models
@@ -86,7 +86,7 @@
 			</p><div class="itemizedlist"><ul type="disc"><li><p>Nathan A. Baker</p><p>Primary author</p></li><li><p>Steve Bond</p><p>Contributor:  FEtk library compatibility and Vopot functions</p></li><li><p>Larry Canino</p><p>Contributor: solvent accessibility function modification</p></li><li><p>Todd Dolinsky</p><p>Developer and contributor: Python
 						wrappers, PDB2PQR, output
 						logging, examples, and other
-						tools</p></li><li><p>Adrian Elcock</p><p>Contributor: parameter files</p></li><li><p>David Gohara</p><p>Developer</p></li><li><p>Michael J. Holst</p><p>Advisor and author of several routines scattered about APBS,
+						tools</p></li><li><p>Adrian Elcock</p><p>Contributor: parameter files</p></li><li><p>David Gohara</p><p>Developer</p></li><li><p>Yong Huang</p><p>Developer</p></li><li><p>Michael J. Holst</p><p>Advisor and author of several routines scattered about APBS,
 						and author of PMG (the multigrid library used by this code), author
 						of MALOC (hardware abstraction library used by this code), author
 						of FEtk (finite element library incorporated in developmental
@@ -94,13 +94,13 @@
 					</p></li><li><p>Adrian Kaats</p><p>Contributor:  multivalue.c</p></li><li><p>Patrice Koehl</p><p>Contributor:  Aqua, a streamlined version of the Holst group PMG multigrid library</p></li><li><p>Robert Konecny</p><p>Contributor: parameters, CHARMM FORTRAN interface</p></li><li><p>Jung-Hsin Lin</p><p>Contributor:  OpenDX to MOLMOL conversion</p></li><li><p>Chiansan Ma</p><p>Contributor: format conversion scripts</p></li><li><p>J. Andrew McCammon</p><p>Advisor, financial and equipment support, functionality
 						suggestions</p></li><li><p>Jens Nielsen</p><p>Contributor: PDB2PQR</p></li><li><p>Jay Ponder</p><p>Contributor:  TINKER Interface</p></li><li><p>Michael Schnieders</p><p>Contributor:  Polarizable atomic multipole routines, TINKER 
 						interface</p></li><li><p>David Sept</p><p> Contributor:  scripts and tools, VMD compatibility, general
-						suggestions about functionality </p></li><li><p>Tongye Shen</p><p>Contributor:  finite element mesh generation</p></li><li><p>Justin Xiang</p><p>Contributor:  generalized Born
+						suggestions about functionality </p></li><li><p>Tongye Shen</p><p>Contributor:  finite element mesh generation</p></li><li><p>Samir Unni</p><p>Contributor:  APBS Opal web services client code</p></li><li><p>Justin Xiang</p><p>Contributor:  generalized Born
 						Python utilities</p></li></ul></div><p>
-		</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="installation-sect"></a>Chapter 2. Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#obtaining-sect">2.1. Availability</a></span></dt><dt><span class="sect1"><a href="#id418205">2.2. Binary installation</a></span></dt><dt><span class="sect1"><a href="#id418287">2.3. Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">2.3.1. Prerequisites</a></span></dt><dt><span class="sect2"><a href="#tested-systems">2.3.2. Tested systems</a></span></dt><dt><span class="sect2"><a href="#setup-sect">2.3.3. Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id418609">2.3.4. Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#install-dirs">2.3.5. APBS directory structure</a></span></dt><dt><span class="sect2"><a href="#id418817">2.3.6. System-specific notes</a></span></dt></dl></dd></dl></div><p>The following sections outline the installation of APBS on a generic
+		</p></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="installation-sect"></a>Chapter 2. Installation</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#obtaining-sect">2.1. Availability</a></span></dt><dt><span class="sect1"><a href="#id418249">2.2. Binary installation</a></span></dt><dt><span class="sect1"><a href="#id418331">2.3. Source installation</a></span></dt><dd><dl><dt><span class="sect2"><a href="#prerequisites-sect">2.3.1. Prerequisites</a></span></dt><dt><span class="sect2"><a href="#tested-systems">2.3.2. Tested systems</a></span></dt><dt><span class="sect2"><a href="#setup-sect">2.3.3. Preparation for installation</a></span></dt><dt><span class="sect2"><a href="#id418654">2.3.4. Configuring, compiling, and installing</a></span></dt><dt><span class="sect2"><a href="#install-dirs">2.3.5. APBS directory structure</a></span></dt><dt><span class="sect2"><a href="#id418861">2.3.6. System-specific notes</a></span></dt></dl></dd></dl></div><p>The following sections outline the installation of APBS on a generic
 		UNIX platform as well as installation instructions for various specific
 		machines.</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="obtaining-sect"></a>2.1. Availability</h2></div></div></div><p>The latest version of APBS can always be found at <a href="http://apbs.sourceforge.net/" target="_top">
 				http://apbs.sourceforge.net</a>.  APBS is available in both source code form and
-			binaries for a variety of architectures.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id418205"></a>2.2. Binary installation</h2></div></div></div><p>
+			binaries for a variety of architectures.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id418249"></a>2.2. Binary installation</h2></div></div></div><p>
 			We currently offer binaries for the RedHat Linux platform on a variety of architectures as well as command line binaries for WinXP and Mac OS X.  Binaries can be downloaded from the <a href="http://agave.wustl.edu/apbs/download" target="_top">APBS download page</a>.  For all other systems, please install from source on your particular platform and feel free to contact the <a href="#mailing-lists" title="5.2. Mailing Lists">APBS users mailing list</a> for more help and/or to request a binary for that system.
 		</p><p>
 			APBS binaries are provided in compressed tar format (*.tgz).  On most systems, the binaries can be unarchived by simply double-clicking or opening the archive.  This can also be accomplished on the comamnd line by
@@ -109,7 +109,7 @@
 			</pre><p>
 			where <strong class="userinput"><code>XYZ</code></strong> is the particular architecture of the binary you downloaded.
 			Note that this will expand into a directory called <code class="filename">apbs-1.0.0-XYZ</code>.  The contents of this directory can be placed anywhere on your system that you prefer (and have access to).  The specific sub-directory of this archive is described in <a href="#install-dirs" title="2.3.5. APBS directory structure">Section 2.3.5, &#8220;APBS directory structure&#8221;</a>, which contains information about the location of documentation, examples, libraries, header files, and binaries.  The APBS binaries do not contain dependencies on special data files, etc. and can be moved out of this directory structure without causing any problems for APBS execution.
-		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id418287"></a>2.3. Source installation</h2></div></div></div><p>If you were unable to find the binary pacakge for your system, or would like to compile APBS
+		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id418331"></a>2.3. Source installation</h2></div></div></div><p>If you were unable to find the binary pacakge for your system, or would like to compile APBS
 			yourself, you'll need to read the instructions in this section.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="prerequisites-sect"></a>2.3.1. Prerequisites</h3></div></div></div><p>In order to install APBS from the source code, you will need:
 				</p><div class="itemizedlist"><ul type="disc"><li><p>C and Fortran compilers</p></li><li><p>The APBS source code (see 
 							<a href="#obtaining-sect" title="2.1. Availability">above</a>)</p></li></ul></div><p>
@@ -133,10 +133,10 @@
 				<a href="#machine-sect">Section 2.3.6, &#8220;System-specific notes&#8221;</a>.
 			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="setup-sect"></a>2.3.3. Preparation for installation</h3></div></div></div><p>In what follows, I'll be assuming you're using 
 				<a href="http://www.gnu.org/software/bash/bash.html" target="_top">bash</a>, a shell available
-				on most platforms (UNIX and non-UNIX).</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418472"></a>2.3.3.1. Compiler variables</h4></div></div></div><p>First, please look at <a href="#machine-sect">Section 2.3.6, &#8220;System-specific notes&#8221;</a> section of this document for
+				on most platforms (UNIX and non-UNIX).</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418516"></a>2.3.3.1. Compiler variables</h4></div></div></div><p>First, please look at <a href="#machine-sect">Section 2.3.6, &#8220;System-specific notes&#8221;</a> section of this document for
 					appropriate compiler flags, etc. to be set via pre-configuration environmental
 					variables.  This section outlines generic installation procedures with default
-					compilers and options.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418492"></a>2.3.3.2. Installation directories</h4></div></div></div><p>There are a few directories you'll need to identify prior to installation.  The
+					compilers and options.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418536"></a>2.3.3.2. Installation directories</h4></div></div></div><p>There are a few directories you'll need to identify prior to installation.  The
 					first, which we'll call <em class="parameter"><code>APBS_SRC</code></em>, will contain the APBS
 					and MALOC source code.  This directory can be deleted after installation, if you
 					wish.  The second directory will be the permanent location for APBS and MALOC;
@@ -150,12 +150,12 @@
 <code class="prompt">$</code> <strong class="userinput"><code>export APBS_PREFIX=/home/soft</code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>mkdir -p ${APBS_SRC} ${APBS_PREFIX}</code></strong>
 					</pre><p>
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418568"></a>2.3.3.3. Unpacking the source code</h4></div></div></div><p>You're now ready to unpack the source code:
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418613"></a>2.3.3.3. Unpacking the source code</h4></div></div></div><p>You're now ready to unpack the source code:
 					</p><pre class="screen">
 <code class="prompt">$</code> <strong class="userinput"><code>cd ${APBS_SRC}</code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>gzip -dc apbs-1.0.0.tar.gz | tar xvf -</code></strong>
 					</pre><p>
-				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id418609"></a>2.3.4. Configuring, compiling, and installing</h3></div></div></div><p> Before compiling/installing APBS, you need to configure with the autoconf
+				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id418654"></a>2.3.4. Configuring, compiling, and installing</h3></div></div></div><p> Before compiling/installing APBS, you need to configure with the autoconf
 				<code class="literal">configure</code> script.  You can examine the various configure options with
 				the <code class="option">--help</code> option.  For many platforms, no options need to be
 				specified.  Therefore, most users <span class="emphasis"><em>who want single-CPU (not parallel)
@@ -190,7 +190,7 @@
 				provided with APBS that remain in the APBS directory; these are described in later
 				portions of this manual.  You may wish to copy these to a global location (or the same
 				place as your APBS binary) at this time.
-			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id418817"></a>2.3.6. System-specific notes</h3></div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> If you have tips or tricks on improving APBS performance and/or installation on
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id418861"></a>2.3.6. System-specific notes</h3></div></div></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Important"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="images/important.png"></td><th align="left">Important</th></tr><tr><td align="left" valign="top"><p> If you have tips or tricks on improving APBS performance and/or installation on
 					your machine, please <a href="#mailing-lists" title="5.2. Mailing Lists">let us know!</a> </p></td></tr></table></div><p>This section provides tips on compiling APBS on specific platforms and outlines some of
 				the basic options available for parallel execution, Python linkage, etc.  Note that many
 				aspects of this section have changed from previous releases.  In particular, APBS now
@@ -208,14 +208,14 @@
 				</p><pre class="screen">
 <code class="prompt">$</code> <strong class="userinput"><code>./configure --help</code></strong>
 				</pre><p>
-			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418914"></a>2.3.6.1. Using an external BLAS library</h4></div></div></div><p>If an optimized (vendor) BLAS library is available, it should be used with APBS since it will generally provide better performance.  This can be enabled by the <code class="code">--with-blas=...</code> option.  The configure-make-install procedure is:
+			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418958"></a>2.3.6.1. Using an external BLAS library</h4></div></div></div><p>If an optimized (vendor) BLAS library is available, it should be used with APBS since it will generally provide better performance.  This can be enabled by the <code class="code">--with-blas=...</code> option.  The configure-make-install procedure is:
 					</p><pre class="screen">
 <code class="prompt">$</code> <strong class="userinput"><code>./configure --with-blas='-L/path/to/blas -lblas'</code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>make</code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 					</pre><p>
 					where <strong class="userinput"><code>/path/to/blas</code></strong> is the location of a library named <strong class="userinput"><code>libblas.a</code></strong>.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id418983"></a>2.3.6.2. Python support</h4></div></div></div><p>Python libraries and related tools can be enabled at configure-time.  Currently,
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419027"></a>2.3.6.2. Python support</h4></div></div></div><p>Python libraries and related tools can be enabled at configure-time.  Currently,
 					Python libraries compile on most Linux and Mac systems.  Other systems are
 					untested.  The configure-make-install procedure is:
 					</p><pre class="screen">
@@ -223,7 +223,7 @@
 <code class="prompt">$</code> <strong class="userinput"><code>make </code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 					</pre><p>
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419035"></a>2.3.6.3. Parallel (MPI) support</h4></div></div></div><p> APBS uses MPI for parallel execution.  In general, MPI support requires informing
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419080"></a>2.3.6.3. Parallel (MPI) support</h4></div></div></div><p> APBS uses MPI for parallel execution.  In general, MPI support requires informing
 					the APBS configure script about:
 					</p><div class="itemizedlist"><ul type="disc"><li><p> MPI compiler options.  For most MPI implementations, you
 								simply need to set the <em class="parameter"><code>CC</code></em> and
@@ -249,7 +249,7 @@
 								<em class="parameter"><code>LDFLAGS</code></em> variables to be set
 								correctly before configuration to locate the required
 								headers and libraries. </p></li></ul></div><p>
-				</p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419155"></a>2.3.6.3.1. LAM MPI</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
+				</p><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419470"></a>2.3.6.3.1. LAM MPI</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
 						compilers you will use to compile APBS when installing/compiling 
 						<a href="http://www.lam-mpi.org/" target="_top">LAM MPI</a>.  For example, if
 						your C compiler is set in the environmental variable
@@ -274,7 +274,7 @@
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 						</pre><p>
 						This procedure was tested with LAM MPI 7.2.1.
-					</p></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419575"></a>2.3.6.3.2. MPICH1</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
+					</p></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419619"></a>2.3.6.3.2. MPICH1</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
 						compilers you will use to compile APBS when installing/compiling 
 						<a href="http://www-unix.mcs.anl.gov/mpi/mpich1/" target="_top">MPICH1</a>.
 						For example, if your C compiler is set in the environmental variable
@@ -306,7 +306,7 @@
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 						</pre><p>
 						This procedure was tested with MPICH2 1.0.6p1.
-					</p></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419737"></a>2.3.6.3.3. MPICH2</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
+					</p></div><div class="sect4" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="id419781"></a>2.3.6.3.3. MPICH2</h5></div></div></div><p> It is important that you enable FORTRAN support and use the same
 						compilers you will use to compile APBS when installing/compiling 
 						<a href="http://www-unix.mcs.anl.gov/mpi/mpich1/" target="_top">MPICH2</a>.
 					</p><p> Let <em class="parameter"><code>${MPI_PREFIX}</code></em> be an environmental variable
@@ -328,7 +328,7 @@
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 						</pre><p>
 						This procedure was tested with MPICH1 1.2.7p1.
-					</p></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419852"></a>2.3.6.4. FEtk support</h4></div></div></div><p> 
+					</p></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419897"></a>2.3.6.4. FEtk support</h4></div></div></div><p> 
 					In order to enable support for the finite element features in APBS, you must
 					compile it against the <a href="http://www.fetk.org" target="_top">FEtk</a> libraries.
 					<span class="emphasis"><em>Please use the same compilers for both APBS and FEtk.</em></span>
@@ -346,14 +346,14 @@
 <code class="prompt">$</code> <strong class="userinput"><code>make </code></strong>
 <code class="prompt">$</code> <strong class="userinput"><code>make install</code></strong>
 					</pre><p>
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419953"></a>2.3.6.5. Windows</h4></div></div></div><p>We are happy to now provide native APBS command line binaries for Windows.  The
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419997"></a>2.3.6.5. Windows</h4></div></div></div><p>We are happy to now provide native APBS command line binaries for Windows.  The
 					binary is probably the best option available, but if you would still like to
 					compile your own binaries you will need to use either the Cygwin or MinGW
 					environments.  Binaries compiled under Cygwin tend to require Cygwin DLLs and
 					thus can only be run on systems with Cygwin.  Performance for the Windows
 					binaries and all compiled systems will be fairly mediocre as they depend on the
 					GNU compilers.</p><p>If you do choose to use Cygwin and compile your own code, compilation should be
-					rather straightforward.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id419968"></a>2.3.6.6. Macintosh</h4></div></div></div><p>We are happy to now provide a Mac install package for Mac OS 10.4 
+					rather straightforward.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id420012"></a>2.3.6.6. Macintosh</h4></div></div></div><p>We are happy to now provide a Mac install package for Mac OS 10.4 
 					(Tiger).  Unfortunately this is the only binary for Mac that we have
 					available, so users on OS 10.3 may have to compile binaries for themselves - you
 					may want to examine the
@@ -384,9 +384,9 @@
 						nice tutorial</a>
 					on building APBS from within <a href="http://www.apple.com/macosx/features/xcode/" target="_top">Xcode</a> to take
 					advantage of its development and debugging features.
-				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="contents-sect"></a>Chapter 3. Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id421816">3.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#id422348">3.2. Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">3.2.1. Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">3.2.2. Problem setup</a></span></dt><dt><span class="sect2"><a href="#id422649">3.2.3. Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">3.2.4. Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">3.2.5. Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id423028">3.2.6. Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id423161">3.2.7. Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id423186">3.2.8. Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">3.3. Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">3.4. Documentation</a></span></dt><dt><span class="sect1"><a href="#id423390">3.5. Source code</a></span></dt></dl></div><p>
+				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="contents-sect"></a>Chapter 3. Overview</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id421860">3.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#id422393">3.2. Other tools</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parameterization">3.2.1. Parameterization</a></span></dt><dt><span class="sect2"><a href="#problem-setup">3.2.2. Problem setup</a></span></dt><dt><span class="sect2"><a href="#id422693">3.2.3. Output data processing</a></span></dt><dt><span class="sect2"><a href="#viz-tools">3.2.4. Data visualization</a></span></dt><dt><span class="sect2"><a href="#acc">3.2.5. Solvent accessibility</a></span></dt><dt><span class="sect2"><a href="#id423072">3.2.6. Coulomb's Law and Generalized Born calculations</a></span></dt><dt><span class="sect2"><a href="#id423205">3.2.7. Eigenvalue analysis</a></span></dt><dt><span class="sect2"><a href="#id423230">3.2.8. Python development tools</a></span></dt></dl></dd><dt><span class="sect1"><a href="#examples-sect">3.3. Examples and tutorial</a></span></dt><dt><span class="sect1"><a href="#documentation-sect">3.4. Documentation</a></span></dt><dt><span class="sect1"><a href="#id423434">3.5. Source code</a></span></dt></dl></div><p>
 		This chapter gives an overview of the binaries, tools, etc. distributed as part of the APBS software package.  It is organized by directory; later chapters provide a more in-depth description on tools specific to particular applications.
-	</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id421816"></a>3.1. Invocation</h2></div></div></div><p>As mentioned in the 
+	</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id421860"></a>3.1. Invocation</h2></div></div></div><p>As mentioned in the 
 		<a href="#installation-sect" title="Chapter 2. Installation">Installation intructions</a>, the main
 		APBS binary is installed in
 		<code class="filename">${FETK_PREFIX}/bin/${prefix}/</code> where
@@ -422,7 +422,7 @@
 					<code class="literal">N</code> is the processor ID.  This gives you detailed
 					information about the progress of the run with a particular focus on
 					the numerical solver.</p></li></ul></div><p>
-	</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id422348"></a>3.2. Other tools</h2></div></div></div><p>
+	</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id422393"></a>3.2. Other tools</h2></div></div></div><p>
 			APBS contains a number of tools to facilitate the preparation of APBS runs and analysis of the results.  
 			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  In addition to the tools provided with APBS, there are a number of other programs which interoperate with our code.  Please see the <a href="#other-programs" title="4.3. Using APBS with other programs">Other Programs</a> section of this manual for more information.  </p></td></tr></table></div><p>
 		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="parameterization"></a>3.2.1. Parameterization</h3></div></div></div><p> Unfortunately, the majority of problems encountered during
@@ -473,7 +473,7 @@
 							for 
 							<a href="#mg-manual" title="4.2.2.3. Manual multigrid calculation (mg-manual)">mg-manual</a>
 							calculations. Written by Nathan Baker</p></li></ul></div><p>
-			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id422649"></a>3.2.3. Output data processing</h3></div></div></div><p>The following tools perform typical analyses of the output data,
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id422693"></a>3.2.3. Output data processing</h3></div></div></div><p>The following tools perform typical analyses of the output data,
 				usually in 
 				<a href="#opendx-format" title="A.4. OpenDX scalar data format">OpenDX format</a>. 
 				These scripts are not meant to be comprehensive; instead, they provide
@@ -485,7 +485,7 @@
 							Contributed by Jung-Hsin Lin with bug fixes by Fred Damberger.</p></li><li><p><code class="filename">tools/mesh/dx2uhbd</code></p><p>Converts 
 							<a href="#opendx-format" title="A.4. OpenDX scalar data format">OpenDX format</a>
 							data to UHBD format. 
-							Contributed by Robert Konecny.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id422748"></a>3.2.3.2. Manipulation</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">tools/mesh/mergedx</code></p><p>Merge 
+							Contributed by Robert Konecny.</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id422793"></a>3.2.3.2. Manipulation</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p><code class="filename">tools/mesh/mergedx</code></p><p>Merge 
 							<a href="#opendx-format" title="A.4. OpenDX scalar data format">OpenDX format</a>
 							data from several domains (e.g., from a 
 							<a href="#mg-para" title="4.2.2.2. Automatic parallel focusing multigrid calculation (mg-para)">mg-para</a>
@@ -535,13 +535,13 @@
 				Such calculations are often used to determine apolar solvation
 				contributions to binding events, etc. See the new <a href="#apolar" title="4.2.3. APOLAR statements">APOLAR</a> keyword for more
 				documentation on this APBS feature.
-			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423028"></a>3.2.6. Coulomb's Law and Generalized Born calculations</h3></div></div></div><p>These utilities are provided for occasional use and are
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423072"></a>3.2.6. Coulomb's Law and Generalized Born calculations</h3></div></div></div><p>These utilities are provided for occasional use and are
 				<span class="emphasis"><em>definitely not</em></span> optimized for speed.
 			</p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Note"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="images/note.png"></td><th align="left">Note</th></tr><tr><td align="left" valign="top"><p>NOTE:  Many of these tools will be incorporated into the main
-					APBS executable during upcoming releases!</p></td></tr></table></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id423050"></a>3.2.6.1. Coulomb's Law calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/coulomb</code> calculates
+					APBS executable during upcoming releases!</p></td></tr></table></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id423094"></a>3.2.6.1. Coulomb's Law calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/coulomb</code> calculates
 					<span class="emphasis"><em>vacuum</em></span> Coulomb law energies from a PQR file.  It
 					has a number of options which can be viewed by running the 
-					<code class="filename">coulomb</code> program with no arguments.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id423079"></a>3.2.6.2. Generalized Born calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/born</code> is a crude,
+					<code class="filename">coulomb</code> program with no arguments.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id423123"></a>3.2.6.2. Generalized Born calculations</h4></div></div></div><p>The program <code class="filename">tools/manip/born</code> is a crude,
 					non-optimal, buggy program (are you still reading?!?) for calculating
 					Generalized Born electrostatic energies.  This is only intended for
 					hacking and general comparison with Poisson-Boltzmann results.</p><p>The Python-based program <code class="filename">tools/python/runGB.py</code>
@@ -572,9 +572,9 @@
 				</p><p>
 					Both of these Python-based programs
 					were written by Justin Xiang.
-				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423161"></a>3.2.7. Eigenvalue analysis</h3></div></div></div><p><code class="filename">tools/arpack/driver</code></p><p>If APBS is linked with ARPACK (see <code class="literal">configure
+				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423205"></a>3.2.7. Eigenvalue analysis</h3></div></div></div><p><code class="filename">tools/arpack/driver</code></p><p>If APBS is linked with ARPACK (see <code class="literal">configure
 					--help</code>), this routine will perform eigenvalue analyses of
-				matrices produced by APBS.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423186"></a>3.2.8. Python development tools</h3></div></div></div><p>There are a number of example Python tools and wrappers provided in
+				matrices produced by APBS.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id423230"></a>3.2.8. Python development tools</h3></div></div></div><p>There are a number of example Python tools and wrappers provided in
 				the tools/python directory. These tools all make use of the APBS SWIG
 				wrappers developed by Todd Dolinsky, Nathan Baker, Alex Gillet, and
 				Michel Sanner. The SWIG wrappers are compiled by default during normal
@@ -599,11 +599,11 @@
 			using APBS and developing code based on APBS libraries.  The
 			subdirectories include:
 			</p><div class="itemizedlist"><ul type="disc"><li><p><a href="../user-guide/index.html" target="_top"><code class="filename">doc/html/user-guide/index.html</code></a></p><p>HTML-format User Guide </p></li><li><p><a href="../programmer/index.html" target="_top"><code class="filename">doc/html/programmer/index.html</code></a></p><p>HTML-format Programmer Guide </p></li><li><p><a href="../tutorial/index.html" target="_top"><code class="filename">doc/html/tutorial/index.html</code></a></p><p>HTML-format APBS tutorial </p></li></ul></div><p>
-		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id423390"></a>3.5. Source code</h2></div></div></div><p>The APBS sub-directory <code class="filename">src</code> contains the source
+		</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id423434"></a>3.5. Source code</h2></div></div></div><p>The APBS sub-directory <code class="filename">src</code> contains the source
 			code for the APBS libraries and main executable.  These files are
 			described in more detailed in the 
 			<a href="#programming-sect" title="Chapter 6. Programming">Programming section</a>.
-		</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="executable-sect"></a>Chapter 4. Using APBS</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id421805">4.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">4.2. Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">4.2.1. READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">4.2.2. ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">4.2.3. APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">4.2.4. PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">4.3. Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">4.3.1. Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">4.3.2. Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">4.3.3. Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">4.3.4. Visualization software</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id421805"></a>4.1. Invocation</h2></div></div></div><p>As mentioned in the 
+		</p></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="executable-sect"></a>Chapter 4. Using APBS</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#id421850">4.1. Invocation</a></span></dt><dt><span class="sect1"><a href="#apbs-input">4.2. Input files</a></span></dt><dd><dl><dt><span class="sect2"><a href="#read">4.2.1. READ statements</a></span></dt><dt><span class="sect2"><a href="#elec">4.2.2. ELEC statements</a></span></dt><dt><span class="sect2"><a href="#apolar">4.2.3. APOLAR statements</a></span></dt><dt><span class="sect2"><a href="#print">4.2.4. PRINT statements</a></span></dt></dl></dd><dt><span class="sect1"><a href="#other-programs">4.3. Using APBS with other programs</a></span></dt><dd><dl><dt><span class="sect2"><a href="#web-sect">4.3.1. Web interfaces</a></span></dt><dt><span class="sect2"><a href="#gui-sect">4.3.2. Graphical user interfaces</a></span></dt><dt><span class="sect2"><a href="#simulation-sect">4.3.3. Simulation software</a></span></dt><dt><span class="sect2"><a href="#visualization-sect">4.3.4. Visualization software</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id421850"></a>4.1. Invocation</h2></div></div></div><p>As mentioned in the 
 		<a href="#installation-sect" title="Chapter 2. Installation">Installation intructions</a>, the main
 		APBS binary is installed in
 		<code class="filename">${FETK_PREFIX}/bin/${prefix}/</code> where
@@ -663,7 +663,7 @@
 					section for specifying summary output.</p></li></ul></div><p>
 		The APBS input file is constructed from these sections in the following
 		format:
-		</p><div class="example"><a name="id425249"></a><p class="title"><b>Example 4.1. Template for APBS input file</b></p><div class="example-contents"><pre class="programlisting">
+		</p><div class="example"><a name="id425293"></a><p class="title"><b>Example 4.1. Template for APBS input file</b></p><div class="example-contents"><pre class="programlisting">
 				READ
 				...
 				END
@@ -1490,7 +1490,7 @@
 						the change in energies and visual artifacts in isocontours as a
 						function of <span><strong class="command">ofrac</strong></span> values for a small peptide 
 						(<a href="http://www.rcsb.org/pdb/cgi/explore.cgi?job=chains&amp;pdbId=2PHK" target="_top">2PHK</a>:B).
-						</p><div class="table"><a name="id432347"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
+						</p><div class="table"><a name="id432391"></a><p class="title"><b>Table 4.1. Sensitivity of 2PHK:B solvation energy calculations
 								to <span>ofrac</span> values.</b></p><div class="table-contents"><table summary="Sensitivity of 2PHK:B solvation energy calculations
 								to ofrac values." border="1"><colgroup><col><col><col></colgroup><thead><tr><th><span><strong class="command">ofrac</strong></span> value</th><th>Energy (kJ/mol)</th><th>Visual artifact in ± 1 kT/e iscontour?</th></tr></thead><tbody><tr><td>0.05</td><td>342.79</td><td>No</td></tr><tr><td>0.06</td><td>342.00</td><td>No</td></tr><tr><td>0.07</td><td>341.12</td><td>Yes</td></tr><tr><td>0.08</td><td>341.14</td><td>Yes</td></tr><tr><td>0.09</td><td>342.02</td><td>Yes</td></tr><tr><td>0.10</td><td>340.84</td><td>Yes</td></tr><tr><td>0.11</td><td>339.67</td><td>No</td></tr><tr><td>0.12</td><td>341.10</td><td>No</td></tr><tr><td>0.13</td><td>341.10</td><td>No</td></tr><tr><td>0.14</td><td>341.32</td><td>No</td></tr><tr><td>0.15</td><td>341.54</td><td>No</td></tr></tbody></table></div></div><p><br class="table-break">
 					</p></td></tr></table></div><p>
@@ -2022,7 +2022,7 @@
 					quantities:
 					</p><div class="variablelist"><dl><dt><span class="term"> + </span></dt><dd><p>Addition</p></dd><dt><span class="term"> - </span></dt><dd><p>Subtraction</p></dd></dl></div><p>
 				</p></dd></dl></div><p>
-</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id445376"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
+</p><p>Given all these options, a typical declaration might look like:</p><div class="example"><a name="id445420"></a><p class="title"><b>Example 4.2. PRINT statement example</b></p><div class="example-contents"><pre class="programlisting">
 		# Energy change due to binding
 		print energy complex - ligand - protein end
 		# Energy change due to solvation
@@ -2041,7 +2041,7 @@
 			inadvertantly omitted from this list.  If you know of software that uses
 			APBS and is not listed here, please contact Nathan Baker 
 			<code class="email">&lt;<a href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>&gt;</code>.
-		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>4.3.1. Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456516"></a>4.3.1.1. Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="web-sect"></a>4.3.1. Web interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456560"></a>4.3.1.1. Gemstone</h4></div></div></div><p>The Gemstone extension (<a href="http://gemstone.mozdev.org/" target="_top">http://gemstone.mozdev.org/</a>)
 					for the Firefox web browser provides a very easy-to-use
 					interface to older versions of APBS (0.4.0) with all of the functionality of the
 					command-line interface.  This extension currently uses web
@@ -2050,18 +2050,18 @@
 					The NBCR Web Services portal (<a href="http://ws.nbcr.net:8080/opal/GetServicesList.do" target="_top">http://ws.nbcr.net:8080/opal/GetServicesList.do</a>) provides an off-site alternative for running computationally-expensive APBS calculations that won't fit on local resources.  This portal is currently running APBS 1.0.0.
 				</p><p>
 					The NBCR Opal Web Services client for APBS (<a href="http://nbcr.net/services/#Software" target="_top">http://nbcr.net/services/#Software</a>) provides a more basic interface which allows users to execute APBS jobs remotely via Python or build such functionality into their own software.
-				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>4.3.2. Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456581"></a>4.3.2.1. PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
+				</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gui-sect"></a>4.3.2. Graphical user interfaces</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456625"></a>4.3.2.1. PyMOL</h4></div></div></div><p>PyMOL (<a href="http://pymol.sourceforge.net/" target="_top">http://pymol.sourceforge.net/</a>)
 					is a molecular visualization and animation package which
 					provides an interface to APBS.  The APBS plugin to PyMOL
 					(developed by Michael George Lerner)  permits isocontour and
 					surface map visualization of APBS results.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456601"></a>4.3.2.2. VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456645"></a>4.3.2.2. VMD</h4></div></div></div><p>VMD (<a href="http://www.ks.uiuc.edu/Research/vmd/" target="_top">http://www.ks.uiuc.edu/Research/vmd/</a>)
 					is a molecular visualization and animation package which provides an
 					interface to APBS.  It permits visualization of APBS results as isocontours, electric field lines, or on 
 					biomolecular surfaces.  VMD also a graphical plugin to setup APBS calculations and execute them either
 					locally or remotely via BioCoRE.  More information is available at 
 					<a href="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/" target="_top">http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/</a>.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456632"></a>4.3.2.3. PMV</h4></div></div></div><p>PMV 
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456676"></a>4.3.2.3. PMV</h4></div></div></div><p>PMV 
 					(<a href="http://www.scripps.edu/~sanner/python" target="_top">http://www.scripps.edu/~sanner/python</a>)
 					is a Python-based molecular visualization package which provides an
 					interface to APBS.  It not only permits visualization of APBS results
@@ -2088,19 +2088,19 @@
 				biological systems.  This section describes molecular graphics software
 				which can display potentials and other data output from APBS.  Note
 				that this set of programs also includes the <a href="#gui-sect" title="4.3.2. Graphical user interfaces">graphical users interfaces</a> listed above.
-			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456753"></a>4.3.4.1. Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
+			</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456797"></a>4.3.4.1. Dino3D</h4></div></div></div><p>Dino3D (<a href="http://www.dino3d.org/" target="_top">http://www.dino3d.org/</a>
 					is a molecular graphics program which can read UHBD-format
 					electrostatic data.  APBS can write multigrid results in UHBD format
 					(see the <a href="#elec-write"><span><strong class="command">write</strong></span></a>
 					<span><strong class="command">ELEC</strong></span> command) and therefore can be used with
 					Dino3D.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456788"></a>4.3.4.2. MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456833"></a>4.3.4.2. MOLMOL</h4></div></div></div><p>MOLMOL (<a href="http://www.mol.biol.ethz.ch/wuthrich/software/molmol/" target="_top">http://www.mol.biol.ethz.ch/wuthrich/software/molmol/</a>)
 					is a molecular graphics package with an emphasis on NMR-generated
 					structural data.  A program is provided with APBS (see
 					<code class="filename">tools/mesh</code> and the
 					<a href="#conversion-sect" title="3.2.3.1. Conversion">Data conversion tools</a> in this
 					manual) which converts OpenDX data to MOLMOL format.
-				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456824"></a>4.3.4.3. OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
+				</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id456868"></a>4.3.4.3. OpenDX</h4></div></div></div><p>OpenDX (<a href="http://www.opendx.org" target="_top">http://www.opendx.org</a>)
 					is a general data visualization package which can read APBS output
 					using the scripts provided in
 					<code class="filename">tools/visualization/opendx</code> (see the discussion
@@ -2108,7 +2108,7 @@
 					manual).  However, as there is no straightforward way to
 					visualizate the potential in the context of the atomic structure,
 					OpenDX should not a first choice for APBS visualization.
-				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id467965"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">5.1. User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">5.2. Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id468164">5.3. Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
+				</p></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="id468009"></a>Chapter 5. Getting help</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#user-forums">5.1. User Forums</a></span></dt><dt><span class="sect1"><a href="#mailing-lists">5.2. Mailing Lists</a></span></dt><dt><span class="sect1"><a href="#id468208">5.3. Bug and other problems</a></span></dt></dl></div><p>APBS follows an open source software development model and relies
     heavily on the user community for feedback to enhance the software,
     identify bugs, etc. </p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="user-forums"></a>5.1. User Forums</h2></div></div></div><p> The <a href="http://sourceforge.net/projects/apbs" target="_top">SourceForge project page</a> offers many user forums for discussion on APBS topics.  Users are encouraged to post bugs and request for support and features via the following forums:
       </p><div class="itemizedlist"><ul type="disc"><li><p><a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top">
@@ -2138,7 +2138,7 @@
                   </p></li><li><p>List archives:  <a href="http://sourceforge.net/mailarchive/forum.php?forum=apbs-users" target="_top">http://sourceforge.net/mailarchive/forum.php?forum=apbs-users</a>
                   </p></li></ul></div><p>
             </p></dd></dl></div><p>
-    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id468164"></a>5.3. Bug and other problems</h2></div></div></div><p> 
+    </p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id468208"></a>5.3. Bug and other problems</h2></div></div></div><p> 
       Bugs or potential bugs, problems, etc. should either be posted to the
       <a href="http://sourceforge.net/tracker/?group_id=148472&amp;atid=771704" target="_top"> 
       SourceForge bug tracker forum</a> or reported to the
@@ -2154,7 +2154,7 @@
       <a href="../programmer/index.html" target="_top">doc/html/programmer/index.html</a>
     </code>.
   </p></div><div class="appendix" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="format-sect"></a>Appendix A. File formats</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#pqr-format">A.1. PQR biomolecular structure format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#pqr-flat-format">A.1.1.  PQR flat-file format</a></span></dt><dt><span class="sect2"><a href="#pqr-xml-format">A.1.2. PQR XML Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#param-format">A.2. Parameter file format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#parm-flat-format">A.2.1. Flat-file format</a></span></dt><dt><span class="sect2"><a href="#parm-xml-format">A.2.2. XML Parameter Format </a></span></dt></dl></dd><dt><span class="sect1"><a href="#hb-format">A.3. Harwell-Boeing column-compressed matrix
-			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">A.4. OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id469609">A.4.1. Multigrid</a></span></dt><dt><span class="sect2"><a href="#id469874">A.4.2. Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
+			format</a></span></dt><dt><span class="sect1"><a href="#opendx-format">A.4. OpenDX scalar data format</a></span></dt><dd><dl><dt><span class="sect2"><a href="#id469654">A.4.1. Multigrid</a></span></dt><dt><span class="sect2"><a href="#id469918">A.4.2. Finite element</a></span></dt></dl></dd></dl></div><p>This section introduces some of the input and output file formats which
 		are used by APBS.</p><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pqr-format"></a>A.1. PQR biomolecular structure format</h2></div></div></div><p>
 			The PQR format is the primary input format for biomolecular structure in
 			APBS package.
@@ -2292,7 +2292,7 @@
 			OpenDX data format is very flexible; the following sections describe the
 			application of this format for APBS multigrid and finite element
 			datasets.
-		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id469609"></a>A.4.1. Multigrid</h3></div></div></div><p>
+		</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id469654"></a>A.4.1. Multigrid</h3></div></div></div><p>
 				This data format has the following form:
 				</p><pre class="programlisting">
 					# <em class="replaceable"><code>Comments</code></em>
@@ -2337,7 +2337,7 @@
 								The data values, ordered with the z-index increasing most
 								quickly, followed by the y-index, and then the x-index.
 							</p></dd></dl></div><p>
-			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id469874"></a>A.4.2. Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
+			</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id469918"></a>A.4.2. Finite element</h3></div></div></div><p>For finite element solutions, the OpenDX format takes the following
 				form:
 				</p><pre class="programlisting">
 					<code class="literal">object 1 class array type float rank 1 shape 3 items</code> <em class="replaceable"><code>N</code></em>

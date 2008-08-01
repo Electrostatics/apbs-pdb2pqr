@@ -155,6 +155,10 @@
 					<para>Developer</para>
 				</listitem>
 				<listitem>
+					<para>Yong Huang</para>
+					<para>Developer</para>
+				</listitem>
+				<listitem>
 					<para>Michael J. Holst</para>
 					<para>Advisor and author of several routines scattered about APBS,
 						and author of PMG (the multigrid library used by this code), author
@@ -209,6 +213,10 @@
 				<listitem>
 					<para>Tongye Shen</para>
 					<para>Contributor:  finite element mesh generation</para>
+				</listitem>
+				<listitem>
+					<para>Samir Unni</para>
+					<para>Contributor:  APBS Opal web services client code</para>
 				</listitem>
 				<listitem>
 					<para>Justin Xiang</para>
