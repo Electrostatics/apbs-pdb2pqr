@@ -62,6 +62,7 @@ from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
 __date__ = "July 2007"
+__version__ = "1.0.0"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
