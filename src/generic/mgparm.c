@@ -444,7 +444,7 @@ keyword!\n", tok);
 VPRIVATE Vrc_Codes MGparm_parseCHGM(MGparm *thee, Vio *sock) {
 
     char tok[VMAX_BUFSIZE];
-    int ti;
+    Vchrg_Meth ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (sscanf(tok, "%d", &ti) == 1) {
@@ -571,20 +571,6 @@ keyword!\n", tok);
     VERROR1:
         Vnm_print(2, "parseMG:  ran out of tokens!\n");
         return VRC_WARNING;
-}
-
-VPRIVATE Vrc_Codes MGparm_parseGAMMA(MGparm *thee, Vio *sock) {
-	
-    char tok[VMAX_BUFSIZE];
-	
-    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-	Vnm_print(2, "parseMG:  GAMMA keyword deprecated!\n");
-	Vnm_print(2, "parseMG:  Please see new APOLAR documentation.\n");
-	return VRC_SUCCESS;
-	
-VERROR1:
-        Vnm_print(2, "parseMG:  ran out of tokens!\n");
-	return VRC_WARNING;
 }
 
 VPRIVATE Vrc_Codes MGparm_parseGCENT(MGparm *thee, Vio *sock) {
@@ -883,11 +869,11 @@ keyword!\n", tok);
         return VRC_WARNING;
 }
 
-VPRIVATE int MGparm_parseUSEAQUA(MGparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes MGparm_parseUSEAQUA(MGparm *thee, Vio *sock) {
     Vnm_print(0, "NOsh: parsed useaqua\n");
     thee->useAqua = 1;
     thee->setUseAqua = 1;
-    return 1;
+    return VRC_SUCCESS;
 }
 
 VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE], 
@@ -931,8 +917,6 @@ VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
         return MGparm_parseOFRAC(thee, sock);
     } else if (Vstring_strcasecmp(tok, "async") == 0) {
         return MGparm_parseASYNC(thee, sock);
-	} else if (Vstring_strcasecmp(tok, "gamma") == 0) {
-        return MGparm_parseGAMMA(thee, sock);
 	} else if (Vstring_strcasecmp(tok, "useaqua") == 0) {
         return MGparm_parseUSEAQUA(thee, sock);
     } else {
