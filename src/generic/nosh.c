@@ -482,13 +482,24 @@ VPUBLIC int NOsh_parseInput(
 
 VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     NOsh_MolFormat molfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "pqr") == 0) {
         molfmt = NMF_PQR;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
 				  thee->nmol, tok);
         thee->molfmt[thee->nmol] = molfmt;
@@ -497,6 +508,17 @@ VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
     } else if (Vstring_strcasecmp(tok, "pdb") == 0) {
         molfmt = NMF_PDB;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
 				  thee->nmol, tok);
         thee->molfmt[thee->nmol] = molfmt;
@@ -505,6 +527,17 @@ VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
     } else if (Vstring_strcasecmp(tok, "xml") == 0) {
         molfmt = NMF_XML;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing molecule %d path %s\n", 
 				  thee->nmol, tok);
         thee->molfmt[thee->nmol] = molfmt;
@@ -526,13 +559,24 @@ VERROR1:
 
 VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     NOsh_ParmFormat parmfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "flat") == 0) {
         parmfmt = NPF_FLAT;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         if (thee->gotparm) {
             Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
             Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
@@ -544,6 +588,17 @@ VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
     } else if(Vstring_strcasecmp(tok, "xml") == 0) {
         parmfmt = NPF_XML;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         if (thee->gotparm) {
             Vnm_print(2, "NOsh:  Hey!  You already specified a parameterfile (%s)!\n", thee->parmpath);
             Vnm_print(2, "NOsh:  I'm going to ignore this one (%s)!\n", tok);
@@ -568,13 +623,24 @@ VERROR1:
 
 VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     Vdata_Format dielfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         dielfmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
 %s\n", thee->ndiel, tok);
         strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
@@ -604,13 +670,24 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     Vdata_Format kappafmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         kappafmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
 				  thee->nkappa, tok);
         thee->kappafmt[thee->nkappa] = kappafmt;
@@ -632,13 +709,24 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     Vdata_Format chargefmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         chargefmt = VDF_DX;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
 				  thee->ncharge, tok);
         thee->chargefmt[thee->ncharge] = chargefmt;
@@ -660,13 +748,24 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_MESH(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
     Vdata_Format meshfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "mcsf") == 0) {
         meshfmt = VDF_MCSF;
         VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
         Vnm_print(0, "NOsh: Storing mesh %d path %s\n",
 				  thee->nmesh, tok);
         thee->meshfmt[thee->nmesh] = meshfmt;
@@ -708,7 +807,6 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 	
     /* Read until we run out of tokens (bad) or hit the "END" keyword (good) */
     while (Vio_scanf(sock, "%s", tok) == 1) {
-		
         if (Vstring_strcasecmp(tok, "end") == 0) {
             Vnm_print(0, "NOsh: Done parsing READ section\n");
             return 1;
