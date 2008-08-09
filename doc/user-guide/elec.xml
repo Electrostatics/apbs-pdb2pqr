@@ -2307,9 +2307,9 @@
 						<listitem>
 							<para>
 								Specify the path for the output; files are written to
-								<replaceable>stem</replaceable><filename>.XXX</filename>, where
-								<filename>XXX</filename> is determined by the file format (and
-								processor rank for parallel calculations).  This pathname should not include spaces.
+								<replaceable>stem</replaceable><filename>.XYZ</filename>, where
+								<filename>XYZ</filename> is determined by the file format (and
+								processor rank for parallel calculations).  If the pathname contains spaces, then it must be surrounded by double quotes; e.g., "/path with spaces/foo.in".
 							</para>
 						</listitem>
 					</varlistentry>
@@ -2357,7 +2357,7 @@
 						<listitem>
 							<para>
 								Specify the path for the output; files are written to
-								<replaceable>stem</replaceable><filename>.mat</filename>.  This pathname should not include spaces.
+								<replaceable>stem</replaceable><filename>.mat</filename>.  If the pathname contains spaces, then it must be surrounded by double quotes; e.g., "/path with spaces/foo.in".
 							</para>
 						</listitem>
 					</varlistentry>
