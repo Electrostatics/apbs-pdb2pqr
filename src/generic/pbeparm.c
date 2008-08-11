@@ -901,7 +901,7 @@ calcforce!\n", tok);
 }
 
 VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Type writetype;
     Vdata_Format writefmt;
 
@@ -952,6 +952,17 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         return -1;
     }
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (tok[0]=='"') {
+        strcpy(strnew, "");
+        while (tok[strlen(tok)-1] != '"') {
+            strcat(str, tok);
+            strcat(str, " ");
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        }
+        strcat(str, tok);
+        strncpy(strnew, str+1, strlen(str)-2);
+        strcpy(tok, strnew);
+    }
 	if (thee->numwrite < (PBEPARM_MAXWRITE-1)) {
 		strncpy(thee->writestem[thee->numwrite], tok, VMAX_ARGLEN);
 		thee->writetype[thee->numwrite] = writetype;
@@ -969,7 +980,7 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
 }
 
 VPRIVATE int PBEparm_parseWRITEMAT(PBEparm *thee, Vio *sock) {
-    char tok[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "poisson") == 0) {
@@ -981,7 +992,19 @@ VPRIVATE int PBEparm_parseWRITEMAT(PBEparm *thee, Vio *sock) {
 WRITEMAT keyword!\n", tok);
         return -1;
     }
+
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (tok[0]=='"') {
+        strcpy(strnew, "");
+        while (tok[strlen(tok)-1] != '"') {
+            strcat(str, tok);
+            strcat(str, " ");
+            VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        }
+        strcat(str, tok);
+        strncpy(strnew, str+1, strlen(str)-2);
+        strcpy(tok, strnew);
+    }
     strncpy(thee->writematstem, tok, VMAX_ARGLEN);
     thee->setwritemat = 1;
     thee->writemat = 1;
