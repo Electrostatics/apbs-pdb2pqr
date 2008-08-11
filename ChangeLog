@@ -14,6 +14,7 @@
 - BUG FIXES
 	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword
 	usage
+	* Fixed typo in User Guide (writemat: poission -> poisson)
 
 
 #############################################################################
