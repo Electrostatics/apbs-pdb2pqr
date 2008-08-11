@@ -2335,7 +2335,7 @@
 								What type of operator to output:
 								<variablelist>
 									<varlistentry>
-										<term>poission</term>
+										<term>poisson</term>
 										<listitem>
 											<para>Write out the Poisson operator.</para>
 										</listitem>
