@@ -482,7 +482,7 @@ VPUBLIC int NOsh_parseInput(
 
 VPRIVATE int NOsh_parseREAD_MOL(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     NOsh_MolFormat molfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -559,7 +559,7 @@ VERROR1:
 
 VPRIVATE int NOsh_parseREAD_PARM(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     NOsh_ParmFormat parmfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -623,7 +623,7 @@ VERROR1:
 
 VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Format dielfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -670,7 +670,7 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Format kappafmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -709,7 +709,7 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Format chargefmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
@@ -748,7 +748,7 @@ section!\n");
 
 VPRIVATE int NOsh_parseREAD_MESH(NOsh *thee, Vio *sock) {
 	
-    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE];
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Format meshfmt;
 	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
