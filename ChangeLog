@@ -11,6 +11,7 @@
         * Removed GAMMA keyword from ELEC statement
         * Path lengths can now be larger than 80 characters
 	* Expanded authorship list
+	* Added in 'make test-opal' as a post install test (run from the examples install directory)
 - BUG FIXES
 	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword
 	usage
