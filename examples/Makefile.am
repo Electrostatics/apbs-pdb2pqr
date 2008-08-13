@@ -14,7 +14,7 @@ $(srcdir)/Makefile.in:
 
 Makefile:
 
-#SUBDIRS = actin-dimer alkanes born FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf protein-rna smpbe solv 
+#SUBDIRS = actin-dimer alkanes born FKBP hca-bind ion-pmf ion-protein ionize pka-lig point-pmf protein-rna smpbe solv opal
 
 clean:
 	cd actin-dimer; make clean
@@ -49,4 +49,7 @@ test:
 	cd solv; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 
 test.serial: test
+
+test-opal:
+	cd ${prefix}/share/examples/opal; make test
 

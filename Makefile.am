@@ -35,3 +35,4 @@ install-data-local:
 
 test:
 	cd examples; make test
+

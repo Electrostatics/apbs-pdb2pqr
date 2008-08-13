@@ -1202,8 +1202,8 @@ AC_CONFIG_FILES([
     contrib/blas/Makefile
     contrib/pmgZ/Makefile
     contrib/aqua/Makefile
-	contrib/opal/Makefile
-	contrib/opal/ZSI/Makefile
+    contrib/opal/Makefile
+    contrib/opal/ZSI/Makefile
 	
     tools/Makefile
     tools/mesh/Makefile
@@ -1234,6 +1234,7 @@ AC_CONFIG_FILES([
     examples/protein-rna/Makefile
     examples/smpbe/Makefile
     examples/solv/Makefile
+    examples/opal/Makefile
     
     bin/Makefile
 
