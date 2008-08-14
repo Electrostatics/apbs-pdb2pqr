@@ -125,7 +125,7 @@
 
 		</sect2>
 
-		<sect2> <title>Configuring, compiling, and installing</title>
+		<sect2> <title>Configuring, compiling, installing, and testing</title>
 			<para> Before compiling/installing APBS, you need to configure with the autoconf
 				<literal>configure</literal> script.  You can examine the various configure options with
 				the <option>--help</option> option.  For many platforms, no options need to be
@@ -150,6 +150,22 @@
 <prompt>$</prompt> <userinput>make install</userinput>
 				</screen>
 			</para>
+			<para>
+				For those with obsessive-compulsive tendencies<footnote><para>Including some of the APBS development team...</para></footnote>, you can also test the APBS binary you just compiled against a suite of benchmark jobs by running
+				<screen>
+<prompt>$</prompt> <userinput>make test</userinput>
+				</screen>
+				You should be able to watch the various tests pass on your platform.  If they don't pass, please let us know by posting to the <ulink url="https://lists.sourceforge.net/lists/listinfo/apbs-users">APBS-USERS mailing list</ulink>.  These tests can also be run before <userinput>make install</userinput> is executed.
+			</para>
+			
+			<para>
+				You can test the <link linkend="opal">Opal</link> version of APBS separately by typing
+				<screen>
+<prompt>$</prompt> <userinput>make test-opal</userinput>
+				</screen>
+				This follows a similar set of tests as the normal <userinput>make test</userinput> described above.  However, because of runtime dependencies, the Opal version of APBS needs to know the final installation path of the ZSI runtime component. Therefore, in order to test the APBS Opal functionality, the <userinput>make test-opal</userinput> command must be run after APBS has been installed (i.e. after <userinput>make install</userinput> has been issued).
+			</para>
+				
 		</sect2>
 
 		<sect2 id="install-dirs"> <title>APBS directory structure</title>
@@ -187,6 +203,7 @@
 		</sect2>
 
 		<sect2> <title id="machine-sect">System-specific notes</title>
+			
 			<important>
 				<para> If you have tips or tricks on improving APBS performance and/or installation on
 					your machine, please <link linkend="mailing-lists">let us know!</link> </para>
