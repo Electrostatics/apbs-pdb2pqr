@@ -200,27 +200,6 @@
 				of this manual.</para>
 			<itemizedlist>
 				<listitem>
-					<para><filename>tools/visualization/vmd</filename></para>
-					<para>This directory contains scripts which facilitate the
-						visualization of APBS data with 
-						<ulink url="http://www.ks.uiuc.edu/Research/vmd/">VMD</ulink>.
-						<note>
-							<para>NOTE:  As described in the 
-								<link linkend="visualization-sect">Visualization
-									section</link>,
-								a much more elegant interface has been developed for APBS and
-								is available from the 
-								<ulink url="http://www.ks.uiuc.edu/Research/vmd/plugins/apbsrun/">VMD plugins page</ulink>.  
-							</para>
-						</note>
-						The version distributed with APBS was written by Nathan Baker and
-						Dave Sept based on example Tcl scripts by John Stone. The file
-						<filename>loadstuff.vmd</filename> is the command file to be
-						modified to the users' tastes and loaded into VMD. The file
-						<filename>read_dx</filename> contains the Tcl
-						functions needed to read the APBS output.</para>
-				</listitem>
-				<listitem>
 					<para><filename>tools/visualization/opendx</filename></para>
 					<para>This directory contains the 
 						<ulink url="http://www.opendx.org">OpenDX</ulink>

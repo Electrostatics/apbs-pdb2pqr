@@ -276,9 +276,12 @@ potential around my biomolecule?</title>
 			</para>
 
 			<note>
-				<para>This tutorial was written using VMD
-					1.8.5.</para>
+				<para>This tutorial was written using VMD 1.8.5.</para>
 			</note>
+			
+			<warning>
+				<para>You may need to change the path of your VMD APBS working directory to make sure it does not contain spaces.  This is typically a problem on Windows installations.  To make this change, launch the APBS extension (as described <link linkend="vmd-run-apbs">below</link>).  Choose Edit &#8594; Settings... in the APBS Tool window and set the path to your local copy of the APBS executable. Also, make sure that Working Directory does not contain spaces in the path name. Hit OK to close this window.</para>
+			</warning>
 
 			<sect2> <title>Generating the PQR</title>
 
@@ -324,7 +327,7 @@ potential around my biomolecule?</title>
 
 			</sect2>
 
-			<sect2> <title>Running the electrostatics calculation</title>
+			<sect2 id="vmd-run-apbs"> <title>Running the electrostatics calculation</title>
 
 				<para>
 					You're now ready for electrostatics
