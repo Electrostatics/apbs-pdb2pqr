@@ -8,14 +8,15 @@
 	* Allowed pathname containing spaces in input file, as long as the whole pathname is in quotes ("")
 	* Documented 'make test' and related features
 - MODIFICATIONS
-        * 'make test' has been reconfigured to run before issuing make install (can be run from top directory)
-        * Removed GAMMA keyword from ELEC statement
-        * Path lengths can now be larger than 80 characters
+	* Updated tutorial to warn against spaces in APBS working directory path in VMD
+	* 'make test' has been reconfigured to run before issuing make install (can be run from top directory)
+	* Removed GAMMA keyword from ELEC statement
+	* Removed tools/visualization/vmd from tools directory in lieu of built-in support in VMD
+	* Path lengths can now be larger than 80 characters
 	* Expanded authorship list
 	* Added in 'make test-opal' as a post install test (run from the examples install directory)
 - BUG FIXES
-	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword
-	usage
+	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword usage
 	* Fixed typo in User Guide (writemat: poission -> poisson)
 
 
