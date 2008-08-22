@@ -14,6 +14,11 @@
 		<para>
 			We currently offer binaries for the RedHat Linux platform on a variety of architectures as well as command line binaries for WinXP and Mac OS X.  Binaries can be downloaded from the <ulink url="http://agave.wustl.edu/apbs/download">APBS download page</ulink>.  For all other systems, please install from source on your particular platform and feel free to contact the <link linkend="mailing-lists">APBS users mailing list</link> for more help and/or to request a binary for that system.
 		</para>
+		
+		<warning>
+			<para>If you are using APBS on a Windows system, you may not want to install it in a directory with spaces in the path name (e.g., <filename>C:\Program Files\</filename>) as this can cause problems with some visualization programs.
+			</para>
+		</warning>
 
 		<para>
 			APBS binaries are provided in compressed tar format (*.tgz).  On most systems, the binaries can be unarchived by simply double-clicking or opening the archive.  This can also be accomplished on the comamnd line by
