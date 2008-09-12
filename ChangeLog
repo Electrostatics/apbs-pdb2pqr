@@ -8,6 +8,7 @@
 	* Allowed pathname containing spaces in input file, as long as the whole pathname is in quotes ("")
 	* Documented 'make test' and related features
 - MODIFICATIONS
+	* Clarified documentation on the IDs assigned to input maps, PQRs, parameter files, etc.
 	* Updated tutorial to warn against spaces in APBS working directory path in VMD; updated user guide to warn against spaces in APBS installation path on Windows
 	* 'make test' has been reconfigured to run before issuing make install (can be run from top directory)
 	* Removed GAMMA keyword from ELEC statement

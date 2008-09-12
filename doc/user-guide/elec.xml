@@ -333,8 +333,7 @@
 				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="elec-usemap">usemap</link></command>
-				(optional)
+				<command><link linkend="elec-usemap">usemap</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
@@ -462,8 +461,7 @@
 				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="elec-usemap">usemap</link></command>
-				(optional)
+				<command><link linkend="elec-usemap">usemap</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
@@ -553,8 +551,7 @@
 				<command><link linkend="elec-chgm">chgm</link></command>
 			</member>
 			<member>
-				<command><link linkend="elec-usemap">usemap</link></command>
-				(optional)
+				<command><link linkend="elec-usemap">usemap</link></command> (optional)
 			</member>
 			<member>
 				<command><link linkend="elec-useaqua">useaqua</link></command> (optional)
@@ -1958,9 +1955,7 @@
 				<arg choice="req"><replaceable>type</replaceable></arg>
 				<arg choice="req"><replaceable>id</replaceable></arg>
 			</cmdsynopsis>
-			<para>Specify pre-calculated coefficient maps to be used in the PB
-				calculation.  These must have been input via an earlier 
-				<link linkend="read"><command>read map</command></link> statement.
+			<para>Specify pre-calculated coefficient maps to be used in the PB calculation.  These must have been input via an earlier <link linkend="read"><command>read map</command></link> statement.
 				<variablelist>
 					<varlistentry>
 						<term><replaceable>type</replaceable></term>
@@ -1971,54 +1966,21 @@
 									<varlistentry>
 										<term>diel</term>
 										<listitem>
-											<para>Dielectric function map (as read by <command>read
-													map</command> <replaceable>dielx diely
-													dielx</replaceable>); this causes the
-												<link
-													linkend="elec-pdie"><command>pdie</command></link>,
-												<link
-													linkend="elec-sdie"><command>sdie</command></link>,
-												<link
-													linkend="elec-srad"><command>srad</command></link>, 
-												<link
-													linkend="elec-swin"><command>swin</command></link>, and
-												<link
-													linkend="elec-srfm"><command>srfm</command></link>
-												parameters and the radii of the biomolecular atoms to be
-												ignored when computing dielectric values for the PBE.
+											<para>Dielectric function map (as read by <command>read map</command> <replaceable>dielx diely dielx</replaceable>); this causes the <link linkend="elec-pdie"><command>pdie</command></link>, <link linkend="elec-sdie"><command>sdie</command></link>, <link linkend="elec-srad"><command>srad</command></link>, <link linkend="elec-swin"><command>swin</command></link>, and <link linkend="elec-srfm"><command>srfm</command></link> parameters and the radii of the biomolecular atoms to be ignored when computing dielectric values for the PBE.
 											</para>
 										</listitem>
 									</varlistentry>
 									<varlistentry>
 										<term>kappa</term>
 										<listitem>
-											<para>Mobile ion-accessibility function map (as read by
-												<command>read map</command>
-												<replaceable>kappa</replaceable>); this causes the
-												<link
-													linkend="elec-swin"><command>swin</command></link> and 
-												<link
-													linkend="elec-srfm"><command>srfm</command></link>
-												parameters and the radii of the biomolecular atoms to be
-												ignored when computing mobile ion values for the PBE.
-												The 
-												<link
-													linkend="elec-ion"><command>ion</command></link>
-												parameter is not ignored and will still be used.
+											<para>Mobile ion-accessibility function map (as read by <command>read map</command> <replaceable>kappa</replaceable>); this causes the <link linkend="elec-swin"><command>swin</command></link> and  <link linkend="elec-srfm"><command>srfm</command></link> parameters and the radii of the biomolecular atoms to be ignored when computing mobile ion values for the PBE.  The <link linkend="elec-ion"><command>ion</command></link> parameter is not ignored and will still be used.
 											</para>
 										</listitem>
 									</varlistentry>
 									<varlistentry>
 										<term>charge</term>
 										<listitem>
-											<para>Charge distribution map (as read by 
-												<command>read map</command>
-												<replaceable>charge</replaceable>); this causes the
-												<link
-													linkend="elec-chgm"><command>chgm</command></link>
-												parameter and the charges of the biomolecular atoms to
-												be ignored when assembling the fixed charge
-												distribution for the PBE.
+											<para>Charge distribution map (as read by <command>read map</command> <replaceable>charge</replaceable>); this causes the <link linkend="elec-chgm"><command>chgm</command></link> parameter and the charges of the biomolecular atoms to be ignored when assembling the fixed charge distribution for the PBE.
 											</para>
 										</listitem>
 									</varlistentry>
@@ -2029,11 +1991,7 @@
 					<varlistentry>
 						<term><replaceable>id</replaceable></term>
 						<listitem>
-							<para>
-								This ID specifies the particular map read in with <command>read
-									map</command>.  These IDs are assigned sequentially, starting
-								from 1, for each map type read by APBS.
-							</para>
+							<para>As described in the <link linkend="read">READ command documentation</link>, this ID specifies the particular map read in with <command>read map</command>.  These IDs are assigned sequentially, starting from 1, and incremented independently for each map type read by APBS.  In other words, a calculation that uses two PQR files, one parameter file, three charge maps, and four dielectric maps would have PQR files with IDs 1-2, a parameter file with ID 1, charge maps with IDs 1-3, and dielectric maps with IDs 1-4.</para>
 						</listitem>
 					</varlistentry>
 				</variablelist>
@@ -2052,9 +2010,7 @@
 						<term><replaceable>id</replaceable></term>
 						<listitem>
 							<para>
-								This ID specifies the particular map read in with <command>read
-									mesh</command>.  These IDs are assigned sequentially, starting
-								from 1, for each mesh read by APBS.
+								This ID specifies the particular map read in with <command>read mesh</command>.  These IDs are assigned sequentially, starting from 1, and incremented independently for each mesh read by APBS.
 							</para>
 						</listitem>
 					</varlistentry>

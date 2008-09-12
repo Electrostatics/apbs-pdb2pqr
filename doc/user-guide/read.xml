@@ -3,10 +3,10 @@
 	<arg choice="opt" rep="repeat"><replaceable>keywords</replaceable></arg>
 	<command>END</command>
 </cmdsynopsis>
-<para>One of these sections must be present for every molecule involved in the
-	APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for
-	each molecule/map read, based on order and starting at 1.  This section has
-	the following keywords:</para>
+<note>
+	<para>One of these sections must be present for every molecule involved in the APBS calculation. Molecule and "map" IDs are assigned implicitly assigned for each molecule/map read, based on order and starting at 1 and incremented independently for each input type.  In other words, each input PQR is assigned an ID 1, 2, 3, ...; each input dielectric map is assigned an independent ID 1, 2, 3, ...; etc.</para>
+</note>
+<para>This section has the following keywords:</para>
 <itemizedlist>
 	<listitem>
 		<cmdsynopsis id="read-mol">
