@@ -477,6 +477,7 @@ fi
 
 dnl # MPI library location ARG specification (override environment)
 USE_MPI=
+apbs_do_mpi=""
 if test -n "${mpi_path}"; then
 	AC_CHECK_FILE(${mpi_path}/include/mpi.h,[HAS_MPI_INC="yes"], [])
 	if test -n "${HAS_MPI_INC}"; then
@@ -533,6 +534,14 @@ if test -n "${mpi_path}"; then
 	fi
 
 	USE_MPI="yes"
+fi
+
+if test -n "${USE_MPI}"; then
+	if test -n "${apbs_do_python}"; then
+		AC_MSG_NOTICE([Sorry -- Python wrappers don't work with MPI.])
+		AC_MSG_NOTICE([Disabling Python support])
+		apbs_do_python=""
+	fi
 fi
 
 AC_SUBST(mpi_lib)

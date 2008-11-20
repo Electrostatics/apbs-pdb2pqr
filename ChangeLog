@@ -3,6 +3,7 @@
                                    
 #############################################################################
 - NEW FEATURES
+	* Moved APBS user guide to MediaWiki and PDF format
 	* Added in support for OpenMPI for parallel calculations
 	* Added in command line support for Opal job submissions (Code by Samir Unni)
 	* Allowed pathname containing spaces in input file, as long as the whole pathname is in quotes ("")
