@@ -8,7 +8,7 @@
 
 # READ IN MOLECULES
 read                                                
-    mol xml ion.xml
+    mol xml born.xml
 end
 
 # COMPUTE POTENTIAL FOR SOLVATED STATE
