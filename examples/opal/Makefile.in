@@ -344,7 +344,8 @@ uninstall-am:
 
 
 test:
-	${prefix}/bin/ApbsClient.py apbs-mol-auto.in
+	${prefix}/bin/ApbsClient.py born.in
+        ${prefix}/bin/ApbsClient.py actin-dimer.in
 
 $(srcdir)/Makefile.in:
 

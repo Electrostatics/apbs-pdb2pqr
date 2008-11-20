@@ -15,7 +15,8 @@ IGEN=${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc*
 
 test:
-	${prefix}/bin/ApbsClient.py apbs-mol-auto.in
+	${prefix}/bin/ApbsClient.py born.in
+        ${prefix}/bin/ApbsClient.py actin-dimer.in
 
 $(srcdir)/Makefile.in:
 
