@@ -1,5 +1,0 @@
-  source read_dx 
-  mol load pdb mol.pqr
-  read_dx pot.dx 0
-
-  add_contour 0 -1.0 1
