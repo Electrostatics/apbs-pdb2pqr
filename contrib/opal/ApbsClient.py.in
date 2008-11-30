@@ -11,13 +11,14 @@ sys.path.append("@SITEPKGS@")
 sys.path.append("@SITEPKGS@/ZSI")
 
 from AppService_client import \
-     AppServiceLocator, getAppMetadataRequest, launchJobRequest, \
+     AppServiceLocator, AppServicePortTypeSoapBindingSOAP, getAppMetadataRequest, launchJobRequest, \
      queryStatusRequest, getOutputsRequest, \
      launchJobBlockingRequest, getOutputAsBase64ByNameRequest
 from AppService_types import ns0
 from ZSI.TC import String
 
 serviceURL = 'http://ws.nbcr.net/opal/services/ApbsOpalService' # hardcoded?
+local_version = '1.0.1' # hardcoded?
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
     if outputDirectory != None:
@@ -141,6 +142,11 @@ def execApbs(vars=None, argv=None):
     # Set up remote job launch
     req = launchJobRequest()
     
+    # Checks version compatibility
+    if AppServicePortTypeSoapBindingSOAP(vars['serviceURL']).getAppMetadata(getAppMetadataRequest())._usage[-5:] != local_version:
+        print "The calculation cannot be completed, as the version of APBS on the remote server does not match the local version."
+        os._exit(99)
+
     #*argument parser
     # command-line arguments
     vars['inFile'] = argv[-1]
