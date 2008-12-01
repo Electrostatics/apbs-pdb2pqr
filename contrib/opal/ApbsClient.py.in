@@ -17,8 +17,8 @@ from AppService_client import \
 from AppService_types import ns0
 from ZSI.TC import String
 
-serviceURL = 'http://ws.nbcr.net/opal/services/ApbsOpalService' # hardcoded?
-local_version = '1.0.0' # hardcoded?
+serviceURL = '@SERVICEURL@' 
+local_version = '@PACKAGE_VERSION@' 
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
     if outputDirectory != None:
