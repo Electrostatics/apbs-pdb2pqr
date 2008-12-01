@@ -21615,6 +21615,7 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 USE_MPI=
+apbs_do_mpi=""
 if test -n "${mpi_path}"; then
 	as_ac_File=`echo "ac_cv_file_${mpi_path}/include/mpi.h" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for ${mpi_path}/include/mpi.h" >&5
@@ -21971,6 +21972,16 @@ echo "$as_me: error: Error...Could not find OpenMPI libraries in ${mpi_path}/lib
 	fi
 
 	USE_MPI="yes"
+fi
+
+if test -n "${USE_MPI}"; then
+	if test -n "${apbs_do_python}"; then
+		{ echo "$as_me:$LINENO: Sorry -- Python wrappers don't work with MPI." >&5
+echo "$as_me: Sorry -- Python wrappers don't work with MPI." >&6;}
+		{ echo "$as_me:$LINENO: Disabling Python support" >&5
+echo "$as_me: Disabling Python support" >&6;}
+		apbs_do_python=""
+	fi
 fi
 
 
@@ -22345,8 +22356,11 @@ else
 fi
 
 PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
+SERVICEURL='http://ws.nbcr.net/opal/services/ApbsOpalService'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
-sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
+sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
+    -e 's%@PACKAGE_VERSION@%'${PACKAGE_VERSION}'%' \
+    -e 's%@SERVICEURL@%'${SERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
 
 SITEPKGS=$SITEPKGS
 
