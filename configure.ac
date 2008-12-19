@@ -689,10 +689,12 @@ changequote(<<, >>)dnl
 PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 changequote([, ])dnl
 SERVICEURL='http://ws.nbcr.net/opal/services/ApbsOpalService'
+PARALLELSERVICEURL='http://ws.nbcr.net/opal/services/ApbsParallelOpalService'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
     -e 's%@PACKAGE_VERSION@%'${PACKAGE_VERSION}'%' \
-    -e 's%@SERVICEURL@%'${SERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
+    -e 's%@SERVICEURL@%'${SERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py'%' \
+    -e 's%@PARALLELSERVICEURL@%'${PARALLELSERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
 
 AC_SUBST(SITEPKGS,[$SITEPKGS])
 
