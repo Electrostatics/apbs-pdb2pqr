@@ -152,6 +152,10 @@ def execApbs(vars=None, argv=None):
                 global parallel_service_url
                 vars['service_url'] = parallel_service_url
                 sequential = False
+            if(line[:5]=='async'):
+                global service_url
+                vars['service_url'] = service_url
+                sequential = True
                 break
         if sequential:
             global service_url
