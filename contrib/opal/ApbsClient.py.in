@@ -35,9 +35,8 @@ def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
             print fileName+" downloaded."
 
 def pollStatus(jobID,outputDirectory):
-    appLocator = AppServiceLocator()
     global serviceURL
-    appServicePort = appLocator.getAppServicePort(serviceURL)
+    appServicePort = AppServiceLocator().getAppServicePort(serviceURL)
     status = appServicePort.queryStatus(queryStatusRequest(jobID))
 
     if status._code == 4:
@@ -108,9 +107,8 @@ def initRemoteVars(argv):
     return vars
     
 def displayResults(jobID):
-    appLocator = AppServiceLocator()
     global serviceURL
-    appServicePort = appLocator.getAppServicePort(serviceURL)
+    appServicePort = AppServiceLocator().getAppServicePort(serviceURL)
     resp = appServicePort.getOutputs(getOutputsRequest(jobID))
 
     # Retrieve a listing of all output files
@@ -135,9 +133,8 @@ def execApbs(vars=None, argv=None):
         vars['serviceURL']= serviceURL
 
     # Retrieve a reference to the AppServicePort
-    appLocator = AppServiceLocator()
     #*this is also from the path to the service
-    appServicePort = appLocator.getAppServicePort(vars['serviceURL'])
+    appServicePort = AppServiceLocator().getAppServicePort(vars['serviceURL'])
         
     # Set up remote job launch
     req = launchJobRequest()
