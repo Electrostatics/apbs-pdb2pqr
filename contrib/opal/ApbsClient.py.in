@@ -18,6 +18,7 @@ from AppService_types import ns0
 from ZSI.TC import String
 
 service_url = '@SERVICEURL@' 
+parallel_service_url = '@PARALLELSERVICEURL@'
 local_version = '@PACKAGE_VERSION@' 
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
@@ -128,21 +129,6 @@ def execApbs(vars=None, argv=None):
        webRun = True
        vars = initRemoteVars(argv)
 
-    if not vars.has_key('service_url'):
-        global service_url
-        vars['service_url']= service_url
-
-    # Retrieve a reference to the AppServicePort
-    #*this is also from the path to the service
-    appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
-        
-    # Set up remote job launch
-    req = launchJobRequest()
-    
-    # Checks version compatibility
-    if AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:] != local_version:
-        print "The calculation cannot be completed, as the version of APBS on the remote server does not match the local version."
-        os._exit(99)
 
     #*argument parser
     # command-line arguments
@@ -155,6 +141,37 @@ def execApbs(vars=None, argv=None):
         directory = os.path.dirname(vars['inFile'])+'/'
         vars['inFile'] = os.path.basename(vars['inFile'])
 
+    if not vars.has_key('service_url'):
+        # find out if it's sequential or parallel
+        tempFile = open(directory+vars['inFile'], 'r') 
+        sequential = True
+        for line in tempFile:
+            # remove whitespace
+            line=line.strip()
+            if(line[:5]=='pdime'):
+                global parallel_service_url
+                vars['service_url'] = parallel_service_url
+                sequential = False
+                break
+        if sequential:
+            global service_url
+            vars['service_url']= service_url
+
+        tempFile.close()
+
+    # Retrieve a reference to the AppServicePort
+    #*this is also from the path to the service
+    appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
+        
+    # Set up remote job launch
+    req = launchJobRequest()
+    
+    # Checks version compatibility (but currently only works for sequential calculations)
+    if sequential:
+        opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:]
+        if opal_version != local_version:
+            print "The calculation cannot be completed, as the version of APBS on the remote server (%s) does not match the local version (%s)." % (opal_version,local_version)
+            os._exit(99)
 
     if(vars.has_key('argList')):
         vars['argList'] = vars['argList'] + " " + vars['inFile']
