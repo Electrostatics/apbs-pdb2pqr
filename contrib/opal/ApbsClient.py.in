@@ -17,7 +17,7 @@ from AppService_client import \
 from AppService_types import ns0
 from ZSI.TC import String
 
-serviceURL = '@SERVICEURL@' 
+service_url = '@SERVICEURL@' 
 local_version = '@PACKAGE_VERSION@' 
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
@@ -35,8 +35,8 @@ def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
             print fileName+" downloaded."
 
 def pollStatus(jobID,outputDirectory):
-    global serviceURL
-    appServicePort = AppServiceLocator().getAppServicePort(serviceURL)
+    global service_url
+    appServicePort = AppServiceLocator().getAppServicePort(service_url)
     status = appServicePort.queryStatus(queryStatusRequest(jobID))
 
     if status._code == 4:
@@ -78,9 +78,9 @@ def initLocalVars():
     # parses custom service location
     for arg in sys.argv:
         if(arg[:19]=="--service-location="):
-            vars['serviceURL'] = arg[19:]
+            vars['service_url'] = arg[19:]
             if(arg[19:].find("://")==-1):
-                vars['serviceURL']="http://"+vars['serviceURL']
+                vars['service_url']="http://"+vars['service_url']
             break
 
     # parses filename to write to
@@ -107,8 +107,8 @@ def initRemoteVars(argv):
     return vars
     
 def displayResults(jobID):
-    global serviceURL
-    appServicePort = AppServiceLocator().getAppServicePort(serviceURL)
+    global service_url
+    appServicePort = AppServiceLocator().getAppServicePort(service_url)
     resp = appServicePort.getOutputs(getOutputsRequest(jobID))
 
     # Retrieve a listing of all output files
@@ -128,19 +128,19 @@ def execApbs(vars=None, argv=None):
        webRun = True
        vars = initRemoteVars(argv)
 
-    if not vars.has_key('serviceURL'):
-        global serviceURL
-        vars['serviceURL']= serviceURL
+    if not vars.has_key('service_url'):
+        global service_url
+        vars['service_url']= service_url
 
     # Retrieve a reference to the AppServicePort
     #*this is also from the path to the service
-    appServicePort = AppServiceLocator().getAppServicePort(vars['serviceURL'])
+    appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
         
     # Set up remote job launch
     req = launchJobRequest()
     
     # Checks version compatibility
-    if AppServicePortTypeSoapBindingSOAP(vars['serviceURL']).getAppMetadata(getAppMetadataRequest())._usage[-5:] != local_version:
+    if AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:] != local_version:
         print "The calculation cannot be completed, as the version of APBS on the remote server does not match the local version."
         os._exit(99)
 
@@ -152,11 +152,8 @@ def execApbs(vars=None, argv=None):
     if(vars['inFile'].find("/")==-1):
         directory=""
     else:
-        count=-1
-        while vars['inFile'][count]!='/':
-            count = count-1
-        directory = vars['inFile'][:count+1]
-        vars['inFile'] = vars['inFile'][count+1:]
+        directory = os.path.dirname(vars['inFile'])+'/'
+        vars['inFile'] = os.path.basename(vars['inFile'])
 
 
     if(vars.has_key('argList')):
