@@ -17,6 +17,7 @@
 	* Path lengths can now be larger than 80 characters
 	* Expanded authorship list
 	* Added in 'make test-opal' as a post install test (run from the examples install directory)
+	* Added additional concentrations to protein-rna test case to better encompass experimental conditions used by Garcia-Garcia and Draper; this improves agreement with the published data
 - BUG FIXES
 	* Fixed typos in User Guide (ion keyword) and clarified SMPBE keyword usage
 	* Fixed typo in User Guide (writemat: poission -> poisson)
