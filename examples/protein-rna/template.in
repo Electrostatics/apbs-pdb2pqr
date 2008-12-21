@@ -3,7 +3,7 @@ read
     mol pqr model_outNpep.pqr
     mol pqr model_outBoxB19.pqr
 end
-elec 
+elec name complex
     mg-auto
     dime 65 97 129
     cglen 45.3322 54.9498 82.2633
@@ -26,7 +26,7 @@ elec
     calcenergy total
     calcforce no
 end
-elec 
+elec name peptide
     mg-auto
     dime 65 97 129
     cglen 45.3322 54.9498 82.2633
@@ -49,7 +49,7 @@ elec
     calcenergy total
     calcforce no
 end
-elec 
+elec name rna
     mg-auto
     dime 65 97 129
     cglen 45.3322 54.9498 82.2633
@@ -73,6 +73,6 @@ elec
     calcforce no
 end
 
-print energy 1 - 2 - 3 end
+print energy complex - peptide - rna end
 
 quit
