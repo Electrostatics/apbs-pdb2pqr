@@ -22361,7 +22361,7 @@ PARALLELSERVICEURL='http://ws.nbcr.net/opal/services/ApbsParallelOpalService'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
     -e 's%@PACKAGE_VERSION@%'${PACKAGE_VERSION}'%' \
-    -e 's%@SERVICEURL@%'${SERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py'%' \
+    -e 's%@SERVICEURL@%'${SERVICEURL}'%' \
     -e 's%@PARALLELSERVICEURL@%'${PARALLELSERVICEURL}'%' ${top_apbsdir}/contrib/opal/ApbsClient.py.in > ${top_apbsdir}/contrib/opal/ApbsClient.py
 
 SITEPKGS=$SITEPKGS

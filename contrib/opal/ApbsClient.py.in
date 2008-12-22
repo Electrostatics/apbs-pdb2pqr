@@ -141,6 +141,7 @@ def execApbs(vars=None, argv=None):
         directory = os.path.dirname(vars['inFile'])+'/'
         vars['inFile'] = os.path.basename(vars['inFile'])
 
+    nprocs = 1
     if not vars.has_key('service_url'):
         # find out if it's sequential or parallel
         tempFile = open(directory+vars['inFile'], 'r') 
@@ -149,6 +150,9 @@ def execApbs(vars=None, argv=None):
             # remove whitespace
             line=line.strip()
             if(line[:5]=='pdime'):
+                dimension_array = line.split()
+                for i in range(1,4):
+                    nprocs = int(dimension_array[i])*nprocs
                 global parallel_service_url
                 vars['service_url'] = parallel_service_url
                 sequential = False
@@ -159,17 +163,17 @@ def execApbs(vars=None, argv=None):
                 break
         if sequential:
             global service_url
-            vars['service_url']= service_url
+            vars['service_url'] = service_url
 
         tempFile.close()
 
     # Retrieve a reference to the AppServicePort
     #*this is also from the path to the service
     appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
-        
+
     # Set up remote job launch
     req = launchJobRequest()
-    
+
     # Checks version compatibility (but currently only works for sequential calculations)
     if sequential:
         opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:]
@@ -181,8 +185,9 @@ def execApbs(vars=None, argv=None):
         vars['argList'] = vars['argList'] + " " + vars['inFile']
     else:
         vars['argList']=vars['inFile']
-    
+
     req._argList = vars['argList']
+    req._numProcs = nprocs
     # append all input files in this manner - in this case we have two of them
     
     inputFiles = []
