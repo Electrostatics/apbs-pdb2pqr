@@ -2124,6 +2124,185 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     }
 }
 
+/* 
+ Used by bcflnew
+ */
+VPRIVATE int gridPointIsValid(int i, int j, int k, int nx, int ny, int nz){
+	
+	int isValid = 0;
+	
+	if((k==0) || (k==nz-1)){
+		isValid = 1;
+	}else if((j==0) || (j==ny-1)){
+		isValid = 1;
+	}else if((i==0) || (i==nx-1)){
+		isValid = 1;
+	}
+	
+	return isValid;
+}
+
+/* 
+ Used by bcflnew
+ */
+VPRIVATE void packAtoms(double *ax, double *ay, double *az,
+						double *charge, double *size, Vpmg *thee){
+	
+	int i;
+	int natoms;
+	
+	Vatom *atom = VNULL;
+	Valist *alist = VNULL;
+	
+	alist = thee->pbe->alist;
+	natoms = Valist_getNumberAtoms(alist);
+	
+	for(i=0;i<natoms;i++){
+		atom = &(alist->atoms[i]);
+		charge[i] = Vunit_ec*atom->charge;
+		ax[i] = atom->position[0];
+		ay[i] = atom->position[1];
+		az[i] = atom->position[2];
+		size[i] = atom->radius;
+	}
+}
+
+/* 
+ Used by bcflnew
+ */
+VPRIVATE void packUnpack(int nx, int ny, int nz, int ngrid,
+						 double *gx, double *gy, double *gz, double *value,
+						 Vpmg *thee, int pack){
+	
+	int i,j,k,igrid;
+	int x0,x1,y0,y1,z0,z1;
+	
+	double gpos[3];
+	double *xf, *yf, *zf;
+	double *gxcf, *gycf, *gzcf;
+	
+	xf = thee->xf;
+	yf = thee->yf;
+	zf = thee->zf;
+	
+	gxcf = thee->gxcf;
+	gycf = thee->gycf;
+	gzcf = thee->gzcf;
+	
+	igrid = 0;
+	for(k=0;k<nz;k++){
+		gpos[2] = zf[k];
+		for(j=0;j<ny;j++){
+			gpos[1] = yf[j];
+			for(i=0;i<nx;i++){
+				gpos[0] = xf[i];
+				if(gridPointIsValid(i, j, k, nx, ny, nz)){
+					if(pack != 0){
+						gx[igrid] = gpos[0];
+						gy[igrid] = gpos[1];
+						gz[igrid] = gpos[2];
+						
+						value[igrid] = 0.0;
+					}else{
+						x0 = IJKx(j,k,0);
+						x1 = IJKx(j,k,1);
+						y0 = IJKy(i,k,0);
+						y1 = IJKy(i,k,1);
+						z0 = IJKz(i,j,0);
+						z1 = IJKz(i,j,1);
+						
+						if(i==0){
+							gxcf[x0] += value[igrid];
+						}else if(i==nx-1){
+							gxcf[x1] += value[igrid];
+						}else if(j==0){
+							gycf[y0] += value[igrid];
+						}else if(j==ny-1){
+							gycf[y1] += value[igrid];
+						}else if(k==0){
+							gzcf[z0] += value[igrid];
+						}else if(k==nz-1){
+							gzcf[z1] += value[igrid];
+						}
+					}
+					
+					igrid++;
+				} //end is valid point
+			} //end i
+		} //end j
+	} //end k
+}
+
+/*
+ bcflnew is an optimized replacement for bcfl1. bcfl1 is still used when TINKER support is compiled in.
+ bcflnew uses: packUnpack, packAtoms, gridPointIsValid
+ */
+VPRIVATE void bcflnew(int nx, int ny, int nz, double xkappa, double pre1, Vpmg *thee){
+	
+	int i,j,k, iatom, igrid;
+	int x0, x1, y0, y1, z0, z1;
+	int natoms, ngrid;
+	
+	double dist;
+	
+	double *ax, *ay, *az;
+	double *charge, *size, *val;
+	
+	double *gx, *gy, *gz;
+	
+	natoms = Valist_getNumberAtoms(thee->pbe->alist);
+	ngrid = 2*((nx*ny) + (ny*nz) + (nx*nz));
+	
+	ax = (double*)malloc(natoms * sizeof(double));
+	ay = (double*)malloc(natoms * sizeof(double));
+	az = (double*)malloc(natoms * sizeof(double));
+	
+	charge = (double*)malloc(natoms * sizeof(double));
+	size = (double*)malloc(natoms * sizeof(double));
+	
+	gx = (double*)malloc(ngrid * sizeof(double));
+	gy = (double*)malloc(ngrid * sizeof(double));
+	gz = (double*)malloc(ngrid * sizeof(double));
+	
+	val = (double*)malloc(ngrid * sizeof(double));
+	
+	packAtoms(ax,ay,az,charge,size,thee);
+	packUnpack(nx,ny,nz,ngrid,gx,gy,gz,val,thee,1);
+	
+	if(xkappa > VSMALL){
+#pragma omp parallel for default(shared) private(igrid,iatom,dist)
+		for(igrid=0;igrid<ngrid;igrid++){
+			for(iatom=0; iatom<natoms; iatom++){
+				dist = VSQRT(VSQR(gx[igrid]-ax[iatom]) + VSQR(gy[igrid]-ay[iatom])
+							 + VSQR(gz[igrid]-az[iatom]));
+				val[igrid] += pre1*(charge[iatom]/dist)*VEXP(-xkappa*(dist-size[iatom]))
+				/ (1+xkappa*size[iatom]);
+			}
+		}
+	}else{
+#pragma omp parallel for default(shared) private(igrid,iatom,dist)
+		for(igrid=0;igrid<ngrid;igrid++){
+			for(iatom=0; iatom<natoms; iatom++){
+				dist = VSQRT(VSQR(gx[igrid]-ax[iatom]) + VSQR(gy[igrid]-ay[iatom])
+							 + VSQR(gz[igrid]-az[iatom]));
+				val[igrid] += pre1*(charge[iatom]/dist); 
+			}
+		}
+	}
+	packUnpack(nx,ny,nz,ngrid,gx,gy,gz,val,thee,0);
+	
+	free(ax);
+	free(ay);
+	free(az);
+	free(charge);
+	free(size);
+	
+	free(gx);
+	free(gy);
+	free(gz);
+	free(val);
+}
+
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag, 
         double partMin[3], double partMax[3], int bflags[6]) {
 
@@ -2364,7 +2543,6 @@ VPRIVATE void bcfl1(double size, double *apos, double charge,
         }
     }
 }
-
 
 VPRIVATE void bcCalc(Vpmg *thee) {
 	
@@ -2608,6 +2786,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
             break;
 			
         case BCFL_MDH:
+//#if  defined(WITH_TINKER)			
 			for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 				atom = Valist_getAtom(alist, iatom);
 				position = Vatom_getPosition(atom);
@@ -2619,8 +2798,7 @@ VPRIVATE void bcCalc(Vpmg *thee) {
 				{
 					case VCM_CHARGE:
 						;
-						
-#if defined(WITH_TINKER)
+#if  defined(WITH_TINKER)			
 					case VCM_PERMANENT:
 						dipole = Vatom_getDipole(atom);
 						quadrupole = Vatom_getQuadrupole(atom);
@@ -2630,12 +2808,15 @@ VPRIVATE void bcCalc(Vpmg *thee) {
 						
 					case VCM_NLINDUCED:
 						dipole = Vatom_getNLInducedDipole(atom);
-#endif /* if defined(WITH_TINKER) */                
+#endif
 				}
 				bcfl1(size, position, charge, xkappa, pre1,
 					  thee->gxcf, thee->gycf, thee->gzcf, 
 					  thee->xf, thee->yf, thee->zf, nx, ny, nz);
 			}
+//#else /* if defined(WITH_TINKER) */
+//			bcflnew(nx, ny, nz, xkappa, pre1, thee);
+//#endif
 			break;
 			
         case BCFL_UNUSED:

@@ -16,7 +16,8 @@ CLEANFILES = *-PE* *.out *.log io.mc*
 
 test:
 	${prefix}/bin/ApbsClient.py born.in
-        ${prefix}/bin/ApbsClient.py actin-dimer.in
+	${prefix}/bin/ApbsClient.py actin-dimer.in
+	${prefix}/bin/ApbsClient.py actin-dimer-para.in
 
 $(srcdir)/Makefile.in:
 
