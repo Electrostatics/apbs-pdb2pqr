@@ -653,27 +653,29 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
 #endif /* defined(HAVE_MC_H) */
 
 VPUBLIC double Vacc_SASA(Vacc *thee, double radius) { 
-
+	
     int i, natom;
     double area, *apos;
     Vatom *atom;
     VaccSurf *asurf;
-
+	
     natom = Valist_getNumberAtoms(thee->alist);
-
+	
     /* Check to see if we need to build the surface */
     if (thee->surf == VNULL) {
         thee->surf = Vmem_malloc(thee->mem, natom, sizeof(VaccSurf *));
+		
+//#pragma omp parallel for private(i,atom,apos)
         for (i=0; i<natom; i++) {
             atom = Valist_getAtom(thee->alist, i);
             apos = Vatom_getPosition(atom);
             /* NOTE:  RIGHT NOW WE DO THIS FOR THE ENTIRE MOLECULE WHICH IS
              * INCREDIBLY INEFFICIENT, PARTICULARLY DURING FOCUSING!!! */
             thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, 
-                    radius);
+										  radius);
         }
     }
-
+	
     /* Calculate the area */
     area = 0.0;
     for (i=0; i<natom; i++) {
@@ -682,16 +684,16 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
         /* See if this surface needs to be rebuilt */
         if (asurf->probe_radius != radius) {
             Vnm_print(2, "Vacc_SASA:  Warning -- probe radius changed from %g to %g!\n", 
-                    asurf->probe_radius, radius);
+					  asurf->probe_radius, radius);
             VaccSurf_dtor2(asurf);
             thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
             asurf = thee->surf[i];
         }
         area += (asurf->area);
     }
-
+	
     return area;
-
+	
 }
 
 VPUBLIC double Vacc_totalSASA(Vacc *thee, double radius) {
@@ -741,7 +743,7 @@ VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
     thee->npts = nsphere;
     thee->probe_radius = probe_radius;
     thee->area = 0.0;
-
+	
     if (thee->npts > 0) {
         thee->xpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->ypts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
@@ -816,10 +818,10 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
             ref->bpts[i] = 0;
         }
     }
-
+	
     /* Allocate space for the points */
     surf = VaccSurf_ctor(thee->mem, prad, npts);
-
+	
     /* Assign the points */
     j = 0;
     for (i=0; i<ref->npts; i++) {

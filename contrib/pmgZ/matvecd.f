@@ -269,6 +269,7 @@ c*
 c*    *** return and end ***
       return
       end
+	  
       subroutine mresid7_1s(nx,ny,nz,ipc,rpc,oC,cc,fc,oE,oN,uC,x,r)
 c* *********************************************************************
 c* purpose:
@@ -287,12 +288,10 @@ c*
 cmdir 0 0
 c*
 c*    *** do it ***
-cmdir 3 1
-      do 10 k=2,nz-1
-cmdir 3 2
-         do 11 j=2,ny-1
-cmdir 3 3
-            do 12 i=2,nx-1
+!$OMP PARALLEL DO default(shared) private(i,j,k)
+       do k=2,nz-1
+         do j=2,ny-1
+            do i=2,nx-1
                r(i,j,k) = fc(i,j,k)
      2               +  oN(i,j,k)        * x(i,j+1,k)
      3               +  oN(i,j-1,k)      * x(i,j-1,k)
@@ -301,13 +300,15 @@ cmdir 3 3
      6               +  uC(i,j,k-1)      * x(i,j,k-1)
      7               +  uC(i,j,k)        * x(i,j,k+1)
      8               -  (oC(i,j,k) + cc(i,j,k)) * x(i,j,k)
- 12         continue
- 11      continue
- 10   continue
+			end do
+		end do
+	  end do
+!$OMP END PARALLEL DO
 c*
 c*    *** return and end ***
       return
       end
+	  
       subroutine mresid27(nx,ny,nz,ipc,rpc,ac,cc,fc,x,r)
 c* *********************************************************************
 c* purpose:
@@ -965,6 +966,7 @@ c*
 c*    *** return and end ***
       return
       end
+	  
       subroutine restrc2(nxf,nyf,nzf,nxc,nyc,nzc,xin,xout,
      2   oPC,oPN,oPS,oPE,oPW,oPNE,oPNW,oPSE,oPSW,
      3   uPC,uPN,uPS,uPE,uPW,uPNE,uPNW,uPSE,uPSW,
@@ -1016,14 +1018,13 @@ c*    *** determine dimension factor ***
       dimfac  = 2.**idimenshun
 c*
 c*    *** handle the interior points as average of 5 finer grid pts ***
-cmdir 3 1
-      do 10 k = 2, nzc-1
+!$OMP PARALLEL default(shared) private(k,kk,j,jj,i,ii,tmpO,tmpU,tmpD)
+!$OMP DO
+      do k = 2, nzc-1
          kk = (k - 1) * 2 + 1
-cmdir 3 2
-         do 11 j = 2, nyc-1
+         do j = 2, nyc-1
             jj = (j - 1) * 2 + 1
-cmdir 3 3
-            do 12 i = 2, nxc-1
+            do i = 2, nxc-1
                ii = (i - 1) * 2 + 1
 c*
 c*             *** compute the restriction ***
@@ -1058,9 +1059,11 @@ c*             *** compute the restriction ***
      9            +  dPSE(i,j,k)       * xin(ii+1,jj-1,kk-1)
      9            +  dPSW(i,j,k)       * xin(ii-1,jj-1,kk-1)
                xout(i,j,k) = tmpO + tmpU + tmpD
- 12         continue
- 11      continue
- 10   continue
+		  end do
+		end do
+	   end do
+!$OMP END DO
+!$OMP END PARALLEL
 c*
 c*    *** verify correctness of the output boundary points ***
       call fboundPMG00(nxc,nyc,nzc,xout)
@@ -1068,6 +1071,7 @@ c*
 c*    *** return and end ***
       return
       end
+	  
       subroutine extrac(nxf,nyf,nzf,nxc,nyc,nzc,xin,xout)
 c* *********************************************************************
 c* purpose:

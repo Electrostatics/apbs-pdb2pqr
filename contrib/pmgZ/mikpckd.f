@@ -108,20 +108,20 @@ c*
 cmdir 0 0
 c*
 c*    *** do it ***
-cmdir 3 1
-      do 10 k = 2, nz-1
-cmdir 3 2
-         do 11 j = 2, ny-1
-cmdir 3 3
-            do 12 i = 2, nx-1
+!$OMP PARALLEL DO private(i,j,k)
+      do k = 2, nz-1
+         do j = 2, ny-1
+            do i = 2, nx-1
                y(i,j,k) = x(i,j,k)
- 12         continue
- 11      continue
- 10   continue
+			end do
+		 end do
+	  end do
+!$OMP END PARALLEL DO
 c*
 c*    *** return and end ***
       return
       end
+
       function xnrm1(nx,ny,nz,x)
 c* *********************************************************************
 c* purpose:
@@ -433,23 +433,13 @@ cmdir 0 0
 c*
 c*    *** find parallel loops (ipara), remainder (ivect) ***
       n     = nx * ny * nz
-      ipara = n / nproc
-      ivect = mod(n,nproc)
-c*
-c*    *** do parallel loops ***
-cmdir 2 1
-      do 10 ii = 1, nproc
-cmdir 2 2
-         do 11 i = 1+(ipara*(ii-1)), ipara*ii
-            x(i) = 0.0d0
- 11      continue
- 10   continue
-c*
-c*    *** do vector loops ***
-cmdir 1 1
-      do 20 i = ipara*nproc+1, n
-         x(i) = 0.0d0
- 20   continue
+
+!$OMP PARALLEL DO private(i)
+      do i = 1, n
+       x(i) = 0.0d0
+	  end do
+!$OMP END PARALLEL DO
+
 c*
 c*    *** return and end ***
       return
