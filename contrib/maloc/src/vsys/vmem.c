@@ -240,7 +240,7 @@ VPUBLIC void *Vmem_malloc(Vmem *thee, size_t num, size_t size)
     /* VWARN( (num > 0) && (size > 0) ); */
     VASSERT( (num > 0) && (size > 0) );
     if ( (num > 0) && (size > 0) ) {
-
+		
         ram = (void*)calloc((size_t)num, (size_t)size);
         if (ram == VNULL) {
             fprintf(stderr, "Unable to allocate memory!\n");

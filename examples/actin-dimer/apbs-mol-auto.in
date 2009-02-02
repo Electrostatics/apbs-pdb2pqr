@@ -47,7 +47,7 @@ elec name mol2
     fgcent mol 3
     mol 2
     npbe
-    bcfl sdh
+    bcfl mdh
     ion charge 1 conc 0.050 radius 2.0
     ion charge -1 conc 0.050 radius 2.0
     pdie 2.0
@@ -72,7 +72,7 @@ elec name complex
     fgcent mol 3
     mol 3
     npbe
-    bcfl sdh
+    bcfl mdh
     ion charge 1 conc 0.050 radius 2.0
     ion charge -1 conc 0.050 radius 2.0
     pdie 2.0
