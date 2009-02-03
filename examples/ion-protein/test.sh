@@ -12,7 +12,7 @@ vsmall=0.000000001000
 
 input=( apbs-mol-pdiel2 apbs-smol-pdiel2 apbs-mol-pdiel12 apbs-smol-pdiel12 )
 
-results=( 1.559159532949E+01  2.355542126656E+01 1.802722643239E+01 1.928245019833E+01 )
+results=( 1.558193146267E+01  2.354575739967E+01 1.801756256558E+01 1.927278633158E+01 )
 
 # Initialize the results file
 
