@@ -2774,14 +2774,13 @@ VPRIVATE void bcCalcOrig(Vpmg *thee) {
 			 printf("%6.3f %6.3f %6.3f\n", sdhquadrupole[6]*debye,
 			 sdhquadrupole[7]*debye, sdhquadrupole[8]*debye);
 			 */
-			
+
 			bcfl2(size, position, sdhcharge, sdhdipole, sdhquadrupole, 
 				  xkappa, eps_p, eps_w, T, thee->gxcf, thee->gycf, 
 				  thee->gzcf, thee->xf, thee->yf, thee->zf, nx, ny, nz);
             break;
 			
-        case BCFL_MDH:
-//#if  defined(WITH_TINKER)			
+        case BCFL_MDH:	
 			for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 				atom = Valist_getAtom(alist, iatom);
 				position = Vatom_getPosition(atom);
@@ -2809,9 +2808,6 @@ VPRIVATE void bcCalcOrig(Vpmg *thee) {
 					  thee->gxcf, thee->gycf, thee->gzcf, 
 					  thee->xf, thee->yf, thee->zf, nx, ny, nz);
 			}
-//#else /* if defined(WITH_TINKER) */
-//			bcflnew(nx, ny, nz, xkappa, pre1, thee);
-//#endif
 			break;
 			
         case BCFL_UNUSED:
@@ -3390,6 +3386,7 @@ VPRIVATE void bcfl_sdh(Vpmg *thee){
 			} /* End i loop */
 		} /* End j loop */
 	} /* End k loop */
+
 }
 
 VPRIVATE void bcfl_mdh(Vpmg *thee){

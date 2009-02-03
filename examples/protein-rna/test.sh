@@ -12,7 +12,7 @@ vsmall=0.000000001000
 
 input=( apbs-0.050 ) 
 
-results=(  9.606836712907E+01 )
+results=(  9.610426671309E+01 )
 
 # Initialize the results file
 
