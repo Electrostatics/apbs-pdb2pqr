@@ -28,8 +28,8 @@ case "$r" in
 	   echo "$testfile: PASSED within error ($result; expected $expected; $relativeError% error)" >> $logfile
 	   ;;
 	3) echo "*** FAILED ***"
-       echo "   APBS returned $result"
-       echo "   Expected result is $expected ($error% error)"
+ 	   echo "   APBS returned $result"
+           echo "   Expected result is $expected ($error% error)"
 	   echo "$testfile: FAILED ($result; expected $expected; $relativeError% error)" >> $logfile
 	   ;;
 esac
