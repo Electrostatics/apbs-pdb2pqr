@@ -10,6 +10,8 @@ import subprocess
 sys.path.append("@SITEPKGS@")
 sys.path.append("@SITEPKGS@/ZSI")
 
+import ZSI
+
 from AppService_client import \
      AppServiceLocator, AppServicePortTypeSoapBindingSOAP, getAppMetadataRequest, launchJobRequest, \
      queryStatusRequest, getOutputsRequest, \
@@ -150,10 +152,8 @@ def execApbs(vars=None, argv=None):
             # remove whitespace
             line=line.strip()
             if(line[:5]=='pdime'):
-                raise ValueError, "Sorry, parallel Opal support is not currently available."
                 dimension_array = line.split()
-                for i in range(1,4):
-                    nprocs = int(dimension_array[i])*nprocs
+                nprocs = int(dimension_array[1])*int(dimension_array[2])*int(dimension_array[3])
                 global parallel_service_url
                 vars['service_url'] = parallel_service_url
                 sequential = False
@@ -238,7 +238,12 @@ def execApbs(vars=None, argv=None):
     
     # Launch job, and retrieve job ID
     print "Launching remote APBS job"
-    resp = appServicePort.launchJob(req)
+    try:
+       resp = appServicePort.launchJob(req)
+    except ZSI.FaultException, f:
+       print "Failed to execute Opal job - Please send the entire output to the APBS development team"
+       print f.fault.AsSoap()
+       sys.exit(1)
     
     jobID = resp._jobID
     print "Received Job ID:", jobID
