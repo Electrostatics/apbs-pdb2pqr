@@ -63,7 +63,7 @@ elec name reference
 end
 
 # COMBINE TO FORM SOLVATION ENERGY
-print energy solvated - reference end
+print elecEnergy solvated - reference end
 #print apolForce solvated - asdf2 end
 #print apolEnergy solvated + asdf2 end
 

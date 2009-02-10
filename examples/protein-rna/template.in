@@ -73,6 +73,6 @@ elec name rna
     calcforce no
 end
 
-print energy complex - peptide - rna end
+print elecEnergy complex - peptide - rna end
 
 quit

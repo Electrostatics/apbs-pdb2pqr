@@ -150,6 +150,6 @@ elec name complex-fine
     calcforce no
 end
 
-print energy complex-fine - lig-fine - pka-fine end
+print elecEnergy complex-fine - lig-fine - pka-fine end
 
 quit

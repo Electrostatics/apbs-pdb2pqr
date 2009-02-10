@@ -289,15 +289,15 @@ elec name 1d7h-ref-fine
 end
 
 # COMPLEX SOLVATION ENERGY
-print energy complex-solv-fine - complex-ref-fine end
+print elecEnergy complex-solv-fine - complex-ref-fine end
 
 # DMSO SOLVATION ENERGY
-print energy dmso-solv-fine - dmso-ref-fine end
+print elecEnergy dmso-solv-fine - dmso-ref-fine end
 
 # 1D7H SOLVATION ENERGY
-print energy 1d7h-solv-fine - 1d7h-ref-fine end
+print elecEnergy 1d7h-solv-fine - 1d7h-ref-fine end
 
 # CHANGE IN SOLVATION ENERGY UPON BINDING
-print energy complex-solv-fine - complex-ref-fine - dmso-solv-fine + dmso-ref-fine - 1d7h-solv-fine + 1d7h-ref-fine end
+print elecEnergy complex-solv-fine - complex-ref-fine - dmso-solv-fine + dmso-ref-fine - 1d7h-solv-fine + 1d7h-ref-fine end
 
 quit

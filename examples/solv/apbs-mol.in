@@ -108,12 +108,12 @@ elec name methoxide-ref
 end
 
 # Methanol solvation energy
-print energy methanol-solv - methanol-ref end
+print elecEnergy methanol-solv - methanol-ref end
 
 # Methoxide solvation energy
-print energy methoxide-solv - methoxide-ref end
+print elecEnergy methoxide-solv - methoxide-ref end
 
 # Solvation energy difference
-print energy methoxide-solv - methoxide-ref - methanol-solv + methanol-ref end
+print elecEnergy methoxide-solv - methoxide-ref - methanol-solv + methanol-ref end
 
 quit

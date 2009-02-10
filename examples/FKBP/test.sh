@@ -4,8 +4,6 @@ if [[ $1 = "" ]]; then
     echo "Please use \"make test\" to run the tests."
     exit
 fi
- 
-
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -23,7 +21,7 @@ echo "Results  :" >> $logfile
 # Do 1d7h-dmso first
 
 cd 1d7h-dmso
-results=( 1.500890142385E+01 1.624584726796E+01 )
+results=( 1.500890142388E+01 1.624584726802E+01 )
 
 # For each file in the directory, run APBS and get the value
 
@@ -34,7 +32,7 @@ do
   echo ""
 
   starttime=`date +%s`
-  $1 ${input[i]}.in > ${input[i]}.out 
+  ../$1 ${input[i]}.in > ${input[i]}.out 
   answer=( `grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'` )
 
   echo "Global net energy: ${answer[3]}"
@@ -64,7 +62,7 @@ do
   echo ""
 
   starttime=`date +%s`
-  $1 ${input[i]}.in > ${input[i]}.out 
+  ../$1 ${input[i]}.in > ${input[i]}.out 
   answer=( `grep "Global net ELEC" ${input[i]}.out | awk '{print $6}'` )
 
   echo "Global net energy: ${answer[3]}"
