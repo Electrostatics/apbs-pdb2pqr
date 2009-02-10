@@ -9,8 +9,8 @@ end
 elec name duplexA
    mg-auto
    mol 1
-   ion charge +1 conc 0.02 radius 2 
-   ion charge +2 conc 0.004 radius 2 
+   ion charge 1 conc 0.02 radius 2 
+   ion charge 2 conc 0.004 radius 2 
    ion charge -1 conc 0.028 radius 2
    cglen 250 250 400
    fglen 192 192 336
@@ -27,11 +27,10 @@ elec name duplexA
    smpbe vol 10 size 1000
    sdens 10
    temp 298.1
-   gamma 0.105
    calcenergy total
    calcforce no
    write pot dx pot-24dup
    write ivdw dx sol-24dup
 end
 
-print energy duplexA end
+print elecEnergy duplexA end

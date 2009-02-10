@@ -159,12 +159,12 @@ elec name proton-ref
 end
 
 # SOLVATION OF ACETIC ACID
-print energy acetic-solv - acetic-ref end
+print elecEnergy acetic-solv - acetic-ref end
 # SOLVATION OF ACETATE
-print energy acetate-solv - acetate-ref end
+print elecEnergy acetate-solv - acetate-ref end
 # SOLVATION OF PROTON
-print energy proton-solv - proton-ref end
+print elecEnergy proton-solv - proton-ref end
 # TOTAL ENERGY
-print energy acetate-solv - acetate-ref + proton-solv - proton-ref - acetic-solv + acetic-ref end
+print elecEnergy acetate-solv - acetate-ref + proton-solv - proton-ref - acetic-solv + acetic-ref end
 
 quit

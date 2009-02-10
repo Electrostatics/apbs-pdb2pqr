@@ -85,6 +85,6 @@ elec name complex
 end
 
 # COMBINE INTO BINDING ENERGY
-print energy complex - protein - ion end
+print elecEnergy complex - protein - ion end
 
 quit

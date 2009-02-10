@@ -95,6 +95,6 @@ elec name complex
 end
 
 # COMBINE TO GIVE BINDING ENERGY
-print energy complex - mol1 - mol2 end
+print elecEnergy complex - mol1 - mol2 end
 
 quit

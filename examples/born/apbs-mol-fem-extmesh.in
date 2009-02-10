@@ -66,6 +66,6 @@ elec name born_ref
 	write smol dx acc
 end
 
-print energy born - born_ref end
+print elecEnergy born - born_ref end
 
 quit

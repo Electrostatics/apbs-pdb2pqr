@@ -151,6 +151,6 @@ elec name complex-fine
 end
 
 # COMBINE INTO BINDING ENERGY
-print energy complex-fine - lig-fine - pka-fine end
+print elecEnergy complex-fine - lig-fine - pka-fine end
 
 quit

@@ -88,6 +88,6 @@ elec name complex
 end
 
 # CALCULATE BINDING ENERGY
-print energy complex - acet - hca end
+print elecEnergy complex - acet - hca end
 
 quit

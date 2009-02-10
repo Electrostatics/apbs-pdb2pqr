@@ -64,6 +64,6 @@ elec name reference
 end
 
 # COMBINE TO GIVE SOLVATION ENERGY
-print energy solvated - reference end
+print elecEnergy solvated - reference end
 
 quit

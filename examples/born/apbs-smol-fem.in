@@ -35,6 +35,6 @@ elec name born
     write smol dx acc
 end
 
-print energy born end
+print elecEnergy born end
 
 quit
