@@ -150,6 +150,7 @@ def execApbs(vars=None, argv=None):
             # remove whitespace
             line=line.strip()
             if(line[:5]=='pdime'):
+                raise ValueError, "Sorry, parallel Opal support is not currently available."
                 dimension_array = line.split()
                 for i in range(1,4):
                     nprocs = int(dimension_array[i])*nprocs
