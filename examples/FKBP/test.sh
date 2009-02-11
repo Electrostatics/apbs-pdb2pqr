@@ -53,7 +53,7 @@ cat $logfile >> ../$logfile
 # Now do 1d7i-dss
 
 cd ../1d7i-dss
-results=( 1.442544510653E+01 1.545171104995E+01 )
+results=( 1.442544510656E+01 1.545171104994E+01 )
 
 for i in 0 1 
 do
