@@ -1,3 +1,2 @@
-base referer
-rect $vatom_8h.html 129,58 230,85
-rect $vhal_8h.html 289,84 379,110
+<area shape="rect" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="111,82,213,109">
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="178,157,269,184">

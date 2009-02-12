@@ -1,11 +1,17 @@
-base referer
-rect $vpmg-private_8h.html 122,332 234,358
-rect $vpmg_8h.html 282,332 381,358
-rect $vhal_8h.html 761,388 851,414
-rect $vpmgp_8h.html 429,249 535,276
-rect $mgparm_8h.html 586,109 701,136
-rect $vacc_8h.html 597,312 690,338
-rect $vcap_8h.html 435,84 529,110
-rect $vpbe_8h.html 435,306 529,333
-rect $vgrid_8h.html 597,464 690,490
-rect $pbeparm_8h.html 585,413 702,440
+<area shape="rect" href="$vpmg&#45;private_8h.html" title="Class Vpmg private method declaration." alt="" coords="842,98,954,125">
+<area shape="rect" href="$vpmg_8h.html" title="Contains declarations for class Vpmg." alt="" coords="942,173,1041,200">
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="482,696,573,722">
+<area shape="rect" href="$vpmgp_8h.html" title="Contains declarations for class Vpmgp." alt="" coords="1346,546,1453,573">
+<area shape="rect" href="$mgparm_8h.html" title="Contains declarations for class MGparm." alt="" coords="1344,621,1458,648">
+<area shape="rect" href="$vacc_8h.html" title="Contains declarations for class Vacc." alt="" coords="512,322,605,349">
+<area shape="rect" href="$vcap_8h.html" title="Contains declarations for class Vcap." alt="" coords="1634,322,1728,349">
+<area shape="rect" href="$vpbe_8h.html" title="Contains declarations for class Vpbe." alt="" coords="426,248,520,274">
+<area shape="rect" href="$vgrid_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="829,546,925,573">
+<area shape="rect" href="$pbeparm_8h.html" title="Contains declarations for class PBEparm." alt="" coords="1000,621,1117,648">
+<area shape="rect" href="$valist_8h.html" title="Contains declarations for class Valist." alt="" coords="592,472,688,498">
+<area shape="rect" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="413,546,514,573">
+<area shape="rect" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="242,621,338,648">
+<area shape="rect" href="$vclist_8h.html" title="Contains declarations for class Vclist." alt="" coords="425,397,521,424">
+<area shape="rect" href="$apolparm_8h&#45;source.html" title="apbs/apolparm.h" alt="" coords="712,472,834,498">
+<area shape="rect" href="$vparam_8h.html" title="Contains declarations for class Vparam." alt="" coords="640,546,749,573">
+<area shape="rect" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="717,621,824,648">

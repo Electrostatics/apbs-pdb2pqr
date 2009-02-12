@@ -1,0 +1,13 @@
+<area shape="rect" href="$group__Vacc.html#g6e118e97d0ef09899dd376b6eda231a7" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="352,160,466,186">
+<area shape="rect" href="$group__Vatom.html#g37404117f53ad617e4371df8a7c849bb" title="Get atom ID." alt="" coords="544,210,674,237">
+<area shape="rect" href="$group__Vacc.html#g7a741d87762baf5906802b6b9a670080" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface..." alt="" coords="182,286,276,313">
+<area shape="rect" href="$group__Vacc.html#g90b879964a5faa185a82dc2f7c736a15" title="Destroy the surface object." alt="" coords="352,413,466,440">
+<area shape="rect" href="$vacc_8c.html#5c6356f19e11daf8d0dea84bd92cc226" title="Determines if a point is within the union of the spheres centered at the atomic centers..." alt="" coords="553,58,665,85">
+<area shape="rect" href="$group__Vacc.html#gf645f700c467833a3611fadb606d16e5" title="Allocate and construct the surface object; do not assign surface points to positions..." alt="" coords="556,109,662,136">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="541,261,677,288">
+<area shape="rect" href="$group__Vatom.html#gd3538039818c4279eb8a6b0e806dea7b" title="Get atomic position." alt="" coords="545,160,673,186">
+<area shape="rect" href="$group__Vclist.html#g13dc2b36b0eb96f433ee79566bdd45e4" title="Return cell corresponding to specified position or return VNULL." alt="" coords="738,8,842,34">
+<area shape="rect" href="$group__Vclist.html#ga67500e4f221d3f965c2ff48dee31593" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="726,58,854,85">
+<area shape="rect" href="$group__Vacc.html#g7b5d73ff3b8ae17c8efad24ce683de78" title="Construct the surface object using previously allocated memory; do not assign surface..." alt="" coords="733,109,848,136">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="353,312,465,338">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="325,362,493,389">

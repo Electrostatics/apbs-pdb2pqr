@@ -1,0 +1,28 @@
+<area shape="rect" href="$group__Vpmg.html#ge3a3587bfb6c15342890a2dada846d4f" title="FORTRAN stub constructor for the Vpmg class (uses previously&#45;allocated memory)." alt="" coords="145,514,238,541">
+<area shape="rect" href="$vpmg&#45;private_8h.html#f0c2a5754fbe7a35b083ef600dab299d" title="For focusing, set external energy data members in new Vpmg object based on energy..." alt="" coords="302,236,385,262">
+<area shape="rect" href="$group__Vpbe.html#g49a4178cddec98a0388a0b0a42b402ad" title="Get bulk ionic strength." alt="" coords="881,413,1065,440">
+<area shape="rect" href="$group__Vpbe.html#g23d965029db459d11f2bbbbaa2c7dbc7" title="Get information about the counterion species present." alt="" coords="921,514,1025,541">
+<area shape="rect" href="$group__Vpbe.html#ga4e725db086b16333664140ac3d25e79" title="Get modified squared Debye&#45;Huckel parameter." alt="" coords="908,565,1038,592">
+<area shape="rect" href="$group__Vpmg.html#g7b7c6cbfc1c468da596efff1d51fd28a" title="Remove partition restrictions." alt="" coords="684,109,806,136">
+<area shape="rect" href="$vpmg&#45;private_8h.html#e22da4bcde8fe8d1b2aac949e1c0f059" title="For focusing, fill in the boundaries of the new mesh based on the potential values..." alt="" coords="288,717,400,744">
+<area shape="rect" href="$group__Vpmg.html#g54c8a69f4055041178cc4cd7a7c346ec" title="Object destructor." alt="" coords="300,844,388,870">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="917,170,1029,197">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="889,113,1057,140">
+<area shape="rect" href="$group__Vpmg.html#g0718ba16e1357ce4ad27c15e960ca8cd" title="Get the &quot;polarization&quot; contribution to the electrostatic energy." alt="" coords="681,362,809,389">
+<area shape="rect" href="$group__Vpmg.html#gbc99a910a365aa8c0e0efce577abb9af" title="Get the &quot;fixed charge&quot; contribution to the electrostatic energy." alt="" coords="470,261,588,288">
+<area shape="rect" href="$group__Vpmg.html#g72773d2eb289d3bf2d06ab23e198e926" title="Get the &quot;mobile charge&quot; contribution to the electrostatic energy." alt="" coords="466,362,592,389">
+<area shape="rect" href="$group__Vpmg.html#gaef73d86f87bb23134c669f6a0dc571e" title="Set partition information which restricts the calculation of observables to a (rectangular)..." alt="" coords="692,160,798,186">
+<area shape="rect" href="$group__Vpbe.html#geb447cb04d310e06a5edd1b96bbc52bb" title="Get charge scaling factor." alt="" coords="912,360,1034,386">
+<area shape="rect" href="$vpmg&#45;private_8h.html#0876512b1ee9f93ee0378334b886938c" title="Calculates charge&#45;potential energy using summation over delta function positions..." alt="" coords="670,261,820,288">
+<area shape="rect" href="$vpmg&#45;private_8h.html#78687d08a4040d18d46337e1345b6dac" title="Calculates charge&#45;potential energy as integral over a volume." alt="" coords="664,312,826,338">
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="908,284,1038,310">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="905,233,1041,260">
+<area shape="rect" href="$vpmg&#45;private_8h.html#9bbc2d7d63eea65e627e398cc05ee342" title="Vpmg_qmEnergy for SMPBE." alt="" coords="660,464,830,490">
+<area shape="rect" href="$group__Vcap.html#g30fdd185fb47faae0ea2edda2ddb32c4" title="Provide a capped exp() function." alt="" coords="933,464,1013,490">
+<area shape="rect" href="$group__Vpbe.html#g6c2324fb961e2266a16894c03ec6b67b" title="Get coordinates of solute center." alt="" coords="450,616,608,642">
+<area shape="rect" href="$group__Vpbe.html#g2927b540ffc7d27c2881ff08ca944f35" title="Get total solute charge." alt="" coords="449,666,609,693">
+<area shape="rect" href="$group__Vpbe.html#g9a3084232e6eab9547179349f252c612" title="Get sphere radius which bounds biomolecule." alt="" coords="449,717,609,744">
+<area shape="rect" href="$group__Vpbe.html#g71c1fc1e8901630a97cf0f2bf0fcb18f" title="Get solvent dielectric constant." alt="" coords="456,768,602,794">
+<area shape="rect" href="$group__Vpbe.html#gb2a970a797a66508f244cfbddb40edf9" title="Get temperature." alt="" coords="452,818,606,845">
+<area shape="rect" href="$group__Vpbe.html#ge08119761afa47a8332ba13e4409f988" title="Get Debye&#45;Huckel parameter." alt="" coords="468,869,590,896">
+<area shape="rect" href="$group__Vpmg.html#g3cde6b7c8ed033476ff517348567213c" title="FORTRAN stub object destructor." alt="" coords="482,920,576,946">

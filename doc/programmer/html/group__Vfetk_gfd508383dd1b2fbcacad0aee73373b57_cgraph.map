@@ -1,0 +1,8 @@
+<area shape="rect" href="$group__Vcsm.html#g9d6d4cd551a393c05dab3022a8eb401b" title="Construct Vcsm object." alt="" coords="190,33,276,60">
+<area shape="rect" href="$group__Vcsm.html#ge1506d49d6faaf810fa884c18f9c3bba" title="Initialize charge&#45;simplex map with mesh and atom data." alt="" coords="193,96,273,122">
+<area shape="rect" href="$group__Vfetk.html#ge473241047881ecd91d72cba8b037999" title="Construct a rectangular mesh (in the current Vfetk object)." alt="" coords="176,146,290,173">
+<area shape="rect" href="$group__Vpbe.html#g541798ff5543ed7daaa597d661108408" title="Get atom list." alt="" coords="177,197,289,224">
+<area shape="rect" href="$group__Vcsm.html#g9e2eed4344b173d8cf5125bfdb8be8fb" title="FORTRAN stub to construct Vcsm object." alt="" coords="376,8,469,34">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="366,58,478,85">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="338,109,506,136">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="354,160,490,186">

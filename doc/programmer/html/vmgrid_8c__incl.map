@@ -1,5 +1,4 @@
-base referer
-rect $vmgrid_8h.html 130,109 237,135
-rect $vhal_8h.html 593,159 683,186
-rect $vgrid_8h.html 286,109 379,135
-rect $vstring_8h.html 429,109 535,135
+<area shape="rect" href="$vmgrid_8h.html" title="Multiresolution oracle for Cartesian mesh data." alt="" coords="112,82,218,109">
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="29,306,120,333">
+<area shape="rect" href="$vgrid_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="117,157,213,183">
+<area shape="rect" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="112,231,218,258">

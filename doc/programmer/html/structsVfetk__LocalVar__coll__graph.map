@@ -1,3 +1,12 @@
-base referer
-rect $structsVfetk.html 7,8 93,392
-rect $structsVgreen.html 117,112 189,288
+<area shape="rect" href="$structsVfetk.html" title="Contains public data members for Vfetk class/module." alt="" coords="338,2360,423,2744">
+<area shape="rect" href="$structsVcsm.html" title="Charge&#45;simplex map class." alt="" coords="441,768,518,1008">
+<area shape="rect" href="$structsValist.html" title="Container class for list of atom objects." alt="" coords="311,264,391,456">
+<area shape="rect" href="$structsVpbe.html" title="Contains public data members for Vpbe class/module." alt="" coords="157,1616,295,2128">
+<area shape="rect" href="$structsVacc.html" title="Oracle for solvent&#45; and ion&#45;accessibility around a biomolecule." alt="" coords="147,1032,254,1224">
+<area shape="rect" href="$structsVclist.html" title="Atom cell list." alt="" coords="242,520,354,744">
+<area shape="rect" href="$structsVgreen.html" title="Contains public data members for Vgreen class/module." alt="" coords="529,1248,601,1424">
+<area shape="rect" href="$structsVatom.html" title="Contains public data members for Vatom class/module." alt="" coords="235,8,334,200">
+<area shape="rect" href="$structsVclistCell.html" title="Atom cell list cell." alt="" coords="163,312,249,408">
+<area shape="rect" href="$structsVaccSurf.html" title="Surface object list of per&#45;atom surface points." alt="" coords="33,536,145,728">
+<area shape="rect" href="$structsFEMparm.html" title="Parameter structure for FEM&#45;specific variables from input files." alt="" coords="319,1648,442,2096">
+<area shape="rect" href="$structsPBEparm.html" title="Parameter structure for PBE variables from input files." alt="" coords="7,1448,133,2296">

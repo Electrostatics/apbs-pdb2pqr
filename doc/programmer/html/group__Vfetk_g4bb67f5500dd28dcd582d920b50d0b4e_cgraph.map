@@ -1,0 +1,32 @@
+<area shape="rect" href="$group__Vfetk.html#g40b301931083038af40312b49b167794" title="Intializes the FEtk PDE object." alt="" coords="173,602,298,629">
+<area shape="rect" href="$group__Vfetk.html#g877160adf876489f6493322cf34831d9" title="Define the way manifold edges are bisected." alt="" coords="369,172,529,198">
+<area shape="rect" href="$group__Vfetk.html#gd8b11d6436d7ea407c94ac79eb1f9e99" title="Evaluate a (discretized) delta function source term at the given point." alt="" coords="388,222,510,249">
+<area shape="rect" href="$group__Vfetk.html#g58889daff822d088b8286402228eb8e2" title="This is the linearization of the weak form of the PBE; e.g., for use in a Newton..." alt="" coords="377,349,521,376">
+<area shape="rect" href="$group__Vfetk.html#g6ab828dbe466030949f3332a6370a22a" title="Evaluate strong form of PBE. For interior points, this is:  where  is the (possibly..." alt="" coords="393,400,505,426">
+<area shape="rect" href="$group__Vfetk.html#gd8bfaaca31087ca5c98663f1a9839bcc" title="This is the weak form of the PBE; i.e. the strong form integrated with a test function..." alt="" coords="386,450,512,477">
+<area shape="rect" href="$group__Vfetk.html#g850c1f0593b2b3ba8ad2795b5642d340" title="Do once&#45;per&#45;assembly initialization." alt="" coords="364,501,534,528">
+<area shape="rect" href="$group__Vfetk.html#gecb946cbd53bd9aeddd67c1e4494b6fa" title="Do once&#45;per&#45;element initialization." alt="" coords="368,552,530,578">
+<area shape="rect" href="$group__Vfetk.html#g92f682b4b349b1236be7306b8091a6f0" title="Do once&#45;per&#45;face initialization." alt="" coords="378,602,520,629">
+<area shape="rect" href="$group__Vfetk.html#gb2c9190ba012844d51836146e4c0a6c1" title="Do once&#45;per&#45;point initialization." alt="" coords="377,653,521,680">
+<area shape="rect" href="$group__Vfetk.html#gcd6aede0ecf4ee5b7cd103a68a28aeee" title="Energy functional. This returns the energy (less delta function terms) in the form:..." alt="" coords="394,298,504,325">
+<area shape="rect" href="$group__Vfetk.html#gab7c03cc5568407794999c0f617ab889" title="Map a boundary point to some pre&#45;defined shape." alt="" coords="360,704,538,730">
+<area shape="rect" href="$group__Vfetk.html#gc35880a0b1dcab29fb0eb12aeae116b2" title="User&#45;defined error estimator &#45;&#45; in our case, a geometry&#45;based refinement method;..." alt="" coords="362,754,536,781">
+<area shape="rect" href="$group__Vfetk.html#g0e48a1a433ae34229a1cf5157260eb8c" title="Unify the chart for different coordinate systems &#45;&#45; a no&#45;op for us." alt="" coords="374,805,524,832">
+<area shape="rect" href="$group__Vfetk.html#gb42e012aef0ff3f23862dacdbaf86f0a" title="Evaluate the bases for the trial or test space, for a particular component of the..." alt="" coords="346,856,552,882">
+<area shape="rect" href="$group__Vfetk.html#g0ba7af67b39b140e8150e5699eb2ad31" title="Initialize the bases for the trial or the test space, for a particular component..." alt="" coords="353,906,545,933">
+<area shape="rect" href="$group__Vfetk.html#gc37aeabeafd642e7a67b0654497ce2ab" title="Evaluate the Dirichlet boundary condition at the given point." alt="" coords="389,957,509,984">
+<area shape="rect" href="$group__Vfetk.html#g0d6f246e3a44d57b2907972efe97bb14" title="Evaluate the &quot;true solution&quot; at the given point for comparison with the..." alt="" coords="390,1008,508,1034">
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="618,8,749,34">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="616,58,752,85">
+<area shape="rect" href="$group__Vcsm.html#g9fb0ff4858be085d6698bd1a1bac8d0d" title="Get particular atom associated with a simplex." alt="" coords="628,109,740,136">
+<area shape="rect" href="$group__Vcsm.html#g0e64a5068f0bb54b5c0603ff87b47d55" title="Get ID of particular atom in a simplex." alt="" coords="610,160,757,186">
+<area shape="rect" href="$group__Vcsm.html#g66a9b72b572a2e69ecbf31d756739a30" title="Get number of atoms associated with a simplex." alt="" coords="600,210,768,237">
+<area shape="rect" href="$group__Vfetk.html#ge996913edc49d3be58cfad38cf2ead4d" title="Get a pointer to the Gem (grid manager) object." alt="" coords="630,261,737,288">
+<area shape="rect" href="$group__Vfetk.html#ge16c17016c3f527e1639f0e2e2ece7f3" title="Get a pointer to the Vcsm (charge&#45;simplex map) object." alt="" coords="628,312,740,338">
+<area shape="rect" href="$group__Vpbe.html#geb447cb04d310e06a5edd1b96bbc52bb" title="Get charge scaling factor." alt="" coords="622,362,745,389">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="817,109,929,136">
+<area shape="rect" href="$group__Vgreen.html#g40625a240b34a5eddec5d98925aa3061" title="Construct the Green&#39;s function oracle." alt="" coords="637,464,730,490">
+<area shape="rect" href="$group__Vgreen.html#gc60c5788fc669e5f7b48502bcecfb174" title="Destruct the Green&#39;s function oracle." alt="" coords="636,514,732,541">
+<area shape="rect" href="$group__Vgreen.html#gbf630ca7658e483fc8e58ee3e0353d44" title="FORTRAN stub to construct the Green&#39;s function oracle." alt="" coords="822,464,924,490">
+<area shape="rect" href="$group__Vgreen.html#gb6dced702dabd03e72f9a46ee540f94e" title="FORTRAN stub to destruct the Green&#39;s function oracle." alt="" coords="821,514,925,541">
+<area shape="rect" href="$group__Vcap.html#g30fdd185fb47faae0ea2edda2ddb32c4" title="Provide a capped exp() function." alt="" coords="644,413,724,440">

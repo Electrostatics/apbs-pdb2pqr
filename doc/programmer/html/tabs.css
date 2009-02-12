@@ -32,7 +32,7 @@ DIV.tabs A
    float            : left;
    background       : url("tab_r.gif") no-repeat right top;
    border-bottom    : 1px solid #84B0C7;
-   font-size        : x-small;
+   font-size        : 8px;
    font-weight      : bold;
    text-decoration  : none;
 }
@@ -66,7 +66,7 @@ DIV.tabs INPUT
 
 DIV.tabs TD
 {
-   font-size        : x-small;
+   font-size        : 8px;
    font-weight      : bold;
    text-decoration  : none;
 }
@@ -82,19 +82,19 @@ DIV.tabs A:hover SPAN
    background-position: 0% -150px;
 }
 
-DIV.tabs LI#current A
+DIV.tabs LI.current A
 {
    background-position: 100% -150px;
    border-width     : 0px;
 }
 
-DIV.tabs LI#current SPAN
+DIV.tabs LI.current SPAN
 {
    background-position: 0% -150px;
    padding-bottom   : 6px;
 }
 
-DIV.nav
+DIV.navpath
 {
    background       : none;
    border           : none;

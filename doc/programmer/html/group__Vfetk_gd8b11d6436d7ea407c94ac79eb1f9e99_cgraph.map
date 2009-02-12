@@ -1,0 +1,9 @@
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="200,7,330,34">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="197,58,333,85">
+<area shape="rect" href="$group__Vcsm.html#g9fb0ff4858be085d6698bd1a1bac8d0d" title="Get particular atom associated with a simplex." alt="" coords="209,109,321,135">
+<area shape="rect" href="$group__Vcsm.html#g0e64a5068f0bb54b5c0603ff87b47d55" title="Get ID of particular atom in a simplex." alt="" coords="192,159,338,186">
+<area shape="rect" href="$group__Vcsm.html#g66a9b72b572a2e69ecbf31d756739a30" title="Get number of atoms associated with a simplex." alt="" coords="181,210,349,237">
+<area shape="rect" href="$group__Vfetk.html#ge996913edc49d3be58cfad38cf2ead4d" title="Get a pointer to the Gem (grid manager) object." alt="" coords="212,261,318,287">
+<area shape="rect" href="$group__Vfetk.html#ge16c17016c3f527e1639f0e2e2ece7f3" title="Get a pointer to the Vcsm (charge&#45;simplex map) object." alt="" coords="209,311,321,338">
+<area shape="rect" href="$group__Vpbe.html#geb447cb04d310e06a5edd1b96bbc52bb" title="Get charge scaling factor." alt="" coords="204,362,326,389">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="398,109,510,135">

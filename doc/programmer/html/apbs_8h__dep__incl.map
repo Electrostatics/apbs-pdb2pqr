@@ -1,5 +1,4 @@
-base referer
-rect $mgparm_8c.html 121,8 201,34
-rect $main_8c.html 261,84 322,110
-rect $routines_8h.html 119,109 202,136
-rect $routines_8c.html 251,146 331,173
+<area shape="rect" href="$mgparm_8c.html" title="Class MGparm methods." alt="" coords="8,82,88,109">
+<area shape="rect" href="$main_8c.html" title="APBS &quot;front end&quot; program using formatted input files." alt="" coords="110,157,172,184">
+<area shape="rect" href="$routines_8h.html" title="Header file for front end auxiliary routines." alt="" coords="162,82,245,109">
+<area shape="rect" href="$routines_8c.html" title="Supporting routines for APBS front end." alt="" coords="226,157,306,184">

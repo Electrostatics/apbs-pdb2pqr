@@ -1,0 +1,6 @@
+<area shape="rect" href="$group__Vpbe.html#g6c2324fb961e2266a16894c03ec6b67b" title="Get coordinates of solute center." alt="" coords="170,8,328,34">
+<area shape="rect" href="$group__Vpbe.html#g2927b540ffc7d27c2881ff08ca944f35" title="Get total solute charge." alt="" coords="169,58,329,85">
+<area shape="rect" href="$group__Vpbe.html#g9a3084232e6eab9547179349f252c612" title="Get sphere radius which bounds biomolecule." alt="" coords="169,109,329,136">
+<area shape="rect" href="$group__Vpbe.html#g71c1fc1e8901630a97cf0f2bf0fcb18f" title="Get solvent dielectric constant." alt="" coords="176,160,322,186">
+<area shape="rect" href="$group__Vpbe.html#gb2a970a797a66508f244cfbddb40edf9" title="Get temperature." alt="" coords="172,210,326,237">
+<area shape="rect" href="$group__Vpbe.html#ge08119761afa47a8332ba13e4409f988" title="Get Debye&#45;Huckel parameter." alt="" coords="188,261,310,288">

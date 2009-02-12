@@ -1,3 +1,2 @@
-base referer
-rect $vhal_8h.html 302,96 393,122
-rect $mgparm_8h.html 130,58 245,85
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="173,157,264,184">
+<area shape="rect" href="$mgparm_8h.html" title="Contains declarations for class MGparm." alt="" coords="84,82,198,109">

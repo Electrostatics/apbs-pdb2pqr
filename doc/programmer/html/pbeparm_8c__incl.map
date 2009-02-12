@@ -1,4 +1,3 @@
-base referer
-rect $pbeparm_8h.html 142,109 260,136
-rect $vstring_8h.html 148,58 254,85
-rect $vhal_8h.html 318,109 409,136
+<area shape="rect" href="$pbeparm_8h.html" title="Contains declarations for class PBEparm." alt="" coords="242,82,360,109">
+<area shape="rect" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="112,82,218,109">
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="252,157,342,184">

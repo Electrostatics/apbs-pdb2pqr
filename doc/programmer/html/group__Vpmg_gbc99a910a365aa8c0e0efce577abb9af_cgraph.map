@@ -1,0 +1,7 @@
+<area shape="rect" href="$vpmg&#45;private_8h.html#0876512b1ee9f93ee0378334b886938c" title="Calculates charge&#45;potential energy using summation over delta function positions..." alt="" coords="183,109,333,135">
+<area shape="rect" href="$vpmg&#45;private_8h.html#78687d08a4040d18d46337e1345b6dac" title="Calculates charge&#45;potential energy as integral over a volume." alt="" coords="177,185,339,211">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="417,7,529,34">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="389,58,557,85">
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="407,109,538,135">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="405,159,541,186">
+<area shape="rect" href="$group__Vpbe.html#geb447cb04d310e06a5edd1b96bbc52bb" title="Get charge scaling factor." alt="" coords="411,210,534,237">

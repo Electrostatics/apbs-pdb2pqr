@@ -1,0 +1,11 @@
+<area shape="rect" href="$group__Valist.html#g902e23e51a90ae7d7dec67c904e83049" title="Load up Valist with various statistics." alt="" coords="185,7,321,34">
+<area shape="rect" href="$group__Vatom.html#g619690d8845221f0319fddf78bf883d9" title="Set atom ID." alt="" coords="188,58,318,85">
+<area shape="rect" href="$group__Vatom.html#gb1012d7d66dd93f1b9c5678d93de840f" title="Set atom name." alt="" coords="177,109,329,135">
+<area shape="rect" href="$group__Vatom.html#g804cb2136cc1ff6105b37b176d58b804" title="Set atomic charge." alt="" coords="188,159,318,186">
+<area shape="rect" href="$group__Vatom.html#gc17a9120ddc6cfe671e8e27dc9a2600d" title="Set atomic epsilon." alt="" coords="188,210,318,237">
+<area shape="rect" href="$group__Vatom.html#gd233011217b9aeeea2907cead69a09f4" title="Set the atomic position." alt="" coords="186,261,320,287">
+<area shape="rect" href="$group__Vatom.html#gb7f8af75a9fe695fafcec2d8dcfe1f74" title="Set atomic radius." alt="" coords="189,311,317,338">
+<area shape="rect" href="$group__Vatom.html#g4bfc689ba5d955b8b96034b920923409" title="Set residue name." alt="" coords="181,362,325,389">
+<area shape="rect" href="$group__Vparam.html#g674303a8cbbc48a18703758c41bb1402" title="Get atom data." alt="" coords="176,413,330,439">
+<area shape="rect" href="$group__Vstring.html#g5cba5800bc4941a4ef59b2189a24de15" title="Case&#45;insensitive string comparison (BSD standard)." alt="" coords="574,413,713,439">
+<area shape="rect" href="$group__Vparam.html#g30d036e5f205c5df47fdba86acdf6366" title="Get residue data." alt="" coords="378,362,525,389">

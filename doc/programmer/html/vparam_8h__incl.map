@@ -1,4 +1,3 @@
-base referer
-rect $vhal_8h.html 300,109 390,136
-rect $vunit_8h.html 142,109 236,136
-rect $vstring_8h.html 136,58 242,85
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="232,157,322,184">
+<area shape="rect" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="189,82,285,109">
+<area shape="rect" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="58,82,165,109">

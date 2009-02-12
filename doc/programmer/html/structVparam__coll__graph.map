@@ -1,3 +1,2 @@
-base referer
-rect $structVparam__ResData.html 14,216 142,344
-rect $structsVparam__AtomData.html 7,8 149,152
+<area shape="rect" href="$structVparam__ResData.html" title="ResData sub&#45;class; stores residue data." alt="" coords="14,216,142,344">
+<area shape="rect" href="$structsVparam__AtomData.html" title="AtomData sub&#45;class; stores atom data." alt="" coords="7,8,149,152">

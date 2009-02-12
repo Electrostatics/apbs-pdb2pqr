@@ -1,0 +1,32 @@
+<area shape="rect" href="$group__Vgrid.html#g4b06bf864ec47b8e0d47dc9310c37f84" title="Construct Vgrid object with values obtained from Vpmg_readDX (for example)." alt="" coords="366,8,449,34">
+<area shape="rect" href="$group__Vgrid.html#g198520f697a55c26780ca9cf10a9e883" title="Object destructor." alt="" coords="366,58,449,85">
+<area shape="rect" href="$group__Vgrid.html#g1a39f21a13643b52a0535edd95ee972a" title="Write out the data in OpenDX grid format." alt="" coords="168,312,274,338">
+<area shape="rect" href="$group__Vgrid.html#g7176f576cee0718dd9fc3055fd4fad53" title="Write out the data in UHBD grid format." alt="" coords="158,362,284,389">
+<area shape="rect" href="$group__Vpmg.html#g83b3ab07ffeff693e2519db3a9bebf91" title="Fill the specified array with accessibility values." alt="" coords="166,261,276,288">
+<area shape="rect" href="$group__Vacc.html#g6e3d06de84edfdedec72f6c39fe6b58f" title="Report inflated van der Waals accessibility." alt="" coords="538,312,648,338">
+<area shape="rect" href="$group__Vacc.html#g14c8339e2806380b18aad1e88fe66b71" title="Report molecular accessibility." alt="" coords="356,362,460,389">
+<area shape="rect" href="$group__Vacc.html#g2b52e74285215d0138d3a1bad46b556f" title="Report van der Waals accessibility." alt="" coords="541,413,645,440">
+<area shape="rect" href="$group__Vacc.html#g6f4eb93667854820fbfc4478e60a618e" title="Report spline&#45;based accessibility." alt="" coords="534,641,652,668">
+<area shape="rect" href="$group__Vcap.html#g30fdd185fb47faae0ea2edda2ddb32c4" title="Provide a capped exp() function." alt="" coords="368,514,448,541">
+<area shape="rect" href="$group__Vgrid.html#ga2e339a0a1afd169cbdbbbd4071f402d" title="Get second derivative values at a point." alt="" coords="349,565,466,592">
+<area shape="rect" href="$group__Vgrid.html#g01c5b30d3191de329996c53b6f5025db" title="Get first derivative values at a point." alt="" coords="353,616,462,642">
+<area shape="rect" href="$group__Vpbe.html#g0aac5d03d89f4a9c5b5a93e853325e0d" title="Get solute dielectric constant." alt="" coords="337,109,478,136">
+<area shape="rect" href="$group__Vpbe.html#g71c1fc1e8901630a97cf0f2bf0fcb18f" title="Get solvent dielectric constant." alt="" coords="334,160,481,186">
+<area shape="rect" href="$group__Vpbe.html#g2e37bd1ca6c3a22b6be58c613589459c" title="Get accessibility oracle." alt="" coords="353,210,462,237">
+<area shape="rect" href="$group__Vpbe.html#geb447cb04d310e06a5edd1b96bbc52bb" title="Get charge scaling factor." alt="" coords="346,261,469,288">
+<area shape="rect" href="$group__Vacc.html#g771fa3d6536e75841ee6fcbead1660f0" title="Report molecular accessibility quickly." alt="" coords="530,362,656,389">
+<area shape="rect" href="$group__Vacc.html#g7a741d87762baf5906802b6b9a670080" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface..." alt="" coords="705,438,798,465">
+<area shape="rect" href="$group__Vclist.html#g13dc2b36b0eb96f433ee79566bdd45e4" title="Return cell corresponding to specified position or return VNULL." alt="" coords="1261,514,1365,541">
+<area shape="rect" href="$group__Vatom.html#g37404117f53ad617e4371df8a7c849bb" title="Get atom ID." alt="" coords="1066,362,1197,389">
+<area shape="rect" href="$group__Vacc.html#g6e118e97d0ef09899dd376b6eda231a7" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="874,514,989,541">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="1064,565,1200,592">
+<area shape="rect" href="$group__Vacc.html#g90b879964a5faa185a82dc2f7c736a15" title="Destroy the surface object." alt="" coords="874,362,989,389">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="876,413,988,440">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="848,464,1016,490">
+<area shape="rect" href="$vacc_8c.html#5c6356f19e11daf8d0dea84bd92cc226" title="Determines if a point is within the union of the spheres centered at the atomic centers..." alt="" coords="1076,514,1188,541">
+<area shape="rect" href="$group__Vacc.html#gf645f700c467833a3611fadb606d16e5" title="Allocate and construct the surface object; do not assign surface points to positions..." alt="" coords="1078,464,1185,490">
+<area shape="rect" href="$group__Vatom.html#gd3538039818c4279eb8a6b0e806dea7b" title="Get atomic position." alt="" coords="1068,616,1196,642">
+<area shape="rect" href="$group__Vclist.html#ga67500e4f221d3f965c2ff48dee31593" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="1249,641,1377,668">
+<area shape="rect" href="$group__Vacc.html#g7b5d73ff3b8ae17c8efad24ce683de78" title="Construct the surface object using previously allocated memory; do not assign surface..." alt="" coords="1256,464,1370,490">
+<area shape="rect" href="$vacc_8c.html#2a318b9e1df4d9a97ac47cf55498c4a8" title="Fast spline&#45;based surface computation subroutine." alt="" coords="712,616,792,642">
+<area shape="rect" href="$group__Vacc.html#g6c202624954a3bd3fde446182415c769" title="Report spline&#45;based accessibility for a given atom." alt="" coords="857,616,1006,642">

@@ -1,0 +1,19 @@
+<area shape="rect" href="$group__Valist.html#g161c8bda69f6a37578011cc39b5630be" title="Construct the atom list object." alt="" coords="206,21,292,48">
+<area shape="rect" href="$group__Valist.html#gaf04de8da79be6d12a2cfe7e001b24fd" title="Destroys atom list object." alt="" coords="206,97,292,124">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="165,198,333,225">
+<area shape="rect" href="$group__Valist.html#g155ec618d8938ccf2cff609d9811b7db" title="Fill atom list with information from a PDB file." alt="" coords="190,362,308,389">
+<area shape="rect" href="$group__Valist.html#g501998331453e488840902156653ef18" title="Fill atom list with information from a PQR file." alt="" coords="190,413,308,440">
+<area shape="rect" href="$group__Valist.html#g79d3ae98e4903139c3f0172286c48d8a" title="Fill atom list with information from an XML file." alt="" coords="190,249,308,276">
+<area shape="rect" href="$group__Valist.html#g3a45cdb67596f6289b4b4a27f3515af4" title="FORTRAN stub to construct the atom list object." alt="" coords="412,8,505,34">
+<area shape="rect" href="$group__Valist.html#g8b18b21fa58e5250ed419c246d22a4d0" title="FORTRAN stub to destroy atom list object." alt="" coords="412,58,505,85">
+<area shape="rect" href="$group__Valist.html#g902e23e51a90ae7d7dec67c904e83049" title="Load up Valist with various statistics." alt="" coords="390,413,526,440">
+<area shape="rect" href="$group__Vatom.html#g619690d8845221f0319fddf78bf883d9" title="Set atom ID." alt="" coords="393,160,524,186">
+<area shape="rect" href="$group__Vatom.html#gb1012d7d66dd93f1b9c5678d93de840f" title="Set atom name." alt="" coords="382,514,534,541">
+<area shape="rect" href="$group__Vatom.html#g804cb2136cc1ff6105b37b176d58b804" title="Set atomic charge." alt="" coords="393,210,524,237">
+<area shape="rect" href="$group__Vatom.html#gc17a9120ddc6cfe671e8e27dc9a2600d" title="Set atomic epsilon." alt="" coords="393,565,524,592">
+<area shape="rect" href="$group__Vatom.html#gd233011217b9aeeea2907cead69a09f4" title="Set the atomic position." alt="" coords="392,261,525,288">
+<area shape="rect" href="$group__Vatom.html#gb7f8af75a9fe695fafcec2d8dcfe1f74" title="Set atomic radius." alt="" coords="394,312,522,338">
+<area shape="rect" href="$group__Vatom.html#g4bfc689ba5d955b8b96034b920923409" title="Set residue name." alt="" coords="386,464,530,490">
+<area shape="rect" href="$group__Vparam.html#g674303a8cbbc48a18703758c41bb1402" title="Get atom data." alt="" coords="381,616,536,642">
+<area shape="rect" href="$group__Vstring.html#g5cba5800bc4941a4ef59b2189a24de15" title="Case&#45;insensitive string comparison (BSD standard)." alt="" coords="780,565,918,592">
+<area shape="rect" href="$group__Vparam.html#g30d036e5f205c5df47fdba86acdf6366" title="Get residue data." alt="" coords="584,616,730,642">

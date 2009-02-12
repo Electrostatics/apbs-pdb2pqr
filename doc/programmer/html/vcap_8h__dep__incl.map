@@ -1,12 +1,11 @@
-base referer
-rect $vpmg_8h.html 121,84 188,110
-rect $apbs_8h.html 262,160 324,186
-rect $vcap_8c.html 124,261 185,288
-rect $vfetk_8h.html 122,210 186,237
-rect $vpmg-private_8h.html 237,77 349,104
-rect $vpmg_8c.html 405,8 472,34
-rect $mgparm_8c.html 398,58 478,85
-rect $main_8c.html 538,134 600,161
-rect $routines_8h.html 397,210 480,237
-rect $routines_8c.html 529,210 609,237
-rect $vfetk_8c.html 262,312 324,338
+<area shape="rect" href="$vpmg_8h.html" title="Contains declarations for class Vpmg." alt="" coords="148,82,214,109">
+<area shape="rect" href="$apbs_8h.html" title="Top&#45;level header for APBS." alt="" coords="236,157,297,183">
+<area shape="rect" href="$vcap_8c.html" title="Class Vcap methods." alt="" coords="396,82,457,109">
+<area shape="rect" href="$vfetk_8h.html" title="Contains declarations for class Vfetk." alt="" coords="308,82,372,109">
+<area shape="rect" href="$vpmg&#45;private_8h.html" title="Class Vpmg private method declaration." alt="" coords="94,157,206,183">
+<area shape="rect" href="$vpmg_8c.html" title="Class Vpmg methods." alt="" coords="8,231,74,258">
+<area shape="rect" href="$mgparm_8c.html" title="Class MGparm methods." alt="" coords="149,231,229,258">
+<area shape="rect" href="$main_8c.html" title="APBS &quot;front end&quot; program using formatted input files." alt="" coords="150,306,212,333">
+<area shape="rect" href="$routines_8h.html" title="Header file for front end auxiliary routines." alt="" coords="304,231,386,258">
+<area shape="rect" href="$routines_8c.html" title="Supporting routines for APBS front end." alt="" coords="305,306,385,333">
+<area shape="rect" href="$vfetk_8c.html" title="Class Vfetk methods." alt="" coords="461,157,522,183">

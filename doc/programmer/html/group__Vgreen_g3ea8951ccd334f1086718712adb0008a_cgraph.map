@@ -1,0 +1,4 @@
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="249,8,361,34">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="221,58,389,85">
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="239,109,370,136">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="237,160,373,186">

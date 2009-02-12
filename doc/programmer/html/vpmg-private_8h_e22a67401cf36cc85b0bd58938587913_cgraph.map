@@ -1,0 +1,9 @@
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="230,8,342,34">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="202,58,370,85">
+<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="221,109,352,136">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="218,160,354,186">
+<area shape="rect" href="$group__Vgrid.html#g4b06bf864ec47b8e0d47dc9310c37f84" title="Construct Vgrid object with values obtained from Vpmg_readDX (for example)." alt="" coords="245,210,328,237">
+<area shape="rect" href="$group__Vgrid.html#ga2e339a0a1afd169cbdbbbd4071f402d" title="Get second derivative values at a point." alt="" coords="228,261,345,288">
+<area shape="rect" href="$group__Vpbe.html#g0aac5d03d89f4a9c5b5a93e853325e0d" title="Get solute dielectric constant." alt="" coords="216,312,357,338">
+<area shape="rect" href="$group__Vpbe.html#g71c1fc1e8901630a97cf0f2bf0fcb18f" title="Get solvent dielectric constant." alt="" coords="213,362,360,389">
+<area shape="rect" href="$group__Vpbe.html#gb2a970a797a66508f244cfbddb40edf9" title="Get temperature." alt="" coords="209,413,364,440">

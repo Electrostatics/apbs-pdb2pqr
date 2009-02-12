@@ -1,8 +1,7 @@
-base referer
-rect $vclist_8h.html 120,249 216,276
-rect $vhal_8h.html 734,362 825,389
-rect $valist_8h.html 265,249 361,276
-rect $vatom_8h.html 416,413 517,440
-rect $vunit_8h.html 577,109 670,136
-rect $vparam_8h.html 412,210 521,237
-rect $vstring_8h.html 570,210 677,237
+<area shape="rect" href="$vclist_8h.html" title="Contains declarations for class Vclist." alt="" coords="208,82,304,109">
+<area shape="rect" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="77,381,168,408">
+<area shape="rect" href="$valist_8h.html" title="Contains declarations for class Valist." alt="" coords="208,157,304,184">
+<area shape="rect" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="58,232,160,258">
+<area shape="rect" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="442,306,538,333">
+<area shape="rect" href="$vparam_8h.html" title="Contains declarations for class Vparam." alt="" coords="260,232,369,258">
+<area shape="rect" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="261,306,368,333">

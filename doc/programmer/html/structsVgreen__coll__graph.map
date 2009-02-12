@@ -1,3 +1,2 @@
-base referer
-rect $structsValist.html 17,264 97,456
-rect $structsVatom.html 8,8 106,200
+<area shape="rect" href="$structsValist.html" title="Container class for list of atom objects." alt="" coords="17,264,97,456">
+<area shape="rect" href="$structsVatom.html" title="Contains public data members for Vatom class/module." alt="" coords="8,8,106,200">

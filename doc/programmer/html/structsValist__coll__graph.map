@@ -1,2 +1,1 @@
-base referer
-rect $structsVatom.html 8,8 106,200
+<area shape="rect" href="$structsVatom.html" title="Contains public data members for Vatom class/module." alt="" coords="8,8,106,200">

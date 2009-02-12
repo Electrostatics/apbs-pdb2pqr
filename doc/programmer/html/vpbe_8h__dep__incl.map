@@ -1,14 +1,13 @@
-base referer
-rect $vopot_8h.html 121,83 188,110
-rect $apbs_8h.html 262,109 324,135
-rect $vpmg_8h.html 121,235 188,262
-rect $vpbe_8c.html 124,286 185,313
-rect $vfetk_8h.html 122,185 186,211
-rect $vopot_8c.html 260,58 326,85
-rect $mgparm_8c.html 398,7 478,34
-rect $main_8c.html 538,83 600,110
-rect $routines_8h.html 397,159 480,186
-rect $routines_8c.html 529,159 609,186
-rect $vpmg-private_8h.html 237,362 349,389
-rect $vpmg_8c.html 405,337 472,363
-rect $vfetk_8c.html 262,261 324,287
+<area shape="rect" href="$vopot_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="134,82,201,109">
+<area shape="rect" href="$apbs_8h.html" title="Top&#45;level header for APBS." alt="" coords="184,157,245,183">
+<area shape="rect" href="$vpmg_8h.html" title="Contains declarations for class Vpmg." alt="" coords="364,82,430,109">
+<area shape="rect" href="$vpbe_8c.html" title="Class Vpbe methods." alt="" coords="454,82,516,109">
+<area shape="rect" href="$vfetk_8h.html" title="Contains declarations for class Vfetk." alt="" coords="276,82,340,109">
+<area shape="rect" href="$vopot_8c.html" title="Class Vopot methods." alt="" coords="93,157,160,183">
+<area shape="rect" href="$mgparm_8c.html" title="Class MGparm methods." alt="" coords="58,231,138,258">
+<area shape="rect" href="$main_8c.html" title="APBS &quot;front end&quot; program using formatted input files." alt="" coords="60,306,121,333">
+<area shape="rect" href="$routines_8h.html" title="Header file for front end auxiliary routines." alt="" coords="213,231,296,258">
+<area shape="rect" href="$routines_8c.html" title="Supporting routines for APBS front end." alt="" coords="214,306,294,333">
+<area shape="rect" href="$vpmg&#45;private_8h.html" title="Class Vpmg private method declaration." alt="" coords="506,157,618,183">
+<area shape="rect" href="$vpmg_8c.html" title="Class Vpmg methods." alt="" coords="482,231,549,258">
+<area shape="rect" href="$vfetk_8c.html" title="Class Vfetk methods." alt="" coords="370,157,432,183">

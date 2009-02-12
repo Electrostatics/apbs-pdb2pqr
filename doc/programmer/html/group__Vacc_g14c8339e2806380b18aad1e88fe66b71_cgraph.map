@@ -1,0 +1,16 @@
+<area shape="rect" href="$group__Vacc.html#g771fa3d6536e75841ee6fcbead1660f0" title="Report molecular accessibility quickly." alt="" coords="160,58,285,85">
+<area shape="rect" href="$group__Vacc.html#g6e3d06de84edfdedec72f6c39fe6b58f" title="Report inflated van der Waals accessibility." alt="" coords="168,109,277,135">
+<area shape="rect" href="$group__Vacc.html#g2b52e74285215d0138d3a1bad46b556f" title="Report van der Waals accessibility." alt="" coords="170,159,274,186">
+<area shape="rect" href="$group__Vacc.html#g7a741d87762baf5906802b6b9a670080" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface..." alt="" coords="334,235,428,262">
+<area shape="rect" href="$group__Vclist.html#g13dc2b36b0eb96f433ee79566bdd45e4" title="Return cell corresponding to specified position or return VNULL." alt="" coords="890,33,994,59">
+<area shape="rect" href="$group__Vatom.html#g37404117f53ad617e4371df8a7c849bb" title="Get atom ID." alt="" coords="696,58,826,85">
+<area shape="rect" href="$group__Vacc.html#g6e118e97d0ef09899dd376b6eda231a7" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="504,159,618,186">
+<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="693,261,829,287">
+<area shape="rect" href="$group__Vacc.html#g90b879964a5faa185a82dc2f7c736a15" title="Destroy the surface object." alt="" coords="504,261,618,287">
+<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="505,311,617,338">
+<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="477,362,645,389">
+<area shape="rect" href="$vacc_8c.html#5c6356f19e11daf8d0dea84bd92cc226" title="Determines if a point is within the union of the spheres centered at the atomic centers..." alt="" coords="705,109,817,135">
+<area shape="rect" href="$group__Vacc.html#gf645f700c467833a3611fadb606d16e5" title="Allocate and construct the surface object; do not assign surface points to positions..." alt="" coords="708,159,814,186">
+<area shape="rect" href="$group__Vatom.html#gd3538039818c4279eb8a6b0e806dea7b" title="Get atomic position." alt="" coords="697,210,825,237">
+<area shape="rect" href="$group__Vclist.html#ga67500e4f221d3f965c2ff48dee31593" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="878,109,1006,135">
+<area shape="rect" href="$group__Vacc.html#g7b5d73ff3b8ae17c8efad24ce683de78" title="Construct the surface object using previously allocated memory; do not assign surface..." alt="" coords="885,159,1000,186">

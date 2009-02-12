@@ -1,7 +1,6 @@
-base referer
-rect $vfetk_8c.html 121,58 182,85
-rect $apbs_8h.html 121,109 182,135
-rect $routines_8h.html 231,159 314,186
-rect $routines_8c.html 363,159 443,186
-rect $mgparm_8c.html 233,7 313,34
-rect $main_8c.html 373,83 434,110
+<area shape="rect" href="$vfetk_8c.html" title="Class Vfetk methods." alt="" coords="8,82,69,109">
+<area shape="rect" href="$apbs_8h.html" title="Top&#45;level header for APBS." alt="" coords="144,82,205,109">
+<area shape="rect" href="$routines_8h.html" title="Header file for front end auxiliary routines." alt="" coords="16,157,98,184">
+<area shape="rect" href="$routines_8c.html" title="Supporting routines for APBS front end." alt="" coords="250,232,330,258">
+<area shape="rect" href="$mgparm_8c.html" title="Class MGparm methods." alt="" coords="173,157,253,184">
+<area shape="rect" href="$main_8c.html" title="APBS &quot;front end&quot; program using formatted input files." alt="" coords="66,232,128,258">
