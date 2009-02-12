@@ -62,7 +62,7 @@ from sys import stdout, stderr
 
 __author__ = "Todd Dolinsky, Nathan Baker"
 __date__ = "July 2007"
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
@@ -100,7 +100,7 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 1.0.0\n\
+    Version 1.1.0\n\
     \n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
     \n\
