@@ -21,7 +21,7 @@
 			  <td rowspan=5><a href="apbs-mol-auto.in">apbs-mol-auto.in</a></td>
 			  <td rowspan=5>Sequential, 2-level focusing to &le; 0.725 A, NPBE, srfm mol</td>
 			  <td align=center><strong>1.1.0</strong></td>
-			  <td align=center><strong>104.867</strong></td>
+			  <td align=center><strong>104.867<sup><a href="#5">5</a></sup></strong></td>
 			  <td rowspan=5>106.7<br />(1.00 A res., NPBE)</td>
 			</tr>
 			<tr> 
@@ -39,7 +39,7 @@
 			  <td rowspan=16><a href="apbs-smol-auto.in">apbs-smol-auto.in</a></td>
 			  <td rowspan=16>Sequential, 2-level focusing to &le; 0.725 A, NPBE, srfm smol</td>
 			  <td align=center><strong>1.1.0</strong></td>
-			  <td align=center><strong>109.5829</strong></td>
+			  <td align=center><strong>109.5829<sup><a href="#5">5</a></sup></strong></td>
 			  <td rowspan=16>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr>
@@ -68,7 +68,7 @@
 			  <td rowspan=5><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
 			  <td rowspan=5>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
 			  <td align=center><strong>1.1.0</strong></td>
-			  <td align=center><strong>98.1630</strong></td>
+			  <td align=center><strong>98.1630<sup><a href="#5">5</a></sup></strong></td>
 			  <td rowspan=5>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -86,7 +86,7 @@
 			  <td rowspan=16><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
 			  <td rowspan=16>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
 			  <td align=center><strong>1.1.0</strong></td>
-			  <td align=center><strong>115.5560</strong></td>
+			  <td align=center><strong>115.5560<sup><a href="#5">5</a></sup></strong></td>
 			  <td rowspan=16>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -135,7 +135,9 @@
 			</ul>
 			</p>
 
-			<P> <a name=4></a><sup>4</sup> The discrepancy in values between versions 0.5.1 and 1.0.0 was due to the execution of the previous APBS tests on a PowerPC platform with the XLC/XLF compilers.  Running with binaries compiled with gcc/gfortran or the Intel compilers gives identical results between versions 0.5.1 and 1.0.0. </p>
+		<P> <a name=4></a><sup>4</sup> The discrepancy in values between versions 0.5.1 and 1.0.0 was due to the execution of the previous APBS tests on a PowerPC platform with the XLC/XLF compilers.  Running with binaries compiled with gcc/gfortran or the Intel compilers gives identical results between versions 0.5.1 and 1.0.0. </p>
+				
+		<p> <a name="5"/><sup>5</sup> The discrepancy in values between versions 1.0.0 and 1.1.0 is due to a bugfix in the implementation of the boundary conditions.  This bug introduces a very small error (generally less than 1%) the calculated results. </p>
 		
 		<p> Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
 		more information. </p>
