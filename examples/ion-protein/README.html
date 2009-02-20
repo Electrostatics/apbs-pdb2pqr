@@ -23,7 +23,7 @@
 			  <td rowspan=5><a href="apbs-mol-pdiel2.in">apbs-mol-pdiel2.in</a></td>
 			  <td rowspan=5>0.53 A resolution, pdie 2, srfm mol</td>
 			  <td align=center><B>1.1.0</B></td>
-			  <td align=center><B>15.5819</B></td>
+			  <td align=center><B>15.5819<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=5>23.58</td>
 		  </tr>
 			<tr>
@@ -41,7 +41,7 @@
 			  <td rowspan=16><a href="apbs-smol-pdiel2.in">apbs-smol-pdiel2.in</a></td>
 			  <td rowspan=16>0.53 A resolution, pdie 2, srfm smol</td>
 			  <td align=center><B>1.1.0</B></td>
-			  <td align=center><B>23.5458</B></td>
+			  <td align=center><B>23.5458<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=16>23.58</td>
 		  </tr>
 			<tr>
@@ -70,7 +70,7 @@
 			  <td rowspan=5><a href="apbs-mol-pdiel12.in">apbs-mol-pdiel12.in</a></td>
 			  <td rowspan=5>0.53 A resolution, pdie 12, srfm mol</td>
 			  <td align=center><B>1.1.0</B></td>
-			  <td align=center><B>18.0176</B></td>
+			  <td align=center><B>18.0176<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=5>23.58</td>
 		  </tr>
 			<tr>
@@ -88,7 +88,7 @@
 			  <td rowspan=16><a href="apbs-smol-pdiel12.in">apbs-smol-pdiel12.in</a></td>
 			  <td rowspan=16>0.53 A resolution, pdie 12, srfm smol</td>
 			  <td align=center><B>1.1.0</B></td>
-			  <td align=center><B>19.2728</B></td>
+			  <td align=center><B>19.2728<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=16>23.58</td>
 		  </tr>
 			<tr>
@@ -114,7 +114,7 @@
 			<tr><td align=center>0.1.8</td><td align=center>18.90</td> </tr>
 		</table>
 
-		<p> </p><a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
+		<p> <a name=1></a><sup>1</sup>  The discrepancy in values between versions 0.4.0 and 0.3.2 is most likely
 			due to three factors:
 			<ul>
 				<li> A bug fix in Vacc_molAcc which removed spurious regions of high internal dielectric values
@@ -122,6 +122,7 @@
 				</li><li>  The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
 			</li></ul>
 			Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
-			<p></p>
+		</p>
+		<p> <a name="2"/><sup>2</sup> The discrepancy in values between versions 1.0.0 and 1.1.0 is due to a bugfix in the implementation of the boundary conditions.  This bug introduces a very small error (generally less than 1%) the calculated results.  This error is most prominent when the molecule substantially overlaps the boundary (e.g., in the current example) and is often symptomatic of insufficiently-large problem domains.</p>
 	</body>
 </html>
