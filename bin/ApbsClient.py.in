@@ -338,7 +338,7 @@ def execApbs(vars=None, argv=None):
 		webRun = True
 		vars = initRemoteVars(argv)
 		
-		
+	global service_url	
 	#*argument parser
 	# command-line arguments
 	vars['inFile'] = argv[-1]
@@ -365,12 +365,10 @@ def execApbs(vars=None, argv=None):
 				vars['service_url'] = parallel_service_url
 				sequential = False
 			if(line[:5]=='async'):
-				global service_url
 				vars['service_url'] = service_url
 				sequential = True
 				break
 		if sequential:
-			global service_url
 			vars['service_url'] = service_url
 			
 		tempFile.close()
