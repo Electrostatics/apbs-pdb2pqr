@@ -3136,6 +3136,7 @@ VPRIVATE void bcfl_sdh(Vpmg *thee){
 	
 	double size, *position, charge, xkappa, eps_w, eps_p, T, pre, dist;
 	double sdhcharge, sdhdipole[3], traced[9], sdhquadrupole[9];
+	double *dipole, *quadrupole;
 	
 	double val, *apos, gpos[3], tensor[3], qave;
 	double ux, uy, uz, xr, yr, zr;
