@@ -137,17 +137,21 @@ def processOptions():
 
 #### Setup a list of paths to search for Opal-related modules ####
 sys.path.append(userPath)
+
 # This is the path determined by autoconf/automake
 configPath = "@SITEPKGS@"
 modPaths = [configPath, os.path.join(configPath, "ZSI")]
 sys.path = sys.path + modPaths
+
 # This is the current working directory
 sys.path.append(os.getcwd())
+
 # This is an attempt to decipher the path of this script if not in the current directory (and not in the path)
 myExecPath = sys.argv[0]
 pathSplit = os.path.split(myExecPath)
 libPath = os.path.join(pathSplit[0], "../lib/python2.5/site-packages")
 sys.path.append(os.path.abspath(libPath))
+
 # Now check to see if the user specified the APBS installation path on the command line
 if __name__ == "__main__":
 	optDict = processOptions()
@@ -383,7 +387,7 @@ def execApbs(vars=None, argv=None):
 		opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:]
 		if opal_version != local_version:
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
-			stderr.write("It appears that the remote server version of APBS (%s) does not match the local version (%s)!\n" % (opal_version,local_version))
+			stderr.write("It appears that the remote server version of APBS (%s) does not match\nthe local version (%s)!\n" % (opal_version,local_version))
 			stderr.write("Proceed at your own risk!!\n")
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
 	
