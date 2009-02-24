@@ -28,3 +28,8 @@ AM_LDFLAGS       = @LDFLAGS@ @FFLAGS@
  
 includedir = ${prefix}/include/apbs
 include_HEADERS = routines.h
+
+install-data-local:
+	-cp -p ${top_apbsdir}/bin/ApbsClient.py ${prefix}/bin
+	-chmod 755 ${prefix}/bin/ApbsClient.py
+	-rm -f ${prefix}/bin/wsdl2py 
