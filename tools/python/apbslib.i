@@ -233,6 +233,10 @@ Valist *make_Valist(Valist **args, int n){
     return args[n];
 }
 
+void remove_Valist(Valist *thee){
+    Valist_dtor2(thee);
+}
+
 /* Generic array of doubles and ints:
    Constructors, Destructors, Gets, and Sets */
 

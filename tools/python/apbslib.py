@@ -305,6 +305,7 @@ delete_Com = _apbslib.delete_Com
 delete_Mem = _apbslib.delete_Mem
 get_AtomForce = _apbslib.get_AtomForce
 make_Valist = _apbslib.make_Valist
+remove_Valist = _apbslib.remove_Valist
 double_array = _apbslib.double_array
 int_array = _apbslib.int_array
 delete_double_array = _apbslib.delete_double_array

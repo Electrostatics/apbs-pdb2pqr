@@ -2836,6 +2836,10 @@ Valist *make_Valist(Valist **args, int n){
     return args[n];
 }
 
+void remove_Valist(Valist *thee){
+    Valist_dtor2(thee);
+}
+
 /* Generic array of doubles and ints:
    Constructors, Destructors, Gets, and Sets */
 
@@ -5422,6 +5426,27 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_remove_Valist(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Valist *arg1 = (Valist *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:remove_Valist",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Valist, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "remove_Valist" "', argument " "1"" of type '" "Valist *""'"); 
+  }
+  arg1 = (Valist *)(argp1);
+  remove_Valist(arg1);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_double_array(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -5677,6 +5702,7 @@ SWIGINTERN PyObject *_wrap_NOsh_setupElecCalc(PyObject *SWIGUNUSEDPARM(self), Py
 fail:
   return NULL;
 }
+
 
 SWIGINTERN PyObject *_wrap_NOsh_setupApolCalc(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -7201,6 +7227,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_Mem", _wrap_delete_Mem, METH_VARARGS, NULL},
 	 { (char *)"get_AtomForce", _wrap_get_AtomForce, METH_VARARGS, NULL},
 	 { (char *)"make_Valist", _wrap_make_Valist, METH_VARARGS, NULL},
+	 { (char *)"remove_Valist", _wrap_remove_Valist, METH_VARARGS, NULL},
 	 { (char *)"double_array", _wrap_double_array, METH_VARARGS, NULL},
 	 { (char *)"int_array", _wrap_int_array, METH_VARARGS, NULL},
 	 { (char *)"delete_double_array", _wrap_delete_double_array, METH_VARARGS, NULL},
