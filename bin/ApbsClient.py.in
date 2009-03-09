@@ -222,9 +222,7 @@ helpString = """
 """
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
-	"""
-	THIS FUNCTION NEEDS DOCSTRINGS!
-	"""
+	""" Downloads files from Opal server (only if automatic downloading is enabled). """
 	stdout.write("Downloading select results:\n")
 	if outputDirectory != None:
 		stdout.write("\tOutput directory:  %s\n" % outputDirectory)
@@ -240,9 +238,7 @@ def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
 		stdout.write("\tDownloading %s...\n" % fileName)
 
 def pollStatus(jobID,outputDirectory):
-	"""
-	THIS FUNCTION NEEDS DOCSTRINGS!
-	"""
+	""" Determines current status of run and executes fetching of results if the run is completed. """
 	global service_url
 	appServicePort = AppServiceLocator().getAppServicePort(service_url)
 	status = appServicePort.queryStatus(queryStatusRequest(jobID))
@@ -311,9 +307,7 @@ def initRemoteVars(argv):
 	return vars
 
 def displayResults(jobID):
-	"""
-	THIS FUNCTION NEEDS DOCSTRINGS!
-	"""
+	""" Displays URLs of resulting files, if they are not to be fetched automatically. """
 	global service_url
 	appServicePort = AppServiceLocator().getAppServicePort(service_url)
 	resp = appServicePort.getOutputs(getOutputsRequest(jobID))
@@ -327,9 +321,7 @@ def displayResults(jobID):
 		stdout.write("\tStandard Error:  %s\n" % resp._stdErr)
 
 def execApbs(vars=None, argv=None):
-	"""
-	THIS FUNCTION NEEDS DOCSTRINGS!
-	"""
+	""" Executes APBS and regulates checking of job status and retrieval of data if job is successfully completed. """
 	if argv is None:
 		# i.e. if it is a local run
 		argv = sys.argv
@@ -495,9 +487,7 @@ def execApbs(vars=None, argv=None):
 		stdout.write("\t%s\n" % jobID)
 		
 def main():
-	"""
-	THIS FUNCTION NEEDS DOCSTRINGS!
-	"""
+	""" Parses input, runs local jobs, and fetches files from previously completed calculations. """
 	# __main__ output
 	print creditString
 	# Check for invocation with no arguments
