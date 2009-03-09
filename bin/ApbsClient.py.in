@@ -388,6 +388,8 @@ def execApbs(vars=None, argv=None):
 			stderr.write("It appears that the remote server version of APBS (%s) does not match\nthe local version (%s)!\n" % (opal_version,local_version))
 			stderr.write("Proceed at your own risk!!\n")
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
+			if webRun:
+				return False
 	
 	if(vars.has_key('argList')):
 		vars['argList'] = vars['argList'] + " " + vars['inFile']
