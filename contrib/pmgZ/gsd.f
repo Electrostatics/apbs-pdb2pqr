@@ -50,23 +50,18 @@ c* *********************************************************************
       double precision omega,errtol
       double precision rpc(*),ac(nx*ny*nz,*),cc(nx,ny,nz),fc(nx,ny,nz)
       double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz),r(nx,ny,nz)
+	  integer*8 mbeg
 c*
 cmdir 0 0
 c*
 c*    *** do in one step ***
       numdia = ipc(11)
+	  call machm(mbeg)
       if (numdia .eq. 7) then
-!$	  if(1 .ne. 1) !This is for OpenMP calls to the kerneled version of gsrb7
          call gsrb7(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
      2      ac(1,2),ac(1,3),ac(1,4),
      3      x,w1,w2,r,
      4      itmax,iters,errtol,omega,iresid,iadjoint)
-!$	  else
-!$         call gsrb7toc(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
-!$   2      ac(1,2),ac(1,3),ac(1,4),
-!$   3      x,w1,w2,r,
-!$   4      itmax,iters,errtol,omega,iresid,iadjoint)
-!$	  endif
       elseif (numdia .eq. 27) then
          call gsrb27(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
      2      ac(1,2),ac(1,3),ac(1,4),ac(1,5),ac(1,6),ac(1,7),ac(1,8),
@@ -115,23 +110,21 @@ c*    *** do the gauss-seidel iteration itmax times ***
       k1 = (1-iadjoint) * 2 + iadjoint     * (nz-1)
       k2 = iadjoint     * 2 + (1-iadjoint) * (nz-1)
       istep = iadjoint*(-1) + (1-iadjoint)*(1)
+	  
       do 30 iters = 1, itmax
 c*
 c*       *** do the red points ***
-cmdir 3 1
          do 10 k=k1,k2,istep
-cmdir 3 2
             do 11 j=j1,j2,istep
-cmdir 3 3
                do 12 i=i1,i2,istep
-                  x(i,j,k) = (fc(i,j,k)+(
+                 x(i,j,k) = (fc(i,j,k) 
      2               +  oN(i,j,k)        * x(i,j+1,k)
      3               +  oN(i,j-1,k)      * x(i,j-1,k)
      4               +  oE(i,j,k)        * x(i+1,j,k)
      5               +  oE(i-1,j,k)      * x(i-1,j,k)
      6               +  uC(i,j,k-1)      * x(i,j,k-1)
      7               +  uC(i,j,k)        * x(i,j,k+1)
-     8               )) /  (oC(i,j,k) + cc(i,j,k))
+     8				 ) / (oC(i,j,k) + cc(i,j,k))
  12            continue
  11         continue
  10      continue
@@ -271,6 +264,147 @@ c*
 c*    *** return and end ***
       return
       end
+
+      subroutine gsrb27X(nx,ny,nz,ipc,rpc,
+     2   oC,cc,fc,
+     3   oE,oN,uC,oNE,oNW,uE,uW,uN,uS,uNE,uNW,uSE,uSW,
+     4   x,w1,w2,r,
+     5   itmax,iters,errtol,omega,iresid,iadjoint)
+c* *********************************************************************
+c* purpose: 
+c*
+c*    27 diagonal gauss-seidel routine.
+c*
+c*    this routine applies the gauss-seidel operator or its
+c*    adjoint depending on the flag iadjoint.
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+      integer          ipc(*),itmax,iters,iresid,iadjoint,nx,ny,nz
+      integer          i,j,k,i1,i2,j1,j2,k1,k2,istep,ioff
+      double precision omega,errtol
+      double precision rpc(*),oE(nx,ny,nz),oN(nx,ny,nz),uC(nx,ny,nz)
+      double precision oNE(nx,ny,nz),oNW(nx,ny,nz),uE(nx,ny,nz)
+      double precision uW(nx,ny,nz),uN(nx,ny,nz),uS(nx,ny,nz)
+      double precision uNE(nx,ny,nz),uNW(nx,ny,nz),uSE(nx,ny,nz)
+      double precision uSW(nx,ny,nz)
+      double precision fc(nx,ny,nz),oC(nx,ny,nz),cc(nx,ny,nz)
+      double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz)
+      double precision r(nx,ny,nz)
+      double precision tmpO,tmpU,tmpD
+c*
+cmdir 0 0
+c*
+c*    *** do the gauss-seidel iteration itmax times ***
+      i1 = (1-iadjoint) * 2 + iadjoint     * (nx-1)
+      i2 = iadjoint     * 2 + (1-iadjoint) * (nx-1)
+      j1 = (1-iadjoint) * 2 + iadjoint     * (ny-1)
+      j2 = iadjoint     * 2 + (1-iadjoint) * (ny-1)
+      k1 = (1-iadjoint) * 2 + iadjoint     * (nz-1)
+      k2 = iadjoint     * 2 + (1-iadjoint) * (nz-1)
+      istep = iadjoint*(-1) + (1-iadjoint)*(1)
+
+C!$OMP PARALLEL default(shared) private(i,j,k,ioff,tmpO,tmpU,tmpD)	  
+      do 30 iters = 1, itmax
+C!$OMP DO
+         do 10 k=2,nz-1
+            do 11 j=2,ny-1
+               ioff = (1-iadjoint)*mod((j+k+2),2) 
+     2              + iadjoint    *(1-mod((j+k+2),2))
+               do 12 i=2+ioff,nx-1, 2
+                  tmpO =
+     2               +  oN(i,j,k)        * x(i,j+1,k)
+     3               +  oN(i,j-1,k)      * x(i,j-1,k)
+     4               +  oE(i,j,k)        * x(i+1,j,k)
+     5               +  oE(i-1,j,k)      * x(i-1,j,k)
+     6               +  oNE(i,j,k)       * x(i+1,j+1,k)
+     7               +  oNW(i,j,k)       * x(i-1,j+1,k)
+     8               +  oNW(i+1,j-1,k)   * x(i+1,j-1,k)
+     9               +  oNE(i-1,j-1,k)   * x(i-1,j-1,k)
+                  tmpU =
+     2               +  uC(i,j,k)        * x(i,j,k+1)
+     3               +  uN(i,j,k)        * x(i,j+1,k+1)
+     4               +  uS(i,j,k)        * x(i,j-1,k+1)
+     5               +  uE(i,j,k)        * x(i+1,j,k+1)
+     6               +  uW(i,j,k)        * x(i-1,j,k+1)
+     7               +  uNE(i,j,k)       * x(i+1,j+1,k+1)
+     8               +  uNW(i,j,k)       * x(i-1,j+1,k+1)
+     9               +  uSE(i,j,k)       * x(i+1,j-1,k+1)
+     9               +  uSW(i,j,k)       * x(i-1,j-1,k+1)
+                  tmpD =
+     2               +  uC(i,j,k-1)      * x(i,j,k-1)
+     3               +  uS(i,j+1,k-1)    * x(i,j+1,k-1)
+     4               +  uN(i,j-1,k-1)    * x(i,j-1,k-1)
+     5               +  uW(i+1,j,k-1)    * x(i+1,j,k-1)
+     6               +  uE(i-1,j,k-1)    * x(i-1,j,k-1)
+     7               +  uSW(i+1,j+1,k-1) * x(i+1,j+1,k-1)
+     8               +  uSE(i-1,j+1,k-1) * x(i-1,j+1,k-1)
+     9               +  uNW(i+1,j-1,k-1) * x(i+1,j-1,k-1)
+     9               +  uNE(i-1,j-1,k-1) * x(i-1,j-1,k-1)
+                  x(i,j,k) = (fc(i,j,k)+(tmpO + tmpU + tmpD
+     9               )) /  (oC(i,j,k) + cc(i,j,k))
+ 12            continue
+ 11         continue
+ 10      continue
+C!$OMP END DO
+
+C!$OMP DO
+         do 20 k=2,nz-1
+            do 21 j=2,ny-1
+               ioff = iadjoint    *mod((j+k+2),2) 
+     2              + (1-iadjoint)*(1-mod((j+k+2),2))
+               do 22 i=2+ioff,nx-1, 2
+                  tmpO =
+     2               +  oN(i,j,k)        * x(i,j+1,k)
+     3               +  oN(i,j-1,k)      * x(i,j-1,k)
+     4               +  oE(i,j,k)        * x(i+1,j,k)
+     5               +  oE(i-1,j,k)      * x(i-1,j,k)
+     6               +  oNE(i,j,k)       * x(i+1,j+1,k)
+     7               +  oNW(i,j,k)       * x(i-1,j+1,k)
+     8               +  oNW(i+1,j-1,k)   * x(i+1,j-1,k)
+     9               +  oNE(i-1,j-1,k)   * x(i-1,j-1,k)
+                  tmpU =
+     2               +  uC(i,j,k)        * x(i,j,k+1)
+     3               +  uN(i,j,k)        * x(i,j+1,k+1)
+     4               +  uS(i,j,k)        * x(i,j-1,k+1)
+     5               +  uE(i,j,k)        * x(i+1,j,k+1)
+     6               +  uW(i,j,k)        * x(i-1,j,k+1)
+     7               +  uNE(i,j,k)       * x(i+1,j+1,k+1)
+     8               +  uNW(i,j,k)       * x(i-1,j+1,k+1)
+     9               +  uSE(i,j,k)       * x(i+1,j-1,k+1)
+     9               +  uSW(i,j,k)       * x(i-1,j-1,k+1)
+                  tmpD =
+     2               +  uC(i,j,k-1)      * x(i,j,k-1)
+     3               +  uS(i,j+1,k-1)    * x(i,j+1,k-1)
+     4               +  uN(i,j-1,k-1)    * x(i,j-1,k-1)
+     5               +  uW(i+1,j,k-1)    * x(i+1,j,k-1)
+     6               +  uE(i-1,j,k-1)    * x(i-1,j,k-1)
+     7               +  uSW(i+1,j+1,k-1) * x(i+1,j+1,k-1)
+     8               +  uSE(i-1,j+1,k-1) * x(i-1,j+1,k-1)
+     9               +  uNW(i+1,j-1,k-1) * x(i+1,j-1,k-1)
+     9               +  uNE(i-1,j-1,k-1) * x(i-1,j-1,k-1)
+                  x(i,j,k) = (fc(i,j,k)+(tmpO + tmpU + tmpD
+     9               )) /  (oC(i,j,k) + cc(i,j,k))
+ 22            continue
+ 21         continue
+ 20      continue
+C!$OMP END DO
+ 30   continue
+C!$OMP END PARALLEL
+
+c*
+c*    *** if specified, return the new residual as well ***
+      if (iresid .eq. 1) then
+         call mresid27_1s(nx,ny,nz,ipc,rpc,oC,cc,fc,
+     2      oE,oN,uC,oNE,oNW,uE,uW,uN,uS,uNE,uNW,uSE,uSW,
+     3      x,r)
+      endif
+c*
+c*    *** return and end ***
+      return
+      end
+
       subroutine gsrb7X(nx,ny,nz,ipc,rpc,
      2   oC,cc,fc,
      3   oE,oN,uC,
@@ -331,21 +465,16 @@ c* *********************************************************************
       double precision fc(nx,ny,nz),oC(nx,ny,nz),cc(nx,ny,nz)
       double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz)
       double precision r(nx,ny,nz)
-c*
-cmdir 0 0
-c*
-c*    *** do the gauss-seidel iteration itmax times ***
+
+C!$OMP PARALLEL default(shared) private(i,j,k,ioff)
       do 30 iters = 1, itmax
 c*
 c*       *** do the red points ***
-cmdir 3 1
+C!$OMP DO
          do 10 k=2,nz-1
-cmdir 3 2
             do 11 j=2,ny-1
-CZZZ           ioff = mod((j+k+2),2) 
                ioff = (1-iadjoint)*mod((j+k+2),2) 
      2              + iadjoint    *(1-mod((j+k+2),2))
-cmdir 3 3
                do 12 i=2+ioff,nx-1, 2
                   x(i,j,k) = (fc(i,j,k)+(
      2               +  oN(i,j,k)        * x(i,j+1,k)
@@ -358,16 +487,14 @@ cmdir 3 3
  12            continue
  11         continue
  10      continue
+C!$OMP END DO
 c*
 c*       *** do the black points ***
-cmdir 3 1
+C!$OMP DO
          do 20 k=2,nz-1
-cmdir 3 2
             do 21 j=2,ny-1
-CZZZ           ioff = 1-mod((j+k+2),2)
                ioff = iadjoint    *mod((j+k+2),2) 
      2              + (1-iadjoint)*(1-mod((j+k+2),2))
-cmdir 3 3
                do 22 i=2+ioff,nx-1, 2
                   x(i,j,k) = (fc(i,j,k)+(
      2               +  oN(i,j,k)        * x(i,j+1,k)
@@ -380,9 +507,10 @@ cmdir 3 3
  22            continue
  21         continue
  20      continue
-c*
-c*       *** main loop ***
+C!$OMP END DO
  30   continue
+C!$OMP END PARALLEL
+
 c*
 c*    *** if specified, return the new residual as well ***
       if (iresid .eq. 1) then

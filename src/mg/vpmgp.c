@@ -131,7 +131,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
 	thee->nu2 = 2;
 	thee->mgprol = 0;
 	thee->mgdisc = 0;
-	thee->omegal = 8.0e-1;
+	thee->omegal = 19.4e-1;
 	thee->omegan = 9.0e-1;
 	thee->ipcon = 3;
 	thee->irite = 8;

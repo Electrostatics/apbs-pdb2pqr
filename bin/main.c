@@ -362,7 +362,13 @@ int main(
 	 				"     are performing an APOLAR calculation\n");
 	 	VJMPERR1(0);
 	} */
-
+	
+#if defined(DEBUG_MAC_OSX)	
+#include <stdint.h>
+	uint64_t mbeg;
+	machm_(&mbeg);
+#endif
+	
 	/* *************** LOAD MAPS ******************* */
 	if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
 		Vnm_tprint(2, "Error reading dielectric maps!\n");
@@ -631,7 +637,7 @@ int main(
 	killDielMaps(nosh, dielXMap, dielYMap, dielZMap);
 	killMolecules(nosh, alist);
 	NOsh_dtor(&nosh);
-
+	
 	/* Memory statistics */
 	bytesTotal = Vmem_bytesTotal();
 	highWater = Vmem_highWaterTotal();
@@ -647,6 +653,10 @@ int main(
 	Vnm_tprint(1, "\n\n");
 	Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
+#if defined(DEBUG_MAC_OSX)
+	mets_(&mbeg, "main program");
+#endif
+	
 	/* This should be last */
 	Vnm_tstop(APBS_TIMER_WALL_CLOCK, "APBS WALL CLOCK");
 	Vnm_flush(1);
