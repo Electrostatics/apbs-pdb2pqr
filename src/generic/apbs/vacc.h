@@ -81,7 +81,7 @@ struct sVaccSurf {
     double *xpts;  /**< Array of point x-locations */
     double *ypts;  /**< Array of point y-locations */
     double *zpts;  /**< Array of point z-locations */
-    int *bpts;  /**< Array of booleans indicating whether a point is (1) or is
+    char *bpts;  /**< Array of booleans indicating whether a point is (1) or is
                  * not (0) part of the surface */
     double area;  /**< Area spanned by these points */
     int npts;  /**< Length of thee->xpts, ypts, zpts arrays */

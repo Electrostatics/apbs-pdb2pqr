@@ -748,7 +748,7 @@ VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
         thee->xpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->ypts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->zpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
-        thee->bpts = Vmem_malloc(thee->mem, thee->npts, sizeof(int));
+        thee->bpts = Vmem_malloc(thee->mem, thee->npts, sizeof(char));
     } else {
         thee->xpts = VNULL;
         thee->ypts = VNULL;
@@ -781,7 +781,7 @@ VPUBLIC void VaccSurf_dtor2(VaccSurf *thee) {
                 (void **)&(thee->ypts));
         Vmem_free(thee->mem, thee->npts, sizeof(double), 
                 (void **)&(thee->zpts));
-        Vmem_free(thee->mem, thee->npts, sizeof(int), 
+        Vmem_free(thee->mem, thee->npts, sizeof(char), 
                 (void **)&(thee->bpts));
     }
 }
