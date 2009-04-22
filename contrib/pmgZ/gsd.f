@@ -56,7 +56,6 @@ cmdir 0 0
 c*
 c*    *** do in one step ***
       numdia = ipc(11)
-	  call machm(mbeg)
       if (numdia .eq. 7) then
          call gsrb7(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
      2      ac(1,2),ac(1,3),ac(1,4),
