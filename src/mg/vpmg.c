@@ -2986,7 +2986,7 @@ VPRIVATE void bcflnew(Vpmg *thee){
 	packUnpack(nx,ny,nz,ngrid,gx,gy,gz,val,thee,1);
 	
 	if(xkappa > VSMALL){
-#pragma omp parallel for default(shared) private(igrid,iatom,dist)
+//#pragma omp parallel for default(shared) private(igrid,iatom,dist)
 		for(igrid=0;igrid<ngrid;igrid++){
 			for(iatom=0; iatom<natoms; iatom++){
 				dist = VSQRT(VSQR(gx[igrid]-ax[iatom]) + VSQR(gy[igrid]-ay[iatom])
@@ -2996,7 +2996,7 @@ VPRIVATE void bcflnew(Vpmg *thee){
 			}
 		}
 	}else{
-#pragma omp parallel for default(shared) private(igrid,iatom,dist)
+//#pragma omp parallel for default(shared) private(igrid,iatom,dist)
 		for(igrid=0;igrid<ngrid;igrid++){
 			for(iatom=0; iatom<natoms; iatom++){
 				dist = VSQRT(VSQR(gx[igrid]-ax[iatom]) + VSQR(gy[igrid]-ay[iatom])
@@ -4026,6 +4026,8 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
 
     /* Loop through the atoms and set a{123}cf = 0.0 (inaccessible)
      * if a point is inside the solvent-inflated van der Waals radii */
+	
+//#pragma omp parallel for default(shared) private(iatom,atom,apos,arad)	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
         atom = Valist_getAtom(alist, iatom);
@@ -4081,6 +4083,8 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
     if (srad > VSMALL) {
 		
         /* Now loop over the solvent accessible surface points */
+		
+//#pragma omp parallel for default(shared) private(iatom,atom,area,asurf,ipt,position)		
         for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
             atom = Valist_getAtom(alist, iatom);
 			area = Vacc_atomSASA(acc, srad, atom);

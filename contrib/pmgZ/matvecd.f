@@ -288,7 +288,7 @@ c*
 cmdir 0 0
 c*
 c*    *** do it ***
-!$OMP PARALLEL DO default(shared) private(i,j,k)
+C!$OMP PARALLEL DO default(shared) private(i,j,k)
        do k=2,nz-1
          do j=2,ny-1
             do i=2,nx-1
@@ -303,7 +303,7 @@ c*    *** do it ***
 			end do
 		end do
 	  end do
-!$OMP END PARALLEL DO
+C!$OMP END PARALLEL DO
 c*
 c*    *** return and end ***
       return
@@ -354,15 +354,11 @@ c* *********************************************************************
       double precision oC(nx,ny,nz)
       double precision x(nx,ny,nz),r(nx,ny,nz),rpc(*)
       double precision tmpO,tmpU,tmpD
-c*
-cmdir 0 0
-c*
-c*    *** do it ***
-cmdir 3 1
+
+!$OMP PARALLEL default(shared) private(i,j,k,tmpO,tmpU,tmpD)
+!$OMP DO
       do 10 k=2,nz-1
-cmdir 3 2
          do 11 j=2,ny-1
-cmdir 3 3
             do 12 i=2,nx-1
                   tmpO =
      2               +  oN(i,j,k)        * x(i,j+1,k)
@@ -398,8 +394,9 @@ cmdir 3 3
  12         continue
  11      continue
  10   continue
-c*
-c*    *** return and end ***
+!$OMP END DO
+!$OMP END PARALLEL
+
       return
       end
       subroutine nmatvec(nx,ny,nz,ipc,rpc,ac,cc,x,y,w1)
@@ -1018,8 +1015,8 @@ c*    *** determine dimension factor ***
       dimfac  = 2.**idimenshun
 c*
 c*    *** handle the interior points as average of 5 finer grid pts ***
-!$OMP PARALLEL default(shared) private(k,kk,j,jj,i,ii,tmpO,tmpU,tmpD)
-!$OMP DO
+C!$OMP PARALLEL default(shared) private(k,kk,j,jj,i,ii,tmpO,tmpU,tmpD)
+C!$OMP DO
       do k = 2, nzc-1
          kk = (k - 1) * 2 + 1
          do j = 2, nyc-1
@@ -1062,8 +1059,8 @@ c*             *** compute the restriction ***
 		  end do
 		end do
 	   end do
-!$OMP END DO
-!$OMP END PARALLEL
+C!$OMP END DO
+C!$OMP END PARALLEL
 c*
 c*    *** verify correctness of the output boundary points ***
       call fboundPMG00(nxc,nyc,nzc,xout)

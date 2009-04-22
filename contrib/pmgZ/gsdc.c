@@ -106,7 +106,9 @@ void doKernel(int i1,int i2,int j1,int j2,int k1,int k2,int nx,int ny,int nz,
 }
 
 void gsrb7c_(double * oN,double * oE,double * uC, double * oC,
-			 double * x,double * fc,double * cc,int * iadjoint,int * aNx, int * aNy, int * aNz, int * aItmax,double * r,int doResid){
+			 double * x,double * fc,double * cc,int * iadjoint,
+			 int * aNx,int * aNy,int * aNz,int * aItmax,
+			 double * r,int doResid){
 	
 	int i,j,k, iters;
 	int i1,i2,j1,j2,k1,k2;
@@ -119,21 +121,21 @@ void gsrb7c_(double * oN,double * oE,double * uC, double * oC,
 	ny = *aNy;
 	nz = *aNz;
 	
-	ti = (int)nx;
-	tj = (int)(ny * 0.1);
-	tk = (int)(nz * 0.03);
+	ti = nx;
+	tj = ny;
+	tk = 1;
 	
-#pragma omp parallel for private(i,j,k,i1,i2,j1,j2,k1,k2,iters) schedule(dynamic,tk)
-	for(k=1;k<nz-1;k+=tk){
-		k1 = k;
-		k2 = MIN(k+tk,nz-1);
-		for(j=1;j<ny-1;j+=tj){
-			j1 = j;
-			j2 = MIN(j+tj,ny-1);
-			for(i=1;i<nx-1;i+=ti){
-				i1 = i;
-				i2 = MIN(i+ti,nx-1);
-				for (iters=0;iters<itmax;iters++){	
+	for (iters=0;iters<itmax;iters++){	
+#pragma omp parallel for private(i,j,k,i1,i2,j1,j2,k1,k2) schedule(dynamic,tk)
+		for(k=1;k<nz-1;k+=tk){
+			k1 = k;
+			k2 = MIN(k+tk,nz-1);
+			for(j=1;j<ny-1;j+=tj){
+				j1 = j;
+				j2 = MIN(j+tj,ny-1);
+				for(i=1;i<nx-1;i+=ti){
+					i1 = i;
+					i2 = MIN(i+ti,nx-1);
 					doKernel(i1,i2,j1,j2,k1,k2,nx,ny,nz,oN,oE,uC,oC,x,fc,cc,1);
 					doKernel(i1,i2,j1,j2,k1,k2,nx,ny,nz,oN,oE,uC,oC,x,fc,cc,0);
 				}
