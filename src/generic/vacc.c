@@ -665,10 +665,9 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
     if (thee->surf == VNULL) {
         thee->surf = Vmem_malloc(thee->mem, natom, sizeof(VaccSurf *));
 		
-//#pragma omp parallel for private(i,atom,apos)
+//#pragma omp parallel for private(i,atom)
         for (i=0; i<natom; i++) {
             atom = Valist_getAtom(thee->alist, i);
-            apos = Vatom_getPosition(atom);
             /* NOTE:  RIGHT NOW WE DO THIS FOR THE ENTIRE MOLECULE WHICH IS
              * INCREDIBLY INEFFICIENT, PARTICULARLY DURING FOCUSING!!! */
             thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, 
@@ -728,7 +727,8 @@ VPUBLIC double Vacc_atomSASA(Vacc *thee, double radius, Vatom *atom) {
 VPUBLIC VaccSurf* VaccSurf_ctor(Vmem *mem, double probe_radius, int nsphere) {
     VaccSurf *thee;
 
-    thee = Vmem_malloc(mem, 1, sizeof(Vacc) );
+    //thee = Vmem_malloc(mem, 1, sizeof(Vacc) );
+	thee = (VaccSurf*)calloc(1,sizeof(Vacc));
     VASSERT( VaccSurf_ctor2(thee, mem, probe_radius, nsphere) );
 
     return thee;
@@ -745,10 +745,16 @@ VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
     thee->area = 0.0;
 	
     if (thee->npts > 0) {
+		/*
         thee->xpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->ypts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->zpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->bpts = Vmem_malloc(thee->mem, thee->npts, sizeof(char));
+		 */
+		thee->xpts = (double*)calloc(thee->npts,sizeof(double));
+        thee->ypts = (double*)calloc(thee->npts,sizeof(double));
+        thee->zpts = (double*)calloc(thee->npts,sizeof(double));
+        thee->bpts = (char*)calloc(thee->npts,sizeof(char));
     } else {
         thee->xpts = VNULL;
         thee->ypts = VNULL;
@@ -766,7 +772,8 @@ VPUBLIC void VaccSurf_dtor(VaccSurf **thee) {
     if ((*thee) != VNULL) {
         mem = (*thee)->mem;
         VaccSurf_dtor2(*thee);
-        Vmem_free(mem, 1, sizeof(VaccSurf), (void **)thee);
+        //Vmem_free(mem, 1, sizeof(VaccSurf), (void **)thee);
+		free(*thee);
         (*thee) = VNULL;
     }
 
@@ -775,6 +782,7 @@ VPUBLIC void VaccSurf_dtor(VaccSurf **thee) {
 VPUBLIC void VaccSurf_dtor2(VaccSurf *thee) {
 
     if (thee->npts > 0) {
+		/*
         Vmem_free(thee->mem, thee->npts, sizeof(double), 
                 (void **)&(thee->xpts));
         Vmem_free(thee->mem, thee->npts, sizeof(double), 
@@ -783,6 +791,11 @@ VPUBLIC void VaccSurf_dtor2(VaccSurf *thee) {
                 (void **)&(thee->zpts));
         Vmem_free(thee->mem, thee->npts, sizeof(char), 
                 (void **)&(thee->bpts));
+		 */
+		free(thee->xpts);
+		free(thee->ypts);
+		free(thee->zpts);
+		free(thee->bpts);
     }
 }
 
@@ -792,7 +805,8 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
     VaccSurf *surf;
     int i, j, npts, atomID;
     double arad, rad, pos[3], *apos;
-
+	char bpts[ref->npts];
+			  
     /* Get atom information */
     arad = Vatom_getRadius(atom);
     apos = Vatom_getPosition(atom);
@@ -813,9 +827,9 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
         pos[2] = rad*(ref->zpts[i]) + apos[2];
         if (ivdwAccExclus(thee, pos, prad, atomID)) {
             npts++;
-            ref->bpts[i] = 1;
+            bpts[i] = 1;
         } else {
-            ref->bpts[i] = 0;
+            bpts[i] = 0;
         }
     }
 	
@@ -825,7 +839,7 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
     /* Assign the points */
     j = 0;
     for (i=0; i<ref->npts; i++) {
-        if (ref->bpts[i]) {
+        if (bpts[i]) {
             surf->bpts[j] = 1;
             surf->xpts[j] = rad*(ref->xpts[i]) + apos[0];
             surf->ypts[j] = rad*(ref->ypts[i]) + apos[1];
