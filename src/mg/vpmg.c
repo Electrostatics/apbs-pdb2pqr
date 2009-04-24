@@ -4026,7 +4026,6 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
 
     /* Loop through the atoms and set a{123}cf = 0.0 (inaccessible)
      * if a point is inside the solvent-inflated van der Waals radii */
-	
 //#pragma omp parallel for default(shared) private(iatom,atom,apos,arad)	
     for (iatom=0; iatom<Valist_getNumberAtoms(alist); iatom++) {
 
@@ -4078,6 +4077,8 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
 
         } /* endif (on the mesh) */
     } /* endfor (over all atoms) */
+
+	area = Vacc_SASA(acc, srad);
 
     /* We only need to do the next step for non-zero solvent radii */
     if (srad > VSMALL) {
