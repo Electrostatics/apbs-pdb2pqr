@@ -59,7 +59,6 @@
 #ifndef _APBSROUTINES_H_
 #define _APBSROUTINES_H_
 
-#include "apbscfg.h"
 #include "apbs/apbs.h"  
 #include "apbs/nosh.h"  
 #include "apbs/mgparm.h"  
