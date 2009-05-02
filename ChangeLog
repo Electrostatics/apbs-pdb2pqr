@@ -5,6 +5,7 @@
 - NEW FEATURES
 
 - MODIFICATIONS
+	* Applied Robert Konecny's patch to bin/routines.h (no need to include apbscfg.h in routines.h)
 
 - BUG FIXES
 	* Added a remove_Valist function in Python wrapper files, to fix a memory leak problem in pdb2pka
