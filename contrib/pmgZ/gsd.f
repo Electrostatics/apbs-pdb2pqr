@@ -304,9 +304,9 @@ c*    *** do the gauss-seidel iteration itmax times ***
       k2 = iadjoint     * 2 + (1-iadjoint) * (nz-1)
       istep = iadjoint*(-1) + (1-iadjoint)*(1)
 
-C!$OMP PARALLEL default(shared) private(i,j,k,ioff,tmpO,tmpU,tmpD)	  
+!$OMP PARALLEL default(shared) private(i,j,k,ioff,tmpO,tmpU,tmpD)	  
       do 30 iters = 1, itmax
-C!$OMP DO
+!$OMP DO
          do 10 k=2,nz-1
             do 11 j=2,ny-1
                ioff = (1-iadjoint)*mod((j+k+2),2) 
@@ -346,9 +346,9 @@ C!$OMP DO
  12            continue
  11         continue
  10      continue
-C!$OMP END DO
+!$OMP END DO
 
-C!$OMP DO
+!$OMP DO
          do 20 k=2,nz-1
             do 21 j=2,ny-1
                ioff = iadjoint    *mod((j+k+2),2) 
@@ -388,9 +388,9 @@ C!$OMP DO
  22            continue
  21         continue
  20      continue
-C!$OMP END DO
+!$OMP END DO
  30   continue
-C!$OMP END PARALLEL
+!$OMP END PARALLEL
 
 c*
 c*    *** if specified, return the new residual as well ***
@@ -465,11 +465,11 @@ c* *********************************************************************
       double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz)
       double precision r(nx,ny,nz)
 
-C!$OMP PARALLEL default(shared) private(i,j,k,ioff)
+!$OMP PARALLEL default(shared) private(i,j,k,ioff)
       do 30 iters = 1, itmax
 c*
 c*       *** do the red points ***
-C!$OMP DO
+!$OMP DO
          do 10 k=2,nz-1
             do 11 j=2,ny-1
                ioff = (1-iadjoint)*mod((j+k+2),2) 
@@ -486,10 +486,10 @@ C!$OMP DO
  12            continue
  11         continue
  10      continue
-C!$OMP END DO
+!$OMP END DO
 c*
 c*       *** do the black points ***
-C!$OMP DO
+!$OMP DO
          do 20 k=2,nz-1
             do 21 j=2,ny-1
                ioff = iadjoint    *mod((j+k+2),2) 
@@ -506,9 +506,9 @@ C!$OMP DO
  22            continue
  21         continue
  20      continue
-C!$OMP END DO
+!$OMP END DO
  30   continue
-C!$OMP END PARALLEL
+!$OMP END PARALLEL
 
 c*
 c*    *** if specified, return the new residual as well ***

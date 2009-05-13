@@ -108,7 +108,7 @@ c*
 cmdir 0 0
 c*
 c*    *** do it ***
-C!$OMP PARALLEL DO private(i,j,k)
+!$OMP PARALLEL DO private(i,j,k)
       do k = 2, nz-1
          do j = 2, ny-1
             do i = 2, nx-1
@@ -116,7 +116,7 @@ C!$OMP PARALLEL DO private(i,j,k)
 			end do
 		 end do
 	  end do
-C!$OMP END PARALLEL DO
+!$OMP END PARALLEL DO
 c*
 c*    *** return and end ***
       return
@@ -434,11 +434,11 @@ c*
 c*    *** find parallel loops (ipara), remainder (ivect) ***
       n     = nx * ny * nz
 
-C!$OMP PARALLEL DO private(i)
+!$OMP PARALLEL DO private(i)
       do i = 1, n
        x(i) = 0.0d0
 	  end do
-C!$OMP END PARALLEL DO
+!$OMP END PARALLEL DO
 
 c*
 c*    *** return and end ***

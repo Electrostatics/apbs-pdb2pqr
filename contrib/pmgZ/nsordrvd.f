@@ -360,7 +360,43 @@ c*    *** return and end ***
  99   continue
       return
       end
-      subroutine sorgo(nx,ny,nz,x,r,w1,w2,
+	  
+	  subroutine sorgo(nx,ny,nz,x,r,w1,w2,
+     2   istop,itmax,iters,ierror,
+     3   iok,iinfo,epsiln,errtol,omega,
+     4   ipc,rpc,ac,cc,fc,tru)
+c* *********************************************************************
+c* purpose:
+c*
+c*    linear sor iteration.
+c*
+c* author:  michael holst
+c* *********************************************************************
+      implicit         none
+c*
+c*    *** other declarations ***
+      integer          ipc(*),iok,iinfo
+      integer          itmax,iters,ierror
+      integer          iresid,iadjoint,istop,itmax_s,iters_s
+      integer          nx,ny,nz
+      double precision omega,errtol,epsiln,errtol_s,omega_s
+      double precision rsden,rsnrm,orsnrm,xnrm1,xnrm2,xdot
+      double precision x(*),r(*),w1(*),w2(*)
+      double precision rpc(*),ac(nx*ny*nz,*),cc(*),fc(*),tru(*)
+	  
+C	  call nsordnew(%VAL(nx),%VAL(ny),%VAL(nz),%VAL(itmax),
+C     .			ac(1,1),cc,fc,ac(1,2),ac(1,3),ac(1,4),x,r,
+C     .			%VAL(omega))
+	 
+	  call sorgo_orig(nx,ny,nz,x,r,w1,w2,
+     2   istop,itmax,iters,ierror,
+     3   iok,iinfo,epsiln,errtol,omega,
+     4   ipc,rpc,ac,cc,fc,tru)
+
+      return
+      end
+	  
+      subroutine sorgo_orig(nx,ny,nz,x,r,w1,w2,
      2   istop,itmax,iters,ierror,
      3   iok,iinfo,epsiln,errtol,omega,
      4   ipc,rpc,ac,cc,fc,tru)
