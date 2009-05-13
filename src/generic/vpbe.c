@@ -381,6 +381,7 @@ function\n", thee->maxIonRadius);
 
     thee->clist = Vclist_ctor(thee->alist, radius, inhash, 
             CLIST_AUTO_DOMAIN, lower_corner, upper_corner);
+	
     VASSERT(thee->clist != VNULL);
     thee->acc = Vacc_ctor(thee->alist, thee->clist, sdens);
 	

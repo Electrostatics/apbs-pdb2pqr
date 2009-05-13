@@ -126,7 +126,7 @@ void gsrb7c_(double * oN,double * oE,double * uC, double * oC,
 	tk = 1;
 	
 	for (iters=0;iters<itmax;iters++){	
-#pragma omp parallel for private(i,j,k,i1,i2,j1,j2,k1,k2) schedule(dynamic,tk)
+//#pragma omp parallel for private(i,j,k,i1,i2,j1,j2,k1,k2) schedule(dynamic,tk)
 		for(k=1;k<nz-1;k+=tk){
 			k1 = k;
 			k2 = MIN(k+tk,nz-1);

@@ -288,7 +288,7 @@ c*
 cmdir 0 0
 c*
 c*    *** do it ***
-C!$OMP PARALLEL DO default(shared) private(i,j,k)
+!$OMP PARALLEL DO default(shared) private(i,j,k)
        do k=2,nz-1
          do j=2,ny-1
             do i=2,nx-1
@@ -303,7 +303,7 @@ C!$OMP PARALLEL DO default(shared) private(i,j,k)
 			end do
 		end do
 	  end do
-C!$OMP END PARALLEL DO
+!$OMP END PARALLEL DO
 c*
 c*    *** return and end ***
       return
@@ -1015,8 +1015,8 @@ c*    *** determine dimension factor ***
       dimfac  = 2.**idimenshun
 c*
 c*    *** handle the interior points as average of 5 finer grid pts ***
-C!$OMP PARALLEL default(shared) private(k,kk,j,jj,i,ii,tmpO,tmpU,tmpD)
-C!$OMP DO
+!$OMP PARALLEL default(shared) private(k,kk,j,jj,i,ii,tmpO,tmpU,tmpD)
+!$OMP DO
       do k = 2, nzc-1
          kk = (k - 1) * 2 + 1
          do j = 2, nyc-1
@@ -1059,8 +1059,8 @@ c*             *** compute the restriction ***
 		  end do
 		end do
 	   end do
-C!$OMP END DO
-C!$OMP END PARALLEL
+!$OMP END DO
+!$OMP END PARALLEL
 c*
 c*    *** verify correctness of the output boundary points ***
       call fboundPMG00(nxc,nyc,nzc,xout)
