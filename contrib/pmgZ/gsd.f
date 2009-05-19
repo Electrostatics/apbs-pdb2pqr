@@ -50,7 +50,6 @@ c* *********************************************************************
       double precision omega,errtol
       double precision rpc(*),ac(nx*ny*nz,*),cc(nx,ny,nz),fc(nx,ny,nz)
       double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz),r(nx,ny,nz)
-	  integer*8 mbeg
 c*
 cmdir 0 0
 c*
@@ -65,8 +64,7 @@ c*    *** do in one step ***
          call gsrb27(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
      2      ac(1,2),ac(1,3),ac(1,4),ac(1,5),ac(1,6),ac(1,7),ac(1,8),
      3      ac(1,9),ac(1,10),ac(1,11),ac(1,12),ac(1,13),ac(1,14),
-     4      x,w1,w2,r,
-     4      itmax,iters,errtol,omega,iresid,iadjoint)
+     4      x,w1,w2,r,itmax,iters,errtol,omega,iresid,iadjoint)
       else
          call vnmprt(2,'% GSRB: invalid stencil type given...',37)
       endif
