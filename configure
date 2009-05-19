@@ -22072,10 +22072,14 @@ fi
 			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
 			;;
 		darwin**)
-			PY_CC=${F77}
-			PY_LINKFLAGS="-Wl,-framework -Wl,Python -shared"
-			PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
-			;;
+	 	PY_CC=${F77}
+                       PY_SHARED="-shared"
+                       if test "${F77}" == "g95"; then
+                         PY_SHARED="-dynamiclib"
+                       fi
+                       PY_LINKFLAGS="-Wl,-framework -Wl,Python"
+                       PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
+                       ;;
 		mingw*)
 			PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
 			PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
