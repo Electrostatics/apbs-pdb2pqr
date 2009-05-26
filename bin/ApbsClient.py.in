@@ -215,7 +215,7 @@ helpString = """
     --non-blocking           Disables blocking and outputs a URL at which the data can be
                              retreived later.
     --service-location=<URL> Specifies the location of the Opal server.  Defaults to
-                             http://ws.nbcr.net/opal/services/ApbsOpalService
+                             http://ws.nbcr.net/opal2/services/ApbsOpalService
     --local                  Perform a local APBS run using whatever APBS executable is
                              available in the path
 ----------------------------------------------------------------------

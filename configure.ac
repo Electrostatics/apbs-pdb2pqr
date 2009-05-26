@@ -693,8 +693,8 @@ changequote(<<, >>)dnl
 PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 changequote([, ])dnl
 
-SERVICEURL='http://ws.nbcr.net/opal/services/APBS_1.1.0'
-PARALLELSERVICEURL='http://ws.nbcr.net/opal/services/APBS_Parallel_1.1.0'
+SERVICEURL='http://ws.nbcr.net/opal2/services/APBS_1.1.0'
+PARALLELSERVICEURL='http://ws.nbcr.net/opal2/services/APBS_Parallel_1.1.0'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 
 sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \

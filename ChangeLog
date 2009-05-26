@@ -3,6 +3,7 @@
                                    
 #############################################################################
 - NEW FEATURES
+    * Updated NBCR opal service urls from http://ws.nbcr.net/opal/... to http://ws.nbcr.net/opal2/...
 
 - MODIFICATIONS
 	* Applied Robert Konecny's patch to bin/routines.h (no need to include apbscfg.h in routines.h)
