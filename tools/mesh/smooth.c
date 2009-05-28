@@ -246,6 +246,10 @@ int gaussian(Vgrid *grid, double stddev, double bandwidth) {
     iband = (int)(stddev*bandwidth/hx);
     jband = (int)(stddev*bandwidth/hy);
     kband = (int)(stddev*bandwidth/hzed);
+    /* Special handling for iband, jband and kband, they are non-zero positive integers */
+    if (iband == 0) iband = 1;
+    if (jband == 0) jband = 1;
+    if (kband == 0) kband = 1;
     Vnm_print(1, "Bandwidth converted to %d x %d x %d grid units.\n",
       iband, jband, kband);
     Vnm_print(1, "This means any non-zero data within (%g, %g, %g) of the\n", 
@@ -260,6 +264,10 @@ int gaussian(Vgrid *grid, double stddev, double bandwidth) {
     /* Get data */
     oldData = grid->data;
     newData = Vmem_malloc(VNULL, (nx*ny*nz), sizeof(double));
+
+	/* Copy over old data.  All but the boundary values will be replaced in the next step so this is more copying than is strictly
+	   necessary... */
+	for (i=0; i<(nx*ny*nz); i++) newData[i] = oldData[i];
 
     /* Apply filter */
     for (k=1; k<(nz-1); k++) {

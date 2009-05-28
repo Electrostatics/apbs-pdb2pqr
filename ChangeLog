@@ -10,6 +10,7 @@
 
 - BUG FIXES
 	* Added a remove_Valist function in Python wrapper files, to fix a memory leak problem in pdb2pka
+        * Fixed a bug in smooth.c: bandwidth iband, jband and kband (in grid units) should be positive integers
 
 #############################################################################
                                  VERSION 1.1.0 
