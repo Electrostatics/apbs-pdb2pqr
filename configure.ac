@@ -1106,6 +1106,23 @@ AC_ARG_ENABLE(
 if test x"$enable_tinker" != "xno"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE([WITH_TINKER], [], [include TINKER support])
+	AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
+else
+    AC_MSG_RESULT([no]) 
+fi
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO DISABLE APBS MESSAGES
+dnl # -----------------------
+AC_MSG_CHECKING([for --enable-abps-quiet])
+AC_ARG_ENABLE(
+	[abps-quiet],
+	AS_HELP_STRING([--enable-abps-quiet],[prevent APBS diagnostic messages from displaying to stdout]),,
+	[enable_apbs_quiet=no]
+)
+if test x"$enable_apbs_quiet" != "xno"; then
+    AC_MSG_RESULT([yes])
+    AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
 else
     AC_MSG_RESULT([no]) 
 fi

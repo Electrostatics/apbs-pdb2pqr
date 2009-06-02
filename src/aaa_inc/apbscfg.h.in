@@ -90,6 +90,9 @@
 /* use hierarchical basis method */
 #undef USE_HB
 
+/* APBS diagnostic messages will not display */
+#undef VAPBSQUIET
+
 /* Version number of package */
 #undef VERSION
 
