@@ -1022,8 +1022,9 @@ VPUBLIC double Vgrid_integrate(Vgrid *thee) {
     nz = thee->nz;
 
     sum = 0.0;
-	w = 1.0;
+
     for (k=0; k<nz; k++) {
+		w = 1.0;
 		if ((k==0) || (k==(nz-1))) w = w * 0.5;
         for (j=0; j<ny; j++) {
 			if ((j==0) || (j==(ny-1))) w = w * 0.5;
