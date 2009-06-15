@@ -12,6 +12,7 @@
 	* Added a remove_Valist function in Python wrapper files, to fix a memory leak problem in pdb2pka
 	* Fixed a bug in smooth.c: bandwidth iband, jband and kband (in grid units) should be positive integers
 	* Fixed a bug in psize.py: for a pqr file with no ATOM entries but only HETATM entries in it, inputgen.py should still create an APBS input file with reasonable grid lengths
+	* Fixed a bug in Vgrid_integrate: weight w should return to 1.0 after every i, j or k loop is finished 
 
 #############################################################################
                                  VERSION 1.1.0 
