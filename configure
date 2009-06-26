@@ -22074,7 +22074,7 @@ fi
 			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
 			;;
 		darwin**)
-	 	PY_CC=${F77}
+	               PY_CC=${F77}
                        PY_SHARED="-shared"
                        if test "${F77}" == "g95"; then
                          PY_SHARED="-dynamiclib"

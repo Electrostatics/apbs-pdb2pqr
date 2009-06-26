@@ -419,10 +419,17 @@ VPUBLIC int Vpmg_solve(Vpmg *thee) {
             break;
 			/* MG (linear/nonlinear) */
         case VSOL_MG:
+#if 1
 			F77MGDRIV(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
 					  thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
 					  thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
 					  thee->fcf, thee->tcf);
+#else
+			mgdrivc(thee->iparm, thee->rparm, thee->iwork, thee->rwork,
+					  thee->u, thee->xf, thee->yf, thee->zf, thee->gxcf, thee->gycf,
+					  thee->gzcf, thee->a1cf, thee->a2cf, thee->a3cf, thee->ccf,
+					  thee->fcf, thee->tcf);
+#endif
             break;
 			/* CGHS (linear/nonlinear) */
         case VSOL_CG: 

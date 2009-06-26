@@ -56,7 +56,7 @@ c*
 c*    *** do in one step ***
       numdia = ipc(11)
       if (numdia .eq. 7) then
-         call gsrb7(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
+         call gsrb7X(nx,ny,nz,ipc,rpc,ac(1,1),cc,fc,
      2      ac(1,2),ac(1,3),ac(1,4),
      3      x,w1,w2,r,
      4      itmax,iters,errtol,omega,iresid,iadjoint)
@@ -138,32 +138,32 @@ c*    *** return and end ***
       return
       end
 	  
-      subroutine gsrb7toc(nx,ny,nz,ipc,rpc,
-     2   oC,cc,fc,
-     3   oE,oN,uC,
-     4   x,w1,w2,r,
-     5   itmax,iters,errtol,omega,iresid,iadjoint)
-
-      implicit         none
-      integer          ipc(*),itmax,iters,iresid,iadjoint,nx,ny,nz
-      integer          i,j,k,i1,i2,j1,j2,k1,k2,istep
-      double precision omega,errtol
-      double precision rpc(*),oE(nx,ny,nz),oN(nx,ny,nz),uC(nx,ny,nz)
-      double precision fc(nx,ny,nz),oC(nx,ny,nz),cc(nx,ny,nz)
-      double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz)
-      double precision r(nx,ny,nz)
-	  
-	  call gsrb7c(oN,oE,uC,oC,x,fc,cc,iadjoint,nx,ny,nz,itmax,r)
-
+C      subroutine gsrb7toc(nx,ny,nz,ipc,rpc,
+C     2   oC,cc,fc,
+C     3   oE,oN,uC,
+C     4   x,w1,w2,r,
+C     5   itmax,iters,errtol,omega,iresid,iadjoint)
+C
+C      implicit         none
+C      integer          ipc(*),itmax,iters,iresid,iadjoint,nx,ny,nz
+C      integer          i,j,k,i1,i2,j1,j2,k1,k2,istep
+C      double precision omega,errtol
+C      double precision rpc(*),oE(nx,ny,nz),oN(nx,ny,nz),uC(nx,ny,nz)
+C      double precision fc(nx,ny,nz),oC(nx,ny,nz),cc(nx,ny,nz)
+C      double precision x(nx,ny,nz),w1(nx,ny,nz),w2(nx,ny,nz)
+C      double precision r(nx,ny,nz)
+C	  
+C	  call gsrb7c(oN,oE,uC,oC,x,fc,cc,iadjoint,nx,ny,nz,itmax,r)
+C
 c*
 c*    *** if specified, return the new residual as well ***
-      if (iresid .eq. 1) then
-		call mresid7_1s(nx,ny,nz,ipc,rpc,oC,cc,fc,oE,oN,uC,x,r,iresid)
-      endif
+C      if (iresid .eq. 1) then
+C		call mresid7_1s(nx,ny,nz,ipc,rpc,oC,cc,fc,oE,oN,uC,x,r,iresid)
+C      endif
 c*
 c*    *** return and end ***
-      return
-      end
+C      return
+C      end
 	  
       subroutine gsrb27(nx,ny,nz,ipc,rpc,
      2   oC,cc,fc,

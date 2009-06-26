@@ -520,6 +520,7 @@ c*    *** go down grids: compute max/min eigenvalues of all operators ***
       nxc  = nx
       nyc  = ny
       nzc  = nz
+	  
       do 10 level = 2, nlev
 c*
 c*       *** find new grid size ***
