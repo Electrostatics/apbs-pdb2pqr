@@ -245,6 +245,9 @@ VPUBLIC void *Vmem_malloc(Vmem *thee, size_t num, size_t size)
         if (ram == VNULL) {
             fprintf(stderr, "Unable to allocate memory!\n");
             fprintf(stderr, "(This often means you don't have enough memory available for this calculation.)\n");
+			printf("FATAL ERROR: Unable to allocate enough memory for problem size.\n");
+			printf("FATAL ERROR: You requested %u bytes of RAM.\n",(size_t)num * (size_t)size);
+			printf("FATAL ERROR: Check that your system has that much memory.\n");
         }
         VASSERT( ram != VNULL );
 
