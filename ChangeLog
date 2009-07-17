@@ -13,6 +13,7 @@
 	* Fixed a bug in smooth.c: bandwidth iband, jband and kband (in grid units) should be positive integers
 	* Fixed a bug in psize.py: for a pqr file with no ATOM entries but only HETATM entries in it, inputgen.py should still create an APBS input file with reasonable grid lengths
 	* Fixed a bug in Vgrid_integrate: weight w should return to 1.0 after every i, j or k loop is finished 
+	* Fixed a bug in routines.c, now runGB.py and main.py in tools/python/ should be working again instead of producing segfault
 
 #############################################################################
                                  VERSION 1.1.0 

@@ -136,7 +136,7 @@ VPUBLIC int loadMolecules(NOsh *nosh, Vparam *param, Valist *alist[NOSH_MAXMOL])
 		if(alist[i] == VNULL){
 			alist[i] = Valist_ctor();
 		}else{
-			Valist_dtor(&(alist[i]));
+			alist[i] = VNULL;
 			alist[i] = Valist_ctor();
 		}
 		
