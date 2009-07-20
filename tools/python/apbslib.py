@@ -264,6 +264,10 @@ NOsh_swigregister(NOsh)
 
 NPT_ENERGY = _apbslib.NPT_ENERGY
 NPT_FORCE = _apbslib.NPT_FORCE
+NPT_ELECENERGY = _apbslib.NPT_ELECENERGY
+NPT_ELECFORCE = _apbslib.NPT_ELECFORCE
+NPT_APOLENERGY = _apbslib.NPT_APOLENERGY
+NPT_APOLFORCE = _apbslib.NPT_APOLFORCE
 NOsh_getCalc = _apbslib.NOsh_getCalc
 NOsh_elecname = _apbslib.NOsh_elecname
 NOsh_elec2calc = _apbslib.NOsh_elec2calc
@@ -340,11 +344,15 @@ killForce = _apbslib.killForce
 writedataMG = _apbslib.writedataMG
 writematMG = _apbslib.writematMG
 printForce = _apbslib.printForce
+printElecForce = _apbslib.printElecForce
+printApolForce = _apbslib.printApolForce
 startVio = _apbslib.startVio
 Vacc_molAcc = _apbslib.Vacc_molAcc
 Vacc_vdwAcc = _apbslib.Vacc_vdwAcc
 energyMG = _apbslib.energyMG
 printEnergy = _apbslib.printEnergy
+printElecEnergy = _apbslib.printElecEnergy
+printApolEnergy = _apbslib.printApolEnergy
 returnEnergy = _apbslib.returnEnergy
 
 

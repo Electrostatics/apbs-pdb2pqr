@@ -316,6 +316,14 @@ def main():
             printEnergy(com, nosh, totEnergy, iprint)
         elif NOsh_printWhat(nosh, iprint) == NPT_FORCE:
             printForce(com, nosh, nforce, atomforce, iprint)
+        elif NOsh_printWhat(nosh, iprint) == NPT_ELECENERGY:
+            printElecEnergy(com, nosh, totEnergy, iprint)
+        elif NOsh_printWhat(nosh, iprint) == NPT_ELECFORCE:
+            printElecForce(com, nosh, nforce, atomForce, iprint)
+        elif NOsh_printWhat(nosh, iprint) == NPT_APOLENERGY:
+            printApolEnergy(nosh, iprint)
+        elif NOsh_printWhat(nosh, iprint) == NPT_APOLFORCE:
+            printApolForce(com, nosh, nforce, atomForce, iprint)
         else:
             stdout.write("Undefined PRINT keyword!\n")
             break

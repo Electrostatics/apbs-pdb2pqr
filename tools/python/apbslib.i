@@ -127,7 +127,7 @@ enum MGparm_CalcType {
 };
 
 enum NOsh_PrintType {
-    NPT_ENERGY=0, NPT_FORCE=1
+    NPT_ENERGY=0, NPT_FORCE=1, NPT_ELECENERGY=2, NPT_ELECFORCE=3, NPT_APOLENERGY=4, NPT_APOLFORCE=5
 };
 
 
@@ -491,6 +491,10 @@ extern int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 extern int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg);
 extern int printForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC],
   AtomForce *atomForce[NOSH_MAXCALC], int i);
+extern int printElecForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
+  AtomForce *atomForce[NOSH_MAXCALC], int i);
+extern int printApolForce(Vcom *com, NOsh *nosh, int nforce[NOSH_MAXCALC], 
+  AtomForce *atomForce[NOSH_MAXCALC], int i);
 extern void startVio();
 extern double Vacc_molAcc(Vacc *thee, double center[3], double radius);
 extern double Vacc_vdwAcc(Vacc *thee, double center[3]);
@@ -528,4 +532,7 @@ extern int energyMG(NOsh* nosh, int icalc, Vpmg *pmg,
 
 extern int printEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC],
     int i);
+extern int printElecEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], 
+    int i);
+extern int printApolEnergy(NOsh *nosh, int i);
 extern double returnEnergy(Vcom *com, NOsh *nosh, double totEnergy[NOSH_MAXCALC], int i);
