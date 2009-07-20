@@ -6785,6 +6785,122 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_printElecForce(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Vcom *arg1 = (Vcom *) 0 ;
+  NOsh *arg2 = (NOsh *) 0 ;
+  int *arg3 ;
+  AtomForce **arg4 ;
+  int arg5 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:printElecForce",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Vcom, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "printElecForce" "', argument " "1"" of type '" "Vcom *""'"); 
+  }
+  arg1 = (Vcom *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "printElecForce" "', argument " "2"" of type '" "NOsh *""'"); 
+  }
+  arg2 = (NOsh *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "printElecForce" "', argument " "3"" of type '" "int [NOSH_MAXCALC]""'"); 
+  } 
+  arg3 = (int *)(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_p_AtomForce, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "printElecForce" "', argument " "4"" of type '" "AtomForce *[NOSH_MAXCALC]""'"); 
+  } 
+  arg4 = (AtomForce **)(argp4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "printElecForce" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  result = (int)printElecForce(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_printApolForce(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Vcom *arg1 = (Vcom *) 0 ;
+  NOsh *arg2 = (NOsh *) 0 ;
+  int *arg3 ;
+  AtomForce **arg4 ;
+  int arg5 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:printApolForce",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Vcom, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "printApolForce" "', argument " "1"" of type '" "Vcom *""'"); 
+  }
+  arg1 = (Vcom *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "printApolForce" "', argument " "2"" of type '" "NOsh *""'"); 
+  }
+  arg2 = (NOsh *)(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_int, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "printApolForce" "', argument " "3"" of type '" "int [NOSH_MAXCALC]""'"); 
+  } 
+  arg3 = (int *)(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_p_AtomForce, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "printApolForce" "', argument " "4"" of type '" "AtomForce *[NOSH_MAXCALC]""'"); 
+  } 
+  arg4 = (AtomForce **)(argp4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "printApolForce" "', argument " "5"" of type '" "int""'");
+  } 
+  arg5 = (int)(val5);
+  result = (int)printApolForce(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_startVio(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   
@@ -7056,6 +7172,101 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_printElecEnergy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  Vcom *arg1 = (Vcom *) 0 ;
+  NOsh *arg2 = (NOsh *) 0 ;
+  double *arg3 ;
+  int arg4 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:printElecEnergy",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_Vcom, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "printElecEnergy" "', argument " "1"" of type '" "Vcom *""'"); 
+  }
+  arg1 = (Vcom *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "printElecEnergy" "', argument " "2"" of type '" "NOsh *""'"); 
+  }
+  arg2 = (NOsh *)(argp2);
+  {
+    /* Check if is a list */
+    if (PyList_Check(obj2)) {
+      int size = PyList_Size(obj2);
+      int i = 0;
+      arg3 = (double *) malloc((size+1)*sizeof(double));
+      for (i = 0; i < size; i++) {
+        PyObject *o = PyList_GetItem(obj2,i);
+        if (PyFloat_Check(o))
+        arg3[i] = PyFloat_AsDouble(PyList_GetItem(obj2,i));
+        else {
+          PyErr_SetString(PyExc_TypeError,"list must contain floats");
+          free(arg3);
+          return NULL;
+        }
+      }
+      arg3[i] = 0;
+    } else {
+      PyErr_SetString(PyExc_TypeError,"not a list");
+      return NULL;
+    }
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "printElecEnergy" "', argument " "4"" of type '" "int""'");
+  } 
+  arg4 = (int)(val4);
+  result = (int)printElecEnergy(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_printApolEnergy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NOsh *arg1 = (NOsh *) 0 ;
+  int arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:printApolEnergy",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "printApolEnergy" "', argument " "1"" of type '" "NOsh *""'"); 
+  }
+  arg1 = (NOsh *)(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "printApolEnergy" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (int)printApolEnergy(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_returnEnergy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   Vcom *arg1 = (Vcom *) 0 ;
@@ -7262,11 +7473,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"writedataMG", _wrap_writedataMG, METH_VARARGS, NULL},
 	 { (char *)"writematMG", _wrap_writematMG, METH_VARARGS, NULL},
 	 { (char *)"printForce", _wrap_printForce, METH_VARARGS, NULL},
+	 { (char *)"printElecForce", _wrap_printElecForce, METH_VARARGS, NULL},
+	 { (char *)"printApolForce", _wrap_printApolForce, METH_VARARGS, NULL},
 	 { (char *)"startVio", _wrap_startVio, METH_VARARGS, NULL},
 	 { (char *)"Vacc_molAcc", _wrap_Vacc_molAcc, METH_VARARGS, NULL},
 	 { (char *)"Vacc_vdwAcc", _wrap_Vacc_vdwAcc, METH_VARARGS, NULL},
 	 { (char *)"energyMG", _wrap_energyMG, METH_VARARGS, NULL},
 	 { (char *)"printEnergy", _wrap_printEnergy, METH_VARARGS, NULL},
+	 { (char *)"printElecEnergy", _wrap_printElecEnergy, METH_VARARGS, NULL},
+	 { (char *)"printApolEnergy", _wrap_printApolEnergy, METH_VARARGS, NULL},
 	 { (char *)"returnEnergy", _wrap_returnEnergy, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
@@ -7898,5 +8113,9 @@ SWIGEXPORT void SWIG_init(void) {
   
   SWIG_Python_SetConstant(d, "NPT_ENERGY",SWIG_From_int((int)(NPT_ENERGY)));
   SWIG_Python_SetConstant(d, "NPT_FORCE",SWIG_From_int((int)(NPT_FORCE)));
+  SWIG_Python_SetConstant(d, "NPT_ELECENERGY",SWIG_From_int((int)(NPT_ELECENERGY)));
+  SWIG_Python_SetConstant(d, "NPT_ELECFORCE",SWIG_From_int((int)(NPT_ELECFORCE)));
+  SWIG_Python_SetConstant(d, "NPT_APOLENERGY",SWIG_From_int((int)(NPT_APOLENERGY)));
+  SWIG_Python_SetConstant(d, "NPT_APOLFORCE",SWIG_From_int((int)(NPT_APOLFORCE)));
 }
 
