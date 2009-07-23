@@ -56,9 +56,9 @@
 
 VEMBED(rcsid="$Id$")
 
-VPRIVATE char *Valist_whiteChars = " \t\n";
+VPRIVATE char *Valist_whiteChars = " \t\r\n";
 VPRIVATE char *Valist_commChars  = "#%";
-VPRIVATE char *Valist_xmlwhiteChars = " \t\n<>";
+VPRIVATE char *Valist_xmlwhiteChars = " \t\r\n<>";
 
 #if !defined(VINLINE_VATOM)
 
