@@ -69,7 +69,7 @@
 /** @brief   Number of things that can be written out in a single calculation
  *  @ingroup PBEparm
  */
-#define PBEPARM_MAXWRITE 10
+#define PBEPARM_MAXWRITE 20
 
 /**
  * @ingroup PBEparm
