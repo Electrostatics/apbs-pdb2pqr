@@ -4,6 +4,7 @@
 #############################################################################
 - NEW FEATURES
     * Updated NBCR opal service urls from http://ws.nbcr.net/opal/... to http://ws.nbcr.net/opal2/...
+    * Increased the number of allowed write statements from 10 to 20
 
 - MODIFICATIONS
 	* Applied Robert Konecny's patch to bin/routines.h (no need to include apbscfg.h in routines.h)
