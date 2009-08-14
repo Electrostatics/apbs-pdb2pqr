@@ -370,6 +370,7 @@ def execApbs(vars=None, argv=None):
 		tempFile.close()
 	else:
 		version_check_flag = False
+		service_url = vars['service_url']
 	# Retrieve a reference to the AppServicePort
 	#*this is also from the path to the service
 	appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
