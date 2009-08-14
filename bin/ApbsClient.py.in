@@ -328,8 +328,12 @@ def execApbs(vars=None, argv=None):
 		webRun = False
 	else:
 		webRun = True
+		custom_service_url = None
+		if vars.has_key('service_url'):
+			custom_service_url = vars['service_url']
 		vars = initRemoteVars(argv)
-		
+		if custom_service_url != None:
+			vars['service_url'] = custom_service_url
 	global service_url	
 	#*argument parser
 	# command-line arguments
@@ -341,12 +345,12 @@ def execApbs(vars=None, argv=None):
 	else:
 		directory = os.path.dirname(vars['inFile'])+'/'
 		vars['inFile'] = os.path.basename(vars['inFile'])
-	
+		
 	nprocs = 1
 	if not vars.has_key('service_url'):
 		# find out if it's sequential or parallel
 		tempFile = open(directory+vars['inFile'], 'r')
-		sequential = True
+		version_check_flag = True
 		for line in tempFile:
 			# remove whitespace
 			line=line.strip()
@@ -355,25 +359,25 @@ def execApbs(vars=None, argv=None):
 				nprocs = int(dimension_array[1])*int(dimension_array[2])*int(dimension_array[3])
 				global parallel_service_url
 				vars['service_url'] = parallel_service_url
-				sequential = False
+				version_check_flag = False
 			if(line[:5]=='async'):
 				vars['service_url'] = service_url
-				sequential = True
+				version_check_flag = True
 				break
-		if sequential:
+		if version_check_flag:
 			vars['service_url'] = service_url
 			
 		tempFile.close()
-	
+	else:
+		version_check_flag = False
 	# Retrieve a reference to the AppServicePort
 	#*this is also from the path to the service
 	appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
 	
 	# Set up remote job launch
 	req = launchJobRequest()
-	
 	# Checks version compatibility (but currently only works for sequential calculations)
-	if sequential:
+	if version_check_flag:
 		opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-5:]
 		if opal_version != local_version:
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
