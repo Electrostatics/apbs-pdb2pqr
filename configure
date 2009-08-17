@@ -22074,7 +22074,7 @@ fi
 			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
 			;;
 		darwin**)
-	               PY_CC=${F77}
+	 	PY_CC=${F77}
                        PY_SHARED="-shared"
                        if test "${F77}" == "g95"; then
                          PY_SHARED="-dynamiclib"
@@ -23876,13 +23876,10 @@ esac
 if test -n "${mc_found}"; then
 	case $host_os in
 
-	darwin*)
-		extra_list3="-lsuperlu"
+	*)
+		extra_list3="-lsuperlu -lumfpack -lamd -lpunc -lblas"
 		;;
 
-	*)
-		extra_list3="-lsuperlu -lblas"
-		;;
 	esac
 else
 
