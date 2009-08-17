@@ -1195,14 +1195,11 @@ dnl # ADD ON THE LIBRARIES FOR VERSION 1.40 OF FETK
 dnl # -----------------------
 if test -n "${mc_found}"; then
 	case $host_os in
-	
-	darwin*)
-		extra_list3="-lsuperlu"
-		;;
-		
+
 	*)
-		extra_list3="-lsuperlu -lblas"
+		extra_list3="-lsuperlu -lumfpack -lamd -lpunc -lblas"
 		;;
+	
 	esac
 else
 
