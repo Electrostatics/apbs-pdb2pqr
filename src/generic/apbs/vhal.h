@@ -217,7 +217,8 @@ enum eVbcfl {
     BCFL_MDH=2,  /**< Multiple-sphere Debye-Huckel Dirichlet boundary 
                   * condition */
     BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
-    BCFL_FOCUS=4  /**< Focusing Dirichlet boundary condition */
+    BCFL_FOCUS=4,  /**< Focusing Dirichlet boundary condition */
+    BCFL_MEM=5  /**< Focusing Dirichlet boundary condition */
 };
 
 /**

@@ -159,6 +159,22 @@ struct sPBEparm {
     int setcalcenergy;  /**< Flag, @see calcenergy */
     PBEparm_calcForce calcforce;  /**< Atomic forces calculation */
     int setcalcforce;  /**< Flag, @see calcforce */
+	
+	/*----------------------------------------------------------------*/
+	/* Added by Michael Grabe                                         */
+	/*----------------------------------------------------------------*/
+	
+    double zmem;               /**< z value of membrane bottom */
+    int setzmem;               /**< Flag */
+    double Lmem;               /**< membrane width */
+    int setLmem;               /**< Flag */
+    double mdie;               /**< membrane dielectric constant */
+    int setmdie;               /**< Flag */
+    double memv;               /**< Membrane potential */
+    int setmemv;               /**< Flag */
+	
+	/*----------------------------------------------------------------*/
+	
     int numwrite;  /**< Number of write statements encountered */
     char writestem[PBEPARM_MAXWRITE][VMAX_ARGLEN]; /**< File stem to write 
                                                     * data to */

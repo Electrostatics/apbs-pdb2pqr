@@ -3502,6 +3502,204 @@ VPRIVATE void bcfl_mdh(Vpmg *thee){
 	
 }
 
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  bcfl_mem
+ //
+ // Purpose:  Increment all the boundary points by the
+ //           analytic expression for a membrane system in
+ //           the presence of a membrane potential. This
+ //           Boundary flag should only be used for systems
+ //           that explicitly have membranes in the dielectric
+ //           and solvent maps.
+ //
+ //           There should be several input variables add to this
+ //           function such as membrane potential, membrane thickness
+ //           and height.
+ //
+ // Args:     apos is a 3-vector
+ //
+ // Author: Michael Grabe
+ /////////////////////////////////////////////////////////////////////////// */
+VPRIVATE void bcfl_mem(double zmem, double L, double eps_m, double eps_w,
+					double V, double xkappa, double *gxcf, double *gycf, double *gzcf,
+					double *xf, double *yf, double *zf, int nx, int ny, int nz) {
+	
+    ///////////////////////////////////////////////////
+    /* some definitions                              */
+    /* L = total length of the membrane              */
+    /* xkappa = inverse Debeye length                */
+    /* zmem = z value of membrane bottom (Cytoplasm) */
+    /* V = electrical potential inside the cell      */
+    ///////////////////////////////////////////////////
+    int i, j, k;
+    double dist, val, z_low, z_high, z_shift;
+    double A, B, C, D, edge_L, l;
+    double G, z_0, z_rel;
+    double gpos[3];
+	
+	printf("Here is the value of kappa: %f\n",xkappa);
+	printf("Here is the value of L: %f\n",L);
+	printf("Here is the value of zmem: %f\n",zmem);
+	printf("Here is the value of mdie: %f\n",eps_m);
+	printf("Here is the value of memv: %f\n",V);
+	
+	/* no salt symmetric BC's at +/- infinity */
+	// B=V/(edge_L - l*(1-eps_w/eps_m));
+	// A=V + B*edge_L;
+	// D=eps_w/eps_m*B;
+	z_low = zmem;     /* this defines the bottom of the membrane */
+	z_high = zmem + L;  /* this is the top of the membrane */
+	
+	/******************************************************/
+	/* proper boundary conditions for V = 0 extracellular */
+	/* and psi=-V cytoplasm.                              */
+	/* Implicit in this formulation is that the membrane  */
+	/* center be at z = 0                                 */
+	/******************************************************/
+	
+	l=L/2;                     /* half of the membrane length */
+	z_0 = z_low + l;           /* center of the membrane      */
+	G=l*eps_w/eps_m*xkappa;
+	A=-V/2*(1/(G+1))*exp(xkappa*l);
+	B=V/2;
+	C=-V/2*eps_w/eps_m*xkappa*(1/(G+1));
+	D=-A;
+	/* The analytic expression for the boundary conditions      */
+	/* had the cytoplasmic surface of the membrane set to zero. */
+	/* This requires an off-set of the BC equations.            */
+	
+    /* the "i" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        z_rel = gpos[2] - z_0;    /* relative position for BCs */
+		
+        for (j=0; j<ny; j++) {
+			
+			if (gpos[2] <= z_low) {                       /* cytoplasmic */
+				
+				val = A*exp(xkappa*z_rel) + V;
+				gxcf[IJKx(j,k,0)] += val;    /* assign low side BC */
+				gxcf[IJKx(j,k,1)] += val;    /* assign high side BC */
+				
+			}
+			
+			else if (gpos[2] > z_low && gpos[2] <= z_high) {  /* in membrane */
+				
+				val = B + C*z_rel;
+				gxcf[IJKx(j,k,0)] += val;    /* assign low side BC */
+				gxcf[IJKx(j,k,1)] += val;    /* assign high side BC */
+				
+			}
+			
+			else if (gpos[2] > z_high)  {                  /* extracellular */
+				
+				val = D*exp(-xkappa*z_rel);
+				gxcf[IJKx(j,k,0)] += val;    /* assign low side BC */
+				gxcf[IJKx(j,k,1)] += val;    /* assign high side BC */
+				
+			}
+			
+        }
+    }
+	
+    /* the "j" boundaries (dirichlet) */
+    for (k=0; k<nz; k++) {
+        gpos[2] = zf[k];
+        z_rel = gpos[2] - z_0;
+        for (i=0; i<nx; i++) {
+			
+			if (gpos[2] <= z_low) {                       /* cytoplasmic */
+				
+				val = A*exp(xkappa*z_rel) + V;
+				gycf[IJKy(i,k,0)] += val;    /* assign low side BC */
+				gycf[IJKy(i,k,1)] += val;    /* assign high side BC */
+				//printf("%f \n",val);
+				
+			}
+			
+			else if (gpos[2] > z_low && gpos[2] <= z_high) {  /* in membrane */
+				
+				val = B + C*z_rel;
+				gycf[IJKy(i,k,0)] += val;    /* assign low side BC */
+				gycf[IJKy(i,k,1)] += val;    /* assign high side BC */
+				//printf("%f \n",val);
+				
+			}
+			else if (gpos[2] > z_high)  {                  /* extracellular */
+				
+				val = D*exp(-xkappa*z_rel);
+				gycf[IJKy(i,k,0)] += val;    /* assign low side BC */
+				gycf[IJKy(i,k,1)] += val;    /* assign high side BC */
+				//printf("%f \n",val);
+				
+			}
+			
+        }
+    }
+	
+    /* the "k" boundaries (dirichlet) */
+    for (j=0; j<ny; j++) {
+        for (i=0; i<nx; i++) {
+			
+			/* first assign the bottom boundary */
+			
+			gpos[2] = zf[0];
+			z_rel = gpos[2] - z_0;
+			
+			if (gpos[2] <= z_low) {                       /* cytoplasmic */
+				
+				val = A*exp(xkappa*z_rel) + V;
+				gzcf[IJKz(i,j,0)] += val;    /* assign low side BC */
+				//printf("%f \n",val);
+				
+			}
+			
+			else if (gpos[2] > z_low && gpos[2] <= z_high) {  /* in membrane */
+				
+				val = B + C*z_rel;
+				gzcf[IJKz(i,j,0)] += val;    /* assign low side BC */
+				
+			}
+			
+			else if (gpos[2] > z_high)  {                  /* extracellular */
+				
+				val = D*exp(-xkappa*z_rel);
+				gzcf[IJKz(i,j,0)] += val;    /* assign low side BC */
+				
+			}
+			
+			/* now assign the top boundary */
+			
+			gpos[2] = zf[nz-1];
+			z_rel = gpos[2] - z_0;
+			
+			if (gpos[2] <= z_low) {                       /* cytoplasmic */
+				
+				val = A*exp(xkappa*z_rel) + V;
+				gzcf[IJKz(i,j,1)] += val;    /* assign high side BC */
+				
+			}
+			
+			else if (gpos[2] > z_low && gpos[2] <= z_high) {  /* in membrane */
+				
+				val = B + C*z_rel;
+				gzcf[IJKz(i,j,1)] += val;    /* assign high side BC */
+				
+			}
+			
+			else if (gpos[2] > z_high)  {                  /* extracellular */
+				
+				val = D*exp(-xkappa*z_rel);
+				gzcf[IJKz(i,j,1)] += val;    /* assign high side BC */
+				//printf("%f \n",val);
+				
+			}
+			
+        } 
+    }
+}
+
+
 #if  defined(WITH_TINKER)	
 VPRIVATE void bcfl_mdh_tinker(Vpmg *thee){
 	
@@ -3669,6 +3867,8 @@ VPRIVATE void bcCalc(Vpmg *thee){
 	int i, j, k;
 	int nx, ny, nz;
     
+	double zmem, eps_m, Lmem, memv, eps_w, xkappa; 
+	
     nx = thee->pmgp->nx;
     ny = thee->pmgp->ny;
     nz = thee->pmgp->nz;
@@ -3718,6 +3918,20 @@ VPRIVATE void bcCalc(Vpmg *thee){
 			//bcfl_mdh(thee);
 			bcflnew(thee);
 #endif
+			break;
+		case BCFL_MEM:
+			
+			zmem  = Vpbe_getzmem(thee->pbe);
+			Lmem  = Vpbe_getLmem(thee->pbe);
+			eps_m = Vpbe_getmembraneDiel(thee->pbe);
+			memv =  Vpbe_getmemv(thee->pbe);
+			
+			eps_w = Vpbe_getSolventDiel(thee->pbe);
+			xkappa = Vpbe_getXkappa(thee->pbe);
+			
+			bcfl_mem(zmem, Lmem, eps_m, eps_w, memv, xkappa,
+				  thee->gxcf, thee->gycf, thee->gzcf,
+				  thee->xf, thee->yf, thee->zf, nx, ny, nz);
 			break;
         case BCFL_UNUSED:
             Vnm_print(2, "bcCalc:  Invalid bcfl (%d)!\n", thee->pmgp->bcfl);

@@ -187,6 +187,55 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
    VASSERT(thee != VNULL);
    return thee->soluteCharge; 
 }
+
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vpbe_getzmem
+ // Purpose: This routine returns values stored in the structure thee.
+ // Author:  Michael Grabe
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getzmem(Vpbe *thee) {
+	
+	VASSERT(thee != VNULL);
+	VASSERT(thee->param2Flag);
+	return thee->z_mem;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vpbe_getLmem
+ // Purpose: This routine returns values stored in the structure thee.
+ // Author:  Michael Grabe
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getLmem(Vpbe *thee) {
+	
+	VASSERT(thee != VNULL);
+	VASSERT(thee->param2Flag);
+	return thee->L;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vpbe_getmembraneDiel
+ // Purpose: This routine returns values stored in the structure thee.
+ // Author:  Michael Grabe
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getmembraneDiel(Vpbe *thee) {
+	
+	VASSERT(thee != VNULL);
+	VASSERT(thee->param2Flag);
+	return thee->mmembraneDiel;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vpbe_getmemv
+ // Purpose: This routine returns values stored in the structure thee.
+ // Author:  Michael Grabe
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC double Vpbe_getmemv(Vpbe *thee) {
+	
+	VASSERT(thee != VNULL);
+	VASSERT(thee->param2Flag);
+	return thee->V;
+}
+
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -194,26 +243,29 @@ VPUBLIC double Vpbe_getSoluteCharge(Vpbe *thee) {
 /////////////////////////////////////////////////////////////////////////// */
 
 VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
-                    double *ionRadii, double *ionQ, double T, 
-                    double soluteDiel, double solventDiel,
-                    double solventRadius, int focusFlag, double sdens) {
-
+						double *ionRadii, double *ionQ, double T, 
+						double soluteDiel, double solventDiel,
+						double solventRadius, int focusFlag, double sdens,
+						double z_mem, double L, double membraneDiel, double V ) {
+	
     /* Set up the structure */
     Vpbe *thee = VNULL;
     thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
-      T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens) );
-
+						T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens, 
+						z_mem, L, membraneDiel, V) );
+	
     return thee;
 }
 
 
 VPUBLIC int Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum,
-                    double *ionConc, double *ionRadii,
-                    double *ionQ, double T, double soluteDiel,
-                    double solventDiel, double solventRadius, int focusFlag,
-                    double sdens) {
+					   double *ionConc, double *ionRadii,
+					   double *ionQ, double T, double soluteDiel,
+					   double solventDiel, double solventRadius, int focusFlag,
+					   double sdens, double z_mem, double L, double membraneDiel,
+					   double V) {
 
     int i, iatom, inhash[3];
     double atomRadius;
@@ -393,6 +445,20 @@ function\n", thee->maxIonRadius);
 	thee->ipkey = 0;
 	
     thee->paramFlag = 1;
+	
+	/*-----------------------------------------------------------*/
+	/* added by Michael Grabe                                    */
+	/*-----------------------------------------------------------*/
+	
+    thee->z_mem = z_mem;
+    thee->L = L;
+    thee->membraneDiel = membraneDiel;
+    thee->V = V;
+	
+	//    if (V != VNULL) thee->param2Flag = 1;
+	//    else thee->param2Flag = 0;
+	
+	/*-----------------------------------------------------------*/	
 	
     return 1; 
 }
