@@ -80,6 +80,27 @@ VPUBLIC double PBEparm_getIonRadius(PBEparm *thee, int i) {
     return thee->ionr[i];
 }
 
+/*----------------------------------------------------------------------*/
+/* Added by Michael Grabe                                               */
+/*----------------------------------------------------------------------*/
+
+VPUBLIC double PBEparm_getzmem(PBEparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->zmem;
+}
+VPUBLIC double PBEparm_getLmem(PBEparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->Lmem;
+}
+VPUBLIC double PBEparm_getmembraneDiel(PBEparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->mdie;
+}
+VPUBLIC double PBEparm_getmemv(PBEparm *thee) {
+    VASSERT(thee != VNULL);
+    return thee->memv;
+}
+
 VPUBLIC PBEparm* PBEparm_ctor() {
 
     /* Set up the structure */
@@ -127,6 +148,17 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->useDielMap = 0;
     thee->useKappaMap = 0;
     thee->useChargeMap = 0;
+	
+	/*----------------------------------------------*/
+	/* Added by Michael Grabe                       */
+	/*----------------------------------------------*/
+	
+    thee->setzmem = 0;
+    thee->setLmem = 0;
+    thee->setmdie = 0;
+    thee->setmemv = 0;
+	
+	/*----------------------------------------------*/
 	
 	thee->smsize = 0.0;
 	thee->smvolume = 0.0;
@@ -221,6 +253,29 @@ VPUBLIC int PBEparm_check(PBEparm *thee) {
     if (!thee->setcalcforce) thee->calcforce = PCF_NO;
     if (!thee->setwritemat) thee->writemat = 0;
 	
+	/*--------------------------------------------------------*/
+	/* Added by Michael Grabe                                 */
+	/*--------------------------------------------------------*/
+	
+    if ((!thee->setzmem) && (thee->bcfl == 3)){
+        Vnm_print(2, "PBEparm_check: ZMEM not set!\n");
+        return 0;
+    }
+    if ((!thee->setLmem) && (thee->bcfl == 3)){
+        Vnm_print(2, "PBEparm_check: LMEM not set!\n");
+        return 0;
+    }
+    if ((!thee->setmdie) && (thee->bcfl == 3)){
+        Vnm_print(2, "PBEparm_check: MDIE not set!\n");
+        return 0;
+    }
+    if ((!thee->setmemv) && (thee->bcfl == 3)){
+        Vnm_print(2, "PBEparm_check: MEMV not set!\n");
+        return 0;
+    }
+	
+	/*--------------------------------------------------------*/
+	
     return 1;
 }
 
@@ -269,6 +324,22 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->setcalcenergy = parm->setcalcenergy;
     thee->calcforce = parm->calcforce;
     thee->setcalcforce = parm->setcalcforce;
+	
+	/*----------------------------------------------------*/
+	/* Added by Michael Grabe                             */
+	/*----------------------------------------------------*/
+	
+    thee->zmem = parm->zmem;
+    thee->setzmem = parm->setzmem;
+    thee->Lmem = parm->Lmem;
+    thee->setLmem = parm->setLmem;
+    thee->mdie = parm->mdie;
+    thee->setmdie = parm->setmdie;
+    thee->memv = parm->memv;
+    thee->setmemv = parm->setmemv;
+	
+	/*----------------------------------------------------*/
+	
     thee->numwrite = parm->numwrite;
     for (i=0; i<PBEPARM_MAXWRITE; i++) {
         thee->writetype[i] = parm->writetype[i];
@@ -425,6 +496,9 @@ statement\n", ti);
             case BCFL_FOCUS:
                 Vnm_print(2, "focus");
                 break;
+			case BCFL_MEM:
+                Vnm_print(2, "mem");
+                break;
             default:
                 Vnm_print(2, "UKNOWN");
                 break;
@@ -449,6 +523,10 @@ statement\n", ti);
             return 1;
         } else if (Vstring_strcasecmp(tok, "focus") == 0) {
             thee->bcfl = BCFL_FOCUS;
+            thee->setbcfl = 1;
+            return 1;
+		} else if (Vstring_strcasecmp(tok, "mem") == 0) {
+            thee->bcfl = BCFL_MEM;
             thee->setbcfl = 1;
             return 1;
         } else {
@@ -900,6 +978,89 @@ calcforce!\n", tok);
         return -1;
 }
 
+/*----------------------------------------------------------*/
+/* Added by Michael Grabe                                   */
+/*----------------------------------------------------------*/
+
+VPRIVATE int PBEparm_parseZMEM(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing ZMEM \
+				  keyword!\n", tok);
+        return -1;
+    }
+    thee->zmem = tf;
+    thee->setzmem = 1;
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return -1;
+}
+
+
+VPRIVATE int PBEparm_parseLMEM(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing LMEM \
+				  keyword!\n", tok);
+        return -1;
+    }
+    thee->Lmem = tf;
+    thee->setLmem = 1;
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return -1;
+}
+
+VPRIVATE int PBEparm_parseMDIE(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing MDIE \
+				  keyword!\n", tok);
+        return -1;
+    }
+    thee->mdie = tf;
+    thee->setmdie  = 1;
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return -1;
+}
+
+VPRIVATE int PBEparm_parseMEMV(PBEparm *thee, Vio *sock) {
+    char tok[VMAX_BUFSIZE];
+    double tf;
+	
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing MEMV \
+				  keyword!\n", tok);
+        return -1;
+    }
+    thee->memv = tf;
+    thee->setmemv = 1;
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "parsePBE:  ran out of tokens!\n");
+	return -1;
+}
+
+/*----------------------------------------------------------*/
+
 VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
     char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Type writetype;
@@ -1071,7 +1232,22 @@ VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE],
         return PBEparm_parseWRITE(thee, sock);
     } else if (Vstring_strcasecmp(tok, "writemat") == 0) {
         return PBEparm_parseWRITEMAT(thee, sock);
+		
+	/*----------------------------------------------------------*/
+	/* Added by Michael Grabe                                   */
+	/*----------------------------------------------------------*/
+		
+    } else if (Vstring_strcasecmp(tok, "zmem") == 0) {
+        return PBEparm_parseZMEM(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "Lmem") == 0) {
+        return PBEparm_parseLMEM(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "mdie") == 0) {
+        return PBEparm_parseMDIE(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "memv") == 0) {
+        return PBEparm_parseMEMV(thee, sock);
     }
+	
+	/*----------------------------------------------------------*/
 
     return 0;
 

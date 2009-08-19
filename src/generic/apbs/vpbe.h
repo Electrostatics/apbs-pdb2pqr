@@ -122,6 +122,17 @@ struct sVpbe {
 	
 	int paramFlag;      /**< Check to see if the parameters have been set */
 	
+	/*-------------------------------------------------------*/
+	/* Added by Michael Grabe                                */
+	/*-------------------------------------------------------*/
+	
+	double z_mem;        /* Z value of the botton of the membrane (A) */
+	double L;            /* Length of the membrane (A) */
+	double membraneDiel; /* Membrane dielectric constant */
+	double V;            /* Membrane potential */
+	int param2Flag;     /* Check to see if bcfl=3 parms have been set */
+	/*-------------------------------------------------------*/
+	
 };
 
 /** 
@@ -288,6 +299,43 @@ VEXTERNC double  Vpbe_getZkappa2(Vpbe *thee);
 */
 VEXTERNC double  Vpbe_getZmagic(Vpbe *thee);
 
+/*--------------------------------------------------------------*/
+/* Added by Michael Grabe                                       */
+/*--------------------------------------------------------------*/
+
+/** @brief   Get z position of the membrane bottom
+ *  @ingroup Vpbe
+ *  @author  Michael Grabe
+ *  @param   thee Vpbe object
+ *  @return  z value of membrane (A)
+ */
+VEXTERNC double  Vpbe_getzmem(Vpbe *thee);
+
+/** @brief   Get length of the membrane (A)
+ *  @ingroup Vpbe
+ *  aauthor  Michael Grabe
+ *  @param   thee Vpbe object
+ *  @return  Length of the membrane (A)
+ */
+VEXTERNC double  Vpbe_getLmem(Vpbe *thee);
+
+/** @brief   Get membrane dielectric constant
+ *  @ingroup Vpbe
+ *  @author  Michael Grabe
+ *  @param   thee Vpbe object
+ *  @return  Membrane dielectric constant
+ */
+VEXTERNC double  Vpbe_getmembraneDiel(Vpbe *thee);
+
+/** @brief   Get membrane potential (kT)
+ *  @ingroup Vpbe
+ *  @author  Michael Grabe
+ *  @param   thee Vpbe object
+ */
+VEXTERNC double  Vpbe_getmemv(Vpbe *thee);
+
+/*--------------------------------------------------------------*/
+
 #else /* if defined(VINLINE_VPBE) */
 #   define Vpbe_getValist(thee) ((thee)->alist)
 #   define Vpbe_getVacc(thee) ((thee)->acc)
@@ -307,6 +355,19 @@ VEXTERNC double  Vpbe_getZmagic(Vpbe *thee);
 #   define Vpbe_getDeblen(thee) ((thee)->deblen)
 #   define Vpbe_getZkappa2(thee) ((thee)->zkappa2)
 #   define Vpbe_getZmagic(thee) ((thee)->zmagic)
+
+/*------------------------------------------------------------*/
+/* Added by Michael Grabe                                     */
+/*------------------------------------------------------------*/
+
+#   define Vpbe_getzmem(thee) ((thee)->z_mem)
+#   define Vpbe_getLmem(thee) ((thee)->L)
+#   define Vpbe_getmembraneDiel(thee) ((thee)->membraneDiel)
+#   define Vpbe_getmemv(thee) ((thee)->V)
+
+/*------------------------------------------------------------*/
+
+
 #endif /* if !defined(VINLINE_VPBE) */
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -345,48 +406,54 @@ VEXTERNC double  Vpbe_getZmagic(Vpbe *thee);
 *  @return  Pointer to newly allocated Vpbe object
 */
 
+/*---------------------------------------------------------------*/
+/* Additions by Michael Grabe to Vpbe_ctor2 and Vpbe_ctor        */
+/*---------------------------------------------------------------*/
+
 VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
 						   double *ionRadii, double *ionQ, double T, 
 						   double soluteDiel, double solventDiel,  
-						   double solventRadius, int focusFlag, double sdens);
+						   double solventRadius, int focusFlag, double sdens,
+						   double z_mem, double L, double membraneDiel, double V);
 
 /** @brief   FORTRAN stub to construct Vpbe objct
-*  @ingroup Vpbe
-*  @author  Nathan Baker and Mike Holst
-*  @note   This is partially based on some of Mike Holst's PMG code.  Here
-*           are a few of the original function comments:
-*           kappa is defined as follows:
-*           \f[ \kappa^2 = \frac{8 \pi N_A e_c^2 I_s}{1000 eps_w k_B T} \f]
-*           where the units are esu*esu/erg/mol.  To obtain \f$\AA^{-2}\f$, we
-*           multiply by \f$10^{-16}\f$.
-*           Thus, in \f$\AA^{-2}\f$, where \f$k_B\f$ and \f$e_c\f$ are in 
-*           gaussian rather than mks units, the proper value for kappa is:
-*           \f[ \kappa^2 = \frac{8 pi N_A e_c^2 I_s}{1000 eps_w k_b T} \times 
-	*           10^{-16} \f]
-*           and the factor of \f$10^{-16}\f$ results from converting cm^2 to 
-*           angstroms^2, noting that the 1000 in the denominator has converted
-*           m^3 to cm^3, since the ionic strength \f$I_s\f$ is assumed to have
-*           been provided in moles per liter, which is moles per 1000 cm^3. 
-*  @param   thee   Pointer to memory allocated for Vpbe object
-*  @param   alist  Atom list
-*  @param   ionNum  Number of counterion species
-*  @param   ionConc Array containing counterion species' concentrations (M)
-*  @param   ionRadii Array containing counterion species' radii (A)
-*  @param   ionQ Array containing counterion species' charges (e)
-*  @param   T temperature (K)
-*  @param   soluteDiel Solute dielectric constant
-*  @param   solventDiel Solvent dielectric constant
-*  @param   solventRadius Solvent radius
-*  @param   focusFlag 1 if Focusing operation, 0 otherwise
-*  @bug     The focusing flag is currently not used!!
-*  @param   sdens Vacc sphere density
-*  @return  1 if successful, 0 otherwise
-*/
+ *  @ingroup Vpbe
+ *  @author  Nathan Baker and Mike Holst
+ *  @note   This is partially based on some of Mike Holst's PMG code.  Here
+ *           are a few of the original function comments:
+ *           kappa is defined as follows:
+ *           \f[ \kappa^2 = \frac{8 \pi N_A e_c^2 I_s}{1000 eps_w k_B T} \f]
+ *           where the units are esu*esu/erg/mol.  To obtain \f$\AA^{-2}\f$, we
+ *           multiply by \f$10^{-16}\f$.
+ *           Thus, in \f$\AA^{-2}\f$, where \f$k_B\f$ and \f$e_c\f$ are in 
+ *           gaussian rather than mks units, the proper value for kappa is:
+ *           \f[ \kappa^2 = \frac{8 pi N_A e_c^2 I_s}{1000 eps_w k_b T} \times 
+ *           10^{-16} \f]
+ *           and the factor of \f$10^{-16}\f$ results from converting cm^2 to 
+ *           angstroms^2, noting that the 1000 in the denominator has converted
+ *           m^3 to cm^3, since the ionic strength \f$I_s\f$ is assumed to have
+ *           been provided in moles per liter, which is moles per 1000 cm^3. 
+ *  @param   thee   Pointer to memory allocated for Vpbe object
+ *  @param   alist  Atom list
+ *  @param   ionNum  Number of counterion species
+ *  @param   ionConc Array containing counterion species' concentrations (M)
+ *  @param   ionRadii Array containing counterion species' radii (A)
+ *  @param   ionQ Array containing counterion species' charges (e)
+ *  @param   T temperature (K)
+ *  @param   soluteDiel Solute dielectric constant
+ *  @param   solventDiel Solvent dielectric constant
+ *  @param   solventRadius Solvent radius
+ *  @param   focusFlag 1 if Focusing operation, 0 otherwise
+ *  @bug     The focusing flag is currently not used!!
+ *  @param   sdens Vacc sphere density
+ *  @return  1 if successful, 0 otherwise
+ */
 VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
 						   double *ionConc, double *ionRadii, double *ionQ, 
 						   double T, double soluteDiel, 
 						   double solventDiel, double solventRadius, int focusFlag,
-						   double sdens);
+						   double sdens, double z_mem, double L, double membraneDiel, 
+						   double V);
 
 /** @brief   Get information about the counterion species present
 *  @ingroup Vpbe

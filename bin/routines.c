@@ -610,6 +610,8 @@ conditions\n");
 conditions\n");
 	} else if (pbeparm->bcfl == BCFL_FOCUS) {
 		Vnm_tprint( 1, "  Boundary conditions from focusing\n");
+	} else if (pbeparm->bcfl == BCFL_MEM) {
+		Vnm_tprint( 1, "  Membrane potential boundary conditions.\n");
 	}
 	Vnm_tprint( 1, "  %d ion species (%4.3f M ionic strength):\n",
 				pbeparm->nion, ionstr);
@@ -806,9 +808,11 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 	} else focusFlag = 0;
 	
 	pbe[icalc] = Vpbe_ctor(myalist, pbeparm->nion,
-					   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
-					   pbeparm->temp, pbeparm->pdie, 
-					   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens);
+						   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
+						   pbeparm->temp, pbeparm->pdie, 
+						   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens, 
+						   pbeparm->zmem, pbeparm->Lmem, pbeparm->mdie, 
+						   pbeparm->memv);
 	
 	/* Set up PDE object */
 	Vnm_tprint(0, "Setting up PDE object...\n");
@@ -1485,6 +1489,9 @@ VPUBLIC int writedataFlat(
 			case BCFL_FOCUS:
 				fprintf(file,"    bcfl focus\n");
 				break;
+			case BCFL_MEM:
+				fprintf(file,"    bcfl mem\n");
+				break;
 			default:
 				break;
 		}
@@ -1724,6 +1731,9 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 				break;
 			case BCFL_FOCUS:
 				fprintf(file,"      <bcfl>focus</bcfl>\n");
+				break;
+			case BCFL_MEM:
+				fprintf(file,"      <bcfl>mem</bcfl>\n");
 				break;
 			default:
 				break;
@@ -3096,9 +3106,10 @@ VPUBLIC Vrc_Codes initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbepar
 	focusFlag = 0;
 	pbe[icalc] = Vpbe_ctor(myalist, pbeparm->nion,
 						   pbeparm->ionc, pbeparm->ionr, pbeparm->ionq, 
-						   pbeparm->temp, pbeparm->pdie, pbeparm->sdie, 
-						   sparm, focusFlag,
-						   pbeparm->sdens);
+						   pbeparm->temp, pbeparm->pdie, 
+						   pbeparm->sdie, sparm, focusFlag, pbeparm->sdens, 
+						   pbeparm->zmem, pbeparm->Lmem, pbeparm->mdie, 
+						   pbeparm->memv);
 	
 	/* Print a few derived parameters */
 	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
