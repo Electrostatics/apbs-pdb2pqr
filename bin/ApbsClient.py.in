@@ -96,6 +96,7 @@ def processOptions():
 	""" A function that transforms command line options into a dictionary for further processing.  However,
 	presence of the -h or --help option causes the script to print help information and exit. """
 	global helpString
+	global service_url
 	shortOptions = "h"
 	longOptions = ["help", "local", "library-location=", "output-format=", "output-file=", "fetch=", "job-id=", "no-fetch", "non-blocking", "service-location="]
 	opts, args = getopt.getopt(sys.argv[1:], shortOptions, longOptions)
@@ -124,6 +125,7 @@ def processOptions():
 			optionDict["non-blocking"] = True
 		elif o == "--service-location":
 			optionDict["service-location"] = a
+			service_url = optionDict["service-location"]
 		elif o == "--library-location":
 			optionDict["library-location"] = a
 		else:
