@@ -538,7 +538,7 @@ fi
 
 if test -n "${USE_MPI}"; then
 	if test -n "${apbs_do_python}"; then
-		AC_MSG_NOTICE([Sorry -- Python wrappers don't work with MPI.])
+		AC_MSG_NOTICE([Sorry -- Python wrappers don not work with MPI.])
 		AC_MSG_NOTICE([Disabling Python support])
 		apbs_do_python=""
 	fi
@@ -1125,6 +1125,31 @@ if test x"$enable_apbs_quiet" != "xno"; then
     AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
 else
     AC_MSG_RESULT([no]) 
+fi
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
+dnl # -----------------------
+AC_MSG_CHECKING([for --disable-openmp])
+AC_ARG_ENABLE(
+	[openmp],
+	AS_HELP_STRING([--disable-openmp],[disables OpenMP compiler support]),,
+	[disable_openmp=yes]
+)
+if test x"$disable_openmp" != "xyes"; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+	if [[ "${CC}" = "icc" ] && [ "${F77}" = "ifort" ]]; then
+		CFLAGS="${CFLAGS} -openmp"
+		FFLAGS="${FFLAGS} -openmp -assume cc_omp"
+		LDFLAGS="${LDFLAGS} -static-intel"
+	fi
+	
+	if [[ "${CC}" = "gcc" ] && [ "${F77}" = "gfortran" ]]; then
+		CFLAGS="${CFLAGS} -fopenmp"
+		FFLAGS="${FFLAGS} -fopenmp"
+	fi
 fi
 
 dnl # -----------------------
