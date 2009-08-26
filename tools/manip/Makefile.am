@@ -17,4 +17,4 @@ born_SOURCES     = born.c
 born_LDADD       = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 INCLUDES         = @inc_list@
 AM_CFLAGS        = @CFLAGS@
-AM_LDFLAGS       = @LDFLAGS@ @FFLAGS@
+AM_LDFLAGS       = @LDFLAGS@
