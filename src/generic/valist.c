@@ -649,6 +649,7 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
             if (Valist_readPDB_throughXYZ(thee, sock, &serial, atomName, 
                         resName, &resSeq, &x, &y, &z) == VRC_FAILURE) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n",serial);
+                Vnm_print(2, "Please double check this atom in the pqr file, e.g., make sure there are no concatenated fields.\n");
                 return VRC_FAILURE;
             }
 
@@ -656,6 +657,7 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
             if (Valist_readPDBChargeRadius(thee, sock, &charge, &radius) == VRC_FAILURE) {
                 Vnm_print(2, "Valist_readPQR:  Error parsing atom %d!\n", 
                           serial);
+                Vnm_print(2, "Please double check this atom in the pqr file, e.g., make sure there are no concatenated fields.\n");
                 return VRC_FAILURE;
             }
 

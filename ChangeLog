@@ -6,6 +6,7 @@
     * Updated NBCR opal service urls from http://ws.nbcr.net/opal/... to http://ws.nbcr.net/opal2/...
     * Increased the number of allowed write statements from 10 to 20
     * Updated inputgen.py with --potdx and --istrng options added, original modification code provided by Miguel Ortiz-Lombard’a
+    * Added more information on PQR file parsing failures
 
 - MODIFICATIONS
 	* Applied Robert Konecny's patch to bin/routines.h (no need to include apbscfg.h in routines.h)
