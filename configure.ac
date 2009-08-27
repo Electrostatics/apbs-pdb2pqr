@@ -1147,8 +1147,17 @@ else
 	fi
 	
 	if [[ "${CC}" = "gcc" ] && [ "${F77}" = "gfortran" ]]; then
-		CFLAGS="${CFLAGS} -fopenmp"
-		FFLAGS="${FFLAGS} -fopenmp"
+		gcc_version=`gcc --version`
+		gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}' | awk -F'.' '{print $1$2}'`
+		
+		if test ["${gcc_complete_version}" -ge 42]; then
+			CFLAGS="${CFLAGS} -fopenmp"
+			FFLAGS="${FFLAGS} -fopenmp"
+		else
+		    AC_MSG_RESULT([WARNING])
+			AC_MSG_RESULT([WARNING Version of gcc/gfortran does not support OpenMP. Disabling.])
+			AC_MSG_RESULT([WARNING])
+		fi
 	fi
 fi
 
