@@ -331,8 +331,9 @@ def execApbs(vars=None, argv=None):
 	else:
 		webRun = True
 		custom_service_url = None
-		if vars.has_key('service_url'):
-			custom_service_url = vars['service_url']
+		if vars != None:
+			if vars.has_key('service_url'):
+				custom_service_url = vars['service_url']
 		vars = initRemoteVars(argv)
 		if custom_service_url != None:
 			vars['service_url'] = custom_service_url
