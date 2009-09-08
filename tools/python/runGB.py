@@ -59,8 +59,8 @@ import math
 from sys import stdout, stderr
 from math import sqrt, pow, exp, pi
 
-__author__ = "Justin Xiang, Todd Dolinsky, Nathan Baker"
-__date__ = "6 November, 2006"
+__author__ = "Justin Xiang, Todd Dolinsky, Nathan Baker, Yong Huang"
+__date__ = "September 2009"
 
 Python_kb = 1.3806581e-23
 Python_Na = 6.0221367e+23
@@ -105,7 +105,7 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 1.1.0\n\
+    Version 1.2\n\
     \n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
     \n\

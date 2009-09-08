@@ -66,7 +66,7 @@ dnl ##########################################################################
 dnl 0. autoconf initialization
 dnl ##########################################################################
 dnl # AC_INIT(src/aaa_inc/apbs/apbs.h)
-AC_INIT([APBS], [1.1.0], [baker@biochem.wustl.edu])
+AC_INIT([APBS], [1.2], [baker@biochem.wustl.edu])
 AC_PREREQ(2.56)
 AM_CONFIG_HEADER(src/aaa_inc/apbscfg.h)
 AC_CONFIG_AUX_DIR(config)
@@ -102,7 +102,7 @@ dnl #
 dnl #   Never try to set the interface numbers so that they correspond to the
 dnl #   release number of your package. This is an abuse that only fosters
 dnl #   misunderstanding of the purpose of library versions.
-AM_INIT_AUTOMAKE(apbs, 1.1.0)
+AM_INIT_AUTOMAKE(apbs, 1.2)
 APBS_VERSION="1:0:0"
 AC_SUBST(APBS_VERSION)
 ACLOCAL=":";
@@ -693,7 +693,7 @@ changequote(<<, >>)dnl
 PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 changequote([, ])dnl
 
-SERVICEURL='http://ws.nbcr.net/opal2/services/APBS_1.1.0'
+SERVICEURL='http://sccne.wustl.edu:8082/opal2/services/apbs-1.2'
 PARALLELSERVICEURL='http://ws.nbcr.net/opal2/services/APBS_Parallel_1.1.0'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 
