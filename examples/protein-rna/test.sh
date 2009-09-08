@@ -5,6 +5,11 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -17,7 +22,7 @@ results=(  9.610426671309E+01 )
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: protein-rna" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -36,7 +41,7 @@ do
  
   sync
 
-  ../scripts/checkresults.sh ${answer[0]} ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh ${answer[0]} ${results[i]} ${input[i]}.in $logfile $ocd
 
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

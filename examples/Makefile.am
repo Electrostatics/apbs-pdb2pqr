@@ -48,6 +48,24 @@ test:
 	cd smpbe; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 	cd solv; make test; cat TESTRESULTS.log >> ../TESTRESULTS.log
 
+testocd:
+	rm -f TESTRESULTS.log
+	touch TESTRESULTS.log
+	cd actin-dimer; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd alkanes; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd born; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd FKBP; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd hca-bind; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ion-pmf; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ion-protein; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd ionize; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd pka-lig; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd point-pmf; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd protein-rna; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd smpbe; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+	cd solv; make testocd; cat TESTRESULTS.log >> ../TESTRESULTS.log
+
+
 test.serial: test
 
 test-opal:

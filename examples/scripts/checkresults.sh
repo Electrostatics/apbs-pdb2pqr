@@ -10,14 +10,26 @@ result=$1
 expected=$2
 testfile=$3
 logfile=$4
+ocd=$5
 
 # Error tolerance as a percentage of 
 errortol=0.0001
 
-error=`echo $result $expected | awk '{printf("%.12f",(($1 - $2)*100)/$2)}'`
-relativeError=`echo $error | awk '{$1 = ($1 < 0) ? -$1 : $1; print}'`
-
-r=`echo $result $expected $relativeError $errortol | awk '{if($1 == $2) print 1; else if($3 < $4) print 2; else print 3}'`
+# Check if we are being obsessive compulsive if so, then the digits of precision
+# much higher
+if [ "$ocd" = "ocd" ]; then
+	error=`echo $result $expected | awk '{printf("%.12g",(($1 - $2)*100)/$2)}'`
+	relativeError=`echo $error | awk '{$1 = ($1 < 0) ? -$1 : $1; print}'`
+	r=`echo $result $expected $relativeError $errortol | awk '{if($1 == $2) print 1; else if($3 < $4) print 2; else print 3}'`
+else
+	# Truncate the result and expected values to seven decimal places
+	newresult=`echo $result | awk '{printf("%.7g",$1)}'`
+	newexpected=`echo $expected | awk '{printf("%.7g",$1)}'`
+	
+	error=`echo $newresult $newexpected | awk '{printf("%.7g",(($1 - $2)*100)/$2)}'`
+	relativeError=`echo $error | awk '{$1 = ($1 < 0) ? -$1 : $1; print}'`
+	r=`echo $newresult $newexpected $relativeError $errortol | awk '{if($1 == $2) print 1; else if($3 < $4) print 2; else print 3}'`
+fi
 
 case "$r" in
 

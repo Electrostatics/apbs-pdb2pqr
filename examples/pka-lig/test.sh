@@ -5,7 +5,11 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
-
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -18,7 +22,7 @@ results=( 8.085852882999E+00 2.096282333147E+01 1.192607452865E+02 1.08877306672
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: pka-lig" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -37,7 +41,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

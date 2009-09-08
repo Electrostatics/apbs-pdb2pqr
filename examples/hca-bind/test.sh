@@ -5,6 +5,11 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -17,7 +22,7 @@ results=( -5.246691707481E+01 -5.405870865431E+01 )
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: hca-bind" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -37,7 +42,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

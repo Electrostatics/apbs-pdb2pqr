@@ -5,6 +5,12 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
@@ -16,7 +22,7 @@ results=( 1.439739455792E+01 1.208346456826E+01 1.354016672221E+01 9.36367320014
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: alkanes" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -40,7 +46,7 @@ for pdb in $alkanes; do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[i]} ${alkane}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${alkane}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

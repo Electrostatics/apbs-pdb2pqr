@@ -10,6 +10,12 @@ if [[ $2 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
@@ -21,7 +27,7 @@ results=( -2.297735411962E+02 -2.290122772380E+02 -2.304915804304E+02 -2.2938719
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: born" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -68,7 +74,7 @@ do
   echo "Global net energy: $answer"
   sync
   
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

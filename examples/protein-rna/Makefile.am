@@ -31,8 +31,11 @@ apbs-%.in: $(TEMPLATE_IN) $(PQRS)
 postprocess:
 	bash postprocess.sh
 
-test: apbs-0.050.in
-	./test.sh ${APBSBIN} 
+test:
+	./test.sh ${APBSBIN} ${IGEN} noocd
+
+testocd:
+	./test.sh ${APBSBIN} ${IGEN} ocd
 
 test.serial: test
 
