@@ -10,6 +10,12 @@ if [[ $2 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000100000
@@ -21,7 +27,7 @@ results=( 1.048670970463E+02 1.095828954446E+02 9.816296058638E+01 1.15555977407
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: actin-dimer" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -68,7 +74,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

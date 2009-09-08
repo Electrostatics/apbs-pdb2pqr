@@ -5,6 +5,11 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -19,7 +24,7 @@ difference=( -3.541632345308E+02 -3.536627451694E+02 )
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: solv" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -40,15 +45,15 @@ do
 
   # Methanol
 
-  ../scripts/checkresults.sh ${answer[0]} ${methanol[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh ${answer[0]} ${methanol[i]} ${input[i]}.in $logfile $ocd
 
   # Methoxide
   
-  ../scripts/checkresults.sh ${answer[1]} ${methoxide[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh ${answer[1]} ${methoxide[i]} ${input[i]}.in $logfile $ocd
   
   # Difference
   
-  ../scripts/checkresults.sh ${answer[2]} ${difference[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh ${answer[2]} ${difference[i]} ${input[i]}.in $logfile $ocd
    
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

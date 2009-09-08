@@ -15,7 +15,10 @@ IGEN=${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc*
 
 test:
-	./test.sh ${APBS} 
+	./test.sh ${APBS} ${IGEN} noocd
+
+testocd:
+        ./test.sh ${APBS} ${IGEN} ocd
 
 test.serial: test
 

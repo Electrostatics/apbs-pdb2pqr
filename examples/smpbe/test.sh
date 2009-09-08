@@ -10,6 +10,12 @@ if [[ $2 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
@@ -21,7 +27,7 @@ results=( 8.404388689915E+03 8.141539945656E+02 )
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: smpbe" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -67,7 +73,7 @@ do
   echo "Global net energy: $answer"
   sync
   
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
     
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

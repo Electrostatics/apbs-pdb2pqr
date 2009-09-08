@@ -65,7 +65,8 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-ECHO = @ECHO@
+DSYMUTIL = @DSYMUTIL@
+DUMPBIN = @DUMPBIN@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
@@ -73,21 +74,28 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+FGREP = @FGREP@
 GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
+LIPO = @LIPO@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+NM = @NM@
+NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
+OTOOL = @OTOOL@
+OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -101,6 +109,7 @@ PY_LDFLAGS = @PY_LDFLAGS@
 PY_LINKFLAGS = @PY_LINKFLAGS@
 PY_SHARED = @PY_SHARED@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 SITEPKGS = @SITEPKGS@
@@ -112,6 +121,7 @@ abs_top_builddir = @abs_top_builddir@
 abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
+ac_ct_DUMPBIN = @ac_ct_DUMPBIN@
 ac_ct_F77 = @ac_ct_F77@
 am__include = @am__include@
 am__leading_dot = @am__leading_dot@
@@ -155,6 +165,7 @@ liberty_lib = @liberty_lib@
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
+lt_ECHO = @lt_ECHO@
 maloc_inc = @maloc_inc@
 maloc_lib = @maloc_lib@
 mandir = @mandir@
@@ -344,7 +355,10 @@ uninstall-am:
 
 
 test:
-	./test.sh ${APBS} ${IGEN}
+	./test.sh ${APBS} ${IGEN} noocd
+
+testocd:
+        ./test.sh ${APBS} ${IGEN} ocd
 
 test.serial: test
 

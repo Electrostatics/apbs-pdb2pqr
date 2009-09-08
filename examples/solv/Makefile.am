@@ -14,7 +14,10 @@ APBS=${top_builddir}/bin/${fetk_cpu_vendor_os}/apbs
 CLEANFILES = *-PE* *.out *.log io.mc
 
 test:
-	./test.sh ${APBS} 
+	./test.sh ${APBS} ${IGEN} noocd
+
+testocd:
+	./test.sh ${APBS} ${IGEN} ocd
 
 test.serial: test
 

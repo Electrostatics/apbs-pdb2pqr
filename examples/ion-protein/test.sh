@@ -5,6 +5,11 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
 
 logfile=TESTRESULTS.log
 nettime=0
@@ -17,7 +22,7 @@ results=( 1.558193146267E+01  2.354575739967E+01 1.801756256558E+01 1.9272786331
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: ion-protein" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -37,7 +42,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile
+  ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime

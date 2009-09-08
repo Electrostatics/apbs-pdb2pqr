@@ -5,6 +5,12 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 echo "This test only compares energies.  If you would like to examine forces please see README.html"
 
 logfile=TESTRESULTS.log
@@ -42,7 +48,7 @@ do
   echo "Global net energy: $answer"
   sync
 
-  ../scripts/checkresults.sh $answer ${results[j]} apbs${i} $logfile
+  ../scripts/checkresults.sh $answer ${results[j]} apbs${i} $logfile $ocd
   ../scripts/checkforces.sh OUTPUT_${i}.out $logfile
   
   endtime=`date +%s`

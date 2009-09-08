@@ -5,6 +5,12 @@ if [[ $1 = "" ]]; then
     exit
 fi
 
+if [[ "$3" = "ocd" ]]; then
+    ocd='ocd'
+else
+	ocd='noocd'
+fi
+
 logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
@@ -14,7 +20,7 @@ input=( apbs-mol apbs-smol )
 # Initialize the results file
 
 date=`date`
-echo "Date     : ${date}" >> $logfile
+echo "Date     : ${date}" > $logfile
 echo "Directory: FKBP" >> $logfile
 echo "Results  :" >> $logfile
 
@@ -38,7 +44,7 @@ do
   echo "Global net energy: ${answer[3]}"
   sync
 
-  ../../scripts/checkresults.sh ${answer[3]} ${results[i]} 1d7h-dmso/${input[i]}.in $logfile
+  ../../scripts/checkresults.sh ${answer[3]} ${results[i]} 1d7h-dmso/${input[i]}.in $logfile $ocd
   
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
