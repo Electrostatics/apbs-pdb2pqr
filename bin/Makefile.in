@@ -251,6 +251,12 @@ CCLD = $(F77) $(FFLAGS)
 build_libraries = @apbs_build_libraries@
 apbs_SOURCES = main.c 
 apbs_LDADD = ${build_libraries}
+
+# This is a hack I suspect, but needed to force apbs to be
+# rebuilt anytime the make command is issued
+# Problem before is that there is no dependency between source file
+# recompilation and relinking the binary. There is probably
+# a cleaner way to do this, I can't find it, however.
 BUILT_SOURCES = rm.apbs
 lib_LTLIBRARIES = libapbsmainroutines.la
 libapbsmainroutines_la_SOURCES = routines.c

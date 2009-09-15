@@ -482,7 +482,6 @@ if test -n "${mpi_path}"; then
 	AC_CHECK_FILE(${mpi_path}/include/mpi.h,[HAS_MPI_INC="yes"], [])
 	if test -n "${HAS_MPI_INC}"; then
 		mpi_inc="-I${mpi_path}/include"
-		AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
 	else
 		AC_MSG_ERROR([Error... mpi.h missing in ${mpi_path}/include], 0)
 	fi
@@ -537,6 +536,7 @@ if test -n "${mpi_path}"; then
 fi
 
 if test -n "${USE_MPI}"; then
+	AC_DEFINE([HAVE_MPI_H], [], [have the MPI library])
 	if test -n "${apbs_do_python}"; then
 		AC_MSG_NOTICE([Sorry -- Python wrappers do not work with MPI.])
 		AC_MSG_NOTICE([Disabling Python support])
