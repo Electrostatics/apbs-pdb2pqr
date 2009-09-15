@@ -1552,7 +1552,7 @@ Optional Packages:
   --with-mpich=PATH       toplevel MPICH directory
   --with-mpich2=PATH      toplevel MPICH2 directory
   --with-lam=PATH         toplevel LAM-MPI directory
-  --with-openmpi          enable OpenMPI compilation
+  --with-openmpi=PATH     enable OpenMPI compilation
   --with-python=PYTHONPATH           Specify python location.
   --with-blas=LDFLAGS     link to user-specified BLAS (specify flags to pass
                           to ld)
@@ -20760,8 +20760,8 @@ fi
 
 if test -n "${USE_MPI}"; then
 	if test -n "${apbs_do_python}"; then
-		{ echo "$as_me:$LINENO: Sorry -- Python wrappers don not work with MPI." >&5
-echo "$as_me: Sorry -- Python wrappers don not work with MPI." >&6;}
+		{ echo "$as_me:$LINENO: Sorry -- Python wrappers do not work with MPI." >&5
+echo "$as_me: Sorry -- Python wrappers do not work with MPI." >&6;}
 		{ echo "$as_me:$LINENO: Disabling Python support" >&5
 echo "$as_me: Disabling Python support" >&6;}
 		apbs_do_python=""
