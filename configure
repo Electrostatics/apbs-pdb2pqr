@@ -20426,11 +20426,6 @@ fi
 
 	if test -n "${HAS_MPI_INC}"; then
 		mpi_inc="-I${mpi_path}/include"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_MPI_H
-_ACEOF
-
 	else
 		{ { echo "$as_me:$LINENO: error: Error... mpi.h missing in ${mpi_path}/include" >&5
 echo "$as_me: error: Error... mpi.h missing in ${mpi_path}/include" >&2;}
@@ -20759,6 +20754,11 @@ echo "$as_me: error: Error...Could not find OpenMPI libraries in ${mpi_path}/lib
 fi
 
 if test -n "${USE_MPI}"; then
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_MPI_H
+_ACEOF
+
 	if test -n "${apbs_do_python}"; then
 		{ echo "$as_me:$LINENO: Sorry -- Python wrappers do not work with MPI." >&5
 echo "$as_me: Sorry -- Python wrappers do not work with MPI." >&6;}
