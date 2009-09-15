@@ -463,7 +463,7 @@ if test -z "${mpi_path}"; then
 	AC_MSG_CHECKING([for --with-openmpi option])
 	AC_ARG_WITH(
 		[openmpi],
-		AS_HELP_STRING([--with-openmpi], [enable OpenMPI compilation]),
+		AS_HELP_STRING([--with-openmpi=PATH], [enable OpenMPI compilation]),
 		[mpi_path="${with_openmpi}"],
 	)
 	if test x"$mpi_path" != "xno" -a -n "$mpi_path"; then
@@ -538,7 +538,7 @@ fi
 
 if test -n "${USE_MPI}"; then
 	if test -n "${apbs_do_python}"; then
-		AC_MSG_NOTICE([Sorry -- Python wrappers don not work with MPI.])
+		AC_MSG_NOTICE([Sorry -- Python wrappers do not work with MPI.])
 		AC_MSG_NOTICE([Disabling Python support])
 		apbs_do_python=""
 	fi
