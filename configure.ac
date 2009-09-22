@@ -694,7 +694,7 @@ PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 changequote([, ])dnl
 
 SERVICEURL='http://sccne.wustl.edu:8082/opal2/services/apbs-1.2'
-PARALLELSERVICEURL='http://ws.nbcr.net/opal2/services/APBS_Parallel_1.1.0'
+PARALLELSERVICEURL='http://sccne.wustl.edu:8082/opal2/services/apbs-parallel-1.2'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 
 sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
