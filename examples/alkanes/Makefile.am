@@ -18,7 +18,7 @@ test:
 	./test.sh ${APBS} ${IGEN} noocd
 
 testocd:
-        ./test.sh ${APBS} ${IGEN} ocd
+	./test.sh ${APBS} ${IGEN} ocd
 
 test.serial: test
 
