@@ -372,7 +372,7 @@ def execApbs(vars=None, argv=None):
 			
 		tempFile.close()
 	else:
-		version_check_flag = False
+		version_check_flag = True     # Enable version checking for custom defined Opal service as well 
 		service_url = vars['service_url']
 	# Retrieve a reference to the AppServicePort
 	#*this is also from the path to the service
@@ -382,7 +382,7 @@ def execApbs(vars=None, argv=None):
 	req = launchJobRequest()
 	# Checks version compatibility (but currently only works for sequential calculations)
 	if version_check_flag:
-		opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage[-3:]
+		opal_version = AppServicePortTypeSoapBindingSOAP(vars['service_url']).getAppMetadata(getAppMetadataRequest())._usage.split()[-1]
 		if opal_version != local_version:
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
 			stderr.write("It appears that the remote server version of APBS (%s) does not match\nthe local version (%s)!\n" % (opal_version,local_version))
