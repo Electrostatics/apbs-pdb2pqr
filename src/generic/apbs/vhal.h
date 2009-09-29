@@ -218,7 +218,7 @@ enum eVbcfl {
                   * condition */
     BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
     BCFL_FOCUS=4,  /**< Focusing Dirichlet boundary condition */
-    BCFL_MEM=5  /**< Focusing Dirichlet boundary condition */
+    BCFL_MEM=5  /**< Focusing membrane boundary condition */
 };
 
 /**
