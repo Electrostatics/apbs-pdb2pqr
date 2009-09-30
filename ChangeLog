@@ -8,6 +8,7 @@
 	* Updated inputgen.py with --potdx and --istrng options added, original modification code provided by Miguel Ortiz-Lombard’a
 	* Added more information on PQR file parsing failures
 	* Added in support for OpenMP calculations for multiprocessor machines.
+	* Changed default Opal service from http://ws.nbcr.net/opal2/services/APBS_1.1.0 to http://sccne.wustl.edu:8082/opal2/services/apbs-1.2
 
 - MODIFICATIONS
 	* Applied Robert Konecny's patch to bin/routines.h (no need to include apbscfg.h in routines.h)
