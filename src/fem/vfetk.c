@@ -616,12 +616,14 @@ VPUBLIC void Vfetk_setParameters(Vfetk *thee, PBEparm *pbeparm,
     thee->pbeparm = pbeparm;
 }
 
-VPUBLIC void Vfetk_dtor(Vfetk **thee) {
+VPUBLIC void Vfetk_PDE_dtor(PDE **thee) 
+
     if ((*thee) != VNULL) {
-        Vfetk_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vfetk), (void **)thee);
+        Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee);
+		Vfetk_PDE_dtor2(*thee);
         (*thee) = VNULL;
     }
+
 }
 
 VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
@@ -1165,8 +1167,8 @@ VPUBLIC int Vfetk_PDE_ctor2(PDE *thee, Vfetk *fetk) {
 VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
 
     if ((*thee) != VNULL) {
-        Vfetk_PDE_dtor2(*thee);
         Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee);
+		Vfetk_PDE_dtor2(*thee);
         (*thee) = VNULL;
     }
 
