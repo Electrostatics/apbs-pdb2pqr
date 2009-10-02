@@ -17,7 +17,7 @@ vsmall=0.000000001000
 
 input=( apbs-mol apbs-smol ) 
 
-results=( -5.246691707481E+01 -5.405870865431E+01 )
+results=( -5.246467966595E+01 -5.405977880082E+01 )
 
 # Initialize the results file
 

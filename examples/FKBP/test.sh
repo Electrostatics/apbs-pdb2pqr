@@ -27,7 +27,7 @@ echo "Results  :" >> $logfile
 # Do 1d7h-dmso first
 
 cd 1d7h-dmso
-results=( 1.500890142388E+01 1.624584726802E+01 )
+results=( 1.500870687135E+01 1.624556234580E+01 )
 
 # For each file in the directory, run APBS and get the value
 
@@ -59,7 +59,7 @@ cat $logfile >> ../$logfile
 # Now do 1d7i-dss
 
 cd ../1d7i-dss
-results=( 1.442544510656E+01 1.545171104994E+01 )
+results=( 1.442525956257E+01 1.545174889410E+01 )
 
 for i in 0 1 
 do
