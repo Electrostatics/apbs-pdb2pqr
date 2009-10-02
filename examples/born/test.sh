@@ -22,7 +22,7 @@ vsmall=0.000000001000
 
 input=( apbs-mol-auto apbs-smol-auto  apbs-mol-parallel apbs-smol-parallel)
 
-results=( -2.297735411962E+02 -2.290122772380E+02 -2.304915804304E+02 -2.293871983649E+02 )
+results=( -2.297735411962E+02 -2.290124171992E+02 -2.304918086635E+02 -2.293871354771E+02 )
 
 # Initialize the results file
 
