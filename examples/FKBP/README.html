@@ -29,7 +29,7 @@
 			  <td rowspan=6><a href="1d7h-dmso/apbs-mol.in">1d7h-dmso/apbs-mol.in</a></td>
 			  <td rowspan=6>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
 			  <td align=center><B>1.2</B></td>
-			  <td align=center><B>15.0087</B></td>
+			  <td align=center><B>15.0087<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=6>19.097</td>
 		  </tr>
 			<tr>
@@ -50,7 +50,7 @@
 			  <td rowspan=17><a href="1d7h-dmso/apbs-smol.in">1d7h-dmso/apbs-smol.in</a></td>
 			  <td rowspan=17>1d7h-dmso, 2-level focusing to 0.225 A, VdW surface, srfm smol</td>
 			  <td align=center><B>1.2</B></td>
-			  <td align=center><B>16.2456</B> </td>
+			  <td align=center><B>16.2456<sup><a href="#2">2</a></sup></B> </td>
 			  <td rowspan=17>19.097</td>
 		  </tr>
 			<tr>
@@ -86,7 +86,7 @@
 			  <td rowspan=6><a href="1d7i-dss/apbs-mol.in">1d7i-dss/apbs-mol.in</a></td>
 			  <td rowspan=6>1d7i-dss, 2-level focusing to 0.225 A, VdW surface, srfm mol</td>
 			  <td align=center><B>1.2</B></td>
-			  <td align=center><B>14.4253</B></td>
+			  <td align=center><B>14.4253<sup><a href="#2">2</a></sup></B></td>
 			  <td rowspan=6>16.231</td>
 			</tr>
 			<tr>
@@ -151,6 +151,10 @@
 				</li><li> A switch in the algorithm used to compute the dielectric smoothing for srfm smol 
 				</li><li> The addition of the Vacc sphere density (sdens keyword) as a variable and a change in the default sdens value from 3.0 to 10.0
 			</li></ul>
+
+			<p> </p><a name=2></a><sup>2</sup>  APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization.  This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%).  These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values.  For a more detailed explanation, please see <a href="http://is.gd/45AzN">here</a>.
+			<p></p>
+			
 			Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for more information.
 			<p></p>
 	</body>
