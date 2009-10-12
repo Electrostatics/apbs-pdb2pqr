@@ -31,11 +31,11 @@
 
 rm -rf config.cache autom4te.cache
 
-aclocal \
-&& automake --gnu --add-missing --copy \
-&& autoconf \
-&& autoheader \
-&& libtoolize --automake --copy --force
+libtoolize --automake --copy --force \
+&& aclocal --force \
+&& autoheader -f \
+&& automake --gnu --add-missing --copy -f \
+&& autoconf -f 
 
 rm -rf config.cache autom4te.cache
 
