@@ -787,11 +787,13 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		atom = Valist_getAtom(myalist, iatom);
 		q += VSQR(Vatom_getCharge(atom));
 	}
+	/*  D. Gohara 10/22/09 - disabled 
 	if (q < (1e-6)) {
 		Vnm_tprint(2, "Molecule #%d is uncharged!\n", pbeparm->molid);
 		Vnm_tprint(2, "Sum square charge = %g!\n", q);
 		return 0;
 	}
+	*/
 	
 	/* Set up PBE object */
 	Vnm_tprint(0, "Setting up PBE object...\n");
@@ -3083,12 +3085,13 @@ VPUBLIC Vrc_Codes initFE(int icalc, NOsh *nosh, FEMparm *feparm, PBEparm *pbepar
 		atom = Valist_getAtom(myalist, iatom);
 		q += VSQR(Vatom_getCharge(atom));
 	}
+	/* D. Gohara 10/22/09 - disabled
 	if (q < (1e-6)) {
 		Vnm_tprint(2, "Molecule #%d is uncharged!\n", pbeparm->molid);
 		Vnm_tprint(2, "Sum square charge = %g!\n", q);
 		return VRC_FAILURE;
 	}
-	
+	*/
 	
 	/* Set the femparm pkey value based on the presence of an HB solver */
 #ifdef USE_HB
