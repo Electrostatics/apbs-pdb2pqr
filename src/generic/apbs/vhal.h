@@ -444,6 +444,12 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #define VPMGSMALL 1e-12
 
+/** @brief   Used to set the min/max values acceptable for sinh chopping
+ *  @ingroup Vhal
+ */
+#define SINH_MIN -85.0
+#define SINH_MAX 85.0
+
 
 #if defined(VDEBUG)
 #   if !defined(APBS_NOINLINE)
