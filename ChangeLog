@@ -1,1 +1,6 @@
-Please see http://www.poissonboltzmann.org/apbs/release-history
+Please see http://www.poissonboltzmann.org/apbs/release-history for the
+complete change log
+
+# These are notes for the current version of APBS
+* Added tools/matlab/solver with simple Matlab LPBE solver for prototyping,
+teaching, etc.
