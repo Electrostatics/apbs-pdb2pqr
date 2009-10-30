@@ -1322,8 +1322,11 @@ VPRIVATE double Vpmg_qmEnergyNONLIN(Vpmg *thee, int extFlag) {
                 }
             }
         }
-        if (nchop > 0) Vnm_print(2, "Vpmg_qmEnergy:  Chopped EXP %d times!\n",
-          nchop);
+        if (nchop > 0){
+			Vnm_print(2, "Vpmg_qmEnergy:  Chopped EXP %d times!\n",nchop);
+			Vnm_print(2, "\nERROR!  Detected large potential values in energy evaluation! \nERROR!  This calculation failed -- please report to the APBS developers!\n\n");
+			VASSERT(0);
+		}
     } else {
         /* Zkappa2 OK here b/c LPBE approx */
         Vnm_print(0, "Vpmg_qmEnergy:  Calculating linear energy\n");
@@ -1731,7 +1734,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     int i, j, k, ihi, ilo, jhi, jlo, khi, klo, nx, ny, nz;
     double x, y, z, dx, dy, dz, ifloat, jfloat, kfloat, uval;
     double eps_w, T, pre1, xkappa, size, *apos, charge, pos[3];
-
+	
+	double uvalMin, uvalMax;
+	
     /* Calculate new problem dimensions */
     hxNEW = thee->pmgp->hx;
     hyNEW = thee->pmgp->hy;
@@ -1826,6 +1831,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
         VASSERT(0);
     }
 
+	uvalMin	= VPMGSMALL;
+	uvalMax = -VPMGSMALL;
     
     /* Fill the "i" boundaries (dirichlet) */
     for (k=0; k<nzNEW; k++) {
@@ -1875,6 +1882,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,0)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
 
             /* High X face */
             x = xmaxNEW;
@@ -1919,6 +1928,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,1)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
             
             /* Zero Neumann conditions */             
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -1976,6 +1987,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,0)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
 
             /* High Y face */
             y = ymaxNEW;
@@ -2020,6 +2033,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,1)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
 
             /* Zero Neumann conditions */
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -2077,6 +2092,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,0)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
 
             /* High Z face */
             z = zmaxNEW;
@@ -2121,6 +2138,8 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,1)] = uval;
+			if(uval < uvalMin) uvalMin = uval;
+			if(uval > uvalMax) uvalMax = uval;
 
             /* Zero Neumann conditions */
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -2129,6 +2148,11 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             thee->gzcf[IJKz(i,j,3)] = 0.0;
         }
     }
+	
+	if((uvalMin < SINH_MIN) || (uvalMax > SINH_MAX)){
+		Vnm_print(2, "\nfocusFillBound:  WARNING! Unusually large potential values detected on the focusing boundary!  Convergence not guaranteed!\n");
+	}
+	
 }
 
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag, 
