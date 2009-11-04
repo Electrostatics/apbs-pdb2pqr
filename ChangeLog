@@ -10,3 +10,5 @@ teaching, etc.
   in setting the boundary conditions during a focusing calculation
 * Added in a check and abort in Vpmg_qmEnergy if chopped values are
   detected. This seems to occur under certain conditions for npbe calcs.
+* Fixed a bug in Vpmg_MolIon that causes npbe based calculaions
+  to return very large energies.
