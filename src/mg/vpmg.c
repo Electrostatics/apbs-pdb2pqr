@@ -4178,9 +4178,9 @@ VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
         if (arad > VSMALL) {
 
             /* Make sure we're on the grid */
-            if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
-                (apos[1]<=ymin) || (apos[1]>=ymax)  || \
-                (apos[2]<=zmin) || (apos[2]>=zmax)) {
+            if ((apos[0]<(xmin-irad-arad)) || (apos[0]>(xmax+irad+arad))  || \
+                (apos[1]<(ymin-irad-arad)) || (apos[1]>(ymax+irad+arad))  || \
+                (apos[2]<(zmin-irad-arad)) || (apos[2]>(zmax+irad+arad))) {
                 if (thee->pmgp->bcfl != BCFL_FOCUS) {
                     Vnm_print(2, 
     "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
