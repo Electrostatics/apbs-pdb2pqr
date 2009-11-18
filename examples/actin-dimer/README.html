@@ -80,7 +80,7 @@
 			  <td rowspan=7><a href="apbs-mol-parallel.in">apbs-mol-parallel.in</a></td>
 			  <td rowspan=7>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm mol</td>
 			  <td align=center><strong>1.2.1</strong></td>
-			  <td align=center><strong>98.1733</td>
+			  <td align=center><strong>98.1733<sup><a href="#7">7</a></sup></strong></td>
 			  <td rowspan=7>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -104,7 +104,7 @@
 			  <td rowspan=18><a href="apbs-smol-parallel.in">apbs-smol-parallel.in</a></td>
 			  <td rowspan=18>Parallel with 8 processors, focusing to ~0.9 A, LPBE, srfm smol</td>
 			  <td align=center><strong>1.2.1</strong></td>
-			  <td align=center><strong>115.5409</strong></td>
+			  <td align=center><strong>115.5409<sup><a href="#7">7</a></sup></strong></td>
 			  <td rowspan=18>106.7<br />(1.00 A res., NPBE)</td>
 		  </tr>
 			<tr> 
@@ -164,6 +164,12 @@
 		<p> <a name=5/><sup>5</sup> The discrepancy in values between versions 1.0.0 and 1.1.0 is due to a bugfix in the implementation of the boundary conditions.  This bug introduces a very small error (generally less than 1%) the calculated results. </p>
 
 		<p> </p><a name=6></a><sup>6</sup>  APBS 1.2 has switched the multigrid smoothing algorithm from standard Gauss-Seidel to Gauss-Seidel red/black in order to facilitate parallelization.  This switch has caused small differences in individual calculation energies which, when combined to the final answer, create larger errors (up to 0.04%).  These errors can be reduced by resetting the APBS error tolerance to 1e-9 or smaller values.  For a more detailed explanation, please see <a href="http://is.gd/45AzN">here</a>.
+
+		<p> <a name=7></a><sup>7</sup>  The discrepancy in values between versions 1.2 and 1.2.1 is most likely due to the following factor(s):
+			<ul>
+				<li> Fixed a bug in Vpmg_fillcoCoefMolIon which causes npbe based calculations to return very large energies </li>
+			</ul>
+			</p>
 		
 		<p> Please see the ChangeLog or the <a href="http://apbs.sourceforge.net/doc">APBS documentation</a> for
 		more information. </p>
