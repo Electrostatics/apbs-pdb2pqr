@@ -6,7 +6,7 @@ Written by Samir Unni, Dave Gohara, Nathan Baker, Yong Huang based on example co
 
 ----------------------------------------------------------------------
     APBS -- Adaptive Poisson-Boltzmann Solver
-    Version 1.2
+    Version 1.2.1
     
     Nathan A. Baker (baker@biochem.wustl.edu)
     Dept. Biochemistry and Molecular Biophysics
@@ -72,7 +72,7 @@ Written by Samir Unni, Dave Gohara, Nathan Baker, Yong Huang based on example co
 """
 __date__  = "3 September 2009"
 __author__ = "Samir Unni, Dave Gohara, Nathan Baker, Yong Huang"
-__version__ = "1.2"
+__version__ = "1.2.1"
 
 import sys
 from sys import stdout, stderr
@@ -89,7 +89,7 @@ import getopt
 # the location where APBS was installed; e.g., the directory that contains the APBS bin, include, lib, and
 # share sub-directories.  The following value is just an example and may not be appropriate for your system
 # depending on where you installed APBS:
-userPath = "/usr/local/apbs-1.2"
+userPath = "/usr/local/apbs-1.2.1"
 ########################################################################
 
 def processOptions():
@@ -208,7 +208,7 @@ helpString = """
                              bin, include, lib, and share sub-directories.  The following
                              value is just an example and may not be appropriate for your
                              system, depending on where you installed APBS:
-                               --library-location=/usr/local/apbs-1.2
+                               --library-location=/usr/local/apbs-1.2.1
                              Note that you can also edit this Python file to eliminate the
                              need to specify this option.
     --job-id=<job ID>        Specifies the job ID of the run for which results are to be
@@ -217,7 +217,7 @@ helpString = """
     --non-blocking           Disables blocking and outputs a URL at which the data can be
                              retreived later.
     --service-location=<URL> Specifies the location of the Opal server.  Defaults to
-                             http://sccne.wustl.edu:8082/opal2/services/apbs-1.2
+                             http://sccne.wustl.edu:8082/opal2/services/apbs-1.2.1
     --local                  Perform a local APBS run using whatever APBS executable is
                              available in the path
 ----------------------------------------------------------------------
