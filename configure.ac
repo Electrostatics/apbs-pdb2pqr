@@ -1198,13 +1198,9 @@ case $host_os in
 	darwin8*)
 		extra_list1="-lSystemStubs"
 		;;
-	darwin9*)
+	darwin*)
 		LDFLAGS="${LDFLAGS} -mmacosx-version-min=10.4"
 		;;
-	*)
-		extra_list1=""
-		;;
-
 esac
 
 dnl # -------------------------
