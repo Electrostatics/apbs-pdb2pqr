@@ -279,7 +279,10 @@ int main(
 				Vnm_tprint(2, "%s\n", usage);
 				VJMPERR1(0); 
 			} else if (strncmp(argv[i], "--output-format", 15) == 0) {
-				if (strstr(argv[i], "xml") != NULL) outputformat = OUTPUT_XML;
+				if (strstr(argv[i], "xml") != NULL) {
+					Vnm_tprint(2, "XML output format is now deprecated, please use --output-format=flat instead!\n\n");
+					VJMPERR1(0); 
+				}
 				else if (strstr(argv[i], "flat") != NULL) {
 					outputformat = OUTPUT_FLAT;
 				} else {
@@ -604,12 +607,7 @@ int main(
 	
 	/* *************** HANDLE LOGGING *********************** */
 
-	if (outputformat == OUTPUT_XML) {
-		Vnm_tprint(2, "  Writing data to XML file %s...\n\n", output_path);
-		writedataXML(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
-					 dielEnergy, nenergy, atomEnergy, nforce, atomForce);
-		
-	} else if (outputformat == OUTPUT_FLAT) {
+	if (outputformat == OUTPUT_FLAT) {
 		Vnm_tprint(2," Writing data to flat file %s...\n\n", output_path);
 		writedataFlat(nosh, com, output_path, totEnergy, qfEnergy, qmEnergy,
 					  dielEnergy, nenergy, atomEnergy, nforce, atomForce);
