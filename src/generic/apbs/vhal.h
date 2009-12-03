@@ -196,7 +196,6 @@ typedef enum eVhal_NONLINType Vhal_NONLINType;
 enum eVoutput_Format {
     OUTPUT_NULL,   /**< No output */
     OUTPUT_FLAT, /**< Output in flat-file format */
-    OUTPUT_XML   /**< Output in XML format */
 };
 
 /**
