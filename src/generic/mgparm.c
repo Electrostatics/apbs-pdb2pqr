@@ -911,6 +911,7 @@ VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
     } else if (Vstring_strcasecmp(tok, "chgm") == 0) {
         return MGparm_parseCHGM(thee, sock);
     } else if (Vstring_strcasecmp(tok, "nlev") == 0) {
+        Vnm_print(2, "Warning: The 'nlev' keyword is now deprecated!\n");
         return MGparm_parseNLEV(thee, sock);
     } else if (Vstring_strcasecmp(tok, "grid") == 0) {
         return MGparm_parseGRID(thee, sock);
