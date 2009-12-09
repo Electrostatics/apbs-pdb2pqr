@@ -16,7 +16,6 @@ end
 elec name lig-coarse
     mg-manual
     dime 97 97 97
-    nlev 4
     glen 70 70 70
     gcent mol 3
     mol 1
@@ -38,7 +37,6 @@ end
 elec name lig-fine
     mg-manual
     dime 97 97 97
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 1
     mol 1
@@ -62,7 +60,6 @@ end
 elec name pka-coarse
     mg-manual
     dime 97 97 97
-    nlev 4
     glen 70 70 70
     gcent mol 3
     mol 2
@@ -84,7 +81,6 @@ end
 elec name pka-fine
     mg-manual
     dime 97 97 97
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 1
     mol 2
@@ -108,7 +104,6 @@ end
 elec name complex-coarse
     mg-manual
     dime 97 97 97
-    nlev 4
     glen 70 70 70
     gcent mol 3
     mol 3
@@ -130,7 +125,6 @@ end
 elec name complex-fine
     mg-manual
     dime 97 97 97
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 1
     mol 3

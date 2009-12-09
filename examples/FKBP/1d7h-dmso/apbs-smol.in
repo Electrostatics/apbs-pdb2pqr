@@ -16,7 +16,6 @@ end
 elec name complex-solv-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 1
     mol 1
@@ -38,7 +37,6 @@ end
 elec name complex-solv-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 1
@@ -62,7 +60,6 @@ end
 elec name complex-ref-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 1
     mol 1
@@ -84,7 +81,6 @@ end
 elec name complex-ref-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 1
@@ -108,7 +104,6 @@ end
 elec name dmso-solv-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 2
     mol 2
@@ -130,7 +125,6 @@ end
 elec name dmso-solv-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 2
@@ -154,7 +148,6 @@ end
 elec name dmso-ref-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 2
     mol 2
@@ -176,7 +169,6 @@ end
 elec name dmso-ref-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 2
@@ -200,7 +192,6 @@ end
 elec name 1d7h-solv-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 3
     mol 3
@@ -222,7 +213,6 @@ end
 elec name 1d7h-solv-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 3
@@ -246,7 +236,6 @@ end
 elec name 1d7h-ref-coarse
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 1.5 1.5 1.5
     gcent mol 3
     mol 3
@@ -268,7 +257,6 @@ end
 elec name 1d7h-ref-fine
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.225 0.225 0.225
     gcent mol 2
     mol 3

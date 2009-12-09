@@ -14,7 +14,6 @@ end
 elec name solv
 	mg-manual
 	dime 65 65 65
-	nlev 4
 	grid 0.21 0.21 0.21
 	gcent 0.0 0.0 0.0
 	mol 1
@@ -34,7 +33,6 @@ end
 elec name ref
 	mg-manual
 	dime 65 65 65
-	nlev 4
 	grid 0.21 0.21 0.21
 	gcent 0.0 0.0 0.0
 	mol 1

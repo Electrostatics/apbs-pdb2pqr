@@ -20,7 +20,6 @@ end
 elec name solvated
    mg-manual
     dime 65 65 65
-    nlev 4 
     grid 0.33 0.33 0.33
     gcent mol 1
     mol 1 
@@ -43,7 +42,6 @@ end
 elec name reference
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.33 0.33 0.33
     gcent mol 1
     mol 1
