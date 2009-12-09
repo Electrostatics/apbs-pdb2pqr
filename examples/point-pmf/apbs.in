@@ -16,7 +16,6 @@ end
 elec name point1
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.21 0.21 0.21
     gcent 0.0 0.0 0.0
     mol 1
@@ -38,7 +37,6 @@ end
 elec name point2
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.21 0.21 0.21
     gcent 0.0 0.0 0.0
     mol 2
@@ -60,7 +58,6 @@ end
 elec name complex
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.21 0.21 0.21
     gcent 0.0 0.0 0.0
     mol 3

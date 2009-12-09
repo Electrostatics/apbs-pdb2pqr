@@ -14,7 +14,6 @@ end
 elec name viz
     mg-manual
     dime 129 129 129
-    nlev 4
     glen 100 100 100
     gcent mol 1
     mol 1

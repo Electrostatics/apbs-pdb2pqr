@@ -15,7 +15,6 @@ end
 elec name methanol-solv
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 1
     mol 1
@@ -39,7 +38,6 @@ end
 elec name methanol-ref
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 1
     mol 1
@@ -63,7 +61,6 @@ end
 elec name methoxide-solv
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 2
     mol 2
@@ -87,7 +84,6 @@ end
 elec name methoxide-ref
     mg-manual
     dime 65 65 65
-    nlev 4
     grid 0.25 0.25 0.25
     gcent mol 2
     mol 2

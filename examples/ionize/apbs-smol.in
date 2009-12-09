@@ -7,7 +7,6 @@ end
 # Solvated acetic acid
 elec name acetic-solv
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen 6 6 6 
@@ -32,7 +31,6 @@ end
 # Reference acetic acid
 elec name acetic-ref
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen 6 6 6
@@ -57,7 +55,6 @@ end
 # Solvated acetate
 elec name acetate-solv
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen 6 6 6 
@@ -83,7 +80,6 @@ end
 # Acetate ref
 elec name acetate-ref
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen  6  6  6
@@ -109,7 +105,6 @@ end
 # Solvated proton
 elec name proton-solv
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen 6 6 6 
@@ -135,7 +130,6 @@ end
 # Reference proton
 elec name proton-ref
     mg-auto
-    nlev 4
     dime 65 65 65
     cglen 12 12 12
     fglen  6  6  6

@@ -16,7 +16,6 @@ end
 elec name protein
     mg-manual
     dime  129 129 129
-    nlev 6
     glen  67  67  75
     gcent mol 3
     mol 1
@@ -40,7 +39,6 @@ end
 elec name ion
     mg-manual
     dime  129 129 129
-    nlev 6
     glen  67  67  75
     gcent mol 3
     mol 2
@@ -64,7 +62,6 @@ end
 elec name complex
     mg-manual
     dime  129 129 129
-    nlev 6
     glen  67  67  75
     gcent mol 3
     mol 3
