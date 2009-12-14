@@ -1,4 +1,6 @@
 /* src/aaa_inc/maloccf.h.in.  Generated from configure.ac by autoheader.  */
+
+
 /*
  * ***************************************************************************
  * MALOC = < Minimal Abstraction Layer for Object-oriented C >
@@ -72,8 +74,7 @@
 #undef HAVE_ARPA_INET_H
 
 /* Am I running in a Cygwin/Win32 environment? */
-#undef WIN32
-#undef MSDOS
+#undef HAVE_CYGWIN
 
 /* Do I compile as a debug version? */
 #undef HAVE_DEBUG
@@ -156,6 +157,16 @@
 /* Do I have the XDR datastructure in the RPC package? */
 #undef HAVE_XDR
 
+/* Define to 1 if you have the <\> header file. */
+#undef HAVE__
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
+
+/* MSDOS Macro for Cygwin and icl - obsolete */
+#undef MSDOS
+
 /* Name of package */
 #undef PACKAGE
 
@@ -182,6 +193,9 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* WIN32 Macro for Cygwin and icl */
+#undef WIN32
 
 /* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
    `char[]'. */
