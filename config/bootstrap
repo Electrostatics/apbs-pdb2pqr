@@ -31,7 +31,7 @@
 
 rm -rf config.cache autom4te.cache
 
-libtoolize --automake --copy --force \
+glibtoolize --automake --copy --force \
 && aclocal --force \
 && autoheader -f \
 && automake --gnu --add-missing --copy -f \

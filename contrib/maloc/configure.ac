@@ -289,11 +289,11 @@ dnl # ---------------------------------------------------
 dnl # HANDLE VARIOUS ARCHITECTURE-SPECIFIC CONFIGURATIONS
 dnl # ---------------------------------------------------
 if [[ "${host_os}" = "cygwin" ] && [ "${CC}" != "icl" ]]; then
-    AC_DEFINE(MSDOS)
-    AC_DEFINE(WIN32)
+    AC_DEFINE(MSDOS, [], [MSDOS Macro for Cygwin and gcc])
+    AC_DEFINE(WIN32, [], [WIN32 Macro for Cygwin and gcc])
 elif [[ "${host_os}" = "cygwin" ] && [ "${CC}" = "icl" ]]; then
-   AC_DEFINE(MSDOS)
-   AC_DEFINE(WIN32)
+   AC_DEFINE(MSDOS, [], [MSDOS Macro for Cygwin and icl - obsolete])
+   AC_DEFINE(WIN32, [], [WIN32 Macro for Cygwin and icl])
 #   AC_CHECK_HEADERS(\
 #    unistd.h \
 #    sys/types.h \
