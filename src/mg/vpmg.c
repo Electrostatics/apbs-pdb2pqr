@@ -5467,7 +5467,7 @@ VPUBLIC int Vpmg_dbForce(Vpmg *thee, double *dbForce, int atomID,
     Vpbe *pbe;
     Vatom *atom;
 	
-    double *apos, position[3], arad, hx, hy, hzed, izmagic, deps, depsi;
+    double *apos, position[3], arad, srad, hx, hy, hzed, izmagic, deps, depsi;
     double xlen, ylen, zlen, xmin, ymin, zmin, xmax, ymax, zmax, rtot2, epsp;
     double rtot, dx, gpos[3], tgrad[3], dbFmag, epsw, kT;
     double *u, Hxijk, Hyijk, Hzijk, Hxim1jk, Hyijm1k, Hzijkm1;
@@ -5485,6 +5485,7 @@ VPUBLIC int Vpmg_dbForce(Vpmg *thee, double *dbForce, int atomID,
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);
     arad = Vatom_getRadius(atom);
+    srad = Vpbe_getSolventRadius(pbe);
 	
     /* Reset force */
     dbForce[0] = 0.0;
@@ -5539,9 +5540,10 @@ force calculation!\n");
     depsi = 1.0/deps;
 	
     /* Make sure we're on the grid */
-    if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
-		(apos[1]<=ymin) || (apos[1]>=ymax)  || \
-		(apos[2]<=zmin) || (apos[2]>=zmax)) {
+    /* Grid checking modified by Matteo Rotter */
+    if ((apos[0]<=xmin + rtot) || (apos[0]>=xmax - rtot)  || \
+		(apos[1]<=ymin + rtot) || (apos[1]>=ymax - rtot)  || \
+		(apos[2]<=zmin + rtot) || (apos[2]>=zmax - rtot)) {
         if (thee->pmgp->bcfl != BCFL_FOCUS) {
             Vnm_print(2, "Vpmg_dbForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
 					  atomID, apos[0], apos[1], apos[2]);
@@ -5561,7 +5563,7 @@ force calculation!\n");
         position[2] = apos[2] - zmin;
 		
         /* Integrate over points within this atom's (inflated) radius */
-        rtot = (arad + thee->splineWin);
+        rtot = (arad + thee->splineWin + srad);
         rtot2 = VSQR(rtot);
         dx = rtot/hx;
         imin = (int)floor((position[0]-rtot)/hx);

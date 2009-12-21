@@ -8,3 +8,4 @@ complete change log
 * Deprecated nlev keyword.
 
 # BUGFIXES
+* Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
