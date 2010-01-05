@@ -384,6 +384,13 @@ int main(
 	}
 #endif
 	
+#if defined(DEBUG_MAC_OSX_STANDARD)
+#include "mach_chud.h"
+#include <stdint.h>
+	uint64_t mbeg;
+	machm_(&mbeg);
+#endif
+	
 	/* *************** LOAD MAPS ******************* */
 	if (loadDielMaps(nosh, dielXMap, dielYMap, dielZMap) != 1) {
 		Vnm_tprint(2, "Error reading dielectric maps!\n");
@@ -664,7 +671,10 @@ int main(
 	Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
 #if defined(DEBUG_MAC_OSX_OCL)
-	mets_(&mbeg, "main program");
+	mets_(&mbeg, "Main Program CL");
+#endif
+#if defined(DEBUG_MAC_OSX_STANDARD)
+	mets_(&mbeg, "Main Program Standard");
 #endif
 	
 	/* This should be last */

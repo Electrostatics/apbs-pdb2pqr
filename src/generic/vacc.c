@@ -658,14 +658,20 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
     double area, *apos;
     Vatom *atom;
     VaccSurf *asurf;
+
+	unsigned long long mbeg;
 	
     natom = Valist_getNumberAtoms(thee->alist);
-	
+
     /* Check to see if we need to build the surface */
     if (thee->surf == VNULL) {
         thee->surf = Vmem_malloc(thee->mem, natom, sizeof(VaccSurf *));
-		
-//#pragma omp parallel for private(i,atom)
+
+#if defined(DEBUG_MAC_OSX_OCL) || defined(DEBUG_MAC_OSX_STANDARD)
+#include "mach_chud.h"
+		machm_(&mbeg);
+#pragma omp parallel for private(i,atom)
+#endif
         for (i=0; i<natom; i++) {
             atom = Valist_getAtom(thee->alist, i);
             /* NOTE:  RIGHT NOW WE DO THIS FOR THE ENTIRE MOLECULE WHICH IS
@@ -690,6 +696,10 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
         }
         area += (asurf->area);
     }
+	
+#if defined(DEBUG_MAC_OSX_OCL) || defined(DEBUG_MAC_OSX_STANDARD)
+	mets_(&mbeg, "Vacc_SASA - Parallel");
+#endif
 	
     return area;
 	
