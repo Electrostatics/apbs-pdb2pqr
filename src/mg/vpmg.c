@@ -2877,6 +2877,166 @@ VPRIVATE int gridPointIsValid(int i, int j, int k, int nx, int ny, int nz){
 /* 
  Used by bcflnew
  */
+#ifdef DEBUG_MAC_OSX_OCL
+#include "mach_chud.h"
+VPRIVATE void packAtomsOpenCL(float *ax, float *ay, float *az,
+						float *charge, float *size, Vpmg *thee){
+	
+	int i;
+	int natoms;
+	
+	Vatom *atom = VNULL;
+	Valist *alist = VNULL;
+	
+	alist = thee->pbe->alist;
+	natoms = Valist_getNumberAtoms(alist);
+	
+	for(i=0;i<natoms;i++){
+		atom = &(alist->atoms[i]);
+		charge[i] = Vunit_ec*atom->charge;
+		ax[i] = atom->position[0];
+		ay[i] = atom->position[1];
+		az[i] = atom->position[2];
+		size[i] = atom->radius;
+	}
+}
+
+/* 
+ Used by bcflnew
+ */
+VPRIVATE void packUnpackOpenCL(int nx, int ny, int nz, int ngrid,
+						 float *gx, float *gy, float *gz, float *value,
+						 Vpmg *thee, int pack){
+	
+	int i,j,k,igrid;
+	int x0,x1,y0,y1,z0,z1;
+	
+	float gpos[3];
+	double *xf, *yf, *zf;
+	double *gxcf, *gycf, *gzcf;
+	
+	xf = thee->xf;
+	yf = thee->yf;
+	zf = thee->zf;
+	
+	gxcf = thee->gxcf;
+	gycf = thee->gycf;
+	gzcf = thee->gzcf;
+	
+	igrid = 0;
+	for(k=0;k<nz;k++){
+		gpos[2] = zf[k];
+		for(j=0;j<ny;j++){
+			gpos[1] = yf[j];
+			for(i=0;i<nx;i++){
+				gpos[0] = xf[i];
+				if(gridPointIsValid(i, j, k, nx, ny, nz)){
+					if(pack != 0){
+						gx[igrid] = gpos[0];
+						gy[igrid] = gpos[1];
+						gz[igrid] = gpos[2];
+						
+						value[igrid] = 0.0;
+					}else{
+						x0 = IJKx(j,k,0);
+						x1 = IJKx(j,k,1);
+						y0 = IJKy(i,k,0);
+						y1 = IJKy(i,k,1);
+						z0 = IJKz(i,j,0);
+						z1 = IJKz(i,j,1);
+						
+						if(i==0){
+							gxcf[x0] += value[igrid];
+						}else if(i==nx-1){
+							gxcf[x1] += value[igrid];
+						}else if(j==0){
+							gycf[y0] += value[igrid];
+						}else if(j==ny-1){
+							gycf[y1] += value[igrid];
+						}else if(k==0){
+							gzcf[z0] += value[igrid];
+						}else if(k==nz-1){
+							gzcf[z1] += value[igrid];
+						}
+					}
+					
+					igrid++;
+				} //end is valid point
+			} //end i
+		} //end j
+	} //end k
+
+}
+
+/*
+ bcflnew is an optimized replacement for bcfl1. bcfl1 is still used when TINKER 
+ support is compiled in.
+ bcflnew uses: packUnpack, packAtoms, gridPointIsValid
+ */
+VPRIVATE void bcflnewOpenCL(Vpmg *thee){
+	
+	int i,j,k, iatom, igrid;
+	int x0, x1, y0, y1, z0, z1;
+	
+	int nx, ny, nz;
+	int natoms, ngrid, ngadj;
+	
+	float dist, pre1, eps_w, eps_p, T, xkappa;
+	
+	float *ax, *ay, *az;
+	float *charge, *size, *val;
+	
+	float *gx, *gy, *gz;
+	
+	Vpbe *pbe = thee->pbe;
+	
+	nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+	
+	eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
+    eps_p = Vpbe_getSoluteDiel(pbe);           /* Dimensionless */
+    T = Vpbe_getTemperature(pbe);               /* K             */
+    pre1 = ((Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T))*(1.0e10);
+	xkappa = Vpbe_getXkappa(pbe);
+	
+	natoms = Valist_getNumberAtoms(thee->pbe->alist);
+	ngrid = 2*((nx*ny) + (ny*nz) + (nx*nz));
+	ngadj = ngrid + (512 - (ngrid & 511));
+	
+	ax = (float*)malloc(natoms * sizeof(float));
+	ay = (float*)malloc(natoms * sizeof(float));
+	az = (float*)malloc(natoms * sizeof(float));
+	
+	charge = (float*)malloc(natoms * sizeof(float));
+	size = (float*)malloc(natoms * sizeof(float));
+	
+	gx = (float*)malloc(ngrid * sizeof(float));
+	gy = (float*)malloc(ngrid * sizeof(float));
+	gz = (float*)malloc(ngrid * sizeof(float));
+	
+	val = (float*)malloc(ngrid * sizeof(float));
+	
+	packAtomsOpenCL(ax,ay,az,charge,size,thee);
+	packUnpackOpenCL(nx,ny,nz,ngrid,gx,gy,gz,val,thee,1);
+
+	runMDHCL(ngrid,natoms,ngadj,ax,ay,az,gx,gy,gz,charge,size,xkappa,pre1,val);
+
+	packUnpackOpenCL(nx,ny,nz,ngrid,gx,gy,gz,val,thee,0);
+	
+	free(ax);
+	free(ay);
+	free(az);
+	free(charge);
+	free(size);
+	
+	free(gx);
+	free(gy);
+	free(gz);
+	free(val);
+}
+#endif
+
 VPRIVATE void packAtoms(double *ax, double *ay, double *az,
 						double *charge, double *size, Vpmg *thee){
 	
@@ -2963,14 +3123,9 @@ VPRIVATE void packUnpack(int nx, int ny, int nz, int ngrid,
 			} //end i
 		} //end j
 	} //end k
-
+	
 }
 
-/*
- bcflnew is an optimized replacement for bcfl1. bcfl1 is still used when TINKER 
- support is compiled in.
- bcflnew uses: packUnpack, packAtoms, gridPointIsValid
- */
 VPRIVATE void bcflnew(Vpmg *thee){
 	
 	int i,j,k, iatom, igrid;
@@ -3939,9 +4094,25 @@ VPRIVATE void bcCalc(Vpmg *thee){
 #if defined(WITH_TINKER)
 			bcfl_mdh_tinker(thee);
 #else
-			//bcfl_mdh(thee);
+			
+#ifdef DEBUG_MAC_OSX_OCL
+#include "mach_chud.h"
+			uint64_t mbeg = mach_absolute_time();
+			
+			/* 
+			 * If OpenCL is available we use it, otherwise fall back to
+			 * normal route (CPU multithreaded w/ OpenMP)
+			 */
+			if (kOpenCLAvailable == 1) bcflnewOpenCL(thee);
+			else bcflnew(thee);
+			
+			mets_(&mbeg, "MDH");
+#else
+			/* bcfl_mdh(thee); */
 			bcflnew(thee);
-#endif
+#endif	/* DEBUG_MAC_OSX_OCL */
+			
+#endif	/* WITH_TINKER */
 			break;
 		case BCFL_MEM:
 			

@@ -366,10 +366,22 @@ int main(
 	 	VJMPERR1(0);
 	} */
 	
-#if defined(DEBUG_MAC_OSX)	
+#if defined(DEBUG_MAC_OSX_OCL)
+#include "mach_chud.h"
 #include <stdint.h>
 	uint64_t mbeg;
 	machm_(&mbeg);
+	
+	if(clFinish != NULL)
+	{
+		int ret = initOpenCL();
+        printf("OpenCL runtime present - initialized = %i\n",ret);
+    }
+    else
+	{
+		setkOpenCLAvailable_(0);
+        printf("OpenCL is not present!\n");
+	}
 #endif
 	
 	/* *************** LOAD MAPS ******************* */
@@ -651,7 +663,7 @@ int main(
 	Vnm_tprint(1, "\n\n");
 	Vnm_tprint( 1, "Thanks for using APBS!\n\n");
 
-#if defined(DEBUG_MAC_OSX)
+#if defined(DEBUG_MAC_OSX_OCL)
 	mets_(&mbeg, "main program");
 #endif
 	
