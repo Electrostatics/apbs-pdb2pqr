@@ -107,6 +107,12 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
     thee->nonlin = mgparm->nonlintype;
 	thee->meth = mgparm->method;
 	
+#ifdef DEBUG_MAC_OSX_OCL
+#include "mach_chud.h"
+	if(kOpenCLAvailable)
+		thee->meth = 4;
+#endif
+	
     if (thee->nonlin == NONLIN_LPBE) thee->ipkey = IPKEY_LPBE; /* LPBE case */
 	else if(thee->nonlin == NONLIN_SMPBE) thee->ipkey = IPKEY_SMPBE; /* SMPBE case */
     else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
