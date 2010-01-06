@@ -6,6 +6,8 @@ complete change log
   teaching, etc.
 * Deprecated APBS XML output format.
 * Deprecated nlev keyword.
+* Added errtol keyword, which allows user-defined error tolerance in 
+  LPBE and NPBE calculations (default errtol value is 1.0e-6).
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.

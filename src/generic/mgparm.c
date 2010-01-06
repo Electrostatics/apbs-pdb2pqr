@@ -145,6 +145,8 @@ VPUBLIC Vrc_Codes MGparm_ctor2(MGparm *thee, MGparm_CalcType type) {
     /* *** TYPE 0 PARAMETERS *** */
     thee->nlev = VMGNLEV;
     thee->setnlev = 1;
+    thee->errtol = 1.0e-6;
+    thee->seterrtol = 0;
     thee->setgrid = 0;
     thee->setglen = 0;
     thee->setgcent = 0;  
@@ -359,6 +361,8 @@ VPUBLIC void MGparm_copy(MGparm *thee, MGparm *parm) {
     /* *** TYPE 0 PARMS *** */
     thee->nlev = parm->nlev;
     thee->setnlev = parm->setnlev;
+    thee->errtol = parm->errtol;
+    thee->seterrtol = parm->seterrtol;
     for (i=0; i<3; i++) thee->grid[i] = parm->grid[i];
     thee->setgrid = parm->setgrid;
     for (i=0; i<3; i++) thee->glen[i] = parm->glen[i];
@@ -510,6 +514,26 @@ keyword!\n", tok);
         Vnm_print(2, "parseMG:  ran out of tokens!\n");
         return VRC_WARNING;
 }
+
+VPRIVATE Vrc_Codes MGparm_parseERRTOL(MGparm *thee, Vio *sock) {
+
+    char tok[VMAX_BUFSIZE];
+    double tf;
+
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (sscanf(tok, "%lf", &tf) == 0) {
+        Vnm_print(2, "NOsh:  Read non-float (%s) while parsing errtol \
+keyword!\n", tok);
+        return VRC_WARNING;
+    } else thee->errtol = tf;
+    thee->seterrtol = 1;
+    return VRC_SUCCESS;
+
+    VERROR1:
+        Vnm_print(2, "parseMG:  ran out of tokens!\n");
+        return VRC_WARNING;
+}
+
 
 VPRIVATE Vrc_Codes MGparm_parseGRID(MGparm *thee, Vio *sock) {
 
@@ -913,6 +937,8 @@ VPUBLIC Vrc_Codes MGparm_parseToken(MGparm *thee, char tok[VMAX_BUFSIZE],
     } else if (Vstring_strcasecmp(tok, "nlev") == 0) {
         Vnm_print(2, "Warning: The 'nlev' keyword is now deprecated!\n");
         return MGparm_parseNLEV(thee, sock);
+    } else if (Vstring_strcasecmp(tok, "errtol") == 0) {
+        return MGparm_parseERRTOL(thee, sock);
     } else if (Vstring_strcasecmp(tok, "grid") == 0) {
         return MGparm_parseGRID(thee, sock);
     } else if (Vstring_strcasecmp(tok, "glen") == 0) {

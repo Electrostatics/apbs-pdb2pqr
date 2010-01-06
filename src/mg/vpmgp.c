@@ -118,7 +118,14 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
     else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
 	
     /* Default parameters */
-    thee->errtol = 1.0e-6;   /* Here are a few comments.  Mike had this set to
+    if (mgparm->seterrtol) { /* If errtol is set by the user in APBS input file, */
+                             /* then use this custom-defined errtol */
+        thee->errtol = mgparm->errtol; 
+        Vnm_print(1, "  Error tolerance (errtol) is now set to user-defined \
+value: %g \n", thee->errtol);
+        Vnm_print(0, "Error tolerance (errtol) is now set to user-defined \
+value: %g \n", thee->errtol);
+    } else thee->errtol = 1.0e-6;   /* Here are a few comments.  Mike had this set to
 		* 1e-9; convential wisdom sets this at 1e-6 for
 		* the PBE; Ray Luo sets this at 1e-3 for his
 		* accelerated PBE (for dynamics, etc.) */
