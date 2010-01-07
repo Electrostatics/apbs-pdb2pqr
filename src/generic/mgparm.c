@@ -525,6 +525,9 @@ VPRIVATE Vrc_Codes MGparm_parseERRTOL(MGparm *thee, Vio *sock) {
         Vnm_print(2, "NOsh:  Read non-float (%s) while parsing errtol \
 keyword!\n", tok);
         return VRC_WARNING;
+    } else if (tf <= 0.0) {
+        Vnm_print(2, "parseMG:  errtol must be greater than 0!\n");
+        return VRC_WARNING;
     } else thee->errtol = tf;
     thee->seterrtol = 1;
     return VRC_SUCCESS;
