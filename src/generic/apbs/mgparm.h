@@ -123,8 +123,8 @@ struct sMGparm {
     int nlev;  /**< Levels in multigrid hierarchy 
                 *   @deprecated Just ignored now */
     int setnlev;  /**< Flag, @see nlev */
-    double errtol;  /**< User-defined error tolerance */ 
-    int seterrtol;  /**< Flag, @see errtol */
+    double etol;  /**< User-defined error tolerance */ 
+    int setetol;  /**< Flag, @see etol */
     double grid[3];  /**< Grid spacings */
     int setgrid;  /**< Flag, @see grid */
     double glen[3];  /**< Grid side lengths. */
