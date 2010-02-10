@@ -27,8 +27,8 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2009, Washington University in St. Louis.
- * Portions Copyright (c) 2002-2009.  Nathan A. Baker
+ * Copyright (c) 2002-2010, Washington University in St. Louis.
+ * Portions Copyright (c) 2002-2010.  Nathan A. Baker
  * Portions Copyright (c) 1999-2002.  The Regents of the University of California.
  * Portions Copyright (c) 1995.  Michael Holst
  *
@@ -150,8 +150,8 @@ int main(
 	\n\
 	Additional contributing authors listed in the code documentation.\n\
 	\n\
-	Copyright (c) 2002-2009, Washington University in St. Louis.\n\
-	Portions Copyright (c) 2002-2009.  Nathan A. Baker\n\
+	Copyright (c) 2002-2010, Washington University in St. Louis.\n\
+	Portions Copyright (c) 2002-2010.  Nathan A. Baker\n\
 	Portions Copyright (c) 1999-2002.  The Regents of the University of California.\n\
 	Portions Copyright (c) 1995.  Michael Holst\n\
 	\n\
