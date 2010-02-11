@@ -5656,7 +5656,7 @@ VPUBLIC int Vpmg_dbForce(Vpmg *thee, double *dbForce, int atomID,
     atom = Valist_getAtom(thee->pbe->alist, atomID);
     apos = Vatom_getPosition(atom);
     arad = Vatom_getRadius(atom);
-    srad = Vpbe_getSolventRadius(pbe);
+    srad = Vpbe_getSolventRadius(thee->pbe);
 	
     /* Reset force */
     dbForce[0] = 0.0;
