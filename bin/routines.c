@@ -3787,6 +3787,12 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	/* Get WAT (water) LJ parameters from Vparam object */
 	if (param == VNULL && (apolparm->bconc != 0.0)) {
 		Vnm_tprint(2, "initAPOL:  Got NULL Vparam object!\n");
+		Vnm_tprint(2, "initAPOL:  You are performing an apolar calculation with the van der Waals integral term,\n");
+		Vnm_tprint(2, "initAPOL:  this term requires van der Waals parameters which are not available from the \n");
+		Vnm_tprint(2, "initAPOL:  PQR file. Therefore, you need to supply a parameter file with the parm keyword,\n");
+		Vnm_tprint(2, "initAPOL:  for example,\n");
+		Vnm_tprint(2, "initAPOL:    read parm flat amber94.dat end\n");
+		Vnm_tprint(2, "initAPOL:  where the relevant parameter files can be found in apbs/tools/conversion/param/vparam.\n");
 		return VRC_FAILURE;
 	}
 	
