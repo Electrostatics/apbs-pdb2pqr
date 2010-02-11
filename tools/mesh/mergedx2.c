@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
     int i, j, k,spec,warn;
     int nx, ny, nz, count, numfnams;
 	
-    double pt[3],value, res;
+    double pt[3],value, res1, res2, res3;
 	
     double xmin, ymin, zmin;
 	double xmax, ymax, zmax;
@@ -144,7 +144,9 @@ int main(int argc, char **argv) {
 	/* Set the default values */
 	spec = 0;
 	warn = 0;
-	res = 1.0;
+	res1 = 1.0;
+	res2 = 1.0;
+	res3 = 1.0;
 	xmin = ymin = zmin = 0.0;
 	xmax = ymax = zmax = 0.0;
 	sprintf(outname,"gridmerged.dx");
@@ -160,7 +162,11 @@ int main(int argc, char **argv) {
 	while ((ch = getopt(argc, argv, "r:b:o:s:h")) != -1) {
 		switch (ch) {
 			case 'r':
-				res = atof(optarg);
+				ind = optind - 1;
+				res1 = atof(argv[ind++]);
+				res2 = atof(argv[ind++]);
+				res3 = atof(argv[ind++]);
+				optind = ind;
 				break;
 			case 'b':
 				ind = optind - 1;
@@ -201,9 +207,9 @@ int main(int argc, char **argv) {
 	Vio_start();
 	
 	/* For now we only allow one resolution on all three axes */
-	double resx = res;
-	double resy = res;
-	double resz = res;
+	double resx = res1;
+	double resy = res2;
+	double resz = res3;
 	
     /* *********** PREPARE MERGED GRID OBJECT ************* */
     mgrid = Vgrid_ctor(nx, ny, nz, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
@@ -226,7 +232,7 @@ int main(int argc, char **argv) {
         if( grid->zmin < mgrid->zmin ) mgrid->zmin = grid->zmin;
         if( grid->zmax > mgrid->zmax ) mgrid->zmax = grid->zmax;
 		
-		if( grid->hx > res || grid->hy > res || grid->hzed > res ) warn = 1;
+		if( grid->hx > res1 || grid->hy > res2 || grid->hzed > res3 ) warn = 1;
     }
 	
 	if(warn){
