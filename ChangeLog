@@ -2,12 +2,11 @@ Please see http://www.poissonboltzmann.org/apbs/release-history for the
 complete change log
 
 # These are notes for the current version of APBS
-* Added tools/matlab/solver with simple Matlab LPBE solver for prototyping,
-  teaching, etc.
+* Added tools/matlab/solver with simple Matlab LPBE solver for prototyping, teaching, etc.
 * Deprecated APBS XML output format.
 * Deprecated nlev keyword.
-* Added etol keyword, which allows user-defined error tolerance in 
-  LPBE and NPBE calculations (default errtol value is 1.0e-6).
+* Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).
+* Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
