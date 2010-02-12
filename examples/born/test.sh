@@ -20,9 +20,9 @@ logfile=TESTRESULTS.log
 nettime=0
 vsmall=0.000000001000
 
-input=( apbs-mol-auto apbs-smol-auto  apbs-mol-parallel apbs-smol-parallel)
+input=( apbs-mol-auto apbs-smol-auto  apbs-mol-parallel apbs-smol-parallel apbs-force-auto)
 
-results=( -2.297735411962E+02 -2.290124171992E+02 -2.304918086635E+02 -2.293871354771E+02 )
+results=( -2.297735411962E+02 -2.290124171992E+02 -2.304918086635E+02 -2.293871354771E+02 -2.491741420169E+02 )
 
 # Initialize the results file
 
