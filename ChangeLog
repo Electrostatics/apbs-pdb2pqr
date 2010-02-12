@@ -7,6 +7,7 @@ complete change log
 * Deprecated nlev keyword.
 * Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).
 * Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.
+* Added a polar solvation force example to examples/born/ .
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
