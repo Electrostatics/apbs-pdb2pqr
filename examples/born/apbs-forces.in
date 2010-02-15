@@ -8,10 +8,11 @@
 
 # READ IN MOLECULES
 read                                                
-    mol xml ion.xml
+    mol pqr ion.pqr
+    parm flat parm.dat
 end
 
-# COMPUTE POTENTIAL FOR SOLVATED STATE
+# COMPUTE POLAR FORCES FOR SOLVATED STATE
 elec name solvated
     mg-auto      
     dime 65 65 65
@@ -30,13 +31,12 @@ elec name solvated
     swin 0.3
     sdens 10.0
     temp 298.15
-    calcenergy total
     calcforce total
     # write pot dx potential
     # write charge dx charge
 end
 
-# COMPUTE POTENTIAL FOR REFERENCE STATE
+# COMPUTE POLAR FORCES FOR REFERENCE STATE
 elec name reference
     mg-auto
     dime 65 65 65
@@ -55,11 +55,28 @@ elec name reference
     swin 0.3
     sdens 10.0
     temp 298.15
-    calcenergy total
     calcforce total
 end
 
-# COMBINE TO GIVE SOLVATION ENERGY
-print elecEnergy solvated - reference end
+# COMPUTE APOLAR FORCES
+apolar name asolv
+	grid 0.1 0.1 0.1
+	mol 1
+	srfm sacc
+	swin 0.3
+	srad 1.4
+	press 0.00
+	gamma 0.00072
+	bconc 0.033
+	sdens 100.0
+	dpos 0.2
+	temp 298.15
+	calcforce comps
+end
+
+# THIS GIVES THE POLAR SOLVATION FORCES
+print elecForce solvated - reference end
+# THIS GIVES THE APOLAR SOLVATION FORCES
+print apolForce asolv end
 
 quit
