@@ -33,7 +33,7 @@ echo "Results  :" >> $logfile
 
 # For each file in the directory, run APBS and get the value
 
-for i in 0 1 2 3 4
+for i in 0 1 2 3
 do
   echo "----------------------------------------"
   echo "Testing input file ${input[i]}.in"
@@ -75,7 +75,7 @@ do
   sync
   
   ../scripts/checkresults.sh $answer ${results[i]} ${input[i]}.in $logfile $ocd
-  
+
   endtime=`date +%s`
   let elapsed=$endtime-$starttime
   let nettime=$nettime+$elapsed
@@ -83,6 +83,19 @@ do
   echo "----------------------------------------"
 
 done
+
+echo "----------------------------------------"
+echo "Testing input file apbs-forces.in"
+echo ""
+
+starttime=`date +%s`
+$1 apbs-forces.in > apbs-forces.out 
+../scripts/checkforces.sh apbs-forces.out $logfile
+endtime=`date +%s`
+let elapsed=$endtime-$starttime
+let nettime=$nettime+$elapsed
+echo "Total elapsed time: $elapsed seconds"
+echo "----------------------------------------"
 
 echo "Test results have been logged to ${logfile}."
 echo "Total time for this directory: ${nettime} seconds."
