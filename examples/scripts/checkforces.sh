@@ -26,7 +26,8 @@ docomparison(){
 	fi
 	
 	difference=`echo $var1 $var2 | awk '{printf("%.12f",($1 - $2))}'`
-	r=`echo $var1 $var2 $errortol $difference | awk '{if($1 == $2) print 1; else if($3 < $4) print 2; else print 3}'`
+	absdifference=`echo $difference | awk '{$1 = ($1 < 0) ? -$1 : $1; print}'`   # Absolute value of difference
+	r=`echo $var1 $var2 $absdifference $errortol | awk '{if($1 == $2) print 1; else if($3 < $4) print 2; else print 3}'`
 	
 	case "$r" in
 	
