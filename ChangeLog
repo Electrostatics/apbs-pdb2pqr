@@ -12,3 +12,4 @@ complete change log
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
 * Fixed a bug in psize.py per Michael Lerner's suggestion. The old version of psize.py gives wrong cglen and fglen results in special cases (e.g., all y coordinates are negative values).
+* Fixed a bug in examples/scripts/checkforces.sh: the condition for "Passed with rounding error" is abs(difference) < errortol, not the other way around.
