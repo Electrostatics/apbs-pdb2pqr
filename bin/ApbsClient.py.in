@@ -92,6 +92,50 @@ import getopt
 userPath = "/usr/local/apbs-1.2.1"
 ########################################################################
 
+#### Here are our help and credit messages
+creditString = __doc__
+helpString = "\n\n\
+    This driver program calculates electrostatic potentials, energies, and forces\n\
+    using both multigrid and finite element methods.  It is invoked as:\n\
+    \n\
+	ApbsClient.py [options] apbs.in\n\
+    \n\
+    where apbs.in is a formatted input file and [options] are:\n\
+    \n\
+    --output-file=<name>     Enables output logging to the path listed in <name>.\n\
+    --output-format=<type>   Specifies format for logging.  Options for type are\n\
+      either \"xml\" or \"flat\".   Uses flat-file format if --output-format is not used.\n\
+    --help                   Display this help information.\n\
+    \n\
+    Options specific to the Opal web client are:\n\
+    \n\
+    --fetch=<output file location>\n\
+                             Used to specify the location to which the files should be\n\
+                             downloaded. Files are downloaded to current directory if\n\
+                             <output file location> or the entire flag is omitted when\n\
+                             expected.\n\
+    --library-location=<directory>\n\
+                             This path variable is only needed if you are using a binary\n\
+                             distribution of APBS.  It should point to the location where\n\
+                             APBS was installed; e.g., the directory that contains the APBS\n\
+                             bin, include, lib, and share sub-directories.  The following\n\
+                             value is just an example and may not be appropriate for your\n\
+                             system, depending on where you installed APBS:\n\
+                               --library-location=/usr/local/apbs-1.2.1\n\
+                             Note that you can also edit this Python file to eliminate the\n\
+                             need to specify this option.\n\
+    --job-id=<job ID>        Specifies the job ID of the run for which results are to be\n\
+                             downloaded. Expects the '--fetch' flag to be present as well.\n\
+    --no-fetch               Disables fetching of files following (only) a blocked run.\n\
+    --non-blocking           Disables blocking and outputs a URL at which the data can be\n\
+                             retreived later.\n\
+    --service-location=<URL> Specifies the location of the Opal server.  Defaults to\n\
+                             http://sccne.wustl.edu:8082/opal2/services/apbs-1.2.1\n\
+    --local                  Perform a local APBS run using whatever APBS executable is\n\
+                             available in the path \
+\n----------------------------------------------------------------------\n\
+\n"
+
 def processOptions():
 	""" A function that transforms command line options into a dictionary for further processing.  However,
 	presence of the -h or --help option causes the script to print help information and exit. """
@@ -178,50 +222,6 @@ except ImportError, errstr:
 service_url = "@SERVICEURL@"
 parallel_service_url = "@PARALLELSERVICEURL@"
 local_version = "@PACKAGE_VERSION@"
-
-#### Here are our help and credit messages
-creditString = __doc__
-helpString = """
-    This driver program calculates electrostatic potentials, energies, and forces
-    using both multigrid and finite element methods.  It is invoked as:
-    
-    apbs [options] apbs.in
-    
-    where apbs.in is a formatted input file and [options] are:
-    
-    --output-file=<name>     Enables output logging to the path listed in <name>.
-    --output-format=<type>   Specifies format for logging.  Options for type are
-      either "xml" or "flat".   Uses flat-file format if --output-format is not used.
-    --help                   Display this help information.
-    
-    Options specific to the Opal web client are:
-    
-    --fetch=<output file location>
-                             Used to specify the location to which the files should be
-                             downloaded. Files are downloaded to current directory if
-                             <output file location> or the entire flag is omitted when
-                             expected.
-    --library-location=<directory>
-                             This path variable is only needed if you are using a binary
-                             distribution of APBS.  It should point to the location where
-                             APBS was installed; e.g., the directory that contains the APBS
-                             bin, include, lib, and share sub-directories.  The following
-                             value is just an example and may not be appropriate for your
-                             system, depending on where you installed APBS:
-                               --library-location=/usr/local/apbs-1.2.1
-                             Note that you can also edit this Python file to eliminate the
-                             need to specify this option.
-    --job-id=<job ID>        Specifies the job ID of the run for which results are to be
-                             downloaded. Expects the '--fetch' flag to be present as well.
-    --no-fetch               Disables fetching of files following (only) a blocked run.
-    --non-blocking           Disables blocking and outputs a URL at which the data can be
-                             retreived later.
-    --service-location=<URL> Specifies the location of the Opal server.  Defaults to
-                             http://sccne.wustl.edu:8082/opal2/services/apbs-1.2.1
-    --local                  Perform a local APBS run using whatever APBS executable is
-                             available in the path
-----------------------------------------------------------------------
-"""
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
 	""" Downloads files from Opal server (only if automatic downloading is enabled). """
@@ -497,6 +497,7 @@ def execApbs(vars=None, argv=None):
 def main():
 	""" Parses input, runs local jobs, and fetches files from previously completed calculations. """
 	# __main__ output
+	global helpString
 	print creditString
 	# Check for invocation with no arguments
 	if len(sys.argv) == 1:
