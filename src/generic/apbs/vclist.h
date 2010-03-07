@@ -138,7 +138,7 @@ typedef struct sVclist Vclist;
      *  @returns Number of bytes allocated for object
      */
     VEXTERNC unsigned long int Vclist_memChk(
-            Vclist *thee /** Object for memory check */
+            Vclist *thee /**< Object for memory check */
             );
 
     /**
@@ -149,7 +149,7 @@ typedef struct sVclist Vclist;
      * @returns Max probe radius (in A)
      */
     VEXTERNC double Vclist_maxRadius(
-            Vclist *thee /** Cell list object */
+            Vclist *thee /**< Cell list object */
             );
 
 #else /* if defined(VINLINE_VCLIST) */
@@ -168,15 +168,15 @@ typedef struct sVclist Vclist;
  *  @author  Nathan Baker
  *  @returns Newly allocated Vclist object */
 VEXTERNC Vclist* Vclist_ctor(
-        Valist *alist, /** Molecule for cell list queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int npts[VAPBS_DIM], /** Number of in hash table points in each
+        Valist *alist, /**< Molecule for cell list queries */
+        double max_radius, /**< Max probe radius (&Aring;) to be queried */ 
+        int npts[VAPBS_DIM], /**< Number of in hash table points in each
                               * direction*/ 
-        Vclist_DomainMode mode, /** Mode to construct table */
-        double lower_corner[VAPBS_DIM],  /** Hash table lower corner for
+        Vclist_DomainMode mode, /**< Mode to construct table */
+        double lower_corner[VAPBS_DIM],  /**< Hash table lower corner for
                                            manual construction (see mode
                                            variable); ignored otherwise */
-        double upper_corner[VAPBS_DIM]   /** Hash table upper corner for
+        double upper_corner[VAPBS_DIM]   /**< Hash table upper corner for
                                            manual construction (see mode
                                            variable); ignored otherwise */
         );
@@ -186,16 +186,16 @@ VEXTERNC Vclist* Vclist_ctor(
  *  @author  Nathan Baker, Yong Huang
  *  @returns Success enumeration */
 VEXTERNC Vrc_Codes Vclist_ctor2(
-        Vclist *thee, /** Memory for Vclist objet */
-        Valist *alist, /** Molecule for cell list queries */
-        double max_radius, /** Max probe radius (&Aring;) to be queried */ 
-        int npts[VAPBS_DIM], /** Number of in hash table points in each
+        Vclist *thee, /**< Memory for Vclist objet */
+        Valist *alist, /**< Molecule for cell list queries */
+        double max_radius, /**< Max probe radius (&Aring;) to be queried */ 
+        int npts[VAPBS_DIM], /**< Number of in hash table points in each
                               * direction*/ 
-        Vclist_DomainMode mode, /** Mode to construct table */
-        double lower_corner[VAPBS_DIM],  /** Hash table lower corner for
+        Vclist_DomainMode mode, /**< Mode to construct table */
+        double lower_corner[VAPBS_DIM],  /**< Hash table lower corner for
                                            manual construction (see mode
                                            variable); ignored otherwise */
-        double upper_corner[VAPBS_DIM]   /** Hash table upper corner for
+        double upper_corner[VAPBS_DIM]   /**< Hash table upper corner for
                                            manual construction (see mode
                                            variable); ignored otherwise */
         );
@@ -205,7 +205,7 @@ VEXTERNC Vrc_Codes Vclist_ctor2(
  *  @author  Nathan Baker
  */
 VEXTERNC void Vclist_dtor(
-        Vclist **thee /** Pointer to memory location of object */
+        Vclist **thee /**< Pointer to memory location of object */
         );
 
 /** @brief   FORTRAN stub to destroy object
@@ -213,7 +213,7 @@ VEXTERNC void Vclist_dtor(
  *  @author  Nathan Baker
  */
 VEXTERNC void Vclist_dtor2(
-        Vclist *thee /** Pointer to object */
+        Vclist *thee /**< Pointer to object */
         );
 
 /** 
@@ -224,8 +224,8 @@ VEXTERNC void Vclist_dtor2(
  * from molecule).
  */
 VEXTERNC VclistCell* Vclist_getCell(
-        Vclist *thee, /** Pointer to Vclist cell list */
-        double position[VAPBS_DIM] /** Position to evaluate */
+        Vclist *thee, /**< Pointer to Vclist cell list */
+        double position[VAPBS_DIM] /**< Position to evaluate */
         );
 
 /**
@@ -235,7 +235,7 @@ VEXTERNC VclistCell* Vclist_getCell(
  * @returns Pointer to newly-allocated and constructed object.
  */
 VEXTERNC VclistCell* VclistCell_ctor(
-        int natoms  /** Number of atoms associated with this cell */
+        int natoms  /**< Number of atoms associated with this cell */
         );
 
 /**
@@ -245,8 +245,8 @@ VEXTERNC VclistCell* VclistCell_ctor(
  * @returns Success enumeration
  */
 VEXTERNC Vrc_Codes VclistCell_ctor2(
-        VclistCell *thee,  /** Memory location for object */
-        int natoms  /** Number of atoms associated with this cell */
+        VclistCell *thee,  /**< Memory location for object */
+        int natoms  /**< Number of atoms associated with this cell */
         );
 
 /** @brief   Destroy object
@@ -254,7 +254,7 @@ VEXTERNC Vrc_Codes VclistCell_ctor2(
  *  @author  Nathan Baker
  */
 VEXTERNC void VclistCell_dtor(
-        VclistCell **thee /** Pointer to memory location of object */
+        VclistCell **thee /**< Pointer to memory location of object */
         );
 
 /** @brief   FORTRAN stub to destroy object
@@ -262,7 +262,7 @@ VEXTERNC void VclistCell_dtor(
  *  @author  Nathan Baker
  */
 VEXTERNC void VclistCell_dtor2(
-        VclistCell *thee /** Pointer to object */
+        VclistCell *thee /**< Pointer to object */
         );
 
 #endif    /* ifndef _VCLIST_H_ */

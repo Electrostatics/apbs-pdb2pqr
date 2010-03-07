@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/sh -x
 ### ##########################################################################
 ### MALOC = < Minimal Abstraction Layer for Object-oriented C >
 ### Copyright (C) 1994--2000  Michael Holst
@@ -34,7 +34,7 @@ rm -rf config.cache autom4te.cache
 glibtoolize --automake --copy --force \
 && aclocal --force \
 && autoheader -f \
-&& automake --gnu --add-missing --copy -f \
+&& automake --gnu --verbose --add-missing --copy --force-missing \
 && autoconf -f 
 
 rm -rf config.cache autom4te.cache

@@ -376,7 +376,7 @@ VEXTERNC double  Vpbe_getmemv(Vpbe *thee);
 
 /** @brief   Construct Vpbe object
 *  @ingroup Vpbe
-*  @author  Nathan Baker and Mike Holst
+*  @author  Nathan Baker and Mike Holst and Michael Grabe
 *  @note   This is partially based on some of Mike Holst's PMG code.  Here
 *           are a few of the original function comments:
 *           kappa is defined as follows:
@@ -392,33 +392,29 @@ VEXTERNC double  Vpbe_getmemv(Vpbe *thee);
 *           angstroms^2, noting that the 1000 in the denominator has converted
 *           m^3 to cm^3, since the ionic strength \f$I_s\f$ is assumed to have
 *           been provided in moles per liter, which is moles per 1000 cm^3.
-*  @param   alist  Atom list
-*  @param   ionNum  Number of counterion species
-*  @param   ionConc Array containing counterion species' concentrations (M)
-*  @param   ionRadii Array containing counterion species' radii (A)
-*  @param   ionQ Array containing counterion species' charges (e)
-*  @param   T temperature (K)
-*  @param   soluteDiel Solute dielectric constant
-*  @param   solventDiel Solvent dielectric constant
-*  @param   solventRadius Solvent radius
-*  @param   focusFlag 1 if Focusing operation, 0 otherwise
-*  @param   sdens Vacc sphere density
 *  @return  Pointer to newly allocated Vpbe object
 */
-
-/*---------------------------------------------------------------*/
-/* Additions by Michael Grabe to Vpbe_ctor2 and Vpbe_ctor        */
-/*---------------------------------------------------------------*/
-
-VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc, 
-						   double *ionRadii, double *ionQ, double T, 
-						   double soluteDiel, double solventDiel,  
-						   double solventRadius, int focusFlag, double sdens,
-						   double z_mem, double L, double membraneDiel, double V);
+VEXTERNC Vpbe*   Vpbe_ctor(
+							Valist *alist, /**< Atom list */
+							int ionNum, /**< Number of counterion species */
+							double *ionConc, /**< Array containing counterion concentrations (M) */
+						  	double *ionRadii, /**< Array containing counterion radii (A) */
+							double *ionQ, /**< Array containing counterion charges (e) */
+							double T, /**< Temperature for Boltzmann distribution (K) */
+							double soluteDiel, /**< Solute internal dielectric constant */
+							double solventDiel,  /**< Solvent dielectric constant */
+							double solventRadius, /**< Solvent probe radius for surfaces that use it (A) */
+							int focusFlag, /**< 1 if focusing operation, 0 otherwise */
+							double sdens,  /**< Vacc sphere density */
+							double z_mem, /**< Membrane location (A) */
+							double L, /**< Membrane thickness (A) */
+							double membraneDiel, /**< Membrane dielectric constant */
+							double V /**< Transmembrane potential (V) */
+							);
 
 /** @brief   FORTRAN stub to construct Vpbe objct
  *  @ingroup Vpbe
- *  @author  Nathan Baker and Mike Holst
+ *  @author  Nathan Baker and Mike Holst and Michael Grabe
  *  @note   This is partially based on some of Mike Holst's PMG code.  Here
  *           are a few of the original function comments:
  *           kappa is defined as follows:
@@ -433,27 +429,27 @@ VEXTERNC Vpbe*   Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
  *           angstroms^2, noting that the 1000 in the denominator has converted
  *           m^3 to cm^3, since the ionic strength \f$I_s\f$ is assumed to have
  *           been provided in moles per liter, which is moles per 1000 cm^3. 
- *  @param   thee   Pointer to memory allocated for Vpbe object
- *  @param   alist  Atom list
- *  @param   ionNum  Number of counterion species
- *  @param   ionConc Array containing counterion species' concentrations (M)
- *  @param   ionRadii Array containing counterion species' radii (A)
- *  @param   ionQ Array containing counterion species' charges (e)
- *  @param   T temperature (K)
- *  @param   soluteDiel Solute dielectric constant
- *  @param   solventDiel Solvent dielectric constant
- *  @param   solventRadius Solvent radius
- *  @param   focusFlag 1 if Focusing operation, 0 otherwise
  *  @bug     The focusing flag is currently not used!!
- *  @param   sdens Vacc sphere density
  *  @return  1 if successful, 0 otherwise
  */
-VEXTERNC int    Vpbe_ctor2(Vpbe *thee, Valist *alist, int ionNum, 
-						   double *ionConc, double *ionRadii, double *ionQ, 
-						   double T, double soluteDiel, 
-						   double solventDiel, double solventRadius, int focusFlag,
-						   double sdens, double z_mem, double L, double membraneDiel, 
-						   double V);
+VEXTERNC int    Vpbe_ctor2(
+							Vpbe *thee, /**< Pointer to memory allocated for Vpbe object */
+							Valist *alist, /**< Atom list */
+							int ionNum, /**< Number of counterion species */
+							double *ionConc, /**< Array containing counterion concentrations (M) */
+							double *ionRadii, /**< Array containing counterion radii (A) */
+							double *ionQ, /**< Array containing counterion charges (e) */
+							double T, /**< Temperature for Boltzmann distribution (K) */
+							double soluteDiel, /**< Solute internal dielectric constant */
+							double solventDiel,  /**< Solvent dielectric constant */
+							double solventRadius, /**< Solvent probe radius for surfaces that use it (A) */
+							int focusFlag, /**< 1 if focusing operation, 0 otherwise */
+							double sdens,  /**< Vacc sphere density */
+							double z_mem, /**< Membrane location (A) */
+							double L, /**< Membrane thickness (A) */
+							double membraneDiel, /**< Membrane dielectric constant */
+							double V /**< Transmembrane potential (V) */
+							);
 
 /** @brief   Get information about the counterion species present
 *  @ingroup Vpbe

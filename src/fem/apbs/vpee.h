@@ -127,9 +127,9 @@ typedef struct sVpee Vpee;
  * @return   Newly constructed Vpee object
  */
 VEXTERNC Vpee* Vpee_ctor(
-        Gem *gm,  /** FEtk geometry manager object */
-        int localPartID,  /** ID of the local partition (focus of refinement) */
-        int killFlag,  /** A flag to indicate how error estimates are to be
+        Gem *gm,  /**< FEtk geometry manager object */
+        int localPartID,  /**< ID of the local partition (focus of refinement) */
+        int killFlag,  /**< A flag to indicate how error estimates are to be
                          attenuated outside the local partition:
                          \li 0:  no attenuation
                          \li 1:  all error outside the local partition set to
@@ -140,7 +140,7 @@ VEXTERNC Vpee* Vpee_ctor(
                                circumscribing the local partition
                          \li 3:  all error is set to zero except for the local
                                partition and its immediate neighbors */
-        double killParam /** @see killFlag for usage */
+        double killParam /**< @see killFlag for usage */
         );
 
 /** 
@@ -150,10 +150,10 @@ VEXTERNC Vpee* Vpee_ctor(
  * @return  1 if successful, 0 otherwise
  */
 VEXTERNC int Vpee_ctor2(
-        Vpee *thee,  /** The Vpee object */
-        Gem *gm,  /** FEtk geometry manager object */
-        int localPartID,  /** ID of the local partition (focus of refinement) */
-        int killFlag,  /** A flag to indicate how error estimates are to be
+        Vpee *thee,  /**< The Vpee object */
+        Gem *gm,  /**< FEtk geometry manager object */
+        int localPartID,  /**< ID of the local partition (focus of refinement) */
+        int killFlag,  /**< A flag to indicate how error estimates are to be
                          attenuated outside the local partition:
                          \li 0:  no attenuation
                          \li 1:  all error outside the local partition set to
@@ -164,7 +164,7 @@ VEXTERNC int Vpee_ctor2(
                                circumscribing the local partition
                          \li 3:  all error is set to zero except for the local
                                partition and its immediate neighbors */
-        double killParam /** @see killFlag for usage */
+        double killParam /**< @see killFlag for usage */
         );
 
 /** @brief   Object destructor
@@ -172,7 +172,7 @@ VEXTERNC int Vpee_ctor2(
  *  @author  Nathan Baker
  */
 VEXTERNC void Vpee_dtor(
-        Vpee **thee /** Pointer to memory location of the Vpee object */
+        Vpee **thee /**< Pointer to memory location of the Vpee object */
         );
 
 /** @brief   FORTRAN stub object destructor
@@ -180,7 +180,7 @@ VEXTERNC void Vpee_dtor(
  *  @author  Nathan Baker
  */
 VEXTERNC void Vpee_dtor2(
-        Vpee *thee /** Pointer to object to be destroyed */
+        Vpee *thee /**< Pointer to object to be destroyed */
         );
 
 /** @brief   Mark simplices for refinement based on attenuated error estimates.
@@ -199,10 +199,10 @@ VEXTERNC void Vpee_dtor2(
  *  properly
  */
 VEXTERNC int Vpee_markRefine(
-        Vpee *thee,  /** The Vpee object */
-        AM *am,  /** The FEtk algebra manager currently used to solve the PB */
-        int level,  /** The current level of the multigrid hierarchy */
-        int akey,  /** The marking method: 
+        Vpee *thee,  /**< The Vpee object */
+        AM *am,  /**< The FEtk algebra manager currently used to solve the PB */
+        int level,  /**< The current level of the multigrid hierarchy */
+        int akey,  /**< The marking method: 
                       \li -1:  Reset markings  --> killFlag has no effect.
                       \li 0:  Uniform.
                       \li 1:  User defined (geometry-based).
@@ -210,11 +210,11 @@ VEXTERNC int Vpee_markRefine(
                                set in am and should be attenuated according to
                                killFlag and used, in conjunction with etol, to mark
                                simplices for refinement. */
-        int rcol, /** The ID of the main parition on which to mark (or -1 if
+        int rcol, /**< The ID of the main parition on which to mark (or -1 if
                     all partitions should be marked).  NOte that we shouldhave
                     (rcol == thee->localPartID) for (thee->killFlag == 2 or 3) */
-        double etol,  /** The error tolerance criterion for marking */
-        int bkey  /** How the error tolerance is interpreted:
+        double etol,  /**< The error tolerance criterion for marking */
+        int bkey  /**< How the error tolerance is interpreted:
                      \li 0:  Simplex marked if error > etol.
                      \li 1:  Simplex marked if error > 
                      sqrt(etol^2/L) where L$ is the number of simplices */
@@ -226,7 +226,7 @@ VEXTERNC int Vpee_markRefine(
  *  @return  Number of simplices in the local partition
  */
 VEXTERNC int Vpee_numSS(
-        Vpee *thee /** The Vpee object */
+        Vpee *thee /**< The Vpee object */
         );
 
 #endif    /* ifndef _VPEE_H_ */
