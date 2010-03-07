@@ -443,10 +443,16 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #define VPMGSMALL 1e-12
 
-/** @brief   Used to set the min/max values acceptable for sinh chopping
+/** @brief   Used to set the min values acceptable for sinh chopping
+ *  @def SINH_MIN
  *  @ingroup Vhal
  */
 #define SINH_MIN -85.0
+
+/** @brief   Used to set the max values acceptable for sinh chopping
+ *  @def SINH_MAX
+ *  @ingroup Vhal
+ */
 #define SINH_MAX 85.0
 
 

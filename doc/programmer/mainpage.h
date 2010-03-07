@@ -138,7 +138,7 @@
  * in Clean OO C.
  * <p>
  * Finally, inline functions in C++ are simply treated as macros in Clean OO C
- * and declared/defined using <code>#define</code> statements in the public
+ * and declared/defined using <code>define</code> statements in the public
  * header file.
  * <p>
  * See any of the APBS header files for more information on Clean OO C

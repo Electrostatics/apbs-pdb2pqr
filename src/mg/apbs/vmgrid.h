@@ -67,7 +67,8 @@
 /* Headers specific to this file */
 #include "apbs/vgrid.h"
 
-/** @def VMGRIDMAX   The maximum number of levels in the grid hiearchy
+/** @def VMGRIDMAX
+ *  @brief The maximum number of levels in the grid hiearchy
  *  @ingroup Vmgrid
  */
 #define VMGRIDMAX 20

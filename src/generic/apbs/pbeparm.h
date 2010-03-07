@@ -211,8 +211,8 @@ typedef struct sPBEparm PBEparm;
  *  @returns Charge of ion species (e)
  */
 VEXTERNC double PBEparm_getIonCharge(
-        PBEparm *thee, /** PBEparm object */
-        int iion  /** Ion species ID/index */
+        PBEparm *thee, /**< PBEparm object */
+        int iion  /**< Ion species ID/index */
         );
 
 /** @brief   Get concentration (M) of specified ion species
@@ -221,8 +221,8 @@ VEXTERNC double PBEparm_getIonCharge(
  *  @returns Concentration of ion species (M)
  */
 VEXTERNC double PBEparm_getIonConc(
-        PBEparm *thee, /** PBEparm object */
-        int iion /** Ion species ID/index */
+        PBEparm *thee, /**< PBEparm object */
+        int iion /**< Ion species ID/index */
         );
 
 /** @brief   Get radius (A) of specified ion species
@@ -231,8 +231,8 @@ VEXTERNC double PBEparm_getIonConc(
  *  @returns Radius of ion species (A)
  */
 VEXTERNC double PBEparm_getIonRadius(
-        PBEparm *thee, /** PBEparm object */ 
-        int iion /** Ion species ID/index */
+        PBEparm *thee, /**< PBEparm object */ 
+        int iion /**< Ion species ID/index */
         );
 
 
@@ -249,7 +249,7 @@ VEXTERNC PBEparm* PBEparm_ctor();
  *  @returns 1 if succesful, 0 otherwise
  */
 VEXTERNC int PBEparm_ctor2(
-        PBEparm *thee /** Memory location for object */
+        PBEparm *thee /**< Memory location for object */
         );
 
 /** @brief   Object destructor
@@ -257,7 +257,7 @@ VEXTERNC int PBEparm_ctor2(
  *  @author  Nathan Baker
  */
 VEXTERNC void PBEparm_dtor(
-        PBEparm **thee /** Pointer to memory location of object */
+        PBEparm **thee /**< Pointer to memory location of object */
         );
 
 /** @brief   FORTRAN stub for object destructor
@@ -265,7 +265,7 @@ VEXTERNC void PBEparm_dtor(
  *  @author  Nathan Baker
  */
 VEXTERNC void PBEparm_dtor2(
-        PBEparm *thee /** Pointer to object to be destroyed */
+        PBEparm *thee /**< Pointer to object to be destroyed */
         );
 
 /** @brief   Consistency check for parameter values stored in object
@@ -274,7 +274,7 @@ VEXTERNC void PBEparm_dtor2(
  *  @returns 1 if OK, 0 otherwise
  */
 VEXTERNC int PBEparm_check(
-        PBEparm *thee /** Object to be checked */
+        PBEparm *thee /**< Object to be checked */
         );
 
 /** @brief   Copy PBEparm object into thee
@@ -282,8 +282,8 @@ VEXTERNC int PBEparm_check(
  *  @author  Nathan Baker
  */
 VEXTERNC void PBEparm_copy(
-        PBEparm *thee, /** Target for copy */
-        PBEparm *parm /** Source for copy */
+        PBEparm *thee, /**< Target for copy */
+        PBEparm *parm /**< Source for copy */
         );
 
 /** @brief   Parse a keyword from an input file
@@ -293,9 +293,9 @@ VEXTERNC void PBEparm_copy(
  *            of error (i.e., too few args); 0 if not matched
  */
 VEXTERNC int PBEparm_parseToken(
-        PBEparm *thee, /** Parsing object */
-        char tok[VMAX_BUFSIZE], /** Token to parse */ 
-        Vio *sock /** Socket for additional tokens */
+        PBEparm *thee, /**< Parsing object */
+        char tok[VMAX_BUFSIZE], /**< Token to parse */ 
+        Vio *sock /**< Socket for additional tokens */
         );
 
 
