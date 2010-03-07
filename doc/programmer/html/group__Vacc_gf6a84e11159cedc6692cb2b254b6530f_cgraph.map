@@ -1,9 +1,0 @@
-<area shape="rect" href="$vacc_8c.html#5a4ad4553abd7aa28ddc19d8f6b05403" title="Vacc_allocate" alt="" coords="158,21,262,47">
-<area shape="rect" href="$vacc_8c.html#43a99ef46d09254c73e3edf1ed1a3e3d" title="Vacc_storeParms" alt="" coords="146,97,274,123">
-<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="322,7,490,34">
-<area shape="rect" href="$group__Vacc.html#gb4df080067f12568eb4336687b676cea" title="Set up an array of points for a reference sphere of unit radius." alt="" coords="334,58,478,85">
-<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="350,109,462,135">
-<area shape="rect" href="$group__Vatom.html#gd3538039818c4279eb8a6b0e806dea7b" title="Get atomic position." alt="" coords="342,159,470,186">
-<area shape="rect" href="$group__Vclist.html#ga67500e4f221d3f965c2ff48dee31593" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="342,210,470,237">
-<area shape="rect" href="$group__Vacc.html#gf645f700c467833a3611fadb606d16e5" title="Allocate and construct the surface object; do not assign surface points to positions..." alt="" coords="538,58,645,85">
-<area shape="rect" href="$group__Vacc.html#g7b5d73ff3b8ae17c8efad24ce683de78" title="Construct the surface object using previously allocated memory; do not assign surface..." alt="" coords="693,58,808,85">

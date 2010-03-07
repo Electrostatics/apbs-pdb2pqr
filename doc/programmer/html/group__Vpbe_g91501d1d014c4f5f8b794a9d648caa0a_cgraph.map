@@ -1,7 +1,0 @@
-<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="268,8,380,34">
-<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="240,58,408,85">
-<area shape="rect" href="$group__Vatom.html#g6123ac049c637301d5aa730c18c94756" title="Get atomic charge." alt="" coords="258,109,389,136">
-<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="256,160,392,186">
-<area shape="rect" href="$group__Vpbe.html#g0aac5d03d89f4a9c5b5a93e853325e0d" title="Get solute dielectric constant." alt="" coords="253,210,394,237">
-<area shape="rect" href="$group__Vpbe.html#gb2a970a797a66508f244cfbddb40edf9" title="Get temperature." alt="" coords="246,261,401,288">
-<area shape="rect" href="$group__Vpbe.html#g541798ff5543ed7daaa597d661108408" title="Get atom list." alt="" coords="268,312,380,338">

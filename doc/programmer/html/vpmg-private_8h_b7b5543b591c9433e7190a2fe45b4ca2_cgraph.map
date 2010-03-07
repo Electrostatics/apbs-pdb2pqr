@@ -1,8 +1,0 @@
-<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="215,7,327,34">
-<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="187,58,355,85">
-<area shape="rect" href="$group__Vatom.html#gbe19ed4ab35365a2e8f7505bcbb6bca2" title="Get atomic position." alt="" coords="203,109,339,135">
-<area shape="rect" href="$group__Vatom.html#gd3538039818c4279eb8a6b0e806dea7b" title="Get atomic position." alt="" coords="207,159,335,186">
-<area shape="rect" href="$group__Vpbe.html#g49a4178cddec98a0388a0b0a42b402ad" title="Get bulk ionic strength." alt="" coords="179,210,363,237">
-<area shape="rect" href="$group__Vpbe.html#g97920614b496aee5cde2dd284f1ee8e7" title="Get maximum radius of ion species." alt="" coords="189,261,354,287">
-<area shape="rect" href="$group__Vpbe.html#g0aac5d03d89f4a9c5b5a93e853325e0d" title="Get solute dielectric constant." alt="" coords="201,311,342,338">
-<area shape="rect" href="$group__Vpbe.html#g71c1fc1e8901630a97cf0f2bf0fcb18f" title="Get solvent dielectric constant." alt="" coords="198,362,345,389">

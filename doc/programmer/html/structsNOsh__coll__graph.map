@@ -1,7 +1,0 @@
-<area shape="rect" href="$structsNOsh__calc.html" title="Calculation class for use when parsing fixed format input files." alt="" coords="321,944,414,1088">
-<area shape="rect" href="$structsAPOLparm.html" title="Parameter structure for APOL&#45;specific variables from input files." alt="" coords="7,128,125,736">
-<area shape="rect" href="$structsMGparm.html" title="Parameter structure for MG&#45;specific variables from input files." alt="" coords="149,16,282,848">
-<area shape="rect" href="$structsFEMparm.html" title="Parameter structure for FEM&#45;specific variables from input files." alt="" coords="306,208,429,656">
-<area shape="rect" href="$structsPBEparm.html" title="Parameter structure for PBE variables from input files." alt="" coords="453,8,578,856">
-<area shape="rect" href="$structsValist.html" title="Container class for list of atom objects." alt="" coords="525,920,605,1112">
-<area shape="rect" href="$structsVatom.html" title="Contains public data members for Vatom class/module." alt="" coords="602,336,701,528">

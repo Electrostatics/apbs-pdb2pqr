@@ -1,6 +1,0 @@
-<area shape="rect" href="$group__Valist.html#g902e23e51a90ae7d7dec67c904e83049" title="Load up Valist with various statistics." alt="" coords="176,8,312,34">
-<area shape="rect" href="$group__Vatom.html#g619690d8845221f0319fddf78bf883d9" title="Set atom ID." alt="" coords="178,58,309,85">
-<area shape="rect" href="$group__Vatom.html#g804cb2136cc1ff6105b37b176d58b804" title="Set atomic charge." alt="" coords="178,109,309,136">
-<area shape="rect" href="$group__Vatom.html#gd233011217b9aeeea2907cead69a09f4" title="Set the atomic position." alt="" coords="177,160,310,186">
-<area shape="rect" href="$group__Vatom.html#gb7f8af75a9fe695fafcec2d8dcfe1f74" title="Set atomic radius." alt="" coords="180,210,308,237">
-<area shape="rect" href="$group__Vstring.html#g5cba5800bc4941a4ef59b2189a24de15" title="Case&#45;insensitive string comparison (BSD standard)." alt="" coords="174,261,313,288">

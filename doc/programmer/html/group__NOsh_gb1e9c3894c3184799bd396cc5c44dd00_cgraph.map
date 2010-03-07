@@ -1,8 +1,0 @@
-<area shape="rect" href="$group__APOLparm.html#ge46cc56511ff966914c0d74453cd5f56" title="Construct APOLparm." alt="" coords="173,8,293,34">
-<area shape="rect" href="$group__FEMparm.html#ga2f1e40a4813b89cad3a69e7c8f6bd66" title="Construct FEMparm." alt="" coords="178,58,287,85">
-<area shape="rect" href="$group__MGparm.html#g7f23d40f3e2ac0bef7fda8f137b79e77" title="Construct MGparm object." alt="" coords="181,109,285,136">
-<area shape="rect" href="$group__PBEparm.html#ga94d48d554d5abe0a478426b0972bd95" title="Construct PBEparm object." alt="" coords="178,160,287,186">
-<area shape="rect" href="$group__APOLparm.html#g5edb9881babddfc95f5e33afb35d5397" title="FORTRAN stub to construct APOLparm." alt="" coords="342,8,467,34">
-<area shape="rect" href="$group__FEMparm.html#g942224028557034676b3663f13eaac47" title="FORTRAN stub to construct FEMparm." alt="" coords="346,58,463,85">
-<area shape="rect" href="$group__MGparm.html#g466a05855cc2d96ec7e44416393a5fa9" title="FORTRAN stub to construct MGparm object." alt="" coords="349,109,461,136">
-<area shape="rect" href="$group__PBEparm.html#g3a2dd09083faa24aaa9f07c0c95d06af" title="FORTRAN stub to construct PBEparm object." alt="" coords="347,160,462,186">

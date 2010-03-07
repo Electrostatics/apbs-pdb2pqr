@@ -1,5 +1,0 @@
-<area shape="rect" href="$group__Vfetk.html#g4be8c4c7a641a5fa2c5f8e2ae02d00fb" title="Transfer color (partition ID) information frmo a partitioned mesh to the atoms." alt="" coords="121,84,267,110">
-<area shape="rect" href="$group__Valist.html#g6e228909b1e2c178ee292ae97c5bce62" title="Get pointer to particular atom in list." alt="" coords="345,8,457,34">
-<area shape="rect" href="$group__Valist.html#g2aea567c031963b275f4e6e31f9c3e74" title="Get number of atoms in the list." alt="" coords="317,58,485,85">
-<area shape="rect" href="$group__Vatom.html#g208e36b834b3839119d472c13b0a34e6" title="Set partition ID." alt="" coords="339,109,462,136">
-<area shape="rect" href="$group__Vcsm.html#g9caeb8476cc7827c595d531c8ac1d004" title="Get particular simplex associated with an atom." alt="" coords="337,160,465,186">

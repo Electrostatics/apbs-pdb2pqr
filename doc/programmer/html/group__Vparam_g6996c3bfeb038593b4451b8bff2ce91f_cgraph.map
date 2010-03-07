@@ -1,6 +1,0 @@
-<area shape="rect" href="$group__Vparam.html#g8b35934af27637a90fb419cdfe6f8fb5" title="Read atom information from an XML file." alt="" coords="237,8,365,34">
-<area shape="rect" href="$group__Vstring.html#g5cba5800bc4941a4ef59b2189a24de15" title="Case&#45;insensitive string comparison (BSD standard)." alt="" coords="465,46,603,73">
-<area shape="rect" href="$group__Vparam.html#g713e01e44ed7bfd459110b96cfbd247d" title="Copy current atom object to destination." alt="" coords="441,122,627,149">
-<area shape="rect" href="$group__Vparam.html#gdacb5ad3ed64436c5a8a85ba5dac3bef" title="Copy current residue object to destination." alt="" coords="211,160,390,186">
-<area shape="rect" href="$group__Vparam.html#ga188f6a9dbe9ba1465e0045067b4c02e" title="FORTRAN stub to construct the object." alt="" coords="218,210,383,237">
-<area shape="rect" href="$group__Vparam.html#g7f92801fe95005c1e08fcd87dc303128" title="FORTRAN stub to destroy object." alt="" coords="218,261,383,288">
