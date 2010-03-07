@@ -126,11 +126,11 @@ struct sVpbe {
 	/* Added by Michael Grabe                                */
 	/*-------------------------------------------------------*/
 	
-	double z_mem;        /* Z value of the botton of the membrane (A) */
-	double L;            /* Length of the membrane (A) */
-	double membraneDiel; /* Membrane dielectric constant */
-	double V;            /* Membrane potential */
-	int param2Flag;     /* Check to see if bcfl=3 parms have been set */
+	double z_mem;        /**< Z value of the botton of the membrane (A) */
+	double L;            /**< Length of the membrane (A) */
+	double membraneDiel; /**< Membrane dielectric constant */
+	double V;            /**< Membrane potential */
+	int param2Flag;     /**< Check to see if bcfl=3 parms have been set */
 	/*-------------------------------------------------------*/
 	
 };
