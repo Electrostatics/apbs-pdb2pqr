@@ -523,8 +523,8 @@ def main():
 			argString = "--output-format=%s" % optionDict["output-format"]
 			args.append(argString)
 		if optionDict.has_key("args"):
-			args.append(optionDict["args"])
-		stdout.write("Running:  %s...\n" % args.join())
+            args = args + optionDict["args"]
+		stdout.write("Running:  %s...\n" % " ".join(args))
 		subprocess.call(args)
 		sys.exit()
 
