@@ -619,7 +619,7 @@ VPUBLIC void Vfetk_setParameters(Vfetk *thee, PBEparm *pbeparm,
 VPUBLIC void Vfetk_dtor(Vfetk **thee) {
     if ((*thee) != VNULL) {
         Vfetk_dtor2(*thee);
-        Vmem_free(VNULL, 1, sizeof(Vfetk), (void **)thee);
+        //Vmem_free(VNULL, 1, sizeof(Vfetk), (void **)thee);
         (*thee) = VNULL;
     }
 }
@@ -1166,7 +1166,12 @@ VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
 
     if ((*thee) != VNULL) {
         Vfetk_PDE_dtor2(*thee);
-        Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee);
+		/* TODO: The following line is commented out because at the moment,
+			there is a seg fault when deallocating at the end of a run. Since
+			this routine is called only once at the very end, we'll leave it
+			commented out. However, this could be a memory leak.
+		 */
+        /* Vmem_free(var.fetk->vmem, 1, sizeof(PDE), (void **)thee); */
         (*thee) = VNULL;
     }
 
