@@ -1854,7 +1854,7 @@ fclose(file);
 return 1;
 }   
 
-VPUBLIC int writeMultivalue(PBEparm *pbeparm, Vpmg *pmg,Valist *alist,int calcnum){
+VPUBLIC int writeMultivalue(PBEparm *pbeparm, Vpmg *pmg,Valist *alist[NOSH_MAXMOL],int calcnum){
 	
 	int i;
 	int nx, ny, nz;
@@ -1889,8 +1889,8 @@ VPUBLIC int writeMultivalue(PBEparm *pbeparm, Vpmg *pmg,Valist *alist,int calcnu
 	sprintf(filename,"calc_%i.txt",calcnum);
 	FILE * pfile = fopen(filename, "w");
 	
-	atoms = alist->atoms;
-	for (i=0; i<alist->number;i++) {
+	atoms = alist[pbeparm->molid-1]->atoms;
+	for (i=0; i<alist[pbeparm->molid-1]->number;i++) {
 		apos[0] = atoms[i].position[0];
 		apos[1] = atoms[i].position[1];
 		apos[2] = atoms[i].position[2]; 
