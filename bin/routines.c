@@ -1854,10 +1854,12 @@ fclose(file);
 return 1;
 }   
 
-VPUBLIC int writeMultivalue( PBEparm *pbeparm, Vpmg *pmg,Valist *alist){
+VPUBLIC int writeMultivalue(PBEparm *pbeparm, Vpmg *pmg,Valist *alist,int calcnum){
 	
 	int i;
 	int nx, ny, nz;
+	char filename[1024];
+	
 	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
 	double apos[3];
 	double value;
@@ -1884,6 +1886,9 @@ VPUBLIC int writeMultivalue( PBEparm *pbeparm, Vpmg *pmg,Valist *alist){
 	grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
 					  pmg->rwork);
 	
+	sprintf(filename,"calc_%i.txt",calcnum);
+	FILE * pfile = fopen(filename, "w");
+	
 	atoms = alist->atoms;
 	for (i=0; i<alist->number;i++) {
 		apos[0] = atoms[i].position[0];
@@ -1891,8 +1896,9 @@ VPUBLIC int writeMultivalue( PBEparm *pbeparm, Vpmg *pmg,Valist *alist){
 		apos[2] = atoms[i].position[2]; 
 		
 		Vgrid_value(grid, apos, &value);
-		printf("%1.12e\n",value);
+		fprintf(pfile, "%1.12e\n",value);
 	}
+	fclose(pfile);
 	
 	Vgrid_dtor(&grid);
 	
