@@ -464,6 +464,11 @@ int main(
 				forceMG(mem, nosh, pbeparm, mgparm, pmg[i], &(nforce[i]), 
 						&(atomForce[i]), alist);
 				
+#if defined(INCLUDE_MULTI)
+				/* HACK: Write multivalue values for each atom */
+				writeMultivalue(pbeparm,pmg[i],alist[i]);
+				/* HACK: End hack */
+#endif					
 				/* Write out data folks might want */
 				writedataMG(rank, nosh, pbeparm, pmg[i]);
 				

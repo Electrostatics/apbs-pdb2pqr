@@ -1854,6 +1854,51 @@ fclose(file);
 return 1;
 }   
 
+VPUBLIC int writeMultivalue( PBEparm *pbeparm, Vpmg *pmg,Valist *alist){
+	
+	int i;
+	int nx, ny, nz;
+	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+	double apos[3];
+	double value;
+	
+	Vgrid *grid;
+	Vatom *atoms;
+	
+	nx = pmg->pmgp->nx;
+	ny = pmg->pmgp->ny;
+	nz = pmg->pmgp->nz;
+	hx = pmg->pmgp->hx;
+	hy = pmg->pmgp->hy;
+	hzed = pmg->pmgp->hzed;
+	
+	xcent = pmg->pmgp->xcent;
+	ycent = pmg->pmgp->ycent;
+	zcent = pmg->pmgp->zcent;
+	xmin = xcent - 0.5*(nx-1)*hx;
+	ymin = ycent - 0.5*(ny-1)*hy;
+	zmin = zcent - 0.5*(nz-1)*hzed;
+	VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
+						   pbeparm->pbetype));
+	
+	grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+					  pmg->rwork);
+	
+	atoms = alist->atoms;
+	for (i=0; i<alist->number;i++) {
+		apos[0] = atoms[i].position[0];
+		apos[1] = atoms[i].position[1];
+		apos[2] = atoms[i].position[2]; 
+		
+		Vgrid_value(grid, apos, &value);
+		printf("%1.12e\n",value);
+	}
+	
+	Vgrid_dtor(&grid);
+	
+	return 1;
+}
+
 VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 	
 	char writestem[VMAX_ARGLEN];
