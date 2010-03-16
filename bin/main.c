@@ -466,7 +466,7 @@ int main(
 				
 #if defined(INCLUDE_MULTI)
 				/* HACK: Write multivalue values for each atom */
-				writeMultivalue(pbeparm,pmg[i],alist[i]);
+				writeMultivalue(pbeparm,pmg[i],alist[i],i);
 				/* HACK: End hack */
 #endif					
 				/* Write out data folks might want */
