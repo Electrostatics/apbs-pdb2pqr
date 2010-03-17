@@ -2,6 +2,7 @@ Please see http://www.poissonboltzmann.org/apbs/release-history for the
 complete change log
 
 # These are notes for the current version of APBS
+* Added a new program for converting delphi potential maps to OpenDX format. tools/mesh/del2dx
 * Updated Doxygen manual with call/caller graphs.  Replaced HTML with PDF.
 * Added tools/matlab/solver with simple Matlab LPBE solver for prototyping, teaching, etc.
 * Deprecated APBS XML output format.
