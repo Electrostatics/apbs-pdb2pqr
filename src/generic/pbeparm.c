@@ -499,6 +499,9 @@ statement\n", ti);
 			case BCFL_MEM:
                 Vnm_print(2, "mem");
                 break;
+			case BCFL_MAP:
+                Vnm_print(2, "map");
+                break;
             default:
                 Vnm_print(2, "UKNOWN");
                 break;
@@ -527,6 +530,10 @@ statement\n", ti);
             return 1;
 		} else if (Vstring_strcasecmp(tok, "mem") == 0) {
             thee->bcfl = BCFL_MEM;
+            thee->setbcfl = 1;
+            return 1;
+        } else if (Vstring_strcasecmp(tok, "map") == 0) {
+            thee->bcfl = BCFL_MAP;
             thee->setbcfl = 1;
             return 1;
         } else {
@@ -849,6 +856,16 @@ USEMAP KAPPA keyword!\n", tok);
             return -1;
         }
         thee->kappaMapID = ti;
+        return 1;
+    } else if (Vstring_strcasecmp(tok, "pot") == 0) {
+        thee->usePotMap = 1;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (sscanf(tok, "%d", &ti) == 0) {
+            Vnm_print(2, "NOsh:  Read non-int (%s) while parsing \
+					  USEMAP POT keyword!\n", tok);
+            return -1;
+        }
+        thee->potMapID = ti;
         return 1;
     } else if (Vstring_strcasecmp(tok, "charge") == 0) {
         thee->useChargeMap = 1;
@@ -1179,7 +1196,6 @@ WRITEMAT keyword!\n", tok);
 
 VPUBLIC int PBEparm_parseToken(PBEparm *thee, char tok[VMAX_BUFSIZE], 
   Vio *sock) {
-
 
     if (thee == VNULL) {
         Vnm_print(2, "parsePBE:  got NULL thee!\n");
