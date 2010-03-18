@@ -160,6 +160,11 @@ VPUBLIC char* NOsh_getKappapath(NOsh *thee, int imol) {
 	VASSERT(imol < thee->nmol);
 	return thee->kappapath[imol];
 }
+VPUBLIC char* NOsh_getPotpath(NOsh *thee, int imol) {
+	VASSERT(thee != VNULL);
+	VASSERT(imol < thee->nmol);
+	return thee->potpath[imol];
+}
 VPUBLIC char* NOsh_getChargepath(NOsh *thee, int imol) {
 	VASSERT(thee != VNULL);
 	VASSERT(imol < thee->nmol);
@@ -179,6 +184,11 @@ VPUBLIC int NOsh_getKappafmt(NOsh *thee, int i) {
 	VASSERT(thee != VNULL);
 	VASSERT(i < thee->nkappa);
 	return (thee->kappafmt[i]);
+}
+VPUBLIC int NOsh_getPotfmt(NOsh *thee, int i) {
+	VASSERT(thee != VNULL);
+	VASSERT(i < thee->npot);
+	return (thee->potfmt[i]);
 }
 VPUBLIC int NOsh_getChargefmt(NOsh *thee, int i) {
 	VASSERT(thee != VNULL);
@@ -261,6 +271,7 @@ VPUBLIC int NOsh_ctor2(NOsh *thee, int rank, int size) {
     thee->ncharge = 0;
     thee->ndiel = 0;
     thee->nkappa = 0;
+	thee->npot = 0;
     thee->nprint = 0;
 	
     for (i=0; i<NOSH_MAXCALC; i++) {
@@ -451,8 +462,8 @@ VPUBLIC int NOsh_parseInput(
 			Vnm_print(0, "NOsh: Parsing READ section\n");
 			if (!NOsh_parseREAD(thee, sock)) return 0;
 			Vnm_print(0, "NOsh: Done parsing READ section \
-(nmol=%d, ndiel=%d, nkappa=%d, ncharge=%d)\n", thee->nmol, thee->ndiel, 
-					  thee->nkappa, thee->ncharge);
+(nmol=%d, ndiel=%d, nkappa=%d, ncharge=%d, npot=%d)\n", thee->nmol, thee->ndiel, 
+					  thee->nkappa, thee->ncharge,thee->npot);
 		} else if (Vstring_strcasecmp(tok, "print") == 0) {
 			Vnm_print(0, "NOsh: Parsing PRINT section\n");
 			if (!NOsh_parsePRINT(thee, sock)) return 0;
@@ -707,6 +718,67 @@ section!\n");
 	
 }
 
+VPRIVATE int NOsh_parseREAD_POTENTIAL(NOsh *thee, Vio *sock) {
+	
+    char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
+    Vdata_Format potfmt;
+	/* TODO: This is somewhat redundant, since the only difference between
+			 the VDF_DX and VDF_BIN block is that assignment of the format
+			 type. D. Gohara (3/18/10)
+	 */
+    VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+    if (Vstring_strcasecmp(tok, "dx") == 0) {
+        potfmt = VDF_DX;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
+        Vnm_print(0, "NOsh: Storing potential map %d path %s\n",
+				  thee->npot, tok);
+        thee->potfmt[thee->npot] = potfmt;
+        strncpy(thee->potpath[thee->npot], tok, VMAX_ARGLEN);
+        (thee->npot)++;
+    } else if (Vstring_strcasecmp(tok, "bin") == 0) {
+        potfmt = VDF_BIN;
+        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+        if (tok[0]=='"') {
+            strcpy(strnew, "");
+            while (tok[strlen(tok)-1] != '"') {
+                strcat(str, tok);
+                strcat(str, " ");
+                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+			}
+            strcat(str, tok);
+            strncpy(strnew, str+1, strlen(str)-2);
+            strcpy(tok, strnew);
+        }
+        Vnm_print(0, "NOsh: Storing potential map %d path %s\n",
+				  thee->npot, tok);
+        thee->potfmt[thee->npot] = potfmt;
+        strncpy(thee->potpath[thee->npot], tok, VMAX_ARGLEN);
+        (thee->npot)++;
+    } else {
+        Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
+				  %s!\n", tok);
+    }
+	
+    return 1;
+	
+VERROR1:
+	Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
+			  section!\n");
+	return 0;
+	
+}
+
 VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
@@ -818,6 +890,8 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
             NOsh_parseREAD_DIEL(thee,sock);
         } else if (Vstring_strcasecmp(tok, "kappa") == 0) {
             NOsh_parseREAD_KAPPA(thee,sock);
+		} else if (Vstring_strcasecmp(tok, "pot") == 0) {
+            NOsh_parseREAD_POTENTIAL(thee,sock);
         } else if (Vstring_strcasecmp(tok, "charge") == 0) {
             NOsh_parseREAD_CHARGE(thee,sock);
 		} else if (Vstring_strcasecmp(tok, "mesh") == 0) {
@@ -1160,7 +1234,9 @@ VPUBLIC int NOsh_setupElecCalc(
 		/* Unload the calculation object containing the ELEC information */
 		elec = thee->elec[ielec];
 		
-		if (((thee->ndiel != 0) || (thee->nkappa != 0) || (thee->ncharge != 0)) && (elec->pbeparm->calcforce != PCF_NO)) {
+		if (((thee->ndiel != 0) || (thee->nkappa != 0) ||
+			 (thee->ncharge != 0) || (thee->npot != 0)) &&
+				(elec->pbeparm->calcforce != PCF_NO)) {
 			Vnm_print(2, "NOsh_setupElecCalc:  Calculation of forces disabled because surface \
 map is used!\n");
 			elec->pbeparm->calcforce = PCF_NO;

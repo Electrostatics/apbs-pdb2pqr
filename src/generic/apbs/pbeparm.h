@@ -121,6 +121,10 @@ struct sPBEparm {
     int useKappaMap;  /**< Indicates whether we use an external
                        * kappa map */
     int kappaMapID;  /**< Kappa map ID (if used) */
+    int usePotMap;  /**< Indicates whether we use an external
+                       * kappa map */
+    int potMapID;  /**< Kappa map ID (if used) */
+	
     int useChargeMap;  /**< Indicates whether we use an external
                         * charge distribution map */
     int chargeMapID;  /**< Charge distribution map ID (if used) */
