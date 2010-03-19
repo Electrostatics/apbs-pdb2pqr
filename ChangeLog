@@ -2,6 +2,7 @@ Please see http://www.poissonboltzmann.org/apbs/release-history for the
 complete change log
 
 # These are notes for the current version of APBS
+* Added new write format to output the atomic potentials to a flat file (see atompot)
 * Added new functionality for using a previously calculated potential map for a new calculation.
 * Added a new program for converting delphi potential maps to OpenDX format. tools/mesh/del2dx
 * Updated Doxygen manual with call/caller graphs.  Replaced HTML with PDF.

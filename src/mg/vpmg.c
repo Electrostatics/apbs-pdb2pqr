@@ -832,15 +832,17 @@ VPUBLIC void Vpmg_unsetPart(Vpmg *thee) {
 }
 
 VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type, 
-  double parm, Vhal_PBEType pbetype) {
+  double parm, Vhal_PBEType pbetype, PBEparm *pbeparm) {
 
     Vacc *acc = VNULL;
     Vpbe *pbe = VNULL;
     Vgrid *grid = VNULL;
+	Vatom *atoms = VNULL;
+	Valist *alist = VNULL;
     double position[3], hx, hy, hzed, xmin, ymin, zmin;
     double grad[3], eps, epsp, epss, zmagic;
     int i, j, k, l, nx, ny, nz, ichop;
-
+	
     pbe = thee->pbe;
     acc = Vpbe_getVacc(pbe);
     nx = thee->pmgp->nx;
@@ -855,7 +857,7 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
     epsp = Vpbe_getSoluteDiel(pbe);
     epss = Vpbe_getSolventDiel(pbe);
     zmagic = Vpbe_getZmagic(pbe);
-
+	
     if (!(thee->filled)) {
         Vnm_print(2, "Vpmg_fillArray:  need to call Vpmg_fillco first!\n");
         return 0;
@@ -892,7 +894,22 @@ VPUBLIC int Vpmg_fillArray(Vpmg *thee, double *vec, Vdata_Type type,
 
             for (i=0; i<nx*ny*nz; i++) vec[i] = thee->u[i];
             break;
-
+		
+		case VDT_ATOMPOT:
+			alist = thee->pbe->alist;
+			atoms = alist[pbeparm->molid-1].atoms;
+			grid = Vgrid_ctor(nx, ny, nz, hx, hy,
+							  hzed, xmin, ymin, zmin,thee->u);
+			for (i=0; i<alist[pbeparm->molid-1].number;i++) {
+				position[0] = atoms[i].position[0];
+				position[1] = atoms[i].position[1];
+				position[2] = atoms[i].position[2]; 
+				
+				Vgrid_value(grid, position, &vec[i]);
+			}
+			Vgrid_dtor(&grid);
+			break;
+			
         case VDT_SMOL:
  
             for (k=0; k<nz; k++) {

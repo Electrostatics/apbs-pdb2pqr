@@ -1131,7 +1131,9 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         writefmt = VDF_AVS;
     } else if (Vstring_strcasecmp(tok, "bin") == 0) {
         writefmt = VDF_BIN;
-    }  else {
+    } else if (Vstring_strcasecmp(tok, "flat") == 0) {
+        writefmt = VDF_FLAT;
+    } else {
         Vnm_print(2, "PBEparm_parse:  Invalid data format (%s) to write!\n",
            tok);
         return -1;

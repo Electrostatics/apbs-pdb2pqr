@@ -52,8 +52,27 @@
  * @endverbatim
  */
 
-//#define F77SORGOSTUB   VF77_MANGLE(sorgo_stub, F77SORGOSTUB)
-int sorgo_stub_(int nx,int ny,int nz,int itmax,double *oCn,
+#include "../../src/aaa_inc/apbscfg.h"
+#if defined(VF77_UPPERCASE)
+#   if defined(VF77_NOUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) NAME
+#   elif defined(VF77_ONEUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) NAME ## _
+#   else
+#       define VF77_MANGLE(name,NAME) name
+#   endif
+#else
+#   if defined(VF77_NOUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) name
+#   elif defined(VF77_ONEUNDERSCORE)
+#       define VF77_MANGLE(name,NAME) name ## _
+#   else
+#       define VF77_MANGLE(name,NAME) name
+#   endif
+#endif
+
+#define F77SORGOSTUB   VF77_MANGLE(sorgo_stub, SORGO_STUB)
+int F77SORGOSTUB(int nx,int ny,int nz,int itmax,double *oCn,
 				double *ccn,double *fcn,double *oEn,
 				double *oNn,double *uCn,double *xn,
 				double *rn,double omega)
