@@ -228,10 +228,10 @@ VEXTERNC int initMG(
 					Vgrid *dielYMap[NOSH_MAXMOL],  /**< Array of y-shifted dielectric maps */
 					Vgrid *dielZMap[NOSH_MAXMOL],  /**< Array of z-shifted dielectric maps */
 					Vgrid *kappaMap[NOSH_MAXMOL],  /**< Array of kappa maps  */
-					Vgrid *potMap[NOSH_MAXMOL],  /**< Array of potential maps  */
 					Vgrid *chargeMap[NOSH_MAXMOL],  /**< Array of charge maps */
 					Vpmgp *pmgp[NOSH_MAXCALC],  /**< Array of MG parameter objects (one for each calc) */
-					Vpmg *pmg[NOSH_MAXCALC]  /**< Array of MG objects (one for each calc) */
+					Vpmg *pmg[NOSH_MAXCALC],  /**< Array of MG objects (one for each calc) */
+					Vgrid *potMap[NOSH_MAXMOL]  /**< Array of potential maps  */
 					);
 #else
 /**
