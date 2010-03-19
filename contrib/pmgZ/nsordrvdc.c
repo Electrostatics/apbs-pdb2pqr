@@ -52,8 +52,8 @@
  * @endverbatim
  */
 
-#define F77SORGOSTUB   VF77_MANGLE(sorgo_stub, F77SORGOSTUB)
-int sorgo_stub(int nx,int ny,int nz,int itmax,double *oCn,
+//#define F77SORGOSTUB   VF77_MANGLE(sorgo_stub, F77SORGOSTUB)
+int sorgo_stub_(int nx,int ny,int nz,int itmax,double *oCn,
 				double *ccn,double *fcn,double *oEn,
 				double *oNn,double *uCn,double *xn,
 				double *rn,double omega)
