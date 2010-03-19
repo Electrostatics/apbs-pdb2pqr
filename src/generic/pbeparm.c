@@ -1089,7 +1089,9 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "pot") == 0) {
         writetype = VDT_POT;
-    } else if (Vstring_strcasecmp(tok, "charge") == 0) {
+    } else if (Vstring_strcasecmp(tok, "atompot") == 0) {
+        writetype = VDT_ATOMPOT;
+    }  else if (Vstring_strcasecmp(tok, "charge") == 0) {
         writetype = VDT_CHARGE;
     } else if (Vstring_strcasecmp(tok, "smol") == 0) {
         writetype = VDT_SMOL;
@@ -1127,7 +1129,9 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         writefmt = VDF_UHBD;
     } else if (Vstring_strcasecmp(tok, "avs") == 0) {
         writefmt = VDF_AVS;
-    } else {
+    } else if (Vstring_strcasecmp(tok, "bin") == 0) {
+        writefmt = VDF_BIN;
+    }  else {
         Vnm_print(2, "PBEparm_parse:  Invalid data format (%s) to write!\n",
            tok);
         return -1;

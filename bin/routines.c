@@ -833,7 +833,6 @@ VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 	
 }
 
-#if defined(INCLUDE_MULTI)
 VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm, 
 				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
 				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
@@ -841,15 +840,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 				   Vgrid *kappaMap[NOSH_MAXMOL],  
 				   Vgrid *chargeMap[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], 
 				   Vpmg *pmg[NOSH_MAXCALC], Vgrid *potMap[NOSH_MAXMOL]) {
-#else
-VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm, 
-				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
-				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
-				   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
-				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
-				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
-		
-#endif
+
 	int j,  focusFlag, iatom;
 	size_t bytesTotal, highWater;
 	double sparm, iparm, q;
@@ -1016,7 +1007,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 			return 0;
 		}
 	} else theChargeMap = VNULL;
-#if defined(INCLUDE_MULTI)
+
 	if (!Vpmg_fillco(pmg[icalc], 
 					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
 					 pbeparm->useDielMap, theDielXMap,
@@ -1028,19 +1019,7 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		Vnm_print(2, "initMG:  problems setting up coefficients (fillco)!\n");
 		return 0;
 	}
-#else
-	if (!Vpmg_fillco(pmg[icalc], 
-					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
-					 pbeparm->useDielMap, theDielXMap,
-					 pbeparm->useDielMap, theDielYMap,
-					 pbeparm->useDielMap, theDielZMap,
-					 pbeparm->useKappaMap, theKappaMap,
-					 pbeparm->usePotMap, thePotMap,
-					 pbeparm->useChargeMap, theChargeMap)) {
-		Vnm_print(2, "initMG:  problems setting up coefficients (fillco)!\n");
-		return 0;
-	}
-#endif	
+
 	/* Print a few derived parameters */
 #ifndef VAPBSQUIET
 	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
@@ -2249,6 +2228,20 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 						"KAPPA MAP");
 				break;
 				
+			case VDT_ATOMPOT:
+				
+				Vnm_tprint(1, "  Writing atom potentials to ");
+				xcent = pmg->pmgp->xcent;
+				ycent = pmg->pmgp->ycent;
+				zcent = pmg->pmgp->zcent;
+				xmin = xcent - 0.5*(nx-1)*hx;
+				ymin = ycent - 0.5*(ny-1)*hy;
+				zmin = zcent - 0.5*(nz-1)*hzed;
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
+									   pbeparm->pbetype));
+				sprintf(title,
+						"KAPPA MAP");
+				break;	
 			default:
 				
 				Vnm_tprint(2, "Invalid data type for writing!\n");

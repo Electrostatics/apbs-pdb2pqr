@@ -438,21 +438,14 @@ int main(
 				
 				/* Set up problem */
 				Vnm_tprint( 1, "  Setting up problem...\n");
-#if defined(INCLUDE_MULTI)
+
 				if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
 							alist, dielXMap, dielYMap, dielZMap, kappaMap,
 							chargeMap, pmgp, pmg, potMap)) {
 					Vnm_tprint( 2, "Error setting up MG calculation!\n");
 					VJMPERR1(0);
 				}
-#else
-				if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
-							alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
-							pmgp, pmg)) {
-					Vnm_tprint( 2, "Error setting up MG calculation!\n");
-					VJMPERR1(0);
-				}
-#endif				
+
 				/* Print problem parameters */
 				printMGPARM(mgparm, realCenter);
 				printPBEPARM(pbeparm);
@@ -657,7 +650,7 @@ int main(
 		if (nenergy[i] > 0) Vmem_free(mem, nenergy[i], sizeof(double),
 									  (void **)&(atomEnergy[i]));    
 	}
-
+	
 	/* *************** GARBAGE COLLECTION ******************* */
 
 	Vnm_tprint( 1, "CLEANING UP AND SHUTTING DOWN...\n");

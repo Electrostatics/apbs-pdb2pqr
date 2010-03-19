@@ -243,7 +243,6 @@ VEXTERNC void Vpmg_dtor2(
         Vpmg *thee  /**< Pointer to object to be destroyed */
         );
 
-#if defined(INCLUDE_MULTI)
 /** @brief  Fill the coefficient arrays prior to solving the equation
  *  @ingroup  Vpmg
  *  @author  Nathan Baker
@@ -268,30 +267,7 @@ VEXTERNC int Vpmg_fillco(
         int useChargeMap,  /**< Boolean to use charge map argument */
         Vgrid *chargeMap  /**< External charge map */
         );
-#else
-/** @brief  Fill the coefficient arrays prior to solving the equation
- *  @ingroup  Vpmg
- *  @author  Nathan Baker
- *  @returns  1 if successful, 0 otherwise
- */
-VEXTERNC int Vpmg_fillco(
-						 Vpmg *thee,  /**< Vpmg object */ 
-						 Vsurf_Meth surfMeth,  /**< Surface discretization method */
-						 double splineWin,  /**< Spline window (in A) for surfMeth = 
-											 * VSM_SPLINE */
-						 Vchrg_Meth chargeMeth,  /**< Charge discretization method */ 
-						 int useDielXMap,  /**< Boolean to use dielectric map argument */
-						 Vgrid *dielXMap,  /**< External dielectric map */
-						 int useDielYMap,  /**< Boolean to use dielectric map argument */
-						 Vgrid *dielYMap,  /**< External dielectric map */
-						 int useDielZMap,  /**< Boolean to use dielectric map argument */
-						 Vgrid *dielZMap,  /**< External dielectric map */
-						 int useKappaMap,  /**< Boolean to use kappa map argument */
-						 Vgrid *kappaMap,  /**< External kappa map */
-						 int useChargeMap,  /**< Boolean to use charge map argument */
-						 Vgrid *chargeMap  /**< External charge map */
-						 );
-#endif
+
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg
  *  @author  Nathan Baker
