@@ -1779,7 +1779,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 		zminOLD = pmgOLD->pmgp->zcent - ((double)(nzOLD-1)*hzOLD)/2.0;
 		zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
 		
-		data = data;
+		data = pmgOLD->u;
 	}else{
 		/* Relevant old problem parameters */
 		hxOLD = thee->potMap->hx;
@@ -5383,7 +5383,6 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
     } /* endfor (each atom) */
 }
 
-#if defined(INCLUDE_MULTI)
 VPUBLIC int Vpmg_fillco(Vpmg *thee, 
 						Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
 						int useDielXMap,   Vgrid *dielXMap, 
@@ -5392,15 +5391,7 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
 						int useKappaMap,   Vgrid *kappaMap, 
 						int usePotMap,	   Vgrid *potMap, 
 						int useChargeMap,  Vgrid *chargeMap) {
-#else
-VPUBLIC int Vpmg_fillco(Vpmg *thee, 
-						Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
-						int useDielXMap,   Vgrid *dielXMap, 
-						int useDielYMap,   Vgrid *dielYMap, 
-						int useDielZMap,   Vgrid *dielZMap, 
-						int useKappaMap,   Vgrid *kappaMap, 
-						int useChargeMap,  Vgrid *chargeMap) {
-#endif		
+	
     Vpbe *pbe;
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, hx, hy, hzed;

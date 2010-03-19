@@ -210,7 +210,6 @@ VEXTERNC void printPBEPARM(PBEparm *pbeparm);
  * @param  mgparm  MGparm object */
 VEXTERNC void printMGPARM(MGparm *mgparm, double realCenter[3]);
 
-#if defined(INCLUDE_MULTI)
 /**
  * @brief  Initialize an MG calculation
  * @ingroup  Frontend
@@ -233,29 +232,7 @@ VEXTERNC int initMG(
 					Vpmg *pmg[NOSH_MAXCALC],  /**< Array of MG objects (one for each calc) */
 					Vgrid *potMap[NOSH_MAXMOL]  /**< Array of potential maps  */
 					);
-#else
-/**
- * @brief  Initialize an MG calculation
- * @ingroup  Frontend
- * @author  Nathan Baker
- * @return  1 if succesful, 0 otherwise */
-VEXTERNC int initMG(
-					int icalc,  /**< Index of calculation in pmg/pmpg arrays */
-					NOsh *nosh,  /**< Object with parsed input file parameters */
-					MGparm *mgparm,  /**< Object with MG-specific parameters */
-					PBEparm *pbeparm,  /**< Object with generic PBE parameters  */
-					double realCenter[3],  /**< The actual center of the current mesh */
-					Vpbe *pbe[NOSH_MAXCALC],  /**< Array of Vpbe objects (one for each calc) */
-					Valist *alist[NOSH_MAXMOL],  /**< Array of atom lists */
-					Vgrid *dielXMap[NOSH_MAXMOL],  /**< Array of x-shifted dielectric maps */
-					Vgrid *dielYMap[NOSH_MAXMOL],  /**< Array of y-shifted dielectric maps */
-					Vgrid *dielZMap[NOSH_MAXMOL],  /**< Array of z-shifted dielectric maps */
-					Vgrid *kappaMap[NOSH_MAXMOL],  /**< Array of kappa maps  */
-					Vgrid *chargeMap[NOSH_MAXMOL],  /**< Array of charge maps */
-					Vpmgp *pmgp[NOSH_MAXCALC],  /**< Array of MG parameter objects (one for each calc) */
-					Vpmg *pmg[NOSH_MAXCALC]  /**< Array of MG objects (one for each calc) */
-					);
-#endif
+
 /**
  * @brief  Kill structures initialized during an MG calculation
  * @ingroup  Frontend

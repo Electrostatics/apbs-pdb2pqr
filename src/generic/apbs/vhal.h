@@ -274,6 +274,7 @@ typedef enum eVchrg_Src Vchrg_Src;
 enum eVdata_Type {
     VDT_CHARGE, /**< Charge distribution (e) */
     VDT_POT,    /**< Potential (kT/e) */
+	VDT_ATOMPOT, /**< Atom potential (kT/e) */
     VDT_SMOL,   /**< Solvent accessibility defined by molecular/Connolly
                  * surface definition (1 = accessible, 0 = inaccessible) */
     VDT_SSPL,   /**< Spline-based solvent accessibility (1 = accessible, 0 =
