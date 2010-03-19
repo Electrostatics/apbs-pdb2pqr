@@ -549,7 +549,8 @@ VEXTERNC int Vpmg_fillArray(
                         values to be written */
         Vdata_Type type,  /**< What to write */ 
         double parm,  /**< Parameter for data type definition (if needed) */
-        Vhal_PBEType pbetype  /**< Parameter for PBE type (if needed) */
+        Vhal_PBEType pbetype, /**< Parameter for PBE type (if needed) */
+		PBEparm * pbeparm /**< Pass in the PBE parameters (if needed) */
         );
 
 /** @brief   Computes the field at an atomic center using a stencil based

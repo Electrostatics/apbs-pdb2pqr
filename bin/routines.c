@@ -1945,68 +1945,18 @@ fclose(file);
 return 1;
 }   
 
-VPUBLIC int writeMultivalue(PBEparm *pbeparm, Vpmg *pmg,Valist *alist[NOSH_MAXMOL],int calcnum){
-	
-	int i;
-	int nx, ny, nz;
-	char filename[1024];
-	
-	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
-	double apos[3];
-	double value;
-	
-	Vgrid *grid;
-	Vatom *atoms;
-	
-	nx = pmg->pmgp->nx;
-	ny = pmg->pmgp->ny;
-	nz = pmg->pmgp->nz;
-	hx = pmg->pmgp->hx;
-	hy = pmg->pmgp->hy;
-	hzed = pmg->pmgp->hzed;
-	
-	xcent = pmg->pmgp->xcent;
-	ycent = pmg->pmgp->ycent;
-	zcent = pmg->pmgp->zcent;
-	xmin = xcent - 0.5*(nx-1)*hx;
-	ymin = ycent - 0.5*(ny-1)*hy;
-	zmin = zcent - 0.5*(nz-1)*hzed;
-	VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
-						   pbeparm->pbetype));
-	
-	grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
-					  pmg->rwork);
-	
-	sprintf(filename,"calc_%i.txt",calcnum);
-	FILE * pfile = fopen(filename, "w");
-	
-	atoms = alist[pbeparm->molid-1]->atoms;
-	for (i=0; i<alist[pbeparm->molid-1]->number;i++) {
-		apos[0] = atoms[i].position[0];
-		apos[1] = atoms[i].position[1];
-		apos[2] = atoms[i].position[2]; 
-		
-		Vgrid_value(grid, apos, &value);
-		fprintf(pfile, "%1.12e\n",value);
-	}
-	fclose(pfile);
-	
-	Vgrid_dtor(&grid);
-	
-	return 1;
-}
-
 VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 	
 	char writestem[VMAX_ARGLEN];
 	char outpath[VMAX_ARGLEN];
 	char title[72];
-	int i, nx, ny, nz;
+	int i, nx, ny, nz, natoms;
 	double hx, hy, hzed, xcent, ycent, zcent, xmin, ymin, zmin;
+	
 	Vgrid *grid; 
+	Vio *sock;
 	
 	if (nosh->bogus) return 1;
-	
 	
 	for (i=0; i<pbeparm->numwrite; i++) { 
 		
@@ -2029,7 +1979,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_CHARGE, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, "CHARGE DISTRIBUTION (e)");
 				break;
 				
@@ -2043,7 +1993,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, "POTENTIAL (kT/e)");
 				break;
 				
@@ -2057,7 +2007,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SMOL, 
-									   pbeparm->srad, pbeparm->pbetype));
+									   pbeparm->srad, pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"SOLVENT ACCESSIBILITY -- MOLECULAR (%4.3f PROBE)", 
 						pbeparm->srad);
@@ -2073,7 +2023,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_SSPL,
-									   pbeparm->swin, pbeparm->pbetype));
+									   pbeparm->swin, pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"SOLVENT ACCESSIBILITY -- SPLINE (%4.3f WINDOW)",
 						pbeparm->swin);
@@ -2089,7 +2039,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_VDW, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, "SOLVENT ACCESSIBILITY -- VAN DER WAALS");
 				break;
 				
@@ -2103,7 +2053,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_IVDW, 
-									   pmg->pbe->maxIonRadius, pbeparm->pbetype));
+									   pmg->pbe->maxIonRadius, pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"ION ACCESSIBILITY -- SPLINE (%4.3f RADIUS)",
 						pmg->pbe->maxIonRadius);
@@ -2119,7 +2069,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_LAP, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"POTENTIAL LAPLACIAN (kT/e/A^2)");
 				break;
@@ -2134,7 +2084,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_EDENS, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, "ENERGY DENSITY (kT/e/A)^2");
 				break;
 				
@@ -2148,7 +2098,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_NDENS, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"ION NUMBER DENSITY (M)");
 				break;
@@ -2163,7 +2113,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_QDENS, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title, 
 						"ION CHARGE DENSITY (e_c * M)");
 				break;
@@ -2178,7 +2128,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELX, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title,
 						"X-SHIFTED DIELECTRIC MAP");
 				break;
@@ -2193,7 +2143,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELY, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title,
 						"Y-SHIFTED DIELECTRIC MAP");
 				break;
@@ -2208,7 +2158,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_DIELZ, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title,
 						"Z-SHIFTED DIELECTRIC MAP");
 				break;
@@ -2223,7 +2173,7 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
 				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
-									   pbeparm->pbetype));
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title,
 						"KAPPA MAP");
 				break;
@@ -2237,10 +2187,10 @@ VPUBLIC int writedataMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 				xmin = xcent - 0.5*(nx-1)*hx;
 				ymin = ycent - 0.5*(ny-1)*hy;
 				zmin = zcent - 0.5*(nz-1)*hzed;
-				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_KAPPA, 0.0, 
-									   pbeparm->pbetype));
+				VASSERT(Vpmg_fillArray(pmg, pmg->rwork, VDT_ATOMPOT, 0.0, 
+									   pbeparm->pbetype, pbeparm));
 				sprintf(title,
-						"KAPPA MAP");
+						"ATOM POTENTIALS");
 				break;	
 			default:
 				
@@ -2294,7 +2244,30 @@ uniform meshes yet!\n");
 								pmg->pvec);
 				Vgrid_dtor(&grid);
 				break;
-				
+			
+			case VDF_FLAT: 
+				sprintf(outpath, "%s.%s", writestem, "txt");
+				Vnm_tprint(1, "%s\n", outpath);
+				Vnm_print(0, "routines:  Opening virtual socket...\n");
+				sock = Vio_ctor("FILE","ASC",VNULL,outpath,"w");
+				if (sock == VNULL) {
+					Vnm_print(2, "routines:  Problem opening virtual socket %s\n",
+							  outpath);
+					return 0;
+				}
+				if (Vio_connect(sock, 0) < 0) {
+					Vnm_print(2, "routines: Problem connecting virtual socket %s\n",
+							  outpath);
+					return 0; 
+				}
+				Vio_printf(sock, "# Data from %s\n", PACKAGE_STRING);
+				Vio_printf(sock, "# \n");
+				Vio_printf(sock, "# %s\n", title);
+				Vio_printf(sock, "# \n");
+				natoms = pmg->pbe->alist[pbeparm->molid-1].number;
+				for(i=0;i<natoms;i++)
+					Vio_printf(sock, "%12.6e\n", pmg->rwork[i]);
+				break;
 			default:
 				Vnm_tprint(2, "Bogus data format (%d)!\n", 
 						   pbeparm->writefmt[i]);
