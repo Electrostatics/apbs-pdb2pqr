@@ -542,7 +542,23 @@ VPUBLIC int loadPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
 				return 0;
 			case VDF_BIN:
-				Vnm_tprint( 2, "Binary input not supported yet!\n");
+				if (Vgrid_readBIN(map[i], "FILE", "ASC", VNULL, 
+								 nosh->potpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->potpath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
+					sum += (map[i]->data[ii]);
+				sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
@@ -2244,7 +2260,16 @@ uniform meshes yet!\n");
 								pmg->pvec);
 				Vgrid_dtor(&grid);
 				break;
-			
+				
+			case VDF_BIN:
+				sprintf(outpath, "%s.%s", writestem, "bin");
+				Vnm_tprint(1, "%s\n", outpath);
+				grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
+								  pmg->rwork);
+				Vgrid_writeBIN(grid, "FILE", "ASC", VNULL, outpath, title,
+							  pmg->pvec);
+				Vgrid_dtor(&grid);
+				break;
 			case VDF_FLAT: 
 				sprintf(outpath, "%s.%s", writestem, "txt");
 				Vnm_tprint(1, "%s\n", outpath);
