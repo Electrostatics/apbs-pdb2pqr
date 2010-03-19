@@ -499,6 +499,76 @@ VPUBLIC void killKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 	
 }
 
+VPUBLIC int loadPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+	
+	int i, ii;
+	double sum;
+	
+	if (nosh->npot > 0) 
+		Vnm_tprint( 1, "Got paths for %d potential maps\n", nosh->npot);
+	else return 1;
+	
+	for (i=0; i<nosh->npot; i++) {
+		Vnm_tprint( 1, "Reading potential map data from %s:\n",
+				   nosh->potpath[i]);
+		map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
+		switch (nosh->potfmt[i]) {
+			case VDF_DX:
+				if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
+								 nosh->potpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->potpath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
+					sum += (map[i]->data[ii]);
+				sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_UHBD:
+				Vnm_tprint( 2, "UHBD input not supported yet!\n");
+				return 0;
+			case VDF_MCSF:
+				Vnm_tprint( 2, "MCSF input not supported yet!\n");
+				return 0;
+			case VDF_AVS:
+				Vnm_tprint( 2, "AVS input not supported yet!\n");
+				return 0;
+			case VDF_BIN:
+				Vnm_tprint( 2, "Binary input not supported yet!\n");
+				return 0;
+			default:
+				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
+						   nosh->potfmt[i]);
+				return 0;
+		}
+	}
+	
+	return 1;
+	
+}
+
+VPUBLIC void killPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
+	
+	int i;
+	
+	if (nosh->npot > 0) {
+#ifndef VAPBSQUIET
+		Vnm_tprint( 1, "Destroying %d potential maps\n", nosh->npot);
+#endif
+		for (i=0; i<nosh->npot; i++) Vgrid_dtor(&(map[i]));
+	}
+	else return;
+	
+}
+
 VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 	
 	int i, ii;
@@ -610,6 +680,8 @@ conditions\n");
 conditions\n");
 	} else if (pbeparm->bcfl == BCFL_FOCUS) {
 		Vnm_tprint( 1, "  Boundary conditions from focusing\n");
+	} else if (pbeparm->bcfl == BCFL_MAP) {
+		Vnm_tprint( 1, "  Boundary conditions from potential map\n");
 	} else if (pbeparm->bcfl == BCFL_MEM) {
 		Vnm_tprint( 1, "  Membrane potential boundary conditions.\n");
 	}
@@ -761,18 +833,29 @@ VPUBLIC void printMGPARM(MGparm *mgparm, double realCenter[3]) {
 	
 }
 
+#if defined(INCLUDE_MULTI)
+VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm, 
+				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
+				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
+				   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
+				   Vgrid *kappaMap[NOSH_MAXMOL],  Vgrid *potMap[NOSH_MAXMOL],
+				   Vgrid *chargeMap[NOSH_MAXMOL], Vpmgp *pmgp[NOSH_MAXCALC], 
+				   Vpmg *pmg[NOSH_MAXCALC]) {
+#else
 VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm, 
 				   PBEparm *pbeparm, double realCenter[3], Vpbe *pbe[NOSH_MAXCALC], 
 				   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
 				   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL],
 				   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL],
 				   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]) {
-	
+		
+#endif
 	int j,  focusFlag, iatom;
 	size_t bytesTotal, highWater;
 	double sparm, iparm, q;
 	Vatom *atom = VNULL;
-	Vgrid *theDielXMap, *theDielYMap, *theDielZMap, *theKappaMap, *theChargeMap;
+	Vgrid *theDielXMap, *theDielYMap, *theDielZMap;
+	Vgrid *theKappaMap, *thePotMap, *theChargeMap;
 	Valist *myalist = VNULL;
 	
 	Vnm_tstart(APBS_TIMER_SETUP, "Setup timer");
@@ -915,6 +998,15 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 			return 0;
 		}
 	} else theKappaMap = VNULL;
+	if (pbeparm->usePotMap) {
+		if ((pbeparm->potMapID-1) < nosh->npot) {
+			thePotMap = potMap[pbeparm->potMapID-1];
+		} else {
+			Vnm_print(2, "Error!  %d is not a valid potential map ID!\n",
+					  pbeparm->potMapID);
+			return 0;
+		}
+	} else thePotMap = VNULL;
 	if (pbeparm->useChargeMap) {
 		if ((pbeparm->chargeMapID-1) < nosh->ncharge) {
 			theChargeMap = chargeMap[pbeparm->chargeMapID-1];
@@ -924,17 +1016,31 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 			return 0;
 		}
 	} else theChargeMap = VNULL;
+#if defined(INCLUDE_MULTI)
 	if (!Vpmg_fillco(pmg[icalc], 
 					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
 					 pbeparm->useDielMap, theDielXMap,
 					 pbeparm->useDielMap, theDielYMap,
 					 pbeparm->useDielMap, theDielZMap,
 					 pbeparm->useKappaMap, theKappaMap,
+					 pbeparm->usePotMap, thePotMap,
 					 pbeparm->useChargeMap, theChargeMap)) {
 		Vnm_print(2, "initMG:  problems setting up coefficients (fillco)!\n");
 		return 0;
 	}
-	
+#else
+	if (!Vpmg_fillco(pmg[icalc], 
+					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
+					 pbeparm->useDielMap, theDielXMap,
+					 pbeparm->useDielMap, theDielYMap,
+					 pbeparm->useDielMap, theDielZMap,
+					 pbeparm->useKappaMap, theKappaMap,
+					 pbeparm->usePotMap, thePotMap,
+					 pbeparm->useChargeMap, theChargeMap)) {
+		Vnm_print(2, "initMG:  problems setting up coefficients (fillco)!\n");
+		return 0;
+	}
+#endif	
 	/* Print a few derived parameters */
 #ifndef VAPBSQUIET
 	Vnm_tprint(1, "  Debye length:  %g A\n", Vpbe_getDeblen(pbe[icalc]));
@@ -1491,6 +1597,9 @@ VPUBLIC int writedataFlat(
 			case BCFL_FOCUS:
 				fprintf(file,"    bcfl focus\n");
 				break;
+			case BCFL_MAP:
+				fprintf(file,"    bcfl map\n");
+				break;
 			case BCFL_MEM:
 				fprintf(file,"    bcfl mem\n");
 				break;
@@ -1733,6 +1842,9 @@ VPUBLIC int writedataXML(NOsh *nosh, Vcom *com, const char *fname,
 				break;
 			case BCFL_FOCUS:
 				fprintf(file,"      <bcfl>focus</bcfl>\n");
+				break;
+			case BCFL_MAP:
+				fprintf(file,"      <bcfl>map</bcfl>\n");
 				break;
 			case BCFL_MEM:
 				fprintf(file,"      <bcfl>mem</bcfl>\n");

@@ -101,6 +101,7 @@ struct sVpmg {
   double *epsy;  /**< Y-shifted dielectric map */
   double *epsz;  /**< Y-shifted dielectric map */
   double *kappa;  /**< Ion accessibility map (0 <= kappa(x) <= 1) */
+  double *pot;  /**< Potential map */
   double *charge;  /**< Charge map */
 
   int *iparm;  /**< Passing int parameters to FORTRAN */
@@ -151,6 +152,10 @@ struct sVpmg {
   int useKappaMap;  /**< Indicates whether Vpmg_fillco was called with an
                      * external kappa map */
   Vgrid *kappaMap;  /**< External kappa map */
+  int usePotMap;    /**< Indicates whether Vpmg_fillco was called with an
+					   * external potential map */
+  Vgrid *potMap;    /**< External potential map */
+	
   int useChargeMap;  /**< Indicates whether Vpmg_fillco was called with an
                       * external charge distribution map */
   Vgrid *chargeMap;  /**< External charge distribution map */
@@ -238,6 +243,7 @@ VEXTERNC void Vpmg_dtor2(
         Vpmg *thee  /**< Pointer to object to be destroyed */
         );
 
+#if defined(INCLUDE_MULTI)
 /** @brief  Fill the coefficient arrays prior to solving the equation
  *  @ingroup  Vpmg
  *  @author  Nathan Baker
@@ -257,10 +263,35 @@ VEXTERNC int Vpmg_fillco(
         Vgrid *dielZMap,  /**< External dielectric map */
         int useKappaMap,  /**< Boolean to use kappa map argument */
         Vgrid *kappaMap,  /**< External kappa map */
+        int usePotMap,  /**< Boolean to use potential map argument */
+		Vgrid *potMap,  /**< External potential map */
         int useChargeMap,  /**< Boolean to use charge map argument */
         Vgrid *chargeMap  /**< External charge map */
         );
-
+#else
+/** @brief  Fill the coefficient arrays prior to solving the equation
+ *  @ingroup  Vpmg
+ *  @author  Nathan Baker
+ *  @returns  1 if successful, 0 otherwise
+ */
+VEXTERNC int Vpmg_fillco(
+						 Vpmg *thee,  /**< Vpmg object */ 
+						 Vsurf_Meth surfMeth,  /**< Surface discretization method */
+						 double splineWin,  /**< Spline window (in A) for surfMeth = 
+											 * VSM_SPLINE */
+						 Vchrg_Meth chargeMeth,  /**< Charge discretization method */ 
+						 int useDielXMap,  /**< Boolean to use dielectric map argument */
+						 Vgrid *dielXMap,  /**< External dielectric map */
+						 int useDielYMap,  /**< Boolean to use dielectric map argument */
+						 Vgrid *dielYMap,  /**< External dielectric map */
+						 int useDielZMap,  /**< Boolean to use dielectric map argument */
+						 Vgrid *dielZMap,  /**< External dielectric map */
+						 int useKappaMap,  /**< Boolean to use kappa map argument */
+						 Vgrid *kappaMap,  /**< External kappa map */
+						 int useChargeMap,  /**< Boolean to use charge map argument */
+						 Vgrid *chargeMap  /**< External charge map */
+						 );
+#endif
 /** @brief   Solve the PBE using PMG
  *  @ingroup Vpmg
  *  @author  Nathan Baker

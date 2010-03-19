@@ -147,6 +147,7 @@ VPUBLIC int PBEparm_ctor2(PBEparm *thee) {
     thee->srad = 1.4;
     thee->useDielMap = 0;
     thee->useKappaMap = 0;
+	thee->usePotMap = 0;
     thee->useChargeMap = 0;
 	
 	/*----------------------------------------------*/
@@ -292,6 +293,8 @@ VPUBLIC void PBEparm_copy(PBEparm *thee, PBEparm *parm) {
     thee->dielMapID = parm->dielMapID;
     thee->useKappaMap = parm->useKappaMap;
     thee->kappaMapID = parm->kappaMapID;
+	thee->usePotMap = parm->usePotMap;
+	thee->potMapID = parm->potMapID;
     thee->useChargeMap = parm->useChargeMap;
     thee->chargeMapID = parm->chargeMapID;
     thee->pbetype = parm->pbetype; 

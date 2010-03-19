@@ -217,7 +217,8 @@ enum eVbcfl {
                   * condition */
     BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
     BCFL_FOCUS=4,  /**< Focusing Dirichlet boundary condition */
-    BCFL_MEM=5  /**< Focusing membrane boundary condition */
+    BCFL_MEM=5,  /**< Focusing membrane boundary condition */
+	BCFL_MAP=6	/**< Skip first level of focusing use an external map */
 };
 
 /**
@@ -313,7 +314,8 @@ enum eVdata_Format {
     VDF_DX=0,  /**< OpenDX (Data Explorer) format */
     VDF_UHBD=1, /**< UHBD format */
     VDF_AVS=2,  /**< AVS UCD format */
-	VDF_MCSF=3  /**< FEtk MC Simplex Format (MCSF) */
+	VDF_MCSF=3,  /**< FEtk MC Simplex Format (MCSF) */
+	VDF_BIN=4	/**< Temporary binary file (OpenDX as binary) */
 };
 
 /** @typedef Vdata_Format
