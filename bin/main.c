@@ -111,6 +111,7 @@ int main(
 	Valist *alist[NOSH_MAXMOL];
 	Vgrid *dielXMap[NOSH_MAXMOL],*dielYMap[NOSH_MAXMOL],*dielZMap[NOSH_MAXMOL];
 	Vgrid *kappaMap[NOSH_MAXMOL];
+	Vgrid *potMap[NOSH_MAXMOL];
 	Vgrid *chargeMap[NOSH_MAXMOL];
 	char *input_path = VNULL;
 	char *output_path = VNULL;
@@ -250,6 +251,7 @@ int main(
 		dielYMap[i] = VNULL;
 		dielZMap[i] = VNULL;
 		kappaMap[i] = VNULL;
+		potMap[i] = VNULL;
 		chargeMap[i] = VNULL;
 	}
 
@@ -400,6 +402,10 @@ int main(
 		Vnm_tprint(2, "Error reading kappa maps!\n");
 		VJMPERR1(0);
 	}
+	if (loadPotMaps(nosh, potMap) != 1) {
+		Vnm_tprint(2, "Error reading potential maps!\n");
+		VJMPERR1(0);
+	}
 	if (loadChargeMaps(nosh, chargeMap) != 1) {
 		Vnm_tprint(2, "Error reading charge maps!\n");
 		VJMPERR1(0);
@@ -432,13 +438,21 @@ int main(
 				
 				/* Set up problem */
 				Vnm_tprint( 1, "  Setting up problem...\n");
+#if defined(INCLUDE_MULTI)
+				if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
+							alist, dielXMap, dielYMap, dielZMap, kappaMap, potMap,
+							chargeMap, pmgp, pmg)) {
+					Vnm_tprint( 2, "Error setting up MG calculation!\n");
+					VJMPERR1(0);
+				}
+#else
 				if (!initMG(i, nosh, mgparm, pbeparm, realCenter, pbe, 
 							alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
 							pmgp, pmg)) {
 					Vnm_tprint( 2, "Error setting up MG calculation!\n");
 					VJMPERR1(0);
 				}
-				
+#endif				
 				/* Print problem parameters */
 				printMGPARM(mgparm, realCenter);
 				printPBEPARM(pbeparm);

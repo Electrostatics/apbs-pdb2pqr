@@ -209,6 +209,11 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 	thee->gzcf = (double *)Vmem_malloc(thee->vmem,
 									   10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
 	
+	/* Warn users if they are using BCFL_MAP that 
+	   we do not include external energies */
+	if (thee->pmgp->bcfl == BCFL_MAP)
+		Vnm_print(2,"Vpmg_ctor2: \nWarning: External energies are not used in BCFL_MAP calculations!\n");
+	
 	if (focusFlag) {
 		/* Overwrite any default or user-specified boundary condition
 		* arguments; we are now committed to a calculation via focusing */
@@ -275,6 +280,8 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 	thee->charge = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
 										 sizeof(double));
 	thee->kappa = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
+										sizeof(double));
+	thee->pot = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
 										sizeof(double));
 	thee->epsx = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
 									   sizeof(double));
@@ -519,6 +526,8 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
       (void **)&(thee->charge));
     Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
       (void **)&(thee->kappa));
+	Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
+			  (void **)&(thee->pot));
     Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
       (void **)&(thee->epsx));
     Vmem_free(thee->vmem, thee->pmgp->narr, sizeof(double),
@@ -1723,7 +1732,7 @@ VPRIVATE void Vpmg_splineSelect(int srfm,Vacc *acc,double *gpos,double win,
 }
 
 VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
-
+	
     Vpbe *pbe;
     double hxOLD, hyOLD, hzOLD, xminOLD, yminOLD, zminOLD, xmaxOLD, ymaxOLD;
     double zmaxOLD;
@@ -1736,6 +1745,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     double eps_w, T, pre1, xkappa, size, *apos, charge, pos[3];
 	
 	double uvalMin, uvalMax;
+	double *data;
 	
     /* Calculate new problem dimensions */
     hxNEW = thee->pmgp->hx;
@@ -1753,21 +1763,40 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     ymaxNEW = thee->pmgp->ycent + ((double)(nyNEW-1)*hyNEW)/2.0;
     zminNEW = thee->pmgp->zcent - ((double)(nzNEW-1)*hzNEW)/2.0;
     zmaxNEW = thee->pmgp->zcent + ((double)(nzNEW-1)*hzNEW)/2.0;
-
-    /* Relevant old problem parameters */
-    hxOLD = pmgOLD->pmgp->hx;
-    hyOLD = pmgOLD->pmgp->hy;
-    hzOLD = pmgOLD->pmgp->hzed;
-    nxOLD = pmgOLD->pmgp->nx;
-    nyOLD = pmgOLD->pmgp->ny;
-    nzOLD = pmgOLD->pmgp->nz;
-    xminOLD = pmgOLD->pmgp->xcent - ((double)(nxOLD-1)*hxOLD)/2.0;
-    xmaxOLD = pmgOLD->pmgp->xcent + ((double)(nxOLD-1)*hxOLD)/2.0;
-    yminOLD = pmgOLD->pmgp->ycent - ((double)(nyOLD-1)*hyOLD)/2.0;
-    ymaxOLD = pmgOLD->pmgp->ycent + ((double)(nyOLD-1)*hyOLD)/2.0;
-    zminOLD = pmgOLD->pmgp->zcent - ((double)(nzOLD-1)*hzOLD)/2.0;
-    zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
-
+	
+	if(pmgOLD != VNULL){
+		/* Relevant old problem parameters */
+		hxOLD = pmgOLD->pmgp->hx;
+		hyOLD = pmgOLD->pmgp->hy;
+		hzOLD = pmgOLD->pmgp->hzed;
+		nxOLD = pmgOLD->pmgp->nx;
+		nyOLD = pmgOLD->pmgp->ny;
+		nzOLD = pmgOLD->pmgp->nz;
+		xminOLD = pmgOLD->pmgp->xcent - ((double)(nxOLD-1)*hxOLD)/2.0;
+		xmaxOLD = pmgOLD->pmgp->xcent + ((double)(nxOLD-1)*hxOLD)/2.0;
+		yminOLD = pmgOLD->pmgp->ycent - ((double)(nyOLD-1)*hyOLD)/2.0;
+		ymaxOLD = pmgOLD->pmgp->ycent + ((double)(nyOLD-1)*hyOLD)/2.0;
+		zminOLD = pmgOLD->pmgp->zcent - ((double)(nzOLD-1)*hzOLD)/2.0;
+		zmaxOLD = pmgOLD->pmgp->zcent + ((double)(nzOLD-1)*hzOLD)/2.0;
+		
+		data = data;
+	}else{
+		/* Relevant old problem parameters */
+		hxOLD = thee->potMap->hx;
+		hyOLD = thee->potMap->hy;
+		hzOLD = thee->potMap->hzed;
+		nxOLD = thee->potMap->nx;
+		nyOLD = thee->potMap->ny;
+		nzOLD = thee->potMap->nz;
+		xminOLD = thee->potMap->xmin;
+		xmaxOLD = thee->potMap->xmax;
+		yminOLD = thee->potMap->ymin;
+		ymaxOLD = thee->potMap->ymax;
+		zminOLD = thee->potMap->zmin;
+		zmaxOLD = thee->potMap->zmax;
+		
+		data = thee->potMap->data;
+	}
     /* BOUNDARY CONDITION SETUP FOR POINTS OFF OLD MESH:
      * For each "atom" (only one for bcfl=1), we use the following formula to
      * calculate the boundary conditions:
@@ -1784,7 +1813,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     eps_w = Vpbe_getSolventDiel(pbe);           /* Dimensionless */
     T = Vpbe_getTemperature(pbe);               /* K             */
     pre1 = (Vunit_ec)/(4*VPI*Vunit_eps0*eps_w*Vunit_kb*T);
-
+	
     /* Finally, if we convert keep xkappa in A^{-1} and scale pre1 by
      * m/A, then we will only need to deal with distances and sizes in
      * Angstroms rather than meters.                                       */
@@ -1793,7 +1822,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     size = Vpbe_getSoluteRadius(pbe);
     apos = Vpbe_getSoluteCenter(pbe);
     charge = Vunit_ec*Vpbe_getSoluteCharge(pbe);
-
+	
     /* Check for rounding error */
     if (VABS(xminOLD-xminNEW) < VSMALL) xminNEW = xminOLD;
     if (VABS(xmaxOLD-xmaxNEW) < VSMALL) xmaxNEW = xmaxOLD;
@@ -1802,22 +1831,22 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     if (VABS(zminOLD-zminNEW) < VSMALL) zminNEW = zminOLD;
     if (VABS(zmaxOLD-zmaxNEW) < VSMALL) zmaxNEW = zmaxOLD;
     
-
+	
     /* Sanity check: make sure we're within the old mesh */
     Vnm_print(0, "VPMG::focusFillBound -- New mesh mins = %g, %g, %g\n",
-      xminNEW, yminNEW, zminNEW);
+			  xminNEW, yminNEW, zminNEW);
     Vnm_print(0, "VPMG::focusFillBound -- New mesh maxs = %g, %g, %g\n",
-      xmaxNEW, ymaxNEW, zmaxNEW);
+			  xmaxNEW, ymaxNEW, zmaxNEW);
     Vnm_print(0, "VPMG::focusFillBound -- Old mesh mins = %g, %g, %g\n",
-      xminOLD, yminOLD, zminOLD);
+			  xminOLD, yminOLD, zminOLD);
     Vnm_print(0, "VPMG::focusFillBound -- Old mesh maxs = %g, %g, %g\n",
-      xmaxOLD, ymaxOLD, zmaxOLD);
-
+			  xmaxOLD, ymaxOLD, zmaxOLD);
+	
     /* The following is obsolete; we'll substitute analytical boundary
      * condition values when the new mesh falls outside the old */
     if ((xmaxNEW>xmaxOLD) || (ymaxNEW>ymaxOLD) || (zmaxNEW>zmaxOLD) ||
         (xminOLD>xminNEW) || (yminOLD>yminNEW) || (zminOLD>zminNEW)) {
-
+		
         Vnm_print(2, "Vpmg::focusFillBound -- new mesh not contained in old!\n");
 		Vnm_print(2, "Vpmg::focusFillBound -- old mesh min = (%g, %g, %g)\n",
 				  xminOLD, yminOLD, zminOLD);
@@ -1830,7 +1859,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
 		fflush(stderr);
         VASSERT(0);
     }
-
+	
 	uvalMin	= VPMGSMALL;
 	uvalMax = -VPMGSMALL;
     
@@ -1862,29 +1891,29 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gxcf[IJKx(j,k,0)] = uval;
 			if(uval < uvalMin) uvalMin = uval;
 			if(uval > uvalMax) uvalMax = uval;
-
+			
             /* High X face */
             x = xmaxNEW;
             if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
@@ -1908,22 +1937,22 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
@@ -1938,7 +1967,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             thee->gxcf[IJKx(j,k,3)] = 0.0;
         }
     }
-
+	
     /* Fill the "j" boundaries (dirichlet) */
     for (k=0; k<nzNEW; k++) {
         for (i=0; i<nxNEW; i++) {
@@ -1967,29 +1996,29 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,0)] = uval;
 			if(uval < uvalMin) uvalMin = uval;
 			if(uval > uvalMax) uvalMax = uval;
-
+			
             /* High Y face */
             y = ymaxNEW;
             if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
@@ -2013,29 +2042,29 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,1)] = uval;
 			if(uval < uvalMin) uvalMin = uval;
 			if(uval > uvalMax) uvalMax = uval;
-
+			
             /* Zero Neumann conditions */
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gycf[IJKy(i,k,2)] = 0.0;
@@ -2043,7 +2072,7 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
             thee->gycf[IJKy(i,k,3)] = 0.0;
         }
     }
-
+	
     /* Fill the "k" boundaries (dirichlet) */
     for (j=0; j<nyNEW; j++) {
         for (i=0; i<nxNEW; i++) {
@@ -2072,29 +2101,29 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,0)] = uval;
 			if(uval < uvalMin) uvalMin = uval;
 			if(uval > uvalMax) uvalMax = uval;
-
+			
             /* High Z face */
             z = zmaxNEW;
             if ((x >= (xminOLD-VSMALL)) && (y >= (yminOLD-VSMALL)) && (z >= (zminOLD-VSMALL)) &&
@@ -2118,29 +2147,29 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
                 dy = jfloat - (double)(jlo);
                 dz = kfloat - (double)(klo);
                 nx = nxOLD; ny = nyOLD; nz = nzOLD;
-                uval =  dx*dy*dz*(pmgOLD->u[IJK(ihi,jhi,khi)])
-                  + dx*(1.0-dy)*dz*(pmgOLD->u[IJK(ihi,jlo,khi)])
-                  + dx*dy*(1.0-dz)*(pmgOLD->u[IJK(ihi,jhi,klo)])
-                  + dx*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ihi,jlo,klo)])
-                  + (1.0-dx)*dy*dz*(pmgOLD->u[IJK(ilo,jhi,khi)])
-                  + (1.0-dx)*(1.0-dy)*dz*(pmgOLD->u[IJK(ilo,jlo,khi)])
-                  + (1.0-dx)*dy*(1.0-dz)*(pmgOLD->u[IJK(ilo,jhi,klo)])
-                  + (1.0-dx)*(1.0-dy)*(1.0-dz)*(pmgOLD->u[IJK(ilo,jlo,klo)]);
+                uval =  dx*dy*dz*(data[IJK(ihi,jhi,khi)])
+				+ dx*(1.0-dy)*dz*(data[IJK(ihi,jlo,khi)])
+				+ dx*dy*(1.0-dz)*(data[IJK(ihi,jhi,klo)])
+				+ dx*(1.0-dy)*(1.0-dz)*(data[IJK(ihi,jlo,klo)])
+				+ (1.0-dx)*dy*dz*(data[IJK(ilo,jhi,khi)])
+				+ (1.0-dx)*(1.0-dy)*dz*(data[IJK(ilo,jlo,khi)])
+				+ (1.0-dx)*dy*(1.0-dz)*(data[IJK(ilo,jhi,klo)])
+				+ (1.0-dx)*(1.0-dy)*(1.0-dz)*(data[IJK(ilo,jlo,klo)]);
                 nx = nxNEW; ny = nyNEW; nz = nzNEW;
             } else {
 				Vnm_print(2, "focusFillBound (%s, %d):  Off old mesh at %g, %g \
-%g!\n", __FILE__, __LINE__, x, y, z);
+						  %g!\n", __FILE__, __LINE__, x, y, z);
 				Vnm_print(2, "focusFillBound (%s, %d):  old mesh lower corner at \
-%g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xminOLD, yminOLD, zminOLD);
                 Vnm_print(2, "focusFillBound (%s, %d):  old mesh upper corner at \
-%g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
+						  %g %g %g.\n", __FILE__, __LINE__, xmaxOLD, ymaxOLD, zmaxOLD);
 				VASSERT(0);
             }
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,1)] = uval;
 			if(uval < uvalMin) uvalMin = uval;
 			if(uval > uvalMax) uvalMax = uval;
-
+			
             /* Zero Neumann conditions */
             nx = nxNEW; ny = nyNEW; nz = nzNEW;
             thee->gzcf[IJKz(i,j,2)] = 0.0;
@@ -3878,6 +3907,46 @@ VPRIVATE void bcfl_mem(double zmem, double L, double eps_m, double eps_w,
     }
 }
 
+VPRIVATE void bcfl_map(Vpmg *thee){
+	
+	Vpbe *pbe;
+    double position[3], pot, hx, hy, hzed;
+    int i, j, k, nx, ny, nz, rc;
+	
+	
+    VASSERT(thee != VNULL);
+	
+    /* Mesh info */
+    nx = thee->pmgp->nx;
+    ny = thee->pmgp->ny;
+    nz = thee->pmgp->nz;
+    hx = thee->pmgp->hx;
+    hy = thee->pmgp->hy;
+    hzed = thee->pmgp->hzed;
+	
+    /* Reset the potential array */
+    for (i=0; i<(nx*ny*nz); i++) thee->pot[i] = 0.0;
+	
+    /* Fill in the source term (atomic potentials) */
+    Vnm_print(0, "Vpmg_fillco:  filling in source term.\n");
+    for (k=0; k<nz; k++) {
+        for (j=0; j<ny; j++) {
+            for (i=0; i<nx; i++) {
+                position[0] = thee->xf[i];
+                position[1] = thee->yf[j];
+                position[2] = thee->zf[k];
+				rc = Vgrid_value(thee->potMap, position, &pot);
+				if (!rc) {
+					Vnm_print(2, "fillcoChargeMap:  Error -- fell off of potential map at (%g, %g, %g)!\n",
+							  position[0], position[1], position[2]);
+					return VRC_FAILURE;
+				}
+                thee->pot[IJK(i,j,k)] = pot;
+            }
+        }
+    }
+	
+}
 
 #if  defined(WITH_TINKER)	
 VPRIVATE void bcfl_mdh_tinker(Vpmg *thee){
@@ -4136,6 +4205,10 @@ VPRIVATE void bcCalc(Vpmg *thee){
             Vnm_print(2, "VPMG::bcCalc -- not appropriate for focusing!\n");
             VASSERT(0);
 			break;
+		case BCFL_MAP:
+			bcfl_map(thee);
+			focusFillBound(thee,VNULL);
+			break;
         default:
             Vnm_print(2, "VPMG::bcCalc -- invalid boundary condition \
 					  flag (%d)!\n", thee->pmgp->bcfl);
@@ -4147,7 +4220,7 @@ VPRIVATE void bcCalc(Vpmg *thee){
 VPRIVATE void fillcoCoefMap(Vpmg *thee) {
 
     Vpbe *pbe;
-    double ionstr, position[3], tkappa, eps, hx, hy, hzed;
+    double ionstr, position[3], tkappa, eps, pot, hx, hy, hzed;
     int i, j, k, nx, ny, nz;
     double kappamax;
     VASSERT(thee != VNULL);
@@ -4164,8 +4237,8 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
     hy = thee->pmgp->hy;
     hzed = thee->pmgp->hzed;
 
-    if ((!thee->useDielXMap) || (!thee->useDielYMap) || (!thee->useDielZMap) ||
-      ((!thee->useKappaMap) && (ionstr>VPMGSMALL))) {
+    if ((!thee->useDielXMap) || (!thee->useDielYMap) 
+		|| (!thee->useDielZMap) || ((!thee->useKappaMap) && (ionstr>VPMGSMALL))) {
 
         Vnm_print(2, "fillcoCoefMap:  You need to use all coefficient maps!\n");
         VASSERT(0);
@@ -4229,7 +4302,7 @@ VPRIVATE void fillcoCoefMap(Vpmg *thee) {
                      if (tkappa < VPMGSMALL) tkappa = 0.0;
                      thee->kappa[IJK(i,j,k)] = (tkappa / kappamax);
                 }
-
+				
                 position[0] = thee->xf[i] + 0.5*hx;
                 position[1] = thee->yf[j];
                 position[2] = thee->zf[k];
@@ -4352,7 +4425,8 @@ VPRIVATE void fillcoCoefMolIon(Vpmg *thee) {
             if ((apos[0]<(xmin-irad-arad)) || (apos[0]>(xmax+irad+arad))  || \
                 (apos[1]<(ymin-irad-arad)) || (apos[1]>(ymax+irad+arad))  || \
                 (apos[2]<(zmin-irad-arad)) || (apos[2]>(zmax+irad+arad))) {
-                if (thee->pmgp->bcfl != BCFL_FOCUS) {
+                if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+					(thee->pmgp->bcfl != BCFL_MAP)) {
                     Vnm_print(2, 
     "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
                       iatom, apos[0], apos[1], apos[2]);
@@ -4454,7 +4528,8 @@ VPRIVATE void fillcoCoefMolDielNoSmooth(Vpmg *thee) {
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
  %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
@@ -4749,7 +4824,8 @@ VPRIVATE void fillcoCoefSpline(Vpmg *thee) {
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
  %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
@@ -4903,8 +4979,8 @@ VPRIVATE void fillcoCoef(Vpmg *thee) {
 	
     VASSERT(thee != VNULL);
 	
-    if (thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
-      thee->useKappaMap) {
+    if (thee->useDielXMap || thee->useDielYMap || 
+		thee->useDielZMap || thee->useKappaMap) {
         fillcoCoefMap(thee);
         return;
     }
@@ -5097,7 +5173,8 @@ VPRIVATE void fillcoChargeSpline1(Vpmg *thee) {
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, \
 %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
@@ -5234,7 +5311,8 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
         if ((apos[0]<=(xmin-hx)) || (apos[0]>=(xmax+hx))  || \
             (apos[1]<=(ymin-hy)) || (apos[1]>=(ymax+hy))  || \
             (apos[2]<=(zmin-hzed)) || (apos[2]>=(zmax+hzed))) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f, \
 %4.3f) is off the mesh (for cubic splines!!) (ignoring this atom):\n",
                   iatom, apos[0], apos[1], apos[2]);
@@ -5305,14 +5383,24 @@ VPRIVATE void fillcoChargeSpline2(Vpmg *thee) {
     } /* endfor (each atom) */
 }
 
+#if defined(INCLUDE_MULTI)
 VPUBLIC int Vpmg_fillco(Vpmg *thee, 
-  Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
-  int useDielXMap,   Vgrid *dielXMap, 
-  int useDielYMap,   Vgrid *dielYMap, 
-  int useDielZMap,   Vgrid *dielZMap, 
-  int useKappaMap,   Vgrid *kappaMap, 
-  int useChargeMap,  Vgrid *chargeMap) {
-
+						Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
+						int useDielXMap,   Vgrid *dielXMap, 
+						int useDielYMap,   Vgrid *dielYMap, 
+						int useDielZMap,   Vgrid *dielZMap, 
+						int useKappaMap,   Vgrid *kappaMap, 
+						int usePotMap,	   Vgrid *potMap, 
+						int useChargeMap,  Vgrid *chargeMap) {
+#else
+VPUBLIC int Vpmg_fillco(Vpmg *thee, 
+						Vsurf_Meth surfMeth, double splineWin, Vchrg_Meth chargeMeth,
+						int useDielXMap,   Vgrid *dielXMap, 
+						int useDielYMap,   Vgrid *dielYMap, 
+						int useDielZMap,   Vgrid *dielZMap, 
+						int useKappaMap,   Vgrid *kappaMap, 
+						int useChargeMap,  Vgrid *chargeMap) {
+#endif		
     Vpbe *pbe;
     double xmin, xmax, ymin, ymax, zmin, zmax;
     double xlen, ylen, zlen, hx, hy, hzed;
@@ -5336,6 +5424,8 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
     if (thee->useDielZMap) thee->dielZMap = dielZMap;
     thee->useKappaMap = useKappaMap;
     if (thee->useKappaMap) thee->kappaMap = kappaMap;
+	thee->usePotMap = usePotMap;
+    if (thee->usePotMap) thee->potMap = potMap;
     thee->useChargeMap = useChargeMap;
     if (thee->useChargeMap) thee->chargeMap = chargeMap;
 
@@ -5382,7 +5472,7 @@ VPUBLIC int Vpmg_fillco(Vpmg *thee,
      * i.e., in the case of a homogenous dielectric and zero ionic strength
 	 * The operator cannot be a simple Laplacian if maps are read in. */
 	if(thee->useDielXMap || thee->useDielYMap || thee->useDielZMap ||
-	   thee->useKappaMap){
+	   thee->useKappaMap || thee->usePotMap){
 		islap = 0;
 	}else if ( (ionstr < VPMGSMALL) && (VABS(epsp-epsw) < VPMGSMALL) ){
 		islap = 1;
@@ -5549,7 +5639,8 @@ calculation!\n");
     if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
       (apos[1]<=ymin) || (apos[1]>=ymax)  || \
       (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
+		if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+			(thee->pmgp->bcfl != BCFL_MAP)) {
             Vnm_print(2, "Vpmg_ibForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
                   atom, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_ibForce:    xmin = %g, xmax = %g\n",
@@ -5715,7 +5806,8 @@ force calculation!\n");
     if ((apos[0]<=xmin + rtot) || (apos[0]>=xmax - rtot)  || \
 		(apos[1]<=ymin + rtot) || (apos[1]>=ymax - rtot)  || \
 		(apos[2]<=zmin + rtot) || (apos[2]>=zmax - rtot)) {
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
+		if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+			(thee->pmgp->bcfl != BCFL_MAP)) {
             Vnm_print(2, "Vpmg_dbForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n",
 					  atomID, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_dbForce:    xmin = %g, xmax = %g\n",
@@ -5973,7 +6065,8 @@ VPRIVATE void qfForceSpline1(Vpmg *thee, double *force, int atomID) {
     /* Make sure we're on the grid */
     if ((apos[0]<=xmin) || (apos[0]>=xmax) || (apos[1]<=ymin) || \
         (apos[1]>=ymax) || (apos[2]<=zmin) || (apos[2]>=zmax)) {
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
+		if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+			(thee->pmgp->bcfl != BCFL_MAP)) {
             Vnm_print(2, "Vpmg_qfForce:  Atom #%d at (%4.3f, %4.3f, %4.3f) is off the mesh (ignoring):\n", atomID, apos[0], apos[1], apos[2]);
             Vnm_print(2, "Vpmg_qfForce:    xmin = %g, xmax = %g\n", xmin, xmax);
             Vnm_print(2, "Vpmg_qfForce:    ymin = %g, ymax = %g\n", ymin, ymax);
@@ -6114,7 +6207,8 @@ VPRIVATE void qfForceSpline2(Vpmg *thee, double *force, int atomID) {
     if ((apos[0]<=(xmin+hx))   || (apos[0]>=(xmax-hx)) \
      || (apos[1]<=(ymin+hy))   || (apos[1]>=(ymax-hy)) \
      || (apos[2]<=(zmin+hzed)) || (apos[2]>=(zmax-hzed))) {
-        if (thee->pmgp->bcfl != BCFL_FOCUS) {
+		if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+			(thee->pmgp->bcfl != BCFL_MAP)) {
             Vnm_print(2, "qfForceSpline2:  Atom #%d off the mesh \
 				(ignoring)\n", atomID);
         }
@@ -9682,7 +9776,8 @@ VPRIVATE void fillcoCoefSpline4(Vpmg *thee) {
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+            if ((thee->pmgp->bcfl != BCFL_FOCUS) && 
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
  %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
@@ -10170,7 +10265,8 @@ VPRIVATE void fillcoCoefSpline3(Vpmg *thee) {
         if ((apos[0]<=xmin) || (apos[0]>=xmax)  || \
             (apos[1]<=ymin) || (apos[1]>=ymax)  || \
             (apos[2]<=zmin) || (apos[2]>=zmax)) {
-            if (thee->pmgp->bcfl != BCFL_FOCUS) {
+			if ((thee->pmgp->bcfl != BCFL_FOCUS) &&
+				(thee->pmgp->bcfl != BCFL_MAP)) {
                 Vnm_print(2, "Vpmg_fillco:  Atom #%d at (%4.3f, %4.3f,\
  %4.3f) is off the mesh (ignoring):\n",
                   iatom, apos[0], apos[1], apos[2]);
