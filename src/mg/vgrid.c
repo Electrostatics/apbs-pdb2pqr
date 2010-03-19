@@ -432,6 +432,63 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vgrid_readBIN
+ //
+ // Author:   Nathan Baker
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC int Vgrid_readBIN(Vgrid *thee, const char *iodev, const char *iofmt,
+						 const char *thost, const char *fname) {
+#if 0	
+    int i, j, k, itmp, u;
+    double dtmp;
+    char tok[VMAX_BUFSIZE];
+    Vio *sock;
+	
+    /* Check to see if the existing data is null and, if not, clear it out */
+    if (thee->data != VNULL) {
+        Vnm_print(1, "Vgrid_readDX:  destroying existing data!\n");
+		Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
+				  (void **)&(thee->data)); }
+    thee->readdata = 1;
+    thee->ctordata = 0;
+	
+	//read in the data and then assign values
+	
+    /* Allocate space for the data */
+    Vnm_print(0, "Vgrid_readDX:  allocating %d x %d x %d doubles for storage\n",
+			  thee->nx, thee->ny, thee->nz);
+    thee->data = VNULL;
+    thee->data = Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
+							 sizeof(double));
+    if (thee->data == VNULL) {
+        Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");
+        return 0;
+    }
+	
+    for (i=0; i<thee->nx; i++) {
+        for (j=0; j<thee->ny; j++) {
+            for (k=0; k<thee->nz; k++) {
+                u = k*(thee->nx)*(thee->ny)+j*(thee->nx)+i;
+                VJMPERR2(1 == Vio_scanf(sock, "%s", tok));
+                VJMPERR1(1 == sscanf(tok, "%lf", &dtmp));
+                (thee->data)[u] = dtmp;
+            }
+        }
+    }
+	
+    /* calculate grid maxima */
+    thee->xmax = thee->xmin + (thee->nx-1)*thee->hx;
+    thee->ymax = thee->ymin + (thee->ny-1)*thee->hy;
+    thee->zmax = thee->zmin + (thee->nz-1)*thee->hzed;
+	
+    /* Close off the socket */
+    Vio_acceptFree(sock);
+    Vio_dtor(&sock);
+#endif	
+    return 1;
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vgrid_readDX
 //
 // Author:   Nathan Baker
@@ -653,6 +710,181 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
 
 
 
+}
+
+/* ///////////////////////////////////////////////////////////////////////////
+ // Routine:  Vgrid_writeBIN
+ //
+ // Author:   Nathan Baker
+ /////////////////////////////////////////////////////////////////////////// */
+VPUBLIC void Vgrid_writeBIN(Vgrid *thee, const char *iodev, const char *iofmt,
+						   const char *thost, const char *fname, char *title, double *pvec) {
+	
+    double xmin, ymin, zmin, hx, hy, hzed;
+    
+	int nx, ny, nz;
+    int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
+    double x, y, z, xminPART, yminPART, zminPART;
+	char header[8196];
+	char footer[8196];
+	
+    char precFormat[VMAX_BUFSIZE];
+	
+    if (thee == VNULL) {
+        Vnm_print(2, "Vgrid_writeBIN:  Error -- got VNULL thee!\n");
+        VASSERT(0);
+    }
+    if (!(thee->ctordata || thee->readdata)) {
+        Vnm_print(2, "Vgrid_writeBIN:  Error -- no data available!\n");
+        VASSERT(0);
+    }
+	
+    hx = thee->hx;
+    hy = thee->hy; 
+    hzed = thee->hzed; 
+    nx = thee->nx;
+    ny = thee->ny;
+    nz = thee->nz;
+    xmin = thee->xmin;
+    ymin = thee->ymin;
+    zmin = thee->zmin;
+	
+    if (pvec == VNULL) usepart = 0;
+    else usepart = 1;
+	
+    /* Set up the virtual socket */
+    Vnm_print(0, "Vgrid_writeBIN:  Opening file...\n");
+	FILE * pfile = fopen(fname, "w");
+	if(pfile == NULL){
+		Vnm_print(2, "Vgrid_writeBIN:  Problem opening file %s\n",
+				  fname);
+		return;
+	}
+	
+    if (usepart) {
+        /* Get the lower corner and number of grid points for the local
+         * partition */
+        xminPART = VLARGE;
+        yminPART = VLARGE;
+        zminPART = VLARGE;
+        nxPART = 0;
+        nyPART = 0;
+        nzPART = 0;
+        /* First, search for the lower corner */
+        for (k=0; k<nz; k++) {
+            z = k*hzed + zmin;
+            for (j=0; j<ny; j++) {
+                y = j*hy + ymin;
+                for (i=0; i<nx; i++) {
+                    x = i*hx + xmin;
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        if (x < xminPART) xminPART = x;
+                        if (y < yminPART) yminPART = y;
+                        if (z < zminPART) zminPART = z;
+                    }
+                }
+            }
+        }
+        /* Now search for the number of grid points in the z direction */
+        for (k=0; k<nz; k++) {
+            gotit = 0;
+            for (j=0; j<ny; j++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nzPART++;
+        }
+        /* Now search for the number of grid points in the y direction */
+        for (j=0; j<ny; j++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (i=0; i<nx; i++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break;
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nyPART++;
+        }
+        /* Now search for the number of grid points in the x direction */
+        for (i=0; i<nx; i++) {
+            gotit = 0;
+            for (k=0; k<nz; k++) {
+                for (j=0; j<ny; j++) {
+                    if (pvec[IJK(i,j,k)] > 0.0) {
+                        gotit = 1;
+                        break; 
+                    }
+                }
+                if (gotit) break;
+            }
+            if (gotit) nxPART++;
+        }
+		
+        if ((nxPART != nx) || (nyPART != ny) || (nzPART != nz)) {
+            Vnm_print(0, "Vgrid_writeBIN:  printing only subset of domain\n");
+        }
+		
+        /* Write off the title (if we're not XDR) */
+		sprintf(header,
+				"# Data from APBS %s\n"	\
+				"# \n"							\
+				"# POTENTIAL (kT/e)\n"			\
+				"# \n"							\
+				"object 1 class gridpositions counts %i %i %i\n"	\
+				"origin %12.6e %12.6e %12.6e\n"	\
+				"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
+				"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
+				"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
+				"object 2 class gridconnections counts %i %i %i\n"\
+				"object 3 class array type double rank 0 items %i data follows\n",
+				PACKAGE_STRING,nx,ny,nz,xminPART,yminPART,zminPART,
+				hx,hy,hzed,nx,ny,nz,(nxPART*nyPART*nzPART));
+		
+		fwrite(header, strlen(header), sizeof(char), pfile);
+		
+		/* Now write the data */
+		fwrite(thee->data, nxPART*nyPART*nzPART, sizeof(double), pfile);
+	}else {
+		/* Write off the title (if we're not XDR) */
+		sprintf(header,
+				"# Data from APBS %s\n"	\
+				"# \n"							\
+				"# POTENTIAL (kT/e)\n"			\
+				"# \n"							\
+				"object 1 class gridpositions counts %i %i %i\n"	\
+				"origin %12.6e %12.6e %12.6e\n"	\
+				"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
+				"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
+				"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
+				"object 2 class gridconnections counts %i %i %i\n"\
+				"object 3 class array type double rank 0 items %i data follows\n",
+				PACKAGE_STRING,nx,ny,nz,xmin,ymin,zmin,
+				hx,hy,hzed,nx,ny,nz,(nx*ny*nz));
+		
+		fwrite(header, strlen(header), sizeof(char), pfile);
+		
+		/* Now write the data */
+		fwrite(thee->data, nx*ny*nz, sizeof(double), pfile);
+	}
+	
+	
+	/* Create the field */
+	sprintf(footer, "attribute \"dep\" string \"positions\"\n" \
+			"object \"regular positions regular connections\" class field\n" \
+			"component \"positions\" value 1\n" \
+			"component \"connections\" value 2\n" \
+			"component \"data\" value 3\n");
+	fwrite(footer, strlen(footer), sizeof(char), pfile);
+	
+	fclose(pfile);
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
