@@ -2994,7 +2994,7 @@ PyObject *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
     ymin = ycent - 0.5*(ny-1)*hy;
     zmin = zcent - 0.5*(nz-1)*hzed;
    
-    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype);
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype, pbeparm);
     grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
                   pmg->rwork);
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
@@ -6190,6 +6190,67 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_loadPotMaps(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NOsh *arg1 = (NOsh *) 0 ;
+  Vgrid **arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:loadPotMaps",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "loadPotMaps" "', argument " "1"" of type '" "NOsh *""'"); 
+  }
+  arg1 = (NOsh *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_Vgrid, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "loadPotMaps" "', argument " "2"" of type '" "Vgrid *[NOSH_MAXMOL]""'"); 
+  } 
+  arg2 = (Vgrid **)(argp2);
+  result = (int)loadPotMaps(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_killPotMaps(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  NOsh *arg1 = (NOsh *) 0 ;
+  Vgrid **arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:killPotMaps",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_NOsh, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "killPotMaps" "', argument " "1"" of type '" "NOsh *""'"); 
+  }
+  arg1 = (NOsh *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_p_Vgrid, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "killPotMaps" "', argument " "2"" of type '" "Vgrid *[NOSH_MAXMOL]""'"); 
+  } 
+  arg2 = (Vgrid **)(argp2);
+  killPotMaps(arg1,arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_loadChargeMaps(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   NOsh *arg1 = (NOsh *) 0 ;
@@ -6301,6 +6362,7 @@ fail:
   return NULL;
 }
 
+
 SWIGINTERN PyObject *_wrap_initMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -6364,8 +6426,8 @@ SWIGINTERN PyObject *_wrap_initMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   PyObject * obj12 = 0 ;
   PyObject * obj13 = 0 ;
   PyObject * obj14 = 0 ;
-		
-  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOOO:initMG",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOOOOOOOOOO:initMG",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8,&obj9,&obj10,&obj11,&obj12,&obj13,&obj14)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "initMG" "', argument " "1"" of type '" "int""'");
@@ -6437,8 +6499,8 @@ SWIGINTERN PyObject *_wrap_initMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args
   } 
   arg14 = (Vpmg **)(argp14);
   res15 = SWIG_ConvertPtr(obj14, &argp15,SWIGTYPE_p_p_Vgrid, 0 |  0 );
-	if (!SWIG_IsOK(res15)) {
-			SWIG_exception_fail(SWIG_ArgError(res15), "in method '" "initMG" "', argument " "15"" of type '" "Vgrid *[NOSH_MAXMOL]""'"); 
+  if (!SWIG_IsOK(res15)) {
+    SWIG_exception_fail(SWIG_ArgError(res15), "in method '" "initMG" "', argument " "15"" of type '" "Vgrid *[NOSH_MAXMOL]""'"); 
   } 
   arg15 = (Vgrid **)(argp15);
   result = (int)initMG(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14,arg15);
@@ -6447,6 +6509,7 @@ SWIGINTERN PyObject *_wrap_initMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args
 fail:
   return NULL;
 }
+
 
 SWIGINTERN PyObject *_wrap_killMG(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -7467,6 +7530,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"killDielMaps", _wrap_killDielMaps, METH_VARARGS, NULL},
 	 { (char *)"loadKappaMaps", _wrap_loadKappaMaps, METH_VARARGS, NULL},
 	 { (char *)"killKappaMaps", _wrap_killKappaMaps, METH_VARARGS, NULL},
+	 { (char *)"loadPotMaps", _wrap_loadPotMaps, METH_VARARGS, NULL},
+	 { (char *)"killPotMaps", _wrap_killPotMaps, METH_VARARGS, NULL},
 	 { (char *)"loadChargeMaps", _wrap_loadChargeMaps, METH_VARARGS, NULL},
 	 { (char *)"killChargeMaps", _wrap_killChargeMaps, METH_VARARGS, NULL},
 	 { (char *)"printPBEPARM", _wrap_printPBEPARM, METH_VARARGS, NULL},

@@ -394,7 +394,7 @@ PyObject *getPotentials(NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg, Valist *alist){
     ymin = ycent - 0.5*(ny-1)*hy;
     zmin = zcent - 0.5*(nz-1)*hzed;
    
-    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype);
+    Vpmg_fillArray(pmg, pmg->rwork, VDT_POT, 0.0, pbeparm->pbetype, pbeparm);
     grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
                   pmg->rwork);
     for (i=0;i<Valist_getNumberAtoms(alist);i++){
@@ -468,6 +468,8 @@ extern void killDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
 Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
 extern int loadKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
 extern void killKappaMaps(NOsh *nosh, Vgrid *kappa[NOSH_MAXMOL]);
+extern int loadPotMaps(NOsh *nosh, Vgrid *pot[NOSH_MAXMOL]);
+extern void killPotMaps(NOsh *nosh, Vgrid *pot[NOSH_MAXMOL]);
 extern int loadChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 extern void killChargeMaps(NOsh *nosh, Vgrid *charge[NOSH_MAXMOL]);
 extern void printPBEPARM(PBEparm *pbeparm);
@@ -477,7 +479,8 @@ extern int initMG(int i, NOsh *nosh, MGparm *mgparm,
   Valist *alist[NOSH_MAXMOL], Vgrid *dielXMap[NOSH_MAXMOL], 
   Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL], 
   Vgrid *kappaMap[NOSH_MAXMOL], Vgrid *chargeMap[NOSH_MAXMOL], 
-  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
+  Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC],
+  Vgrid *potMap[NOSH_MAXMOL]);
 extern void killMG(NOsh *nosh, Vpbe *pbe[NOSH_MAXCALC],
   Vpmgp *pmgp[NOSH_MAXCALC], Vpmg *pmg[NOSH_MAXCALC]);
 extern int solveMG(NOsh *nosh, Vpmg *pmg, MGparm_CalcType type);
