@@ -2196,7 +2196,9 @@ VPRIVATE void focusFillBound(Vpmg *thee, Vpmg *pmgOLD) {
     }
 	
 	if((uvalMin < SINH_MIN) || (uvalMax > SINH_MAX)){
-		Vnm_print(2, "\nfocusFillBound:  WARNING! Unusually large potential values detected on the focusing boundary!  Convergence not guaranteed!\n");
+		Vnm_print(2, "\nfocusFillBound:  WARNING! Unusually large potential values\n" \
+					   "                   detected on the focusing boundary!  \n" \
+					   "                   Convergence not guaranteed for NPBE/NRPBE calculations!\n");
 	}
 	
 }
