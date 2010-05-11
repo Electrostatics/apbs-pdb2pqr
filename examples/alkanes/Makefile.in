@@ -203,6 +203,7 @@ top_srcdir = @top_srcdir@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
+zlib = @zlib@
 APBS = ${top_builddir}/bin/${fetk_cpu_vendor_os}/apbs
 IGEN = ${top_builddir}/tools/manip/inputgen.py
 CLEANFILES = *-PE* *.out *.log io.mc*

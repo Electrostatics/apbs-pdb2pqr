@@ -239,6 +239,7 @@ AC_LANG_C
 AC_PROG_CPP
 AC_DISABLE_SHARED
 AM_PROG_LIBTOOL
+FFLAGS="${FFLAGS}"
 
 dnl ##########################################################################
 dnl 3. checks for libraries
@@ -1033,6 +1034,23 @@ else
 fi
 AC_SUBST(apbs_do_blas)
 
+dnl # --------------------------------
+dnl # HANDLE ZLIB COMPILATION
+dnl # --------------------------------
+AC_MSG_CHECKING([--enable-zlib])
+AC_ARG_ENABLE(
+	[zlib],
+	AS_HELP_STRING([--enable-zlib], [enable zlib compilation]),,
+	[enable_zlib=no]
+)
+if test x"$enable_zlib" != "xno"; then
+	AC_MSG_RESULT([yes])
+	zlib="zlib"
+	z_lib=${contrib_path}/zlib/.libs/libz.a
+	AC_DEFINE([HAVE_ZLIB], [], [have zlib compression enabled])
+fi
+AC_SUBST(zlib)
+
 dnl # -----------------------
 dnl # If using Portland compilers, do not compile
 dnl # tools/mesh/uhbd_asc2bin.f
@@ -1051,7 +1069,7 @@ dnl # If using Intel compilers add in -nofor_main
 dnl # -----------------------
 case $F77 in
 	ifort)
-		FFLAGS="${FFLAGS} -nofor_main";;
+			FFLAGS="${FFLAGS} -nofor_main" ;;
 	*)
 		;;
 esac
@@ -1191,7 +1209,7 @@ dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
 base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} \ 
-	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${blas_lib}"
+	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${blas_lib} ${z_lib}"
 
 case $host_os in
 
@@ -1271,6 +1289,7 @@ AC_CONFIG_FILES([
     contrib/aqua/Makefile
     contrib/opal/Makefile
     contrib/opal/ZSI/Makefile
+    contrib/zlib/Makefile	
 	
     tools/Makefile
     tools/mesh/Makefile

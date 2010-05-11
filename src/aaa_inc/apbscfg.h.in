@@ -63,6 +63,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* have zlib compression enabled */
+#undef HAVE_ZLIB
+
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
 #undef LT_OBJDIR
@@ -114,3 +117,5 @@
 
 /* include TINKER support */
 #undef WITH_TINKER
+
+
