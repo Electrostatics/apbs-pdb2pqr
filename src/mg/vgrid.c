@@ -719,12 +719,16 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
  /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vgrid_writeBIN(Vgrid *thee, const char *iodev, const char *iofmt,
 						   const char *thost, const char *fname, char *title, double *pvec) {
-	
+
     double xmin, ymin, zmin, hx, hy, hzed;
     
 	int nx, ny, nz;
     int icol, i, j, k, u, usepart, nxPART, nyPART, nzPART, gotit;
     double x, y, z, xminPART, yminPART, zminPART;
+	
+	int txyz;
+	double txmin, tymin, tzmin;
+	
 	char header[8196];
 	char footer[8196];
 	
@@ -832,49 +836,40 @@ VPUBLIC void Vgrid_writeBIN(Vgrid *thee, const char *iodev, const char *iofmt,
             Vnm_print(0, "Vgrid_writeBIN:  printing only subset of domain\n");
         }
 		
-        /* Write off the title (if we're not XDR) */
-		sprintf(header,
-				"# Data from APBS %s\n"	\
-				"# \n"							\
-				"# POTENTIAL (kT/e)\n"			\
-				"# \n"							\
-				"object 1 class gridpositions counts %i %i %i\n"	\
-				"origin %12.6e %12.6e %12.6e\n"	\
-				"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
-				"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
-				"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
-				"object 2 class gridconnections counts %i %i %i\n"\
-				"object 3 class array type double rank 0 items %i data follows\n",
-				PACKAGE_STRING,nx,ny,nz,xminPART,yminPART,zminPART,
-				hx,hy,hzed,nx,ny,nz,(nxPART*nyPART*nzPART));
+		txyz = (nxPART*nyPART*nzPART);
+		txmin = xminPART;
+		tymin = yminPART;
+		tzmin = zminPART;
 		
-		fwrite(header, strlen(header), sizeof(char), pfile);
-		
-		/* Now write the data */
-		fwrite(thee->data, nxPART*nyPART*nzPART, sizeof(double), pfile);
 	}else {
-		/* Write off the title (if we're not XDR) */
-		sprintf(header,
-				"# Data from APBS %s\n"	\
-				"# \n"							\
-				"# POTENTIAL (kT/e)\n"			\
-				"# \n"							\
-				"object 1 class gridpositions counts %i %i %i\n"	\
-				"origin %12.6e %12.6e %12.6e\n"	\
-				"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
-				"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
-				"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
-				"object 2 class gridconnections counts %i %i %i\n"\
-				"object 3 class array type double rank 0 items %i data follows\n",
-				PACKAGE_STRING,nx,ny,nz,xmin,ymin,zmin,
-				hx,hy,hzed,nx,ny,nz,(nx*ny*nz));
 		
-		fwrite(header, strlen(header), sizeof(char), pfile);
-		
-		/* Now write the data */
-		fwrite(thee->data, nx*ny*nz, sizeof(double), pfile);
+		txyz = (nx*ny*nz);
+		txmin = xmin;
+		tymin = ymin;
+		tzmin = zmin;
+
 	}
 	
+	/* Write off the title (if we're not XDR) */
+	sprintf(header,
+			"# Data from APBS %s\n"	\
+			"# \n"							\
+			"# POTENTIAL (kT/e)\n"			\
+			"# \n"							\
+			"object 1 class gridpositions counts %i %i %i\n"	\
+			"origin %12.6e %12.6e %12.6e\n"	\
+			"delta %12.6e 0.000000e+00 0.000000e+00\n"		\
+			"delta 0.000000e+00 %12.6e 0.000000e+00\n"		\
+			"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
+			"object 2 class gridconnections counts %i %i %i\n"\
+			"object 3 class array type double rank 0 items %i data follows\n",
+			PACKAGE_STRING,nx,ny,nz,txmin,tymin,tzmin,
+			hx,hy,hzed,nx,ny,nz,txyz);
+	
+	fwrite(header, strlen(header), sizeof(char), pfile);
+	
+	/* Now write the data */
+	fwrite(thee->data, txyz, sizeof(double), pfile);
 	
 	/* Create the field */
 	sprintf(footer, "attribute \"dep\" string \"positions\"\n" \
@@ -885,6 +880,7 @@ VPUBLIC void Vgrid_writeBIN(Vgrid *thee, const char *iodev, const char *iofmt,
 	fwrite(footer, strlen(footer), sizeof(char), pfile);
 	
 	fclose(pfile);
+	
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
