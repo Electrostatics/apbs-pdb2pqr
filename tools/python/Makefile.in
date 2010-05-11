@@ -238,6 +238,7 @@ top_srcdir = @top_srcdir@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
+zlib = @zlib@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .c .C .o .so
 INCLUDES = @inc_list@ $(PY_CFLAGS) -I${top_srcdir}/bin 

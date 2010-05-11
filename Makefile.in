@@ -233,6 +233,7 @@ top_srcdir = @top_srcdir@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
+zlib = @zlib@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .cc .c .f .o
 SUBDIRS = contrib src bin @apbs_do_tools@ 
