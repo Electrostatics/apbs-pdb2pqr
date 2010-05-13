@@ -640,37 +640,41 @@ VPRIVATE int NOsh_parseREAD_DIEL(NOsh *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         dielfmt = VDF_DX;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (tok[0]=='"') {
-            strcpy(strnew, "");
-            while (tok[strlen(tok)-1] != '"') {
-                strcat(str, tok);
-                strcat(str, " ");
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-            strcat(str, tok);
-            strncpy(strnew, str+1, strlen(str)-2);
-            strcpy(tok, strnew);
-        }
-        Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-        strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        Vnm_print(0, "NOsh: Storing y-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-        strncpy(thee->dielYpath[thee->ndiel], tok, VMAX_ARGLEN);
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        Vnm_print(0, "NOsh: Storing z-shifted dielectric map %d path \
-%s\n", thee->ndiel, tok);
-        strncpy(thee->dielZpath[thee->ndiel], tok, VMAX_ARGLEN);
-        thee->dielfmt[thee->ndiel] = dielfmt;
-        (thee->ndiel)++;
-    } else { 
+	} else if (Vstring_strcasecmp(tok, "gz") == 0) {
+        dielfmt = VDF_GZ;
+	} else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-    } 
+				  %s!\n", tok);
+		return VRC_FAILURE;
+	}
 	
-    return 1;
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (tok[0]=='"') {
+		strcpy(strnew, "");
+		while (tok[strlen(tok)-1] != '"') {
+			strcat(str, tok);
+			strcat(str, " ");
+			VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+		}
+		strcat(str, tok);
+		strncpy(strnew, str+1, strlen(str)-2);
+		strcpy(tok, strnew);
+	}
+	Vnm_print(0, "NOsh: Storing x-shifted dielectric map %d path \
+			  %s\n", thee->ndiel, tok);
+	strncpy(thee->dielXpath[thee->ndiel], tok, VMAX_ARGLEN);
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	Vnm_print(0, "NOsh: Storing y-shifted dielectric map %d path \
+			  %s\n", thee->ndiel, tok);
+	strncpy(thee->dielYpath[thee->ndiel], tok, VMAX_ARGLEN);
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	Vnm_print(0, "NOsh: Storing z-shifted dielectric map %d path \
+			  %s\n", thee->ndiel, tok);
+	strncpy(thee->dielZpath[thee->ndiel], tok, VMAX_ARGLEN);
+	thee->dielfmt[thee->ndiel] = dielfmt;
+	(thee->ndiel)++;
+
+	return 1;
 	
 VERROR1:
         Vnm_print(2, "NOsh_parseREAD_DIEL:  Ran out of tokens while parsing READ \
@@ -687,28 +691,32 @@ VPRIVATE int NOsh_parseREAD_KAPPA(NOsh *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         kappafmt = VDF_DX;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (tok[0]=='"') {
-            strcpy(strnew, "");
-            while (tok[strlen(tok)-1] != '"') {
-                strcat(str, tok);
-                strcat(str, " ");
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-            strcat(str, tok);
-            strncpy(strnew, str+1, strlen(str)-2);
-            strcpy(tok, strnew);
-        }
-        Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
-				  thee->nkappa, tok);
-        thee->kappafmt[thee->nkappa] = kappafmt;
-        strncpy(thee->kappapath[thee->nkappa], tok, VMAX_ARGLEN);
-        (thee->nkappa)++;
-    } else {
+	} else if (Vstring_strcasecmp(tok, "gz") == 0) {
+        kappafmt = VDF_GZ;
+	} else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-    }
+				  %s!\n", tok);
+		return VRC_FAILURE;
+	}
 	
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (tok[0]=='"') {
+		strcpy(strnew, "");
+		while (tok[strlen(tok)-1] != '"') {
+			strcat(str, tok);
+			strcat(str, " ");
+			VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+		}
+		strcat(str, tok);
+		strncpy(strnew, str+1, strlen(str)-2);
+		strcpy(tok, strnew);
+	}
+	Vnm_print(0, "NOsh: Storing kappa map %d path %s\n",
+			  thee->nkappa, tok);
+	thee->kappafmt[thee->nkappa] = kappafmt;
+	strncpy(thee->kappapath[thee->nkappa], tok, VMAX_ARGLEN);
+	(thee->nkappa)++;
+    
     return 1;
 	
 VERROR1:
@@ -722,55 +730,37 @@ VPRIVATE int NOsh_parseREAD_POTENTIAL(NOsh *thee, Vio *sock) {
 	
     char tok[VMAX_BUFSIZE], str[VMAX_BUFSIZE]="", strnew[VMAX_BUFSIZE]="";
     Vdata_Format potfmt;
-	/* TODO: This is somewhat redundant, since the only difference between
-			 the VDF_DX and VDF_BIN block is that assignment of the format
-			 type. D. Gohara (3/18/10)
-	 */
+	
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         potfmt = VDF_DX;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (tok[0]=='"') {
-            strcpy(strnew, "");
-            while (tok[strlen(tok)-1] != '"') {
-                strcat(str, tok);
-                strcat(str, " ");
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-            strcat(str, tok);
-            strncpy(strnew, str+1, strlen(str)-2);
-            strcpy(tok, strnew);
-        }
-        Vnm_print(0, "NOsh: Storing potential map %d path %s\n",
-				  thee->npot, tok);
-        thee->potfmt[thee->npot] = potfmt;
-        strncpy(thee->potpath[thee->npot], tok, VMAX_ARGLEN);
-        (thee->npot)++;
-    } else if (Vstring_strcasecmp(tok, "bin") == 0) {
-        potfmt = VDF_BIN;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (tok[0]=='"') {
-            strcpy(strnew, "");
-            while (tok[strlen(tok)-1] != '"') {
-                strcat(str, tok);
-                strcat(str, " ");
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-            strcat(str, tok);
-            strncpy(strnew, str+1, strlen(str)-2);
-            strcpy(tok, strnew);
-        }
-        Vnm_print(0, "NOsh: Storing potential map %d path %s\n",
-				  thee->npot, tok);
-        thee->potfmt[thee->npot] = potfmt;
-        strncpy(thee->potpath[thee->npot], tok, VMAX_ARGLEN);
-        (thee->npot)++;
-    } else {
+	} else if (Vstring_strcasecmp(tok, "gz") == 0) {
+        potfmt = VDF_GZ;
+	} else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
 				  %s!\n", tok);
-    }
+		return VRC_FAILURE;
+   }
 	
-    return 1;
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (tok[0]=='"') {
+		strcpy(strnew, "");
+		while (tok[strlen(tok)-1] != '"') {
+			strcat(str, tok);
+			strcat(str, " ");
+			VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+		}
+		strcat(str, tok);
+		strncpy(strnew, str+1, strlen(str)-2);
+		strcpy(tok, strnew);
+	}
+	Vnm_print(0, "NOsh: Storing potential map %d path %s\n",
+			  thee->npot, tok);
+	thee->potfmt[thee->npot] = potfmt;
+	strncpy(thee->potpath[thee->npot], tok, VMAX_ARGLEN);
+	(thee->npot)++;
+    
+	return 1;
 	
 VERROR1:
 	Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \
@@ -787,27 +777,31 @@ VPRIVATE int NOsh_parseREAD_CHARGE(NOsh *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     if (Vstring_strcasecmp(tok, "dx") == 0) {
         chargefmt = VDF_DX;
-        VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-        if (tok[0]=='"') {
-            strcpy(strnew, "");
-            while (tok[strlen(tok)-1] != '"') {
-                strcat(str, tok);
-                strcat(str, " ");
-                VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-			}
-            strcat(str, tok);
-            strncpy(strnew, str+1, strlen(str)-2);
-            strcpy(tok, strnew);
-        }
-        Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
-				  thee->ncharge, tok);
-        thee->chargefmt[thee->ncharge] = chargefmt;
-        strncpy(thee->chargepath[thee->ncharge], tok, VMAX_ARGLEN);
-        (thee->ncharge)++;
-    } else {
+	} else if (Vstring_strcasecmp(tok, "gz") == 0) {
+        chargefmt = VDF_GZ;
+	} else {
         Vnm_print(2, "NOsh_parseREAD:  Ignoring undefined format \
-%s!\n", tok);
-    }
+				  %s!\n", tok);
+		return VRC_FAILURE;
+	}
+	
+	VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+	if (tok[0]=='"') {
+		strcpy(strnew, "");
+		while (tok[strlen(tok)-1] != '"') {
+			strcat(str, tok);
+			strcat(str, " ");
+			VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
+		}
+		strcat(str, tok);
+		strncpy(strnew, str+1, strlen(str)-2);
+		strcpy(tok, strnew);
+	}
+	Vnm_print(0, "NOsh: Storing charge map %d path %s\n",
+			  thee->ncharge, tok);
+	thee->chargefmt[thee->ncharge] = chargefmt;
+	strncpy(thee->chargepath[thee->ncharge], tok, VMAX_ARGLEN);
+	(thee->ncharge)++;
 	
     return 1;
 	
@@ -901,7 +895,6 @@ VPRIVATE int NOsh_parseREAD(NOsh *thee, Vio *sock) {
 					  tok);
         }
     }
-	
 	
     /* We ran out of tokens! */
     Vnm_print(2, "NOsh_parseREAD:  Ran out of tokens while parsing READ \

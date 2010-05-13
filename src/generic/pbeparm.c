@@ -716,7 +716,7 @@ VPRIVATE int PBEparm_parseSRFM(PBEparm *thee, Vio *sock) {
     if (sscanf(tok, "%d", &ti) == 1) {
         thee->srfm = ti;
         thee->setsrfm = 1;
-
+		
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"srfm %d\" \
 statement.\n", ti);
         Vnm_print(2, "parsePBE:  Please use \"srfm ");
@@ -1129,8 +1129,8 @@ VPRIVATE int PBEparm_parseWRITE(PBEparm *thee, Vio *sock) {
         writefmt = VDF_UHBD;
     } else if (Vstring_strcasecmp(tok, "avs") == 0) {
         writefmt = VDF_AVS;
-    } else if (Vstring_strcasecmp(tok, "bin") == 0) {
-        writefmt = VDF_BIN;
+    } else if (Vstring_strcasecmp(tok, "gz") == 0) {
+        writefmt = VDF_GZ;
     } else if (Vstring_strcasecmp(tok, "flat") == 0) {
         writefmt = VDF_FLAT;
     } else {

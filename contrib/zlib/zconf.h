@@ -360,9 +360,10 @@ typedef uLong FAR uLongf;
 #  define Z_HAVE_UNISTD_H
 #endif
 
-#ifdef STDC
-#  include <sys/types.h>    /* for off_t */
-#endif
+#pragma message("WARNING -- Disabled the following ifdef. D. Gohara in file: "__FILE__)
+//#ifdef STDC
+//#  include <sys/types.h>    /* for off_t */
+//#endif
 
 /* a little trick to accommodate both "#define _LARGEFILE64_SOURCE" and
  * "#define _LARGEFILE64_SOURCE 1" as requesting 64-bit operations, (even
@@ -375,7 +376,10 @@ typedef uLong FAR uLongf;
 #endif
 
 #if defined(Z_HAVE_UNISTD_H) || defined(_LARGEFILE64_SOURCE)
+#pragma message("WARNING -- Disabled the following include. D. Gohara in file: "__FILE__)
+#if !defined(HAVE_ZLIB)
 #  include <unistd.h>       /* for SEEK_* and off_t */
+#endif
 #  ifdef VMS
 #    include <unixio.h>     /* for off_t */
 #  endif
