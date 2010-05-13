@@ -301,6 +301,31 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 					sum = sum*hx*hy*hzed;
 				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 				break;
+			case VDF_GZ:
+				if (Vgrid_readGZ(dielXMap[i], nosh->dielXpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->dielXpath[i]);
+					return 0;
+				}
+				nx = dielXMap[i]->nx;
+				ny = dielXMap[i]->ny;
+				nz = dielXMap[i]->nz;
+				hx = dielXMap[i]->hx;
+				hy = dielXMap[i]->hy;
+				hzed = dielXMap[i]->hzed;
+				xmin = dielXMap[i]->xmin;
+				ymin = dielXMap[i]->ymin;
+				zmin = dielXMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++)
+					sum += (dielXMap[i]->data[ii]);
+				sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
 			case VDF_UHBD:
 				Vnm_tprint( 2, "UHBD input not supported yet!\n");
 				return 0;
@@ -343,6 +368,31 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 				for (ii=0; ii<(nx*ny*nz); ii++)
 					sum += (dielYMap[i]->data[ii]);
 					sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_GZ:
+				if (Vgrid_readGZ(dielYMap[i], nosh->dielYpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->dielYpath[i]);
+					return 0;
+				}
+				nx = dielYMap[i]->nx;
+				ny = dielYMap[i]->ny;
+				nz = dielYMap[i]->nz;
+				hx = dielYMap[i]->hx;
+				hy = dielYMap[i]->hy;
+				hzed = dielYMap[i]->hzed;
+				xmin = dielYMap[i]->xmin;
+				ymin = dielYMap[i]->ymin;
+				zmin = dielYMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n", nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++)
+					sum += (dielYMap[i]->data[ii]);
+				sum = sum*hx*hy*hzed;
 				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 				break;
 			case VDF_UHBD:
@@ -388,6 +438,32 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 				sum = 0;
 				for (ii=0; ii<(nx*ny*nz); ii++) sum += (dielZMap[i]->data[ii]);
 					sum = sum*hx*hy*hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
+			case VDF_GZ:
+				if (Vgrid_readGZ(dielZMap[i], nosh->dielZpath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->dielZpath[i]);
+					return 0;
+				}
+				nx = dielZMap[i]->nx;
+				ny = dielZMap[i]->ny;
+				nz = dielZMap[i]->nz;
+				hx = dielZMap[i]->hx;
+				hy = dielZMap[i]->hy;
+				hzed = dielZMap[i]->hzed;
+				xmin = dielZMap[i]->xmin;
+				ymin = dielZMap[i]->ymin;
+				zmin = dielZMap[i]->zmin;
+				Vnm_tprint(1, "  %d x %d x %d grid\n",
+						   nx, ny, nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n",
+						   hx, hy, hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n",
+						   xmin, ymin, zmin);
+				sum = 0;
+				for (ii=0; ii<(nx*ny*nz); ii++) sum += (dielZMap[i]->data[ii]);
+				sum = sum*hx*hy*hzed;
 				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 				break;
 			case VDF_UHBD:
@@ -514,11 +590,20 @@ VPUBLIC int loadPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 		map[i] = Vgrid_ctor(0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, VNULL);
 		switch (nosh->potfmt[i]) {
 			case VDF_DX:
-				if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
-								 nosh->potpath[i]) != 1) {
-					Vnm_tprint( 2, "Fatal error while reading from %s\n",
-							   nosh->potpath[i]);
-					return 0;
+			case VDF_GZ:
+				if (nosh->potfmt[i] == VDF_DX) {
+					if (Vgrid_readDX(map[i], "FILE", "ASC", VNULL, 
+									 nosh->potpath[i]) != 1) {
+						Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								   nosh->potpath[i]);
+						return 0;
+					}
+				}else {
+					if (Vgrid_readGZ(map[i], nosh->potpath[i]) != 1) {
+						Vnm_tprint( 2, "Fatal error while reading from %s\n",
+								   nosh->potpath[i]);
+						return 0;
+					}
 				}
 				Vnm_tprint(1, "  %d x %d x %d grid\n", 
 						   map[i]->nx, map[i]->ny, map[i]->nz);
@@ -540,25 +625,6 @@ VPUBLIC int loadPotMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 				return 0;
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
-				return 0;
-			case VDF_BIN:
-				if (Vgrid_readBIN(map[i], "FILE", "ASC", VNULL, 
-								 nosh->potpath[i]) != 1) {
-					Vnm_tprint( 2, "Fatal error while reading from %s\n",
-							   nosh->potpath[i]);
-					return 0;
-				}
-				Vnm_tprint(1, "  %d x %d x %d grid\n", 
-						   map[i]->nx, map[i]->ny, map[i]->nz);
-				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
-						   map[i]->hx, map[i]->hy, map[i]->hzed);
-				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
-						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
-				sum = 0;
-				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
-					sum += (map[i]->data[ii]);
-				sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
-				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
 				return 0;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
@@ -627,6 +693,24 @@ VPUBLIC int loadChargeMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 			case VDF_MCSF:
 				Vnm_tprint(2, "MCSF input not supported yet!\n");
 				return 0;
+			case VDF_GZ:
+				if (Vgrid_readGZ(map[i], nosh->chargepath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->chargepath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++) 
+					sum += (map[i]->data[ii]);
+				sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Charge map integral = %3.2e e\n", sum);
+				break;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
 							nosh->kappafmt[i]);
@@ -800,6 +884,9 @@ to ");
 		switch (pbeparm->writefmt[i]) {
 			case VDF_DX:
 				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "dx");
+				break;
+			case VDF_GZ:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "dx.gz");
 				break;
 			case VDF_UHBD:
 				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "grd");
@@ -2261,12 +2348,12 @@ uniform meshes yet!\n");
 				Vgrid_dtor(&grid);
 				break;
 				
-			case VDF_BIN:
-				sprintf(outpath, "%s.%s", writestem, "bin");
+			case VDF_GZ:
+				sprintf(outpath, "%s.%s", writestem, "dx.gz");
 				Vnm_tprint(1, "%s\n", outpath);
 				grid = Vgrid_ctor(nx, ny, nz, hx, hy, hzed, xmin, ymin, zmin,
 								  pmg->rwork);
-				Vgrid_writeBIN(grid, "FILE", "ASC", VNULL, outpath, title,
+				Vgrid_writeGZ(grid, "FILE", "ASC", VNULL, outpath, title,
 							  pmg->pvec);
 				Vgrid_dtor(&grid);
 				break;

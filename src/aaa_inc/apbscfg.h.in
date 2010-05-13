@@ -117,5 +117,3 @@
 
 /* include TINKER support */
 #undef WITH_TINKER
-
-

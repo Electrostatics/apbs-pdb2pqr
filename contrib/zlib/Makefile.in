@@ -46,9 +46,9 @@ CONFIG_HEADER = $(top_builddir)/src/aaa_inc/apbscfg.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libz_la_LIBADD =
-am_libz_la_OBJECTS = example.lo adler32.lo compress.lo crc32.lo \
-	deflate.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo infback.lo \
-	inffast.lo inflate.lo inftrees.lo zutil.lo
+am_libz_la_OBJECTS = adler32.lo compress.lo crc32.lo deflate.lo \
+	gzclose.lo gzlib.lo gzread.lo gzwrite.lo infback.lo inffast.lo \
+	inflate.lo inftrees.lo trees.lo zutil.lo
 libz_la_OBJECTS = $(am_libz_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/src/aaa_inc@am__isrc@
 depcomp =
@@ -242,8 +242,8 @@ always_built_SUBDIRS =
 SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = z
 noinst_LTLIBRARIES = libz.la
-libz_la_SOURCES = example.c adler32.c compress.c crc32.c deflate.c gzclose.c \
-	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c zutil.c
+libz_la_SOURCES = adler32.c compress.c crc32.c deflate.c gzclose.c \
+	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c
 
 AM_FLAGS = @CFLAGS@
 all: all-recursive

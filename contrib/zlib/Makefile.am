@@ -13,7 +13,7 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = z
 
 noinst_LTLIBRARIES = libz.la
-libz_la_SOURCES = example.c adler32.c compress.c crc32.c deflate.c gzclose.c \
-	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c zutil.c
+libz_la_SOURCES = adler32.c compress.c crc32.c deflate.c gzclose.c \
+	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c
 	
 AM_FLAGS			  = @CFLAGS@
