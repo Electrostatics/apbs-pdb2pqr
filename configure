@@ -1534,7 +1534,7 @@ Optional Features:
   --disable-fetk          disable FEtk features
   --enable-pansi          enable pedantic ANSI compilation
   --disable-tools         disable tool compilation
-  --enable-zlib           enable zlib compilation
+  --disable-zlib          disable zlib compilation
   --disable-inline        disable inline functions (macros)
   --enable-tinker         include TINKER support
   --enable-abps-quiet     prevent APBS diagnostic messages from displaying to
@@ -22365,17 +22365,18 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 
-{ echo "$as_me:$LINENO: checking --enable-zlib" >&5
-echo $ECHO_N "checking --enable-zlib... $ECHO_C" >&6; }
+disable_zlib=yes
+{ echo "$as_me:$LINENO: checking --disable-zlib" >&5
+echo $ECHO_N "checking --disable-zlib... $ECHO_C" >&6; }
 # Check whether --enable-zlib was given.
 if test "${enable_zlib+set}" = set; then
   enableval=$enable_zlib;
 else
-  enable_zlib=no
+  disable_zlib=no
 
 fi
 
-if test x"$enable_zlib" != "xno"; then
+if test x"$disable_zlib" == "xno"; then
 	{ echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
 	zlib="zlib"
