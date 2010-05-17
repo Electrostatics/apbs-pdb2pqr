@@ -544,10 +544,14 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	/* Close off the socket */
 	gzclose(infile);
 	free(temp);
+#else
 	
-	return VRC_SUCCESS;
-	
+	Vnm_print(0, "WARNING\n");
+	Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
+	Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
+	Vnm_print(0, "WARNING\n");
 #endif	
+	return VRC_SUCCESS;
 } 
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -913,7 +917,7 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 	sprintf(header,
 			"# Data from %s\n"	\
 			"# \n"							\
-			"# POTENTIAL (kT/e)\n"			\
+			"# %s\n"			\
 			"# \n"							\
 			"object 1 class gridpositions counts %i %i %i\n"	\
 			"origin %12.6e %12.6e %12.6e\n"	\
@@ -922,7 +926,7 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 			"delta 0.000000e+00 0.000000e+00 %12.6e\n"		\
 			"object 2 class gridconnections counts %i %i %i\n"\
 			"object 3 class array type double rank 0 items %i data follows\n",
-			PACKAGE_STRING,nx,ny,nz,txmin,tymin,tzmin,
+			PACKAGE_STRING,title,nx,ny,nz,txmin,tymin,tzmin,
 			hx,hy,hzed,nx,ny,nz,txyz);
 	gzwrite(outfile, header, strlen(header)*sizeof(char));
 	
@@ -959,7 +963,13 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 	gzwrite(outfile, footer, strlen(footer)*sizeof(char));
 	
 	gzclose(outfile);
-#endif
+#else
+	
+	Vnm_print(0, "WARNING\n");
+	Vnm_print(0, "Vgrid_readGZ:  gzip read/write support is disabled in this build\n");
+	Vnm_print(0, "Vgrid_readGZ:  configure and compile without the --disable-zlib flag.\n");
+	Vnm_print(0, "WARNING\n");
+#endif	
 }
 
 /* ///////////////////////////////////////////////////////////////////////////

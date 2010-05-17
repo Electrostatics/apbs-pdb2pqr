@@ -1037,13 +1037,14 @@ AC_SUBST(apbs_do_blas)
 dnl # --------------------------------
 dnl # HANDLE ZLIB COMPILATION
 dnl # --------------------------------
-AC_MSG_CHECKING([--enable-zlib])
+disable_zlib=yes
+AC_MSG_CHECKING([--disable-zlib])
 AC_ARG_ENABLE(
 	[zlib],
-	AS_HELP_STRING([--enable-zlib], [enable zlib compilation]),,
-	[enable_zlib=no]
+	AS_HELP_STRING([--disable-zlib], [disable zlib compilation]),,
+	[disable_zlib=no]
 )
-if test x"$enable_zlib" != "xno"; then
+if test x"$disable_zlib" == "xno"; then
 	AC_MSG_RESULT([yes])
 	zlib="zlib"
 	z_lib=${contrib_path}/zlib/.libs/libz.a
