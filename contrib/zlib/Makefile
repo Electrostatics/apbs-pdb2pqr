@@ -164,7 +164,7 @@ apbs_build_libraries = /Users/gohara/Projects/APBS/apbs-svn/trunk/bin/libapbsmai
 apbs_do_blas = blas
 apbs_do_maloc = 
 apbs_do_python = 
-apbs_do_tools = 
+apbs_do_tools = tools
 arpack_do_tools = 
 arpack_lib = 
 bindir = ${exec_prefix}/bin
@@ -235,7 +235,7 @@ top_srcdir = ../..
 wall = 
 wall_pedantic = 
 wall_pedantic_ansi = 
-zlib = zlib
+zlib = 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .c .o
 always_built_SUBDIRS = 
@@ -246,6 +246,7 @@ libz_la_SOURCES = adler32.c compress.c crc32.c deflate.c gzclose.c \
 	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c
 
 AM_FLAGS = -g -O2
+INCLUDES = -I${top_srcdir}/contrib/zlib
 all: all-recursive
 
 .SUFFIXES:
