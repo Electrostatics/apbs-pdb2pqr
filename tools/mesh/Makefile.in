@@ -37,7 +37,7 @@ noinst_PROGRAMS = mgmesh$(EXEEXT) dxmath$(EXEEXT) mergedx$(EXEEXT) \
 	mergedx2$(EXEEXT) $(am__EXEEXT_1) smooth$(EXEEXT) \
 	value$(EXEEXT) dx2mol$(EXEEXT) dx2uhbd$(EXEEXT) \
 	benchmark$(EXEEXT) similarity$(EXEEXT) analysis$(EXEEXT) \
-	multivalue$(EXEEXT) del2dx$(EXEEXT)
+	multivalue$(EXEEXT) del2dx$(EXEEXT) tensor2dx$(EXEEXT)
 subdir = tools/mesh
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -104,6 +104,9 @@ smooth_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 smooth_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(smooth_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_tensor2dx_OBJECTS = tensor2dx.$(OBJEXT)
+tensor2dx_OBJECTS = $(am_tensor2dx_OBJECTS)
+tensor2dx_DEPENDENCIES = ../../src/aaa_lib/libapbs.la
 am__uhbd_asc2bin_SOURCES_DIST = uhbd_asc2bin.f
 @UHBD_COMPILE_TRUE@am_uhbd_asc2bin_OBJECTS = uhbd_asc2bin.$(OBJEXT)
 uhbd_asc2bin_OBJECTS = $(am_uhbd_asc2bin_OBJECTS)
@@ -141,13 +144,13 @@ SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) $(del2dx_SOURCES) \
 	$(dx2mol_SOURCES) $(dx2uhbd_SOURCES) $(dxmath_SOURCES) \
 	$(mergedx_SOURCES) $(mergedx2_SOURCES) $(mgmesh_SOURCES) \
 	$(multivalue_SOURCES) $(similarity_SOURCES) $(smooth_SOURCES) \
-	$(uhbd_asc2bin_SOURCES) $(value_SOURCES)
+	$(tensor2dx_SOURCES) $(uhbd_asc2bin_SOURCES) $(value_SOURCES)
 DIST_SOURCES = $(analysis_SOURCES) $(benchmark_SOURCES) \
 	$(del2dx_SOURCES) $(dx2mol_SOURCES) $(dx2uhbd_SOURCES) \
 	$(dxmath_SOURCES) $(mergedx_SOURCES) $(mergedx2_SOURCES) \
 	$(mgmesh_SOURCES) $(multivalue_SOURCES) $(similarity_SOURCES) \
-	$(smooth_SOURCES) $(am__uhbd_asc2bin_SOURCES_DIST) \
-	$(value_SOURCES)
+	$(smooth_SOURCES) $(tensor2dx_SOURCES) \
+	$(am__uhbd_asc2bin_SOURCES_DIST) $(value_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -361,6 +364,8 @@ dx2uhbd_SOURCES = dx2uhbd.c
 dx2uhbd_LDADD = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 del2dx_SOURCES = del2dx.c 
 del2dx_LDADD = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
+tensor2dx_SOURCES = tensor2dx.c
+tensor2dx_LDADD = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 all: all-am
 
 .SUFFIXES:
@@ -437,6 +442,9 @@ similarity$(EXEEXT): $(similarity_OBJECTS) $(similarity_DEPENDENCIES)
 smooth$(EXEEXT): $(smooth_OBJECTS) $(smooth_DEPENDENCIES) 
 	@rm -f smooth$(EXEEXT)
 	$(smooth_LINK) $(smooth_OBJECTS) $(smooth_LDADD) $(LIBS)
+tensor2dx$(EXEEXT): $(tensor2dx_OBJECTS) $(tensor2dx_DEPENDENCIES) 
+	@rm -f tensor2dx$(EXEEXT)
+	$(LINK) $(tensor2dx_OBJECTS) $(tensor2dx_LDADD) $(LIBS)
 uhbd_asc2bin$(EXEEXT): $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_DEPENDENCIES) 
 	@rm -f uhbd_asc2bin$(EXEEXT)
 	$(uhbd_asc2bin_LINK) $(uhbd_asc2bin_OBJECTS) $(uhbd_asc2bin_LDADD) $(LIBS)

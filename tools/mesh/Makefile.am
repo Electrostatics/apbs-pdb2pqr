@@ -21,7 +21,8 @@ uhbd_asc2bin_CCLD        = $(F77)
 else
 UHBD =
 endif
-noinst_PROGRAMS          = mgmesh dxmath mergedx mergedx2 $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis multivalue del2dx
+noinst_PROGRAMS          = mgmesh dxmath mergedx mergedx2 $(UHBD) smooth value dx2mol dx2uhbd benchmark similarity analysis multivalue del2dx tensor2dx
+
 mgmesh_SOURCES				= mgmesh.c 
 mgmesh_LDADD				= ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 mgmesh_LDFLAGS				= ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
@@ -62,3 +63,5 @@ dx2uhbd_SOURCES				= dx2uhbd.c
 dx2uhbd_LDADD				= ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
 del2dx_SOURCES				= del2dx.c 
 del2dx_LDADD				= ../../src/aaa_lib/libapbs.la @apbs_build_libraries@
+tensor2dx_SOURCES                       = tensor2dx.c
+tensor2dx_LDADD                         = ../../src/aaa_lib/libapbs.la @apbs_build_libraries@

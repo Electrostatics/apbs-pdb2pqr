@@ -17,3 +17,4 @@ libz_la_SOURCES = adler32.c compress.c crc32.c deflate.c gzclose.c \
 	gzlib.c gzread.c gzwrite.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c
 	
 AM_FLAGS			  = @CFLAGS@
+INCLUDES           = -I${top_srcdir}/contrib/zlib
