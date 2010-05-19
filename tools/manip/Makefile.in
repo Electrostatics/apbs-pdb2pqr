@@ -225,6 +225,7 @@ top_srcdir = @top_srcdir@
 wall = @wall@
 wall_pedantic = @wall_pedantic@
 wall_pedantic_ansi = @wall_pedantic_ansi@
+z_lib = @z_lib@
 zlib = @zlib@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o

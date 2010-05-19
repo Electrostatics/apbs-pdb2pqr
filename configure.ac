@@ -1038,6 +1038,7 @@ dnl # --------------------------------
 dnl # HANDLE ZLIB COMPILATION
 dnl # --------------------------------
 disable_zlib=yes
+z_lib=
 AC_MSG_CHECKING([--disable-zlib])
 AC_ARG_ENABLE(
 	[zlib],
@@ -1051,6 +1052,7 @@ if test x"$disable_zlib" == "xno"; then
 	AC_DEFINE([HAVE_ZLIB], [], [have zlib compression enabled])
 fi
 AC_SUBST(zlib)
+AC_SUBST(z_lib)
 
 dnl # -----------------------
 dnl # If using Portland compilers, do not compile
