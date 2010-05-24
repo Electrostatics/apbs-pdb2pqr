@@ -222,6 +222,15 @@ except ImportError, errstr:
 service_url = "@SERVICEURL@"
 parallel_service_url = "@PARALLELSERVICEURL@"
 local_version = "@PACKAGE_VERSION@"
+maxmem = @MAXMEM@
+
+def enoughMemory(inputFileName):
+    inputFile = file(inputFileName, 'r')
+    for line in inputFile:
+        line = line.strip()
+        if(line[:4].lower()=='dime'):
+            grid_dimensions = line.split()
+    return ((int(grid_dimensions[1])*int(grid_dimensions[2])*int(grid_dimensions[3])*160/(1024*1024) < maxmem))
 
 def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
 	""" Downloads files from Opal server (only if automatic downloading is enabled). """
@@ -524,6 +533,10 @@ def main():
 			args.append(argString)
 		if optionDict.has_key("args"):
 			args = args + optionDict["args"]
+		if(not enoughMemory(optionDict["args"][-1])):
+			# Add Opal error sending support
+			print "Job will use too much memory to complete calculation"
+			sys.exit()
 		stdout.write("Running:  %s...\n" % " ".join(args))
 		subprocess.call(args)
 		sys.exit()
