@@ -698,7 +698,13 @@ SERVICEURL='http://sccne.wustl.edu:8082/opal2/services/apbs-1.2.1'
 PARALLELSERVICEURL='http://sccne.wustl.edu:8082/opal2/services/apbs-parallel-1.2.1'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 
-sed -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
+AC_ARG_WITH(maxmem,
+  [  --with-maxmem=MAXMEM                    Maximum memory (in MB) to be used for a job.],
+  [MAXMEM=$withval],
+  [MAXMEM="-1"])
+
+sed -e 's%@MAXMEM@%'${MAXMEM}'%' \
+    -e 's%@SITEPKGS@%'${SITEPKGS}'%' \
     -e 's%@PACKAGE_VERSION@%'${PACKAGE_VERSION}'%' \
     -e 's%@SERVICEURL@%'${SERVICEURL}'%' \
     -e 's%@PARALLELSERVICEURL@%'${PARALLELSERVICEURL}'%' ${top_apbsdir}/bin/ApbsClient.py.in > ${top_apbsdir}/bin/ApbsClient.py
