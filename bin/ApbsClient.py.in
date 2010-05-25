@@ -225,6 +225,9 @@ local_version = "@PACKAGE_VERSION@"
 maxmem = @MAXMEM@
 
 def enoughMemory(inputFileName):
+    if(maxmem == -1):
+        return True
+
     inputFile = file(inputFileName, 'r')
     for line in inputFile:
         line = line.strip()
