@@ -385,9 +385,9 @@ c*    *** other declarations ***
       double precision x(*),r(*),w1(*),w2(*)
       double precision rpc(*),ac(nx*ny*nz,*),cc(*),fc(*),tru(*)
 
-	  retval = sorgo_stub(%VAL(nx),%VAL(ny),%VAL(nz),%VAL(itmax),
+	  retval = sorgo_stub(nx,ny,nz,itmax,
      .			     ac(1,1),cc,fc,ac(1,2),ac(1,3),ac(1,4),x,r,
-     .			     %VAL(omega))
+     .			     omega)
   
 	  if(retval.eq.1) then
 		return

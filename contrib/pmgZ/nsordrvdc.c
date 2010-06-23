@@ -72,13 +72,13 @@
 #endif
 
 #define F77SORGOSTUB   VF77_MANGLE(sorgo_stub, SORGO_STUB)
-int F77SORGOSTUB(int nx,int ny,int nz,int itmax,double *oCn,
+int F77SORGOSTUB(int *nx,int *ny,int *nz,int *itmax,double *oCn,
 				double *ccn,double *fcn,double *oEn,
 				double *oNn,double *uCn,double *xn,
-				double *rn,double omega)
+				double *rn,double *omega)
 {
 #ifdef DEBUG_MAC_OSX_OCL
-	nsordnew_(nx,ny,nz,itmax,oCn,ccn,fcn,oEn,oNn,uCn,xn,rn,omega);
+	nsordnew_(*nx,*ny,*nz,*itmax,oCn,ccn,fcn,oEn,oNn,uCn,xn,rn,*omega);
 	return 1;
 #else
 	return 0;
