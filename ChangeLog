@@ -13,6 +13,7 @@ complete change log
 * Added etol keyword, which allows user-defined error tolerance in LPBE and NPBE calculations (default errtol value is 1.0e-6).
 * Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.
 * Added a polar and apolor forces calculation example to examples/born/ .
+* Added warning messages for users who try to compile APBS with --enable-tinker flag and run APBS stand-alone execution.
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
