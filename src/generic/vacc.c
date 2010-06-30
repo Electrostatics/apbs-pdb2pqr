@@ -1298,6 +1298,9 @@ VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, d
     temp_Pos[2] += dpos; 
     azt1 = Vacc_atomSASAPos(thee, srad, atom,0);
 	temp_Pos[2] = tPos[2];
+	
+	/* Reset the atom SASA to zero displacement */
+	Vacc_atomSASAPos(thee, srad, atom,0);
     
 	/* Calculate the final value */
     dSA[0] = (axt1-axb1)/(2.0 * dpos);
