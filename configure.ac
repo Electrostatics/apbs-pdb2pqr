@@ -1254,7 +1254,7 @@ if test -n "${mc_found}"; then
 	case $host_os in
 
 	*)
-		extra_list3="-lsuperlu -lumfpack -lamd -lpunc -lblas"
+		extra_list3="-lsuperlu -lumfpack -lamd -lpunc -lblas -lmaloc"
 		;;
 	
 	esac
