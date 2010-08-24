@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 	pfile = fopen(outpath, "w");
 	
 	fprintf(pfile,
-		   "# Data from del2dx (APBS 1.2.1)\n"	\
+		   "# Data from del2dx (APBS 1.3)\n"	\
 		   "# \n"							\
 		   "# POTENTIAL (kT/e)\n"			\
 		   "# \n"							\

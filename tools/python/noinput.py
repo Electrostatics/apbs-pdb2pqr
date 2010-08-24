@@ -196,7 +196,7 @@ def getHeader():
     header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 1.2.1\n\
+    Version 1.3\n\
     \n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
     \n\

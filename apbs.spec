@@ -13,7 +13,7 @@
 
 Summary: Adaptive Poisson Boltzmann Solver
 Name: apbs
-Version: 1.2.1
+Version: 1.3
 Release: 1
 License: GPL
 Group: Applications/Science
