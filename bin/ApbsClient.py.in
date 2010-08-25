@@ -130,7 +130,7 @@ helpString = "\n\n\
     --non-blocking           Disables blocking and outputs a URL at which the data can be\n\
                              retreived later.\n\
     --service-location=<URL> Specifies the location of the Opal server.  Defaults to\n\
-                             http://sccne.wustl.edu:8082/opal2/services/apbs-1.2.1\n\
+                             http://kryptonite.nbcr.net/opal2/services/apbs-1.3\n\
     --local                  Perform a local APBS run using whatever APBS executable is\n\
                              available in the path \
 \n----------------------------------------------------------------------\n\
