@@ -14,6 +14,7 @@ complete change log
 * Added more explanatory error messages for the case in which parm keyword is missing from APBS input file for apolar calculations.
 * Added a polar and apolor forces calculation example to examples/born/ .
 * Added warning messages for users who try to compile APBS with --enable-tinker flag and run APBS stand-alone execution.
+* Switched default Opal service urls from sccne.wustl.edu to NBCR.
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
