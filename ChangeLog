@@ -15,6 +15,7 @@ complete change log
 * Added a polar and apolor forces calculation example to examples/born/ .
 * Added warning messages for users who try to compile APBS with --enable-tinker flag and run APBS stand-alone execution.
 * Switched default Opal service urls from sccne.wustl.edu to NBCR.
+* Added a sanity check in routines.c: 'bcfl map' in the input file requires 'usemap pot' statement in the input file as well.
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.

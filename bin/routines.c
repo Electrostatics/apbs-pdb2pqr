@@ -1111,6 +1111,13 @@ VPUBLIC int initMG(int icalc, NOsh *nosh, MGparm *mgparm,
 		}
 	} else theChargeMap = VNULL;
 
+    if (pbeparm->bcfl == BCFL_MAP && thePotMap == VNULL) {
+		Vnm_print(2, "Warning: You specified 'bcfl map' in the input file, but no potential map was found.\n");
+		Vnm_print(2, "         You must specify 'usemap pot' statement in the APBS input file!\n");
+		Vnm_print(2, "Bailing out ...\n");
+		return 0;
+	}
+
 	if (!Vpmg_fillco(pmg[icalc], 
 					 pbeparm->srfm, pbeparm->swin, mgparm->chgm,
 					 pbeparm->useDielMap, theDielXMap,
