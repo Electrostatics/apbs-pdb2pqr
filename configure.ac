@@ -695,7 +695,7 @@ PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 changequote([, ])dnl
 
 SERVICEURL='http://kryptonite.nbcr.net/opal2/services/apbs-1.3'
-PARALLELSERVICEURL='http://kryptonite.nbcr.net/opal2/services/apbs-parallel-1.3'
+PARALLELSERVICEURL='http://oolite.calit2.optiputer.net/opal2/services/apbs-parallel-1.3'
 SITEPKGS=${prefix}/lib/python${PY_VERSION}/site-packages
 
 AC_ARG_WITH(maxmem,
