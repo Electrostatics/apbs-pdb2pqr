@@ -23,3 +23,4 @@ complete change log
 * Fixed a bug in examples/scripts/checkforces.sh: the condition for "Passed with rounding error" is abs(difference) < errortol, not the other way around.
 * Fixed the help string in ApbsClient.py .
 * Fixed a bug in Vacc_atomdSASA(): the atom SASA needs to be reset to zero displacement after finite melement methods.
+* Fixed a bug in Vpmg_dbForce(): the initialization of rtot should appear before it is used.
