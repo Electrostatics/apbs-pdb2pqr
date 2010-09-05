@@ -5810,7 +5810,8 @@ force calculation!\n");
     }
     deps = (epsw - epsp);
     depsi = 1.0/deps;
-	
+    rtot = (arad + thee->splineWin + srad);	
+
     /* Make sure we're on the grid */
     /* Grid checking modified by Matteo Rotter */
     if ((apos[0]<=xmin + rtot) || (apos[0]>=xmax - rtot)  || \
@@ -5836,7 +5837,6 @@ force calculation!\n");
         position[2] = apos[2] - zmin;
 		
         /* Integrate over points within this atom's (inflated) radius */
-        rtot = (arad + thee->splineWin + srad);
         rtot2 = VSQR(rtot);
         dx = rtot/hx;
         imin = (int)floor((position[0]-rtot)/hx);
