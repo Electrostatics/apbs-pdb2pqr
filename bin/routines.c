@@ -3958,7 +3958,7 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 					 int *nforce, AtomForce **atomForce, Valist *alist) {
 
-	int i;
+	int i,j;
 	
 	Vclist *clist = VNULL;
 	Vacc *acc = VNULL;
@@ -3990,6 +3990,9 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
     zmin = Vatom_getPosition(atom)[2];
     zmax = Vatom_getPosition(atom)[2];
     charge = 0;
+    for (j=0; j<3; j++) {
+        center[j] = alist->center[j];  // Initialization for center[3].
+    }
     for (i=0; i < Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
         atomRadius = Vatom_getRadius(atom);
