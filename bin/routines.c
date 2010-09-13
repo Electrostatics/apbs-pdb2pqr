@@ -1492,7 +1492,7 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 	sprintf(writematstem, "%s-PE%d", pbeparm->writematstem, rank);
 #else
 	strlenmax = (int)(VMAX_ARGLEN)-1;
-	if (strlen(pbeparm->writematstem) > strlenmax) {
+	if ((int)strlen(pbeparm->writematstem) > strlenmax) {
 		Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
 				   pbeparm->writematstem, strlenmax);
 		Vnm_tprint(2, "  Not writing matrix!\n");
@@ -1507,7 +1507,7 @@ VPUBLIC int writematMG(int rank, NOsh *nosh, PBEparm *pbeparm, Vpmg *pmg) {
 	
 	if (pbeparm->writemat == 1) {
 		strlenmax = VMAX_ARGLEN-5;
-		if (strlen(pbeparm->writematstem) > strlenmax) {
+		if ((int)strlen(pbeparm->writematstem) > strlenmax) {
 			Vnm_tprint(2, "  Matrix name (%s) too long (%d char max)!\n",
 					   pbeparm->writematstem, strlenmax);
 			Vnm_tprint(2, "  Not writing matrix!\n");
@@ -1534,8 +1534,9 @@ Poisson-Boltzmann operator matrix to %s...\n", outpath);
 		}
 		
 		Vnm_tprint(0, "  Printing operator...\n");
-		Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
-						  pbeparm->writematflag);
+		//Vpmg_printColComp(pmg, outpath, outpath, mxtype, 
+		//				  pbeparm->writematflag);
+		return 0;
 		
 	}
 	
@@ -3958,7 +3959,7 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 					 int *nforce, AtomForce **atomForce, Valist *alist) {
 
-	int i,j;
+	int i;
 	
 	Vclist *clist = VNULL;
 	Vacc *acc = VNULL;
@@ -3973,13 +3974,15 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 	double nhash[3];
 	double sradPad, x, y, z;
 	double atomRadius, srad;
-	double atomsasa[Valist_getNumberAtoms(alist)];
-	double atomwcaEnergy[Valist_getNumberAtoms(alist)];
+	double *atomsasa, *atomwcaEnergy;
 	double energy = 0.0;        //WCA energy per atom
 	
 	double dist, charge, xmin, xmax, ymin, ymax, zmin, zmax;
 	double disp[3], center[3];
 	double soluteXlen, soluteYlen, soluteZlen;
+
+	atomsasa = (double *)Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
+	atomwcaEnergy = (double *)Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
 	
 	/* Determine solute length and charge*/
     atom = Valist_getAtom(alist, 0);
@@ -3990,9 +3993,6 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
     zmin = Vatom_getPosition(atom)[2];
     zmax = Vatom_getPosition(atom)[2];
     charge = 0;
-    for (j=0; j<3; j++) {
-        center[j] = alist->center[j];  // Initialization for center[3].
-    }
     for (i=0; i < Valist_getNumberAtoms(alist); i++) {
         atom = Valist_getAtom(alist, i);
         atomRadius = Vatom_getRadius(atom);
@@ -4122,7 +4122,9 @@ VPUBLIC int initAPOL(NOsh *nosh, Vmem *mem, Vparam *param, APOLparm *apolparm,
 		}
 		energyAPOL(apolparm, apolparm->sasa, apolparm->sav, atomsasa, atomwcaEnergy, Valist_getNumberAtoms(alist));
 	}
-	
+
+	Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), (void **)&(atomsasa));
+	Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), (void **)&(atomwcaEnergy));
 	Vclist_dtor(&clist);
 	Vacc_dtor(&acc);
 	

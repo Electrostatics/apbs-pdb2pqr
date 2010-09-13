@@ -118,8 +118,7 @@ VPUBLIC int Vpmgp_ctor2(Vpmgp *thee,MGparm *mgparm) {
     else thee->ipkey = IPKEY_NPBE; /* NPBE standard case */
 	
     /* Default parameters */
-    if (mgparm->setetol) { /* If etol is set by the user in APBS input file, */
-                             /* then use this custom-defined etol */
+    if (mgparm->setetol) { /* If etol is set by the user in APBS input file, then use this custom-defined etol */
         thee->errtol = mgparm->etol; 
         Vnm_print(1, "  Error tolerance (etol) is now set to user-defined \
 value: %g \n", thee->errtol);
@@ -131,9 +130,7 @@ value: %g \n", thee->errtol);
 		* accelerated PBE (for dynamics, etc.) */
     thee->itmax = 200;
     thee->istop = 1;
-    thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 
-		* 2 (for debugging NPBE), higher values give 
-		* too much output */
+    thee->iinfo = 1;         /* I'd recommend either 1 (for debugging LPBE) or 2 (for debugging NPBE), higher values give too much output */
 	
     thee->bcfl = BCFL_SDH;
     thee->key = 0;
@@ -158,7 +155,7 @@ value: %g \n", thee->errtol);
 		/* SMPBE Added - SMPBE needs to mimic NPBE */
 		Vnm_print(0, "Vpmp_ctor2:  Using meth = 1, mgsolv = 0\n");
         thee->mgsolv = 0;
-	}else{        
+	} else {        
 		/* Most rigorous (good for testing) */
 		Vnm_print(0, "Vpmp_ctor2:  Using meth = 2, mgsolv = 1\n");
         thee->mgsolv = 1;
@@ -194,3 +191,144 @@ VPUBLIC void Vpmgp_dtor(Vpmgp **thee) {
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC void Vpmgp_dtor2(Vpmgp *thee) { ; }
+
+
+VPUBLIC void Vpmgp_size(
+	Vpmgp *thee
+	)
+{
+
+	int num_nf = 0;
+	int num_narr = 2;
+	int num_narrc = 27;
+	int nxf, nyf, nzf, level, num_nf_oper, num_narrc_oper, n_band, nc_band, num_band, iretot;
+
+	thee->nf = thee->nx * thee->ny * thee->nz;
+	thee->narr = thee->nf;
+	nxf = thee->nx;
+	nyf = thee->ny;
+	nzf = thee->nz;
+	thee->nxc = thee->nx;
+	thee->nyc = thee->ny;
+	thee->nzc = thee->nz;
+
+	for (level=2; level<=thee->nlev; level++) {
+		Vpmgp_makeCoarse(1, nxf, nyf, nzf, &(thee->nxc), &(thee->nyc), &(thee->nzc)); /* NAB TO-DO -- implement this function and check which variables need to be passed by reference... */
+		nxf = thee->nxc;
+		nyf = thee->nyc;
+		nzf = thee->nzc;
+		thee->narr = thee->narr + (nxf * nyf * nzf);
+	}
+
+	thee->nc = thee->nxc * thee->nyc * thee->nzc;
+	thee->narrc = thee->narr - thee->nf;
+
+	/* Box or FEM discretization on fine grid? */
+	switch (thee->mgdisc) { /* NAB TO-DO:  This needs to be changed into an enumeration */
+	case 0:
+		num_nf_oper = 4;
+		break;
+	case 1:
+		num_nf_oper = 14;
+		break;
+	default:
+		Vnm_print(2, "Vpmgp_size:  Invalid mgdisc value (%d)!\n", thee->mgdisc);
+		VASSERT(0);
+	}
+
+	/* Galerkin or standard coarsening? */
+	switch (thee->mgcoar) { /* NAB TO-DO:  This needs to be changed into an enumeration */
+	case 0:
+		if (thee->mgdisc != 0) {
+			Vnm_print(2, "Vpmgp_size:  Invalid mgcoar value (%d); must be used with mgdisc 0!\n", thee->mgcoar);
+			VASSERT(0);
+		}
+		num_narrc_oper = 4;
+		break;
+	case 1:
+		if (thee->mgdisc != 0) {
+			Vnm_print(2, "Vpmgp_size:  Invalid mgcoar value (%d); must be used with mgdisc 0!\n", thee->mgcoar);
+			VASSERT(0);
+		}
+		num_narrc_oper = 14;
+		break;
+	case 2:
+		num_narrc_oper = 14;
+		break;
+	default:
+		Vnm_print(2, "Vpmgp_size:  Invalid mgcoar value (%d)!\n", thee->mgcoar);
+		VASSERT(0);
+	}
+
+	/* LINPACK storage on coarse grid */
+	switch (thee->mgsolv) { /* NAB TO-DO:  This needs to be changed into an enumeration */
+	case 0:
+		n_band = 0;
+		break;
+	case 1:
+		if ( ( (thee->mgcoar == 0) || (thee->mgcoar == 1)) && (thee->mgdisc == 0) ) {
+			num_band = 1 + (thee->nxc-2)*(thee->nyc-2);
+		} else {
+			num_band = 1 + (thee->nxc-2)*(thee->nyc-2) + (thee->nxc-2) + 1;
+		}
+		nc_band = (thee->nxc-2)*(thee->nyc-2)*(thee->nzc-2);
+		n_band  = nc_band * num_band;
+		break;
+	default:
+		Vnm_print(2, "Vpmgp_size:  Invalid mgsolv value (%d)!\n", thee->mgsolv);
+		VASSERT(0);
+	}
+	
+	/* Real storage parameters */
+	thee->n_rpc = 100*(thee->nlev+1);
+
+	/* Resulting total required for real storage */
+	thee->nrwk = num_narr*thee->narr + (num_nf + num_nf_oper)*thee->nf + (num_narrc + num_narrc_oper)*thee->narrc + n_band + thee->n_rpc;
+
+	/* Integer storage parameters */
+	thee->n_iz = 50*(thee->nlev+1);
+	thee->n_ipc = 100*(thee->nlev+1);
+	thee->niwk = thee->n_iz + thee->n_ipc;
+}
+
+VPRIVATE int coarsenThis(nOld) {
+
+	int nOut;
+
+	nOut = (nOld - 1) / 2 + 1;
+
+	if (((nOut-1)*2) != (nOld-1)) {
+		Vnm_print(2, "Vpmgp_makeCoarse:  Warning!  The grid dimensions you have chosen are not consistent with the nlev you have specified!\n");
+		Vnm_print(2, "Vpmgp_makeCoarse:  This calculation will only work if you are running with mg-dummy type.\n");
+	}
+	if (nOut < 1) {
+		Vnm_print(2, "D'oh!  You coarsened the grid below zero!  How did you do that?\n");
+		VASSERT(0);
+	}
+
+	return nOut;
+}
+
+VPUBLIC void Vpmgp_makeCoarse(
+	int numLevel,
+	int nxOld,
+	int nyOld,
+	int nzOld,
+	int *nxNew,
+	int *nyNew,
+	int *nzNew
+	)
+{
+	int nxtmp, nytmp, nztmp, iLevel;
+
+	for (iLevel=0; iLevel<numLevel; iLevel++) {
+		nxtmp = *nxNew;
+		nytmp = *nyNew;
+		nztmp = *nzNew;
+		*nxNew = coarsenThis(nxtmp);
+		*nyNew = coarsenThis(nytmp);
+		*nzNew = coarsenThis(nztmp);
+	}
+
+
+}

@@ -243,4 +243,28 @@ VEXTERNC void Vpmgp_dtor(Vpmgp **thee);
  */
 VEXTERNC void Vpmgp_dtor2(Vpmgp *thee);
 
+/**	@brief	Determine array sizes and parameters for multigrid solver
+*	@ingroup Vpmgp
+*	@author	Mike Holst and Nathan Baker
+*/
+VEXTERNC void Vpmgp_size(
+	Vpmgp *thee	/**< Object to be sized */
+	);
+
+/**	@brief	Coarsen the grid by the desired number of levels and determine the resulting numbers of grid points.
+*	@ingroup Vpmgp
+*	@author	Mike Holst and Nathan Baker
+*/
+VEXTERNC void Vpmgp_makeCoarse(
+	int numLevel,	/**< Number of levels to coarsen */
+	int nxOld,	/**< Number of old grid points in this direction */
+	int nyOld,	/**< Number of old grid points in this direction */
+	int nzOld,	/**< Number of old grid points in this direction */
+	int *nxNew,	/**< Number of new grid points in this direction */
+	int *nyNew,	/**< Number of new grid points in this direction */
+	int *nzNew	/**< Number of new grid points in this direction */
+	);
+
+
+
 #endif    /* ifndef _VPMGP_H_ */

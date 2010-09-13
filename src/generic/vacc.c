@@ -738,6 +738,11 @@ VPUBLIC VaccSurf* VaccSurf_ctor(Vmem *mem, double probe_radius, int nsphere) {
     VaccSurf *thee;
 
     //thee = Vmem_malloc(mem, 1, sizeof(Vacc) );
+	if (nsphere >= MAX_SPHERE_PTS) {
+		Vnm_print(2, "VaccSurf_ctor:  Error!  The requested number of grid points (%d) exceeds the maximum (%d)!\n", nsphere, MAX_SPHERE_PTS);
+		Vnm_print(2, "VaccSurf_ctor:  Please check the variable MAX_SPHERE_PTS to reset.\n");
+		VASSERT(0);
+	}
 	thee = (VaccSurf*)calloc(1,sizeof(Vacc));
     VASSERT( VaccSurf_ctor2(thee, mem, probe_radius, nsphere) );
 
@@ -815,7 +820,7 @@ VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom,
     VaccSurf *surf;
     int i, j, npts, atomID;
     double arad, rad, pos[3], *apos;
-	char bpts[ref->npts];
+	char bpts[MAX_SPHERE_PTS];
 			  
     /* Get atom information */
     arad = Vatom_getRadius(atom);

@@ -583,9 +583,9 @@ VEXTERNC double Vacc_totalSAV(
  * @brief  Return the WCA integral energy
  * @ingroup  Vacc
  * @author  David Gohara
- * @return WCA energy (kJ/mol)
+ * @return Success flag
  */
-VPUBLIC int Vacc_wcaEnergy(
+VEXTERNC int Vacc_wcaEnergy(
 						   Vacc *thee,  /**< Accessibility object */
 							 APOLparm *apolparm,  /**< Apolar calculation parameters */
 							 Valist *alist, /**< Alist for acc object */
@@ -597,11 +597,25 @@ VPUBLIC int Vacc_wcaEnergy(
  * @author  David Gohara
  * @return WCA energy (kJ/mol/A)
  */
-VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, /**< Accessibility object */
+VEXTERNC int Vacc_wcaForceAtom(Vacc *thee, /**< Accessibility object */
 							  APOLparm *apolparm,  /**< Apolar calculation parameters */
 							  Vclist *clist, /**< Clist for acc object */
 							  Vatom *atom, /**< Current atom */
 							  double *force /**< Force for atom */
 						   );
+
+/**	@brief	Calculate the WCA energy for an atom
+	@ingroup Vacc
+	@author	Dave Gohara and Nathan Baker
+	@return	Success flag
+	*/
+VEXTERNC int Vacc_wcaEnergyAtom(
+	Vacc *thee,	/**< Accessibility object */
+	APOLparm *apolparm,	/**< Apolar calculation parameters */
+	Valist *alist,	/**< Atom list */
+	Vclist *clist,	/**< Cell list associated with Vacc object */
+	int iatom,	/**< Index for atom of interest */
+	double *value	/**< Set to energy value */
+	);
 
 #endif    /* ifndef _VACC_H_ */
