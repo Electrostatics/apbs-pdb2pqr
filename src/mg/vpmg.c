@@ -153,17 +153,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 	/* TEMPORARY USEAQUA */
     /* Calculate storage requirements */
 	if(mgparm->useAqua == 0){
-		F77MGSZ(
-				&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),
-				&(thee->pmgp->mgsolv), 
-				&(thee->pmgp->nx), &(thee->pmgp->ny), &(thee->pmgp->nz), 
-				&(thee->pmgp->nlev), 
-				&(thee->pmgp->nxc), &(thee->pmgp->nyc), &(thee->pmgp->nzc), 
-				&(thee->pmgp->nf), &(thee->pmgp->nc), 
-				&(thee->pmgp->narr), &(thee->pmgp->narrc), 
-				&(thee->pmgp->n_rpc), &(thee->pmgp->n_iz), &(thee->pmgp->n_ipc), 
-				&(thee->pmgp->nrwk), &(thee->pmgp->niwk)
-				);
+		Vpmgp_size(thee->pmgp);
 	}else{
 		F77MGSZAQUA(
 				&(thee->pmgp->mgcoar), &(thee->pmgp->mgdisc),

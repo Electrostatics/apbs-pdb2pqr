@@ -65,7 +65,8 @@
 #include "apbs/pbeparm.h"  
 #include "apbs/femparm.h"  
 #include "apbs/vparam.h"  
-
+#include "apbs/vgrid.h"
+#include "apbs/vacc.h"
 
 /**
  * @brief  Return code for APBS during failure
@@ -484,6 +485,54 @@ VEXTERNC int printApolForce(
  * @author  Nathan Baker and Robert Konecny */
 VEXTERNC void startVio();
 
+/**
+ * @brief  Calculate non-polar energies
+ * @ingroup  Frontend
+ * @author  David Gohara
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int energyAPOL(
+						APOLparm *apolparm, /** APOLparm object */
+						double sasa, /** Solvent accessible surface area */
+						double sav, /** Solvent accessible volume */
+						double atomsasa[], /** Array for SASA per atom **/
+						double atomwcaEnergy[], /** Array for WCA energy per atom **/
+						int numatoms /** Number of atoms (or size of the above arrays) **/
+						);
+
+/**
+ * @brief  Calculate non-polar forces
+ * @ingroup  Frontend
+ * @author  David Gohara
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int forceAPOL(
+					   Vacc *acc,  /**< Accessiblity object */
+					   Vmem *mem,  /**< Memory manager */
+					   APOLparm *apolparm,  /**< Apolar calculation parameter
+					   object */
+					   int *nforce,  /**< Number of atomic forces to calculate 
+					   statements for */
+					   AtomForce **atomForce,  /**< Object for storing atom
+					   forces */
+					   Valist *alist,  /**< Atom list */
+					   Vclist *clist  /**< Cell list for accessibility object */
+					   );
+
+/**
+ * @brief  Upperlevel routine to the non-polar energy and force routines
+ * @ingroup  Frontend
+ * @author  David Gohara
+ * @return  1 if successful, 0 otherwise */
+VEXTERNC int initAPOL(
+					  NOsh *nosh,  /**< Input parameter object */
+					  Vmem *mem,  /**< Memory manager */
+					  Vparam *param,  /**< Atom parameters */
+					  APOLparm *apolparm,  /**< Apolar calculation parameters */
+					  int *nforce,  /**< Number of force calculations */
+					  AtomForce **atomForce,  /**< Atom force storage object */
+					  Valist *alist  /**< Atom list */
+					  );
+
+
 #ifdef HAVE_MC_H
 #include "apbs/vfetk.h"
 
@@ -609,53 +658,6 @@ VEXTERNC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
  * @param  fetk  FEtk object (with solution)
  * @return  1 if successful, 0 otherwise */
 VEXTERNC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk);
-
-/**
- * @brief  Calculate non-polar energies
- * @ingroup  Frontend
- * @author  David Gohara
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int energyAPOL(
-						APOLparm *apolparm, /** APOLparm object */
-						double sasa, /** Solvent accessible surface area */
-						double sav, /** Solvent accessible volume */
-						double atomsasa[], /** Array for SASA per atom **/
-						double atomwcaEnergy[], /** Array for WCA energy per atom **/
-						int numatoms /** Number of atoms (or size of the above arrays) **/
-						);
-
-/**
- * @brief  Calculate non-polar forces
- * @ingroup  Frontend
- * @author  David Gohara
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int forceAPOL(
-					   Vacc *acc,  /**< Accessiblity object */
-					   Vmem *mem,  /**< Memory manager */
-					   APOLparm *apolparm,  /**< Apolar calculation parameter
-					   object */
-					   int *nforce,  /**< Number of atomic forces to calculate 
-					   statements for */
-					   AtomForce **atomForce,  /**< Object for storing atom
-					   forces */
-					   Valist *alist,  /**< Atom list */
-					   Vclist *clist  /**< Cell list for accessibility object */
-					   );
-
-/**
- * @brief  Upperlevel routine to the non-polar energy and force routines
- * @ingroup  Frontend
- * @author  David Gohara
- * @return  1 if successful, 0 otherwise */
-VEXTERNC int initAPOL(
-					  NOsh *nosh,  /**< Input parameter object */
-					  Vmem *mem,  /**< Memory manager */
-					  Vparam *param,  /**< Atom parameters */
-					  APOLparm *apolparm,  /**< Apolar calculation parameters */
-					  int *nforce,  /**< Number of force calculations */
-					  AtomForce **atomForce,  /**< Atom force storage object */
-					  Valist *alist  /**< Atom list */
-					  );
 
 /**
  * @brief  Load the meshes given in NOsh into geometry objects
