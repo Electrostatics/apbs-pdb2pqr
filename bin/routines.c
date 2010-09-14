@@ -877,6 +877,9 @@ to ");
 			case VDT_KAPPA:
 				Vnm_tprint(1, "  Kappa map to be written to ");
 				break;
+			case VDT_ATOMPOT:
+				Vnm_tprint(1, "  Atom potentials to be written to ");
+				break;
 			default: 
 				Vnm_tprint(2, "  Invalid data type for writing!\n");
 				break;
@@ -896,6 +899,9 @@ to ");
 				break;
 			case VDF_MCSF:
 				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "mcsf");
+				break;				
+			case VDF_FLAT:
+				Vnm_tprint(1, "%s.%s\n", pbeparm->writestem[i], "txt");
 				break;				
 			default: 
 				Vnm_tprint(2, "  Invalid format for writing!\n");
@@ -3899,6 +3905,12 @@ VPUBLIC int writedataFE(int rank, NOsh *nosh, PBEparm *pbeparm, Vfetk *fetk) {
 			case VDT_KAPPA:
 				
 				Vnm_tprint(1, "    Sorry; can't write kappa map for FEM!\n");
+				writeit = 0;
+				break;
+
+			case VDT_ATOMPOT:
+				
+				Vnm_tprint(1, "    Sorry; can't write atom potentials for FEM!\n");
 				writeit = 0;
 				break;
 				
