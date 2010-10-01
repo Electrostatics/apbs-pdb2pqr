@@ -220,6 +220,28 @@ VEXTERNC int Vgrid_curvature(Vgrid *thee, double pt[3], int cflag,
  */
 VEXTERNC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3] );
 
+/** @brief	Read in OpenDX data in GZIP format
+ *	@ingroup Vgrid
+ *	@author Dave Gohara
+ *	@return 1 if successful, 0 otherwise */
+VEXTERNC int Vgrid_readGZ(
+						  Vgrid *thee, /**< Object with grid data to write */
+						  const char *fname /**< Path to write to */
+						  );
+
+/** @brief	Write out OpenDX data in GZIP format
+ *	@author Dave Gohara
+ */
+VEXTERNC void Vgrid_writeGZ(
+							Vgrid *thee, /**< Object to hold new grid data */
+							const char *iodev, /**< I/O device */
+							const char *iofmt, /**< I/O format */
+							const char *thost, /**< Remote host name */
+							const char *fname, /**< File name */
+							char *title, /**< Data title */
+							double *pvec /**< Masking vector (0 = not written) */
+							);
+
 /** @brief Write out the data in UHBD grid format 
  *  @note   \li The mesh spacing should be uniform
  *          \li Format changed from %12.6E to %12.5E
