@@ -3948,7 +3948,7 @@ VPRIVATE void bcfl_map(Vpmg *thee){
 				if (!rc) {
 					Vnm_print(2, "fillcoChargeMap:  Error -- fell off of potential map at (%g, %g, %g)!\n",
 							  position[0], position[1], position[2]);
-					return VRC_FAILURE;
+					VASSERT(0);
 				}
                 thee->pot[IJK(i,j,k)] = pot;
             }
