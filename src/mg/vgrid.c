@@ -445,13 +445,12 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 #ifdef HAVE_ZLIB
 	int i, j, k, q, itmp, u, header;
 	int length, incr;
-	
 	double * temp;
 	double dtmp1, dtmp2, dtmp3;
-	
+	gzFile infile;
+	char line[VMAX_ARGLEN];
+
 	header = 0;
-	length = 256;
-	char line[length];
 	
 	/* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
@@ -461,7 +460,7 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
     thee->readdata = 1;
     thee->ctordata = 0;
 	
-	gzFile infile = gzopen(fname, "rb");
+	infile = gzopen(fname, "rb");
 	if (infile == Z_NULL) {
         Vnm_print(2, "Vgrid_writeDX:  Problem opening compressed file %s\n",
 				  fname);
@@ -474,7 +473,7 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	
 	//read data here
 	while (header < 7) {
-		if(gzgets(infile, line, length) == Z_NULL){
+		if(gzgets(infile, line, VMAX_ARGLEN) == Z_NULL){
 			return VRC_FAILURE;
 		}
 		if(strncmp(line, "#", 1) == 0) continue;
@@ -799,7 +798,8 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 	char header[8196];
 	char footer[8196];
 	char line[80];
-	
+	char newline[] = "\n";
+	gzFile outfile;
 	char precFormat[VMAX_BUFSIZE];
 	
 	if (thee == VNULL) {
@@ -826,7 +826,7 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 	
 	/* Set up the virtual socket */
 	Vnm_print(0, "Vgrid_writeGZ:  Opening file...\n");
-	gzFile outfile = gzopen(fname, "wb");
+	outfile = gzopen(fname, "wb");
 	
 	if (usepart) {
 		/* Get the lower corner and number of grid points for the local
@@ -942,7 +942,6 @@ VPUBLIC void Vgrid_writeGZ(Vgrid *thee, const char *iodev, const char *iofmt,
 					icol++;
 					if (icol == 3) {
 						icol = 0;
-						char newline[] = "\n";
 						gzwrite(outfile, newline, strlen(newline)*sizeof(char));
 					}
 				}
