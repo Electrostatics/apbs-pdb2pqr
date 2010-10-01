@@ -32,7 +32,7 @@ elec name solvated
     temp 298.15
     calcenergy total
     calcforce no
-    write pot bin potential
+    write pot gz potential
     # write pot dx potential
     # write charge dx charge
 end
