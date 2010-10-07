@@ -27,3 +27,4 @@ complete change log
 * Fixed a bug in Vpmg_dbForce(): the initialization of rtot should appear before it is used.
 * Fixed a bug in initAPOL(): center should be initialized before used.
 * Fixed a bug in routines.c: eliminated spurious "Invalid data type for writing!" and "Invalid format for writing!" from outputs with "write atompot" statement in the input file.
+* Fixed a bug in vpmg.c: fixed zero potential value problem on eges and corners in non-focusing calculations.

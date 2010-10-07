@@ -2985,15 +2985,20 @@ VPRIVATE void packUnpackOpenCL(int nx, int ny, int nz, int ngrid,
 						
 						if(i==0){
 							gxcf[x0] += value[igrid];
-						}else if(i==nx-1){
+						}
+						if(i==nx-1){
 							gxcf[x1] += value[igrid];
-						}else if(j==0){
+						}
+						if(j==0){
 							gycf[y0] += value[igrid];
-						}else if(j==ny-1){
+						}
+						if(j==ny-1){
 							gycf[y1] += value[igrid];
-						}else if(k==0){
+						}
+						if(k==0){
 							gzcf[z0] += value[igrid];
-						}else if(k==nz-1){
+						}
+						if(k==nz-1){
 							gzcf[z1] += value[igrid];
 						}
 					}
@@ -3143,15 +3148,20 @@ VPRIVATE void packUnpack(int nx, int ny, int nz, int ngrid,
 						
 						if(i==0){
 							gxcf[x0] += value[igrid];
-						}else if(i==nx-1){
+						}
+						if(i==nx-1){
 							gxcf[x1] += value[igrid];
-						}else if(j==0){
+						}
+						if(j==0){
 							gycf[y0] += value[igrid];
-						}else if(j==ny-1){
+						}
+						if(j==ny-1){
 							gycf[y1] += value[igrid];
-						}else if(k==0){
+						}
+						if(k==0){
 							gzcf[z0] += value[igrid];
-						}else if(k==nz-1){
+						}
+						if(k==nz-1){
 							gzcf[z1] += value[igrid];
 						}
 					}
@@ -3597,15 +3607,20 @@ VPRIVATE void bcfl_sdh(Vpmg *thee){
 					
 					if(i==0){
 						gxcf[IJKx(j,k,0)] = val;
-					}else if(i==nx-1){
+					}
+					if(i==nx-1){
 						gxcf[IJKx(j,k,1)] = val;
-					}else if(j==0){
+					}
+					if(j==0){
 						gycf[IJKy(i,k,0)] = val;
-					}else if(j==ny-1){
+					}
+					if(j==ny-1){
 						gycf[IJKy(i,k,1)] = val;
-					}else if(k==0){
+					}
+					if(k==0){
 						gzcf[IJKz(i,j,0)] = val;
-					}else if(k==nz-1){
+					}
+					if(k==nz-1){
 						gzcf[IJKz(i,j,1)] = val;
 					}
 				} /* End grid point is valid */
@@ -3701,15 +3716,20 @@ VPRIVATE void bcfl_mdh(Vpmg *thee){
 					
 					if(i==0){
 						gxcf[IJKx(j,k,0)] = val;
-					}else if(i==nx-1){
+					}
+					if(i==nx-1){
 						gxcf[IJKx(j,k,1)] = val;
-					}else if(j==0){
+					}
+					if(j==0){
 						gycf[IJKy(i,k,0)] = val;
-					}else if(j==ny-1){
+					}
+					if(j==ny-1){
 						gycf[IJKy(i,k,1)] = val;
-					}else if(k==0){
+					}
+					if(k==0){
 						gzcf[IJKz(i,j,0)] = val;
-					}else if(k==nz-1){
+					}
+					if(k==nz-1){
 						gzcf[IJKz(i,j,1)] = val;
 					}
 				} /* End grid point is valid */
@@ -4100,15 +4120,20 @@ VPRIVATE void bcfl_mdh_tinker(Vpmg *thee){
 					
 					if(i==0){
 						gxcf[IJKx(j,k,0)] = val;
-					}else if(i==nx-1){
+					}
+					if(i==nx-1){
 						gxcf[IJKx(j,k,1)] = val;
-					}else if(j==0){
+					}
+					if(j==0){
 						gycf[IJKy(i,k,0)] = val;
-					}else if(j==ny-1){
+					}
+					if(j==ny-1){
 						gycf[IJKy(i,k,1)] = val;
-					}else if(k==0){
+					}
+					if(k==0){
 						gzcf[IJKz(i,j,0)] = val;
-					}else if(k==nz-1){
+					}
+					if(k==nz-1){
 						gzcf[IJKz(i,j,1)] = val;
 					}
 				} /* End grid point is valid */
