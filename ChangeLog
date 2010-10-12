@@ -17,6 +17,7 @@ complete change log
 * Switched default Opal service urls from sccne.wustl.edu to NBCR.
 * Added a sanity check in routines.c: 'bcfl map' in the input file requires 'usemap pot' statement in the input file as well.
 * Introduced Vpmgp_size() routine to replace F77MGSZ call in vpmg.c
+* Updated test results for APBS-1.3 release.
 
 # BUGFIXES
 * Modified Vpmg_dbForce with some grid checking code provided by Matteo Rotter.
