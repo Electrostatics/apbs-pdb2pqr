@@ -621,6 +621,8 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
     double x, y, z, charge, radius, epsilon;
     double pos[3];
  
+	epsilon = 0.0;
+
     if (thee == VNULL) {
 		Vnm_print(2, "Valist_readPQR:  Got NULL pointer when reading PQR file!\n");
 		VASSERT(0);
