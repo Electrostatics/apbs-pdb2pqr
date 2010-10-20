@@ -11,34 +11,6 @@ from sys import stdout, stderr
 header = "\n\n\
     ----------------------------------------------------------------------\n\
     Adaptive Poisson-Boltzmann Solver (APBS)\n\
-    Version 1.3 (November 2009)\n\
-    \n\
-    Nathan A. Baker (baker@biochem.wustl.edu)\n\
-    Dept. of Biochemistry and Molecular Biophysics\n\
-    Center for Computational Biology\n\
-    Washington University in St. Louis\n\
-    Additional contributing authors listed in the code documentation.\n\n\
-    Copyright (c) 2002-2010. Washington University in St. Louis\n\
-    All Rights Reserved.\n\n\
-    Portions copyright (c) 1999-2002.  University of California.\n\
-    Portions copyright (c) 1995.  Michael Holst.\n\n\
-    Permission to use, copy, modify, and distribute this software and its\n\
-    documentation for educational, research, and not-for-profit purposes,\n\
-    without fee and without a signed licensing agreement, is hereby granted,\n\
-    provided that the above copyright notice, this paragraph and the\n\
-    following two paragraphs appear in all copies, modifications, and\n\
-    distributions.\n\n\
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR DIRECT,\n\
-    INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST\n\
-    PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,\n\
-    EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH\n\
-    DAMAGE.\n\n\
-    THE AUTHORS SPECIFICALLY DISCLAIM ANY WARRANTIES, INCLUDING, BUT NOT\n\
-    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A\n\
-    PARTICULAR PURPOSE.  THE SOFTWARE AND ACCOMPANYING DOCUMENTATION, IF\n\
-    ANY, PROVIDED HEREUNDER IS PROVIDED \"AS IS\".  THE AUTHORS HAVE NO\n\
-    OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR\n\
-    MODIFICATIONS.\n\
     ----------------------------------------------------------------------\n\
     \n\n"
     

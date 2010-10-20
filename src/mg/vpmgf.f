@@ -9,18 +9,18 @@ c*  @verbatim
 c*
 c* APBS -- Adaptive Poisson-Boltzmann Solver
 c*
-c* Nathan A. Baker (baker@biochem.wustl.edu)
-c* Dept. of Biochemistry and Molecular Biophysics
-c* Center for Computational Biology
-c* Washington University in St. Louis
+c* Nathan A. Baker (nathan.baker@pnl.gov)
+c* Pacific Northwest National Laboratory
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 2002-2006.  Washington University in St. Louis.
-c* All Rights Reserved.
+c* Copyright (c) 2010.  Pacific Northwest National Laboratory.
+c* Portions Copyright (c) 2002-2010.  Washington University in St. Louis.
 c* Portions Copyright (c) 1999-2002.  The Regents of the University 
 c* of California.  
 c* Portions Copyright (c) 1995.  Michael Holst.
+c*
+c* All rights reserved.
 c*
 c* This file is part of APBS.
 c*

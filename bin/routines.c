@@ -7,18 +7,12 @@
  *  @verbatim
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
- * Nathan A. Baker (baker@biochem.wustl.edu)
- * Dept. of Biochemistry and Molecular Biophysics
- * Center for Computational Biology
- * Washington University in St. Louis
+ * Nathan A. Baker (nathan.baker@pnl.gov)
+ * Pacific Northwest National Laboratory
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2002-2010, Washington University in St. Louis.
- * Portions Copyright (c) 2002-2010.  Nathan A. Baker
- * Portions Copyright (c) 1999-2002.  The Regents of the University of California.
- * Portions Copyright (c) 1995.  Michael Holst
- *
+ * Copyright (c) 2010, Pacific Northwest National Laboratory.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -3739,7 +3733,7 @@ VPUBLIC int energyFE(NOsh *nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
 	if (pbeparm->calcenergy == PCE_COMPS) {
 		
 		Vnm_tprint(2, "Error!  Verbose energy evaluation not available for FEM yet!\n");
-		Vnm_tprint(2, "E-mail baker@biochem.wustl.edu if you want this.\n");
+		Vnm_tprint(2, "E-mail nathan.baker@pnl.gov if you want this.\n");
 		*qfEnergy = 0;
 		*qmEnergy = 0;
 		*dielEnergy = 0;

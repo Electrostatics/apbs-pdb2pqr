@@ -22,16 +22,15 @@
  * <hr width="100%">
  * @section license License
  *
- * Primary author: <a href="http://agave.wustl.edu/">Nathan A. Baker</a> (<a href="mailto:baker@biochem.wustl.edu">baker@biochem.wustl.edu</a>)<br>
- * Department of Biochemistry and Molecular Biophysics<br>
- * Center for Computational Biology<br>
- * Washington University in St. Louis<br>
+ * Primary author: Nathan A. Baker (<a href="mailto:nathan.baker@pnl.gov">nathan.baker@pnl.gov</a>)<br>
+ * Pacific Northwest National Laboratory<br>
  * Additional contributing authors are listed in the code documentation.<br>
  * 
- * <p> Copyright (c) 2002-2010, Washington University in St. Louis.
- * Portions Copyright (c) 2002-2010.  Nathan A. Baker
- * Portions Copyright (c) 1999-2002.  The Regents of the University of California.
- * Portions Copyright (c) 1995.  Michael Holst
+ * <p> Copyright (c) 2010, Pacific Northwest National Laboratory.
+ * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
+ * Portions Copyright (c) 2002-2010, Nathan A. Baker
+ * Portions Copyright (c) 1999-2002, The Regents of the University of California.
+ * Portions Copyright (c) 1995, Michael Holst
  * 
  * <p> All rights reserved.
  * 
