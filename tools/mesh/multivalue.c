@@ -77,7 +77,7 @@ int main(int argc, char *argv[]){
 	dxFileName = argv[2];
 	outputFileName = argv[3];
 
-	Vnm_print(1,"Input file:\t%s\ndx file:\t%s\nOutput file:\t%s\n",inputFileName,dxFileName,outputFileName);
+	Vnm_print(1,"Input file:\t%s\ndx file:\t%s\nOutput file:\t%s\n", inputFileName, dxFileName, outputFileName);
 	
 	/* *************** READ DATA ******************* */
 	Vnm_print(1,"Reading data from %s...\n",dxFileName);

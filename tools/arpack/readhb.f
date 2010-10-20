@@ -3,52 +3,6 @@ c*  @file    arstuff.f
 c*  @author  Nathan Baker
 c*  @brief   Support routines for ARPACK
 c*  @version $Id$
-c*  @attention
-c*  @verbatim
-c*
-c* APBS -- Adaptive Poisson-Boltzmann Solver
-c*
-c* Nathan A. Baker (baker@biochem.wustl.edu)
-c* Dept. of Biochemistry and Molecular Biophysics
-c* Center for Computational Biology
-c* Washington University in St. Louis
-c*
-c* Additional contributing authors listed in the code documentation.
-c*
-c* Copyright (c) 2002-2010, Washington University in St. Louis.
-c* Portions Copyright (c) 2002-2010.  Nathan A. Baker
-c* Portions Copyright (c) 1999-2002.  The Regents of the University of California.
-c* Portions Copyright (c) 1995.  Michael Holst
-c*
-c* All rights reserved.
-c* 
-c* Redistribution and use in source and binary forms, with or without
-c* modification, are permitted provided that the following conditions are met: 
-c*
-c* -  Redistributions of source code must retain the above copyright notice, this
-c* list of conditions and the following disclaimer.  
-c* 
-c* - Redistributions in binary form must reproduce the above copyright notice,
-c* this list of conditions and the following disclaimer in the documentation
-c* and/or other materials provided with the distribution.
-c* 
-c* - Neither the name of Washington University in St. Louis nor the names of its
-c* contributors may be used to endorse or promote products derived from this
-c* software without specific prior written permission.
-c* 
-c* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-c* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-c* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-c* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-c* CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-c* EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-c* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-c* PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-c* LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-c* NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-c* SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-c*
-c* @endverbatim
 c**************************************************************************
       subroutine readhbhead(nrow, ncol, nnzero, path)
 c**************************************************************************

@@ -9,22 +9,16 @@
     documentation for more information about each function.
 
     Todd Dolinsky (todd@ccb.wustl.edu)
-    Nathan Baker (baker@biochem.wustl.edu)
-    Washington University in St. Louis
+    Nathan Baker (nathan.baker@pnl.gov)
 
 	APBS -- Adaptive Poisson-Boltzmann Solver
 
-	  Nathan A. Baker (baker@biochem.wustl.edu)
-	  Dept. Biochemistry and Molecular Biophysics
-	  Center for Computational Biology
-	  Washington University in St. Louis
+	  Nathan A. Baker (nathan.baker@pnl.gov)
+	  Pacific Northwest National Laboratory
 
 	  Additional contributing authors listed in the code documentation.
 
-	Copyright (c) 2002-2010, Washington University in St. Louis.
-	Portions Copyright (c) 2002-2010.  Nathan A. Baker
-	Portions Copyright (c) 1999-2002.  The Regents of the University of California.
-	Portions Copyright (c) 1995.  Michael Holst
+	Copyright (c) 2010, Pacific Northwest National Laboratory.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California.  Portions Copyright (c) 1995, Michael Holst
 
 	All rights reserved.
 
@@ -104,17 +98,12 @@ def getHeader():
     \n\
     APBS -- Adaptive Poisson-Boltzmann Solver\n\
     \n\
-    Nathan A. Baker (baker@biochem.wustl.edu)\n\
-    Dept. Biochemistry and Molecular Biophysics\n\
-    Center for Computational Biology\n\
-    Washington University in St. Louis\n\
+    Nathan A. Baker (nathan.baker@pnl.gov)\n\
+    Pacific Northwest National Laboratory\n\
     \n\
     Additional contributing authors listed in the code documentation.\n\
     \n\
-    Copyright (c) 2002-2010, Washington University in St. Louis.\n\
-    Portions Copyright (c) 2002-2010.  Nathan A. Baker\n\
-    Portions Copyright (c) 1999-2002.  The Regents of the University of California.\n\
-    Portions Copyright (c) 1995.  Michael Holst\n\
+    Copyright (c) 2010, Pacific Northwest National Laboratory.  Portions Copyright (c) 2002-2010, Washington University in St. Louis. Portions Copyright (c) 2002-2010, Nathan A. Baker. Portions Copyright (c) 1999-2002, The Regents of the University of California.  Portions Copyright (c) 1995, Michael Holst\n\
     \n\
     All rights reserved.\n\
     \n\

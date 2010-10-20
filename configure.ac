@@ -1,18 +1,17 @@
 1.3dnl ##########################################################################
 dnl APBS -- Adaptive Poisson-Boltzmann Solver
 dnl 
-dnl Nathan A. Baker (baker@biochem.wustl.edu)
-dnl Dept. of Biochemistry and Molecular Biophysics
-dnl Center for Computational Biology
-dnl Washington University in St. Louis
+dnl Nathan A. Baker (nathan.baker@pnl.gov)
+dnl Pacific Northwest National Laboratory
 dnl 
 dnl Additional contributing authors listed in the code documentation.
 dnl 
-dnl Copyright (c) 2002-2010.  Washington University in St. Louis.
-dnl All Rights Reserved.
+dnl Copyright (c) 2010.  Pacific Northwest National Laboratory.
+dnl Portions Copyright (c) 2002-2010.  Washington University in St. Louis.
 dnl Portions Copyright (c) 1999-2002.  The Regents of the University of
 dnl California.  
 dnl Portions Copyright (c) 1995.  Michael Holst.
+dnl All Rights Reserved.
 dnl 
 dnl This file is part of APBS.
 dnl 
