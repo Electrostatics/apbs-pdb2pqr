@@ -1,3 +1,5 @@
 Please see http://www.poissonboltzmann.org/apbs/release-history for the
 complete change log
 
+# BUGFIXES
+* Fixed a bug in routines.c: loadKappaMaps() is missing the case for reading kappa map in gz format.

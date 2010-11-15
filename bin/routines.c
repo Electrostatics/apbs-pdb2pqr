@@ -544,6 +544,24 @@ VPUBLIC int loadKappaMaps(NOsh *nosh, Vgrid *map[NOSH_MAXMOL]) {
 			case VDF_AVS:
 				Vnm_tprint( 2, "AVS input not supported yet!\n");
 				return 0;
+			case VDF_GZ:
+				if (Vgrid_readGZ(map[i], nosh->kappapath[i]) != 1) {
+					Vnm_tprint( 2, "Fatal error while reading from %s\n",
+							   nosh->kappapath[i]);
+					return 0;
+				}
+				Vnm_tprint(1, "  %d x %d x %d grid\n", 
+						   map[i]->nx, map[i]->ny, map[i]->nz);
+				Vnm_tprint(1, "  (%g, %g, %g) A spacings\n", 
+						   map[i]->hx, map[i]->hy, map[i]->hzed);
+				Vnm_tprint(1, "  (%g, %g, %g) A lower corner\n", 
+						   map[i]->xmin, map[i]->ymin, map[i]->zmin);
+				sum = 0;
+				for (ii=0; ii<(map[i]->nx*map[i]->ny*map[i]->nz); ii++)
+					sum += (map[i]->data[ii]);
+				sum = sum*map[i]->hx*map[i]->hy*map[i]->hzed;
+				Vnm_tprint(1, "  Volume integral = %3.2e A^3\n", sum);
+				break;
 			default:
 				Vnm_tprint( 2, "Invalid data format (%d)!\n", 
 							nosh->kappafmt[i]);
