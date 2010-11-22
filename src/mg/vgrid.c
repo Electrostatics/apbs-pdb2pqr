@@ -513,6 +513,7 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	 * big enough to take extra data on the final read loop.
 	 */
 	temp = (double *)malloc(thee->nx*thee->ny*thee->nz*sizeof(double) + 2);
+	length = temp;
 	for(i=0;i<thee->nx*thee->ny*thee->nz;i+=3){
 		gzgets(infile, line, length);
 		sscanf(line, "%lf %lf %lf",&temp[i],&temp[i+1],&temp[i+2]);
