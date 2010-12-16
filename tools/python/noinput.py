@@ -160,7 +160,7 @@ def getHeader():
     \n\
     Additional contributing authors listed in the code documentation.\n\
     \n\
-    Copyright (c) 2010, Pacific Northwest National Laboratory.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002,  The Regents of the University of California. Portions Copyright (c) 1995,  Michael Holst\n\
+    Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002,  The Regents of the University of California. Portions Copyright (c) 1995,  Michael Holst\n\
     \n\
     All rights reserved.\n\
     \n\
