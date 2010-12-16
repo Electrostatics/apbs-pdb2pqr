@@ -14,7 +14,7 @@ c* Pacific Northwest National Laboratory
 c*
 c* Additional contributing authors listed in the code documentation.
 c*
-c* Copyright (c) 2010.  Pacific Northwest National Laboratory.
+c* Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy. 
 c* Portions Copyright (c) 2002-2010.  Washington University in St. Louis.
 c* Portions Copyright (c) 1999-2002.  The Regents of the University 
 c* of California.  
