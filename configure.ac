@@ -596,9 +596,11 @@ if test x"$enable_python" != "xno"; then
 		darwin**)
 	 	PY_CC=${F77}
                        PY_SHARED="-shared"
-                       if test "${F77}" == "g95"; then
+                       if (test "${F77}" == "g95") || (test "${F77}" == "ifort"); then
                          PY_SHARED="-dynamiclib"
                        fi
+                       CC="${CC} -fPIC"
+                       F77="${F77} -fPIC"
                        PY_LINKFLAGS="-Wl,-framework -Wl,Python"
                        PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
                        ;;
