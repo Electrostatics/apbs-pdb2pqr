@@ -54,14 +54,13 @@ AC_LANG_SAVE
 AC_LANG_C
 ac_save_LIBS="$LIBS"
 LIBS="mangle-func.o $LIBS"
-AC_TRY_LINK(,foobar();,
-     ac_f77_mangle_type=lowercase,
-     AC_TRY_LINK(,foobar_();,
-          ac_f77_mangle_type=lowercase-underscore,
-          AC_TRY_LINK(,FOOBAR();,
-               ac_f77_mangle_type=uppercase,
-               AC_TRY_LINK(,FOOBAR_();,
-                    ac_f77_mangle_type=uppercase-underscore))))
+AC_TRY_LINK(,foobar();,  ac_f77_mangle_type=lowercase )
+AC_TRY_LINK(,foobar_();, ac_f77_mangle_type=lowercase-underscore )
+AC_TRY_LINK(,FOOBAR();,  ac_f77_mangle_type=uppercase )
+AC_TRY_LINK(,FOOBAR_();, ac_f77_mangle_type=uppercase-underscore )
+if [ "x$ac_f77_mangle_type" -eq "xunknown" ]; then
+  AC_MSG_ERROR( "couldn't detect mangle type: $ac_f77_mangle_type" )
+fi
 LIBS="$ac_save_LIBS"
 AC_LANG_RESTORE
 AC_MSG_RESULT($ac_f77_mangle_type)
