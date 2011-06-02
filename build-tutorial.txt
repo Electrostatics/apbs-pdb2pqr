@@ -1,0 +1,187 @@
+Installing APBS from source
+---------------------------
+Author: Tucker A. Beck
+Email:  tucker.beck@pnl.gov
+Date:   June 2, 2011
+---------------------------
+
+If you follow these instructions, the installation procedure should not be too painful.  If errors occur or you can't find something you installed, please contact one of the APBS developers.  Make sure that you include (as attached text files, please) any logs or output from the process that may be applicable.  If any package fails to build, please include the 'config.log' file from the root of that projects source tree.
+
+Pleas ignore any lines labeled 'TODO'.  These are notes to let the developers know what actions need to be taken to finish this tutorial.
+
+
+
+1  Overview
+
+For the purposes of this walk-through, I will assume that a user Linus is installing APBS, and he chooses to build APBS in his home folder.  I also assume that Linus has all of his downloads saved to a download folder in his home directory.  He will first need to create the root of his FETk/APBS build.  All lines that begin with a '$' indicate that this is a command to be entered into a linux terminal.  Any text after a '#' on a command line indicates a comment that is only used to describe what the command does.  The comment lines may be ignored (don't bother typing them in!).  I also assume that Linus has 'sudo' privileges on the machine upon which he wishes to install APBS.
+
+
+
+2  Pre-requisite requirements
+
+The following programs / libraries will need to be on your system before you can install APBS from source
+
+
+
+2.1  Essential build tools
+
+This includes a C compiler and the Autoconf tools that are used to build APBS and its dependencies.
+
+If you are using  Ubunut or any other Debian linux based distribution, you may simply install the 'build-essentials'
+
+$ sudo apt-get install build-essential
+
+If you are using a Redhat or Fedora flavor of linux, you may simply install the 'Development Tools' group package
+
+$ sudo yum groupinstall "Development Tools"
+
+If you are using a different flavor of linux, BSD, or a different *nix distribution, please google for instructions on installing essential build programs and libraries
+
+
+
+2.2  Fortran Compiler
+
+You may install the fortran compiler of your choice.  The GNU fortran compiler is readily available and easy to install:
+
+For Ubuntu/Debian:
+
+$ sudo apt-get install gfortran
+
+For Redhat/Fedora:
+
+$ sudo yum install gfortran
+
+
+
+2.3  Subversion
+
+APBS should be downloaded using subversion.  This is a version managment system, and it simply allows you to keep an updated copy of the APBS source code.  I won't go into the specifics of subversion here, but if you want to learn more, go to: http://svnbook.red-bean.com/
+
+For Ubuntu/Debian:
+
+$ sudo apt-get install subversion
+
+For Redhat/Fedora:
+
+$ sudo yum install subversion
+
+
+
+3.  Install software libraries
+
+APBS requires at least 3 other libraries from the Finite Element Toolkit (FETk) in order to work.  These libraries are MALOC, PUNC, and MC.  These libraries provide minimal object-oriented framework for the source code, an understructure for numerical computing, and a mesh geometry manager.  These libraries must also be compiled from source code.  
+
+
+
+3.0  FETk
+
+The Finite Element Toolkit can be found at fetk.org.  All of the elements of the tookit can be found on the download page http://fetk.org/codes/download/.  The entire toolkit may be downloaded from this link, however, it will include lots of packages that aren't needed by APBS.  For each of the prerequisites, download the tarball.  You should at this point pick a common location where you will extract the source and a location where the fully built libraries will reside.  It is common practice to build all of the libraries to your home folder, but you may also deploy them to your /usr/local folder or any other location you wish.  We will make use of some temporary variables during this turorial to faciliate easy management of these folders.
+
+
+
+3.1  Set up your environment
+
+# This is a utility variable that we will use throught the process
+#   it will save us some typing and help reduce typos
+$ export FETK_ROOT=/home/Linus/fetk
+
+# This variable will be used by the install scripts to locate the
+#   source code for each FETk package including APBS
+$ export FETK_INCLUDE=$FETK_ROOT/include
+
+# This variable will be used by the install scripts to locate the
+#   built libraries for each FETk package including APBS
+$ export FETK_LIBRARY=$FETK_ROOT/lib
+
+# This variable points to the folder that contains the source
+#   packages for APBS and all the prerequisite packages
+$ export FETK_SRC=$FETK_ROOT/src
+
+# This variable simply points to the download folder into which all
+#   the packages are downloaded from Linus' browser
+$ export DOWNLOADS=/home/Linus/Downloads
+
+# Create the fetk root (where APBS and it's prerequisites will go)
+$ mkdir $FETK_ROOOT
+
+
+
+3.2  MALOC
+
+First, download the MALOC package from the FETk website, and then type the following commands:
+
+# Extract the compressed package to the FETk source folder
+$ tar -xzvf $DOWNLOADS/maloc-1.5.tar.gz -C $FETK_SRC
+
+# Configure the package for building
+$ $FETK_SRC/maloc/configure --prefix=$FETK_ROOT
+
+# Build the package
+$ make -C $FETK_SRC/maloc
+
+# Install the built package
+$ sudo make -C $FETK_SRC/maloc install
+
+
+
+3.3  PUNC
+
+First, download the PUNC package from the FETk website, and then type the following commands:
+
+# Extract the compressed package to the FETk source folder
+$ tar -xzvf $DOWNLOADS/punc-1.5.tar.gz -C $FETK_SRC
+
+# Configure the package for building
+$ $FETK_SRC/punc/configure --prefix=$FETK_ROOT
+
+# Build the package
+$ make -C $FETK_SRC/punc
+
+# Install the built package
+$ sudo make -C $FETK_SRC/punc install
+
+
+
+4.4  MC
+
+First, download the MC package from the FETk website, and then type the following commands:
+
+# Extract the compressed package to the FETk source folder
+$ tar -xzvf $DOWNLOADS/mc-1.5.tar.gz -C $FETK_SRC
+
+# Configure the package for building
+$ $FETK_SRC/mc/configure --prefix=$FETK_ROOT
+
+# Build the package
+$ make -C $FETK_SRC/mc
+
+# Install the built package
+$ sudo make -C $FETK_SRC/mc install
+
+
+
+4.5  APBS
+
+Downlaod APBS via subversion and install using the following commands:
+
+TODO:  Fix with-fetk-library check bug in configure.ac, and update documentation here
+
+# Fetches the APBS package form the subversion repository and saves it in the FETK source folder
+$ svn co https://apbs.svn.sourceforge.net/svnroot/apbs/trunk $FETK_SRC/apbs
+
+# Configure the package for building
+$ $FETK_SRC/apbs/configure --prefix=$FETK_ROOT
+
+# Build the package
+$ make -C $FETK_SRC/apbs
+
+# Install the built package
+$ sudo make -C $FETK_SRC/apbs install
+
+
+
+5  Finish
+
+The APBS package should now be built and installed on your system.
+
+TODO:  Add more commentary here and descriptions of other options available while building the APBS library
