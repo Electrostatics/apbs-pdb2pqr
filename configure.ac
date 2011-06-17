@@ -184,9 +184,12 @@ dnl # compatible with gfortran/g95. If they are using g77 then they need to
 dnl # use gcc < 4.0 - D. Gohara 8/30/2006
 dnl # -------------------------------------------------------------------------
 if test ["$CC" = "gcc"]; then
+	AC_MSG_NOTICE([extracting gcc version number])
 	gcc_version=`gcc --version`
-	gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}'`
+	#gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}'`
+	gcc_complete_version=`echo ${gcc_version} | sed -ne '1,1p' | perl -pe 's|^.*?(\d+\.\d+(\.\d+)*).*$|\1|'`
 	gcc_major_version=`echo ${gcc_complete_version} | awk '{printf("%i",$1)}'`
+	AC_MSG_NOTICE([gcc version is ${gcc_complete_version}])
 
 	if test ["$F77" = "g77"]; then
 		if test ["${gcc_major_version}" -ge 4]; then
