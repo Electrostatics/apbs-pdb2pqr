@@ -693,7 +693,7 @@ c* Added by DG SMPBE variables and common blocks
 		 !*** count chopped values !***
 		 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) /
      2							SINH_MIN))
-		 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) /
+		 ichopped_pos = idnint(aint((a1_pos + a2_pos+a3_pos) /
      2							SINH_MAX))
 		 ichopped = ichopped
      2        + idnint(am_zero) * (ichopped_neg + ichopped_pos)
@@ -835,7 +835,7 @@ c*       compute the arguments for exp(u) term
 c*       *** count chopped values ***
 		 ichopped_neg = idnint(aint((a1_neg + a2_neg+a3_neg) 
      2									/ SINH_MIN))
-		 ichopped_pos = idnint(aint((a2_pos + a2_pos+a3_pos) 
+		 ichopped_pos = idnint(aint((a1_pos + a2_pos+a3_pos)
      2									/ SINH_MAX))
 		 ichopped = ichopped
      2        + idnint(am_zero) * (ichopped_neg + ichopped_pos)
