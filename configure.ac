@@ -438,7 +438,7 @@ if test -n "${USE_FETK_LIBRARY}"; then
     AC_MSG_NOTICE([Using MALOC library from FETK])
 else
     AC_MSG_NOTICE([Using MALOC library bundled with APBS])
-	maloc_lib_path="${contrib_path}/lib";
+	maloc_lib_path="${contrib_path}/lib"
 fi
 AC_MSG_NOTICE([MALOC library located in ${maloc_lib_path}])
 
@@ -1180,20 +1180,30 @@ AC_SUBST(apbs_do_blas)
 dnl # --------------------------------
 dnl # HANDLE ZLIB COMPILATION
 dnl # --------------------------------
-disable_zlib=yes
+#disable_zlib=yes
+z_lib_path=
 z_lib=
 AC_MSG_CHECKING([--disable-zlib])
 AC_ARG_ENABLE(
 	[zlib],
-	AS_HELP_STRING([--disable-zlib], [disable zlib compilation]),,
-	[disable_zlib=no]
+	AS_HELP_STRING([--disable-zlib], [disable zlib compilation])
 )
-if test x"$disable_zlib" == "xno"; then
-	AC_MSG_RESULT([yes])
-	zlib="zlib"
-	z_lib=${contrib_path}/zlib/.libs/libz.a
-	AC_DEFINE([HAVE_ZLIB], [], [have zlib compression enabled])
+
+if test "x${enable_zlib}" != "xno"; then
+    # TODO:  Figure out if the system should be checked for already having libz available
+    z_lib_path="${contrib_path}/zlib/"
+    z_lib="-L${z_lib_path} -lz"
+    zlib="zlib"  # TODO:  figure out what this is supposed to accomplish
+    AC_DEFINE(
+        [HAVE_ZLIB],
+        [],
+        [have zlib compression enabled]
+        )
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
 fi
+
 AC_SUBST(zlib)
 AC_SUBST(z_lib)
 
