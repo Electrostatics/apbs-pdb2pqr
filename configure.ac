@@ -381,29 +381,67 @@ else
 	AC_MSG_RESULT([no])
 fi
 
+dnl # --------------------------------------------------------------------------
+dnl #                     Configure and test MALOC paths
+dnl #                    Modified by Tucker Beck  5/24/11
+dnl # --------------------------------------------------------------------------
+dnl # Eliminated use of AC_CHECK_FILE macros in favor of AC_CHECK_HEADER and
+dnl # AC_CHECK_LIB.  This is prefereable, in particular, for building against
+dnl # shared and static libraries as the AC_CHECK_LIB macro automatically checks
+dnl # for the correct form of the library automatically (.so, .a, .la).
+dnl # The oldmethod relied on discovery of a static library only (libmaloc.a)
+dnl # --------------------------------------------------------------------------
+
 USE_FETK=
+
 if test -n "${USE_FETK_INCLUDE}"; then
-	maloc_inc_path="${fetk_include_path}"
-	AC_CHECK_FILE(${maloc_inc_path}/maloc/maloc.h,[maloc_inc="yes"],[maloc_inc=""])	
-	if test -z "${maloc_inc}"; then
-		AC_MSG_ERROR([[Error... Couldn't find FETK include files in the location you specified]])
-	fi
+
+    dnl # Save the current path data
+    CPPFLAGS_SAVE=${CPPFLAGS};
+    
+    dnl # Set the include and library paths to the supplied fetk paths
+    CPPFLAGS="-I${fetk_include_path}";
+    
+    AC_CHECK_HEADER(maloc/maloc.h,
+        [maloc_inc_path="${fetk_include_path}"],
+        [AC_MSG_ERROR([Error... Couldn't find FETK include files in the location you specified])])
+        
+	dnl # Return CPPFLAGS to normal
+	CPPFLAGS=${CPPFLAGS_SAVE}
+        
+    AC_MSG_NOTICE([Using MALOC headers from FETK])
 else
+    AC_MSG_NOTICE([Using MALOC headers bundled with APBS])
 	maloc_inc_path="${contrib_path}/include";
 fi
-AC_MSG_NOTICE([Using MALOC headers in ${maloc_inc_path}])
+AC_MSG_NOTICE([MALOC headers located in ${maloc_inc_path}])
 
 if test -n "${USE_FETK_LIBRARY}"; then
-	maloc_lib_path="${fetk_library_path}"
-	AC_CHECK_FILE(${maloc_lib_path}/libmaloc.a,[maloc_lib="yes"],[maloc_lib=""])
-	if test -z "${maloc_lib}"; then
-		AC_MSG_ERROR([Error... Couldn't find FETK library files in the location you specified])
-	fi
+
+    dnl # Save the current path data
+    LDFLAGS_SAVE=${LDFLAGS};
+        
+    dnl # Set the include and library paths to the supplied fetk paths
+    LDFLAGS="-L${fetk_library_path}";
+    
+    dnl # Make sure that the MALOC library is accessible in the supplied FETK library path
+	AC_CHECK_LIB(maloc, maloc_link,
+	   [maloc_lib_path="${fetk_library_path}"],
+	   AC_MSG_ERROR( [Error... Didn't find MALOC library in ${fetk_library_path}] ),
+	   [${math_lib}]
+	   )
+	   
+	dnl # Return LDFLAGS to normal
+	LDFLAGS=${LDFLAGS_SAVE}
+
 	USE_FETK="yes"
+    AC_MSG_NOTICE([Using MALOC library from FETK])
 else
+    AC_MSG_NOTICE([Using MALOC library bundled with APBS])
 	maloc_lib_path="${contrib_path}/lib";
 fi
-AC_MSG_NOTICE([Using MALOC libraries in ${maloc_lib_path}])
+AC_MSG_NOTICE([MALOC library located in ${maloc_lib_path}])
+
 
 maloc_inc="-I${maloc_inc_path}"
 maloc_lib="-L${maloc_lib_path} -lmaloc"
@@ -411,6 +449,25 @@ maloc_lib="-L${maloc_lib_path} -lmaloc"
 dnl # Return LDFLAGS and CPPFLAGS to normal
 AC_SUBST(maloc_lib)
 AC_SUBST(maloc_inc)
+
+dnl # -----------------------------
+dnl # Added by Tucker Beck  5/24/11
+dnl # -----------------------------
+dnl # Check for --with-gamer configure flag.  If enabled, use gamer mesh refinement.
+dnl # Further checks including path checks for the headers and library included after processing the 
+dnl # with-fetk-[include|library] arguments are processed
+dnl # 
+dnl # TODO:  Add gamer mesh refinement into source code
+dnl # --------------------------------
+
+AC_MSG_CHECKING([for --with-gamer option])
+AC_ARG_WITH(gamer,
+            AS_HELP_STRING([--with-gamer=yes/no/PATH],
+                           [Enable (on default path), Disable, or Enable with explicit path]),
+            [AC_MSG_RESULT([${withval}])],
+            [AC_MSG_RESULT([no])]
+            )
+
 
 dnl # ---------------------------
 dnl # HANDLE THE MPI LIBRARY
@@ -599,11 +656,9 @@ if test x"$enable_python" != "xno"; then
 		darwin**)
 	 	PY_CC=${F77}
                        PY_SHARED="-shared"
-                       if (test "${F77}" == "g95") || (test "${F77}" == "ifort"); then
+                       if test "${F77}" == "g95"; then
                          PY_SHARED="-dynamiclib"
                        fi
-                       CC="${CC} -fPIC"
-                       F77="${F77} -fPIC"
                        PY_LINKFLAGS="-Wl,-framework -Wl,Python"
                        PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
                        ;;
@@ -847,6 +902,12 @@ mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
 
+dnl # Added by Tucker Beck 5/24/11
+gamer_path=""
+gamer_include_path=""
+gamer_library_path=""
+gamer_library=""
+
 AC_MSG_CHECKING([for --disable-fetk])
 AC_ARG_ENABLE(
 	[fetk],
@@ -872,6 +933,9 @@ if test x"$enable_fetk" != "xno"; then
 		AC_MSG_RESULT([no])
 	fi
 	
+	dnl # -----------------------
+	dnl # Handle MC linkage
+	dnl # -----------------------
 	dnl # Setup temp LDFLAGS and look for MC library/header
 	LDFLAGS_SAVE=${LDFLAGS};
 	CPPFLAGS_SAVE=${CPPFLAGS};
@@ -915,6 +979,73 @@ if test x"$enable_fetk" != "xno"; then
 	else
 		AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
 	fi
+	
+    dnl # ----------------------------------------------------------------------
+    dnl #                        Handle GAMER linkage
+    dnl #                    Added by Tucker Beck  5/24/11
+    dnl # ----------------------------------------------------------------------
+    dnl # Look for gamer headers and libraries on the supplied paths
+    dnl # If enabled, use gamer mesh refinement.
+    dnl #
+    dnl # Note: Gamer must be enabled and fetk must not be disabled
+    dnl # ----------------------------------------------------------------------
+		
+	dnl # First determine if gamer has been enabled
+    if test "x${with_gamer}" != "xno"; then
+    	
+    	dnl # As GAMER is a c++ library, we need to switch tool chains
+    	AC_LANG_PUSH([C++])
+            
+        AC_MSG_NOTICE([Checking for GAMER library availability])
+        
+        if test "x${with_gamer}" == "xyes"; then
+            gamer_include_path="${fetk_include_path}/gamer"
+            gamer_library_path="${fetk_library_path}"
+        else
+            gamer_include_path="${with_gamer}/include/gamer"
+            gamer_library_path="${with_gamer}/lib"
+        fi
+              	    
+    	dnl # Setup temp LDFLAGS and look for GAMER library/header
+    	LDFLAGS_SAVE=${LDFLAGS}
+    	CPPFLAGS_SAVE=${CPPFLAGS}
+    		
+    	dnl # Set the include and library flags for the compiler
+    	LDFLAGS="-L${gamer_library_path}"
+    	CPPFLAGS="-I${gamer_include_path}"
+    	
+        dnl # GAMER is dependent on the tetgen library
+        dnl # TODO:  Determine why this check is not working
+        dnl #AC_CHECK_LIB(tetgen, tetrahedralize,
+        dnl #    [],
+        dnl #    [AC_MSG_ERROR([didn't find tetgen library - dependency])]
+        dnl #    )
+    		            
+        dnl # Look for the GAMER header files.  Terminate if not found
+        AC_CHECK_HEADER(gamer.h,
+            [gamer_include_path=""],
+            [AC_MSG_WARN([gamer headers not found at ${gamer_include_path}])]
+            )
+                  
+    	dnl # Look for the GAMER library, and if found set the GAMER library path	
+    	AC_CHECK_LIB( gamer, gamer_link,
+    		[gamer_library_path=""],
+    		[AC_MSG_WARN([gamer library not found at ${gamer_library_path}])],
+    		[${math_lib} -ltetgen])
+    		
+    	dnl # Return LDFLAGS and CPPFLAGS to normal
+    	LDFLAGS=${LDFLAGS_SAVE}
+    	CPPFLAGS=${CPPFLAGS_SAVE}
+        AC_LANG_POP([C++])
+    	
+    	# If the GAMER library and headers are found, enable gamer in the source
+    	if test -n gamer_include_path && test -n gamer_library_path; then
+    	   AC_MSG_NOTICE([FEtk component GAMER found:  enabled.])
+    	   AC_DEFINE([HAVE_GAMER_H], [], [have FEtk component GAMER])
+    	else
+    	   AC_MSG_WARN([FEtk component GAMER not found:  GAMER finite element refinement disabled.])
+    	fi
+    fi	
 else
 	AC_MSG_RESULT([yes])
 	AC_MSG_NOTICE([FEtk disabled at user request.])
@@ -1223,7 +1354,7 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} \ 
+base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${gamer_library}\ 
 	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${blas_lib} ${z_lib}"
 
 case $host_os in
