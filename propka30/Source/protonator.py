@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
 import  sys, math
-from Source.vector_algebra import *
-import Source.bonds as bonds
-import Source.pdb as pdb
+from vector_algebra import *
+import bonds as bonds
+import pdb as pdb
 
 
 def makeProtonator(scheme=None):

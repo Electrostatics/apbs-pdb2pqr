@@ -1,8 +1,8 @@
 import math, time
-import Source.calculator as calculate
-import Source.lib as lib
+import calculator as calculate
+import lib
 #import Source.debug as debug
-from Source.determinant import Determinant
+from determinant import Determinant
 
 
 # Some library functions for the interative pKa determinants

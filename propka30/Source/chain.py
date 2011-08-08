@@ -1,7 +1,7 @@
 import math, sys
-import Source.lib as lib
-import Source.mutate
-from Source.residue import Residue
+import lib
+import mutate
+from residue import Residue
 
 
 class Chain:

@@ -132,7 +132,7 @@ def printPQRHeader(atomlist, reslist, charge, ff, warnings, pH, ffout):
 
     return header
 
-class ExtentionOptions(object):
+class ExtraOptions(object):
     pass
 
 def runPDB2PQR(pdblist, ff,
@@ -140,7 +140,8 @@ def runPDB2PQR(pdblist, ff,
                ph = None,
                verbose = False,
                extentions = [],
-               ententionOptions = ExtentionOptions(),
+               ententionOptions = ExtraOptions(),
+               propkaOptions = None,
                clean = False,
                neutraln = False,
                neutralc = False,
@@ -168,6 +169,7 @@ def runPDB2PQR(pdblist, ff,
                              When False, no detailed information will be printed (float)
             extentions:      List of extensions to run
             ententionOptions:optionParser like option object that is passed to each object. 
+            propkaOptions:optionParser like option object for propka30.
             clean:         only return original PDB file in aligned format.
             neutraln:      Make the N-terminus of this protein neutral
             neutralc:      Make the C-terminus of this protein neutral
@@ -285,7 +287,7 @@ def runPDB2PQR(pdblist, ff,
             myRoutines.debumpProtein()  
 
         if pka:
-            myRoutines.runPROPKA(ph, ff, pkaname)
+            myRoutines.runPROPKA(ph, ff, outroot, pkaname, propkaOptions)
 
         myRoutines.addHydrogens()
 
@@ -455,10 +457,6 @@ def mainCommand(argv):
     group.add_option('--usernames', dest='usernames', metavar='USER_NAME_FILE', 
                       help='The user created names file to use. Required if using --userff')
     
-    group.add_option('--with-ph', dest='pH', action='store', type='float',
-                      help='Use propka to calculate pKas and apply them to the molecule given the pH value. ' +
-                           'Actual PropKa results will be output to <output-path>.propka.')
-    
     group.add_option('--apbs-input', dest='input', action='store_true', default=False,
                       help='Create a template APBS input file based on the generated PQR file.  Also creates a Python ' +
                            'pickle for using these parameters in other programs.')
@@ -483,6 +481,17 @@ def mainCommand(argv):
                       help='Print information to stdout.')
     parser.add_option_group(group)
     
+    
+    propkaroup = OptionGroup(parser,"propka options")
+    
+    propkaroup.add_option('--with-ph', dest='pH', action='store', type='float',
+                      help='Use propka to calculate pKas and apply them to the molecule given the pH value. ' +
+                           'Actual PropKa results will be output to <output-path>.propka.')
+    
+    propkaroup.add_option("--reference", dest="reference", default="neutral", 
+           help="setting which reference to use for stability calculations [neutral/low-pH]")
+    
+    
     extentionsGroup = extensions.setupExtensionsOptions(parser)
     
     (options, args) = parser.parse_args() 
@@ -495,9 +504,36 @@ def mainCommand(argv):
     package_path = PACKAGE_PATH
     if package_path != "":
         sys.path.extend(package_path.split(":"))
+       
+    propkaOpts = None 
+    if (not options.pH is None): 
+        if(options.pH < 0.0 or options.pH > 14.0):
+            parser.error('%i is not a valid pH!  Please choose a pH between 0.0 and 14.0.' % options.pH)
         
-    if (not options.pH is None) and (options.pH < 0.0 or options.pH > 14.0):
-        parser.error('%i is not a valid pH!  Please choose a pH between 0.0 and 14.0.' % options.pH)
+        #build propka options
+        propkaOpts = ExtraOptions()
+        propkaOpts.pH = options.pH
+        propkaOpts.reference = "neutral"
+        propkaOpts.chains = None
+        propkaOpts.thermophiles = None
+        propkaOpts.alignment = None
+        propkaOpts.mutations = None
+        propkaOpts.verbose = options.verbose
+        propkaOpts.protonation = "old-school"
+        propkaOpts.window = (0.0, 14.0, 1.0)
+        propkaOpts.grid = (0.0, 14.0, 0.1)
+        propkaOpts.mutator = None
+        propkaOpts.mutator_options = None
+        propkaOpts.display_coupled_residues = None
+        propkaOpts.print_iterations = None
+        propkaOpts.version_label = "Nov30"
+        
+        from propka30.Source import lib
+        lib.interpretMutator(propkaOpts)
+        #With the current defaults used here this does not do anything.
+        #However if we start adding the propka options we'll need to do this.
+        lib.setDefaultAlignmentFiles(propkaOpts)
+        
         
     if options.assign_only or options.clean:
         options.debump = options.optflag = False
@@ -574,9 +610,9 @@ def mainCommand(argv):
     if options.active_extentions is None:
         options.active_extentions = []
         
-    #Filter out the options specifically for extentions.
+    #Filter out the options specifically for extentions or propka.
     #Passed into runPDB2PQR, but not used by any extention yet.
-    extentionOpts = ExtentionOptions()
+    extentionOpts = ExtraOptions()
     
     if extentionsGroup is not None:
         for opt in extentionsGroup.option_list:
@@ -584,6 +620,8 @@ def mainCommand(argv):
                 continue
             setattr(extentionOpts, opt.dest, 
                     getattr(options, opt.dest))
+            
+    
 
     #TODO: The ideal would be to pass a file like object for the second
     # argument and get rid of the userff and username arguments to this function.
@@ -595,6 +633,7 @@ def mainCommand(argv):
                                               ph = options.pH,
                                               verbose = options.verbose,
                                               extentions = options.active_extentions,
+                                              propkaOptions = propkaOpts,
                                               ententionOptions = extentionOpts,
                                               clean = options.clean,
                                               neutraln = options.neutraln,

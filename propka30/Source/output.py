@@ -1,5 +1,5 @@
 import sys
-import Source.lib
+import lib
 
 revision = 182
 
@@ -184,7 +184,7 @@ def getDeterminantSection(protein, verbose=False):
     prints out the pka-section of the result
     """
     # getting the same order as in propka2.0
-    residue_list = Source.lib.residueList("propka1")
+    residue_list = lib.residueList("propka1")
     str  = "%s\n" % ( getDeterminantsHeader() )
 
     # printing determinants
@@ -209,7 +209,7 @@ def getSummarySection(protein, verbose=False):
     prints out the pka-section of the result
     """
     # getting the same order as in propka2.0
-    residue_list = Source.lib.residueList("propka1")
+    residue_list = lib.residueList("propka1")
     str  = "%s\n" % ( getSummaryHeader() )
     # printing pKa summary
     for chain in protein.chains:

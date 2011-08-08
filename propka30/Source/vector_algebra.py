@@ -1,5 +1,5 @@
 import math, sys
-import Source.lib as lib
+import lib
 
 
 class vector:

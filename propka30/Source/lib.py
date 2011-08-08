@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import string, sys, copy, math
-import Source.output as output
+import output
 
 
 def loadOptions():

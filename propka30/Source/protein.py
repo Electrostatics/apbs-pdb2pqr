@@ -1,12 +1,12 @@
 import math, sys, os, time, string
-import Source.lib as lib
-import Source.determinants as determinants
-import Source.pdb as pdb 
+import lib
+import determinants
+import pdb 
 #import Source.debug as debug
-import Source.output as output
-import Source.coupled_residues as coupled_residues
-import Source.calculator as calculate
-from Source.chain import Chain
+import output
+import coupled_residues
+import calculator as calculate
+from chain import Chain
 
 
 
@@ -251,7 +251,7 @@ class Protein:
         """ 
         protonates the protein according to given scheme
         """ 
-        from Source.protonator import makeProtonator
+        from protonator import makeProtonator
         please = makeProtonator(scheme=scheme)
         self.removeHydrogens()
 
@@ -278,8 +278,8 @@ class Protein:
         """ 
         # create a default version if not provided
         if version == None:
-          import Source.version
-          version = Source.version.makeVersion(label=options.version_label)
+          import version
+          version = version.makeVersion(label=options.version_label)
 
         if len(self.configurations) == 1:
           # found only one configuration in pdbfile
@@ -922,7 +922,7 @@ def getResidueParameters():
     """ 
     Reads necessary information about residues (includes ions)
     """ 
-    from Source.parameters_new import resName2Type, getQs, pKa_mod
+    from parameters_new import resName2Type, getQs, pKa_mod
     resInfo = {}
     # reading residue information from parameters.py
     resInfo['resType'] = resName2Type()

@@ -1,8 +1,8 @@
 import math, os, sys, re
 
-import Source.lib as lib
-import Source.output as output
-import Source.pdb as pdb
+import lib
+import output
+import pdb
 #import Source.debug as debug
 
 

@@ -643,11 +643,16 @@ class Atom(ATOM):
         str = str + string.ljust(tstr, 8)[:8]
         tstr = "%8.3f" % self.z
         str = str + string.ljust(tstr, 8)[:8]
-        if self.ffcharge != None: ffcharge = "%.4f" % self.ffcharge
-        else: ffcharge = "0.0000"
+        
+        if self.ffcharge != None: 
+            ffcharge = "%.4f" % self.ffcharge
+        else: 
+            ffcharge = "0.0000"
         str = str + string.rjust(ffcharge, 8)[:8]
-        if self.radius != None: ffradius = "%.4f" % self.radius
-        else: ffradius = "0.0000"
+        if self.radius != None: 
+            ffradius = "%.4f" % self.radius
+        else: 
+            ffradius = "0.0000"
         str = str + string.rjust(ffradius, 7)[:7]
         return str
     

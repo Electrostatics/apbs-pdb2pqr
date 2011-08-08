@@ -69,6 +69,7 @@ from forcefield import *
 from structures import *
 from protein import *
 from definitions import *
+from StringIO import StringIO
 
 class Routines:
     def __init__(self, protein, verbose, definition = None):
@@ -1545,7 +1546,7 @@ class Routines:
         for residue in self.protein.getResidues():
             residue.setDonorsAndAcceptors()
         
-    def runPROPKA(self, ph, ff, outname):
+    def runPROPKA(self, ph, ff, rootname, outname, options):
         """
             Run PROPKA on the current protein, setting protonation states to
             the correct values
@@ -1556,6 +1557,10 @@ class Routines:
                outname: The name of the PQR outfile
         """
         self.write("Running propka and applying at pH %.2f... " % ph)
+        
+        from propka30.Source.protein import Protein as pkaProtein
+        from propka30.Source.pdb import readPDB as pkaReadPDB
+        from propka30.Source.lib import residueList
 
         # Initialize some variables
 
@@ -1564,61 +1569,80 @@ class Routines:
         pkadic = {}
         warnings = []
 
-        # Make sure PropKa has been installed.
-        
-        try:
-            from propka.propkalib import runPKA
-        except ImportError:
-            text = "Couldn't find propka - make sure it has been installed!\n"
-            text += "(propka installation requires a version of Fortran compiler, like g95, gfortran, etc.)"
-            raise ValueError, text
-
         # Reorder the atoms in each residue to start with N
    
         for residue in self.protein.getResidues():
             residue.reorder() 
         
         # Make a string with all non-hydrogen atoms
+        
+        HFreeProteinFile = StringIO()
 
         for atom in self.protein.getAtoms():
             if not atom.isHydrogen():
-                atomtxt = str(atom)
-                if len(atomtxt) + 1 != linelen:
-                    print "Atom line length (%i) does not match constant (%i)!" % \
-                          ((len(atomtxt) +1), linelen)
-                    sys.exit()
-                txt += "%s\n" % atomtxt
+                atomtxt = ATOM.__str__(atom)
+                atomtxt = atomtxt[:linelen]
+#                if len(atomtxt) + 1 != linelen:
+#                    print "Atom line length (%i) does not match constant (%i)!" % \
+#                          ((len(atomtxt) +1), linelen)
+#                    sys.exit()
+                HFreeProteinFile.write(atomtxt)
+                HFreeProteinFile.write('\n')
 
         # The length of the overall text/line length ratio should be
         # the number of atoms without remainder
 
-        txtlen = len(txt)
-        if txtlen % linelen != 0:
-            raise ValueError, "Extra characters in pka string!"
-
+#        HFreeProteinFile.seek(0)
+#        
+#        txtlen = len(HFreeProteinFile.read())
+#        if txtlen % linelen != 0:
+#            raise ValueError, "Extra characters in pka string!"
+        
+        HFreeProteinFile.seek(0)
 
         # Run PropKa
+        
+        atoms = pkaReadPDB('', file = HFreeProteinFile)
+        
+        # creating protein object
+        myPkaProtein = pkaProtein(atoms=atoms, name=rootname, options=options)
+        # calculating pKa values for ionizable residues
+        myPkaProtein.calculatePKA(options=options)
+        # printing pka file
+        myPkaProtein.writePKA(options=options, filename=outname)
 
-        numatoms = int(txtlen) / linelen
-
-        runPKA(numatoms, txt, outname)
+#        numatoms = int(txtlen) / linelen
+#
+#        runPKA(numatoms, txt, outname)
         
         # Parse the results
         
-        pkafile = open(outname, 'rU')
-        summary = 0
-        while 1:
-            line = pkafile.readline()
-            if line == "": break
-            if line.startswith("SUMMARY"): summary = 1
-            elif line.startswith("-"): summary = 0
-            elif summary:
-                words = string.split(string.strip(line))
-                key = ""
-                for i in range(len(words) - 1):
-                    key = "%s %s" % (key,words[i])
-                key = string.strip(key)
-                pkadic[key] = float(words[-1])
+        # printing determinants
+        residue_list = residueList("propka1")
+        for chain in myPkaProtein.chains:
+            for residue_type in residue_list:
+                for residue in chain.residues:
+                    if residue.resName == residue_type:
+                        key = string.strip('%s %s %s'% (string.strip(residue.resName), residue.resNumb, residue.chainID))
+                        pkadic[key] = residue.pKa_pro
+        
+#        pkafile = open(outname, 'rU')
+#        summary = 0
+#        while 1:
+#            line = pkafile.readline()
+#            if line == "": 
+#                break
+#            if line.startswith("SUMMARY"): 
+#                summary = 1
+#            elif line.startswith("-"): 
+#                summary = 0
+#            elif summary:
+#                words = string.split(string.strip(line))
+#                key = ""
+#                for i in range(len(words) - 1):
+#                    key = "%s %s" % (key,words[i])
+#                key = string.strip(key)
+#                pkadic[key] = float(words[-1])
             
         if len(pkadic) == 0: return
 
