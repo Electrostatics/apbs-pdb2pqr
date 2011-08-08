@@ -1,7 +1,7 @@
 import math
-import Source.lib as lib
+import lib
 import sys, os
-import Source.calculator as calculate
+import calculator as calculate
 
 
 def getAtomInteractionList():
@@ -417,7 +417,7 @@ class Version(object):
         """
         setting the Coulomb model, and its parameters. If parameter is not defined, it will take the default from 'parameters.py'
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
         coulomb_parameters = parameters.getCoulombParameters()
         if label not in coulomb_parameters:
           print("do not accept Coulomb model \"%s\\n" % (label))
@@ -454,7 +454,7 @@ class Version(object):
         """
         setting the desolvation model, and its parameters
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
         desolvation_parameters = parameters.getDesolvationParameters()
         if label not in desolvation_parameters:
           print("do not accept solvation model \"%s\\n" % (label))
@@ -1353,7 +1353,7 @@ class Nov30(Version):
         """
         Rules of action for version Nov30
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Nov30"
         self.Nmin             =  280

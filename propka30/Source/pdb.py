@@ -1,18 +1,19 @@
 import string, sys, copy
-import Source.lib as lib
+import lib
 
 excluded_resNames = ["H2O", "HOH", "SO4", "PO4", "PEG", "EPE", "NAG", "TRS"]
 
 
 
-def readPDB(filename, verbose=True, tags = ["ATOM"]):
+def readPDB(filename, file=None, verbose=True, tags = ["ATOM"]):
     """
     Reads the pdb line and returns an atom-dictionary; atoms sorted according to chain and residue
     """
     atoms   = {}   # atoms[chainID][resLabel] = [A1, A2, A3 ...]
 
     # check the filename and open the file
-    file = openPdbFile(filename)
+    if file is None:
+        file = openPdbFile(filename)
 
     # scan pdbfile for models and configurations
     number_of_configurations, models_configurations, models_lines = scanFileForConfigurations(file)

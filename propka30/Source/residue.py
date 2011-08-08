@@ -2,8 +2,8 @@ import sys
 import string
 import math
 import copy
-import Source.lib as lib
-from Source.pdb import Atom
+import lib
+from pdb import Atom
 
 class Residue:
     """

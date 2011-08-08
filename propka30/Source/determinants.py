@@ -1,10 +1,10 @@
 import math, time
 
-import Source.iterative as iterative
-import Source.lib as lib
+import iterative
+import lib
 #import Source.debug as debug
-import Source.calculator as calculate
-from   Source.determinant import Determinant
+import calculator as calculate
+from   determinant import Determinant
 
 
 def setDeterminants(propka_residues, version=None, options=None):
