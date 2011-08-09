@@ -2,7 +2,7 @@ import math, time
 
 import iterative
 import lib
-#import Source.debug as debug
+#import debug
 import calculator as calculate
 from   determinant import Determinant
 

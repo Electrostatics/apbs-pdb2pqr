@@ -1,5 +1,5 @@
 import  sys, math, string
-from Source.lib import int2roman, convertResidueCode
+from lib import int2roman, convertResidueCode
 
 
 def compareFoldingContributions(target=None, template=None, options=None):
@@ -10,7 +10,7 @@ def compareFoldingContributions(target=None, template=None, options=None):
     4. calculate the difference
     5. printout sorted result
     """
-    from Source.mutate import readAlignmentFiles
+    from mutate import readAlignmentFiles
 
     # checking that pKa values are available
     checkDonePKA(target, template)

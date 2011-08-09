@@ -2,7 +2,7 @@ import math, sys, os, time, string
 import lib
 import determinants
 import pdb 
-#import Source.debug as debug
+#import debug
 import output
 import coupled_residues
 import calculator as calculate
@@ -369,7 +369,7 @@ class Protein:
           print(str)
 
         # get the average pKa properties by dividing the sum with number of configurations, len(configuration keys)
-        from Source.determinants import Determinant
+        from determinants import Determinant
         for residue in pka_residues:
           residue_key = residue.label
           sum_pka = 0.00; sum_Nmass = 0.00; sum_Emass = 0.00; sum_Nlocl = 0.00; sum_Elocl = 0.00
@@ -735,7 +735,7 @@ class Protein:
         """ 
         mutates the protein according to 'mutation' using 'method'
         """
-        import Source.mutate as mutate
+        import mutate
         newProtein = mutate.makeMutatedProtein(self, mutation=mutation, atoms=atoms, options=options)
 
         return  newProtein
@@ -745,7 +745,7 @@ class Protein:
         """ 
         permutes multiple mutations and determins the most stable combination; note, you need the version for stability calculations
         """
-        import Source.mutate as mutate
+        import mutate
         best_mutation = mutate.optimizeMutationDeterminants(self, mutation=mutation, atoms=atoms, alignment=alignment, version=version, options=options)
 
         return  best_mutation
@@ -755,7 +755,7 @@ class Protein:
         """ 
         permutes multiple mutations and determins the most stable combination; note, you need the version for stability calculations
         """
-        import Source.mutate as mutate
+        import mutate
         best_mutation = mutate.optimizeMultipleMutations(self, mutations=mutations, atoms=atoms, alignment=None, version=version, options=options)
 
         return  best_mutation

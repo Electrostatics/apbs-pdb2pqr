@@ -1,7 +1,7 @@
 #!/usr/local/bin/python3.0
 
 import sys
-from Source.lib import residueList, atomList
+from lib import residueList, atomList
 
 
 #    NOTE:

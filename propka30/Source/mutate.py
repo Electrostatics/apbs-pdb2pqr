@@ -3,7 +3,7 @@ import math, os, sys, re
 import lib
 import output
 import pdb
-#import Source.debug as debug
+#import debug
 
 
 def optimizeMutationDeterminants(protein, mutation=None, atoms=None, alignment=None, version=None, options=None):
@@ -124,7 +124,7 @@ def makeMutatedProtein(protein, mutation=None, atoms=None, alignment=None, optio
     """
     returning a new protein, mutation approach determined from options.mutator
     """
-    from Source.protein import Protein as Protein
+    from protein import Protein
     print("mutator: %s" % (options.mutator.label))
     print("type: %s\n" % (options.mutator.type))
 
@@ -971,8 +971,8 @@ def mutateAtomsDictionaryUsingOverlap(protein=None, atoms=None, mutation=None, o
     """
     This routine overlaps two residues based on an array of atom labels, 'center'
     """
-    from Source.corresponding_atoms import makeCorrespondingAtomNames
-    from Source.rotate import rotatePosition, translatePosition, makeCrossProduct, calculateVectorLength, \
+    from corresponding_atoms import makeCorrespondingAtomNames
+    from rotate import rotatePosition, translatePosition, makeCrossProduct, calculateVectorLength, \
                               makeScalarProduct, generateRandomDisplacement, generateRandomRotation, rotateAtoms, translateAtoms
 
     # create copy of target
@@ -1162,7 +1162,7 @@ def makeMutationLight(original_protein=None, template_protein=None, mutation=Non
     translate = dictionary for translating target and template residues to the origin
     center    = array with atom names in 'position-dictionary': used for 'rotation-center'
     """
-    from Source.rotate import rotatePosition, translatePosition, makeCrossProduct, calculateVectorLength, makeScalarProduct, generateRandomDisplacement, generateRandomRotation
+    from rotate import rotatePosition, translatePosition, makeCrossProduct, calculateVectorLength, makeScalarProduct, generateRandomDisplacement, generateRandomRotation
 
     # start mutations
     for label in mutation.keys():

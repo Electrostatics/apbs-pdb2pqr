@@ -1,7 +1,7 @@
 import math, time
 import calculator as calculate
 import lib
-#import Source.debug as debug
+#import debug
 from determinant import Determinant
 
 
