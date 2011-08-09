@@ -105,7 +105,7 @@ def checkCooArgException(residue_coo, residue_arg, version=None):
     checking Coo-Arg exception: uses the two shortes unique distances (involving 2+2 atoms)
     """
     # printing out all distances for debugging
-    #import Source.debug as debug
+    #import debug
     #debug.printCooArgAtomDistances(residue_coo, residue_arg)
 
     str = "xxx"
@@ -621,7 +621,7 @@ class Jan01(Version):
         """
         Rules of action for version Jan01
         """
-        import Source.parameters_std as parameters
+        import parameters_std as parameters
     
         self.name             = "Jan01"
         self.Nmin             =  300
@@ -710,7 +710,7 @@ class Jan15(Version):
         """
         Rules of action for version Jan15
         """
-        import Source.parameters_std as parameters
+        import parameters_std as parameters
 
         self.name             = "Jan15"
         self.Nmin             =  300
@@ -799,7 +799,7 @@ class May13(Version):
         """
         Rules of action for version May13
         """
-        import Source.parameters_std as parameters
+        import parameters_std as parameters
 
         self.name             = "May13"
         self.coulomb_cutoff =   7.00
@@ -829,7 +829,7 @@ class Dec18(Version):
         """
         Rules of action for version Dec18
         """
-        import Source.parameters_std as parameters
+        import parameters_std as parameters
 
         self.name             = "Dec18"
         self.Nmin             =  300
@@ -885,7 +885,7 @@ class Dec19(Version):
         """
         Rules of action for version Dec19
         """
-        import Source.parameters_std as parameters
+        import parameters_std as parameters
         
         self.name             = "Dec19"
         self.Nmin             =  300
@@ -941,7 +941,7 @@ class Aug24(Version):
         """
         Rules of action for version Aug24
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Aug24"
         self.Nmin             =  280
@@ -969,7 +969,7 @@ class Aug30(Version):
         """
         Rules of action for version Aug30
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Aug30"
         self.Nmin             =  280
@@ -997,7 +997,7 @@ class Aug31(Version):
         """
         Rules of action for version Aug31
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Aug31"
         self.Nmin             =  280
@@ -1025,7 +1025,7 @@ class Sep05(Version):
         """
         Rules of action for version Sep05
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Sep05"
         self.Nmin             =  280
@@ -1053,7 +1053,7 @@ class Sep06(Version):
         """
         Rules of action for version Sep06
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Sep06"
         self.Nmin             =  280
@@ -1081,7 +1081,7 @@ class Sep07(Version):
         """
         Rules of action for version Sep07
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Sep07"
         self.Nmin             =  280
@@ -1109,7 +1109,7 @@ class Sep08(Version):
         """
         Rules of action for version Sep08
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Sep08"
         self.Nmin             =  280
@@ -1137,7 +1137,7 @@ class Oct13(Version):
         """
         Rules of action for version Oct13, based on Sep07
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Oct13"
         self.Nmin             =  280
@@ -1269,7 +1269,7 @@ class Oct14(Version):
         """
         Rules of action for version Oct14
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Oct14"
         self.Nmin             =  280
@@ -1297,7 +1297,7 @@ class Nov28(Version):
         """
         Rules of action for version Oct14
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Nov28"
         self.Nmin             =  280
@@ -1325,7 +1325,7 @@ class Nov29(Version):
         """
         Rules of action for version Nov29
         """
-        import Source.parameters_new as parameters
+        import parameters_new as parameters
 
         self.name             = "Nov29"
         self.Nmin             =  280

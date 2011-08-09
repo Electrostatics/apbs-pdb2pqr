@@ -760,7 +760,7 @@ class Residue:
         """
         rotate residue theta radians around axis with center=center
         """
-        from Source.rotate import generalRotationMatrix
+        from rotate import generalRotationMatrix
         translate = [0.00, 0.00, 0.00]
         number_of_atoms = 0
         for atom in self.atoms:
@@ -814,7 +814,7 @@ class Residue:
         """
         making a copy of this residue
         """
-        from Source.protein import getResidueParameters
+        from protein import getResidueParameters
         if chainID == None: chainID = self.chainID
         if resNumb == None: resNumb = self.resNumb
 

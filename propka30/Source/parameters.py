@@ -1,7 +1,7 @@
 import math
-import Source.lib as lib
+import lib
 import sys, os
-from Source.calculator import calculate
+from calculator import calculate
 
 
 def pKa_mod(resName):
@@ -318,7 +318,7 @@ def checkCooArgException(residue_coo, residue_arg, dpka_max=None, cutoff=None, v
     checking Coo-Arg exception
     """
     # printing out all distances for debugging
-    #import Source.debug as debug
+    #import debug
     #debug.printCooArgAtomDistances(residue_coo, residue_arg)
 
     excluded_atoms = []

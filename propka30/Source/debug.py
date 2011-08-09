@@ -1,6 +1,6 @@
 import string
-import Source.lib as lib
-import Source.calculator as calculate
+import lib
+import calculator as calculate
 
 
 def interactionMatrix(interaction):

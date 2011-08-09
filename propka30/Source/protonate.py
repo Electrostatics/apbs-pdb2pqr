@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from Source.vector_algebra import *
+from vector_algebra import *
 import bonds, pdb
 
 class Protonate:

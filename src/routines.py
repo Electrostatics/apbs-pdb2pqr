@@ -1580,23 +1580,11 @@ class Routines:
 
         for atom in self.protein.getAtoms():
             if not atom.isHydrogen():
-                atomtxt = ATOM.__str__(atom)
+                atomtxt = str(atom)
                 atomtxt = atomtxt[:linelen]
-#                if len(atomtxt) + 1 != linelen:
-#                    print "Atom line length (%i) does not match constant (%i)!" % \
-#                          ((len(atomtxt) +1), linelen)
-#                    sys.exit()
                 HFreeProteinFile.write(atomtxt)
                 HFreeProteinFile.write('\n')
 
-        # The length of the overall text/line length ratio should be
-        # the number of atoms without remainder
-
-#        HFreeProteinFile.seek(0)
-#        
-#        txtlen = len(HFreeProteinFile.read())
-#        if txtlen % linelen != 0:
-#            raise ValueError, "Extra characters in pka string!"
         
         HFreeProteinFile.seek(0)
 
@@ -1611,45 +1599,26 @@ class Routines:
         # printing pka file
         myPkaProtein.writePKA(options=options, filename=outname)
 
-#        numatoms = int(txtlen) / linelen
-#
-#        runPKA(numatoms, txt, outname)
-        
         # Parse the results
-        
-        # printing determinants
+        # This is the method used to generate the summary in the first place.
         residue_list = residueList("propka1")
         for chain in myPkaProtein.chains:
             for residue_type in residue_list:
                 for residue in chain.residues:
                     if residue.resName == residue_type:
-                        key = string.strip('%s %s %s'% (string.strip(residue.resName), residue.resNumb, residue.chainID))
+                        #String out the extra space after C- or N+ 
+                        key = string.strip('%s %s %s'% (string.strip(residue.resName), 
+                                                        residue.resNumb, residue.chainID))
                         pkadic[key] = residue.pKa_pro
         
-#        pkafile = open(outname, 'rU')
-#        summary = 0
-#        while 1:
-#            line = pkafile.readline()
-#            if line == "": 
-#                break
-#            if line.startswith("SUMMARY"): 
-#                summary = 1
-#            elif line.startswith("-"): 
-#                summary = 0
-#            elif summary:
-#                words = string.split(string.strip(line))
-#                key = ""
-#                for i in range(len(words) - 1):
-#                    key = "%s %s" % (key,words[i])
-#                key = string.strip(key)
-#                pkadic[key] = float(words[-1])
-            
-        if len(pkadic) == 0: return
+        if len(pkadic) == 0: 
+            return
 
         # Now apply each pka to the appropriate residue
 
         for residue in self.protein.getResidues():
-            if not isinstance(residue, Amino): continue
+            if not isinstance(residue, Amino): 
+                continue
             resname = residue.name
             resnum = residue.resSeq
             chainID = residue.chainID

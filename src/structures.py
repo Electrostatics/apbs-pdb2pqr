@@ -644,16 +644,17 @@ class Atom(ATOM):
         tstr = "%8.3f" % self.z
         str = str + string.ljust(tstr, 8)[:8]
         
-        if self.ffcharge != None: 
-            ffcharge = "%.4f" % self.ffcharge
-        else: 
-            ffcharge = "0.0000"
-        str = str + string.rjust(ffcharge, 8)[:8]
-        if self.radius != None: 
-            ffradius = "%.4f" % self.radius
-        else: 
-            ffradius = "0.0000"
-        str = str + string.rjust(ffradius, 7)[:7]
+        tstr = "%6.2f" % self.occupancy
+        str = str + string.ljust(tstr, 6)[:6]
+        tstr = "%6.2f" % self.tempFactor
+        str = str + string.rjust(tstr, 6)[:6]
+        tstr = self.segID
+        str = str + string.ljust(tstr, 4)[:4]
+        tstr = self.element
+        str = str + string.ljust(tstr, 2)[:2]
+        tstr = self.charge
+        str = str + string.ljust(tstr, 2)[:2]
+
         return str
     
     def get(self, name):
@@ -760,9 +761,7 @@ class Atom(ATOM):
             Returns
                 value: 1 if Atom is a Hydrogen, 0 otherwise
         """
-        value = 0
-        if self.name[0] == "H": value = 1
-        return value
+        return self.name[0] == "H"
 
     def isBackbone(self):
         """
@@ -771,10 +770,7 @@ class Atom(ATOM):
             Returns
                 state: 1 if true, 0 if false
         """
-        state = 0
-        if self.name in BACKBONE:
-            state = 1
-        return state
+        return self.name in BACKBONE
 
     def hasReference(self):
         """
@@ -785,8 +781,7 @@ class Atom(ATOM):
                 1 if atom has a reference object, 0 otherwise.
         """
 
-        if self.reference != None: return 1
-        else: return 0
+        return self.reference != None
 
     
         

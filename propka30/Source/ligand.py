@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import sys, pdb, protonate, lib, bonds
-from Source.vector_algebra import *
+from vector_algebra import *
 
 all_sybyl_types = [
     'C.3',   #  carbon sp3
