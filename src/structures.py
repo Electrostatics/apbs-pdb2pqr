@@ -600,12 +600,14 @@ class Atom(ATOM):
         if hasattr(atom,'mol2charge'):
             self.mol2charge=atom.mol2charge
         
-          
-    def __str__(self):
+    
+    def getCommonStringRep(self):
         """
-            Returns a string of the new atom type.  Uses the ATOM string
-            output but changes the first field to either by ATOM or
-            HETATM as necessary.
+            Returns a string of the common column of the new atom type.  
+            Uses the ATOM string output but changes the first field 
+            to either by ATOM or HETATM as necessary.
+            
+            This is used to create the output for pqr and pdb files! No touchy!
 
             Returns
                 str: String with ATOM/HETATM field set appropriately
@@ -642,7 +644,48 @@ class Atom(ATOM):
         tstr = "%8.3f" % self.y
         str = str + string.ljust(tstr, 8)[:8]
         tstr = "%8.3f" % self.z
-        str = str + string.ljust(tstr, 8)[:8]
+        str = str + string.ljust(tstr, 8)[:8] 
+        return str
+        
+    def __str__(self):
+        """
+            Returns a string of the new atom type.  Uses the ATOM string
+            output but changes the first field to either by ATOM or
+            HETATM as necessary.
+            
+            This is used to create the output for pqr files! No touchy!
+
+            Returns
+                str: String with ATOM/HETATM field set appropriately
+        """
+        str = self.getCommonStringRep()
+        
+        if self.ffcharge != None: 
+            ffcharge = "%.4f" % self.ffcharge
+        else: 
+            ffcharge = "0.0000"
+        str = str + string.rjust(ffcharge, 8)[:8]
+        if self.radius != None: 
+            ffradius = "%.4f" % self.radius
+        else: 
+            ffradius = "0.0000"
+        str = str + string.rjust(ffradius, 7)[:7]
+
+        return str
+    
+    def getPDBString(self):
+        """
+            Returns a string of the new atom type.  Uses the ATOM string
+            output but changes the first field to either by ATOM or
+            HETATM as necessary.
+            
+            This is for the pdb representation of the atom. The propka30 module 
+            depends on this being correct. No touchy!
+
+            Returns
+                str: String with ATOM/HETATM field set appropriately
+        """
+        str = self.getCommonStringRep()
         
         tstr = "%6.2f" % self.occupancy
         str = str + string.ljust(tstr, 6)[:6]
@@ -654,6 +697,7 @@ class Atom(ATOM):
         str = str + string.ljust(tstr, 2)[:2]
         tstr = self.charge
         str = str + string.ljust(tstr, 2)[:2]
+
 
         return str
     
