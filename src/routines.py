@@ -1580,7 +1580,7 @@ class Routines:
 
         for atom in self.protein.getAtoms():
             if not atom.isHydrogen():
-                atomtxt = str(atom)
+                atomtxt = atom.getPDBString()
                 atomtxt = atomtxt[:linelen]
                 HFreeProteinFile.write(atomtxt)
                 HFreeProteinFile.write('\n')
