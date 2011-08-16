@@ -6,6 +6,12 @@
 /* do not inline functions */
 #undef APBS_NOINLINE
 
+/* Enable fortran replacement code */
+#undef BURY_FORTRAN
+
+/* Debug Mode */
+#undef DEBUG
+
 /* have floating point errors */
 #undef FLOAT_ERRORS
 

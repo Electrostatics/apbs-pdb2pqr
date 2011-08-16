@@ -330,6 +330,21 @@ dnl ##########################################################################
 fetk_cpu_vendor_os="";
 AC_SUBST(fetk_cpu_vendor_os)
 
+dnl See if the user specified --with-fortran-replacement
+fortran_replacement=
+AC_MSG_CHECKING([for --with-fortran-replacement option])
+AC_ARG_WITH([fortran-replacement],
+    AS_HELP_STRING([--with-fortran-replacement],[enable fortran replacement code]),
+    [fortran_replacement="yes"],
+    [fortran_replacement="no"]
+)
+
+if test x"$fortran_replacement" != "xno"; then
+    AC_DEFINE([BURY_FORTRAN],[1],[Enable fortran replacement code])
+fi
+    
+AC_MSG_RESULT([${fortran_replacement}])
+
 AC_MSG_NOTICE([-----------------------------------------------------------])
 AC_MSG_NOTICE([---------- begin configuring for MALOC linkage ------------])
 AC_MSG_NOTICE([-----------------------------------------------------------])
@@ -363,6 +378,7 @@ AC_ARG_WITH(
 	[fetk_include_path="${with_fetk_include}"]
 )
 if test x"$fetk_include_path" != "xno" -a -n "$fetk_include_path"; then
+    fetk_include_path=`echo $fetk_include_path | sed 's/\/$//g'`
 	AC_MSG_RESULT([${fetk_include_path}])
 	USE_FETK_INCLUDE="yes"
 else
@@ -375,6 +391,7 @@ AC_ARG_WITH(fetk-library,
 	[fetk_library_path="${with_fetk_library}"]
 )
 if test x"$fetk_library_path" != "xno" -a -n "$fetk_library_path"; then
+    fetk_library_path=`echo $fetk_library_path | sed 's/\/$//g'`
 	AC_MSG_RESULT([${fetk_library_path}])
 	USE_FETK_LIBRARY="yes"
 else
@@ -1302,6 +1319,64 @@ else
 fi
 
 dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO ENABLE DEBUGGING SYMBOLS
+dnl # -----------------------
+AC_MSG_CHECKING([for --enable-debug])
+AC_ARG_ENABLE(
+    [debug],
+    [AS_HELP_STRING([--enable-debug], [enable debug data generation])],
+    [enable_debug=yes],
+    [enable_debug=no])
+AC_MSG_RESULT([$enable_debug])
+
+if [[ "x$enable_debug" == "xyes" ]]; then
+    AC_DEFINE([DEBUG],[],[Debug Mode])
+    CFLAGS="-g -Wall -O0"
+    FFLAGS="-g -O0"
+fi
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO USE ELECTRIC FENCE FOR MEMORY DEBUGGING
+dnl # -----------------------
+
+efence_path=
+efence_lib=
+
+AC_MSG_CHECKING([for --with-efence])
+AC_ARG_WITH(efence,
+    AS_HELP_STRING([--with-efence\[=PATH\]],
+                   [enable linking with electric fence \[at PATH\]]),
+    [],
+    with_efence=no
+    )
+        
+if test x"$with_efence" != "xno"; then
+
+    dnl # Save the current path data
+    LDFLAGS_SAVE=${LDFLAGS};
+    
+	if test "x$with_efence" != "xyes" -a -n "$with_efence"; then
+	    efence_path="-L${with_efence}"
+        LDFLAGS="${efence_path}"
+    else
+        with_efence="yes"
+    fi
+    
+    AC_MSG_RESULT([${with_efence}])
+                    
+	AC_CHECK_LIB(efence, malloc,
+	   [efence_lib="${efence_path} -lefence"],
+	   AC_MSG_ERROR([Error... Didn't find efence library in ${efence_path}]),
+	   []
+	   )
+	   
+	dnl # Return LDFLAGS to normal
+	LDFLAGS=${LDFLAGS_SAVE}
+else
+	AC_MSG_RESULT([no])
+fi
+
+dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
 dnl # -----------------------
 AC_MSG_CHECKING([for --disable-openmp])
@@ -1310,7 +1385,8 @@ AC_ARG_ENABLE(
 	AS_HELP_STRING([--disable-openmp],[disables OpenMP compiler support]),,
 	[disable_openmp=yes]
 )
-if test x"$disable_openmp" != "xyes"; then
+    
+if [[ "x$disable_openmp" != "xyes" ] || [ "x$enable_debug" == "xyes" ]]; then
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
@@ -1364,8 +1440,9 @@ dnl # ASSEMBLE A LIST OF LIBRARIES AND INCLUDE FILES THAT WILL BE USED IN ALL
 dnl # COMPILATIONS
 dnl # -----------------------
 top_srcdir="`pwd`"
-base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib} ${gamer_library}\ 
-	   ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib} ${socket_lib} ${nsl_lib} ${blas_lib} ${z_lib}"
+base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib}\
+           ${gamer_library} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib}\
+           ${socket_lib} ${nsl_lib} ${blas_lib} ${z_lib} ${efence_lib}"
 
 case $host_os in
 
