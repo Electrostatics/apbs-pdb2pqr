@@ -346,11 +346,11 @@ fi
 AC_MSG_RESULT([${fortran_replacement}])
 
 AC_MSG_NOTICE([-----------------------------------------------------------])
-AC_MSG_NOTICE([---------- begin configuring for MALOC linkage ------------])
+AC_MSG_NOTICE([---------- begin configuring for FEtk linkage -------------])
 AC_MSG_NOTICE([-----------------------------------------------------------])
 
 dnl # ----------------------
-dnl # HANDLE THE MALOC AND FETK LIBRARIES
+dnl # HANDLE THE FEtk LIBRARIES
 dnl # ----------------------
 
 contrib_path=`pwd`/contrib
@@ -397,94 +397,6 @@ if test x"$fetk_library_path" != "xno" -a -n "$fetk_library_path"; then
 else
 	AC_MSG_RESULT([no])
 fi
-
-dnl # --------------------------------------------------------------------------
-dnl #                     Configure and test MALOC paths
-dnl #                    Modified by Tucker Beck  5/24/11
-dnl # --------------------------------------------------------------------------
-dnl # Eliminated use of AC_CHECK_FILE macros in favor of AC_CHECK_HEADER and
-dnl # AC_CHECK_LIB.  This is prefereable, in particular, for building against
-dnl # shared and static libraries as the AC_CHECK_LIB macro automatically checks
-dnl # for the correct form of the library automatically (.so, .a, .la).
-dnl # The oldmethod relied on discovery of a static library only (libmaloc.a)
-dnl # --------------------------------------------------------------------------
-
-USE_FETK=
-
-if test -n "${USE_FETK_INCLUDE}"; then
-
-    dnl # Save the current path data
-    CPPFLAGS_SAVE=${CPPFLAGS};
-    
-    dnl # Set the include and library paths to the supplied fetk paths
-    CPPFLAGS="-I${fetk_include_path}";
-    
-    AC_CHECK_HEADER(maloc/maloc.h,
-        [maloc_inc_path="${fetk_include_path}"],
-        [AC_MSG_ERROR([Error... Couldn't find FETK include files in the location you specified])])
-        
-	dnl # Return CPPFLAGS to normal
-	CPPFLAGS=${CPPFLAGS_SAVE}
-        
-    AC_MSG_NOTICE([Using MALOC headers from FETK])
-else
-    AC_MSG_NOTICE([Using MALOC headers bundled with APBS])
-	maloc_inc_path="${contrib_path}/include";
-fi
-AC_MSG_NOTICE([MALOC headers located in ${maloc_inc_path}])
-
-if test -n "${USE_FETK_LIBRARY}"; then
-
-    dnl # Save the current path data
-    LDFLAGS_SAVE=${LDFLAGS};
-        
-    dnl # Set the include and library paths to the supplied fetk paths
-    LDFLAGS="-L${fetk_library_path}";
-    
-    dnl # Make sure that the MALOC library is accessible in the supplied FETK library path
-	AC_CHECK_LIB(maloc, maloc_link,
-	   [maloc_lib_path="${fetk_library_path}"],
-	   AC_MSG_ERROR( [Error... Didn't find MALOC library in ${fetk_library_path}] ),
-	   [${math_lib}]
-	   )
-	   
-	dnl # Return LDFLAGS to normal
-	LDFLAGS=${LDFLAGS_SAVE}
-
-	USE_FETK="yes"
-    AC_MSG_NOTICE([Using MALOC library from FETK])
-else
-    AC_MSG_NOTICE([Using MALOC library bundled with APBS])
-	maloc_lib_path="${contrib_path}/lib"
-fi
-AC_MSG_NOTICE([MALOC library located in ${maloc_lib_path}])
-
-
-maloc_inc="-I${maloc_inc_path}"
-maloc_lib="-L${maloc_lib_path} -lmaloc"
-
-dnl # Return LDFLAGS and CPPFLAGS to normal
-AC_SUBST(maloc_lib)
-AC_SUBST(maloc_inc)
-
-dnl # -----------------------------
-dnl # Added by Tucker Beck  5/24/11
-dnl # -----------------------------
-dnl # Check for --with-gamer configure flag.  If enabled, use gamer mesh refinement.
-dnl # Further checks including path checks for the headers and library included after processing the 
-dnl # with-fetk-[include|library] arguments are processed
-dnl # 
-dnl # TODO:  Add gamer mesh refinement into source code
-dnl # --------------------------------
-
-AC_MSG_CHECKING([for --with-gamer option])
-AC_ARG_WITH(gamer,
-            AS_HELP_STRING([--with-gamer=yes/no/PATH],
-                           [Enable (on default path), Disable, or Enable with explicit path]),
-            [AC_MSG_RESULT([${withval}])],
-            [AC_MSG_RESULT([no])]
-            )
-
 
 dnl # ---------------------------
 dnl # HANDLE THE MPI LIBRARY
@@ -792,7 +704,7 @@ AC_SUBST(SITEPKGS,[$SITEPKGS])
 dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
-if test -z "${USE_FETK}";  then
+if test -z "${USE_FETK_LIBRARY}";  then
 	AC_MSG_CHECKING([for --disable-maloc-rebuild])
 	AC_ARG_ENABLE(
 		[maloc-rebuild],
@@ -814,6 +726,7 @@ if test -z "${USE_FETK}";  then
 		export CC=${CC}
 		export CFLAGS=${CFLAGS}
 		export LDFLAGS=${LDFLAGS}
+		AC_MSG_NOTICE([cd, make clean, configure, make, make install])
 		cd ${contrib_path}/maloc
 	
 		make clean
@@ -833,69 +746,20 @@ if test -z "${USE_FETK}";  then
 		AC_MSG_NOTICE([-----------------------------------------------------------])
 		AC_MSG_NOTICE([----- MALOC installation finished continuing with APBS ----])
 		AC_MSG_NOTICE([-----------------------------------------------------------])
+		        
 	fi
+    
+    maloc_library_path="-L${contrib_path}/lib"
+    maloc_include_path="${contrib_path}/include"
 	
 else
+
+    maloc_library_path="-L${fetk_library_path}"
+    maloc_include_path="${fetk_include_path}"
+    
 	AC_MSG_NOTICE([Skipping MALOC installation; will use MALOC provided with FEtk])
 fi
 AC_SUBST(apbs_do_maloc)
-
-dnl # ---------------------------
-dnl # HANDLE THE READLINE LIBRARY
-dnl # ---------------------------
-
-LDFLAGS_SAVE=${LDFLAGS};
-CPPFLAGS_SAVE=${CPPFLAGS};
-LDFLAGS=${maloc_lib_path};
-CPPFLAGS=${maloc_inc_path};
-rl_lib="";
-AC_CHECK_LIB(maloc,maloc_needs_rl,
-	[rl_use="yes"],
-	[rl_use=""],
-	[${maloc_lib_path} -lmaloc -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-if test -n "${rl_use}"; then
-
-	dnl # READLINE library location ENV specification
-	AC_MSG_CHECKING([whether your environment defines FETK_RL_LIBRARY])
-	if test -n "${FETK_RL_LIBRARY}"; then
-		AC_MSG_RESULT([${FETK_RL_LIBRARY}])
-		rl_lib_path="-L${FETK_RL_LIBRARY} ";
-	else
-		AC_MSG_RESULT([no])
-		rl_lib_path="";
-	fi
-
-	dnl # Setup temp LDFLAGS and look for READLINE library
-  
-	LDFLAGS=${rl_lib_path};
-	AC_CHECK_LIB(ncurses,tgetnum,
-		[ncurses_lib="-lncurses"],
-		[ncurses_lib=""],
-		[${math_lib}])
-	AC_CHECK_LIB(readline,readline,
-		[rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
-		[rl_use="";rl_lib=""],
-		[${rl_lib_path} ${ncurses_lib} ${math_lib}])
-	if test -n "${rl_use}"; then
-		AC_CHECK_LIB(readline,add_history,
-			[rl_use="yes";rl_lib="${rl_lib_path} -lreadline ${ncurses_lib}"],
-			[rl_use="";rl_lib=""],
-			[${rl_lib_path} ${ncurses_lib} ${math_lib}])
-	fi
-
-	dnl # Return LDFLAGS to normal
-	LDFLAGS=${LDFLAGS2_SAVE};
-
-	dnl # Final decision
-	if test -z "${rl_use}"; then
-		AC_MSG_NOTICE([MALOC was compiled with READLINE enabled])
-		AC_MSG_NOTICE([MALOC needs to link against the READLINE library])
-		AC_MSG_ERROR([READLINE cannot be found!])
-	fi
-fi
-LDFLAGS=${LDFLAGS_SAVE};
-CPPFLAGS=${CPPFLAGS_SAVE};
-AC_SUBST(rl_lib)
 
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
@@ -912,6 +776,90 @@ AC_MSG_NOTICE([------------------------------------------------------------])
 AC_MSG_NOTICE([---------- begin configuring for FEtk linkage --------------])
 AC_MSG_NOTICE([------------------------------------------------------------])
 
+
+
+dnl # --------------------
+dnl # Handle MALOC linkage
+dnl # --------------------
+
+    
+AC_MSG_NOTICE([maloc_library_path=${maloc_library_path}])
+AC_CHECK_LIB(maloc,maloc_link,
+    [maloc_lib="${maloc_library_path} -lmaloc"],
+    [AC_MSG_ERROR([Couldn't link against MALOC library])],
+    [${maloc_library_path} ${math_lib}])
+
+AC_SUBST(maloc_lib)
+
+
+
+dnl # ----------------------------------------
+dnl # HANDLE THE READLINE LIBRARY DEPENDENCIES
+dnl # ----------------------------------------
+
+readline_path=""
+readline_lib="";
+
+dnl # Discable support for using the environment to specify the location of
+dnl #   the readline library
+if test -n "${FETK_RL_LIBRARY}"; then
+    AC_MSG_WARN([WARNING... FETK_RL_LIBRARY is no longer supported.])
+    AC_MSG_WARN([Use --with-readline=PATH instead.])
+    AC_MSG_WARN([Ignoring this variable...])
+fi
+
+AC_ARG_WITH(readline,
+    AS_HELP_STRING([--with-readline\[=PATH\]],
+                   [enable linking with readline library \[at PATH\]]),
+    [],
+    with_readline=no
+    )
+
+if test "x${with_readline}" == "xno"; then
+
+    dnl # If MALOC was built with readline dependencies, override with-readline
+    AC_CHECK_LIB(maloc,maloc_needs_rl,
+        [with_readline="yes"],
+        [with_readline="no"],
+        [${maloc_library_path} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+    
+    if test "x${with_readline}" == "xyes"; then
+        AC_MSG_NOTICE([MALOC was built with readline. Overriding with-readline])
+    fi
+fi
+
+AC_MSG_CHECKING([for --with-readline])
+if test "x$with_readline" != "xno"; then
+    
+    if test "x${with_readline}" != "xyes" -a -n "${with_readline}"; then
+        readline_path="-L${with_readline}"
+    else
+        with_readline="yes"
+    fi
+    
+    AC_MSG_RESULT([${with_readline}])
+
+    dnl # Checking if ncurses is available.  Readline might be dependant.
+    AC_CHECK_LIB(ncurses,tgetnum,
+        [ncurses_lib="-lncurses"],
+        [ncurses_lib=""],
+        [${math_lib}])
+        
+    AC_CHECK_LIB(readline,readline,
+        [readline_lib="${readline_path} -lreadline ${ncurses_lib}"],
+        [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
+        [${readline_path} ${ncurses_lib} ${math_lib}])
+    AC_CHECK_LIB(readline,add_history,
+        [readline_lib="${readline_path} -lreadline ${ncurses_lib}"],
+        [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
+        [${readline_path} ${ncurses_lib} ${math_lib}])
+else
+    AC_MSG_RESULT("no")
+fi
+AC_SUBST(readline_lib)
+
+
+
 dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 mc_lib=""
 mc_inc=""
@@ -921,9 +869,11 @@ mc_do_test=""
 
 dnl # Added by Tucker Beck 5/24/11
 gamer_path=""
-gamer_include_path=""
-gamer_library_path=""
-gamer_library=""
+gamer_include_path="${fetk_include_path}"
+gamer_library_path="${fetk_library_path}"
+gamer_lib=""
+
+
 
 AC_MSG_CHECKING([for --disable-fetk])
 AC_ARG_ENABLE(
@@ -1062,11 +1012,14 @@ if test x"$enable_fetk" != "xno"; then
     	else
     	   AC_MSG_WARN([FEtk component GAMER not found:  GAMER finite element refinement disabled.])
     	fi
+    	
+    	gamer_lib="-L${gamer_library_path} -lgamer"
     fi	
 else
 	AC_MSG_RESULT([yes])
 	AC_MSG_NOTICE([FEtk disabled at user request.])
 fi
+AC_SUBST(gamer_lib)
 AC_SUBST(mcx_lib)
 AC_SUBST(mcx_inc)
 AC_SUBST(mc_lib)
@@ -1355,9 +1308,8 @@ if test x"$with_efence" != "xno"; then
     dnl # Save the current path data
     LDFLAGS_SAVE=${LDFLAGS};
     
-	if test "x$with_efence" != "xyes" -a -n "$with_efence"; then
+	if test "x${with_efence}" != "xyes" -a -n "${with_efence}"; then
 	    efence_path="-L${with_efence}"
-        LDFLAGS="${efence_path}"
     else
         with_efence="yes"
     fi
@@ -1366,12 +1318,11 @@ if test x"$with_efence" != "xno"; then
                     
 	AC_CHECK_LIB(efence, malloc,
 	   [efence_lib="${efence_path} -lefence"],
-	   AC_MSG_ERROR([Error... Didn't find efence library in ${efence_path}]),
-	   []
+	   AC_MSG_ERROR([Couldn't link with efence]),
+	   [${efence_path}]
 	   )
 	   
-	dnl # Return LDFLAGS to normal
-	LDFLAGS=${LDFLAGS_SAVE}
+	
 else
 	AC_MSG_RESULT([no])
 fi
