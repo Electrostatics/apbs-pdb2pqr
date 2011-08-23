@@ -846,13 +846,15 @@ if test "x$with_readline" != "xno"; then
         [${math_lib}])
         
     AC_CHECK_LIB(readline,readline,
-        [readline_lib="${readline_path} -lreadline ${ncurses_lib}"],
+        [],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
         [${readline_path} ${ncurses_lib} ${math_lib}])
     AC_CHECK_LIB(readline,add_history,
-        [readline_lib="${readline_path} -lreadline ${ncurses_lib}"],
+        [],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
         [${readline_path} ${ncurses_lib} ${math_lib}])
+        
+    readline_lib="${readline_path} -lreadline ${ncurses_lib} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}"
 else
     AC_MSG_RESULT("no")
 fi
