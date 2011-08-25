@@ -21,11 +21,11 @@
 /* EMBED macro can be used */
 #undef HAVE_EMBED
 
-/* have FEtk component GAMER */
-#undef HAVE_GAMER_H
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `readline' library (-lreadline). */
+#undef HAVE_LIBREADLINE
 
 /* have FEtk component MCX */
 #undef HAVE_MCX_H

@@ -749,12 +749,12 @@ if test -z "${USE_FETK_LIBRARY}";  then
 		        
 	fi
     
-    maloc_library_path="-L${contrib_path}/lib"
+    maloc_library_path="${contrib_path}/lib"
     maloc_include_path="${contrib_path}/include"
 	
 else
 
-    maloc_library_path="-L${fetk_library_path}"
+    maloc_library_path="${fetk_library_path}"
     maloc_include_path="${fetk_include_path}"
     
 	AC_MSG_NOTICE([Skipping MALOC installation; will use MALOC provided with FEtk])
@@ -781,17 +781,21 @@ AC_MSG_NOTICE([------------------------------------------------------------])
 dnl # --------------------
 dnl # Handle MALOC linkage
 dnl # --------------------
-
-    
-AC_MSG_NOTICE([maloc_library_path=${maloc_library_path}])
+         
+maloc_library_flag="-L${maloc_library_path}"
+         
 AC_CHECK_LIB(maloc,maloc_link,
-    [maloc_lib="${maloc_library_path} -lmaloc"],
+    [true],
     [AC_MSG_ERROR([Couldn't link against MALOC library])],
-    [${maloc_library_path} ${math_lib}])
+    [${maloc_library_flag} ${math_lib}])
+    
+maloc_inc="-I${maloc_include_path}"
+maloc_lib="${maloc_library_flag} -lmaloc"
 
+AC_SUBST(maloc_inc)
 AC_SUBST(maloc_lib)
-
-
+    
+    
 
 dnl # ----------------------------------------
 dnl # HANDLE THE READLINE LIBRARY DEPENDENCIES
@@ -821,8 +825,8 @@ if test "x${with_readline}" == "xno"; then
     AC_CHECK_LIB(maloc,maloc_needs_rl,
         [with_readline="yes"],
         [with_readline="no"],
-        [${maloc_library_path} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-    
+        [${maloc_library_flag} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
+        
     if test "x${with_readline}" == "xyes"; then
         AC_MSG_NOTICE([MALOC was built with readline. Overriding with-readline])
     fi
@@ -831,8 +835,9 @@ fi
 AC_MSG_CHECKING([for --with-readline])
 if test "x$with_readline" != "xno"; then
     
-    if test "x${with_readline}" != "xyes" -a -n "${with_readline}"; then
-        readline_path="-L${with_readline}"
+    if test "x${with_readline}" != "xyes"; then
+        readline_library_path="${with_readline}"
+        readline_library_flag="-L${readline_library_path}"
     else
         with_readline="yes"
     fi
@@ -846,19 +851,20 @@ if test "x$with_readline" != "xno"; then
         [${math_lib}])
         
     AC_CHECK_LIB(readline,readline,
-        [],
+        [true],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
-        [${readline_path} ${ncurses_lib} ${math_lib}])
+        [${readline_library_flag} ${ncurses_lib} ${math_lib}])
     AC_CHECK_LIB(readline,add_history,
         [],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
-        [${readline_path} ${ncurses_lib} ${math_lib}])
+        [${readline_library_flag} ${ncurses_lib} ${math_lib}])
         
-    readline_lib="${readline_path} -lreadline ${ncurses_lib} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}"
+    readline_lib="${readline_library_flag} -lreadline ${ncurses_lib} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}"
 else
     AC_MSG_RESULT("no")
 fi
 AC_SUBST(readline_lib)
+
 
 
 
@@ -869,18 +875,11 @@ mc_do_src=""
 mc_do_lib=""
 mc_do_test=""
 
-dnl # Added by Tucker Beck 5/24/11
-gamer_path=""
-gamer_include_path="${fetk_include_path}"
-gamer_library_path="${fetk_library_path}"
-gamer_lib=""
-
-
 
 AC_MSG_CHECKING([for --disable-fetk])
-AC_ARG_ENABLE(
-	[fetk],
-	AS_HELP_STRING([--disable-fetk],[disable FEtk features]),,
+AC_ARG_ENABLE([fetk],
+	AS_HELP_STRING([--disable-fetk],[disable FEtk features]),
+	[],
 	[enable_fetk=yes]
 )
 
@@ -889,7 +888,6 @@ if test x"$enable_fetk" != "xno"; then
 	AC_MSG_CHECKING([for user-specified FEtk include path])
 	if test -n "${fetk_include_path}"; then
 		AC_MSG_RESULT([${fetk_include_path}])
-		mc_inc_path="-I${fetk_include_path} ";
 	else
 		AC_MSG_RESULT([no])
 	fi
@@ -897,139 +895,300 @@ if test x"$enable_fetk" != "xno"; then
 	AC_MSG_CHECKING([for user-specified FEtk library path])
 	if test -n "${fetk_library_path}"; then
 		AC_MSG_RESULT([${fetk_library_path}])
-		mc_lib_path="-L${fetk_library_path}";
 	else
 		AC_MSG_RESULT([no])
 	fi
-	
-	dnl # -----------------------
-	dnl # Handle MC linkage
-	dnl # -----------------------
-	dnl # Setup temp LDFLAGS and look for MC library/header
-	LDFLAGS_SAVE=${LDFLAGS};
-	CPPFLAGS_SAVE=${CPPFLAGS};
-	LDFLAGS=${mc_lib_path};
-	CPPFLAGS=${mc_inc_path};
-	mc_found="";
-	AC_CHECK_HEADER(mc/mc.h,
-		[mc_found="yes";mc_inc="${mc_inc_path}"],
-		[mc_found="";mc_inc=""])
-	AC_CHECK_LIB(mc,mc_link,
-		[mc_found="yes";mc_lib="${mc_lib_path} -lmc"],
-		[mc_found="";mc_lib=""],
-		[${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-	dnl # Setup temp LDFLAGS and look for MCX library/header
-	LDFLAGS=${mc_lib_path};
-	CPPFLAGS=${mc_inc_path};
-	mcx_found="";
-	AC_CHECK_HEADER(mcx/mcx.h,
-		[mcx_found="yes";mcx_inc="${mc_inc_path}"],
-		[mcx_found="";mc_inc=""])
-	AC_CHECK_LIB(mcx,mcx_link,
-		[mcx_found="yes";mcx_lib="${mc_lib_path} -lmcx"],
-		[mcx_found="";mcx_lib=""],
-		[${mc_lib_path} -lmc ${maloc_lib} ${mpi_lib} ${rl_lib} ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-    
-
-	dnl # Return LDFLAGS and CPPFLAGS to normal
-	LDFLAGS=${LDFLAGS_SAVE}
-	CPPFLAGS=${CPPFLAGS_SAVE}
-	
-	if test -n "${mc_found}"; then
-		AC_MSG_NOTICE([FEtk component MC found:  enabled.])
-		AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
-	else
-		AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
-	fi
-	if test -n "${mcx_found}"; then
-		AC_MSG_NOTICE([FEtk component MCX found:  enabled.])
-		AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])\
-		AC_DEFINE([USE_HB], [], [use hierarchical basis method])
-	else
-		AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
-	fi
-	
-    dnl # ----------------------------------------------------------------------
-    dnl #                        Handle GAMER linkage
-    dnl #                    Added by Tucker Beck  5/24/11
-    dnl # ----------------------------------------------------------------------
-    dnl # Look for gamer headers and libraries on the supplied paths
-    dnl # If enabled, use gamer mesh refinement.
-    dnl #
-    dnl # Note: Gamer must be enabled and fetk must not be disabled
-    dnl # ----------------------------------------------------------------------
-		
-	dnl # First determine if gamer has been enabled
-    if test "x${with_gamer}" != "xno"; then
-    	
-    	dnl # As GAMER is a c++ library, we need to switch tool chains
-    	AC_LANG_PUSH([C++])
-            
-        AC_MSG_NOTICE([Checking for GAMER library availability])
-        
-        if test "x${with_gamer}" == "xyes"; then
-            gamer_include_path="${fetk_include_path}/gamer"
-            gamer_library_path="${fetk_library_path}"
-        else
-            gamer_include_path="${with_gamer}/include/gamer"
-            gamer_library_path="${with_gamer}/lib"
-        fi
-              	    
-    	dnl # Setup temp LDFLAGS and look for GAMER library/header
-    	LDFLAGS_SAVE=${LDFLAGS}
-    	CPPFLAGS_SAVE=${CPPFLAGS}
-    		
-    	dnl # Set the include and library flags for the compiler
-    	LDFLAGS="-L${gamer_library_path}"
-    	CPPFLAGS="-I${gamer_include_path}"
-    	
-        dnl # GAMER is dependent on the tetgen library
-        dnl # TODO:  Determine why this check is not working
-        dnl #AC_CHECK_LIB(tetgen, tetrahedralize,
-        dnl #    [],
-        dnl #    [AC_MSG_ERROR([didn't find tetgen library - dependency])]
-        dnl #    )
-    		            
-        dnl # Look for the GAMER header files.  Terminate if not found
-        AC_CHECK_HEADER(gamer.h,
-            [gamer_include_path=""],
-            [AC_MSG_WARN([gamer headers not found at ${gamer_include_path}])]
-            )
-                  
-    	dnl # Look for the GAMER library, and if found set the GAMER library path	
-    	AC_CHECK_LIB( gamer, gamer_link,
-    		[gamer_library_path=""],
-    		[AC_MSG_WARN([gamer library not found at ${gamer_library_path}])],
-    		[${math_lib} -ltetgen])
-    		
-    	dnl # Return LDFLAGS and CPPFLAGS to normal
-    	LDFLAGS=${LDFLAGS_SAVE}
-    	CPPFLAGS=${CPPFLAGS_SAVE}
-        AC_LANG_POP([C++])
-    	
-    	# If the GAMER library and headers are found, enable gamer in the source
-    	if test -n gamer_include_path && test -n gamer_library_path; then
-    	   AC_MSG_NOTICE([FEtk component GAMER found:  enabled.])
-    	   AC_DEFINE([HAVE_GAMER_H], [], [have FEtk component GAMER])
-    	else
-    	   AC_MSG_WARN([FEtk component GAMER not found:  GAMER finite element refinement disabled.])
-    	fi
-    	
-    	gamer_lib="-L${gamer_library_path} -lgamer"
-    fi	
 else
-	AC_MSG_RESULT([yes])
-	AC_MSG_NOTICE([FEtk disabled at user request.])
+    AC_MSG_RESULT([yes])
+    AC_MSG_NOTICE([FEtk disabled at user request.])
+fi
+
+
+    
+dnl # ----------------------------------------------------------------------
+dnl #                        Handle GAMER linkage
+dnl #                    Added by Tucker Beck  5/24/11
+dnl # ----------------------------------------------------------------------
+dnl # Look for gamer headers and libraries on the supplied paths
+dnl # If enabled, use gamer mesh refinement.
+dnl #
+dnl # Note: Gamer must be enabled and fetk must not be disabled
+dnl # ----------------------------------------------------------------------
+    
+dnl # If FETk is disabled, disable GAMER
+if test "x$enable_fetk" == "xno"; then
+    with_gamer="no"
+fi
+
+gamer_lib=
+gamer_include_path=
+gamer_include_flag=
+gamer_library_path=
+gamer_library_flag=
+
+AC_MSG_CHECKING([for --with-gamer])
+AC_ARG_WITH(gamer,
+    AS_HELP_STRING([--with-gamer=PATH],[enable gamer at PATH]),
+    [],
+    [with_gamer=no]
+    )
+
+dnl # First determine if gamer has been enabled
+if test "x${with_gamer}" != "xno"; then
+
+    AC_MSG_RESULT([${with_gamer}])
+   
+    AC_MSG_NOTICE([Checking for GAMER library availability])
+    
+    AC_LANG_PUSH([C++])
+       
+    dnl # Determine if the user specified a location for GAMER
+    if test "x${with_gamer}" == "xyes"; then
+        gamer_include_path="${fetk_include_path}"
+        gamer_library_path="${fetk_library_path}"
+    else
+        gamer_include_path="${with_gamer}/include"
+        gamer_library_path="${with_gamer}/lib"
+    fi
+    
+    gamer_include_flag="-I${gamer_include_path}"
+    gamer_library_flag="-L${gamer_library_path}"
+    
+    dnl # Look for the GAMER header files.  Terminate if not found
+    CPPFLAGS_SAVE=${CPPFLAGS}
+    CPPFLAGS="-I${gamer_include_path}"
+    AC_CHECK_HEADER(gamer/gamer.h,
+        [],
+        AC_MSG_ERROR([gamer headers not found at ${gamer_include_path}]),
+        []
+        )
+    CPPFLAGS=${CPPFLAGS_SAVE}
+    
+    dnl # Look for the GAMER library.  Terminate if not found   
+    AC_CHECK_LIB(gamer, gamer_link,
+        [true],
+        AC_MSG_ERROR([gamer library not found at ${gamer_library_path}]),
+        [${gamer_library_flag} ${math_lib} -ltetgen])
+        
+    AC_LANG_POP([C++])
+    
+    gamer_lib="${gamer_library_flag} -lgamer ${math_lib} -ltetgen"
+else
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(gamer_lib)
-AC_SUBST(mcx_lib)
-AC_SUBST(mcx_inc)
+
+
+dnl # -----------------------
+dnl # Handle MC linkage
+dnl # -----------------------
+dnl # Setup temp LDFLAGS and look for MC library/header
+    
+mc_include_path=
+mc_include_flag=
+mc_library_path=
+mc_library_flag=
+mc_lib=""
+    
+dnl # If FETk is disabled, disable MC
+if test "x$enable_fetk" != "xno"; then
+    
+    AC_LANG_PUSH([C++])
+    
+    mc_include_path="${fetk_include_path}"
+    mc_include_flag="-I${mc_include_path}"
+    mc_library_path="${fetk_library_path}"
+    mc_library_flag="-L${mc_library_path}"
+        
+    CPPLAGS_SAVE=${CPPFLAGS};
+    CPPFLAGS="-I${mc_include_path}"
+    AC_CHECK_HEADER(
+        [mc/mc.h],
+        [mc_include_found="yes"],
+        [mc_include_found="no"],
+        []
+        )
+    CPPLAGS=${CPPFLAGS_SAVE}
+    LDFLAGS_SAVE=${LDFLAGS_SAVE}
+    
+    AC_CHECK_LIB(
+        [mc],
+        [mc_link],
+        [mc_library_found="yes"],
+        [mc_library_found="no"],
+        [${mc_library_flag} ${maloc_lib} ${punc_lib} ${gamer_lib}])
+        
+    dnl # Enable the MC dependency only if both the headers and library was found
+    if test "x${mc_include_found}" == "xyes" -a "x${mc_library_found}" == "xyes"; then
+        AC_MSG_NOTICE([FEtk component MC found and enabled.])
+        AC_DEFINE([HAVE_MC_H], [], [have FEtk component MC])
+        mc_lib="${mc_library_flag} -lmc ${maloc_lib} ${punc_lib} ${gamer_lib}"
+    else
+        AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
+    fi    
+    
+    AC_LANG_POP([C++])
+fi
 AC_SUBST(mc_lib)
-AC_SUBST(mc_inc)
+
+    
+
+dnl # -----------------------
+dnl # Handle MCX linkage
+dnl # -----------------------
+dnl # Setup temp LDFLAGS and look for MCX library/header
+    
+mcx_include_path=
+mcx_include_flag=
+mcx_library_path=
+mcx_library_flag=
+mcx_lib=""
+
+dnl # If FETk is disabled, disable MCX
+if test "x$enable_fetk" != "xno"; then
+
+    AC_LANG_PUSH([C++])
+    
+    mcx_include_path="${fetk_include_path}"
+    mcx_include_flag="-I${mcx_include_path}"
+    mcx_library_path="${fetk_library_path}"
+    mcx_library_flag="-L${mcx_library_path}"
+            
+    CPPLAGS_SAVE=${CPPFLAGS}
+    CPPFLAGS="-I${mc_include_path}"
+    AC_CHECK_HEADER(
+        [mcx/mcx.h],
+        [mcx_include_found="yes"],
+        [mcx_include_found="no"],
+        []
+        )
+    CPPLAGS=${CPPFLAGS_SAVE}
+    
+    AC_CHECK_LIB(
+        [mcx],
+        [mcx_link],
+        [mcx_library_found="yes"],
+        [mcx_library_found="no"],
+        [${mcx_library_flag} ${maloc_lib} ${punc_lib} ${gamer_lib}])
+        
+    dnl # Enable the MCX dependency only if both the headers and library was found
+    if test "x${mcx_include_found}" == "xyes" -a "x${mcx_library_found}" == "xyes"; then
+        AC_MSG_NOTICE([FEtk component MCX found and enabled.])
+        AC_DEFINE([HAVE_MCX_H], [], [have FEtk component MCX])
+        AC_DEFINE([USE_HB], [], [use hierarchical basis method])
+        mcx_lib="${mcx_library_flag} -lmcx ${maloc_lib} ${punc_lib} ${gamer_lib}"
+    else
+        AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
+    fi
+    
+    AC_LANG_POP([C++])
+fi
+AC_SUBST(mcx_lib)
+
+
 
 AC_MSG_NOTICE([---------------------------------------------------------------])
 AC_MSG_NOTICE([------------ begin processing APBS configure options ----------])
 AC_MSG_NOTICE([---------------------------------------------------------------])
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO USE ELECTRIC FENCE FOR MEMORY DEBUGGING
+dnl # -----------------------
+
+
+efence_library_path=
+efence_library_flag=
+efence_lib=
+
+AC_MSG_CHECKING([for --with-efence])
+AC_ARG_WITH(
+    [efence],
+    AS_HELP_STRING([--with-efence\[=PATH\]],
+                   [enable linking with electric fence \[at PATH\]]),
+    [],
+    [with_efence=no]
+    )
+        
+if test x"$with_efence" != "xno"; then
+
+    AC_MSG_RESULT([${with_efence}])
+        
+    if test "x${with_efence}" != "xyes"; then
+        efence_library_path="${with_efence}"
+        efence_library_flag="-L${efence_library_path}"
+    fi
+    
+    AC_CHECK_LIB(
+       [efence],
+       [malloc],
+       [true],
+       AC_MSG_ERROR([Couldn't link with efence]),
+       [${efence_library_flag}]
+       )
+       
+    efence_lib="${efence_library_flag} -lefence"
+    
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(efence_lib)
+
+
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO ENABLE DEBUGGING SYMBOLS
+dnl # -----------------------
+
+AC_MSG_CHECKING([for --enable-debug])
+AC_ARG_ENABLE(
+    [debug],
+    [AS_HELP_STRING([--enable-debug], [enable debug data generation])],
+    [enable_debug=yes],
+    [enable_debug=no])
+AC_MSG_RESULT([$enable_debug])
+
+if test "x$enable_debug" == "xyes"; then
+    AC_DEFINE([DEBUG],[],[Debug Mode])
+    CFLAGS="-g -Wall -O0"
+    FFLAGS="-g -O0"
+fi
+
+
+
+dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
+dnl # -----------------------
+AC_MSG_CHECKING([for --disable-openmp])
+AC_ARG_ENABLE(
+    [openmp],
+    AS_HELP_STRING([--disable-openmp],[disables OpenMP compiler support]),,
+    [disable_openmp=yes]
+)
+    
+if [[ "x$disable_openmp" != "xyes" ] || [ "x$enable_debug" == "xyes" ]]; then
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+    if [[ "${CC}" = "icc" ] && [ "${F77}" = "ifort" ]]; then
+        CFLAGS="${CFLAGS} -openmp"
+        FFLAGS="${FFLAGS} -openmp -assume cc_omp"
+        LDFLAGS="${LDFLAGS} -static-intel"
+    fi
+    
+    if [[ "${CC}" = "gcc" ] && [ "${F77}" = "gfortran" ]]; then
+        gcc_version=`gcc --version`
+        gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}' | awk -F'.' '{print $1$2}'`
+        
+        if test ["${gcc_complete_version}" -ge 42]; then
+            CFLAGS="${CFLAGS} -fopenmp"
+            FFLAGS="${FFLAGS} -fopenmp"
+        else
+            AC_MSG_RESULT([WARNING])
+            AC_MSG_RESULT([WARNING Version of gcc/gfortran does not support OpenMP. Disabling.])
+            AC_MSG_RESULT([WARNING])
+        fi
+    fi
+fi
 
 dnl # -----------------------
 dnl # HANDLE SYMBOL EMBEDDING
@@ -1109,6 +1268,8 @@ AC_SUBST(apbs_do_tools)
 dnl # -----------------------
 dnl # HANDLE THE BLAS LIBRARIES
 dnl # -----------------------
+
+# TODO:  Update and clarify this section
 blas_lib=""
 AC_ARG_WITH(
 	    [blas], 
@@ -1130,7 +1291,7 @@ if test x"$with_blas" != "xno" -a -n "$with_blas"; then
 	AC_LANG_FORTRAN77
 	LDFLAGS_SAVE=${LDFLAGS};
 	CPPFLAGS_SAVE=${CPPFLAGS};
-	LDFLAGS="-L${maloc_lib_path} ${blas_lib}";
+	LDFLAGS="${maloc_library_flag} ${blas_lib}";
 	AC_CHECK_LIB(${blas_name},dscal,
 		[blas_found="yes"],
 		[blas_found=""],
@@ -1271,97 +1432,6 @@ if test x"$enable_apbs_quiet" != "xno"; then
     AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
 else
     AC_MSG_RESULT([no]) 
-fi
-
-dnl # -----------------------
-dnl # CHECK WHETHER YOU WANT TO ENABLE DEBUGGING SYMBOLS
-dnl # -----------------------
-AC_MSG_CHECKING([for --enable-debug])
-AC_ARG_ENABLE(
-    [debug],
-    [AS_HELP_STRING([--enable-debug], [enable debug data generation])],
-    [enable_debug=yes],
-    [enable_debug=no])
-AC_MSG_RESULT([$enable_debug])
-
-if [[ "x$enable_debug" == "xyes" ]]; then
-    AC_DEFINE([DEBUG],[],[Debug Mode])
-    CFLAGS="-g -Wall -O0"
-    FFLAGS="-g -O0"
-fi
-
-dnl # -----------------------
-dnl # CHECK WHETHER YOU WANT TO USE ELECTRIC FENCE FOR MEMORY DEBUGGING
-dnl # -----------------------
-
-efence_path=
-efence_lib=
-
-AC_MSG_CHECKING([for --with-efence])
-AC_ARG_WITH(efence,
-    AS_HELP_STRING([--with-efence\[=PATH\]],
-                   [enable linking with electric fence \[at PATH\]]),
-    [],
-    with_efence=no
-    )
-        
-if test x"$with_efence" != "xno"; then
-
-    dnl # Save the current path data
-    LDFLAGS_SAVE=${LDFLAGS};
-    
-	if test "x${with_efence}" != "xyes" -a -n "${with_efence}"; then
-	    efence_path="-L${with_efence}"
-    else
-        with_efence="yes"
-    fi
-    
-    AC_MSG_RESULT([${with_efence}])
-                    
-	AC_CHECK_LIB(efence, malloc,
-	   [efence_lib="${efence_path} -lefence"],
-	   AC_MSG_ERROR([Couldn't link with efence]),
-	   [${efence_path}]
-	   )
-	   
-	
-else
-	AC_MSG_RESULT([no])
-fi
-
-dnl # -----------------------
-dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
-dnl # -----------------------
-AC_MSG_CHECKING([for --disable-openmp])
-AC_ARG_ENABLE(
-	[openmp],
-	AS_HELP_STRING([--disable-openmp],[disables OpenMP compiler support]),,
-	[disable_openmp=yes]
-)
-    
-if [[ "x$disable_openmp" != "xyes" ] || [ "x$enable_debug" == "xyes" ]]; then
-    AC_MSG_RESULT([yes])
-else
-    AC_MSG_RESULT([no])
-	if [[ "${CC}" = "icc" ] && [ "${F77}" = "ifort" ]]; then
-		CFLAGS="${CFLAGS} -openmp"
-		FFLAGS="${FFLAGS} -openmp -assume cc_omp"
-		LDFLAGS="${LDFLAGS} -static-intel"
-	fi
-	
-	if [[ "${CC}" = "gcc" ] && [ "${F77}" = "gfortran" ]]; then
-		gcc_version=`gcc --version`
-		gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}' | awk -F'.' '{print $1$2}'`
-		
-		if test ["${gcc_complete_version}" -ge 42]; then
-			CFLAGS="${CFLAGS} -fopenmp"
-			FFLAGS="${FFLAGS} -fopenmp"
-		else
-		    AC_MSG_RESULT([WARNING])
-			AC_MSG_RESULT([WARNING Version of gcc/gfortran does not support OpenMP. Disabling.])
-			AC_MSG_RESULT([WARNING])
-		fi
-	fi
 fi
 
 dnl # -----------------------
