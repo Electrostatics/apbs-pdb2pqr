@@ -15,13 +15,7 @@
 #--                                                                                                   --
 #--                                   PROPKA: A PROTEIN PKA PREDICTOR                                 --
 #--                                                                                                   --
-#--                                VERSION 1.0,  04/25/2004, IOWA CITY                                --
-#--                                             BY HUI LI                                             --
-#--                                                                                                   --
-#--                               VERSION 2.0,  11/05/2007, IOWA CITY/COPENHAGEN                      --
-#--                                BY DELPHINE C. BAS AND DAVID M. ROGERS                             --
-#--                                                                                                   --
-#--                              VERSION 3.0,  xx/xx/2010, COPENHAGEN                                 --
+#--                              VERSION 3.0,  01/01/2011, COPENHAGEN                                 --
 #--                              BY MATS H.M. OLSSON AND CHRESTEN R. SONDERGARD                       --
 #--                                                                                                   --
 #-------------------------------------------------------------------------------------------------------
@@ -40,7 +34,7 @@
 #
 #   PROPKA3: Consistent Treatment of Internal and Surface Residues in Empirical pKa predictions
 #   Mats H.M. Olsson, Chresten R. Sondergard, Michal Rostkowski, and Jan H. Jensen
-#   Journal of Chemical Theory and Computation, to be submitted (2010)
+#   Journal of Chemical Theory and Computation, 7, 525-537 (2011)
 #-------------------------------------------------------------------------------------------------------
 import string
 import lib
