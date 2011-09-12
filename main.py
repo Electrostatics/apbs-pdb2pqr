@@ -142,7 +142,7 @@ def runPDB2PQR(pdblist, ff,
                ph = None,
                verbose = False,
                extentions = [],
-               ententionOptions = ExtraOptions(),
+               extensionOptions = ExtraOptions(),
                propkaOptions = None,
                clean = False,
                neutraln = False,
@@ -170,7 +170,7 @@ def runPDB2PQR(pdblist, ff,
             verbose:       When True, script will print information to stdout
                              When False, no detailed information will be printed (float)
             extentions:      List of extensions to run
-            ententionOptions:optionParser like option object that is passed to each object. 
+            extensionOptions:optionParser like option object that is passed to each object. 
             propkaOptions:optionParser like option object for propka30.
             clean:         only return original PDB file in aligned format.
             neutraln:      Make the N-terminus of this protein neutral
@@ -453,8 +453,7 @@ def mainCommand(argv):
     group.add_option('--ffout', dest='ffout', metavar='FIELD_NAME',choices=validForcefields,
                       help='Instead of using the standard canonical naming scheme for residue and atom names, ' +
                            'use the names from the given forcefield - currently amber, ' +
-                           'charmm, parse, tyl06, peoepb and swanson ' +
-                           'are supported.')
+                           'charmm, parse, tyl06, peoepb and swanson are supported.')
     
     group.add_option('--usernames', dest='usernames', metavar='USER_NAME_FILE', 
                       help='The user created names file to use. Required if using --userff')
@@ -474,10 +473,12 @@ def mainCommand(argv):
                       help='Create Typemap output.')
     
     group.add_option('--neutraln', dest='neutraln', action='store_true', default=False,
-                      help='Make the N-terminus of this protein neutral (default is charged).')  
+                      help='Make the N-terminus of this protein neutral (default is charged). ' +
+                           'Requires PARSE force field.')  
     
     group.add_option('--neutralc', dest='neutralc', action='store_true', default=False,
-                      help='Make the C-terminus of this protein neutral (default is charged).')  
+                      help='Make the C-terminus of this protein neutral (default is charged). ' +
+                           'Requires PARSE force field.') 
 
     group.add_option('-v', '--verbose', dest='verbose', action='store_true', default=False,
                       help='Print information to stdout.')
@@ -594,11 +595,6 @@ def mainCommand(argv):
     pdblist, errlist = readPDB(file)
     
     if len(pdblist) == 0 and len(errlist) == 0:
-        #TODO: Why are we doing this?
-#        try: 
-#            os.remove(path)
-#        except OSError: 
-#            pass
         parser.error("Unable to find file %s!" % path)
 
     if len(errlist) != 0 and options.verbose:
@@ -608,19 +604,19 @@ def mainCommand(argv):
     outpath = args[1]
     options.outname = outpath
 
-    #In case no extensions were specified.
-    if options.active_extentions is None:
-        options.active_extentions = []
+    #In case no extensions were specified or no extensions exist.
+    if not hasattr(options, 'active_extensions' ) or options.active_extensions is None:
+        options.active_extensions = []
         
     #Filter out the options specifically for extentions or propka.
     #Passed into runPDB2PQR, but not used by any extention yet.
-    extentionOpts = ExtraOptions()
+    extensionOpts = ExtraOptions()
     
     if extentionsGroup is not None:
         for opt in extentionsGroup.option_list:
-            if opt.dest == 'active_extentions':
+            if opt.dest == 'active_extensions':
                 continue
-            setattr(extentionOpts, opt.dest, 
+            setattr(extensionOpts, opt.dest, 
                     getattr(options, opt.dest))
             
     
@@ -634,9 +630,9 @@ def mainCommand(argv):
                                               outname = options.outname,
                                               ph = options.pH,
                                               verbose = options.verbose,
-                                              extentions = options.active_extentions,
+                                              extentions = options.active_extensions,
                                               propkaOptions = propkaOpts,
-                                              ententionOptions = extentionOpts,
+                                              extensionOptions = extensionOpts,
                                               clean = options.clean,
                                               neutraln = options.neutraln,
                                               neutralc = options.neutralc,
