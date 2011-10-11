@@ -187,18 +187,18 @@ def identify_coupled_residues(protein, options=None):
 
     verbose=options.display_coupled_residues
     
-    if False:
-      print('')
-      print(' Detecting coupled residues')
-      print('   Maximum pKa difference:     %4.2f pKa units'%max_intrinsic_pKa_diff)
-      print('   Minimum interaction energy: %4.2f pKa units'%min_interaction_energy)
-      print('   Maximum free energy diff.:  %4.2f pKa units'%max_free_energy_diff)
-      print('   Minimum swap pKa shift:     %4.2f pKa units'%min_swap_pka_shift)
-      print('   pH:                         %6s '%str(pH))
-      print('   Reference:                  %s'%reference)
-      print('   Min pKa:                    %4.2f'%min_pka)
-      print('   Max pKa:                    %4.2f'%max_pka)
-      print('')
+    if True:
+        print('')
+        print(' Detecting coupled residues')
+        print('   Maximum pKa difference:     %4.2f pKa units'%max_intrinsic_pKa_diff)
+        print('   Minimum interaction energy: %4.2f pKa units'%min_interaction_energy)
+        print('   Maximum free energy diff.:  %4.2f pKa units'%max_free_energy_diff)
+        print('   Minimum swap pKa shift:     %4.2f pKa units'%min_swap_pka_shift)
+        print('   pH:                         %6s '%str(pH))
+        print('   Reference:                  %s'%reference)
+        print('   Min pKa:                    %4.2f'%min_pka)
+        print('   Max pKa:                    %4.2f'%max_pka)
+        print('')
 
     # make a single list of all residues in the protein
     all_residues = []
@@ -292,6 +292,8 @@ def get_interaction(residue1, residue2, include_side_chain_hbs = True):
     for det in determinants:
         if residue2.label == det.label:
             interaction_energy += det.value
+
+    print residue1, residue2, interaction_energy   
 
     return interaction_energy
 
