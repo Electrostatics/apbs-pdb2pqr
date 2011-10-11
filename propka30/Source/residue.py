@@ -401,14 +401,14 @@ class Residue:
         C = None
         O = None
         for atom in self.atoms:
-          if   atom.name == "N":
-              N = atom
-          elif atom.name == "H":
-              H = atom
-          elif atom.name == "C":
-              C = atom
-          elif atom.name == "O":
-              O = atom
+            if   atom.name == "N":
+                N = atom
+            elif atom.name == "H":
+                H = atom
+            elif atom.name == "C":
+                C = atom
+            elif atom.name == "O":
+                O = atom
 
         return  N, H, C, O
         
@@ -418,22 +418,22 @@ class Residue:
         Extracting reference to determinant atom - test stage still
         """
         if type == 'base' or type == 'acid':
-          pair_type = type
+            pair_type = type
         else:
-          if resType in ["HIS", "LYS", "ARG", "N+ "]:
-            pair_type = 'base'
-          else:
-            pair_type = 'acid'
+            if resType in ["HIS", "LYS", "ARG", "N+ "]:
+                pair_type = 'base'
+            else:
+                pair_type = 'acid'
 
         if self.resName not in version.atomInteractionList[pair_type]:
-          print("cannot find atomInteractionList for residue %s in residue.makeDeterminantAtomList()" % (self.resName))
-          sys.exit(9)
+            print("cannot find atomInteractionList for residue %s in residue.makeDeterminantAtomList()" % (self.resName))
+            sys.exit(9)
             
         # Searching for determinant atom
         atoms = []
         for atom in self.atoms:
-          if atom.name in version.atomInteractionList[pair_type][self.resName]:
-            atoms.append(atom)
+            if atom.name in version.atomInteractionList[pair_type][self.resName]:
+                atoms.append(atom)
 
         return atoms
         

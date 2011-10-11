@@ -53,25 +53,25 @@ def setDeterminants(propka_residues, version=None, options=None):
     iterative_interactions = []
     # --- NonIterative section ---#
     for residue1 in propka_residues:
-      for residue2 in propka_residues:
+        for residue2 in propka_residues:
 
-        if residue1 == residue2:
-            break
+            if residue1 == residue2:
+                break
 
-        distance = calculate.InterResidueDistance(residue1, residue2)
-
-        if distance < version.sidechain_cutoff or distance < version.coulomb_cutoff[1]:
-          do_pair, iterative_interaction = version.interaction[residue1.resType][residue2.resType]
-         
-          if do_pair == True:
-            if iterative_interaction == True:
-              iterative.addtoDeterminantList(residue1, residue2, distance, iterative_interactions, version=version)
-              #print "%s - %s I" % (residue1.label, residue2.label)
-            else:
-              addDeterminants(residue1, residue2, distance, version=version)
-              #print "%s - %s" % (residue1.label, residue2.label)
-          else:
-            """ False - don't do this at home folks """
+            distance = calculate.InterResidueDistance(residue1, residue2)
+   
+            if distance < version.sidechain_cutoff or distance < version.coulomb_cutoff[1]:
+                do_pair, iterative_interaction = version.interaction[residue1.resType][residue2.resType]
+             
+                if do_pair == True:
+                    if iterative_interaction == True:
+                        iterative.addtoDeterminantList(residue1, residue2, distance, iterative_interactions, version=version)
+                        #print "%s - %s I" % (residue1.label, residue2.label)
+                    else:
+                        addDeterminants(residue1, residue2, distance, version=version)
+                        #print "%s - %s" % (residue1.label, residue2.label)
+                else:
+                    """ False - don't do this at home folks """
 
     # --- Iterative section ---#
     #debug.printIterativeDeterminants(iterative_interactions)
@@ -118,14 +118,14 @@ def addSidechainDeterminants(residue1, residue2, version=None):
     dpka_max, cutoff = version.SideChainParameters[residue1.resType][residue2.resType]
     if distance < cutoff[1]:
         if   residue2.resType in version.angularDependentSideChainInteractions:
-          atom3 = residue2.getThirdAtomInAngle(closest_atom2)
-          distance, f_angle, nada = calculate.AngleFactorX(closest_atom1, closest_atom2, atom3)
+            atom3 = residue2.getThirdAtomInAngle(closest_atom2)
+            distance, f_angle, nada = calculate.AngleFactorX(closest_atom1, closest_atom2, atom3)
         elif residue1.resType in version.angularDependentSideChainInteractions:
-          atom3 = residue1.getThirdAtomInAngle(closest_atom1)
-          distance, f_angle, nada = calculate.AngleFactorX(closest_atom2, closest_atom1, atom3)
+            atom3 = residue1.getThirdAtomInAngle(closest_atom1)
+            distance, f_angle, nada = calculate.AngleFactorX(closest_atom2, closest_atom1, atom3)
         else:
-          # i.e. no angular dependence
-          f_angle = 1.0
+            # i.e. no angular dependence
+            f_angle = 1.0
 
         weight = version.calculatePairWeight(residue1.Nmass, residue2.Nmass)
         exception, value = version.checkExceptions(residue1, residue2)
@@ -136,20 +136,20 @@ def addSidechainDeterminants(residue1, residue2, version=None):
         else:
             value = version.calculateSideChainEnergy(distance, dpka_max, cutoff, weight, f_angle)
         if residue1.Q == residue2.Q:
-          # acid pair or base pair
-          if residue1.pKa_mod < residue2.pKa_mod:
-            newDeterminant1 = Determinant(residue2.label, -value)
-            newDeterminant2 = Determinant(residue1.label,  value)
-          else:
-            newDeterminant1 = Determinant(residue2.label,  value)
-            newDeterminant2 = Determinant(residue1.label, -value)
+            # acid pair or base pair
+            if residue1.pKa_mod < residue2.pKa_mod:
+                newDeterminant1 = Determinant(residue2.label, -value)
+                newDeterminant2 = Determinant(residue1.label,  value)
+            else:
+                newDeterminant1 = Determinant(residue2.label,  value)
+                newDeterminant2 = Determinant(residue1.label, -value)
         else:
-          newDeterminant1 = Determinant(residue2.label, value*residue1.Q)
-          newDeterminant2 = Determinant(residue1.label, value*residue2.Q)
+            newDeterminant1 = Determinant(residue2.label, value*residue1.Q)
+            newDeterminant2 = Determinant(residue1.label, value*residue2.Q)
         if residue1.resName not in version.exclude_sidechain_interactions:
-          residue1.determinants[0].append(newDeterminant1)
+            residue1.determinants[0].append(newDeterminant1)
         if residue2.resName not in version.exclude_sidechain_interactions:
-          residue2.determinants[0].append(newDeterminant2)
+            residue2.determinants[0].append(newDeterminant2)
 
 
 def addCoulombDeterminants(residue1, residue2, distance, version):
@@ -230,16 +230,16 @@ def setIonDeterminants(protein, version=None):
     """
     ionizable_residues = lib.residueList("propka1")
     for residue in protein.propka_residues:
-      if residue.resName in ionizable_residues:
-        for ion in protein.residue_dictionary["ION"]:
-          distance = calculate.InterResidueDistance(residue, ion)
-          if distance < version.coulomb_cutoff[1]:
-            label  = "%s%4d%2s" % (ion.resName, ion.resNumb, ion.chainID)
-            weight = version.calculatePairWeight(residue.Nmass, ion.Nmass)
-            # the pKa of both acids and bases are shifted up by negative ions (and vice versa)
-            value  =  (-ion.Q) * version.calculateCoulombEnergy(distance, weight)
-            newDeterminant = Determinant(label, value)
-            residue.determinants[2].append(newDeterminant)
+        if residue.resName in ionizable_residues:
+            for ion in protein.residue_dictionary["ION"]:
+                distance = calculate.InterResidueDistance(residue, ion)
+                if distance < version.coulomb_cutoff[1]:
+                    label  = "%s%4d%2s" % (ion.resName, ion.resNumb, ion.chainID)
+                    weight = version.calculatePairWeight(residue.Nmass, ion.Nmass)
+                    # the pKa of both acids and bases are shifted up by negative ions (and vice versa)
+                    value  =  (-ion.Q) * version.calculateCoulombEnergy(distance, weight)
+                    newDeterminant = Determinant(label, value)
+                    residue.determinants[2].append(newDeterminant)
 
 
 def setBackBoneDeterminants(backbone_interactions, version=None):
@@ -261,25 +261,25 @@ def setBackBoneAcidDeterminants(data_clump, version=None):
     """
     residues, interactions = data_clump
     for residue in residues:
-      if residue.location != "BONDED":
-        dpKa_max, cutoff = version.BackBoneParameters[residue.resType]
-        for interaction in interactions:
-          atom2 = interaction[1]
-          atom3 = interaction[0]
-          atoms = residue.makeDeterminantAtomList("back-bone", version=version)
-          shortest_distance = 999.
-          for atom in atoms:
-              distance = calculate.InterAtomDistance(atom, atom2)
-              if distance < shortest_distance:
-                  shortest_distance = distance
-                  atom1 = atom
-          distance, f_angle, nada = calculate.AngleFactorX(atom1, atom2, atom3)
-          if distance < cutoff[1] and f_angle > 0.001:
-              label = "%s%4d%2s" % (atom2.resName, atom2.resNumb, atom2.chainID)
-              value = residue.Q * calculate.HydrogenBondEnergy(distance, dpKa_max, cutoff, f_angle)
-              newDeterminant = Determinant(label, value)
-              residue.determinants[1].append(newDeterminant)
-
+        if residue.location != "BONDED":
+            dpKa_max, cutoff = version.BackBoneParameters[residue.resType]
+            for interaction in interactions:
+                atom2 = interaction[1]
+                atom3 = interaction[0]
+                atoms = residue.makeDeterminantAtomList("back-bone", version=version)
+                shortest_distance = 999.
+                for atom in atoms:
+                    distance = calculate.InterAtomDistance(atom, atom2)
+                    if distance < shortest_distance:
+                        shortest_distance = distance
+                        atom1 = atom
+                distance, f_angle, nada = calculate.AngleFactorX(atom1, atom2, atom3)
+                if distance < cutoff[1] and f_angle > 0.001:
+                    label = "%s%4d%2s" % (atom2.resName, atom2.resNumb, atom2.chainID)
+                    value = residue.Q * calculate.HydrogenBondEnergy(distance, dpKa_max, cutoff, f_angle)
+                    newDeterminant = Determinant(label, value)
+                    residue.determinants[1].append(newDeterminant)
+            
         
 def setBackBoneBaseDeterminants(data_clump, version=None):
     """
@@ -289,27 +289,27 @@ def setBackBoneBaseDeterminants(data_clump, version=None):
     """
     residues, interactions = data_clump
     for residue in residues:
-      if residue.location != "BONDED":
-          dpKa_max, cutoff = version.BackBoneParameters[residue.resType]
-          for interaction in interactions:
-            distance = 999.
-            atom1 = interaction[1]
-            atoms = residue.makeDeterminantAtomList("back-bone", version=version)
-            for atom in atoms:
-              current_distance = calculate.InterAtomDistance(atom1, atom)
-              if current_distance < distance:
-                  atom2 = atom
-                  distance = current_distance
-            if distance < cutoff[1]:
-              if residue.resType in version.angularDependentSideChainInteractions:
-                atom3 = residue.getThirdAtomInAngle(atom2)
-                distance, f_angle, nada = calculate.AngleFactorX(atom1, atom2, atom3)
-              else:
-                f_angle = 1.0
-              if f_angle > 0.001:
-                # add determinant
-                label = "%s%4d%2s" % (atom2.resName, atom2.resNumb, atom2.chainID)
-                value = residue.Q * calculate.HydrogenBondEnergy(distance, dpKa_max, cutoff, f_angle)
-                newDeterminant = Determinant(label, value)
-                residue.determinants[1].append(newDeterminant)
-
+        if residue.location != "BONDED":
+            dpKa_max, cutoff = version.BackBoneParameters[residue.resType]
+            for interaction in interactions:
+                distance = 999.
+                atom1 = interaction[1]
+                atoms = residue.makeDeterminantAtomList("back-bone", version=version)
+                for atom in atoms:
+                    current_distance = calculate.InterAtomDistance(atom1, atom)
+                    if current_distance < distance:
+                        atom2 = atom
+                        distance = current_distance
+                if distance < cutoff[1]:
+                    if residue.resType in version.angularDependentSideChainInteractions:
+                        atom3 = residue.getThirdAtomInAngle(atom2)
+                        distance, f_angle, nada = calculate.AngleFactorX(atom1, atom2, atom3)
+                    else:
+                        f_angle = 1.0
+                    if f_angle > 0.001:
+                        # add determinant
+                        label = "%s%4d%2s" % (atom2.resName, atom2.resNumb, atom2.chainID)
+                        value = residue.Q * calculate.HydrogenBondEnergy(distance, dpKa_max, cutoff, f_angle)
+                        newDeterminant = Determinant(label, value)
+                        residue.determinants[1].append(newDeterminant)
+              

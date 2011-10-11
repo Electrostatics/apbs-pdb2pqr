@@ -55,14 +55,13 @@ def main():
     options, pdbfiles = lib.loadOptions()
 
     for pdbfile in pdbfiles:
-
-      # creating protein object
-      myProtein = Protein(pdbfile=pdbfile, options=options)
-
-      # calculating pKa values for ionizable residues
-      myProtein.calculatePKA(options=options)
-      # printing pka file
-      myProtein.writePKA(options=options)
+        # creating protein object
+        myProtein = Protein(pdbfile=pdbfile, options=options)
+       
+        # calculating pKa values for ionizable residues
+        myProtein.calculatePKA(options=options)
+        # printing pka file
+        myProtein.writePKA(options=options)
 
 
 if __name__ == '__main__': main()
