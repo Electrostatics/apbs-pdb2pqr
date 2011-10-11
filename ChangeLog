@@ -6,4 +6,6 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Updated propka to version 3.0
 
 - BUG FIXES
+ * Cleaned up white space in several files and some pydev warnings.
+ * Fixed arc cosine domain problem caused by rounding. (Thanks Federico Fogolari) 
 
