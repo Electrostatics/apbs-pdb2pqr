@@ -46,7 +46,7 @@
 
 import pkgutil
 
-from optparse import OptionGroup, OptionConflictError
+from optparse import OptionGroup, OptionConflictError, Option
 
 _extList = [name for _, name, _ in pkgutil.iter_modules(__path__)]
 
@@ -62,20 +62,48 @@ def setupExtensionsOptions(parser):
     if len(extDict) == 0:
         return None
     
-    group = OptionGroup(parser,"Extension options", "Options for output extensions.")
+    firstGroup = OptionGroup(parser,"Extension options")
+    groups = [firstGroup]
+    
     for extName, extModule in extDict.items():
         helpArg = {}
         if hasattr(extModule, 'usage'):
             helpArg['help'] = extModule.usage()
+            
+        extOption = Option('--' + extName, action='append_const', 
+                             const = extName, dest = 'active_extensions', **helpArg )
         
-        group.add_option('--' + extName, action='append_const', const = extName, dest = 'active_extentions', **helpArg )
-        
-        if hasattr(extModule, 'addExtensionOptions'):
-            try:
+        try:
+            if hasattr(extModule, 'addExtensionOptions'):
+                group = OptionGroup(parser, extName.capitalize() + " extension options")
+                group.add_option(extOption)
+                
                 extModule.addExtensionOptions(group)
-            except OptionConflictError, value:
-                print 'Error adding command line option for extension ' + extName + ' ' + '(' + str(value) + ')'
+                
+                if len(group.option_list) == 1:
+                    opt = group.option_list[0]
+                    group.remove_option(opt.get_opt_string())
+                    firstGroup.add_option(opt)
+                else:
+                    groups.append(group)   
+                
+            else:
+                firstGroup.add_option(extOption)
+                
+        except OptionConflictError, value:
+            print 'Error adding command line options for extension ' + extName + ' ' + '(' + str(value) + ')'
+            
     
-    parser.add_option_group(group)
+    for group in groups:
+        parser.add_option_group(group)
     
-    return group
+    return groups
+
+class extOutputHelper(object):
+    def __init__(self, routines, outfile):
+        self.routines = routines
+        self.outfile = outfile
+
+    def write(self, s):
+        self.routines.write(s)
+        self.outfile.write(s)

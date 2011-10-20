@@ -232,7 +232,6 @@ class Optimize:
             Returns
                 angle:  The angle between the atoms (float)
         """
-        angle = 0.0
         atom2Coords = atom2.getCoords()
         coords1 = subtract(atom3.getCoords(), atom2Coords)
         coords2 = subtract(atom1.getCoords(), atom2Coords)
@@ -241,6 +240,8 @@ class Optimize:
         dotted = dot(norm1, norm2)
         if dotted > 1.0: # If normalized, this is due to rounding error
             dotted = 1.0
+        elif dotted < -1.0: # If normalized, this is due to rounding error
+            dotted = -1.0            
         rad = abs(math.acos(dotted))
         angle = rad*180.0/math.pi
         if angle > 180.0:
@@ -352,14 +353,14 @@ class Optimize:
                     if angle1 <= maxangle:
                         angleterm = (maxangle - angle1)/maxangle
                         angle2 = self.getHbondangle(donorhatom, acceptorhatom, acceptor)
-                        if angle2 < 110.0: angle2 = 1.0
-                        else: angle2 = (110.0 - angle2)/110.0
+                        if angle2 < 110.0: 
+                            angle2 = 1.0
+                        else: 
+                            angle2 = (110.0 - angle2)/110.0
                         energy += max_hbond_energy/pow(dist,3)*angleterm*angle2
 
             else:
-
-                # Assign energies based on A-D-H(D) angle alone
-              
+                # Assign energies based on A-D-H(D) angle alone              
                 angle1 = self.getHbondangle(acceptor, donor, donorhatom)
                 if angle1 <= maxangle:
                     angleterm = (maxangle - angle1)/maxangle
@@ -1166,7 +1167,7 @@ class Alcoholic(Optimize):
             # Initialize variables
             
             pivot = atom.bonds[0]
-            bestdist = 0.0
+            #bestdist = 0.0
             bestcoords = []
             bestenergy = 999.99
 
@@ -1176,7 +1177,7 @@ class Alcoholic(Optimize):
             newatom = residue.getAtom(addname)
             self.routines.cells.addCell(newatom)
 
-            for i in range(18):
+            for _ in range(18):
                 residue.rotateTetrahedral(pivot, atom, 20.0)
 
                 closeatoms = self.routines.cells.getNearCells(atom)
@@ -1352,13 +1353,10 @@ class Water(Optimize):
             if self.isHbond(donor, acc):
 
                 # Find the best donor hydrogen and use that 
-
-                besth = donor
                 bestdist = distance(acc.getCoords(), donor.getCoords())
                 for donorh in donor.bonds:
                     dist = distance(acc.getCoords(), donorh.getCoords())
                     if dist < bestdist:
-                        besth = donorh
                         bestdist = dist
                         
                 # Point the LP to the best H
@@ -1796,7 +1794,7 @@ class Carboxylic(Optimize):
            The main driver for adding a hydrogen to an
            optimizeable residue.
         """
-        residue = self.residue
+        #residue = self.residue
 
         # Do some error checking
         
@@ -1848,7 +1846,7 @@ class Carboxylic(Optimize):
         # Initialize some variables
 
         hydrogens = []
-        bestdist = 0.0
+        #bestdist = 0.0
         bestatom = None
         residue = self.residue
 
@@ -1936,14 +1934,14 @@ class Carboxylic(Optimize):
 
         elif len(self.atomlist) == 1:
 
-			# Appending the other bondatom to self.atomlist 
+            # Appending the other bondatom to self.atomlist 
             hnames = [hname[:-1] + "1", hname[:-1] + "2"]
             for hn in hnames:
-              bondatom = residue.getAtom(optinstance.map[hn].bond)
-              if bondatom.name != self.atomlist[0].name:
-                  self.atomlist.append(bondatom)
-              else:
-                  pass
+                bondatom = residue.getAtom(optinstance.map[hn].bond)
+                if bondatom.name != self.atomlist[0].name:
+                    self.atomlist.append(bondatom)
+                else:
+                    pass
 
             if hydatom.name.endswith("1"):
                 if (hydatom.name[:-1] + "2") in residue.map.keys():
@@ -1991,10 +1989,11 @@ class Generic(Optimize):
         
         # Initialize some variables
 
-        hydrogens = []
-        bestdist = 0.0
-        bestatom = None
-        residue = self.residue
+#        hydrogens = []
+#        bestdist = 0.0
+#        bestatom = None
+#        residue = self.residue
+        pass
 
     def complete(self):
         """
@@ -2009,7 +2008,7 @@ class hydrogenRoutines:
     """
     def __init__(self, routines):
         """
-            Parse the XML file and store the data in a map
+            Parse the XML hydrogenFile and store the data in a map
         """
         self.routines = routines
         self.protein = routines.protein
@@ -2025,9 +2024,9 @@ class hydrogenRoutines:
         if defpath == "":
             raise ValueError, "Could not find %s!" % HYDPATH 
      
-        file = open(defpath)
-        sax.parseString(file.read(), handler)
-        file.close()
+        hydrogenFile = open(defpath)
+        sax.parseString(hydrogenFile.read(), handler)
+        hydrogenFile.close()
 
         self.map = handler.map
 
@@ -2040,7 +2039,7 @@ class hydrogenRoutines:
         """
         if HDEBUG: print text  
 
-    def switchstate(self, states, amb, id):
+    def switchstate(self, states, amb, stateID):
         """
             Switch a residue to a new state by first removing all
             hydrogens.
@@ -2048,7 +2047,7 @@ class hydrogenRoutines:
             Parameters
                 states: The list of states (list)
                 amb   : The amibiguity to switch (tuple)
-                id    : The state id to switch to (int)
+                stateID    : The state id to switch to (int)
         """
         #
         # This routine does not remove all hydrogens, merely the titratable
@@ -2058,17 +2057,17 @@ class hydrogenRoutines:
         # If we do pKa calculations, then we use another routine
         #
         if states=='pKa':
-            return self.pKa_switchstate(amb,id)
+            return self.pKa_switchstate(amb,stateID)
         #
         # JENS: From here on only for Hbond optimisation - is it's used at all?
         #
-        if id > len(states):
+        if stateID > len(states):
             raise ValueError, "Invalid State ID!"
         
         # First Remove all Hs
         residue = getattr(amb,"residue")
         hdef = getattr(amb,"hdef")
-        type = hdef.type
+        #type = hdef.type
         for conf in hdef.conformations:
             hname = conf.hname
             boundname = conf.boundatom
@@ -2090,7 +2089,7 @@ class hydrogenRoutines:
         #x    defresidue = ligandclean.defligand.LigandDefinitionResidue(residue)
                               
         # Now build appropriate atoms
-        state = states[id]
+        state = states[stateID]
         for conf in state:
             print conf
             refcoords = []
@@ -2126,14 +2125,14 @@ class hydrogenRoutines:
         return
 
                 
-    def pKa_switchstate(self,amb,id):
+    def pKa_switchstate(self,amb,stateID):
         """
             Switch a residue to a new state by first removing all
             hydrogens. this routine is used in pKa calculations only!
 
             Parameters
                 amb   : The amibiguity to switch (tuple)
-                id    : The state id to switch to (list)
+                stateID    : The state id to switch to (list)
 
         """
         #
@@ -2148,17 +2147,17 @@ class hydrogenRoutines:
                          'HSD': '1', 'HSE': '2', 'HSP': '1+2', 
                          'H3': '1', 'H2': '2', 'H3+H2': '1+2',
                          'CTR01c': '1', 'CTR01t': '2', 'CTR02c': '3', 'CTR02t': '4', 'CTR-': '0'}
-        id=titrationdict[id]
-        id=id.split('+')
-        new_id=[]
-        for i in id:
-            new_id.append(int(i))
+        stateID=titrationdict[stateID]
+        stateID=stateID.split('+')
+        new_stateID=[]
+        for i in stateID:
+            new_stateID.append(int(i))
         #
         # First Remove all Hs
         #
         residue = getattr(amb,"residue")
         hdef = getattr(amb,"hdef")
-        type = hdef.opttype
+        #type = hdef.opttype
         for conf in hdef.conformations:
             hname = conf.hname
             boundname = conf.boundatom
@@ -2169,19 +2168,19 @@ class hydrogenRoutines:
         #
         # Update the IntraBonds
         #
-        name = residue.get("name")
-        defresidue = self.routines.protein.referencemap[name] #self.routines.aadef.getResidue(name)
+        #name = residue.get("name")
+        #defresidue = self.routines.protein.referencemap[name] #self.routines.aadef.getResidue(name)
         #residue.updateIntraBonds(defresidue)
         #
         # Now build appropriate atoms
         #
-        for id in new_id:
-            if id==0:
+        for stateID in new_stateID:
+            if stateID==0:
                 #
                 # For state 0 we never build any hydrogens
                 #
                 continue
-            conf=hdef.conformations[id-1]
+            conf=hdef.conformations[stateID-1]
             refcoords = []
             defcoords = []
             defatomcoords = []
@@ -2661,10 +2660,10 @@ class hydrogenRoutines:
             ntrmap = {}    # map for N-TERM
 
             for tautomer in titrationstatemap["NTER"].tautomers:
-                 for conformer in tautomermap[tautomer.name].conformers:
-                      for conformeradds in conformermap[conformer.name].conformerAdds:
-                           for atom in conformeradds.atoms:
-                                ntrmap[atom.name] = atom
+                for conformer in tautomermap[tautomer.name].conformers:
+                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                        for atom in conformeradds.atoms:
+                            ntrmap[atom.name] = atom
             atoms = ['H3', 'H2']
             refatoms = ['CA', 'H', 'N']
         elif name == 'CTR':
@@ -2672,16 +2671,16 @@ class hydrogenRoutines:
             nonhmap ={}    # map for refatoms
             conformernames = []
             for tautomer in titrationstatemap["CTER"].tautomers:
-                 for conformer in tautomermap[tautomer.name].conformers:
-                      for conformeradds in conformermap[conformer.name].conformerAdds:
-                           for atom in conformeradds.atoms:
-                                nonhmap[atom.name] = atom
+                for conformer in tautomermap[tautomer.name].conformers:
+                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                        for atom in conformeradds.atoms:
+                            nonhmap[atom.name] = atom
             for tautomer in titrationstatemap["CTER0"].tautomers:
-                 for conformer in tautomermap[tautomer.name].conformers:
-                      conformernames.append(conformer.name)
-                      for conformeradds in conformermap[conformer.name].conformerAdds:
-                           for atom in conformeradds.atoms:
-                                hmap[conformer.name, atom.name] = atom
+                for conformer in tautomermap[tautomer.name].conformers:
+                    conformernames.append(conformer.name)
+                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                        for atom in conformeradds.atoms:
+                            hmap[conformer.name, atom.name] = atom
 
             atoms = ['HO']
             refatoms = ['O', 'C', 'OXT']
@@ -2709,11 +2708,11 @@ class hydrogenRoutines:
             conformernames = []
             reference = refmap['ASP']
             for tautomer in titrationstatemap["ASH"].tautomers:
-                 for conformer in tautomermap[tautomer.name].conformers:
-                      for conformeradds in conformermap[conformer.name].conformerAdds:
-                           for atom in conformeradds.atoms:
-                                hmap[conformer.name, atom.name] = atom
-                                conformernames.append(conformer.name)
+                for conformer in tautomermap[tautomer.name].conformers:
+                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                        for atom in conformeradds.atoms:
+                            hmap[conformer.name, atom.name] = atom
+                            conformernames.append(conformer.name)
             atoms = ['HD1', 'HD2']
             refatoms = ['OD1', 'CG', 'OD2']
         elif name == 'GLH':
@@ -2722,11 +2721,11 @@ class hydrogenRoutines:
             conformernames = []
             reference = refmap['GLU']
             for tautomer in titrationstatemap["GLH"].tautomers:
-                 for conformer in tautomermap[tautomer.name].conformers:
-                      for conformeradds in conformermap[conformer.name].conformerAdds:
-                           for atom in conformeradds.atoms:
-                                hmap[conformer.name, atom.name] = atom
-                                conformernames.append(conformer.name)
+                for conformer in tautomermap[tautomer.name].conformers:
+                    for conformeradds in conformermap[conformer.name].conformerAdds:
+                        for atom in conformeradds.atoms:
+                            hmap[conformer.name, atom.name] = atom
+                            conformernames.append(conformer.name)
             atoms = ['HE1', 'HE2']
             refatoms = ['OE1', 'CD', 'OE2']
         else:

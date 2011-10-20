@@ -209,7 +209,9 @@ def runPDB2PQR(pdblist, ff,
     if not ph is None:
         pka = True
         pkaname = outroot + ".propka"
-        if os.path.isfile(pkaname): os.remove(pkaname)
+        #TODO: What? Shouldn't it be up to propka on how to handle this?
+        if os.path.isfile(pkaname): 
+            os.remove(pkaname)
     else: 
         pka = False
 
@@ -259,11 +261,9 @@ def runPDB2PQR(pdblist, ff,
         lines = myProtein.printAtoms(myProtein.getAtoms(), chain)
       
         # Process the extensions
-        # TODO: kill the eval call.
         for ext in extentions:
             module = extensions.extDict[ext]
-            call = "module.%s(myRoutines, outroot)" % ext
-            eval(call)  
+            module.run_extension(myRoutines, outroot, extensionOptions)
     
         if verbose:
             print "Total time taken: %.2f seconds\n" % (time.time() - start)
@@ -303,7 +303,7 @@ def runPDB2PQR(pdblist, ff,
             myhydRoutines.initializeFullOptimization()
             myhydRoutines.optimizeHydrogens()
         else:
-            myhydRoutines = hydrogenRoutines(myRoutines)
+            #myhydRoutines = hydrogenRoutines(myRoutines)
             myhydRoutines.initializeWaterOptimization()
             myhydRoutines.optimizeHydrogens()
 
@@ -390,11 +390,9 @@ def runPDB2PQR(pdblist, ff,
             missedligandresidues.append(atom.resName)
 
     # Process the extensions
-    #TODO: kill the eval call.
     for ext in extentions:
         module = extensions.extDict[ext]
-        call = "module.%s(myRoutines, outroot)" % ext
-        eval(call)
+        module.run_extension(myRoutines, outroot, extensionOptions)
 
     if verbose:
         print "Total time taken: %.2f seconds\n" % (time.time() - start)
@@ -495,7 +493,8 @@ def mainCommand(argv):
            help="setting which reference to use for stability calculations [neutral/low-pH]")
     
     
-    extentionsGroup = extensions.setupExtensionsOptions(parser)
+    #extentionGroups = extensions.setupExtensionsOptions(parser)
+    extensions.setupExtensionsOptions(parser)
     
     (options, args) = parser.parse_args() 
     
@@ -591,8 +590,8 @@ def mainCommand(argv):
     sys.stdout.write(text)
             
     path = args[0]
-    file = getPDBFile(path)
-    pdblist, errlist = readPDB(file)
+    pdbFile = getPDBFile(path)
+    pdblist, errlist = readPDB(pdbFile)
     
     if len(pdblist) == 0 and len(errlist) == 0:
         parser.error("Unable to find file %s!" % path)
@@ -608,21 +607,25 @@ def mainCommand(argv):
     if not hasattr(options, 'active_extensions' ) or options.active_extensions is None:
         options.active_extensions = []
         
+    #I see no point in hiding options from extentions.
+    extensionOpts = options
+    
     #Filter out the options specifically for extentions or propka.
     #Passed into runPDB2PQR, but not used by any extention yet.
-    extensionOpts = ExtraOptions()
-    
-    if extentionsGroup is not None:
-        for opt in extentionsGroup.option_list:
-            if opt.dest == 'active_extensions':
-                continue
-            setattr(extensionOpts, opt.dest, 
-                    getattr(options, opt.dest))
+#    extensionOpts = ExtraOptions()
+#    
+#    if extentionsGroup is not None:
+#        for opt in extentionsGroup.option_list:
+#            if opt.dest == 'active_extensions':
+#                continue
+#            setattr(extensionOpts, opt.dest, 
+#                    getattr(options, opt.dest))
             
     
 
     #TODO: The ideal would be to pass a file like object for the second
-    # argument and get rid of the userff and username arguments to this function.
+    # argument and add a third for names then
+    # get rid of the userff and username arguments to this function.
     # This would also do away with the redundent checks and such in 
     # the Forcefield constructor.
     header, lines, missedligands = runPDB2PQR(pdblist, 
