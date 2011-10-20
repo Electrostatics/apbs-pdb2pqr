@@ -7,5 +7,8 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
 
 - BUG FIXES
  * Cleaned up white space in several files and some pydev warnings.
- * Fixed arc cosine domain problem caused by rounding. (Thanks Federico Fogolari) 
+ * Improved interface for extensions. 
+ * Extension may now add their own command line arguments.
+ * Combined hbond and hbondwhatit into one extension (hbond) with new command line parameters. (No more hacking hbond.py)
+ * Combined rama, phi, psi into one extension (rama) with new command line parameters.
 

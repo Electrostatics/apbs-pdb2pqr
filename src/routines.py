@@ -103,10 +103,10 @@ class Routines:
         """
         out = ""
         if self.verbose:
-           for i in range(indent):
-               out += "\t"
-           out += message
-           sys.stdout.write(out)
+            for i in range(indent):
+                out += "\t"
+            out += message
+            sys.stdout.write(out)
 
     def getWarnings(self):
         """
@@ -127,7 +127,7 @@ class Routines:
         for residue in self.protein.getResidues():
             if isinstance(residue, Amino) or isinstance(residue, WAT) \
                or isinstance(residue, Nucleic):
-               resname = residue.ffname
+                resname = residue.ffname
             else: resname = residue.name
 
             for atom in residue.getAtoms():
@@ -1051,11 +1051,11 @@ class Routines:
             self.write("Starting to debump %s...\n" % residue, 1)
             self.write("Debumping cutoffs: %2.1f for heavy atoms, %2.1f for hydrogens.\n" % (BUMP_DIST, BUMP_HDIST), 1)
             if self.debumpResidue(residue, conflictnames):
-                 self.write("Debumping Successful!\n\n",1)
+                self.write("Debumping Successful!\n\n",1)
             else:
-                 text = "WARNING: Unable to debump %s\n" % residue
-                 self.write("********\n%s********\n\n" % text)
-                 self.warnings.append(text)  
+                text = "WARNING: Unable to debump %s\n" % residue
+                self.write("********\n%s********\n\n" % text)
+                self.warnings.append(text)  
 
         self.write("Done.\n")
 
@@ -1111,11 +1111,11 @@ class Routines:
 
             self.write("Starting to debump %s...\n" % residue, 1)
             if self.debumpResidueTopology(residue, conflictnames):
-                 self.write("Debumping Successful!\n\n",1)
+                self.write("Debumping Successful!\n\n",1)
             else:
-                 text = "WARNING: Unable to debump %s\n" % residue
-                 self.write("********\n%s********\n\n" % text)
-                 self.warnings.append(text)  
+                text = "WARNING: Unable to debump %s\n" % residue
+                self.write("********\n%s********\n\n" % text)
+                self.warnings.append(text)  
 
         self.write("Done.\n")
 

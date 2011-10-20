@@ -421,17 +421,13 @@ class Residue:
             Parameters
                 resname: The name of the residue to retrieve (string)
         """
-        try:
-            return self.map[name]
-        except KeyError:
-            return None
+        return self.map.get(name);
 
     def getAtoms(self):
         return self.atoms
 
     def hasAtom(self, name):
-        if name in self.map: return 1
-        else: return 0
+        return name in self.map
 
     def getCharge(self):
         """
@@ -442,11 +438,14 @@ class Residue:
             Returns:
                 charge: The charge of the residue (float)
         """
-        charge = 0.0
-        for atom in self.atoms:
-            atomcharge = atom.get("ffcharge")
-            if atomcharge != None:
-                charge = charge + atomcharge
+        #ffcharge can be None.
+        charge = (atom.ffcharge for atom in self.atoms if atom.ffcharge)
+        charge = sum(charge)
+#        charge = 0.0
+#        for atom in self.atoms:
+#            atomcharge = atom.get("ffcharge")
+#            if atomcharge != None:
+#                charge += atomcharge
 
         charge = float("%.4f" % charge)
         return charge
@@ -701,6 +700,9 @@ class Atom(ATOM):
 
         return str
     
+    #TODO: What? Why? Isn't this Python?
+    #Are we really doing attribute access based
+    # on dynamic names? A search of the code says no.
     def get(self, name):
         """
             Get a member of the Atom class
@@ -771,8 +773,6 @@ class Atom(ATOM):
                 ffcharge:   The forcefield charge on the atom
                 hdonor:     Whether the atom is a hydrogen donor
                 hacceptor:  Whether the atom is a hydrogen acceptor
-            Returns
-                item:       The value of the member
         """
         try:
             setattr(self, name, value)
