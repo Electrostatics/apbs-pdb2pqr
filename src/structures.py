@@ -212,7 +212,8 @@ class Residue:
         """
         text = "%s %s %i" % (self.name, self.chainID, self.resSeq)
         return text
-
+    
+    #TODO: Kill this in a fire.
     def get(self, name):
         """
             Get a member of the Residue class
