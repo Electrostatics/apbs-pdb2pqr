@@ -221,7 +221,8 @@ class Optimize:
         """
         if HDEBUG: print txt
 
-    def getHbondangle(self, atom1, atom2, atom3):
+    @staticmethod
+    def getHbondangle(atom1, atom2, atom3):
         """
             Get the angle between three atoms
 
@@ -294,7 +295,8 @@ class Optimize:
 
         return 0
         
-    def getPairEnergy(self, donor, acceptor):
+    @staticmethod
+    def getPairEnergy(donor, acceptor):
         """
             Get the energy between two atoms
 
@@ -306,26 +308,24 @@ class Optimize:
         """
 
         # Initialize some variables
-        
+        bump_energy = 10.0
+        bump_distance = 1.5
         max_hbond_energy = -10.0
         max_ele_energy = -1.0
-        maxangle = ANGLE_CUTOFF
+        ADH_angle_cutoff = ANGLE_CUTOFF
+        DhAhA_angle_cutoff = 110.0
         max_dha_dist = DIST_CUTOFF
         max_ele_dist = 5.0
         energy = 0.0
-        donorhs = []
-        acceptorhs = []
         
-        if not (donor.hdonor and acceptor.hacceptor): return energy
+        if not (donor.hdonor and acceptor.hacceptor): 
+            return energy
 
         # See if hydrogens are presently bonded to the acceptor and donor
 
-        for bond in donor.bonds:
-            if bond.isHydrogen(): donorhs.append(bond)
-        for bond in acceptor.bonds:
-            if bond.isHydrogen(): acceptorhs.append(bond)
-            
-        if donorhs == []: return energy
+        donorhs = (bond for bond in donor.bonds if bond.isHydrogen())
+        
+        acceptorhs = [bond for bond in acceptor.bonds if bond.isHydrogen()]
 
         for donorhatom in donorhs:
 
@@ -334,36 +334,33 @@ class Optimize:
                 energy += max_ele_energy/(dist*dist)
                 continue
 
-            if acceptorhs != []:
+            # Case 1: Both donor and acceptor hydrogens are present
+            for acceptorhatom in acceptorhs:
 
-                # Case 1: Both donor and acceptor hydrogens are present
+                # Penalize if H(D) is too close to H(A)
+                hdist = distance(donorhatom.getCoords(), acceptorhatom.getCoords())
+                if hdist < bump_distance:
+                    energy += bump_energy
+                    continue
 
-                for acceptorhatom in acceptorhs:
-
-                    # Penalize if H(D) is too close to H(A)
+                # Assign energies based on angles
+                angle1 = Optimize.getHbondangle(acceptor, donor, donorhatom)
+                if angle1 <= ADH_angle_cutoff:                    
+                    angle2 = Optimize.getHbondangle(donorhatom, acceptorhatom, acceptor)
+                    if angle2 < DhAhA_angle_cutoff: 
+                        angle2 = 1.0
+                    else: 
+                        angle2 = (DhAhA_angle_cutoff - angle2)/DhAhA_angle_cutoff
                     
-                    hdist = distance(donorhatom.getCoords(), acceptorhatom.getCoords())
-                    if hdist < 1.5:
-                        energy += -1 * max_hbond_energy
-                        continue
+                    angleterm = (ADH_angle_cutoff - angle1)/ADH_angle_cutoff
+                    energy += max_hbond_energy/pow(dist,3)*angleterm*angle2
 
-                    # Assign energies based on angles
-                    
-                    angle1 = self.getHbondangle(acceptor, donor, donorhatom)
-                    if angle1 <= maxangle:
-                        angleterm = (maxangle - angle1)/maxangle
-                        angle2 = self.getHbondangle(donorhatom, acceptorhatom, acceptor)
-                        if angle2 < 110.0: 
-                            angle2 = 1.0
-                        else: 
-                            angle2 = (110.0 - angle2)/110.0
-                        energy += max_hbond_energy/pow(dist,3)*angleterm*angle2
-
-            else:
+            # Case 2: Only donor hydrogens are present
+            if len(acceptorhs) == 0:
                 # Assign energies based on A-D-H(D) angle alone              
-                angle1 = self.getHbondangle(acceptor, donor, donorhatom)
-                if angle1 <= maxangle:
-                    angleterm = (maxangle - angle1)/maxangle
+                angle1 = Optimize.getHbondangle(acceptor, donor, donorhatom)
+                if angle1 <= ADH_angle_cutoff:
+                    angleterm = (ADH_angle_cutoff - angle1)/ADH_angle_cutoff
                     energy += max_hbond_energy/pow(dist,2)*angleterm
                   
         return energy
@@ -1632,7 +1629,8 @@ class Carboxylic(Optimize):
             # First mirror the hydrogen about the same donor
 
             for di in residue.reference.dihedrals:
-                if di.endswith(hname): break
+                if di.endswith(hname): 
+                    break
 
             anglenum = residue.reference.dihedrals.index(di)
             if anglenum == -1:
@@ -1767,15 +1765,14 @@ class Carboxylic(Optimize):
                 self.routines.cells.removeCell(hyds[0])
                 residue.removeAtom(hyds[0].name)
                 donorhatom = residue.getAtom(hyds[1].name)
-            else:
-                if hyds[1] in self.hlist:
-                    self.hlist.remove(hyds[1])
-                    self.routines.cells.removeCell(hyds[1])
-                    residue.removeAtom(hyds[1].name)
-                    if residue.hasAtom(hyds[0].name):
-                        donorhatom = residue.getAtom(hyds[0].name)
-                    elif len(self.hlist) != 0 and residue.hasAtom(self.hlist[0].name):
-                        donorhatom = residue.getAtom(self.hlist[0].name)
+            elif hyds[1] in self.hlist:
+                self.hlist.remove(hyds[1])
+                self.routines.cells.removeCell(hyds[1])
+                residue.removeAtom(hyds[1].name)
+                if residue.hasAtom(hyds[0].name):
+                    donorhatom = residue.getAtom(hyds[0].name)
+                elif len(self.hlist) != 0 and residue.hasAtom(self.hlist[0].name):
+                    donorhatom = residue.getAtom(self.hlist[0].name)
 
             # If only one H is left, we're done
 
