@@ -56,8 +56,13 @@ for extName in _extList:
     extDict[extName] = __import__(extName,globals(),locals(),[], -1)
     
 def setupExtensionsOptions(parser):
-    '''Takes an instance of an OptionParser 
-    and adds the options for all extensions'''
+    """
+    Takes an instance of an OptionParser 
+    and adds the options for all extensions
+    
+    If an extension adds it's own options, those
+    options are put in their own group.
+    """
     
     if len(extDict) == 0:
         return None
@@ -100,6 +105,9 @@ def setupExtensionsOptions(parser):
     return groups
 
 class extOutputHelper(object):
+    """
+    Simple class that makes writing to both file and output simple.
+    """
     def __init__(self, routines, outfile):
         self.routines = routines
         self.outfile = outfile

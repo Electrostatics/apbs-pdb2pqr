@@ -159,7 +159,7 @@ class Routines:
         for residue in self.protein.getResidues():
             if isinstance(residue, Amino) or isinstance(residue, WAT) \
                or isinstance(residue, Nucleic):
-               resname = residue.ffname
+                resname = residue.ffname
             else: resname = residue.name
 
             # Apply the parameters
@@ -267,8 +267,10 @@ class Routines:
        
         for residue in self.protein.getResidues():
             if isinstance(residue, Amino):
-                if residue.isNterm or residue.isCterm: continue
-                else: self.applyPatch("PEPTIDE", residue)
+                if residue.isNterm or residue.isCterm: 
+                    continue
+                else:
+                    self.applyPatch("PEPTIDE", residue)
 
         # Update all internal bonds
                 
@@ -284,9 +286,14 @@ class Routines:
                     continue
                 atom1 = res1.getAtom("C")
                 atom2 = res2.getAtom("N")
-                if atom1 != None: res2.peptideC = atom1
-                if atom2 != None: res1.peptideN = atom2
-                if atom1 == None or atom2 == None: continue
+                
+                if atom1 != None: 
+                    res2.peptideC = atom1
+                if atom2 != None: 
+                    res1.peptideN = atom2
+                if atom1 == None or atom2 == None: 
+                    continue
+                
                 if distance(atom1.getCoords(), atom2.getCoords()) > PEPTIDE_DIST:
                     text = "Gap in backbone detected between %s and %s!\n" % \
                            (res1, res2)
@@ -621,7 +628,8 @@ class Routines:
         else:
             self.write("No heavy atoms found missing - Done.\n")
 
-    def rebuildTetrahedral(self, residue, atomname):
+    @staticmethod
+    def rebuildTetrahedral(residue, atomname):
         """
             Rebuild a tetrahedral hydrogen group.  This is necessary
             due to the shortcomings of the quatfit routine - given a
@@ -644,19 +652,22 @@ class Routines:
 
         # Return if the bonded atom does not exist
         
-        if not residue.hasAtom(bondname): return 0
+        if not residue.hasAtom(bondname): 
+            return False
 
         # This group is tetrahedral if bondatom has 4 bonds,
         #  3 of which are hydrogens
         
         for bond in residue.reference.map[bondname].bonds:
-            if bond.startswith("H"): hcount += 1
+            if bond.startswith("H"): 
+                hcount += 1
             elif bond != 'C-1' and bond != 'N+1': 
                 nextatomname = bond
 
         # Check if this is a tetrahedral group
 
-        if hcount != 3 or nextatomname == None: return 0
+        if hcount != 3 or nextatomname == None: 
+            return False
 
         # Now rebuild according to the tetrahedral geometry
 
@@ -761,18 +772,20 @@ class Routines:
         count = 0
         self.write("Adding hydrogens to the protein...\n")
         for residue in self.protein.getResidues():
-            if not (isinstance(residue, Amino) or \
-                    isinstance(residue, Nucleic)): continue
+            if not (isinstance(residue, Amino) or isinstance(residue, Nucleic)): 
+                continue
             for atomname in residue.reference.map:
-                if not atomname.startswith("H"): continue
-                if residue.hasAtom(atomname): continue
-                if isinstance(residue,CYS):
-                    if residue.SSbonded and atomname == "HG": continue
+                if not atomname.startswith("H"): 
+                    continue
+                if residue.hasAtom(atomname): 
+                    continue
+                if isinstance(residue,CYS) and residue.SSbonded and atomname == "HG": 
+                    continue
 
                 # If this hydrogen is part of a tetrahedral group,
                 #  follow a different codepath
 
-                if self.rebuildTetrahedral(residue, atomname):
+                if Routines.rebuildTetrahedral(residue, atomname):
                     count += 1
                     continue
          
@@ -785,11 +798,15 @@ class Routines:
                 bondlist = residue.reference.getNearestBonds(atomname)
                 
                 for bond in bondlist:
-                    if bond == "N+1": atom = residue.peptideN
-                    elif bond == "C-1": atom = residue.peptideC
-                    else: atom = residue.getAtom(bond)
+                    if bond == "N+1": 
+                        atom = residue.peptideN
+                    elif bond == "C-1": 
+                        atom = residue.peptideC
+                    else: 
+                        atom = residue.getAtom(bond)
 
-                    if atom == None: continue
+                    if atom == None: 
+                        continue
 
                     # Get coordinates, reference coordinates
 
@@ -798,7 +815,8 @@ class Routines:
 
                     # Exit if we have enough atoms
                     
-                    if len(coords) == 3: break
+                    if len(coords) == 3: 
+                        break
 
                 if len(coords) == 3:
                     newcoords = findCoordinates(3, coords, refcoords, refatomcoords)
@@ -808,6 +826,16 @@ class Routines:
                     self.write("Couldn't rebuild %s in %s!\n" % (atomname, residue),1)
                     
         self.write(" Added %i hydrogen atoms.\n" % count)
+        
+    def removeHydrogens(self):
+        self.write("Stripping hydrogens from the protein...\n")
+        
+        for residue in self.protein.getResidues():
+            if not (isinstance(residue, Amino) or isinstance(residue, Nucleic)): 
+                continue
+            for atom in residue.atoms[:]:
+                if atom.isHydrogen():
+                    residue.removeAtom(atom.name) 
 
     def repairHeavy(self):
         """
