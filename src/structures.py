@@ -93,7 +93,7 @@ class Chain:
                 item = getattr(self, name)
                 return item
             except AttributeError:
-                message = "Unable to get object \"%s\" in class Chain" % name
+                message = 'Unable to get object "%s" in class Chain' % name
                 raise ValueError, message
 
     def addResidue(self, residue):
@@ -104,7 +104,7 @@ class Chain:
                 residue: The residue to be added (Residue)
         """
         self.residues.append(residue)
-
+        
     def numResidues(self):
         """
             Get the number of residues for the chain
@@ -308,10 +308,9 @@ class Residue:
             Get the number of atoms for the residue
 
             Returns
-                count:  Number of atoms in the residue (int)
+                Number of atoms in the residue (int)
         """
-        count = len(self.atoms)
-        return count
+        return len(self.atoms)
                     
     def setResSeq(self, value):
         """
@@ -601,7 +600,7 @@ class Atom(ATOM):
             self.mol2charge=atom.mol2charge
         
     
-    def getCommonStringRep(self):
+    def getCommonStringRep(self, chainflag=False):
         """
             Returns a string of the common column of the new atom type.  
             Uses the ATOM string output but changes the first field 
@@ -631,7 +630,10 @@ class Atom(ATOM):
             str = str + " " + string.ljust(tstr, 3)[:3]
             
         str = str + " "
-        tstr = self.chainID
+        if chainflag:
+            tstr = self.chainID
+        else:
+            tstr = ''
         str = str + string.ljust(tstr, 1)[:1]
         tstr = "%d" % self.resSeq
         str = str + string.rjust(tstr, 4)[:4]
@@ -658,7 +660,21 @@ class Atom(ATOM):
             Returns
                 str: String with ATOM/HETATM field set appropriately
         """
-        str = self.getCommonStringRep()
+        return self.getPQRString()
+    
+    
+    def getPQRString(self, chainflag=False):
+        """
+            Returns a string of the new atom type.  Uses the ATOM string
+            output but changes the first field to either by ATOM or
+            HETATM as necessary.
+            
+            This is used to create the output for pqr files! No touchy!
+
+            Returns
+                str: String with ATOM/HETATM field set appropriately
+        """
+        str = self.getCommonStringRep(chainflag=chainflag)
         
         if self.ffcharge != None: 
             ffcharge = "%.4f" % self.ffcharge
@@ -672,6 +688,7 @@ class Atom(ATOM):
         str = str + string.rjust(ffradius, 7)[:7]
 
         return str
+    
     
     def getPDBString(self):
         """
@@ -823,7 +840,7 @@ class Atom(ATOM):
             All known atoms should have reference objects.
 
             Returns
-                1 if atom has a reference object, 0 otherwise.
+                True if atom has a reference object, False otherwise.
         """
 
         return self.reference != None

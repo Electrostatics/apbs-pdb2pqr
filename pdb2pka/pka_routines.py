@@ -2133,7 +2133,6 @@ class pKaRoutines:
         pKalist = []
         
         print "Finding Titratable groups....",
-        import sys
         sys.stdout.flush()
         if self.verbose:
             print
