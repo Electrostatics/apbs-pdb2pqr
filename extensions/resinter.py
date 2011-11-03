@@ -48,46 +48,50 @@ def usage():
     return 'Print interaction energy between each residue pair in the protein to {output-path}.resinter.'
 
 #the combinations functions allow us to iterate through all possible combinations of titration states. 
-def _combinations(sublist, remainder):
-    """
-    combinations function helper
+def pairwiseCombinations(initialList):
+    r = [len(x) for x in initialList]
+    m = min(r)
+    M = max(r)
+    n = len(initialList)
     
-    sublist - first list in list of lists for combinations
-    remainder - list of remaining lists
-    """
-    if remainder and sublist:
-        for item in sublist:
-            for result in _combinations(remainder[0], remainder[1:]):
-                yield [item] + result
-        return
-    elif sublist:
-        for item in sublist:
-            yield [item]
-        return
-    elif remainder:
-        for result in _combinations(remainder[0], remainder[1:]):
-            yield [None] + result
-        return
-            
-    yield [None]
+    R = set()
+    
+    for i in range(m):
+        t = [initialList[x][i] for x in range(n)]
+        R.add(tuple(t))
+        
+    for i in range(m,M):
+        t = [initialList[x][min(r[x]-1,i)] for x in range(n)]
+        R.add(tuple(t))
+        
+    for i in range(m):
+        for j in range(n):
+            for k in range(i+1,r[j]):
+                prejth = [initialList[x][i] for x in range(j)]
 
-def combinations(initialList):
-    """
-    Wrapper for main combinations function. 
+                jth = initialList[j][k]
+                
+                postjth = [initialList[x][i] for x in range(j+1, n)]
+                
+                t = prejth + [jth] + postjth
+                R.add(tuple(t))
     
-    Iterates over each possible combination of single items 
-    from each sub-list. For example:
-    
-    combinations([[1,2],[3,4]] -> [1,3], [1,4], [2,3], [2,4] in that order.     
-    
-    
-    initialList - list of lists to derive combinations from.
-    """
-    if not initialList:
-        return
-    for result in _combinations(initialList[0], initialList[1:]):
-        yield result
+    for i in range(m,M):
+        for j in range(n):
+            if r[i] < i:
+                continue
+            for k in range(i+1,r[j]):
+                prejth = [initialList[x][min(r[x]-1,i)] for x in range(j)]
 
+                jth = initialList[j][k]
+                
+                postjth = [initialList[x][min(r[x]-1,i)] for x in range(j+1, n)]
+                
+                t = prejth + [jth] + postjth
+                R.add(tuple(t))
+                
+    return R
+    
 def get_residue_interaction_energy(residue1, residue2):
     """
     Returns to total energy of every atom pair between the two residues.
@@ -124,7 +128,7 @@ def get_residue_titration_sets(residues):
     """
     result = []
     for residue in residues:
-        result.append(_titrationSetsMap.get(residue.name))
+        result.append(_titrationSetsMap.get(residue.name, [residue.name]))
         
     return result
 
@@ -136,7 +140,7 @@ def process_residue_set(residueSet, routines, output, clean = False,
                                                       chain = False,
                                                       debump = True,
                                                       opt = True):
-    output.write(str(residueSet)+'\n')
+    routines.write(str(residueSet)+'\n')
     
     routines.removeHydrogens()
     
@@ -150,10 +154,13 @@ def process_residue_set(residueSet, routines, output, clean = False,
         
         #Create the replacement residue
         newResidue = routines.protein.createResidue(residueAtoms, newResidueName)
+        
+        newResidue.renameResidue(newResidueName)
         #Drop it in
         routines.protein.residues[index] = newResidue
         chain.residues[chainIndex] = newResidue
-        
+    
+    #Run the meaty bits of PDB2PQR  
     routines.setTermini(neutraln, neutralc)
     routines.updateBonds()
     
@@ -175,7 +182,6 @@ def process_residue_set(residueSet, routines, output, clean = False,
             hydRoutines.initializeFullOptimization()
             hydRoutines.optimizeHydrogens()
         else:
-            #hydRoutines = hydrogenRoutines(myRoutines)
             hydRoutines.initializeWaterOptimization()
             hydRoutines.optimizeHydrogens()
 
@@ -199,7 +205,7 @@ def write_all_residue_interaction_energies_combinations(routines, output, option
         routines.write(str(thing)+'\n')
         
     count = 0
-    for residueSet in combinations(residueNamesList):
+    for residueSet in pairwiseCombinations(residueNamesList):
         count += 1
         process_residue_set(residueSet, routines, output, clean = options.clean,
                                                           neutraln = options.neutraln,
@@ -210,7 +216,7 @@ def write_all_residue_interaction_energies_combinations(routines, output, option
                                                           debump = options.debump,
                                                           opt = options.opt)
     
-    output.write(str(count)+' combinations tried\n')
+    routines.write(str(count)+' combinations tried\n')
 
 def create_resinter_output(routines, outfile, options, all_combinations=False):
     """
