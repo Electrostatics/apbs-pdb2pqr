@@ -16,18 +16,18 @@ from itertools import product, permutations, izip, count
 from collections import defaultdict
 from src.hydrogens import hydrogenRoutines
 
-_titrationSets = [['ARG','AR0'],
-                  ['ASP', 'ASH'],
-                  ['CYS', 'CYX'],
-                  ['GLU', 'GLH'],
-                  ['HSD', 'HSE', 'HSP'],
-                  ['HID', 'HIE', 'HIP'],
-                  ['LYN', 'LYS'],
-                  ['TYR', 'TYM'],
-                  ['NEUTRAL-CTERM', 'CTERM'],
-                  ['NEUTRAL-NTERM', 'NTERM']]
+_titrationSets = (('ARG','AR0'),
+                  ('ASP', 'ASH'),
+                  ('CYS', 'CYX'),
+                  ('GLU', 'GLH'),
+                  ('HSD', 'HSE', 'HSP'),
+                  ('HID', 'HIE', 'HIP'),
+                  ('LYN', 'LYS'),
+                  ('TYR', 'TYM'),
+                  ('NEUTRAL-CTERM', 'CTERM'),
+                  ('NEUTRAL-NTERM', 'NTERM'))
 
-_titrationSetsMap = defaultdict(list)
+_titrationSetsMap = defaultdict(tuple)
 
 for tsSet in _titrationSets:
     for ts in tsSet:
@@ -35,20 +35,92 @@ for tsSet in _titrationSets:
         
 #loose ends.
 _titrationSetsMap['HIS'] = _titrationSetsMap['HSD']
-_titrationSetsMap['CYM'] = _titrationSetsMap['CYS'] 
+_titrationSetsMap['CYM'] = _titrationSetsMap['CYS']
+
+_pairEnergyResults = {}
+#If the residue pair energy for a specific pair changes less than this ignore it.
+PAIR_ENERGY_EPSILON = 1.0e-14
 
 def addExtensionOptions(extensionGroup):
     """
         Add options.
     """
-    extensionGroup.add_option('--all_combinations', dest='all_combinations', action='store_true', default=False,
-                      help='Remap residues to each possible titration state and rerun resinter appending output.') 
+    extensionGroup.add_option('--residue_combinations', 
+                              dest='residue_combinations', 
+                              action='store_true', 
+                              default=False,
+                              help=
+'''Remap residues to different titration states and rerun resinter appending output.
+Consider only the minimum number of whole protein titration combinations needed to
+test each possible pairing of residue titration states. Normally used with
+--noopt. If a protein titration state combination results in a pair of residue being 
+re-tested in the same individual titration states a warning will be generated if the 
+re-tested result is different. This warning should not be possible if used with --noopt.''') 
+    
+    extensionGroup.add_option('--all_residue_combinations', 
+                              dest='all_residue_combinations', 
+                              action='store_true', 
+                              default=False,
+                              help=
+'''Remap residues to ALL possible titration state combinations and rerun resinter appending output.
+Results with --noopt should be the same as --residue_combinations. Runs considerably slower than
+--residue_combinations and generates the same type of warnings. 
+Use without --noopt to discover how hydrogen optimization affects residue 
+interaction energies via the warnings in the output.''') 
 
 def usage():
-    return 'Print interaction energy between each residue pair in the protein to {output-path}.resinter.'
+    """
+    Returns usage text for resinter.
+    """
+    txt = 'Print interaction energy between each residue pair in the protein to {output-path}.resinter.'
+    return txt
 
-#the combinations functions allow us to iterate through all possible combinations of titration states. 
+def _combinations(sublist, remainder):
+    """
+    combinations function helper
+    
+    sublist - first list in list of lists for combinations
+    remainder - list of remaining lists
+    """
+    if remainder and sublist:
+        for item in sublist:
+            for result in _combinations(remainder[0], remainder[1:]):
+                yield [item] + result
+        return
+    elif sublist:
+        for item in sublist:
+            yield [item]
+        return
+    elif remainder:
+        for result in _combinations(remainder[0], remainder[1:]):
+            yield [None] + result
+        return
+            
+    yield [None]
+
+def combinations(initialList):
+    """
+    Wrapper for main combinations function. 
+    
+    Iterates over each possible combination of single items 
+    from each sub-list. For example:
+    
+    combinations([[1,2],[3,4]] -> [1,3], [1,4], [2,3], [2,4] in that order.     
+    
+    
+    initialList - list of lists to derive combinations from.
+    """
+    if not initialList:
+        return
+    for result in _combinations(initialList[0], initialList[1:]):
+        yield result
+
+
 def pairwiseCombinations(initialList):
+    """
+    Creates the minimum set of combinations that will make available 
+    every possible pair available.
+    """
     r = [len(x) for x in initialList]
     m = min(r)
     M = max(r)
@@ -111,7 +183,7 @@ def get_residue_interaction_energy(residue1, residue2):
         
     return energy
 
-def write_residue_interaction_energies(residues, output):
+def save_residue_interaction_energies(residues, output):
     """
     Writes out the residue interaction energy for each possible
     residue pair in the protein.
@@ -120,7 +192,21 @@ def write_residue_interaction_energies(residues, output):
     
     for pair in residuepairs:
         energy = get_residue_interaction_energy(pair[0], pair[1])
-        output.write(str(pair[0]) + ' ' + str(pair[1]) + ' ' + str(energy) + '\n')
+        pairText = str(pair[0]) + ' ' + str(pair[1])
+        if pairText in _pairEnergyResults:
+            
+            oldEnergy = _pairEnergyResults[pairText]
+            energyDiff = oldEnergy - energy
+            if abs(energyDiff) > PAIR_ENERGY_EPSILON:
+                txt = '#%s re-tested' % pairText
+                txt += ' with a difference of %s' % repr(energyDiff)
+                txt += ' and a reference of %s\n' % repr(energyDiff/energy)
+                output.write(txt)
+                 
+            continue
+        
+        _pairEnergyResults[pairText] = energy
+                    
         
 def get_residue_titration_sets(residues):
     """
@@ -128,7 +214,7 @@ def get_residue_titration_sets(residues):
     """
     result = []
     for residue in residues:
-        result.append(_titrationSetsMap.get(residue.name, [residue.name]))
+        result.append(_titrationSetsMap.get(residue.name, (residue.name,)))
         
     return result
 
@@ -155,7 +241,9 @@ def process_residue_set(residueSet, routines, output, clean = False,
         #Create the replacement residue
         newResidue = routines.protein.createResidue(residueAtoms, newResidueName)
         
+        #Make sure our names are cleaned up for output.
         newResidue.renameResidue(newResidueName)
+        
         #Drop it in
         routines.protein.residues[index] = newResidue
         chain.residues[chainIndex] = newResidue
@@ -188,10 +276,10 @@ def process_residue_set(residueSet, routines, output, clean = False,
         # Special for GLH/ASH, since both conformations were added
         hydRoutines.cleanup()
         
-    write_residue_interaction_energies(routines.protein.getResidues(), output)        
+    save_residue_interaction_energies(routines.protein.getResidues(), output)        
         
 
-def write_all_residue_interaction_energies_combinations(routines, output, options):
+def write_all_residue_interaction_energies_combinations(routines, output, options, all_residue_combinations=False):
     """
     For every titration state combination of residue output the 
     interaction energy for all possible residue pairs. 
@@ -200,25 +288,36 @@ def write_all_residue_interaction_energies_combinations(routines, output, option
     
     routines.write("Testing the following combinations\n")
     namelist = [r.name for r in routines.protein.getResidues()]
-    combinationsData = zip(namelist, residueNamesList)
+    combinationsData = izip(namelist, residueNamesList)
     for thing in combinationsData:
         routines.write(str(thing)+'\n')
         
+    if all_residue_combinations:
+        combinationGenerator = combinations(residueNamesList)
+    else:
+        combinationGenerator = pairwiseCombinations(residueNamesList)
+        
     count = 0
-    for residueSet in pairwiseCombinations(residueNamesList):
+    for residueSet in combinationGenerator:
         count += 1
-        process_residue_set(residueSet, routines, output, clean = options.clean,
-                                                          neutraln = options.neutraln,
-                                                          neutralc = options.neutralc,
-                                                          ligand = options.ligand,
-                                                          assign_only = options.assign_only,
-                                                          chain = options.chain,
-                                                          debump = options.debump,
-                                                          opt = options.opt)
+        process_residue_set(residueSet, routines, output, 
+                            clean = options.clean,
+                            neutraln = options.neutraln,
+                            neutralc = options.neutralc,
+                            ligand = options.ligand,
+                            assign_only = options.assign_only,
+                            chain = options.chain,
+                            debump = options.debump,
+                            opt = options.opt)
+        
+    for resultKey in sorted(_pairEnergyResults.iterkeys()):
+        output.write(resultKey + ' ' + str(_pairEnergyResults[resultKey]) + '\n')
     
-    routines.write(str(count)+' combinations tried\n')
+    routines.write(str(count)+' residue combinations tried\n')
 
-def create_resinter_output(routines, outfile, options, all_combinations=False):
+def create_resinter_output(routines, outfile, options, 
+                           residue_combinations=False,
+                           all_residue_combinations=False):
     """
     Output the interaction energy between each possible residue pair.
     """
@@ -226,13 +325,16 @@ def create_resinter_output(routines, outfile, options, all_combinations=False):
     
     output = extensions.extOutputHelper(routines, outfile)
     
-    if all_combinations:
-        write_all_residue_interaction_energies_combinations(routines, output, options)
+    if residue_combinations or all_residue_combinations:
+        write_all_residue_interaction_energies_combinations(routines, output, options, 
+                                                            all_residue_combinations=all_residue_combinations)
     else:
-        write_residue_interaction_energies(routines.protein.getResidues(), output)
+        save_residue_interaction_energies(routines.protein.getResidues(), output)
     
 
 def run_extension(routines, outroot, options):
     outname = outroot + ".resinter"
     with open(outname, "w") as outfile:
-        create_resinter_output(routines, outfile, options, all_combinations=options.all_combinations)
+        create_resinter_output(routines, outfile, options, 
+                               residue_combinations=options.residue_combinations,
+                               all_residue_combinations=options.all_residue_combinations)

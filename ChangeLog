@@ -5,12 +5,12 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
 - NEW FEATURES
  * Updated propka to version 3.0
  * Added residue interaction energy plugin.
-
-- BUG FIXES
- * Cleaned up white space in several files and some pydev warnings.
- * Improved interface for extensions. 
- * Extension may now add their own command line arguments.
  * Combined hbond and hbondwhatit into one extension (hbond) with new command line parameters. (No more hacking hbond.py)
  * Combined rama, phi, psi into one extension (rama) with new command line parameters.
+ * Extensions may now add their own command line arguments. Extensions with their own command line arguments will be grouped separately.
+ * Improved interface for extensions. 
+ 
+- BUG FIXES
+ * Cleaned up white space in several files and some pydev warnings.
  * Creating print output no longer clears the chain id data from atoms in the data. (Affected resinter plugin) 
 
