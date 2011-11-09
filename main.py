@@ -55,6 +55,7 @@ import getopt
 from optparse import OptionParser, OptionGroup
 import os
 import time
+import copy
 from src import pdb
 from src import utilities
 from src import structures
@@ -263,7 +264,8 @@ def runPDB2PQR(pdblist, ff,
         # Process the extensions
         for ext in extentions:
             module = extensions.extDict[ext]
-            module.run_extension(myRoutines, outroot, extensionOptions)
+            tempRoutines = copy.deepcopy(myRoutines)
+            module.run_extension(tempRoutines, outroot, extensionOptions)
     
         if verbose:
             print "Total time taken: %.2f seconds\n" % (time.time() - start)
@@ -392,7 +394,8 @@ def runPDB2PQR(pdblist, ff,
     # Process the extensions
     for ext in extentions:
         module = extensions.extDict[ext]
-        module.run_extension(myRoutines, outroot, extensionOptions)
+        tempRoutines = copy.deepcopy(myRoutines)
+        module.run_extension(tempRoutines, outroot, extensionOptions)
 
     if verbose:
         print "Total time taken: %.2f seconds\n" % (time.time() - start)
@@ -493,8 +496,7 @@ def mainCommand(argv):
            help="setting which reference to use for stability calculations [neutral/low-pH]")
     
     
-    #extentionGroups = extensions.setupExtensionsOptions(parser)
-    extensions.setupExtensionsOptions(parser)
+     extensions.setupExtensionsOptions(parser)
     
     (options, args) = parser.parse_args() 
     
@@ -609,19 +611,6 @@ def mainCommand(argv):
         
     #I see no point in hiding options from extentions.
     extensionOpts = options
-    
-    #Filter out the options specifically for extentions or propka.
-    #Passed into runPDB2PQR, but not used by any extention yet.
-#    extensionOpts = ExtraOptions()
-#    
-#    if extentionsGroup is not None:
-#        for opt in extentionsGroup.option_list:
-#            if opt.dest == 'active_extensions':
-#                continue
-#            setattr(extensionOpts, opt.dest, 
-#                    getattr(options, opt.dest))
-            
-    
 
     #TODO: The ideal would be to pass a file like object for the second
     # argument and add a third for names then

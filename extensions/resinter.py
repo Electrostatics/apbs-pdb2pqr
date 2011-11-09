@@ -2,12 +2,10 @@
     Resinter extension
 
     Print interaction energy between each residue pair in the protein. 
-
-    Author:  Kyle Monson and Emile Hogan
 """
 
 __date__ = "21 October 2011"
-__author__ = "Kyle Monson, Emile Hogan"
+__authors__ = "Kyle Monson and Emile Hogan"
 
 import extensions
 from src.hydrogens import Optimize
