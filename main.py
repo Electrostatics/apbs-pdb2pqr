@@ -496,7 +496,7 @@ def mainCommand(argv):
            help="setting which reference to use for stability calculations [neutral/low-pH]")
     
     
-     extensions.setupExtensionsOptions(parser)
+    extensions.setupExtensionsOptions(parser)
     
     (options, args) = parser.parse_args() 
     
