@@ -1156,6 +1156,26 @@ fi
 
 
 dnl # -----------------------
+dnl # CHECK WHETHER YOU WANT TO ENABLE PROFILING
+dnl # -----------------------
+
+AC_MSG_CHECKING([for --enable-profiling])
+AC_ARG_ENABLE(
+    [profiling],
+    [AS_HELP_STRING([--enable-profiling], [enable profiling data generation])],
+    [enable_profiling=yes],
+    [enable_profiling=no])
+AC_MSG_RESULT([$enable_profiling])
+
+if test "x$enable_profiling" == "xyes"; then
+    AC_DEFINE([DEBUG],[],[Debug Mode])
+    CFLAGS="${CFLAGS} -pg"
+    FFLAGS="${FFLAGS} -pg"
+fi
+
+
+
+dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
 dnl # -----------------------
 AC_MSG_CHECKING([for --disable-openmp])
