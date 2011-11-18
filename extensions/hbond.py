@@ -42,10 +42,10 @@ def addExtensionOptions(extensionGroup):
     extensionGroup.add_option('--whatif', dest='whatif', action='store_true', default=False,
                               help='Change hbond output to WHAT-IF format.')
     
-    extensionGroup.add_option('--angle_cutoff', dest='angle_cutoff', action='store', default=ANGLE_CUTOFF,
+    extensionGroup.add_option('--angle_cutoff', dest='angle_cutoff',  type="float", action='store', default=ANGLE_CUTOFF,
                               help='Angle cutoff to use when creating hbond data (default %s)' % ANGLE_CUTOFF)
     
-    extensionGroup.add_option('--distance_cutoff', dest='distance_cutoff', action='store', default=DIST_CUTOFF,
+    extensionGroup.add_option('--distance_cutoff', dest='distance_cutoff',  type="float", action='store', default=DIST_CUTOFF,
                               help='Distance cutoff to use when creating hbond data (default %s)' % DIST_CUTOFF)
     
     extensionGroup.add_option('--old_distance_method', dest='old_distance_method', action='store_true', default=False,
