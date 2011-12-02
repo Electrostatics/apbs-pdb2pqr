@@ -20,40 +20,47 @@
  *
  * APBS -- Adaptive Poisson-Boltzmann Solver
  *
- * Nathan A. Baker (nathan.baker@pnl.gov)
- * Pacific Northwest National Laboratory
+ *  Nathan A. Baker (nathan.baker@pnnl.gov)
+ *  Pacific Northwest National Laboratory
  *
- * Additional contributing authors listed in the code documentation.
+ *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
+ * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Institute, Pacific Northwest Division for the U.S. Department of Energy.
+ *
+ * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
+ * Portions Copyright (c) 2002-2010, Nathan A. Baker.
+ * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * California.
+ * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: 
  *
- * -  Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
+ * Redistribution and use in source and binary forms, with or without 
+ * modification, are permitted provided that the following conditions are met:
  * 
- * - Redistributions in binary form must reproduce the above copyright notice,
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.  
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, 
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
- * 
- * - Neither the name of Washington University in St. Louis nor the names of its
- * contributors may be used to endorse or promote products derived from this
- * software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
+ * Neither the name of the developer nor the names of its contributors may be 
+ * used to endorse or promote products derived from this software without 
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
  */
@@ -135,42 +142,48 @@ int main(
 	/* Instructions: */
 	char header[] = {"\n\n\
 ----------------------------------------------------------------------\n\
-	APBS -- Adaptive Poisson-Boltzmann Solver\n\
-	Version 1.3\n\
-	\n\
-	Nathan A. Baker (nathan.baker@pnl.gov)\n\
-	Washington University in St. Louis\n\
-	\n\
-	Additional contributing authors listed in the code documentation.\n\
-	\n\
-	Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.\n\
-	All rights reserved.\n\
-	\n\
-	Redistribution and use in source and binary forms, with or without\n\
-	modification, are permitted provided that the following conditions are met: \n\
-	\n\
-	* Redistributions of source code must retain the above copyright notice, this\n\
-	list of conditions and the following disclaimer.  \n\
-	\n\
-	* Redistributions in binary form must reproduce the above copyright notice,\n\
-	this list of conditions and the following disclaimer in the documentation\n\
-	and/or other materials provided with the distribution.\n\
-	\n\
-	* Neither the name of Washington University in St. Louis nor the names of its\n\
-	contributors may be used to endorse or promote products derived from this\n\
-	software without specific prior written permission.\n\
-	\n\
-	THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS\n\
-	\"AS IS\" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT\n\
-	LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR\n\
-	A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR\n\
-	CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,\n\
-	EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,\n\
-	PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR\n\
-	PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF\n\
-	LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\n\
-	NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n\
-	SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\
+    APBS -- Adaptive Poisson-Boltzmann Solver\n\
+    Version 1.3\n\
+    \n\
+    Nathan A. Baker (nathan.baker@pnnl.gov)\n\
+    Pacific Northwest National Laboratory\n\
+    \n\
+    Additional contributing authors listed in the code documentation.\n\
+    \n\
+    Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific\n\
+    Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific\n\
+    Northwest Division for the U.S. Department of Energy.\n\
+    \n\
+    Portions Copyright (c) 2002-2010, Washington University in St. Louis.\n\
+    Portions Copyright (c) 2002-2010, Nathan A. Baker.\n\
+    Portions Copyright (c) 1999-2002, The Regents of the University of California.\n\
+    Portions Copyright (c) 1995, Michael Holst.\n\
+    All rights reserved.\n\
+    \n\
+    Redistribution and use in source and binary forms, with or without\n\
+    modification, are permitted provided that the following conditions are met:\n\
+    \n\
+    * Redistributions of source code must retain the above copyright notice, this\n\
+      list of conditions and the following disclaimer.\n\
+    \n\
+    * Redistributions in binary form must reproduce the above copyright notice,\n\
+      this list of conditions and the following disclaimer in the documentation\n\
+      and/or other materials provided with the distribution.\n\
+    \n\
+    * Neither the name of the developer nor the names of its contributors may be\n\
+      used to endorse or promote products derived from this software without\n\
+      specific prior written permission.\n\
+    \n\
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND\n\
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED\n\
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE\n\
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR\n\
+    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n\
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n\
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\n\
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n\
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n\
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n\
 ----------------------------------------------------------------------\n\
 	APBS uses FETK (the Finite Element ToolKit) to solve the\n\
 	Poisson-Boltzmann equation numerically.  FETK is a portable collection\n\
