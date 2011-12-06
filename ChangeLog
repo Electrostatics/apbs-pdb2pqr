@@ -5,3 +5,4 @@ complete change log
 * Fixed a bug in routines.c: loadKappaMaps() is missing the case for reading kappa map in gz format.
 * Fixed a bug in Vgrid_readGZ: the buffer length is uninitialized for gzgets().
 * Fixed configure to setup python wrappers on the Mac with an intel compiler.
+* Updated all license data to reflect most current information for APBS.
