@@ -1,0 +1,260 @@
+
+=>> Init data
+    Presuming executables of amber suite to be in /home/rok/Amber-090508/amber11/exe
+
+=>> Reading input parameters
+    Found PREFIX => ras_raf_II_wt
+    Found PATH => ../01_GenerateSnapshots/
+    Found COMPLEX => 1
+    Found RECEPTOR => 1
+    Found LIGAND => 1
+    Found COMPT => ../ras_raf_II_wt.prmtop
+    Found RECPT => ../ras_II_wt.prmtop
+    Found LIGPT => ../raf_wt.prmtop
+    Found GC => 0
+    Found AS => 0
+    Found DC => 0
+    Found MM => 1
+    Found GB => 0
+    Found PB => 1
+    Found MS => 0
+    Found NM => 0
+    Found PROC => 3
+    Found REFE => 0
+    Found INDI => 1.0
+    Found EXDI => 80.0
+    Found SCALE => 2
+    Found LINIT => 1000
+    Found PRBRAD => 1.4
+    Found ISTRNG => 0.0
+    Found RADIOPT => 0
+    Found SRAD => 1.4
+    Found BCFL => 2
+    Found SRFM => 1
+    Found CHGM => 1
+    Found SWIN => 0.3
+    Found GAMMA => 0.105
+    Found DIELC => 1.0
+    Found IGB => 2
+    Found GBSA => 1
+    Found SALTCON => 0.00
+    Found EXTDIEL => 80.0
+    Found INTDIEL => 1.0
+    Found SURFTEN => 0.0072
+    Found SURFOFF => 0.00
+    Found PROBE => 0.0
+
+=>> Checking sanity
+    Checking GENERAL
+    Setting START to default 1
+    Setting STOP to default 10e10
+    Setting OFFSET to default 1
+    Setting VERBOSE to default 0
+    Checking MM
+    Checking PB
+
+=>> Creating input
+    Sander input
+    iAPBS input
+
+=>> Calculating energy / entropy contributions
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_com.crd.1
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_com.crd.2
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_com.crd.3
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_com.crd.4
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_com.crd.5
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_rec.crd.1
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_rec.crd.2
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_rec.crd.3
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_rec.crd.4
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_rec.crd.5
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_lig.crd.1
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_lig.crd.2
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_lig.crd.3
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_lig.crd.4
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+    Calc contrib for ../01_GenerateSnapshots/ras_raf_II_wt_lig.crd.5
+        Calc MM/GB/SAS
+        Calc Amber/iAPBS
+
+=>> Doing statistics
+=>> Values of global variables
+    TEMP   = 300
+    R      = 8.314
+    gammaP = 1
+    betaP  = 0
+    gammaG = 0.0072
+    betaG  = 0
+=>> Reading input
+=>> Reordering files
+    Final order:
+    1. ras_raf_II_wt_com.all.out: - 
+    2. ras_raf_II_wt_rec.all.out: - 
+    3. ras_raf_II_wt_lig.all.out: - 
+=>> Reading files
+    Reading ras_raf_II_wt_com.all.out
+    WARNING: Missing ELRAELE for PB in 0 -> Taken from -1
+    WARNING: Missing PBCAV for PB in 0 -> Taken from -1
+    WARNING: Missing EPB for PB in 0 -> Taken from -1
+    WARNING: Missing PBDIS for PB in 0 -> Taken from -1
+    WARNING: Missing ELRAELE for PB in 1 -> Taken from 0
+    WARNING: Missing PBCAV for PB in 1 -> Taken from 0
+    WARNING: Missing EPB for PB in 1 -> Taken from 0
+    WARNING: Missing PBDIS for PB in 1 -> Taken from 0
+    WARNING: Missing ELRAELE for PB in 2 -> Taken from 1
+    WARNING: Missing PBCAV for PB in 2 -> Taken from 1
+    WARNING: Missing EPB for PB in 2 -> Taken from 1
+    WARNING: Missing PBDIS for PB in 2 -> Taken from 1
+    WARNING: Missing ELRAELE for PB in 3 -> Taken from 2
+    WARNING: Missing PBCAV for PB in 3 -> Taken from 2
+    WARNING: Missing EPB for PB in 3 -> Taken from 2
+    WARNING: Missing PBDIS for PB in 3 -> Taken from 2
+    WARNING: Missing ELRAELE for PB in 4 -> Taken from 3
+    WARNING: Missing PBCAV for PB in 4 -> Taken from 3
+    WARNING: Missing EPB for PB in 4 -> Taken from 3
+    WARNING: Missing PBDIS for PB in 4 -> Taken from 3
+    Reading ras_raf_II_wt_rec.all.out
+    Checking CALC
+    WARNING: Missing ELRAELE for PB in 0 -> Taken from -1
+    WARNING: Missing PBCAV for PB in 0 -> Taken from -1
+    WARNING: Missing EPB for PB in 0 -> Taken from -1
+    WARNING: Missing PBDIS for PB in 0 -> Taken from -1
+    WARNING: Missing ELRAELE for PB in 1 -> Taken from 0
+    WARNING: Missing PBCAV for PB in 1 -> Taken from 0
+    WARNING: Missing EPB for PB in 1 -> Taken from 0
+    WARNING: Missing PBDIS for PB in 1 -> Taken from 0
+    WARNING: Missing ELRAELE for PB in 2 -> Taken from 1
+    WARNING: Missing PBCAV for PB in 2 -> Taken from 1
+    WARNING: Missing EPB for PB in 2 -> Taken from 1
+    WARNING: Missing PBDIS for PB in 2 -> Taken from 1
+    WARNING: Missing ELRAELE for PB in 3 -> Taken from 2
+    WARNING: Missing PBCAV for PB in 3 -> Taken from 2
+    WARNING: Missing EPB for PB in 3 -> Taken from 2
+    WARNING: Missing PBDIS for PB in 3 -> Taken from 2
+    WARNING: Missing ELRAELE for PB in 4 -> Taken from 3
+    WARNING: Missing PBCAV for PB in 4 -> Taken from 3
+    WARNING: Missing EPB for PB in 4 -> Taken from 3
+    WARNING: Missing PBDIS for PB in 4 -> Taken from 3
+    Reading ras_raf_II_wt_lig.all.out
+    Checking CALC
+    WARNING: Missing ELRAELE for PB in 0 -> Taken from -1
+    WARNING: Missing PBCAV for PB in 0 -> Taken from -1
+    WARNING: Missing EPB for PB in 0 -> Taken from -1
+    WARNING: Missing PBDIS for PB in 0 -> Taken from -1
+    WARNING: Missing ELRAELE for PB in 1 -> Taken from 0
+    WARNING: Missing PBCAV for PB in 1 -> Taken from 0
+    WARNING: Missing EPB for PB in 1 -> Taken from 0
+    WARNING: Missing PBDIS for PB in 1 -> Taken from 0
+    WARNING: Missing ELRAELE for PB in 2 -> Taken from 1
+    WARNING: Missing PBCAV for PB in 2 -> Taken from 1
+    WARNING: Missing EPB for PB in 2 -> Taken from 1
+    WARNING: Missing PBDIS for PB in 2 -> Taken from 1
+    WARNING: Missing ELRAELE for PB in 3 -> Taken from 2
+    WARNING: Missing PBCAV for PB in 3 -> Taken from 2
+    WARNING: Missing EPB for PB in 3 -> Taken from 2
+    WARNING: Missing PBDIS for PB in 3 -> Taken from 2
+    WARNING: Missing ELRAELE for PB in 4 -> Taken from 3
+    WARNING: Missing PBCAV for PB in 4 -> Taken from 3
+    WARNING: Missing EPB for PB in 4 -> Taken from 3
+    WARNING: Missing PBDIS for PB in 4 -> Taken from 3
+=>> Treat special parameters
+treat_special(): No PBCAV, PBDIS, ELRAELE and EPB found, assuming iAPBS calculation.
+treat_special(): No PBCAV, PBDIS, ELRAELE and EPB found, assuming iAPBS calculation.
+treat_special(): No PBCAV, PBDIS, ELRAELE and EPB found, assuming iAPBS calculation.
+=>> Calc missing parameters
+    Processing MM GAS
+        Doing 1 MM ELE
+    No values for MM_ELE existing -> Skipping
+    Processing MM INT
+        Doing 1 MM BOND
+        Doing 1 MM ANGLE
+        Doing 1 MM DIHED
+        Doing 1 MM BOND
+        Doing 1 MM ANGLE
+        Doing 1 MM DIHED
+        Doing 1 MM BOND
+        Doing 1 MM ANGLE
+        Doing 1 MM DIHED
+    Processing MM ELE
+        Doing 1 MM ELENB
+        Doing 1 MM ELE14
+        Doing 1 MM ELENB
+        Doing 1 MM ELE14
+        Doing 1 MM ELENB
+        Doing 1 MM ELE14
+    Processing MM VDW
+        Doing 1 MM VDWNB
+        Doing 1 MM VDW14
+        Doing 1 MM VDWNB
+        Doing 1 MM VDW14
+        Doing 1 MM VDWNB
+        Doing 1 MM VDW14
+    Processing PB PBSOL
+        Doing 1 PB PBCAL
+        Doing 1 PB PBSUR
+        Doing 1 PB PBDIS
+        Doing 1 PB PBCAL
+        Doing 1 PB PBSUR
+        Doing 1 PB PBDIS
+        Doing 1 PB PBCAL
+        Doing 1 PB PBSUR
+        Doing 1 PB PBDIS
+    Processing PB PBELE
+        Doing 1 PB PBCAL
+        Doing 1 MM ELE
+        Doing 1 PB PBCAL
+        Doing 1 MM ELE
+        Doing 1 PB PBCAL
+        Doing 1 MM ELE
+    Processing PB PBTOT
+        Doing 1 PB PBSOL
+        Doing 1 MM GAS
+    No values for MM_GAS existing -> Skipping
+    Processing MM GAS
+        Doing 1 MM ELE
+        Doing 1 MM VDW
+        Doing 1 MM INT
+        Doing 1 MM ELE
+        Doing 1 MM VDW
+        Doing 1 MM INT
+        Doing 1 MM ELE
+        Doing 1 MM VDW
+        Doing 1 MM INT
+    Processing PB PBTOT
+        Doing 1 PB PBSOL
+        Doing 1 MM GAS
+        Doing 1 PB PBSOL
+        Doing 1 MM GAS
+        Doing 1 PB PBSOL
+        Doing 1 MM GAS
+=>> Calc delta from raw data
+=>> Calc average and stddev
+=>> Print output to ras_raf_II_wt_statistics.out
+=>> Print output (snap) to ras_raf_II_wt_statistics.out.snap

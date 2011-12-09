@@ -1,0 +1,113 @@
+
+= APBS as an alternative PB solver in sander =
+
+
+APBS is a robust, numerical Poisson-Boltzmann solver with many
+features (for more details see http://apbs.sourceforge.net/). APBS can
+be used as an alternative PB solver in sander when compiled with
+sander using iAPBS. sander.APBS can be then used for implicit solvent
+MD simulations, calculation of solvation energies and electrostatic
+properties and to generate electrostatic potential maps for
+visualization. It can also be used in the MM_PBSA approach to estimate
+solvation and apolar (GAMMA * SASA) energy contributions to free
+energies of binding.
+
+Please see APBS documentation
+(http://apbs.sourceforge.net/doc/user-guide/index.html) for definition
+of APBS input parameters and iAPBS documentation
+(http://mccammon.ucsd.edu/iapbs/) on how to build sander.APBS and how
+to use it.
+
+
+== Using sander.APBS in MM_PBSA ==
+
+To use mm_pbsa.pl script with sander.APBS the following is necessary: 
+
+- sander.APBS must be installed in $AMBERHOME/exe directory.
+- @GENERAL and @PB sections in input file need to be modified.
+- PQR files for ligand, receptor and complex need to be prepared if an
+  alternate charge/radius scheme is used (which is recommended).
+
+
+=== Input file description ===
+
+The mm_pbsa.in input file which is included in the Amber distribution
+can be used with the following modifications:
+
+- Turn on PB and turn off GB and MS calculations in the @GENERAL
+  section of the input file:
+
+@GENERAL
+MM                    1
+GB                    0
+PB                    1
+MS                    0
+
+
+- Input file @PB section:
+
+#
+@PB
+#
+#
+# PROC = 3 uses sander.APBS as the PB solver
+# REFE - REFE = 0 is always used with sander.APBS
+# INDI and EXDI are solute and solvent dielectric constants
+# SCALE - grid spacing in number of grid points per A
+# LINIT - no effect
+# PRBRAD - solvent probe radius in A
+# ISTRNG - ionic strength in mM
+#
+# RADIOPT - option to set up radii and charges for PB calculation:
+#  0: uses the radii from prmtop files
+#  2: reads in PQR files with radii/charges information from
+#     lig.pqr, rec.pqr and com.pqr PQR files
+#
+# APBS options:
+# BCFL, SRFM, CHGM, SWIN, GAMMA - see APBS and iAPBS documentation for details
+# GAMMA is surface tension for apolar energies (in kJ/mol/A^2),
+# defaults to 0.105 (Please note the units!)
+#
+PROC       3
+REFE       0
+INDI       1.0
+EXDI       80.0
+SCALE      2
+LINIT      1000
+PRBRAD     1.4
+ISTRNG     0.0
+#
+RADIOPT    0
+#
+BCFL   2
+SRFM   1
+CHGM   1
+SWIN   0.3
+GAMMA  0.105
+#
+
+=== PQR files ===
+
+With RADIOPT=2 three PQR files are required: lig.pqr, rec.pqr and
+com.pqr with charge/radius information for the ligand, receptor and
+complex, respectively. This is the recommended option to get better
+estimates of solvation energies.
+
+The PQR files can be created with pdb2pqr utility:
+
+pdb2pqr.py --assign-only --ff=amber com.pdb com.pqr
+pdb2pqr.py --assign-only --ff=amber rec.pdb rec.pqr
+pdb2pqr.py --assign-only --ff=amber lig.pdb lig.pqr
+
+
+where --ff=amber is the requested force field charge/radius
+parameters. Several options are available (Amber, CHARMM, PARSE, etc.)
+and also a user defined charge/radius scheme is supported (with
+--ff=myff option).
+
+pdb2pqr.py can be obtained from http://pdb2pqr.sourceforge.net/.
+PDB2PQR service is also available on the web at
+http://nbcr.net/pdb2pqr/.  The PDB files (com.pdb, rec.pdb and
+lig.pdb) can be generated using ambpdb utility.
+
+

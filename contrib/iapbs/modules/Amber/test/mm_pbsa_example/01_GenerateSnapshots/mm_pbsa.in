@@ -1,0 +1,134 @@
+#
+# Input parameters for mm_pbsa.pl
+# This example just generates snapshots from a trajectory file
+#
+# Holger Gohlke
+# 08.01.2002
+#
+################################################################################
+@GENERAL
+#
+# General parameters
+#   0: means NO; >0: means YES
+#
+#   mm_pbsa allows to calculate (absolute) free energies for one molecular
+#     species or a free energy difference according to:
+#
+#     Receptor + Ligand = Complex, 
+#     DeltaG = G(Complex) - G(Receptor) - G(Ligand).
+#
+#   PREFIX - To the prefix, "{_com, _rec, _lig}.crd.Number" is added during 
+#            generation of snapshots as well as during mm_pbsa calculations.
+#   PATH - Specifies the location where to store or get snapshots.
+#
+#   COMPLEX - Set to 1 if free energy difference is calculated.
+#   RECEPTOR - Set to 1 if either (absolute) free energy or free energy
+#              difference are calculated.
+#   LIGAND - Set to 1 if free energy difference is calculated.
+#
+#   COMPT - parmtop file for the complex (not necessary for option GC).
+#   RECPT - parmtop file for the receptor (not necessary for option GC).
+#   LIGPT - parmtop file for the ligand (not necessary for option GC).
+#
+#   GC - Snapshots are generated from trajectories (see below).
+#   AS - Residues are mutated during generation of snapshots from trajectories.
+#   DC - Decompose the free energies into individual contributions 
+#        (only works with MM and GB).
+#
+#   MM - Calculation of gas phase energies using sander.
+#   GB - Calculation of desolvation free energies using the GB models in sander
+#        (see below).
+#   PB - Calculation of desolvation free energies using delphi (see below).
+#        Calculation of nonpolar solvation free energies according to
+#        the NPOPT option in pbsa (see below).
+#   MS - Calculation of nonpolar contributions to desolvation using molsurf
+#        (see below).
+#        If MS == 0 and GB == 1, nonpolar contributions are calculated with the
+#        LCPO method in sander.
+#        If MS == 0 and PB == 1, nonpolar contributions are calculated according
+#        the NPOPT option in pbsa (see below).
+#   NM - Calculation of entropies with nmode.
+#
+PREFIX                ras_raf_II_wt
+PATH                  ./
+#
+COMPLEX               1
+RECEPTOR              1
+LIGAND                1
+#
+COMPT                 ../ras_raf_II_wt.prmtop
+RECPT                 ../ras_II_wt.prmtop
+LIGPT                 ../raf_wt.prmtop
+#
+GC                    1
+AS                    0
+DC                    0
+#
+MM                    0 
+GB                    0
+PB                    0
+MS                    0
+#
+NM                    0
+#
+################################################################################
+@MAKECRD
+#
+# The following parameters are passed to make_crd_hg, which extracts snapshots
+#   from trajectory files. (This section is only relevant if GC = 1 OR AS = 1 above.)
+#
+#   BOX - "YES" means that periodic boundary conditions were used during MD 
+#         simulation and that box information has been printed in the
+#         trajecotry files; "NO" means opposite.
+#   NTOTAL - Total number of atoms per snapshot printed in the trajectory file
+#            (including water, ions, ...).
+#   NSTART - Start structure extraction from NSTART snapshot.
+#   NSTOP - Stop structure extraction at NSTOP snapshot.
+#   NFREQ - Every NFREQ structure will be extracted from the trajectory.
+#
+#   NUMBER_LIG_GROUPS - Number of subsequent LSTART/LSTOP combinations to
+#                       extract atoms belonging to the ligand.
+#   LSTART - Number of first ligand atom in the trajectory entry.
+#   LSTOP - Number of last ligand atom in the trajectory entry.      
+#   NUMBER_REC_GROUPS - Number of subsequent RSTART/RSTOP combinations to
+#                       extract atoms belonging to the receptor.
+#   RSTART - Number of first receptor atom in the trajectory entry.
+#   RSTOP - Number of last receptor atom in the trajectory entry.      
+#   Note: If only one molecular species is extracted, use only the receptor
+#         parameters (NUMBER_REC_GROUPS, RSTART, RSTOP).
+#   
+BOX                   NO
+NTOTAL                36606
+NSTART                1
+NSTOP                 5
+NFREQ                 1
+#
+NUMBER_LIG_GROUPS     1
+LSTART                2622
+LSTOP                 3862
+NUMBER_REC_GROUPS     2
+RSTART                1
+RSTOP                 2621
+RSTART                3863
+RSTOP                 3907
+#
+#################################################################################
+@TRAJECTORY
+#
+# Trajectory names
+#
+#   The following trajectories are used to extract snapshots with "make_crd_hg":
+#   Each trajectory name must be preceeded by the TRAJECTORY card.
+#   Subsequent trajectories are considered together; trajectories may be 
+#     in ascii as well as in .gz format. 
+#   To be able to identify the title line, it must be identical in all files. 
+#
+TRAJECTORY            ./md_traj_short.mdcrd
+#
+################################################################################
+@PROGRAMS
+#
+# Additional program executables can be defined here
+#
+#
+################################################################################ 

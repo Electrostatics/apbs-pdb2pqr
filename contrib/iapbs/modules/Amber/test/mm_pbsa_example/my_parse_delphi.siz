@@ -1,0 +1,14 @@
+!my siz based on PARSE 
+!(value for P taken from Pauling,
+! for Mg from Biophys J 2001, 80, 1151)
+atom__res_radius_
+O         1.4
+H         1.0
+1H        1.0
+2H        1.0
+3H        1.0
+C         1.7
+N         1.5
+S         1.85
+P         1.90
+Mg        0.99

@@ -1,0 +1,20 @@
+MM
+GB
+PB
+MS
+1
+ BOND    =      214.4899  ANGLE   =      667.3993  DIHED      =      705.7143
+ VDWAALS =     -536.1096  EEL     =    -4670.1313  EGB        =    -1661.5085
+ 1-4 VDW =      278.8469  1-4 EEL =     2572.1143  RESTRAINT  =        0.0000
+corrected reaction field energy:    -2794.537584
+surface area =   5377.043
+ECAVITY =   5377.043
+EDISPER = 0.0000
+2
+ BOND    =      241.3035  ANGLE   =      674.5400  DIHED      =      739.5616
+ VDWAALS =     -517.4498  EEL     =    -4652.4735  EGB        =    -1715.4760
+ 1-4 VDW =      271.8454  1-4 EEL =     2587.9641  RESTRAINT  =        0.0000
+corrected reaction field energy:    -2896.037747
+surface area =   5378.266
+ECAVITY =   5378.266
+EDISPER = 0.0000

@@ -1,0 +1,49 @@
+# iAPBS/Amber validation/test directory
+
+echo "AMBERHOME: $AMBERHOME"
+
+cd Solvation
+./Run.apbs.solv
+
+export TESTsander=$AMBERHOME/exe/sander.APBS
+cd apbs_radi
+./Run.ion.min
+
+cd pbsa_pgb/iAPBS
+./Run.test.sh
+
+cd Minimization
+./Run.apbs.min
+
+cd Visualization
+./Run.apbs.vis
+
+cd apbs_min/
+./Run.apbs.min
+
+cd apbs_radi/
+./Run.ion.min
+
+cd apbs_solv/
+./Run.apbs.solv
+
+# SM-PBE
+cd smpbe
+./Run.apbs.smpbe
+
+
+# MM-PBSA test
+cd mm_pbsa
+$AMBERHOME/src/mm_pbsa/mm_pbsa.pl test.mmpbsa
+
+# MM-PBSA example
+cd mm_pbsa_example/
+make
+cd 02_MMPBSA_Stability/
+diff ras_raf_II_wt_statistics.out.apbs.save ras_raf_II_wt_statistics.out
+cd ../03_MMPBSA_Binding
+diff ras_raf_II_wt_com.all.out.apbs.save ras_raf_II_wt_com.all.out
+diff ras_raf_II_wt_lig.all.out.apbs.save ras_raf_II_wt_lig.all.out
+diff ras_raf_II_wt_rec.all.out.apbs.save ras_raf_II_wt_rec.all.out
+diff ras_raf_II_wt_statistics.out.apbs.save ras_raf_II_wt_statistics.out
+
