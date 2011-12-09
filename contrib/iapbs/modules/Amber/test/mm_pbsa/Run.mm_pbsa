@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ -z "$AMBERHOME" ] ; then
+   echo "\$AMBERHOME not defined, quiting ..."
+   exit 1
+fi
+
+export MCSH_HOME=/dev/null
+
+$AMBERHOME/exe/mm_pbsa.pl test.mmpbsa > log
+
+for i in snapshot_com.all.out snapshot_lig.all.out \
+ snapshot_rec.all.out snapshot_statistics.out
+do
+  echo "Diffing $i ..."
+  diff save/$i $i
+done
+
+
+echo "Running statistics ..."
+
+$AMBERHOME/exe/mm_pbsa_statistics.pl  2 0 \
+ snapshot_statistics.in statistics.out > log.stat
+
+
+
+
+
+

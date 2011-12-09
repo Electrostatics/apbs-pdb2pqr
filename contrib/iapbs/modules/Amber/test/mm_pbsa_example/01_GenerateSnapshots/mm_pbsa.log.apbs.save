@@ -1,0 +1,55 @@
+
+=>> Init data
+    Presuming executables of amber suite to be in /home/rok/Amber-090508/amber11/exe
+
+=>> Reading input parameters
+    Found PREFIX => ras_raf_II_wt
+    Found PATH => ./
+    Found COMPLEX => 1
+    Found RECEPTOR => 1
+    Found LIGAND => 1
+    Found COMPT => ../ras_raf_II_wt.prmtop
+    Found RECPT => ../ras_II_wt.prmtop
+    Found LIGPT => ../raf_wt.prmtop
+    Found GC => 1
+    Found AS => 0
+    Found DC => 0
+    Found MM => 0
+    Found GB => 0
+    Found PB => 0
+    Found MS => 0
+    Found NM => 0
+    Found BOX => NO
+    Found NTOTAL => 36606
+    Found NSTART => 1
+    Found NSTOP => 5
+    Found NFREQ => 1
+    Found NUMBER_LIG_GROUPS => 1
+    Found LSTART => 2622
+    Found LSTOP => 3862
+    Found NUMBER_REC_GROUPS => 2
+    Found RSTART => 1
+    Found RSTOP => 2621
+    Found RSTART => 3863
+    Found RSTOP => 3907
+    Found TRAJECTORY => ./md_traj_short.mdcrd
+
+=>> Checking sanity
+    Checking GENERAL
+    Setting START to default 1
+    Setting STOP to default 10e10
+    Setting OFFSET to default 1
+    Setting VERBOSE to default 0
+    Checking GC
+    Checking TRAJ
+
+=>> Creating input
+    make_crd input
+
+=>> Creating coordinates
+    Executing makecrd
+  
+ Amber8 Module: make_crg_hg
+  
+ usage: make_crd_hg <  trajectory_file 
+  

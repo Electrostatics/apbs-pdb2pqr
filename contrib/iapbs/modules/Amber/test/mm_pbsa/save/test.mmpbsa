@@ -1,0 +1,214 @@
+#
+# Input parameters for mm_pbsa.pl
+#
+# Holger Gohlke
+# 08.01.2002
+#
+################################################################################
+@GENERAL
+#
+# General parameters
+#   0: means NO; >0: means YES
+#
+#   mm_pbsa allows to calculate (absolute) free energies for one molecular
+#     species or a free energy difference according to:
+#
+#     Receptor + Ligand = Complex, 
+#     DeltaG = G(Complex) - G(Receptor) - G(Ligand).
+#
+#   PREFIX - To the prefix, "{_com, _rec, _lig}.crd.Number" is added during 
+#            generation of snapshots as well as during mm_pbsa calculations.
+#   PATH - Specifies the location where to store or get snapshots.
+#
+#   COMPLEX - Set to 1 if free energy difference is calculated.
+#   RECEPTOR - Set to 1 if either (absolute) free energy or free energy
+#              difference are calculated.
+#   LIGAND - Set to 1 if free energy difference is calculated.
+#
+#   COMPT - parmtop file for the complex (not necessary for option GC).
+#   RECPT - parmtop file for the receptor (not necessary for option GC).
+#   LIGPT - parmtop file for the ligand (not necessary for option GC).
+#
+#   GC - Snapshots are generated from trajectories (see below).
+#   AS - Residues are mutated during generation of snapshots from trajectories.
+#   DC - Decompose the free energies into individual contributions 
+#        (only works with MM and GB).
+#
+#   MM - Calculation of gas phase energies using sander.
+#   GB - Calculation of desolvation free energies using the GB models in sander
+#        (see below).
+#   PB - Calculation of desolvation free energies using delphi (see below).
+#        Calculation of nonpolar solvation free energies according to
+#        the NPOPT option in pbsa (see below).
+#   MS - Calculation of nonpolar contributions to desolvation using molsurf
+#        (see below).
+#        If MS == 0 and GB == 1, nonpolar contributions are calculated with the
+#        LCPO method in sander.
+#        If MS == 0 and PB == 1, nonpolar contributions are calculated according
+#        the NPOPT option in pbsa (see below).
+#   NM - Calculation of entropies with nmode.
+#
+PREFIX                snapshot
+PATH                  ./Snapshots/
+#
+COMPLEX               1
+RECEPTOR              1
+LIGAND                1
+#
+COMPT                 ./Prmtop/ras-raf.prmtop
+RECPT                 ./Prmtop/ras.prmtop
+LIGPT                 ./Prmtop/raf.prmtop 
+#
+GC                    0
+AS                    0
+DC                    0
+#
+MM                    1 
+GB                    0
+PB                    1
+MS                    0
+#
+NM                    0
+#
+################################################################################
+@PB
+#
+# PB parameters (this section is only relevant if PB = 1 above)
+#
+#   The following parameters are passed to the PB solver.
+#   Additional input parameters may also be added here. See the sander PB
+#   documentation for more options.
+#
+#   PROC -  Determines which method is used for solving the PB equation:
+#           By default, PROC = 2, the pbsa program of the AMBER suite is used.
+#   REFE -  Determines which reference state is taken for PB calc:
+#           By default, REFE = 0, reaction field energy is calculated with
+#           EXDI/INDI. Here, INDI must agree with DIELC from MM part.
+#   INDI -  Dielectric constant for the solute.
+#   EXDI -  Dielectric constant for the surrounding solvent.
+#   ISTRNG - Ionic strength (in mM) for the Poisson-Boltzmann solvent.
+#   PRBRAD - Solvent probe radius in Angstrom:
+#           1.4: with the radii in the prmtop files. Default.
+#           1.6: with the radii optimized by Tan and Luo (In preparation).
+#           See RADIOPT on how to choose a cavity radii set.
+#   RADIOPT - Option to set up radii for PB calc:
+#           0: uses the radii from the prmtop file. Default.
+#           1: uses the radii optimized by Tan and Luo (In preparation)
+#           with respect to the reaction field energies computed
+#           in the TIP3P explicit solvents. Note that optimized radii
+#           are based on AMBER atom types (upper case) and charges.
+#           Radii from the prmtop files are used if the atom types
+#           are defined by antechamber (lower case).
+#   SCALE - Lattice spacing in no. of grids per Angstrom.
+#   LINIT - No. of iterations with linear PB equation.
+#
+# NP Parameters for nonpolar solvation energies if MS = 0
+#
+#   NPOPT - Option for modeling nonpolar solvation free energy.
+#           See sander PB documentation for more information on the
+#           implementations by Tan and Luo (In preparation).
+#           1: uses the solvent-accessible-surface area to correlate total
+#           nonpolar solvation free energy:
+#           Gnp = CAVITY_SURFTEN * SASA + CAVITY_OFFSET. Default.
+#           2: uses the solvent-accessible-surface area to correlate the
+#           repulsive (cavity) term only, and uses a surface-integration
+#           approach to compute the attractive (dispersion) term:
+#           Gnp = Gdisp + Gcavity
+#               = Gdisp + CAVITY_SURFTEN * SASA + CAVITY_OFFSET.
+#           When this option is used, RADIOPT has to be set to 1,
+#           i.e. the radii set optimized by Tan and Luo to mimic Gnp
+#           in TIP3P explicit solvents. Otherwise, there is no guarantee
+#           that Gnp matches that in explicit solvents.
+#   CAVITY_SURFTEN/CAVITY_OFFSET - Values used to compute the nonpolar
+#           solvation free energy Gnp according NPOPT. The default values
+#           are for NPOPT set to 0 and RADIOPT set to 0 (see above).
+#           If NPOPT is set to 1 and RADIOPT set to 1, these two lines
+#           can be removed, i.e. use the default values set in pbsa
+#           for this nonpolar solvation model. Otherwise, please
+#           set these to the following:
+#           CAVITY_SURFTEN: 0.04356
+#           CAVITY_OFFSET: -1.008
+#
+# NP Parameters for nonpolar solvation energies if MS = 1
+#
+#   SURFTEN/SURFOFF - Values used to compute the nonpolar contribution Gnp to
+#           the desolvation according to Gnp = SURFTEN * SASA + SURFOFF.
+#
+PROC                  3
+REFE                  0
+INDI                  1.0
+EXDI                  80.0
+SCALE                 2 
+LINIT                 1000
+PRBRAD                1.4
+# radiopt 0 use default amber parameters
+RADIOPT               0
+# to use a pqr file set radiopt to 2
+# pqr files needed: com.pqr, lig.pqr and rec.pqr
+#RADIOPT               2
+#
+SRAD 1.4
+BCFL 2
+SRFM 1
+CHGM 1
+SWIN 0.3
+ISTRNG 0.0
+#
+#
+################################################################################
+@MM
+#
+# MM parameters (this section is only relevant if MM = 1 above)
+#
+#   The following parameters are passed to sander. 
+#   For further details see the sander documentation.
+#
+#   DIELC - Dielectricity constant for electrostatic interactions.
+#           Note: This is not related to GB calculations.
+#
+DIELC                 1.0
+#
+################################################################################
+@GB
+#
+# GB parameters (this section is only relevant if GB = 1 above)
+#
+#   The first group of the following parameters are passed to sander. 
+#   For further details see the sander documentation.
+#
+#   IGB - Switches between Tsui's GB (1), Onufriev's GB (2, 5).
+#   GBSA - Switches between LCPO (1) and ICOSA (2) method for SASA calc.
+#          Decomposition only works with ICOSA.
+#   SALTCON - Concentration (in M) of 1-1 mobile counterions in solution.
+#   EXTDIEL - Dielectricity constant for the solvent.
+#   INTDIEL - Dielectricity constant for the solute 
+#
+#   SURFTEN / SURFOFF - Values used to compute the nonpolar contribution Gnp to
+#                   the desolvation according to Gnp = SURFTEN * SASA + SURFOFF.
+#
+IGB                   2
+GBSA                  1
+SALTCON               0.00
+EXTDIEL               80.0
+INTDIEL               1.0
+#
+SURFTEN               0.0072
+SURFOFF               0.00
+#
+################################################################################
+@MS
+#
+# Molsurf parameters (this section is only relevant if MS = 1 above)
+#
+#   PROBE - Radius of the probe sphere used to calculate the SAS.
+#           Since Bondi radii are already augmented by 1.4A, PROBE should be 0.0
+#
+PROBE                 0.0
+#
+#################################################################################
+@PROGRAMS
+#
+# Additional program executables can be defined here
+#
+#
+################################################################################ 

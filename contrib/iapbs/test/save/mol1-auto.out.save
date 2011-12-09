@@ -1,0 +1,8 @@
+Reading parameter file mol1-auto.in                                                                    
+ Reading PQR file ...
+Mol. dimensions:   68.682  69.075  70.346
+ main.f: apbs return code:            0
+esenergy (kJ/mol): 96037.37099082
+npenergy (kJ/mol):  2549.53924062
+esenergy (kcal/mol): 22953.48246668
+npenergy (kcal/mol):   609.35450079

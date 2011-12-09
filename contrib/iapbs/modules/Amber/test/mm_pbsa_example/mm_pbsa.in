@@ -1,0 +1,410 @@
+#
+# Input parameters for mm_pbsa.pl
+#
+# Holger Gohlke
+# 08.01.2002
+#
+################################################################################
+@GENERAL
+#
+# General parameters
+#   0: means NO; >0: means YES
+#
+#   mm_pbsa allows to calculate (absolute) free energies for one molecular
+#     species or a free energy difference according to:
+#
+#     Receptor + Ligand = Complex, 
+#     DeltaG = G(Complex) - G(Receptor) - G(Ligand).
+#
+#   VERBOSE - If set to 1, input and output files are not removed. This is useful for
+#             debugging purposes.
+#
+#   PREFIX - To the prefix, "{_com, _rec, _lig}.crd.Number" is added during 
+#            generation of snapshots as well as during mm_pbsa calculations.
+#   PATH - Specifies the location where to store or get snapshots.
+#   START - Specifies the first snapshot to be used in energy calculations (optional, defaults to 1).
+#   STOP - Specifies the last snapshot to be used in energy calculations (optional, defaults to 10e10).
+#   OFFSET - Specifies the offset between snapshots in energy calculations (optional, defaults to 1).
+#
+#   COMPLEX - Set to 1 if free energy difference is calculated.
+#   RECEPTOR - Set to 1 if either (absolute) free energy or free energy
+#              difference are calculated.
+#   LIGAND - Set to 1 if free energy difference is calculated.
+#
+#   COMPT - parmtop file for the complex (not necessary for option GC).
+#   RECPT - parmtop file for the receptor (not necessary for option GC).
+#   LIGPT - parmtop file for the ligand (not necessary for option GC).
+#
+#   GC - Snapshots are generated from trajectories (see below).
+#   AS - Residues are mutated during generation of snapshots from trajectories.
+#   DC - Decompose the free energies into individual contributions 
+#        (only works with MM and GB).
+#
+#   MM - Calculation of gas phase energies using sander.
+#   GB - Calculation of desolvation free energies using the GB models in sander
+#        (see below).
+#   PB - Calculation of desolvation free energies using delphi (see below).
+#        Calculation of nonpolar solvation free energies according to
+#        the NPOPT option in pbsa (see below).
+#   MS - Calculation of nonpolar contributions to desolvation using molsurf
+#        (see below).
+#        If MS == 0 and GB == 1, nonpolar contributions are calculated with the
+#        LCPO method in sander.
+#        If MS == 0 and PB == 1, nonpolar contributions are calculated according
+#        the NPOPT option in pbsa (see below).
+#   NM - Calculation of entropies with nmode.
+#
+VERBOSE               0
+#
+PREFIX                snapshot
+PATH                  ./
+START                 1
+STOP                  5
+OFFSET                1
+#
+COMPLEX               1
+RECEPTOR              1
+LIGAND                1
+#
+COMPT                 ./parm_com.top
+RECPT                 ./parm_rec.top
+LIGPT                 ./parm_lig.top
+#
+GC                    0
+AS                    0
+DC                    0
+#
+MM                    1 
+GB                    1
+PB                    1
+MS                    1
+#
+NM                    0
+#
+################################################################################
+@DECOMP 
+#
+# Energy decomposition parameters (this section is only relevant if DC = 1 above)
+#
+#   Energy decomposition is performed for gasphase energies, desolvation free
+#     energies calculated with GB, and nonpolar contributions to desolvation
+#     using the LCPO method.
+#   For amino acids, decomposition is also performed with respect to backbone 
+#     and sidechain atoms.
+#
+#   DCTYPE - Values of 1 or 2 yield a decomposition on a per-residue basis,
+#            values of 3 or 4 yield a decomposition on a pairwise per-residue
+#               basis. For the latter, so far the number of pairs must not 
+#               exceed the number of residues in the molecule considered.
+#            Values 1 or 3 add 1-4 interactions to bond contributions.
+#            Values 2 or 4 add 1-4 interactions to either electrostatic or vdW 
+#              contributions.
+#
+#   COMREC - Residues belonging to the receptor molecule IN THE COMPLEX.
+#   COMLIG - Residues belonging to the ligand molecule IN THE COMPLEX.
+#   RECRES - Residues in the receptor molecule.
+#   LIGRES - Residues in the ligand molecule.
+#   {COM,REC,LIG}PRI - Residues considered for output.
+#   {REC,LIG}MAP - Residues in the complex which are equivalent to the residues
+#                  in the receptor molecule or the ligand molecule. 
+#
+DCTYPE                2
+#
+COMREC                1-166 254-255
+COMLIG                167-253
+COMPRI                1-255
+RECRES                1-168
+RECPRI                1-168
+RECMAP                1-166 254-255
+LIGRES                1-87
+LIGPRI                1-87
+LIGMAP                167-253
+################################################################################
+@PB
+#
+# PB parameters (this section is only relevant if PB = 1 above)
+#
+#   The following parameters are passed to the PB solver.
+#   Additional input parameters may also be added here. See the sander PB
+#   documentation for more options.
+#
+#   PROC -  Determines which method is used for solving the PB equation:
+#           By default, PROC = 2, the pbsa program of the AMBER suite is used.
+#   REFE -  Determines which reference state is taken for PB calc:
+#           By default, REFE = 0, reaction field energy is calculated with
+#           EXDI/INDI. Here, INDI must agree with DIELC from MM part.
+#   INDI -  Dielectric constant for the solute.
+#   EXDI -  Dielectric constant for the surrounding solvent.
+#   ISTRNG - Ionic strength (in mM) for the Poisson-Boltzmann solvent.
+#   PRBRAD - Solvent probe radius in Angstrom:
+#           1.4: with the radii in the prmtop files. Default.
+#           1.6: with the radii optimized by Tan and Luo (In preparation).
+#           See RADIOPT on how to choose a cavity radii set.
+#   RADIOPT - Option to set up radii for PB calc:
+#           0: uses the radii from the prmtop file. Default.
+#           1: uses the radii optimized by Tan and Luo (In preparation)
+#           with respect to the reaction field energies computed
+#           in the TIP3P explicit solvents. Note that optimized radii
+#           are based on AMBER atom types (upper case) and charges.
+#           Radii from the prmtop files are used if the atom types
+#           are defined by antechamber (lower case).
+#   SCALE - Lattice spacing in no. of grids per Angstrom.
+#   LINIT - No. of iterations with linear PB equation.
+#   IVCAP - If set to 1, a solvent sphere (specified by CUTCAP,XCAP,YCAP, 
+#           and ZCAP) is excised from a box of water. If set to 5, a solvent shell
+#           is excised, specified by CUTCAP (the thickness of the shell in A).
+#           The electrostatic part
+#           of the solvation free energy is estimated from a linear response 
+#           approximation using the explicit water plus a reaction field
+#           contribution from outside the sphere (i.e., a hybrid solvation approach 
+#           is pursued). In addition, the nonpolar 
+#           contribution is estimated from a sum of (attractive) dispersion 
+#           interactions calc. between the solute and the solvent molecules 
+#           plus a (repulsive) cavity contribution. For the latter,
+#           the surface calculation must be done with MS = 1 and the PROBE should
+#           be set to 1.4 to get the solvent excluded surface.
+#   CUTCAP - Radius of the water sphere or thickness of the water shell. 
+#           Note that the sphere must enclose the whole solute.
+#   XCAP  - Location of the center of the water sphere.
+#   YCAP
+#   ZCAP
+#
+# NP Parameters for nonpolar solvation energies if MS = 0
+#
+#   NPOPT - Option for modeling nonpolar solvation free energy.
+#           See sander PB documentation for more information on the
+#           implementations by Tan and Luo (In preparation).
+#           1: uses the solvent-accessible-surface area to correlate total
+#           nonpolar solvation free energy:
+#           Gnp = SURFTEN * SASA + SURFOFF. Default.
+#           2: uses the solvent-accessible-surface area to correlate the
+#           repulsive (cavity) term only, and uses a surface-integration
+#           approach to compute the attractive (dispersion) term:
+#           Gnp = Gdisp + Gcavity
+#               = Gdisp + SURFTEN * SASA + SURFOFF.
+#           When this option is used, RADIOPT has to be set to 1,
+#           i.e. the radii set optimized by Tan and Luo to mimic Gnp
+#           in TIP3P explicit solvents. Otherwise, there is no guarantee
+#           that Gnp matches that in explicit solvents.
+#   SURFTEN/SURFOFF - Values used to compute the nonpolar
+#           solvation free energy Gnp acccording to NPOPT.
+#           If NPOPT = 1 and RADIOPT = 0 (default, see above),
+#           use SURFTEN/SURFOFF parameters that fit with the radii from the
+#           prmtop file, e.g., use SURFTEN: 0.00542; SURFOFF: 0.92 for PARSE radii. 
+#           If NPOPT = 2 and RADIOPT = 1, these two lines
+#           can be removed, i.e. use the default values set in pbsa
+#           for this nonpolar solvation model. Otherwise, please
+#           set these to the following: SURFTEN: 0.04356; OFFSET: -1.008
+#
+# NP Parameters for nonpolar solvation energies if MS = 1
+#
+#   SURFTEN/SURFOFF - Values used to compute the nonpolar contribution Gnp to
+#           the desolvation according to either 
+#           (I) Gnp = SURFTEN * SASA + SURFOFF (if IVCAP = 0) or
+#           (II) Gnp = Gdisp + Gcavity = Gdisp + SURFTEN * SESA + SURFOFF (if IVCAP > 0). 
+#           In the case of (I), use parameters that fit with the radii from the
+#           reaction field calculation. E.g., use SURFTEN: 0.00542, SURFOFF: 0.92 
+#           for PARSE radii or use SURFTEN: 0.005, SURFOFF: 0.86 for Tan & Luo radii.  
+#           In the case of (II), use SURFTEN: 0.069; SURFOFF: 0.00 for calculating the
+#           Gcavity contribution.
+#
+PROC                  2
+REFE                  0
+INDI                  1.0
+EXDI                  80.0
+SCALE                 2
+LINIT                 1000
+PRBRAD                1.4
+ISTRNG                0.0
+RADIOPT               0
+NPOPT                 1
+#
+SURFTEN               0.00542
+SURFOFF               0.92
+#
+IVCAP                 0
+CUTCAP                -1.0
+XCAP                  0.0
+YCAP                  0.0
+ZCAP                  0.0
+#
+################################################################################
+@MM
+#
+# MM parameters (this section is only relevant if MM = 1 above)
+#
+#   The following parameters are passed to sander. 
+#   For further details see the sander documentation.
+#
+#   DIELC - Dielectricity constant for electrostatic interactions.
+#           Note: This is not related to GB calculations.
+#
+DIELC                 1.0
+#
+################################################################################
+@GB
+#
+# GB parameters (this section is only relevant if GB = 1 above)
+#
+#   The first group of the following parameters are passed to sander. 
+#   For further details see the sander documentation.
+#
+#   IGB - Switches between Tsui's GB (1) and Onufriev's GB (2, 5).
+#   GBSA - Switches between LCPO (1) and ICOSA (2) method for SASA calc.
+#          Decomposition only works with ICOSA.
+#   SALTCON - Concentration (in M) of 1-1 mobile counterions in solution.
+#   EXTDIEL - Dielectricity constant for the solvent.
+#   INTDIEL - Dielectricity constant for the solute.
+#
+#   SURFTEN / SURFOFF - Values used to compute the nonpolar contribution Gnp to
+#                   the desolvation according to Gnp = SURFTEN * SASA + SURFOFF.
+#
+IGB                   2
+GBSA                  1
+SALTCON               0.00
+EXTDIEL               80.0
+INTDIEL               1.0
+#
+SURFTEN               0.0072
+SURFOFF               0.00
+#
+################################################################################
+@MS
+#
+# Molsurf parameters (this section is only relevant if MS = 1 above)
+#
+#   PROBE - Radius of the probe sphere used to calculate the SAS.
+#           In general, since Bondi radii are already augmented by 1.4A, 
+#           PROBE should be 0.0
+#           In IVCAP = 1 or 5, the solvent excluded surface is required for
+#           calculating the cavity contribution. Bondi radii are not 
+#           augmented in this case and PROBE should be 1.4.
+#
+PROBE                 0.0
+#
+#################################################################################
+@NM
+#
+# Parameters for sander/nmode calculation (this section is only relevant if NM = 1 above)
+#
+#   The following parameters are passed to sander (for minimization) and nmode
+#     (for entropy calculation using gasphase statistical mechanics).
+#   For further details see documentation.
+#
+#   DIELC - (Distance-dependent) dielectric constant
+#   MAXCYC - Maximum number of cycles of minimization.
+#   DRMS - Convergence criterion for the energy gradient.
+#
+DIELC                 4
+MAXCYC                10000
+DRMS                  0.0001
+#
+#################################################################################
+@MAKECRD
+#
+# The following parameters are passed to make_crd_hg, which extracts snapshots
+#   from trajectory files. (This section is only relevant if GC = 1 OR AS = 1 above.)
+#
+#   BOX - "YES" means that periodic boundary conditions were used during MD 
+#         simulation and that box information has been printed in the
+#         trajecotry files; "NO" means opposite.
+#   NTOTAL - Total number of atoms per snapshot printed in the trajectory file
+#            (including water, ions, ...).
+#   NSTART - Start structure extraction from NSTART snapshot.
+#   NSTOP - Stop structure extraction at NSTOP snapshot.
+#   NFREQ - Every NFREQ structure will be extracted from the trajectory.
+#
+#   NUMBER_LIG_GROUPS - Number of subsequent LSTART/LSTOP combinations to
+#                       extract atoms belonging to the ligand.
+#   LSTART - Number of first ligand atom in the trajectory entry.
+#   LSTOP - Number of last ligand atom in the trajectory entry.      
+#   NUMBER_REC_GROUPS - Number of subsequent RSTART/RSTOP combinations to
+#                       extract atoms belonging to the receptor.
+#   RSTART - Number of first receptor atom in the trajectory entry.
+#   RSTOP - Number of last receptor atom in the trajectory entry.      
+#   Note: If only one molecular species is extracted, use only the receptor
+#         parameters (NUMBER_REC_GROUPS, RSTART, RSTOP).
+#   
+BOX                   YES
+NTOTAL                25570
+NSTART                1
+NSTOP                 5000
+NFREQ                 500
+#
+NUMBER_LIG_GROUPS     0
+LSTART                0
+LSTOP                 0
+NUMBER_REC_GROUPS     1
+RSTART                1
+RSTOP                 2666
+#
+#################################################################################
+@ALASCAN
+#
+# The following parameters are additionally passed to make_crd_hg in conjunction 
+#   with the ones from the @MAKECRD section if "alanine scanning" is requested.
+# (This section is only relevant if AS = 1 above.)
+#
+# The description of the parameters is taken from Irina Massova.
+#
+#   NUMBER_MUTANT_GROUPS - Total number of mutated residues. For each mutated
+#                          residue, the following four parameters must be given
+#                          subsequently.
+#   MUTANT_ATOM1 - If residue is mutated to Ala then this is a pointer on CG 
+#                  atom of the mutated residue for all residues except Thr,
+#                  Ile and Val.
+#                  A pointer to CG2 if Thr, Ile or Val residue is mutated to Ala
+#                  A pointer to OG if Ser residue is mutated to Ala
+#                  If residue is mutated to Gly then this is a pointer on CB.
+#   MUTANT_ATOM2 - If residue is mutated to Ala then this should be zero for 
+#                  all mutated residues except Thr, VAL, and ILE. 
+#                  A pointer on OG1 if Thr residue is mutated to Ala.
+#                  A pointer on CG1 if VAL or ILE residue is mutated to Ala.
+#                  If residue is mutated to Gly then this should be always zero.
+#   MUTANT_KEEP  - A pointer on C atom (carbonyl atom) for the mutated residue.
+#   MUTANT_REFERENCE - If residue is mutated to Ala then this is a pointer on 
+#                      CB atom for the mutated residue.
+#                      If residue is mutated to Gly then this is a pointer on 
+#                      CA atom for the mutated residue.
+#   Note: The method will not work for a smaller residue mutation to a bigger
+#         for example Gly -> Ala mutation.
+#   Note: Maximum number of the simultaneously mutated residues is 40.
+#
+NUMBER_MUTANT_GROUPS 3
+MUTANT_ATOM1         1480
+MUTANT_ATOM2         0
+MUTANT_KEEP          1486
+MUTANT_REFERENCE     1477
+MUTANT_ATOM2         1498
+MUTANT_ATOM1         1494
+MUTANT_KEEP          1500
+MUTANT_REFERENCE     1492
+MUTANT_ATOM1         1552
+MUTANT_ATOM2         0
+MUTANT_KEEP          1562
+MUTANT_REFERENCE     1549
+#
+#################################################################################
+@TRAJECTORY
+#
+# Trajectory names
+#
+#   The following trajectories are used to extract snapshots with "make_crd_hg":
+#   Each trajectory name must be preceeded by the TRAJECTORY card.
+#   Subsequent trajectories are considered together; trajectories may be 
+#     in ascii as well as in .gz format. 
+#   To be able to identify the title line, it must be identical in all files. 
+#
+TRAJECTORY            ../prod_II/md_nvt_prod_pme_01.mdcrd.gz
+TRAJECTORY            ../prod_II/md_nvt_prod_pme_02.mdcrd.gz
+TRAJECTORY            ../prod_II/md_nvt_prod_pme_03.mdcrd.gz
+TRAJECTORY            ../prod_II/md_nvt_prod_pme_04.mdcrd.gz
+TRAJECTORY            ../prod_II/md_nvt_prod_pme_05.mdcrd.gz
+#
+################################################################################
+@PROGRAMS
+#
+# Additional program executables can be defined here
+#
+#
+################################################################################ 

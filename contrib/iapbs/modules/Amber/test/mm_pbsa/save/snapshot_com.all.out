@@ -1,0 +1,14 @@
+MM
+PB
+1
+ BOND    =      730.3907  ANGLE   =     1984.0754  DIHED      =     2313.9147
+ VDWAALS =    -1869.5971  EEL     =   -17231.1931  HBOND      =        0.0000
+ 1-4 VDW =      895.4560  1-4 EEL =     8527.2834  RESTRAINT  =        0.0000
+corrected reaction field energy:    -5432.477787
+ ENPOLAR =      317.6930
+2
+ BOND    =      773.4468  ANGLE   =     1995.1388  DIHED      =     2304.2392
+ VDWAALS =    -1870.7789  EEL     =   -17084.6257  HBOND      =        0.0000
+ 1-4 VDW =      851.5374  1-4 EEL =     8490.3088  RESTRAINT  =        0.0000
+corrected reaction field energy:    -5629.755014
+ ENPOLAR =      324.6660
