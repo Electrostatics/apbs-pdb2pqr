@@ -55,17 +55,17 @@ class Residue:
         self.label   = None
         self.atoms   = []
         if chainID == None:
-          self.chainID = atoms[0].chainID
+            self.chainID = atoms[0].chainID
         else:
-          self.chainID = chainID
+            self.chainID = chainID
         if resNumb == None:
-          self.resNumb = atoms[0].resNumb
+            self.resNumb = atoms[0].resNumb
         else:
-          self.resNumb = resNumb
+            self.resNumb = resNumb
         if resName == None:
-          self.resName = atoms[0].resName
+            self.resName = atoms[0].resName
         else:
-          self.resName = resName
+            self.resName = resName
         self.resType = None                         # determins the interaction parameters, e.g. 'COO'
         self.Q       = None                         # residue charge
         self.type    = None                         # 'amino-acid' / 'ion' / 'ligand' / 'N-terminus' / 'C-terminus'
@@ -103,12 +103,12 @@ class Residue:
 
             # checking if this residue has 'HETATM' atoms; good chance it's a ligand then
             if atom.type == "hetatm" and self.type == None:
-              self.type = "ligand"
+                self.type = "ligand"
 
             # setting the number of configurations for this residue
             for key in atom.configurations.keys():
-              if key not in self.configurations:
-                self.configurations.append(key)
+                if key not in self.configurations:
+                    self.configurations.append(key)
 
             #if atom.name[0] != 'H':
             if True:
@@ -117,13 +117,13 @@ class Residue:
                 
             # setting 'center atoms'; needs to be on self since it is reset when you switch configurations
             if len(residue_center_atom_labels) == 0:
-              self.center_atoms.append(atom)
+                self.center_atoms.append(atom)
             elif atom.name in residue_center_atom_labels:
-              self.center_atoms.append(atom)
+                self.center_atoms.append(atom)
 
         # set residue center, i.e. give 'x, y, z' values
         if len(self.center_atoms) > 0:
-          self.setResidueCenter()
+            self.setResidueCenter()
 
 
     def setResidueInformation(self, resInfo=None):
@@ -132,27 +132,27 @@ class Residue:
         """
         # resType - determines interaction parameters
         if self.resName in resInfo['resType']:
-          self.resType = resInfo['resType'][self.resName]
+            self.resType = resInfo['resType'][self.resName]
           
         # Q - group charge
         if self.resName in resInfo['Q']:
-          self.Q       = resInfo['Q'][self.resName]
+            self.Q       = resInfo['Q'][self.resName]
         else:
-          self.Q       = 0.00
+            self.Q       = 0.00
 
         # type - 'amino-acid' / 'ion' / 'ligand' / 'N-terminus' / 'C-terminus'
         if   self.resName in lib.residueList("standard"):
-          self.type    = "amino-acid"
+            self.type    = "amino-acid"
         elif self.resName in resInfo['type']:
-          self.type    = resInfo['type'][self.resName]
+            self.type    = resInfo['type'][self.resName]
 
         # pKa_mod - model or water pKa value
         if self.resName in resInfo['pKa']:
-          self.pKa_mod = resInfo['pKa'][self.resName]
-          self.pKa_pro = resInfo['pKa'][self.resName]
+            self.pKa_mod = resInfo['pKa'][self.resName]
+            self.pKa_pro = resInfo['pKa'][self.resName]
         else:
-          self.pKa_mod = resInfo['pKa']['default']
-          self.pKa_pro = resInfo['pKa']['default']
+            self.pKa_mod = resInfo['pKa']['default']
+            self.pKa_pro = resInfo['pKa']['default']
 
 
     def setConfiguration(self, key=None):
@@ -161,9 +161,9 @@ class Residue:
         """
         self.cleanupPKA()
         if key in self.configurations:
-          configuration = key
+            configuration = key
         else:
-          configuration = self.default_key
+            configuration = self.default_key
           
         for atom in self.atoms:
             atom.setConfiguration(key=configuration)
@@ -192,13 +192,13 @@ class Residue:
         self.y = 0.00
         self.z = 0.00
         for atom in self.center_atoms:
-          self.x += atom.x
-          self.y += atom.y
-          self.z += atom.z
+            self.x += atom.x
+            self.y += atom.y
+            self.z += atom.z
         if number_of_atoms > 0:
-          self.x = self.x/number_of_atoms
-          self.y = self.y/number_of_atoms
-          self.z = self.z/number_of_atoms
+            self.x = self.x/number_of_atoms
+            self.y = self.y/number_of_atoms
+            self.z = self.z/number_of_atoms
 
 
     def getThirdAtomInAngle(self, atom=None):
@@ -207,23 +207,23 @@ class Residue:
         expecting one of ["HIS", "ARG", "AMD", "TRP"]
         """
         if   self.resName == "HIS":
-          if   atom.name == "HD1":
-            return self.getAtom(name="ND1")
-          elif atom.name == "HE2":
-            return self.getAtom(name="NE2")
+            if   atom.name == "HD1":
+                return self.getAtom(name="ND1")
+            elif atom.name == "HE2":
+                return self.getAtom(name="NE2")
         elif self.resName == "ARG":
-          if   atom.name in ["HE"]:
-            return self.getAtom(name="NE")
-          elif atom.name in ["1HH1", "2HH1"]:
-            return self.getAtom(name="NH1")
-          elif atom.name in ["1HH2", "2HH2"]:
-            return self.getAtom(name="NH2")
+            if   atom.name in ["HE"]:
+                return self.getAtom(name="NE")
+            elif atom.name in ["1HH1", "2HH1"]:
+                return self.getAtom(name="NH1")
+            elif atom.name in ["1HH2", "2HH2"]:
+                return self.getAtom(name="NH2")
         elif self.resName == "ASN":
-          return self.getAtom(name="ND2")
+            return self.getAtom(name="ND2")
         elif self.resName == "GLN":
-          return self.getAtom(name="NE2")
+            return self.getAtom(name="NE2")
         elif self.resName == "TRP":
-          return self.getAtom(name="NE1")
+            return self.getAtom(name="NE1")
 
 
     def getAtom(self, name=None):
@@ -231,9 +231,9 @@ class Residue:
         finds and returns the specified atom in this residue.
         """
         for atom in self.atoms:
-          if atom.name == name:
-            return  atom
-            break
+            if atom.name == name:
+                return  atom
+                break
 
         return  None
 
@@ -247,11 +247,13 @@ class Residue:
 
         # NMR Xplor over-write
         if O == None:
-          O = self.getAtom(name="OT1")
-          if O != None: O.setProperty(name="O")
+            O = self.getAtom(name="OT1")
+            if O != None: 
+                O.setProperty(name="O")
         if OXT == None:
-          OXT = self.getAtom(name="OT2")
-          if OXT != None: OXT.setProperty(name="OXT")
+            OXT = self.getAtom(name="OT2")
+            if OXT != None: 
+                OXT.setProperty(name="OXT")
 
         # continuing after 'NMR exception'; creating OXT if not found
         if OXT == None:
@@ -259,7 +261,7 @@ class Residue:
             CA = self.getAtom(name="CA")
             C  = self.getAtom(name="C")
             if O == None or CA == None or C == None:
-              print("ERROR: cannot create OXT atom - missing CA, C, or O atoms; please correct pdbfile"); sys.exit(8)
+                print("ERROR: cannot create OXT atom - missing CA, C, or O atoms; please correct pdbfile"); sys.exit(8)
             dX = -((CA.x-C.x) + (O.x-C.x))
             dY = -((CA.y-C.y) + (O.y-C.y))
             dZ = -((CA.z-C.z) + (O.z-C.z))
@@ -282,15 +284,15 @@ class Residue:
         """
         # getting default key as the first OK element in the sorted protein keys
         for key in keys:
-          if key in self.configurations:
-            self.default_key = key
-            break
+            if key in self.configurations:
+                self.default_key = key
+                break
 
         # enforcing all residue keys on each atom
         for atom in self.atoms:
-          for configuration in self.configurations:
-            if key not in atom.configurations:
-              atom.configurations[configuration] = atom.configurations[self.default_key]
+            for configuration in self.configurations:
+                if key not in atom.configurations:
+                    atom.configurations[configuration] = atom.configurations[self.default_key]
 
 
     def checked(self, options=None):
@@ -299,9 +301,9 @@ class Residue:
         """
         excluded_resNames = lib.residueList("excluded")
         if self.resName in excluded_resNames:
-          return False
+            return False
         else:
-          return True
+            return True
 
 
     def checkResidue(self, options=None):
@@ -317,14 +319,14 @@ class Residue:
 
         # renaming residue if in rename dictionary
         if self.resName in rename:
-          newName = rename[self.resName]
-          if options.verbose == True:
-            print("Warning: renaming %s to %s" % (self.resName, newName))
-          self.resName = newName
-          for atom in self.atoms:
-              atom.resName = newName
+            newName = rename[self.resName]
+            if options.verbose == True:
+                print("Warning: renaming %s to %s" % (self.resName, newName))
+            self.resName = newName
+            for atom in self.atoms:
+                atom.resName = newName
         else:
-          """OK - lets rock"""
+            """OK - lets rock"""
 
         # after rename residue cases, check heavy atoms
         if self.resName in residue_list:
@@ -332,8 +334,8 @@ class Residue:
             self.checkAtoms(options=options)
         # Chresten's stuff
         elif self.type == "ion":
-            str  = "%s%4d -  OK %s" % (self.resName, self.resNumb, self.type)
-            print(str)
+            outstr  = "%s%4d -  OK %s" % (self.resName, self.resNumb, self.type)
+            print(outstr)
         #elif self.resName in version.ions.keys():
         #    str  = "%-3s%4d - %s with charge %+d" % (self.resName, 
         #                                             self.resNumb, 
@@ -341,33 +343,34 @@ class Residue:
         #                                             version.ions[self.resName])
         #    print(str)            
         else:
-            str  = "%s%4d - unidentified residue" % (self.resName, self.resNumb)
-            print(str)
+            outstr  = "%s%4d - unidentified residue" % (self.resName, self.resNumb)
+            print(outstr)
 
 
     def checkAtoms(self, options=None):
         """
         Checks that all heavy atoms are there
         """
-        str  = "%s%4d - " % (self.resName, self.resNumb)
+        outstr  = "%s%4d - " % (self.resName, self.resNumb)
         atom_list = lib.atomList(self.resName)
         OK = True
         for name in atom_list:
             FOUND = False
             for atom in self.atoms:
-              if atom.name == name:
-                FOUND = True
+                if atom.name == name:
+                    FOUND = True
             if FOUND == False:
-              str += " %s" % (name)
-              OK = False
+                outstr += " %s" % (name)
+                OK = False
 
         if OK == True:
-          self.checkConfigurations(verbose=False)
-          str += " OK (%2d: %2d)" % (len(self.atoms), len(self.configurations))
-          if options.verbose == True: print(str)
+            self.checkConfigurations(verbose=False)
+            outstr += " OK (%2d: %2d)" % (len(self.atoms), len(self.configurations))
+            if options.verbose == True:
+                print(outstr)
         else:
-          str += " missing"
-          print(str)
+            outstr += " missing"
+            print(outstr)
 
 
     def checkConfigurations(self, verbose=False):
@@ -375,22 +378,21 @@ class Residue:
         checks that all atoms in this residue has the same number of configurations
         """
         for atom in self.atoms:
-          for key in self.configurations:
-            if key not in atom.configurations:
-              atom.configurations[key] = atom.configurations[self.default_key]
+            for key in self.configurations:
+                if key not in atom.configurations:
+                    atom.configurations[key] = atom.configurations[self.default_key]
 
 
     def printLabel(self):
         """
         prints the residue ID
         """
-        str = "%s%4d %s" % (self.resName, self.resNumb, self.chainID)
-        print(str)
+        outstr = "%s%4d %s" % (self.resName, self.resNumb, self.chainID)
+        print(outstr)
 
 
     def __str__(self):
         return self.label
-
 
     def extractBackBoneAtoms(self):
         """
@@ -510,9 +512,9 @@ class Residue:
         Set the residue label to e.g. 'GLU 145 A'
         """
         if label == None:
-          self.label = lib.makeResidueLabel(self.resName, self.resNumb, self.chainID)
+            self.label = lib.makeResidueLabel(self.resName, self.resNumb, self.chainID)
         else:
-          self.label = label
+            self.label = label
 
 
     def shiftResidueNumber(self, shift):
@@ -527,40 +529,40 @@ class Residue:
         returning the electrostatic energy of this residue at pH 'pH'
         """
         if pH == None:
-          pH = options.pH
+            pH = options.pH
         if reference == None:
-          reference = options.reference
+            reference = options.reference
 
         # calculating the ddG(neutral --> low-pH) contribution
         if self.resType not in ["COO", "HIS", "N+ ", "CYS", "TYR", "LYS", "ARG"]:
-          ddG = 0.00
+            ddG = 0.00
         else:
-          if reference == "low-pH":
-            ddG_neutral = 0.00
-          else:
-            if self.Q > 0.00:
-              pKa_prime = self.pKa_pro
-              coulomb_determinants = self.determinants[2]
-              for determinant in coulomb_determinants:
-                if determinant.value > 0.00:
-                  pKa_prime -= determinant.value
-              ddG_neutral = -1.36*(pKa_prime - self.pKa_mod)
+            if reference == "low-pH":
+                ddG_neutral = 0.00
             else:
-              ddG_neutral = 0.00
+                if self.Q > 0.00:
+                    pKa_prime = self.pKa_pro
+                    coulomb_determinants = self.determinants[2]
+                    for determinant in coulomb_determinants:
+                        if determinant.value > 0.00:
+                            pKa_prime -= determinant.value
+                    ddG_neutral = -1.36*(pKa_prime - self.pKa_mod)
+                else:
+                    ddG_neutral = 0.00
         
-          # calculating the ddG(low-pH --> pH) contribution
-          # folded
-          x =  pH - self.pKa_pro
-          y = 10**x
-          Q_pro = math.log10(1+y)
-        
-          # unfolded
-          x =  pH - self.pKa_mod
-          y = 10**x
-          Q_mod = math.log10(1+y)
-        
-          ddG_low = -1.36*(Q_pro - Q_mod)
-          ddG = ddG_neutral + ddG_low
+            # calculating the ddG(low-pH --> pH) contribution
+            # folded
+            x =  pH - self.pKa_pro
+            y = 10**x
+            Q_pro = math.log10(1+y)
+            
+            # unfolded
+            x =  pH - self.pKa_mod
+            y = 10**x
+            Q_mod = math.log10(1+y)
+            
+            ddG_low = -1.36*(Q_pro - Q_mod)
+            ddG = ddG_neutral + ddG_low
 
         return ddG
 
@@ -570,10 +572,10 @@ class Residue:
         returning the charge of this residue at pH 'pH'
         """
         if state == "mod" or state == "unfolded":
-          x =  self.Q*(self.pKa_mod - pH)
+            x =  self.Q*(self.pKa_mod - pH)
         else:
-          x =  self.Q*(self.pKa_pro - pH)
-          #x =  pH - self.pKa_pro
+            x =  self.Q*(self.pKa_pro - pH)
+            #x =  pH - self.pKa_pro
         y = 10**x
         charge = self.Q*(y/(1.0+y))
         #charge = math.log10(1+y)
@@ -586,15 +588,15 @@ class Residue:
         calculates the titration curve of this residue
         """
         if grid == None:
-          grid = [self.pKa_pro-2.5, self.pKa_pro+2.5, 0.10]
+            grid = [self.pKa_pro-2.5, self.pKa_pro+2.5, 0.10]
         state = "folded"
         titration_curve = []
         pH   = grid[0]
         stop = grid[1] + grid[2]/2.0
         while pH < stop:
-          Q  = self.getCharge(pH, state)
-          titration_curve.append([pH, Q])
-          pH += grid[2]
+            Q  = self.getCharge(pH, state)
+            titration_curve.append([pH, Q])
+            pH += grid[2]
 
         return titration_curve
 
@@ -603,8 +605,8 @@ class Residue:
         """
         Writing the summary string
         """
-        str = "   %s%8.2lf%10.2lf" % (self.label, self.pKa_pro, self.pKa_mod)
-        return str
+        outstr = "   %s%8.2lf%10.2lf" % (self.label, self.pKa_pro, self.pKa_mod)
+        return outstr
 
 
     def mutateToAla(self):
@@ -620,8 +622,8 @@ class Residue:
         self.printLabel()
         new_atoms = []
         for atom in self.atoms:
-          if atom.name in keep_atoms:
-            new_atoms.append(atom)
+            if atom.name in keep_atoms:
+                new_atoms.append(atom)
         print(self.atoms)
         print(new_atoms)
         self.cleanupResidue
@@ -641,14 +643,14 @@ class Residue:
         exclude_atoms = ["N", "CA", "C", "O"]
         tmp_atoms = []
         for atom in self.atoms:
-          if atom.name in exclude_atoms:
-            tmp_atoms.append(atom)
+            if atom.name in exclude_atoms:
+                tmp_atoms.append(atom)
         self.atoms = tmp_atoms
         for new_atom in new_residue.atoms:
-          if new_atom.name in exclude_atoms:
-            """ do nothing """
-          else:
-            self.atoms.append(new_atom)
+            if new_atom.name in exclude_atoms:
+                """ do nothing """
+            else:
+                self.atoms.append(new_atom)
 
 
     def getDeterminantString(self):
@@ -664,59 +666,59 @@ class Residue:
         number_of_coulomb   = len(self.determinants[2])
         number_of_determinants = number_of_sidechain + number_of_backbone + number_of_coulomb
         number_of_lines     = max(1, number_of_sidechain, number_of_backbone, number_of_coulomb)
-        str  = ""
-        #str += " number_of_sidechain = %d" % (number_of_sidechain)
-        #str += " number_of_backbone  = %d" % (number_of_backbone )
-        #str += " number_of_coulomb   = %d" % (number_of_coulomb  )
-        #str += " number_of_lines     = %d" % (number_of_lines    )
-        #print str
+        outsting  = ""
+        #outsting += " number_of_sidechain = %d" % (number_of_sidechain)
+        #outsting += " number_of_backbone  = %d" % (number_of_backbone )
+        #outsting += " number_of_coulomb   = %d" % (number_of_coulomb  )
+        #outsting += " number_of_lines     = %d" % (number_of_lines    )
+        #print outsting
 
         for line_number in range(1, number_of_lines+1):
-          str += "%s" % (self.label)
-          if line_number == 1:
-            str += " %6.2lf" % (self.pKa_pro)
-            if len(self.coupled_residues)>0:
-                str+='*'
+            outsting += "%s" % (self.label)
+            if line_number == 1:
+                outsting += " %6.2lf" % (self.pKa_pro)
+                if len(self.coupled_residues)>0:
+                    outsting+='*'
+                else:
+                    outsting+=' '
+                
+                if BURIED_RATIO == True:
+                    if self.type == "BONDED":
+                        outsting += " BONDED "
+                    else:
+                        outsting += " %4d%2s " % (int(100.0*self.buried), "%")
+                else:
+                    outsting += "%8s" % (self.type)
+                outsting += " %6.2lf %4d" % (self.Emass, self.Nmass)
+                outsting += " %6.2lf %4d" % (self.Elocl, self.Nlocl)
             else:
-                str+=' '
-
-            if BURIED_RATIO == True:
-              if self.type == "BONDED":
-                str += " BONDED "
-              else:
-                str += " %4d%2s " % (int(100.0*self.buried), "%")
+                outsting += "%40s" % (" ")
+            
+            # Side-chain determinants
+            if line_number > number_of_sidechain :
+                outsting += "%8.2lf %s" % (0.0, empty_determinant)
             else:
-                str += "%8s" % (self.type)
-            str += " %6.2lf %4d" % (self.Emass, self.Nmass)
-            str += " %6.2lf %4d" % (self.Elocl, self.Nlocl)
-          else:
-            str += "%40s" % (" ")
-        
-          # Side-chain determinants
-          if line_number > number_of_sidechain :
-              str += "%8.2lf %s" % (0.0, empty_determinant)
-          else:
-              determinant = self.determinants[0][line_number-1]
-              str += "%8.2lf %s" % (determinant.value, determinant.label)
+                determinant = self.determinants[0][line_number-1]
+                outsting += "%8.2lf %s" % (determinant.value, determinant.label)
+            
+            # Back-bone determinants
+            if line_number > number_of_backbone:
+                outsting += "%8.2lf %s" % (0.0, empty_determinant)
+            else:
+                determinant = self.determinants[1][line_number-1]
+                outsting += "%8.2lf %s" % (determinant.value, determinant.label)
+            
+            # Coulomb determinants
+            if line_number > number_of_coulomb:
+                outsting += "%8.2lf %s" % (0.0, empty_determinant)
+            else:
+                determinant = self.determinants[2][line_number-1]
+                outsting += "%8.2lf %s" % (determinant.value, determinant.label)
+            
+            # adding end-of-line
+            outsting += "\n"
 
-          # Back-bone determinants
-          if line_number > number_of_backbone:
-              str += "%8.2lf %s" % (0.0, empty_determinant)
-          else:
-              determinant = self.determinants[1][line_number-1]
-              str += "%8.2lf %s" % (determinant.value, determinant.label)
-
-          # Coulomb determinants
-          if line_number > number_of_coulomb:
-              str += "%8.2lf %s" % (0.0, empty_determinant)
-          else:
-              determinant = self.determinants[2][line_number-1]
-              str += "%8.2lf %s" % (determinant.value, determinant.label)
-
-          # adding end-of-line
-          str += "\n"
-
-        return str
+        return outsting
 
 
     def printResult(self):
@@ -732,51 +734,51 @@ class Residue:
         number_of_coulomb   = len(self.determinants[2])
         number_of_determinants = number_of_sidechain + number_of_backbone + number_of_coulomb
         number_of_lines     = max(1, number_of_sidechain, number_of_backbone, number_of_coulomb)
-        str  = ""
-        str += " number_of_sidechain = %d" % (number_of_sidechain)
-        str += " number_of_backbone  = %d" % (number_of_backbone )
-        str += " number_of_coulomb   = %d" % (number_of_coulomb  )
-        str += " number_of_lines     = %d" % (number_of_lines    )
-        #print str
+        outstr  = ""
+        outstr += " number_of_sidechain = %d" % (number_of_sidechain)
+        outstr += " number_of_backbone  = %d" % (number_of_backbone )
+        outstr += " number_of_coulomb   = %d" % (number_of_coulomb  )
+        outstr += " number_of_lines     = %d" % (number_of_lines    )
+        #print outstr
 
         if True:
-          for line_number in range(1, number_of_lines+1):
-            str  = "%s%4d%2s" % (self.resName, self.resNumb, self.chainID)
-            if line_number == 1:
-              str += " %6.2lf" % (self.pKa_pro)
-              if BURIED_RATIO == True:
-                  str += "  %4d%2s " % (int(100.0*self.buried), "%")
-              else:
-                  str += " %8s" % (self.type)
-              str += " %6.2lf %4d" % (self.Emass, self.Nmass)
-              str += " %6.2lf %4d" % (self.Elocl, self.Nlocl)
-            else:
-              str += "%40s" % (" ")
-         
-            # Side-chain determinant
-            if line_number > number_of_sidechain :
-                str += "%8.2lf %s" % (0.0, empty_determinant)
-            else:
-                determinant = self.determinants[0][line_number-1]
-                str += "%8.2lf %s" % (determinant.value, determinant.label)
-
-            # Back-bone determinant
-            if line_number > number_of_backbone:
-                str += "%8.2lf %s" % (0.0, empty_determinant)
-            else:
-                determinant = self.determinants[1][line_number-1]
-                str += "%8.2lf %s" % (determinant.value, determinant.label)
-
-            # Coulomb determinant
-            if line_number > number_of_coulomb:
-                str += "%8.2lf %s" % (0.0, empty_determinant)
-            else:
-                determinant = self.determinants[2][line_number-1]
-                str += "%8.2lf %s" % (determinant.value, determinant.label)
-            print('%s' % (str))
+            for line_number in range(1, number_of_lines+1):
+                outstr  = "%s%4d%2s" % (self.resName, self.resNumb, self.chainID)
+                if line_number == 1:
+                    outstr += " %6.2lf" % (self.pKa_pro)
+                    if BURIED_RATIO == True:
+                        outstr += "  %4d%2s " % (int(100.0*self.buried), "%")
+                    else:
+                        outstr += " %8s" % (self.type)
+                    outstr += " %6.2lf %4d" % (self.Emass, self.Nmass)
+                    outstr += " %6.2lf %4d" % (self.Elocl, self.Nlocl)
+                else:
+                    outstr += "%40s" % (" ")
+                
+                # Side-chain determinant
+                if line_number > number_of_sidechain :
+                    outstr += "%8.2lf %s" % (0.0, empty_determinant)
+                else:
+                    determinant = self.determinants[0][line_number-1]
+                    outstr += "%8.2lf %s" % (determinant.value, determinant.label)
+                
+                # Back-bone determinant
+                if line_number > number_of_backbone:
+                    outstr += "%8.2lf %s" % (0.0, empty_determinant)
+                else:
+                    determinant = self.determinants[1][line_number-1]
+                    outstr += "%8.2lf %s" % (determinant.value, determinant.label)
+                
+                # Coulomb determinant
+                if line_number > number_of_coulomb:
+                    outstr += "%8.2lf %s" % (0.0, empty_determinant)
+                else:
+                    determinant = self.determinants[2][line_number-1]
+                    outstr += "%8.2lf %s" % (determinant.value, determinant.label)
+                print('%s' % (outstr))
         else:
-          str  = "%s%4d%2s%4d%2d" % (self.resName, self.resNumb, self.chainID, number_of_lines, number_of_determinants)
-          print('%s' % (str))
+            outstr  = "%s%4d%2s%4d%2d" % (self.resName, self.resNumb, self.chainID, number_of_lines, number_of_determinants)
+            print('%s' % (outstr))
 
         print('')
 

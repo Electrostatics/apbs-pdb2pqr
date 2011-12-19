@@ -365,6 +365,13 @@ class multi_vector:
             self.res.vectors.append(self.vectors[i].rescale(new_length))
             self.res.keys.append(self.keys[i])
         return self.res
+    
+    def orthogonal(self):
+        self.res = multi_vector()
+        for i in range(len(self.vectors)):
+            self.res.vectors.append(self.vectors[i].orthogonal())
+            self.res.keys.append(self.keys[i])
+        return self.res
 
 
 def rotate_multi_vector_around_an_axis(theta, axis, v):
