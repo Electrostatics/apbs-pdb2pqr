@@ -15,4 +15,5 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
  * Cleaned up white space in several files and some pydev warnings.
  * Creating print output no longer clears the chain id data from atoms in the data. (Affected resinter plugin)
  * Removed possibility of one plug-in affecting the output of another. 
+ * Fixed --protonation=new option for propka30.
 
