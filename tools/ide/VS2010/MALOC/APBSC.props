@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <CONF_INCLUDES>..\..</CONF_INCLUDES>
+    <TOP_SRCDIR>..\..\..\..</TOP_SRCDIR>
+    <APBS_SRCDIR>$(TOP_SRCDIR)</APBS_SRCDIR>
+    <MALOC_SRCDIR>$(TOP_SRCDIR)\contrib\maloc</MALOC_SRCDIR>
+    <MALOC_INCLUDES>$(MALOC_SRCDIR)\src\aaa_inc; $(MALOC_SRCDIR)\src\base; $(MALOC_SRCDIR)\src\vsh; $(MALOC_SRCDIR)\src\psh; $(MALOC_SRCDIR)\src\vsys</MALOC_INCLUDES>
+    <ZLIB_INCLUDES>$(APBS_SRCDIR)\contrib\zlib</ZLIB_INCLUDES>
+    <APBS_INCLUDES>$(APBS_SRCDIR)\src\aaa_inc;$(APBS_SRCDIR)\src\aaa_lib;$(APBS_SRCDIR)\src\generic;$(APBS_SRCDIR)\src\mg;$(APBS_SRCDIR)\src\fem</APBS_INCLUDES>
+    <ALL_INCLUDES>$(CONF_INCLUDES);$(MALOC_INCLUDES);$(ZLIB_INCLUDES);$(APBS_INCLUDES);</ALL_INCLUDES>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <_PropertySheetDisplayName>APBS</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="CONF_INCLUDES">
+      <Value>$(CONF_INCLUDES)</Value>
+    </BuildMacro>
+    <BuildMacro Include="TOP_SRCDIR">
+      <Value>$(TOP_SRCDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="APBS_SRCDIR">
+      <Value>$(APBS_SRCDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="MALOC_SRCDIR">
+      <Value>$(MALOC_SRCDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="MALOC_INCLUDES">
+      <Value>$(MALOC_INCLUDES)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ZLIB_INCLUDES">
+      <Value>$(ZLIB_INCLUDES)</Value>
+    </BuildMacro>
+    <BuildMacro Include="APBS_INCLUDES">
+      <Value>$(APBS_INCLUDES)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ALL_INCLUDES">
+      <Value>$(ALL_INCLUDES)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

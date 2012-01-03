@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="APBS"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories=""
+	/>
+	<UserMacro
+		Name="CONF_INCLUDES"
+		Value="..\.."
+	/>
+	<UserMacro
+		Name="TOP_SRCDIR"
+		Value="..\..\..\.."
+	/>
+	<UserMacro
+		Name="APBS_SRCDIR"
+		Value="$(TOP_SRCDIR)"
+	/>
+	<UserMacro
+		Name="MALOC_SRCDIR"
+		Value="$(TOP_SRCDIR)\contrib\maloc"
+	/>
+	<UserMacro
+		Name="MALOC_INCLUDES"
+		Value="$(MALOC_SRCDIR)\src\aaa_inc; $(MALOC_SRCDIR)\src\base; $(MALOC_SRCDIR)\src\vsh; $(MALOC_SRCDIR)\src\psh; $(MALOC_SRCDIR)\src\vsys"
+	/>
+	<UserMacro
+		Name="ZLIB_INCLUDES"
+		Value="$(APBS_SRCDIR)\contrib\zlib"
+	/>
+	<UserMacro
+		Name="APBS_INCLUDES"
+		Value="$(APBS_SRCDIR)\src\aaa_inc;$(APBS_SRCDIR)\src\aaa_lib;$(APBS_SRCDIR)\src\generic;$(APBS_SRCDIR)\src\mg;$(APBS_SRCDIR)\src\fem"
+	/>
+	<UserMacro
+		Name="ALL_INCLUDES"
+		Value="$(CONF_INCLUDES);$(MALOC_INCLUDES);$(ZLIB_INCLUDES);$(APBS_INCLUDES);"
+	/>
+</VisualStudioPropertySheet>

@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>APBSC</ProjectName>
+    <ProjectGuid>{A744F0C5-46B1-4442-B322-A71D4C34FB5E}</ProjectGuid>
+    <RootNamespace>MALOC</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="APBSC.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="APBSC.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/Qdiag-disable:177 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ALL_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/Qdiag-disable:177 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ALL_INCLUDES);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\contrib\zlib\adler32.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\compress.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\crc32.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\deflate.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzclose.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzlib.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzread.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzwrite.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\infback.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\inffast.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\inflate.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\inftrees.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\minigzip.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\trees.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\uncompr.c" />
+    <ClCompile Include="..\..\..\..\contrib\zlib\zutil.c" />
+    <ClCompile Include="..\..\..\..\src\aaa_lib\apbs_link.c" />
+    <ClCompile Include="..\..\..\..\src\mg\vgrid.c" />
+    <ClCompile Include="..\..\..\..\src\mg\vmgrid.c" />
+    <ClCompile Include="..\..\..\..\src\mg\vopot.c" />
+    <ClCompile Include="..\..\..\..\src\mg\vpmg.c" />
+    <ClCompile Include="..\..\..\..\src\mg\vpmgp.c" />
+    <ClCompile Include="..\..\..\..\src\fem\dummy.c" />
+    <ClCompile Include="..\..\..\..\src\fem\vcsm.c" />
+    <ClCompile Include="..\..\..\..\src\fem\vfetk.c" />
+    <ClCompile Include="..\..\..\..\src\fem\vpee.c" />
+    <ClCompile Include="..\..\..\..\src\generic\apolparm.c" />
+    <ClCompile Include="..\..\..\..\src\generic\femparm.c" />
+    <ClCompile Include="..\..\..\..\src\generic\mgparm.c" />
+    <ClCompile Include="..\..\..\..\src\generic\nosh.c" />
+    <ClCompile Include="..\..\..\..\src\generic\pbeparm.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vacc.c" />
+    <ClCompile Include="..\..\..\..\src\generic\valist.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vatom.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vcap.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vclist.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vgreen.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vparam.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vpbe.c" />
+    <ClCompile Include="..\..\..\..\src\generic\vstring.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\base\maloc_base.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\psh.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vcom.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vmp.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vmpi.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vlex.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vpars.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vpup.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vsh.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vyacc.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vio.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\viofb.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vmem.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vnm.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vnmfb.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vset.c" />
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\ziofb.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\contrib\zlib\crc32.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\deflate.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\gzguts.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\inffast.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\inffixed.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\inflate.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\inftrees.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\trees.h" />
+    <ClInclude Include="..\..\zconf.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\zlib.h" />
+    <ClInclude Include="..\..\..\..\contrib\zlib\zutil.h" />
+    <ClInclude Include="..\..\..\..\src\aaa_inc\apbs\apbs.h" />
+    <ClInclude Include="..\..\apbscfg.h" />
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vgrid.h" />
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vmgrid.h" />
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vopot.h" />
+    <ClInclude Include="..\..\..\..\src\mg\vpmg-private.h" />
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vpmg.h" />
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vpmgp.h" />
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vcsm.h" />
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vfetk.h" />
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vpee.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\apolparm.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\femparm.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\mgparm.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\nosh.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\pbeparm.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vacc.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\valist.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vatom.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vcap.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vclist.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vgreen.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vhal.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vparam.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vpbe.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vstring.h" />
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vunit.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\doc\license.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\aaa_inc\maloc\maloc.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\base\maloc\maloc_base.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\base\maloc_base_p.h" />
+    <ClInclude Include="..\..\maloccf.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\psh.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\psh_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vcom.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vcom_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vmp.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vmp_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vmpi.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vmpi_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vpup.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\maloc\vsh.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vsh_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vyacc.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vio.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vio_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vmem.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vmem_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vnm.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vnm_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vset.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vset_p.h" />
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vsys.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\trunk\AUTHORS" />
+    <None Include="..\..\..\..\trunk\ChangeLog" />
+    <None Include="..\..\..\..\trunk\COPYING" />
+    <None Include="..\..\..\..\trunk\doc\LICENSE.txt" />
+    <None Include="..\..\..\..\trunk\README" />
+    <None Include="..\..\..\..\fetk\maloc\doc\index.html" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

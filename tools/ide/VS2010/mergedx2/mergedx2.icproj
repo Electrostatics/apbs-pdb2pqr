@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="mergedx2"
+	ProjectGUID="{E0341292-889C-4542-93EB-A987E39BB7FF}"
+	VCNestedProjectGUID="{8474CA71-174D-4132-B578-93EBE90F2764}"
+	VCNestedProjectFileName="mergedx2.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

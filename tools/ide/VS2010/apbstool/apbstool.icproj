@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="12.0"
+	Name="apbstool"
+	ProjectGUID="{E095F4A1-CB1B-4010-8829-0B932E1A492A}"
+	VCNestedProjectGUID="{214DD3D0-4542-48EF-A26D-E25D337398F9}"
+	VCNestedProjectFileName="apbstool.vcproj"
+	>
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

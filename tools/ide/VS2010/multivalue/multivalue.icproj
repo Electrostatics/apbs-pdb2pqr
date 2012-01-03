@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="12.0"
+	Name="multivalue"
+	ProjectGUID="{A3DA061C-9672-4C20-AD21-5CDBD255DC10}"
+	VCNestedProjectGUID="{83270CA3-7D65-49A1-A35E-272986A9C694}"
+	VCNestedProjectFileName="multivalue.vcproj"
+	>
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

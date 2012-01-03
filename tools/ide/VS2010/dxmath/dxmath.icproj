@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="12.0"
+	Name="dxmath"
+	ProjectGUID="{3CEEBD0B-6991-490F-B8E3-B00AC97771C2}"
+	VCNestedProjectGUID="{63961BD1-6268-498C-846B-4130959387F0}"
+	VCNestedProjectFileName="dxmath.vcproj"
+	>
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

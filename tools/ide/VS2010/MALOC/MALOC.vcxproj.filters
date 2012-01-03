@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ZLIB">
+      <UniqueIdentifier>{a696dcde-febb-4009-9f8a-d8233a95fbb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="APBS">
+      <UniqueIdentifier>{f71abc95-6799-4db2-9d89-cac544b77140}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="APBS\mg">
+      <UniqueIdentifier>{7ccf35b6-f0b9-4d38-b5cd-18b6c0faad55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="APBS\fem">
+      <UniqueIdentifier>{c8b547ae-354c-49a2-b098-6ea6ffe05ba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="APBS\generic">
+      <UniqueIdentifier>{9c44db64-da87-4a4d-82db-dfab2d36db2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MALOC">
+      <UniqueIdentifier>{2a807ef1-6252-4c6f-b181-4a89756703bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MALOC\psh">
+      <UniqueIdentifier>{086c938a-fbe1-4df0-8622-cf1f93741290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MALOC\vsh">
+      <UniqueIdentifier>{d1817902-a010-4cd2-a790-0583ce5aa9ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MALOC\vsys">
+      <UniqueIdentifier>{ac68e3b6-8dca-471d-b14a-553cea07c46b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\contrib\zlib\adler32.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\compress.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\crc32.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\deflate.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzclose.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzlib.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzread.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\gzwrite.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\infback.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\inffast.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\inflate.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\inftrees.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\minigzip.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\trees.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\uncompr.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\zlib\zutil.c">
+      <Filter>ZLIB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\aaa_lib\apbs_link.c">
+      <Filter>APBS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\mg\vgrid.c">
+      <Filter>APBS\mg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\mg\vmgrid.c">
+      <Filter>APBS\mg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\mg\vopot.c">
+      <Filter>APBS\mg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\mg\vpmg.c">
+      <Filter>APBS\mg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\mg\vpmgp.c">
+      <Filter>APBS\mg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\fem\dummy.c">
+      <Filter>APBS\fem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\fem\vcsm.c">
+      <Filter>APBS\fem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\fem\vfetk.c">
+      <Filter>APBS\fem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\fem\vpee.c">
+      <Filter>APBS\fem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\apolparm.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\femparm.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\mgparm.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\nosh.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\pbeparm.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vacc.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\valist.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vatom.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vcap.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vclist.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vgreen.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vparam.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vpbe.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\generic\vstring.c">
+      <Filter>APBS\generic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\base\maloc_base.c">
+      <Filter>MALOC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\psh.c">
+      <Filter>MALOC\psh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vcom.c">
+      <Filter>MALOC\psh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vmp.c">
+      <Filter>MALOC\psh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\psh\vmpi.c">
+      <Filter>MALOC\psh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vlex.c">
+      <Filter>MALOC\vsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vpars.c">
+      <Filter>MALOC\vsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vpup.c">
+      <Filter>MALOC\vsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vsh.c">
+      <Filter>MALOC\vsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsh\vyacc.c">
+      <Filter>MALOC\vsh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vio.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\viofb.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vmem.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vnm.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vnmfb.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\vset.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\contrib\maloc\src\vsys\ziofb.c">
+      <Filter>MALOC\vsys</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\contrib\zlib\crc32.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\deflate.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\gzguts.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\inffast.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\inffixed.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\inflate.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\inftrees.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\trees.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\zconf.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\zlib.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\zlib\zutil.h">
+      <Filter>ZLIB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\aaa_inc\apbs\apbs.h">
+      <Filter>APBS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\apbscfg.h">
+      <Filter>APBS</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vgrid.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vmgrid.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vopot.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\vpmg-private.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vpmg.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\mg\apbs\vpmgp.h">
+      <Filter>APBS\mg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vcsm.h">
+      <Filter>APBS\fem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vfetk.h">
+      <Filter>APBS\fem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\fem\apbs\vpee.h">
+      <Filter>APBS\fem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\apolparm.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\femparm.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\mgparm.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\nosh.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\pbeparm.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vacc.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\valist.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vatom.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vcap.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vclist.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vgreen.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vhal.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vparam.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vpbe.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vstring.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\generic\apbs\vunit.h">
+      <Filter>APBS\generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\doc\license.h">
+      <Filter>MALOC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\aaa_inc\maloc\maloc.h">
+      <Filter>MALOC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\base\maloc\maloc_base.h">
+      <Filter>MALOC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\base\maloc_base_p.h">
+      <Filter>MALOC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maloccf.h">
+      <Filter>MALOC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\psh.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\psh_p.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vcom.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vcom_p.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vmp.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vmp_p.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\maloc\vmpi.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\psh\vmpi_p.h">
+      <Filter>MALOC\psh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vpup.h">
+      <Filter>MALOC\vsh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\maloc\vsh.h">
+      <Filter>MALOC\vsh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vsh_p.h">
+      <Filter>MALOC\vsh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsh\vyacc.h">
+      <Filter>MALOC\vsh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vio.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vio_p.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vmem.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vmem_p.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vnm.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vnm_p.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vset.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\vset_p.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\contrib\maloc\src\vsys\maloc\vsys.h">
+      <Filter>MALOC\vsys</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\trunk\AUTHORS">
+      <Filter>APBS</Filter>
+    </None>
+    <None Include="..\..\..\..\trunk\ChangeLog">
+      <Filter>APBS</Filter>
+    </None>
+    <None Include="..\..\..\..\trunk\COPYING">
+      <Filter>APBS</Filter>
+    </None>
+    <None Include="..\..\..\..\trunk\doc\LICENSE.txt">
+      <Filter>APBS</Filter>
+    </None>
+    <None Include="..\..\..\..\trunk\README">
+      <Filter>APBS</Filter>
+    </None>
+    <None Include="..\..\..\..\fetk\maloc\doc\index.html">
+      <Filter>MALOC</Filter>
+    </None>
+  </ItemGroup>
+</Project>

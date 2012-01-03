@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="12.0"
+	Name="APBSC"
+	ProjectGUID="{2409C8C6-D957-4A62-BB79-9CB6196E7911}"
+	VCNestedProjectGUID="{A744F0C5-46B1-4442-B322-A71D4C34FB5E}"
+	VCNestedProjectFileName="MALOC.vcproj"
+	>
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>
