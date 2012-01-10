@@ -1,7 +1,7 @@
-CHARMM Element source/misc/apbs.src $Revision: 384 $
+CHARMM Element source/misc/apbs.src $Revision: 554 $
       SUBROUTINE APBS
 c
-c $Id: apbs.f 384 2010-03-18 00:33:44Z rok $
+c $Id: apbs.f 554 2012-01-10 02:45:26Z rok $
 c
 c APBS module for CHARMM/APBS integration
 c
@@ -53,8 +53,11 @@ c local variables
       INTEGER nonlin, bcfl, nion, srfm, calcenergy, calcforce
       INTEGER calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
       INTEGER calcnpenergy, wpot, wchg, wsmol, wkappa, wdiel
+      integer watompot, rpot
+      integer calcnpforce
       INTEGER rchg, rkappa, rdiel
       INTEGER apbs_print, radiopt
+
       double precision pdie, sdie, srad, swinapbs, tempapbs, gamma
       double precision sdens,smvolume, smsize
       double precision maxx, minx, maxy, miny, maxz, minz
@@ -67,7 +70,7 @@ c local variables
       double precision apbsdbx(NATOM), apbsdby(NATOM), apbsdbz(NATOM)
 
 c      character*80 rcsid
-c      data rcsid /'$Id: apbs.f 384 2010-03-18 00:33:44Z rok $'/
+c      data rcsid /'$Id: apbs.f 554 2012-01-10 02:45:26Z rok $'/
 c-----------------------------------------------------------------
       INTEGER ISLCT, lstpbi, ntpbi
 C Local variables
@@ -142,14 +145,17 @@ c-----------------------------------------------------------------
       calcenergy = 1
       calcforce = 0
       calcnpenergy = 1
+      calcnpforce = 2
       wpot = 0
       wchg = 0
       wsmol = 0
       wkappa = 0
       wdiel= 0
+      watompot = 0
       rchg = 0
       rkappa = 0
       rdiel = 0
+      rpot = 0
 
     ! MGparm
       calc_type = 1 ! 0 - manual MG, 1- autoMG, 2- parallel MG
@@ -475,10 +481,10 @@ c ok, we now have all user switches
       i_param(14) = wsmol
       i_param(15) = wkappa
       i_param(16) = wdiel
-      i_param(17) = 0
-      i_param(18) = 0
+      i_param(17) = watompot
+      i_param(18) = rpot
       i_param(19) = 0
-      i_param(20) = 0
+      i_param(20) = calcnpforce
       i_param(21) = calcnpenergy
       i_param(22) = nion
       i_param(23) = rchg
@@ -593,7 +599,7 @@ c OK, now we are ready to call the apbs_driver and start the show
             write(outu, '(3x, a, i3)') "APBS> APBS return code: ", rc
          end if
 
-         if ((apbs_debug .gt. 0) .and. (calcforce .gt. 0)) then
+         if ((apbs_debug .gt. 3) .and. (calcforce .gt. 0)) then
             do i = 1, natom
                write(outu, '(3x, a, i8, 3f13.5, a)')
      +              "APBS> Total force on atom", i, apbsdx(i), apbsdy(i)
@@ -1006,4 +1012,4 @@ c endif section for napbs/icall comparison
       RETURN
       END
 
-c $Id: apbs.f 384 2010-03-18 00:33:44Z rok $
+c $Id: apbs.f 554 2012-01-10 02:45:26Z rok $

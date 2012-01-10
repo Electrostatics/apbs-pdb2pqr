@@ -2,7 +2,7 @@
 c
 c apbs interface
 c
-c $Id: wrapper.f 547 2011-12-08 21:19:07Z rok $
+c $Id: wrapper.f 556 2012-01-10 03:03:33Z rok $
 c
 c simple reference Fortran code
 c this shows how to call iapbs library from a fortran application
@@ -12,7 +12,7 @@ c
       implicit none
       integer rc, apbsdrv, natom, i, j, loop
       character*80 rcsid, finput, pqr
-      data rcsid /'$Id: wrapper.f 547 2011-12-08 21:19:07Z rok $'/
+      data rcsid /'$Id: wrapper.f 556 2012-01-10 03:03:33Z rok $'/
 
       integer MAXAIM
       parameter (MAXAIM = 150000)
@@ -41,8 +41,8 @@ c local
       double precision smvolume, smsize
       integer nonlin, bcfl, nion, srfm, calcenergy, calcforce
       integer calc_type, nlev, cmeth, ccmeth, fcmeth, chgm
-      integer wpot, wchg, wsmol, wkappa, wdiel, rchg, rkappa, rdiel
-      integer watompot, rpot
+      integer wpot, wchg, wsmol, wkappa, wdiel, rchg, rkappa
+      integer watompot, rpot, rdiel
       integer calcnpenergy, calcnpforce
 
       NAMELIST /apbs/ dime, pdime, cglen, fglen, grid, 
@@ -79,18 +79,20 @@ c     defaults
       grid(2) = 0.5
       grid(3) = 0.5
 
-      pdie = 1.5
-      sdie = 80.0 
+      pdie = 2.0
+      sdie = 78.4
       srad = 1.4
-      swin = 0.4
-      temp = 300.0
+      swin = 0.3
+      temp = 298.15
       sdens = 10.0
-      gamma = 0.15
+      gamma = 0.105
+      smvolume = 10.0
+      smsize = 1000.0
       smvolume = 10.0
       smsize = 1000.0
 
       calc_type = 0
-      nlev = 4 
+      nlev = 4
       cmeth = 1 
       ccmeth = 1 
       fcmeth = 1 
@@ -98,10 +100,10 @@ c     defaults
       nonlin = 0
       bcfl = 1
       srfm = 2
-      calcenergy = 2
-      calcforce = 2
+      calcenergy = 1
+      calcforce = 0
       calcnpenergy = 1
-      calcnpforce = 2
+      calcnpforce = 0
       wpot = 0
       wchg = 0
       wsmol = 0
@@ -162,10 +164,10 @@ c     read in PQR data
       write(6,'(a, 3f8.3)') 'Mol. dimensions: ', maxx-minx, maxy-miny,
      +     maxz-minz
 
-c if we are doing mg-manual calculate recommended grid values
+c if we are doing mg-auto calculate recommended grid values
 c including dime, if not specified
 
-      if (calc_type == 0 ) then
+      if ((calc_type == 0 .OR. calc_type == 1) .AND. dime(1) == 0) then
          cglen(1) = 1.7 * (maxx-minx)
          cglen(2) = 1.7 * (maxy-miny)
          cglen(3) = 1.7 * (maxz-minz)
@@ -174,14 +176,14 @@ c including dime, if not specified
          fglen(3) = 20.0 + (maxz-minz)
 
          do i = 1, 3
-            if (fglen(i) > cglen(i)) fglen(i) = cglen(i)
+            if (fglen(i) > cglen(i)) cglen(i) = fglen(i)
          end do
 
          if (dime(1) == 0 ) then
             print *, 'Grid dime not specified, calculating ...'
             do i = 1, 3
                dime(i) = 
-     +              32*(int(( int(fglen(i)/grid(i)+0.5)-1)/32 + 0.5))+ 1
+     +              32*(int((int(fglen(i)/grid(i)+0.5)-1)/32 + 0.5))+ 1
                if (dime(i) < 33) dime(i) = 33
             end do
          end if
@@ -243,6 +245,37 @@ c     print molecule data
       r_param(8) = smvolume
       r_param(9) = smsize
 
+      if (apbs_debug > 2) then
+         print *, 'i_param:'
+         write(*, '(a, i4)') 'calc_type', i_param(1)
+         write(*, '(a, i4)') 'nlev', i_param(2)
+         write(*, '(a, i4)') 'cmeth', i_param(3)
+         write(*, '(a, i4)') 'ccmeth', i_param(4)
+         write(*, '(a, i4)') 'fcmeth', i_param(5)
+         write(*, '(a, i4)') 'chgm', i_param(6)
+         write(*, '(a, i4)') 'nonlin', i_param(7)
+         write(*, '(a, i4)') 'bcfl', i_param(8)
+         write(*, '(a, i4)') 'srfm', i_param(9)
+         write(*, '(a, i4)') 'calcenergy', i_param(10)
+         write(*, '(a, i4)') 'calcforce', i_param(11)
+         write(*, '(a, i4)') 'wpot', i_param(12)
+         write(*, '(a, i4)') 'wchg', i_param(13)
+         write(*, '(a, i4)') 'wsmol', i_param(14)
+         write(*, '(a, i4)') 'wkappa', i_param(15)
+         write(*, '(a, i4)') 'wdiel', i_param(16)
+         write(*, '(a, i4)') 'watompot', i_param(17)
+         write(*, '(a, i4)') 'rpot', i_param(18)
+         write(*, '(a, i4)') '0', i_param(19)
+         write(*, '(a, i4)') 'calcnpforce', i_param(20)
+         write(*, '(a, i4)') 'calcnpenergy', i_param(21)
+         write(*, '(a, i4)') 'nion', i_param(22)
+         write(*, '(a, i4)') 'rchg', i_param(23)
+         write(*, '(a, i4)') 'rkappa', i_param(24)
+         write(*, '(a, i4)') 'rdiel', i_param(25)
+
+         print *, 'r_param:'
+         write(*, '(a, f8.3)') 'pdie', r_param(1)
+      end if
 
 c more intialization
       do i = 1, natom

@@ -1,5 +1,5 @@
 c
-c $Id: wrapper_inc.f 266 2009-05-05 04:47:57Z rok $
+c $Id: wrapper_inc.f 554 2012-01-10 02:45:26Z rok $
 c
 
 
@@ -14,8 +14,12 @@ c For detailed description of individual variables please see
 c APBS manual.
 c
 c-----------------------------------------------------------------------
+c      INTEGER(kind=4), allocatable, dimension(:) :: ARRINFO, MAXPROCS
+c      INTEGER(kind=4), allocatable, dimension(:) :: ARRERR
+c      INTEGER(kind=4) NPROC,MPIINFO4,MPICOMM4,ME4,MPISELF,MPIERRS(1)
+c      INTEGER(kind=4) ME,NP,MPIDP,MEROOT,IONE,IERR
 
-      integer MAXION, NATOMS
+      integer :: MAXION, NATOMS
       parameter (MAXION = 10, NATOMS = MAXAIM)
 
 c-----------------------------------------------------------------------
@@ -27,7 +31,7 @@ c-----------------------------------------------------------------------
       double precision r_param(9)
 
 c-----------------------------------------------------------------------
-      integer i_param(25)
+      integer :: i_param(25)
 
 
 c-----------------------------------------------------------------------
@@ -35,7 +39,7 @@ c   int dime[3];               /**< Grid dimensions */
 c   int pdime[3];              /**< Grid of processors to be used in
 c                               * calculation */
 c
-      integer dime(3), pdime(3)
+      integer :: dime(3), pdime(3)
 
 c-----------------------------------------------------------------------
 c   double grid[3];            /**< Grid spacings */
