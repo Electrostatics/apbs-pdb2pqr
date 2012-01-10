@@ -5,8 +5,8 @@
  *  @brief  The main iAPBS driver code
  *  @note   Energy is returned in kJ/mol, forces in  kJ/(mol/A).
  *
- *  $Revision: 547 $
- *  $Id: apbs_driver.c 547 2011-12-08 21:19:07Z rok $
+ *  $Revision: 556 $
+ *  $Id: apbs_driver.c 556 2012-01-10 03:03:33Z rok $
  *
  */
 
@@ -26,7 +26,7 @@
 */
 #define MAX_BUF_SIZE 4096
 
-VEMBED(rcsid="$Id: apbs_driver.c 547 2011-12-08 21:19:07Z rok $")
+VEMBED(rcsid="$Id: apbs_driver.c 556 2012-01-10 03:03:33Z rok $")
 
 /**
  * @brief  Wrapper iAPBS function
@@ -155,6 +155,7 @@ int apbsdrv_(
 	kappaMap[i] = VNULL;
 	potMap[i] = VNULL;
 	chargeMap[i] = VNULL;
+	inputString = VNULL;
     }
 
 
@@ -173,7 +174,7 @@ int apbsdrv_(
     inputString = setupString(r_param, i_param, grid, dime, ionq, ionc, 
 		  ionr, glen, center, cglen, fglen, ccenter, fcenter, ofrac, 
 		  pdime, debug);
-    if(debug>2) Vnm_tprint(1, "debug: Input string:\n %s\n", inputString);
+    if(debug>2) Vnm_tprint(1, "debug: Input string:\n%s\n", inputString);
     Vio_bufTake(sock, inputString, bufsize);
 
     if (!NOsh_parseInput(nosh, sock)) {
@@ -212,7 +213,7 @@ int apbsdrv_(
     alist[0]->charge = 0.;
 
     alist[0]->number = *nat;
-
+    natom =  alist[0]->number;
     /* Allocate the necessary space for the atom array */
     alist[0]->atoms = Vmem_malloc(alist[0]->vmem, alist[0]->number,
 	    (sizeof(Vatom)));
@@ -707,7 +708,7 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
     static char mybuf[MAX_BUF_SIZE];
     int i;
     // read section
-    strcpy(string, "read\n mol pqr ion.pqr\n");
+    strcat(string, "read\nmol pqr ion.pqr\n");
 
     if(i_param[22] == 1){
       strcat(string, "charge dx iapbs-charge.dx\n");
@@ -738,7 +739,7 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
     if (i_param[0] == 0 && grid[0] > 0.) {
 	sprintf(mybuf, "grid %.3f %.3f %.3f\n", grid[0], grid[1], grid[2]);
 	strcat(string,mybuf);
-	// nlev is deprecated now (12/09)
+	// nlev is deprecated now (2009/12)
 	sprintf(mybuf, "# nlev %i\n", i_param[1]);
 	strcat(string,mybuf);
     }
@@ -788,8 +789,8 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
 	      ionq[i], ionc[i], ionr[i]);
       strcat(string,mybuf);
     }
-    sprintf(mybuf, "pdie %.3f \n sdie %.3f\n srad %.3f\n swin %.3f\n\
-	    temp %.3f\n sdens %.3f\n mol 1\n", r_param[0], r_param[1], r_param[2],
+    sprintf(mybuf, "pdie %.3f \nsdie %.3f\nsrad %.3f\nswin %.3f\n\
+temp %.3f\nsdens %.3f\nmol 1\n", r_param[0], r_param[1], r_param[2],
 	    r_param[3], r_param[4], r_param[5]);
     strcat(string, mybuf);
 
@@ -881,12 +882,12 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
 
     if(i_param[20] > 0){
       strcat(string, "apolar name npolar\n");
-      strcat(string, "bconc 0.0\n press 0.0\n dpos 0.2\n");
-      strcat(string, "mol 1\n srfm sacc\n");
+      strcat(string, "bconc 0.0\npress 0.0\ndpos 0.2\n");
+      strcat(string, "mol 1\nsrfm sacc\n");
       strcat(string, "grid 0.2 0.2 0.2\n");
       sprintf(mybuf, "gamma %.3f\n", r_param[6]);
       strcat(string, mybuf);
-      sprintf(mybuf, "srad %.3f\n swin %.3f\n temp %.3f\n sdens %.3f\n", \
+      sprintf(mybuf, "srad %.3f\nswin %.3f\ntemp %.3f\nsdens %.3f\n", \
 	      r_param[2], r_param[3], r_param[4], r_param[5]);
       strcat(string, mybuf);
 
@@ -922,7 +923,7 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
       }
     }
 
-    strcat(string, "\n quit\n");
+    strcat(string, "\nquit\n");
     //printf("%s", string);
     return string;
 }

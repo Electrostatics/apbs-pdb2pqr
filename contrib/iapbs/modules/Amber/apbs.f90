@@ -1,4 +1,4 @@
-! $Id: apbs.f90 549 2011-12-08 21:21:18Z rok $
+! $Id: apbs.f90 554 2012-01-10 02:45:26Z rok $
 !
 ! This is iAPBS/sander module for performing APBS calculations in sander.
 !
@@ -57,6 +57,10 @@ CONTAINS
     temp = 298.15
     gamma = 0.105
     sdens = 10.0
+    gamma = 0.105
+    smvolume = 10.0
+    smsize = 1000.0
+
     calcenergy = 1
     calcforce = 0
     calcnpenergy = 1

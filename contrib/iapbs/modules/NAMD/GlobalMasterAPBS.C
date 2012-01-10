@@ -11,8 +11,8 @@
  *  @brief NAMD/APBS module
  *  @note Energy is returned in kcal/mol, forces in  kcal/(mol/A).
  *
- *  $Revision: 480 $
- *  $Id: GlobalMasterAPBS.C 480 2011-03-15 23:01:39Z rok $
+ *  $Revision: 555 $
+ *  $Id: GlobalMasterAPBS.C 555 2012-01-10 02:51:36Z rok $
  *
  */
 
@@ -69,11 +69,14 @@ public:
   int calcenergy;
   int calcforce;
   int calcnpenergy;
+  int calcnpforce;
   Bool wpot;
   Bool wchg;
   Bool wsmol;
   Bool wkappa;
   Bool wdiel;
+  Bool watompot;
+  Bool rpot;
   Bool rchg;
   Bool rkappa;
   Bool rdiel;
@@ -133,7 +136,9 @@ void APBSParameters::config_parser(ParseOptions &opts) {
   opts.optional("main", "calcenergy", "Energy calculation flag: 0: Do not perform energy calculation; 1: Calculate total energy only; 2: Calculate per-atom energy components", &calcenergy, 1);
   opts.optional("main", "calcforce", "Atomic forces calculation: 0: Do not perform force calculation; 1: Calculate total force only; 2: Calculate per-atom force components", &calcforce, 2);
   opts.optional("main", "calcnpenergy", "NP energy calculation: 0: Do not perform NP energy calculation; 1: Calculate total NP energy only; 2: Calculate per-atom NP energy components", &calcnpenergy, 1);
+  opts.optional("main", "calcnpforce", "NP force calculation: 0: Do not perform NP force calculation; 1: Calculate total NP force only; 2: Calculate per-atom NP force components", &calcnpforce, 1);
   opts.optionalB("main", "wpot", "Write electrostatic potential to iapbs-pot.dx?", &wpot, FALSE);
+  opts.optionalB("main", "watompot", "Write atomic electrostatic potential to iapbs-atompot.dx?", &watompot, FALSE);
   opts.optionalB("main", "wchg", "Write charge data to iapbs-charge.dx?", &wchg, FALSE);
   opts.optionalB("main", "wsmol", "Write molecular surface data to iapbs-smol.dx?", &wsmol, FALSE);
   opts.optionalB("main", "wkappa", "Write kappa data to iapbs-kappa.dx?", &wkappa, FALSE);
@@ -141,6 +146,7 @@ void APBSParameters::config_parser(ParseOptions &opts) {
   opts.optionalB("main", "rkappa", "Read kappa map from iapbs-kappa.dx?", &rkappa, FALSE);
   opts.optionalB("main", "rchg", "Read charge map from iapbs-charge.dx?", &rchg, FALSE);
   opts.optionalB("main", "rdiel", "Reade diel map from iapbs-diel[x,y,z].dx?", &rdiel, FALSE);
+  opts.optionalB("main", "rpot", "Reade pot map from iapbs-pot[x,y,z].dx?", &rpot, FALSE);
   opts.optional("main", "ion", "Counterion charge [e], conc [M], radius [A]", PARSE_MULTIPLES);
   opts.optional("main", "dime", "Grid dimensions (in x, y and z)", PARSE_STRING);
   opts.optional("main", "cmeth", "Centering method: 0: Center on a point 1: Center on a molecule", &cmeth, 1);
@@ -194,10 +200,10 @@ void APBSParameters::check_config(ParseOptions &opts, ConfigList &config) {
   i_param[13] = wsmol;
   i_param[14] = wkappa;
   i_param[15] = wdiel;
-  i_param[16] = 0;
-  i_param[17] = 0;
+  i_param[16] = watompot;
+  i_param[17] = rpot;
   i_param[18] = 0;
-  i_param[19] = 0;
+  i_param[19] = calcnpforce;
   i_param[20] = calcnpenergy;
   i_param[21] = nion;
   i_param[22] = rchg;
