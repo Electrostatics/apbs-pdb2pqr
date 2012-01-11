@@ -309,6 +309,7 @@ VPUBLIC int loadDielMaps(NOsh *nosh,
 							   nosh->dielXpath[i]);
 					return 0;
 				}
+
 				nx = dielXMap[i]->nx;
 				ny = dielXMap[i]->ny;
 				nz = dielXMap[i]->nz;
