@@ -29,16 +29,40 @@
 # Author:  Michael Holst
 ##############################################################################
 
-rm -rf config.cache autom4te.cache
+# rm -rf aclocal.m4  autom4te.cache/ config config.status config.log configure libtool m4/ Makefile Makefile.in
+# autoreconf --warnings=all --force --verbose --install
 
-aclocal
-automake --gnu --add-missing --copy
-autoconf
-#autoheader --verbose 
-
-if [ -x libtoolize ]; then
-  libtoolize --automake --copy --force
+if [ ! -x configure ] ; then
+ echo "Creating configure script ..."
+ rm -rf config.cache autom4te.cache
+ mkdir config
+ aclocal \
+ && automake --gnu --add-missing --copy \
+ && autoconf \
+ && libtoolize --automake --copy --force
+ rm -rf config.cache autom4te.cache
 fi
 
-rm -rf config.cache autom4te.cache
+aclocal --force
+mkdir config
+/usr/bin/autoconf --force --warnings=all
+automake --add-missing --copy --force-missing --warnings=all
+
+# setup libs
+echo "Setting up library dependencies ..."
+p=`pwd`
+APBS_SRC=`echo $p| sed 's%/contrib/iapbs%%'`
+APBS_PREFIX=`grep "^prefix =" ../../Makefile | awk '{print $3}'`
+
+cp -a $APBS_SRC/contrib/include/maloc $APBS_PREFIX/include
+cp $APBS_SRC/contrib/lib/libmaloc.a $APBS_PREFIX/lib
+cp $APBS_SRC/contrib/blas/.libs/libapbsblas.a $APBS_PREFIX/lib
+cp $APBS_SRC/contrib/zlib/.libs/libz.a $APBS_PREFIX/lib
+
+echo "APBS_SRC=$APBS_SRC"
+echo "APBS_PREFIX=$APBS_PREFIX"
+
+echo "Running configure and building iAPBS ..."
+./configure --prefix=${APBS_PREFIX} --disable-openmp \
+&& make && make install
 

@@ -14,7 +14,7 @@ libiapbs_a_SOURCES = apbs_driver.c apbs_driver.h
 includedir = $(prefix)/include/apbs
 include_HEADERS = apbs_driver.h
 
-INCLUDES = $(apbs_inc_path)
+AM_CPPFLAGS = $(apbs_inc_path)
 
 EXTRA_PROGRAMS = wrapper
 wrapper_SOURCES = wrapper.f apbs_driver.c apbs_driver.h
