@@ -6,7 +6,7 @@
 ## Author:  Robert Konecny
 ## ###########################################################################
 
-#ACLOCAL_AMFLAGS= -I m4
+ACLOCAL_AMFLAGS= -I m4
 
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .y .l .H .h .m .C .cc .c .f .java .o
