@@ -28,11 +28,12 @@ AC_PROG_FC(${fclist})
 AC_PROG_F77(${fclist})
 AC_PROG_INSTALL
 AC_PROG_CPP
-AC_PROG_RANLIB
+#AC_PROG_RANLIB
 # libtool needs to be installed
-#AM_PROG_LIBTOOL
+##AM_PROG_LIBTOOL
 #AC_LIBTOOL_DLOPEN
 #AC_PROG_LIBTOOL
+LT_INIT
 
 dnl # -------------------------------------------------------------------------
 dnl # Test to see if the compiler combination is valid for gcc/g77 or

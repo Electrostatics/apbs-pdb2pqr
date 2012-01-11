@@ -43,16 +43,16 @@ if [ ! -x configure ] ; then
  rm -rf config.cache autom4te.cache
 fi
 
-aclocal --force
-mkdir config
-/usr/bin/autoconf --force --warnings=all
-automake --add-missing --copy --force-missing --warnings=all
+#aclocal --force
+#mkdir config
+#/usr/bin/autoconf --force --warnings=all
+#automake --add-missing --copy --force-missing --warnings=all
 
 # setup libs
 echo "Setting up library dependencies ..."
 p=`pwd`
-APBS_SRC=`echo $p| sed 's%/contrib/iapbs%%'`
-APBS_PREFIX=`grep "^prefix =" ../../Makefile | awk '{print $3}'`
+export APBS_SRC=`echo $p| sed 's%/contrib/iapbs%%'`
+export APBS_PREFIX=`grep "^prefix =" ../../Makefile | awk '{print $3}'`
 
 cp -a $APBS_SRC/contrib/include/maloc $APBS_PREFIX/include
 cp $APBS_SRC/contrib/lib/libmaloc.a $APBS_PREFIX/lib

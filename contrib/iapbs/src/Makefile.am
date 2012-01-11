@@ -1,4 +1,3 @@
-
 SUFFIXES = .H .h .C .cc .c .F .f .o
 
 SUBDIRS = .
@@ -16,10 +15,8 @@ include_HEADERS = apbs_driver.h
 
 AM_CPPFLAGS = $(apbs_inc_path)
 
-EXTRA_PROGRAMS = wrapper
+bin_PROGRAMS = wrapper
 wrapper_SOURCES = wrapper.f apbs_driver.c apbs_driver.h
-
 wrapper_LDADD = libiapbs.a
 wrapper_LDFLAGS = $(apbs_lib_path) $(apbs_libs) $(apbs_blas) $(z_lib)
-
 
