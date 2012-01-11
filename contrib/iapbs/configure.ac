@@ -1,9 +1,9 @@
-AC_INIT([iAPBS], [2.0.0], [rok@ucsd.edu])
-AC_PREREQ(2.56)
+AC_INIT([iAPBS],[2.0.0],[rok@ucsd.edu])
+AC_PREREQ(2.65)
 
 AC_CONFIG_AUX_DIR(config)
 AC_PREFIX_DEFAULT(${HOME})
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 
 dnl AM_INIT_AUTOMAKE(iapbs, 2.0.0)
 AM_INIT_AUTOMAKE
@@ -28,12 +28,11 @@ AC_PROG_FC(${fclist})
 AC_PROG_F77(${fclist})
 AC_PROG_INSTALL
 AC_PROG_CPP
-# AC_PROG_RANLIB
-AC_DISABLE_SHARED
+AC_PROG_RANLIB
 # libtool needs to be installed
-AM_PROG_LIBTOOL
-AC_LIBTOOL_DLOPEN
-AC_PROG_LIBTOOL
+#AM_PROG_LIBTOOL
+#AC_LIBTOOL_DLOPEN
+#AC_PROG_LIBTOOL
 
 dnl # -------------------------------------------------------------------------
 dnl # Test to see if the compiler combination is valid for gcc/g77 or
@@ -194,7 +193,8 @@ AC_SUBST(zlib)
 AC_SUBST(z_lib)
 
 
-#AC_OUTPUT([Makefile src/Makefile test/Makefile])
+#AC_CONFIG_FILES([Makefile src/Makefile test/Makefile])
+AC_OUTPUT
 AC_CONFIG_FILES([
 	Makefile
 	src/Makefile
