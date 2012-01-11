@@ -2,7 +2,7 @@
 # test dir Makefile.am
 #
 
-clean:
+clean-local:
 	rm -f *.out *.diff timing.log io.mc*
 
 test: all
@@ -18,7 +18,7 @@ parallel:
 	./test.sh parallel
 
 
-$(srcdir)/Makefile.in:
+#$(srcdir)/Makefile.in:
 
-Makefile:
+#Makefile:
 
