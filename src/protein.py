@@ -247,9 +247,7 @@ class Protein:
         file.write("<tr><th>Atom Number</th><th>Atom Name</th><th>Residue Name</th><th>Chain ID</th><th>AMBER Atom Type</th><th>CHARMM Atom Type</th></tr>\n")
        
         for atom in self.getAtoms():
-            if isinstance(atom.residue, Amino) or \
-               isinstance(atom.residue, WAT) or \
-               isinstance(atom.residue, Nucleic):
+            if isinstance(atom.residue, (Amino, WAT, Nucleic)):
                 resname = atom.residue.ffname
             else:
                 resname = atom.residue.name
@@ -352,3 +350,9 @@ class Protein:
                 chains: The list of chains in the protein (chain)
         """
         return self.chains
+    
+    def getSummary(self):
+        output = []
+        for chain in self.chains:
+            output.append(chain.getSummary())
+        return ' '.join(output)

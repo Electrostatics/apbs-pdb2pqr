@@ -83,9 +83,9 @@ def printHeader(pagetitle,have_opal=None,jobid=None):
     """
     if jobid:
         if have_opal:
-            print "Location: querystatus.cgi?jobid=%s&typeofjob=opal\n" % (jobid,typeOfJob)
+            print "Location: querystatus.cgi?jobid=%s&typeofjob=opal\n" % (jobid)
         else:
-            print "Location: querystatus.cgi?jobid=%s&typeofjob=local\n" & (jobid,typeOfJob)
+            print "Location: querystatus.cgi?jobid=%s&typeofjob=local\n" % (jobid)
 
     #print "Content-type: text/html\n"
     print "<HTML>"
@@ -95,19 +95,72 @@ def printHeader(pagetitle,have_opal=None,jobid=None):
     print "</HEAD>"
     return
 
-def redirector(name):
+def redirector(name, weboptions):
     """
         Prints a page which redirects the user to querystatus.cgi and writes starting time to file
     """
 
     utilities.appendToLogFile(name, 'pdb2pqr_start_time', str(time.time()))
+    
+    jobid = int(name)
+    
+    analiticsDict = weboptions.getOptions()
+    
+    events = {}
+    
+    events['submission'] = analiticsDict['pdb']+'|'+str(os.environ["REMOTE_ADDR"])
+    del analiticsDict['pdb']
+    
+    events['titration'] = str(analiticsDict.get('ph'))
+    if 'ph' in analiticsDict:
+        del analiticsDict['ph']
+        
+    events['apbsInput'] = str(analiticsDict.get('apbs'))
+    del analiticsDict['apbs']
+    
+    #Clean up selected extensions output
+    if 'selectedExtensions' in analiticsDict:
+        analiticsDict['selectedExtensions'] = ' '.join(analiticsDict['selectedExtensions'])
+#    events += utilities.getEventTrackingString(category='submissionData',
+#                                               action='submission', 
+#                                               label=submissionStr)
+    
+    options = ','.join(str(k)+':'+str(v) for k,v in analiticsDict.iteritems())
+    events['options']=options
+#    for key in analiticsDict:
+#        result = analiticsDict[key]
+#        if key == "selectedExtensions":
+#            result = ' '.join(result)
+#            
+#        events += utilities.getEventTrackingString(category='setting',
+#                                                   action=key, 
+#                                                   label=result)
 
-    string = ""
-    string+= "<html>\n"
-    string+= "\t<head>\n"
-    string+= "\t\t<meta http-equiv=\"Refresh\" content=\"0; url=%squerystatus.cgi?jobid=%s&calctype=pdb2pqr\">\n" % (WEBSITE, name)
-    string+= "\t</head>\n"
-    string+= "</html>\n"
+    eventsScriptString = ''
+    for event in events:
+        eventsScriptString += utilities.getEventTrackingString(category='submissionData',
+                                                               action=event, 
+                                                               label=events[event]) 
+        
+    redirectURL = "{website}querystatus.cgi?jobid={jobid}&calctype=pdb2pqr".format(website=WEBSITE, 
+                                                                                   jobid=jobid)
+
+    string = """
+<html>
+    <head>
+        {trackingscript}
+        <script type="text/javascript">
+            {trackingevents}
+        </script>
+        <meta http-equiv="Refresh" content="5; url={redirectURL}"> 
+    </head>
+    <body>
+        You are being automatically redirected to a new location.<br />
+        If your browser does not redirect you in 5 seconds, or you do
+        not wish to wait, <a href="{redirectURL}">click here</a>. 
+    </body>
+</html>""".format(trackingscript=utilities.getTrackingScriptString(jobid=jobid), 
+                  trackingevents=eventsScriptString, redirectURL=redirectURL)
     return string
 
 def sanitizeFileName(fileName):
@@ -123,7 +176,7 @@ class WebOptions(object):
     '''Helper class for gathering and querying options selected by the user'''
     def __init__(self, form):
         '''Gleans all information about the user selected options and uploaded files.
-        Also validates the user input. raises WebOptionsError if there is any problems.'''
+        Also validates the user input. Raises WebOptionsError if there is any problems.'''
         
         #options to pass to runPDB2PQR
         self.runoptions = {}
@@ -167,6 +220,8 @@ class WebOptions(object):
                 text += phHelp
                 raise WebOptionsError(text)
             self.runoptions['ph'] = ph
+            #build propka options
+            self.runoptions['propkaOptions'] = utilities.createPropkaOptions(ph, True)
                  
         self.otheroptions['apbs'] = form.has_key("INPUT")
         self.otheroptions['whitespace'] = form.has_key("WHITESPACE")
@@ -203,7 +258,7 @@ class WebOptions(object):
         if form.has_key("LIGAND") and form['LIGAND'].filename:
             self.ligandfilename=sanitizeFileName(form["LIGAND"].filename)
             ligandfilestring = form["LIGAND"].value
-            # for Windows-style newline compatibility for pdb2pka
+            # for Windows and Mac style newline compatibility for pdb2pka
             ligandfilestring = ligandfilestring.replace('\r\n', '\n')
             self.ligandfilestring = ligandfilestring.replace('\r', '\n')
             
@@ -214,7 +269,9 @@ class WebOptions(object):
         else:
             self.pqrfilename = "%s.pqr" % self.pdbfilename
             
-        self.runoptions['verbose'] = False
+        #Always turn on summary and verbose.
+        self.runoptions['verbose'] = True
+        self.runoptions['selectedExtensions'] = ['summary']
         
     def getLoggingList(self):
         '''Returns a list of options the user has turned on.
@@ -232,9 +289,26 @@ class WebOptions(object):
         return self.runoptions.copy()
     
     def getOptions(self):
-        '''Returns all options for reporting to google analytics and local job logging'''
+        '''Returns all options for reporting to google analytics'''
         options = self.runoptions.copy()
         options.update(self.otheroptions)
+        
+        options['ff'] = self.ff
+        
+        options['pdb'] = self.pdbfilename
+        
+        #This is redundant.
+        if options.has_key('propkaOptions'):
+            del options['propkaOptions']
+        
+        if options.has_key('ligand'):
+            options['ligand'] = self.ligandfilename
+            
+        if options.has_key('userff'):
+            options['userff'] = self.userfffilename
+            
+        if options.has_key('usernames'):
+            options['usernames'] = self.usernamesfilename
         
         return options
     
@@ -272,6 +346,9 @@ class WebOptions(object):
         if 'ligand' in self.runoptions:
             commandLine.append('--ligand=%s' % self.ligandfilename)
             
+        for ext in self.runoptions.get('selectedExtensions',[]):
+            commandLine.append('--%s' % ext)
+            
         commandLine.append(self.pdbfilename)
         
         commandLine.append(self.pqrfilename)
@@ -300,7 +377,7 @@ def handleOpal(weboptions):
     '''
         Handle opal based run.
     '''
-    # Opal-specific import statments
+    # Opal-specific import statements
     from AppService_client import AppServiceLocator, getAppMetadataRequest, launchJobRequest, launchJobBlockingRequest, getOutputAsBase64ByNameRequest
     from AppService_types import ns0
     from ZSI.TC import String
@@ -352,8 +429,8 @@ def handleOpal(weboptions):
         print "<script type=\"text/javascript\">"
         print "try {"
         print "var pageTracker = _gat._getTracker(\"UA-11026338-3\");"
-        for key in options:
-            print "pageTracker._trackPageview(\"/main_cgi/has_%s_%s.html\");" % (key, options[key])
+        for key in weboptions:
+            print "pageTracker._trackPageview(\"/main_cgi/has_%s_%s.html\");" % (key, weboptions[key])
         print "pageTracker._trackPageview();"
         print "} catch(err) {}</script>"
         print "</BODY>"
@@ -378,12 +455,11 @@ def handleOpal(weboptions):
         pdb2pqrOpalJobIDFile.write(resp._jobID)
         pdb2pqrOpalJobIDFile.close()
         
-        print redirector(name)
+        print redirector(name, weboptions)
         
         # Recording CGI run information for PDB2PQR Opal
-        pdb2pqrOpalLogFile = open('%s%s%s/pdb2pqr_opal_log' % (INSTALLDIR, TMPDIR, name), 'w')
+        pdb2pqrOpalLogFile = open('%s%s%s/pdb2pqr_log' % (INSTALLDIR, TMPDIR, name), 'w')
         pdb2pqrOpalLogFile.write(str(weboptions.getOptions())+'\n'+
-                                 str(weboptions.ff)+'\n'+
                                  str(os.environ["REMOTE_ADDR"]))
         pdb2pqrOpalLogFile.close()
 
@@ -451,11 +527,18 @@ def handleNonOpal(weboptions):
         statusfile = open('%s%s%s/pdb2pqr_status' % (INSTALLDIR, TMPDIR, name), 'w')
         statusfile.write('running')
         statusfile.close()
+        
+        # Recording CGI run information for PDB2PQR Opal
+        pdb2pqrLogFile = open('%s%s%s/pdb2pqr_log' % (INSTALLDIR, TMPDIR, name), 'w')
+        pdb2pqrLogFile.write(str(weboptions.getOptions())+'\n'+
+                                 str(weboptions.ff)+'\n'+
+                                 str(os.environ["REMOTE_ADDR"]))
+        pdb2pqrLogFile.close()
 
 
         pid = os.fork()
         if pid:
-            print redirector(name)
+            print redirector(name, weboptions)
             sys.exit()
         else:
             currentdir = os.getcwd()

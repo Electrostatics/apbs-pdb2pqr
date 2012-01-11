@@ -24,6 +24,8 @@ def create_summary_output(routines, outfile):
     
     output = extensions.extOutputHelper(routines, outfile)
     
+    output.write(routines.protein.getSummary() + '\n')
+    
     for residue in routines.protein.getResidues():
         output.write(str(residue)+'\n')
 
