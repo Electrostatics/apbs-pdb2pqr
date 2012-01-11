@@ -442,13 +442,25 @@ VPUBLIC int Vgrid_gradient(Vgrid *thee, double pt[3], double grad[3]) {
 #define off_t long
 #include "../../contrib/zlib/zlib.h"
 #endif
-VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
+VPUBLIC int Vgrid_readGZ(Vgrid *thee, 
+                         const char *fname
+                        ) {
 
 #ifdef HAVE_ZLIB
-	int i, j, k, q, itmp, u, header;
-	int length, incr;
-	double * temp;
-	double dtmp1, dtmp2, dtmp3;
+	int i, 
+	    j, 
+            k, 
+            len, /* Temporary counter variable for loop conditionals */
+            q, 
+            itmp, 
+            u, 
+            header,
+            incr;
+	double *temp,
+               *length,
+               dtmp1,
+               dtmp2,
+               dtmp3;
 	gzFile infile;
 	char line[VMAX_ARGLEN];
 
@@ -456,16 +468,18 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	
 	/* Check to see if the existing data is null and, if not, clear it out */
     if (thee->data != VNULL) {
-        Vnm_print(1, "Vgrid_readDX:  destroying existing data!\n");
+            Vnm_print(1, "%s:  destroying existing data!\n", __func__);
 		Vmem_free(thee->mem, (thee->nx*thee->ny*thee->nz), sizeof(double),
-				  (void **)&(thee->data)); }
+				  (void **)&(thee->data));
+        }
+
     thee->readdata = 1;
     thee->ctordata = 0;
 	
 	infile = gzopen(fname, "rb");
 	if (infile == Z_NULL) {
-        Vnm_print(2, "Vgrid_writeDX:  Problem opening compressed file %s\n",
-				  fname);
+            Vnm_print(2, "%s:  Problem opening compressed file %s\n",
+				  __func__, fname);
         return VRC_FAILURE;
     }
 	
@@ -478,6 +492,8 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 		if(gzgets(infile, line, VMAX_ARGLEN) == Z_NULL){
 			return VRC_FAILURE;
 		}
+
+		// Skip comments and newlines
 		if(strncmp(line, "#", 1) == 0) continue;
 		if(line[0] == '\n') continue; 
 		
@@ -506,13 +522,14 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	}
 	
 	/* Allocate space for the data */
-    Vnm_print(0, "Vgrid_readGZ:  allocating %d x %d x %d doubles for storage\n",
-			  thee->nx, thee->ny, thee->nz);
+        Vnm_print(0, "%s:  allocating %d x %d x %d doubles for storage\n",
+			  __func__, thee->nx, thee->ny, thee->nz);
+        len = thee->nx * thee->ny * thee->nz;
+
     thee->data = VNULL;
-    thee->data = Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
-							 sizeof(double));
+        thee->data = Vmem_malloc(thee->mem, len, sizeof(double));
     if (thee->data == VNULL) {
-        Vnm_print(2, "Vgrid_readGZ:  Unable to allocate space for data!\n");
+            Vnm_print(2, "%s:  Unable to allocate space for data!\n", __func__);
         return 0;
     }
 	
@@ -520,10 +537,12 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee, const char *fname) {
 	 * data into (column major order). Add 2 to ensure the buffer is
 	 * big enough to take extra data on the final read loop.
 	 */
-	temp = (double *)malloc(thee->nx*thee->ny*thee->nz*sizeof(double) + 2);
+	temp = (double *)malloc(len * (2 * sizeof(double)));
 	length = temp;
-	for(i=0;i<thee->nx*thee->ny*thee->nz;i+=3){
-		gzgets(infile, line, length);
+
+	for(i=0;i<len;i+=3){
+		memset(&line, 0, sizeof(line));
+		gzgets(infile, line, VMAX_ARGLEN);
 		sscanf(line, "%lf %lf %lf",&temp[i],&temp[i+1],&temp[i+2]);
 	}
 	
