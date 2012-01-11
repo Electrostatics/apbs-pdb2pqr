@@ -155,6 +155,13 @@ class Chain:
             for atom in myList:
                 atomlist.append(atom)
         return atomlist
+    
+    def getSummary(self):
+        output = []
+        for residue in self.residues:
+            output.append(residue.letterCode())
+            
+        return ''.join(output)
 
 
 class Residue:
@@ -267,7 +274,8 @@ class Residue:
             Returns
                 item:          The value of the member   
         """
-        if name == "resSeq": self.setResSeq(value)
+        if name == "resSeq": 
+            self.setResSeq(value)
         else:
             try:
                 setattr(self, name, value)
@@ -542,6 +550,9 @@ class Residue:
         # Change the list pointer
 
         self.atoms = templist[:]
+        
+    def letterCode(self):
+        return 'X'
 
 class Atom(ATOM):
     """

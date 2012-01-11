@@ -54,11 +54,11 @@ BUMP_HDIST = 1.5
 BONDED_SS_LIMIT = 2.5
 PEPTIDE_DIST = 1.7
 REPAIR_LIMIT = 10
-AAS = ["ALA","ARG","ASH","ASN","ASP","CYS","CYM","GLN","GLU","GLH","GLY",\
-       "HIS","HID","HIE","HIP","HSD","HSE","HSP","ILE","LEU","LYS","LYN",\
-       "MET","PHE","PRO","SER","THR","TRP","TYR","TYM","VAL"]
-NAS = ["A","A5","A3","C","C5","C3","G","G5","G3","T","T5","T3","U",\
-       "U5","U3","RA","RG","RC","RU","DA","DG","DC","DT"]
+AAS = ["ALA", "ARG", "ASH", "ASN", "ASP", "CYS", "CYM", "GLN", "GLU", "GLH", "GLY", \
+       "HIS", "HID", "HIE", "HIP", "HSD", "HSE", "HSP", "ILE", "LEU", "LYS", "LYN", \
+       "MET", "PHE", "PRO", "SER", "THR", "TRP", "TYR", "TYM", "VAL"]
+NAS = ["A", "A5", "A3", "C", "C5", "C3", "G", "G5", "G3", "T", "T5", "T3", "U", \
+       "U5", "U3", "RA", "RG", "RC", "RU", "DA", "DG", "DC", "DT"]
 
 import math
 import copy
@@ -72,7 +72,7 @@ from definitions import *
 from StringIO import StringIO
 
 class Routines:
-    def __init__(self, protein, verbose, definition = None):
+    def __init__(self, protein, verbose, definition=None):
         """
             Initialize the Routines class.  The class contains most
             of the main routines that run PDB2PQR
@@ -92,7 +92,7 @@ class Routines:
             self.aadef = definition.getAA()
             self.nadef = definition.getNA()
 
-            
+
     def write(self, message, indent=0):
         """
             Write a message to stderr for debugging if verbose
@@ -116,7 +116,7 @@ class Routines:
 
     def applyNameScheme(self, forcefield):
         """
-            Apply the naming scheme of the give forcefield to the atoms
+            Apply the naming scheme of the given forcefield to the atoms
             within the protein
 
             Parameters
@@ -125,22 +125,25 @@ class Routines:
         """
         self.write("Applying the naming scheme to the protein...")
         for residue in self.protein.getResidues():
-            if isinstance(residue, Amino) or isinstance(residue, WAT) \
-               or isinstance(residue, Nucleic):
+            if isinstance(residue, (Amino, WAT, Nucleic)):
                 resname = residue.ffname
-            else: resname = residue.name
+            else:
+                resname = residue.name
 
             for atom in residue.getAtoms():
                 rname, aname = forcefield.getNames(resname, atom.name)
                 if resname not in ['LIG', 'WAT', 'ACE', 'NME'] and rname != None:
-                    if (residue.isNterm or residue.isCterm) and rname != residue.name: 
-                        rname = residue.name
+                    try:
+                        if (residue.isNterm or residue.isCterm) and rname != residue.name:
+                            rname = residue.name
+                    except AttributeError:
+                        pass
                 if aname != None and rname != None:
                     atom.resName = rname
                     atom.name = aname
-                    
-        self.write("Done.\n")            
-           
+
+        self.write("Done.\n")
+
     def applyForcefield(self, forcefield):
         """
             Apply the forcefield to the atoms within the protein
@@ -157,13 +160,13 @@ class Routines:
         misslist = []
         hitlist = []
         for residue in self.protein.getResidues():
-            if isinstance(residue, Amino) or isinstance(residue, WAT) \
-               or isinstance(residue, Nucleic):
+            if isinstance(residue, (Amino, WAT, Nucleic)):
                 resname = residue.ffname
-            else: resname = residue.name
+            else: 
+                resname = residue.name
 
             # Apply the parameters
-           
+
             for atom in residue.getAtoms():
                 atomname = atom.get("name")
                 charge, radius = forcefield.getParams(resname, atomname)
@@ -173,10 +176,10 @@ class Routines:
                     hitlist.append(atom)
                 else:
                     misslist.append(atom)
-                    
-        self.write("Done.\n")            
+
+        self.write("Done.\n")
         return hitlist, misslist
-   
+
     def updateResidueTypes(self):
         """
             Find the type of residue as notated in the Amino Acid definition
@@ -186,16 +189,16 @@ class Routines:
             for residue in chain.get("residues"):
                 name = residue.get("name")
                 if name in AAS:
-                    residue.set("type",1)
+                    residue.set("type", 1)
                 elif name == "WAT":
-                    residue.set("type",3)
+                    residue.set("type", 3)
                 elif name in NAS:
-                    residue.set("type",4)
+                    residue.set("type", 4)
                 else: # Residue is a ligand or unknown
-                    residue.set("type",2)
-                 
-        self.write("Done\n")   
-            
+                    residue.set("type", 2)
+
+        self.write("Done\n")
+
     def updateSSbridges(self):
         """
             Check for SS-bridge partners, and if present, set appropriate
@@ -216,13 +219,13 @@ class Routines:
                 if dist < BONDED_SS_LIMIT:
                     SGpartners[atom].append(partner)
                     SGpartners[partner].append(atom)
-        
+
         for atom in SGpartners:
             res1 = atom.get("residue")
             numpartners = len(SGpartners[atom])
             if numpartners == 1:
                 partner = SGpartners[atom][0]
-                res2 = partner.get("residue")                  
+                res2 = partner.get("residue")
                 res1.set("SSbonded", 1)
                 res1.set("SSbondedpartner", partner)
                 self.applyPatch("CYX", res1)
@@ -242,8 +245,7 @@ class Routines:
             objects in each atom.
         """
         for residue in self.protein.getResidues():
-            if isinstance(residue, Amino) or isinstance(residue, WAT) or \
-               isinstance(residue, Nucleic):
+            if isinstance(residue, (Amino, WAT, Nucleic)):
                 for atom in residue.getAtoms():
                     if not atom.hasReference(): continue
                     for bond in atom.reference.bonds:
@@ -251,7 +253,7 @@ class Routines:
                         bondatom = residue.getAtom(bond)
                         if bondatom not in atom.bonds:
                             atom.addBond(bondatom)
-            
+
     def updateBonds(self):
         """
             Update the bonding network of the protein.  This happens
@@ -264,16 +266,16 @@ class Routines:
         """
 
         # Apply the peptide patch
-       
+
         for residue in self.protein.getResidues():
             if isinstance(residue, Amino):
-                if residue.isNterm or residue.isCterm: 
+                if residue.isNterm or residue.isCterm:
                     continue
                 else:
                     self.applyPatch("PEPTIDE", residue)
 
         # Update all internal bonds
-                
+
         self.updateInternalBonds()
 
         # Set the peptide bond pointers
@@ -281,19 +283,19 @@ class Routines:
         for chain in self.protein.getChains():
             for i in range(chain.numResidues() - 1):
                 res1 = chain.residues[i]
-                res2 = chain.residues[i+1]
+                res2 = chain.residues[i + 1]
                 if not isinstance(res1, Amino) or not isinstance(res2, Amino):
                     continue
                 atom1 = res1.getAtom("C")
                 atom2 = res2.getAtom("N")
-                
-                if atom1 != None: 
+
+                if atom1 != None:
                     res2.peptideC = atom1
-                if atom2 != None: 
+                if atom2 != None:
                     res1.peptideN = atom2
-                if atom1 == None or atom2 == None: 
+                if atom1 == None or atom2 == None:
                     continue
-                
+
                 if distance(atom1.getCoords(), atom2.getCoords()) > PEPTIDE_DIST:
                     text = "Gap in backbone detected between %s and %s!\n" % \
                            (res1, res2)
@@ -322,8 +324,8 @@ class Routines:
                 residue:    The residue to apply the patch to (residue)
         """
         if patchname not in self.protein.patchmap:
-            raise ValueError,"Unable to find patch %s!" % patchname
-        
+            raise ValueError, "Unable to find patch %s!" % patchname
+
         # Make a copy of the reference, i.e. a new reference for
         # this patch.  Two examples:
         #     PEPTIDE is a special case, as it applies to
@@ -335,20 +337,20 @@ class Routines:
             newreference = residue.reference
         else:
             newreference = copy.deepcopy(residue.reference)
-            
+
         patch = self.protein.patchmap[patchname]
 
         # Add atoms from patch
 
-        for atomname in patch.map: 
+        for atomname in patch.map:
             newreference.map[atomname] = patch.map[atomname]
             for bond in patch.map[atomname].bonds:
                 if bond not in newreference.map: continue
                 if atomname not in newreference.map[bond].bonds:
                     newreference.map[bond].bonds.append(atomname)
-                    
+
         # Remove atoms as directed by patch
-            
+
         for remove in patch.remove:
             if remove in residue.map: residue.removeAtom(remove)
             if remove not in newreference.map: continue
@@ -361,7 +363,7 @@ class Routines:
         # Add the new dihedrals
 
         for dihedral in patch.dihedrals:
-            newreference.dihedrals.append(dihedral)        
+            newreference.dihedrals.append(dihedral)
 
         # Point at the new reference
 
@@ -390,17 +392,16 @@ class Routines:
             See aa.py for residue-specific functions.
         """
         for residue in self.protein.getResidues():
-            if isinstance(residue, Amino) or \
-               isinstance(residue, Nucleic):
+            if isinstance(residue, (Amino, Nucleic)):
                 residue.setState()
 
-    def assignTermini(self, chain, neutraln = False, neutralc = False):
+    def assignTermini(self, chain, neutraln=False, neutralc=False):
         """
             Assign the termini for the given chain by looking at
             the start and end residues.
         """
 
-        if len(chain.residues) == 0: 
+        if len(chain.residues) == 0:
             text = "Error: chain \"%s\" has 0 residues!" % chain.chainID
             raise ValueError, text
 
@@ -408,52 +409,52 @@ class Routines:
 
         res0 = chain.residues[0]
         if isinstance(res0, Amino):
-            res0.set("isNterm",1)
+            res0.set("isNterm", 1)
             if isinstance(res0, PRO):
                 self.applyPatch("NEUTRAL-NTERM", res0)
             elif neutraln:
                 self.applyPatch("NEUTRAL-NTERM", res0)
             else:
-                self.applyPatch("NTERM",res0)
+                self.applyPatch("NTERM", res0)
         elif isinstance(res0, Nucleic):
-            res0.set("is5term",1)
+            res0.set("is5term", 1)
             self.applyPatch("5TERM", res0)
-                    
+
         # Set the C-Terminus/ 3' Terminus
-            
+
         reslast = chain.residues[-1]
         if isinstance(reslast, Amino):
-            reslast.set("isCterm",1)
+            reslast.set("isCterm", 1)
             if neutralc:
                 self.applyPatch("NEUTRAL-CTERM", reslast)
             else:
                 self.applyPatch("CTERM", reslast)
         elif isinstance(reslast, Nucleic):
-            reslast.set("is3term",1)
+            reslast.set("is3term", 1)
             self.applyPatch("3TERM", reslast)
         else:
             for i in range(len(chain.residues)):
                 resthis = chain.residues[-1 - i]
                 if isinstance(resthis, Amino):
-                    resthis.set("isCterm",1)
+                    resthis.set("isCterm", 1)
                     if neutralc:
                         self.applyPatch("NEUTRAL-CTERM", resthis)
                     else:
                         self.applyPatch("CTERM", resthis)
                     break
-                elif resthis.name in ["NH2","NME"]: break
+                elif resthis.name in ["NH2", "NME"]: break
                 elif isinstance(resthis, Nucleic):
-                    resthis.set("is3term",1)
+                    resthis.set("is3term", 1)
                     self.applyPatch("3TERM", resthis)
                     break
-                    
-    def setTermini(self, neutraln = False, neutralc = False):
+
+    def setTermini(self, neutraln=False, neutralc=False):
         """
             Set the termini for the protein. First set all known
             termini by looking at the ends of the chain. Then
             examine each residue, looking for internal chain breaks.
         """
-        
+
         self.write("Setting the termini... \n")
 
         # First assign the known termini
@@ -509,7 +510,7 @@ class Routines:
                     if(idLength > 1):
                         message = 'Warning: Reusing chain id: ' + chainid[0] + '\n'
                         self.write(message)
-                        
+
                     # Make a new chain with these residues
                     newchain = Chain(chainid[0])
 
@@ -557,7 +558,7 @@ class Routines:
             if(idLength > 1):
                 message = 'Warning: Reusing chain id: ' + chainid[0] + '\n'
                 self.write(message)
-                
+
             # Use the new chainID
 
             self.protein.chainmap[chainid] = chain
@@ -577,14 +578,13 @@ class Routines:
         misscount = 0
         heavycount = 0
         for residue in self.protein.getResidues():
-            if not (isinstance(residue, Amino) or \
-                    isinstance(residue, Nucleic)): continue
-            
+            if not isinstance(residue, (Amino, Nucleic)): continue
+
             # Check for Missing Heavy Atoms
 
             for refatomname in residue.reference.map:
                 if refatomname.startswith("H"): continue
-                if refatomname in ["N+1","C-1"]: continue
+                if refatomname in ["N+1", "C-1"]: continue
                 if refatomname in ["O1P", "O2P"]:
                     if residue.hasAtom("OP1") and residue.hasAtom("OP2"): continue
                 heavycount += 1
@@ -592,8 +592,8 @@ class Routines:
                     self.write("Missing %s in %s\n" % \
                                (refatomname, residue), 1)
                     misscount += 1
-                    residue.addMissing(refatomname)                    
-                            
+                    residue.addMissing(refatomname)
+
             # Check for Extra Atoms
 
             atomlist = []
@@ -601,7 +601,7 @@ class Routines:
                 atomlist.append(atom)
 
             for atom in atomlist:
-                atomname = atom.get("name")                 
+                atomname = atom.get("name")
                 if atomname in ["OP1", "OP2"] and residue.reference.hasAtom("O1P") \
                     and residue.reference.hasAtom("O2P"): continue
                 if not residue.reference.hasAtom(atomname):
@@ -612,8 +612,8 @@ class Routines:
 
         if heavycount == 0:
             raise ValueError, "No heavy atoms found!"
-                            
-        misspct = 100.0 * float(misscount) / heavycount 
+
+        misspct = 100.0 * float(misscount) / heavycount
         if misspct > REPAIR_LIMIT:
             error = "This PDB file is missing too many (%i out of " % misscount
             error += "%i, %.2f%%) heavy atoms to accurately repair the file.  " % \
@@ -621,7 +621,7 @@ class Routines:
             error += "The current repair limit is set at %i%%." % REPAIR_LIMIT
             raise ValueError, error
         elif misscount > 0:
-            self.write("Missing %i out of %i heavy atoms (%.2f percent) - " %\
+            self.write("Missing %i out of %i heavy atoms (%.2f percent) - " % \
                        (misscount, heavycount, misspct))
             self.write("Will attempt to repair.\n")
             self.repairHeavy()
@@ -646,27 +646,27 @@ class Routines:
 
         hcount = 0
         nextatomname = None
-    
+
         atomref = residue.reference.map[atomname]
         bondname = atomref.bonds[0]
 
         # Return if the bonded atom does not exist
-        
-        if not residue.hasAtom(bondname): 
+
+        if not residue.hasAtom(bondname):
             return False
 
         # This group is tetrahedral if bondatom has 4 bonds,
         #  3 of which are hydrogens
-        
+
         for bond in residue.reference.map[bondname].bonds:
-            if bond.startswith("H"): 
+            if bond.startswith("H"):
                 hcount += 1
-            elif bond != 'C-1' and bond != 'N+1': 
+            elif bond != 'C-1' and bond != 'N+1':
                 nextatomname = bond
 
         # Check if this is a tetrahedral group
 
-        if hcount != 3 or nextatomname == None: 
+        if hcount != 3 or nextatomname == None:
             return False
 
         # Now rebuild according to the tetrahedral geometry
@@ -678,7 +678,7 @@ class Routines:
         if numbonds == 1:
 
             # Place according to two atoms
-            
+
             coords = [bondatom.getCoords(), nextatom.getCoords()]
             refcoords = [residue.reference.map[bondname].getCoords(), \
                          residue.reference.map[nextatomname].getCoords()]
@@ -710,7 +710,7 @@ class Routines:
                 residue.rotateTetrahedral(nextatom, bondatom, diffangle)
 
             return 1
-            
+
         elif numbonds == 2:
 
             # Get the single hydrogen coordinates
@@ -727,9 +727,9 @@ class Routines:
             newcoords = hatom.getCoords()
             residue.rotateTetrahedral(nextatom, bondatom, -120)
             residue.createAtom(atomname, newcoords)
-            
+
             return 1
-        
+
         elif numbonds == 3:
 
             # Find the one spot the atom can be
@@ -757,9 +757,9 @@ class Routines:
                 residue.createAtom(atomname, newcoords1)
             else:
                 residue.createAtom(atomname, newcoords2)
-          
+
             return 1
-            
+
     def addHydrogens(self):
         """
             Add the hydrogens to the protein.  This requires either
@@ -772,14 +772,14 @@ class Routines:
         count = 0
         self.write("Adding hydrogens to the protein...\n")
         for residue in self.protein.getResidues():
-            if not (isinstance(residue, Amino) or isinstance(residue, Nucleic)): 
+            if not isinstance(residue, (Amino, Nucleic)):
                 continue
             for atomname in residue.reference.map:
-                if not atomname.startswith("H"): 
+                if not atomname.startswith("H"):
                     continue
-                if residue.hasAtom(atomname): 
+                if residue.hasAtom(atomname):
                     continue
-                if isinstance(residue,CYS) and residue.SSbonded and atomname == "HG": 
+                if isinstance(residue, CYS) and residue.SSbonded and atomname == "HG":
                     continue
 
                 # If this hydrogen is part of a tetrahedral group,
@@ -788,24 +788,24 @@ class Routines:
                 if Routines.rebuildTetrahedral(residue, atomname):
                     count += 1
                     continue
-         
+
                 # Otherwise use the standard quatfit methods
-                 
+
                 coords = []
                 refcoords = []
-                
+
                 refatomcoords = residue.reference.map[atomname].getCoords()
                 bondlist = residue.reference.getNearestBonds(atomname)
-                
+
                 for bond in bondlist:
-                    if bond == "N+1": 
+                    if bond == "N+1":
                         atom = residue.peptideN
-                    elif bond == "C-1": 
+                    elif bond == "C-1":
                         atom = residue.peptideC
-                    else: 
+                    else:
                         atom = residue.getAtom(bond)
 
-                    if atom == None: 
+                    if atom == None:
                         continue
 
                     # Get coordinates, reference coordinates
@@ -814,8 +814,8 @@ class Routines:
                     refcoords.append(residue.reference.map[bond].getCoords())
 
                     # Exit if we have enough atoms
-                    
-                    if len(coords) == 3: 
+
+                    if len(coords) == 3:
                         break
 
                 if len(coords) == 3:
@@ -823,19 +823,19 @@ class Routines:
                     residue.createAtom(atomname, newcoords)
                     count += 1
                 else:
-                    self.write("Couldn't rebuild %s in %s!\n" % (atomname, residue),1)
-                    
+                    self.write("Couldn't rebuild %s in %s!\n" % (atomname, residue), 1)
+
         self.write(" Added %i hydrogen atoms.\n" % count)
-        
+
     def removeHydrogens(self):
         self.write("Stripping hydrogens from the protein...\n")
-        
+
         for residue in self.protein.getResidues():
-            if not (isinstance(residue, Amino) or isinstance(residue, Nucleic)): 
+            if not isinstance(residue, (Amino, Nucleic)):
                 continue
             for atom in residue.atoms[:]:
                 if atom.isHydrogen():
-                    residue.removeAtom(atom.name) 
+                    residue.removeAtom(atom.name)
 
     def repairHeavy(self):
         """
@@ -848,8 +848,8 @@ class Routines:
         """
         self.write("Rebuilding missing heavy atoms... \n")
         for residue in self.protein.getResidues():
-            if not (isinstance(residue, Amino) or \
-                    isinstance(residue, Nucleic)): continue
+            if not isinstance(residue, (Amino, Nucleic)): 
+                continue
             missing = residue.get("missing")
             if missing == []: continue
 
@@ -857,11 +857,11 @@ class Routines:
 
             seenmap = {}
             nummissing = len(missing)
-              
+
             while len(missing) > 0:
                 coords = []
                 refcoords = []
-                
+
                 atomname = missing.pop(0)
                 refatomcoords = residue.reference.map[atomname].getCoords()
                 bondlist = residue.reference.getNearestBonds(atomname)
@@ -879,7 +879,7 @@ class Routines:
                     refcoords.append(residue.reference.map[bond].getCoords())
 
                     # Exit if we have enough atoms
-                    
+
                     if len(coords) == 3: break
 
                 # We might need other atoms to be rebuilt first
@@ -897,10 +897,10 @@ class Routines:
                 else: # Rebuild the atom
                     newcoords = findCoordinates(3, coords, refcoords, refatomcoords)
                     residue.createAtom(atomname, newcoords)
-                    self.write("Added %s to %s at coordinates" % (atomname, residue),1)
+                    self.write("Added %s to %s at coordinates" % (atomname, residue), 1)
                     self.write(" %.3f %.3f %.3f\n" % \
                            (newcoords[0], newcoords[1], newcoords[2]))
-                    
+
         self.write("Done.\n")
 
     def setReferenceDistance(self):
@@ -914,34 +914,34 @@ class Routines:
             if not isinstance(residue, Amino): continue
 
             # Initialize some variables
-            
+
             map = {}
             caatom = residue.getAtom("CA")
 
             if caatom == None:
                 text = "Cannot set references to %s without CA atom!\n"
                 raise ValueError, text
-            
+
             # Set up the linked map
-            
-            for atom in residue.getAtoms(): 
+
+            for atom in residue.getAtoms():
                 map[atom] = atom.bonds
-             
+
             # Run the algorithm
-                
+
             for atom in residue.getAtoms():
                 if atom.isBackbone():
-                    atom.refdistance = -1 
+                    atom.refdistance = -1
                 elif residue.isCterm and atom.name == "HO":   # special case for HO in Cterm
                     atom.refdistance = 3
                 elif residue.isNterm and (atom.name == "H3" or atom.name == "H2"):  # special case for H2 or H3 in Nterm
-                    atom.refdistance = 2 
+                    atom.refdistance = 2
                 else:
                     atom.refdistance = len(shortestPath(map, atom, caatom)) - 1
-        
-    def getbumpscore(self,residue):
+
+    def getbumpscore(self, residue):
         """Get an bump score for the current structure"""
-        
+
         # Do some setup
 
         self.cells = Cells(CELL_SIZE)
@@ -951,20 +951,20 @@ class Routines:
         self.setDonorsAndAcceptors()
         self.updateInternalBonds()
         self.setReferenceDistance()
-        bumpscore=0.0
+        bumpscore = 0.0
         #for residue in self.protein.getResidues():
         if not isinstance(residue, Amino): return 0.0
         # Initialize variables
-        
+
         conflictnames = []
-        
+
         for atom in residue.getAtoms():
             atomname = atom.name
             #if not atom.added: continue
             if atomname[0] != "H": continue
             #if atom.optimizeable: continue
             #print atomname,atom.optimizeable,atom.added
-            bumpscore=bumpscore+self.getbumpscore_atom(atom)
+            bumpscore = bumpscore + self.getbumpscore_atom(atom)
         return bumpscore
 
 
@@ -993,25 +993,25 @@ class Routines:
         #print 'Cutoff distance',cutoff
 
         # Get atoms from nearby cells
-        
+
         closeatoms = self.cells.getNearCells(atom)
 
         # Loop through and see if any are within the cutoff
 
-        bumpscore=0.0
+        bumpscore = 0.0
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
             #print 'Closeatomname',atom.name,closeatom.name
-            if closeresidue == residue and closeatom.name not in ['N','CA','C','O']:
+            if closeresidue == residue and closeatom.name not in ['N', 'CA', 'C', 'O']:
                 continue
-            
+
             if not isinstance(closeresidue, Amino):
                 continue
             if isinstance(residue, CYS):
                 if residue.SSbondedpartner == closeatom: continue
-                    
+
             # Also ignore if this is a donor/acceptor pair
-                
+
             #if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
             #   and closeatom.hacceptor: continue
             #if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
@@ -1020,9 +1020,9 @@ class Routines:
 
             dist = distance(atom.getCoords(), closeatom.getCoords())
             if dist < cutoff:
-                bumpscore=bumpscore+1000.0
+                bumpscore = bumpscore + 1000.0
                 #nearatoms[closeatom] = (dist-cutoff)**2
-        print 'BUMPSCORE',bumpscore
+        print 'BUMPSCORE', bumpscore
         return bumpscore
 
 
@@ -1032,7 +1032,7 @@ class Routines:
             on top of existing atoms.  See each called function
             for more information.
         """
-        
+
         self.write("Checking if we must debump any residues... \n")
 
         # Do some setup
@@ -1044,7 +1044,7 @@ class Routines:
         self.setDonorsAndAcceptors()
         self.updateInternalBonds()
         self.setReferenceDistance()
-    
+
         # Determine which residues to debump
 
         for residue in self.protein.getResidues():
@@ -1059,16 +1059,16 @@ class Routines:
                 if not atom.added: continue
                 if atomname == "H": continue
                 if atom.optimizeable: continue
-               
+
                 nearatoms = self.findNearbyAtoms(atom)
-                
+
                 # If something is too close, we must debump the residue
-        
+
                 if nearatoms != {}:
                     conflictnames.append(atomname)
                     for repatom in nearatoms:
                         self.write("%s %s is too close to %s %s\n" % \
-                                  (residue, atomname, repatom.residue, repatom.name),1) 
+                                  (residue, atomname, repatom.residue, repatom.name), 1)
 
             # If there are no conflicting atoms, move on
 
@@ -1079,11 +1079,11 @@ class Routines:
             self.write("Starting to debump %s...\n" % residue, 1)
             self.write("Debumping cutoffs: %2.1f for heavy atoms, %2.1f for hydrogens.\n" % (BUMP_DIST, BUMP_HDIST), 1)
             if self.debumpResidue(residue, conflictnames):
-                self.write("Debumping Successful!\n\n",1)
+                self.write("Debumping Successful!\n\n", 1)
             else:
                 text = "WARNING: Unable to debump %s\n" % residue
                 self.write("********\n%s********\n\n" % text)
-                self.warnings.append(text)  
+                self.warnings.append(text)
 
         self.write("Done.\n")
 
@@ -1093,7 +1093,7 @@ class Routines:
             rebuilt on top of existing atoms.  See each called function
             for more information.
         """
-        
+
         self.write("Checking if we must debump any residues... \n")
 
         # Do some setup
@@ -1105,7 +1105,7 @@ class Routines:
         self.setDonorsAndAcceptors()
         self.updateInternalBonds()
         self.setReferenceDistance()
-    
+
         # Determine which residues to debump
 
         for residue in self.protein.getResidues():
@@ -1120,16 +1120,16 @@ class Routines:
                 if not atom.added: continue
                 if atomname == "H": continue
                 if atom.optimizeable: continue
-               
+
                 nearatoms = self.findNearbyAtoms(atom)
-                
+
                 # If something is too close, we must debump the residue
-        
+
                 if nearatoms != {}:
                     conflictnames.append(atomname)
                     for repatom in nearatoms:
                         self.write("%s %s is too close to %s %s\n" % \
-                                  (residue, atomname, repatom.residue, repatom.name),1) 
+                                  (residue, atomname, repatom.residue, repatom.name), 1)
 
             # If there are no conflicting atoms, move on
 
@@ -1139,11 +1139,11 @@ class Routines:
 
             self.write("Starting to debump %s...\n" % residue, 1)
             if self.debumpResidueTopology(residue, conflictnames):
-                self.write("Debumping Successful!\n\n",1)
+                self.write("Debumping Successful!\n\n", 1)
             else:
                 text = "WARNING: Unable to debump %s\n" % residue
                 self.write("********\n%s********\n\n" % text)
-                self.warnings.append(text)  
+                self.warnings.append(text)
 
         self.write("Done.\n")
 
@@ -1163,20 +1163,20 @@ class Routines:
         """
 
         # Initialize some variables
-        
+
         step = 0
         bestscore = 100
         anglenum = -1
         newcauses = []
 
         # Try (up to 10 times) to find a workable solution
-        
+
         while step < 10:
 
             anglenum = self.pickDihedralAngle(residue, conflictnames, anglenum)
-            
+
             if anglenum == -1: return 0
-            
+
             self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
 
             for i in range(72):
@@ -1186,7 +1186,7 @@ class Routines:
                 # Check for conflicts
 
                 score = 0
-                
+
                 atomnames = residue.reference.dihedrals[anglenum].split()
                 pivot = atomnames[2]
                 moveablenames = self.getMoveableNames(residue, pivot)
@@ -1194,19 +1194,19 @@ class Routines:
                     nearatoms = self.findNearbyAtoms(residue.getAtom(name))
                     for atom in nearatoms:
                         score += nearatoms[atom]
-                
+
                 if score == 0:
                     self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
                     return 1
 
                 # Set the best angle
-                
+
                 if score < bestscore:
                     bestangle = newangle
 
             self.setDihedralAngle(residue, anglenum, bestangle)
             step += 1
-            
+
 
         # If we're here, debumping was unsuccessful
 
@@ -1228,20 +1228,20 @@ class Routines:
         """
 
         # Initialize some variables
-        
+
         step = 0
         bestscore = 100
         anglenum = -1
         newcauses = []
 
         # Try (up to 10 times) to find a workable solution
-        
+
         while step < 10:
 
             anglenum = self.pickDihedralAngle(residue, conflictnames, anglenum)
-            
+
             if anglenum == -1: return 0
-            
+
             self.write("Using dihedral angle number %i to debump the residue.\n" % anglenum, 1)
 
             for i in range(72):
@@ -1251,7 +1251,7 @@ class Routines:
                 # Check for conflicts
 
                 score = 0
-                
+
                 atomnames = residue.reference.dihedrals[anglenum].split()
                 pivot = atomnames[2]
                 moveablenames = self.getMoveableNames(residue, pivot)
@@ -1259,19 +1259,19 @@ class Routines:
                     nearatoms = self.findNearbyAtomsTopology(residue.getAtom(name))
                     for atom in nearatoms:
                         score += nearatoms[atom]
-                
+
                 if score == 0:
                     self.write("No conflicts found at angle %.2f.\n" % newangle, 1)
                     return 1
 
                 # Set the best angle
-                
+
                 if score < bestscore:
                     bestangle = newangle
 
             self.setDihedralAngle(residue, anglenum, bestangle)
             step += 1
-            
+
 
         # If we're here, debumping was unsuccessful
 
@@ -1297,7 +1297,7 @@ class Routines:
                 if len(coords) == 4: angle = getDihedral(coords[0], coords[1], coords[2], coords[3])
                 else: angle = None
 
-                residue.addDihedralAngle(angle)             
+                residue.addDihedralAngle(angle)
 
     def getClosestAtom(self, atom):
         """
@@ -1319,20 +1319,20 @@ class Routines:
         residue = atom.residue
 
         # Get atoms from nearby cells
-        
+
         closeatoms = self.cells.getNearCells(atom)
 
         # Loop through and see which is the closest
-        
+
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
             if closeresidue == residue: continue
             if not isinstance(closeresidue, Amino): continue
             if isinstance(residue, CYS):
                 if residue.SSbondedpartner == closeatom: continue
-                    
+
             # Also ignore if this is a donor/acceptor pair
-                
+
             if atom.isHydrogen() and atom.bonds[0].hdonor \
                and closeatom.hacceptor: continue
             if closeatom.isHydrogen() and closeatom.bonds[0].hdonor \
@@ -1343,7 +1343,7 @@ class Routines:
             if dist < bestdist:
                 bestdist = dist
                 bestatom = closeatom
-            
+
         return bestatom
 
     def findNearbyAtoms(self, atom):
@@ -1368,20 +1368,20 @@ class Routines:
         if atom.isHydrogen(): cutoff = BUMP_HDIST
 
         # Get atoms from nearby cells
-        
+
         closeatoms = self.cells.getNearCells(atom)
 
         # Loop through and see if any are within the cutoff
-        
+
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
             if closeresidue == residue: continue
             if not isinstance(closeresidue, Amino): continue
             if isinstance(residue, CYS):
                 if residue.SSbondedpartner == closeatom: continue
-                    
+
             # Also ignore if this is a donor/acceptor pair
-                
+
             if atom.isHydrogen() and len(atom.bonds) != 0 and atom.bonds[0].hdonor \
                and closeatom.hacceptor: continue
             if closeatom.isHydrogen() and len(closeatom.bonds) != 0 and closeatom.bonds[0].hdonor \
@@ -1413,21 +1413,21 @@ class Routines:
         if atom.isHydrogen(): cutoff = BUMP_HDIST
 
         # Get atoms from nearby cells
-        
+
         closeatoms = self.cells.getNearCells(atom)
 
         # Loop through and see if any are within the cutoff
-        
+
         for closeatom in closeatoms:
             closeresidue = closeatom.residue
             if closeresidue == residue and "H" not in atom.name: continue
             if not isinstance(closeresidue, Amino): continue
             if isinstance(residue, CYS):
                 if residue.SSbondedpartner == closeatom: continue
-                    
+
             # Also ignore if this is a donor/acceptor pair
-                
-            if atom.isHydrogen() and closeatom.name == atom.bonds[0].name: continue 
+
+            if atom.isHydrogen() and closeatom.name == atom.bonds[0].name: continue
 
             if closeatom.isHydrogen() and closeatom.bonds[0].hdonor \
                    and atom.hacceptor:
@@ -1438,7 +1438,7 @@ class Routines:
                 nearatoms[closeatom] = dist
 
         return nearatoms
-        
+
     def pickDihedralAngle(self, residue, conflictnames, oldnum=None):
         """ 
             Choose an angle number to use in debumping
@@ -1468,15 +1468,15 @@ class Routines:
             score = 0
             atomnames = residue.reference.dihedrals[i].split()
             pivot = atomnames[2]
-            
+
             moveablenames = self.getMoveableNames(residue, pivot)
-         
+
             # If this pivot only moves the conflict atoms, pick it
-            
-            if conflictnames == moveablenames: return i 
-            
+
+            if conflictnames == moveablenames: return i
+
             # Otherwise find the pivot with the most matches
-            
+
             for name in conflictnames:
                 if name in moveablenames:
                     score += 1
@@ -1504,7 +1504,7 @@ class Routines:
         initcoords = []
         movecoords = []
         pivot = ""
-        
+
         oldangle = residue.dihedrals[anglenum]
         diff = angle - oldangle
 
@@ -1524,7 +1524,7 @@ class Routines:
         for name in moveablenames:
             atom = residue.getAtom(name)
             movecoords.append(subtract(atom.getCoords(), coordlist[1]))
-            
+
         newcoords = qchichange(initcoords, movecoords, diff)
 
         for i in range(len(moveablenames)):
@@ -1537,17 +1537,17 @@ class Routines:
             atom.set("y", y)
             atom.set("z", z)
             self.cells.addCell(atom)
-            
+
 
         # Set the new angle
-        
+
         coordlist = []
         for atomname in atomnames:
             if residue.hasAtom(atomname):
                 coordlist.append(residue.getAtom(atomname).getCoords())
             else:
-                raise ValueError, "Error occurred while trying to debump!" 
-        
+                raise ValueError, "Error occurred while trying to debump!"
+
         di = getDihedral(coordlist[0], coordlist[1], coordlist[2], coordlist[3])
         residue.dihedrals[anglenum] = di
 
@@ -1573,7 +1573,7 @@ class Routines:
         """
         for residue in self.protein.getResidues():
             residue.setDonorsAndAcceptors()
-        
+
     def runPROPKA(self, ph, ff, rootname, outname, options):
         """
             Run PROPKA on the current protein, setting protonation states to
@@ -1585,7 +1585,7 @@ class Routines:
                outname: The name of the PQR outfile
         """
         self.write("Running propka and applying at pH %.2f... " % ph)
-        
+
         from propka30.Source.protein import Protein as pkaProtein
         from propka30.Source.pdb import readPDB as pkaReadPDB
         from propka30.Source.lib import residueList
@@ -1598,12 +1598,12 @@ class Routines:
         warnings = []
 
         # Reorder the atoms in each residue to start with N
-   
+
         for residue in self.protein.getResidues():
-            residue.reorder() 
-        
+            residue.reorder()
+
         # Make a string with all non-hydrogen atoms
-        
+
         HFreeProteinFile = StringIO()
 
         for atom in self.protein.getAtoms():
@@ -1613,13 +1613,13 @@ class Routines:
                 HFreeProteinFile.write(atomtxt)
                 HFreeProteinFile.write('\n')
 
-        
+
         HFreeProteinFile.seek(0)
 
         # Run PropKa
-        
-        atoms = pkaReadPDB('', file = HFreeProteinFile)
-        
+
+        atoms = pkaReadPDB('', file=HFreeProteinFile)
+
         # creating protein object
         myPkaProtein = pkaProtein(atoms=atoms, name=rootname, options=options)
         # calculating pKa values for ionizable residues
@@ -1635,35 +1635,35 @@ class Routines:
                 for residue in chain.residues:
                     if residue.resName == residue_type:
                         #String out the extra space after C- or N+ 
-                        key = string.strip('%s %s %s'% (string.strip(residue.resName), 
+                        key = string.strip('%s %s %s' % (string.strip(residue.resName),
                                                         residue.resNumb, residue.chainID))
                         pkadic[key] = residue.pKa_pro
-        
-        if len(pkadic) == 0: 
+
+        if len(pkadic) == 0:
             return
 
         # Now apply each pka to the appropriate residue
 
         for residue in self.protein.getResidues():
-            if not isinstance(residue, Amino): 
+            if not isinstance(residue, Amino):
                 continue
             resname = residue.name
             resnum = residue.resSeq
             chainID = residue.chainID
-    
+
             if residue.isNterm:
                 key = "N+ %i %s" % (resnum, chainID)
                 key = string.strip(key)
-                if key in pkadic: 
+                if key in pkadic:
                     value = pkadic[key]
                     del pkadic[key]
                     if ph >= value:
-                        if ff in ["amber","charmm","tyl06","peoepb","swanson"]:
+                        if ff in ["amber", "charmm", "tyl06", "peoepb", "swanson"]:
                             warn = ("N-terminal %s" % key, "neutral")
                             warnings.append(warn)
                         else:
                             self.applyPatch("NEUTRAL-NTERM", residue)
-                                
+
             if residue.isCterm:
                 key = "C- %i %s" % (resnum, chainID)
                 key = string.strip(key)
@@ -1671,12 +1671,12 @@ class Routines:
                     value = pkadic[key]
                     del pkadic[key]
                     if ph < value:
-                        if ff in ["amber","charmm", "tyl06","peoepb","swanson"]:
+                        if ff in ["amber", "charmm", "tyl06", "peoepb", "swanson"]:
                             warn = ("C-terminal %s" % key, "neutral")
                             warnings.append(warn)
                         else:
                             self.applyPatch("NEUTRAL-CTERM", residue)
-                                
+
             key = "%s %i %s" % (resname, resnum, chainID)
             key = string.strip(key)
             if key in pkadic:
@@ -1689,10 +1689,10 @@ class Routines:
                         warn = (key, "neutral")
                         warnings.append(warn)
                 elif resname == "ASP" and ph < value:
-                    if residue.isCterm and ff in ["amber","tyl06","swanson"]:
+                    if residue.isCterm and ff in ["amber", "tyl06", "swanson"]:
                         warn = (key, "Protonated at C-Terminal")
                         warnings.append(warn)
-                    elif residue.isNterm and ff in ["amber","tyl06","swanson"]:
+                    elif residue.isNterm and ff in ["amber", "tyl06", "swanson"]:
                         warn = (key, "Protonated at N-Terminal")
                         warnings.append(warn)
                     else:
@@ -1704,35 +1704,35 @@ class Routines:
                     else:
                         self.applyPatch("CYM", residue)
                 elif resname == "GLU" and ph < value:
-                    if residue.isCterm and ff in ["amber","tyl06","swanson"]:
+                    if residue.isCterm and ff in ["amber", "tyl06", "swanson"]:
                         warn = (key, "Protonated at C-Terminal")
                         warnings.append(warn)
-                    elif residue.isNterm and ff in ["amber","tyl06","swanson"]:
+                    elif residue.isNterm and ff in ["amber", "tyl06", "swanson"]:
                         warn = (key, "Protonated at N-Terminal")
                         warnings.append(warn)
                     else:
                         self.applyPatch("GLH", residue)
                 elif resname == "HIS" and ph < value:
-                    self.applyPatch("HIP", residue)              
+                    self.applyPatch("HIP", residue)
                 elif resname == "LYS" and ph >= value:
                     if ff == "charmm":
                         warn = (key, "neutral")
                         warnings.append(warn)
-                    elif ff in ["amber","tyl06","swanson"] and residue.get("isCterm"):
+                    elif ff in ["amber", "tyl06", "swanson"] and residue.get("isCterm"):
                         warn = (key, "neutral at C-Terminal")
                         warnings.append(warn)
                     elif ff == "tyl06" and residue.get("isNterm"):
                         warn = (key, "neutral at N-Terminal")
-                        warnings.append(warn)  
+                        warnings.append(warn)
                     else:
                         self.applyPatch("LYN", residue)
                 elif resname == "TYR" and ph >= value:
-                    if ff in ["charmm", "amber", "tyl06","peoepb","swanson"]:
+                    if ff in ["charmm", "amber", "tyl06", "peoepb", "swanson"]:
                         warn = (key, "negative")
                         warnings.append(warn)
                     else:
                         self.applyPatch("TYM", residue)
-                        
+
         if len(warnings) > 0:
             init = "WARNING: Propka determined the following residues to be\n"
             self.warnings.append(init)
@@ -1747,7 +1747,7 @@ class Routines:
                 text = "             %s (%s)\n" % (warn[0], warn[1])
                 self.warnings.append(text)
             self.warnings.append("\n")
-   
+
         if len(pkadic) > 0:
             warn = "         PDB2PQR could not identify the following residues\n"
             self.warnings.append(warn)
@@ -1786,7 +1786,7 @@ class Cells:
     def assignCells(self, protein):
         """
             Place each atom in a virtual cell for easy neighbor comparison
-        """  
+        """
         for atom in protein.getAtoms():
             atom.cell = None
             self.addCell(atom)
@@ -1800,15 +1800,15 @@ class Cells:
         """
         size = self.cellsize
         x = atom.get("x")
-        if x < 0: x = (int(x)-1)/size*size
-        else: x = int(x)/size*size
+        if x < 0: x = (int(x) - 1) / size * size
+        else: x = int(x) / size * size
         y = atom.get("y")
-        if y < 0: y = (int(y)-1)/size*size
-        else: y = int(y)/size*size
+        if y < 0: y = (int(y) - 1) / size * size
+        else: y = int(y) / size * size
         z = atom.get("z")
-        if z < 0: z = (int(z)-1)/size*size
-        else: z = int(z)/size*size
-        key = (x,y,z)
+        if z < 0: z = (int(z) - 1) / size * size
+        else: z = int(z) / size * size
+        key = (x, y, z)
         try:
             self.cellmap[key].append(atom)
         except KeyError:
@@ -1845,15 +1845,15 @@ class Cells:
             x = cell[0]
             y = cell[1]
             z = cell[2]
-            for i in range(-1*size,2*size,size):
-                for j in range(-1*size,2*size,size):
-                    for k in range(-1*size,2*size,size):
-                        newkey = (x+i, y+j, z+k)
+            for i in range(-1 * size, 2 * size, size):
+                for j in range(-1 * size, 2 * size, size):
+                    for k in range(-1 * size, 2 * size, size):
+                        newkey = (x + i, y + j, z + k)
                         try:
                             newatoms = self.cellmap[newkey]
                             for atom2 in newatoms:
                                 if atom == atom2: continue
                                 closeatoms.append(atom2)
                         except KeyError: pass
-                        
+
             return closeatoms

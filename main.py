@@ -135,15 +135,12 @@ def printPQRHeader(atomlist, reslist, charge, ff, warnings, pH, ffout):
 
     return header
 
-class ExtraOptions(object):
-    pass
-
 def runPDB2PQR(pdblist, ff,
                outname = "",
                ph = None,
                verbose = False,
-               extentions = [],
-               extensionOptions = ExtraOptions(),
+               selectedExtensions = [],
+               extensionOptions = utilities.ExtraOptions(),
                propkaOptions = None,
                clean = False,
                neutraln = False,
@@ -170,7 +167,7 @@ def runPDB2PQR(pdblist, ff,
             ph:            The desired ph of the system (float)
             verbose:       When True, script will print information to stdout
                              When False, no detailed information will be printed (float)
-            extentions:      List of extensions to run
+            extensions:      List of extensions to run
             extensionOptions:optionParser like option object that is passed to each object. 
             propkaOptions:optionParser like option object for propka30.
             clean:         only return original PDB file in aligned format.
@@ -262,7 +259,7 @@ def runPDB2PQR(pdblist, ff,
         lines = myProtein.printAtoms(myProtein.getAtoms(), chain)
       
         # Process the extensions
-        for ext in extentions:
+        for ext in selectedExtensions:
             module = extensions.extDict[ext]
             tempRoutines = copy.deepcopy(myRoutines)
             module.run_extension(tempRoutines, outroot, extensionOptions)
@@ -359,7 +356,8 @@ def runPDB2PQR(pdblist, ff,
     if ligsuccess:
         templist = misslist[:]
         for atom in templist:
-            if isinstance(atom.residue, Amino) or isinstance(atom.residue, Nucleic): continue
+            if isinstance(atom.residue, (Amino, Nucleic)): 
+                continue
             misslist.remove(atom)
 
     # Create the Typemap
@@ -387,12 +385,13 @@ def runPDB2PQR(pdblist, ff,
     # Determine if any of the atoms in misslist were ligands
     missedligandresidues = []
     for atom in misslist:
-        if isinstance(atom.residue, Amino) or isinstance(atom.residue, Nucleic): continue
+        if isinstance(atom.residue, (Amino, Nucleic)): 
+            continue
         if atom.resName not in missedligandresidues:
             missedligandresidues.append(atom.resName)
 
     # Process the extensions
-    for ext in extentions:
+    for ext in selectedExtensions:
         module = extensions.extDict[ext]
         tempRoutines = copy.deepcopy(myRoutines)
         module.run_extension(tempRoutines, outroot, extensionOptions)
@@ -495,6 +494,8 @@ def mainCommand(argv):
     propkaroup.add_option("--reference", dest="reference", default="neutral", 
            help="setting which reference to use for stability calculations [neutral/low-pH]")
     
+    parser.add_option_group(propkaroup)
+    
     
     extensions.setupExtensionsOptions(parser)
     
@@ -515,29 +516,7 @@ def mainCommand(argv):
             parser.error('%i is not a valid pH!  Please choose a pH between 0.0 and 14.0.' % options.pH)
         
         #build propka options
-        propkaOpts = ExtraOptions()
-        propkaOpts.pH = options.pH
-        propkaOpts.reference = "neutral"
-        propkaOpts.chains = None
-        propkaOpts.thermophiles = None
-        propkaOpts.alignment = None
-        propkaOpts.mutations = None
-        propkaOpts.verbose = options.verbose
-        propkaOpts.protonation = "old-school"
-        propkaOpts.window = (0.0, 14.0, 1.0)
-        propkaOpts.grid = (0.0, 14.0, 0.1)
-        propkaOpts.mutator = None
-        propkaOpts.mutator_options = None
-        propkaOpts.display_coupled_residues = None
-        propkaOpts.print_iterations = None
-        propkaOpts.version_label = "Nov30"
-        
-        from propka30.Source import lib
-        lib.interpretMutator(propkaOpts)
-        #With the current defaults used here this does not do anything.
-        #However if we start adding the propka options we'll need to do this.
-        lib.setDefaultAlignmentFiles(propkaOpts)
-        
+        propkaOpts = utilities.createPropkaOptions(options.pH, options.verbose)
         
     if options.assign_only or options.clean:
         options.debump = options.optflag = False
@@ -609,7 +588,7 @@ def mainCommand(argv):
     if not hasattr(options, 'active_extensions' ) or options.active_extensions is None:
         options.active_extensions = []
         
-    #I see no point in hiding options from extentions.
+    #I see no point in hiding options from extensions.
     extensionOpts = options
 
     #TODO: The ideal would be to pass a file like object for the second
@@ -622,7 +601,7 @@ def mainCommand(argv):
                                               outname = options.outname,
                                               ph = options.pH,
                                               verbose = options.verbose,
-                                              extentions = options.active_extensions,
+                                              selectedExtensions = options.active_extensions,
                                               propkaOptions = propkaOpts,
                                               extensionOptions = extensionOpts,
                                               clean = options.clean,

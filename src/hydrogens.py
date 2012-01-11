@@ -2227,7 +2227,8 @@ class hydrogenRoutines:
             This may occur when no optimization is chosen
         """
         for residue in self.routines.protein.getResidues():
-            if not isinstance(residue, Amino): continue
+            if not isinstance(residue, Amino): 
+                continue
             if residue.name == "GLH" or "GLH" in residue.patches:
                 if residue.hasAtom("HE1") and residue.hasAtom("HE2"):
                     residue.removeAtom("HE1")
@@ -2320,11 +2321,13 @@ class hydrogenRoutines:
                     residue.fixed = 1
                 else:
                     residue.fixed = 0 
-            if optinstance == None: continue
+            if optinstance == None: 
+                continue
 
             type = optinstance.opttype
             command = "%s(residue, optinstance, self.routines)" % type
-            if residue.fixed == 1: pass
+            if residue.fixed == 1: 
+                pass
             else:
                 myobj = eval(command)
                 self.atomlist += myobj.atomlist
