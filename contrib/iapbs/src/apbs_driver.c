@@ -155,7 +155,6 @@ int apbsdrv_(
 	kappaMap[i] = VNULL;
 	potMap[i] = VNULL;
 	chargeMap[i] = VNULL;
-	inputString = VNULL;
     }
 
 
@@ -171,6 +170,7 @@ int apbsdrv_(
     debug = *dbg;
 
     /* generate input string */
+    inputString = VNULL;
     inputString = setupString(r_param, i_param, grid, dime, ionq, ionc, 
 		  ionr, glen, center, cglen, fglen, ccenter, fcenter, ofrac, 
 		  pdime, debug);
@@ -708,7 +708,7 @@ char *setupString(double r_param[9], int i_param[25], double grid[3],
     static char mybuf[MAX_BUF_SIZE];
     int i;
     // read section
-    strcat(string, "read\nmol pqr ion.pqr\n");
+    strcpy(string, "read\n mol pqr ion.pqr\n");
 
     if(i_param[22] == 1){
       strcat(string, "charge dx iapbs-charge.dx\n");
