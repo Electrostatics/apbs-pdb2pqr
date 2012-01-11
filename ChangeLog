@@ -6,6 +6,7 @@ complete change log
 * Fixed a bug in Vgrid_readGZ: the buffer length is uninitialized for gzgets().
 * Fixed configure to setup python wrappers on the Mac with an intel compiler.
 * Updated all license data to reflect most current information for APBS.
+* Fixed a bug in GZip handling for Ubuntu installations.
 
 # NEW CONTRIBUTED CODE
 * iAPBS has been added to the contrib/ directory.
