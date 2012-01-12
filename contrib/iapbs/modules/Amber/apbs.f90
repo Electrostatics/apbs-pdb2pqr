@@ -61,10 +61,10 @@ CONTAINS
     smvolume = 10.0
     smsize = 1000.0
 
-    calcenergy = 1
-    calcforce = 0
+    calcenergy = 2
+    calcforce = 2
     calcnpenergy = 1
-    calcnpforce = 0
+    calcnpforce = 2
     wpot = 0
     wchg = 0
     wsmol = 0
@@ -604,7 +604,7 @@ CONTAINS
     END IF
 
 
-    IF (apbs_debug > 1) WRITE(6,  '(a)') 'iAPBS: Calling apbsdrv.'
+    IF (apbs_debug > 1) WRITE(6,  '(a)') 'iAPBS: Calling apbsdrv in apbs_spenergy().'
 
     ! call APBS as a function
 
@@ -816,8 +816,7 @@ CONTAINS
     IF (i_param(11) /= 2 ) THEN
        WRITE(6, *) 'iAPBS: WARNING: Calculation of solvation forces is ', &
             'requested but calcforce keyword is not set to 2.'
-       WRITE(6, *) 'Turning polar forces on (calcforce=2)'
-       i_param(11) = 2
+       WRITE(6, *) 'Polar forces will not be included'
     END IF
     IF (i_param(20) /= 2 ) THEN
        WRITE(6, *) 'iAPBS: WARNING: Calculation of solvation forces is ', &
@@ -843,6 +842,7 @@ CONTAINS
        END IF
 
        ! first calculation - in solvent
+       IF (apbs_debug > 1) WRITE(6,  '(a)') 'iAPBS: Calling apbsdrv in apbs_force().'
        rc = apbsdrv(natom, cx, cy, cz, pbradii, pbcg, &
             r_param, i_param, &
             grid, dime, pdime, glen, center, &
@@ -925,6 +925,7 @@ CONTAINS
        END IF
 
        ! redo the calculation in vacuum
+       IF (apbs_debug > 1) WRITE(6,  '(a)') 'iAPBS: Calling apbsdrv in apbs_force().'
        rc = apbsdrv(natom, cx, cy, cz, pbradii, pbcg, &
             r_param, i_param, &
             grid, dime, pdime, glen, center, &
