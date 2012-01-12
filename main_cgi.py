@@ -99,6 +99,8 @@ def redirector(name, weboptions):
     """
         Prints a page which redirects the user to querystatus.cgi and writes starting time to file
     """
+    
+    redirectWait = 3
 
     utilities.appendToLogFile(name, 'pdb2pqr_start_time', str(time.time()))
     
@@ -121,20 +123,9 @@ def redirector(name, weboptions):
     #Clean up selected extensions output
     if 'selectedExtensions' in analiticsDict:
         analiticsDict['selectedExtensions'] = ' '.join(analiticsDict['selectedExtensions'])
-#    events += utilities.getEventTrackingString(category='submissionData',
-#                                               action='submission', 
-#                                               label=submissionStr)
     
     options = ','.join(str(k)+':'+str(v) for k,v in analiticsDict.iteritems())
     events['options']=options
-#    for key in analiticsDict:
-#        result = analiticsDict[key]
-#        if key == "selectedExtensions":
-#            result = ' '.join(result)
-#            
-#        events += utilities.getEventTrackingString(category='setting',
-#                                                   action=key, 
-#                                                   label=result)
 
     eventsScriptString = ''
     for event in events:
@@ -152,15 +143,15 @@ def redirector(name, weboptions):
         <script type="text/javascript">
             {trackingevents}
         </script>
-        <meta http-equiv="Refresh" content="5; url={redirectURL}"> 
+        <meta http-equiv="Refresh" content="{wait}; url={redirectURL}"> 
     </head>
     <body>
         You are being automatically redirected to a new location.<br />
-        If your browser does not redirect you in 5 seconds, or you do
+        If your browser does not redirect you in {wait} seconds, or you do
         not wish to wait, <a href="{redirectURL}">click here</a>. 
     </body>
 </html>""".format(trackingscript=utilities.getTrackingScriptString(jobid=jobid), 
-                  trackingevents=eventsScriptString, redirectURL=redirectURL)
+                  trackingevents=eventsScriptString, redirectURL=redirectURL, wait=redirectWait)
     return string
 
 def sanitizeFileName(fileName):

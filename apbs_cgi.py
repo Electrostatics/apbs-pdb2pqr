@@ -21,6 +21,7 @@ from src.server import setID
 #from apbsExec import apbsExec
 #from apbsExec import apbsOpalExec
 from sgmllib import SGMLParser
+from src.utilities import getTrackingScriptString, getEventTrackingString
 
 def apbsOpalExec(logTime, form, apbsOptions):
     
@@ -547,18 +548,7 @@ def generateForm(file, initVars, pdb2pqrID, type):
     print "</li></ul></blockquote></div>"
     print "</blockquote>"
     print "</div>"
-
-
-
-
-
-
-
-
-
-
-
-
+    
     print """ 
         
        <div class=\"mg-auto mg-para\"><ul>
@@ -1581,11 +1571,31 @@ def redirector(logTime):
         starttimefile = open('%s%s%s/apbs_start_time' % (INSTALLDIR, TMPDIR, logTime), 'w')
         starttimefile.write(str(time.time()))
         starttimefile.close()
+        
+    redirectWait = 3
+    
+    redirectURL = "{website}querystatus.cgi?jobid={jobid}&calctype=apbs".format(website=WEBSITE, 
+                                                                                jobid=logTime)
 
-    string = ""
-    string+='<html> <head>'
-    # status is passed to querystatus.cgi
-    string+='<meta http-equiv=\"refresh\" content=\"0;url=querystatus.cgi?jobid=%s&calctype=apbs\"/></head></html>' % str(logTime)
+    string = """
+<html> 
+    <head>
+        {trackingscript}
+        <script type="text/javascript">
+            {trackingevents}
+        </script>
+        <meta http-equiv="refresh" content="{wait};url={redirectURL}"/>
+    </head>
+    <body>
+        You are being automatically redirected to a new location.<br/>
+        If your browser does not redirect you in {wait} seconds, or you do
+        not wish to wait, <a href="{redirectURL}">click here</a>. 
+    </body>
+</html>""".format(trackingscript=getTrackingScriptString(jobid=logTime),
+                  trackingevents = getEventTrackingString(category='apbs',
+                                                                    action='submission', 
+                                                                    label=str(os.environ["REMOTE_ADDR"])),
+                  redirectURL=redirectURL, wait=redirectWait)
     return string
 
 def mainInput() :
