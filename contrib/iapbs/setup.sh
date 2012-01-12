@@ -59,10 +59,10 @@ cp $APBS_SRC/contrib/lib/libmaloc.a $APBS_PREFIX/lib
 cp $APBS_SRC/contrib/blas/.libs/libapbsblas.a $APBS_PREFIX/lib
 cp $APBS_SRC/contrib/zlib/.libs/libz.a $APBS_PREFIX/lib
 
-echo "APBS_SRC=$APBS_SRC"
-echo "APBS_PREFIX=$APBS_PREFIX"
+#echo "APBS_SRC=$APBS_SRC"
+#echo "APBS_PREFIX=$APBS_PREFIX"
 
-echo "Running configure and building iAPBS ..."
-./configure --prefix=${APBS_PREFIX} --disable-openmp \
-&& make && make install
+#echo "Running configure and building iAPBS ..."
+#./configure --prefix=${APBS_PREFIX} --disable-openmp \
+#&& make && make install
 
