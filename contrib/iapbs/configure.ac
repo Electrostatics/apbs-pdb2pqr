@@ -1,4 +1,4 @@
-AC_INIT([iAPBS],[2.0.0],[rok@ucsd.edu])
+AC_INIT([iAPBS],[2.1.0],[rok@ucsd.edu])
 AC_PREREQ(2.65)
 
 AC_CONFIG_AUX_DIR(config)
@@ -9,7 +9,7 @@ dnl AM_INIT_AUTOMAKE(iapbs, 2.0.0)
 AM_INIT_AUTOMAKE
 dnl AM_CONFIG_HEADER(src/iapbscfg.h)
 
-AC_SUBST(IAPBS_VERSION, 2.0.0)
+AC_SUBST(IAPBS_VERSION, 2.1.0)
 ACLOCAL=":";
 AUTOCONF=":";
 AUTOMAKE=":";

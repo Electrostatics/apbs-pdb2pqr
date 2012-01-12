@@ -142,8 +142,8 @@ c-----------------------------------------------------------------
       tempapbs = 298.15D0
       gamma = 0.105D0
       sdens = 10.0D0
-      calcenergy = 1
-      calcforce = 0
+      calcenergy = 2
+      calcforce = 2
       calcnpenergy = 1
       calcnpforce = 2
       wpot = 0
@@ -251,12 +251,20 @@ c defaults to 10.0
       sdens = gtrmf(comlyn, comlen, 'SDENS', sdens)
 
 c calcenergy :: energy calculation
-c defaults to total energy calculation
+c defaults to per atom energy calculation
       calcenergy = gtrmi(comlyn, comlen, 'CALCE', calcenergy)
 
 c calcforce :: atomic forces I/O
-c defaults to no forces calculation
+c defaults to per atom forces calculation
       calcforce = gtrmi(comlyn, comlen, 'CALCF', calcforce)
+
+c calcnpenergy :: NP energy calculation
+c defaults to per atom energy calculation
+      calcenergy = gtrmi(comlyn, comlen, 'CALNE', calcnpenergy)
+
+c calcnpforce :: NP atomic forces I/O
+c defaults to per atom forces calculation
+      calcforce = gtrmi(comlyn, comlen, 'CALNF', calcnpforce)
 
 c dielMap :: read dielectric maps (x, y and z)
       if (indxa(comlyn, comlen, 'RDIEL') .gt. 0) then

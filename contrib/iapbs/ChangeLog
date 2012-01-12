@@ -1,10 +1,18 @@
 #######################################################################
 #
 #
-#  iAPBS Release 2.0.0 ChangleLog
+#  iAPBS Release 2.1.0 ChangleLog
 #
 #
 #######################################################################
+
+
+Release 2.1.0, January 11, 2012
+
+- Updated Amber, NAMD and CHARMM modules.
+- Fixed a couple of low priority bugs.
+
+----------------------------------------------------------------------
 
 Release 2.0.0, December 8, 2011
 
@@ -34,7 +42,6 @@ Release 1.0.0, November 18, 2009
 
 - Updated the NAMD module for NAMD version 2.7b2 and the current CVS
   tree.
-
 - Updated the Amber module to work with Amber11 CVS tree.
 
 ----------------------------------------------------------------------
@@ -57,9 +64,7 @@ Release 0.7.0, April 7, 2009
 Release 0.6.0, Jan 14, 2009
 
 - Added support for diel and kappa map reading/writing.
-
 - Added support for charge map reading.
-
 - CHARMM and Amber modules updated for the new functionality.
 
 ----------------------------------------------------------------------
@@ -79,7 +84,6 @@ Release 0.4.0, Sep 22, 2008
 Release 0.3.0, May 28, 2008
 
 - Updated the interface to match APBS version 1.0.0
-
 - Added basic NAMD module support.
 
 ----------------------------------------------------------------------
@@ -87,11 +91,8 @@ Release 0.3.0, May 28, 2008
 Release 0.2.0, June 21, 2006
 
 - Updated the interface to match APBS version 0.4.0.
-
 - Amber module available together with docs and examples.
-
 - Manual installation converted to autotools.
-
 - Added support for linking with C++ applications (thanks to Gernot
   Kieseritzky).
 
@@ -100,5 +101,4 @@ Release 0.2.0, June 21, 2006
 Release 0.1.0 May 25, 2005
 
 - Initial public release.
-
 - CHARMM module available with docs and examples.
