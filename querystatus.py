@@ -346,9 +346,10 @@ def mainCGI():
         timefile = open('%s%s%s/%s_start_time' % (INSTALLDIR, TMPDIR, form["jobid"].value, form["calctype"].value))
         starttime = float(timefile.read())
         timefile.close()
-    if progress == "running" or (have_opal and progress != "version_mismatch" 
-                                           and progress != "not_enough_memory"
-                                           and progress != "error"):
+    if progress == "running" or (have_opal and progress not in ("version_mismatch", 
+                                                                "not_enough_memory",
+                                                                "error",
+                                                                "complete")):
         runtime = time.time()-starttime
     elif progress == "complete":
         endtimefile = open('%s%s%s/%s_end_time' % (INSTALLDIR, TMPDIR, form["jobid"].value, form["calctype"].value))

@@ -49,33 +49,41 @@ __author__ = "Todd Dolinsky, Nathan Baker, Jens Nielsen, Paul Czodrowski, Jan Je
 __version__ = "1.7.1"
 
 
-import string
-import sys
-import getopt
+import glob
 import os
 import time
-import httplib
 import re
-import glob
-import tempfile
-from src import pdb
-from src import utilities
-from src import structures
-from src import routines
-from src import protein
+import sys
+import string
+from StringIO import StringIO
+#import tempfile
+#from src import pdb
+
+#from src import structures
+#from src import routines
+#from src import protein
 #from src import server
-from src.pdb import *
-from src.utilities import *
-from src.structures import *
-from src.definitions import *
-from src.forcefield import *
-from src.routines import *
-from src.protein import *
-from src.server import *
-from src.hydrogens import *
-from src.aconf import *
-from StringIO import *
-from main import *
+from src.pdb import readPDB
+#from src.utilities import *
+#from src.structures import *
+from src.definitions import Definition
+#from src.forcefield import *
+#from src.routines import *
+from src.protein import Protein
+#from src.server import *
+#from src.hydrogens import *
+from src import utilities
+from src.server import setID, createError
+from src.aconf import (STYLESHEET, 
+                       WEBSITE, 
+                       PDB2PQR_OPAL_URL,
+                       HAVE_PDB2PQR_OPAL,
+                       INSTALLDIR,
+                       TMPDIR,
+                       MAXATOMS)
+
+
+from main import runPDB2PQR
 
 def printHeader(pagetitle,have_opal=None,jobid=None):
     """
@@ -102,7 +110,7 @@ def redirector(name, weboptions):
     
     redirectWait = 3
 
-    utilities.appendToLogFile(name, 'pdb2pqr_start_time', str(time.time()))
+    utilities.startLogFile(name, 'pdb2pqr_start_time', str(time.time()))
     
     jobid = int(name)
     
@@ -184,7 +192,7 @@ class WebOptions(object):
             raise WebOptionsError('Force field type missing from form.')
         
         if form.has_key("PDBID") and form["PDBID"].value and form["PDBSOURCE"].value == 'ID':
-            self.pdbfile = getPDBFile(form["PDBID"].value)
+            self.pdbfile = utilities.getPDBFile(form["PDBID"].value)
             if self.pdbfile is None:
                 raise WebOptionsError('The pdb ID provided is invalid.')
             self.pdbfilestring = self.pdbfile.read()
@@ -280,7 +288,7 @@ class WebOptions(object):
         return self.runoptions.copy()
     
     def getOptions(self):
-        '''Returns all options for reporting to google analytics'''
+        '''Returns all options for reporting to Google analytics'''
         options = self.runoptions.copy()
         options.update(self.otheroptions)
         
@@ -288,7 +296,7 @@ class WebOptions(object):
         
         options['pdb'] = self.pdbfilename
         
-        #This is redundant.
+        #propkaOptions is redundant.
         if options.has_key('propkaOptions'):
             del options['propkaOptions']
         
