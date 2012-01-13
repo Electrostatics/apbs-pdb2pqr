@@ -21,7 +21,10 @@ from src.server import setID
 #from apbsExec import apbsExec
 #from apbsExec import apbsOpalExec
 from sgmllib import SGMLParser
-from src.utilities import getTrackingScriptString, getEventTrackingString
+from src.utilities import (getTrackingScriptString, 
+                           getEventTrackingString,
+                           startLogFile,
+                           appendToLogFile)
 
 def apbsOpalExec(logTime, form, apbsOptions):
     
@@ -155,35 +158,50 @@ def apbsExec(logTime, form, apbsOptions):
         #os.chdir('./tmp/%s' % logTime)
         os.chdir('%s%s%s' % (INSTALLDIR, TMPDIR, logTime))
         # LAUNCHING APBS HERE
-        statusfile = open('%s%s%s/apbs_status' % (INSTALLDIR, TMPDIR, logTime),'w')
-        statusfile.write("running\n")
-        statusfile.close()
+        startLogFile(logTime, 'apbs_status', "running\n")
+#        statusfile = open('%s%s%s/apbs_status' % (INSTALLDIR, TMPDIR, logTime),'w')
+#        statusfile.write("running\n")
+#        statusfile.close()
 
 
         apbs_stdin, apbs_stdout, apbs_stderr = os.popen3('%s apbsinput.in' % HAVE_APBS)
 
-        input = open('%s%s%s/apbs_stdout.txt' % (INSTALLDIR, TMPDIR, logTime), 'w')
-        input.write(apbs_stdout.read())
-        input.close()
+        startLogFile(logTime, 'apbs_stdout.txt', apbs_stdout.read())
+#        stdoutFile=open('%s%s%s/apbs_stdout.txt' % (INSTALLDIR, TMPDIR, logTime), 'w')
+#        stdoutFile.write(apbs_stdout.read())
+#        stdoutFile.close()
+
+        startLogFile(logTime, 'apbs_stderr.txt', apbs_stderr.read())
+#        stderrFile=open('%s%s%s/apbs_stderr.txt' % (INSTALLDIR, TMPDIR, logTime), 'w')
+#        stderrFile.write(apbs_stderr.read())
+#        stderrFile.close()
         
-        endtimefile = open('%s%s%s/apbs_end_time' % (INSTALLDIR, TMPDIR, logTime), 'w')
-        endtimefile.write(str(time.time()))
-        endtimefile.close()
+        startLogFile(logTime, 'apbs_end_time', str(time.time()))
+#        endtimefile=open('%s%s%s/apbs_end_time' % (INSTALLDIR, TMPDIR, logTime), 'w')
+#        endtimefile.write(str(time.time()))
+#        endtimefile.close()
 
-        input = open('%s%s%s/apbs_stderr.txt' % (INSTALLDIR, TMPDIR, logTime), 'w')
-        input.write(apbs_stderr.read())
-        input.close()
-
-        statusfile = open('%s%s%s/apbs_status' % (INSTALLDIR, TMPDIR, logTime),'w')
-        statusfile.write("complete\n")
-        statusfile.write("%s%s%s/apbsinput.in\n" % (INSTALLDIR, TMPDIR, logTime))
-        statusfile.write("%s%s%s/%s.pqr\n" % (INSTALLDIR, TMPDIR, logTime, logTime))
-        statusfile.write("%s%s%s/io.mc\n" % (INSTALLDIR, TMPDIR, logTime))
-        for filename in glob.glob("%s%s%s/%s-*.dx" % (INSTALLDIR, TMPDIR, logTime, logTime)):
-            statusfile.write(filename+"\n")
-        statusfile.write("%s%s%s/apbs_stdout.txt\n" % (INSTALLDIR, TMPDIR, logTime))
-        statusfile.write("%s%s%s/apbs_stderr.txt\n" % (INSTALLDIR, TMPDIR, logTime))
-        statusfile.close()
+        jobDir = '%s%s%s/' % (INSTALLDIR, TMPDIR, logTime)
+        statusStr = "complete\n"
+        statusStr += jobDir + 'apbsinput.in\n'
+        statusStr += jobDir + '%s.pqr\n' % logTime
+        statusStr += jobDir + 'io.mc\n'
+        for filename in glob.glob(jobDir+"%s-*.dx" % logTime):
+            statusStr += (filename+"\n")
+        statusStr += jobDir + 'apbs_stdout.txt\n'
+        statusStr += jobDir + 'apbs_stderr.txt\n'
+        startLogFile(logTime, 'apbs_status', statusStr)
+        
+#        statusfile=open('%s%s%s/apbs_status' % (INSTALLDIR, TMPDIR, logTime),'w')
+#        statusfile.write("complete\n")
+#        statusfile.write("%s%s%s/apbsinput.in\n" % (INSTALLDIR, TMPDIR, logTime))
+#        statusfile.write("%s%s%s/%s.pqr\n" % (INSTALLDIR, TMPDIR, logTime, logTime))
+#        statusfile.write("%s%s%s/io.mc\n" % (INSTALLDIR, TMPDIR, logTime))
+#        for filename in glob.glob("%s%s%s/%s-*.dx" % (INSTALLDIR, TMPDIR, logTime, logTime)):
+#            statusfile.write(filename+"\n")
+#        statusfile.write("%s%s%s/apbs_stdout.txt\n" % (INSTALLDIR, TMPDIR, logTime))
+#        statusfile.write("%s%s%s/apbs_stderr.txt\n" % (INSTALLDIR, TMPDIR, logTime))
+#        statusfile.close()
         sys.exit()
 
 def generateForm(file, initVars, pdb2pqrID, type):
@@ -1568,9 +1586,10 @@ def convertOpalToLocal(jobid,pdb2pqrOpalJobID):
 
 def redirector(logTime):
     if (str(logTime) != "False") and (str(logTime) != "notenoughmem"):
-        starttimefile = open('%s%s%s/apbs_start_time' % (INSTALLDIR, TMPDIR, logTime), 'w')
-        starttimefile.write(str(time.time()))
-        starttimefile.close()
+        startLogFile(logTime, 'apbs_start_time', str(time.time()))
+#        starttimefile = open('%s%s%s/apbs_start_time' % (INSTALLDIR, TMPDIR, logTime), 'w')
+#        starttimefile.write(str(time.time()))
+#        starttimefile.close()
         
     redirectWait = 3
     
@@ -1593,8 +1612,8 @@ def redirector(logTime):
     </body>
 </html>""".format(trackingscript=getTrackingScriptString(jobid=logTime),
                   trackingevents = getEventTrackingString(category='apbs',
-                                                                    action='submission', 
-                                                                    label=str(os.environ["REMOTE_ADDR"])),
+                                                          action='submission', 
+                                                          label=str(os.environ["REMOTE_ADDR"])),
                   redirectURL=redirectURL, wait=redirectWait)
     return string
 
@@ -1693,9 +1712,10 @@ def mainInput() :
             else:
                 print redirector(logTime)
 
-            apbsOpalJobIDFile = open('%s%s%s/apbs_opal_job_id' % (INSTALLDIR, TMPDIR, logTime),'w')
-            apbsOpalJobIDFile.write(apbsOpalJobID)
-            apbsOpalJobIDFile.close()
+            startLogFile(logTime, 'apbs_opal_job_id', apbsOpalJobID)
+#            apbsOpalJobIDFile = open('%s%s%s/apbs_opal_job_id' % (INSTALLDIR, TMPDIR, logTime),'w')
+#            apbsOpalJobIDFile.write(apbsOpalJobID)
+#            apbsOpalJobIDFile.close()
         else:
             apbsExec(logTime, form, apbsOptions)
 

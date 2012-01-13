@@ -54,8 +54,12 @@ import os
 import sys
 from aconf import INSTALLDIR, TMPDIR
 
-def appendToLogFile(jobName, fileName, logInput):
+def startLogFile(jobName, fileName, logInput):
     with open('%s%s%s/%s' % (INSTALLDIR, TMPDIR, jobName, fileName), 'w') as f:
+        f.write(logInput)
+        
+def appendToLogFile(jobName, fileName, logInput):
+    with open('%s%s%s/%s' % (INSTALLDIR, TMPDIR, jobName, fileName), 'a') as f:
         f.write(logInput)
         
 def getTrackingScriptString(jobid=None):
