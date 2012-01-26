@@ -46,7 +46,7 @@
 
 __date__  = "5 April 2010"
 __author__ = "Todd Dolinsky, Nathan Baker, Jens Nielsen, Paul Czodrowski, Jan Jensen, Samir Unni, Yong Huang"
-__version__ = "1.7.1"
+__version__ = "1.8"
 
 
 import glob
@@ -338,7 +338,7 @@ class WebOptions(object):
         if 'ffout' in self.runoptions:
             commandLine.append('--ffout=%s' % self.runoptions['ffout'])
             
-        for o in ('chain', 'typemap', 'neutraln', 'neutralc'):
+        for o in ('chain', 'typemap', 'neutraln', 'neutralc', 'verbose'):
             if self.runoptions[o]:
                 commandLine.append('--' + o)
             
