@@ -614,16 +614,16 @@ int apbsdrv_(
 	    printEnergy(com, nosh, totEnergy, i);
 	    /* Print force */
 	} else if (nosh->printwhat[i] == NPT_FORCE) {
-	    if(debug>3) printForce(com, nosh, nforce, atomForce, i);
+	    if(debug>6) printForce(com, nosh, nforce, atomForce, i);
 	} else if (nosh->printwhat[i] == NPT_ELECENERGY) {
 	    if(debug>3) printElecEnergy(com, nosh, totEnergy, i);
 	    //esEnergy[0] = getElecEnergy(com, nosh, totEnergy, i);
 	} else if (nosh->printwhat[i] == NPT_ELECFORCE) {
-	    if(debug>3) printElecForce(com, nosh, nforce, atomForce, i);
+	    if(debug>6) printElecForce(com, nosh, nforce, atomForce, i);
 	} else if (nosh->printwhat[i] == NPT_APOLENERGY) {
 	    if(debug>3) printApolEnergy(nosh, i);
 	} else if (nosh->printwhat[i] == NPT_APOLFORCE) {
-	    if(debug>3) printApolForce(com, nosh, nforce, atomForce, i);
+	    if(debug>6) printApolForce(com, nosh, nforce, atomForce, i);
 	} else {
 	    Vnm_tprint( 2, "Undefined PRINT keyword!\n");
 	    break;
@@ -912,11 +912,13 @@ temp %.3f\nsdens %.3f\nmol 1\n", r_param[0], r_param[1], r_param[2],
     // print section
     if (debug > 3) {
       strcat(string, "print elecEnergy elec end\n");
-      if(i_param[10] > 0 ){
-	strcat(string, "print elecForce elec end\n");
-      }
       if(i_param[20] > 0 ){
 	strcat(string, "print apolEnergy npolar end\n");
+      }
+    }
+    if (debug > 6) {
+      if(i_param[10] > 0 ){
+	strcat(string, "print elecForce elec end\n");
       }
       if(i_param[20] > 0  && i_param[19] > 0 ) {
 	strcat(string, "print apolForce npolar end\n");
