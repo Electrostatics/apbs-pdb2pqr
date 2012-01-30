@@ -540,7 +540,7 @@ CONTAINS
     esenerg(1) = 0.0
     npenerg(1) = 0.0
 
-    IF (apbs_debug > 3) THEN
+    IF (apbs_debug > 5) THEN
        WRITE(6,  '(a)') 'iAPBS: unpacked coordinates, charge and radius:'
        DO i = 1, natom
           WRITE(6, '(i4, 5f8.3)') i, cx(i), cy(i), cz(i), &
@@ -749,7 +749,7 @@ CONTAINS
        cz(i) = x(j+3)
     END DO
 
-    IF (apbs_debug > 3) THEN
+    IF (apbs_debug > 5) THEN
        WRITE(6,  '(a)') 'iAPBS: unpacked coordinates, charge and radius:'
        DO i = 1, natom
           WRITE(6, '(i4, 5f8.3)') i, cx(i), cy(i), cz(i), &
@@ -998,7 +998,7 @@ CONTAINS
           f(j+3) = f(j+3) + (solvdz(i) - vacdz(i))
        END DO
 
-       IF (apbs_debug > 3) THEN
+       IF (apbs_debug > 6) THEN
           DO i = 1, natom
              j = 3*(i-1)
              WRITE(6, '(a, 4x, i4, 3f8.3)') "iAPBS: TotalForces:", &
