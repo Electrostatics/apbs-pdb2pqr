@@ -491,8 +491,8 @@ def mainCommand(argv):
                       help='Use propka to calculate pKas and apply them to the molecule given the pH value. ' +
                            'Actual PropKa results will be output to <output-path>.propka.')
     
-    propkaroup.add_option("--reference", dest="reference", default="neutral", 
-           help="setting which reference to use for stability calculations [neutral/low-pH]")
+    propkaroup.add_option("--reference", dest="reference", default="neutral", choices=('neutral','low-pH'), 
+           help="setting which reference to use for stability calculations")
     
     parser.add_option_group(propkaroup)
     
@@ -516,7 +516,9 @@ def mainCommand(argv):
             parser.error('%i is not a valid pH!  Please choose a pH between 0.0 and 14.0.' % options.pH)
         
         #build propka options
-        propkaOpts = utilities.createPropkaOptions(options.pH, options.verbose)
+        propkaOpts = utilities.createPropkaOptions(options.pH, 
+                                                   verbose=options.verbose, 
+                                                   reference=options.reference)
         
     if options.assign_only or options.clean:
         options.debump = options.optflag = False

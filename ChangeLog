@@ -3,5 +3,8 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
 # These are notes for the current version of PDB2PQR
 
 - NEW FEATURES
+ * Added support for reference command line option for PROPKA.
  
 - BUG FIXES
+ * Fixed user specified mobile ion species not being passed to apbs input file.
+
