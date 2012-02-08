@@ -814,17 +814,13 @@ CONTAINS
 
     ! calcforce parameters should be on!
     IF (i_param(11) /= 2 ) THEN
-       WRITE(6, *) 'iAPBS: WARNING: Calculation of solvation forces is ', &
-            'requested but calcforce keyword is not set to 2.'
-       WRITE(6, *) 'Polar forces will not be included'
+       WRITE(6, *) 'iAPBS: WARNING: calcforce keyword is not set to 2, ', &
+            'polar forces will not be calculated.'
     END IF
     IF (i_param(20) /= 2 ) THEN
-       WRITE(6, *) 'iAPBS: WARNING: Calculation of solvation forces is ', &
-            'requested but calcnpforce keyword is not set to 2.'
-       WRITE(6, *) 'Non-polar forces will not be included.'
+       WRITE(6, *) 'iAPBS: WARNING: calcnpforce keyword is not set to 2, ', &
+            'non-polar forces will not be calculated.'
     END IF
-
-
 
     napbs = napbs + 1
 
