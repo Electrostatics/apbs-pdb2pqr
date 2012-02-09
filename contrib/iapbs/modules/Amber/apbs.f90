@@ -417,7 +417,6 @@ CONTAINS
        CALL mexit(6,1)
     END IF
 
-
 !   WRITE(6,*) 'Number of grid points for grid-based discretization:', dime
    WRITE(6,'(a, 3i4)') 'Grid dimension:', dime(1), dime(2), dime(3)
    IF (cglen(1) > 0.) THEN
@@ -451,6 +450,50 @@ CONTAINS
       WRITE(6, '(a)') 'Using radii information from PQR file'
    ELSE
       WRITE(6, '(a)') 'Unknown radiopt selection'
+      CALL mexit(6,1)
+   END IF
+
+   IF (i_param(10) == 0) THEN
+      WRITE(6, '(a)') 'No electrostatic energy will be calculated'
+   ELSE IF (i_param(10) == 1) THEN
+      WRITE(6, '(a)') 'Total electrostatic energy will be calculated'
+   ELSE IF (i_param(10) == 2) THEN
+      WRITE(6, '(a)') 'Total and per atom electrostatic energy will be calculated'
+   ELSE
+      WRITE(6, '(a)') 'Unknown calcenergy selection'
+      CALL mexit(6,1)
+   END IF
+
+   IF (i_param(21) == 0) THEN
+      WRITE(6, '(a)') 'No apolar energy will be calculated'
+   ELSE IF (i_param(21) == 1) THEN
+      WRITE(6, '(a)') 'Total apolar energy will be calculated'
+   ELSE IF (i_param(21) == 2) THEN
+      WRITE(6, '(a)') 'Total and per atom apolar energy calculation is not supported'
+   ELSE
+      WRITE(6, '(a)') 'Unknown calcnpenergy selection'
+      CALL mexit(6,1)
+   END IF
+
+   IF (i_param(11) == 0) THEN
+      WRITE(6, '(a)') 'No electrostatic forces will be calculated'
+   ELSE IF (i_param(11) == 1) THEN
+      WRITE(6, '(a)') 'Total electrostatic forces will be calculated'
+   ELSE IF (i_param(11) == 2) THEN
+      WRITE(6, '(a)') 'Total and per atom electrostatic forces will be calculated'
+   ELSE
+      WRITE(6, '(a)') 'Unknown calcforce selection'
+      CALL mexit(6,1)
+   END IF
+
+   IF (i_param(20) == 0) THEN
+      WRITE(6, '(a)') 'No apolar forces will be calculated'
+   ELSE IF (i_param(20) == 1) THEN
+      WRITE(6, '(a)') 'Total apolar forces will be calculated'
+   ELSE IF (i_param(20) == 2) THEN
+      WRITE(6, '(a)') 'Total and per atom apolar forces will be calculated'
+   ELSE
+      WRITE(6, '(a)') 'Unknown calcnpforce selection'
       CALL mexit(6,1)
    END IF
 
@@ -813,13 +856,15 @@ CONTAINS
     END IF
 
     ! calcforce parameters should be on!
-    IF (i_param(11) /= 2 ) THEN
-       WRITE(6, *) 'iAPBS: WARNING: calcforce keyword is not set to 2, ', &
-            'polar forces will not be calculated.'
-    END IF
-    IF (i_param(20) /= 2 ) THEN
-       WRITE(6, *) 'iAPBS: WARNING: calcnpforce keyword is not set to 2, ', &
-            'non-polar forces will not be calculated.'
+    IF (apbs_print > 2) THEN
+       IF (i_param(11) /= 2 ) THEN
+          WRITE(6, *) 'iAPBS: WARNING: calcforce keyword is not set to 2, ', &
+               'polar forces will not be calculated.'
+       END IF
+       IF (i_param(20) /= 2 ) THEN
+          WRITE(6, *) 'iAPBS: WARNING: calcnpforce keyword is not set to 2, ', &
+               'non-polar forces will not be calculated.'
+       END IF
     END IF
 
     napbs = napbs + 1
