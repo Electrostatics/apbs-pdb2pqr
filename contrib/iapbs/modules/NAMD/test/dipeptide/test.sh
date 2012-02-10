@@ -1,6 +1,6 @@
 #!/bin/sh
 
-namd=/home/rok/namd-cvs/OO/namd2/Linux-x86_64-icc/namd2
+namd=$NAMD_BIN
 
 short="apbs-solvation.conf apbs-visualization.conf"
 long="apbs-md.conf"
