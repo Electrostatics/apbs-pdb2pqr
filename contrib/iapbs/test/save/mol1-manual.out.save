@@ -9,7 +9,7 @@ dime:   97  97  97
 grid:    0.833   0.833   0.833
 Required memory (in MB):    174.079
  main.f: apbs return code:            0
-esenergy (kJ/mol): 96146.65771524
-npenergy (kJ/mol):  2549.53924062
-esenergy (kcal/mol): 22979.60262060
-npenergy (kcal/mol):   609.35450079
+esenergy (kJ/mol): 97225.64819670
+npenergy (kJ/mol):  1784.67746843
+esenergy (kcal/mol): 23237.48753397
+npenergy (kcal/mol):   426.54815056

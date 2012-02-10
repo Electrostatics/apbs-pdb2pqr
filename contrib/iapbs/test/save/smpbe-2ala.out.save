@@ -2,9 +2,9 @@ Reading parameter file smpbe-2ala.in
  Reading PQR file ...
 Mol. dimensions:    8.118  10.679   5.995
 % CGMG: starting:      [ 65, 65, 65] 
- ]; cgmg_sf=0.000E+00; cgmg_sc=3.162-322; cgmg_st=3.162-322; cgmg_so=4.941-324;
+ ]; cgmg_sf=0.000E+00; cgmg_sc=3.162-322; cgmg_st=3.162-322; cgmg_so=3.500E+01;
 % CGMG: starting:      [ 65, 65, 65] 
- ]; cgmg_sf=2.970E-01; cgmg_sc=5.449E-01; cgmg_st=8.419E-01; cgmg_so=1.573E+01;
+ ]; cgmg_sf=6.953-310; cgmg_sc=3.600E+01; cgmg_st=3.600E+01; cgmg_so=3.900E+01;
  main.f: apbs return code:            0
 esenergy (kJ/mol):  1028.30299549
 npenergy (kJ/mol):    39.77620684

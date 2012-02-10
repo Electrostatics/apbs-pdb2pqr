@@ -2,7 +2,6 @@
 #
 # Run iAPBS validation tests.
 #
-# $Id: test.sh,v 1.2 2007/10/04 19:14:19 rok Exp $
 
 wrapper=../src/wrapper
 time="/usr/bin/time -v"
@@ -20,7 +19,7 @@ if [ "$1" = "single" ] ; then
     exit
 fi
 
-files="apbs mol1-auto mol1-manual mol1-manual-loop \
+files="apbs apbs.d9 mol1-auto mol1-manual mol1-manual-loop \
  smpbe-ion smpbe-2ala apbs-forces apbs-forces-tot"
 
 for i in $files
