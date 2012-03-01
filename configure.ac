@@ -1441,10 +1441,11 @@ fi
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT TO DISABLE APBS MESSAGES
 dnl # -----------------------
-AC_MSG_CHECKING([for --enable-abps-quiet])
+AC_MSG_CHECKING([for --enable-apbs-quiet])
 AC_ARG_ENABLE(
-	[abps-quiet],
-	AS_HELP_STRING([--enable-abps-quiet],[prevent APBS diagnostic messages from displaying to stdout]),,
+	[apbs-quiet],
+	AS_HELP_STRING([--enable-apb
+	s-quiet],[prevent APBS diagnostic messages from displaying to stdout]),,
 	[enable_apbs_quiet=no]
 )
 if test x"$enable_apbs_quiet" != "xno"; then
