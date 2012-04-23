@@ -133,8 +133,8 @@ class ResInter(object):
         self.save_interation_energy(residues[i], residues[j])
         self.save_interation_energy(residues[j], residues[i])
             
-    def create_all_protenated(self):
-        residueSet = get_residue_titration_set_protenated(self.routines.protein.getResidues())
+    def create_all_protonated(self):
+        residueSet = get_residue_titration_set_protonated(self.routines.protein.getResidues())
         self.process_residue_set(residueSet, 
                                 clean = self.options.clean,
                                 neutraln = self.options.neutraln,
@@ -147,8 +147,8 @@ class ResInter(object):
         
         self.save_all_residue_interaction_energies()
         
-    def create_all_single_unprotenated(self):
-        combinations = residue_set_single_unprotenated_combinations(self.routines.protein.getResidues())
+    def create_all_single_unprotonated(self):
+        combinations = residue_set_single_unprotonated_combinations(self.routines.protein.getResidues())
         for residueSet, i in combinations:
             self.process_residue_set(residueSet, 
                                      clean = self.options.clean,
@@ -162,8 +162,8 @@ class ResInter(object):
         
             self.save_one_with_all_interaction_energies(i)
             
-    def create_all_pair_unprotenated(self):
-        combinations = residue_set_pair_unprotenated_combinations(self.routines.protein.getResidues())
+    def create_all_pair_unprotonated(self):
+        combinations = residue_set_pair_unprotonated_combinations(self.routines.protein.getResidues())
         for residueSet, i, j in combinations:
             self.process_residue_set(residueSet, 
                                      clean = self.options.clean,
@@ -185,13 +185,13 @@ class ResInter(object):
         self.routines.write("Printing residue interaction energies...\n")
         
         #Phase 1: Everything protonated
-        self.create_all_protenated()
+        self.create_all_protonated()
         
         #Phase 2: Single unprotonated paired with everything else.
-        self.create_all_single_unprotenated()
+        self.create_all_single_unprotonated()
         
         #Phase 2: Pair unprotonated paired with each other.
-        self.create_all_pair_unprotenated()
+        self.create_all_pair_unprotonated()
 
     def write_resinter_output(self):
         """
@@ -265,9 +265,9 @@ class ResInter(object):
             hydRoutines.cleanup()
                     
         
-def get_residue_titration_set_protenated(residues):
+def get_residue_titration_set_protonated(residues):
     """
-    Returns residue set when everything is protenated.
+    Returns residue set when everything is protonated.
     """
     result = []
     for residue in residues:
@@ -280,43 +280,43 @@ def get_residue_titration_set_protenated(residues):
         
     return result
 
-def residue_set_single_unprotenated_combinations(residues):
+def residue_set_single_unprotonated_combinations(residues):
     """
     Yields pair (residue set, residue index) for 
-    every "single unprotenated" combination.
+    every "single unprotonated" combination.
     residue set - set for process_residue_set
     residue index - index of residue that was left unprotonated
     """    
-    protenatedNames = get_residue_titration_set_protenated(residues)
+    protonatedNames = get_residue_titration_set_protonated(residues)
     
-    for name, i in izip(protenatedNames, count()):
+    for name, i in izip(protonatedNames, count()):
         if not name in _titrationSetsMap:
             continue
         
         tStateSet = _titrationSetsMap[name][0]
         
         for tState in tStateSet:
-            result = list(protenatedNames)
+            result = list(protonatedNames)
             result[i] = tState
             yield result, i
             
-def residue_set_pair_unprotenated_combinations(residues):
+def residue_set_pair_unprotonated_combinations(residues):
     """
     Yields pair (residue set, 1rst residue index, 2nd residue index) for 
-    every "single unprotenated" combination.
+    every "single unprotonated" combination.
     residue set - set for process_residue_set
     1rst residue index - index of 1rst residue that was left unprotonated
     2nd residue index - index of 2nd residue that was left unprotonated
     """    
-    protenatedNames = get_residue_titration_set_protenated(residues)
+    protonatedNames = get_residue_titration_set_protonated(residues)
     
-    for i in xrange(0,len(protenatedNames)):
-        firstName = protenatedNames[i]
+    for i in xrange(0,len(protonatedNames)):
+        firstName = protonatedNames[i]
         if not firstName in _titrationSetsMap:
             continue
         firstStateSet = _titrationSetsMap[firstName][0]
         for j in xrange(0,i):
-            secondName = protenatedNames[j]
+            secondName = protonatedNames[j]
             if not secondName in _titrationSetsMap:
                 continue            
             
@@ -324,7 +324,7 @@ def residue_set_pair_unprotenated_combinations(residues):
             
             for firstState in firstStateSet:
                 for secondState in secondStateSet:
-                    result = list(protenatedNames)
+                    result = list(protonatedNames)
                     result[i] = firstState
                     result[j] = secondState
                     yield result, i, j
