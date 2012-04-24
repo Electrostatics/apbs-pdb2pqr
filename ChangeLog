@@ -4,6 +4,7 @@ Please see http://www.poissonboltzmann.org/pdb2pqr/release-history
 
 - NEW FEATURES
  * Added support for reference command line option for PROPKA.
+ * Added newresinter plugin.
  
 - BUG FIXES
  * Fixed user specified mobile ion species not being passed to apbs input file.
