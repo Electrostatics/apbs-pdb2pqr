@@ -44,7 +44,7 @@ for tsSet in _titrationSets:
         _titrationSetsMap[ts] = tsSet
         
     _titrationSetsMap[tsSet[1]] = tsSet
-        
+    
 #loose ends.
 _titrationSetsMap['HIS'] = _titrationSetsMap['HSD']
 _titrationSetsMap['CYM'] = _titrationSetsMap['CYS']
@@ -63,29 +63,11 @@ def run_extension(routines, outroot, options):
         processor.generate_all()
         processor.write_resinter_output()
 
-def get_residue_interaction_energy(residue1, residue2):
-    """
-    Returns to total energy of every atom pair between the two residues.
-    
-    Uses Optimize.getPairEnergy and it's donor/accepter model 
-    to determine energy.
-    
-    residue1 - "donor" residue
-    residue2 - "acceptor" residue
-    
-    THE RESULTS OF THIS FUNCTION ARE NOT SYMMETRIC. Swapping 
-    residue1 and residue2 will not always produce the same result.
-    """
-    energy = 0.0
-    for pair in product(residue1.getAtoms(), residue2.getAtoms()):
-        energy += Optimize.getPairEnergy(pair[0], pair[1])
-        
-    return energy
-        
 class ResInter(object):
     def __init__(self, routines, outfile, options):
         self.pairEnergyResults = {}
         self.combinationCount = 0
+        self.totalCombinations = 0
         self.options = options
         self.output = extensions.extOutputHelper(routines, outfile)
         self.routines = routines
@@ -176,13 +158,30 @@ class ResInter(object):
                                      opt = self.options.opt)
         
             self.save_pair_interaction_energies(i, j)
-    
+            
+    def count_combinations(self):
+        n = 0 # total iterable residues
+        k = 0 # total iterable residues with two possible choices.
+        
+        allProtonated = get_residue_titration_set_protonated(self.routines.protein.getResidues())
+        
+        for name in allProtonated:
+            if name in _titrationSetsMap:
+                n += 1
+                
+                if len(_titrationSetsMap[name][0]) == 2:
+                    k += 1
+        
+        self.totalCombinations = (((n+k)**2)+(n-k)+2)/2
+            
     def generate_all(self):
         """
         For every titration state combination of residue output the 
         interaction energy for all possible residue pairs. 
         """
         self.routines.write("Printing residue interaction energies...\n")
+        
+        self.count_combinations()
         
         #Phase 1: Everything protonated
         self.create_all_protonated()
@@ -212,9 +211,12 @@ class ResInter(object):
                             debump = True,
                             opt = True):
         
-        self.routines.write(str(residueSet)+'\n')
-        
         self.combinationCount += 1
+        
+        txt = "Running combination {0} of {1}\n".format(self.combinationCount, self.totalCombinations)
+        self.routines.write(txt)
+        
+        self.routines.write(str(residueSet)+'\n')
         
         self.routines.removeHydrogens()
         
@@ -330,6 +332,23 @@ def residue_set_pair_unprotonated_combinations(residues):
                     yield result, i, j
 
 
-
+def get_residue_interaction_energy(residue1, residue2):
+    """
+    Returns to total energy of every atom pair between the two residues.
+    
+    Uses Optimize.getPairEnergy and it's donor/accepter model 
+    to determine energy.
+    
+    residue1 - "donor" residue
+    residue2 - "acceptor" residue
+    
+    THE RESULTS OF THIS FUNCTION ARE NOT SYMMETRIC. Swapping 
+    residue1 and residue2 will not always produce the same result.
+    """
+    energy = 0.0
+    for pair in product(residue1.getAtoms(), residue2.getAtoms()):
+        energy += Optimize.getPairEnergy(pair[0], pair[1])
+        
+    return energy
     
 
