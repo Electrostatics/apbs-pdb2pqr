@@ -367,6 +367,11 @@ def runAPBS(PQR, INPUT):
         stderr.write("Error reading charge maps!\n")
         raise APBSError, "Error reading charge maps!"
 
+    potMap = new_gridlist(NOSH_MAXMOL)
+    if loadPotMaps(nosh, chargeMap) != 1:
+        stderr.write("Error reading charge maps!\n")
+        raise APBSError, "Error reading charge maps!"
+
     # Do the calculations
 
     stdout.write("Preparing to run %d PBE calculations. \n" % nosh.ncalc)
@@ -395,7 +400,7 @@ def runAPBS(PQR, INPUT):
         
         if initMG(icalc, nosh, mgparm, pbeparm, realCenter, pbe, 
               alist, dielXMap, dielYMap, dielZMap, kappaMap, chargeMap, 
-              pmgp, pmg) != 1:
+              pmgp, pmg, potMap) != 1:
             stderr.write("Error setting up MG calculation!\n")
             raise APBSError, "Error setting up MG calculation!"
 	
@@ -472,6 +477,7 @@ def runAPBS(PQR, INPUT):
     killEnergy()
     killMG(nosh, pbe, pmgp, pmg)
     killChargeMaps(nosh, chargeMap)
+    killPotMaps(nosh, potMap)
     killKappaMaps(nosh, kappaMap)
     killDielMaps(nosh, dielXMap, dielYMap, dielZMap)
     killMolecules(nosh, alist)
