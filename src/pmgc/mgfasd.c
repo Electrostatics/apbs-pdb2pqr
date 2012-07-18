@@ -381,7 +381,7 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
                 RAT( ac, VAT2(iz, 7, lev)), RAT( cc, VAT2(iz, 1, lev)),
                 RAT( fc, VAT2(iz, 1, lev)), RAT(  x, VAT2(iz, 1, lev)),
                 w2, w3, w1,
-                &nuuu, &iters_s, &errtol_s, &omega,
+                &nuuu, &iters_s, &errtol_s, omega,
                 &iresid, &iadjoint, mgsmoo);
         Vxcopy(&nxf, &nyf, &nzf, w1, RAT(w0, VAT2(iz, 1, lev)));
 
