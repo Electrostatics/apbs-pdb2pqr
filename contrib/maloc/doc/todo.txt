@@ -1,0 +1,46 @@
+==============================================================================
+The MALOC ChangeLog and the MALOC TODO List
+
+This file written and maintained by Michael Holst (mholst@math.ucsd.edu)
+rcsid="$Id: todo.txt,v 1.1 2002/10/02 00:40:43 mholst Exp $"
+==============================================================================
+
+
+The MALOC ChangeLog
+-------------------
+
+Thu Oct  5 22:14:28 PDT 2000 Michael Holst
+
+ * MALOC gets named; separation from MC as a programming interface   100500
+ * Completely removed the old (but lovable) "mk" build scripts       030100
+ * Much improved the GNU Autoconf/automake setup                     021500
+ * Added preliminary GNU Autoconf/automake configuration             010100
+ * (See the MC ChangeLog for early MALOC development history)        100193
+ * (I move from University of Illinois to Caltech Applied Math:      100193)
+
+
+The MALOC TODO List
+-------------------
+
+This is the MALOC "TODO" list, basically a list of known problems that need
+to be fixed, or desirable features that I (or someone else) would like to
+add to MALOC.  The list is divided into sublists, according to which primary 
+component of MALOC the task involves hacking into.  The column on the left
+side of each sublist refers to which state the task is currently in:
+
+  o <Open>        ==> It is not completed, and no one is working on it yet.
+  - <In Progress> ==> Someone is working on it, but it is not done.
+  x <Completed>   ==> The task has been completed and the code has been tested.
+
+For the "in progress" tasks, the name of the person working on it (usually me)
+will usually be listed somewhere in the description of the task.
+
+  -michael holst
+
+----------<MALOC-shell TODO List>---------------------------------------------
+x  Fix sg socket read bug that kills both sg and Msh once in a while
+o  Bash-like job control, environ variables, control (if-else, for, etc)
+
+----------<MALOC I/O TODO List>-----------------------------------------------
+x  BINARY I/O pipe to/from Msh/Geomview/sg/GMV
+

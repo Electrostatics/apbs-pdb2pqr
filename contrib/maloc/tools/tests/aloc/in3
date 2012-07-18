@@ -1,0 +1,6 @@
+        cat ${MC_CWD}/${MK_NAME} | ${AWK} " \
+                \$1 ~  /^ *MC_ROOT=/   { print \"MC_ROOT=${MC_ROOT}\" } \
+                \$1 ~  /^ *MK_MAKARG=/ { print \"MK_MAKARG=\${PARAMAKE}\" } \
+                \$1 !~ /^ *MC_ROOT=/ && \$1 !~ /^ *MK_MAKARG=/ { print \$0 } \
+            " > ${MK_NAME}
+        chmod u+x ${MK_NAME}
