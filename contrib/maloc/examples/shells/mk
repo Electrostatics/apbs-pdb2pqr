@@ -1,0 +1,800 @@
+#! /bin/sh
+### ##########################################################################
+### MALOC = < Minimal Abstraction Layer for Object-oriented C >
+### Copyright (C) 1994--2008 Michael Holst
+### 
+### This library is free software; you can redistribute it and/or
+### modify it under the terms of the GNU Lesser General Public
+### License as published by the Free Software Foundation; either
+### version 2.1 of the License, or (at your option) any later version.
+### 
+### This library is distributed in the hope that it will be useful,
+### but WITHOUT ANY WARRANTY; without even the implied warranty of
+### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+### Lesser General Public License for more details.
+### 
+### You should have received a copy of the GNU Lesser General Public
+### License along with this library; if not, write to the Free Software
+### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+### 
+### rcsid="$Id: mk,v 1.2 2008/03/12 05:13:57 fetk Exp $"
+### ##########################################################################
+
+##############################################################################
+# Purpose: Master mk script for managing the code MC.
+#
+# Notes:
+#
+# (1) The following UNIX tools need to be present for this script to
+#     function correctly:
+#
+#         - sh (a bourne-compatible shell with an implementation of functions)
+#         - pwd (a builtin or utility to identify the current directory)
+#         - sed (the standard stream editor)
+#         - awk (the standard awkward unix tool)
+#         - make (a standard unix make utility with no required extensions)
+#         - cc (an ANSI C-Compiler, employing an ANSI C-Preprocessor)
+#
+#     The "tgz" option also requires:
+#
+#         - touch (a standard unix file utility)
+#         - tar (the standard unix tape archive utility)
+#         - gzip (the GNU Project's compress/decompress utility)
+#
+# (2) In order to use the auto-config option, the following environment 
+#     variable is assumed to be pre-defined by the shell (or the user):
+#         
+#         - OSTYPE (Linux, IRIX, IRIX64, NeXT, etc)
+#
+#     I rely on the OSTYPE environment variable rather than some UNIX
+#     utility like "uname" to determine the OS and hardware because 
+#     uname and related utilities does not exist on some UNIX platforms
+#     (e.g., NeXT).  OSTYPE is pre-defined by bash, tcsh, etc, so if you
+#     use a modern shell, this should just work for you.  If not, you 
+#     will need to define OSTYPE yourself, or simply use the manual
+#     configuration option.
+#
+# (3) If your bourne-compatible shell doesn't support functions, then you
+#     can't build MC using this tool.  Your best options are (1) install
+#     "bash" (the "Bourne Again SHell", the GNU Project's bourne-compatible
+#     shell, implementing a superset of the standard Bourne shell), or
+#     (2) install "ksh" (the "Korn shell").  Both of these powerful shells
+#     are available for free on the internet, and can be installed on nearly
+#     any platform (UNIX, WindowsXX, OS/2, BeOS, NeXT, ...).
+#
+# Author:  Michael Holst
+##############################################################################
+
+##############################################################################
+# Required UNIX support tools for this shell script
+##############################################################################
+
+# Make environment
+SH="sh"
+PWD="pwd"
+SED="sed"
+AWK="awk"
+MAKE="make"
+
+# Extended tgz make environment
+TOUCH="touch"
+TAR="tar"
+GZIP="gzip"
+
+# Make arguments (PARAMAKE may be inherited from the shell)
+MK_MAKARG="-s ${PARAMAKE}"
+
+##############################################################################
+# Routine: getMkLibs()
+# Purpose: Define the list of libraries to build.
+#          Note that things will be built following the list order.
+##############################################################################
+getMkLibs() {
+    MK_LIBS="ef vnm glw vor vblas vslu vgl vto vgm vmc bin" ;
+}
+
+##############################################################################
+# Routine: make_ef()
+# Purpose: Build the ElectricFence library "libef.a"
+##############################################################################
+libs_ef() { LIBDIRS="src/ef tst/ef" ; }
+make_ef() {
+    CMD="$1"
+    ARG="$2"
+    if [ "${CMD}" = "killMakefile" ]; then
+        exec_lib "ef" "${CMD}" "${ARG}"
+    elif [ "${MC_EF}" = "yes" ]; then
+        exec_lib "ef" "${CMD}" "${ARG}"
+    fi
+}
+
+##############################################################################
+# Routine: make_glw()
+# Purpose: Build the OpenGL library "libGLw.a"
+##############################################################################
+libs_glw() { LIBDIRS="src/glw tst/glw" ; }
+make_glw() {
+    CMD="$1"
+    ARG="$2"
+    if [ "${CMD}" = "killMakefile" ]; then
+        exec_lib "glw" "${CMD}" "${ARG}"
+    elif [ ! "${XLDL}" = "" ]; then
+        exec_lib "glw" "${CMD}" "${ARG}"
+    fi
+}
+
+##############################################################################
+# Routine: make_vblas()
+# Purpose: Build the MC library "libvblas.a"
+##############################################################################
+libs_vblas() { LIBDIRS="src/vblas tst/vblas" ; }
+make_vblas() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vblas" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vslu()
+# Purpose: Build the MC library "libvslu.a"
+##############################################################################
+libs_vslu() { LIBDIRS="src/vslu tst/vslu" ; }
+make_vslu() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vslu" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vnm()
+# Purpose: Build the MC library "libvnm.a"
+##############################################################################
+libs_vnm() { LIBDIRS="src/vnm tst/vnm" ; }
+make_vnm() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vnm" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vor()
+# Purpose: Build the MC library "libvor.a"
+##############################################################################
+libs_vor() { LIBDIRS="src/vor tst/vor" ; }
+make_vor() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vor" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vto()
+# Purpose: Build the MC library "libvto.a"
+##############################################################################
+libs_vto() { LIBDIRS="src/vto tst/vto" ; }
+make_vto() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vto" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vgl()
+# Purpose: Build the MC library "libvgl.a"
+##############################################################################
+libs_vgl() { LIBDIRS="src/vgl tst/vgl" ; }
+make_vgl() {
+    CMD="$1"
+    ARG="$2"
+    if [ "${CMD}" = "killMakefile" ]; then
+        exec_lib "vgl" "${CMD}" "${ARG}"
+    elif [ "${MC_GL}" = "yes" ]; then
+        exec_lib "vgl" "${CMD}" "${ARG}"
+    fi
+}
+
+##############################################################################
+# Routine: make_vgm()
+# Purpose: Build the MC library "libvgm.a"
+##############################################################################
+libs_vgm() { LIBDIRS="src/vgm tst/vgm" ; }
+make_vgm() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vgm" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_vmc()
+# Purpose: Build the MC library "libvmc.a"
+##############################################################################
+libs_vmc() { LIBDIRS="src/vmc tst/vmc" ; }
+make_vmc() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "vmc" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: make_bin()
+# Purpose: Build the MC work binaries.
+##############################################################################
+libs_bin() { LIBDIRS="work/bin" ; }
+make_bin() {
+    CMD="$1"
+    ARG="$2"
+    exec_lib "bin" "${CMD}" "${ARG}" ;
+}
+
+##############################################################################
+# Routine: exec_lib()
+# Purpose: Execute command with argument in directories ${LIBDIRS}.
+#          The first argument represents a library function name to use.
+#          (This function name then defines LIBDIR for use.)
+#          The second argument represents the command to execute.
+#          The third argument represents the arguments for the command.
+##############################################################################
+exec_lib() {
+    MI_LIB="$1"
+    MI_CMD="$2"
+    MI_ARG="$3"
+    "libs_${MI_LIB}"
+    for thelib in ${LIBDIRS}; do
+        "${MI_CMD}" "${thelib}" "${MI_ARG}"
+    done
+}
+
+##############################################################################
+# Routine: printMenu()
+# Purpose: Generate and print short "usage" menu.
+##############################################################################
+printMenu() {
+    echo "${PR}"
+    echo "${PR}        ${MK_NAME} -- MaKe Utility"\
+                       "for Configuring and Building MC."
+    echo "${PR}"
+    echo "${PR} Usage: ./${MK_NAME}                "\
+                       " (Print this info but take no action)"
+    echo "${PR}        ./${MK_NAME} go     [OS]    "\
+                       " (Do: config->clean->dep->build     )"
+    echo "${PR}        ./${MK_NAME} config [OS]    "\
+                       " (Configure the package             )"
+    echo "${PR}        ./${MK_NAME} clean  [OS]    "\
+                       " (rm -f *.o                         )"
+    echo "${PR}        ./${MK_NAME} dep    [OS]    "\
+                       " (makedepend                        )"
+    echo "${PR}        ./${MK_NAME} build  [OS]    "\
+                       " (Build the package                 )"
+    echo "${PR}        ./${MK_NAME} brkdep [OS]    "\
+                       " (breakdepend                       )"
+    echo "${PR}        ./${MK_NAME} rclean [OS|all]"\
+                       " (Total cleanup of OS or of all     )"
+    echo "${PR}        ./${MK_NAME} tgz            "\
+                       " (Make tgz file after doing rclean  )"
+    echo "${PR}        ./${MK_NAME} info           "\
+                       " (Print additional usage information)"
+    echo "${PR}"
+}
+
+##############################################################################
+# Routine: printInfo()
+# Purpose: Generate and print "usage" menu.
+##############################################################################
+printInfo() {
+    echo "${PR}"
+    echo "${PR} Info:  If you do not supply the optional OS argument,"\
+                       "${MK_NAME} tries"
+    echo "${PR}        to determine your platform by looking at the OSTYPE    "
+    echo "${PR}        environment variable (predefined by most UNIX shells). "
+    echo "${PR}        You can influence this choice by resetting the OSTYPE  "
+    echo "${PR}        variable yourself, or by giving the OS argument.       "
+    echo "${PR}"
+    echo "${PR}        ${MK_NAME} then looks for a config file in"\
+                       "<mc/cnf/platform>.  "
+    echo "${PR}        If none is found, ${MK_NAME} uses a generic UNIX/X"\
+                       "config file."
+    echo "${PR}        You can add a new platform by copying the generic file "
+    echo "${PR}        to your new (uniquely named) file in the directory     "
+    echo "${PR}        <mc/cnf/platform>, and editing the file as needed.  "
+    echo "${PR}"
+    echo "${PR} Config files currently in <mc/cnf/platform> for selecting OS: "
+    echo "${PR}"
+    PLATFORMS=`ls -1 ${MC_CONFIG}/platform \
+             | ${SED} -e "s./..g" | ${SED} -e "s.CVS..g"`;
+    for platform in ${PLATFORMS}; do
+        . ${MC_CONFIG}/platform/${platform}
+        echo "${PR}        ${platform}"\
+             "   (${PLATFORM}, EF=${EFENCE}, OPENGL=${OPENGL})"
+    done
+    echo "${PR}"
+}
+
+##############################################################################
+# Routine: getConfig()
+# Purpose: Do an auto- or manual-configuration.
+#          If no arguments given, try an auto-configuration is based on the
+#          OSTYPE environment variable.
+#          If one argument is given, try a manual configuration based on 
+#          that argument.
+#          After this routine exits, the platform is at least well-defined.
+##############################################################################
+getConfig() {
+
+    # Auto configuration
+    if [ $# -eq 0 ]; then
+        MC_OS=${OSTYPE}
+        MYOSKEY="OSTYPE"
+
+    # Manual configuration
+    elif [ $# -eq 1 ]; then
+        MC_OS=$1
+        MYOSKEY="OS"
+    fi
+
+    # Check for a valid platform
+    if [ -f "${MC_CONFIG}/platform/${MC_OS}" ]; then
+        echo "${PR} Platform <${MC_OS}> WAS found from <${MYOSKEY}>."
+    else
+        # Attempt to map MC_OS to more canonical names
+        case ${MC_OS} in
+            NeXT*)        MC_OS="next" ;;
+            next*)        MC_OS="next" ;;
+            Rhapsody*)    MC_OS="rhapsody" ;;
+            rhapsody*)    MC_OS="rhapsody" ;;
+            Solaris*)     MC_OS="sunos" ;;
+            solaris*)     MC_OS="sunos" ;;
+            SunOS*)       MC_OS="sunos" ;;
+            sunos*)       MC_OS="sunos" ;;
+            *BSD)         MC_OS="bsd" ;;
+            *bsd)         MC_OS="bsd" ;;
+            Linux)        MC_OS="linux" ;;
+            linux)        MC_OS="linux" ;;
+            IRIX)         MC_OS="irix" ;;
+            Irix)         MC_OS="irix" ;;
+            irix)         MC_OS="irix" ;;
+            IRIX64)       MC_OS="irix64" ;;
+            Irix64)       MC_OS="irix64" ;;
+            irix64)       MC_OS="irix64" ;;
+            Irix6)        MC_OS="irix" ;;
+            irix6)        MC_OS="irix" ;;
+            osf*)         MC_OS="osf1" ;;
+            OSF*)         MC_OS="osf1" ;;
+        esac
+        if [ -f "${MC_CONFIG}/platform/${MC_OS}" ]; then
+            echo "${PR} Platform <${MC_OS}> WAS found from <${MYOSKEY}>."
+        else
+            echo "${PR} Platform <${MC_OS}> WAS NOT found from <${MYOSKEY}>. "\
+                  "Using <generic>."
+            MC_OS="generic"
+        fi
+    fi
+
+    # Finally, read in the correct config file
+    . ${MC_CONFIG}/platform/${MC_OS}
+    MC_PL="${PLATFORM}"
+    MC_EF="${EFENCE}"
+    MC_GL="${OPENGL}"
+
+    # Define the library path (now that MC_OS is defined)
+    MC_LIB="${MC_ROOT}/lib/${MC_OS}"
+}
+
+##############################################################################
+# Routine: genConfig()
+# Purpose: Given a valid configuration, generate all of the makefiles.
+#          We ASSUME that getConfig() has already been called, so that the
+#          appropriate platform file has already been read in, and the 
+#          following variables (among others) are already well-defined:
+#
+#              MC_OS, MC_PL, MC_EF, MC_GL, MC_LIB
+#
+#          After this routine exits, the platform is configured and ready
+#          to clean/dep/build/etc.
+##############################################################################
+genConfig() {
+    # Read in the current (assumed valid) configuration file
+    echo "${PR} Configuring with <${MC_OS}> platform config file."
+    echo "${PR} Platform is  = <${MC_PL}>"
+    echo "${PR} EF libraries = <${MC_EF}>"
+    echo "${PR} GL libraries = <${MC_GL}>"
+
+    # Generate the premake.${MC_OS} file
+    echo "# DO NOT EDIT -- automatically built from config file <${MC_OS}>" \
+                                      > ${MC_CONFIG}/premake.${MC_OS}
+    echo ""                          >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "    PLATFORM=${PLATFORM}"  >> ${MC_CONFIG}/premake.${MC_OS}
+    echo ""                          >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       MC_OS=${MC_OS}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "     MC_ROOT=${MC_ROOT}"   >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "    MC_TOOLS=${MC_TOOLS}"  >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "   MC_CONFIG=${MC_CONFIG}" >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      MC_BIN=${MC_BIN}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      MC_INC=${MC_INC}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      MC_LIB=${MC_LIB}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo ""                          >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "    CPPFLAGS=${CPPFLAGS}"  >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "          CC=${CC}"        >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "          FC=${FC}"        >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "          PC=${PC}"        >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      CFLAGS=${CFLAGS}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      FFLAGS=${FFLAGS}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      PFLAGS=${PFLAGS}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       CWARN=${CWARN}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       FWARN=${FWARN}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       PWARN=${PWARN}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        XINC=${XINC}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        XLIB=${XLIB}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        XLDL=${XLDL}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        GINC=${GINC}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        GLIB=${GLIB}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        GLDL=${GLDL}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        MINC=${MINC}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        MLIB=${MLIB}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        MLDL=${MLDL}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        OINC=${OINC}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        OLIB=${OLIB}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "        OLDL=${OLDL}"      >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      ARCLIB=${ARCLIB}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "      RANLIB=${RANLIB}"    >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "          RM=${RM}"        >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       BKDEP=${BKDEP}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo "       MKDEP=${MKDEP}"     >> ${MC_CONFIG}/premake.${MC_OS}
+    echo ""                          >> ${MC_CONFIG}/premake.${MC_OS}
+
+    # Generate the postmake.${MC_OS} file
+    echo ""                              > ${MC_CONFIG}/postmake.${MC_OS}
+    echo "dep:"                         >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "	\${MKDEP} Makefile -Y \${CPPFLAGS} -I\${MC_INC} \${SRC}" \
+                                        >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "brkdep:"                      >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "	\${BKDEP} Makefile"         >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "clean:"                       >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "	\${RM} \${CLEANABLE}"       >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo ""                             >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo "# DO NOT DELETE THIS LINE -- make depend depends on it." \
+                                        >> ${MC_CONFIG}/postmake.${MC_OS}
+    echo ""                             >> ${MC_CONFIG}/postmake.${MC_OS}
+
+    # Make the MC_LIB subdirectory if it does not yet exist
+    if [ ! -d "${MC_LIB}" ]; then
+        mkdir ${MC_LIB}
+    fi
+}
+
+##############################################################################
+# Routine: chkConfig()
+# Purpose: Check to see if the package has been configured by genConfig().
+#          We key on existence of the MC_LIB directory (created by genConfig).
+#          The first argument is the option the user wants to execute.
+##############################################################################
+chkConfig() {
+    CC_ARG1="$1"
+    if [ ! -d "${MC_LIB}" ]; then
+        echo "${PR} ERROR: use <config> (at least once) before <${CC_ARG1}>."
+        mkExit "1" "chkConfig"
+    fi
+}
+
+##############################################################################
+# Routine: killMakefile()
+# Purpose: Kill an arch-dependent subdirectory (containing a makefile) in 
+#          directory specified by the first argument, where the name of the
+#          arch-dependent subdirectory to kill is given by the second argument.
+#          If no agument given, remove all the arch-dependent subdirectories.
+##############################################################################
+killMakefile() {
+    KMF_DIR="$1"
+    KMF_OS="$2"
+    echo "${PR} Removing <${KMF_OS}> arch files and mk script in <${KMF_DIR}>."
+    cd ${MC_ROOT}/${KMF_DIR}
+    if [ "${KMF_OS}" = "ALL" ]; then
+        rm -rf arch ; rm -f mk mk.*
+    else
+        rm -rf arch/${KMF_OS} ; rm -f mk.${KMF_OS}
+    fi
+}
+
+##############################################################################
+# Routine: makeMakefile()
+# Purpose: Generate a makefile in directory specified by the first argument.
+#          We also leave behind a useful script for calling make.
+##############################################################################
+makeMakefile() {
+    MMF_ARG="$1"
+    echo "${PR} Generating Makefile for <${MMF_ARG}/arch/${MC_OS}>"
+
+    # Move to the directory
+    cd ${MC_ROOT}/${MMF_ARG}
+
+    # Leave behind a make script and a local version of ${MK_NAME}.
+    if [ "${MC_CWD}" = "${MC_ROOT}" ]; then
+
+        # Leave behind a make script called "mk.${MC_OS}"
+        echo "#! /bin/sh"                      > mk.${MC_OS}
+        echo "cd arch/${MC_OS} ; ${MAKE} \$@" >> mk.${MC_OS}
+        chmod u+x mk.${MC_OS}
+
+        # Leave behind local version of ${MK_NAME}
+        # (With a hard-wired MC_ROOT and a verbose make).
+        cat ${MC_CWD}/${MK_NAME} | ${AWK} " \
+                \$1 ~  /^ *MC_ROOT=/   { print \"MC_ROOT=${MC_ROOT}\" } \
+                \$1 ~  /^ *MK_MAKARG=/ { print \"MK_MAKARG=\${PARAMAKE}\" } \
+                \$1 !~ /^ *MC_ROOT=/ && \$1 !~ /^ *MK_MAKARG=/ { print \$0 } \
+            " > ${MK_NAME}
+        chmod u+x ${MK_NAME}
+    fi
+
+    # Get the list of source and header files while we are here
+    FILES=`ls -1 *.cc *.c *.h *.f 2>/dev/null \
+         | ${SED} -e "s./..g" | ${SED} -e "s.CVS..g"`;
+
+    # Make the "arch"itecture subdirectory if it does not yet exist
+    if [ ! -d "arch" ]; then
+        mkdir arch
+    fi
+    cd arch
+
+    # Remove MS_OS subdirectory and all contents, then recreate
+    rm -rf ${MC_OS}
+    mkdir ${MC_OS}
+    cd ${MC_OS}
+
+    # Create the symbolic links to the source and headers
+    for file in ${FILES}; do
+        ln -s ../../${file} ${file}
+    done
+
+    # Generate the makefile
+    cat ${MC_CONFIG}/premake.${MC_OS} > Makefile
+    cat ../../Makefile.mk | ${AWK} "!/^ *#+/ { print \$0 }" >> Makefile
+    cat ${MC_CONFIG}/postmake.${MC_OS} >> Makefile
+}
+
+##############################################################################
+# Routine: callMake()
+# Purpose: Do a make in the directory specified by the first argument.
+#          The second argument gives the optional target for the make.
+##############################################################################
+callMake() {
+    ML_DIR="$1"
+    ML_TGT="$2"
+    echo "${PR} Handling directory <${ML_DIR}/arch/${MC_OS}>"
+    cd ${MC_ROOT}/${ML_DIR}
+    ./mk.${MC_OS} ${MK_MAKARG} ${ML_TGT}
+}
+
+##############################################################################
+# Routine: doAll()
+# Purpose: Do something in all MK_LIBS directories.
+#          The first argument specifies the something to do.
+#          The second argument gives the argument for the something.
+##############################################################################
+doAll() {
+    DA_CMD="$1"
+    DA_ARG="$2"
+    getMkLibs
+    for lib in ${MK_LIBS}; do
+        "make_${lib}" "${DA_CMD}" "${DA_ARG}"
+    done
+}
+
+##############################################################################
+# Routine: mkExit()
+# Purpose: Exit with some error condition.
+#          The first argument has the error code.
+#          The second argument is the name of the function calling mkExit.
+##############################################################################
+mkExit() {
+    MKE_ERR="$1"
+    MKE_FUN="$2"
+    # echo "${PR} Exiting (called from ${MKE_FUN}) with error "${MKE_ERR})."
+    exit
+}
+
+##############################################################################
+# Initialization
+##############################################################################
+
+# Grab the arguments
+MK_CMD="$1"
+MK_OS="$2"
+
+# MC I/O prompt
+MK_NAME=`echo "$0" | ${SED} -e "s:./::g"`;
+if [ $# -eq 0 ]; then
+    PR="[${MK_NAME}]:"
+else
+    PR="[${MK_NAME} $@]:"
+fi
+
+# Define ROOT and CONFIG Paths
+MC_ROOT=`${PWD}`
+MC_TOOLS="${MC_ROOT}/cnf/tools"
+MC_CONFIG="${MC_ROOT}/cnf"
+MC_BIN="${MC_ROOT}/work/bin"
+MC_INC="${MC_ROOT}/inc"
+
+# Deal with the current working directory and the subroot piece
+# The subroot piece satisfies:  MC_CWD=MC_ROOT/MC_SUBROOT
+MC_CWD=`${PWD}`
+MC_SUBROOT=`echo "" | \
+   ${AWK} "{ printf(\"%s\",substr(\"${MC_CWD}\",length(\"${MC_ROOT}\")+2)) }"`
+
+# Identify the library name in case we are in a subdirectory
+MC_LIBNAME=""
+getMkLibs
+for lib in ${MK_LIBS}; do
+   VAL=`echo ""|${AWK} "{printf(\"%s\",index(\"${MC_SUBROOT}\",\"${lib}\"))}"`
+   if [ ${VAL} -gt 0 ]; then
+       MC_LIBNAME="${lib}"
+   fi
+done
+
+# Some minmal checking for correctness of the paths
+if [ ! "${MC_CWD}" = "${MC_ROOT}" ]; then
+    MK_ERROR=0
+
+    # Make sure the three paths agree with each other
+    if [ ! "${MC_CWD}" = "${MC_ROOT}/${MC_SUBROOT}" ]; then
+        MK_ERROR=1
+    fi
+
+    # Make sure we have a proper library name if we are in a subdirectory
+    if [ "${MC_LIBNAME}" = "" ]; then
+        MK_ERROR=1
+    fi
+
+    # Do some helpful debug I/O if necessary
+    if [ ${MK_ERROR} -gt 0 ]; then
+        echo "${PR} There is some problem with the path settings."
+        echo "${PR}     MC_CWD=<${MC_CWD}>"
+        echo "${PR}    MC_ROOT=<${MC_ROOT}>"
+        echo "${PR} MC_SUBROOT=<${MC_SUBROOT}>"
+        echo "${PR} MC_LIBNAME=<${MC_LIBNAME}>"
+        mkExit "${MK_ERROR}" "main"
+    fi
+fi
+
+##############################################################################
+# Do it
+##############################################################################
+
+# Decode the first argument
+case ${MK_CMD} in
+    go) # <config/clean/dep/build> all at once
+        echo "${PR} Doing config->clean->dep->build."
+        getConfig ${MK_OS}
+        ./${MK_NAME} config ${MK_OS}
+        ./${MK_NAME} clean  ${MK_OS}
+        ./${MK_NAME} dep    ${MK_OS}
+        ./${MK_NAME} build  ${MK_OS} ;;
+
+    config) # <auto|manual configuration>
+        echo "${PR} Doing a configuration."
+        getConfig ${MK_OS}
+        genConfig
+        if [ "${MC_SUBROOT}" = "" ]; then
+            doAll "makeMakefile"
+        else
+            "make_${MC_LIBNAME}" "makeMakefile"
+        fi ;;
+
+    clean) # <clean up object files and binaries>
+        echo "${PR} Doing a make clean."
+        getConfig ${MK_OS}
+        chkConfig "clean"
+        if [ "${MC_SUBROOT}" = "" ]; then
+            doAll "callMake" "clean"
+        else
+            "make_${MC_LIBNAME}" "callMake" "clean"
+        fi ;;
+
+    dep) # <build all dependencies in the makefiles>
+        echo "${PR} Doing a make depend."
+        getConfig ${MK_OS}
+        chkConfig "dep"
+        if [ "${MC_SUBROOT}" = "" ]; then
+            doAll "callMake" "dep"
+        else
+            "make_${MC_LIBNAME}" "callMake" "dep"
+        fi ;;
+
+    build) # <build the libraries>
+        echo "${PR} Doing package build."
+        getConfig ${MK_OS}
+        chkConfig "build"
+        if [ "${MC_SUBROOT}" = "" ]; then
+            doAll "callMake" "default"
+        else
+            "make_${MC_LIBNAME}" "callMake" "default"
+        fi ;;
+
+    brkdep) # <remove dependencies in the makefiles>
+        echo "${PR} Doing a break depend."
+        getConfig ${MK_OS}
+        chkConfig "brkdep"
+        if [ "${MC_SUBROOT}" = "" ]; then
+            doAll "callMake" "brkdep"
+        else
+            "make_${MC_LIBNAME}" "callMake" "brkdep"
+        fi ;;
+
+    rclean) # <clean up everything>
+
+        # Allow rclean only in the root directory.
+        if [ "${MC_SUBROOT}" = "" ]; then
+            echo "${PR} Doing a make REAL clean."
+
+            # Clean out all platform build directories and support files.
+            if [ "${MK_OS}" = "all" ]; then
+
+                echo "${PR} Removing <ALL> arch files and mk scripts."
+                doAll "killMakefile" "ALL"
+
+                echo "${PR} Removing <ALL> archive libraries."
+                cd ${MC_ROOT}/lib
+                THELIBS=`ls -1 | ${SED} -e "s./..g" | ${SED} -e "s.CVS..g"`;
+                for lib in ${THELIBS}; do
+                    rm -rf ${lib}
+                done
+
+                echo "${PR} Removing <ALL> premake and postmake files."
+                cd ${MC_CONFIG} ; rm -f premake.* postmake.*
+
+                echo "${PR} Removing <ALL> executables."
+                cd ${MC_BIN}    ; rm -f core   2>/dev/null
+                cd ${MC_BIN}    ; rm -f   go.* 2>/dev/null
+
+            # One particular platform specified, so clean only that platform.
+            else
+
+                # Get the actuall platform OS to cleanup.
+                getConfig ${MK_OS}
+
+                echo "${PR} Removing <${MC_OS}> arch files and mk scripts."
+                doAll "killMakefile" "${MC_OS}"
+
+                echo "${PR} Removing <${MC_OS}> archive libraries."
+                cd ${MC_ROOT}/lib ; rm -rf ${MC_OS}
+
+                echo "${PR} Removing <${MC_OS}> premake and postmake files."
+                cd ${MC_CONFIG} ; rm -f premake.${MC_OS} postmake.${MC_OS}
+
+                echo "${PR} Removing <${MC_OS}> executables."
+                cd ${MC_BIN}    ; rm -f core          2>/dev/null
+                cd ${MC_BIN}    ; rm -f   go.${MC_OS} 2>/dev/null
+            fi
+
+        # Do not allow rclean in the subdirectories.
+        else
+            echo "${PR} You can do <rclean> only from the root directory."
+        fi ;;
+
+    tgz) # <build a gzipped tar archive of the package>
+
+        # Allow tgz only in the root directory.
+        if [ "${MC_SUBROOT}" = "" ]; then
+
+            ./${MK_NAME} rclean all
+            echo "${PR} Forming gzipped tar archive."
+            cd ${MC_ROOT}/../
+            ${TOUCH} mc.tgz
+            mv -f mc.tgz mc.tgz_OLD
+            ${TAR} cf mc.tar mc
+            ${GZIP} -v mc.tar
+            mv mc.tar.gz mc.tgz
+
+        # Do not allow tgz in the subdirectories.
+        else
+            echo "${PR} You can do <tgz> only from the root directory."
+        fi ;;
+
+    info) # <print more information about usage>
+        printInfo ;;
+
+    *) # <print a short usage menu>
+        printMenu ;;
+esac
+
+mkExit "0" "main"
+

@@ -66,6 +66,7 @@
 
 #include "maloc/maloc.h"
 #include "apbs/vhal.h"
+#include "apbs/vstring.h"
 
 /**
  * @brief  Calculation type 

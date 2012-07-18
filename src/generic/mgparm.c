@@ -54,11 +54,7 @@
  * @endverbatim
  */
 
-#include "apbscfg.h"
-#include "apbs/apbs.h"
-#include "apbs/vhal.h"
 #include "apbs/mgparm.h"
-#include "apbs/vstring.h"
 
 VEMBED(rcsid="$Id$")
 
