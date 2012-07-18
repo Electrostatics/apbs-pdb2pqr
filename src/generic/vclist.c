@@ -84,7 +84,7 @@ VPUBLIC Vclist* Vclist_ctor(Valist *alist, double max_radius,
     Vclist *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vclist) );
+    thee = (Vclist*)Vmem_malloc(VNULL, 1, sizeof(Vclist) );
     VASSERT( thee != VNULL);
     VASSERT( Vclist_ctor2(thee, alist, max_radius, npts, mode, lower_corner,
                 upper_corner) == VRC_SUCCESS );
@@ -367,7 +367,7 @@ VPUBLIC Vrc_Codes Vclist_ctor2(Vclist *thee, Valist *alist, double max_radius,
     }
 
     /* Set up cells */
-    thee->cells = Vmem_malloc( thee->vmem, thee->n, sizeof(VclistCell) );
+    thee->cells = (VclistCell*)Vmem_malloc( thee->vmem, thee->n, sizeof(VclistCell) );
     if (thee->cells == VNULL) {
         Vnm_print(2, 
                 "Vclist_ctor2:  Failed allocating %d VclistCell objects!\n",
@@ -425,26 +425,29 @@ VPUBLIC void Vclist_dtor2(Vclist *thee) {
 
 }
 
-VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, double pos[VAPBS_DIM]) {
+VPUBLIC VclistCell* Vclist_getCell(Vclist *thee, 
+                                   double pos[VAPBS_DIM]
+                                  ) {
 
-    int i, ic[VAPBS_DIM], ui;
+    int i, 
+        ic[VAPBS_DIM], 
+        ui;
     double c[VAPBS_DIM];
+
+    /* Assert this before we do anything else, since its failure should fail the function */
+    VASSERT(VAPBS_DIM == 3);
 
     /* Convert to grid based coordinates */
     for (i=0; i<VAPBS_DIM; i++) {
         c[i] = pos[i] - (thee->lower_corner)[i];
         ic[i] = (int)(c[i]/thee->spacs[i]);
-        if (ic[i] < 0) {
-            /* printf("OFF LOWER CORNER!\n"); */
-            return VNULL;
-        } else if (ic[i] >= thee->npts[i]) {
-            /* printf("OFF UPPER CORNER!\n"); */
+
+        if (ic[i] < 0 || ic[i] >= thee->npts[i]) {
             return VNULL;
         }
     }
 
     /* Get the array index */
-    VASSERT(VAPBS_DIM == 3);
     ui = Vclist_arrayIndex(thee, ic[0], ic[1], ic[2]);
 
     return &(thee->cells[ui]);
@@ -456,7 +459,7 @@ VPUBLIC VclistCell* VclistCell_ctor(int natoms) {
     VclistCell *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(VclistCell));
+    thee = (VclistCell*)Vmem_malloc(VNULL, 1, sizeof(VclistCell));
     VASSERT( thee != VNULL);
     VASSERT( VclistCell_ctor2(thee, natoms) == VRC_SUCCESS );
 
@@ -472,7 +475,7 @@ VPUBLIC Vrc_Codes VclistCell_ctor2(VclistCell *thee, int natoms) {
 
     thee->natoms = natoms;
     if (thee->natoms > 0) {
-        thee->atoms = Vmem_malloc(VNULL, natoms, sizeof(Vatom *));
+        thee->atoms = (Vatom**)Vmem_malloc(VNULL, natoms, sizeof(Vatom *));
         if (thee->atoms == VNULL) {
             Vnm_print(2, 
           "VclistCell_ctor2:  unable to allocate space for %d atom pointers!\n",

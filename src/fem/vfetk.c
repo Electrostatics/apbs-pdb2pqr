@@ -519,7 +519,9 @@ VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) {
 
 }
 
-VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
+VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, 
+                               int iatom
+                              ) {
 
     int natoms;
 
@@ -532,18 +534,23 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, int iatom) {
 }
 #endif /* if !defined(VINLINE_VFETK) */
 
-VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, Vhal_PBEType type) {
+VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, 
+                          Vhal_PBEType type
+                         ) {
 
     /* Set up the structure */
     Vfetk *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vfetk) );
+    thee = (Vfetk*)Vmem_malloc(VNULL, 1, sizeof(Vfetk) );
     VASSERT(thee != VNULL);
     VASSERT(Vfetk_ctor2(thee, pbe, type));
 
     return thee;
 }
 	 
-VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
+VPUBLIC int Vfetk_ctor2(Vfetk *thee, 
+                        Vpbe *pbe, 
+                        Vhal_PBEType type
+                       ) {
 
     int i;
     double center[VAPBS_DIM];
@@ -610,8 +617,10 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee, Vpbe *pbe, Vhal_PBEType type) {
     return 1;
 }
 
-VPUBLIC void Vfetk_setParameters(Vfetk *thee, PBEparm *pbeparm, 
-  FEMparm *feparm) {
+VPUBLIC void Vfetk_setParameters(Vfetk *thee, 
+                                 PBEparm *pbeparm,
+                                 FEMparm *feparm
+                                ) {
 
     VASSERT(thee != VNULL);
     thee->feparm = feparm;
@@ -634,11 +643,13 @@ VPUBLIC void Vfetk_dtor2(Vfetk *thee) {
     Vmem_dtor(&(thee->vmem));
 }
 
-VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
+VPUBLIC double* Vfetk_getSolution(Vfetk *thee,
+                                  int *length
+                                 ) {
 
    int i;
-   double *solution;
-   double *theAnswer;
+   double *solution,
+          *theAnswer;
    AM *am;
 
    VASSERT(thee != VNULL);
@@ -658,18 +669,44 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee, int *length) {
    VASSERT(1 == Bvec_numB(am->w0));
    /* Allocate space for the returned vector and copy the solution into it */
    theAnswer = VNULL;
-   theAnswer = Vmem_malloc(VNULL, *length, sizeof(double));
+   theAnswer = (double*)Vmem_malloc(VNULL, *length, sizeof(double));
    VASSERT(theAnswer != VNULL);
    for (i=0; i<(*length); i++) theAnswer[i] = solution[i];
 
    return theAnswer;
 }
 
-VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 
-    double totEnergy = 0.0;
-    double qfEnergy = 0.0;
-    double dqmEnergy = 0.0;
+/** 
+ * @brief   Return the total electrostatic energy
+ * 
+ *  Using the solution at the finest mesh level, get the electrostatic energy
+ *  using the free energy functional for the Poisson-Boltzmann equation
+ *  without removing any self-interaction terms (i.e., removing the reference
+ *  state of isolated charges present in an infinite dielectric continuum with
+ *  the same relative permittivity as the interior of the protein) and return
+ *  the result in units of \f$k_B T\f$.  The argument color allows the user to
+ *  control the partition on which this energy is calculated; if (color == -1)
+ *  no restrictions are used.  The solution is obtained from the finest level
+ *  of the passed AM object, but atomic data from the Vfetk object is used to
+ *  calculate the energy.
+ *
+ * @ingroup Vfetk
+ * @author  Nathan Baker
+ * @return Total electrostatic energy in units of \f$k_B T\f$.
+ */
+VPUBLIC double Vfetk_energy(Vfetk *thee, /**< THe Vfetk object */
+                            int color,  /**< Partition restriction for energy calculation; if
+                                            non-negative, energy calculation is restricted to the
+                                            specified partition (indexed by simplex and atom colors
+                                            */
+                            int nonlin  /**< If 1, the NPBE energy functional is used; otherwise,
+                                            the LPBE energy functional is used. If -2, SMPBE is used. */
+                           ) {
+
+    double totEnergy = 0.0, /**< Total energy */
+           qfEnergy = 0.0,  /**< @todo document */
+           dqmEnergy = 0.0; /**< @todo docuemnt */
 
     VASSERT(thee != VNULL);
 
@@ -697,12 +734,15 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, int color, int nonlin) {
 }
 
 
-VPUBLIC double Vfetk_qfEnergy(Vfetk *thee, int color) {
+VPUBLIC double Vfetk_qfEnergy(Vfetk *thee,
+                              int color
+                             ) {
  
-    double *sol; int nsol;
-    int iatom, natoms;
-    double energy = 0.0;
- 
+    double *sol,
+           energy = 0.0;
+    int nsol,
+        iatom, 
+        natoms;
     AM *am;
  
     VASSERT(thee != VNULL);
@@ -743,13 +783,18 @@ VPRIVATE double Vfetk_qfEnergyAtom(
         double *sol) {
 
     Vatom *atom;
-    double charge;
-    double phi[VAPBS_NVS], phix[VAPBS_NVS][3], *position;
-    double uval;
-    double energy = 0.0;
-    int isimp, nsimps;
+    double charge,
+           phi[VAPBS_NVS], 
+           phix[VAPBS_NVS][3], 
+           *position,
+           uval,
+           energy = 0.0;
+    int isimp, 
+        nsimps, 
+        icolor, 
+        ivert, 
+        usingColor;
     SS *simp;
-    int icolor, ivert, usingColor;
 
 
     /* Get atom information */
@@ -799,7 +844,8 @@ VPRIVATE double Vfetk_qfEnergyAtom(
 }
 
 
-VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
+VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, 
+                               int color) {
 
     return AM_evalJ(thee->am);
 
@@ -807,10 +853,10 @@ VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, int color) {
 
 VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 
-#define VMAXLOCALCOLORSDONTREUSETHISVARIABLE 1024
     SS *simp;
     Vatom *atom;
-    int i, natoms;
+    int i, 
+        natoms;
 
     VASSERT(thee != VNULL);
 
@@ -835,28 +881,37 @@ VPUBLIC unsigned long int Vfetk_memChk(Vfetk *thee) {
     return memUse;
 }
 
-VPUBLIC Vrc_Codes Vfetk_genCube(
-								Vfetk *thee,  
-								double center[3],
-								double length[3],
-								Vfetk_MeshLoad meshType) {
-    AM *am = VNULL;
-    Gem *gm = VNULL;
-	
-    int skey = 0;  /* Simplex format */
-    char *key = "r";  /* Read */
-    char *iodev = "BUFF";  /* Buffer */
-    char *iofmt = "ASC";  /* ASCII */
-    char *iohost = "localhost";  /* localhost (dummy) */
-    char *iofile = "0";  /*< socket 0 (dummy) */
-    Vio *sock = VNULL;
-    char buf[VMAX_BUFSIZE];
-    int bufsize = 0;
-    VV *vx = VNULL;
-    int i, j;
-    double x;
+/**
+ * Generates a new cube mesh within the provided Vfetk object based on the 
+ * specified mesh type.  Creates a new copy of the mesh based on the global 
+ * variables at the top of the file and the mesh type, then recenters the 
+ * mesh based on the center and length variables provided to the function.
+ */
+VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
+                                double center[3], /**< Center for mesh, which the new mesh will adjust to */
+                                double length[3], /**< Mesh lengths, which the new mesh will adjust to */
+                                Vfetk_MeshLoad meshType /**< Mesh boundary conditions */
+                               ) {
 	
     VASSERT(thee != VNULL);
+
+    AM *am = VNULL; /* @todo - no idea what this is */
+    Gem *gm = VNULL; /* Geometry manager */
+	
+    int skey = 0,  /* Simplex format */
+        bufsize = 0, /* Buffer size */
+        i, /* Loop counter */
+        j; /* Loop counter */
+    char *key = "r",  /* Read */
+         *iodev = "BUFF",  /* Buffer */
+         *iofmt = "ASC",  /* ASCII */
+         *iohost = "localhost",  /* localhost (dummy) */
+         *iofile = "0",  /*< socket 0 (dummy) */
+         buf[VMAX_BUFSIZE]; /* Socket buffer */
+    Vio *sock = VNULL; /* Socket object */
+    VV *vx = VNULL; /* @todo - no idea what this is */
+    double x;
+	
     am = thee->am;
     VASSERT(am != VNULL);
     gm = thee->gm;
@@ -866,11 +921,13 @@ VPUBLIC Vrc_Codes Vfetk_genCube(
     /* Write mesh string to buffer and read back */
 	switch (meshType) {
 		case VML_DIRICUBE:
+		    /* Create a new copy of the DIRICUBE mesh (see globals higher in this file) */
 			bufsize = strlen(diriCubeString);
 			VASSERT( bufsize <= VMAX_BUFSIZE );
 			strncpy(buf, diriCubeString, VMAX_BUFSIZE); 
 			break;
 		case VML_NEUMCUBE:
+		    /* Create a new copy of the NEUMCUBE mesh (see globals higher in this file) */
 			bufsize = strlen(neumCubeString);
 			Vnm_print(2, "Vfetk_genCube:  WARNING!  USING EXPERIMENTAL NEUMANN BOUNDARY CONDITIONS!\n");
 			VASSERT( bufsize <= VMAX_BUFSIZE );
@@ -880,19 +937,23 @@ VPUBLIC Vrc_Codes Vfetk_genCube(
 			Vnm_print(2, "Vfetk_genCube:  Got request for external mesh!\n");
 			Vnm_print(2, "Vfetk_genCube:  How did we get here?\n");
 			return VRC_FAILURE;
-			break;
 		default:
 			Vnm_print(2, "Vfetk_genCube:  Unknown mesh type (%d)\n", meshType);
 			return VRC_FAILURE;
 	}
-    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) );
-    Vio_bufTake(sock, buf, bufsize);
-    AM_read(am, skey, sock);
-	Vio_connectFree(sock);
-    Vio_bufGive(sock);
-    Vio_dtor(&sock);
 	
-    /* Scale (unit) cube */
+    VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) ); /* Open socket */
+    Vio_bufTake(sock, buf, bufsize); /* Initialize internal buffer for socket */
+    AM_read(am, skey, sock); /* Take the initial mesh from the socket and load 
+                                into internal AM data structure with simplex 
+                                format */
+	Vio_connectFree(sock); /* Purge output buffers */
+    Vio_bufGive(sock); /* Get pointer to output buffer?  No assignment of return value... */
+    Vio_dtor(&sock); /* Destroy output buffer */
+	
+	/* @todo - could the following be done in a single pass? - PCE */
+    /* Scale (unit) cube - for each vertex, set the new coordinates of that 
+       vertex based on the vertex length */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
         for (j=0; j<3; j++) {
@@ -902,7 +963,7 @@ VPUBLIC Vrc_Codes Vfetk_genCube(
         }
     }
 	
-    /* Add new center */
+    /* Add new center - for each vertex, set a new center for the vertex */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
         for (j=0; j<3; j++) {
@@ -912,21 +973,26 @@ VPUBLIC Vrc_Codes Vfetk_genCube(
         }
     }
 	
-	
     return VRC_SUCCESS;
 }
 
-VPUBLIC Vrc_Codes Vfetk_loadMesh(
-								 Vfetk *thee,
-								 double center[3],
-								 double length[3],
-								 Vfetk_MeshLoad meshType,
-								 Vio *sock) {
+/**
+ * If we have an external mesh, load that external mesh from the provided 
+ * socket.  If we specify a non-external mesh type, we generate a new mesh
+ * cube based on templates.  We then create and store a new Vcsm object in
+ * our Vfetk structure, which will carry the mesh data.
+ */ 
+VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
+                                 double center[3], /* Center for mesh (if constructed) */
+                                 double length[3], /* Mesh lengths (if constructed) */
+                                 Vfetk_MeshLoad meshType, /* Type of mesh to load */
+                                 Vio *sock /* Socket for external mesh data (NULL otherwise) */
+                                ) {
 	
-	Vrc_Codes vrc;
+	Vrc_Codes vrc; /* Function return codes - see vhal.h for enum */
 	int skey = 0;  /* Simplex format */
 
-	
+	/* Load mesh from socket if external mesh, otherwise generate mesh */
 	switch (meshType) {
 		case VML_EXTERNAL:
 			if (sock == VNULL) {
@@ -939,10 +1005,8 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(
 			Vio_dtor(&sock);
 			break;
 		case VML_DIRICUBE:
-			vrc = Vfetk_genCube(thee, center, length, meshType);
-			if (vrc == VRC_FAILURE) return VRC_FAILURE;
-			break;
 		case VML_NEUMCUBE:
+		    /* Create new mesh and store in thee */
 			vrc = Vfetk_genCube(thee, center, length, meshType);
 			if (vrc == VRC_FAILURE) return VRC_FAILURE;
 			break;
@@ -955,6 +1019,7 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(
 	/* Setup charge-simplex map */
     Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
     thee->csm = VNULL;
+    /* Construct a new Vcsm with the atom list and gem data */
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
@@ -963,7 +1028,9 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(
 }
 
 
-VPUBLIC void Bmat_printHB( Bmat *thee, char *fname ) {
+VPUBLIC void Bmat_printHB(Bmat *thee, 
+                          char *fname
+                         ) {
 
     Mat *Ablock;
     MATsym pqsym;
@@ -1115,14 +1182,16 @@ VPUBLIC PDE* Vfetk_PDE_ctor(Vfetk *fetk) {
 
     PDE *thee = VNULL;
 
-    thee = Vmem_malloc(fetk->vmem, 1, sizeof(PDE));
+    thee = (PDE*)Vmem_malloc(fetk->vmem, 1, sizeof(PDE));
     VASSERT(thee != VNULL);
     VASSERT(Vfetk_PDE_ctor2(thee, fetk));
 
     return thee;
 }
 
-VPUBLIC int Vfetk_PDE_ctor2(PDE *thee, Vfetk *fetk) {
+VPUBLIC int Vfetk_PDE_ctor2(PDE *thee,
+                            Vfetk *fetk
+                           ) {
 
     int i;
 
@@ -1813,8 +1882,21 @@ VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
 
 }
 
+/**
+ * The signature here doesn't match what's in mc's src/pde/mc/pde.h, which 
+ * g++ seems to dislike for GAMer integration.  Trying a change of function
+ * signature to match to see if that makes g++ happy.  Also see vfetk.h for
+ * similar signature change. - P. Ellis 11-8-2011
+ */
 VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
   double F[]) { 
+/*VPUBLIC void Vfetk_PDE_u_T(sPDE *thee, 
+                           int type,
+                           int chart, 
+                           double txq[], 
+                           double F[], 
+                           double dF[][3]
+                          ) { */
 
     F[0] = 0.0;
     var.u_T = F[0];

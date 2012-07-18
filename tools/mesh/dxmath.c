@@ -21,7 +21,8 @@ typedef enum Dxmath_Opcode {
     DXM_SUB,  /**< - */
     DXM_DIV,  /**< / */
     DXM_MUL,  /**< * */
-    DXM_EQU   /**< = */
+    DXM_EQU,  /**< = */
+    DXM_EXP   /**< ^ */
 } Dxmath_Opcode;
 
 int main(int argc, char **argv) {
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
     double scalar[DXM_MAXOP+1];
     int obType[DXM_MAXOP+1];
     int iop, numop;
-    int i, nx, ny, nz;
+    int i, nx, ny, nz, len;
     Dxmath_Opcode op[DXM_MAXOP];
     Vio *sock = VNULL;
     Vgrid *grid1 = VNULL;
@@ -119,6 +120,7 @@ int main(int argc, char **argv) {
         else if (strcmp(tok, "+") == 0) op[numop] = DXM_ADD;
         else if (strcmp(tok, "-") == 0) op[numop] = DXM_SUB;
         else if (strcmp(tok, "/") == 0) op[numop] = DXM_DIV;
+        else if (strcmp(tok, "^") == 0) op[numop] = DXM_EXP;
         else if (strcmp(tok, "=") == 0) {
             op[numop] = DXM_EQU;
             numop++;
@@ -160,6 +162,9 @@ int main(int argc, char **argv) {
             case DXM_EQU:
                 Vnm_print(1, "=\n");
                 break; 
+            case DXM_EXP:
+                Vnm_print(1, "^\n");
+                break;
             default:
                 Vnm_print(2, "\nmain:  Unknown operation (%d)!", op[iop]);
                 return ERRRC;
@@ -174,9 +179,12 @@ int main(int argc, char **argv) {
           gridPath[0]);
         return ERRRC;
     }
+
     nx = grid1->nx;
     ny = grid1->ny;
     nz = grid1->nz;
+    len = nx * ny * nz;
+
     for (iop=0; iop<numop-1; iop++) {
         if (obType[iop+1] == DXM_ISGRID) {
             Vnm_print(1, "main:  Reading grid from %s...\n", gridPath[iop+1]);
@@ -193,26 +201,33 @@ int main(int argc, char **argv) {
                   grid2->nx, grid2->ny, grid2->nz);
                 return ERRRC;
             }
+            
             switch (op[iop]) {
                 case DXM_ADD:
                     Vnm_print(1, "main:  Adding...\n");
-                    for (i=0; i<nx*ny*nz; i++) 
+                    for (i=0; i<len; i++) 
                       grid1->data[i] = grid1->data[i] + grid2->data[i];
                     break;
                 case DXM_MUL:
                     Vnm_print(1, "main:  Multiplying...\n");
-                    for (i=0; i<nx*ny*nz; i++) 
+                    for (i=0; i<len; i++) 
                       grid1->data[i] = grid1->data[i] * grid2->data[i];
                     break;
                 case DXM_SUB:
                     Vnm_print(1, "main:  Subtracting...\n");
-                    for (i=0; i<nx*ny*nz; i++) 
+                    for (i=0; i<len; i++) 
                       grid1->data[i] = grid1->data[i] - grid2->data[i];
                     break;
                 case DXM_DIV:
                     Vnm_print(1, "main:  Dividing...\n");
-                    for (i=0; i<nx*ny*nz; i++) 
+                    for (i=0; i<len; i++) 
                       grid1->data[i] = grid1->data[i] / grid2->data[i];
+                    break;
+                case DXM_EXP:
+                    Vnm_print(1, "main:  Applying exponents...\n");
+                    for(i = 0; i < grid2->data[i]; i++) {
+                        grid1->data[i] *= grid1->data[i];
+                    }
                     break;
                 default:
                     Vnm_print(2, "main:  Unexpected operation (%d)!\n",
@@ -225,23 +240,29 @@ int main(int argc, char **argv) {
             switch (op[iop]) {
                 case DXM_ADD:
                     Vnm_print(1, "main:  Adding...\n");
-                    for (i=0; i<nx*ny*nz; i++)
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] + scalar[iop+1];
                     break;
                 case DXM_MUL:
                     Vnm_print(1, "main:  Multiplying...\n");
-                    for (i=0; i<nx*ny*nz; i++)
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] * scalar[iop+1];
                     break;
                 case DXM_SUB:
                     Vnm_print(1, "main:  Subtracting...\n");
-                    for (i=0; i<nx*ny*nz; i++)
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] - scalar[iop+1];
                     break;
                 case DXM_DIV:
                     Vnm_print(1, "main:  Dividing...\n");
-                    for (i=0; i<nx*ny*nz; i++)
+                    for (i=0; i<len; i++)
                       grid1->data[i] = grid1->data[i] / scalar[iop+1];
+                    break;
+                case DXM_EXP:
+                    Vnm_print(1, "main:  Applying exponents...\n");
+                    for(i = 0; i < scalar[iop+1]; i++) {
+                        grid1->data[i] *= grid1->data[i];
+                    }
                     break;
                 default:
                     Vnm_print(2, "main:  Unexpected operation (%d)!\n",

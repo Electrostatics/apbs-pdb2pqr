@@ -6,14 +6,14 @@
 /* do not inline functions */
 #undef APBS_NOINLINE
 
-/* Enable fortran replacement code */
-#undef BURY_FORTRAN
-
 /* Debug Mode */
 #undef DEBUG
 
 /* have floating point errors */
 #undef FLOAT_ERRORS
+
+/* have fetk component GAMER */
+#undef HAVE_BIOM_H
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
@@ -112,20 +112,11 @@
 /* APBS diagnostic messages will not display */
 #undef VAPBSQUIET
 
+/* Enable verbose debugging output */
+#undef VERBOSE_DEBUG
+
 /* Version number of package */
 #undef VERSION
-
-/* F77 lowercase */
-#undef VF77_LOWERCASE
-
-/* no F77 underscore */
-#undef VF77_NOUNDERSCORE
-
-/* one F77 underscore */
-#undef VF77_ONEUNDERSCORE
-
-/* F77 uppercase */
-#undef VF77_UPPERCASE
 
 /* include TINKER support */
 #undef WITH_TINKER

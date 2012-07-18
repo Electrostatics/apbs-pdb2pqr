@@ -141,7 +141,7 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
 
     /* Set up the structure */
     Vcsm *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vcsm) );
+    thee = (Vcsm*)Vmem_malloc(VNULL, 1, sizeof(Vcsm) );
     VASSERT( thee != VNULL);
     VASSERT( Vcsm_ctor2(thee, alist, gm));
 
@@ -174,7 +174,11 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) {
 VPUBLIC void Vcsm_init(Vcsm *thee) {
  
     /* Counters */
-    int iatom, jatom, isimp, jsimp, gotSimp;
+    int iatom, 
+        jatom, 
+        isimp, 
+        jsimp, 
+        gotSimp;
     /* Atomic information */
     Vatom *atom;
     double *position;
@@ -187,7 +191,6 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
         VASSERT(0);
     }
     if (thee->gm == VNULL) {
-    VASSERT(thee->gm != VNULL);
         Vnm_print(2, "Vcsm_init:  Error!  Got NULL thee->gm!\n");
         VASSERT(0);
     }
@@ -200,9 +203,9 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
 
     /* Allocate and initialize space for the first dimensions of the 
      * simplex-charge map, the simplex array, and the counters */
-    thee->sqm = Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int *));
+    thee->sqm = (int**)Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int *));
     VASSERT(thee->sqm != VNULL);
-    thee->nsqm = Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int));
+    thee->nsqm = (int*)Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int));
     VASSERT(thee->nsqm != VNULL);
     for (isimp=0; isimp<thee->nsimp; isimp++) (thee->nsqm)[isimp] = 0;
 
@@ -220,10 +223,11 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
         }
     }
 
+    /* @todo Combine the following two loops? - PCE */
     /* Allocate the space for the simplex-charge map */
     for (isimp=0; isimp<thee->nsimp; isimp++) {
         if ((thee->nsqm)[isimp] > 0) {
-            thee->sqm[isimp] = Vmem_malloc(thee->vmem, (thee->nsqm)[isimp], 
+            thee->sqm[isimp] = (int*)Vmem_malloc(thee->vmem, (thee->nsqm)[isimp], 
               sizeof(int));
             VASSERT(thee->sqm[isimp] != VNULL);
         }
@@ -248,9 +252,9 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     thee->msimp = thee->nsimp;
 
     /* Allocate space for the charge-simplex map */
-    thee->qsm = Vmem_malloc(thee->vmem, thee->natom, sizeof(int *));
+    thee->qsm = (int**)Vmem_malloc(thee->vmem, thee->natom, sizeof(int *));
     VASSERT(thee->qsm != VNULL);
-    thee->nqsm = Vmem_malloc(thee->vmem, thee->natom, sizeof(int));
+    thee->nqsm = (int*)Vmem_malloc(thee->vmem, thee->natom, sizeof(int));
     VASSERT(thee->nqsm != VNULL);
     for (iatom=0; iatom<thee->natom; iatom++) (thee->nqsm)[iatom] = 0;
     /* Loop through the list of simplices and count the number of times
@@ -272,7 +276,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Allocate the appropriate amount of space for each entry in the
      * charge-simplex map and clear the counter for re-use in assignment */
     for (iatom=0; iatom<thee->natom; iatom++) {
-        thee->qsm[iatom] = Vmem_malloc(thee->vmem, (thee->nqsm)[iatom],
+        thee->qsm[iatom] = (int*)Vmem_malloc(thee->vmem, (thee->nqsm)[iatom],
           sizeof(int));
         VASSERT(thee->qsm[iatom] != VNULL);
         thee->nqsm[iatom] = 0;
@@ -348,10 +352,10 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     while (!gotMem) {
         if (isimp > thee->msimp) {
             isimp = 2 * isimp;
-            thee->nsqm = Vmem_realloc(thee->vmem, thee->msimp, sizeof(int), 
+            thee->nsqm = (int*)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int), 
               (void **)&(thee->nsqm), isimp);
             VASSERT(thee->nsqm != VNULL);
-            thee->sqm = Vmem_realloc(thee->vmem, thee->msimp, sizeof(int *), 
+            thee->sqm = (int**)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int *), 
               (void **)&(thee->sqm), isimp);
             VASSERT(thee->sqm != VNULL);
             thee->msimp = isimp;
@@ -380,9 +384,9 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     nqParent = thee->nsqm[isimp];
     qParent = thee->sqm[isimp];
 
-    sqmNew = Vmem_malloc(thee->vmem, num, sizeof(int *));
+    sqmNew = (int**)Vmem_malloc(thee->vmem, num, sizeof(int *));
     VASSERT(sqmNew != VNULL);
-    nsqmNew = Vmem_malloc(thee->vmem, num, sizeof(int));
+    nsqmNew = (int*)Vmem_malloc(thee->vmem, num, sizeof(int));
     VASSERT(nsqmNew != VNULL);
     for (isimp=0; isimp<num; isimp++) nsqmNew[isimp] = 0;
 
@@ -420,7 +424,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Allocate the storage */
     for (isimp=0; isimp<num; isimp++) {
         if (nsqmNew[isimp] > 0) {
-            sqmNew[isimp] = Vmem_malloc(thee->vmem, nsqmNew[isimp], 
+            sqmNew[isimp] = (int*)Vmem_malloc(thee->vmem, nsqmNew[isimp], 
               sizeof(int));
             VASSERT(sqmNew[isimp] != VNULL);
         }
@@ -455,11 +459,11 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
      * However, it is possible that a subdivision could cause an atom to be
      * shared by two child simplices.  Here we record the change, if any,
      * in the number of simplices associated with each atom. */
-    dnqsm = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
+    dnqsm = (int*)Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
     VASSERT(dnqsm != VNULL);
-    nqsmNew = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
+    nqsmNew = (int*)Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int));
     VASSERT(nqsmNew != VNULL);
-    qsmNew = Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int*));
+    qsmNew = (int**)Vmem_malloc(thee->vmem, nAffAtoms, sizeof(int*));
     VASSERT(qsmNew != VNULL);
     for (iatom=0; iatom<nAffAtoms; iatom++) {
         dnqsm[iatom] = -1;
@@ -474,7 +478,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Setup the new entries in the array */
     for (iatom=0;iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
-        qsmNew[iatom] = Vmem_malloc(thee->vmem, 
+        qsmNew[iatom] = (int*)Vmem_malloc(thee->vmem, 
                 (dnqsm[iatom] + thee->nqsm[atomID]), 
                 sizeof(int));
         nqsmNew[iatom] = 0;

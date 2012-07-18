@@ -68,7 +68,7 @@ VPUBLIC APOLparm* APOLparm_ctor() {
 
     /* Set up the structure */
     APOLparm *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(APOLparm));
+    thee = (APOLparm*)Vmem_malloc(VNULL, 1, sizeof(APOLparm));
     VASSERT( thee != VNULL);
     VASSERT( APOLparm_ctor2(thee) == VRC_SUCCESS );
 
@@ -391,7 +391,7 @@ VPRIVATE Vrc_Codes APOLparm_parseCALCENERGY(APOLparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     /* Parse number */
     if (sscanf(tok, "%d", &ti) == 1) {
-        thee->calcenergy = ti;
+        thee->calcenergy = (APOLparm_calcEnergy)ti;
         thee->setcalcenergy = 1;
 		
         Vnm_print(2, "parseAPOL:  Warning -- parsed deprecated \"calcenergy \
@@ -444,7 +444,7 @@ VPRIVATE Vrc_Codes APOLparm_parseCALCFORCE(APOLparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     /* Parse number */
     if (sscanf(tok, "%d", &ti) == 1) {
-        thee->calcforce = ti;
+        thee->calcforce = (APOLparm_calcForce)ti;
         thee->setcalcforce = 1;
 		
         Vnm_print(2, "parseAPOL:  Warning -- parsed deprecated \"calcforce \

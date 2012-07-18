@@ -9,6 +9,6 @@
 AUTOMAKE_OPTIONS = no-dependencies
 SUFFIXES = .H .h .C .c .f .o
 
-always_built_SUBDIRS = generic mg fem 
+always_built_SUBDIRS = generic pmgc mg fem 
 
 SUBDIRS = $(always_built_SUBDIRS) aaa_inc aaa_lib .

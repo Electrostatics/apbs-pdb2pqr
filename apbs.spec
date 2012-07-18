@@ -81,8 +81,6 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
     export CFLAGS="-O2 -tpp7 -static-libcxa -static -mp" 
     export CXX="icc" 
     export CXXFLAGS="-O2 -tpp7 -static-libcxa -static -mp" 
-    export F77="ifort" 
-    export FFLAGS="-O2 -tpp7 -static-libcxa -static -mp" 
     export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
     make
@@ -93,8 +91,6 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CFLAGS="-O2 -tpp6 -static-libcxa -static -mp" 
       export CXX="icc" 
       export CXXFLAGS="-O2 -tpp6 -static-libcxa -static -mp" 
-      export F77="ifort" 
-      export FFLAGS="-O2 -tpp6 -static-libcxa -static -mp" 
       export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
@@ -104,8 +100,6 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
       export CFLAGS="-O2 -static-libcxa -static -mp" 
       export CXX="icc" 
       export CXXFLAGS="-O2 -static-libcxa -static -mp" 
-      export F77="ifort" 
-      export FFLAGS="-O2 -static-libcxa -static -mp" 
       export LDFLAGS="-L${FETK_LIBRARY} -static-libcxa -i-static"
       ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-shared
       make
@@ -118,16 +112,12 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 %ifarch alphaev6
   export CC='ccc'
   export CFLAGS='-O2 -arch ev6'
-  export F77='fort'
-  export FFLAGS='-O2 -arch ev6'
   ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
   make
 %else
   %ifarch alpha
     export CC='ccc'
     export CFLAGS='-O2'
-    export F77='fort'
-    export FFLAGS='-O2'
     ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --disable-tools
     make
   %endif
@@ -139,9 +129,6 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 %ifarch x86_64
    export CC=pgcc
    export CFLAGS='-O2 -fastsse -fPIC'
-   export F77=pgf77
-   export FFLAGS='-O2 -fastsse -fPIC'
-   export F77FLAGS='-O2 -fastsse -fPIC'
    export CXX=pgf77
    export CXXFLAGS='-O2 -fastsse -fPIC'
    export LDFLAGS='-Bstatic'	   
@@ -156,9 +143,7 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 
 %ifarch ia64
    export CC=icc
-   export CFLAGS='-fPIC  -O3 -tpp2' 
-   export F77=ifort
-   export FFLAGS='-fPIC -O3 -tpp2'
+   export CFLAGS='-fPIC  -O3 -tpp2'
    export LDFLAGS='-static -static-libcxa'
    ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${INTEL_BLAS} -lmkl_lapack -lmkl_ipf -ldl" --with-blas-name="mkl_lapack"
    make
@@ -177,16 +162,12 @@ echo RPM VARIABLES:  ARCH: ${arch}, HOST: ${host}
 #            and give the stanza a new name.
 #        2.  Copy the xlc stanza in vac.cfg and make a new stanza, using the
 #            same name you used in the xlf config file.
-#        3.  Set var in FFLAGS -F:var below to this name.
-#        4.  Set the BLAS environment variable and BLAS library flags to
-#            point to the appropriate libraries (ATLAS or ESSL) - if using
-#            ATLAS, make sure to use xlf when compiling the Fortran wrappers.
+#        3.  Set the BLAS environment variable and BLAS library flags to
+#            point to the appropriate libraries (ATLAS or ESSL)
 
 %ifarch ppc64 ppc64pseries ppc64iseries
      export CC=xlc
      export CFLAGS='-O2 -q64 -qarch=pwr4 -qtune=pwr4'
-     export F77=xlf
-     export FFLAGS='-q64 -qarch=pwr4 -qtune=pwr4 -Wl,-static -F:xtest'
      ./configure --prefix=${RPM_BUILD_ROOT}/%{prefix} --with-blas="-L${BLAS} -lxlfblas -latlas" --with-blas-name="xlfblas"
      make
 %endif

@@ -19,8 +19,9 @@ test:
 
 testocd:
 	./test.sh ${APBS} ${IGEN} ocd
-
-test.serial: test
+	
+testtime:
+	/usr/bin/time -v ./test.sh ${APBS} ${IGEN} noocd
 
 
 $(srcdir)/Makefile.in:

@@ -67,7 +67,8 @@ VEMBED(rcsid="$Id$")
 #if !defined(VINLINE_VACC)
 
 VPUBLIC unsigned long int Vacc_memChk(Vacc *thee) {
-    if (thee == VNULL) return 0;
+    if (thee == VNULL)
+        return 0;
     return Vmem_bytes(thee->mem);
 }
 
@@ -90,7 +91,8 @@ VPRIVATE int ivdwAccExclus(
 						   ) {
 	
     int iatom;
-    double dist2, *apos;
+    double dist2,
+           *apos;
     Vatom *atom;
     VclistCell *cell;
 	
@@ -116,11 +118,15 @@ VPRIVATE int ivdwAccExclus(
     /* Otherwise, check for overlap with the atoms in the cell */
     for (iatom=0; iatom<cell->natoms; iatom++) {
         atom = cell->atoms[iatom];
+        
+        // We don't actually need to test this if the atom IDs do match; don't compute this if we're comparing atom against itself.
+        if (atom->id == atomID) continue;
+        
 		apos = atom->position;
 		dist2 = VSQR(center[0]-apos[0]) + VSQR(center[1]-apos[1]) 
 						+ VSQR(center[2]-apos[2]); 
 		if (dist2 < VSQR(atom->radius+radius)){
-			if (atom->id != atomID) return 0;			
+            return 0;
 		}
 	}
 	
@@ -129,24 +135,33 @@ VPRIVATE int ivdwAccExclus(
 	
 }
 
-VPUBLIC Vacc* Vacc_ctor(Valist *alist, Vclist *clist, double surf_density) {
+VPUBLIC Vacc* Vacc_ctor(Valist *alist,
+                        Vclist *clist,
+                        double surf_density /* Surface density */
+                        ) {
 
 
     Vacc *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vacc) );
+    thee = (Vacc*)Vmem_malloc(VNULL, 1, sizeof(Vacc) );
     VASSERT( thee != VNULL);
     VASSERT( Vacc_ctor2(thee, alist, clist, surf_density));
     return thee;
 }
 
 /** Check and store parameters passed to constructor */
-VPRIVATE int Vacc_storeParms(Vacc *thee, Valist *alist, Vclist *clist,
-        double surf_density) {
+VPRIVATE int Vacc_storeParms(Vacc *thee,
+                             Valist *alist,
+                             Vclist *clist,
+                             double surf_density /* Surface density */
+                             ) {
 
-    int nsphere, iatom;
-    double maxrad, maxarea, rad;
+    int nsphere,
+        iatom;
+    double maxrad = 0.0,
+           maxarea,
+           rad;
     Vatom *atom;
 
     if (alist == VNULL) {
@@ -183,11 +198,12 @@ VPRIVATE int Vacc_storeParms(Vacc *thee, Valist *alist, Vclist *clist,
 /** Allocate (and clear) space for storage */
 VPRIVATE int Vacc_allocate(Vacc *thee) {
 
-    int i, natoms;
+    int i,
+        natoms;
 
     natoms = Valist_getNumberAtoms(thee->alist);
 
-    thee->atomFlags = Vmem_malloc(thee->mem, natoms, sizeof(int));
+    thee->atomFlags = (int*)Vmem_malloc(thee->mem, natoms, sizeof(int));
     if (thee->atomFlags == VNULL) {
         Vnm_print(2, 
                "Vacc_allocate:  Failed to allocate %d (int)s for atomFlags!\n", 
@@ -200,8 +216,11 @@ VPRIVATE int Vacc_allocate(Vacc *thee) {
 }
 
 
-VPUBLIC int Vacc_ctor2(Vacc *thee, Valist *alist, Vclist *clist,
-    double surf_density) {
+VPUBLIC int Vacc_ctor2(Vacc *thee,
+                       Valist *alist,
+                       Vclist *clist,
+                       double surf_density
+                       ) {
 
     /* Check and store parameters */
     if (!Vacc_storeParms(thee, alist, clist, surf_density)) {
@@ -241,7 +260,8 @@ VPUBLIC void Vacc_dtor(Vacc **thee) {
 
 VPUBLIC void Vacc_dtor2(Vacc *thee) {
 
-    int i, natoms;
+    int i,
+        natoms;
 
     natoms = Valist_getNumberAtoms(thee->alist);
     Vmem_free(thee->mem, natoms, sizeof(int), (void **)&(thee->atomFlags));
@@ -260,13 +280,15 @@ VPUBLIC void Vacc_dtor2(Vacc *thee) {
     Vmem_dtor(&(thee->mem));
 }
 
-VPUBLIC double Vacc_vdwAcc(Vacc *thee, double center[3]) {
+VPUBLIC double Vacc_vdwAcc(Vacc *thee,
+                           double center[3]
+                           ) {
 
     VclistCell *cell;
     Vatom *atom;
     int iatom;
-    double *apos;
-    double dist2;
+    double *apos,
+           dist2;
 
     /* Get the relevant cell from the cell list */
     cell = Vclist_getCell(thee->clist, center);
@@ -288,18 +310,33 @@ VPUBLIC double Vacc_vdwAcc(Vacc *thee, double center[3]) {
     return 1.0;
 }
 
-VPUBLIC double Vacc_ivdwAcc(Vacc *thee, double center[3], double radius) {
+VPUBLIC double Vacc_ivdwAcc(Vacc *thee,
+                            double center[3],
+                            double radius
+                            ) {
 
     return (double)ivdwAccExclus(thee, center, radius, -1);
 
 }
 
-VPUBLIC void Vacc_splineAccGradAtomNorm(Vacc *thee, double center[VAPBS_DIM], 
-        double win, double infrad, Vatom *atom, double *grad) {
+VPUBLIC void Vacc_splineAccGradAtomNorm(Vacc *thee,
+                                        double center[VAPBS_DIM],
+                                        double win,
+                                        double infrad,
+                                        Vatom *atom,
+                                        double *grad
+                                        ) {
 
     int i;
-    double dist, *apos, arad, sm, sm2, w2i, w3i, mygrad;
-    double mychi = 1.0;           /* Char. func. value for given atom */
+    double dist,
+           *apos,
+           arad,
+           sm,
+           sm2,
+           w2i, /* inverse of win squared */
+           w3i, /* inverse of win cubed */
+           mygrad,
+           mychi = 1.0;           /* Char. func. value for given atom */
 
     VASSERT(thee != NULL);
 
@@ -343,12 +380,24 @@ VPUBLIC void Vacc_splineAccGradAtomNorm(Vacc *thee, double center[VAPBS_DIM],
     }    
 }
 
-VPUBLIC void Vacc_splineAccGradAtomUnnorm(Vacc *thee, double center[VAPBS_DIM], 
-        double win, double infrad, Vatom *atom, double *grad) {
+VPUBLIC void Vacc_splineAccGradAtomUnnorm(Vacc *thee,
+                                          double center[VAPBS_DIM],
+                                          double win,
+                                          double infrad,
+                                          Vatom *atom,
+                                          double *grad
+                                          ) {
 
     int i;
-    double dist, *apos, arad, sm, sm2, w2i, w3i, mygrad;
-    double mychi = 1.0;           /* Char. func. value for given atom */
+    double dist,
+           *apos,
+           arad,
+           sm,
+           sm2,
+           w2i, /* Inverse of win squared */
+           w3i, /* Inverse of win cubed */
+           mygrad,
+           mychi = 1.0;           /* Char. func. value for given atom */
 
     VASSERT(thee != NULL);
 
@@ -392,10 +441,23 @@ VPUBLIC void Vacc_splineAccGradAtomUnnorm(Vacc *thee, double center[VAPBS_DIM],
     }    
 }
 
-VPUBLIC double Vacc_splineAccAtom(Vacc *thee, double center[VAPBS_DIM], 
-        double win, double infrad, Vatom *atom) {
+VPUBLIC double Vacc_splineAccAtom(Vacc *thee,
+                                  double center[VAPBS_DIM],
+                                  double win,
+                                  double infrad,
+                                  Vatom *atom
+                                  ) {
 
-    double dist, *apos, arad, sm, sm2, w2i, w3i, value, stot, sctot;
+    double dist,
+           *apos,
+           arad,
+           sm,
+           sm2,
+           w2i, /* Inverse of win squared */
+           w3i, /* Inverse of win cubed */
+           value,
+           stot,
+           sctot;
 
     VASSERT(thee != NULL);
 
@@ -654,14 +716,21 @@ VPUBLIC void Vacc_writeGMV(Vacc *thee, double radius, int meth, Gem *gm,
 }
 #endif /* defined(HAVE_MC_H) */
 
-VPUBLIC double Vacc_SASA(Vacc *thee, double radius) { 
-	
-    int i, natom;
-    double area, *apos;
+VPUBLIC double Vacc_SASA(Vacc *thee,
+                         double radius
+                         ) {
+    
+    int i,
+        natom;
+    double area;
+           //*apos; // gcc says unused
     Vatom *atom;
     VaccSurf *asurf;
+	
+    time_t ts; // PCE: temp
+    ts = clock();
 
-	unsigned long long mbeg;
+	//unsigned long long mbeg; // gcc says unused
 	
     natom = Valist_getNumberAtoms(thee->alist);
 
@@ -703,6 +772,7 @@ VPUBLIC double Vacc_SASA(Vacc *thee, double radius) {
 	mets_(&mbeg, "Vacc_SASA - Parallel");
 #endif
 	
+    printf("Vacc_SASA: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
     return area;
 	
 }
@@ -754,7 +824,8 @@ VPUBLIC VaccSurf* VaccSurf_ctor(Vmem *mem, double probe_radius, int nsphere) {
 VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
         int nsphere) {
 
-    if (thee == VNULL) return 0;
+    if (thee == VNULL)
+    	return 0;
 
     thee->mem = mem;
     thee->npts = nsphere;
@@ -762,22 +833,16 @@ VPUBLIC int VaccSurf_ctor2(VaccSurf *thee, Vmem *mem, double probe_radius,
     thee->area = 0.0;
 	
     if (thee->npts > 0) {
-		/*
         thee->xpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->ypts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->zpts = Vmem_malloc(thee->mem, thee->npts, sizeof(double));
         thee->bpts = Vmem_malloc(thee->mem, thee->npts, sizeof(char));
-		 */
-		thee->xpts = (double*)calloc(thee->npts,sizeof(double));
-        thee->ypts = (double*)calloc(thee->npts,sizeof(double));
-        thee->zpts = (double*)calloc(thee->npts,sizeof(double));
-        thee->bpts = (char*)calloc(thee->npts,sizeof(char));
     } else {
         thee->xpts = VNULL;
         thee->ypts = VNULL;
         thee->zpts = VNULL;
         thee->bpts = VNULL;
-    } 
+    }
 
     return 1;
 }
@@ -799,7 +864,6 @@ VPUBLIC void VaccSurf_dtor(VaccSurf **thee) {
 VPUBLIC void VaccSurf_dtor2(VaccSurf *thee) {
 
     if (thee->npts > 0) {
-		/*
         Vmem_free(thee->mem, thee->npts, sizeof(double), 
                 (void **)&(thee->xpts));
         Vmem_free(thee->mem, thee->npts, sizeof(double), 
@@ -808,20 +872,25 @@ VPUBLIC void VaccSurf_dtor2(VaccSurf *thee) {
                 (void **)&(thee->zpts));
         Vmem_free(thee->mem, thee->npts, sizeof(char), 
                 (void **)&(thee->bpts));
-		 */
-		free(thee->xpts);
-		free(thee->ypts);
-		free(thee->zpts);
-		free(thee->bpts);
     }
+
 }
 
-VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee, Vatom *atom, 
-        VaccSurf *ref, double prad) {
+VPUBLIC VaccSurf* Vacc_atomSurf(Vacc *thee,
+                                Vatom *atom,
+                                VaccSurf *ref, 
+                                double prad
+                               ) {
 
     VaccSurf *surf;
-    int i, j, npts, atomID;
-    double arad, rad, pos[3], *apos;
+    int i, 
+        j, 
+        npts, 
+        atomID;
+    double arad, 
+           rad, 
+           pos[3], 
+           *apos;
 	char bpts[MAX_SPHERE_PTS];
 			  
     /* Get atom information */
@@ -1146,7 +1215,11 @@ VPUBLIC void Vacc_splineAccGradAtomNorm3(Vacc *thee, double center[VAPBS_DIM],
    // Author:   Jason Wagoner
    //           Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
    /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vacc_atomdSAV(Vacc *thee, double srad, Vatom *atom, double *dSA) { 
+VPUBLIC void Vacc_atomdSAV(Vacc *thee, 
+                           double srad, 
+                           Vatom *atom, 
+                           double *dSA
+                          ) {
 	
     int ipt, iatom;
 
@@ -1208,10 +1281,10 @@ VPRIVATE double Vacc_SASAPos(Vacc *thee, double radius) {
     for (i=0; i<natom; i++) {
         atom = Valist_getAtom(thee->alist, i);
         asurf = thee->surf[i];
-        
-		VaccSurf_dtor2(asurf);
-		thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
-		asurf = thee->surf[i];
+
+        VaccSurf_dtor2(asurf);
+        thee->surf[i] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+        asurf = thee->surf[i];
         area += (asurf->area);
     }
 	
@@ -1219,7 +1292,11 @@ VPRIVATE double Vacc_SASAPos(Vacc *thee, double radius) {
 	
 }
 
-VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode) {
+VPRIVATE double Vacc_atomSASAPos(Vacc *thee, 
+                                 double radius,
+                                 Vatom *atom, /* The atom being manipulated */
+                                 int mode
+                                ) {
 	
     VaccSurf *asurf;
     int id;
@@ -1230,18 +1307,19 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode
 			printf("WARNING: Recalculating entire surface!!!!\n");
 			warned = 1;
 		}
-		Vacc_SASAPos(thee, radius);
+		Vacc_SASAPos(thee, radius); // reinitialize before we can do anything about doing a calculation on a repositioned atom
 	}
 	
     id = Vatom_getAtomID(atom);
     asurf = thee->surf[id];
 	
-	VaccSurf_dtor(&asurf);
-	thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
-	asurf = thee->surf[id];
+    VaccSurf_dtor(&asurf);
+    thee->surf[id] = Vacc_atomSurf(thee, atom, thee->refSphere, radius);
+    asurf = thee->surf[id];
 	
+    //printf("%s: Time elapsed: %f\n", __func__, ((double)clock() - ts) / CLOCKS_PER_SEC);
+
     return asurf->area;
-	
 }
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -1257,23 +1335,30 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee, double radius, Vatom *atom,int mode
    //			David Gohara
    //           Nathan Baker (original FORTRAN routine from UHBD by Brock Luty)
    /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vacc_atomdSASA(Vacc *thee, double dpos, double srad, Vatom *atom, double *dSA) { 
-	
-    int iatom;
-    double *temp_Pos, tRad;
-    double tPos[3];
-	double axb1,axt1,ayb1,ayt1,azb1,azt1;
+VPUBLIC void Vacc_atomdSASA(Vacc *thee, 
+                            double dpos, 
+                            double srad, 
+                            Vatom *atom, 
+                            double *dSA
+                           ) {
+
+    double *temp_Pos,
+           tPos[3], 
+           axb1,
+           axt1,
+           ayb1,
+           ayt1,
+           azb1,
+           azt1;
     VaccSurf *ref;
+	
+    //printf("%s: entering\n", __func__);
+    time_t ts;
+    ts = clock();
 	
     /* Get the atom information */
     ref = thee->refSphere;
-    temp_Pos = Vatom_getPosition(atom);
-    tRad = Vatom_getRadius(atom);
-    iatom = Vatom_getAtomID(atom);
-    
-    dSA[0] = 0.0;
-    dSA[1] = 0.0;
-    dSA[2] = 0.0;
+    temp_Pos = Vatom_getPosition(atom); // Get a pointer to the position object.  You actually manipulate the atom doing this...
     
 	tPos[0] = temp_Pos[0];
     tPos[1] = temp_Pos[1];
@@ -1686,26 +1771,59 @@ VPUBLIC int Vacc_wcaEnergy(Vacc *acc, APOLparm *apolparm, Valist *alist,
 	
 }
 
-VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist, 
-							  Vatom *atom, double *force){
-	int i,si;
-	int npts[3];
-	int pad = 14;
+VPUBLIC int Vacc_wcaForceAtom(Vacc *thee,
+                              APOLparm *apolparm,
+                              Vclist *clist, 
+                              Vatom *atom, 
+                              double *force
+                             ){
+    int i,
+        si,
+        npts[3],
+        pad = 14, 
+        xmin, 
+        ymin, 
+        zmin, 
+        xmax, 
+        ymax, 
+        zmax;
 
-        int xmin, ymin, zmin;
-        int xmax, ymax, zmax;
-
-        double sigma6, sigma12;
+    double sigma6, 
+           sigma12, 
+           spacs[3], 
+           vec[3], 
+           fpt[3], 
+           w, 
+           wx, 
+           wy, 
+           wz, 
+           len, 
+           fn, 
+           x, 
+           y, 
+           z, 
+           vol, 
+           x2,
+           y2,
+           z2,
+           r, 
+           vol_density, 
+           fo, 
+           rho, 
+           srad, 
+           psig, 
+           epsilon, 
+           watepsilon, 
+           sigma, 
+           watsigma, 
+           chi,
+           *pos,
+           *lower_corner, 
+           *upper_corner;
 	
-	double spacs[3], vec[3], fpt[3];
-    double w, wx, wy, wz, len, fn, x, y, z, vol;
-	double x2,y2,z2,r;
-	double vol_density, fo;
-	double rho;
-	double srad, psig, epsilon, watepsilon, sigma, watsigma, chi;
-	
-	double *pos;
-    double *lower_corner, *upper_corner;
+    /* Allocate needed variables now that we've asserted required conditions. */
+    time_t ts;
+    ts = clock();
 
 	VASSERT(apolparm != VNULL);
 	
@@ -1715,7 +1833,7 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 		Vnm_print(2,"Vacc_wcaEnergy: Error. No value was set for watsigma and watepsilon.\n");
 		return VRC_FAILURE;
 	}
-	
+
 	vol = 1.0;
 	vol_density = 2.0;
 	
@@ -1724,12 +1842,6 @@ VPUBLIC int Vacc_wcaForceAtom(Vacc *thee, APOLparm *apolparm, Vclist *clist,
 	
 	pos = Vatom_getPosition(atom);
 
-	/* Note:  these are the temporary water parameters we used to use in this
-		routine... they have been replaced by entries in a parameter file 
-	watsigma = 1.7683; 
-	watepsilon =  0.1521; 
-	watepsilon = watepsilon*4.184;  
-	*/
 	srad = apolparm->srad;
 	rho = apolparm->bconc;
 	watsigma = apolparm->watsigma;

@@ -249,7 +249,7 @@ VPUBLIC NOsh* NOsh_ctor(int rank, int size) {
 	
 	/* Set up the structure */
 	NOsh *thee = VNULL;
-	thee = Vmem_malloc(VNULL, 1, sizeof(NOsh) );
+	thee = (NOsh*)Vmem_malloc(VNULL, 1, sizeof(NOsh) );
 	VASSERT( thee != VNULL);
 	VASSERT( NOsh_ctor2(thee, rank, size) );
 	

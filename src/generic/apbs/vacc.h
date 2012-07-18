@@ -223,7 +223,6 @@ VEXTERNC VaccSurf* Vacc_atomSurf(
         double probe_radius  /**< Probe radius (in A) */
         );
 
-
 /** @brief   Construct the accessibility object
  *  @ingroup Vacc
  *  @author  Nathan Baker

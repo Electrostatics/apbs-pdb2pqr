@@ -252,7 +252,7 @@ VPUBLIC Vpbe* Vpbe_ctor(Valist *alist, int ionNum, double *ionConc,
 	
     /* Set up the structure */
     Vpbe *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
+    thee = (Vpbe*)Vmem_malloc(VNULL, 1, sizeof(Vpbe) );
     VASSERT( thee != VNULL);
     VASSERT( Vpbe_ctor2(thee, alist, ionNum, ionConc, ionRadii, ionQ, 
 						T, soluteDiel, solventDiel, solventRadius, focusFlag, sdens, 

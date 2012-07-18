@@ -133,8 +133,11 @@ VEXTERNC void killMolecules(NOsh *nosh, Valist *alist[NOSH_MAXMOL]);
  * @param  dielYMap  List of y-shifted dielectric maps
  * @param  dielZMap  List of x-shifted dielectric maps
  * @returns  1 if successful, 0 otherwise */
-VEXTERNC int loadDielMaps(NOsh *nosh, Vgrid *dielXMap[NOSH_MAXMOL],
-  Vgrid *dielYMap[NOSH_MAXMOL], Vgrid *dielZMap[NOSH_MAXMOL]);
+VEXTERNC int loadDielMaps(NOsh *nosh,
+						  Vgrid *dielXMap[NOSH_MAXMOL],
+						  Vgrid *dielYMap[NOSH_MAXMOL],
+						  Vgrid *dielZMap[NOSH_MAXMOL]
+						 );
 
 /**
  * @brief  Destroy the loaded dielectric
@@ -575,15 +578,13 @@ VEXTERNC int energyFE(NOsh* nosh, int icalc, Vfetk *fetk[NOSH_MAXCALC],
  * @todo  THIS FUNCTION IS HARD-CODED TO SOLVE LRPBE
  */
 VEXTERNC Vrc_Codes initFE(
-					int icalc, /** Index in pb, fetk to initialize (calculation 
- index) */
+					int icalc, /** Index in pb, fetk to initialize (calculation index) */
 					NOsh *nosh,  /** Master parmaeter object */
 					FEMparm *feparm,  /** FE-specific parameters */
 					PBEparm *pbeparm,  /** Generic PBE parameters */
 					Vpbe *pbe[NOSH_MAXCALC],  /** Array of PBE objects */
 					Valist *alist[NOSH_MAXMOL],  /** Array of atom lists */
-					Vfetk *fetk[NOSH_MAXCALC],  /** Array of finite element objects */
-					Gem *gm[NOSH_MAXCALC]  /** Array of geometry objects */
+					Vfetk *fetk[NOSH_MAXCALC]  /** Array of finite element objects */
 );
 
 /**
@@ -607,8 +608,10 @@ VEXTERNC void killFE(
  * @param feparm  FE-specific parameters 
  * @param fetk  Array of FE solver objects 
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int preRefineFE(int i, NOsh *nosh, FEMparm *feparm,
-  Vfetk *fetk[NOSH_MAXCALC]);
+VEXTERNC int preRefineFE(int i,
+                        FEMparm *feparm,
+                        Vfetk *fetk[NOSH_MAXCALC]
+);
 
 /**
  * @brief  Partition mesh (if applicable)
@@ -627,28 +630,31 @@ VEXTERNC int partFE(int i, NOsh *nosh, FEMparm *feparm,
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  i  Calculation index
- * @param  nosh  Master parameter object
  * @param feparm  FE-specific parameters 
  * @param pbeparm  Generic PBE parameters
  * @param fetk  Array of FE solver objects 
  * @return  1 if successful, 0 otherwise */
-VEXTERNC int solveFE(int i, NOsh *nosh, PBEparm *pbeparm, FEMparm *feparm,
-  Vfetk *fetk[NOSH_MAXCALC]);
+VEXTERNC int solveFE(int i, 
+                     PBEparm *pbeparm, 
+                     FEMparm *feparm,
+                     Vfetk *fetk[NOSH_MAXCALC]
+);
 
 /**
  * @brief  Estimate error, mark mesh, and refine mesh after solve
  * @ingroup  Frontend
  * @author  Nathan Baker
  * @param  icalc  Calculation index
- * @param  nosh  Master parameter object
  * @param feparm  FE-specific parameters 
  * @param fetk  Array of FE solver objects 
  * @return  1 if successful, 0 otherwise -- note that a 0 will likely imply
  * that either the max number of vertices have been met or no vertices were
  * marked for refinement.  In either case, this should not be treated as a
  * fatal error.  */
-VEXTERNC int postRefineFE(int icalc, NOsh *nosh, FEMparm *feparm,
-  Vfetk *fetk[NOSH_MAXCALC]);
+VEXTERNC int postRefineFE(int icalc, 
+                          FEMparm *feparm,
+                          Vfetk *fetk[NOSH_MAXCALC]
+);
 
 /**
  * @brief  Write FEM data to files

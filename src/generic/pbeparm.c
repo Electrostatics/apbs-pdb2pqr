@@ -107,7 +107,7 @@ VPUBLIC PBEparm* PBEparm_ctor() {
 
     /* Set up the structure */
     PBEparm *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(PBEparm));
+    thee = (PBEparm*)Vmem_malloc(VNULL, 1, sizeof(PBEparm));
     VASSERT( thee != VNULL);
     VASSERT( PBEparm_ctor2(thee) );
 
@@ -482,7 +482,7 @@ VPRIVATE int PBEparm_parseBCFL(PBEparm *thee, Vio *sock) {
     /* We can either parse int flag... */
     if (sscanf(tok, "%d", &ti) == 1) {
 
-        thee->bcfl = ti;
+        thee->bcfl = (Vbcfl)ti;
         thee->setbcfl = 1;
         /* Warn that this usage is deprecated */
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"bcfl %d\" \
@@ -716,7 +716,7 @@ VPRIVATE int PBEparm_parseSRFM(PBEparm *thee, Vio *sock) {
 
     /* Parse old-style int arg */ 
     if (sscanf(tok, "%d", &ti) == 1) {
-        thee->srfm = ti;
+        thee->srfm = (Vsurf_Meth)ti;
         thee->setsrfm = 1;
 		
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"srfm %d\" \
@@ -901,7 +901,7 @@ VPRIVATE int PBEparm_parseCALCENERGY(PBEparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     /* Parse number */
     if (sscanf(tok, "%d", &ti) == 1) {
-        thee->calcenergy = ti;
+        thee->calcenergy = (PBEparm_calcEnergy)ti;
         thee->setcalcenergy = 1;
 
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"calcenergy \
@@ -954,7 +954,7 @@ VPRIVATE int PBEparm_parseCALCFORCE(PBEparm *thee, Vio *sock) {
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
     /* Parse number */
     if (sscanf(tok, "%d", &ti) == 1) {
-        thee->calcforce = ti;
+        thee->calcforce = (PBEparm_calcForce)ti;
         thee->setcalcforce = 1;
 
         Vnm_print(2, "parsePBE:  Warning -- parsed deprecated \"calcforce \

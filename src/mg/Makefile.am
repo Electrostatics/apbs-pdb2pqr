@@ -13,9 +13,10 @@ SUBDIRS = $(always_built_SUBDIRS) .
 THISLIB = mg
 
 noinst_LTLIBRARIES = libapbsmg.la
-libapbsmg_la_SOURCES  = vpmg.c vpmgp.c mypde.f vpmgf.f vmgrid.c vgrid.c vopot.c
-INCLUDES           = -I${top_srcdir}/src/generic -I${top_srcdir}/src/fem @inc_list@
-AM_CFLAGS          = @wall_pedantic_ansi@ @CFLAGS@
+libapbsmg_la_SOURCES = vgrid.c vopot.c vpmg.c vpmgp.c
+
+INCLUDES = -I${top_srcdir}/src/generic -I${top_srcdir}/src/pmgc -I${top_srcdir}/src/fem @inc_list@
+AM_CFLAGS = @wall_pedantic_ansi@ @CFLAGS@
 
 
 all-local:

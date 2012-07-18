@@ -63,14 +63,30 @@
 #include "mc/mc.h"
 #include "apbs/vpee.h"
 
-VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm);
-VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol);
-VEXTERNC double Aprx_estNonlinResid(Aprx *thee, SS *sm,
-    Bvec *u, Bvec *ud, Bvec *f);
-VEXTERNC double Aprx_estLocalProblem(Aprx *thee, SS *sm,
-    Bvec *u, Bvec *ud, Bvec *f);
-VEXTERNC double Aprx_estDualProblem(Aprx *thee, SS *sm,
-    Bvec *u, Bvec *ud, Bvec *f);
+VPRIVATE int Vpee_userDefined(Vpee *thee,
+                              SS *sm
+                              );
+VPRIVATE int Vpee_ourSimp(Vpee *thee,
+                          SS *sm,
+                          int rcol
+                          );
+VEXTERNC double Aprx_estNonlinResid(Aprx *thee,
+                                    SS *sm,
+                                    Bvec *u,
+                                    Bvec *ud,
+                                    Bvec *f
+                                    );
+VEXTERNC double Aprx_estLocalProblem(Aprx *thee,
+                                     SS *sm,
+                                     Bvec *u,
+                                     Bvec *ud,
+                                     Bvec *f);
+VEXTERNC double Aprx_estDualProblem(Aprx *thee,
+                                    SS *sm,
+                                    Bvec *u,
+                                    Bvec *ud,
+                                    Bvec *f
+                                    );
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Class Vpee: Non-inlineable methods
@@ -81,8 +97,11 @@ VEXTERNC double Aprx_estDualProblem(Aprx *thee, SS *sm,
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vpee* Vpee_ctor(Gem *gm, int localPartID, int killFlag, double
-  killParam) {
+VPUBLIC Vpee* Vpee_ctor(Gem *gm,
+                        int localPartID,
+                        int killFlag,
+                        double killParam
+                        ) {
 
     Vpee *thee = VNULL;
 
@@ -99,13 +118,21 @@ VPUBLIC Vpee* Vpee_ctor(Gem *gm, int localPartID, int killFlag, double
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpee_ctor2(Vpee *thee, Gem *gm, int localPartID, int killFlag,
-  double killParam) {
+VPUBLIC int Vpee_ctor2(Vpee *thee,
+                       Gem *gm,
+                       int localPartID,
+                       int killFlag,
+                       double killParam
+                       ) {
 
-    int ivert, nLocalVerts;
+    int ivert,
+        nLocalVerts;
     SS *simp;
     VV *vert;
-    double radius, dx, dy, dz;
+    double radius,
+           dx,
+           dy,
+           dz;
 
     VASSERT(thee != VNULL);
 
@@ -217,7 +244,9 @@ VPUBLIC void Vpee_dtor(Vpee **thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
+VPUBLIC void Vpee_dtor2(Vpee *thee) {
+    Vmem_dtor(&(thee->mem));
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 // Routine:  Vpee_markRefine
@@ -225,16 +254,27 @@ VPUBLIC void Vpee_dtor2(Vpee *thee) { Vmem_dtor(&(thee->mem)); }
 // Author:   Nathan Baker (and Michael Holst: the author of AM_markRefine, on
 //           which this is based)
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vpee_markRefine(Vpee *thee, AM *am, int level, int akey, int rcol,
-  double etol, int bkey) {
+VPUBLIC int Vpee_markRefine(Vpee *thee,
+                            AM *am,
+                            int level,
+                            int akey,
+                            int rcol,
+                            double etol,
+                            int bkey
+                            ) {
 
     Aprx *aprx;
-    int marked = 0;
-    int markMe, i, smid, count, currentQ;
-    double minError = 0.0;
-    double maxError = 0.0;
-    double errEst = 0.0;
-    double mlevel, barrier;
+    int marked = 0,
+        markMe,
+        i,
+        smid,
+        count,
+        currentQ;
+    double minError = 0.0,
+           maxError = 0.0,
+           errEst = 0.0,
+           mlevel,
+           barrier;
     SS *sm;
 
 
@@ -462,9 +502,15 @@ VPUBLIC int Vpee_numSS(Vpee *thee) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
+VPRIVATE int Vpee_userDefined(Vpee *thee,
+                              SS *sm
+                              ) {
 
-    int ivert, icoord, chart[4], fType[4], vType[4];
+    int ivert,
+        icoord,
+        chart[4],
+        fType[4],
+        vType[4];
     double vx[4][3];
 
     for (ivert=0; ivert<Gem_dimVV(thee->gm); ivert++) {
@@ -490,10 +536,16 @@ VPRIVATE int Vpee_userDefined(Vpee *thee, SS *sm) {
 //
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPRIVATE int Vpee_ourSimp(Vpee *thee, SS *sm, int rcol) {
+VPRIVATE int Vpee_ourSimp(Vpee *thee,
+                          SS *sm,
+                          int rcol
+                          ) {
 
     int ivert;
-    double dist, dx, dy, dz;
+    double dist,
+           dx,
+           dy,
+           dz;
 
     if (thee->killFlag == 0) return 1;
     else if (thee->killFlag == 1) {

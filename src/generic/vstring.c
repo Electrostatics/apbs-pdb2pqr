@@ -60,7 +60,7 @@
 // Routine:  Vstring_strcasecmp
 //
 //           Copyright (c) 1988-1993 The Regents of the University of
-//                         California.  
+//                         California.
 //           Copyright (c) 1995-1996 Sun Microsystems, Inc.
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vstring_strcasecmp(const char *s1, const char *s2) {
@@ -124,7 +124,7 @@ VPUBLIC int Vstring_strcasecmp(const char *s1, const char *s2) {
 // Routine:  Vstring_isdigit
 //
 //           Improves upon sscanf to see if a token is an int or not
-//           
+//
 //           Returns isdigit: 1 if a digit, 0 otherwise
 /////////////////////////////////////////////////////////////////////////// */
 VPUBLIC int Vstring_isdigit(const char *tok) {
@@ -135,9 +135,9 @@ VPUBLIC int Vstring_isdigit(const char *tok) {
     isdigit = 1;
     for(i=0; ; i++){
       checkchar[0] =  name[i];
-      if (name[i] == '\0'){ 
+      if (name[i] == '\0'){
         break;
-      } 
+      }
       if (sscanf(checkchar, "%d", &ti) != 1){
         isdigit = 0;
         break;
@@ -145,3 +145,94 @@ VPUBLIC int Vstring_isdigit(const char *tok) {
     }
     return isdigit;
 }
+
+
+/** Creates a wrapped and indented string from an input string
+ *  @author Tucker Beck
+ *  @ingroup Vstring
+ *  @note    This funciton allocates a new string, so be sure to free it!
+ */
+char* Vstring_wrappedtext(const char* str, int right_margin, int left_padding)
+{
+    int span = right_margin - left_padding;
+    int i = 0;
+    int k = 0;
+    int j = 0;
+    int line_len = 0;
+    int hyphenate = 0;
+    char* wrap_str;
+    int   wrap_len;
+    int len = strlen( str );
+
+    if( len == 0 )
+        return VNULL;
+
+    wrap_str = (char*)malloc( len * sizeof(char) );
+    wrap_len = len;
+
+    do
+    {
+        if( str[i] == ' ' )
+        {
+            i++;
+        }
+        else
+        {
+            /** @note:  The +2 is for the newline character
+        	  *         and the null-terminating character;
+        	  */
+            if( k + right_margin + 2 > wrap_len )
+            {
+                wrap_len += right_margin + 2;
+                wrap_str = (char*)realloc( wrap_str, wrap_len * sizeof( char ) );
+            }
+
+
+            if( i + span >= len )
+            {
+                hyphenate = 0;
+                line_len = len - i;
+            }
+            else
+            {
+                j = span;
+                do
+                {
+                    if( str[ i + j ] == ' ' )
+                    {
+                        hyphenate = 0;
+                        line_len = j;
+                        break;
+                    }
+                    else if( j == 0 )
+                    {
+                        hyphenate = 1;
+                        line_len = span - 1;
+                        break;
+                    }
+                    else
+                    {
+                        j--;
+                    }
+                } while( 1 );
+            }
+
+            memset( wrap_str + k, ' ', left_padding * sizeof( char ) );
+            k += left_padding;
+
+            memcpy( wrap_str + k, str + i, line_len * sizeof( char ) );
+            k += line_len;
+            i += line_len;
+
+            if( hyphenate )
+                wrap_str[k++] = '-';
+
+            wrap_str[k++] = '\n';
+
+            wrap_str[k] = '\0';
+        }
+    } while( i < len );
+
+    return wrap_str;
+}
+

@@ -116,7 +116,7 @@ VPUBLIC Vparam_AtomData* Vparam_AtomData_ctor() {
     Vparam_AtomData *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vparam_AtomData) );
+    thee = (Vparam_AtomData*)Vmem_malloc(VNULL, 1, sizeof(Vparam_AtomData) );
     VASSERT(thee != VNULL);
     VASSERT(Vparam_AtomData_ctor2(thee));
 
@@ -142,7 +142,7 @@ VPUBLIC Vparam_ResData* Vparam_ResData_ctor(Vmem *mem) {
     Vparam_ResData *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(mem, 1, sizeof(Vparam_ResData) );
+    thee = (Vparam_ResData*)Vmem_malloc(mem, 1, sizeof(Vparam_ResData) );
     VASSERT(thee != VNULL);
     VASSERT(Vparam_ResData_ctor2(thee, mem));
 
@@ -188,7 +188,7 @@ VPUBLIC Vparam* Vparam_ctor() {
     Vparam *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vparam) );
+    thee = (Vparam*)Vmem_malloc(VNULL, 1, sizeof(Vparam) );
     VASSERT(thee != VNULL);
     VASSERT(Vparam_ctor2(thee));
 
@@ -355,7 +355,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
     /* Set up temporary residue list */
     
     ralloc = 50;
-    residues = Vmem_malloc(thee->vmem, ralloc, sizeof(Vparam_ResData));
+    residues = (Vparam_ResData*)Vmem_malloc(thee->vmem, ralloc, sizeof(Vparam_ResData));
 
     /* Read until we run out of entries, allocating space as needed */
     while (1) {
@@ -368,7 +368,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
         
         if (Vstring_strcasecmp(tok, "residue") == 0) {
           if (thee->nResData >= ralloc) {
-                tresidues = Vmem_malloc(thee->vmem, 2*ralloc, sizeof(Vparam_ResData));
+                tresidues = (Vparam_ResData*)Vmem_malloc(thee->vmem, 2*ralloc, sizeof(Vparam_ResData));
                 VASSERT(tresidues != VNULL);
                 for (i=0; i<thee->nResData; i++) {
                     Vparam_ResData_copyTo(&(residues[i]), &(tresidues[i]));
@@ -383,7 +383,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
           /* Initial space for this residue's atoms */
           nalloc = 20;
           natoms = 0;
-          atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
+          atoms = (Vparam_AtomData*)Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
 
         } else if (Vstring_strcasecmp(tok, "name") == 0) {
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);  /* value */
@@ -391,7 +391,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
             VJMPERR1(Vio_scanf(sock, "%s", tok) == 1); /* </name> */
         } else if (Vstring_strcasecmp(tok, "atom") == 0) {
             if (natoms >= nalloc) {
-                tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
+                tatoms = (Vparam_AtomData*)Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
                 VASSERT(tatoms != VNULL);
                 for (i=0; i<natoms; i++) {
                     Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
@@ -410,7 +410,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
 
           res = &(residues[thee->nResData]);
           Vparam_ResData_ctor2(res, thee->vmem);
-          res->atomData = Vmem_malloc(thee->vmem, natoms, 
+          res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, natoms, 
                                       sizeof(Vparam_AtomData));
           res->nAtomData = natoms;
           strcpy(res->name, currResName);
@@ -426,7 +426,7 @@ VPUBLIC int Vparam_readXMLFile(Vparam *thee, const char *iodev,
 
     /* Initialize and copy the residues into the Vparam object */
       
-    thee->resData = Vmem_malloc(thee->vmem, thee->nResData, 
+    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData, 
                                 sizeof(Vparam_ResData));
     for (ires=0; ires<thee->nResData; ires++) {
         Vparam_ResData_copyTo(&(residues[ires]), &(thee->resData[ires]));
@@ -488,12 +488,12 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     /* Initial space for atoms */
     nalloc = 200;
     natoms = 0;
-    atoms = Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
+    atoms = (Vparam_AtomData*)Vmem_malloc(thee->vmem, nalloc, sizeof(Vparam_AtomData));
 
     /* Read until we run out of entries, allocating space as needed */
     while (1) {
         if (natoms >= nalloc) {
-            tatoms = Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
+            tatoms = (Vparam_AtomData*)Vmem_malloc(thee->vmem, 2*nalloc, sizeof(Vparam_AtomData));
             VASSERT(tatoms != VNULL);
             for (i=0; i<natoms; i++) {
                 Vparam_AtomData_copyTo(&(atoms[i]), &(tatoms[i]));
@@ -521,7 +521,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     }
 
     /* Create the residues */
-    thee->resData = Vmem_malloc(thee->vmem, thee->nResData, 
+    thee->resData = (Vparam_ResData*)Vmem_malloc(thee->vmem, thee->nResData, 
       sizeof(Vparam_ResData));
     VASSERT(thee->resData != VNULL);
     for (i=0; i<(thee->nResData); i++) {
@@ -546,7 +546,7 @@ VPUBLIC int Vparam_readFlatFile(Vparam *thee, const char *iodev,
     /* Allocate per-residue space for atoms */
     for (ires=0; ires<thee->nResData; ires++) {
         res = &(thee->resData[ires]);
-		res->atomData = Vmem_malloc(thee->vmem, res->nAtomData, 
+		res->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, res->nAtomData, 
           sizeof(Vparam_AtomData));
     }
 
@@ -599,7 +599,7 @@ VEXTERNC void Vparam_ResData_copyTo(Vparam_ResData *thee,
     dest->vmem = thee->vmem;
     dest->nAtomData = thee->nAtomData;
 
-    dest->atomData = Vmem_malloc(thee->vmem, dest->nAtomData, 
+    dest->atomData = (Vparam_AtomData*)Vmem_malloc(thee->vmem, dest->nAtomData, 
                                  sizeof(Vparam_AtomData));
     
     for (i=0; i<dest->nAtomData; i++) {

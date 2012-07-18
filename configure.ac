@@ -1,32 +1,32 @@
 dnl ##########################################################################
 dnl APBS -- Adaptive Poisson-Boltzmann Solver
-dnl 
+dnl
 dnl Nathan A. Baker (nathan.baker@pnnl.gov)
 dnl Pacific Northwest National Laboratory
-dnl 
+dnl
 dnl Additional contributing authors listed in the code documentation.
-dnl 
-dnl Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
-dnl Pacific Northwest National Laboratory, operated by Battelle Memorial 
-dnl Institute, Pacific Northwest Division for the U.S. Department of Energy. 
+dnl
+dnl Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the
+dnl Pacific Northwest National Laboratory, operated by Battelle Memorial
+dnl Institute, Pacific Northwest Division for the U.S. Department Energy.
 dnl Portions Copyright (c) 2002-2010.  Washington University in St. Louis.
 dnl Portions Copyright (c) 1999-2002.  The Regents of the University of
-dnl California.  
+dnl California.
 dnl Portions Copyright (c) 1995.  Michael Holst.
 dnl All Rights Reserved.
-dnl 
+dnl
 dnl This file is part of APBS.
-dnl 
+dnl
 dnl APBS is free software; you can redistribute it and/or modify
 dnl it under the terms of the GNU General Public License as published by
 dnl the Free Software Foundation; either version 2 of the License, or
 dnl (at your option) any later version.
-dnl 
+dnl
 dnl APBS is distributed in the hope that it will be useful,
 dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
 dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 dnl GNU General Public License for more details.
-dnl 
+dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with APBS; if not, write to the Free Software
 dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
@@ -34,19 +34,19 @@ dnl
 dnl Linking APBS statically or dynamically with other modules is making a
 dnl combined work based on APBS. Thus, the terms and conditions of the GNU
 dnl General Public License cover the whole combination.
-dnl 
+dnl
 dnl SPECIAL GPL EXCEPTION
 dnl In addition, as a special exception, the copyright holders of APBS
 dnl give you permission to combine the APBS program with free software
 dnl programs and libraries that are released under the GNU LGPL or with
-dnl code included in releases of ISIM, Ion Simulator Interface, PMV, 
-dnl SMOL, VMD, and Vision. Such combined software may be linked with APBS and 
+dnl code included in releases of ISIM, Ion Simulator Interface, PMV,
+dnl SMOL, VMD, and Vision. Such combined software may be linked with APBS and
 dnl redistributed together in original or modified form as mere aggregation
-dnl without requirement that the entire work be under the scope of the GNU 
+dnl without requirement that the entire work be under the scope of the GNU
 dnl General Public License. This special exception permission is also extended
 dnl to any software listed in the SPECIAL GPL EXCEPTION clauses by the PMG,
 dnl FEtk, MC, or MALOC libraries.
-dnl 
+dnl
 dnl Note that people who make modified versions of APBS are not obligated
 dnl to grant this special exception for their modified versions; it is
 dnl their choice whether to do so. The GNU General Public License gives
@@ -77,20 +77,20 @@ AC_CANONICAL_SYSTEM
 dnl ##########################################################################
 dnl 1. automake initialization (uncomment only if rebuilding Makefile.in's)
 dnl ##########################################################################
-dnl # THIS IS THE VERSION INFORMATION FOR THE APBS LIBRARY.  ACCORDING TO 
+dnl # THIS IS THE VERSION INFORMATION FOR THE APBS LIBRARY.  ACCORDING TO
 dnl # THE LIBTOOL MANUAL:
 dnl #   This flag accepts an argument of the form `current[:revision[:age]]'.
 dnl #   So, passing `-version-info 3:12:1' sets current to 3, revision to 12,
-dnl #   and age to 1.  If either revision or age are omitted, they default to 
-dnl #   0. Also note that age must be less than or equal to the current 
+dnl #   and age to 1.  If either revision or age are omitted, they default to
+dnl #   0. Also note that age must be less than or equal to the current
 dnl #   interface number.  Here are a set of rules to help you update your
 dnl #   library version information:
-dnl #      1. Start with version information of `0:0:0' for each libtool 
+dnl #      1. Start with version information of `0:0:0' for each libtool
 dnl #         library.
 dnl #      2. Update the version information only immediately before a public
 dnl #         release of your software. More frequent updates are unnecessary,
 dnl #         and only guarantee that the current interface number gets larger
-dnl #         faster.  
+dnl #         faster.
 dnl #      3. If the library source code has changed at all since the last
 dnl #         update, then increment revision (`c:r:a' becomes `c:r+1:a').
 dnl #      4. If any interfaces have been added, removed, or changed since the
@@ -161,12 +161,10 @@ if test x"$enable_python" != "xno"; then
 	AC_MSG_RESULT([yes])
 	AC_MSG_NOTICE([Python linkage requires GNU compilers])
 	cclist="gcc"
-	f77list="gfortran g95 g77"
 	apbs_do_python="python"
 else
 	AC_MSG_RESULT([no])
 	cclist="icc pgcc gcc"
-	f77list="ifort pgf77 gfortran g95 g77"
 	apbs_do_python=""
 fi
 AC_SUBST(apbs_do_python)
@@ -175,75 +173,11 @@ AC_LANG_C
 AC_PROG_CC(${cclist})
 AM_PROG_CC_STDC
 AC_PROG_CXX
-AC_PROG_F77(${f77list})
 
-dnl # -------------------------------------------------------------------------
-dnl # Test to see if the compiler combination is valid for gcc/g77 or
-dnl # gcc/gfortran/g95. Since code compiled with gcc 4.0 is only link
-dnl # compatible with gfortran/g95. If they are using g77 then they need to
-dnl # use gcc < 4.0 - D. Gohara 8/30/2006
-dnl # -------------------------------------------------------------------------
-if test ["$CC" = "gcc"]; then
-	AC_MSG_NOTICE([extracting gcc version number])
-	gcc_version=`gcc --version`
-	#gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}'`
-	gcc_complete_version=`echo ${gcc_version} | sed -ne '1,1p' | perl -pe 's|^.*?(\d+\.\d+(\.\d+)*).*$|\1|'`
-	gcc_major_version=`echo ${gcc_complete_version} | awk '{printf("%i",$1)}'`
-	AC_MSG_NOTICE([gcc version is ${gcc_complete_version}])
-
-	if test ["$F77" = "g77"]; then
-		if test ["${gcc_major_version}" -ge 4]; then
-			AC_MSG_ERROR([Error, your GCC version is: ${gcc_complete_version} which is not compatible])
-			AC_MSG_ERROR([with g77. You need to either use gcc < 4.0 as your C/CC/CXX compiler])
-			AC_MSG_ERROR([or gfortran/g95 as your Fortran compiler ... exiting.])
-		fi
-	fi
-fi
-
-dnl AC_F77_LIBRARY_LDFLAGS 
-dnl # -----------------------
-dnl # HANDLE OSF WEIRDNESS:
-dnl #   This includes the inability to link FORTRAN and C code compiled with
-dnl #   debugger flags and a g77 that breaks on some FORTRAN code with the
-dnl #   -O2 flag set.
-dnl # -----------------------
-short_os=`echo ${host_os} | sed 's/osf.*/osf/g'`;
-if test -z "`echo ${short_os} | sed 's/osf//g'`"; then
-	AC_MSG_NOTICE([Disabling debugger compiler flags to avert OSF weirdness])
-	if test -z ${FFLAGS-''}; then
-		FFLAGS="";
-	else
-		FFLAGS=`echo ${FFLAGS} | sed 's/-g//g'`;
-		if test -z "`echo ${F77-f77} | sed 's/g77//g'`"; then
-			FFLAGS=`echo ${FFLAGS} | sed 's/-O2/-O/g'`;
-		fi
-	fi
-	if test -z ${CFLAGS-''}; then
-		CFLAGS="";
-	else
-		CFLAGS=`echo ${CFLAGS} | sed 's/-g//g'`;
-	fi
-	if test -z ${CPPFLAGS-''}; then
-		CPPFLAGS="";
-	else
-		CPPFLAGS=`echo ${CPPFLAGS} | sed 's/-g//g'`;
-	fi
-	if test -z ${CXXFLAGS-''}; then
-		CXXFLAGS="";
-	else
-		CXXFLAGS=`echo ${CXXFLAGS} | sed 's/-g//g'`;
-	fi
-fi
-AC_F77_NOFORMAIN
-FFLAGS="${FLIBS} ${FFLAGS}"
-if test "${CC}" != "icl"; then
-  AC_F77_FCN_MANGLE()
-fi
 AC_LANG_C
 AC_PROG_CPP
 AC_DISABLE_SHARED
 AM_PROG_LIBTOOL
-FFLAGS="${FFLAGS}"
 
 dnl ##########################################################################
 dnl 3. checks for libraries
@@ -330,20 +264,23 @@ dnl ##########################################################################
 fetk_cpu_vendor_os="";
 AC_SUBST(fetk_cpu_vendor_os)
 
-dnl See if the user specified --with-fortran-replacement
-fortran_replacement=
-AC_MSG_CHECKING([for --with-fortran-replacement option])
-AC_ARG_WITH([fortran-replacement],
-    AS_HELP_STRING([--with-fortran-replacement],[enable fortran replacement code]),
-    [fortran_replacement="yes"],
-    [fortran_replacement="no"]
-)
 
-if test x"$fortran_replacement" != "xno"; then
-    AC_DEFINE([BURY_FORTRAN],[1],[Enable fortran replacement code])
+
+dnl This should only be used for the refactoring effort and removed afterward
+dnl See if the user specified --enable-verbose-debug
+AC_MSG_CHECKING([for --enable-verbose-debug])
+AC_ARG_ENABLE(
+    [verbose-debug],
+    [AS_HELP_STRING([--enable-verbose-debug], [enable verbose debugging information])],
+    [verbose_debug=yes],
+    [verbose_debug=no])
+AC_MSG_RESULT([$verbose_debug])
+
+if test x"$verbose_debug" != "xno"; then
+    AC_DEFINE([VERBOSE_DEBUG],[1],[Enable verbose debugging output])
 fi
-    
-AC_MSG_RESULT([${fortran_replacement}])
+
+
 
 AC_MSG_NOTICE([-----------------------------------------------------------])
 AC_MSG_NOTICE([---------- begin configuring for FEtk linkage -------------])
@@ -354,46 +291,37 @@ dnl # HANDLE THE FEtk LIBRARIES
 dnl # ----------------------
 
 contrib_path=`pwd`/contrib
+fetk_path=
+fetk_include_path=
+fetk_library_path=
 
 dnl First check to see if they are using FETK_INCLUDE or FETK_LIBRARY
 dnl if they are abort. We no longer support this...
 if test -n "${FETK_INCLUDE}"; then
 	AC_MSG_WARN([Error... FETK_INCLUDE is no longer supported.])
-	AC_MSG_WARN([Use --with-fetk-include=PATH instead.])
+	AC_MSG_WARN([Use --with-fetk=PATH instead.])
 	AC_MSG_WARN([Ignoring these variables...])
 fi
 
 if test -n "${FETK_LIBRARY}"; then
 	AC_MSG_WARN([Error... FETK_LIBRARY is no longer supported.])
-	AC_MSG_WARN([Use --with-fetk-library=PATH instead.])
+	AC_MSG_WARN([Use --with-fetk=PATH instead.])
 	AC_MSG_WARN([Ignoring these variables...])
 fi
 
-dnl Next see if the user specified fetk-include or fetk-lib if they did
-dnl process those and use those values instead of our own MALOC
-AC_MSG_CHECKING([for --with-fetk-include option])
+dnl Next see if the user specified --with-fetk.  If they did
+dnl process that and use it instead of our own MALOC
+AC_MSG_CHECKING([for --with-fetk option])
 AC_ARG_WITH(
-	[fetk-include],
-	AS_HELP_STRING([--with-fetk-include=PATH], [full path to the FETk INCLUDE directory]),
-	[fetk_include_path="${with_fetk_include}"]
+	[fetk],
+	AS_HELP_STRING([--with-fetk=PATH], [full path to the FETk directory]),
+	[fetk_path="${with_fetk}"]
 )
-if test x"$fetk_include_path" != "xno" -a -n "$fetk_include_path"; then
-    fetk_include_path=`echo $fetk_include_path | sed 's/\/$//g'`
-	AC_MSG_RESULT([${fetk_include_path}])
-	USE_FETK_INCLUDE="yes"
-else
-	AC_MSG_RESULT([no])
-fi
-
-AC_MSG_CHECKING([for --with-fetk-library option])
-AC_ARG_WITH(fetk-library,
-	AS_HELP_STRING([--with-fetk-library=PATH], [full path to the FETk LIBRARY directory]),
-	[fetk_library_path="${with_fetk_library}"]
-)
-if test x"$fetk_library_path" != "xno" -a -n "$fetk_library_path"; then
-    fetk_library_path=`echo $fetk_library_path | sed 's/\/$//g'`
-	AC_MSG_RESULT([${fetk_library_path}])
-	USE_FETK_LIBRARY="yes"
+if test x"$fetk_path" != "xno" -a -n "$fetk_path"; then
+    fetk_library_path="${fetk_path}/lib"
+    fetk_include_path="${fetk_path}/include"
+    AC_MSG_RESULT([${fetk_path}])
+    USE_FETK="yes"
 else
 	AC_MSG_RESULT([no])
 fi
@@ -476,12 +404,12 @@ if test -n "${mpi_path}"; then
 	else
 		AC_MSG_ERROR([Error... mpi.h missing in ${mpi_path}/include], 0)
 	fi
-	
+
 	if test -n "${USE_MPICH}"; then
 		AC_CHECK_FILE(${mpi_path}/lib/libmpich.a, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/libmpich.so, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/libmpich.dylib, [HAS_MPI_LIB="yes"], [])
-		
+
 		if test -n "${HAS_MPI_LIB}"; then
 			mpi_lib="-L${mpi_path}/lib -lmpich -lpmpich"
 			mpi_bin="pnoshell"
@@ -489,7 +417,7 @@ if test -n "${mpi_path}"; then
 			AC_MSG_ERROR([Error...Could not find MPICH library in ${mpi_path}/lib], 0)
 		fi
 	fi
-	
+
 	if test -n "${USE_MPICH2}"; then
 		AC_CHECK_FILE(${mpi_path}/lib/libmpich.a, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/libmpich.so, [HAS_MPI_LIB="yes"], [])
@@ -500,7 +428,7 @@ if test -n "${mpi_path}"; then
 			AC_MSG_ERROR([Error...Could not find MPICH library in ${mpi_path}/lib], 0)
 		fi
 	fi
-	
+
 	if test -n "${USE_LAM}"; then
 		AC_CHECK_FILE(${mpi_path}/lib/liblam.a, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/liblam.so, [HAS_MPI_LIB="yes"], [])
@@ -511,7 +439,7 @@ if test -n "${mpi_path}"; then
 			AC_MSG_ERROR([Error...Could not find LAM-MPI libraries in ${mpi_path}/lib], 0)
 		fi
 	fi
-	
+
 	if test -n "${USE_OPMI}"; then
 		AC_CHECK_FILE(${mpi_path}/lib/libmpi.a, [HAS_MPI_LIB="yes"], [])
 		AC_CHECK_FILE(${mpi_path}/lib/libmpi.so, [HAS_MPI_LIB="yes"], [])
@@ -548,11 +476,11 @@ AC_MSG_CHECKING([for --enable-python])
 if test x"$enable_python" != "xno"; then
 	AC_MSG_RESULT([yes])
 	AC_PATH_PROG(py_path, python)
-	PY_ENABLE="yes"    
+	PY_ENABLE="yes"
 
 	if test -n "${py_path}"; then
 		changequote(<<, >>)dnl
-		PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`   
+		PY_VERSION=`$py_path -c 'import sys; print sys.version[:3]'`
 		changequote([, ])dnl
 		PY_PREFIX=`$py_path -c 'import sys; print sys.prefix'`
 		PY_EXEC_PREFIX=`$py_path -c 'import sys; print sys.exec_prefix'`
@@ -569,25 +497,20 @@ if test x"$enable_python" != "xno"; then
 	PY_LDFLAGS=""
 	PY_SHARED=""
 	case $host_os in
-		linux*) 
+		linux*)
 			PY_SHARED="-shared"
 			CC="${CC} -fPIC"
-			F77="${F77} -fPIC"
 			;;
-		irix*) 
+		irix*)
 			PY_SHARED="-shared"
 			PY_LDFLAGS="-lftn -lm"
 			;;
-		sun|solaris**) 
+		sun|solaris**)
 			PY_SHARED="-G"
-			PY_LDFLAGS="-lF77 -lm -lM77 -lsunmath"
+			PY_LDFLAGS="-lm -lM77 -lsunmath"
 			;;
 		darwin**)
-	 	PY_CC=${F77}
                        PY_SHARED="-shared"
-                       if test "${F77}" == "g95"; then
-                         PY_SHARED="-dynamiclib"
-                       fi
                        PY_LINKFLAGS="-Wl,-framework -Wl,Python"
                        PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
                        ;;
@@ -597,7 +520,6 @@ if test x"$enable_python" != "xno"; then
 			changequote(<<, >>)dnl
 			PY_NOSPACE_VER=`$py_path -c 'import sys; a=sys.version[0]; b=sys.version[2]; print a+b;'`
 			changequote([, ])dnl
-			PY_CC=${F77}
 			PY_LDFLAGS="-L$PY_PREFIX/libs -lpython$PY_NOSPACE_VER"
 			PY_SHARED="-shared"
 			if test -f $PY_PREFIX/include/Python.h; then
@@ -610,10 +532,7 @@ if test x"$enable_python" != "xno"; then
 
 	IS_STATIC=`echo ${LDFLAGS} | grep static`
 	case $host_cpu in
-		x86_64*)
-			PY_CC="${F77}";;
 		i*86)
-			PY_CC="${F77}"
 			if test "${CC}" = "icc"; then
 				AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
 				if test -n "${ifcore_lib}"; then
@@ -624,7 +543,7 @@ if test x"$enable_python" != "xno"; then
 				if test -n "${IS_STATIC}"; then
 					PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static"
 				fi
-			fi;; 
+			fi;;
 		ia64*)
 			if test "${CC}" = "icc"; then
 				AC_CHECK_LIB(ifcore_pic,d_int_val,[ifcore_lib="-lifcore_pic"],[ifcore_lib=""])
@@ -638,9 +557,9 @@ if test x"$enable_python" != "xno"; then
 						PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
 					else
 						AC_MSG_WARN([Could not find libc.so or libm.so in /usr/lib])
-					fi 
 				fi
-			fi;; 
+				fi
+			fi;;
 	esac
 
 else
@@ -711,7 +630,7 @@ if test -z "${USE_FETK_LIBRARY}";  then
 		AS_HELP_STRING([--disable-maloc-rebuild], [disable rebuilding maloc]),,
 		[enable_maloc_rebuild=yes]
 	)
-	
+
 	if test x"$enable_maloc_rebuild" = "xno"; then
 		AC_MSG_RESULT([yes])
 		AC_MSG_NOTICE([Will not rebuild MALOC...skipping])
@@ -722,33 +641,36 @@ if test -z "${USE_FETK_LIBRARY}";  then
 		AC_MSG_NOTICE([-------------------- building MALOC -----------------------])
 		AC_MSG_NOTICE([-----------------------------------------------------------])
 		apbs_do_maloc="maloc"
-		
+
 		export CC=${CC}
 		export CFLAGS=${CFLAGS}
 		export LDFLAGS=${LDFLAGS}
 		AC_MSG_NOTICE([cd, make clean, configure, make, make install])
 		cd ${contrib_path}/maloc
-	
+
 		make clean
-	
+
 		if test -n "${USE_MPI}";then
 			export APBS_MPI_INC=${mpi_inc}
 			export APBS_MPI_LIB=${mpi_lib}
-			
+
 			./configure --prefix=${contrib_path} --with-mpi --enable-vdebug
 		else
 			./configure --prefix=${contrib_path} --enable-vdebug
 		fi
-		
+
 		make; make install;
 		cd ../../
 
 		AC_MSG_NOTICE([-----------------------------------------------------------])
 		AC_MSG_NOTICE([----- MALOC installation finished continuing with APBS ----])
 		AC_MSG_NOTICE([-----------------------------------------------------------])
-		        
+
 	fi
-    
+
+    maloc_library_path="${contrib_path}/lib"
+    maloc_include_path="${contrib_path}/include"
+
     maloc_library_path="${contrib_path}/lib"
     maloc_include_path="${contrib_path}/include"
 	
@@ -756,7 +678,7 @@ else
 
     maloc_library_path="${fetk_library_path}"
     maloc_include_path="${fetk_include_path}"
-    
+
 	AC_MSG_NOTICE([Skipping MALOC installation; will use MALOC provided with FEtk])
 fi
 AC_SUBST(apbs_do_maloc)
@@ -765,7 +687,7 @@ dnl # BEGIN FETK LIBRARY/HEADER TEST BLOCK
 dnl # -----------------------
 dnl # HANDLE THE FEtk LIBRARIES
 dnl #
-dnl # We require MC to be present.  If this library is not found, then 
+dnl # We require MC to be present.  If this library is not found, then
 dnl # we simply disable compilation of the portions of APBS
 dnl # which depend on FEtk.  Compilation can also be disabled by the
 dnl # '--disable-fetk' flag.
@@ -781,21 +703,21 @@ AC_MSG_NOTICE([------------------------------------------------------------])
 dnl # --------------------
 dnl # Handle MALOC linkage
 dnl # --------------------
-         
+
 maloc_library_flag="-L${maloc_library_path}"
-         
+
 AC_CHECK_LIB(maloc,maloc_link,
     [true],
     [AC_MSG_ERROR([Couldn't link against MALOC library])],
     [${maloc_library_flag} ${math_lib}])
-    
+
 maloc_inc="-I${maloc_include_path}"
 maloc_lib="${maloc_library_flag} -lmaloc"
 
 AC_SUBST(maloc_inc)
 AC_SUBST(maloc_lib)
-    
-    
+
+
 
 dnl # ----------------------------------------
 dnl # HANDLE THE READLINE LIBRARY DEPENDENCIES
@@ -826,7 +748,7 @@ if test "x${with_readline}" == "xno"; then
         [with_readline="yes"],
         [with_readline="no"],
         [${maloc_library_flag} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-        
+
     if test "x${with_readline}" == "xyes"; then
         AC_MSG_NOTICE([MALOC was built with readline. Overriding with-readline])
     fi
@@ -834,7 +756,7 @@ fi
 
 AC_MSG_CHECKING([for --with-readline])
 if test "x$with_readline" != "xno"; then
-    
+
     if test "x${with_readline}" != "xyes"; then
         readline_library_path="${with_readline}"
         readline_library_flag="-L${readline_library_path}"
@@ -844,12 +766,14 @@ if test "x$with_readline" != "xno"; then
     
     AC_MSG_RESULT([${with_readline}])
 
+    AC_MSG_RESULT([${with_readline}])
+
     dnl # Checking if ncurses is available.  Readline might be dependant.
     AC_CHECK_LIB(ncurses,tgetnum,
         [ncurses_lib="-lncurses"],
         [ncurses_lib=""],
         [${math_lib}])
-        
+
     AC_CHECK_LIB(readline,readline,
         [true],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
@@ -864,6 +788,8 @@ else
     AC_MSG_RESULT("no")
 fi
 AC_SUBST(readline_lib)
+
+
 
 
 
@@ -891,7 +817,7 @@ if test x"$enable_fetk" != "xno"; then
 	else
 		AC_MSG_RESULT([no])
 	fi
-	
+
 	AC_MSG_CHECKING([for user-specified FEtk library path])
 	if test -n "${fetk_library_path}"; then
 		AC_MSG_RESULT([${fetk_library_path}])
@@ -1027,6 +953,13 @@ if test "x$enable_fetk" != "xno"; then
         AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
     fi    
     
+
+    dnl # Look for the GAMER library.  Terminate if not found
+    AC_CHECK_LIB(gamer, gamer_link,
+        [true],
+        AC_MSG_ERROR([gamer library not found at ${gamer_library_path}]),
+        [${gamer_library_flag} ${math_lib} -ltetgen])
+
     AC_LANG_POP([C++])
 fi
 AC_SUBST(mc_lib)
@@ -1078,8 +1011,9 @@ if test "x$enable_fetk" != "xno"; then
         AC_DEFINE([USE_HB], [], [use hierarchical basis method])
         mcx_lib="${mcx_library_flag} -lmcx ${maloc_lib} ${punc_lib} ${gamer_lib}"
     else
-        AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
-    fi
+<<<<<<< .mine        AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
+=======        AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
+>>>>>>> .theirs    fi
     
     AC_LANG_POP([C++])
 fi
@@ -1175,6 +1109,7 @@ fi
 
 
 
+
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT TO DISABLE OPENMP SUPPORT
 dnl # -----------------------
@@ -1184,27 +1119,25 @@ AC_ARG_ENABLE(
     AS_HELP_STRING([--disable-openmp],[disables OpenMP compiler support]),,
     [disable_openmp=yes]
 )
-    
+
 if [[ "x$disable_openmp" != "xyes" ] || [ "x$enable_debug" == "xyes" ]]; then
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
-    if [[ "${CC}" = "icc" ] && [ "${F77}" = "ifort" ]]; then
+    if [[ "${CC}" = "icc" ]]; then
         CFLAGS="${CFLAGS} -openmp"
-        FFLAGS="${FFLAGS} -openmp -assume cc_omp"
         LDFLAGS="${LDFLAGS} -static-intel"
     fi
-    
-    if [[ "${CC}" = "gcc" ] && [ "${F77}" = "gfortran" ]]; then
+
+    if [[ "${CC}" = "gcc" ]]; then
         gcc_version=`gcc --version`
         gcc_complete_version=`echo ${gcc_version} | awk '{printf("%s",$3)}' | awk -F'.' '{print $1$2}'`
-        
+
         if test ["${gcc_complete_version}" -ge 42]; then
             CFLAGS="${CFLAGS} -fopenmp"
-            FFLAGS="${FFLAGS} -fopenmp"
         else
             AC_MSG_RESULT([WARNING])
-            AC_MSG_RESULT([WARNING Version of gcc/gfortran does not support OpenMP. Disabling.])
+            AC_MSG_RESULT([WARNING Version of gcc does not support OpenMP. Disabling.])
             AC_MSG_RESULT([WARNING])
         fi
     fi
@@ -1284,52 +1217,6 @@ else
 fi
 AC_SUBST(apbs_do_tools)
 
-
-dnl # -----------------------
-dnl # HANDLE THE BLAS LIBRARIES
-dnl # -----------------------
-
-# TODO:  Update and clarify this section
-blas_lib=""
-AC_ARG_WITH(
-	    [blas], 
-	    AS_HELP_STRING([--with-blas=LDFLAGS], [link to user-specified BLAS (specify flags to pass to ld)])
-	    )
-AC_MSG_CHECKING([for --with-blas])
-if test x"$with_blas" != "xno" -a -n "$with_blas"; then
-	blas_lib="${with_blas}"
-	AC_MSG_RESULT([${blas_lib}])
- 	AC_ARG_WITH(
-		    [blas_name], 
-		    AS_HELP_STRING([--with-blas-name=NAME], [name of BLAS library, defaults to blas]),, 
-		    [with_blas_name="blas"]
-		    )
-	if test x"$with_blas_name" != "xno" -a -n "$with_blas_name"; then
-		blas_name="${with_blas_name}"
-	fi
- 	AC_MSG_NOTICE([checking ${blas_name} using ${blas_lib}])
-	AC_LANG_FORTRAN77
-	LDFLAGS_SAVE=${LDFLAGS};
-	CPPFLAGS_SAVE=${CPPFLAGS};
-	LDFLAGS="${maloc_library_flag} ${blas_lib}";
-	AC_CHECK_LIB(${blas_name},dscal,
-		[blas_found="yes"],
-		[blas_found=""],
-		[${blas_lib} ${socket_lib} ${nsl_lib} ${math_lib}])
-	LDFLAGS=${LDFLAGS_SAVE};
-	CPPFLAGS=${CPPFLAGS_SAVE};
-	if test -z "${blas_found}"; then
-		AC_MSG_ERROR([BLAS libraries or headers missing:  exiting on error!])
-	fi
-	apbs_do_blas=""
-	AC_LANG_C
-else
-	AC_MSG_RESULT([no])
-	apbs_do_blas="blas"
-	blas_lib=${contrib_path}/blas/.libs/libapbsblas.a
-fi
-AC_SUBST(apbs_do_blas)
-
 dnl # --------------------------------
 dnl # HANDLE ZLIB COMPILATION
 dnl # --------------------------------
@@ -1359,49 +1246,6 @@ fi
 
 AC_SUBST(zlib)
 AC_SUBST(z_lib)
-
-dnl # -----------------------
-dnl # If using Portland compilers, do not compile
-dnl # tools/mesh/uhbd_asc2bin.f
-dnl # -----------------------
-case $F77 in
-	pgf77*)
-		UHBD_PORTLAND=""
-		FFLAGS="${FFLAGS} -Mnomain";;
-	*)
-		UHBD_PORTLAND="Y";;
-esac
-AM_CONDITIONAL(UHBD_COMPILE, [test -n "${UHBD_PORTLAND}"])
-
-dnl # -----------------------
-dnl # If using Intel compilers add in -nofor_main
-dnl # -----------------------
-case $F77 in
-	ifort)
-			FFLAGS="${FFLAGS} -nofor_main" ;;
-	*)
-		;;
-esac
-
-dnl # -----------------------
-dnl # CHECK WHETHER OR NOT TO LINK IN ARPACK FUNCTIONS
-dnl # -----------------------
-AC_MSG_CHECKING([for --with-arpack])
-AC_ARG_WITH(
-	[arpack],
-	AS_HELP_STRING([--with-arpack=PATH], [enable ARPACK functions (specify path to lib)])
-)
-
-if test x"$with_arpack" != "xno" -a -n "$with_arpack"; then
-	arpack_lib="-larpack -L${with_arpack}"
-	arpack_do_tools="arpack"
-	AC_MSG_RESULT([${arpack_lib}])
-else
-	arpack_do_tools=""
-	AC_MSG_RESULT([no])
-fi
-AC_SUBST(arpack_lib)
-AC_SUBST(arpack_do_tools)
 
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT INLINE FUNCTIONS
@@ -1435,7 +1279,7 @@ if test x"$enable_tinker" != "xno"; then
     AC_DEFINE([WITH_TINKER], [], [include TINKER support])
 	AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
 else
-    AC_MSG_RESULT([no]) 
+    AC_MSG_RESULT([no])
 fi
 
 dnl # -----------------------
@@ -1452,7 +1296,7 @@ if test x"$enable_apbs_quiet" != "xno"; then
     AC_MSG_RESULT([yes])
     AC_DEFINE([VAPBSQUIET], [], [APBS diagnostic messages will not display])
 else
-    AC_MSG_RESULT([no]) 
+    AC_MSG_RESULT([no])
 fi
 
 dnl # -----------------------
@@ -1486,7 +1330,7 @@ dnl # -----------------------
 top_srcdir="`pwd`"
 base_list="${FLIBS} ${tree_lib} ${vmetis_lib} ${vor_lib} ${mcx_lib} ${mc_lib}\
            ${gamer_library} ${thread_lib} ${mpi_lib} ${math_lib} ${rl_lib}\
-           ${socket_lib} ${nsl_lib} ${blas_lib} ${z_lib} ${efence_lib}"
+           ${socket_lib} ${nsl_lib} ${z_lib} ${efence_lib}"
 
 case $host_os in
 
@@ -1498,23 +1342,6 @@ case $host_os in
 		;;
 esac
 
-dnl # -------------------------
-dnl # Need to add in a case statement to put in lcc_dynamic for g77
-dnl # This is for OS X only
-dnl # -------------------------
-extra_list2=""
-case $host_os in
-
-	darwin*)
-		if test "$F77" == "g77"; then
-			extra_list2="-lcc_dynamic"
-		else
-			extra_list2=""
-		fi
-		;;
-		
-esac
-
 dnl # -----------------------
 dnl # ADD ON THE LIBRARIES FOR VERSION 1.40 OF FETK
 dnl # -----------------------
@@ -1524,7 +1351,7 @@ if test -n "${mc_found}"; then
 	*)
 		extra_list3="-lsuperlu -lumfpack -lamd -lpunc -lblas"
 		;;
-	
+
 	esac
 else
 
@@ -1533,7 +1360,7 @@ else
 fi
 
 inc_list="-I. ${maloc_inc} ${mc_inc} ${mcx_inc} ${mpi_inc}"
-lib_list="${base_list} ${extra_list1} ${extra_list2} ${extra_list3}"
+lib_list="${base_list} ${extra_list1} ${extra_list3}"
 AC_SUBST(lib_list)
 AC_SUBST(inc_list)
 
@@ -1561,22 +1388,19 @@ AC_CONFIG_FILES([
     Makefile
 
     contrib/Makefile
-    contrib/blas/Makefile
-    contrib/pmgZ/Makefile
-    contrib/aqua/Makefile
     contrib/opal/Makefile
     contrib/opal/ZSI/Makefile
-    contrib/zlib/Makefile	
-	
+    contrib/zlib/Makefile
+
     tools/Makefile
     tools/mesh/Makefile
     tools/manip/Makefile
     tools/python/Makefile
-    tools/arpack/Makefile
     tools/python/vgrid/Makefile
 
     src/Makefile
     src/generic/Makefile
+    src/pmgc/Makefile
     src/mg/Makefile
     src/fem/Makefile
     src/aaa_inc/Makefile
@@ -1598,7 +1422,7 @@ AC_CONFIG_FILES([
     examples/smpbe/Makefile
     examples/solv/Makefile
     examples/opal/Makefile
-    
+
     bin/Makefile
 
 ])
@@ -1607,7 +1431,6 @@ AC_OUTPUT
 AC_MSG_NOTICE([
 
 APBS to be compiled with following settings:  ${CC} ${CFLAGS}
-APBS to be compiled with following settings:  ${F77} ${FFLAGS}
 APBS to be linked with following libraries :  ${lib_list}
 APBS to be compiled with following includes:  ${inc_list}
 
