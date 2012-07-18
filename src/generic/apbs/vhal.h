@@ -31,15 +31,31 @@
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * -  Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * - Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
+ *
+ * - Neither the name of Washington University in St. Louis nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Neither the name of the developer nor the names of its contributors may be 
  * used to endorse or promote products derived from this software without 
@@ -71,7 +87,7 @@
  *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
  */
 enum eVrc_Codes {
-	
+
 	VRC_WARNING=-1, /** A non-fatal error  */
 	VRC_FAILURE=0,  /** A fatal error */
 	VRC_SUCCESS=1   /** A successful execution */
@@ -86,7 +102,7 @@ typedef enum eVrc_Codes Vrc_Codes;
  *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
  */
 enum eVsol_Meth {
-	
+
 	VSOL_CGMG,		/* 0: conjugate gradient multigrid */
 	VSOL_Newton,	/* 1: newton */
 	VSOL_MG,		/* 2: multigrid */
@@ -95,9 +111,9 @@ enum eVsol_Meth {
 	VSOL_RBGS,		/* 5: red-black gauss-seidel */
 	VSOL_WJ,		/* 6: weighted jacobi */
 	VSOL_Richardson,/* 7: richardson  */
-	VSOL_CGMGAqua,	/* 8: conjugate gradient multigrid aqua */ 
+	VSOL_CGMGAqua,	/* 8: conjugate gradient multigrid aqua */
 	VSOL_NewtonAqua	/* 9: newton aqua */
-	
+
 };
 typedef enum eVsol_Meth Vsol_Meth;
 
@@ -109,7 +125,7 @@ typedef enum eVsol_Meth Vsol_Meth;
 enum eVsurf_Meth {
 	VSM_MOL=0, /**<  Ion accessibility is defined using inflated van der Waals
 				*    radii, the dielectric coefficient ( ) is defined using the
-				*    molecular (Conolly) surface definition without 
+				*    molecular (Conolly) surface definition without
                 *    smoothing */
     VSM_MOLSMOOTH=1, /**<  As VSM_MOL but with a simple harmonic average
                       *    smoothing */
@@ -123,12 +139,12 @@ enum eVsurf_Meth {
 					  * van der Waals radii with the spline function and the
 					  * dielectric coefficient is defined using the standard
 					  * van der Waals radii with the spline function.  */
-	VSM_SPLINE3=3,  /**<  A 5th order polynomial spline is used to create 
-					  *  a smoothly varying characteristic function 
+	VSM_SPLINE3=3,  /**<  A 5th order polynomial spline is used to create
+					  *  a smoothly varying characteristic function
 					  *  (continuity through 2nd derivatives) for surface
 					  *  based paramters. */
-	VSM_SPLINE4=4   /**<  A 7th order polynomial spline is used to create 
-					  *  a smoothly varying characteristic function 
+	VSM_SPLINE4=4   /**<  A 7th order polynomial spline is used to create
+					  *  a smoothly varying characteristic function
 					  *  (continuity through 3rd derivatives) for surface
 					  *  based paramters. */
 };
@@ -151,7 +167,7 @@ enum eVhal_PBEType {
 	PBE_SMPBE	/**< SM PBE */
 };
 
-/** 
+/**
  *  @brief   Declaration of the Vhal_PBEType type as the Vhal_PBEType enum
  *  @ingroup Vhal
  */
@@ -167,7 +183,7 @@ enum eVhal_IPKEYType {
     IPKEY_NPBE /**<  NPBE ipkey */
 };
 
-/** 
+/**
 *  @brief   Declaration of the Vhal_IPKEYType type as the Vhal_IPKEYType enum
 *  @ingroup Vhal
 */
@@ -179,13 +195,13 @@ typedef enum eVhal_IPKEYType Vhal_IPKEYType;
  */
 enum eVhal_NONLINType {
     NONLIN_LPBE = 0,
-	NONLIN_NPBE,  
+	NONLIN_NPBE,
     NONLIN_SMPBE,
 	NONLIN_LPBEAQUA,
 	NONLIN_NPBEAQUA
 };
 
-/** 
+/**
 *  @brief   Declaration of the Vhal_NONLINType type as the Vhal_NONLINType enum
 *  @ingroup Vhal
 */
@@ -209,13 +225,13 @@ typedef enum eVoutput_Format Voutput_Format;
 /**
  * @ingroup  Vhal
  * @author  Nathan Baker
- * @brief  Types of boundary conditions 
+ * @brief  Types of boundary conditions
  */
 enum eVbcfl {
     BCFL_ZERO=0,  /**< Zero Dirichlet boundary conditions */
-    BCFL_SDH=1,  /**< Single-sphere Debye-Huckel Dirichlet boundary 
+    BCFL_SDH=1,  /**< Single-sphere Debye-Huckel Dirichlet boundary
                   * condition */
-    BCFL_MDH=2,  /**< Multiple-sphere Debye-Huckel Dirichlet boundary 
+    BCFL_MDH=2,  /**< Multiple-sphere Debye-Huckel Dirichlet boundary
                   * condition */
     BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
     BCFL_FOCUS=4,  /**< Focusing Dirichlet boundary condition */
@@ -288,7 +304,7 @@ enum eVdata_Type {
     VDT_LAP,    /**< Laplacian of potential (kT/e/A^2) */
     VDT_EDENS,  /**< Energy density \f$\epsilon (\nabla u)^2\f$, where \f$u\f$
                  * is potential (kT/e/A)^2 */
-    VDT_NDENS,  /**< Ion number density \f$\sum c_i \exp (-q_i u)^2\f$, 
+    VDT_NDENS,  /**< Ion number density \f$\sum c_i \exp (-q_i u)^2\f$,
 	         * where \f$u\f$ is potential (output in M) */
     VDT_QDENS,  /**< Ion charge density \f$\sum q_i c_i \exp (-q_i u)^2\f$,
 	         * where \f$u\f$ is potential (output in \f$e_c M\f$) */
@@ -319,7 +335,7 @@ enum eVdata_Format {
     VDF_AVS=2,  /**< AVS UCD format */
 	VDF_MCSF=3,  /**< FEtk MC Simplex Format (MCSF) */
 	VDF_GZ=4,	/**< Binary file (GZip) */
-	VDF_FLAT=5  /**< Write flat file */ 
+	VDF_FLAT=5  /**< Write flat file */
 };
 
 /** @typedef Vdata_Format
@@ -328,55 +344,55 @@ enum eVdata_Format {
  */
 typedef enum eVdata_Format Vdata_Format;
 
-/** 
+/**
  * @brief  APBS total execution timer ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_WALL_CLOCK 26
 
-/** 
+/**
  * @brief  APBS setup timer ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_SETUP 27
 
-/** 
+/**
  * @brief  APBS solver timer ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_SOLVER 28
 
-/** 
+/**
  * @brief  APBS energy timer ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_ENERGY 29
 
-/** 
+/**
  * @brief  APBS force timer ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_FORCE 30
 
-/** 
+/**
  * @brief  APBS temp timer #1 ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_TEMP1 31
 
-/** 
+/**
  * @brief  APBS temp timer #2 ID
  * @ingroup  Vhal
  */
 #define APBS_TIMER_TEMP2 32
 
-/** @brief The maximum number of molecules that can be involved in a single 
+/** @brief The maximum number of molecules that can be involved in a single
  *         PBE calculation
- *  @ingroup Vhal 
+ *  @ingroup Vhal
  */
 #define MAXMOL 5
 
-/** @brief The maximum number of ion species that can be involved in a single 
+/** @brief The maximum number of ion species that can be involved in a single
  *         PBE calculation
  *  @ingroup Vhal
  */
@@ -392,9 +408,9 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #define VMGNLEV 4
 
-/** @brief   Maximum reduction of grid spacing during a focusing calculation 
+/** @brief   Maximum reduction of grid spacing during a focusing calculation
  *  @ingroup Vhal
- */ 
+ */
 #define VREDFRAC 0.25
 
 /** @brief  Number of vertices per simplex (hard-coded to 3D)
@@ -408,7 +424,7 @@ typedef enum eVdata_Format Vdata_Format;
 #define VAPBS_DIM 3
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_RIGHT 0
@@ -420,31 +436,31 @@ typedef enum eVdata_Format Vdata_Format;
 #define MAX_SPHERE_PTS 50000
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_FRONT 1
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_UP    2
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_LEFT  3
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_BACK  4
 
 /** @brief   Face definition for a volume
- *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH 
+ *  @note    Consistent with PMG if RIGHT = EAST, BACK = SOUTH
  *  @ingroup Vhal
  */
 #define VAPBS_DOWN  5
@@ -466,7 +482,6 @@ typedef enum eVdata_Format Vdata_Format;
  *  @ingroup Vhal
  */
 #define SINH_MAX 85.0
-
 
 #if defined(VDEBUG)
 #   if !defined(APBS_NOINLINE)
@@ -514,7 +529,7 @@ typedef enum eVdata_Format Vdata_Format;
 /** @brief   Turns on inlining macros in Vpmg class if defined
  *  @ingroup Vhal
  */
-#   define VINLINE_VPMG 
+#   define VINLINE_VPMG
 
 /** @brief   Defines the maximum hash table size in any direction
  *  @ingroup Vhal
@@ -522,6 +537,29 @@ typedef enum eVdata_Format Vdata_Format;
 
 #   define MAX_HASH_DIM 75
 
+#endif
+
+/** OS specific flags and etcetera */
+#if !defined(WIN32) || defined(__MINGW32__)
+#define PRINT_FUNC __PRETTY_FUNCTION__
+#define OS_SEP_STR "/"
+#define OS_SEP_CHAR '/'
+#else
+#define OS_SEP_STR "\\"
+#define OS_SEP_CHAR '\\'
+#define PRINT_FUNC __FUNCSIG__
+#endif
+
+#ifdef VERBOSE_DEBUG
+#define ANNOUNCE_FUNCTION do{fprintf(stderr, "%s() [%s:%d]\n",PRINT_FUNC,__FILE__,__LINE__);}while(0)
+#define WARN_FORTRAN      do{fprintf(stderr, "%s() [%s:%d]: Calling Fortran Subroutine!!!\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
+#define WARN_UNTESTED     do{fprintf(stderr, "%s() [%s:%d]: Untested Translation!\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
+#define WARN_PARTTESTED   do{fprintf(stderr, "%s() [%s:%d]: Partially Tested Translation.\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
+#else
+#define ANNOUNCE_FUNCTION
+#define WARN_FORTRAN
+#define WARN_UNTESTED
+#define WARN_PARTTESTED
 #endif
 
 /* Fortran name mangling */
@@ -576,5 +614,206 @@ typedef enum eVdata_Format Vdata_Format;
  * @ingroup Vhal */
 #    define VEMBED(rctag)
 #endif /* if defined(HAVE_EMBED) */
+
+
+
+// Added by Tucker Beck.  Prints location information with a status message
+#define VMESSAGE0(msg)                                        \
+		do {                                                  \
+			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"           \
+					     "    %s\n\n",                        \
+					  __FILE__, __LINE__, __FUNCTION__, msg); \
+		} while(0)
+
+#define VMESSAGE1(msg, arg)                                    \
+		do {                                                   \
+			char buff[1000];                                   \
+			snprintf( buff, 1000, msg, arg );                  \
+			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+					     "    %s\n\n",                         \
+					  __FILE__, __LINE__, __FUNCTION__, buff); \
+		} while(0)
+
+#define VMESSAGE2(msg, arg0, arg1)                             \
+		do {                                                   \
+			char buff[1000];                                   \
+			snprintf( buff, 1000, msg, arg0, arg1 );           \
+			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+					     "    %s\n\n",                         \
+					  __FILE__, __LINE__, __FUNCTION__, buff); \
+		} while(0)
+
+/** Utility assertion; if it fails prints a message and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VASSERT_MSG0(cnd, msg)                                                                           \
+	do {                                                            \
+		if( (cnd) == 0 ) {                                          \
+			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                   \
+                         "    Assertion Failed (%s): %s\n\n",       \
+					  __FILE__, __LINE__, __FUNCTION__, #cnd, msg); \
+			abort();                                                \
+		}                                                           \
+	} while(0)
+
+/** Utility assertion; if it fails prints a message with an argument and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VASSERT_MSG1(cnd, msg, arg)                                  \
+	do {                                                             \
+		if( (cnd) == 0 ) {                                           \
+			char buff[1000];                                         \
+			snprintf( buff, 1000, msg, arg );                        \
+			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
+                         "    Assertion Failed (%s): %s\n\n",        \
+					  __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
+			abort();                                                 \
+		}                                                            \
+	} while(0)
+
+/** Utility assertion; if it fails prints a message with an argument and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VASSERT_MSG2(cnd, msg, arg0, arg1)                           \
+	do {                                                             \
+		if( (cnd) == 0 ) {                                           \
+			char buff[1000];                                         \
+            snprintf( buff, 1000, msg, arg0, arg1 );                 \
+			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
+                         "    Assertion Failed (%s): %s\n\n",        \
+                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
+            abort();                                                 \
+		}                                                            \
+	} while(0)
+
+/** Conditional warning; if true prints a message
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VWARN_MSG0(cnd, msg)                                            \
+		do {                                                            \
+			if( (cnd) == 0 ) {                                          \
+				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                 \
+						     "    Condition Failed (%s): %s\n\n",       \
+	                      __FILE__, __LINE__, __FUNCTION__, #cnd, msg); \
+			}                                                           \
+		} while(0)
+
+/** Conditional warning; if true prints a message and an argument
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VWARN_MSG1(cnd, msg, arg)                                        \
+		do {                                                             \
+			if( (cnd) == 0 ) {                                           \
+				char buff[1000];                                         \
+	            snprintf( buff, 1000, msg, arg );                        \
+				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                  \
+						     "    Condition Failed (%s): %s\n\n",        \
+	                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
+			}                                                            \
+		} while(0)
+
+/** Conditional warning; if true prints a message and an argument
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VWARN_MSG2(cnd, msg, arg0, arg1)                                   \
+		do {                                                               \
+			if( (cnd) == 0 ) {                                             \
+				char buff[1000];                                           \
+	            snprintf( buff, 1000, msg, arg0, arg1 );                   \
+				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                    \
+						     "    Condition Failed (%s): %s\n\n",          \
+	                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff);   \
+			}                                                              \
+		} while(0)
+
+/** Prints a message and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
+ */
+#define VABORT_MSG0(msg)                                      \
+		do {                                                  \
+			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"          \
+					     "    %s\n\n",                        \
+					  __FILE__, __LINE__, __FUNCTION__, msg); \
+			abort();                                          \
+		} while(0)
+
+/** Prints a message with an argument and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end\
+ */
+#define VABORT_MSG1(msg, arg)                                  \
+		do {                                                   \
+			char buff[1000];                                   \
+			snprintf( buff, 1000, msg, arg );                  \
+			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
+					     "    %s\n\n",                         \
+					  __FILE__, __LINE__, __FUNCTION__, buff); \
+			abort();                                           \
+		} while(0)
+
+/** Prints a message with an argument and aborts
+ *  @author Tucker Beck
+ *  @ingroup Vhal
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end\
+ */
+#define VABORT_MSG2(msg, arg0, arg1)                           \
+		do {                                                   \
+			char buff[1000];                                   \
+			snprintf( buff, 1000, msg, arg0, arg1);            \
+			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
+					     "    %s\n\n",                         \
+					  __FILE__, __LINE__, __FUNCTION__, buff); \
+			abort();                                           \
+		} while(0)
+
+#define PRINT_INT(expr)                                             \
+	do {                                                            \
+		Vnm_print(2, "%s:%d [%s()]: %s == %d\n",                    \
+				  __FILE__, __LINE__, __FUNCTION__, #expr, expr);   \
+	} while(0)
+
+#define PRINT_DBL(expr)                                           \
+	do {                                                          \
+		Vnm_print(2, "%s:%d [%s()]: %s == %f\n\n",                \
+				  __FILE__, __LINE__, __FUNCTION__, #expr, expr); \
+	} while(0)
+
+#define VMALLOC(vmem, n, type) ((type*)Vmem_malloc(vmem, n, sizeof(type)))
+
+#define VFREE(vmem, n, type, ptr) (Vmem_free(vmem, n, sizeof(type), (void **)&(ptr)))
+
+#define VFILL(vec, n, val)                           \
+	do {                                             \
+		int fill_idx;                                \
+	    for (fill_idx = 0; fill_idx < n; fill_idx++) \
+	    	vec[fill_idx] = val;                     \
+	} while(0)
+
+#define VCOPY(srcvec, dstvec, i, n) \
+	do {                            \
+		for (i = 0; i < n; i++)     \
+		    dstvec[i] = srcvec[i];  \
+    } while(0)
+
+
+char* wrap_text( char* str, int right_margin, int left_padding );
+
+#define VAT(array, i) ((array)[(i) - 1])
+#define RAT(array, i) ((array) + i - 1)
 
 #endif /* #ifndef _VAPBSHAL_H_ */

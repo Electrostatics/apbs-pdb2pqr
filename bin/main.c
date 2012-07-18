@@ -73,6 +73,7 @@
 #include "apbs/femparm.h"  
 
 #include "routines.h"
+#include <time.h>
 
 VEMBED(rcsid="$Id$")
 
@@ -87,6 +88,9 @@ int main(
 		 char **argv  /**< Argument strings */
 		 ) 
 {
+    // PCE: Adding below variables temporarily
+    clock_t ts, te;
+    // End PCE
 	
 	NOsh *nosh = VNULL;
 	
@@ -102,6 +106,7 @@ int main(
 #ifdef HAVE_MC_H
 	Vfetk *fetk[NOSH_MAXCALC];
 	Gem *gm[NOSH_MAXMOL];
+    int isolve;
 #else
 	void *fetk[NOSH_MAXCALC];
 	void *gm[NOSH_MAXMOL];
@@ -110,33 +115,41 @@ int main(
 	Vpmgp *pmgp[NOSH_MAXCALC];
 	Vpbe *pbe[NOSH_MAXCALC];
 	Valist *alist[NOSH_MAXMOL];
-	Vgrid *dielXMap[NOSH_MAXMOL],*dielYMap[NOSH_MAXMOL],*dielZMap[NOSH_MAXMOL];
-	Vgrid *kappaMap[NOSH_MAXMOL];
-	Vgrid *potMap[NOSH_MAXMOL];
-	Vgrid *chargeMap[NOSH_MAXMOL];
-	char *input_path = VNULL;
-	char *output_path = VNULL;
-	int i, rank, size, isolve, k;
-	size_t bytesTotal, highWater;
+	Vgrid *dielXMap[NOSH_MAXMOL],
+	      *dielYMap[NOSH_MAXMOL],
+	      *dielZMap[NOSH_MAXMOL],
+	      *kappaMap[NOSH_MAXMOL],
+	      *potMap[NOSH_MAXMOL],
+	      *chargeMap[NOSH_MAXMOL];
+	char *input_path = VNULL,
+         *output_path = VNULL;
+	int i,
+	    rank,
+	    size,
+	    k;
+	size_t bytesTotal,
+           highWater;
 	Voutput_Format outputformat;
 	
 	int rc = 0;
 	
-	/* These variables require some explaining... The energy double arrays
-		* store energies from the various calculations.  The energy int array
-		* stores either a flag (0,1) displaying whether energies were calculated
-		* or if PCE_COMPS is used, the number of atom energies stored
-		* for the given calculation.  Likewise, the
-		* force double arrays store forces from the various calcualtions.  The
-		* force int array stores an integer which either says no calculation was
-		* performed (0) or gives the number of entries in the force array for each
-		* calculation */
-	double qfEnergy[NOSH_MAXCALC], qmEnergy[NOSH_MAXCALC];
-	double dielEnergy[NOSH_MAXCALC], totEnergy[NOSH_MAXCALC];
-	AtomForce *atomForce[NOSH_MAXCALC];
+    /* The energy double arrays below store energies from various calculations. */
+	double qfEnergy[NOSH_MAXCALC],
+           qmEnergy[NOSH_MAXCALC];
+	double dielEnergy[NOSH_MAXCALC],
+           totEnergy[NOSH_MAXCALC];
 	double *atomEnergy[NOSH_MAXCALC];
-	int nenergy[NOSH_MAXCALC], nforce[NOSH_MAXCALC];
-	/* THe real partition centers */
+	AtomForce *atomForce[NOSH_MAXCALC]; /* Stores forces from various calculations. */
+	int nenergy[NOSH_MAXCALC], /* Stores either a flag (0,1) displaying whether
+                                * energies were calculated, or, if PCE_COMPS
+                                * was used, the number of atom energies stored
+                                * for the given calculation. */
+	    nforce[NOSH_MAXCALC]; /* Stores an integer which either says no
+                               * calculation was performed (0) or gives the
+                               * number of entries in the force array for each
+                               * calculation. */
+
+	/* The real partition centers */
 	double realCenter[3];
 	
 	/* Instructions: */
@@ -275,6 +288,7 @@ int main(
 	exit(2);
 #endif
 	
+    /* Process program arguments */
 	i=0;
 	outputformat = OUTPUT_NULL;
 	while (i<argc){
@@ -310,7 +324,8 @@ int main(
 		} else {
 			
 			/* Set the path to the input file */
-			if ((input_path == VNULL) && (i != 0)) input_path = argv[i];
+			if ((input_path == VNULL) && (i != 0))
+			    input_path = argv[i];
 			else if (i != 0) {
 				Vnm_tprint(2, "ERROR -- CALLED WITH TOO MANY ARGUMENTS!\n", \
 						   argc);
@@ -321,11 +336,13 @@ int main(
 		i++; 
 	}
 
+    /* If we set an output format but no path, error. */
 	if ((outputformat != 0) && (output_path == NULL)) {
 		Vnm_tprint(2, "The --output-path variable must be set when using --output-format!\n");
 		VJMPERR1(0);
 	}
 
+    /* If we failed to specify an input file, error. */
 	if (input_path == NULL) {
 		Vnm_tprint(2, "ERROR -- APBS input file not specified!\n", argc);
 		Vnm_tprint(2, "%s\n", usage);
@@ -347,7 +364,9 @@ int main(
 	if (!NOsh_parseInput(nosh, sock)) {
 		Vnm_tprint( 2, "Error while parsing input file.\n");
 		VJMPERR1(0);
-	} else Vnm_tprint( 1, "Parsed input file.\n");
+	}
+	else
+        Vnm_tprint( 1, "Parsed input file.\n");
 	Vio_dtor(&sock);
 	
 	/* *************** LOAD PARAMETERS AND MOLECULES ******************* */	
@@ -425,6 +444,7 @@ int main(
 		Vnm_tprint( 1, "----------------------------------------\n");
 		
 		switch (nosh->calc[i]->calctype) {  
+			/* Multigrid */
 			case NCT_MG:
 				/* What is this?  This seems like a very awkward way to find 
 				the right ELEC statement... */
@@ -518,7 +538,11 @@ int main(
 				
 				/* Set up problem */
 				Vnm_tprint( 1, "  Setting up problem...\n");
-				if (initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk, gm) != VRC_SUCCESS) {
+				/* Attempt to initialize and do an initial refinement of the mesh data.  The mesh data 
+				 * will be stored in the Vfetk object fetk, which contains the appropriate geometry 
+				 * manager (Gem) object and Vcsm object describing the mesh structure.  The mesh will 
+				 * either be loaded from an external source or generated from scratch. */
+				if (initFE(i, nosh, feparm, pbeparm, pbe, alist, fetk) != VRC_SUCCESS) {
 					Vnm_tprint( 2, "Error setting up FE calculation!\n");
 					VJMPERR1(0);
 				}
@@ -527,8 +551,13 @@ int main(
 					printFEPARM(i, nosh, feparm, fetk);
 				printPBEPARM(pbeparm);
 				
-				/* Refine mesh */
-				if (!preRefineFE(i, nosh, feparm, fetk)) {
+				/* Refine mesh - this continues to run the AM_markRefine procedure already run
+				 * in initFE() to arrive at some initial refinement, but does checks of the
+				 * simplices so that it refines until the error or size tolerances are reached.
+				 * Once this is done, we have a mesh that has been refined to the point where
+				 * we can attempt to solve - further refinement may be needed in the loop
+				 * below. */
+				if (!preRefineFE(i, feparm, fetk)) {
 					Vnm_tprint( 2, "Error pre-refining mesh!\n");
 					VJMPERR1(0);
 				}
@@ -540,32 +569,43 @@ int main(
 				Vnm_tprint(2, "PERFORMANCE, PLEASE USE THE MULTIGRID-BASED METHODS, E.G.\n");
 				Vnm_tprint(2, "MG-AUTO, MG-PARA, and MG-MANUAL (SEE DOCS.)\n\n");
 				Vnm_tprint(1, "  Beginning solve-estimate-refine cycle:\n");
+
 				for (isolve=0; isolve<feparm->maxsolve; isolve++) {
 					Vnm_tprint(1, "    Solve #%d...\n", isolve);
-					if (!solveFE(i, nosh, pbeparm, feparm, fetk)) {
+
+                    /* Attempt to solve the mesh by using one of MC's solver types. */
+					if (!solveFE(i, pbeparm, feparm, fetk)) {
 						Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
 						VJMPERR1(0);
 					}
+					
+					/* Calculate the total electrostatic energy. */
 					if (!energyFE(nosh, i, fetk, &(nenergy[i]), 
 								  &(totEnergy[i]), &(qfEnergy[i]), 
 								  &(qmEnergy[i]), &(dielEnergy[i]))) {
 						Vnm_tprint(2, "ERROR SOLVING EQUATION!\n");
 						VJMPERR1(0);
 					}
+
 					/* We're not going to refine if we've hit the max number
 						* of solves */
 					if (isolve < (feparm->maxsolve)-1) {
-						if (!postRefineFE(i, nosh, feparm, fetk)) break;
+					    /* Do a final error estimation and mesh refinement. */
+						if (!postRefineFE(i, feparm, fetk)) {
+						    break;
+					}
 					}
 					bytesTotal = Vmem_bytesTotal();
 					highWater = Vmem_highWaterTotal();
-					Vnm_tprint(1, "      Currently memory use:  %g MB\n", 
+					Vnm_tprint(1, "      Current memory use:     %g MB\n",
 							   ((double)bytesTotal/(1024.)/(1024.)));
 					Vnm_tprint(1, "      High-water memory use:  %g MB\n", 
 							   ((double)highWater/(1024.)/(1024.)));
 				}
 					
 					Vnm_tprint(1, "  Writing FEM data to files.\n");
+
+                /* Save data. */
 				if (!writedataFE(rank, nosh, pbeparm, fetk[i])) {
 					Vnm_tprint(2, "  Error while writing FEM data!\n");
 				}
@@ -594,8 +634,11 @@ int main(
 				}
 
 				apolparm = nosh->calc[i]->apolparm;
+				// poor man's execution timer.
+                ts = clock();
 				rc = initAPOL(nosh, mem, param, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
+				printf("initAPOL: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
 				if(rc == 0) {
 					Vnm_tprint(2, "Error calculating apolar solvation quantities!\n");
 					VJMPERR1(0);

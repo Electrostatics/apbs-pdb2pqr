@@ -59,9 +59,9 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
             } else if (strcmp("-ef", argv[i]) == 0 || \
                        strcmp("-fe", argv[i]) == 0){
                 Vnm_print(1, "Providing per-atom forces and energies...\n");
-                doforce = 1; 
+                doforce = 1;
                 doenergy = 1;
-              
+
             } else {
                 Vnm_print(2, "Ignoring option %s\n", argv[i]);
             }
@@ -75,7 +75,7 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
     alist = Valist_ctor();
     sock = Vio_ctor("FILE", "ASC", VNULL, path, "r");
     if (sock == VNULL) {
-        Vnm_print(2, "Problem opening virtual socket %s!\n", 
+        Vnm_print(2, "Problem opening virtual socket %s!\n",
                   path);
         return 0;
     }
@@ -91,7 +91,7 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
     green = Vgreen_ctor(alist);
 
     /* Initialize variables */
-    Vnm_print(1, "Dielectric constant = 1 (vacuum)\n"); 
+    Vnm_print(1, "Dielectric constant = 1 (vacuum)\n");
     Vnm_print(1, "Distances in Angstroms\n");
     Vnm_print(1, "Charges in electrons\n");
     zmagic  = (1e-3)*Vunit_ec*Vunit_Na;
@@ -108,20 +108,20 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
     zp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
     qp = Vmem_malloc(VNULL, Valist_getNumberAtoms(alist), sizeof(double));
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
-        fx[i] = 0.0; 
-        fy[i] = 0.0; 
+        fx[i] = 0.0;
+        fy[i] = 0.0;
         fz[i] = 0.0;
         pot[i] = 0.0;
         atom = Valist_getAtom(alist, i);
         pos = Vatom_getPosition(atom);
-        xp[i] = pos[0]; 
-        yp[i] = pos[1]; 
+        xp[i] = pos[0];
+        yp[i] = pos[1];
         zp[i] = pos[2];
         qp[i] = Vatom_getCharge(atom);
     }
 
     Vnm_print(1, "Calculating...\n");
-    Vgreen_coulombD(green, Valist_getNumberAtoms(alist), xp, yp, zp, 
+    Vgreen_coulombD(green, Valist_getNumberAtoms(alist), xp, yp, zp,
             pot, fx, fy, fz);
 
     for (i=0; i<Valist_getNumberAtoms(alist); i++) {
@@ -137,13 +137,13 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
             Vnm_print(1, "\tAtom %d:  Energy  = %1.12E kJ/mol\n", i+1, pot[i]);
         }
         if (doforce) {
-          Vnm_print(1, "\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i+1, 
+          Vnm_print(1, "\tAtom %d:  x-force = %1.12E kJ/mol/A\n", i+1,
                     fx[i]);
-          Vnm_print(1, "\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i+1, 
+          Vnm_print(1, "\tAtom %d:  y-force = %1.12E kJ/mol/A\n", i+1,
                     fy[i]);
-          Vnm_print(1, "\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i+1, 
+          Vnm_print(1, "\tAtom %d:  z-force = %1.12E kJ/mol/A\n", i+1,
                     fz[i]);
-        }    
+        }
     }
 
     Vnm_print(1, "\n\n-------------------------------------------------------\n");
@@ -152,21 +152,21 @@ Usage: coulomb [-e] [-f] <molecule.pqr>\n\n\
     Vnm_print(1, "Total y-force = %1.12e kJ/mol/A in vacuum.\n", force[1]);
     Vnm_print(1, "Total z-force = %1.12e kJ/mol/A in vacuum.\n", force[2]);
 
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&fx);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&fy);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&fz);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&pot);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&xp);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&yp);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&zp);
-    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double), 
+    Vmem_free(VNULL, Valist_getNumberAtoms(alist), sizeof(double),
       (void **)&qp);
     Vgreen_dtor(&green);
     Valist_dtor(&alist);

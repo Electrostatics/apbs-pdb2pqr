@@ -119,7 +119,7 @@ VPUBLIC MGparm* MGparm_ctor(MGparm_CalcType type) {
 
     /* Set up the structure */
     MGparm *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(MGparm));
+    thee = (MGparm*)Vmem_malloc(VNULL, 1, sizeof(MGparm));
     VASSERT( thee != VNULL);
     VASSERT( MGparm_ctor2(thee, type) == VRC_SUCCESS );
 
@@ -453,7 +453,7 @@ VPRIVATE Vrc_Codes MGparm_parseCHGM(MGparm *thee, Vio *sock) {
     Vchrg_Meth ti;
 
     VJMPERR1(Vio_scanf(sock, "%s", tok) == 1);
-    if (sscanf(tok, "%d", &ti) == 1) {
+    if (sscanf(tok, "%d", (int*)(&ti)) == 1) {
         thee->chgm = ti;
         thee->setchgm = 1;
         Vnm_print(2, "NOsh:  Warning -- parsed deprecated statment \"chgm %d\".\n", ti);

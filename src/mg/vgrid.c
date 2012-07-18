@@ -75,14 +75,21 @@ VPRIVATE char Vprecision[26];
 // Routine:  Vgrid_ctor
 // Author:   Nathan Baker
 /////////////////////////////////////////////////////////////////////////// */
-VPUBLIC Vgrid* Vgrid_ctor(int nx, int ny, int nz,
-                  double hx, double hy, double hzed,
-                  double xmin, double ymin, double zmin,
-                  double *data) {
+VPUBLIC Vgrid* Vgrid_ctor(int nx, 
+                          int ny, 
+                          int nz,
+                          double hx, 
+                          double hy, 
+                          double hzed,
+                          double xmin, 
+                          double ymin, 
+                          double zmin,
+                          double *data
+                         ) {
 
     Vgrid *thee = VNULL;
 
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vgrid));
+    thee = (Vgrid*)Vmem_malloc(VNULL, 1, sizeof(Vgrid));
     VASSERT(thee != VNULL);
     VASSERT(Vgrid_ctor2(thee, nx, ny, nz, hx, hy, hzed,
                   xmin, ymin, zmin, data));
@@ -538,7 +545,7 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee,
 	 * big enough to take extra data on the final read loop.
 	 */
 	temp = (double *)malloc(len * (2 * sizeof(double)));
-	length = temp;
+	length = *temp;
 
 	for(i=0;i<len;i+=3){
 		memset(&line, 0, sizeof(line));
@@ -575,15 +582,22 @@ VPUBLIC int Vgrid_readGZ(Vgrid *thee,
 	return VRC_SUCCESS;
 } 
 
-/* ///////////////////////////////////////////////////////////////////////////
-// Routine:  Vgrid_readDX
-//
-// Author:   Nathan Baker
-/////////////////////////////////////////////////////////////////////////// */
-VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
-  const char *thost, const char *fname) {
+/**
+ * Load grid from an input file using sockets.
+ * @author Nathan Baker
+ */
+VPUBLIC int Vgrid_readDX(Vgrid *thee, 
+                         const char *iodev, 
+                         const char *iofmt,
+                         const char *thost,
+                         const char *fname
+                        ) {
 
-    int i, j, k, itmp, u;
+    int i, 
+        j,
+        k, 
+        itmp, 
+        u;
     double dtmp;
     char tok[VMAX_BUFSIZE];
     Vio *sock;
@@ -754,7 +768,7 @@ VPUBLIC int Vgrid_readDX(Vgrid *thee, const char *iodev, const char *iofmt,
     Vnm_print(0, "Vgrid_readDX:  allocating %d x %d x %d doubles for storage\n",
       thee->nx, thee->ny, thee->nz);
     thee->data = VNULL;
-    thee->data = Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
+    thee->data = (double*)Vmem_malloc(thee->mem, (thee->nx)*(thee->ny)*(thee->nz), 
       sizeof(double));
     if (thee->data == VNULL) {
         Vnm_print(2, "Vgrid_readDX:  Unable to allocate space for data!\n");

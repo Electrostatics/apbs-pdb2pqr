@@ -8,7 +8,7 @@
  *  @brief    Contains declarations for class Vstring
  *  @version  $Id$
  *  @author   Nathan A. Baker
- *  
+ *
  *  @attention
  *  @verbatim
  *
@@ -30,15 +30,31 @@
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * -  Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * - Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
+ *
+ * - Neither the name of Washington University in St. Louis nor the names of its
+ * contributors may be used to endorse or promote products derived from this
+ * software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * Neither the name of the developer nor the names of its contributors may be 
  * used to endorse or promote products derived from this software without 
@@ -86,5 +102,16 @@ VEXTERNC int Vstring_strcasecmp(const char *s1, const char *s2);
  *  @return  1 if the entire string is an integer, 0 if otherwise.
  */
 VEXTERNC int Vstring_isdigit(const char *tok);
+
+/** Creates a wrapped and indented string from an input string
+ *  @author Tucker Beck
+ *  @ingroup Vstring
+ *  @note    This function allocates a new string, so be sure to free it!
+ */
+VEXTERNC char* Vstring_wrappedtext(
+		const char* str,  /**< The input string to wrap and indent          */
+		int right_margin, /**< The number of characters to the right margin */
+		int left_padding  /**< The number of characters in the left indent  */
+		);
 
 #endif    /* ifndef _VSTRING_H_ */

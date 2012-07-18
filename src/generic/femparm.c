@@ -68,14 +68,16 @@ VPUBLIC FEMparm* FEMparm_ctor(FEMparm_CalcType type) {
 
     /* Set up the structure */
     FEMparm *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(FEMparm));
+    thee = (FEMparm*)Vmem_malloc(VNULL, 1, sizeof(FEMparm));
     VASSERT( thee != VNULL);
     VASSERT( FEMparm_ctor2(thee, type) );
 
     return thee;
 }
 
-VPUBLIC int FEMparm_ctor2(FEMparm *thee, FEMparm_CalcType type) {
+VPUBLIC int FEMparm_ctor2(FEMparm *thee,
+                          FEMparm_CalcType type
+                          ) {
 
     if (thee == VNULL) return 0;
 
@@ -193,7 +195,9 @@ VPUBLIC int FEMparm_check(FEMparm *thee) {
     return rc;
 }
 
-VPRIVATE Vrc_Codes FEMparm_parseDOMAINLENGTH(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseDOMAINLENGTH(FEMparm *thee,
+                                             Vio *sock
+                                             ) {
 
     int i;
     double tf;
@@ -216,7 +220,9 @@ VERROR1:
 
 }
 
-VPRIVATE Vrc_Codes FEMparm_parseETOL(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseETOL(FEMparm *thee,
+                                     Vio *sock
+                                     ) {
 
     double tf;
     char tok[VMAX_BUFSIZE];
@@ -237,7 +243,9 @@ VERROR1:
 
 }
 
-VPRIVATE Vrc_Codes FEMparm_parseEKEY(FEMparm *thee, Vio *sock) {
+VPRIVATE Vrc_Codes FEMparm_parseEKEY(FEMparm *thee,
+                                     Vio *sock
+                                     ) {
 
     char tok[VMAX_BUFSIZE];
     Vrc_Codes vrc = VRC_FAILURE;
@@ -425,8 +433,8 @@ VERROR1:
 VPUBLIC Vrc_Codes FEMparm_parseToken(FEMparm *thee, char tok[VMAX_BUFSIZE],
   Vio *sock) {
 
-    int i, ti;
-    double tf;
+    //int i, ti; // gcc says unused
+    //double tf; // gcc says unused
 
     if (thee == VNULL) {
         Vnm_print(2, "parseFE:  got NULL thee!\n");

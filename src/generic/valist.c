@@ -140,7 +140,7 @@ VPUBLIC Valist* Valist_ctor() {
 
     /* Set up the structure */
     Valist *thee = VNULL;
-    thee = Vmem_malloc(VNULL, 1, sizeof(Valist));
+    thee = (Valist*)Vmem_malloc(VNULL, 1, sizeof(Valist));
     if ( thee == VNULL) {
 		Vnm_print(2, "Valist_ctor:  Got NULL pointer when constructing the atom list object!\n");
 		VASSERT(0);
@@ -442,7 +442,7 @@ VPRIVATE Vatom* Valist_getAtomStorage(
         /* Double the storage space */
         oldLength = *pnlist;
         newLength = 2*oldLength;
-        newList = Vmem_malloc(thee->vmem, newLength, sizeof(Vatom));
+        newList = (Vatom*)Vmem_malloc(thee->vmem, newLength, sizeof(Vatom));
         oldList = *plist;
 
         /* Check the allocation */
@@ -491,7 +491,7 @@ VPRIVATE Vrc_Codes Valist_setAtomArray(Valist *thee,
 
     /* Allocate necessary space */
     thee->number = 0;
-    thee->atoms = Vmem_malloc(thee->vmem, natoms, sizeof(Vatom));
+    thee->atoms = (Vatom*)Vmem_malloc(thee->vmem, natoms, sizeof(Vatom));
     if (thee->atoms == VNULL) {
         Vnm_print(2, "Valist_readPDB:  Unable to allocate space for %d (Vatom)s!\n", 
                 natoms);
@@ -541,7 +541,7 @@ VPUBLIC Vrc_Codes Valist_readPDB(Valist *thee, Vparam *param, Vio *sock) {
 
     /* Allocate some initial space for the atoms */
     nlist = 200;
-    atoms = Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
+    atoms = (Vatom*)Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
 
     natoms = 0;
     /* Read until we run out of lines */
@@ -636,7 +636,7 @@ VPUBLIC Vrc_Codes Valist_readPQR(Valist *thee, Vparam *params, Vio *sock) {
 
     /* Allocate some initial space for the atoms */
     nlist = 200;
-    atoms = Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
+    atoms = (Vatom*)Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
 	
 	/* Check if we are using a parameter file or not */
 	if(params != VNULL) use_params = 1;
@@ -737,7 +737,7 @@ VPUBLIC Vrc_Codes Valist_readXML(Valist *thee, Vparam *params, Vio *sock) {
 
     /* Allocate some initial space for the atoms */
     nlist = 200;
-    atoms = Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
+    atoms = (Vatom*)Vmem_malloc(thee->vmem, nlist, sizeof(Vatom));
 
     /* Initialize some variables */
     natoms = 0;

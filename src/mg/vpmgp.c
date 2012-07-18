@@ -80,7 +80,7 @@ VPUBLIC Vpmgp* Vpmgp_ctor(MGparm *mgparm) {
     Vpmgp *thee = VNULL;
 
     /* Set up the structure */
-    thee = Vmem_malloc(VNULL, 1, sizeof(Vpmgp) );
+    thee = (Vpmgp*)Vmem_malloc(VNULL, 1, sizeof(Vpmgp) );
     VASSERT( thee != VNULL);
     VASSERT(Vpmgp_ctor2(thee,mgparm));
 
@@ -293,7 +293,7 @@ VPUBLIC void Vpmgp_size(
 	thee->niwk = thee->n_iz + thee->n_ipc;
 }
 
-VPRIVATE int coarsenThis(nOld) {
+VPRIVATE int coarsenThis(int nOld) {
 
 	int nOut;
 
