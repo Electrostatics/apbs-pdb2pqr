@@ -1,18 +1,9 @@
 
-<<<<<<< .working
-# libtool (GNU libtool) 2.4
-=======
 # libtool (GNU libtool) 2.4.2
->>>>>>> .merge-right.r1748
 # Written by Gordon Matzigkeit <gord@gnu.ai.mit.edu>, 1996
 
-<<<<<<< .working
-# Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006,
-# 2007, 2008, 2009, 2010 Free Software Foundation, Inc.
-=======
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005, 2006,
 # 2007, 2008, 2009, 2010, 2011 Free Software Foundation, Inc.
->>>>>>> .merge-right.r1748
 # This is free software; see the source for copying conditions.  There is NO
 # warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
@@ -41,22 +32,6 @@
 #
 # Provide generalized library-building support services.
 #
-<<<<<<< .working
-#       --config             show all configuration variables
-#       --debug              enable verbose shell tracing
-#   -n, --dry-run            display commands without modifying any files
-#       --features           display basic configuration information and exit
-#       --mode=MODE          use operation mode MODE
-#       --preserve-dup-deps  don't remove duplicate dependency libraries
-#       --quiet, --silent    don't print informational messages
-#       --no-quiet, --no-silent
-#                            print informational messages (default)
-#       --tag=TAG            use configuration variables from tag TAG
-#   -v, --verbose            print more informational messages than default
-#       --no-verbose         don't print the extra informational messages
-#       --version            print version information
-#   -h, --help, --help-all   print short, long, or detailed help message
-=======
 #       --config             show all configuration variables
 #       --debug              enable verbose shell tracing
 #   -n, --dry-run            display commands without modifying any files
@@ -72,7 +47,6 @@
 #       --no-verbose         don't print the extra informational messages
 #       --version            print version information
 #   -h, --help, --help-all   print short, long, or detailed help message
->>>>>>> .merge-right.r1748
 #
 # MODE must be one of the following:
 #
@@ -91,16 +65,6 @@
 # When reporting a bug, please describe a test case to reproduce it and
 # include the following information:
 #
-<<<<<<< .working
-#         host-triplet:	$host
-#         shell:		$SHELL
-#         compiler:		$LTCC
-#         compiler flags:		$LTCFLAGS
-#         linker:		$LD (gnu? $with_gnu_ld)
-#         $progname:	(GNU libtool) 2.4 Debian-2.4-2ubuntu1
-#         automake:	$automake_version
-#         autoconf:	$autoconf_version
-=======
 #         host-triplet:	$host
 #         shell:		$SHELL
 #         compiler:		$LTCC
@@ -109,7 +73,6 @@
 #         $progname:	(GNU libtool) 2.4.2 Debian-2.4.2-1ubuntu1
 #         automake:	$automake_version
 #         autoconf:	$autoconf_version
->>>>>>> .merge-right.r1748
 #
 # Report bugs to <bug-libtool@gnu.org>.
 # GNU libtool home page: <http://www.gnu.org/software/libtool/>.
@@ -117,17 +80,9 @@
 
 PROGRAM=libtool
 PACKAGE=libtool
-<<<<<<< .working
-VERSION="2.4 Debian-2.4-2ubuntu1"
-=======
 VERSION="2.4.2 Debian-2.4.2-1ubuntu1"
->>>>>>> .merge-right.r1748
 TIMESTAMP=""
-<<<<<<< .working
-package_revision=1.3293
-=======
 package_revision=1.3337
->>>>>>> .merge-right.r1748
 
 # Be Bourne compatible
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -181,15 +136,7 @@ progpath="$0"
 
 
 : ${CP="cp -f"}
-<<<<<<< .working
 test "${ECHO+set}" = set || ECHO=${as_echo-'printf %s\n'}
-: ${EGREP="/bin/grep -E"}
-: ${FGREP="/bin/grep -F"}
-: ${GREP="/bin/grep"}
-: ${LN_S="ln -s"}
-=======
-test "${ECHO+set}" = set || ECHO=${as_echo-'printf %s\n'}
->>>>>>> .merge-right.r1748
 : ${MAKE="make"}
 : ${MKDIR="mkdir"}
 : ${MV="mv -f"}
@@ -1063,56 +1010,6 @@ _LT_EOF
   fi
 }
 
-<<<<<<< .working
-
-# Shorthand for --mode=foo, only valid as the first argument
-case $1 in
-clean|clea|cle|cl)
-  shift; set dummy --mode clean ${1+"$@"}; shift
-  ;;
-compile|compil|compi|comp|com|co|c)
-  shift; set dummy --mode compile ${1+"$@"}; shift
-  ;;
-execute|execut|execu|exec|exe|ex|e)
-  shift; set dummy --mode execute ${1+"$@"}; shift
-  ;;
-finish|finis|fini|fin|fi|f)
-  shift; set dummy --mode finish ${1+"$@"}; shift
-  ;;
-install|instal|insta|inst|ins|in|i)
-  shift; set dummy --mode install ${1+"$@"}; shift
-  ;;
-link|lin|li|l)
-  shift; set dummy --mode link ${1+"$@"}; shift
-  ;;
-uninstall|uninstal|uninsta|uninst|unins|unin|uni|un|u)
-  shift; set dummy --mode uninstall ${1+"$@"}; shift
-  ;;
-esac
-
-
-
-# Option defaults:
-opt_debug=:
-opt_dry_run=false
-opt_config=false
-opt_preserve_dup_deps=false
-opt_features=false
-opt_finish=false
-opt_help=false
-opt_help_all=false
-opt_silent=:
-opt_verbose=:
-opt_silent=false
-opt_verbose=false
-
-
-# Parse options once, thoroughly.  This comes as soon as possible in the
-# script to make things like `--version' happen as quickly as we can.
-{
-  # this just eases exit handling
-  while test $# -gt 0; do
-=======
 
 # Shorthand for --mode=foo, only valid as the first argument
 case $1 in
@@ -1162,7 +1059,6 @@ opt_verbose=false
 {
   # this just eases exit handling
   while test $# -gt 0; do
->>>>>>> .merge-right.r1748
     opt="$1"
     shift
     case $opt in
@@ -1221,28 +1117,6 @@ esac
 			opt_silent=false
 func_append preserve_args " $opt"
 			;;
-<<<<<<< .working
-      --no-verbose)
-			opt_verbose=false
-func_append preserve_args " $opt"
-			;;
-      --silent|--quiet)
-			opt_silent=:
-func_append preserve_args " $opt"
-        opt_verbose=false
-			;;
-      --verbose|-v)
-			opt_verbose=:
-func_append preserve_args " $opt"
-opt_silent=false
-			;;
-      --tag)
-			test $# = 0 && func_missing_arg $opt && break
-			optarg="$1"
-			opt_tag="$optarg"
-func_append preserve_args " $opt $optarg"
-func_enable_tag "$optarg"
-=======
       --no-warning|--no-warn)
 			opt_warning=false
 func_append preserve_args " $opt"
@@ -1267,7 +1141,6 @@ opt_silent=false
 			opt_tag="$optarg"
 func_append preserve_args " $opt $optarg"
 func_enable_tag "$optarg"
->>>>>>> .merge-right.r1748
 			shift
 			;;
 
@@ -2187,11 +2060,7 @@ func_mode_compile ()
     *.[cCFSifmso] | \
     *.ada | *.adb | *.ads | *.asm | \
     *.c++ | *.cc | *.ii | *.class | *.cpp | *.cxx | \
-<<<<<<< .working
-    *.[fF][09]? | *.for | *.java | *.obj | *.sx | *.cu | *.cup)
-=======
     *.[fF][09]? | *.for | *.java | *.go | *.obj | *.sx | *.cu | *.cup)
->>>>>>> .merge-right.r1748
       func_xform "$libobj"
       libobj=$func_xform_result
       ;;
@@ -4096,42 +3965,6 @@ func_exec_program_core ()
 "
     ;;
 
-<<<<<<< .working
-  *)
-    $ECHO "\
-      if test -n \"\$lt_option_debug\"; then
-        \$ECHO \"${outputname}:${output}:\${LINENO}: newargv[0]: \$progdir/\$program\" 1>&2
-        func_lt_dump_args \${1+\"\$@\"} 1>&2
-      fi
-      exec \"\$progdir/\$program\" \${1+\"\$@\"}
-"
-    ;;
-  esac
-  $ECHO "\
-      \$ECHO \"\$0: cannot exec \$program \$*\" 1>&2
-      exit 1
-}
-
-# A function to encapsulate launching the target application
-# Strips options in the --lt-* namespace from \$@ and
-# launches target application with the remaining arguments.
-func_exec_program ()
-{
-  for lt_wr_arg
-  do
-    case \$lt_wr_arg in
-    --lt-*) ;;
-    *) set x \"\$@\" \"\$lt_wr_arg\"; shift;;
-    esac
-    shift
-  done
-  func_exec_program_core \${1+\"\$@\"}
-}
-
-  # Parse options
-  func_parse_lt_options \"\$0\" \${1+\"\$@\"}
-
-=======
   *)
     $ECHO "\
       if test -n \"\$lt_option_debug\"; then
@@ -4169,7 +4002,6 @@ func_exec_program ()
   # Parse options
   func_parse_lt_options \"\$0\" \${1+\"\$@\"}
 
->>>>>>> .merge-right.r1748
   # Find the directory that this script lives in.
   thisdir=\`\$ECHO \"\$file\" | $SED 's%/[^/]*$%%'\`
   test \"x\$thisdir\" = \"x\$file\" && thisdir=.
@@ -5223,20 +5055,6 @@ prepare_spawn (char **argv)
   return new_argv;
 }
 EOF
-<<<<<<< .working
-		;;
-	    esac
-
-            cat <<"EOF"
-void lt_dump_script (FILE* f)
-{
-EOF
-	    func_emit_wrapper yes |
-              $SED -e 's/\([\\"]\)/\\\1/g' \
-	           -e 's/^/  fputs ("/' -e 's/$/\\n", f);/'
-
-            cat <<"EOF"
-=======
 		;;
 	    esac
 
@@ -5255,7 +5073,6 @@ s/\([^\n]*\).*/  fputs ("\1", f);/p
 g
 D'
             cat <<"EOF"
->>>>>>> .merge-right.r1748
 }
 EOF
 }
@@ -5838,14 +5655,9 @@ func_mode_link ()
 	continue
 	;;
 
-<<<<<<< .working
-      -mt|-mthreads|-kthread|-Kthread|-pthread|-pthreads|--thread-safe|-threads)
-	func_append compiler_flags " $arg"
-=======
       -mt|-mthreads|-kthread|-Kthread|-pthread|-pthreads|--thread-safe \
       |-threads|-fopenmp|-openmp|-mp|-xopenmp|-omp|-qsmp=*)
 	func_append compiler_flags " $arg"
->>>>>>> .merge-right.r1748
 	func_append compile_command " $arg"
 	func_append finalize_command " $arg"
 	case "$new_inherited_linker_flags " in
@@ -8264,11 +8076,7 @@ EOF
 	    elif test -n "$runpath_var"; then
 	      case "$perm_rpath " in
 	      *" $libdir "*) ;;
-<<<<<<< .working
-	      *) func_apped perm_rpath " $libdir" ;;
-=======
 	      *) func_append perm_rpath " $libdir" ;;
->>>>>>> .merge-right.r1748
 	      esac
 	    fi
 	  done

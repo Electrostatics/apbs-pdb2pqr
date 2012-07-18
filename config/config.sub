@@ -1,19 +1,10 @@
 #! /bin/sh
 # Configuration validation subroutine script.
 #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-<<<<<<< .working
-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-#   2011 Free Software Foundation, Inc.
-=======
 #   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
 #   2011, 2012 Free Software Foundation, Inc.
->>>>>>> .merge-right.r1748
 
-<<<<<<< .working
-timestamp='2011-03-23'
-=======
 timestamp='2012-02-10'
->>>>>>> .merge-right.r1748
 
 # This file is (in principle) common to ALL GNU software.
 # The presence of a machine in this file suggests that SOME GNU software
@@ -83,13 +74,8 @@ version="\
 GNU config.sub ($timestamp)
 
 Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-<<<<<<< .working
-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free
-Software Foundation, Inc.
-=======
 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
 Free Software Foundation, Inc.
->>>>>>> .merge-right.r1748
 
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -327,19 +313,6 @@ case $basic_machine in
 	| z8k | z80)
 		basic_machine=$basic_machine-unknown
 		;;
-<<<<<<< .working
-	c54x)
-		basic_machine=tic54x-unknown
-		;;
-	c55x)
-		basic_machine=tic55x-unknown
-		;;
-	c6x)
-		basic_machine=tic6x-unknown
-		;;
-	m6811 | m68hc11 | m6812 | m68hc12 | picochip)
-		# Motorola 68HC11/12.
-=======
 	c54x)
 		basic_machine=tic54x-unknown
 		;;
@@ -350,7 +323,6 @@ case $basic_machine in
 		basic_machine=tic6x-unknown
 		;;
 	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | picochip)
->>>>>>> .merge-right.r1748
 		basic_machine=$basic_machine-unknown
 		os=-none
 		;;
@@ -360,20 +332,6 @@ case $basic_machine in
 		basic_machine=mt-unknown
 		;;
 
-<<<<<<< .working
-	strongarm | thumb | xscale)
-		basic_machine=arm-unknown
-		;;
-
-	xscaleeb)
-		basic_machine=armeb-unknown
-		;;
-
-	xscaleel)
-		basic_machine=armel-unknown
-		;;
-
-=======
 	strongarm | thumb | xscale)
 		basic_machine=arm-unknown
 		;;
@@ -389,7 +347,6 @@ case $basic_machine in
 		basic_machine=armel-unknown
 		;;
 
->>>>>>> .merge-right.r1748
 	# We use `pc' rather than `unknown'
 	# because (1) that's what they normally are, and
 	# (2) the word "unknown" tends to confuse beginning users.
@@ -1184,14 +1141,6 @@ case $basic_machine in
 		basic_machine=t90-cray
 		os=-unicos
 		;;
-<<<<<<< .working
-	# This must be matched before tile*.
-	tilegx*)
-		basic_machine=tilegx-unknown
-		os=-linux-gnu
-		;;
-=======
->>>>>>> .merge-right.r1748
 	tile*)
 		basic_machine=$basic_machine-unknown
 		os=-linux-gnu
@@ -1403,15 +1352,9 @@ case $os in
 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
 	      | -chorusos* | -chorusrdb* | -cegcc* \
-<<<<<<< .working
-	      | -cygwin* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
-	      | -mingw32* | -linux-gnu* | -linux-android* \
-	      | -linux-newlib* | -linux-uclibc* \
-=======
 	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
 	      | -mingw32* | -linux-gnu* | -linux-android* \
 	      | -linux-newlib* | -linux-uclibc* \
->>>>>>> .merge-right.r1748
 	      | -uxpv* | -beos* | -mpeix* | -udk* \
 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
 	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
