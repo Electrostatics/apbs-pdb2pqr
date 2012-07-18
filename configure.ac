@@ -1,7 +1,7 @@
 dnl ##########################################################################
 dnl APBS -- Adaptive Poisson-Boltzmann Solver
 dnl
-dnl Nathan A. Baker (nathan.baker@pnnl.gov)
+dnl Nathan A. Baker (nathan.baker@pnl.gov)
 dnl Pacific Northwest National Laboratory
 dnl
 dnl Additional contributing authors listed in the code documentation.
@@ -323,7 +323,7 @@ if test x"$fetk_path" != "xno" -a -n "$fetk_path"; then
     AC_MSG_RESULT([${fetk_path}])
     USE_FETK="yes"
 else
-	AC_MSG_RESULT([no])
+    AC_MSG_RESULT([no])
 fi
 
 dnl # ---------------------------
@@ -557,7 +557,7 @@ if test x"$enable_python" != "xno"; then
 						PY_LINKFLAGS="$CFLAGS -static-libcxa -Wl,-static,/usr/lib/libc.so,/usr/lib/libm.so"
 					else
 						AC_MSG_WARN([Could not find libc.so or libm.so in /usr/lib])
-				fi
+					fi
 				fi
 			fi;;
 	esac
@@ -623,7 +623,7 @@ AC_SUBST(SITEPKGS,[$SITEPKGS])
 dnl # ---------------------------
 dnl # BUILD MALOC IF NECESSARY
 dnl # ---------------------------
-if test -z "${USE_FETK_LIBRARY}";  then
+if test -z "${USE_FETK}";  then
 	AC_MSG_CHECKING([for --disable-maloc-rebuild])
 	AC_ARG_ENABLE(
 		[maloc-rebuild],
@@ -671,9 +671,6 @@ if test -z "${USE_FETK_LIBRARY}";  then
     maloc_library_path="${contrib_path}/lib"
     maloc_include_path="${contrib_path}/include"
 
-    maloc_library_path="${contrib_path}/lib"
-    maloc_include_path="${contrib_path}/include"
-	
 else
 
     maloc_library_path="${fetk_library_path}"
@@ -763,8 +760,6 @@ if test "x$with_readline" != "xno"; then
     else
         with_readline="yes"
     fi
-    
-    AC_MSG_RESULT([${with_readline}])
 
     AC_MSG_RESULT([${with_readline}])
 
@@ -782,14 +777,12 @@ if test "x$with_readline" != "xno"; then
         [],
         [AC_MSG_ERROR([Compatible readline library was not found.  Aborting])],
         [${readline_library_flag} ${ncurses_lib} ${math_lib}])
-        
+
     readline_lib="${readline_library_flag} -lreadline ${ncurses_lib} -lvf2c ${liberty_lib} ${socket_lib} ${nsl_lib} ${math_lib}"
 else
     AC_MSG_RESULT("no")
 fi
 AC_SUBST(readline_lib)
-
-
 
 
 
@@ -830,7 +823,7 @@ else
 fi
 
 
-    
+
 dnl # ----------------------------------------------------------------------
 dnl #                        Handle GAMER linkage
 dnl #                    Added by Tucker Beck  5/24/11
@@ -840,7 +833,7 @@ dnl # If enabled, use gamer mesh refinement.
 dnl #
 dnl # Note: Gamer must be enabled and fetk must not be disabled
 dnl # ----------------------------------------------------------------------
-    
+
 dnl # If FETk is disabled, disable GAMER
 if test "x$enable_fetk" == "xno"; then
     with_gamer="no"
@@ -863,11 +856,11 @@ dnl # First determine if gamer has been enabled
 if test "x${with_gamer}" != "xno"; then
 
     AC_MSG_RESULT([${with_gamer}])
-   
+
     AC_MSG_NOTICE([Checking for GAMER library availability])
-    
+
     AC_LANG_PUSH([C++])
-       
+
     dnl # Determine if the user specified a location for GAMER
     if test "x${with_gamer}" == "xyes"; then
         gamer_include_path="${fetk_include_path}"
@@ -876,10 +869,10 @@ if test "x${with_gamer}" != "xno"; then
         gamer_include_path="${with_gamer}/include"
         gamer_library_path="${with_gamer}/lib"
     fi
-    
+
     gamer_include_flag="-I${gamer_include_path}"
     gamer_library_flag="-L${gamer_library_path}"
-    
+
     dnl # Look for the GAMER header files.  Terminate if not found
     CPPFLAGS_SAVE=${CPPFLAGS}
     CPPFLAGS="-I${gamer_include_path}"
@@ -889,16 +882,17 @@ if test "x${with_gamer}" != "xno"; then
         []
         )
     CPPFLAGS=${CPPFLAGS_SAVE}
-    
-    dnl # Look for the GAMER library.  Terminate if not found   
+
+    dnl # Look for the GAMER library.  Terminate if not found
     AC_CHECK_LIB(gamer, gamer_link,
         [true],
         AC_MSG_ERROR([gamer library not found at ${gamer_library_path}]),
         [${gamer_library_flag} ${math_lib} -ltetgen])
-        
+
     AC_LANG_POP([C++])
-    
-    gamer_lib="${gamer_library_flag} -lgamer ${math_lib} -ltetgen"
+
+    gamer_lib="${gamer_library_flag} -lgamer ${math_lib} -ltetgen -lncurses -lstdc++ -lmolmesh"
+    AC_DEFINE([HAVE_BIOM_H], [], [have fetk component GAMER])
 else
     AC_MSG_RESULT([no])
 fi
@@ -909,23 +903,24 @@ dnl # -----------------------
 dnl # Handle MC linkage
 dnl # -----------------------
 dnl # Setup temp LDFLAGS and look for MC library/header
-    
+
 mc_include_path=
 mc_include_flag=
 mc_library_path=
 mc_library_flag=
+punc_lib=" -lblas -lsuperlu -lumfpack -lmolmesh -lamd -lmc -lvf2c"
 mc_lib=""
-    
+
 dnl # If FETk is disabled, disable MC
 if test "x$enable_fetk" != "xno"; then
-    
+
     AC_LANG_PUSH([C++])
-    
+
     mc_include_path="${fetk_include_path}"
     mc_include_flag="-I${mc_include_path}"
     mc_library_path="${fetk_library_path}"
     mc_library_flag="-L${mc_library_path}"
-        
+
     CPPLAGS_SAVE=${CPPFLAGS};
     CPPFLAGS="-I${mc_include_path}"
     AC_CHECK_HEADER(
@@ -936,14 +931,14 @@ if test "x$enable_fetk" != "xno"; then
         )
     CPPLAGS=${CPPFLAGS_SAVE}
     LDFLAGS_SAVE=${LDFLAGS_SAVE}
-    
+
     AC_CHECK_LIB(
         [mc],
         [mc_link],
         [mc_library_found="yes"],
         [mc_library_found="no"],
         [${mc_library_flag} ${maloc_lib} ${punc_lib} ${gamer_lib}])
-        
+
     dnl # Enable the MC dependency only if both the headers and library was found
     if test "x${mc_include_found}" == "xyes" -a "x${mc_library_found}" == "xyes"; then
         AC_MSG_NOTICE([FEtk component MC found and enabled.])
@@ -951,26 +946,19 @@ if test "x$enable_fetk" != "xno"; then
         mc_lib="${mc_library_flag} -lmc ${maloc_lib} ${punc_lib} ${gamer_lib}"
     else
         AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
-    fi    
-    
-
-    dnl # Look for the GAMER library.  Terminate if not found
-    AC_CHECK_LIB(gamer, gamer_link,
-        [true],
-        AC_MSG_ERROR([gamer library not found at ${gamer_library_path}]),
-        [${gamer_library_flag} ${math_lib} -ltetgen])
+    fi
 
     AC_LANG_POP([C++])
 fi
 AC_SUBST(mc_lib)
 
-    
+
 
 dnl # -----------------------
 dnl # Handle MCX linkage
 dnl # -----------------------
 dnl # Setup temp LDFLAGS and look for MCX library/header
-    
+
 mcx_include_path=
 mcx_include_flag=
 mcx_library_path=
@@ -981,12 +969,12 @@ dnl # If FETk is disabled, disable MCX
 if test "x$enable_fetk" != "xno"; then
 
     AC_LANG_PUSH([C++])
-    
+
     mcx_include_path="${fetk_include_path}"
     mcx_include_flag="-I${mcx_include_path}"
     mcx_library_path="${fetk_library_path}"
     mcx_library_flag="-L${mcx_library_path}"
-            
+
     CPPLAGS_SAVE=${CPPFLAGS}
     CPPFLAGS="-I${mc_include_path}"
     AC_CHECK_HEADER(
@@ -996,14 +984,14 @@ if test "x$enable_fetk" != "xno"; then
         []
         )
     CPPLAGS=${CPPFLAGS_SAVE}
-    
+
     AC_CHECK_LIB(
         [mcx],
         [mcx_link],
         [mcx_library_found="yes"],
         [mcx_library_found="no"],
         [${mcx_library_flag} ${maloc_lib} ${punc_lib} ${gamer_lib}])
-        
+
     dnl # Enable the MCX dependency only if both the headers and library was found
     if test "x${mcx_include_found}" == "xyes" -a "x${mcx_library_found}" == "xyes"; then
         AC_MSG_NOTICE([FEtk component MCX found and enabled.])
@@ -1011,10 +999,9 @@ if test "x$enable_fetk" != "xno"; then
         AC_DEFINE([USE_HB], [], [use hierarchical basis method])
         mcx_lib="${mcx_library_flag} -lmcx ${maloc_lib} ${punc_lib} ${gamer_lib}"
     else
-<<<<<<< .mine        AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
-=======        AC_MSG_WARN([FEtk component MC not found:  finite element solver disabled.])
->>>>>>> .theirs    fi
-    
+        AC_MSG_WARN([FEtk component MCX not found:  hierarchical basis methods disabled.])
+    fi
+
     AC_LANG_POP([C++])
 fi
 AC_SUBST(mcx_lib)
@@ -1042,16 +1029,16 @@ AC_ARG_WITH(
     [],
     [with_efence=no]
     )
-        
+
 if test x"$with_efence" != "xno"; then
 
     AC_MSG_RESULT([${with_efence}])
-        
+
     if test "x${with_efence}" != "xyes"; then
         efence_library_path="${with_efence}"
         efence_library_flag="-L${efence_library_path}"
     fi
-    
+
     AC_CHECK_LIB(
        [efence],
        [malloc],
@@ -1059,9 +1046,9 @@ if test x"$with_efence" != "xno"; then
        AC_MSG_ERROR([Couldn't link with efence]),
        [${efence_library_flag}]
        )
-       
+
     efence_lib="${efence_library_flag} -lefence"
-    
+
 else
     AC_MSG_RESULT([no])
 fi
@@ -1084,7 +1071,9 @@ AC_MSG_RESULT([$enable_debug])
 if test "x$enable_debug" == "xyes"; then
     AC_DEFINE([DEBUG],[],[Debug Mode])
     CFLAGS="-g -Wall -O0"
-    FFLAGS="-g -O0"
+else
+    CFLAGS="-O2"
+
 fi
 
 
@@ -1104,9 +1093,7 @@ AC_MSG_RESULT([$enable_profiling])
 if test "x$enable_profiling" == "xyes"; then
     AC_DEFINE([DEBUG],[],[Debug Mode])
     CFLAGS="${CFLAGS} -pg"
-    FFLAGS="${FFLAGS} -pg"
 fi
-
 
 
 
@@ -1285,11 +1272,10 @@ fi
 dnl # -----------------------
 dnl # CHECK WHETHER YOU WANT TO DISABLE APBS MESSAGES
 dnl # -----------------------
-AC_MSG_CHECKING([for --enable-apbs-quiet])
+AC_MSG_CHECKING([for --enable-abps-quiet])
 AC_ARG_ENABLE(
-	[apbs-quiet],
-	AS_HELP_STRING([--enable-apb
-	s-quiet],[prevent APBS diagnostic messages from displaying to stdout]),,
+	[abps-quiet],
+	AS_HELP_STRING([--enable-abps-quiet],[prevent APBS diagnostic messages from displaying to stdout]),,
 	[enable_apbs_quiet=no]
 )
 if test x"$enable_apbs_quiet" != "xno"; then
