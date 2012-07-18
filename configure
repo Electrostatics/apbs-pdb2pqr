@@ -1465,8 +1465,7 @@ Optional Features:
 
   --disable-inline        disable inline functions (macros)
   --enable-tinker         include TINKER support
-  --enable-apb
-	s-quiet   prevent APBS diagnostic messages from displaying to
+  --enable-abps-quiet     prevent APBS diagnostic messages from displaying to
                           stdout
 
 Optional Packages:
@@ -15613,9 +15612,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-if test -z "$F77" || test "X$F77" = "Xno"; then
-  _lt_disable_F77=yes
-fi
 
 
 
@@ -16612,10 +16608,10 @@ fi
 			PY_LDFLAGS="-lm -lM77 -lsunmath"
 			;;
 		darwin**)
-           PY_SHARED="-shared"
-           PY_LINKFLAGS="-Wl,-framework -Wl,Python"
-           PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
-           ;;
+                       PY_SHARED="-shared"
+                       PY_LINKFLAGS="-Wl,-framework -Wl,Python"
+                       PY_LDFLAGS="-Wl,-framework -Wl,Accelerate"
+                       ;;
 		mingw*)
 			PY_PREFIX=`$py_path -c 'import sys, string; a=sys.prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
 			PY_EXEC_PREFIX=`$py_path -c 'import sys, string; a=sys.exec_prefix; b=string.replace(a,"c:\\\","/c/"); print b;'`
@@ -16863,7 +16859,7 @@ sed -e 's%@MAXMEM@%'${MAXMEM}'%' \
 SITEPKGS=$SITEPKGS
 
 
-if test -z "${USE_FETK_LIBRARY}";  then
+if test -z "${USE_FETK}";  then
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --disable-maloc-rebuild" >&5
 $as_echo_n "checking for --disable-maloc-rebuild... " >&6; }
 	# Check whether --enable-maloc-rebuild was given.
@@ -17961,11 +17957,11 @@ else
 $as_echo "no" >&6; }
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-apbs-quiet" >&5
-$as_echo_n "checking for --enable-apbs-quiet... " >&6; }
-# Check whether --enable-apbs-quiet was given.
-if test "${enable_apbs_quiet+set}" = set; then :
-  enableval=$enable_apbs_quiet;
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for --enable-abps-quiet" >&5
+$as_echo_n "checking for --enable-abps-quiet... " >&6; }
+# Check whether --enable-abps-quiet was given.
+if test "${enable_abps_quiet+set}" = set; then :
+  enableval=$enable_abps_quiet;
 else
   enable_apbs_quiet=no
 
@@ -19134,13 +19130,9 @@ postdeps \
 compiler_lib_search_path \
 LD_CXX \
 reload_flag_CXX \
-reload_flag_CXX \
-reload_flag_F77 \
 compiler_CXX \
 lt_prog_compiler_no_builtin_flag_CXX \
 lt_prog_compiler_pic_CXX \
-lt_prog_compiler_pic_CXX \
-lt_prog_compiler_pic_F77 \
 lt_prog_compiler_wl_CXX \
 lt_prog_compiler_static_CXX \
 lt_cv_prog_compiler_c_o_CXX \

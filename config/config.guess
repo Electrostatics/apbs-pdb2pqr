@@ -1,19 +1,10 @@
 #! /bin/sh
 # Attempt to guess a canonical system name.
 #   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
-<<<<<<< .working
-#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-#   2011 Free Software Foundation, Inc.
-=======
 #   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
 #   2011, 2012 Free Software Foundation, Inc.
->>>>>>> .merge-right.r1748
 
-<<<<<<< .working
-timestamp='2011-05-11'
-=======
 timestamp='2012-02-10'
->>>>>>> .merge-right.r1748
 
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
@@ -64,13 +55,8 @@ GNU config.guess ($timestamp)
 
 Originally written by Per Bothner.
 Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
-<<<<<<< .working
-2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Free
-Software Foundation, Inc.
-=======
 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
 Free Software Foundation, Inc.
->>>>>>> .merge-right.r1748
 
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
@@ -922,11 +908,7 @@ EOF
 	echo ${UNAME_MACHINE}-axis-linux-gnu
 	exit ;;
     frv:Linux:*:*)
-<<<<<<< .working
-	echo frv-unknown-linux-gnu
-=======
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
->>>>>>> .merge-right.r1748
 	exit ;;
     hexagon:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
@@ -1005,15 +987,9 @@ EOF
     sparc:Linux:*:* | sparc64:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
 	exit ;;
-<<<<<<< .working
-    tile*:Linux:*:*)
-	echo ${UNAME_MACHINE}-tilera-linux-gnu
-	exit ;;
-=======
     tile*:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
 	exit ;;
->>>>>>> .merge-right.r1748
     vax:Linux:*:*)
 	echo ${UNAME_MACHINE}-dec-linux-gnu
 	exit ;;
