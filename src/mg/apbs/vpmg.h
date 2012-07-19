@@ -21,7 +21,7 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
  * Pacific Northwest National Laboratory, operated by Battelle Memorial 
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
@@ -103,8 +103,7 @@
 
 
 
-/** @def VPMGMAXPART The maximum number of partitions the
- *                   mesh can be divided into
+/** @def VPMGMAXPART The maximum number of partitions the mesh can be divided into
  *  @ingroup Vpmg
  */
 #define VPMGMAXPART 2000

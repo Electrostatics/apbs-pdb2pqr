@@ -14,7 +14,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
  *
@@ -111,7 +111,7 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
 		double *a1cf, double *a2cf, double *a3cf,
 		double *ccf,  double *fcf) {
 
-	int i, j, k;            // @todo: Doc
+	int i, j, k;            // @todo Document this function
 
 	/** @note:  The following variables are temporaries that are not necessarily
 	 *          all needed as explicitly different variables.  They do not
@@ -122,34 +122,34 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
 	 *          homogeneous temporaries named using unclear abbreviations
 	 */
 
-	// @todo: Doc
+	
 	int ike, jke, kke;
 
-	// @todo: Doc
+	
 	int nxm1, nym1, nzm1;
 
-	// @todo: Doc
+	
 	double hx, hy, hz;
 
-    // @todo: Doc
+    
 	double hxm1, hym1, hzm1;
 
-	double coef_fc;   // @todo: Doc
+	double coef_fc;   
 
-	double bc_cond_e; // @todo: Doc
-	double bc_cond_w; // @todo: Doc
-	double bc_cond_n; // @todo: Doc
-	double bc_cond_s; // @todo: Doc
-	double bc_cond_u; // @todo: Doc
-	double bc_cond_d; // @todo: Doc
-    double coef_oE;   // @todo: Doc
-    double coef_oN;   // @todo: Doc
-    double coef_uC;   // @todo: Doc
-    double coef_oEm1; // @todo: Doc
-    double coef_oNm1; // @todo: Doc
-    double coef_uCm1; // @todo: Doc
+	double bc_cond_e; 
+	double bc_cond_w; 
+	double bc_cond_n; 
+	double bc_cond_s; 
+	double bc_cond_u; 
+	double bc_cond_d; 
+    double coef_oE;   
+    double coef_oN;   
+    double coef_uC;   
+    double coef_oEm1; 
+    double coef_oNm1; 
+    double coef_uCm1; 
 
-    double diag;      // @todo: Doc
+    double diag;      
 
     MAT3(  fc, *nx, *ny, *nz);
     MAT3( fcf, *nx, *ny, *nz);
