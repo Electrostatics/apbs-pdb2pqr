@@ -14,7 +14,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
  *
@@ -58,47 +58,47 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
         double* ccf, double* fcf, double* tcf) {
 
     // The following variables will be returned from mgsz
-    int nxc;    // @todo: Doc
-    int nyc;    // @todo: Doc
-    int nzc;    // @todo: Doc
-    int nf;     // @todo: Doc
-    int nc;     // @todo: Doc
-    int narr;   // @todo: Doc
-    int narrc;  // @todo: Doc
-    int n_rpc;  // @todo: Doc
-    int n_iz;   // @todo: Doc
-    int n_ipc;  // @todo: Doc
-    int iretot; // @todo: Doc
-    int iintot; // @todo: Doc
+    int nxc;    // @todo Document this function
+    int nyc;    
+    int nzc;    
+    int nf;     
+    int nc;     
+    int narr;   
+    int narrc;  
+    int n_rpc;  
+    int n_iz;   
+    int n_ipc;  
+    int iretot; 
+    int iintot; 
 
     // Miscellaneous variables
-    int nrwk;   // @todo: Doc
-    int niwk;   // @todo: Doc
-    int nx;     // @todo: Doc
-    int ny;     // @todo: Doc
-    int nz;     // @todo: Doc
-    int nlev;   // @todo: Doc
-    int ierror; // @todo: Doc
-    int mxlv;   // @todo: Doc
-    int mgcoar; // @todo: Doc
-    int mgdisc; // @todo: Doc
-    int mgsolv; // @todo: Doc
-    int k_iz;   // @todo: Doc
-    int k_ipc;  // @todo: Doc
-    int k_rpc;  // @todo: Doc
-    int k_ac;   // @todo: Doc
-    int k_cc;   // @todo: Doc
-    int k_fc;   // @todo: Doc
-    int k_pc;   // @todo: Doc
+    int nrwk;   
+    int niwk;   
+    int nx;     
+    int ny;     
+    int nz;     
+    int nlev;   
+    int ierror; 
+    int mxlv;   
+    int mgcoar; 
+    int mgdisc; 
+    int mgsolv; 
+    int k_iz;   
+    int k_ipc;  
+    int k_rpc;  
+    int k_ac;   
+    int k_cc;   
+    int k_fc;   
+    int k_pc;   
 
     // Utility pointers to help in passing values
-    int *iz;     // @todo: Doc
-    int *ipc;    // @todo: Doc
-    double *rpc; // @todo: Doc
-    double *pc;  // @todo: Doc
-    double *ac;  // @todo: Doc
-    double *cc;  // @todo: Doc
-    double *fc;  // @todo: Doc
+    int *iz;     
+    int *ipc;    
+    double *rpc; 
+    double *pc;  
+    double *ac;  
+    double *cc;  
+    double *fc;  
 
     ANNOUNCE_FUNCTION;
 
@@ -197,60 +197,60 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
         double *ccf, double *fcf, double *tcf) {
 
 	// Miscellaneous Variables
-	int mgkey;      // @todo: Doc
-	int nlev;       // @todo: Doc
-	int itmax;      // @todo: Doc
-	int iok;        // @todo: Doc
-	int iinfo;      // @todo: Doc
-	int istop;      // @todo: Doc
-	int ipkey;      // @todo: Doc
-	int nu1;        // @todo: Doc
-	int nu2;        // @todo: Doc
-	int ilev;       // @todo: Doc
-	int ido;        // @todo: Doc
-	int iters;      // @todo: Doc
-	int ierror;     // @todo: Doc
-	int nlev_real;  // @todo: Doc
-	int ibound;     // @todo: Doc
-	int mgprol;     // @todo: Doc
-	int mgcoar;     // @todo: Doc
-	int mgsolv;     // @todo: Doc
-	int mgdisc;     // @todo: Doc
-	int mgsmoo;     // @todo: Doc
-	int iperf;      // @todo: Doc
-	int mode;       // @todo: Doc
-	double epsiln;  // @todo: Doc
-	double epsmac;  // @todo: Doc
-	double errtol;  // @todo: Doc
-	double omegal;  // @todo: Doc
-	double omegan;  // @todo: Doc
-	double bf;      // @todo: Doc
-	double oh;      // @todo: Doc
-	double tsetupf; // @todo: Doc
-	double tsetupc; // @todo: Doc
-	double tsolve;  // @todo: Doc
+	int mgkey;      // @todo Document this function
+	int nlev;       
+	int itmax;      
+	int iok;        
+	int iinfo;      
+	int istop;      
+	int ipkey;      
+	int nu1;        
+	int nu2;        
+	int ilev;       
+	int ido;        
+	int iters;      
+	int ierror;     
+	int nlev_real;  
+	int ibound;     
+	int mgprol;     
+	int mgcoar;     
+	int mgsolv;     
+	int mgdisc;     
+	int mgsmoo;     
+	int iperf;      
+	int mode;       
+	double epsiln;  
+	double epsmac;  
+	double errtol;  
+	double omegal;  
+	double omegan;  
+	double bf;      
+	double oh;      
+	double tsetupf; 
+	double tsetupc; 
+	double tsolve;  
 
 
 
 	// More miscellaneous variables
-	int itmax_p;        // @todo: Doc
-	int iters_p;        // @todo: Doc
-	int iok_p;          // @todo: Doc
-	int iinfo_p;        // @todo: Doc
-	double errtol_p;    // @todo: Doc
-	double rho_p;       // @todo: Doc
-	double rho_min;     // @todo: Doc
-	double rho_max;     // @todo: Doc
-	double rho_min_mod; // @todo: Doc
-	double rho_max_mod; // @todo: Doc
-	int nxf;            // @todo: Doc
-	int nyf;            // @todo: Doc
-	int nzf;            // @todo: Doc
-	int nxc;            // @todo: Doc
-	int nyc;            // @todo: Doc
-	int nzc;            // @todo: Doc
-	int level;          // @todo: Doc
-	int nlevd;          // @todo: Doc
+	int itmax_p;        
+	int iters_p;        
+	int iok_p;          
+	int iinfo_p;        
+	double errtol_p;    
+	double rho_p;       
+	double rho_min;     
+	double rho_max;     
+	double rho_min_mod; 
+	double rho_max_mod; 
+	int nxf;            
+	int nyf;            
+	int nzf;            
+	int nxc;            
+	int nyc;            
+	int nzc;            
+	int level;          
+	int nlevd;          
 
 
 

@@ -14,7 +14,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
  *
@@ -98,8 +98,7 @@ VPUBLIC void Vmypdefinitsmpbe(int *tnion, double *tcharge, double *tsconc,
     ANNOUNCE_FUNCTION;
 
     VABORT_MSG0("Not tested");
-    /// @todo  Determine why this is commented out
-    // nion = *tnion;
+
     if (*tnion > 3) {
             Vnm_print(2, "SMPBE: modified theory handles only three ion species.\n");
             Vnm_print(2, "       Ignoring the rest of the ions!\n");
@@ -136,16 +135,16 @@ VPUBLIC void Vc_vec(double *coef, double *uin, double *uout,
 VPUBLIC void Vc_vecpmg(double *coef, double *uin, double *uout,
         int *nx, int *ny, int *nz, int *ipkey) {
 
-    double zcf2;      /// @todo  Document
-    double zu2;       /// @todo  Document
-    double am_zero;   /// @todo  Document
-    double am_neg;    /// @todo  Document
-    double am_pos;    /// @todo  Document
-    double argument;  /// @todo  Document
-    int ichopped;     /// @todo  Document
-    int ichopped_neg; /// @todo  Document
-    int ichopped_pos; /// @todo  Document
-    int iion;         /// @todo  Document
+    double zcf2;      /// @todo  Document this function!
+    double zu2;       
+    double am_zero;   
+    double am_neg;    
+    double am_pos;   
+    double argument;  
+    int ichopped;     
+    int ichopped_neg; 
+    int ichopped_pos; 
+    int iion;         
 
     int n, i;
 

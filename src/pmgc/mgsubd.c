@@ -14,7 +14,7 @@
  *
  * Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the Pacific Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific Northwest Division for the U.S. Department Energy.  Portions Copyright (c) 2002-2010, Washington University in St. Louis.  Portions Copyright (c) 2002-2010, Nathan A. Baker.  Portions Copyright (c) 1999-2002, The Regents of the University of California. Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
  *
@@ -61,15 +61,15 @@ VPUBLIC void Vbuildops(
         double *ccf, double *fcf, double *tcf
         ) {
 
-    int lev;    // @todo: doc
-    int nxx;    // @todo: doc
-    int nyy;    // @todo: doc
-    int nzz;    // @todo: doc
-    int nxold;  // @todo: doc
-    int nyold;  // @todo: doc
-    int nzold;  // @todo: doc
-    int numdia; // @todo: doc
-    int key;    // @todo: doc
+    int lev;    // @todo Document this function
+    int nxx;    
+    int nyy;    
+    int nzz;    
+    int nxold;  
+    int nyold;  
+    int nzold;  
+    int numdia; 
+    int key;    
     int i;      // An indexing variable used in loops
 
     MAT2(iz, 50, *nlev);
