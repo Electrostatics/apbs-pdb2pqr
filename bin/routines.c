@@ -4604,8 +4604,8 @@ VPUBLIC int forceAPOL(Vacc *acc,
 	       force[3],
 	       *apos;
 	
-        ts_main = clock();
 	Vatom *atom = VNULL;
+    ts_main = clock();
 	
 	srad = apolparm->srad;
 	press = apolparm->press;
