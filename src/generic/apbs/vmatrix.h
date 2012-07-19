@@ -6,7 +6,7 @@
  *  @file     vmatrix.h
  *  @ingroup  Vmatrix
  *  @brief    Contains inclusions for matrix data wrappers
- *  @version  @todo  figure out how the version identification works
+ *  @version  
  *  @author   Tucker A. Beck
  *
  *  @attention

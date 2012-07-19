@@ -14,41 +14,41 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -63,7 +63,7 @@
 /* Inlineable methods */
 #if !defined(VINLINE_VCSM)
 
-VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) { 
+VPUBLIC Valist* Vcsm_getValist(Vcsm *thee) {
 
    VASSERT(thee != VNULL);
    return thee->alist;
@@ -148,8 +148,8 @@ VPUBLIC Vcsm* Vcsm_ctor(Valist *alist, Gem *gm) {
     return thee;
 }
 
-VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) { 
- 
+VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) {
+
     VASSERT( thee != VNULL );
 
     /* Memory management object */
@@ -166,18 +166,18 @@ VPUBLIC int Vcsm_ctor2(Vcsm *thee, Valist *alist, Gem *gm) {
         return 0;
     }
     thee->gm = gm;
-   
+
     thee->initFlag = 0;
     return 1;
 }
 
 VPUBLIC void Vcsm_init(Vcsm *thee) {
- 
+
     /* Counters */
-    int iatom, 
-        jatom, 
-        isimp, 
-        jsimp, 
+    int iatom,
+        jatom,
+        isimp,
+        jsimp,
         gotSimp;
     /* Atomic information */
     Vatom *atom;
@@ -201,7 +201,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     }
     thee->natom = Valist_getNumberAtoms(thee->alist);
 
-    /* Allocate and initialize space for the first dimensions of the 
+    /* Allocate and initialize space for the first dimensions of the
      * simplex-charge map, the simplex array, and the counters */
     thee->sqm = (int**)Vmem_malloc(thee->vmem, thee->nsimp, sizeof(int *));
     VASSERT(thee->sqm != VNULL);
@@ -227,7 +227,7 @@ VPUBLIC void Vcsm_init(Vcsm *thee) {
     /* Allocate the space for the simplex-charge map */
     for (isimp=0; isimp<thee->nsimp; isimp++) {
         if ((thee->nsqm)[isimp] > 0) {
-            thee->sqm[isimp] = (int*)Vmem_malloc(thee->vmem, (thee->nsqm)[isimp], 
+            thee->sqm[isimp] = (int*)Vmem_malloc(thee->vmem, (thee->nsqm)[isimp],
               sizeof(int));
             VASSERT(thee->sqm[isimp] != VNULL);
         }
@@ -301,24 +301,24 @@ VPUBLIC void Vcsm_dtor(Vcsm **thee) {
     }
 }
 
-VPUBLIC void Vcsm_dtor2(Vcsm *thee) { 
+VPUBLIC void Vcsm_dtor2(Vcsm *thee) {
     int i;
 
     if ((thee != VNULL) && thee->initFlag) {
 
         for (i=0; i<thee->msimp; i++) {
-            if (thee->nsqm[i] > 0) Vmem_free(thee->vmem, thee->nsqm[i], 
+            if (thee->nsqm[i] > 0) Vmem_free(thee->vmem, thee->nsqm[i],
               sizeof(int), (void **)&(thee->sqm[i]));
         }
         for (i=0; i<thee->natom; i++) {
-            if (thee->nqsm[i] > 0) Vmem_free(thee->vmem, thee->nqsm[i], 
+            if (thee->nqsm[i] > 0) Vmem_free(thee->vmem, thee->nqsm[i],
               sizeof(int), (void **)&(thee->qsm[i]));
         }
-        Vmem_free(thee->vmem, thee->msimp, sizeof(int *), 
+        Vmem_free(thee->vmem, thee->msimp, sizeof(int *),
           (void **)&(thee->sqm));
         Vmem_free(thee->vmem, thee->msimp, sizeof(int),
           (void **)&(thee->nsqm));
-        Vmem_free(thee->vmem, thee->natom, sizeof(int *), 
+        Vmem_free(thee->vmem, thee->natom, sizeof(int *),
           (void **)&(thee->qsm));
         Vmem_free(thee->vmem, thee->natom, sizeof(int),
           (void **)&(thee->nqsm));
@@ -345,17 +345,17 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     VASSERT(thee != VNULL);
     VASSERT(thee->initFlag);
 
-    /* If we don't have enough memory to accommodate the new entries, 
+    /* If we don't have enough memory to accommodate the new entries,
      * add more by doubling the existing amount */
     isimp = thee->nsimp + num - 1;
     gotMem = 0;
     while (!gotMem) {
         if (isimp > thee->msimp) {
             isimp = 2 * isimp;
-            thee->nsqm = (int*)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int), 
+            thee->nsqm = (int*)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int),
               (void **)&(thee->nsqm), isimp);
             VASSERT(thee->nsqm != VNULL);
-            thee->sqm = (int**)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int *), 
+            thee->sqm = (int**)Vmem_realloc(thee->vmem, thee->msimp, sizeof(int *),
               (void **)&(thee->sqm), isimp);
             VASSERT(thee->sqm != VNULL);
             thee->msimp = isimp;
@@ -365,7 +365,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     for (isimp = thee->nsimp; isimp<thee->nsimp+num-1 ; isimp++) {
        thee->nsqm[isimp] = 0;
     }
-    
+
     thee->nsimp = thee->nsimp + num - 1;
 
     /* There's a simple case to deal with:  if simps[0] didn't have a
@@ -408,7 +408,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
                 jsimp = 1;
             }
         }
- 
+
         VASSERT(jsimp != 0);
     }
 
@@ -416,7 +416,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     iatom = 0;
     for (isimp=0; isimp<num; isimp++) iatom += nsqmNew[isimp];
     if (iatom < nqParent) {
-        Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n", 
+        Vnm_print(2,"Vcsm_update: Lost %d (of %d) atoms!\n",
             nqParent - iatom, nqParent);
         VASSERT(0);
     }
@@ -424,7 +424,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Allocate the storage */
     for (isimp=0; isimp<num; isimp++) {
         if (nsqmNew[isimp] > 0) {
-            sqmNew[isimp] = (int*)Vmem_malloc(thee->vmem, nsqmNew[isimp], 
+            sqmNew[isimp] = (int*)Vmem_malloc(thee->vmem, nsqmNew[isimp],
               sizeof(int));
             VASSERT(sqmNew[isimp] != VNULL);
         }
@@ -478,8 +478,8 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Setup the new entries in the array */
     for (iatom=0;iatom<nAffAtoms; iatom++) {
         atomID = affAtoms[iatom];
-        qsmNew[iatom] = (int*)Vmem_malloc(thee->vmem, 
-                (dnqsm[iatom] + thee->nqsm[atomID]), 
+        qsmNew[iatom] = (int*)Vmem_malloc(thee->vmem,
+                (dnqsm[iatom] + thee->nqsm[atomID]),
                 sizeof(int));
         nqsmNew[iatom] = 0;
         VASSERT(qsmNew[iatom] != VNULL);
@@ -496,7 +496,7 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
             if (jatom < nAffAtoms) {
                 qsmNew[jatom][nqsmNew[jatom]] = simpID;
                 nqsmNew[jatom]++;
-            } 
+            }
         }
     }
     /* Now do the unmodified entries */
@@ -517,15 +517,15 @@ VPUBLIC int Vcsm_update(Vcsm *thee, SS **simps, int num) {
     /* Replace the existing entries in the table.  Do the QSM entires
      * first, since they require affAtoms = thee->sqm[simps[0]] */
     for (iatom=0; iatom<nAffAtoms; iatom++) {
-        atomID = affAtoms[iatom]; 
-        Vmem_free(thee->vmem, thee->nqsm[atomID], sizeof(int), 
+        atomID = affAtoms[iatom];
+        Vmem_free(thee->vmem, thee->nqsm[atomID], sizeof(int),
           (void **)&(thee->qsm[atomID]));
         thee->qsm[atomID] = qsmNew[iatom];
         thee->nqsm[atomID] = nqsmNew[iatom];
     }
     for (isimp=0; isimp<num; isimp++) {
         simpID = SS_id(simps[isimp]);
-        if (thee->nsqm[simpID] > 0) Vmem_free(thee->vmem, thee->nsqm[simpID], 
+        if (thee->nsqm[simpID] > 0) Vmem_free(thee->vmem, thee->nsqm[simpID],
           sizeof(int), (void **)&(thee->sqm[simpID]));
         thee->sqm[simpID] = sqmNew[isimp];
         thee->nsqm[simpID] = nsqmNew[isimp];
