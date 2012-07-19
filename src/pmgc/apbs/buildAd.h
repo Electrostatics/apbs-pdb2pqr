@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    vbuilda.h
- *  @ingroup Vgrid
- *  @author  Nathan Baker and Steve Bond [original], Tucker Beck [translation]
- *  @brief
- *  @version $Id:
+ *  @ingroup PMGC
+ *  @author  Mike Holst [original], Tucker Beck [translation]
+ *  @brief Build the Laplacian
  *
  *  @attention
  *  @verbatim

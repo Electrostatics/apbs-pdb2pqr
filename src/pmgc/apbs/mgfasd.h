@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    mgfasd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
- *  @version $Id:
+ *  @brief  Multigrid nonlinear solve iteration routine
  *
  *  @attention
  *  @verbatim

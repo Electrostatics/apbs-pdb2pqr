@@ -1,10 +1,5 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    newdrvd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
  *  @brief   Driver for the Newton Solver
  *  @version $Id:

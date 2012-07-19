@@ -1,12 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    buildPd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
+ *  @brief Builds prolongation matrix
  *  @version $Id:
  *
  *  @attention

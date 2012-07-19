@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    buildBd.h
- *  @ingroup
- *  @author  Nathan Baker and Steve Bond [original], Tucker Beck [translation]
- *  @brief
- *  @version $Id:
+ *  @ingroup PMGC
+ *  @author Mike Holst and Steve Bond [original], Tucker Beck [translation]
+ *  @brief Banded matrix builder
  *
  *  @attention
  *  @verbatim
