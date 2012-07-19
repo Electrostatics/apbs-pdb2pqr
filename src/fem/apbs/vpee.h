@@ -1,7 +1,7 @@
 /** @defgroup Vpee Vpee class
  *  @brief  This class provides some functionality for error esimation
- *          in parallel. 
- * 
+ *          in parallel.
+ *
  *    This class provides some functionality for error esimation in parallel.
  *    The purpose is to modulate the error returned by some external error
  *    estimator according to the partitioning of the mesh.  For example, the
@@ -22,7 +22,7 @@
  *  @brief    Contains declarations for class Vpee
  *  @version  $Id$
  *  @author   Nathan A. Baker
- *  
+ *
  *  @attention
  *  @verbatim
  *
@@ -33,41 +33,41 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -88,7 +88,7 @@
 struct sVpee {
 
   Gem *gm;                     /**< Grid manager */
-  int localPartID;             /**< The local partition ID: i.e. the partition 
+  int localPartID;             /**< The local partition ID: i.e. the partition
                                 * whose boundary simplices we're keeping
                                 * track of */
   double localPartCenter[3];   /**< The coordinates of the center of the local
@@ -104,14 +104,14 @@ struct sVpee {
 
 };
 
-/** 
+/**
  *  @ingroup Vpee
  *  @brief   Declaration of the Vpee class as the Vpee structure
  */
 typedef struct sVpee Vpee;
 
 /* ///////////////////////////////////////////////////////////////////////////
-// Class Vpee Inlineable methods 
+// Class Vpee Inlineable methods
 /////////////////////////////////////////////////////////////////////////// */
 
 #if !defined(VINLINE_VPEE)
@@ -122,7 +122,7 @@ typedef struct sVpee Vpee;
 // Class Vpee: Non-Inlineable methods (vpee.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-/** 
+/**
  * @brief   Construct the Vpee object
  * @ingroup Vpee
  * @author  Nathan Baker
@@ -145,7 +145,7 @@ VEXTERNC Vpee* Vpee_ctor(
         double killParam /**< @see killFlag for usage */
         );
 
-/** 
+/**
  * @brief  FORTRAN stub to construct the Vpee object
  * @ingroup  Vpee
  * @author  Nathan Baker
@@ -186,13 +186,13 @@ VEXTERNC void Vpee_dtor2(
         );
 
 /** @brief   Mark simplices for refinement based on attenuated error estimates.
- *  
+ *
  *  A wrapper/reimplementation of AM_markRefine that allows for more flexible
  *  attenuation of error-based markings outside the local partition.  The error
  *  in each simplex is modified by the method (see killFlag) specified in the
  *  Vpee constructor.  This allows the user to confine refinement to an
  *  arbitrary area around the local partition.
- * 
+ *
  *  @ingroup Vpee
  *  @author  Nathan Baker and Mike Holst
  *  @note  This routine borrows very heavily from FEtk routines by Mike Holst.
@@ -204,7 +204,7 @@ VEXTERNC int Vpee_markRefine(
         Vpee *thee,  /**< The Vpee object */
         AM *am,  /**< The FEtk algebra manager currently used to solve the PB */
         int level,  /**< The current level of the multigrid hierarchy */
-        int akey,  /**< The marking method: 
+        int akey,  /**< The marking method:
                       \li -1:  Reset markings  --> killFlag has no effect.
                       \li 0:  Uniform.
                       \li 1:  User defined (geometry-based).
@@ -218,7 +218,7 @@ VEXTERNC int Vpee_markRefine(
         double etol,  /**< The error tolerance criterion for marking */
         int bkey  /**< How the error tolerance is interpreted:
                      \li 0:  Simplex marked if error > etol.
-                     \li 1:  Simplex marked if error > 
+                     \li 1:  Simplex marked if error >
                      sqrt(etol^2/L) where L$ is the number of simplices */
         );
 

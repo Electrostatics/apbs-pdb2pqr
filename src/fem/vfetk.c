@@ -14,41 +14,41 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -77,9 +77,9 @@
  * @returns Per-atom energy
  */
 VPRIVATE double Vfetk_qfEnergyAtom(
-        Vfetk *thee, 
-        int iatom, 
-        int color, 
+        Vfetk *thee,
+        int iatom,
+        int color,
         double *sol
         );
 
@@ -191,14 +191,14 @@ VPRIVATE double ionacc();
  * @param  meth  Method for smoothing
  *   \li  0 ==> arithmetic mean (gives bad results)
  *   \li  1 ==> geometric mean
- * @param  nverts  Number of vertices 
+ * @param  nverts  Number of vertices
  * @param  dist  distance from point to each vertex
  * @param  coeff  coefficient value at each vertex
  * @note  Thread-safe
  * @return smoothed value of coefficieent at point of interest */
 VPRIVATE double smooth(
-        int nverts, 
-        double dist[VAPBS_NVS], 
+        int nverts,
+        double dist[VAPBS_NVS],
         double coeff[VAPBS_NVS],
         int meth
         );
@@ -216,15 +216,15 @@ VPRIVATE double smooth(
  * @returns  Multi-sphere Debye-Huckel potential in kT/e
  */
 VPRIVATE double debye_U(
-        Vpbe *pbe, 
-        int d, 
+        Vpbe *pbe,
+        int d,
         double x[]
         );
 
 /*
  * @brief  Return the difference between the analytical multi-sphere
  * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
- * point 
+ * point
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @param  pbe  Vpbe object
@@ -233,15 +233,15 @@ VPRIVATE double debye_U(
  * @note  Thread-safe
  * @returns  Multi-sphere Debye-Huckel potential in kT/e */
 VPRIVATE double debye_Udiff(
-        Vpbe *pbe, 
-        int d, 
+        Vpbe *pbe,
+        int d,
         double x[]
         );
 
 /*
  * @brief  Calculate the Coulomb's
  * Debye-Huckel approximation and Coulomb's law (in kT/e) at the specified
- * point 
+ * point
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @param  pbe  Vpbe object
@@ -253,12 +253,12 @@ VPRIVATE double debye_Udiff(
  * @param  d2U  Set to Laplacian of potential (in \f$kT e^{-1} \AA^{-2}\f$)
  * @returns  Multi-sphere Debye-Huckel potential in kT/e */
 VPRIVATE void coulomb(
-        Vpbe *pbe, 
-        int d, 
-        double x[], 
-        double eps, 
-        double *U, 
-        double dU[], 
+        Vpbe *pbe,
+        int d,
+        double x[],
+        double eps,
+        double *U,
+        double dU[],
         double *d2U
         );
 
@@ -270,15 +270,15 @@ VPRIVATE void coulomb(
  * @param ndof  dunno
  * @param dof  dunno
  * @param c  dunno
- * @param cx  dunno 
+ * @param cx  dunno
  * @note  Trust in Mike */
 VPRIVATE void init_2DP1(
-        int dimIS[], 
-        int *ndof, 
-        int dof[], 
-        double c[][VMAXP], 
-        double cx[][VMAXP], 
-        double cy[][VMAXP], 
+        int dimIS[],
+        int *ndof,
+        int dof[],
+        double c[][VMAXP],
+        double cx[][VMAXP],
+        double cy[][VMAXP],
         double cz[][VMAXP]
         );
 
@@ -292,15 +292,15 @@ VPRIVATE void init_2DP1(
  * @param c dunno
  * @param cx dunno
  * @param cy dunno
- * @param cz dunno 
+ * @param cz dunno
  * @note  Trust in Mike */
 VPRIVATE void init_3DP1(
-        int dimIS[], 
-        int *ndof, 
-        int dof[], 
-        double c[][VMAXP], 
-        double cx[][VMAXP], 
-        double cy[][VMAXP], 
+        int dimIS[],
+        int *ndof,
+        int dof[],
+        double c[][VMAXP],
+        double cx[][VMAXP],
+        double cy[][VMAXP],
         double cz[][VMAXP]
         );
 
@@ -319,14 +319,14 @@ VPRIVATE void init_3DP1(
  * @param icz  dunno
  * @note  Trust in Mike */
 VPRIVATE void setCoef(
-        int numP, 
-        double c[][VMAXP], 
-        double cx[][VMAXP], 
-        double cy[][VMAXP], 
-        double cz[][VMAXP], 
-        int ic[][VMAXP], 
-        int icx[][VMAXP], 
-        int icy[][VMAXP], 
+        int numP,
+        double c[][VMAXP],
+        double cx[][VMAXP],
+        double cy[][VMAXP],
+        double cz[][VMAXP],
+        int ic[][VMAXP],
+        int icx[][VMAXP],
+        int icy[][VMAXP],
         int icz[][VMAXP]
         );
 
@@ -344,11 +344,11 @@ VPRIVATE void setCoef(
  *  Note that "VMAXP" must be >= 19 for cubic polynomials.
  *  The polynomials are build from the coefficients c[][] as
  *  follows.  To build polynomial "k", fix k and set:
- *  
+ *
  *  c0=c[k][0], c1=c[k][1], .... , cp=c[k][p]
- *  
+ *
  *  Then evaluate as:
- *  
+ *
  *  p3(x,y,z) = c0 + c1*x + c2*y + c3*z
  *            + c4*x*x + c5*y*y + c6*z*z + c7*x*y + c8*x*z + c9*y*z
  *            + c10*x*x*x + c11*y*y*y + c12*z*z*z
@@ -357,9 +357,9 @@ VPRIVATE void setCoef(
  * </pre>
  */
 VPRIVATE void polyEval(
-        int numP, 
-        double p[], 
-        double c[][VMAXP], 
+        int numP,
+        double p[],
+        double c[][VMAXP],
         double xv[]
         );
 
@@ -374,13 +374,13 @@ VPRIVATE int dim_2DP1 = 3;
  * @brief  I have no clue what these variable do, but we need it to initialize
  * the simplices
  * @ingroup  Vfetk
- * @author  Mike Holst 
+ * @author  Mike Holst
  * @note  Mike says:
  * <pre>
  *  2D-P1 Basis:
- *  
+ *
  *  p1(x,y) = c0 + c1*x + c2*y
- *  
+ *
  *  Lagrange Point    Lagrange Basis Function Definition
  *  --------------    ----------------------------------
  *  (0, 0)            p[0](x,y) = 1 - x - y
@@ -424,13 +424,13 @@ VPRIVATE int lgr_2DP1z[3][VMAXP] = {
  * @brief  I have no clue what these variable do, but we need it to initialize
  * the simplices
  * @ingroup  Vfetk
- * @author  Mike Holst 
+ * @author  Mike Holst
  * @note  Mike says:
  * <pre>
  * 3D-P1 Basis:
- * 
+ *
  * p1(x,y,z) = c0 + c1*x + c2*y + c3*z
- * 
+ *
  * Lagrange Point    Lagrange Basis Function Definition
  * --------------    ----------------------------------
  * (0, 0, 0)         p[0](x,y,z) = 1 - x - y - z
@@ -479,7 +479,7 @@ VPRIVATE int lgr_3DP1z[VAPBS_NVS][VMAXP] = {
  * @author  Mike Holst
  * @note  Mike says: 1 = linear, 2 = quadratic */
 VPRIVATE const int P_DEG=1;
-    
+
 /*
  * @brief  Another Holst variable
  * @ingroup  Vfetk
@@ -519,7 +519,7 @@ VPUBLIC Vcsm* Vfetk_getVcsm(Vfetk *thee) {
 
 }
 
-VPUBLIC int Vfetk_getAtomColor(Vfetk *thee, 
+VPUBLIC int Vfetk_getAtomColor(Vfetk *thee,
                                int iatom
                               ) {
 
@@ -534,7 +534,7 @@ VPUBLIC int Vfetk_getAtomColor(Vfetk *thee,
 }
 #endif /* if !defined(VINLINE_VFETK) */
 
-VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe, 
+VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe,
                           Vhal_PBEType type
                          ) {
 
@@ -546,9 +546,9 @@ VPUBLIC Vfetk* Vfetk_ctor(Vpbe *pbe,
 
     return thee;
 }
-	 
-VPUBLIC int Vfetk_ctor2(Vfetk *thee, 
-                        Vpbe *pbe, 
+
+VPUBLIC int Vfetk_ctor2(Vfetk *thee,
+                        Vpbe *pbe,
                         Vhal_PBEType type
                        ) {
 
@@ -576,7 +576,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee,
     thee->aprx = Aprx_ctor(thee->vmem, thee->gm, thee->pde);
     Vnm_print(0, "Vfetk_ctor2:  Constructing Aprx...\n");
     thee->am = AM_ctor(thee->vmem, thee->aprx);
-	
+
     /* Reset refinement level */
     thee->level = 0;
 
@@ -617,7 +617,7 @@ VPUBLIC int Vfetk_ctor2(Vfetk *thee,
     return 1;
 }
 
-VPUBLIC void Vfetk_setParameters(Vfetk *thee, 
+VPUBLIC void Vfetk_setParameters(Vfetk *thee,
                                  PBEparm *pbeparm,
                                  FEMparm *feparm
                                 ) {
@@ -677,9 +677,9 @@ VPUBLIC double* Vfetk_getSolution(Vfetk *thee,
 }
 
 
-/** 
+/**
  * @brief   Return the total electrostatic energy
- * 
+ *
  *  Using the solution at the finest mesh level, get the electrostatic energy
  *  using the free energy functional for the Poisson-Boltzmann equation
  *  without removing any self-interaction terms (i.e., removing the reference
@@ -737,22 +737,22 @@ VPUBLIC double Vfetk_energy(Vfetk *thee, /**< THe Vfetk object */
 VPUBLIC double Vfetk_qfEnergy(Vfetk *thee,
                               int color
                              ) {
- 
+
     double *sol,
            energy = 0.0;
     int nsol,
-        iatom, 
+        iatom,
         natoms;
     AM *am;
- 
+
     VASSERT(thee != VNULL);
     am = thee->am;
- 
+
     /* Get the finest level solution */
     sol= VNULL;
     sol = Vfetk_getSolution(thee, &nsol);
     VASSERT(sol != VNULL);
- 
+
     /* Make sure the number of entries in the solution array matches the
      * number of vertices currently in the mesh */
     if (nsol != Gem_numVV(thee->gm)) {
@@ -760,39 +760,39 @@ VPUBLIC double Vfetk_qfEnergy(Vfetk *thee,
        Vnm_print(2, "Vfetk_qfEnergy: number of vertices in mesh!!!  Bailing out!\n");
        VASSERT(0);
     }
- 
+
     /* Now we do the sum over atoms... */
     natoms = Valist_getNumberAtoms(thee->pbe->alist);
     for (iatom=0; iatom<natoms; iatom++) {
- 
+
         energy = energy + Vfetk_qfEnergyAtom(thee, iatom, color, sol);
- 
+
     } /* end for iatom */
- 
+
     /* Destroy the finest level solution */
     Vmem_free(VNULL, nsol, sizeof(double), (void **)&sol);
- 
+
     /* Return the energy */
     return energy;
 }
 
 VPRIVATE double Vfetk_qfEnergyAtom(
-        Vfetk *thee, 
-        int iatom, 
-        int color, 
+        Vfetk *thee,
+        int iatom,
+        int color,
         double *sol) {
 
     Vatom *atom;
     double charge,
-           phi[VAPBS_NVS], 
-           phix[VAPBS_NVS][3], 
+           phi[VAPBS_NVS],
+           phix[VAPBS_NVS][3],
            *position,
            uval,
            energy = 0.0;
-    int isimp, 
-        nsimps, 
-        icolor, 
-        ivert, 
+    int isimp,
+        nsimps,
+        icolor,
+        ivert,
         usingColor;
     SS *simp;
 
@@ -815,14 +815,14 @@ VPRIVATE double Vfetk_qfEnergyAtom(
     if ((icolor==color) || (!usingColor)) {
         /* Loop over the simps associated with this atom */
         nsimps =  Vcsm_getNumberSimplices(thee->csm, iatom);
- 
+
         /* Get the first simp of the correct color; we can use just one
          * simplex for energy evaluations, but not for force
          * evaluations */
         for (isimp=0; isimp<nsimps; isimp++) {
- 
+
             simp = Vcsm_getSimplex(thee->csm, isimp, iatom);
- 
+
             /* If we've asked for a particular partition AND if the atom
              * is our partition, then compute the energy */
             if ((SS_chart(simp)==color)||(color<0)) {
@@ -844,7 +844,7 @@ VPRIVATE double Vfetk_qfEnergyAtom(
 }
 
 
-VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee, 
+VPUBLIC double Vfetk_dqmEnergy(Vfetk *thee,
                                int color) {
 
     return AM_evalJ(thee->am);
@@ -855,7 +855,7 @@ VPUBLIC void Vfetk_setAtomColors(Vfetk *thee) {
 
     SS *simp;
     Vatom *atom;
-    int i, 
+    int i,
         natoms;
 
     VASSERT(thee != VNULL);
@@ -882,9 +882,9 @@ VPUBLIC unsigned long int Vfetk_memChk(Vfetk *thee) {
 }
 
 /**
- * Generates a new cube mesh within the provided Vfetk object based on the 
- * specified mesh type.  Creates a new copy of the mesh based on the global 
- * variables at the top of the file and the mesh type, then recenters the 
+ * Generates a new cube mesh within the provided Vfetk object based on the
+ * specified mesh type.  Creates a new copy of the mesh based on the global
+ * variables at the top of the file and the mesh type, then recenters the
  * mesh based on the center and length variables provided to the function.
  */
 VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
@@ -892,12 +892,12 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
                                 double length[3], /**< Mesh lengths, which the new mesh will adjust to */
                                 Vfetk_MeshLoad meshType /**< Mesh boundary conditions */
                                ) {
-	
+
     VASSERT(thee != VNULL);
 
     AM *am = VNULL; /* @todo - no idea what this is */
     Gem *gm = VNULL; /* Geometry manager */
-	
+
     int skey = 0,  /* Simplex format */
         bufsize = 0, /* Buffer size */
         i, /* Loop counter */
@@ -911,12 +911,12 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
     Vio *sock = VNULL; /* Socket object */
     VV *vx = VNULL; /* @todo - no idea what this is */
     double x;
-	
+
     am = thee->am;
     VASSERT(am != VNULL);
     gm = thee->gm;
     VASSERT(gm != VNULL);
-	
+
     /* @note This code is based on Gem_makeCube by Mike Holst */
     /* Write mesh string to buffer and read back */
 	switch (meshType) {
@@ -924,7 +924,7 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
 		    /* Create a new copy of the DIRICUBE mesh (see globals higher in this file) */
 			bufsize = strlen(diriCubeString);
 			VASSERT( bufsize <= VMAX_BUFSIZE );
-			strncpy(buf, diriCubeString, VMAX_BUFSIZE); 
+			strncpy(buf, diriCubeString, VMAX_BUFSIZE);
 			break;
 		case VML_NEUMCUBE:
 		    /* Create a new copy of the NEUMCUBE mesh (see globals higher in this file) */
@@ -941,18 +941,18 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
 			Vnm_print(2, "Vfetk_genCube:  Unknown mesh type (%d)\n", meshType);
 			return VRC_FAILURE;
 	}
-	
+
     VASSERT( VNULL != (sock=Vio_socketOpen(key,iodev,iofmt,iohost,iofile)) ); /* Open socket */
     Vio_bufTake(sock, buf, bufsize); /* Initialize internal buffer for socket */
-    AM_read(am, skey, sock); /* Take the initial mesh from the socket and load 
-                                into internal AM data structure with simplex 
+    AM_read(am, skey, sock); /* Take the initial mesh from the socket and load
+                                into internal AM data structure with simplex
                                 format */
 	Vio_connectFree(sock); /* Purge output buffers */
     Vio_bufGive(sock); /* Get pointer to output buffer?  No assignment of return value... */
     Vio_dtor(&sock); /* Destroy output buffer */
-	
+
 	/* @todo - could the following be done in a single pass? - PCE */
-    /* Scale (unit) cube - for each vertex, set the new coordinates of that 
+    /* Scale (unit) cube - for each vertex, set the new coordinates of that
        vertex based on the vertex length */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
@@ -962,7 +962,7 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
             VV_setCoord(vx, j, x);
         }
     }
-	
+
     /* Add new center - for each vertex, set a new center for the vertex */
     for (i=0; i<Gem_numVV(gm); i++) {
         vx = Gem_VV(gm, i);
@@ -972,23 +972,23 @@ VPUBLIC Vrc_Codes Vfetk_genCube(Vfetk *thee, /**< Vfetk object */
             VV_setCoord(vx, j, x);
         }
     }
-	
+
     return VRC_SUCCESS;
 }
 
 /**
- * If we have an external mesh, load that external mesh from the provided 
+ * If we have an external mesh, load that external mesh from the provided
  * socket.  If we specify a non-external mesh type, we generate a new mesh
  * cube based on templates.  We then create and store a new Vcsm object in
  * our Vfetk structure, which will carry the mesh data.
- */ 
+ */
 VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
                                  double center[3], /* Center for mesh (if constructed) */
                                  double length[3], /* Mesh lengths (if constructed) */
                                  Vfetk_MeshLoad meshType, /* Type of mesh to load */
                                  Vio *sock /* Socket for external mesh data (NULL otherwise) */
                                 ) {
-	
+
 	Vrc_Codes vrc; /* Function return codes - see vhal.h for enum */
 	int skey = 0;  /* Simplex format */
 
@@ -1011,11 +1011,11 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
 			if (vrc == VRC_FAILURE) return VRC_FAILURE;
 			break;
 		default:
-			Vnm_print(2, "Vfetk_loadMesh:  unrecognized mesh type (%d)!\n", 
+			Vnm_print(2, "Vfetk_loadMesh:  unrecognized mesh type (%d)!\n",
 					  meshType);
 			return VRC_FAILURE;
 	};
-		
+
 	/* Setup charge-simplex map */
     Vnm_print(0, "Vfetk_ctor2:  Constructing Vcsm...\n");
     thee->csm = VNULL;
@@ -1023,12 +1023,12 @@ VPUBLIC Vrc_Codes Vfetk_loadMesh(Vfetk *thee, /* Vfetk object to load into */
     thee->csm = Vcsm_ctor(Vpbe_getValist(thee->pbe), thee->gm);
     VASSERT(thee->csm != VNULL);
     Vcsm_init(thee->csm);
-	
+
 	return VRC_SUCCESS;
 }
 
 
-VPUBLIC void Bmat_printHB(Bmat *thee, 
+VPUBLIC void Bmat_printHB(Bmat *thee,
                           char *fname
                          ) {
 
@@ -1248,8 +1248,8 @@ VPUBLIC void Vfetk_PDE_dtor(PDE **thee) {
 
 }
 
-VPUBLIC void Vfetk_PDE_dtor2(PDE *thee) { 
-    var.fetk = VNULL; 
+VPUBLIC void Vfetk_PDE_dtor2(PDE *thee) {
+    var.fetk = VNULL;
 }
 
 VPRIVATE double smooth(int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NVS], int meth) {
@@ -1264,19 +1264,19 @@ VPRIVATE double smooth(int nverts, double dist[VAPBS_NVS], double coeff[VAPBS_NV
         weight = 1.0/dist[i];
         if (meth == 0) {
             num += (weight * coeff[i]);
-            den += weight; 
-        } else if (meth == 1) { 
+            den += weight;
+        } else if (meth == 1) {
             /* Small coefficients reset the average to 0; we need to break out
              * of the loop */
             if (coeff[i] < VSMALL) {
                 num = 0.0;
                 break;
-            } else { 
-                num += weight; den += (weight/coeff[i]); 
+            } else {
+                num += weight; den += (weight/coeff[i]);
             }
-        } else VASSERT(0); 
-    } 
-    
+        } else VASSERT(0);
+    }
+
     return (num/den);
 
 }
@@ -1442,7 +1442,7 @@ VPRIVATE double debye_Udiff(Vpbe *pbe, int d, double x[]) {
     return pot;
 }
 
-VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U, 
+VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U,
   double dU[], double *d2U) {
 
     int iatom, i;
@@ -1500,7 +1500,7 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U,
     }
 
     printf("Unew - Uold = %g - %g = %g\n", *U, Uold, (*U - Uold));
-    printf("||dUnew - dUold||^2 = %g\n", (VSQR(dU[0] - dUold[0]) 
+    printf("||dUnew - dUold||^2 = %g\n", (VSQR(dU[0] - dUold[0])
                 + VSQR(dU[1] - dUold[1]) + VSQR(dU[2] - dUold[2])));
     printf("dUnew[0] = %g, dUold[0] = %g\n", dU[0], dUold[0]);
     printf("dUnew[1] = %g, dUold[1] = %g\n", dU[1], dUold[1]);
@@ -1510,11 +1510,11 @@ VPRIVATE void coulomb(Vpbe *pbe, int d, double pt[], double eps, double *U,
 
 }
 
-VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) { 
+VPUBLIC void Vfetk_PDE_initAssemble(PDE *thee, int ip[], double rp[]) {
 
 #if 1
     /* Re-initialize the Green's function oracle in case the atom list has
-     * changed */    
+     * changed */
     if (var.initGreen) {
         Vgreen_dtor(&(var.green));
         var.initGreen = 0;
@@ -1561,7 +1561,7 @@ VPUBLIC void Vfetk_PDE_initElement(PDE *thee, int elementType, int chart,
     var.jumpDiel = 0;  /* NOT IMPLEMENTED YET! */
 }
 
-VPUBLIC void Vfetk_PDE_initFace(PDE *thee, int faceType, int chart, 
+VPUBLIC void Vfetk_PDE_initFace(PDE *thee, int faceType, int chart,
   double tnvec[]) {
 
     int i;
@@ -1573,7 +1573,7 @@ VPUBLIC void Vfetk_PDE_initFace(PDE *thee, int faceType, int chart,
     var.fType = faceType;
 }
 
-VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart, 
+VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
   double txq[], double tU[], double tdU[][3]) {
 
     int i, j, ichop;
@@ -1629,7 +1629,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                         coef2 = -1.0 * var.ionQ[i] * coef2;
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
-                } 
+                }
                 break;
 
             case PBE_LRPBE:
@@ -1637,7 +1637,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                 var.B = var.DB*(var.U[0]+var.W);
                 break;
 
-            case PBE_NRPBE: 
+            case PBE_NRPBE:
 
                 var.B  = 0;
                 var.DB  = 0;
@@ -1655,15 +1655,15 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                     }
                 }
                 break;
-				
+
 			case PBE_SMPBE: /* SMPBE Temp */
-				
+
                 var.B  = 0;
                 var.DB  = 0;
                 if ((var.ionacc > VSMALL) && (var.zks2 > VSMALL)) {
                     for (i=0; i<var.nion; i++) {
                         u2 = -1.0 * var.U[0] * var.ionQ[i];
-						
+
                         /* NONLINEAR TERM */
                         coef2 = -1.0 * var.ionacc * var.zks2 * var.ionConc[i];
                         var.B += (coef2 * Vcap_exp(u2, &ichop));
@@ -1671,7 +1671,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
                         coef2 = -1.0 * var.ionQ[i] * coef2;
                         var.DB += (coef2 * Vcap_exp(u2, &ichop));
                     }
-                } 
+                }
 					break;
             default:
                 Vnm_print(2, "Vfetk_PDE_initPoint:  Unknown PBE type (%d)!\n",
@@ -1689,7 +1689,7 @@ VPUBLIC void Vfetk_PDE_initPoint(PDE *thee, int pointType, int chart,
         Vnm_print(2, "Vfetk:  Whoa!  I just got a boundary point to evaluate (%d)!\n", pointType);
         Vnm_print(2, "Vfetk:  Did you do that on purpose?\n");
 #endif
-    } 
+    }
 
 #if 0 /* THIS IS VERY NOISY! */
     Vfetk_dumpLocalVar();
@@ -1706,9 +1706,9 @@ VPUBLIC void Vfetk_PDE_Fu(PDE *thee, int key, double F[]) {
 }
 
 VPUBLIC double Vfetk_PDE_Fu_v(
-        PDE *thee, 
-        int key, 
-        double V[], 
+        PDE *thee,
+        int key,
+        double V[],
         double dV[][VAPBS_DIM]
         ) {
 
@@ -1744,11 +1744,11 @@ VPUBLIC double Vfetk_PDE_Fu_v(
 }
 
 VPUBLIC double Vfetk_PDE_DFu_wv(
-        PDE *thee, 
-        int key, 
-        double W[], 
-        double dW[][VAPBS_DIM], 
-        double V[], 
+        PDE *thee,
+        int key,
+        double W[],
+        double dW[][VAPBS_DIM],
+        double V[],
         double dV[][3]
         ) {
 
@@ -1776,7 +1776,7 @@ VPUBLIC double Vfetk_PDE_DFu_wv(
     return value;
 }
 
-/** @brief  Maximum number of simplices in a simplex ring 
+/** @brief  Maximum number of simplices in a simplex ring
  *  @ingroup  Vfetk */
 #define VRINGMAX 1000
 /** @brief  Maximum number of atoms associated with a vertex
@@ -1816,8 +1816,8 @@ VPUBLIC void Vfetk_PDE_delta(PDE *thee, int type, int chart, double txq[],
             sid = SS_id(sring[isimp]);
             natoms = Vcsm_getNumberAtoms(Vfetk_getVcsm(var.fetk), sid);
             for (iatom=0; iatom<natoms; iatom++) {
-                /* Get the delta function information * */ 
-                atomIndex = Vcsm_getAtomIndex(Vfetk_getVcsm(var.fetk), 
+                /* Get the delta function information * */
+                atomIndex = Vcsm_getAtomIndex(Vfetk_getVcsm(var.fetk),
                   iatom, sid);
                 gotAtom = 0;
                 for (jatom=0; jatom<nAtomList; jatom++) {
@@ -1883,18 +1883,18 @@ VPUBLIC void Vfetk_PDE_u_D(PDE *thee, int type, int chart, double txq[],
 }
 
 /**
- * The signature here doesn't match what's in mc's src/pde/mc/pde.h, which 
+ * The signature here doesn't match what's in mc's src/pde/mc/pde.h, which
  * g++ seems to dislike for GAMer integration.  Trying a change of function
  * signature to match to see if that makes g++ happy.  Also see vfetk.h for
  * similar signature change. - P. Ellis 11-8-2011
  */
 VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
-  double F[]) { 
-/*VPUBLIC void Vfetk_PDE_u_T(sPDE *thee, 
+  double F[]) {
+/*VPUBLIC void Vfetk_PDE_u_T(sPDE *thee,
                            int type,
-                           int chart, 
-                           double txq[], 
-                           double F[], 
+                           int chart,
+                           double txq[],
+                           double F[],
                            double dF[][3]
                           ) { */
 
@@ -1904,7 +1904,7 @@ VPUBLIC void Vfetk_PDE_u_T(PDE *thee, int type, int chart, double txq[],
 }
 
 
-VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType, 
+VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType,
   int chart[], double vx[][3]) {
 
     int i;
@@ -1915,8 +1915,8 @@ VPUBLIC void Vfetk_PDE_bisectEdge(int dim, int dimII, int edgeType,
 }
 
 VPUBLIC void Vfetk_PDE_mapBoundary(int dim, int dimII, int vertexType,
-  int chart, double vx[3]) { 
-    
+  int chart, double vx[3]) {
+
 }
 
 VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
@@ -1962,7 +1962,7 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
     }
 
     /* We would like to resolve the mesh between the van der Waals surface the
-     * max distance from this surface where there could be coefficient 
+     * max distance from this surface where there could be coefficient
      * changes */
     switch(srfm) {
         case VSM_MOL:
@@ -2001,11 +2001,11 @@ VPUBLIC int Vfetk_PDE_markSimplex(int dim, int dimII, int simplexType,
 }
 
 VPUBLIC void Vfetk_PDE_oneChart(int dim, int dimII, int objType, int chart[],
-  double vx[][3], int dimV) { 
-    
+  double vx[][3], int dimV) {
+
 }
 
-VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) { 
+VPUBLIC double Vfetk_PDE_Ju(PDE *thee, int key) {
 
     int i, ichop;
     double dielE, qmE, coef2, u2;
@@ -2091,7 +2091,7 @@ VPUBLIC void Vfetk_externalUpdateFunction(SS **simps, int num) {
 
     rc = Vcsm_update(csm, simps, num);
 
-    if (!rc) { 
+    if (!rc) {
         Vnm_print(2, "Error while updating charge-simplex map!\n");
         VASSERT(0);
     }
@@ -2101,9 +2101,9 @@ VPRIVATE void polyEval(int numP, double p[], double c[][VMAXP], double xv[]) {
     int i;
     double x, y, z;
 
-    x = xv[0]; 
-    y = xv[1]; 
-    z = xv[2]; 
+    x = xv[0];
+    y = xv[1];
+    z = xv[2];
     for (i=0; i<numP; i++) {
         p[i] = c[i][0]
              + c[i][1]  * x
@@ -2127,8 +2127,8 @@ VPRIVATE void polyEval(int numP, double p[], double c[][VMAXP], double xv[]) {
     }
 }
 
-VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP], 
-  double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP], 
+VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP],
+  double cy[][VMAXP], double cz[][VMAXP], int ic[][VMAXP], int icx[][VMAXP],
   int icy[][VMAXP], int icz[][VMAXP]) {
 
     int i, j;
@@ -2142,7 +2142,7 @@ VPRIVATE void setCoef(int numP, double c[][VMAXP], double cx[][VMAXP],
     }
 }
 
-VPUBLIC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof, 
+VPUBLIC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof,
   int dof[]) {
 
     int qorder, bump, dimIS[VAPBS_NVS];
@@ -2205,7 +2205,7 @@ VPUBLIC int Vfetk_PDE_simplexBasisInit(int key, int dim, int comp, int *ndof,
     return qorder;
 }
 
-VPUBLIC void Vfetk_PDE_simplexBasisForm(int key, int dim, int comp, int pdkey, 
+VPUBLIC void Vfetk_PDE_simplexBasisForm(int key, int dim, int comp, int pdkey,
   double xq[], double basis[]) {
 
     if (pdkey == 0) {
@@ -2266,7 +2266,7 @@ VPUBLIC void Vfetk_dumpLocalVar() {
     Vnm_print(1, "DEBUG: nverts = %d\n", var.nverts);
     for (i=0; i<var.nverts; i++) {
         Vnm_print(1, "DEBUG: verts[%d] ID = %d\n", i, VV_id(var.verts[i]));
-        Vnm_print(1, "DEBUG: vx[%d] = (%g, %g, %g)\n", i, var.vx[i][0], 
+        Vnm_print(1, "DEBUG: vx[%d] = (%g, %g, %g)\n", i, var.vx[i][0],
           var.vx[i][1], var.vx[i][2]);
     }
     Vnm_print(1, "DEBUG: simp ID = %d\n", SS_id(var.simp));
@@ -2274,7 +2274,7 @@ VPUBLIC void Vfetk_dumpLocalVar() {
     Vnm_print(1, "DEBUG: fType = %d\n", var.fType);
     Vnm_print(1, "DEBUG: xq = (%g, %g, %g)\n", var.xq[0], var.xq[1], var.xq[2]);
     Vnm_print(1, "DEBUG: U[0] = %g\n", var.U[0]);
-    Vnm_print(1, "DEBUG: dU[0] = (%g, %g, %g)\n", var.dU[0][0], var.dU[0][1], 
+    Vnm_print(1, "DEBUG: dU[0] = (%g, %g, %g)\n", var.dU[0][0], var.dU[0][1],
       var.dU[0][2]);
     Vnm_print(1, "DEBUG: W = %g\n", var.W);
     Vnm_print(1, "DEBUG: d2W = %g\n", var.d2W);

@@ -20,41 +20,41 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -76,7 +76,7 @@
  *  @author  Nathan Baker
  */
 VEXTERNC void Gem_setExternalUpdateFunction(
-        Gem *thee, /**< The FEtk geometry manager */ 
+        Gem *thee, /**< The FEtk geometry manager */
         void (*externalUpdate)(SS **simps, int num) /**< Function pointer for
                                                       call during mesh
                                                       refinement */
@@ -86,7 +86,7 @@ VEXTERNC void Gem_setExternalUpdateFunction(
  *  @ingroup Vcsm
  *  @author  Nathan Baker
  */
-struct sVcsm { 
+struct sVcsm {
 
   Valist *alist;      /**< Atom (charge) list */
   int natom;          /**< Size of thee->alist; redundant, but useful for
@@ -97,14 +97,14 @@ struct sVcsm {
   int **sqm;          /**< The map which gives the list charges associated with
                        * each simplex in gm->simplices.  The indices of
                        * the first dimension are associated with the
-                       * simplex ID's in Vgm.  Each charge list (second 
+                       * simplex ID's in Vgm.  Each charge list (second
                        * dimension) contains entries corresponding to
-                       * indicies in thee->alist with lengths given in 
+                       * indicies in thee->alist with lengths given in
                        * thee->nsqm */
   int *nsqm;          /**< The length of the charge lists in thee->sqm */
-  int nsimp;          /**< The _currently used) length of sqm, nsqm -- may not 
+  int nsimp;          /**< The _currently used) length of sqm, nsqm -- may not
                        * always be up-to-date with Gem */
-  int msimp;          /**< The maximum number of entries that can be 
+  int msimp;          /**< The maximum number of entries that can be
                        * accomodated by sqm or nsqm  -- saves on realloc's */
   int **qsm;          /**< The inverse of sqm; the list of simplices
                        * associated with a given charge */
@@ -115,7 +115,7 @@ struct sVcsm {
 
 };
 
-/** 
+/**
  *  @ingroup Vcsm
  *  @brief   Declaration of the Vcsm class as the Vcsm structure
  */
@@ -182,7 +182,7 @@ typedef struct sVcsm Vcsm;
      *  @ingroup Vcsm
      *  @author  Nathan Baker
      *  @return  Pointer to simplex object
-     */ 
+     */
     VEXTERNC SS* Vcsm_getSimplex(
             Vcsm *thee,  /**< The Vcsm object */
             int isimp,  /**< Index of simplex in Vcsm list */
@@ -193,7 +193,7 @@ typedef struct sVcsm Vcsm;
      *  @ingroup Vcsm
      *  @author  Nathan Baker
      *  @return  Gem index of specified simplex
-     */ 
+     */
     VEXTERNC int Vcsm_getSimplexIndex(
             Vcsm *thee,  /**< The Vcsm object */
             int isimp,  /**< Index of simplex in Vcsm list */
@@ -226,12 +226,12 @@ typedef struct sVcsm Vcsm;
 /////////////////////////////////////////////////////////////////////////// */
 
 /** @brief   Construct Vcsm object
- *  @ingroup Vcsm 
+ *  @ingroup Vcsm
  *  @author  Nathan Baker
  *  @note    \li The initial mesh must be sufficiently coarse for the assignment
  *             procedures to be efficient
  *           \li The map is not built until Vcsm_init is called
- *  @return  Pointer to newly allocated Vcsm object 
+ *  @return  Pointer to newly allocated Vcsm object
  */
 VEXTERNC Vcsm* Vcsm_ctor(
         Valist *alist,  /**< List of atoms */
@@ -239,12 +239,12 @@ VEXTERNC Vcsm* Vcsm_ctor(
         );
 
 /** @brief   FORTRAN stub to construct Vcsm object
- *  @ingroup Vcsm 
+ *  @ingroup Vcsm
  *  @author  Nathan Baker
  *  @note    \li The initial mesh must be sufficiently coarse for the assignment
  *             procedures to be efficient
  *           \li The map is not built until Vcsm_init is called
- *  @return  1 if successful, 0 otherwise 
+ *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int Vcsm_ctor2(
         Vcsm *thee,  /**< The Vcsm object */
@@ -282,7 +282,7 @@ VEXTERNC void Vcsm_init(
  *           refinement
  *  @ingroup Vcsm
  *  @author  Nathan Baker
- *  @return  1 if successful, 0 otherwise 
+ *  @return  1 if successful, 0 otherwise
  */
 VEXTERNC int Vcsm_update(
         Vcsm *thee, /**< The Vcsm object */

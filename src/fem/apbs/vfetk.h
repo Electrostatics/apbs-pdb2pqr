@@ -19,41 +19,41 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer.  
  *
- * Redistributions in binary form must reproduce the above copyright notice, 
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice,
  * this list of conditions and the following disclaimer in the documentation
  * and/or other materials provided with the distribution.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -76,7 +76,7 @@
 #include "apbs/femparm.h"
 
 /**
- * @brief  Linear solver type 
+ * @brief  Linear solver type
  * @ingroup Vfetk
  * @note  Do not change these values; they correspond to settings in FEtk
  */
@@ -111,7 +111,7 @@ enum eVfetk_MeshLoad {
 typedef enum eVfetk_MeshLoad Vfetk_MeshLoad;
 
 /**
- * @brief  Non-linear solver type 
+ * @brief  Non-linear solver type
  * @ingroup Vfetk
  * @note  Do not change these values; they correspond to settings in FEtk
  */
@@ -170,7 +170,7 @@ typedef enum eVfetk_PrecType Vfetk_PrecType;
  *  (written by Mike Holst) provided with the PMG code.
  *
  */
-struct sVfetk { 
+struct sVfetk {
 
   Vmem *vmem;  /**< Memory management object */
   Gem *gm;  /**< Grid manager (container class for master vertex
@@ -189,7 +189,7 @@ struct sVfetk {
   double ntol;  /**< Residual tolerance for nonlinear solver */
   Vfetk_GuessType gues;  /**< Initial guess method */
   Vfetk_PrecType lprec;  /**< Linear preconditioner */
-  int pjac;  /**< Flag to print the jacobians (usually set this to -1, 
+  int pjac;  /**< Flag to print the jacobians (usually set this to -1,
               * please) */
   PBEparm *pbeparm;  /**<  Generic PB parameters */
   FEMparm *feparm;  /**<  FEM-specific parameters */
@@ -229,9 +229,9 @@ struct sVfetk_LocalVar {
     double jumpDiel;  /**< Dielectric value on one side of a simplex face */
     Vfetk *fetk;  /**< Pointer to the VFETK object */
     Vgreen *green;  /**< Pointer to a Green's function object */
-    int initGreen;  /**< Boolean to designate whether Green's function 
+    int initGreen;  /**< Boolean to designate whether Green's function
                      * has been initialized */
-    SS *simp;  /**< Pointer to the latest simplex object; set in initElement() 
+    SS *simp;  /**< Pointer to the latest simplex object; set in initElement()
                 *  and delta() */
     VV *verts[4];  /**< Pointer to the latest vertices; set in initElement */
     int nverts;  /**< number of vertices in the simplex */
@@ -249,9 +249,9 @@ struct sVfetk_LocalVar {
     double u_T;  /**< Store true value */
 };
 
-/** 
+/**
  *  @ingroup Vfetk
- *  @brief   Declaration of the Vfetk_LocalVar subclass as the Vfetk_LocalVar 
+ *  @brief   Declaration of the Vfetk_LocalVar subclass as the Vfetk_LocalVar
  *           structure */
 typedef struct sVfetk_LocalVar Vfetk_LocalVar;
 
@@ -297,7 +297,7 @@ typedef struct sVfetk_LocalVar Vfetk_LocalVar;
      *  @ingroup Vfetk
      *  @author  Nathan Baker
      *  @note    Friend function of Vatom
-     *  @returns Partition ID 
+     *  @returns Partition ID
      */
     VEXTERNC int Vfetk_getAtomColor(
             Vfetk *thee, /**< The Vfetk object */
@@ -316,28 +316,28 @@ typedef struct sVfetk_LocalVar Vfetk_LocalVar;
 // Class Vfetk: Non-Inlineable methods (vfetk.c)
 /////////////////////////////////////////////////////////////////////////// */
 
-/** 
+/**
  * @brief  Constructor for Vfetk object
  * @ingroup  Vfetk
  * @author  Nathan Baker
- * @return  Pointer to newly allocated Vfetk object 
+ * @return  Pointer to newly allocated Vfetk object
  * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
- *         Vfetk_genCube 
+ *         Vfetk_genCube
  */
 VEXTERNC Vfetk* Vfetk_ctor(
         Vpbe *pbe, /**< Vpbe (PBE manager object) */
         Vhal_PBEType type /**< Version of PBE to solve */
         );
 
-/** 
+/**
  * @brief  FORTRAN stub constructor for Vfetk object
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @return  1 if successful, 0 otherwise
  * @note  This sets up the Gem, AM, and Aprx FEtk objects but does not create
  *         a mesh.  The easiest way to create a mesh is to then call
- *         Vfetk_genCube 
+ *         Vfetk_genCube
  */
 VEXTERNC int Vfetk_ctor2(
         Vfetk *thee, /**< Vfetk object memory */
@@ -345,7 +345,7 @@ VEXTERNC int Vfetk_ctor2(
         Vhal_PBEType type /**< Version of PBE to solve */
         );
 
-/** 
+/**
  * @brief   Object destructor
  * @ingroup Vfetk
  * @author  Nathan Baker
@@ -354,7 +354,7 @@ VEXTERNC void Vfetk_dtor(
         Vfetk **thee /**< Pointer to memory location of Vfetk object */
         );
 
-/** 
+/**
  * @brief   FORTRAN stub object destructor
  * @ingroup Vfetk
  * @author  Nathan Baker
@@ -363,9 +363,9 @@ VEXTERNC void Vfetk_dtor2(
         Vfetk *thee /**< Pointer to Vfetk object to be destroyed */
         );
 
-/** 
+/**
  * @brief   Create an array containing the solution (electrostatic potential
- *          in units of \f$k_B T/e\f$) at the finest mesh level. 
+ *          in units of \f$k_B T/e\f$) at the finest mesh level.
  * @ingroup Vfetk
  * @author  Nathan Baker and Michael Holst
  * @note    The user is responsible for destroying the newly created array
@@ -384,13 +384,13 @@ VEXTERNC double* Vfetk_getSolution(
  */
 VEXTERNC void Vfetk_setParameters(
         Vfetk *thee, /**< The Vfetk object */
-        PBEparm *pbeparm, /**< Parameters for solution of the PBE */ 
+        PBEparm *pbeparm, /**< Parameters for solution of the PBE */
         FEMparm *feparm /**< FEM-speecific solution parameters */
         );
 
-/** 
+/**
  * @brief   Return the total electrostatic energy
- * 
+ *
  *  Using the solution at the finest mesh level, get the electrostatic energy
  *  using the free energy functional for the Poisson-Boltzmann equation
  *  without removing any self-interaction terms (i.e., removing the reference
@@ -416,22 +416,22 @@ VEXTERNC double  Vfetk_energy(
                      the LPBE energy functional is used. If -2, SMPBE is used. */
         );
 
-/** 
+/**
  * @brief   Get the "mobile charge" and "polarization" contributions to the
  *          electrostatic energy.
- * 
+ *
  * Using the solution at the finest mesh level, get the
  * electrostatic energy due to the interaction of the mobile charges
  * with the potential and polarization of the dielectric medium:
  *   \f[ G = \frac{1}{4 I_s} \sum_i c_i q_i^2 \int
- *   \overline{\kappa}^2(x) e^{-q_i u(x)} dx + \frac{1}{2} \int 
+ *   \overline{\kappa}^2(x) e^{-q_i u(x)} dx + \frac{1}{2} \int
  *   \epsilon ( \nabla u )^2 dx \f]
  * for the NPBE and
- *   \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx + 
+ *   \f[ G = \frac{1}{2} \int \overline{\kappa}^2(x) u^2(x) dx +
  *   \frac{1}{2} \int \epsilon ( \nabla u )^2 dx \f]
  * for the LPBE.  Here \f$i\f$ denotes the counterion species,
  * \f$I_s\f$ is the bulk ionic strength, \f$\overline{\kappa}^2(x)\f$
- * is the modified Debye-Huckel parameter, \f$c_i\f$ is the  
+ * is the modified Debye-Huckel parameter, \f$c_i\f$ is the
  * concentration of species \f$i\f$, \f$q_i\f$ is the charge of
  * species \f$i\f$, \f$\epsilon\f$ is the dielectric function, and
  * \f$u(x)\f$ is the dimensionless electrostatic potential.  The
@@ -453,7 +453,7 @@ VEXTERNC double  Vfetk_dqmEnergy(
                      */
         );
 
-/** 
+/**
  * @brief   Get the "fixed charge" contribution to the electrostatic energy
  *
  *          Using the solution at the finest mesh level, get the
@@ -476,7 +476,7 @@ VEXTERNC double Vfetk_qfEnergy(
                     if non-negative */
         );
 
-/** 
+/**
  * @brief   Return the memory used by this structure (and its contents)
  *          in bytes
  * @ingroup Vfetk
@@ -487,10 +487,10 @@ VEXTERNC unsigned long int Vfetk_memChk(
         Vfetk *thee /**< THe Vfetk object */
         );
 
-/** 
+/**
  * @brief   Transfer color (partition ID) information frmo a partitioned mesh
  *          to the atoms.
- * 
+ *
  *          Transfer color information from partitioned mesh to the atoms.
  *          In the case that a charge is shared between two partitions, the
  *          partition color of the first simplex is selected.  Due to the
@@ -506,9 +506,9 @@ VEXTERNC void Vfetk_setAtomColors(
         Vfetk *thee /**< THe Vfetk object */
         );
 
-/** 
+/**
  * @brief   Writes a Bmat to disk in Harwell-Boeing sparse matrix format.
- * 
+ *
  * @ingroup Vfetk
  * @author  Stephen Bond
  * @note    This is a friend function of Bmat
@@ -530,7 +530,7 @@ VEXTERNC Vrc_Codes Vfetk_genCube(
 								 double length[3],  /**< Mesh lengths */
 								 Vfetk_MeshLoad meshType  /**< Mesh boundary conditions */
 								 );
- 
+
 /**
  * @brief	Loads a mesh into the Vfetk (and associated) object(s).
  * @ingroup	Vfetk
@@ -545,17 +545,17 @@ VEXTERNC Vrc_Codes Vfetk_loadMesh(
 								  );
 
 /**
- * @brief  Constructs the FEtk PDE object 
+ * @brief  Constructs the FEtk PDE object
  * @ingroup  Vfetk
  * @author  Nathan Baker
- * @return  Newly-allocated PDE object 
+ * @return  Newly-allocated PDE object
  * @bug  Not thread-safe */
 VEXTERNC PDE* Vfetk_PDE_ctor(
         Vfetk *fetk /**< The Vfetk object */
         );
 
 /**
- * @brief  Intializes the FEtk PDE object 
+ * @brief  Intializes the FEtk PDE object
  * @ingroup  Vfetk
  * @author  Nathan Baker (with code by Mike Holst)
  * @return  1 if successful, 0 otherwise
@@ -585,7 +585,7 @@ VEXTERNC void Vfetk_PDE_dtor2(
         PDE *thee /**< PDE object memory */
         );
 
-/** 
+/**
  * @brief  Do once-per-assembly initialization
  * @ingroup  Vfetk
  * @author  Nathan Baker and Mike Holst
@@ -596,7 +596,7 @@ VEXTERNC void Vfetk_PDE_initAssemble(
         double rp[] /**< Double parameter array (not used) */
         );
 
-/** 
+/**
  * @brief  Do once-per-element initialization
  * @ingroup  Vfetk
  * @author  Nathan Baker and Mike Holst
@@ -612,7 +612,7 @@ VEXTERNC void Vfetk_PDE_initElement(
         void *data /**< Simplex pointer (hack) */
         );
 
-/** 
+/**
  * @brief  Do once-per-face initialization
  * @ingroup  Vfetk
  * @author  Nathan Baker and Mike Holst
@@ -622,15 +622,15 @@ VEXTERNC void Vfetk_PDE_initFace(
         int faceType, /**< Simplex face type (interior or various boundary
                         types) */
         int chart, /**< Chart in which the vertex coordinates are provided,
-                     used here as a bitfield for molecular accessibility */ 
+                     used here as a bitfield for molecular accessibility */
         double tnvec[] /**< Coordinates of outward normal vector for face */
         );
 
-/** 
+/**
  * @brief  Do once-per-point initialization
  * @ingroup  Vfetk
  * @author  Nathan Baker
- * @bug This function is not thread-safe 
+ * @bug This function is not thread-safe
  * @bug This function uses pre-defined boudnary definitions for the molecular
  *      surface. */
 VEXTERNC void Vfetk_PDE_initPoint(
@@ -643,13 +643,13 @@ VEXTERNC void Vfetk_PDE_initPoint(
         double tdU[][VAPBS_DIM] /**< Solution derivative at point */
         );
 
-/** 
+/**
  * @brief  Evaluate strong form of PBE.  For interior points, this is:
  *  \f[ -\nabla \cdot \epsilon \nabla u + b(u) - f \f]
  *  where \f$b(u)\f$ is the (possibly nonlinear) mobile ion term and \f$f\f$ is
  *  the source charge distribution term (for PBE) or the induced surface charge
  *  distribution (for RPBE).  For an interior-boundary (simplex face) point,
- *  this is: 
+ *  this is:
  *  \f[ [\epsilon(x) \nabla u(x) \cdot n(x)]_{x=0^+} - [\epsilon(x) \nabla u(x)
  *  \cdot n(x)]_{x=0^-} \f]
  *  where \f$n(x)\f$ is the normal to the simplex face and the term represents
@@ -657,7 +657,7 @@ VEXTERNC void Vfetk_PDE_initPoint(
  *  outer-boundary contribution for this problem.
  * @ingroup  Vfetk
  * @author  Nathan Baker
- * @bug This function is not thread-safe 
+ * @bug This function is not thread-safe
  * @bug This function is not implemented (sets error to zero)
  */
 VEXTERNC void Vfetk_PDE_Fu(
@@ -701,7 +701,7 @@ VEXTERNC double Vfetk_PDE_DFu_wv(
         int key, /**< Integrand to evaluate (0 = interior weak form, 1 =
                    boundary weak form) */
         double W[], /**< Trial function value at current point */
-        double dW[][VAPBS_DIM], /**< Trial function gradient at current point */ 
+        double dW[][VAPBS_DIM], /**< Trial function gradient at current point */
         double V[], /**< Test function value at current point */
         double dV[][VAPBS_DIM] /**< Test function gradient */
         );
@@ -716,7 +716,7 @@ VEXTERNC void Vfetk_PDE_delta(
         PDE *thee, /**< PDE object */
         int type, /**< Vertex type */
         int chart, /**< Chart for point coordinates */
-        double txq[], /**< Point coordinates */ 
+        double txq[], /**< Point coordinates */
         void *user, /**< Vertex object pointer */
         double F[] /**< Set to delta function value */
         );
@@ -726,13 +726,13 @@ VEXTERNC void Vfetk_PDE_delta(
  * @ingroup  Vfetk
  * @author  Nathan Baker
  * @bug  This function is hard-coded to call only multiple-sphere
- * Debye-H&uuml; functions. 
+ * Debye-H&uuml; functions.
  * @bug  This function is not thread-safe. */
 VEXTERNC void Vfetk_PDE_u_D(
         PDE *thee, /**< PDE object */
         int type, /**< Vertex boundary type */
         int chart, /**< Chart for point coordinates */
-        double txq[], /**< Point coordinates */ 
+        double txq[], /**< Point coordinates */
         double F[] /**< Set to boundary values */
         );
 
@@ -747,7 +747,7 @@ VEXTERNC void Vfetk_PDE_u_T(
         PDE *thee, /**< PDE object */
         int type, /**< Point type */
         int chart, /**< Chart for point coordinates */
-        double txq[], /**< Point coordinates */ 
+        double txq[], /**< Point coordinates */
         double F[] /**< Set to value at point */
         );
 
@@ -759,7 +759,7 @@ VEXTERNC void Vfetk_PDE_u_T(
 VEXTERNC void Vfetk_PDE_bisectEdge(
         int dim, /**< Intrinsic dimension of manifold */
         int dimII, /**< Embedding dimension of manifold */
-        int edgeType,  /**< Type of edge being refined */ 
+        int edgeType,  /**< Type of edge being refined */
         int chart[], /**< Chart for edge vertices, used here as accessibility
                        bitfields */
         double vx[][VAPBS_DIM] /**< Edge vertex coordindates */
@@ -773,8 +773,8 @@ VEXTERNC void Vfetk_PDE_bisectEdge(
 VEXTERNC void Vfetk_PDE_mapBoundary(
         int dim, /**< Intrinsic dimension of manifold */
         int dimII, /**< Embedding dimension of manifold */
-        int vertexType,  /**< Type of vertex */ 
-        int chart, /**< Chart for vertex coordinates */ 
+        int vertexType,  /**< Type of vertex */
+        int chart, /**< Chart for vertex coordinates */
         double vx[VAPBS_DIM] /**< Vertex coordinates */
         );
 
@@ -789,11 +789,11 @@ VEXTERNC void Vfetk_PDE_mapBoundary(
 VEXTERNC int Vfetk_PDE_markSimplex(
         int dim, /**< Intrinsic manifold dimension */
         int dimII, /**< Embedding manifold dimension */
-        int simplexType,  /**< Type of simplex being refined */ 
+        int simplexType,  /**< Type of simplex being refined */
         int faceType[VAPBS_NVS], /**< Types of faces in simplex */
         int vertexType[VAPBS_NVS], /**< Types of vertices in simplex */
         int chart[], /**< Charts for vertex coordinates */
-        double vx[][VAPBS_DIM], /**< Vertex coordinates */ 
+        double vx[][VAPBS_DIM], /**< Vertex coordinates */
         void *simplex /**< Simplex pointer */
         );
 
@@ -806,7 +806,7 @@ VEXTERNC void Vfetk_PDE_oneChart(
         int dim, /**< Intrinsic manifold dimension */
         int dimII, /**< Embedding manifold dimension */
         int objType, /**< ??? */
-        int chart[], /**< Charts of vertices' coordinates */ 
+        int chart[], /**< Charts of vertices' coordinates */
         double vx[][VAPBS_DIM], /**< Vertices' coordinates */
         int dimV /**< Number of vertices */
         );
@@ -850,12 +850,12 @@ VEXTERNC void Vfetk_externalUpdateFunction(
  *   The basis ordering is important.  For a fixed quadrature
  *   point iq, you must follow the following ordering in p[iq][],
  *   based on how you specify the degrees of freedom in dof[]:
- *   
+ *
  *   <v_0 vDF_0>,      <v_1 vDF_0>,      ..., <v_{nv} vDF_0>
  *   <v_0 vDF_1>,      <v_1 vDF_1>,      ..., <v_{nv} vDF_1>
  *                           ...
  *   <v_0 vDF_{nvDF}>, <v_0 vDF_{nvDF}>, ..., <v_{nv} vDF_{nvDF}>
- *   
+ *
  *   <e_0 eDF_0>,      <e_1 eDF_0>,      ..., <e_{ne} eDF_0>
  *   <e_0 eDF_1>,      <e_1 eDF_1>,      ..., <e_{ne} eDF_1>
  *                           ...
@@ -872,15 +872,15 @@ VEXTERNC void Vfetk_externalUpdateFunction(
  *   <s_0 sDF_{nsDF}>, <s_1 sDF_{nsDF}>, ..., <s_{ns} sDF_{nsDF}>
  *
  *   For example, linear elements in R^3, with one degree of freedom at each *
- *   vertex, would use the following ordering: 
+ *   vertex, would use the following ordering:
  *
- *     <v_0 vDF_0>, <v_1 vDF_0>, <v_2 vDF_0>, <v_3 vDF_0> 
+ *     <v_0 vDF_0>, <v_1 vDF_0>, <v_2 vDF_0>, <v_3 vDF_0>
  *
  *   Quadratic elements in R^2, with one degree of freedom at each vertex and
- *   edge, would use the following ordering: 
- * 
- *     <v_0 vDF_0>, <v_1 vDF_0>, <v_2 vDF_0> 
- *     <e_0 eDF_0>, <e_1 eDF_0>, <e_2 eDF_0> 
+ *   edge, would use the following ordering:
+ *
+ *     <v_0 vDF_0>, <v_1 vDF_0>, <v_2 vDF_0>
+ *     <e_0 eDF_0>, <e_1 eDF_0>, <e_2 eDF_0>
  *
  *   You can use different trial and test spaces for each component of the
  *   elliptic system, thereby allowing for the use of Petrov-Galerkin methods.
@@ -888,14 +888,14 @@ VEXTERNC void Vfetk_externalUpdateFunction(
  *   your PDE constructor to reflect that DF(u)(w,v) will be different from
  *   DF(u)(v,w), even if your form acts symmetrically when the same basis is
  *   used for w and v.
- * 
+ *
  *   You can also use different trial spaces for each component of the elliptic
  *   system, and different test spaces for each component of the elliptic
- *   system.  This allows you to e.g.  use a basis which is vertex-based for 
+ *   system.  This allows you to e.g.  use a basis which is vertex-based for
  *   one component, and a basis which is edge-based for another.  This is
  *   useful in fluid mechanics, eletromagnetics, or simply to play around with
- *   different elements.  
- *   
+ *   different elements.
+ *
  *   This function is called by MC to build new master elements whenever it
  *   reads in a new mesh.  Therefore, this function does not have to be all
  *   that fast, and e.g.  could involve symbolic computation.
@@ -905,9 +905,9 @@ VEXTERNC int Vfetk_PDE_simplexBasisInit(
         int key, /**< Basis type to evaluate (0 = trial, 1 = test, 2 = trialB,
                    3 = testB) */
         int dim, /**< Spatial dimension */
-        int comp, /**< Which component of elliptic system to produce basis 
-                    for?  */ 
-        int *ndof,  /**< Set to the number of degrees of freedom */ 
+        int comp, /**< Which component of elliptic system to produce basis
+                    for?  */
+        int *ndof,  /**< Set to the number of degrees of freedom */
         int dof[] /**< Set to degree of freedom per v/e/f/s */
         );
 
@@ -944,7 +944,7 @@ VEXTERNC void Vfetk_PDE_simplexBasisForm(
  * @note  @see Vfetk_genCube */
 VEXTERNC void Vfetk_readMesh(
         Vfetk *thee, /**< THe Vfetk object */
-        int skey, /**< The sock format key (0 = MCSF simplex format) */ 
+        int skey, /**< The sock format key (0 = MCSF simplex format) */
         Vio *sock /**< Socket object ready for reading */
         );
 
@@ -959,9 +959,9 @@ VEXTERNC void Vfetk_dumpLocalVar();
  * @brief  Fill an array with the specified data
  * @ingroup  Vfetk
  * @author  Nathan Baker
- * @note  This function is thread-safe 
+ * @note  This function is thread-safe
  * @bug  Several values of type are not implemented
- * @return  1 if successful, 0 otherwise */  
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int Vfetk_fillArray(
         Vfetk *thee, /**< The Vfetk object with the data */
         Bvec *vec, /**< The vector to hold the data */
@@ -979,9 +979,9 @@ VEXTERNC int Vfetk_fillArray(
  * @param iofmt  Output device format (ASCII/XDR)
  * @param thost  Output hostname (for sockets)
  * @param fname  Output FILE/BUFF/UNIX/INET name
- * @note  This function is thread-safe 
+ * @note  This function is thread-safe
  * @bug  Some values of format are not implemented
- * @return  1 if successful, 0 otherwise */  
+ * @return  1 if successful, 0 otherwise */
 VEXTERNC int Vfetk_write(
         Vfetk *thee, /**< The Vfetk object */
         const char *iodev, /**< Output device type (FILE = file, BUFF = buffer,

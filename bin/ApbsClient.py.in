@@ -12,7 +12,7 @@ Written by Samir Unni, Dave Gohara, Nathan Baker, Yong Huang based on example co
 
       Additional contributing authors listed in the code documentation.
 
-    Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the Pacific 
+    Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the Pacific
     Northwest National Laboratory, operated by Battelle Memorial Institute, Pacific
     Northwest Division for the U.S. Department of Energy.
 
@@ -22,29 +22,29 @@ Written by Samir Unni, Dave Gohara, Nathan Baker, Yong Huang based on example co
     Portions Copyright (c) 1995, Michael Holst.
     All rights reserved.
 
-    Redistribution and use in source and binary forms, with or without 
+    Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
 
-    * Redistributions of source code must retain the above copyright notice, this 
-      list of conditions and the following disclaimer.  
+    * Redistributions of source code must retain the above copyright notice, this
+      list of conditions and the following disclaimer.
 
-    * Redistributions in binary form must reproduce the above copyright notice, 
+    * Redistributions in binary form must reproduce the above copyright notice,
       this list of conditions and the following disclaimer in the documentation
       and/or other materials provided with the distribution.
 
-    * Neither the name of the developer nor the names of its contributors may be 
-      used to endorse or promote products derived from this software without 
+    * Neither the name of the developer nor the names of its contributors may be
+      used to endorse or promote products derived from this software without
       specific prior written permission.
 
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
     DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
-    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
-    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
-    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
-    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+    ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ----------------------------------------------------------------------
     APBS uses FETK (the Finite Element ToolKit) to solve the
@@ -63,7 +63,7 @@ Written by Samir Unni, Dave Gohara, Nathan Baker, Yong Huang based on example co
     memory usage when solving the Poisson-Boltzmann equation.
 ----------------------------------------------------------------------
     Please cite your use of APBS as:
-    
+
     Baker NA, Sept D, Joseph S, Holst MJ, McCammon JA. Electrostatics of
     nanosystems: application to microtubules and the ribosome. Proc.
     Natl. Acad. Sci. USA 98, 10037-10041 2001.
@@ -244,7 +244,7 @@ def fetchResults(jobID,outputDirectory,outputFiles,fetchAll):
 		except OSError:
 			pass
 		os.chdir(outputDirectory)
-    
+
 	for file in outputFiles:
 		fileName = file._name
 		urllib.urlretrieve(file._url, fileName)
@@ -255,7 +255,7 @@ def pollStatus(jobID,outputDirectory):
 	global service_url
 	appServicePort = AppServiceLocator().getAppServicePort(service_url)
 	status = appServicePort.queryStatus(queryStatusRequest(jobID))
-	
+
 	if status._code == 4:
 		stderr.write("Error!  The calculation failed!\n")
 		stderr.write("Message:  %s\n" % status._message)
@@ -271,7 +271,7 @@ def initLocalVars():
 	""" Initializes variables for local usage.  This should eventually be merged with processOptions """
 	vars = {'typeOfRun' : 'local'}
 	optionDict = processOptions()
-	
+
 	# Non-blocking parser
 	if optionDict.has_key("no-fetch"):
 		vars['fetchFiles'] = False
@@ -283,13 +283,13 @@ def initLocalVars():
 		vars["blocking"] = True
 	# Samir:  I have no idea what fetchFileDescriptionLocation was supposed to do so I set it to None
 	vars['fetchFileDescriptionLocation'] = None
-	
+
 	# Parses location to save to after a blocking run
 	if optionDict.has_key("fetch") and vars["blocking"]:
 		vars["outputDirectory"] = optionDict["fetch"]
 	else:
 		vars['outputDirectory'] = None
-	
+
 	# Parses custom service location
 	if optionDict.has_key("service-location"):
 		vars["service_url"] = optionDict["service-location"]
@@ -304,13 +304,13 @@ def initLocalVars():
 			vars["argList"] = ""
 		argString = "--output-format=%s" % optionDict["output-format"]
 		vars["argList"] = "%s %s" % (vars["argList"], argString)
-		    
+
 	return vars
 
 def initRemoteVars(argv):
 	""" Initializes variables for remote usage """
 	vars = {'typeOfRun':'remote'}
-    
+
 	# data will always be written to a file, and have the same main file name as the .in file, since that can't be specified through the web interface
 	vars['outFileName'] = os.path.basename(argv[-1])
 	for i in (1, len(vars['outFileName'])):
@@ -324,7 +324,7 @@ def displayResults(jobID):
 	global service_url
 	appServicePort = AppServiceLocator().getAppServicePort(service_url)
 	resp = appServicePort.getOutputs(getOutputsRequest(jobID))
-	
+
 	# Retrieve a listing of all output files
 	stdout.write("\tStandard Output:  %s\n" % resp._stdOut, "\n")
 	stdout.write("\tStandard Error:  %s\n", resp._stdErr)
@@ -348,18 +348,18 @@ def execApbs(vars=None, argv=None):
 		vars = initRemoteVars(argv)
 		if custom_service_url != None:
 			vars['service_url'] = custom_service_url
-	global service_url	
+	global service_url
 	#*argument parser
 	# command-line arguments
 	vars['inFile'] = argv[-1]
-	
+
 	# parses input file
 	if(vars['inFile'].find("/")==-1):
 		directory=""
 	else:
 		directory = os.path.dirname(vars['inFile'])+'/'
 		vars['inFile'] = os.path.basename(vars['inFile'])
-		
+
 	nprocs = 1
 	if not vars.has_key('service_url'):
 		# find out if it's sequential or parallel
@@ -380,15 +380,15 @@ def execApbs(vars=None, argv=None):
 				break
 		if version_check_flag:
 			vars['service_url'] = service_url
-			
+
 		tempFile.close()
 	else:
-		version_check_flag = True     # Enable version checking for custom defined Opal service as well 
+		version_check_flag = True     # Enable version checking for custom defined Opal service as well
 		service_url = vars['service_url']
 	# Retrieve a reference to the AppServicePort
 	#*this is also from the path to the service
 	appServicePort = AppServiceLocator().getAppServicePort(vars['service_url'])
-	
+
 	# Set up remote job launch
 	req = launchJobRequest()
 	# Checks version compatibility (but currently only works for sequential calculations)
@@ -401,16 +401,16 @@ def execApbs(vars=None, argv=None):
 			stderr.write("WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!\n")
 			if webRun:
 				return False
-	
+
 	if(vars.has_key('argList')):
 		vars['argList'] = vars['argList'] + " " + vars['inFile']
 	else:
 		vars['argList']=vars['inFile']
-		
+
 	req._argList = vars['argList']
 	req._numProcs = nprocs
 	# append all input files in this manner - in this case we have two of them
-	
+
 	inputFiles = []
 	#*this is where apbs.in is read in
 	inputFiles.append(ns0.InputFileType_Def('inputFile'))
@@ -419,7 +419,7 @@ def execApbs(vars=None, argv=None):
 	tempFile = open(directory+vars['inFile'], 'r')
 	inputFiles[-1]._contents = tempFile.read()
 	tempFile.close()
-    
+
 	# this is where the rest of the files to read in are determined
 	start = False
 	tempFile = open(directory+vars['inFile'], 'r')
@@ -447,16 +447,16 @@ def execApbs(vars=None, argv=None):
 			tempFile2.close()
 		if(line=="read"):
 			start = True
-	
+
 	tempFile.close()
-	
+
 	# req's inputFile variable is the array of input files created in the lines directly above
 	req._inputFile = inputFiles
-	
+
 	if vars['typeOfRun']=='remote':
 		appServicePort.launchJob(req)
 		return [appServicePort, appServicePort.launchJob(req)]
-	
+
 	# Launch job, and retrieve job ID
 	print "Launching remote APBS job"
 	try:
@@ -465,12 +465,12 @@ def execApbs(vars=None, argv=None):
 		stderr.write("Error! Failed to execute Opal job. Please send the entire output to the APBS development team.\n")
 		stderr.write("%s\n" % errstr.fault.AsSoap())
 		sys.exit(13)
-	
+
 	jobID = resp._jobID
 	print "Received Job ID:", jobID
-    
+
 	status = resp._status
-    
+
 	if(vars['blocking']):
 		# Poll for job status
 		print "Polling job status"
@@ -480,31 +480,31 @@ def execApbs(vars=None, argv=None):
 			stdout.write("\tCode:  %s\n" % status._code)
 			stdout.write("\tMessage:  %s\n" % status._message)
 			stdout.write("\tURL for all results:  %s\n" % status._baseURL)
-			
+
 			if (status._code == 8) or (status._code == 4) or (not vars['blocking']):
 				# STATUS_DONE || STATUS_FAILED
 				break
-			
+
 			# Sleep for 30 seconds
 			stdout.write("Waiting 30 seconds...\n")
 			time.sleep(30)
-            
+
 			# Query job status
 			status = appServicePort.queryStatus(queryStatusRequest(jobID))
-        
+
 		# Output
 		if vars['fetchFiles']:
 			pollStatus(jobID, vars['outputDirectory'])
 		else:
 			displayResults(jobID)
-			
-			
+
+
 	else:
 		stdout.write("When the job is complete, the results can be retrieved at: \n")
 		stdout.write("\t%s\n" % status._baseURL)
 		stdout.write("If you want to use the APBS Opal client to download the results for you, the job ID is:\n")
 		stdout.write("\t%s\n" % jobID)
-		
+
 def main():
 	""" Parses input, runs local jobs, and fetches files from previously completed calculations. """
 	# __main__ output
@@ -554,7 +554,7 @@ def main():
 
 
 
-# Run the main driver if we are invoked 
+# Run the main driver if we are invoked
 if __name__ == "__main__":
 	main()
 	execApbs(vars=initLocalVars())

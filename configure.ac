@@ -6,7 +6,7 @@ dnl Pacific Northwest National Laboratory
 dnl
 dnl Additional contributing authors listed in the code documentation.
 dnl
-dnl Copyright (c) 2010-2011 Battelle Memorial Institute. Developed at the
+dnl Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
 dnl Pacific Northwest National Laboratory, operated by Battelle Memorial
 dnl Institute, Pacific Northwest Division for the U.S. Department Energy.
 dnl Portions Copyright (c) 2002-2010.  Washington University in St. Louis.
