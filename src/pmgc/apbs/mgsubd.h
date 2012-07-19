@@ -75,7 +75,7 @@
  *             ido==3: rebuild the second operator at the coarsest level
  *
  *  @note    The fine level must be build before any coarse levels.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  Replaces buildops from mgsubd.f
@@ -128,7 +128,7 @@ VEXTERNC void Vbuildops(
  *           grdy(i)   = brdy(iz(9,i))
  *           grdz(i)   = brdz(iz(10,i))
  *
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildstr from mgsubd.f
  */
@@ -144,7 +144,7 @@ VEXTERNC void Vbuildstr(
  *  @note    Although the fine grid matrix may be 7 or 27 diagonal,
  *           the coarse grid matrix is always 27 diagonal.
  *           (only 14 stored due to symmetry.)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildgaler0 from mgsubd.f
  */

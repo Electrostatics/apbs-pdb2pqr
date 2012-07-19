@@ -59,7 +59,7 @@
 
 /** @brief   Copy operation for a grid function with boundary values.
  *           Quite simply copies one 3d matrix to another
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xcopy from mikpckd.f
@@ -76,7 +76,7 @@ VEXTERNC void Vxcopy(
 
 /** @brief   Copy operation for a grid function with boundary values.
  *           Quite simply copies one 3d matrix to another
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xcopy_small from mikpckd.f
@@ -93,7 +93,7 @@ VEXTERNC void Vxcopy_small(
 
 /** @brief   Copy operation for a grid function with boundary values.
  *           Quite simply copies one 3d matrix to another
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xcopy_large from mikpckd.f
@@ -109,7 +109,7 @@ VEXTERNC void Vxcopy_large(
 
 
 /** @brief   saxpy operation for a grid function with boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xaxpy from mikpckd.f
@@ -124,7 +124,7 @@ VEXTERNC void Vxaxpy(
 		);
 
 /** @brief   Norm operation for a grid function with boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xnrm1 from mikpckd.f
@@ -139,7 +139,7 @@ VEXTERNC double Vxnrm1(
 
 
 /** @brief   Norm operation for a grid function with boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xnrm2 from mikpckd.f
@@ -152,7 +152,7 @@ VEXTERNC double Vxnrm2(
 		);
 
 /** @brief   Inner product operation for a grid function with boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xdot from mikpckd.f
@@ -166,7 +166,7 @@ VEXTERNC double Vxdot(
 		);
 
 /** @brief   Zero out operation for a grid function, including boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces azeros from mikpckd.f
@@ -179,7 +179,7 @@ VEXTERNC void Vazeros(
 		);
 
 /** @brief   Initialize a grid function to have a certain boundary value,
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces fboundPMG from mikpckd.f
@@ -196,7 +196,7 @@ VEXTERNC void VfboundPMG(
         );
 
 /** @brief   Initialize a grid function to have a zero boundary value
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces fboundPMG00 from mikpckd.f
@@ -209,7 +209,7 @@ VEXTERNC void VfboundPMG00(
         );
 
 /** @brief   Fill grid function with random values, including boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces axrand from mikpckd.f
@@ -222,7 +222,7 @@ VEXTERNC void Vaxrand(
         );
 
 /** @brief   Scale operation for a grid function with boundary values.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces xscal from mikpckd.f
@@ -236,7 +236,7 @@ VEXTERNC void Vxscal(
         );
 
 /** @brief
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces prtmatd from mikpckd.f

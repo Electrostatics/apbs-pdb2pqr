@@ -57,7 +57,7 @@
 
 /** @brief   Break the matrix data-structure into diagonals and then call the
  *           matrix build routine
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  */
 VEXTERNC void VbuildA(

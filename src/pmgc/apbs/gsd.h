@@ -56,7 +56,7 @@
 #include "apbs/matvecd.h"
 
 /** @brief   Call the fast diagonal iterative method.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces gsrb from gsd.f

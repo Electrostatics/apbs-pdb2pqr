@@ -59,7 +59,7 @@
 #include "apbs/mgdrvd.h"
 
 /** @brief   Driver for a screaming inexact-newton-multilevel solver.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces newdriv from newdrvd.f
@@ -85,7 +85,7 @@ VEXTERNC void Vnewdriv(
         );
 
 /** @brief   Solves using Newton's Method
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *    This routine uses a newton's method, combined with a linear

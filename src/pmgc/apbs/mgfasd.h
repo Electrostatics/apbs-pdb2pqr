@@ -63,7 +63,7 @@
  *             v-cycle solver.  in other words, at repeatedly calls the v-cycle
  *             multigrid solver on successively finer and finer grids.
  *  @note
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  Replaces fmvfas from mgfasd.f
@@ -108,7 +108,7 @@ VEXTERNC void Vfmvfas(
 
 /** @brief   Nonlinear multilevel method.
  *  @note    Replaces mvfas from mgfasd.f
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  Algorithm:  nonlinear multigrid iteration (fas)
