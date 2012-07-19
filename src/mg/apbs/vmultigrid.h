@@ -1,11 +1,11 @@
-/** @defgroup Vmultigrid
+/** @defgroup Vmultigrid Multi-grid class
  *  @brief    Multi-grid class used to encapsulate values and methods for
  *            multi-grid computations
  */
 
 /**
  *  @file    vmultigrid.h
- *  @ingroup
+ *  @ingroup Vmultigrid
  *  @author  Tucker Beck
  *  @brief
  *  @version

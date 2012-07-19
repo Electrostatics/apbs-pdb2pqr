@@ -1,6 +1,5 @@
 /**
- *  @file    vmultigrid.c
- *  @ingroup
+ *  @ingroup Vmultigrid
  *  @author  Tucker Beck
  *  @brief   Implements methods for the Vmultigrid class
  *  @version $Id:

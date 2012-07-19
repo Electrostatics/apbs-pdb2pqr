@@ -1,4 +1,4 @@
-/** @defgroup PMGC
+/** @defgroup PMGC C translation of Holst group PMG code
  *  @brief C translation of Holst group PMG code
  */
 
@@ -67,7 +67,7 @@
 
 
 /** @brief   Multilevel solver driver
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  Replaces mgdriv from mgdrvd.f
@@ -93,7 +93,7 @@ VEXTERNC void Vmgdriv(
 		);
 
 /** @brief   Solves the pde using the multi-grid method
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *	Replaces mgdriv2 from mgdrvd.f
@@ -232,7 +232,7 @@ VPUBLIC void Vmgdriv3(int *iparm, double *rparm, int *nx, int *ny, int *nz,
  *       NBAND = 0                           (mgsolv=iterative)
  *          or = 1+(nxc-2)*(nyc-2)           (mgsolv=7-pt banded linpack)
  *          or = 1+(nxc-2)*(nyc-2)+(nxc-2)+1 (mgsolv=27-pt banded linpack)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  Replaces mgsz from mgdrvd.f

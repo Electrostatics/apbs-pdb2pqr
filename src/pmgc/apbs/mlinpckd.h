@@ -59,7 +59,7 @@
 
 /** @brief   Solves the double precision symmetric positive definite band system
  *           A*X = B using the factors computed by dpbco or dpbfa
- *  @ingroup
+ *  @ingroup  PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    A division by zero will occur if the input factor contains
  *           a zero on the diagonal.  Technically this indicates singularity,

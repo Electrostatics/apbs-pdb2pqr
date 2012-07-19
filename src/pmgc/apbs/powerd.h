@@ -68,7 +68,7 @@ c*
 c*       lambda_max = 6 - 2*dcos((nx-2)*pi/(nx-1))
 c*                      - 2*dcos((ny-2)*pi/(ny-1))
 c*                      - 2*dcos((nz-2)*pi/(nz-1))
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces power from powerd.f
@@ -110,7 +110,7 @@ VEXTERNC void Vpower(
  *                      - 2*dcos((ny-2)*pi/(ny-1))
  *                      - 2*dcos((nz-2)*pi/(nz-1))
  *
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces ipower from powerd.f

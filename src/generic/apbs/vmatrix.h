@@ -1,4 +1,4 @@
-/** @defgroup Vmatrix
+/** @defgroup Vmatrix  Matrix wrapper class
  *  @brief    A header for including data wrapping matrices
  */
 

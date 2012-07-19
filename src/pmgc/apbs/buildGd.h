@@ -70,7 +70,7 @@ VEXTERNC void VbuildG(
 
 /** @brief   Computes a 27-point galerkin coarse grid matrix from
  *           a 1-point (i.e., diagonal) fine grid matrix.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildG_1 from buildGd.f
  *
@@ -195,7 +195,7 @@ VEXTERNC void VbuildG_1(
 
 /** @brief   Computes a 27-point galerkin coarse grid matrix from
  *           a 7-point fine grid matrix.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildG_7 from buildGd.f
  *
@@ -329,7 +329,7 @@ VEXTERNC void VbuildG_7(
 
 /** @brief   Compute a 27-point galerkin coarse grid matrix from
  *           a 27-point fine grid matrix.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildG_27 from buildGd.f
  *

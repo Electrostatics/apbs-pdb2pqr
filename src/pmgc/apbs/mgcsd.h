@@ -99,7 +99,7 @@
  *       (7) signs may be reveresed; i.e., residual is used in place
  *           of the defect in places, etc.
  *
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces mvcs from mgcsd.f

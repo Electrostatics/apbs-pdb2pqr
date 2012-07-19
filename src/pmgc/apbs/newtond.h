@@ -61,7 +61,7 @@
 #include "apbs/powerd.h"
 
 /** @brief   Nested iteration for an inexact-newton-multilevel method.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces fnewton from newtond.f
@@ -105,7 +105,7 @@ VPUBLIC void Vfnewton(
         );
 
 /** @brief   Inexact-newton-multilevel method.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces newton from newtond.f
@@ -150,7 +150,7 @@ VEXTERNC void Vnewton(
 
 
 /** @brief   Form the jacobian system.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces getjac from newtond.f

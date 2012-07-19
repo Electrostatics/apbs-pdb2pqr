@@ -58,7 +58,7 @@
 
 /** @brief   Break the matrix data-structure into diagonals and
  *           then call the matrix-vector routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces matvec from matvecd.f
@@ -144,7 +144,7 @@ VEXTERNC void Vmatvec27_1s(
 
 /** @brief   Break the matrix data-structure into diagonals and
  *           then call the matrix-vector routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces nmatvec from matvecd.f
@@ -233,7 +233,7 @@ VEXTERNC void Vnmatvecd27_1s(
 
 /** @brief   Break the matrix data-structure into diagonals and
  *           then call the residual routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces mresid from matvecd.f
@@ -323,7 +323,7 @@ VEXTERNC void Vmresid27_1s(
 
 /** @brief   Break the matrix data-structure into diagonals and
  *           then call the residual routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces nmresid from matvecd.f
@@ -417,7 +417,7 @@ VEXTERNC void Vnmresid27_1s(
 
 
 /** @brief   Apply the restriction operator
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces restrc from matvecd.f
@@ -473,7 +473,7 @@ VEXTERNC void Vrestrc2(
         );
 
 /** @brief   Apply the prolongation operator
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces interpPMG from matvecd.f
@@ -529,7 +529,7 @@ VEXTERNC void VinterpPMG2(
         );
 
 /** @brief   Simple injection of a fine grid function into coarse grid.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces extrac from matvecd.f

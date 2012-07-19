@@ -56,7 +56,7 @@
 #include "apbs/vmatrix.h"
 
 /** @brief   Build and factor a banded matrix given a matrix in diagonal form.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildband from buildBd.f
  */
@@ -74,7 +74,7 @@ VEXTERNC void Vbuildband(
         );
 
 /** @brief   Build the operator in banded form given the 7-diagonal form.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildband1_7 from buildBd.f
  */
@@ -97,7 +97,7 @@ VEXTERNC void Vbuildband1_7(
         );
 
 /** @brief   Build the operator in banded form given the 27-diagonal form.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *  @note    Replaces buildband1_7 from buildBd.f
  */

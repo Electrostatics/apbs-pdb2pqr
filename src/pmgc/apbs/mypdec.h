@@ -77,7 +77,7 @@ double sconc[MAXIONS];
 
 /** @brief   Set up the ionic species to be used in later calculations.  This
  *           must be called before any other of the routines in this file.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Nathan Baker [Original]
  *
  *  @note    Replaces mypdefinitlpbe from mypde.f
@@ -95,7 +95,7 @@ VEXTERNC void Vmypdefinitlpbe(
 
 /** @brief   Set up the ionic species to be used in later calculations.  This
  *           must be called before any other of the routines in this file.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Nathan Baker [Original]
  *
  *  @note    Replaces mypdefinitnpbe from mypde.f
@@ -113,7 +113,7 @@ VEXTERNC void Vmypdefinitnpbe(
 
 /** @brief   Set up the ionic species to be used in later calculations.  This
  *           must be called before any other of the routines in this file.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Nathan Baker [Original]
  *
  *  @note    Replaces mypdefinitsmpbe from mypde.f
@@ -132,7 +132,7 @@ VEXTERNC void Vmypdefinitsmpbe(
 
 
 /** @brief   Define the nonlinearity (vector version)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces c_vec from mypde.f
@@ -150,7 +150,7 @@ VEXTERNC void Vc_vec(
 
 
 /** @brief   Define the derivative of the nonlinearity (vector version)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces dc_vec from mypde.f
@@ -188,7 +188,7 @@ VEXTERNC void Vdc_vecsmpbe(
 
 
 /** @brief   Define the nonlinearity (vector version)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces c_vecpmg from mypde.f
@@ -206,7 +206,7 @@ VEXTERNC void Vc_vecpmg(
 
 
 /** @brief   Define the nonlinearity (vector version)
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces c_vecpmg from mypde.f

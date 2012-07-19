@@ -57,7 +57,7 @@
 #include "apbs/vmatrix.h"
 
 /** @brief   call the appropriate linear smoothing routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces smooth from smoothd.f
@@ -85,7 +85,7 @@ VEXTERNC void Vsmooth(
 		);
 
 /** @brief   call the appropriate non-linear smoothing routine.
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [C Translation], Michael Holst [Original]
  *
  *  @note    Replaces nsmooth from nsmoothd.f
