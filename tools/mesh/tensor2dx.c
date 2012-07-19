@@ -31,7 +31,7 @@ NOTE: This program only handles isotropic tensor files at the moment.\n\
 
 int main(int argc, char **argv) {
 	
-	int i,j,k,index;
+	int i,j,k,index,icol;
 	int nx,ny,nz;
 	int lcount;
 	int itmp[3];
@@ -109,7 +109,7 @@ int main(int argc, char **argv) {
 	
 	//For the moment I'm assuming the data for the tensor file is row major
 	//Write out the data
-	int icol = 0;
+	icol = 0;
 	for (i=0; i<nx*ny*nz; i++){
 		fscanf(pfile2,"%i %i %i",&itmp[0],&itmp[1],&itmp[2]);
 		fscanf(pfile2,"%lf %lf %lf",&datapt[0],&tmp[1],&tmp[2]);

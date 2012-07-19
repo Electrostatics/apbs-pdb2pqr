@@ -4,7 +4,6 @@
  *  @brief   Small program to calculate Coulombic energies
  *  @version $Id$
  */
-#include <unistd.h>
 
 #include "apbscfg.h"
 #include "apbs/vatom.h"
