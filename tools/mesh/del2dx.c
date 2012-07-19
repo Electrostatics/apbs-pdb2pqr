@@ -33,8 +33,9 @@ int main(int argc, char **argv) {
 	
 	char buffer[1024];
 	
-	int igrid, tot_grid;
-	float val, scale, oldmid[3];
+	int igrid, tot_grid, icol;
+	float val, xmax, scale, oldmid[3], temp, xdata, range, extent, origin[3], delta[3];
+	float *data;
 	
 	FILE * pfile = NULL;
 	
@@ -54,7 +55,7 @@ int main(int argc, char **argv) {
 	fread(&igrid, 1, sizeof(int), pfile);
 	tot_grid = igrid*igrid*igrid;
 	
-	float * data = (float *)calloc(tot_grid, sizeof(float));
+	data = (float *)calloc(tot_grid, sizeof(float));
 	
 	rewind(pfile);
 	
@@ -90,16 +91,15 @@ int main(int argc, char **argv) {
 	fclose(pfile);
 	
 	//Now calculate some numbers needed for writing the DX header
-	float temp = 0.;
-	float xmax = 0.;
+	temp = 0.;
+	xmax = 0.;
 	for(i=0;i<3;i++){
 		temp = fabsf(oldmid[i]);
 		xmax = (xmax < temp) ? temp : xmax;
 	}
 	
-	float range = ((float)igrid - 1.) / (2. * scale);
-	float extent = range + xmax;
-	float origin[3], delta[3];
+	range = ((float)igrid - 1.) / (2. * scale);
+	extent = range + xmax;
 	
 	for(i=0;i<3;i++) origin[i] = oldmid[i] - range;
 	for(i=0;i<3;i++) delta[i] = (range * 2.) / (float)igrid;
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
 	
 	//For the moment I'm assuming the data for DelPhi is row major
 	//Write out the data
-	int icol = 0;
+	icol = 0;
 	for (i=0; i<igrid; i++) {
 		for (j=0; j<igrid; j++) { 
 			for (k=0; k<igrid; k++) {
