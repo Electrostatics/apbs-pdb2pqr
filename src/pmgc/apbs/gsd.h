@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    gsd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
- *  @version $Id:
+ *  @brief Guass-Seidel solver
  *
  *  @attention
  *  @verbatim

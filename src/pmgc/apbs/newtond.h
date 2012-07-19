@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    newtond.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
- *  @version $Id:
+ *  @brief Driver routines for the Newton method
  *
  *  @attention
  *  @verbatim

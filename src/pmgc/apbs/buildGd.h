@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    buildGd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
- *  @version $Id:
+ *  @brief Build Galerkin matrix structures
  *
  *  @attention
  *  @verbatim

@@ -1,13 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    matvecd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
- *  @version $Id:
+ *  @brief  Matrix-vector multiplication routines
  *
  *  @attention
  *  @verbatim

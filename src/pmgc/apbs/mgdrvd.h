@@ -1,10 +1,9 @@
-/** @defgroup
- *  @brief
+/** @defgroup PMGC
+ *  @brief C translation of Holst group PMG code
  */
 
 /**
- *  @file    vbuilda.h
- *  @ingroup Vmgdrv
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
  *  @brief
  *  @version $Id:

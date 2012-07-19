@@ -1,12 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    mgcsd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
+ *  @brief MG helper functions
  *  @version $Id:
  *
  *  @attention

@@ -1,12 +1,7 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    mgsubd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
- *  @brief
+ *  @brief Multigrid subroutines
  *  @version $Id:
  *
  *  @attention

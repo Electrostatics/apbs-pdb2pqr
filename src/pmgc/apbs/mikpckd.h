@@ -1,10 +1,5 @@
-/** @defgroup
- *  @brief
- */
-
 /**
- *  @file    mikpckd.h
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
  *  @brief   A collection of useful low-level routines (timing, etc).
  *  @version $Id:
