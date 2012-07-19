@@ -4587,7 +4587,6 @@ VPUBLIC int forceAPOL(Vacc *acc,
                       Vclist *clist
                      ) {
                          time_t ts, ts_main, ts_sub;
-                         ts_main = clock();
 	int i,
 	    j,
 	    natom;
@@ -4605,6 +4604,7 @@ VPUBLIC int forceAPOL(Vacc *acc,
 	       force[3],
 	       *apos;
 	
+        ts_main = clock();
 	Vatom *atom = VNULL;
 	
 	srad = apolparm->srad;
