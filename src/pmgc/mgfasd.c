@@ -1,6 +1,5 @@
 /**
- *  @file    mgfasd.c
- *  @ingroup
+ *  @ingroup PMGC
  *  @author  Tucker Beck [fortran ->c translation], Michael Holst [original]
  *  @brief
  *  @version $Id:
