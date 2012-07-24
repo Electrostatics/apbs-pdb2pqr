@@ -6,7 +6,7 @@
  *  @file     vmatrix.h
  *  @ingroup  Vmatrix
  *  @brief    Contains inclusions for matrix data wrappers
- *  @version  
+ *  @version
  *  @author   Tucker A. Beck
  *
  *  @attention
@@ -61,28 +61,29 @@
 #ifndef _VMATRIX_H_
 #define _VMATRIX_H_
 
-/* Generic headers */
-#include "maloc/maloc.h"
+#define MAT2(mat, dx, dy) \
+    int dx_##mat = dx;    \
+    int dy_##mat = dy
 
-#define MAT2(mat, rows, cols) \
-    int rows_##mat = rows;    \
-    int cols_##mat = rows
+#define RAT2(mat, x, y) \
+    &VAT2(mat, x, y)
 
-#define RAT2(mat, i, j) \
-    (mat + ((j - 1) * rows_##mat + (i - 1)))
+#define VAT2(mat, x, y) \
+    mat[(y - 1) * dx_##mat + (x - 1)]
 
-#define VAT2(mat, i, j) \
-    mat[(j - 1) * rows_##mat + (i - 1)]
 
-#define MAT3(mat, rows, cols, levs) \
-    int rows_##mat = rows;          \
-    int cols_##mat = cols;          \
-    int levs_##mat = levs
 
-#define RAT3(mat, i, j, k) \
-    (mat + ((k - 1) * rows_##mat * cols_##mat + (j - 1) * rows_##mat + (i - 1)))
+#define MAT3(mat, dx, dy, dz) \
+    int dx_##mat = dx;        \
+    int dy_##mat = dy;        \
+    int dz_##mat = dz
 
-#define VAT3(mat, i, j, k) \
-    mat[(k - 1) * rows_##mat * cols_##mat + (j - 1) * rows_##mat + (i - 1)]
+#define RAT3(mat, x, y, z) \
+    &VAT3(mat, x, y, z)
+
+#define VAT3(mat, x, y, z) \
+    mat[(z - 1) * dy_##mat * dx_##mat + \
+        (y - 1) * dx_##mat + \
+        (x - 1)]
 
 #endif /* _VMATRIX_H_ */
