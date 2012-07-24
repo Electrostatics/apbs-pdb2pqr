@@ -190,7 +190,7 @@ VPUBLIC void Vc_vecpmg(double *coef, double *uin, double *uout,
                 // Count chopped values
                 ichopped_neg = (int)(am_neg / SINH_MIN);
                 ichopped_pos = (int)(am_pos / SINH_MAX);
-                ichopped += (int)(round(am_zero)) * (ichopped_neg + ichopped_pos);
+                ichopped += (int)(floor(am_zero+0.5)) * (ichopped_neg + ichopped_pos);
             }
 
             // Info
@@ -334,7 +334,7 @@ VPUBLIC void Vc_vecsmpbe(double *coef, double *uin, double *uout,
         // Count chopped values
         ichopped_neg = (int)((a1_neg + a2_neg+a3_neg) / SINH_MIN);
         ichopped_pos = (int)((a1_pos + a2_pos+a3_pos) / SINH_MAX);
-        ichopped += (int)round(am_zero) * (ichopped_neg + ichopped_pos);
+        ichopped += (int)floor(am_zero+0.5) * (ichopped_neg + ichopped_pos);
     }
 
     // Info
@@ -412,7 +412,7 @@ VPUBLIC void Vdc_vecpmg(double *coef, double *uin, double *uout,
                 // Count chopped values
                 ichopped_neg = (int)(am_neg / SINH_MIN);
                 ichopped_pos = (int)(am_pos / SINH_MAX);
-                ichopped += (int)round(am_zero) * (ichopped_neg + ichopped_pos);
+                ichopped += (int)floor(am_zero+0.5) * (ichopped_neg + ichopped_pos);
             }
 
             // Info
@@ -549,7 +549,7 @@ VPUBLIC void Vdc_vecsmpbe(double *coef, double *uin, double *uout,
         // Count chopped values
         ichopped_neg = (int)((a1_neg + a2_neg + a3_neg) / SINH_MIN);
         ichopped_pos = (int)((a1_pos + a2_pos + a3_pos) / SINH_MAX);
-        ichopped += (int)round(am_zero) * (ichopped_neg + ichopped_pos);
+        ichopped += (int)floor(am_zero+0.5) * (ichopped_neg + ichopped_pos);
     }
 
     // Info
