@@ -88,8 +88,9 @@ VPUBLIC void Vfnewton(int *nx,int *ny,int *nz,
 
     // Move up grids: interpolate solution to finer, do newton
     if (*iinfo > 1) {
-        Vnm_print(2, "Vfnewton: starting: [%d, %d, %d, %d, %d, %d]\n",
-                nxf, nyf, nzf, nxc, nyc, nzc);
+        VMESSAGE0("Starting");
+        VMESSAGE3("Fine Grid Size:   (%d, %d, %d)", nxf, nyf, nzf);
+        VMESSAGE3("Course Grid Size: (%d, %d, %d)", nxc, nyc, nzc);
     }
 
     for (level=*nlev_real; level<=*ilev+1; level--) {
@@ -195,7 +196,7 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
 
     // Do some i/o if requested
     if (*iinfo > 1) {
-        Vnm_print(2, "Vnewton: starting: (%d, %d, %d)", *nx, *ny, *nz);
+        VMESSAGE3("Starting: (%d, %d, %d)", *nx, *ny, *nz);
     }
 
     /// @todo Add timing back
@@ -241,12 +242,12 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
                 w1, w2);
         rsden = VSQRT(Vxdot(nx, ny, nz, RAT(tru, VAT2(iz, 1, lev)), w1));
     } else {
-        Vnm_print(2, "Vnewton: bad istop value: %d\n", *istop);
+        VABORT_MSG1("Bad istop value: %d\n", *istop);
     }
 
     if (rsden == 0.0) {
         rsden = 1.0;
-        Vnm_print(2, "Vnewton: rhs is zero\n");
+        VWARN_MSG0(rsden != 0, "rhs is zero");
     }
     rsnrm = rsden;
     orsnrm = rsnrm;
@@ -276,8 +277,7 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
      *********************************************************************/
 
     // Setup for the looping
-    if (*iinfo > 1)
-        Vnm_print(2, "Vnewton: damping enabled\n");
+    VMESSAGE0("Damping enabled");
     idamp  = 1;
     *iters  = 0;
 
@@ -308,7 +308,7 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
          * the appropriate form (as here)
          */
          errtol_s  = VMIN2((0.9 * xnorm_old), (bigc * VPOW(xnorm_old, ord)));
-         Vnm_print(2, "Vnewton: using errtol_s: %f\n", errtol_s);
+         VMESSAGE1("Using errtol_s: %f", errtol_s);
 
         // Do a linear multigrid solve of the newton equations
         Vazeros(nx, ny, nz, RAT(xtmp, VAT2(iz, 1, lev)));
@@ -368,8 +368,7 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
             itmax_d = 10;
             mode    = 0;
 
-            Vnm_print(2, "Vnewton: attempting damping, relres = %f\n",
-                    (double)xnorm_new / xnorm_den);
+            VMESSAGE1("Attempting damping, relres = %f", xnorm_new / xnorm_den);
 
             while(iter_d < itmax_d) {
                 if (mode == 0) {
@@ -401,8 +400,8 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
 
                // Next iter...
                iter_d = iter_d + 1;
-               Vnm_print(2, "Vnewton: attempting damping, relres = %f\n",
-                       (double)xnorm_new / xnorm_den);
+               VMESSAGE1("Attempting damping, relres = %f",
+                   xnorm_new / xnorm_den);
 
             }
 
@@ -410,12 +409,12 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
             Vxcopy(nx, ny, nz, w3, w0);
             xnorm_new = xnorm_med;
             xnorm_old = xnorm_new;
-            Vnm_print(2, "Vnewton: damping accepted, relres = %f\n",
-                    (double)xnorm_new / xnorm_den);
+
+            VMESSAGE1("Damping accepted, relres = %f", xnorm_new / xnorm_den);
 
             // Determine whether or not to disable damping
             if ((iter_d - 1) == 0) {
-               Vnm_print(2, "Vnewton: damping disabled\n");
+                VMESSAGE0("Damping disabled");
                idamp = 0;
             }
          } else {
@@ -471,7 +470,7 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
                        w1, w2, w3);
                rsnrm = VSQRT(Vxdot(nx, ny, nz, w1, w2));
             } else {
-                Vnm_print(2, "Vnewton: bad istop value... \n");
+                VABORT_MSG1("Bad istop value: %d", *istop);
             }
 
             if ((rsnrm/rsden) <= *errtol)

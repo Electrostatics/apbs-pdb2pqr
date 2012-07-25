@@ -48,7 +48,6 @@
  */
 
 #include "apbs/mgdrvd.h"
-#include "apbs/mgfasd.h"
 
 VPUBLIC void Vmgdriv(int* iparm, double* rparm,
         int* iwork, double* rwork, double* u,
@@ -59,46 +58,46 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
 
     // The following variables will be returned from mgsz
     int nxc;    // @todo Document this function
-    int nyc;    
-    int nzc;    
-    int nf;     
-    int nc;     
-    int narr;   
-    int narrc;  
-    int n_rpc;  
-    int n_iz;   
-    int n_ipc;  
-    int iretot; 
-    int iintot; 
+    int nyc;
+    int nzc;
+    int nf;
+    int nc;
+    int narr;
+    int narrc;
+    int n_rpc;
+    int n_iz;
+    int n_ipc;
+    int iretot;
+    int iintot;
 
     // Miscellaneous variables
-    int nrwk;   
-    int niwk;   
-    int nx;     
-    int ny;     
-    int nz;     
-    int nlev;   
-    int ierror; 
-    int mxlv;   
-    int mgcoar; 
-    int mgdisc; 
-    int mgsolv; 
-    int k_iz;   
-    int k_ipc;  
-    int k_rpc;  
-    int k_ac;   
-    int k_cc;   
-    int k_fc;   
-    int k_pc;   
+    int nrwk;
+    int niwk;
+    int nx;
+    int ny;
+    int nz;
+    int nlev;
+    int ierror;
+    int mxlv;
+    int mgcoar;
+    int mgdisc;
+    int mgsolv;
+    int k_iz;
+    int k_ipc;
+    int k_rpc;
+    int k_ac;
+    int k_cc;
+    int k_fc;
+    int k_pc;
 
     // Utility pointers to help in passing values
-    int *iz;     
-    int *ipc;    
-    double *rpc; 
-    double *pc;  
-    double *ac;  
-    double *cc;  
-    double *fc;  
+    int *iz;
+    int *ipc;
+    double *rpc;
+    double *pc;
+    double *ac;
+    double *cc;
+    double *fc;
 
     ANNOUNCE_FUNCTION;
 
@@ -198,59 +197,59 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 
 	// Miscellaneous Variables
 	int mgkey;      // @todo Document this function
-	int nlev;       
-	int itmax;      
-	int iok;        
-	int iinfo;      
-	int istop;      
-	int ipkey;      
-	int nu1;        
-	int nu2;        
-	int ilev;       
-	int ido;        
-	int iters;      
-	int ierror;     
-	int nlev_real;  
-	int ibound;     
-	int mgprol;     
-	int mgcoar;     
-	int mgsolv;     
-	int mgdisc;     
-	int mgsmoo;     
-	int iperf;      
-	int mode;       
-	double epsiln;  
-	double epsmac;  
-	double errtol;  
-	double omegal;  
-	double omegan;  
-	double bf;      
-	double oh;      
-	double tsetupf; 
-	double tsetupc; 
-	double tsolve;  
+	int nlev;
+	int itmax;
+	int iok;
+	int iinfo;
+	int istop;
+	int ipkey;
+	int nu1;
+	int nu2;
+	int ilev;
+	int ido;
+	int iters;
+	int ierror;
+	int nlev_real;
+	int ibound;
+	int mgprol;
+	int mgcoar;
+	int mgsolv;
+	int mgdisc;
+	int mgsmoo;
+	int iperf;
+	int mode;
+	double epsiln;
+	double epsmac;
+	double errtol;
+	double omegal;
+	double omegan;
+	double bf;
+	double oh;
+	double tsetupf;
+	double tsetupc;
+	double tsolve;
 
 
 
 	// More miscellaneous variables
-	int itmax_p;        
-	int iters_p;        
-	int iok_p;          
-	int iinfo_p;        
-	double errtol_p;    
-	double rho_p;       
-	double rho_min;     
-	double rho_max;     
-	double rho_min_mod; 
-	double rho_max_mod; 
-	int nxf;            
-	int nyf;            
-	int nzf;            
-	int nxc;            
-	int nyc;            
-	int nzc;            
-	int level;          
-	int nlevd;          
+	int itmax_p;
+	int iters_p;
+	int iok_p;
+	int iinfo_p;
+	double errtol_p;
+	double rho_p;
+	double rho_min;
+	double rho_max;
+	double rho_min_mod;
+	double rho_max_mod;
+	int nxf;
+	int nyf;
+	int nzf;
+	int nxc;
+	int nyc;
+	int nzc;
+	int level;
+	int nlevd;
 
 
 
@@ -350,15 +349,18 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
             nzf = nzc;
         }
 
-        if (iinfo > 1)
-                Vnm_print(2, "MGDRIV2: Analysis ==> (%3d, %3d, %3d)\n", nxf, nyf, nzf); 
+        if (iinfo > 1) {
+            VMESSAGE3("Analysis ==> (%3d, %3d, %3d)", nxf, nyf, nzf);
+        }
+
 
         // Largest eigenvalue of the system matrix A
         if (iperf == 1 || iperf == 3) {
-            
-            if (iinfo > 1)
-                Vnm_print(2, "MGDRIV2: power calculating rho(A)...\n");
-            
+
+            if (iinfo > 1) {
+                VMESSAGE0("Power calculating rho(A)");
+            }
+
             iters_p   = 0;
             iinfo_p   = iinfo;
             errtol_p  = 1.0e-4;
@@ -369,16 +371,18 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
                     a1cf, a2cf, a3cf, ccf,
                     &rho_max, &rho_max_mod, &errtol_p,
                     &itmax_p, &iters_p, &iinfo_p);
-            
-            if (iinfo > 1) {                
-                Vnm_print(2, "MGDRIV2: power iters   = %d\n", iters_p);
-                Vnm_print(2, "MGDRIV2: power eigmax  = %d\n", rho_max);
-                Vnm_print(2, "MGDRIV2: power (MODEL) = %d\n", rho_max_mod);
+
+            if (iinfo > 1) {
+                VMESSAGE1("Power iters   = %d", iters_p);
+                VMESSAGE1("Power eigmax  = %d", rho_max);
+                VMESSAGE1("Power (MODEL) = %d", rho_max_mod);
             }
 
             // Smallest eigenvalue of the system matrix A
-            if (iinfo > 1)
-                Vnm_print(2, "MGDRIV2: ipower calculating lambda_min(A)...\n");
+            if (iinfo > 1) {
+                VMESSAGE0("Ipower calculating lambda_min(A)...");
+            }
+
             iters_p   = 0;
             iinfo_p   = iinfo;
             errtol_p  = 1.0e-4;
@@ -393,26 +397,25 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
                     &nu1, &nu2, &mgsmoo,
                     ipc, rpc, pc, ac, cc, tcf);
 
-            if (iinfo > 1) {                
-                Vnm_print(2, "MGDRIV2: ipower iters   = %d\n", iters_p);
-                Vnm_print(2, "MGDRIV2: ipower eigmin  = %d\n", rho_min);
-                Vnm_print(2, "MGDRIV2: ipower (MODEL) = %d\n", rho_min_mod);
+            if (iinfo > 1) {
+                VMESSAGE1("Ipower iters   = %d", iters_p);
+                VMESSAGE1("Ipower eigmin  = %d", rho_min);
+                VMESSAGE1("Ipower (MODEL) = %d", rho_min_mod);
 
                 // Condition number estimate
-                Vnm_print(2, "MGDRIV2: condition number  = %d\n",
-                        rho_max / rho_min);
-                Vnm_print(2, "MGDRIV2: condition (MODEL) = %d\n",
-                        rho_max_mod / rho_min_mod);
+                VMESSAGE1("Condition number  = %d", rho_max / rho_min);
+                VMESSAGE1("Condition (MODEL) = %d", rho_max_mod / rho_min_mod);
             }
         }
 
         // Spectral radius of the multigrid operator M
         // NOTE: due to lack of vectors, we destroy "fc" in mpower...
         if (iperf == 2 || iperf == 3) {
-            
-            if (iinfo > 1)
-                Vnm_print(2, "MGDRIV2: mpower calculating rho(M)...\n");
-            
+
+            if (iinfo > 1) {
+                VMESSAGE0("Mpower calculating rho(M)");
+            }
+
             iters_p   = 0;
             iinfo_p   = iinfo;
             errtol_p  = epsiln;
@@ -429,8 +432,8 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
                             ipc, rpc, pc, ac, cc, fc, tcf);
 
             if (iinfo > 1) {
-                Vnm_print(2, "MGDRIV2: mpower iters  = %d\n", iters_p);
-                Vnm_print(2, "MGDRIV2: mpower rho(M) = %d\n", rho_p);
+                VMESSAGE1("Mpower iters  = %d", iters_p);
+                VMESSAGE1("Mpower rho(M) = %d", rho_p);
             }
         }
 
@@ -449,9 +452,10 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 	 ***** compute an algebraically produced rhs for the given tcf *****/
 
 	if (istop == 4 || istop == 5 || iperf != 0 ) {
-            
-            if (iinfo > 1)
-		Vnm_print(2, "MGDRIV2: generating algebraic RHS from your soln...\n");
+
+            if (iinfo > 1) {
+                VMESSAGE0("Generating algebraic RHS from your soln...");
+            }
 
 
             WARN_UNTESTED;
@@ -493,7 +497,7 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
                         ipc, rpc, pc, ac, cc, fc, tcf);
 
             } else {
-                    Vnm_print(2, "MGDRIV2: bad mgkey given... \n");
+                VABORT_MSG1("Bad mgkey given: %d", mgkey);
             }
 	}
 
@@ -523,9 +527,9 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
                         &iok, &iinfo, &epsiln, &errtol, &omegan,
                         &nu1, &nu2, &mgsmoo,
                         ipc, rpc, pc, ac, cc, fc, tcf);
-                
+
 		} else {
-			Vnm_print(2, "MGDRIV2: bad mgkey given... \n");
+            VABORT_MSG1("Bad mgkey given: %d", mgkey);
 		}
 	}
 

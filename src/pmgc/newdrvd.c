@@ -250,8 +250,9 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     omegan = VAT(rparm, 10);
 
 
+
     /// @todo replace timer
-    
+
     // Build the multigrid data structure in iz
     Vbuildstr(nx, ny, nz, &nlev, iz);
 
@@ -310,7 +311,8 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     ilev = 1;
     if (mgkey == 0) {
         Vnewton(nx, ny, nz,
-                u, iz, ccf, fcf, w1, w2,
+                u, iz,
+                ccf, fcf, w1, w2,
                 &istop, &itmax, &iters, &ierror,
                 &nlev, &ilev, &nlev_real, &mgsolv,
                 &iok, &iinfo,
@@ -331,7 +333,7 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
                 ipc, rpc,
                 pc, ac, cc, fc, tcf);
     } else {
-        Vnm_print(2, "NEWDRIV2: bad mgkey given\n");
+        VABORT_MSG1("Bad mgkey given: %d", mgkey);
     }
 
     // Restore boundary conditions

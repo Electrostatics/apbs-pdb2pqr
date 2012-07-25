@@ -14,13 +14,13 @@
  *
  *  Additional contributing authors listed in the code documentation.
  *
- * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the 
- * Pacific Northwest National Laboratory, operated by Battelle Memorial 
+ * Copyright (c) 2010-2012 Battelle Memorial Institute. Developed at the
+ * Pacific Northwest National Laboratory, operated by Battelle Memorial
  * Institute, Pacific Northwest Division for the U.S. Department of Energy.
  *
  * Portions Copyright (c) 2002-2010, Washington University in St. Louis.
  * Portions Copyright (c) 2002-2010, Nathan A. Baker.
- * Portions Copyright (c) 1999-2002, The Regents of the University of 
+ * Portions Copyright (c) 1999-2002, The Regents of the University of
  * California.
  * Portions Copyright (c) 1995, Michael Holst.
  * All rights reserved.
@@ -51,20 +51,20 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * Neither the name of the developer nor the names of its contributors may be 
- * used to endorse or promote products derived from this software without 
+ * Neither the name of the developer nor the names of its contributors may be
+ * used to endorse or promote products derived from this software without
  * specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @endverbatim
@@ -211,13 +211,28 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
                             thee->pmgp->nrwk, thee->pmgp->niwk);
         }
 
+
+
 	/* Allocate boundary storage */
-	thee->gxcf = (double *)Vmem_malloc(thee->vmem,
-									   10*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
-	thee->gycf = (double *)Vmem_malloc(thee->vmem,
-									   10*(thee->pmgp->nx)*(thee->pmgp->nz), sizeof(double));
-	thee->gzcf = (double *)Vmem_malloc(thee->vmem,
-									   10*(thee->pmgp->nx)*(thee->pmgp->ny), sizeof(double));
+	thee->gxcf = (double *)Vmem_malloc(
+        thee->vmem,
+        10*(thee->pmgp->ny)*(thee->pmgp->nz),
+        sizeof(double)
+        );
+
+	thee->gycf = (double *)Vmem_malloc(
+        thee->vmem,
+        10*(thee->pmgp->nx)*(thee->pmgp->nz),
+        sizeof(double)
+        );
+
+	thee->gzcf = (double *)Vmem_malloc(
+        thee->vmem,
+        10*(thee->pmgp->nx)*(thee->pmgp->ny),
+        sizeof(double)
+        );
+
+
 
 	/* Warn users if they are using BCFL_MAP that
 	   we do not include external energies */
@@ -225,6 +240,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 		Vnm_print(2,"Vpmg_ctor2: \nWarning: External energies are not used in BCFL_MAP calculations!\n");
 
 	if (focusFlag) {
+
 		/* Overwrite any default or user-specified boundary condition
 		* arguments; we are now committed to a calculation via focusing */
 		if (thee->pmgp->bcfl != BCFL_FOCUS) {
@@ -269,48 +285,33 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 	}
 
 	/* Allocate partition vector storage */
-	thee->pvec = (double *)Vmem_malloc(thee->vmem,
-									   (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz), sizeof(double));
+	thee->pvec = (double *)Vmem_malloc(
+        thee->vmem,
+        (thee->pmgp->nx)*(thee->pmgp->ny)*(thee->pmgp->nz),
+        sizeof(double)
+        );
 
 	/* Allocate remaining storage */
-	thee->iparm = (int *)Vmem_malloc(thee->vmem, 100, sizeof(int));
-	thee->rparm = (double *)Vmem_malloc(thee->vmem, 100, sizeof(double));
-	thee->iwork = (int *)Vmem_malloc(thee->vmem, thee->pmgp->niwk,
-									 sizeof(int));
-	thee->rwork = (double *)Vmem_malloc(thee->vmem, thee->pmgp->nrwk,
-										sizeof(double));
-	thee->charge = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-										 sizeof(double));
-	thee->kappa = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-										sizeof(double));
-	thee->pot = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-										sizeof(double));
-	thee->epsx = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->epsy = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->epsz = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->a1cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->a2cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->a3cf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									   sizeof(double));
-	thee->ccf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									  sizeof(double));
-	thee->fcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									  sizeof(double));
-	thee->tcf = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									  sizeof(double));
-	thee->u = (double *)Vmem_malloc(thee->vmem, thee->pmgp->narr,
-									sizeof(double));
-	thee->xf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nx),
-									 sizeof(double));
-	thee->yf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->ny),
-									 sizeof(double));
-	thee->zf = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz),
-									 sizeof(double));
+	thee->iparm  = (   int *)Vmem_malloc(thee->vmem,                100, sizeof(   int));
+	thee->rparm  = (double *)Vmem_malloc(thee->vmem,                100, sizeof(double));
+	thee->iwork  = (   int *)Vmem_malloc(thee->vmem,   thee->pmgp->niwk, sizeof(   int));
+	thee->rwork  = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->nrwk, sizeof(double));
+	thee->charge = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->kappa  = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->pot    = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->epsx   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->epsy   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->epsz   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->a1cf   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->a2cf   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->a3cf   = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->ccf    = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->fcf    = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->tcf    = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->u      = (double *)Vmem_malloc(thee->vmem,   thee->pmgp->narr, sizeof(double));
+	thee->xf     = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nx), sizeof(double));
+	thee->yf     = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->ny), sizeof(double));
+	thee->zf     = (double *)Vmem_malloc(thee->vmem, 5*(thee->pmgp->nz), sizeof(double));
 
 
 
@@ -370,7 +371,7 @@ VPUBLIC int Vpmg_ctor2(Vpmg *thee, Vpmgp *pmgp, Vpbe *pbe, int focusFlag,
 			Vnm_print(2, "PMG: Warning: PBE structure not initialized!\n");
 			/* Else adjust the inoConc by scaling factor zks2 */
 			for (i=0; i<nion; i++)
-                            ionConc[i] = zks2 * ionConc[i];
+                ionConc[i] = zks2 * ionConc[i];
 			break;
 	}
 
@@ -570,8 +571,10 @@ VPUBLIC void Vpmg_dtor2(Vpmg *thee) {
 
     /* Clean up the storage */
 
-    Vmem_free(thee->vmem, 100, sizeof(int), (void **)&(thee->iparm));
-    Vmem_free(thee->vmem, 100, sizeof(double), (void **)&(thee->rparm));
+    Vmem_free(thee->vmem,              100, sizeof(int),
+      (void **)&(thee->iparm));
+    Vmem_free(thee->vmem,              100, sizeof(double),
+        (void **)&(thee->rparm));
     Vmem_free(thee->vmem, thee->pmgp->niwk, sizeof(int),
       (void **)&(thee->iwork));
     Vmem_free(thee->vmem, thee->pmgp->nrwk, sizeof(double),
@@ -2408,12 +2411,12 @@ VPRIVATE void focusFillBound(Vpmg *thee,
         }
     }
 
-	if((uvalMin < SINH_MIN) || (uvalMax > SINH_MAX)){
-		Vnm_print(2, "\nfocusFillBound:  WARNING! Unusually large potential values\n" \
-					   "                   detected on the focusing boundary!  \n" \
-					   "                   Convergence not guaranteed for NPBE/NRPBE calculations!\n");
-	}
-
+    VWARN_MSG0(
+        uvalMin >= SINH_MIN && uvalMax <= SINH_MAX,
+        "Unusually large potential values\n"
+        "    detected on the focusing boundary!\n"
+        "    Convergence not guaranteed for NPBE/NRPBE calculations!"
+        );
 }
 
 VPRIVATE void extEnergy(Vpmg *thee, Vpmg *pmgOLD, PBEparm_calcEnergy extFlag,
