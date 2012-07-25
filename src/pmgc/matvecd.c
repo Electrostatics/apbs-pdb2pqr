@@ -982,36 +982,36 @@ VPUBLIC void VinterpPMG2(int *nxc, int *nyc, int *nzc,
     int  i,  j,  k;
     int ii, jj, kk;
 
-    MAT3(xin, *nxc, *nyc, *nzc);
+    MAT3( xin, *nxc, *nyc, *nzc);
     MAT3(xout, *nxf, *nyf, *nzf);
 
-    MAT3(oPC, *nxc, *nyc, *nzc);
-    MAT3(oPN, *nxc, *nyc, *nzc);
-    MAT3(oPS, *nxc, *nyc, *nzc);
-    MAT3(oPE, *nxc, *nyc, *nzc);
-    MAT3(oPW, *nxc, *nyc, *nzc);
+    MAT3( oPC, *nxc, *nyc, *nzc);
+    MAT3( oPN, *nxc, *nyc, *nzc);
+    MAT3( oPS, *nxc, *nyc, *nzc);
+    MAT3( oPE, *nxc, *nyc, *nzc);
+    MAT3( oPW, *nxc, *nyc, *nzc);
 
     MAT3(oPNE, *nxc, *nyc, *nzc);
     MAT3(oPNW, *nxc, *nyc, *nzc);
     MAT3(oPSE, *nxc, *nyc, *nzc);
     MAT3(oPSW, *nxc, *nyc, *nzc);
 
-    MAT3(uPC, *nxc, *nyc, *nzc);
-    MAT3(uPN, *nxc, *nyc, *nzc);
-    MAT3(uPS, *nxc, *nyc, *nzc);
-    MAT3(uPE, *nxc, *nyc, *nzc);
-    MAT3(uPW, *nxc, *nyc, *nzc);
+    MAT3( uPC, *nxc, *nyc, *nzc);
+    MAT3( uPN, *nxc, *nyc, *nzc);
+    MAT3( uPS, *nxc, *nyc, *nzc);
+    MAT3( uPE, *nxc, *nyc, *nzc);
+    MAT3( uPW, *nxc, *nyc, *nzc);
 
     MAT3(uPNE, *nxc, *nyc, *nzc);
     MAT3(uPNW, *nxc, *nyc, *nzc);
     MAT3(uPSE, *nxc, *nyc, *nzc);
     MAT3(uPSW, *nxc, *nyc, *nzc);
 
-    MAT3(dPC, *nxc, *nyc, *nzc);
-    MAT3(dPN, *nxc, *nyc, *nzc);
-    MAT3(dPS, *nxc, *nyc, *nzc);
-    MAT3(dPE, *nxc, *nyc, *nzc);
-    MAT3(dPW, *nxc, *nyc, *nzc);
+    MAT3( dPC, *nxc, *nyc, *nzc);
+    MAT3( dPN, *nxc, *nyc, *nzc);
+    MAT3( dPS, *nxc, *nyc, *nzc);
+    MAT3( dPE, *nxc, *nyc, *nzc);
+    MAT3( dPW, *nxc, *nyc, *nzc);
 
     MAT3(dPNE, *nxc, *nyc, *nzc);
     MAT3(dPNW, *nxc, *nyc, *nzc);
@@ -1028,7 +1028,7 @@ VPUBLIC void VinterpPMG2(int *nxc, int *nyc, int *nzc,
     VfboundPMG00(nxc, nyc, nzc, xin);
 
     // Do it
-    for (k=1; k<=*nxf-2; k+=2) {
+    for (k=1; k<=*nzf-2; k+=2) {
         kk = (k - 1) / 2 + 1;
 
         for (j=1; j<=*nyf-2; j+=2) {

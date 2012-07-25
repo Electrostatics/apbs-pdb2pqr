@@ -48,6 +48,7 @@
  */
 
 #include "apbs/mgcsd.h"
+#include "apbs/vhal.h"
 
 VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 		double *x,
@@ -109,8 +110,9 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 
 	// Do some i/o if requested
     if (*iinfo > 1) {
-        Vnm_print(2, "MVCS: starting:   [%d, %d, %d, %d, %d, %d]\n",
-                nxf, nyf, nzf, nxc, nyc, nzc);
+        VMESSAGE0("Starting mvcs operation");
+        VMESSAGE3("Fine Grid Size:   (%d, %d, %d)", nxf, nyf, nzf);
+        VMESSAGE3("Coarse Grid Size: (%d, %d, %d)", nxc, nyc, nzc);
     }
 
     /// @todo add timing
@@ -150,12 +152,12 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			rsden = VSQRT(Vxdot(&nxf, &nyf, &nzf, RAT(tru, VAT2(iz, 1,lev)), w1));
 		}
 		else {
-			Vnm_print(2,"MVCS: bad istop value: %d\n", *istop);
+            VABORT_MSG1("Bad istop value: %d", *istop);
 		}
 
 		if (rsden == 0.0) {
 			rsden = 1.0;
-			Vnm_print(2, "MVCS: rhs is zero on finest level\n");
+            VWARN_MSG0(rsden != 0, "rhs is zero on finest level");
 		}
 		rsnrm = rsden;
 	    orsnrm = rsnrm;
@@ -191,10 +193,11 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 					  &itmax_s, &iters_s, &errtol_s, omega,
 					  &iresid, &iadjoint, &mgsmoo_s);
 
-			// check for trouble on the coarse grid ***
-                    if (iters_s >= itmax_s) {
-                            Vnm_print(2, "MVCS: > max iters on coarse grid: %d\n", iters_s);
-                    }
+			// Check for trouble on the coarse grid
+            VWARN_MSG2(iters_s <= itmax_s,
+                "Exceeded maximum iterations: iters_s=%d, itmax_s=%d",
+                iters_s, itmax_s);
+
 		} else if (*mgsolv == 1) {
 
 		    // Use direct method?
@@ -214,8 +217,7 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
 
 		} else {
-			Vnm_print(2, "MVCS: invalid coarse solver requested: %d\n",
-			        *mgsolv);
+            VABORT_MSG1("Invalid coarse solver requested: %d", *mgsolv);
 		}
 
 
@@ -290,7 +292,7 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			}
 
 			else {
-			   Vnm_print(2, "MVCS: bad istop value: %d\n", *istop);
+                VABORT_MSG1("Bad istop value: %d\n", *istop);
 			}
 
 		}
@@ -405,9 +407,9 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 					&iresid, &iadjoint, &mgsmoo_s);
 
 			// Check for trouble on the coarse grid
-			if (iters_s >= itmax_s) {
-				Vnm_print(2, "MVCS: iters on coarse grid: %d\n", iters_s);
-			}
+            VWARN_MSG2(iters_s <= itmax_s,
+                "Exceeded maximum iterations: iters_s=%d, itmax_s=%d",
+                iters_s, itmax_s);
 		} else if (*mgsolv == 1) {
 
 	        // use direct method?
@@ -427,8 +429,7 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 			VfboundPMG00(&nxf, &nyf, &nzf, RAT(x, VAT2(iz, 1,lev)));
 
 		} else {
-			Vnm_print(2, "MVCS: invalid coarse solver requested: %d\n",
-			        *mgsolv);
+            VABORT_MSG1("Invalid coarse solver requested: %d", *mgsolv);
 		}
 
 
@@ -549,7 +550,7 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 						 w1, w2);
 				rsnrm = VSQRT(Vxdot(&nxf, &nyf, &nzf, w1, w2));
 			} else {
-				Vnm_print(2, "MVCS: bad istop value: %d\n", *istop);
+                VABORT_MSG1("Bad istop value: %d", *istop);
 			}
 		}
 

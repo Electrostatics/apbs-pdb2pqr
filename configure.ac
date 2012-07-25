@@ -1017,15 +1017,13 @@ dnl # CHECK WHETHER YOU WANT TO USE ELECTRIC FENCE FOR MEMORY DEBUGGING
 dnl # -----------------------
 
 
-efence_library_path=
-efence_library_flag=
 efence_lib=
 
 AC_MSG_CHECKING([for --with-efence])
 AC_ARG_WITH(
     [efence],
-    AS_HELP_STRING([--with-efence\[=PATH\]],
-                   [enable linking with electric fence \[at PATH\]]),
+    AS_HELP_STRING([--with-efence],
+                   [enable linking with electric fence]),
     [],
     [with_efence=no]
     )
@@ -1034,20 +1032,7 @@ if test x"$with_efence" != "xno"; then
 
     AC_MSG_RESULT([${with_efence}])
 
-    if test "x${with_efence}" != "xyes"; then
-        efence_library_path="${with_efence}"
-        efence_library_flag="-L${efence_library_path}"
-    fi
-
-    AC_CHECK_LIB(
-       [efence],
-       [malloc],
-       [true],
-       AC_MSG_ERROR([Couldn't link with efence]),
-       [${efence_library_flag}]
-       )
-
-    efence_lib="${efence_library_flag} -lefence"
+    efence_lib="-lefence"
 
 else
     AC_MSG_RESULT([no])

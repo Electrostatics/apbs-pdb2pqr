@@ -594,6 +594,7 @@ typedef enum eVdata_Format Vdata_Format;
 
 
 // Added by Tucker Beck.  Prints location information with a status message
+#ifdef DEBUG
 #define VMESSAGE0(msg)                                        \
 		do {                                                  \
 			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"           \
@@ -618,6 +619,42 @@ typedef enum eVdata_Format Vdata_Format;
 					     "    %s\n\n",                         \
 					  __FILE__, __LINE__, __FUNCTION__, buff); \
 		} while(0)
+
+#define VMESSAGE3(msg, arg0, arg1, arg2)                             \
+		do {                                                   \
+			char buff[1000];                                   \
+			snprintf(buff, 1000, msg, arg0, arg1, arg2);           \
+			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+					     "    %s\n\n",                         \
+					  __FILE__, __LINE__, __FUNCTION__, buff); \
+		} while(0)
+#else
+#define VMESSAGE0(msg)                                                \
+                do {                                                  \
+                        Vnm_print(1, "%s: %s\n", __FUNCTION__, msg);  \
+                } while(0)
+
+#define VMESSAGE1(msg, arg0)                                          \
+		do {                                                  \
+			char buff[1000];                              \
+			snprintf( buff, 1000, msg, arg0 );            \
+			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+		} while(0)
+
+#define VMESSAGE2(msg, arg0, arg1)                                    \
+		do {                                                  \
+			char buff[1000];                              \
+			snprintf( buff, 1000, msg, arg0, arg1 );      \
+			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+		} while(0)
+
+#define VMESSAGE3(msg, arg0, arg1, arg2)                              \
+		do {                                                  \
+			char buff[1000];                              \
+			snprintf(buff, 1000, msg, arg0, arg1, arg2);  \
+			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+		} while(0)
+#endif
 
 /** Utility assertion; if it fails prints a message and aborts
  *  @author Tucker Beck
@@ -658,7 +695,7 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #if WIN32
 #	define snprintf sprintf_s
-#endif 
+#endif
 #define VASSERT_MSG2(cnd, msg, arg0, arg1)                           \
 	do {                                                             \
 		if( (cnd) == 0 ) {                                           \
@@ -676,46 +713,67 @@ typedef enum eVdata_Format Vdata_Format;
  *  @ingroup Vhal
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
-#define VWARN_MSG0(cnd, msg)                                            \
-		do {                                                            \
-			if( (cnd) == 0 ) {                                          \
-				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                 \
-						     "    Condition Failed (%s): %s\n\n",       \
-	                      __FILE__, __LINE__, __FUNCTION__, #cnd, msg); \
-			}                                                           \
-		} while(0)
+#define VWARN_MSG0(cnd, msg)                                              \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "%s:%d [%s()]: WARNING:\n"                \
+                                "    Condition Failed (%s):\n    %s\n\n", \
+                                __FILE__,                                 \
+                                __LINE__,                                 \
+                                __FUNCTION__,                             \
+                                #cnd,                                     \
+                                msg                                       \
+                                );                                        \
+                }                                                         \
+        } while(0)
 
 /** Conditional warning; if true prints a message and an argument
  *  @author Tucker Beck
  *  @ingroup Vhal
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
-#define VWARN_MSG1(cnd, msg, arg)                                        \
-		do {                                                             \
-			if( (cnd) == 0 ) {                                           \
-				char buff[1000];                                         \
-	            snprintf( buff, 1000, msg, arg );                        \
-				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                  \
-						     "    Condition Failed (%s): %s\n\n",        \
-	                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
-			}                                                            \
-		} while(0)
+#define VWARN_MSG1(cnd, msg, arg0)                                        \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        char buff[1000];                                  \
+                        snprintf(buff, 1000, msg, arg0);                  \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "%s:%d [%s()]: WARNING:\n"                \
+                                "    Condition Failed (%s):\n    %s\n\n", \
+                                __FILE__,                                 \
+                                __LINE__,                                 \
+                                __FUNCTION__,                             \
+                                #cnd,                                     \
+                                buff                                      \
+                                );                                        \
+                }                                                         \
+        } while(0)
 
 /** Conditional warning; if true prints a message and an argument
  *  @author Tucker Beck
  *  @ingroup Vhal
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
-#define VWARN_MSG2(cnd, msg, arg0, arg1)                                   \
-		do {                                                               \
-			if( (cnd) == 0 ) {                                             \
-				char buff[1000];                                           \
-	            snprintf( buff, 1000, msg, arg0, arg1 );                   \
-				Vnm_print(2, "%s:%d [%s()]: WARNING:\n"                    \
-						     "    Condition Failed (%s): %s\n\n",          \
-	                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff);   \
-			}                                                              \
-		} while(0)
+#define VWARN_MSG2(cnd, msg, arg0, arg1)                                  \
+        do {                                                              \
+                if( (cnd) == 0 ) {                                        \
+                        char buff[1000];                                  \
+                        snprintf(buff, 1000, msg, arg0, arg1);            \
+                        Vnm_print(                                        \
+                                2,                                        \
+                                "%s:%d [%s()]: WARNING:\n"                \
+                                "    Condition Failed (%s):\n    %s\n\n", \
+                                __FILE__,                                 \
+                                __LINE__,                                 \
+                                __FUNCTION__,                             \
+                                #cnd,                                     \
+                                buff                                      \
+                                );                                        \
+                }                                                         \
+        } while(0)
 
 /** Prints a message and aborts
  *  @author Tucker Beck
