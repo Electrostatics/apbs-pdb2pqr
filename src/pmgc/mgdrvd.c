@@ -197,7 +197,6 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 
 	// Miscellaneous Variables
 	int mgkey;      // @todo Document this function
-	int nlev;
 	int itmax;
 	int iok;
 	int iinfo;
@@ -259,12 +258,13 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 	double rsden;
 	double orsnrm;
 
+    // Get the value of nlev here because it is needed for the iz matrix
+    int nlev   = VAT(iparm,  6);
     MAT2(iz, 50, nlev);
 
     ANNOUNCE_FUNCTION;
 
     // Decode integer parameters from the iparm array
-    nlev   = VAT(iparm,  6);
     nu1    = VAT(iparm,  7);
     nu2    = VAT(iparm,  8);
     mgkey  = VAT(iparm,  9);
@@ -374,8 +374,8 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 
             if (iinfo > 1) {
                 VMESSAGE1("Power iters   = %d", iters_p);
-                VMESSAGE1("Power eigmax  = %d", rho_max);
-                VMESSAGE1("Power (MODEL) = %d", rho_max_mod);
+                VMESSAGE1("Power eigmax  = %f", rho_max);
+                VMESSAGE1("Power (MODEL) = %f", rho_max_mod);
             }
 
             // Smallest eigenvalue of the system matrix A
@@ -399,12 +399,12 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 
             if (iinfo > 1) {
                 VMESSAGE1("Ipower iters   = %d", iters_p);
-                VMESSAGE1("Ipower eigmin  = %d", rho_min);
-                VMESSAGE1("Ipower (MODEL) = %d", rho_min_mod);
+                VMESSAGE1("Ipower eigmin  = %f", rho_min);
+                VMESSAGE1("Ipower (MODEL) = %f", rho_min_mod);
 
                 // Condition number estimate
-                VMESSAGE1("Condition number  = %d", rho_max / rho_min);
-                VMESSAGE1("Condition (MODEL) = %d", rho_max_mod / rho_min_mod);
+                VMESSAGE1("Condition number  = %f", rho_max / rho_min);
+                VMESSAGE1("Condition (MODEL) = %f", rho_max_mod / rho_min_mod);
             }
         }
 
@@ -433,7 +433,7 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 
             if (iinfo > 1) {
                 VMESSAGE1("Mpower iters  = %d", iters_p);
-                VMESSAGE1("Mpower rho(M) = %d", rho_p);
+                VMESSAGE1("Mpower rho(M) = %f", rho_p);
             }
         }
 
