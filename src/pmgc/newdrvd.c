@@ -104,23 +104,14 @@ VEXTERNC void Vnewdriv(
     nlev   = VAT(iparm, 6);
 
     // Some checks on input ***
-    if (nlev <= 0 || nx <= 0 || ny <= 0 || nz <= 0) {
-        Vnm_print(2, "NEWDRIV:  nx,ny,nz,nlev must be positive...\n");
-        ierror = -1;
-        VAT(iparm, 51) = ierror;
-        return;
-    }
+    VASSERT_MSG0(nlev > 0, "The nlev parameter must be positive");
+    VASSERT_MSG0(nx > 0, "The nx parameter must be positive");
+    VASSERT_MSG0(ny > 0, "The ny parameter must be positive");
+    VASSERT_MSG0(nz > 0, "The nz parameter must be positive");
 
     mxlv = Vmaxlev(nx,ny,nz);
 
-    if (nlev > mxlv) {
-        Vnm_print(2, "NEWDRIV:  max lev for your grid size is: %d", mxlv);
-        ierror = -2;
-        VAT(iparm, 51) = ierror;
-        return;
-    }
-
-
+    VASSERT_MSG1(nlev <= mxlv, "Max lev for your grid size is: %d", mxlv);
 
     // Basic grid sizes, etc.
     mgcoar = VAT(iparm, 18);
@@ -140,13 +131,8 @@ VEXTERNC void Vnewdriv(
     iretot = iretot + 2 * nf;
 
     // Some more checks on input
-    if (nrwk < iretot || niwk < iintot) {
-        Vnm_print(2, "NEWDRIV: Real work space must be: %d", iretot);
-        Vnm_print(2, "NEWDRIV: integer work space must be: %d", iintot);
-        ierror = -3;
-        VAT(iparm, 51) = ierror;
-        return;
-    }
+    VASSERT_MSG1( nrwk >= iretot, "Real work space must be: %d", iretot );
+    VASSERT_MSG1( niwk >= iintot, "Integer work space must be: %d", iintot );
 
     // Split up the integer work array
     k_iz   = 1;
@@ -256,6 +242,8 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     // Build the multigrid data structure in iz
     Vbuildstr(nx, ny, nz, &nlev, iz);
 
+    VMESSAGE0("Fine problem setup");
+
     // Build op and rhs on fine grid ***
     ido = 0;
     Vbuildops(nx, ny, nz,
@@ -267,6 +255,8 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
             gxcf, gycf, gzcf,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
+
+    VMESSAGE0("Coarse problem setup");
 
     // Build op and rhs on all coarse grids
     ido = 1;
