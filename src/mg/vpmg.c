@@ -4000,11 +4000,11 @@ VPRIVATE void bcfl_mem(double zmem, double L, double eps_m, double eps_w,
     double G, z_0, z_rel;
     double gpos[3];
 
-	printf("Here is the value of kappa: %f\n",xkappa);
-	printf("Here is the value of L: %f\n",L);
-	printf("Here is the value of zmem: %f\n",zmem);
-	printf("Here is the value of mdie: %f\n",eps_m);
-	printf("Here is the value of memv: %f\n",V);
+	Vnm_print(0, "Here is the value of kappa: %f\n",xkappa);
+	Vnm_print(0, "Here is the value of L: %f\n",L);
+	Vnm_print(0, "Here is the value of zmem: %f\n",zmem);
+	Vnm_print(0, "Here is the value of mdie: %f\n",eps_m);
+	Vnm_print(0, "Here is the value of memv: %f\n",V);
 
 	/* no salt symmetric BC's at +/- infinity */
 	// B=V/(edge_L - l*(1-eps_w/eps_m));
