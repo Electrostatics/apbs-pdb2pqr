@@ -53,8 +53,6 @@ VPUBLIC void Vmypdefinitlpbe(int *tnion, double *tcharge, double *tsconc) {
 
 	int i;
 
-	ANNOUNCE_FUNCTION;
-
 	nion = *tnion;
 	if (nion > MAXIONS) {
 		Vnm_print(2, "Vmypde: Warning: Ignoring extra ion species\n");
@@ -72,8 +70,6 @@ VPUBLIC void Vmypdefinitlpbe(int *tnion, double *tcharge, double *tsconc) {
 VPUBLIC void Vmypdefinitnpbe(int *tnion, double *tcharge, double *tsconc) {
 
     int i;
-
-    ANNOUNCE_FUNCTION;
 
     nion = *tnion;
     if (nion > MAXIONS) {
@@ -95,7 +91,6 @@ VPUBLIC void Vmypdefinitsmpbe(int *tnion, double *tcharge, double *tsconc,
     int i;
 
     WARN_UNTESTED;
-    ANNOUNCE_FUNCTION;
 
     VABORT_MSG0("Not tested");
 
@@ -121,8 +116,6 @@ VPUBLIC void Vmypdefinitsmpbe(int *tnion, double *tcharge, double *tsconc,
 VPUBLIC void Vc_vec(double *coef, double *uin, double *uout,
         int *nx, int *ny, int *nz, int *ipkey) {
 
-    ANNOUNCE_FUNCTION;
-
     if (*ipkey == -2) {
         Vc_vecsmpbe(coef, uin, uout, nx, ny, nz, ipkey);
     } else {
@@ -136,19 +129,17 @@ VPUBLIC void Vc_vecpmg(double *coef, double *uin, double *uout,
         int *nx, int *ny, int *nz, int *ipkey) {
 
     double zcf2;      /// @todo  Document this function!
-    double zu2;       
-    double am_zero;   
-    double am_neg;    
-    double am_pos;   
-    double argument;  
-    int ichopped;     
-    int ichopped_neg; 
-    int ichopped_pos; 
-    int iion;         
+    double zu2;
+    double am_zero;
+    double am_neg;
+    double am_pos;
+    double argument;
+    int ichopped;
+    int ichopped_neg;
+    int ichopped_pos;
+    int iion;
 
     int n, i;
-
-    ANNOUNCE_FUNCTION;
 
     n = *nx * *ny * *nz;
 
@@ -235,7 +226,6 @@ VPUBLIC void Vc_vecsmpbe(double *coef, double *uin, double *uout,
     double a3_neg, a3_pos, a1, a2, a3;
     double f, g, gpark, alpha;
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     Vnm_print(2, "Vc_vecsmpbe: v1      = %f\n", v1);
@@ -349,8 +339,6 @@ VPUBLIC void Vdc_vec(double *coef, double *uin, double *uout,
     int i;
     int n = *nx * *ny * *nz;
 
-    ANNOUNCE_FUNCTION;
-
     if(*ipkey == -2) {
         Vdc_vecsmpbe(coef, uin, uout, nx, ny, nz, ipkey);
     } else {
@@ -368,8 +356,6 @@ VPUBLIC void Vdc_vecpmg(double *coef, double *uin, double *uout,
 
     int ichopped, ichopped_neg, ichopped_pos;
     int n, i;
-
-    ANNOUNCE_FUNCTION;
 
     // Find parallel loops (ipara), remainder (ivect)
     n = *nx * *ny * *nz;
@@ -449,8 +435,7 @@ VPUBLIC void Vdc_vecsmpbe(double *coef, double *uin, double *uout,
     double a1_neg, a1_pos, a2_neg, a2_pos;
     double a3_neg, a3_pos, a1, a2, a3;
     double f, g, fprime, gprime, gpark, alpha;
-
-    ANNOUNCE_FUNCTION;
+    
     WARN_UNTESTED;
 
     // Find parallel loops (ipara), remainder (ivect)

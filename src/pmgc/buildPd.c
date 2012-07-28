@@ -62,8 +62,6 @@ VPUBLIC void VbuildP(int *nxf, int *nyf, int *nzf,
     MAT2(pc, *nxc * *nyc * *nzc, 1);
     MAT2(ac, *nxf * *nyf * *nzf, 1);
 
-    ANNOUNCE_FUNCTION;
-
     if (*mgprol == 0) {
 
             VbuildP_trilin(nxf, nyf, nzf,
@@ -97,8 +95,6 @@ VPUBLIC void VbuildP_trilin(int *nxf, int *nyf, int *nzf,
 		double *xf, double *yf, double *zf) {
 
     MAT2(pc, *nxc * *nyc * *nzc, 1);
-
-    ANNOUNCE_FUNCTION;
 
     VbuildPb_trilin(nxf, nyf, nzf,
     		nxc, nyc, nzc,
@@ -162,8 +158,6 @@ VEXTERNC void VbuildPb_trilin(int *nxf, int *nyf, int *nzf,
     MAT3(dPSE, *nxc, *nyc, *nzc);
     MAT3(dPSW, *nxc, *nyc, *nzc);
 
-    ANNOUNCE_FUNCTION;
-
 for(k=2; k<=*nzc-1; k++) {
     for(j=2; j<=*nyc-1; j++) {
             for(i=2; i<=*nxc-1; i++) {
@@ -209,13 +203,12 @@ VPUBLIC void VbuildP_op7(int *nxf, int *nyf, int *nzf,
         int *nxc, int *nyc, int *nzc,
         int *ipc, double *rpc,
         double *ac, double *pc) {
-    
+
     MAT2(ac, *nxf * *nyf * *nzf, 1);
     MAT2(pc, *nxc * *nyc * *nzc, 1);
-    
+
     WARN_UNTESTED;
-    ANNOUNCE_FUNCTION;
-    
+
     VbuildPb_op7(nxf, nyf, nzf,
             nxc, nyc, nzc,
             ipc, rpc,
@@ -242,7 +235,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
         double *uPNE, double *uPNW, double *uPSE, double *uPSW,
         double  *dPC, double  *dPN, double  *dPS, double  *dPE, double  *dPW,
         double *dPNE, double *dPNW, double *dPSE, double *dPSW) {
-    
+
     int  i,  j,  k;
     int ii, jj, kk;
     int  im1,  ip1;
@@ -254,9 +247,9 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
     int iim1, iip1;
     int jjm1, jjp1;
     int kkm1, kkp1;
-    
+
     double won, half, quarter, eighth;
-    
+
     MAT3(  oC, *nxf, *nyf, *nzf);
     MAT3(  oE, *nxf, *nyf, *nzf);
     MAT3(  oN, *nxf, *nyf, *nzf);
@@ -289,8 +282,6 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
     MAT3(dPSE, *nxc, *nyc, *nzc);
     MAT3(dPSW, *nxc, *nyc, *nzc);
 
-
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // interpolation stencil ***
@@ -298,13 +289,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
     half    =  1.0 /  2.0;
     quarter =  1.0 /  4.0;
     eighth  =  1.0 /  8.0;
-    
+
     for (kk = 2; kk < *nzc - 1; kk++) {
         k = 2 * kk - 1;
-        
+
         for (jj = 2; jj < *nyc - 1; jj++) {
             j = 2 * jj - 1;
-                        
+
             for (ii = 2; ii < *nxc - 1; ii++) {
                 i = 2 * ii - 1;
 
@@ -339,31 +330,31 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *************************************************************
 
                 VAT3( oPN, ii, jj, kk) =
-                        VAT3(  oN, i, j, k) / ( VAT3(  oC,   i, jp1,   k) 
-                                               - VAT3(  oE, im1, jp1,   k) 
-                                               - VAT3(  oE,   i, jp1,   k) 
-                                               - VAT3(  uC,   i, jp1, km1) 
+                        VAT3(  oN, i, j, k) / ( VAT3(  oC,   i, jp1,   k)
+                                               - VAT3(  oE, im1, jp1,   k)
+                                               - VAT3(  oE,   i, jp1,   k)
+                                               - VAT3(  uC,   i, jp1, km1)
                                                - VAT3(  uC,   i, jp1,   k));
 
                 // *************************************************************
                 // *** > oPS;
                 // *************************************************************
 
-                VAT3( oPS, ii, jj, kk) = 
-                        VAT3(  oN, i, jm1, k) / ( VAT3(  oC,   i, jm1,   k) 
-                                                 - VAT3(  oE, im1, jm1,   k) 
-                                                 - VAT3(  oE,   i, jm1,   k) 
+                VAT3( oPS, ii, jj, kk) =
+                        VAT3(  oN, i, jm1, k) / ( VAT3(  oC,   i, jm1,   k)
+                                                 - VAT3(  oE, im1, jm1,   k)
+                                                 - VAT3(  oE,   i, jm1,   k)
                                                  - VAT3(  uC,   i, jm1, km1)
                                                  - VAT3(  uC,   i, jm1,   k));
- 
+
                 // *************************************************************
                 // *** > oPE;
                 // *************************************************************
 
-                VAT3( oPE, ii, jj, kk) = 
-                        VAT3(  oE, i, j, k) / ( VAT3(  oC, ip1,   j,   k) 
-                                               - VAT3(  uC, ip1,   j, km1) 
-                                               - VAT3(  uC, ip1,   j,   k) 
+                VAT3( oPE, ii, jj, kk) =
+                        VAT3(  oE, i, j, k) / ( VAT3(  oC, ip1,   j,   k)
+                                               - VAT3(  uC, ip1,   j, km1)
+                                               - VAT3(  uC, ip1,   j,   k)
                                                - VAT3(  oN, ip1,   j,   k)
                                                - VAT3(  oN, ip1, jm1,   k));
 
@@ -371,10 +362,10 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > oPW;
                 // *************************************************************
 
-                VAT3( oPW, ii, jj, kk) = 
-                        VAT3(  oE, im1, j, k) / ( VAT3(  oC, im1,   j,   k) 
-                                                 - VAT3(  uC, im1,   j, km1) 
-                                                 - VAT3(  uC, im1,   j,   k) 
+                VAT3( oPW, ii, jj, kk) =
+                        VAT3(  oE, im1, j, k) / ( VAT3(  oC, im1,   j,   k)
+                                                 - VAT3(  uC, im1,   j, km1)
+                                                 - VAT3(  uC, im1,   j,   k)
                                                  - VAT3(  oN, im1,   j,   k)
                                                  - VAT3(  oN, im1, jm1,   k));
 
@@ -382,13 +373,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > oPNE;
                 // *************************************************************
 
-                VAT3(oPNE, ii, jj, kk) = 
+                VAT3(oPNE, ii, jj, kk) =
                         (
                             VAT3(  oN, ip1,   j,   k) * VAT3( oPE, ii, jj, kk)
                           + VAT3(  oE,   i, jp1,   k) * VAT3( oPN, ii, jj, kk)
                         ) / (
-                            VAT3(  oC, ip1, jp1,   k) 
-                          - VAT3(  uC, ip1, jp1, km1) 
+                            VAT3(  oC, ip1, jp1,   k)
+                          - VAT3(  uC, ip1, jp1, km1)
                           - VAT3(  uC, ip1, jp1,   k)
                         );
 
@@ -396,13 +387,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > oPNW;
                 // *************************************************************
 
-                VAT3(oPNW, ii, jj, kk) = 
+                VAT3(oPNW, ii, jj, kk) =
                         (
-                            VAT3(  oN, im1,   j,   k) * VAT3( oPW, ii, jj, kk) 
+                            VAT3(  oN, im1,   j,   k) * VAT3( oPW, ii, jj, kk)
                           + VAT3(  oE, im1, jp1,   k) * VAT3( oPN, ii, jj, kk)
                         ) / (
-                            VAT3(  oC, im1, jp1,   k) 
-                          - VAT3(  uC, im1, jp1, km1) 
+                            VAT3(  oC, im1, jp1,   k)
+                          - VAT3(  uC, im1, jp1, km1)
                           - VAT3(  uC, im1, jp1,   k)
                         );
 
@@ -410,13 +401,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > oPSE;
                 // *************************************************************
 
-                VAT3(oPSE, ii, jj, kk) = 
+                VAT3(oPSE, ii, jj, kk) =
                     (
-                        VAT3(  oN, ip1, jm1,   k) * VAT3( oPE, ii, jj, kk) 
+                        VAT3(  oN, ip1, jm1,   k) * VAT3( oPE, ii, jj, kk)
                       + VAT3(  oE,   i, jm1,   k) * VAT3( oPS, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, ip1, jm1,   k) 
-                      - VAT3(  uC, ip1, jm1, km1) 
+                        VAT3(  oC, ip1, jm1,   k)
+                      - VAT3(  uC, ip1, jm1, km1)
                       - VAT3(  uC, ip1, jm1,   k)
                     );
 
@@ -424,13 +415,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > oPSW;
                 // *************************************************************
 
-                VAT3(oPSW, ii, jj, kk) = 
+                VAT3(oPSW, ii, jj, kk) =
                     (
                         VAT3(  oN, im1, jm1,   k) * VAT3( oPW, ii, jj, kk)
                       + VAT3(  oE, im1, jm1,   k) * VAT3( oPS, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, im1, jm1,   k) 
-                      - VAT3(  uC, im1, jm1, km1) 
+                        VAT3(  oC, im1, jm1,   k)
+                      - VAT3(  uC, im1, jm1, km1)
                       - VAT3(  uC, im1, jm1,   k)
                     );
 
@@ -438,12 +429,12 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPC;
                 // *************************************************************
 
-                VAT3( dPC, ii, jj, kk) = 
+                VAT3( dPC, ii, jj, kk) =
                     VAT3(  uC, i, j, km1)
                     / (
-                          VAT3(  oC,   i,   j, km1) 
-                        - VAT3(  oN,   i,   j, km1) 
-                        - VAT3(  oN,   i, jm1, km1) 
+                          VAT3(  oC,   i,   j, km1)
+                        - VAT3(  oN,   i,   j, km1)
+                        - VAT3(  oN,   i, jm1, km1)
                         - VAT3(  oE, im1,   j, km1)
                         - VAT3(  oE,   i,   j, km1)
                     );
@@ -452,13 +443,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPN;
                 // *************************************************************
 
-                VAT3( dPN, ii, jj, kk) = 
+                VAT3( dPN, ii, jj, kk) =
                     (
-                        VAT3(  oN,   i,   j, km1) * VAT3( dPC, ii, jj, kk) 
+                        VAT3(  oN,   i,   j, km1) * VAT3( dPC, ii, jj, kk)
                       + VAT3(  uC,   i, jp1, km1) * VAT3( oPN, ii, jj, kk)
                     ) / (
-                        VAT3(  oC,   i, jp1, km1) 
-                      - VAT3(  oE, im1, jp1, km1) 
+                        VAT3(  oC,   i, jp1, km1)
+                      - VAT3(  oE, im1, jp1, km1)
                       - VAT3(  oE,   i, jp1, km1)
                     );
 
@@ -466,13 +457,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPS;
                 // *************************************************************
 
-                VAT3( dPS, ii, jj, kk) = 
+                VAT3( dPS, ii, jj, kk) =
                     (
                         VAT3(  oN,   i, jm1, km1) * VAT3( dPC, ii, jj, kk)
                       + VAT3(  uC,   i, jm1, km1) * VAT3( oPS, ii, jj, kk)
                     ) / (
-                        VAT3(  oC,   i, jm1, km1) 
-                      - VAT3(  oE, im1, jm1, km1) 
+                        VAT3(  oC,   i, jm1, km1)
+                      - VAT3(  oE, im1, jm1, km1)
                       - VAT3(  oE,   i, jm1, km1)
                     );
 
@@ -480,13 +471,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPE;
                 // *************************************************************
 
-                VAT3( dPE, ii, jj, kk) = 
+                VAT3( dPE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1,   j, km1) * VAT3( oPE, ii, jj, kk)
                       + VAT3(  oE,   i,   j, km1) * VAT3( dPC, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, ip1,   j, km1) 
-                      - VAT3(  oN, ip1,   j, km1) 
+                        VAT3(  oC, ip1,   j, km1)
+                      - VAT3(  oN, ip1,   j, km1)
                       - VAT3(  oN, ip1, jm1, km1)
                     );
 
@@ -494,13 +485,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPW;
                 // *************************************************************
 
-                VAT3( dPW, ii, jj, kk) = 
+                VAT3( dPW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1,   j, km1) * VAT3( oPW, ii, jj, kk)
                       + VAT3(  oE, im1,   j, km1) * VAT3( dPC, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, im1,   j, km1) 
-                      - VAT3(  oN, im1,   j, km1) 
+                        VAT3(  oC, im1,   j, km1)
+                      - VAT3(  oN, im1,   j, km1)
                       - VAT3(  oN, im1, jm1, km1)
                     );
 
@@ -508,7 +499,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPNE;
                 // *************************************************************
 
-                VAT3(dPNE, ii, jj, kk) = 
+                VAT3(dPNE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1, jp1, km1) * VAT3(oPNE, ii, jj, kk)
                       + VAT3(  oE,   i, jp1, km1) * VAT3( dPN, ii, jj, kk)
@@ -519,7 +510,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPNW;
                 // *************************************************************
 
-                VAT3(dPNW, ii, jj, kk) = 
+                VAT3(dPNW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1, jp1, km1) * VAT3(oPNW, ii, jj, kk)
                       + VAT3(  oE, im1, jp1, km1) * VAT3( dPN, ii, jj, kk)
@@ -530,7 +521,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPSE;
                 // *************************************************************
 
-                VAT3(dPSE, ii, jj, kk) = 
+                VAT3(dPSE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1, jm1, km1) * VAT3(oPSE, ii, jj, kk)
                       + VAT3(  oE,   i, jm1, km1) * VAT3( dPS, ii, jj, kk)
@@ -541,7 +532,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > dPSW;
                 // *************************************************************
 
-                VAT3(dPSW, ii, jj, kk) = 
+                VAT3(dPSW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1, jm1, km1) * VAT3(oPSW, ii, jj, kk)
                       + VAT3(  oE, im1, jm1, km1) * VAT3( dPS, ii, jj, kk)
@@ -552,11 +543,11 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPC;
                 // *************************************************************
 
-                VAT3( uPC, ii, jj, kk) = 
+                VAT3( uPC, ii, jj, kk) =
                     VAT3(  uC, i, j, k)
-                    / ( VAT3(  oC,   i,   j, kp1) 
-                      - VAT3(  oN,   i,   j, kp1) 
-                      - VAT3(  oN,   i, jm1, kp1) 
+                    / ( VAT3(  oC,   i,   j, kp1)
+                      - VAT3(  oN,   i,   j, kp1)
+                      - VAT3(  oN,   i, jm1, kp1)
                       - VAT3(  oE, im1,   j, kp1)
                       - VAT3(  oE,   i,   j, kp1)
                     );
@@ -565,13 +556,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPN;
                 // *************************************************************
 
-                VAT3( uPN, ii, jj, kk) = 
+                VAT3( uPN, ii, jj, kk) =
                     (
-                        VAT3(  oN,   i,   j, kp1) * VAT3( uPC, ii, jj, kk) 
+                        VAT3(  oN,   i,   j, kp1) * VAT3( uPC, ii, jj, kk)
                      +  VAT3(  uC,   i, jp1,   k) * VAT3( oPN, ii, jj, kk)
                     ) / (
-                        VAT3(  oC,   i, jp1, kp1) 
-                      - VAT3(  oE, im1, jp1, kp1) 
+                        VAT3(  oC,   i, jp1, kp1)
+                      - VAT3(  oE, im1, jp1, kp1)
                       - VAT3(  oE,   i, jp1, kp1)
                     );
 
@@ -579,13 +570,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPS;
                 // *************************************************************
 
-                VAT3( uPS, ii, jj, kk) = 
+                VAT3( uPS, ii, jj, kk) =
                     (
                         VAT3(  oN,   i, jm1, kp1) * VAT3( uPC, ii, jj, kk)
                      +  VAT3(  uC,   i, jm1,   k) * VAT3( oPS, ii, jj, kk)
                     ) / (
-                        VAT3(  oC,   i, jm1, kp1) 
-                      - VAT3(  oE, im1, jm1, kp1) 
+                        VAT3(  oC,   i, jm1, kp1)
+                      - VAT3(  oE, im1, jm1, kp1)
                       - VAT3(  oE,   i, jm1, kp1)
                     );
 
@@ -593,13 +584,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPE;
                 // *************************************************************
 
-                VAT3( uPE, ii, jj, kk) = 
+                VAT3( uPE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1,   j,   k) * VAT3( oPE, ii, jj, kk)
                       + VAT3(  oE,   i,   j, kp1) * VAT3( uPC, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, ip1,   j, kp1) 
-                      - VAT3(  oN, ip1,   j, kp1) 
+                        VAT3(  oC, ip1,   j, kp1)
+                      - VAT3(  oN, ip1,   j, kp1)
                       - VAT3(  oN, ip1, jm1, kp1)
                     );
 
@@ -607,13 +598,13 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPW;
                 // *************************************************************
 
-                VAT3( uPW, ii, jj, kk) = 
+                VAT3( uPW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1,   j,   k) * VAT3( oPW, ii, jj, kk)
                      +  VAT3(  oE, im1,   j, kp1) * VAT3( uPC, ii, jj, kk)
                     ) / (
-                        VAT3(  oC, im1,   j, kp1) 
-                      - VAT3(  oN, im1,   j, kp1) 
+                        VAT3(  oC, im1,   j, kp1)
+                      - VAT3(  oN, im1,   j, kp1)
                       - VAT3(  oN, im1, jm1, kp1)
                     );
 
@@ -621,7 +612,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPNE;
                 // *************************************************************
 
-                VAT3(uPNE, ii, jj, kk) = 
+                VAT3(uPNE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1, jp1,   k) * VAT3(oPNE, ii, jj, kk)
                       + VAT3(  oE,   i, jp1, kp1) * VAT3( uPN, ii, jj, kk)
@@ -632,7 +623,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPNW;
                 // *************************************************************
 
-                VAT3(uPNW, ii, jj, kk) = 
+                VAT3(uPNW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1, jp1,   k) * VAT3(oPNW, ii, jj, kk)
                       + VAT3(  oE, im1, jp1, kp1) * VAT3( uPN, ii, jj, kk)
@@ -643,7 +634,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPSE;
                 // *************************************************************
 
-                VAT3(uPSE, ii, jj, kk) = 
+                VAT3(uPSE, ii, jj, kk) =
                     (
                         VAT3(  uC, ip1, jm1,   k) * VAT3(oPSE, ii, jj, kk)
                       + VAT3(  oE,   i, jm1, kp1) * VAT3( uPS, ii, jj, kk)
@@ -654,7 +645,7 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
                 // *** > uPSW;
                 // *************************************************************
 
-                VAT3(uPSW, ii, jj, kk) = 
+                VAT3(uPSW, ii, jj, kk) =
                     (
                         VAT3(  uC, im1, jm1,   k) * VAT3(oPSW, ii, jj, kk)
                       + VAT3(  oE, im1, jm1, kp1) * VAT3( uPS, ii, jj, kk)
@@ -668,21 +659,20 @@ VPUBLIC void VbuildPb_op7(int *nxf, int *nyf, int *nzf,
 
 
 
-VPUBLIC void VbuildP_op27(int *nxf, int *nyf, int *nzf, 
-        int *nxc, int *nyc, int *nzc, 
-        int *ipc, double *rpc, 
+VPUBLIC void VbuildP_op27(int *nxf, int *nyf, int *nzf,
+        int *nxc, int *nyc, int *nzc,
+        int *ipc, double *rpc,
         double *ac, double *pc) {
-    
+
     MAT2(ac, *nxf * *nyf * *nzf, 1);
     MAT2(pc, *nxc * *nyc * *nzc, 1);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
-    
+
     VbuildPb_op27(nxf, nyf, nzf,
             nxc, nyc, nzc,
             ipc, rpc,
-            
+
             RAT2(ac, 1,  1), RAT2(ac, 1,  2), RAT2(ac, 1,  3),
             RAT2(ac, 1,  4),
             RAT2(ac, 1,  5), RAT2(ac, 1,  6),
@@ -710,7 +700,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
         double *uPNE, double *uPNW, double *uPSE, double *uPSW,
         double  *dPC, double  *dPN, double  *dPS, double  *dPE, double  *dPW,
         double *dPNE, double *dPNW, double *dPSE, double *dPSW) {
-    
+
       int   i,     j,  k;
       int  ii,    jj, kk;
       int  im1,  ip1;
@@ -722,9 +712,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
       int iim1, iip1;
       int jjm1, jjp1;
       int kkm1, kkp1;
-      
+
       double won, half, quarter, eighth;
-            
+
       MAT3(  oC, *nxf, *nyf, *nzf);
       MAT3(  oE, *nxf, *nyf, *nzf);
       MAT3(  oN, *nxf, *nyf, *nzf);
@@ -767,21 +757,20 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
       MAT3(dPSE, *nxc, *nyc, *nzc);
       MAT3(dPSW, *nxc, *nyc, *nzc);
 
-      ANNOUNCE_FUNCTION;
       WARN_UNTESTED;
-      
+
       // Interpolation Stencil
       won     = 1.0;
       half    = 1.0 / 2.0;
       quarter = 1.0 / 4.0;
       eighth  = 1.0 / 8.0;
-      
+
       for (kk = 2; kk <= *nzc - 1; kk++) {
           k = 2 * kk - 1;
-         
+
           for (jj = 2; jj <= *nyc - 1; jj++) {
               j = 2 * jj - 1;
-            
+
               for (ii = 2; ii <= *nxc - 1; ii++) {
                   i = 2 * ii - 1;
 
@@ -815,26 +804,26 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPN;
                   //* **********************************************************
 
-                  VAT3( oPN,  ii,  jj,  kk) = 
+                  VAT3( oPN,  ii,  jj,  kk) =
                           (
                                 VAT3( uNE, im1,   j, km1)
                               + VAT3(  uN,   i,   j, km1)
                               + VAT3( uNW, ip1,   j, km1)
-                              + VAT3( oNE, im1,   j,   k) 
-                              + VAT3(  oN,   i,   j,   k) 
+                              + VAT3( oNE, im1,   j,   k)
+                              + VAT3(  oN,   i,   j,   k)
                               + VAT3( oNW, ip1,   j,   k)
-                              + VAT3( uSW,   i, jp1,   k) 
+                              + VAT3( uSW,   i, jp1,   k)
                               + VAT3(  uS,   i, jp1,   k)
                               + VAT3( uSE,   i, jp1,   k)
                           ) / (
-                                VAT3(  oC,   i, jp1,   k) 
-                              - VAT3(  oE, im1, jp1,   k) 
-                              - VAT3(  oE,   i, jp1,   k) 
+                                VAT3(  oC,   i, jp1,   k)
+                              - VAT3(  oE, im1, jp1,   k)
+                              - VAT3(  oE,   i, jp1,   k)
                               - VAT3(  uC,   i, jp1, km1)
                               - VAT3(  uE, im1, jp1, km1)
-                              - VAT3(  uW, ip1, jp1, km1) 
-                              - VAT3(  uC,   i, jp1,   k) 
-                              - VAT3(  uW,   i, jp1,   k) 
+                              - VAT3(  uW, ip1, jp1, km1)
+                              - VAT3(  uC,   i, jp1,   k)
+                              - VAT3(  uW,   i, jp1,   k)
                               - VAT3(  uE,   i, jp1,   k)
                           );
 
@@ -842,24 +831,24 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPS;
                   //* **********************************************************
 
-                  VAT3( oPS,  ii,  jj,  kk) = 
+                  VAT3( oPS,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE, im1,   j, km1)
                               + VAT3(  uS,   i,   j, km1)
                               + VAT3( uSW, ip1,   j, km1)
                               + VAT3( oNW,   i, jm1,   k)
                               + VAT3(  oN,   i, jm1,   k)
-                              + VAT3( oNE,   i, jm1,   k) 
+                              + VAT3( oNE,   i, jm1,   k)
                               + VAT3( uNW,   i, jm1,   k)
                               + VAT3(  uN,   i, jm1,   k)
                               + VAT3( uNE,   i, jm1,   k)
                           ) / (
-                                VAT3(  oC,   i, jm1,   k) 
+                                VAT3(  oC,   i, jm1,   k)
                               - VAT3(  oE, im1, jm1,   k)
-                              - VAT3(  oE,   i, jm1,   k) 
+                              - VAT3(  oE,   i, jm1,   k)
                               - VAT3(  uC,   i, jm1, km1)
                               - VAT3(  uE, im1, jm1, km1)
-                              - VAT3(  uW, ip1, jm1, km1) 
+                              - VAT3(  uW, ip1, jm1, km1)
                               - VAT3(  uC,   i, jm1,   k)
                               - VAT3(  uW,   i, jm1,   k)
                               - VAT3(  uE,   i, jm1,   k)
@@ -869,24 +858,24 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPE;
                   //* **********************************************************
 
-                  VAT3( oPE,  ii,  jj,  kk) = 
+                  VAT3( oPE,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE,   i, jp1, km1)
                               + VAT3( oNW, ip1,   j,   k)
                               + VAT3( uNW, ip1,   j,   k)
                               + VAT3(  uE,   i,   j, km1)
                               + VAT3(  oE,   i,   j,   k)
-                              + VAT3(  uW, ip1,   j,   k) 
+                              + VAT3(  uW, ip1,   j,   k)
                               + VAT3( uNE,   i, jm1, km1)
                               + VAT3( oNE,   i, jm1,   k)
                               + VAT3( uSW, ip1,   j,   k)
                           ) / (
-                                VAT3(  oC, ip1,   j,   k) 
+                                VAT3(  oC, ip1,   j,   k)
                               - VAT3(  uC, ip1,   j, km1)
-                              - VAT3(  uC, ip1,   j,   k) 
+                              - VAT3(  uC, ip1,   j,   k)
                               - VAT3(  oN, ip1,   j,   k)
                               - VAT3(  uS, ip1, jp1, km1)
-                              - VAT3(  uN, ip1,   j,   k) 
+                              - VAT3(  uN, ip1,   j,   k)
                               - VAT3(  oN, ip1, jm1,   k)
                               - VAT3(  uN, ip1, jm1, km1)
                               - VAT3(  uS, ip1,   j,   k)
@@ -896,7 +885,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPW;
                   //* **********************************************************
 
-                  VAT3( oPW,  ii,  jj,  kk) = 
+                  VAT3( oPW,  ii,  jj,  kk) =
                           (
                                 VAT3( uSW,   i, jp1, km1)
                               + VAT3( oNE, im1,   j,   k)
@@ -908,12 +897,12 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               + VAT3( oNW,   i, jm1,   k)
                               + VAT3( uSE, im1,   j,   k)
                           ) / (
-                                VAT3(  oC, im1,   j,   k) 
+                                VAT3(  oC, im1,   j,   k)
                               - VAT3(  uC, im1,   j, km1)
-                              - VAT3(  uC, im1,   j,   k) 
+                              - VAT3(  uC, im1,   j,   k)
                               - VAT3(  oN, im1,   j,   k)
                               - VAT3(  uS, im1, jp1, km1)
-                              - VAT3(  uN, im1,   j,   k) 
+                              - VAT3(  uN, im1,   j,   k)
                               - VAT3(  oN, im1, jm1,   k)
                               - VAT3(  uN, im1, jm1, km1)
                               - VAT3(  uS, im1,   j,   k)
@@ -923,11 +912,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPNE;
                   //* **********************************************************
 
-                  VAT3(oPNE,  ii,  jj,  kk) = 
+                  VAT3(oPNE,  ii,  jj,  kk) =
                           (
                                 VAT3( uNE,   i,   j, km1)
                               + VAT3( oNE,   i,   j,   k)
-                              + VAT3( uSW, ip1, jp1,   k) 
+                              + VAT3( uSW, ip1, jp1,   k)
                               + (
                                     VAT3(  uN, ip1,   j, km1)
                                   + VAT3(  oN, ip1,   j,   k)
@@ -941,7 +930,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPN,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, ip1, jp1,   k) 
+                                VAT3(  oC, ip1, jp1,   k)
                               - VAT3(  uC, ip1, jp1, km1)
                               - VAT3(  uC, ip1, jp1,   k)
                           );
@@ -950,17 +939,17 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPNW;
                   //* **********************************************************
 
-                  VAT3(oPNW,  ii,  jj,  kk) = 
+                  VAT3(oPNW,  ii,  jj,  kk) =
                           (
                                 VAT3( uNW,   i,   j, km1)
                               + VAT3( oNW,   i,   j,   k)
-                              + VAT3( uSE, im1, jp1,   k) 
+                              + VAT3( uSE, im1, jp1,   k)
                               + (
                                     VAT3(  uN, im1,   j, km1)
                                   + VAT3(  oN, im1,   j,   k)
                                   + VAT3(  uS, im1, jp1,   k)
                                 )
-                              * VAT3( oPW,  ii,  jj,  kk) 
+                              * VAT3( oPW,  ii,  jj,  kk)
                               + (
                                     VAT3(  uW,   i, jp1, km1)
                                   + VAT3(  oE, im1, jp1,   k)
@@ -968,7 +957,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPN,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, im1, jp1,   k) 
+                                VAT3(  oC, im1, jp1,   k)
                               - VAT3(  uC, im1, jp1, km1)
                               - VAT3(  uC, im1, jp1,   k)
                           );
@@ -977,7 +966,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPSE;
                   //* **********************************************************
 
-                  VAT3(oPSE,  ii,  jj,  kk) = 
+                  VAT3(oPSE,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE,   i,   j, km1)
                               + VAT3( oNW, ip1, jm1,   k)
@@ -987,7 +976,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                   + VAT3(  oN, ip1, jm1,   k)
                                   + VAT3(  uN, ip1, jm1,   k)
                                 )
-                              * VAT3( oPE,  ii,  jj,  kk) 
+                              * VAT3( oPE,  ii,  jj,  kk)
                               + (
                                     VAT3(  uE,   i, jm1, km1)
                                   + VAT3(  oE,   i, jm1,   k)
@@ -995,7 +984,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPS,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, ip1, jm1,   k) 
+                                VAT3(  oC, ip1, jm1,   k)
                               - VAT3(  uC, ip1, jm1, km1)
                               - VAT3(  uC, ip1, jm1,   k)
                           );
@@ -1004,7 +993,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > oPSW;
                   //* **********************************************************
 
-                  VAT3(oPSW,  ii,  jj,  kk) = 
+                  VAT3(oPSW,  ii,  jj,  kk) =
                           (
                                 VAT3( uSW,   i,   j, km1)
                               + VAT3( oNE, im1, jm1,   k)
@@ -1022,7 +1011,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPS,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, im1, jm1,   k) 
+                                VAT3(  oC, im1, jm1,   k)
                               - VAT3(  uC, im1, jm1, km1)
                               - VAT3(  uC, im1, jm1,   k)
                           );
@@ -1031,7 +1020,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPC;
                   //* **********************************************************
 
-                  VAT3( dPC,  ii,  jj,  kk) = 
+                  VAT3( dPC,  ii,  jj,  kk) =
                           (
                                 VAT3( uNW,   i,   j, km1)
                               + VAT3(  uW,   i,   j, km1)
@@ -1043,12 +1032,12 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               + VAT3(  uE,   i,   j, km1)
                               + VAT3( uSE,   i,   j, km1)
                           ) / (
-                                VAT3(  oC,   i,   j, km1) 
+                                VAT3(  oC,   i,   j, km1)
                               - VAT3(  oN,   i,   j, km1)
-                              - VAT3(  oN,   i, jm1, km1) 
+                              - VAT3(  oN,   i, jm1, km1)
                               - VAT3( oNW,   i,   j, km1)
                               - VAT3(  oE, im1,   j, km1)
-                              - VAT3( oNE, im1, jm1, km1) 
+                              - VAT3( oNE, im1, jm1, km1)
                               - VAT3( oNE,   i,   j, km1)
                               - VAT3(  oE,   i,   j, km1)
                               - VAT3( oNW, ip1, jm1, km1)
@@ -1058,17 +1047,17 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPN;
                   //* **********************************************************
 
-                  VAT3( dPN,  ii,  jj,  kk) = 
+                  VAT3( dPN,  ii,  jj,  kk) =
                           (
                                 VAT3( uSW,   i, jp1, km1)
                               + VAT3(  uS,   i, jp1, km1)
-                              + VAT3( uSE,   i, jp1, km1) 
+                              + VAT3( uSE,   i, jp1, km1)
                               + (
                                     VAT3( oNE, im1,   j, km1)
                                   + VAT3(  oN,   i,   j, km1)
                                   + VAT3( oNW, ip1,   j, km1)
                                 )
-                              * VAT3( dPC,  ii,  jj,  kk) 
+                              * VAT3( dPC,  ii,  jj,  kk)
                               + (
                                     VAT3(  uW,   i, jp1, km1)
                                   + VAT3(  uC,   i, jp1, km1)
@@ -1076,7 +1065,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPN,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC,   i, jp1, km1) 
+                                VAT3(  oC,   i, jp1, km1)
                               - VAT3(  oE, im1, jp1, km1)
                               - VAT3(  oE,   i, jp1, km1)
                           );
@@ -1085,11 +1074,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPS;
                   //* **********************************************************
 
-                  VAT3( dPS,  ii,  jj,  kk) = 
+                  VAT3( dPS,  ii,  jj,  kk) =
                           (
                                 VAT3( uNW,   i, jm1, km1)
                               + VAT3(  uN,   i, jm1, km1)
-                              + VAT3( uNE,   i, jm1, km1) 
+                              + VAT3( uNE,   i, jm1, km1)
                               + (
                                     VAT3( oNW,   i, jm1, km1)
                                   + VAT3(  oN,   i, jm1, km1)
@@ -1103,7 +1092,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPS,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC,   i, jm1, km1) 
+                                VAT3(  oC,   i, jm1, km1)
                               - VAT3(  oE, im1, jm1, km1)
                               - VAT3(  oE,   i, jm1, km1)
                           );
@@ -1112,11 +1101,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPE;
                   //* **********************************************************
 
-                  VAT3( dPE,  ii,  jj,  kk) = 
+                  VAT3( dPE,  ii,  jj,  kk) =
                           (
                                 VAT3( uNW, ip1,   j, km1)
                               + VAT3(  uW, ip1,   j, km1)
-                              + VAT3( uSW, ip1,   j, km1) 
+                              + VAT3( uSW, ip1,   j, km1)
                               + (
                                     VAT3(  uN, ip1,   j, km1)
                                   + VAT3(  uC, ip1,   j, km1)
@@ -1125,12 +1114,12 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                               * VAT3( oPE,  ii,  jj,  kk)
                               + (
                                     VAT3( oNW, ip1,   j, km1)
-                                  + VAT3(  oE,   i,   j, km1) 
+                                  + VAT3(  oE,   i,   j, km1)
                                   + VAT3( oNE,   i, jm1, km1)
                                 )
                               * VAT3( dPC,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, ip1,   j, km1) 
+                                VAT3(  oC, ip1,   j, km1)
                               - VAT3(  oN, ip1,   j, km1)
                               - VAT3(  oN, ip1, jm1, km1)
                           );
@@ -1139,11 +1128,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPW;
                   //* **********************************************************
 
-                  VAT3( dPW,  ii,  jj,  kk) = 
+                  VAT3( dPW,  ii,  jj,  kk) =
                           (
                                 VAT3( uNE, im1,   j, km1)
                               + VAT3(  uE, im1,   j, km1)
-                              + VAT3( uSE, im1,   j, km1) 
+                              + VAT3( uSE, im1,   j, km1)
                               + (
                                     VAT3(  uN, im1,   j, km1)
                                   + VAT3(  uC, im1,   j, km1)
@@ -1157,23 +1146,23 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( dPC,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, im1,   j, km1) 
+                                VAT3(  oC, im1,   j, km1)
                               - VAT3(  oN, im1,   j, km1)
                               - VAT3(  oN, im1, jm1, km1)
                           );
-                  
+
 
                   //* **********************************************************
                   //* *** > dPNE;
                   //* **********************************************************
 
-                  VAT3(dPNE,  ii,  jj,  kk) = 
+                  VAT3(dPNE,  ii,  jj,  kk) =
                           (
-                                VAT3( uSW, ip1, jp1, km1) 
+                                VAT3( uSW, ip1, jp1, km1)
                               + VAT3(  uW, ip1, jp1, km1)
                               * VAT3( oPN,  ii,  jj,  kk)
                               + VAT3(  uS, ip1, jp1, km1)
-                              * VAT3( oPE,  ii,  jj,  kk) 
+                              * VAT3( oPE,  ii,  jj,  kk)
                               + VAT3(  uC, ip1, jp1, km1)
                               * VAT3(oPNE,  ii,  jj,  kk)
                               + VAT3( oNE,   i,   j, km1)
@@ -1189,9 +1178,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPNW;
                   //* **********************************************************
 
-                  VAT3(dPNW,  ii,  jj,  kk) = 
+                  VAT3(dPNW,  ii,  jj,  kk) =
                           (
-                                VAT3( uSE, im1, jp1, km1) 
+                                VAT3( uSE, im1, jp1, km1)
                               + VAT3(  uE, im1, jp1, km1)
                               * VAT3( oPN,  ii,  jj,  kk)
                               + VAT3(  uS, im1, jp1, km1)
@@ -1211,7 +1200,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPSE;
                   //* **********************************************************
 
-                  VAT3(dPSE,  ii,  jj,  kk) = 
+                  VAT3(dPSE,  ii,  jj,  kk) =
                           (
                                 VAT3( uNW, ip1, jm1, km1)
                               + VAT3(  uW, ip1, jm1, km1)
@@ -1233,7 +1222,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > dPSW;
                   //* **********************************************************
 
-                  VAT3(dPSW,  ii,  jj,  kk) = 
+                  VAT3(dPSW,  ii,  jj,  kk) =
                           (
                                 VAT3( uNE, im1, jm1, km1)
                               + VAT3(  uE, im1, jm1, km1)
@@ -1255,24 +1244,24 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPC;
                   //* **********************************************************
 
-                  VAT3( uPC,  ii,  jj,  kk) = 
+                  VAT3( uPC,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE, im1, jp1,   k)
                               + VAT3(  uE, im1,   j,   k)
                               + VAT3( uNE, im1, jm1,   k)
                               + VAT3(  uS,   i, jp1,   k)
                               + VAT3(  uC,   i,   j,   k)
-                              + VAT3(  uN,   i, jm1,   k) 
+                              + VAT3(  uN,   i, jm1,   k)
                               + VAT3( uSW, ip1, jp1,   k)
                               + VAT3(  uW, ip1,   j,   k)
                               + VAT3( uNW, ip1, jm1,   k)
                           ) / (
-                                VAT3(  oC,   i,   j, kp1) 
+                                VAT3(  oC,   i,   j, kp1)
                               - VAT3(  oN,   i,   j, kp1)
-                              - VAT3(  oN,   i, jm1, kp1) 
+                              - VAT3(  oN,   i, jm1, kp1)
                               - VAT3( oNW,   i,   j, kp1)
                               - VAT3(  oE, im1,   j, kp1)
-                              - VAT3( oNE, im1, jm1, kp1) 
+                              - VAT3( oNE, im1, jm1, kp1)
                               - VAT3( oNE,   i,   j, kp1)
                               - VAT3(  oE,   i,   j, kp1)
                               - VAT3( oNW, ip1, jm1, kp1)
@@ -1282,17 +1271,17 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPN;
                   //* **********************************************************
 
-                  VAT3( uPN,  ii,  jj,  kk) = 
+                  VAT3( uPN,  ii,  jj,  kk) =
                           (
                                 VAT3( uNE, im1,   j,   k)
                               + VAT3(  uN,   i,   j,   k)
-                              + VAT3( uNW, ip1,   j,   k) 
+                              + VAT3( uNW, ip1,   j,   k)
                               + (
                                     VAT3( oNE, im1,   j, kp1)
                                   + VAT3(  oN,   i,   j, kp1)
                                   + VAT3( oNW, ip1,   j, kp1)
                                 )
-                              * VAT3( uPC,  ii,  jj,  kk) 
+                              * VAT3( uPC,  ii,  jj,  kk)
                               + (
                                     VAT3(  uE, im1, jp1,   k)
                                   + VAT3(  uC,   i, jp1,   k)
@@ -1300,7 +1289,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPN,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC,   i, jp1, kp1) 
+                                VAT3(  oC,   i, jp1, kp1)
                               - VAT3(  oE, im1, jp1, kp1)
                               - VAT3(  oE,   i, jp1, kp1)
                           );
@@ -1309,11 +1298,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPS;
                   //* **********************************************************
 
-                  VAT3( uPS,  ii,  jj,  kk) = 
+                  VAT3( uPS,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE, im1,   j,   k)
                               + VAT3(  uS,   i,   j,   k)
-                              + VAT3( uSW, ip1,   j,   k) 
+                              + VAT3( uSW, ip1,   j,   k)
                               + (
                                     VAT3( oNW,   i, jm1, kp1)
                               + VAT3(  oN,   i, jm1, kp1)
@@ -1327,7 +1316,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( oPS,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC,   i, jm1, kp1) 
+                                VAT3(  oC,   i, jm1, kp1)
                               - VAT3(  oE, im1, jm1, kp1)
                               - VAT3(  oE,   i, jm1, kp1)
                           );
@@ -1336,11 +1325,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPE;
                   //* **********************************************************
 
-                  VAT3( uPE,  ii,  jj,  kk) = 
+                  VAT3( uPE,  ii,  jj,  kk) =
                           (
                                 VAT3( uSE,   i, jp1,   k)
                               + VAT3(  uS, ip1, jp1,   k)
-                              + VAT3( uNE,   i, jm1,   k) 
+                              + VAT3( uNE,   i, jm1,   k)
                               + (
                                     VAT3(  uS, ip1, jp1,   k)
                               + VAT3(  uC, ip1,   j,   k)
@@ -1354,7 +1343,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( uPC,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, ip1,   j, kp1) 
+                                VAT3(  oC, ip1,   j, kp1)
                               - VAT3(  oN, ip1,   j, kp1)
                               - VAT3(  oN, ip1, jm1, kp1)
                           );
@@ -1363,11 +1352,11 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPW;
                   //* **********************************************************
 
-                  VAT3( uPW,  ii,  jj,  kk) = 
+                  VAT3( uPW,  ii,  jj,  kk) =
                           (
                                 VAT3( uSW,   i, jp1,   k)
                               + VAT3(  uW,   i,   j,   k)
-                              + VAT3( uNW,   i, jm1,   k) 
+                              + VAT3( uNW,   i, jm1,   k)
                               + (
                                     VAT3(  uS, im1, jp1,   k)
                                   + VAT3(  uC, im1,   j,   k)
@@ -1381,7 +1370,7 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                                 )
                               * VAT3( uPC,  ii,  jj,  kk)
                           ) / (
-                                VAT3(  oC, im1,   j, kp1) 
+                                VAT3(  oC, im1,   j, kp1)
                               - VAT3(  oN, im1,   j, kp1)
                               - VAT3(  oN, im1, jm1, kp1)
                           );
@@ -1390,9 +1379,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPNE;
                   //* **********************************************************
 
-                  VAT3(uPNE,  ii,  jj,  kk) = 
+                  VAT3(uPNE,  ii,  jj,  kk) =
                           (
-                                VAT3( uNE,   i,   j,   k) 
+                                VAT3( uNE,   i,   j,   k)
                               + VAT3(  uE,   i, jp1,   k)
                               * VAT3( oPN,  ii,  jj,  kk)
                               + VAT3(  uN, ip1,   j,   k)
@@ -1412,9 +1401,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPNW;
                   //* **********************************************************
 
-                  VAT3(uPNW,  ii,  jj,  kk) = 
+                  VAT3(uPNW,  ii,  jj,  kk) =
                           (
-                                VAT3( uNW,   i,   j,   k) 
+                                VAT3( uNW,   i,   j,   k)
                               + VAT3(  uW,   i, jp1,   k)
                               * VAT3( oPN,  ii,  jj,  kk)
                               + VAT3(  uN, im1,   j,   k)
@@ -1434,9 +1423,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPSE;
                   //* **********************************************************
 
-                  VAT3(uPSE,  ii,  jj,  kk) = 
+                  VAT3(uPSE,  ii,  jj,  kk) =
                           (
-                                VAT3( uSE,   i,   j,   k) 
+                                VAT3( uSE,   i,   j,   k)
                               + VAT3(  uE,   i, jm1,   k)
                               * VAT3( oPS,  ii,  jj,  kk)
                               + VAT3(  uS, ip1,   j,   k)
@@ -1456,9 +1445,9 @@ VPUBLIC void VbuildPb_op27(int *nxf, int *nyf, int *nzf,
                   //* *** > uPSW;
                   //* **********************************************************
 
-                  VAT3(uPSW,  ii,  jj,  kk) = 
+                  VAT3(uPSW,  ii,  jj,  kk) =
                           (
-                                VAT3( uSW,   i,   j,   k) 
+                                VAT3( uSW,   i,   j,   k)
                               + VAT3(  uW,   i, jm1,   k)
                               * VAT3( oPS,  ii,  jj,  kk)
                               + VAT3(  uS, im1,   j,   k)

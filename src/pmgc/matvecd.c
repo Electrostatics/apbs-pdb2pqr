@@ -81,8 +81,6 @@ VPUBLIC void Vmatvec7(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
-
     Vmatvec7_1s(nx, ny, nz,
                 ipc,     rpc,
             RAT2(ac, 1, 1),      cc,
@@ -107,8 +105,6 @@ VEXTERNC void Vmatvec7_1s(int *nx, int *ny, int *nz,
     MAT3(oC, *nx, *ny, *nz);
     MAT3(x, *nx, *ny, *nz);
     MAT3(y, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Do it
     #pragma omp parallel for private(i, j, k)
@@ -136,8 +132,6 @@ VPUBLIC void Vmatvec27(int *nx, int *ny, int *nz,
         double   *x, double   *y) {
 
     MAT2(ac, *nx * *ny * *nz, 1);
-
-    ANNOUNCE_FUNCTION;
 
     Vmatvec27_1s(nx, ny, nz,
             ipc, rpc,
@@ -183,8 +177,6 @@ VPUBLIC void Vmatvec27_1s(int *nx, int *ny, int *nz,
     MAT3(uNW, *nx, *ny, *nz);
     MAT3(uSE, *nx, *ny, *nz);
     MAT3(uSW, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Do it
 
@@ -239,8 +231,6 @@ VEXTERNC void Vnmatvec(int *nx, int *ny, int *nz,
 
     int numdia;
 
-    ANNOUNCE_FUNCTION;
-
     // Do in one step
     numdia = VAT(ipc, 11);
 
@@ -268,10 +258,8 @@ VPUBLIC void Vnmatvec7(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
-    WARN_FORTRAN;
     Vnmatvecd7_1s(nx, ny, nz,
             ipc, rpc,
             RAT2(ac, 1, 1), cc,
@@ -299,7 +287,6 @@ VPUBLIC void Vnmatvecd7_1s(int *nx, int *ny, int *nz,
     MAT3( y, *nx, *ny, *nz);
     MAT3(w1, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // first get vector nonlinear term to avoid subroutine calls
@@ -330,7 +317,6 @@ VPUBLIC void Vnmatvec27(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Do in one step
@@ -379,7 +365,6 @@ VPUBLIC void Vnmatvecd27_1s(int *nx, int *ny, int *nz,
     MAT3(  y, *nx, *ny, *nz);
     MAT3( w1, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // First get vector noNlinear term to avoid subroutine calls
@@ -441,8 +426,6 @@ VPUBLIC void Vmresid(int *nx, int *ny, int *nz,
 
     int numdia;
 
-    ANNOUNCE_FUNCTION;
-
     // Do in one step
     numdia = VAT(ipc, 11);
     if (numdia == 7) {
@@ -462,8 +445,6 @@ VPUBLIC void Vmresid7(int *nx, int *ny, int *nz,
         double *x, double *r) {
 
     MAT2(ac, *nx * *ny * *nz, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Do in one step
     Vmresid7_1s(nx, ny, nz,
@@ -489,8 +470,6 @@ VPUBLIC void Vmresid7_1s(int *nx, int *ny, int *nz,
     MAT3(oC, *nx, *ny, *nz);
     MAT3(x, *nx, *ny, *nz);
     MAT3(r, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Do it
     #pragma omp parallel for private(i, j, k)
@@ -518,8 +497,6 @@ VPUBLIC void Vmresid27(int *nx, int *ny, int *nz,
         double *x, double *r) {
 
     MAT2(ac, *nx * *ny * *nz, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Do in one step
     Vmresid27_1s(nx,ny,nz,
@@ -567,8 +544,6 @@ VPUBLIC void Vmresid27_1s(int *nx, int *ny, int *nz,
     MAT3(uNW, *nx, *ny, *nz);
     MAT3(uSE, *nx, *ny, *nz);
     MAT3(uSW, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     #pragma omp parallel for private(i, j, k, tmpO, tmpU, tmpD)
     for (k=2; k<=*nz-1; k++) {
@@ -623,8 +598,6 @@ VPUBLIC void Vnmresid(int *nx, int *ny, int *nz,
 
     int numdia;
 
-    ANNOUNCE_FUNCTION;
-
     // Do in oNe step ***
     numdia = VAT(ipc, 11);
     if (numdia == 7) {
@@ -644,8 +617,6 @@ VPUBLIC void Vnmresid7(int *nx, int *ny, int *nz,
         double *x, double *r, double *w1) {
 
     MAT2(ac, *nx * *ny * *nz, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Do in oNe step
     Vnmresid7_1s(nx, ny, nz,
@@ -673,8 +644,6 @@ VPUBLIC void Vnmresid7_1s(int *nx, int *ny, int *nz,
     MAT3( x, *nx, *ny, *nz);
     MAT3( r, *nx, *ny, *nz);
     MAT3(w1, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // First get vector nonlinear term to avoid subroutine calls
     ipkey = VAT(ipc, 10);
@@ -706,8 +675,6 @@ VPUBLIC void Vnmresid27(int *nx, int *ny, int *nz,
         double *x, double *r, double *w1) {
 
     MAT2(ac, *nx * *ny * *nz, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Do in oNe step
     Vnmresid27_1s(nx, ny, nz,
@@ -754,8 +721,6 @@ VPUBLIC void Vnmresid27_1s(int *nx, int *ny, int *nz,
     MAT3(  x, *nx, *ny, *nz);
     MAT3(  r, *nx, *ny, *nz);
     MAT3( w1, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // First get vector noNlinear term to avoid subroutine calls
     ipkey = VAT(ipc, 10);
@@ -815,8 +780,6 @@ VPUBLIC void Vrestrc(int *nxf, int *nyf, int *nzf,
         double *xin, double *xout, double *pc) {
 
     MAT2(pc, *nxc * *nyc * *nzc, 1 );
-
-    ANNOUNCE_FUNCTION;
 
     Vrestrc2(nxf, nyf, nzf,
             nxc, nyc, nzc,
@@ -883,8 +846,6 @@ VEXTERNC void Vrestrc2(int *nxf, int *nyf, int *nzf,
     MAT3(dPNW, *nxc, *nyc, *nzc);
     MAT3(dPSE, *nxc, *nyc, *nzc);
     MAT3(dPSW, *nxc, *nyc, *nzc);
-
-    ANNOUNCE_FUNCTION;
 
     // Verify correctness of the input boundary points
     VfboundPMG00(nxf, nyf, nzf, xin);
@@ -954,8 +915,6 @@ VPUBLIC void VinterpPMG(int *nxc, int *nyc, int *nzc,
 
     MAT2(pc, *nxc * *nyc * *nzc, 1);
 
-    ANNOUNCE_FUNCTION;
-
     VinterpPMG2(nxc, nyc, nzc,
             nxf, nyf, nzf,
             xin, xout,
@@ -1017,8 +976,6 @@ VPUBLIC void VinterpPMG2(int *nxc, int *nyc, int *nzc,
     MAT3(dPNW, *nxc, *nyc, *nzc);
     MAT3(dPSE, *nxc, *nyc, *nzc);
     MAT3(dPSW, *nxc, *nyc, *nzc);
-
-    ANNOUNCE_FUNCTION;
 
     /* *********************************************************************
      * Setup
@@ -1123,8 +1080,6 @@ VPUBLIC void Vextrac(int *nxf, int *nyf, int *nzf,
 
     MAT3( xin, *nxf, *nyf, *nzf);
     MAT3(xout, *nxc, *nyc, *nzc);
-
-    ANNOUNCE_FUNCTION;
 
     // Verify correctness of the input boundary points
     VfboundPMG00(nxf, nyf, nzf, xin);

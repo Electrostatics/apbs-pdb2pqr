@@ -10739,7 +10739,6 @@ VPRIVATE void bcolcomp(int *iparm, double *rparm, int *iwork, double *rwork,
     int k_iz;
     int k_ipc, k_rpc, k_ac, k_cc, k_fc, k_pc;
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Decode some parameters
@@ -10795,7 +10794,6 @@ VPRIVATE void bcolcomp2(int *iparm, double *rparm,
 
     MAT2(iz, 50, nlev);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     /*
@@ -10828,7 +10826,6 @@ VPRIVATE void bcolcomp3(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     bcolcomp4(nx, ny, nz,
@@ -10867,7 +10864,6 @@ VPRIVATE void bcolcomp4(int *nx, int *ny, int *nz,
     MAT3(cc, *nx, *ny, *nz);
     MAT3(oC, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Get some column, row, and nonzero information
@@ -11029,7 +11025,6 @@ VPRIVATE void pcolcomp(int *nrow, int *ncol, int *nnzero,
 
     FILE *outFile;
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Open the file for reading

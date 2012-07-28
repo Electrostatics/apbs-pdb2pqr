@@ -61,8 +61,6 @@ VPUBLIC void Vbuildband(int *key, int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
-
     // Do in one step
     numdia = VAT(ipc, 11);
     if (numdia == 7) {
@@ -131,7 +129,6 @@ VPUBLIC void Vbuildband1_7(int *nx, int *ny, int *nz,
     MAT3(oN, *nx, *ny, *nz);
     MAT3(uC, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Do it
@@ -207,8 +204,6 @@ VPUBLIC void Vbuildband1_27(int *nx, int *ny, int *nz,
     MAT3(uNW, *nx, *ny, *nz);
     MAT3(uSE, *nx, *ny, *nz);
     MAT3(uSW, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Do it
     VAT(ipcB, 1) = *n;

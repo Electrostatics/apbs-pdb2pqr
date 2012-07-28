@@ -99,8 +99,6 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
     double *cc;
     double *fc;
 
-    ANNOUNCE_FUNCTION;
-
     // Decode some parameters
     nrwk   = VAT(iparm, 1);
     niwk   = VAT(iparm, 2);
@@ -249,8 +247,6 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
 	int level;
 	int nlevd;
 
-
-
 	// Utility variables
 	int numlev;
 	double rsnrm;
@@ -260,8 +256,6 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
     // Get the value of nlev here because it is needed for the iz matrix
     int nlev   = VAT(iparm,  6);
     MAT2(iz, 50, nlev);
-
-    ANNOUNCE_FUNCTION;
 
     // Decode integer parameters from the iparm array
     nu1    = VAT(iparm,  7);
@@ -564,8 +558,6 @@ VPUBLIC void Vmgsz(int *mgcoar, int *mgdisc, int *mgsolv,
 
 	// Utility variables
 	int numlev;
-
-	ANNOUNCE_FUNCTION;
 
 	// Go down grids: compute max/min eigenvalues of all operators
 	*nf   = *nx * *ny * *nz;

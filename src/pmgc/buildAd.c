@@ -63,8 +63,6 @@ VPUBLIC void VbuildA(int* nx, int* ny, int* nz,
 
     MAT2(ac, *nx * *ny * *nz, 14);
 
-    ANNOUNCE_FUNCTION;
-
     if (*mgdisc == 0) {
 
         VbuildA_fv(nx, ny, nz,
@@ -122,34 +120,34 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
 	 *          homogeneous temporaries named using unclear abbreviations
 	 */
 
-	
+
 	int ike, jke, kke;
 
-	
+
 	int nxm1, nym1, nzm1;
 
-	
+
 	double hx, hy, hz;
 
-    
+
 	double hxm1, hym1, hzm1;
 
-	double coef_fc;   
+	double coef_fc;
 
-	double bc_cond_e; 
-	double bc_cond_w; 
-	double bc_cond_n; 
-	double bc_cond_s; 
-	double bc_cond_u; 
-	double bc_cond_d; 
-    double coef_oE;   
-    double coef_oN;   
-    double coef_uC;   
-    double coef_oEm1; 
-    double coef_oNm1; 
-    double coef_uCm1; 
+	double bc_cond_e;
+	double bc_cond_w;
+	double bc_cond_n;
+	double bc_cond_s;
+	double bc_cond_u;
+	double bc_cond_d;
+    double coef_oE;
+    double coef_oN;
+    double coef_uC;
+    double coef_oEm1;
+    double coef_oNm1;
+    double coef_uCm1;
 
-    double diag;      
+    double diag;
 
     MAT3(  fc, *nx, *ny, *nz);
     MAT3( fcf, *nx, *ny, *nz);
@@ -165,8 +163,6 @@ VPUBLIC void VbuildA_fv(int *nx, int *ny, int *nz,
     MAT3(gxcf, *ny, *nz,   2);
     MAT3(gycf, *nx, *nz,   2);
     MAT3(gzcf, *nx, *ny,   2);
-
-    ANNOUNCE_FUNCTION;
 
     // Save the problem key with this operator.  @todo:  What?
     VAT(ipc, 10) = *ipkey;
@@ -280,8 +276,8 @@ VPUBLIC void VbuildA_fe(int *nx, int *ny, int *nz,
 		double *oC, double *cc, double *fc,
                 double *oE, double *oN, double *uC,
                 double* oNE, double* oNW,
-                double* uE, double* uW,     
-                double* uN, double* uS,     
+                double* uE, double* uW,
+                double* uN, double* uS,
                 double* uNE, double* uNW, double* uSE, double* uSW,
 		double *xf, double *yf, double *zf,
 		double *gxcf, double *gycf, double *gzcf,

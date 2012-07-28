@@ -93,8 +93,6 @@ VEXTERNC void Vnewdriv(
     int k_fc;   /// @todo: Doc
     int k_pc;   /// @todo: Doc
 
-    ANNOUNCE_FUNCTION;
-
     // Decode some parameters
     nrwk   = VAT(iparm, 1);
     niwk   = VAT(iparm, 2);
@@ -213,8 +211,6 @@ VPUBLIC void Vnewdriv2(int *iparm, double *rparm,
     double rsnrm;
     double rsden;
     double orsnrm;
-
-    ANNOUNCE_FUNCTION;
 
     // Decode the iparm array
     nlev   = VAT(iparm, 6);
