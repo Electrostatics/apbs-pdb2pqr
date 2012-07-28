@@ -631,28 +631,28 @@ typedef enum eVdata_Format Vdata_Format;
 #else
 #define VMESSAGE0(msg)                                                \
                 do {                                                  \
-                        Vnm_print(1, "%s: %s\n", __FUNCTION__, msg);  \
+                        Vnm_print(0, "%s: %s\n", __FUNCTION__, msg);  \
                 } while(0)
 
 #define VMESSAGE1(msg, arg0)                                          \
 		do {                                                  \
 			char buff[1000];                              \
 			snprintf( buff, 1000, msg, arg0 );            \
-			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
 		} while(0)
 
 #define VMESSAGE2(msg, arg0, arg1)                                    \
 		do {                                                  \
 			char buff[1000];                              \
 			snprintf( buff, 1000, msg, arg0, arg1 );      \
-			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
 		} while(0)
 
 #define VMESSAGE3(msg, arg0, arg1, arg2)                              \
 		do {                                                  \
 			char buff[1000];                              \
 			snprintf(buff, 1000, msg, arg0, arg1, arg2);  \
-			Vnm_print(1, "%s: %s\n", __FUNCTION__, buff); \
+			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
 		} while(0)
 #endif
 
