@@ -69,7 +69,6 @@ VPUBLIC void Vpower(int *nx, int *ny, int *nz,
     MAT2(iz, 50, 1);
 
     WARN_UNTESTED;
-    ANNOUNCE_FUNCTION;
 
     // Recover level information
     level = 1;
@@ -184,7 +183,6 @@ VPUBLIC void Vipower(int *nx,int *ny,int *nz,
     MAT2(iz, 50, 1);
 
     WARN_UNTESTED;
-    ANNOUNCE_FUNCTION;
 
     // Recover level information
     level = 1;

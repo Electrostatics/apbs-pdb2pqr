@@ -60,8 +60,6 @@ VPUBLIC void Vcghs(int *nx, int *ny, int *nz,
     double rsnrm, pAp, denom;
     double rhok1, rhok2, alpha, beta;
 
-    ANNOUNCE_FUNCTION;
-
     // Setup for the looping
     *iters = 0;
 

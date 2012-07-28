@@ -62,19 +62,17 @@ VPUBLIC void Vbuildops(
         ) {
 
     int lev;    // @todo Document this function
-    int nxx;    
-    int nyy;    
-    int nzz;    
-    int nxold;  
-    int nyold;  
-    int nzold;  
-    int numdia; 
-    int key;    
+    int nxx;
+    int nyy;
+    int nzz;
+    int nxold;
+    int nyold;
+    int nzold;
+    int numdia;
+    int key;
     int i;      // An indexing variable used in loops
 
     MAT2(iz, 50, *nlev);
-
-    ANNOUNCE_FUNCTION;
 
     // Setup
     nxx = *nx;
@@ -272,8 +270,6 @@ VPUBLIC void Vbuildstr(int *nx, int *ny, int *nz, int *nlev, int *iz) {
 
     MAT2(iz, 50, *nlev);
 
-    ANNOUNCE_FUNCTION;
-
     // Setup
     nxnew  = *nx;
     nynew  = *ny;
@@ -356,8 +352,6 @@ VPUBLIC void Vbuildgaler0(int *nxf, int *nyf, int *nzf,
 		double *ac, double *cc, double *fc) {
 
 	int numdia_loc;
-
-	ANNOUNCE_FUNCTION;
 
 	// Call the algebraic galerkin routine
 	numdia_loc = VAT(ipcFF, 11);
@@ -572,8 +566,6 @@ VPUBLIC void Vpackmg(int *iparm, double *rparm, int *nrwk, int *niwk,
 		int *mgcoar, int *mgsolv, int *mgdisc, int *iinfo, double *errtol,
 		int *ipkey, double *omegal, double *omegan, int *irite, int *iperf) {
 
-	ANNOUNCE_FUNCTION;
-
 	/// @todo  Convert this into a struct
 
 	// Encode iparm parameters ***
@@ -643,7 +635,6 @@ VEXTERNC void Vbuildcopy0(int *nx, int *ny, int *nz,
     MAT3( ccf, *nxf, *nyf, *nzf);
     MAT3( fcf, *nxf, *nyf, *nzf);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // How far to step into the coefficient arrays
@@ -770,8 +761,6 @@ VPUBLIC void Vbuildharm0(int *nx, int *ny, int *nz,
     MAT3( tcf, *nxf, *nyf, *nzf);
     MAT3( ccf, *nxf, *nyf, *nzf);
     MAT3( fcf, *nxf, *nyf, *nzf);
-
-    ANNOUNCE_FUNCTION;
 
     // Statement functions
     /// @todo  Figure out where the harmo ad arith functions come from
@@ -920,19 +909,19 @@ VPUBLIC void Vbuildharm0(int *nx, int *ny, int *nz,
 
 
 
-VPUBLIC void Vbuildalg(int *nx, int *ny, int *nz, 
-        int *mode, int *nlev, int *iz, 
-        int *ipc, double *rpc, 
-        double *ac, double *cc, double *fc, 
+VPUBLIC void Vbuildalg(int *nx, int *ny, int *nz,
+        int *mode, int *nlev, int *iz,
+        int *ipc, double *rpc,
+        double *ac, double *cc, double *fc,
         double *x, double *y, double *tmp) {
-    
+
     int   nxx,   nyy,   nzz;
     int nxold, nyold, nzold;
     int lev, numlev;
-    
+
     MAT2(iz, 50, *nlev);
-    
-    // Setup 
+
+    // Setup
     nxx = *nx;
     nyy = *ny;
     nzz = *nz;
@@ -957,11 +946,11 @@ VPUBLIC void Vbuildalg(int *nx, int *ny, int *nz,
         nxold = nxx;
         nyold = nyy;
         nzold = nzz;
-         
+
         numlev = 1;
         Vmkcors(&numlev, &nxold, &nyold, &nzold, &nxx, &nyy, &nzz);
 
-        // Build the rhs on this level 
+        // Build the rhs on this level
         if ((*mode == 1) || (*mode == 2)) {
             Vnmatvec(&nxx, &nyy, &nzz,
                     RAT(ipc, VAT2(iz, 5, lev)), RAT(rpc, VAT2(iz, 6, lev)),

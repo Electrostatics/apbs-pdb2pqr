@@ -59,8 +59,6 @@ VEXTERNC void Vsmooth(int *nx, int *ny, int *nz,
 		double *errtol, double *omega,
 		int *iresid, int *iadjoint, int *meth) {
 
-    ANNOUNCE_FUNCTION;
-
     // Do in one step
     if (*meth == 0) {
         VABORT_MSG0( "wjac not yet translated" );
@@ -100,11 +98,10 @@ VEXTERNC void Vnsmooth(int *nx, int *ny, int *nz,
 		int *itmax, int *iters,
 		double *errtol, double *omega,
 		int *iresid, int *iadjoint, int *meth) {
-    
-    ANNOUNCE_FUNCTION;
+
     WARN_UNTESTED;
-    
-    // Do in one step 
+
+    // Do in one step
     if (*meth == 0) {
         VABORT_MSG0( "nwjac not yet translated" );
         //nwjac(nx,ny,nz,ipc,rpc,ac,cc,fc,x,w1,w2,r,itmax,iters,errtol,omega,iresid,iadjoint)
@@ -119,5 +116,5 @@ VEXTERNC void Vnsmooth(int *nx, int *ny, int *nz,
         //nrich(nx,ny,nz,ipc,rpc,ac,cc,fc,x,w1,w2,r,itmax,iters,errtol,omega,iresid,iadjoint)
     } else {
         VABORT_MSG1("Bad smoothing routine specified: %d", *meth );
-    }    
+    }
 }

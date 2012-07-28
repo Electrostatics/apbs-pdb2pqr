@@ -582,17 +582,11 @@ typedef enum eVdata_Format Vdata_Format;
 #define snprintf sprintf_s
 #endif
 
-#ifdef VERBOSE_DEBUG
+#ifdef VERGBOSE_DEBUG
 #define ANNOUNCE_FUNCTION                                \
         do {                                             \
             Vnm_prrint(2, "%s() [%s:%d]\n",              \
                        PRINT_FUNC, __FILE__, __LINE__ ); \
-        } while(0)
-
-#define WARN_FORTRAN                                                      \
-        do {                                                              \
-            Vnm_print(2, "%s() [%s:%d]: Calling Fortran Subroutine!!!\n", \
-                      __FUNCTION__, __FILE__, __LINE__);                  \
         } while(0)
 
 #define WARN_UNTESTED                                             \
@@ -608,7 +602,6 @@ typedef enum eVdata_Format Vdata_Format;
         } while(0)
 #else
 #define ANNOUNCE_FUNCTION
-#define WARN_FORTRAN
 #define WARN_UNTESTED
 #define WARN_PARTTESTED
 #endif

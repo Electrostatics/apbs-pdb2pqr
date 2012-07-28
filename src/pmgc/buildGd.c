@@ -58,8 +58,6 @@ VPUBLIC void VbuildG(int *nxf, int *nyf, int *nzf,
     MAT2(acFF, *nxf * *nyf * *nzf, 27);
     MAT2(  ac, *nxc * *nyc * *nzc, 27);
 
-    ANNOUNCE_FUNCTION;
-
     // Call the build routine ***
     if (*numdia == 1) {
 
@@ -211,8 +209,6 @@ VPUBLIC void VbuildG_1(int *nxf, int *nyf, int *nzf,
 	MAT3(dPNW, *nx, *ny,  *nz);
 	MAT3(dPSE, *nx, *ny,  *nz);
 	MAT3(dPSW, *nx, *ny,  *nz);
-
-	ANNOUNCE_FUNCTION;
 
 	// Define n and determine number of mesh points
 	nxm1 = *nx - 1;
@@ -500,8 +496,6 @@ VPUBLIC void VbuildG_7(int *nxf, int *nyf, int *nzf,
     MAT3(dPNW, *nx, *ny,  *nz);
     MAT3(dPSE, *nx, *ny,  *nz);
     MAT3(dPSW, *nx, *ny,  *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Define n and determine number of mesh points
     nxm1 = *nx - 1;
@@ -1342,8 +1336,6 @@ VPUBLIC void VbuildG_27(int *nxf, int *nyf, int *nzf,
 	MAT3(dPNW, *nx, *ny,  *nz);
 	MAT3(dPSE, *nx, *ny,  *nz);
 	MAT3(dPSW, *nx, *ny,  *nz);
-
-	ANNOUNCE_FUNCTION;
 
     // define n and determine number of mesh points ***
     nxm1    = *nx - 1;

@@ -94,9 +94,6 @@ VEXTERNC void Vmvcs(int *nx, int *ny, int *nz,
 
 	MAT2(iz, 50, 1);
 
-	ANNOUNCE_FUNCTION;
-
-
 	// Recover level information
 	level = 1;
 	lev = (*ilev - 1) + level;

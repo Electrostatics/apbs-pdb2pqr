@@ -192,8 +192,6 @@ VPUBLIC void Vazeros(int *nx, int *ny, int *nz, double *x) {
 	int i, n;
 	int nproc = 1;
 
-	ANNOUNCE_FUNCTION;
-
 	n = *nx * *ny * *nz;
 
 	#pragma omp parallel for private(i)
@@ -213,8 +211,6 @@ VPUBLIC void VfboundPMG(int *ibound, int *nx, int *ny, int *nz,
     MAT3(gxc, *ny, *nz,   2);
     MAT3(gyc, *nx, *nz,   2);
     MAT3(gzc, *nx, *ny,   2);
-
-    ANNOUNCE_FUNCTION;
 
     // Dirichlet test
     if (ibound == 0) {
@@ -260,8 +256,6 @@ VPUBLIC void VfboundPMG00(int *nx, int *ny, int *nz, double *x) {
 
     MAT3(  x, *nx, *ny, *nz);
 
-ANNOUNCE_FUNCTION;
-
     // The (i=1) and (i=nx) boundaries
     for (k=1; k<=*nz; k++) {
         for (j=1; j<=*ny; j++) {
@@ -296,7 +290,6 @@ VPUBLIC void Vaxrand(int *nx, int *ny, int *nz, double *x) {
     double xdum;
 
     WARN_UNTESTED;
-    ANNOUNCE_FUNCTION;
 
     // Find parallel loops (ipara), remainder (ivect)
     n = *nx * *ny * *nz;
@@ -338,7 +331,6 @@ VPUBLIC void Vprtmatd(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Do the printing
@@ -372,7 +364,6 @@ VPUBLIC void Vprtmatd7(int *nx, int *ny, int *nz,
     MAT3(oN, *nx, *ny, *nz);
     MAT3(uC, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Recover matrix dimension
@@ -418,7 +409,6 @@ VEXTERNC void Vprtmatd27(int *nx, int *ny, int *nz,
     MAT3(uSE, *nx, *ny, *nz);
     MAT3(uSW, *nx, *ny, *nz);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Recover matrix dimension
@@ -449,9 +439,9 @@ VEXTERNC void Vprtmatd27(int *nx, int *ny, int *nz,
 
 VPUBLIC void Vlinesearch(int *nx, int *ny, int *nz,
         double *alpha,
-        int *ipc, double *rpc,  
-        double *ac, double *cc, double *fc,    
-        double *p, double *x, double *r,     
+        int *ipc, double *rpc,
+        double *ac, double *cc, double *fc,
+        double *p, double *x, double *r,
         double *ap, double *zk, double *zkp1) {
     VABORT_MSG0("Not translated yet");
 }

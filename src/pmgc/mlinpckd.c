@@ -57,8 +57,6 @@ VPUBLIC void Vdpbsl(double *abd, int *lda, int *n, int *m, double *b) {
 
     MAT2(abd, *lda, 1);
 
-    ANNOUNCE_FUNCTION;
-
     for (k=1; k<=*n; k++) {
         lm = VMIN2(k-1, *m);
         la = *m + 1 - lm;
@@ -190,25 +188,23 @@ VPUBLIC double Vddot(int n, double *dx, int incx, double *dy, int incy) {
 
 
 VPUBLIC void Vdpbfa(double *abd, int *lda, int *n, int *m, int *info) {
-         
+
     double t, s;
     int ik, j, jk, k, mu;
-    
+
     MAT2(abd, *lda, 1);
-    
-    ANNOUNCE_FUNCTION;
-    
+
     *info = 0;
-    
+
     for(j = 1; j <= *n; j++) {
-            
+
         s = 0.0;
         ik = *m + 1;
         jk = VMAX2(j - *m, 1);
         mu = VMAX2(*m + 2 - j, 1);
-        
+
         if (*m >= mu ) {
-        
+
             for(k = mu; k <= *m; k++) {
                 t = VAT2(abd, k, j) - Vddot(k - mu,
                         RAT2(abd, ik, jk), 1,
@@ -220,14 +216,14 @@ VPUBLIC void Vdpbfa(double *abd, int *lda, int *n, int *m, int *info) {
                 jk++;
             }
         }
-        
+
         s = VAT2(abd, *m + 1, j) - s;
-    
+
         if (s <= 0.0) {
             *info = j;
             break;
         }
-        
+
         VAT2(abd, *m + 1, j) = VSQRT(s);
     }
 }

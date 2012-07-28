@@ -176,7 +176,6 @@ VPUBLIC void Vmvfas(int *nx, int *ny, int *nz,
 
     MAT2(iz, 50, *nlev);
 
-    ANNOUNCE_FUNCTION;
     WARN_UNTESTED;
 
     // Recover level information

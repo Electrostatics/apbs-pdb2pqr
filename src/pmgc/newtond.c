@@ -76,8 +76,6 @@ VPUBLIC void Vfnewton(int *nx,int *ny,int *nz,
 
     MAT2( iz, 50, 1);
 
-    ANNOUNCE_FUNCTION;
-
     // Recover gridsizes ***
     nxf = *nx;
     nyf = *ny;
@@ -187,8 +185,6 @@ VPUBLIC void Vnewton(int *nx, int *ny, int *nz,
     double alpha;
 
     MAT2(iz, 50, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Recover level information
     level = 1;
@@ -554,8 +550,6 @@ VPUBLIC void Vgetjac(int *nx, int *ny, int *nz,
     int level, numlev;
 
     MAT2(iz, 50, 1);
-
-    ANNOUNCE_FUNCTION;
 
     // Setup
     nxx    = *nx;

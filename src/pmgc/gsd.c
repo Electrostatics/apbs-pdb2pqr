@@ -61,8 +61,6 @@ VPUBLIC void Vgsrb(int *nx, int *ny, int *nz,
 
     MAT2(ac, *nx * *ny * *nz, 1);
 
-    ANNOUNCE_FUNCTION;
-
     // Do in one step ***
     numdia = VAT(ipc, 11);
     if (numdia == 7) {
@@ -111,8 +109,6 @@ VPUBLIC void Vgsrb7x(int *nx,int *ny,int *nz,
     MAT3(oN, *nx, *ny, *nz);
     MAT3(uC, *nx, *ny, *nz);
     MAT3(oC, *nx, *ny, *nz);
-
-     ANNOUNCE_FUNCTION;
 
     for (*iters=1; *iters<=*itmax; (*iters)++) {
 
@@ -205,8 +201,6 @@ VPUBLIC void Vgsrb27x(int *nx,int *ny,int *nz,
     MAT3(uNW, *nx, *ny, *nz);
     MAT3(uSE, *nx, *ny, *nz);
     MAT3(uSW, *nx, *ny, *nz);
-
-    ANNOUNCE_FUNCTION;
 
     // Do the gauss-seidel iteration itmax times
 
