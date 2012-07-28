@@ -4616,7 +4616,7 @@ VPUBLIC int forceAPOL(Vacc *acc,
 	natom = Valist_getNumberAtoms(alist);
 
 	/* Check to see if we need to build the surface */
-    printf("forceAPOL: Trying atom surf...\n");
+    Vnm_print(0, "forceAPOL: Trying atom surf...\n");
     ts = clock();
     if (acc->surf == VNULL) {
         acc->surf = (VaccSurf**)Vmem_malloc(acc->mem, natom, sizeof(VaccSurf *));
@@ -4628,10 +4628,10 @@ VPUBLIC int forceAPOL(Vacc *acc,
             acc->surf[i] = Vacc_atomSurf(acc, atom, acc->refSphere, srad);
         }
     }
-    printf("forceAPOL: atom surf: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
+    Vnm_print(0, "forceAPOL: atom surf: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
 
 	if(apolparm->calcforce == ACF_TOTAL){
-        printf("forceAPOL: calcforce == ACF_TOTAL\n");
+        Vnm_print(0, "forceAPOL: calcforce == ACF_TOTAL\n");
         ts = clock();
 
 		*nforce = 1;
@@ -4696,7 +4696,7 @@ VPUBLIC int forceAPOL(Vacc *acc,
 					(*atomForce)[0].wcaForce[1],
 					(*atomForce)[0].wcaForce[2]);
 
-        printf("forceAPOL: calcforce == ACF_TOTAL: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
+        Vnm_print(0, "forceAPOL: calcforce == ACF_TOTAL: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
 	} else if (apolparm->calcforce == ACF_COMPS ){
 		*nforce = Valist_getNumberAtoms(alist);
 		if(*atomForce == VNULL){
@@ -4782,7 +4782,7 @@ VPUBLIC int forceAPOL(Vacc *acc,
 	Vnm_print(1,"\n");
 #endif
 
-    printf("forceAPOL: Time elapsed: %f\n", ((double)clock() - ts_main) / CLOCKS_PER_SEC);
+    Vnm_print(0, "forceAPOL: Time elapsed: %f\n", ((double)clock() - ts_main) / CLOCKS_PER_SEC);
 	return VRC_SUCCESS;
 }
 

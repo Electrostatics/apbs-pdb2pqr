@@ -772,7 +772,7 @@ VPUBLIC double Vacc_SASA(Vacc *thee,
 	mets_(&mbeg, "Vacc_SASA - Parallel");
 #endif
 	
-    printf("Vacc_SASA: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
+    Vnm_print(0, "Vacc_SASA: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
     return area;
 	
 }
@@ -1304,7 +1304,7 @@ VPRIVATE double Vacc_atomSASAPos(Vacc *thee,
 	
     if ((thee->surf == VNULL) || (mode == 1)){
 		if(!warned){
-			printf("WARNING: Recalculating entire surface!!!!\n");
+			Vnm_print(2, "WARNING: Recalculating entire surface!!!!\n");
 			warned = 1;
 		}
 		Vacc_SASAPos(thee, radius); // reinitialize before we can do anything about doing a calculation on a repositioned atom

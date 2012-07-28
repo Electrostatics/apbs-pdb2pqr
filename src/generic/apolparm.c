@@ -296,8 +296,8 @@ VPRIVATE Vrc_Codes APOLparm_parseSRFM(APOLparm *thee, Vio *sock) {
         thee->setsrfm = 1;
         return VRC_SUCCESS;
     } else {
-        printf("parseAPOL: Unrecongnized keyword (%s) when parsing srfm!\n", tok);
-		printf("parseAPOL: Accepted values for srfm = sacc\n");
+        Vnm_print(2, "parseAPOL: Unrecongnized keyword (%s) when parsing srfm!\n", tok);
+		Vnm_print(2, "parseAPOL: Accepted values for srfm = sacc\n");
         return VRC_WARNING;
     }
 	

@@ -274,7 +274,7 @@ int main(
 	Vnm_tprint( 1, "%s", header);
 
 #ifdef APBS_FAST
-	printf("WARNING: APBS was compiled with the --enable-fast option.\n"
+	Vnm_tprint(, 2"WARNING: APBS was compiled with the --enable-fast option.\n"
 		   "WARNING: This mode is experimental and subject to change in future releases.\n"
 		   "WARNING: The fast mode enables: Gauess-Seidel Smoothing and \n"
 		   "WARNING:   Conjugate Gradient Multigrid methods.\n\n");
@@ -638,7 +638,7 @@ int main(
                 ts = clock();
 				rc = initAPOL(nosh, mem, param, apolparm, &(nforce[i]), &(atomForce[i]), 
 						 alist[(apolparm->molid)-1]);
-				printf("initAPOL: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
+				Vnm_print(0, "initAPOL: Time elapsed: %f\n", ((double)clock() - ts) / CLOCKS_PER_SEC);
 				if(rc == 0) {
 					Vnm_tprint(2, "Error calculating apolar solvation quantities!\n");
 					VJMPERR1(0);
