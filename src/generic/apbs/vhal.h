@@ -57,38 +57,38 @@
 #define _VAPBSHAL_H_
 
 /**
- *	@ingroup Vhal
- *	@author	 David Gohara
- *	@brief	 Return code enumerations
+ *    @ingroup Vhal
+ *    @author     David Gohara
+ *    @brief     Return code enumerations
  *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
  */
 enum eVrc_Codes {
 
-	VRC_WARNING=-1, /** A non-fatal error  */
-	VRC_FAILURE=0,  /** A fatal error */
-	VRC_SUCCESS=1   /** A successful execution */
+    VRC_WARNING=-1, /** A non-fatal error  */
+    VRC_FAILURE=0,  /** A fatal error */
+    VRC_SUCCESS=1   /** A successful execution */
 
 };
 typedef enum eVrc_Codes Vrc_Codes;
 
 /**
- *	@ingroup Vhal
- *	@author	 David Gohara
- *	@brief	 Solution Method enumerations
+ *    @ingroup Vhal
+ *    @author     David Gohara
+ *    @brief     Solution Method enumerations
  *  @note  Note that the enumerated values are opposite the standard for FAILURE and SUCCESS
  */
 enum eVsol_Meth {
 
-	VSOL_CGMG,		/* 0: conjugate gradient multigrid */
-	VSOL_Newton,	/* 1: newton */
-	VSOL_MG,		/* 2: multigrid */
-	VSOL_CG,		/* 3: conjugate gradient */
-	VSOL_SOR,		/* 4: sucessive overrelaxation */
-	VSOL_RBGS,		/* 5: red-black gauss-seidel */
-	VSOL_WJ,		/* 6: weighted jacobi */
-	VSOL_Richardson,/* 7: richardson  */
-	VSOL_CGMGAqua,	/* 8: conjugate gradient multigrid aqua */
-	VSOL_NewtonAqua	/* 9: newton aqua */
+    VSOL_CGMG,        /* 0: conjugate gradient multigrid */
+    VSOL_Newton,    /* 1: newton */
+    VSOL_MG,        /* 2: multigrid */
+    VSOL_CG,        /* 3: conjugate gradient */
+    VSOL_SOR,        /* 4: sucessive overrelaxation */
+    VSOL_RBGS,        /* 5: red-black gauss-seidel */
+    VSOL_WJ,        /* 6: weighted jacobi */
+    VSOL_Richardson,/* 7: richardson  */
+    VSOL_CGMGAqua,    /* 8: conjugate gradient multigrid aqua */
+    VSOL_NewtonAqua    /* 9: newton aqua */
 
 };
 typedef enum eVsol_Meth Vsol_Meth;
@@ -99,30 +99,30 @@ typedef enum eVsol_Meth Vsol_Meth;
  *  @brief   Types of molecular surface definitions
  */
 enum eVsurf_Meth {
-	VSM_MOL=0, /**<  Ion accessibility is defined using inflated van der Waals
-				*    radii, the dielectric coefficient ( ) is defined using the
-				*    molecular (Conolly) surface definition without
+    VSM_MOL=0, /**<  Ion accessibility is defined using inflated van der Waals
+                *    radii, the dielectric coefficient ( ) is defined using the
+                *    molecular (Conolly) surface definition without
                 *    smoothing */
     VSM_MOLSMOOTH=1, /**<  As VSM_MOL but with a simple harmonic average
                       *    smoothing */
-	VSM_SPLINE=2,    /**<  Spline-based surface definitions. This is primarily
-					  * for use with force calculations, since it requires
-					  * substantial reparameterization of radii. This is based
-					  * on the work of Im et al, Comp. Phys.  Comm. 111 ,
-					  * (1998) and uses a cubic spline to define a smoothly
-					  * varying characteristic function for the surface-based
-					  * parameters. Ion accessibility is defined using inflated
-					  * van der Waals radii with the spline function and the
-					  * dielectric coefficient is defined using the standard
-					  * van der Waals radii with the spline function.  */
-	VSM_SPLINE3=3,  /**<  A 5th order polynomial spline is used to create
-					  *  a smoothly varying characteristic function
-					  *  (continuity through 2nd derivatives) for surface
-					  *  based paramters. */
-	VSM_SPLINE4=4   /**<  A 7th order polynomial spline is used to create
-					  *  a smoothly varying characteristic function
-					  *  (continuity through 3rd derivatives) for surface
-					  *  based paramters. */
+    VSM_SPLINE=2,    /**<  Spline-based surface definitions. This is primarily
+                      * for use with force calculations, since it requires
+                      * substantial reparameterization of radii. This is based
+                      * on the work of Im et al, Comp. Phys.  Comm. 111 ,
+                      * (1998) and uses a cubic spline to define a smoothly
+                      * varying characteristic function for the surface-based
+                      * parameters. Ion accessibility is defined using inflated
+                      * van der Waals radii with the spline function and the
+                      * dielectric coefficient is defined using the standard
+                      * van der Waals radii with the spline function.  */
+    VSM_SPLINE3=3,  /**<  A 5th order polynomial spline is used to create
+                      *  a smoothly varying characteristic function
+                      *  (continuity through 2nd derivatives) for surface
+                      *  based paramters. */
+    VSM_SPLINE4=4   /**<  A 7th order polynomial spline is used to create
+                      *  a smoothly varying characteristic function
+                      *  (continuity through 3rd derivatives) for surface
+                      *  based paramters. */
 };
 
 /** @typedef Vsurf_Meth
@@ -140,7 +140,7 @@ enum eVhal_PBEType {
     PBE_NPBE,  /**<  Traditional Poisson-Boltzmann equation, full */
     PBE_LRPBE,  /**<  Regularized Poisson-Boltzmann equation, linearized */
     PBE_NRPBE,  /** <  Regularized Poisson-Boltzmann equation, full */
-	PBE_SMPBE	/**< SM PBE */
+    PBE_SMPBE    /**< SM PBE */
 };
 
 /**
@@ -155,7 +155,7 @@ typedef enum eVhal_PBEType Vhal_PBEType;
  */
 enum eVhal_IPKEYType {
     IPKEY_SMPBE = -2, /**<  SMPBE ipkey */
-	IPKEY_LPBE,  /**<  LPBE ipkey */
+    IPKEY_LPBE,  /**<  LPBE ipkey */
     IPKEY_NPBE /**<  NPBE ipkey */
 };
 
@@ -171,10 +171,10 @@ typedef enum eVhal_IPKEYType Vhal_IPKEYType;
  */
 enum eVhal_NONLINType {
     NONLIN_LPBE = 0,
-	NONLIN_NPBE,
+    NONLIN_NPBE,
     NONLIN_SMPBE,
-	NONLIN_LPBEAQUA,
-	NONLIN_NPBEAQUA
+    NONLIN_LPBEAQUA,
+    NONLIN_NPBEAQUA
 };
 
 /**
@@ -212,7 +212,7 @@ enum eVbcfl {
     BCFL_UNUSED=3,  /**< Unused boundary condition method (placeholder) */
     BCFL_FOCUS=4,  /**< Focusing Dirichlet boundary condition */
     BCFL_MEM=5,  /**< Focusing membrane boundary condition */
-	BCFL_MAP=6	/**< Skip first level of focusing use an external map */
+    BCFL_MAP=6    /**< Skip first level of focusing use an external map */
 };
 
 /**
@@ -227,12 +227,12 @@ typedef enum eVbcfl Vbcfl;
  *  @brief   Types of charge discretization methods
  */
 enum eVchrg_Meth {
-	VCM_TRIL=0,  /**< Trilinear interpolation of charge to 8 nearest grid
+    VCM_TRIL=0,  /**< Trilinear interpolation of charge to 8 nearest grid
                   *   points.  The traditional method; not particularly good to
                   *   use with PBE forces. */
     VCM_BSPL2=1,  /**< Cubic B-spline across nearest- and
-				  *   next-nearest-neighbors.  Mainly for use in grid-sensitive
-				  *   applications (such as force calculations). */
+                  *   next-nearest-neighbors.  Mainly for use in grid-sensitive
+                  *   applications (such as force calculations). */
     VCM_BSPL4=2  /**< 5th order B-spline for AMOEBA permanent multipoles. */
 };
 
@@ -248,8 +248,8 @@ typedef enum eVchrg_Meth Vchrg_Meth;
  *  @brief   Charge source
  */
 enum eVchrg_Src {
-	VCM_CHARGE=0,     /**< Partial Charge source distribution */
-	VCM_PERMANENT=1,  /**< Permanent Multipole source distribution */
+    VCM_CHARGE=0,     /**< Partial Charge source distribution */
+    VCM_PERMANENT=1,  /**< Permanent Multipole source distribution */
     VCM_INDUCED=2,    /**< Induced Dipole source distribution */
     VCM_NLINDUCED=3   /**< NL Induced Dipole source distribution */
 };
@@ -268,7 +268,7 @@ typedef enum eVchrg_Src Vchrg_Src;
 enum eVdata_Type {
     VDT_CHARGE, /**< Charge distribution (e) */
     VDT_POT,    /**< Potential (kT/e) */
-	VDT_ATOMPOT, /**< Atom potential (kT/e) */
+    VDT_ATOMPOT, /**< Atom potential (kT/e) */
     VDT_SMOL,   /**< Solvent accessibility defined by molecular/Connolly
                  * surface definition (1 = accessible, 0 = inaccessible) */
     VDT_SSPL,   /**< Spline-based solvent accessibility (1 = accessible, 0 =
@@ -281,9 +281,9 @@ enum eVdata_Type {
     VDT_EDENS,  /**< Energy density \f$\epsilon (\nabla u)^2\f$, where \f$u\f$
                  * is potential (kT/e/A)^2 */
     VDT_NDENS,  /**< Ion number density \f$\sum c_i \exp (-q_i u)^2\f$,
-	         * where \f$u\f$ is potential (output in M) */
+             * where \f$u\f$ is potential (output in M) */
     VDT_QDENS,  /**< Ion charge density \f$\sum q_i c_i \exp (-q_i u)^2\f$,
-	         * where \f$u\f$ is potential (output in \f$e_c M\f$) */
+             * where \f$u\f$ is potential (output in \f$e_c M\f$) */
     VDT_DIELX,  /**< Dielectric x-shifted map as calculated with the currently
                  * specified scheme (dimensionless) */
     VDT_DIELY,  /**< Dielectric y-shifted map as calculated with the currently
@@ -309,9 +309,9 @@ enum eVdata_Format {
     VDF_DX=0,  /**< OpenDX (Data Explorer) format */
     VDF_UHBD=1, /**< UHBD format */
     VDF_AVS=2,  /**< AVS UCD format */
-	VDF_MCSF=3,  /**< FEtk MC Simplex Format (MCSF) */
-	VDF_GZ=4,	/**< Binary file (GZip) */
-	VDF_FLAT=5  /**< Write flat file */
+    VDF_MCSF=3,  /**< FEtk MC Simplex Format (MCSF) */
+    VDF_GZ=4,    /**< Binary file (GZip) */
+    VDF_FLAT=5  /**< Write flat file */
 };
 
 /** @typedef Vdata_Format
@@ -405,10 +405,10 @@ typedef enum eVdata_Format Vdata_Format;
  */
 #define VAPBS_RIGHT 0
 
-/** @brief	Maximum number of points on a sphere
-	@note	Used by VaccSurf
-	@ingroup	Vhal
-	*/
+/** @brief    Maximum number of points on a sphere
+    @note    Used by VaccSurf
+    @ingroup    Vhal
+    */
 #define MAX_SPHERE_PTS 50000
 
 /** @brief   Face definition for a volume
@@ -515,29 +515,6 @@ typedef enum eVdata_Format Vdata_Format;
 
 #endif
 
-/** OS specific flags and etcetera */
-#if !defined(WIN32) || defined(__MINGW32__)
-#define PRINT_FUNC __PRETTY_FUNCTION__
-#define OS_SEP_STR "/"
-#define OS_SEP_CHAR '/'
-#else
-#define OS_SEP_STR "\\"
-#define OS_SEP_CHAR '\\'
-#define PRINT_FUNC __FUNCSIG__
-#endif
-
-#ifdef VERBOSE_DEBUG
-#define ANNOUNCE_FUNCTION do{fprintf(stderr, "%s() [%s:%d]\n",PRINT_FUNC,__FILE__,__LINE__);}while(0)
-#define WARN_FORTRAN      do{fprintf(stderr, "%s() [%s:%d]: Calling Fortran Subroutine!!!\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
-#define WARN_UNTESTED     do{fprintf(stderr, "%s() [%s:%d]: Untested Translation!\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
-#define WARN_PARTTESTED   do{fprintf(stderr, "%s() [%s:%d]: Partially Tested Translation.\n", __FUNCTION__, __FILE__, __LINE__);}while(0)
-#else
-#define ANNOUNCE_FUNCTION
-#define WARN_FORTRAN
-#define WARN_UNTESTED
-#define WARN_PARTTESTED
-#endif
-
 /* Fortran name mangling */
 #if defined(VF77_UPPERCASE)
 #   if defined(VF77_NOUNDERSCORE)
@@ -593,67 +570,111 @@ typedef enum eVdata_Format Vdata_Format;
 
 
 
-// Added by Tucker Beck.  Prints location information with a status message
+/** OS specific flags and etcetera */
+#if !defined(WIN32) || defined(__MINGW32__)
+#define PRINT_FUNC __PRETTY_FUNCTION__
+#define OS_SEP_STR "/"
+#define OS_SEP_CHAR '/'
+#else
+#define OS_SEP_STR "\\"
+#define OS_SEP_CHAR '\\'
+#define PRINT_FUNC __FUNCSIG__
+#define snprintf sprintf_s
+#endif
+
+#ifdef VERBOSE_DEBUG
+#define ANNOUNCE_FUNCTION                                \
+        do {                                             \
+            Vnm_prrint(2, "%s() [%s:%d]\n",              \
+                       PRINT_FUNC, __FILE__, __LINE__ ); \
+        } while(0)
+
+#define WARN_FORTRAN                                                      \
+        do {                                                              \
+            Vnm_print(2, "%s() [%s:%d]: Calling Fortran Subroutine!!!\n", \
+                      __FUNCTION__, __FILE__, __LINE__);                  \
+        } while(0)
+
+#define WARN_UNTESTED                                             \
+        do {                                                      \
+            Vnm_print(2, "%s() [%s:%d]: Untested Translation!\n", \
+                      __FUNCTION__, __FILE__, __LINE__);          \
+        } while(0)
+
+#define WARN_PARTTESTED                                                   \
+        do{                                                               \
+            Vnm_print(2, "%s() [%s:%d]: Partially Tested Translation.\n", \
+                      __FUNCTION__, __FILE__, __LINE__);                  \
+        } while(0)
+#else
+#define ANNOUNCE_FUNCTION
+#define WARN_FORTRAN
+#define WARN_UNTESTED
+#define WARN_PARTTESTED
+#endif
+
+
+
 #ifdef DEBUG
 #define VMESSAGE0(msg)                                        \
-		do {                                                  \
-			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"           \
-					     "    %s\n\n",                        \
-					  __FILE__, __LINE__, __FUNCTION__, msg); \
-		} while(0)
+        do {                                                  \
+            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"           \
+                         "    %s\n\n",                        \
+                      __FILE__, __LINE__, __FUNCTION__, msg); \
+        } while(0)
 
 #define VMESSAGE1(msg, arg)                                    \
-		do {                                                   \
-			char buff[1000];                                   \
-			snprintf( buff, 1000, msg, arg );                  \
-			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
-					     "    %s\n\n",                         \
-					  __FILE__, __LINE__, __FUNCTION__, buff); \
-		} while(0)
+        do {                                                   \
+            char buff[1000];                                   \
+            snprintf( buff, 1000, msg, arg );                  \
+            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+                         "    %s\n\n",                         \
+                      __FILE__, __LINE__, __FUNCTION__, buff); \
+        } while(0)
 
 #define VMESSAGE2(msg, arg0, arg1)                             \
-		do {                                                   \
-			char buff[1000];                                   \
-			snprintf( buff, 1000, msg, arg0, arg1 );           \
-			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
-					     "    %s\n\n",                         \
-					  __FILE__, __LINE__, __FUNCTION__, buff); \
-		} while(0)
+        do {                                                   \
+            char buff[1000];                                   \
+            snprintf( buff, 1000, msg, arg0, arg1 );           \
+            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+                         "    %s\n\n",                         \
+                      __FILE__, __LINE__, __FUNCTION__, buff); \
+        } while(0)
 
-#define VMESSAGE3(msg, arg0, arg1, arg2)                             \
-		do {                                                   \
-			char buff[1000];                                   \
-			snprintf(buff, 1000, msg, arg0, arg1, arg2);           \
-			Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
-					     "    %s\n\n",                         \
-					  __FILE__, __LINE__, __FUNCTION__, buff); \
-		} while(0)
+#define VMESSAGE3(msg, arg0, arg1, arg2)                       \
+        do {                                                   \
+            char buff[1000];                                   \
+            snprintf(buff, 1000, msg, arg0, arg1, arg2);       \
+            Vnm_print(2, "%s:%d [%s()]: MESSAGE:\n"            \
+                         "    %s\n\n",                         \
+                      __FILE__, __LINE__, __FUNCTION__, buff); \
+        } while(0)
 #else
-#define VMESSAGE0(msg)                                                \
-                do {                                                  \
-                        Vnm_print(0, "%s: %s\n", __FUNCTION__, msg);  \
-                } while(0)
+#define VMESSAGE0(msg)                                    \
+        do {                                              \
+            Vnm_print(0, "%s: %s\n", __FUNCTION__, msg);  \
+        } while(0)
 
-#define VMESSAGE1(msg, arg0)                                          \
-		do {                                                  \
-			char buff[1000];                              \
-			snprintf( buff, 1000, msg, arg0 );            \
-			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
-		} while(0)
+#define VMESSAGE1(msg, arg0)                              \
+        do {                                              \
+            char buff[1000];                              \
+            snprintf( buff, 1000, msg, arg0 );            \
+            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+        } while(0)
 
-#define VMESSAGE2(msg, arg0, arg1)                                    \
-		do {                                                  \
-			char buff[1000];                              \
-			snprintf( buff, 1000, msg, arg0, arg1 );      \
-			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
-		} while(0)
+#define VMESSAGE2(msg, arg0, arg1)                        \
+        do {                                              \
+            char buff[1000];                              \
+            snprintf( buff, 1000, msg, arg0, arg1 );      \
+            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+        } while(0)
 
-#define VMESSAGE3(msg, arg0, arg1, arg2)                              \
-		do {                                                  \
-			char buff[1000];                              \
-			snprintf(buff, 1000, msg, arg0, arg1, arg2);  \
-			Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
-		} while(0)
+#define VMESSAGE3(msg, arg0, arg1, arg2)                  \
+        do {                                              \
+            char buff[1000];                              \
+            snprintf(buff, 1000, msg, arg0, arg1, arg2);  \
+            Vnm_print(0, "%s: %s\n", __FUNCTION__, buff); \
+        } while(0)
 #endif
 
 /** Utility assertion; if it fails prints a message and aborts
@@ -662,14 +683,14 @@ typedef enum eVdata_Format Vdata_Format;
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
 #define VASSERT_MSG0(cnd, msg)                                                                           \
-	do {                                                            \
-		if( (cnd) == 0 ) {                                          \
-			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                   \
+    do {                                                            \
+        if( (cnd) == 0 ) {                                          \
+            Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                   \
                          "    Assertion Failed (%s): %s\n\n",       \
-					  __FILE__, __LINE__, __FUNCTION__, #cnd, msg); \
-			abort();                                                \
-		}                                                           \
-	} while(0)
+                      __FILE__, __LINE__, __FUNCTION__, #cnd, msg); \
+            abort();                                                \
+        }                                                           \
+    } while(0)
 
 /** Utility assertion; if it fails prints a message with an argument and aborts
  *  @author Tucker Beck
@@ -677,36 +698,33 @@ typedef enum eVdata_Format Vdata_Format;
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
 #define VASSERT_MSG1(cnd, msg, arg)                                  \
-	do {                                                             \
-		if( (cnd) == 0 ) {                                           \
-			char buff[1000];                                         \
-			snprintf( buff, 1000, msg, arg );                        \
-			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
+    do {                                                             \
+        if( (cnd) == 0 ) {                                           \
+            char buff[1000];                                         \
+            snprintf( buff, 1000, msg, arg );                        \
+            Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
                          "    Assertion Failed (%s): %s\n\n",        \
-					  __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
-			abort();                                                 \
-		}                                                            \
-	} while(0)
+                      __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
+            abort();                                                 \
+        }                                                            \
+    } while(0)
 
 /** Utility assertion; if it fails prints a message with an argument and aborts
  *  @author Tucker Beck
  *  @ingroup Vhal
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
-#if WIN32
-#	define snprintf sprintf_s
-#endif
 #define VASSERT_MSG2(cnd, msg, arg0, arg1)                           \
-	do {                                                             \
-		if( (cnd) == 0 ) {                                           \
-			char buff[1000];                                         \
+    do {                                                             \
+        if( (cnd) == 0 ) {                                           \
+            char buff[1000];                                         \
             snprintf( buff, 1000, msg, arg0, arg1 );                 \
-			Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
+            Vnm_print(2, "%s:%d [%s()]: ERROR:\n"                    \
                          "    Assertion Failed (%s): %s\n\n",        \
                       __FILE__, __LINE__, __FUNCTION__, #cnd, buff); \
             abort();                                                 \
-		}                                                            \
-	} while(0)
+        }                                                            \
+    } while(0)
 
 /** Conditional warning; if true prints a message
  *  @author Tucker Beck
@@ -781,12 +799,12 @@ typedef enum eVdata_Format Vdata_Format;
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
 #define VABORT_MSG0(msg)                                      \
-		do {                                                  \
-			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"          \
-					     "    %s\n\n",                        \
-					  __FILE__, __LINE__, __FUNCTION__, msg); \
-			abort();                                          \
-		} while(0)
+        do {                                                  \
+            Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"          \
+                         "    %s\n\n",                        \
+                      __FILE__, __LINE__, __FUNCTION__, msg); \
+            abort();                                          \
+        } while(0)
 
 /** Prints a message with an argument and aborts
  *  @author Tucker Beck
@@ -794,57 +812,57 @@ typedef enum eVdata_Format Vdata_Format;
  *  @note    The do{...} while(0) simply enforces that a semicolon at the end\
  */
 #define VABORT_MSG1(msg, arg)                                  \
-		do {                                                   \
-			char buff[1000];                                   \
-			snprintf( buff, 1000, msg, arg );                  \
-			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
-					     "    %s\n\n",                         \
-					  __FILE__, __LINE__, __FUNCTION__, buff); \
-			abort();                                           \
-		} while(0)
+        do {                                                   \
+            char buff[1000];                                   \
+            snprintf( buff, 1000, msg, arg );                  \
+            Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
+                         "    %s\n\n",                         \
+                      __FILE__, __LINE__, __FUNCTION__, buff); \
+            abort();                                           \
+        } while(0)
 
 /** Prints a message with an argument and aborts
  *  @author Tucker Beck
  *  @ingroup Vhal
- *  @note    The do{...} while(0) simply enforces that a semicolon at the end\
+ *  @note    The do{...} while(0) simply enforces that a semicolon at the end
  */
 #define VABORT_MSG2(msg, arg0, arg1)                           \
-		do {                                                   \
-			char buff[1000];                                   \
-			snprintf( buff, 1000, msg, arg0, arg1);            \
-			Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
-					     "    %s\n\n",                         \
-					  __FILE__, __LINE__, __FUNCTION__, buff); \
-			abort();                                           \
-		} while(0)
+        do {                                                   \
+            char buff[1000];                                   \
+            snprintf( buff, 1000, msg, arg0, arg1);            \
+            Vnm_print(2, "%s:%d [%s()]: ABORTING:\n"           \
+                         "    %s\n\n",                         \
+                      __FILE__, __LINE__, __FUNCTION__, buff); \
+            abort();                                           \
+        } while(0)
 
 #define PRINT_INT(expr)                                             \
-	do {                                                            \
-		Vnm_print(2, "%s:%d [%s()]: %s == %d\n",                    \
-				  __FILE__, __LINE__, __FUNCTION__, #expr, expr);   \
-	} while(0)
+    do {                                                            \
+        Vnm_print(2, "%s:%d [%s()]: %s == %d\n",                    \
+                  __FILE__, __LINE__, __FUNCTION__, #expr, expr);   \
+    } while(0)
 
 #define PRINT_DBL(expr)                                           \
-	do {                                                          \
-		Vnm_print(2, "%s:%d [%s()]: %s == %f\n\n",                \
-				  __FILE__, __LINE__, __FUNCTION__, #expr, expr); \
-	} while(0)
+    do {                                                          \
+        Vnm_print(2, "%s:%d [%s()]: %s == %f\n\n",                \
+                  __FILE__, __LINE__, __FUNCTION__, #expr, expr); \
+    } while(0)
 
 #define VMALLOC(vmem, n, type) ((type*)Vmem_malloc(vmem, n, sizeof(type)))
 
 #define VFREE(vmem, n, type, ptr) (Vmem_free(vmem, n, sizeof(type), (void **)&(ptr)))
 
 #define VFILL(vec, n, val)                           \
-	do {                                             \
-		int fill_idx;                                \
-	    for (fill_idx = 0; fill_idx < n; fill_idx++) \
-	    	vec[fill_idx] = val;                     \
-	} while(0)
+    do {                                             \
+        int fill_idx;                                \
+        for (fill_idx = 0; fill_idx < n; fill_idx++) \
+            vec[fill_idx] = val;                     \
+    } while(0)
 
 #define VCOPY(srcvec, dstvec, i, n) \
-	do {                            \
-		for (i = 0; i < n; i++)     \
-		    dstvec[i] = srcvec[i];  \
+    do {                            \
+        for (i = 0; i < n; i++)     \
+            dstvec[i] = srcvec[i];  \
     } while(0)
 
 

@@ -130,7 +130,6 @@ VPUBLIC void Vmgdriv(int* iparm, double* rparm,
 	mgdisc = VAT(iparm, 19);
 	mgsolv = VAT(iparm, 21);
 
-	//WARN_FORTRAN;
 	Vmgsz(&mgcoar, &mgdisc, &mgsolv,
                 &nx, &ny, &nz,
                 &nlev,
@@ -285,11 +284,11 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
     omegal = VAT(rparm,  9);
     omegan = VAT(rparm, 10);
 
-
-    /// @todo Add timing again
-
     // Build the multigrid data structure in iz
     Vbuildstr(nx, ny, nz, &nlev, iz);
+
+    /// @todo Add timing again
+    VMESSAGE0( "Fine problem setup" );
 
     // Build operator and rhs on fine grid
     ido = 0;
@@ -301,6 +300,8 @@ VPUBLIC void Vmgdriv2(int *iparm, double *rparm,
             gxcf, gycf, gzcf,
             a1cf, a2cf, a3cf,
             ccf, fcf, tcf);
+
+    VMESSAGE0( "Coarse problem setup" );
 
     // Build operator and rhs on all coarse grids
     ido = 1;
