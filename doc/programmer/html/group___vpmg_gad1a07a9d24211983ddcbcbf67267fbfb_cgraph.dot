@@ -1,0 +1,21 @@
+digraph "Vpmg_qfEnergy"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vpmg_qfEnergy",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vpmg_qfEnergyVolume",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8h.html#a78687d08a4040d18d46337e1345b6dac",tooltip="Calculates charge-potential energy as integral over a volume."];
+  Node2 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vpbe_getZmagic",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e",tooltip="Get charge scaling factor."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_qfEnergyPoint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8h.html#a0876512b1ee9f93ee0378334b886938c",tooltip="Calculates charge-potential energy using summation over delta function positions (i.e. something like an Linf norm)"];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Valist_getNumberAtoms",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230",tooltip="Get number of atoms in the list."];
+  Node4 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Valist_getAtom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043",tooltip="Get pointer to particular atom in list."];
+  Node4 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vatom_getPosition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c",tooltip="Get atomic position."];
+  Node4 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vatom_getCharge",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5",tooltip="Get atomic charge."];
+}

@@ -1,0 +1,31 @@
+digraph G
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir=LR;
+  Node1 [label="Vpower",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vaxrand",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#ab55dc8ffa3b957de1a774db74d770ea0",tooltip="Fill grid function with random values, including boundary values."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vazeros",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#aef847ec9dd6d9773b19250a24f58cd83",tooltip="Zero out operation for a grid function, including boundary values."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vmatvec",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga3550f412c9793915998671c2c0b8df4f",tooltip="Matrix-vector multiplication routines."];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vmatvec27",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$matvecd_8c.html#aa1dd27fe99292c3b0e64560795980579"];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vmatvec27_1s",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$matvecd_8c.html#aaaa17b9361384eeed8488039a492c9e2"];
+  Node4 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vmatvec7",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$matvecd_8c.html#a03c4d05974cf672d82e2bc37b3b55444"];
+  Node7 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vmatvec7_1s",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$matvecd_8c.html#a7cdea00c982b9b4ef1e9de29f92045fb"];
+  Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Vxaxpy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#a357bc5ff97764263ab65b864a9fb2bd4",tooltip="saxpy operation for a grid function with boundary values."];
+  Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="Vxcopy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga964d91008dba76f460e36b9a207fb2af",tooltip="A collection of useful low-level routines (timing, etc)."];
+  Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node11 [label="Vxdot",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#a835e0deca8e3cbfbc735369e7885f255",tooltip="Inner product operation for a grid function with boundary values."];
+  Node1 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node12 [label="Vxnrm2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#a5e9af2a16f77c9082534cd41f3134c51",tooltip="Norm operation for a grid function with boundary values."];
+  Node1 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node13 [label="Vxscal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mikpckd_8c.html#ad50204651fc18777116ab7ceb1f9da8a",tooltip="Scale operation for a grid function with boundary values."];
+}

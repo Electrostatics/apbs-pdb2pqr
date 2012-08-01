@@ -1,0 +1,11 @@
+<map id="sVopot" name="sVopot">
+<area shape="rect" id="node2" href="$structs_vmgrid.html" title="Multiresoltion oracle for Cartesian mesh data." alt="" coords="31,381,100,408"/>
+<area shape="rect" id="node4" href="$structs_vgrid.html" title="Electrostatic potential oracle for Cartesian mesh data." alt="" coords="5,291,64,317"/>
+<area shape="rect" id="node6" href="$structs_vpbe.html" title="Contains public data members for Vpbe class/module." alt="" coords="141,381,197,408"/>
+<area shape="rect" id="node8" href="$structs_vacc.html" title="Oracle for solvent&#45; and ion&#45;accessibility around a biomolecule." alt="" coords="178,291,232,317"/>
+<area shape="rect" id="node10" href="$structs_valist.html" title="Container class for list of atom objects." alt="" coords="253,96,312,123"/>
+<area shape="rect" id="node14" href="$structs_vclist.html" title="Atom cell list." alt="" coords="87,187,145,213"/>
+<area shape="rect" id="node12" href="$structs_vatom.html" title="Contains public data members for Vatom class/module." alt="" coords="201,5,265,32"/>
+<area shape="rect" id="node17" href="$structs_vclist_cell.html" title="Atom cell list cell." alt="" coords="135,96,213,123"/>
+<area shape="rect" id="node20" href="$structs_vacc_surf.html" title="Surface object list of per&#45;atom surface points." alt="" coords="170,187,248,213"/>
+</map>

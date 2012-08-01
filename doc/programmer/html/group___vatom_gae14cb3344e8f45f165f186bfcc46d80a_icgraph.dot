@@ -1,0 +1,9 @@
+digraph "Vatom_dtor2"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vatom_dtor2",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vatom_dtor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga934338fa2e9d4c7b29d48bf6abc28a1c",tooltip="Object destructor."];
+}

@@ -1,0 +1,18 @@
+<map id="Vatom_getAtomID" name="Vatom_getAtomID">
+<area shape="rect" id="node3" href="$group___vacc.html#gace3cf23d10bbc818a28b212ef5c94f84" title="Report molecular accessibility quickly." alt="" coords="531,31,648,57"/>
+<area shape="rect" id="node11" href="$group___vacc.html#ga9913f912bca5c71ba11ef9aefe7c390c" title="Return the atomic solvent accessible surface area (SASA)" alt="" coords="531,81,648,108"/>
+<area shape="rect" id="node23" href="$group___vacc.html#ga8c962cab8849df00c7f8ac61f3f8246b" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="203,183,312,209"/>
+<area shape="rect" id="node31" href="$group___vacc.html#gaa1b76ea181d5f3a3ddb2b890e470cb3f" title="Get the set of points for this atom&#39;s solvent&#45;accessible surface." alt="" coords="518,233,661,260"/>
+<area shape="rect" id="node38" href="$group___vacc.html#ga6778ad8dd91c1ed6f868a836f2050843" title="Testing purposes only." alt="" coords="182,309,333,336"/>
+<area shape="rect" id="node40" href="$group___vacc.html#ga2f0ab2c1092a991c401dca0836a5a084" title="Total solvent accessible volume." alt="" coords="186,360,329,387"/>
+<area shape="rect" id="node5" href="$group___vacc.html#ga31a47b0e2a3e828ab38802dbebb07415" title="Report molecular accessibility." alt="" coords="749,31,846,57"/>
+<area shape="rect" id="node7" href="$group___vfetk.html#gab568aa48a9072ad4fe3007a181affda1" title="Fill an array with the specified data." alt="" coords="939,5,1042,32"/>
+<area shape="rect" id="node9" href="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240" title="Fill the specified array with accessibility values." alt="" coords="937,56,1044,83"/>
+<area shape="rect" id="node13" href="$vpmg_8c.html#adf9fff114eed3d5d94f3adbbf9527483" title="Fill differential operator coefficient arrays from a molecular surface calculation without smoothing..." alt="" coords="710,132,885,159"/>
+<area shape="rect" id="node15" href="$vpmg_8c.html#a34484f0f2f254b954abf20c5a98ab9d4" title="Fill differential operator coefficient arrays from a molecular surface calculation." alt="" coords="933,132,1048,159"/>
+<area shape="rect" id="node17" href="$vpmg_8c.html#a62617829770eaed11c159947453e457c" title="Fill operator coefficient arrays from a molecular surface calculation." alt="" coords="1097,132,1191,159"/>
+<area shape="rect" id="node19" href="$vpmg_8c.html#a169088d2631112390e9699d0ff25ab0a" title="Top&#45;level driver to fill all operator coefficient arrays." alt="" coords="1240,132,1315,159"/>
+<area shape="rect" id="node21" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="1363,132,1451,159"/>
+<area shape="rect" id="node25" href="$group___vacc.html#gad2041f50041470d01e00a17f18b5b6c2" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area..." alt="" coords="381,157,469,184"/>
+<area shape="rect" id="node28" href="$group___vacc.html#ga6e6925112665279c1b237f792c595e82" title="Return the total solvent accessible surface area (SASA)" alt="" coords="533,183,646,209"/>
+</map>

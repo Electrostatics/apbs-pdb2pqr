@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$matvecd_8h.html#a3550f412c9793915998671c2c0b8df4f" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="133,56,203,83"/>
+<area shape="rect" id="node13" href="$mgsubd_8h.html#abb5cb28581c88bf4adaab11d35484ac7" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="133,107,203,133"/>
+<area shape="rect" id="node17" href="$matvecd_8h.html#afbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="129,157,207,184"/>
+<area shape="rect" id="node5" href="$matvecd_8h.html#a20925845b383dba21bf7fb7dafb340b0" title="Vmatvec27" alt="" coords="260,5,345,32"/>
+<area shape="rect" id="node9" href="$matvecd_8h.html#ae6b8553ded343f1ee7d0d4011a560141" title="Vmatvec7" alt="" coords="263,56,342,83"/>
+<area shape="rect" id="node7" href="$matvecd_8h.html#afdd47ebf5a388815a71a5a7331ca886e" title="Vmatvec27_1s" alt="" coords="405,5,510,32"/>
+<area shape="rect" id="node11" href="$matvecd_8h.html#a7cdea00c982b9b4ef1e9de29f92045fb" title="Vmatvec7_1s" alt="" coords="408,56,507,83"/>
+<area shape="rect" id="node15" href="$mgsubd_8h.html#aec1ae6e963b514a637ca71305e332856" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="273,107,332,133"/>
+<area shape="rect" id="node19" href="$matvecd_8h.html#acfb01799db27c9a74dd7925a8a836dbd" title="Vnmatvec27" alt="" coords="257,157,349,184"/>
+<area shape="rect" id="node23" href="$matvecd_8h.html#a932505d663cc398b4f553290fcabd3d0" title="Vnmatvec7" alt="" coords="260,208,345,235"/>
+<area shape="rect" id="node21" href="$matvecd_8h.html#a2e14199273cb54ba12f4c56076cf1b28" title="Vnmatvecd27_1s" alt="" coords="398,157,517,184"/>
+<area shape="rect" id="node25" href="$matvecd_8h.html#a71d7741be4f15fe8a6242b207a96d006" title="Vnmatvecd7_1s" alt="" coords="401,208,513,235"/>
+</map>

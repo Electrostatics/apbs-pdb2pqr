@@ -1,0 +1,10 @@
+digraph "C:/Users/bake113/Documents/" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_966ccb3b68f17632bac5c241bfe8c23d {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_966ccb3b68f17632bac5c241bfe8c23d.html"];
+    dir_966ccb3b68f17632bac5c241bfe8c23d [shape=plaintext label="Documents"];
+    dir_40a5bcb0a6e0a79d39fedb6c1f206dfc [shape=box label="Projects" color="red" fillcolor="white" style="filled" URL="dir_40a5bcb0a6e0a79d39fedb6c1f206dfc.html"];
+  }
+}

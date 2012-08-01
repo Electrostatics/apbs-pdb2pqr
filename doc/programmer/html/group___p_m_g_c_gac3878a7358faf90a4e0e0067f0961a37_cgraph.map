@@ -1,0 +1,7 @@
+<map id="Vbuildgaler0" name="Vbuildgaler0">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga5616c0696f52963ddd4bacb3ff71e8b6" title="Build Galerkin matrix structures." alt="" coords="147,56,213,83"/>
+<area shape="rect" id="node11" href="$group___p_m_g_c.html#gaede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="149,107,211,133"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#ga97822bdb6ab237b4bc4a89fe7647e34f" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="266,5,345,32"/>
+<area shape="rect" id="node7" href="$group___p_m_g_c.html#ga74cbf02bfd4ffcf36ea4b344ee2ea077" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="266,56,345,83"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#ga78287000cb1a0517e4959c910566c828" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="262,107,349,133"/>
+</map>

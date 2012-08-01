@@ -1,0 +1,39 @@
+digraph "ivdwAccExclus"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="ivdwAccExclus",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vacc_atomSurf",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#ga8c962cab8849df00c7f8ac61f3f8246b",tooltip="Set up an array of points corresponding to the SAS due to a particular atom."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vacc_SASA",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#gad2041f50041470d01e00a17f18b5b6c2",tooltip="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area..."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vacc_fastMolAcc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#gace3cf23d10bbc818a28b212ef5c94f84",tooltip="Report molecular accessibility quickly."];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vacc_molAcc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#ga31a47b0e2a3e828ab38802dbebb07415",tooltip="Report molecular accessibility."];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vfetk_fillArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#gab568aa48a9072ad4fe3007a181affda1",tooltip="Fill an array with the specified data."];
+  Node5 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vpmg_fillArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240",tooltip="Fill the specified array with accessibility values."];
+  Node3 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vacc_totalSASA",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#ga6e6925112665279c1b237f792c595e82",tooltip="Return the total solvent accessible surface area (SASA)"];
+  Node3 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Vacc_atomSASA",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#ga9913f912bca5c71ba11ef9aefe7c390c",tooltip="Return the atomic solvent accessible surface area (SASA)"];
+  Node9 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="fillcoCoefMolDielNoSmooth",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#adf9fff114eed3d5d94f3adbbf9527483",tooltip="Fill differential operator coefficient arrays from a molecular surface calculation without smoothing..."];
+  Node10 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node11 [label="fillcoCoefMolDiel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#a34484f0f2f254b954abf20c5a98ab9d4",tooltip="Fill differential operator coefficient arrays from a molecular surface calculation."];
+  Node11 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node12 [label="fillcoCoefMol",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#a62617829770eaed11c159947453e457c",tooltip="Fill operator coefficient arrays from a molecular surface calculation."];
+  Node12 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node13 [label="fillcoCoef",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#a169088d2631112390e9699d0ff25ab0a",tooltip="Top-level driver to fill all operator coefficient arrays."];
+  Node13 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node14 [label="Vpmg_fillco",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a",tooltip="Fill the coefficient arrays prior to solving the equation."];
+  Node3 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node15 [label="Vacc_atomSASPoints",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vacc.html#gaa1b76ea181d5f3a3ddb2b890e470cb3f",tooltip="Get the set of points for this atom&#39;s solvent-accessible surface."];
+  Node15 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

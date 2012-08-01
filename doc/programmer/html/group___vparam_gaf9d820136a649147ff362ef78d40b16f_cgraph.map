@@ -1,0 +1,8 @@
+<map id="Vparam_readXMLFile" name="Vparam_readXMLFile">
+<area shape="rect" id="node3" href="$group___vparam.html#ga206cf552ad533634a56d277f92ae9336" title="FORTRAN stub to destroy object." alt="" coords="203,5,362,32"/>
+<area shape="rect" id="node5" href="$group___vstring.html#ga8dd2348150c70288ebb00c8eb0b847e0" title="Case&#45;insensitive string comparison (BSD standard)" alt="" coords="438,95,573,121"/>
+<area shape="rect" id="node7" href="$group___vparam.html#gaed5da927b1be4ac04c6a740327239217" title="Copy current residue object to destination." alt="" coords="198,157,367,184"/>
+<area shape="rect" id="node9" href="$group___vparam.html#ga434ae4b213d8d0de3c8dde8f1c63088a" title="Copy current atom object to destination." alt="" coords="416,171,595,197"/>
+<area shape="rect" id="node12" href="$group___vparam.html#ga8b35934af27637a90fb419cdfe6f8fb5" title="Read atom information from an XML file." alt="" coords="221,107,344,133"/>
+<area shape="rect" id="node15" href="$group___vparam.html#ga6b28c70f61616d5454c926f6ced8514f" title="FORTRAN stub to construct the object." alt="" coords="204,259,361,285"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Vgrid_normH1" name="Vgrid_normH1">
+<area shape="rect" id="node3" href="$group___vgrid.html#gaee83557976835b30c3ec8154028dc7c9" title="Get the &#160;semi&#45;norm of the data. This returns the integral: ." alt="" coords="157,5,288,32"/>
+<area shape="rect" id="node7" href="$group___vgrid.html#gac6553c8ed3a7d257ca750c55a3866924" title="Get the &#160;norm of the data. This returns the integral: ." alt="" coords="171,56,274,83"/>
+<area shape="rect" id="node5" href="$group___vgrid.html#ga74468f9a1d749f5573ea7f67c919abe9" title="Get first derivative values at a point." alt="" coords="336,5,443,32"/>
+</map>

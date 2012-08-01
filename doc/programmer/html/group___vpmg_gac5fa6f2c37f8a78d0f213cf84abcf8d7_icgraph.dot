@@ -1,0 +1,13 @@
+digraph "bcolcomp3"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="bcolcomp3",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="bcolcomp2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gab5bd1e304d44f0a7721da2181d809f61",tooltip="Build a column-compressed matrix in Harwell-Boeing format."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="bcolcomp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga60b35ab9ae779ffa7329589f64a4111e",tooltip="Build a column-compressed matrix in Harwell-Boeing format."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_printColComp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gafd544ba4fe172d3f942016cf74e7a31e",tooltip="Print out a column-compressed sparse matrix in Harwell-Boeing format."];
+}

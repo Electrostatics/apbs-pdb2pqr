@@ -1,0 +1,11 @@
+digraph "Vgrid_curvature"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vgrid_curvature",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vpmg_fillArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240",tooltip="Fill the specified array with accessibility values."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vpmg_polarizEnergy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#ae22a67401cf36cc85b0bd58938587913",tooltip="Determines energy from polarizeable charge and interaction with fixed charges according to Rocchia et..."];
+}

@@ -1,0 +1,48 @@
+digraph G
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir=LR;
+  Node1 [label="extEnergy",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Valist_getAtom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043",tooltip="Get pointer to particular atom in list."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Valist_getNumberAtoms",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230",tooltip="Get number of atoms in the list."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_dielEnergy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga855098121480f53fffc85f15b97cb88c",tooltip="Get the &quot;polarization&quot; contribution to the electrostatic energy."];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vpbe_getZmagic",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e",tooltip="Get charge scaling factor."];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vpmg_qfEnergy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gad1a07a9d24211983ddcbcbf67267fbfb",tooltip="Get the &quot;fixed charge&quot; contribution to the electrostatic energy."];
+  Node6 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vpmg_qfEnergyPoint",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8h.html#a0876512b1ee9f93ee0378334b886938c",tooltip="Calculates charge-potential energy using summation over delta function positions (i.e. something like an Linf norm)"];
+  Node7 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vatom_getCharge",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5",tooltip="Get atomic charge."];
+  Node7 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Vatom_getPosition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c",tooltip="Get atomic position."];
+  Node6 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="Vpmg_qfEnergyVolume",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8h.html#a78687d08a4040d18d46337e1345b6dac",tooltip="Calculates charge-potential energy as integral over a volume."];
+  Node10 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node11 [label="Vpmg_qmEnergy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gaa742b2c423bcb09628a84833a5f1e7ae",tooltip="Get the &quot;mobile charge&quot; contribution to the electrostatic energy."];
+  Node11 -> Node12 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node12 [label="Vpmg_qmEnergySMPBE",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8h.html#a9bbc2d7d63eea65e627e398cc05ee342",tooltip="Vpmg_qmEnergy for SMPBE."];
+  Node12 -> Node13 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node13 [label="Vcap_exp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vcap.html#ga3af96d10891f3150377104c65689c6ec",tooltip="Provide a capped exp() function."];
+  Node12 -> Node14 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node14 [label="Vpbe_getBulkIonicStrength",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#gabca9ea80c0a56d3848c54b37d0418f20",tooltip="Get bulk ionic strength."];
+  Node12 -> Node15 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node15 [label="Vpbe_getIons",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#gae42c09bef7405779d87bce73c44e1ebf",tooltip="Get information about the counterion species present."];
+  Node12 -> Node16 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node16 [label="Vpbe_getZkappa2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga56e38face81d2d29659541b5e3f5e442",tooltip="Get modified squared Debye-Huckel parameter."];
+  Node1 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node17 [label="Vpmg_setPart",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gafe4fbd069927d516936116a417a256c1",tooltip="Set partition information which restricts the calculation of observables to a (rectangular) subset of..."];
+  Node17 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node17 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node1 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node18 [label="Vpmg_unsetPart",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gafc90a96505e0bddd5cc15b69f3c7613c",tooltip="Remove partition restrictions."];
+  Node18 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node18 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

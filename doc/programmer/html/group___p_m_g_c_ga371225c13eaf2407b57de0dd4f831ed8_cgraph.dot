@@ -1,0 +1,21 @@
+digraph "Vcghs"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vcghs",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vmresid",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gaaa7843124ee62ccb6d9469363a8cd6a6",tooltip="Break the matrix data-structure into diagonals and then call the residual routine."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vxnrm2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26",tooltip="Norm operation for a grid function with boundary values."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vxdot",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69",tooltip="Inner product operation for a grid function with boundary values."];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vxcopy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383",tooltip="A collection of useful low-level routines (timing, etc)."];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vxaxpy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6",tooltip="saxpy operation for a grid function with boundary values."];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vxscal",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga678a92f4fb3447e6dbbc97bef28e160e",tooltip="Scale operation for a grid function with boundary values."];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vmatvec",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gacda83144fd9d06e3c62a1687933ba010",tooltip="Matrix-vector multiplication routines."];
+}

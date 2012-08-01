@@ -1,0 +1,39 @@
+digraph "Vstring_strcasecmp"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vstring_strcasecmp",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="APOLparm_parseToken",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___m_gparm.html#ga71bc8da12582fe3453e7482321ce6694",tooltip="Parse an MG keyword from an input file."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="FEMparm_parseToken",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___m_gparm.html#gaa97472cad5d213870a6cc6e57d6e9908",tooltip="Parse an MG keyword from an input file."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="MGparm_parseToken",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___m_gparm.html#gaf28f03425686bf7820b5dd2202a2ee83",tooltip="Parse an MG keyword from an input file."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="NOsh_parseInput",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___n_osh.html#ga663ba31a41ef988c632cda964947c2fb",tooltip="Parse an input file from a socket."];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="NOsh_parseInputFile",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___n_osh.html#ga68e3b8cfc448f83268349e508662c092",tooltip="Parse an input file only from a file."];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="PBEparm_parseToken",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_b_eparm.html#gafb246c3bc70ae2ff195606c4bf53a6b6",tooltip="Parse a keyword from an input file."];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Valist_readPDB",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gacfb6dbc66d8671a04bd5032e8f9557cc",tooltip="Fill atom list with information from a PDB file."];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Valist_readPQR",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#ga4ab1618d8b6f43684598551d923206dd",tooltip="Fill atom list with information from a PQR file."];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="Valist_readXML",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gabbb8144a756bf803f6a42cd15d9c9021",tooltip="Fill atom list with information from an XML file."];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node11 [label="Vparam_getResData",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vparam.html#gaf373b2f58919aac717afc7fd158d6336",tooltip="Get residue data."];
+  Node11 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node12 [label="Vparam_getAtomData",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vparam.html#ga5eb507195510839d9073b535abf4b044",tooltip="Get atom data."];
+  Node12 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node12 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node1 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node13 [label="Vparam_readXMLFile",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vparam.html#gaf9d820136a649147ff362ef78d40b16f",tooltip="Read an XML format parameter database."];
+  Node1 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node14 [label="Vparam_readFlatFile",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vparam.html#ga61d8ecdb1e58e573392dcc90d3e43bc7",tooltip="Read a flat-file format parameter database."];
+  Node1 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node15 [label="readXMLFileAtom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vparam.html#ga8b35934af27637a90fb419cdfe6f8fb5",tooltip="Read atom information from an XML file."];
+  Node15 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

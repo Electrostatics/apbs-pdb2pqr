@@ -1,0 +1,12 @@
+<map id="Vpbe_getZkappa2" name="Vpbe_getZkappa2">
+<area shape="rect" id="node3" href="$group___vfetk.html#gabc68994e0bb0bdc828252a8c90e422a0" title="FORTRAN stub constructor for Vfetk object." alt="" coords="215,5,302,32"/>
+<area shape="rect" id="node7" href="$group___vpmg.html#ga44b9a21b48776d5d308a2de3c658f6a7" title="FORTRAN stub constructor for the Vpmg class (uses previously&#45;allocated memory)" alt="" coords="213,56,304,83"/>
+<area shape="rect" id="node11" href="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082" title="Solve the PBE using PMG." alt="" coords="213,107,304,133"/>
+<area shape="rect" id="node13" href="$vpmg_8c.html#aff52adddfe50ff4e6282f3bcf05f3dd5" title="Vpmg_qmEnergy for SMPBE." alt="" coords="179,157,338,184"/>
+<area shape="rect" id="node19" href="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67" title="Calculate the osmotic pressure on the specified atom in units of k_B T/AA." alt="" coords="207,208,311,235"/>
+<area shape="rect" id="node5" href="$group___vfetk.html#ga18cb8270f03b5893108de2ff714386e0" title="Constructor for Vfetk object." alt="" coords="407,5,487,32"/>
+<area shape="rect" id="node9" href="$group___vpmg.html#ga7e280e4beb3cd7dc7ddcf7dda904f481" title="Constructor for the Vpmg class (allocates new memory)" alt="" coords="405,56,489,83"/>
+<area shape="rect" id="node15" href="$group___vpmg.html#gaa742b2c423bcb09628a84833a5f1e7ae" title="Get the &quot;mobile charge&quot; contribution to the electrostatic energy." alt="" coords="387,157,506,184"/>
+<area shape="rect" id="node17" href="$group___vpmg.html#gad8cdc819e2c366c7b2da0afd20d9735b" title="Get the total electrostatic energy." alt="" coords="555,157,656,184"/>
+<area shape="rect" id="node21" href="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c" title="Calculate the total force on the specified atom in units of k_B T/AA." alt="" coords="401,208,492,235"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga4411348a3f410ffabb97676b3d9a3553" title="Build the Laplacian." alt="" coords="146,5,211,32"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#ga2df5349f181d18f4c8760d154face9a9" title="Banded matrix builder." alt="" coords="136,56,221,83"/>
+<area shape="rect" id="node11" href="$mgsubd_8c.html#af869cb57ae08d0bcdaf96f5ee29c701a" title="Produce information for a coarser grid. Also harmonically average the problem coefficients." alt="" coords="133,107,224,133"/>
+<area shape="rect" id="node13" href="$mgsubd_8c.html#a62a30dba6efce38b05339176da1c0a4c" title="Form the Galerkin coarse grid system." alt="" coords="132,157,225,184"/>
+<area shape="rect" id="node29" href="$mgsubd_8c.html#a4f4dcc0a2765d36043baf84339622b61" title="Produce information for a coarser grid. Also harmonically average the problem coefficients." alt="" coords="131,208,226,235"/>
+<area shape="rect" id="node31" href="$group___p_m_g_c.html#ga7de05fbf33504a49c87628ef9a58b26f" title="Builds prolongation matrix." alt="" coords="147,259,211,285"/>
+<area shape="rect" id="node45" href="$matvecd_8c.html#a9798c5bf4affd45e209db9f2bbef8988" title="Simple injection of a fine grid function into coarse grid." alt="" coords="458,360,523,387"/>
+<area shape="rect" id="node48" href="$mgsubd_8c.html#a991b3b9403010f02c64fcb2fedf7dd0a" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="143,411,214,437"/>
+<area shape="rect" id="node52" href="$mikpckd_8c.html#a42cd5e41db1a0e2676cd63a292dc6284" title="Vprtmatd" alt="" coords="141,461,216,488"/>
+<area shape="rect" id="node7" href="$build_bd_8c.html#abf0d453e08d0c6dfebb595859dbf0098" title="Build the operator in banded form given the 27&#45;diagonal form." alt="" coords="275,5,389,32"/>
+<area shape="rect" id="node9" href="$build_bd_8c.html#aa79790a186b5be89c21c28b397de7a1f" title="Build the operator in banded form given the 7&#45;diagonal form." alt="" coords="279,56,385,83"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#gacb8c5c7b632956199f40dbb3c24e65b7" title="Build Galerkin matrix structures." alt="" coords="299,107,365,133"/>
+<area shape="rect" id="node23" href="$matvecd_8c.html#a5272299e7e280af7f61a1e6e25e1c3df" title="Apply the restriction operator." alt="" coords="301,157,363,184"/>
+<area shape="rect" id="node17" href="$build_gd_8c.html#abcd209cd0339d65e0c4f24fb77432f0a" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="451,5,530,32"/>
+<area shape="rect" id="node19" href="$build_gd_8c.html#acaefec47c6b56c0261871cfd325c0c6c" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="447,56,534,83"/>
+<area shape="rect" id="node21" href="$build_gd_8c.html#a2205f426f8fede18209c76a53bb7755d" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="451,107,530,133"/>
+<area shape="rect" id="node25" href="$matvecd_8c.html#ade0953634c3377d24922b80b9351c8b5" title="Vrestrc2" alt="" coords="455,157,526,184"/>
+<area shape="rect" id="node27" href="$mikpckd_8c.html#a2f39f931c001e4b36034361835d60c25" title="Initialize a grid function to have a zero boundary value." alt="" coords="593,259,701,285"/>
+<area shape="rect" id="node33" href="$build_pd_8c.html#a775b86e4fe7b789c681a970083b57301" title="VbuildP_op27" alt="" coords="283,208,381,235"/>
+<area shape="rect" id="node37" href="$build_pd_8c.html#ae1ee9579326c9f27150190b9f07dd098" title="VbuildP_op7" alt="" coords="286,259,378,285"/>
+<area shape="rect" id="node41" href="$build_pd_8c.html#ab61d3759bb7237f82ec681b016b63c10" title="VbuildP_trilin" alt="" coords="284,309,380,336"/>
+<area shape="rect" id="node35" href="$build_pd_8c.html#a307a957d3598e95ac811c574e6b23c77" title="VbuildPb_op27" alt="" coords="437,208,544,235"/>
+<area shape="rect" id="node39" href="$build_pd_8c.html#a239090c5a21ba15500d3822fb02a20fb" title="VbuildPb_op7" alt="" coords="441,259,540,285"/>
+<area shape="rect" id="node43" href="$build_pd_8c.html#a483e139344e16bf6e514b4a10f597067" title="VbuildPb_trilin" alt="" coords="439,309,542,336"/>
+<area shape="rect" id="node50" href="$mgsubd_8c.html#ad3ea2f62646e015feb883b784f747b44" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="303,411,361,437"/>
+<area shape="rect" id="node54" href="$mikpckd_8c.html#af7209a810d264ba210ccffbf2bd8ab1f" title="Vprtmatd27" alt="" coords="287,461,377,488"/>
+<area shape="rect" id="node56" href="$mikpckd_8c.html#a701817666d03370c06f4a0522c48265a" title="Vprtmatd7" alt="" coords="291,512,373,539"/>
+</map>

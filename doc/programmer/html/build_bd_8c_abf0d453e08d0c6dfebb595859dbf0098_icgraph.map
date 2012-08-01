@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga2df5349f181d18f4c8760d154face9a9" title="Banded matrix builder." alt="" coords="168,31,253,57"/>
+<area shape="rect" id="node5" href="$mgsubd_8c.html#ab676e77a0ea7fd89e6e93fca248831ae" title="Build operators, boundary arrays, modify affine vectors ido==0: do only fine level ido==1: do only co..." alt="" coords="301,31,379,57"/>
+<area shape="rect" id="node7" href="$mgdrvd_8c.html#ad88069b85b98b96bcbfbf4bfab67c661" title="Solves the pde using the multi&#45;grid method." alt="" coords="430,5,506,32"/>
+<area shape="rect" id="node13" href="$newdrvd_8c.html#a8b2877638552af80324173636bf0506a" title="Solves using Newton&#39;s Method." alt="" coords="427,56,509,83"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#gae0bd7674be993f09052615397fb11ef7" title="Multilevel solver driver." alt="" coords="560,5,629,32"/>
+<area shape="rect" id="node11" href="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082" title="Solve the PBE using PMG." alt="" coords="680,31,771,57"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga579debc5cc00c2e8e9901fa65e165a12" title="Driver for the Newton Solver." alt="" coords="557,56,632,83"/>
+</map>

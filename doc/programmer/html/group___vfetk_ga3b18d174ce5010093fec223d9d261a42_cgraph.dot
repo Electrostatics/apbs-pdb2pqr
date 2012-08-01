@@ -1,0 +1,25 @@
+digraph "Vfetk_PDE_delta"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vfetk_PDE_delta",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vcsm_getNumberAtoms",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vcsm.html#ga0cfc90d86ca9b99dae23a3695d182a0f",tooltip="Get number of atoms associated with a simplex."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vfetk_getVcsm",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#ga863f19c6f83e7b575a227f6869ef6b54",tooltip="Get a pointer to the Vcsm (charge-simplex map) object."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vcsm_getAtomIndex",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vcsm.html#ga0e3fde08a6e77a09b189c15ff6150a70",tooltip="Get ID of particular atom in a simplex."];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vcsm_getAtom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vcsm.html#ga40138cd1d313a5c2c5084281711d5840",tooltip="Get particular atom associated with a simplex."];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Valist_getAtom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043",tooltip="Get pointer to particular atom in list."];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vatom_getCharge",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5",tooltip="Get atomic charge."];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vatom_getPosition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c",tooltip="Get atomic position."];
+  Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Vfetk_getGem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#gae88ae6cb6b8957f2c1afe7690953c68a",tooltip="Get a pointer to the Gem (grid manager) object."];
+  Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="Vpbe_getZmagic",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e",tooltip="Get charge scaling factor."];
+}

@@ -1,0 +1,16 @@
+digraph "Vacc_splineAccGradAtomNorm3"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vacc_splineAccGradAtomNorm3",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vpmg_splineSelect",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#a1271687db8aa07b73c4ce3316943b72c",tooltip="Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vpmg_ibForce",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67",tooltip="Calculate the osmotic pressure on the specified atom in units of k_B T/AA."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_force",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c",tooltip="Calculate the total force on the specified atom in units of k_B T/AA."];
+  Node2 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vpmg_dbForce",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b",tooltip="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA."];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

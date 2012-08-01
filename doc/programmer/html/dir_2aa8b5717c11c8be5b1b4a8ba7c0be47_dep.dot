@@ -1,0 +1,9 @@
+digraph "src/aaa_lib/" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_68267d1309a1af8e8297ef4c3efbcdba {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="FreeSans", fontsize="10", URL="dir_68267d1309a1af8e8297ef4c3efbcdba.html"]
+  dir_2aa8b5717c11c8be5b1b4a8ba7c0be47 [shape=box, label="aaa_lib", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_2aa8b5717c11c8be5b1b4a8ba7c0be47.html"];
+  }
+}

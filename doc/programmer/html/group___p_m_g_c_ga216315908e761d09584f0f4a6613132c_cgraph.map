@@ -1,0 +1,22 @@
+<map id="Vipower" name="Vipower">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga0cc1b42e9c573d4c0b960afda283b0b1" title="Fill grid function with random values, including boundary values." alt="" coords="123,5,192,32"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#gad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="261,259,329,285"/>
+<area shape="rect" id="node7" href="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="504,411,571,437"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#ga678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="508,157,567,184"/>
+<area shape="rect" id="node11" href="$group___p_m_g_c.html#gacda83144fd9d06e3c62a1687933ba010" title="Matrix&#45;vector multiplication routines." alt="" coords="502,309,573,336"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="510,360,565,387"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="506,664,569,691"/>
+<area shape="rect" id="node17" href="$group___p_m_g_c.html#gab7f955448bd40d97f3b1b3ac91b9f21c" title="MG helper functions." alt="" coords="128,588,187,615"/>
+<area shape="rect" id="node36" href="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="506,968,569,995"/>
+<area shape="rect" id="node19" href="$group___p_m_g_c.html#gae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="261,563,328,589"/>
+<area shape="rect" id="node25" href="$group___p_m_g_c.html#ga7f469e5b5661e8c176889cde7bed8175" title="Multigrid smoothing functions." alt="" coords="259,411,331,437"/>
+<area shape="rect" id="node31" href="$group___p_m_g_c.html#gaaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="503,537,572,564"/>
+<area shape="rect" id="node40" href="$group___p_m_g_c.html#ga6243a4021fb62c2ca1008c747ff8dd7f" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="245,715,344,741"/>
+<area shape="rect" id="node42" href="$group___p_m_g_c.html#ga9183f58be97708e2945a1578d943b283" title="LINPACK interface." alt="" coords="265,765,325,792"/>
+<area shape="rect" id="node44" href="$group___p_m_g_c.html#gaf2989f16a64132f085943e0cafca0c5d" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="245,816,344,843"/>
+<area shape="rect" id="node46" href="$group___p_m_g_c.html#gaa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="241,867,349,893"/>
+<area shape="rect" id="node51" href="$group___p_m_g_c.html#gaede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="263,917,326,944"/>
+<area shape="rect" id="node53" href="$group___p_m_g_c.html#ga9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="251,461,339,488"/>
+<area shape="rect" id="node27" href="$group___p_m_g_c.html#gaafddbbf81f667f3e155e468d85a89807" title="Guass&#45;Seidel solver." alt="" coords="398,461,453,488"/>
+<area shape="rect" id="node29" href="$group___p_m_g_c.html#ga371225c13eaf2407b57de0dd4f831ed8" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="397,411,453,437"/>
+</map>

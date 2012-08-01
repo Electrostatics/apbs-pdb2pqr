@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mgsubd_8h.html#abb5cb28581c88bf4adaab11d35484ac7" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="121,5,191,32"/>
+<area shape="rect" id="node7" href="$matvecd_8h.html#aede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="125,56,187,83"/>
+<area shape="rect" id="node13" href="$mikpckd_8h.html#a964d91008dba76f460e36b9a207fb2af" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="125,107,187,133"/>
+<area shape="rect" id="node5" href="$mgsubd_8h.html#aec1ae6e963b514a637ca71305e332856" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="247,5,305,32"/>
+<area shape="rect" id="node9" href="$matvecd_8h.html#ade0953634c3377d24922b80b9351c8b5" title="Vrestrc2" alt="" coords="241,56,311,83"/>
+<area shape="rect" id="node11" href="$mikpckd_8h.html#aa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="361,56,469,83"/>
+</map>

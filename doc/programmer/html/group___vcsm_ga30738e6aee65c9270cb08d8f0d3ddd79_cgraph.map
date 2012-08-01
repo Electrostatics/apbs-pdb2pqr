@@ -1,0 +1,5 @@
+<map id="Vcsm_init" name="Vcsm_init">
+<area shape="rect" id="node3" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="131,5,290,32"/>
+<area shape="rect" id="node5" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="157,56,265,83"/>
+<area shape="rect" id="node7" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="147,107,275,133"/>
+</map>

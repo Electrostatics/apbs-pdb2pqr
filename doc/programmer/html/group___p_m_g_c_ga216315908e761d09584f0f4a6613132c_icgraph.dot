@@ -1,0 +1,23 @@
+digraph "Vipower"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vipower",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vmgdriv2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gadc0ebef4376e1de553e49c2b78fd2eee",tooltip="Solves the pde using the multi-grid method."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vmgdriv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga67eecfd194462b66dbad001c2d04234d",tooltip="Multilevel solver driver."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_solve",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082",tooltip="Solve the PBE using PMG."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vnewton",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga218aef2ec11ca80de45a5bcfa089cd9e",tooltip="Inexact-newton-multilevel method."];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vnewdriv2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga28bb35e37a738d808269f4b8b63f4491",tooltip="Solves using Newton&#39;s Method."];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vnewdriv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga579debc5cc00c2e8e9901fa65e165a12",tooltip="Driver for the Newton Solver."];
+  Node7 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vfnewton",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gaf57dd61aeb1cc91a734b7ae494998b45",tooltip="Driver routines for the Newton method."];
+  Node8 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

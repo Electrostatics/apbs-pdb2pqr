@@ -1,0 +1,5 @@
+<map id="Vacc_wcaEnergyAtom" name="Vacc_wcaEnergyAtom">
+<area shape="rect" id="node3" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="213,5,321,32"/>
+<area shape="rect" id="node5" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="203,56,331,83"/>
+<area shape="rect" id="node7" href="$group___vacc.html#ga050da431e776227898c5a7e7060d2202" title="Report inflated van der Waals accessibility." alt="" coords="215,107,318,133"/>
+</map>

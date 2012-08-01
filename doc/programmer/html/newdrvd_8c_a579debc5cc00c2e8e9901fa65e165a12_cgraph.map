@@ -1,0 +1,51 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mgsubd_8h.html#aafeec659ec982b3db15f71bf92698b32" title="Find maximum multigrid possible coarsenning common to three grid sizes." alt="" coords="134,587,205,613"/>
+<area shape="rect" id="node5" href="$mgdrvd_8c.html#a5f5b52099b346692aaa497a701395d7e" title="This routine computes the required sizes of the real and integer work arrays for the multigrid code..." alt="" coords="410,637,470,664"/>
+<area shape="rect" id="node11" href="$newdrvd_8h.html#a28bb35e37a738d808269f4b8b63f4491" title="Solves using Newton&#39;s Method." alt="" coords="128,1043,211,1069"/>
+<area shape="rect" id="node7" href="$mgsubd_8h.html#abb5cb28581c88bf4adaab11d35484ac7" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="819,789,890,816"/>
+<area shape="rect" id="node9" href="$mgsubd_8h.html#aec1ae6e963b514a637ca71305e332856" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="979,789,1037,816"/>
+<area shape="rect" id="node13" href="$mgsubd_8h.html#af5dcda5c3983e745a0e2cae34a4094e4" title="Build RHS algebraically for analysis purposes." alt="" coords="403,1081,477,1108"/>
+<area shape="rect" id="node28" href="$mgsubd_8h.html#a1ae001bade7ef2006a2fd9de15b9c7e3" title="Build operators, boundary arrays, modify affine vectors ido==0: do only fine level ido==1: do only co..." alt="" coords="527,485,604,512"/>
+<area shape="rect" id="node59" href="$mikpckd_8h.html#aa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="1105,1245,1213,1272"/>
+<area shape="rect" id="node68" href="$mgsubd_8h.html#a81ac80afc08fb27607efdc5c9e97ceaa" title="Build the nexted operator framework in the array iz." alt="" coords="271,840,343,867"/>
+<area shape="rect" id="node71" href="$mikpckd_8h.html#a04aca6300210f7c190bda51d25fe2bd4" title="Initialize a grid function to have a certain boundary value,." alt="" coords="259,1955,354,1981"/>
+<area shape="rect" id="node75" href="$newtond_8h.html#af57dd61aeb1cc91a734b7ae494998b45" title="Nested iteration for an inexact&#45;newton&#45;multilevel method." alt="" coords="269,992,345,1019"/>
+<area shape="rect" id="node85" href="$newtond_8h.html#a218aef2ec11ca80de45a5bcfa089cd9e" title="Inexact&#45;newton&#45;multilevel method." alt="" coords="404,1321,476,1348"/>
+<area shape="rect" id="node15" href="$matvecd_8h.html#a3550f412c9793915998671c2c0b8df4f" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="819,1372,890,1399"/>
+<area shape="rect" id="node22" href="$matvecd_8h.html#afbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="526,1093,605,1120"/>
+<area shape="rect" id="node17" href="$matvecd_8h.html#a20925845b383dba21bf7fb7dafb340b0" title="Vmatvec27" alt="" coords="965,1347,1051,1373"/>
+<area shape="rect" id="node19" href="$matvecd_8h.html#ae6b8553ded343f1ee7d0d4011a560141" title="Vmatvec7" alt="" coords="969,1397,1047,1424"/>
+<area shape="rect" id="node24" href="$matvecd_8h.html#acfb01799db27c9a74dd7925a8a836dbd" title="Vnmatvec27" alt="" coords="655,1093,747,1120"/>
+<area shape="rect" id="node26" href="$matvecd_8h.html#a932505d663cc398b4f553290fcabd3d0" title="Vnmatvec7" alt="" coords="659,1043,744,1069"/>
+<area shape="rect" id="node30" href="$build_bd_8h.html#a2df5349f181d18f4c8760d154face9a9" title="Build and factor a banded matrix given a matrix in diagonal form." alt="" coords="659,195,744,221"/>
+<area shape="rect" id="node39" href="$mgsubd_8h.html#af869cb57ae08d0bcdaf96f5ee29c701a" title="Produce information for a coarser grid. Also harmonically average the problem coefficients." alt="" coords="656,536,747,563"/>
+<area shape="rect" id="node41" href="$mgsubd_8h.html#ac3878a7358faf90a4e0e0067f0961a37" title="Form the Galerkin coarse grid system." alt="" coords="655,485,748,512"/>
+<area shape="rect" id="node47" href="$mgsubd_8h.html#ab81768f9181b9bdfeab930b957a7c26c" title="Produce information for a coarser grid. Also harmonically average the problem coefficients." alt="" coords="654,587,749,613"/>
+<area shape="rect" id="node49" href="$build_pd_8h.html#a7de05fbf33504a49c87628ef9a58b26f" title="VbuildP" alt="" coords="669,359,733,385"/>
+<area shape="rect" id="node57" href="$matvecd_8h.html#afa446fbf1bb85646b186469db9768ab8" title="Simple injection of a fine grid function into coarse grid." alt="" coords="975,587,1041,613"/>
+<area shape="rect" id="node62" href="$mikpckd_8h.html#a4bf7ed81bbcfc630677a68ff3ef78570" title="Vprtmatd" alt="" coords="664,56,739,83"/>
+<area shape="rect" id="node32" href="$build_bd_8h.html#ab16d52afd502c461d5d023c02c7d659f" title="Build the operator in banded form given the 27&#45;diagonal form." alt="" coords="798,107,911,133"/>
+<area shape="rect" id="node34" href="$build_bd_8h.html#a01d0f3717c0789ed0dd32393fb43b633" title="Build the operator in banded form given the 7&#45;diagonal form." alt="" coords="801,157,908,184"/>
+<area shape="rect" id="node36" href="$mlinpckd_8h.html#a7214808d99864af035c455a60255ec39" title="Vdpbfa" alt="" coords="823,232,886,259"/>
+<area shape="rect" id="node43" href="$build_gd_8h.html#acb8c5c7b632956199f40dbb3c24e65b7" title="VbuildG" alt="" coords="822,485,887,512"/>
+<area shape="rect" id="node45" href="$matvecd_8h.html#aede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="823,891,886,917"/>
+<area shape="rect" id="node51" href="$build_pd_8h.html#a29bc25c5ac8cb46f66230189cafb0bde" title="VbuildP_op27" alt="" coords="805,283,904,309"/>
+<area shape="rect" id="node53" href="$build_pd_8h.html#aa014512f6de4184668d69e35e5caae78" title="VbuildP_op7" alt="" coords="809,333,901,360"/>
+<area shape="rect" id="node55" href="$build_pd_8h.html#a73ebfb2bcca51a04b10be1fc19317dc5" title="VbuildP_trilin" alt="" coords="807,384,903,411"/>
+<area shape="rect" id="node64" href="$mikpckd_8h.html#af7209a810d264ba210ccffbf2bd8ab1f" title="Vprtmatd27" alt="" coords="810,5,899,32"/>
+<area shape="rect" id="node66" href="$mikpckd_8h.html#acb52d22ecea1bfa2231e21ae2a36f69f" title="Vprtmatd7" alt="" coords="813,56,896,83"/>
+<area shape="rect" id="node77" href="$matvecd_8h.html#a9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="811,1093,899,1120"/>
+<area shape="rect" id="node83" href="$mgsubd_8h.html#a7b0bd272745e2c31bf1ebc11a8d40b2d" title="Refine a grid Compute the number of grid points in the finer grid, given the number of grid points in..." alt="" coords="821,1144,889,1171"/>
+<area shape="rect" id="node79" href="$matvecd_8h.html#a5d497618aca91752806dbae6e0d94626" title="VinterpPMG2" alt="" coords="961,1144,1055,1171"/>
+<area shape="rect" id="node87" href="$mikpckd_8h.html#ad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="821,1727,889,1753"/>
+<area shape="rect" id="node89" href="$newtond_8h.html#a458b63cb21cb123da5e3e079eb5d81b8" title="Form the jacobian system." alt="" coords="669,891,734,917"/>
+<area shape="rect" id="node93" href="$mikpckd_8h.html#a964d91008dba76f460e36b9a207fb2af" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="823,1296,886,1323"/>
+<area shape="rect" id="node95" href="$powerd_8h.html#a216315908e761d09584f0f4a6613132c" title="Standard inverse power method for minimum eigenvalue estimation." alt="" coords="531,1499,600,1525"/>
+<area shape="rect" id="node99" href="$mgcsd_8h.html#ab7f955448bd40d97f3b1b3ac91b9f21c" title="Screaming linear multilevel method." alt="" coords="672,1245,731,1272"/>
+<area shape="rect" id="node108" href="$mikpckd_8h.html#ac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="823,1575,886,1601"/>
+<area shape="rect" id="node111" href="$mikpckd_8h.html#a3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="827,1651,882,1677"/>
+<area shape="rect" id="node113" href="$mikpckd_8h.html#ae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="821,1195,888,1221"/>
+<area shape="rect" id="node115" href="$mikpckd_8h.html#ac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="821,1473,888,1500"/>
+<area shape="rect" id="node123" href="$matvecd_8h.html#acb2fd32fc0aa12d56b7620ae0a7712e1" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="527,1296,603,1323"/>
+<area shape="rect" id="node125" href="$powerd_8h.html#adbff80ddaeeb1efd8ad2a9cd1cfad1da" title="Standard power method for maximum eigenvalue estimation of a matrix c* c*." alt="" coords="668,1549,735,1576"/>
+</map>

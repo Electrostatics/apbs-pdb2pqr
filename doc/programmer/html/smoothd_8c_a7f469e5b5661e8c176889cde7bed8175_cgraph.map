@@ -1,0 +1,21 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$cgd_8h.html#a7c7f5d86bfd491a12a1fbe4e44a15246" title="Vcghs" alt="" coords="125,183,181,209"/>
+<area shape="rect" id="node36" href="$gsd_8h.html#a3e7151571d9f8a79e8eaf38dbec02197" title="Call the fast diagonal iterative method." alt="" coords="238,360,293,387"/>
+<area shape="rect" id="node6" href="$matvecd_8h.html#a3550f412c9793915998671c2c0b8df4f" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="230,157,301,184"/>
+<area shape="rect" id="node16" href="$matvecd_8h.html#aaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="231,208,300,235"/>
+<area shape="rect" id="node26" href="$mikpckd_8h.html#ac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="234,259,297,285"/>
+<area shape="rect" id="node28" href="$mikpckd_8h.html#a964d91008dba76f460e36b9a207fb2af" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="234,309,297,336"/>
+<area shape="rect" id="node30" href="$mikpckd_8h.html#a3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="238,5,293,32"/>
+<area shape="rect" id="node32" href="$mikpckd_8h.html#ac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="232,56,299,83"/>
+<area shape="rect" id="node34" href="$mikpckd_8h.html#a678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="236,107,295,133"/>
+<area shape="rect" id="node8" href="$matvecd_8h.html#a20925845b383dba21bf7fb7dafb340b0" title="Vmatvec27" alt="" coords="349,107,435,133"/>
+<area shape="rect" id="node12" href="$matvecd_8h.html#ae6b8553ded343f1ee7d0d4011a560141" title="Vmatvec7" alt="" coords="353,157,431,184"/>
+<area shape="rect" id="node10" href="$matvecd_8h.html#afdd47ebf5a388815a71a5a7331ca886e" title="Vmatvec27_1s" alt="" coords="483,107,589,133"/>
+<area shape="rect" id="node14" href="$matvecd_8h.html#a7cdea00c982b9b4ef1e9de29f92045fb" title="Vmatvec7_1s" alt="" coords="487,157,585,184"/>
+<area shape="rect" id="node18" href="$matvecd_8h.html#a7f825c93285a5e22ac0b505ef1834da1" title="Vmresid27" alt="" coords="351,208,433,235"/>
+<area shape="rect" id="node22" href="$matvecd_8h.html#acdf5e00def4da6b7fcda91bd3510cdb9" title="Vmresid7" alt="" coords="354,259,430,285"/>
+<area shape="rect" id="node20" href="$matvecd_8h.html#a0c381239d197298b29b8310540c6dd48" title="Vmresid27_1s" alt="" coords="485,259,587,285"/>
+<area shape="rect" id="node24" href="$matvecd_8h.html#af2083c2638126d9bf7c729cb9686758c" title="Vmresid7_1s" alt="" coords="488,309,584,336"/>
+<area shape="rect" id="node38" href="$gsd_8h.html#a09556d855f1a3899ebde6355298b05f5" title="Vgsrb27x" alt="" coords="355,309,429,336"/>
+<area shape="rect" id="node41" href="$gsd_8h.html#a70b9996b9824109c5a184fade23cb119" title="Vgsrb7x" alt="" coords="358,360,426,387"/>
+</map>

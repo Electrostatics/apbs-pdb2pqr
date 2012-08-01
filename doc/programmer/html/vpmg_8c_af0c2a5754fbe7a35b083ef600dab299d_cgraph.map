@@ -1,0 +1,19 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="546,24,654,50"/>
+<area shape="rect" id="node5" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="521,74,679,101"/>
+<area shape="rect" id="node7" href="$group___vpmg.html#ga855098121480f53fffc85f15b97cb88c" title="Get the &quot;polarization&quot; contribution to the electrostatic energy." alt="" coords="134,252,255,278"/>
+<area shape="rect" id="node11" href="$group___vpmg.html#gad1a07a9d24211983ddcbcbf67267fbfb" title="Get the &quot;fixed charge&quot; contribution to the electrostatic energy." alt="" coords="139,176,251,202"/>
+<area shape="rect" id="node24" href="$group___vpmg.html#gaa742b2c423bcb09628a84833a5f1e7ae" title="Get the &quot;mobile charge&quot; contribution to the electrostatic energy." alt="" coords="135,314,254,341"/>
+<area shape="rect" id="node36" href="$group___vpmg.html#gafe4fbd069927d516936116a417a256c1" title="Set partition information which restricts the calculation of observables to a (rectangular) subset of..." alt="" coords="333,24,435,50"/>
+<area shape="rect" id="node40" href="$group___vpmg.html#gafc90a96505e0bddd5cc15b69f3c7613c" title="Remove partition restrictions." alt="" coords="326,74,442,101"/>
+<area shape="rect" id="node9" href="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e" title="Get charge scaling factor." alt="" coords="541,226,659,253"/>
+<area shape="rect" id="node13" href="$vpmg_8h.html#a0876512b1ee9f93ee0378334b886938c" title="Calculates charge&#45;potential energy using summation over delta function positions (i.e. something like an Linf norm)" alt="" coords="314,176,454,202"/>
+<area shape="rect" id="node21" href="$vpmg_8h.html#a78687d08a4040d18d46337e1345b6dac" title="Calculates charge&#45;potential energy as integral over a volume." alt="" coords="307,226,461,253"/>
+<area shape="rect" id="node17" href="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5" title="Get atomic charge." alt="" coords="537,176,663,202"/>
+<area shape="rect" id="node19" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="536,125,664,152"/>
+<area shape="rect" id="node26" href="$vpmg_8h.html#a9bbc2d7d63eea65e627e398cc05ee342" title="Vpmg_qmEnergy for SMPBE." alt="" coords="305,328,463,354"/>
+<area shape="rect" id="node28" href="$group___vcap.html#ga3af96d10891f3150377104c65689c6ec" title="Provide a capped exp() function." alt="" coords="561,429,639,456"/>
+<area shape="rect" id="node30" href="$group___vpbe.html#gabca9ea80c0a56d3848c54b37d0418f20" title="Get bulk ionic strength." alt="" coords="513,277,687,304"/>
+<area shape="rect" id="node32" href="$group___vpbe.html#gae42c09bef7405779d87bce73c44e1ebf" title="Get information about the counterion species present." alt="" coords="550,328,650,354"/>
+<area shape="rect" id="node34" href="$group___vpbe.html#ga56e38face81d2d29659541b5e3f5e442" title="Get modified squared Debye&#45;Huckel parameter." alt="" coords="538,378,662,405"/>
+</map>

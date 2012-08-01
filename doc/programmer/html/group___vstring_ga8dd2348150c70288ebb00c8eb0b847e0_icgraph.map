@@ -1,0 +1,16 @@
+<map id="Vstring_strcasecmp" name="Vstring_strcasecmp">
+<area shape="rect" id="node3" href="$group___m_gparm.html#ga71bc8da12582fe3453e7482321ce6694" title="Parse an MG keyword from an input file." alt="" coords="190,5,346,32"/>
+<area shape="rect" id="node5" href="$group___m_gparm.html#gaa97472cad5d213870a6cc6e57d6e9908" title="Parse an MG keyword from an input file." alt="" coords="193,56,343,83"/>
+<area shape="rect" id="node7" href="$group___m_gparm.html#gaf28f03425686bf7820b5dd2202a2ee83" title="Parse an MG keyword from an input file." alt="" coords="196,107,340,133"/>
+<area shape="rect" id="node9" href="$group___n_osh.html#ga663ba31a41ef988c632cda964947c2fb" title="Parse an input file from a socket." alt="" coords="208,157,328,184"/>
+<area shape="rect" id="node13" href="$group___p_b_eparm.html#gafb246c3bc70ae2ff195606c4bf53a6b6" title="Parse a keyword from an input file." alt="" coords="195,208,341,235"/>
+<area shape="rect" id="node15" href="$group___valist.html#gacfb6dbc66d8671a04bd5032e8f9557cc" title="Fill atom list with information from a PDB file." alt="" coords="594,335,702,361"/>
+<area shape="rect" id="node17" href="$group___valist.html#ga4ab1618d8b6f43684598551d923206dd" title="Fill atom list with information from a PQR file." alt="" coords="593,436,703,463"/>
+<area shape="rect" id="node19" href="$group___valist.html#gabbb8144a756bf803f6a42cd15d9c9021" title="Fill atom list with information from an XML file." alt="" coords="213,360,323,387"/>
+<area shape="rect" id="node21" href="$group___vparam.html#gaf373b2f58919aac717afc7fd158d6336" title="Get residue data." alt="" coords="199,411,337,437"/>
+<area shape="rect" id="node23" href="$group___vparam.html#ga5eb507195510839d9073b535abf4b044" title="Get atom data." alt="" coords="395,335,543,361"/>
+<area shape="rect" id="node28" href="$group___vparam.html#gaf9d820136a649147ff362ef78d40b16f" title="Read an XML format parameter database." alt="" coords="397,563,541,589"/>
+<area shape="rect" id="node30" href="$group___vparam.html#ga61d8ecdb1e58e573392dcc90d3e43bc7" title="Read a flat&#45;file format parameter database." alt="" coords="197,563,339,589"/>
+<area shape="rect" id="node32" href="$group___vparam.html#ga8b35934af27637a90fb419cdfe6f8fb5" title="Read atom information from an XML file." alt="" coords="207,512,329,539"/>
+<area shape="rect" id="node11" href="$group___n_osh.html#ga68e3b8cfc448f83268349e508662c092" title="Parse an input file only from a file." alt="" coords="399,157,539,184"/>
+</map>

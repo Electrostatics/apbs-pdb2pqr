@@ -1,0 +1,14 @@
+digraph "C:/Users/bake113/Documents/Projects/APBS & PDB2PQR/Source code/APBS/trunk/src/generic/" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_e5f440db28aa01947b9a534c86166b99 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="FreeSans", fontsize="10", URL="dir_e5f440db28aa01947b9a534c86166b99.html"]
+  subgraph clusterdir_5a4b9a4ce670c27bbe9b881c30da1d5e {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_5a4b9a4ce670c27bbe9b881c30da1d5e.html"];
+    dir_5a4b9a4ce670c27bbe9b881c30da1d5e [shape=plaintext label="generic"];
+    dir_c4c134100cbef3a7999c3878b11184f2 [shape=box label="apbs" color="black" fillcolor="white" style="filled" URL="dir_c4c134100cbef3a7999c3878b11184f2.html"];
+  }
+  }
+  dir_5a4b9a4ce670c27bbe9b881c30da1d5e->dir_c4c134100cbef3a7999c3878b11184f2 [headlabel="17", labeldistance=1.5 headhref="dir_000015_000016.html"];
+}

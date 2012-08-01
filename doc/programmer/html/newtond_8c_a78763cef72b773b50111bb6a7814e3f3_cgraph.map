@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mgsubd_8c.html#a991b3b9403010f02c64fcb2fedf7dd0a" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="121,5,191,32"/>
+<area shape="rect" id="node7" href="$matvecd_8c.html#a5272299e7e280af7f61a1e6e25e1c3df" title="Apply the restriction operator." alt="" coords="125,56,187,83"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#ga964d91008dba76f460e36b9a207fb2af" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="125,107,187,133"/>
+<area shape="rect" id="node5" href="$mgsubd_8c.html#ad3ea2f62646e015feb883b784f747b44" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="247,5,305,32"/>
+<area shape="rect" id="node9" href="$matvecd_8c.html#ade0953634c3377d24922b80b9351c8b5" title="Vrestrc2" alt="" coords="241,56,311,83"/>
+<area shape="rect" id="node11" href="$mikpckd_8c.html#a2f39f931c001e4b36034361835d60c25" title="Initialize a grid function to have a zero boundary value." alt="" coords="361,56,469,83"/>
+</map>

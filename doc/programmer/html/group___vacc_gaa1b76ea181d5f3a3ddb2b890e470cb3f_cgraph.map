@@ -1,0 +1,15 @@
+<map id="Vacc_atomSASPoints" name="Vacc_atomSASPoints">
+<area shape="rect" id="node3" href="$group___vacc.html#gad2041f50041470d01e00a17f18b5b6c2" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area..." alt="" coords="197,56,285,83"/>
+<area shape="rect" id="node9" href="$group___vacc.html#ga8c962cab8849df00c7f8ac61f3f8246b" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="359,107,468,133"/>
+<area shape="rect" id="node15" href="$group___vatom.html#ga15b6aa3689898e3b88f2920dec4470a9" title="Get atom ID." alt="" coords="542,208,669,235"/>
+<area shape="rect" id="node27" href="$group___vacc.html#ga1df66922b78e3824beb4695c5a84ec45" title="Destroy the surface object." alt="" coords="358,157,469,184"/>
+<area shape="rect" id="node5" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="334,56,493,83"/>
+<area shape="rect" id="node7" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="359,5,467,32"/>
+<area shape="rect" id="node11" href="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4" title="Get atomic position." alt="" coords="544,157,667,184"/>
+<area shape="rect" id="node13" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="541,5,669,32"/>
+<area shape="rect" id="node17" href="$group___vacc.html#ga4a6d9195773fa7de0e8971ae9ef4c185" title="Allocate and construct the surface object; do not assign surface points to positions." alt="" coords="554,56,657,83"/>
+<area shape="rect" id="node21" href="$vacc_8c.html#a5c6356f19e11daf8d0dea84bd92cc226" title="Determines if a point is within the union of the spheres centered at the atomic centers with radii eq..." alt="" coords="554,107,657,133"/>
+<area shape="rect" id="node19" href="$group___vacc.html#gad253baa15c0da3af54e7aaf95a3cad14" title="Construct the surface object using previously allocated memory; do not assign surface points to posit..." alt="" coords="724,56,833,83"/>
+<area shape="rect" id="node23" href="$group___vclist.html#gac90480afcf0e082a4b7bf755cb15d360" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="718,107,839,133"/>
+<area shape="rect" id="node25" href="$group___vclist.html#gaee63e2dac121f3469b10f9f16b999402" title="Return cell corresponding to specified position or return VNULL." alt="" coords="729,157,828,184"/>
+</map>

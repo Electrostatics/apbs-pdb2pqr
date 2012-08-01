@@ -1,0 +1,19 @@
+digraph "bcCalc"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="bcCalc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vpbe_getzmem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga65394a771afdf72438400665484f713d",tooltip="Get z position of the membrane bottom."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vpbe_getLmem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#gaafd907bf54994c337dc3962b8c445e84",tooltip="Get length of the membrane (A)aauthor Michael Grabe."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpbe_getmembraneDiel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#gaa92d6d1c93aedbfa059fd52e0be214c5",tooltip="Get membrane dielectric constant."];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vpbe_getmemv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga513e4ba228cbce76d264c76efea1e624",tooltip="Get membrane potential (kT)"];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vpbe_getSolventDiel",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#gaa27f724cd82148fd89335c405c3d80b5",tooltip="Get solvent dielectric constant."];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vpbe_getXkappa",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga7695a6f94ede72e89779a64b2f7a2217",tooltip="Get Debye-Huckel parameter."];
+}

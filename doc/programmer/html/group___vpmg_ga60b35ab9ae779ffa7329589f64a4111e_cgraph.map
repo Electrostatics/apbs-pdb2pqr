@@ -1,0 +1,6 @@
+<map id="bcolcomp" name="bcolcomp">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga9d22f2b899f947ef541bb735f8f5de3d" title="This routine computes the required sizes of the real and integer work arrays for the multigrid code..." alt="" coords="142,5,202,32"/>
+<area shape="rect" id="node5" href="$group___vpmg.html#gab5bd1e304d44f0a7721da2181d809f61" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="131,56,213,83"/>
+<area shape="rect" id="node7" href="$group___vpmg.html#gac5fa6f2c37f8a78d0f213cf84abcf8d7" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="261,56,344,83"/>
+<area shape="rect" id="node9" href="$group___vpmg.html#gab2403b9193313b36ec9fa9603e6a8833" title="Build a column&#45;compressed matrix in Harwell&#45;Boeing format." alt="" coords="392,56,475,83"/>
+</map>

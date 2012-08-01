@@ -1,0 +1,33 @@
+<map id="fillcoCoef" name="fillcoCoef">
+<area shape="rect" id="node3" href="$vpmg_8h.html#a35949511a7f2779c8ac7e7c88bdca001" title="Fill operator coefficient arrays from pre&#45;calculated maps." alt="" coords="280,1141,379,1168"/>
+<area shape="rect" id="node9" href="$vpmg_8h.html#a62617829770eaed11c159947453e457c" title="Fill operator coefficient arrays from a molecular surface calculation." alt="" coords="129,1091,223,1117"/>
+<area shape="rect" id="node79" href="$vpmg_8h.html#a61365ff4cedaf084ea6d960d432a3d03" title="Fill operator coefficient arrays from a spline&#45;based surface calculation." alt="" coords="868,761,977,788"/>
+<area shape="rect" id="node89" href="$vpmg_8h.html#ab7b5543b591c9433e7190a2fe45b4ca2" title="Fill operator coefficient arrays from a 5th order polynomial based surface calculation." alt="" coords="865,812,981,839"/>
+<area shape="rect" id="node99" href="$vpmg_8h.html#abe8b2056b56093552215f2e97c8f5c1b" title="Fill operator coefficient arrays from a 7th order polynomial based surface calculation." alt="" coords="865,913,981,940"/>
+<area shape="rect" id="node5" href="$group___vpbe.html#gabca9ea80c0a56d3848c54b37d0418f20" title="Get bulk ionic strength." alt="" coords="1030,837,1205,864"/>
+<area shape="rect" id="node7" href="$group___vgrid.html#gae96a803dbd3016673affbc3d10310150" title="Get potential value (from mesh or approximation) at a point." alt="" coords="478,1167,567,1193"/>
+<area shape="rect" id="node12" href="$vpmg_8h.html#a34484f0f2f254b954abf20c5a98ab9d4" title="Fill differential operator coefficient arrays from a molecular surface calculation." alt="" coords="272,1015,387,1041"/>
+<area shape="rect" id="node69" href="$vpmg_8h.html#a9217fdfc8737424d5e5ccc1193f9c3b0" title="Fill ion (nonlinear) operator coefficient array from a molecular surface calculation." alt="" coords="867,584,979,611"/>
+<area shape="rect" id="node14" href="$vpmg_8h.html#adf9fff114eed3d5d94f3adbbf9527483" title="Fill differential operator coefficient arrays from a molecular surface calculation without smoothing..." alt="" coords="435,420,610,447"/>
+<area shape="rect" id="node66" href="$vpmg_8h.html#aafab27ad33274047911bd2ec092eb265" title="Fill differential operator coefficient arrays from a molecular surface calculation with smoothing..." alt="" coords="443,1015,602,1041"/>
+<area shape="rect" id="node16" href="$group___vpbe.html#ga87631b31eefd5639e45c43f972344f29" title="Get solvent molecule radius." alt="" coords="659,243,815,269"/>
+<area shape="rect" id="node18" href="$group___vpbe.html#gaa27f724cd82148fd89335c405c3d80b5" title="Get solvent dielectric constant." alt="" coords="1048,1141,1187,1168"/>
+<area shape="rect" id="node20" href="$group___vpbe.html#ga54d318d98803a19fa5ea8b13fb73c7b0" title="Get solute dielectric constant." alt="" coords="1051,989,1184,1016"/>
+<area shape="rect" id="node22" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="1038,584,1197,611"/>
+<area shape="rect" id="node24" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="1063,635,1171,661"/>
+<area shape="rect" id="node26" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="1253,685,1381,712"/>
+<area shape="rect" id="node28" href="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4" title="Get atomic position." alt="" coords="1256,533,1379,560"/>
+<area shape="rect" id="node30" href="$vpmg_8h.html#aac867a97b6a1b573c285c846237837a5" title="Mark the grid points inside a sphere with a particular value. This marks by resetting the the grid po..." alt="" coords="1071,432,1163,459"/>
+<area shape="rect" id="node32" href="$group___vacc.html#gad2041f50041470d01e00a17f18b5b6c2" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area..." alt="" coords="879,293,967,320"/>
+<area shape="rect" id="node54" href="$group___vacc.html#ga9913f912bca5c71ba11ef9aefe7c390c" title="Return the atomic solvent accessible surface area (SASA)" alt="" coords="679,141,796,168"/>
+<area shape="rect" id="node60" href="$group___vacc.html#gaa1b76ea181d5f3a3ddb2b890e470cb3f" title="Get the set of points for this atom&#39;s solvent&#45;accessible surface." alt="" coords="666,192,809,219"/>
+<area shape="rect" id="node36" href="$group___vacc.html#ga8c962cab8849df00c7f8ac61f3f8246b" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="1063,167,1172,193"/>
+<area shape="rect" id="node52" href="$group___vacc.html#ga1df66922b78e3824beb4695c5a84ec45" title="Destroy the surface object." alt="" coords="1062,243,1173,269"/>
+<area shape="rect" id="node40" href="$group___vatom.html#ga15b6aa3689898e3b88f2920dec4470a9" title="Get atom ID." alt="" coords="1254,40,1381,67"/>
+<area shape="rect" id="node42" href="$group___vacc.html#ga4a6d9195773fa7de0e8971ae9ef4c185" title="Allocate and construct the surface object; do not assign surface points to positions." alt="" coords="1266,141,1369,168"/>
+<area shape="rect" id="node46" href="$vacc_8c.html#a5c6356f19e11daf8d0dea84bd92cc226" title="Determines if a point is within the union of the spheres centered at the atomic centers with radii eq..." alt="" coords="1266,192,1369,219"/>
+<area shape="rect" id="node44" href="$group___vacc.html#gad253baa15c0da3af54e7aaf95a3cad14" title="Construct the surface object using previously allocated memory; do not assign surface points to posit..." alt="" coords="1436,141,1545,168"/>
+<area shape="rect" id="node48" href="$group___vclist.html#gac90480afcf0e082a4b7bf755cb15d360" title="Get the max probe radius value (in A) the cell list was constructed with." alt="" coords="1430,243,1551,269"/>
+<area shape="rect" id="node50" href="$group___vclist.html#gaee63e2dac121f3469b10f9f16b999402" title="Return cell corresponding to specified position or return VNULL." alt="" coords="1441,192,1540,219"/>
+<area shape="rect" id="node71" href="$group___vpbe.html#gabf77d3500a5e3b3c8673eab703bb53e0" title="Get maximum radius of ion species." alt="" coords="1040,787,1195,813"/>
+</map>

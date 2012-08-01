@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['id',['id',['../structs_vatom.html#a7441ef0865bcb3db9b8064dd7375c1ea',1,'sVatom']]],
+  ['iinfo',['iinfo',['../structs_vpmgp.html#ac3465c920e73bb3096d213e8a19740ee',1,'sVpmgp']]],
+  ['initflag',['initFlag',['../structs_vcsm.html#a1fa18df106a71df86f7ce9780b65e88b',1,'sVcsm']]],
+  ['initgreen',['initGreen',['../structs_vfetk___local_var.html#a9fbc02bbb04a5843e53d7d989f554df9',1,'sVfetk_LocalVar']]],
+  ['ionc',['ionc',['../structs_p_b_eparm.html#af611cc40b302f977a0fcb30622bb080b',1,'sPBEparm']]],
+  ['ionconc',['ionConc',['../structs_vfetk___local_var.html#ae33e45044c553dd172e46c302ffeb0c8',1,'sVfetk_LocalVar::ionConc()'],['../structs_vpbe.html#ae33e45044c553dd172e46c302ffeb0c8',1,'sVpbe::ionConc()']]],
+  ['ionq',['ionQ',['../structs_vfetk___local_var.html#afaf48998eac66e6e67c15ea20e41f22f',1,'sVfetk_LocalVar::ionQ()'],['../structs_vpbe.html#afaf48998eac66e6e67c15ea20e41f22f',1,'sVpbe::ionQ()'],['../structs_p_b_eparm.html#afe9257c6322b57aec30692997b8321fc',1,'sPBEparm::ionq()']]],
+  ['ionr',['ionr',['../structs_p_b_eparm.html#acb2d9f9e10124ba076c9b847dd43dfd5',1,'sPBEparm']]],
+  ['ionradii',['ionRadii',['../structs_vfetk___local_var.html#a4aaa2bda7467e7b99506ca4709c36ff2',1,'sVfetk_LocalVar::ionRadii()'],['../structs_vpbe.html#a4aaa2bda7467e7b99506ca4709c36ff2',1,'sVpbe::ionRadii()']]],
+  ['ionstr',['ionstr',['../structs_vfetk___local_var.html#ab79b589fd6e96561143e67a00820bacd',1,'sVfetk_LocalVar']]],
+  ['iparm',['iparm',['../structs_vpmg.html#a40be00c9f8e1a7974391a6e6bf3461b0',1,'sVpmg']]],
+  ['ipcon',['ipcon',['../structs_vpmgp.html#aa6be27a1536423deddc3c89f891ac32f',1,'sVpmgp']]],
+  ['iperf',['iperf',['../structs_vpmgp.html#a0452f1983970e26d358a30f598f2b2b2',1,'sVpmgp']]],
+  ['ipkey',['ipkey',['../structs_vpbe.html#a3f1bcd3a128e97bf445ce23fa55305e5',1,'sVpbe::ipkey()'],['../structs_vpmgp.html#a3f1bcd3a128e97bf445ce23fa55305e5',1,'sVpmgp::ipkey()']]],
+  ['irite',['irite',['../structs_vpmgp.html#a698d522da0b3f6f582f83c079dc2d65d',1,'sVpmgp']]],
+  ['ispara',['ispara',['../structs_n_osh.html#a834a31cb12bd406bb9f715535a93ae9e',1,'sNOsh']]],
+  ['istop',['istop',['../structs_vpmgp.html#abb1062d08fbab63f575813d12c33b327',1,'sVpmgp']]],
+  ['itmax',['itmax',['../structs_vpmgp.html#ac8da2a7f67eddd46d6b08817471e3063',1,'sVpmgp']]],
+  ['iwork',['iwork',['../structs_vpmg.html#ac0908d30703d6255e301caef5a20c7c8',1,'sVpmg']]]
+];

@@ -1,0 +1,13 @@
+digraph "Vfnewton"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vfnewton",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vnewdriv2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga28bb35e37a738d808269f4b8b63f4491",tooltip="Solves using Newton&#39;s Method."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vnewdriv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga579debc5cc00c2e8e9901fa65e165a12",tooltip="Driver for the Newton Solver."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_solve",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082",tooltip="Solve the PBE using PMG."];
+}

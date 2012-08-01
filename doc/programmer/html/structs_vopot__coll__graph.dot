@@ -1,0 +1,28 @@
+digraph "sVopot"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  Node1 [label="sVopot",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" mgrid" ,fontname="FreeSans"];
+  Node2 [label="sVmgrid",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vmgrid.html",tooltip="Multiresoltion oracle for Cartesian mesh data."];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" grids" ,fontname="FreeSans"];
+  Node3 [label="sVgrid",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vgrid.html",tooltip="Electrostatic potential oracle for Cartesian mesh data."];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" pbe" ,fontname="FreeSans"];
+  Node4 [label="sVpbe",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vpbe.html",tooltip="Contains public data members for Vpbe class/module."];
+  Node5 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" acc" ,fontname="FreeSans"];
+  Node5 [label="sVacc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vacc.html",tooltip="Oracle for solvent- and ion-accessibility around a biomolecule."];
+  Node6 -> Node5 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" alist" ,fontname="FreeSans"];
+  Node6 [label="sValist",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_valist.html",tooltip="Container class for list of atom objects."];
+  Node7 -> Node6 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" atoms" ,fontname="FreeSans"];
+  Node7 [label="sVatom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vatom.html",tooltip="Contains public data members for Vatom class/module."];
+  Node8 -> Node5 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" clist" ,fontname="FreeSans"];
+  Node8 [label="sVclist",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vclist.html",tooltip="Atom cell list."];
+  Node6 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" alist" ,fontname="FreeSans"];
+  Node9 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cells" ,fontname="FreeSans"];
+  Node9 [label="sVclistCell",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vclist_cell.html",tooltip="Atom cell list cell."];
+  Node7 -> Node9 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" atoms" ,fontname="FreeSans"];
+  Node10 -> Node5 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" refSphere\nsurf" ,fontname="FreeSans"];
+  Node10 [label="sVaccSurf",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vacc_surf.html",tooltip="Surface object list of per-atom surface points."];
+  Node6 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" alist" ,fontname="FreeSans"];
+  Node8 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" clist" ,fontname="FreeSans"];
+}

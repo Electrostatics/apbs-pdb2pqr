@@ -1,0 +1,22 @@
+digraph G
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir=LR;
+  Node1 [label="VbuildP_op7",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="VbuildP",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga7de05fbf33504a49c87628ef9a58b26f",tooltip="Builds prolongation matrix."];
+  Node2 -> Node3 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vbuildops",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mgsubd_8c.html#ab676e77a0ea7fd89e6e93fca248831ae",tooltip="Build operators, boundary arrays, modify affine vectors ido==0: do only fine level ido==1: do only co..."];
+  Node3 -> Node4 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vmgdriv2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$mgdrvd_8c.html#ad88069b85b98b96bcbfbf4bfab67c661",tooltip="Solves the pde using the multi-grid method."];
+  Node4 -> Node5 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vmgdriv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#gae0bd7674be993f09052615397fb11ef7",tooltip="Multilevel solver driver."];
+  Node5 -> Node6 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vpmg_solve",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga86a44c6ef4ada350900ef88e87428082",tooltip="Solve the PBE using PMG."];
+  Node3 -> Node7 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vnewdriv2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$newdrvd_8c.html#a8b2877638552af80324173636bf0506a",tooltip="Solves using Newton&#39;s Method."];
+  Node7 -> Node8 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vnewdriv",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___p_m_g_c.html#ga579debc5cc00c2e8e9901fa65e165a12",tooltip="Driver for the Newton Solver."];
+  Node8 -> Node6 [dir=back,color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+}

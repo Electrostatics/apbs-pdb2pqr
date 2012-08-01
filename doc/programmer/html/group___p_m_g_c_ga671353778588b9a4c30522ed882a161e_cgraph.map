@@ -1,0 +1,15 @@
+<map id="Vmvfas" name="Vmvfas">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#gad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="127,5,195,32"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#gacb2fd32fc0aa12d56b7620ae0a7712e1" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="123,56,199,83"/>
+<area shape="rect" id="node7" href="$group___p_m_g_c.html#gae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="128,107,195,133"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="128,157,195,184"/>
+<area shape="rect" id="node11" href="$group___p_m_g_c.html#gafbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="122,208,201,235"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="134,259,189,285"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga423f66e215b77f2d9e4e0569cf36b9c8" title="call the appropriate non&#45;linear smoothing routine." alt="" coords="122,309,201,336"/>
+<area shape="rect" id="node17" href="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="130,360,193,387"/>
+<area shape="rect" id="node19" href="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="130,411,193,437"/>
+<area shape="rect" id="node21" href="$group___p_m_g_c.html#gaede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="130,461,193,488"/>
+<area shape="rect" id="node23" href="$group___p_m_g_c.html#gafa446fbf1bb85646b186469db9768ab8" title="Simple injection of a fine grid function into coarse grid." alt="" coords="129,512,194,539"/>
+<area shape="rect" id="node27" href="$group___p_m_g_c.html#ga9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="117,563,205,589"/>
+<area shape="rect" id="node25" href="$group___p_m_g_c.html#gaa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="254,512,362,539"/>
+</map>

@@ -1,0 +1,8 @@
+<map id="Valist_readXML" name="Valist_readXML">
+<area shape="rect" id="node3" href="$group___vstring.html#ga8dd2348150c70288ebb00c8eb0b847e0" title="Case&#45;insensitive string comparison (BSD standard)" alt="" coords="166,5,301,32"/>
+<area shape="rect" id="node5" href="$group___vatom.html#ga50f3b3e42cf0362d07a48a6d4d5f05a1" title="Set the atomic position." alt="" coords="170,56,297,83"/>
+<area shape="rect" id="node7" href="$group___vatom.html#ga894b59d7bf6215c50f24e916dc1ea8e4" title="Set atomic charge." alt="" coords="171,107,295,133"/>
+<area shape="rect" id="node9" href="$group___vatom.html#ga19b8601dd2a35c6e4a474be96abbaba8" title="Set atomic radius." alt="" coords="173,157,294,184"/>
+<area shape="rect" id="node11" href="$group___vatom.html#gae539b20d76285199daa78f2ef5870e1c" title="Set atom ID." alt="" coords="171,208,296,235"/>
+<area shape="rect" id="node13" href="$group___valist.html#gad8d50e4a1d7fd79807faf340ecfcae8a" title="Load up Valist with various statistics." alt="" coords="169,259,298,285"/>
+</map>

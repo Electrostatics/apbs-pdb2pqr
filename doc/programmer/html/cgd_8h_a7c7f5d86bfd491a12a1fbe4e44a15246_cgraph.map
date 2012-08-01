@@ -1,0 +1,17 @@
+<map id="G" name="G">
+<area shape="rect" id="node4" href="$matvecd_8h.html#a3550f412c9793915998671c2c0b8df4f" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="110,56,181,83"/>
+<area shape="rect" id="node14" href="$matvecd_8h.html#aaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="111,107,180,133"/>
+<area shape="rect" id="node24" href="$mikpckd_8h.html#ac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="114,157,177,184"/>
+<area shape="rect" id="node26" href="$mikpckd_8h.html#a964d91008dba76f460e36b9a207fb2af" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="114,208,177,235"/>
+<area shape="rect" id="node28" href="$mikpckd_8h.html#a3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="118,259,173,285"/>
+<area shape="rect" id="node30" href="$mikpckd_8h.html#ac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="112,309,179,336"/>
+<area shape="rect" id="node32" href="$mikpckd_8h.html#a678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="116,360,175,387"/>
+<area shape="rect" id="node6" href="$matvecd_8h.html#a20925845b383dba21bf7fb7dafb340b0" title="Vmatvec27" alt="" coords="229,5,315,32"/>
+<area shape="rect" id="node10" href="$matvecd_8h.html#ae6b8553ded343f1ee7d0d4011a560141" title="Vmatvec7" alt="" coords="233,56,311,83"/>
+<area shape="rect" id="node8" href="$matvecd_8h.html#afdd47ebf5a388815a71a5a7331ca886e" title="Vmatvec27_1s" alt="" coords="363,5,469,32"/>
+<area shape="rect" id="node12" href="$matvecd_8h.html#a7cdea00c982b9b4ef1e9de29f92045fb" title="Vmatvec7_1s" alt="" coords="367,56,465,83"/>
+<area shape="rect" id="node16" href="$matvecd_8h.html#a7f825c93285a5e22ac0b505ef1834da1" title="Vmresid27" alt="" coords="231,107,313,133"/>
+<area shape="rect" id="node20" href="$matvecd_8h.html#acdf5e00def4da6b7fcda91bd3510cdb9" title="Vmresid7" alt="" coords="234,157,310,184"/>
+<area shape="rect" id="node18" href="$matvecd_8h.html#a0c381239d197298b29b8310540c6dd48" title="Vmresid27_1s" alt="" coords="365,107,467,133"/>
+<area shape="rect" id="node22" href="$matvecd_8h.html#af2083c2638126d9bf7c729cb9686758c" title="Vmresid7_1s" alt="" coords="368,157,464,184"/>
+</map>

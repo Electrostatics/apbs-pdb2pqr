@@ -1,0 +1,13 @@
+digraph "Vacc_totalAtomdSASA"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vacc_totalAtomdSASA",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vatom_getPosition",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c",tooltip="Get atomic position."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vatom_getRadius",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4",tooltip="Get atomic position."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vatom_getAtomID",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vatom.html#ga15b6aa3689898e3b88f2920dec4470a9",tooltip="Get atom ID."];
+}

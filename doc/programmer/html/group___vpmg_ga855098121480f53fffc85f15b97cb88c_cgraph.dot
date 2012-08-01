@@ -1,0 +1,9 @@
+digraph "Vpmg_dielEnergy"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vpmg_dielEnergy",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vpbe_getZmagic",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e",tooltip="Get charge scaling factor."];
+}

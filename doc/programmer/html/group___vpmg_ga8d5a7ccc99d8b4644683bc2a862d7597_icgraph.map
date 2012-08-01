@@ -1,0 +1,5 @@
+<map id="Vpmg_dtor2" name="Vpmg_dtor2">
+<area shape="rect" id="node3" href="$group___vpmg.html#ga1c87698f1d365aa7677f6b3ff64c9e8d" title="Object destructor." alt="" coords="147,5,232,32"/>
+<area shape="rect" id="node5" href="$group___vpmg.html#ga44b9a21b48776d5d308a2de3c658f6a7" title="FORTRAN stub constructor for the Vpmg class (uses previously&#45;allocated memory)" alt="" coords="280,5,371,32"/>
+<area shape="rect" id="node7" href="$group___vpmg.html#ga7e280e4beb3cd7dc7ddcf7dda904f481" title="Constructor for the Vpmg class (allocates new memory)" alt="" coords="419,5,503,32"/>
+</map>

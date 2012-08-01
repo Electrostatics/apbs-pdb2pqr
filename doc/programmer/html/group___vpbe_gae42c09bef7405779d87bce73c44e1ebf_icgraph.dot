@@ -1,0 +1,25 @@
+digraph "Vpbe_getIons"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vpbe_getIons",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vfetk_ctor2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#gabc68994e0bb0bdc828252a8c90e422a0",tooltip="FORTRAN stub constructor for Vfetk object."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node3 [label="Vfetk_ctor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#ga18cb8270f03b5893108de2ff714386e0",tooltip="Constructor for Vfetk object."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node4 [label="Vpmg_ctor2",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga44b9a21b48776d5d308a2de3c658f6a7",tooltip="FORTRAN stub constructor for the Vpmg class (uses previously-allocated memory)"];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node5 [label="Vpmg_ctor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga7e280e4beb3cd7dc7ddcf7dda904f481",tooltip="Constructor for the Vpmg class (allocates new memory)"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node6 [label="Vpmg_qmEnergySMPBE",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vpmg_8c.html#aff52adddfe50ff4e6282f3bcf05f3dd5",tooltip="Vpmg_qmEnergy for SMPBE."];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node7 [label="Vpmg_qmEnergy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gaa742b2c423bcb09628a84833a5f1e7ae",tooltip="Get the &quot;mobile charge&quot; contribution to the electrostatic energy."];
+  Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node8 [label="Vpmg_energy",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gad8cdc819e2c366c7b2da0afd20d9735b",tooltip="Get the total electrostatic energy."];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node9 [label="Vpmg_ibForce",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67",tooltip="Calculate the osmotic pressure on the specified atom in units of k_B T/AA."];
+  Node9 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node10 [label="Vpmg_force",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c",tooltip="Calculate the total force on the specified atom in units of k_B T/AA."];
+}

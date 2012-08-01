@@ -1,0 +1,16 @@
+digraph "C:/Users/bake113/Documents/Projects/APBS & PDB2PQR/Source code/APBS/trunk/src/fem/" {
+  compound=true
+  node [ fontsize="10", fontname="FreeSans"];
+  edge [ labelfontsize="10", labelfontname="FreeSans"];
+  subgraph clusterdir_e5f440db28aa01947b9a534c86166b99 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="src" fontname="FreeSans", fontsize="10", URL="dir_e5f440db28aa01947b9a534c86166b99.html"]
+  subgraph clusterdir_04db92f80e702b72a7c30ceee6790eb4 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_04db92f80e702b72a7c30ceee6790eb4.html"];
+    dir_04db92f80e702b72a7c30ceee6790eb4 [shape=plaintext label="fem"];
+    dir_215bf4321b1915ce68e1b6a99b213b00 [shape=box label="apbs" color="black" fillcolor="white" style="filled" URL="dir_215bf4321b1915ce68e1b6a99b213b00.html"];
+  }
+  }
+  dir_5a4b9a4ce670c27bbe9b881c30da1d5e [shape=box label="generic" fillcolor="white" style="filled" color="red" URL="dir_5a4b9a4ce670c27bbe9b881c30da1d5e.html"];
+  dir_04db92f80e702b72a7c30ceee6790eb4->dir_215bf4321b1915ce68e1b6a99b213b00 [headlabel="3", labeldistance=1.5 headhref="dir_000013_000014.html"];
+  dir_215bf4321b1915ce68e1b6a99b213b00->dir_5a4b9a4ce670c27bbe9b881c30da1d5e [headlabel="10", labeldistance=1.5 headhref="dir_000014_000015.html"];
+}

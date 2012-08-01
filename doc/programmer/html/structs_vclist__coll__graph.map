@@ -1,0 +1,5 @@
+<map id="sVclist" name="sVclist">
+<area shape="rect" id="node2" href="$structs_valist.html" title="Container class for list of atom objects." alt="" coords="5,96,64,123"/>
+<area shape="rect" id="node4" href="$structs_vatom.html" title="Contains public data members for Vatom class/module." alt="" coords="50,5,115,32"/>
+<area shape="rect" id="node6" href="$structs_vclist_cell.html" title="Atom cell list cell." alt="" coords="89,96,167,123"/>
+</map>

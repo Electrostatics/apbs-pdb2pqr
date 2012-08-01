@@ -1,0 +1,9 @@
+digraph "Vatom_getPartID"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="Vatom_getPartID",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="FreeSans"];
+  Node2 [label="Vfetk_getAtomColor",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$group___vfetk.html#ga323592347468a67f7d6191542c164d76",tooltip="Get the partition information for a particular atom."];
+}

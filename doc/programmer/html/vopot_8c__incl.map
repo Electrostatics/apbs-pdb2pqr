@@ -1,0 +1,16 @@
+<map id="src/mg/vopot.c" name="src/mg/vopot.c">
+<area shape="rect" id="node5" href="$vopot_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="697,80,793,107"/>
+<area shape="rect" id="node69" href="$pbeparm_8h.html" title="Contains declarations for class PBEparm." alt="" coords="487,229,603,256"/>
+<area shape="rect" id="node9" href="$vhal_8h.html" title="Contains generic macro definitions for APBS." alt="" coords="240,603,328,629"/>
+<area shape="rect" id="node13" href="$vatom_8h.html" title="Contains declarations for class Vatom." alt="" coords="923,453,1023,480"/>
+<area shape="rect" id="node17" href="$valist_8h.html" title="Contains declarations for class Valist." alt="" coords="774,379,868,405"/>
+<area shape="rect" id="node26" href="$vunit_8h.html" title="Contains a collection of useful constants and conversion factors." alt="" coords="1117,528,1208,555"/>
+<area shape="rect" id="node32" href="$vmgrid_8h.html" title="Multiresolution oracle for Cartesian mesh data." alt="" coords="429,379,533,405"/>
+<area shape="rect" id="node42" href="$vpbe_8h.html" title="Contains declarations for class Vpbe." alt="" coords="935,155,1027,181"/>
+<area shape="rect" id="node22" href="$vparam_8h.html" title="Contains declarations for class Vparam." alt="" coords="689,453,796,480"/>
+<area shape="rect" id="node28" href="$vstring_8h.html" title="Contains declarations for class Vstring." alt="" coords="499,528,601,555"/>
+<area shape="rect" id="node36" href="$vgrid_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="416,453,509,480"/>
+<area shape="rect" id="node48" href="$vacc_8h.html" title="Contains declarations for class Vacc." alt="" coords="853,229,944,256"/>
+<area shape="rect" id="node53" href="$vclist_8h.html" title="Contains declarations for class Vclist." alt="" coords="935,304,1028,331"/>
+<area shape="rect" id="node62" href="$apolparm_8h_source.html" title="apbs/apolparm.h" alt="" coords="631,379,749,405"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="Vacc_splineAccGradAtomNorm4" name="Vacc_splineAccGradAtomNorm4">
+<area shape="rect" id="node3" href="$vpmg_8c.html#a1271687db8aa07b73c4ce3316943b72c" title="Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7." alt="" coords="259,31,389,57"/>
+<area shape="rect" id="node5" href="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67" title="Calculate the osmotic pressure on the specified atom in units of k_B T/AA." alt="" coords="440,5,544,32"/>
+<area shape="rect" id="node9" href="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b" title="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA." alt="" coords="438,56,546,83"/>
+<area shape="rect" id="node7" href="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c" title="Calculate the total force on the specified atom in units of k_B T/AA." alt="" coords="595,31,685,57"/>
+</map>

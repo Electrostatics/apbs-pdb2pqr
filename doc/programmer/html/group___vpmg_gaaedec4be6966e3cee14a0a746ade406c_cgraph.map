@@ -1,0 +1,31 @@
+<map id="Vpmg_force" name="Vpmg_force">
+<area shape="rect" id="node3" href="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b" title="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA." alt="" coords="145,259,253,285"/>
+<area shape="rect" id="node35" href="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67" title="Calculate the osmotic pressure on the specified atom in units of k_B T/AA." alt="" coords="147,588,251,615"/>
+<area shape="rect" id="node52" href="$group___vpmg.html#gaf3bc9840c1d9ab92eddbfd5f798ae0b6" title="Calculate the &quot;charge&#45;field&quot; force on the specified atom in units of k_B T/AA." alt="" coords="146,867,251,893"/>
+<area shape="rect" id="node5" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="574,816,682,843"/>
+<area shape="rect" id="node7" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="779,487,907,513"/>
+<area shape="rect" id="node9" href="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4" title="Get atomic position." alt="" coords="781,309,904,336"/>
+<area shape="rect" id="node11" href="$group___vpbe.html#ga87631b31eefd5639e45c43f972344f29" title="Get solvent molecule radius." alt="" coords="311,56,467,83"/>
+<area shape="rect" id="node13" href="$group___vpbe.html#ga54d318d98803a19fa5ea8b13fb73c7b0" title="Get solute dielectric constant." alt="" coords="323,107,456,133"/>
+<area shape="rect" id="node15" href="$group___vpbe.html#gaa27f724cd82148fd89335c405c3d80b5" title="Get solvent dielectric constant." alt="" coords="320,208,459,235"/>
+<area shape="rect" id="node17" href="$group___vpbe.html#gae9aa99eb531a803268fc963796c3bba2" title="Get temperature." alt="" coords="314,5,465,32"/>
+<area shape="rect" id="node19" href="$group___vpbe.html#ga7fb9c15c98345dccc07853fec763de4e" title="Get charge scaling factor." alt="" coords="331,461,448,488"/>
+<area shape="rect" id="node21" href="$vpmg_8h.html#a1271687db8aa07b73c4ce3316943b72c" title="Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7." alt="" coords="324,309,455,336"/>
+<area shape="rect" id="node23" href="$group___vacc.html#ga02bc1d0af5c35f2f5acaecf4f6b46449" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by the acc..." alt="" coords="529,309,727,336"/>
+<area shape="rect" id="node27" href="$group___vacc.html#ga406f82703bc43217e0e39412e2e780c4" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by a 3rd o..." alt="" coords="526,360,730,387"/>
+<area shape="rect" id="node31" href="$group___vacc.html#gad3f1efb0d9af322e255746a09ac674d2" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by a 4th o..." alt="" coords="526,411,730,437"/>
+<area shape="rect" id="node40" href="$group___vpbe.html#gabf77d3500a5e3b3c8673eab703bb53e0" title="Get maximum radius of ion species." alt="" coords="312,613,467,640"/>
+<area shape="rect" id="node42" href="$group___vpbe.html#ga56e38face81d2d29659541b5e3f5e442" title="Get modified squared Debye&#45;Huckel parameter." alt="" coords="327,664,451,691"/>
+<area shape="rect" id="node45" href="$group___vpbe.html#gabca9ea80c0a56d3848c54b37d0418f20" title="Get bulk ionic strength." alt="" coords="302,715,477,741"/>
+<area shape="rect" id="node47" href="$group___vpbe.html#gae42c09bef7405779d87bce73c44e1ebf" title="Get information about the counterion species present." alt="" coords="339,765,439,792"/>
+<area shape="rect" id="node50" href="$group___vcap.html#ga3af96d10891f3150377104c65689c6ec" title="Provide a capped exp() function." alt="" coords="351,563,428,589"/>
+<area shape="rect" id="node54" href="$vpmg_8h.html#a68e3819e4049a4b0c194289a2afb32ea" title="Charge&#45;field force due to a linear spline charge function." alt="" coords="336,917,443,944"/>
+<area shape="rect" id="node60" href="$vpmg_8h.html#ac55adeb810c3e971ebe1bf9b3a137246" title="Charge&#45;field force due to a cubic spline charge function." alt="" coords="336,968,443,995"/>
+<area shape="rect" id="node69" href="$vpmg_8h.html#a682bb08f7ef2b312b9da1c2ba6e0a25b" title="Charge&#45;field force due to a quintic spline charge function." alt="" coords="336,816,443,843"/>
+<area shape="rect" id="node58" href="$group___vatom.html#gad310786c8f4b295fea34c76b9c308ac5" title="Get atomic charge." alt="" coords="565,867,691,893"/>
+<area shape="rect" id="node65" href="$vpmg_8h.html#a50d8ef438d4a7a76d869fb256b24d372" title="Evaluate a cubic B&#45;spline." alt="" coords="593,1069,663,1096"/>
+<area shape="rect" id="node67" href="$vpmg_8h.html#a8a4a959a2448c20bfc3660f04077892e" title="Evaluate a cubic B&#45;spline derivative." alt="" coords="590,1019,666,1045"/>
+<area shape="rect" id="node74" href="$vpmg_8h.html#afcf864c3b65f0d536a2985d931dc4692" title="Return 2.5 plus difference of i &#45; f." alt="" coords="596,664,660,691"/>
+<area shape="rect" id="node76" href="$vpmg_8h.html#ac953c7091df8e4a1df53463baf8fe7ee" title="Evaluate a 5th Order B&#45;Spline (4th order polynomial)" alt="" coords="593,715,663,741"/>
+<area shape="rect" id="node78" href="$vpmg_8h.html#a91d1557ecff0ea7809aface06c0c179e" title="Evaluate a 5th Order B&#45;Spline derivative (4th order polynomial)" alt="" coords="590,765,666,792"/>
+</map>

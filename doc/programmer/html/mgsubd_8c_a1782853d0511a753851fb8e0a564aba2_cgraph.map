@@ -1,0 +1,14 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga3550f412c9793915998671c2c0b8df4f" title="Matrix&#45;vector multiplication routines." alt="" coords="133,56,203,83"/>
+<area shape="rect" id="node13" href="$mgsubd_8c.html#a991b3b9403010f02c64fcb2fedf7dd0a" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="133,107,203,133"/>
+<area shape="rect" id="node17" href="$matvecd_8c.html#afbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="129,157,207,184"/>
+<area shape="rect" id="node5" href="$matvecd_8c.html#aa1dd27fe99292c3b0e64560795980579" title="Vmatvec27" alt="" coords="260,5,345,32"/>
+<area shape="rect" id="node9" href="$matvecd_8c.html#a03c4d05974cf672d82e2bc37b3b55444" title="Vmatvec7" alt="" coords="263,56,342,83"/>
+<area shape="rect" id="node7" href="$matvecd_8c.html#aaaa17b9361384eeed8488039a492c9e2" title="Vmatvec27_1s" alt="" coords="405,5,510,32"/>
+<area shape="rect" id="node11" href="$matvecd_8c.html#a7cdea00c982b9b4ef1e9de29f92045fb" title="Vmatvec7_1s" alt="" coords="408,56,507,83"/>
+<area shape="rect" id="node15" href="$mgsubd_8c.html#ad3ea2f62646e015feb883b784f747b44" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="273,107,332,133"/>
+<area shape="rect" id="node19" href="$matvecd_8c.html#a55f83d51e88bd051d28613a1f06310be" title="Vnmatvec27" alt="" coords="257,157,349,184"/>
+<area shape="rect" id="node23" href="$matvecd_8c.html#a06046e8e64dec9012844b74c4243a1aa" title="Vnmatvec7" alt="" coords="260,208,345,235"/>
+<area shape="rect" id="node21" href="$matvecd_8c.html#a41afe26c1505f6b69c1cb0763968c970" title="Vnmatvecd27_1s" alt="" coords="398,157,517,184"/>
+<area shape="rect" id="node25" href="$matvecd_8c.html#ad5a0f4c2ae6950c0bf9d13cfa25ec005" title="Vnmatvecd7_1s" alt="" coords="401,208,513,235"/>
+</map>

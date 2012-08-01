@@ -1,0 +1,44 @@
+<map id="Vmgdriv2" name="Vmgdriv2">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga81ac80afc08fb27607efdc5c9e97ceaa" title="Build the nexted operator framework in the array iz." alt="" coords="143,157,215,184"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#gab676e77a0ea7fd89e6e93fca248831ae" title="Build operators, boundary arrays, modify affine vectors ido==0: do only fine level ido==1: do only co..." alt="" coords="140,208,217,235"/>
+<area shape="rect" id="node27" href="$group___p_m_g_c.html#gaa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="579,841,687,868"/>
+<area shape="rect" id="node35" href="$group___p_m_g_c.html#ga12b75e114e465814978a7bf3189cfe54" title="Power methods for eigenvalue estimation." alt="" coords="288,588,355,615"/>
+<area shape="rect" id="node39" href="$group___p_m_g_c.html#gad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="439,841,507,868"/>
+<area shape="rect" id="node54" href="$group___p_m_g_c.html#ga216315908e761d09584f0f4a6613132c" title="Standard inverse power method for minimum eigenvalue estimation." alt="" coords="144,689,213,716"/>
+<area shape="rect" id="node63" href="$group___p_m_g_c.html#gab7f955448bd40d97f3b1b3ac91b9f21c" title="MG helper functions." alt="" coords="292,1399,351,1425"/>
+<area shape="rect" id="node101" href="$group___p_m_g_c.html#ga671353778588b9a4c30522ed882a161e" title="Nonlinear multilevel method." alt="" coords="289,1804,353,1831"/>
+<area shape="rect" id="node118" href="$group___p_m_g_c.html#ga1be3411a48bb33478420cd2757f2ce10" title="Multigrid nonlinear solve iteration routine." alt="" coords="145,1804,213,1831"/>
+<area shape="rect" id="node122" href="$group___p_m_g_c.html#ga04aca6300210f7c190bda51d25fe2bd4" title="Initialize a grid function to have a certain boundary value,." alt="" coords="131,740,226,767"/>
+<area shape="rect" id="node7" href="$group___p_m_g_c.html#ga2bde193d19ed04b9be986456cdc57d17" title="Build the Laplacian." alt="" coords="289,81,354,108"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#ga4bf7ed81bbcfc630677a68ff3ef78570" title="Vprtmatd" alt="" coords="284,132,359,159"/>
+<area shape="rect" id="node11" href="$group___p_m_g_c.html#ga2fa36f52a017ede585d5f2ba4aeeafdc" title="Builds prolongation matrix." alt="" coords="289,183,353,209"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#gac3878a7358faf90a4e0e0067f0961a37" title="Form the Galerkin coarse grid system." alt="" coords="275,233,368,260"/>
+<area shape="rect" id="node25" href="$group___p_m_g_c.html#gafa446fbf1bb85646b186469db9768ab8" title="Simple injection of a fine grid function into coarse grid." alt="" coords="441,892,506,919"/>
+<area shape="rect" id="node29" href="$group___p_m_g_c.html#ga977a0e4b9b186676462933f4b531ec62" title="Banded matrix builder." alt="" coords="279,31,364,57"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga5616c0696f52963ddd4bacb3ff71e8b6" title="Build Galerkin matrix structures." alt="" coords="441,208,506,235"/>
+<area shape="rect" id="node23" href="$group___p_m_g_c.html#gaede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="442,1399,505,1425"/>
+<area shape="rect" id="node17" href="$group___p_m_g_c.html#ga97822bdb6ab237b4bc4a89fe7647e34f" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="594,183,673,209"/>
+<area shape="rect" id="node19" href="$group___p_m_g_c.html#ga74cbf02bfd4ffcf36ea4b344ee2ea077" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="594,233,673,260"/>
+<area shape="rect" id="node21" href="$group___p_m_g_c.html#ga78287000cb1a0517e4959c910566c828" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="590,132,677,159"/>
+<area shape="rect" id="node31" href="$group___p_m_g_c.html#ga01d0f3717c0789ed0dd32393fb43b633" title="Build the operator in banded form given the 7&#45;diagonal form." alt="" coords="420,56,527,83"/>
+<area shape="rect" id="node33" href="$group___p_m_g_c.html#gab16d52afd502c461d5d023c02c7d659f" title="Build the operator in banded form given the 27&#45;diagonal form." alt="" coords="417,5,530,32"/>
+<area shape="rect" id="node37" href="$group___p_m_g_c.html#ga0cc1b42e9c573d4c0b960afda283b0b1" title="Fill grid function with random values, including boundary values." alt="" coords="439,436,508,463"/>
+<area shape="rect" id="node41" href="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="739,1703,805,1729"/>
+<area shape="rect" id="node43" href="$group___p_m_g_c.html#ga678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="743,335,801,361"/>
+<area shape="rect" id="node45" href="$group___p_m_g_c.html#gacda83144fd9d06e3c62a1687933ba010" title="Matrix&#45;vector multiplication routines." alt="" coords="737,765,807,792"/>
+<area shape="rect" id="node47" href="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="745,1449,799,1476"/>
+<area shape="rect" id="node49" href="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="741,1044,803,1071"/>
+<area shape="rect" id="node51" href="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="741,1145,803,1172"/>
+<area shape="rect" id="node65" href="$group___p_m_g_c.html#gae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="440,1753,507,1780"/>
+<area shape="rect" id="node71" href="$group___p_m_g_c.html#ga7f469e5b5661e8c176889cde7bed8175" title="Multigrid smoothing functions." alt="" coords="437,1145,509,1172"/>
+<area shape="rect" id="node77" href="$group___p_m_g_c.html#gaaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="737,1297,807,1324"/>
+<area shape="rect" id="node85" href="$group___p_m_g_c.html#ga6243a4021fb62c2ca1008c747ff8dd7f" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="424,1449,523,1476"/>
+<area shape="rect" id="node87" href="$group___p_m_g_c.html#ga9183f58be97708e2945a1578d943b283" title="LINPACK interface." alt="" coords="443,1500,503,1527"/>
+<area shape="rect" id="node89" href="$group___p_m_g_c.html#gaf2989f16a64132f085943e0cafca0c5d" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="424,1551,523,1577"/>
+<area shape="rect" id="node96" href="$group___p_m_g_c.html#ga9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="429,2108,517,2135"/>
+<area shape="rect" id="node73" href="$group___p_m_g_c.html#gaafddbbf81f667f3e155e468d85a89807" title="Guass&#45;Seidel solver." alt="" coords="606,1196,661,1223"/>
+<area shape="rect" id="node75" href="$group___p_m_g_c.html#ga371225c13eaf2407b57de0dd4f831ed8" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="605,1145,661,1172"/>
+<area shape="rect" id="node104" href="$group___p_m_g_c.html#gacb2fd32fc0aa12d56b7620ae0a7712e1" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="435,1956,511,1983"/>
+<area shape="rect" id="node108" href="$group___p_m_g_c.html#gafbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="434,2007,513,2033"/>
+<area shape="rect" id="node111" href="$group___p_m_g_c.html#ga423f66e215b77f2d9e4e0569cf36b9c8" title="call the appropriate non&#45;linear smoothing routine." alt="" coords="434,2057,513,2084"/>
+</map>

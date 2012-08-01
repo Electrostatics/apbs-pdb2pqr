@@ -1,0 +1,10 @@
+<map id="Vacc_ivdwAcc" name="Vacc_ivdwAcc">
+<area shape="rect" id="node3" href="$group___vfetk.html#gab568aa48a9072ad4fe3007a181affda1" title="Fill an array with the specified data." alt="" coords="375,6,478,32"/>
+<area shape="rect" id="node5" href="$group___vacc.html#ga31a47b0e2a3e828ab38802dbebb07415" title="Report molecular accessibility." alt="" coords="183,43,281,70"/>
+<area shape="rect" id="node8" href="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240" title="Fill the specified array with accessibility values." alt="" coords="373,82,480,108"/>
+<area shape="rect" id="node10" href="$group___vacc.html#gaf5cc22ee39db6bc914312ab36d670996" title="Return the total solvent accessible volume (SAV)" alt="" coords="179,144,285,171"/>
+<area shape="rect" id="node14" href="$group___vacc.html#ga0b4c7d9ba7ddd36cf993c64c31334adb" title="Calculate the WCA energy for an atom." alt="" coords="158,195,306,222"/>
+<area shape="rect" id="node18" href="$group___vacc.html#gaf19385f0ec91cbc2534eded1cc25a992" title="Return the WCA integral force." alt="" coords="161,246,303,272"/>
+<area shape="rect" id="node12" href="$group___vacc.html#ga2f0ab2c1092a991c401dca0836a5a084" title="Total solvent accessible volume." alt="" coords="355,144,498,171"/>
+<area shape="rect" id="node16" href="$group___vacc.html#ga000a7ed4480d23fa560e45191e21c2f9" title="Return the WCA integral energy." alt="" coords="367,195,486,222"/>
+</map>

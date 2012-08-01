@@ -1,0 +1,38 @@
+<map id="Vatom_getRadius" name="Vatom_getRadius">
+<area shape="rect" id="node3" href="$vacc_8c.html#a43a99ef46d09254c73e3edf1ed1a3e3d" title="Vacc_storeParms" alt="" coords="221,5,342,32"/>
+<area shape="rect" id="node9" href="$group___vpbe.html#gacaf51947bfe10a206974dc3fd4c29e46" title="FORTRAN stub to construct Vpbe objct." alt="" coords="850,31,937,57"/>
+<area shape="rect" id="node11" href="$group___vacc.html#ga02bc1d0af5c35f2f5acaecf4f6b46449" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by the acc..." alt="" coords="183,360,380,387"/>
+<area shape="rect" id="node17" href="$group___vpmg.html#ga140aea8dc31832d40a7cfb638464ee67" title="Calculate the osmotic pressure on the specified atom in units of k_B T/AA." alt="" coords="633,183,737,209"/>
+<area shape="rect" id="node21" href="$group___vpmg.html#gae681cc5a764ed8b8f9f869c047af997b" title="Calculate the dielectric boundary forces on the specified atom in units of k_B T/AA." alt="" coords="631,233,739,260"/>
+<area shape="rect" id="node24" href="$group___vacc.html#ga172ea224ac81bd3dd952d16dc8654c52" title="Report gradient of spline&#45;based accessibility with respect to a particular atom (see Vpmg_splineAccAt..." alt="" coords="176,259,387,285"/>
+<area shape="rect" id="node26" href="$group___vacc.html#gafd1dc8f126eed1c8ffea8d81e859c7cd" title="Report spline&#45;based accessibility for a given atom." alt="" coords="212,411,351,437"/>
+<area shape="rect" id="node37" href="$group___vacc.html#ga8c962cab8849df00c7f8ac61f3f8246b" title="Set up an array of points corresponding to the SAS due to a particular atom." alt="" coords="227,512,336,539"/>
+<area shape="rect" id="node51" href="$vpmg_8c.html#adf9fff114eed3d5d94f3adbbf9527483" title="Fill differential operator coefficient arrays from a molecular surface calculation without smoothing..." alt="" coords="806,639,981,665"/>
+<area shape="rect" id="node67" href="$group___vacc.html#gad3f1efb0d9af322e255746a09ac674d2" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by a 4th o..." alt="" coords="179,208,383,235"/>
+<area shape="rect" id="node70" href="$group___vacc.html#ga406f82703bc43217e0e39412e2e780c4" title="Report gradient of spline&#45;based accessibility with respect to a particular atom normalized by a 3rd o..." alt="" coords="179,157,383,184"/>
+<area shape="rect" id="node73" href="$group___vacc.html#ga6778ad8dd91c1ed6f868a836f2050843" title="Testing purposes only." alt="" coords="206,563,357,589"/>
+<area shape="rect" id="node75" href="$group___vacc.html#ga2f0ab2c1092a991c401dca0836a5a084" title="Total solvent accessible volume." alt="" coords="210,613,353,640"/>
+<area shape="rect" id="node78" href="$vpmg_8c.html#a9217fdfc8737424d5e5ccc1193f9c3b0" title="Fill ion (nonlinear) operator coefficient array from a molecular surface calculation." alt="" coords="444,461,556,488"/>
+<area shape="rect" id="node82" href="$vpmg_8c.html#a61365ff4cedaf084ea6d960d432a3d03" title="Fill operator coefficient arrays from a spline&#45;based surface calculation." alt="" coords="1199,765,1308,792"/>
+<area shape="rect" id="node87" href="$vpmg_8c.html#abe8b2056b56093552215f2e97c8f5c1b" title="Fill operator coefficient arrays from a 7th order polynomial based surface calculation." alt="" coords="1195,816,1311,843"/>
+<area shape="rect" id="node90" href="$vpmg_8c.html#ab7b5543b591c9433e7190a2fe45b4ca2" title="Fill operator coefficient arrays from a 5th order polynomial based surface calculation." alt="" coords="1030,867,1146,893"/>
+<area shape="rect" id="node5" href="$group___vacc.html#ga04c21186f33179193e153b82d9c1daf8" title="FORTRAN stub to construct the accessibility object." alt="" coords="457,5,543,32"/>
+<area shape="rect" id="node7" href="$group___vacc.html#ga6d35703fb022ab73c33627667262f16f" title="Construct the accessibility object." alt="" coords="646,5,725,32"/>
+<area shape="rect" id="node13" href="$group___vacc.html#ga696c5e5e782ec49072e83478144eb10d" title="Report gradient of spline&#45;based accessibility." alt="" coords="617,309,753,336"/>
+<area shape="rect" id="node15" href="$vpmg_8c.html#a1271687db8aa07b73c4ce3316943b72c" title="Selects a spline based surface method from either VSM_SPLINE, VSM_SPLINE5 or VSM_SPLINE7." alt="" coords="435,208,565,235"/>
+<area shape="rect" id="node19" href="$group___vpmg.html#gaaedec4be6966e3cee14a0a746ade406c" title="Calculate the total force on the specified atom in units of k_B T/AA." alt="" coords="848,208,939,235"/>
+<area shape="rect" id="node28" href="$vacc_8c.html#a2a318b9e1df4d9a97ac47cf55498c4a8" title="Fast spline&#45;based surface computation subroutine." alt="" coords="463,411,537,437"/>
+<area shape="rect" id="node30" href="$group___vacc.html#ga6ba9bfeee26f30304543c0c15aeb34ef" title="Report spline&#45;based accessibility." alt="" coords="839,309,948,336"/>
+<area shape="rect" id="node32" href="$group___vfetk.html#gab568aa48a9072ad4fe3007a181affda1" title="Fill an array with the specified data." alt="" coords="1037,309,1139,336"/>
+<area shape="rect" id="node34" href="$group___vpmg.html#ga11ed702159c3c6ee7d89c9d0bcdee240" title="Fill the specified array with accessibility values." alt="" coords="1035,360,1141,387"/>
+<area shape="rect" id="node39" href="$group___vacc.html#gad2041f50041470d01e00a17f18b5b6c2" title="Build the solvent accessible surface (SAS) and calculate the solvent accessible surface area..." alt="" coords="456,563,544,589"/>
+<area shape="rect" id="node49" href="$group___vacc.html#ga9913f912bca5c71ba11ef9aefe7c390c" title="Return the atomic solvent accessible surface area (SASA)" alt="" coords="627,664,744,691"/>
+<area shape="rect" id="node61" href="$group___vacc.html#gaa1b76ea181d5f3a3ddb2b890e470cb3f" title="Get the set of points for this atom&#39;s solvent&#45;accessible surface." alt="" coords="614,512,757,539"/>
+<area shape="rect" id="node41" href="$group___vacc.html#gace3cf23d10bbc818a28b212ef5c94f84" title="Report molecular accessibility quickly." alt="" coords="627,461,744,488"/>
+<area shape="rect" id="node47" href="$group___vacc.html#ga6e6925112665279c1b237f792c595e82" title="Return the total solvent accessible surface area (SASA)" alt="" coords="629,563,742,589"/>
+<area shape="rect" id="node43" href="$group___vacc.html#ga31a47b0e2a3e828ab38802dbebb07415" title="Report molecular accessibility." alt="" coords="845,360,942,387"/>
+<area shape="rect" id="node53" href="$vpmg_8c.html#a34484f0f2f254b954abf20c5a98ab9d4" title="Fill differential operator coefficient arrays from a molecular surface calculation." alt="" coords="1031,639,1145,665"/>
+<area shape="rect" id="node55" href="$vpmg_8c.html#a62617829770eaed11c159947453e457c" title="Fill operator coefficient arrays from a molecular surface calculation." alt="" coords="1206,639,1301,665"/>
+<area shape="rect" id="node57" href="$vpmg_8c.html#a169088d2631112390e9699d0ff25ab0a" title="Top&#45;level driver to fill all operator coefficient arrays." alt="" coords="1360,791,1435,817"/>
+<area shape="rect" id="node59" href="$group___vpmg.html#gaf117af16d5e9c5bd4e557a69ec1eb73a" title="Fill the coefficient arrays prior to solving the equation." alt="" coords="1483,791,1571,817"/>
+</map>

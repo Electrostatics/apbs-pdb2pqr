@@ -1,0 +1,15 @@
+<map id="Vpmg_ctor2" name="Vpmg_ctor2">
+<area shape="rect" id="node3" href="$group___vpbe.html#ga56e38face81d2d29659541b5e3f5e442" title="Get modified squared Debye&#45;Huckel parameter." alt="" coords="170,5,294,32"/>
+<area shape="rect" id="node5" href="$group___vpbe.html#gabca9ea80c0a56d3848c54b37d0418f20" title="Get bulk ionic strength." alt="" coords="145,56,319,83"/>
+<area shape="rect" id="node7" href="$group___vpbe.html#gae42c09bef7405779d87bce73c44e1ebf" title="Get information about the counterion species present." alt="" coords="182,107,282,133"/>
+<area shape="rect" id="node9" href="$group___vpmgp.html#gadb713e70f5724ce0f63ec4cf380278d7" title="Determine array sizes and parameters for multigrid solver." alt="" coords="187,157,277,184"/>
+<area shape="rect" id="node11" href="$group___vpmg.html#ga5aa26cf409548947ad0e1315e912bf90" title="Print out a column&#45;compressed sparse matrix in Harwell&#45;Boeing format." alt="" coords="195,208,269,235"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#gac56d2f62a96de22f3daac68f9a91cdd4" title="Set up the ionic species to be used in later calculations. This must be called before any other of th..." alt="" coords="169,259,295,285"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga066ca8c224e32501a389bdb7ee96c742" title="Set up the ionic species to be used in later calculations. This must be called before any other of th..." alt="" coords="173,309,291,336"/>
+<area shape="rect" id="node17" href="$group___p_m_g_c.html#ga83fda7bc1ceee77f044f04196f63350a" title="Set up the ionic species to be used in later calculations. This must be called before any other of th..." alt="" coords="175,360,289,387"/>
+<area shape="rect" id="node19" href="$group___vpmg.html#gafc90a96505e0bddd5cc15b69f3c7613c" title="Remove partition restrictions." alt="" coords="174,411,290,437"/>
+<area shape="rect" id="node25" href="$group___vpmg.html#ga1c87698f1d365aa7677f6b3ff64c9e8d" title="Object destructor." alt="" coords="189,461,275,488"/>
+<area shape="rect" id="node21" href="$group___valist.html#gaff55ce9b8624255736b0ccf62030f230" title="Get number of atoms in the list." alt="" coords="369,360,527,387"/>
+<area shape="rect" id="node23" href="$group___valist.html#gaf9175f6b6d2c33ad79bd525fc9e0e043" title="Get pointer to particular atom in list." alt="" coords="394,411,502,437"/>
+<area shape="rect" id="node27" href="$group___vpmg.html#ga8d5a7ccc99d8b4644683bc2a862d7597" title="FORTRAN stub object destructor." alt="" coords="402,461,494,488"/>
+</map>

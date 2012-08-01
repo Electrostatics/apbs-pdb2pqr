@@ -1,0 +1,45 @@
+<map id="Vnewdriv2" name="Vnewdriv2">
+<area shape="rect" id="node3" href="$group___p_m_g_c.html#ga81ac80afc08fb27607efdc5c9e97ceaa" title="Build the nexted operator framework in the array iz." alt="" coords="139,5,211,32"/>
+<area shape="rect" id="node5" href="$group___p_m_g_c.html#gab676e77a0ea7fd89e6e93fca248831ae" title="Build operators, boundary arrays, modify affine vectors ido==0: do only fine level ido==1: do only co..." alt="" coords="407,259,484,285"/>
+<area shape="rect" id="node27" href="$group___p_m_g_c.html#gaa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="678,132,786,159"/>
+<area shape="rect" id="node36" href="$group___p_m_g_c.html#ga218aef2ec11ca80de45a5bcfa089cd9e" title="Inexact&#45;newton&#45;multilevel method." alt="" coords="273,1044,345,1071"/>
+<area shape="rect" id="node118" href="$group___p_m_g_c.html#gaf57dd61aeb1cc91a734b7ae494998b45" title="Driver routines for the Newton method." alt="" coords="137,1044,213,1071"/>
+<area shape="rect" id="node122" href="$group___p_m_g_c.html#ga04aca6300210f7c190bda51d25fe2bd4" title="Initialize a grid function to have a certain boundary value,." alt="" coords="262,56,357,83"/>
+<area shape="rect" id="node7" href="$group___p_m_g_c.html#ga2bde193d19ed04b9be986456cdc57d17" title="Build the Laplacian." alt="" coords="547,259,613,285"/>
+<area shape="rect" id="node9" href="$group___p_m_g_c.html#ga4bf7ed81bbcfc630677a68ff3ef78570" title="Vprtmatd" alt="" coords="543,309,617,336"/>
+<area shape="rect" id="node11" href="$group___p_m_g_c.html#ga2fa36f52a017ede585d5f2ba4aeeafdc" title="Builds prolongation matrix." alt="" coords="548,360,612,387"/>
+<area shape="rect" id="node13" href="$group___p_m_g_c.html#gac3878a7358faf90a4e0e0067f0961a37" title="Form the Galerkin coarse grid system." alt="" coords="533,411,627,437"/>
+<area shape="rect" id="node25" href="$group___p_m_g_c.html#gafa446fbf1bb85646b186469db9768ab8" title="Simple injection of a fine grid function into coarse grid." alt="" coords="547,157,613,184"/>
+<area shape="rect" id="node29" href="$group___p_m_g_c.html#ga977a0e4b9b186676462933f4b531ec62" title="Banded matrix builder." alt="" coords="537,208,623,235"/>
+<area shape="rect" id="node15" href="$group___p_m_g_c.html#ga5616c0696f52963ddd4bacb3ff71e8b6" title="Build Galerkin matrix structures." alt="" coords="699,284,765,311"/>
+<area shape="rect" id="node23" href="$group___p_m_g_c.html#gaede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="701,411,763,437"/>
+<area shape="rect" id="node17" href="$group___p_m_g_c.html#ga97822bdb6ab237b4bc4a89fe7647e34f" title="Computes a 27&#45;point galerkin coarse grid matrix from a 1&#45;point (i.e., diagonal) fine grid matrix..." alt="" coords="842,208,921,235"/>
+<area shape="rect" id="node19" href="$group___p_m_g_c.html#ga74cbf02bfd4ffcf36ea4b344ee2ea077" title="Computes a 27&#45;point galerkin coarse grid matrix from a 7&#45;point fine grid matrix." alt="" coords="842,259,921,285"/>
+<area shape="rect" id="node21" href="$group___p_m_g_c.html#ga78287000cb1a0517e4959c910566c828" title="Compute a 27&#45;point galerkin coarse grid matrix from a 27&#45;point fine grid matrix." alt="" coords="838,309,925,336"/>
+<area shape="rect" id="node31" href="$group___p_m_g_c.html#ga01d0f3717c0789ed0dd32393fb43b633" title="Build the operator in banded form given the 7&#45;diagonal form." alt="" coords="679,233,785,260"/>
+<area shape="rect" id="node33" href="$group___p_m_g_c.html#gab16d52afd502c461d5d023c02c7d659f" title="Build the operator in banded form given the 27&#45;diagonal form." alt="" coords="675,183,789,209"/>
+<area shape="rect" id="node38" href="$group___p_m_g_c.html#gad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="975,1753,1043,1780"/>
+<area shape="rect" id="node40" href="$group___p_m_g_c.html#gacb2fd32fc0aa12d56b7620ae0a7712e1" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="407,1323,483,1349"/>
+<area shape="rect" id="node42" href="$group___p_m_g_c.html#gae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="699,715,765,741"/>
+<area shape="rect" id="node44" href="$group___p_m_g_c.html#gac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="976,1171,1043,1197"/>
+<area shape="rect" id="node46" href="$group___p_m_g_c.html#gafbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="406,1601,485,1628"/>
+<area shape="rect" id="node48" href="$group___p_m_g_c.html#ga3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="982,867,1037,893"/>
+<area shape="rect" id="node50" href="$group___p_m_g_c.html#ga164408694a926f8f9452144cd688e383" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="978,652,1041,679"/>
+<area shape="rect" id="node52" href="$group___p_m_g_c.html#ga458b63cb21cb123da5e3e079eb5d81b8" title="Form the jacobian system." alt="" coords="547,461,613,488"/>
+<area shape="rect" id="node58" href="$group___p_m_g_c.html#gab7f955448bd40d97f3b1b3ac91b9f21c" title="MG helper functions." alt="" coords="551,1044,609,1071"/>
+<area shape="rect" id="node77" href="$group___p_m_g_c.html#gac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="978,1323,1041,1349"/>
+<area shape="rect" id="node96" href="$group___p_m_g_c.html#ga12b75e114e465814978a7bf3189cfe54" title="Power methods for eigenvalue estimation." alt="" coords="848,1424,915,1451"/>
+<area shape="rect" id="node107" href="$group___p_m_g_c.html#ga216315908e761d09584f0f4a6613132c" title="Standard inverse power method for minimum eigenvalue estimation." alt="" coords="411,1272,480,1299"/>
+<area shape="rect" id="node55" href="$group___p_m_g_c.html#ga6829f61b2e11572f3fd0b4abbf5dbd28" title="Define the derivative of the nonlinearity (vector version)" alt="" coords="697,461,767,488"/>
+<area shape="rect" id="node62" href="$group___p_m_g_c.html#gacda83144fd9d06e3c62a1687933ba010" title="Matrix&#45;vector multiplication routines." alt="" coords="974,1475,1045,1501"/>
+<area shape="rect" id="node66" href="$group___p_m_g_c.html#ga7f469e5b5661e8c176889cde7bed8175" title="Multigrid smoothing functions." alt="" coords="696,968,768,995"/>
+<area shape="rect" id="node72" href="$group___p_m_g_c.html#gaaa7843124ee62ccb6d9469363a8cd6a6" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="975,1007,1044,1033"/>
+<area shape="rect" id="node82" href="$group___p_m_g_c.html#ga6243a4021fb62c2ca1008c747ff8dd7f" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="683,1019,781,1045"/>
+<area shape="rect" id="node84" href="$group___p_m_g_c.html#ga9183f58be97708e2945a1578d943b283" title="LINPACK interface." alt="" coords="702,1069,762,1096"/>
+<area shape="rect" id="node86" href="$group___p_m_g_c.html#gaf2989f16a64132f085943e0cafca0c5d" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="683,1120,781,1147"/>
+<area shape="rect" id="node93" href="$group___p_m_g_c.html#ga9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="688,1424,776,1451"/>
+<area shape="rect" id="node68" href="$group___p_m_g_c.html#gaafddbbf81f667f3e155e468d85a89807" title="Guass&#45;Seidel solver." alt="" coords="854,1019,909,1045"/>
+<area shape="rect" id="node70" href="$group___p_m_g_c.html#ga371225c13eaf2407b57de0dd4f831ed8" title="A collection of useful low&#45;level routines (timing, etc)." alt="" coords="853,1095,909,1121"/>
+<area shape="rect" id="node79" href="$group___p_m_g_c.html#ga678a92f4fb3447e6dbbc97bef28e160e" title="Scale operation for a grid function with boundary values." alt="" coords="980,1424,1039,1451"/>
+<area shape="rect" id="node98" href="$group___p_m_g_c.html#ga0cc1b42e9c573d4c0b960afda283b0b1" title="Fill grid function with random values, including boundary values." alt="" coords="975,1601,1044,1628"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="Vacc_totalAtomdSAV" name="Vacc_totalAtomdSAV">
+<area shape="rect" id="node3" href="$group___vatom.html#ga282b06da5d33678cab1173a6fe5bc89c" title="Get atomic position." alt="" coords="197,5,325,32"/>
+<area shape="rect" id="node5" href="$group___vatom.html#ga9739f811224b6e7219cf6e21e0b4d9b4" title="Get atomic position." alt="" coords="200,56,323,83"/>
+<area shape="rect" id="node7" href="$group___vatom.html#ga15b6aa3689898e3b88f2920dec4470a9" title="Get atom ID." alt="" coords="198,107,325,133"/>
+<area shape="rect" id="node9" href="$group___vacc.html#gaf5cc22ee39db6bc914312ab36d670996" title="Return the total solvent accessible volume (SAV)" alt="" coords="209,157,314,184"/>
+<area shape="rect" id="node11" href="$group___vacc.html#ga050da431e776227898c5a7e7060d2202" title="Report inflated van der Waals accessibility." alt="" coords="374,157,477,184"/>
+</map>

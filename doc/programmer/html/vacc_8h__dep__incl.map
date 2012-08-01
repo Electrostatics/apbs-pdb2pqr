@@ -1,0 +1,12 @@
+<map id="src/generic/apbs/vacc.h" name="src/generic/apbs/vacc.h">
+<area shape="rect" id="node3" href="$apbs_8h.html" title="Top&#45;level header for APBS." alt="" coords="419,229,581,256"/>
+<area shape="rect" id="node5" href="$vpbe_8h.html" title="Contains declarations for class Vpbe." alt="" coords="337,80,497,107"/>
+<area shape="rect" id="node20" href="$vpmg_8h.html" title="Contains declarations for class Vpmg." alt="" coords="589,155,731,181"/>
+<area shape="rect" id="node25" href="$vacc_8c.html" title="Class Vacc methods." alt="" coords="641,80,767,107"/>
+<area shape="rect" id="node8" href="$vfetk_8h.html" title="Contains declarations for class Vfetk." alt="" coords="171,155,312,181"/>
+<area shape="rect" id="node13" href="$vpbe_8c.html" title="Class Vpbe methods." alt="" coords="336,155,464,181"/>
+<area shape="rect" id="node15" href="$vopot_8h.html" title="Potential oracle for Cartesian mesh data." alt="" coords="5,155,147,181"/>
+<area shape="rect" id="node11" href="$vfetk_8c.html" title="Class Vfetk methods." alt="" coords="187,229,295,256"/>
+<area shape="rect" id="node18" href="$vopot_8c.html" title="Class Vopot methods." alt="" coords="22,229,129,256"/>
+<area shape="rect" id="node23" href="$vpmg_8c.html" title="Class Vpmg methods." alt="" coords="606,229,713,256"/>
+</map>

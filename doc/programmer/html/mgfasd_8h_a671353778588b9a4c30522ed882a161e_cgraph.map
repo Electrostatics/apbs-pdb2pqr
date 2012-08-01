@@ -1,0 +1,31 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$mikpckd_8h.html#ad9648f5e231786d88b395ba412063c4b" title="Zero out operation for a grid function, including boundary values." alt="" coords="127,5,195,32"/>
+<area shape="rect" id="node5" href="$matvecd_8h.html#afa446fbf1bb85646b186469db9768ab8" title="Simple injection of a fine grid function into coarse grid." alt="" coords="269,56,334,83"/>
+<area shape="rect" id="node9" href="$matvecd_8h.html#a9c1d062d8b452deeffc8e759fdc8f246" title="Apply the prolongation operator." alt="" coords="117,107,205,133"/>
+<area shape="rect" id="node14" href="$mgsubd_8h.html#ae48ff034897f3c1c594d8873c730fe8b" title="Coarsen a single dimension of a grid Compute the number of grid points in the coarser grid..." alt="" coords="131,157,191,184"/>
+<area shape="rect" id="node16" href="$mikpckd_8h.html#a0bf03c8d451c3256efa8b3b9c9db1831" title="Vlinesearch" alt="" coords="117,208,205,235"/>
+<area shape="rect" id="node18" href="$mgsubd_8h.html#abb5cb28581c88bf4adaab11d35484ac7" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="126,259,197,285"/>
+<area shape="rect" id="node22" href="$mgsubd_8h.html#a7b0bd272745e2c31bf1ebc11a8d40b2d" title="Refine a grid Compute the number of grid points in the finer grid, given the number of grid points in..." alt="" coords="127,309,195,336"/>
+<area shape="rect" id="node26" href="$matvecd_8h.html#afbd34b881d565b9bba4cf515e55519c8" title="Break the matrix data&#45;structure into diagonals and then call the matrix&#45;vector routine." alt="" coords="122,411,201,437"/>
+<area shape="rect" id="node36" href="$matvecd_8h.html#acb2fd32fc0aa12d56b7620ae0a7712e1" title="Break the matrix data&#45;structure into diagonals and then call the residual routine." alt="" coords="123,512,199,539"/>
+<area shape="rect" id="node46" href="$smoothd_8h.html#a423f66e215b77f2d9e4e0569cf36b9c8" title="call the appropriate non&#45;linear smoothing routine." alt="" coords="122,461,201,488"/>
+<area shape="rect" id="node48" href="$matvecd_8h.html#aede4c916a1698890f6fdbda54778d491" title="Apply the restriction operator." alt="" coords="130,360,193,387"/>
+<area shape="rect" id="node53" href="$mikpckd_8h.html#ac453601512aae1d82a7bf7c14326f0b6" title="saxpy operation for a grid function with boundary values." alt="" coords="130,563,193,589"/>
+<area shape="rect" id="node55" href="$mikpckd_8h.html#a964d91008dba76f460e36b9a207fb2af" title="Copy operation for a grid function with boundary values. Quite simply copies one 3d matrix to another..." alt="" coords="130,613,193,640"/>
+<area shape="rect" id="node57" href="$mikpckd_8h.html#a3f117cfb2336b1291164ef351dd2bd69" title="Inner product operation for a grid function with boundary values." alt="" coords="134,664,189,691"/>
+<area shape="rect" id="node59" href="$mikpckd_8h.html#ae89d002951e3c000702b22cc44bc9b3c" title="Norm operation for a grid function with boundary values." alt="" coords="128,715,195,741"/>
+<area shape="rect" id="node61" href="$mikpckd_8h.html#ac7a7f2c804a247ec8b5aea45058e1d26" title="Norm operation for a grid function with boundary values." alt="" coords="128,765,195,792"/>
+<area shape="rect" id="node7" href="$mikpckd_8h.html#aa5cd2792bb251ae2ee940d0b7de06a42" title="Initialize a grid function to have a zero boundary value." alt="" coords="403,107,511,133"/>
+<area shape="rect" id="node11" href="$matvecd_8h.html#a5d497618aca91752806dbae6e0d94626" title="VinterpPMG2" alt="" coords="254,107,349,133"/>
+<area shape="rect" id="node20" href="$mgsubd_8h.html#aec1ae6e963b514a637ca71305e332856" title="Coarsen a grid Compute the number of grid points in the coarser grid, given the number of grid points..." alt="" coords="272,259,331,285"/>
+<area shape="rect" id="node24" href="$mgsubd_8h.html#a289005afa37681fe1162a04291037413" title="Refine a grid Compute the number of grid points in the finer grid, given the number of grid points in..." alt="" coords="273,309,329,336"/>
+<area shape="rect" id="node28" href="$matvecd_8h.html#acfb01799db27c9a74dd7925a8a836dbd" title="Vnmatvec27" alt="" coords="255,461,347,488"/>
+<area shape="rect" id="node32" href="$matvecd_8h.html#a932505d663cc398b4f553290fcabd3d0" title="Vnmatvec7" alt="" coords="259,411,344,437"/>
+<area shape="rect" id="node30" href="$matvecd_8h.html#a2e14199273cb54ba12f4c56076cf1b28" title="Vnmatvecd27_1s" alt="" coords="398,461,517,488"/>
+<area shape="rect" id="node34" href="$matvecd_8h.html#a71d7741be4f15fe8a6242b207a96d006" title="Vnmatvecd7_1s" alt="" coords="401,411,513,437"/>
+<area shape="rect" id="node38" href="$matvecd_8h.html#a8c4f7854a6782b22c7edfca2cc006c4b" title="Vnmresid27" alt="" coords="256,563,347,589"/>
+<area shape="rect" id="node42" href="$matvecd_8h.html#acc3f7ebd15a447cea9dd69f200d019cb" title="Vnmresid7" alt="" coords="260,512,343,539"/>
+<area shape="rect" id="node40" href="$matvecd_8h.html#af89b44986cf76cff366cda7a3b3c8944" title="Vnmresid27_1s" alt="" coords="402,563,513,589"/>
+<area shape="rect" id="node44" href="$matvecd_8h.html#af852dd3ee529090814f3fdc298ea0db2" title="Vnmresid7_1s" alt="" coords="406,512,509,539"/>
+<area shape="rect" id="node50" href="$matvecd_8h.html#ade0953634c3377d24922b80b9351c8b5" title="Vrestrc2" alt="" coords="266,360,337,387"/>
+</map>

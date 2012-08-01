@@ -1,0 +1,18 @@
+digraph "sVacc"
+{
+  edge [fontname="FreeSans",fontsize="10",labelfontname="FreeSans",labelfontsize="10"];
+  node [fontname="FreeSans",fontsize="10",shape=record];
+  Node1 [label="sVacc",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled" fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" alist" ,fontname="FreeSans"];
+  Node2 [label="sValist",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_valist.html",tooltip="Container class for list of atom objects."];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" atoms" ,fontname="FreeSans"];
+  Node3 [label="sVatom",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vatom.html",tooltip="Contains public data members for Vatom class/module."];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" clist" ,fontname="FreeSans"];
+  Node4 [label="sVclist",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vclist.html",tooltip="Atom cell list."];
+  Node2 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" alist" ,fontname="FreeSans"];
+  Node5 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cells" ,fontname="FreeSans"];
+  Node5 [label="sVclistCell",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vclist_cell.html",tooltip="Atom cell list cell."];
+  Node3 -> Node5 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" atoms" ,fontname="FreeSans"];
+  Node6 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" refSphere\nsurf" ,fontname="FreeSans"];
+  Node6 [label="sVaccSurf",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structs_vacc_surf.html",tooltip="Surface object list of per-atom surface points."];
+}
